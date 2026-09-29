@@ -325,7 +325,7 @@ public static partial class OfficeSceneUIBuilder
         return screen;
     }
 
-    /// <summary>An orthographic camera looking at the desktop that draws only its layer (no post-processing, no shadows). Idempotent.</summary>
+    /// <summary>An orthographic camera looking at the desktop that draws only its layer (no post-processing, no shadows); its built <paramref name="depth"/> is a placeholder the binder reorders around the art's camera at load (PcFrame.DrawAfter, PcScreenClone.Bind). Idempotent.</summary>
     private static Camera EnsureDesktopCamera(Transform root, string name, float orthoSize, float depth)
     {
         Transform t = EnsureChild(root, name);
@@ -359,15 +359,32 @@ public static partial class OfficeSceneUIBuilder
     // -----------------------------
 
     /// <summary>
+    /// The PC's device ink (the brand plate): the neutral theme's DiegeticDevice
+    /// ink, #5E5446 in world_source.json, the one source of that colour (audit
+    /// R6-005: the builder drew its own #6B614D beside it, and the theme never
+    /// recolours a diegetic role, so the drawn colour and the checked one
+    /// differed). A missing entry is an error; the text then draws black.
+    /// </summary>
+    private static Color DeviceInk(ContentLibrarySO library)
+    {
+        PaletteEntry device = library != null && library.NeutralTheme != null ? library.NeutralTheme.Get(ThemeRoleId.DiegeticDevice) : null;
+        if (device != null && device.hasInk)
+            return device.ink;
+
+        Debug.LogError("[TimeDesk] The neutral theme has no DiegeticDevice ink for the PC's brand plate. Run Tools > TimeDesk > Generate World, then build again.");
+        return Color.black;
+    }
+
+    /// <summary>
     /// The PC frame on the office overlay canvas, rebuilt each run: an
     /// always-active host with the PcFrame; its Root (inactive until opened)
     /// holds the full-screen exit catcher (a click outside the frame closes
     /// it), the bezel (placeholder art; clicks on it do nothing), the Glass the
     /// frame camera draws into (4:3; the catcher and the bezel let clicks
     /// through there), the red close X, the power button and LED, and the
-    /// brand plate. Returns the power LED and button through out parameters.
+    /// brand plate, in the neutral theme's DiegeticDevice ink. Returns the power LED and button through out parameters.
     /// </summary>
-    private static PcFrame BuildPcFrame(Transform overlay, Camera frameCamera, OfficeViewController view, out Image powerLed, out Button powerButton)
+    private static PcFrame BuildPcFrame(Transform overlay, Camera frameCamera, OfficeViewController view, ContentLibrarySO library, out Image powerLed, out Button powerButton)
     {
         DestroyChildIfPresent(overlay, "PcFrame");
         Transform host = Panel(overlay, "PcFrame", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -428,7 +445,7 @@ public static partial class OfficeSceneUIBuilder
         powerLed.sprite = EnsureOfficeShape("crt_led", 8, 8, Center, LedPixel);
         powerLed.raycastTarget = false;
 
-        TMP_Text brand = Text(frame, "Brand", "CHRONODESK 2150", 34, TextAlignmentOptions.Center, new Vector2(0.3f, 0f), new Vector2(0.7f, 0f), new Color(0.42f, 0.38f, 0.3f, 1f),
+        TMP_Text brand = Text(frame, "Brand", "CHRONODESK 2150", 34, TextAlignmentOptions.Center, new Vector2(0.3f, 0f), new Vector2(0.7f, 0f), DeviceInk(library),
                               ThemeRoleId.DiegeticDevice, style: FontStyles.Bold);
         var brandRect = (RectTransform)brand.transform;
         brandRect.sizeDelta = new Vector2(0f, 60f);
@@ -571,7 +588,7 @@ public static partial class OfficeSceneUIBuilder
     /// </summary>
     private static BoothCoordinator BuildOffice(OfficeViewController view, MonitorScreen screen, Button framePower, DeskConfigSO config,
                                                 OfficeSceneContractSO contract, TravellerWheel wheel, OverlayCallout[] callouts,
-                                                OverlayCallout tooltip, TMP_Text trayClockText, ShiftClockDriver clock,
+                                                OverlayCallout tooltip, OverlayCallout boardTooltip, GameManager game, TMP_Text trayClockText, ShiftClockDriver clock,
                                                 ContentLibrarySO library, FallbackHud hud, PcFrame pcFrame, StampTray stampTray,
                                                 OfficeCaseHud caseHud, Button deskViewBack, out Clickable readySign)
     {
@@ -596,11 +613,11 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soScanner, "reaction", WireReaction(scanner.GetComponent<Clickable>(), EnsureDeskReaction("Reaction_Scanner", ReactionKind.Pulse, ""), tooltip, null));
         soScanner.ApplyModifiedProperties();
 
-        // What a handed-over paper must not land under: the case HUD's strips, the speech bubble, the wheel's ring.
+        // What a handed-over paper must not land under: the case HUD's compare strip, the speech bubble, the wheel's ring.
         var soDesk = new SerializedObject(desk);
         SerializedArrays.Set(soDesk, "landingCovers", new Object[]
         {
-            caseHud.transform.Find("Root/ClaimStrip"), caseHud.transform.Find("Root/CompareStrip"),
+            caseHud.transform.Find("Root/CompareStrip"),
             callouts[0].transform.Find("Panel"), wheel.transform.Find("Catcher/Ring")
         });
         soDesk.ApplyModifiedProperties();
@@ -641,6 +658,11 @@ public static partial class OfficeSceneUIBuilder
         Prop("Stapler", OfficeAnchorId.Stapler, EnsureDeskReaction("Reaction_Stapler", ReactionKind.Squash, ""), null, "stapler");
         WirePersistentVoid(propsRoot.Find("Intercom").GetComponent<Clickable>(), "onClick", wheel, nameof(TravellerWheel.Open));
         WirePersistentVoid(propsRoot.Find("Stamp").GetComponent<Clickable>(), "onClick", stampTray, nameof(StampTray.Open));
+
+        // The hall's Departure Board and portal rings (the portals spec v3; OfficeSceneUIBuilder.Portals.cs).
+        DepartureBoardView board = BuildDepartureBoard(office, config, boardTooltip, game);
+        clicks.Add(board.transform.Find("ClickBox").GetComponent<Clickable>());
+        PortalEffect[] portalEffects = BuildPortalEffects(office, config);
         AssetDatabase.SaveAssets();
 
         // The readouts (the binder hands them the art's texts or the fallback HUD's).
@@ -690,6 +712,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "matCatcher", desk.transform.Find("ViewCatcher").GetComponent<BoxCollider>());
         SetRef(soBinder, "deskView", deskView);
         SetRef(soBinder, "screenClone", screen.GetComponent<PcScreenClone>());
+        SetRef(soBinder, "frame", pcFrame);
         SetRef(soBinder, "pc", pc);
         SetRef(soBinder, "pcPower", pcPower);
         SetRef(soBinder, "surface", desk.GetComponent<DeskSurface>());
@@ -718,6 +741,9 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "hudStability", hud.stability);
         SetRef(soBinder, "hudCredits", hud.credits);
         SetRef(soBinder, "hudClock", hud.clock);
+        SetRef(soBinder, "game", game);
+        SetRef(soBinder, "board", board);
+        SerializedArrays.Set(soBinder, "portalEffects", portalEffects);
         soBinder.ApplyModifiedProperties();
 
         // Checks (the validator runs the same, audit R6-021): every paper a traveller carries has a spawn slot, every document's rows fit its paper's face, the wheel shows the menu capacity.
@@ -1183,14 +1209,19 @@ public static partial class OfficeSceneUIBuilder
         return hud;
     }
 
-    /// <summary>The office case HUD's strips (reference px from the top centre): the claim tag, the office compare strip under it.</summary>
-    private static readonly Vector2 ClaimStripSize = new Vector2(1100f, 64f);
-    private const float ClaimStripTop = 16f;
+    /// <summary>
+    /// The office overlay's top strips (reference px from the top centre): the
+    /// office case HUD's compare strip, in the place of the claim tag the
+    /// personalities spec's B1 removed, and the verdict strip in the same place
+    /// (they never show together: the HUD shows only while a traveller is at
+    /// the desk, the verdict line once they have gone).
+    /// </summary>
+    private const float TopStripTop = 16f;
     private static readonly Vector2 CompareStripSize = new Vector2(1200f, 56f);
-    private const float CompareStripTop = 88f;
+    private static readonly Vector2 VerdictStripSize = new Vector2(1100f, 64f);
 
-    /// <summary>Where the desk view's "▲ Back" control starts (reference px from the top): under the office case HUD's strips and a gap.</summary>
-    private static readonly float CaseHudClearance = CompareStripTop + CompareStripSize.y + 8f;
+    /// <summary>Where the desk view's "▲ Back" control starts (reference px from the top): under the office case HUD's compare strip and a gap.</summary>
+    private static readonly float CaseHudClearance = TopStripTop + CompareStripSize.y + 8f;
 
     /// <summary>The desk view's "▲ Back" control (reference px), top centre under the case HUD.</summary>
     private static readonly Vector2 DeskViewBackSize = new Vector2(200f, 44f);
@@ -1218,26 +1249,23 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The office case HUD (piece 10) under the office overlay canvas, rebuilt
     /// each run: an always-active full-screen host (OfficeCaseHud, no graphic)
-    /// and its Root, top centre: the claim tag (ClaimStrip, the claim banner's
-    /// text) and under it the office compare strip (CompareBar, inactive; the
-    /// CompareController draws it). No part takes raycasts. Returns the HUD and
-    /// the strip's object and text through out parameters.
+    /// and its Root, top centre: the office compare strip (CompareBar,
+    /// inactive; the CompareController draws it), where the claim tag was (no
+    /// claim is printed: the personalities spec's B1). No part takes raycasts.
+    /// Returns the HUD and the strip's object and text through out parameters.
     /// </summary>
     private static OfficeCaseHud BuildOfficeCaseHud(Transform overlay, out GameObject compareStrip, out TMP_Text compareText)
     {
         DestroyChildIfPresent(overlay, "OfficeCaseHud");
         Transform host = Panel(overlay, "OfficeCaseHud", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         Transform root = Panel(host, "Root", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        TMP_Text claimText = TopStrip(root, "ClaimStrip", ClaimStripSize, ClaimStripTop, ScreenStripColor, ThemeRoleId.ClaimStrip, 26, Color.white, out Transform claim);
-        compareText = TopStrip(root, "CompareStrip", CompareStripSize, CompareStripTop, Tooltip, ThemeRoleId.CompareBar, 22, Ink, out Transform compare);
+        compareText = TopStrip(root, "CompareStrip", CompareStripSize, TopStripTop, Tooltip, ThemeRoleId.CompareBar, 22, Ink, out Transform compare);
         compareStrip = compare.gameObject;
         compareStrip.SetActive(false);
 
         OfficeCaseHud hud = host.gameObject.AddComponent<OfficeCaseHud>();
         var so = new SerializedObject(hud);
         SetRef(so, "root", root.gameObject);
-        SetRef(so, "claimRoot", claim.gameObject);
-        SetRef(so, "claimText", claimText);
         so.ApplyModifiedProperties();
         root.gameObject.SetActive(false);
         return hud;
@@ -1381,7 +1409,7 @@ public static partial class OfficeSceneUIBuilder
     /// object is out of view, below the case HUD's strips (the speech bubble),
     /// else it hides (the tooltip).
     /// </summary>
-    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background, ThemeRoleId role, bool keepOnScreen)
+    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background, ThemeRoleId role, bool keepOnScreen, bool grows = false)
     {
         DestroyChildIfPresent(overlay, name);
         Transform host = Panel(overlay, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -1395,6 +1423,8 @@ public static partial class OfficeSceneUIBuilder
         label.fontSizeMax = 24f;
         label.textWrappingMode = TextWrappingModes.Normal;
         label.raycastTarget = false;
+        if (grows)
+            Grow(panel, label, size);
 
         OverlayCallout callout = host.gameObject.AddComponent<OverlayCallout>();
         var so = new SerializedObject(callout);
@@ -1402,6 +1432,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "label", label);
         so.FindProperty("keepOnScreen").boolValue = keepOnScreen;
         so.FindProperty("topInset").floatValue = keepOnScreen ? OverlayTopClearance : 0f;
+        so.FindProperty("grows").boolValue = grows;
         so.ApplyModifiedProperties();
 
         panel.gameObject.SetActive(false);

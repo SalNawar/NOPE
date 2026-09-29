@@ -35,4 +35,21 @@ public class OneShotTests
         Assert.DoesNotThrow(() => OneShot.Fire(ref slot, "x"));
         Assert.IsNull(slot);
     }
+
+    [Test]
+    public void Fire_WithoutAValue_InvokesOnce_AndTheCallbackMayFillTheSlotAgain()
+    {
+        // A panel's continue callback (Home's four steps, the citation slip).
+        int calls = 0;
+        Action next = () => { };
+        Action slot = null;
+        slot = () => { calls++; slot = next; };
+        OneShot.Fire(ref slot);
+        Assert.AreEqual(1, calls);
+        Assert.AreSame(next, slot, "the callback's new callback survives");
+
+        Action empty = null;
+        Assert.DoesNotThrow(() => OneShot.Fire(ref empty));
+        Assert.IsNull(empty);
+    }
 }

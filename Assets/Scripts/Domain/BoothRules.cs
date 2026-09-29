@@ -173,7 +173,7 @@ public static class BoothRules
         bool held = atDesk && !modal;
         return new BoothInput(
             desktopInteractive: c.Focused && c.ScreenOn && !newsletter,
-            crtFocusable: !c.Focused && !newsletter && !modal,
+            crtFocusable: props,
             powerButtonLive: !newsletter && !modal && !c.CitationPending,
             propsLive: props,
             papersLive: papers,

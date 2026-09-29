@@ -85,6 +85,32 @@ public sealed class SpeechQueue
     private float EndSeconds => ShownSeconds + (_waiting.Count > 0 ? _minSeconds : _holdSeconds);
 
     /// <summary>
+    /// Seconds from now until the last queued line is fully shown (typed and
+    /// revealed), unheld: the shown line runs to its end when lines wait
+    /// (its minimum), each waiting line types out and, when another follows,
+    /// stays its minimum. 0 when nothing shows or the last line is fully shown.
+    /// </summary>
+    public float SecondsUntilShown
+    {
+        get
+        {
+            if (Text == null)
+                return 0f;
+            int waiting = _waiting.Count;
+            float total = waiting > 0 ? EndSeconds - _elapsed : ShownSeconds - _elapsed;
+            if (total < 0f)
+                total = 0f;
+            int i = 0;
+            foreach (var (text, _, reveal, _) in _waiting)
+            {
+                float type = _charsPerSecond > 0f ? text.Length / _charsPerSecond : 0f;
+                total += (type > reveal ? type : reveal) + (++i < waiting ? _minSeconds : 0f);
+            }
+            return total;
+        }
+    }
+
+    /// <summary>
     /// Queues a line (a blank one is ignored) that counts as fully shown
     /// <paramref name="revealSeconds"/> after it starts if its typing ends
     /// sooner (negative or NaN counts as 0), carrying <paramref name="tag"/>

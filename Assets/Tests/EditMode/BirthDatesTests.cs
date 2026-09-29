@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 public class BirthDatesTests
@@ -64,6 +66,40 @@ public class BirthDatesTests
             Assert.That(d, Is.InRange(1, 28));
             Assert.That(m, Is.InRange(0, 11));
         }
+    }
+
+    // Audit R1-005: -50..2 holds 52 years besides year 0. One Range draw indexes them in order, so
+    // index 49 is 1 BCE and index 50 is 1 CE (year 0 stepped over); year 0 used to fold onto 1 CE, drawing it twice as often.
+    [TestCase(0, -50)]
+    [TestCase(49, -1)]
+    [TestCase(50, 1)]
+    [TestCase(51, 2)]
+    public void Generate_AcrossYearZero_IndexesTheNonZeroYears(int index, int expectedYear)
+    {
+        var rng = new ScriptedRandom(ScriptStep.Range(index), ScriptStep.Range(0), ScriptStep.Range(0));
+        Assert.IsTrue(BirthDates.TryParse(BirthDates.Generate(-50, 2, rng), out _, out _, out int year));
+        Assert.AreEqual(expectedYear, year);
+        Assert.IsTrue(rng.Done, "one draw for the year, then the day and the month");
+    }
+
+    [Test]
+    public void Generate_AcrossYearZero_GivesEveryYearOnce_OverTheIndices()
+    {
+        var years = new List<int>();
+        for (int index = 0; index < 52; index++)
+        {
+            BirthDates.TryParse(BirthDates.Generate(-50, 2, new ScriptedRandom(ScriptStep.Range(index), ScriptStep.Range(0), ScriptStep.Range(0))), out _, out _, out int year);
+            years.Add(year);
+        }
+        CollectionAssert.AllItemsAreUnique(years, "each year exactly as likely as the others");
+        CollectionAssert.AreEquivalent(Enumerable.Range(-50, 53).Where(y => y != 0), years);
+    }
+
+    [Test]
+    public void Generate_OnlyYearZero_GivesOneBce()
+    {
+        Assert.IsTrue(BirthDates.TryParse(BirthDates.Generate(0, 0, new ScriptedRandom(ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0))), out _, out _, out int year));
+        Assert.AreEqual(-1, year);
     }
 
     [Test]

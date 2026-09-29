@@ -11,7 +11,9 @@ using NUnit.Framework;
 /// and Geography with an Answer tell ("Babylon"), has no Politics answer, and
 /// has a small-talk line. The rumour dialog is shaped like dlg_rumour. With a
 /// key-word rule, each traveller line carries the spans that stay English
-/// when it shows untranslated (the traveller-types spec's §8.1).
+/// when it shows untranslated (the traveller-types spec's §8.1). Every
+/// traveller of a day is offered the same wheel (the personalities spec's
+/// W1-W5): a request entry's id names the request, whatever they carry.
 /// </summary>
 public class InterviewScriptTests
 {
@@ -23,8 +25,7 @@ public class InterviewScriptTests
         papersLabel = "Request papers >",
         requestPrompt = new LineText("interview.requestPrompt", "Your {document}, please."),
         requestReply = new LineText("interview.requestReply", "Here you are."),
-        askLabel = "Ask about home >",
-        tripAskLabel = "Ask about the trip >",
+        askLabel = "Ask about the trip >",
         lookLabel = "Look >",
         backLabel = "< Back",
         smallTalkLabel = "Small talk",
@@ -46,8 +47,8 @@ public class InterviewScriptTests
         currency.overrides.Add(new WordingOverride
         {
             eraId = "ancient",
-            prompt = new LineText("q_currency.ancient.prompt", "What do you trade with at home?"),
-            answer = new LineText("q_currency.ancient.answer", "We trade with {value}.")
+            kinds = { TravellerKind.Displaced },
+            answer = new LineText("q_currency.overrides.1.answer", "We trade with {value}.")
         });
 
         return new List<InterviewQuestion>
@@ -61,16 +62,12 @@ public class InterviewScriptTests
     private static CaseDocument Doc(string name, DocumentHandOver handOver = DocumentHandOver.OnRequest, string formNumber = null, string askGroup = null) =>
         new CaseDocument { name = name, handOver = handOver, formNumber = formNumber, askGroup = askGroup };
 
-    private static readonly TravellerKind[] Citizens = { TravellerKind.RichTourist, TravellerKind.PoorTourist, TravellerKind.Labourer };
-
-    /// <summary>The 2150 citizens' forms the desk may ask for (traveller types I2): the manifest, the waiver and the three proofs of means in the proof group.</summary>
+    /// <summary>The papers menu of days 1-4 (the personalities spec's W4): the manifest, the waiver and the proof of means (its group's first form).</summary>
     private static AskableForm[] CitizenAskable() => new[]
     {
-        new AskableForm("TC-230", "Departure Manifest", "", true, Citizens),
-        new AskableForm("TC-310", "Stranding Waiver", "", true, Citizens),
-        new AskableForm("TC-415", "Holiday Credit Agreement", AccountMaker.ProofGroup, true, Citizens),
-        new AskableForm("TC-416", "Proof of Funds", AccountMaker.ProofGroup, true, Citizens),
-        new AskableForm("TC-417", "Travel Insurance Certificate", AccountMaker.ProofGroup, true, Citizens)
+        new AskableForm("TC-230", "Departure Manifest", "", true),
+        new AskableForm("TC-310", "Stranding Waiver", "", true),
+        new AskableForm("TC-415", "Holiday Credit Agreement", AccountMaker.ProofGroup, true)
     };
 
     /// <summary>A poor tourist's four papers: the visa on arrival, the manifest, the waiver and the Proof of Funds they hold.</summary>
@@ -115,7 +112,7 @@ public class InterviewScriptTests
     /// <summary>The displaced's three forms: the certificate on arrival, the declaration and the return order on request.</summary>
     private static CaseDocument[] DisplacedForms() => new[]
     {
-        Doc("Displacement Certificate", DocumentHandOver.OnArrival), Doc("Intake Declaration"), Doc("Return Order")
+        Doc("Displacement Certificate", DocumentHandOver.OnArrival, "TC-610"), Doc("Intake Declaration", formNumber: "TC-620"), Doc("Return Order", formNumber: "TC-630")
     };
 
     private static InterviewCase Case(bool smallTalk = true, string intro = "Next! Step forward, sir.", CaseDocument[] documents = null, KeyWordRule keyWords = null) => new InterviewCase
@@ -183,18 +180,286 @@ public class InterviewScriptTests
                                      InterviewLines lines = null) =>
         InterviewScript.Build(lines ?? Lines(), questions ?? Questions(), dialogs ?? new[] { Rumour() }, c ?? Case());
 
-    [Test]
-    public void TheAskEntry_IsTheKinds_ATripForACitizen_HomeForTheDisplaced()
+    // -----------------------------
+    // The voice (the personalities spec's V1, V3, T2-T3)
+    // -----------------------------
+
+    /// <summary>A row of curt's for a slot.</summary>
+    private static VoiceLine V(string text, string key = null, MissingFormVariant variant = MissingFormVariant.Honest, params TravellerKind[] kinds) =>
+        new VoiceLine { personality = "curt", kinds = kinds.ToList(), key = key ?? string.Empty, variant = variant, line = new LineText("interview.voices.x.curt." + text.Length, text) };
+
+    /// <summary>The wording with the groups, the spoken requests and curt's rows: a displaced claim, a hand-over, a rich tourist's waiver refusal, "Speak up", the currency and capital answers.</summary>
+    private static InterviewLines VoicedLines()
     {
-        Assert.AreEqual("Ask about home >", Build().Node(InterviewScript.HubNodeId).Choices.First(x => x.Id == "ask").Label);
+        InterviewLines lines = LinesWithGroups();
+        lines.requests.Add(Spoken("step_closer", "Step closer", "Step closer to the glass, please.", "Like this?"));
+        lines.requests.Add(Spoken("speak_up", "Speak up", "Speak up, please.", "Sorry. Is this better?"));
+        lines.voices.claims.Add(V("{place}. Home. Now.", kinds: TravellerKind.Displaced));
+        lines.voices.handOver.Add(V("Here."));
+        lines.voices.missingForms.Add(V("Premium units are exempt from the {document}.", "TC-310", kinds: TravellerKind.RichTourist));
+        lines.voices.spoken.Add(V("Said it once. That was billed.", "speak_up"));
+        lines.voices.answers.Add(V("{value}. Not that it'll be enough.", "q_currency"));
+        lines.voices.answers.Add(V("{value}, I'm sure.", "q_capital"));
+        return lines;
+    }
 
-        InterviewCase tourist = Case();
-        tourist.kind = TravellerKind.RichTourist;
-        Assert.AreEqual("Ask about the trip >", Build(tourist).Node(InterviewScript.HubNodeId).Choices.First(x => x.Id == "ask").Label);
+    private static InterviewCase Voiced(InterviewCase c)
+    {
+        c.voice = new Voice("curt", null, 7);
+        return c;
+    }
 
-        InterviewLines noTripLabel = Lines();
-        noTripLabel.tripAskLabel = null;
-        Assert.AreEqual("Ask about home >", Build(tourist, lines: noTripLabel).Node(InterviewScript.HubNodeId).Choices.First(x => x.Id == "ask").Label, "the home label stands in");
+    [Test]
+    public void Opening_SaysTheVoicesClaim()
+    {
+        IReadOnlyList<DialogLine> opening = InterviewScript.Opening(VoicedLines(), Voiced(Case()));
+        Assert.AreEqual((InterviewScript.ClaimLineId, DialogSpeaker.Traveller, "New Kingdom Egypt (Ancient). Home. Now."), (opening[1].Id, opening[1].Speaker, opening[1].Text));
+        Assert.AreEqual(opening[1].Text, InterviewScript.Claim(VoicedLines(), Voiced(Case())));
+    }
+
+    [Test]
+    public void Opening_ClaimKeyWordsAreTakenOverItsTemplate()
+    {
+        DialogLine claim = InterviewScript.Opening(VoicedLines(), Voiced(Case(keyWords: KeyWordRule())))[1];
+        Assert.AreEqual("New Kingdom Egypt (Ancient)|Home", English(claim), "the place's fill and the key word of the voice's own template");
+    }
+
+    [Test]
+    public void Opening_NoVoiceSaysTheKindsClaim()
+    {
+        Assert.AreEqual("Please. Send me home to New Kingdom Egypt (Ancient).", InterviewScript.Opening(VoicedLines(), Case())[1].Text);
+        InterviewCase chatty = Case();
+        chatty.voice = new Voice("chatty", null, 7);
+        Assert.AreEqual("Please. Send me home to New Kingdom Egypt (Ancient).", InterviewScript.Opening(VoicedLines(), chatty)[1].Text, "a personality with no row: the default");
+    }
+
+    [Test]
+    public void Build_TheHandOverInTheVoicesWords()
+    {
+        DialogChoice order = Build(Voiced(Case()), lines: VoicedLines()).Node(InterviewScript.PapersNodeId).Choices.First(x => x.Id == "request:TC-630");
+        Assert.AreEqual(DialogAction.HandOverDocument, order.Action);
+        Assert.AreEqual("Your Return Order, please.", order.Lines[0].Text, "the desk's words are everyone's");
+        Assert.AreEqual("Here.", order.Lines[1].Text);
+        Assert.AreEqual("Here you are.", Build(Case(), lines: VoicedLines()).Node(InterviewScript.PapersNodeId).Choices.First(x => x.Id == "request:TC-630").Lines[1].Text);
+    }
+
+    [Test]
+    public void Build_ARefusalByKindVariantAndVoice()
+    {
+        DialogNode rich = Build(Voiced(Citizen(TravellerKind.RichTourist, RichForms())), lines: VoicedLines()).Node(InterviewScript.PapersNodeId);
+        Assert.AreEqual("Premium units are exempt from the Stranding Waiver.", rich.Choices.First(x => x.Id == "request:TC-310").Lines[1].Text, "{document} is the request's label");
+        Assert.AreEqual("I pay my own way.", rich.Choices.First(x => x.Id == "request:proof").Lines[1].Text, "no row for the proof: the kind's default");
+
+        DialogNode poor = Build(Voiced(Citizen(TravellerKind.PoorTourist, PoorForms().Take(3).ToArray(), MissingFormVariant.Missing)), lines: VoicedLines()).Node(InterviewScript.PapersNodeId);
+        Assert.AreEqual("I... didn't get round to that one.", poor.Choices.First(x => x.Id == "request:proof").Lines[1].Text, "the Missing variant: the rich tourist's row is not theirs");
+    }
+
+    [Test]
+    public void Build_ASpokenRequestsReply()
+    {
+        DialogNode hub = Build(Voiced(Case()), lines: VoicedLines()).Node(InterviewScript.HubNodeId);
+        Assert.AreEqual("Said it once. That was billed.", hub.Choices.First(x => x.Id == "act:speak_up").Lines[1].Text);
+        Assert.AreEqual("Like this?", hub.Choices.First(x => x.Id == "act:step_closer").Lines[1].Text, "no row for Step closer: its reply");
+        Assert.AreEqual("Step closer to the glass, please.", hub.Choices.First(x => x.Id == "act:step_closer").Lines[0].Text);
+    }
+
+    [Test]
+    public void Build_AnAnswerKeepsItsCanonicalValueAndFact()
+    {
+        DialogLine answer = Build(Voiced(Case()), lines: VoicedLines()).Node(InterviewScript.AskNodeId).Choices.First(x => x.Id == "q:q_currency").Lines[1];
+        Assert.AreEqual("Deben. Not that it'll be enough.", answer.Text);
+        Assert.IsTrue(answer.IsAnswer);
+        Assert.AreEqual((ClueCategory.Currency, "Deben", false), (answer.Category, answer.Value, answer.IsTell), "the value and the fact are the answer's, whatever the voice");
+        Assert.AreEqual("About Currency?", Build(Voiced(Case()), lines: VoicedLines()).Node(InterviewScript.AskNodeId).Choices.First(x => x.Id == "q:q_currency").Lines[0].Text, "the desk's prompt is everyone's");
+    }
+
+    [Test]
+    public void Build_ATellsSentenceIsTheHonestSentence()
+    {
+        // The personalities spec's T3: two travellers alike but for one answer's tell say the same sentence around the value,
+        // and the same claim, replies and small talk.
+        InterviewCase honest = Voiced(Case()), liar = Voiced(Case());
+        honest.answers = new[] { new InterviewAnswer { category = ClueCategory.Currency, value = "Deben" }, new InterviewAnswer { category = ClueCategory.Geography, value = "Thebes" } };
+        liar.answers = new[] { new InterviewAnswer { category = ClueCategory.Currency, value = "Deben" }, new InterviewAnswer { category = ClueCategory.Geography, value = "Babylon", isTell = true } };
+
+        List<string> a = Walk(honest), b = Walk(liar);
+        Assert.AreEqual(a.Count, b.Count);
+        for (int i = 0; i < a.Count; i++)
+            Assert.AreEqual(a[i].Replace("Thebes", "{value}"), b[i].Replace("Babylon", "{value}"), $"line {i}");
+        CollectionAssert.Contains(a, "Thebes, I'm sure.");
+        CollectionAssert.Contains(b, "Babylon, I'm sure.");
+    }
+
+    [Test]
+    public void Build_NoVoiceSaysTodaysLines()
+    {
+        CollectionAssert.AreEqual(new[]
+        {
+            "Next! Step forward, sir.", "Please. Send me home to New Kingdom Egypt (Ancient).",
+            "Your Intake Declaration, please.", "Here you are.", "Your Return Order, please.", "Here you are.",
+            "Step closer to the glass, please.", "Like this?", "Speak up, please.", "Sorry. Is this better?",
+            "About Currency?", "We trade with Deben.", "About Capital?", "Our capital is Babylon.",
+            "How is life back home?", "The Nile rose right on time."
+        }, Walk(Case()), "no voice: every line is today's, whatever rows the voices have");
+    }
+
+    /// <summary>Every line of a walk through the hub's requests, the papers menu, the spoken requests and the ask menu, in order.</summary>
+    private static List<string> Walk(InterviewCase c)
+    {
+        var runner = new DialogRunner(Build(c, dialogs: new AuthoredDialog[0], lines: VoicedLines()), InterviewScript.Opening(VoicedLines(), c));
+        runner.Choose("papers");
+        foreach (string id in Ids(runner.Choices).Where(id => id.StartsWith("request:")).ToList())
+            runner.Choose(id);
+        runner.Choose("back");
+        runner.Choose("act:step_closer");
+        runner.Choose("act:speak_up");
+        runner.Choose("ask");
+        foreach (string id in Ids(runner.Choices).Where(id => id != "back").ToList())
+            runner.Choose(id);
+        return runner.Transcript.Select(l => l.Text).ToList();
+    }
+
+    // -----------------------------
+    // The one wheel (the personalities spec's W1-W6)
+    // -----------------------------
+
+    /// <summary>The papers menu of day 5 (the personalities spec's W4): the manifest, the waiver, the proof of means, then the displaced's declaration and return order.</summary>
+    private static AskableForm[] Day5Menu() => new[]
+    {
+        new AskableForm("TC-230", "Departure Manifest", "", true),
+        new AskableForm("TC-310", "Stranding Waiver", "", true),
+        new AskableForm("TC-415", "Holiday Credit Agreement", AccountMaker.ProofGroup, true),
+        new AskableForm("TC-620", "Intake Declaration", "", true),
+        new AskableForm("TC-630", "Return Order", "", true)
+    };
+
+    /// <summary>A labourer's three papers: the contract on arrival, the manifest and the waiver.</summary>
+    private static CaseDocument[] LabourerForms() => new[]
+    {
+        Doc("Labour Contract", DocumentHandOver.OnArrival, "TC-520"), Doc("Departure Manifest", formNumber: "TC-230"), Doc("Stranding Waiver", formNumber: "TC-310")
+    };
+
+    /// <summary>The wording of day 5 (§3.3): the groups, the spoken requests and every Honest line the one menu needs.</summary>
+    private static InterviewLines Day5Lines()
+    {
+        InterviewLines lines = LinesWithGroups();
+        lines.requests.Add(Spoken("step_closer", "Step closer", "Step closer to the glass, please.", "Like this?"));
+        lines.requests.Add(Spoken("speak_up", "Speak up", "Speak up, please.", "Sorry. Is this better?"));
+        void Honest(TravellerKind kind, string request, string text) =>
+            lines.missingFormReplies.Add(new MissingFormReply { kind = kind, request = request, variant = MissingFormVariant.Honest, line = new LineText($"interview.missingFormReplies.{kind}.{request}.Honest", text) });
+        Honest(TravellerKind.Displaced, "TC-230", "A manifest? I was pulled out of my own time. I didn't pack.");
+        Honest(TravellerKind.Displaced, "TC-310", "A waiver? Nobody asked me anything before the sky opened.");
+        Honest(TravellerKind.Displaced, AccountMaker.ProofGroup, "Means? I have what was in my pockets when the sky opened.");
+        foreach (TravellerKind kind in new[] { TravellerKind.RichTourist, TravellerKind.PoorTourist, TravellerKind.Labourer })
+        {
+            Honest(kind, "TC-620", "An intake declaration? I'm leaving, not arriving.");
+            Honest(kind, "TC-630", "A return order? I have a return booking. Is that the same thing?");
+        }
+        Honest(TravellerKind.Labourer, AccountMaker.ProofGroup, "Debt Relief pays my way.");
+        return lines;
+    }
+
+    /// <summary>A traveller of <paramref name="kind"/> on day 5 with their own <paramref name="documents"/>, every answer, small talk and one garment.</summary>
+    private static InterviewCase Day5(TravellerKind kind, CaseDocument[] documents, MissingFormVariant variant = MissingFormVariant.Honest)
+    {
+        InterviewCase c = Case(documents: documents);
+        c.kind = kind;
+        c.askable = Day5Menu();
+        c.missingVariant = variant;
+        c.answers = new[]
+        {
+            new InterviewAnswer { category = ClueCategory.Currency, value = "Silver drachma" },
+            new InterviewAnswer { category = ClueCategory.Geography, value = "Athens" },
+            new InterviewAnswer { category = ClueCategory.Politics, value = "The Assembly" }
+        };
+        c.garments = new[] { new Garment(LookSlot.Outfit, kind + " outfit", "chiton", false) };
+        return c;
+    }
+
+    private static string Menu(DialogGraph graph, string node) =>
+        string.Join(" | ", graph.Node(node).Choices.Select(x => $"{x.Id}:{x.Label}:{x.Kind}"));
+
+    [Test]
+    public void Build_EveryKindGetsTheSameHubPapersAndAskMenus()
+    {
+        var travellers = new Dictionary<TravellerKind, InterviewCase>
+        {
+            [TravellerKind.RichTourist] = Day5(TravellerKind.RichTourist, RichForms()),
+            [TravellerKind.PoorTourist] = Day5(TravellerKind.PoorTourist, PoorForms()),
+            [TravellerKind.Labourer] = Day5(TravellerKind.Labourer, LabourerForms()),
+            [TravellerKind.Displaced] = Day5(TravellerKind.Displaced, DisplacedForms())
+        };
+
+        foreach (string node in new[] { InterviewScript.HubNodeId, InterviewScript.PapersNodeId, InterviewScript.AskNodeId })
+        {
+            List<string> menus = travellers.Values.Select(c => Menu(Build(c, lines: Day5Lines()), node)).ToList();
+            Assert.AreEqual(1, menus.Distinct().Count(), $"{node}:\n{string.Join("\n", menus)}");
+        }
+
+        DialogGraph rich = Build(travellers[TravellerKind.RichTourist], lines: Day5Lines());
+        CollectionAssert.AreEqual(new[] { "papers", "act:step_closer", "act:speak_up", "ask", "look", "dlg:dlg_rumour" }, Ids(rich.Node(InterviewScript.HubNodeId).Choices));
+        CollectionAssert.AreEqual(new[] { "back", "request:TC-230", "request:TC-310", "request:proof", "request:TC-620", "request:TC-630" }, Ids(rich.Node(InterviewScript.PapersNodeId).Choices),
+                                  "a request's id names the request, carried or not");
+        CollectionAssert.AreEqual(new[] { "< Back", "Departure Manifest", "Stranding Waiver", "Proof of means", "Intake Declaration", "Return Order" },
+                                  rich.Node(InterviewScript.PapersNodeId).Choices.Select(x => x.Label));
+        CollectionAssert.AreEqual(new[] { "back", "q:q_currency", "q:q_capital", "q:q_ruler", "smalltalk" }, Ids(rich.Node(InterviewScript.AskNodeId).Choices));
+    }
+
+    [Test]
+    public void Build_TheAskEntryIsTheAskLabelForEveryKind()
+    {
+        foreach (TravellerKind kind in (TravellerKind[])System.Enum.GetValues(typeof(TravellerKind)))
+        {
+            InterviewCase c = Case();
+            c.kind = kind;
+            Assert.AreEqual("Ask about the trip >", Build(c).Node(InterviewScript.HubNodeId).Choices.First(x => x.Id == "ask").Label, kind.ToString());
+        }
+    }
+
+    [Test]
+    public void Build_ADisplacedTravellerAskedForAManifestSaysTheirHonestLine()
+    {
+        DialogChoice manifest = Build(Day5(TravellerKind.Displaced, DisplacedForms()), lines: Day5Lines()).Node(InterviewScript.PapersNodeId).Choices
+            .First(x => x.Id == "request:TC-230");
+
+        Assert.AreEqual(DialogAction.None, manifest.Action, "no hand-over: they carry none");
+        CollectionAssert.AreEqual(new[] { "interview.requestPrompt", "interview.missingFormReplies.Displaced.TC-230.Honest" }, LineIds(manifest.Lines));
+        Assert.AreEqual("Your Departure Manifest, please.", manifest.Lines[0].Text, "the desk's words are everyone's");
+        Assert.AreEqual("A manifest? I was pulled out of my own time. I didn't pack.", manifest.Lines[1].Text);
+        Assert.AreEqual(DialogSpeaker.Traveller, manifest.Lines[1].Speaker);
+
+        DialogChoice order = Build(Day5(TravellerKind.Displaced, DisplacedForms()), lines: Day5Lines()).Node(InterviewScript.PapersNodeId).Choices.First(x => x.Id == "request:TC-630");
+        Assert.AreEqual((DialogAction.HandOverDocument, 2), (order.Action, order.DocumentIndex), "the return order they carry is handed over");
+    }
+
+    [Test]
+    public void Build_ACitizenAskedForAReturnOrderSaysTheirHonestLine()
+    {
+        foreach ((TravellerKind kind, CaseDocument[] papers) in new[] { (TravellerKind.RichTourist, RichForms()), (TravellerKind.PoorTourist, PoorForms()), (TravellerKind.Labourer, LabourerForms()) })
+        {
+            DialogChoice order = Build(Day5(kind, papers), lines: Day5Lines()).Node(InterviewScript.PapersNodeId).Choices.First(x => x.Id == "request:TC-630");
+            Assert.AreEqual(DialogAction.None, order.Action, kind.ToString());
+            Assert.AreEqual("A return order? I have a return booking. Is that the same thing?", order.Lines[1].Text, kind.ToString());
+        }
+    }
+
+    [Test]
+    public void Build_AMissingVariantAskedForAFormTheKindNeverCarries_SaysTheHonestLine()
+    {
+        InterviewCase poor = Day5(TravellerKind.PoorTourist, PoorForms().Take(3).ToArray(), MissingFormVariant.Missing);
+        DialogNode papers = Build(poor, lines: Day5Lines()).Node(InterviewScript.PapersNodeId);
+
+        Assert.AreEqual("I... didn't get round to that one.", papers.Choices.First(x => x.Id == "request:proof").Lines[1].Text, "the proof they left out: their Missing line");
+        Assert.AreEqual("An intake declaration? I'm leaving, not arriving.", papers.Choices.First(x => x.Id == "request:TC-620").Lines[1].Text,
+                        "no Missing line for a form their kind never carries: the Honest one");
+    }
+
+    [Test]
+    public void MenuProblems_FiveRequestsFitThePapersMenu()
+    {
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, 5, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
+                                 "< Back and five requests is six of the wheel's eight; the hub still counts the papers menu once");
+        StringAssert.Contains("The papers menu holds 9 choices", string.Join("\n", DialogChecks.MenuProblems(6, true, 8, 2, 2, 1, 8)));
     }
 
     [Test]
@@ -222,7 +487,7 @@ public class InterviewScriptTests
     {
         DialogNode hub = Build().Node(InterviewScript.HubNodeId);
         CollectionAssert.AreEqual(new[] { "papers", "ask", "dlg:dlg_rumour" }, Ids(hub.Choices));
-        CollectionAssert.AreEqual(new[] { "Request papers >", "Ask about home >", "Any news from home? >" },
+        CollectionAssert.AreEqual(new[] { "Request papers >", "Ask about the trip >", "Any news from home? >" },
                                   hub.Choices.Select(c => c.Label).ToArray());
 
         DialogChoice papers = hub.Choices[0];
@@ -244,7 +509,7 @@ public class InterviewScriptTests
     public void Papers_BackFirst_ThenOneRequestPerDocumentOnRequest_InPaperOrder_NamedByTheForm()
     {
         DialogNode papers = Build().Node(InterviewScript.PapersNodeId);
-        CollectionAssert.AreEqual(new[] { "back", "request:1", "request:2" }, Ids(papers.Choices), "the certificate came on arrival");
+        CollectionAssert.AreEqual(new[] { "back", "request:TC-620", "request:TC-630" }, Ids(papers.Choices), "the certificate came on arrival");
         CollectionAssert.AreEqual(new[] { "< Back", "Intake Declaration", "Return Order" }, papers.Choices.Select(c => c.Label).ToArray());
         Assert.AreEqual(DialogChoiceKind.Back, papers.Choices[0].Kind);
         Assert.AreEqual(InterviewScript.HubNodeId, papers.Choices[0].Next);
@@ -269,7 +534,7 @@ public class InterviewScriptTests
     public void Papers_APoorTourist_TheProofGroupIsOneEntry_NamedByTheGroup_HandingOverTheHeldProof()
     {
         DialogNode papers = Build(Citizen(TravellerKind.PoorTourist, PoorForms()), lines: LinesWithGroups()).Node(InterviewScript.PapersNodeId);
-        CollectionAssert.AreEqual(new[] { "back", "request:1", "request:2", "request:3" }, Ids(papers.Choices));
+        CollectionAssert.AreEqual(new[] { "back", "request:TC-230", "request:TC-310", "request:proof" }, Ids(papers.Choices));
         CollectionAssert.AreEqual(new[] { "< Back", "Departure Manifest", "Stranding Waiver", "Proof of means" }, papers.Choices.Select(c => c.Label).ToArray());
         DialogChoice proof = papers.Choices[3];
         Assert.AreEqual(DialogAction.HandOverDocument, proof.Action);
@@ -283,7 +548,7 @@ public class InterviewScriptTests
     {
         DialogGraph graph = Build(Citizen(TravellerKind.RichTourist, RichForms()), lines: LinesWithGroups());
         DialogNode papers = graph.Node(InterviewScript.PapersNodeId);
-        CollectionAssert.AreEqual(new[] { "back", "request:1", "missing:TC-310", "missing:proof" }, Ids(papers.Choices), "the three requests of a 2150 citizen, whatever they carry");
+        CollectionAssert.AreEqual(new[] { "back", "request:TC-230", "request:TC-310", "request:proof" }, Ids(papers.Choices), "the three requests of days 1-4, whatever they carry");
         CollectionAssert.AreEqual(new[] { "< Back", "Departure Manifest", "Stranding Waiver", "Proof of means" }, papers.Choices.Select(c => c.Label).ToArray());
 
         DialogChoice waiver = papers.Choices[2];
@@ -301,9 +566,9 @@ public class InterviewScriptTests
 
         var runner = new DialogRunner(graph, InterviewScript.Opening(LinesWithGroups(), Case()));
         Assert.IsNotNull(runner.Choose("papers"));
-        Assert.IsNotNull(runner.Choose("missing:TC-310"));
-        CollectionAssert.AreEqual(new[] { "back", "request:1", "missing:proof" }, Ids(runner.Choices), "asked once");
-        Assert.IsNull(runner.Choose("missing:TC-310"));
+        Assert.IsNotNull(runner.Choose("request:TC-310"));
+        CollectionAssert.AreEqual(new[] { "back", "request:TC-230", "request:proof" }, Ids(runner.Choices), "asked once");
+        Assert.IsNull(runner.Choose("request:TC-310"));
     }
 
     [Test]
@@ -312,7 +577,7 @@ public class InterviewScriptTests
         InterviewCase poor = Citizen(TravellerKind.PoorTourist, PoorForms().Take(3).ToArray(), MissingFormVariant.Missing);
         DialogNode papers = Build(poor, lines: LinesWithGroups()).Node(InterviewScript.PapersNodeId);
         DialogChoice proof = papers.Choices[3];
-        Assert.AreEqual("missing:proof", proof.Id);
+        Assert.AreEqual("request:proof", proof.Id);
         Assert.AreEqual("I... didn't get round to that one.", proof.Lines[1].Text, "a poor tourist who left their proof out (phase 9's paper-set fault)");
 
         InterviewCase labourer = Citizen(TravellerKind.Labourer, RichForms());
@@ -324,16 +589,16 @@ public class InterviewScriptTests
     public void Hub_OneAskableRequest_IsADirectEntry_EvenWhenNotCarried()
     {
         InterviewCase c = Citizen(TravellerKind.RichTourist, new[] { Doc("Leisure Departure Visa", DocumentHandOver.OnArrival, "TC-101") });
-        c.askable = new[] { new AskableForm("TC-310", "Stranding Waiver", "", true, Citizens) };
+        c.askable = new[] { new AskableForm("TC-310", "Stranding Waiver", "", true) };
         DialogNode hub = Build(c, lines: LinesWithGroups()).Node(InterviewScript.HubNodeId);
-        Assert.AreEqual("missing:TC-310", hub.Choices[0].Id);
+        Assert.AreEqual("request:TC-310", hub.Choices[0].Id);
         Assert.AreEqual("Request Stranding Waiver", hub.Choices[0].Label);
     }
 
     [Test]
     public void TheWheelsWorstCase_StaysEight_WithThreeRequestsForACitizen()
     {
-        int requests = FormRequests.Count(FormRequests.For(TravellerKind.PoorTourist, CitizenAskable()));
+        int requests = FormRequests.Count(CitizenAskable());
         Assert.AreEqual(3, requests, "Manifest, Waiver, Proof of means");
         CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, requests, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
                                  "the papers menu + 2 spoken requests + ask + look + 2 dialogs + one premade's dialog = 8");
@@ -360,10 +625,10 @@ public class InterviewScriptTests
     {
         var runner = new DialogRunner(Build(), InterviewScript.Opening(Lines(), Case()));
         Assert.IsNotNull(runner.Choose("papers"));
-        Assert.IsNotNull(runner.Choose("request:2"));
-        CollectionAssert.AreEqual(new[] { "back", "request:1" }, Ids(runner.Choices), "still in the papers menu");
-        Assert.IsNull(runner.Choose("request:2"), "it cannot be chosen twice");
-        Assert.IsNotNull(runner.Choose("request:1"));
+        Assert.IsNotNull(runner.Choose("request:TC-630"));
+        CollectionAssert.AreEqual(new[] { "back", "request:TC-620" }, Ids(runner.Choices), "still in the papers menu");
+        Assert.IsNull(runner.Choose("request:TC-630"), "it cannot be chosen twice");
+        Assert.IsNotNull(runner.Choose("request:TC-620"));
         CollectionAssert.AreEqual(new[] { "back" }, Ids(runner.Choices), "every paper handed over: only the way back");
         Assert.IsNotNull(runner.Choose("back"));
         CollectionAssert.AreEqual(new[] { "papers", "ask", "dlg:dlg_rumour" }, Ids(runner.Choices));
@@ -372,10 +637,10 @@ public class InterviewScriptTests
     [Test]
     public void Hub_OneDocumentOnRequest_IsADirectRequest_KeepingThePaperIndex()
     {
-        InterviewCase c = Case(documents: new[] { Doc("Displacement Certificate", DocumentHandOver.OnArrival), Doc("Intake Declaration") });
+        InterviewCase c = Case(documents: new[] { Doc("Displacement Certificate", DocumentHandOver.OnArrival, "TC-610"), Doc("Intake Declaration", formNumber: "TC-620") });
         DialogGraph graph = Build(c);
         DialogNode hub = graph.Node(InterviewScript.HubNodeId);
-        CollectionAssert.AreEqual(new[] { "request:1", "ask", "dlg:dlg_rumour" }, Ids(hub.Choices), "no sub-menu for one form");
+        CollectionAssert.AreEqual(new[] { "request:TC-620", "ask", "dlg:dlg_rumour" }, Ids(hub.Choices), "no sub-menu for one form");
         Assert.AreEqual("Request Intake Declaration", hub.Choices[0].Label);
         Assert.AreEqual(1, hub.Choices[0].DocumentIndex, "the index stays the paper's place in the case");
         Assert.AreEqual(DialogChoiceKind.Request, hub.Choices[0].Kind);
@@ -395,7 +660,7 @@ public class InterviewScriptTests
         DialogGraph graph = Build(Dressed(new Garment(LookSlot.Hair, "Caesar crop", "Caesar crop / nodus roll", false)), lines: LinesWithRequests());
         var expected = new Dictionary<string, DialogChoiceKind>
         {
-            ["papers"] = DialogChoiceKind.Request, ["request:1"] = DialogChoiceKind.Request, ["request:2"] = DialogChoiceKind.Request,
+            ["papers"] = DialogChoiceKind.Request, ["request:TC-620"] = DialogChoiceKind.Request, ["request:TC-630"] = DialogChoiceKind.Request,
             ["act:step_closer"] = DialogChoiceKind.Request, ["act:speak_up"] = DialogChoiceKind.Request,
             ["ask"] = DialogChoiceKind.Question, ["look"] = DialogChoiceKind.Look, ["dlg:dlg_rumour"] = DialogChoiceKind.Dialog,
             ["back"] = DialogChoiceKind.Back, ["q:q_currency"] = DialogChoiceKind.Question, ["q:q_capital"] = DialogChoiceKind.Question,
@@ -492,13 +757,13 @@ public class InterviewScriptTests
     }
 
     [Test]
-    public void AnswerLines_CarryTheFact_AndTheClaimedErasWordingWins()
+    public void AnswerLines_CarryTheFact_AndTheKindsAndErasWordingWins()
     {
         DialogNode ask = Build().Node(InterviewScript.AskNodeId);
 
         DialogChoice currency = ask.Choices[1];
-        CollectionAssert.AreEqual(new[] { "q_currency.ancient.prompt", "q_currency.ancient.answer" }, LineIds(currency.Lines));
-        Assert.AreEqual("What do you trade with at home?", currency.Lines[0].Text);
+        CollectionAssert.AreEqual(new[] { "q_currency.prompt", "q_currency.overrides.1.answer" }, LineIds(currency.Lines), "the desk's words are the question's own; the answer the override's");
+        Assert.AreEqual("About Currency?", currency.Lines[0].Text);
         Assert.AreEqual(DialogSpeaker.Desk, currency.Lines[0].Speaker);
         Assert.AreEqual("We trade with Deben.", currency.Lines[1].Text);
         Assert.IsTrue(currency.Lines[1].IsAnswer);
@@ -515,6 +780,10 @@ public class InterviewScriptTests
         InterviewCase medieval = Case();
         medieval.claimedEraId = "medieval";
         Assert.AreEqual("We pay in Deben.", Build(medieval).Node(InterviewScript.AskNodeId).Choices[1].Lines[1].Text, "no override for this era");
+
+        InterviewCase tourist = Case();
+        tourist.kind = TravellerKind.RichTourist;
+        Assert.AreEqual("We pay in Deben.", Build(tourist).Node(InterviewScript.AskNodeId).Choices[1].Lines[1].Text, "the displaced's override is not a tourist's");
     }
 
     [Test]
@@ -535,7 +804,7 @@ public class InterviewScriptTests
         InterviewLines blank = Lines();
         blank.claims = null;
         Assert.AreEqual("New Kingdom Egypt (Ancient)", InterviewScript.Opening(blank, Case())[1].Text);
-        Assert.AreEqual(Interview.Claim(Lines(), TravellerKind.Displaced, "New Kingdom Egypt (Ancient)"), InterviewScript.Opening(Lines(), Case())[1].Text, "the banner's text");
+        Assert.AreEqual(InterviewScript.Claim(Lines(), Case()), InterviewScript.Opening(Lines(), Case())[1].Text, "the claim's one text");
 
         InterviewCase tourist = Case();
         tourist.kind = TravellerKind.RichTourist;
@@ -573,10 +842,10 @@ public class InterviewScriptTests
         DialogNode hub = graph.Node(InterviewScript.HubNodeId);
 
         DialogNode papers = graph.Node(InterviewScript.PapersNodeId);
-        DialogLine requestReply = papers.Choices.First(ch => ch.Id == "request:1").Lines[1];
+        DialogLine requestReply = papers.Choices.First(ch => ch.Id == "request:TC-620").Lines[1];
         Assert.AreEqual(DialogSpeaker.Traveller, requestReply.Speaker);
         CollectionAssert.IsEmpty(requestReply.English, "\"Here you are.\" holds no key word");
-        CollectionAssert.IsEmpty(papers.Choices.First(ch => ch.Id == "request:1").Lines[0].English, "the desk's prompt");
+        CollectionAssert.IsEmpty(papers.Choices.First(ch => ch.Id == "request:TC-620").Lines[0].English, "the desk's prompt");
         CollectionAssert.IsEmpty(hub.Choices.First(ch => ch.Id == "act:step_closer").Lines[1].English, "\"Like this?\" holds no key word");
 
         DialogLine smallTalk = graph.Node(InterviewScript.AskNodeId).Choices.First(ch => ch.Id == "smalltalk").Lines[1];
@@ -656,7 +925,7 @@ public class InterviewScriptTests
 
         runner.Choose("papers");
         int before = runner.Transcript.Count;
-        runner.Choose("request:1");
+        runner.Choose("request:TC-620");
         Assert.AreEqual("Here you are.", InterviewScript.SaidSince(runner.Transcript, before).Single().Text);
     }
 
@@ -970,5 +1239,78 @@ public class InterviewScriptTests
         DialogNode ask = graph.Node(InterviewScript.AskNodeId);
         Assert.IsTrue(ask.Choices.SelectMany(c => c.Lines).All(l => l.Expression == null), "prompts, answers and small talk carry no expression");
         Assert.IsTrue(graph.Node(InterviewScript.HubNodeId).Choices.SelectMany(c => c.Lines).All(l => l.Expression == null), "requests carry none");
+    }
+
+    // ---- The reaction (R1, §6) ----
+
+    private static InterviewLines ReactingLines()
+    {
+        InterviewLines lines = VoicedLines();
+        lines.reactions.Add(new VoiceLine { verdict = ReactionVerdict.Denied, intent = ReactionIntent.Honest, line = new LineText("interview.reactions.1", "But... I did everything right.") });
+        lines.voices.reactions.Add(new VoiceLine
+        {
+            personality = "curt",
+            verdict = ReactionVerdict.Denied,
+            intent = ReactionIntent.Honest,
+            line = new LineText("interview.voices.reactions.curt.1", "Unbelievable. Home, they said."),
+            then = new LineText("interview.voices.reactions.curt.1.then", "And I paid for the queue to {place}.")
+        });
+        return lines;
+    }
+
+    [Test]
+    public void Reaction_IsOneOrTwoTravellerLinesWithKeyWordSpans()
+    {
+        IReadOnlyList<DialogLine> said = InterviewScript.Reaction(ReactingLines(), Voiced(Case(keyWords: KeyWordRule())), ReactionVerdict.Denied, ReactionIntent.Honest, "closed");
+        Assert.AreEqual(2, said.Count);
+        Assert.AreEqual(("interview.voices.reactions.curt.1", DialogSpeaker.Traveller, "Unbelievable. Home, they said."), (said[0].Id, said[0].Speaker, said[0].Text));
+        Assert.AreEqual(("interview.voices.reactions.curt.1.then", "And I paid for the queue to New Kingdom Egypt (Ancient)."), (said[1].Id, said[1].Text));
+        Assert.AreEqual("Home", English(said[0]));
+        Assert.AreEqual("New Kingdom Egypt (Ancient)", English(said[1]), "the place's fill stays English");
+        Assert.IsFalse(said[0].IsAnswer || said[1].IsAnswer, "never evidence");
+    }
+
+    [Test]
+    public void Reaction_NoVoiceSaysTheDefault()
+    {
+        IReadOnlyList<DialogLine> said = InterviewScript.Reaction(ReactingLines(), Case(), ReactionVerdict.Denied, ReactionIntent.Honest, string.Empty);
+        Assert.AreEqual(1, said.Count, "no then line: one line");
+        Assert.AreEqual("But... I did everything right.", said[0].Text);
+        CollectionAssert.IsEmpty(InterviewScript.Reaction(ReactingLines(), Case(), ReactionVerdict.Accepted, ReactionIntent.Lying, string.Empty), "no row: nothing said");
+    }
+
+    // ---- The slip (T10) ----
+
+    private static InterviewCase Slipped(InterviewCase c)
+    {
+        c.slip = new LineText("interview.slips.4", "Home. Yes. {place}. I say it every morning so I don't forget.");
+        return c;
+    }
+
+    [Test]
+    public void Build_ASlipFollowsTheSmallTalkReply()
+    {
+        DialogChoice talk = Build(Slipped(Case())).Node(InterviewScript.AskNodeId).Choices.Single(c => c.Id == "smalltalk");
+        Assert.AreEqual(3, talk.Lines.Count);
+        Assert.AreEqual("The Nile rose right on time.", talk.Lines[1].Text);
+        Assert.AreEqual(("interview.slips.4", DialogSpeaker.Traveller, "Home. Yes. New Kingdom Egypt (Ancient). I say it every morning so I don't forget."),
+                        (talk.Lines[2].Id, talk.Lines[2].Speaker, talk.Lines[2].Text));
+    }
+
+    [Test]
+    public void Build_ASlipIsNotAnAnswerLine()
+    {
+        DialogChoice talk = Build(Slipped(Case())).Node(InterviewScript.AskNodeId).Choices.Single(c => c.Id == "smalltalk");
+        Assert.IsFalse(talk.Lines[2].IsAnswer, "never compare-clickable, never evidence");
+        Assert.IsNull(talk.Lines[2].Value);
+    }
+
+    [Test]
+    public void Build_NoSlipLeavesSmallTalkAsBefore()
+    {
+        DialogChoice talk = Build(Case()).Node(InterviewScript.AskNodeId).Choices.Single(c => c.Id == "smalltalk");
+        Assert.AreEqual(2, talk.Lines.Count);
+        CollectionAssert.IsEmpty(Build(Slipped(Case(smallTalk: false))).Node(InterviewScript.AskNodeId).Choices.Where(c => c.Id == "smalltalk"),
+                                 "no small talk: nowhere to slip");
     }
 }

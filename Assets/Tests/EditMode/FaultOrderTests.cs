@@ -33,6 +33,32 @@ public class FaultOrderTests
         Assert.IsFalse(FaultOrder.MayRoll(FaultRoll.Costume, false, false, false, true), "a liar or a violator is dressed right");
     }
 
+    /// <summary>A forced slot's authored fault (days 7-15 B6) is a planned slot: the lie, violation and costume rolls are all skipped, with no draw on the lie or fault streams.</summary>
+    [Test]
+    public void AForcedSlotsFault_SkipsEveryRollWithNoDraw()
+    {
+        var lie = new ScriptedRandom();
+        var fault = new ScriptedRandom();
+        bool authored = true;
+        foreach (FaultRoll roll in FaultOrder.Order)
+            Assert.IsFalse(FaultOrder.MayRoll(roll, false, authored, false, false), roll.ToString());
+        if (FaultOrder.MayRoll(FaultRoll.Lie, false, authored, false, false))
+            Lies.Roll(1f, new[] { LieKind.DoctoredIdentity }, lie);
+        if (FaultOrder.MayRoll(FaultRoll.Violation, false, authored, false, false))
+            Directives.Roll(1f, 1, fault);
+        Assert.IsTrue(lie.Done && fault.Done, "no draw was made on either stream");
+    }
+
+    /// <summary>A premade forced without an authored fault is honest: their authoring decides, and it names none.</summary>
+    [Test]
+    public void AForcedSlotWithoutAFault_IsHonest()
+    {
+        Assert.IsFalse(FaultOrder.Rolls(true, false, false));
+        foreach (FaultRoll roll in FaultOrder.Order)
+            Assert.IsFalse(FaultOrder.MayRoll(roll, true, false, false, false), roll.ToString());
+        Assert.IsFalse(Directives.Plan(PlannedDirective.None).IsFault);
+    }
+
     /// <summary>An honest entry's traveller draws nothing on the lie and fault streams: the streams are untouched (CaseFactory reads FaultOrder before Lies.Roll and CostumeErrors.Plan).</summary>
     [Test]
     public void AnHonestEntry_SkipsEveryRoll_WithNoDraw()

@@ -68,6 +68,24 @@ public readonly struct ScreenBox
 
     /// <summary>The box's height, in screen heights.</summary>
     public float Height { get; }
+
+    /// <summary>The box as a rectangle in pixels on a screen of <paramref name="screenWidth"/> x <paramref name="screenHeight"/> (its width is its height times <paramref name="paperAspect"/>).</summary>
+    public ScreenRect InPixels(float paperAspect, float screenWidth, float screenHeight)
+    {
+        float h = screenHeight, halfWidth = screenWidth / 2f, w = Height * paperAspect;
+        return new ScreenRect(halfWidth + (CentreX - w / 2f) * h, (CentreY - Height / 2f) * h,
+                              halfWidth + (CentreX + w / 2f) * h, (CentreY + Height / 2f) * h);
+    }
+
+    /// <summary>True when a point in pixels (<paramref name="px"/>, <paramref name="py"/>) lies in the box, its edges included, on such a screen; a screen with no height covers nothing.</summary>
+    public bool Covers(float paperAspect, float screenWidth, float screenHeight, float px, float py)
+    {
+        if (screenHeight <= 0f)
+            return false;
+        float h = screenHeight, w = Height * paperAspect;
+        float x = (px - screenWidth / 2f) / h, y = py / h;
+        return Math.Abs(x - CentreX) <= w / 2f && Math.Abs(y - CentreY) <= Height / 2f;
+    }
 }
 
 /// <summary>
@@ -177,18 +195,22 @@ public static class ExamineLayout
         float k = 2f * (float)Math.Tan(verticalFovDegrees * Math.PI / 360.0);
         float halfWidth = box.Height * paperAspect / 2f;
         float bottom = box.CentreY - box.Height / 2f;
-        float best = float.PositiveInfinity;
-        foreach (float x in new[] { box.CentreX - halfWidth, box.CentreX + halfWidth })
-        {
-            // A point at depth z on the ray sits heightAboveDesk + z * rate above the plane.
-            float rate = normalDotRight * x * k + normalDotUp * (bottom - 0.5f) * k + normalDotForward;
-            if (rate >= 0f)
-                continue;
-            float z = -heightAboveDesk / rate;
-            if (z > 0f && z < best)
-                best = z;
-        }
-        return best;
+        // The two lower corners, one after the other (no array: this runs every frame a paper is held).
+        float left = CornerDepth(box.CentreX - halfWidth, bottom, k, heightAboveDesk, normalDotRight, normalDotUp, normalDotForward);
+        float right = CornerDepth(box.CentreX + halfWidth, bottom, k, heightAboveDesk, normalDotRight, normalDotUp, normalDotForward);
+        return Math.Min(left, right);
+    }
+
+    /// <summary>The depth at which the ray through one lower corner (x across, <paramref name="bottom"/> up, in screen heights) meets the desk plane; positive infinity when it never goes down to it.</summary>
+    private static float CornerDepth(float x, float bottom, float k, float heightAboveDesk,
+                                     float normalDotRight, float normalDotUp, float normalDotForward)
+    {
+        // A point at depth z on the ray sits heightAboveDesk + z * rate above the plane.
+        float rate = normalDotRight * x * k + normalDotUp * (bottom - 0.5f) * k + normalDotForward;
+        if (rate >= 0f)
+            return float.PositiveInfinity;
+        float z = -heightAboveDesk / rate;
+        return z > 0f ? z : float.PositiveInfinity;
     }
 
     /// <summary>Smoothstep over [0, 1] (clamped): the rise and the return.</summary>

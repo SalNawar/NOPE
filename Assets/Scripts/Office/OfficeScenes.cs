@@ -29,10 +29,10 @@ public static class OfficeScenes
     }
 
     /// <summary>The art office's scene name.</summary>
-    public static string ArtSceneName => Config != null ? Config.officeSceneName : "OfficeScene";
+    public static string ArtSceneName => Config != null ? Config.officeSceneName : RunConfigSO.DefaultOfficeSceneName;
 
     /// <summary>The gameplay layer's scene name.</summary>
-    public static string GameplaySceneName => Config != null ? Config.officeGameplaySceneName : "OfficeGameplay";
+    public static string GameplaySceneName => Config != null ? Config.officeGameplaySceneName : RunConfigSO.DefaultOfficeGameplaySceneName;
 
     /// <summary>The office scene contract (null when RunConfig has none).</summary>
     public static OfficeSceneContractSO Contract => Config != null ? Config.officeContract : null;

@@ -24,6 +24,14 @@ public class EffectOpsTests
     [TestCase(EffectOpType.BriefingLine, false)]
     [TestCase(EffectOpType.NewsLine, false)]
     [TestCase(EffectOpType.SetFact, false)]
+    [TestCase(EffectOpType.HouseholdExpense, true)]
+    [TestCase(EffectOpType.SicknessChance, true)]
+    [TestCase(EffectOpType.CareCost, true)]
+    [TestCase(EffectOpType.Upkeep, true)]
+    [TestCase(EffectOpType.MedicalDrain, true)]
+    [TestCase(EffectOpType.Mood, true)]
+    [TestCase(EffectOpType.BreakInChance, true)]
+    [TestCase(EffectOpType.BreakInShare, true)]
     public void ActsWhileActive_OnlyTheContinuousModifiersAndCues(EffectOpType type, bool expected)
     {
         Assert.AreEqual(expected, EffectOps.ActsWhileActive(type));
@@ -50,6 +58,15 @@ public class EffectOpsTests
         Assert.AreEqual(15, (int)EffectOpType.BriefingLine);
         Assert.AreEqual(16, (int)EffectOpType.NewsLine);
         Assert.AreEqual(17, (int)EffectOpType.SetFact);
+        Assert.AreEqual(18, (int)EffectOpType.HouseholdExpense);
+        Assert.AreEqual(19, (int)EffectOpType.SicknessChance);
+        Assert.AreEqual(20, (int)EffectOpType.CareCost);
+        Assert.AreEqual(21, (int)EffectOpType.Upkeep);
+        Assert.AreEqual(22, (int)EffectOpType.MedicalDrain);
+        Assert.AreEqual(23, (int)EffectOpType.Mood);
+        Assert.AreEqual(24, (int)EffectOpType.BreakInChance);
+        Assert.AreEqual(25, (int)EffectOpType.BreakInShare);
+        Assert.AreEqual(26, System.Enum.GetValues(typeof(EffectOpType)).Length, "a new member is appended here too");
     }
 
     [Test]

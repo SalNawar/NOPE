@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216f58e381e1445588efbd033278b8d9, type: 3}
+  m_Name: Dialog_dlg_ines
+  m_EditorClassIdentifier: Assembly-CSharp::DialogSO
+  dialog:
+    id: dlg_ines
+    label: Ask about Desk 4 >
+    oneShot: 1
+    nodes:
+    - id: start
+      lines:
+      - id: dlg_ines.start.1
+        speaker: 1
+        text: Desk 4 closed this morning. The Drive found my account on Tuesday,
+          and the Drive doesn't wait.
+        expression: 
+      choices:
+      - id: queue
+        label: What happens to your queue?
+        lines: []
+        next: queue
+        effect: 
+      - id: luck
+        label: Good luck at the mills.
+        lines: []
+        next: luck
+        effect: 
+    - id: queue
+      lines:
+      - id: dlg_ines.queue.1
+        speaker: 1
+        text: They're sending it to you. Sorry. Keep the good pen, it's in the second
+          drawer.
+        expression: 
+      choices:
+      - id: pen
+        label: Next!
+        lines: []
+        next: 
+        effect: 
+    - id: luck
+      lines:
+      - id: dlg_ines.luck.1
+        speaker: 1
+        text: Luck is a Premium feature. I'm on Economy.
+        expression: 
+      choices:
+      - id: bye
+        label: Next!
+        lines: []
+        next: 
+        effect: 
+  conditions: []

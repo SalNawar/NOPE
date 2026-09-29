@@ -19,7 +19,7 @@ public enum EffectOpType
     /// <summary>floatParam = credits (can be negative)</summary>
     AddMoney,
 
-    /// <summary>floatParam = stability delta</summary>
+    /// <summary>floatParam = a stability change in percent, compounding (StabilityRules.ApplyPercent: a loss takes that share of the current value, a gain closes that share of the gap to 100)</summary>
     AddStability,
 
     /// <summary>stringParam = upgrade id</summary>
@@ -63,7 +63,33 @@ public enum EffectOpType
     // ---- Instant, history rules only ----
 
     /// <summary>Instant: profile = the target place, category = the fact, stringParam = the new value. History rules only (EffectOps.HistoryOnly).</summary>
-    SetFact
+    SetFact,
+
+    // ---- Continuous, the household (Home's house upgrades; docs/superpowers/specs/2026-09-30-home-upgrades-design.md §3) ----
+
+    /// <summary>floatParam = cr a night added to rent and utilities (negative saves), never below 0 in all (HomeRules.Cost)</summary>
+    HouseholdExpense,
+
+    /// <summary>floatParam = +chance (negative lowers) that a family member worsens a night, never below 0 in all (HomeRules.Adjusted)</summary>
+    SicknessChance,
+
+    /// <summary>floatParam = cr added to a treatment's cost (negative cheaper), never below 0 in all</summary>
+    CareCost,
+
+    /// <summary>floatParam = cr a night the household pays for what it owns (a food plan, a subscription): the bill's upkeep line</summary>
+    Upkeep,
+
+    /// <summary>floatParam = cr added to the medical drain per condition point (negative lowers), never below 0 in all</summary>
+    MedicalDrain,
+
+    /// <summary>floatParam = the household's mood points (a sick member's nightly recovery chance, HomeRules.RecoveryChance)</summary>
+    Mood,
+
+    /// <summary>floatParam = +chance (negative lowers) of a break-in at Home a night, never below 0 in all</summary>
+    BreakInChance,
+
+    /// <summary>floatParam = +share (negative lowers) of a positive wallet a break-in takes, never below 0 in all</summary>
+    BreakInShare
 }
 
 /// <summary>Rules over effect ops, pure so they are tested headless.</summary>
@@ -72,7 +98,7 @@ public static class EffectOps
     /// <summary>
     /// True for the continuous ops that change play for as long as the effect
     /// is active (legendary, liar and pay bonuses, visitor and blueprint
-    /// weights, shop discounts, cues); false for the instant ops (SetFact
+    /// weights, shop discounts, cues, the household's ops); false for the instant ops (SetFact
     /// included, see <see cref="HistoryOnly"/>) and for BriefingLine/NewsLine,
     /// which act once or only through the next morning's paper. A narrative
     /// dialog's effect may hold only the latter.
@@ -88,6 +114,14 @@ public static class EffectOps
             case EffectOpType.ShopDiscountPercent:
             case EffectOpType.CaseBlueprintWeight:
             case EffectOpType.Cue:
+            case EffectOpType.HouseholdExpense:
+            case EffectOpType.SicknessChance:
+            case EffectOpType.CareCost:
+            case EffectOpType.Upkeep:
+            case EffectOpType.MedicalDrain:
+            case EffectOpType.Mood:
+            case EffectOpType.BreakInChance:
+            case EffectOpType.BreakInShare:
                 return true;
             default:
                 return false;

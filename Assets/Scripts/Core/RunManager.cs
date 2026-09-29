@@ -63,7 +63,7 @@ public sealed class RunManager : MonoBehaviour
         if (!mgr.ContinueRun())
             mgr.NewRun();
 
-        Debug.Log($"[RunManager] <<< Exiting GetOrCreate (day {mgr.World?.day}, money={mgr.World?.money}, stability={mgr.World?.timelineStability:0.#}).");
+        Debug.Log($"[RunManager] <<< Exiting GetOrCreate (day {mgr.World?.day}, money={mgr.World?.money}, stability={mgr.World?.timelineStability:0.00}).");
 
         return mgr;
     }
@@ -78,6 +78,18 @@ public sealed class RunManager : MonoBehaviour
     // -----------------------------
     // Run lifecycle
     // -----------------------------
+
+    /// <summary>
+    /// Raised when the running world's effects change: an effect activated,
+    /// removed or expired (TimelineService), or a new or continued run. Cue
+    /// receivers listen to it, so an effect that lands mid-scene (a Home
+    /// purchase, a dev cheat) shows at once, not at the next scene's start
+    /// (audit R3-040).
+    /// </summary>
+    public static event System.Action EffectsChanged;
+
+    /// <summary>Raises <see cref="EffectsChanged"/> (TimelineService after it changes a world's effects; NewRun and ContinueRun).</summary>
+    public static void NotifyEffectsChanged() => EffectsChanged?.Invoke();
 
     /// <summary>
     /// Starts a brand-new run: deletes the save and builds a fresh WorldState.
@@ -95,6 +107,7 @@ public sealed class RunManager : MonoBehaviour
             : Random.Range(int.MinValue, int.MaxValue));
 
         Debug.Log($"[RunManager] New run started (day {World.day}, seed {World.runSeed}).");
+        NotifyEffectsChanged();
     }
 
     /// <summary>
@@ -120,6 +133,7 @@ public sealed class RunManager : MonoBehaviour
         if (Library != null)
             HistoryService.RebuildLeaderEffect(World, Library, World.day);
         Debug.Log($"[RunManager] Continued run (day {World.day}).");
+        NotifyEffectsChanged();
         return true;
     }
 
@@ -181,7 +195,7 @@ public sealed class RunManager : MonoBehaviour
     /// </summary>
     public void Sleep()
     {
-        Debug.Log($"[RunManager] >>> Entering Sleep (day {World.day}, money={World.money}, stability={World.timelineStability:0.#}).");
+        Debug.Log($"[RunManager] >>> Entering Sleep (day {World.day}, money={World.money}, stability={World.timelineStability:0.00}).");
 
         EndingSO ending = EndingService.Evaluate(World, Library, Config != null ? Config.gameConfig : null, EndingMoment.DayBoundary);
         if (ending != null)
@@ -210,7 +224,7 @@ public sealed class RunManager : MonoBehaviour
         // The nightly resolve runs before the day turns, so triggers read "today" (DayCycle.AdvanceNight).
         DayCycle.AdvanceNight(World, Library, Config != null ? Config.gameConfig : null);
 
-        Debug.Log($"[RunManager] <<< Exiting AdvanceToNextDay (now day {World.day}, money={World.money}, stability={World.timelineStability:0.#}; saving and loading Office).");
+        Debug.Log($"[RunManager] <<< Exiting AdvanceToNextDay (now day {World.day}, money={World.money}, stability={World.timelineStability:0.00}; saving and loading Office).");
 
         SaveNow();
         LoadOfficeScene();

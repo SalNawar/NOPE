@@ -67,7 +67,7 @@ public sealed class OfficeUIController : MonoBehaviour
             moneyText.text = UiText.Format("tray.money", UiText.Currency(UiText.WalletForm.Label), world.money);
 
         if (stabilityText != null)
-            stabilityText.text = UiText.Format("tray.stability", world.timelineStability);
+            stabilityText.text = UiText.Format("tray.stability", StabilityRules.Format(world.timelineStability));
 
         if (dayText != null)
             dayText.text = UiText.Format("tray.day", world.day);
@@ -90,8 +90,8 @@ public sealed class OfficeUIController : MonoBehaviour
         SetResult(verdict.correct
             ? UiText.Format("verdict.correct", verdict.payAwarded, credits)
             : verdict.moneyPenalty > 0
-                ? UiText.Format("verdict.wrongPenalty", verdict.stabilityDelta, verdict.moneyPenalty, credits)
-                : UiText.Format("verdict.wrong", verdict.stabilityDelta));
+                ? UiText.Format("verdict.wrongPenalty", StabilityRules.FormatChange(verdict.stabilityDelta), verdict.moneyPenalty, credits)
+                : UiText.Format("verdict.wrong", StabilityRules.FormatChange(verdict.stabilityDelta)));
 
         bool canShowSlip = verdict.citationIssued && citationPanel != null && citationText != null;
 
@@ -128,8 +128,6 @@ public sealed class OfficeUIController : MonoBehaviour
         if (citationPanel != null)
             citationPanel.SetActive(false);
 
-        Action cb = _onCitationDismissed;
-        _onCitationDismissed = null;
-        cb?.Invoke();
+        OneShot.Fire(ref _onCitationDismissed);
     }
 }

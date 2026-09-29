@@ -133,17 +133,18 @@ public static class TimelineService
 
         int tomorrow = world.day + 1;
         var news = new List<string>();
+        var desk = new List<string>();
 
         RecomputeDominance(world, lib, config, news, TomorrowPlaces(world, lib));
         RebuildTierEffects(world, lib, tomorrow);
         int historyLines = HistoryService.LatchLeader(world, lib, config, tomorrow, news);
-        EvaluateTriggers(world, lib, tomorrow, news);
+        EvaluateTriggers(world, lib, tomorrow, news, desk);
         HistoryService.PromoteCarries(world, lib, config, tomorrow, news, historyLines);
         HistoryService.ReportPanics(world, lib, news);
         HistoryService.ReportStrandings(world, lib, news);
         AddDebtLine(world, lib, tomorrow, news);
         ExpireEffects(world, tomorrow);
-        BuildTomorrowPackage(world, lib, news);
+        BuildTomorrowPackage(world, lib, news, desk);
 
         Debug.Log($"[TimelineService] <<< Exiting NightlyResolve (activeEffects={world.timeline.activeEffects.Count}, dominant={world.timeline.dominantKeys.Count}, supporting={world.timeline.supportingKeys.Count}, briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count}).");
     }
@@ -281,15 +282,22 @@ public static class TimelineService
     /// One idempotent-rebuild step: an effect family (dominance tiers, the
     /// timeline leader) removes its own active entries, whose source label
     /// starts with <paramref name="sourcePrefix"/>, before re-activating.
-    /// Returns how many were removed.
+    /// Returns how many were removed (any: RunManager.EffectsChanged).
     /// </summary>
-    internal static int RemoveEffectsFrom(WorldState world, string sourcePrefix) =>
-        world.timeline.activeEffects.RemoveAll(e => e != null && e.sourceLabel != null && e.sourceLabel.StartsWith(sourcePrefix, System.StringComparison.Ordinal));
+    internal static int RemoveEffectsFrom(WorldState world, string sourcePrefix)
+    {
+        int removed = world.timeline.activeEffects.RemoveAll(e => e != null && e.sourceLabel != null && e.sourceLabel.StartsWith(sourcePrefix, System.StringComparison.Ordinal));
+        if (removed > 0)
+            RunManager.NotifyEffectsChanged();
+        return removed;
+    }
 
     /// <summary>
-    /// Evaluates all triggers; fires those whose conditions all pass.
+    /// Evaluates all triggers; fires those whose conditions all pass. A fired
+    /// trigger's line goes where its section says (days 7-15 Q9): the news,
+    /// the paper's <paramref name="desk"/> section, or nowhere (Return).
     /// </summary>
-    private static void EvaluateTriggers(WorldState world, ContentLibrarySO lib, int startDay, List<string> news)
+    private static void EvaluateTriggers(WorldState world, ContentLibrarySO lib, int startDay, List<string> news, List<string> desk)
     {
         int total = lib.Triggers != null ? lib.Triggers.Count : 0;
         int fired = 0;
@@ -313,8 +321,8 @@ public static class TimelineService
             Debug.Log($"[Timeline] Trigger fired: {trigger.displayName}");
             fired++;
 
-            if (!string.IsNullOrEmpty(trigger.newsLineOnFire))
-                news.Add(trigger.newsLineOnFire);
+            if (!string.IsNullOrEmpty(trigger.newsLineOnFire) && trigger.section != StorySection.Return)
+                (trigger.section == StorySection.Desk ? desk : news).Add(trigger.newsLineOnFire);
 
             foreach (TriggerOutcome outcome in trigger.outcomes)
             {
@@ -365,34 +373,66 @@ public static class TimelineService
             dialogs.Add(new Gated<AuthoredDialog>(d.dialog, ToGates(d.conditions)));
         }
 
-        var premadeDialogs = new List<string>();
-        foreach (LegendarySO premade in lib.Legendaries)
-            if (premade != null && !string.IsNullOrWhiteSpace(premade.dialogId))
-                premadeDialogs.Add(premade.dialogId);
+        List<string> premadeDialogs = PremadeDialogIds(lib);
 
-        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs, AgencyForms(lib));
+        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs, AgencyForms(lib, world != null ? world.day : 1));
     }
 
     /// <summary>
-    /// The agency forms of the library's day plans (every blueprint's
-    /// templates, each once, in first-appearance order) as the interview's
-    /// requests see them (traveller types I2): the papers menu lists those a
-    /// kind may be asked for.
+    /// Every dialog bound to a premade's appearance (InterviewDay: offered only
+    /// while it stands at the desk): each premade's own and each forced slot's
+    /// of every day plan (days 7-15 B7), in library order, blanks skipped.
     /// </summary>
-    public static List<AskableForm> AgencyForms(ContentLibrarySO lib)
+    public static List<string> PremadeDialogIds(ContentLibrarySO lib)
     {
-        var forms = new List<AskableForm>();
-        var seen = new HashSet<DocumentTemplateSO>();
+        var ids = new List<string>();
+        foreach (LegendarySO premade in lib != null ? lib.Legendaries : System.Array.Empty<LegendarySO>())
+            if (premade != null && !string.IsNullOrWhiteSpace(premade.dialogId))
+                ids.Add(premade.dialogId);
         foreach (DayPlanSO plan in lib != null ? lib.DayPlans : System.Array.Empty<DayPlanSO>())
+            foreach (ForcedCaseSlot forced in plan != null ? plan.ForcedCases : System.Array.Empty<ForcedCaseSlot>())
+                if (forced != null && !string.IsNullOrWhiteSpace(forced.dialogId))
+                    ids.Add(forced.dialogId);
+        return ids;
+    }
+
+    /// <summary>
+    /// The papers menu of <paramref name="day"/> (the personalities spec's
+    /// W4): every on-request form of the day plans of days 1 to
+    /// <paramref name="day"/>, in first-appearance order, a request group once
+    /// (FormRequests.MetSoFar over DayForms). Every traveller of the day is
+    /// offered it.
+    /// </summary>
+    public static List<AskableForm> AgencyForms(ContentLibrarySO lib, int day) => FormRequests.MetSoFar(DayForms(lib, day), day);
+
+    /// <summary>
+    /// Each day's agency forms from day 1 to <paramref name="lastDay"/>, in day
+    /// order (item i is day i + 1's: the plan GetDayPlan picks for it, its
+    /// kinds' and forced blueprints' templates, each once, in order), one
+    /// AskableForm per template across the days. A day without a plan lists none.
+    /// </summary>
+    public static List<IReadOnlyList<AskableForm>> DayForms(ContentLibrarySO lib, int lastDay)
+    {
+        var byTemplate = new Dictionary<DocumentTemplateSO, AskableForm>();
+        var days = new List<IReadOnlyList<AskableForm>>();
+        for (int d = 1; d <= lastDay; d++)
         {
-            if (plan == null)
-                continue;
-            foreach (CaseBlueprintSO blueprint in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints))
-                foreach (DocumentTemplateSO t in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : System.Array.Empty<DocumentTemplateSO>())
-                    if (t != null && seen.Add(t))
-                        forms.Add(new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver), t.askableBy ?? System.Array.Empty<TravellerKind>()));
+            var forms = new List<AskableForm>();
+            DayPlanSO plan = lib != null ? lib.GetDayPlan(d) : null;
+            if (plan != null)
+                foreach (CaseBlueprintSO blueprint in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints))
+                    foreach (DocumentTemplateSO t in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : System.Array.Empty<DocumentTemplateSO>())
+                    {
+                        if (t == null)
+                            continue;
+                        if (!byTemplate.TryGetValue(t, out AskableForm form))
+                            byTemplate[t] = form = new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver));
+                        if (!forms.Contains(form))
+                            forms.Add(form);
+                    }
+            days.Add(forms);
         }
-        return forms;
+        return days;
     }
 
     /// <summary>
@@ -403,16 +443,24 @@ public static class TimelineService
     public static TranslationDay BuildTranslationDay(ContentLibrarySO lib, WorldState world) =>
         new TranslationDay(lib != null && lib.Translation.HasData ? lib.Translation.rules : null, Snapshot(world, null));
 
-    /// <summary>Today's scanner upgrades (the PC redesign SC1): the Auto-Feed and the Analysis Scanner as the day-start snapshot owns them, fixed at day start like the translation.</summary>
-    public static ScannerDay BuildScannerDay(WorldState world) => ScannerDay.From(Snapshot(world, null));
+    /// <summary>Today's scanner upgrade (the PC redesign SC1): the Auto-Feed or the Analysis Scanner, whichever is installed at the day's start (OrderBook.InForce: one upgraded scanner at a time), fixed at day start like the translation.</summary>
+    public static ScannerDay BuildScannerDay(WorldState world, ContentLibrarySO lib) => ScannerDay.From(OrderBook.InForce(world, lib));
 
     /// <summary>
-    /// Returns true if every condition on the trigger passes (Gates.AllPass):
+    /// Returns true if every condition on the trigger passes (ConditionsPass):
     /// one snapshot per trigger, so a trigger sees the flags that earlier
     /// triggers set tonight.
     /// </summary>
-    private static bool AllConditionsPass(TimelineTriggerSO trigger, WorldState world) =>
-        Gates.AllPass(ToGates(trigger.conditions), Snapshot(world, trigger.conditions));
+    private static bool AllConditionsPass(TimelineTriggerSO trigger, WorldState world) => ConditionsPass(trigger.conditions, world);
+
+    /// <summary>
+    /// True when every condition passes on the world as it stands now
+    /// (Gates.AllPass over one snapshot of it; a null or empty list passes):
+    /// the nightly triggers', and a forced slot's appearance at the day's
+    /// start (CaseFactory; days 7-15 B9), read the same way.
+    /// </summary>
+    public static bool ConditionsPass(IReadOnlyList<TriggerCondition> conditions, WorldState world) =>
+        Gates.AllPass(ToGates(conditions), Snapshot(world, conditions));
 
     /// <summary>
     /// A condition as the Domain gates read it: its type, threshold and plain
@@ -510,7 +558,8 @@ public static class TimelineService
 
     /// <summary>
     /// Activates an effect: applies its instant ops (optionally) and registers
-    /// it in the stacked active-effect list. Effects from any source coexist.
+    /// it in the stacked active-effect list (RunManager.EffectsChanged). Effects
+    /// from any source coexist.
     /// </summary>
     public static void ActivateEffect(
         WorldState world, EffectSO effect, string sourceLabel,
@@ -533,7 +582,7 @@ public static class TimelineService
                     case EffectOpType.AddCounter: world.AddCounter(op.stringParam, Mathf.RoundToInt(op.floatParam)); break;
                     case EffectOpType.AddMoney: world.money += Mathf.RoundToInt(op.floatParam); break;
                     case EffectOpType.AddStability:
-                        world.timelineStability = Mathf.Clamp(world.timelineStability + op.floatParam, 0f, 100f);
+                        world.timelineStability = StabilityRules.ApplyPercent(world.timelineStability, op.floatParam);
                         break;
                     case EffectOpType.UnlockUpgrade: world.UnlockUpgrade(op.stringParam); break;
                     case EffectOpType.AddAttributeScore:
@@ -561,47 +610,56 @@ public static class TimelineService
             startDay = startDay,
             durationDays = durationDays
         });
+        RunManager.NotifyEffectsChanged();
 
         Debug.Log($"[TimelineService] ActivateEffect: effectId='{effect.name}', sourceLabel='{sourceLabel}', startDay={startDay}, durationDays={durationDays}, applyInstantOps={applyInstantOps}.");
     }
 
-    /// <summary>The morning paper's debt line (redesign phase 13; the traveller-types spec's §10): tomorrow's line of the news.debt pool in the run's order (DebtNews.Line); none when the pool is empty.</summary>
+    /// <summary>The morning paper's debt lines (redesign phases 13 and 9; the traveller-types spec's §10): tomorrow's line of the news.debt pool in the run's order (DebtNews.Line; none when the pool is empty), then the count of the Debt Relief departures the last shift approved (WorldState.debtReliefYesterday; DebtNews.YesterdayLine; none for none).</summary>
     private static void AddDebtLine(WorldState world, ContentLibrarySO lib, int tomorrow, List<string> news)
     {
         string line = DebtNews.Line(lib.News.debt, world.runSeed, tomorrow);
         if (!string.IsNullOrEmpty(line))
             news.Add(line);
+        string count = DebtNews.YesterdayLine(lib.News.debtReliefCount, world.debtReliefYesterday);
+        if (!string.IsNullOrEmpty(count))
+            news.Add(count);
     }
 
-    /// <summary>Removes effects that are no longer active on the given day.</summary>
+    /// <summary>Removes the effects that have ended by the given day (one that starts later is kept).</summary>
     private static void ExpireEffects(WorldState world, int day)
     {
         int before = world.timeline.activeEffects.Count;
 
-        world.timeline.activeEffects.RemoveAll(e => e == null || !e.IsActiveOnDay(day));
+        world.timeline.activeEffects.RemoveAll(e => e == null || e.HasEndedBy(day));
 
         int removed = before - world.timeline.activeEffects.Count;
+        if (removed > 0)
+            RunManager.NotifyEffectsChanged();
 
         Debug.Log($"[TimelineService] ExpireEffects (day {day}): removed {removed} effect(s), {world.timeline.activeEffects.Count} remain active.");
     }
 
     /// <summary>
     /// Builds the deterministic tomorrow package: dominance, history and
-    /// trigger news plus briefing/news lines contributed by effects active tomorrow.
+    /// trigger news, the desk's own stories (<paramref name="desk"/>), plus
+    /// briefing/news lines contributed by effects active tomorrow.
     /// </summary>
-    private static void BuildTomorrowPackage(WorldState world, ContentLibrarySO lib, List<string> news)
+    private static void BuildTomorrowPackage(WorldState world, ContentLibrarySO lib, List<string> news, List<string> desk)
     {
         Debug.Log("[TimelineService] >>> Entering BuildTomorrowPackage.");
 
         world.tomorrow.briefingLines.Clear();
         world.tomorrow.newsLines.Clear();
+        world.tomorrow.deskLines.Clear();
 
         world.tomorrow.newsLines.AddRange(news);
+        world.tomorrow.deskLines.AddRange(desk);
 
-        // Lines from active effects (note: world.day is still "today" here, but
-        // expiry has already removed everything not active tomorrow).
-        world.tomorrow.briefingLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.BriefingLine));
-        world.tomorrow.newsLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.NewsLine));
+        // Lines from the effects in force tomorrow (world.day is still "today" here).
+        int tomorrow = world.day + 1;
+        world.tomorrow.briefingLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.BriefingLine, tomorrow));
+        world.tomorrow.newsLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.NewsLine, tomorrow));
 
         Debug.Log($"[TimelineService] <<< Exiting BuildTomorrowPackage (briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count} [{news.Count} from dominance/triggers]).");
     }

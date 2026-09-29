@@ -87,6 +87,10 @@ MonoBehaviour:
     text: "\u4FBF\u7B3A"
     gloss: 0
     tier: 0
+  - key: icon.orders
+    text: "\u8BA2\u5355"
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: "\u8C03\u67E5"
     gloss: 0
@@ -108,7 +112,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: tray.stability
-    text: "\u7A33\u5B9A\u5EA6\uFF1A{0:0}%"
+    text: "\u7A33\u5B9A\u5EA6\uFF1A{0}"
     gloss: 0
     tier: 0
   - key: taskbar.desk
@@ -125,5 +129,9 @@ MonoBehaviour:
     tier: 0
   - key: briefing.newsHeader
     text: "\u2014 \u65F6\u95F4\u7EBF\u65B0\u95FB \u2014"
+    gloss: 0
+    tier: 0
+  - key: icon.portals
+    text: "\u4F20\u9001\u95E8"
     gloss: 0
     tier: 0

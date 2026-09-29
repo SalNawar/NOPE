@@ -90,6 +90,10 @@ MonoBehaviour:
     text: "\u03A3\u03B7\u03BC\u03B5\u03B9\u03CE\u03C3\u03B5\u03B9\u03C2"
     gloss: 0
     tier: 0
+  - key: icon.orders
+    text: "\u03A0\u03B1\u03C1\u03B1\u03B3\u03B3\u03B5\u03BB\u03AF\u03B5\u03C2"
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: "\u0388\u03C1\u03B5\u03C5\u03BD\u03B1"
     gloss: 0
@@ -111,7 +115,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: tray.stability
-    text: "\u03A3\u03C4\u03B1\u03B8\u03B5\u03C1\u03CC\u03C4\u03B7\u03C4\u03B1: {0:0}%"
+    text: "\u03A3\u03C4\u03B1\u03B8\u03B5\u03C1\u03CC\u03C4\u03B7\u03C4\u03B1: {0}"
     gloss: 0
     tier: 0
   - key: taskbar.desk
@@ -131,5 +135,9 @@ MonoBehaviour:
   - key: briefing.newsHeader
     text: "\u2014 \u0395\u0399\u0394\u0397\u03A3\u0395\u0399\u03A3 \u03A7\u03A1\u039F\u039D\u039F\u0393\u03A1\u0391\u039C\u039C\u0397\u03A3
       \u2014"
+    gloss: 0
+    tier: 0
+  - key: icon.portals
+    text: "\u03A0\u03CD\u03BB\u03B5\u03C2"
     gloss: 0
     tier: 0

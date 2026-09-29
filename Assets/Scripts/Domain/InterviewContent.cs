@@ -153,21 +153,26 @@ public sealed class MissingFormReply
     public LineText line = new();
 }
 
-/// <summary>Per-era wording of a question: chosen by the traveller's claimed era.</summary>
+/// <summary>
+/// A question's answer for some kinds of traveller, a claimed era, or both
+/// (world_source.json questions[].overrides; the personalities spec's W3):
+/// only the traveller's sentence changes, never the desk's words or the value.
+/// The most specific override wins (ContextMatch: named kinds 2, a named era 1).
+/// </summary>
 [Serializable]
 public sealed class WordingOverride
 {
-    /// <summary>The claimed era this wording is for (EraSO.id).</summary>
+    /// <summary>The claimed era this answer is for (EraSO.id); blank: any era.</summary>
     public string eraId;
 
-    /// <summary>The desk's question.</summary>
-    public LineText prompt = new();
+    /// <summary>The kinds of traveller this answer is for; empty: any kind. Serialized TravellerKind values (append only).</summary>
+    public List<TravellerKind> kinds = new();
 
     /// <summary>The traveller's answer template ({value}).</summary>
     public LineText answer = new();
 }
 
-/// <summary>One interview question: a fact category, its menu label and wording.</summary>
+/// <summary>One interview question: a fact category, its menu label and wording; asked of every traveller in the same words (the personalities spec's W3), the answer's sentence by kind and era.</summary>
 [Serializable]
 public sealed class InterviewQuestion
 {
@@ -180,46 +185,38 @@ public sealed class InterviewQuestion
     /// <summary>The ask-menu entry ("Capital").</summary>
     public string label;
 
-    /// <summary>The desk's question.</summary>
+    /// <summary>The desk's question, the same for every traveller ({place}: the claimed place's label).</summary>
     public LineText prompt = new();
 
-    /// <summary>The traveller's answer template; {value} is the canonical fact value.</summary>
+    /// <summary>The traveller's default answer template (a 2150 citizen's); {value} is the canonical fact value.</summary>
     public LineText answer = new();
 
-    /// <summary>Wording per claimed era (only the sentence changes, never the value).</summary>
+    /// <summary>The answer per kinds and claimed era (only the sentence changes, never the value).</summary>
     public List<WordingOverride> overrides = new();
 
-    /// <summary>The kinds of traveller the desk asks it of (world_source.json questions[].kinds; traveller types I1: the trip questions the 2150 citizens', the home questions the displaced's); empty: every kind.</summary>
-    public List<TravellerKind> kinds = new();
-
-    /// <summary>True when the desk asks this question of a traveller of <paramref name="kind"/>: one of its kinds, or every kind when it names none.</summary>
-    public bool AsksOf(TravellerKind kind) => kinds == null || kinds.Count == 0 || kinds.Contains(kind);
-
-    /// <summary>The question as asked of a traveller claiming <paramref name="eraId"/>: that era's override, else the default.</summary>
-    public LineText PromptFor(string eraId)
+    /// <summary>
+    /// The answer template of a traveller of <paramref name="kind"/> claiming
+    /// <paramref name="eraId"/>: the best-scoring override (ContextMatch:
+    /// named kinds 2, a named era 1, summed; a tie keeps the first listed; an
+    /// override of another kind or era never applies), else the default.
+    /// </summary>
+    public LineText AnswerFor(string eraId, TravellerKind kind)
     {
-        WordingOverride o = OverrideFor(eraId);
-        return o != null ? o.prompt : prompt;
-    }
+        LineText best = answer;
+        int bestScore = ContextMatch.NoMatch;
+        foreach (WordingOverride o in overrides ?? new List<WordingOverride>())
+        {
+            if (o == null)
+                continue;
+            int score = ContextMatch.Score(o.kinds, o.eraId, kind, eraId);
+            if (score > bestScore)
+            {
+                bestScore = score;
+                best = o.answer;
+            }
+        }
 
-    /// <summary>The answer template for a traveller claiming <paramref name="eraId"/>: that era's override, else the default.</summary>
-    public LineText AnswerFor(string eraId)
-    {
-        WordingOverride o = OverrideFor(eraId);
-        return o != null ? o.answer : answer;
-    }
-
-    /// <summary>The override for an era, or null.</summary>
-    private WordingOverride OverrideFor(string eraId)
-    {
-        if (string.IsNullOrEmpty(eraId) || overrides == null)
-            return null;
-
-        foreach (WordingOverride o in overrides)
-            if (o != null && o.eraId == eraId)
-                return o;
-
-        return null;
+        return best;
     }
 }
 
@@ -242,7 +239,7 @@ public sealed class InterviewLines
     /// <summary>The desk's opener for a legendary ({name}).</summary>
     public LineText openerLegendary = new();
 
-    /// <summary>The traveller's claim per kind ({place}; traveller types §8: the displaced "Please. Send me home to {place}."); also the banner and the shift summary.</summary>
+    /// <summary>The traveller's claim per kind ({place}; traveller types §8: the displaced "Please. Send me home to {place}."): the spoken claim's default when their voice has no row (Voices.Claim).</summary>
     public List<KindLine> claims = new();
 
     /// <summary>Honorific for a traveller recorded as male ("sir").</summary>
@@ -272,11 +269,8 @@ public sealed class InterviewLines
     /// <summary>The traveller's reply as they hand the document over.</summary>
     public LineText requestReply = new();
 
-    /// <summary>Hub entry that opens the questions sub-menu for the displaced ("Ask about home >"; Interview.AskLabel).</summary>
+    /// <summary>Hub entry that opens the questions sub-menu, the same for every traveller ("Ask about the trip >": every traveller travels to their claim, the displaced home; the personalities spec's W2).</summary>
     public string askLabel;
-
-    /// <summary>Hub entry that opens the questions sub-menu for a 2150 citizen ("Ask about the trip >"; traveller types §8), who is asked about the trip, never about home.</summary>
-    public string tripAskLabel;
 
     /// <summary>The ask menu's way back to the hub (always its first entry).</summary>
     public string backLabel;
@@ -295,6 +289,21 @@ public sealed class InterviewLines
 
     /// <summary>The most choices the traveller wheel shows at once (content never offers more).</summary>
     public int menuCapacity;
+
+    /// <summary>How small talk picks its source: the personality's lines, the home's, the kind's (interview.smallTalkWeights; the personalities spec's V5).</summary>
+    public SmallTalkWeights smallTalkWeights = new SmallTalkWeights();
+
+    /// <summary>The kinds' small talk (interview.kindSmallTalk: rows naming kinds and optionally an era, no voice), one of small talk's three sources.</summary>
+    public List<VoiceLine> kindSmallTalk = new List<VoiceLine>();
+
+    /// <summary>The personalities' and premades' own lines, one list per slot (interview.voices); a voice with no matching row says the defaults above (Voices).</summary>
+    public VoiceBook voices = new VoiceBook();
+
+    /// <summary>The default reactions to the stamp (interview.reactions: verdict, intent, an optional reason, kinds and era, a line and an optional then line; the personalities spec's R1-R3): the four base rows are required.</summary>
+    public List<VoiceLine> reactions = new List<VoiceLine>();
+
+    /// <summary>The default slips (interview.slips, by lie kind; one with a blank lie is required; the personalities spec's T10).</summary>
+    public List<VoiceLine> slips = new List<VoiceLine>();
 }
 
 /// <summary>

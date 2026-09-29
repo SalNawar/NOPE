@@ -83,7 +83,7 @@ public sealed class DayFlowUIController : MonoBehaviour
         {
             var sb = new System.Text.StringBuilder();
 
-            if (world.tomorrow.briefingLines.Count == 0 && world.tomorrow.newsLines.Count == 0)
+            if (world.tomorrow.briefingLines.Count == 0 && world.tomorrow.newsLines.Count == 0 && world.tomorrow.deskLines.Count == 0)
             {
                 sb.AppendLine(UiText.Get("briefing.empty"));
             }
@@ -98,6 +98,16 @@ public sealed class DayFlowUIController : MonoBehaviour
                     sb.AppendLine(UiText.Get("briefing.newsHeader"));
 
                     foreach (string line in world.tomorrow.newsLines)
+                        sb.AppendLine(UiText.Format("list.bullet", line));
+                }
+
+                // The desk's own stories (days 7-15, Q9), after the news.
+                if (world.tomorrow.deskLines.Count > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine(UiText.Get("briefing.deskHeader"));
+
+                    foreach (string line in world.tomorrow.deskLines)
                         sb.AppendLine(UiText.Format("list.bullet", line));
                 }
             }
@@ -130,6 +140,8 @@ public sealed class DayFlowUIController : MonoBehaviour
             var sb = new System.Text.StringBuilder();
             sb.AppendLine(UiText.Format("results.processed", ledger.verdicts.Count));
             sb.AppendLine(UiText.Format("results.correctWrong", ledger.CorrectCount, ledger.WrongCount));
+            sb.AppendLine(UiText.Format("results.leisureDepartures", ledger.LeisureDepartures));
+            sb.AppendLine(UiText.Format("results.debtReliefDepartures", ledger.DebtReliefDepartures, ledger.DebtPutToWork, UiText.Currency(UiText.WalletForm.Short)));
             sb.AppendLine();
             sb.AppendLine(UiText.Format("results.pay", ledger.TotalPay));
 
@@ -144,7 +156,7 @@ public sealed class DayFlowUIController : MonoBehaviour
 
             sb.AppendLine(UiText.Format("results.net", ledger.NetMoney, UiText.Currency(UiText.WalletForm.Inline), world.money));
             sb.AppendLine();
-            sb.AppendLine(UiText.Format("results.stability", world.timelineStability, ledger.TotalStabilityDelta));
+            sb.AppendLine(UiText.Format("results.stability", StabilityRules.Format(world.timelineStability), StabilityRules.FormatChange(ledger.TotalStabilityDelta)));
 
             if (world.citationsToday > 0)
                 sb.AppendLine(UiText.Format("results.citations", world.citationsToday));

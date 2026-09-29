@@ -365,6 +365,37 @@ public static partial class OfficeSceneUIBuilder
         return content;
     }
 
+    /// <summary>
+    /// A vertical scrollbar at the right of <paramref name="area"/>,
+    /// <paramref name="width"/> wide (callers may place it): a track in
+    /// <paramref name="track"/> (<paramref name="trackRole"/>) whose handle is
+    /// <paramref name="handle"/> (<paramref name="handleRole"/>), reading bottom
+    /// to top. Its handle, direction, size and value are set through the
+    /// serialized fields, not the setters: a setter drives the handle's anchors
+    /// at once (even under a closed window), and a driven RectTransform is saved
+    /// zeroed, so the saved scene would differ from the built one. The scrollbar
+    /// drives the handle itself once it shows; until then the handle fills the
+    /// track (a list that fits).
+    /// </summary>
+    private static Scrollbar BuildScrollbar(Transform area, float width, Color track, ThemeRoleId trackRole, Color handle, ThemeRoleId handleRole)
+    {
+        Transform bar = Panel(area, "Scrollbar", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, track, trackRole);
+        PlaceRect(bar, new Vector2(1f, 0f), Vector2.one, new Vector2(-width, 0f), Vector2.zero);
+        Transform slide = Panel(bar, "SlidingArea", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        SetAnchors(slide, Vector2.zero, Vector2.one);
+        Transform grip = Panel(slide, "Handle", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, handle, handleRole);
+        SetAnchors(grip, Vector2.zero, Vector2.one);
+        Scrollbar scrollbar = bar.gameObject.AddComponent<Scrollbar>();
+        var so = new SerializedObject(scrollbar);
+        so.FindProperty("m_Direction").enumValueIndex = (int)Scrollbar.Direction.BottomToTop;
+        so.FindProperty("m_HandleRect").objectReferenceValue = grip;
+        so.FindProperty("m_TargetGraphic").objectReferenceValue = grip.GetComponent<Image>();
+        so.FindProperty("m_Size").floatValue = 1f;
+        so.FindProperty("m_Value").floatValue = 0f;
+        so.ApplyModifiedProperties();
+        return scrollbar;
+    }
+
     /// <summary>A list row: a button of <see cref="AppRowHeight"/> whose left-aligned label holds two lines (rich text), with a "Selected" bar at its left edge (hidden; the window shows it on the open row).</summary>
     private static Button BuildListRow(Transform list, string name)
     {

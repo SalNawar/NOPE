@@ -1,7 +1,7 @@
 // Audit baseline automation (kept as text in tools/audit/unity; copied into Assets/Editor as .cs only to run it, never committed there): the Phase 0 golden masters that
 // need Unity but no play mode. Runs in the persistent editor through the job
 // runner (Library/ClaudeJobs), never exits it. Outputs go to
-// <out root>/<tag>/ (see Root): the case generation dump (days 1-6 x 20 seeds,
+// <out root>/<tag>/ (see Root): the case generation dump (days 1-15 x 20 seeds,
 // day 6 also under each possible leader), Generate World twice (the Data
 // folder's hashes), the validator's output, semantic dumps of the committed
 // OfficeGameplay / HomeScene / TitleScene and of their builders' rebuilds, the
@@ -139,7 +139,8 @@ public static class _TimeDeskAuditStatic
     {
         var lines = new List<string>();
         var variants = new List<(int day, string leader)>();
-        for (int d = 1; d <= 6; d++)
+        // Days 1 to the run's last (the Retirement milestone, day 15; days 7-15 D4), each from a fresh world (no story flags: a slot's first standing entry).
+        for (int d = 1; d <= Math.Max(6, lib.LastDay); d++)
             variants.Add((d, "-"));
         foreach (NationSO n in lib.Nations)
             if (n != null)
@@ -151,13 +152,13 @@ public static class _TimeDeskAuditStatic
             DayPlanSO plan = lib.GetDayPlan(day);
             WorldState world = World(day, leader);
             InterviewDay interview = TimelineService.BuildInterviewDay(lib, world, new ShiftLedger());
-            TodaysWorld today = lib.BuildToday(plan, world.history);
+            TodaysWorld today = lib.BuildToday(plan, world);
             string head = $"WORLD day={day} leader={leader}";
             lines.Add($"{head} plan='{plan.name}' visitors={plan.VisitorsCount} tellCount={plan.TellCount} channels=[{string.Join(",", plan.TellChannels)}] violators={plan.GuaranteeRuleViolators} legendaryChance={plan.LegendaryBaseChance.ToString("0.###", Inv)}");
             lines.Add($"{head} places=[{string.Join(", ", today.Places.Select(p => p != null ? p.id : "null"))}]");
             lines.Add($"{head} rules=[{string.Join(" | ", plan.ActiveTravelRules.Where(r => r != null).Select(r => r.Summary()))}]");
             lines.Add($"{head} askable=[{string.Join(",", interview.AskableCategories)}] answerTells=[{string.Join(",", interview.AnswerTellCategories)}] dialogs=[{string.Join(",", interview.OfferedDialogs(null).Select(d => d.id))}] problems={interview.ContentProblems.Count}");
-            lines.Add($"{head} forced=[{string.Join(",", plan.ForcedCases.Where(f => f != null).Select(f => $"{f.caseIndex1Based}:{(f.legendary != null ? f.legendary.id : "-")}/{(f.caseBlueprint != null ? f.caseBlueprint.name : "-")}"))}] pool=[{string.Join(",", plan.AvailableLegendaries.Where(l => l != null).Select(l => l.id))}]");
+            lines.Add($"{head} forced=[{string.Join(",", plan.ForcedCases.Where(f => f != null).Select(f => $"{f.caseIndex1Based}:{(f.legendary != null ? f.legendary.id : "-")}/{(f.caseBlueprint != null ? f.caseBlueprint.name : "-")}{(string.IsNullOrEmpty(f.id) ? "" : "#" + f.id)}"))}] pool=[{string.Join(",", plan.AvailableLegendaries.Where(l => l != null).Select(l => l.id))}]");
             foreach (ClueCategory category in Enum.GetValues(typeof(ClueCategory)).Cast<ClueCategory>())
                 foreach (FactRow row in today.Facts.Rows(category))
                     lines.Add($"{head} fact {category} {row.NationId}/{row.EraId} '{row.OriginLabel}' = '{row.Value}'{(today.Facts.IsChanged(row.NationId, row.EraId, category) ? " [revised]" : "")}");
@@ -171,20 +172,30 @@ public static class _TimeDeskAuditStatic
                 DayPlanSO plan = lib.GetDayPlan(day);
                 WorldState world = World(day, leader);
                 InterviewDay interview = TimelineService.BuildInterviewDay(lib, world, new ShiftLedger());
-                var factory = new CaseFactory(lib, lib.BuildToday(plan, world.history));
+                var factory = new CaseFactory(lib, lib.BuildToday(plan, world));
                 List<CaseInstance> cases = factory.GenerateDayCases(plan, world, Seeds.Day(seed, day), interview, true);
                 var violators = (Dictionary<int, NationEraProfileSO>)violatorsField.GetValue(factory);
                 CitizenRegistry registry = CaseFactory.BuildRegistry(cases);
                 for (int i = 0; i < cases.Count; i++)
                 {
                     CaseInstance c = cases[i];
-                    CitizenRecord record = registry.Records.FirstOrDefault(r => r.FullName == c.visitorGivenName);
+                    CitizenRecord record = FindRecord(registry, c.visitorGivenName);
                     string rec = record != null ? string.Join("|", record.Groups.SelectMany(g => g.Rows).Select(r => r.Value)) : "none";
-                    lines.Add(CaseLine(seed, day, leader, i + 1, c, violators.TryGetValue(i + 1, out NationEraProfileSO v) ? v.id : null) + $" | record={rec}");
+                    lines.Add(CaseLine(seed, day, leader, i + 1, c, violators.TryGetValue(i + 1, out NationEraProfileSO v) ? v.id : null, lib.Interview) + $" | record={rec}");
                 }
             }
         }
         return lines;
+    }
+
+    /// <summary>The registry's lookup as it read before phase 19 moved it into search (by number first, then by full name, ignoring case), so the dump's record column keeps its meaning.</summary>
+    private static CitizenRecord FindRecord(CitizenRegistry registry, string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+            return null;
+        string q = query.Trim();
+        return registry.Records.FirstOrDefault(r => !string.IsNullOrWhiteSpace(r.Number) && string.Equals(r.Number.Trim(), q, StringComparison.OrdinalIgnoreCase))
+               ?? registry.Records.FirstOrDefault(r => string.Equals(r.FullName.Trim(), q, StringComparison.OrdinalIgnoreCase));
     }
 
     private static WorldState World(int day, string leader)
@@ -198,8 +209,8 @@ public static class _TimeDeskAuditStatic
         return world;
     }
 
-    /// <summary>Piece 10's dump line (the same format as SCRATCH/p10_after_cases.txt), the violator's place named, each paper's serial after its name (redesign phase 4).</summary>
-    public static string CaseLine(int seed, int day, string leader, int slot, CaseInstance c, string violatorPlace)
+    /// <summary>Piece 10's dump line (the same format as SCRATCH/p10_after_cases.txt), the violator's place (or a guaranteed procedure's rule, phase 9) named, each paper's serial after its name (redesign phase 4); claimLine is the spoken claim in the traveller's voice (<paramref name="wording"/>'s rows; the personalities spec's B3: no case field holds it), personality= the drawn personality (none for a premade).</summary>
+    public static string CaseLine(int seed, int day, string leader, int slot, CaseInstance c, string violatorPlace, InterviewLines wording)
     {
         List<DocumentField> fields = c.documents.SelectMany(d => d.fields).ToList();
         IEnumerable<string> tells = fields.Where(f => f.isAnachronism).Select(f => $"{f.category}/Papers").Distinct()
@@ -212,7 +223,7 @@ public static class _TimeDeskAuditStatic
         string recordTells = string.Join(",", c.recordTells.Select(t => $"{t.Category}@{t.Document}"));
         return $"seed={seed} day={day} leader={leader} slot={slot} claim='{c.originLabel}' name='{c.visitorGivenName}' born='{c.trueBirthDate}' role='{(c.archetype != null ? c.archetype.displayName : "")}' directive={c.directiveFault} violator={(violatorPlace ?? "no")}" +
                $" | liar={c.IsLiar} home='{c.HomeLabel}' tells=[{string.Join(",", tells)}] recordTells=[{recordTells}] fault='{c.FaultReason}' | papers={papers} | answers={answers}" +
-               $" | premade={(c.legendarySource != null ? c.legendarySource.id : "none")} gender={c.gender} intro='{c.introLine}' claimLine='{c.claimLine}' smalltalk='{c.smallTalk?.id}' look={look} garments={garments} | tongue={c.tongueId}";
+               $" | premade={(c.legendarySource != null ? c.legendarySource.id : "none")} gender={c.gender} personality={(string.IsNullOrEmpty(c.personality) ? "none" : c.personality)} slip={(c.slip != null ? c.slip.id : "-")} intro='{c.introLine}' claimLine='{InterviewScript.Claim(wording, new InterviewCase { kind = c.kind, claimPlace = c.originLabel, claimedEraId = c.claimedEra != null ? c.claimedEra.id : null, voice = c.Voice })}' smalltalk='{c.smallTalk?.id}' look={look} garments={garments} | tongue={c.tongueId}";
     }
 
     // =====================================================================

@@ -85,6 +85,26 @@ public static class DayPlans
     }
 
     /// <summary>
+    /// The unplanned tail (days 7-15 V1): one warning when the days after the
+    /// latest planned one, up to <paramref name="lastDay"/> (the run's last
+    /// day, the Retirement milestone's DayAtLeast threshold), have no plan of
+    /// their own and would replay the latest's (Pick). None with every day
+    /// planned, with no milestone (0), or with no plan at all (Gaps names
+    /// that).
+    /// </summary>
+    public static List<string> Unplanned(IEnumerable<int> dayNumbers, int lastDay)
+    {
+        var warnings = new List<string>();
+        int latest = 0;
+        foreach (int day in dayNumbers ?? new int[0])
+            if (day >= 1 && day <= lastDay && day > latest)
+                latest = day;
+        if (latest > 0 && latest < lastDay)
+            warnings.Add($"Days {latest + 1}..{lastDay} have no plan of their own and replay day {latest}'s (the run ends after day {lastDay}, the Retirement milestone). Author their days[] or move the milestone.");
+        return warnings;
+    }
+
+    /// <summary>
     /// One message per hole in the day sequence (audit R6-022): the plans
     /// not starting at day 1 (RunConfig.startingDay is 1, so the run would
     /// open on a day with no plan of its own), and each gap between two

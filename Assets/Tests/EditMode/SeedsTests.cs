@@ -54,6 +54,7 @@ public class SeedsTests
         { "account", Seeds.ForAccount },
         { "forms", Seeds.ForForms },
         { "faults", Seeds.ForFaults },
+        { "personality", Seeds.ForPersonality },
     };
 
     [TestCase("lie")]
@@ -63,6 +64,7 @@ public class SeedsTests
     [TestCase("account")]
     [TestCase("forms")]
     [TestCase("faults")]
+    [TestCase("personality")]
     public void TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream(string name)
     {
         Assert.AreEqual(TravellerStreams.Count, typeof(SeedsTests).GetMethod(nameof(TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream))
@@ -90,10 +92,21 @@ public class SeedsTests
         CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "violator"), Seeds.ForViolators(daySeed));
     }
 
+    /// <summary>Audit R3-010 (phase 9): the day's event placements draw from their own salted stream, apart from the day's raw seed and every other stream.</summary>
+    [Test]
+    public void EventStream_IsDeterministic_AndApartFromEveryOtherStream()
+    {
+        int daySeed = Seeds.Day(12345, 2);
+        Assert.AreEqual(Seeds.ForEvents(daySeed), Seeds.ForEvents(daySeed));
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "events"), Seeds.ForEvents(daySeed));
+        CollectionAssert.AreNotEqual(TenDraws(daySeed), TenDraws(Seeds.ForEvents(daySeed)), "the raw day stream");
+        CollectionAssert.AllItemsAreUnique(Enumerable.Range(1, 30).Select(day => Seeds.ForEvents(Seeds.Day(12345, day))).ToList(), "each day its own placements");
+    }
+
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.StrandingSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -123,8 +136,81 @@ public class SeedsTests
         Assert.AreEqual(0x46414C54, Seeds.FaultSalt, "\"FALT\"");
         Assert.AreEqual(-230985786, Seeds.ForDebtNews(12345));
         Assert.AreEqual(0x44454254, Seeds.DebtNewsSalt, "\"DEBT\"");
+        Assert.AreEqual(-1597173572, Seeds.ForEvents(daySeed));
+        Assert.AreEqual(0x45564E54, Seeds.EventSalt, "\"EVNT\"");
         Assert.AreEqual(Seeds.Mix(daySeed, 0x53545244), Seeds.ForStrandings(daySeed));
         Assert.AreEqual(0x53545244, Seeds.StrandingSalt, "\"STRD\"");
+        Assert.AreEqual(-288322321, Seeds.ForFamily(daySeed));
+        Assert.AreEqual(0x464D4C59, Seeds.FamilySalt, "\"FMLY\"");
+        Assert.AreEqual(1986888608, Seeds.ForRecovery(daySeed));
+        Assert.AreEqual(0x52435652, Seeds.RecoverySalt, "\"RCVR\"");
+        Assert.AreEqual(-1690349512, Seeds.ForBreakIns(daySeed));
+        Assert.AreEqual(0x42524B4E, Seeds.BreakInSalt, "\"BRKN\"");
+    }
+
+    /// <summary>
+    /// A premade's generated stand-in look (days 7-15 B4) is drawn on a stream
+    /// seeded by the premade's id alone: the same face at every appearance and
+    /// in every run, apart from every premade's else and every traveller's streams.
+    /// </summary>
+    [Test]
+    public void ForPremadeLook_IsStableAndDistinct()
+    {
+        Assert.AreEqual(0x504C4F4B, Seeds.PremadeLookSalt, "\"PLOK\"");
+        Assert.AreEqual(Seeds.ForPremadeLook("pell"), Seeds.ForPremadeLook("pell"), "one id, one seed");
+        string[] ids = { "pell", "ines", "rook", "ada", "hollis", "auditor", "senenmut", "socrates", "turing", "meitner", "toyoda", "a", "b", "ab", "ba", "" };
+        CollectionAssert.AllItemsAreUnique(ids.Select(Seeds.ForPremadeLook).ToList(), "a different id, a different face");
+        int caseSeed = Seeds.ForCase(Seeds.Day(12345, 7), 5);
+        CollectionAssert.AreNotEqual(TenDraws(Seeds.ForLooks(caseSeed)), TenDraws(Seeds.ForPremadeLook("pell")), "apart from the slot's own look stream");
+        Assert.AreEqual(Seeds.ForPremadeLook(null), Seeds.ForPremadeLook(string.Empty), "a missing id reads blank");
+    }
+
+    /// <summary>The personality stream's salt is "PRSN" (the personalities spec's PS2).</summary>
+    [Test]
+    public void SlipSalt_IsPinned()
+    {
+        Assert.AreEqual(0x534C4950, Seeds.SlipSalt, "\"SLIP\"");
+        Assert.AreEqual(Seeds.Mix(12345, 0x534C4950), Seeds.ForSlip(12345));
+    }
+
+    [Test]
+    public void PersonalitySalt_IsPinned()
+    {
+        Assert.AreEqual(0x5052534E, Seeds.PersonalitySalt, "\"PRSN\"");
+    }
+
+    /// <summary>The personality draw's seed of sample case seeds (run 12345, day 3, slot 1 among them): pinned, so a changed salt fails here.</summary>
+    [Test]
+    public void ForPersonality_IsPinnedForSampleSeeds()
+    {
+        Assert.AreEqual(-45739289, Seeds.ForPersonality(Seeds.ForCase(Seeds.Day(12345, 3), 1)));
+        Assert.AreEqual(-666199600, Seeds.ForPersonality(1));
+        Assert.AreEqual(443472842, Seeds.ForPersonality(12345));
+    }
+
+    /// <summary>A slot key's value (the personalities spec's V4: a line's pick is a value of the dialog seed and the key): Seeds.Mix folded over the key's characters, the same in every runtime.</summary>
+    [Test]
+    public void OfKey_IsPinned()
+    {
+        Assert.AreEqual(24390979, Seeds.OfKey("claim"));
+        Assert.AreEqual(1046563660, Seeds.OfKey("smalltalk"));
+        Assert.AreEqual(-1783325148, Seeds.OfKey("answer:q_currency"));
+    }
+
+    [Test]
+    public void OfKey_DiffersPerKey()
+    {
+        string[] keys = { "claim", "smalltalk", "smalltalk:source", "answer:q_currency", "answer:q_device", "missing:TC-310:Honest", "missing:TC-310:Missing", "spoken:step_closer", "handover:TC-230" };
+        CollectionAssert.AllItemsAreUnique(keys.Select(Seeds.OfKey).ToList());
+        Assert.AreEqual(Seeds.OfKey("claim"), Seeds.OfKey("claim"));
+    }
+
+    [Test]
+    public void OfKey_OfEmptyIsItsStart()
+    {
+        Assert.AreEqual(Seeds.KeyStart, Seeds.OfKey(string.Empty));
+        Assert.AreEqual(Seeds.KeyStart, Seeds.OfKey(null), "no key: the start");
+        Assert.AreEqual(0x4B455953, Seeds.KeyStart, "\"KEYS\"");
     }
 
     /// <summary>The stranding draws (redesign phase 13b) are the day's own stream, apart from the day's other streams and every traveller's.</summary>
@@ -147,7 +233,7 @@ public class SeedsTests
         for (int day = 1; day <= 15; day++)
         {
             int daySeed = Seeds.Day(12345, day);
-            CollectionAssert.DoesNotContain(new[] { daySeed, Seeds.ForViolators(daySeed), Seeds.ForSlot(daySeed), Seeds.ForCase(daySeed, 1) }, Seeds.ForDebtNews(12345));
+            CollectionAssert.DoesNotContain(new[] { daySeed, Seeds.ForViolators(daySeed), Seeds.ForSlot(daySeed), Seeds.ForEvents(daySeed), Seeds.ForCase(daySeed, 1) }, Seeds.ForDebtNews(12345));
         }
     }
 
@@ -163,8 +249,8 @@ public class SeedsTests
     /// Audit R2-004: the night's slot spins drew from the unseeded
     /// UnityEngine.Random, so a run did not replay and Continue (Home reloads
     /// from the save made before it) rerolled a spin. They draw from their own
-    /// stream of the run and the day, apart from every other stream and from
-    /// the day's raw stream the family conditions draw from.
+    /// stream of the run and the day, apart from every other stream (the
+    /// family's included) and from the day's raw stream.
     /// </summary>
     [Test]
     public void SlotStream_IsDeterministic_AndApartFromEveryOtherStream_NightByNight()
@@ -179,10 +265,44 @@ public class SeedsTests
         Assert.AreNotEqual(slot, Seeds.ForSlot(Seeds.Day(999, 2)), "each run its own spins");
     }
 
+    /// <summary>The house upgrades' night draws (the Home upgrades spec HU6, HU7): the break-in roll and each member's recovery roll are the night's own salted streams, apart from every other stream, the family's drift included.</summary>
+    [TestCase("recovery")]
+    [TestCase("breakins")]
+    public void HouseStreams_AreDeterministic_AndApartFromEveryOtherStream_NightByNight(string name)
+    {
+        Func<int, int> stream = name == "recovery" ? (Func<int, int>)Seeds.ForRecovery : Seeds.ForBreakIns;
+        int daySeed = Seeds.Day(12345, 2);
+        int seed = stream(daySeed);
+        Assert.AreEqual(seed, stream(daySeed), "the same run and night give the same draws");
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, name), seed);
+        CollectionAssert.AreNotEqual(TenDraws(daySeed), TenDraws(seed), "the raw day stream");
+        CollectionAssert.AllItemsAreUnique(Enumerable.Range(1, 30).Select(night => stream(Seeds.Day(12345, night))).ToList(), "each night its own draws");
+        Assert.AreNotEqual(seed, stream(Seeds.Day(999, 2)), "each run its own draws");
+    }
+
+    /// <summary>
+    /// Audit R2-008: the night's family drift drew from its own hash of the day
+    /// seed over System.Random. It is the day's own salted stream now (one
+    /// seed per member, mixed from it), apart from every other stream, the
+    /// slot's included, and from the day's raw stream.
+    /// </summary>
+    [Test]
+    public void FamilyStream_IsDeterministic_AndApartFromEveryOtherStream_NightByNight()
+    {
+        int daySeed = Seeds.Day(12345, 2);
+        int family = Seeds.ForFamily(daySeed);
+
+        Assert.AreEqual(family, Seeds.ForFamily(daySeed), "the same run and night give the same drift");
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "family"), family);
+        CollectionAssert.AreNotEqual(TenDraws(daySeed), TenDraws(family), "the raw day stream");
+        CollectionAssert.AllItemsAreUnique(Enumerable.Range(1, 30).Select(night => Seeds.ForFamily(Seeds.Day(12345, night))).ToList(), "each night its own drift");
+        Assert.AreNotEqual(family, Seeds.ForFamily(Seeds.Day(999, 2)), "each run its own drift");
+    }
+
     /// <summary>
     /// The day's raw seed and every stream of the day but <paramref name="except"/>:
-    /// the violator and slot streams, and each of 20 travellers' case stream and
-    /// every stream of <see cref="TravellerStreams"/>.
+    /// the violator, slot, family and event streams, and each of 20 travellers'
+    /// case stream and every stream of <see cref="TravellerStreams"/>.
     /// </summary>
     private static List<int> EveryOtherStream(int daySeed, string except)
     {
@@ -191,6 +311,14 @@ public class SeedsTests
             streams.Add(Seeds.ForViolators(daySeed));
         if (except != "slot")
             streams.Add(Seeds.ForSlot(daySeed));
+        if (except != "family")
+            streams.Add(Seeds.ForFamily(daySeed));
+        if (except != "events")
+            streams.Add(Seeds.ForEvents(daySeed));
+        if (except != "recovery")
+            streams.Add(Seeds.ForRecovery(daySeed));
+        if (except != "breakins")
+            streams.Add(Seeds.ForBreakIns(daySeed));
         foreach (int caseSeed in Enumerable.Range(1, 20).Select(slotIndex => Seeds.ForCase(daySeed, slotIndex)))
         {
             streams.Add(caseSeed);

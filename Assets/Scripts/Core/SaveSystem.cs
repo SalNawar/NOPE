@@ -17,14 +17,16 @@ using UnityEngine;
 public static class SaveSystem
 {
     /// <summary>Bump when WorldState shape changes incompatibly.</summary>
-    private const int SaveVersion = 2;
+    private const int SaveVersion = 3;
 
     /// <summary>
     /// Oldest save version that can still be continued. Version 2 replaced the
-    /// made-up world with real places (all place and era ids changed), so
-    /// version 1 saves are ignored and the Title offers only New Run.
+    /// made-up world with real places (all place and era ids changed); version
+    /// 3 keeps stability as whole hundredths on its compounding scale
+    /// (WorldState.stabilityHundredths, redesign phase 23 part 1b), so older
+    /// saves are ignored and the Title offers only New Run.
     /// </summary>
-    private const int MinCompatibleVersion = 2;
+    private const int MinCompatibleVersion = 3;
 
     /// <summary>Save file name (single slot).</summary>
     private const string FileName = "nope_save.json";
@@ -60,6 +62,14 @@ public static class SaveSystem
         public WorldState world;
     }
 
+    /// <summary>A save file read for its version only: the world is not built, so checking every file of the slot stays cheap (audit R3-022: a boot parsed the whole world about six times).</summary>
+    [Serializable]
+    private sealed class SaveVersionOnly
+    {
+        /// <summary>The save's version (0 when the file has none).</summary>
+        public int version;
+    }
+
     /// <summary>Returns true if a file of the slot holds a save this build can continue (older versions are ignored with a warning).</summary>
     public static bool HasSave()
     {
@@ -70,7 +80,7 @@ public static class SaveSystem
             return false;
         }
 
-        Debug.Log($"[SaveSystem] HasSave: true ('{PathOf(source)}', version {ReadVersion(PathOf(source))}).");
+        Debug.Log($"[SaveSystem] HasSave: true ('{PathOf(source)}').");
         return true;
     }
 
@@ -92,17 +102,17 @@ public static class SaveSystem
             return true;
 
         Debug.LogWarning(version >= 0
-            ? $"[SaveSystem] Ignoring the save at '{path}': version {version} predates the real-world content (needs {MinCompatibleVersion}+). Start a new run."
+            ? $"[SaveSystem] Ignoring the save at '{path}': version {version} predates this build's save format (needs {MinCompatibleVersion}+). Start a new run."
             : $"[SaveSystem] Ignoring the save file at '{path}': it cannot be read.");
         return false;
     }
 
-    /// <summary>The file's save version, or -1 if it is missing or unreadable.</summary>
+    /// <summary>The file's save version, or -1 if it is missing or unreadable (the world in it is not built).</summary>
     private static int ReadVersion(string path)
     {
         try
         {
-            SaveFile file = JsonUtility.FromJson<SaveFile>(File.ReadAllText(path));
+            SaveVersionOnly file = JsonUtility.FromJson<SaveVersionOnly>(File.ReadAllText(path));
             return file != null ? file.version : -1;
         }
         catch (Exception)
@@ -117,8 +127,6 @@ public static class SaveSystem
     /// </summary>
     public static bool Save(WorldState world)
     {
-        Debug.Log($"[SaveSystem] >>> Entering Save (day {world?.day}).");
-
         if (world == null)
         {
             Debug.LogError("SaveSystem.Save called with null WorldState.");
@@ -133,9 +141,6 @@ public static class SaveSystem
             Directory.CreateDirectory(Folder);
             File.WriteAllText(TempPath, json);
             Commit();
-
-            Debug.Log($"[SaveSystem] <<< Exiting Save (success, day {world.day}, money={world.money}, path='{SavePath}').");
-
             return true;
         }
         catch (Exception e)
@@ -183,14 +188,9 @@ public static class SaveSystem
     /// </summary>
     public static WorldState Load()
     {
-        Debug.Log("[SaveSystem] >>> Entering Load.");
-
         SaveSource source = Source();
         if (source == SaveSource.None)
-        {
-            Debug.Log("[SaveSystem] <<< Exiting Load — no save this build can continue.");
             return null;
-        }
 
         try
         {
@@ -213,8 +213,6 @@ public static class SaveSystem
             if (file.version != SaveVersion)
                 Debug.LogWarning($"SaveSystem.Load: save version {file.version} != current {SaveVersion}. Loading with defaults for new fields.");
 
-            Debug.Log($"[SaveSystem] <<< Exiting Load (success, day {file.world.day}, money={file.world.money}, version={file.version}).");
-
             return file.world;
         }
         catch (Exception e)
@@ -227,8 +225,6 @@ public static class SaveSystem
     /// <summary>Deletes the save slot's files, the temp file and the backup included, so no older run can be recovered (used by "New Run").</summary>
     public static void Delete()
     {
-        Debug.Log("[SaveSystem] >>> Entering Delete.");
-
         try
         {
             int removed = 0;
@@ -240,7 +236,7 @@ public static class SaveSystem
                 removed++;
             }
 
-            Debug.Log($"[SaveSystem] <<< Exiting Delete ({removed} save file(s) removed).");
+            Debug.Log($"[SaveSystem] Deleted {removed} save file(s).");
         }
         catch (Exception e)
         {

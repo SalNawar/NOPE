@@ -22,7 +22,10 @@ public static partial class OfficeSceneUIBuilder
     private const float PcPageWidth = 542f;
 
     /// <summary>The scanned-copy page's margin, its gaps, the scrollbar's width, the name's and the scan strip's heights and text sizes (u).</summary>
-    private const float DocMargin = 10f, DocGap = 4f, DocScrollbar = 14f, DocTitle = 28f, DocTitleText = 20f, DocStrip = 22f, DocStripText = 18f;
+    private const float DocMargin = 10f, DocGap = 4f, DocScrollbar = 14f, DocTitle = 28f, DocTitleText = 20f, DocStrip = 22f, DocStripText = 18f, DocTagGap = 8f;
+
+    /// <summary>The MATCH tag's plate padding either side of its word.</summary>
+    private const int DocTagPadding = 8;
 
     /// <summary>The seal placeholder's sprite (FormStyle's seal art until the agency seal lands; the desk paper's ring).</summary>
     private const string FormSealSprite = "form_seal";
@@ -120,7 +123,11 @@ public static partial class OfficeSceneUIBuilder
     /// The scanned-copy page template of the Investigation app's Documents tab
     /// (PC spec §2.4), cloned per paper by DocumentsView: on the scanner's dark
     /// backing (the form style's, DiegeticBacking), the document's name, the
-    /// scan strip in the backing's ink, and a scroll (the pane's height) whose
+    /// scan strip in the backing's ink with the MATCH tag after it (the compare
+    /// bar's plate with its MATCH ink and word, as the compare shows a match:
+    /// its pairing reads 5.4:1 or better in every theme, where the MATCH ink
+    /// straight on the dark backing would read under 3:1; hidden until an
+    /// analysis pass finds the scanned papers agree), and a scroll (the pane's height) whose
     /// content is the paper's FormView at the PC page width, with an
     /// auto-hiding scrollbar. Inactive; its parent rebuilds it fresh.
     /// </summary>
@@ -139,12 +146,36 @@ public static partial class OfficeSceneUIBuilder
         title.overflowMode = TextOverflowModes.Ellipsis;
 
         float stripTop = DocGap + DocTitle;
-        TMP_Text strip = Text(page, "ScanStrip", string.Format(style.scanStrip, "--:--"), Mathf.RoundToInt(DocStripText), TextAlignmentOptions.MidlineLeft,
-                              new Vector2(0f, 1f), Vector2.one, style.backingInk, ThemeRoleId.DiegeticBacking);
-        PlaceRect(strip.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(DocMargin, -(stripTop + DocStrip)), new Vector2(-DocMargin, -stripTop));
+        Transform stripRow = Panel(page, "StripRow", new Vector2(0f, 1f), Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(stripRow, new Vector2(0f, 1f), Vector2.one, new Vector2(DocMargin, -(stripTop + DocStrip)), new Vector2(-DocMargin, -stripTop));
+        HorizontalLayoutGroup line = GetOrAdd<HorizontalLayoutGroup>(stripRow.gameObject);
+        line.spacing = DocTagGap;
+        line.childAlignment = TextAnchor.MiddleLeft;
+        line.childControlWidth = true;
+        line.childControlHeight = true;
+        line.childForceExpandWidth = false;
+        line.childForceExpandHeight = true;
+
+        TMP_Text strip = Text(stripRow, "ScanStrip", string.Format(style.scanStrip, "--:--"), Mathf.RoundToInt(DocStripText), TextAlignmentOptions.MidlineLeft,
+                              Vector2.zero, Vector2.one, style.backingInk, ThemeRoleId.DiegeticBacking);
         strip.raycastTarget = false;
         strip.textWrappingMode = TextWrappingModes.NoWrap;
         strip.overflowMode = TextOverflowModes.Ellipsis;
+
+        Transform matchTag = Panel(stripRow, "MatchTag", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Tooltip, ThemeRoleId.CompareBar);
+        matchTag.GetComponent<Image>().raycastTarget = false;
+        HorizontalLayoutGroup tagLine = GetOrAdd<HorizontalLayoutGroup>(matchTag.gameObject);
+        tagLine.padding = new RectOffset(DocTagPadding, DocTagPadding, 0, 0);
+        tagLine.childAlignment = TextAnchor.MiddleCenter;
+        tagLine.childControlWidth = true;
+        tagLine.childControlHeight = true;
+        tagLine.childForceExpandWidth = false;
+        tagLine.childForceExpandHeight = true;
+        TMP_Text matchWord = Text(matchTag, "Label", null, Mathf.RoundToInt(DocStripText), TextAlignmentOptions.Center, Vector2.zero, Vector2.one, CompareMatchInk,
+                                  ThemeRoleId.CompareMatch, "compare.match", FontStyles.Bold);
+        matchWord.raycastTarget = false;
+        matchWord.textWrappingMode = TextWrappingModes.NoWrap;
+        matchTag.gameObject.SetActive(false);
 
         FormPage copy = BuildFormPage(page, "Scroll", PcPageWidth, false);
         PlaceRect(copy.transform, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -(stripTop + DocStrip + DocGap)));
@@ -153,6 +184,7 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(c);
         Wire(so, "titleText", title);
         Wire(so, "scanStrip", strip);
+        Wire(so, "matchTag", matchTag.gameObject);
         Wire(so, "page", copy);
         so.ApplyModifiedProperties();
         page.gameObject.SetActive(false);
@@ -204,21 +236,7 @@ public static partial class OfficeSceneUIBuilder
         PlaceRect(viewport, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-(DocScrollbar + DocGap), 0f));
         viewport.gameObject.AddComponent<RectMask2D>();
 
-        Transform track = Panel(area, "Scrollbar", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, style.backing, ThemeRoleId.DiegeticBacking);
-        PlaceRect(track, new Vector2(1f, 0f), Vector2.one, new Vector2(-DocScrollbar, 0f), Vector2.zero);
-        Transform slide = Panel(track, "SlidingArea", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        SetAnchors(slide, Vector2.zero, Vector2.one);
-        Transform handle = Panel(slide, "Handle", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, style.backingInk, ThemeRoleId.DiegeticBacking);
-        SetAnchors(handle, Vector2.zero, Vector2.one);
-        // Through the serialized fields, as the browser's scrollbar: a setter would drive the handle now and save it zeroed.
-        Scrollbar scrollbar = track.gameObject.AddComponent<Scrollbar>();
-        var soBar = new SerializedObject(scrollbar);
-        soBar.FindProperty("m_Direction").enumValueIndex = (int)Scrollbar.Direction.BottomToTop;
-        soBar.FindProperty("m_HandleRect").objectReferenceValue = handle;
-        soBar.FindProperty("m_TargetGraphic").objectReferenceValue = handle.GetComponent<Image>();
-        soBar.FindProperty("m_Size").floatValue = 1f;
-        soBar.FindProperty("m_Value").floatValue = 0f;
-        soBar.ApplyModifiedProperties();
+        Scrollbar scrollbar = BuildScrollbar(area, DocScrollbar, style.backing, ThemeRoleId.DiegeticBacking, style.backingInk, ThemeRoleId.DiegeticBacking);
 
         ScrollRect scroll = area.gameObject.AddComponent<ScrollRect>();
         scroll.viewport = viewport;

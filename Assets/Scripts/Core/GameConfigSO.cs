@@ -18,9 +18,9 @@ public sealed class GameConfigSO : ScriptableObject
     public int legendaryBonusPay = 15;
 
     [Header("Citations (one penalty per wrong decision)")]
-    /// <summary>Wrong decisions per day forgiven with a warning only (no money penalty); 0 fines every mistake (Saleh, 2026-09-29).</summary>
+    /// <summary>Wrong decisions per day forgiven with a warning only (no money penalty; the slip says so); 0 fines every mistake (Saleh: "one free warning but configurable and tunable").</summary>
     [Min(0)]
-    public int freeWarningsPerDay = 0;
+    public int freeWarningsPerDay = 1;
 
     /// <summary>
     /// The one money penalty for a wrong decision past the free warnings: a
@@ -50,21 +50,39 @@ public sealed class GameConfigSO : ScriptableObject
     [Min(10f)]
     public float shiftRealSeconds = 480f;
 
-    [Header("Timeline stability")]
-    /// <summary>Stability lost per wrong send (0..100 scale).</summary>
+    [Header("Timeline stability (x.xx, changes compound)")]
+    /// <summary>
+    /// The share of stability one point of change moves (StabilityRules.Apply;
+    /// redesign phase 23 part 1b): a loss takes rate x points of the current
+    /// value, a gain closes rate x points of the gap to 100, so changes are
+    /// small and compound. 0.005 = 0.5 % a point.
+    /// </summary>
+    [Range(0f, 0.05f)]
+    public float stabilityChangeRate = 0.005f;
+
+    /// <summary>Points of change a wrong decision costs (5 at 0.5 % a point: 2.5 % of the current stability).</summary>
     [Min(0f)]
     public float stabilityLossPerWrong = 5f;
 
-    /// <summary>Extra stability lost when a wrong send involves a legendary.</summary>
+    /// <summary>Extra points a wrong decision on a premade costs (Saleh: "this is a different consequence").</summary>
     [Min(0f)]
     public float extraStabilityLossLegendary = 10f;
 
-    /// <summary>Stability regained per correct send (usually small or 0).</summary>
+    /// <summary>Points of change a correct decision gains, closing a share of the gap to 100 (usually 0).</summary>
     [Min(0f)]
     public float stabilityGainPerCorrect = 0f;
 
-    /// <summary>At or below this stability, the player is fired (run over).</summary>
-    public float firedAtStability = 0f;
+    /// <summary>At or below this stability, the player is fired (run over). Compounding losses never reach 0, so the line sits above it (set with the balance simulation).</summary>
+    [Range(0f, 100f)]
+    public float firedAtStability = 60f;
+
+    /// <summary>The office's stability readout turns amber within this many points above the firing line (StabilityRules.Band).</summary>
+    [Min(0f)]
+    public float stabilityWarningMargin = 10f;
+
+    /// <summary>The office's stability readout turns red within this many points above the firing line.</summary>
+    [Min(0f)]
+    public float stabilityCriticalMargin = 3f;
 
     [Header("Endings")]
     /// <summary>At or below this money total, the player goes bankrupt (run over).</summary>
@@ -125,6 +143,31 @@ public sealed class GameConfigSO : ScriptableObject
     /// <summary>Maximum value a family member's condition can reach.</summary>
     [Min(0)]
     public int maxFamilyCondition = 10;
+
+    /// <summary>A sick member's nightly chance to get one point better per point of the household's mood (the house upgrades' Mood ops; HomeRules.RecoveryChance). Provisional (Saleh's Q3, option A).</summary>
+    [Range(0f, 1f)]
+    public float recoveryPerMood = 0.04f;
+
+    /// <summary>The highest nightly recovery chance any mood gives.</summary>
+    [Range(0f, 1f)]
+    public float maxRecoveryChance = 0.5f;
+
+    [Header("Home / Break-ins")]
+    /// <summary>The first night someone may break in while the clerk is at work (HomeRules.BreakIn). Provisional (Saleh's Q2, option A).</summary>
+    [Min(1)]
+    public int breakInFromDay = 2;
+
+    /// <summary>The nightly chance of a break-in, before the house's locks and alarm (BreakInChance ops).</summary>
+    [Range(0f, 1f)]
+    public float breakInChance = 0.08f;
+
+    /// <summary>The share of a positive wallet a break-in takes, before the strongbox (BreakInShare ops).</summary>
+    [Range(0f, 1f)]
+    public float breakInShare = 0.25f;
+
+    /// <summary>The most a break-in takes, in credits.</summary>
+    [Min(0)]
+    public int breakInMaxLoss = 60;
 
     [Header("Home / Slot Machine")]
     /// <summary>Credits cost to spin the slot machine once.</summary>

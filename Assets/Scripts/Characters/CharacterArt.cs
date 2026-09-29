@@ -29,6 +29,15 @@ public sealed class CharacterArt : IDisposable
     /// <summary>How much darker each later era's garments are.</summary>
     private const float EraShadeStep = 0.11f;
 
+    /// <summary>A body or head placeholder's border: its skin at this brightness.</summary>
+    private const float SkinBorderShade = 0.7f;
+
+    /// <summary>A garment placeholder's border: its nation colour at this brightness.</summary>
+    private const float GarmentBorderShade = 0.55f;
+
+    /// <summary>A premade's whole-figure placeholder's stripes and mark: a warm off-white.</summary>
+    private static readonly (byte r, byte g, byte b) WholeFigureAccent = (240, 236, 224);
+
     /// <summary>One key's sprites.</summary>
     private sealed class Entry
     {
@@ -58,9 +67,25 @@ public sealed class CharacterArt : IDisposable
             if (nations[i] != null && !string.IsNullOrEmpty(nations[i].id))
                 _nationHue[nations[i].id] = i / (float)Math.Max(1, nations.Count);
 
-        foreach (EraSO era in library.Eras ?? Array.Empty<EraSO>())
+        foreach (EraSO era in library.Eras)
             if (era != null && !string.IsNullOrEmpty(era.id))
                 _eraOrder[era.id] = era.order;
+    }
+
+    /// <summary>
+    /// True when final art is delivered for <paramref name="keyName"/>
+    /// (Resources/Characters/{key}): a premade shows its whole picture once
+    /// its neutral one is, and its generated stand-in look until then (days
+    /// 7-15 B4). Loads the sprite to look, then releases its texture (a later
+    /// Get loads it again).
+    /// </summary>
+    public static bool HasFinalArt(string keyName)
+    {
+        Sprite sprite = string.IsNullOrEmpty(keyName) ? null : Resources.Load<Sprite>($"{ResourcesFolder}/{keyName}");
+        if (sprite == null)
+            return false;
+        Resources.UnloadAsset(sprite.texture);
+        return true;
     }
 
     /// <summary>The layer's full-canvas sprite (final art, else a placeholder).</summary>
@@ -140,7 +165,7 @@ public sealed class CharacterArt : IDisposable
             case LookLayer.Body:
             case LookLayer.Head:
                 fill = PlaceholderPalette.Skin(key.SkinTone);
-                accent = PlaceholderPalette.Darker(fill, 0.7f);
+                accent = PlaceholderPalette.Darker(fill, SkinBorderShade);
                 break;
             case LookLayer.HairBack:
             case LookLayer.Hair:
@@ -150,12 +175,12 @@ public sealed class CharacterArt : IDisposable
                 break;
             case LookLayer.Whole:
                 fill = nation;
-                accent = (240, 236, 224);
+                accent = WholeFigureAccent;
                 mark = Mark(key.Expression);
                 break;
             default:
                 fill = nation;
-                accent = PlaceholderPalette.Darker(nation, 0.55f);
+                accent = PlaceholderPalette.Darker(nation, GarmentBorderShade);
                 break;
         }
 

@@ -7,8 +7,9 @@ using UnityEngine.UI;
 /// <summary>
 /// The office investigation's façade (the PC redesign RF1, audit R4-001): the
 /// one component GameManager talks to, with the scene's references. It
-/// presents each case in the Investigation app (InvestigationApp: the claim
-/// in its case header, the counters, two panes of the six tabs; every tab
+/// presents each case in the Investigation app (InvestigationApp: the
+/// counters in its case header, never the claim, which the traveller only
+/// says; two panes of the six tabs; every tab
 /// has one view per pane and the presenters fill them all) and offers the binary
 /// Accept/Deny (the app header's buttons and the desk's stamp tray, wired
 /// once); the work is its presenters': CaseDocumentsPresenter (the papers,
@@ -79,7 +80,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The physical papers and the scanner (optional: without it documents reach the PC when handed over).</summary>
     [SerializeField] private DeskController desk;
 
-    /// <summary>The office case HUD (piece 10; optional): the claim tag shows the claim banner's text in the office.</summary>
+    /// <summary>The office case HUD (piece 10; optional): the office compare strip's host (it prints no claim).</summary>
     [SerializeField] private OfficeCaseHud hud;
 
     /// <summary>The stamp tray (piece 10; optional): its Accept and Deny decide the case like the PC's buttons.</summary>
@@ -141,9 +142,10 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>
     /// What the wired references make reachable (InvestigationWiring).
     /// Serialized references are compared with != null: an unassigned one is
-    /// Unity's fake null.
+    /// Unity's fake null. Build Office UI checks it on the scene it builds
+    /// (audit R4-022), so a partly wired desk fails the build, not the day.
     /// </summary>
-    private InvestigationWiring Wiring => new InvestigationWiring(
+    public InvestigationWiring Wiring => new InvestigationWiring(
         First(documentsViews) != null && First(documentsViews).Ready, app != null, acceptButton != null, denyButton != null, compareController != null,
         interactionPanel != null, First(transcriptViews) != null, app != null && app.Hosts(AppTab.Transcript), desk != null && desk.IsReachable,
         First(recordsViews) != null);
@@ -303,7 +305,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             ShowRich(inst, lib);
     }
 
-    /// <summary>Between cases: the compare dock hides, the desktop shows its idle line, the app's case tabs show the no-case state, the steps go and the office's claim tag empties. No window closes.</summary>
+    /// <summary>Between cases: the compare dock hides, the desktop shows its idle line, the app's case tabs show the no-case state and the steps go. No window closes.</summary>
     public void Hide()
     {
         ShowCaseLayers(false);
@@ -311,8 +313,6 @@ public sealed class InvestigationUIController : MonoBehaviour
             app.EndCase();
         if (stepsPanel != null)
             stepsPanel.EndCase();
-        if (hud != null)
-            hud.SetClaim(string.Empty);
     }
 
     /// <summary>Shows the compare dock and Accept and Deny (a traveller is at the desk), or hides the dock, turns the buttons off and shows the desktop's idle line.</summary>
@@ -325,21 +325,20 @@ public sealed class InvestigationUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// A case on the desk: the claim in the app's header and the office's tag
-    /// (one text), the app on Documents with its badges cleared, today's
+    /// A case on the desk: the app's title names the traveller (no claim is
+    /// printed anywhere: the traveller says it, the personalities spec's B1),
+    /// the app on Documents with its badges cleared, today's
     /// directives, the papers presented, the interview started, the reference
-    /// books built the first time and turned to the claim, the steps of the
-    /// traveller's kind listed (the papers handed over on arrival received),
+    /// books built the first time and turned to the claim, the steps listed
+    /// (the default set until the arrival paper is read, then the kind's; the
+    /// papers handed over on arrival received),
     /// the compare cleared. No window opens or closes.
     /// </summary>
     private void ShowRich(CaseInstance inst, ContentLibrarySO lib)
     {
         ShowCaseLayers(true);
 
-        string claim = inst != null ? UiText.Format("claim.banner", inst.visitorDisplayName, inst.claimLine) : string.Empty;
-        app.BeginCase(claim, inst != null ? inst.visitorDisplayName : string.Empty);
-        if (hud != null)
-            hud.SetClaim(claim);
+        app.BeginCase(inst != null ? inst.visitorDisplayName : string.Empty);
 
         _reference.ShowDirectives();
         _interview.BeginCase(inst);
@@ -443,6 +442,32 @@ public sealed class InvestigationUIController : MonoBehaviour
     {
         if (app != null && _currentCase != null)
             app.SetCounters(_documents.Papers, _evidence.Count);
+    }
+
+    /// <summary>
+    /// The decided traveller's reaction (the personalities spec's R1-R4): the
+    /// verdict, their intent (ReactionIntents.Of: a place lie or a record lie
+    /// is Lying) and fault reason choose one or two lines in their voice,
+    /// appended to the transcript and said in the bubble in turn. Returns how
+    /// long the traveller stays (0: they leave at once). Scores nothing.
+    /// </summary>
+    public float React(CaseInstance inst, bool accepted)
+    {
+        if (inst == null || _interview == null)
+            return 0f;
+
+        ReactionVerdict verdict = accepted ? ReactionVerdict.Accepted : ReactionVerdict.Denied;
+        ReactionIntent intent = ReactionIntents.Of(inst.IsLiar, inst.IsForger);
+        IReadOnlyList<DialogLine> lines = _interview.React(inst, verdict, intent);
+        Debug.Log($"[InvestigationUIController] Reaction ({verdict} · {intent}, reason '{inst.FaultReason}'): {string.Join(" / ", lines.Select(l => l.Text))}");
+        return wheel != null ? wheel.React(lines) : 0f;
+    }
+
+    /// <summary>The decided traveller has left (or the next is called): their reaction's bubble hides.</summary>
+    public void EndReaction()
+    {
+        if (wheel != null)
+            wheel.EndReaction();
     }
 
     private void Accept() => Decide(true);

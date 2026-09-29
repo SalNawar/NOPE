@@ -187,6 +187,40 @@ public class ExamineLayoutTests
     }
 
     [Test]
+    public void InPixels_WorkedExample_1080p()
+    {
+        // The right office slot at 1920 x 1080: 0.44 screen heights tall, 0.3365 wide, its centre 0.2 right of the middle.
+        ScreenRect r = new ScreenBox(0.2f, 0.24f, 0.44f).InPixels(PaperAspect, 1920f, 1080f);
+        Assert.AreEqual(994.306f, r.XMin, 1e-2f);
+        Assert.AreEqual(1357.694f, r.XMax, 1e-2f);
+        Assert.AreEqual(21.6f, r.YMin, 1e-2f);
+        Assert.AreEqual(496.8f, r.YMax, 1e-2f);
+    }
+
+    [Test]
+    public void InPixels_ScalesWithTheScreenHeight_CentredOnTheMiddle()
+    {
+        var box = new ScreenBox(0f, 0.5f, 1f);
+        ScreenRect r = box.InPixels(1f, 1280f, 720f);
+        Assert.AreEqual(640f - 360f, r.XMin, Eps, "a centred box sits round the screen's middle");
+        Assert.AreEqual(640f + 360f, r.XMax, Eps);
+        Assert.AreEqual(0f, r.YMin, Eps);
+        Assert.AreEqual(720f, r.YMax, Eps, "a box a screen height tall fills the height");
+    }
+
+    [Test]
+    public void Covers_InsideAndOnTheEdges_NotBeyond()
+    {
+        var box = new ScreenBox(0.2f, 0.24f, 0.44f);
+        ScreenRect r = box.InPixels(PaperAspect, 1920f, 1080f);
+        Assert.IsTrue(box.Covers(PaperAspect, 1920f, 1080f, (r.XMin + r.XMax) / 2f, (r.YMin + r.YMax) / 2f), "the centre");
+        Assert.IsTrue(box.Covers(PaperAspect, 1920f, 1080f, r.XMin + 0.01f, r.YMax - 0.01f), "just inside a corner");
+        Assert.IsFalse(box.Covers(PaperAspect, 1920f, 1080f, r.XMax + 0.5f, 250f), "right of the box");
+        Assert.IsFalse(box.Covers(PaperAspect, 1920f, 1080f, 1100f, r.YMax + 0.5f), "above the box");
+        Assert.IsFalse(box.Covers(PaperAspect, 1920f, 0f, 1100f, 250f), "a screen with no height covers nothing");
+    }
+
+    [Test]
     public void Ease_EndpointsAndMonotonic()
     {
         Assert.AreEqual(0f, ExamineLayout.Ease(0f), Eps);

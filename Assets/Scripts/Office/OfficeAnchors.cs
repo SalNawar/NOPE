@@ -133,7 +133,13 @@ public static class OfficeAnchors
         return null;
     }
 
-    /// <summary>The world bounds of the active renderers under <paramref name="t"/>; false when it has none.</summary>
+    /// <summary>
+    /// The world bounds of the active renderers under <paramref name="t"/> (a
+    /// sprite's are its opaque pixels', <see cref="OpaqueRect"/>: the anime
+    /// hall's layers are whole-canvas sprites); with none, a sized marker's
+    /// rect (an empty RectTransform anchor over a place, Anchor_DepartureBoard);
+    /// false when it has neither.
+    /// </summary>
     public static bool TryBounds(Transform t, out Bounds bounds)
     {
         bounds = default;
@@ -142,17 +148,86 @@ public static class OfficeAnchors
         {
             if (!r.enabled || r is ParticleSystemRenderer)
                 continue;
+            Bounds b = r is SpriteRenderer sprite && sprite.sprite != null ? WorldBounds(sprite.transform, OpaqueRect(sprite.sprite)) : r.bounds;
             if (!any)
             {
-                bounds = r.bounds;
+                bounds = b;
                 any = true;
             }
             else
             {
-                bounds.Encapsulate(r.bounds);
+                bounds.Encapsulate(b);
             }
         }
+        if (!any && t is RectTransform marker && marker.rect.width > 0f && marker.rect.height > 0f)
+        {
+            bounds = WorldBounds(marker, marker.rect);
+            any = true;
+        }
         return any;
+    }
+
+    /// <summary>
+    /// Where a place's picture is, in <paramref name="frame"/>'s space, for a
+    /// view that follows it each frame (<see cref="WorldBounds"/>): a sized
+    /// marker's rect, else its sprite's opaque rect, else false (a mesh's
+    /// bounds do not follow as a rect; use <see cref="TryBounds"/>).
+    /// </summary>
+    public static bool TryLocalRect(Transform t, out Transform frame, out Rect local)
+    {
+        frame = null;
+        local = default;
+        if (t == null)
+            return false;
+        if (t is RectTransform marker && marker.rect.width > 0f && marker.rect.height > 0f && marker.GetComponentInChildren<Renderer>(false) == null)
+        {
+            frame = marker;
+            local = marker.rect;
+            return true;
+        }
+        SpriteRenderer sprite = t.GetComponentInChildren<SpriteRenderer>(false);
+        if (sprite == null || sprite.sprite == null)
+            return false;
+        frame = sprite.transform;
+        local = OpaqueRect(sprite.sprite);
+        return true;
+    }
+
+    /// <summary>
+    /// A sprite's opaque pixels as a rect in its local units: the bounds of its
+    /// physics shape (Unity's outline of the opaque pixels, generated at import
+    /// with Generate Physics Shape), else the whole sprite.
+    /// </summary>
+    public static Rect OpaqueRect(Sprite sprite)
+    {
+        int count = sprite.GetPhysicsShapeCount();
+        if (count == 0)
+            return new Rect(sprite.bounds.min, sprite.bounds.size);
+
+        var points = new List<Vector2>();
+        float xMin = float.MaxValue, yMin = float.MaxValue, xMax = float.MinValue, yMax = float.MinValue;
+        for (int i = 0; i < count; i++)
+        {
+            sprite.GetPhysicsShape(i, points);
+            foreach (Vector2 p in points)
+            {
+                xMin = Mathf.Min(xMin, p.x);
+                yMin = Mathf.Min(yMin, p.y);
+                xMax = Mathf.Max(xMax, p.x);
+                yMax = Mathf.Max(yMax, p.y);
+            }
+        }
+        return Rect.MinMaxRect(xMin, yMin, xMax, yMax);
+    }
+
+    /// <summary>The world bounds of <paramref name="local"/> (a rect in <paramref name="frame"/>'s x-y plane) as <paramref name="frame"/> stands now.</summary>
+    public static Bounds WorldBounds(Transform frame, Rect local)
+    {
+        var bounds = new Bounds(frame.TransformPoint(new Vector3(local.xMin, local.yMin, 0f)), Vector3.zero);
+        bounds.Encapsulate(frame.TransformPoint(new Vector3(local.xMax, local.yMin, 0f)));
+        bounds.Encapsulate(frame.TransformPoint(new Vector3(local.xMin, local.yMax, 0f)));
+        bounds.Encapsulate(frame.TransformPoint(new Vector3(local.xMax, local.yMax, 0f)));
+        return bounds;
     }
 
     /// <summary>

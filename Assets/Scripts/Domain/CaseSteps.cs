@@ -249,9 +249,10 @@ public readonly struct StepTarget
 
 /// <summary>
 /// The optional steps checklist's rules (the PC redesign ST1-ST4, §4.4;
-/// redesign phase 21): the set a traveller gets (their kind's, inheriting and
-/// overriding by id; the default for a kind without one; a step from its first
-/// day), each step's parts and tick from what the player has done this case
+/// redesign phase 21): the set a traveller gets (the default set until a paper
+/// handed over on arrival is read, then their kind's, the personalities spec's
+/// B5; inheriting and overriding by id; the default for a kind without one; a
+/// step from its first day), each step's parts and tick from what the player has done this case
 /// (CaseProgress; a hand-set tick holds), and where a click goes. A step ticks
 /// when the player made the check, never on what the check found, so the list
 /// gives no answer away. Pure; the Investigation app's StepsPanel draws it.
@@ -260,6 +261,17 @@ public static class CaseSteps
 {
     /// <summary>The type of the set a traveller kind without its own set gets.</summary>
     public const string DefaultType = "default";
+
+    /// <summary>
+    /// The set the checklist lists for a traveller of <paramref name="kind"/>
+    /// (a TravellerKind name): the default set until a paper handed over on
+    /// arrival has been read (<paramref name="arrivalRead"/>,
+    /// CaseProgress.ArrivalRead), then the kind's. The papers name the kind
+    /// first, never the checklist (the personalities spec's B5: "you can't know
+    /// the type before checking the papers"); progress is kept by step id, so
+    /// a step done under the default set stays done in the kind's.
+    /// </summary>
+    public static string SetName(string kind, bool arrivalRead) => arrivalRead ? kind : DefaultType;
 
     /// <summary>
     /// The steps a traveller of <paramref name="type"/> (a TravellerKind name)
@@ -295,13 +307,16 @@ public static class CaseSteps
     /// <summary>
     /// Each listed step's state this case (a step with no parts is left out):
     /// its parts checked and needed, ticked when all are (or as set by hand,
-    /// which holds).
+    /// which holds). Written into <paramref name="into"/> (cleared first; the
+    /// steps panel reuses one list) or a new list, which is returned.
     /// </summary>
-    public static List<StepState> Evaluate(IReadOnlyList<StepSpec> steps, CaseProgress progress)
+    public static List<StepState> Evaluate(IReadOnlyList<StepSpec> steps, CaseProgress progress, List<StepState> into = null)
     {
-        var states = new List<StepState>();
-        foreach (StepSpec step in steps)
+        List<StepState> states = into ?? new List<StepState>();
+        states.Clear();
+        for (int i = 0; i < steps.Count; i++)
         {
+            StepSpec step = steps[i];
             Count(step, progress, out int have, out int need);
             if (need == 0)
                 continue;

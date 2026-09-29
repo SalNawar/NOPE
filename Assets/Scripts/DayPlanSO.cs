@@ -10,8 +10,17 @@ using UnityEngine;
 /// - How many travellers queue that day (visitorsCount; the shift clock may close first)
 /// - Procedural generation knobs (the kinds' blueprints and weights, eras, the premade pool and chance)
 /// - Which lies today's liars may tell (lie kinds), and where a place lie may leak tells (tell count and tell channels)
-/// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut")
+/// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut"; a slot may list alternatives, the first standing wins)
 /// - Event rules (fixed or random placement, including "random but after N cases")
+///
+/// The portals seam (Saleh's portals feature, designed separately and not
+/// built here; days 7-15 spec section 15): a day would list the portals it
+/// opens beside its travel rules (a days[].portals list read here next to
+/// activeTravelRules), and ContentLibrarySO.BuildToday(plan, history), the
+/// one place a day's destinations are decided, would narrow them to the open
+/// portals' places. Which portals are open on which day is the portal
+/// design's to say (portal 01 from day 1, the others repaired from the PC);
+/// no day plan assumes an opening.
 /// </summary>
 [CreateAssetMenu(menuName = "TimeDesk/Day/Day Plan", fileName = "DayPlan_")]
 public sealed class DayPlanSO : ScriptableObject
@@ -72,11 +81,26 @@ public sealed class DayPlanSO : ScriptableObject
     [SerializeField, Range(0f, 1f)] private float costumeErrorChance;
 
     /// <summary>
+    /// Chance per generated liar of a slip after their small talk (the
+    /// personalities spec's T9; Slips.Roll on Seeds.ForSlip). Written by
+    /// Tools > TimeDesk > Generate World from world_source.json days[].slipChance.
+    /// </summary>
+    [SerializeField, Range(0f, 1f)] private float slipChance;
+
+    /// <summary>
     /// The lies enabled today (traveller types §6.1; a traveller draws among
     /// those that fit their kind, LieKinds.For, on the lie roll). Written by
     /// Tools > TimeDesk > Generate World from world_source.json days[].lies.
     /// </summary>
     [SerializeField] private LieKind[] lieKinds;
+
+    /// <summary>
+    /// Chance per honest traveller of breaking one of today's rolled
+    /// procedures (the paper set, the debt standing; traveller types P4;
+    /// Directives.Roll on the fault stream): 0 before their first day.
+    /// Written by Generate World from world_source.json days[].violationChance.
+    /// </summary>
+    [SerializeField, Range(0f, 1f)] private float violationChance;
 
     // -----------------------------
     // Scripted overrides
@@ -86,16 +110,21 @@ public sealed class DayPlanSO : ScriptableObject
     [SerializeField] private TravelRuleSO[] activeTravelRules;
 
     /// <summary>
-    /// Each active rule sends at least one violator, placed in the first half
-    /// of the queue, so the day's directives are always tested.
+    /// Each guaranteeing rule (Directives.Guarantees: every active closure;
+    /// a procedure on its first day) sends at least one faulty traveller,
+    /// placed in the first half of the queue, so the day's directives are
+    /// always tested.
     /// </summary>
     [SerializeField] private bool guaranteeRuleViolators = true;
 
-    /// <summary>Forced slots (1-based): a blueprint, a premade or both (written by Generate World from days[].forced).</summary>
+    /// <summary>Forced slots (1-based): a blueprint, a premade or both, and a slot's alternatives in the order they are tried (written by Generate World from days[].forced).</summary>
     [SerializeField] private List<ForcedCaseSlot> forcedCases = new();
 
     /// <summary>Event rules (fixed or random placement).</summary>
     [SerializeField] private List<DayEventRule> eventRules = new();
+
+    /// <summary>The Directorate's route for each departure portal today (the portals spec v3 RT2; written by Generate World from days[].portals, the place by reference so a renamed place cannot dangle).</summary>
+    [SerializeField] private DirectorateRoute[] directorateRoutes;
 
     /// <summary>Public read-only day number.</summary>
     public int DayNumber => dayNumber;
@@ -138,13 +167,19 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Chance per 2150 citizen of a costume error today.</summary>
     public float CostumeErrorChance => costumeErrorChance;
 
+    /// <summary>Chance per generated liar of a slip today (T9).</summary>
+    public float SlipChance => slipChance;
+
     /// <summary>The lies enabled today, in authored order (empty when unset).</summary>
     public IReadOnlyList<LieKind> EnabledLies => lieKinds ?? Array.Empty<LieKind>();
+
+    /// <summary>Chance per honest traveller of breaking one of today's rolled procedures.</summary>
+    public float ViolationChance => violationChance;
 
     /// <summary>Public read-only travel rules active this day.</summary>
     public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();
 
-    /// <summary>Whether each active rule is guaranteed a violator in the first half of the queue.</summary>
+    /// <summary>Whether each guaranteeing rule is guaranteed a faulty traveller in the first half of the queue.</summary>
     public bool GuaranteeRuleViolators => guaranteeRuleViolators;
 
     /// <summary>Every forced case's blueprint (set slots only, in authored order); the content validator counts their documents.</summary>
@@ -179,71 +214,75 @@ public sealed class DayPlanSO : ScriptableObject
     }
 
     /// <summary>
-    /// Returns true if every active rule permits travel to the claimed nation+era.
+    /// Returns true if every active rule read for a traveller of
+    /// <paramref name="kind"/> permits travel to the claimed nation+era (a
+    /// closure listing kinds closes only for them: the Economy range limit,
+    /// days 7-15 §6.1).
     /// </summary>
-    public bool ClaimAllowed(NationSO claimNation, EraSO claimEra)
+    public bool ClaimAllowed(NationSO claimNation, EraSO claimEra, TravellerKind kind)
     {
         if (activeTravelRules == null)
             return true;
 
         foreach (TravelRuleSO rule in activeTravelRules)
-            if (rule != null && !rule.Allows(claimNation, claimEra))
+            if (rule != null && rule.AppliesTo(kind) && !rule.Allows(claimNation, claimEra))
                 return false;
 
         return true;
     }
 
-    /// <summary>
-    /// Tries to get a forced blueprint for the given case slot (1-based).
-    /// Returns true if a forced case exists for that slot.
-    /// </summary>
-    public bool TryGetForcedCase(int caseIndex1Based, out CaseBlueprintSO blueprint)
+    /// <summary>The Directorate's routes as authored (the validator checks each names a place).</summary>
+    public IReadOnlyList<DirectorateRoute> DirectorateRoutes => directorateRoutes ?? Array.Empty<DirectorateRoute>();
+
+    /// <summary>The Directorate's routes as the schedule's requests (PortalSchedule.Resolve), in authored order; a route whose place is missing is left out.</summary>
+    public List<PortalRequest> PortalRequests()
     {
-        foreach (ForcedCaseSlot slot in forcedCases)
-        {
-            if (slot == null)
-                continue;
-
-            if (slot.caseIndex1Based == caseIndex1Based && slot.caseBlueprint != null)
-            {
-                blueprint = slot.caseBlueprint;
-                return true;
-            }
-        }
-
-        blueprint = null;
-        return false;
+        var requests = new List<PortalRequest>();
+        foreach (DirectorateRoute route in directorateRoutes ?? Array.Empty<DirectorateRoute>())
+            if (route != null && route.place != null && route.place.nation != null && route.place.era != null)
+                requests.Add(new PortalRequest(route.portal, new PlaceRef(route.place.nation.id, route.place.era.id)));
+        return requests;
     }
 
     /// <summary>
-    /// Tries to get the premade forced into the given case slot (1-based).
-    /// Returns true if the slot names a premade.
+    /// The line of today's first closure that forbids <paramref name="nation"/>
+    /// in <paramref name="era"/> for every traveller (a portal's route it
+    /// forbids shows CLOSED; the portals spec v3 RT2), or null when none does.
+    /// A closure listing kinds (the Economy range limit) closes no portal: it
+    /// only turns some travellers away.
     /// </summary>
-    public bool TryGetForcedPremade(int caseIndex1Based, out LegendarySO premade)
+    public string ClosureOf(NationSO nation, EraSO era)
     {
-        foreach (ForcedCaseSlot slot in forcedCases)
-        {
-            if (slot != null && slot.caseIndex1Based == caseIndex1Based && slot.legendary != null)
-            {
-                premade = slot.legendary;
-                return true;
-            }
-        }
-
-        premade = null;
-        return false;
+        foreach (TravelRuleSO rule in ActiveTravelRules)
+            if (rule != null && rule.IsClosure && (rule.kinds == null || rule.kinds.Length == 0) && !rule.Allows(nation, era))
+                return rule.Summary();
+        return null;
     }
 
     /// <summary>
-    /// Resolves eventRules into a concrete schedule using a deterministic seed.
-    /// Random placement happens here (once), so runtime lookups are fast and stable.
+    /// The forced entries of a case slot (1-based), in the authored order: a
+    /// slot's alternatives (days 7-15 B9), tried in this order at the day's
+    /// start (Premades.Appearance). Empty when nothing is forced there.
+    /// </summary>
+    public IEnumerable<ForcedCaseSlot> ForcedAt(int caseIndex1Based)
+    {
+        foreach (ForcedCaseSlot slot in forcedCases)
+            if (slot != null && slot.caseIndex1Based == caseIndex1Based)
+                yield return slot;
+    }
+
+    /// <summary>
+    /// Resolves eventRules into a concrete schedule using a deterministic seed:
+    /// the day's event stream (Seeds.ForEvents of <paramref name="seed"/>, the
+    /// day's seed; audit R3-010), apart from every traveller's. Random
+    /// placement happens here (once), so runtime lookups are fast and stable.
     /// </summary>
     public ResolvedDaySchedule ResolveSchedule(int seed)
     {
         var schedule = new ResolvedDaySchedule();
 
         int total = Mathf.Max(1, visitorsCount);
-        var rng = new System.Random(seed);
+        var rng = new SeededRandom(Seeds.ForEvents(seed));
 
         // Tracks reserved slots for exclusive events to reduce collisions.
         var reservedExclusive = new HashSet<(DayEventTrigger trigger, int caseIndex1Based)>();
@@ -257,7 +296,7 @@ public sealed class DayPlanSO : ScriptableObject
             if (minInclusive > maxInclusive)
                 minInclusive = maxInclusive;
 
-            return rng.Next(minInclusive, maxInclusive + 1);
+            return rng.Range(minInclusive, maxInclusive + 1);
         }
 
         if (eventRules == null || eventRules.Count == 0)
@@ -322,7 +361,9 @@ public sealed class DayPlanSO : ScriptableObject
 /// <summary>
 /// Forces a blueprint, a premade or both into a case slot (1-based), written
 /// by Generate World from world_source.json days[].forced. Example: "case 3
-/// of day 1 is Senenmut".
+/// of day 1 is Senenmut". One entry is one appearance (days 7-15 B9): it
+/// stands when its conditions pass at the day's start and its premade is not
+/// met; a slot may list several, the first standing wins.
 /// </summary>
 [Serializable]
 public sealed class ForcedCaseSlot
@@ -330,11 +371,32 @@ public sealed class ForcedCaseSlot
     /// <summary>1-based case slot index.</summary>
     [Min(1)] public int caseIndex1Based = 1;
 
+    /// <summary>The appearance's name (days[].forced[].id; blank: none), unique in the day: a slot's alternatives are told apart by it in the logs and the content sheet.</summary>
+    public string id = string.Empty;
+
     /// <summary>The case blueprint that must appear in this slot (null = the day's pick).</summary>
     public CaseBlueprintSO caseBlueprint;
 
     /// <summary>A premade who stands in this slot (null = none); the slot is never a rule violator's.</summary>
     public LegendarySO legendary;
+
+    /// <summary>True when the appearance tells an authored lie (<see cref="lie"/>; days 7-15 B6): the slot's authoring, never a roll.</summary>
+    public bool hasLie;
+
+    /// <summary>The appearance's authored lie (read only when <see cref="hasLie"/>): its variant and false values drawn on the traveller's lie stream, as a rolled lie's are.</summary>
+    public LieKind lie;
+
+    /// <summary>The appearance's authored directive fault (None: none; days 7-15 B6): the maker's variant pinned (Directives.Plan), its values drawn on the traveller's fault stream.</summary>
+    public PlannedDirective directive;
+
+    /// <summary>The appearance's dialog (blank: the premade's own; days 7-15 B7), offered only while it stands at the desk (Premades.Voice).</summary>
+    public string dialogId = string.Empty;
+
+    /// <summary>The desk's opener for the appearance (blank: the premade's own, else the interview's; days 7-15 B7).</summary>
+    public string introLine = string.Empty;
+
+    /// <summary>When this appearance stands (all must pass on the day-start snapshot; none: always): the verdict memory's flags, dialog flags, the day (days 7-15 B9).</summary>
+    public List<TriggerCondition> conditions = new();
 }
 
 /// <summary>
@@ -353,6 +415,17 @@ public sealed class KindWeight
 
     /// <summary>True when a traveller drawn from this entry is honest: every fault roll is skipped with no draw (traveller types K5; FaultOrder; day 1's poor tourists). Written by Generate World from days[].kinds[].honest.</summary>
     public bool honest;
+}
+
+/// <summary>The Directorate's route for one departure portal on a day (days[].portals[]).</summary>
+[Serializable]
+public sealed class DirectorateRoute
+{
+    /// <summary>The portal's number (agency.portals[].number).</summary>
+    public int portal;
+
+    /// <summary>The place it runs to today.</summary>
+    public NationEraProfileSO place;
 }
 
 /// <summary>

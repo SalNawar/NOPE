@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ using UnityEngine;
 /// </summary>
 public sealed class DayOrchestrator : MonoBehaviour
 {
-    /// <summary>Runs scripted events (cutscenes, rule changes, etc.).</summary>
+    /// <summary>Runs scripted events (cutscenes, rule changes, etc.). Optional (Saleh, audit R3-013): no event type is authored yet, so without it the day runs and a scheduled event is skipped with a warning.</summary>
     [SerializeField] private DayEventDirector eventDirector;
 
     /// <summary>Designer-authored plan for the current day.</summary>
@@ -26,6 +27,9 @@ public sealed class DayOrchestrator : MonoBehaviour
 
     /// <summary>World state for the current run.</summary>
     private WorldState _worldState;
+
+    /// <summary>Today's travellers in slot order (CaseFactory): the closing-time warning names the forced appearances it never reached.</summary>
+    private IReadOnlyList<CaseInstance> _cases = Array.Empty<CaseInstance>();
 
     /// <summary>Per-slot state for today (null until StartDay).</summary>
     private DaySlotSequencer _slots;
@@ -54,10 +58,8 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// Starts a day using a plan and world state.
     /// Provide a seed to make random events deterministic.
     /// </summary>
-    public void StartDay(WorldState worldState, DayPlanSO plan, int seed)
+    public void StartDay(WorldState worldState, DayPlanSO plan, int seed, IReadOnlyList<CaseInstance> cases)
     {
-        Debug.Log($"[DayOrchestrator] >>> Entering StartDay (day {worldState?.day}, plan='{plan?.name}', seed={seed}).");
-
         // Stop an earlier day loop if this orchestrator is reused.
         if (_dayLoopRoutine != null)
         {
@@ -67,6 +69,7 @@ public sealed class DayOrchestrator : MonoBehaviour
 
         _worldState = worldState;
         dayPlan = plan;
+        _cases = cases ?? Array.Empty<CaseInstance>();
 
         // Validate required inputs early to avoid silent deadlocks.
         if (dayPlan == null)
@@ -81,22 +84,16 @@ public sealed class DayOrchestrator : MonoBehaviour
             return;
         }
 
-        if (eventDirector == null)
-        {
-            Debug.LogError("DayOrchestrator is missing a DayEventDirector reference.");
-            return;
-        }
-
         _slots = new DaySlotSequencer(dayPlan.VisitorsCount);
 
         // Resolve random placements once. This keeps the runtime loop simple and debuggable.
-        _resolvedSchedule = dayPlan != null ? dayPlan.ResolveSchedule(seed) : null;
+        _resolvedSchedule = dayPlan.ResolveSchedule(seed);
 
-        // Initialize event context for all events.
-        if (eventDirector != null && _worldState != null)
+        // Initialize event context for all events (the director is optional).
+        if (eventDirector != null)
             eventDirector.Init(new DayEventContext(this, _worldState));
 
-        Debug.Log($"[DayOrchestrator] <<< Exiting StartDay (starting day loop with a queue of {_slots.TotalSlots}).");
+        Debug.Log($"[DayOrchestrator] Day {_worldState.day} starts: plan '{dayPlan.name}', a queue of {_slots.TotalSlots}, seed {seed}.");
 
         // Start the day loop.
         _dayLoopRoutine = StartCoroutine(DayLoop());
@@ -140,15 +137,12 @@ public sealed class DayOrchestrator : MonoBehaviour
 
         int total = _slots.TotalSlots;
 
-        Debug.Log($"[DayOrchestrator] >>> Entering DayLoop (day {_worldState?.day}, {total} case slot(s)).");
-
         // True once the current slot's before-case events ran (for the closing report).
         bool beforeEventsRan = false;
 
         while (_slots.CanStartSlot)
         {
             int slot = _slots.CurrentSlot;
-            Debug.Log($"[DayOrchestrator] >>> Entering case slot {slot}/{total}.");
 
             // 1) BeforeCase events
             yield return RunScheduledEvents(DayEventTrigger.BeforeCase, slot);
@@ -193,8 +187,6 @@ public sealed class DayOrchestrator : MonoBehaviour
             // 5) AfterCase events
             yield return RunScheduledEvents(DayEventTrigger.AfterCase, slot);
 
-            Debug.Log($"[DayOrchestrator] <<< Exiting case slot {slot}/{total}.");
-
             // 6) Advance
             _slots.Advance();
             beforeEventsRan = false;
@@ -203,7 +195,7 @@ public sealed class DayOrchestrator : MonoBehaviour
         if (_slots.CloseRequested)
             WarnAboutUnreachedContent(_slots.CurrentSlot, beforeEventsRan, total);
 
-        Debug.Log($"[DayOrchestrator] <<< Exiting DayLoop (day {_worldState?.day} complete, closedEarly={_slots.CloseRequested}, invoking OnDayCompleted).");
+        Debug.Log($"[DayOrchestrator] Day {_worldState?.day} complete (closed early: {_slots.CloseRequested}).");
 
         // Queue done or booth closed: the shift is over.
         OnDayCompleted?.Invoke();
@@ -211,9 +203,10 @@ public sealed class DayOrchestrator : MonoBehaviour
 
     /// <summary>
     /// Closing time cut the queue short: warns (for designers) about scheduled
-    /// events, forced cases and forced premades placed in slots the player
-    /// never reached (a premade met on an earlier day left an ordinary
-    /// traveller in its slot, so it is not named).
+    /// events and the forced appearances standing in slots the player never
+    /// reached (CaseInstance.forcedAppearance: a met premade, or an appearance
+    /// whose conditions failed, left an ordinary traveller in its slot, so it
+    /// is not named).
     /// </summary>
     private void WarnAboutUnreachedContent(int firstUnreachedSlot, bool firstSlotBeforeEventsRan, int total)
     {
@@ -230,12 +223,9 @@ public sealed class DayOrchestrator : MonoBehaviour
                     missed.AddRange(events.Where(e => e != null).Select(e => $"{e.name} ({trigger}, slot {s})"));
             }
 
-            if (dayPlan != null && dayPlan.TryGetForcedCase(s, out CaseBlueprintSO forced) && forced != null)
-                missed.Add($"forced case {forced.name} (slot {s})");
-
-            if (dayPlan != null && dayPlan.TryGetForcedPremade(s, out LegendarySO premade) &&
-                Premades.SlotSource(true, _worldState != null && _worldState.HasMetPremade(premade.id), false) == PremadeSlot.Forced)
-                missed.Add($"forced premade {premade.displayName} (slot {s})");
+            ForcedCaseSlot forced = s - 1 < _cases.Count && _cases[s - 1] != null ? _cases[s - 1].forcedAppearance : null;
+            if (forced != null)
+                missed.Add($"forced {CaseFactory.Describe(forced)} (slot {s})");
         }
 
         if (missed.Count > 0)
@@ -247,13 +237,19 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// </summary>
     private IEnumerator RunScheduledEvents(DayEventTrigger trigger, int slotIndex1Based)
     {
-        if (_resolvedSchedule == null || eventDirector == null)
+        if (_resolvedSchedule == null)
             yield break;
 
         var events = _resolvedSchedule.Get(trigger, slotIndex1Based);
 
         if (events == null || events.Count == 0)
             yield break;
+
+        if (eventDirector == null)
+        {
+            Debug.LogWarning($"[DayOrchestrator] {events.Count} event(s) are scheduled for trigger={trigger}, slot={slotIndex1Based}, but no DayEventDirector is wired: they are skipped. Wire one on the day system (Build Office UI).");
+            yield break;
+        }
 
         Debug.Log($"[DayOrchestrator] Running {events.Count} scheduled event(s) for trigger={trigger}, slot={slotIndex1Based}: {string.Join(", ", events.Select(e => e != null ? e.name : "<null>"))}.");
 

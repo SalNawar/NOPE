@@ -17,7 +17,8 @@ using UnityEngine.UI;
 /// it takes the press, so the PC frame's Escape (OfficeViewController) skips
 /// it; F1 (and the app's Keys button) shows or hides the shortcut card; the
 /// icons take the arrows and Enter while no window has the focus; Ctrl+V
-/// with Notes focused adds the clip as a clipping; everything else goes to
+/// with Notes focused adds the clip as a clipping; with Orders focused the
+/// arrows walk its tree and Enter acts on the selected node; everything else goes to
 /// the Investigation app. A text field that sees the same Escape (TMP's own
 /// cancel) keeps its text and, unless the press was for it, its focus. A
 /// press of a mouse button hands the pointer back (the app's focus ring
@@ -62,6 +63,9 @@ public sealed class DesktopKeyboard : MonoBehaviour
 
     /// <summary>The Notes app (Ctrl+V with it focused adds the clip as a clipping).</summary>
     [SerializeField] private NotesWindow notes;
+
+    /// <summary>The Orders app (the arrows and Enter with it focused).</summary>
+    [SerializeField] private OrdersWindow orders;
 
     /// <summary>The shortcut card (F1, the app's Keys button, Settings' Show shortcuts).</summary>
     [SerializeField] private DesktopWindow card;
@@ -140,7 +144,9 @@ public sealed class DesktopKeyboard : MonoBehaviour
             searchFocused: app != null && app.IsSearchField(field),
             menuOpen: (contextMenu != null && contextMenu.IsOpen) || (shell != null && shell.StartMenuOpen),
             listFocused: appFocused && app.ListFocused,
-            tabStripFocused: appFocused && app.TabStripFocused);
+            tabStripFocused: appFocused && app.TabStripFocused,
+            resultsShown: appFocused && app.ResultsListed,
+            ordersFocused: orders != null && focused != null && focused == orders.Window);
         if (ShortcutMap.Resolve(chord, context, out AppCommand command))
             Run(command, field);
     }
@@ -173,6 +179,21 @@ public sealed class DesktopKeyboard : MonoBehaviour
                 break;
             case AppCommand.Paste:
                 notes.PasteClipboard();
+                break;
+            case AppCommand.NodeLeft:
+                orders.Step(-1, 0);
+                break;
+            case AppCommand.NodeRight:
+                orders.Step(1, 0);
+                break;
+            case AppCommand.NodeUp:
+                orders.Step(0, -1);
+                break;
+            case AppCommand.NodeDown:
+                orders.Step(0, 1);
+                break;
+            case AppCommand.NodeAct:
+                orders.Act();
                 break;
             default:
                 if (app != null)

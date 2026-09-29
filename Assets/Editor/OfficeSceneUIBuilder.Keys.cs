@@ -100,6 +100,7 @@ public static partial class OfficeSceneUIBuilder
         DesktopWindow card = Need(windowLayer, "ShortcutsWindow")?.GetComponent<DesktopWindow>();
         DesktopContextMenu menu = Need(root, "ContextMenu")?.GetComponent<DesktopContextMenu>();
         NotesWindow notes = root.GetComponentInChildren<NotesWindow>(true);
+        OrdersWindow orders = root.GetComponentInChildren<OrdersWindow>(true);
 
         DesktopKeyboard keyboard = GetOrAdd<DesktopKeyboard>(root.gameObject);
         var so = new SerializedObject(keyboard);
@@ -110,6 +111,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "contextMenu", menu);
         Wire(so, "app", app.App);
         Wire(so, "notes", notes);
+        Wire(so, "orders", orders);
         Wire(so, "card", card);
         so.ApplyModifiedProperties();
 
@@ -302,7 +304,7 @@ public static partial class OfficeSceneUIBuilder
         return paneZoom;
     }
 
-    /// <summary>The pane header's Pin button (PR1: it pins the pane's item), at the header's right end, outside the chip row's layout.</summary>
+    /// <summary>The pane header's Pin button (PR1: it pins the pane's item), at the header's right end, beside the chip row (whose area ends before it).</summary>
     private static Button BuildPinButton(AppPane pane)
     {
         Transform header = Need(pane.transform, "PaneHeader");
@@ -315,9 +317,8 @@ public static partial class OfficeSceneUIBuilder
         rect.sizeDelta = new Vector2(PinButtonWidth, 0f);
         rect.anchoredPosition = new Vector2(-PinButtonWidth / 2f - 6f, 0f);
         GetOrAdd<LayoutElement>(pin.gameObject).ignoreLayout = true;
-        HorizontalLayoutGroup row = header.GetComponent<HorizontalLayoutGroup>();
-        if (row != null)
-            row.padding = new RectOffset(row.padding.left, (int)PinButtonWidth + 12, row.padding.top, row.padding.bottom);
+        if (header.Find("ChipArea") is RectTransform chips)
+            chips.offsetMax = new Vector2(-(PinButtonWidth + 12f), chips.offsetMax.y);
         return pin;
     }
 

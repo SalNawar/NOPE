@@ -96,6 +96,27 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The Settings window's size.</summary>
     public Vector2 settingsWindowSize = new Vector2(640f, 720f);
 
+    /// <summary>The Portals window's size (the portals spec v3 PA3: 880 x 600 u, restored; it can be maximised).</summary>
+    public Vector2 portalsWindowSize = new Vector2(880f, 600f);
+
+    /// <summary>The Orders window's restored size (it opens maximised, the tree needs room; the portals spec v3 OR9).</summary>
+    public Vector2 ordersWindowSize = new Vector2(1120f, 820f);
+
+    /// <summary>One cell of the Orders tree: a node and the gap to the next tier (where its links bend) and the next slot.</summary>
+    public Vector2 ordersCellSize = new Vector2(290f, 108f);
+
+    /// <summary>A node of the Orders tree: its glyph, its name and its state line, two lines each at most (22 u and 19 u text, never under 17 and 16 u: 8.8 and 8.3 px at 720p).</summary>
+    public Vector2 ordersNodeSize = new Vector2(260f, 98f);
+
+    /// <summary>A band's head (its glyph and branch name) above the band's nodes.</summary>
+    [Min(1f)] public float ordersBandHead = 40f;
+
+    /// <summary>The detail card's width beside the tree (the TC-980 requisition form).</summary>
+    [Min(1f)] public float ordersDetailWidth = 500f;
+
+    /// <summary>A link's thickness in the tree.</summary>
+    [Min(1f)] public float ordersLinkWidth = 3f;
+
     [Header("The Investigation app (redesign phase 16)")]
     /// <summary>The app window's restored size (it opens maximised; P spec WN4).</summary>
     public Vector2 investigationWindowSize = new Vector2(1120f, 820f);
@@ -113,23 +134,23 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The places a pane's Back can return through (AP9).</summary>
     [Min(1)] public int paneHistory = 30;
 
-    /// <summary>The width a tab's name is given before the strip collapses: a strip narrower than six of these shows the inactive tabs' glyphs, a wider one every name (six names that just fit shrink a little) (AP3, AppPanes.TabsNarrow).</summary>
-    [Min(1f)] public float tabLabelWidth = 130f;
-
-    /// <summary>An inactive tab's width while it shows its glyph and its badge.</summary>
+    /// <summary>An inactive tab's narrowest width while it shows its glyph and its badge; the collapsed tabs share what the active tab leaves of the strip.</summary>
     [Min(1f)] public float tabGlyphWidth = 48f;
+
+    /// <summary>A collapsed tab's glyph size (22 units read 11.4 px at 720p; every glyph fits a split pane's strip at it beside the active tab's name and the badge's slot, and one with less room shrinks to fit).</summary>
+    [Min(1f)] public float tabGlyphSize = 22f;
 
     [Header("The Investigation app's chrome (readability; desktop units)")]
     /// <summary>A pane's tab strip height (the tabs stand on the strip's bottom edge, joined to the row under it).</summary>
     [Min(1f)] public float tabStripHeight = 48f;
 
-    /// <summary>A tab's label size (26 units read 20 px at 1080p and 13.5 px at 720p; a label never wraps, and shrinks only while six names just fit the strip: a narrower strip shows glyphs instead).</summary>
+    /// <summary>A tab's label size (26 units read 20 px at 1080p and 13.5 px at 720p; a label never wraps and never shrinks: a strip that cannot hold every name at this size shows the inactive tabs' glyphs instead, AppPanes.TabsNarrow).</summary>
     [Min(1f)] public float tabLabelSize = 26f;
 
     /// <summary>The pane header's (the chip row's) height.</summary>
     [Min(1f)] public float chipRowHeight = 48f;
 
-    /// <summary>A chip's label size; a chip squeezed by its row shrinks the label to three quarters of it, then cuts the text with "…".</summary>
+    /// <summary>A chip's label size: a chip is as wide as its label at it; a row too narrow for its chips scrolls sideways (ChipRow), so no chip is squeezed.</summary>
     [Min(1f)] public float chipLabelSize = 22f;
 
     [Header("Notes (redesign phase 25)")]

@@ -11,8 +11,9 @@ using UnityEngine;
 /// site's archive, WorldState.newsArchive; today's from the morning paper
 /// until the briefing archives it; an issue the archive no longer keeps is
 /// only its link),
-/// a notice for each citation slip once it is acknowledged this shift, and
-/// the authored mail. It rebuilds the list (Mailbox.ForDays) when the day
+/// a notice for each citation slip once it is acknowledged this shift, the
+/// Orders app's delivery notice for each day something arrived (the order
+/// log, WorldState.orders), and the authored mail. It rebuilds the list (Mailbox.ForDays) when the day
 /// changes and when a slip is acknowledged; opening a message marks it read
 /// in WorldState.mailRead, the only saved state. The unread count shows on
 /// the Start menu's Mail entry and in the Mail window's title (retitled
@@ -108,7 +109,9 @@ public sealed class MailFeed : MonoBehaviour
             News = day => Headlines(world, day),
             Citations = _citations,
             Authored = library != null ? library.Mail : Array.Empty<AuthoredMail>(),
-            HasFlag = world.HasFlag
+            HasFlag = world.HasFlag,
+            Orders = world.orders,
+            UpgradeName = id => library != null && library.GetUpgradeById(id) != null ? library.GetUpgradeById(id).displayName : null
         });
         Announce();
     }
@@ -125,7 +128,7 @@ public sealed class MailFeed : MonoBehaviour
         return lines;
     }
 
-    /// <summary>A day's paper, its notices then its news: the archived issue, else today's morning paper; null when neither is on hand.</summary>
+    /// <summary>A day's paper, its notices then its news then the desk's own stories: the archived issue, else today's morning paper; null when neither is on hand.</summary>
     private static IReadOnlyList<string> Headlines(WorldState world, int day)
     {
         NewsIssue issue = NewsArchive.Find(world.newsArchive, day);
@@ -133,6 +136,7 @@ public sealed class MailFeed : MonoBehaviour
             return null;
         var lines = new List<string>(issue != null ? issue.briefing : world.tomorrow.briefingLines);
         lines.AddRange(issue != null ? issue.news : world.tomorrow.newsLines);
+        lines.AddRange(issue != null ? issue.desk ?? new List<string>() : world.tomorrow.deskLines);
         return lines;
     }
 

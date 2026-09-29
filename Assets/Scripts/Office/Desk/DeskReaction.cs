@@ -7,7 +7,8 @@ using UnityEngine;
 /// scale it, wobble tilts it, nudge bobs it), an optional sound (when the
 /// reaction has a clip and the prop an AudioSource) and an optional tooltip
 /// that shows a live readout's text (the calendar's day, the till's money in
-/// the wallet's word...) through the overlay tooltip callout. The animated
+/// the wallet's word...; or a text the prop composes, the departure board's
+/// lines: SetReadout(Func)) through the overlay tooltip callout. The animated
 /// object is the art prop the office binder hands over (SetTarget), else this
 /// object.
 /// </summary>
@@ -25,6 +26,9 @@ public sealed class DeskReaction : MonoBehaviour
 
     /// <summary>Optional: plays the reaction's clip.</summary>
     [SerializeField] private AudioSource audioSource;
+
+    /// <summary>A text the tooltip's {0} shows instead of the readout's (the departure board's lines), or null.</summary>
+    private System.Func<string> _text;
 
     private Transform _target;
     private Transform _tooltipPoint;
@@ -51,6 +55,9 @@ public sealed class DeskReaction : MonoBehaviour
     /// <summary>Sets the live text the tooltip's {0} shows (the office binder: the art's readout).</summary>
     public void SetReadout(TMP_Text text) => readout = text;
 
+    /// <summary>Sets the text the tooltip's {0} shows, asked each time it shows (a prop that composes its own lines: the departure board).</summary>
+    public void SetReadout(System.Func<string> text) => _text = text;
+
     /// <summary>Plays the reaction: the animation, the clip when there is one and a source, and the tooltip when its key is not blank.</summary>
     public void Play()
     {
@@ -69,7 +76,7 @@ public sealed class DeskReaction : MonoBehaviour
         if (reaction.clip != null && audioSource != null)
             audioSource.PlayOneShot(reaction.clip);
         if (tooltip != null && !string.IsNullOrWhiteSpace(reaction.tooltipKey))
-            tooltip.Show(UiText.Format(reaction.tooltipKey, readout != null ? readout.text : string.Empty, UiText.Currency(UiText.WalletForm.Label)),
+            tooltip.Show(UiText.Format(reaction.tooltipKey, _text != null ? _text() : readout != null ? readout.text : string.Empty, UiText.Currency(UiText.WalletForm.Label)),
                          _tooltipPoint != null ? _tooltipPoint : transform, reaction.tooltipOffset, reaction.tooltipSeconds);
     }
 

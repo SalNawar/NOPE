@@ -6,7 +6,8 @@ using NUnit.Framework;
 /// What the office offers on a day. Questions: Currency (ungated), Capital
 /// (DayAtLeast 2), Ruler (DayAtLeast 3), Date of birth (UpgradeOwned
 /// interview_protocols) and a Language question gated by the flag
-/// "met_tesla". Dialogs: the rumour (DayAtLeast 2, one-shot), its follow-up
+/// "met_tesla"; the one wheel's questions (the personalities spec's §3.2:
+/// one per category, asked of every traveller) in OneWheelQuestions. Dialogs: the rumour (DayAtLeast 2, one-shot), its follow-up
 /// (FlagSet rumour_calculators, one-shot), a repeatable chat (ungated) and a
 /// broken dialog with no nodes (DayAtLeast 99).
 /// </summary>
@@ -20,30 +21,19 @@ public class InterviewDayTests
     private static Gated<InterviewQuestion> Question(string id, ClueCategory category, params GateCondition[] conditions) =>
         new Gated<InterviewQuestion>(new InterviewQuestion { id = id, category = category, label = id }, conditions);
 
-    /// <summary>A question the desk asks of <paramref name="kinds"/> only (world_source.json questions[].kinds).</summary>
-    private static Gated<InterviewQuestion> KindQuestion(string id, ClueCategory category, TravellerKind[] kinds, params GateCondition[] conditions)
+    /// <summary>The one wheel's questions in library order (the personalities spec's §3.2): Currency and Device from day 4, Language, Capital and Ruler from day 5, Date of birth with Interview Protocols.</summary>
+    private static List<Gated<InterviewQuestion>> OneWheelQuestions() => new List<Gated<InterviewQuestion>>
     {
-        Gated<InterviewQuestion> q = Question(id, category, conditions);
-        q.Item.kinds.AddRange(kinds);
-        return q;
-    }
-
-    private static readonly TravellerKind[] Citizens = { TravellerKind.RichTourist, TravellerKind.PoorTourist, TravellerKind.Labourer };
-    private static readonly TravellerKind[] Displaced = { TravellerKind.Displaced };
-
-    /// <summary>Day 4's questions (traveller types I1): the home questions the displaced's, the trip questions (Currency, Technology, from day 4) the citizens', the birth date everyone's.</summary>
-    private static List<Gated<InterviewQuestion>> KindQuestions() => new List<Gated<InterviewQuestion>>
-    {
-        KindQuestion("q_currency", ClueCategory.Currency, Displaced),
-        KindQuestion("q_device", ClueCategory.Technology, Displaced),
-        KindQuestion("q_capital", ClueCategory.Geography, Displaced, Day(2)),
-        Question("q_born", ClueCategory.BirthDate, new GateCondition(TriggerConditionType.UpgradeOwned, "interview_protocols", 0f)),
-        KindQuestion("q_trip_currency", ClueCategory.Currency, Citizens, Day(4)),
-        KindQuestion("q_trip_device", ClueCategory.Technology, Citizens, Day(4))
+        Question("q_currency", ClueCategory.Currency, Day(4)),
+        Question("q_language", ClueCategory.Language, Day(5)),
+        Question("q_device", ClueCategory.Technology, Day(4)),
+        Question("q_capital", ClueCategory.Geography, Day(5)),
+        Question("q_ruler", ClueCategory.Politics, Day(5)),
+        Question("q_born", ClueCategory.BirthDate, new GateCondition(TriggerConditionType.UpgradeOwned, "interview_protocols", 0f))
     };
 
-    private static InterviewDay KindDay(GateSnapshot snapshot) =>
-        new InterviewDay(new InterviewLines { menuCapacity = 8 }, KindQuestions(), null, snapshot, new ShiftLedger(), null);
+    private static InterviewDay OneWheelDay(GateSnapshot snapshot) =>
+        new InterviewDay(new InterviewLines { menuCapacity = 8, backLabel = "< Back" }, OneWheelQuestions(), null, snapshot, new ShiftLedger(), null);
 
     private static List<Gated<InterviewQuestion>> Questions() => new List<Gated<InterviewQuestion>>
     {
@@ -109,67 +99,77 @@ public class InterviewDayTests
     }
 
     [Test]
-    public void QuestionsFor_AreTheKindsAskableQuestions_InLibraryOrder_TheTripQuestionsFromDay4()
+    public void Questions_AreTheDaysForEveryKind()
     {
-        InterviewDay day3 = KindDay(Snap(3, upgrades: new[] { "interview_protocols" }));
-        CollectionAssert.AreEqual(new[] { "q_currency", "q_device", "q_capital", "q_born" }, day3.QuestionsFor(TravellerKind.Displaced).Select(q => q.id).ToArray());
-        CollectionAssert.AreEqual(new[] { "q_born" }, day3.QuestionsFor(TravellerKind.RichTourist).Select(q => q.id).ToArray(), "a citizen is never asked about home");
-        CollectionAssert.AreEqual(new[] { ClueCategory.BirthDate }, day3.AskableCategoriesFor(TravellerKind.Labourer));
+        CollectionAssert.IsEmpty(OneWheelDay(Snap(3)).Questions, "no fact question before day 4");
+        CollectionAssert.AreEqual(new[] { "q_currency", "q_device" }, OneWheelDay(Snap(4)).Questions.Select(q => q.id).ToArray());
+        InterviewDay day5 = OneWheelDay(Snap(5));
+        CollectionAssert.AreEqual(new[] { "q_currency", "q_language", "q_device", "q_capital", "q_ruler" }, day5.Questions.Select(q => q.id).ToArray());
 
-        InterviewDay day4 = KindDay(Snap(4));
-        CollectionAssert.AreEqual(new[] { "q_trip_currency", "q_trip_device" }, day4.QuestionsFor(TravellerKind.PoorTourist).Select(q => q.id).ToArray());
-        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology }, day4.AskableCategoriesFor(TravellerKind.RichTourist));
-        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology, ClueCategory.Geography }, day4.AskableCategoriesFor(TravellerKind.Displaced));
-        CollectionAssert.AreEqual(new[] { "q_currency", "q_device", "q_capital", "q_trip_currency", "q_trip_device" }, day4.Questions.Select(q => q.id).ToArray(), "every kind's, in library order");
-        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Currency, ClueCategory.Technology }, day4.AskableCategories);
-    }
-
-    [Test]
-    public void AnswerTellCategoriesFor_AreTheKindsDayGatedQuestions()
-    {
-        InterviewDay day4 = KindDay(Snap(4, upgrades: new[] { "interview_protocols" }));
-        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology }, day4.AnswerTellCategoriesFor(TravellerKind.Labourer), "the trip questions may carry a smuggler's spoken tell");
-        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology, ClueCategory.Geography }, day4.AnswerTellCategoriesFor(TravellerKind.Displaced));
-        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.BirthDate, ClueCategory.Currency, ClueCategory.Technology }, day4.AskableCategories);
-        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Currency, ClueCategory.Technology }, day4.AnswerTellCategories, "the upgrade-gated birth date is hint-only for everyone");
-        CollectionAssert.IsEmpty(KindDay(Snap(3)).AnswerTellCategoriesFor(TravellerKind.RichTourist), "before day 4 a citizen has no question that could carry a tell");
-    }
-
-    [Test]
-    public void AQuestionNamingNoKind_IsEveryKinds()
-    {
-        InterviewDay day = DayOf(Snap(3));
+        // One list for everyone: every kind's ask menu is the day's questions, in the same words and order.
+        var lines = new InterviewLines { backLabel = "< Back", askLabel = "Ask about the trip >" };
+        var menus = new List<string>();
         foreach (TravellerKind kind in (TravellerKind[])System.Enum.GetValues(typeof(TravellerKind)))
         {
-            CollectionAssert.AreEqual(day.Questions, day.QuestionsFor(kind), kind.ToString());
-            CollectionAssert.AreEqual(day.AskableCategories, day.AskableCategoriesFor(kind), kind.ToString());
-            CollectionAssert.AreEqual(day.AnswerTellCategories, day.AnswerTellCategoriesFor(kind), kind.ToString());
+            var c = new InterviewCase
+            {
+                kind = kind,
+                claimPlace = "Periclean Athens (Ancient)",
+                claimedEraId = "ancient",
+                answers = day5.AskableCategories.Select(category => new InterviewAnswer { category = category, value = "v" }).ToList()
+            };
+            menus.Add(string.Join(" | ", InterviewScript.Build(lines, day5.Questions, null, c).Node(InterviewScript.AskNodeId).Choices.Select(x => $"{x.Id}:{x.Label}")));
         }
+        Assert.AreEqual(1, menus.Distinct().Count(), string.Join("\n", menus));
     }
 
     [Test]
-    public void InterviewQuestions_OneQuestionPerCategoryPerKind()
+    public void AskableCategories_OnePerCategoryInLibraryOrder()
     {
-        List<InterviewQuestion> sound = KindQuestions().Select(q => q.Item).ToList();
-        CollectionAssert.IsEmpty(InterviewQuestions.Problems(sound), "the home and trip questions share categories across disjoint kinds");
-        Assert.AreEqual(4, InterviewQuestions.MostForOneKind(sound), "the displaced's four");
+        InterviewDay day = OneWheelDay(Snap(6, upgrades: new[] { "interview_protocols" }));
 
-        // A trip question asking every kind collides with the home question of the displaced, and only there.
-        sound[4].kinds.Clear();
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Language, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Politics, ClueCategory.BirthDate },
+                                  day.AskableCategories);
+        CollectionAssert.AllItemsAreUnique(day.AskableCategories, "one question per category: every traveller answers each once");
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology }, OneWheelDay(Snap(4)).AskableCategories);
+    }
+
+    [Test]
+    public void AnswerTellCategories_AreTheDayGatedOnes()
+    {
+        InterviewDay day5 = OneWheelDay(Snap(5, upgrades: new[] { "interview_protocols" }));
+
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Language, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Politics },
+                                  day5.AnswerTellCategories, "the displaced's order of days 5-6 is kept (the personalities spec's T8); the upgrade's birth date is hint-only");
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology }, OneWheelDay(Snap(4)).AnswerTellCategories, "day 4: the smugglers' two");
+        CollectionAssert.IsEmpty(OneWheelDay(Snap(3, upgrades: new[] { "interview_protocols" })).AnswerTellCategories, "before day 4 no question may carry a tell");
+    }
+
+    [Test]
+    public void Problems_OneQuestionPerCategory()
+    {
+        List<InterviewQuestion> sound = OneWheelQuestions().Select(q => q.Item).ToList();
+        CollectionAssert.IsEmpty(InterviewQuestions.Problems(sound));
+
+        sound.Add(Question("q_trip_currency", ClueCategory.Currency).Item);
         List<string> problems = InterviewQuestions.Problems(sound);
         Assert.AreEqual(1, problems.Count, string.Join(" | ", problems));
-        Assert.AreEqual("Question 'q_trip_currency' asks about Currency for Displaced, as 'q_currency' does (one question per category per kind).", problems[0]);
-        Assert.AreEqual(5, InterviewQuestions.MostForOneKind(sound), "the displaced are now asked five");
-
-        // Two questions naming no kind: reported once per kind, in enum order.
-        List<InterviewQuestion> twice = new[] { Question("a", ClueCategory.Politics).Item, Question("b", ClueCategory.Politics).Item }.ToList();
-        problems = InterviewQuestions.Problems(twice);
-        Assert.AreEqual(4, problems.Count, string.Join(" | ", problems));
-        StringAssert.StartsWith("Question 'b' asks about Politics for RichTourist, as 'a' does", problems[0]);
+        Assert.AreEqual("Question 'q_trip_currency' asks about Currency, as 'q_currency' does (one question per category: every traveller is asked each).", problems[0]);
 
         CollectionAssert.IsEmpty(InterviewQuestions.Problems(null));
-        Assert.AreEqual(0, InterviewQuestions.MostForOneKind(null));
         CollectionAssert.IsEmpty(InterviewQuestions.Problems(new List<InterviewQuestion> { null }));
+    }
+
+    [Test]
+    public void Count_IsTheDaysQuestions()
+    {
+        List<InterviewQuestion> library = OneWheelQuestions().Select(q => q.Item).ToList();
+
+        Assert.AreEqual(6, InterviewQuestions.Count(library), "every traveller is asked every question: the ask menu's worst case is the library's six");
+        Assert.AreEqual(OneWheelDay(Snap(6, upgrades: new[] { "interview_protocols" })).Questions.Count, InterviewQuestions.Count(library));
+        library.Insert(2, null);
+        Assert.AreEqual(6, InterviewQuestions.Count(library), "an empty entry is no question");
+        Assert.AreEqual(0, InterviewQuestions.Count(null));
     }
 
     [Test]
@@ -309,5 +309,35 @@ public class InterviewDayTests
         CollectionAssert.AreEqual(new[] { "dlg_chat", "dlg_senenmut" }, Offered(day, "dlg_senenmut"));
         CollectionAssert.AreEqual(new[] { "dlg_chat", "dlg_socrates" }, Offered(day, "dlg_socrates"));
         CollectionAssert.AreEqual(new[] { "dlg_chat" }, Offered(day, "dlg_unknown"), "a premade without a dialog of today");
+    }
+
+    /// <summary>A forced slot's dialog (days 7-15 B7) is premade-bound like a premade's own: offered only while that appearance stands at the desk.</summary>
+    [Test]
+    public void OfferedDialogs_AForcedSlotsDialogOnlyWhileItsPremadeStands()
+    {
+        var dialogs = new List<Gated<AuthoredDialog>>
+        {
+            new Gated<AuthoredDialog>(Dialog("dlg_chat", false), null),
+            new Gated<AuthoredDialog>(Dialog("dlg_pell_2", true), null)
+        };
+        var day = new InterviewDay(new InterviewLines { menuCapacity = 8 }, null, dialogs, Snap(10), new ShiftLedger(), new[] { "dlg_pell_2" });
+
+        CollectionAssert.AreEqual(new[] { "dlg_chat" }, Offered(day), "an ordinary traveller in the slot");
+        CollectionAssert.AreEqual(new[] { "dlg_chat", "dlg_pell_2" }, Offered(day, Premades.Voice("dlg_pell_2", string.Empty)), "Pell's appearance");
+    }
+
+    /// <summary>The appearance's dialog replaces the premade's own for that slot: the premade's is not offered beside it.</summary>
+    [Test]
+    public void OfferedDialogs_TheSlotsDialogReplacesThePremadesOwn()
+    {
+        var dialogs = new List<Gated<AuthoredDialog>>
+        {
+            new Gated<AuthoredDialog>(Dialog("dlg_auditor", true), null),
+            new Gated<AuthoredDialog>(Dialog("dlg_auditor_found", true), null)
+        };
+        var day = new InterviewDay(new InterviewLines { menuCapacity = 8 }, null, dialogs, Snap(14), new ShiftLedger(), new[] { "dlg_auditor", "dlg_auditor_found" });
+
+        CollectionAssert.AreEqual(new[] { "dlg_auditor_found" }, Offered(day, Premades.Voice("dlg_auditor_found", "dlg_auditor")));
+        CollectionAssert.AreEqual(new[] { "dlg_auditor" }, Offered(day, Premades.Voice(string.Empty, "dlg_auditor")), "an appearance with no dialog of its own keeps the premade's");
     }
 }

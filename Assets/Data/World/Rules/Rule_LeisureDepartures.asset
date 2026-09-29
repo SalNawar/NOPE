@@ -18,3 +18,5 @@ MonoBehaviour:
   description: 'Leisure departures: a Leisure Visa and a Departure Manifest; a Standard
     visa also needs a signed Stranding Waiver and a proof of means. Every paper must
     match the Citizen Account.'
+  kinds: 
+  transponder: 

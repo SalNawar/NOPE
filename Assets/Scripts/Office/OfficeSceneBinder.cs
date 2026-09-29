@@ -17,11 +17,15 @@ using UnityEngine.SceneManagement;
 /// paper examiner the camera, poses the desk view from the art's Cinemachine
 /// camera and the mat, stands the traveller,
 /// binds the readouts to the art's texts (or shows the fallback HUD), points
-/// the anime hall's presentation at the shift clock (AnimeHallShiftLink) when
-/// the art carries one, and readies the office camera (a PhysicsRaycaster on
+/// the anime hall's presentation at the shift clock (AnimeHallShiftLink) and
+/// its portal rings at the day's portals (AnimeHallPortalLink) when the art
+/// carries one, puts the Departure Board's rows and click box on its display
+/// (DepartureBoardView), and readies the office camera (a PhysicsRaycaster on
 /// the Interactable layer, the gameplay's layers drawn and the desktop's
 /// culled, an AudioListener when no scene has one, its Cinemachine camera on
-/// top). Runs before
+/// top) and orders the desktop's cameras around it (the PC frame's right
+/// after it, the clone's right before it, whatever depth the art gave its
+/// camera). Runs before
 /// every other gameplay component (execution order -1000). An anchor found
 /// by a fallback path is logged; one on its default pose or missing is
 /// warned about once, naming the tool that adds anchors.
@@ -68,6 +72,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     [Header("PC")]
     /// <summary>The desktop's clone on the PC's glass.</summary>
     [SerializeField] private PcScreenClone screenClone;
+
+    /// <summary>The PC frame (its camera draws the desktop into the glass right after the office camera).</summary>
+    [SerializeField] private PcFrame frame;
 
     /// <summary>The PC's click (opens the frame); its box is fitted to the PC.</summary>
     [SerializeField] private Clickable pc;
@@ -139,6 +146,16 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
     /// <summary>The fallback HUD's clock text.</summary>
     [SerializeField] private TMP_Text hudClock;
+
+    [Header("Portals (the portals spec v3)")]
+    /// <summary>The shift, whose day-start portals the board and the rings show.</summary>
+    [SerializeField] private GameManager game;
+
+    /// <summary>The Departure Board's rows and click box (placed on the DepartureBoard anchor; hidden without one).</summary>
+    [SerializeField] private DepartureBoardView board;
+
+    /// <summary>The portal rings' effects, one per DeskConfigSO.hallPortalLayers entry, in its order (driven by AnimeHallPortalLink in the anime hall).</summary>
+    [SerializeField] private PortalEffect[] portalEffects;
 
     /// <summary>A desk anchor's size when it has no renderers (metres, XZ).</summary>
     private static readonly Vector2 DefaultDeskSize = new Vector2(1.6f, 1f);
@@ -216,14 +233,17 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             examiner.SetCamera(office);
         if (stampTray != null)
             stampTray.SetCamera(office);
+        if (frame != null)
+            frame.DrawAfter(office);
 
         Vector3 viewer = office.transform.position;
-        BindPc(viewer);
+        BindPc(office);
         float deskTop = BindDesk(viewer);
         BindTraveller(viewer, deskTop);
         BindReadySign();
         BindReadouts();
         BindProps();
+        BindBoard();
         BindHall(art);
         Report();
     }
@@ -271,13 +291,13 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     // PC
     // -----------------------------
 
-    /// <summary>The desktop's clone on the PC's glass, the PC's click box and the power knob's.</summary>
-    private void BindPc(Vector3 viewer)
+    /// <summary>The desktop's clone on the PC's glass (drawn before <paramref name="office"/>, the office camera), the PC's click box and the power knob's.</summary>
+    private void BindPc(Camera office)
     {
         ResolvedAnchor anchor = At(OfficeAnchorId.PCScreen);
         (Renderer glass, int submesh) = anchor.Transform != null ? OfficeAnchors.FindGlass(anchor.Transform) : (null, 0);
         if (glass != null && screenClone != null)
-            screenClone.Bind(glass, submesh, viewer);
+            screenClone.Bind(glass, submesh, office);
         else if (anchor.Transform != null)
             Debug.LogWarning($"[OfficeSceneBinder] The PC ('{anchor.Path}') has no renderer or material named Glass or Screen: its screen shows no desktop. See docs/SCENE_CONTRACT_GAMEPLAY.md.", this);
 
@@ -303,7 +323,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             pcPower.gameObject.SetActive(false);
             return;
         }
-        InFrontOf(pcPower.transform, pcBox, viewer);
+        InFrontOf(pcPower.transform, pcBox, office.transform.position);
     }
 
     /// <summary>
@@ -506,7 +526,21 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     // The anime hall
     // -----------------------------
 
-    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock (the config's hall knobs); an art office without one needs nothing.</summary>
+    /// <summary>The Departure Board's rows and click box on the DepartureBoard anchor's rect (a sized marker, or the display layer's opaque pixels); hidden without one (the 3D room).</summary>
+    private void BindBoard()
+    {
+        if (board == null)
+            return;
+        ResolvedAnchor anchor = At(OfficeAnchorId.DepartureBoard);
+        if (!OfficeAnchors.TryLocalRect(anchor.Transform, out Transform frame, out Rect rect))
+        {
+            board.gameObject.SetActive(false);
+            return;
+        }
+        board.Bind(frame, rect, anchor.Transform.GetComponentsInChildren<Renderer>(false));
+    }
+
+    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock, and the ink of the art's calendar with it (the config's hall knobs), and a second link its portal rings from the day's portals; an art office without one needs nothing.</summary>
     private void BindHall(Scene art)
     {
         if (config == null)
@@ -517,7 +551,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             AnimeHallPresentation hall = root.GetComponentInChildren<AnimeHallPresentation>(false);
             if (hall == null)
                 continue;
-            gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config.hallEveningStartsAt, config.hallEveningFullAt);
+            gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config, TextOf(OfficeAnchorId.ReadoutDay));
+            gameObject.AddComponent<AnimeHallPortalLink>().Configure(hall, config, game, portalEffects);
             return;
         }
     }

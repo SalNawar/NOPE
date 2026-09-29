@@ -24,7 +24,7 @@ using UnityEngine.UI;
 ///   the verdict line on the office overlay (piece 10)  [OfficeUIController]
 /// - Morning briefing + shift report panels  [DayFlowUIController]
 /// - Investigation desk: the Investigation app (OfficeSceneUIBuilder.App.cs:
-///   one window with the claim, the counters, Accept/Deny and six tabs: the
+///   one window with the counters, Accept/Deny and six tabs (no claim): the
 ///   scanned documents, Citizen Records, the reference books, the interview
 ///   transcript, the Deviation Report and the directives), the compare dock
 ///   and the scan toast, laid out for the 4:3 desktop  [InvestigationUIController,
@@ -34,8 +34,8 @@ using UnityEngine.UI;
 ///   [DesktopIcons, DesktopIconView, DesktopContextMenu, DesktopShell, DesktopApps]
 /// - The traveller wheel (the interview's choices around the traveller), the
 ///   speech bubble (its answer pickable, above the wheel), the desk tooltip,
-///   the fallback HUD, the office case HUD (the claim tag and the office
-///   compare strip), the desk view's "▲ Back" control and the stamp tray
+///   the fallback HUD, the office case HUD (the office compare strip; no
+///   claim tag), the desk view's "▲ Back" control and the stamp tray
 ///   (Accept and Deny at the desk) on the office overlay canvas
 ///   [TravellerWheel, OverlayCallout, SpeechBubbleInput, OfficeCaseHud,
 ///   HoverHint, StampTray]
@@ -70,6 +70,7 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Color XpFace = new Color(0.925f, 0.913f, 0.847f, 1f); // #ECE9D8 control face
     private static readonly Color XpRed = new Color(0.77f, 0.235f, 0.17f, 1f);    // close button (#C43C2C: white reads on it)
     private static readonly Color Tooltip = new Color(1f, 1f, 0.88f, 1f);         // #FFFFE1 info yellow
+    private static readonly Color CompareMatchInk = new Color(0.05f, 0.45f, 0.12f, 1f); // the compare's MATCH ink (CompareMatch; the theme's replaces it)
 
     private static readonly Color PanelNavy = new Color(0.1f, 0.12f, 0.2f, 0.97f);
     private static readonly Color Paper = new Color(0.925f, 0.913f, 0.847f, 1f);  // XP window body
@@ -91,7 +92,7 @@ public static partial class OfficeSceneUIBuilder
     private const string GameplayScenePath = "Assets/Scenes/OfficeGameplay.unity";
 
     /// <summary>The gameplay layer's scene name (RunConfig.officeGameplaySceneName).</summary>
-    private const string GameplaySceneName = "OfficeGameplay";
+    private const string GameplaySceneName = RunConfigSO.DefaultOfficeGameplaySceneName;
 
     /// <summary>The art office the gameplay layer loads on (the art side's scene RunConfig.officeSceneName names, ArtOfficeScene; the builder never opens it).</summary>
     private static string ArtScenePath => ArtOfficeScene.Path;
@@ -185,7 +186,7 @@ public static partial class OfficeSceneUIBuilder
 
         // Office overlays, rebuilt each run with always-active hosts, above the
         // newsletters, bottom to top: the fallback HUD, the office case HUD (the
-        // claim tag and the office compare strip), the desk view's "▲ Back"
+        // office compare strip), the desk view's "▲ Back"
         // control (under the case HUD, shown while tilted), the PC frame, the traveller
         // wheel (the interview's choices), the traveller's speech bubble (above
         // the wheel, its answer pickable), the desk props' tooltip, the stamp
@@ -193,18 +194,19 @@ public static partial class OfficeSceneUIBuilder
         FallbackHud fallbackHud = BuildFallbackHud(officeCanvas.transform);
         OfficeCaseHud caseHud = BuildOfficeCaseHud(officeCanvas.transform, out GameObject officeCompareStrip, out TMP_Text officeCompareText);
         Button deskViewBack = BuildDeskViewBack(officeCanvas.transform);
-        PcFrame pcFrame = BuildPcFrame(officeCanvas.transform, frameCamera, officeView, out Image powerLed, out Button framePower);
+        PcFrame pcFrame = BuildPcFrame(officeCanvas.transform, frameCamera, officeView, library, out Image powerLed, out Button framePower);
         OverlayCallout speechBubble = BuildOverlayCallout(officeCanvas.transform, "SpeechBubble", new Vector2(420f, 110f), new Color(0.98f, 0.97f, 0.93f, 0.97f), ThemeRoleId.DiegeticBubble, true);
         TravellerWheel wheel = BuildTravellerWheel(officeCanvas.transform, deskConfig, speechBubble);
         BuildBubbleInput(speechBubble, wheel);
         InteractionPanelController interaction = wheel.transform.Find("Catcher/Ring").GetComponent<InteractionPanelController>();
         OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip, false);
+        OverlayCallout boardTooltip = BuildOverlayCallout(officeCanvas.transform, "BoardTooltip", BoardTooltipSize, Tooltip, ThemeRoleId.Tooltip, false, true);
         StampTray stampTray = BuildStampTray(officeCanvas.transform, deskConfig);
 
-        // Verdict line (result text) on a strip that shows only while the line has text (piece 6 R18): top centre, the claim tag's place (they never show together).
+        // Verdict line (result text) on a strip that shows only while the line has text (piece 6 R18): top centre, the case HUD's compare strip's place (they never show together).
         DestroyChildIfPresent(officeCanvas.transform, "VerdictStrip");
-        Transform verdictStrip = Panel(officeCanvas.transform, "VerdictStrip", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -ClaimStripTop - ClaimStripSize.y / 2f),
-                                       ClaimStripSize, ScreenStripColor, ThemeRoleId.ScreenStrip);
+        Transform verdictStrip = Panel(officeCanvas.transform, "VerdictStrip", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -TopStripTop - VerdictStripSize.y / 2f),
+                                       VerdictStripSize, ScreenStripColor, ThemeRoleId.ScreenStrip);
         ((RectTransform)verdictStrip).pivot = Center;
         verdictStrip.GetComponent<Image>().raycastTarget = false;
         TMP_Text verdictText = Text(verdictStrip, "VerdictText", "", 26, TextAlignmentOptions.Center, new Vector2(0.02f, 0.04f), new Vector2(0.98f, 0.96f), Color.white,
@@ -238,7 +240,7 @@ public static partial class OfficeSceneUIBuilder
         // --- Investigation desk ---
         // Persistent host (never toggled) holds the controllers; on it the window layer (every window, the icon area
         // exactly; it shows with or without a case), the scan toast above it and the compare dock above that
-        // (BuildCompareDock). The case overlay retired: its claim and Accept/Deny are in the Investigation app's header.
+        // (BuildCompareDock). The case overlay retired: its Accept/Deny are in the Investigation app's header (its claim is only spoken now).
         Transform investHost = Panel(root, "InvestigationUI", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         InvestigationUIController invest = GetOrAdd<InvestigationUIController>(investHost.gameObject);
         CompareController compare = GetOrAdd<CompareController>(investHost.gameObject);
@@ -298,7 +300,7 @@ public static partial class OfficeSceneUIBuilder
         // The Office root: every click box, the desk, the traveller, the readouts,
         // the input rules and the binder that puts them on the art office at load.
         BoothCoordinator booth = BuildOffice(officeView, monitorScreen, framePower, deskConfig, contract, wheel,
-                                             new[] { speechBubble, deskTooltip }, deskTooltip, trayClockText, shiftClock, library,
+                                             new[] { speechBubble, deskTooltip, boardTooltip }, deskTooltip, boardTooltip, gameManager, trayClockText, shiftClock, library,
                                              fallbackHud, pcFrame, stampTray, caseHud, deskViewBack, out Clickable readySign);
 
         // The Tier-2 images' art slots (OfficeSceneUIBuilder.Art.cs, redesign phase 27), before the desktop's layer is applied to its covers.
@@ -334,7 +336,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(soCompare, "dock", dockColumns);
         SetRef(soCompare, "officeBar", officeCompareStrip);
         SetRef(soCompare, "officeText", officeCompareText);
-        SetColor(soCompare, "matchColor", new Color(0.05f, 0.45f, 0.12f, 1f));
+        SetColor(soCompare, "matchColor", CompareMatchInk);
         SetColor(soCompare, "mismatchColor", new Color(0.72f, 0.1f, 0.08f, 1f));
         SetColor(soCompare, "neutralColor", new Color(0.18f, 0.15f, 0.05f, 1f));
         soCompare.ApplyModifiedProperties();
@@ -384,6 +386,7 @@ public static partial class OfficeSceneUIBuilder
         CheckThemeTags(canvas, officeCanvas);
         CheckLabelKeysAndRoles(library, canvas, officeCanvas);
         CheckContrast(library, canvas, officeCanvas);
+        CheckInvestigationWiring(invest);
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene, GameplayScenePath);
         EnsureBuildSettings();
@@ -494,16 +497,19 @@ public static partial class OfficeSceneUIBuilder
             new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
     }
 
-    private static void SetRef(SerializedObject so, string prop, Object value)
-    {
-        SerializedProperty p = so.FindProperty(prop);
-        if (p != null) p.objectReferenceValue = value;
-    }
+    /// <summary>Sets a serialized reference; a field the component does not have is an error (Wire), never a silent skip (audit R6-004).</summary>
+    private static void SetRef(SerializedObject so, string prop, Object value) => Wire(so, prop, value);
 
+    /// <summary>Sets a serialized colour; a field the component does not have is an error, never a silent skip (audit R6-004).</summary>
     private static void SetColor(SerializedObject so, string prop, Color value)
     {
         SerializedProperty p = so.FindProperty(prop);
-        if (p != null) p.colorValue = value;
+        if (p == null)
+        {
+            Debug.LogError($"[TimeDesk] {so.targetObject.GetType().Name} has no serialized colour '{prop}' to set; fix OfficeSceneUIBuilder.");
+            return;
+        }
+        p.colorValue = value;
     }
 
     private static void FullStretch(RectTransform rt)
@@ -642,10 +648,34 @@ public static partial class OfficeSceneUIBuilder
         UiContrastCheck.Check(overlay, 1f, themes, library.CultureUi);
     }
 
+    /// <summary>
+    /// Logs an error for every part of the investigation desk the build left
+    /// unreachable (InvestigationWiring, evaluated on the built references): a
+    /// partly wired desk silently changes every traveller of the day (no spoken
+    /// or dress tells, no evidence gate, papers straight to the PC), and at run
+    /// time only a warning said so (audit R4-022).
+    /// </summary>
+    private static void CheckInvestigationWiring(InvestigationUIController invest)
+    {
+        InvestigationWiring wiring = invest.Wiring;
+        if (!wiring.Wired)
+            Debug.LogError("[TimeDesk] The investigation desk has no Investigation app (its Documents page, the app, Accept or Deny is unwired): no case can show. Check BuildInvestigationApp.", invest);
+        if (!wiring.EvidenceSystemActive)
+            Debug.LogError("[TimeDesk] The investigation desk's evidence system is off (the app or the compare is unwired): denials would not be gated on evidence.", invest);
+        if (!wiring.InterviewReachable)
+            Debug.LogError("[TimeDesk] A traveller's answers cannot be read (the wheel's ring, the transcript or the app's Transcript tab is unwired): no spoken tell would be generated.", invest);
+        if (!wiring.AppearanceReachable)
+            Debug.LogError("[TimeDesk] A traveller's garments cannot be compared (the wheel's ring or the compare is unwired): no dress tell would be generated.", invest);
+        if (!wiring.DeskReachable)
+            Debug.LogError("[TimeDesk] The desk is not wired whole (its surface, scanner, paper template, paper root, hand-over point or config): papers would go straight to the PC.", invest);
+        if (wiring.RecordsMissing)
+            Debug.LogError("[TimeDesk] The app's Records tab is unwired: birth-date tells could not be proven.", invest);
+    }
+
     /// <summary>A transform's scene path.</summary>
     private static string PathOf(Transform t) => t.parent == null ? t.name : PathOf(t.parent) + "/" + t.name;
 
-    /// <summary>The translucent strip behind texts on the wallpaper (verdict and idle lines) and the claim strip.</summary>
+    /// <summary>The translucent strip behind texts on the wallpaper (verdict and idle lines) and the app's case header.</summary>
     private static readonly Color ScreenStripColor = new Color(0.06f, 0.18f, 0.42f, 0.8f);
 
     /// <summary>
@@ -1007,19 +1037,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>Where generated placeholder cursors live (never mistaken for final art).</summary>
     private const string PlaceholderCursorFolder = "Assets/Art/Generated/Cursors";
 
-    /// <summary>Placeholder arrow outline, in top-left pixel coordinates of a 32x32 cursor.</summary>
-    private static readonly (float x, float y)[] ArrowCursorShape =
-    {
-        (0, 0), (0, 22), (5, 17), (9, 26), (12, 25), (8, 16), (15, 16),
-    };
-
-    /// <summary>Placeholder pointing hand (fingertip at 12,1), top-left pixel coordinates.</summary>
-    private static readonly (float x, float y)[] HandCursorShape =
-    {
-        (10, 1), (13, 1), (14, 2), (14, 12), (21, 13), (23, 15), (23, 25), (19, 30),
-        (10, 30), (6, 24), (5, 18), (7, 17), (10, 19),
-    };
-
     /// <summary>
     /// Ensures the interaction-feedback settings (cursor art by file name when
     /// present, placeholders otherwise, with click points derived from the art;
@@ -1041,7 +1058,7 @@ public static partial class OfficeSceneUIBuilder
         // Whenever a cursor texture is replaced, its click point is re-derived from the image.
         if (settings.arrowCursor == null || IsPlaceholderCursor(settings.arrowCursor))
         {
-            Texture2D arrow = EnsureCursorTexture("cursor_arrow", ArrowCursorShape);
+            Texture2D arrow = EnsureCursorTexture("cursor_arrow", PlaceholderCursors.Arrow);
             if (arrow != settings.arrowCursor)
             {
                 settings.arrowCursor = arrow;
@@ -1050,7 +1067,7 @@ public static partial class OfficeSceneUIBuilder
         }
         if (settings.handCursor == null || IsPlaceholderCursor(settings.handCursor))
         {
-            Texture2D hand = EnsureCursorTexture("cursor_hand", HandCursorShape);
+            Texture2D hand = EnsureCursorTexture("cursor_hand", PlaceholderCursors.Hand);
             if (hand != settings.handCursor)
             {
                 settings.handCursor = hand;
@@ -1167,9 +1184,11 @@ public static partial class OfficeSceneUIBuilder
         var windows = new Dictionary<string, DesktopWindow>
         {
             { DesktopAppIds.Investigation, app.Window },
+            { DesktopAppIds.Portals, BuildPortalsWindow(windowLayer, config, game) },
             { DesktopAppIds.Internet, internet },
             { DesktopAppIds.Mail, BuildMailWindow(windowLayer, config, feed, apps, internet.GetComponent<BrowserWindow>(), app.App) },
             { DesktopAppIds.CitizenAccount, BuildAccountWindow(windowLayer, config) },
+            { DesktopAppIds.Orders, BuildOrdersWindow(windowLayer, config) },
             { DesktopAppIds.Notes, BuildNotesWindow(windowLayer, config) },
             { DesktopAppIds.Settings, BuildSettingsWindow(windowLayer) },
         };

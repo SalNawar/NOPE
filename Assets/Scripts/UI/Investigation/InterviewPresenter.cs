@@ -142,10 +142,10 @@ public sealed class InterviewPresenter
 
     /// <summary>
     /// Starts the traveller's interview: the wheel takes the case's translation;
-    /// the hub has a request per form or group the kind may be asked for, "Look >"
+    /// the hub has a request per form or group of the day's papers menu, "Look >"
     /// (the traveller's garments) when garments can be compared, and, when the
-    /// interview is reachable, today's questions of the traveller's kind (the
-    /// trip's for a 2150 citizen, home's for the displaced), small talk and offered
+    /// interview is reachable, today's questions (the same for every
+    /// traveller, the personalities spec's W3), small talk and offered
     /// dialogs (a premade's own dialog only while they are at the desk; without
     /// a wired transcript nothing spoken could be read, so only the requests
     /// and the look remain). The transcript starts with the opener and the
@@ -168,12 +168,11 @@ public sealed class InterviewPresenter
             return;
         }
 
-        TravellerKind kind = inst != null ? inst.kind : default;
-        _questionCategories = interviewReachable ? _day.AskableCategoriesFor(kind) : Array.Empty<ClueCategory>();
+        _questionCategories = interviewReachable ? _day.AskableCategories : Array.Empty<ClueCategory>();
         InterviewCase interviewCase = CaseFor(inst, documents, interviewReachable, appearanceReachable);
-        string premadeDialog = inst != null && inst.legendarySource != null ? inst.legendarySource.dialogId : null;
+        string premadeDialog = inst != null ? inst.premadeDialogId : null;
         DialogGraph graph = InterviewScript.Build(_day.Lines,
-            interviewReachable ? _day.QuestionsFor(kind) : Array.Empty<InterviewQuestion>(),
+            interviewReachable ? _day.Questions : Array.Empty<InterviewQuestion>(),
             interviewReachable ? _day.OfferedDialogs(premadeDialog) : Array.Empty<AuthoredDialog>(),
             interviewCase);
         _runner = new DialogRunner(graph, InterviewScript.Opening(_day.Lines, interviewCase));
@@ -217,7 +216,7 @@ public sealed class InterviewPresenter
         }
     }
 
-    /// <summary>The traveller as the interview script reads them: the forms their kind may be asked for (today's), small talk only when the interview is reachable, the garments only when the look is.</summary>
+    /// <summary>The traveller as the interview script reads them: the day's papers menu (the same for everyone), small talk only when the interview is reachable, the garments only when the look is.</summary>
     private InterviewCase CaseFor(CaseInstance inst, IReadOnlyList<CaseDocument> documents, bool interviewReachable, bool appearanceReachable) =>
         new InterviewCase
         {
@@ -227,10 +226,12 @@ public sealed class InterviewPresenter
             keyWords = _keyWords,
             claimedEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null,
             documents = documents,
-            askable = inst != null ? _day.AskableForms(inst.kind) : null,
-            missingVariant = MissingFormVariant.Honest,
+            askable = inst != null ? _day.AskableForms : null,
+            missingVariant = inst != null ? inst.missingFormVariant : MissingFormVariant.Honest,
             answers = inst != null ? inst.answers : null,
             smallTalk = interviewReachable && inst != null ? inst.smallTalk : null,
+            voice = inst != null ? inst.Voice : null,
+            slip = interviewReachable && inst != null ? inst.slip : null,
             garments = appearanceReachable && inst != null && inst.look != null ? inst.look.Garments : null
         };
 
@@ -313,6 +314,30 @@ public sealed class InterviewPresenter
             _day.Complete(choice.DialogId, choice.EffectName);
 
         RefreshChoices();
+    }
+
+    /// <summary>
+    /// The traveller's reaction to the stamp (the personalities spec's R1, §6):
+    /// one or two lines in their voice (InterviewScript.Reaction by the
+    /// verdict, the intent and the case's fault reason) appended to the
+    /// transcript (the Transcript tab shows them and search indexes them).
+    /// Returns them for the bubble; empty before any interview.
+    /// </summary>
+    public IReadOnlyList<DialogLine> React(CaseInstance inst, ReactionVerdict verdict, ReactionIntent intent)
+    {
+        if (_runner == null || _day == null || inst == null)
+            return Array.Empty<DialogLine>();
+
+        IReadOnlyList<DialogLine> lines = InterviewScript.Reaction(_day.Lines, CaseFor(inst, null, false, false), verdict, intent, inst.FaultReason);
+        int before = _runner.Transcript.Count;
+        _runner.Append(lines);
+        foreach (TranscriptView transcript in _transcripts)
+            if (transcript != null)
+                transcript.Refresh();
+        IndexLines(before);
+        if (_runner.Transcript.Count > before)
+            _spoke();
+        return lines;
     }
 
     /// <summary>

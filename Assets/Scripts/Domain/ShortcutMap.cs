@@ -86,7 +86,19 @@ public enum AppCommand
     /// <summary>PgUp in a focused list: a page up.</summary>
     PageUp,
     /// <summary>PgDn in a focused list: a page down.</summary>
-    PageDown
+    PageDown,
+    /// <summary>↓ in the search field while its results list hits: the focus ring goes to the first hit (the PC redesign SE4).</summary>
+    IntoResults,
+    /// <summary>← in the Orders tree: the selected node's prerequisite (UpgradeTree.Step).</summary>
+    NodeLeft,
+    /// <summary>→ in the Orders tree: the selected node's first dependant.</summary>
+    NodeRight,
+    /// <summary>↑ in the Orders tree: the node above in the same tier.</summary>
+    NodeUp,
+    /// <summary>↓ in the Orders tree: the node below in the same tier.</summary>
+    NodeDown,
+    /// <summary>Enter in the Orders tree: the selected node's action (order, cancel, install or keep).</summary>
+    NodeAct
 }
 
 /// <summary>The keys the desktop's shortcuts use (DesktopKeyboard maps the Input System's keys onto these; the numpad's Enter, plus and minus count as Enter, = and -).</summary>
@@ -200,6 +212,9 @@ public readonly struct ShortcutContext
     /// <summary>The Notes window has the focus.</summary>
     public readonly bool NotesFocused;
 
+    /// <summary>The Orders window has the focus (the arrows walk its tree, Enter acts).</summary>
+    public readonly bool OrdersFocused;
+
     /// <summary>A text field has the keyboard: only the chords that cannot be typing pass.</summary>
     public readonly bool TextFieldFocused;
 
@@ -215,10 +230,13 @@ public readonly struct ShortcutContext
     /// <summary>The app's focus ring is on its tab strip.</summary>
     public readonly bool TabStripFocused;
 
+    /// <summary>The search results panel lists hits (↓ in the search field goes into them).</summary>
+    public readonly bool ResultsShown;
+
     /// <summary>A context.</summary>
     public ShortcutContext(bool frameOpen = false, bool desktopFocused = false, bool iconSelected = false, bool appFocused = false, bool notesFocused = false,
                            bool textFieldFocused = false, bool searchFocused = false, bool menuOpen = false, bool listFocused = false,
-                           bool tabStripFocused = false)
+                           bool tabStripFocused = false, bool resultsShown = false, bool ordersFocused = false)
     {
         FrameOpen = frameOpen;
         DesktopFocused = desktopFocused;
@@ -230,6 +248,8 @@ public readonly struct ShortcutContext
         MenuOpen = menuOpen;
         ListFocused = listFocused;
         TabStripFocused = tabStripFocused;
+        ResultsShown = resultsShown;
+        OrdersFocused = ordersFocused;
     }
 }
 
@@ -262,7 +282,9 @@ public sealed class ShortcutCardRow
 /// field has the keyboard only the chords that cannot be typing pass (Ctrl+F,
 /// Ctrl+1…6, F6, Ctrl+\, Ctrl+B, Esc, F1; the field keeps its own
 /// Ctrl+C/V/X/A, arrows and Enter), and in the app's search field Tab and
-/// Shift+Tab (the next region: KB4's order starts there). The icons take the arrows and Enter
+/// Shift+Tab (the next region: KB4's order starts there) and, while the
+/// results list hits, ↓ into them (the ring then walks the hits: Enter opens
+/// one, Ctrl+Enter in the other pane). The icons take the arrows and Enter
 /// while no window has the focus; the app's chords need the app focused, its
 /// row keys a focused list, ← → the focused tab strip; Ctrl+V adds a
 /// clipping with Notes focused. Card is the F1 card: every command once.
@@ -274,10 +296,13 @@ public static class ShortcutMap
     public static readonly IReadOnlyList<ShortcutCardRow> Card = new[]
     {
         new ShortcutCardRow("Ctrl+F", "keys.focusSearch", AppCommand.FocusSearch),
+        new ShortcutCardRow("↓", "keys.intoResults", AppCommand.IntoResults),
         new ShortcutCardRow("Esc", "keys.escape", AppCommand.Escape),
         new ShortcutCardRow("F1", "keys.help", AppCommand.Help),
         new ShortcutCardRow("Enter", "keys.openIcon", AppCommand.OpenIcon),
         new ShortcutCardRow("← → ↑ ↓", "keys.icons", AppCommand.IconLeft, AppCommand.IconRight, AppCommand.IconUp, AppCommand.IconDown),
+        new ShortcutCardRow("← → ↑ ↓", "keys.orders", AppCommand.NodeLeft, AppCommand.NodeRight, AppCommand.NodeUp, AppCommand.NodeDown),
+        new ShortcutCardRow("Enter", "keys.ordersAct", AppCommand.NodeAct),
         new ShortcutCardRow("Ctrl+1 … Ctrl+6", "keys.tabs", AppCommand.Tab1, AppCommand.Tab2, AppCommand.Tab3, AppCommand.Tab4, AppCommand.Tab5, AppCommand.Tab6),
         new ShortcutCardRow("Ctrl+Tab, Ctrl+Shift+Tab", "keys.nextTab", AppCommand.NextTab, AppCommand.PrevTab),
         new ShortcutCardRow("Ctrl+Shift+PgUp, Ctrl+Shift+PgDn", "keys.moveTab", AppCommand.MoveTabLeft, AppCommand.MoveTabRight),
@@ -311,7 +336,7 @@ public static class ShortcutMap
         if (context.MenuOpen && found != AppCommand.Escape)
             return false;
         if (context.TextFieldFocused && !PassesInField(found) &&
-            !(context.SearchFocused && (found == AppCommand.NextRegion || found == AppCommand.PrevRegion)))
+            !(context.SearchFocused && (found == AppCommand.NextRegion || found == AppCommand.PrevRegion || found == AppCommand.IntoResults)))
             return false;
         command = found;
         return true;
@@ -340,8 +365,12 @@ public static class ShortcutMap
             return true;
         if (c.NotesFocused && k.Key == ShortcutKey.V && ctrl)
             return Is(AppCommand.Paste, out command);
+        if (c.OrdersFocused && plain && Tree(k.Key, out command))
+            return true;
         if (!c.AppFocused)
             return None(out command);
+        if (c.SearchFocused && c.ResultsShown && plain && k.Key == ShortcutKey.Down)
+            return Is(AppCommand.IntoResults, out command);
 
         if (ctrl && App(k.Key, out command))
             return true;
@@ -372,6 +401,20 @@ public static class ShortcutMap
             case ShortcutKey.Up: return Is(AppCommand.IconUp, out command);
             case ShortcutKey.Down: return Is(AppCommand.IconDown, out command);
             case ShortcutKey.Enter when selected: return Is(AppCommand.OpenIcon, out command);
+            default: return None(out command);
+        }
+    }
+
+    /// <summary>The Orders tree: the arrows move the selection along links and within a tier, Enter acts.</summary>
+    private static bool Tree(ShortcutKey key, out AppCommand command)
+    {
+        switch (key)
+        {
+            case ShortcutKey.Left: return Is(AppCommand.NodeLeft, out command);
+            case ShortcutKey.Right: return Is(AppCommand.NodeRight, out command);
+            case ShortcutKey.Up: return Is(AppCommand.NodeUp, out command);
+            case ShortcutKey.Down: return Is(AppCommand.NodeDown, out command);
+            case ShortcutKey.Enter: return Is(AppCommand.NodeAct, out command);
             default: return None(out command);
         }
     }

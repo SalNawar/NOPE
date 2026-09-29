@@ -73,6 +73,19 @@ public sealed class RowKey
             ? Template.Split('{').Skip(1).Select(part => part.Substring(0, part.IndexOf('}')))
             : new[] { Template };
 
+    /// <summary>The template's headers that may be blank (a composite key's optional part, <see cref="Optional"/>); the rest of the key still names the row, unique as ever.</summary>
+    public IReadOnlyCollection<string> OptionalColumns => _optional;
+
+    private readonly HashSet<string> _optional = new HashSet<string>();
+
+    /// <summary>Lets the named headers of a composite template be blank ("{slot}{id}": a forced slot's id is needed only when the slot lists alternatives); two rows that leave them blank alike are duplicates.</summary>
+    public RowKey Optional(params string[] headers)
+    {
+        foreach (string h in headers ?? new string[0])
+            _optional.Add(h);
+        return this;
+    }
+
     /// <summary>The key of a row, from its cells by header.</summary>
     public string Of(System.Func<string, string> cell)
     {

@@ -87,6 +87,115 @@ MonoBehaviour:
     text: Notes
     gloss: 0
     tier: 1
+  - key: icon.orders
+    text: Orders
+    gloss: 0
+    tier: 1
+  - key: window.orders
+    text: Orders
+    gloss: 0
+    tier: 0
+  - key: app.orders.wallet
+    text: "Wallet {0} \xB7 Orders are paid now and arrive at the start of tomorrow's
+      shift; cancel one today for a refund."
+    gloss: 0
+    tier: 0
+  - key: app.orders.price
+    text: '{0} {1}'
+    gloss: 0
+    tier: 0
+  - key: app.orders.tooDear
+    text: "{0} {1} \xB7 not enough {1}"
+    gloss: 0
+    tier: 0
+  - key: app.orders.needs
+    text: 'Needs: {0}'
+    gloss: 0
+    tier: 0
+  - key: app.orders.inTransit
+    text: "In transit \xB7 arrives day {0}"
+    gloss: 0
+    tier: 0
+  - key: app.orders.delivered
+    text: Delivered day {0}
+    gloss: 0
+    tier: 0
+  - key: app.orders.owned
+    text: Owned
+    gloss: 0
+    tier: 0
+  - key: app.orders.installed
+    text: Installed
+    gloss: 0
+    tier: 0
+  - key: app.orders.stored
+    text: In storage
+    gloss: 0
+    tier: 0
+  - key: app.orders.installsTomorrow
+    text: Installs tomorrow
+    gloss: 0
+    tier: 0
+  - key: app.orders.leavesTomorrow
+    text: Swapped out tomorrow
+    gloss: 0
+    tier: 0
+  - key: app.orders.order
+    text: Order
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancel
+    text: Cancel order
+    gloss: 0
+    tier: 0
+  - key: app.orders.install
+    text: Install tomorrow
+    gloss: 0
+    tier: 0
+  - key: app.orders.keep
+    text: Keep installed
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancelInstall
+    text: Cancel install
+    gloss: 0
+    tier: 0
+  - key: app.orders.select
+    text: Select an item in the tree to see it here.
+    gloss: 0
+    tier: 0
+  - key: app.orders.none
+    text: None
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.desk
+    text: Desk equipment
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.interview
+    text: Interview
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.portals
+    text: Portals
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.contacts
+    text: Contacts
+    gloss: 0
+    tier: 0
+  - key: mail.from.supply
+    text: Temporal Customs Supply
+    gloss: 0
+    tier: 0
+  - key: mail.subject.delivery
+    text: Your order has arrived
+    gloss: 0
+    tier: 0
+  - key: mail.body.delivery
+    text: 'Delivered this morning and in force from today''s shift:'
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: Investigation
     gloss: 0
@@ -108,7 +217,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: tray.stability
-    text: 'Stability: {0:0}%'
+    text: 'Stability: {0}'
     gloss: 0
     tier: 1
   - key: taskbar.desk
@@ -127,6 +236,10 @@ MonoBehaviour:
     text: "\u2014 TIMELINE NEWS \u2014"
     gloss: 0
     tier: 1
+  - key: briefing.deskHeader
+    text: FROM DESK 3
+    gloss: 0
+    tier: 0
   - key: wallet.credits
     text: Credits
     gloss: 0
@@ -148,11 +261,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: verdict.wrong
-    text: WRONG  ({0:+0.#;-0.#} stability)
+    text: WRONG  ({0} stability)
     gloss: 0
     tier: 0
   - key: verdict.wrongPenalty
-    text: WRONG  ({0:+0.#;-0.#} stability, -{1} {2})
+    text: WRONG  ({0} stability, -{1} {2})
     gloss: 0
     tier: 0
   - key: verdict.simpleCorrect
@@ -604,6 +717,10 @@ MonoBehaviour:
     text: WORLD
     gloss: 0
     tier: 0
+  - key: site.news.desk
+    text: From Desk 3
+    gloss: 0
+    tier: 0
   - key: site.news.notices
     text: NOTICES
     gloss: 0
@@ -916,6 +1033,11 @@ MonoBehaviour:
     text: Open the Investigation app and put the cursor in its search field
     gloss: 0
     tier: 0
+  - key: keys.intoResults
+    text: 'From the search field into its results: the arrows walk the hits, Enter
+      opens one'
+    gloss: 0
+    tier: 0
   - key: keys.escape
     text: Close a menu, this card or the search; clear the search; leave a text field;
       close the Start menu or cancel a drag. With none of those, leave the PC
@@ -931,6 +1053,15 @@ MonoBehaviour:
     tier: 0
   - key: keys.icons
     text: 'Desktop: select the nearest icon that way'
+    gloss: 0
+    tier: 0
+  - key: keys.orders
+    text: 'Orders: move along the tree (to a prerequisite, a dependant, or up and
+      down a column)'
+    gloss: 0
+    tier: 0
+  - key: keys.ordersAct
+    text: 'Orders: order, cancel or install the selected item'
     gloss: 0
     tier: 0
   - key: keys.tabs
@@ -979,7 +1110,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.followOther
-    text: Follow a row's link in the other pane
+    text: Follow a row's link, or open the focused search result, in the other pane
     gloss: 0
     tier: 0
   - key: keys.pick
@@ -1364,6 +1495,14 @@ MonoBehaviour:
     text: 'Correct: {0}   Wrong: {1}'
     gloss: 0
     tier: 0
+  - key: results.leisureDepartures
+    text: 'Leisure departures: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.debtReliefDepartures
+    text: 'Debt Relief departures: {0}   ({1:N0} {2} of debt put to work)'
+    gloss: 0
+    tier: 0
   - key: results.pay
     text: 'Pay earned: +{0}'
     gloss: 0
@@ -1381,7 +1520,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: results.stability
-    text: 'Timeline stability: {0:0}% ({1:+0.#;-0.#;0} today)'
+    text: 'Timeline stability: {0} ({1} today)'
     gloss: 0
     tier: 0
   - key: results.citations
@@ -1443,12 +1582,6 @@ MonoBehaviour:
     tier: 0
   - key: directives.none
     text: 'Directives: all destinations cleared today.'
-    gloss: 0
-    tier: 0
-  - key: claim.banner
-    text: '{0}
-
-      "{1}"'
     gloss: 0
     tier: 0
   - key: document.untitled
@@ -1733,7 +1866,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.stability
-    text: Stability {0:+0.#;-0.#}
+    text: Stability {0}
     gloss: 0
     tier: 0
   - key: citation.layout
@@ -1920,6 +2053,34 @@ MonoBehaviour:
     text: DEBT
     gloss: 0
     tier: 0
+  - key: records.standing.frozen
+    text: 'Frozen: default, {0}'
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.incomplete
+    text: Approved incomplete paperwork.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.frozen
+    text: Approved a frozen account.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.recalled
+    text: Approved a recalled transponder.
+    gloss: 0
+    tier: 0
+  - key: category.Employer
+    text: EMPLOYER
+    gloss: 0
+    tier: 0
+  - key: category.Term
+    text: TERM
+    gloss: 0
+    tier: 0
+  - key: category.Wage
+    text: WAGE
+    gloss: 0
+    tier: 0
   - key: category.WaiverNo
     text: WAIVER NO.
     gloss: 0
@@ -1938,5 +2099,102 @@ MonoBehaviour:
     tier: 0
   - key: category.Signature
     text: SIGNATURE
+    gloss: 0
+    tier: 0
+  - key: icon.portals
+    text: Portals
+    gloss: 0
+    tier: 1
+  - key: window.portals
+    text: Portals
+    gloss: 0
+    tier: 0
+  - key: board.returnGate
+    text: RETURN GATE
+    gloss: 0
+    tier: 0
+  - key: board.closed
+    text: CLOSED
+    gloss: 0
+    tier: 0
+  - key: board.maintenance
+    text: UNDER MAINTENANCE
+    gloss: 0
+    tier: 0
+  - key: board.noRoute
+    text: NO ROUTE
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.title
+    text: DEPARTURE BOARD
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.route
+    text: '{0} {1}: {2}, {3}'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.closed
+    text: '{0} {1}: {2}, {3}: CLOSED today'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGate
+    text: '{0} {1}: Return Gate'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGateMaintenance
+    text: '{0} {1}: Return Gate, under maintenance'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.maintenance
+    text: '{0} {1}: under maintenance'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.noRoute
+    text: '{0} {1}: no route today'
+    gloss: 0
+    tier: 0
+  - key: portals.date
+    text: Routes for {0}
+    gloss: 0
+    tier: 0
+  - key: portals.returnGate
+    text: Return Gate
+    gloss: 0
+    tier: 0
+  - key: portals.none
+    text: "\u2013"
+    gloss: 0
+    tier: 0
+  - key: portals.state.inService
+    text: In service
+    gloss: 0
+    tier: 0
+  - key: portals.state.noRoute
+    text: "In service \xB7 no route today"
+    gloss: 0
+    tier: 0
+  - key: portals.state.closed
+    text: 'CLOSED today: {0}'
+    gloss: 0
+    tier: 0
+  - key: portals.state.underMaintenance
+    text: Under maintenance
+    gloss: 0
+    tier: 0
+  - key: portals.state.maintenance
+    text: "Under maintenance \xB7 repair it in Orders ({0})"
+    gloss: 0
+    tier: 0
+  - key: portals.state.locked
+    text: "Under maintenance \xB7 locked: repair {0} first"
+    gloss: 0
+    tier: 0
+  - key: portals.state.transit
+    text: "Under maintenance \xB7 repair in transit, in service tomorrow"
+    gloss: 0
+    tier: 0
+  - key: portals.footer
+    text: Routes are set by the Directorate. Until the Return Gate is repaired, the
+      displaced leave through Portal {0}.
     gloss: 0
     tier: 0

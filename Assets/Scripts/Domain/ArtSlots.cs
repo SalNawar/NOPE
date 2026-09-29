@@ -25,6 +25,12 @@ public static class ArtSlots
     /// <summary>The speech bubble's tail, under the bubble's bottom centre (none without art).</summary>
     public const string SpeechBubbleTail = "Office/speech_bubble_tail";
 
+    /// <summary>The glow inside an open departure portal's ring (greyscale; the game tints it and draws it as an unlit glow; PortalGlowPlaceholder's until it lands).</summary>
+    public const string PortalGlow = "Office/portal_glow";
+
+    /// <summary>The Return Gate's spiral inside its ring (greyscale; tinted amber, an unlit glow; PortalGlowPlaceholder's until it lands).</summary>
+    public const string ReturnGateGlow = "Office/portal_return_glow";
+
     /// <summary>The morning briefing's newsprint sheet ("The Temporal Times").</summary>
     public const string BriefingPaper = "DayFlow/temporal_times_paper";
 
@@ -61,8 +67,14 @@ public static class ArtSlots
     /// <summary>A desktop icon's glyph by its app id (DesktopAppIds).</summary>
     public static string DesktopIcon(string appId) => "Desktop/icon_" + Key(appId);
 
-    /// <summary>An upgrade's icon in its Home shop row, by the upgrade's id.</summary>
+    /// <summary>A Home upgrade's icon in Home's list, by the upgrade's id (the office's upgrades moved to the Orders app: <see cref="OrderIcon"/>).</summary>
     public static string UpgradeIcon(string upgradeId) => "Home/upgrade_" + Key(upgradeId);
+
+    /// <summary>An Orders node's icon (the upgrade tree, Saleh 2026-09-29), by the upgrade's id; without it the node draws its band's glyph.</summary>
+    public static string OrderIcon(string upgradeId) => "Orders/upgrade_" + Key(upgradeId);
+
+    /// <summary>An Orders band's glyph by its branch (Orders/branch_desk, _interview, _portals, _contacts); without it the band draws the code-drawn one.</summary>
+    public static string OrderBranch(UpgradeBranch branch) => "Orders/branch_" + Key(branch.ToString());
 
     /// <summary>A reference book's cover by the category it lists (the asset list's book ids: the Geography book is the capitals', the Politics book the rulers').</summary>
     public static string BookCover(ClueCategory category) => "Investigation/refbook_cover_" + BookId(category);

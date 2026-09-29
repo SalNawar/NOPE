@@ -29,7 +29,6 @@ MonoBehaviour:
     label: Valid Until
   handOver: 1
   showsPhoto: 1
-  askableBy: 
   form:
     formNumber: 
     title: 

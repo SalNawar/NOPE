@@ -17,3 +17,5 @@ MonoBehaviour:
   nation: {fileID: 0}
   description: 'Dress for the destination. An item from another time or place causes
     a panic: check the Costume Guide.'
+  kinds: 
+  transponder: 

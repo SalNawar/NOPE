@@ -18,8 +18,8 @@ using UnityEditor;
 /// </summary>
 public static partial class WorldContentGenerator
 {
-    /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models; phase 8 the proofs of means, "proofs"; phase 13b the stranding chance).</summary>
-    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public ProofData[] proofs; public float strandChance; }
+    /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models; phase 8 the proofs of means, "proofs"; phase 13b the stranding chance; phase 9 the employers).</summary>
+    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public ProofData[] proofs; public float strandChance; public Employer[] employers; public PortalData[] portals; }
 
     /// <summary>The clerk's own account as authored ("agency.clerk").</summary>
     [Serializable] private sealed class ClerkData
@@ -28,8 +28,8 @@ public static partial class WorldContentGenerator
         public int startDebt; public float garnishShare; public string reliefEmployer; public string reliefWorksite; public int reliefWage;
     }
 
-    /// <summary>The accounts' ranges as authored ("agency.accounts"; statuses by name; the waiver prefix, phase 8).</summary>
-    [Serializable] private sealed class AccountsData { public int validDaysMin; public int validDaysMax; public int tripsWithinDays; public string waiverPrefix; public StatusData[] statuses; }
+    /// <summary>The accounts' ranges as authored ("agency.accounts"; statuses by name; the waiver prefix, phase 8; the freeze window and the contract ranges, phase 9).</summary>
+    [Serializable] private sealed class AccountsData { public int validDaysMin; public int validDaysMax; public int tripsWithinDays; public int frozenWithinDays; public string waiverPrefix; public StatusData[] statuses; public ContractRanges contract; }
 
     /// <summary>One proof of means as authored ("agency.proofs"; the category by name).</summary>
     [Serializable] private sealed class ProofData { public string form; public string category; public float weight; public int amountMin; public int amountMax; public string prefix; }
@@ -55,6 +55,7 @@ public static partial class WorldContentGenerator
                 validDaysMax = a.accounts.validDaysMax,
                 tripsWithinDays = a.accounts.tripsWithinDays,
                 waiverPrefix = a.accounts.waiverPrefix ?? string.Empty,
+                frozenWithinDays = a.accounts.frozenWithinDays,
                 statuses = (a.accounts.statuses ?? Array.Empty<StatusData>())
                     .Select(s => new StatusRanges
                     {
@@ -64,7 +65,8 @@ public static partial class WorldContentGenerator
                         tripsMin = s.tripsMin,
                         tripsMax = s.tripsMax
                     })
-                    .ToList()
+                    .ToList(),
+                contract = a.accounts.contract
             },
             transponders = (a.transponders ?? Array.Empty<TransponderData>())
                 .Select(t => new TransponderModel
@@ -87,7 +89,9 @@ public static partial class WorldContentGenerator
                     prefix = p.prefix ?? string.Empty
                 })
                 .ToList(),
-            strandChance = a.strandChance
+            strandChance = a.strandChance,
+            employers = (a.employers ?? Array.Empty<Employer>()).Where(e => e != null).ToList(),
+            portals = BuildPortals(a.portals)
         };
 
     /// <summary>The clerk's rows (verbatim; a missing block reads blank and fails ClerkContent.Problems).</summary>
@@ -120,6 +124,15 @@ public static partial class WorldContentGenerator
         foreach (ProofData p in src.agency.proofs ?? Array.Empty<ProofData>())
             if (!ParseEnum(p.category, out ClueCategory _))
                 errors.Add($"agency.proofs '{p.form}': '{p.category}' is not a category (Credit, Funds or PolicyNo).");
+
+        // The employers (phase 9): each of a known era, and every past era with at least one, so a labourer bound anywhere has a contract.
+        var eraIds = new HashSet<string>((src.eras ?? Array.Empty<EraData>()).Select(e => e.id));
+        foreach (Employer e in src.agency.employers ?? Array.Empty<Employer>())
+            if (e != null && !string.IsNullOrWhiteSpace(e.era) && !eraIds.Contains(e.era))
+                errors.Add($"agency.employers '{e.id}' hires for unknown era '{e.era}'.");
+        foreach (EraData era in (src.eras ?? Array.Empty<EraData>()).Where(e => !e.future))
+            if (agency.EmployersOf(era.id).Count == 0)
+                errors.Add($"agency.employers has no employer for the era '{era.id}', so a labourer bound there would have no registered contract.");
     }
 
     /// <summary>Writes the agency block into the content library.</summary>

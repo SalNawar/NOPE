@@ -102,7 +102,7 @@ public static class NewsPages
     private static string Lead(NewsIssue issue, IPageWords w) =>
         issue.news != null && issue.news.Count > 0 ? issue.news[0] : w.Get("site.news.quiet");
 
-    /// <summary>The lead as the headline, the other news under World, and the notices boxed.</summary>
+    /// <summary>The lead as the headline, the other news under World, the desk's own stories under their heading, and the notices boxed.</summary>
     private static void AddLines(SitePage page, NewsIssue issue, IPageWords w)
     {
         page.Blocks.Add(PageBlock.Of(PageBlockKind.Headline, Lead(issue, w)));
@@ -111,6 +111,15 @@ public static class NewsPages
         {
             page.Blocks.Add(PageBlock.Of(PageBlockKind.Heading, w.Get("site.news.world")));
             foreach (string line in world)
+                page.Blocks.Add(PageBlock.Of(PageBlockKind.Paragraph, line));
+        }
+
+        // The desk's own stories (days 7-15, Q9), after the news.
+        List<string> desk = (issue.desk ?? new List<string>()).ToList();
+        if (desk.Count > 0)
+        {
+            page.Blocks.Add(PageBlock.Of(PageBlockKind.Heading, w.Get("site.news.desk")));
+            foreach (string line in desk)
                 page.Blocks.Add(PageBlock.Of(PageBlockKind.Paragraph, line));
         }
 

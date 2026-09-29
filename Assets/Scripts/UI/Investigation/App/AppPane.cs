@@ -11,10 +11,13 @@ using UnityEngine.UI;
 /// tab strip (one tab per source, laid out in the app's shared TabOrder, each
 /// with a badge and a tooltip naming it; the active tab wears its active
 /// look, the paper plate with the ink bar the builder made; on a strip too
-/// narrow for every name the inactive tabs collapse to their glyphs and their
-/// badges: AppPanes.TabsNarrow), its header (the active view's chips: a click
-/// shows that item; the chosen chip wears its "Chosen" accent look, one not
-/// readable yet is dimmed) and its content (the active tab's view; between
+/// narrow for every name at its size the inactive tabs collapse to their
+/// glyphs and their badges, sharing what the active tab's name leaves:
+/// AppPanes.TabsNarrow), its header (the active view's chips in a row that
+/// scrolls sideways when they do not fit, ChipRow: a click shows that item;
+/// the chosen chip wears its "Chosen" accent look and is scrolled into view,
+/// one not readable yet is dimmed) and
+/// its content (the active tab's view; between
 /// travellers a case source shows the no-case state, "Waiting for the next
 /// traveller", instead). The views are IAppView components, each drawing its
 /// page as a form (FormPage). The app has two
@@ -52,8 +55,11 @@ public sealed partial class AppPane : MonoBehaviour
     /// <summary>The views, one per tab (their Tab says which).</summary>
     [SerializeField] private AppView[] views = new AppView[0];
 
-    /// <summary>The header's chip row.</summary>
+    /// <summary>The header's chips' parent (the chip row's scrolling content).</summary>
     [SerializeField] private RectTransform chipStrip;
+
+    /// <summary>The header's chip row: it scrolls sideways when the chips do not fit, and shows the chosen one.</summary>
+    [SerializeField] private ChipRow chipRow;
 
     /// <summary>A chip (inactive), cloned per item of the active view.</summary>
     [SerializeField] private Button chipTemplate;
@@ -67,7 +73,7 @@ public sealed partial class AppPane : MonoBehaviour
     /// <summary>The tab the pane shows first.</summary>
     [SerializeField] private AppTab startTab = AppTab.Documents;
 
-    /// <summary>The desktop's knobs: the tabs' label and glyph widths, the history's length.</summary>
+    /// <summary>The desktop's knobs: the tabs' glyph width, the history's length.</summary>
     [SerializeField] private DesktopConfigSO config;
 
     /// <summary>An unavailable item's chip tint (dimmed; it still shows why when clicked).</summary>
@@ -76,6 +82,8 @@ public sealed partial class AppPane : MonoBehaviour
     private readonly Dictionary<AppTab, IAppView> _views = new Dictionary<AppTab, IAppView>();
     private readonly List<Button> _chips = new List<Button>();
     private readonly List<float> _middles = new List<float>();
+    private readonly List<float> _nameTabs = new List<float>();
+    private readonly Dictionary<AppTab, float> _nameWidths = new Dictionary<AppTab, float>();
     private NavHistory<LinkTarget> _history;
     private AppTab _active;
     private bool _caseOn;
@@ -333,17 +341,30 @@ public sealed partial class AppPane : MonoBehaviour
     }
 
     /// <summary>
-    /// On a narrow strip the inactive tabs collapse to their glyphs and badges
-    /// at the glyph width (the plate's padding gone, the glyph and the badge
-    /// centred), the active one keeps its name; otherwise every tab is as wide
-    /// as its name, on the plate the builder made (its padding and narrowest
-    /// width, read once before the first collapse).
+    /// A strip that cannot hold every tab with its name at its size
+    /// (AppPanes.TabsNarrow over each tab's measured width: NameTabWidth)
+    /// collapses its inactive tabs to their glyphs and badges (the plate's
+    /// padding gone, the glyph and the badge's slot centred), at least the
+    /// glyph width each and sharing what the active tab, which keeps its name
+    /// at its own width, leaves of the strip; the glyph shrinks to fit its room
+    /// (its theme tag's fit), so it never draws over a neighbour. Otherwise
+    /// every tab is as wide as its name, on the plate the builder made (its
+    /// padding and narrowest width, read once before the first collapse), so
+    /// no name ever shrinks under its size.
     /// </summary>
     private void LayoutTabs()
     {
         if (tabStrip == null || config == null)
             return;
-        bool narrow = AppPanes.TabsNarrow(tabStrip.rect.width, TabOrder.Default.Count, config.tabLabelWidth);
+        _nameTabs.Clear();
+        foreach (AppTab tab in TabOrder.Default)
+        {
+            float width = NameTabWidth(tab);
+            if (width > 0f)
+                _nameTabs.Add(width);
+        }
+        HorizontalLayoutGroup strip = tabStrip.GetComponent<HorizontalLayoutGroup>();
+        bool narrow = AppPanes.TabsNarrow(tabStrip.rect.width, _nameTabs, strip != null ? strip.padding.horizontal : 0f, strip != null ? strip.spacing : 0f);
         foreach (AppTab tab in TabOrder.Default)
         {
             bool glyph = narrow && tab != _active;
@@ -355,13 +376,9 @@ public sealed partial class AppPane : MonoBehaviour
             Button button = At(tabButtons, tab);
             if (button == null || !button.TryGetComponent(out LayoutElement size) || !button.TryGetComponent(out HorizontalLayoutGroup plate))
                 continue;
-            if (_tabMinWidth < 0f)
-            {
-                _tabMinWidth = size.minWidth;
-                _tabPadding = plate.padding.left;
-            }
             size.minWidth = glyph ? config.tabGlyphWidth : _tabMinWidth;
             size.preferredWidth = glyph ? config.tabGlyphWidth : -1f;
+            size.flexibleWidth = glyph ? 1f : 0f;
             int padding = glyph ? 0 : _tabPadding;
             if (plate.padding.left != padding)
             {
@@ -372,12 +389,45 @@ public sealed partial class AppPane : MonoBehaviour
         }
     }
 
-    /// <summary>The active view's chips (none while the no-case state shows): the chosen one wears its accent look, an unavailable one is dimmed.</summary>
+    /// <summary>
+    /// The tab's width with its name at the label size (the name's preferred
+    /// width, a fitting label's largest; the plate's padding either side; the
+    /// gap and the badge's slot), never under the plate's narrowest; 0 while
+    /// it is not known. It is measured whenever TextMeshPro has set the label
+    /// up (a label never shown yet has no material to measure with: every
+    /// name shows when the pane first does), and the last measure stands while
+    /// the tab shows its glyph. The plate's padding and narrowest width are
+    /// read once, before the first collapse.
+    /// </summary>
+    private float NameTabWidth(AppTab tab)
+    {
+        Button button = At(tabButtons, tab);
+        GameObject label = At(tabLabels, tab), badge = At(tabBadges, tab);
+        if (button == null || label == null || !label.TryGetComponent(out TMP_Text name) ||
+            !button.TryGetComponent(out LayoutElement size) || !button.TryGetComponent(out HorizontalLayoutGroup plate))
+            return 0f;
+        if (_tabMinWidth < 0f)
+        {
+            _tabMinWidth = size.minWidth;
+            _tabPadding = plate.padding.left;
+        }
+        if (name.fontSharedMaterial != null)
+        {
+            float slot = badge != null && badge.transform.parent is RectTransform room ? LayoutUtility.GetPreferredWidth(room) + plate.spacing : 0f;
+            _nameWidths[tab] = 2f * _tabPadding + name.GetPreferredValues(name.text).x + slot;
+        }
+        return _nameWidths.TryGetValue(tab, out float width) ? Mathf.Max(_tabMinWidth, width) : 0f;
+    }
+
+    /// <summary>The active view's chips (none while the no-case state shows): the chosen one wears its accent look and is scrolled into view (ChipRow), an unavailable one is dimmed.</summary>
     private void DrawChips()
     {
         foreach (Button chip in _chips)
             if (chip != null)
+            {
+                chip.gameObject.SetActive(false); // out of the row's layout now; destroyed at the frame's end
                 Destroy(chip.gameObject);
+            }
         _chips.Clear();
 
         if (chipTemplate == null || chipStrip == null || (!_caseOn && TabOrder.IsCaseSource(_active)) || !_views.TryGetValue(_active, out IAppView view))
@@ -394,6 +444,8 @@ public sealed partial class AppPane : MonoBehaviour
             Transform chosen = chip.transform.Find("Chosen");
             if (chosen != null && chosen.gameObject.activeSelf != (i == view.Selected))
                 chosen.gameObject.SetActive(i == view.Selected);
+            if (chosen != null && i == view.Selected)
+                FitChosen(chip, chosen);
             ColorBlock colours = chip.colors;
             colours.normalColor = items[i].Available ? Color.white : unavailableTint;
             colours.selectedColor = colours.normalColor;
@@ -403,6 +455,30 @@ public sealed partial class AppPane : MonoBehaviour
             chip.onClick.AddListener(() => Navigate(LinkTarget.ToTab(tab, index), true));
             _chips.Add(chip);
         }
+        if (chipRow != null)
+            chipRow.Refresh(view.Selected >= 0 && view.Selected < _chips.Count ? (RectTransform)_chips[view.Selected].transform : null);
+    }
+
+    /// <summary>
+    /// The chosen chip is as wide as its bold name too: the chosen look draws
+    /// the name in bold over the chip, whose regular-weight name sizes it, so
+    /// without this a long name was cut ("Currency Le…") now that no chip
+    /// label shrinks (the row scrolls instead). Measured once the chosen look
+    /// is shown (TextMeshPro has set its label up). The bold name fits, so it
+    /// truncates rather than ellipsizes: TextMeshPro found no "…" for the bold
+    /// label in LiberationSans SDF or its fallbacks and logged a warning each
+    /// time a chosen chip was drawn.
+    /// </summary>
+    private static void FitChosen(Button chip, Transform chosen)
+    {
+        TMP_Text bold = chosen.GetComponentInChildren<TMP_Text>(true);
+        if (bold == null)
+            return;
+        bold.overflowMode = TextOverflowModes.Truncate;
+        if (bold.fontSharedMaterial == null || !chip.TryGetComponent(out LayoutElement size))
+            return;
+        float insets = -((RectTransform)bold.transform).sizeDelta.x;
+        size.minWidth = Mathf.Max(size.minWidth, bold.GetPreferredValues(bold.text).x + insets);
     }
 
     /// <summary>The tab's entry in an array indexed by the tab's value, or null.</summary>

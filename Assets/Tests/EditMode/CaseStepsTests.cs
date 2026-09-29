@@ -5,7 +5,8 @@ using NUnit.Framework;
 /// <summary>
 /// The optional steps checklist (the PC redesign ST1-ST4, §4.4; redesign phase
 /// 21): which set a traveller gets (by kind, inherit and override by id, the
-/// default for an unknown kind, a step's first day), when each kind of step
+/// default for an unknown kind, a step's first day; the default set until a
+/// paper handed over on arrival is read, the personalities spec's B5), when each kind of step
 /// ticks (each StepWhen, with its parts: "Papers 1 of 3"), that a step ticks
 /// when the player made the check and never on what it found (a MISMATCH ticks
 /// like a MATCH), that a hand-set tick holds for the case, and where a click
@@ -100,6 +101,58 @@ public class CaseStepsTests
     }
 
     [Test]
+    public void SetName_IsTheDefaultUntilAnArrivalPaperIsRead()
+    {
+        CaseProgress p = Progress();
+
+        Assert.IsFalse(p.ArrivalRead);
+        Assert.AreEqual(CaseSteps.DefaultType, CaseSteps.SetName("Displaced", p.ArrivalRead), "nothing read yet: the kind is not the checklist's to say");
+        p.Received(0);
+        Assert.AreEqual(CaseSteps.DefaultType, CaseSteps.SetName("Displaced", p.ArrivalRead), "handed over is not read");
+    }
+
+    [Test]
+    public void SetName_IsTheKindsOnceItIsRead()
+    {
+        CaseProgress p = Progress();
+
+        Assert.IsTrue(p.Read(0), "the certificate, handed over on arrival, lifted into the hand or its scanned copy seen");
+        Assert.IsTrue(p.ArrivalRead);
+        Assert.AreEqual("Displaced", CaseSteps.SetName("Displaced", p.ArrivalRead));
+    }
+
+    [Test]
+    public void SetName_AReadRequestedPaperDoesNotSwitch()
+    {
+        CaseProgress p = Progress();
+
+        p.Read(1);
+        p.Read(2);
+        Assert.IsFalse(p.ArrivalRead, "the declaration and the return order come on request: the arrival paper is the papers' first word on the kind");
+        Assert.AreEqual(CaseSteps.DefaultType, CaseSteps.SetName("Displaced", p.ArrivalRead));
+    }
+
+    [Test]
+    public void Resolve_ProgressCarriesOverBySetId()
+    {
+        StepSetData data = Data(Set(CaseSteps.DefaultType, Step("rules", StepWhen.RulesViewed), Step("papers", StepWhen.PapersReceived)),
+                                Set("Displaced", Step("rules", StepWhen.RulesViewed), Step("look", StepWhen.LookedAt), Step("papers", StepWhen.PapersReceived)));
+        CaseProgress p = Progress();
+
+        p.RulesViewed();
+        p.SetManual("papers", true);
+        List<StepState> before = CaseSteps.Evaluate(CaseSteps.Resolve(data, CaseSteps.SetName("Displaced", p.ArrivalRead), 1), p);
+        p.Read(0);
+        List<StepState> after = CaseSteps.Evaluate(CaseSteps.Resolve(data, CaseSteps.SetName("Displaced", p.ArrivalRead), 1), p);
+
+        CollectionAssert.AreEqual(new[] { "rules", "papers" }, before.Select(s => s.Id));
+        CollectionAssert.AreEqual(new[] { "rules", "look", "papers" }, after.Select(s => s.Id));
+        Assert.IsTrue(after.Single(s => s.Id == "rules").Done, "the rules seen under the default set stay seen in the kind's");
+        Assert.IsTrue(after.Single(s => s.Id == "papers").Done && after.Single(s => s.Id == "papers").Manual, "a hand-set tick is kept by step id");
+        Assert.IsFalse(after.Single(s => s.Id == "look").Done);
+    }
+
+    [Test]
     public void Resolve_AStepBeforeItsFirstDay_IsLeftOut()
     {
         StepSetData data = Data(Set("Displaced", Step("rules", StepWhen.RulesViewed), Step("dates", StepWhen.PaperRead, fromDay: 4)));
@@ -135,6 +188,21 @@ public class CaseStepsTests
         StepSpec visa = Step("visa", StepWhen.PaperRead, forms: new[] { "TC-101" });
 
         CollectionAssert.IsEmpty(CaseSteps.Evaluate(new[] { visa }, p), "a displaced traveller has no visa");
+    }
+
+    [Test]
+    public void Evaluate_IntoAList_ReplacesWhatItHeld_AndReturnsThatList()
+    {
+        CaseProgress p = Progress();
+        StepSpec papers = Step("papers", StepWhen.PapersReceived), visa = Step("visa", StepWhen.PaperRead, forms: new[] { "TC-101" });
+        var states = new List<StepState> { new StepState("stale", true, 1, 1, false) };
+
+        List<StepState> returned = CaseSteps.Evaluate(new[] { papers, visa }, p, states);
+
+        Assert.AreSame(states, returned, "the steps panel reuses its list: no list per redraw");
+        CollectionAssert.AreEqual(new[] { "papers" }, states.Select(s => s.Id), "the stale state went; the visa step has no parts here");
+        CollectionAssert.AreEqual(CaseSteps.Evaluate(new[] { papers, visa }, p).Select(s => (s.Id, s.Done, s.Have, s.Need)), states.Select(s => (s.Id, s.Done, s.Have, s.Need)),
+                                  "the same states as a new list");
     }
 
     [Test]

@@ -32,6 +32,21 @@ public static class BalanceSimulation
     /// <summary>The run seed whose every decision is dumped per style, and whose runs are played twice to prove the simulation deterministic.</summary>
     public const int ExampleSeed = 12345;
 
+    /// <summary>
+    /// The pace when BalanceSimSettings.asset is missing: the travellers a
+    /// careful clerk gets through in a shift before the clock closes (8 real
+    /// minutes at about 45 s a traveller). The knob itself is
+    /// BalanceSimSettingsSO.travellersPerShift (days 7-15 X3, Q11), which Saleh
+    /// edits in the Inspector.
+    /// </summary>
+    public const int ShiftPace = 10;
+
+    /// <summary>The pace this run plays at (BalanceSimSettingsSO.travellersPerShift, read at Run; <see cref="ShiftPace"/> without the asset).</summary>
+    private static int _pace = ShiftPace;
+
+    /// <summary>The House buyer's reserve and care threshold (BalanceSimSettingsSO, read at Run; the asset's defaults without it).</summary>
+    private static int _houseReserve = 60, _careThreshold = 3;
+
     /// <summary>The folder the summary and the example dumps go to (project-relative; Logs/ is not in git).</summary>
     public const string ReportFolder = "Logs/Balance";
 
@@ -41,6 +56,7 @@ public static class BalanceSimulation
     private const int SeedStep = 7919;
     private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
     private static readonly PlayStyle[] Styles = { PlayStyle.Perfect, PlayStyle.Imperfect, PlayStyle.Careless };
+    private static int[] Paces => _pace > 0 ? new[] { 0, _pace } : new[] { 0 };
 
     /// <summary>Runs the simulation with today's knobs and shows the summary's file (refused in play mode).</summary>
     [MenuItem("Tools/TimeDesk/Balance/Run 50-Run Simulation")]
@@ -75,6 +91,11 @@ public static class BalanceSimulation
             return null;
         }
 
+        var settings = AssetDatabase.LoadAssetAtPath<BalanceSimSettingsSO>(BalanceSimSettingsSO.AssetPath);
+        _pace = settings != null ? settings.travellersPerShift : ShiftPace;
+        _houseReserve = settings != null ? settings.houseReserve : 60;
+        _careThreshold = settings != null ? settings.careThreshold : 3;
+
         string dir = Path.IsPathRooted(folder) ? folder : Path.Combine(Directory.GetCurrentDirectory(), folder);
         Directory.CreateDirectory(dir);
 
@@ -91,28 +112,40 @@ public static class BalanceSimulation
         Debug.unityLogger.filterLogType = LogType.Error;
         try
         {
-            var results = new Dictionary<PlayStyle, List<RunResult>>();
-            int step = 0, steps = Styles.Length * (Runs + 2);
+            var results = new Dictionary<(PlayStyle, int), List<RunResult>>();
+            var buyers = new Dictionary<(PlayStyle, int), List<RunResult>>();
+            int step = 0, steps = Styles.Length * (2 * Paces.Length * Runs + 2);
             foreach (PlayStyle style in Styles)
             {
-                var runs = new List<RunResult>();
-                for (int i = 1; i <= Runs; i++)
+                foreach (int pace in Paces)
                 {
-                    EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play, run {i} of {Runs}", (float)step++ / steps);
-                    runs.Add(Play(run, lib, config, i * SeedStep, style));
+                    var runs = new List<RunResult>();
+                    for (int i = 1; i <= Runs; i++)
+                    {
+                        EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play, {PaceLabel(pace)}, run {i} of {Runs}", (float)step++ / steps);
+                        runs.Add(Play(run, lib, config, i * SeedStep, style, pace, false));
+                    }
+                    results[(style, pace)] = runs;
+
+                    var bought = new List<RunResult>();
+                    for (int i = 1; i <= Runs; i++)
+                    {
+                        EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play and the House buyer, {PaceLabel(pace)}, run {i} of {Runs}", (float)step++ / steps);
+                        bought.Add(Play(run, lib, config, i * SeedStep, style, pace, true));
+                    }
+                    buyers[(style, pace)] = bought;
                 }
-                results[style] = runs;
 
                 EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play, seed {ExampleSeed} twice", (float)step / steps);
-                RunResult a = Play(run, lib, config, ExampleSeed, style);
-                RunResult b = Play(run, lib, config, ExampleSeed, style);
+                RunResult a = Play(run, lib, config, ExampleSeed, style, 0, false);
+                RunResult b = Play(run, lib, config, ExampleSeed, style, 0, false);
                 step += 2;
                 File.WriteAllText(Path.Combine(dir, $"balance_seed{ExampleSeed}_{style.ToString().ToLowerInvariant()}.txt"), a.Dump.ToString());
                 if (a.Fingerprint != b.Fingerprint || a.Dump.ToString() != b.Dump.ToString())
                     errors.Add($"{style} play: seed {ExampleSeed} played twice gave two different runs (the simulation is not deterministic).");
             }
 
-            Write(summary, run, lib, config, results, errors);
+            Write(summary, run, lib, config, results, buyers, errors);
         }
         finally
         {
@@ -124,7 +157,7 @@ public static class BalanceSimulation
 
         string path = Path.Combine(dir, SummaryFile);
         File.WriteAllText(path, summary.ToString());
-        Debug.Log($"[Balance] {Styles.Length} x {Runs} runs of {Days} days: {path}{(errors.Count > 0 ? $" ({errors.Count} error(s): see its last section)" : "")}.");
+        Debug.Log($"[Balance] {Styles.Length} x {Paces.Length} x {Runs} runs of {Days} days: {path}{(errors.Count > 0 ? $" ({errors.Count} error(s): see its last section)" : "")}.");
         return path;
     }
 
@@ -137,8 +170,21 @@ public static class BalanceSimulation
         public WorldState World;
         public readonly List<int> MoneyAfterShift = new List<int>();
         public readonly List<int> MoneyAtNight = new List<int>();
+        public readonly List<float> StabilityAfterShift = new List<float>();
         public int MinMoney = int.MaxValue;
         public int Cases, Faulty, Accepted, Wrong, Unproven, Pay, Penalties, Instalments, Household, Stranded, Carries;
+
+        /// <summary>Home's figures (the Home upgrades spec §9): the house's upkeep paid, the break-ins and what they took, the care paid and the house upgrades' prices paid.</summary>
+        public int Upkeep, BreakIns, BreakInLoss, Care, HousePurchases;
+
+        /// <summary>The house upgrades the buyer bought, with the day of each.</summary>
+        public readonly List<(int day, string id)> Bought = new List<(int, string)>();
+
+        /// <summary>The strandings and the carries of each day played (days 7-15 X5).</summary>
+        public readonly List<int> StrandedByDay = new List<int>(), CarriesByDay = new List<int>();
+
+        /// <summary>The past places whose Technology a carry rewrote by the run's end (an accepted liar's or smuggler's, a stranded citizen's; history rules apart; days 7-15 X5).</summary>
+        public int TechnologyChanged;
         public readonly List<CaseRecord> Records = new List<CaseRecord>();
         public readonly List<string> DialogsOffered = new List<string>();
         public readonly StringBuilder Dump = new StringBuilder();
@@ -149,12 +195,13 @@ public static class BalanceSimulation
     private sealed class CaseRecord
     {
         public int Day, Slot;
-        public string Kind, Source, Premade, Reason;
-        public bool Faulty, Deviation, Accepted, Correct, Economy;
+        public string Kind, Source, Premade, Reason, Entry, Closure;
+        public bool Faulty, Deviation, Accepted, Correct, Economy, Famous;
+        public float StabilityDelta;
     }
 
-    /// <summary>A run of <see cref="Days"/> days from <paramref name="seed"/> under <paramref name="style"/>, through the game's own steps.</summary>
-    private static RunResult Play(RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, int seed, PlayStyle style)
+    /// <summary>A run of <see cref="Days"/> days from <paramref name="seed"/> under <paramref name="style"/>, through the game's own steps, <paramref name="pace"/> travellers a shift (0: the whole queue); with <paramref name="buyer"/>, each night at Home the House buyer treats and buys (<see cref="BuyerNight"/>).</summary>
+    private static RunResult Play(RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, int seed, PlayStyle style, int pace, bool buyer)
     {
         DevToolsState.ResetAll();
         var r = new RunResult { Seed = seed };
@@ -168,22 +215,25 @@ public static class BalanceSimulation
             DayPlanSO plan = lib.GetDayPlan(day);
             var ledger = new ShiftLedger();
             InterviewDay interview = TimelineService.BuildInterviewDay(lib, world, ledger);
-            TodaysWorld today = lib.BuildToday(plan, world.history);
+            TodaysWorld today = lib.BuildToday(plan, world);
             List<CaseInstance> cases = new CaseFactory(lib, today).GenerateDayCases(plan, world, Seeds.Day(seed, day), interview, true);
             r.DialogsOffered.Add($"day {day}: [{string.Join(", ", interview.OfferedDialogs(null).Select(d => d.id))}]");
             policy.StartDay(day);
+            int carriesBefore = r.Carries;
 
             string ended = null;
-            for (int i = 0; i < cases.Count && ended == null; i++)
+            for (int i = 0; i < cases.Count && PlayPolicy.Reaches(i + 1, pace) && ended == null; i++)
             {
                 CaseInstance inst = cases[i];
+                // The traveller comes to the desk: a once-per-run premade is met (days 7-15 X1, the game's own step).
+                DayCycle.Present(world, inst);
                 PlayDecision decision = policy.Decide(inst.ShouldAccept, inst.HasDeviationFault);
                 int carries = world.history.pendingCarries.Count;
                 CaseVerdict verdict = DayCycle.Decide(inst, decision.Accept, i + 1, decision.Documented ? 1 : 0, world, today, ledger, lib, config);
                 r.Carries += world.history.pendingCarries.Count - carries;
-                r.Records.Add(Record(plan, day, i + 1, inst, decision.Accept, verdict.correct));
+                r.Records.Add(Record(plan, day, i + 1, inst, decision.Accept, verdict));
                 Count(r, inst, decision.Accept, verdict);
-                r.Dump.AppendLine($"d{day} #{i + 1} {inst.kind} {Source(plan, i + 1, inst)} '{inst.originLabel}' fault='{inst.FaultReason}' accept={decision.Accept} documented={decision.Documented} correct={verdict.correct} pay={verdict.payAwarded} penalty={verdict.moneyPenalty} money={world.money} stability={world.timelineStability.ToString("0.#", Inv)}");
+                r.Dump.AppendLine($"d{day} #{i + 1} {inst.kind} {Source(plan, i + 1, inst)} '{inst.originLabel}' fault='{inst.FaultReason}' accept={decision.Accept} documented={decision.Documented} correct={verdict.correct} pay={verdict.payAwarded} penalty={verdict.moneyPenalty} money={world.money} stability={StabilityRules.Format(world.timelineStability)}");
                 EndingSO now = EndingService.Evaluate(world, lib, config, EndingMoment.Immediate);
                 if (now != null)
                     ended = now.id;
@@ -196,7 +246,10 @@ public static class BalanceSimulation
             r.Penalties += ledger.TotalPenalties;
             r.Instalments += ledger.debtInstalment;
             r.Stranded += ledger.strandedCount;
+            r.StrandedByDay.Add(ledger.strandedCount);
+            r.CarriesByDay.Add(r.Carries - carriesBefore);
             r.MoneyAfterShift.Add(world.money);
+            r.StabilityAfterShift.Add(world.timelineStability);
             r.MinMoney = Math.Min(r.MinMoney, world.money);
             r.Dump.AppendLine($"shift {day}: pay {ledger.TotalPay} penalties {ledger.TotalPenalties} stranded {ledger.strandedCount} instalment {ledger.debtInstalment} money {world.money}{(ended != null ? " ENDING " + ended : "")}");
             if (ended != null)
@@ -205,10 +258,17 @@ public static class BalanceSimulation
                 break;
             }
 
-            // Home: the bill and the family's drift; the simulation buys nothing, treats no one and spins nothing.
-            HomeEconomy.ExpenseReport bill = DayCycle.OpenHome(world, config, Seeds.Day(seed, day));
-            ClerkAccountSource.RecordHome(world, bill.total, 0, lib, config);
-            r.Household += bill.total;
+            // Home: the break-in, the bill and the family's night; the House buyer then treats and buys (the plain runs
+            // treat no one and buy nothing); no run spins the slot machine or orders at the PC.
+            HomeEconomy.ExpenseReport bill = DayCycle.OpenHome(world, lib, config, Seeds.Day(seed, day)).bill;
+            (int care, int bought) = buyer ? BuyerNight(world, lib, config, r, day) : (0, 0);
+            ClerkAccountSource.RecordHome(world, bill.total + care, bought, lib, config);
+            r.Household += bill.total + care;
+            r.Upkeep += bill.upkeepAmount;
+            r.BreakInLoss += bill.breakInLoss;
+            r.BreakIns += bill.breakInLoss > 0 ? 1 : 0;
+            r.Care += care;
+            r.HousePurchases += bought;
             r.MoneyAtNight.Add(world.money);
             r.MinMoney = Math.Min(r.MinMoney, world.money);
 
@@ -223,8 +283,40 @@ public static class BalanceSimulation
             r.Dump.AppendLine($"night {day}: household {bill.total} money {world.money} leader '{world.history.leaderId}'");
         }
 
+        r.TechnologyChanged = world.history.factEdits.Where(e => e != null && e.cause == EditCause.Carry && e.category == ClueCategory.Technology && e.eraId != "future")
+            .Select(e => e.nationId + "/" + e.eraId).Distinct().Count();
         r.Fingerprint = JsonUtility.ToJson(world.history) + JsonUtility.ToJson(world.timeline) + world.money.ToString(Inv) + r.Ending;
         return r;
+    }
+
+    /// <summary>
+    /// The House buyer's night (Domain HousePolicy through the game's own
+    /// purchase paths): care first, a point at a time for the sickest member
+    /// at the care threshold while the wallet keeps the reserve
+    /// (HomeEconomy.TreatFamilyMember), then at most one house upgrade, the
+    /// cheapest buyable one that keeps the reserve (HomeEconomy.BuyHouseUpgrade).
+    /// Returns the care and the purchase paid.
+    /// </summary>
+    private static (int care, int bought) BuyerNight(WorldState world, ContentLibrarySO lib, GameConfigSO config, RunResult r, int day)
+    {
+        int care = 0;
+        while (true)
+        {
+            int cost = HomeEconomy.GetCareCost(world, lib, config);
+            int member = HousePolicy.Care(world.family.members.Select(m => m != null ? m.condition : 0).ToList(), world.money, cost, _houseReserve, _careThreshold);
+            if (member < 0 || !HomeEconomy.TreatFamilyMember(world, lib, config, member))
+                break;
+            care += cost;
+        }
+
+        List<UpgradeSO> house = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
+        string pick = HousePolicy.Purchase(house.Select(u => new HouseOffer(u.id, OrderBook.Price(world, lib, u), world.HasUpgrade(u.id), UpgradeTree.Unlocked(u.Node, world.HasUpgrade))).ToList(),
+                                           world.money, _houseReserve);
+        int paid = pick != null ? HomeEconomy.BuyHouseUpgrade(world, lib, house.First(u => u.id == pick)) : -1;
+        if (paid < 0)
+            return (care, 0);
+        r.Bought.Add((day, pick));
+        return (care, paid);
     }
 
     private static void End(RunResult r, string ending, int day)
@@ -254,8 +346,12 @@ public static class BalanceSimulation
         return inst.isLegendary ? "premade" : "random";
     }
 
-    private static CaseRecord Record(DayPlanSO plan, int day, int slot, CaseInstance inst, bool accepted, bool correct) => new CaseRecord
+    private static CaseRecord Record(DayPlanSO plan, int day, int slot, CaseInstance inst, bool accepted, CaseVerdict verdict) => new CaseRecord
     {
+        Entry = inst.forcedAppearance != null ? (string.IsNullOrEmpty(inst.forcedAppearance.id) ? "(unnamed)" : inst.forcedAppearance.id) : "",
+        Closure = inst.directiveFault == DirectiveFault.ClosedDestination ? ClosureOf(plan, inst) : "",
+        Famous = inst.IsFamous,
+        StabilityDelta = verdict.stabilityDelta,
         Day = day,
         Slot = slot,
         Kind = inst.kind.ToString(),
@@ -265,28 +361,43 @@ public static class BalanceSimulation
         Faulty = !inst.ShouldAccept,
         Deviation = inst.HasDeviationFault,
         Accepted = accepted,
-        Correct = correct,
+        Correct = verdict.correct,
         Economy = inst.account != null && inst.account.TransponderClass == TransponderClass.Economy
     };
+
+    /// <summary>The type of the day's closure that bars the traveller (nation-era, nation, era; an era closure listing kinds is the range limit), days 7-15 X4.</summary>
+    private static string ClosureOf(DayPlanSO plan, CaseInstance inst)
+    {
+        TravelRuleSO rule = plan.ActiveTravelRules.FirstOrDefault(t => t != null && t.IsClosure && t.AppliesTo(inst.kind) && !t.Allows(inst.claimedNation, inst.claimedEra));
+        if (rule == null)
+            return "?";
+        return rule.type == TravelRuleType.EraForbidden && rule.kinds != null && rule.kinds.Length > 0 ? "range limit" : rule.type.ToString();
+    }
 
     // ------------------------------------------------------------------
     // The summary
     // ------------------------------------------------------------------
 
-    private static void Write(StringBuilder sb, RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, Dictionary<PlayStyle, List<RunResult>> results, List<string> errors)
+    private static void Write(StringBuilder sb, RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results,
+                              Dictionary<(PlayStyle, int), List<RunResult>> buyers, List<string> errors)
     {
-        sb.AppendLine($"BALANCE SIMULATION  {DateTime.Now:yyyy-MM-dd HH:mm}  ({Runs} runs x {Days} days per play style; Tools > TimeDesk > Balance > Run 50-Run Simulation)");
-        sb.AppendLine("Each run plays the whole queue each day through the game's own steps (DayCycle), with no scene: no shift clock, no shop, no care, no slot machine, no dialog choices.");
+        sb.AppendLine($"BALANCE SIMULATION  {DateTime.Now:yyyy-MM-dd HH:mm}  ({Runs} runs x {Days} days per play style and pace; Tools > TimeDesk > Balance > Run 50-Run Simulation)");
+        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no orders, no slot machine, no dialog choices, and no care or house upgrade except in the House buyer's runs (its own section below); once on the whole queue and once at the shift clock's pace ({_pace} travellers a shift, {BalanceSimSettingsSO.AssetPath} travellersPerShift: the rest go home when the clock closes, PlayPolicy.Reaches).");
         sb.AppendLine("Perfect: every call right. Imperfect: one wrong call a day (odd days the first faulty traveller let through, even days the first deviation denial left unproven). Careless: both every day.");
         sb.AppendLine();
         Knobs(sb, run, lib, config);
 
         List<EndingSO> epilogues = lib.Endings.Where(e => e != null && e.conditionType == EndingConditionType.AttrTotalAtLeast && e.attribute != null).ToList();
-        foreach (PlayStyle style in Styles)
-            Style(sb, style, results[style], lib, config, epilogues);
+        foreach (int pace in Paces)
+            foreach (PlayStyle style in Styles)
+                Style(sb, style, pace, results[(style, pace)], lib, config, epilogues);
 
-        Queue(sb, results[PlayStyle.Perfect]);
-        Authored(sb, results[PlayStyle.Perfect]);
+        Queue(sb, results[(PlayStyle.Perfect, 0)]);
+        Authored(sb, results[(PlayStyle.Perfect, 0)]);
+        Beats(sb, results);
+        Contamination(sb, results);
+        Bribe(sb, lib);
+        House(sb, lib, config, results, buyers);
 
         sb.AppendLine();
         sb.AppendLine("== Checks ==");
@@ -302,10 +413,17 @@ public static class BalanceSimulation
         sb.AppendLine("== The knobs and where to edit them ==");
         sb.AppendLine("In the Inspector (assets Generate World never writes):");
         sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)}: basePayPerCorrect {config.basePayPerCorrect}, legendaryBonusPay {config.legendaryBonusPay}, wrongDecisionPenalty {config.wrongDecisionPenalty}, freeWarningsPerDay {config.freeWarningsPerDay}, " +
-                      $"stabilityLossPerWrong {F(config.stabilityLossPerWrong)}, extraStabilityLossLegendary {F(config.extraStabilityLossLegendary)}, firedAtStability {F(config.firedAtStability)}, bankruptcyMoneyThreshold {config.bankruptcyMoneyThreshold}, " +
+                      $"stabilityChangeRate {config.stabilityChangeRate.ToString("0.####", Inv)}, stabilityLossPerWrong {F(config.stabilityLossPerWrong)}, extraStabilityLossLegendary {F(config.extraStabilityLossLegendary)}, stabilityGainPerCorrect {F(config.stabilityGainPerCorrect)}, firedAtStability {F(config.firedAtStability)}, stabilityWarningMargin {F(config.stabilityWarningMargin)}, stabilityCriticalMargin {F(config.stabilityCriticalMargin)}, bankruptcyMoneyThreshold {config.bankruptcyMoneyThreshold}, " +
                       $"baseDailyExpense {config.baseDailyExpense}, expensePerFamilyMember {config.expensePerFamilyMember}, expensePerConditionPoint {config.expensePerConditionPoint}, conditionWorsenChance {F(config.conditionWorsenChance)}");
         sb.AppendLine($"  {AssetDatabase.GetAssetPath(run)}: startingMoney {run.startingMoney}, startingStability {F(run.startingStability)}, startingFamilyMembers {run.startingFamilyMembers?.Count ?? 0}");
-        List<DayPlanSO> plans = Enumerable.Range(1, 6).Select(lib.GetDayPlan).Where(p => p != null).Distinct().ToList();
+        sb.AppendLine($"  {BalanceSimSettingsSO.AssetPath}: travellersPerShift {_pace} (the simulation's cap, days 7-15 X3), houseReserve {_houseReserve}, careThreshold {_careThreshold} (the House buyer)");
+        sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)} (Home): conditionCareCost {config.conditionCareCost}, maxFamilyCondition {config.maxFamilyCondition}, recoveryPerMood {F(config.recoveryPerMood)}, maxRecoveryChance {F(config.maxRecoveryChance)}, " +
+                      $"breakInFromDay {config.breakInFromDay}, breakInChance {F(config.breakInChance)}, breakInShare {F(config.breakInShare)}, breakInMaxLoss {config.breakInMaxLoss}");
+        EffectSO bribe = lib.GetEffectByAssetName(BribeEffect);
+        if (bribe != null)
+            sb.AppendLine($"  {AssetDatabase.GetAssetPath(bribe)}: AddMoney {F(bribe.ops.Where(o => o != null && o.type == EffectOpType.AddMoney).Sum(o => o.floatParam))} (the bribe's amount, days 7-15 X6)");
+        int lastDay = Math.Max(6, lib.LastDay);
+        List<DayPlanSO> plans = Enumerable.Range(1, lastDay).Select(lib.GetDayPlan).Where(p => p != null).Distinct().ToList();
         foreach (CaseBlueprintSO bp in plans.SelectMany(p => p.PossibleBlueprints.Concat(p.ForcedBlueprints)).Where(b => b != null).Distinct().OrderBy(b => b.Kind))
             sb.AppendLine($"  {AssetDatabase.GetAssetPath(bp)}: contradictionChance {F(bp.ContradictionChance)} (the {bp.Kind} liar chance)");
         foreach (EndingSO e in lib.Endings.Where(e => e != null).OrderBy(e => e.conditionType).ThenBy(e => e.priority))
@@ -318,14 +436,19 @@ public static class BalanceSimulation
                       $"proofs [{string.Join(", ", agency.proofs.Select(p => $"{p.form} {F(p.weight)}"))}]; transponders [{string.Join(", ", agency.transponders.Select(t => $"{t.id} {t.transponderClass} {F(t.weight)}"))}]");
         foreach (DayPlanSO p in plans)
             sb.AppendLine($"  days/dayKinds, day {p.DayNumber}: queue {p.VisitorsCount}, kinds [{string.Join(", ", p.Kinds.Select(k => $"{(k.blueprint != null ? k.blueprint.Kind.ToString() : "?")} {F(k.weight)}{(k.honest ? " honest" : "")}"))}], " +
-                          $"lies [{string.Join(", ", p.EnabledLies)}], costumeErrorChance {F(p.CostumeErrorChance)}, premadeChance {F(p.LegendaryBaseChance)}");
-        sb.AppendLine("  (days 7 and on replay day 6's plan)");
+                          $"lies [{string.Join(", ", p.EnabledLies)}], violationChance {F(p.ViolationChance)}, costumeErrorChance {F(p.CostumeErrorChance)}, premadeChance {F(p.LegendaryBaseChance)}");
+        foreach (TravelRuleSO recall in plans.SelectMany(p => p.ActiveTravelRules).Where(t => t != null && t.type == TravelRuleType.TransponderRecall).Distinct())
+            sb.AppendLine($"  rules, {recall.name}: transponder {recall.transponder}, kinds [{string.Join(", ", recall.kinds ?? new TravellerKind[0])}], first day {lib.FirstDayOf(recall)}");
+        sb.AppendLine($"  violationChance by day (its ramp): {string.Join(" ", plans.Select(p => $"d{p.DayNumber}:{F(p.ViolationChance)}"))}");
+        sb.AppendLine($"  (a day past {lastDay} replays day {lastDay}'s plan)");
     }
 
-    private static void Style(StringBuilder sb, PlayStyle style, List<RunResult> runs, ContentLibrarySO lib, GameConfigSO config, List<EndingSO> epilogues)
+    private static string PaceLabel(int pace) => pace > 0 ? $"{pace} a shift" : "whole queue";
+
+    private static void Style(StringBuilder sb, PlayStyle style, int pace, List<RunResult> runs, ContentLibrarySO lib, GameConfigSO config, List<EndingSO> epilogues)
     {
         sb.AppendLine();
-        sb.AppendLine($"== {style} play, {runs.Count} runs ==");
+        sb.AppendLine($"== {style} play, {PaceLabel(pace)}, {runs.Count} runs ==");
         sb.AppendLine($"endings: {string.Join(", ", runs.GroupBy(r => r.Ending).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}");
         List<RunResult> early = runs.Where(r => r.EndingDay < Days).ToList();
         sb.AppendLine($"runs ending before day {Days}'s night: {early.Count}{(early.Count > 0 ? $" ({string.Join(", ", early.GroupBy(r => r.Ending).Select(g => $"{g.Key} on days {string.Join(",", g.Select(r => r.EndingDay).OrderBy(d => d))}"))})" : "")}");
@@ -334,7 +457,11 @@ public static class BalanceSimulation
         sb.AppendLine($"wallet: lowest in a run mean {F(BalanceStats.Mean(runs.Select(r => (float)r.MinMoney)))}, min {runs.Min(r => r.MinMoney)}; runs ever below 0: {runs.Count(r => r.MinMoney < 0)}; at or below the bankruptcy line ({config.bankruptcyMoneyThreshold}): {runs.Count(r => r.MinMoney <= config.bankruptcyMoneyThreshold)}");
         sb.AppendLine("wallet after each shift, mean/min over the runs still going: " + Curve(runs, r => r.MoneyAfterShift, "d"));
         sb.AppendLine("wallet after each night's bills, mean/min: " + Curve(runs, r => r.MoneyAtNight, "n"));
-        sb.AppendLine($"stability at the end: mean {F(BalanceStats.Mean(runs.Select(r => r.World.timelineStability)))}, min {F(runs.Min(r => r.World.timelineStability))}");
+        sb.AppendLine($"stability at the end (firing line {StabilityRules.Format(config.firedAtStability)}): mean {StabilityRules.Format(BalanceStats.Mean(runs.Select(r => r.World.timelineStability)))}, min {StabilityRules.Format(runs.Min(r => r.World.timelineStability))}, max {StabilityRules.Format(runs.Max(r => r.World.timelineStability))}");
+        sb.AppendLine("stability after each shift, mean/min over the runs still going: " + string.Join(" ", Enumerable.Range(0, Days)
+            .Select(n => runs.Where(r => r.StabilityAfterShift.Count > n).Select(r => r.StabilityAfterShift[n]).ToList())
+            .TakeWhile(l => l.Count > 0)
+            .Select((l, n) => $"d{n + 1}:{BalanceStats.Mean(l).ToString("0.00", Inv)}/{l.Min().ToString("0.00", Inv)}")));
 
         List<RunResult> full = runs.Where(r => r.EndingDay >= Days).ToList();
         if (full.Count == 0 || epilogues.Count == 0)
@@ -348,7 +475,7 @@ public static class BalanceSimulation
         }
         if (style != PlayStyle.Perfect)
             return;
-        sb.AppendLine($"proposed epilogue thresholds (the {F(BalanceStats.EpilogueQuantile * 100f)}th percentile of perfect play, rounded): {string.Join(", ", proposed.Select(kv => $"{kv.Key.id} {F(kv.Value)}"))}");
+        sb.AppendLine($"{(pace == _pace && pace > 0 ? "proposed epilogue thresholds" : "for comparison, whole-queue thresholds")} (the {F(BalanceStats.EpilogueQuantile * 100f)}th percentile of perfect play{(pace == _pace && pace > 0 ? " at the shift clock's pace" : "")}, rounded): {string.Join(", ", proposed.Select(kv => $"{kv.Key.id} {F(kv.Value)}"))}");
         sb.AppendLine($"endings with those thresholds: {string.Join(", ", full.GroupBy(r => Hypothetical(r.World, lib, config, proposed)).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}");
     }
 
@@ -371,7 +498,7 @@ public static class BalanceSimulation
     private static void Queue(StringBuilder sb, List<RunResult> runs)
     {
         sb.AppendLine();
-        sb.AppendLine($"== The random draws by day (perfect play, {runs.Count} runs; a day counts while its run lasted; authored travellers apart, below) ==");
+        sb.AppendLine($"== The random draws by day (perfect play, whole queue, {runs.Count} runs; a day counts while its run lasted; authored travellers apart, below) ==");
         foreach (IGrouping<int, CaseRecord> day in runs.SelectMany(r => r.Records).Where(c => c.Source == "random").GroupBy(c => c.Day).OrderBy(g => g.Key))
         {
             List<CaseRecord> all = day.ToList();
@@ -386,7 +513,7 @@ public static class BalanceSimulation
     private static void Authored(StringBuilder sb, List<RunResult> runs)
     {
         sb.AppendLine();
-        sb.AppendLine($"== Authored travellers (not random draws; perfect play, {runs.Count} runs) ==");
+        sb.AppendLine($"== Authored travellers (not random draws; perfect play, whole queue, {runs.Count} runs) ==");
         List<CaseRecord> authored = runs.SelectMany(r => r.Records).Where(c => c.Source != "random").ToList();
         if (authored.Count == 0)
             sb.AppendLine("none stood in these runs");
@@ -399,6 +526,100 @@ public static class BalanceSimulation
         RunResult example = runs.FirstOrDefault();
         if (example != null)
             sb.AppendLine($"dialogs offered to drawn travellers (run seed {example.Seed}; the simulation makes no dialog choice, so a dialog's effect is not in these numbers): {string.Join("; ", example.DialogsOffered)}");
+    }
+
+    /// <summary>The dialog effect the bribe's choice names (dlg_rook, days 7-15 §4.3).</summary>
+    private const string BribeEffect = "Effect_Dialog_BribeTaken";
+
+    /// <summary>
+    /// Days 7-15 X2 and X8: each beat (a forced entry of a day plan) per style at
+    /// the shift clock's pace: how often it stood, which entry, why not (a met
+    /// premade or no entry's conditions), its fault, the right calls, the
+    /// famous beats' stability cost; then the story's branches: how many runs
+    /// fired each story rule.
+    /// </summary>
+    private static void Beats(StringBuilder sb, Dictionary<(PlayStyle, int), List<RunResult>> results)
+    {
+        sb.AppendLine();
+        sb.AppendLine($"== The beats of days 7-15 (forced entries; per style at {PaceLabel(_pace)}) ==");
+        int pace = Paces.Last();
+        foreach (PlayStyle style in Styles)
+        {
+            List<RunResult> runs = results[(style, pace)];
+            sb.AppendLine($"{style}:");
+            foreach (IGrouping<(int, int), CaseRecord> slot in runs.SelectMany(r => r.Records).Where(c => c.Day >= 7 && c.Source == "forced").GroupBy(c => (c.Day, c.Slot)).OrderBy(g => g.Key))
+            {
+                List<CaseRecord> all = slot.ToList();
+                string entries = string.Join(", ", all.GroupBy(c => c.Entry.Length > 0 ? $"{c.Entry} ({c.Premade})" : "none standing (met, or no entry's conditions)").Select(g => $"{g.Key} {g.Count()}"));
+                List<CaseRecord> famous = all.Where(c => c.Famous && c.Entry.Length > 0).ToList();
+                string cost = famous.Count > 0 ? $"; the famous beat's stability change per run {F(famous.Sum(c => c.StabilityDelta) / runs.Count)} (wrong {famous.Count(c => !c.Correct)})" : "";
+                sb.AppendLine($"  day {slot.Key.Item1} slot {slot.Key.Item2}: reached in {all.Count} of {runs.Count} runs: {entries}; {Judged(all.Where(c => c.Entry.Length > 0).ToList())}{cost}");
+            }
+            var fired = runs.SelectMany(r => r.World.flags.Where(f => f.StartsWith("trig:history_") && f.EndsWith(":fired")).Distinct())
+                .GroupBy(f => f.Substring("trig:history_".Length, f.Length - "trig:history_".Length - ":fired".Length)).OrderBy(g => g.Key);
+            sb.AppendLine($"  the story's branches (runs that fired each rule): {string.Join(", ", fired.Select(g => $"{g.Key} {g.Count()}"))}");
+            sb.AppendLine($"  verdicts remembered at the end: {string.Join(", ", runs.SelectMany(r => r.World.flags.Where(f => f.StartsWith("premade:") && !f.EndsWith(":met"))).GroupBy(f => f).OrderBy(g => g.Key).Select(g => $"{g.Key} {g.Count()}"))}");
+        }
+    }
+
+    /// <summary>Days 7-15 X4 and X5: the closures by type and the 2150 contamination (strandings, carries, past places whose Technology changed) by day.</summary>
+    private static void Contamination(StringBuilder sb, Dictionary<(PlayStyle, int), List<RunResult>> results)
+    {
+        sb.AppendLine();
+        sb.AppendLine("== Closures by type and the 2150 contamination ==");
+        foreach (int pace in Paces)
+            foreach (PlayStyle style in Styles)
+            {
+                List<RunResult> runs = results[(style, pace)];
+                string closures = string.Join(", ", runs.SelectMany(r => r.Records).Where(c => c.Closure.Length > 0).GroupBy(c => c.Closure).OrderBy(g => g.Key).Select(g => $"{g.Key} {F((float)g.Count() / runs.Count)}"));
+                string Daily(Func<RunResult, List<int>> of) => string.Join(" ", Enumerable.Range(0, Days)
+                    .Select(n => runs.Where(r => of(r).Count > n).Select(r => of(r)[n]).ToList()).TakeWhile(l => l.Count > 0)
+                    .Select((l, n) => $"d{n + 1}:{l.Average().ToString("0.##", Inv)}"));
+                List<float> changed = runs.Select(r => (float)r.TechnologyChanged).ToList();
+                sb.AppendLine($"{style}, {PaceLabel(pace)}: closure faults per run by type [{closures}]; recalled units per run {F((float)runs.SelectMany(r => r.Records).Count(c => c.Reason == Faults.Recalled) / runs.Count)}");
+                sb.AppendLine($"  strandings per day, mean: {Daily(r => r.StrandedByDay)}");
+                sb.AppendLine($"  carries per day, mean: {Daily(r => r.CarriesByDay)}");
+                sb.AppendLine($"  past places whose Technology a carry rewrote by the run's end: mean {F(BalanceStats.Mean(changed))}, median {F(BalanceStats.Quantile(changed, 0.5f))}, max {F(changed.Max())} (watch line: more than three in the median run lowers agency.strandChance)");
+            }
+    }
+
+    /// <summary>
+    /// The House (the Home upgrades spec §9): per pace and style, the plain
+    /// runs (no care, no purchase) against the House buyer's: the endings,
+    /// the wallet, the household, upkeep, break-ins, care, what the house
+    /// upgrades cost and which were bought when; and the tree's prices from
+    /// the content spreadsheet.
+    /// </summary>
+    private static void House(StringBuilder sb, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, Dictionary<(PlayStyle, int), List<RunResult>> buyers)
+    {
+        List<UpgradeSO> house = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
+        sb.AppendLine();
+        sb.AppendLine($"== The House: the plain runs against the House buyer (reserve {_houseReserve} cr, care at condition {_careThreshold}) ==");
+        sb.AppendLine($"the tree (content spreadsheet, homeUpgrades): {house.Count} upgrades, {house.Sum(u => u.cost)} cr in all: {string.Join(", ", house.OrderBy(u => u.cost).Select(u => $"{u.id} {u.cost}"))}");
+        foreach (int pace in Paces)
+            foreach (PlayStyle style in Styles)
+            {
+                sb.AppendLine($"{style}, {PaceLabel(pace)}:");
+                foreach ((string label, List<RunResult> runs) in new[] { ("plain", results[(style, pace)]), ("buyer", buyers[(style, pace)]) })
+                {
+                    sb.AppendLine($"  {label}: endings {string.Join(", ", runs.GroupBy(r => r.Ending).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}; " +
+                                  $"wallet lowest mean {F(BalanceStats.Mean(runs.Select(r => (float)r.MinMoney)))} min {runs.Min(r => r.MinMoney)}, at the end mean {F(BalanceStats.Mean(runs.Select(r => (float)r.World.money)))}; " +
+                                  $"per run cr: household {M(runs, r => r.Household)} (upkeep {M(runs, r => r.Upkeep)}, break-ins {M(runs, r => r.BreakIns)} taking {M(runs, r => r.BreakInLoss)}, care {M(runs, r => r.Care)}), house upgrades {M(runs, r => r.HousePurchases)} ({M(runs, r => r.Bought.Count)} bought)");
+                    if (label == "buyer")
+                        sb.AppendLine("    bought (runs, mean day): " + string.Join(", ", runs.SelectMany(r => r.Bought).GroupBy(b => b.id).OrderBy(g => g.Average(b => b.day))
+                                          .Select(g => $"{g.Key} {g.Count()} d{g.Average(b => b.day).ToString("0.#", Inv)}")));
+                }
+            }
+    }
+
+    /// <summary>Days 7-15 X6: the bribe is a dialog choice, which the simulation never makes; its amount is reported apart.</summary>
+    private static void Bribe(StringBuilder sb, ContentLibrarySO lib)
+    {
+        EffectSO bribe = lib.GetEffectByAssetName(BribeEffect);
+        float amount = bribe != null ? bribe.ops.Where(o => o != null && o.type == EffectOpType.AddMoney).Sum(o => o.floatParam) : 0f;
+        sb.AppendLine();
+        sb.AppendLine($"== The bribe (day 11, dlg_rook) ==");
+        sb.AppendLine($"not in these numbers: the simulation makes no dialog choice. Taken, it adds {F(amount)} cr once at day 11's close ({BribeEffect}); its consequences are a story rule's 3 % of stability (rook_complaint if Rook is denied, audit_rook on day 14's night if he is approved).");
     }
 
     /// <summary>The days the records stood on, as a range when they run on ("6-15") or a list.</summary>

@@ -15,4 +15,12 @@ public static class OneShot
         slot = null;
         callback?.Invoke(value);
     }
+
+    /// <summary>Takes the callback out of <paramref name="slot"/> and invokes it (an empty slot does nothing): a panel's continue.</summary>
+    public static void Fire(ref Action slot)
+    {
+        Action callback = slot;
+        slot = null;
+        callback?.Invoke();
+    }
 }

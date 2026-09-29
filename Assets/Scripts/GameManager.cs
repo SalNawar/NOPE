@@ -66,6 +66,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Currently active case slot (1-based).</summary>
     private int _activeCaseIndex1Based;
 
+    /// <summary>The case of the active slot (the traveller at the desk or waiting behind READY), or null between days; the debug panel shows its voice.</summary>
+    public CaseInstance ActiveCase => _dayCases != null && _activeCaseIndex1Based >= 1 && _activeCaseIndex1Based <= _dayCases.Count ? _dayCases[_activeCaseIndex1Based - 1] : null;
+
     /// <summary>Verdict record for the current shift (results screen reads this).</summary>
     private ShiftLedger _ledger;
 
@@ -83,6 +86,12 @@ public sealed class GameManager : MonoBehaviour
 
     /// <summary>Read-only access to the current shift's ledger.</summary>
     public ShiftLedger Ledger => _ledger;
+
+    /// <summary>Today's portals (TodaysWorld.Portals, the portals spec v3 RT3), fixed at the day's start; none before it: the board, the rings and the Portals app read it.</summary>
+    public PortalDay Portals => _today != null ? _today.Portals : PortalDay.None;
+
+    /// <summary>Raised when an accepted traveller leaves, with the portal they leave through (PortalDay.DepartureFor; the hall's rings pulse it, VX4).</summary>
+    public event System.Action<int> Departed;
 
     /// <summary>Raised when the player acknowledges a citation slip (Mail's citation notice arrives then; redesign phase 25).</summary>
     public event System.Action<CaseVerdict> CitationAcknowledged;
@@ -165,7 +174,7 @@ public sealed class GameManager : MonoBehaviour
         // Today's world (places and facts, history applied): one snapshot shared
         // by the case factory and the books, so papers and reference books can
         // never disagree during the day.
-        _today = contentLibrary.BuildToday(dayPlan, _worldState.history);
+        _today = contentLibrary.BuildToday(dayPlan, _worldState);
         _caseFactory = new CaseFactory(contentLibrary, _today);
         _characterArt = new CharacterArt(contentLibrary);
 
@@ -212,13 +221,14 @@ public sealed class GameManager : MonoBehaviour
 
         // The booth's day (its day-1 notes; the scanner upgrades fixed at day start, like the translation) and phase: the briefing comes first.
         if (booth != null)
-            booth.BeginDay(_worldState.day, TimelineService.BuildScannerDay(_worldState));
+            booth.BeginDay(_worldState.day, TimelineService.BuildScannerDay(_worldState, contentLibrary));
 
-        Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}, cases={_dayCases.Count}, places={_today.Places.Count}, leader='{_worldState.history.leaderId}'.");
+        Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.00}, cases={_dayCases.Count}, places={_today.Places.Count}, leader='{_worldState.history.leaderId}'.");
 
         // The morning paper is printed: its lines go to the News site's back issues (the night rebuilds them, so they are kept now).
         if (desktopConfig != null)
-            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues);
+            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
+                               _worldState.tomorrow.deskLines);
         else
             Debug.LogWarning("[GameManager] No DesktopConfigSO wired: today's paper is not kept for the News site. Run Tools > TimeDesk > Build Office UI.");
 
@@ -317,7 +327,7 @@ public sealed class GameManager : MonoBehaviour
         }
 
         int totalCases = _ledger != null ? _ledger.verdicts.Count : 0;
-        Debug.Log($"[GameManager] Day {_worldState.day} shift complete: {correctCount}/{totalCases} correct, totalPay={totalPay}, totalPenalty={totalPenalty}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}.");
+        Debug.Log($"[GameManager] Day {_worldState.day} shift complete: {correctCount}/{totalCases} correct, totalPay={totalPay}, totalPenalty={totalPenalty}, money={_worldState.money}, stability={_worldState.timelineStability:0.00}.");
 
         // The strandings among the accepted travellers (their carries and their
         // news; redesign phase 13b; they move no money since phase 23), the
@@ -453,7 +463,7 @@ public sealed class GameManager : MonoBehaviour
         if (booth != null)
             booth.SetPhase(BoothPhase.NoTraveller);
 
-        orchestrator.StartDay(_worldState, plan, daySeed);
+        orchestrator.StartDay(_worldState, plan, daySeed, _dayCases);
 
         if (shiftClock != null)
             shiftClock.StartShift();
@@ -505,7 +515,7 @@ public sealed class GameManager : MonoBehaviour
     /// how they look) feeds the closing-time rule, the booth figure and the
     /// booth's input phase.
     /// </summary>
-    private void SetTravellerAtDesk(bool at, TravellerLook look = null)
+    private void SetTravellerAtDesk(bool at, TravellerLook look = null, bool keepFigure = false)
     {
         _travellerAtDesk = at;
 
@@ -513,7 +523,7 @@ public sealed class GameManager : MonoBehaviour
         {
             if (at)
                 travellerView.Show(look, _characterArt);
-            else
+            else if (!keepFigure)
                 travellerView.Clear();
         }
 
@@ -524,16 +534,19 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>
     /// Presents a case via the investigation UI: keeps only this traveller's
     /// art, shows them in the booth, and marks a once-per-run premade as met
-    /// (FlagKeys.PremadeMet: they never come back this run). Without the
+    /// (DayCycle.Present: they never come back this run). Without the
     /// investigation UI no case can be shown: an error, and the slot resolves.
     /// </summary>
     private void ShowActiveCase(CaseInstance inst)
     {
+        // Calling the next traveller ends the last one's linger at once (R4).
+        if (travellerView != null)
+            travellerView.EndLinger();
+        EndReaction();
         _characterArt?.Retain(inst.look != null ? inst.look.Keys : null);
         SetTravellerAtDesk(true, inst.look);
 
-        if (inst.isLegendary && inst.legendarySource != null && inst.legendarySource.oncePerRun)
-            _worldState.SetFlag(FlagKeys.PremadeMet(inst.legendarySource.id));
+        DayCycle.Present(_worldState, inst);
 
         if (investigationUI == null)
         {
@@ -563,12 +576,15 @@ public sealed class GameManager : MonoBehaviour
     private void HandleDecision(bool accepted)
     {
         Debug.Log($"[GameManager] >>> Entering HandleDecision (slot {_activeCaseIndex1Based}, accepted={accepted}).");
-        SetTravellerAtDesk(false);
+        // The booth has no traveller from here (the wheel cannot open); the figure stays for their reaction (R4).
+        SetTravellerAtDesk(false, keepFigure: true);
 
         int idx = _activeCaseIndex1Based - 1;
 
         if (_dayCases == null || idx < 0 || idx >= _dayCases.Count)
         {
+            if (travellerView != null)
+                travellerView.Clear();
             Debug.LogError("Player decided but the active case index is invalid.");
             orchestrator.MarkCaseResolved();
             return;
@@ -582,6 +598,7 @@ public sealed class GameManager : MonoBehaviour
             bool simpleCorrect = accepted == inst.ShouldAccept;
             if (officeUI != null)
                 officeUI.SetResultText(UiText.Get(simpleCorrect ? "verdict.simpleCorrect" : "verdict.simpleWrong"));
+            React(inst, accepted);
             Debug.Log($"[GameManager] <<< Exiting HandleDecision (no GameConfig, simpleCorrect={simpleCorrect}).");
             orchestrator.MarkCaseResolved();
             return;
@@ -602,11 +619,16 @@ public sealed class GameManager : MonoBehaviour
         // panic there (tomorrow's news). DayCycle holds the step, so the balance
         // simulation plays the same one.
         CaseVerdict verdict = DayCycle.Decide(inst, accepted, _activeCaseIndex1Based, evidenceCount, _worldState, _today, _ledger, contentLibrary, _gameConfig);
+        if (accepted)
+            AnnounceDeparture(inst);
 
         if (officeUI != null)
             officeUI.UpdateHud(_worldState);
 
-        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: accepted={accepted}, shouldAccept={inst.ShouldAccept}, fault='{inst.FaultReason}', home='{inst.HomeLabel}', directive={inst.directiveFault}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.#}->{_worldState.timelineStability:0.#}, firedNow={verdict.firedNow}.");
+        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: accepted={accepted}, shouldAccept={inst.ShouldAccept}, fault='{inst.FaultReason}', home='{inst.HomeLabel}', directive={inst.directiveFault}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.00}->{_worldState.timelineStability:0.00}, firedNow={verdict.firedNow}.");
+
+        // The reaction (the personalities spec's R1-R5): presentation only, after the scoring, never changing it.
+        React(inst, accepted);
 
         EndingSO ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig, EndingMoment.Immediate);
 
@@ -623,6 +645,38 @@ public sealed class GameManager : MonoBehaviour
         }
 
         ShowVerdictThen(verdict, () => orchestrator.MarkCaseResolved());
+    }
+
+    /// <summary>An accepted traveller leaves through today's portal for them (the displaced by the Return Gate once repaired, else 01; a citizen by the open route to their destination, else 01): the portal is announced for the hall's pulse; none when the hall has no portals.</summary>
+    private void AnnounceDeparture(CaseInstance inst)
+    {
+        if (_today == null || inst.claimedNation == null || inst.claimedEra == null)
+            return;
+        int portal = _today.Portals.DepartureFor(new PlaceRef(inst.claimedNation.id, inst.claimedEra.id), inst.kind == TravellerKind.Displaced);
+        if (portal <= 0)
+            return;
+        Debug.Log($"[GameManager] Case {_activeCaseIndex1Based} leaves through portal {PortalText.Number(portal)}.");
+        Departed?.Invoke(portal);
+    }
+
+    /// <summary>
+    /// The decided traveller's reaction (the personalities spec's R1-R4): the
+    /// investigation UI says it and returns the linger; the figure leaves
+    /// after it (at once for 0), and their bubble hides as they go.
+    /// </summary>
+    private void React(CaseInstance inst, bool accepted)
+    {
+        float linger = investigationUI != null ? investigationUI.React(inst, accepted) : 0f;
+        if (travellerView != null)
+            travellerView.Leave(linger, EndReaction);
+        else
+            EndReaction();
+    }
+
+    private void EndReaction()
+    {
+        if (investigationUI != null)
+            investigationUI.EndReaction();
     }
 
     /// <summary>

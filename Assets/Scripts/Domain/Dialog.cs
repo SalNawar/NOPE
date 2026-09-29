@@ -265,6 +265,16 @@ public sealed class DialogRunner
     /// <summary>Every line so far, in order (append-only; a live view).</summary>
     public IReadOnlyList<DialogLine> Transcript => _transcript;
 
+    /// <summary>Appends <paramref name="lines"/> to the transcript (the reaction to the stamp, said after the interview; null lines skipped).</summary>
+    public void Append(IEnumerable<DialogLine> lines)
+    {
+        if (lines == null)
+            return;
+        foreach (DialogLine line in lines)
+            if (line != null)
+                _transcript.Add(line);
+    }
+
     /// <summary>The current node's choices minus the used one-shot ones, as a fresh list.</summary>
     public IReadOnlyList<DialogChoice> Choices
     {

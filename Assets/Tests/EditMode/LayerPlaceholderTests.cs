@@ -113,4 +113,15 @@ public class LayerPlaceholderTests
     {
         CollectionAssert.AreEqual(Render(PlaceholderRegion.Hat, PlaceholderMark.Angry), Render(PlaceholderRegion.Hat, PlaceholderMark.Angry));
     }
+
+    [Test]
+    public void TheMarksAfterNone_AreTheExpressions_InTheirOrder()
+    {
+        // CharacterArt draws a premade's expression as PlaceholderMark.Neutral + its index in LookKeys.Expressions:
+        // an expression added or moved there without its mark here would draw another face, or none.
+        string[] marks = Enum.GetNames(typeof(PlaceholderMark)).Where(n => n != nameof(PlaceholderMark.None)).ToArray();
+        CollectionAssert.AreEqual(LookKeys.Expressions.Select(e => e.ToLowerInvariant()).ToArray(), marks.Select(m => m.ToLowerInvariant()).ToArray());
+        for (int i = 0; i < LookKeys.Expressions.Count; i++)
+            Assert.AreEqual(LookKeys.Expressions[i], (PlaceholderMark.Neutral + i).ToString().ToLowerInvariant());
+    }
 }

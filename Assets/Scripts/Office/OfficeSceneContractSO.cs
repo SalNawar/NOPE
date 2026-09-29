@@ -85,6 +85,7 @@ public sealed class OfficeSceneContractSO : ScriptableObject
         new AnchorSpec(OfficeAnchorId.Calculator, new[] { "ImportedOfficeDress/Desk/Desk calculator", "Clean_Calculator__DeskClean_Case" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.PenPot, new[] { "ImportedOfficeDress/Desk/Pen pot", "Clean_PenPot__DeskClean_ABS" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.Stapler, new[] { "ImportedOfficeDress/Desk/Forms stapler", "Clean_Stapler__DeskClean_Case" }, false, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.DepartureBoard, new[] { "16 Departure board blank display" }, false, Vector3.zero),
     };
 
     /// <summary>

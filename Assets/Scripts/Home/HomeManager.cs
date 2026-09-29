@@ -2,11 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Drives the Home phase (Phase 4): on scene load, bills today's living
-/// expenses and rolls family condition drift, then walks the player through
-/// Expenses -> Shop -> Slot Machine -> Sleep. Sleep hands off to
-/// RunManager.Sleep() (day-boundary endings, else nightly resolve, day++,
-/// back to Office).
+/// Drives the Home phase (Phase 4): on scene load, the night's break-in, the
+/// bill and the family's night (DayCycle.OpenHome), then walks the player
+/// through Expenses -> House -> Slot Machine -> Sleep. The House shows only
+/// the Home upgrades (UpgradeSO.venue Home: the house upgrades' tree; the
+/// office's moved to the PC's Orders app, Saleh 2026-09-29) and is skipped
+/// while none is stocked; with the radio owned the sleep panel plays the
+/// night's radio line (ContentLibrarySO.Home). Sleep hands off to RunManager.Sleep() (day-boundary endings,
+/// else nightly resolve, day++ and the Orders app's deliveries, back to Office).
 /// All HomeUIController panels are optional; unwired panels are skipped.
 /// </summary>
 public sealed class HomeManager : MonoBehaviour
@@ -23,8 +26,8 @@ public sealed class HomeManager : MonoBehaviour
     /// <summary>Gameplay tuning (expenses, slot cost).</summary>
     private GameConfigSO _config;
 
-    /// <summary>Today's expense breakdown, kept for re-showing the panel after a Treat.</summary>
-    private HomeEconomy.ExpenseReport _expenseReport;
+    /// <summary>Tonight's evening (the bill, the break-in, the family's night, the mood), kept for re-showing the panel after a Treat.</summary>
+    private HomeEconomy.Evening _evening;
 
     /// <summary>Tonight's slot spins, drawn in turn from the run's own stream for the day (Seeds.ForSlot): a run replays, and Continue (Home again from the save made before it) cannot reroll a spin.</summary>
     private IRandomSource _slotRandom;
@@ -32,7 +35,7 @@ public sealed class HomeManager : MonoBehaviour
     /// <summary>Tonight's household costs so far (the expenses and any care), for the clerk's statement.</summary>
     private int _household;
 
-    /// <summary>Tonight's purchases so far (upgrades and slot spins), for the clerk's statement.</summary>
+    /// <summary>Tonight's purchases at Home so far (Home upgrades and slot spins), for the clerk's statement (the shift's orders are added by ClerkAccountSource.RecordHome).</summary>
     private int _purchases;
 
     /// <summary>Acquires the run, bills expenses, and starts the panel flow.</summary>
@@ -52,13 +55,13 @@ public sealed class HomeManager : MonoBehaviour
         _lib = run.Library;
         _config = run.Config != null ? run.Config.gameConfig : null;
 
-        Debug.Log($"[HomeManager] Day {_world.day} home phase starting: money={_world.money}, stability={_world.timelineStability:0.#}, familyMembers={_world.family.members.Count}.");
+        Debug.Log($"[HomeManager] Day {_world.day} home phase starting: money={_world.money}, stability={_world.timelineStability:0.00}, familyMembers={_world.family.members.Count}.");
 
-        // Bill today's living costs and let untreated conditions drift,
-        // deterministically seeded by the day so it's stable on reload.
-        _expenseReport = DayCycle.OpenHome(_world, _config, run.GetDaySeed());
+        // The break-in, the bill and the family's night, deterministically
+        // seeded by the day so it's stable on reload.
+        _evening = DayCycle.OpenHome(_world, _lib, _config, run.GetDaySeed());
         _slotRandom = new SeededRandom(Seeds.ForSlot(run.GetDaySeed()));
-        _household = _expenseReport.total;
+        _household = _evening.bill.total;
         RecordStatement();
 
         RefreshHud();
@@ -74,7 +77,7 @@ public sealed class HomeManager : MonoBehaviour
         Debug.Log("[HomeManager] >>> Entering ShowExpenses.");
 
         if (homeUI != null && homeUI.HasExpensesPanel)
-            homeUI.ShowExpenses(_world, _expenseReport, _config, HandleTreatFamilyMember, ShowShop);
+            homeUI.ShowExpenses(_world, _evening, _config, HomeEconomy.GetCareCost(_world, _lib, _config), HandleTreatFamilyMember, ShowShop, ShopNext);
         else
         {
             Debug.Log("[HomeManager] ShowExpenses: no expenses panel, skipping to Shop.");
@@ -82,20 +85,35 @@ public sealed class HomeManager : MonoBehaviour
         }
     }
 
+    /// <summary>The upgrades Home sells (venue Home: household improvements), in the library's order.</summary>
+    private List<UpgradeSO> HomeUpgrades()
+    {
+        var upgrades = new List<UpgradeSO>();
+        if (_lib != null)
+            foreach (UpgradeSO u in _lib.Upgrades)
+                if (u != null && u.venue == UpgradeVenue.Home)
+                    upgrades.Add(u);
+        return upgrades;
+    }
+
+    /// <summary>True when the shop step shows (its panel is wired and Home stocks an upgrade).</summary>
+    private bool ShopNext => homeUI != null && homeUI.HasShopPanel && HomeUpgrades().Count > 0;
+
     /// <summary>Treats a family member, then refreshes the expenses panel.</summary>
     private void HandleTreatFamilyMember(int memberIndex)
     {
         Debug.Log($"[HomeManager] >>> Entering HandleTreatFamilyMember (memberIndex={memberIndex}).");
 
-        if (HomeEconomy.TreatFamilyMember(_world, _config, memberIndex))
+        int careCost = HomeEconomy.GetCareCost(_world, _lib, _config);
+        if (HomeEconomy.TreatFamilyMember(_world, _lib, _config, memberIndex))
         {
-            _household += HomeEconomy.GetCareCost(_config);
+            _household += careCost;
             RecordStatement();
             RefreshHud();
 
             // Refresh the panel in place (report numbers don't change; rows do).
             if (homeUI != null && homeUI.HasExpensesPanel)
-                homeUI.ShowExpenses(_world, _expenseReport, _config, HandleTreatFamilyMember, ShowShop);
+                homeUI.ShowExpenses(_world, _evening, _config, careCost, HandleTreatFamilyMember, ShowShop, ShopNext);
 
             Debug.Log($"[HomeManager] <<< Exiting HandleTreatFamilyMember (treated, money={_world.money}).");
         }
@@ -105,60 +123,43 @@ public sealed class HomeManager : MonoBehaviour
         }
     }
 
-    /// <summary>Step 2: upgrade shop.</summary>
+    /// <summary>Step 2: the House (the Home upgrades' tree), skipped while Home stocks none.</summary>
     private void ShowShop()
     {
         Debug.Log("[HomeManager] >>> Entering ShowShop.");
 
         RefreshHud();
 
-        if (homeUI != null && homeUI.HasShopPanel)
-            homeUI.ShowShop(_world, _lib, HandleBuyUpgrade, ShowSlot);
+        if (ShopNext)
+            homeUI.ShowShop(_world, _lib, HomeUpgrades(), HandleBuyUpgrade, ShowSlot);
         else
         {
-            Debug.Log("[HomeManager] ShowShop: no shop panel, skipping to Slot.");
+            Debug.Log("[HomeManager] ShowShop: no shop panel or no Home upgrade stocked (the office's are in the PC's Orders app), skipping to Slot.");
             ShowSlot();
         }
     }
 
-    /// <summary>Purchases an upgrade (if affordable at its discounted price, HomeEconomy.UpgradeCost, and not already owned), then refreshes the shop.</summary>
+    /// <summary>Buys a Home upgrade when it is buyable (HomeEconomy.BuyHouseUpgrade: its prerequisites owned, the wallet covering its price): owned at once, its effects from the next night; then refreshes the House.</summary>
     private void HandleBuyUpgrade(UpgradeSO upgrade)
     {
         Debug.Log($"[HomeManager] >>> Entering HandleBuyUpgrade (upgrade='{upgrade?.displayName}').");
 
-        if (upgrade == null || _world.HasUpgrade(upgrade.id))
+        int cost = HomeEconomy.BuyHouseUpgrade(_world, _lib, upgrade);
+        if (cost < 0)
         {
-            Debug.Log("[HomeManager] <<< Exiting HandleBuyUpgrade — null upgrade or already owned.");
+            Debug.Log("[HomeManager] <<< Exiting HandleBuyUpgrade — not a buyable Home upgrade (owned, locked or too dear).");
             return;
         }
 
-        int cost = HomeEconomy.UpgradeCost(_world, _lib, upgrade, out float discountPercent);
-
-        if (_world.money < cost)
-        {
-            Debug.Log($"[HomeManager] <<< Exiting HandleBuyUpgrade — not enough money ({_world.money} < {cost}).");
-            return;
-        }
-
-        _world.money -= cost;
-        _world.UnlockUpgrade(upgrade.id);
         _purchases += cost;
-
-        if (upgrade.unlockEffect != null)
-        {
-            TimelineService.ActivateEffect(
-                _world, upgrade.unlockEffect, $"Upgrade: {upgrade.displayName}",
-                _world.day, upgrade.unlockEffect.defaultDurationDays, applyInstantOps: true);
-        }
-
         RefreshHud();
         RecordStatement();
 
         // Re-show to refresh rows (costs/owned state) without advancing the flow.
         if (homeUI != null && homeUI.HasShopPanel)
-            homeUI.ShowShop(_world, _lib, HandleBuyUpgrade, ShowSlot);
+            homeUI.ShowShop(_world, _lib, HomeUpgrades(), HandleBuyUpgrade, ShowSlot);
 
-        Debug.Log($"[HomeManager] <<< Exiting HandleBuyUpgrade (bought '{upgrade.displayName}' for {cost} [discount={discountPercent:0.#}%], money={_world.money}).");
+        Debug.Log($"[HomeManager] <<< Exiting HandleBuyUpgrade (bought '{upgrade.displayName}' for {cost}, money={_world.money}).");
     }
 
     /// <summary>Step 3: slot machine.</summary>
@@ -255,12 +256,19 @@ public sealed class HomeManager : MonoBehaviour
         RefreshHud();
 
         if (homeUI != null && homeUI.HasSleepPanel)
-            homeUI.ShowSleep(_world, HandleSleep);
+            homeUI.ShowSleep(_world, RadioLine(), HandleSleep);
         else
         {
             Debug.Log("[HomeManager] ShowSleep: no sleep panel, sleeping immediately.");
             HandleSleep();
         }
+    }
+
+    /// <summary>Tonight's radio line when the house owns the radio (ContentLibrarySO.Home: HomeContent.RadioLine by the day), else "".</summary>
+    private string RadioLine()
+    {
+        HomeContent home = _lib != null ? _lib.Home : null;
+        return home != null && _world.HasUpgrade(home.radioUpgrade) ? home.RadioLine(_world.day) : string.Empty;
     }
 
     /// <summary>

@@ -62,6 +62,9 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Interview questions, in ask-menu order (generated from world_source.json "questions").</summary>
     [SerializeField] private QuestionSO[] questions;
 
+    /// <summary>The cast: the personalities a generated traveller is drawn from, one weight each for every kind (written by Generate World from world_source.json "personalities"; the personalities spec's PS1-PS2).</summary>
+    [SerializeField] private List<Personality> personalities = new();
+
     /// <summary>Narrative dialogs (generated from world_source.json "dialogs").</summary>
     [SerializeField] private DialogSO[] dialogs;
 
@@ -103,6 +106,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     [Header("Agency (redesign phase 2)")]
     /// <summary>The agency's printed name, programme line and day 1's date (written by Generate World from world_source.json "agency").</summary>
     [SerializeField] private AgencyContent agency = new();
+
+    [Header("Home (the Home upgrades spec)")]
+    /// <summary>Home's radio: which house upgrade plays it and its lines (written by Generate World from world_source.json "home"; the house upgrades are in the upgrades list).</summary>
+    [SerializeField] private HomeContent home = new();
 
     [Header("News (redesign phase 13)")]
     /// <summary>The morning paper's debt-theme lines (written by Generate World from world_source.json "news").</summary>
@@ -165,16 +172,31 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// then the present's row (the leader's Future place or the neutral
     /// present; Present.AddRow, so every book lists it from day 1), so case
     /// generation and the reference books share one list and one table; and
-    /// the present itself.
+    /// the present itself; and the day's portals (PortalSchedule.Resolve:
+    /// the agency's portals, in service by their first day or a repair
+    /// <paramref name="world"/> owns at the day's start, running the plan's
+    /// Directorate routes, CLOSED where a closure forbids them), which the
+    /// board, the rings, the Portals app and the departures read all day.
     /// </summary>
-    public TodaysWorld BuildToday(DayPlanSO plan, HistoryState history)
+    public TodaysWorld BuildToday(DayPlanSO plan, WorldState world)
     {
+        HistoryState history = world != null ? world.history : null;
         List<NationEraProfileSO> places = TodaysProfiles(plan);
         var table = new FactTable();
         FillFacts(table, places, history);
         PresentPlace now = BuildPresent(history);
         global::Present.AddRow(table, now);
-        return new TodaysWorld(places, table, now);
+        return new TodaysWorld(places, table, now, BuildPortalDay(plan, world));
+    }
+
+    /// <summary>The day's portals (the portals spec v3 RT2, RT3): the agency's portals on <paramref name="world"/>'s day and owned repairs, over <paramref name="plan"/>'s Directorate routes and closures; none without a plan or portals.</summary>
+    private PortalDay BuildPortalDay(DayPlanSO plan, WorldState world)
+    {
+        List<PortalSpec> portals = Agency.portals;
+        if (plan == null || world == null || portals == null || portals.Count == 0)
+            return PortalDay.None;
+        return PortalSchedule.Resolve(portals, world.day, world.HasUpgrade, plan.PortalRequests(),
+                                      place => plan.ClosureOf(GetNationById(place.NationId), GetEraById(place.EraId)));
     }
 
     /// <summary>
@@ -280,8 +302,8 @@ public sealed class ContentLibrarySO : ScriptableObject
     public int FirstDayOf(TravelRuleSO rule) =>
         Directives.FirstDay(DayPlans.Where(p => p != null && p.ActiveTravelRules.Contains(rule)).Select(p => p.DayNumber));
 
-    /// <summary>Public read-only access to eras.</summary>
-    public IReadOnlyList<EraSO> Eras => eras;
+    /// <summary>Public read-only access to eras (empty, never null, like the other lists).</summary>
+    public IReadOnlyList<EraSO> Eras => eras ?? System.Array.Empty<EraSO>();
 
     /// <summary>Public read-only access to the premade characters.</summary>
     public IReadOnlyList<LegendarySO> Legendaries => legendaries ?? System.Array.Empty<LegendarySO>();
@@ -297,6 +319,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>Public read-only access to endings.</summary>
     public IReadOnlyList<EndingSO> Endings => endings ?? System.Array.Empty<EndingSO>();
+
+    /// <summary>The run's last day: the earliest DayAtLeast ending's threshold (Retirement, day 15), which every day up to must plan (DayPlans.Unplanned); 0 without one.</summary>
+    public int LastDay => (int)Endings.Where(e => e != null && e.conditionType == EndingConditionType.DayAtLeast).Select(e => e.threshold).DefaultIfEmpty(0f).Min();
 
     /// <summary>Public read-only access to attributes.</summary>
     public IReadOnlyList<AttributeSO> Attributes => attributes ?? System.Array.Empty<AttributeSO>();
@@ -315,6 +340,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>The interview's fixed wording and layout limits.</summary>
     public InterviewLines Interview => interview;
+
+    /// <summary>The cast (Personalities.Pick draws from it; empty: every traveller says the defaults).</summary>
+    public IReadOnlyList<Personality> Personalities => personalities ?? (IReadOnlyList<Personality>)System.Array.Empty<Personality>();
 
     /// <summary>Public read-only access to interview questions (ask-menu order).</summary>
     public IReadOnlyList<QuestionSO> Questions => questions ?? System.Array.Empty<QuestionSO>();
@@ -345,6 +373,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>The agency block: its name, programme line and first date (never null).</summary>
     public AgencyContent Agency => agency ?? new AgencyContent();
+
+    /// <summary>Home's radio block (never null).</summary>
+    public HomeContent Home => home ?? new HomeContent();
 
     /// <summary>The morning paper's debt-theme lines (never null).</summary>
     public NewsContent News => news ?? new NewsContent();
@@ -451,6 +482,15 @@ public sealed class ContentLibrarySO : ScriptableObject
 
         EnsureLookups();
         return _profileById.TryGetValue(id, out NationEraProfileSO profile) ? profile : null;
+    }
+
+    /// <summary>The place of <paramref name="place"/>'s nation and era ids (a portal's route), or null.</summary>
+    public NationEraProfileSO GetProfile(PlaceRef place)
+    {
+        foreach (NationEraProfileSO p in Profiles)
+            if (p != null && p.nation != null && p.era != null && p.nation.id == place.NationId && p.era.id == place.EraId)
+                return p;
+        return null;
     }
 
     /// <summary>The theme of a culture id ("neutral" or a nation id), or null for an unknown or blank id.</summary>

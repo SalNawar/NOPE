@@ -35,6 +35,15 @@ public sealed class CaseInstance
     /// <summary>The premade's asset (null for a generated traveller).</summary>
     public LegendarySO legendarySource;
 
+    /// <summary>True for a famous premade (Premades.IsFamous: the displaced kind): scored as a legendary; a 2150 citizen premade is scored as anyone.</summary>
+    public bool IsFamous => isLegendary && legendarySource != null && Premades.IsFamous(legendarySource.kind);
+
+    /// <summary>The forced entry that stands in this slot today (DayPlanSO forced cases, days 7-15 B9: its premade or blueprint, its fault and its voice); null for a traveller the day drew.</summary>
+    public ForcedCaseSlot forcedAppearance;
+
+    /// <summary>The narrative dialog bound to this traveller (Premades.Voice: the appearance's, else the premade's; blank for an ordinary traveller): offered only while they are at the desk (InterviewDay.OfferedDialogs).</summary>
+    public string premadeDialogId = string.Empty;
+
     /// <summary>Visitor archetype (drives default timeline impacts + tags).</summary>
     public ArchetypeSO archetype;
 
@@ -146,20 +155,32 @@ public sealed class CaseInstance
     /// </summary>
     public DirectiveFault directiveFault;
 
+    /// <summary>Why the traveller lacks a form the desk asks for: Honest (they never needed it), or Missing when a broken paper set left their waiver or proof of means out (CaseFactory.BreakPapers; the interview's reply, MissingFormVariant).</summary>
+    public MissingFormVariant missingFormVariant;
+
     /// <summary>True when the Directives forbid the traveller's claim or papers (a directive fault).</summary>
     public bool HasDirectiveFault => directiveFault != DirectiveFault.None;
 
     /// <summary>The traveller's one fault reason (Faults.Reason): a wrong accept's citation key suffix; empty with no fault.</summary>
     public string FaultReason => Faults.Reason(directiveFault, costumeFault, lie);
 
-    /// <summary>The traveller's claim sentence (their kind's interview.claims line with the claimed place's label); the banner, the shift summary and the transcript's second line.</summary>
-    public string claimLine;
-
     /// <summary>The traveller's answer to each question askable today, in question order (computed at generation from the same values as the papers).</summary>
     public readonly List<InterviewAnswer> answers = new();
 
-    /// <summary>What the traveller says when asked small talk (their claimed place's or era's flavour; null when none is authored).</summary>
+    /// <summary>What the traveller says when asked small talk (Voices.SmallTalk: their personality's, their home's or their kind's line; null when none is authored).</summary>
     public LineText smallTalk;
+
+    /// <summary>The liar's slip, said once after their small-talk reply (the personalities spec's T9-T11: a generated liar who rolled under the day's slipChance, or a liar premade with a slip line; Voices.Slip); null for none. Never evidence.</summary>
+    public LineText slip;
+
+    /// <summary>The traveller's personality (Personality.id), drawn at generation on its own stream (Seeds.ForPersonality); blank for a premade, who speaks its own lines, and for an empty cast. Never printed (the personalities spec's PS4).</summary>
+    public string personality = string.Empty;
+
+    /// <summary>The traveller's dialog seed (Seeds.ForDialog): every line pick is a value of it and the slot's key (Voices.Pick), never a draw.</summary>
+    public int dialogSeed;
+
+    /// <summary>Who speaks: the traveller's personality, or the premade they are, and their dialog seed (every reply is resolved in it, Voices).</summary>
+    public Voice Voice => new Voice(personality, legendarySource != null ? legendarySource.id : null, dialogSeed);
 
     /// <summary>
     /// How the traveller looks (layers and garments; a premade: one whole

@@ -123,26 +123,6 @@ public sealed class TextFlip
             SetFont(_text, _ownFont, _ownFont, _ownMaterial);
     }
 
-    /// <summary>
-    /// Writes a text that never animates (a transcript row): its DisplayText
-    /// form, always in the font DisplayText.FontFor picks: the script's while
-    /// it shows foreign cells, else <paramref name="ownFont"/> with
-    /// <paramref name="ownMaterial"/> (the text's own, from its template), so a
-    /// row that held a foreign line before gets its own font back (audit
-    /// R4-024, the PC spec's TR3: rows may be pooled).
-    /// </summary>
-    public static void Write(TMP_Text text, TMP_FontAsset ownFont, Material ownMaterial, string canonical, Reveal reveal, CaseTranslation tr)
-    {
-        if (text == null)
-            return;
-        tr = tr ?? CaseTranslation.None;
-        SpeechTranslation speech = tr.Speech;
-        text.text = DisplayText.For(canonical, reveal, speech.Timing, speech.ReducedMotion);
-        SetFont(text, DisplayText.FontFor(canonical, reveal, speech.Timing, speech.ReducedMotion, tr.Font, ownFont), ownFont, ownMaterial);
-        if (DisplayText.ShowsForeign(canonical, reveal, speech.Timing, speech.ReducedMotion))
-            Fit(text);
-    }
-
     /// <summary>Writes the reveal's form (typed out so far, while typing) and picks the font for it.</summary>
     private void Apply(Reveal reveal)
     {

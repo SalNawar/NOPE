@@ -17,3 +17,5 @@ MonoBehaviour:
   nation: {fileID: 0}
   description: 'The displaced return only to their own time: their declaration must
     match their origin.'
+  kinds: 
+  transponder: 

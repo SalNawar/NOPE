@@ -47,14 +47,19 @@ public static class ContentSheetMap
                     Int("validDaysMin").Note("the fewest days after today a citizen's honest paper is valid"),
                     Int("validDaysMax").Note("the most days after today a citizen's honest paper is valid"),
                     Int("tripsWithinDays").Note("a past trip on an account left 1 to this many days ago"),
+                    Int("frozenWithinDays").Note("a Frozen account went into default 1 to this many days ago"),
                     Text("waiverPrefix").Note("the Stranding Waiver number's prefix (SW gives SW-204817)"),
                     Rows("agencyStatuses", "statuses",
                         Text("status").Required().OneOf("Premium", "Standard", "Eligible"),
                         Int("debtMin"),
                         Int("debtMax"),
                         Int("tripsMin"),
-                        Int("tripsMax")).Note("each account status's debt and past trips")).Note("the ranges a 2150 citizen's Citizen Account is drawn from"),
-                Rows("agencyTransponders", "transponders",
+                        Int("tripsMax")).Note("each account status's debt and past trips"),
+                    Int("contract.termMin").Note("a labourer's registered contract: the shortest term in days (whole 30-day months)"),
+                    Int("contract.termMax").Note("the longest term in days"),
+                    Int("contract.wageMin").Note("the lowest day wage in cr"),
+                    Int("contract.wageMax").Note("the highest day wage in cr")).Note("the ranges a 2150 citizen's Citizen Account is drawn from"),
+                Rows("agencyTransponders", "transponders", Key("id"),
                     Text("id").Required(),
                     Text("transponderClass").OneOf("Premium", "Economy"),
                     Text("model"),
@@ -67,7 +72,17 @@ public static class ContentSheetMap
                     Int("amountMin").Note("an amount proof's least value in cr (0 for a number)"),
                     Int("amountMax").Note("an amount proof's most value in cr (0 for a number)"),
                     Text("prefix").Note("a number proof's prefix (TI gives TI-551902); blank for an amount")).Note("the proofs of means a Standard account may hold, one per proof form"),
-                Num("strandChance").Note("the chance an accepted traveller on an Economy transponder is stranded at the shift's end (0.08 = 8%)")),
+                Num("strandChance").Note("the chance an accepted traveller on an Economy transponder is stranded at the shift's end (0.08 = 8%)"),
+                Rows("agencyEmployers", "employers", Key("id"),
+                    Text("id").Required(),
+                    Text("era").Ref("eras").Note("the era the employer hires for"),
+                    Text("name").Note("the printed name on a labourer's contract")).Note("the Debt Relief programme's employers: a labourer's contract names one of the worksite's era"),
+                Rows("agencyPortals", "portals", Key("number"),
+                    Int("number").Required().Note("the ring's number as the art numbers it (01 front ... 05 upper right)"),
+                    Text("name").Note("the ring's name, printed in the Portals app and the board's tooltip"),
+                    Text("role").OneOf("Departures", "Returns").Note("Departures run the Directorate's route each day; Returns is the Return Gate, the displaced's way home"),
+                    Int("fromDay").Omit().Note("the day it enters service by itself; blank: only by its repair"),
+                    Text("repair").Omit().Note("the upgrade id whose delivery puts it in service (an Orders node)")).OmitEmpty().Note("the hall's portals: one row per ring")),
             Rows("eras", "eras", Key("id", "era"),
                 Text("id").Required(),
                 Text("displayName"),
@@ -82,8 +97,11 @@ public static class ContentSheetMap
                 Text("type"),
                 Text("country").Omit().Ref("countries").Note("a closure's country (blank: none)"),
                 Text("era").Omit().Ref("eras").Note("a closure's era (blank: none)"),
-                Text("description")).Note("travel rules a day can switch on: closures and standing procedures"),
+                Text("description"),
+                List("kinds").Omit().Note("a paper set's, debt standing's or recall's kinds (RichTourist, PoorTourist, Labourer, Displaced); blank: every kind"),
+                Text("transponder").Omit().Ref("agencyTransponders").Note("the model a recall (TransponderRecall) grounds; blank for every other rule")).Note("travel rules a day can switch on: closures and standing procedures"),
             Days(),
+            PersonalitiesSheet(),
             Interview(),
             Questions(),
             Dialogs(),
@@ -91,10 +109,12 @@ public static class ContentSheetMap
             History(),
             Single("news", "news",
                 Text("stranded").Note("the morning paper's line per traveller stranded the day before: {name} and {place}"),
+                Text("debtReliefCount").Note("the morning paper's count of the Debt Relief departures the last shift approved: {count}"),
                 Values("newsDebt", "debt", Text("text")).Note("the morning paper's debt lines: one a day, in a shuffled order per run")).Note("the morning paper's debt-theme lines"),
             Pc(),
             Ui(),
-            Translation());
+            Translation(),
+            Home());
 
     private static SheetSpec Looks() =>
         Single("looks", "looks",
@@ -197,7 +217,7 @@ public static class ContentSheetMap
             Int("queue"),
             Int("tells"),
             List("channels"),
-            List("lies").Note("the lies enabled this day (FalseOrigin, PoorPosingAsRich, DoctoredIdentity, FakeDisplaced, Smuggling); a traveller draws among those that fit their kind"),
+            List("lies").Note("the lies enabled this day (FalseOrigin, PoorPosingAsRich, DoctoredIdentity, FakeDisplaced, Smuggling, DebtorPosingAsTourist, ForgedContract, FakeWaiver, ForgedProof); a traveller draws among those that fit their kind"),
             Rows("dayKinds", "kinds",
                 Text("kind").Required().OneOf("RichTourist", "PoorTourist", "Labourer", "Displaced"),
                 Num("weight"),
@@ -208,12 +228,24 @@ public static class ContentSheetMap
             List("countries").Ref("countries"),
             List("rules").Ref("rules"),
             List("premades").Ref("premades").Note("premades that may roll this day"),
-            Rows("dayForced", "forced",
+            Rows("dayForced", "forced", Key("{slot}{id}", "forced").Optional("id"),
                 Int("slot"),
                 Text("premade").Ref("premades"),
-                Text("blueprint")),
+                Text("blueprint"),
+                Text("id").Omit().Note("the appearance's name (days 7-15): needed when a slot lists alternatives, which are tried in order, the first whose conditions pass standing; unique in the day"),
+                Text("lie").Omit().OneOf(System.Enum.GetNames(typeof(LieKind))).Note("an authored lie the appearance tells (blank: none)"),
+                Text("directive").Omit().OneOf(System.Enum.GetNames(typeof(PlannedDirective)).Skip(1).ToArray()).Note("an authored directive fault (blank: none): the maker's variant pinned"),
+                Text("dialog").Omit().Ref("dialogs").Note("the appearance's dialog, replacing the premade's (blank: the premade's)"),
+                Text("intro").Omit().Note("the desk's opener for the appearance (blank: the premade's, else the interview's)"),
+                GateConditions("dayForcedConditions").OmitEmpty().Note("when the appearance stands (all must pass at the day's start; none: always)")).Note("forced slots: a premade, a blueprint or both, and a beat's fault, voice and conditions"),
             Float("premadeChance"),
-            Float("costumeErrorChance").Note("chance per 2150 citizen of a costume error (0 before the dress rule's first day)"));
+            Float("costumeErrorChance").Note("chance per 2150 citizen of a costume error (0 before the dress rule's first day)"),
+            Float("slipChance").Note("chance per generated liar of a slip after small talk (the personalities spec's T9; 0 never)"),
+            Float("violationChance").Note("chance per honest traveller of breaking a rolled procedure, the paper set or the debt standing (0 before their first day)"),
+            Rows("dayPortals", "portals",
+                Int("portal").Required().Ref("agencyPortals"),
+                Text("country").Ref("countries"),
+                Text("era").Ref("eras")).OmitEmpty().Note("the Directorate's route for each departure portal that day (a place of the day's world; a route a closure forbids shows CLOSED)"));
 
     private static SheetSpec Interview() =>
         Single("interview", "interview",
@@ -233,8 +265,7 @@ public static class ContentSheetMap
                 Text("label").Note("the papers menu's one entry for the group")).Note("request groups: several forms as one request"),
             Text("requestPrompt"),
             Text("requestReply"),
-            Text("askLabel").Note("the ask entry for the displaced"),
-            Text("tripAskLabel").Note("the ask entry for a 2150 citizen, who is asked about the trip"),
+            Text("askLabel").Note("the ask entry, the same for every traveller"),
             Text("backLabel"),
             Text("smallTalkLabel"),
             Text("smallTalkPrompt"),
@@ -250,13 +281,82 @@ public static class ContentSheetMap
                 Text("text")).Note("what a kind says when asked for a request they carry no form of"),
             Int("menuCapacity"),
             Int("maxLineChars"),
-            Text("lookLabel")).Note("the interview's wording");
+            Text("lookLabel"),
+            Num("smallTalkWeights.personality").Note("small talk's sources are picked by weight: the personality's own lines"),
+            Num("smallTalkWeights.home").Note("the home's lines (a displaced person's claimed place, else its era; a 2150 citizen's present, else the Future era)"),
+            Num("smallTalkWeights.kind").Note("the kind's lines (kindSmallTalk)"),
+            Rows("kindSmallTalk", "kindSmallTalk",
+                List("kinds").Note("the kinds that say it (RichTourist, PoorTourist, Labourer, Displaced)"),
+                Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                Text("text")).Note("the kinds' small talk: one of small talk's three sources"),
+            VoiceSheet("voiceClaims", "voices.claims", "the claim in a voice ({place} required)"),
+            VoiceSheet("voiceHandOver", "voices.handOver", "the reply as a paper is handed over ({document}, {place})",
+                Text("request").Omit().Note("the request it is for (a form number or a group id; blank: any)")),
+            VoiceSheet("voiceMissingForms", "voices.missingForms", "a refusal in character of a form the traveller does not carry ({document}, {place})",
+                Text("request").Required().Note("a form number (TC-310) or a request group's id (proof)"),
+                Text("variant").OneOf("Honest", "Missing").Note("Honest: the kind never needs it; Missing: they should have it")),
+            VoiceSheet("voiceSpoken", "voices.spoken", "the reply to a spoken request ({place})",
+                Text("request").Required().Ref("interviewRequests")),
+            VoiceSheet("voiceAnswers", "voices.answers", "an answer in a voice ({value} required, {place})",
+                Text("question").Required().Ref("questions")),
+            VoiceSheet("voiceSmallTalk", "voices.smallTalk", "a personality's or a premade's small talk ({place}; a premade's is its only source)"),
+            Rows("interviewReactions", "reactions",
+                Text("verdict").OneOf("Accepted", "Denied"),
+                Text("intent").OneOf("Honest", "Lying").Note("Lying: a place lie, smuggling or a record lie; Honest otherwise (a directive fault or a costume error included)"),
+                Text("reason").Omit().Note("a fault reason (forged, disguised, smuggled, closed, wrongDate, expired, incomplete, frozen, panic; blank: any)"),
+                List("kinds").Omit().Note("the kinds it is for (blank: any)"),
+                Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                Text("text"),
+                Text("then").Omit().Note("an optional second line")).Note("the default reactions to the stamp: the four verdict x intent rows with a blank reason, kinds and era are required"),
+            Rows("interviewSlips", "slips",
+                Text("lie").Omit().Note("a lie kind (FalseOrigin, PoorPosingAsRich, DoctoredIdentity, FakeDisplaced, Smuggling...; blank: any)"),
+                List("kinds").Omit().Note("the kinds it is for (blank: any)"),
+                Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                Text("text")).Note("the default slips a liar says after small talk (one with a blank lie is required; never a checkable value)"),
+            VoiceSheet("voiceReactions", "voices.reactions", "a reaction to the stamp in a voice ({place} in both lines)",
+                new ColumnSpec[]
+                {
+                    Text("verdict").OneOf("Accepted", "Denied"),
+                    Text("intent").OneOf("Honest", "Lying"),
+                    Text("reason").Omit().Note("a fault reason (blank: any)")
+                },
+                Text("then").Omit().Note("an optional second line")),
+            VoiceSheet("voiceSlips", "voices.slips", "a liar's slip in a voice ({place}; never a checkable value)",
+                Text("lie").Omit().Note("a lie kind (blank: any)"))).Note("the interview's wording");
+
+    /// <summary>The cast (world_source.json "personalities"; the personalities spec's PS1-PS2).</summary>
+    private static SheetSpec PersonalitiesSheet() =>
+        Rows("personalities", "personalities", Key("id", "personality"),
+            Text("id").Required(),
+            Text("name"),
+            Num("weight").Note("its weight in the draw, the same for every kind (0 benches it)"),
+            Text("note").Note("for authors: the tone in one line (never shown in the game)")).Note("the cast: every generated traveller is one of them; the premades speak their own lines");
+
+    /// <summary>One voice slot's sheet (interview.voices.{list}; the personalities spec's §9.1): the voice (a personality or a premade, exactly one), the slot's keys, the kinds and era it is for, the line.</summary>
+    private static SheetSpec VoiceSheet(string sheet, string path, string note, params ColumnSpec[] keys) =>
+        VoiceSheet(sheet, path, note, keys, null);
+
+    /// <summary>A voice slot's sheet with <paramref name="tail"/> after the text (a reaction's then line).</summary>
+    private static SheetSpec VoiceSheet(string sheet, string path, string note, ColumnSpec[] keys, ColumnSpec tail) =>
+        Rows(sheet, path,
+            new[]
+            {
+                Text("personality").Omit().Ref("personalities").Note("the personality that says it (or a premade)"),
+                Text("premade").Omit().Ref("premades").Note("the premade that says it (or a personality)")
+            }
+            .Concat(keys)
+            .Concat(new[]
+            {
+                List("kinds").Omit().Note("the kinds it is for (blank: any)"),
+                Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                Text("text")
+            })
+            .Concat(tail != null ? new[] { tail } : new ColumnSpec[0]).Cast<SheetField>().ToArray()).Note(note);
 
     private static SheetSpec Questions() =>
         Rows("questions", "questions", Key("id", "question"),
             Text("id").Required(),
             Text("category"),
-            List("kinds").Omit().Note("the traveller kinds the desk asks it of (RichTourist, PoorTourist, Labourer, Displaced); blank: every kind; one question per category per kind"),
             Text("label"),
             Text("prompt"),
             Text("answer"),
@@ -264,9 +364,9 @@ public static class ContentSheetMap
             Text("announce"),
             GateConditions("questionConditions"),
             Rows("questionOverrides", "overrides",
-                Text("era").Ref("eras"),
-                Text("prompt"),
-                Text("answer")).Note("the wording in one era"));
+                Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                List("kinds").Omit().Note("the traveller kinds (RichTourist, PoorTourist, Labourer, Displaced); blank: any"),
+                Text("answer")).Note("the answer for some kinds, an era or both (the most specific wins: kinds 2, era 1); every traveller is asked the question's own prompt")).Note("one question per category, asked of every traveller in the same words");
 
     private static SheetSpec Dialogs() =>
         Rows("dialogs", "dialogs", Key("id", "dialog"),
@@ -301,7 +401,12 @@ public static class ContentSheetMap
                 Text("attribute").Ref("contentAttributes"),
                 Num("onCorrect"),
                 Num("onWrong"),
-                Bool("skipNationScore").Omit())).Note("premade characters: real people and written stories");
+                Bool("skipNationScore").Omit()),
+            Text("kind").Omit().OneOf("RichTourist", "PoorTourist", "Labourer", "Displaced").Note("a 2150 story character's kind (blank: Displaced, the famous)"),
+            Text("family").Omit().Ref("countries").Note("a story character's family country: its lineage and generated look (blank: its place's country)"),
+            Text("citizenId").Omit().Note("a story character's Citizen ID (000-0000-00), the same at every appearance"),
+            Int("debt").Omit().Note("a story character's debt in cr (blank: drawn from its status's range)"),
+            Text("employer").Omit().Ref("agencyEmployers").Note("a labourer story character's employer (an agency.employers id of its destination's era; blank: drawn)")).Note("premade characters: real people and written stories");
 
     private static SheetSpec History() =>
         Single("history", "history",
@@ -324,7 +429,9 @@ public static class ContentSheetMap
                 Rows("historyEdits", "edits",
                     Text("place").Ref("places"),
                     Text("category"),
-                    Text("value"))).Note("history rules: when their conditions pass at night they rewrite a place's fact"));
+                    Text("value")),
+                Num("stability").Omit().Note("a change of stability the night the rule fires, a percent of where it stands (-3 takes 3%); blank: none"),
+                Text("section").Omit().OneOf("News", "Desk", "Return").Note("where the line goes: the paper's news (blank), the paper's desk section, or nowhere until the character returns (its fired flag, trig:history_{id}:fired)")).Note("history rules: when their conditions pass at night they rewrite a place's fact; a rule with no edit is a story rule, which prints its news line"));
 
     /// <summary>The PC block: the steps checklist's sets, the Internet's sites, the Static sites' authored pages, the Lineage Archive's people and relations, and Mail's authored messages.</summary>
     private static SheetSpec Pc() =>
@@ -414,6 +521,27 @@ public static class ContentSheetMap
                     Text("key").Ref("uiStrings"),
                     Text("text"))));
 
+    /// <summary>Home's house upgrades (the Home upgrades spec HU3): the tree's rows, generated into upgrade and effect assets, and the radio's lines.</summary>
+    private static SheetSpec Home() =>
+        Single("home", "home",
+            Text("radioUpgrade").Note("the house upgrade whose ownership plays a radio line on the sleep panel"),
+            Values("homeRadio", "radio", Text("text")).Note("the radio's lines: one a night, in order by the day"),
+            Rows("homeUpgrades", "upgrades", Key("id"),
+                Text("id").Required().Note("the upgrade's id (saved as owned)"),
+                Text("name"),
+                Text("category").Required().OneOf("Food", "Housing", "Security", "Health", "Comfort").Note("its column in the House panel"),
+                Int("cost").Note("the one-off price in cr"),
+                Int("upkeep").Note("cr a night the household pays once it is owned (0: none)"),
+                List("requires").Note("the house upgrades it needs owned first (ids of this sheet)"),
+                Int("householdExpense").Note("cr a night on rent and utilities (negative saves)"),
+                Num("sicknessChance").Note("added to each member's nightly chance to worsen (-0.05 = 5 points less)"),
+                Int("careCost").Note("cr on each treatment (negative cheaper)"),
+                Int("medicalDrain").Note("cr on each condition point's nightly drain (negative lowers)"),
+                Num("mood").Note("the household's mood points (a sick member's nightly recovery chance)"),
+                Num("breakInChance").Note("added to the nightly break-in chance (-0.03 = 3 points less)"),
+                Num("breakInShare").Note("added to the share of the wallet a break-in takes"),
+                Text("blurb").Note("the House panel's line under its name")).Note("the House tree: every effect never takes a knob below 0")).Note("Home's house upgrades and the radio");
+
     private static SheetSpec Translation() =>
         Single("translation", "translation",
             Int("fromDay"),
@@ -433,7 +561,8 @@ public static class ContentSheetMap
             Rows("packs", "packs", Key("id"),
                 Text("id").Required(),
                 Text("displayName"),
-                Int("spokenCost")),
+                Int("spokenCost"),
+                List("requires").Omit().Note("the upgrade ids the translator's Orders node needs owned first (interview_protocols); blank: none")),
             Rows("tongues", "tongues", Key("id"),
                 Text("id").Required(),
                 Text("displayName"),

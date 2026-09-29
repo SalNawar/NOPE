@@ -9,19 +9,19 @@ public sealed class InterviewCase
     /// <summary>The traveller's kind (CaseInstance.kind): the claim is said in its words.</summary>
     public TravellerKind kind;
 
-    /// <summary>The claimed place's label, the claim's {place} (CaseInstance.originLabel; the claim is filled as the banner's CaseInstance.claimLine is).</summary>
+    /// <summary>The claimed place's label, the claim's {place} (CaseInstance.originLabel; the claim is only spoken, never printed: the personalities spec's B3).</summary>
     public string claimPlace;
 
     /// <summary>What of the traveller's lines stays English when they show untranslated (translation.keyWords); null keeps nothing.</summary>
     public KeyWordRule keyWords;
 
-    /// <summary>The claimed era's id: picks each question's wording override.</summary>
+    /// <summary>The claimed era's id: with the kind, picks each question's answer override.</summary>
     public string claimedEraId;
 
     /// <summary>The traveller's documents in paper order; only those handed over on request get a hub request.</summary>
     public IReadOnlyList<CaseDocument> documents;
 
-    /// <summary>The forms the desk may ask this traveller's kind for (InterviewDay.AskableForms: on request, askable by the kind), in template order; null: only the carried papers can be asked for.</summary>
+    /// <summary>The day's papers menu, the same for every traveller (InterviewDay.AskableForms: every on-request form of the days so far, the personalities spec's W4); null: only the carried papers can be asked for.</summary>
     public IReadOnlyList<AskableForm> askable;
 
     /// <summary>Why this traveller lacks a form they are asked for (the reply they give): Honest unless a paper-set fault left it out.</summary>
@@ -30,8 +30,14 @@ public sealed class InterviewCase
     /// <summary>The traveller's answers to today's askable questions (CaseInstance.answers).</summary>
     public IReadOnlyList<InterviewAnswer> answers;
 
-    /// <summary>The traveller's small-talk line; null means no small talk.</summary>
+    /// <summary>The traveller's small-talk line, resolved at generation (Voices.SmallTalk; {place} filled here); null means no small talk.</summary>
     public LineText smallTalk;
+
+    /// <summary>Who speaks (CaseInstance's personality or premade and dialog seed): every reply is resolved in their voice (Voices); null says the defaults.</summary>
+    public Voice voice;
+
+    /// <summary>The liar's slip (CaseInstance.slip, resolved at generation: Voices.Slip; {place} filled here), said once right after their small-talk reply; null for none (the personalities spec's T9-T10).</summary>
+    public LineText slip;
 
     /// <summary>The traveller's visible garments (TravellerLook.Garments); none means no look menu.</summary>
     public IReadOnlyList<Garment> garments;
@@ -39,12 +45,12 @@ public sealed class InterviewCase
 
 /// <summary>
 /// Builds a traveller's interview graph: the hub (a document request, or
-/// "Request papers >" for two or more, the spoken requests, "Ask about home
-/// >" or a citizen's "Ask about the trip >" (Interview.AskLabel), "Look >",
+/// "Request papers >" for two or more, the spoken requests, "Ask about the
+/// trip >" (InterviewLines.askLabel, everyone's), "Look >",
 /// today's narrative dialogs), the papers menu ("&lt; Back"
-/// first, then one request per form or request group the desk may ask the
-/// kind for, FormRequests.Build: a carried paper is handed over, a missing
-/// one answered with the kind's line), the ask menu ("&lt; Back" first,
+/// first, then one request per form or request group of the day's menu,
+/// the same for everyone, FormRequests.Build: a carried paper is handed
+/// over, a missing one answered with the kind's line), the ask menu ("&lt; Back" first,
 /// then the kind's questions and small talk), the look menu ("&lt; Back" first, then
 /// one choice per visible garment) and every authored dialog's nodes. Every traveller line carries its key-word spans
 /// (KeyWords.Spans over its template and fills, InterviewCase.keyWords): the
@@ -81,7 +87,7 @@ public static class InterviewScript
     /// <summary>
     /// The transcript's first lines: the desk's opener (<see cref="IntroLineId"/>,
     /// skipped when blank), then the traveller's claim (<see cref="ClaimLineId"/>:
-    /// Interview.Claim of the claimed place in their kind's words, with its key-word spans).
+    /// <see cref="Claim"/>, with its key-word spans taken over its template).
     /// </summary>
     public static IReadOnlyList<DialogLine> Opening(InterviewLines wording, InterviewCase c)
     {
@@ -91,26 +97,51 @@ public static class InterviewScript
 
         if (!string.IsNullOrWhiteSpace(c.introLine))
             lines.Add(new DialogLine(IntroLineId, DialogSpeaker.Desk, c.introLine));
+        string template = ClaimTemplate(wording, c);
         var fills = new Dictionary<string, string> { { Interview.PlaceToken, c.claimPlace } };
-        lines.Add(new DialogLine(ClaimLineId, DialogSpeaker.Traveller, Interview.Claim(wording, c.kind, c.claimPlace), null,
-                                 KeyWords.Spans(Interview.ClaimTemplate(wording, c.kind), fills, c.keyWords)));
+        lines.Add(new DialogLine(ClaimLineId, DialogSpeaker.Traveller, Interview.Fill(template, Interview.PlaceToken, c.claimPlace), null,
+                                 KeyWords.Spans(template, fills, c.keyWords)));
         return lines;
     }
 
-    /// <summary>The desk asking <paramref name="q"/> of a traveller claiming <paramref name="eraId"/>, the claimed place's label filling {place} (a trip question: "What will you pay with in {place}?").</summary>
-    public static DialogLine PromptLine(InterviewQuestion q, string eraId, string placeLabel = null)
+    /// <summary>
+    /// The traveller's claim template (the only claim: nothing prints it, the
+    /// personalities spec's B3): their voice's (Voices.Claim), else their
+    /// kind's (interview.claims), or "{place}" alone when that is missing or blank.
+    /// </summary>
+    public static string ClaimTemplate(InterviewLines wording, InterviewCase c)
     {
-        LineText prompt = q.PromptFor(eraId);
+        LineText line = c != null ? Voices.Claim(wording, c.voice, Context(c)) : null;
+        return string.IsNullOrWhiteSpace(line?.text) ? Interview.Placeholder(Interview.PlaceToken) : line.text;
+    }
+
+    /// <summary>The traveller's claim sentence (<see cref="ClaimTemplate"/> with the claimed place's label): what they say as they step up.</summary>
+    public static string Claim(InterviewLines wording, InterviewCase c) => Interview.Fill(ClaimTemplate(wording, c), Interview.PlaceToken, c?.claimPlace);
+
+    /// <summary>What a line may depend on before the stamp (VoiceContext, T2): the kind and the claimed era.</summary>
+    private static VoiceContext Context(InterviewCase c) => new VoiceContext(c != null ? c.kind : default, c?.claimedEraId);
+
+    /// <summary>The desk asking <paramref name="q"/>, in the question's own words for every traveller (the personalities spec's W3), the claimed place's label filling {place} ("What will you pay with in {place}?").</summary>
+    public static DialogLine PromptLine(InterviewQuestion q, string placeLabel = null)
+    {
+        LineText prompt = q.prompt ?? new LineText();
         return new DialogLine(prompt.id, DialogSpeaker.Desk, Interview.Fill(prompt.text, Interview.PlaceToken, placeLabel));
     }
 
-    /// <summary>The traveller's answer line: the (era's) template with the canonical value, carrying the answer's fact and its key-word spans under <paramref name="keyWords"/> (null: none).</summary>
-    public static DialogLine AnswerLine(InterviewQuestion q, string eraId, InterviewAnswer a, KeyWordRule keyWords = null)
+    /// <summary>
+    /// The traveller's answer line: the template in their voice for their kind
+    /// and claimed era (Voices.Answer: the voice's row, else the question's
+    /// override, else its answer) with the canonical value and the claimed
+    /// place, carrying the answer's fact (the sentence around a tell's value is
+    /// the honest sentence, T3) and its key-word spans.
+    /// </summary>
+    public static DialogLine AnswerLine(InterviewLines lines, InterviewQuestion q, InterviewCase c, InterviewAnswer a)
     {
-        LineText answer = q.AnswerFor(eraId);
+        LineText answer = Voices.Answer(lines, c?.voice, Context(c), q);
         string value = a != null ? a.value : null;
-        var fills = new Dictionary<string, string> { { Interview.ValueToken, value } };
-        return DialogLine.Answer(answer.id, Interview.Fill(answer.text, Interview.ValueToken, value), a, KeyWords.Spans(answer.text, fills, keyWords));
+        var fills = new Dictionary<string, string> { { Interview.ValueToken, value }, { Interview.PlaceToken, c?.claimPlace } };
+        string text = Interview.Fill(Interview.Fill(answer.text, Interview.ValueToken, value), Interview.PlaceToken, c?.claimPlace);
+        return DialogLine.Answer(answer.id, text, a, KeyWords.Spans(answer.text, fills, c?.keyWords));
     }
 
     /// <summary>
@@ -134,11 +165,13 @@ public static class InterviewScript
     }
 
     /// <summary>
-    /// The traveller's graph. Hub: the traveller's one request entry
-    /// (FormRequests.Build over the askable forms and the documents: a
-    /// carried paper's "request:{i}", one-shot, hands document i over; a
-    /// request the traveller carries no form of, "missing:{id}", one-shot,
-    /// the desk's prompt and the kind's missing-form line, no hand-over), or,
+    /// The traveller's graph, the same entries for every traveller of the day
+    /// (the personalities spec's W1): only the replies differ. Hub: the one
+    /// request entry (FormRequests.Build over the day's papers menu and the
+    /// documents: "request:{id}", the request's id whatever the traveller
+    /// carries, one-shot; a carried paper is handed over, a request the
+    /// traveller carries no form of gets the desk's prompt and their
+    /// missing-form line, no hand-over), or,
     /// with two or more, "papers" (the papers menu: "back" first, then one
     /// entry per request, labelled with the form's name or the group's label,
     /// staying in the menu), then "act:{id}" per spoken
@@ -195,7 +228,7 @@ public static class InterviewScript
                     Lines =
                     {
                         new DialogLine(Id(r.prompt), DialogSpeaker.Desk, Text(r.prompt)),
-                        Said(Id(r.reply), Text(r.reply), null, keyWords)
+                        Say(Voices.Spoken(lines, c?.voice, Context(c), r), c, null)
                     },
                     OneShot = true,
                     Kind = DialogChoiceKind.Request
@@ -205,7 +238,6 @@ public static class InterviewScript
 
         ask.Choices.Add(new DialogChoice { Id = "back", Label = lines.backLabel, Next = HubNodeId, Kind = DialogChoiceKind.Back });
 
-        string eraId = c != null ? c.claimedEraId : null;
         if (questions != null)
         {
             foreach (InterviewQuestion q in questions)
@@ -218,7 +250,7 @@ public static class InterviewScript
                 {
                     Id = $"q:{q.id}",
                     Label = q.label,
-                    Lines = { PromptLine(q, eraId, c != null ? c.claimPlace : null), AnswerLine(q, eraId, a, keyWords) },
+                    Lines = { PromptLine(q, c != null ? c.claimPlace : null), AnswerLine(lines, q, c, a) },
                     OneShot = true,
                     Kind = DialogChoiceKind.Question
                 });
@@ -234,15 +266,19 @@ public static class InterviewScript
                 Lines =
                 {
                     new DialogLine(Id(lines.smallTalkPrompt), DialogSpeaker.Desk, Text(lines.smallTalkPrompt)),
-                    Said(c.smallTalk.id, c.smallTalk.text, null, keyWords)
+                    Say(c.smallTalk, c, null)
                 },
                 OneShot = true,
                 Kind = DialogChoiceKind.Question
             });
         }
 
+        // The slip (T10): a plain traveller line after the small-talk reply, never an answer.
+        if (c != null && c.smallTalk != null && c.slip != null && !string.IsNullOrWhiteSpace(c.slip.text))
+            ask.Choices[ask.Choices.Count - 1].Lines.Add(Say(c.slip, c, null));
+
         if (ask.Choices.Count > 1)
-            hub.Choices.Add(new DialogChoice { Id = "ask", Label = Interview.AskLabel(lines, c != null ? c.kind : default), Next = AskNodeId, Kind = DialogChoiceKind.Question });
+            hub.Choices.Add(new DialogChoice { Id = "ask", Label = lines.askLabel, Next = AskNodeId, Kind = DialogChoiceKind.Question });
 
         var look = new DialogNode { Id = LookNodeId };
         look.Choices.Add(new DialogChoice { Id = "back", Label = lines.backLabel, Next = HubNodeId, Kind = DialogChoiceKind.Back });
@@ -278,16 +314,19 @@ public static class InterviewScript
     /// <summary>
     /// A request entry (one-shot, staying where it was chosen): the desk's
     /// prompt naming the request, then, for a carried paper, the traveller's
-    /// reply and the hand-over ("request:{index}"), or, for a request the
-    /// traveller carries no form of, their kind's missing-form line
-    /// (Interview.MissingFormReply for the case's variant; only the prompt
-    /// when none is authored) and no action ("missing:{id}").
+    /// reply in their voice (Voices.HandOver) and the hand-over, or, for a
+    /// request the traveller carries no form of, their refusal in their voice
+    /// for the case's variant (Voices.Missing: a voice row, else the kind's
+    /// line; a Missing variant with no line for the request says the Honest
+    /// one; only the prompt when none is authored) and no action. {document}
+    /// is the request's label, {place} the claimed place. Its id is
+    /// "request:{id}" either way, so the menu is the same for every traveller (W1).
     /// </summary>
     private static DialogChoice Request(InterviewLines lines, FormRequest request, string label, InterviewCase c, KeyWordRule keyWords)
     {
         var choice = new DialogChoice
         {
-            Id = request.Carried ? $"request:{request.Document}" : $"missing:{request.Id}",
+            Id = $"request:{request.Id}",
             Label = label,
             Lines = { new DialogLine(Id(lines.requestPrompt), DialogSpeaker.Desk, Interview.Fill(Text(lines.requestPrompt), Interview.DocumentToken, request.Label)) },
             OneShot = true,
@@ -296,18 +335,48 @@ public static class InterviewScript
 
         if (request.Carried)
         {
-            choice.Lines.Add(Said(Id(lines.requestReply), Text(lines.requestReply), null, keyWords));
+            choice.Lines.Add(Say(Voices.HandOver(lines, c?.voice, Context(c), request.Id), c, request.Label));
             choice.Action = DialogAction.HandOverDocument;
             choice.DocumentIndex = request.Document;
         }
         else
         {
-            LineText reply = Interview.MissingFormReply(lines, c != null ? c.kind : default, request.Id, c != null ? c.missingVariant : MissingFormVariant.Honest);
+            LineText reply = Voices.Missing(lines, c?.voice, Context(c), request.Id, c != null ? c.missingVariant : MissingFormVariant.Honest);
             if (reply != null)
-                choice.Lines.Add(Said(reply.id, reply.text, null, keyWords));
+                choice.Lines.Add(Say(reply, c, request.Label));
         }
 
         return choice;
+    }
+
+    /// <summary>
+    /// The traveller's reaction to the stamp (the personalities spec's R1, §6):
+    /// one or two traveller lines in their voice (Voices.Reaction by
+    /// <paramref name="verdict"/>, <paramref name="intent"/> and the case's
+    /// fault <paramref name="reason"/>: the row's line, then its then line when
+    /// it has one), {place} filled, with their key-word spans. Empty when no
+    /// row matches.
+    /// </summary>
+    public static IReadOnlyList<DialogLine> Reaction(InterviewLines lines, InterviewCase c, ReactionVerdict verdict, ReactionIntent intent, string reason)
+    {
+        var said = new List<DialogLine>();
+        VoiceLine row = Voices.Reaction(lines, c?.voice, Context(c), verdict, intent, reason);
+        if (row == null || row.line == null || string.IsNullOrWhiteSpace(row.line.text))
+            return said;
+        said.Add(Say(row.line, c, null));
+        if (row.then != null && !string.IsNullOrWhiteSpace(row.then.text))
+            said.Add(Say(row.then, c, null));
+        return said;
+    }
+
+    /// <summary>A traveller's reply in their voice: <paramref name="line"/>'s template with {place} (the claimed place) and {document} (<paramref name="document"/>) filled, carrying its key-word spans over the template and its fills.</summary>
+    private static DialogLine Say(LineText line, InterviewCase c, string document)
+    {
+        string template = line != null ? line.text : null;
+        string place = c != null ? c.claimPlace : null;
+        var fills = new Dictionary<string, string> { { Interview.PlaceToken, place }, { Interview.DocumentToken, document } };
+        string text = Interview.Fill(Interview.Fill(template, Interview.PlaceToken, place), Interview.DocumentToken, document);
+        return new DialogLine(line != null ? line.id : null, DialogSpeaker.Traveller, text, null, KeyWords.Spans(template, fills, c != null ? c.keyWords : null));
     }
 
     /// <summary>An authored node as a runtime node: namespaced ids, the desk speaking each choice's label, the traveller's lines with their key-word spans.</summary>
@@ -412,6 +481,7 @@ public static class DialogChecks
         }
 
         var nodes = new Dictionary<string, ScriptNode>();
+        var choicesOf = new Dictionary<string, List<ScriptChoice>>(); // each listed node's choices, gathered once (audit R1-019)
         var choiceIds = new HashSet<string>();
         bool anyEnding = false;
 
@@ -423,12 +493,15 @@ public static class DialogChecks
                 continue;
             }
 
+            List<ScriptChoice> choices = Choices(node);
             if (nodes.ContainsKey(node.id ?? string.Empty))
                 problems.Add($"node '{node.id}' is listed twice");
             else
+            {
                 nodes.Add(node.id ?? string.Empty, node);
+                choicesOf.Add(node.id ?? string.Empty, choices);
+            }
 
-            List<ScriptChoice> choices = Choices(node);
             foreach (ScriptChoice choice in choices)
             {
                 if (!choiceIds.Add(choice.id ?? string.Empty))
@@ -447,8 +520,8 @@ public static class DialogChecks
                 problems.Add($"node '{node.id}' offers {choices.Count} choices; the traveller wheel shows at most {maxChoices}");
         }
 
-        foreach (ScriptNode node in nodes.Values)
-            foreach (ScriptChoice choice in Choices(node))
+        foreach (List<ScriptChoice> choices in choicesOf.Values)
+            foreach (ScriptChoice choice in choices)
                 if (!string.IsNullOrEmpty(choice.next) && !nodes.ContainsKey(choice.next))
                     problems.Add($"choice '{choice.id}' leads to unknown node '{choice.next}'");
 
@@ -462,29 +535,28 @@ public static class DialogChecks
         queue.Enqueue(start);
         while (queue.Count > 0)
         {
-            foreach (ScriptChoice choice in Choices(nodes[queue.Dequeue()]))
+            foreach (ScriptChoice choice in choicesOf[queue.Dequeue()])
                 if (!string.IsNullOrEmpty(choice.next) && nodes.ContainsKey(choice.next) && reachable.Add(choice.next))
                     queue.Enqueue(choice.next);
         }
 
         // Backwards: every node from which some path ends the dialog.
         var ending = new HashSet<string>();
-        foreach (ScriptNode node in nodes.Values)
-            foreach (ScriptChoice choice in Choices(node))
+        foreach (KeyValuePair<string, List<ScriptChoice>> node in choicesOf)
+            foreach (ScriptChoice choice in node.Value)
                 if (string.IsNullOrEmpty(choice.next))
-                    ending.Add(node.id ?? string.Empty);
+                    ending.Add(node.Key);
 
         bool grew = true;
         while (grew)
         {
             grew = false;
-            foreach (ScriptNode node in nodes.Values)
+            foreach (string id in nodes.Keys)
             {
-                string id = node.id ?? string.Empty;
                 if (ending.Contains(id))
                     continue;
 
-                foreach (ScriptChoice choice in Choices(node))
+                foreach (ScriptChoice choice in choicesOf[id])
                 {
                     if (!string.IsNullOrEmpty(choice.next) && ending.Contains(choice.next))
                     {

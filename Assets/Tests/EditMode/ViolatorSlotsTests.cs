@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 public class ViolatorSlotsTests
@@ -82,6 +83,47 @@ public class ViolatorSlotsTests
             CollectionAssert.AreEqual(plain, ViolatorSlots.Pick(12, 2, new SeededRandom(seed), new int[0]), $"seed {seed}: empty");
             CollectionAssert.AreEqual(plain, ViolatorSlots.Pick(12, 2, new SeededRandom(seed), new[] { 7, 9 }), $"seed {seed}: second-half exclusions change nothing");
         }
+    }
+
+    /// <summary>The day plan's guarantee counts (traveller types §2.3, phase 9): day 2's three of five, day 3's four of six, day 4's three of six, day 5's three of seven, distinct and in the first half.</summary>
+    [TestCase(10, 3, 5)]
+    [TestCase(12, 4, 6)]
+    [TestCase(12, 3, 6)]
+    [TestCase(13, 3, 7)]
+    public void TheGuaranteedFaultyTravellers_OfEachDay_FitTheFirstHalf(int queue, int planned, int window)
+    {
+        for (int seed = 0; seed < 100; seed++)
+        {
+            int[] slots = ViolatorSlots.Pick(queue, planned, new SeededRandom(seed));
+            Assert.AreEqual(planned, slots.Length, $"seed {seed}");
+            CollectionAssert.AllItemsAreUnique(slots, $"seed {seed}");
+            Assert.That(slots, Is.All.InRange(1, window), $"seed {seed}");
+        }
+    }
+
+    [Test]
+    public void RoomProblems_NoneWhileTheFreeWindowHoldsTheGuarantees()
+    {
+        CollectionAssert.IsEmpty(ViolatorSlots.RoomProblems("DayPlan_Inv_Day13", 17, new[] { 6 }, 3), "9 slots in the window, 8 free, 3 guarantees");
+        CollectionAssert.IsEmpty(ViolatorSlots.RoomProblems("tight", 4, new[] { 1 }, 1), "2 slots, 1 free, 1 guarantee");
+        CollectionAssert.IsEmpty(ViolatorSlots.RoomProblems("none", 14, new int[0], 0));
+    }
+
+    [Test]
+    public void RoomProblems_WarnsWhenForcedSlotsLeaveTooFewFreeSlots()
+    {
+        List<string> problems = ViolatorSlots.RoomProblems("crowded", 6, new[] { 1, 2 }, 2);
+        Assert.AreEqual(1, problems.Count, "3 slots in the window, 1 free, 2 guarantees: one is dropped");
+        StringAssert.Contains("'crowded'", problems[0]);
+        StringAssert.Contains("1 free", problems[0]);
+        StringAssert.Contains("2 guaranteed", problems[0]);
+    }
+
+    [Test]
+    public void RoomProblems_ForcedSlotsPastTheWindowTakeNoRoom()
+    {
+        CollectionAssert.IsEmpty(ViolatorSlots.RoomProblems("DayPlan_Inv_Day6", 14, new[] { 8, 11 }, 7), "day 6's famous stand past slot 7");
+        CollectionAssert.IsEmpty(ViolatorSlots.RoomProblems("repeat", 6, new[] { 3, 3, 3 }, 2), "a slot's alternatives take its one slot");
     }
 
     [Test]

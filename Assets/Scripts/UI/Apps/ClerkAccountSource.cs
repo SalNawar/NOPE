@@ -72,18 +72,18 @@ public sealed class ClerkAccountSource : IClerkAccountSource
         return instalment;
     }
 
-    /// <summary>Writes the day's statement row from the shift's ledger, its instalment included (the shift's end, before the end-of-shift save).</summary>
+    /// <summary>Writes the day's statement row from the shift's ledger, its instalment included, with the day's orders as its purchases (the shift's end, before the end-of-shift save).</summary>
     public static void RecordShift(WorldState world, ShiftLedger ledger, ContentLibrarySO library, GameConfigSO config)
     {
         if (world != null)
-            Account.RecordShift(world.accountDays, world.day, ledger, new ClerkAccountSource(world, library, ledger), Kept(config));
+            Account.RecordShift(world.accountDays, world.day, ledger, new ClerkAccountSource(world, library, ledger), Kept(config), Orders.SpentOn(world.orders, world.day));
     }
 
-    /// <summary>Writes Home's part of the day's statement row: its household costs and purchases so far, and the wallet after.</summary>
-    public static void RecordHome(WorldState world, int household, int purchases, ContentLibrarySO library, GameConfigSO config)
+    /// <summary>Writes Home's part of the day's statement row: its household costs, the day's purchases (Home's own, <paramref name="homePurchases"/>, and the shift's orders), and the wallet after.</summary>
+    public static void RecordHome(WorldState world, int household, int homePurchases, ContentLibrarySO library, GameConfigSO config)
     {
         if (world != null)
-            Account.RecordHome(world.accountDays, world.day, household, purchases, new ClerkAccountSource(world, library), Kept(config));
+            Account.RecordHome(world.accountDays, world.day, household, homePurchases + Orders.SpentOn(world.orders, world.day), new ClerkAccountSource(world, library), Kept(config));
     }
 
     /// <summary>The statement's day cap (0 keeps every day when no config is wired).</summary>

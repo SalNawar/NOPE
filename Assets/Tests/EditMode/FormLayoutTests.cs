@@ -390,6 +390,41 @@ public class FormLayoutTests
     }
 
     [Test]
+    public void ARowLinksRoom_WrapsATablesLastColumnShortOfTheLink_TheOtherColumnsAndTheRowBoxKeepTheirWidth()
+    {
+        var spec = new FormSpec
+        {
+            fixedPage = false,
+            blocks = new[] { new FormBlock { kind = FormBlockKind.Table, columns = new[] { "NO", "SPEAKER", "STATEMENT" }, shares = new[] { 0.12f, 0.24f, 0.64f }, slot = "rows" } }
+        };
+        const float width = 542f, room = 28f;
+        float h = width / M.aspect, pad = M.boxPadding * h, size = M.cellSize * h;
+        float statementWidth = 0.64f * (width - 2f * M.marginX * h) - 2f * pad;
+        // Short words exactly filling one line of the whole column (FakeMeasure: half an em a letter), so any room wraps the last one.
+        int letters = (int)Math.Floor(statementWidth / (size * 0.5f));
+        char[] line = string.Concat(Enumerable.Repeat("abcd ", letters / 5 + 1)).Substring(0, letters).ToCharArray();
+        line[letters - 1] = 'x';
+        string statement = new string(line);
+        var data = new FormData { Rows = new Dictionary<string, IReadOnlyList<string[]>> { { "rows", new List<string[]> { new[] { "1", "Desk", statement } } } } };
+
+        PlacedForm plain = FormLayout.Layout(spec, data, width, M, new FakeMeasure());
+        PlacedForm linked = FormLayout.Layout(spec, data, width, M, new FakeMeasure(), room);
+
+        FormItem[] a = plain.Items.Where(i => i.Kind == FormItemKind.Text && i.Role == FormTextRole.Cell).OrderBy(i => i.Rect.XMin).ToArray();
+        FormItem[] b = linked.Items.Where(i => i.Kind == FormItemKind.Text && i.Role == FormTextRole.Cell).OrderBy(i => i.Rect.XMin).ToArray();
+        Assert.AreEqual(3, b.Length);
+        for (int i = 0; i < 2; i++)
+            Assert.AreEqual(a[i].Rect.Width, b[i].Rect.Width, Eps, "the other columns keep their width");
+        Assert.AreEqual(a[2].Rect.Width - (room - pad), b[2].Rect.Width, Eps, "the last column gives up the room less its padding");
+        Assert.AreEqual(linked.Slots[0].Hit.XMax - room, b[2].Rect.XMax, Eps, "its text ends where the link's box begins");
+        Assert.AreEqual(plain.Slots[0].Hit.Width, linked.Slots[0].Hit.Width, Eps, "the row's box keeps the table's width");
+        Assert.AreEqual(1, Math.Round(a[2].Rect.Height / (size * 1.15f)), "the whole column holds the statement on one line");
+        Assert.AreEqual(2, Math.Round(b[2].Rect.Height / (size * 1.15f)), "short of the link it wraps");
+        Assert.Greater(linked.Slots[0].Hit.Height, plain.Slots[0].Hit.Height, "and its row is as tall as the wrapped text");
+        Assert.AreEqual(plain.Items.Count(i => i.Role == FormTextRole.Label), linked.Items.Count(i => i.Role == FormTextRole.Label));
+    }
+
+    [Test]
     public void Checkboxes_TickTheOptionEqualToTheFieldsValue_AndPickAsTheField()
     {
         var spec = new FormSpec

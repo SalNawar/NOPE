@@ -77,7 +77,10 @@ public enum OfficeAnchorId
     PenPot,
 
     /// <summary>A flavour prop (a click reaction).</summary>
-    Stapler
+    Stapler,
+
+    /// <summary>The hall's Departure Board display (the portals spec v3 BD1): the gameplay draws the day's portal rows on it and its click box shows their tooltip; the 3D room has none.</summary>
+    DepartureBoard
 }
 
 /// <summary>Where a resolved anchor came from.</summary>

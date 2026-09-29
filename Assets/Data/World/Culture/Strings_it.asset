@@ -87,6 +87,10 @@ MonoBehaviour:
     text: Appunti
     gloss: 0
     tier: 0
+  - key: icon.orders
+    text: Ordini
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: Indagine
     gloss: 0
@@ -108,7 +112,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: tray.stability
-    text: "Stabilit\xE0: {0:0}%"
+    text: "Stabilit\xE0: {0}"
     gloss: 0
     tier: 0
   - key: taskbar.desk
@@ -125,5 +129,9 @@ MonoBehaviour:
     tier: 0
   - key: briefing.newsHeader
     text: "\u2014 NOTIZIE DELLA LINEA TEMPORALE \u2014"
+    gloss: 0
+    tier: 0
+  - key: icon.portals
+    text: Portali
     gloss: 0
     tier: 0

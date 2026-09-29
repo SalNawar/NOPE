@@ -7,7 +7,7 @@ using NUnit.Framework;
 /// </summary>
 public class SerializedEnumsTests
 {
-    /// <summary>ClueCategory: stored in templates, books, places, effects, the config and saves (FactEdit, CarryRecord); phase 3 appends CitizenId, Destination, Incident, DepartureDate and Expiry; phase 6 AccountStatus, TransponderId, TransponderClass and Debt.</summary>
+    /// <summary>ClueCategory: stored in templates, books, places, effects, the config and saves (FactEdit, CarryRecord); phase 3 appends CitizenId, Destination, Incident, DepartureDate and Expiry; phase 6 AccountStatus, TransponderId, TransponderClass and Debt; phase 8 WaiverNo, Credit, Funds, PolicyNo and Signature; phase 9 Employer, Term and Wage.</summary>
     [Test]
     public void ClueCategory_KeepsItsSerializedInts()
     {
@@ -34,7 +34,10 @@ public class SerializedEnumsTests
         Assert.AreEqual(20, (int)ClueCategory.Funds);
         Assert.AreEqual(21, (int)ClueCategory.PolicyNo);
         Assert.AreEqual(22, (int)ClueCategory.Signature);
-        Assert.AreEqual(23, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
+        Assert.AreEqual(23, (int)ClueCategory.Employer);
+        Assert.AreEqual(24, (int)ClueCategory.Term);
+        Assert.AreEqual(25, (int)ClueCategory.Wage);
+        Assert.AreEqual(26, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
     }
 
     /// <summary>CitizenStatus: stored in the content library's account ranges (agency.accounts.statuses).</summary>
@@ -65,10 +68,14 @@ public class SerializedEnumsTests
         Assert.AreEqual(2, (int)LieKind.DoctoredIdentity);
         Assert.AreEqual(3, (int)LieKind.FakeDisplaced);
         Assert.AreEqual(4, (int)LieKind.Smuggling);
-        Assert.AreEqual(5, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
+        Assert.AreEqual(5, (int)LieKind.DebtorPosingAsTourist);
+        Assert.AreEqual(6, (int)LieKind.ForgedContract);
+        Assert.AreEqual(7, (int)LieKind.FakeWaiver);
+        Assert.AreEqual(8, (int)LieKind.ForgedProof);
+        Assert.AreEqual(9, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
     }
 
-    /// <summary>TravelRuleType: stored in TravelRuleSO.type (world_source.json rules[].type); phase 12 appends ReturnHome, phase 11 NoPresentGoods and PaperDates.</summary>
+    /// <summary>TravelRuleType: stored in TravelRuleSO.type (world_source.json rules[].type); phase 10 appends DressForDestination, phase 7 Procedure, phase 12 ReturnHome, phase 11 NoPresentGoods and PaperDates, phase 9 PaperSet and DebtStanding.</summary>
     [Test]
     public void TravelRuleType_KeepsItsSerializedInts()
     {
@@ -80,7 +87,36 @@ public class SerializedEnumsTests
         Assert.AreEqual(5, (int)TravelRuleType.ReturnHome);
         Assert.AreEqual(6, (int)TravelRuleType.NoPresentGoods);
         Assert.AreEqual(7, (int)TravelRuleType.PaperDates);
-        Assert.AreEqual(8, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
+        Assert.AreEqual(8, (int)TravelRuleType.PaperSet);
+        Assert.AreEqual(9, (int)TravelRuleType.DebtStanding);
+        Assert.AreEqual(10, (int)TravelRuleType.TransponderRecall, "days 7-15: the Driftbox 3 recall");
+        Assert.AreEqual(11, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>PlannedDirective: stored in DayPlanSO's forced slots (world_source.json days[].forced[].directive; days 7-15 B6).</summary>
+    [Test]
+    public void PlannedDirective_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)PlannedDirective.None);
+        Assert.AreEqual(1, (int)PlannedDirective.EconomyManifest);
+        Assert.AreEqual(2, (int)PlannedDirective.WaiverMissing);
+        Assert.AreEqual(3, (int)PlannedDirective.WaiverUnsigned);
+        Assert.AreEqual(4, (int)PlannedDirective.ProofMissing);
+        Assert.AreEqual(5, (int)PlannedDirective.Frozen);
+        Assert.AreEqual(6, (int)PlannedDirective.DepartureDate);
+        Assert.AreEqual(7, (int)PlannedDirective.Expired);
+        Assert.AreEqual(8, (int)PlannedDirective.Recalled);
+        Assert.AreEqual(9, System.Enum.GetValues(typeof(PlannedDirective)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>StorySection: stored in TimelineTriggerSO.section (world_source.json history.rules[].section; days 7-15 B10, Saleh's Q9).</summary>
+    [Test]
+    public void StorySection_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)StorySection.News);
+        Assert.AreEqual(1, (int)StorySection.Desk);
+        Assert.AreEqual(2, (int)StorySection.Return);
+        Assert.AreEqual(3, System.Enum.GetValues(typeof(StorySection)).Length, "a new member is appended here too");
     }
 
     /// <summary>MissingFormVariant: stored in the content library's missing-form replies (interview.missingFormReplies).</summary>
@@ -92,7 +128,7 @@ public class SerializedEnumsTests
         Assert.AreEqual(2, System.Enum.GetValues(typeof(MissingFormVariant)).Length, "a new member is appended here too");
     }
 
-    /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy.</summary>
+    /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and the questions' WordingOverride.kinds.</summary>
     [Test]
     public void TravellerKind_KeepsItsSerializedInts()
     {
@@ -168,7 +204,33 @@ public class SerializedEnumsTests
         Assert.AreEqual(20, (int)OfficeAnchorId.Calculator);
         Assert.AreEqual(21, (int)OfficeAnchorId.PenPot);
         Assert.AreEqual(22, (int)OfficeAnchorId.Stapler);
-        Assert.AreEqual(23, System.Enum.GetValues(typeof(OfficeAnchorId)).Length, "a new member is appended here too");
+        Assert.AreEqual(23, (int)OfficeAnchorId.DepartureBoard);
+        Assert.AreEqual(24, System.Enum.GetValues(typeof(OfficeAnchorId)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>UpgradeVenue: stored in UpgradeSO.venue (the Orders app or Home; Saleh 2026-09-29, the portals spec v3 OR1).</summary>
+    [Test]
+    public void UpgradeVenue_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)UpgradeVenue.Orders);
+        Assert.AreEqual(1, (int)UpgradeVenue.Home);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(UpgradeVenue)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>UpgradeBranch: stored in UpgradeSO.branch (the Orders tree's bands, the portals spec v3 OR2; then Home's five categories, the Home upgrades spec HU1).</summary>
+    [Test]
+    public void UpgradeBranch_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)UpgradeBranch.Desk);
+        Assert.AreEqual(1, (int)UpgradeBranch.Interview);
+        Assert.AreEqual(2, (int)UpgradeBranch.Portals);
+        Assert.AreEqual(3, (int)UpgradeBranch.Contacts);
+        Assert.AreEqual(4, (int)UpgradeBranch.Food);
+        Assert.AreEqual(5, (int)UpgradeBranch.Housing);
+        Assert.AreEqual(6, (int)UpgradeBranch.Security);
+        Assert.AreEqual(7, (int)UpgradeBranch.Health);
+        Assert.AreEqual(8, (int)UpgradeBranch.Comfort);
+        Assert.AreEqual(9, System.Enum.GetValues(typeof(UpgradeBranch)).Length, "a new member is appended here too");
     }
 
     /// <summary>DialogSpeaker: stored in ScriptLine.speaker.</summary>
@@ -191,6 +253,15 @@ public class SerializedEnumsTests
         Assert.AreEqual(4, (int)DialogChoiceKind.Look);
         Assert.AreEqual(5, (int)DialogChoiceKind.Dialog);
         Assert.AreEqual(6, System.Enum.GetValues(typeof(DialogChoiceKind)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>PortalRole: stored in the content library's agency block (agency.portals[].role, the portals spec v3 PO2); append only.</summary>
+    [Test]
+    public void PortalRole_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)PortalRole.Departures);
+        Assert.AreEqual(1, (int)PortalRole.Returns);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(PortalRole)).Length, "a new member is appended here too");
     }
 
     /// <summary>The steps checklist's enums (redesign phase 21): stored in the content library's step sets (ContentLibrarySO.Pc.steps).</summary>
@@ -225,5 +296,23 @@ public class SerializedEnumsTests
         Assert.AreEqual(3, (int)StepLink.FirstUncheckedField);
         Assert.AreEqual(4, (int)StepLink.CostumeClaimed);
         Assert.AreEqual(5, System.Enum.GetValues(typeof(StepLink)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>ReactionVerdict: stored in the reactions' rows (interview.reactions, interview.voices.reactions; the personalities spec's R2).</summary>
+    [Test]
+    public void ReactionVerdict_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)ReactionVerdict.Accepted);
+        Assert.AreEqual(1, (int)ReactionVerdict.Denied);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(ReactionVerdict)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>ReactionIntent: stored in the reactions' rows (the personalities spec's R2).</summary>
+    [Test]
+    public void ReactionIntent_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)ReactionIntent.Honest);
+        Assert.AreEqual(1, (int)ReactionIntent.Lying);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(ReactionIntent)).Length, "a new member is appended here too");
     }
 }

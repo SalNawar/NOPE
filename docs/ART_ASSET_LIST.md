@@ -54,6 +54,8 @@ The room and every prop in it are the art side's 3D models in `Assets/Scenes/Off
 | The wall exhibits and the city outside | `HybridOffice/Exhibits`, `HybridOffice/Exterior` | done |
 | A poster frame | none | deferred: the culture posters return when the art side adds a frame with an anchor |
 | Desk decoration spots | the gameplay layer's empty slots `photo`, `free_1`, `free_2` | no art planned; any decoration would be a 3D model |
+| The anime hall's departure board: its display stays blank; the game draws the day's portal rows on it (the portals spec v3 BD1-BD5) | `DepartureBoard`: `GameplayAnchors/Anchor_DepartureBoard` over the hall's `16 Departure board blank display` | done: keep the display text-free |
+| The anime hall's five portal rings: the game dims a ring under maintenance and draws the glow and the Return Gate's spiral inside it, under the bay, the ring and the glass (orders: the bay's − 1; VX1-VX6) | the layers `38`-`47` and `53`-`57` (`DeskConfigSO.hallPortalLayers`) | done; keep each ring's centre free of other layers at the bay's order − 1 |
 
 ## 2. The 2D layers over the office
 
@@ -70,6 +72,8 @@ Drawn on the office overlay canvas (1920 × 1080 reference; it scales with the s
 | Speech bubble tail | under the bubble's bottom centre, its top on the bubble's bottom edge | `Assets/Art/UI/Resources/Office/speech_bubble_tail.png` | none (the bubble has no tail until it lands) | about 32 × 24 on screen, pointing down, white or light grey with the bubble's outline; deliver 64 × 48 | 1 | missing |
 | Wheel choices and the "< Back" centre | on an ellipse around the traveller, 240 × 44 and 150 × 44 | the UI kit's `ui_button.png` (section 3) | code-drawn themed buttons | from the kit | 2 | code-drawn, later |
 | Desk tooltip | above a clicked prop (credits, day, stability, time), 360 × 60 | the UI kit's `tooltip.png` (section 3) | code-drawn yellow panel | from the kit | 2 | code-drawn, later |
+| Portal glow | inside an open departure portal's ring in the anime hall (the portals spec v3 VX1), about 150 px across at 1080p for the front ring; tinted pale cyan and drawn as a glow (unlit) by the game, slowly turning | `Assets/Art/UI/Resources/Office/portal_glow.png` | a code-drawn radial glow (`PortalGlowPlaceholder`) | 512 × 512, a soft swirl of light on transparent, greyscale, clear at the rim | 1 | missing |
+| Return Gate spiral | inside the Return Gate's ring (portal 03) while it is in service (VX5); tinted amber and drawn as a glow (unlit) | `Assets/Art/UI/Resources/Office/portal_return_glow.png` | a code-drawn inward spiral (`PortalGlowPlaceholder`) | the same format: an inward spiral | 1 | missing |
 
 - The wheel's icons are in section 8.
 - **Drawn by code, no art:** the fallback HUD (it shows only when the art office lacks a readout) and the floating hints.
@@ -83,12 +87,16 @@ A 4:3 canvas of 1440 × 1080, seen in the PC frame (its glass is 1120 × 840 at 
 |---|---|---|---|---|---|---|
 | Neutral wallpaper | behind the desktop until a country leads history | `Assets/Art/Generated/xp_bliss.png` (via `Theme_neutral`) | 1920 × 1080; the 4:3 desktop shows its middle 1440 × 1080 | keep | 1 | done |
 | Culture wallpapers × 8 | behind the desktop from the morning after a country leads | `Assets/Art/Culture/<id>/wallpaper.png` for `egypt`, `iraq`, `greece`, `italy`, `china`, `japan`, `britain`, `germany` (via `Theme_<id>`) | Generate World placeholders, 960 × 540 | **1440 × 1080**: ask ChatGPT for 1536 × 1024 and Claude crops the middle (UI_ART_RULES, "Wallpapers" and "The eight cultures") | 1 | placeholder |
-| Desktop icons × 6 | the six free-placed desktop icons (plan phase 17): a 72 × 72 glyph over its label in a 120 × 132 cell, tinted by the theme | `Assets/Art/UI/Resources/Desktop/icon_<id>.png` (ids below) | code-drawn placeholder glyphs (`DesktopIconPlaceholder`); the old interim `icon_internet`, `icon_notes` and `icon_settings` in `UI/Desktop/` (cream plates) are not used | 128 × 128, a bold greyscale glyph on transparent (it shows about 56 px tall at 1080p), no plate | 1 | placeholder |
+| Desktop icons × 8 | the eight free-placed desktop icons (plan phase 17; Orders added 2026-09-29; Portals, a portal ring, the portals spec v3 PA1): a 72 × 72 glyph over its label in a 120 × 132 cell, tinted by the theme | `Assets/Art/UI/Resources/Desktop/icon_<id>.png` (ids below) | code-drawn placeholder glyphs (`DesktopIconPlaceholder`); the old interim `icon_internet`, `icon_notes` and `icon_settings` in `UI/Desktop/` (cream plates) are not used | 128 × 128, a bold greyscale glyph on transparent (it shows about 56 px tall at 1080p), no plate | 1 | placeholder |
+| Orders branch glyphs × 4 | the Orders tree's band heads, 34 × 34 (a node without its own icon shows its band's glyph too, 48 × 48) | `Assets/Art/UI/Resources/Orders/branch_<id>.png` for `desk`, `interview`, `portals`, `contacts` | code-drawn placeholders (`DesktopIconPlaceholder.OrdersGlyphs`: a scanner, a speech bubble, a portal ring, two linked rings) | 128 × 128, a bold greyscale glyph on transparent, no plate | 1 | placeholder |
+| Upgrade icons × 12 | at the left of each Orders node, 48 × 48 (moved from Home's shop, 2026-09-29) | `Assets/Art/UI/Resources/Orders/upgrade_<id>.png` (ids below) | 2 interim at 256 × 256, wired (`upgrade_adv_scanner`, `upgrade_diplo_contacts`, moved here with their metas); 10 missing (their band's glyph shows) | 256 × 256 | 1 | interim / missing |
 | Cursors: arrow, hand | everywhere: the game's cursor, the hand over anything clickable | `Assets/Art/UI/Desktop/cursor_arrow.png`, `cursor_hand.png` (found by name, set in `InteractionFeedback_Default`) | interim 32 × 32 | 32 × 32; the tip (arrow) and the fingertip (hand) are the click point: the stored points are (3, 2) and (13, 3), so Claude re-measures them when new art lands | 1 | interim |
 | Cursors: grab, grabbing | over a desk paper and while dragging it | `cursor_grab.png`, `cursor_grabbing.png` | none (the hand shows) | 32 × 32 | 2 | missing, later |
 | UI kit × 9 | every window, button, bar and menu (table below) | `Assets/Art/UI/Desktop/` | code-drawn themed panels | greyscale 9-slice pieces | 2 | later |
 
-**Desktop icon ids** (the PC redesign DK1; `DesktopAppIds`): `investigation`, `internet`, `mail`, `citizen_account`, `notes`, `settings`, and nothing else. The old tiles' interim glyphs (`directives`, `scanner`, `citizen_records`, `cluelog`, the books) move to the Investigation app's tab glyphs with the app (plan phase 16); `lexicon`, `dialect` and `material` are retired with their placeholder apps. The slot is wired (plan phase 27): each icon shows its file when it exists, else the placeholder glyph for its id.
+**Desktop icon ids** (the PC redesign DK1; `DesktopAppIds`): `investigation`, `portals` (a portal ring on its base), `internet`, `mail`, `citizen_account`, `orders` (a parcel or a crate with a tick), `notes`, `settings`, and nothing else.
+
+**Orders upgrade ids (12).** `scanner_autofeed` (Auto-Feed Scanner), `adv_scanner` (Analysis Scanner), `interview_protocols` (Interview Protocols), the four Speech translators `tr_near_east_spoken`, `tr_mediterranean_spoken`, `tr_east_asia_spoken`, `tr_north_europe_spoken`, `diplo_contacts` (Diplomatic Contacts), and the portal repairs `repair_portal_02`, `repair_return_gate`, `repair_portal_04`, `repair_portal_05`. The state badges (padlock, clock, tick) are code-drawn and need no art. The old tiles' interim glyphs (`directives`, `scanner`, `citizen_records`, `cluelog`, the books) move to the Investigation app's tab glyphs with the app (plan phase 16); `lexicon`, `dialect` and `material` are retired with their placeholder apps. The slot is wired (plan phase 27): each icon shows its file when it exists, else the placeholder glyph for its id.
 
 **The UI kit (later).** UI_ART_RULES rule 5: greyscale only (white to mid grey), a flat middle and even borders so each piece stretches, no text or letter-shaped glyphs. The culture theme tints every piece. Not needed until Claude adds the theme slots.
 
@@ -142,17 +150,17 @@ A traveller hands over Temporal Customs forms (the TC forms of the redesign). Ea
 | Item | Where it shows | File | Now | Deliver | Tier | Status |
 |---|---|---|---|---|---|---|
 | Home background | behind every Home panel, full screen | `Assets/Art/Home/home_bg.png` (`Canvas/ArtBackground`) | interim 1920 × 1080, painted, warm lamp light | 1920 × 1080, opaque, redrawn in the cel style | 1 | interim |
-| Expenses panel | the day's bills and the family rows, 760 × 600 | `Assets/Art/Home/panel_expenses.png` (`ExpensesPanel`) | interim 800 × 1000, stretched to 760 × 600 | 1520 × 1200, a text-free paper panel | 1 | interim |
-| Shop panel | the upgrade shop, 760 × 600 | `Assets/Art/Home/panel_shop.png` (`ShopPanel`) | interim 800 × 1000, stretched | 1520 × 1200 | 1 | interim |
+| Expenses panel | the night's bill, break-in, mood and the family rows, 900 × 780 | `Assets/Art/Home/panel_expenses.png` (`ExpensesPanel`) | interim 800 × 1000, stretched to 900 × 780 | 1520 × 1200, a text-free paper panel | 1 | interim |
+| House panel (the old shop panel) | the House tree (the Home upgrades spec §6), 1840 × 920 | `Assets/Art/Home/panel_shop.png` (`ShopPanel`) | interim 800 × 1000, stretched | 1840 × 920 or larger at that aspect, a text-free paper panel | 1 | interim |
 | Slot panel | the slot machine's panel, 560 × 360 | `Assets/Art/Home/panel_slot.png` | code-drawn (dark, with white text: a light panel needs the texts recoloured, so there is no slot yet) | 1120 × 720 | 2 | code-drawn |
 | Sleep panel | "Turn in", 560 × 320 | `Assets/Art/Home/panel_sleep.png` | code-drawn (as the slot panel) | 1120 × 640 | 2 | code-drawn |
 | Slot machine | standing on the slot panel's top edge, in a 375 × 240 box at its own aspect (the panel's white texts stay on the dark panel) | `Assets/Art/UI/Resources/Home/slot_machine.png` | interim 800 × 1000, portrait, wired (it shows small in the landscape box) | a landscape machine, 1000 × 640, the reels in the middle, no lever in the picture | 1 | interim |
 | Slot lever | at the machine box's right edge, 80 × 240 | `Assets/Art/UI/Resources/Home/slot_lever.png` | interim 200 × 600, wired | 160 × 480, standing | 1 | interim |
 | Slot outcome symbols × 5 | the result of a spin | `Assets/Art/Home/slot_<outcome id>.png` for `small_win`, `jackpot_cash`, `busted_machine`, `forgery_warning`, `legendary_omen` | 5 interim at 256 × 256, not wired (a spin shows text only); two still carry older names (`slot_jackpot`, `slot_busted`) | 256 × 256 | 2 | interim |
-| Upgrade icons × 8 | at the left of each shop row, 44 × 44 | `Assets/Art/UI/Resources/Home/upgrade_<id>.png` (ids below) | 2 interim at 256 × 256, wired (`upgrade_adv_scanner`, `upgrade_diplo_contacts`); 6 missing (their rows are text only) | 256 × 256 | 1 | interim / missing |
+| House upgrade icons × 18 | at the left of each House card, 56 × 56 | `Assets/Art/UI/Resources/Home/upgrade_<id>.png` (ids below) | none yet (the cards are text only); the office's upgrades moved to the PC's Orders app (section 3) | 256 × 256 | 1 | missing |
 | Family portraits × 6 | at the left of the member's family row, 44 × 44: the Partner and the Kid (`RunConfig.startingFamilyMembers`), whose condition runs from 0 to 10 | `Assets/Art/UI/Resources/Home/family_<member>_<band>.png`: members `partner`, `kid`; bands `well` (condition 0–3), `ill` (4–7), `grave` (8–10) | none: the rows are text only | 512 × 512, in the character style; 2 members × 3 condition bands | 1 | missing |
 
-**Upgrade ids (8).** `adv_scanner` (Analysis Scanner), `scanner_autofeed` (Auto-Feed Scanner), `diplo_contacts` (Diplomatic Contacts), `interview_protocols` (Interview Protocols), and the four Speech translators (papers are always English, so the Papers translators retired): `tr_near_east_spoken` (Near East Translator: Speech), `tr_mediterranean_spoken`, `tr_east_asia_spoken`, `tr_north_europe_spoken`.
+**House upgrade ids (18).** `house_rations_b`, `house_veg_box`, `house_hen_share`, `house_draught_seals`, `house_insulation`, `house_floor_up`, `house_corner_flat`, `house_second_lock`, `house_strongbox`, `house_alarm`, `house_air_filter`, `house_water_purifier`, `house_medicine_cabinet`, `house_clinic`, `house_plant`, `house_photo`, `house_radio`, `house_better_bed`.
 
 - **Drawn by code, no art:** the HUD line and the rows' text. The buttons take the UI kit's button.
 
@@ -174,12 +182,38 @@ A traveller hands over Temporal Customs forms (the TC forms of the redesign). Ea
 |---|---|---|---|---|---|---|
 | Wheel icons × 6 | at the left of each traveller-wheel choice, 28 px at 1080p, on a dark blue button | `Assets/Art/UI/Resources/WheelIcons/wheel_<kind>.png` for `request` (a sheet of paper or an open hand), `question` (a speech balloon), `look` (an eye), `dialog` (two balloons), `back` (an arrow pointing left), `normal` (a small dot) | white glyphs of the same shapes drawn at run time, 32 × 32, never on disk; the folder does not exist yet (a file dropped there shows: checked 2026-09-26) | 64 × 64, white on transparent (the importer makes it a sprite) | 1 | missing |
 
-- The desktop icons are in section 3, the upgrade icons in section 6.
+- The desktop icons, the Orders branch glyphs and the upgrade icons are in section 3; the house upgrade icons' slot in section 6.
 - **Every icon:** a bold, simple silhouette that reads at 24 px; no letters, question marks or exclamation marks; a white or grey glyph on transparent (the game may tint it); no plate behind it unless the item says so.
 
 ## Characters (pointer)
 
 About 880 files (50 bases, 759 garments, 31 Future outfits, 40 premade expressions) from about 406 ChatGPT images, at `Assets/Art/Characters/Resources/Characters/<key>.png`, 1024 × 1536. Tier 1: the game loads each by key at run time and draws a 256 × 384 placeholder until it lands. Status: missing (the folder does not exist yet). Everything else is in the character brief and `coverage.json`.
+
+A premade (a character drawn whole) shows its picture once its neutral image is in the folder; until then the game draws it as a generated traveller in its place's costume, the same face at every appearance (days 7-15 B4), never the flat placeholder.
+
+### Premades of days 7-15 (by-name slots)
+
+Sixteen new whole-figure characters, four expressions each (`neutral`, `happy`, `angry`, `worried`): 64 files, Tier 1 drop-in at `Assets/Art/Characters/Resources/Characters/premade_<id>_<expression>.png`. Each is drawn once, in the costume of the one place they claim; the character brief's batch 9 has the prompt. The six story characters come first (they stand in the second week's beats); the ten famous are pooled from day 7.
+
+| Character (`id`) | Place and look | Files | Now | Deliver | Tier | Status |
+|---|---|---|---|---|---|---|
+| `pell`: Pell Quimby (2150 story character, days 7, 10, 15) | Periclean Athens, 430 BCE: a cheerful woman of 26 in a cheap tourist's copy of an Athenian chiton and himation, a straw sun hat, a battered transponder on her wrist | `premade_pell_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `ines`: Ines Varga (2150 story character, day 8) | Victorian Britain, 1843: a tired woman of 51 in a Victorian mill worker's dress and apron, a Temporal Customs lanyard tucked into her collar | `premade_ines_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `rook`: Rook Danner (2150 story character, day 11) | Victorian Britain, 1843: a grinning man of 33 in a too-clean Victorian workman's jacket and flat cap | `premade_rook_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `ada`: "Ada Lovelace" (a 2150 enthusiast posing as her, day 12) | Victorian Britain, 1843: a woman of about 28 in a slightly-too-new Victorian day dress and bonnet, a little too pleased with it | `premade_ada_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `hollis`: Marek Hollis (2150 story character, day 13) | Wilhelmine Germany, 1899: a gaunt man of 32 in a Wilhelmine collier's jacket and cap | `premade_hollis_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `auditor`: Quill Ferreira, the Directorate's auditor (day 14) | Republican Rome, 50 BCE: a sharp man of 48 in a Roman toga worn over very good 2150 shoes | `premade_auditor_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `tahtawi`: Rifa'a al-Tahtawi (famous, pooled) | Khedivate of Egypt, 1869: an Egyptian scholar of 67 in a turban and a scholar's robe over a kaftan | `premade_tahtawi_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `kulthum`: Umm Kulthum (famous, pooled) | Nasser's Egypt, 1962: an Egyptian singer of 58 in an elegant long evening dress, dark glasses, a handkerchief in her hand | `premade_kulthum_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `malaika`: Nazik al-Mala'ika (famous, pooled) | Kingdom of Iraq, 1956: an Iraqi poet of 33 in a 1950s skirt suit, a book under her arm | `premade_malaika_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `sayyab`: Badr Shakir al-Sayyab (famous, pooled) | Kingdom of Iraq, 1956: a slight Iraqi poet of 29 in a 1950s suit, a notebook in his hand | `premade_sayyab_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `elytis`: Odysseas Elytis (famous, pooled) | Metapolitefsi Athens, 1975: a Greek poet of 63 in a jacket and an open-collared shirt, glasses | `premade_elytis_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `fellini`: Federico Fellini (famous, pooled) | Dolce Vita Rome, 1960: an Italian film director of 40 in a dark suit and a hat, a scarf | `premade_fellini_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `hezehui`: He Zehui (famous, pooled) | Beijing, People's Republic, 1972: a Chinese physicist of 58 in a plain Zhongshan-style jacket, short hair, glasses | `premade_hezehui_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `toyoda`: Sakichi Toyoda (famous, pooled) | Meiji Nagoya, 1899: a Japanese inventor of 32 in a Meiji kimono with a work apron over it | `premade_toyoda_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `turing`: Alan Turing (famous, pooled) | Post-war Britain, 1950: a British mathematician of 38 in a tweed jacket and a crooked tie, a runner's build | `premade_turing_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `meitner`: Lise Meitner (famous, pooled) | Weimar Berlin, 1926: a physicist of 48 in a dark 1920s dress and jacket, her hair in a bun | `premade_meitner_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+
 
 ## Totals
 
@@ -188,16 +222,16 @@ New 2D files (the Blender scanner and the characters are counted apart):
 | Section | Tier 1 | Tier 2 | Files |
 |---|---|---|---|
 | 1. The office (Blender) | – | – | the scanner model (Tier 3) |
-| 2. 2D layers over the office | 5 | 0 | 5 |
-| 3. PC desktop | 16 | 11 | 27 |
+| 2. 2D layers over the office | 7 | 0 | 7 |
+| 3. PC desktop | 34 | 11 | 45 |
 | 4. Documents | 22 | 0 | 22 |
 | 5. Day flow | 3 | 0 | 3 |
-| 6. Home | 19 | 7 | 26 |
+| 6. Home | 11 | 7 | 18 |
 | 7. Title and endings | 10 | 1 | 11 |
 | 8. Icons | 6 | 0 | 6 |
-| **Total** | **81** | **19** | **100** |
+| **Total** | **93** | **19** | **112** |
 
-- Every decision was answered yes, so all are wanted. The count moved from 107 to 100 with the redesign: six desktop icons instead of seventeen, one Title face (normal and hover) instead of four baked buttons, eight upgrade icons, and ten per-kind faces, the plain agency face and the seal instead of the passport and permit faces.
+- Every decision was answered yes, so all are wanted. The Orders app (2026-09-29) added the Orders icon, four branch glyphs and four portal-repair icons, and moved the eight upgrade icons from Home to it (109); the portals (the portals spec v3) added the Portals icon, the portal glow and the Return Gate's spiral (112). The count moved from 107 to 100 with the redesign: six desktop icons instead of seventeen, one Title face (normal and hover) instead of four baked buttons, eight upgrade icons, and ten per-kind faces, the plain agency face and the seal instead of the passport and permit faces.
 - Tier 2 now: the UI kit (9) and the grab cursors (2), the slot and sleep panels and the ending panel (their white text needs a dark panel), the slot outcome symbols (5); the scanned copy waits on plan phase 5 and reuses the faces.
 - Also: the scanner (1 Blender model) and about 880 character files (the brief).
 

@@ -109,7 +109,7 @@ public sealed class DebugPanelController : MonoBehaviour
             return;
         }
 
-        GUILayout.Label($"Day {world.day}   Money {world.money}   Stability {world.timelineStability:0.#}   Ending '{world.endingId}'");
+        GUILayout.Label($"Day {world.day}   Money {world.money}   Stability {StabilityRules.Format(world.timelineStability)}   Ending '{world.endingId}'");
 
         int tab = GUILayout.Toolbar(_tab, TabLabels);
         if (tab != _tab)
@@ -128,7 +128,44 @@ public sealed class DebugPanelController : MonoBehaviour
         GUILayout.EndArea();
     }
 
-    /// <summary>Cheats tab: day skip, history (force leader), money/stability adjust, flags, force legendary, upgrades.</summary>
+    /// <summary>
+    /// The voice (the personalities spec's PS4): the active traveller's
+    /// personality, or the premade they are (shown here only, never in the
+    /// game), and the force every generated traveller's personality takes
+    /// from the next generation ("Drawn" lifts it).
+    /// </summary>
+    private void DrawPersonality(ContentLibrarySO lib)
+    {
+        GameManager game = FindFirstObjectByType<GameManager>();
+        CaseInstance active = game != null ? game.ActiveCase : null;
+        GUILayout.Label(active == null ? "Traveller: none"
+            : $"Traveller: {active.visitorDisplayName}, voice {(active.legendarySource != null ? "premade " + active.legendarySource.id : string.IsNullOrEmpty(active.personality) ? "none (the defaults)" : active.personality)}");
+        GUILayout.Label($"Personality of every generated case: {DevToolsState.ForcedPersonality ?? "drawn"} (from the next generation)");
+
+        var choices = new System.Collections.Generic.List<string> { null };
+        if (lib != null)
+            foreach (Personality p in lib.Personalities)
+                if (p != null && !string.IsNullOrWhiteSpace(p.id))
+                    choices.Add(p.id);
+        for (int i = 0; i < choices.Count; i += 4)
+        {
+            GUILayout.BeginHorizontal();
+            for (int j = i; j < i + 4 && j < choices.Count; j++)
+            {
+                string id = choices[j];
+                if (!GUILayout.Button(id ?? "Drawn", GUILayout.Width(100f)) || DevToolsState.ForcedPersonality == id)
+                    continue;
+                AfterPass(() =>
+                {
+                    Debug.Log($"[DebugPanelController] Cheat: ForcedPersonality set to '{id ?? "drawn"}' (from the next generation).");
+                    DevToolsState.ForcedPersonality = id;
+                });
+            }
+            GUILayout.EndHorizontal();
+        }
+    }
+
+    /// <summary>Cheats tab: day skip, history (force leader), money/stability adjust, flags, force legendary, the voice, upgrades.</summary>
     private void DrawCheatsTab(RunManager run, WorldState world, ContentLibrarySO lib)
     {
         GUILayout.Label("Day flow");
@@ -271,6 +308,8 @@ public sealed class DebugPanelController : MonoBehaviour
         }
         GUILayout.EndHorizontal();
 
+        DrawPersonality(lib);
+
         bool forceStrandings = DevToolsState.ForceStrandings;
         bool newForceStrandings = GUILayout.Toggle(forceStrandings, "Force strandings (every accepted Economy transponder fails at the shift's end)");
         if (newForceStrandings != forceStrandings)
@@ -335,19 +374,19 @@ public sealed class DebugPanelController : MonoBehaviour
         Debug.Log($"[DebugPanelController] Cheat: money {before} -> {world.money} ({delta:+0;-0}).");
     }
 
-    /// <summary>Adds to world.timelineStability (clamped 0..100) and logs the change.</summary>
+    /// <summary>Adds a flat step to world.timelineStability (a cheat, not the compounding rule; in hundredths, 0..100) and logs the change.</summary>
     private static void AddStability(WorldState world, float delta)
     {
         float before = world.timelineStability;
-        world.timelineStability = Mathf.Clamp(world.timelineStability + delta, 0f, 100f);
-        Debug.Log($"[DebugPanelController] Cheat: stability {before:0.#} -> {world.timelineStability:0.#} ({delta:+0.#;-0.#}).");
+        world.timelineStability = StabilityRules.Round(world.timelineStability + delta);
+        Debug.Log($"[DebugPanelController] Cheat: stability {StabilityRules.Format(before)} -> {StabilityRules.Format(world.timelineStability)} ({StabilityRules.FormatChange(delta)}).");
     }
 
-    /// <summary>Sets world.timelineStability (clamped 0..100) and logs the change.</summary>
+    /// <summary>Sets world.timelineStability (in hundredths, 0..100) and logs the change.</summary>
     private static void SetStability(WorldState world, float value)
     {
         float before = world.timelineStability;
-        world.timelineStability = Mathf.Clamp(value, 0f, 100f);
-        Debug.Log($"[DebugPanelController] Cheat: stability {before:0.#} -> {world.timelineStability:0.#} (set).");
+        world.timelineStability = StabilityRules.Round(value);
+        Debug.Log($"[DebugPanelController] Cheat: stability {StabilityRules.Format(before)} -> {StabilityRules.Format(world.timelineStability)} (set).");
     }
 }
