@@ -496,8 +496,9 @@ public static class BalanceSimulation
             sb.AppendLine($"  watch, {f.id}: as found ({f.statusQuo}) in {of.Count(l => !l.IsSplit && l.outcome == f.statusQuo)} of {of.Count}; splits {of.Count(l => l.IsSplit)}; " +
                           $"outcomes no run reached: {(never.Count > 0 ? string.Join(", ", never) : "none")}");
         }
-        sb.AppendLine("  watch, pull per run at the end (mean, all outcomes of a factor): " + string.Join(", ", lib.World.PullFactors()
-            .Select(f => $"{f.Id} {F(BalanceStats.Mean(runs.Select(r => r.World.pulls.Where(p => p.factor == f.Id).Sum(p => p.amount))))}")));
+        foreach (PullFactor f in lib.World.PullFactors())
+            sb.AppendLine($"  watch, {f.Id}'s pull per run at the end (mean; \"as found\" starts {F(config.worldStatusQuoWeight)} ahead): " + string.Join(", ", f.Outcomes
+                .Select(o => (o, mean: BalanceStats.Mean(runs.Select(r => WorldPulls.Weight(r.World.pulls, f.Id, o))))).OrderByDescending(x => x.mean).Select(x => $"{x.o} {F(x.mean)}")));
     }
 
     /// <summary>The random draws of the perfect runs by day: how many, how many faulty and why, by kind.</summary>

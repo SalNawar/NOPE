@@ -128,9 +128,9 @@ public sealed class GameConfigSO : ScriptableObject
     [Min(0f)]
     public float worldLeadMargin = DefaultWorldLeadMargin;
 
-    /// <summary>A denial's pull toward each factor's "as you found it" outcome: the past stays untouched (WorldPulls.ForDenial).</summary>
+    /// <summary>A denial's pull toward each factor's "as you found it" outcome: the past stays untouched (WorldPulls.ForDenial). Small: a shift denies many, and at the spec's first cut (0.5) no simulated run ever left 2150 as it found it (balance 2026-09-30).</summary>
     [Min(0f)]
-    public float worldDenialPull = 0.5f;
+    public float worldDenialPull = 0.05f;
 
     /// <summary>A rich tourist's scale on their role's pull (a holiday leaves a lighter mark; WorldPulls.KindScale).</summary>
     [Min(0f)]

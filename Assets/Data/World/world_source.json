@@ -14881,7 +14881,7 @@
           {
             "factor": "money",
             "outcome": "debt",
-            "amount": 3
+            "amount": 1
           }
         ]
       },
@@ -14986,7 +14986,7 @@
           {
             "factor": "future",
             "outcome": "anarchy",
-            "amount": 3
+            "amount": 1
           }
         ]
       },
@@ -15023,7 +15023,7 @@
           {
             "factor": "government",
             "outcome": "directorate",
-            "amount": 2
+            "amount": 1
           }
         ]
       },
@@ -15118,7 +15118,7 @@
           {
             "factor": "government",
             "outcome": "directorate",
-            "amount": 2
+            "amount": 1
           }
         ]
       },
@@ -15137,7 +15137,7 @@
           {
             "factor": "future",
             "outcome": "space_age",
-            "amount": 2
+            "amount": 1
           }
         ]
       },
@@ -15262,7 +15262,7 @@
           {
             "factor": "money",
             "outcome": "debt",
-            "amount": 4
+            "amount": 2
           }
         ]
       }
@@ -21629,7 +21629,7 @@
       {
         "archetype": "scientist",
         "factor": "future",
-        "pull": 2
+        "pull": 3
       },
       {
         "archetype": "diplomat",
@@ -21644,7 +21644,7 @@
       {
         "archetype": "merchant",
         "factor": "money",
-        "pull": 2
+        "pull": 3
       }
     ]
   }
