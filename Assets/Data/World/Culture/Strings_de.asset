@@ -87,6 +87,10 @@ MonoBehaviour:
     text: Notizen
     gloss: 0
     tier: 0
+  - key: icon.orders
+    text: Bestellungen
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: Ermittlung
     gloss: 0

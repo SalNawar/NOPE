@@ -87,6 +87,10 @@ MonoBehaviour:
     text: Appunti
     gloss: 0
     tier: 0
+  - key: icon.orders
+    text: Ordini
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: Indagine
     gloss: 0

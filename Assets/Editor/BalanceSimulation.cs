@@ -324,7 +324,7 @@ public static class BalanceSimulation
     private static void Write(StringBuilder sb, RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, List<string> errors)
     {
         sb.AppendLine($"BALANCE SIMULATION  {DateTime.Now:yyyy-MM-dd HH:mm}  ({Runs} runs x {Days} days per play style and pace; Tools > TimeDesk > Balance > Run 50-Run Simulation)");
-        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no shop, no care, no slot machine, no dialog choices; once on the whole queue and once at the shift clock's pace ({_pace} travellers a shift, {BalanceSimSettingsSO.AssetPath} travellersPerShift: the rest go home when the clock closes, PlayPolicy.Reaches).");
+        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no orders, no care, no slot machine, no dialog choices; once on the whole queue and once at the shift clock's pace ({_pace} travellers a shift, {BalanceSimSettingsSO.AssetPath} travellersPerShift: the rest go home when the clock closes, PlayPolicy.Reaches).");
         sb.AppendLine("Perfect: every call right. Imperfect: one wrong call a day (odd days the first faulty traveller let through, even days the first deviation denial left unproven). Careless: both every day.");
         sb.AppendLine();
         Knobs(sb, run, lib, config);

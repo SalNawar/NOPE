@@ -87,6 +87,115 @@ MonoBehaviour:
     text: Notes
     gloss: 0
     tier: 1
+  - key: icon.orders
+    text: Orders
+    gloss: 0
+    tier: 1
+  - key: window.orders
+    text: Orders
+    gloss: 0
+    tier: 0
+  - key: app.orders.wallet
+    text: "Wallet {0} \xB7 Orders are paid now and arrive at the start of tomorrow's
+      shift; cancel one today for a refund."
+    gloss: 0
+    tier: 0
+  - key: app.orders.price
+    text: '{0} {1}'
+    gloss: 0
+    tier: 0
+  - key: app.orders.tooDear
+    text: "{0} {1} \xB7 not enough {1}"
+    gloss: 0
+    tier: 0
+  - key: app.orders.needs
+    text: 'Needs: {0}'
+    gloss: 0
+    tier: 0
+  - key: app.orders.inTransit
+    text: "In transit \xB7 arrives day {0}"
+    gloss: 0
+    tier: 0
+  - key: app.orders.delivered
+    text: Delivered day {0}
+    gloss: 0
+    tier: 0
+  - key: app.orders.owned
+    text: Owned
+    gloss: 0
+    tier: 0
+  - key: app.orders.installed
+    text: Installed
+    gloss: 0
+    tier: 0
+  - key: app.orders.stored
+    text: In storage
+    gloss: 0
+    tier: 0
+  - key: app.orders.installsTomorrow
+    text: Installs tomorrow
+    gloss: 0
+    tier: 0
+  - key: app.orders.leavesTomorrow
+    text: Swapped out tomorrow
+    gloss: 0
+    tier: 0
+  - key: app.orders.order
+    text: Order
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancel
+    text: Cancel order
+    gloss: 0
+    tier: 0
+  - key: app.orders.install
+    text: Install tomorrow
+    gloss: 0
+    tier: 0
+  - key: app.orders.keep
+    text: Keep installed
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancelInstall
+    text: Cancel install
+    gloss: 0
+    tier: 0
+  - key: app.orders.select
+    text: Select an item in the tree to see it here.
+    gloss: 0
+    tier: 0
+  - key: app.orders.none
+    text: None
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.desk
+    text: Desk equipment
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.interview
+    text: Interview
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.portals
+    text: Portals
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.contacts
+    text: Contacts
+    gloss: 0
+    tier: 0
+  - key: mail.from.supply
+    text: Temporal Customs Supply
+    gloss: 0
+    tier: 0
+  - key: mail.subject.delivery
+    text: Your order has arrived
+    gloss: 0
+    tier: 0
+  - key: mail.body.delivery
+    text: 'Delivered this morning and in force from today''s shift:'
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: Investigation
     gloss: 0
@@ -944,6 +1053,15 @@ MonoBehaviour:
     tier: 0
   - key: keys.icons
     text: 'Desktop: select the nearest icon that way'
+    gloss: 0
+    tier: 0
+  - key: keys.orders
+    text: 'Orders: move along the tree (to a prerequisite, a dependant, or up and
+      down a column)'
+    gloss: 0
+    tier: 0
+  - key: keys.ordersAct
+    text: 'Orders: order, cancel or install the selected item'
     gloss: 0
     tier: 0
   - key: keys.tabs
