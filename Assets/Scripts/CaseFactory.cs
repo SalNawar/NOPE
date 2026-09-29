@@ -206,6 +206,9 @@ public sealed class CaseFactory
         string clerkId = _lib.Agency.clerk != null ? _lib.Agency.clerk.citizenId : null;
         if (!string.IsNullOrWhiteSpace(clerkId))
             _agencyNumbers.Add(clerkId.Trim()); // no traveller is ever given the clerk's own Citizen ID
+        foreach (ForcedCaseSlot forced in _appearances.Values)
+            if (forced.legendary != null && !string.IsNullOrWhiteSpace(forced.legendary.citizenId))
+                _agencyNumbers.Add(forced.legendary.citizenId.Trim()); // a story character's own ID, reserved before slot 1 (days 7-15 B3)
         _today = AgencyCalendar.TryToday(_lib.Agency.firstDate, state.day, out System.DateTime today) ? today : (System.DateTime?)null;
         if (_today == null)
             Debug.LogError($"[CaseFactory] Day {state.day}: the agency calendar cannot count from agency.firstDate '{_lib.Agency.firstDate}', so the displaced's numbers and dates print placeholders. Run Tools > TimeDesk > Generate World.");
@@ -382,8 +385,8 @@ public sealed class CaseFactory
         CaseBlueprintSO blueprint = forcedBlueprint != null ? forcedBlueprint : entry?.blueprint;
         bool honest = entry != null && entry.honest;
 
-        // A 2150 citizen (traveller types K2, K4) comes from the present.
-        bool citizen = legendary == null && blueprint != null && TravellerKinds.IsCitizen(blueprint.Kind);
+        // A 2150 citizen (traveller types K2, K4) comes from the present: a drawn one, or a story character (a citizen premade, days 7-15 B2).
+        bool citizen = blueprint != null && TravellerKinds.IsCitizen(blueprint.Kind);
 
         // 4.5) Timeline identity: archetype, place, visitor identity.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
@@ -401,7 +404,7 @@ public sealed class CaseFactory
         string birthDate = legendary != null ? legendary.birthDate
             : citizen ? GenerateBirthDate(_present != null ? _present.BirthYearMin : 0, _present != null ? _present.BirthYearMax : 0)
             : GenerateBirthDate(place != null ? place.birthYearMin : 0, place != null ? place.birthYearMax : 0);
-        NationEraProfileSO family = citizen ? FamilyOf(givenName) : null;
+        NationEraProfileSO family = !citizen ? null : legendary != null ? PremadeFamily(legendary) : FamilyOf(givenName);
         string intro = Interview.Opener(_lib.Interview, gender, legendary != null && Premades.IsFamous(legendary.kind) ? legendary.displayName : null,
                                         Premades.Voice(appearance != null ? appearance.introLine : null, legendary != null ? legendary.introLine : null));
 
@@ -457,7 +460,7 @@ public sealed class CaseFactory
         if (inst.kind == TravellerKind.Displaced && _today != null)
             inst.displacement = AgencyNumbers.Displaced(_today.Value, _lib.Agency.displaced, _agencyNumbers, _accountRng);
         else if (citizen && _today != null && AccountMaker.StatusOf(inst.kind, out CitizenStatus status))
-            inst.account = AccountMaker.Make(AccountRequestFor(LieKinds.TrueStatus(lieKind, status), family, blueprint, claimedEra, lieKind == LieKind.DebtorPosingAsTourist),
+            inst.account = AccountMaker.Make(AccountRequestFor(LieKinds.TrueStatus(lieKind, status), family, blueprint, claimedEra, lieKind == LieKind.DebtorPosingAsTourist, legendary),
                                              _lib.Agency.accounts, _lib.Agency.transponders, _lib.Agency.proofs, _today.Value, _agencyNumbers, _accountRng);
 
         // 4.9) The violation (K5: after the lie roll, before the costume roll): the slot's authored directive fault or a
@@ -1290,6 +1293,16 @@ public sealed class CaseFactory
         return BirthDates.Generate(yearMin, yearMax, _rng);
     }
 
+    /// <summary>A story character's family country's Future place (LegendarySO.family, else its claimed nation): their lineage and their generated look's weights; null, with a warning, when that country has no Future place.</summary>
+    private NationEraProfileSO PremadeFamily(LegendarySO premade)
+    {
+        NationSO nation = premade.family != null ? premade.family : premade.nation;
+        NationEraProfileSO family = _lib.Profiles.FirstOrDefault(p => p != null && p.nation == nation && p.era != null && p.era.isFuture);
+        if (family == null)
+            Debug.LogWarning($"[CaseFactory] Premade '{premade.displayName}' has no family country with a Future place ('{(nation != null ? nation.id : "none")}'), so they have no lineage. Check world_source.json premades[].family.");
+        return family;
+    }
+
     /// <summary>The Future place whose name list gave a 2150 citizen's name (CitizenNames.SourceOf): their family's country; null, with a warning, when no list holds it.</summary>
     private NationEraProfileSO FamilyOf(string givenName)
     {
@@ -1309,10 +1322,17 @@ public sealed class CaseFactory
     /// labourer the registered contract with the worksite's era's employers
     /// (agency.employers); a debtor posing as a tourist
     /// (<paramref name="debtorPosing"/>) from an entry that carries a proof of
-    /// means draws one they do not hold (L4's poor variant).
+    /// means draws one they do not hold (L4's poor variant); a story
+    /// character (<paramref name="premade"/>, days 7-15 B3) brings its
+    /// authored Citizen ID, debt and employer (by its agency.employers id).
     /// </summary>
-    private AccountRequest AccountRequestFor(CitizenStatus status, NationEraProfileSO family, CaseBlueprintSO blueprint, EraSO worksiteEra, bool debtorPosing) => new AccountRequest
+    private AccountRequest AccountRequestFor(CitizenStatus status, NationEraProfileSO family, CaseBlueprintSO blueprint, EraSO worksiteEra, bool debtorPosing, LegendarySO premade) => new AccountRequest
     {
+        CitizenId = premade != null ? premade.citizenId : null,
+        Debt = premade != null ? premade.debt : 0,
+        Employer = premade != null && !string.IsNullOrWhiteSpace(premade.employer)
+            ? (_lib.Agency.employers ?? new List<Employer>()).FirstOrDefault(e => e != null && e.id == premade.employer)?.name
+            : null,
         Status = status,
         Contract = blueprint.Kind == TravellerKind.Labourer,
         ForgedProof = debtorPosing && !AccountMaker.HoldsProof(status) &&
@@ -1361,7 +1381,8 @@ public sealed class CaseFactory
             string origin = !string.IsNullOrEmpty(inst.originLabel) ? inst.originLabel : FallbackOriginLabel(inst.claimedNation, inst.claimedEra);
             if (inst.account != null)
             {
-                registry.Add(AccountRecords.Record(inst.visitorGivenName, inst.trueBirthDate, origin, inst.account, UiText.Get));
+                registry.Add(AccountRecords.Record(inst.visitorGivenName, inst.trueBirthDate, origin, inst.account, UiText.Get,
+                                                   inst.isLegendary && inst.legendarySource != null ? inst.legendarySource.recordNote : null));
                 continue;
             }
 

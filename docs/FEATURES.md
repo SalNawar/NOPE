@@ -121,7 +121,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Closing: a traveller at the desk may be finished; one still behind READY is never called (tested: `DaySlotSequencerTests`, `ShiftFlowTests`, `ReadyGateTests`)
 - [ ] Scheduled events and the forced appearances (a forced blueprint or premade) that stood in slots never reached before closing are reported as a warning (`CaseInstance.forcedAppearance`; a premade met on an earlier day, or an appearance whose conditions failed, left an ordinary traveller and is not named: that is logged at the day's start, never warned)
 - [ ] The clock pauses only while a citation slip is shown, and the slip keeps the PC screen on until acknowledged (the interview, scans and camera moves take real time and cost nothing else)
-- [ ] Visitor names are unique within a day ("Marcus II" once a pool runs out; a premade never repeats a name used that day; a forced premade's name is reserved for their slot before the day starts, and no premade's name is in any place's name list) (uniqueness tested: `NameRosterTests`; the reservation is checked in Unity)
+- [ ] Visitor names are unique within a day ("Marcus II" once a pool runs out; a premade never repeats a name used that day; a forced premade's name is reserved for their slot before the day starts, and so is a standing story character's authored Citizen ID (days 7-15 B3: `AccountRequest.CitizenId`, taken as it is and never redrawn; its authored debt and employer replace their draws, which are still made; its record's Note row reads the premade's note; tested: `AccountMakerTests`), and no premade's name is in any place's name list) (uniqueness tested: `NameRosterTests`; the reservation is checked in Unity)
 
 ## Interaction feedback
 

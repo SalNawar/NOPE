@@ -97,6 +97,60 @@ public class AccountMakerTests
         Assert.IsNull(account.FrozenSince);
     }
 
+    /// <summary>A story character's authored Citizen ID (days 7-15 B3): reserved before slot 1 (in the day's taken numbers), taken as it is and never redrawn.</summary>
+    [Test]
+    public void Make_AnAuthoredCitizenIdIsReservedAndNeverRedrawn()
+    {
+        var taken = new HashSet<string> { "512-6048-33" };
+        AccountRequest request = Request(CitizenStatus.Standard);
+        request.CitizenId = "512-6048-33";
+        var rng = new ScriptedRandom(
+            ScriptStep.Range(1000),                   // debt (no Citizen ID draw)
+            ScriptStep.Value(0f),                     // the proof
+            ScriptStep.Range(2000),                   // its amount
+            ScriptStep.Value(0f), ScriptStep.Range(7), // the Economy model, its serial
+            ScriptStep.Range(204817),                 // the waiver's number
+            ScriptStep.Range(0),                      // lineage
+            ScriptStep.Range(0),                      // no past trips
+            ScriptStep.Range(0));                     // the expiring form
+        CitizenAccount account = AccountMaker.Make(request, Ranges(), Transponders(), Proofs(), Today, taken, rng);
+        Assert.IsTrue(rng.Done, "no draw for the Citizen ID");
+        Assert.AreEqual("512-6048-33", account.CitizenId);
+        Assert.AreEqual(3, taken.Count, "the reserved ID, the serial and the waiver's number: nothing redrawn");
+    }
+
+    /// <summary>An authored debt replaces the drawn one; the draw is still made, so every later draw keeps its order.</summary>
+    [Test]
+    public void Make_TheDebtOverrideReplacesTheDraw()
+    {
+        AccountRequest request = Request(CitizenStatus.Eligible);
+        request.Debt = 212000;
+        var rng = new ScriptedRandom(
+            ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52), ScriptStep.Range(1000), ScriptStep.Value(0f), ScriptStep.Range(7),
+            ScriptStep.Range(1), ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
+        CitizenAccount account = AccountMaker.Make(request, Ranges(), Transponders(), Proofs(), Today, new HashSet<string>(), rng);
+        Assert.IsTrue(rng.Done, "the same draws as without the override");
+        Assert.AreEqual(212000, account.Debt);
+        Assert.AreEqual("Tick-Tock Basic · TT-00007", account.Transponder, "the draws after the debt are unchanged");
+    }
+
+    /// <summary>A labourer story character's authored employer names the registered contract; the employer draw is still made.</summary>
+    [Test]
+    public void Make_TheEmployerOverrideNamesTheContract()
+    {
+        AccountRequest request = Request(CitizenStatus.Eligible, contract: true);
+        request.Employer = "Tyburn Mills Consortium";
+        var rng = new ScriptedRandom(
+            ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52), ScriptStep.Range(1000), ScriptStep.Value(0f), ScriptStep.Range(7),
+            ScriptStep.Range(204817), ScriptStep.Range(1), ScriptStep.Range(3), ScriptStep.Range(24),
+            ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
+        CitizenAccount account = AccountMaker.Make(request, Ranges(), Transponders(), Proofs(), Today, new HashSet<string>(), rng);
+        Assert.IsTrue(rng.Done);
+        Assert.AreEqual("Tyburn Mills Consortium", account.Employer, "the draw picked the second, the authored name wins");
+        Assert.AreEqual(180, account.TermDays);
+        Assert.AreEqual(420, account.Wage);
+    }
+
     [Test]
     public void Make_WithoutAContract_OrWithoutEmployers_DrawsNothingForIt()
     {
@@ -624,6 +678,15 @@ public class AccountMakerTests
         Assert.AreEqual("418-0937-52", rec.Number);
         CollectionAssert.AreEqual(new[] { "<records.group.account>", "<records.group.forms>", "<records.group.travel>", string.Empty },
                                   rec.Groups.Select(g => g.Title).ToArray());
+    }
+
+    /// <summary>A story character's record (days 7-15 B3) shows the premade's own note in the Note row; everyone else's reads none.</summary>
+    [Test]
+    public void Record_ShowsThePremadesNote()
+    {
+        CitizenRecord rec = AccountRecords.Record("Pell Quimby", "4 Jul 2124", "Periclean Athens (Ancient)", Account(), key => "<" + key + ">", "Honeymoon departure. Travelling alone.");
+        Assert.AreEqual("Honeymoon departure. Travelling alone.", rec.Groups[3].Rows.Single().Value);
+        Assert.AreEqual("<records.note.none>", AccountRecords.Record("Omar", "3 May 2101", "Periclean Athens (Ancient)", Account(), key => "<" + key + ">", "  ").Groups[3].Rows.Single().Value, "a blank note is none");
     }
 
     [Test]

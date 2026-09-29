@@ -64,7 +64,7 @@ public static partial class ContentLibraryValidator
                 Error($"Day plan '{plan.name}' lists a kind with no blueprint (run Tools > TimeDesk > Generate World).", plan);
 
             // A premade stands as its kind (TravellerKinds.PickWeight: the slot's one draw weighs only it): the pool's famous as the displaced, a forced premade as its own.
-            var premadeKinds = new HashSet<TravellerKind>((plan.AvailableLegendaries ?? Array.Empty<LegendarySO>()).Where(l => l != null).Select(l => l.kind)
+            var premadeKinds = new HashSet<TravellerKind>((plan.AvailableLegendaries ?? System.Array.Empty<LegendarySO>()).Where(l => l != null).Select(l => l.kind)
                 .Concat(plan.ForcedCases.Where(f => f != null && f.legendary != null).Select(f => f.legendary.kind)));
             foreach (TravellerKind kind in premadeKinds.Where(kind => !plan.Kinds.Any(k => k != null && k.blueprint != null && k.weight > 0f && k.blueprint.Kind == kind)))
                 Error($"Day plan '{plan.name}' has a {kind} premade but no {kind} kind with a positive weight; a premade stands only as its own kind.", plan);
