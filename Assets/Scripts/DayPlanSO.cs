@@ -12,6 +12,15 @@ using UnityEngine;
 /// - Which lies today's liars may tell (lie kinds), and where a place lie may leak tells (tell count and tell channels)
 /// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut"; a slot may list alternatives, the first standing wins)
 /// - Event rules (fixed or random placement, including "random but after N cases")
+///
+/// The portals seam (Saleh's portals feature, designed separately and not
+/// built here; days 7-15 spec section 15): a day would list the portals it
+/// opens beside its travel rules (a days[].portals list read here next to
+/// activeTravelRules), and ContentLibrarySO.BuildToday(plan, history), the
+/// one place a day's destinations are decided, would narrow them to the open
+/// portals' places. Which portals are open on which day is the portal
+/// design's to say (portal 01 from day 1, the others repaired from the PC);
+/// no day plan assumes an opening.
 /// </summary>
 [CreateAssetMenu(menuName = "TimeDesk/Day/Day Plan", fileName = "DayPlan_")]
 public sealed class DayPlanSO : ScriptableObject
