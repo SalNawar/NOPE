@@ -521,6 +521,18 @@ public class DirectivesTests
     }
 
     [Test]
+    public void Closes_EachClosureType_ByIds()
+    {
+        Assert.IsTrue(new Directive(TravelRuleType.EraForbidden, null, null, "modern").Closes("japan", "modern"));
+        Assert.IsFalse(new Directive(TravelRuleType.EraForbidden, null, null, "modern").Closes("japan", "industrial"));
+        Assert.IsTrue(new Directive(TravelRuleType.NationForbidden, null, "japan", null).Closes("japan", "ancient"));
+        Assert.IsFalse(new Directive(TravelRuleType.NationForbidden, null, "japan", null).Closes("china", "ancient"));
+        Assert.IsTrue(new Directive(TravelRuleType.NationEraForbidden, null, "egypt", "ancient").Closes("egypt", "ancient"));
+        Assert.IsFalse(new Directive(TravelRuleType.NationEraForbidden, null, "egypt", "ancient").Closes("egypt", "medieval"));
+        Assert.IsFalse(new Directive(TravelRuleType.PaperSet, null, "egypt", "ancient").Closes("egypt", "ancient"), "a procedure closes nothing");
+    }
+
+    [Test]
     public void Plan_MapsEachPlannedDirectiveToItsRuleAndVariant()
     {
         (PlannedDirective planned, TravelRuleType rule, PaperSetBreak paper, PaperDateFault date)[] table =

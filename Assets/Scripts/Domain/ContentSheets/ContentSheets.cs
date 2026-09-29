@@ -483,7 +483,7 @@ public static class ContentSheets
             if (s.RowKey != null)
             {
                 List<int> keyCols = s.RowKey.Columns.Select(c => node.Headers.IndexOf(c)).ToList();
-                foreach (int k in keyCols.Where(k => row.Raw[k].Trim().Length == 0 && !columns[k - firstColumn].IsRequired))
+                foreach (int k in keyCols.Where(k => row.Raw[k].Trim().Length == 0 && !columns[k - firstColumn].IsRequired && !s.RowKey.OptionalColumns.Contains(node.Headers[k])))
                     errors.Add($"{rows.Where(row, k)}: a value is required (it names the row).");
                 row.OwnKey = s.RowKey.Of(c => row.Raw[node.Headers.IndexOf(c)].Trim());
             }
@@ -616,7 +616,9 @@ public static class ContentSheets
             {
                 bool required = col.IsRequired || s.Shape == SheetShape.Values;
                 string blank = required ? "(required)" : DefaultDisplay(col) + (col.OmitDefault ? " (left out of the JSON)" : string.Empty);
-                string key = s.RowKey != null && s.RowKey.Columns.Contains(col.Header) ? "part of the row's name" : null;
+                string key = s.RowKey != null && s.RowKey.Columns.Contains(col.Header)
+                    ? s.RowKey.OptionalColumns.Contains(col.Header) ? "part of the row's name, may be blank" : "part of the row's name"
+                    : null;
                 t.Add(new[] { s.Name, col.Header, TypeName(col.Type), blank, Rules(col, key), col.Doc ?? string.Empty });
             }
         }

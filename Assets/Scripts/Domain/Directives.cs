@@ -84,7 +84,7 @@ public readonly struct DirectivePlan
     }
 }
 
-/// <summary>One of today's Directives as the rules see it: its type and the kinds it applies to (empty: every kind).</summary>
+/// <summary>One of today's Directives as the rules see it: its type, the kinds it applies to (empty: every kind) and, for a closure, the place it names by ids.</summary>
 public readonly struct Directive
 {
     /// <summary>What the rule forbids.</summary>
@@ -93,15 +93,26 @@ public readonly struct Directive
     /// <summary>The kinds the rule applies to; empty for every kind.</summary>
     public readonly IReadOnlyList<TravellerKind> Kinds;
 
+    /// <summary>The nation id a closure names (NationForbidden, NationEraForbidden); null otherwise.</summary>
+    public readonly string NationId;
+
+    /// <summary>The era id a closure names (EraForbidden, NationEraForbidden); null otherwise.</summary>
+    public readonly string EraId;
+
     /// <summary>Creates a directive.</summary>
-    public Directive(TravelRuleType type, IReadOnlyList<TravellerKind> kinds)
+    public Directive(TravelRuleType type, IReadOnlyList<TravellerKind> kinds, string nationId = null, string eraId = null)
     {
         Type = type;
         Kinds = kinds ?? new TravellerKind[0];
+        NationId = nationId;
+        EraId = eraId;
     }
 
     /// <summary>True when the rule applies to a traveller of <paramref name="kind"/>: listed, or no kind is listed.</summary>
     public bool AppliesTo(TravellerKind kind) => Kinds.Count == 0 || Kinds.Contains(kind);
+
+    /// <summary>True when the rule is a closure that forbids the destination <paramref name="nationId"/> in <paramref name="eraId"/> (Directives.Closes).</summary>
+    public bool Closes(string nationId, string eraId) => Directives.Closes(Type, NationId, EraId, nationId, eraId);
 }
 
 /// <summary>
@@ -237,6 +248,27 @@ public static class Directives
     /// <summary>True for the closure types (a forbidden era, nation or place), which forbid destinations; false for a standing procedure.</summary>
     public static bool IsClosure(TravelRuleType type) =>
         type == TravelRuleType.EraForbidden || type == TravelRuleType.NationForbidden || type == TravelRuleType.NationEraForbidden;
+
+    /// <summary>
+    /// The closure predicate, by ids (one home for TravelRuleSO.Allows and
+    /// the content checks): an era closure forbids every destination of its
+    /// era (<paramref name="ruleEraId"/>), a nation closure every one of its
+    /// nation, a nation-era closure its one place; a procedure closes nothing.
+    /// </summary>
+    public static bool Closes(TravelRuleType type, string ruleNationId, string ruleEraId, string nationId, string eraId)
+    {
+        switch (type)
+        {
+            case TravelRuleType.EraForbidden:
+                return string.Equals(eraId, ruleEraId, StringComparison.Ordinal);
+            case TravelRuleType.NationForbidden:
+                return string.Equals(nationId, ruleNationId, StringComparison.Ordinal);
+            case TravelRuleType.NationEraForbidden:
+                return string.Equals(nationId, ruleNationId, StringComparison.Ordinal) && string.Equals(eraId, ruleEraId, StringComparison.Ordinal);
+            default:
+                return false;
+        }
+    }
 
     /// <summary>
     /// A rule's first day: the smallest of <paramref name="daysListed"/>

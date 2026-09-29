@@ -91,6 +91,7 @@ public static partial class ContentLibraryValidator
         // --- Day plans ---
         issues += CheckDayPlanEntries(lib);
         issues += CheckDayPlanLegendaries(lib);
+        issues += CheckForcedEntries(lib);
 
         // --- Cross references ---
         issues += CheckLegendaryReferences(lib);
@@ -1046,11 +1047,6 @@ public static partial class ContentLibraryValidator
                 }
             }
 
-            foreach (IGrouping<LegendarySO, ForcedCaseSlot> twice in forced.GroupBy(f => f.legendary).Where(g => g.Count() > 1))
-            {
-                Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' forces premade '{twice.Key.displayName}' {twice.Count()} times.", plan);
-                issues++;
-            }
 
             if (plan.TellChannels.Contains(TellChannel.Appearance) && !lib.ReferenceBookCategories().Contains(Looks.EvidenceCategory))
             {
@@ -1136,6 +1132,61 @@ public static partial class ContentLibraryValidator
         }
 
         return issues;
+    }
+
+    /// <summary>
+    /// The forced entries' faults, ids, alternatives, dialogs and conditions
+    /// (days 7-15 V2-V5, Premades.ForcedProblems: the rule Generate World
+    /// checks its source with), over every day plan: errors, then warnings.
+    /// </summary>
+    private static int CheckForcedEntries(ContentLibrarySO lib)
+    {
+        var days = new List<ForcedDayCheck>();
+        foreach (DayPlanSO plan in lib.DayPlans.Where(p => p != null))
+        {
+            var forced = new List<ForcedCheck>();
+            foreach (ForcedCaseSlot f in plan.ForcedCases.Where(f => f != null))
+            {
+                TravellerKind kind = f.legendary != null ? TravellerKind.Displaced : f.caseBlueprint != null ? f.caseBlueprint.Kind : TravellerKind.Displaced;
+                CaseBlueprintSO blueprint = f.caseBlueprint ?? plan.Kinds.Where(k => k != null && k.blueprint != null && k.blueprint.Kind == kind).Select(k => k.blueprint).FirstOrDefault();
+                forced.Add(new ForcedCheck
+                {
+                    Slot = f.caseIndex1Based,
+                    Id = f.id,
+                    Premade = f.legendary != null ? f.legendary.id : null,
+                    Kind = kind,
+                    Forms = (blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => t.formNumber).ToList(),
+                    HasTruePlace = f.legendary != null && f.legendary.truePlace != null,
+                    OncePerRun = f.legendary != null && f.legendary.oncePerRun,
+                    ClosedPlace = f.legendary != null && !plan.ClaimAllowed(f.legendary.nation, f.legendary.trueEra),
+                    Lie = f.hasLie ? f.lie : (LieKind?)null,
+                    Directive = f.directive,
+                    Dialog = f.dialogId,
+                    ConditionKeys = (f.conditions ?? new List<TriggerCondition>()).Where(c => c != null && !string.IsNullOrEmpty(c.key)).Select(c => c.key).ToList(),
+                    Conditions = (f.conditions ?? new List<TriggerCondition>()).Count(c => c != null)
+                });
+            }
+
+            days.Add(new ForcedDayCheck
+            {
+                Asset = plan.name,
+                Day = plan.DayNumber,
+                Lies = plan.EnabledLies,
+                Rules = plan.ActiveTravelRules.Where(r => r != null).Select(r => r.Directive).ToList(),
+                Pooled = (plan.AvailableLegendaries ?? Array.Empty<LegendarySO>()).Where(l => l != null).Select(l => l.id).ToList(),
+                Forced = forced
+            });
+        }
+
+        var errors = new List<string>();
+        var warnings = new List<string>();
+        Premades.ForcedProblems(days, lib.Legendaries.Where(l => l != null).Select(l => l.id).ToList(),
+                                lib.Dialogs.Where(d => d != null && d.dialog != null).Select(d => d.dialog.id).ToList(), errors, warnings);
+        foreach (string e in errors)
+            Debug.LogError($"[ContentLibraryValidator] {e} (run Tools > TimeDesk > Generate World)", lib);
+        foreach (string w in warnings)
+            Debug.LogWarning($"[ContentLibraryValidator] {w}", lib);
+        return errors.Count + warnings.Count;
     }
 
     /// <summary>Reports DayPlan.AvailableLegendaries entries that are null.</summary>

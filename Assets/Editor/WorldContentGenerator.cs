@@ -1112,22 +1112,26 @@ public static partial class WorldContentGenerator
             if (d.premadeChance < 0f || d.premadeChance > 1f || (pool.Length > 0 && d.premadeChance <= 0f))
                 errors.Add($"{owner} needs \"premadeChance\" in 0..1, above 0 with a pool (a missing value reads 0).");
 
-            var slots = new HashSet<int>();
-            var forcedPremades = new HashSet<string>();
             foreach (ForcedData f in d.forced ?? Array.Empty<ForcedData>())
             {
+                string slotOwner = $"{owner} slot {f.slot}";
                 if (f.slot < 1 || f.slot > d.queue)
                     errors.Add($"{owner} forces slot {f.slot}, outside its queue of {d.queue} (a missing slot reads 0).");
-                if (!slots.Add(f.slot))
-                    errors.Add($"{owner} forces slot {f.slot} twice.");
                 if (string.IsNullOrEmpty(f.premade) && string.IsNullOrEmpty(f.blueprint))
                     errors.Add($"{owner} forces slot {f.slot} with neither a premade nor a blueprint.");
+                if (!string.IsNullOrEmpty(f.lie) && !ParseEnum(f.lie, out LieKind _))
+                    errors.Add($"{slotOwner} authors unknown lie '{f.lie}' (one of {string.Join(", ", Enum.GetNames(typeof(LieKind)))}).");
+                if (!string.IsNullOrEmpty(f.directive) && (!ParseEnum(f.directive, out PlannedDirective planned) || planned == PlannedDirective.None))
+                    errors.Add($"{slotOwner} authors unknown directive fault '{f.directive}' (one of {string.Join(", ", Enum.GetNames(typeof(PlannedDirective)).Skip(1))}).");
+                if (!IsAscii(f.intro))
+                    errors.Add($"{slotOwner}: its intro must be ASCII.");
+                if (src.interview != null && (f.intro ?? string.Empty).Length > src.interview.maxLineChars)
+                    errors.Add($"{slotOwner}: its intro is {f.intro.Length} characters; the transcript holds at most {src.interview.maxLineChars} (interview.maxLineChars).");
+                CheckConditions(f.conditions, slotOwner, false, authored, src, errors);
                 if (string.IsNullOrEmpty(f.premade))
                     continue;
 
                 InWorld(f.premade, "forces");
-                if (!forcedPremades.Add(f.premade))
-                    errors.Add($"{owner} forces premade '{f.premade}' twice.");
                 if (pool.Contains(f.premade))
                     errors.Add($"{owner} both forces and pools premade '{f.premade}'.");
             }
@@ -1138,6 +1142,12 @@ public static partial class WorldContentGenerator
             foreach (string problem in ViolatorSlots.RoomProblems(d.asset, d.queue, standing, Guarantees(src, d)))
                 Debug.LogWarning($"[WorldContentGenerator] {problem}");
         }
+
+        // --- The forced entries' faults, ids, alternatives, dialogs and conditions (days 7-15 V2-V5; the validator's rule) ---
+        var forcedWarnings = new List<string>();
+        Premades.ForcedProblems(src.days.Select(d => ForcedDay(src, d, authored, premadesById)).ToList(), premadeIds, dialogIds, errors, forcedWarnings);
+        foreach (string warning in forcedWarnings)
+            Debug.LogWarning($"[WorldContentGenerator] {warning}");
 
         // --- Dialog line expressions: only on traveller lines ---
         foreach (DialogData d in src.dialogs ?? Array.Empty<DialogData>())
@@ -1552,6 +1562,65 @@ public static partial class WorldContentGenerator
 
         errors.AddRange(Directives.DayProblems(d.asset, d.day, active, kinds));
     }
+
+    /// <summary>
+    /// A day of the source as the forced entries' checks see it
+    /// (Premades.ForcedProblems): its lies, its rules (a closure's place by
+    /// ids), its pool, and each forced entry's kind (its premade's, or its
+    /// blueprint's), forms, fault, dialog, conditions and whether its place
+    /// is closed that day.
+    /// </summary>
+    private static ForcedDayCheck ForcedDay(WorldSource src, DayData d, Authored authored, Dictionary<string, PremadeData> premades)
+    {
+        var byAsset = (src.rules ?? Array.Empty<RuleData>()).Where(r => r != null).GroupBy(r => r.asset).ToDictionary(g => g.Key, g => g.First());
+        List<Directive> rules = (d.rules ?? Array.Empty<string>())
+            .Where(name => byAsset.ContainsKey(name ?? string.Empty) && ParseEnum(byAsset[name].type, out TravelRuleType _))
+            .Select(name => byAsset[name])
+            .Select(r => new Directive((TravelRuleType)Enum.Parse(typeof(TravelRuleType), r.type), RuleKinds(r), NullIfBlank(r.country), NullIfBlank(r.era)))
+            .ToList();
+
+        var forced = new List<ForcedCheck>();
+        foreach (ForcedData f in d.forced ?? Array.Empty<ForcedData>())
+        {
+            premades.TryGetValue(f.premade ?? string.Empty, out PremadeData m);
+            CaseBlueprintSO blueprint = !string.IsNullOrEmpty(f.blueprint) && authored.forcedBlueprints.TryGetValue(f.blueprint, out CaseBlueprintSO b) ? b : null;
+            TravellerKind kind = m != null ? PremadeKind(m) : blueprint != null ? blueprint.Kind : TravellerKind.Displaced;
+            CaseBlueprintSO kindBlueprint = blueprint ?? (authored.blueprints.TryGetValue(kind, out CaseBlueprintSO kb) ? kb : null);
+            PlaceData place = m != null ? src.places.FirstOrDefault(p => PlaceId(p) == m.place) : null;
+            forced.Add(new ForcedCheck
+            {
+                Slot = f.slot,
+                Id = f.id,
+                Premade = f.premade,
+                Kind = kind,
+                Forms = kindBlueprint != null ? FormNumbers(kindBlueprint) : new List<string>(),
+                HasTruePlace = m != null && !string.IsNullOrEmpty(m.truePlace),
+                OncePerRun = m != null && !m.repeatable,
+                ClosedPlace = place != null && rules.Any(r => r.AppliesTo(kind) && r.Closes(place.country, place.era)),
+                Lie = ParseEnum(f.lie, out LieKind lie) ? lie : (LieKind?)null,
+                Directive = ParseEnum(f.directive, out PlannedDirective directive) ? directive : PlannedDirective.None,
+                Dialog = f.dialog,
+                ConditionKeys = (f.conditions ?? Array.Empty<ConditionData>()).Select(c => c.key).Where(k => !string.IsNullOrEmpty(k)).ToList(),
+                Conditions = f.conditions?.Length ?? 0
+            });
+        }
+
+        return new ForcedDayCheck
+        {
+            Asset = d.asset,
+            Day = d.day,
+            Lies = (d.lies ?? Array.Empty<string>()).Where(l => ParseEnum(l, out LieKind _)).Select(l => (LieKind)Enum.Parse(typeof(LieKind), l)).ToList(),
+            Rules = rules,
+            Pooled = d.premades ?? Array.Empty<string>(),
+            Forced = forced
+        };
+    }
+
+    /// <summary>The kind a premade stands as: the displaced (the famous).</summary>
+    private static TravellerKind PremadeKind(PremadeData m) => TravellerKind.Displaced;
+
+    /// <summary>Null for a blank id (a rule's missing country or era).</summary>
+    private static string NullIfBlank(string id) => string.IsNullOrEmpty(id) ? null : id;
 
     /// <summary>How many guaranteed faulty travellers a day plans (Directives.Guarantees over its rules: every closure, a procedure with a maker on its first day).</summary>
     private static int Guarantees(WorldSource src, DayData d)
