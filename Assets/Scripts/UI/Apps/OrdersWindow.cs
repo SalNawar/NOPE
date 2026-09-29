@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -17,14 +18,20 @@ using UnityEngine.UI;
 /// section, price, status, requires, blurb) with its one action button:
 /// Order (paid now, arrives tomorrow), Cancel order (today's, refunded),
 /// Install tomorrow / Cancel install / Keep installed for an owned scanner
-/// (one installed at a time). The arrows walk the tree and Enter acts
-/// (DesktopKeyboard, UpgradeTree.Step). It opens maximised and redraws when
-/// the day, the wallet, the order log, the owned upgrades or the installs
-/// change.
+/// (one installed at a time). The arrows walk the tree, scrolling the
+/// selected node into view, and Enter acts (DesktopKeyboard, UpgradeTree.Step).
+/// The tree zooms, pans and scrolls (Saleh: "zoom drag and scroll";
+/// TreeScrollRect): Ctrl+wheel about the pointer, the − and + buttons over
+/// its corner (with the level between them) and Ctrl+=, Ctrl+- and Ctrl+0,
+/// through the readable levels only (TreeZoom.ReadableLevels: never so far
+/// out that a node's smallest text reads under DesktopConfigSO.ordersTextFloor).
+/// It opens maximised and redraws when the day, the wallet, the order log, the
+/// owned upgrades or the installs change; each node's parts are found once,
+/// when the tree is laid out, so a redraw looks nothing up.
 /// </summary>
 public sealed class OrdersWindow : MonoBehaviour
 {
-    /// <summary>The tree's sizes (cell, node, band head, link width).</summary>
+    /// <summary>The tree's sizes (cell, node, band head, link width) and its zoom levels and text floor.</summary>
     [SerializeField] private DesktopConfigSO config;
 
     /// <summary>The app's window (it opens maximised; the keyboard routes to it while it has the focus).</summary>
@@ -32,6 +39,9 @@ public sealed class OrdersWindow : MonoBehaviour
 
     /// <summary>The wallet line over the tree.</summary>
     [SerializeField] private TMP_Text walletText;
+
+    /// <summary>The tree's view: scrolls, pans and zooms the content.</summary>
+    [SerializeField] private TreeScrollRect view;
 
     /// <summary>The tree's content (top-left pivot; bands, links and nodes are cloned into it).</summary>
     [SerializeField] private RectTransform treeContent;
@@ -47,6 +57,15 @@ public sealed class OrdersWindow : MonoBehaviour
 
     /// <summary>A link segment once its prerequisite is owned (inactive).</summary>
     [SerializeField] private Image linkLitTemplate;
+
+    /// <summary>The zoom's − button (a level out; off at the lowest readable level).</summary>
+    [SerializeField] private Button zoomOutButton;
+
+    /// <summary>The zoom's + button (a level in; off at the highest level).</summary>
+    [SerializeField] private Button zoomInButton;
+
+    /// <summary>The zoom level between the buttons ("125 %").</summary>
+    [SerializeField] private TMP_Text zoomText;
 
     /// <summary>The detail card's scroll (hidden until a node is selected).</summary>
     [SerializeField] private ScrollRect detailScroll;
@@ -66,11 +85,27 @@ public sealed class OrdersWindow : MonoBehaviour
     /// <summary>A locked node's card alpha.</summary>
     [SerializeField, Range(0.2f, 1f)] private float lockedAlpha = 0.55f;
 
+    /// <summary>The detail card's slots are never picked (the requisition form is read, not cited).</summary>
+    private static readonly Func<FormSlot, bool> NothingPicks = _ => false;
+
+    /// <summary>A node's card and the parts a redraw writes, found once when the tree is laid out.</summary>
+    private sealed class NodeView
+    {
+        public RectTransform Card;
+        public TMP_Text State;
+        public Image Badge;
+        public CanvasGroup Group;
+        public GameObject Selected;
+    }
+
     private readonly List<GameObject> _built = new List<GameObject>();
-    private readonly Dictionary<string, Button> _nodes = new Dictionary<string, Button>();
+    private readonly Dictionary<string, NodeView> _nodes = new Dictionary<string, NodeView>();
     private readonly List<(string from, Image dim, Image lit)> _links = new List<(string, Image, Image)>();
     private readonly Dictionary<string, Sprite> _glyphs = new Dictionary<string, Sprite>();
     private readonly List<Texture2D> _glyphTextures = new List<Texture2D>();
+    private readonly Dictionary<string, string> _detailText = new Dictionary<string, string>();
+    private Sprite _padlock, _clock, _tick;
+    private TMP_Text _actionLabel;
     private TreeLayout _layout;
     private string _selected;
     private int _signature;
@@ -88,7 +123,21 @@ public sealed class OrdersWindow : MonoBehaviour
             if (template != null)
                 template.gameObject.SetActive(false);
         if (actionButton != null)
+        {
             actionButton.onClick.AddListener(Act);
+            _actionLabel = actionButton.GetComponentInChildren<TMP_Text>(true);
+        }
+        if (zoomOutButton != null)
+            zoomOutButton.onClick.AddListener(() => Zoom(-1));
+        if (zoomInButton != null)
+            zoomInButton.onClick.AddListener(() => Zoom(1));
+        if (view != null)
+        {
+            view.LevelChanged += ShowZoom;
+            if (config != null)
+                view.SetLevels(TreeZoom.ReadableLevels(config.ordersZoomLevels, SmallestText(), config.ordersTextFloor));
+        }
+        ShowZoom();
     }
 
     /// <summary>The first open: the tree fills the desktop.</summary>
@@ -113,18 +162,30 @@ public sealed class OrdersWindow : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (view != null)
+            view.LevelChanged -= ShowZoom;
         foreach (Sprite s in _glyphs.Values)
             Destroy(s);
         foreach (Texture2D t in _glyphTextures)
             Destroy(t);
     }
 
-    /// <summary>The arrows (DesktopKeyboard): moves the selection along the links or within a tier (UpgradeTree.Step); nothing that way keeps it.</summary>
+    /// <summary>The arrows (DesktopKeyboard): moves the selection along the links or within a tier (UpgradeTree.Step) and scrolls it into view; nothing that way keeps it.</summary>
     public void Step(int dx, int dy)
     {
         string next = UpgradeTree.Step(_layout, _selected, dx, dy);
-        if (next != null)
-            Select(next);
+        if (next == null)
+            return;
+        Select(next);
+        if (view != null && _nodes.TryGetValue(next, out NodeView node))
+            view.Reveal(node.Card);
+    }
+
+    /// <summary>The zoom (the buttons, Ctrl+=, Ctrl+- and Ctrl+0): a level in (1), out (-1) or back to 100 % (0), about the view's centre.</summary>
+    public void Zoom(int direction)
+    {
+        if (view != null)
+            view.Step(direction);
     }
 
     /// <summary>Enter (DesktopKeyboard) and the action button: the selected node's action.</summary>
@@ -204,7 +265,7 @@ public sealed class OrdersWindow : MonoBehaviour
             _ => null
         };
 
-    /// <summary>Lays the tree out anew: a head per band, a card per node at its cell, three segments per link (dim and lit), and the content's size.</summary>
+    /// <summary>Lays the tree out anew: a head per band, a card per node at its cell (its parts found here, once), three segments per link (dim and lit), the badges' glyphs, and the content's size; the view goes back to the tree's corner.</summary>
     private void Build()
     {
         foreach (GameObject go in _built)
@@ -217,6 +278,9 @@ public sealed class OrdersWindow : MonoBehaviour
         if (lib == null || config == null || treeContent == null)
             return;
 
+        _padlock = Glyph("padlock");
+        _clock = Glyph("clock");
+        _tick = Glyph("tick");
         _layout = OrderBook.Layout(lib);
         Vector2 cell = config.ordersCellSize, node = config.ordersNodeSize;
         float margin = (cell.x - node.x) / 2f, head = config.ordersBandHead;
@@ -230,7 +294,7 @@ public sealed class OrdersWindow : MonoBehaviour
                 RectTransform h = Instantiate(bandTemplate, treeContent);
                 h.name = "Band_" + band.Branch;
                 Place(h, new Vector2(margin, y), new Vector2(Mathf.Max(1, _layout.Tiers) * cell.x - 2f * margin, head - 6f));
-                SetText(h, "Label", UiText.Get("app.orders.branch." + ArtSlots.Key(band.Branch.ToString())));
+                SetText(h, "Label", OrderLines.Branch(band.Branch));
                 SetImage(h, "Glyph", SlotArt.Sprite(ArtSlots.OrderBranch(band.Branch)) ?? Glyph("branch_" + ArtSlots.Key(band.Branch.ToString())));
                 h.gameObject.SetActive(true);
                 _built.Add(h.gameObject);
@@ -239,12 +303,8 @@ public sealed class OrdersWindow : MonoBehaviour
             y += head + band.Slots * cell.y;
         }
         treeContent.sizeDelta = new Vector2(Mathf.Max(1, _layout.Tiers) * cell.x, y + margin);
-        ScrollRect scroll = treeContent.GetComponentInParent<ScrollRect>(true);
-        if (scroll != null)
-        {
-            Canvas.ForceUpdateCanvases();
-            scroll.normalizedPosition = new Vector2(0f, 1f);
-        }
+        if (view != null)
+            view.ShowCorner();
 
         var at = new Dictionary<string, Vector2>();
         foreach (TreeCell c in _layout.Cells)
@@ -269,7 +329,15 @@ public sealed class OrdersWindow : MonoBehaviour
             string id = c.Id;
             card.onClick.AddListener(() => Select(id));
             card.gameObject.SetActive(true);
-            _nodes[id] = card;
+            Transform selected = card.transform.Find("Selected");
+            _nodes[id] = new NodeView
+            {
+                Card = (RectTransform)card.transform,
+                State = Child<TMP_Text>(card.transform, "State"),
+                Badge = Child<Image>(card.transform, "Badge"),
+                Group = card.GetComponent<CanvasGroup>(),
+                Selected = selected != null ? selected.gameObject : null
+            };
             _built.Add(card.gameObject);
         }
     }
@@ -319,25 +387,25 @@ public sealed class OrdersWindow : MonoBehaviour
             return;
 
         if (walletText != null)
-            walletText.text = UiText.Format("app.orders.wallet", Money(world.money));
+            walletText.text = OrderLines.Wallet(world);
 
-        foreach (KeyValuePair<string, Button> pair in _nodes)
+        foreach (KeyValuePair<string, NodeView> pair in _nodes)
         {
             UpgradeSO upgrade = lib.GetUpgradeById(pair.Key);
             OrderState state = OrderBook.StateOf(world, lib, upgrade);
-            Transform card = pair.Value.transform;
-            SetText(card, "State", StateLine(world, lib, upgrade, state, false));
-            Sprite badge = state == OrderState.Locked ? Glyph("padlock") : state == OrderState.InTransit ? Glyph("clock") : state == OrderState.Owned ? Glyph("tick") : null;
-            SetImage(card, "Badge", badge);
-            Transform b = card.Find("Badge");
-            if (b != null)
-                b.gameObject.SetActive(badge != null);
-            CanvasGroup group = card.GetComponent<CanvasGroup>();
-            if (group != null)
-                group.alpha = state == OrderState.Locked ? lockedAlpha : 1f;
-            Transform selected = card.Find("Selected");
-            if (selected != null)
-                selected.gameObject.SetActive(pair.Key == _selected);
+            NodeView node = pair.Value;
+            if (node.State != null)
+                node.State.text = OrderLines.State(world, lib, upgrade, state, false);
+            Sprite badge = state == OrderState.Locked ? _padlock : state == OrderState.InTransit ? _clock : state == OrderState.Owned ? _tick : null;
+            if (node.Badge != null)
+            {
+                node.Badge.sprite = badge;
+                node.Badge.gameObject.SetActive(badge != null);
+            }
+            if (node.Group != null)
+                node.Group.alpha = state == OrderState.Locked ? lockedAlpha : 1f;
+            if (node.Selected != null)
+                node.Selected.SetActive(pair.Key == _selected);
         }
 
         foreach ((string from, Image dim, Image lit) in _links)
@@ -367,76 +435,46 @@ public sealed class OrdersWindow : MonoBehaviour
         {
             actionButton.gameObject.SetActive(action != NodeAction.None);
             actionButton.interactable = enabled;
-            TMP_Text label = actionButton.GetComponentInChildren<TMP_Text>(true);
-            if (label != null && action != NodeAction.None)
-                label.text = UiText.Get(ActionKey(action));
+            if (_actionLabel != null && action != NodeAction.None)
+                _actionLabel.text = UiText.Get(ActionKey(action));
         }
         if (upgrade == null || detail == null || detailForm == null)
             return;
 
         OrderState state = OrderBook.StateOf(world, lib, upgrade);
         FormData page = detailForm.Page(lib.Agency);
-        page.Text = new Dictionary<string, string>
-        {
-            { "item", upgrade.displayName },
-            { "section", UiText.Get("app.orders.branch." + ArtSlots.Key(upgrade.branch.ToString())) },
-            { "price", Money(OrderBook.Price(world, lib, upgrade)) },
-            { "status", StateLine(world, lib, upgrade, state, true) },
-            { "requires", Requires(world, lib, upgrade) },
-            { "blurb", upgrade.description ?? string.Empty }
-        };
-        detail.Show(detailForm.form, page, _ => false);
+        _detailText.Clear();
+        _detailText["item"] = upgrade.displayName;
+        _detailText["section"] = OrderLines.Branch(upgrade.branch);
+        _detailText["price"] = OrderLines.Money(OrderBook.Price(world, lib, upgrade));
+        _detailText["status"] = OrderLines.State(world, lib, upgrade, state, true);
+        _detailText["requires"] = OrderLines.Requires(world, lib, upgrade);
+        _detailText["blurb"] = upgrade.description ?? string.Empty;
+        page.Text = _detailText;
+        detail.Show(detailForm.form, page, NothingPicks);
     }
 
-    /// <summary>A node's state line: its price (or "not enough"), "Needs: …", "In transit · arrives day N", "Delivered day N" or "Owned"; for an owned scanner where it stands (on the node alone, where room is short; after the delivery day on the <paramref name="full"/> detail card).</summary>
-    private static string StateLine(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade, OrderState state, bool full)
+    /// <summary>The zoom's line and buttons follow the view's level (the − button off at the lowest readable level, + at the highest).</summary>
+    private void ShowZoom()
     {
-        switch (state)
-        {
-            case OrderState.Locked:
-                return UiText.Format("app.orders.needs", string.Join(", ", UpgradeTree.Missing(upgrade.Node, world.HasUpgrade).ConvertAll(id => NameOf(lib, id))));
-            case OrderState.TooDear:
-                return UiText.Format("app.orders.tooDear", OrderBook.Price(world, lib, upgrade), UiText.Currency(UiText.WalletForm.Short));
-            case OrderState.InTransit:
-                return UiText.Format("app.orders.inTransit", Orders.ArrivalDay(Orders.Pending(world.orders, upgrade.id)));
-            case OrderState.Owned:
-                OrderEntry delivery = Orders.Delivery(world.orders, upgrade.id);
-                string owned = delivery != null ? UiText.Format("app.orders.delivered", delivery.deliveredDay) : UiText.Get("app.orders.owned");
-                string install = InstallLine(OrderBook.InstallStateOf(world, lib, upgrade));
-                return install == null ? owned : full ? owned + " · " + install : install;
-            default:
-                return Money(OrderBook.Price(world, lib, upgrade));
-        }
+        int level = view != null ? view.Level : AppZoom.Normal;
+        if (zoomText != null)
+            zoomText.text = UiText.Format("app.orders.zoom", level);
+        if (zoomOutButton != null)
+            zoomOutButton.interactable = view != null && view.CanStep(-1);
+        if (zoomInButton != null)
+            zoomInButton.interactable = view != null && view.CanStep(1);
     }
 
-    /// <summary>An owned scanner's place: Installed, In storage, Installs tomorrow, Swapped out tomorrow; null without a slot.</summary>
-    private static string InstallLine(InstallState state) =>
-        state switch
-        {
-            InstallState.Installed => UiText.Get("app.orders.installed"),
-            InstallState.Stored => UiText.Get("app.orders.stored"),
-            InstallState.InstallsTomorrow => UiText.Get("app.orders.installsTomorrow"),
-            InstallState.LeavesTomorrow => UiText.Get("app.orders.leavesTomorrow"),
-            _ => null
-        };
-
-    /// <summary>The form's Requires box: every prerequisite by name, "None" for a root.</summary>
-    private static string Requires(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade)
+    /// <summary>The smallest a node's or a band's text may be drawn at 100 % (an auto-sized text's floor), for the readable zoom levels.</summary>
+    private float SmallestText()
     {
-        var names = new List<string>();
-        foreach (string id in upgrade.requires ?? System.Array.Empty<string>())
-            names.Add(NameOf(lib, id) + (world.HasUpgrade(id) ? " (" + UiText.Get("app.orders.owned") + ")" : string.Empty));
-        return names.Count > 0 ? string.Join(", ", names) : UiText.Get("app.orders.none");
-    }
-
-    /// <summary>An amount in the wallet's currency ("200 cr").</summary>
-    private static string Money(int amount) => UiText.Format("app.orders.price", amount, UiText.Currency(UiText.WalletForm.Short));
-
-    /// <summary>An upgrade's name by its id (the id when the library lacks it).</summary>
-    private static string NameOf(ContentLibrarySO lib, string id)
-    {
-        UpgradeSO upgrade = lib != null ? lib.GetUpgradeById(id) : null;
-        return upgrade != null ? upgrade.displayName : id;
+        float smallest = float.MaxValue;
+        foreach (Component template in new Component[] { nodeTemplate, bandTemplate })
+            if (template != null)
+                foreach (TMP_Text text in template.GetComponentsInChildren<TMP_Text>(true))
+                    smallest = Mathf.Min(smallest, text.enableAutoSizing ? Mathf.Min(text.fontSizeMin, text.fontSizeMax) : text.fontSize);
+        return smallest == float.MaxValue ? 0f : smallest;
     }
 
     /// <summary>An upgrade's install slot by id.</summary>
@@ -507,11 +545,17 @@ public sealed class OrdersWindow : MonoBehaviour
         rt.sizeDelta = size;
     }
 
+    /// <summary>A named child's component (null without either).</summary>
+    private static T Child<T>(Transform parent, string child) where T : Component
+    {
+        Transform t = parent.Find(child);
+        return t != null ? t.GetComponent<T>() : null;
+    }
+
     /// <summary>Writes a child text.</summary>
     private static void SetText(Transform parent, string child, string text)
     {
-        Transform t = parent.Find(child);
-        TMP_Text label = t != null ? t.GetComponent<TMP_Text>() : null;
+        TMP_Text label = Child<TMP_Text>(parent, child);
         if (label != null)
             label.text = text;
     }
@@ -519,8 +563,7 @@ public sealed class OrdersWindow : MonoBehaviour
     /// <summary>Sets a child image's sprite.</summary>
     private static void SetImage(Transform parent, string child, Sprite sprite)
     {
-        Transform t = parent.Find(child);
-        Image image = t != null ? t.GetComponent<Image>() : null;
+        Image image = Child<Image>(parent, child);
         if (image != null)
             image.sprite = sprite;
     }

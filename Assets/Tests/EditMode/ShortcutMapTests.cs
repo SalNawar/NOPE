@@ -249,6 +249,18 @@ public class ShortcutMapTests
     }
 
     [Test]
+    public void OrdersFocused_TheZoomChordsZoomTheTree()
+    {
+        var orders = new ShortcutContext(frameOpen: true, ordersFocused: true);
+        Assert.AreEqual(AppCommand.ZoomIn, Resolve(K(ShortcutKey.Equals, ctrl: true), orders));
+        Assert.AreEqual(AppCommand.ZoomOut, Resolve(K(ShortcutKey.Minus, ctrl: true), orders));
+        Assert.AreEqual(AppCommand.ZoomReset, Resolve(K(ShortcutKey.Digit0, ctrl: true), orders));
+        Assert.IsNull(Resolve(K(ShortcutKey.Equals), orders), "a plain = is no zoom");
+        Assert.IsNull(Resolve(K(ShortcutKey.Equals, ctrl: true), new ShortcutContext(frameOpen: true, desktopFocused: true)), "nothing zooms on the bare desktop");
+        Assert.AreEqual(AppCommand.ZoomIn, Resolve(K(ShortcutKey.Equals, ctrl: true), App), "the app's panes keep their zoom");
+    }
+
+    [Test]
     public void TheCard_ListsEveryCommandOnce()
     {
         var seen = new List<AppCommand>();
