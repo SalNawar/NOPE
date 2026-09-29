@@ -48,6 +48,18 @@ public class UiStringsTests
     }
 
     [Test]
+    public void ABlankText_IsAbsent_TheCultureFallsBackToReading_TheReadingToTheKey()
+    {
+        // Unity serializes a null string as "": a blank entry must not draw a blank label (or a gloss alone).
+        var reading = new List<UiStringEntry>(Reading) { E("empty", "") };
+        var s = new UiStrings(reading, new[] { E("ok", ""), E("plain", "Simple") }, false, 60);
+        Assert.AreEqual("OK", s.Get("ok"), "a blank culture entry falls back to the reading text, with no gloss");
+        Assert.AreEqual("Simple", s.Get("plain"));
+        Assert.AreEqual("empty", s.Get("empty"), "a blank reading entry is a missing key");
+        CollectionAssert.AreEqual(new[] { "empty" }, s.MissingKeys.ToArray());
+    }
+
+    [Test]
     public void Format_FillsPlaceholders_AndPassesCanonicalStringsVerbatim()
     {
         UiStrings s = Strings();
