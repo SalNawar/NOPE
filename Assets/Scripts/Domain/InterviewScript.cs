@@ -421,6 +421,7 @@ public static class DialogChecks
         }
 
         var nodes = new Dictionary<string, ScriptNode>();
+        var choicesOf = new Dictionary<string, List<ScriptChoice>>(); // each listed node's choices, gathered once (audit R1-019)
         var choiceIds = new HashSet<string>();
         bool anyEnding = false;
 
@@ -432,12 +433,15 @@ public static class DialogChecks
                 continue;
             }
 
+            List<ScriptChoice> choices = Choices(node);
             if (nodes.ContainsKey(node.id ?? string.Empty))
                 problems.Add($"node '{node.id}' is listed twice");
             else
+            {
                 nodes.Add(node.id ?? string.Empty, node);
+                choicesOf.Add(node.id ?? string.Empty, choices);
+            }
 
-            List<ScriptChoice> choices = Choices(node);
             foreach (ScriptChoice choice in choices)
             {
                 if (!choiceIds.Add(choice.id ?? string.Empty))
@@ -456,8 +460,8 @@ public static class DialogChecks
                 problems.Add($"node '{node.id}' offers {choices.Count} choices; the traveller wheel shows at most {maxChoices}");
         }
 
-        foreach (ScriptNode node in nodes.Values)
-            foreach (ScriptChoice choice in Choices(node))
+        foreach (List<ScriptChoice> choices in choicesOf.Values)
+            foreach (ScriptChoice choice in choices)
                 if (!string.IsNullOrEmpty(choice.next) && !nodes.ContainsKey(choice.next))
                     problems.Add($"choice '{choice.id}' leads to unknown node '{choice.next}'");
 
@@ -471,29 +475,28 @@ public static class DialogChecks
         queue.Enqueue(start);
         while (queue.Count > 0)
         {
-            foreach (ScriptChoice choice in Choices(nodes[queue.Dequeue()]))
+            foreach (ScriptChoice choice in choicesOf[queue.Dequeue()])
                 if (!string.IsNullOrEmpty(choice.next) && nodes.ContainsKey(choice.next) && reachable.Add(choice.next))
                     queue.Enqueue(choice.next);
         }
 
         // Backwards: every node from which some path ends the dialog.
         var ending = new HashSet<string>();
-        foreach (ScriptNode node in nodes.Values)
-            foreach (ScriptChoice choice in Choices(node))
+        foreach (KeyValuePair<string, List<ScriptChoice>> node in choicesOf)
+            foreach (ScriptChoice choice in node.Value)
                 if (string.IsNullOrEmpty(choice.next))
-                    ending.Add(node.id ?? string.Empty);
+                    ending.Add(node.Key);
 
         bool grew = true;
         while (grew)
         {
             grew = false;
-            foreach (ScriptNode node in nodes.Values)
+            foreach (string id in nodes.Keys)
             {
-                string id = node.id ?? string.Empty;
                 if (ending.Contains(id))
                     continue;
 
-                foreach (ScriptChoice choice in Choices(node))
+                foreach (ScriptChoice choice in choicesOf[id])
                 {
                     if (!string.IsNullOrEmpty(choice.next) && ending.Contains(choice.next))
                     {

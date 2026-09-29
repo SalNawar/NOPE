@@ -92,7 +92,7 @@ public static partial class OfficeSceneUIBuilder
     private const string GameplayScenePath = "Assets/Scenes/OfficeGameplay.unity";
 
     /// <summary>The gameplay layer's scene name (RunConfig.officeGameplaySceneName).</summary>
-    private const string GameplaySceneName = "OfficeGameplay";
+    private const string GameplaySceneName = RunConfigSO.DefaultOfficeGameplaySceneName;
 
     /// <summary>The art office the gameplay layer loads on (the art side's scene RunConfig.officeSceneName names, ArtOfficeScene; the builder never opens it).</summary>
     private static string ArtScenePath => ArtOfficeScene.Path;
@@ -194,7 +194,7 @@ public static partial class OfficeSceneUIBuilder
         FallbackHud fallbackHud = BuildFallbackHud(officeCanvas.transform);
         OfficeCaseHud caseHud = BuildOfficeCaseHud(officeCanvas.transform, out GameObject officeCompareStrip, out TMP_Text officeCompareText);
         Button deskViewBack = BuildDeskViewBack(officeCanvas.transform);
-        PcFrame pcFrame = BuildPcFrame(officeCanvas.transform, frameCamera, officeView, out Image powerLed, out Button framePower);
+        PcFrame pcFrame = BuildPcFrame(officeCanvas.transform, frameCamera, officeView, library, out Image powerLed, out Button framePower);
         OverlayCallout speechBubble = BuildOverlayCallout(officeCanvas.transform, "SpeechBubble", new Vector2(420f, 110f), new Color(0.98f, 0.97f, 0.93f, 0.97f), ThemeRoleId.DiegeticBubble, true);
         TravellerWheel wheel = BuildTravellerWheel(officeCanvas.transform, deskConfig, speechBubble);
         BuildBubbleInput(speechBubble, wheel);
@@ -385,6 +385,7 @@ public static partial class OfficeSceneUIBuilder
         CheckThemeTags(canvas, officeCanvas);
         CheckLabelKeysAndRoles(library, canvas, officeCanvas);
         CheckContrast(library, canvas, officeCanvas);
+        CheckInvestigationWiring(invest);
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene, GameplayScenePath);
         EnsureBuildSettings();
@@ -495,16 +496,19 @@ public static partial class OfficeSceneUIBuilder
             new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
     }
 
-    private static void SetRef(SerializedObject so, string prop, Object value)
-    {
-        SerializedProperty p = so.FindProperty(prop);
-        if (p != null) p.objectReferenceValue = value;
-    }
+    /// <summary>Sets a serialized reference; a field the component does not have is an error (Wire), never a silent skip (audit R6-004).</summary>
+    private static void SetRef(SerializedObject so, string prop, Object value) => Wire(so, prop, value);
 
+    /// <summary>Sets a serialized colour; a field the component does not have is an error, never a silent skip (audit R6-004).</summary>
     private static void SetColor(SerializedObject so, string prop, Color value)
     {
         SerializedProperty p = so.FindProperty(prop);
-        if (p != null) p.colorValue = value;
+        if (p == null)
+        {
+            Debug.LogError($"[TimeDesk] {so.targetObject.GetType().Name} has no serialized colour '{prop}' to set; fix OfficeSceneUIBuilder.");
+            return;
+        }
+        p.colorValue = value;
     }
 
     private static void FullStretch(RectTransform rt)
@@ -641,6 +645,30 @@ public static partial class OfficeSceneUIBuilder
                 themes.Add(theme);
         UiContrastCheck.Check(desktop, FrameGlass.height / DesktopSize.y, themes, library.CultureUi);
         UiContrastCheck.Check(overlay, 1f, themes, library.CultureUi);
+    }
+
+    /// <summary>
+    /// Logs an error for every part of the investigation desk the build left
+    /// unreachable (InvestigationWiring, evaluated on the built references): a
+    /// partly wired desk silently changes every traveller of the day (no spoken
+    /// or dress tells, no evidence gate, papers straight to the PC), and at run
+    /// time only a warning said so (audit R4-022).
+    /// </summary>
+    private static void CheckInvestigationWiring(InvestigationUIController invest)
+    {
+        InvestigationWiring wiring = invest.Wiring;
+        if (!wiring.Wired)
+            Debug.LogError("[TimeDesk] The investigation desk has no Investigation app (its Documents page, the app, Accept or Deny is unwired): no case can show. Check BuildInvestigationApp.", invest);
+        if (!wiring.EvidenceSystemActive)
+            Debug.LogError("[TimeDesk] The investigation desk's evidence system is off (the app or the compare is unwired): denials would not be gated on evidence.", invest);
+        if (!wiring.InterviewReachable)
+            Debug.LogError("[TimeDesk] A traveller's answers cannot be read (the wheel's ring, the transcript or the app's Transcript tab is unwired): no spoken tell would be generated.", invest);
+        if (!wiring.AppearanceReachable)
+            Debug.LogError("[TimeDesk] A traveller's garments cannot be compared (the wheel's ring or the compare is unwired): no dress tell would be generated.", invest);
+        if (!wiring.DeskReachable)
+            Debug.LogError("[TimeDesk] The desk is not wired whole (its surface, scanner, paper template, paper root, hand-over point or config): papers would go straight to the PC.", invest);
+        if (wiring.RecordsMissing)
+            Debug.LogError("[TimeDesk] The app's Records tab is unwired: birth-date tells could not be proven.", invest);
     }
 
     /// <summary>A transform's scene path.</summary>
@@ -1008,19 +1036,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>Where generated placeholder cursors live (never mistaken for final art).</summary>
     private const string PlaceholderCursorFolder = "Assets/Art/Generated/Cursors";
 
-    /// <summary>Placeholder arrow outline, in top-left pixel coordinates of a 32x32 cursor.</summary>
-    private static readonly (float x, float y)[] ArrowCursorShape =
-    {
-        (0, 0), (0, 22), (5, 17), (9, 26), (12, 25), (8, 16), (15, 16),
-    };
-
-    /// <summary>Placeholder pointing hand (fingertip at 12,1), top-left pixel coordinates.</summary>
-    private static readonly (float x, float y)[] HandCursorShape =
-    {
-        (10, 1), (13, 1), (14, 2), (14, 12), (21, 13), (23, 15), (23, 25), (19, 30),
-        (10, 30), (6, 24), (5, 18), (7, 17), (10, 19),
-    };
-
     /// <summary>
     /// Ensures the interaction-feedback settings (cursor art by file name when
     /// present, placeholders otherwise, with click points derived from the art;
@@ -1042,7 +1057,7 @@ public static partial class OfficeSceneUIBuilder
         // Whenever a cursor texture is replaced, its click point is re-derived from the image.
         if (settings.arrowCursor == null || IsPlaceholderCursor(settings.arrowCursor))
         {
-            Texture2D arrow = EnsureCursorTexture("cursor_arrow", ArrowCursorShape);
+            Texture2D arrow = EnsureCursorTexture("cursor_arrow", PlaceholderCursors.Arrow);
             if (arrow != settings.arrowCursor)
             {
                 settings.arrowCursor = arrow;
@@ -1051,7 +1066,7 @@ public static partial class OfficeSceneUIBuilder
         }
         if (settings.handCursor == null || IsPlaceholderCursor(settings.handCursor))
         {
-            Texture2D hand = EnsureCursorTexture("cursor_hand", HandCursorShape);
+            Texture2D hand = EnsureCursorTexture("cursor_hand", PlaceholderCursors.Hand);
             if (hand != settings.handCursor)
             {
                 settings.handCursor = hand;

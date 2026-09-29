@@ -16,6 +16,9 @@ public static class DesktopIconPlaceholder
     /// <summary>The glyph's side in pixels (a placeholder resolution, not a gameplay knob).</summary>
     public const int Size = 64;
 
+    /// <summary>The notes glyph's sheet with its folded corner (pixels, y up), built once: In runs for every pixel.</summary>
+    private static readonly (float x, float y)[] NotesSheet = { (12f, 6f), (52f, 6f), (52f, 44f), (40f, 58f), (12f, 58f) };
+
     /// <summary>The glyph for an app id (DesktopAppIds' ids; this assembly does not see the Domain, so they are written out here and the tests check they match), or null for an id with no glyph.</summary>
     public static byte[] Render(string appId)
     {
@@ -86,7 +89,7 @@ public static class DesktopIconPlaceholder
             case "notes":
             {
                 // A sheet with a folded top-right corner and three rules.
-                bool sheet = PixelShapes.InPolygon(new (float x, float y)[] { (12f, 6f), (52f, 6f), (52f, 44f), (40f, 58f), (12f, 58f) }, px, py);
+                bool sheet = PixelShapes.InPolygon(NotesSheet, px, py);
                 bool inside = px > 16f && px < 48f && py > 10f && py < 40f;
                 bool rule = (py >= 16f && py <= 19f) || (py >= 25f && py <= 28f) || (py >= 34f && py <= 37f);
                 return sheet && !(inside && !rule);

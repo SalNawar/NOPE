@@ -170,14 +170,14 @@ public sealed class BoothCoordinator : MonoBehaviour
 
     /// <summary>The rules' input for the office as it is now.</summary>
     private BoothContext Context() => new BoothContext(
-        view != null && view.Current == OfficeView.MonitorFocus,
-        screen == null || screen.IsOn,
-        _phase,
-        wheel != null && wheel.IsOpen,
-        _citationPending,
-        stampTray != null && stampTray.IsOpen,
-        desk != null && desk.HeldCount > 0,
-        deskView != null && deskView.IsOn);
+        focused: view != null && view.Current == OfficeView.MonitorFocus,
+        screenOn: screen == null || screen.IsOn,
+        phase: _phase,
+        wheelOpen: wheel != null && wheel.IsOpen,
+        citationPending: _citationPending,
+        stampOpen: stampTray != null && stampTray.IsOpen,
+        papersHeld: desk != null && desk.HeldCount > 0,
+        deskView: deskView != null && deskView.IsOn);
 
     /// <summary>Applies the rules. The wheel, the stamp tray and the desk view first: closing or returning either changes the context the rest reads (their events re-apply too, harmlessly).</summary>
     private void Apply()

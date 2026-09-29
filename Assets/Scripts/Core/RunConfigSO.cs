@@ -9,6 +9,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "RunConfig", menuName = "TimeDesk/Run Config", order = 1)]
 public sealed class RunConfigSO : ScriptableObject
 {
+    /// <summary>The art office's scene name when nothing names another (the 3D room; audit R5-017: one home for the name).</summary>
+    public const string DefaultOfficeSceneName = "OfficeScene";
+
+    /// <summary>The gameplay layer's scene name (Build Office UI writes that scene).</summary>
+    public const string DefaultOfficeGameplaySceneName = "OfficeGameplay";
+
     /// <summary>Content library used by all runtime systems.</summary>
     public ContentLibrarySO contentLibrary;
 
@@ -38,10 +44,10 @@ public sealed class RunConfigSO : ScriptableObject
     /// must be in the build list (Build Office UI keeps the named one enabled right after the title, the
     /// other art scenes listed and disabled), and the editor tools open it by this name (ArtOfficeScene).
     /// </summary>
-    public string officeSceneName = "OfficeScene";
+    public string officeSceneName = DefaultOfficeSceneName;
 
     /// <summary>The office's gameplay layer (the shift loop, the PC, the desk, the traveller), loaded additively on the art office.</summary>
-    public string officeGameplaySceneName = "OfficeGameplay";
+    public string officeGameplaySceneName = DefaultOfficeGameplaySceneName;
 
     /// <summary>Where the gameplay layer finds its places in the art office, and the art office's leftover gameplay objects it switches off.</summary>
     public OfficeSceneContractSO officeContract;

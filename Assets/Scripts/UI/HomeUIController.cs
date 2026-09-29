@@ -252,9 +252,7 @@ public sealed class HomeUIController : MonoBehaviour
         if (expensesPanel != null)
             expensesPanel.SetActive(false);
 
-        Action cb = _onExpensesContinue;
-        _onExpensesContinue = null;
-        cb?.Invoke();
+        OneShot.Fire(ref _onExpensesContinue);
     }
 
     // =========================================================
@@ -355,9 +353,7 @@ public sealed class HomeUIController : MonoBehaviour
         if (shopPanel != null)
             shopPanel.SetActive(false);
 
-        Action cb = _onShopContinue;
-        _onShopContinue = null;
-        cb?.Invoke();
+        OneShot.Fire(ref _onShopContinue);
     }
 
     // =========================================================
@@ -409,9 +405,7 @@ public sealed class HomeUIController : MonoBehaviour
         if (slotPanel != null)
             slotPanel.SetActive(false);
 
-        Action cb = _onSlotContinue;
-        _onSlotContinue = null;
-        cb?.Invoke();
+        OneShot.Fire(ref _onSlotContinue);
     }
 
     // =========================================================
@@ -447,9 +441,7 @@ public sealed class HomeUIController : MonoBehaviour
         if (sleepPanel != null)
             sleepPanel.SetActive(false);
 
-        Action cb = _onSleep;
-        _onSleep = null;
-        cb?.Invoke();
+        OneShot.Fire(ref _onSleep);
     }
 
     // =========================================================
@@ -469,6 +461,17 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>A panel's own ink: its body text's colour (the scene's choice for that panel), white without a body text.</summary>
     private static Color PanelInk(TMP_Text body) => body != null ? body.color : Color.white;
 
+    // The runtime rows' layout (the family, shop and empty-state rows; audit R4-015).
+    private const float LabelRowHeight = 36f;
+    private const float RowHeight = 44f;
+    private const float RowSpacing = 12f;
+    private const float RowFontSize = 22f;
+    private const float RowButtonWidth = 160f;
+    private const float RowButtonHeight = 40f;
+    private const float RowButtonFontSize = 20f;
+    private static readonly Color RowButtonFill = new Color(0.95f, 0.95f, 0.95f, 1f);
+    private static readonly Color RowButtonInk = Color.black;
+
     /// <summary>Creates a label-only row (no button) in <paramref name="ink"/> — used for empty-state messages.</summary>
     private static GameObject CreateLabelRow(Transform parent, string label, Color ink)
     {
@@ -476,7 +479,7 @@ public sealed class HomeUIController : MonoBehaviour
         row.transform.SetParent(parent, false);
 
         var layout = row.AddComponent<LayoutElement>();
-        layout.preferredHeight = 36f;
+        layout.preferredHeight = LabelRowHeight;
         layout.flexibleWidth = 1f;
 
         // The rows containers do not control their children's heights: the row takes its own.
@@ -484,7 +487,7 @@ public sealed class HomeUIController : MonoBehaviour
 
         var text = row.AddComponent<TextMeshProUGUI>();
         text.text = label;
-        text.fontSize = 22;
+        text.fontSize = RowFontSize;
         text.color = ink;
         text.alignment = TextAlignmentOptions.MidlineLeft;
 
@@ -498,7 +501,7 @@ public sealed class HomeUIController : MonoBehaviour
         row.transform.SetParent(parent, false);
 
         var rowLayout = row.AddComponent<LayoutElement>();
-        rowLayout.preferredHeight = 44f;
+        rowLayout.preferredHeight = RowHeight;
         rowLayout.flexibleWidth = 1f;
 
         // The rows containers do not control their children's heights: the row takes its own.
@@ -507,7 +510,7 @@ public sealed class HomeUIController : MonoBehaviour
         var hLayout = row.AddComponent<HorizontalLayoutGroup>();
         hLayout.childForceExpandWidth = false;
         hLayout.childForceExpandHeight = true;
-        hLayout.spacing = 12f;
+        hLayout.spacing = RowSpacing;
         hLayout.childAlignment = TextAnchor.MiddleLeft;
 
         // Icon (the row's art slot; none without art).
@@ -533,7 +536,7 @@ public sealed class HomeUIController : MonoBehaviour
 
         var labelText = labelGo.AddComponent<TextMeshProUGUI>();
         labelText.text = label;
-        labelText.fontSize = 22;
+        labelText.fontSize = RowFontSize;
         labelText.color = ink;
         labelText.alignment = TextAlignmentOptions.MidlineLeft;
         UiText.FitLabel(labelText); // a long currency name shrinks the price instead of wrapping
@@ -543,11 +546,11 @@ public sealed class HomeUIController : MonoBehaviour
         buttonGo.transform.SetParent(row.transform, false);
 
         var buttonLayout = buttonGo.AddComponent<LayoutElement>();
-        buttonLayout.preferredWidth = 160f;
-        buttonLayout.preferredHeight = 40f;
+        buttonLayout.preferredWidth = RowButtonWidth;
+        buttonLayout.preferredHeight = RowButtonHeight;
 
         Image img = buttonGo.AddComponent<Image>();
-        img.color = new Color(0.95f, 0.95f, 0.95f, 1f);
+        img.color = RowButtonFill;
 
         Button btn = buttonGo.AddComponent<Button>();
         btn.targetGraphic = img;
@@ -564,9 +567,9 @@ public sealed class HomeUIController : MonoBehaviour
 
         var btnLabelText = btnLabelGo.AddComponent<TextMeshProUGUI>();
         btnLabelText.text = buttonLabel;
-        btnLabelText.fontSize = 20;
+        btnLabelText.fontSize = RowButtonFontSize;
         btnLabelText.alignment = TextAlignmentOptions.Center;
-        btnLabelText.color = Color.black;
+        btnLabelText.color = RowButtonInk;
 
         if (onClick != null)
             btn.onClick.AddListener(() => onClick());

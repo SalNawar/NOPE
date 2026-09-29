@@ -106,7 +106,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.PersonalitySalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -140,6 +140,8 @@ public class SeedsTests
         Assert.AreEqual(0x45564E54, Seeds.EventSalt, "\"EVNT\"");
         Assert.AreEqual(Seeds.Mix(daySeed, 0x53545244), Seeds.ForStrandings(daySeed));
         Assert.AreEqual(0x53545244, Seeds.StrandingSalt, "\"STRD\"");
+        Assert.AreEqual(-288322321, Seeds.ForFamily(daySeed));
+        Assert.AreEqual(0x464D4C59, Seeds.FamilySalt, "\"FMLY\"");
     }
 
     /// <summary>The personality stream's salt is "PRSN" (the personalities spec's PS2).</summary>
@@ -219,8 +221,8 @@ public class SeedsTests
     /// Audit R2-004: the night's slot spins drew from the unseeded
     /// UnityEngine.Random, so a run did not replay and Continue (Home reloads
     /// from the save made before it) rerolled a spin. They draw from their own
-    /// stream of the run and the day, apart from every other stream and from
-    /// the day's raw stream the family conditions draw from.
+    /// stream of the run and the day, apart from every other stream (the
+    /// family's included) and from the day's raw stream.
     /// </summary>
     [Test]
     public void SlotStream_IsDeterministic_AndApartFromEveryOtherStream_NightByNight()
@@ -236,9 +238,28 @@ public class SeedsTests
     }
 
     /// <summary>
+    /// Audit R2-008: the night's family drift drew from its own hash of the day
+    /// seed over System.Random. It is the day's own salted stream now (one
+    /// seed per member, mixed from it), apart from every other stream, the
+    /// slot's included, and from the day's raw stream.
+    /// </summary>
+    [Test]
+    public void FamilyStream_IsDeterministic_AndApartFromEveryOtherStream_NightByNight()
+    {
+        int daySeed = Seeds.Day(12345, 2);
+        int family = Seeds.ForFamily(daySeed);
+
+        Assert.AreEqual(family, Seeds.ForFamily(daySeed), "the same run and night give the same drift");
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "family"), family);
+        CollectionAssert.AreNotEqual(TenDraws(daySeed), TenDraws(family), "the raw day stream");
+        CollectionAssert.AllItemsAreUnique(Enumerable.Range(1, 30).Select(night => Seeds.ForFamily(Seeds.Day(12345, night))).ToList(), "each night its own drift");
+        Assert.AreNotEqual(family, Seeds.ForFamily(Seeds.Day(999, 2)), "each run its own drift");
+    }
+
+    /// <summary>
     /// The day's raw seed and every stream of the day but <paramref name="except"/>:
-    /// the violator and slot streams, and each of 20 travellers' case stream and
-    /// every stream of <see cref="TravellerStreams"/>.
+    /// the violator, slot, family and event streams, and each of 20 travellers'
+    /// case stream and every stream of <see cref="TravellerStreams"/>.
     /// </summary>
     private static List<int> EveryOtherStream(int daySeed, string except)
     {
@@ -247,6 +268,8 @@ public class SeedsTests
             streams.Add(Seeds.ForViolators(daySeed));
         if (except != "slot")
             streams.Add(Seeds.ForSlot(daySeed));
+        if (except != "family")
+            streams.Add(Seeds.ForFamily(daySeed));
         if (except != "events")
             streams.Add(Seeds.ForEvents(daySeed));
         foreach (int caseSeed in Enumerable.Range(1, 20).Select(slotIndex => Seeds.ForCase(daySeed, slotIndex)))

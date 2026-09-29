@@ -11,9 +11,10 @@ public enum DeskSlotKind
 }
 
 /// <summary>
-/// A named spot on the desk. Decoration hook (item 7): read by the builder now
-/// (props stand at their slot), by the decoration piece later. No public
-/// members until then.
+/// A named spot on the desk. Decoration hook (item 7): Build Office UI writes
+/// each slot's id and kind as it places the props at their slots; nothing
+/// reads them at run time yet (the decoration piece will). No public members
+/// until then.
 /// </summary>
 public sealed class DeskSlot : MonoBehaviour
 {

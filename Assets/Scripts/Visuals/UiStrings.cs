@@ -81,18 +81,20 @@ public sealed class UiStrings
     /// The string for a key with its placeholders filled: an IFormattable
     /// argument through its placeholder's format and the invariant culture, a
     /// string verbatim (its format ignored), null as "". Then shaping (a
-    /// right-to-left culture label) and the gloss.
+    /// right-to-left culture label) and the gloss. An entry with no text
+    /// counts as absent (Unity stores a null text as ""): a blank culture
+    /// entry falls back to the reading text, a blank reading entry to the key.
     /// </summary>
     public string Format(string key, params object[] args)
     {
         key = key ?? string.Empty;
         _reading.TryGetValue(key, out UiStringEntry reading);
-        if (_culture.TryGetValue(key, out UiStringEntry culture) && culture.text != null)
+        if (_culture.TryGetValue(key, out UiStringEntry culture) && !string.IsNullOrEmpty(culture.text))
         {
             string native = Fill(culture.text, args);
             if (_rightToLeft)
                 native = ArabicShaper.ToVisual(native);
-            if (reading == null || reading.text == null)
+            if (reading == null || string.IsNullOrEmpty(reading.text))
                 return native;
             string english = Fill(reading.text, args);
             switch (reading.gloss)
@@ -106,7 +108,7 @@ public sealed class UiStrings
             }
         }
 
-        if (reading != null && reading.text != null)
+        if (reading != null && !string.IsNullOrEmpty(reading.text))
             return Fill(reading.text, args);
 
         if (_missingSet.Add(key))

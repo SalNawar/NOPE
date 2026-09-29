@@ -142,9 +142,10 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>
     /// What the wired references make reachable (InvestigationWiring).
     /// Serialized references are compared with != null: an unassigned one is
-    /// Unity's fake null.
+    /// Unity's fake null. Build Office UI checks it on the scene it builds
+    /// (audit R4-022), so a partly wired desk fails the build, not the day.
     /// </summary>
-    private InvestigationWiring Wiring => new InvestigationWiring(
+    public InvestigationWiring Wiring => new InvestigationWiring(
         First(documentsViews) != null && First(documentsViews).Ready, app != null, acceptButton != null, denyButton != null, compareController != null,
         interactionPanel != null, First(transcriptViews) != null, app != null && app.Hosts(AppTab.Transcript), desk != null && desk.IsReachable,
         First(recordsViews) != null);

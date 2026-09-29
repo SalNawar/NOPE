@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 /// <summary>The UI string lookup (piece 6 U7): fallbacks, number formats, glosses, shaping and the table rules; and today's flavour tables (the PC redesign TH3).</summary>
@@ -45,6 +46,18 @@ public class UiStringsTests
         Assert.AreEqual("nope", s.Get("nope"));
         Assert.AreEqual("nope", s.Get("nope"));
         CollectionAssert.AreEqual(new[] { "nope" }, s.MissingKeys.ToArray());
+    }
+
+    [Test]
+    public void ABlankText_IsAbsent_TheCultureFallsBackToReading_TheReadingToTheKey()
+    {
+        // Unity serializes a null string as "": a blank entry must not draw a blank label (or a gloss alone).
+        var reading = new List<UiStringEntry>(Reading) { E("empty", "") };
+        var s = new UiStrings(reading, new[] { E("ok", ""), E("plain", "Simple") }, false, 60);
+        Assert.AreEqual("OK", s.Get("ok"), "a blank culture entry falls back to the reading text, with no gloss");
+        Assert.AreEqual("Simple", s.Get("plain"));
+        Assert.AreEqual("empty", s.Get("empty"), "a blank reading entry is a missing key");
+        CollectionAssert.AreEqual(new[] { "empty" }, s.MissingKeys.ToArray());
     }
 
     [Test]
@@ -170,6 +183,33 @@ public class UiStringsTests
             CollectionAssert.Contains(flavour, added);
         foreach (string gone in new[] { "icon.directives", "icon.scanner", "icon.records", "icon.lexicon", "icon.dialect", "icon.material", "icon.clueLog", "window.directives", "window.scanner", "records.title" })
             CollectionAssert.DoesNotContain(flavour, gone);
+    }
+
+    /// <summary>The game's scripts folder (Assets/Scripts).</summary>
+    private static string ScriptsFolder([CallerFilePath] string here = "")
+    {
+        const string scripts = "Assets/Scripts";
+        return Directory.Exists(scripts) ? scripts : Path.Combine(Path.GetDirectoryName(here), "..", "..", "Scripts");
+    }
+
+    [Test]
+    public void EveryLiteralKeyTheScriptsLookUp_IsInTheReadingTable()
+    {
+        // A key the code asks UiText for by a literal and the table lacks draws as the key itself (audit R4-023).
+        // Keys built at run time (a prefix plus an id) are checked where they are made, not here.
+        var keys = new HashSet<string>(TodaysUi().Get("strings").Items.Select(e => e.Get("key").Text));
+        var literal = new Regex(@"UiText\.(?:Get|Format)\(\s*""([^""]+)""\s*[,)]");
+        var missing = new List<string>();
+        int found = 0;
+        foreach (string file in Directory.GetFiles(ScriptsFolder(), "*.cs", SearchOption.AllDirectories))
+            foreach (Match m in literal.Matches(File.ReadAllText(file)))
+            {
+                found++;
+                if (!keys.Contains(m.Groups[1].Value))
+                    missing.Add($"{m.Groups[1].Value} ({Path.GetFileName(file)})");
+            }
+        Assert.Greater(found, 100, "the scan finds the scripts' literal lookups");
+        CollectionAssert.IsEmpty(missing, "keys looked up by a literal but missing from ui.strings");
     }
 
     [Test]

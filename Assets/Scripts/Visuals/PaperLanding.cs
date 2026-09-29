@@ -83,6 +83,12 @@ public static class PaperLanding
     /// <summary>The share of a spot that must show for it to count as whole (edges within a hair).</summary>
     private const float Whole = 0.999f;
 
+    /// <summary>How much more of a spot must show before the paper held longest goes back for it (a hair's share is not worth a put-back).</summary>
+    private const float PutBackMargin = 0.001f;
+
+    /// <summary>Two spots whose shares differ by less than this tie (the earlier spot wins).</summary>
+    private const float TieMargin = 0.0001f;
+
     /// <summary>
     /// The share of <paramref name="paper"/> that shows: its part inside
     /// <paramref name="screen"/> that none of <paramref name="covers"/> hides,
@@ -175,7 +181,7 @@ public static class PaperLanding
             return new LandingChoice(bestKeep, false);
 
         int bestPut = Best(spots, putBack, screen, out float putShare);
-        return putShare > keepShare + 0.001f ? new LandingChoice(bestPut, true) : new LandingChoice(bestKeep, false);
+        return putShare > keepShare + PutBackMargin ? new LandingChoice(bestPut, true) : new LandingChoice(bestKeep, false);
     }
 
     /// <summary>The first spot that shows whole, else the one that shows most (the earliest on a tie), and its share.</summary>
@@ -191,7 +197,7 @@ public static class PaperLanding
                 share = s;
                 return i;
             }
-            if (s > share + 0.0001f)
+            if (s > share + TieMargin)
             {
                 share = s;
                 best = i;

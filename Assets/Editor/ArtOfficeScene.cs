@@ -21,7 +21,7 @@ public static class ArtOfficeScene
         get
         {
             var config = Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath);
-            return config != null && !string.IsNullOrWhiteSpace(config.officeSceneName) ? config.officeSceneName.Trim() : "OfficeScene";
+            return config != null && !string.IsNullOrWhiteSpace(config.officeSceneName) ? config.officeSceneName.Trim() : RunConfigSO.DefaultOfficeSceneName;
         }
     }
 

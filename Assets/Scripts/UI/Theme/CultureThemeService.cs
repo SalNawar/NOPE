@@ -116,7 +116,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
         UiStringTableSO reading = ReadingTable();
         UiStringTableSO cultureTable = ActiveTheme.language != ui.readingLanguage ? Library.GetStringTable(ActiveTheme.language) : null;
 
-        RuntimeFonts.Result font = _fonts.Resolve(ActiveTheme, Sample(reading, cultureTable, ui.glossPercent));
+        RuntimeFonts.Result font = _fonts.Resolve(ActiveTheme, () => Sample(reading, cultureTable, ui.glossPercent));
         Language = CultureChoice.Language(ActiveTheme.language, ui.readingLanguage, cultureTable != null, UiLanguagePreference.AlwaysEnglish, font.Covers);
         if (Language == LabelLanguage.EnglishNoFont)
             WarnOnce("font:" + ActiveTheme.cultureId, $"[CultureThemeService] No installed font draws the '{ActiveTheme.cultureId}' labels (missing {font.Missing}; tried {font.Tried}); the desk shows English labels in its colours.");
@@ -142,13 +142,17 @@ public sealed class CultureThemeService : TimelineCueReceiver
         Instance = this;
     }
 
-    private void OnEnable()
+    /// <summary>Themes each scene as it loads, and follows the run's effect changes (TimelineCueReceiver).</summary>
+    protected override void OnEnable()
     {
+        base.OnEnable();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnDisable()
+    /// <summary>Stops both.</summary>
+    protected override void OnDisable()
     {
+        base.OnDisable();
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 

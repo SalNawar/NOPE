@@ -89,7 +89,7 @@ public sealed class TranslationPresenter
         }
         else
         {
-            RuntimeFonts.Result font = fonts.Resolve("script:" + script.id, script.fonts, ScriptSample(_settings, script.id));
+            RuntimeFonts.Result font = fonts.Resolve("script:" + script.id, script.fonts, () => ScriptSample(_settings, script.id));
             if (font.Asset != null && font.Covers)
             {
                 look = (new ForeignText(table, script.rightToLeft), font.Asset);

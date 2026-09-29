@@ -464,12 +464,18 @@ public sealed partial class AppPane : MonoBehaviour
     /// the name in bold over the chip, whose regular-weight name sizes it, so
     /// without this a long name was cut ("Currency Le…") now that no chip
     /// label shrinks (the row scrolls instead). Measured once the chosen look
-    /// is shown (TextMeshPro has set its label up).
+    /// is shown (TextMeshPro has set its label up). The bold name fits, so it
+    /// truncates rather than ellipsizes: TextMeshPro found no "…" for the bold
+    /// label in LiberationSans SDF or its fallbacks and logged a warning each
+    /// time a chosen chip was drawn.
     /// </summary>
     private static void FitChosen(Button chip, Transform chosen)
     {
         TMP_Text bold = chosen.GetComponentInChildren<TMP_Text>(true);
-        if (bold == null || bold.fontSharedMaterial == null || !chip.TryGetComponent(out LayoutElement size))
+        if (bold == null)
+            return;
+        bold.overflowMode = TextOverflowModes.Truncate;
+        if (bold.fontSharedMaterial == null || !chip.TryGetComponent(out LayoutElement size))
             return;
         float insets = -((RectTransform)bold.transform).sizeDelta.x;
         size.minWidth = Mathf.Max(size.minWidth, bold.GetPreferredValues(bold.text).x + insets);
