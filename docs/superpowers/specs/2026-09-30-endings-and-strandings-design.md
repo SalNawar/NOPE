@@ -419,83 +419,109 @@ S1-S2 and E1-E2 can run as two parallel tracks; they meet at E4 (the report read
 
 ## 14. Open questions for Saleh
 
-Each question lists the recommended option first (A). Until Saleh answers, the build takes A.
+Each question lists the recommended option first (A). **Status (2026-09-30): all sixteen are answered**; each question's line carries the answer and §15 records Saleh's words. Where an answer differs from the text of §1-§13, §15 wins.
 
-1. **What should the ending describe about 2150?** Example of a finished run: "Japanese culture, a Cybernetic future, a Theocracy, every debt forgiven."
+1. **What should the ending describe about 2150?** *(answered: A, and for now no ending story (§15.1))* Example of a finished run: "Japanese culture, a Cybernetic future, a Theocracy, every debt forgiven."
    - **A (recommended)** Four things: who runs 2150, what 2150 runs on, how 2150 pays its way (the debt), and whose culture leads (already in the game).
    - **B** Three things: who runs it, what it runs on, and whose culture leads (drop the money question).
    - **C** Five things: A plus "what 2150 believes in" (faith, art, fun), a new line to write.
 
-2. **Which governments can 2150 end up with?**
+2. **Which governments can 2150 end up with?** *(answered: 8 or 12 options, the list lives in config (§15.1))*
    - **A (recommended)** The Directorate (how 2150 is at the start), Democracy, Monarchy, Fascism, Communism, Theocracy.
    - **B** A, plus Anarchy moved here from the futures list (so "no government" is a government answer, not a future).
    - **C** A shorter list: The Directorate, Democracy, Fascism, Communism.
 
-3. **Which futures can 2150 end up with?**
+3. **Which futures can 2150 end up with?** *(answered: many combinations, the outcome lists live in config and the combos are calculated (§15.1))*
    - **A (recommended)** The Credit Age (how 2150 is at the start: wrist comms and queues), Nuclear, Cybernetic, Space Age, Naturalism, Anarchy.
    - **B** A, plus a Clockwork future (brass and steam, from Victorian London and Renaissance Nuremberg).
    - **C** Only your five (Nuclear, Cybernetic, Space Age, Naturalism, Anarchy): 2150 always ends up changed, never as it started.
 
-4. **How does a traveller change the world?** Example: on day 4 you approve a scientist going to Meiji Nagoya, home of the automatic loom.
+4. **How does a traveller change the world?** *(answered: A, plus famous travellers have big impacts and story beats offer opportunities and surprises (§15.1))* Example: on day 4 you approve a scientist going to Meiji Nagoya, home of the automatic loom.
    - **A (recommended)** Every traveller you let through nudges 2150 toward what their destination is known for, through their job: that scientist nudges the future toward Cybernetic. Even a by-the-book clerk shapes the world through who comes to the desk; breaking a rule on purpose (and paying the fine) steers it further.
    - **B** Only your deliberate choices count: letting a rule-breaker through, turning an honest person away, and dialog choices. A perfect by-the-book run leaves 2150 as it started.
    - **C** Only the story characters (Pell, Gutenberg, Rook...) and dialog choices change the world.
 
-5. **Should the player see the world changing during the run?**
+5. **Should the player see the world changing during the run?** *(answered: A, widened: the change shows in everything that can change, never the variables (§15.1))*
    - **A (recommended)** Yes, in words only: the morning paper reports when something takes over ("The first launch ring opens over the Aegean"), and the Internet's History site has a "2150 today" page. No bars, no numbers.
    - **B** No: the world is a surprise on the last day.
    - **C** Yes, with bars for each outcome (not recommended: bars invite chasing a score, the linear feel you rejected).
 
-6. **What if two outcomes are neck and neck at the end?** Example: Space Age and Naturalism end one pull apart.
+6. **What if two outcomes are neck and neck at the end?** *(answered: A (§15.1))* Example: Space Age and Naturalism end one pull apart.
    - **A (recommended)** The ending says the world is split, as its own answer: "Launch rings over the Aegean, rewilded valleys along the Rhine."
    - **B** 2150 stays as it started on that question until one side clearly leads.
    - **C** Whichever of the two took the lead most recently wins.
 
-7. **What does the last screen look like?**
+7. **What does the last screen look like?** *(answered: for now no ending story; day 15 ends the demo showing the four outcomes (§15.1))*
    - **A (recommended)** The last morning paper (the Temporal Times, day 16): a headline naming your world ("The Cybernetic Monarchy"), a picture, one short column per question, then "The past you rewrote", "Where are they now" (Pell, Ines, Gutenberg...), "Your desk" (the clerk, still working: "Desk 3 opens at 9:00."), then END OF DEMO.
    - **B** One illustrated card: the world's name and one paragraph.
    - **C** A short slideshow, one slide per question, then the people, then END OF DEMO.
 
-8. **Pictures for the ending.**
+8. **Pictures for the ending.** *(answered: later, layered (§15.1))*
    - **A (recommended)** Twelve pictures layered: one background per future (6) and one banner per government (6) in front of it. Every combination is covered.
    - **B** One picture per combination (36 or more), the richest and costliest.
    - **C** No pictures in the demo: text on the paper only.
 
-9. **When the clerk is fired or goes bankrupt, what comes after the failure screen?**
+9. **When the clerk is fired or goes bankrupt, what comes after the failure screen?** *(answered: A (§15.1))*
    - **A (recommended)** The same last paper, titled "The world you leave behind": the world you shaped still exists.
    - **B** Only the failure screen, as today.
 
-10. **The waiver fine and your "one penalty for any mistake" rule.** Example: Pell arrives with an unsigned waiver and you approve her anyway. That approval is a wrong decision, so you pay the one penalty (25 cr) at the stamp. Two days later her cheap unit fails in Athens and she tells everyone about wrist computers, breaking the waiver's promise she never signed. Should that cost you again?
+10. **The waiver fine and your "one penalty for any mistake" rule.** *(answered: D, 100 cr, a knowing exception to the one-fine rule (§15.2))* Example: Pell arrives with an unsigned waiver and you approve her anyway. That approval is a wrong decision, so you pay the one penalty (25 cr) at the stamp. Two days later her cheap unit fails in Athens and she tells everyone about wrist computers, breaking the waiver's promise she never signed. Should that cost you again?
     - **A (recommended)** Yes, the same one fine (25 cr, the same setting as every other fine), charged again by the agency's failure report, only in this case. No new fine amount exists anywhere.
     - **B** No: the fine at the stamp was the whole price; the report only reminds you of it.
     - **C** No money: it costs timeline stability instead, like the extra loss for getting a famous traveller wrong.
     - **D** A separate, bigger stranding fine (like the old 150 cr). This breaks the one-penalty rule.
 
-11. **How often does each fate happen?** (For you only; the player never sees these numbers.)
+11. **How often does each fate happen?** *(answered: A (§15.2))* (For you only; the player never sees these numbers.)
     - **A (recommended)** With a signed waiver: forgotten 40 %, in the news 25 %, brings 2150 technology 20 %, shakes the timeline 10 %, Time Police 5 %. Without one: forgotten 20 %, news 20 %, technology 20 %, shakes 15 %, Time Police 25 % (nobody registered them, so the police clean up).
     - **B** All five equally likely, with or without a waiver.
     - **C** A's first column for everyone: the waiver only decides who pays, not what happens.
 
-12. **What is left of a "forgotten" traveller?**
+12. **What is left of a "forgotten" traveller?** *(answered: A (§15.2))*
     - **A (recommended)** Only the agency's failure report in the clerk's Mail ("Unit HP-40718 failed in Periclean Athens. Traveller: Pell Quimby. Status: not recovered."), never mentioned again.
     - **B** Nothing at all: no mail, and the shift report stops counting them.
     - **C** A line in the paper: "No trace was found of a traveller lost in Periclean Athens."
 
-13. **How does the paper report the Time Police?**
+13. **How does the paper report the Time Police?** *(answered: A (§15.2))*
     - **A (recommended)** In the Directorate's dry voice, so the killing is clear but deadpan: "TIME POLICE: an unregistered traveller was removed from Periclean Athens. The file is closed."
     - **B** Openly: "TIME POLICE execute a stranded traveller in Periclean Athens."
     - **C** They arrest instead of kill: "...was brought back to 2150 in cuffs."
 
-14. **Can the clerk get a waiver signed at the desk?** Example: Pell hands over her waiver unsigned.
+14. **Can the clerk get a waiver signed at the desk?** *(answered: A (§15.2))* Example: Pell hands over her waiver unsigned.
     - **A (recommended)** Yes: you hand her a blank waiver from a pad on the desk. Most travellers sign; some refuse in character (a Grand traveller: "I do not sign things. People sign things for me."). Once signed you can approve her correctly; turning her away stays correct too.
     - **B** No: travellers must arrive with it signed; unsigned means deny (today's rule).
     - **C** Yes, and the clerk may even sign it for them: a forgery that saves time but counts as a wrong approval if an auditor checks.
 
-15. **What does getting a waiver signed cost the clerk?**
+15. **What does getting a waiver signed cost the clerk?** *(answered: A (§15.2))*
     - **A (recommended)** Only time: the shift clock runs on about as long as asking a question, so fewer travellers reach the desk before closing.
     - **B** Blank waivers are a desk supply you buy from the Orders app (for example a pad of ten for 20 cr).
     - **C** The traveller pays a waiver fee; it costs the clerk nothing, but some travellers refuse to pay it.
 
-16. **Where is the waiver's promise ("I will not reveal the future or alter history") written?**
+16. **Where is the waiver's promise ("I will not reveal the future or alter history") written?** *(answered: A, plus a death clause in the fine print (§15.2))*
     - **A (recommended)** In the waiver's printed text above the signature, next to "my debt passes to my next of kin". Nothing new to check: the signature covers it.
     - **B** As a separate tick box on the waiver that can be left empty, a new thing for the clerk to check.
+
+## 15. Saleh's answers (2026-09-30)
+
+Recorded from Saleh's answers to §14. They override the text of §1-§13 wherever the two disagree; the build of S1-S2 (branch `feat/strandings`) follows them.
+
+### 15.1 Endings (Q1-Q9)
+
+- **No ending story for now (Q1, Q7).** Day 15 just ends the demo showing the **four outcomes**: who runs 2150, what it runs on, how it pays its way, and whose culture leads. No World Report paper, no "Where are they now" story yet; the four answers, then END OF DEMO.
+- **Governments (Q2): 8 or 12 options.** The list is config, not code.
+- **Futures (Q3): many combinations.** The game is config-based: the outcome lists live in config (spreadsheet rows), and the combinations get calculated, never authored one by one.
+- **Influence (Q4): every traveller nudges** (option A); **famous travellers have big impacts**; **story beats offer opportunities and surprises**.
+- **Visibility (Q5): the change shows in everything that can change**: the paper, the websites, the PC, its font, languages, the city out of the window, the hall. **Never the variables** (no meters, numbers or bars).
+- **Ties (Q6): a split world is its own answer** (option A).
+- **Fired or bankrupt (Q9): "the world you leave behind"** follows the failure screen too (option A).
+- **Pictures (Q8): later, layered** (a background per future and a banner per government in front of it).
+
+### 15.2 Strandings (Q10-Q16)
+
+- **Q10 = D: a separate stranding fine of 100 cr** (a knob, `GameConfigSO.strandingFine`), charged by the agency's failure report only when the stranded traveller had **no valid signed waiver** on file. **Saleh chose this knowingly as an exception to his rule "one penalty for any wrong decision"** (2026-09-29): the rule still governs every decision at the stamp (one amount, approval or rejection alike, after the free warning); the stranding fine is not a decision penalty but the agency billing the desk for an unregistered traveller lost in the past, a consequence that lands days later. It is the only fine in the game with its own amount. The switch of §7.4 (`waiverBreachConsequence`) is not built: the answer is fixed, the amount is the knob.
+  - Scope, as built: the fine is charged for **every** fate of a stranding without a valid signed waiver (Forgotten and the Time Police included), because Saleh's answer ties it to the missing waiver, not to the promise being broken; §7.2's "nobody pays" rows for unwaivered strandings are superseded. No free warning applies to it.
+- **Q11 = A: fate odds by waiver**, knobs (content rows): signed 40 / 25 / 20 / 10 / 5, unsigned 20 / 20 / 20 / 15 / 25 (Forgotten / In the news / Brings 2150 technology / Tremor / Time Police).
+- **Q12 = A: a Forgotten traveller leaves only the agency's failure report in Mail.**
+- **Q13 = A: the Time Police are reported dry and deadpan**, in the Directorate's voice.
+- **Q14 = A: the clerk can get a waiver signed at the desk** from a pad; some travellers refuse in character; denying stays correct.
+- **Q15 = A: it costs only shift-clock time**, about one question's worth.
+- **Q16 = A, plus a death clause.** The promise not to reveal the future or alter history is in the printed text above the signature, **and the fine print carries a death clause** (authored wording, deadpan, in content): the signatory accepts that the Time Police may remove them from the past.
