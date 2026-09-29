@@ -151,8 +151,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The board's rows' ink (FFF2D9, the ivory of the hall's other glasses; the text is unlit, the display darkens with the evening, so its contrast only rises).</summary>
     public Color hallBoardInk = new Color(1f, 0.949f, 0.851f, 1f);
 
-    /// <summary>The ink of the board's state words (CLOSED, UNDER MAINTENANCE, NO ROUTE): an amber-red.</summary>
-    public Color hallBoardStateInk = new Color(1f, 0.55f, 0.33f, 1f);
+    /// <summary>The ink of the board's state words (CLOSED, UNDER MAINTENANCE, NO ROUTE): an amber-red (5.9:1 on the display by day as drawn, more as the evening darkens it).</summary>
+    public Color hallBoardStateInk = new Color(1f, 0.62f, 0.4f, 1f);
 
     /// <summary>The share of the display's width and height the rows keep clear on each side (so they stay below the claim strip).</summary>
     [Range(0f, 0.45f)] public float hallBoardInset = 0.08f;
@@ -170,11 +170,11 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>A ring under maintenance: its metal ring's tint (a 45 % grey, multiplied with the art's own lighting, so the evening still darkens it).</summary>
     public Color hallPortalIdleTint = new Color(0.45f, 0.45f, 0.45f, 1f);
 
-    /// <summary>An open departure ring's glow (an additive, unlit tint: a pale cyan).</summary>
-    public Color hallPortalGlowTint = new Color(0.55f, 0.9f, 1f, 0.85f);
+    /// <summary>An open departure ring's glow (an unlit tint, brightened by the PortalGlow material: a pale cyan).</summary>
+    public Color hallPortalGlowTint = new Color(0.35f, 0.85f, 1f, 0.9f);
 
-    /// <summary>The Return Gate's spiral (an additive, unlit tint: an amber).</summary>
-    public Color hallReturnGateTint = new Color(1f, 0.68f, 0.25f, 0.85f);
+    /// <summary>The Return Gate's spiral (an unlit tint, brightened by the PortalGlow material: an amber).</summary>
+    public Color hallReturnGateTint = new Color(1f, 0.6f, 0.15f, 0.95f);
 
     /// <summary>The effect's diameter as a share of its ring's opaque width, so its edge hides under the frame.</summary>
     [Range(0.1f, 1f)] public float hallPortalGlowSize = 0.85f;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// One portal ring's effect in the anime hall (the portals spec v3 VX1,
-/// VX3-VX6): an unlit additive sprite (TimeDesk/PortalGlow) inside its ring:
+/// VX3-VX6): an unlit sprite (TimeDesk/PortalGlow: premultiplied and brightened, a glow) inside its ring:
 /// the glow of an open departure portal (tinted, slowly turning, still with
 /// reduced motion), the Return Gate's spiral, or nothing (CLOSED, under
 /// maintenance); a departure flares it (<see cref="Pulse"/>: up and down over

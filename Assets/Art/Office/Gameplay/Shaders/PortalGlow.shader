@@ -1,12 +1,16 @@
 // The portal rings' effects (the portals spec v3 VX1, VX5: PortalEffect): a
-// sprite drawn additive and unlit, so an open ring glows through the hall's
-// evening; the SpriteRenderer's colour tints it (its alpha scales it). No
-// depth write; it depth-tests, so the preserved 3D desk in front hides it.
+// sprite drawn unlit, so an open ring glows through the hall's evening, and
+// premultiplied: where it is opaque it covers the floor seen through the ring
+// with its colour, brightened by _Boost (light added, as a glow), so the tint
+// reads over the hall's light floor (a plain additive glow washes to white
+// there); the SpriteRenderer's colour tints it (its alpha scales it). No depth
+// write; it depth-tests, so the preserved 3D desk in front hides it.
 Shader "TimeDesk/PortalGlow"
 {
     Properties
     {
         [PerRendererData] _MainTex ("Effect", 2D) = "white" {}
+        _Boost ("Brightness over the tint", Float) = 1.5
     }
 
     SubShader
@@ -17,7 +21,7 @@ Shader "TimeDesk/PortalGlow"
         {
             Name "Unlit"
             Tags { "LightMode" = "UniversalForward" }
-            Blend SrcAlpha One
+            Blend One OneMinusSrcAlpha
             ZWrite Off
             Cull Off
 
@@ -28,6 +32,10 @@ Shader "TimeDesk/PortalGlow"
 
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
+
+            CBUFFER_START(UnityPerMaterial)
+                float _Boost;
+            CBUFFER_END
 
             struct Attributes
             {
@@ -48,14 +56,16 @@ Shader "TimeDesk/PortalGlow"
                 Varyings output;
                 output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
                 output.uv = input.uv;
-                output.color = input.color;
+                // The renderer's colour: in the vertices, or per draw (unity_SpriteColor) under the SRP batcher, as URP's own sprite shaders read it.
+                output.color = input.color * unity_SpriteColor;
                 return output;
             }
 
             half4 Frag(Varyings input) : SV_Target
             {
                 half4 texel = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
-                return half4(texel.rgb * input.color.rgb, texel.a * input.color.a);
+                half a = texel.a * input.color.a;
+                return half4(texel.rgb * input.color.rgb * a * _Boost, a);
             }
             ENDHLSL
         }

@@ -25,10 +25,10 @@ public static class ArtSlots
     /// <summary>The speech bubble's tail, under the bubble's bottom centre (none without art).</summary>
     public const string SpeechBubbleTail = "Office/speech_bubble_tail";
 
-    /// <summary>The glow inside an open departure portal's ring (greyscale; the game tints it and draws it additive; PortalGlowPlaceholder's until it lands).</summary>
+    /// <summary>The glow inside an open departure portal's ring (greyscale; the game tints it and draws it as an unlit glow; PortalGlowPlaceholder's until it lands).</summary>
     public const string PortalGlow = "Office/portal_glow";
 
-    /// <summary>The Return Gate's spiral inside its ring (greyscale; tinted amber, additive; PortalGlowPlaceholder's until it lands).</summary>
+    /// <summary>The Return Gate's spiral inside its ring (greyscale; tinted amber, an unlit glow; PortalGlowPlaceholder's until it lands).</summary>
     public const string ReturnGateGlow = "Office/portal_return_glow";
 
     /// <summary>The morning briefing's newsprint sheet ("The Temporal Times").</summary>

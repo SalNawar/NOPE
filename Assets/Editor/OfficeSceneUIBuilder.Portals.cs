@@ -66,7 +66,7 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The rows' largest and smallest type (TextMeshPro world sizes; they shrink to the display together).</summary>
     private const float BoardRowsMax = 2f, BoardRowsMin = 0.05f;
 
-    /// <summary>The rings' effects' material (unlit, additive: they glow through the evening).</summary>
+    /// <summary>The rings' effects' material (unlit, premultiplied and brightened: they glow through the evening).</summary>
     private static Material PortalGlowMaterial() => EnsureMaterial("PortalGlow", "TimeDesk/PortalGlow", null);
 
     /// <summary>
