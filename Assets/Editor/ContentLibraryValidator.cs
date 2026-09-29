@@ -91,6 +91,8 @@ public static partial class ContentLibraryValidator
         // --- Day plans ---
         issues += CheckDayPlanEntries(lib);
         issues += CheckDayPlanLegendaries(lib);
+        issues += CheckForcedEntries(lib);
+        issues += CheckPremadeRows(lib);
 
         // --- Cross references ---
         issues += CheckLegendaryReferences(lib);
@@ -260,7 +262,7 @@ public static partial class ContentLibraryValidator
 
         bool smallTalk = (lib.Eras ?? Array.Empty<EraSO>()).Any(e => e != null && e.smallTalk != null && e.smallTalk.Count > 0) ||
                          lib.Profiles.Any(p => p != null && p.smallTalk != null && p.smallTalk.Count > 0);
-        var premadeDialogs = new HashSet<string>(lib.Legendaries.Where(l => l != null && !string.IsNullOrWhiteSpace(l.dialogId)).Select(l => l.dialogId));
+        var premadeDialogs = new HashSet<string>(TimelineService.PremadeDialogIds(lib));
         int bound = lib.Dialogs.Count(d => d != null && d.dialog != null && premadeDialogs.Contains(d.dialog.id));
         List<KindForms> kindForms = KindForms(lib, out List<AskableForm> forms, out int maxRequests);
         foreach (string problem in FormRequests.GroupProblems(forms, lines.askGroups))
@@ -508,15 +510,37 @@ public static partial class ContentLibraryValidator
     /// Every trigger condition names what its type needs (a profile and an
     /// attribute, an attribute, a nation, a key): without it the condition can
     /// never pass. A trigger whose outcome effect holds a history-only op must
-    /// be one-shot (a repeatable one would latch an edit every night).
+    /// be one-shot (a repeatable one would latch an edit every night). Each
+    /// trigger is read as a history rule (HistoryChecks.RuleProblems, the
+    /// generator's rule): a condition, a news line or an outcome, verdict
+    /// flags naming known premades, a stability change within a hundred.
     /// </summary>
     private static int CheckTriggers(ContentLibrarySO lib)
     {
         int issues = 0;
+        IEnumerable<string> forcedKeys = lib.DayPlans.Where(p => p != null).SelectMany(p => p.ForcedCases).Where(f => f != null)
+            .SelectMany(f => f.conditions ?? new List<TriggerCondition>()).Where(c => c != null).Select(c => c.key);
+        var historyRules = lib.Triggers.Where(t => t != null && t.id != null && t.id.StartsWith(FlagKeys.HistoryRuleTriggerId(string.Empty), StringComparison.Ordinal))
+            .Select(t => (t.id.Substring(FlagKeys.HistoryRuleTriggerId(string.Empty).Length), t.section));
+        foreach (string warning in HistoryChecks.ReturnProblems(historyRules, forcedKeys))
+        {
+            Debug.LogWarning($"[ContentLibraryValidator] {warning}", lib);
+            issues++;
+        }
+        var premadeIds = new HashSet<string>(lib.Legendaries.Where(l => l != null).Select(l => l.id));
         foreach (TimelineTriggerSO t in lib.Triggers)
         {
             if (t == null)
                 continue;
+
+            List<EffectOp> ops = (t.outcomes ?? new List<TriggerOutcome>()).Where(o => o != null && o.effect != null).SelectMany(o => o.effect.ops ?? new List<EffectOp>()).Where(op => op != null).ToList();
+            List<TriggerCondition> conditions = (t.conditions ?? new List<TriggerCondition>()).Where(c => c != null).ToList();
+            foreach (string problem in HistoryChecks.RuleProblems(t.name, ops.Count, !string.IsNullOrWhiteSpace(t.newsLineOnFire), conditions.Count,
+                                                                  conditions.Select(c => c.key), ops.Where(op => op.type == EffectOpType.AddStability).Sum(op => op.floatParam), premadeIds))
+            {
+                Debug.LogError($"[ContentLibraryValidator] {problem} (in '{lib.name}'; run Tools > TimeDesk > Generate World)", t);
+                issues++;
+            }
 
             foreach (TriggerCondition c in t.conditions ?? new List<TriggerCondition>())
             {
@@ -934,8 +958,9 @@ public static partial class ContentLibraryValidator
     /// types H2) or a rule naming it (it would forbid nothing), rules no place
     /// of the day can break, premades (pooled or forced) whose claim or true
     /// place is outside the day's world, forced slots beyond the queue, a
-    /// premade forced twice, a forced premade in the first half of a day with
-    /// rules (a warning: it takes a slot a guaranteed violator could need), and
+    /// premade forced twice, the first half's room (a warning when the forced
+    /// slots leave fewer free slots than the day's guarantees,
+    /// ViolatorSlots.RoomProblems: a violator would be dropped), and
     /// a day allowing dress tells without a Costume Guide.
     /// </summary>
     private static int CheckDayPlanPlaces(ContentLibrarySO lib)
@@ -994,16 +1019,17 @@ public static partial class ContentLibraryValidator
             // The Directives (phase 9; the rule Generate World checks its source with): each rule's shape, and the day's
             // rolled procedures and guarantees against the kinds of the day (Directives.RuleProblems, DayProblems).
             foreach (TravelRuleSO rule in plan.ActiveTravelRules.Where(r => r != null).Distinct())
-                foreach (string problem in Directives.RuleProblems(rule.name, rule.type, rule.kinds, rule.nation != null || rule.era != null, !string.IsNullOrWhiteSpace(rule.description)))
+                foreach (string problem in Directives.RuleProblems(rule.name, rule.type, rule.kinds, rule.nation != null || rule.era != null, !string.IsNullOrWhiteSpace(rule.description),
+                                                                   rule.transponder, lib.Agency.transponders))
                 {
                     Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", rule);
                     issues++;
                 }
-            List<Directives.RuleEntry> active = plan.ActiveTravelRules.Where(r => r != null).Select(r => new Directives.RuleEntry(r.name, r.type, r.kinds, lib.FirstDayOf(r))).ToList();
+            List<Directives.RuleEntry> active = plan.ActiveTravelRules.Where(r => r != null).Select(r => new Directives.RuleEntry(r.name, r.type, r.kinds, lib.FirstDayOf(r), r.transponder)).ToList();
             var kinds = plan.Kinds.Where(k => k != null && k.blueprint != null && k.weight > 0f)
                 .Select(k => (k.blueprint.Kind, (IReadOnlyCollection<string>)(k.blueprint.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => t.formNumber).ToList()))
                 .ToList();
-            foreach (string problem in Directives.DayProblems(plan.name, plan.DayNumber, active, kinds))
+            foreach (string problem in Directives.DayProblems(plan.name, plan.DayNumber, active, kinds, lib.Agency.transponders))
             {
                 Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", plan);
                 issues++;
@@ -1036,18 +1062,19 @@ public static partial class ContentLibraryValidator
                     issues++;
                 }
 
-                if (plan.GuaranteeRuleViolators && plan.ActiveTravelRules.Any(r => r != null && Directives.Guarantees(r.type, plan.DayNumber, lib.FirstDayOf(r))) && slot.caseIndex1Based <= ViolatorSlots.Window(plan.VisitorsCount))
+            }
+
+            if (plan.GuaranteeRuleViolators)
+            {
+                IEnumerable<int> standing = plan.ForcedCases.Where(f => f != null && (f.legendary != null || f.hasLie || f.directive != PlannedDirective.None)).Select(f => f.caseIndex1Based);
+                int guarantees = plan.ActiveTravelRules.Where(r => r != null).Distinct().Count(r => Directives.Guarantees(r.type, plan.DayNumber, lib.FirstDayOf(r)));
+                foreach (string problem in ViolatorSlots.RoomProblems(plan.name, plan.VisitorsCount, standing, guarantees))
                 {
-                    Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' forces premade '{slot.legendary.displayName}' into slot {slot.caseIndex1Based}, in the first half of a day with rules: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.", plan);
+                    Debug.LogWarning($"[ContentLibraryValidator] {problem}", plan);
                     issues++;
                 }
             }
 
-            foreach (IGrouping<LegendarySO, ForcedCaseSlot> twice in forced.GroupBy(f => f.legendary).Where(g => g.Count() > 1))
-            {
-                Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' forces premade '{twice.Key.displayName}' {twice.Count()} times.", plan);
-                issues++;
-            }
 
             if (plan.TellChannels.Contains(TellChannel.Appearance) && !lib.ReferenceBookCategories().Contains(Looks.EvidenceCategory))
             {
@@ -1113,8 +1140,9 @@ public static partial class ContentLibraryValidator
     /// <summary>
     /// Reports the day plans' identity and size problems (DayPlans.Problems,
     /// the rule Generate World checks its source with: a blank or repeated
-    /// asset name, a day below 1 or planned twice, a queue below 1) and gaps
-    /// in the day sequence.
+    /// asset name, a day below 1 or planned twice, a queue below 1), gaps in
+    /// the day sequence and an unplanned tail up to the run's last day
+    /// (DayPlans.Unplanned, days 7-15 V1).
     /// </summary>
     private static int CheckDayPlanEntries(ContentLibrarySO lib)
     {
@@ -1126,13 +1154,107 @@ public static partial class ContentLibraryValidator
             Debug.LogError($"[ContentLibraryValidator] {problem} ('{lib.name}')", lib);
         int issues = problems.Count;
 
-        foreach (string gap in DayPlans.Gaps(lib.DayPlans.Where(p => p != null).Select(p => p.DayNumber)))
+        foreach (string gap in DayPlans.Gaps(lib.DayPlans.Where(p => p != null).Select(p => p.DayNumber))
+                         .Concat(DayPlans.Unplanned(lib.DayPlans.Where(p => p != null).Select(p => p.DayNumber), lib.LastDay)))
         {
             Debug.LogWarning($"[ContentLibraryValidator] {gap} ('{lib.name}')", lib);
             issues++;
         }
 
         return issues;
+    }
+
+    /// <summary>
+    /// The forced entries' faults, ids, alternatives, dialogs and conditions
+    /// (days 7-15 V2-V5, Premades.ForcedProblems: the rule Generate World
+    /// checks its source with), over every day plan: errors, then warnings.
+    /// </summary>
+    private static int CheckForcedEntries(ContentLibrarySO lib)
+    {
+        var days = new List<ForcedDayCheck>();
+        foreach (DayPlanSO plan in lib.DayPlans.Where(p => p != null))
+        {
+            var forced = new List<ForcedCheck>();
+            foreach (ForcedCaseSlot f in plan.ForcedCases.Where(f => f != null))
+            {
+                TravellerKind kind = f.legendary != null ? f.legendary.kind : f.caseBlueprint != null ? f.caseBlueprint.Kind : TravellerKind.Displaced;
+                CaseBlueprintSO blueprint = f.caseBlueprint ?? plan.Kinds.Where(k => k != null && k.blueprint != null && k.blueprint.Kind == kind).Select(k => k.blueprint).FirstOrDefault();
+                forced.Add(new ForcedCheck
+                {
+                    Slot = f.caseIndex1Based,
+                    Id = f.id,
+                    Premade = f.legendary != null ? f.legendary.id : null,
+                    Kind = kind,
+                    Forms = (blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => t.formNumber).ToList(),
+                    HasTruePlace = f.legendary != null && f.legendary.truePlace != null,
+                    OncePerRun = f.legendary != null && f.legendary.oncePerRun,
+                    ClosedPlace = f.legendary != null && !plan.ClaimAllowed(f.legendary.nation, f.legendary.trueEra, kind),
+                    Lie = f.hasLie ? f.lie : (LieKind?)null,
+                    Directive = f.directive,
+                    Dialog = f.dialogId,
+                    ConditionKeys = (f.conditions ?? new List<TriggerCondition>()).Where(c => c != null && !string.IsNullOrEmpty(c.key)).Select(c => c.key).ToList(),
+                    Conditions = (f.conditions ?? new List<TriggerCondition>()).Count(c => c != null)
+                });
+            }
+
+            days.Add(new ForcedDayCheck
+            {
+                Asset = plan.name,
+                Day = plan.DayNumber,
+                Lies = plan.EnabledLies,
+                Rules = plan.ActiveTravelRules.Where(r => r != null).Select(r => r.Directive).ToList(),
+                Pooled = (plan.AvailableLegendaries ?? Array.Empty<LegendarySO>()).Where(l => l != null).Select(l => l.id).ToList(),
+                Forced = forced
+            });
+        }
+
+        var errors = new List<string>();
+        var warnings = new List<string>();
+        Premades.ForcedProblems(days, lib.Legendaries.Where(l => l != null).Select(l => l.id).ToList(),
+                                lib.Dialogs.Where(d => d != null && d.dialog != null).Select(d => d.dialog.id).ToList(), errors, warnings);
+        foreach (string e in errors)
+            Debug.LogError($"[ContentLibraryValidator] {e} (run Tools > TimeDesk > Generate World)", lib);
+        foreach (string w in warnings)
+            Debug.LogWarning($"[ContentLibraryValidator] {w}", lib);
+        return errors.Count + warnings.Count;
+    }
+
+    /// <summary>
+    /// The premades' rows (days 7-15 V6, Premades.Problems: the rule Generate
+    /// World checks its source with): the famous hold no account; a story
+    /// character's birth years, family, Citizen ID, debt, employer and that no
+    /// day pools it.
+    /// </summary>
+    private static int CheckPremadeRows(ContentLibrarySO lib)
+    {
+        var employers = (lib.Agency.employers ?? new List<Employer>()).Where(e => e != null && !string.IsNullOrEmpty(e.id)).GroupBy(e => e.id).ToDictionary(g => g.Key, g => g.First());
+        var pooled = new HashSet<LegendarySO>(lib.DayPlans.Where(p => p != null).SelectMany(p => p.AvailableLegendaries ?? Array.Empty<LegendarySO>()).Where(l => l != null));
+        List<PremadeCheck> checks = lib.Legendaries.Where(l => l != null).Select(l => new PremadeCheck
+        {
+            Id = l.id,
+            Kind = l.kind,
+            HasTruePlace = l.truePlace != null,
+            PlaceEraId = l.trueEra != null ? l.trueEra.id : null,
+            BirthYear = BirthDates.TryParse(l.birthDate, out _, out _, out int born) ? born : (int?)null,
+            HasFamily = l.family != null,
+            FamilyKnown = true,
+            CitizenId = l.citizenId,
+            Debt = l.debt,
+            Employer = l.employer,
+            EmployerEraId = !string.IsNullOrEmpty(l.employer) && employers.TryGetValue(l.employer, out Employer e) ? e.era : null,
+            Pooled = pooled.Contains(l)
+        }).ToList();
+
+        PresentPlace present = lib.BuildPresent(null);
+        var errors = new List<string>();
+        var warnings = new List<string>();
+        Premades.Problems(checks, present != null ? present.BirthYearMin : 0, present != null ? present.BirthYearMax : 0,
+                          lib.Agency.clerk != null ? lib.Agency.clerk.citizenId : null, lib.Agency.accounts, errors, warnings);
+        foreach (string problem in errors)
+            Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", lib);
+        foreach (string problem in warnings)
+            Debug.LogWarning($"[ContentLibraryValidator] {problem}", lib);
+        return errors.Count + warnings.Count;
     }
 
     /// <summary>Reports DayPlan.AvailableLegendaries entries that are null.</summary>
@@ -1162,8 +1284,10 @@ public static partial class ContentLibraryValidator
 
     /// <summary>
     /// Reports premades with missing era, archetype or nation references, an
-    /// id that is not a key token, a blank name, an unreadable birth date or
-    /// one outside the claimed place's birth years, a true place equal to the
+    /// id that is not a key token, a blank name, an unreadable birth date or,
+    /// for the famous, one outside the claimed place's birth years (a 2150
+    /// story character is born in the present's, CheckPremadeRows, days 7-15
+    /// V6), a true place equal to the
     /// claim, or a record note too long for the Records box.
     /// </summary>
     private static int CheckLegendaryReferences(ContentLibrarySO lib)
@@ -1209,7 +1333,7 @@ public static partial class ContentLibraryValidator
             NationEraProfileSO claim = legend.nation != null && legend.trueEra != null ? lib.GetProfile(legend.nation, legend.trueEra) : null;
             if (!BirthDates.TryParse(legend.birthDate, out _, out _, out int year))
                 Error($"has an unreadable birth date '{legend.birthDate}'");
-            else if (claim != null && (year < claim.birthYearMin || year > claim.birthYearMax))
+            else if (claim != null && Premades.IsFamous(legend.kind) && (year < claim.birthYearMin || year > claim.birthYearMax))
                 Error($"is born in {year}, outside '{claim.name}''s birth years {claim.birthYearMin}..{claim.birthYearMax}");
 
             if (legend.truePlace != null && legend.truePlace == claim)

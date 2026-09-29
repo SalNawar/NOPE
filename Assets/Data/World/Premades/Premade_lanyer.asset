@@ -25,3 +25,8 @@ MonoBehaviour:
   recordNote: Poet of London, raised in a countess's household.
   dialogId: 
   oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 

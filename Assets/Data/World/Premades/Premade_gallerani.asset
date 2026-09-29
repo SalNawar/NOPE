@@ -25,3 +25,8 @@ MonoBehaviour:
   recordNote: Lady of the Milanese court. Sat for a portrait with an ermine.
   dialogId: 
   oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 

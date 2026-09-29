@@ -18,3 +18,4 @@ MonoBehaviour:
   description: Depart only on the date on your manifest or return order, and never
     on an expired paper.
   kinds: 
+  transponder: 

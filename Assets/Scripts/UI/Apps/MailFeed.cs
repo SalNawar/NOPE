@@ -125,7 +125,7 @@ public sealed class MailFeed : MonoBehaviour
         return lines;
     }
 
-    /// <summary>A day's paper, its notices then its news: the archived issue, else today's morning paper; null when neither is on hand.</summary>
+    /// <summary>A day's paper, its notices then its news then the desk's own stories: the archived issue, else today's morning paper; null when neither is on hand.</summary>
     private static IReadOnlyList<string> Headlines(WorldState world, int day)
     {
         NewsIssue issue = NewsArchive.Find(world.newsArchive, day);
@@ -133,6 +133,7 @@ public sealed class MailFeed : MonoBehaviour
             return null;
         var lines = new List<string>(issue != null ? issue.briefing : world.tomorrow.briefingLines);
         lines.AddRange(issue != null ? issue.news : world.tomorrow.newsLines);
+        lines.AddRange(issue != null ? issue.desk ?? new List<string>() : world.tomorrow.deskLines);
         return lines;
     }
 

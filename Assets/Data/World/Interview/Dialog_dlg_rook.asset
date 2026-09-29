@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216f58e381e1445588efbd033278b8d9, type: 3}
+  m_Name: Dialog_dlg_rook
+  m_EditorClassIdentifier: Assembly-CSharp::DialogSO
+  dialog:
+    id: dlg_rook
+    label: Ask about the contract >
+    oneShot: 1
+    nodes:
+    - id: start
+      lines:
+      - id: dlg_rook.start.1
+        speaker: 1
+        text: Best contract in the building, this. Read it twice if you like. I'll
+          wait.
+        expression: 
+      choices:
+      - id: read
+        label: I will.
+        lines: []
+        next: read
+        effect: 
+      - id: next
+        label: Next!
+        lines: []
+        next: 
+        effect: 
+    - id: read
+      lines:
+      - id: dlg_rook.read.1
+        speaker: 1
+        text: Of course. And for a clerk who reads quickly, there's 50 cr in it.
+          Between friends.
+        expression: 
+      choices:
+      - id: take
+        label: Take the 50 cr.
+        lines:
+        - id: dlg_rook.read.take.1
+          speaker: 1
+          text: Pleasure doing business.
+          expression: 
+        next: 
+        effect: Effect_Dialog_BribeTaken
+      - id: refuse
+        label: Put that away.
+        lines:
+        - id: dlg_rook.read.refuse.1
+          speaker: 1
+          text: Suit yourself. It was a very quick 50.
+          expression: 
+        next: 
+        effect: 
+  conditions: []

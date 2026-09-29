@@ -59,7 +59,7 @@ public static class ContentSheetMap
                     Int("contract.termMax").Note("the longest term in days"),
                     Int("contract.wageMin").Note("the lowest day wage in cr"),
                     Int("contract.wageMax").Note("the highest day wage in cr")).Note("the ranges a 2150 citizen's Citizen Account is drawn from"),
-                Rows("agencyTransponders", "transponders",
+                Rows("agencyTransponders", "transponders", Key("id"),
                     Text("id").Required(),
                     Text("transponderClass").OneOf("Premium", "Economy"),
                     Text("model"),
@@ -73,7 +73,7 @@ public static class ContentSheetMap
                     Int("amountMax").Note("an amount proof's most value in cr (0 for a number)"),
                     Text("prefix").Note("a number proof's prefix (TI gives TI-551902); blank for an amount")).Note("the proofs of means a Standard account may hold, one per proof form"),
                 Num("strandChance").Note("the chance an accepted traveller on an Economy transponder is stranded at the shift's end (0.08 = 8%)"),
-                Rows("agencyEmployers", "employers",
+                Rows("agencyEmployers", "employers", Key("id"),
                     Text("id").Required(),
                     Text("era").Ref("eras").Note("the era the employer hires for"),
                     Text("name").Note("the printed name on a labourer's contract")).Note("the Debt Relief programme's employers: a labourer's contract names one of the worksite's era")),
@@ -92,7 +92,8 @@ public static class ContentSheetMap
                 Text("country").Omit().Ref("countries").Note("a closure's country (blank: none)"),
                 Text("era").Omit().Ref("eras").Note("a closure's era (blank: none)"),
                 Text("description"),
-                List("kinds").Omit().Note("a paper set's or debt standing's kinds (RichTourist, PoorTourist, Labourer, Displaced); blank: every kind")).Note("travel rules a day can switch on: closures and standing procedures"),
+                List("kinds").Omit().Note("a paper set's, debt standing's or recall's kinds (RichTourist, PoorTourist, Labourer, Displaced); blank: every kind"),
+                Text("transponder").Omit().Ref("agencyTransponders").Note("the model a recall (TransponderRecall) grounds; blank for every other rule")).Note("travel rules a day can switch on: closures and standing procedures"),
             Days(),
             PersonalitiesSheet(),
             Interview(),
@@ -220,10 +221,16 @@ public static class ContentSheetMap
             List("countries").Ref("countries"),
             List("rules").Ref("rules"),
             List("premades").Ref("premades").Note("premades that may roll this day"),
-            Rows("dayForced", "forced",
+            Rows("dayForced", "forced", Key("{slot}{id}", "forced").Optional("id"),
                 Int("slot"),
                 Text("premade").Ref("premades"),
-                Text("blueprint")),
+                Text("blueprint"),
+                Text("id").Omit().Note("the appearance's name (days 7-15): needed when a slot lists alternatives, which are tried in order, the first whose conditions pass standing; unique in the day"),
+                Text("lie").Omit().OneOf(System.Enum.GetNames(typeof(LieKind))).Note("an authored lie the appearance tells (blank: none)"),
+                Text("directive").Omit().OneOf(System.Enum.GetNames(typeof(PlannedDirective)).Skip(1).ToArray()).Note("an authored directive fault (blank: none): the maker's variant pinned"),
+                Text("dialog").Omit().Ref("dialogs").Note("the appearance's dialog, replacing the premade's (blank: the premade's)"),
+                Text("intro").Omit().Note("the desk's opener for the appearance (blank: the premade's, else the interview's)"),
+                GateConditions("dayForcedConditions").OmitEmpty().Note("when the appearance stands (all must pass at the day's start; none: always)")).Note("forced slots: a premade, a blueprint or both, and a beat's fault, voice and conditions"),
             Float("premadeChance"),
             Float("costumeErrorChance").Note("chance per 2150 citizen of a costume error (0 before the dress rule's first day)"),
             Float("violationChance").Note("chance per honest traveller of breaking a rolled procedure, the paper set or the debt standing (0 before their first day)"));
@@ -354,7 +361,12 @@ public static class ContentSheetMap
                 Text("attribute").Ref("contentAttributes"),
                 Num("onCorrect"),
                 Num("onWrong"),
-                Bool("skipNationScore").Omit())).Note("premade characters: real people and written stories");
+                Bool("skipNationScore").Omit()),
+            Text("kind").Omit().OneOf("RichTourist", "PoorTourist", "Labourer", "Displaced").Note("a 2150 story character's kind (blank: Displaced, the famous)"),
+            Text("family").Omit().Ref("countries").Note("a story character's family country: its lineage and generated look (blank: its place's country)"),
+            Text("citizenId").Omit().Note("a story character's Citizen ID (000-0000-00), the same at every appearance"),
+            Int("debt").Omit().Note("a story character's debt in cr (blank: drawn from its status's range)"),
+            Text("employer").Omit().Ref("agencyEmployers").Note("a labourer story character's employer (an agency.employers id of its destination's era; blank: drawn)")).Note("premade characters: real people and written stories");
 
     private static SheetSpec History() =>
         Single("history", "history",
@@ -377,7 +389,9 @@ public static class ContentSheetMap
                 Rows("historyEdits", "edits",
                     Text("place").Ref("places"),
                     Text("category"),
-                    Text("value"))).Note("history rules: when their conditions pass at night they rewrite a place's fact"));
+                    Text("value")),
+                Num("stability").Omit().Note("a change of stability the night the rule fires, a percent of where it stands (-3 takes 3%); blank: none"),
+                Text("section").Omit().OneOf("News", "Desk", "Return").Note("where the line goes: the paper's news (blank), the paper's desk section, or nowhere until the character returns (its fired flag, trig:history_{id}:fired)")).Note("history rules: when their conditions pass at night they rewrite a place's fact; a rule with no edit is a story rule, which prints its news line"));
 
     /// <summary>The PC block: the steps checklist's sets, the Internet's sites, the Static sites' authored pages, the Lineage Archive's people and relations, and Mail's authored messages.</summary>
     private static SheetSpec Pc() =>

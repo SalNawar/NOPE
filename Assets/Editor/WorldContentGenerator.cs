@@ -116,13 +116,13 @@ public static partial class WorldContentGenerator
         var placesById = places.ToDictionary(p => p.id);
         var archetypesById = authored.archetypes.ToDictionary(a => a.id);
         var premades = (src.premades ?? Array.Empty<PremadeData>())
-            .Select(m => MakePremade(m, placesById, archetypesById, authored.attributes, written))
+            .Select(m => MakePremade(m, placesById, archetypesById, authored.attributes, nations, written))
             .ToArray();
         var premadesById = premades.ToDictionary(m => m.id);
 
         WireBlueprints(authored);
 
-        DayPlanSO[] days = src.days.Select(d => MakeDay(d, src.content.dayPlanFolder, authored, eras, nations, rules, premadesById)).ToArray();
+        DayPlanSO[] days = src.days.Select(d => MakeDay(d, src.content.dayPlanFolder, authored, eras, nations, rules, premadesById, refs)).ToArray();
 
         // --- Interview: questions, dialogs, unlock announcements ---
         QuestionData[] questionData = src.questions ?? Array.Empty<QuestionData>();
@@ -272,7 +272,8 @@ public static partial class WorldContentGenerator
                 if (!ParseEnum(kind, out TravellerKind _))
                     errors.Add($"Rule '{r.asset}' lists '{kind}', which is not a traveller kind ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}).");
             if (ParseEnum(r.type, out type))
-                errors.AddRange(Directives.RuleProblems(r.asset, type, RuleKinds(r), !string.IsNullOrEmpty(r.country) || !string.IsNullOrEmpty(r.era), !string.IsNullOrWhiteSpace(r.description)));
+                errors.AddRange(Directives.RuleProblems(r.asset, type, RuleKinds(r), !string.IsNullOrEmpty(r.country) || !string.IsNullOrEmpty(r.era), !string.IsNullOrWhiteSpace(r.description),
+                                                        r.transponder, src.agency != null ? BuildAgency(src.agency).transponders : null));
         }
 
         var futureIds = new HashSet<string>(src.eras.Where(e => e.future).Select(e => e.id));
@@ -304,6 +305,9 @@ public static partial class WorldContentGenerator
         }
 
         errors.AddRange(DayPlans.Problems(src.days.Select(d => new DayPlanEntry(d.asset, d.day, d.queue)).ToList()));
+        if (authored.library != null)
+            foreach (string warning in DayPlans.Unplanned(src.days.Select(d => d.day), authored.library.LastDay))
+                Debug.LogWarning($"[WorldContentGenerator] {warning}");
         string ages = BirthDates.AgeRangeProblem(src.travellerAgeMin, src.travellerAgeMax);
         if (ages != null)
             errors.Add(ages);
@@ -315,8 +319,11 @@ public static partial class WorldContentGenerator
     /// it; every place fact fits a book row (FactTable.MaxValueLength); the
     /// history lines are ASCII and hold their tokens; history rules have
     /// unique lower-case ids, ASCII text, conditions whose references resolve,
-    /// edits of known places and categories, and values HistoryChecks proves
-    /// unique against every place's facts and every other rule.
+    /// what HistoryChecks.RuleProblems asks of a rule (a condition; a news
+    /// line when it has no edit, a story rule; verdict flags naming known
+    /// premades; a stability change within a hundred), edits of known places
+    /// and categories, and values HistoryChecks proves unique against every
+    /// place's facts and every other rule.
     /// </summary>
     private static void CheckHistory(WorldSource src, Authored authored, List<string> errors)
     {
@@ -367,6 +374,7 @@ public static partial class WorldContentGenerator
 
         var ruleIds = new HashSet<string>();
         var placeIds = new HashSet<string>(src.places.Select(PlaceId));
+        var premadeIds = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Select(m => m.id));
         var edits = new List<FactEdit>();
         foreach (HistoryRuleData r in h.rules ?? Array.Empty<HistoryRuleData>())
         {
@@ -383,12 +391,11 @@ public static partial class WorldContentGenerator
                 CheckAscii($"history.{r.id}.{field}", text, errors);
             }
 
-            if (r.conditions == null || r.conditions.Length == 0)
-                errors.Add($"{owner} needs at least one condition (it would fire on the first night).");
             CheckConditions(r.conditions, owner, false, authored, src, errors);
-
-            if (r.edits == null || r.edits.Length == 0)
-                errors.Add($"{owner} needs at least one edit.");
+            if (!string.IsNullOrEmpty(r.section) && !ParseEnum(r.section, out StorySection _))
+                errors.Add($"{owner} has unknown section '{r.section}' ({string.Join(", ", Enum.GetNames(typeof(StorySection)))}; blank: News).");
+            errors.AddRange(HistoryChecks.RuleProblems(r.id, r.edits?.Length ?? 0, !string.IsNullOrWhiteSpace(r.news), r.conditions?.Length ?? 0,
+                                                       (r.conditions ?? Array.Empty<ConditionData>()).Select(c => c.key), r.stability, premadeIds));
             foreach (EditData e in r.edits ?? Array.Empty<EditData>())
             {
                 CheckAscii($"history.{r.id}.edit", e.value, errors);
@@ -406,6 +413,11 @@ public static partial class WorldContentGenerator
 
         foreach (string problem in HistoryChecks.Problems(edits, baseWorld))
             errors.Add(problem);
+
+        // A Return rule's consequence reaches the player only through an appearance that reads it (days 7-15 Q9).
+        IEnumerable<string> forcedKeys = src.days.SelectMany(d => d.forced ?? Array.Empty<ForcedData>()).SelectMany(f => f.conditions ?? Array.Empty<ConditionData>()).Select(c => c.key);
+        foreach (string warning in HistoryChecks.ReturnProblems((h.rules ?? Array.Empty<HistoryRuleData>()).Select(r => (r.id, ParseEnum(r.section, out StorySection s) ? s : StorySection.News)), forcedKeys))
+            Debug.LogWarning($"[WorldContentGenerator] {warning}");
     }
 
     /// <summary>
@@ -688,7 +700,9 @@ public static partial class WorldContentGenerator
         // --- Menus: the traveller wheel must show every choice ---
         bool anySmallTalk = src.eras.Any(e => e.smallTalk != null && e.smallTalk.Length > 0) ||
                             src.places.Any(p => p.smallTalk != null && p.smallTalk.Length > 0);
-        var premadeDialogs = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => !string.IsNullOrEmpty(m.dialog)).Select(m => m.dialog));
+        // A premade's dialog and a forced slot's (days 7-15 B7) are offered only while that appearance stands at the desk (TimelineService.PremadeDialogIds).
+        var premadeDialogs = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => !string.IsNullOrEmpty(m.dialog)).Select(m => m.dialog)
+            .Concat(src.days.SelectMany(day => day.forced ?? Array.Empty<ForcedData>()).Where(f => !string.IsNullOrEmpty(f.dialog)).Select(f => f.dialog)));
         foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.Count(built), anySmallTalk, kindForms.Select(k => FormRequests.Count(k.Askable)).DefaultIfEmpty(0).Max(), requests.Length,
                                                              dialogs.Count(d => !premadeDialogs.Contains(d.id)), dialogs.Count(d => premadeDialogs.Contains(d.id)), iv.menuCapacity))
             errors.Add(problem);
@@ -1048,9 +1062,12 @@ public static partial class WorldContentGenerator
             if (home != null && futureEras.Contains(home.era))
                 errors.Add($"{owner} comes from the Future place '{m.truePlace}', which is in the world only while its nation leads; no premade may claim or come from the Future.");
 
+            if (!string.IsNullOrEmpty(m.kind) && !ParseEnum(m.kind, out TravellerKind _))
+                errors.Add($"{owner} has unknown kind '{m.kind}' ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}; blank: Displaced, the famous).");
+            bool storyCharacter = TravellerKinds.IsCitizen(PremadeKind(m));
             if (!BirthDates.TryParse(m.birthDate, out _, out _, out int year))
                 errors.Add($"{owner} has unreadable birth date '{m.birthDate}' (\"14 Mar 1505 BCE\").");
-            else if (place != null)
+            else if (place != null && !storyCharacter) // a story character is born in the present's years (Premades.Problems)
             {
                 (int min, int max) = BirthYears(place, src.travellerAgeMin, src.travellerAgeMax);
                 if (year < min || year > max)
@@ -1076,10 +1093,33 @@ public static partial class WorldContentGenerator
             }
         }
 
+        // --- The premades' rows: the famous hold no account, a story character's account and scheduling (days 7-15 V6; the validator's rule) ---
+        AgencyContent agency = src.agency != null ? BuildAgency(src.agency) : null;
+        var employersById = (agency?.employers ?? new List<Employer>()).Where(e => e != null && !string.IsNullOrEmpty(e.id)).GroupBy(e => e.id).ToDictionary(g => g.Key, g => g.First());
+        var countryIds = new HashSet<string>(src.countries.Select(c => c.id));
+        var pooledIds = new HashSet<string>(src.days.SelectMany(d => d.premades ?? Array.Empty<string>()));
+        var premadeChecks = (src.premades ?? Array.Empty<PremadeData>()).Select(m => new PremadeCheck
+        {
+            Id = m.id,
+            Kind = PremadeKind(m),
+            HasTruePlace = !string.IsNullOrEmpty(m.truePlace),
+            PlaceEraId = src.places.FirstOrDefault(p => PlaceId(p) == m.place)?.era,
+            BirthYear = BirthDates.TryParse(m.birthDate, out _, out _, out int born) ? born : (int?)null,
+            HasFamily = !string.IsNullOrEmpty(m.family),
+            FamilyKnown = string.IsNullOrEmpty(m.family) || countryIds.Contains(m.family),
+            CitizenId = m.citizenId,
+            Debt = m.debt,
+            Employer = m.employer,
+            EmployerEraId = !string.IsNullOrEmpty(m.employer) && employersById.TryGetValue(m.employer, out Employer e) ? e.era : null,
+            Pooled = pooledIds.Contains(m.id)
+        }).ToList();
+        var premadeWarnings = new List<string>();
+        int presentYear = src.present != null ? src.present.year : 0;
+        Premades.Problems(premadeChecks, presentYear - src.travellerAgeMax, presentYear - src.travellerAgeMin, src.agency?.clerk?.citizenId, agency?.accounts, errors, premadeWarnings);
+        foreach (string warning in premadeWarnings)
+            Debug.LogWarning($"[WorldContentGenerator] {warning}");
+
         // --- Days: pools, forced slots, chance ---
-        var closures = new HashSet<string>((src.rules ?? Array.Empty<RuleData>())
-            .Where(r => ParseEnum(r.type, out TravelRuleType type) && Directives.IsClosure(type))
-            .Select(r => r.asset));
         foreach (DayData d in src.days)
         {
             string owner = $"Day '{d.asset}'";
@@ -1109,28 +1149,42 @@ public static partial class WorldContentGenerator
             if (d.premadeChance < 0f || d.premadeChance > 1f || (pool.Length > 0 && d.premadeChance <= 0f))
                 errors.Add($"{owner} needs \"premadeChance\" in 0..1, above 0 with a pool (a missing value reads 0).");
 
-            var slots = new HashSet<int>();
-            var forcedPremades = new HashSet<string>();
             foreach (ForcedData f in d.forced ?? Array.Empty<ForcedData>())
             {
+                string slotOwner = $"{owner} slot {f.slot}";
                 if (f.slot < 1 || f.slot > d.queue)
                     errors.Add($"{owner} forces slot {f.slot}, outside its queue of {d.queue} (a missing slot reads 0).");
-                if (!slots.Add(f.slot))
-                    errors.Add($"{owner} forces slot {f.slot} twice.");
                 if (string.IsNullOrEmpty(f.premade) && string.IsNullOrEmpty(f.blueprint))
                     errors.Add($"{owner} forces slot {f.slot} with neither a premade nor a blueprint.");
+                if (!string.IsNullOrEmpty(f.lie) && !ParseEnum(f.lie, out LieKind _))
+                    errors.Add($"{slotOwner} authors unknown lie '{f.lie}' (one of {string.Join(", ", Enum.GetNames(typeof(LieKind)))}).");
+                if (!string.IsNullOrEmpty(f.directive) && (!ParseEnum(f.directive, out PlannedDirective planned) || planned == PlannedDirective.None))
+                    errors.Add($"{slotOwner} authors unknown directive fault '{f.directive}' (one of {string.Join(", ", Enum.GetNames(typeof(PlannedDirective)).Skip(1))}).");
+                if (!IsAscii(f.intro))
+                    errors.Add($"{slotOwner}: its intro must be ASCII.");
+                if (src.interview != null && (f.intro ?? string.Empty).Length > src.interview.maxLineChars)
+                    errors.Add($"{slotOwner}: its intro is {f.intro.Length} characters; the transcript holds at most {src.interview.maxLineChars} (interview.maxLineChars).");
+                CheckConditions(f.conditions, slotOwner, false, authored, src, errors);
                 if (string.IsNullOrEmpty(f.premade))
                     continue;
 
                 InWorld(f.premade, "forces");
-                if (!forcedPremades.Add(f.premade))
-                    errors.Add($"{owner} forces premade '{f.premade}' twice.");
                 if (pool.Contains(f.premade))
                     errors.Add($"{owner} both forces and pools premade '{f.premade}'.");
-                if ((d.rules ?? Array.Empty<string>()).Any(closures.Contains) && f.slot <= ViolatorSlots.Window(d.queue))
-                    Debug.LogWarning($"[WorldContentGenerator] {owner} forces premade '{f.premade}' into slot {f.slot}, in the first half of a day with closures: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.");
             }
+
+            // The first half's room (V10): the slots a forced premade or an authored fault may take, against the day's guarantees.
+            IEnumerable<int> standing = (d.forced ?? Array.Empty<ForcedData>())
+                .Where(f => !string.IsNullOrEmpty(f.premade) || !string.IsNullOrEmpty(f.lie) || !string.IsNullOrEmpty(f.directive)).Select(f => f.slot);
+            foreach (string problem in ViolatorSlots.RoomProblems(d.asset, d.queue, standing, Guarantees(src, d)))
+                Debug.LogWarning($"[WorldContentGenerator] {problem}");
         }
+
+        // --- The forced entries' faults, ids, alternatives, dialogs and conditions (days 7-15 V2-V5; the validator's rule) ---
+        var forcedWarnings = new List<string>();
+        Premades.ForcedProblems(src.days.Select(d => ForcedDay(src, d, authored, premadesById)).ToList(), premadeIds, dialogIds, errors, forcedWarnings);
+        foreach (string warning in forcedWarnings)
+            Debug.LogWarning($"[WorldContentGenerator] {warning}");
 
         // --- Dialog line expressions: only on traveller lines ---
         foreach (DialogData d in src.dialogs ?? Array.Empty<DialogData>())
@@ -1329,17 +1383,23 @@ public static partial class WorldContentGenerator
     /// <summary>Writes History/Effect_History_{id}.asset: one SetFact op per edit of the rule (latched when its trigger fires).</summary>
     private static EffectSO MakeHistoryEffect(HistoryRuleData r, ConditionRefs refs, HashSet<string> written)
     {
+        EditData[] editData = r.edits ?? Array.Empty<EditData>();
+        if (editData.Length == 0 && r.stability == 0f)
+            return null; // a story rule that only prints its line has no effect
+
         EffectSO fx = LoadOrCreate<EffectSO>($"{HistoryFolder}/Effect_History_{r.id}.asset", written);
         fx.displayName = r.name;
         fx.channel = EffectChannel.General;
         fx.defaultDurationDays = 1;
-        fx.ops = (r.edits ?? Array.Empty<EditData>()).Select(e => new EffectOp
+        fx.ops = editData.Select(e => new EffectOp
         {
             type = EffectOpType.SetFact,
             profile = refs.places[e.place],
             category = (ClueCategory)Enum.Parse(typeof(ClueCategory), e.category),
             stringParam = e.value
         }).ToList();
+        if (r.stability != 0f)
+            fx.ops.Add(new EffectOp { type = EffectOpType.AddStability, floatParam = r.stability });
         EditorUtility.SetDirty(fx);
         return fx;
     }
@@ -1348,13 +1408,14 @@ public static partial class WorldContentGenerator
     private static TimelineTriggerSO MakeHistoryTrigger(HistoryRuleData r, EffectSO effect, ConditionRefs refs, HashSet<string> written)
     {
         TimelineTriggerSO t = LoadOrCreate<TimelineTriggerSO>($"{HistoryFolder}/Trigger_History_{r.id}.asset", written);
-        t.id = $"history_{r.id}";
+        t.id = FlagKeys.HistoryRuleTriggerId(r.id);
         t.displayName = r.name;
         t.description = "Generated from world_source.json history.rules.";
         t.oneShot = true;
         t.newsLineOnFire = r.news;
+        t.section = ParseEnum(r.section, out StorySection section) ? section : StorySection.News;
         t.conditions = Conditions(r.conditions, refs).ToList();
-        t.outcomes = new List<TriggerOutcome> { new TriggerOutcome { effect = effect, durationDaysOverride = 0 } };
+        t.outcomes = effect != null ? new List<TriggerOutcome> { new TriggerOutcome { effect = effect, durationDaysOverride = 0 } } : new List<TriggerOutcome>();
         EditorUtility.SetDirty(t);
         return t;
     }
@@ -1473,7 +1534,7 @@ public static partial class WorldContentGenerator
 
     /// <summary>Writes Premades/Premade_{id}.asset: every field (once per run unless repeatable; impacts move the nation's score unless skipNationScore).</summary>
     private static LegendarySO MakePremade(PremadeData m, Dictionary<string, NationEraProfileSO> places, Dictionary<string, ArchetypeSO> archetypes,
-                                           Dictionary<string, AttributeSO> attributes, HashSet<string> written)
+                                           Dictionary<string, AttributeSO> attributes, Dictionary<string, NationSO> nations, HashSet<string> written)
     {
         LegendarySO premade = LoadOrCreate<LegendarySO>($"{WorldRoot}/Premades/Premade_{m.id}.asset", written);
         NationEraProfileSO claim = places[m.place];
@@ -1489,6 +1550,11 @@ public static partial class WorldContentGenerator
         premade.recordNote = m.recordNote ?? string.Empty;
         premade.dialogId = m.dialog ?? string.Empty;
         premade.oncePerRun = !m.repeatable;
+        premade.kind = PremadeKind(m);
+        premade.family = !string.IsNullOrEmpty(m.family) && nations.TryGetValue(m.family, out NationSO family) ? family : null;
+        premade.citizenId = m.citizenId ?? string.Empty;
+        premade.debt = m.debt;
+        premade.employer = m.employer ?? string.Empty;
         premade.authoredImpacts = (m.impacts ?? Array.Empty<ImpactData>()).Select(i => new TimelineImpact
         {
             attribute = attributes[i.attribute],
@@ -1508,6 +1574,7 @@ public static partial class WorldContentGenerator
         rule.era = !string.IsNullOrEmpty(r.era) ? eras[r.era] : null;
         rule.description = r.description;
         rule.kinds = RuleKinds(r).ToArray();
+        rule.transponder = r.transponder ?? string.Empty;
         EditorUtility.SetDirty(rule);
         return rule;
     }
@@ -1530,14 +1597,86 @@ public static partial class WorldContentGenerator
         var active = new List<Directives.RuleEntry>();
         foreach (string name in d.rules ?? Array.Empty<string>())
             if (byAsset.TryGetValue(name ?? string.Empty, out RuleData r) && ParseEnum(r.type, out TravelRuleType type))
-                active.Add(new Directives.RuleEntry(r.asset, type, RuleKinds(r), Directives.FirstDay(src.days.Where(x => (x.rules ?? Array.Empty<string>()).Contains(name)).Select(x => x.day))));
+                active.Add(new Directives.RuleEntry(r.asset, type, RuleKinds(r), Directives.FirstDay(src.days.Where(x => (x.rules ?? Array.Empty<string>()).Contains(name)).Select(x => x.day)), r.transponder));
 
         var kinds = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)>();
         foreach (KindWeightData k in d.kinds ?? Array.Empty<KindWeightData>())
             if (k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind kind))
                 kinds.Add((kind, authored.blueprints.TryGetValue(kind, out CaseBlueprintSO b) ? FormNumbers(b) : new string[0]));
 
-        errors.AddRange(Directives.DayProblems(d.asset, d.day, active, kinds));
+        errors.AddRange(Directives.DayProblems(d.asset, d.day, active, kinds, src.agency != null ? BuildAgency(src.agency).transponders : null));
+    }
+
+    /// <summary>
+    /// A day of the source as the forced entries' checks see it
+    /// (Premades.ForcedProblems): its lies, its rules (a closure's place by
+    /// ids), its pool, and each forced entry's kind (its premade's, or its
+    /// blueprint's), forms, fault, dialog, conditions and whether its place
+    /// is closed that day.
+    /// </summary>
+    private static ForcedDayCheck ForcedDay(WorldSource src, DayData d, Authored authored, Dictionary<string, PremadeData> premades)
+    {
+        var byAsset = (src.rules ?? Array.Empty<RuleData>()).Where(r => r != null).GroupBy(r => r.asset).ToDictionary(g => g.Key, g => g.First());
+        List<Directive> rules = (d.rules ?? Array.Empty<string>())
+            .Where(name => byAsset.ContainsKey(name ?? string.Empty) && ParseEnum(byAsset[name].type, out TravelRuleType _))
+            .Select(name => byAsset[name])
+            .Select(r => new Directive((TravelRuleType)Enum.Parse(typeof(TravelRuleType), r.type), RuleKinds(r), NullIfBlank(r.country), NullIfBlank(r.era)))
+            .ToList();
+
+        var forced = new List<ForcedCheck>();
+        foreach (ForcedData f in d.forced ?? Array.Empty<ForcedData>())
+        {
+            premades.TryGetValue(f.premade ?? string.Empty, out PremadeData m);
+            CaseBlueprintSO blueprint = !string.IsNullOrEmpty(f.blueprint) && authored.forcedBlueprints.TryGetValue(f.blueprint, out CaseBlueprintSO b) ? b : null;
+            TravellerKind kind = m != null ? PremadeKind(m) : blueprint != null ? blueprint.Kind : TravellerKind.Displaced;
+            CaseBlueprintSO kindBlueprint = blueprint ?? (authored.blueprints.TryGetValue(kind, out CaseBlueprintSO kb) ? kb : null);
+            PlaceData place = m != null ? src.places.FirstOrDefault(p => PlaceId(p) == m.place) : null;
+            forced.Add(new ForcedCheck
+            {
+                Slot = f.slot,
+                Id = f.id,
+                Premade = f.premade,
+                Kind = kind,
+                Forms = kindBlueprint != null ? FormNumbers(kindBlueprint) : new List<string>(),
+                HasTruePlace = m != null && !string.IsNullOrEmpty(m.truePlace),
+                OncePerRun = m != null && !m.repeatable,
+                ClosedPlace = place != null && rules.Any(r => r.AppliesTo(kind) && r.Closes(place.country, place.era)),
+                Lie = ParseEnum(f.lie, out LieKind lie) ? lie : (LieKind?)null,
+                Directive = ParseEnum(f.directive, out PlannedDirective directive) ? directive : PlannedDirective.None,
+                Dialog = f.dialog,
+                ConditionKeys = (f.conditions ?? Array.Empty<ConditionData>()).Select(c => c.key).Where(k => !string.IsNullOrEmpty(k)).ToList(),
+                Conditions = f.conditions?.Length ?? 0
+            });
+        }
+
+        return new ForcedDayCheck
+        {
+            Asset = d.asset,
+            Day = d.day,
+            Lies = (d.lies ?? Array.Empty<string>()).Where(l => ParseEnum(l, out LieKind _)).Select(l => (LieKind)Enum.Parse(typeof(LieKind), l)).ToList(),
+            Rules = rules,
+            Pooled = d.premades ?? Array.Empty<string>(),
+            Forced = forced
+        };
+    }
+
+    /// <summary>The kind a premade stands as (premades[].kind): blank is the famous' Displaced; an unknown name reads Displaced too (CheckCharacters reports it).</summary>
+    private static TravellerKind PremadeKind(PremadeData m) =>
+        !string.IsNullOrEmpty(m.kind) && ParseEnum(m.kind, out TravellerKind kind) ? kind : TravellerKind.Displaced;
+
+    /// <summary>Null for a blank id (a rule's missing country or era).</summary>
+    private static string NullIfBlank(string id) => string.IsNullOrEmpty(id) ? null : id;
+
+    /// <summary>How many guaranteed faulty travellers a day plans (Directives.Guarantees over its rules: every closure, a procedure with a maker on its first day).</summary>
+    private static int Guarantees(WorldSource src, DayData d)
+    {
+        var byAsset = (src.rules ?? Array.Empty<RuleData>()).Where(r => r != null).GroupBy(r => r.asset).ToDictionary(g => g.Key, g => g.First());
+        int count = 0;
+        foreach (string name in (d.rules ?? Array.Empty<string>()).Distinct())
+            if (byAsset.TryGetValue(name ?? string.Empty, out RuleData r) && ParseEnum(r.type, out TravelRuleType type) &&
+                Directives.Guarantees(type, d.day, Directives.FirstDay(src.days.Where(x => (x.rules ?? Array.Empty<string>()).Contains(name)).Select(x => x.day))))
+                count++;
+        return count;
     }
 
     /// <summary>The form numbers of a blueprint's templates (null templates skipped).</summary>
@@ -1603,11 +1742,12 @@ public static partial class WorldContentGenerator
     /// <summary>
     /// Writes the day's queue, tell count, tell channels, lies, eras, countries,
     /// rules, the violation chance, the premade pool and chance, and the
-    /// forced slots (premade, blueprint or both; authoritative).
+    /// forced slots (premade, blueprint or both, and each appearance's id,
+    /// authored fault and conditions, days 7-15; authoritative).
     /// </summary>
     private static DayPlanSO MakeDay(DayData d, string folder, Authored authored, Dictionary<string, EraSO> eras,
                                      Dictionary<string, NationSO> nations, Dictionary<string, TravelRuleSO> rules,
-                                     Dictionary<string, LegendarySO> premades)
+                                     Dictionary<string, LegendarySO> premades, ConditionRefs refs)
     {
         DayPlanSO plan = LoadOrCreate<DayPlanSO>($"{folder}/{d.asset}.asset", null);
         var so = new SerializedObject(plan);
@@ -1641,6 +1781,13 @@ public static partial class WorldContentGenerator
             el.FindPropertyRelative("caseIndex1Based").intValue = forcedData[i].slot;
             el.FindPropertyRelative("caseBlueprint").objectReferenceValue = string.IsNullOrEmpty(forcedData[i].blueprint) ? null : authored.forcedBlueprints[forcedData[i].blueprint];
             el.FindPropertyRelative("legendary").objectReferenceValue = string.IsNullOrEmpty(forcedData[i].premade) ? null : premades[forcedData[i].premade];
+            el.FindPropertyRelative("id").stringValue = forcedData[i].id ?? string.Empty;
+            bool hasLie = ParseEnum(forcedData[i].lie, out LieKind lie);
+            el.FindPropertyRelative("hasLie").boolValue = hasLie;
+            el.FindPropertyRelative("lie").enumValueIndex = hasLie ? (int)lie : 0;
+            el.FindPropertyRelative("directive").enumValueIndex = ParseEnum(forcedData[i].directive, out PlannedDirective directive) ? (int)directive : 0;
+            el.FindPropertyRelative("dialogId").stringValue = forcedData[i].dialog ?? string.Empty;
+            el.FindPropertyRelative("introLine").stringValue = forcedData[i].intro ?? string.Empty;
         }
 
         EraWeightData[] weightsData = d.eras ?? Array.Empty<EraWeightData>();
@@ -1654,6 +1801,11 @@ public static partial class WorldContentGenerator
         }
 
         so.ApplyModifiedProperties();
+
+        // The appearances' conditions (object references resolved like a dialog's), in the forced slots' order.
+        for (int i = 0; i < forcedData.Length; i++)
+            plan.ForcedCases[i].conditions = Conditions(forcedData[i].conditions, refs).ToList();
+
         EditorUtility.SetDirty(plan);
         return plan;
     }
@@ -1948,7 +2100,7 @@ public static partial class WorldContentGenerator
         so.FindProperty("historyLines").boxedValue = historyLines;
         SerializedArrays.Set(so, "timelineTriggers", HandAuthored(so, "timelineTriggers").Concat(unlocks).Concat(notices).Concat(historyTriggers).ToArray());
         SerializedArrays.Set(so, "upgrades", HandAuthored(so, "upgrades").Concat(translators).ToArray());
-        SerializedArrays.Set(so, "effects", HandAuthored(so, "effects").Concat(historyEffects).Concat(leaderEffects).ToArray());
+        SerializedArrays.Set(so, "effects", HandAuthored(so, "effects").Concat(historyEffects.Where(fx => fx != null)).Concat(leaderEffects).ToArray());
         SerializedArrays.Set(so, "legendaries", premades);
         so.FindProperty("lookRules").boxedValue = lookRules;
         so.FindProperty("cultureUi.readingLanguage").stringValue = ui.readingLanguage;
@@ -2116,7 +2268,7 @@ public static partial class WorldContentGenerator
     /// <summary>A worn item; the flags read false when missing, and a missing artNation files its art under the place's own nation.</summary>
     [Serializable] private sealed class ItemData { public string label; public bool leakable; public bool wig; public bool back; public string[] covers; public string artNation; }
 
-    /// <summary>A premade: missing truePlace, intro, recordNote and dialog mean none; missing repeatable means once per run.</summary>
+    /// <summary>A premade: missing truePlace, intro, recordNote and dialog mean none; missing repeatable means once per run; a missing kind is the famous' (Displaced); a 2150 story character (days 7-15 B2) also names its family country, Citizen ID, and optionally its debt (0: drawn) and a labourer's employer (an agency.employers id).</summary>
     [Serializable] private sealed class PremadeData
     {
         public string id;
@@ -2131,13 +2283,29 @@ public static partial class WorldContentGenerator
         public string dialog;
         public bool repeatable;
         public ImpactData[] impacts;
+        public string kind;
+        public string family;
+        public string citizenId;
+        public int debt;
+        public string employer;
     }
 
     /// <summary>A premade's timeline impact; a missing skipNationScore means the delta also moves the nation's score.</summary>
     [Serializable] private sealed class ImpactData { public string attribute; public float onCorrect; public float onWrong; public bool skipNationScore; }
 
-    /// <summary>A forced slot: a premade id, a blueprint asset path, or both.</summary>
-    [Serializable] private sealed class ForcedData { public int slot; public string premade; public string blueprint; }
+    /// <summary>A forced slot: a premade id, a blueprint asset path, or both; and, each left out when blank (days 7-15), the appearance's id, its authored lie (a LieKind) or directive fault (a PlannedDirective), its dialog and opener, and its conditions.</summary>
+    [Serializable] private sealed class ForcedData
+    {
+        public int slot;
+        public string premade;
+        public string blueprint;
+        public string id;
+        public string lie;
+        public string directive;
+        public string dialog;
+        public string intro;
+        public ConditionData[] conditions;
+    }
 
     /// <summary>Authored assets the world is wired into (asset paths).</summary>
     [Serializable] private sealed class ContentData
@@ -2179,8 +2347,8 @@ public static partial class WorldContentGenerator
         public LooksWeightData looks;
     }
 
-    /// <summary>One travel rule as authored ("rules"): a closure names its country and/or era; a standing procedure its line and, for a paper set or debt standing, the kinds it is read for.</summary>
-    [Serializable] private sealed class RuleData { public string asset; public string type; public string country; public string era; public string description; public string[] kinds; }
+    /// <summary>One travel rule as authored ("rules"): a closure names its country and/or era; a standing procedure its line and, for a paper set, debt standing or recall, the kinds it is read for; a recall the model it grounds ("transponder", an agency.transponders id; days 7-15).</summary>
+    [Serializable] private sealed class RuleData { public string asset; public string type; public string country; public string era; public string description; public string[] kinds; public string transponder; }
 
     [Serializable] private sealed class EraWeightData { public string era; public float weight; }
 
@@ -2284,8 +2452,8 @@ public static partial class WorldContentGenerator
     /// <summary>The templated history lines ({nation}, {place}, {value}).</summary>
     [Serializable] private sealed class HistoryLinesData { public string leaderGained; public string leaderLost; public string carry; public string dominant; public string panic; }
 
-    /// <summary>A history rule: when its conditions pass at night it fires once, latches its edits and prints its news line.</summary>
-    [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; }
+    /// <summary>A history rule: when its conditions pass at night it fires once, latches its edits, moves stability by its percent (missing: 0) and prints its news line; with no edit it is a story rule (days 7-15 B10).</summary>
+    [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; public float stability; public string section; }
 
     /// <summary>A fact edit: place ("{country}_{era}"), category and the new value.</summary>
     [Serializable] private sealed class EditData { public string place; public string category; public string value; }

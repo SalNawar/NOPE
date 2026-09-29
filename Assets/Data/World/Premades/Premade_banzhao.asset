@@ -25,3 +25,8 @@ MonoBehaviour:
   recordNote: Court historian and tutor to the empress. Finishing her brother's history.
   dialogId: 
   oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 

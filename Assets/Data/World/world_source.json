@@ -6695,6 +6695,42 @@
       "description": "Typhoon warning: no travel to Showa Tokyo today."
     },
     {
+      "asset": "Rule_NoMedievalGreece",
+      "type": "NationEraForbidden",
+      "country": "greece",
+      "era": "medieval",
+      "description": "Rift storm over the Aegean: no travel to Byzantine Mystras today."
+    },
+    {
+      "asset": "Rule_NoBabylonia",
+      "type": "NationEraForbidden",
+      "country": "iraq",
+      "era": "ancient",
+      "description": "Search teams in Babylonia: no travel to Babylonia today."
+    },
+    {
+      "asset": "Rule_NoJapan",
+      "type": "NationForbidden",
+      "country": "japan",
+      "description": "Rift aftershock over the Pacific: no travel to Japan, in any era, today."
+    },
+    {
+      "asset": "Rule_NoModernEra",
+      "type": "EraForbidden",
+      "era": "modern",
+      "description": "Audit: the twentieth century is sealed today while the Directorate inspects its archives."
+    },
+    {
+      "asset": "Rule_NoEconomyAncient",
+      "type": "EraForbidden",
+      "era": "ancient",
+      "description": "RANGE LIMIT: cheap Economy units no longer reach the Ancient era. Refuse any poor tourist or Debt Relief labourer bound for it.",
+      "kinds": [
+        "PoorTourist",
+        "Labourer"
+      ]
+    },
+    {
       "asset": "Rule_DressForDestination",
       "type": "DressForDestination",
       "description": "Dress for the destination. An item from another time or place causes a panic: check the Costume Guide."
@@ -6750,6 +6786,16 @@
         "PoorTourist",
         "Labourer"
       ]
+    },
+    {
+      "asset": "Rule_DriftboxRecall",
+      "type": "TransponderRecall",
+      "description": "RECALL: every Driftbox 3 transponder is grounded. Refuse any departure on a Driftbox 3.",
+      "kinds": [
+        "PoorTourist",
+        "Labourer"
+      ],
+      "transponder": "driftbox3"
     }
   ],
   "days": [
@@ -7162,6 +7208,1064 @@
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "violationChance": 0.05
+    },
+    {
+      "asset": "DayPlan_Inv_Day7",
+      "day": 7,
+      "queue": 14,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
+        "FalseOrigin",
+        "FakeDisplaced",
+        "Smuggling"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 3
+        },
+        {
+          "kind": "Displaced",
+          "weight": 2
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 1
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoAncientEgypt",
+        "Rule_NoModernJapan",
+        "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates"
+      ],
+      "premades": [
+        "socrates",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "khwarizmi",
+        "gutenberg",
+        "leonardo",
+        "lanyer",
+        "gallerani",
+        "tahtawi",
+        "kulthum",
+        "malaika",
+        "sayyab",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "toyoda",
+        "turing",
+        "meitner"
+      ],
+      "forced": [
+        {
+          "slot": 5,
+          "premade": "pell",
+          "blueprint": "",
+          "id": "pell_1",
+          "directive": "WaiverUnsigned",
+          "dialog": "dlg_pell_1"
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.05
+    },
+    {
+      "asset": "DayPlan_Inv_Day8",
+      "day": 8,
+      "queue": 14,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
+        "FalseOrigin",
+        "FakeDisplaced",
+        "Smuggling"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 3
+        },
+        {
+          "kind": "Displaced",
+          "weight": 2
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoMedievalChina",
+        "Rule_NoModernGermany",
+        "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates"
+      ],
+      "premades": [
+        "senenmut",
+        "socrates",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "khwarizmi",
+        "gutenberg",
+        "leonardo",
+        "lanyer",
+        "gallerani",
+        "tahtawi",
+        "kulthum",
+        "malaika",
+        "sayyab",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "toyoda",
+        "turing"
+      ],
+      "forced": [
+        {
+          "slot": 4,
+          "premade": "ines",
+          "blueprint": "",
+          "id": "ines"
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.05
+    },
+    {
+      "asset": "DayPlan_Inv_Day9",
+      "day": 9,
+      "queue": 16,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
+        "FalseOrigin",
+        "FakeDisplaced",
+        "Smuggling"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 3
+        },
+        {
+          "kind": "Displaced",
+          "weight": 4
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoMedievalGreece",
+        "Rule_NoEarlyModernJapan",
+        "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates"
+      ],
+      "premades": [
+        "senenmut",
+        "socrates",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "khwarizmi",
+        "leonardo",
+        "lanyer",
+        "gallerani",
+        "tahtawi",
+        "kulthum",
+        "malaika",
+        "sayyab",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "toyoda",
+        "turing",
+        "meitner"
+      ],
+      "forced": [
+        {
+          "slot": 6,
+          "premade": "gutenberg",
+          "blueprint": "",
+          "id": "gutenberg",
+          "dialog": "dlg_gutenberg"
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.05
+    },
+    {
+      "asset": "DayPlan_Inv_Day10",
+      "day": 10,
+      "queue": 16,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
+        "FalseOrigin",
+        "FakeDisplaced",
+        "Smuggling"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 3
+        },
+        {
+          "kind": "Displaced",
+          "weight": 3
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 2
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoBabylonia",
+        "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates",
+        "Rule_DriftboxRecall"
+      ],
+      "premades": [
+        "senenmut",
+        "socrates",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "khwarizmi",
+        "gutenberg",
+        "leonardo",
+        "lanyer",
+        "gallerani",
+        "tahtawi",
+        "kulthum",
+        "malaika",
+        "sayyab",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "toyoda",
+        "turing",
+        "meitner"
+      ],
+      "forced": [
+        {
+          "slot": 5,
+          "premade": "pell",
+          "blueprint": "",
+          "id": "pell_2",
+          "directive": "Recalled",
+          "dialog": "dlg_pell_2",
+          "intro": "Next! Oh. Step forward, Ms Quimby.",
+          "conditions": [
+            {
+              "type": "FlagSet",
+              "key": "trig:history_pell_turned_away:fired",
+              "threshold": 0
+            },
+            {
+              "type": "FlagNotSet",
+              "key": "premade:pell:accepted",
+              "threshold": 0
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "premade": "pell",
+          "blueprint": "",
+          "id": "pell_2_first",
+          "directive": "Recalled",
+          "dialog": "dlg_pell_1",
+          "conditions": [
+            {
+              "type": "FlagNotSet",
+              "key": "premade:pell:accepted",
+              "threshold": 0
+            }
+          ]
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.06
+    },
+    {
+      "asset": "DayPlan_Inv_Day11",
+      "day": 11,
+      "queue": 16,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
+        "FalseOrigin",
+        "FakeDisplaced",
+        "Smuggling"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 3
+        },
+        {
+          "kind": "Displaced",
+          "weight": 3
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 2
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoJapan",
+        "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates",
+        "Rule_DriftboxRecall"
+      ],
+      "premades": [
+        "senenmut",
+        "socrates",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "khwarizmi",
+        "gutenberg",
+        "leonardo",
+        "lanyer",
+        "gallerani",
+        "tahtawi",
+        "kulthum",
+        "malaika",
+        "sayyab",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "turing",
+        "meitner"
+      ],
+      "forced": [
+        {
+          "slot": 7,
+          "premade": "rook",
+          "blueprint": "",
+          "id": "rook",
+          "lie": "ForgedContract"
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.06
+    },
+    {
+      "asset": "DayPlan_Inv_Day12",
+      "day": 12,
+      "queue": 17,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
+        "FalseOrigin",
+        "FakeDisplaced",
+        "Smuggling"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 4
+        },
+        {
+          "kind": "Displaced",
+          "weight": 3
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 2
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoAncientEgypt",
+        "Rule_NoEarlyModernJapan",
+        "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates",
+        "Rule_DriftboxRecall"
+      ],
+      "premades": [
+        "socrates",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "khwarizmi",
+        "gutenberg",
+        "leonardo",
+        "lanyer",
+        "gallerani",
+        "tahtawi",
+        "kulthum",
+        "malaika",
+        "sayyab",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "toyoda",
+        "turing",
+        "meitner"
+      ],
+      "forced": [
+        {
+          "slot": 5,
+          "premade": "ada",
+          "blueprint": "",
+          "id": "ada",
+          "lie": "FakeDisplaced"
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.06
+    },
+    {
+      "asset": "DayPlan_Inv_Day13",
+      "day": 13,
+      "queue": 17,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
+        "FalseOrigin",
+        "FakeDisplaced",
+        "Smuggling"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 4
+        },
+        {
+          "kind": "Displaced",
+          "weight": 3
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 2
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoModernGermany",
+        "Rule_NoMedievalChina",
+        "Rule_NoEconomyAncient",
+        "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates",
+        "Rule_DriftboxRecall"
+      ],
+      "premades": [
+        "senenmut",
+        "socrates",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "khwarizmi",
+        "gutenberg",
+        "leonardo",
+        "lanyer",
+        "gallerani",
+        "tahtawi",
+        "kulthum",
+        "malaika",
+        "sayyab",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "toyoda",
+        "turing"
+      ],
+      "forced": [
+        {
+          "slot": 6,
+          "premade": "hollis",
+          "blueprint": "",
+          "id": "hollis",
+          "directive": "Frozen"
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.08
+    },
+    {
+      "asset": "DayPlan_Inv_Day14",
+      "day": 14,
+      "queue": 18,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
+        "FalseOrigin",
+        "FakeDisplaced",
+        "Smuggling"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 4
+        },
+        {
+          "kind": "Displaced",
+          "weight": 3
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 0.5
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoModernEra",
+        "Rule_NoEconomyAncient",
+        "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates",
+        "Rule_DriftboxRecall"
+      ],
+      "premades": [
+        "senenmut",
+        "socrates",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "khwarizmi",
+        "gutenberg",
+        "leonardo",
+        "lanyer",
+        "gallerani",
+        "tahtawi",
+        "toyoda"
+      ],
+      "forced": [
+        {
+          "slot": 4,
+          "premade": "auditor",
+          "blueprint": "",
+          "id": "auditor_found",
+          "lie": "DoctoredIdentity",
+          "dialog": "dlg_auditor_found",
+          "conditions": [
+            {
+              "type": "FlagSet",
+              "key": "bribe:rook:taken",
+              "threshold": 0
+            },
+            {
+              "type": "FlagSet",
+              "key": "premade:rook:accepted",
+              "threshold": 0
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "premade": "auditor",
+          "blueprint": "",
+          "id": "auditor",
+          "lie": "DoctoredIdentity"
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.08
+    },
+    {
+      "asset": "DayPlan_Inv_Day15",
+      "day": 15,
+      "queue": 18,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
+        "FalseOrigin",
+        "FakeDisplaced",
+        "Smuggling"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 3
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 4
+        },
+        {
+          "kind": "Displaced",
+          "weight": 2
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 2
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 1
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoIndustrialBritain",
+        "Rule_NoModernJapan",
+        "Rule_NoEconomyAncient",
+        "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates",
+        "Rule_DriftboxRecall"
+      ],
+      "premades": [
+        "senenmut",
+        "socrates",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "khwarizmi",
+        "gutenberg",
+        "leonardo",
+        "lanyer",
+        "gallerani",
+        "tahtawi",
+        "kulthum",
+        "malaika",
+        "sayyab",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "toyoda",
+        "turing",
+        "meitner"
+      ],
+      "forced": [
+        {
+          "slot": 7,
+          "premade": "pell",
+          "blueprint": "",
+          "id": "pell_3",
+          "dialog": "dlg_pell_3",
+          "intro": "Next! ...Ms Quimby. Of course it is.",
+          "conditions": [
+            {
+              "type": "FlagSet",
+              "key": "trig:history_pell_turned_away:fired",
+              "threshold": 0
+            },
+            {
+              "type": "FlagNotSet",
+              "key": "premade:pell:accepted",
+              "threshold": 0
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "premade": "pell",
+          "blueprint": "",
+          "id": "pell_3_first",
+          "dialog": "dlg_pell_1",
+          "conditions": [
+            {
+              "type": "FlagNotSet",
+              "key": "premade:pell:accepted",
+              "threshold": 0
+            }
+          ]
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.08
     }
   ],
   "personalities": [
@@ -7891,6 +8995,587 @@
           ]
         }
       ]
+    },
+    {
+      "id": "dlg_pell_1",
+      "label": "Ask about Athens >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_pell_1.start.1",
+              "speaker": "Traveller",
+              "text": "Periclean Athens! My honeymoon. Well, our honeymoon. Dmitri's account froze on Tuesday."
+            }
+          ],
+          "choices": [
+            {
+              "id": "alone",
+              "label": "You're going alone?",
+              "lines": [],
+              "next": "alone",
+              "effect": ""
+            },
+            {
+              "id": "next",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "alone",
+          "lines": [
+            {
+              "id": "dlg_pell_1.alone.1",
+              "speaker": "Traveller",
+              "text": "The brochure says the owls are real. Dmitri can have the postcard. I read every form, you know."
+            }
+          ],
+          "choices": [
+            {
+              "id": "bye",
+              "label": "Enjoy the owls.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_pell_2",
+      "label": "Ask about Athens >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_pell_2.start.1",
+              "speaker": "Traveller",
+              "text": "Me again! New waiver, signed in blue, like the lady said. Third line from the bottom."
+            }
+          ],
+          "choices": [
+            {
+              "id": "unit",
+              "label": "And your transponder?",
+              "lines": [],
+              "next": "unit",
+              "effect": ""
+            },
+            {
+              "id": "next",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "unit",
+          "lines": [
+            {
+              "id": "dlg_pell_2.unit.1",
+              "speaker": "Traveller",
+              "text": "My Driftbox! It beeps when it's happy. It beeps a lot. Is that a lot?"
+            }
+          ],
+          "choices": [
+            {
+              "id": "bye",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_pell_3",
+      "label": "Ask about Athens >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_pell_3.start.1",
+              "speaker": "Traveller",
+              "text": "Me again! New unit, signed waiver, proof of means. What's this notice about a range limit?"
+            }
+          ],
+          "choices": [
+            {
+              "id": "range",
+              "label": "Economy units can't reach Athens now.",
+              "lines": [],
+              "next": "range",
+              "effect": ""
+            },
+            {
+              "id": "next",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "range",
+          "lines": [
+            {
+              "id": "dlg_pell_3.range.1",
+              "speaker": "Traveller",
+              "text": "Then I'll save for a Premium. Tell the owls to wait for me. Tell Dmitri... actually, don't."
+            }
+          ],
+          "choices": [
+            {
+              "id": "bye",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_ines",
+      "label": "Ask about Desk 4 >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_ines.start.1",
+              "speaker": "Traveller",
+              "text": "Desk 4 closed this morning. The Drive found my account on Tuesday, and the Drive doesn't wait."
+            }
+          ],
+          "choices": [
+            {
+              "id": "queue",
+              "label": "What happens to your queue?",
+              "lines": [],
+              "next": "queue",
+              "effect": ""
+            },
+            {
+              "id": "luck",
+              "label": "Good luck at the mills.",
+              "lines": [],
+              "next": "luck",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "queue",
+          "lines": [
+            {
+              "id": "dlg_ines.queue.1",
+              "speaker": "Traveller",
+              "text": "They're sending it to you. Sorry. Keep the good pen, it's in the second drawer."
+            }
+          ],
+          "choices": [
+            {
+              "id": "pen",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "luck",
+          "lines": [
+            {
+              "id": "dlg_ines.luck.1",
+              "speaker": "Traveller",
+              "text": "Luck is a Premium feature. I'm on Economy."
+            }
+          ],
+          "choices": [
+            {
+              "id": "bye",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_gutenberg",
+      "label": "Ask about Strasbourg >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_gutenberg.start.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "My business in Strasbourg? Mirrors. Pilgrims buy little mirrors to catch the holy light."
+            }
+          ],
+          "choices": [
+            {
+              "id": "only",
+              "label": "Only mirrors?",
+              "lines": [],
+              "next": "only",
+              "effect": ""
+            },
+            {
+              "id": "bye",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "only",
+          "lines": [
+            {
+              "id": "dlg_gutenberg.only.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "Mirrors. And a small press. A very small press. Please do not write that down."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "I didn't hear a thing.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_rook",
+      "label": "Ask about the contract >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_rook.start.1",
+              "speaker": "Traveller",
+              "text": "Best contract in the building, this. Read it twice if you like. I'll wait."
+            }
+          ],
+          "choices": [
+            {
+              "id": "read",
+              "label": "I will.",
+              "lines": [],
+              "next": "read",
+              "effect": ""
+            },
+            {
+              "id": "next",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "read",
+          "lines": [
+            {
+              "id": "dlg_rook.read.1",
+              "speaker": "Traveller",
+              "text": "Of course. And for a clerk who reads quickly, there's 50 cr in it. Between friends."
+            }
+          ],
+          "choices": [
+            {
+              "id": "take",
+              "label": "Take the 50 cr.",
+              "lines": [
+                {
+                  "id": "dlg_rook.read.take.1",
+                  "speaker": "Traveller",
+                  "text": "Pleasure doing business."
+                }
+              ],
+              "next": "",
+              "effect": "Effect_Dialog_BribeTaken"
+            },
+            {
+              "id": "refuse",
+              "label": "Put that away.",
+              "lines": [
+                {
+                  "id": "dlg_rook.read.refuse.1",
+                  "speaker": "Traveller",
+                  "text": "Suit yourself. It was a very quick 50."
+                }
+              ],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_ada",
+      "label": "Ask about her work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_ada.start.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "The Analytical Engine will weave algebra as the loom weaves flowers. I wrote that, you know."
+            }
+          ],
+          "choices": [
+            {
+              "id": "when",
+              "label": "When did you write it?",
+              "lines": [],
+              "next": "when",
+              "effect": ""
+            },
+            {
+              "id": "next",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "when",
+          "lines": [
+            {
+              "id": "dlg_ada.when.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "In 1843, of course. Where else would I have been? Is that a trick question?"
+            }
+          ],
+          "choices": [
+            {
+              "id": "bye",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_hollis",
+      "label": "Ask about the account >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_hollis.start.1",
+              "speaker": "Traveller",
+              "text": "It froze on Tuesday. The Drive put me on its list on Monday. You see my problem."
+            }
+          ],
+          "choices": [
+            {
+              "id": "what",
+              "label": "What happened?",
+              "lines": [],
+              "next": "what",
+              "effect": ""
+            },
+            {
+              "id": "cant",
+              "label": "I can't help you.",
+              "lines": [],
+              "next": "cant",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "what",
+          "lines": [
+            {
+              "id": "dlg_hollis.what.1",
+              "speaker": "Traveller",
+              "text": "My father's waiver passed his debt to me when he didn't come back. The colliery was my way out."
+            }
+          ],
+          "choices": [
+            {
+              "id": "sorry",
+              "label": "I'm sorry.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "cant",
+          "lines": [
+            {
+              "id": "dlg_hollis.cant.1",
+              "speaker": "Traveller",
+              "text": "Nobody can. Stamp it quickly, then. Everyone else does."
+            }
+          ],
+          "choices": [
+            {
+              "id": "bye",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_auditor",
+      "label": "Ask about Rome >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_auditor.start.1",
+              "speaker": "Traveller",
+              "text": "Routine leisure departure. Republican Rome. I hear the concrete is excellent."
+            }
+          ],
+          "choices": [
+            {
+              "id": "declare",
+              "label": "Anything to declare?",
+              "lines": [],
+              "next": "declare",
+              "effect": ""
+            },
+            {
+              "id": "next",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "declare",
+          "lines": [
+            {
+              "id": "dlg_auditor.declare.1",
+              "speaker": "Traveller",
+              "text": "Only my patience. Take all the time the Directorate pays you for. I'll be timing it."
+            }
+          ],
+          "choices": [
+            {
+              "id": "bye",
+              "label": "Noted.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_auditor_found",
+      "label": "Ask about Rome >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_auditor_found.start.1",
+              "speaker": "Traveller",
+              "text": "Routine leisure departure. Republican Rome. The Tyburn Mills sent us a very interesting contract."
+            }
+          ],
+          "choices": [
+            {
+              "id": "contract",
+              "label": "What contract?",
+              "lines": [],
+              "next": "contract",
+              "effect": ""
+            },
+            {
+              "id": "next",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "contract",
+          "lines": [
+            {
+              "id": "dlg_auditor_found.contract.1",
+              "speaker": "Traveller",
+              "text": "Stamped here, on day eleven. Fifty credits went missing the same day. Curious, isn't it?"
+            }
+          ],
+          "choices": [
+            {
+              "id": "bye",
+              "label": "Noted.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
     }
   ],
   "premades": [
@@ -8030,6 +9715,250 @@
       "archetype": "diplomat",
       "intro": "",
       "recordNote": "Lady of the Milanese court. Sat for a portrait with an ermine.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "pell",
+      "name": "Pell Quimby",
+      "gender": "Female",
+      "place": "greece_ancient",
+      "truePlace": "",
+      "birthDate": "4 Jul 2124",
+      "archetype": "wanderer",
+      "intro": "",
+      "recordNote": "Honeymoon departure. Travelling alone.",
+      "dialog": "",
+      "repeatable": true,
+      "impacts": [],
+      "kind": "PoorTourist",
+      "family": "greece",
+      "citizenId": "512-6048-33"
+    },
+    {
+      "id": "ines",
+      "name": "Ines Varga",
+      "gender": "Female",
+      "place": "britain_industrial",
+      "truePlace": "",
+      "birthDate": "19 Nov 2098",
+      "archetype": "merchant",
+      "intro": "Next! Step forward... Ines? From Desk 4?",
+      "recordNote": "Temporal Customs, Desk 4. Debt Relief departure booked.",
+      "dialog": "dlg_ines",
+      "repeatable": false,
+      "impacts": [],
+      "kind": "Labourer",
+      "family": "germany",
+      "citizenId": "773-1102-07",
+      "debt": 88200,
+      "employer": "tyburn"
+    },
+    {
+      "id": "rook",
+      "name": "Rook Danner",
+      "gender": "Male",
+      "place": "britain_industrial",
+      "truePlace": "",
+      "birthDate": "2 Feb 2117",
+      "archetype": "merchant",
+      "intro": "",
+      "recordNote": "No remarks on file.",
+      "dialog": "dlg_rook",
+      "repeatable": false,
+      "impacts": [],
+      "kind": "Labourer",
+      "family": "germany",
+      "citizenId": "309-7715-64",
+      "employer": "tyburn"
+    },
+    {
+      "id": "ada",
+      "name": "Ada Lovelace",
+      "gender": "Female",
+      "place": "britain_industrial",
+      "truePlace": "",
+      "birthDate": "10 Dec 1815",
+      "archetype": "scientist",
+      "intro": "Priority arrival: Ada Lovelace, of London.",
+      "recordNote": "Mathematician, of London. Registered on arrival, in her own hand.",
+      "dialog": "dlg_ada",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "hollis",
+      "name": "Marek Hollis",
+      "gender": "Male",
+      "place": "germany_industrial",
+      "truePlace": "",
+      "birthDate": "30 Aug 2118",
+      "archetype": "wanderer",
+      "intro": "",
+      "recordNote": "Debt passed from kin, 2147.",
+      "dialog": "dlg_hollis",
+      "repeatable": false,
+      "impacts": [],
+      "kind": "Labourer",
+      "family": "britain",
+      "citizenId": "418-3302-56",
+      "debt": 212000,
+      "employer": "ruhr_colliery"
+    },
+    {
+      "id": "auditor",
+      "name": "Quill Ferreira",
+      "gender": "Male",
+      "place": "italy_ancient",
+      "truePlace": "",
+      "birthDate": "13 Jan 2102",
+      "archetype": "diplomat",
+      "intro": "",
+      "recordNote": "No remarks on file.",
+      "dialog": "dlg_auditor",
+      "repeatable": false,
+      "impacts": [],
+      "kind": "RichTourist",
+      "family": "italy",
+      "citizenId": "100-0001-01"
+    },
+    {
+      "id": "tahtawi",
+      "name": "Rifa'a al-Tahtawi",
+      "gender": "Male",
+      "place": "egypt_industrial",
+      "truePlace": "",
+      "birthDate": "15 Oct 1801",
+      "archetype": "scientist",
+      "intro": "",
+      "recordNote": "Scholar of Cairo. Heads the School of Languages; translates Paris into Arabic.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "kulthum",
+      "name": "Umm Kulthum",
+      "gender": "Female",
+      "place": "egypt_modern",
+      "truePlace": "",
+      "birthDate": "4 May 1904",
+      "archetype": "artist",
+      "intro": "",
+      "recordNote": "Singer of Cairo. Her Thursday concerts empty the streets.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "malaika",
+      "name": "Nazik al-Mala'ika",
+      "gender": "Female",
+      "place": "iraq_modern",
+      "truePlace": "",
+      "birthDate": "23 Aug 1923",
+      "archetype": "artist",
+      "intro": "",
+      "recordNote": "Poet of Baghdad. Broke the old metres for free verse.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "sayyab",
+      "name": "Badr Shakir al-Sayyab",
+      "gender": "Male",
+      "place": "iraq_modern",
+      "truePlace": "",
+      "birthDate": "24 Dec 1926",
+      "archetype": "artist",
+      "intro": "",
+      "recordNote": "Poet of Basra. Writes of rain over the Gulf.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "elytis",
+      "name": "Odysseas Elytis",
+      "gender": "Male",
+      "place": "greece_modern",
+      "truePlace": "",
+      "birthDate": "2 Nov 1911",
+      "archetype": "artist",
+      "intro": "",
+      "recordNote": "Poet of Athens. Writes about the light of the Aegean.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "fellini",
+      "name": "Federico Fellini",
+      "gender": "Male",
+      "place": "italy_modern",
+      "truePlace": "",
+      "birthDate": "20 Jan 1920",
+      "archetype": "artist",
+      "intro": "",
+      "recordNote": "Film director of Rome. Shooting a sweet life on the Via Veneto.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "hezehui",
+      "name": "He Zehui",
+      "gender": "Female",
+      "place": "china_modern",
+      "truePlace": "",
+      "birthDate": "5 Mar 1914",
+      "archetype": "scientist",
+      "intro": "",
+      "recordNote": "Nuclear physicist of Beijing. Trained in Berlin; counts particles.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "toyoda",
+      "name": "Sakichi Toyoda",
+      "gender": "Male",
+      "place": "japan_industrial",
+      "truePlace": "",
+      "birthDate": "14 Feb 1867",
+      "archetype": "scientist",
+      "intro": "",
+      "recordNote": "Carpenter's son and loom inventor of Nagoya. His looms run on steam.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "turing",
+      "name": "Alan Turing",
+      "gender": "Male",
+      "place": "britain_modern",
+      "truePlace": "",
+      "birthDate": "23 Jun 1912",
+      "archetype": "scientist",
+      "intro": "",
+      "recordNote": "Mathematician at Manchester. Asks whether machines can think.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "meitner",
+      "name": "Lise Meitner",
+      "gender": "Female",
+      "place": "germany_modern",
+      "truePlace": "",
+      "birthDate": "7 Nov 1878",
+      "archetype": "scientist",
+      "intro": "",
+      "recordNote": "Physicist of Berlin. The first woman professor of physics in Germany.",
       "dialog": "",
       "repeatable": false,
       "impacts": []
@@ -8244,6 +10173,287 @@
             "value": "Elected Pharaoh Hatshepsut"
           }
         ]
+      },
+      {
+        "id": "drive_begins",
+        "name": "The Debt Relief Drive",
+        "news": "DIRECTORATE: the Debt Relief Drive begins. Every Eligible account departs this quarter.",
+        "conditions": [
+          {
+            "type": "DayAtLeast",
+            "threshold": 6
+          }
+        ],
+        "edits": []
+      },
+      {
+        "id": "pell_departed",
+        "name": "Pell's honeymoon",
+        "news": "Pell Quimby has left for Periclean Athens. Her honeymoon is on.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:pell:accepted"
+          }
+        ],
+        "edits": [],
+        "section": "Desk"
+      },
+      {
+        "id": "pell_turned_away",
+        "name": "Pell turned away",
+        "news": "Pell Quimby was turned away at Desk 3 and has rebooked.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:pell:denied"
+          }
+        ],
+        "edits": [],
+        "section": "Return"
+      },
+      {
+        "id": "desk4_closes",
+        "name": "Desk 4 closes",
+        "news": "Desk 4 is closed for the Drive. From today its queue joins Desk 3.",
+        "conditions": [
+          {
+            "type": "DayAtLeast",
+            "threshold": 8
+          }
+        ],
+        "edits": [],
+        "section": "Desk"
+      },
+      {
+        "id": "ines_mills",
+        "name": "Ines at the mills",
+        "news": "Ines Varga, late of Desk 4, clocks in at the Tyburn Mills. Her first shift runs fourteen hours.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:ines:accepted"
+          }
+        ],
+        "edits": [],
+        "section": "Desk"
+      },
+      {
+        "id": "ines_rebooked",
+        "name": "Ines rebooked",
+        "news": "Ines Varga's Debt Relief departure was refused at Desk 3. Collections have rebooked her.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:ines:denied"
+          }
+        ],
+        "edits": [],
+        "section": "Desk"
+      },
+      {
+        "id": "rift_storm",
+        "name": "The rift storm",
+        "news": "RIFT STORM: hundreds were pulled out of their own time overnight. The intake halls are full.",
+        "conditions": [
+          {
+            "type": "DayAtLeast",
+            "threshold": 8
+          }
+        ],
+        "edits": []
+      },
+      {
+        "id": "gutenberg_press",
+        "name": "Gutenberg's press",
+        "news": "HISTORY: Mainz prints with movable metal type. The Rhineland's presses start rolling.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:gutenberg:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "germany_medieval",
+            "category": "Technology",
+            "value": "Gutenberg printing press"
+          }
+        ]
+      },
+      {
+        "id": "driftbox_recall",
+        "name": "The Driftbox recall",
+        "news": "RECALL: a Driftbox 3 tour group is lost in Babylonia. Every Driftbox 3 is grounded from today.",
+        "conditions": [
+          {
+            "type": "DayAtLeast",
+            "threshold": 9
+          }
+        ],
+        "edits": []
+      },
+      {
+        "id": "rook_departed",
+        "name": "Rook's contract",
+        "news": "The Tyburn Mills report a new hand with a very interesting contract.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:rook:accepted"
+          }
+        ],
+        "edits": [],
+        "section": "Desk"
+      },
+      {
+        "id": "rook_complaint",
+        "name": "Rook's complaint",
+        "news": "COMPLAINT: a labourer refused at Desk 3 says the clerk pocketed his 50 cr first. The Directorate has opened a file.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "bribe:rook:taken"
+          },
+          {
+            "type": "FlagSet",
+            "key": "premade:rook:denied"
+          }
+        ],
+        "edits": [],
+        "stability": -3,
+        "section": "Desk"
+      },
+      {
+        "id": "ada_departed",
+        "name": "A lady with a glowing wrist",
+        "news": "A London drawing room reports a lady with a glowing wrist. Society is intrigued.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:ada:accepted"
+          }
+        ],
+        "edits": []
+      },
+      {
+        "id": "ada_returned",
+        "name": "The Lovelace enthusiast",
+        "news": "The 'Ada Lovelace' refused at Desk 3 was a 2150 enthusiast. She has been sent home with a caution.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:ada:denied"
+          }
+        ],
+        "edits": []
+      },
+      {
+        "id": "audit_week",
+        "name": "Audit week",
+        "news": "DIRECTORATE: auditors will test the desks this week. Any traveller may be one.",
+        "conditions": [
+          {
+            "type": "DayAtLeast",
+            "threshold": 12
+          }
+        ],
+        "edits": []
+      },
+      {
+        "id": "range_limit",
+        "name": "The range limit",
+        "news": "RANGE LIMIT: after Babylonia, cheap Economy units no longer reach the Ancient era. From today, no Economy traveller goes there.",
+        "conditions": [
+          {
+            "type": "DayAtLeast",
+            "threshold": 12
+          }
+        ],
+        "edits": []
+      },
+      {
+        "id": "hollis_departed",
+        "name": "A frozen account departs",
+        "news": "A frozen account left on Debt Relief from Desk 3. Collections have questions.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:hollis:accepted"
+          }
+        ],
+        "edits": [],
+        "section": "Desk"
+      },
+      {
+        "id": "hollis_collections",
+        "name": "Collections call",
+        "news": "Collections called at a Hollis address last night. Nobody answered.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:hollis:denied"
+          }
+        ],
+        "edits": [],
+        "section": "Desk"
+      },
+      {
+        "id": "audit_passed",
+        "name": "The audit passed",
+        "news": "AUDIT: Desk 3 caught the Directorate's test traveller. A commendation goes on file.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:auditor:denied"
+          }
+        ],
+        "edits": []
+      },
+      {
+        "id": "audit_failed",
+        "name": "The audit failed",
+        "news": "AUDIT: Desk 3 approved the Directorate's test traveller. It goes on file.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:auditor:accepted"
+          }
+        ],
+        "edits": []
+      },
+      {
+        "id": "audit_rook",
+        "name": "The audit finds the fifty",
+        "news": "AUDIT: a forged Labour Contract passed Desk 3 on day 11, with 50 cr beside it. It goes on file.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "bribe:rook:taken"
+          },
+          {
+            "type": "FlagSet",
+            "key": "premade:rook:accepted"
+          },
+          {
+            "type": "DayAtLeast",
+            "threshold": 14
+          }
+        ],
+        "edits": [],
+        "stability": -3
+      },
+      {
+        "id": "drive_last_day",
+        "name": "The Drive's last day",
+        "news": "The Drive's last day. Premium families book the summer; Debt Relief books everyone else.",
+        "conditions": [
+          {
+            "type": "DayAtLeast",
+            "threshold": 14
+          }
+        ],
+        "edits": []
       }
     ]
   },
@@ -9944,6 +12154,12 @@
         "tier": "Flavour"
       },
       {
+        "key": "briefing.deskHeader",
+        "text": "FROM DESK 3",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "wallet.credits",
         "text": "Credits",
         "gloss": "None",
@@ -10654,6 +12870,12 @@
       {
         "key": "site.news.world",
         "text": "WORLD",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.desk",
+        "text": "From Desk 3",
         "gloss": "None",
         "tier": "Full"
       },
@@ -12622,6 +14844,12 @@
       {
         "key": "citation.acceptedWrong.frozen",
         "text": "Approved a frozen account.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.acceptedWrong.recalled",
+        "text": "Approved a recalled transponder.",
         "gloss": "None",
         "tier": "Full"
       },

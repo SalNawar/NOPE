@@ -310,4 +310,34 @@ public class InterviewDayTests
         CollectionAssert.AreEqual(new[] { "dlg_chat", "dlg_socrates" }, Offered(day, "dlg_socrates"));
         CollectionAssert.AreEqual(new[] { "dlg_chat" }, Offered(day, "dlg_unknown"), "a premade without a dialog of today");
     }
+
+    /// <summary>A forced slot's dialog (days 7-15 B7) is premade-bound like a premade's own: offered only while that appearance stands at the desk.</summary>
+    [Test]
+    public void OfferedDialogs_AForcedSlotsDialogOnlyWhileItsPremadeStands()
+    {
+        var dialogs = new List<Gated<AuthoredDialog>>
+        {
+            new Gated<AuthoredDialog>(Dialog("dlg_chat", false), null),
+            new Gated<AuthoredDialog>(Dialog("dlg_pell_2", true), null)
+        };
+        var day = new InterviewDay(new InterviewLines { menuCapacity = 8 }, null, dialogs, Snap(10), new ShiftLedger(), new[] { "dlg_pell_2" });
+
+        CollectionAssert.AreEqual(new[] { "dlg_chat" }, Offered(day), "an ordinary traveller in the slot");
+        CollectionAssert.AreEqual(new[] { "dlg_chat", "dlg_pell_2" }, Offered(day, Premades.Voice("dlg_pell_2", string.Empty)), "Pell's appearance");
+    }
+
+    /// <summary>The appearance's dialog replaces the premade's own for that slot: the premade's is not offered beside it.</summary>
+    [Test]
+    public void OfferedDialogs_TheSlotsDialogReplacesThePremadesOwn()
+    {
+        var dialogs = new List<Gated<AuthoredDialog>>
+        {
+            new Gated<AuthoredDialog>(Dialog("dlg_auditor", true), null),
+            new Gated<AuthoredDialog>(Dialog("dlg_auditor_found", true), null)
+        };
+        var day = new InterviewDay(new InterviewLines { menuCapacity = 8 }, null, dialogs, Snap(14), new ShiftLedger(), new[] { "dlg_auditor", "dlg_auditor_found" });
+
+        CollectionAssert.AreEqual(new[] { "dlg_auditor_found" }, Offered(day, Premades.Voice("dlg_auditor_found", "dlg_auditor")));
+        CollectionAssert.AreEqual(new[] { "dlg_auditor" }, Offered(day, Premades.Voice(string.Empty, "dlg_auditor")), "an appearance with no dialog of its own keeps the premade's");
+    }
 }

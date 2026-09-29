@@ -59,10 +59,11 @@ public static partial class ContentLibraryValidator
             foreach (KindWeight k in plan.Kinds.Where(k => k != null && k.blueprint == null))
                 Error($"Day plan '{plan.name}' lists a kind with no blueprint (run Tools > TimeDesk > Generate World).", plan);
 
-            bool premades = plan.AvailableLegendaries != null && plan.AvailableLegendaries.Any(l => l != null) ||
-                            plan.ForcedCases.Any(f => f != null && f.legendary != null);
-            if (premades && !plan.Kinds.Any(k => k != null && k.blueprint != null && k.weight > 0f && k.blueprint.Kind == TravellerKind.Displaced))
-                Error($"Day plan '{plan.name}' has premades but no Displaced kind with a positive weight; a premade stands only as a displaced traveller.", plan);
+            // A premade stands as its kind (TravellerKinds.PickWeight: the slot's one draw weighs only it): the pool's famous as the displaced, a forced premade as its own.
+            var premadeKinds = new HashSet<TravellerKind>((plan.AvailableLegendaries ?? System.Array.Empty<LegendarySO>()).Where(l => l != null).Select(l => l.kind)
+                .Concat(plan.ForcedCases.Where(f => f != null && f.legendary != null).Select(f => f.legendary.kind)));
+            foreach (TravellerKind kind in premadeKinds.Where(kind => !plan.Kinds.Any(k => k != null && k.blueprint != null && k.weight > 0f && k.blueprint.Kind == kind)))
+                Error($"Day plan '{plan.name}' has a {kind} premade but no {kind} kind with a positive weight; a premade stands only as its own kind.", plan);
         }
 
         // The present (traveller types H1): every book lists its row, so it needs a fact per book category.

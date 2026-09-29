@@ -19,6 +19,7 @@ MonoBehaviour:
   oneShot: 1
   newsLineOnFire: 'BUREAU NOTICE: desk officers may now ask every traveller what
     language they will speak. Check answers against Tongues & Scripts.'
+  section: 0
   conditions:
   - type: 8
     key: 

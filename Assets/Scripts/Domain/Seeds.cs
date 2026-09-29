@@ -163,6 +163,24 @@ public static class Seeds
     /// placing an event never shifts who travels.
     /// </summary>
     public static int ForEvents(int daySeed) => Mix(daySeed, EventSalt);
+    /// <summary>Salt for a premade's generated stand-in look ("PLOK"; days 7-15 B4).</summary>
+    public const int PremadeLookSalt = 0x504C4F4B;
+
+    /// <summary>
+    /// A premade's look stream (days 7-15 B4): until the premade's art is
+    /// delivered, its generated stand-in look is drawn here, seeded by the
+    /// premade's id alone (Mix folded over its characters, stable in every
+    /// runtime), so the same face comes back at every appearance and in every
+    /// run; apart from every traveller's streams.
+    /// </summary>
+    public static int ForPremadeLook(string premadeId)
+    {
+        int seed = 0;
+        foreach (char c in premadeId ?? string.Empty)
+            seed = Mix(seed, c);
+        return Mix(seed, PremadeLookSalt);
+    }
+
     /// <summary>Salt for the day's stranding stream ("STRD").</summary>
     public const int StrandingSalt = 0x53545244;
 

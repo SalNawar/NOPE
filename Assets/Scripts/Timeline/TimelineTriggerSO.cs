@@ -31,6 +31,9 @@ public sealed class TimelineTriggerSO : ScriptableObject
     /// <summary>News line added to tomorrow's briefing when this fires (optional).</summary>
     public string newsLineOnFire;
 
+    /// <summary>Where its line goes (days 7-15 Q9): the paper's news, the paper's desk section, or nowhere (Return: its fired flag is the consequence a returning character reads).</summary>
+    public StorySection section;
+
     /// <summary>All conditions must pass for the trigger to fire.</summary>
     public List<TriggerCondition> conditions = new();
 

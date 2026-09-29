@@ -791,6 +791,18 @@ public class RecordLiesTests
         CollectionAssert.Contains(taken, "HP-00002");
     }
 
+    /// <summary>While a recall stands (days 7-15 §6), the forged Economy unit is drawn from the models left after it (Directives.Unrecalled): nobody holds a recalled unit except through the recall's maker (one fault per traveller).</summary>
+    [Test]
+    public void FalseTransponder_SkipsARecalledModel()
+    {
+        List<TransponderModel> left = Directives.Unrecalled(Transponders(), new[] { "driftbox3" });
+        for (int seed = 0; seed < 200; seed++)
+        {
+            string forged = RecordLies.FalseTransponder(TransponderClass.Economy, "Hopper Mk II · HP-40718", left, new HashSet<string>(), new SeededRandom(seed));
+            StringAssert.DoesNotStartWith("Driftbox 3", forged, $"seed {seed}");
+        }
+    }
+
     [Test]
     public void FalseTransponder_NeverTheOwnModel_WhenAnotherExists_ElseTheSameModelWithAFreshSerial()
     {

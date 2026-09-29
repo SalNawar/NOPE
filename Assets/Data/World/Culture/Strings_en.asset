@@ -127,6 +127,10 @@ MonoBehaviour:
     text: "\u2014 TIMELINE NEWS \u2014"
     gloss: 0
     tier: 1
+  - key: briefing.deskHeader
+    text: FROM DESK 3
+    gloss: 0
+    tier: 0
   - key: wallet.credits
     text: Credits
     gloss: 0
@@ -602,6 +606,10 @@ MonoBehaviour:
     tier: 0
   - key: site.news.world
     text: WORLD
+    gloss: 0
+    tier: 0
+  - key: site.news.desk
+    text: From Desk 3
     gloss: 0
     tier: 0
   - key: site.news.notices
@@ -1937,6 +1945,10 @@ MonoBehaviour:
     tier: 0
   - key: citation.acceptedWrong.frozen
     text: Approved a frozen account.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.recalled
+    text: Approved a recalled transponder.
     gloss: 0
     tier: 0
   - key: category.Employer

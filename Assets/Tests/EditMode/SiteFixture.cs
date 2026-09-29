@@ -94,7 +94,7 @@ public static class SiteFixture
         var archive = new List<NewsIssue>
         {
             new NewsIssue { day = 1, briefing = new List<string> { "Welcome, desk officer." }, news = new List<string>() },
-            new NewsIssue { day = 2, briefing = new List<string> { "Desk officers may now ask about the capital." }, news = new List<string> { "HISTORY: China now dominates the timeline." } },
+            new NewsIssue { day = 2, briefing = new List<string> { "Desk officers may now ask about the capital." }, news = new List<string> { "HISTORY: China now dominates the timeline." }, desk = new List<string> { "Desk 4 is closed for the Drive." } },
             new NewsIssue { day = 3, briefing = new List<string>(), news = new List<string> { "HISTORY: Florentine printers set type the Chinese way.", "Robots is now DOMINANT in Showa Tokyo." } },
         };
         List<PlaceInfo> places = Places();

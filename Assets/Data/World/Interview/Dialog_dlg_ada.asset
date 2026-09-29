@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216f58e381e1445588efbd033278b8d9, type: 3}
+  m_Name: Dialog_dlg_ada
+  m_EditorClassIdentifier: Assembly-CSharp::DialogSO
+  dialog:
+    id: dlg_ada
+    label: Ask about her work >
+    oneShot: 1
+    nodes:
+    - id: start
+      lines:
+      - id: dlg_ada.start.1
+        speaker: 1
+        text: The Analytical Engine will weave algebra as the loom weaves flowers.
+          I wrote that, you know.
+        expression: happy
+      choices:
+      - id: when
+        label: When did you write it?
+        lines: []
+        next: when
+        effect: 
+      - id: next
+        label: Next!
+        lines: []
+        next: 
+        effect: 
+    - id: when
+      lines:
+      - id: dlg_ada.when.1
+        speaker: 1
+        text: In 1843, of course. Where else would I have been? Is that a trick question?
+        expression: worried
+      choices:
+      - id: bye
+        label: Next!
+        lines: []
+        next: 
+        effect: 
+  conditions: []

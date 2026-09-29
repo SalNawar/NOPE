@@ -20,6 +20,7 @@ MonoBehaviour:
   newsLineOnFire: 'BUREAU NOTICE: from today, desk officers ask every traveller what
     they are taking with them. Check answers against the Index of Devices: nothing
     from 2150 leaves 2150.'
+  section: 0
   conditions:
   - type: 8
     key: 

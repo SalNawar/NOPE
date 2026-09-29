@@ -17,6 +17,7 @@ MonoBehaviour:
   description: Generated from world_source.json history.rules.
   oneShot: 1
   newsLineOnFire: 'HISTORY: Khedivate Cairo now trades in British sterling.'
+  section: 0
   conditions:
   - type: 11
     key: 

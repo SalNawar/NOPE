@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216f58e381e1445588efbd033278b8d9, type: 3}
+  m_Name: Dialog_dlg_auditor
+  m_EditorClassIdentifier: Assembly-CSharp::DialogSO
+  dialog:
+    id: dlg_auditor
+    label: Ask about Rome >
+    oneShot: 1
+    nodes:
+    - id: start
+      lines:
+      - id: dlg_auditor.start.1
+        speaker: 1
+        text: Routine leisure departure. Republican Rome. I hear the concrete is
+          excellent.
+        expression: 
+      choices:
+      - id: declare
+        label: Anything to declare?
+        lines: []
+        next: declare
+        effect: 
+      - id: next
+        label: Next!
+        lines: []
+        next: 
+        effect: 
+    - id: declare
+      lines:
+      - id: dlg_auditor.declare.1
+        speaker: 1
+        text: Only my patience. Take all the time the Directorate pays you for. I'll
+          be timing it.
+        expression: 
+      choices:
+      - id: bye
+        label: Noted.
+        lines: []
+        next: 
+        effect: 
+  conditions: []

@@ -106,7 +106,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -142,6 +142,23 @@ public class SeedsTests
         Assert.AreEqual(0x53545244, Seeds.StrandingSalt, "\"STRD\"");
         Assert.AreEqual(-288322321, Seeds.ForFamily(daySeed));
         Assert.AreEqual(0x464D4C59, Seeds.FamilySalt, "\"FMLY\"");
+    }
+
+    /// <summary>
+    /// A premade's generated stand-in look (days 7-15 B4) is drawn on a stream
+    /// seeded by the premade's id alone: the same face at every appearance and
+    /// in every run, apart from every premade's else and every traveller's streams.
+    /// </summary>
+    [Test]
+    public void ForPremadeLook_IsStableAndDistinct()
+    {
+        Assert.AreEqual(0x504C4F4B, Seeds.PremadeLookSalt, "\"PLOK\"");
+        Assert.AreEqual(Seeds.ForPremadeLook("pell"), Seeds.ForPremadeLook("pell"), "one id, one seed");
+        string[] ids = { "pell", "ines", "rook", "ada", "hollis", "auditor", "senenmut", "socrates", "turing", "meitner", "toyoda", "a", "b", "ab", "ba", "" };
+        CollectionAssert.AllItemsAreUnique(ids.Select(Seeds.ForPremadeLook).ToList(), "a different id, a different face");
+        int caseSeed = Seeds.ForCase(Seeds.Day(12345, 7), 5);
+        CollectionAssert.AreNotEqual(TenDraws(Seeds.ForLooks(caseSeed)), TenDraws(Seeds.ForPremadeLook("pell")), "apart from the slot's own look stream");
+        Assert.AreEqual(Seeds.ForPremadeLook(null), Seeds.ForPremadeLook(string.Empty), "a missing id reads blank");
     }
 
     /// <summary>The personality stream's salt is "PRSN" (the personalities spec's PS2).</summary>

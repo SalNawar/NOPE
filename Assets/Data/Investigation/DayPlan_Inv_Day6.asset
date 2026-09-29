@@ -68,9 +68,23 @@ MonoBehaviour:
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 8
+    id: 
     caseBlueprint: {fileID: 0}
     legendary: {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
+    hasLie: 0
+    lie: 0
+    directive: 0
+    dialogId: 
+    introLine: 
+    conditions: []
   - caseIndex1Based: 11
+    id: 
     caseBlueprint: {fileID: 0}
     legendary: {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
+    hasLie: 0
+    lie: 0
+    directive: 0
+    dialogId: 
+    introLine: 
+    conditions: []
   eventRules: []

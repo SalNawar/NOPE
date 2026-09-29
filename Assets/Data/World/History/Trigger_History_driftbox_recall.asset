@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e5c29680f95ee1428d9fa9fb2d8790e, type: 3}
+  m_Name: Trigger_History_driftbox_recall
+  m_EditorClassIdentifier: Assembly-CSharp::TimelineTriggerSO
+  id: history_driftbox_recall
+  displayName: The Driftbox recall
+  description: Generated from world_source.json history.rules.
+  oneShot: 1
+  newsLineOnFire: 'RECALL: a Driftbox 3 tour group is lost in Babylonia. Every Driftbox
+    3 is grounded from today.'
+  section: 0
+  conditions:
+  - type: 8
+    key: 
+    threshold: 9
+    attribute: {fileID: 0}
+    profile: {fileID: 0}
+    nation: {fileID: 0}
+  outcomes: []

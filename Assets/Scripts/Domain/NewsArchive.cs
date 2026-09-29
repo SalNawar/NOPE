@@ -14,6 +14,9 @@ public sealed class NewsIssue
 
     /// <summary>The news lines (dominance, history, trigger and effect news, in the paper's order).</summary>
     public List<string> news = new List<string>();
+
+    /// <summary>The paper's own section for the desk's stories (the story rules in StorySection.Desk; days 7-15, Q9); an older save loads it empty.</summary>
+    public List<string> desk = new List<string>();
 }
 
 /// <summary>
@@ -26,17 +29,18 @@ public static class NewsArchive
 {
     /// <summary>
     /// Records <paramref name="day"/>'s issue (copies of the lines; blank lines
-    /// dropped): replaces that day's issue if there is one, keeps the archive
-    /// in day order and drops the oldest issues past <paramref name="cap"/>
-    /// (below 1 counts as 1). A null archive does nothing.
+    /// dropped), its <paramref name="desk"/> section too: replaces that day's
+    /// issue if there is one, keeps the archive in day order and drops the
+    /// oldest issues past <paramref name="cap"/> (below 1 counts as 1). A null
+    /// archive does nothing.
     /// </summary>
-    public static void Record(List<NewsIssue> archive, int day, IReadOnlyList<string> briefing, IReadOnlyList<string> news, int cap)
+    public static void Record(List<NewsIssue> archive, int day, IReadOnlyList<string> briefing, IReadOnlyList<string> news, int cap, IReadOnlyList<string> desk = null)
     {
         if (archive == null)
             return;
 
         archive.RemoveAll(i => i == null || i.day == day);
-        archive.Add(new NewsIssue { day = day, briefing = Lines(briefing), news = Lines(news) });
+        archive.Add(new NewsIssue { day = day, briefing = Lines(briefing), news = Lines(news), desk = Lines(desk) });
         archive.Sort((a, b) => a.day.CompareTo(b.day));
 
         int keep = Math.Max(1, cap);
