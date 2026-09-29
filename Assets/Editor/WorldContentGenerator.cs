@@ -456,7 +456,7 @@ public static partial class WorldContentGenerator
             ("deskName", iv.deskName), ("opener", iv.opener), ("openerLegendary", iv.openerLegendary),
             ("honorificMale", iv.honorificMale), ("honorificFemale", iv.honorificFemale), ("honorificUnknown", iv.honorificUnknown),
             ("requestLabel", iv.requestLabel), ("papersLabel", iv.papersLabel), ("requestPrompt", iv.requestPrompt), ("requestReply", iv.requestReply),
-            ("askLabel", iv.askLabel), ("tripAskLabel", iv.tripAskLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel),
+            ("askLabel", iv.askLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel),
             ("smallTalkPrompt", iv.smallTalkPrompt), ("lookLabel", iv.lookLabel)
         };
         foreach ((string field, string text) in wording)
@@ -1699,7 +1699,6 @@ public static partial class WorldContentGenerator
         requestPrompt = new LineText(InterviewLineId("requestPrompt"), i.requestPrompt),
         requestReply = new LineText(InterviewLineId("requestReply"), i.requestReply),
         askLabel = i.askLabel,
-        tripAskLabel = i.tripAskLabel,
         backLabel = i.backLabel,
         smallTalkLabel = i.smallTalkLabel,
         lookLabel = i.lookLabel,
@@ -2223,9 +2222,8 @@ public static partial class WorldContentGenerator
         public AskGroupData[] askGroups;
         public string requestPrompt;
         public string requestReply;
+        /// <summary>The ask entry, every traveller's ("Ask about the trip >").</summary>
         public string askLabel;
-        /// <summary>The ask entry for a 2150 citizen ("Ask about the trip >").</summary>
-        public string tripAskLabel;
         public string backLabel;
         public string smallTalkLabel;
         public string smallTalkPrompt;

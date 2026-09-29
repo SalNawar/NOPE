@@ -269,11 +269,8 @@ public sealed class InterviewLines
     /// <summary>The traveller's reply as they hand the document over.</summary>
     public LineText requestReply = new();
 
-    /// <summary>Hub entry that opens the questions sub-menu for the displaced ("Ask about home >"; Interview.AskLabel).</summary>
+    /// <summary>Hub entry that opens the questions sub-menu, the same for every traveller ("Ask about the trip >": every traveller travels to their claim, the displaced home; the personalities spec's W2).</summary>
     public string askLabel;
-
-    /// <summary>Hub entry that opens the questions sub-menu for a 2150 citizen ("Ask about the trip >"; traveller types §8), who is asked about the trip, never about home.</summary>
-    public string tripAskLabel;
 
     /// <summary>The ask menu's way back to the hub (always its first entry).</summary>
     public string backLabel;

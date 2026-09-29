@@ -39,8 +39,8 @@ public sealed class InterviewCase
 
 /// <summary>
 /// Builds a traveller's interview graph: the hub (a document request, or
-/// "Request papers >" for two or more, the spoken requests, "Ask about home
-/// >" or a citizen's "Ask about the trip >" (Interview.AskLabel), "Look >",
+/// "Request papers >" for two or more, the spoken requests, "Ask about the
+/// trip >" (InterviewLines.askLabel, everyone's), "Look >",
 /// today's narrative dialogs), the papers menu ("&lt; Back"
 /// first, then one request per form or request group of the day's menu,
 /// the same for everyone, FormRequests.Build: a carried paper is handed
@@ -134,11 +134,13 @@ public static class InterviewScript
     }
 
     /// <summary>
-    /// The traveller's graph. Hub: the traveller's one request entry
-    /// (FormRequests.Build over the askable forms and the documents: a
-    /// carried paper's "request:{i}", one-shot, hands document i over; a
-    /// request the traveller carries no form of, "missing:{id}", one-shot,
-    /// the desk's prompt and the kind's missing-form line, no hand-over), or,
+    /// The traveller's graph, the same entries for every traveller of the day
+    /// (the personalities spec's W1): only the replies differ. Hub: the one
+    /// request entry (FormRequests.Build over the day's papers menu and the
+    /// documents: "request:{id}", the request's id whatever the traveller
+    /// carries, one-shot; a carried paper is handed over, a request the
+    /// traveller carries no form of gets the desk's prompt and their
+    /// missing-form line, no hand-over), or,
     /// with two or more, "papers" (the papers menu: "back" first, then one
     /// entry per request, labelled with the form's name or the group's label,
     /// staying in the menu), then "act:{id}" per spoken
@@ -242,7 +244,7 @@ public static class InterviewScript
         }
 
         if (ask.Choices.Count > 1)
-            hub.Choices.Add(new DialogChoice { Id = "ask", Label = Interview.AskLabel(lines, c != null ? c.kind : default), Next = AskNodeId, Kind = DialogChoiceKind.Question });
+            hub.Choices.Add(new DialogChoice { Id = "ask", Label = lines.askLabel, Next = AskNodeId, Kind = DialogChoiceKind.Question });
 
         var look = new DialogNode { Id = LookNodeId };
         look.Choices.Add(new DialogChoice { Id = "back", Label = lines.backLabel, Next = HubNodeId, Kind = DialogChoiceKind.Back });
@@ -278,16 +280,20 @@ public static class InterviewScript
     /// <summary>
     /// A request entry (one-shot, staying where it was chosen): the desk's
     /// prompt naming the request, then, for a carried paper, the traveller's
-    /// reply and the hand-over ("request:{index}"), or, for a request the
+    /// reply and the hand-over, or, for a request the
     /// traveller carries no form of, their kind's missing-form line
     /// (Interview.MissingFormReply for the case's variant; only the prompt
-    /// when none is authored) and no action ("missing:{id}").
+    /// when none is authored) and no action. Its id is "request:{id}" either
+    /// way, so the menu is the same for every traveller (W1). A Missing
+    /// variant with no line of its own for the request (a form the kind never
+    /// carries) says the kind's Honest line: only a form they should carry
+    /// was left out.
     /// </summary>
     private static DialogChoice Request(InterviewLines lines, FormRequest request, string label, InterviewCase c, KeyWordRule keyWords)
     {
         var choice = new DialogChoice
         {
-            Id = request.Carried ? $"request:{request.Document}" : $"missing:{request.Id}",
+            Id = $"request:{request.Id}",
             Label = label,
             Lines = { new DialogLine(Id(lines.requestPrompt), DialogSpeaker.Desk, Interview.Fill(Text(lines.requestPrompt), Interview.DocumentToken, request.Label)) },
             OneShot = true,
@@ -302,7 +308,10 @@ public static class InterviewScript
         }
         else
         {
-            LineText reply = Interview.MissingFormReply(lines, c != null ? c.kind : default, request.Id, c != null ? c.missingVariant : MissingFormVariant.Honest);
+            TravellerKind kind = c != null ? c.kind : default;
+            MissingFormVariant variant = c != null ? c.missingVariant : MissingFormVariant.Honest;
+            LineText reply = Interview.MissingFormReply(lines, kind, request.Id, variant)
+                             ?? (variant != MissingFormVariant.Honest ? Interview.MissingFormReply(lines, kind, request.Id, MissingFormVariant.Honest) : null);
             if (reply != null)
                 choice.Lines.Add(Said(reply.id, reply.text, null, keyWords));
         }

@@ -71,15 +71,6 @@ public static class Interview
         return Fill(lines.opener != null ? lines.opener.text : null, HonorificToken, Honorific(gender, lines));
     }
 
-    /// <summary>The hub entry that opens the ask menu for a traveller of <paramref name="kind"/> (traveller types §8): a 2150 citizen's "Ask about the trip >" (tripAskLabel; the home label when it is blank), the displaced's "Ask about home >" (askLabel); "" for null lines.</summary>
-    public static string AskLabel(InterviewLines lines, TravellerKind kind)
-    {
-        if (lines == null)
-            return string.Empty;
-
-        return TravellerKinds.IsCitizen(kind) && !string.IsNullOrWhiteSpace(lines.tripAskLabel) ? lines.tripAskLabel : lines.askLabel ?? string.Empty;
-    }
-
     /// <summary>A traveller's claim sentence for a place label, in their kind's words; the bare label when the kind has no line (the banner never goes empty).</summary>
     public static string Claim(InterviewLines lines, TravellerKind kind, string placeLabel) => Fill(ClaimTemplate(lines, kind), PlaceToken, placeLabel);
 

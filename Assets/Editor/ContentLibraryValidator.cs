@@ -171,7 +171,7 @@ public static partial class ContentLibraryValidator
             ("deskName", lines.deskName), ("opener", lines.opener?.text), ("openerLegendary", lines.openerLegendary?.text),
             ("honorificMale", lines.honorificMale), ("honorificFemale", lines.honorificFemale),
             ("honorificUnknown", lines.honorificUnknown), ("requestLabel", lines.requestLabel), ("papersLabel", lines.papersLabel), ("requestPrompt", lines.requestPrompt?.text),
-            ("requestReply", lines.requestReply?.text), ("askLabel", lines.askLabel), ("tripAskLabel", lines.tripAskLabel), ("backLabel", lines.backLabel),
+            ("requestReply", lines.requestReply?.text), ("askLabel", lines.askLabel), ("backLabel", lines.backLabel),
             ("smallTalkLabel", lines.smallTalkLabel), ("smallTalkPrompt", lines.smallTalkPrompt?.text), ("lookLabel", lines.lookLabel)
         };
         foreach ((string field, string text) in wording)
