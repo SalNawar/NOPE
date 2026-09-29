@@ -495,16 +495,19 @@ public static partial class OfficeSceneUIBuilder
             new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
     }
 
-    private static void SetRef(SerializedObject so, string prop, Object value)
-    {
-        SerializedProperty p = so.FindProperty(prop);
-        if (p != null) p.objectReferenceValue = value;
-    }
+    /// <summary>Sets a serialized reference; a field the component does not have is an error (Wire), never a silent skip (audit R6-004).</summary>
+    private static void SetRef(SerializedObject so, string prop, Object value) => Wire(so, prop, value);
 
+    /// <summary>Sets a serialized colour; a field the component does not have is an error, never a silent skip (audit R6-004).</summary>
     private static void SetColor(SerializedObject so, string prop, Color value)
     {
         SerializedProperty p = so.FindProperty(prop);
-        if (p != null) p.colorValue = value;
+        if (p == null)
+        {
+            Debug.LogError($"[TimeDesk] {so.targetObject.GetType().Name} has no serialized colour '{prop}' to set; fix OfficeSceneUIBuilder.");
+            return;
+        }
+        p.colorValue = value;
     }
 
     private static void FullStretch(RectTransform rt)
