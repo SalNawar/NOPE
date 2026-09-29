@@ -9945,6 +9945,30 @@
         "tier": "Full"
       },
       {
+        "key": "app.link.pick",
+        "text": "Open where it was picked: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.link.place",
+        "text": "Open the Reference: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.transcript.answersOnly",
+        "text": "Answers only",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.transcript.newLine",
+        "text": "New line ▼",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "compare.dockSide",
         "text": "{0}:  {1}",
         "gloss": "None",
@@ -9969,12 +9993,6 @@
         "tier": "Full"
       },
       {
-        "key": "book.claimedLabel",
-        "text": "{0} (claimed)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "window.minimize",
         "text": "_",
         "gloss": "None",
@@ -9989,24 +10007,6 @@
       {
         "key": "window.close",
         "text": "X",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "window.prev",
-        "text": "<",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "window.next",
-        "text": ">",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "window.page",
-        "text": "Page {0}/{1}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -11319,14 +11319,56 @@
         "tier": "Full"
       },
       {
-        "key": "directives.none",
-        "text": "Directives: all destinations cleared today.",
+        "key": "report.proof.claimMismatch",
+        "text": "Mismatch",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "directives.header",
-        "text": "Directives (deny violators):",
+        "key": "report.proof.foreignOrigin",
+        "text": "Belongs elsewhere",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "report.proof.recordMismatch",
+        "text": "Agency records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "report.proof.crossMismatch",
+        "text": "Papers disagree",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "form.report.caseLine",
+        "text": "{0} · {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "form.interview.head",
+        "text": "{0} · Desk officer: {1} · {2}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "form.interview.answerMark",
+        "text": "►",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "rules.memo.to",
+        "text": "All desk officers",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "directives.none",
+        "text": "Directives: all destinations cleared today.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -11361,8 +11403,20 @@
         "tier": "Full"
       },
       {
-        "key": "book.revisedLabel",
-        "text": "{0}  [revised]",
+        "key": "book.claimedNote",
+        "text": "Claimed",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "book.revisedNote",
+        "text": "Revised",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "book.edition",
+        "text": "Edition of day {0}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -11459,12 +11513,6 @@
       {
         "key": "records.onFile",
         "text": "Query \"{0}\" · 1 record on file · {1}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "records.agency",
-        "text": "{0} · {1}",
         "gloss": "None",
         "tier": "Full"
       },

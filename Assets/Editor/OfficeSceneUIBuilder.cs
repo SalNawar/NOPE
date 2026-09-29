@@ -74,7 +74,6 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Color PanelNavy = new Color(0.1f, 0.12f, 0.2f, 0.97f);
     private static readonly Color Paper = new Color(0.925f, 0.913f, 0.847f, 1f);  // XP window body
     private static readonly Color HeaderBar = new Color(0.13f, 0.34f, 0.86f, 1f); // XP title bar
-    private static readonly Color RowBg = new Color(1f, 1f, 1f, 0.7f);            // near-white field row
     private static readonly Color Ink = new Color(0.1f, 0.09f, 0.08f, 1f);
 
     /// <summary>Padding on every side of a vertical list (AddVLayout).</summary>
@@ -347,11 +346,11 @@ public static partial class OfficeSceneUIBuilder
         Wire(soInvest, "compareController", compare);
         Wire(soInvest, "compareDock", compareDock);
         SerializedArrays.Set(soInvest, "documentsViews", app.Documents);
-        SerializedArrays.Set(soInvest, "recordsWindows", app.Records);
+        SerializedArrays.Set(soInvest, "recordsViews", app.Records);
         SerializedArrays.Set(soInvest, "referenceViews", app.Reference);
-        SerializedArrays.Set(soInvest, "transcriptWindows", app.Transcript);
-        SerializedArrays.Set(soInvest, "reportTexts", app.ReportText);
-        SerializedArrays.Set(soInvest, "directivesTexts", app.RulesText);
+        SerializedArrays.Set(soInvest, "transcriptViews", app.Transcript);
+        SerializedArrays.Set(soInvest, "reportViews", app.Report);
+        SerializedArrays.Set(soInvest, "rulesViews", app.Rules);
         Wire(soInvest, "interactionPanel", interaction);
         Wire(soInvest, "desk", officeView.transform.Find("Desk").GetComponent<DeskController>());
         Wire(soInvest, "hud", caseHud);
@@ -427,107 +426,6 @@ public static partial class OfficeSceneUIBuilder
         return view;
     }
 
-    /// <summary>A paged list's parts (PagedRowsWindow's): the rows' root and template, Prev, Next and the page line.</summary>
-    private struct PagedBody
-    {
-        public TMP_Text page;
-        public Button prev;
-        public Button next;
-        public Transform rowsRoot;
-        public GameObject rowTemplate;
-    }
-
-    /// <summary>
-    /// A paged list in a view (the app's tabs): the row list between
-    /// <paramref name="rowsMin"/> and <paramref name="rowsMax"/> with its
-    /// template and the footer (Prev, "Page n/m", Next); <paramref name="frameRole"/>
-    /// colours the footer text, <paramref name="rowRole"/> the rows (whose label
-    /// shrinks to fit when <paramref name="rowLabelFits"/>).
-    /// </summary>
-    private static PagedBody BuildPagedBody(Transform view, Vector2 rowsMin, Vector2 rowsMax, ThemeRoleId frameRole, ThemeRoleId rowRole, bool rowLabelFits)
-    {
-        Transform rowsRoot = Panel(view, "Rows", rowsMin, rowsMax, Vector2.zero, Vector2.zero, null);
-        SetAnchors(rowsRoot, rowsMin, rowsMax);
-        AddVLayout(rowsRoot, 4f);
-        GetOrAdd<RectMask2D>(rowsRoot.gameObject); // clip any overflow inside the view
-        GameObject rowTemplate = BuildRowTemplate(rowsRoot, rowRole, rowLabelFits);
-        rowTemplate.GetComponent<LayoutElement>().flexibleHeight = 0f; // rows keep their height from the top of a tall view
-
-        Button prev = MakeButton(view, "PrevButton", null, new Vector2(0.04f, 0.02f), new Vector2(0.18f, 0.09f), null, ThemeRoleId.Button, "window.prev");
-        TMP_Text page = Text(view, "PageText", UiText.Format("window.page", 1, 1), 18, TextAlignmentOptions.Center, new Vector2(0.2f, 0.02f), new Vector2(0.8f, 0.09f), Ink, frameRole);
-        Button next = MakeButton(view, "NextButton", null, new Vector2(0.82f, 0.02f), new Vector2(0.96f, 0.09f), null, ThemeRoleId.Button, "window.next");
-
-        return new PagedBody { page = page, prev = prev, next = next, rowsRoot = rowsRoot, rowTemplate = rowTemplate };
-    }
-
-    /// <summary>
-    /// The transcript's row layout, re-applied on every build: the speaker in a
-    /// fixed 150 px column that ellipsizes, the sentence in the rest, wrapping
-    /// onto a second line and auto-sizing 12-18 pt inside the fixed 34 px row
-    /// (its width never follows its text).
-    /// </summary>
-    private static void ApplyTranscriptRowLayout(GameObject row)
-    {
-        HorizontalLayoutGroup h = row.GetComponent<HorizontalLayoutGroup>();
-        if (h != null)
-            h.childForceExpandWidth = false;
-
-        ConfigureTranscriptText(row.transform.Find("Label"), 150f, 0f, TextWrappingModes.NoWrap, TextOverflowModes.Ellipsis);
-        ConfigureTranscriptText(row.transform.Find("Value"), 0f, 1f, TextWrappingModes.Normal, TextOverflowModes.Overflow);
-    }
-
-    /// <summary>Sizes one transcript row text: layout width, auto-size range, wrapping and overflow.</summary>
-    private static void ConfigureTranscriptText(Transform t, float width, float flexibleWidth, TextWrappingModes wrapping, TextOverflowModes overflow)
-    {
-        if (t == null)
-            return;
-
-        LayoutElement le = t.GetComponent<LayoutElement>();
-        if (le == null)
-            le = t.gameObject.AddComponent<LayoutElement>();
-        le.minWidth = width;
-        le.preferredWidth = width;
-        le.flexibleWidth = flexibleWidth;
-
-        TMP_Text text = t.GetComponent<TMP_Text>();
-        if (text == null)
-            return;
-        text.enableAutoSizing = true;
-        text.fontSizeMin = 12f;
-        text.fontSizeMax = 18f;
-        text.textWrappingMode = wrapping;
-        text.overflowMode = overflow;
-    }
-
-    /// <summary>A list's row template (existing-wins: an existing one only gets its theme tags).</summary>
-    private static GameObject BuildRowTemplate(Transform parent, ThemeRoleId rowRole, bool labelFits)
-    {
-        Transform existing = parent.Find("RowTemplate");
-        if (existing != null)
-        {
-            Tag(existing.GetComponent<Image>(), rowRole, ThemePart.Fill);
-            Text(existing, "Label", "Label", 18, TextAlignmentOptions.Left, Vector2.zero, Vector2.one, Ink, rowRole, fit: labelFits);
-            Text(existing, "Value", "Value", 18, TextAlignmentOptions.Left, Vector2.zero, Vector2.one, Ink, rowRole);
-            return existing.gameObject;
-        }
-
-        var go = new GameObject("RowTemplate", typeof(RectTransform));
-        go.transform.SetParent(parent, false);
-        Image img = go.AddComponent<Image>();
-        img.color = RowBg;
-        Tag(img, rowRole, ThemePart.Fill);
-        go.AddComponent<Button>().targetGraphic = img;
-        var le = go.AddComponent<LayoutElement>();
-        le.minHeight = 34f;
-        le.preferredHeight = 34f;
-        AddHLayout(go.transform, 8f);
-
-        Text(go.transform, "Label", "Label", 18, TextAlignmentOptions.Left, Vector2.zero, Vector2.one, Ink, rowRole, fit: labelFits);
-        Text(go.transform, "Value", "Value", 18, TextAlignmentOptions.Left, Vector2.zero, Vector2.one, Ink, rowRole);
-
-        go.SetActive(false);
-        return go;
-    }
 
     // -----------------------------
     // Primitive helpers

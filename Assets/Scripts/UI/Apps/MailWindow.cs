@@ -249,11 +249,14 @@ public static class MailText
         return date ?? UiText.Format("notes.day", day);
     }
 
+    /// <summary>The directive memo's reference for <paramref name="day"/> ("D-3"): Mail's copy and the Investigation app's Rules tab print the same.</summary>
+    public static string DirectiveRef(int day) => "D-" + day;
+
     /// <summary>The memo's reference: D-3 (directives), TT-3 (the Times), C-3-2 (a citation), M-welcome (authored).</summary>
     public static string Ref(MailItem m) =>
         m.Kind switch
         {
-            MailKind.DirectiveMemo => "D-" + m.Day,
+            MailKind.DirectiveMemo => DirectiveRef(m.Day),
             MailKind.TimesIssue => "TT-" + m.Day,
             MailKind.CitationNotice => "C-" + m.Day + "-" + m.Slot,
             _ => "M-" + m.Id.Substring(Mailbox.AuthoredPrefix.Length)

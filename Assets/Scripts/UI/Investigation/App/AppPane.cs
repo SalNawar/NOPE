@@ -16,8 +16,8 @@ using UnityEngine.UI;
 /// shows that item; the chosen chip wears its "Chosen" accent look, one not
 /// readable yet is dimmed) and its content (the active tab's view; between
 /// travellers a case source shows the no-case state, "Waiting for the next
-/// traveller", instead). The views are IAppView components, so a view drawn
-/// by the forms engine drops in for today's. The app has two
+/// traveller", instead). The views are IAppView components, each drawing its
+/// page as a form (FormPage). The app has two
 /// panes, each with its own views and its own back/forward history
 /// (NavHistory of LinkTargets: every tab switch, item switch, lookup and link
 /// is recorded; Back and Forward walk it without recording). A link followed

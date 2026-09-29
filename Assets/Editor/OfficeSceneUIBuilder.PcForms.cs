@@ -10,7 +10,8 @@ using UnityEngine.UI;
 /// found outline (phase 18, OfficeSceneUIBuilder.Panes), the photo cell and
 /// the text template in the paper's text material, every part tagged
 /// DiegeticForm so no theme touches it; the hints and the outline are chrome)
-/// and the scanned-copy page of the Investigation app's
+/// the FormPage that scrolls it (a page kind fitting its viewport, a copy at
+/// its own width), and the scanned-copy page of the Investigation app's
 /// Documents tab built on it: the scanner's dark backing, the document's
 /// name, the scan strip and the form in a scroll, a document page at the PC
 /// width (542 u, so H = 708 u). Part of <see cref="OfficeSceneUIBuilder"/>.
@@ -145,15 +146,14 @@ public static partial class OfficeSceneUIBuilder
         strip.textWrappingMode = TextWrappingModes.NoWrap;
         strip.overflowMode = TextOverflowModes.Ellipsis;
 
-        ScrollRect scroll = BuildFormScroll(page, "Scroll", PcPageWidth, out FormView form);
-        PlaceRect(scroll.transform, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -(stripTop + DocStrip + DocGap)));
+        FormPage copy = BuildFormPage(page, "Scroll", PcPageWidth, false);
+        PlaceRect(copy.transform, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -(stripTop + DocStrip + DocGap)));
 
         DocumentWindowController c = page.gameObject.AddComponent<DocumentWindowController>();
         var so = new SerializedObject(c);
         Wire(so, "titleText", title);
         Wire(so, "scanStrip", strip);
-        Wire(so, "scroll", scroll);
-        Wire(so, "form", form);
+        Wire(so, "page", copy);
         so.ApplyModifiedProperties();
         page.gameObject.SetActive(false);
         return c;
@@ -170,6 +170,23 @@ public static partial class OfficeSceneUIBuilder
         form = BuildFormView(viewport, "Form", formWidth);
         scroll.content = (RectTransform)form.transform;
         return scroll;
+    }
+
+    /// <summary>
+    /// A form in a scroll (BuildFormScroll) and the FormPage on the scroll that
+    /// draws it: at the viewport's width with <paramref name="fitsViewport"/>
+    /// (a page kind), else at its own (a copy).
+    /// </summary>
+    private static FormPage BuildFormPage(Transform parent, string name, float formWidth, bool fitsViewport)
+    {
+        ScrollRect scroll = BuildFormScroll(parent, name, formWidth, out FormView form);
+        FormPage page = scroll.gameObject.AddComponent<FormPage>();
+        var so = new SerializedObject(page);
+        Wire(so, "scroll", scroll);
+        Wire(so, "form", form);
+        so.FindProperty("fitsViewport").boolValue = fitsViewport;
+        so.ApplyModifiedProperties();
+        return page;
     }
 
     /// <summary>
