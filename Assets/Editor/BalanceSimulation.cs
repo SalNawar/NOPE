@@ -44,6 +44,9 @@ public static class BalanceSimulation
     /// <summary>The pace this run plays at (BalanceSimSettingsSO.travellersPerShift, read at Run; <see cref="ShiftPace"/> without the asset).</summary>
     private static int _pace = ShiftPace;
 
+    /// <summary>The House buyer's reserve and care threshold (BalanceSimSettingsSO, read at Run; the asset's defaults without it).</summary>
+    private static int _houseReserve = 60, _careThreshold = 3;
+
     /// <summary>The folder the summary and the example dumps go to (project-relative; Logs/ is not in git).</summary>
     public const string ReportFolder = "Logs/Balance";
 
@@ -90,6 +93,8 @@ public static class BalanceSimulation
 
         var settings = AssetDatabase.LoadAssetAtPath<BalanceSimSettingsSO>(BalanceSimSettingsSO.AssetPath);
         _pace = settings != null ? settings.travellersPerShift : ShiftPace;
+        _houseReserve = settings != null ? settings.houseReserve : 60;
+        _careThreshold = settings != null ? settings.careThreshold : 3;
 
         string dir = Path.IsPathRooted(folder) ? folder : Path.Combine(Directory.GetCurrentDirectory(), folder);
         Directory.CreateDirectory(dir);
@@ -108,7 +113,8 @@ public static class BalanceSimulation
         try
         {
             var results = new Dictionary<(PlayStyle, int), List<RunResult>>();
-            int step = 0, steps = Styles.Length * (Paces.Length * Runs + 2);
+            var buyers = new Dictionary<(PlayStyle, int), List<RunResult>>();
+            int step = 0, steps = Styles.Length * (2 * Paces.Length * Runs + 2);
             foreach (PlayStyle style in Styles)
             {
                 foreach (int pace in Paces)
@@ -117,21 +123,29 @@ public static class BalanceSimulation
                     for (int i = 1; i <= Runs; i++)
                     {
                         EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play, {PaceLabel(pace)}, run {i} of {Runs}", (float)step++ / steps);
-                        runs.Add(Play(run, lib, config, i * SeedStep, style, pace));
+                        runs.Add(Play(run, lib, config, i * SeedStep, style, pace, false));
                     }
                     results[(style, pace)] = runs;
+
+                    var bought = new List<RunResult>();
+                    for (int i = 1; i <= Runs; i++)
+                    {
+                        EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play and the House buyer, {PaceLabel(pace)}, run {i} of {Runs}", (float)step++ / steps);
+                        bought.Add(Play(run, lib, config, i * SeedStep, style, pace, true));
+                    }
+                    buyers[(style, pace)] = bought;
                 }
 
                 EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play, seed {ExampleSeed} twice", (float)step / steps);
-                RunResult a = Play(run, lib, config, ExampleSeed, style, 0);
-                RunResult b = Play(run, lib, config, ExampleSeed, style, 0);
+                RunResult a = Play(run, lib, config, ExampleSeed, style, 0, false);
+                RunResult b = Play(run, lib, config, ExampleSeed, style, 0, false);
                 step += 2;
                 File.WriteAllText(Path.Combine(dir, $"balance_seed{ExampleSeed}_{style.ToString().ToLowerInvariant()}.txt"), a.Dump.ToString());
                 if (a.Fingerprint != b.Fingerprint || a.Dump.ToString() != b.Dump.ToString())
                     errors.Add($"{style} play: seed {ExampleSeed} played twice gave two different runs (the simulation is not deterministic).");
             }
 
-            Write(summary, run, lib, config, results, errors);
+            Write(summary, run, lib, config, results, buyers, errors);
         }
         finally
         {
@@ -160,6 +174,12 @@ public static class BalanceSimulation
         public int MinMoney = int.MaxValue;
         public int Cases, Faulty, Accepted, Wrong, Unproven, Pay, Penalties, Instalments, Household, Stranded, Carries;
 
+        /// <summary>Home's figures (the Home upgrades spec §9): the house's upkeep paid, the break-ins and what they took, the care paid and the house upgrades' prices paid.</summary>
+        public int Upkeep, BreakIns, BreakInLoss, Care, HousePurchases;
+
+        /// <summary>The house upgrades the buyer bought, with the day of each.</summary>
+        public readonly List<(int day, string id)> Bought = new List<(int, string)>();
+
         /// <summary>The strandings and the carries of each day played (days 7-15 X5).</summary>
         public readonly List<int> StrandedByDay = new List<int>(), CarriesByDay = new List<int>();
 
@@ -180,8 +200,8 @@ public static class BalanceSimulation
         public float StabilityDelta;
     }
 
-    /// <summary>A run of <see cref="Days"/> days from <paramref name="seed"/> under <paramref name="style"/>, through the game's own steps, <paramref name="pace"/> travellers a shift (0: the whole queue).</summary>
-    private static RunResult Play(RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, int seed, PlayStyle style, int pace)
+    /// <summary>A run of <see cref="Days"/> days from <paramref name="seed"/> under <paramref name="style"/>, through the game's own steps, <paramref name="pace"/> travellers a shift (0: the whole queue); with <paramref name="buyer"/>, each night at Home the House buyer treats and buys (<see cref="BuyerNight"/>).</summary>
+    private static RunResult Play(RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, int seed, PlayStyle style, int pace, bool buyer)
     {
         DevToolsState.ResetAll();
         var r = new RunResult { Seed = seed };
@@ -238,10 +258,17 @@ public static class BalanceSimulation
                 break;
             }
 
-            // Home: the bill and the family's drift; the simulation buys nothing, treats no one and spins nothing.
+            // Home: the break-in, the bill and the family's night; the House buyer then treats and buys (the plain runs
+            // treat no one and buy nothing); no run spins the slot machine or orders at the PC.
             HomeEconomy.ExpenseReport bill = DayCycle.OpenHome(world, lib, config, Seeds.Day(seed, day)).bill;
-            ClerkAccountSource.RecordHome(world, bill.total, 0, lib, config);
-            r.Household += bill.total;
+            (int care, int bought) = buyer ? BuyerNight(world, lib, config, r, day) : (0, 0);
+            ClerkAccountSource.RecordHome(world, bill.total + care, bought, lib, config);
+            r.Household += bill.total + care;
+            r.Upkeep += bill.upkeepAmount;
+            r.BreakInLoss += bill.breakInLoss;
+            r.BreakIns += bill.breakInLoss > 0 ? 1 : 0;
+            r.Care += care;
+            r.HousePurchases += bought;
             r.MoneyAtNight.Add(world.money);
             r.MinMoney = Math.Min(r.MinMoney, world.money);
 
@@ -260,6 +287,36 @@ public static class BalanceSimulation
             .Select(e => e.nationId + "/" + e.eraId).Distinct().Count();
         r.Fingerprint = JsonUtility.ToJson(world.history) + JsonUtility.ToJson(world.timeline) + world.money.ToString(Inv) + r.Ending;
         return r;
+    }
+
+    /// <summary>
+    /// The House buyer's night (Domain HousePolicy through the game's own
+    /// purchase paths): care first, a point at a time for the sickest member
+    /// at the care threshold while the wallet keeps the reserve
+    /// (HomeEconomy.TreatFamilyMember), then at most one house upgrade, the
+    /// cheapest buyable one that keeps the reserve (HomeEconomy.BuyHouseUpgrade).
+    /// Returns the care and the purchase paid.
+    /// </summary>
+    private static (int care, int bought) BuyerNight(WorldState world, ContentLibrarySO lib, GameConfigSO config, RunResult r, int day)
+    {
+        int care = 0;
+        while (true)
+        {
+            int cost = HomeEconomy.GetCareCost(world, lib, config);
+            int member = HousePolicy.Care(world.family.members.Select(m => m != null ? m.condition : 0).ToList(), world.money, cost, _houseReserve, _careThreshold);
+            if (member < 0 || !HomeEconomy.TreatFamilyMember(world, lib, config, member))
+                break;
+            care += cost;
+        }
+
+        List<UpgradeSO> house = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
+        string pick = HousePolicy.Purchase(house.Select(u => new HouseOffer(u.id, OrderBook.Price(world, lib, u), world.HasUpgrade(u.id), UpgradeTree.Unlocked(u.Node, world.HasUpgrade))).ToList(),
+                                           world.money, _houseReserve);
+        int paid = pick != null ? HomeEconomy.BuyHouseUpgrade(world, lib, house.First(u => u.id == pick)) : -1;
+        if (paid < 0)
+            return (care, 0);
+        r.Bought.Add((day, pick));
+        return (care, paid);
     }
 
     private static void End(RunResult r, string ending, int day)
@@ -321,10 +378,11 @@ public static class BalanceSimulation
     // The summary
     // ------------------------------------------------------------------
 
-    private static void Write(StringBuilder sb, RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, List<string> errors)
+    private static void Write(StringBuilder sb, RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results,
+                              Dictionary<(PlayStyle, int), List<RunResult>> buyers, List<string> errors)
     {
         sb.AppendLine($"BALANCE SIMULATION  {DateTime.Now:yyyy-MM-dd HH:mm}  ({Runs} runs x {Days} days per play style and pace; Tools > TimeDesk > Balance > Run 50-Run Simulation)");
-        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no orders, no care, no slot machine, no dialog choices; once on the whole queue and once at the shift clock's pace ({_pace} travellers a shift, {BalanceSimSettingsSO.AssetPath} travellersPerShift: the rest go home when the clock closes, PlayPolicy.Reaches).");
+        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no orders, no slot machine, no dialog choices, and no care or house upgrade except in the House buyer's runs (its own section below); once on the whole queue and once at the shift clock's pace ({_pace} travellers a shift, {BalanceSimSettingsSO.AssetPath} travellersPerShift: the rest go home when the clock closes, PlayPolicy.Reaches).");
         sb.AppendLine("Perfect: every call right. Imperfect: one wrong call a day (odd days the first faulty traveller let through, even days the first deviation denial left unproven). Careless: both every day.");
         sb.AppendLine();
         Knobs(sb, run, lib, config);
@@ -339,6 +397,7 @@ public static class BalanceSimulation
         Beats(sb, results);
         Contamination(sb, results);
         Bribe(sb, lib);
+        House(sb, lib, config, results, buyers);
 
         sb.AppendLine();
         sb.AppendLine("== Checks ==");
@@ -357,7 +416,9 @@ public static class BalanceSimulation
                       $"stabilityChangeRate {config.stabilityChangeRate.ToString("0.####", Inv)}, stabilityLossPerWrong {F(config.stabilityLossPerWrong)}, extraStabilityLossLegendary {F(config.extraStabilityLossLegendary)}, stabilityGainPerCorrect {F(config.stabilityGainPerCorrect)}, firedAtStability {F(config.firedAtStability)}, stabilityWarningMargin {F(config.stabilityWarningMargin)}, stabilityCriticalMargin {F(config.stabilityCriticalMargin)}, bankruptcyMoneyThreshold {config.bankruptcyMoneyThreshold}, " +
                       $"baseDailyExpense {config.baseDailyExpense}, expensePerFamilyMember {config.expensePerFamilyMember}, expensePerConditionPoint {config.expensePerConditionPoint}, conditionWorsenChance {F(config.conditionWorsenChance)}");
         sb.AppendLine($"  {AssetDatabase.GetAssetPath(run)}: startingMoney {run.startingMoney}, startingStability {F(run.startingStability)}, startingFamilyMembers {run.startingFamilyMembers?.Count ?? 0}");
-        sb.AppendLine($"  {BalanceSimSettingsSO.AssetPath}: travellersPerShift {_pace} (the simulation's cap, days 7-15 X3)");
+        sb.AppendLine($"  {BalanceSimSettingsSO.AssetPath}: travellersPerShift {_pace} (the simulation's cap, days 7-15 X3), houseReserve {_houseReserve}, careThreshold {_careThreshold} (the House buyer)");
+        sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)} (Home): conditionCareCost {config.conditionCareCost}, maxFamilyCondition {config.maxFamilyCondition}, recoveryPerMood {F(config.recoveryPerMood)}, maxRecoveryChance {F(config.maxRecoveryChance)}, " +
+                      $"breakInFromDay {config.breakInFromDay}, breakInChance {F(config.breakInChance)}, breakInShare {F(config.breakInShare)}, breakInMaxLoss {config.breakInMaxLoss}");
         EffectSO bribe = lib.GetEffectByAssetName(BribeEffect);
         if (bribe != null)
             sb.AppendLine($"  {AssetDatabase.GetAssetPath(bribe)}: AddMoney {F(bribe.ops.Where(o => o != null && o.type == EffectOpType.AddMoney).Sum(o => o.floatParam))} (the bribe's amount, days 7-15 X6)");
@@ -519,6 +580,35 @@ public static class BalanceSimulation
                 sb.AppendLine($"  strandings per day, mean: {Daily(r => r.StrandedByDay)}");
                 sb.AppendLine($"  carries per day, mean: {Daily(r => r.CarriesByDay)}");
                 sb.AppendLine($"  past places whose Technology a carry rewrote by the run's end: mean {F(BalanceStats.Mean(changed))}, median {F(BalanceStats.Quantile(changed, 0.5f))}, max {F(changed.Max())} (watch line: more than three in the median run lowers agency.strandChance)");
+            }
+    }
+
+    /// <summary>
+    /// The House (the Home upgrades spec §9): per pace and style, the plain
+    /// runs (no care, no purchase) against the House buyer's: the endings,
+    /// the wallet, the household, upkeep, break-ins, care, what the house
+    /// upgrades cost and which were bought when; and the tree's prices from
+    /// the content spreadsheet.
+    /// </summary>
+    private static void House(StringBuilder sb, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, Dictionary<(PlayStyle, int), List<RunResult>> buyers)
+    {
+        List<UpgradeSO> house = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
+        sb.AppendLine();
+        sb.AppendLine($"== The House: the plain runs against the House buyer (reserve {_houseReserve} cr, care at condition {_careThreshold}) ==");
+        sb.AppendLine($"the tree (content spreadsheet, homeUpgrades): {house.Count} upgrades, {house.Sum(u => u.cost)} cr in all: {string.Join(", ", house.OrderBy(u => u.cost).Select(u => $"{u.id} {u.cost}"))}");
+        foreach (int pace in Paces)
+            foreach (PlayStyle style in Styles)
+            {
+                sb.AppendLine($"{style}, {PaceLabel(pace)}:");
+                foreach ((string label, List<RunResult> runs) in new[] { ("plain", results[(style, pace)]), ("buyer", buyers[(style, pace)]) })
+                {
+                    sb.AppendLine($"  {label}: endings {string.Join(", ", runs.GroupBy(r => r.Ending).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}; " +
+                                  $"wallet lowest mean {F(BalanceStats.Mean(runs.Select(r => (float)r.MinMoney)))} min {runs.Min(r => r.MinMoney)}, at the end mean {F(BalanceStats.Mean(runs.Select(r => (float)r.World.money)))}; " +
+                                  $"per run cr: household {M(runs, r => r.Household)} (upkeep {M(runs, r => r.Upkeep)}, break-ins {M(runs, r => r.BreakIns)} taking {M(runs, r => r.BreakInLoss)}, care {M(runs, r => r.Care)}), house upgrades {M(runs, r => r.HousePurchases)} ({M(runs, r => r.Bought.Count)} bought)");
+                    if (label == "buyer")
+                        sb.AppendLine("    bought (runs, mean day): " + string.Join(", ", runs.SelectMany(r => r.Bought).GroupBy(b => b.id).OrderBy(g => g.Average(b => b.day))
+                                          .Select(g => $"{g.Key} {g.Count()} d{g.Average(b => b.day).ToString("0.#", Inv)}")));
+                }
             }
     }
 
