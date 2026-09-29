@@ -24,8 +24,6 @@ public sealed class TitleSceneController : MonoBehaviour
     /// <summary>Acquires the run and shows the appropriate panel.</summary>
     private void Start()
     {
-        Debug.Log("[TitleSceneController] >>> Entering Start.");
-
         RunManager run = RunManager.GetOrCreate();
 
         if (run == null)
@@ -39,7 +37,6 @@ public sealed class TitleSceneController : MonoBehaviour
         if (!string.IsNullOrEmpty(world.endingId) && titleUI != null && titleUI.HasEndingPanel)
         {
             EndingSO ending = run.Library != null ? run.Library.GetEndingById(world.endingId) : null;
-            Debug.Log($"[TitleSceneController] <<< Exiting Start (showing ending panel for '{world.endingId}', resolved={ending != null}).");
             titleUI.ShowEnding(ending, HandleNewRun);
             ShowClerkPapers(run, ending);
             return;
@@ -48,13 +45,12 @@ public sealed class TitleSceneController : MonoBehaviour
         if (titleUI != null && titleUI.HasTitlePanel)
         {
             bool hasSave = SaveSystem.HasSave();
-            Debug.Log($"[TitleSceneController] <<< Exiting Start (showing title panel, hasSave={hasSave}).");
             titleUI.ShowTitle(hasSave, HandleContinue, HandleNewRun);
             return;
         }
 
         // No title UI wired yet: keep the loop playable.
-        Debug.Log("[TitleSceneController] <<< Exiting Start (no title UI wired, resuming the run directly).");
+        Debug.Log("[TitleSceneController] No title UI wired: resuming the run directly.");
         run.ResumeRun();
     }
 
@@ -84,34 +80,22 @@ public sealed class TitleSceneController : MonoBehaviour
     /// <summary>Resumes the current (saved) run where the save was made (RunManager.ResumeRun).</summary>
     private void HandleContinue()
     {
-        Debug.Log("[TitleSceneController] >>> Entering HandleContinue.");
-
         if (RunManager.HasInstance)
-        {
-            Debug.Log("[TitleSceneController] <<< Exiting HandleContinue (RunManager.ResumeRun).");
             RunManager.Instance.ResumeRun();
-        }
         else
-        {
-            Debug.LogWarning("[TitleSceneController] <<< Exiting HandleContinue — no RunManager instance.");
-        }
+            Debug.LogWarning("[TitleSceneController] Continue with no RunManager instance: nothing to resume.");
     }
 
     /// <summary>Clears the save, starts a fresh run, and heads to the office.</summary>
     private void HandleNewRun()
     {
-        Debug.Log("[TitleSceneController] >>> Entering HandleNewRun.");
-
         if (!RunManager.HasInstance)
         {
-            Debug.LogWarning("[TitleSceneController] <<< Exiting HandleNewRun — no RunManager instance.");
+            Debug.LogWarning("[TitleSceneController] New Run with no RunManager instance: nothing to start.");
             return;
         }
 
         RunManager.Instance.NewRun();
-
-        Debug.Log("[TitleSceneController] <<< Exiting HandleNewRun (new run started, loading Office).");
-
         RunManager.Instance.LoadOfficeScene();
     }
 }

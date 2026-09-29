@@ -56,8 +56,6 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// </summary>
     public void StartDay(WorldState worldState, DayPlanSO plan, int seed)
     {
-        Debug.Log($"[DayOrchestrator] >>> Entering StartDay (day {worldState?.day}, plan='{plan?.name}', seed={seed}).");
-
         // Stop an earlier day loop if this orchestrator is reused.
         if (_dayLoopRoutine != null)
         {
@@ -96,7 +94,7 @@ public sealed class DayOrchestrator : MonoBehaviour
         if (eventDirector != null && _worldState != null)
             eventDirector.Init(new DayEventContext(this, _worldState));
 
-        Debug.Log($"[DayOrchestrator] <<< Exiting StartDay (starting day loop with a queue of {_slots.TotalSlots}).");
+        Debug.Log($"[DayOrchestrator] Day {_worldState.day} starts: plan '{dayPlan.name}', a queue of {_slots.TotalSlots}, seed {seed}.");
 
         // Start the day loop.
         _dayLoopRoutine = StartCoroutine(DayLoop());
@@ -140,15 +138,12 @@ public sealed class DayOrchestrator : MonoBehaviour
 
         int total = _slots.TotalSlots;
 
-        Debug.Log($"[DayOrchestrator] >>> Entering DayLoop (day {_worldState?.day}, {total} case slot(s)).");
-
         // True once the current slot's before-case events ran (for the closing report).
         bool beforeEventsRan = false;
 
         while (_slots.CanStartSlot)
         {
             int slot = _slots.CurrentSlot;
-            Debug.Log($"[DayOrchestrator] >>> Entering case slot {slot}/{total}.");
 
             // 1) BeforeCase events
             yield return RunScheduledEvents(DayEventTrigger.BeforeCase, slot);
@@ -193,8 +188,6 @@ public sealed class DayOrchestrator : MonoBehaviour
             // 5) AfterCase events
             yield return RunScheduledEvents(DayEventTrigger.AfterCase, slot);
 
-            Debug.Log($"[DayOrchestrator] <<< Exiting case slot {slot}/{total}.");
-
             // 6) Advance
             _slots.Advance();
             beforeEventsRan = false;
@@ -203,7 +196,7 @@ public sealed class DayOrchestrator : MonoBehaviour
         if (_slots.CloseRequested)
             WarnAboutUnreachedContent(_slots.CurrentSlot, beforeEventsRan, total);
 
-        Debug.Log($"[DayOrchestrator] <<< Exiting DayLoop (day {_worldState?.day} complete, closedEarly={_slots.CloseRequested}, invoking OnDayCompleted).");
+        Debug.Log($"[DayOrchestrator] Day {_worldState?.day} complete (closed early: {_slots.CloseRequested}).");
 
         // Queue done or booth closed: the shift is over.
         OnDayCompleted?.Invoke();

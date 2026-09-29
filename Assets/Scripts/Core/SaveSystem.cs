@@ -125,8 +125,6 @@ public static class SaveSystem
     /// </summary>
     public static bool Save(WorldState world)
     {
-        Debug.Log($"[SaveSystem] >>> Entering Save (day {world?.day}).");
-
         if (world == null)
         {
             Debug.LogError("SaveSystem.Save called with null WorldState.");
@@ -141,9 +139,6 @@ public static class SaveSystem
             Directory.CreateDirectory(Folder);
             File.WriteAllText(TempPath, json);
             Commit();
-
-            Debug.Log($"[SaveSystem] <<< Exiting Save (success, day {world.day}, money={world.money}, path='{SavePath}').");
-
             return true;
         }
         catch (Exception e)
@@ -191,14 +186,9 @@ public static class SaveSystem
     /// </summary>
     public static WorldState Load()
     {
-        Debug.Log("[SaveSystem] >>> Entering Load.");
-
         SaveSource source = Source();
         if (source == SaveSource.None)
-        {
-            Debug.Log("[SaveSystem] <<< Exiting Load — no save this build can continue.");
             return null;
-        }
 
         try
         {
@@ -221,8 +211,6 @@ public static class SaveSystem
             if (file.version != SaveVersion)
                 Debug.LogWarning($"SaveSystem.Load: save version {file.version} != current {SaveVersion}. Loading with defaults for new fields.");
 
-            Debug.Log($"[SaveSystem] <<< Exiting Load (success, day {file.world.day}, money={file.world.money}, version={file.version}).");
-
             return file.world;
         }
         catch (Exception e)
@@ -235,8 +223,6 @@ public static class SaveSystem
     /// <summary>Deletes the save slot's files, the temp file and the backup included, so no older run can be recovered (used by "New Run").</summary>
     public static void Delete()
     {
-        Debug.Log("[SaveSystem] >>> Entering Delete.");
-
         try
         {
             int removed = 0;
@@ -248,7 +234,7 @@ public static class SaveSystem
                 removed++;
             }
 
-            Debug.Log($"[SaveSystem] <<< Exiting Delete ({removed} save file(s) removed).");
+            Debug.Log($"[SaveSystem] Deleted {removed} save file(s).");
         }
         catch (Exception e)
         {
