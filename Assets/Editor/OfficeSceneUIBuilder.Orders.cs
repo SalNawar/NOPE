@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// The office builder's Orders app (Saleh 2026-09-29: the upgrade tree moves
 /// to the PC; the portals spec v3 OR3, OR9, §6.2): the Orders window, opening
 /// maximised, with the wallet line at the top, the tree's canvas on the left
-/// (a scroll both ways over a sidebar-toned plate, holding the inactive
+/// (a scroll both ways over a sidebar-toned plate, a vertical scrollbar at its right, holding the inactive
 /// templates OrdersWindow clones: a band head with its glyph and name, a node
 /// card in the input-field role with its glyph, name, state line, state badge
 /// and selection frame, and a link segment dim and lit), and on the right the
@@ -46,7 +46,7 @@ public static partial class OfficeSceneUIBuilder
         Transform area = Panel(win, "Tree", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0.93f, 0.94f, 0.96f, 1f), ThemeRoleId.Sidebar);
         PlaceRect(area, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-(config.ordersDetailWidth + 2f * DocMargin), -below));
         Transform viewport = Panel(area, "Viewport", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(viewport, Vector2.zero, Vector2.one, new Vector2(6f, 6f), new Vector2(-6f, -6f));
+        PlaceRect(viewport, Vector2.zero, Vector2.one, new Vector2(6f, 6f), new Vector2(-(6f + DocScrollbar + DocGap), -6f));
         GetOrAdd<RectMask2D>(viewport.gameObject);
         var content = (RectTransform)Panel(viewport, "Content", new Vector2(0f, 1f), new Vector2(0f, 1f), Vector2.zero, new Vector2(100f, 100f), null);
         content.pivot = new Vector2(0f, 1f);
@@ -57,6 +57,9 @@ public static partial class OfficeSceneUIBuilder
         scroll.vertical = true;
         scroll.movementType = ScrollRect.MovementType.Clamped;
         scroll.scrollSensitivity = 30f;
+        Scrollbar bar = BuildScrollbar(area, DocScrollbar, Color.white, ThemeRoleId.InputField, new Color(0.13f, 0.34f, 0.86f, 1f), ThemeRoleId.TitleBar);
+        scroll.verticalScrollbar = bar;
+        scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHide;
 
         RectTransform band = BuildOrdersBand(content, config);
         Button node = BuildOrdersNode(content, config);
@@ -145,7 +148,7 @@ public static partial class OfficeSceneUIBuilder
         Tag(glyph, ThemeRoleId.InputField, ThemePart.Ink);
 
         TMP_Text name = Text(node.transform, "Name", "", 22, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField, style: FontStyles.Bold);
-        PlaceRect(name.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(66f, -54f), new Vector2(-34f, -6f));
+        PlaceRect(name.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(66f, -52f), new Vector2(-34f, -5f));
         name.textWrappingMode = TextWrappingModes.Normal;
         name.overflowMode = TextOverflowModes.Ellipsis;
         name.maxVisibleLines = 2;
@@ -155,12 +158,13 @@ public static partial class OfficeSceneUIBuilder
         name.raycastTarget = false;
 
         TMP_Text state = Text(node.transform, "State", "", 19, TextAlignmentOptions.BottomLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField);
-        PlaceRect(state.transform, Vector2.zero, new Vector2(1f, 0f), new Vector2(66f, 6f), new Vector2(-8f, 32f));
-        state.textWrappingMode = TextWrappingModes.NoWrap;
+        PlaceRect(state.transform, Vector2.zero, new Vector2(1f, 0f), new Vector2(66f, 5f), new Vector2(-8f, 46f));
+        state.textWrappingMode = TextWrappingModes.Normal;
         state.overflowMode = TextOverflowModes.Ellipsis;
+        state.maxVisibleLines = 2;
         state.enableAutoSizing = true;
         state.fontSizeMax = 19f;
-        state.fontSizeMin = 14f;
+        state.fontSizeMin = 16f;
         state.raycastTarget = false;
 
         Image badge = Panel(node.transform, "Badge", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Ink).GetComponent<Image>();
