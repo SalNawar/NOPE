@@ -13031,7 +13031,7 @@
   },
   "translation": {
     "fromDay": 5,
-    "announce": "Budget cuts close the interpreter pool. From tomorrow, the displaced reach the desk speaking their own tongues, untranslated but for their key words; Speech translators are sold at Home tonight. Papers are still filled in English.",
+    "announce": "Budget cuts close the interpreter pool. From the day after tomorrow, the displaced reach the desk speaking their own tongues, untranslated but for their key words. Order Interview Protocols today and a Speech translator tomorrow in Orders: each arrives the morning after it is ordered. Papers are still filled in English.",
     "flip": {
       "startDelay": 0.3,
       "letterInterval": 0.04,
@@ -13215,22 +13215,34 @@
       {
         "id": "near_east",
         "displayName": "Near East",
-        "spokenCost": 80
+        "spokenCost": 80,
+        "requires": [
+          "interview_protocols"
+        ]
       },
       {
         "id": "mediterranean",
         "displayName": "Mediterranean",
-        "spokenCost": 80
+        "spokenCost": 80,
+        "requires": [
+          "interview_protocols"
+        ]
       },
       {
         "id": "east_asia",
         "displayName": "East Asia",
-        "spokenCost": 80
+        "spokenCost": 80,
+        "requires": [
+          "interview_protocols"
+        ]
       },
       {
         "id": "north_europe",
         "displayName": "Northern Europe",
-        "spokenCost": 80
+        "spokenCost": 80,
+        "requires": [
+          "interview_protocols"
+        ]
       }
     ],
     "tongues": [
