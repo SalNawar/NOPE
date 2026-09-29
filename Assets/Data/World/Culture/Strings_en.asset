@@ -947,6 +947,10 @@ MonoBehaviour:
     text: Back to the search
     gloss: 0
     tier: 0
+  - key: title.name
+    text: Time Sorter
+    gloss: 0
+    tier: 0
   - key: ending.world.leftBehind
     text: The world you leave behind
     gloss: 0

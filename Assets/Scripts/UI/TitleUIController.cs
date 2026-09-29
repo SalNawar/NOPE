@@ -18,11 +18,14 @@ using UnityEngine.UI;
 /// </summary>
 public sealed class TitleUIController : MonoBehaviour
 {
+    /// <summary>The game's name the title block prints (world_source.json ui.strings; the Title builder previews it too).</summary>
+    public const string NameKey = "title.name";
+
     [Header("Title Panel")]
     /// <summary>Root panel shown when the run has not ended.</summary>
     [SerializeField] private GameObject titlePanel;
 
-    /// <summary>Game title / day-counter text.</summary>
+    /// <summary>The game's name, large, at the top of the title block (UiText <see cref="NameKey"/>).</summary>
     [SerializeField] private TMP_Text titleText;
 
     /// <summary>Resumes the saved run (hidden if there is no save).</summary>
@@ -113,7 +116,7 @@ public sealed class TitleUIController : MonoBehaviour
         titlePanel.SetActive(true);
 
         if (titleText != null)
-            titleText.text = "Time Sorter";
+            titleText.text = UiText.Get(NameKey);
 
         if (continueButton != null)
         {

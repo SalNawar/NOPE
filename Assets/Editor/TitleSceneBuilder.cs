@@ -18,6 +18,9 @@ using static SceneUiKit;
 /// panel (EndingSO.picture). The world panel (the endings spec E0) lists the
 /// world's outcomes over the END OF DEMO card and New Run; the ending panel's
 /// world button opens it after a failure ("The world you leave behind").
+/// The title panel is the title block (Saleh 2026-09-30), laid out on every
+/// build from the knobs in <see cref="TitleBlock"/>: the printed name, a gold
+/// rule and the menu on a navy plate over the painting's open floor.
 /// </summary>
 public static class TitleSceneBuilder
 {
@@ -35,9 +38,9 @@ public static class TitleSceneBuilder
 
         Transform uiRoot = titleUI.transform;
 
-        // --- Title panel ---
+        // --- Title panel: the title block (the game's name over the menu; laid out on every build by LayOutTitleBlock) ---
         Transform title = FindOrCreatePanel(uiRoot, "TitlePanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(640f, 420f), withBackground: true, bgColor: new Color(0.08f, 0.09f, 0.14f, 0.97f));
+            Vector2.zero, new Vector2(640f, 420f), withBackground: true, bgColor: TitleBlock.PlateColour);
 
         TMP_Text titleText = FindOrCreateText(title, "TitleText", "Time Sorter", 44,
             TextAlignmentOptions.Center, new Vector2(0.05f, 0.7f), new Vector2(0.95f, 0.95f));
@@ -45,6 +48,7 @@ public static class TitleSceneBuilder
             new Vector2(0.2f, 0.4f), new Vector2(0.8f, 0.55f));
         Button newRunButton = FindOrCreateButton(title, "NewRunButton", "New Run",
             new Vector2(0.2f, 0.18f), new Vector2(0.8f, 0.33f));
+        LayOutTitleBlock(title, titleText, continueButton, newRunButton);
 
         // --- Ending panel ---
         Transform ending = FindOrCreatePanel(uiRoot, "EndingPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -72,6 +76,7 @@ public static class TitleSceneBuilder
             new Vector2(0.3f, 0.04f), new Vector2(0.7f, 0.14f));
         worldOutcomesText.textWrappingMode = TextWrappingModes.Normal;
         MatchFace(worldNewRunButton, endingNewRunButton);
+        LayOutEndingButtons(endingBodyText, endingWorldButton, endingNewRunButton);
 
         // --- The Debt Relief ending's papers (redesign phase 13): the clerk's Labour Contract left of the panel, the account right ---
         Transform papers = FindOrCreatePanel(ending, "ClerkPapers", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -130,6 +135,202 @@ public static class TitleSceneBuilder
 
         EditorSceneManager.MarkSceneDirty(titleUI.gameObject.scene);
         Debug.Log("[TimeDesk] Title UI built and wired. Save the scene.");
+    }
+
+    /// <summary>
+    /// The title block's layout knobs (Saleh 2026-09-30: the name large and
+    /// legible, the menu grouped under it, clear of the desk's props), in
+    /// units of the 1920×1080 canvas. The block stands over the title
+    /// painting's open floor, between the window's potted plant (its right
+    /// edge near x 282) and the desk's front corner (near x 790).
+    /// </summary>
+    private static class TitleBlock
+    {
+        /// <summary>The block's left edge and vertical centre, from the screen's left middle.</summary>
+        public static readonly Vector2 Position = new Vector2(290f, -20f);
+
+        /// <summary>The block's width; its height follows what it shows (Continue only with a save).</summary>
+        public const float Width = 480f;
+
+        /// <summary>Space inside the plate: left, right, top, bottom.</summary>
+        public const int PadSides = 40, PadTop = 40, PadBottom = 48;
+
+        /// <summary>Space between the name, the rule and each button.</summary>
+        public const float Spacing = 22f;
+
+        /// <summary>The plate: the Title's own panel navy, nearly opaque (it hides the painting's highlights under the name; measured on screen, linear colour space).</summary>
+        public static readonly Color PlateColour = new Color(0.08f, 0.09f, 0.14f, 0.94f);
+
+        /// <summary>The name's box: two lines ("TIME" over "SORTER") at the largest size that fits.</summary>
+        public static readonly Vector2 NameBox = new Vector2(400f, 232f);
+
+        /// <summary>The name's size range (auto-sized to its box).</summary>
+        public const float NameMaxSize = 108f, NameMinSize = 64f;
+
+        /// <summary>The name's ink: the buttons' cream face colour.</summary>
+        public static readonly Color NameColour = new Color(0.957f, 0.929f, 0.859f, 1f);
+
+        /// <summary>The rule under the name, the logo's gold line.</summary>
+        public static readonly Vector2 RuleSize = new Vector2(360f, 4f);
+
+        /// <summary>The rule's colour.</summary>
+        public static readonly Color RuleColour = new Color(0.8f, 0.6f, 0.31f, 1f);
+
+        /// <summary>Each menu button (the faces are 400×100 pictures: kept at their 4:1 shape).</summary>
+        public static readonly Vector2 ButtonSize = new Vector2(360f, 90f);
+    }
+
+    /// <summary>
+    /// Lays the title panel out as the title block, re-applied on every build
+    /// (the one part of the Title that is not create-only): the plate at the
+    /// left of the screen, stacking its children top down (a
+    /// VerticalLayoutGroup, the height fitted, so a hidden Continue closes up)
+    /// in the order the name, the gold rule, Continue, New Run; the printed
+    /// name on (TitleUIController prints UiText's "title.name") and the
+    /// interim logo picture off (its dark ink was drawn for a light ground).
+    /// Each child's own place is set too, so the scene reads right in the
+    /// editor before the layout runs.
+    /// </summary>
+    private static void LayOutTitleBlock(Transform block, TMP_Text name, Button continueButton, Button newRunButton)
+    {
+        var plate = (RectTransform)block;
+        Undo.RecordObject(plate, "Lay out the title block");
+        plate.anchorMin = plate.anchorMax = new Vector2(0f, 0.5f);
+        plate.pivot = new Vector2(0f, 0.5f);
+        plate.anchoredPosition = TitleBlock.Position;
+        Image plateImage = block.GetComponent<Image>();
+        if (plateImage != null)
+        {
+            Undo.RecordObject(plateImage, "Lay out the title block");
+            plateImage.color = TitleBlock.PlateColour;
+            EditorUtility.SetDirty(plateImage);
+        }
+
+        var group = Ensure<VerticalLayoutGroup>(block);
+        group.padding = new RectOffset(TitleBlock.PadSides, TitleBlock.PadSides, TitleBlock.PadTop, TitleBlock.PadBottom);
+        group.spacing = TitleBlock.Spacing;
+        group.childAlignment = TextAnchor.UpperCenter;
+        group.childControlWidth = group.childControlHeight = false;
+        group.childForceExpandWidth = group.childForceExpandHeight = false;
+        group.childScaleWidth = group.childScaleHeight = false;
+        EditorUtility.SetDirty(group);
+        var fitter = Ensure<ContentSizeFitter>(block);
+        fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        EditorUtility.SetDirty(fitter);
+
+        Undo.RecordObject(name, "Lay out the title block");
+        name.enabled = true;
+        name.text = UiText.Get(TitleUIController.NameKey);
+        name.fontStyle = FontStyles.Bold | FontStyles.UpperCase;
+        name.color = TitleBlock.NameColour;
+        name.alignment = TextAlignmentOptions.Center;
+        name.textWrappingMode = TextWrappingModes.Normal;
+        name.enableAutoSizing = true;
+        name.fontSizeMin = TitleBlock.NameMinSize;
+        name.fontSizeMax = TitleBlock.NameMaxSize;
+        name.lineSpacing = -8f;
+        name.characterSpacing = 2f;
+        name.raycastTarget = false;
+        EditorUtility.SetDirty(name);
+
+        Image rule = FindOrCreateImage(block, "TitleRule", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero);
+        Undo.RecordObject(rule, "Lay out the title block");
+        rule.preserveAspect = false;
+        rule.color = TitleBlock.RuleColour;
+        EditorUtility.SetDirty(rule);
+
+        Transform logo = block.Find("ArtLogo");
+        if (logo != null && logo.gameObject.activeSelf)
+        {
+            Undo.RecordObject(logo.gameObject, "Lay out the title block");
+            logo.gameObject.SetActive(false);
+        }
+
+        var stack = new (RectTransform rect, Vector2 size)[]
+        {
+            (name.rectTransform, TitleBlock.NameBox),
+            ((RectTransform)rule.transform, TitleBlock.RuleSize),
+            ((RectTransform)continueButton.transform, TitleBlock.ButtonSize),
+            ((RectTransform)newRunButton.transform, TitleBlock.ButtonSize)
+        };
+        float y = TitleBlock.PadTop;
+        for (int i = 0; i < stack.Length; i++)
+        {
+            RectTransform rt = stack[i].rect;
+            Undo.RecordObject(rt, "Lay out the title block");
+            rt.SetSiblingIndex(i);
+            rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 1f);
+            rt.sizeDelta = stack[i].size;
+            rt.anchoredPosition = new Vector2(0f, -y);
+            y += stack[i].size.y + TitleBlock.Spacing;
+        }
+        plate.sizeDelta = new Vector2(TitleBlock.Width, y - TitleBlock.Spacing + TitleBlock.PadBottom);
+    }
+
+    /// <summary>
+    /// The ending panel's two buttons as one column, re-applied on every
+    /// build: New Run at the panel's foot, as wide as its label needs and at
+    /// its face picture's 4:1 shape, and the world button ("The world you
+    /// leave behind") the same size just above it, on the buttons' cream face
+    /// colour with the face's teal ink, so the pair reads as one menu; the
+    /// body text ends above them.
+    /// </summary>
+    private static void LayOutEndingButtons(TMP_Text body, Button world, Button newRun)
+    {
+        var panel = (RectTransform)newRun.transform.parent;
+        var newRunRect = (RectTransform)newRun.transform;
+        float height = EndingButtonWidth * panel.sizeDelta.x / 4f / panel.sizeDelta.y;
+        Undo.RecordObject(newRunRect, "Lay out the ending buttons");
+        newRunRect.anchorMin = new Vector2(0.5f - EndingButtonWidth / 2f, EndingButtonGap + 0.02f);
+        newRunRect.anchorMax = new Vector2(0.5f + EndingButtonWidth / 2f, newRunRect.anchorMin.y + height);
+        newRunRect.offsetMin = newRunRect.offsetMax = Vector2.zero;
+        var worldRect = (RectTransform)world.transform;
+        Undo.RecordObject(worldRect, "Lay out the ending buttons");
+        worldRect.anchorMin = new Vector2(newRunRect.anchorMin.x, newRunRect.anchorMax.y + EndingButtonGap);
+        worldRect.anchorMax = new Vector2(newRunRect.anchorMax.x, worldRect.anchorMin.y + height);
+        worldRect.offsetMin = worldRect.offsetMax = Vector2.zero;
+
+        Undo.RecordObject(body.rectTransform, "Lay out the ending buttons");
+        body.rectTransform.anchorMin = new Vector2(body.rectTransform.anchorMin.x, worldRect.anchorMax.y + EndingButtonGap);
+
+        Image face = world.GetComponent<Image>();
+        Undo.RecordObject(face, "Lay out the ending buttons");
+        face.color = TitleBlock.NameColour;
+        EditorUtility.SetDirty(face);
+        Transform label = world.transform.Find("Label");
+        TMP_Text text = label != null ? label.GetComponent<TMP_Text>() : null;
+        if (text != null)
+        {
+            Undo.RecordObject(text, "Lay out the ending buttons");
+            text.color = EndingButtonInk;
+            text.fontStyle = FontStyles.Bold;
+            text.enableAutoSizing = true;
+            text.fontSizeMin = 22f;
+            text.fontSizeMax = 26f;
+            text.margin = new Vector4(12f, 0f, 12f, 0f);
+            EditorUtility.SetDirty(text);
+        }
+    }
+
+    /// <summary>The ending panel's buttons' width, in panel widths (the world button's label at 24 px or more).</summary>
+    private const float EndingButtonWidth = 0.5f;
+
+    /// <summary>The gap between the ending panel's buttons, and above them, in panel heights.</summary>
+    private const float EndingButtonGap = 0.03f;
+
+    /// <summary>The ending panel's world button's ink: the Title button faces' printed teal.</summary>
+    private static readonly Color EndingButtonInk = new Color(0.18f, 0.29f, 0.33f, 1f);
+
+    /// <summary>The <typeparamref name="T"/> on <paramref name="host"/>, added (with undo) when it has none.</summary>
+    private static T Ensure<T>(Transform host) where T : Component
+    {
+        T component = host.GetComponent<T>();
+        if (component == null)
+            component = Undo.AddComponent<T>(host.gameObject);
+        else
+            Undo.RecordObject(component, "Lay out the title block");
+        return component;
     }
 
     /// <summary>

@@ -17351,6 +17351,12 @@
         "tier": "Full"
       },
       {
+        "key": "title.name",
+        "text": "Time Sorter",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "ending.world.leftBehind",
         "text": "The world you leave behind",
         "gloss": "None",
