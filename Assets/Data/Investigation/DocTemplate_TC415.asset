@@ -10,30 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 411096b30c5d9bb4f9142a8207326fb1, type: 3}
-  m_Name: DocTemplate_TC520
+  m_Name: DocTemplate_TC415
   m_EditorClassIdentifier: Assembly-CSharp::DocumentTemplateSO
-  displayName: Labour Contract
-  formNumber: TC-520
+  displayName: Holiday Credit Agreement
+  formNumber: TC-415
   fieldSpecs:
   - category: 7
-    label: Worker
+    label: Borrower
   - category: 9
     label: Citizen ID
-  - category: 23
-    label: Employer
   - category: 10
-    label: Worksite
-  - category: 24
-    label: Term
-  - category: 25
-    label: Day Wage
-  handOver: 1
-  showsPhoto: 1
-  askableBy: 
+    label: Destination
+  - category: 14
+    label: Account Class
+  - category: 19
+    label: Credit Line
+  - category: 13
+    label: Valid Until
+  handOver: 0
+  showsPhoto: 0
+  askableBy: 000000000100000002000000
+  askGroup: proof
   form:
     formNumber: 
     title: 
     fixedPage: 1
+    landscape: 0
     blocks:
     - kind: 0
       text: 
@@ -44,7 +46,7 @@ MonoBehaviour:
       field: -1
       slot: 
     - kind: 1
-      text: 1  CONTRACT
+      text: 1  BORROWER
       cells: []
       columns: []
       shares: []
@@ -57,26 +59,21 @@ MonoBehaviour:
       - field: 0
         slot: 
         caption: 
-        span: 8
+        span: 6
         rows: 1
-      - field: -1
-        slot: photo
+      - field: 1
+        slot: 
         caption: 
-        span: 4
-        rows: 2
+        span: 6
+        rows: 1
       columns: []
       shares: []
       options: []
       field: -1
       slot: 
-    - kind: 2
-      text: 
-      cells:
-      - field: 1
-        slot: 
-        caption: 
-        span: 8
-        rows: 1
+    - kind: 1
+      text: 2  AGREEMENT
+      cells: []
       columns: []
       shares: []
       options: []
@@ -101,7 +98,12 @@ MonoBehaviour:
       - field: 3
         slot: 
         caption: 
-        span: 12
+        span: 6
+        rows: 1
+      - field: 4
+        slot: 
+        caption: 
+        span: 6
         rows: 1
       columns: []
       shares: []
@@ -111,11 +113,6 @@ MonoBehaviour:
     - kind: 2
       text: 
       cells:
-      - field: 4
-        slot: 
-        caption: 
-        span: 6
-        rows: 1
       - field: 5
         slot: 
         caption: 
@@ -127,7 +124,7 @@ MonoBehaviour:
       field: -1
       slot: 
     - kind: 12
-      text: Debt Relief Act of 2144. Alterations void this contract.
+      text: Temporal Customs Act of 2139. Any alteration voids this document.
       cells: []
       columns: []
       shares: []

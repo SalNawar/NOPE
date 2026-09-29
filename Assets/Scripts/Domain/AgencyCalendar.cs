@@ -35,6 +35,9 @@ public sealed class AgencyContent
     /// <summary>The transponder models citizens travel on (agency.transponders: a weighted list per class).</summary>
     public List<TransponderModel> transponders = new List<TransponderModel>();
 
+    /// <summary>The proofs of means a Standard account may hold (agency.proofs: a weighted list, one per proof form; phase 8).</summary>
+    public List<ProofOfMeans> proofs = new List<ProofOfMeans>();
+
     /// <summary>The chance an accepted traveller on an Economy transponder is stranded at the shift's end (agency.strandChance, 0.08; Strandings.Roll; the traveller-types spec's S1).</summary>
     public float strandChance;
 
@@ -48,7 +51,7 @@ public sealed class AgencyContent
     public List<string> EmployersOf(string eraId) =>
         (employers ?? new List<Employer>()).Where(e => e != null && e.era == eraId).Select(e => e.name).ToList();
 
-    /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from, displaced ranges AgencyNumbers cannot draw from (found at least 1 day ago; valid from at least today, the least no more than the most), a stranding chance outside 0 to 1 or a fine below 0, the accounts' ranges and transponder models (AccountRanges.Problems), and the employers (an id once, an era, a name that fits a form's box). Empty when sound.</summary>
+    /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from, a stranding chance outside 0 to 1 or a fine below 0, displaced ranges AgencyNumbers cannot draw from (found at least 1 day ago; valid from at least today, the least no more than the most), the accounts' ranges, transponder models and proofs of means (AccountRanges.Problems), and the employers (an id once, an era, a name that fits a form's box). Empty when sound.</summary>
     public List<string> Problems()
     {
         var problems = new List<string>();
@@ -75,7 +78,7 @@ public sealed class AgencyContent
         if (accounts == null)
             problems.Add("agency.accounts is missing: the ranges a 2150 citizen's account is drawn from.");
         else
-            problems.AddRange(accounts.Problems(transponders));
+            problems.AddRange(accounts.Problems(transponders, proofs));
 
         var employerIds = new HashSet<string>();
         foreach (Employer e in employers ?? new List<Employer>())

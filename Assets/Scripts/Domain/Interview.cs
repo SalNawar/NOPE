@@ -91,6 +91,19 @@ public static class Interview
         return string.IsNullOrWhiteSpace(template) ? Placeholder(PlaceToken) : template;
     }
 
+    /// <summary>The missing-form reply of <paramref name="kind"/> asked for <paramref name="request"/> (a form number or a group id, FormRequests.IdOf) for <paramref name="variant"/> (null entries skipped), or null when none is authored.</summary>
+    public static LineText MissingFormReply(InterviewLines lines, TravellerKind kind, string request, MissingFormVariant variant)
+    {
+        if (lines == null || lines.missingFormReplies == null)
+            return null;
+
+        foreach (MissingFormReply r in lines.missingFormReplies)
+            if (r != null && r.kind == kind && r.request == request && r.variant == variant)
+                return r.line;
+
+        return null;
+    }
+
     /// <summary>The first claim line of a kind (null entries skipped), or null when it has none.</summary>
     public static LineText ClaimLine(InterviewLines lines, TravellerKind kind)
     {

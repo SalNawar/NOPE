@@ -194,10 +194,10 @@ MonoBehaviour:
       line:
         id: interview.claims.RichTourist
         text: One leisure departure to {place}, please.
-    - kind: 2
+    - kind: 1
       line:
-        id: interview.claims.Labourer
-        text: One Debt Relief departure to {place}. I have a contract to work.
+        id: interview.claims.PoorTourist
+        text: One leisure departure to {place}, please.
     - kind: 3
       line:
         id: interview.claims.Displaced
@@ -207,6 +207,46 @@ MonoBehaviour:
     honorificUnknown: traveller
     requestLabel: Request {document}
     papersLabel: Request papers >
+    askGroups:
+    - id: proof
+      label: Proof of means
+    missingFormReplies:
+    - kind: 0
+      request: TC-310
+      variant: 0
+      line:
+        id: interview.missingFormReplies.RichTourist.TC-310.Honest
+        text: It's a Premium unit, I don't need one.
+    - kind: 0
+      request: proof
+      variant: 0
+      line:
+        id: interview.missingFormReplies.RichTourist.proof.Honest
+        text: I pay my own way.
+    - kind: 2
+      request: proof
+      variant: 0
+      line:
+        id: interview.missingFormReplies.Labourer.proof.Honest
+        text: Debt Relief pays my way.
+    - kind: 1
+      request: TC-310
+      variant: 1
+      line:
+        id: interview.missingFormReplies.PoorTourist.TC-310.Missing
+        text: I... didn't get round to that one.
+    - kind: 1
+      request: proof
+      variant: 1
+      line:
+        id: interview.missingFormReplies.PoorTourist.proof.Missing
+        text: I... didn't get round to that one.
+    - kind: 2
+      request: TC-310
+      variant: 1
+      line:
+        id: interview.missingFormReplies.Labourer.TC-310.Missing
+        text: I... didn't get round to that one.
     requestPrompt:
       id: interview.requestPrompt
       text: Your {document}, please.
@@ -603,7 +643,7 @@ MonoBehaviour:
           fromDay: 4
       - type: PoorTourist
         inherit: RichTourist
-        dataOnly: 1
+        dataOnly: 0
         steps:
         - id: paperSet
           when: 1
@@ -1874,7 +1914,7 @@ MonoBehaviour:
       validDaysMin: 3
       validDaysMax: 365
       tripsWithinDays: 1095
-      frozenWithinDays: 30
+      waiverPrefix: SW
       statuses:
       - status: 0
         debtMin: 0
@@ -1891,11 +1931,6 @@ MonoBehaviour:
         debtMax: 320000
         tripsMin: 0
         tripsMax: 2
-      contract:
-        termMin: 90
-        termMax: 720
-        wageMin: 180
-        wageMax: 520
     transponders:
     - id: hopper2
       transponderClass: 0
@@ -1927,39 +1962,27 @@ MonoBehaviour:
       model: Driftbox 3
       prefix: DB
       weight: 1
+    proofs:
+    - form: TC-415
+      category: 19
+      weight: 1
+      amountMin: 4000
+      amountMax: 12000
+      prefix: 
+    - form: TC-416
+      category: 20
+      weight: 1
+      amountMin: 3000
+      amountMax: 15000
+      prefix: 
+    - form: TC-417
+      category: 21
+      weight: 1
+      amountMin: 0
+      amountMax: 0
+      prefix: TI
     strandChance: 0.08
     strandFine: 150
-    employers:
-    - id: nile_quarry
-      era: ancient
-      name: Nile Quarry Syndicate
-    - id: tigris_canal
-      era: ancient
-      name: Tigris Canal Works
-    - id: caravan_guild
-      era: medieval
-      name: Silk Road Caravan Guild
-    - id: cairo_aqueduct
-      era: medieval
-      name: Cairo Aqueduct Trust
-    - id: edo_timber
-      era: earlymodern
-      name: Edo Timber Company
-    - id: arsenal_holdings
-      era: earlymodern
-      name: Venetian Arsenal Holdings
-    - id: tyburn
-      era: industrial
-      name: Tyburn Mills Consortium
-    - id: ruhr_colliery
-      era: industrial
-      name: Ruhr Colliery Partners
-    - id: weimar_rail
-      era: modern
-      name: Weimar Rail Works
-    - id: showa_shipyard
-      era: modern
-      name: Showa Shipyard Group
   news:
     debt:
     - Debt Relief Departures reach a record high.
@@ -1968,7 +1991,6 @@ MonoBehaviour:
     - Premium families book Periclean Athens for the summer.
     - A stranded tourist's family inherits 212,000 cr.
     stranded: 'Stranded: {name}, lost in {place} when an Economy transponder failed.'
-    debtReliefCount: '{count} citizens left on Debt Relief yesterday.'
   mail:
   - id: welcome
     fromDay: 1

@@ -30,6 +30,9 @@ public sealed class DocumentsView : AppView, IAppItems
 
     private readonly List<DocumentWindowController> _pages = new List<DocumentWindowController>();
     private readonly List<string> _names = new List<string>();
+
+    /// <summary>Each paper's name while it is not handed over: its request group's label, else its own name (the PC redesign §2.4).</summary>
+    private readonly List<string> _requestNames = new List<string>();
     private readonly List<AppChip> _chips = new List<AppChip>();
     private CasePapers _papers = new CasePapers(0);
     private int _selected = -1;
@@ -60,10 +63,12 @@ public sealed class DocumentsView : AppView, IAppItems
     /// its document and drawing its paper's form (<paramref name="forms"/>, in
     /// paper order; a photo paper shows <paramref name="look"/>; the fields
     /// link by the case's <paramref name="claim"/>), the chips from
-    /// <paramref name="papers"/>, nothing chosen.
+    /// <paramref name="papers"/>, nothing chosen; a paper's chip names it by
+    /// <paramref name="requestNames"/> (its request group's label, else its
+    /// name; null: its name) until it is handed over.
     /// </summary>
     public void SetCase(IReadOnlyList<DocumentInstance> documents, IReadOnlyList<DocumentForm> forms, CasePapers papers, CompareController compare, TravellerLook look,
-                        CharacterArt art, CaseClaim claim)
+                        CharacterArt art, CaseClaim claim, IReadOnlyList<string> requestNames = null)
     {
         Clear();
         _papers = papers ?? new CasePapers(0);
@@ -75,7 +80,9 @@ public sealed class DocumentsView : AppView, IAppItems
                 page.gameObject.SetActive(false);
                 page.SetDocument(documents[i], i, forms != null && i < forms.Count ? forms[i] : null, compare, look, art, claim);
                 _pages.Add(page);
-                _names.Add(documents[i] != null ? documents[i].DisplayName : UiText.Get("document.untitled"));
+                string name = documents[i] != null ? documents[i].DisplayName : UiText.Get("document.untitled");
+                _names.Add(name);
+                _requestNames.Add(requestNames != null && i < requestNames.Count && !string.IsNullOrEmpty(requestNames[i]) ? requestNames[i] : name);
             }
         Refresh();
     }
@@ -128,6 +135,7 @@ public sealed class DocumentsView : AppView, IAppItems
                 Destroy(page.gameObject);
         _pages.Clear();
         _names.Clear();
+        _requestNames.Clear();
         _chips.Clear();
         _papers = new CasePapers(0);
         _selected = -1;
@@ -167,7 +175,7 @@ public sealed class DocumentsView : AppView, IAppItems
             case PaperState.OnDesk:
                 return new AppChip(UiText.Format("app.chip.onDesk", _names[index]), false);
             default:
-                return new AppChip(UiText.Format("app.chip.notHandedOver", _names[index]), false);
+                return new AppChip(UiText.Format("app.chip.notHandedOver", _requestNames[index]), false);
         }
     }
 

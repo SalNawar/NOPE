@@ -151,9 +151,6 @@ public static class Directives
     /// <summary>The three proofs of means (Holiday Credit Agreement, Proof of Funds, Travel Insurance Certificate): a Standard visa needs one.</summary>
     public static readonly IReadOnlyList<string> Proofs = new[] { "TC-415", "TC-416", "TC-417" };
 
-    /// <summary>What an unsigned waiver's signature box reads (the paper-set maker writes it; the facts read it).</summary>
-    public const string Unsigned = "UNSIGNED";
-
     /// <summary>How many days off, at most, a falsified departure is (1 to 3 days before or after today, §5.4).</summary>
     public const int DepartureOffsetMaxDays = 3;
 

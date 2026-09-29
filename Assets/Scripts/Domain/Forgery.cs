@@ -14,17 +14,19 @@ public static class Forgery
     /// <summary>
     /// True for a directive-only category: a departure date or a Valid Until,
     /// read against the desk calendar by the Directives (traveller types P1,
-    /// F7), never compared with a truth and never a tell.
+    /// F7), or a waiver's signature, read against the paper-set directive;
+    /// never compared with a truth and never a tell.
     /// </summary>
     public static bool IsDirectiveOnly(ClueCategory category) =>
-        category == ClueCategory.DepartureDate || category == ClueCategory.Expiry;
+        category == ClueCategory.DepartureDate || category == ClueCategory.Expiry || category == ClueCategory.Signature;
 
     /// <summary>
     /// True for a record category: a value the traveller's own record (the
     /// Citizen Account or the Displacement Registry entry) holds and proves,
     /// whatever the books: the birth date, the agency number, the destination,
-    /// the incident, the account's status, transponder, class and debt, and
-    /// the registered contract's employer, term and wage.
+    /// the incident, the account's status, transponder, class, debt,
+    /// waiver and proof of means (a credit line, savings or a policy number),
+    /// and the registered contract's employer, term and wage.
     /// </summary>
     public static bool IsRecordCategory(ClueCategory category)
     {
@@ -38,6 +40,10 @@ public static class Forgery
             case ClueCategory.TransponderId:
             case ClueCategory.TransponderClass:
             case ClueCategory.Debt:
+            case ClueCategory.WaiverNo:
+            case ClueCategory.Credit:
+            case ClueCategory.Funds:
+            case ClueCategory.PolicyNo:
             case ClueCategory.Employer:
             case ClueCategory.Term:
             case ClueCategory.Wage:

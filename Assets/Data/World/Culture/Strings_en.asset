@@ -1364,14 +1364,6 @@ MonoBehaviour:
     text: 'Correct: {0}   Wrong: {1}'
     gloss: 0
     tier: 0
-  - key: results.leisureDepartures
-    text: 'Leisure departures: {0}'
-    gloss: 0
-    tier: 0
-  - key: results.debtReliefDepartures
-    text: 'Debt Relief departures: {0}   ({1:N0} {2} of debt put to work)'
-    gloss: 0
-    tier: 0
   - key: results.pay
     text: 'Pay earned: +{0}'
     gloss: 0
@@ -1900,27 +1892,23 @@ MonoBehaviour:
     text: DEBT
     gloss: 0
     tier: 0
-  - key: records.standing.frozen
-    text: 'Frozen: default, {0}'
+  - key: category.WaiverNo
+    text: WAIVER NO.
     gloss: 0
     tier: 0
-  - key: citation.acceptedWrong.incomplete
-    text: Approved incomplete paperwork.
+  - key: category.Credit
+    text: CREDIT
     gloss: 0
     tier: 0
-  - key: citation.acceptedWrong.frozen
-    text: Approved a frozen account.
+  - key: category.Funds
+    text: FUNDS
     gloss: 0
     tier: 0
-  - key: category.Employer
-    text: EMPLOYER
+  - key: category.PolicyNo
+    text: POLICY NO.
     gloss: 0
     tier: 0
-  - key: category.Term
-    text: TERM
-    gloss: 0
-    tier: 0
-  - key: category.Wage
-    text: WAGE
+  - key: category.Signature
+    text: SIGNATURE
     gloss: 0
     tier: 0

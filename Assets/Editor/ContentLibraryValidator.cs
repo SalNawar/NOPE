@@ -261,7 +261,13 @@ public static partial class ContentLibraryValidator
                          lib.Profiles.Any(p => p != null && p.smallTalk != null && p.smallTalk.Count > 0);
         var premadeDialogs = new HashSet<string>(lib.Legendaries.Where(l => l != null && !string.IsNullOrWhiteSpace(l.dialogId)).Select(l => l.dialogId));
         int bound = lib.Dialogs.Count(d => d != null && d.dialog != null && premadeDialogs.Contains(d.dialog.id));
-        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.MostForOneKind(questions), smallTalk, MaxRequestedDocuments(TravellerBlueprints(lib)),
+        List<KindForms> kindForms = KindForms(lib, out List<AskableForm> forms);
+        foreach (string problem in FormRequests.GroupProblems(forms, lines.askGroups))
+            Error($"{problem} (run Tools > TimeDesk > Generate World)", lib);
+        foreach (string problem in FormRequests.ReplyProblems(lines.missingFormReplies, forms, kindForms))
+            Error($"{problem} (run Tools > TimeDesk > Generate World)", lib);
+
+        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.MostForOneKind(questions), smallTalk, MaxRequests(kindForms),
                                                              (lines.requests ?? new List<InterviewRequest>()).Count(r => r != null),
                                                              lib.Dialogs.Count(d => d != null) - bound, bound, lines.menuCapacity))
             Error(problem, lib);
@@ -269,32 +275,38 @@ public static partial class ContentLibraryValidator
         return issues;
     }
 
+    /// <summary>The most request entries one kind may be asked for (a form outside a group or a request group each one, FormRequests.Count): the papers menu's size.</summary>
+    public static int MaxRequests(IReadOnlyList<KindForms> kinds) =>
+        kinds.Select(k => FormRequests.Count(k.Askable)).DefaultIfEmpty(0).Max();
+
+    /// <summary>The library's agency forms as the interview's requests see them (TimelineService.AgencyForms) and each kind's askable and carried forms (FormRequests' rules; the generator computes the same from its source).</summary>
+    public static List<KindForms> KindForms(ContentLibrarySO lib, out List<AskableForm> forms)
+    {
+        List<AskableForm> all = forms = TimelineService.AgencyForms(lib);
+        var byNumber = all.GroupBy(f => f.FormNumber ?? string.Empty).ToDictionary(g => g.Key, g => g.First());
+        return TravellerBlueprints(lib).Where(b => b != null).Distinct()
+            .GroupBy(b => b.Kind)
+            .Select(g => new KindForms
+            {
+                Kind = g.Key,
+                Askable = FormRequests.For(g.Key, all),
+                Carried = g.SelectMany(b => b.DocumentTemplates ?? new DocumentTemplateSO[0]).Where(t => t != null)
+                           .Select(t => byNumber.TryGetValue(t.formNumber ?? string.Empty, out AskableForm f) ? f : new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver), t.askableBy))
+                           .ToList()
+            })
+            .ToList();
+    }
+
     /// <summary>
-    /// The most papers one traveller carries among these blueprints (null
-    /// blueprints and templates are skipped). The office builder checks the
-    /// desk's paper spawn slots against it.
+    /// The most papers one traveller carries among these blueprints: a
+    /// blueprint's templates outside a request group, plus one per group (a
+    /// traveller carries one form of a group, FormRequests.CarriedCount; null
+    /// blueprints and templates are skipped); 0 for no blueprints. The office
+    /// builder checks the desk's paper spawn slots against it.
     /// </summary>
     public static int MaxDocuments(IEnumerable<CaseBlueprintSO> blueprints) =>
-        MaxTemplates(blueprints, t => true);
-
-    /// <summary>
-    /// The most documents one traveller hands over on request among these
-    /// blueprints (a hub request each; templates handed over on arrival, null
-    /// blueprints and null templates are skipped). Generate World counts its
-    /// source's blueprints with the same rule.
-    /// </summary>
-    public static int MaxRequestedDocuments(IEnumerable<CaseBlueprintSO> blueprints) =>
-        MaxTemplates(blueprints, t => DocumentHandOvers.IsRequested(t.handOver));
-
-    /// <summary>
-    /// The one walk behind MaxDocuments and MaxRequestedDocuments: the most
-    /// templates one blueprint holds that <paramref name="counts"/> accepts
-    /// (null blueprints and null templates are skipped, so the predicate never
-    /// sees a null); 0 for no blueprints.
-    /// </summary>
-    private static int MaxTemplates(IEnumerable<CaseBlueprintSO> blueprints, Func<DocumentTemplateSO, bool> counts) =>
         blueprints.Where(b => b != null && b.DocumentTemplates != null)
-                  .Select(b => b.DocumentTemplates.Count(t => t != null && counts(t)))
+                  .Select(b => FormRequests.CarriedCount(b.DocumentTemplates.Where(t => t != null).Select(t => t.askGroup).ToList()))
                   .DefaultIfEmpty(0)
                   .Max();
 

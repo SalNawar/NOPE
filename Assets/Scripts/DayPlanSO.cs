@@ -34,7 +34,7 @@ public sealed class DayPlanSO : ScriptableObject
     // Procedural generation
     // -----------------------------
 
-    /// <summary>The day's traveller mix (traveller types K1): each kind's blueprint and weight, one weighted draw on the case stream (written by Generate World from days[].kinds).</summary>
+    /// <summary>The day's traveller mix (traveller types K1): each kind's blueprint, weight and whether its travellers are honest (K5), one weighted draw on the case stream (written by Generate World from days[].kinds).</summary>
     [SerializeField] private KindWeight[] kinds;
 
     /// <summary>Weighted set of eras to pick the claimed (home) era from (optional).</summary>
@@ -354,7 +354,8 @@ public sealed class ForcedCaseSlot
 
 /// <summary>
 /// One kind's share of a day's travellers (traveller types K1, days[].kinds):
-/// the kind's blueprint and its weight in the day's one blueprint draw.
+/// the kind's blueprint and its weight in the day's one blueprint draw, and
+/// whether its travellers are honest (K5).
 /// </summary>
 [Serializable]
 public sealed class KindWeight
@@ -364,6 +365,9 @@ public sealed class KindWeight
 
     /// <summary>Relative weight among the day's kinds (higher = more likely; 0 = never).</summary>
     [Min(0f)] public float weight = 1f;
+
+    /// <summary>True when a traveller drawn from this entry is honest: every fault roll is skipped with no draw (traveller types K5; FaultOrder; day 1's poor tourists). Written by Generate World from days[].kinds[].honest.</summary>
+    public bool honest;
 }
 
 /// <summary>

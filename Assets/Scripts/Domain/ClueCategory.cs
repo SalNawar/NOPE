@@ -56,6 +56,24 @@ public enum ClueCategory
     /// <summary>What a citizen owes, in credits ("0 cr", "212,000 cr").</summary>
     Debt,
 
+    // The poor tourist's papers (traveller types F4, phase 8): the waiver
+    // and the proof of means, compared with the Citizen Account's Forms on file.
+
+    /// <summary>The Stranding Waiver registered on the account ("SW-204817").</summary>
+    WaiverNo,
+
+    /// <summary>A Holiday Credit Agreement's credit line, in credits ("9,400 cr").</summary>
+    Credit,
+
+    /// <summary>A Proof of Funds' savings, in credits ("6,200 cr").</summary>
+    Funds,
+
+    /// <summary>A Travel Insurance Certificate's policy number ("TI-551902").</summary>
+    PolicyNo,
+
+    /// <summary>A waiver's signature: the signatory's hand, or blank (UNSIGNED). Directive-only: read against the paper-set directive, never compared, never a proof.</summary>
+    Signature,
+
     // A labourer's registered Debt Relief Labour Contract (traveller types
     // §3.7, phase 9): on TC-520 and the account's Forms on file.
 

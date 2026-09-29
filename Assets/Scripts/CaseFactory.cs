@@ -28,8 +28,9 @@ using UnityEngine;
 /// speech, the destination's dress over their family country's looks, and a
 /// Citizen Account (AccountMaker) on their account stream, which their forms
 /// and their record print. Who lies is one roll on the lie stream
-/// (Lies.Roll, among the day's lies that fit the kind, LieKinds.For; K5:
-/// never a premade authored honest, a closure's violator or a traveller
+/// (Lies.Roll, among the day's lies that fit the kind, LieKinds.For; K5,
+/// FaultOrder: never a premade authored honest, a closure's violator, a
+/// traveller drawn from an honest kind entry, or one
 /// without papers): the displaced's false origin is the place lie above; a
 /// smuggler (LieKind.Smuggling, from day 4) claims honestly but carries the
 /// present's currency or technology, planned by the same Lies.Plan with the
@@ -359,13 +360,16 @@ public sealed class CaseFactory
         // 4) Decide blueprint: forced > one weighted pick of the day's kinds
         //    (active-effect weight multipliers applied; a premade's slot and a
         //    planned liar's slot draw only the displaced, TravellerKinds.PickWeight;
-        //    a planned procedure's slot only the kinds its rule reads and its maker can break).
+        //    a planned procedure's slot only the kinds its rule reads and its maker
+        //    can break, never an honest entry). A traveller drawn from an honest
+        //    entry rolls no fault (K5, FaultOrder).
         bool displacedOnly = legendary != null || (_plannedLiars.TryGetValue(caseIndex1Based, out LieKind plannedLie) && plannedLie != LieKind.Smuggling);
-        CaseBlueprintSO blueprint =
-            forcedBlueprint != null ? forcedBlueprint :
-            WeightedRandom.Pick(plan.Kinds, k => k != null && k.blueprint != null && (plannedRule == null || CanBreak(plannedRule, k.blueprint))
+        KindWeight entry = forcedBlueprint != null ? null :
+            WeightedRandom.Pick(plan.Kinds, k => k != null && k.blueprint != null && (plannedRule == null || (!k.honest && CanBreak(plannedRule, k.blueprint)))
                 ? TravellerKinds.PickWeight(k.blueprint.Kind, k.weight, displacedOnly) * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, k.blueprint.name)
-                : 0f, _rng)?.blueprint;
+                : 0f, _rng);
+        CaseBlueprintSO blueprint = forcedBlueprint != null ? forcedBlueprint : entry?.blueprint;
+        bool honest = entry != null && entry.honest;
 
         // A 2150 citizen (traveller types K2, K4) comes from the present.
         bool citizen = legendary == null && blueprint != null && TravellerKinds.IsCitizen(blueprint.Kind);
@@ -418,13 +422,13 @@ public sealed class CaseFactory
         // 4.6) The directive fault (traveller types P1): a closed destination, read against today's Directives.
         inst.directiveFault = plan.ClaimAllowed(nation, claimedEra) ? DirectiveFault.None : DirectiveFault.ClosedDestination;
 
-        // 4.7) The lie roll (K5: after the premade's authoring and the planned slot; before the account,
+        // 4.7) The lie roll (K5: after the premade's authoring, the planned slot and the honest entry; before the account,
         //      so a poor citizen posing as rich holds the Standard account their papers must be checked against).
         //      A planned procedure's slot draws nothing: its smuggler is planned, its breaker is made below.
         //      A costume error forced from the debug panel is a planned fault: it stands in for the roll.
-        bool forcedCostume = DevToolsState.ForcedCostumeError != CostumeError.None && legendary == null && !inst.HasDirectiveFault && place != null
+        bool forcedCostume = DevToolsState.ForcedCostumeError != CostumeError.None && legendary == null && !inst.HasDirectiveFault && !honest && place != null
                              && !_plannedLiars.ContainsKey(caseIndex1Based) && plannedRule == null;
-        LieKind? lieKind = forcedCostume ? null : RollLie(inst, plan, blueprint, state, legendary, caseIndex1Based, plannedRule != null);
+        LieKind? lieKind = forcedCostume ? null : RollLie(inst, plan, blueprint, state, legendary, honest, caseIndex1Based, plannedRule != null);
 
         // 4.8) The agency's file, on the account stream (the forms and the record print it):
         //      a displaced person's registry numbers, or a 2150 citizen's Citizen Account (LieKinds.TrueStatus: the truth).
@@ -432,13 +436,13 @@ public sealed class CaseFactory
             inst.displacement = AgencyNumbers.Displaced(_today.Value, _lib.Agency.displaced, _agencyNumbers, _accountRng);
         else if (citizen && _today != null && AccountMaker.StatusOf(inst.kind, out CitizenStatus status))
             inst.account = AccountMaker.Make(AccountRequestFor(LieKinds.TrueStatus(lieKind, status), family, blueprint, claimedEra), _lib.Agency.accounts, _lib.Agency.transponders,
-                                             _today.Value, _agencyNumbers, _accountRng);
+                                             _lib.Agency.proofs, _today.Value, _agencyNumbers, _accountRng);
 
         // 4.9) The violation (K5: after the lie roll, before the costume roll): a guaranteed procedure's maker, or the
         //      roll on the fault stream for an honest traveller; the account side of the maker runs before the papers print.
         PaperSetBreak paperBreak = PaperSetBreak.None;
         TravelRuleSO broken = lieKind == null && !forcedCostume && legendary == null && !inst.HasDirectiveFault
-            ? PlanViolation(inst, plan, blueprint, plannedRule, caseIndex1Based, out paperBreak)
+            ? PlanViolation(inst, plan, blueprint, plannedRule, honest, caseIndex1Based, out paperBreak)
             : null;
 
         // 5) Merge authored timeline impacts (blueprint + legendary).
@@ -448,7 +452,7 @@ public sealed class CaseFactory
         if (legendary != null && legendary.authoredImpacts != null)
             inst.authoredImpacts.AddRange(legendary.authoredImpacts);
 
-        // 6) Build the documents (their fields are filled below).
+        // 6) Build the documents the traveller carries (their fields are filled below).
         BuildDocuments(inst, blueprint);
 
         // 7) Investigation layer: stated claim, structured fields, then the rolled lie planned and printed,
@@ -469,7 +473,7 @@ public sealed class CaseFactory
         inst.smallTalk = Interview.PickSmallTalk(place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null, _dialogRng);
 
         bool plannedDress = plannedRule != null && plannedRule.type == TravelRuleType.DressForDestination;
-        (LookSource source, bool whole) costume = broken != null ? (null, false) : PlanCostume(inst, place, legendary, forcedCostume, plannedDress, plan, caseIndex1Based);
+        (LookSource source, bool whole) costume = broken != null ? (null, false) : PlanCostume(inst, place, legendary, forcedCostume, honest, plannedDress, plan, caseIndex1Based);
         inst.look = ComposeLook(inst, place, lie, legendary, family, costume, caseIndex1Based);
 
         // 8) The Directives read the finished papers and account (traveller types P1, P3): the first rule broken is the fault.
@@ -481,7 +485,7 @@ public sealed class CaseFactory
         string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
         string look = inst.look != null ? inst.look.Describe() : "none";
         string recordTells = string.Join(", ", inst.recordTells.Select(t => $"{t.Category}@{t.Document}"));
-        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, broken={(broken != null ? broken.name : "none")}, paperSet={paperBreak}, standing={inst.account?.Standing.ToString() ?? "none"}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, honestEntry={honest}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, broken={(broken != null ? broken.name : "none")}, paperSet={paperBreak}, standing={inst.account?.Standing.ToString() ?? "none"}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
     }
@@ -506,15 +510,18 @@ public sealed class CaseFactory
     /// or a Frozen standing since a day within agency.accounts.frozenWithinDays
     /// (AgencyNumbers.DaysAgo). The paper side follows the printing
     /// (BreakPapers, FalsifyDate). Null when honest (no draw for a traveller
-    /// who can break nothing).
+    /// who can break nothing, or who rolls no fault: an honest kind entry,
+    /// FaultOrder.MayRoll).
     /// </summary>
-    private TravelRuleSO PlanViolation(CaseInstance inst, DayPlanSO plan, CaseBlueprintSO blueprint, TravelRuleSO plannedRule, int caseIndex1Based, out PaperSetBreak paperBreak)
+    private TravelRuleSO PlanViolation(CaseInstance inst, DayPlanSO plan, CaseBlueprintSO blueprint, TravelRuleSO plannedRule, bool honestEntry, int caseIndex1Based, out PaperSetBreak paperBreak)
     {
         paperBreak = PaperSetBreak.None;
         List<string> forms = FormNumbers(blueprint);
         TravelRuleSO broken;
         if (plannedRule != null)
             broken = Directives.IsRolled(plannedRule.type) ? plannedRule : null;
+        else if (!FaultOrder.MayRoll(FaultRoll.Violation, false, inst.HasDirectiveFault, honestEntry, inst.lie != null))
+            return null;
         else
         {
             List<TravelRuleSO> breakable = plan.ActiveTravelRules.Where(r => r != null && Directives.IsRolled(r.type) && CanBreak(r, blueprint)).ToList();
@@ -557,8 +564,9 @@ public sealed class CaseFactory
     /// <summary>
     /// The paper side of a broken paper set (§5.4), after the papers print:
     /// the Stranding Waiver or the proof of means left out (the traveller
-    /// never hands it over; the account keeps it on file), or the waiver's
-    /// signature box (its form's Signature block, FormSpec) reading UNSIGNED.
+    /// never hands it over and answers the request with their kind's Missing
+    /// line, MissingFormVariant.Missing; the account keeps it on file), or the
+    /// waiver's Signature box reading UNSIGNED (Strandings.UnsignedMark).
     /// </summary>
     private static void BreakPapers(CaseInstance inst, PaperSetBreak paperBreak)
     {
@@ -566,41 +574,33 @@ public sealed class CaseFactory
         {
             case PaperSetBreak.WaiverMissing:
                 inst.documents.RemoveAll(d => d.template != null && d.template.formNumber == Directives.Waiver);
+                inst.missingFormVariant = MissingFormVariant.Missing;
                 break;
             case PaperSetBreak.ProofMissing:
                 inst.documents.RemoveAll(d => d.template != null && Directives.Proofs.Contains(d.template.formNumber));
+                inst.missingFormVariant = MissingFormVariant.Missing;
                 break;
             case PaperSetBreak.WaiverUnsigned:
-                DocumentInstance waiver = inst.documents.FirstOrDefault(d => d.template != null && d.template.formNumber == Directives.Waiver);
-                int box = waiver != null ? SignatureBox(waiver.template) : -1;
-                if (box >= 0 && box < waiver.fields.Count)
-                    waiver.fields[box].value = Directives.Unsigned;
+                DocumentField signature = inst.documents.Where(d => d.template != null && d.template.formNumber == Directives.Waiver)
+                    .SelectMany(d => d.fields).FirstOrDefault(f => f != null && f.category == ClueCategory.Signature);
+                if (signature != null)
+                    signature.value = Strandings.UnsignedMark;
                 break;
         }
-    }
-
-    /// <summary>The index of the field a form's Signature block draws (FormBlockKind.Signature), or -1 without one.</summary>
-    private static int SignatureBox(DocumentTemplateSO template)
-    {
-        if (template.form == null || template.form.blocks == null)
-            return -1;
-        foreach (FormBlock block in template.form.blocks)
-            if (block != null && block.kind == FormBlockKind.Signature)
-                return block.field;
-        return -1;
     }
 
     /// <summary>
     /// What the Directives read of the finished traveller (CaseFacts): the
     /// kind; whether today's closures forbid the claim; the class the visa
     /// and the manifest print (unreadable: none); the forms carried; whether
-    /// the waiver is carried and its signature box does not read UNSIGNED;
-    /// the account's standing; and the papers' dates against today.
+    /// the waiver is carried and signed (Strandings.StandingOf: anything but
+    /// Unsigned; a number the account never registered is a forgery, L3, not
+    /// a paper-set fault); the account's standing; and the papers' dates
+    /// against today.
     /// </summary>
     private CaseFacts Facts(CaseInstance inst, DayPlanSO plan)
     {
         DocumentInstance waiver = inst.documents.FirstOrDefault(d => d.template != null && d.template.formNumber == Directives.Waiver);
-        int box = waiver != null ? SignatureBox(waiver.template) : -1;
         List<DocumentField> fields = inst.documents.SelectMany(d => d.fields).Where(f => f != null).ToList();
         return new CaseFacts
         {
@@ -609,7 +609,7 @@ public sealed class CaseFactory
             VisaClass = System.Enum.TryParse(FieldValue(inst, Directives.Visa, ClueCategory.AccountStatus), out CitizenStatus visa) ? visa : (CitizenStatus?)null,
             ManifestClass = System.Enum.TryParse(FieldValue(inst, Directives.Manifest, ClueCategory.TransponderClass), out TransponderClass manifest) ? manifest : (TransponderClass?)null,
             Forms = inst.documents.Where(d => d.template != null).Select(d => d.template.formNumber).ToList(),
-            WaiverSigned = waiver != null && !(box >= 0 && box < waiver.fields.Count && Values.Match(waiver.fields[box].value, Directives.Unsigned)),
+            WaiverSigned = waiver != null && Strandings.StandingOf(waiver.fields, inst.account?.WaiverNo) != WaiverStanding.Unsigned,
             Frozen = inst.account != null && inst.account.Standing == AccountStanding.Frozen,
             Departures = fields.Where(f => f.category == ClueCategory.DepartureDate).Select(f => f.value).ToList(),
             ValidUntils = fields.Where(f => f.category == ClueCategory.Expiry).Select(f => f.value).ToList(),
@@ -674,25 +674,29 @@ public sealed class CaseFactory
     /// <summary>
     /// Rolls the traveller's lie on their lie stream (Lies.Roll; traveller
     /// types K5, §6.2): at the liar chance, one of the day's lies that fit
-    /// the kind (LieKinds.For; a premade authored as a liar lies surely,
-    /// their false origin). A planned liar's slot (PlanViolators: the
+    /// the kind (LieKinds.For). A planned liar's slot (PlanViolators: the
     /// displaced's return home on its first day) tells its planned lie with
-    /// no draw. Exempt travellers (honest premades, a closure's violator or a
-    /// guaranteed procedure's breaker (<paramref name="plannedFault"/>), no
-    /// papers: Lies.MayLie) draw nothing. Null: honest.
+    /// no draw; a premade's authoring decides instead: a premade authored as a
+    /// liar lies surely (their false origin), an honest one never
+    /// (Lies.MayLie). Exempt travellers (a closure's violator or a guaranteed
+    /// procedure's breaker, <paramref name="plannedFault"/>; an honest kind
+    /// entry: FaultOrder.MayRoll; no papers: Lies.MayLie) draw nothing. Null:
+    /// honest.
     /// </summary>
-    private LieKind? RollLie(CaseInstance inst, DayPlanSO plan, CaseBlueprintSO blueprint, WorldState state, LegendarySO legendary, int caseIndex1Based, bool plannedFault)
+    private LieKind? RollLie(CaseInstance inst, DayPlanSO plan, CaseBlueprintSO blueprint, WorldState state, LegendarySO legendary, bool honestEntry, int caseIndex1Based, bool plannedFault)
     {
         if (_plannedLiars.TryGetValue(caseIndex1Based, out LieKind planned))
             return planned;
-
-        bool honestPremade = legendary != null && legendary.truePlace == null;
-        bool hasPapers = blueprint.DocumentTemplates != null && blueprint.DocumentTemplates.Any(t => t != null && t.fieldSpecs != null && t.fieldSpecs.Length > 0);
-        if (!Lies.MayLie(honestPremade, !inst.HasDirectiveFault && !plannedFault, hasPapers))
+        if (plannedFault)
             return null;
 
-        IReadOnlyList<LieKind> lies = legendary != null ? new[] { LieKind.FalseOrigin } : LieKinds.For(plan.EnabledLies, inst.kind);
-        return Lies.Roll(legendary != null ? 1f : LiarChance(blueprint, state), lies, _lieRng);
+        bool hasPapers = blueprint.DocumentTemplates != null && blueprint.DocumentTemplates.Any(t => t != null && t.fieldSpecs != null && t.fieldSpecs.Length > 0);
+        if (legendary != null)
+            return Lies.MayLie(legendary.truePlace == null, !inst.HasDirectiveFault, hasPapers) ? Lies.Roll(1f, new[] { LieKind.FalseOrigin }, _lieRng) : null;
+        if (!FaultOrder.MayRoll(FaultRoll.Lie, false, inst.HasDirectiveFault, honestEntry, false) || !Lies.MayLie(false, true, hasPapers))
+            return null;
+
+        return Lies.Roll(LiarChance(blueprint, state), LieKinds.For(plan.EnabledLies, inst.kind), _lieRng);
     }
 
     /// <summary>The traveller's papers as the lie plans rewrite them: each paper's fields, in case order.</summary>
@@ -920,9 +924,9 @@ public sealed class CaseFactory
 
     /// <summary>
     /// The costume roll (traveller types C2, K5), for a 2150 citizen with no
-    /// other fault (not a premade, a liar, a forger, a closure's violator or a
-    /// directive breaker) whose garments can be looked at today; no draw
-    /// otherwise. Its candidates: today's other places whose signature item
+    /// other fault (FaultOrder.MayRoll: not a premade, a closure's violator,
+    /// an honest kind entry, a liar, a forger or a directive breaker) whose
+    /// garments can be looked at today; no draw otherwise. Its candidates: today's other places whose signature item
     /// can leak onto the claim (Looks.CanLeak) and whose Costume Guide row
     /// differs from the claim's (per place, C5), the present's clothes, and
     /// the kit accessories that can leak (Looks.KitSource). It draws on the
@@ -934,11 +938,11 @@ public sealed class CaseFactory
     /// leak source and whether it is worn whole (the present's clothes), or
     /// no source.
     /// </summary>
-    private (LookSource source, bool whole) PlanCostume(CaseInstance inst, NationEraProfileSO place, LegendarySO legendary, bool forced, bool planned,
+    private (LookSource source, bool whole) PlanCostume(CaseInstance inst, NationEraProfileSO place, LegendarySO legendary, bool forced, bool honestEntry, bool planned,
                                                         DayPlanSO plan, int caseIndex1Based)
     {
-        if (legendary != null || place == null || inst.IsLiar || inst.IsForger || inst.HasDirectiveFault || !_appearanceReachable ||
-            inst.gender == TravellerGender.Unknown || (!forced && !CostumeErrors.MayErr(inst.kind)))
+        if (!(planned || FaultOrder.MayRoll(FaultRoll.Costume, legendary != null, inst.HasDirectiveFault, honestEntry, inst.IsLiar || inst.IsForger)) ||
+            place == null || !_appearanceReachable || inst.gender == TravellerGender.Unknown || (!forced && !CostumeErrors.MayErr(inst.kind)))
             return (null, false);
 
         LookSource claim = SourceOf(place);
@@ -1115,8 +1119,10 @@ public sealed class CaseFactory
     /// a warning) when content is missing; also each spoken answer's cover
     /// value (AddAnswers). A 2150 citizen's account values come from their
     /// Citizen Account (the ID, the status, the transponder and its class,
-    /// the debt, the registered contract's employer, term and wage, and the
-    /// Valid Until of their <paramref name="expiryIndex"/>th expiring form). A liar's Papers tells overwrite the printed values
+    /// the debt, the waiver number, the proof of means the account holds,
+    /// and the Valid Until of their <paramref name="expiryIndex"/>th
+    /// expiring form); a waiver's signature is the traveller's own hand (their
+    /// given name). A liar's Papers tells overwrite the printed values
     /// afterwards (Disguise); an Answer tell replaces only the spoken value
     /// (Interview.Answer).
     /// </summary>
@@ -1137,6 +1143,12 @@ public sealed class CaseFactory
             case ClueCategory.TransponderId: return AgencyValue(account?.Transponder, category);
             case ClueCategory.TransponderClass: return AgencyValue(account?.TransponderClass.ToString(), category);
             case ClueCategory.Debt: return AgencyValue(account != null ? AccountMaker.Credits(account.Debt) : null, category);
+            case ClueCategory.WaiverNo: return AgencyValue(account?.WaiverNo, category);
+            case ClueCategory.Credit:
+            case ClueCategory.Funds:
+            case ClueCategory.PolicyNo:
+                return AgencyValue(account != null && account.ProofForm != null && account.ProofCategory == category ? account.ProofValue : null, category);
+            case ClueCategory.Signature: return inst.visitorGivenName;
             case ClueCategory.Employer: return AgencyValue(account?.Employer, category);
             case ClueCategory.Term: return AgencyValue(account != null && account.HasContract ? AccountMaker.Term(account.TermDays) : null, category);
             case ClueCategory.Wage: return AgencyValue(account != null && account.HasContract ? AccountMaker.Credits(account.Wage) : null, category);
@@ -1250,9 +1262,10 @@ public sealed class CaseFactory
     /// <summary>
     /// What the account maker needs for a citizen of <paramref name="status"/>
     /// (explicit inputs, audit R3-025): their family country's past places as
-    /// lineages (in era order), every past place for their trips, how many
-    /// of their blueprint's forms print a Valid Until, and for a labourer
-    /// the registered contract with the worksite's era's employers
+    /// lineages (in era order), every past place for their trips, their
+    /// blueprint's forms (number, request group, whether it prints a Valid
+    /// Until), of which the account decides the carried ones, and for a
+    /// labourer the registered contract with the worksite's era's employers
     /// (agency.employers).
     /// </summary>
     private AccountRequest AccountRequestFor(CitizenStatus status, NationEraProfileSO family, CaseBlueprintSO blueprint, EraSO worksiteEra) => new AccountRequest
@@ -1267,7 +1280,8 @@ public sealed class CaseFactory
                            .ToList()
             : new List<string>(),
         TripPlaces = _pastPlaces,
-        ExpiringForms = (blueprint.DocumentTemplates ?? System.Array.Empty<DocumentTemplateSO>()).Count(t => t != null && Expires(t))
+        Forms = (blueprint.DocumentTemplates ?? System.Array.Empty<DocumentTemplateSO>()).Where(t => t != null)
+            .Select(t => new FormEntry(t.formNumber, t.askGroup, Expires(t))).ToList()
     };
 
     /// <summary>True when the form prints a Valid Until (an Expiry field).</summary>
@@ -1421,8 +1435,10 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Creates the traveller's runtime documents from the blueprint's
-    /// templates, in paper order (null templates skipped); their fields are
-    /// filled next (PopulateDocumentFields).
+    /// templates the traveller carries (AccountMaker.Carries: every form
+    /// outside a request group, and of the proof group the one form their
+    /// account holds), in paper order (null templates skipped); their fields
+    /// are filled next (PopulateDocumentFields).
     /// </summary>
     private static void BuildDocuments(CaseInstance inst, CaseBlueprintSO blueprint)
     {
@@ -1430,7 +1446,7 @@ public sealed class CaseFactory
             return;
 
         foreach (DocumentTemplateSO dt in blueprint.DocumentTemplates)
-            if (dt != null)
+            if (dt != null && AccountMaker.Carries(dt.askGroup, dt.formNumber, inst.account))
                 inst.documents.Add(new DocumentInstance { template = dt });
     }
 }

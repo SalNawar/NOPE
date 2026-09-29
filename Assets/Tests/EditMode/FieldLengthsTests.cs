@@ -23,6 +23,9 @@ public class FieldLengthsTests
     [TestCase(ClueCategory.Technology)]
     [TestCase(ClueCategory.Culture)]
     [TestCase(ClueCategory.Name)]
+    [TestCase(ClueCategory.WaiverNo)]
+    [TestCase(ClueCategory.PolicyNo)]
+    [TestCase(ClueCategory.Signature)]
     public void AFactOrAName_RunsToABookRow(ClueCategory category)
     {
         Assert.AreEqual(FactTable.MaxValueLength, FieldLengths.Longest(category, 40));
@@ -73,5 +76,16 @@ public class FieldLengthsTests
         Assert.AreEqual(FactTable.MaxValueLength, FieldLengths.Longest(ClueCategory.TransponderId, 40));
         Assert.AreEqual(AccountMaker.Credits(AccountRanges.MaxDebt).Length, FieldLengths.Longest(ClueCategory.Debt, 40));
         Assert.AreEqual("9,999,999 cr", AccountMaker.Credits(AccountRanges.MaxDebt));
+    }
+
+    /// <summary>Phase 8: a credit line and savings are amounts of credits like the debt; a waiver or policy number and a signature (a name) run to a book row (AgencyContent.Problems holds every number prefix to it).</summary>
+    [Test]
+    public void TheProofsOfMeans_AreAmounts_TheNumbersAndTheSignature_RunToABookRow()
+    {
+        Assert.AreEqual(AccountMaker.Credits(AccountRanges.MaxDebt).Length, FieldLengths.Longest(ClueCategory.Credit, 40));
+        Assert.AreEqual(AccountMaker.Credits(AccountRanges.MaxDebt).Length, FieldLengths.Longest(ClueCategory.Funds, 40));
+        Assert.AreEqual(FactTable.MaxValueLength, FieldLengths.Longest(ClueCategory.WaiverNo, 40));
+        Assert.AreEqual(FactTable.MaxValueLength, FieldLengths.Longest(ClueCategory.PolicyNo, 40));
+        Assert.AreEqual(FactTable.MaxValueLength, FieldLengths.Longest(ClueCategory.Signature, 40));
     }
 }

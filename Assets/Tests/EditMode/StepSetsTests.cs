@@ -18,8 +18,8 @@ public class StepSetsTests
 
     private static readonly string[] Forms = { "TC-610", "TC-620", "TC-630" };
 
-    /// <summary>The forms of the kinds in play today: the displaced's and the rich tourists'.</summary>
-    private static readonly string[] FormsToday = { "TC-610", "TC-620", "TC-630", "TC-101", "TC-230" };
+    /// <summary>The forms of today's blueprints: the displaced's three, the rich tourist's two, the poor tourist's four more (phase 8) and the labourer's contract (phase 9).</summary>
+    private static readonly string[] FormsToday = { "TC-610", "TC-620", "TC-630", "TC-101", "TC-230", "TC-310", "TC-415", "TC-416", "TC-417", "TC-520" };
 
     private static StepSource Source(string id, string when, string link = "PrimaryName", string hint = null) => new StepSource
     {
@@ -222,7 +222,7 @@ public class StepSetsTests
     // ---- Today's content ----
 
     [Test]
-    public void TodaysSets_ParseAndPassTheRules_TheDisplacedAndRichTouristsInPlay_TheOthersDataOnly()
+    public void TodaysSets_ParseAndPassTheRules_EveryKindInPlay()
     {
         ContentNode root = ContentJson.Parse(SourceText());
         var errors = new List<string>();
@@ -232,7 +232,7 @@ public class StepSetsTests
         CollectionAssert.IsEmpty(errors);
         CollectionAssert.IsEmpty(StepSets.Problems(data, keys, FormsToday));
         CollectionAssert.AreEqual(new[] { CaseSteps.DefaultType, "Displaced", "RichTourist", "PoorTourist", "Labourer" }, data.sets.Select(s => s.type));
-        CollectionAssert.AreEqual(new[] { false, false, false, true, true }, data.sets.Select(s => s.dataOnly));
+        CollectionAssert.AreEqual(new[] { false, false, false, false, false }, data.sets.Select(s => s.dataOnly), "the poor tourists are in play from phase 8, the labourers from phase 9");
 
         CollectionAssert.AreEqual(new[] { "rules", "papers", "read", "identity", "facts", "questions", "answers", "dress", "returnOrder" },
                                   CaseSteps.Resolve(data, "Displaced", 1).Select(s => s.id));

@@ -17,6 +17,7 @@ MonoBehaviour:
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 3
+    honest: 0
   eraWeights:
   - era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
     weight: 1
