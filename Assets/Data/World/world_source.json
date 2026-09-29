@@ -7164,6 +7164,50 @@
       "violationChance": 0.05
     }
   ],
+  "personalities": [
+    {
+      "id": "chatty",
+      "name": "Chatty",
+      "weight": 1,
+      "note": "Tells you everything, then a bit more."
+    },
+    {
+      "id": "curt",
+      "name": "Curt",
+      "weight": 1,
+      "note": "Time is money, and in 2150 the queue bills by the minute."
+    },
+    {
+      "id": "anxious",
+      "name": "Anxious",
+      "weight": 1,
+      "note": "Worried about paradoxes, transponders, butterflies and you."
+    },
+    {
+      "id": "sunny",
+      "name": "Sunny",
+      "weight": 1,
+      "note": "Believes every word the agency prints."
+    },
+    {
+      "id": "grand",
+      "name": "Grand",
+      "weight": 1,
+      "note": "Treats the desk as staff, whatever their account says."
+    },
+    {
+      "id": "stickler",
+      "name": "Stickler",
+      "weight": 1,
+      "note": "Knows the regulations better than the clerk and says so."
+    },
+    {
+      "id": "glum",
+      "name": "Glum",
+      "weight": 1,
+      "note": "The debt won years ago; this is just the paperwork."
+    }
+  ],
   "interview": {
     "deskName": "DESK",
     "opener": "Next! Step forward, {honorific}.",
@@ -7311,7 +7355,281 @@
     ],
     "menuCapacity": 8,
     "maxLineChars": 100,
-    "lookLabel": "Look >"
+    "lookLabel": "Look >",
+    "smallTalkWeights": {
+      "personality": 1,
+      "home": 1,
+      "kind": 1
+    },
+    "kindSmallTalk": [
+      {
+        "kinds": [
+          "RichTourist"
+        ],
+        "text": "We do three eras a year. The children prefer the ones with castles."
+      },
+      {
+        "kinds": [
+          "PoorTourist"
+        ],
+        "text": "Two years of saving, and the credit company paid the rest. So kind of them."
+      },
+      {
+        "kinds": [
+          "Labourer"
+        ],
+        "text": "They say the past has fresh air. And fourteen-hour shifts."
+      },
+      {
+        "kinds": [
+          "Displaced"
+        ],
+        "text": "Everything in this century hums. Even the walls."
+      }
+    ],
+    "voices": {
+      "claims": [
+        {
+          "personality": "chatty",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist"
+          ],
+          "text": "{place}! Our anniversary. Well, mine. He left. Long story!"
+        },
+        {
+          "personality": "chatty",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Home to {place}. My goat's been alone for days. Or centuries?"
+        },
+        {
+          "personality": "curt",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist"
+          ],
+          "text": "{place}. Leisure. Go."
+        },
+        {
+          "personality": "curt",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "{place}. Home. Now."
+        },
+        {
+          "personality": "anxious",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist"
+          ],
+          "text": "{place}, please. Is it safe? They said it's safe. It's safe?"
+        },
+        {
+          "personality": "sunny",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "Debt Relief to {place}! A fresh start! Like the brochure!"
+        },
+        {
+          "personality": "grand",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist"
+          ],
+          "text": "{place}. Somewhere with a view, and a better class of peasant."
+        },
+        {
+          "personality": "grand",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Return me to {place} at once. I was somebody there."
+        },
+        {
+          "personality": "stickler",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist"
+          ],
+          "text": "One leisure departure to {place}, as the notice words it."
+        },
+        {
+          "personality": "glum",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "Debt Relief to {place}. It's all in the contract. So am I."
+        },
+        {
+          "premade": "senenmut",
+          "text": "Home to {place}. The Pharaoh's temple will not finish itself."
+        },
+        {
+          "premade": "socrates",
+          "text": "Send me home to {place}. But first: what is a home?"
+        }
+      ],
+      "handOver": [
+        {
+          "personality": "curt",
+          "text": "Here."
+        },
+        {
+          "personality": "stickler",
+          "text": "Face up, top edge first, as the sign above you requires."
+        }
+      ],
+      "missingForms": [
+        {
+          "personality": "chatty",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "No waiver, it's the Premium unit! My cousin went Economy once. We don't talk about him."
+        },
+        {
+          "personality": "anxious",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "A waiver? Do I need one? It's Premium. Premium never fails. Does it?"
+        },
+        {
+          "personality": "sunny",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Proof of means? I have a smile and a leaflet! Attendance required!"
+        },
+        {
+          "personality": "grand",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "A waiver? My transponder has people for that."
+        },
+        {
+          "personality": "stickler",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "Premium units are exempt from the {document}. It's on the back of the form."
+        }
+      ],
+      "spoken": [
+        {
+          "personality": "curt",
+          "request": "speak_up",
+          "text": "Said it once. That was billed."
+        },
+        {
+          "personality": "grand",
+          "request": "step_closer",
+          "text": "I don't step. I proceed."
+        }
+      ],
+      "answers": [
+        {
+          "personality": "chatty",
+          "question": "q_device",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Just the approved kit: {value}. My therapist says I overpack. Emotionally."
+        },
+        {
+          "personality": "anxious",
+          "question": "q_currency",
+          "text": "{value}. Is that right? I checked the list twice. Three times."
+        },
+        {
+          "personality": "anxious",
+          "question": "q_language",
+          "text": "{value}. Is that right? I checked the list twice. Three times."
+        },
+        {
+          "personality": "anxious",
+          "question": "q_device",
+          "text": "{value}. Is that right? I checked the list twice. Three times."
+        },
+        {
+          "personality": "anxious",
+          "question": "q_capital",
+          "text": "{value}. Is that right? I checked the list twice. Three times."
+        },
+        {
+          "personality": "anxious",
+          "question": "q_ruler",
+          "text": "{value}. Is that right? I checked the list twice. Three times."
+        },
+        {
+          "personality": "glum",
+          "question": "q_currency",
+          "text": "{value}. Not that it'll be enough."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_ruler",
+          "text": "{value}. May she live forever, and read my plans."
+        }
+      ],
+      "smallTalk": [
+        {
+          "personality": "anxious",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "I read one sneeze in the past can delete a whole family tree. Is that true?"
+        },
+        {
+          "personality": "sunny",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "My whole block got frozen in default! Everyone's home all day now! So cosy!"
+        },
+        {
+          "personality": "stickler",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "I've read all your forms. Four days in the intake hall. Two have typos."
+        },
+        {
+          "personality": "glum",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "The maglev was late. So was my pay. So, apparently, was my birth."
+        },
+        {
+          "premade": "gutenberg",
+          "text": "My business in Strasbourg is private. It involves letters. Movable ones."
+        }
+      ]
+    }
   },
   "questions": [
     {

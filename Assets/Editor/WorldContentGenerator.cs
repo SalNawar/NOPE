@@ -151,6 +151,7 @@ public static partial class WorldContentGenerator
                     historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), culture.ui, neutralTheme, themes, stringTables,
                     translators, notices, BuildTranslation(src.translation));
         WireAgency(authored.library, src.agency);
+        WireCast(authored.library, src.personalities);
         WirePresent(authored.library, src);
         WireNews(authored.library, src.news);
         WritePc(authored.library, pc);
@@ -691,6 +692,9 @@ public static partial class WorldContentGenerator
         foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.Count(built), anySmallTalk, kindForms.Select(k => FormRequests.Count(k.Askable)).DefaultIfEmpty(0).Max(), requests.Length,
                                                              dialogs.Count(d => !premadeDialogs.Contains(d.id)), dialogs.Count(d => premadeDialogs.Contains(d.id)), iv.menuCapacity))
             errors.Add(problem);
+
+        // --- The cast and the voices (the personalities spec's §9.2) ---
+        CheckVoices(src, authored, kindForms, errors, Id, Ascii);
 
         // --- Line length: every line the transcript can show fits two lines of a row ---
         int max = iv.maxLineChars;
@@ -1710,7 +1714,10 @@ public static partial class WorldContentGenerator
             prompt = new LineText(RequestLineId(r.id, PromptPart), r.prompt),
             reply = new LineText(RequestLineId(r.id, ReplyPart), r.reply)
         }).ToList(),
-        menuCapacity = i.menuCapacity
+        menuCapacity = i.menuCapacity,
+        smallTalkWeights = BuildWeights(i.smallTalkWeights),
+        kindSmallTalk = BuildKindTalk(i.kindSmallTalk),
+        voices = BuildVoices(i.voices)
     };
 
     /// <summary>The id of a missing-form reply's line, "interview.missingFormReplies.{kind}.{request}.{variant}": BuildReplies writes it, CheckInterview checks it.</summary>
@@ -2054,6 +2061,7 @@ public static partial class WorldContentGenerator
         public PresentData present;
         public RuleData[] rules;
         public DayData[] days;
+        public PersonalityData[] personalities;
         public InterviewData interview;
         public QuestionData[] questions;
         public DialogData[] dialogs;
@@ -2233,6 +2241,12 @@ public static partial class WorldContentGenerator
         public MissingReplyData[] missingFormReplies;
         public int menuCapacity;
         public int maxLineChars;
+        /// <summary>How small talk picks its source (the personalities spec's V5).</summary>
+        public SmallTalkWeightsData smallTalkWeights;
+        /// <summary>The kinds' small talk, one of its three sources.</summary>
+        public KindTalkData[] kindSmallTalk;
+        /// <summary>The personalities' and premades' own lines, one list per slot.</summary>
+        public VoicesData voices;
     }
 
     /// <summary>A spoken request: the hub entry, the desk's prompt and the traveller's reply (line ids are generated from the id).</summary>
