@@ -17,14 +17,16 @@ using UnityEngine;
 public static class SaveSystem
 {
     /// <summary>Bump when WorldState shape changes incompatibly.</summary>
-    private const int SaveVersion = 2;
+    private const int SaveVersion = 3;
 
     /// <summary>
     /// Oldest save version that can still be continued. Version 2 replaced the
-    /// made-up world with real places (all place and era ids changed), so
-    /// version 1 saves are ignored and the Title offers only New Run.
+    /// made-up world with real places (all place and era ids changed); version
+    /// 3 keeps stability as whole hundredths on its compounding scale
+    /// (WorldState.stabilityHundredths, redesign phase 23 part 1b), so older
+    /// saves are ignored and the Title offers only New Run.
     /// </summary>
-    private const int MinCompatibleVersion = 2;
+    private const int MinCompatibleVersion = 3;
 
     /// <summary>Save file name (single slot).</summary>
     private const string FileName = "nope_save.json";
@@ -100,7 +102,7 @@ public static class SaveSystem
             return true;
 
         Debug.LogWarning(version >= 0
-            ? $"[SaveSystem] Ignoring the save at '{path}': version {version} predates the real-world content (needs {MinCompatibleVersion}+). Start a new run."
+            ? $"[SaveSystem] Ignoring the save at '{path}': version {version} predates this build's save format (needs {MinCompatibleVersion}+). Start a new run."
             : $"[SaveSystem] Ignoring the save file at '{path}': it cannot be read.");
         return false;
     }

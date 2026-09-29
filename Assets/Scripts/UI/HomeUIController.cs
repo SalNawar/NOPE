@@ -160,7 +160,7 @@ public sealed class HomeUIController : MonoBehaviour
             moneyText.text = $"{UiText.Currency(UiText.WalletForm.Label)}: {world.money}";
 
         if (stabilityText != null)
-            stabilityText.text = $"Stability: {world.timelineStability:0}%";
+            stabilityText.text = UiText.Format("tray.stability", StabilityRules.Format(world.timelineStability));
 
         if (dayText != null)
             dayText.text = $"Day {world.day}";

@@ -52,7 +52,7 @@ public sealed class HomeManager : MonoBehaviour
         _lib = run.Library;
         _config = run.Config != null ? run.Config.gameConfig : null;
 
-        Debug.Log($"[HomeManager] Day {_world.day} home phase starting: money={_world.money}, stability={_world.timelineStability:0.#}, familyMembers={_world.family.members.Count}.");
+        Debug.Log($"[HomeManager] Day {_world.day} home phase starting: money={_world.money}, stability={_world.timelineStability:0.00}, familyMembers={_world.family.members.Count}.");
 
         // Bill today's living costs and let untreated conditions drift,
         // deterministically seeded by the day so it's stable on reload.

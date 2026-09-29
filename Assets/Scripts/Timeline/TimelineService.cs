@@ -533,7 +533,7 @@ public static class TimelineService
                     case EffectOpType.AddCounter: world.AddCounter(op.stringParam, Mathf.RoundToInt(op.floatParam)); break;
                     case EffectOpType.AddMoney: world.money += Mathf.RoundToInt(op.floatParam); break;
                     case EffectOpType.AddStability:
-                        world.timelineStability = Mathf.Clamp(world.timelineStability + op.floatParam, 0f, 100f);
+                        world.timelineStability = StabilityRules.ApplyPercent(world.timelineStability, op.floatParam);
                         break;
                     case EffectOpType.UnlockUpgrade: world.UnlockUpgrade(op.stringParam); break;
                     case EffectOpType.AddAttributeScore:
