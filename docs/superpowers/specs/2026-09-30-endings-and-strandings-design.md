@@ -542,7 +542,8 @@ Built overnight on Saleh's answers of 2026-09-30 (four factors; 8 governments wi
 11. **The morning paper**: a changed answer's headline goes after the leader line and before the carries, under the one history news cap (3); nothing prints while nothing changes, and the first night's "as you found it" is saved silently.
 12. **The older save's seed (§9)** runs only when the save has no pull *and* no latched answer (a run of this build latches every night, so it can never be re-seeded); which attribute seeds which factor is derived, not listed: an attribute seeds the factor of the one role whose archetype moves it (Science: the scientists, the future; Democracy: the diplomats and soldiers, the government); Art, moved by artists, merchants and wanderers alike, seeds nothing, so the money line starts as found (§9).
 13. **Names.** E0 named its line builder `WorldFactors`, so the rules of §4 (`WorldFactors.Pull`, `Lead`, `WorldPulls.FromScores` in §11) live together in `WorldPulls`; the play glue is `WorldOutcomeService`.
-14. **No ranking words**: `WorldFactors.JudgingWords` (best, worst, better, worse, good, bad, win, lose, score, rank, retire, triumph, success, fail, victory, defeat, ideal, utopia, dystopia and their listed forms) are matched as whole words so "goods" and "window" stay free; Generate World, the validator and `WorldFactorsTests` refuse any world text using one or printing a percentage.
+14. **Roles: scientist 3, merchant 3, diplomat 2, soldier 2** (§4.1 has 2 each): the government has two roles pulling it and the future and the money one each, so the single roles pull 3 and every factor gathers about as much over a run (§15.5).
+15. **No ranking words**: `WorldFactors.JudgingWords` (best, worst, better, worse, good, bad, win, lose, score, rank, retire, triumph, success, fail, victory, defeat, ideal, utopia, dystopia and their listed forms) are matched as whole words so "goods" and "window" stay free; Generate World, the validator and `WorldFactorsTests` refuse any world text using one or printing a percentage.
 
 ### 15.4 Follow-ups (not built)
 
@@ -550,3 +551,15 @@ Built overnight on Saleh's answers of 2026-09-30 (four factors; 8 governments wi
 - **E4, the World Report**: the composed title ("The Cybernetic Monarchy"), the four columns, the rewritten past, 2150 in the past, where they are now, your desk; `WorldState.worldReport`; the Title's "The world you made"; the counters of §2.2.
 - **S1-S2, the strandings' fates and the waiver at the desk** (§6-§7): not in this track.
 - **Tuning**: the balance simulation's watch lines (the report of this track) against the leanings and knobs; Saleh reviews the leanings (15.3 item 4) first.
+
+### 15.5 Balance (the 50-run simulation, 2026-09-30, main `cfe6846` merged)
+
+At the spec's first cut (a denial pulls 0.5, every role 2, the day-fired story rules 2 to 4) **all 300 simulated runs ended as the run found 2150** on all three factors: a shift denies about half its travellers in the second week, and every denial pulled all three "as found" outcomes. The build ships a first tuning pass (knob and content, all editable): a denial pulls 0.05, scientists and merchants 3 (so the future and the money gather about as much as the government's two roles), the day-fired story rules 1 or 2. The day-15 answers per style at the shift clock's pace (10 a shift, 50 runs each; a distribution, never a target):
+
+| Style | Who runs 2150? | What does 2150 run on? | How does 2150 pay its way? |
+|---|---|---|---|
+| Perfect | Monarchy 27, Democracy 12, The Directorate 6, splits 3, Communism 1, Theocracy 1 | Cybernetic 21, Credit Age 11, Nuclear 6, Anarchy 5, Space Age 2, Naturalism 1, splits 4 | The Debt 29, Company Towns 10, Commons 6, Banking Houses 2, Jubilee 1, splits 2 |
+| Imperfect | Monarchy 30, Democracy 11, Directorate 3, Theocracy 3, Communism 1, splits 2 | Cybernetic 21, Credit Age 9, Anarchy 5, Nuclear 5, Space Age 5, Naturalism 2, splits 3 | The Debt 20, Company Towns 17, Commons 7, Banking Houses 3, Jubilee 1, splits 2 |
+| Careless (bankrupt or fired early) | Monarchy 30, Directorate 9, Democracy 5, Theocracy 2, splits 4 | Credit Age 37, Cybernetic 8, Anarchy 2, others 1 each | The Debt 35, Company Towns 7, Commons 4, Banking Houses 2, splits 2 |
+
+Watch lines (§10) against this: every future and every way to pay leads in some perfect run at the pace; **Fascism, Technocracy and The Corporate Board lead in none** (two places lean each, 15.3 item 4) and **Monarchy leads more than a quarter of perfect runs** (twelve places lean Monarchy, five of the eight Industrial places the second week's labourers go to). Both are the leanings' to fix, Saleh's review first (15.3 item 4), not a knob's: no outcome is made "harder". The "as found" answers lead in fewer than half of the perfect runs on the government and the future, and in 29 of 50 on the money (the Drive's story rules and a slow merchant inflow). The whole-queue runs, with more travellers, drift further from "as found".
