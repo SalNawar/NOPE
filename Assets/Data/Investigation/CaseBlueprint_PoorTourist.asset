@@ -20,7 +20,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5ac7b3515fd84a00b4835ebb2d78b421, type: 2}
   - {fileID: 11400000, guid: a0c52deabac6496599f2d4b3146ff8bc, type: 2}
   - {fileID: 11400000, guid: 0f6b58fc60d141e38428a1fabfc9224f, type: 2}
-  contradictionChance: 0.5
+  contradictionChance: 0.2
   archetypePool:
   - {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}
   - {fileID: 11400000, guid: da6406242904ea74293e5fd7cef8ff53, type: 2}
