@@ -69,7 +69,7 @@ public static class _TimeDeskAuditPlay
         }
     }
     private const int Seed = 12345;
-    private const int LastDay = 6;
+    private const int LastDay = 15;
     private const string ViewName = "TimeDeskAuditPlay";
 
     private const string StepKey = "AuditPlay.Step";
@@ -256,23 +256,35 @@ public static class _TimeDeskAuditPlay
             yield return HomeNight(day);
         }
 
-        if (!_ended)
-        {
-            yield return OfficeLoads(LastDay + 1);
-            Line($"== DAY {LastDay + 1} (morning only)");
-            RecordBriefing();
-            RecordWorld();
-        }
+        // The run ends at night 15's sleep: the day-15 ending on the Title, with its END OF DEMO card.
+        WorldState end = RunManager.Instance.World;
+        Check(_ended && end.day == LastDay, $"the run plays days 1-{LastDay} and ends at night {LastDay}'s sleep (ended={_ended}, day {end.day}, ending '{end.endingId}')");
+        if (_ended)
+            yield return EndingScreen(end.endingId);
         Line("END");
 
         // The run's coverage (report only): the four planned mistakes, each kind, lie and fault met.
         Check(MistakesMade.Count == 4, $"the four planned mistakes were made [{string.Join(", ", MistakesMade)}]");
-        Check(!_ended, "the run reaches day 7's morning without an ending");
         foreach (KeyValuePair<string, int> t in Tally)
             Report($"COVER {t.Key}: {t.Value}");
+    }
 
-        if (ShotsOn && !_ended)
-            yield return ScannerDayShots();
+    /// <summary>The ending screen on the Title: its title and body as shown; the demo ends on the END OF DEMO card (authored on Retirement, "Quarter's End", EndingSO.closingCard).</summary>
+    private static IEnumerator EndingScreen(string endingId)
+    {
+        TitleUIController ui = null;
+        yield return Until(() => (ui = Object.FindFirstObjectByType<TitleUIController>()) != null && ((GameObject)Field(ui, "endingPanel")).activeInHierarchy, 60f, "the ending screen on the Title");
+        yield return Frames(3);
+        string title = ((TMP_Text)Field(ui, "endingTitleText")).text;
+        string body = ((TMP_Text)Field(ui, "endingBodyText")).text;
+        Line($"== ENDING SCREEN '{endingId}': {title}");
+        foreach (string l in Lines(body))
+            Line("   | " + l);
+        EndingSO ending = RunManager.Instance.Library.Endings.FirstOrDefault(e => e != null && e.id == endingId);
+        bool card = ending != null && !string.IsNullOrWhiteSpace(ending.closingCard);
+        Check(body.Contains("END OF DEMO"), $"the demo ends on the END OF DEMO card, whichever day-15 ending it is ('{endingId}', card {(card ? "authored" : "none")}, shown {body.Contains("END OF DEMO")})");
+        if (ShotsOn)
+            yield return Shots($"ending_{endingId}");
     }
 
     private static IEnumerator OfficeLoads(int day)
@@ -291,6 +303,7 @@ public static class _TimeDeskAuditPlay
         Line($"== DAY {day}");
         RecordBriefing();
         RecordWorld();
+        RecordPortals(o);
         if (ShotsOn)
             yield return Shots($"d{day}_briefing");
         o.StartShift.onClick.Invoke();
@@ -812,7 +825,10 @@ public static class _TimeDeskAuditPlay
             yield return SearchShots(o, c, $"search_d{day}", c.visitorGivenName.Split(' ')[0]);
         }
         if (First("one pane"))
+        {
             yield return OnePaneShots(o, c);
+            yield return DesktopAppShots(o);
+        }
     }
 
     /// <summary>A deviation fault's tells proven: the first of each fault kind, on the office strip and in the app (the Report tab, the dock's verdict).</summary>
@@ -891,66 +907,28 @@ public static class _TimeDeskAuditPlay
         yield return Seconds(0.3f);
     }
 
-    /// <summary>Shots only, after the transcript's END: day 7 with the Auto-Feed and Analysis scanners set on the desk (not bought): the first traveller's papers fed by themselves, then one scanned by hand for the analysis.</summary>
-    private static IEnumerator ScannerDayShots()
+    /// <summary>Shots only: the Orders and Portals apps (the desktop's other windows) and the Departure Board's tooltip, once.</summary>
+    private static IEnumerator DesktopAppShots(Office o)
     {
-        var o = new Office();
-        o.Desk.BeginDay(RunManager.Instance.World.day, new ScannerDay(true, true));
-        Report("SHOTS ONLY: day 7 with the Auto-Feed and Analysis scanners set on the desk (DeskController.BeginDay; nothing bought, after the transcript's END)");
-        o.StartShift.onClick.Invoke();
-        yield return Until(() => o.ReadyArmed, 30f, "READY on day 7");
-        ExecuteEvents.Execute(o.Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
-        yield return Until(() => Field(o.Ui, "_currentCase") != null && (bool)Field(o.Game, "_travellerAtDesk"), 10f, "the traveller at the desk");
-        var c = (CaseInstance)Field(o.Ui, "_currentCase");
-        yield return Interview(o, c, false);
-        var papers = ((CaseDocumentsPresenter)Field(o.Ui, "_documents")).Papers;
-        yield return Seconds(1f);
-        yield return Shots("scanner_autofeed_running");
-        yield return Until(() => papers.Scanned == papers.Received, 40f, "the Auto-Feed scanning every paper");
-        Check(papers.Scanned == papers.Count, $"scanners: the Auto-Feed scanned every paper by itself ({papers.Scanned} of {papers.Count})");
-        yield return Seconds(1.5f);
-        yield return Shots("scanner_autofeed_done");
-
-        // A scan by hand: paper 0 dragged onto the scanner, the analysis pass.
-        int finished = -1;
-        bool analysed = false;
-        Action<int, ScanPass> onScan = (i, a) => { finished = i; analysed = a == ScanPass.Analysis; };
-        o.Desk.ScanFinished += onScan;
-        DeskDocument paper = o.Paper(0);
-        yield return Until(() => paper != null && !paper.IsSliding, 6f, "paper 0 at rest");
-        DragOnto(paper, ((DeskScanner)Field(o.Desk, "scanner")).BedPoint);
-        yield return Until(() => finished == 0, 15f, "the hand scan of paper 0");
-        o.Desk.ScanFinished -= onScan;
-        Check(analysed, "scanners: a scan by hand with the Analysis Scanner is an analysis pass");
-        yield return AppShots(o, c, "scanner_analysed", AppTab.Documents, AppTab.Reference);
-        Report("END shots");
+        foreach (string id in new[] { DesktopAppIds.Orders, DesktopAppIds.Portals })
+        {
+            yield return OpenApp(o);
+            o.Apps.OpenApp(id);
+            yield return Frames(4);
+            yield return Shots($"app_{id}");
+            yield return CloseApp(o);
+        }
+        DepartureBoardView board = Office.One<DepartureBoardView>();
+        var box = board != null ? (BoxCollider)Field(board, "box") : null;
+        if (box == null)
+        {
+            Report("   shots: no Departure Board");
+            yield break;
+        }
+        ExecuteEvents.Execute(box.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+        yield return Seconds(0.5f);
+        yield return Shots("board_tooltip");
     }
-
-    /// <summary>A drag through the EventSystem's handlers: begin on the paper, move to the target's screen point, release there.</summary>
-    private static void DragOnto(DeskDocument paper, Vector3 target)
-    {
-        Camera cam = Cam();
-        Vector2 at = cam.WorldToScreenPoint(paper.Sheet.position);
-        var results = new List<RaycastResult>();
-        var data = new PointerEventData(EventSystem.current) { position = at, button = PointerEventData.InputButton.Left };
-        Physics.SyncTransforms();
-        EventSystem.current.RaycastAll(data, results);
-        GameObject handler = results.Count > 0 ? ExecuteEvents.GetEventHandler<IBeginDragHandler>(results[0].gameObject) : null;
-        if (handler != paper.gameObject)
-            throw new InvalidOperationException($"the drag on paper {paper.Index}: the top drag handler at {at} is {(handler != null ? handler.name : "none")}");
-        data.pointerCurrentRaycast = results[0];
-        data.pointerPressRaycast = results[0];
-        data.pressPosition = at;
-        data.pointerDrag = handler;
-        ExecuteEvents.Execute(handler, data, ExecuteEvents.beginDragHandler);
-        data.position = cam.WorldToScreenPoint(target);
-        ExecuteEvents.Execute(handler, data, ExecuteEvents.dragHandler);
-        ExecuteEvents.Execute(handler, data, ExecuteEvents.endDragHandler);
-    }
-
-    /// <summary>The office camera (the anime hall's is not tagged MainCamera): the enabled one drawing to the screen with the highest depth.</summary>
-    private static Camera Cam() =>
-        Camera.main != null ? Camera.main : Object.FindObjectsByType<Camera>(FindObjectsSortMode.None).Where(c => c.enabled && c.targetTexture == null).OrderByDescending(c => c.depth).First();
 
     private static IEnumerator Shots(string name)
     {
@@ -1035,7 +1013,7 @@ public static class _TimeDeskAuditPlay
         WorldState w = RunManager.Instance.World;
         GameConfigSO config = RunManager.Instance.Config.gameConfig;
         Line($"== HOME night {day}");
-        Line($"   expense report: {Fields(Field(manager, "_expenseReport"))}");
+        Line($"   evening: {Fields(Field(manager, "_evening"))}");
         foreach (string l in Lines(((TMP_Text)Field(ui, "expensesBodyText")).text))
             Line("   | " + l);
         Line($"   family: {string.Join(", ", w.family.members.Select(m => $"{m.name}={m.condition}"))}; money={w.money}");
@@ -1050,7 +1028,7 @@ public static class _TimeDeskAuditPlay
 
         ((Button)Field(ui, "expensesContinueButton")).onClick.Invoke();
         yield return Frames(3);
-        Check(!((GameObject)Field(ui, "shopPanel")).activeInHierarchy, $"night {day}: Home sells no office upgrade, so its shop step is skipped");
+        yield return House(ui, manager, day);
         ((Button)Field(ui, "slotContinueButton")).onClick.Invoke();
         yield return Frames(3);
         foreach (string l in Lines(((TMP_Text)Field(ui, "sleepBodyText")).text))
@@ -1065,6 +1043,34 @@ public static class _TimeDeskAuditPlay
             Line($"   ENDING {w.endingId}");
             _ended = true;
         }
+    }
+
+    /// <summary>The House (Home's upgrade tree): every Home upgrade's state and price; the first one buyable with 60 cr to spare is bought (one a night), then on to the slot step.</summary>
+    private static IEnumerator House(HomeUIController ui, HomeManager manager, int day)
+    {
+        var panel = (GameObject)Field(ui, "shopPanel");
+        if (!panel.activeInHierarchy)
+        {
+            Line("   house: not shown");
+            yield break;
+        }
+        WorldState w = RunManager.Instance.World;
+        ContentLibrarySO lib = RunManager.Instance.Library;
+        List<UpgradeSO> home = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
+        Line($"   house: {string.Join(", ", home.Select(u => $"{u.id}={OrderBook.StateOf(w, lib, u)}/{OrderBook.Price(w, lib, u)}"))}");
+        if (ShotsOn && First("house"))
+            yield return Shots($"house_night{day}");
+        UpgradeSO buy = home.FirstOrDefault(u => OrderBook.StateOf(w, lib, u) == OrderState.Orderable && w.money >= OrderBook.Price(w, lib, u) + 60);
+        if (buy != null)
+        {
+            Call(manager, "HandleBuyUpgrade", buy);
+            Line($"   bought house {buy.id}: owned={w.HasUpgrade(buy.id)} money={w.money}");
+            yield return Frames(2);
+            if (ShotsOn && First("house bought"))
+                yield return Shots($"house_bought_night{day}");
+        }
+        ((Button)Field(ui, "shopContinueButton")).onClick.Invoke();
+        yield return Frames(3);
     }
 
     // =====================================================================
@@ -1085,6 +1091,17 @@ public static class _TimeDeskAuditPlay
         Line($"   world: day={w.day} runSeed={w.runSeed} daySeed={RunManager.Instance.GetDaySeed()} money={w.money} stability={F(w.timelineStability)} leader='{w.history.leaderId}' upgrades=[{string.Join(",", w.unlockedUpgradeIds)}] phase={w.phase}");
         Line($"   plan: {RunManager.Instance.GetCurrentDayPlan().name} visitors={RunManager.Instance.GetCurrentDayPlan().VisitorsCount}");
         Line($"   rules: {string.Join(" | ", RunManager.Instance.GetCurrentDayPlan().ActiveTravelRules.Where(r => r != null).Select(r => r.Summary()))}");
+    }
+
+    /// <summary>Today's portal schedule (GameManager.Portals, fixed at the day's start) and the Departure Board's rows as drawn.</summary>
+    private static void RecordPortals(Office o)
+    {
+        foreach (PortalRoute r in o.Game.Portals.Portals)
+            Line($"   portal {PortalText.Number(r.Number)} {r.Name} {r.Role} {r.State} place={(r.Place.HasValue ? r.Place.Value.ToString() : "-")} closure='{r.Closure}' repair='{r.Repair}'");
+        Line($"   portal default {o.Game.Portals.Default}");
+        DepartureBoardView board = Office.One<DepartureBoardView>();
+        var rows = board != null ? (TextMeshPro)Field(board, "rows") : null;
+        Line(rows != null ? "   board: " + rows.text.Replace("\n", " / ") : "   board: none");
     }
 
     private static void RecordSave(string name)
