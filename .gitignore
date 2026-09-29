@@ -19,3 +19,6 @@ _sprite_import/
 **/__pycache__/
 ArtDeliverables/TimeDesk/**/*.build.log
 ArtDeliverables/TimeDesk/HybridScene/BlenderPC/unity-editing.log
+# Unity's crash-recovery copies of unsaved scenes, never committed (audit R6-024)
+_Recovery/
+_Recovery.meta
