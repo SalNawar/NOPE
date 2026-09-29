@@ -57,7 +57,7 @@ internal static class DebugInspector
         var sb = new StringBuilder();
 
         sb.AppendLine("[DebugPanelController] ---- State dump ----");
-        sb.AppendLine($"Day {world.day}, money={world.money}, stability={world.timelineStability:0.#}, endingId='{world.endingId}'.");
+        sb.AppendLine($"Day {world.day}, money={world.money}, stability={StabilityRules.Format(world.timelineStability)}, endingId='{world.endingId}'.");
         sb.AppendLine($"legendaryChanceBonus={world.legendaryChanceBonus:0.##}, forgeryChanceModifier={world.forgeryChanceModifier:0.##}, payRateMultiplier={world.payRateMultiplier:0.##}.");
         sb.AppendLine($"Flags ({world.flags.Count}): {string.Join(", ", world.flags)}");
         sb.AppendLine($"Unlocked upgrades ({world.unlockedUpgradeIds.Count}): {string.Join(", ", world.unlockedUpgradeIds)}");

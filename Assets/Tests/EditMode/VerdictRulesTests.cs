@@ -42,6 +42,19 @@ public class VerdictRulesTests
         Assert.AreEqual(expected, VerdictRules.WrongDecisionPenalty(citationNumberToday, freeWarnings, penalty));
     }
 
+    /// <summary>Phase 23 part 1b (Saleh: "one free warning but configurable and tunable"): with one free warning a day, the day's first wrong decision is the warning and every later one the one penalty; the next day starts over.</summary>
+    [Test]
+    public void OneFreeWarning_ThenTheOnePenalty_EachDay()
+    {
+        for (int day = 1; day <= 2; day++)
+        {
+            Assert.IsTrue(VerdictRules.IsFreeWarning(1, 1), $"day {day}: the first mistake is the warning");
+            Assert.AreEqual(0, VerdictRules.WrongDecisionPenalty(1, 1, 10));
+            for (int n = 2; n <= 6; n++)
+                Assert.AreEqual(10, VerdictRules.WrongDecisionPenalty(n, 1, 10), $"day {day}: mistake {n} costs the one penalty");
+        }
+    }
+
     [TestCase(1, 0, false)]
     [TestCase(1, 1, true)]
     [TestCase(2, 1, false)]

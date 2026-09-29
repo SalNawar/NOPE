@@ -144,7 +144,7 @@ public sealed class DayFlowUIController : MonoBehaviour
 
             sb.AppendLine(UiText.Format("results.net", ledger.NetMoney, UiText.Currency(UiText.WalletForm.Inline), world.money));
             sb.AppendLine();
-            sb.AppendLine(UiText.Format("results.stability", world.timelineStability, ledger.TotalStabilityDelta));
+            sb.AppendLine(UiText.Format("results.stability", StabilityRules.Format(world.timelineStability), StabilityRules.FormatChange(ledger.TotalStabilityDelta)));
 
             if (world.citationsToday > 0)
                 sb.AppendLine(UiText.Format("results.citations", world.citationsToday));
