@@ -45,7 +45,7 @@ MonoBehaviour:
       field: -1
       slot: 
     - kind: 1
-      text: 1  SIGNATORY
+      text: 1  SIGNATORY AND TERMS
       cells: []
       columns: []
       shares: []
@@ -65,14 +65,6 @@ MonoBehaviour:
         caption: 
         span: 6
         rows: 1
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
-    - kind: 1
-      text: 2  TERMS
-      cells: []
       columns: []
       shares: []
       options: []
@@ -109,7 +101,7 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
-    - kind: 6
+    - kind: 10
       text: I travel on an Economy unit at my own risk. If I am stranded, I will not reveal the future or alter history, and my debt passes to my next of kin.
       cells: []
       columns: []
@@ -126,7 +118,7 @@ MonoBehaviour:
       field: 5
       slot: 
     - kind: 12
-      text: If the unit fails, the agency's liability ends at the gate. The signatory consents to removal by the Time Police where the timeline requires it; removal is final and is not a refund. Temporal Customs Act of 2139. Any alteration voids this document.
+      text: If the unit fails, the agency's liability ends at the gate. The signatory consents to removal by the Time Police where the timeline requires it; removal is final and is not a refund. Temporal Customs Act of 2139.
       cells: []
       columns: []
       shares: []
