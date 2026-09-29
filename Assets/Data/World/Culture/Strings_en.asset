@@ -1458,12 +1458,6 @@ MonoBehaviour:
     text: 'Directives: all destinations cleared today.'
     gloss: 0
     tier: 0
-  - key: claim.banner
-    text: '{0}
-
-      "{1}"'
-    gloss: 0
-    tier: 0
   - key: document.untitled
     text: Document
     gloss: 0
