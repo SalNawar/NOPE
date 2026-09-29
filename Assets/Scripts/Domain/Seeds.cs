@@ -102,9 +102,20 @@ public static class Seeds
     /// Seed for the night's slot-machine spins at Home, drawn in turn (audit
     /// R2-004: the spins were unseeded), so a run replays and Continue, which
     /// reloads Home from the save made before it, cannot reroll a spin; apart
-    /// from the day's raw stream the family conditions draw from.
+    /// from the family's stream and the day's raw stream.
     /// </summary>
     public static int ForSlot(int daySeed) => Mix(daySeed, SlotSalt);
+
+    /// <summary>Salt for the night's family drift at Home ("FMLY").</summary>
+    public const int FamilySalt = 0x464D4C59;
+
+    /// <summary>
+    /// Seed for the night's family drift at Home (HomeRules.Worsens: one seed
+    /// per member, mixed from this one), apart from the slot's stream and the
+    /// day's raw stream (audit R2-008: the drift drew from its own hash of the
+    /// day seed over System.Random).
+    /// </summary>
+    public static int ForFamily(int daySeed) => Mix(daySeed, FamilySalt);
 
     /// <summary>Salt for a traveller's account stream ("ACCT").</summary>
     public const int AccountSalt = 0x41434354;
