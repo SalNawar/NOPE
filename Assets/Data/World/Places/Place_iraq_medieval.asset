@@ -166,8 +166,8 @@ MonoBehaviour:
     supportingEffect: {fileID: 0}
   leanings:
   - factor: government
-    outcome: theocracy
+    outcome: technocracy
   - factor: future
-    outcome: cybernetic
+    outcome: space_age
   - factor: money
     outcome: banking_houses

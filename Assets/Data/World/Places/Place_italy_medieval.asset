@@ -167,7 +167,7 @@ MonoBehaviour:
     supportingEffect: {fileID: 0}
   leanings:
   - factor: government
-    outcome: democracy
+    outcome: corporate_board
   - factor: future
     outcome: space_age
   - factor: money

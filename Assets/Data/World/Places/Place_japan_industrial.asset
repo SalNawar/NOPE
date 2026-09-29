@@ -164,7 +164,7 @@ MonoBehaviour:
     supportingEffect: {fileID: 0}
   leanings:
   - factor: government
-    outcome: monarchy
+    outcome: corporate_board
   - factor: future
     outcome: cybernetic
   - factor: money
