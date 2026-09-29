@@ -2031,7 +2031,7 @@ MonoBehaviour:
     - Premium families book Periclean Athens for the summer.
     - A stranded tourist's family inherits 212,000 cr.
     stranded: 'Stranded: {name}, lost in {place} when an Economy transponder failed.'
-    debtReliefCount: '{count} citizens left on Debt Relief yesterday.'
+    debtReliefCount: 'Citizens who left on Debt Relief yesterday: {count}.'
   mail:
   - id: welcome
     fromDay: 1

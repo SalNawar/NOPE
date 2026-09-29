@@ -7889,7 +7889,7 @@
   },
   "news": {
     "stranded": "Stranded: {name}, lost in {place} when an Economy transponder failed.",
-    "debtReliefCount": "{count} citizens left on Debt Relief yesterday.",
+    "debtReliefCount": "Citizens who left on Debt Relief yesterday: {count}.",
     "debt": [
       "Debt Relief Departures reach a record high.",
       "CLEAR YOUR DEBT: 180 days in the Victorian mills.",

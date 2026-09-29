@@ -52,14 +52,14 @@ public class DebtNewsTests
     }
 
     private const string Stranded = "Stranded: {name}, lost in {place} when an Economy transponder failed.";
-    private const string Count = "{count} citizens left on Debt Relief yesterday.";
+    private const string Count = "Citizens who left on Debt Relief yesterday: {count}.";
 
     /// <summary>Phase 9 (§10): the paper counts yesterday's Debt Relief departures, and says nothing for none.</summary>
     [Test]
     public void YesterdayLine_FillsTheCount_AndIsNullForNoneOrABlankTemplate()
     {
-        Assert.AreEqual("43 citizens left on Debt Relief yesterday.", DebtNews.YesterdayLine(Count, 43));
-        Assert.AreEqual("1 citizens left on Debt Relief yesterday.", DebtNews.YesterdayLine(Count, 1));
+        Assert.AreEqual("Citizens who left on Debt Relief yesterday: 43.", DebtNews.YesterdayLine(Count, 43));
+        Assert.AreEqual("Citizens who left on Debt Relief yesterday: 1.", DebtNews.YesterdayLine(Count, 1), "the line reads for any count");
         Assert.IsNull(DebtNews.YesterdayLine(Count, 0));
         Assert.IsNull(DebtNews.YesterdayLine(Count, -3));
         Assert.IsNull(DebtNews.YesterdayLine(" ", 5));
