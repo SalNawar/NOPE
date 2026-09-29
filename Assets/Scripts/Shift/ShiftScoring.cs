@@ -31,7 +31,7 @@ public static class ShiftScoring
         {
             caseIndex1Based = caseIndex1Based,
             visitorName = inst != null ? inst.visitorDisplayName : "Unknown",
-            wasLegendary = inst != null && inst.isLegendary,
+            wasLegendary = inst != null && inst.IsFamous,
             accepted = accepted,
             kind = inst != null ? inst.kind : default,
             debt = inst?.account != null ? inst.account.Debt : 0,

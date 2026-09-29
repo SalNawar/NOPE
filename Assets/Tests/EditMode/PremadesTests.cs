@@ -57,6 +57,15 @@ public class PremadesTests
         Assert.AreEqual(2, Premades.Appearance(new[] { false, false, true }));
     }
 
+    [TestCase(TravellerKind.Displaced, true)]
+    [TestCase(TravellerKind.RichTourist, false)]
+    [TestCase(TravellerKind.PoorTourist, false)]
+    [TestCase(TravellerKind.Labourer, false)]
+    public void IsFamous_OnlyTheDisplacedKind(TravellerKind kind, bool famous)
+    {
+        Assert.AreEqual(famous, Premades.IsFamous(kind));
+    }
+
     [TestCase("slot line", "premade line", "slot line")]
     [TestCase("", "premade line", "premade line")]
     [TestCase("  ", "premade line", "premade line")]

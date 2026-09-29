@@ -114,6 +114,15 @@ public static class Premades
     public static bool Stands(bool oncePerRun, bool met, bool conditionsPass) => conditionsPass && !(oncePerRun && met);
 
     /// <summary>
+    /// True for a famous premade (days 7-15 B5): the displaced kind, the real
+    /// people of the past, scored as legendaries (the bonus pay and the extra
+    /// stability loss Saleh kept as "a different consequence") and greeted by
+    /// the legendary opener. A 2150 citizen premade (a story character) is
+    /// scored and greeted as an ordinary traveller.
+    /// </summary>
+    public static bool IsFamous(TravellerKind kind) => kind == TravellerKind.Displaced;
+
+    /// <summary>
     /// The appearance's voice (days 7-15 B7): the forced slot's own line (its
     /// dialog id, its opener) when authored, else the premade's; a recurring
     /// character gets a new scene each time.

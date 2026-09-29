@@ -35,6 +35,9 @@ public sealed class CaseInstance
     /// <summary>The premade's asset (null for a generated traveller).</summary>
     public LegendarySO legendarySource;
 
+    /// <summary>True for a famous premade (Premades.IsFamous: the displaced kind): scored as a legendary; a 2150 citizen premade is scored as anyone.</summary>
+    public bool IsFamous => isLegendary && legendarySource != null && Premades.IsFamous(legendarySource.kind);
+
     /// <summary>The forced entry that stands in this slot today (DayPlanSO forced cases, days 7-15 B9: its premade or blueprint, its fault and its voice); null for a traveller the day drew.</summary>
     public ForcedCaseSlot forcedAppearance;
 

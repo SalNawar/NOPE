@@ -50,4 +50,7 @@ public sealed class LegendarySO : ScriptableObject
 
     /// <summary>Met once, never again this run (written by Generate World as !repeatable).</summary>
     public bool oncePerRun = true;
+
+    /// <summary>The kind the premade stands as (premades[].kind; days 7-15 B2): Displaced for the famous (blank in the source), a 2150 citizen kind for a story character (Premades.IsFamous).</summary>
+    public TravellerKind kind = TravellerKind.Displaced;
 }

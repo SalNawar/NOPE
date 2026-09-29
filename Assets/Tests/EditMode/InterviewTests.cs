@@ -126,6 +126,23 @@ public class InterviewTests
         Assert.AreEqual(intro, Interview.Opener(null, TravellerGender.Unknown, null, intro), "even without lines");
     }
 
+    /// <summary>A 2150 story character (a citizen premade, days 7-15 B5) is no legendary: the desk greets them as anyone, unless their opener is authored.</summary>
+    [Test]
+    public void Opener_ACitizenPremadeGetsTheOrdinaryOpener()
+    {
+        string name = Premades.IsFamous(TravellerKind.PoorTourist) ? "Pell Quimby" : null;
+        Assert.AreEqual("Next! Step forward, madam.", Interview.Opener(Lines(), TravellerGender.Female, name, null));
+        Assert.AreEqual("Priority arrival: Senenmut.", Interview.Opener(Lines(), TravellerGender.Male, Premades.IsFamous(TravellerKind.Displaced) ? "Senenmut" : null, null));
+    }
+
+    [Test]
+    public void Opener_AnAuthoredIntroWinsForEveryone()
+    {
+        const string intro = "Next! Oh. Step forward, Ms Quimby.";
+        Assert.AreEqual(intro, Interview.Opener(Lines(), TravellerGender.Female, null, intro), "a citizen premade");
+        Assert.AreEqual(intro, Interview.Opener(Lines(), TravellerGender.Female, "Ada Lovelace", intro), "a famous one");
+    }
+
     [Test]
     public void Opener_NullLines_GiveEmpty()
     {
