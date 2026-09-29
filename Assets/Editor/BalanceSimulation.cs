@@ -137,6 +137,7 @@ public static class BalanceSimulation
         public WorldState World;
         public readonly List<int> MoneyAfterShift = new List<int>();
         public readonly List<int> MoneyAtNight = new List<int>();
+        public readonly List<float> StabilityAfterShift = new List<float>();
         public int MinMoney = int.MaxValue;
         public int Cases, Faulty, Accepted, Wrong, Unproven, Pay, Penalties, Instalments, Household, Stranded, Carries;
         public readonly List<CaseRecord> Records = new List<CaseRecord>();
@@ -183,7 +184,7 @@ public static class BalanceSimulation
                 r.Carries += world.history.pendingCarries.Count - carries;
                 r.Records.Add(Record(plan, day, i + 1, inst, decision.Accept, verdict.correct));
                 Count(r, inst, decision.Accept, verdict);
-                r.Dump.AppendLine($"d{day} #{i + 1} {inst.kind} {Source(plan, i + 1, inst)} '{inst.originLabel}' fault='{inst.FaultReason}' accept={decision.Accept} documented={decision.Documented} correct={verdict.correct} pay={verdict.payAwarded} penalty={verdict.moneyPenalty} money={world.money} stability={world.timelineStability.ToString("0.#", Inv)}");
+                r.Dump.AppendLine($"d{day} #{i + 1} {inst.kind} {Source(plan, i + 1, inst)} '{inst.originLabel}' fault='{inst.FaultReason}' accept={decision.Accept} documented={decision.Documented} correct={verdict.correct} pay={verdict.payAwarded} penalty={verdict.moneyPenalty} money={world.money} stability={StabilityRules.Format(world.timelineStability)}");
                 EndingSO now = EndingService.Evaluate(world, lib, config, EndingMoment.Immediate);
                 if (now != null)
                     ended = now.id;
@@ -197,6 +198,7 @@ public static class BalanceSimulation
             r.Instalments += ledger.debtInstalment;
             r.Stranded += ledger.strandedCount;
             r.MoneyAfterShift.Add(world.money);
+            r.StabilityAfterShift.Add(world.timelineStability);
             r.MinMoney = Math.Min(r.MinMoney, world.money);
             r.Dump.AppendLine($"shift {day}: pay {ledger.TotalPay} penalties {ledger.TotalPenalties} stranded {ledger.strandedCount} instalment {ledger.debtInstalment} money {world.money}{(ended != null ? " ENDING " + ended : "")}");
             if (ended != null)
@@ -302,7 +304,7 @@ public static class BalanceSimulation
         sb.AppendLine("== The knobs and where to edit them ==");
         sb.AppendLine("In the Inspector (assets Generate World never writes):");
         sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)}: basePayPerCorrect {config.basePayPerCorrect}, legendaryBonusPay {config.legendaryBonusPay}, wrongDecisionPenalty {config.wrongDecisionPenalty}, freeWarningsPerDay {config.freeWarningsPerDay}, " +
-                      $"stabilityLossPerWrong {F(config.stabilityLossPerWrong)}, extraStabilityLossLegendary {F(config.extraStabilityLossLegendary)}, firedAtStability {F(config.firedAtStability)}, bankruptcyMoneyThreshold {config.bankruptcyMoneyThreshold}, " +
+                      $"stabilityChangeRate {config.stabilityChangeRate.ToString("0.####", Inv)}, stabilityLossPerWrong {F(config.stabilityLossPerWrong)}, extraStabilityLossLegendary {F(config.extraStabilityLossLegendary)}, stabilityGainPerCorrect {F(config.stabilityGainPerCorrect)}, firedAtStability {F(config.firedAtStability)}, stabilityWarningMargin {F(config.stabilityWarningMargin)}, stabilityCriticalMargin {F(config.stabilityCriticalMargin)}, bankruptcyMoneyThreshold {config.bankruptcyMoneyThreshold}, " +
                       $"baseDailyExpense {config.baseDailyExpense}, expensePerFamilyMember {config.expensePerFamilyMember}, expensePerConditionPoint {config.expensePerConditionPoint}, conditionWorsenChance {F(config.conditionWorsenChance)}");
         sb.AppendLine($"  {AssetDatabase.GetAssetPath(run)}: startingMoney {run.startingMoney}, startingStability {F(run.startingStability)}, startingFamilyMembers {run.startingFamilyMembers?.Count ?? 0}");
         List<DayPlanSO> plans = Enumerable.Range(1, 6).Select(lib.GetDayPlan).Where(p => p != null).Distinct().ToList();
@@ -334,7 +336,11 @@ public static class BalanceSimulation
         sb.AppendLine($"wallet: lowest in a run mean {F(BalanceStats.Mean(runs.Select(r => (float)r.MinMoney)))}, min {runs.Min(r => r.MinMoney)}; runs ever below 0: {runs.Count(r => r.MinMoney < 0)}; at or below the bankruptcy line ({config.bankruptcyMoneyThreshold}): {runs.Count(r => r.MinMoney <= config.bankruptcyMoneyThreshold)}");
         sb.AppendLine("wallet after each shift, mean/min over the runs still going: " + Curve(runs, r => r.MoneyAfterShift, "d"));
         sb.AppendLine("wallet after each night's bills, mean/min: " + Curve(runs, r => r.MoneyAtNight, "n"));
-        sb.AppendLine($"stability at the end: mean {F(BalanceStats.Mean(runs.Select(r => r.World.timelineStability)))}, min {F(runs.Min(r => r.World.timelineStability))}");
+        sb.AppendLine($"stability at the end (firing line {StabilityRules.Format(config.firedAtStability)}): mean {StabilityRules.Format(BalanceStats.Mean(runs.Select(r => r.World.timelineStability)))}, min {StabilityRules.Format(runs.Min(r => r.World.timelineStability))}, max {StabilityRules.Format(runs.Max(r => r.World.timelineStability))}");
+        sb.AppendLine("stability after each shift, mean/min over the runs still going: " + string.Join(" ", Enumerable.Range(0, Days)
+            .Select(n => runs.Where(r => r.StabilityAfterShift.Count > n).Select(r => r.StabilityAfterShift[n]).ToList())
+            .TakeWhile(l => l.Count > 0)
+            .Select((l, n) => $"d{n + 1}:{BalanceStats.Mean(l).ToString("0.00", Inv)}/{l.Min().ToString("0.00", Inv)}")));
 
         List<RunResult> full = runs.Where(r => r.EndingDay >= Days).ToList();
         if (full.Count == 0 || epilogues.Count == 0)

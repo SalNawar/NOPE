@@ -26,8 +26,19 @@ public sealed class WorldState
     /// <summary>Player money (credits).</summary>
     public int money;
 
-    /// <summary>Timeline stability gauge (0..100). Reaching 0 means fired.</summary>
-    public float timelineStability = 100f;
+    /// <summary>
+    /// Timeline stability as whole hundredths (9743 = 97.43 %; redesign phase
+    /// 23 part 1b, save version 3), so the save holds it exactly; read and
+    /// written through <see cref="timelineStability"/>.
+    /// </summary>
+    public int stabilityHundredths = 10000;
+
+    /// <summary>Timeline stability, 0 to 100 in hundredths ("97.43%"); every change compounds (StabilityRules); at or below GameConfigSO.firedAtStability the clerk is fired. Kept in <see cref="stabilityHundredths"/>.</summary>
+    public float timelineStability
+    {
+        get => StabilityRules.FromHundredths(stabilityHundredths);
+        set => stabilityHundredths = StabilityRules.ToHundredths(value);
+    }
 
     /// <summary>Total citations issued across the run.</summary>
     public int totalCitations;

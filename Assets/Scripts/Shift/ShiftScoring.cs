@@ -66,10 +66,9 @@ public static class ShiftScoring
         else
             ApplyWrongDecision(verdict, world, config);
 
-        world.timelineStability = Mathf.Clamp(world.timelineStability, 0f, 100f);
-        verdict.firedNow = world.timelineStability <= config.firedAtStability;
+        verdict.firedNow = EndingRules.IsFired(world.timelineStability, config.firedAtStability);
 
-        Debug.Log($"[ShiftScoring] <<< Exiting ResolveDecision (case {caseIndex1Based}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, stability={world.timelineStability:0.#}, firedNow={verdict.firedNow}).");
+        Debug.Log($"[ShiftScoring] <<< Exiting ResolveDecision (case {caseIndex1Based}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, stability={StabilityRules.Format(world.timelineStability)}, firedNow={verdict.firedNow}).");
 
         return verdict;
     }
@@ -81,12 +80,11 @@ public static class ShiftScoring
         world.totalCitations++;
         v.citationIssued = true;
 
-        float stabilityLoss = config.stabilityLossPerWrong;
+        float points = config.stabilityLossPerWrong;
         if (v.wasLegendary)
-            stabilityLoss += config.extraStabilityLossLegendary;
+            points += config.extraStabilityLossLegendary;
 
-        v.stabilityDelta = -stabilityLoss;
-        world.timelineStability += v.stabilityDelta;
+        ChangeStability(v, world, -points, config);
 
         string mistake = UiText.Format(v.MistakeKey, v.destinationLabel);
 
@@ -102,7 +100,7 @@ public static class ShiftScoring
             v.citationText = Citation(mistake, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)), v.stabilityDelta);
         }
 
-        Debug.Log($"[ShiftScoring] ApplyWrongDecision: accepted={v.accepted}, mistake='{v.MistakeKey}', citationsToday={world.citationsToday}, penalty={v.moneyPenalty}, stabilityDelta={v.stabilityDelta:0.#}, money={world.money}.");
+        Debug.Log($"[ShiftScoring] ApplyWrongDecision: accepted={v.accepted}, mistake='{v.MistakeKey}', citationsToday={world.citationsToday}, penalty={v.moneyPenalty}, stabilityDelta={StabilityRules.FormatChange(v.stabilityDelta)}, money={world.money}.");
     }
 
     /// <summary>Pay + optional stability gain for a correct send.</summary>
@@ -118,15 +116,22 @@ public static class ShiftScoring
             pay += config.legendaryBonusPay;
 
         v.payAwarded = Mathf.RoundToInt(pay);
-        v.stabilityDelta = config.stabilityGainPerCorrect;
 
         world.money += v.payAwarded;
-        world.timelineStability += v.stabilityDelta;
+        ChangeStability(v, world, config.stabilityGainPerCorrect, config);
 
-        Debug.Log($"[ShiftScoring] ApplyCorrect: payRate={payRate:0.##}, basePay={config.basePayPerCorrect}, legendaryBonus={(v.wasLegendary ? config.legendaryBonusPay : 0)}, payAwarded={v.payAwarded}, stabilityDelta=+{v.stabilityDelta:0.#}, money={world.money}.");
+        Debug.Log($"[ShiftScoring] ApplyCorrect: payRate={payRate:0.##}, basePay={config.basePayPerCorrect}, legendaryBonus={(v.wasLegendary ? config.legendaryBonusPay : 0)}, payAwarded={v.payAwarded}, stabilityDelta={StabilityRules.FormatChange(v.stabilityDelta)}, money={world.money}.");
+    }
+
+    /// <summary>Moves stability by <paramref name="points"/> at the config's rate (StabilityRules.Apply: a share of where it stands, in hundredths) and records the change on the verdict.</summary>
+    private static void ChangeStability(CaseVerdict v, WorldState world, float points, GameConfigSO config)
+    {
+        float before = StabilityRules.Round(world.timelineStability);
+        world.timelineStability = StabilityRules.Apply(before, points, config.stabilityChangeRate);
+        v.stabilityDelta = world.timelineStability - before;
     }
 
     /// <summary>A citation slip's text: the title, the mistake, the warning or penalty line and the stability change (UI string keys; piece 6).</summary>
     private static string Citation(string mistake, string consequence, float stabilityDelta) =>
-        UiText.Format("citation.layout", UiText.Get("citation.title"), mistake, consequence, UiText.Format("citation.stability", stabilityDelta));
+        UiText.Format("citation.layout", UiText.Get("citation.title"), mistake, consequence, UiText.Format("citation.stability", StabilityRules.FormatChange(stabilityDelta)));
 }

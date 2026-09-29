@@ -18,13 +18,7 @@ using UnityEngine;
 /// </summary>
 public sealed class OfficeReadouts : MonoBehaviour
 {
-    [Header("Stability bands")]
-    /// <summary>Below this stability, the text is amber.</summary>
-    [SerializeField] private float amberBelow = 60f;
-
-    /// <summary>Below this stability, the text is red.</summary>
-    [SerializeField] private float redBelow = 30f;
-
+    [Header("Stability bands (the margins above the firing line are GameConfigSO's)")]
     /// <summary>The text's colour in the warning band.</summary>
     [SerializeField] private Color amberColor = new Color(0.95f, 0.75f, 0.3f);
 
@@ -115,13 +109,14 @@ public sealed class OfficeReadouts : MonoBehaviour
         {
             if (world.timelineStability != _shownStability)
             {
-                _stabilityText.text = $"{world.timelineStability:0}%";
+                _stabilityText.text = StabilityRules.Format(world.timelineStability);
                 _shownStability = world.timelineStability;
             }
-            _stabilityText.color =
-                world.timelineStability < redBelow ? redColor :
-                world.timelineStability < amberBelow ? amberColor :
-                _stabilityColour;
+            GameConfigSO config = RunManager.Instance.Config != null ? RunManager.Instance.Config.gameConfig : null;
+            StabilityBand band = config != null
+                ? StabilityRules.Band(world.timelineStability, config.firedAtStability, config.stabilityWarningMargin, config.stabilityCriticalMargin)
+                : StabilityBand.Normal;
+            _stabilityText.color = band == StabilityBand.Critical ? redColor : band == StabilityBand.Warning ? amberColor : _stabilityColour;
         }
 
         if (_creditsText != null && world.money != _shownMoney)

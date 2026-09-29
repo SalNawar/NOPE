@@ -109,7 +109,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: tray.stability
-    text: "\u0627\u0644\u0627\u0633\u062A\u0642\u0631\u0627\u0631: {0:0}%"
+    text: "\u0627\u0644\u0627\u0633\u062A\u0642\u0631\u0627\u0631: {0}"
     gloss: 0
     tier: 0
   - key: taskbar.desk
