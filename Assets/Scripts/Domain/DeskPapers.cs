@@ -33,6 +33,12 @@ public sealed class CaseDocument
     /// <summary>True when the paper carries the traveller's photo (DocumentTemplateSO.showsPhoto).</summary>
     public bool showsPhoto;
 
+    /// <summary>The agency form number ("TC-310"; DocumentTemplateSO.formNumber): a request names it.</summary>
+    public string formNumber;
+
+    /// <summary>The request group it belongs to (DocumentTemplateSO.askGroup), or blank: a group's request hands over the one form of the group the traveller carries.</summary>
+    public string askGroup;
+
     /// <summary>True when the document is handed over only on request (it then gets a hub request).</summary>
     public bool Requested => DocumentHandOvers.IsRequested(handOver);
 }

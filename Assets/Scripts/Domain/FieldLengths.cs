@@ -11,8 +11,10 @@ using System;
 /// and dates to their makers' fixed widths (AgencyNumbers, AgencyCalendar,
 /// AccountMaker: a Citizen ID or a Displacement No., the wider); an account's
 /// status and transponder class to their longest name, a transponder to a
-/// book row (AccountRanges.Problems holds every model to it) and a debt to
-/// the widest the accounts may hold (AccountRanges.MaxDebt).
+/// book row (AccountRanges.Problems holds every model to it), a debt, a
+/// credit line or savings to the widest the accounts may hold
+/// (AccountRanges.MaxDebt), and a waiver or policy number to a book row
+/// (AgencyContent.Problems holds every prefix's number to it).
 /// </summary>
 public static class FieldLengths
 {
@@ -43,6 +45,8 @@ public static class FieldLengths
             case ClueCategory.TransponderClass:
                 return LongestName(typeof(TransponderClass));
             case ClueCategory.Debt:
+            case ClueCategory.Credit:
+            case ClueCategory.Funds:
                 return AccountMaker.Credits(AccountRanges.MaxDebt).Length;
             case ClueCategory.Incident:
                 return AgencyNumbers.IncidentNumber(WidestDay, new Widest()).Length;

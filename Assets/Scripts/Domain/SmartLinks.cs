@@ -218,9 +218,14 @@ public static class SmartLinks
             case ClueCategory.TransponderId:
             case ClueCategory.TransponderClass:
             case ClueCategory.Debt:
+            case ClueCategory.WaiverNo:
+            case ClueCategory.Credit:
+            case ClueCategory.Funds:
+            case ClueCategory.PolicyNo:
                 return string.IsNullOrWhiteSpace(recordLookup) ? LinkTarget.None : LinkTarget.ToRecords(recordLookup, category);
             case ClueCategory.DepartureDate:
             case ClueCategory.Expiry:
+            case ClueCategory.Signature:
                 return LinkTarget.ToTab(AppTab.Rules);
             default:
                 return LinkTarget.None;

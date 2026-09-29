@@ -109,23 +109,31 @@ public sealed class CaseDocumentsPresenter
     /// to the PC; without it, a paper reaches the PC at the hand-over. Each
     /// paper prints its document's form, headed with <paramref name="agency"/>'s
     /// name and programme (redesign phase 4), and its copy draws that same
-    /// form (phase 5).
+    /// form (phase 5). A paper not handed over is named as the desk asks for
+    /// it: its request group's label (<paramref name="interview"/>'s
+    /// askGroups, "Proof of means") until it is handed over, else its own name.
     /// </summary>
-    public void Present(CaseInstance inst, AgencyContent agency)
+    public void Present(CaseInstance inst, AgencyContent agency, InterviewLines interview)
     {
         _caseDocuments.Clear();
         _caseForms.Clear();
         _marks.Clear();
+        var requestNames = new List<string>();
         if (inst != null)
             foreach (DocumentInstance doc in inst.documents)
             {
+                DocumentTemplateSO template = doc != null ? doc.template : null;
+                string name = doc != null ? doc.DisplayName : UiText.Get("document.untitled");
                 _caseDocuments.Add(new CaseDocument
                 {
-                    name = doc != null ? doc.DisplayName : UiText.Get("document.untitled"),
+                    name = name,
                     fields = doc != null ? doc.fields : null,
-                    handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
-                    showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
+                    handOver = template != null ? template.handOver : DocumentHandOver.OnRequest,
+                    showsPhoto = template != null && template.showsPhoto,
+                    formNumber = template != null ? template.formNumber : string.Empty,
+                    askGroup = template != null ? template.askGroup : string.Empty
                 });
+                requestNames.Add(FormRequests.RequestLabel(template != null ? template.askGroup : null, name, interview != null ? interview.askGroups : null));
                 _caseForms.Add(DocumentForm.For(doc, agency));
             }
 
@@ -133,7 +141,7 @@ public sealed class CaseDocumentsPresenter
         CaseClaim claim = AppLinks.Claim(inst);
         foreach (DocumentsView view in _views)
             if (view != null)
-                view.SetCase(inst != null ? inst.documents : null, _caseForms, _papers, _compare, inst != null ? inst.look : null, _art, claim);
+                view.SetCase(inst != null ? inst.documents : null, _caseForms, _papers, _compare, inst != null ? inst.look : null, _art, claim, requestNames);
 
         if (_desk != null)
             _desk.BeginCase(_caseDocuments, _caseForms, inst != null ? inst.look : null, _art);

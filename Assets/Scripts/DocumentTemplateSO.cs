@@ -40,6 +40,15 @@ public sealed class DocumentTemplateSO : ScriptableObject
     /// </summary>
     public TravellerKind[] askableBy;
 
+    /// <summary>
+    /// The request group the form belongs to (traveller types I2), or blank:
+    /// the forms of a group are one "Request" entry on the traveller wheel
+    /// (the group's label, world_source.json interview.askGroups), and a
+    /// traveller carries one of them, the one their account holds
+    /// (AccountMaker.ProofGroup, "proof": TC-415, TC-416 and TC-417).
+    /// </summary>
+    public string askGroup = string.Empty;
+
     /// <summary>True when the desk may ask a traveller of <paramref name="kind"/> for this form.</summary>
     public bool IsAskableBy(TravellerKind kind) => askableBy != null && System.Array.IndexOf(askableBy, kind) >= 0;
 
