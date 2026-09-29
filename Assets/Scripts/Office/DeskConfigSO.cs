@@ -167,9 +167,6 @@ public sealed class DeskConfigSO : ScriptableObject
         new HallPortalLayers(5, "46 Portal 05 upper right secure bay", "47 Portal 05 upper right metal ring", "57 Portal 05 upper right painted glass"),
     };
 
-    /// <summary>A ring under maintenance: its metal ring's tint (a 45 % grey, multiplied with the art's own lighting, so the evening still darkens it).</summary>
-    public Color hallPortalIdleTint = new Color(0.45f, 0.45f, 0.45f, 1f);
-
     /// <summary>An open departure ring's glow (an unlit tint, brightened by the PortalGlow material: a pale cyan).</summary>
     public Color hallPortalGlowTint = new Color(0.35f, 0.85f, 1f, 0.9f);
 
@@ -203,7 +200,7 @@ public sealed class HallPortalLayers
     /// <summary>The secure bay's layer (its fence and panels stand in front of the ring's lower half); the effect draws at its order less one.</summary>
     public string bay;
 
-    /// <summary>The metal ring's layer (the gate frame): tinted under maintenance; its opaque rect places the effect.</summary>
+    /// <summary>The metal ring's layer (the gate frame, with the wall and bay pixels around it): never tinted; its opaque rect places the effect.</summary>
     public string ring;
 
     /// <summary>The painted glass's layer (drawn over the effect; listed so a renamed layer is one edit here).</summary>

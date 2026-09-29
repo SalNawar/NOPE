@@ -5,20 +5,21 @@ using UnityEngine;
 /// The anime hall's portal rings (the portals spec v3 VX1-VX7;
 /// docs/SCENE_CONTRACT_GAMEPLAY.md): at the day's start (when the shift's
 /// PortalDay arrives, GameManager.Portals) each ring of DeskConfigSO's
-/// hallPortalLayers takes its look (PortalRoute.Look): its metal ring dimmed
-/// under maintenance (the art's own colour times hallPortalIdleTint, through
-/// the art's AnimeHallPresentation.SetLayerTint), else at its own colour; its
-/// PortalEffect inside the ring shows the glow (an open departure portal),
-/// the Return Gate's spiral, or nothing (CLOSED, under maintenance), drawn on
+/// hallPortalLayers takes its look (PortalRoute.Look): its PortalEffect inside
+/// the ring shows the glow (an open departure portal), the Return Gate's
+/// spiral, or nothing (a closed portal: CLOSED or under maintenance), drawn on
 /// the art's Default sorting layer at the secure bay's order less one (read
 /// from the bay's renderer), placed on the ring's opaque rect. An accepted
 /// traveller's portal (GameManager.Departed) flares its effect. The effects'
 /// art comes from the slots Office/portal_glow and Office/portal_return_glow,
 /// else PortalGlowPlaceholder's. OfficeSceneBinder adds it to the gameplay
 /// layer at load when the art office carries a presentation, beside
-/// AnimeHallShiftLink; the gameplay drives the art only through its public
-/// hooks (FindLayer, SetLayerTint). A layer the hall lacks is warned about
-/// once and its ring left as the art drew it.
+/// AnimeHallShiftLink. The metal rings stay as the art drew them in every
+/// state: each ring's registered layer also carries the wall, pillar and bay
+/// pixels around and below its frame (the layers are mutually exclusive
+/// masks), so a tint on it greys that whole disc (Saleh 2026-09-29: "a closed
+/// portal has nothing in the ring"); the gameplay reads the art only through
+/// its public hook FindLayer. A layer the hall lacks is warned about once.
 /// </summary>
 [DisallowMultipleComponent]
 public sealed class AnimeHallPortalLink : MonoBehaviour
@@ -31,7 +32,6 @@ public sealed class AnimeHallPortalLink : MonoBehaviour
     private Sprite _glow;
     private Sprite _spiral;
     private readonly List<Object> _made = new List<Object>();
-    private readonly Dictionary<string, Color> _artColours = new Dictionary<string, Color>();
 
     /// <summary>Points the link at the hall's presentation, the config's ring knobs, the shift and the effects (one per entry of the config's hallPortalLayers, in its order).</summary>
     public void Configure(AnimeHallPresentation hall, DeskConfigSO config, GameManager game, PortalEffect[] effects)
@@ -67,11 +67,11 @@ public sealed class AnimeHallPortalLink : MonoBehaviour
             Apply(day);
     }
 
-    /// <summary>Each ring's tint and effect for <paramref name="day"/> (a day without portals leaves every ring as the art drew it).</summary>
+    /// <summary>Each ring's effect for <paramref name="day"/> (a day without portals shows none).</summary>
     private void Apply(PortalDay day)
     {
         _shown = day;
-        HallPortalLayers[] layers = _config.hallPortalLayers ?? new HallPortalLayers[0];
+        HallPortalLayers[] layers = _config.hallPortalLayers ?? System.Array.Empty<HallPortalLayers>();
         for (int i = 0; i < layers.Length && i < _effects.Length; i++)
         {
             HallPortalLayers l = layers[i];
@@ -81,23 +81,17 @@ public sealed class AnimeHallPortalLink : MonoBehaviour
             if (effect == null || ring == null || bay == null || ring.sprite == null)
                 continue;
 
-            if (!_artColours.TryGetValue(l.ring, out Color art))
-                _artColours[l.ring] = art = ring.color;
-
             PortalLook look = PortalLook.Empty;
-            bool listed = false;
             foreach (PortalRoute p in day.Portals)
             {
                 if (p.Number != l.portal)
                     continue;
                 look = p.Look;
-                listed = true;
                 break;
             }
 
-            _hall.SetLayerTint(l.ring, listed && look == PortalLook.Dimmed ? art * _config.hallPortalIdleTint : art);
             effect.Place(ring.transform, OfficeAnchors.OpaqueRect(ring.sprite), _config.hallPortalGlowSize, bay.sortingLayerID, bay.sortingOrder - 1);
-            Sprite sprite = !listed ? null : look == PortalLook.Glow ? _glow : look == PortalLook.ReturnGate ? _spiral : null;
+            Sprite sprite = look == PortalLook.Glow ? _glow : look == PortalLook.ReturnGate ? _spiral : null;
             effect.Show(sprite, look == PortalLook.ReturnGate ? _config.hallReturnGateTint : _config.hallPortalGlowTint,
                         _config.hallPortalSpinDegrees, _config.hallPortalPulseScale, _config.hallPortalPulseSeconds);
         }
