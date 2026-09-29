@@ -146,16 +146,6 @@ public sealed class CaseInstance
     /// </summary>
     public DirectiveFault directiveFault;
 
-    /// <summary>
-    /// What the desk saw of the traveller's Stranding Waiver (TC-310;
-    /// Strandings.Standing), read when the shift ends: a stranded traveller
-    /// let through at anything but Signed costs the clerk the fine (traveller
-    /// types S3; ShiftStrandings). None until a Stranding Waiver (TC-310) is
-    /// handed over: the hand-over reads its Signature and Waiver No. boxes
-    /// against the account (Strandings.StandingOf, phase 8).
-    /// </summary>
-    public WaiverStanding waiverStanding;
-
     /// <summary>Why the traveller lacks a form the desk asks for: Honest (they never needed it), or Missing when a broken paper set left their waiver or proof of means out (CaseFactory.BreakPapers; the interview's reply, MissingFormVariant).</summary>
     public MissingFormVariant missingFormVariant;
 

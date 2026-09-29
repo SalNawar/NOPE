@@ -1159,7 +1159,6 @@
       }
     ],
     "strandChance": 0.08,
-    "strandFine": 150,
     "employers": [
       {
         "id": "nile_quarry",
@@ -11481,12 +11480,6 @@
       {
         "key": "results.stranded",
         "text": "Stranded in transit: {0}   (an Economy transponder failed)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "results.strandingFine",
-        "text": "Stranding fine: -{0}   (let through without a signed waiver)",
         "gloss": "None",
         "tier": "Full"
       },

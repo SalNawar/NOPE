@@ -566,7 +566,7 @@ public sealed class CaseFactory
     /// the Stranding Waiver or the proof of means left out (the traveller
     /// never hands it over and answers the request with their kind's Missing
     /// line, MissingFormVariant.Missing; the account keeps it on file), or the
-    /// waiver's Signature box reading UNSIGNED (Strandings.UnsignedMark).
+    /// waiver's Signature box reading UNSIGNED (Directives.UnsignedMark).
     /// </summary>
     private static void BreakPapers(CaseInstance inst, PaperSetBreak paperBreak)
     {
@@ -584,7 +584,7 @@ public sealed class CaseFactory
                 DocumentField signature = inst.documents.Where(d => d.template != null && d.template.formNumber == Directives.Waiver)
                     .SelectMany(d => d.fields).FirstOrDefault(f => f != null && f.category == ClueCategory.Signature);
                 if (signature != null)
-                    signature.value = Strandings.UnsignedMark;
+                    signature.value = Directives.UnsignedMark;
                 break;
         }
     }
@@ -593,10 +593,9 @@ public sealed class CaseFactory
     /// What the Directives read of the finished traveller (CaseFacts): the
     /// kind; whether today's closures forbid the claim; the class the visa
     /// and the manifest print (unreadable: none); the forms carried; whether
-    /// the waiver is carried and signed (Strandings.StandingOf: anything but
-    /// Unsigned; a number the account never registered is a forgery, L3, not
-    /// a paper-set fault); the account's standing; and the papers' dates
-    /// against today.
+    /// the waiver is carried and signed (Directives.IsSigned; a number the
+    /// account never registered is a forgery, L3, not a paper-set fault); the
+    /// account's standing; and the papers' dates against today.
     /// </summary>
     private CaseFacts Facts(CaseInstance inst, DayPlanSO plan)
     {
@@ -609,7 +608,7 @@ public sealed class CaseFactory
             VisaClass = System.Enum.TryParse(FieldValue(inst, Directives.Visa, ClueCategory.AccountStatus), out CitizenStatus visa) ? visa : (CitizenStatus?)null,
             ManifestClass = System.Enum.TryParse(FieldValue(inst, Directives.Manifest, ClueCategory.TransponderClass), out TransponderClass manifest) ? manifest : (TransponderClass?)null,
             Forms = inst.documents.Where(d => d.template != null).Select(d => d.template.formNumber).ToList(),
-            WaiverSigned = waiver != null && Strandings.StandingOf(waiver.fields, inst.account?.WaiverNo) != WaiverStanding.Unsigned,
+            WaiverSigned = waiver != null && Directives.IsSigned(waiver.fields),
             Frozen = inst.account != null && inst.account.Standing == AccountStanding.Frozen,
             Departures = fields.Where(f => f.category == ClueCategory.DepartureDate).Select(f => f.value).ToList(),
             ValidUntils = fields.Where(f => f.category == ClueCategory.Expiry).Select(f => f.value).ToList(),

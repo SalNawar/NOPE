@@ -319,17 +319,15 @@ public sealed class GameManager : MonoBehaviour
         int totalCases = _ledger != null ? _ledger.verdicts.Count : 0;
         Debug.Log($"[GameManager] Day {_worldState.day} shift complete: {correctCount}/{totalCases} correct, totalPay={totalPay}, totalPenalty={totalPenalty}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}.");
 
-        // The strandings among the accepted travellers (their carries, their news
-        // and the clerk's fines; redesign phase 13b), the clerk's Debt Relief
-        // instalment out of the shift's pay (phase 13) and the narrative dialogs'
-        // consequences all apply before the save, so a Continue replay of this day
-        // can never apply them twice. Each may move the wallet, so the ending
-        // check runs after them.
-        bool fined = ShiftStrandings.Resolve(_worldState, _ledger, _dayCases, _today, contentLibrary, _gameConfig) > 0;
-        _worldState.debtReliefYesterday = _ledger != null ? _ledger.DebtReliefDepartures : 0;
-        bool instalmentTaken = ClerkAccountSource.TakeInstalment(_worldState, _ledger, contentLibrary) > 0;
+        // The strandings among the accepted travellers (their carries and their
+        // news; redesign phase 13b; they move no money since phase 23), the
+        // clerk's Debt Relief instalment out of the shift's pay (phase 13) and
+        // the narrative dialogs' consequences all apply before the save
+        // (DayCycle.CloseShift), so a Continue replay of this day can never apply
+        // them twice. The instalment and the dialogs may move the wallet, so the
+        // ending check runs after them.
         EndingSO ending = null;
-        if (ApplyDialogOutcomes() || instalmentTaken || fined)
+        if (DayCycle.CloseShift(_worldState, _ledger, _dayCases, _today, contentLibrary, _gameConfig))
         {
             if (officeUI != null)
                 officeUI.UpdateHud(_worldState);
@@ -381,38 +379,6 @@ public sealed class GameManager : MonoBehaviour
             Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (no results panel, going to {(ending != null ? "the title scene" : "Home")} directly).");
             next();
         }
-    }
-
-    /// <summary>
-    /// Applies what the shift's completed dialogs decided (DialogOutcomes):
-    /// sets each one-shot dialog's done flag, and activates each named effect
-    /// once, with its instant ops now and a start day of tomorrow (so its
-    /// briefing and news lines reach the next morning's paper). Returns true
-    /// when any effect was applied.
-    /// </summary>
-    private bool ApplyDialogOutcomes()
-    {
-        if (_ledger == null || _worldState == null)
-            return false;
-
-        foreach (string flag in DialogOutcomes.FlagsToSet(_ledger.dialogOutcomes))
-            _worldState.SetFlag(flag);
-
-        bool applied = false;
-        foreach (DialogOutcome outcome in DialogOutcomes.EffectsToApply(_ledger.dialogOutcomes))
-        {
-            EffectSO fx = contentLibrary.GetEffectByAssetName(outcome.effectName);
-            if (fx == null)
-            {
-                Debug.LogWarning($"[GameManager] Dialog '{outcome.dialogId}' names effect '{outcome.effectName}', which ContentLibrary_Main does not list; add it to the library's effects.");
-                continue;
-            }
-
-            TimelineService.ActivateEffect(_worldState, fx, $"Dialog: {outcome.dialogId}", _worldState.day + 1, fx.defaultDurationDays, applyInstantOps: true);
-            applied = true;
-        }
-
-        return applied;
     }
 
     /// <summary>
@@ -630,18 +596,12 @@ public sealed class GameManager : MonoBehaviour
             ? investigationUI.EvidenceCount
             : -1;
 
-        CaseVerdict verdict = ShiftScoring.ResolveDecision(inst, accepted, _activeCaseIndex1Based, _worldState, _gameConfig, contentLibrary, evidenceCount);
-        _ledger.verdicts.Add(verdict);
-
-        // The traveler is only dispatched (and the timeline moved) when accepted;
-        // an accepted liar also carries their true home's fact into the claim,
-        // and an accepted costume error causes a panic there (tomorrow's news).
-        if (accepted)
-        {
-            TimelineService.ApplyVerdictImpacts(inst, inst.claimedEra, verdict.correct, _worldState, contentLibrary);
-            HistoryService.RecordCarry(_worldState, inst, _today.Facts, _gameConfig);
-            HistoryService.RecordPanic(_worldState, inst);
-        }
+        // The verdict onto the ledger; the traveler is only dispatched (and the
+        // timeline moved) when accepted: an accepted liar also carries their true
+        // home's fact into the claim, and an accepted costume error causes a
+        // panic there (tomorrow's news). DayCycle holds the step, so the balance
+        // simulation plays the same one.
+        CaseVerdict verdict = DayCycle.Decide(inst, accepted, _activeCaseIndex1Based, evidenceCount, _worldState, _today, _ledger, contentLibrary, _gameConfig);
 
         if (officeUI != null)
             officeUI.UpdateHud(_worldState);

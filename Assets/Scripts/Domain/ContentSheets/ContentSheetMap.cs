@@ -73,7 +73,6 @@ public static class ContentSheetMap
                     Int("amountMax").Note("an amount proof's most value in cr (0 for a number)"),
                     Text("prefix").Note("a number proof's prefix (TI gives TI-551902); blank for an amount")).Note("the proofs of means a Standard account may hold, one per proof form"),
                 Num("strandChance").Note("the chance an accepted traveller on an Economy transponder is stranded at the shift's end (0.08 = 8%)"),
-                Int("strandFine").Note("the clerk's fine in cr for a stranded traveller let through without a valid signed waiver"),
                 Rows("agencyEmployers", "employers",
                     Text("id").Required(),
                     Text("era").Ref("eras").Note("the era the employer hires for"),

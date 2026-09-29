@@ -47,17 +47,17 @@ public class AccountTests
         Assert.AreEqual(Account.Unknown, row.owed, "no debt source before phase 13");
     }
 
-    /// <summary>Redesign phase 13b: the FINES cell is the citation penalties and the stranding fines together.</summary>
+    /// <summary>Redesign phase 23: the FINES cell is the wrong-decision penalties alone; a stranding fines nothing.</summary>
     [Test]
-    public void RecordShift_FinesAreThePenaltiesAndTheStrandingFines()
+    public void RecordShift_FinesAreThePenaltiesAlone()
     {
         var days = new List<AccountDay>();
         ShiftLedger ledger = Ledger(100, 20);
-        ledger.strandingFines = 150;
+        ledger.strandedCount = 2;
 
         AccountDay row = Account.RecordShift(days, 1, ledger, new Source(), 60);
 
-        Assert.AreEqual(170, row.fines);
+        Assert.AreEqual(20, row.fines);
     }
 
     [Test]

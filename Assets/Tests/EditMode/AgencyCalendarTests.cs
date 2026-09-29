@@ -82,25 +82,23 @@ public class AgencyCalendarTests
     [Test]
     public void AgencyContent_Problems_NoneWhenComplete()
     {
-        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models(), proofs = Proofs(), strandChance = 0.08f, strandFine = 150 };
+        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models(), proofs = Proofs(), strandChance = 0.08f };
         CollectionAssert.IsEmpty(agency.Problems());
     }
 
-    /// <summary>Redesign phase 13b: the stranding chance is a probability and the fine is never negative (agency.strandChance, agency.strandFine).</summary>
-    [TestCase(-0.1f, 150, "agency.strandChance")]
-    [TestCase(1.5f, 150, "agency.strandChance")]
-    [TestCase(float.NaN, 150, "agency.strandChance")]
-    [TestCase(0.08f, -1, "agency.strandFine")]
-    public void AgencyContent_Problems_TheStrandingKnobs(float chance, int fine, string named)
+    /// <summary>Redesign phase 13b: the stranding chance is a probability (agency.strandChance; phase 23 retired the fine).</summary>
+    [TestCase(-0.1f, "agency.strandChance")]
+    [TestCase(1.5f, "agency.strandChance")]
+    [TestCase(float.NaN, "agency.strandChance")]
+    public void AgencyContent_Problems_TheStrandingChance(float chance, string named)
     {
-        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models(), proofs = Proofs(), strandChance = chance, strandFine = fine };
+        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models(), proofs = Proofs(), strandChance = chance };
         var problems = agency.Problems();
         Assert.AreEqual(1, problems.Count, string.Join(" | ", problems));
         StringAssert.Contains(named, problems[0]);
 
         agency.strandChance = 0f;
-        agency.strandFine = 0;
-        CollectionAssert.IsEmpty(agency.Problems(), "no strandings and no fine are allowed");
+        CollectionAssert.IsEmpty(agency.Problems(), "no strandings are allowed");
         agency.strandChance = 1f;
         CollectionAssert.IsEmpty(agency.Problems(), "every Economy unit failing is allowed");
     }

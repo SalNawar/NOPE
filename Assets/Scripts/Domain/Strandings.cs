@@ -2,26 +2,6 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// What the desk saw of a traveller's Stranding Waiver (TC-310; the
-/// traveller-types spec's S3): the standing that decides the clerk's fine
-/// when the traveller is stranded. Serialized on the case: append only.
-/// </summary>
-public enum WaiverStanding
-{
-    /// <summary>No waiver was handed over (a traveller without one, or one never asked for it).</summary>
-    None,
-
-    /// <summary>A waiver whose signature row reads "UNSIGNED".</summary>
-    Unsigned,
-
-    /// <summary>A waiver number the traveller's Citizen Account never registered (a forged waiver is no waiver).</summary>
-    Unregistered,
-
-    /// <summary>A signed waiver whose number the account registered: the clerk is covered.</summary>
-    Signed
-}
-
-/// <summary>
 /// A traveller stranded in the past (the traveller-types spec's S1-S2),
 /// reported in the next morning's paper (Strandings.Lines) and then cleared.
 /// </summary>
@@ -44,12 +24,11 @@ public sealed class StrandingRecord
 /// (the account's, whatever the manifest claims) is Economy is rolled on the
 /// day's stranding stream (<see cref="Seeds.ForStrandings"/>), in queue order,
 /// one draw each; a stranded traveller does not come back, carries the
-/// present's Technology into the destination through the carries (S2), makes
-/// the next morning's paper, and costs the clerk a fine when let through
-/// without a valid signed waiver (S3). Pure: the draws, the fine rule and the
-/// news lines are tested headless. The waiver's standing is read from the
-/// papers by the phases that bring the waiver form (8 and 9) through
-/// <see cref="Standing"/>; until then every traveller stands at None.
+/// present's Technology into the destination through the carries (S2) and
+/// makes the next morning's paper. A stranding fines nothing (redesign phase
+/// 23: the clerk's only fine is the one wrong-decision penalty,
+/// VerdictRules.WrongDecisionPenalty, so S3's fine is retired). Pure: the
+/// draws and the news lines are tested headless.
 /// </summary>
 public static class Strandings
 {
@@ -76,65 +55,6 @@ public static class Strandings
         }
         return stranded;
     }
-
-    /// <summary>
-    /// What the desk saw of the waiver (the seam for the waiver form): None
-    /// when no waiver was <paramref name="handedOver"/>, Unsigned when its
-    /// <paramref name="signature"/> row is not a signature (blank or
-    /// "UNSIGNED", whatever its case), Unregistered when its
-    /// <paramref name="waiverNo"/> is not the account's
-    /// <paramref name="registeredNo"/> (Values.Match; an account with no waiver
-    /// registers none), else Signed.
-    /// </summary>
-    public static WaiverStanding Standing(bool handedOver, string signature, string waiverNo, string registeredNo)
-    {
-        if (!handedOver)
-            return WaiverStanding.None;
-        if (string.IsNullOrWhiteSpace(signature) || string.Equals(signature.Trim(), UnsignedMark, StringComparison.OrdinalIgnoreCase))
-            return WaiverStanding.Unsigned;
-        if (string.IsNullOrWhiteSpace(registeredNo) || !Values.Match(waiverNo, registeredNo))
-            return WaiverStanding.Unregistered;
-        return WaiverStanding.Signed;
-    }
-
-    /// <summary>
-    /// What the desk saw of a handed-over paper (phase 8, the TC-310 Stranding
-    /// Waiver): None when <paramref name="paper"/> is no waiver (it prints no
-    /// Waiver No.), else <see cref="Standing"/> of its Signature and Waiver No.
-    /// boxes against the account's <paramref name="registeredNo"/>
-    /// (CitizenAccount.WaiverNo; null registers none). The one call site is the
-    /// hand-over (InvestigationUIController.RequestPaper), so a paper that is
-    /// no waiver leaves the traveller's standing as it was.
-    /// </summary>
-    public static WaiverStanding StandingOf(IReadOnlyList<DocumentField> paper, string registeredNo)
-    {
-        string waiverNo = null, signature = null;
-        bool waiver = false;
-        foreach (DocumentField field in paper ?? Array.Empty<DocumentField>())
-        {
-            if (field == null)
-                continue;
-            if (field.category == ClueCategory.WaiverNo)
-            {
-                waiver = true;
-                waiverNo = field.value;
-            }
-            else if (field.category == ClueCategory.Signature)
-            {
-                signature = field.value;
-            }
-        }
-        return waiver ? Standing(true, signature, waiverNo, registeredNo) : WaiverStanding.None;
-    }
-
-    /// <summary>The signature row's value of a waiver nobody signed.</summary>
-    public const string UnsignedMark = "UNSIGNED";
-
-    /// <summary>True when a stranding costs the clerk the fine (S3): no valid signed waiver was presented.</summary>
-    public static bool Fined(WaiverStanding waiver) => waiver != WaiverStanding.Signed;
-
-    /// <summary>The fine for one stranding: <paramref name="fine"/> cr (agency.strandFine; never below 0) when <see cref="Fined"/>, else 0.</summary>
-    public static int Fine(WaiverStanding waiver, int fine) => Fined(waiver) ? Math.Max(0, fine) : 0;
 
     /// <summary>
     /// The next morning's stranding lines (S2): one per record, in order,

@@ -552,4 +552,17 @@ public class DirectivesTests
         Assert.AreEqual(Today.AddDays(-30), Directives.ExpiredValidUntil(Today, Script(R(99))), "the draw is clamped to the range");
         Assert.AreEqual(DirectiveFault.ExpiredPaper, Directives.PaperDates(null, new[] { AgencyCalendar.Write(Directives.ExpiredValidUntil(Today, Script(R(0)))) }, Today), "the maker's date breaks the directive");
     }
+
+    [Test]
+    public void IsSigned_ABlankOrUnsignedSignatureBox_IsUnsigned_TheNumberIsNotRead()
+    {
+        DocumentField Box(ClueCategory category, string value) => new DocumentField { category = category, value = value };
+        Assert.IsTrue(Directives.IsSigned(new[] { Box(ClueCategory.WaiverNo, "SW-204817"), Box(ClueCategory.Signature, "Mara") }));
+        Assert.IsFalse(Directives.IsSigned(new[] { Box(ClueCategory.WaiverNo, "SW-204817"), Box(ClueCategory.Signature, Directives.UnsignedMark) }));
+        Assert.IsFalse(Directives.IsSigned(new[] { Box(ClueCategory.Signature, " unsigned ") }), "any case, trimmed");
+        Assert.IsFalse(Directives.IsSigned(new[] { Box(ClueCategory.Signature, " ") }), "a blank box");
+        Assert.IsTrue(Directives.IsSigned(new[] { Box(ClueCategory.WaiverNo, "SW-000001"), Box(ClueCategory.Signature, "Mara") }), "a number the account never registered is L3's forgery, read by the records");
+        Assert.IsTrue(Directives.IsSigned(new[] { Box(ClueCategory.Name, "Mara") }), "no Signature box states nothing unsigned");
+        Assert.IsTrue(Directives.IsSigned(null));
+    }
 }

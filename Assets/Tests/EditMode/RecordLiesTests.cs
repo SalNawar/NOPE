@@ -443,7 +443,8 @@ public class RecordLiesTests
         CollectionAssert.Contains(taken, "SW-000002");
 
         plan.ApplyTo(Docs(forms));
-        Assert.AreEqual(WaiverStanding.Unregistered, Strandings.StandingOf(forms[2].Fields, account.WaiverNo), "a forged waiver is no waiver: a stranding fines the clerk");
+        Assert.AreNotEqual(account.WaiverNo, forms[2].Fields.Single(f => f.category == ClueCategory.WaiverNo).value, "a number the account never registered");
+        Assert.IsTrue(Directives.IsSigned(forms[2].Fields), "signed: a forgery (the lie), not a paper-set fault");
         CollectionAssert.IsEmpty(PaperChecks.Contradictions(Docs(forms)), "no other paper prints the waiver's number: the record proves it");
     }
 
@@ -461,7 +462,7 @@ public class RecordLiesTests
         List<PaperContradiction> cross = PaperChecks.Contradictions(Docs(forms));
         Assert.AreEqual(1, cross.Count, "the waiver's transponder disagrees with the manifest's (paper vs paper)");
         Assert.AreEqual(ClueCategory.TransponderId, cross[0].Category);
-        Assert.AreEqual(WaiverStanding.Signed, Strandings.StandingOf(forms[2].Fields, account.WaiverNo), "its number is the registered one");
+        Assert.AreEqual(account.WaiverNo, forms[2].Fields.Single(f => f.category == ClueCategory.WaiverNo).value, "its number is the registered one");
     }
 
     [Test]

@@ -151,6 +151,24 @@ public static class Directives
     /// <summary>The three proofs of means (Holiday Credit Agreement, Proof of Funds, Travel Insurance Certificate): a Standard visa needs one.</summary>
     public static readonly IReadOnlyList<string> Proofs = new[] { "TC-415", "TC-416", "TC-417" };
 
+    /// <summary>The Signature box of a waiver nobody signed (the paper-set maker's PaperSetBreak.WaiverUnsigned).</summary>
+    public const string UnsignedMark = "UNSIGNED";
+
+    /// <summary>
+    /// True when a waiver's <paramref name="paper"/> is signed: false when its
+    /// Signature box is blank or reads <see cref="UnsignedMark"/> (any case,
+    /// trimmed); a paper with no Signature box states nothing unsigned. The
+    /// number is not read here: a number the account never registered is a
+    /// forgery (L3, RecordLies), not a paper-set fault.
+    /// </summary>
+    public static bool IsSigned(IReadOnlyList<DocumentField> paper)
+    {
+        foreach (DocumentField field in paper ?? Array.Empty<DocumentField>())
+            if (field != null && field.category == ClueCategory.Signature)
+                return !string.IsNullOrWhiteSpace(field.value) && !string.Equals(field.value.Trim(), UnsignedMark, StringComparison.OrdinalIgnoreCase);
+        return true;
+    }
+
     /// <summary>How many days off, at most, a falsified departure is (1 to 3 days before or after today, §5.4).</summary>
     public const int DepartureOffsetMaxDays = 3;
 
