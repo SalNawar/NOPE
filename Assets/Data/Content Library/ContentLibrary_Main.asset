@@ -337,6 +337,368 @@ MonoBehaviour:
         id: interview.requests.speak_up.reply
         text: Sorry. Is this better?
     menuCapacity: 8
+    smallTalkWeights:
+      personality: 1
+      home: 1
+      kind: 1
+    kindSmallTalk:
+    - personality: 
+      premade: 
+      kinds: 00000000
+      era: 
+      key: 
+      variant: 0
+      line:
+        id: interview.kindSmallTalk.1
+        text: We do three eras a year. The children prefer the ones with castles.
+    - personality: 
+      premade: 
+      kinds: 01000000
+      era: 
+      key: 
+      variant: 0
+      line:
+        id: interview.kindSmallTalk.2
+        text: Two years of saving, and the credit company paid the rest. So kind
+          of them.
+    - personality: 
+      premade: 
+      kinds: 02000000
+      era: 
+      key: 
+      variant: 0
+      line:
+        id: interview.kindSmallTalk.3
+        text: They say the past has fresh air. And fourteen-hour shifts.
+    - personality: 
+      premade: 
+      kinds: 03000000
+      era: 
+      key: 
+      variant: 0
+      line:
+        id: interview.kindSmallTalk.4
+        text: Everything in this century hums. Even the walls.
+    voices:
+      claims:
+      - personality: chatty
+        premade: 
+        kinds: 0000000001000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.chatty.1
+          text: '{place}! Our anniversary. Well, mine. He left. Long story!'
+      - personality: chatty
+        premade: 
+        kinds: 03000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.chatty.2
+          text: Home to {place}. My goat's been alone for days. Or centuries?
+      - personality: curt
+        premade: 
+        kinds: 0000000001000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.curt.1
+          text: '{place}. Leisure. Go.'
+      - personality: curt
+        premade: 
+        kinds: 03000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.curt.2
+          text: '{place}. Home. Now.'
+      - personality: anxious
+        premade: 
+        kinds: 0000000001000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.anxious.1
+          text: '{place}, please. Is it safe? They said it''s safe. It''s safe?'
+      - personality: sunny
+        premade: 
+        kinds: 02000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.sunny.1
+          text: Debt Relief to {place}! A fresh start! Like the brochure!
+      - personality: grand
+        premade: 
+        kinds: 0000000001000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.grand.1
+          text: '{place}. Somewhere with a view, and a better class of peasant.'
+      - personality: grand
+        premade: 
+        kinds: 03000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.grand.2
+          text: Return me to {place} at once. I was somebody there.
+      - personality: stickler
+        premade: 
+        kinds: 0000000001000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.stickler.1
+          text: One leisure departure to {place}, as the notice words it.
+      - personality: glum
+        premade: 
+        kinds: 02000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.glum.1
+          text: Debt Relief to {place}. It's all in the contract. So am I.
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.senenmut.1
+          text: Home to {place}. The Pharaoh's temple will not finish itself.
+      - personality: 
+        premade: socrates
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.socrates.1
+          text: 'Send me home to {place}. But first: what is a home?'
+      handOver:
+      - personality: curt
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.handOver.curt.1
+          text: Here.
+      - personality: stickler
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.handOver.stickler.1
+          text: Face up, top edge first, as the sign above you requires.
+      missingForms:
+      - personality: chatty
+        premade: 
+        kinds: 00000000
+        era: 
+        key: TC-310
+        variant: 0
+        line:
+          id: interview.voices.missingForms.chatty.1
+          text: No waiver, it's the Premium unit! My cousin went Economy once. We
+            don't talk about him.
+      - personality: anxious
+        premade: 
+        kinds: 00000000
+        era: 
+        key: TC-310
+        variant: 0
+        line:
+          id: interview.voices.missingForms.anxious.1
+          text: A waiver? Do I need one? It's Premium. Premium never fails. Does
+            it?
+      - personality: sunny
+        premade: 
+        kinds: 03000000
+        era: 
+        key: proof
+        variant: 0
+        line:
+          id: interview.voices.missingForms.sunny.1
+          text: Proof of means? I have a smile and a leaflet! Attendance required!
+      - personality: grand
+        premade: 
+        kinds: 00000000
+        era: 
+        key: TC-310
+        variant: 0
+        line:
+          id: interview.voices.missingForms.grand.1
+          text: A waiver? My transponder has people for that.
+      - personality: stickler
+        premade: 
+        kinds: 00000000
+        era: 
+        key: TC-310
+        variant: 0
+        line:
+          id: interview.voices.missingForms.stickler.1
+          text: Premium units are exempt from the {document}. It's on the back of
+            the form.
+      spoken:
+      - personality: curt
+        premade: 
+        kinds: 
+        era: 
+        key: speak_up
+        variant: 0
+        line:
+          id: interview.voices.spoken.curt.1
+          text: Said it once. That was billed.
+      - personality: grand
+        premade: 
+        kinds: 
+        era: 
+        key: step_closer
+        variant: 0
+        line:
+          id: interview.voices.spoken.grand.1
+          text: I don't step. I proceed.
+      answers:
+      - personality: chatty
+        premade: 
+        kinds: 000000000100000002000000
+        era: 
+        key: q_device
+        variant: 0
+        line:
+          id: interview.voices.answers.chatty.1
+          text: 'Just the approved kit: {value}. My therapist says I overpack. Emotionally.'
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        line:
+          id: interview.voices.answers.anxious.1
+          text: '{value}. Is that right? I checked the list twice. Three times.'
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        line:
+          id: interview.voices.answers.anxious.2
+          text: '{value}. Is that right? I checked the list twice. Three times.'
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        line:
+          id: interview.voices.answers.anxious.3
+          text: '{value}. Is that right? I checked the list twice. Three times.'
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        line:
+          id: interview.voices.answers.anxious.4
+          text: '{value}. Is that right? I checked the list twice. Three times.'
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        line:
+          id: interview.voices.answers.anxious.5
+          text: '{value}. Is that right? I checked the list twice. Three times.'
+      - personality: glum
+        premade: 
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        line:
+          id: interview.voices.answers.glum.1
+          text: '{value}. Not that it''ll be enough.'
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        line:
+          id: interview.voices.answers.senenmut.1
+          text: '{value}. May she live forever, and read my plans.'
+      smallTalk:
+      - personality: anxious
+        premade: 
+        kinds: 000000000100000002000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.smallTalk.anxious.1
+          text: I read one sneeze in the past can delete a whole family tree. Is
+            that true?
+      - personality: sunny
+        premade: 
+        kinds: 000000000100000002000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.smallTalk.sunny.1
+          text: My whole block got frozen in default! Everyone's home all day now!
+            So cosy!
+      - personality: stickler
+        premade: 
+        kinds: 03000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.smallTalk.stickler.1
+          text: I've read all your forms. Four days in the intake hall. Two have
+            typos.
+      - personality: glum
+        premade: 
+        kinds: 000000000100000002000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.smallTalk.glum.1
+          text: The maglev was late. So was my pay. So, apparently, was my birth.
+      - personality: 
+        premade: gutenberg
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.smallTalk.gutenberg.1
+          text: My business in Strasbourg is private. It involves letters. Movable
+            ones.
   questions:
   - {fileID: 11400000, guid: eb47f92eb6aa00d4cb626ee29787a348, type: 2}
   - {fileID: 11400000, guid: 37fad6847b586444a948159a953fddd5, type: 2}
@@ -344,6 +706,35 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2fc68eb6daa19434a8bd8e9e0a36ad4a, type: 2}
   - {fileID: 11400000, guid: 5e062f2ca111eaf42843494b0fa32990, type: 2}
   - {fileID: 11400000, guid: 4e129f565a2b6744d8a133e8c39bda8f, type: 2}
+  personalities:
+  - id: chatty
+    name: Chatty
+    weight: 1
+    note: Tells you everything, then a bit more.
+  - id: curt
+    name: Curt
+    weight: 1
+    note: Time is money, and in 2150 the queue bills by the minute.
+  - id: anxious
+    name: Anxious
+    weight: 1
+    note: Worried about paradoxes, transponders, butterflies and you.
+  - id: sunny
+    name: Sunny
+    weight: 1
+    note: Believes every word the agency prints.
+  - id: grand
+    name: Grand
+    weight: 1
+    note: Treats the desk as staff, whatever their account says.
+  - id: stickler
+    name: Stickler
+    weight: 1
+    note: Knows the regulations better than the clerk and says so.
+  - id: glum
+    name: Glum
+    weight: 1
+    note: The debt won years ago; this is just the paperwork.
   dialogs:
   - {fileID: 11400000, guid: 330b52d57beff584e9353e8cddf2e621, type: 2}
   - {fileID: 11400000, guid: bcda9ea69ca7a6a4ebabdc7ddf5b030a, type: 2}
