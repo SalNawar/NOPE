@@ -43,18 +43,40 @@ public static class DayCycle
     }
 
     /// <summary>
+    /// A traveller comes to the desk: a once-per-run premade is marked met
+    /// (FlagKeys.PremadeMet), so they never roll again and a later forced slot
+    /// for them holds an ordinary traveller. The game calls it when it shows
+    /// the case; a repeatable premade is never marked.
+    /// </summary>
+    public static void Present(WorldState world, CaseInstance inst)
+    {
+        if (world != null && inst != null && inst.isLegendary && inst.legendarySource != null && inst.legendarySource.oncePerRun)
+            world.SetFlag(FlagKeys.PremadeMet(inst.legendarySource.id));
+    }
+
+    /// <summary>
     /// One decision at the desk: ShiftScoring's verdict (the pay, or the one
     /// wrong-decision penalty and the stability loss; the evidence gate reads
     /// <paramref name="evidenceCount"/>, -1 when the evidence system is not
-    /// active) goes onto <paramref name="ledger"/>; an accepted traveller is
-    /// dispatched: the timeline impacts land on the claimed place, their tell
-    /// source's carry is recorded and a costume error's panic is noted.
+    /// active) goes onto <paramref name="ledger"/>; a premade's verdict is
+    /// remembered (FlagKeys.PremadeVerdictChange: the latest decision wins),
+    /// for the forced slots and story rules that read it; an accepted
+    /// traveller is dispatched: the timeline impacts land on the claimed
+    /// place, their tell source's carry is recorded and a costume error's
+    /// panic is noted.
     /// </summary>
     public static CaseVerdict Decide(CaseInstance inst, bool accepted, int caseIndex1Based, int evidenceCount,
                                      WorldState world, TodaysWorld today, ShiftLedger ledger, ContentLibrarySO lib, GameConfigSO config)
     {
         CaseVerdict verdict = ShiftScoring.ResolveDecision(inst, accepted, caseIndex1Based, world, config, lib, evidenceCount);
         ledger.verdicts.Add(verdict);
+
+        if (inst != null && inst.isLegendary && inst.legendarySource != null && world != null)
+        {
+            (string set, string clear) memory = FlagKeys.PremadeVerdictChange(inst.legendarySource.id, accepted);
+            world.SetFlag(memory.set);
+            world.ClearFlag(memory.clear);
+        }
 
         if (accepted)
         {

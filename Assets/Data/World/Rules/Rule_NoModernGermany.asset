@@ -17,3 +17,4 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
   description: 'Border closed: no travel to Weimar Berlin today.'
   kinds: 
+  transponder: 

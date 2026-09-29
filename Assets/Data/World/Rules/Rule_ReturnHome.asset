@@ -18,3 +18,4 @@ MonoBehaviour:
   description: 'The displaced return only to their own time: their declaration must
     match their origin.'
   kinds: 
+  transponder: 

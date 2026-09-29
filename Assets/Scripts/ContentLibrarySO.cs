@@ -62,6 +62,9 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Interview questions, in ask-menu order (generated from world_source.json "questions").</summary>
     [SerializeField] private QuestionSO[] questions;
 
+    /// <summary>The cast: the personalities a generated traveller is drawn from, one weight each for every kind (written by Generate World from world_source.json "personalities"; the personalities spec's PS1-PS2).</summary>
+    [SerializeField] private List<Personality> personalities = new();
+
     /// <summary>Narrative dialogs (generated from world_source.json "dialogs").</summary>
     [SerializeField] private DialogSO[] dialogs;
 
@@ -298,6 +301,9 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Public read-only access to endings.</summary>
     public IReadOnlyList<EndingSO> Endings => endings ?? System.Array.Empty<EndingSO>();
 
+    /// <summary>The run's last day: the earliest DayAtLeast ending's threshold (Retirement, day 15), which every day up to must plan (DayPlans.Unplanned); 0 without one.</summary>
+    public int LastDay => (int)Endings.Where(e => e != null && e.conditionType == EndingConditionType.DayAtLeast).Select(e => e.threshold).DefaultIfEmpty(0f).Min();
+
     /// <summary>Public read-only access to attributes.</summary>
     public IReadOnlyList<AttributeSO> Attributes => attributes ?? System.Array.Empty<AttributeSO>();
 
@@ -315,6 +321,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>The interview's fixed wording and layout limits.</summary>
     public InterviewLines Interview => interview;
+
+    /// <summary>The cast (Personalities.Pick draws from it; empty: every traveller says the defaults).</summary>
+    public IReadOnlyList<Personality> Personalities => personalities ?? (IReadOnlyList<Personality>)System.Array.Empty<Personality>();
 
     /// <summary>Public read-only access to interview questions (ask-menu order).</summary>
     public IReadOnlyList<QuestionSO> Questions => questions ?? System.Array.Empty<QuestionSO>();

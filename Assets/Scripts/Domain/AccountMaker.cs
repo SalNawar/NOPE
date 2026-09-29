@@ -359,6 +359,15 @@ public sealed class AccountRequest
     /// (CitizenAccount.ProofForged: the record shows none on file).
     /// </summary>
     public bool ForgedProof;
+
+    /// <summary>A story character's authored Citizen ID (days 7-15 B3; blank: drawn): reserved in the day's numbers before slot 1 and taken as it is, never redrawn, so it is the same at every appearance.</summary>
+    public string CitizenId;
+
+    /// <summary>A story character's authored debt in cr (0: drawn); the draw is still made, so the account's later draws keep their order.</summary>
+    public int Debt;
+
+    /// <summary>A labourer story character's authored employer, by printed name (blank: drawn); the employer draw is still made.</summary>
+    public string Employer;
 }
 
 /// <summary>One form of a blueprint as the account maker sees it (phase 8): its number, its request group and whether it prints a Valid Until.</summary>
@@ -553,8 +562,9 @@ public static class AccountMaker
             Departure = AgencyCalendar.Write(today)
         };
 
-        account.CitizenId = AgencyNumbers.TakeUnique(takenToday, () => CitizenId(rng));
-        account.Debt = Amount(status.debtMin, status.debtMax, rng);
+        account.CitizenId = !string.IsNullOrWhiteSpace(request.CitizenId) ? request.CitizenId.Trim() : AgencyNumbers.TakeUnique(takenToday, () => CitizenId(rng));
+        int debt = Amount(status.debtMin, status.debtMax, rng);
+        account.Debt = request.Debt > 0 ? request.Debt : debt;
 
         if (HoldsProof(request.Status) || request.ForgedProof)
         {
@@ -590,7 +600,8 @@ public static class AccountMaker
         if (request.Contract && employers.Count > 0)
         {
             ContractRanges contract = ranges.contract ?? new ContractRanges();
-            account.Employer = employers[rng.Range(0, employers.Count)];
+            string employer = employers[rng.Range(0, employers.Count)];
+            account.Employer = !string.IsNullOrWhiteSpace(request.Employer) ? request.Employer : employer;
             account.TermDays = TermDays(contract.termMin, contract.termMax, rng);
             account.Wage = Amount(contract.wageMin, contract.wageMax, rng);
         }
@@ -675,9 +686,11 @@ public static class AccountRecords
 {
     /// <summary>
     /// The record of a citizen named <paramref name="name"/>, born
-    /// <paramref name="born"/>, booked to <paramref name="destination"/> today.
+    /// <paramref name="born"/>, booked to <paramref name="destination"/> today;
+    /// its Note row reads <paramref name="note"/> (a story character's, days
+    /// 7-15 B3), none when blank.
     /// </summary>
-    public static CitizenRecord Record(string name, string born, string destination, CitizenAccount account, Func<string, string> text)
+    public static CitizenRecord Record(string name, string born, string destination, CitizenAccount account, Func<string, string> text, string note = null)
     {
         account = account ?? new CitizenAccount();
         string none = text("records.none");
@@ -727,7 +740,7 @@ public static class AccountRecords
             new RecordGroup(text("records.group.account"), records),
             new RecordGroup(text("records.group.forms"), forms),
             new RecordGroup(text("records.group.travel"), travel),
-            new RecordGroup(string.Empty, new[] { new RecordRow(text("records.row.note"), text("records.note.none")) })
+            new RecordGroup(string.Empty, new[] { new RecordRow(text("records.row.note"), string.IsNullOrWhiteSpace(note) ? text("records.note.none") : note) })
         });
     }
 

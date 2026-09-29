@@ -18,12 +18,16 @@ MonoBehaviour:
     label: Ruler
     prompt:
       id: q_ruler.prompt
-      text: Who rules your land?
+      text: Who rules {place} these days?
     answer:
       id: q_ruler.answer
-      text: We are ruled by {value}.
-    overrides: []
-    kinds: 03000000
+      text: '{value}, I''m told.'
+    overrides:
+    - eraId: 
+      kinds: 03000000
+      answer:
+        id: q_ruler.overrides.1.answer
+        text: We are ruled by {value}.
   conditions:
   - type: 8
     key: 

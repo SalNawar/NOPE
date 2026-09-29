@@ -133,17 +133,18 @@ public static class TimelineService
 
         int tomorrow = world.day + 1;
         var news = new List<string>();
+        var desk = new List<string>();
 
         RecomputeDominance(world, lib, config, news, TomorrowPlaces(world, lib));
         RebuildTierEffects(world, lib, tomorrow);
         int historyLines = HistoryService.LatchLeader(world, lib, config, tomorrow, news);
-        EvaluateTriggers(world, lib, tomorrow, news);
+        EvaluateTriggers(world, lib, tomorrow, news, desk);
         HistoryService.PromoteCarries(world, lib, config, tomorrow, news, historyLines);
         HistoryService.ReportPanics(world, lib, news);
         HistoryService.ReportStrandings(world, lib, news);
         AddDebtLine(world, lib, tomorrow, news);
         ExpireEffects(world, tomorrow);
-        BuildTomorrowPackage(world, lib, news);
+        BuildTomorrowPackage(world, lib, news, desk);
 
         Debug.Log($"[TimelineService] <<< Exiting NightlyResolve (activeEffects={world.timeline.activeEffects.Count}, dominant={world.timeline.dominantKeys.Count}, supporting={world.timeline.supportingKeys.Count}, briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count}).");
     }
@@ -292,9 +293,11 @@ public static class TimelineService
     }
 
     /// <summary>
-    /// Evaluates all triggers; fires those whose conditions all pass.
+    /// Evaluates all triggers; fires those whose conditions all pass. A fired
+    /// trigger's line goes where its section says (days 7-15 Q9): the news,
+    /// the paper's <paramref name="desk"/> section, or nowhere (Return).
     /// </summary>
-    private static void EvaluateTriggers(WorldState world, ContentLibrarySO lib, int startDay, List<string> news)
+    private static void EvaluateTriggers(WorldState world, ContentLibrarySO lib, int startDay, List<string> news, List<string> desk)
     {
         int total = lib.Triggers != null ? lib.Triggers.Count : 0;
         int fired = 0;
@@ -318,8 +321,8 @@ public static class TimelineService
             Debug.Log($"[Timeline] Trigger fired: {trigger.displayName}");
             fired++;
 
-            if (!string.IsNullOrEmpty(trigger.newsLineOnFire))
-                news.Add(trigger.newsLineOnFire);
+            if (!string.IsNullOrEmpty(trigger.newsLineOnFire) && trigger.section != StorySection.Return)
+                (trigger.section == StorySection.Desk ? desk : news).Add(trigger.newsLineOnFire);
 
             foreach (TriggerOutcome outcome in trigger.outcomes)
             {
@@ -370,34 +373,66 @@ public static class TimelineService
             dialogs.Add(new Gated<AuthoredDialog>(d.dialog, ToGates(d.conditions)));
         }
 
-        var premadeDialogs = new List<string>();
-        foreach (LegendarySO premade in lib.Legendaries)
-            if (premade != null && !string.IsNullOrWhiteSpace(premade.dialogId))
-                premadeDialogs.Add(premade.dialogId);
+        List<string> premadeDialogs = PremadeDialogIds(lib);
 
-        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs, AgencyForms(lib));
+        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs, AgencyForms(lib, world != null ? world.day : 1));
     }
 
     /// <summary>
-    /// The agency forms of the library's day plans (every blueprint's
-    /// templates, each once, in first-appearance order) as the interview's
-    /// requests see them (traveller types I2): the papers menu lists those a
-    /// kind may be asked for.
+    /// Every dialog bound to a premade's appearance (InterviewDay: offered only
+    /// while it stands at the desk): each premade's own and each forced slot's
+    /// of every day plan (days 7-15 B7), in library order, blanks skipped.
     /// </summary>
-    public static List<AskableForm> AgencyForms(ContentLibrarySO lib)
+    public static List<string> PremadeDialogIds(ContentLibrarySO lib)
     {
-        var forms = new List<AskableForm>();
-        var seen = new HashSet<DocumentTemplateSO>();
+        var ids = new List<string>();
+        foreach (LegendarySO premade in lib != null ? lib.Legendaries : System.Array.Empty<LegendarySO>())
+            if (premade != null && !string.IsNullOrWhiteSpace(premade.dialogId))
+                ids.Add(premade.dialogId);
         foreach (DayPlanSO plan in lib != null ? lib.DayPlans : System.Array.Empty<DayPlanSO>())
+            foreach (ForcedCaseSlot forced in plan != null ? plan.ForcedCases : System.Array.Empty<ForcedCaseSlot>())
+                if (forced != null && !string.IsNullOrWhiteSpace(forced.dialogId))
+                    ids.Add(forced.dialogId);
+        return ids;
+    }
+
+    /// <summary>
+    /// The papers menu of <paramref name="day"/> (the personalities spec's
+    /// W4): every on-request form of the day plans of days 1 to
+    /// <paramref name="day"/>, in first-appearance order, a request group once
+    /// (FormRequests.MetSoFar over DayForms). Every traveller of the day is
+    /// offered it.
+    /// </summary>
+    public static List<AskableForm> AgencyForms(ContentLibrarySO lib, int day) => FormRequests.MetSoFar(DayForms(lib, day), day);
+
+    /// <summary>
+    /// Each day's agency forms from day 1 to <paramref name="lastDay"/>, in day
+    /// order (item i is day i + 1's: the plan GetDayPlan picks for it, its
+    /// kinds' and forced blueprints' templates, each once, in order), one
+    /// AskableForm per template across the days. A day without a plan lists none.
+    /// </summary>
+    public static List<IReadOnlyList<AskableForm>> DayForms(ContentLibrarySO lib, int lastDay)
+    {
+        var byTemplate = new Dictionary<DocumentTemplateSO, AskableForm>();
+        var days = new List<IReadOnlyList<AskableForm>>();
+        for (int d = 1; d <= lastDay; d++)
         {
-            if (plan == null)
-                continue;
-            foreach (CaseBlueprintSO blueprint in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints))
-                foreach (DocumentTemplateSO t in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : System.Array.Empty<DocumentTemplateSO>())
-                    if (t != null && seen.Add(t))
-                        forms.Add(new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver), t.askableBy ?? System.Array.Empty<TravellerKind>()));
+            var forms = new List<AskableForm>();
+            DayPlanSO plan = lib != null ? lib.GetDayPlan(d) : null;
+            if (plan != null)
+                foreach (CaseBlueprintSO blueprint in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints))
+                    foreach (DocumentTemplateSO t in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : System.Array.Empty<DocumentTemplateSO>())
+                    {
+                        if (t == null)
+                            continue;
+                        if (!byTemplate.TryGetValue(t, out AskableForm form))
+                            byTemplate[t] = form = new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver));
+                        if (!forms.Contains(form))
+                            forms.Add(form);
+                    }
+            days.Add(forms);
         }
-        return forms;
+        return days;
     }
 
     /// <summary>
@@ -412,12 +447,20 @@ public static class TimelineService
     public static ScannerDay BuildScannerDay(WorldState world, ContentLibrarySO lib) => ScannerDay.From(OrderBook.InForce(world, lib));
 
     /// <summary>
-    /// Returns true if every condition on the trigger passes (Gates.AllPass):
+    /// Returns true if every condition on the trigger passes (ConditionsPass):
     /// one snapshot per trigger, so a trigger sees the flags that earlier
     /// triggers set tonight.
     /// </summary>
-    private static bool AllConditionsPass(TimelineTriggerSO trigger, WorldState world) =>
-        Gates.AllPass(ToGates(trigger.conditions), Snapshot(world, trigger.conditions));
+    private static bool AllConditionsPass(TimelineTriggerSO trigger, WorldState world) => ConditionsPass(trigger.conditions, world);
+
+    /// <summary>
+    /// True when every condition passes on the world as it stands now
+    /// (Gates.AllPass over one snapshot of it; a null or empty list passes):
+    /// the nightly triggers', and a forced slot's appearance at the day's
+    /// start (CaseFactory; days 7-15 B9), read the same way.
+    /// </summary>
+    public static bool ConditionsPass(IReadOnlyList<TriggerCondition> conditions, WorldState world) =>
+        Gates.AllPass(ToGates(conditions), Snapshot(world, conditions));
 
     /// <summary>
     /// A condition as the Domain gates read it: its type, threshold and plain
@@ -599,16 +642,19 @@ public static class TimelineService
 
     /// <summary>
     /// Builds the deterministic tomorrow package: dominance, history and
-    /// trigger news plus briefing/news lines contributed by effects active tomorrow.
+    /// trigger news, the desk's own stories (<paramref name="desk"/>), plus
+    /// briefing/news lines contributed by effects active tomorrow.
     /// </summary>
-    private static void BuildTomorrowPackage(WorldState world, ContentLibrarySO lib, List<string> news)
+    private static void BuildTomorrowPackage(WorldState world, ContentLibrarySO lib, List<string> news, List<string> desk)
     {
         Debug.Log("[TimelineService] >>> Entering BuildTomorrowPackage.");
 
         world.tomorrow.briefingLines.Clear();
         world.tomorrow.newsLines.Clear();
+        world.tomorrow.deskLines.Clear();
 
         world.tomorrow.newsLines.AddRange(news);
+        world.tomorrow.deskLines.AddRange(desk);
 
         // Lines from the effects in force tomorrow (world.day is still "today" here).
         int tomorrow = world.day + 1;

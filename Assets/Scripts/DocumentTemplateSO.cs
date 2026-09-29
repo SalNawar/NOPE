@@ -6,8 +6,10 @@ using UnityEngine;
 /// asset listed on its kind's blueprint. Pure data: its number and name, its
 /// fields in form order (a field's index is its place on the form, the forms
 /// engine's FormCell.field), when it is handed over, whether it carries the
-/// photo, the kinds the desk may ask for it, and its form (redesign phase 4:
-/// where the paper prints each field, FormLayout).
+/// photo, and its form (redesign phase 4: where the paper prints each field,
+/// FormLayout). A form handed over on request is on the papers menu of every
+/// traveller from the first day a blueprint lists it (the personalities
+/// spec's W4, TimelineService.AgencyForms).
 /// </summary>
 [CreateAssetMenu(fileName = "DocTemplate_", menuName = "TimeDesk/Document Template", order = 11)]
 public sealed class DocumentTemplateSO : ScriptableObject
@@ -34,13 +36,6 @@ public sealed class DocumentTemplateSO : ScriptableObject
     public bool showsPhoto;
 
     /// <summary>
-    /// The kinds the desk may ask for this form (traveller types I2): every
-    /// form a blueprint hands over on request must be askable by its kind
-    /// (Validate Content Library). Empty for a form handed over on arrival.
-    /// </summary>
-    public TravellerKind[] askableBy;
-
-    /// <summary>
     /// The request group the form belongs to (traveller types I2), or blank:
     /// the forms of a group are one "Request" entry on the traveller wheel
     /// (the group's label, world_source.json interview.askGroups), and a
@@ -48,9 +43,6 @@ public sealed class DocumentTemplateSO : ScriptableObject
     /// (AccountMaker.ProofGroup, "proof": TC-415, TC-416 and TC-417).
     /// </summary>
     public string askGroup = string.Empty;
-
-    /// <summary>True when the desk may ask a traveller of <paramref name="kind"/> for this form.</summary>
-    public bool IsAskableBy(TravellerKind kind) => askableBy != null && System.Array.IndexOf(askableBy, kind) >= 0;
 
     /// <summary>
     /// The paper's form (PC spec FO3): its blocks and where each field is

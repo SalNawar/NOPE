@@ -18,3 +18,4 @@ MonoBehaviour:
   description: Citizens in debt (Eligible) depart only on Debt Relief. Frozen accounts
     may not depart.
   kinds: 000000000100000002000000
+  transponder: 

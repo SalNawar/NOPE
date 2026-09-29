@@ -1343,6 +1343,30 @@ Keep everything exactly the same (pose, clothing, position, background) and chan
 
 **Who they are is waiting on one decision:** whether premade characters are the real famous people from the country table (Hatshepsut, Archimedes, Ada Lovelace and so on) or original characters inspired by them. The character list gets added here once that's decided.
 
+### Days 7-15: sixteen more premades (64 images)
+
+Saleh, 2026-09-29: "Premades with drawn art", and ten new famous travellers of the Industrial and Modern eras. The six story characters of the second week come first, then the ten famous. Draw each in the costume of their place (the description below goes into the prompt's brackets). Until a character's neutral image lands, the game shows a generated traveller in their place's costume.
+
+| id | Character | Place | Look |
+|---|---|---|---|
+| `pell` | Pell Quimby (2150 story character, days 7, 10, 15) | Periclean Athens, 430 BCE | a cheerful woman of 26 in a cheap tourist's copy of an Athenian chiton and himation, a straw sun hat, a battered transponder on her wrist |
+| `ines` | Ines Varga (2150 story character, day 8) | Victorian Britain, 1843 | a tired woman of 51 in a Victorian mill worker's dress and apron, a Temporal Customs lanyard tucked into her collar |
+| `rook` | Rook Danner (2150 story character, day 11) | Victorian Britain, 1843 | a grinning man of 33 in a too-clean Victorian workman's jacket and flat cap |
+| `ada` | "Ada Lovelace" (a 2150 enthusiast posing as her, day 12) | Victorian Britain, 1843 | a woman of about 28 in a slightly-too-new Victorian day dress and bonnet, a little too pleased with it |
+| `hollis` | Marek Hollis (2150 story character, day 13) | Wilhelmine Germany, 1899 | a gaunt man of 32 in a Wilhelmine collier's jacket and cap |
+| `auditor` | Quill Ferreira, the Directorate's auditor (day 14) | Republican Rome, 50 BCE | a sharp man of 48 in a Roman toga worn over very good 2150 shoes |
+| `tahtawi` | Rifa'a al-Tahtawi (famous, pooled) | Khedivate of Egypt, 1869 | an Egyptian scholar of 67 in a turban and a scholar's robe over a kaftan |
+| `kulthum` | Umm Kulthum (famous, pooled) | Nasser's Egypt, 1962 | an Egyptian singer of 58 in an elegant long evening dress, dark glasses, a handkerchief in her hand |
+| `malaika` | Nazik al-Mala'ika (famous, pooled) | Kingdom of Iraq, 1956 | an Iraqi poet of 33 in a 1950s skirt suit, a book under her arm |
+| `sayyab` | Badr Shakir al-Sayyab (famous, pooled) | Kingdom of Iraq, 1956 | a slight Iraqi poet of 29 in a 1950s suit, a notebook in his hand |
+| `elytis` | Odysseas Elytis (famous, pooled) | Metapolitefsi Athens, 1975 | a Greek poet of 63 in a jacket and an open-collared shirt, glasses |
+| `fellini` | Federico Fellini (famous, pooled) | Dolce Vita Rome, 1960 | an Italian film director of 40 in a dark suit and a hat, a scarf |
+| `hezehui` | He Zehui (famous, pooled) | Beijing, People's Republic, 1972 | a Chinese physicist of 58 in a plain Zhongshan-style jacket, short hair, glasses |
+| `toyoda` | Sakichi Toyoda (famous, pooled) | Meiji Nagoya, 1899 | a Japanese inventor of 32 in a Meiji kimono with a work apron over it |
+| `turing` | Alan Turing (famous, pooled) | Post-war Britain, 1950 | a British mathematician of 38 in a tweed jacket and a crooked tie, a runner's build |
+| `meitner` | Lise Meitner (famous, pooled) | Weimar Berlin, 1926 | a physicist of 48 in a dark 1920s dress and jacket, her hair in a bun |
+
+
 ## Checklist before you send a batch to Claude
 
 - Every file is 1024 x 1536 and named exactly as listed.

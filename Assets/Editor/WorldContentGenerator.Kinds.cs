@@ -128,10 +128,12 @@ public static partial class WorldContentGenerator
             if (!kinds.Any(k => k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind _)))
                 errors.Add($"Day '{d.asset}' has no traveller kind with a positive weight (days[].kinds).");
 
-            bool premades = (d.premades ?? Array.Empty<string>()).Length > 0 || (d.forced ?? Array.Empty<ForcedData>()).Any(f => !string.IsNullOrEmpty(f.premade));
-            bool displaced = kinds.Any(k => k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind kind) && kind == TravellerKind.Displaced);
-            if (premades && !displaced)
-                errors.Add($"Day '{d.asset}' has premades but no Displaced kind with a positive weight; a premade stands only as a displaced traveller.");
+            // A premade stands as its kind (TravellerKinds.PickWeight: the slot's one draw weighs only it): the pool's famous as the displaced, a forced premade as its own.
+            var byId = (src.premades ?? Array.Empty<PremadeData>()).Where(m => m != null && m.id != null).GroupBy(m => m.id).ToDictionary(g => g.Key, g => g.First());
+            var premadeKinds = new HashSet<TravellerKind>((d.premades ?? Array.Empty<string>()).Concat((d.forced ?? Array.Empty<ForcedData>()).Select(f => f.premade))
+                .Where(id => !string.IsNullOrEmpty(id) && byId.ContainsKey(id)).Select(id => PremadeKind(byId[id])));
+            foreach (TravellerKind kind in premadeKinds.Where(kind => !kinds.Any(k => k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind weighted) && weighted == kind)))
+                errors.Add($"Day '{d.asset}' has a {kind} premade but no {kind} kind with a positive weight; a premade stands only as its own kind.");
         }
     }
     /// <summary>One row of interview.claims: a kind's name (TravellerKind) and its claim ({place}).</summary>

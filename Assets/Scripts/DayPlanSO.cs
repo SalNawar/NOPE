@@ -10,8 +10,17 @@ using UnityEngine;
 /// - How many travellers queue that day (visitorsCount; the shift clock may close first)
 /// - Procedural generation knobs (the kinds' blueprints and weights, eras, the premade pool and chance)
 /// - Which lies today's liars may tell (lie kinds), and where a place lie may leak tells (tell count and tell channels)
-/// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut")
+/// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut"; a slot may list alternatives, the first standing wins)
 /// - Event rules (fixed or random placement, including "random but after N cases")
+///
+/// The portals seam (Saleh's portals feature, designed separately and not
+/// built here; days 7-15 spec section 15): a day would list the portals it
+/// opens beside its travel rules (a days[].portals list read here next to
+/// activeTravelRules), and ContentLibrarySO.BuildToday(plan, history), the
+/// one place a day's destinations are decided, would narrow them to the open
+/// portals' places. Which portals are open on which day is the portal
+/// design's to say (portal 01 from day 1, the others repaired from the PC);
+/// no day plan assumes an opening.
 /// </summary>
 [CreateAssetMenu(menuName = "TimeDesk/Day/Day Plan", fileName = "DayPlan_")]
 public sealed class DayPlanSO : ScriptableObject
@@ -101,7 +110,7 @@ public sealed class DayPlanSO : ScriptableObject
     /// </summary>
     [SerializeField] private bool guaranteeRuleViolators = true;
 
-    /// <summary>Forced slots (1-based): a blueprint, a premade or both (written by Generate World from days[].forced).</summary>
+    /// <summary>Forced slots (1-based): a blueprint, a premade or both, and a slot's alternatives in the order they are tried (written by Generate World from days[].forced).</summary>
     [SerializeField] private List<ForcedCaseSlot> forcedCases = new();
 
     /// <summary>Event rules (fixed or random placement).</summary>
@@ -192,59 +201,33 @@ public sealed class DayPlanSO : ScriptableObject
     }
 
     /// <summary>
-    /// Returns true if every active rule permits travel to the claimed nation+era.
+    /// Returns true if every active rule read for a traveller of
+    /// <paramref name="kind"/> permits travel to the claimed nation+era (a
+    /// closure listing kinds closes only for them: the Economy range limit,
+    /// days 7-15 §6.1).
     /// </summary>
-    public bool ClaimAllowed(NationSO claimNation, EraSO claimEra)
+    public bool ClaimAllowed(NationSO claimNation, EraSO claimEra, TravellerKind kind)
     {
         if (activeTravelRules == null)
             return true;
 
         foreach (TravelRuleSO rule in activeTravelRules)
-            if (rule != null && !rule.Allows(claimNation, claimEra))
+            if (rule != null && rule.AppliesTo(kind) && !rule.Allows(claimNation, claimEra))
                 return false;
 
         return true;
     }
 
     /// <summary>
-    /// Tries to get a forced blueprint for the given case slot (1-based).
-    /// Returns true if a forced case exists for that slot.
+    /// The forced entries of a case slot (1-based), in the authored order: a
+    /// slot's alternatives (days 7-15 B9), tried in this order at the day's
+    /// start (Premades.Appearance). Empty when nothing is forced there.
     /// </summary>
-    public bool TryGetForcedCase(int caseIndex1Based, out CaseBlueprintSO blueprint)
+    public IEnumerable<ForcedCaseSlot> ForcedAt(int caseIndex1Based)
     {
         foreach (ForcedCaseSlot slot in forcedCases)
-        {
-            if (slot == null)
-                continue;
-
-            if (slot.caseIndex1Based == caseIndex1Based && slot.caseBlueprint != null)
-            {
-                blueprint = slot.caseBlueprint;
-                return true;
-            }
-        }
-
-        blueprint = null;
-        return false;
-    }
-
-    /// <summary>
-    /// Tries to get the premade forced into the given case slot (1-based).
-    /// Returns true if the slot names a premade.
-    /// </summary>
-    public bool TryGetForcedPremade(int caseIndex1Based, out LegendarySO premade)
-    {
-        foreach (ForcedCaseSlot slot in forcedCases)
-        {
-            if (slot != null && slot.caseIndex1Based == caseIndex1Based && slot.legendary != null)
-            {
-                premade = slot.legendary;
-                return true;
-            }
-        }
-
-        premade = null;
-        return false;
+            if (slot != null && slot.caseIndex1Based == caseIndex1Based)
+                yield return slot;
     }
 
     /// <summary>
@@ -337,7 +320,9 @@ public sealed class DayPlanSO : ScriptableObject
 /// <summary>
 /// Forces a blueprint, a premade or both into a case slot (1-based), written
 /// by Generate World from world_source.json days[].forced. Example: "case 3
-/// of day 1 is Senenmut".
+/// of day 1 is Senenmut". One entry is one appearance (days 7-15 B9): it
+/// stands when its conditions pass at the day's start and its premade is not
+/// met; a slot may list several, the first standing wins.
 /// </summary>
 [Serializable]
 public sealed class ForcedCaseSlot
@@ -345,11 +330,32 @@ public sealed class ForcedCaseSlot
     /// <summary>1-based case slot index.</summary>
     [Min(1)] public int caseIndex1Based = 1;
 
+    /// <summary>The appearance's name (days[].forced[].id; blank: none), unique in the day: a slot's alternatives are told apart by it in the logs and the content sheet.</summary>
+    public string id = string.Empty;
+
     /// <summary>The case blueprint that must appear in this slot (null = the day's pick).</summary>
     public CaseBlueprintSO caseBlueprint;
 
     /// <summary>A premade who stands in this slot (null = none); the slot is never a rule violator's.</summary>
     public LegendarySO legendary;
+
+    /// <summary>True when the appearance tells an authored lie (<see cref="lie"/>; days 7-15 B6): the slot's authoring, never a roll.</summary>
+    public bool hasLie;
+
+    /// <summary>The appearance's authored lie (read only when <see cref="hasLie"/>): its variant and false values drawn on the traveller's lie stream, as a rolled lie's are.</summary>
+    public LieKind lie;
+
+    /// <summary>The appearance's authored directive fault (None: none; days 7-15 B6): the maker's variant pinned (Directives.Plan), its values drawn on the traveller's fault stream.</summary>
+    public PlannedDirective directive;
+
+    /// <summary>The appearance's dialog (blank: the premade's own; days 7-15 B7), offered only while it stands at the desk (Premades.Voice).</summary>
+    public string dialogId = string.Empty;
+
+    /// <summary>The desk's opener for the appearance (blank: the premade's own, else the interview's; days 7-15 B7).</summary>
+    public string introLine = string.Empty;
+
+    /// <summary>When this appearance stands (all must pass on the day-start snapshot; none: always): the verdict memory's flags, dialog flags, the day (days 7-15 B9).</summary>
+    public List<TriggerCondition> conditions = new();
 }
 
 /// <summary>
