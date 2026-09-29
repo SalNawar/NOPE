@@ -163,7 +163,7 @@ public static class BalanceSimulation
         /// <summary>The strandings and the carries of each day played (days 7-15 X5).</summary>
         public readonly List<int> StrandedByDay = new List<int>(), CarriesByDay = new List<int>();
 
-        /// <summary>The past places whose Technology history changed by the run's end (a carry, a stranding's, a history rule; days 7-15 X5).</summary>
+        /// <summary>The past places whose Technology a carry rewrote by the run's end (an accepted liar's or smuggler's, a stranded citizen's; history rules apart; days 7-15 X5).</summary>
         public int TechnologyChanged;
         public readonly List<CaseRecord> Records = new List<CaseRecord>();
         public readonly List<string> DialogsOffered = new List<string>();
@@ -256,8 +256,8 @@ public static class BalanceSimulation
             r.Dump.AppendLine($"night {day}: household {bill.total} money {world.money} leader '{world.history.leaderId}'");
         }
 
-        TodaysWorld last = lib.BuildToday(lib.GetDayPlan(world.day), world.history);
-        r.TechnologyChanged = last.Places.Count(p => p != null && p.nation != null && p.era != null && last.Facts.IsChanged(p.nation.id, p.era.id, ClueCategory.Technology));
+        r.TechnologyChanged = world.history.factEdits.Where(e => e != null && e.cause == EditCause.Carry && e.category == ClueCategory.Technology && e.eraId != "future")
+            .Select(e => e.nationId + "/" + e.eraId).Distinct().Count();
         r.Fingerprint = JsonUtility.ToJson(world.history) + JsonUtility.ToJson(world.timeline) + world.money.ToString(Inv) + r.Ending;
         return r;
     }
@@ -518,7 +518,7 @@ public static class BalanceSimulation
                 sb.AppendLine($"{style}, {PaceLabel(pace)}: closure faults per run by type [{closures}]; recalled units per run {F((float)runs.SelectMany(r => r.Records).Count(c => c.Reason == Faults.Recalled) / runs.Count)}");
                 sb.AppendLine($"  strandings per day, mean: {Daily(r => r.StrandedByDay)}");
                 sb.AppendLine($"  carries per day, mean: {Daily(r => r.CarriesByDay)}");
-                sb.AppendLine($"  past places whose Technology changed by the run's end: mean {F(BalanceStats.Mean(changed))}, median {F(BalanceStats.Quantile(changed, 0.5f))}, max {F(changed.Max())} (watch line: more than three in the median run lowers agency.strandChance)");
+                sb.AppendLine($"  past places whose Technology a carry rewrote by the run's end: mean {F(BalanceStats.Mean(changed))}, median {F(BalanceStats.Quantile(changed, 0.5f))}, max {F(changed.Max())} (watch line: more than three in the median run lowers agency.strandChance)");
             }
     }
 
