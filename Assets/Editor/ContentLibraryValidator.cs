@@ -796,9 +796,10 @@ public static partial class ContentLibraryValidator
     /// <summary>
     /// The Orders app's upgrade tree (Saleh 2026-09-29): what Generate World
     /// also checks (UpgradeTree.Problems over every library upgrade: unknown
-    /// or cyclic prerequisites, a prerequisite at another venue, a Home
-    /// upgrade with prerequisites, a negative cost), and an install slot only
-    /// on an Orders upgrade (Home's are owned at once and never swapped).
+    /// or cyclic prerequisites, a prerequisite at another venue, a branch of
+    /// the other venue, a negative cost), an install slot only on an Orders
+    /// upgrade (Home's are owned at once and never swapped), and Home's radio
+    /// (HomeContent.Problems: its lines, its upgrade among Home's).
     /// </summary>
     private static int CheckUpgradeTree(ContentLibrarySO lib)
     {
@@ -814,6 +815,11 @@ public static partial class ContentLibraryValidator
                 Debug.LogError($"[ContentLibraryValidator] Upgrades: '{u.id}' is sold at Home but has the install slot '{u.installSlot}'; only an Orders upgrade can be swapped.", u);
                 issues++;
             }
+        foreach (string problem in lib.Home.Problems(lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).Select(u => u.id)))
+        {
+            Debug.LogError($"[ContentLibraryValidator] Home: {problem} ('{lib.name}'; edit world_source.json \"home\" and Generate World).", lib);
+            issues++;
+        }
         return issues;
     }
 

@@ -50,7 +50,7 @@ public static partial class WorldContentGenerator
     private const string WorldRoot = "Assets/Data/World";
 
     /// <summary>Generator-owned folders (under <see cref="WorldRoot"/>).</summary>
-    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview", "History", "Premades", "Culture", "Translation" };
+    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview", "History", "Premades", "Culture", "Translation", "Home" };
 
     /// <summary>Folder of the generated interview assets (questions, dialogs, unlock triggers).</summary>
     private const string InterviewFolder = WorldRoot + "/Interview";
@@ -75,6 +75,7 @@ public static partial class WorldContentGenerator
         CheckCharacters(src, authored, errors);
         CulturePlan culture = PlanCulture(src, errors);
         CheckTranslation(src, authored, errors);
+        CheckHome(src, authored, errors);
         CheckAgency(src, errors);
         CheckDayKinds(src, authored, errors);
         CheckPresent(src, errors);
@@ -139,6 +140,9 @@ public static partial class WorldContentGenerator
             .ToArray();
         TimelineTriggerSO[] notices = MakeTranslationNotice(src.translation, TranslatorOrders(CatalogueNodes(authored, src.translation), src.translation), written);
 
+        // --- Home: the house upgrades and their effects ---
+        (UpgradeSO[] houseUpgrades, EffectSO[] houseEffects) = MakeHouse(src, written);
+
         WireMail(authored.library, mail);
 
         // Re-saving the book covers keeps their YAML in the current shape.
@@ -149,11 +153,12 @@ public static partial class WorldContentGenerator
                     places, authored.archetypes, src.content.attributes.Select(a => authored.attributes[a.id]).ToArray(), authored.books,
                     BuildLines(src.interview), questions, dialogs, unlocks, BuildHistoryLines(src.history?.lines),
                     historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), culture.ui, neutralTheme, themes, stringTables,
-                    translators, notices, BuildTranslation(src.translation));
+                    translators, notices, BuildTranslation(src.translation), houseUpgrades, houseEffects);
         WireAgency(authored.library, src.agency);
         WireCast(authored.library, src.personalities);
         WirePresent(authored.library, src);
         WireNews(authored.library, src.news);
+        WireHome(authored.library, src.home);
         WritePc(authored.library, pc);
 
         int pruned = PruneOwnedFolders(written);
@@ -162,7 +167,7 @@ public static partial class WorldContentGenerator
         AssetDatabase.Refresh();
 
         int futurePlaces = src.places.Count(p => src.eras.Any(e => e.future && e.id == p.era));
-        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places ({futurePlaces} Future), {rules.Count} rules, {premades.Length} premades, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers, {historyTriggers.Length} history rules, {leaderEffects.Length} leader effects, {themes.Length + 1} themes, {stringTables.Length} UI string tables, {src.translation.tongues?.Length ?? 0} tongues, {translators.Length} translator upgrades, {notices.Length} translation notice; {pruned} unlisted generated asset(s) moved to the trash.");
+        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places ({futurePlaces} Future), {rules.Count} rules, {premades.Length} premades, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers, {historyTriggers.Length} history rules, {leaderEffects.Length} leader effects, {themes.Length + 1} themes, {stringTables.Length} UI string tables, {src.translation.tongues?.Length ?? 0} tongues, {translators.Length} translator upgrades, {notices.Length} translation notice, {houseUpgrades.Length} house upgrades; {pruned} unlisted generated asset(s) moved to the trash.");
     }
 
     // -----------------------------
@@ -2074,7 +2079,8 @@ public static partial class WorldContentGenerator
     /// triggers), the effects (the hand-authored ones kept in order, then the
     /// history-rule effects, then the leader effects) and the upgrades (the
     /// hand-authored ones kept in order, then the Speech translators in pack
-    /// order), sets the culture UI knobs, the neutral theme,
+    /// order, then the house upgrades in row order; the house effects after the
+    /// leader effects), sets the culture UI knobs, the neutral theme,
     /// the culture themes (country order), the string tables and the
     /// translation settings, and drops missing references from the rest.
     /// </summary>
@@ -2084,7 +2090,8 @@ public static partial class WorldContentGenerator
                                     HistoryLines historyLines, TimelineTriggerSO[] historyTriggers, EffectSO[] historyEffects, EffectSO[] leaderEffects,
                                     LegendarySO[] premades, LookRules lookRules,
                                     UiData ui, ThemeSO neutralTheme, ThemeSO[] themes, UiStringTableSO[] stringTables,
-                                    UpgradeSO[] translators, TimelineTriggerSO[] notices, TranslationSettings translation)
+                                    UpgradeSO[] translators, TimelineTriggerSO[] notices, TranslationSettings translation,
+                                    UpgradeSO[] houseUpgrades, EffectSO[] houseEffects)
     {
         var so = new SerializedObject(lib);
         SerializedArrays.Set(so, "dayPlans", days);
@@ -2099,8 +2106,8 @@ public static partial class WorldContentGenerator
         SerializedArrays.Set(so, "dialogs", dialogs);
         so.FindProperty("historyLines").boxedValue = historyLines;
         SerializedArrays.Set(so, "timelineTriggers", HandAuthored(so, "timelineTriggers").Concat(unlocks).Concat(notices).Concat(historyTriggers).ToArray());
-        SerializedArrays.Set(so, "upgrades", HandAuthored(so, "upgrades").Concat(translators).ToArray());
-        SerializedArrays.Set(so, "effects", HandAuthored(so, "effects").Concat(historyEffects.Where(fx => fx != null)).Concat(leaderEffects).ToArray());
+        SerializedArrays.Set(so, "upgrades", HandAuthored(so, "upgrades").Concat(translators).Concat(houseUpgrades).ToArray());
+        SerializedArrays.Set(so, "effects", HandAuthored(so, "effects").Concat(historyEffects.Where(fx => fx != null)).Concat(leaderEffects).Concat(houseEffects).ToArray());
         SerializedArrays.Set(so, "legendaries", premades);
         so.FindProperty("lookRules").boxedValue = lookRules;
         so.FindProperty("cultureUi.readingLanguage").stringValue = ui.readingLanguage;
@@ -2181,7 +2188,7 @@ public static partial class WorldContentGenerator
         {
             Object o = p.GetArrayElementAtIndex(i).objectReferenceValue;
             string path = o != null ? AssetDatabase.GetAssetPath(o) : null;
-            if (o != null && !path.StartsWith(InterviewFolder + "/") && !path.StartsWith(HistoryFolder + "/") && !path.StartsWith(TranslationFolder + "/"))
+            if (o != null && !path.StartsWith(InterviewFolder + "/") && !path.StartsWith(HistoryFolder + "/") && !path.StartsWith(TranslationFolder + "/") && !path.StartsWith(HomeFolder + "/"))
                 kept.Add(o);
         }
         return kept;
@@ -2224,6 +2231,7 @@ public static partial class WorldContentGenerator
         public AgencyData agency;
         public NewsData news;
         public PcData pc;
+        public HomeData home;
     }
 
     /// <summary>The shared look knobs: face bands, grey age, the premade garment label, confusable place pairs.</summary>

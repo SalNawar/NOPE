@@ -107,6 +107,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The agency's printed name, programme line and day 1's date (written by Generate World from world_source.json "agency").</summary>
     [SerializeField] private AgencyContent agency = new();
 
+    [Header("Home (the Home upgrades spec)")]
+    /// <summary>Home's radio: which house upgrade plays it and its lines (written by Generate World from world_source.json "home"; the house upgrades are in the upgrades list).</summary>
+    [SerializeField] private HomeContent home = new();
+
     [Header("News (redesign phase 13)")]
     /// <summary>The morning paper's debt-theme lines (written by Generate World from world_source.json "news").</summary>
     [SerializeField] private NewsContent news = new();
@@ -354,6 +358,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>The agency block: its name, programme line and first date (never null).</summary>
     public AgencyContent Agency => agency ?? new AgencyContent();
+
+    /// <summary>Home's radio block (never null).</summary>
+    public HomeContent Home => home ?? new HomeContent();
 
     /// <summary>The morning paper's debt-theme lines (never null).</summary>
     public NewsContent News => news ?? new NewsContent();
