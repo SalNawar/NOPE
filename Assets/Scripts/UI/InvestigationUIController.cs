@@ -364,7 +364,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>A document's form number (blank without a template).</summary>
     private static string FormOf(DocumentInstance doc) => doc != null && doc.template != null ? doc.template.formNumber : string.Empty;
 
-    /// <summary>A paper asked for through the wheel: it is handed over, the steps hear of the request, and a Stranding Waiver sets the traveller's waiver standing from the paper (Strandings.StandingOf; phase 13b's fine reads it at the shift's end).</summary>
+    /// <summary>A paper asked for through the wheel: it is handed over and the steps hear of the request.</summary>
     private void RequestPaper(int index)
     {
         _documents.HandOver(index);
@@ -372,9 +372,6 @@ public sealed class InvestigationUIController : MonoBehaviour
             return;
         if (stepsPanel != null)
             stepsPanel.Requested(FormOf(_currentCase.documents[index]));
-        WaiverStanding standing = Strandings.StandingOf(_currentCase.documents[index].fields, _currentCase.account?.WaiverNo);
-        if (standing != WaiverStanding.None)
-            _currentCase.waiverStanding = standing;
     }
 
     /// <summary>The steps hear of every paper handed over so far (on arrival, or asked for).</summary>

@@ -319,16 +319,16 @@ public sealed class GameManager : MonoBehaviour
         int totalCases = _ledger != null ? _ledger.verdicts.Count : 0;
         Debug.Log($"[GameManager] Day {_worldState.day} shift complete: {correctCount}/{totalCases} correct, totalPay={totalPay}, totalPenalty={totalPenalty}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}.");
 
-        // The strandings among the accepted travellers (their carries, their news
-        // and the clerk's fines; redesign phase 13b), the clerk's Debt Relief
-        // instalment out of the shift's pay (phase 13) and the narrative dialogs'
-        // consequences all apply before the save, so a Continue replay of this day
-        // can never apply them twice. Each may move the wallet, so the ending
-        // check runs after them.
-        bool fined = ShiftStrandings.Resolve(_worldState, _ledger, _dayCases, _today, contentLibrary, _gameConfig) > 0;
+        // The strandings among the accepted travellers (their carries and their
+        // news; redesign phase 13b; they move no money since phase 23), the
+        // clerk's Debt Relief instalment out of the shift's pay (phase 13) and
+        // the narrative dialogs' consequences all apply before the save, so a
+        // Continue replay of this day can never apply them twice. The instalment
+        // and the dialogs may move the wallet, so the ending check runs after them.
+        ShiftStrandings.Resolve(_worldState, _ledger, _dayCases, _today, contentLibrary, _gameConfig);
         bool instalmentTaken = ClerkAccountSource.TakeInstalment(_worldState, _ledger, contentLibrary) > 0;
         EndingSO ending = null;
-        if (ApplyDialogOutcomes() || instalmentTaken || fined)
+        if (ApplyDialogOutcomes() || instalmentTaken)
         {
             if (officeUI != null)
                 officeUI.UpdateHud(_worldState);
