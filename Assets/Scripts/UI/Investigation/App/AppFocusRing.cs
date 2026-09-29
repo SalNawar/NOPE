@@ -6,7 +6,7 @@ using UnityEngine;
 /// draws as four edges, laid over the focused target (a row, a tab, a chip,
 /// a pin, a button, the search field) and following it each frame, zoomed
 /// or scrolled, cut to the viewport it is shown in (a row scrolled out of
-/// the pane shows no ring); it hides when its target goes (a page turned, a
+/// the pane shows no ring); it hides when its target goes (a form redrawn, a
 /// view hidden). It takes no raycasts.
 /// </summary>
 public sealed class AppFocusRing : MonoBehaviour

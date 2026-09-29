@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -58,20 +57,20 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The Documents tabs: a chip per paper, the scanned copies.</summary>
     [SerializeField] private DocumentsView[] documentsViews = new DocumentsView[0];
 
-    /// <summary>The Records tabs' lookups (Citizen Records; the registry injected per day).</summary>
-    [SerializeField] private CitizenRecordsWindowController[] recordsWindows = new CitizenRecordsWindowController[0];
+    /// <summary>The Records tabs: the lookup and the Record Extract (Citizen Records; the registry injected per day).</summary>
+    [SerializeField] private RecordsView[] recordsViews = new RecordsView[0];
 
     /// <summary>The Reference tabs: a chip per book, the registers.</summary>
     [SerializeField] private ReferenceView[] referenceViews = new ReferenceView[0];
 
-    /// <summary>The Transcript tabs' transcripts (answer rows are compare-clickable).</summary>
-    [SerializeField] private TranscriptWindowController[] transcriptWindows = new TranscriptWindowController[0];
+    /// <summary>The Transcript tabs: the Interview Record (answer rows are compare-clickable).</summary>
+    [SerializeField] private TranscriptView[] transcriptViews = new TranscriptView[0];
 
-    /// <summary>The Report tabs' texts: the documented deviations.</summary>
-    [SerializeField] private TMP_Text[] reportTexts = new TMP_Text[0];
+    /// <summary>The Report tabs: the Deviation Report.</summary>
+    [SerializeField] private ReportView[] reportViews = new ReportView[0];
 
-    /// <summary>The Rules tabs' texts: the day's travel directives.</summary>
-    [SerializeField] private TMP_Text[] directivesTexts = new TMP_Text[0];
+    /// <summary>The Rules tabs: the day's Directive Memo.</summary>
+    [SerializeField] private RulesView[] rulesViews = new RulesView[0];
 
     [Header("Office")]
     /// <summary>The traveller wheel's ring: shows the current interview node's choices (requests, questions, dialog replies).</summary>
@@ -97,6 +96,9 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>The case currently on the desk (null between cases).</summary>
     private CaseInstance _currentCase;
+
+    /// <summary>The agency block every page of the app prints (the library's, from the first case shown).</summary>
+    private AgencyContent _agency;
 
     /// <summary>The day's directives, facts, registry and the reference books.</summary>
     private DayReference _reference;
@@ -143,8 +145,8 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// </summary>
     private InvestigationWiring Wiring => new InvestigationWiring(
         First(documentsViews) != null && First(documentsViews).Ready, app != null, acceptButton != null, denyButton != null, compareController != null,
-        interactionPanel != null, First(transcriptWindows) != null, app != null && app.Hosts(AppTab.Transcript), desk != null && desk.IsReachable,
-        First(recordsWindows) != null);
+        interactionPanel != null, First(transcriptViews) != null, app != null && app.Hosts(AppTab.Transcript), desk != null && desk.IsReachable,
+        First(recordsViews) != null);
 
     /// <summary>The left pane's view of a tab (the first wired one), or null.</summary>
     private static T First<T>(T[] views) where T : UnityEngine.Object
@@ -206,15 +208,15 @@ public sealed class InvestigationUIController : MonoBehaviour
     private void BuildPresenters(InvestigationWiring wiring)
     {
         CaseIndex index = app != null ? app.Index : null;
-        _reference = new DayReference(directivesTexts, recordsWindows, compareController, referenceViews, index);
+        _reference = new DayReference(rulesViews, recordsViews, compareController, referenceViews, index);
         _documents = new CaseDocumentsPresenter(documentsViews, wiring.DeskReachable ? desk : null, compareController, () => _evidence.DocumentedCategories, index);
-        _interview = new InterviewPresenter(interactionPanel, transcriptWindows, () => Arrived(AppTab.Transcript), wheel, compareController,
+        _interview = new InterviewPresenter(interactionPanel, transcriptViews, () => Arrived(AppTab.Transcript), wheel, compareController,
                                             RequestPaper, () => _currentCase, this, index);
-        _evidence = new EvidencePresenter(compareController, reportTexts, () =>
+        _evidence = new EvidencePresenter(compareController, reportViews, () =>
         {
             Arrived(AppTab.Report);
             ShowCounters();
-        }, () => _currentCase, index);
+        }, () => _currentCase, index, () => _agency, () => _reference.Day);
     }
 
     /// <summary>The start-up error and warnings for what is not wired (each changes what the day can show or generate).</summary>
@@ -294,6 +296,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     {
         _onDecision = onDecision;
         _currentCase = inst;
+        _agency = lib != null ? lib.Agency : _agency;
         _evidence.BeginCase();
 
         if (Wiring.Wired)
@@ -342,7 +345,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         _interview.BeginCase(inst);
         app.SetSpeechScript(_interview.Translation.Font);
         _documents.Present(inst, lib != null ? lib.Agency : null, lib != null ? lib.Interview : null);
-        _interview.Start(inst, _documents.Documents, InterviewReachable, AppearanceReachable);
+        _interview.Start(inst, _documents.Documents, InterviewReachable, AppearanceReachable, _agency, _reference.Day);
         _reference.BuildBooks(lib);
         _reference.SetClaim(inst);
         if (stepsPanel != null && inst != null)

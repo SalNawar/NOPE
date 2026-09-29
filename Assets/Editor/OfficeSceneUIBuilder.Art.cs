@@ -78,28 +78,24 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The Reference tab's book cover: on the register page template (cloned
-    /// per book by ReferenceView), in the title's band, its right edge just
-    /// left of the band's end (clear of the title and of "Claimed place only";
-    /// ReferenceBookWindowController shows it when the book's cover art
+    /// The Reference tab's book cover: in the view's strip, its left edge a gap
+    /// in from the view's left (clear of "Claimed place only" at the right;
+    /// ReferenceView shows it for the chosen book when the book's cover art
     /// exists), inactive.
     /// </summary>
     private static void BuildBookCover(ReferenceView reference)
     {
-        var page = reference != null ? (ReferenceBookWindowController)new SerializedObject(reference).FindProperty("pageTemplate").objectReferenceValue : null;
-        Transform title = page != null ? page.transform.Find("TitleText") : null;
-        if (title == null)
+        if (reference == null)
             return;
-        var band = (RectTransform)title;
-        Transform cover = Panel(page.transform, "Cover", new Vector2(band.anchorMax.x, band.anchorMin.y), band.anchorMax, new Vector2(-BookCoverGap, 0f),
+        Transform cover = Panel(reference.transform, "Cover", new Vector2(0f, AppViewStripBottom), new Vector2(0f, AppViewStripTop), new Vector2(BookCoverGap, 0f),
                                 new Vector2(BookCoverWidth, 0f), Color.white, ThemeRoleId.DiegeticPaper);
-        ((RectTransform)cover).pivot = new Vector2(1f, 0.5f);
+        ((RectTransform)cover).pivot = new Vector2(0f, 0.5f);
         Image image = cover.GetComponent<Image>();
         image.raycastTarget = false;
         image.preserveAspect = true;
         cover.gameObject.SetActive(false);
 
-        var so = new SerializedObject(page);
+        var so = new SerializedObject(reference);
         SetRef(so, "cover", image);
         so.ApplyModifiedProperties();
     }
