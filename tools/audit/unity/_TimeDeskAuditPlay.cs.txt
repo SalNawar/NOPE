@@ -316,6 +316,7 @@ public static class _TimeDeskAuditPlay
         RecordBriefing();
         RecordWorld();
         RecordPortals(o);
+        WorldHeadlines(day);
         if (ShotsOn)
             yield return Shots($"d{day}_briefing");
         o.StartShift.onClick.Invoke();
@@ -928,6 +929,19 @@ public static class _TimeDeskAuditPlay
             o.Apps.OpenApp(id);
             yield return Frames(4);
             yield return Shots($"app_{id}");
+            OrdersWindow orders = id == DesktopAppIds.Orders ? Office.One<OrdersWindow>() : null;
+            if (orders != null)
+            {
+                var tree = (TreeScrollRect)Field(orders, "view");
+                int before = tree.Level;
+                orders.Zoom(1);
+                yield return Frames(3);
+                Check(tree.Level > before, $"the Orders tree zooms in ({before} -> {tree.Level} %)");
+                yield return Shots("app_orders_zoomed");
+                orders.Zoom(0);
+                yield return Frames(2);
+                Check(tree.Level == AppZoom.Normal, $"Ctrl+0 puts the Orders tree back at {AppZoom.Normal} % ({tree.Level})");
+            }
             yield return CloseApp(o);
         }
         DepartureBoardView board = Office.One<DepartureBoardView>();
@@ -1026,6 +1040,12 @@ public static class _TimeDeskAuditPlay
         GameConfigSO config = RunManager.Instance.Config.gameConfig;
         Line($"== HOME night {day}");
         Line($"   evening: {Fields(Field(manager, "_evening"))}");
+        var evening = (HomeEconomy.Evening)Field(manager, "_evening");
+        int breakIn = evening != null ? evening.bill.breakInLoss : 0;
+        int breakInFrom = RunManager.Instance.Config.gameConfig.breakInFromDay;
+        if (breakIn > 0)
+            Count("break-in");
+        Check(day >= breakInFrom || breakIn == 0, $"night {day}: no break-in before day {breakInFrom} (loss {breakIn})");
         foreach (string l in Lines(((TMP_Text)Field(ui, "expensesBodyText")).text))
             Line("   | " + l);
         Line($"   family: {string.Join(", ", w.family.members.Select(m => $"{m.name}={m.condition}"))}; money={w.money}");
@@ -1115,6 +1135,33 @@ public static class _TimeDeskAuditPlay
         DepartureBoardView board = Office.One<DepartureBoardView>();
         var rows = board != null ? (TextMeshPro)Field(board, "rows") : null;
         Line(rows != null ? "   board: " + rows.text.Replace("\n", " / ") : "   board: none");
+
+        // The hall's rings (AnimeHallPortalLink): an open departure portal glows, the Return Gate spirals, a closed ring stays plain (no effect).
+        AnimeHallPortalLink link = Office.One<AnimeHallPortalLink>();
+        if (link != null)
+        {
+            var effects = (PortalEffect[])Field(link, "_effects");
+            int lit = effects.Count(e => e != null && e.Showing);
+            int open = o.Game.Portals.Portals.Count(r => r.Look == PortalLook.Glow || r.Look == PortalLook.ReturnGate);
+            Line($"   rings: {string.Join(" ", o.Game.Portals.Portals.Select(r => $"{PortalText.Number(r.Number)}={r.Look}"))}; effects showing {lit} of {effects.Length}");
+            Check(lit == open, $"day {RunManager.Instance.World.day}: only the open rings show an effect, the closed ones stay plain ({lit} showing, {open} open)");
+        }
+    }
+
+    /// <summary>The world's answers latched last night (dated today) print their headlines in this morning's paper, within the history news cap.</summary>
+    private static void WorldHeadlines(int day)
+    {
+        WorldState w = RunManager.Instance.World;
+        WorldContent content = RunManager.Instance.Library.World;
+        List<FactorLead> today = w.leads.Where(l => l.sinceDay == day).ToList();
+        if (today.Count == 0)
+            return;
+        string paper = ((TMP_Text)Field(Office.One<DayFlowUIController>(), "briefingBodyText")).text;
+        List<string> headlines = today.Select(l => content.Headline(l)).Where(h => !string.IsNullOrWhiteSpace(h)).ToList();
+        int printed = headlines.Count(h => paper.Contains(h));
+        Line($"   world headlines today: {printed} of {headlines.Count} printed");
+        Count("world headline");
+        Check(printed > 0 || headlines.Count == 0, $"day {day}: a world answer changed overnight and the paper prints its headline ({printed} of {headlines.Count})");
     }
 
     private static void RecordSave(string name)
