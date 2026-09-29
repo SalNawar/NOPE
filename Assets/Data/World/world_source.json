@@ -6849,8 +6849,8 @@
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.1,
-      "violationChance": 0.1
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.05
     },
     {
       "asset": "DayPlan_Inv_Day3",
@@ -6911,8 +6911,8 @@
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.1,
-      "violationChance": 0.1
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.05
     },
     {
       "asset": "DayPlan_Inv_Day4",
@@ -6979,8 +6979,8 @@
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.1,
-      "violationChance": 0.1
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.05
     },
     {
       "asset": "DayPlan_Inv_Day5",
@@ -7060,8 +7060,8 @@
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.1,
-      "violationChance": 0.1
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.05
     },
     {
       "asset": "DayPlan_Inv_Day6",
@@ -7160,8 +7160,8 @@
         }
       ],
       "premadeChance": 0.05,
-      "costumeErrorChance": 0.1,
-      "violationChance": 0.1
+      "costumeErrorChance": 0.05,
+      "violationChance": 0.05
     }
   ],
   "interview": {

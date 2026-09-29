@@ -17,7 +17,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7ce076215da84234a0bd64255f4d048e, type: 2}
   - {fileID: 11400000, guid: 17eb2ae45d4944169f09e0d143588211, type: 2}
   - {fileID: 11400000, guid: 60b49b45895f457297155321e53ad915, type: 2}
-  contradictionChance: 0.5
+  contradictionChance: 0.25
   archetypePool:
   - {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}
   - {fileID: 11400000, guid: da6406242904ea74293e5fd7cef8ff53, type: 2}
