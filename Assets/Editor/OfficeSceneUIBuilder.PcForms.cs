@@ -204,21 +204,7 @@ public static partial class OfficeSceneUIBuilder
         PlaceRect(viewport, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-(DocScrollbar + DocGap), 0f));
         viewport.gameObject.AddComponent<RectMask2D>();
 
-        Transform track = Panel(area, "Scrollbar", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, style.backing, ThemeRoleId.DiegeticBacking);
-        PlaceRect(track, new Vector2(1f, 0f), Vector2.one, new Vector2(-DocScrollbar, 0f), Vector2.zero);
-        Transform slide = Panel(track, "SlidingArea", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        SetAnchors(slide, Vector2.zero, Vector2.one);
-        Transform handle = Panel(slide, "Handle", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, style.backingInk, ThemeRoleId.DiegeticBacking);
-        SetAnchors(handle, Vector2.zero, Vector2.one);
-        // Through the serialized fields, as the browser's scrollbar: a setter would drive the handle now and save it zeroed.
-        Scrollbar scrollbar = track.gameObject.AddComponent<Scrollbar>();
-        var soBar = new SerializedObject(scrollbar);
-        soBar.FindProperty("m_Direction").enumValueIndex = (int)Scrollbar.Direction.BottomToTop;
-        soBar.FindProperty("m_HandleRect").objectReferenceValue = handle;
-        soBar.FindProperty("m_TargetGraphic").objectReferenceValue = handle.GetComponent<Image>();
-        soBar.FindProperty("m_Size").floatValue = 1f;
-        soBar.FindProperty("m_Value").floatValue = 0f;
-        soBar.ApplyModifiedProperties();
+        Scrollbar scrollbar = BuildScrollbar(area, DocScrollbar, style.backing, ThemeRoleId.DiegeticBacking, style.backingInk, ThemeRoleId.DiegeticBacking);
 
         ScrollRect scroll = area.gameObject.AddComponent<ScrollRect>();
         scroll.viewport = viewport;
