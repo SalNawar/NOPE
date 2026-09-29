@@ -68,6 +68,24 @@ public readonly struct ScreenBox
 
     /// <summary>The box's height, in screen heights.</summary>
     public float Height { get; }
+
+    /// <summary>The box as a rectangle in pixels on a screen of <paramref name="screenWidth"/> x <paramref name="screenHeight"/> (its width is its height times <paramref name="paperAspect"/>).</summary>
+    public ScreenRect InPixels(float paperAspect, float screenWidth, float screenHeight)
+    {
+        float h = screenHeight, halfWidth = screenWidth / 2f, w = Height * paperAspect;
+        return new ScreenRect(halfWidth + (CentreX - w / 2f) * h, (CentreY - Height / 2f) * h,
+                              halfWidth + (CentreX + w / 2f) * h, (CentreY + Height / 2f) * h);
+    }
+
+    /// <summary>True when a point in pixels (<paramref name="px"/>, <paramref name="py"/>) lies in the box, its edges included, on such a screen; a screen with no height covers nothing.</summary>
+    public bool Covers(float paperAspect, float screenWidth, float screenHeight, float px, float py)
+    {
+        if (screenHeight <= 0f)
+            return false;
+        float h = screenHeight, w = Height * paperAspect;
+        float x = (px - screenWidth / 2f) / h, y = py / h;
+        return Math.Abs(x - CentreX) <= w / 2f && Math.Abs(y - CentreY) <= Height / 2f;
+    }
 }
 
 /// <summary>
