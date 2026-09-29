@@ -107,7 +107,8 @@ public static class ContentSheetMap
                 Values("newsDebt", "debt", Text("text")).Note("the morning paper's debt lines: one a day, in a shuffled order per run")).Note("the morning paper's debt-theme lines"),
             Pc(),
             Ui(),
-            Translation());
+            Translation(),
+            Home());
 
     private static SheetSpec Looks() =>
         Single("looks", "looks",
@@ -480,6 +481,27 @@ public static class ContentSheetMap
                 Rows("uiLanguageEntries", "entries",
                     Text("key").Ref("uiStrings"),
                     Text("text"))));
+
+    /// <summary>Home's house upgrades (the Home upgrades spec HU3): the tree's rows, generated into upgrade and effect assets, and the radio's lines.</summary>
+    private static SheetSpec Home() =>
+        Single("home", "home",
+            Text("radioUpgrade").Note("the house upgrade whose ownership plays a radio line on the sleep panel"),
+            Values("homeRadio", "radio", Text("text")).Note("the radio's lines: one a night, in order by the day"),
+            Rows("homeUpgrades", "upgrades", Key("id"),
+                Text("id").Required().Note("the upgrade's id (saved as owned)"),
+                Text("name"),
+                Text("category").Required().OneOf("Food", "Housing", "Security", "Health", "Comfort").Note("its column in the House panel"),
+                Int("cost").Note("the one-off price in cr"),
+                Int("upkeep").Note("cr a night the household pays once it is owned (0: none)"),
+                List("requires").Note("the house upgrades it needs owned first (ids of this sheet)"),
+                Int("householdExpense").Note("cr a night on rent and utilities (negative saves)"),
+                Num("sicknessChance").Note("added to each member's nightly chance to worsen (-0.05 = 5 points less)"),
+                Int("careCost").Note("cr on each treatment (negative cheaper)"),
+                Int("medicalDrain").Note("cr on each condition point's nightly drain (negative lowers)"),
+                Num("mood").Note("the household's mood points (a sick member's nightly recovery chance)"),
+                Num("breakInChance").Note("added to the nightly break-in chance (-0.03 = 3 points less)"),
+                Num("breakInShare").Note("added to the share of the wallet a break-in takes"),
+                Text("blurb").Note("the House panel's line under its name")).Note("the House tree: every effect never takes a knob below 0")).Note("Home's house upgrades and the radio");
 
     private static SheetSpec Translation() =>
         Single("translation", "translation",

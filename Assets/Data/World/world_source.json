@@ -15910,5 +15910,328 @@
         "glyphs": "eklminpqörßtvwuxzbcdüfghäj"
       }
     ]
+  },
+  "home": {
+    "radioUpgrade": "house_radio",
+    "radio": [
+      "Tonight's weather: overcast, with a chance of interest.",
+      "The Directorate reminds listeners that sleep is a privilege of the solvent.",
+      "Music now: a hymn to compound interest, sung by the Debt Relief choir.",
+      "Traffic: the evening departures to Florence are running on time. Yours is not.",
+      "A listener in Block C asks whether dreams are taxable. They are being assessed.",
+      "Lost and found: one sense of purpose, answers to 'Hope'.",
+      "The number you have called is under maintenance. Please hold until 2151.",
+      "Goodnight from the Directorate. Your account never sleeps; you should."
+    ],
+    "upgrades": [
+      {
+        "id": "house_rations_b",
+        "name": "Ration Card, Tier B",
+        "category": "Food",
+        "cost": 40,
+        "upkeep": 2,
+        "requires": [],
+        "householdExpense": 0,
+        "sicknessChance": -0.02,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 1,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "Tier B paste comes in two colours. The kid prefers the green."
+      },
+      {
+        "id": "house_veg_box",
+        "name": "Vegetable Box",
+        "category": "Food",
+        "cost": 90,
+        "upkeep": 4,
+        "requires": [
+          "house_rations_b"
+        ],
+        "householdExpense": 0,
+        "sicknessChance": -0.04,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 1,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "Real vegetables, by drone, once a week. The carrots are small, but they are carrots."
+      },
+      {
+        "id": "house_hen_share",
+        "name": "Hen Share",
+        "category": "Food",
+        "cost": 160,
+        "upkeep": 5,
+        "requires": [
+          "house_veg_box"
+        ],
+        "householdExpense": 0,
+        "sicknessChance": -0.03,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 2,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "A twelfth of a cooperative hen called Directive Seven. Eggs on Sundays."
+      },
+      {
+        "id": "house_draught_seals",
+        "name": "Draught Seals",
+        "category": "Housing",
+        "cost": 30,
+        "upkeep": 0,
+        "requires": [],
+        "householdExpense": -1,
+        "sicknessChance": 0,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 0,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "Foam strips for the window. The wind now whistles in a lower key."
+      },
+      {
+        "id": "house_insulation",
+        "name": "Wall Insulation",
+        "category": "Housing",
+        "cost": 150,
+        "upkeep": 0,
+        "requires": [
+          "house_draught_seals"
+        ],
+        "householdExpense": -4,
+        "sicknessChance": -0.02,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 0,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "Recycled padding from decommissioned transponder crates. Warmer, faintly humming."
+      },
+      {
+        "id": "house_floor_up",
+        "name": "One Floor Up",
+        "category": "Housing",
+        "cost": 220,
+        "upkeep": 0,
+        "requires": [
+          "house_insulation"
+        ],
+        "householdExpense": 12,
+        "sicknessChance": -0.03,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 2,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "The same flat, one floor further from the damp. The rent noticed."
+      },
+      {
+        "id": "house_corner_flat",
+        "name": "The Corner Flat",
+        "category": "Housing",
+        "cost": 320,
+        "upkeep": 0,
+        "requires": [
+          "house_floor_up"
+        ],
+        "householdExpense": 10,
+        "sicknessChance": -0.03,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 3,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "Two windows. A door for the kid's room. The landlord calls it 'aspirational'."
+      },
+      {
+        "id": "house_second_lock",
+        "name": "A Second Lock",
+        "category": "Security",
+        "cost": 35,
+        "upkeep": 0,
+        "requires": [],
+        "householdExpense": 0,
+        "sicknessChance": 0,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 0,
+        "breakInChance": -0.03,
+        "breakInShare": 0,
+        "blurb": "Two locks: one for thieves, one for the landlord."
+      },
+      {
+        "id": "house_strongbox",
+        "name": "Floor Strongbox",
+        "category": "Security",
+        "cost": 80,
+        "upkeep": 0,
+        "requires": [
+          "house_second_lock"
+        ],
+        "householdExpense": 0,
+        "sicknessChance": 0,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 0,
+        "breakInChance": 0,
+        "breakInShare": -0.15,
+        "blurb": "Under the loose board. Everyone in the building has one under the loose board."
+      },
+      {
+        "id": "house_alarm",
+        "name": "Alarm Service",
+        "category": "Security",
+        "cost": 120,
+        "upkeep": 3,
+        "requires": [
+          "house_strongbox"
+        ],
+        "householdExpense": 0,
+        "sicknessChance": 0,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 0,
+        "breakInChance": -0.04,
+        "breakInShare": 0,
+        "blurb": "A subscription alarm. It calls a number that calls another number."
+      },
+      {
+        "id": "house_air_filter",
+        "name": "Air Filter",
+        "category": "Health",
+        "cost": 90,
+        "upkeep": 1,
+        "requires": [],
+        "householdExpense": 0,
+        "sicknessChance": -0.05,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 0,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "Cartridges sold separately, by the same company, at a loss to you."
+      },
+      {
+        "id": "house_water_purifier",
+        "name": "Water Purifier",
+        "category": "Health",
+        "cost": 150,
+        "upkeep": 0,
+        "requires": [
+          "house_air_filter"
+        ],
+        "householdExpense": 0,
+        "sicknessChance": -0.05,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 0,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "The tap water now tastes of nothing, which is a first."
+      },
+      {
+        "id": "house_medicine_cabinet",
+        "name": "Medicine Cabinet",
+        "category": "Health",
+        "cost": 100,
+        "upkeep": 0,
+        "requires": [],
+        "householdExpense": 0,
+        "sicknessChance": 0,
+        "careCost": -3,
+        "medicalDrain": 0,
+        "mood": 0,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "Stocked at wholesale. The labels are in a language the pharmacist also cannot read."
+      },
+      {
+        "id": "house_clinic",
+        "name": "Clinic Membership",
+        "category": "Health",
+        "cost": 200,
+        "upkeep": 4,
+        "requires": [
+          "house_medicine_cabinet"
+        ],
+        "householdExpense": 0,
+        "sicknessChance": 0,
+        "careCost": -2,
+        "medicalDrain": -1,
+        "mood": 0,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "Priority queueing: you are now fourth in a line of three thousand."
+      },
+      {
+        "id": "house_plant",
+        "name": "A Plastic Plant",
+        "category": "Comfort",
+        "cost": 15,
+        "upkeep": 0,
+        "requires": [],
+        "householdExpense": 0,
+        "sicknessChance": 0,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 1,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "It is plastic. It is still a plant."
+      },
+      {
+        "id": "house_radio",
+        "name": "A Radio",
+        "category": "Comfort",
+        "cost": 45,
+        "upkeep": 1,
+        "requires": [],
+        "householdExpense": 0,
+        "sicknessChance": 0,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 1,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "The Directorate's station, and music on public holidays."
+      },
+      {
+        "id": "house_better_bed",
+        "name": "A Better Bed",
+        "category": "Comfort",
+        "cost": 110,
+        "upkeep": 0,
+        "requires": [],
+        "householdExpense": 0,
+        "sicknessChance": 0,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 2,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "A mattress with fewer than one spring showing."
+      },
+      {
+        "id": "house_photo",
+        "name": "A Framed Photograph",
+        "category": "Comfort",
+        "cost": 25,
+        "upkeep": 0,
+        "requires": [
+          "house_plant"
+        ],
+        "householdExpense": 0,
+        "sicknessChance": 0,
+        "careCost": 0,
+        "medicalDrain": 0,
+        "mood": 1,
+        "breakInChance": 0,
+        "breakInShare": 0,
+        "blurb": "The family at the seaside in 2139, before the sea was privatised."
+      }
+    ]
   }
 }
