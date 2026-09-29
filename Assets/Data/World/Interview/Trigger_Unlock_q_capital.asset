@@ -19,6 +19,7 @@ MonoBehaviour:
   oneShot: 1
   newsLineOnFire: 'BUREAU NOTICE: desk officers may now ask travellers for their
     capital. Check answers against the Capitals Gazetteer.'
+  section: 0
   conditions:
   - type: 8
     key: 

@@ -25,3 +25,8 @@ MonoBehaviour:
   recordNote: Painter and engineer in the service of the Duke of Milan.
   dialogId: 
   oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 

@@ -20,6 +20,7 @@ MonoBehaviour:
   newsLineOnFire: 'BUREAU NOTICE: from today, desk officers ask departing citizens
     what they will pay with. Check answers against the Currency Ledger: nothing from
     2150 leaves 2150.'
+  section: 0
   conditions:
   - type: 8
     key: 

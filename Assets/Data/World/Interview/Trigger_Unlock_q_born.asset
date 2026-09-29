@@ -19,6 +19,7 @@ MonoBehaviour:
   oneShot: 1
   newsLineOnFire: 'BUREAU NOTICE: with Interview Protocols, desk officers may now
     ask travellers when they were born. Check answers against Citizen Records.'
+  section: 0
   conditions:
   - type: 10
     key: interview_protocols
