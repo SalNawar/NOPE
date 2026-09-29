@@ -47,6 +47,21 @@ public class AccountTests
         Assert.AreEqual(Account.Unknown, row.owed, "no debt source before phase 13");
     }
 
+    /// <summary>The Orders app (Saleh 2026-09-29): an order is paid during the shift, so the shift's row starts with the day's orders as its purchases; Home's total then includes them.</summary>
+    [Test]
+    public void RecordShift_TheDaysOrdersAreItsPurchases()
+    {
+        var days = new List<AccountDay>();
+        var source = new Source();
+
+        AccountDay row = Account.RecordShift(days, 2, Ledger(100, 0), source, 60, 200);
+        Assert.AreEqual(200, row.purchases);
+        Assert.AreEqual(0, row.household);
+
+        Account.RecordHome(days, 2, 60, 200 + 5, source, 60);
+        Assert.AreEqual(205, days.Single().purchases, "the orders and a slot spin");
+    }
+
     /// <summary>Redesign phase 23: the FINES cell is the wrong-decision penalties alone; a stranding fines nothing.</summary>
     [Test]
     public void RecordShift_FinesAreThePenaltiesAlone()
