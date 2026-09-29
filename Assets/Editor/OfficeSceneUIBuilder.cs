@@ -24,7 +24,7 @@ using UnityEngine.UI;
 ///   the verdict line on the office overlay (piece 10)  [OfficeUIController]
 /// - Morning briefing + shift report panels  [DayFlowUIController]
 /// - Investigation desk: the Investigation app (OfficeSceneUIBuilder.App.cs:
-///   one window with the claim, the counters, Accept/Deny and six tabs: the
+///   one window with the counters, Accept/Deny and six tabs (no claim): the
 ///   scanned documents, Citizen Records, the reference books, the interview
 ///   transcript, the Deviation Report and the directives), the compare dock
 ///   and the scan toast, laid out for the 4:3 desktop  [InvestigationUIController,
@@ -34,8 +34,8 @@ using UnityEngine.UI;
 ///   [DesktopIcons, DesktopIconView, DesktopContextMenu, DesktopShell, DesktopApps]
 /// - The traveller wheel (the interview's choices around the traveller), the
 ///   speech bubble (its answer pickable, above the wheel), the desk tooltip,
-///   the fallback HUD, the office case HUD (the claim tag and the office
-///   compare strip), the desk view's "▲ Back" control and the stamp tray
+///   the fallback HUD, the office case HUD (the office compare strip; no
+///   claim tag), the desk view's "▲ Back" control and the stamp tray
 ///   (Accept and Deny at the desk) on the office overlay canvas
 ///   [TravellerWheel, OverlayCallout, SpeechBubbleInput, OfficeCaseHud,
 ///   HoverHint, StampTray]
@@ -186,7 +186,7 @@ public static partial class OfficeSceneUIBuilder
 
         // Office overlays, rebuilt each run with always-active hosts, above the
         // newsletters, bottom to top: the fallback HUD, the office case HUD (the
-        // claim tag and the office compare strip), the desk view's "▲ Back"
+        // office compare strip), the desk view's "▲ Back"
         // control (under the case HUD, shown while tilted), the PC frame, the traveller
         // wheel (the interview's choices), the traveller's speech bubble (above
         // the wheel, its answer pickable), the desk props' tooltip, the stamp
@@ -202,10 +202,10 @@ public static partial class OfficeSceneUIBuilder
         OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip, false);
         StampTray stampTray = BuildStampTray(officeCanvas.transform, deskConfig);
 
-        // Verdict line (result text) on a strip that shows only while the line has text (piece 6 R18): top centre, the claim tag's place (they never show together).
+        // Verdict line (result text) on a strip that shows only while the line has text (piece 6 R18): top centre, the case HUD's compare strip's place (they never show together).
         DestroyChildIfPresent(officeCanvas.transform, "VerdictStrip");
-        Transform verdictStrip = Panel(officeCanvas.transform, "VerdictStrip", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -ClaimStripTop - ClaimStripSize.y / 2f),
-                                       ClaimStripSize, ScreenStripColor, ThemeRoleId.ScreenStrip);
+        Transform verdictStrip = Panel(officeCanvas.transform, "VerdictStrip", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -TopStripTop - VerdictStripSize.y / 2f),
+                                       VerdictStripSize, ScreenStripColor, ThemeRoleId.ScreenStrip);
         ((RectTransform)verdictStrip).pivot = Center;
         verdictStrip.GetComponent<Image>().raycastTarget = false;
         TMP_Text verdictText = Text(verdictStrip, "VerdictText", "", 26, TextAlignmentOptions.Center, new Vector2(0.02f, 0.04f), new Vector2(0.98f, 0.96f), Color.white,
@@ -239,7 +239,7 @@ public static partial class OfficeSceneUIBuilder
         // --- Investigation desk ---
         // Persistent host (never toggled) holds the controllers; on it the window layer (every window, the icon area
         // exactly; it shows with or without a case), the scan toast above it and the compare dock above that
-        // (BuildCompareDock). The case overlay retired: its claim and Accept/Deny are in the Investigation app's header.
+        // (BuildCompareDock). The case overlay retired: its Accept/Deny are in the Investigation app's header (its claim is only spoken now).
         Transform investHost = Panel(root, "InvestigationUI", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         InvestigationUIController invest = GetOrAdd<InvestigationUIController>(investHost.gameObject);
         CompareController compare = GetOrAdd<CompareController>(investHost.gameObject);
@@ -646,7 +646,7 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A transform's scene path.</summary>
     private static string PathOf(Transform t) => t.parent == null ? t.name : PathOf(t.parent) + "/" + t.name;
 
-    /// <summary>The translucent strip behind texts on the wallpaper (verdict and idle lines) and the claim strip.</summary>
+    /// <summary>The translucent strip behind texts on the wallpaper (verdict and idle lines) and the app's case header.</summary>
     private static readonly Color ScreenStripColor = new Color(0.06f, 0.18f, 0.42f, 0.8f);
 
     /// <summary>

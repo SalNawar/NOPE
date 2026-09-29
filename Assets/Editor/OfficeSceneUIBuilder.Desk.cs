@@ -596,11 +596,11 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soScanner, "reaction", WireReaction(scanner.GetComponent<Clickable>(), EnsureDeskReaction("Reaction_Scanner", ReactionKind.Pulse, ""), tooltip, null));
         soScanner.ApplyModifiedProperties();
 
-        // What a handed-over paper must not land under: the case HUD's strips, the speech bubble, the wheel's ring.
+        // What a handed-over paper must not land under: the case HUD's compare strip, the speech bubble, the wheel's ring.
         var soDesk = new SerializedObject(desk);
         SerializedArrays.Set(soDesk, "landingCovers", new Object[]
         {
-            caseHud.transform.Find("Root/ClaimStrip"), caseHud.transform.Find("Root/CompareStrip"),
+            caseHud.transform.Find("Root/CompareStrip"),
             callouts[0].transform.Find("Panel"), wheel.transform.Find("Catcher/Ring")
         });
         soDesk.ApplyModifiedProperties();
@@ -1184,14 +1184,19 @@ public static partial class OfficeSceneUIBuilder
         return hud;
     }
 
-    /// <summary>The office case HUD's strips (reference px from the top centre): the claim tag, the office compare strip under it.</summary>
-    private static readonly Vector2 ClaimStripSize = new Vector2(1100f, 64f);
-    private const float ClaimStripTop = 16f;
+    /// <summary>
+    /// The office overlay's top strips (reference px from the top centre): the
+    /// office case HUD's compare strip, in the place of the claim tag the
+    /// personalities spec's B1 removed, and the verdict strip in the same place
+    /// (they never show together: the HUD shows only while a traveller is at
+    /// the desk, the verdict line once they have gone).
+    /// </summary>
+    private const float TopStripTop = 16f;
     private static readonly Vector2 CompareStripSize = new Vector2(1200f, 56f);
-    private const float CompareStripTop = 88f;
+    private static readonly Vector2 VerdictStripSize = new Vector2(1100f, 64f);
 
-    /// <summary>Where the desk view's "▲ Back" control starts (reference px from the top): under the office case HUD's strips and a gap.</summary>
-    private static readonly float CaseHudClearance = CompareStripTop + CompareStripSize.y + 8f;
+    /// <summary>Where the desk view's "▲ Back" control starts (reference px from the top): under the office case HUD's compare strip and a gap.</summary>
+    private static readonly float CaseHudClearance = TopStripTop + CompareStripSize.y + 8f;
 
     /// <summary>The desk view's "▲ Back" control (reference px), top centre under the case HUD.</summary>
     private static readonly Vector2 DeskViewBackSize = new Vector2(200f, 44f);
@@ -1219,26 +1224,23 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The office case HUD (piece 10) under the office overlay canvas, rebuilt
     /// each run: an always-active full-screen host (OfficeCaseHud, no graphic)
-    /// and its Root, top centre: the claim tag (ClaimStrip, the claim banner's
-    /// text) and under it the office compare strip (CompareBar, inactive; the
-    /// CompareController draws it). No part takes raycasts. Returns the HUD and
-    /// the strip's object and text through out parameters.
+    /// and its Root, top centre: the office compare strip (CompareBar,
+    /// inactive; the CompareController draws it), where the claim tag was (no
+    /// claim is printed: the personalities spec's B1). No part takes raycasts.
+    /// Returns the HUD and the strip's object and text through out parameters.
     /// </summary>
     private static OfficeCaseHud BuildOfficeCaseHud(Transform overlay, out GameObject compareStrip, out TMP_Text compareText)
     {
         DestroyChildIfPresent(overlay, "OfficeCaseHud");
         Transform host = Panel(overlay, "OfficeCaseHud", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         Transform root = Panel(host, "Root", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        TMP_Text claimText = TopStrip(root, "ClaimStrip", ClaimStripSize, ClaimStripTop, ScreenStripColor, ThemeRoleId.ClaimStrip, 26, Color.white, out Transform claim);
-        compareText = TopStrip(root, "CompareStrip", CompareStripSize, CompareStripTop, Tooltip, ThemeRoleId.CompareBar, 22, Ink, out Transform compare);
+        compareText = TopStrip(root, "CompareStrip", CompareStripSize, TopStripTop, Tooltip, ThemeRoleId.CompareBar, 22, Ink, out Transform compare);
         compareStrip = compare.gameObject;
         compareStrip.SetActive(false);
 
         OfficeCaseHud hud = host.gameObject.AddComponent<OfficeCaseHud>();
         var so = new SerializedObject(hud);
         SetRef(so, "root", root.gameObject);
-        SetRef(so, "claimRoot", claim.gameObject);
-        SetRef(so, "claimText", claimText);
         so.ApplyModifiedProperties();
         root.gameObject.SetActive(false);
         return hud;
