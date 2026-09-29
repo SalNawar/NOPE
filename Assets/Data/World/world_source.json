@@ -6809,7 +6809,9 @@
       ],
       "lies": [
         "PoorPosingAsRich",
-        "DoctoredIdentity"
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "ForgedProof"
       ],
       "kinds": [
         {
@@ -6864,8 +6866,10 @@
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
+        "FakeWaiver",
         "DebtorPosingAsTourist",
-        "ForgedContract"
+        "ForgedContract",
+        "ForgedProof"
       ],
       "kinds": [
         {
@@ -6924,8 +6928,10 @@
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
+        "FakeWaiver",
         "DebtorPosingAsTourist",
         "ForgedContract",
+        "ForgedProof",
         "Smuggling"
       ],
       "kinds": [
@@ -6990,8 +6996,10 @@
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
+        "FakeWaiver",
         "DebtorPosingAsTourist",
         "ForgedContract",
+        "ForgedProof",
         "FalseOrigin",
         "FakeDisplaced",
         "Smuggling"
@@ -7069,8 +7077,10 @@
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
+        "FakeWaiver",
         "DebtorPosingAsTourist",
         "ForgedContract",
+        "ForgedProof",
         "FalseOrigin",
         "FakeDisplaced",
         "Smuggling"

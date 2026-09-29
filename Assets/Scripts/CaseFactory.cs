@@ -435,8 +435,8 @@ public sealed class CaseFactory
         if (inst.kind == TravellerKind.Displaced && _today != null)
             inst.displacement = AgencyNumbers.Displaced(_today.Value, _lib.Agency.displaced, _agencyNumbers, _accountRng);
         else if (citizen && _today != null && AccountMaker.StatusOf(inst.kind, out CitizenStatus status))
-            inst.account = AccountMaker.Make(AccountRequestFor(LieKinds.TrueStatus(lieKind, status), family, blueprint, claimedEra), _lib.Agency.accounts, _lib.Agency.transponders,
-                                             _lib.Agency.proofs, _today.Value, _agencyNumbers, _accountRng);
+            inst.account = AccountMaker.Make(AccountRequestFor(LieKinds.TrueStatus(lieKind, status), family, blueprint, claimedEra, lieKind == LieKind.DebtorPosingAsTourist),
+                                             _lib.Agency.accounts, _lib.Agency.transponders, _lib.Agency.proofs, _today.Value, _agencyNumbers, _accountRng);
 
         // 4.9) The violation (K5: after the lie roll, before the costume roll): a guaranteed procedure's maker, or the
         //      roll on the fault stream for an honest traveller; the account side of the maker runs before the papers print.
@@ -888,8 +888,9 @@ public sealed class CaseFactory
     /// present's years; fresh numbers from today's, which they join; a
     /// transponder from the agency's models; a debtor's classes from the
     /// status their kind poses as; a forged contract's employer from the
-    /// era's, its worksite from today's other open places), and become the
-    /// traveller's record tells. A lie none of whose variants can show
+    /// era's, its worksite from today's other open places; a fake waiver's
+    /// number with the waiver prefix; a forged policy with the policy's
+    /// prefix), and become the traveller's record tells. A lie none of whose variants can show
     /// (nothing printed to forge) leaves the traveller honest with a warning.
     /// </summary>
     private LiePlan Forge(CaseInstance inst, LieKind kind, DayPlanSO plan, NationEraProfileSO place, int caseIndex1Based)
@@ -904,13 +905,15 @@ public sealed class CaseFactory
             TakenToday = _agencyNumbers,
             PosedStatus = kind == LieKind.DebtorPosingAsTourist && AccountMaker.StatusOf(inst.kind, out CitizenStatus posed) ? posed : (CitizenStatus?)null,
             Employers = _lib.Agency.EmployersOf(inst.claimedEra != null ? inst.claimedEra.id : null),
-            OpenPlaces = _todays.Where(p => p != place && plan.ClaimAllowed(p.nation, p.era)).Select(PlaceLabel).ToList()
+            OpenPlaces = _todays.Where(p => p != place && plan.ClaimAllowed(p.nation, p.era)).Select(PlaceLabel).ToList(),
+            WaiverPrefix = _lib.Agency.accounts != null ? _lib.Agency.accounts.waiverPrefix : null,
+            Proofs = _lib.Agency.proofs
         };
         LiePlan lie = RecordLies.Plan(kind, forms, inst.account, context, _lieRng);
 
         if (lie.Outcome == LieOutcome.NoPossibleLie)
         {
-            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled {kind}, but none of its forged fields is printed on the traveller's forms or can differ from their account, so the traveller stays honest. Check the kind's templates (TC-101, TC-230, TC-520), the account ranges and agency.employers.");
+            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled {kind}, but none of its forged fields is printed on the traveller's forms or can differ from their account, so the traveller stays honest. Check the kind's templates (TC-101, TC-230, TC-310, TC-415 to TC-417, TC-520), the account ranges, agency.proofs and agency.employers.");
         }
         else if (lie.Outcome == LieOutcome.Forger)
         {
@@ -1266,12 +1269,16 @@ public sealed class CaseFactory
     /// blueprint's forms (number, request group, whether it prints a Valid
     /// Until), of which the account decides the carried ones, and for a
     /// labourer the registered contract with the worksite's era's employers
-    /// (agency.employers).
+    /// (agency.employers); a debtor posing as a tourist
+    /// (<paramref name="debtorPosing"/>) from an entry that carries a proof of
+    /// means draws one they do not hold (L4's poor variant).
     /// </summary>
-    private AccountRequest AccountRequestFor(CitizenStatus status, NationEraProfileSO family, CaseBlueprintSO blueprint, EraSO worksiteEra) => new AccountRequest
+    private AccountRequest AccountRequestFor(CitizenStatus status, NationEraProfileSO family, CaseBlueprintSO blueprint, EraSO worksiteEra, bool debtorPosing) => new AccountRequest
     {
         Status = status,
         Contract = blueprint.Kind == TravellerKind.Labourer,
+        ForgedProof = debtorPosing && !AccountMaker.HoldsProof(status) &&
+                      (blueprint.DocumentTemplates ?? System.Array.Empty<DocumentTemplateSO>()).Any(t => t != null && t.askGroup == AccountMaker.ProofGroup),
         Employers = _lib.Agency.EmployersOf(worksiteEra != null ? worksiteEra.id : null),
         Lineages = family != null && family.nation != null
             ? _lib.Profiles.Where(p => p != null && p.nation == family.nation && p.era != null && !p.era.isFuture)

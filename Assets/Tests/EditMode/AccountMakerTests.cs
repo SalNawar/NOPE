@@ -379,6 +379,8 @@ public class AccountMakerTests
         Assert.AreEqual("TC-416", a.ProofForm);
         Assert.AreEqual(ClueCategory.Funds, a.ProofCategory);
         Assert.AreEqual("6,200 cr", a.ProofValue);
+        Assert.AreEqual(6200, a.ProofAmount, "the amount a forged proof inflates (L10)");
+        Assert.IsFalse(a.ProofForged);
         Assert.AreEqual("Tick-Tock Basic · TT-11952", a.Transponder);
         Assert.AreEqual("SW-204817", a.WaiverNo);
         CollectionAssert.AreEqual(new[] { "27 Mar 2150", "6 Apr 2150" }, a.ValidUntil.ToArray(), "one date per carried form that expires: the visa and the held proof, never the two proofs left with the agency");
@@ -419,6 +421,50 @@ public class AccountMakerTests
         CitizenAccount a = AccountMaker.Make(Request(CitizenStatus.Eligible), Ranges(), Transponders(), Proofs(), Today, new HashSet<string>(), new SeededRandom(7));
         StringAssert.IsMatch(@"^SW-\d{6}$", a.WaiverNo);
         Assert.IsNull(a.ProofForm);
+    }
+
+    /// <summary>A debtor posing as a poor tourist (L4's poor variant, phase 9): the proof is drawn where a Standard account's would be and carried, but not on file.</summary>
+    [Test]
+    public void Make_ADebtorPosingAsPoor_DrawsAProofNotOnFile_TheTravellerCarriesIt_TheRecordShowsNone()
+    {
+        AccountRequest request = PoorRequest();
+        request.Status = CitizenStatus.Eligible;
+        request.ForgedProof = true;
+        var rng = new ScriptedRandom(
+            ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52), // Citizen ID
+            ScriptStep.Range(4000),                                             // debt: 40,000 + 40,000 cr
+            ScriptStep.Value(0f),                                               // the proof: the first of three (a credit line)
+            ScriptStep.Range(540),                                              // 4,000 + 5,400 = 9,400 cr
+            ScriptStep.Value(0f), ScriptStep.Range(11952),                      // the Economy model, its serial
+            ScriptStep.Range(204817),                                           // the waiver number
+            ScriptStep.Range(0), ScriptStep.Range(0),                           // lineage, no trips
+            ScriptStep.Range(10), ScriptStep.Range(20));                        // the visa's and the carried proof's Valid Until
+        CitizenAccount a = AccountMaker.Make(request, Ranges(), Transponders(), Proofs(), Today, new HashSet<string>(), rng);
+        Assert.IsTrue(rng.Done, "the proof in a Standard account's place");
+        Assert.AreEqual(CitizenStatus.Eligible, a.Status);
+        Assert.AreEqual("TC-415", a.ProofForm);
+        Assert.AreEqual("9,400 cr", a.ProofValue);
+        Assert.IsTrue(a.ProofForged);
+        Assert.IsTrue(AccountMaker.Carries(AccountMaker.ProofGroup, "TC-415", a), "the traveller carries it");
+        Assert.AreEqual(2, a.ValidUntil.Count, "the carried proof prints a Valid Until");
+
+        List<RecordRow> rows = AccountRecords.Record("Mara", "3 Jun 2101", "New Kingdom Egypt (Ancient)", a, key => key).Groups.SelectMany(g => g.Rows).ToList();
+        RecordRow proof = rows.Single(r => r.Label == "records.row.proof");
+        Assert.AreEqual("records.none", proof.Value, "the account holds no proof");
+        Assert.IsFalse(proof.IsEvidence);
+
+        AccountRequest honest = PoorRequest();
+        honest.Status = CitizenStatus.Eligible;
+        Assert.IsNull(AccountMaker.Make(honest, Ranges(), Transponders(), Proofs(), Today, new HashSet<string>(), new SeededRandom(3)).ProofForm, "without the lie an Eligible account draws no proof");
+        Assert.IsFalse(AccountMaker.Make(PoorRequestForged(), Ranges(), Transponders(), Proofs(), Today, new HashSet<string>(), new SeededRandom(3)).ProofForged,
+                       "a Standard account holds its proof whatever the request says");
+    }
+
+    private static AccountRequest PoorRequestForged()
+    {
+        AccountRequest request = PoorRequest();
+        request.ForgedProof = true;
+        return request;
     }
 
     [Test]

@@ -24,8 +24,9 @@ public readonly struct RecordForm
 /// inputs, audit R3-025): the cover birth date and the present's years (the
 /// year maker), the agency's transponder models and today's numbers (the
 /// transponder and number makers), the status a debtor's tourist papers pose
-/// as (L4), and the era's employers and today's other open places (the
-/// contract makers, L5).
+/// as (L4), the era's employers and today's other open places (the
+/// contract makers, L5), the waiver prefix (a fake waiver's number, L3) and
+/// the proofs of means (a forged policy's prefix, L10).
 /// </summary>
 public sealed class RecordLieContext
 {
@@ -52,6 +53,12 @@ public sealed class RecordLieContext
 
     /// <summary>Today's other open places' labels (never the claim, never a closed one, which would add a directive fault): a forged contract swaps the worksite for one (L5).</summary>
     public IReadOnlyList<string> OpenPlaces;
+
+    /// <summary>The waiver numbers' prefix (agency.accounts.waiverPrefix, "SW"): a fake waiver's number is a fresh one (L3).</summary>
+    public string WaiverPrefix;
+
+    /// <summary>The agency's proofs of means (agency.proofs): a forged policy is a fresh number with its proof's prefix (L10).</summary>
+    public IReadOnlyList<ProofOfMeans> Proofs;
 }
 
 /// <summary>
@@ -63,8 +70,11 @@ public sealed class RecordLieContext
 /// (Forgery.IsRecordCategory). Draws on the traveller's lie stream after
 /// Lies.Roll, in this order: the variant (one Range draw when two or more
 /// variants can show; none when one can), then each forged value in the
-/// variant's fixed order, each maker drawing what it needs. Pure, so every
-/// maker and the draw order are tested headless.
+/// variant's fixed order, each maker drawing what it needs; a category
+/// forged on two papers is made once and printed on both (a forger's papers
+/// agree with each other), and a variant's optional field is forged only
+/// when its form is carried. Pure, so every maker and the draw order are
+/// tested headless.
 /// </summary>
 public static class RecordLies
 {
@@ -77,6 +87,18 @@ public static class RecordLies
     /// <summary>The Debt Relief Labour Contract's form number: its employer, worksite, term and wage are what a forged contract rewrites.</summary>
     public const string Contract = Directives.Contract;
 
+    /// <summary>The Stranding Waiver's form number: its number and transponder are what a fake waiver rewrites, and its debt what a debtor posing as poor shrinks.</summary>
+    public const string Waiver = Directives.Waiver;
+
+    /// <summary>The Holiday Credit Agreement's form number (a proof of means: its credit line; its account class).</summary>
+    public const string CreditAgreement = "TC-415";
+
+    /// <summary>The Proof of Funds' form number (a proof of means: the savings held; its account class).</summary>
+    public const string ProofOfFunds = "TC-416";
+
+    /// <summary>The Travel Insurance Certificate's form number (a proof of means: the policy number).</summary>
+    public const string Insurance = "TC-417";
+
     /// <summary>One forged field: the form it is on and its category.</summary>
     private readonly struct Forged
     {
@@ -86,11 +108,15 @@ public static class RecordLies
         /// <summary>The forged category.</summary>
         public readonly ClueCategory Category;
 
+        /// <summary>True when the variant shows without it: forged only when its form is carried and prints it.</summary>
+        public readonly bool Optional;
+
         /// <summary>Creates a named field.</summary>
-        public Forged(string form, ClueCategory category)
+        public Forged(string form, ClueCategory category, bool optional = false)
         {
             Form = form;
             Category = category;
+            Optional = optional;
         }
     }
 
@@ -117,7 +143,22 @@ public static class RecordLies
     private static readonly Forged[] DoctoredYear = { new Forged(Visa, ClueCategory.BirthDate) };
 
     /// <summary>A debtor posing as a tourist (L4), with rich papers: the visa's class and the manifest's class read the posed status's (Premium); the same fields as the forged rich set.</summary>
-    private static readonly Forged[] DebtorAsTourist = RichForged;
+    private static readonly Forged[] DebtorAsRich = RichForged;
+
+    /// <summary>
+    /// A debtor posing as a tourist (L4), with poor papers: the visa's class
+    /// reads the posed status (Standard) and the waiver's debt a sliver of the
+    /// real one; the carried proof of means, which the account does not hold
+    /// (AccountRequest.ForgedProof), prints the posed class too where it has
+    /// one (the credit agreement and the proof of funds).
+    /// </summary>
+    private static readonly Forged[] DebtorAsPoor =
+    {
+        new Forged(Visa, ClueCategory.AccountStatus),
+        new Forged(Waiver, ClueCategory.Debt),
+        new Forged(CreditAgreement, ClueCategory.AccountStatus, optional: true),
+        new Forged(ProofOfFunds, ClueCategory.AccountStatus, optional: true)
+    };
 
     /// <summary>A forged contract (L5), the wage: the contract's day wage is 1.5 to 3 times the registered one.</summary>
     private static readonly Forged[] ContractWage = { new Forged(Contract, ClueCategory.Wage) };
@@ -131,6 +172,21 @@ public static class RecordLies
     /// <summary>A forged contract (L5), the worksite: another place open today.</summary>
     private static readonly Forged[] ContractWorksite = { new Forged(Contract, ClueCategory.Destination) };
 
+    /// <summary>A fake waiver (L3), the number: a waiver number the account never registered.</summary>
+    private static readonly Forged[] WaiverNumber = { new Forged(Waiver, ClueCategory.WaiverNo) };
+
+    /// <summary>A fake waiver (L3), the transponder: made out for another unit of the account's class (so it also contradicts the manifest).</summary>
+    private static readonly Forged[] WaiverTransponder = { new Forged(Waiver, ClueCategory.TransponderId) };
+
+    /// <summary>A forged proof of means (L10), a credit line: the agreement's line is 3 to 10 times the one on file.</summary>
+    private static readonly Forged[] ProofCredit = { new Forged(CreditAgreement, ClueCategory.Credit) };
+
+    /// <summary>A forged proof of means (L10), savings: the funds held are 3 to 10 times those on file.</summary>
+    private static readonly Forged[] ProofFunds = { new Forged(ProofOfFunds, ClueCategory.Funds) };
+
+    /// <summary>A forged proof of means (L10), a policy: a policy number the account does not hold.</summary>
+    private static readonly Forged[] ProofPolicy = { new Forged(Insurance, ClueCategory.PolicyNo) };
+
     /// <summary>Each record lie's variants, in draw order (the variant draw indexes the ones that can show).</summary>
     private static IReadOnlyList<Forged[]> VariantsOf(LieKind kind)
     {
@@ -141,9 +197,13 @@ public static class RecordLies
             case LieKind.DoctoredIdentity:
                 return new[] { DoctoredId, DoctoredYear };
             case LieKind.DebtorPosingAsTourist:
-                return new[] { DebtorAsTourist };
+                return new[] { DebtorAsRich, DebtorAsPoor };
             case LieKind.ForgedContract:
                 return new[] { ContractWage, ContractTerm, ContractEmployer, ContractWorksite };
+            case LieKind.FakeWaiver:
+                return new[] { WaiverNumber, WaiverTransponder };
+            case LieKind.ForgedProof:
+                return new[] { ProofCredit, ProofFunds, ProofPolicy };
             default:
                 return new Forged[0][];
         }
@@ -168,7 +228,7 @@ public static class RecordLies
         forms = forms ?? new RecordForm[0];
         var showable = new List<Forged[]>();
         foreach (Forged[] variant in VariantsOf(kind))
-            if (variant.All(f => Prints(forms, f) && CanForge(kind, f.Category, account, context)))
+            if (variant.All(f => f.Optional || Forgeable(kind, f, forms, account, context)))
                 showable.Add(variant);
 
         if (showable.Count == 0)
@@ -176,9 +236,13 @@ public static class RecordLies
 
         Forged[] chosen = showable.Count == 1 ? showable[0] : showable[rng.Range(0, showable.Count)];
         var tells = new List<RecordTell>(chosen.Length);
+        var made = new Dictionary<ClueCategory, string>();
         foreach (Forged field in chosen)
         {
-            string value = FalseValue(kind, field.Category, account, context, rng);
+            if (field.Optional && !Forgeable(kind, field, forms, account, context))
+                continue;
+            if (!made.TryGetValue(field.Category, out string value))
+                made[field.Category] = value = FalseValue(kind, field.Category, account, context, rng);
             for (int d = 0; d < forms.Count; d++)
                 if (forms[d].FormNumber == field.Form)
                     tells.Add(new RecordTell(d, field.Category, value));
@@ -187,6 +251,10 @@ public static class RecordLies
         return new LiePlan(LieOutcome.Forger, kind, tells.AsReadOnly());
     }
 
+    /// <summary>True when <paramref name="field"/> is printed on the forms and its maker can make a false value for the account (draws nothing).</summary>
+    private static bool Forgeable(LieKind kind, Forged field, IReadOnlyList<RecordForm> forms, CitizenAccount account, RecordLieContext context) =>
+        Prints(forms, field) && CanForge(kind, field.Category, account, context);
+
     /// <summary>True when one of the forms is <paramref name="field"/>'s form and prints its category.</summary>
     private static bool Prints(IReadOnlyList<RecordForm> forms, Forged field) =>
         forms.Any(f => f.FormNumber == field.Form && f.Fields != null && f.Fields.Any(x => x != null && x.category == field.Category));
@@ -194,6 +262,14 @@ public static class RecordLies
     /// <summary>The class of transponder the posed status travels on; null without a posed status.</summary>
     private static TransponderClass? PosedClass(RecordLieContext context) =>
         context.PosedStatus.HasValue ? AccountMaker.ClassOf(context.PosedStatus.Value) : (TransponderClass?)null;
+
+    /// <summary>The class of the transponder a forged manifest or waiver names: a fake waiver's is the account's own (another unit of it); poor posing as rich names a Premium one (the false class); otherwise the account's.</summary>
+    private static TransponderClass ForgedUnitClass(LieKind kind, CitizenAccount account) =>
+        kind == LieKind.FakeWaiver ? account.TransponderClass : FalseTransponderClass(account.TransponderClass) ?? account.TransponderClass;
+
+    /// <summary>True when the account holds the proof of <paramref name="category"/> on file (a forged proof, L4's, is not on file).</summary>
+    private static bool HoldsProofOf(CitizenAccount account, ClueCategory category) =>
+        account.ProofForm != null && !account.ProofForged && account.ProofCategory == category;
 
     /// <summary>True when the category's maker can make a false value for this account (draws nothing); a debtor's classes are the posed status's, which must differ from the account's.</summary>
     private static bool CanForge(LieKind kind, ClueCategory category, CitizenAccount account, RecordLieContext context)
@@ -206,7 +282,16 @@ public static class RecordLies
             case ClueCategory.TransponderClass:
                 return posed ? PosedClass(context).HasValue && PosedClass(context).Value != account.TransponderClass : FalseTransponderClass(account.TransponderClass) != null;
             case ClueCategory.TransponderId:
-                return ModelsOf(FalseTransponderClass(account.TransponderClass) ?? account.TransponderClass, context.Transponders).Count > 0;
+                return ModelsOf(ForgedUnitClass(kind, account), context.Transponders).Count > 0;
+            case ClueCategory.WaiverNo:
+                return account.WaiverNo != null && !string.IsNullOrWhiteSpace(context.WaiverPrefix);
+            case ClueCategory.Debt:
+                return account.Debt > 0;
+            case ClueCategory.Credit:
+            case ClueCategory.Funds:
+                return HoldsProofOf(account, category) && account.ProofAmount > 0;
+            case ClueCategory.PolicyNo:
+                return HoldsProofOf(account, category) && !string.IsNullOrWhiteSpace(PolicyPrefix(context));
             case ClueCategory.CitizenId:
                 return true;
             case ClueCategory.BirthDate:
@@ -235,7 +320,16 @@ public static class RecordLies
             case ClueCategory.TransponderClass:
                 return posed ? PosedClass(context).Value.ToString() : FalseTransponderClass(account.TransponderClass).ToString();
             case ClueCategory.TransponderId:
-                return FalseTransponder(FalseTransponderClass(account.TransponderClass) ?? account.TransponderClass, account.Transponder, context.Transponders, context.TakenToday, rng);
+                return FalseTransponder(ForgedUnitClass(kind, account), account.Transponder, context.Transponders, context.TakenToday, rng);
+            case ClueCategory.WaiverNo:
+                return AgencyNumbers.TakeUnique(context.TakenToday, () => AccountMaker.Numbered(context.WaiverPrefix, rng));
+            case ClueCategory.Debt:
+                return AccountMaker.Credits(DebtSliver(account.Debt, rng));
+            case ClueCategory.Credit:
+            case ClueCategory.Funds:
+                return AccountMaker.Credits(FalseMeans(account.ProofAmount, rng));
+            case ClueCategory.PolicyNo:
+                return AgencyNumbers.TakeUnique(context.TakenToday, () => AccountMaker.Numbered(PolicyPrefix(context), rng));
             case ClueCategory.CitizenId:
                 return FreshCitizenId(context.TakenToday, rng);
             case ClueCategory.Wage:
@@ -342,6 +436,33 @@ public static class RecordLies
             return forged;
         return forged > AccountMaker.MonthDays ? forged - AccountMaker.MonthDays : forged + AccountMaker.MonthDays;
     }
+
+    /// <summary>
+    /// A forged proof's amount (§6.1, L10): the credit line or the savings on
+    /// file times 3 to 10 (one Value draw), rounded to 100 cr; always above
+    /// the amount on file.
+    /// </summary>
+    public static int FalseMeans(int amount, IRandomSource rng)
+    {
+        int forged = RoundTo(amount * (3.0 + 7.0 * rng.Value()), 100);
+        return forged > amount ? forged : amount + 100;
+    }
+
+    /// <summary>
+    /// The debt a debtor posing as poor writes on their waiver (§6.1, L4): a
+    /// sliver of the real <paramref name="debt"/>, a twentieth to a fifth of
+    /// it (one Value draw), rounded to 100 cr and at least 100 cr; 100 cr less
+    /// when the rounding lands on the real debt.
+    /// </summary>
+    public static int DebtSliver(int debt, IRandomSource rng)
+    {
+        int sliver = Math.Max(100, RoundTo(debt * (0.05 + 0.15 * rng.Value()), 100));
+        return sliver != debt ? sliver : Math.Max(0, sliver - 100);
+    }
+
+    /// <summary>The prefix of the policy proof (the proof of means whose category is PolicyNo), or null.</summary>
+    private static string PolicyPrefix(RecordLieContext context) =>
+        (context.Proofs ?? new ProofOfMeans[0]).FirstOrDefault(p => p != null && p.category == ClueCategory.PolicyNo)?.prefix;
 
     /// <summary><paramref name="value"/> rounded to the nearest multiple of <paramref name="step"/> (halves away from zero).</summary>
     private static int RoundTo(double value, int step) => (int)Math.Round(value / step, MidpointRounding.AwayFromZero) * step;

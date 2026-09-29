@@ -351,6 +351,14 @@ public sealed class AccountRequest
 
     /// <summary>The employers the contract may name: those of the worksite's era, by printed name (agency.employers).</summary>
     public IReadOnlyList<string> Employers;
+
+    /// <summary>
+    /// True for a debtor posing as a poor tourist (L4's poor variant, phase
+    /// 9): a proof of means is drawn where a Standard account's would be, and
+    /// the traveller carries it, but the account does not hold it
+    /// (CitizenAccount.ProofForged: the record shows none on file).
+    /// </summary>
+    public bool ForgedProof;
 }
 
 /// <summary>One form of a blueprint as the account maker sees it (phase 8): its number, its request group and whether it prints a Valid Until.</summary>
@@ -406,6 +414,13 @@ public sealed class CitizenAccount
 
     /// <summary>The proof's value as papers and the record print it ("9,400 cr", "TI-551902"); null without a proof.</summary>
     public string ProofValue;
+
+    /// <summary>The proof's amount in credits (a credit line or savings), which a forged proof inflates (L10); 0 for a policy or without a proof.</summary>
+    public int ProofAmount;
+
+    /// <summary>True when the proof the traveller carries is not on file (L4's poor variant, AccountRequest.ForgedProof): their paper prints it, the record shows none.</summary>
+    public bool ProofForged;
+
     /// <summary>The account's standing: Good, or Frozen for a debtor in default (the debt-standing maker sets it; TravelRuleType.DebtStanding reads it).</summary>
     public AccountStanding Standing = AccountStanding.Good;
 
@@ -496,6 +511,7 @@ public static class AccountMaker
     public static bool Carries(string askGroup, string formNumber, CitizenAccount account) =>
         string.IsNullOrEmpty(askGroup) ||
         (askGroup == ProofGroup && account != null && account.ProofForm != null && account.ProofForm == formNumber);
+
     /// <summary>The days of a contract month: terms are drawn and printed in whole months (30 days).</summary>
     public const int MonthDays = 30;
 
@@ -503,7 +519,8 @@ public static class AccountMaker
     /// A citizen's account, in the fixed draw order (§4.3): the Citizen ID
     /// (<see cref="CitizenId"/>, redrawn while taken today); the debt
     /// (<see cref="Amount"/>, one draw); for an account that holds a proof of
-    /// means (<see cref="HoldsProof"/>) the proof (one weighted draw over
+    /// means (<see cref="HoldsProof"/>), or a debtor posing as a poor tourist
+    /// who carries one not on file (AccountRequest.ForgedProof), the proof (one weighted draw over
     /// <paramref name="proofs"/>; none without proofs) and its value (an
     /// amount: <see cref="Amount"/>, one draw; a number: <see cref="Numbered"/>,
     /// redrawn while taken); the transponder model (one weighted
@@ -539,7 +556,7 @@ public static class AccountMaker
         account.CitizenId = AgencyNumbers.TakeUnique(takenToday, () => CitizenId(rng));
         account.Debt = Amount(status.debtMin, status.debtMax, rng);
 
-        if (HoldsProof(request.Status))
+        if (HoldsProof(request.Status) || request.ForgedProof)
         {
             List<ProofOfMeans> held = (proofs ?? Array.Empty<ProofOfMeans>()).Where(p => p != null && p.weight > 0f).ToList();
             ProofOfMeans proof = WeightedRandom.Pick(held, p => p.weight, rng);
@@ -547,9 +564,16 @@ public static class AccountMaker
             {
                 account.ProofForm = proof.form;
                 account.ProofCategory = proof.category;
-                account.ProofValue = IsAmount(proof.category)
-                    ? Credits(Amount(proof.amountMin, proof.amountMax, rng))
-                    : AgencyNumbers.TakeUnique(takenToday, () => Numbered(proof.prefix, rng));
+                account.ProofForged = !HoldsProof(request.Status);
+                if (IsAmount(proof.category))
+                {
+                    account.ProofAmount = Amount(proof.amountMin, proof.amountMax, rng);
+                    account.ProofValue = Credits(account.ProofAmount);
+                }
+                else
+                {
+                    account.ProofValue = AgencyNumbers.TakeUnique(takenToday, () => Numbered(proof.prefix, rng));
+                }
             }
         }
 
@@ -639,7 +663,8 @@ public static class AccountMaker
 /// three groups (Records, Forms on file, Travel) and the note, found by the
 /// Citizen ID or the name. A row whose category is compared is evidence (a
 /// compare pick): the waiver and the proof of means (under the proof's own
-/// category) when the account holds them, and a labourer's registered
+/// category) when the account holds them (a forged proof, carried but not
+/// on file, shows none), and a labourer's registered
 /// contract (three rows: Employer, Term and Wage); the rest (standing, Good
 /// or Frozen with its date, lineage, the
 /// forms not on file, the departure date, past trips, the note) is shown only. Labels and fixed
@@ -675,7 +700,7 @@ public static class AccountRecords
             new RecordRow(text("records.row.transponder"), account.Transponder ?? none, ClueCategory.TransponderId),
             new RecordRow(text("records.row.transponderClass"), account.TransponderClass.ToString(), ClueCategory.TransponderClass),
             account.WaiverNo != null ? new RecordRow(text("records.row.waiver"), account.WaiverNo, ClueCategory.WaiverNo) : new RecordRow(text("records.row.waiver"), none),
-            account.ProofForm != null ? new RecordRow(text("records.row.proof"), account.ProofValue, account.ProofCategory) : new RecordRow(text("records.row.proof"), none)
+            account.ProofForm != null && !account.ProofForged ? new RecordRow(text("records.row.proof"), account.ProofValue, account.ProofCategory) : new RecordRow(text("records.row.proof"), none)
         };
         if (account.HasContract)
         {

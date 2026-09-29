@@ -209,7 +209,7 @@ public static class ContentSheetMap
             Int("queue"),
             Int("tells"),
             List("channels"),
-            List("lies").Note("the lies enabled this day (FalseOrigin, PoorPosingAsRich, DoctoredIdentity, FakeDisplaced, Smuggling); a traveller draws among those that fit their kind"),
+            List("lies").Note("the lies enabled this day (FalseOrigin, PoorPosingAsRich, DoctoredIdentity, FakeDisplaced, Smuggling, DebtorPosingAsTourist, ForgedContract, FakeWaiver, ForgedProof); a traveller draws among those that fit their kind"),
             Rows("dayKinds", "kinds",
                 Text("kind").Required().OneOf("RichTourist", "PoorTourist", "Labourer", "Displaced"),
                 Num("weight"),

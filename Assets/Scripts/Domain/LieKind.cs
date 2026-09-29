@@ -30,11 +30,17 @@ public enum LieKind
     /// </summary>
     Smuggling,
 
-    /// <summary>L4, a debtor posing as a tourist: an Eligible citizen drawn from a tourist entry, whose visa and manifest print the tourist's classes.</summary>
+    /// <summary>L4, a debtor posing as a tourist: an Eligible citizen drawn from a tourist entry, whose papers print the tourist's status and class (as rich: the visa's and the manifest's classes; as poor: the visa's and the proof's class, a sliver of the debt on the waiver, and a proof of means the account does not hold).</summary>
     DebtorPosingAsTourist,
 
     /// <summary>L5, a forged contract: a labourer's contract with a higher wage, a shorter term, another employer or another worksite than the one registered.</summary>
-    ForgedContract
+    ForgedContract,
+
+    /// <summary>L3, a fake waiver: a Stranding Waiver with a number the account never registered, or one made out for another transponder (which also contradicts the manifest).</summary>
+    FakeWaiver,
+
+    /// <summary>L10, a forged proof of means: a credit line, savings or a policy number the account does not hold on file.</summary>
+    ForgedProof
 }
 
 /// <summary>The lies' rules: which kinds of traveller each lie fits, and which lies are record lies. Pure.</summary>
@@ -47,8 +53,10 @@ public static class LieKinds
     /// say), and so is the fake displaced (a 2150 citizen posing as one);
     /// poor posing as rich is drawn from the rich entry; a doctored identity
     /// is a tourist's, and so is a debtor posing as a tourist; a forged
-    /// contract is a labourer's; smuggling is every kind's (the days decide
-    /// when: 2150 citizens from day 4, the displaced from day 5).
+    /// contract is a labourer's; a fake waiver is a poor tourist's or a
+    /// labourer's (the kinds that carry one); a forged proof of means is a
+    /// poor tourist's; smuggling is every kind's (the days decide when: 2150
+    /// citizens from day 4, the displaced from day 5).
     /// </summary>
     public static bool AppliesTo(LieKind lie, TravellerKind kind)
     {
@@ -66,6 +74,10 @@ public static class LieKinds
                 return true;
             case LieKind.ForgedContract:
                 return kind == TravellerKind.Labourer;
+            case LieKind.FakeWaiver:
+                return kind == TravellerKind.PoorTourist || kind == TravellerKind.Labourer;
+            case LieKind.ForgedProof:
+                return kind == TravellerKind.PoorTourist;
             default:
                 return false;
         }

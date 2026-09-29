@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
-/// The record lies (traveller types L1, L2, §6.2-6.3): each maker, the
+/// The record lies (traveller types L1-L5, L10, §6.2-6.3): each maker, the
 /// variants and their draw order, that only the named fields are rewritten,
 /// and that every forged field differs from the account and is provable.
 /// The fixture is a Standard citizen ("418-0937-52", born 3 Jun 2101, on an
@@ -93,7 +93,9 @@ public class RecordLiesTests
         TakenToday = taken ?? Taken(account),
         PosedStatus = posed,
         Employers = Employers,
-        OpenPlaces = OpenPlaces
+        OpenPlaces = OpenPlaces,
+        WaiverPrefix = "SW",
+        Proofs = Proofs()
     };
 
     private static LiePlan Plan(LieKind kind, IRandomSource rng, CitizenAccount account = null, IReadOnlyList<RecordForm> forms = null,
@@ -304,8 +306,227 @@ public class RecordLiesTests
     {
         var rng = new ScriptedRandom();
         Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.DebtorPosingAsTourist, rng, Eligible()).Outcome, "no posed status");
-        Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.DebtorPosingAsTourist, rng, Eligible(), posed: CitizenStatus.Standard).Outcome, "a Standard visa rides an Economy unit like the account's: the class cannot differ (the poor variant is phase 8's)");
+        Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.DebtorPosingAsTourist, rng, Eligible(), posed: CitizenStatus.Standard).Outcome, "a Standard visa rides an Economy unit like the account's, and the rich set carries no waiver for the poor variant");
         Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.DebtorPosingAsTourist, rng, Eligible(), posed: CitizenStatus.Eligible).Outcome, "posing as oneself");
+        Assert.IsTrue(rng.Done);
+    }
+
+    // -----------------------------
+    // The poor set (phase 8's waiver and proofs of means)
+    // -----------------------------
+
+    private const string WaiverNo = "SW-204817";
+
+    /// <summary>The agency's proofs of means: a credit line (TC-415), savings (TC-416) and a policy ("TI", TC-417).</summary>
+    private static List<ProofOfMeans> Proofs() => new List<ProofOfMeans>
+    {
+        new ProofOfMeans { form = RecordLies.CreditAgreement, category = ClueCategory.Credit, amountMin = 4_000, amountMax = 12_000 },
+        new ProofOfMeans { form = RecordLies.ProofOfFunds, category = ClueCategory.Funds, amountMin = 3_000, amountMax = 15_000 },
+        new ProofOfMeans { form = RecordLies.Insurance, category = ClueCategory.PolicyNo, prefix = "TI" }
+    };
+
+    private static readonly ClueCategory[] ProofKinds = { ClueCategory.Credit, ClueCategory.Funds, ClueCategory.PolicyNo };
+
+    private static string ProofFormOf(ClueCategory proof) =>
+        proof == ClueCategory.Credit ? RecordLies.CreditAgreement : proof == ClueCategory.Funds ? RecordLies.ProofOfFunds : RecordLies.Insurance;
+
+    /// <summary>Gives <paramref name="a"/> a proof of <paramref name="proof"/> (a credit line of 9,400 cr, savings of 6,200 cr or policy TI-551902); <paramref name="forged"/> when it is not on file (L4's).</summary>
+    private static CitizenAccount WithProof(CitizenAccount a, ClueCategory proof, bool forged = false)
+    {
+        a.ProofCategory = proof;
+        a.ProofForm = ProofFormOf(proof);
+        a.ProofAmount = proof == ClueCategory.Credit ? 9_400 : proof == ClueCategory.Funds ? 6_200 : 0;
+        a.ProofValue = proof == ClueCategory.PolicyNo ? "TI-551902" : AccountMaker.Credits(a.ProofAmount);
+        a.ProofForged = forged;
+        return a;
+    }
+
+    /// <summary>A poor tourist's account: Standard, the waiver SW-204817 on file, and one proof of means.</summary>
+    private static CitizenAccount Poor(ClueCategory proof = ClueCategory.Credit)
+    {
+        CitizenAccount a = Standard();
+        a.WaiverNo = WaiverNo;
+        return WithProof(a, proof);
+    }
+
+    /// <summary>A debtor posing as a poor tourist (L4): Eligible, 212,000 cr in debt, the waiver on file, and a proof of means they carry but do not hold.</summary>
+    private static CitizenAccount DebtorAsPoor(ClueCategory proof = ClueCategory.Credit)
+    {
+        CitizenAccount a = Eligible();
+        a.WaiverNo = WaiverNo;
+        return WithProof(a, proof, forged: true);
+    }
+
+    /// <summary>The TC-310 Stranding Waiver as printed: Signatory, Citizen ID, Transponder, Debt Passed to Kin, Waiver No., Signature.</summary>
+    private static List<DocumentField> WaiverFields(CitizenAccount a) => new List<DocumentField>
+    {
+        F(ClueCategory.Name, Traveller),
+        F(ClueCategory.CitizenId, a.CitizenId),
+        F(ClueCategory.TransponderId, a.Transponder),
+        F(ClueCategory.Debt, AccountMaker.Credits(a.Debt)),
+        F(ClueCategory.WaiverNo, a.WaiverNo),
+        F(ClueCategory.Signature, Traveller)
+    };
+
+    /// <summary>The proof of means as its form prints it: TC-415 (Borrower, Citizen ID, Destination, Account Class, Credit Line, Valid Until), TC-416 (Account Holder, Citizen ID, Account Class, Funds Held, Valid Until) or TC-417 (Insured, Citizen ID, Destination, Policy No., Valid Until).</summary>
+    private static List<DocumentField> ProofFields(CitizenAccount a)
+    {
+        var fields = new List<DocumentField> { F(ClueCategory.Name, Traveller), F(ClueCategory.CitizenId, a.CitizenId) };
+        if (a.ProofCategory != ClueCategory.Funds)
+            fields.Add(F(ClueCategory.Destination, "New Kingdom Egypt (Ancient)"));
+        if (a.ProofCategory != ClueCategory.PolicyNo)
+            fields.Add(F(ClueCategory.AccountStatus, a.Status.ToString()));
+        fields.Add(F(a.ProofCategory, a.ProofValue));
+        fields.Add(F(ClueCategory.Expiry, "30 Mar 2150"));
+        return fields;
+    }
+
+    /// <summary>The poor set, honest, for <paramref name="a"/>: TC-101, TC-230, TC-310, then the proof the traveller carries (none without one).</summary>
+    private static List<RecordForm> PoorForms(CitizenAccount a)
+    {
+        List<RecordForm> forms = Forms(a);
+        forms.Add(new RecordForm(RecordLies.Waiver, WaiverFields(a)));
+        if (a.ProofForm != null)
+            forms.Add(new RecordForm(a.ProofForm, ProofFields(a)));
+        return forms;
+    }
+
+    /// <summary>The labour set with its waiver (phase 8): TC-520, TC-230, TC-310.</summary>
+    private static List<RecordForm> LabourFormsWithWaiver(CitizenAccount a)
+    {
+        List<RecordForm> forms = LabourForms(a);
+        forms.Add(new RecordForm(RecordLies.Waiver, WaiverFields(a)));
+        return forms;
+    }
+
+    private static (int, ClueCategory, string)[] Tells(LiePlan plan) => plan.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray();
+
+    [Test]
+    public void DebtorPosingAsTourist_AsPoor_PrintsTheStandardClass_ASliverOfTheDebt_AndTheCarriedProofsClass()
+    {
+        CitizenAccount account = DebtorAsPoor();
+        List<RecordForm> forms = PoorForms(account);
+        var rng = new ScriptedRandom(V(0f));
+        LiePlan plan = Plan(LieKind.DebtorPosingAsTourist, rng, account, forms, posed: CitizenStatus.Standard);
+        Assert.IsTrue(rng.Done, "the rich variant cannot show (a Standard visa rides the account's Economy class), so no variant draw; the posed status draws nothing, the sliver one Value");
+        CollectionAssert.AreEqual(
+            new[] { (0, ClueCategory.AccountStatus, "Standard"), (2, ClueCategory.Debt, "10,600 cr"), (3, ClueCategory.AccountStatus, "Standard") },
+            Tells(plan), "212,000 x 0.05 on the waiver; the credit agreement's class made once with the visa's");
+
+        plan.ApplyTo(Docs(forms));
+        CollectionAssert.IsEmpty(PaperChecks.Contradictions(Docs(forms)), "the forger's papers agree with each other: the record proves them");
+        CitizenRecord record = AccountRecords.Record(Traveller, Cover, "New Kingdom Egypt (Ancient)", account, key => key);
+        Assert.IsFalse(record.Groups.SelectMany(g => g.Rows).Any(r => r.IsEvidence && AccountMaker.IsProofCategory(r.Category)), "the carried proof is not on file");
+
+        CitizenAccount policy = DebtorAsPoor(ClueCategory.PolicyNo);
+        LiePlan insured = Plan(LieKind.DebtorPosingAsTourist, new ScriptedRandom(V(1f)), policy, PoorForms(policy), posed: CitizenStatus.Standard);
+        CollectionAssert.AreEqual(new[] { (0, ClueCategory.AccountStatus, "Standard"), (2, ClueCategory.Debt, "42,400 cr") }, Tells(insured),
+                                  "an insurance certificate prints no class: the optional field is skipped, with no draw");
+    }
+
+    // -----------------------------
+    // L3 a fake waiver
+    // -----------------------------
+
+    [Test]
+    public void FakeWaiver_TheNumber_DrawsTheVariantThenAFreshNumber_TheAccountNeverRegistered()
+    {
+        CitizenAccount account = Poor();
+        List<RecordForm> forms = PoorForms(account);
+        HashSet<string> taken = Taken(account);
+        taken.Add(WaiverNo);
+        taken.Add("SW-000001");
+        var rng = new ScriptedRandom(R(0), R(1), R(2));
+        LiePlan plan = Plan(LieKind.FakeWaiver, rng, account, forms, taken: taken);
+        Assert.IsTrue(rng.Done, "the variant between two, then the number (SW-000001 is taken today, so it is redrawn)");
+        CollectionAssert.AreEqual(new[] { (2, ClueCategory.WaiverNo, "SW-000002") }, Tells(plan));
+        CollectionAssert.Contains(taken, "SW-000002");
+
+        plan.ApplyTo(Docs(forms));
+        Assert.AreEqual(WaiverStanding.Unregistered, Strandings.StandingOf(forms[2].Fields, account.WaiverNo), "a forged waiver is no waiver: a stranding fines the clerk");
+        CollectionAssert.IsEmpty(PaperChecks.Contradictions(Docs(forms)), "no other paper prints the waiver's number: the record proves it");
+    }
+
+    [Test]
+    public void FakeWaiver_TheTransponder_IsAnotherUnitOfTheAccountsClass_AndContradictsTheManifest()
+    {
+        CitizenAccount account = Poor();
+        List<RecordForm> forms = PoorForms(account);
+        var rng = new ScriptedRandom(R(1), V(0f), R(3));
+        LiePlan plan = Plan(LieKind.FakeWaiver, rng, account, forms);
+        Assert.IsTrue(rng.Done, "the variant, then the model among the account's other Economy models (weights 2, 1), then its serial");
+        CollectionAssert.AreEqual(new[] { (2, ClueCategory.TransponderId, "Skip Lite · SL-00003") }, Tells(plan));
+
+        plan.ApplyTo(Docs(forms));
+        List<PaperContradiction> cross = PaperChecks.Contradictions(Docs(forms));
+        Assert.AreEqual(1, cross.Count, "the waiver's transponder disagrees with the manifest's (paper vs paper)");
+        Assert.AreEqual(ClueCategory.TransponderId, cross[0].Category);
+        Assert.AreEqual(WaiverStanding.Signed, Strandings.StandingOf(forms[2].Fields, account.WaiverNo), "its number is the registered one");
+    }
+
+    [Test]
+    public void FakeWaiver_WithoutAWaiverCarried_CannotShow_ALabourersCanBeFaked()
+    {
+        var none = new ScriptedRandom();
+        Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.FakeWaiver, none, Standard()).Outcome, "the rich set carries no waiver");
+        CitizenAccount unregistered = Poor();
+        unregistered.WaiverNo = null;
+        List<RecordForm> forms = PoorForms(unregistered);
+        Assert.AreEqual(LieOutcome.NoPossibleLie, RecordLies.Plan(LieKind.FakeWaiver, forms, unregistered, NoTransponders(unregistered), none).Outcome,
+                        "no waiver on file and no model to name: nothing to fake");
+        Assert.IsTrue(none.Done);
+
+        CitizenAccount labourer = Labourer();
+        labourer.WaiverNo = WaiverNo;
+        var rng = new ScriptedRandom(R(0), R(7));
+        LiePlan plan = Plan(LieKind.FakeWaiver, rng, labourer, LabourFormsWithWaiver(labourer));
+        Assert.IsTrue(rng.Done);
+        CollectionAssert.AreEqual(new[] { (2, ClueCategory.WaiverNo, "SW-000007") }, Tells(plan));
+    }
+
+    private static RecordLieContext NoTransponders(CitizenAccount account)
+    {
+        RecordLieContext context = Context(account);
+        context.Transponders = new TransponderModel[0];
+        return context;
+    }
+
+    // -----------------------------
+    // L10 a forged proof of means
+    // -----------------------------
+
+    [TestCase(ClueCategory.Credit, 0f, "28,200 cr")]
+    [TestCase(ClueCategory.Credit, 1f, "94,000 cr")]
+    [TestCase(ClueCategory.Funds, 0.5f, "40,300 cr")]
+    public void ForgedProof_AnAmount_IsThreeToTenTimesTheOneOnFile_WithNoVariantDraw(ClueCategory proof, float roll, string forged)
+    {
+        CitizenAccount account = Poor(proof);
+        List<RecordForm> forms = PoorForms(account);
+        var rng = new ScriptedRandom(V(roll));
+        LiePlan plan = Plan(LieKind.ForgedProof, rng, account, forms);
+        Assert.IsTrue(rng.Done, "the traveller carries one proof, so one variant shows: the amount's one draw");
+        CollectionAssert.AreEqual(new[] { (3, proof, forged) }, Tells(plan));
+    }
+
+    [Test]
+    public void ForgedProof_APolicy_IsAFreshNumberWithThePolicysPrefix()
+    {
+        CitizenAccount account = Poor(ClueCategory.PolicyNo);
+        HashSet<string> taken = Taken(account);
+        taken.Add("TI-551902");
+        var rng = new ScriptedRandom(R(551902), R(88));
+        LiePlan plan = Plan(LieKind.ForgedProof, rng, account, PoorForms(account), taken: taken);
+        Assert.IsTrue(rng.Done, "the policy on file is taken today, so the number is redrawn");
+        CollectionAssert.AreEqual(new[] { (3, ClueCategory.PolicyNo, "TI-000088") }, Tells(plan));
+    }
+
+    [Test]
+    public void ForgedProof_WithoutAProofOnFile_CannotShow()
+    {
+        var rng = new ScriptedRandom();
+        Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.ForgedProof, rng, Standard()).Outcome, "no proof carried");
+        CitizenAccount debtor = DebtorAsPoor();
+        Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.ForgedProof, rng, debtor, PoorForms(debtor)).Outcome, "a proof not on file (L4's) has nothing to be forged against");
         Assert.IsTrue(rng.Done);
     }
 
@@ -368,18 +589,32 @@ public class RecordLiesTests
     // Every forged field differs and is provable
     // -----------------------------
 
-    [TestCase(LieKind.PoorPosingAsRich)]
-    [TestCase(LieKind.DoctoredIdentity)]
-    [TestCase(LieKind.DebtorPosingAsTourist)]
-    [TestCase(LieKind.ForgedContract)]
-    public void EveryForgedField_DiffersFromTheAccount_IsProvable_AndProvesAgainstTheRecord(LieKind kind)
+    [TestCase(LieKind.PoorPosingAsRich, false)]
+    [TestCase(LieKind.DoctoredIdentity, false)]
+    [TestCase(LieKind.DoctoredIdentity, true)]
+    [TestCase(LieKind.DebtorPosingAsTourist, false)]
+    [TestCase(LieKind.DebtorPosingAsTourist, true)]
+    [TestCase(LieKind.ForgedContract, false)]
+    [TestCase(LieKind.FakeWaiver, true)]
+    [TestCase(LieKind.FakeWaiver, false)]
+    [TestCase(LieKind.ForgedProof, true)]
+    public void EveryForgedField_DiffersFromTheAccount_IsProvable_AndProvesAgainstTheRecord(LieKind kind, bool poor)
     {
         for (int seed = 0; seed < 200; seed++)
         {
-            CitizenAccount account = kind == LieKind.ForgedContract ? Labourer() : kind == LieKind.DebtorPosingAsTourist ? Eligible() : Standard();
-            List<RecordForm> forms = kind == LieKind.ForgedContract ? LabourForms(account) : Forms(account);
+            ClueCategory means = ProofKinds[seed % ProofKinds.Length];
+            CitizenAccount account = kind == LieKind.ForgedContract ? Labourer()
+                : kind == LieKind.DebtorPosingAsTourist ? (poor ? DebtorAsPoor(means) : Eligible())
+                : kind == LieKind.FakeWaiver && !poor ? Labourer()
+                : poor ? Poor(means) : Standard();
+            if (kind == LieKind.FakeWaiver && !poor)
+                account.WaiverNo = WaiverNo;
+            List<RecordForm> forms = kind == LieKind.ForgedContract ? LabourForms(account)
+                : kind == LieKind.FakeWaiver && !poor ? LabourFormsWithWaiver(account)
+                : poor ? PoorForms(account) : Forms(account);
             List<DocumentField> honest = forms.SelectMany(f => f.Fields).Select(f => new DocumentField { category = f.category, value = f.value }).ToList();
-            LiePlan plan = Plan(kind, new SeededRandom(seed), account, forms, posed: kind == LieKind.DebtorPosingAsTourist ? CitizenStatus.Premium : (CitizenStatus?)null);
+            CitizenStatus? posed = kind != LieKind.DebtorPosingAsTourist ? (CitizenStatus?)null : poor ? CitizenStatus.Standard : CitizenStatus.Premium;
+            LiePlan plan = Plan(kind, new SeededRandom(seed), account, forms, posed: posed);
             Assert.AreEqual(LieOutcome.Forger, plan.Outcome, $"seed {seed}");
             Assert.IsNotEmpty(plan.RecordTells, $"seed {seed}");
 
@@ -409,11 +644,12 @@ public class RecordLiesTests
     [Test]
     public void TheSameSeed_GivesTheSamePlan()
     {
-        foreach (LieKind kind in new[] { LieKind.PoorPosingAsRich, LieKind.DoctoredIdentity, LieKind.ForgedContract })
+        foreach (LieKind kind in new[] { LieKind.PoorPosingAsRich, LieKind.DoctoredIdentity, LieKind.ForgedContract, LieKind.FakeWaiver, LieKind.ForgedProof })
         {
-            CitizenAccount a = kind == LieKind.ForgedContract ? Labourer() : Standard(), b = kind == LieKind.ForgedContract ? Labourer() : Standard();
-            LiePlan x = Plan(kind, new SeededRandom(11), a, kind == LieKind.ForgedContract ? LabourForms(a) : null, taken: Taken(a));
-            LiePlan y = Plan(kind, new SeededRandom(11), b, kind == LieKind.ForgedContract ? LabourForms(b) : null, taken: Taken(b));
+            bool poor = kind == LieKind.FakeWaiver || kind == LieKind.ForgedProof;
+            CitizenAccount a = kind == LieKind.ForgedContract ? Labourer() : poor ? Poor() : Standard(), b = kind == LieKind.ForgedContract ? Labourer() : poor ? Poor() : Standard();
+            LiePlan x = Plan(kind, new SeededRandom(11), a, kind == LieKind.ForgedContract ? LabourForms(a) : poor ? PoorForms(a) : null, taken: Taken(a));
+            LiePlan y = Plan(kind, new SeededRandom(11), b, kind == LieKind.ForgedContract ? LabourForms(b) : poor ? PoorForms(b) : null, taken: Taken(b));
             CollectionAssert.AreEqual(x.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray(), y.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray(), kind.ToString());
         }
     }
@@ -434,6 +670,37 @@ public class RecordLiesTests
     // -----------------------------
     // The makers
     // -----------------------------
+
+    [Test]
+    public void FalseMeans_IsThreeToTenTimes_RoundedToAHundred_AlwaysAbove()
+    {
+        Assert.AreEqual(28_200, RecordLies.FalseMeans(9_400, new ScriptedRandom(V(0f))));
+        Assert.AreEqual(94_000, RecordLies.FalseMeans(9_400, new ScriptedRandom(V(1f))));
+        Assert.AreEqual(100, RecordLies.FalseMeans(0, new ScriptedRandom(V(0.5f))), "nothing on file still forges an amount above it");
+        for (int seed = 0; seed < 200; seed++)
+        {
+            int amount = 3_000 + 60 * seed;
+            int forged = RecordLies.FalseMeans(amount, new SeededRandom(seed));
+            Assert.Greater(forged, amount, $"seed {seed}");
+            Assert.AreEqual(0, forged % 100, $"seed {seed}");
+        }
+    }
+
+    [Test]
+    public void DebtSliver_IsATwentiethToAFifth_RoundedToAHundred_AtLeastAHundred_NeverTheDebt()
+    {
+        Assert.AreEqual(10_600, RecordLies.DebtSliver(212_000, new ScriptedRandom(V(0f))));
+        Assert.AreEqual(42_400, RecordLies.DebtSliver(212_000, new ScriptedRandom(V(1f))));
+        Assert.AreEqual(100, RecordLies.DebtSliver(400, new ScriptedRandom(V(0f))), "at least 100 cr");
+        Assert.AreEqual(0, RecordLies.DebtSliver(100, new ScriptedRandom(V(0f))), "100 cr less when the sliver lands on the debt");
+        for (int seed = 0; seed < 200; seed++)
+        {
+            int debt = 40_000 + 1_400 * seed;
+            int sliver = RecordLies.DebtSliver(debt, new SeededRandom(seed));
+            Assert.That(sliver, Is.InRange(debt / 20 - 50, debt / 5 + 50), $"seed {seed}");
+            Assert.AreEqual(0, sliver % 100, $"seed {seed}");
+        }
+    }
 
     [Test]
     public void FalseStatus_IsOneClassUp_AfterOneDraw_AndNothingAbovePremium()

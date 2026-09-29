@@ -32,6 +32,14 @@ public class LieKindsTests
     [TestCase(LieKind.ForgedContract, TravellerKind.RichTourist, false)]
     [TestCase(LieKind.ForgedContract, TravellerKind.PoorTourist, false)]
     [TestCase(LieKind.ForgedContract, TravellerKind.Displaced, false)]
+    [TestCase(LieKind.FakeWaiver, TravellerKind.PoorTourist, true)]
+    [TestCase(LieKind.FakeWaiver, TravellerKind.Labourer, true)]
+    [TestCase(LieKind.FakeWaiver, TravellerKind.RichTourist, false)]
+    [TestCase(LieKind.FakeWaiver, TravellerKind.Displaced, false)]
+    [TestCase(LieKind.ForgedProof, TravellerKind.PoorTourist, true)]
+    [TestCase(LieKind.ForgedProof, TravellerKind.RichTourist, false)]
+    [TestCase(LieKind.ForgedProof, TravellerKind.Labourer, false)]
+    [TestCase(LieKind.ForgedProof, TravellerKind.Displaced, false)]
     public void AppliesTo_TheCataloguesKinds(LieKind lie, TravellerKind kind, bool expected)
     {
         Assert.AreEqual(expected, LieKinds.AppliesTo(lie, kind));
@@ -46,6 +54,10 @@ public class LieKindsTests
         CollectionAssert.AreEqual(new[] { LieKind.FalseOrigin }, LieKinds.For(day, TravellerKind.Displaced));
         CollectionAssert.AreEqual(new[] { LieKind.ForgedContract }, LieKinds.For(day, TravellerKind.Labourer));
         CollectionAssert.IsEmpty(LieKinds.For(null, TravellerKind.Displaced));
+
+        var day3 = new List<LieKind> { LieKind.PoorPosingAsRich, LieKind.DoctoredIdentity, LieKind.FakeWaiver, LieKind.DebtorPosingAsTourist, LieKind.ForgedContract, LieKind.ForgedProof };
+        CollectionAssert.AreEqual(new[] { LieKind.DoctoredIdentity, LieKind.FakeWaiver, LieKind.DebtorPosingAsTourist, LieKind.ForgedProof }, LieKinds.For(day3, TravellerKind.PoorTourist), "the poor tourist's four on day 3");
+        CollectionAssert.AreEqual(new[] { LieKind.FakeWaiver, LieKind.ForgedContract }, LieKinds.For(day3, TravellerKind.Labourer), "the labourer's two");
 
         var day4 = new List<LieKind> { LieKind.FalseOrigin, LieKind.Smuggling };
         CollectionAssert.AreEqual(new[] { LieKind.FalseOrigin, LieKind.Smuggling }, LieKinds.For(day4, TravellerKind.Displaced), "the displaced draw between both");
