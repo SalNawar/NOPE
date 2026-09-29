@@ -1083,9 +1083,6 @@ public static partial class WorldContentGenerator
         }
 
         // --- Days: pools, forced slots, chance ---
-        var closures = new HashSet<string>((src.rules ?? Array.Empty<RuleData>())
-            .Where(r => ParseEnum(r.type, out TravelRuleType type) && Directives.IsClosure(type))
-            .Select(r => r.asset));
         foreach (DayData d in src.days)
         {
             string owner = $"Day '{d.asset}'";
@@ -1133,9 +1130,13 @@ public static partial class WorldContentGenerator
                     errors.Add($"{owner} forces premade '{f.premade}' twice.");
                 if (pool.Contains(f.premade))
                     errors.Add($"{owner} both forces and pools premade '{f.premade}'.");
-                if ((d.rules ?? Array.Empty<string>()).Any(closures.Contains) && f.slot <= ViolatorSlots.Window(d.queue))
-                    Debug.LogWarning($"[WorldContentGenerator] {owner} forces premade '{f.premade}' into slot {f.slot}, in the first half of a day with closures: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.");
             }
+
+            // The first half's room (V10): the slots a forced premade or an authored fault may take, against the day's guarantees.
+            IEnumerable<int> standing = (d.forced ?? Array.Empty<ForcedData>())
+                .Where(f => !string.IsNullOrEmpty(f.premade) || !string.IsNullOrEmpty(f.lie) || !string.IsNullOrEmpty(f.directive)).Select(f => f.slot);
+            foreach (string problem in ViolatorSlots.RoomProblems(d.asset, d.queue, standing, Guarantees(src, d)))
+                Debug.LogWarning($"[WorldContentGenerator] {problem}");
         }
 
         // --- Dialog line expressions: only on traveller lines ---
@@ -1550,6 +1551,18 @@ public static partial class WorldContentGenerator
                 kinds.Add((kind, authored.blueprints.TryGetValue(kind, out CaseBlueprintSO b) ? FormNumbers(b) : new string[0]));
 
         errors.AddRange(Directives.DayProblems(d.asset, d.day, active, kinds));
+    }
+
+    /// <summary>How many guaranteed faulty travellers a day plans (Directives.Guarantees over its rules: every closure, a procedure with a maker on its first day).</summary>
+    private static int Guarantees(WorldSource src, DayData d)
+    {
+        var byAsset = (src.rules ?? Array.Empty<RuleData>()).Where(r => r != null).GroupBy(r => r.asset).ToDictionary(g => g.Key, g => g.First());
+        int count = 0;
+        foreach (string name in (d.rules ?? Array.Empty<string>()).Distinct())
+            if (byAsset.TryGetValue(name ?? string.Empty, out RuleData r) && ParseEnum(r.type, out TravelRuleType type) &&
+                Directives.Guarantees(type, d.day, Directives.FirstDay(src.days.Where(x => (x.rules ?? Array.Empty<string>()).Contains(name)).Select(x => x.day))))
+                count++;
+        return count;
     }
 
     /// <summary>The form numbers of a blueprint's templates (null templates skipped).</summary>

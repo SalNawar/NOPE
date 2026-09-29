@@ -42,4 +42,29 @@ public static class ViolatorSlots
         System.Array.Copy(pool, slots, count);
         return slots;
     }
+
+    /// <summary>
+    /// The first half's room (days 7-15 B11, V10): a warning when the window
+    /// (<see cref="Window"/> of <paramref name="queueSize"/>) holds fewer free
+    /// slots than <paramref name="guarantees"/> (the day's guaranteed faulty
+    /// travellers, Directives.Guarantees), once <paramref name="forcedSlots"/>
+    /// (the slots a forced premade or an authored fault may stand in, each
+    /// counted once; <see cref="Pick"/> skips them) are taken: a violator would
+    /// be dropped. Forced slots past the window take no room. Empty when the
+    /// room holds, as Generate World and the validator both read it.
+    /// </summary>
+    public static List<string> RoomProblems(string day, int queueSize, IEnumerable<int> forcedSlots, int guarantees)
+    {
+        var problems = new List<string>();
+        int window = Window(queueSize);
+        var taken = new HashSet<int>();
+        foreach (int slot in forcedSlots ?? new int[0])
+            if (slot >= 1 && slot <= window)
+                taken.Add(slot);
+
+        int free = window - taken.Count;
+        if (free < guarantees)
+            problems.Add($"Day '{day}': the first half of its queue ({window} slots) has {free} free once the forced slots [{string.Join(", ", taken)}] are taken, fewer than its {guarantees} guaranteed faulty travellers, so one would be dropped. Move a forced slot past slot {window}, or lengthen the queue.");
+        return problems;
+    }
 }

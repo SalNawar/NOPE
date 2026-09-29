@@ -930,8 +930,9 @@ public static partial class ContentLibraryValidator
     /// types H2) or a rule naming it (it would forbid nothing), rules no place
     /// of the day can break, premades (pooled or forced) whose claim or true
     /// place is outside the day's world, forced slots beyond the queue, a
-    /// premade forced twice, a forced premade in the first half of a day with
-    /// rules (a warning: it takes a slot a guaranteed violator could need), and
+    /// premade forced twice, the first half's room (a warning when the forced
+    /// slots leave fewer free slots than the day's guarantees,
+    /// ViolatorSlots.RoomProblems: a violator would be dropped), and
     /// a day allowing dress tells without a Costume Guide.
     /// </summary>
     private static int CheckDayPlanPlaces(ContentLibrarySO lib)
@@ -1032,9 +1033,15 @@ public static partial class ContentLibraryValidator
                     issues++;
                 }
 
-                if (plan.GuaranteeRuleViolators && plan.ActiveTravelRules.Any(r => r != null && Directives.Guarantees(r.type, plan.DayNumber, lib.FirstDayOf(r))) && slot.caseIndex1Based <= ViolatorSlots.Window(plan.VisitorsCount))
+            }
+
+            if (plan.GuaranteeRuleViolators)
+            {
+                IEnumerable<int> standing = plan.ForcedCases.Where(f => f != null && (f.legendary != null || f.hasLie || f.directive != PlannedDirective.None)).Select(f => f.caseIndex1Based);
+                int guarantees = plan.ActiveTravelRules.Where(r => r != null).Distinct().Count(r => Directives.Guarantees(r.type, plan.DayNumber, lib.FirstDayOf(r)));
+                foreach (string problem in ViolatorSlots.RoomProblems(plan.name, plan.VisitorsCount, standing, guarantees))
                 {
-                    Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' forces premade '{slot.legendary.displayName}' into slot {slot.caseIndex1Based}, in the first half of a day with rules: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.", plan);
+                    Debug.LogWarning($"[ContentLibraryValidator] {problem}", plan);
                     issues++;
                 }
             }
