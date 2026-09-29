@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// The day's interview, fixed at day start: which questions are askable (and
-/// of which kinds of traveller, traveller types I1), which of them may carry
-/// a spoken tell, and which narrative dialogs are
+/// The day's interview, fixed at day start: which questions are askable (the
+/// same for every traveller, the personalities spec's W1-W3), which of them
+/// may carry a spoken tell, and which narrative dialogs are
 /// offered (their conditions pass on the day-start snapshot, their structure
 /// is sound, a one-shot dialog is not done yet, and a dialog bound to a
 /// premade only while that premade is at the desk). Every availability rule
@@ -12,7 +12,6 @@ using System.Collections.Generic;
 public sealed class InterviewDay
 {
     private readonly List<InterviewQuestion> _questions = new List<InterviewQuestion>();
-    private readonly List<bool> _dayOnly = new List<bool>();
     private readonly List<ClueCategory> _askable = new List<ClueCategory>();
     private readonly List<ClueCategory> _answerTell = new List<ClueCategory>();
     private readonly List<AuthoredDialog> _dayStartDialogs = new List<AuthoredDialog>();
@@ -48,7 +47,6 @@ public sealed class InterviewDay
                     continue;
 
                 _questions.Add(q.Item);
-                _dayOnly.Add(Gates.DayOnly(q.Conditions));
                 _askable.Add(q.Item.category);
                 if (Gates.DayOnly(q.Conditions))
                     _answerTell.Add(q.Item.category);
@@ -79,49 +77,18 @@ public sealed class InterviewDay
     /// <summary>The forms the desk may ask a traveller of <paramref name="kind"/> for (FormRequests.For over the day's forms), in template order.</summary>
     public IReadOnlyList<AskableForm> AskableForms(TravellerKind kind) => FormRequests.For(kind, _forms);
 
-    /// <summary>Today's askable questions of every kind, in library order (a traveller is asked those of their kind: <see cref="QuestionsFor"/>).</summary>
+    /// <summary>Today's askable questions, in library order: every traveller of the day is asked each, in the same words (the personalities spec's W3).</summary>
     public IReadOnlyList<InterviewQuestion> Questions => _questions;
 
-    /// <summary>The askable questions' categories of every kind, in the same order (a category may repeat across kinds; <see cref="AskableCategoriesFor"/> holds each once).</summary>
+    /// <summary>The askable questions' categories, in the same order, each once (one question per category: InterviewQuestions.Problems): every traveller answers each.</summary>
     public IReadOnlyList<ClueCategory> AskableCategories => _askable;
 
     /// <summary>
-    /// The categories of the askable questions gated by day alone, of every
-    /// kind, in the same order: only these may carry an Answer tell (a
-    /// question gated by an upgrade, a flag, a counter or stability is
-    /// hint-only).
+    /// The categories of the askable questions gated by day alone, in the same
+    /// order: only these may carry an Answer tell (a question gated by an
+    /// upgrade, a flag, a counter or stability is hint-only).
     /// </summary>
     public IReadOnlyList<ClueCategory> AnswerTellCategories => _answerTell;
-
-    /// <summary>Today's askable questions the desk asks a traveller of <paramref name="kind"/> (InterviewQuestion.AsksOf; traveller types I1), in library order.</summary>
-    public IReadOnlyList<InterviewQuestion> QuestionsFor(TravellerKind kind)
-    {
-        var questions = new List<InterviewQuestion>();
-        foreach (InterviewQuestion q in _questions)
-            if (q.AsksOf(kind))
-                questions.Add(q);
-        return questions;
-    }
-
-    /// <summary>The categories of <see cref="QuestionsFor"/>, in the same order: a traveller of the kind answers each (one question per category per kind: InterviewQuestions.Problems).</summary>
-    public IReadOnlyList<ClueCategory> AskableCategoriesFor(TravellerKind kind)
-    {
-        var categories = new List<ClueCategory>();
-        foreach (InterviewQuestion q in _questions)
-            if (q.AsksOf(kind))
-                categories.Add(q.category);
-        return categories;
-    }
-
-    /// <summary>The categories of the kind's askable questions gated by day alone, in the same order: only these may carry a traveller of the kind's Answer tell.</summary>
-    public IReadOnlyList<ClueCategory> AnswerTellCategoriesFor(TravellerKind kind)
-    {
-        var categories = new List<ClueCategory>();
-        for (int i = 0; i < _questions.Count; i++)
-            if (_dayOnly[i] && _questions[i].AsksOf(kind))
-                categories.Add(_questions[i].category);
-        return categories;
-    }
 
     /// <summary>Every structural problem of every dialog, whether or not its conditions pass ("Dialog 'x' is not offered: ...").</summary>
     public IReadOnlyList<string> ContentProblems => _problems;
@@ -176,64 +143,45 @@ public sealed class InterviewDay
 }
 
 /// <summary>
-/// The questions' content rules (traveller types I1), the one rule Generate
-/// World and the content validator share: one question per category per
-/// kind, so every traveller has one answer per category, and the ask menu's
-/// worst case is the fullest kind's. Pure.
+/// The questions' content rules (the personalities spec's W3: one question
+/// per category, asked of every traveller in the same words), the one rule
+/// Generate World and the content validator share: one question per
+/// category, so every traveller has one answer per category, and the ask
+/// menu's worst case is every question. Pure.
 /// </summary>
 public static class InterviewQuestions
 {
-    /// <summary>Every kind of traveller, in enum order.</summary>
-    private static readonly TravellerKind[] Kinds = (TravellerKind[])System.Enum.GetValues(typeof(TravellerKind));
-
     /// <summary>
-    /// The questions that ask a kind about a category another question of
-    /// that kind already asks (a question naming no kind asks every kind):
-    /// "Question 'q_trip_currency' asks about Currency for Displaced, as
-    /// 'q_currency' does (one question per category per kind)." Null entries
-    /// are skipped; empty when sound.
+    /// The questions that ask about a category an earlier question already
+    /// asks: "Question 'q_trip_currency' asks about Currency, as 'q_currency'
+    /// does (one question per category: every traveller is asked each)."
+    /// Null entries are skipped; empty when sound.
     /// </summary>
     public static List<string> Problems(IReadOnlyList<InterviewQuestion> questions)
     {
         var problems = new List<string>();
-        if (questions == null)
-            return problems;
-
-        foreach (TravellerKind kind in Kinds)
+        var first = new Dictionary<ClueCategory, string>();
+        foreach (InterviewQuestion q in questions ?? new InterviewQuestion[0])
         {
-            var first = new Dictionary<ClueCategory, string>();
-            foreach (InterviewQuestion q in questions)
-            {
-                if (q == null || !q.AsksOf(kind))
-                    continue;
-                if (first.TryGetValue(q.category, out string earlier))
-                    problems.Add($"Question '{q.id}' asks about {q.category} for {kind}, as '{earlier}' does (one question per category per kind).");
-                else
-                    first.Add(q.category, q.id);
-            }
+            if (q == null)
+                continue;
+            if (first.TryGetValue(q.category, out string earlier))
+                problems.Add($"Question '{q.id}' asks about {q.category}, as '{earlier}' does (one question per category: every traveller is asked each).");
+            else
+                first.Add(q.category, q.id);
         }
 
         return problems;
     }
 
-    /// <summary>How many of the questions one kind of traveller is asked, at most (the ask menu's worst case); 0 for null.</summary>
-    public static int MostForOneKind(IReadOnlyList<InterviewQuestion> questions)
+    /// <summary>How many questions there are (null entries skipped; 0 for null): every traveller is asked each, so this is the ask menu's worst case.</summary>
+    public static int Count(IReadOnlyList<InterviewQuestion> questions)
     {
-        int most = 0;
-        if (questions == null)
-            return most;
-
-        foreach (TravellerKind kind in Kinds)
-        {
-            int count = 0;
-            foreach (InterviewQuestion q in questions)
-                if (q != null && q.AsksOf(kind))
-                    count++;
-            if (count > most)
-                most = count;
-        }
-
-        return most;
+        int count = 0;
+        foreach (InterviewQuestion q in questions ?? new InterviewQuestion[0])
+            if (q != null)
+                count++;
+        return count;
     }
 }
 

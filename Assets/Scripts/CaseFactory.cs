@@ -114,13 +114,13 @@ public sealed class CaseFactory
     /// <summary>Today's tell channels: the plan's, minus Appearance where no garment can be looked at.</summary>
     private IReadOnlyList<TellChannel> _channels = System.Array.Empty<TellChannel>();
 
-    /// <summary>Today's interview (the questions per kind of traveller); null where nothing spoken can be read.</summary>
+    /// <summary>Today's interview (the same questions for every traveller); null where nothing spoken can be read.</summary>
     private InterviewDay _interview;
 
-    /// <summary>The current traveller's askable question categories, their kind's; they answer each (InterviewDay.AskableCategoriesFor).</summary>
+    /// <summary>Today's askable question categories; every traveller answers each (InterviewDay.AskableCategories).</summary>
     private IReadOnlyList<ClueCategory> _askable = System.Array.Empty<ClueCategory>();
 
-    /// <summary>The current traveller's question categories that may carry an Answer tell (their kind's day-gated questions; InterviewDay.AnswerTellCategoriesFor).</summary>
+    /// <summary>Today's question categories that may carry an Answer tell (the day-gated questions; InterviewDay.AnswerTellCategories).</summary>
     private IReadOnlyList<ClueCategory> _answerTellCategories = System.Array.Empty<ClueCategory>();
 
     /// <summary>Categories with a reference book (only these can carry a place-fact tell).</summary>
@@ -159,10 +159,11 @@ public sealed class CaseFactory
     /// forced premade (not met yet this run) stands in its slot. Each slot
     /// draws from its own streams (Seeds.ForCase and its salted streams), so
     /// one traveller's draws never shift the next one's. Every traveller
-    /// answers each of their kind's askable questions
-    /// (<paramref name="interview"/>, InterviewDay.AskableCategoriesFor); only
-    /// their kind's day-gated ones (InterviewDay.AnswerTellCategoriesFor) may
-    /// carry a spoken tell; a null interview asks nothing (nothing spoken can
+    /// answers each of today's askable questions
+    /// (<paramref name="interview"/>, InterviewDay.AskableCategories: the same
+    /// for everyone); only the day-gated ones (InterviewDay.AnswerTellCategories)
+    /// may carry a spoken tell (a smuggler's only among Currency and Technology,
+    /// Lies.SmuggledCategories); a null interview asks nothing (nothing spoken can
     /// be read). A dress tell needs <paramref name="appearanceReachable"/>
     /// (a garment can be looked at and compared).
     /// </summary>
@@ -417,8 +418,8 @@ public sealed class CaseFactory
         }
 
         inst.kind = blueprint.Kind;
-        _askable = _interview != null ? _interview.AskableCategoriesFor(inst.kind) : System.Array.Empty<ClueCategory>();
-        _answerTellCategories = _interview != null ? _interview.AnswerTellCategoriesFor(inst.kind) : System.Array.Empty<ClueCategory>();
+        _askable = _interview != null ? _interview.AskableCategories : System.Array.Empty<ClueCategory>();
+        _answerTellCategories = _interview != null ? _interview.AnswerTellCategories : System.Array.Empty<ClueCategory>();
 
         // 4.6) The directive fault (traveller types P1): a closed destination, read against today's Directives.
         inst.directiveFault = plan.ClaimAllowed(nation, claimedEra) ? DirectiveFault.None : DirectiveFault.ClosedDestination;
@@ -1088,7 +1089,7 @@ public sealed class CaseFactory
     };
 
     /// <summary>
-    /// The traveller's answer to each of their kind's askable questions, in
+    /// The traveller's answer to each of today's askable questions, in
     /// question order: the cover value ResolveFieldValue gives the papers (the
     /// registered birth date, the claim's fact or its placeholder), or an
     /// Answer tell's true-home value (Interview.Answer). Reads the claim, never

@@ -546,22 +546,7 @@ public static partial class WorldContentGenerator
             else if (!Forgery.IsProvableCategory(category, bookCategories))
                 errors.Add($"{owner} asks about {category}, which no reference book (or, for a birth date, the Citizen Record) can prove.");
 
-            // The kinds it is asked of (traveller types I1): known, none twice; blank asks every kind.
-            bool kindsSound = true;
-            var seenKinds = new HashSet<string>();
-            foreach (string name in q.kinds ?? Array.Empty<string>())
-            {
-                if (!ParseEnum(name, out TravellerKind _))
-                {
-                    errors.Add($"{owner} names '{name}' in \"kinds\", which is not a traveller kind ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}).");
-                    kindsSound = false;
-                }
-                else if (!seenKinds.Add(name))
-                {
-                    errors.Add($"{owner} names the kind {name} twice.");
-                }
-            }
-            if (categorySound && kindsSound)
+            if (categorySound)
                 built.Add(BuildQuestion(q));
 
             if (string.IsNullOrWhiteSpace(q.label))
@@ -703,7 +688,7 @@ public static partial class WorldContentGenerator
         bool anySmallTalk = src.eras.Any(e => e.smallTalk != null && e.smallTalk.Length > 0) ||
                             src.places.Any(p => p.smallTalk != null && p.smallTalk.Length > 0);
         var premadeDialogs = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => !string.IsNullOrEmpty(m.dialog)).Select(m => m.dialog));
-        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.MostForOneKind(built), anySmallTalk, kindForms.Select(k => FormRequests.Count(k.Askable)).DefaultIfEmpty(0).Max(), requests.Length,
+        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.Count(built), anySmallTalk, kindForms.Select(k => FormRequests.Count(k.Askable)).DefaultIfEmpty(0).Max(), requests.Length,
                                                              dialogs.Count(d => !premadeDialogs.Contains(d.id)), dialogs.Count(d => premadeDialogs.Contains(d.id)), iv.menuCapacity))
             errors.Add(problem);
 
@@ -1767,12 +1752,11 @@ public static partial class WorldContentGenerator
             .ToList();
     }
 
-    /// <summary>A question with generated line ids ("{id}.prompt", "{id}.{era}.answer", ...) and the kinds it is asked of (CheckInterview parsed them first).</summary>
+    /// <summary>A question with generated line ids ("{id}.prompt", "{id}.answer", "{id}.overrides.{n}.answer"), asked of every traveller (CheckInterview parsed its category first).</summary>
     private static InterviewQuestion BuildQuestion(QuestionData q) => new InterviewQuestion
     {
         id = q.id,
         category = (ClueCategory)Enum.Parse(typeof(ClueCategory), q.category),
-        kinds = (q.kinds ?? Array.Empty<string>()).Select(k => (TravellerKind)Enum.Parse(typeof(TravellerKind), k)).ToList(),
         label = q.label,
         prompt = new LineText(QuestionLineId(q.id, PromptPart), q.prompt),
         answer = new LineText(QuestionLineId(q.id, AnswerPart), q.answer),
@@ -2233,12 +2217,11 @@ public static partial class WorldContentGenerator
     /// <summary>A missing-form reply (interview.missingFormReplies): the kind and variant by name, the request a form number or a group id.</summary>
     [Serializable] private sealed class MissingReplyData { public string kind; public string request; public string variant; public string text; }
 
-    /// <summary>A question; fromDay is required (0 = missing), announce is required exactly when the question is gated; kinds names the traveller kinds it is asked of (blank: every kind).</summary>
+    /// <summary>A question, asked of every traveller (the personalities spec's W3); fromDay is required (0 = missing), announce is required exactly when the question is gated; overrides change the answer by kinds and era.</summary>
     [Serializable] private sealed class QuestionData
     {
         public string id;
         public string category;
-        public string[] kinds;
         public string label;
         public string prompt;
         public string answer;

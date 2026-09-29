@@ -267,7 +267,7 @@ public static partial class ContentLibraryValidator
         foreach (string problem in FormRequests.ReplyProblems(lines.missingFormReplies, forms, kindForms))
             Error($"{problem} (run Tools > TimeDesk > Generate World)", lib);
 
-        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.MostForOneKind(questions), smallTalk, MaxRequests(kindForms),
+        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.Count(questions), smallTalk, MaxRequests(kindForms),
                                                              (lines.requests ?? new List<InterviewRequest>()).Count(r => r != null),
                                                              lib.Dialogs.Count(d => d != null) - bound, bound, lines.menuCapacity))
             Error(problem, lib);

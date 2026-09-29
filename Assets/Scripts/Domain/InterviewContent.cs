@@ -194,12 +194,6 @@ public sealed class InterviewQuestion
     /// <summary>The answer per kinds and claimed era (only the sentence changes, never the value).</summary>
     public List<WordingOverride> overrides = new();
 
-    /// <summary>The kinds of traveller the desk asks it of (world_source.json questions[].kinds; traveller types I1: the trip questions the 2150 citizens', the home questions the displaced's); empty: every kind.</summary>
-    public List<TravellerKind> kinds = new();
-
-    /// <summary>True when the desk asks this question of a traveller of <paramref name="kind"/>: one of its kinds, or every kind when it names none.</summary>
-    public bool AsksOf(TravellerKind kind) => kinds == null || kinds.Count == 0 || kinds.Contains(kind);
-
     /// <summary>
     /// The answer template of a traveller of <paramref name="kind"/> claiming
     /// <paramref name="eraId"/>: the best-scoring override (ContextMatch:
