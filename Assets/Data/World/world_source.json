@@ -7199,8 +7199,7 @@
     ],
     "requestPrompt": "Your {document}, please.",
     "requestReply": "Here you are.",
-    "askLabel": "Ask about home >",
-    "tripAskLabel": "Ask about the trip >",
+    "askLabel": "Ask about the trip >",
     "backLabel": "< Back",
     "smallTalkLabel": "Small talk",
     "smallTalkPrompt": "How is life back home?",
@@ -7254,6 +7253,60 @@
         "request": "TC-310",
         "variant": "Missing",
         "text": "I... didn't get round to that one."
+      },
+      {
+        "kind": "Displaced",
+        "request": "TC-230",
+        "variant": "Honest",
+        "text": "A manifest? I was pulled out of my own time. I didn't pack."
+      },
+      {
+        "kind": "Displaced",
+        "request": "TC-310",
+        "variant": "Honest",
+        "text": "A waiver? Nobody asked me anything before the sky opened."
+      },
+      {
+        "kind": "Displaced",
+        "request": "proof",
+        "variant": "Honest",
+        "text": "Means? I have what was in my pockets when the sky opened."
+      },
+      {
+        "kind": "RichTourist",
+        "request": "TC-620",
+        "variant": "Honest",
+        "text": "An intake declaration? I'm leaving, not arriving."
+      },
+      {
+        "kind": "RichTourist",
+        "request": "TC-630",
+        "variant": "Honest",
+        "text": "A return order? I have a return booking. Is that the same thing?"
+      },
+      {
+        "kind": "PoorTourist",
+        "request": "TC-620",
+        "variant": "Honest",
+        "text": "An intake declaration? I'm leaving, not arriving."
+      },
+      {
+        "kind": "PoorTourist",
+        "request": "TC-630",
+        "variant": "Honest",
+        "text": "A return order? I have a return booking. Is that the same thing?"
+      },
+      {
+        "kind": "Labourer",
+        "request": "TC-620",
+        "variant": "Honest",
+        "text": "An intake declaration? I'm leaving, not arriving."
+      },
+      {
+        "kind": "Labourer",
+        "request": "TC-630",
+        "variant": "Honest",
+        "text": "A return order? I have a return booking. Is that the same thing?"
       }
     ],
     "menuCapacity": 8,
@@ -7264,19 +7317,24 @@
     {
       "id": "q_currency",
       "category": "Currency",
-      "kinds": [
-        "Displaced"
-      ],
       "label": "Currency",
-      "prompt": "What money do you pay with at home?",
-      "answer": "We pay in {value}.",
-      "fromDay": 1,
-      "announce": "",
+      "prompt": "What will you pay with in {place}?",
+      "answer": "I've changed my money into {value}.",
+      "fromDay": 4,
+      "announce": "BUREAU NOTICE: from today, desk officers ask every traveller what they will pay with. Check answers against the Currency Ledger: nothing from 2150 leaves 2150.",
       "conditions": [],
       "overrides": [
         {
+          "kinds": [
+            "Displaced"
+          ],
+          "answer": "We pay in {value}."
+        },
+        {
           "era": "ancient",
-          "prompt": "What do you trade with at home?",
+          "kinds": [
+            "Displaced"
+          ],
           "answer": "We trade with {value}."
         }
       ]
@@ -7284,90 +7342,74 @@
     {
       "id": "q_language",
       "category": "Language",
-      "kinds": [
-        "Displaced"
-      ],
       "label": "Language",
-      "prompt": "What language do you speak at home?",
-      "answer": "At home we speak {value}.",
-      "fromDay": 1,
-      "announce": "",
+      "prompt": "What language will you speak in {place}?",
+      "answer": "I've been practising my {value}.",
+      "fromDay": 5,
+      "announce": "BUREAU NOTICE: desk officers may now ask every traveller what language they will speak. Check answers against Tongues & Scripts.",
       "conditions": [],
-      "overrides": []
+      "overrides": [
+        {
+          "kinds": [
+            "Displaced"
+          ],
+          "answer": "At home we speak {value}."
+        }
+      ]
     },
     {
       "id": "q_device",
       "category": "Technology",
-      "kinds": [
-        "Displaced"
-      ],
-      "label": "Device",
-      "prompt": "What tool do you use every day?",
-      "answer": "Every day I use {value}.",
-      "fromDay": 1,
-      "announce": "",
-      "conditions": [],
-      "overrides": []
-    },
-    {
-      "id": "q_capital",
-      "category": "Geography",
-      "kinds": [
-        "Displaced"
-      ],
-      "label": "Capital",
-      "prompt": "What is the capital of your land?",
-      "answer": "Our capital is {value}.",
-      "fromDay": 5,
-      "announce": "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
-      "conditions": [],
-      "overrides": []
-    },
-    {
-      "id": "q_ruler",
-      "category": "Politics",
-      "kinds": [
-        "Displaced"
-      ],
-      "label": "Ruler",
-      "prompt": "Who rules your land?",
-      "answer": "We are ruled by {value}.",
-      "fromDay": 5,
-      "announce": "BUREAU NOTICE: desk officers may now ask travellers who rules them. Check answers against Rulers & Regents.",
-      "conditions": [],
-      "overrides": []
-    },
-    {
-      "id": "q_trip_currency",
-      "category": "Currency",
-      "kinds": [
-        "RichTourist",
-        "PoorTourist",
-        "Labourer"
-      ],
-      "label": "Currency",
-      "prompt": "What will you pay with in {place}?",
-      "answer": "I've changed my money into {value}.",
-      "fromDay": 4,
-      "announce": "BUREAU NOTICE: from today, desk officers ask departing citizens what they will pay with. Check answers against the Currency Ledger: nothing from 2150 leaves 2150.",
-      "conditions": [],
-      "overrides": []
-    },
-    {
-      "id": "q_trip_device",
-      "category": "Technology",
-      "kinds": [
-        "RichTourist",
-        "PoorTourist",
-        "Labourer"
-      ],
       "label": "Device",
       "prompt": "What are you taking with you?",
       "answer": "Just the approved kit: {value}.",
       "fromDay": 4,
-      "announce": "BUREAU NOTICE: from today, desk officers ask departing citizens what they are taking with them. Check answers against the Index of Devices: nothing from 2150 leaves 2150.",
+      "announce": "BUREAU NOTICE: from today, desk officers ask every traveller what they are taking with them. Check answers against the Index of Devices: nothing from 2150 leaves 2150.",
       "conditions": [],
-      "overrides": []
+      "overrides": [
+        {
+          "kinds": [
+            "Displaced"
+          ],
+          "answer": "Every day I use {value}."
+        }
+      ]
+    },
+    {
+      "id": "q_capital",
+      "category": "Geography",
+      "label": "Capital",
+      "prompt": "Which city in {place} are you headed for?",
+      "answer": "{value}, like the brochure says.",
+      "fromDay": 5,
+      "announce": "BUREAU NOTICE: desk officers may now ask every traveller which city they are headed for. Check answers against the Capitals Gazetteer.",
+      "conditions": [],
+      "overrides": [
+        {
+          "kinds": [
+            "Displaced"
+          ],
+          "answer": "Our capital is {value}."
+        }
+      ]
+    },
+    {
+      "id": "q_ruler",
+      "category": "Politics",
+      "label": "Ruler",
+      "prompt": "Who rules {place} these days?",
+      "answer": "{value}, I'm told.",
+      "fromDay": 5,
+      "announce": "BUREAU NOTICE: desk officers may now ask every traveller who rules where they are going. Check answers against Rulers & Regents.",
+      "conditions": [],
+      "overrides": [
+        {
+          "kinds": [
+            "Displaced"
+          ],
+          "answer": "We are ruled by {value}."
+        }
+      ]
     },
     {
       "id": "q_born",

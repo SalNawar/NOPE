@@ -245,8 +245,7 @@ public static class ContentSheetMap
                 Text("label").Note("the papers menu's one entry for the group")).Note("request groups: several forms as one request"),
             Text("requestPrompt"),
             Text("requestReply"),
-            Text("askLabel").Note("the ask entry for the displaced"),
-            Text("tripAskLabel").Note("the ask entry for a 2150 citizen, who is asked about the trip"),
+            Text("askLabel").Note("the ask entry, the same for every traveller"),
             Text("backLabel"),
             Text("smallTalkLabel"),
             Text("smallTalkPrompt"),
@@ -268,7 +267,6 @@ public static class ContentSheetMap
         Rows("questions", "questions", Key("id", "question"),
             Text("id").Required(),
             Text("category"),
-            List("kinds").Omit().Note("the traveller kinds the desk asks it of (RichTourist, PoorTourist, Labourer, Displaced); blank: every kind; one question per category per kind"),
             Text("label"),
             Text("prompt"),
             Text("answer"),
@@ -276,9 +274,9 @@ public static class ContentSheetMap
             Text("announce"),
             GateConditions("questionConditions"),
             Rows("questionOverrides", "overrides",
-                Text("era").Ref("eras"),
-                Text("prompt"),
-                Text("answer")).Note("the wording in one era"));
+                Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                List("kinds").Omit().Note("the traveller kinds (RichTourist, PoorTourist, Labourer, Displaced); blank: any"),
+                Text("answer")).Note("the answer for some kinds, an era or both (the most specific wins: kinds 2, era 1); every traveller is asked the question's own prompt")).Note("one question per category, asked of every traveller in the same words");
 
     private static SheetSpec Dialogs() =>
         Rows("dialogs", "dialogs", Key("id", "dialog"),
