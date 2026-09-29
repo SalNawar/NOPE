@@ -102,6 +102,19 @@ public class LooksTests
     }
 
     [Test]
+    public void Compose_NoWeightOnTheFiveTones_TakesTheDefaultTone_WithoutASkinDraw()
+    {
+        // A weight past the fifth tone names no tone: the look falls back to tone 3 and draws only the face and the hair.
+        LookWeights weights = Weights();
+        weights.skin = new[] { 0f, 0f, 0f, 0f, 0f, 7f };
+        var rng = new ScriptedRandom(R(1), V(0f));
+        TravellerLook look = Compose(TravellerGender.Male, rng: rng, weights: weights);
+        Assert.IsTrue(rng.Done, "two draws, no skin draw");
+        Assert.AreEqual(3, look.SkinTone);
+        Assert.AreEqual("b", look.Face);
+    }
+
+    [Test]
     public void Compose_UnknownGender_DrawsTheGenderFirst()
     {
         var rng = new ScriptedRandom(V(0.7f), V(0f), R(0), V(0.9f));

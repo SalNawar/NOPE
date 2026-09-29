@@ -540,15 +540,28 @@ public static class Looks
     private static string ArtName(LookSlot slot, TravellerGender gender, LookItem item, LookSource source) =>
         LookKeys.Garment(LayerOf(slot), gender, item.ArtNation(source.NationId), source.EraId, null, item.artVariant).Name;
 
-    /// <summary>One weighted pick of a skin tone (1..5); 3 with no draw when every weight is 0 or missing.</summary>
+    /// <summary>The skin tones' indices 0..SkinTones-1 (tone = index + 1), built once for PickSkin.</summary>
+    private static readonly int[] ToneIndices = Enumerable.Range(0, LookKeys.SkinTones).ToArray();
+
+    /// <summary>One weighted pick of a skin tone (1..5); 3 with no draw when none of the five tones has a weight (a weight past the fifth names no tone).</summary>
     private static int PickSkin(LookWeights weights, IRandomSource rng)
     {
         float[] skin = weights != null ? weights.skin : null;
-        if (skin == null || skin.All(w => w <= 0f))
+        if (!AnyToneWeighted(skin))
             return DefaultSkin;
 
-        var tones = Enumerable.Range(0, LookKeys.SkinTones).ToList();
-        return 1 + WeightedRandom.Pick(tones, i => i < skin.Length ? skin[i] : 0f, rng);
+        return 1 + WeightedRandom.Pick(ToneIndices, i => i < skin.Length ? skin[i] : 0f, rng);
+    }
+
+    /// <summary>True when one of the first SkinTones weights is positive.</summary>
+    private static bool AnyToneWeighted(float[] skin)
+    {
+        if (skin == null)
+            return false;
+        for (int i = 0; i < skin.Length && i < LookKeys.SkinTones; i++)
+            if (skin[i] > 0f)
+                return true;
+        return false;
     }
 
     /// <summary>The last band whose minimum age the traveller reached (the first band when the age is unknown or below every band).</summary>
