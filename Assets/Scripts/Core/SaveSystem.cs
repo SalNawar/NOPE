@@ -60,6 +60,14 @@ public static class SaveSystem
         public WorldState world;
     }
 
+    /// <summary>A save file read for its version only: the world is not built, so checking every file of the slot stays cheap (audit R3-022: a boot parsed the whole world about six times).</summary>
+    [Serializable]
+    private sealed class SaveVersionOnly
+    {
+        /// <summary>The save's version (0 when the file has none).</summary>
+        public int version;
+    }
+
     /// <summary>Returns true if a file of the slot holds a save this build can continue (older versions are ignored with a warning).</summary>
     public static bool HasSave()
     {
@@ -70,7 +78,7 @@ public static class SaveSystem
             return false;
         }
 
-        Debug.Log($"[SaveSystem] HasSave: true ('{PathOf(source)}', version {ReadVersion(PathOf(source))}).");
+        Debug.Log($"[SaveSystem] HasSave: true ('{PathOf(source)}').");
         return true;
     }
 
@@ -97,12 +105,12 @@ public static class SaveSystem
         return false;
     }
 
-    /// <summary>The file's save version, or -1 if it is missing or unreadable.</summary>
+    /// <summary>The file's save version, or -1 if it is missing or unreadable (the world in it is not built).</summary>
     private static int ReadVersion(string path)
     {
         try
         {
-            SaveFile file = JsonUtility.FromJson<SaveFile>(File.ReadAllText(path));
+            SaveVersionOnly file = JsonUtility.FromJson<SaveVersionOnly>(File.ReadAllText(path));
             return file != null ? file.version : -1;
         }
         catch (Exception)
