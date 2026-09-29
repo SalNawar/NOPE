@@ -50,6 +50,15 @@ public sealed class PlayPolicy
     /// <summary>The way this player plays.</summary>
     public PlayStyle Style { get; }
 
+    /// <summary>
+    /// True when a player at <paramref name="cap"/> travellers a shift reaches
+    /// the queue's <paramref name="slot1Based"/>th traveller before the clock
+    /// closes (days 7-15 X3, Saleh's Q11: the simulation's throughput cap,
+    /// BalanceSimSettingsSO.travellersPerShift); a cap of 0 or less reaches the
+    /// whole queue.
+    /// </summary>
+    public static bool Reaches(int slot1Based, int cap) => cap <= 0 || slot1Based <= cap;
+
     /// <summary>Starts <paramref name="day"/>: the day's planned mistakes are not made yet.</summary>
     public void StartDay(int day)
     {

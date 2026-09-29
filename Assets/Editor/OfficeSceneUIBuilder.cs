@@ -1186,6 +1186,7 @@ public static partial class OfficeSceneUIBuilder
             { DesktopAppIds.Internet, internet },
             { DesktopAppIds.Mail, BuildMailWindow(windowLayer, config, feed, apps, internet.GetComponent<BrowserWindow>(), app.App) },
             { DesktopAppIds.CitizenAccount, BuildAccountWindow(windowLayer, config) },
+            { DesktopAppIds.Orders, BuildOrdersWindow(windowLayer, config) },
             { DesktopAppIds.Notes, BuildNotesWindow(windowLayer, config) },
             { DesktopAppIds.Settings, BuildSettingsWindow(windowLayer) },
         };

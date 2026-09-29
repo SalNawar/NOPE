@@ -236,6 +236,19 @@ public class ShortcutMapTests
     }
 
     [Test]
+    public void OrdersFocused_TheArrowsWalkTheTree_EnterActs()
+    {
+        var orders = new ShortcutContext(frameOpen: true, ordersFocused: true);
+        Assert.IsTrue(ShortcutMap.Resolve(K(ShortcutKey.Left), orders, out AppCommand left));
+        Assert.AreEqual(AppCommand.NodeLeft, left);
+        Assert.IsTrue(ShortcutMap.Resolve(K(ShortcutKey.Down), orders, out AppCommand down));
+        Assert.AreEqual(AppCommand.NodeDown, down);
+        Assert.IsTrue(ShortcutMap.Resolve(K(ShortcutKey.Enter), orders, out AppCommand act));
+        Assert.AreEqual(AppCommand.NodeAct, act);
+        Assert.IsFalse(ShortcutMap.Resolve(K(ShortcutKey.Enter), new ShortcutContext(frameOpen: true, notesFocused: true), out _), "only the Orders window's");
+    }
+
+    [Test]
     public void TheCard_ListsEveryCommandOnce()
     {
         var seen = new List<AppCommand>();
@@ -261,7 +274,8 @@ public class ShortcutMapTests
     {
         ShortcutContext[] contexts =
         {
-            App, AppList, AppTabs, Icons, SearchWithResults, new ShortcutContext(frameOpen: true, notesFocused: true)
+            App, AppList, AppTabs, Icons, SearchWithResults, new ShortcutContext(frameOpen: true, notesFocused: true),
+            new ShortcutContext(frameOpen: true, ordersFocused: true)
         };
         var reached = new HashSet<AppCommand>();
         foreach (ShortcutKey key in Enum.GetValues(typeof(ShortcutKey)))

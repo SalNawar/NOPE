@@ -24,14 +24,32 @@ public static class Translation
 
     /// <summary>
     /// The nightly-resolve day on which the notice fires (traveller types I3):
-    /// the night before the morning paper of the day before
-    /// <paramref name="fromDay"/> (Gates.UnlockNight of that day), so the
-    /// paper says "from tomorrow" and a Speech translator bought that night
-    /// is in force when foreign speech reaches the desk. Meaningful for a
-    /// fromDay of at least 3 (<see cref="Problems"/> refuses 2: no night
-    /// comes before day 1's paper; 1 has no notice at all).
+    /// the night before the morning paper of the day <paramref name="orders"/>
+    /// days before <paramref name="fromDay"/> (Gates.UnlockNight of that day),
+    /// where <paramref name="orders"/> is the Speech translator's chain in the
+    /// Orders app (UpgradeTree.ChainLength: Interview Protocols, then the
+    /// translator; each order arrives the day after it is placed), so a clerk
+    /// who reads the notice and orders the chain one link a day has a
+    /// translator when foreign speech reaches the desk. With one order (no
+    /// prerequisite) it is the paper of the day before ("from tomorrow").
+    /// Meaningful while that paper is day 2 or later (<see cref="NoticeProblem"/>).
     /// </summary>
-    public static int NoticeNight(int fromDay) => Gates.UnlockNight(fromDay - 1);
+    public static int NoticeNight(int fromDay, int orders = 1) => Gates.UnlockNight(fromDay - Math.Max(1, orders));
+
+    /// <summary>
+    /// The notice's timing problem, or null: with foreign speech from
+    /// <paramref name="fromDay"/> (after day 1) and a translator chain of
+    /// <paramref name="orders"/> orders, the notice runs in the paper of day
+    /// fromDay - orders, which must be day 2 or later (no night comes before
+    /// day 1's paper).
+    /// </summary>
+    public static string NoticeProblem(int fromDay, int orders)
+    {
+        int paper = fromDay - Math.Max(1, orders);
+        return fromDay > 1 && paper < 2
+            ? $"translation.fromDay is {fromDay}: a Speech translator takes a chain of {Math.Max(1, orders)} order(s) in Orders, one a day, so the notice must run in day {paper}'s paper, and no night comes before day 2's; set fromDay to at least {Math.Max(1, orders) + 2}, or shorten the translators' requires."
+            : null;
+    }
 
     /// <summary>
     /// Content problems (the generator and the validator both report them),

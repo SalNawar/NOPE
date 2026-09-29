@@ -27,6 +27,7 @@ public static partial class OfficeSceneUIBuilder
         { DesktopAppIds.Internet, "icon.internet" },
         { DesktopAppIds.Mail, "icon.mail" },
         { DesktopAppIds.CitizenAccount, "icon.account" },
+        { DesktopAppIds.Orders, "icon.orders" },
         { DesktopAppIds.Notes, "icon.notes" },
         { DesktopAppIds.Settings, "icon.settings" },
     };

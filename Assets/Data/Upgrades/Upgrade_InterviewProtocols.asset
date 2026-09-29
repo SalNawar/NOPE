@@ -17,3 +17,7 @@ MonoBehaviour:
   description: Clearance to ask travellers when they were born.
   cost: 120
   unlockEffect: {fileID: 0}
+  venue: 0
+  branch: 1
+  requires: []
+  installSlot: 

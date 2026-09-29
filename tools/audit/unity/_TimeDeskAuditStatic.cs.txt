@@ -1,7 +1,7 @@
 // Audit baseline automation (kept as text in tools/audit/unity; copied into Assets/Editor as .cs only to run it, never committed there): the Phase 0 golden masters that
 // need Unity but no play mode. Runs in the persistent editor through the job
 // runner (Library/ClaudeJobs), never exits it. Outputs go to
-// <out root>/<tag>/ (see Root): the case generation dump (days 1-6 x 20 seeds,
+// <out root>/<tag>/ (see Root): the case generation dump (days 1-15 x 20 seeds,
 // day 6 also under each possible leader), Generate World twice (the Data
 // folder's hashes), the validator's output, semantic dumps of the committed
 // OfficeGameplay / HomeScene / TitleScene and of their builders' rebuilds, the
@@ -136,7 +136,8 @@ public static class _TimeDeskAuditStatic
     {
         var lines = new List<string>();
         var variants = new List<(int day, string leader)>();
-        for (int d = 1; d <= 6; d++)
+        // Days 1 to the run's last (the Retirement milestone, day 15; days 7-15 D4), each from a fresh world (no story flags: a slot's first standing entry).
+        for (int d = 1; d <= Math.Max(6, lib.LastDay); d++)
             variants.Add((d, "-"));
         foreach (NationSO n in lib.Nations)
             if (n != null)
@@ -154,7 +155,7 @@ public static class _TimeDeskAuditStatic
             lines.Add($"{head} places=[{string.Join(", ", today.Places.Select(p => p != null ? p.id : "null"))}]");
             lines.Add($"{head} rules=[{string.Join(" | ", plan.ActiveTravelRules.Where(r => r != null).Select(r => r.Summary()))}]");
             lines.Add($"{head} askable=[{string.Join(",", interview.AskableCategories)}] answerTells=[{string.Join(",", interview.AnswerTellCategories)}] dialogs=[{string.Join(",", interview.OfferedDialogs(null).Select(d => d.id))}] problems={interview.ContentProblems.Count}");
-            lines.Add($"{head} forced=[{string.Join(",", plan.ForcedCases.Where(f => f != null).Select(f => $"{f.caseIndex1Based}:{(f.legendary != null ? f.legendary.id : "-")}/{(f.caseBlueprint != null ? f.caseBlueprint.name : "-")}"))}] pool=[{string.Join(",", plan.AvailableLegendaries.Where(l => l != null).Select(l => l.id))}]");
+            lines.Add($"{head} forced=[{string.Join(",", plan.ForcedCases.Where(f => f != null).Select(f => $"{f.caseIndex1Based}:{(f.legendary != null ? f.legendary.id : "-")}/{(f.caseBlueprint != null ? f.caseBlueprint.name : "-")}{(string.IsNullOrEmpty(f.id) ? "" : "#" + f.id)}"))}] pool=[{string.Join(",", plan.AvailableLegendaries.Where(l => l != null).Select(l => l.id))}]");
             foreach (ClueCategory category in Enum.GetValues(typeof(ClueCategory)).Cast<ClueCategory>())
                 foreach (FactRow row in today.Facts.Rows(category))
                     lines.Add($"{head} fact {category} {row.NationId}/{row.EraId} '{row.OriginLabel}' = '{row.Value}'{(today.Facts.IsChanged(row.NationId, row.EraId, category) ? " [revised]" : "")}");
@@ -175,13 +176,23 @@ public static class _TimeDeskAuditStatic
                 for (int i = 0; i < cases.Count; i++)
                 {
                     CaseInstance c = cases[i];
-                    CitizenRecord record = registry.Find(c.visitorGivenName);
+                    CitizenRecord record = FindRecord(registry, c.visitorGivenName);
                     string rec = record != null ? string.Join("|", record.Groups.SelectMany(g => g.Rows).Select(r => r.Value)) : "none";
                     lines.Add(CaseLine(seed, day, leader, i + 1, c, violators.TryGetValue(i + 1, out NationEraProfileSO v) ? v.id : null, lib.Interview) + $" | record={rec}");
                 }
             }
         }
         return lines;
+    }
+
+    /// <summary>The registry's lookup as it read before phase 19 moved it into search (by number first, then by full name, ignoring case), so the dump's record column keeps its meaning.</summary>
+    private static CitizenRecord FindRecord(CitizenRegistry registry, string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+            return null;
+        string q = query.Trim();
+        return registry.Records.FirstOrDefault(r => !string.IsNullOrWhiteSpace(r.Number) && string.Equals(r.Number.Trim(), q, StringComparison.OrdinalIgnoreCase))
+               ?? registry.Records.FirstOrDefault(r => string.Equals(r.FullName.Trim(), q, StringComparison.OrdinalIgnoreCase));
     }
 
     private static WorldState World(int day, string leader)

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 633ce1469e2ac064aa273d138f70aebc, type: 3}
+  m_Name: Upgrade_RepairPortal05
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
+  id: repair_portal_05
+  displayName: Portal 05 repair
+  description: "Repairs the upper-right ring on the gallery, Portal 05, fed through Portal 04. In service from the day it arrives."
+  cost: 350
+  unlockEffect: {fileID: 0}
+  venue: 0
+  branch: 2
+  requires:
+  - repair_portal_04
+  installSlot: 

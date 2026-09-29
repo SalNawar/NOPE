@@ -2,17 +2,30 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
-/// <summary>The desktop's placeholder icon glyphs (the PC redesign DK2): a white glyph on transparent per app id, each its own, nothing for an unknown id.</summary>
+/// <summary>The PC's placeholder glyphs (the PC redesign DK2): a white glyph on transparent per app id and per Orders tree glyph (its bands' and its states' badges, Saleh 2026-09-29), each its own, nothing for an unknown name.</summary>
 public class DesktopIconPlaceholderTests
 {
     private static bool Opaque(byte[] rgba, int x, int y) => rgba[(y * DesktopIconPlaceholder.Size + x) * 4 + 3] != 0;
 
+    /// <summary>Every app's glyph, then every Orders glyph.</summary>
+    private static IEnumerable<string> Everything => DesktopAppIds.DefaultOrder.Concat(DesktopIconPlaceholder.OrdersGlyphs);
+
     [Test]
-    public void EveryApp_IsASquareOfWhiteOnTransparent_WithAClearBorder()
+    public void OrdersHasAGlyph_AndTheTreeHasItsBandsAndBadges()
+    {
+        Assert.IsNotNull(DesktopIconPlaceholder.Render(DesktopAppIds.Orders));
+        foreach (UpgradeBranch branch in (UpgradeBranch[])System.Enum.GetValues(typeof(UpgradeBranch)))
+            CollectionAssert.Contains(DesktopIconPlaceholder.OrdersGlyphs, ArtSlots.OrderBranch(branch).Substring("Orders/".Length),
+                                      "each band's glyph is its art slot's file name");
+        CollectionAssert.IsSubsetOf(new[] { "padlock", "clock", "tick" }, DesktopIconPlaceholder.OrdersGlyphs);
+    }
+
+    [Test]
+    public void EveryGlyph_IsASquareOfWhiteOnTransparent_WithAClearBorder()
     {
         int size = DesktopIconPlaceholder.Size;
         Assert.AreEqual(64, size);
-        foreach (string id in DesktopAppIds.DefaultOrder)
+        foreach (string id in Everything)
         {
             byte[] rgba = DesktopIconPlaceholder.Render(id);
             Assert.IsNotNull(rgba, id);
@@ -36,10 +49,10 @@ public class DesktopIconPlaceholderTests
     }
 
     [Test]
-    public void EveryApp_IsItsOwnGlyph()
+    public void EveryGlyph_IsItsOwn()
     {
         var drawn = new List<byte[]>();
-        foreach (string id in DesktopAppIds.DefaultOrder)
+        foreach (string id in Everything)
         {
             byte[] rgba = DesktopIconPlaceholder.Render(id);
             Assert.IsFalse(drawn.Any(d => d.SequenceEqual(rgba)), id);

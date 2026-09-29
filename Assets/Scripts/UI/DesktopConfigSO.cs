@@ -96,6 +96,24 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The Settings window's size.</summary>
     public Vector2 settingsWindowSize = new Vector2(640f, 720f);
 
+    /// <summary>The Orders window's restored size (it opens maximised, the tree needs room; the portals spec v3 OR9).</summary>
+    public Vector2 ordersWindowSize = new Vector2(1120f, 820f);
+
+    /// <summary>One cell of the Orders tree: a node and the gap to the next tier (where its links bend) and the next slot.</summary>
+    public Vector2 ordersCellSize = new Vector2(290f, 108f);
+
+    /// <summary>A node of the Orders tree: its glyph, its name and its state line, two lines each at most (22 u and 19 u text, never under 17 and 16 u: 8.8 and 8.3 px at 720p).</summary>
+    public Vector2 ordersNodeSize = new Vector2(260f, 98f);
+
+    /// <summary>A band's head (its glyph and branch name) above the band's nodes.</summary>
+    [Min(1f)] public float ordersBandHead = 40f;
+
+    /// <summary>The detail card's width beside the tree (the TC-980 requisition form).</summary>
+    [Min(1f)] public float ordersDetailWidth = 500f;
+
+    /// <summary>A link's thickness in the tree.</summary>
+    [Min(1f)] public float ordersLinkWidth = 3f;
+
     [Header("The Investigation app (redesign phase 16)")]
     /// <summary>The app window's restored size (it opens maximised; P spec WN4).</summary>
     public Vector2 investigationWindowSize = new Vector2(1120f, 820f);

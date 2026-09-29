@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-/// <summary>What a message is, which decides its sender, subject and link (the PC spec's ML1).</summary>
+/// <summary>What a message is, which decides its sender, subject and link (the PC spec's ML1). Never serialized (the inbox is rebuilt by id; only its read flags are saved), so it is not pinned.</summary>
 public enum MailKind
 {
     /// <summary>The day's directives, as the Rules show them (a link to the Rules).</summary>
@@ -14,7 +14,10 @@ public enum MailKind
     CitationNotice,
 
     /// <summary>A message written in world_source.json "pc.mail".</summary>
-    Authored
+    Authored,
+
+    /// <summary>Temporal Customs Supply's delivery notice: what the Orders app delivered at the start of the day (the portals spec v3 OR6).</summary>
+    Delivery
 }
 
 /// <summary>Where a message's link leads (the view decides how it opens).</summary>
@@ -90,7 +93,7 @@ public readonly struct CitationCopy
 /// </summary>
 public sealed class MailItem
 {
-    /// <summary>Stable id, the key of its read flag ("memo:3", "times:3", "cite:3:2", "mail:welcome").</summary>
+    /// <summary>Stable id, the key of its read flag ("memo:3", "times:3", "cite:3:2", "mail:welcome", "delivery:3").</summary>
     public string Id;
 
     /// <summary>The day the message is dated.</summary>
@@ -108,7 +111,7 @@ public sealed class MailItem
     /// <summary>An authored message's subject (empty for the generated kinds).</summary>
     public string Subject = string.Empty;
 
-    /// <summary>The body's lines: the directives, the day's headlines, the slip's text or the authored paragraphs (may be empty).</summary>
+    /// <summary>The body's lines: the directives, the day's headlines, the slip's text, the authored paragraphs or the names of what was delivered (may be empty).</summary>
     public IReadOnlyList<string> Body = Array.Empty<string>();
 
     /// <summary>Where the message links to.</summary>
@@ -120,8 +123,8 @@ public sealed class MailItem
 
 /// <summary>
 /// What the inbox is built from (ML1-ML2); the engine fills it from the day
-/// plans, the morning paper, the shift's acknowledged citations and the
-/// content library. Nothing here is saved: only the read flags are.
+/// plans, the morning paper, the shift's acknowledged citations, the content
+/// library and the order log. Nothing here is saved: only the read flags are.
 /// </summary>
 public sealed class MailSources
 {
@@ -142,19 +145,29 @@ public sealed class MailSources
 
     /// <summary>True when a story flag is set (an authored message may wait for one).</summary>
     public Func<string, bool> HasFlag;
+
+    /// <summary>The Orders app's log (WorldState.orders): each day something arrived gets one delivery memo (null: none).</summary>
+    public IReadOnlyList<OrderEntry> Orders;
+
+    /// <summary>An upgrade's name by its id, for the delivery memo's lines (null, or a blank name: the id).</summary>
+    public Func<string, string> UpgradeName;
 }
 
 /// <summary>
 /// The Mail app's rules (the PC spec's ML1-ML2): the inbox is rebuilt from
 /// its sources by id, newest day first; within a day the citation notices
-/// (latest traveller first), then the directive memo, the Times issue and the
-/// authored messages. Opening a message marks it read; the read flags are the
+/// (latest traveller first), then the directive memo, the Times issue, the
+/// delivery notice (what the Orders app delivered that morning, the portals
+/// spec v3 OR6) and the authored messages. Opening a message marks it read; the read flags are the
 /// only saved state. Pure, so the inbox and its badge are tested headless.
 /// </summary>
 public static class Mailbox
 {
     /// <summary>The id prefix of an authored message.</summary>
     public const string AuthoredPrefix = "mail:";
+
+    /// <summary>The id prefix of a delivery notice (the day follows).</summary>
+    public const string DeliveryPrefix = "delivery:";
 
     /// <summary>The inbox for days 1 to <see cref="MailSources.Today"/>, newest first.</summary>
     public static List<MailItem> ForDays(MailSources s)
@@ -189,6 +202,14 @@ public static class Mailbox
                 Body = news ?? Array.Empty<string>(), IssueOnHand = news != null
             });
 
+            List<string> delivered = global::Orders.DeliveredOn(s.Orders, day);
+            if (delivered.Count > 0)
+                items.Add(new MailItem
+                {
+                    Id = DeliveryPrefix + day, Day = day, Kind = MailKind.Delivery,
+                    Body = delivered.ConvertAll(id => Named(id, s.UpgradeName))
+                });
+
             foreach (AuthoredMail a in s.Authored ?? Array.Empty<AuthoredMail>())
                 if (a != null && a.fromDay == day && Delivered(a, s))
                     items.Add(new MailItem
@@ -199,6 +220,13 @@ public static class Mailbox
                     });
         }
         return items;
+    }
+
+    /// <summary>An upgrade's name for the delivery memo: <paramref name="name"/>'s, else its id.</summary>
+    private static string Named(string id, Func<string, string> name)
+    {
+        string named = name?.Invoke(id);
+        return string.IsNullOrWhiteSpace(named) ? id : named;
     }
 
     /// <summary>True while an authored message is in the inbox: arrived, not past its last day, its flag (if any) set.</summary>
