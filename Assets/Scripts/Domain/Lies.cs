@@ -231,11 +231,12 @@ public static class Lies
 
     /// <summary>
     /// Whether a traveller may lie at all: not an honest premade (premades are
-    /// honest unless authored as liars), a claim today's rules allow, and
+    /// honest unless authored as liars), no planned fault (a closure's
+    /// violator or a guaranteed procedure's breaker: one fault source, K5), and
     /// papers to leak tells on. Exempt travellers make no draw.
     /// </summary>
-    public static bool MayLie(bool honestPremade, bool claimAllowed, bool hasPapers) =>
-        !honestPremade && claimAllowed && hasPapers;
+    public static bool MayLie(bool honestPremade, bool noPlannedFault, bool hasPapers) =>
+        !honestPremade && noPlannedFault && hasPapers;
 
     /// <summary>
     /// Rolls one traveller's lie (traveller types K5, §6.2): with probability

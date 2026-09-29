@@ -246,17 +246,81 @@ public static class SmartLinks
 
 /// <summary>
 /// The Investigation app's pane layout rules (the PC redesign AP3): two panes
-/// only when each gets a readable width, and a tab strip too narrow for every
-/// label collapses its inactive tabs to glyphs. Pure; InvestigationApp and
-/// AppPane apply them.
+/// only when each gets a readable width, a tab strip too narrow for every
+/// name at its size collapses its inactive tabs to glyphs, and a chip row too
+/// narrow for its chips scrolls sideways (Saleh 2026-09-29, "Scroll the row":
+/// the chip an arrow or the focus ring brings into view, whole). Pure;
+/// InvestigationApp, AppPane and ChipRow apply them.
 /// </summary>
 public static class AppPanes
 {
     /// <summary>True when a body <paramref name="bodyWidth"/> wide holds the sidebar and two panes of at least <paramref name="minPaneWidth"/> (a restored window has one pane).</summary>
     public static bool CanSplit(float bodyWidth, float sidebarWidth, float minPaneWidth) => bodyWidth >= sidebarWidth + 2f * minPaneWidth;
 
-    /// <summary>True when a strip <paramref name="stripWidth"/> wide cannot give each of its <paramref name="tabs"/> tabs <paramref name="labelWidth"/>: the inactive tabs then show their glyphs.</summary>
-    public static bool TabsNarrow(float stripWidth, int tabs, float labelWidth) => stripWidth < tabs * labelWidth;
+    /// <summary>
+    /// True when a strip <paramref name="stripWidth"/> wide cannot hold every
+    /// tab with its name at the label size (<paramref name="nameTabs"/>: each
+    /// tab's width so, as measured: the name, the plate's padding and the
+    /// badge's room), with the strip's <paramref name="padding"/> (both ends)
+    /// and a <paramref name="spacing"/> between tabs: the inactive tabs then
+    /// show their glyphs, so no name ever shrinks under its size.
+    /// </summary>
+    public static bool TabsNarrow(float stripWidth, IReadOnlyList<float> nameTabs, float padding, float spacing)
+    {
+        if (nameTabs == null || nameTabs.Count == 0)
+            return false;
+        float need = padding + spacing * (nameTabs.Count - 1);
+        foreach (float tab in nameTabs)
+            need += tab;
+        return stripWidth < need;
+    }
+
+    /// <summary>
+    /// A sideways scroll's offset (the row's width scrolled out of view to the
+    /// left, 0 at its start) that shows the item from <paramref name="start"/>
+    /// to <paramref name="end"/> (from the row's start) whole in a
+    /// <paramref name="viewport"/>-wide window on a <paramref name="content"/>-wide
+    /// row, moving as little as it can from <paramref name="offset"/>: an item
+    /// past the right edge ends at it, one past the left edge starts at it, one
+    /// wider than the window starts at its left; clamped to the row's ends.
+    /// </summary>
+    public static float RevealOffset(float offset, float viewport, float content, float start, float end)
+    {
+        float to = offset;
+        if (end - start > viewport || start < to)
+            to = start;
+        else if (end > to + viewport)
+            to = end - viewport;
+        return Math.Max(0f, Math.Min(Math.Max(0f, content - viewport), to));
+    }
+
+    /// <summary>
+    /// The item an arrow at a scrolling row's end brings into view
+    /// (<paramref name="starts"/> and <paramref name="ends"/>: each item's
+    /// span from the row's start, in order; the window
+    /// <paramref name="viewport"/> wide at <paramref name="offset"/>):
+    /// <paramref name="direction"/> 1 the first one cut or hidden by the
+    /// window's right edge, -1 the last one cut or hidden by its left edge
+    /// (half a unit of slack); -1 when there is none (that arrow greys).
+    /// </summary>
+    public static int NextHidden(IReadOnlyList<float> starts, IReadOnlyList<float> ends, float offset, float viewport, int direction)
+    {
+        const float slack = 0.5f;
+        int count = starts != null && ends != null ? Math.Min(starts.Count, ends.Count) : 0;
+        if (direction > 0)
+        {
+            for (int i = 0; i < count; i++)
+                if (ends[i] > offset + viewport + slack)
+                    return i;
+        }
+        else
+        {
+            for (int i = count - 1; i >= 0; i--)
+                if (starts[i] < offset - slack)
+                    return i;
+        }
+        return -1;
+    }
 
     /// <summary>
     /// A vertical scroll's position (1: the top, 0: the bottom, as a uGUI

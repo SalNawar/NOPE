@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// A daily travel restriction announced in the morning briefing (its type,
 /// TravelRuleType, is Domain's). The player must DENY an otherwise-valid
 /// traveler whose claimed destination violates an active closure (a
-/// directive fault, DirectiveFault.ClosedDestination). A standing procedure
+/// directive fault, DirectiveFault.ClosedDestination), or whose papers or
+/// account break a standing procedure with a predicate (the paper set, the
+/// debt standing: Directives.Breaks). A standing procedure without one
 /// (dress for the destination, a kind's procedure line, the displaced's
 /// return home) closes no destination: its line tells the player what to
 /// check. Rules are listed on a DayPlan and evaluated per case.
@@ -24,8 +27,17 @@ public sealed class TravelRuleSO : ScriptableObject
     /// <summary>Optional custom briefing line; auto-generated if blank (a standing procedure's is authored).</summary>
     [TextArea] public string description;
 
-    /// <summary>True for a closure (Directives.IsClosure): it forbids destinations, and each active one gets a planned violator (CaseFactory.PlanViolators).</summary>
+    /// <summary>The kinds a standing procedure is read for (traveller types §5.3; written by Generate World from rules[].kinds); empty for every kind, and always empty for a closure.</summary>
+    public TravellerKind[] kinds;
+
+    /// <summary>True for a closure: it forbids destinations, and each active one gets a planned violator (CaseFactory.PlanViolators).</summary>
     public bool IsClosure => Directives.IsClosure(type);
+
+    /// <summary>The rule as the Domain predicates see it: its type and kinds.</summary>
+    public Directive Directive => new Directive(type, kinds ?? System.Array.Empty<TravellerKind>());
+
+    /// <summary>True when the rule is read for a traveller of <paramref name="kind"/> (Directive.AppliesTo).</summary>
+    public bool AppliesTo(TravellerKind kind) => Directive.AppliesTo(kind);
 
     /// <summary>
     /// Returns true if this rule permits the given claimed destination.

@@ -9,7 +9,9 @@ using UnityEngine.UI;
 /// (DocumentsView). On the scanner's dark backing it shows the document's
 /// name, the strip ("SCANNED 10:42 · DESK SCANNER 1", the shift clock's time
 /// when the copy arrived; after an analysis pass "ANALYSED 10:44 · 1
-/// CONTRADICTION MARKED" or "... THE SCANNED PAPERS AGREE", the form
+/// CONTRADICTION MARKED", or "ANALYSED 10:44 ·" and the MATCH tag (the
+/// compare's plate, ink and word) when the scanned papers agree; after a
+/// re-scan of an analysed paper "SCANNED 10:50 · ALREADY ANALYSED"; the form
 /// style's words), and the paper's form drawn by a FormView in its scroll
 /// (FormPage) from the same DocumentForm the desk paper prints, so the copy
 /// is the paper: its pages stacked in the scroll. A
@@ -31,6 +33,9 @@ public sealed class DocumentWindowController : MonoBehaviour
 
     /// <summary>The strip on the backing above the copy.</summary>
     [SerializeField] private TMP_Text scanStrip;
+
+    /// <summary>The MATCH tag after the strip (the compare bar's plate with its MATCH ink and word), shown after an analysis pass that found the scanned papers agree.</summary>
+    [SerializeField] private GameObject matchTag;
 
     /// <summary>The copy: the paper's form in its scroll.</summary>
     [SerializeField] private FormPage page;
@@ -98,9 +103,16 @@ public sealed class DocumentWindowController : MonoBehaviour
     /// <summary>The copy arrived on the PC (its scan finished): the strip reads the shift clock's time now.</summary>
     public void MarkScanned() => Strip(Form != null && Form.Style != null ? Form.Style.scanStrip : null);
 
-    /// <summary>An analysis pass ended on this paper (the Analysis Scanner): the strip reads the time and whether a contradicting pair was marked (<paramref name="contradiction"/>), in the form style's words.</summary>
-    public void MarkAnalysed(bool contradiction) =>
-        Strip(Form != null && Form.Style != null ? (contradiction ? Form.Style.analysedStrip : Form.Style.analysedCleanStrip) : null);
+    /// <summary>An analysis pass ended on this paper (the Analysis Scanner): the strip reads the time and whether a contradicting pair was marked (<paramref name="contradiction"/>), in the form style's words; with none the MATCH tag follows it.</summary>
+    public void MarkAnalysed(bool contradiction)
+    {
+        Strip(Form != null && Form.Style != null ? (contradiction ? Form.Style.analysedStrip : Form.Style.analysedMatchStrip) : null);
+        if (matchTag != null && matchTag.activeSelf == contradiction)
+            matchTag.SetActive(!contradiction);
+    }
+
+    /// <summary>This paper was scanned by hand again after its analysis pass (the pass works once per document): the strip says so, in the form style's words; the MATCH tag and the marks stay as the pass left them.</summary>
+    public void MarkAlreadyAnalysed() => Strip(Form != null && Form.Style != null ? Form.Style.alreadyAnalysedStrip : null);
 
     /// <summary>The analysis marks on this copy: the dashed outline on each of <paramref name="fields"/>' boxes (FormView.SetMarks).</summary>
     public void SetMarks(IReadOnlyList<int> fields)

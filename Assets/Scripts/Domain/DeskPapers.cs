@@ -149,8 +149,14 @@ public sealed class DeskPapers
     /// <summary>Seconds a scan the scanner feeds itself takes.</summary>
     private readonly float _scanSeconds;
 
-    /// <summary>Seconds a scan by hand (a paper dropped on the scanner) takes: the analysis pass's when the Analysis Scanner is owned, else the plain scan's.</summary>
-    private readonly float _handScanSeconds;
+    /// <summary>Seconds the Analysis Scanner's pass takes.</summary>
+    private readonly float _analysisSeconds;
+
+    /// <summary>The day's scanner upgrades (which pass a scan takes: ScannerDay.PassFor).</summary>
+    private readonly ScannerDay _scanners;
+
+    /// <summary>Each paper whose analysis pass has ended (the pass works once per document).</summary>
+    private readonly bool[] _analysed;
 
     /// <summary>The running scan's duration.</summary>
     private float _running;
@@ -170,19 +176,21 @@ public sealed class DeskPapers
     /// <summary>The held papers, held longest first.</summary>
     private readonly List<int> _holdOrder = new List<int>();
 
-    /// <summary>Every paper starts with the traveller; a null list means no papers; a scan shorter than 0.01 s is raised to it; a scan by hand takes as long as any scan.</summary>
-    public DeskPapers(IReadOnlyList<CaseDocument> documents, float scanSeconds) : this(documents, scanSeconds, scanSeconds)
+    /// <summary>Every paper starts with the traveller; a null list means no papers; a scan shorter than 0.01 s is raised to it; no scanner upgrade.</summary>
+    public DeskPapers(IReadOnlyList<CaseDocument> documents, float scanSeconds) : this(documents, scanSeconds, scanSeconds, default)
     {
     }
 
-    /// <summary>Every paper starts with the traveller; a null list means no papers; a scan the scanner feeds itself takes <paramref name="scanSeconds"/> and a scan by hand <paramref name="handScanSeconds"/> (each raised to 0.01 s when shorter).</summary>
-    public DeskPapers(IReadOnlyList<CaseDocument> documents, float scanSeconds, float handScanSeconds)
+    /// <summary>Every paper starts with the traveller; a null list means no papers; a plain scan takes <paramref name="scanSeconds"/> and the analysis pass <paramref name="analysisSeconds"/> (each raised to 0.01 s when shorter); <paramref name="scanners"/> are the day's upgrades (which pass a scan takes).</summary>
+    public DeskPapers(IReadOnlyList<CaseDocument> documents, float scanSeconds, float analysisSeconds, ScannerDay scanners)
     {
         _states = new PaperState[documents != null ? documents.Count : 0];
         _slots = new ExamineSlot[_states.Length];
+        _analysed = new bool[_states.Length];
         ArrivalIndices = CaseDocuments.ArrivalIndices(documents);
         _scanSeconds = scanSeconds > MinScanSeconds ? scanSeconds : MinScanSeconds;
-        _handScanSeconds = handScanSeconds > MinScanSeconds ? handScanSeconds : MinScanSeconds;
+        _analysisSeconds = analysisSeconds > MinScanSeconds ? analysisSeconds : MinScanSeconds;
+        _scanners = scanners;
     }
 
     /// <summary>How many papers the case has.</summary>
@@ -191,8 +199,11 @@ public sealed class DeskPapers
     /// <summary>True while a scan runs.</summary>
     public bool ScannerBusy => _scanning >= 0;
 
-    /// <summary>True while the running scan was started by hand (a drop on the scanner), the Analysis Scanner's trigger; false while the scanner fed itself or is idle.</summary>
-    public bool ScanByHand { get; private set; }
+    /// <summary>The running scan's pass (ScannerDay.PassFor: the analysis pass for a paper dropped on the scanner with the Analysis Scanner, once per document); Plain while the scanner fed itself or is idle.</summary>
+    public ScanPass Pass { get; private set; }
+
+    /// <summary>True when paper <paramref name="i"/>'s analysis pass has ended (a re-scan of it is AlreadyAnalysed).</summary>
+    public bool WasAnalysed(int i) => InRange(i) && _analysed[i];
 
     /// <summary>The papers waiting to scan themselves (the Auto-Feed queue).</summary>
     public int QueuedCount => _queue.Count;
@@ -358,9 +369,10 @@ public sealed class DeskPapers
 
     /// <summary>
     /// Advances a running scan by a positive amount (0 and negative amounts
-    /// are ignored). When it reaches the scan's duration (the hand scan's for
-    /// a drop, else the plain one) the paper goes back on the desk and its
-    /// index is returned; otherwise, or with no scan running, -1.
+    /// are ignored). When it reaches the scan's duration (the analysis pass's
+    /// for an analysis, else the plain one) the paper goes back on the desk
+    /// (analysed, after an analysis pass) and its index is returned;
+    /// otherwise, or with no scan running, -1.
     /// </summary>
     public int Tick(float seconds)
     {
@@ -373,9 +385,11 @@ public sealed class DeskPapers
 
         int done = _scanning;
         _states[done] = PaperState.OnDesk;
+        if (Pass == ScanPass.Analysis)
+            _analysed[done] = true;
         _scanning = -1;
         _elapsed = 0f;
-        ScanByHand = false;
+        Pass = ScanPass.Plain;
         return done;
     }
 
@@ -391,17 +405,17 @@ public sealed class DeskPapers
         _queue.Clear();
         _scanning = -1;
         _elapsed = 0f;
-        ScanByHand = false;
+        Pass = ScanPass.Plain;
     }
 
-    /// <summary>Puts a paper on the scanner's bed and starts the timer for its kind of scan (Drop and FeedNext are the callers); a queued paper leaves the queue.</summary>
+    /// <summary>Puts a paper on the scanner's bed and starts the timer for its pass (ScannerDay.PassFor: by hand or fed, analysed before or not; Drop and FeedNext are the callers); a queued paper leaves the queue.</summary>
     private void BeginScan(int i, bool byHand)
     {
         _states[i] = PaperState.Scanning;
         _scanning = i;
         _elapsed = 0f;
-        _running = byHand ? _handScanSeconds : _scanSeconds;
-        ScanByHand = byHand;
+        Pass = _scanners.PassFor(byHand, _analysed[i]);
+        _running = Pass == ScanPass.Analysis ? _analysisSeconds : _scanSeconds;
         _queue.Remove(i);
     }
 

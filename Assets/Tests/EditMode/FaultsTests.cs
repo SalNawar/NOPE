@@ -10,6 +10,8 @@ public class FaultsTests
     [TestCase(DirectiveFault.ClosedDestination, "closed")]
     [TestCase(DirectiveFault.WrongDepartureDate, "wrongDate")]
     [TestCase(DirectiveFault.ExpiredPaper, "expired")]
+    [TestCase(DirectiveFault.IncompletePapers, "incomplete")]
+    [TestCase(DirectiveFault.FrozenAccount, "frozen")]
     public void Reason_OfADirectiveFault(DirectiveFault fault, string expected)
     {
         Assert.AreEqual(expected, Faults.Reason(fault));
@@ -26,6 +28,10 @@ public class FaultsTests
         Assert.AreEqual("smuggled", Faults.Reason(DirectiveFault.None, CostumeError.None, LieKind.Smuggling));
         Assert.AreEqual(string.Empty, Faults.Reason(DirectiveFault.None, CostumeError.None, null));
         Assert.AreEqual(CostumeErrors.FaultReason, Faults.Reason(DirectiveFault.None, CostumeError.PresentAccessory, LieKind.Smuggling));
+        Assert.AreEqual("incomplete", Faults.Reason(DirectiveFault.IncompletePapers, CostumeError.None, null));
+        Assert.AreEqual("frozen", Faults.Reason(DirectiveFault.FrozenAccount, CostumeError.None, LieKind.ForgedContract), "a directive fault outranks a lie (never generated together, K5)");
+        Assert.AreEqual("forged", Faults.Reason(DirectiveFault.None, CostumeError.None, LieKind.DebtorPosingAsTourist));
+        Assert.AreEqual("forged", Faults.Reason(DirectiveFault.None, CostumeError.None, LieKind.ForgedContract));
     }
 
     /// <summary>The English UI string of <paramref name="key"/> in world_source.json (null when missing).</summary>
@@ -41,6 +47,8 @@ public class FaultsTests
     [TestCase("forged", "forged papers")]
     [TestCase("disguised", "disguised traveller")]
     [TestCase("closed", "closed destination")]
+    [TestCase("incomplete", "incomplete paperwork")]
+    [TestCase("frozen", "frozen account")]
     [TestCase("panic", "would cause a panic in {0}")]
     [TestCase("smuggled", "2150 goods")]
     [TestCase("wrongDate", "wrong date")]

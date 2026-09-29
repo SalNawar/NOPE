@@ -28,7 +28,19 @@ public enum LieKind
     /// against the destination's book row or the present's (Lies.Plan with
     /// the present as the only candidate and Lies.SmuggledCategories).
     /// </summary>
-    Smuggling
+    Smuggling,
+
+    /// <summary>L4, a debtor posing as a tourist: an Eligible citizen drawn from a tourist entry, whose papers print the tourist's status and class (as rich: the visa's and the manifest's classes; as poor: the visa's and the proof's class, a sliver of the debt on the waiver, and a proof of means the account does not hold).</summary>
+    DebtorPosingAsTourist,
+
+    /// <summary>L5, a forged contract: a labourer's contract with a higher wage, a shorter term, another employer or another worksite than the one registered.</summary>
+    ForgedContract,
+
+    /// <summary>L3, a fake waiver: a Stranding Waiver with a number the account never registered, or one made out for another transponder (which also contradicts the manifest).</summary>
+    FakeWaiver,
+
+    /// <summary>L10, a forged proof of means: a credit line, savings or a policy number the account does not hold on file.</summary>
+    ForgedProof
 }
 
 /// <summary>The lies' rules: which kinds of traveller each lie fits, and which lies are record lies. Pure.</summary>
@@ -40,7 +52,10 @@ public static class LieKinds
     /// displaced's (a 2150 citizen is who they say and comes from where they
     /// say), and so is the fake displaced (a 2150 citizen posing as one);
     /// poor posing as rich is drawn from the rich entry; a doctored identity
-    /// is a tourist's; smuggling is every kind's (the days decide when: 2150
+    /// is a tourist's, and so is a debtor posing as a tourist; a forged
+    /// contract is a labourer's; a fake waiver is a poor tourist's or a
+    /// labourer's (the kinds that carry one); a forged proof of means is a
+    /// poor tourist's; smuggling is every kind's (the days decide when: 2150
     /// citizens from day 4, the displaced from day 5).
     /// </summary>
     public static bool AppliesTo(LieKind lie, TravellerKind kind)
@@ -53,9 +68,16 @@ public static class LieKinds
             case LieKind.PoorPosingAsRich:
                 return kind == TravellerKind.RichTourist;
             case LieKind.DoctoredIdentity:
+            case LieKind.DebtorPosingAsTourist:
                 return kind == TravellerKind.RichTourist || kind == TravellerKind.PoorTourist;
             case LieKind.Smuggling:
                 return true;
+            case LieKind.ForgedContract:
+                return kind == TravellerKind.Labourer;
+            case LieKind.FakeWaiver:
+                return kind == TravellerKind.PoorTourist || kind == TravellerKind.Labourer;
+            case LieKind.ForgedProof:
+                return kind == TravellerKind.PoorTourist;
             default:
                 return false;
         }
@@ -85,9 +107,12 @@ public static class LieKinds
     /// The status of the account a citizen really holds (the truth their
     /// papers must match): poor posing as rich is a Standard citizen drawn
     /// from the rich entry (L1), so their account is Standard whatever the
-    /// kind's status (AccountMaker.StatusOf); every other traveller holds
-    /// their kind's.
+    /// kind's status (AccountMaker.StatusOf); a debtor posing as a tourist is
+    /// an Eligible citizen drawn from a tourist entry (L4); every other
+    /// traveller holds their kind's.
     /// </summary>
     public static CitizenStatus TrueStatus(LieKind? lie, CitizenStatus kindStatus) =>
-        lie == LieKind.PoorPosingAsRich ? CitizenStatus.Standard : kindStatus;
+        lie == LieKind.PoorPosingAsRich ? CitizenStatus.Standard
+        : lie == LieKind.DebtorPosingAsTourist ? CitizenStatus.Eligible
+        : kindStatus;
 }

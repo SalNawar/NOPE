@@ -318,13 +318,13 @@ public static partial class OfficeSceneUIBuilder
     /// The chip row's template (AP5; hidden, cloned by AppPane per item of the
     /// active view): a button in the Button role as wide as its label (never
     /// narrower than AppChipMinWidth; the label at DesktopConfigSO's chip size,
-    /// shrinking to three quarters of it before its text is cut with "…"),
+    /// never shrunk: the chip row scrolls instead),
     /// and over it the chosen look, "Chosen": an accent plate (the Badge role)
     /// with the same text in bold, shown by the pane for the item the view shows.
     /// </summary>
-    private static Button BuildChipTemplate(Transform header, DesktopConfigSO config)
+    private static Button BuildChipTemplate(Transform chips, DesktopConfigSO config)
     {
-        Button chip = MakeButton(header, "ChipTemplate", "Chip", Vector2.zero, Vector2.one, null, ThemeRoleId.Button);
+        Button chip = MakeButton(chips, "ChipTemplate", "Chip", Vector2.zero, Vector2.one, null, ThemeRoleId.Button);
         LayoutElement chipSize = GetOrAdd<LayoutElement>(chip.gameObject);
         chipSize.minWidth = AppChipMinWidth;
         chipSize.flexibleWidth = 0f;
@@ -352,12 +352,11 @@ public static partial class OfficeSceneUIBuilder
         return chip;
     }
 
-    /// <summary>A chip label's fit: one line at the chip size, shrinking to three quarters of it, then cut with "…"; it takes no raycasts.</summary>
+    /// <summary>A chip label: one line at the chip size, never shrunk (a row too narrow for its chips scrolls: ChipRow); it takes no raycasts.</summary>
     private static void ChipLabel(TMP_Text label, DesktopConfigSO config)
     {
-        label.enableAutoSizing = true;
-        label.fontSizeMax = config.chipLabelSize;
-        label.fontSizeMin = config.chipLabelSize * 0.75f;
+        label.enableAutoSizing = false;
+        label.fontSize = config.chipLabelSize;
         label.textWrappingMode = TextWrappingModes.NoWrap;
         label.overflowMode = TextOverflowModes.Ellipsis;
         label.margin = Vector4.zero;

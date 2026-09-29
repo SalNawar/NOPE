@@ -17,3 +17,4 @@ MonoBehaviour:
   nation: {fileID: 0}
   description: 'Displaced returns: a Displacement Certificate, an Intake Declaration
     and a Return Order. Every paper must match the Displacement Registry.'
+  kinds: 

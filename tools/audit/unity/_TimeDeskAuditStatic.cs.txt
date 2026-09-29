@@ -195,7 +195,7 @@ public static class _TimeDeskAuditStatic
         return world;
     }
 
-    /// <summary>Piece 10's dump line (the same format as SCRATCH/p10_after_cases.txt), the violator's place named, each paper's serial after its name (redesign phase 4).</summary>
+    /// <summary>Piece 10's dump line (the same format as SCRATCH/p10_after_cases.txt), the violator's place (or a guaranteed procedure's rule, phase 9) named, each paper's serial after its name (redesign phase 4).</summary>
     public static string CaseLine(int seed, int day, string leader, int slot, CaseInstance c, string violatorPlace)
     {
         List<DocumentField> fields = c.documents.SelectMany(d => d.fields).ToList();

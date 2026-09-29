@@ -114,6 +114,17 @@ public class ForgeryTests
         Assert.IsTrue(Forgery.IsProvableCategory(ClueCategory.BirthDate, null));
     }
 
+    /// <summary>The registered contract's rows (phase 9) are record categories: the account proves them, whatever the books.</summary>
+    [TestCase(ClueCategory.Employer)]
+    [TestCase(ClueCategory.Term)]
+    [TestCase(ClueCategory.Wage)]
+    public void IsRecordCategory_TheContractsRows(ClueCategory category)
+    {
+        Assert.IsTrue(Forgery.IsRecordCategory(category));
+        Assert.IsTrue(Forgery.IsProvableCategory(category, null));
+        Assert.IsFalse(Forgery.IsDirectiveOnly(category));
+    }
+
     [Test]
     public void IsProvableCategory_APlaceFact_ExactlyWhenABookCoversIt()
     {

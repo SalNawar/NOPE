@@ -7,7 +7,7 @@ using NUnit.Framework;
 /// </summary>
 public class SerializedEnumsTests
 {
-    /// <summary>ClueCategory: stored in templates, books, places, effects, the config and saves (FactEdit, CarryRecord); phase 3 appends CitizenId, Destination, Incident, DepartureDate and Expiry; phase 6 AccountStatus, TransponderId, TransponderClass and Debt.</summary>
+    /// <summary>ClueCategory: stored in templates, books, places, effects, the config and saves (FactEdit, CarryRecord); phase 3 appends CitizenId, Destination, Incident, DepartureDate and Expiry; phase 6 AccountStatus, TransponderId, TransponderClass and Debt; phase 8 WaiverNo, Credit, Funds, PolicyNo and Signature; phase 9 Employer, Term and Wage.</summary>
     [Test]
     public void ClueCategory_KeepsItsSerializedInts()
     {
@@ -34,7 +34,10 @@ public class SerializedEnumsTests
         Assert.AreEqual(20, (int)ClueCategory.Funds);
         Assert.AreEqual(21, (int)ClueCategory.PolicyNo);
         Assert.AreEqual(22, (int)ClueCategory.Signature);
-        Assert.AreEqual(23, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
+        Assert.AreEqual(23, (int)ClueCategory.Employer);
+        Assert.AreEqual(24, (int)ClueCategory.Term);
+        Assert.AreEqual(25, (int)ClueCategory.Wage);
+        Assert.AreEqual(26, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
     }
 
     /// <summary>CitizenStatus: stored in the content library's account ranges (agency.accounts.statuses).</summary>
@@ -65,10 +68,14 @@ public class SerializedEnumsTests
         Assert.AreEqual(2, (int)LieKind.DoctoredIdentity);
         Assert.AreEqual(3, (int)LieKind.FakeDisplaced);
         Assert.AreEqual(4, (int)LieKind.Smuggling);
-        Assert.AreEqual(5, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
+        Assert.AreEqual(5, (int)LieKind.DebtorPosingAsTourist);
+        Assert.AreEqual(6, (int)LieKind.ForgedContract);
+        Assert.AreEqual(7, (int)LieKind.FakeWaiver);
+        Assert.AreEqual(8, (int)LieKind.ForgedProof);
+        Assert.AreEqual(9, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
     }
 
-    /// <summary>TravelRuleType: stored in TravelRuleSO.type (world_source.json rules[].type); phase 12 appends ReturnHome, phase 11 NoPresentGoods and PaperDates.</summary>
+    /// <summary>TravelRuleType: stored in TravelRuleSO.type (world_source.json rules[].type); phase 10 appends DressForDestination, phase 7 Procedure, phase 12 ReturnHome, phase 11 NoPresentGoods and PaperDates, phase 9 PaperSet and DebtStanding.</summary>
     [Test]
     public void TravelRuleType_KeepsItsSerializedInts()
     {
@@ -80,7 +87,9 @@ public class SerializedEnumsTests
         Assert.AreEqual(5, (int)TravelRuleType.ReturnHome);
         Assert.AreEqual(6, (int)TravelRuleType.NoPresentGoods);
         Assert.AreEqual(7, (int)TravelRuleType.PaperDates);
-        Assert.AreEqual(8, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
+        Assert.AreEqual(8, (int)TravelRuleType.PaperSet);
+        Assert.AreEqual(9, (int)TravelRuleType.DebtStanding);
+        Assert.AreEqual(10, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
     }
 
     /// <summary>MissingFormVariant: stored in the content library's missing-form replies (interview.missingFormReplies).</summary>

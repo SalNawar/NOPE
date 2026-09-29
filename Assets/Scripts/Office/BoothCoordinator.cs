@@ -160,8 +160,8 @@ public sealed class BoothCoordinator : MonoBehaviour
         Apply();
     }
 
-    /// <summary>A scan finished (the paper and whether it was an analysis pass are the PC's, CaseDocumentsPresenter): the screen wakes and the rules re-apply.</summary>
-    private void HandleScanFinished(int paper, bool analysed)
+    /// <summary>A scan finished (the paper and its pass are the PC's, CaseDocumentsPresenter): the screen wakes and the rules re-apply.</summary>
+    private void HandleScanFinished(int paper, ScanPass pass)
     {
         if (screen != null)
             screen.Wake(WakeReason.ScanFinished);

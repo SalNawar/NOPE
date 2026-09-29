@@ -114,6 +114,28 @@ public class AgencyCalendarTests
         StringAssert.Contains("agency.firstDate", problems[2]);
     }
 
+    /// <summary>Phase 9: the employers (agency.employers) are the block's too: an id once, an era, a name that fits a form's box.</summary>
+    [Test]
+    public void AgencyContent_Problems_TheEmployers()
+    {
+        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models(), proofs = Proofs() };
+        agency.employers = new System.Collections.Generic.List<Employer>
+        {
+            new Employer { id = "tyburn", era = "industrial", name = "Tyburn Mills Consortium" },
+            new Employer { id = "tyburn", era = "", name = "" },
+            new Employer { id = " ", era = "modern", name = "A name far too wide to fit a form's box" }
+        };
+        var problems = agency.Problems();
+        Assert.AreEqual(5, problems.Count, string.Join(" | ", problems));
+        StringAssert.Contains("'tyburn' is blank or listed twice", problems[0]);
+        StringAssert.Contains("the era is blank", problems[1]);
+        StringAssert.Contains("the name is blank", problems[2]);
+        StringAssert.Contains("' ' is blank or listed twice", problems[3]);
+        StringAssert.Contains("characters", problems[4]);
+        CollectionAssert.AreEqual(new[] { "Tyburn Mills Consortium" }, agency.EmployersOf("industrial"));
+        CollectionAssert.IsEmpty(agency.EmployersOf("ancient"));
+    }
+
     /// <summary>Phase 3: the displaced's day ranges (agency.displaced) are the block's too.</summary>
     [Test]
     public void AgencyContent_Problems_TheDisplacedRanges()
@@ -165,6 +187,8 @@ public class AgencyCalendarTests
         validDaysMax = 365,
         tripsWithinDays = 1095,
         waiverPrefix = "SW",
+        frozenWithinDays = 30,
+        contract = new ContractRanges { termMin = 90, termMax = 720, wageMin = 180, wageMax = 520 },
         statuses = new System.Collections.Generic.List<StatusRanges>
         {
             new StatusRanges { status = CitizenStatus.Premium, tripsMax = 3 },

@@ -70,6 +70,7 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Color XpFace = new Color(0.925f, 0.913f, 0.847f, 1f); // #ECE9D8 control face
     private static readonly Color XpRed = new Color(0.77f, 0.235f, 0.17f, 1f);    // close button (#C43C2C: white reads on it)
     private static readonly Color Tooltip = new Color(1f, 1f, 0.88f, 1f);         // #FFFFE1 info yellow
+    private static readonly Color CompareMatchInk = new Color(0.05f, 0.45f, 0.12f, 1f); // the compare's MATCH ink (CompareMatch; the theme's replaces it)
 
     private static readonly Color PanelNavy = new Color(0.1f, 0.12f, 0.2f, 0.97f);
     private static readonly Color Paper = new Color(0.925f, 0.913f, 0.847f, 1f);  // XP window body
@@ -334,7 +335,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(soCompare, "dock", dockColumns);
         SetRef(soCompare, "officeBar", officeCompareStrip);
         SetRef(soCompare, "officeText", officeCompareText);
-        SetColor(soCompare, "matchColor", new Color(0.05f, 0.45f, 0.12f, 1f));
+        SetColor(soCompare, "matchColor", CompareMatchInk);
         SetColor(soCompare, "mismatchColor", new Color(0.72f, 0.1f, 0.08f, 1f));
         SetColor(soCompare, "neutralColor", new Color(0.18f, 0.15f, 0.05f, 1f));
         soCompare.ApplyModifiedProperties();

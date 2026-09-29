@@ -5,6 +5,29 @@ public class ShiftLedgerTests
     private static CaseVerdict Verdict(bool correct, int pay = 0, int penalty = 0, float stability = 0f, bool unproven = false) =>
         new CaseVerdict { correct = correct, payAwarded = pay, moneyPenalty = penalty, stabilityDelta = stability, unprovenDenial = unproven };
 
+    private static CaseVerdict Departure(TravellerKind kind, bool accepted, int debt = 0) =>
+        new CaseVerdict { kind = kind, accepted = accepted, debt = debt, correct = true };
+
+    /// <summary>The departure lines (traveller types §10; phase 9): accepted tourists are leisure departures, accepted labourers Debt Relief departures whose debts are put to work; denials and the displaced count for neither.</summary>
+    [Test]
+    public void Departures_CountTheAcceptedTouristsAndLabourers_AndSumTheLabourersDebt()
+    {
+        var ledger = new ShiftLedger();
+        ledger.verdicts.Add(Departure(TravellerKind.RichTourist, true));
+        ledger.verdicts.Add(Departure(TravellerKind.PoorTourist, true, debt: 12_000));
+        ledger.verdicts.Add(Departure(TravellerKind.RichTourist, false));
+        ledger.verdicts.Add(Departure(TravellerKind.Labourer, true, debt: 212_000));
+        ledger.verdicts.Add(Departure(TravellerKind.Labourer, true, debt: 40_000));
+        ledger.verdicts.Add(Departure(TravellerKind.Labourer, false, debt: 90_000));
+        ledger.verdicts.Add(Departure(TravellerKind.Displaced, true));
+
+        Assert.AreEqual(2, ledger.LeisureDepartures);
+        Assert.AreEqual(2, ledger.DebtReliefDepartures);
+        Assert.AreEqual(252_000, ledger.DebtPutToWork, "the accepted labourers' debts; a tourist's debt is not put to work");
+        Assert.AreEqual(0, new ShiftLedger().LeisureDepartures);
+        Assert.AreEqual(0, new ShiftLedger().DebtPutToWork);
+    }
+
     [Test]
     public void Totals_SumAcrossVerdicts()
     {
