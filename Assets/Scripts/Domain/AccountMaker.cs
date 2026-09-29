@@ -54,6 +54,35 @@ public sealed class TransponderModel
     public float weight = 1f;
 }
 
+/// <summary>
+/// One proof of means a poor tourist may hold (world_source.json
+/// agency.proofs; traveller types F2, §4.1, §4.3): the form that prints it,
+/// the record category it is compared under (Credit, Funds or PolicyNo), its
+/// weight in the draw, and its value's range (an amount of credits) or its
+/// number's prefix ("TI" gives "TI-551902").
+/// </summary>
+[Serializable]
+public sealed class ProofOfMeans
+{
+    /// <summary>The form that prints the proof ("TC-415"), unique among the proofs; the account's ProofForm names it.</summary>
+    public string form;
+
+    /// <summary>The record category the proof is compared under: Credit or Funds (an amount) or PolicyNo (a number).</summary>
+    public ClueCategory category;
+
+    /// <summary>Relative weight among the proofs (positive).</summary>
+    public float weight = 1f;
+
+    /// <summary>The least amount, in credits (an amount proof).</summary>
+    public int amountMin;
+
+    /// <summary>The most amount, in credits (an amount proof).</summary>
+    public int amountMax;
+
+    /// <summary>The number's prefix (a number proof); blank for an amount.</summary>
+    public string prefix = string.Empty;
+}
+
 /// <summary>The ranges one account status is drawn from (world_source.json agency.accounts.statuses; traveller types §4.1).</summary>
 [Serializable]
 public sealed class StatusRanges
@@ -95,6 +124,9 @@ public sealed class AccountRanges
     /// <summary>A past trip left 1 to this many days before today.</summary>
     public int tripsWithinDays;
 
+    /// <summary>The Stranding Waiver number's prefix ("SW" gives "SW-204817"; F3): every account on an Economy transponder registers one.</summary>
+    public string waiverPrefix = string.Empty;
+
     /// <summary>Each status's ranges (one entry per status).</summary>
     public List<StatusRanges> statuses = new();
 
@@ -108,15 +140,25 @@ public sealed class AccountRanges
     /// <see cref="MaxDebt"/>; and, over <paramref name="transponders"/>, a
     /// model id used twice, a blank model or prefix, a printed name wider than
     /// a book row (FactTable.MaxValueLength, a form's box), a weight of 0 or
-    /// less, and a class some status travels on with no model. Empty when sound.
+    /// less, and a class some status travels on with no model; a blank waiver
+    /// prefix or one whose number is wider than a book row; and, over
+    /// <paramref name="proofs"/> (phase 8), no proof at all (a Standard account
+    /// holds one), a form listed twice or blank, a category that is not a
+    /// proof's (AccountMaker.IsProofCategory), a weight of 0 or less, an
+    /// amount range out of order or above <see cref="MaxDebt"/>, and a number
+    /// proof with a blank prefix or one wider than a book row. Empty when sound.
     /// </summary>
-    public List<string> Problems(IReadOnlyList<TransponderModel> transponders)
+    public List<string> Problems(IReadOnlyList<TransponderModel> transponders, IReadOnlyList<ProofOfMeans> proofs)
     {
         var problems = new List<string>();
         if (validDaysMin < 0 || validDaysMin > validDaysMax)
             problems.Add($"agency.accounts.validDaysMin {validDaysMin} and validDaysMax {validDaysMax}: an honest paper is valid from 0 <= validDaysMin <= validDaysMax days after today.");
         if (tripsWithinDays < 1)
             problems.Add($"agency.accounts.tripsWithinDays is {tripsWithinDays}: a past trip left at least 1 day before today.");
+        if (string.IsNullOrWhiteSpace(waiverPrefix))
+            problems.Add("agency.accounts.waiverPrefix is blank: the Stranding Waiver number's prefix (\"SW\").");
+        else if (AccountMaker.Numbered(waiverPrefix, new TopDraws()).Length > FactTable.MaxValueLength)
+            problems.Add($"agency.accounts.waiverPrefix '{waiverPrefix}': a waiver number is wider than the {FactTable.MaxValueLength} characters a form's box holds.");
 
         foreach (CitizenStatus status in (CitizenStatus[])Enum.GetValues(typeof(CitizenStatus)))
         {
@@ -155,6 +197,37 @@ public sealed class AccountRanges
         foreach (TransponderClass needed in ((CitizenStatus[])Enum.GetValues(typeof(CitizenStatus))).Select(AccountMaker.ClassOf).Distinct())
             if (transponders == null || !transponders.Any(t => t != null && t.transponderClass == needed && t.weight > 0f))
                 problems.Add($"agency.transponders has no {needed} model, but some accounts travel on one.");
+
+        var forms = new HashSet<string>();
+        List<ProofOfMeans> listed = (proofs ?? Array.Empty<ProofOfMeans>()).Where(p => p != null).ToList();
+        if (listed.Count == 0)
+            problems.Add("agency.proofs is empty: a Standard account holds one proof of means (a credit line, savings or a policy).");
+        foreach (ProofOfMeans p in listed)
+        {
+            if (string.IsNullOrWhiteSpace(p.form))
+                problems.Add($"agency.proofs: a {p.category} proof names no form.");
+            else if (!forms.Add(p.form))
+                problems.Add($"agency.proofs: the form '{p.form}' is listed twice.");
+            if (!AccountMaker.IsProofCategory(p.category))
+                problems.Add($"agency.proofs '{p.form}': {p.category} is not a proof of means (Credit, Funds or PolicyNo).");
+            if (p.weight <= 0f)
+                problems.Add($"agency.proofs '{p.form}': the weight {p.weight} must be positive.");
+            if (AccountMaker.IsAmount(p.category))
+            {
+                if (p.amountMin < 0 || p.amountMin > p.amountMax)
+                    problems.Add($"agency.proofs '{p.form}': the amount range {p.amountMin}-{p.amountMax} must run from 0 or more upwards.");
+                if (p.amountMax > MaxDebt)
+                    problems.Add($"agency.proofs '{p.form}': the amount {p.amountMax} is above {AccountMaker.Credits(MaxDebt)}, the widest a form prints.");
+            }
+            else if (string.IsNullOrWhiteSpace(p.prefix))
+            {
+                problems.Add($"agency.proofs '{p.form}': a {p.category} proof needs its number's prefix (\"TI\").");
+            }
+            else if (AccountMaker.Numbered(p.prefix, new TopDraws()).Length > FactTable.MaxValueLength)
+            {
+                problems.Add($"agency.proofs '{p.form}': a number with the prefix '{p.prefix}' is wider than the {FactTable.MaxValueLength} characters a form's box holds.");
+            }
+        }
 
         return problems;
     }
@@ -199,8 +272,29 @@ public sealed class AccountRequest
     /// <summary>The places a past trip may have visited: every past place, by label.</summary>
     public IReadOnlyList<string> TripPlaces;
 
-    /// <summary>How many of the traveller's forms print a Valid Until (one honest date is drawn for each, in form order).</summary>
-    public int ExpiringForms;
+    /// <summary>The forms of the traveller's blueprint, in paper order: the account decides which of them the traveller carries (AccountMaker.Carries), and one honest Valid Until is drawn for each carried form that expires, in form order.</summary>
+    public IReadOnlyList<FormEntry> Forms;
+}
+
+/// <summary>One form of a blueprint as the account maker sees it (phase 8): its number, its request group and whether it prints a Valid Until.</summary>
+public readonly struct FormEntry
+{
+    /// <summary>The agency form number ("TC-415").</summary>
+    public readonly string FormNumber;
+
+    /// <summary>The request group it belongs to (DocumentTemplateSO.askGroup; AccountMaker.ProofGroup for a proof of means), or blank.</summary>
+    public readonly string AskGroup;
+
+    /// <summary>True when the form prints a Valid Until (an Expiry field).</summary>
+    public readonly bool Expires;
+
+    /// <summary>Creates an entry.</summary>
+    public FormEntry(string formNumber, string askGroup, bool expires)
+    {
+        FormNumber = formNumber;
+        AskGroup = askGroup;
+        Expires = expires;
+    }
 }
 
 /// <summary>
@@ -223,6 +317,18 @@ public sealed class CitizenAccount
 
     /// <summary>The transponder's class (the category TransponderClass prints its name).</summary>
     public TransponderClass TransponderClass;
+
+    /// <summary>The Stranding Waiver registered on the account ("SW-204817", the category WaiverNo): every account on an Economy transponder holds one; null on a Premium one (none on file).</summary>
+    public string WaiverNo;
+
+    /// <summary>The form of the proof of means on file ("TC-416"): the one form of the proof group the traveller carries; null when the account holds none (every status but Standard).</summary>
+    public string ProofForm;
+
+    /// <summary>The proof's record category (Credit, Funds or PolicyNo); meaningless without a <see cref="ProofForm"/>.</summary>
+    public ClueCategory ProofCategory;
+
+    /// <summary>The proof's value as papers and the record print it ("9,400 cr", "TI-551902"); null without a proof.</summary>
+    public string ProofValue;
 
     /// <summary>The family's lineage: a past place (flavour, traveller types R4); null when none is authored.</summary>
     public string Lineage;
@@ -270,21 +376,55 @@ public static class AccountMaker
     public static TransponderClass ClassOf(CitizenStatus status) =>
         status == CitizenStatus.Premium ? TransponderClass.Premium : TransponderClass.Economy;
 
+    /// <summary>The request group of the proofs of means (DocumentTemplateSO.askGroup, traveller types I2): the three proof forms share it, and a traveller carries the one their account holds.</summary>
+    public const string ProofGroup = "proof";
+
+    /// <summary>True for a proof of means' record category: a credit line, savings or a policy number (§4.1's one Forms-on-file row).</summary>
+    public static bool IsProofCategory(ClueCategory category) =>
+        category == ClueCategory.Credit || category == ClueCategory.Funds || category == ClueCategory.PolicyNo;
+
+    /// <summary>True when a proof of <paramref name="category"/> is an amount of credits (a credit line or savings); a policy is a number.</summary>
+    public static bool IsAmount(ClueCategory category) => category == ClueCategory.Credit || category == ClueCategory.Funds;
+
+    /// <summary>True when an account of <paramref name="status"/> holds a proof of means on file: a Standard account (a poor tourist, or poor posing as rich); a Premium citizen pays their own way and an Eligible one departs on Debt Relief.</summary>
+    public static bool HoldsProof(CitizenStatus status) => status == CitizenStatus.Standard;
+
+    /// <summary>True when an account of <paramref name="status"/> registers a Stranding Waiver: every account on an Economy transponder (F3).</summary>
+    public static bool HoldsWaiver(CitizenStatus status) => ClassOf(status) == TransponderClass.Economy;
+
+    /// <summary>
+    /// True when a traveller with <paramref name="account"/> carries a form of
+    /// their blueprint: every form outside a request group, and of the proof
+    /// group (<see cref="ProofGroup"/>) the one form the account holds
+    /// (CitizenAccount.ProofForm); a form of another group, or a proof when
+    /// the account holds none, is not carried.
+    /// </summary>
+    public static bool Carries(string askGroup, string formNumber, CitizenAccount account) =>
+        string.IsNullOrEmpty(askGroup) ||
+        (askGroup == ProofGroup && account != null && account.ProofForm != null && account.ProofForm == formNumber);
+
     /// <summary>
     /// A citizen's account, in the fixed draw order (§4.3): the Citizen ID
     /// (<see cref="CitizenId"/>, redrawn while taken today); the debt
-    /// (<see cref="Amount"/>, one draw); the transponder model (one weighted
+    /// (<see cref="Amount"/>, one draw); for an account that holds a proof of
+    /// means (<see cref="HoldsProof"/>) the proof (one weighted draw over
+    /// <paramref name="proofs"/>; none without proofs) and its value (an
+    /// amount: <see cref="Amount"/>, one draw; a number: <see cref="Numbered"/>,
+    /// redrawn while taken); the transponder model (one weighted
     /// draw among the models of the status's class; none without a model) and
-    /// its serial (<see cref="Serial"/>, redrawn while taken); the lineage (one
+    /// its serial (<see cref="Serial"/>, redrawn while taken); for an account
+    /// that registers a waiver (<see cref="HoldsWaiver"/>) its number
+    /// (<see cref="Numbered"/> with the waiver prefix, redrawn while taken); the lineage (one
     /// draw; none without lineages); the number of past trips (one draw), then
     /// each trip's day (AgencyNumbers.DaysAgo) and place (one draw each); then
-    /// one honest Valid Until per expiring form (AgencyNumbers.DaysAhead). The
-    /// ID and the serial join <paramref name="takenToday"/>. Later phases add
-    /// their draws in their places (a poor tourist's proof of means after the
-    /// debt; the waiver after the transponder; a labourer's contract after it).
+    /// one honest Valid Until per carried form that expires
+    /// (<see cref="Carries"/> over the request's forms, in form order;
+    /// AgencyNumbers.DaysAhead). The ID, the serial and every number join
+    /// <paramref name="takenToday"/>. A later phase adds a labourer's contract
+    /// after the waiver.
     /// </summary>
     public static CitizenAccount Make(AccountRequest request, AccountRanges ranges, IReadOnlyList<TransponderModel> transponders,
-                                      DateTime today, ISet<string> takenToday, IRandomSource rng)
+                                      IReadOnlyList<ProofOfMeans> proofs, DateTime today, ISet<string> takenToday, IRandomSource rng)
     {
         ranges = ranges ?? new AccountRanges();
         StatusRanges status = ranges.For(request.Status) ?? new StatusRanges { status = request.Status };
@@ -300,12 +440,29 @@ public static class AccountMaker
         account.CitizenId = AgencyNumbers.TakeUnique(takenToday, () => CitizenId(rng));
         account.Debt = Amount(status.debtMin, status.debtMax, rng);
 
+        if (HoldsProof(request.Status))
+        {
+            List<ProofOfMeans> held = (proofs ?? Array.Empty<ProofOfMeans>()).Where(p => p != null && p.weight > 0f).ToList();
+            ProofOfMeans proof = WeightedRandom.Pick(held, p => p.weight, rng);
+            if (proof != null)
+            {
+                account.ProofForm = proof.form;
+                account.ProofCategory = proof.category;
+                account.ProofValue = IsAmount(proof.category)
+                    ? Credits(Amount(proof.amountMin, proof.amountMax, rng))
+                    : AgencyNumbers.TakeUnique(takenToday, () => Numbered(proof.prefix, rng));
+            }
+        }
+
         List<TransponderModel> models = (transponders ?? Array.Empty<TransponderModel>())
             .Where(t => t != null && t.transponderClass == grade)
             .ToList();
         TransponderModel model = WeightedRandom.Pick(models, t => t.weight, rng);
         if (model != null)
             account.Transponder = TransponderName(model.model, AgencyNumbers.TakeUnique(takenToday, () => Serial(model.prefix, rng)));
+
+        if (HoldsWaiver(request.Status))
+            account.WaiverNo = AgencyNumbers.TakeUnique(takenToday, () => Numbered(ranges.waiverPrefix, rng));
 
         IReadOnlyList<string> lineages = request.Lineages ?? Array.Empty<string>();
         if (lineages.Count > 0)
@@ -326,13 +483,17 @@ public static class AccountMaker
             .Select(t => new PastTrip(AgencyCalendar.Write(t.day), t.place))
             .ToArray();
 
-        var validUntil = new string[Math.Max(0, request.ExpiringForms)];
-        for (int i = 0; i < validUntil.Length; i++)
-            validUntil[i] = AgencyCalendar.Write(AgencyNumbers.DaysAhead(today, ranges.validDaysMin, ranges.validDaysMax, rng));
+        var validUntil = new List<string>();
+        foreach (FormEntry form in request.Forms ?? Array.Empty<FormEntry>())
+            if (form.Expires && Carries(form.AskGroup, form.FormNumber, account))
+                validUntil.Add(AgencyCalendar.Write(AgencyNumbers.DaysAhead(today, ranges.validDaysMin, ranges.validDaysMax, rng)));
         account.ValidUntil = validUntil;
 
         return account;
     }
+
+    /// <summary>An agency number with a prefix, "{prefix}-nnnnnn": one draw, 000000-999999 (a Stranding Waiver "SW-204817", a policy "TI-551902").</summary>
+    public static string Numbered(string prefix, IRandomSource rng) => $"{prefix}-{rng.Range(0, 1000000):D6}";
 
     /// <summary>A Citizen ID, "nnn-nnnn-nn": three draws, 000-999, 0000-9999 then 00-99.</summary>
     public static string CitizenId(IRandomSource rng) =>
@@ -361,8 +522,9 @@ public static class AccountMaker
 /// A Citizen Account as record rows (traveller types R1, §4.1): the art's
 /// three groups (Records, Forms on file, Travel) and the note, found by the
 /// Citizen ID or the name. A row whose category is compared is evidence (a
-/// compare pick); the rest (standing, lineage, the forms not on file, the
-/// departure date, past trips, the note) is shown only. Labels and fixed
+/// compare pick): the waiver and the proof of means (under the proof's own
+/// category) when the account holds them; the rest (standing, lineage, the
+/// forms not on file, the departure date, past trips, the note) is shown only. Labels and fixed
 /// words come through <c>text</c> (UI string keys), values from the account.
 /// The clerk's own account is a record too, with no evidence row.
 /// </summary>
@@ -392,8 +554,8 @@ public static class AccountRecords
         {
             new RecordRow(text("records.row.transponder"), account.Transponder ?? none, ClueCategory.TransponderId),
             new RecordRow(text("records.row.transponderClass"), account.TransponderClass.ToString(), ClueCategory.TransponderClass),
-            new RecordRow(text("records.row.waiver"), none),
-            new RecordRow(text("records.row.proof"), none),
+            account.WaiverNo != null ? new RecordRow(text("records.row.waiver"), account.WaiverNo, ClueCategory.WaiverNo) : new RecordRow(text("records.row.waiver"), none),
+            account.ProofForm != null ? new RecordRow(text("records.row.proof"), account.ProofValue, account.ProofCategory) : new RecordRow(text("records.row.proof"), none),
             new RecordRow(text("records.row.contract"), none)
         };
 

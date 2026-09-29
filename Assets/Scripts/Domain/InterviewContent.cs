@@ -111,6 +111,48 @@ public sealed class KindLine
     public LineText line = new();
 }
 
+/// <summary>A request group's label (world_source.json interview.askGroups; traveller types I2): the forms sharing DocumentTemplateSO.askGroup are one papers-menu entry named by it ("Proof of means").</summary>
+[Serializable]
+public sealed class AskGroupLabel
+{
+    /// <summary>The group's id ("proof": AccountMaker.ProofGroup).</summary>
+    public string id;
+
+    /// <summary>The papers-menu entry ("Proof of means").</summary>
+    public string label;
+}
+
+/// <summary>
+/// Why a traveller lacks a form the desk asks for (traveller types I2, §6.1):
+/// the line they answer with. Serialized in the library's missing-form
+/// replies: append only (SerializedEnumsTests pins every value).
+/// </summary>
+public enum MissingFormVariant
+{
+    /// <summary>They never needed it (a rich tourist asked for a waiver: "It's a Premium unit, I don't need one").</summary>
+    Honest,
+
+    /// <summary>They should have it and left it out (a paper-set fault, the plan's phase 9: "I... didn't get round to that one").</summary>
+    Missing
+}
+
+/// <summary>One missing-form reply (world_source.json interview.missingFormReplies): a kind's one-shot line when asked for a request (a form number or a group id) they carry no form of.</summary>
+[Serializable]
+public sealed class MissingFormReply
+{
+    /// <summary>The kind that says it.</summary>
+    public TravellerKind kind;
+
+    /// <summary>The request: a form number ("TC-310") or a request group's id ("proof"); FormRequests.IdOf.</summary>
+    public string request;
+
+    /// <summary>Why the form is missing.</summary>
+    public MissingFormVariant variant;
+
+    /// <summary>The line ("interview.missingFormReplies.{Kind}.{request}.{Variant}").</summary>
+    public LineText line = new();
+}
+
 /// <summary>Per-era wording of a question: chosen by the traveller's claimed era.</summary>
 [Serializable]
 public sealed class WordingOverride
@@ -217,6 +259,12 @@ public sealed class InterviewLines
 
     /// <summary>Hub entry that opens the papers menu when a traveller can be asked for two or more documents ("Request papers >"; traveller types I2).</summary>
     public string papersLabel;
+
+    /// <summary>The request groups' labels (interview.askGroups): one papers-menu entry per group.</summary>
+    public List<AskGroupLabel> askGroups = new();
+
+    /// <summary>The missing-form replies (interview.missingFormReplies): what a kind says when asked for a request they carry no form of.</summary>
+    public List<MissingFormReply> missingFormReplies = new();
 
     /// <summary>The desk's request ({document}).</summary>
     public LineText requestPrompt = new();

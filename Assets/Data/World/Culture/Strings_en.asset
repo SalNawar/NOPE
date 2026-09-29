@@ -1892,3 +1892,23 @@ MonoBehaviour:
     text: DEBT
     gloss: 0
     tier: 0
+  - key: category.WaiverNo
+    text: WAIVER NO.
+    gloss: 0
+    tier: 0
+  - key: category.Credit
+    text: CREDIT
+    gloss: 0
+    tier: 0
+  - key: category.Funds
+    text: FUNDS
+    gloss: 0
+    tier: 0
+  - key: category.PolicyNo
+    text: POLICY NO.
+    gloss: 0
+    tier: 0
+  - key: category.Signature
+    text: SIGNATURE
+    gloss: 0
+    tier: 0

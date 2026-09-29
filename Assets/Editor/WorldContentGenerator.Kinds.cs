@@ -33,6 +33,9 @@ public static partial class WorldContentGenerator
 
         /// <summary>Its weight (0 or more).</summary>
         public float weight;
+
+        /// <summary>True when its travellers are honest (K5: no fault roll; day 1's poor tourists).</summary>
+        public bool honest;
     }
 
     /// <summary>Loads content.blueprints: each row a known kind, listed once, whose asset is a blueprint of that kind.</summary>
@@ -78,7 +81,7 @@ public static partial class WorldContentGenerator
         }
     }
 
-    /// <summary>Writes a day's traveller mix (days[].kinds) into its plan's kinds: each kind's blueprint and weight, in authored order (CheckDayKinds ran first).</summary>
+    /// <summary>Writes a day's traveller mix (days[].kinds) into its plan's kinds: each kind's blueprint, weight and honest mark, in authored order (CheckDayKinds ran first).</summary>
     private static void WriteKinds(SerializedObject so, DayData d, Authored authored)
     {
         KindWeightData[] kinds = d.kinds ?? Array.Empty<KindWeightData>();
@@ -90,6 +93,7 @@ public static partial class WorldContentGenerator
             ParseEnum(kinds[i].kind, out TravellerKind kind);
             el.FindPropertyRelative("blueprint").objectReferenceValue = authored.blueprints.TryGetValue(kind, out CaseBlueprintSO b) ? b : (Object)null;
             el.FindPropertyRelative("weight").floatValue = kinds[i].weight;
+            el.FindPropertyRelative("honest").boolValue = kinds[i].honest;
         }
     }
 

@@ -58,8 +58,51 @@ public class InterviewScriptTests
         };
     }
 
-    private static CaseDocument Doc(string name, DocumentHandOver handOver = DocumentHandOver.OnRequest) =>
-        new CaseDocument { name = name, handOver = handOver };
+    private static CaseDocument Doc(string name, DocumentHandOver handOver = DocumentHandOver.OnRequest, string formNumber = null, string askGroup = null) =>
+        new CaseDocument { name = name, handOver = handOver, formNumber = formNumber, askGroup = askGroup };
+
+    private static readonly TravellerKind[] Citizens = { TravellerKind.RichTourist, TravellerKind.PoorTourist, TravellerKind.Labourer };
+
+    /// <summary>The 2150 citizens' forms the desk may ask for (traveller types I2): the manifest, the waiver and the three proofs of means in the proof group.</summary>
+    private static AskableForm[] CitizenAskable() => new[]
+    {
+        new AskableForm("TC-230", "Departure Manifest", "", true, Citizens),
+        new AskableForm("TC-310", "Stranding Waiver", "", true, Citizens),
+        new AskableForm("TC-415", "Holiday Credit Agreement", AccountMaker.ProofGroup, true, Citizens),
+        new AskableForm("TC-416", "Proof of Funds", AccountMaker.ProofGroup, true, Citizens),
+        new AskableForm("TC-417", "Travel Insurance Certificate", AccountMaker.ProofGroup, true, Citizens)
+    };
+
+    /// <summary>A poor tourist's four papers: the visa on arrival, the manifest, the waiver and the Proof of Funds they hold.</summary>
+    private static CaseDocument[] PoorForms() => new[]
+    {
+        Doc("Leisure Departure Visa", DocumentHandOver.OnArrival, "TC-101"), Doc("Departure Manifest", formNumber: "TC-230"),
+        Doc("Stranding Waiver", formNumber: "TC-310"), Doc("Proof of Funds", formNumber: "TC-416", askGroup: AccountMaker.ProofGroup)
+    };
+
+    /// <summary>A rich tourist's two papers.</summary>
+    private static CaseDocument[] RichForms() => new[] { Doc("Leisure Departure Visa", DocumentHandOver.OnArrival, "TC-101"), Doc("Departure Manifest", formNumber: "TC-230") };
+
+    /// <summary>The wording with the proof group's label and the rich tourist's honest replies (world_source.json interview.askGroups, interview.missingFormReplies).</summary>
+    private static InterviewLines LinesWithGroups()
+    {
+        InterviewLines lines = Lines();
+        lines.askGroups.Add(new AskGroupLabel { id = AccountMaker.ProofGroup, label = "Proof of means" });
+        lines.missingFormReplies.Add(new MissingFormReply { kind = TravellerKind.RichTourist, request = "TC-310", variant = MissingFormVariant.Honest, line = new LineText("interview.missingFormReplies.RichTourist.TC-310.Honest", "It's a Premium unit, I don't need one.") });
+        lines.missingFormReplies.Add(new MissingFormReply { kind = TravellerKind.RichTourist, request = AccountMaker.ProofGroup, variant = MissingFormVariant.Honest, line = new LineText("interview.missingFormReplies.RichTourist.proof.Honest", "I pay my own way.") });
+        lines.missingFormReplies.Add(new MissingFormReply { kind = TravellerKind.PoorTourist, request = AccountMaker.ProofGroup, variant = MissingFormVariant.Missing, line = new LineText("interview.missingFormReplies.PoorTourist.proof.Missing", "I... didn't get round to that one.") });
+        return lines;
+    }
+
+    /// <summary>A 2150 citizen of <paramref name="kind"/> with <paramref name="documents"/>, asked for the citizens' forms.</summary>
+    private static InterviewCase Citizen(TravellerKind kind, CaseDocument[] documents, MissingFormVariant variant = MissingFormVariant.Honest)
+    {
+        InterviewCase c = Case(documents: documents);
+        c.kind = kind;
+        c.askable = CitizenAskable();
+        c.missingVariant = variant;
+        return c;
+    }
 
     /// <summary>The key-word rule as world_source.json authors it (translation.keyWords).</summary>
     private static KeyWordRule KeyWordRule() => new KeyWordRule
@@ -216,6 +259,84 @@ public class InterviewScriptTests
         DialogNode papers = Build(c).Node(InterviewScript.PapersNodeId);
         Assert.AreEqual(4, papers.Choices.Count, "< Back + 3: the most one traveller is asked for (the spec's poor tourist)");
         CollectionAssert.AreEqual(new[] { "papers", "ask", "dlg:dlg_rumour" }, Ids(Build(c).Node(InterviewScript.HubNodeId).Choices), "still one hub entry");
+    }
+
+    // -----------------------------
+    // Request groups and missing forms (traveller types I2, phase 8)
+    // -----------------------------
+
+    [Test]
+    public void Papers_APoorTourist_TheProofGroupIsOneEntry_NamedByTheGroup_HandingOverTheHeldProof()
+    {
+        DialogNode papers = Build(Citizen(TravellerKind.PoorTourist, PoorForms()), lines: LinesWithGroups()).Node(InterviewScript.PapersNodeId);
+        CollectionAssert.AreEqual(new[] { "back", "request:1", "request:2", "request:3" }, Ids(papers.Choices));
+        CollectionAssert.AreEqual(new[] { "< Back", "Departure Manifest", "Stranding Waiver", "Proof of means" }, papers.Choices.Select(c => c.Label).ToArray());
+        DialogChoice proof = papers.Choices[3];
+        Assert.AreEqual(DialogAction.HandOverDocument, proof.Action);
+        Assert.AreEqual(3, proof.DocumentIndex, "the Proof of Funds the traveller holds");
+        Assert.AreEqual("Your Proof of means, please.", proof.Lines[0].Text, "the desk asks for the group");
+        Assert.AreEqual("Here you are.", proof.Lines[1].Text);
+    }
+
+    [Test]
+    public void Papers_ARichTourist_AskedForAWaiverOrAProof_AnswersWithTheirHonestLine_OneShot_NoHandOver()
+    {
+        DialogGraph graph = Build(Citizen(TravellerKind.RichTourist, RichForms()), lines: LinesWithGroups());
+        DialogNode papers = graph.Node(InterviewScript.PapersNodeId);
+        CollectionAssert.AreEqual(new[] { "back", "request:1", "missing:TC-310", "missing:proof" }, Ids(papers.Choices), "the three requests of a 2150 citizen, whatever they carry");
+        CollectionAssert.AreEqual(new[] { "< Back", "Departure Manifest", "Stranding Waiver", "Proof of means" }, papers.Choices.Select(c => c.Label).ToArray());
+
+        DialogChoice waiver = papers.Choices[2];
+        Assert.AreEqual(DialogAction.None, waiver.Action);
+        Assert.AreEqual(-1, waiver.DocumentIndex);
+        Assert.IsTrue(waiver.OneShot);
+        Assert.AreEqual(DialogChoiceKind.Request, waiver.Kind);
+        Assert.IsTrue(string.IsNullOrEmpty(waiver.Next), "stays in the papers menu");
+        CollectionAssert.AreEqual(new[] { "interview.requestPrompt", "interview.missingFormReplies.RichTourist.TC-310.Honest" }, LineIds(waiver.Lines));
+        Assert.AreEqual("Your Stranding Waiver, please.", waiver.Lines[0].Text);
+        Assert.AreEqual(DialogSpeaker.Desk, waiver.Lines[0].Speaker);
+        Assert.AreEqual("It's a Premium unit, I don't need one.", waiver.Lines[1].Text);
+        Assert.AreEqual(DialogSpeaker.Traveller, waiver.Lines[1].Speaker);
+        Assert.AreEqual("I pay my own way.", papers.Choices[3].Lines[1].Text);
+
+        var runner = new DialogRunner(graph, InterviewScript.Opening(LinesWithGroups(), Case()));
+        Assert.IsNotNull(runner.Choose("papers"));
+        Assert.IsNotNull(runner.Choose("missing:TC-310"));
+        CollectionAssert.AreEqual(new[] { "back", "request:1", "missing:proof" }, Ids(runner.Choices), "asked once");
+        Assert.IsNull(runner.Choose("missing:TC-310"));
+    }
+
+    [Test]
+    public void Papers_AMissingFormsReply_FollowsTheCasesVariant_AndIsOnlyThePromptWhenNoneIsAuthored()
+    {
+        InterviewCase poor = Citizen(TravellerKind.PoorTourist, PoorForms().Take(3).ToArray(), MissingFormVariant.Missing);
+        DialogNode papers = Build(poor, lines: LinesWithGroups()).Node(InterviewScript.PapersNodeId);
+        DialogChoice proof = papers.Choices[3];
+        Assert.AreEqual("missing:proof", proof.Id);
+        Assert.AreEqual("I... didn't get round to that one.", proof.Lines[1].Text, "a poor tourist who left their proof out (phase 9's paper-set fault)");
+
+        InterviewCase labourer = Citizen(TravellerKind.Labourer, RichForms());
+        DialogChoice unauthored = Build(labourer, lines: LinesWithGroups()).Node(InterviewScript.PapersNodeId).Choices[2];
+        CollectionAssert.AreEqual(new[] { "interview.requestPrompt" }, LineIds(unauthored.Lines), "no line authored for a labourer: the desk's prompt only (the validator demands the line)");
+    }
+
+    [Test]
+    public void Hub_OneAskableRequest_IsADirectEntry_EvenWhenNotCarried()
+    {
+        InterviewCase c = Citizen(TravellerKind.RichTourist, new[] { Doc("Leisure Departure Visa", DocumentHandOver.OnArrival, "TC-101") });
+        c.askable = new[] { new AskableForm("TC-310", "Stranding Waiver", "", true, Citizens) };
+        DialogNode hub = Build(c, lines: LinesWithGroups()).Node(InterviewScript.HubNodeId);
+        Assert.AreEqual("missing:TC-310", hub.Choices[0].Id);
+        Assert.AreEqual("Request Stranding Waiver", hub.Choices[0].Label);
+    }
+
+    [Test]
+    public void TheWheelsWorstCase_StaysEight_WithThreeRequestsForACitizen()
+    {
+        int requests = FormRequests.Count(FormRequests.For(TravellerKind.PoorTourist, CitizenAskable()));
+        Assert.AreEqual(3, requests, "Manifest, Waiver, Proof of means");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, requests, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
+                                 "the papers menu + 2 spoken requests + ask + look + 2 dialogs + one premade's dialog = 8");
     }
 
     [Test]
@@ -721,22 +842,22 @@ public class InterviewScriptTests
     [Test]
     public void MenuProblems_TheHub_PapersPlusAskPlusLookPlusDialogs_PremadeDialogsCountOnce()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 1, spokenRequests: 0, dialogs: 4, premadeDialogs: 3, maxChoices: 8),
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequests: 1, spokenRequests: 0, dialogs: 4, premadeDialogs: 3, maxChoices: 8),
                                  "1 request + ask + look + 4 dialogs + one premade's dialog = 8");
-        StringAssert.Contains("The hub holds 9 choices", Only(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 1, spokenRequests: 0, dialogs: 5, premadeDialogs: 3, maxChoices: 8), "the traveller wheel shows at most 8"));
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 1, spokenRequests: 0, dialogs: 4, premadeDialogs: 0, maxChoices: 7), "no premade dialog adds nothing");
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 0, spokenRequests: 0, dialogs: 5, premadeDialogs: 0, maxChoices: 7), "no request adds nothing");
+        StringAssert.Contains("The hub holds 9 choices", Only(DialogChecks.MenuProblems(1, false, maxRequests: 1, spokenRequests: 0, dialogs: 5, premadeDialogs: 3, maxChoices: 8), "the traveller wheel shows at most 8"));
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequests: 1, spokenRequests: 0, dialogs: 4, premadeDialogs: 0, maxChoices: 7), "no premade dialog adds nothing");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequests: 0, spokenRequests: 0, dialogs: 5, premadeDialogs: 0, maxChoices: 7), "no request adds nothing");
         CollectionAssert.IsEmpty(DialogChecks.MenuProblems(99, true, 99, 99, 99, 99, 0), "no capacity, no check");
     }
 
     [Test]
     public void MenuProblems_TheHub_CountsEverySpokenRequest_AndThePapersMenuAsOneEntry()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequests: 2, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
                                  "the displaced: the papers menu + 2 spoken requests + ask + look + 2 dialogs + one premade's dialog = 8");
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 3, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequests: 3, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
                                  "the spec's worst case: three forms on request still take one hub entry");
-        string problem = Only(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, spokenRequests: 3, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
+        string problem = Only(DialogChecks.MenuProblems(1, false, maxRequests: 2, spokenRequests: 3, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
                               "the traveller wheel shows at most 8");
         StringAssert.Contains("The hub holds 9 choices (the papers menu, 3 spoken request(s), the ask and look entries, 2 dialog(s), one premade's dialog)", problem);
         StringAssert.Contains("(1 document request, 3 spoken request(s)", Only(DialogChecks.MenuProblems(1, false, 1, 3, 2, 1, 8), "the traveller wheel shows at most 8"), "one form on request is a direct entry");
@@ -745,7 +866,7 @@ public class InterviewScriptTests
     [Test]
     public void MenuProblems_ThePapersMenu_BackPlusEveryRequest_OnlyWithTwoOrMore()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(0, false, maxRequestedDocuments: 7, spokenRequests: 0, dialogs: 0, premadeDialogs: 0, maxChoices: 8), "< Back + 7 = 8");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(0, false, maxRequests: 7, spokenRequests: 0, dialogs: 0, premadeDialogs: 0, maxChoices: 8), "< Back + 7 = 8");
         StringAssert.Contains("The papers menu holds 9 choices (< Back, 8 request(s)); the traveller wheel shows at most 8.",
                               Only(DialogChecks.MenuProblems(0, false, 8, 0, 0, 0, 8), "the traveller wheel shows at most 8"));
         StringAssert.Contains("The papers menu holds 7 choices", Only(DialogChecks.MenuProblems(0, false, 6, 0, 0, 0, 6), "the traveller wheel shows at most 6"));

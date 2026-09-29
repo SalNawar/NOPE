@@ -29,7 +29,12 @@ public class SerializedEnumsTests
         Assert.AreEqual(15, (int)ClueCategory.TransponderId);
         Assert.AreEqual(16, (int)ClueCategory.TransponderClass);
         Assert.AreEqual(17, (int)ClueCategory.Debt);
-        Assert.AreEqual(18, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
+        Assert.AreEqual(18, (int)ClueCategory.WaiverNo);
+        Assert.AreEqual(19, (int)ClueCategory.Credit);
+        Assert.AreEqual(20, (int)ClueCategory.Funds);
+        Assert.AreEqual(21, (int)ClueCategory.PolicyNo);
+        Assert.AreEqual(22, (int)ClueCategory.Signature);
+        Assert.AreEqual(23, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
     }
 
     /// <summary>CitizenStatus: stored in the content library's account ranges (agency.accounts.statuses).</summary>
@@ -76,6 +81,15 @@ public class SerializedEnumsTests
         Assert.AreEqual(6, (int)TravelRuleType.NoPresentGoods);
         Assert.AreEqual(7, (int)TravelRuleType.PaperDates);
         Assert.AreEqual(8, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>MissingFormVariant: stored in the content library's missing-form replies (interview.missingFormReplies).</summary>
+    [Test]
+    public void MissingFormVariant_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)MissingFormVariant.Honest);
+        Assert.AreEqual(1, (int)MissingFormVariant.Missing);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(MissingFormVariant)).Length, "a new member is appended here too");
     }
 
     /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy.</summary>

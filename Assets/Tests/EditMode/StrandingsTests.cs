@@ -85,6 +85,29 @@ public class StrandingsTests
         Assert.AreEqual(expected, Strandings.Standing(handedOver, signature, waiverNo, registeredNo));
     }
 
+    private static DocumentField F(ClueCategory category, string value) => new DocumentField { category = category, label = category.ToString(), value = value };
+
+    /// <summary>The TC-310 as printed: the signatory's hand and the waiver number.</summary>
+    private static List<DocumentField> Waiver(string signature, string number) => new List<DocumentField>
+    {
+        F(ClueCategory.Name, "Oren Hale"), F(ClueCategory.CitizenId, "552-1804-33"), F(ClueCategory.TransponderId, "Skip Lite · SL-11952"),
+        F(ClueCategory.Debt, "9,800 cr"), F(ClueCategory.WaiverNo, number), F(ClueCategory.Signature, signature)
+    };
+
+    /// <summary>Phase 8: the waiver paper handed over sets the standing through Standing; any other paper leaves it alone.</summary>
+    [Test]
+    public void StandingOf_TheWaiverPaper_ElseNone()
+    {
+        Assert.AreEqual(WaiverStanding.Signed, Strandings.StandingOf(Waiver("Oren", "SW-204817"), "SW-204817"));
+        Assert.AreEqual(WaiverStanding.Unsigned, Strandings.StandingOf(Waiver("", "SW-204817"), "SW-204817"), "a blank signature box");
+        Assert.AreEqual(WaiverStanding.Unsigned, Strandings.StandingOf(Waiver(Strandings.UnsignedMark, "SW-204817"), "SW-204817"));
+        Assert.AreEqual(WaiverStanding.Unregistered, Strandings.StandingOf(Waiver("Oren", "SW-999999"), "SW-204817"), "a forged number");
+        Assert.AreEqual(WaiverStanding.Unregistered, Strandings.StandingOf(Waiver("Oren", "SW-204817"), null), "a Premium account registers no waiver");
+        var manifest = new List<DocumentField> { F(ClueCategory.CitizenId, "552-1804-33"), F(ClueCategory.TransponderId, "Skip Lite · SL-11952") };
+        Assert.AreEqual(WaiverStanding.None, Strandings.StandingOf(manifest, "SW-204817"), "not a waiver");
+        Assert.AreEqual(WaiverStanding.None, Strandings.StandingOf(null, "SW-204817"));
+    }
+
     [TestCase(WaiverStanding.None, true)]
     [TestCase(WaiverStanding.Unsigned, true)]
     [TestCase(WaiverStanding.Unregistered, true)]

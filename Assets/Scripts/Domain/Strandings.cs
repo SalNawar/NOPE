@@ -97,6 +97,36 @@ public static class Strandings
         return WaiverStanding.Signed;
     }
 
+    /// <summary>
+    /// What the desk saw of a handed-over paper (phase 8, the TC-310 Stranding
+    /// Waiver): None when <paramref name="paper"/> is no waiver (it prints no
+    /// Waiver No.), else <see cref="Standing"/> of its Signature and Waiver No.
+    /// boxes against the account's <paramref name="registeredNo"/>
+    /// (CitizenAccount.WaiverNo; null registers none). The one call site is the
+    /// hand-over (InvestigationUIController.RequestPaper), so a paper that is
+    /// no waiver leaves the traveller's standing as it was.
+    /// </summary>
+    public static WaiverStanding StandingOf(IReadOnlyList<DocumentField> paper, string registeredNo)
+    {
+        string waiverNo = null, signature = null;
+        bool waiver = false;
+        foreach (DocumentField field in paper ?? Array.Empty<DocumentField>())
+        {
+            if (field == null)
+                continue;
+            if (field.category == ClueCategory.WaiverNo)
+            {
+                waiver = true;
+                waiverNo = field.value;
+            }
+            else if (field.category == ClueCategory.Signature)
+            {
+                signature = field.value;
+            }
+        }
+        return waiver ? Standing(true, signature, waiverNo, registeredNo) : WaiverStanding.None;
+    }
+
     /// <summary>The signature row's value of a waiver nobody signed.</summary>
     public const string UnsignedMark = "UNSIGNED";
 

@@ -103,15 +103,16 @@ public class PaperAnalysisTests
     {
         var docs = new[]
         {
-            Doc("Visa", F(ClueCategory.Expiry, "2 Apr 2150"), F(ClueCategory.DepartureDate, "14 Mar 2150"), F(ClueCategory.Name, "Mara")),
-            Doc("Manifest", F(ClueCategory.Expiry, "9 Apr 2150"), F(ClueCategory.DepartureDate, "15 Mar 2150"), F(ClueCategory.Name, "Nebamun"))
+            Doc("Visa", F(ClueCategory.Expiry, "2 Apr 2150"), F(ClueCategory.DepartureDate, "14 Mar 2150"), F(ClueCategory.Name, "Mara"), F(ClueCategory.Signature, "Mara")),
+            Doc("Manifest", F(ClueCategory.Expiry, "9 Apr 2150"), F(ClueCategory.DepartureDate, "15 Mar 2150"), F(ClueCategory.Name, "Nebamun"), F(ClueCategory.Signature, ""))
         };
         CollectionAssert.IsEmpty(PaperAnalysis.Contradictions(docs, null));
         Assert.IsFalse(PaperChecks.IsCompared(ClueCategory.DepartureDate));
         Assert.IsFalse(PaperChecks.IsCompared(ClueCategory.Expiry));
+        Assert.IsFalse(PaperChecks.IsCompared(ClueCategory.Signature), "a waiver's signature is read against the paper-set directive (phase 8)");
         Assert.IsFalse(PaperChecks.IsCompared(ClueCategory.Name), "never a tell (Forgery), so never a pair");
         foreach (ClueCategory category in System.Enum.GetValues(typeof(ClueCategory)))
-            if (category != ClueCategory.DepartureDate && category != ClueCategory.Expiry && category != ClueCategory.Name)
+            if (!Forgery.IsDirectiveOnly(category) && category != ClueCategory.Name)
                 Assert.IsTrue(PaperChecks.IsCompared(category), category.ToString());
     }
 

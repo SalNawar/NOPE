@@ -501,6 +501,26 @@ public static partial class WorldContentGenerator
             Id(RequestLineId(r.id, ReplyPart), $"spoken request '{r.id}'");
         }
 
+        // --- Request groups and missing-form replies (phase 8): ASCII, one set of line ids, then FormRequests' rules ---
+        foreach (AskGroupData g in iv.askGroups ?? Array.Empty<AskGroupData>())
+            if (g != null)
+                Ascii(InterviewLineId($"askGroups.{g.id}"), g.label);
+        MissingReplyData[] replies = iv.missingFormReplies ?? Array.Empty<MissingReplyData>();
+        foreach (MissingReplyData r in replies)
+        {
+            if (r == null)
+                continue;
+            if (!ParseEnum(r.kind, out TravellerKind _))
+                errors.Add($"interview.missingFormReplies: '{r.kind}' is not a traveller kind ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}).");
+            if (!ParseEnum(r.variant, out MissingFormVariant _))
+                errors.Add($"interview.missingFormReplies: '{r.variant}' is not a variant ({string.Join(", ", Enum.GetNames(typeof(MissingFormVariant)))}).");
+            Ascii(MissingReplyLineId(r.kind, r.request, r.variant), r.text);
+            Id(MissingReplyLineId(r.kind, r.request, r.variant), $"missing-form reply {r.kind} / '{r.request}' / {r.variant}");
+        }
+        List<KindForms> kindForms = KindForms(authored, out List<AskableForm> agencyForms);
+        errors.AddRange(FormRequests.GroupProblems(agencyForms, BuildLines(iv).askGroups));
+        errors.AddRange(FormRequests.ReplyProblems(BuildReplies(replies), agencyForms, kindForms));
+
         // --- Questions ---
         var bookCategories = new HashSet<ClueCategory>((authored.books ?? Array.Empty<ReferenceBookSO>()).Select(b => b.category));
         var eraIds = new HashSet<string>(src.eras.Select(e => e.id));
@@ -670,7 +690,7 @@ public static partial class WorldContentGenerator
         bool anySmallTalk = src.eras.Any(e => e.smallTalk != null && e.smallTalk.Length > 0) ||
                             src.places.Any(p => p.smallTalk != null && p.smallTalk.Length > 0);
         var premadeDialogs = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => !string.IsNullOrEmpty(m.dialog)).Select(m => m.dialog));
-        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.MostForOneKind(built), anySmallTalk, ContentLibraryValidator.MaxRequestedDocuments(Blueprints(authored)), requests.Length,
+        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.MostForOneKind(built), anySmallTalk, kindForms.Select(k => FormRequests.Count(k.Askable)).DefaultIfEmpty(0).Max(), requests.Length,
                                                              dialogs.Count(d => !premadeDialogs.Contains(d.id)), dialogs.Count(d => premadeDialogs.Contains(d.id)), iv.menuCapacity))
             errors.Add(problem);
 
@@ -705,6 +725,8 @@ public static partial class WorldContentGenerator
             Fits(RequestLineId(r.id, PromptPart), r.prompt, Interview.ValueToken, 0);
             Fits(RequestLineId(r.id, ReplyPart), r.reply, Interview.ValueToken, 0);
         }
+        foreach (MissingReplyData r in replies.Where(r => r != null))
+            Fits(MissingReplyLineId(r.kind, r.request, r.variant), r.text, Interview.ValueToken, 0);
 
         foreach (QuestionData q in questions)
         {
@@ -1491,8 +1513,9 @@ public static partial class WorldContentGenerator
 
     /// <summary>
     /// Refuses a day's lie that is no LieKind, listed twice, or that none of
-    /// the day's kinds can carry (LieKinds.AppliesTo): a lie nobody can tell
-    /// would be a content mistake that never shows.
+    /// the day's kinds can carry (LieKinds.AppliesTo; an honest entry carries
+    /// none, K5): a lie nobody can tell would be a content mistake that never
+    /// shows.
     /// </summary>
     private static void CheckLies(DayData d, List<string> errors)
     {
@@ -1506,9 +1529,9 @@ public static partial class WorldContentGenerator
             }
             if (!seen.Add(name))
                 errors.Add($"Day '{d.asset}' lists the lie '{name}' twice.");
-            bool fits = (d.kinds ?? Array.Empty<KindWeightData>()).Any(k => k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind kind) && LieKinds.AppliesTo(lie, kind));
+            bool fits = (d.kinds ?? Array.Empty<KindWeightData>()).Any(k => k != null && k.weight > 0f && !k.honest && ParseEnum(k.kind, out TravellerKind kind) && LieKinds.AppliesTo(lie, kind));
             if (!fits)
-                errors.Add($"Day '{d.asset}' enables the lie '{name}', which none of its kinds can carry.");
+                errors.Add($"Day '{d.asset}' enables the lie '{name}', which none of its kinds can carry (an honest entry carries none).");
         }
     }
 
@@ -1641,6 +1664,8 @@ public static partial class WorldContentGenerator
         honorificUnknown = i.honorificUnknown,
         requestLabel = i.requestLabel,
         papersLabel = i.papersLabel,
+        askGroups = (i.askGroups ?? Array.Empty<AskGroupData>()).Select(g => new AskGroupLabel { id = g.id, label = g.label }).ToList(),
+        missingFormReplies = BuildReplies(i.missingFormReplies),
         requestPrompt = new LineText(InterviewLineId("requestPrompt"), i.requestPrompt),
         requestReply = new LineText(InterviewLineId("requestReply"), i.requestReply),
         askLabel = i.askLabel,
@@ -1658,6 +1683,44 @@ public static partial class WorldContentGenerator
         }).ToList(),
         menuCapacity = i.menuCapacity
     };
+
+    /// <summary>The id of a missing-form reply's line, "interview.missingFormReplies.{kind}.{request}.{variant}": BuildReplies writes it, CheckInterview checks it.</summary>
+    private static string MissingReplyLineId(string kind, string request, string variant) => InterviewLineId($"missingFormReplies.{kind}.{request}.{variant}");
+
+    /// <summary>The missing-form replies as the library holds them (rows naming no kind or variant are left out; CheckInterview reports them).</summary>
+    private static List<MissingFormReply> BuildReplies(MissingReplyData[] replies) =>
+        (replies ?? Array.Empty<MissingReplyData>())
+            .Select(r => r == null ? null
+                : ParseEnum(r.kind, out TravellerKind kind) && ParseEnum(r.variant, out MissingFormVariant variant)
+                    ? new MissingFormReply { kind = kind, request = r.request, variant = variant, line = new LineText(MissingReplyLineId(r.kind, r.request, r.variant), r.text) }
+                    : null)
+            .Where(r => r != null)
+            .ToList();
+
+    /// <summary>The day plans' forms as the interview's requests see them (every wired or forced blueprint's templates, each once), and each kind's askable and carried forms (FormRequests' rules).</summary>
+    private static List<KindForms> KindForms(Authored authored, out List<AskableForm> forms)
+    {
+        var byTemplate = new Dictionary<DocumentTemplateSO, AskableForm>();
+        forms = new List<AskableForm>();
+        foreach (DocumentTemplateSO t in DocumentTemplates(authored))
+        {
+            if (byTemplate.ContainsKey(t))
+                continue;
+            var form = new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver), t.askableBy ?? Array.Empty<TravellerKind>());
+            byTemplate[t] = form;
+            forms.Add(form);
+        }
+        List<AskableForm> all = forms;
+        return Blueprints(authored)
+            .GroupBy(b => b.Kind)
+            .Select(g => new KindForms
+            {
+                Kind = g.Key,
+                Askable = FormRequests.For(g.Key, all),
+                Carried = g.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => byTemplate[t]).ToList()
+            })
+            .ToList();
+    }
 
     /// <summary>A question with generated line ids ("{id}.prompt", "{id}.{era}.answer", ...) and the kinds it is asked of (CheckInterview parsed them first).</summary>
     private static InterviewQuestion BuildQuestion(QuestionData q) => new InterviewQuestion
@@ -2095,6 +2158,8 @@ public static partial class WorldContentGenerator
         public string requestLabel;
         /// <summary>The hub entry that opens the papers menu ("Request papers >").</summary>
         public string papersLabel;
+        /// <summary>The request groups' labels (phase 8).</summary>
+        public AskGroupData[] askGroups;
         public string requestPrompt;
         public string requestReply;
         public string askLabel;
@@ -2105,12 +2170,20 @@ public static partial class WorldContentGenerator
         public string smallTalkPrompt;
         public string lookLabel;
         public RequestData[] requests;
+        /// <summary>The missing-form replies (phase 8): a kind's line when asked for a request it carries no form of.</summary>
+        public MissingReplyData[] missingFormReplies;
         public int menuCapacity;
         public int maxLineChars;
     }
 
     /// <summary>A spoken request: the hub entry, the desk's prompt and the traveller's reply (line ids are generated from the id).</summary>
     [Serializable] private sealed class RequestData { public string id; public string label; public string prompt; public string reply; }
+
+    /// <summary>A request group's label (interview.askGroups): the papers menu's one entry for the forms sharing DocumentTemplateSO.askGroup.</summary>
+    [Serializable] private sealed class AskGroupData { public string id; public string label; }
+
+    /// <summary>A missing-form reply (interview.missingFormReplies): the kind and variant by name, the request a form number or a group id.</summary>
+    [Serializable] private sealed class MissingReplyData { public string kind; public string request; public string variant; public string text; }
 
     /// <summary>A question; fromDay is required (0 = missing), announce is required exactly when the question is gated; kinds names the traveller kinds it is asked of (blank: every kind).</summary>
     [Serializable] private sealed class QuestionData
