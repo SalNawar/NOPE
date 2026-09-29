@@ -400,7 +400,8 @@ public sealed class CaseFactory
             : citizen ? GenerateBirthDate(_present != null ? _present.BirthYearMin : 0, _present != null ? _present.BirthYearMax : 0)
             : GenerateBirthDate(place != null ? place.birthYearMin : 0, place != null ? place.birthYearMax : 0);
         NationEraProfileSO family = citizen ? FamilyOf(givenName) : null;
-        string intro = Interview.Opener(_lib.Interview, gender, legendary != null ? legendary.displayName : null, legendary != null ? legendary.introLine : null);
+        string intro = Interview.Opener(_lib.Interview, gender, legendary != null ? legendary.displayName : null,
+                                        Premades.Voice(appearance != null ? appearance.introLine : null, legendary != null ? legendary.introLine : null));
 
         var inst = new CaseInstance
         {
@@ -410,6 +411,7 @@ public sealed class CaseFactory
             isLegendary = legendary != null,
             legendarySource = legendary,
             forcedAppearance = appearance,
+            premadeDialogId = Premades.Voice(appearance != null ? appearance.dialogId : null, legendary != null ? legendary.dialogId : null) ?? string.Empty,
             archetype = archetype,
             originLabel = originLabel,
             tongueId = !citizen && place != null && place.tongue != null ? place.tongue : string.Empty,

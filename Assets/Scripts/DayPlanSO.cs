@@ -336,6 +336,12 @@ public sealed class ForcedCaseSlot
     /// <summary>The appearance's authored directive fault (None: none; days 7-15 B6): the maker's variant pinned (Directives.Plan), its values drawn on the traveller's fault stream.</summary>
     public PlannedDirective directive;
 
+    /// <summary>The appearance's dialog (blank: the premade's own; days 7-15 B7), offered only while it stands at the desk (Premades.Voice).</summary>
+    public string dialogId = string.Empty;
+
+    /// <summary>The desk's opener for the appearance (blank: the premade's own, else the interview's; days 7-15 B7).</summary>
+    public string introLine = string.Empty;
+
     /// <summary>When this appearance stands (all must pass on the day-start snapshot; none: always): the verdict memory's flags, dialog flags, the day (days 7-15 B9).</summary>
     public List<TriggerCondition> conditions = new();
 }

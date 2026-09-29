@@ -1652,6 +1652,8 @@ public static partial class WorldContentGenerator
             el.FindPropertyRelative("hasLie").boolValue = hasLie;
             el.FindPropertyRelative("lie").enumValueIndex = hasLie ? (int)lie : 0;
             el.FindPropertyRelative("directive").enumValueIndex = ParseEnum(forcedData[i].directive, out PlannedDirective directive) ? (int)directive : 0;
+            el.FindPropertyRelative("dialogId").stringValue = forcedData[i].dialog ?? string.Empty;
+            el.FindPropertyRelative("introLine").stringValue = forcedData[i].intro ?? string.Empty;
         }
 
         EraWeightData[] weightsData = d.eras ?? Array.Empty<EraWeightData>();
@@ -2121,7 +2123,7 @@ public static partial class WorldContentGenerator
     /// <summary>A premade's timeline impact; a missing skipNationScore means the delta also moves the nation's score.</summary>
     [Serializable] private sealed class ImpactData { public string attribute; public float onCorrect; public float onWrong; public bool skipNationScore; }
 
-    /// <summary>A forced slot: a premade id, a blueprint asset path, or both; and, each left out when blank (days 7-15), the appearance's id, its authored lie (a LieKind) or directive fault (a PlannedDirective), and its conditions.</summary>
+    /// <summary>A forced slot: a premade id, a blueprint asset path, or both; and, each left out when blank (days 7-15), the appearance's id, its authored lie (a LieKind) or directive fault (a PlannedDirective), its dialog and opener, and its conditions.</summary>
     [Serializable] private sealed class ForcedData
     {
         public int slot;
@@ -2130,6 +2132,8 @@ public static partial class WorldContentGenerator
         public string id;
         public string lie;
         public string directive;
+        public string dialog;
+        public string intro;
         public ConditionData[] conditions;
     }
 

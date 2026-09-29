@@ -38,6 +38,9 @@ public sealed class CaseInstance
     /// <summary>The forced entry that stands in this slot today (DayPlanSO forced cases, days 7-15 B9: its premade or blueprint, its fault and its voice); null for a traveller the day drew.</summary>
     public ForcedCaseSlot forcedAppearance;
 
+    /// <summary>The narrative dialog bound to this traveller (Premades.Voice: the appearance's, else the premade's; blank for an ordinary traveller): offered only while they are at the desk (InterviewDay.OfferedDialogs).</summary>
+    public string premadeDialogId = string.Empty;
+
     /// <summary>Visitor archetype (drives default timeline impacts + tags).</summary>
     public ArchetypeSO archetype;
 

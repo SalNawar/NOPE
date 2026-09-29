@@ -365,12 +365,27 @@ public static class TimelineService
             dialogs.Add(new Gated<AuthoredDialog>(d.dialog, ToGates(d.conditions)));
         }
 
-        var premadeDialogs = new List<string>();
-        foreach (LegendarySO premade in lib.Legendaries)
-            if (premade != null && !string.IsNullOrWhiteSpace(premade.dialogId))
-                premadeDialogs.Add(premade.dialogId);
+        List<string> premadeDialogs = PremadeDialogIds(lib);
 
         return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs, AgencyForms(lib));
+    }
+
+    /// <summary>
+    /// Every dialog bound to a premade's appearance (InterviewDay: offered only
+    /// while it stands at the desk): each premade's own and each forced slot's
+    /// of every day plan (days 7-15 B7), in library order, blanks skipped.
+    /// </summary>
+    public static List<string> PremadeDialogIds(ContentLibrarySO lib)
+    {
+        var ids = new List<string>();
+        foreach (LegendarySO premade in lib != null ? lib.Legendaries : System.Array.Empty<LegendarySO>())
+            if (premade != null && !string.IsNullOrWhiteSpace(premade.dialogId))
+                ids.Add(premade.dialogId);
+        foreach (DayPlanSO plan in lib != null ? lib.DayPlans : System.Array.Empty<DayPlanSO>())
+            foreach (ForcedCaseSlot forced in plan != null ? plan.ForcedCases : System.Array.Empty<ForcedCaseSlot>())
+                if (forced != null && !string.IsNullOrWhiteSpace(forced.dialogId))
+                    ids.Add(forced.dialogId);
+        return ids;
     }
 
     /// <summary>

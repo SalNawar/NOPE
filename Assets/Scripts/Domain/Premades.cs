@@ -48,6 +48,13 @@ public static class Premades
     public static bool Stands(bool oncePerRun, bool met, bool conditionsPass) => conditionsPass && !(oncePerRun && met);
 
     /// <summary>
+    /// The appearance's voice (days 7-15 B7): the forced slot's own line (its
+    /// dialog id, its opener) when authored, else the premade's; a recurring
+    /// character gets a new scene each time.
+    /// </summary>
+    public static string Voice(string slotLine, string premadeLine) => string.IsNullOrWhiteSpace(slotLine) ? premadeLine : slotLine;
+
+    /// <summary>
     /// A slot's appearance among its forced entries (days 7-15 B9, the
     /// alternatives of a beat): the index of the first entry that stands
     /// (<see cref="Stands"/>, in the authored order), so an author writes

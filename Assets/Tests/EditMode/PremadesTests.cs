@@ -55,6 +55,16 @@ public class PremadesTests
         Assert.AreEqual(2, Premades.Appearance(new[] { false, false, true }));
     }
 
+    [TestCase("slot line", "premade line", "slot line")]
+    [TestCase("", "premade line", "premade line")]
+    [TestCase("  ", "premade line", "premade line")]
+    [TestCase(null, "premade line", "premade line")]
+    [TestCase(null, null, null)]
+    public void Voice_TheSlotsLineReplacesThePremadesOwn(string slot, string premade, string expected)
+    {
+        Assert.AreEqual(expected, Premades.Voice(slot, premade));
+    }
+
     [Test]
     public void Appearance_NoneStandingIsAnOrdinaryTraveller()
     {

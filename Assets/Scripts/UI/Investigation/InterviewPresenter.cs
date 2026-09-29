@@ -171,7 +171,7 @@ public sealed class InterviewPresenter
         TravellerKind kind = inst != null ? inst.kind : default;
         _questionCategories = interviewReachable ? _day.AskableCategoriesFor(kind) : Array.Empty<ClueCategory>();
         InterviewCase interviewCase = CaseFor(inst, documents, interviewReachable, appearanceReachable);
-        string premadeDialog = inst != null && inst.legendarySource != null ? inst.legendarySource.dialogId : null;
+        string premadeDialog = inst != null ? inst.premadeDialogId : null;
         DialogGraph graph = InterviewScript.Build(_day.Lines,
             interviewReachable ? _day.QuestionsFor(kind) : Array.Empty<InterviewQuestion>(),
             interviewReachable ? _day.OfferedDialogs(premadeDialog) : Array.Empty<AuthoredDialog>(),

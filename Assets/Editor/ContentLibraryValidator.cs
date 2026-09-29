@@ -259,7 +259,7 @@ public static partial class ContentLibraryValidator
 
         bool smallTalk = (lib.Eras ?? Array.Empty<EraSO>()).Any(e => e != null && e.smallTalk != null && e.smallTalk.Count > 0) ||
                          lib.Profiles.Any(p => p != null && p.smallTalk != null && p.smallTalk.Count > 0);
-        var premadeDialogs = new HashSet<string>(lib.Legendaries.Where(l => l != null && !string.IsNullOrWhiteSpace(l.dialogId)).Select(l => l.dialogId));
+        var premadeDialogs = new HashSet<string>(TimelineService.PremadeDialogIds(lib));
         int bound = lib.Dialogs.Count(d => d != null && d.dialog != null && premadeDialogs.Contains(d.dialog.id));
         List<KindForms> kindForms = KindForms(lib, out List<AskableForm> forms);
         foreach (string problem in FormRequests.GroupProblems(forms, lines.askGroups))
