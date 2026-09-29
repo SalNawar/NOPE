@@ -135,6 +135,15 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Shift progress at which the anime hall shows its full evening.</summary>
     [Range(0f, 1f)] public float hallEveningFullAt = 0.9f;
 
+    /// <summary>The hall calendar's ink by day (its date on the art's paper, AnimeHallShiftLink): black, so it still reads 4.5:1 on screen as the evening dims the paper toward the switch (the art's own dark grey reads under 4.5:1 from an evening of 0.44).</summary>
+    public Color hallCalendarDayInk = Color.black;
+
+    /// <summary>The hall calendar's ink once the evening has dimmed its paper (from hallCalendarEveningInkFrom on): white, 10:1 on the full evening's paper.</summary>
+    public Color hallCalendarEveningInk = Color.white;
+
+    /// <summary>The evening blend (0 morning to 1 full evening: the hall's SetTime) from which the calendar takes its evening ink: where its paper reads as well under either ink, near a luminance of 0.18 on screen (the project draws in linear colour); measured in the hall, both inks read 4.5:1 or better only from 0.548 to 0.562 of the blend.</summary>
+    [Range(0f, 1f)] public float hallCalendarEveningInkFrom = 0.555f;
+
     [Header("READY sign")]
     /// <summary>The caption the game writes on the READY sign's label (the art's NEXT sign): a UI string key (world_source.json ui.strings).</summary>
     public string readyCaptionKey = "desk.readyCaption";

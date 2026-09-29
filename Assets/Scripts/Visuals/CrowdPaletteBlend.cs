@@ -1,7 +1,9 @@
 /// <summary>
 /// How far the art office's hall crowds have gone from their morning colours (0)
 /// to their evening colours (1), from the shift clock's progress (0 at opening,
-/// 1 at closing). OfficeHallCrowdPalette tints the crowds with it.
+/// 1 at closing). OfficeHallCrowdPalette tints the crowds with it, and the anime
+/// hall's time hook lights the hall with it (AnimeHallShiftLink), whose
+/// calendar takes its evening ink from a point of that blend (LightInk).
 /// </summary>
 public static class CrowdPaletteBlend
 {
@@ -21,4 +23,12 @@ public static class CrowdPaletteBlend
             return 1f;
         return t * t * (3f - 2f * t);
     }
+
+    /// <summary>
+    /// True when a text printed on the lit art (the anime hall's calendar)
+    /// takes its evening ink: from <paramref name="lightFrom"/> of the evening
+    /// blend on, the paper under it is dim enough that a light ink reads better
+    /// than a dark one; before it, and for a blend that is not a number, the day ink.
+    /// </summary>
+    public static bool LightInk(float evening, float lightFrom) => evening >= lightFrom;
 }

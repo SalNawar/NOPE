@@ -133,8 +133,14 @@ drives **time** only: at load the binder adds an `AnimeHallShiftLink` to its own
 object when the art office carries a presentation; each frame it reads the hook
 above and calls `SetTime` with the crowds' curve (`CrowdPaletteBlend.Evening`,
 `DeskConfigSO.hallEveningStartsAt` 0.5, `hallEveningFullAt` 0.9: morning until
-13:00, full evening from 16:12), writing only when the value changes. Without a
-gameplay clock the hall keeps the time its art authored. Pan is left to the art.
+13:00, full evening from 16:12), writing only when the value changes. With it
+the link sets the colour of the calendar's readout (`ReadoutDay`, the art's
+text on the art's paper, which the evening dims to nearly black):
+`DeskConfigSO.hallCalendarDayInk` (black) by day and `hallCalendarEveningInk`
+(white) from `hallCalendarEveningInkFrom` (0.555) of the evening, so the date
+reads 4.5:1 or better all day as drawn; the text's own authored colour is not
+used during a shift. Without a gameplay clock the hall keeps the time and the
+ink its art authored. Pan is left to the art.
 
 ## What the art scene must not do (and what the game does about leftovers)
 
