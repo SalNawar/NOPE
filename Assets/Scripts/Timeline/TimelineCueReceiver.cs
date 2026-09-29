@@ -15,9 +15,6 @@ public abstract class TimelineCueReceiver : MonoBehaviour
     /// <summary>Channel this receiver listens to.</summary>
     [SerializeField] private EffectChannel channel = EffectChannel.Visuals;
 
-    /// <summary>Channel this receiver listens to (read-only).</summary>
-    public EffectChannel Channel => ListenChannel;
-
     /// <summary>
     /// The channel Refresh reads: the inspector's by default; a subclass
     /// created at runtime (the culture theme service, on UI) overrides it.
