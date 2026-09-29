@@ -18,7 +18,7 @@ MonoBehaviour:
   ops:
   - type: 3
     stringParam: 
-    floatParam: 50
+    floatParam: 200
     attribute: {fileID: 0}
     nation: {fileID: 0}
     profile: {fileID: 0}

@@ -589,23 +589,8 @@ public static partial class OfficeSceneUIBuilder
             img.color = bg.Value;
         }
         if (role.HasValue && go.TryGetComponent(out Image themed))
-            Tag(themed, role.Value, ThemePart.Fill);
+            SceneUiKit.Tag(themed, role.Value, ThemePart.Fill);
         return go.transform;
-    }
-
-    /// <summary>
-    /// Stamps (or re-stamps) a graphic's theme tag (piece 6): its role and part,
-    /// and for a text its label key, built style, kind and shrink-to-fit.
-    /// </summary>
-    private static void Tag(Component graphic, ThemeRoleId role, ThemePart part, string labelKey = null, FontStyles style = FontStyles.Normal,
-                            ThemeTextKind kind = ThemeTextKind.Body, bool fit = false)
-    {
-        if (graphic == null)
-            return;
-        ThemeTag tag = graphic.GetComponent<ThemeTag>();
-        if (tag == null)
-            tag = graphic.gameObject.AddComponent<ThemeTag>();
-        tag.Configure(role, part, labelKey, style, kind, fit);
     }
 
     /// <summary>
@@ -693,7 +678,7 @@ public static partial class OfficeSceneUIBuilder
             if (et != null)
             {
                 if (role.HasValue)
-                    Tag(et, role.Value, ThemePart.Ink, labelKey, style, kind, fit);
+                    SceneUiKit.Tag(et, role.Value, ThemePart.Ink, labelKey, style, kind, fit);
                 return et;
             }
             // Same-named non-text leftover from an older build: replace it.
@@ -714,7 +699,7 @@ public static partial class OfficeSceneUIBuilder
         t.color = color;
         t.fontStyle = style;
         if (role.HasValue)
-            Tag(t, role.Value, ThemePart.Ink, labelKey, style, kind, fit);
+            SceneUiKit.Tag(t, role.Value, ThemePart.Ink, labelKey, style, kind, fit);
         return t;
     }
 
@@ -734,10 +719,10 @@ public static partial class OfficeSceneUIBuilder
             {
                 if (role.HasValue)
                 {
-                    Tag(eb.GetComponent<Image>(), role.Value, ThemePart.Fill);
+                    SceneUiKit.Tag(eb.GetComponent<Image>(), role.Value, ThemePart.Fill);
                     Transform existingLabel = eb.transform.Find("Label");
                     if (existingLabel != null)
-                        Tag(existingLabel.GetComponent<TMP_Text>(), role.Value, ThemePart.Ink, labelKey, FontStyles.Normal, ThemeTextKind.Button, labelKey != null);
+                        SceneUiKit.Tag(existingLabel.GetComponent<TMP_Text>(), role.Value, ThemePart.Ink, labelKey, FontStyles.Normal, ThemeTextKind.Button, labelKey != null);
                 }
                 return eb;
             }
@@ -756,7 +741,7 @@ public static partial class OfficeSceneUIBuilder
         Image img = go.AddComponent<Image>();
         img.color = color ?? XpFace;
         if (role.HasValue)
-            Tag(img, role.Value, ThemePart.Fill);
+            SceneUiKit.Tag(img, role.Value, ThemePart.Fill);
         Button btn = go.AddComponent<Button>();
         btn.targetGraphic = img;
 
@@ -799,7 +784,7 @@ public static partial class OfficeSceneUIBuilder
         bar.localRotation = Quaternion.Euler(0f, 0f, angle);
         Image image = bar.GetComponent<Image>();
         image.raycastTarget = false;
-        Tag(image, role, ThemePart.Ink);
+        SceneUiKit.Tag(image, role, ThemePart.Ink);
     }
 
     // ----------------------------- Windows XP theme -----------------------------

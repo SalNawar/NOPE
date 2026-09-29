@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The create-only UI kit the Home and Title builders share (audit R6-010: it
-/// was copied into both): the canvas and event-system bootstrap, the scene's
+/// was copied into both), and the theme-tag stamp the office builder shares: the canvas and event-system bootstrap, the scene's
 /// logic and UI objects, and panels, texts and buttons found by name under a
 /// parent or created with the given layout. An object that already exists is
 /// returned as it is, never re-laid out (the two builders' create-only policy).
@@ -16,6 +16,24 @@ using UnityEngine.UI;
 /// </summary>
 internal static class SceneUiKit
 {
+    /// <summary>
+    /// Stamps (or re-stamps) a graphic's theme tag (piece 6): its role and part,
+    /// and for a text its label key, built style, kind and shrink-to-fit. The
+    /// office builder stamps every graphic it creates; the Home builder its
+    /// HUD's wallet and stability, so a leading culture's labels are drawn in
+    /// the culture's font (CultureThemeService) as the office's are.
+    /// </summary>
+    public static void Tag(Component graphic, ThemeRoleId role, ThemePart part, string labelKey = null, FontStyles style = FontStyles.Normal,
+                           ThemeTextKind kind = ThemeTextKind.Body, bool fit = false)
+    {
+        if (graphic == null)
+            return;
+        ThemeTag tag = graphic.GetComponent<ThemeTag>();
+        if (tag == null)
+            tag = graphic.gameObject.AddComponent<ThemeTag>();
+        tag.Configure(role, part, labelKey, style, kind, fit);
+    }
+
     /// <summary>
     /// The scene's canvas, or a new Screen Space Overlay canvas that scales
     /// from 1920×1080; the scene also gets an EventSystem with the Input

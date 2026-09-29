@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Trigger_History_audit_rook
   m_EditorClassIdentifier: Assembly-CSharp::TimelineTriggerSO
   id: history_audit_rook
-  displayName: The audit finds the fifty
+  displayName: The audit finds the two hundred
   description: Generated from world_source.json history.rules.
   oneShot: 1
   newsLineOnFire: 'AUDIT: a forged Labour Contract passed Desk 3 on day 11, with
-    50 cr beside it. It goes on file.'
+    200 cr beside it. It goes on file.'
   section: 0
   conditions:
   - type: 1

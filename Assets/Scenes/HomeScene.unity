@@ -2964,6 +2964,7 @@ GameObject:
   - component: {fileID: 1536268351}
   - component: {fileID: 1536268352}
   - component: {fileID: 1536268353}
+  - component: {fileID: 1536268354}
   m_Layer: 0
   m_Name: StabilityText
   m_TagString: Untagged
@@ -3090,6 +3091,24 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1536268354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536268350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3f8b026d424cb7914e565293fca894, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeTag
+  role: 5
+  part: 1
+  labelKey: 
+  baseStyle: 0
+  textKind: 0
+  shrinkToFit: 1
 --- !u!1 &1606654762
 GameObject:
   m_ObjectHideFlags: 0
@@ -3620,6 +3639,7 @@ GameObject:
   - component: {fileID: 1774239106}
   - component: {fileID: 1774239107}
   - component: {fileID: 1774239108}
+  - component: {fileID: 1774239109}
   m_Layer: 0
   m_Name: MoneyText
   m_TagString: Untagged
@@ -3746,6 +3766,24 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1774239109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774239105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3f8b026d424cb7914e565293fca894, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeTag
+  role: 5
+  part: 1
+  labelKey: 
+  baseStyle: 0
+  textKind: 0
+  shrinkToFit: 1
 --- !u!1 &1791243721
 GameObject:
   m_ObjectHideFlags: 0

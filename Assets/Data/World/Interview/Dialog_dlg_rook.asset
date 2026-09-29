@@ -39,12 +39,12 @@ MonoBehaviour:
       lines:
       - id: dlg_rook.read.1
         speaker: 1
-        text: Of course. And for a clerk who reads quickly, there's 50 cr in it.
+        text: Of course. And for a clerk who reads quickly, there's 200 cr in it.
           Between friends.
         expression: 
       choices:
       - id: take
-        label: Take the 50 cr.
+        label: Take the 200 cr.
         lines:
         - id: dlg_rook.read.take.1
           speaker: 1
@@ -57,7 +57,7 @@ MonoBehaviour:
         lines:
         - id: dlg_rook.read.refuse.1
           speaker: 1
-          text: Suit yourself. It was a very quick 50.
+          text: Suit yourself. It was a very quick 200.
           expression: 
         next: 
         effect: 

@@ -61,11 +61,8 @@ public static class HomeEconomy
         /// <summary>The members who got one point better tonight, in family order.</summary>
         public readonly List<string> better = new List<string>();
 
-        /// <summary>The household's mood (the house's Mood ops).</summary>
+        /// <summary>The household's mood (the house's Mood ops); the player sees it only in words (HouseEffects.MoodLine).</summary>
         public float mood;
-
-        /// <summary>A sick member's nightly chance to recover at that mood (HomeRules.RecoveryChance).</summary>
-        public float recoveryChance;
     }
 
     /// <summary>The house upgrades' summed <paramref name="op"/> in force (TimelineEffects.SumFloat); 0 without a library.</summary>
@@ -158,9 +155,11 @@ public static class HomeEconomy
     /// <summary>
     /// The night for each family member (HomeRules.Night): worse by 1, capped
     /// at config.maxFamilyCondition, when their drift roll (HomeRules.Worsens)
-    /// falls below conditionWorsenChance with the house's SicknessChance ops;
-    /// else better by 1 when they are sick and their recovery roll
-    /// (HomeRules.Recovers) falls below the household mood's recovery chance.
+    /// falls below HomeRules.WorsenChance (conditionWorsenChance with the
+    /// house's SicknessChance ops, less the mood's share at sicknessPerMood,
+    /// up to maxMoodSicknessCut); else better by 1 when they are sick and
+    /// their recovery roll (HomeRules.Recovers) falls below the mood's share
+    /// at recoveryPerMood, up to maxRecoveryChance (HomeRules.MoodShare).
     /// Records the changes and the mood in <paramref name="evening"/> (when
     /// given). Nothing changes without a config.
     /// </summary>
@@ -169,14 +168,11 @@ public static class HomeEconomy
         if (world == null || config == null)
             return;
 
-        float worsen = HomeRules.Adjusted(config.conditionWorsenChance, HouseSum(world, lib, EffectOpType.SicknessChance));
         float mood = HouseSum(world, lib, EffectOpType.Mood);
-        float recover = HomeRules.RecoveryChance(mood, config.recoveryPerMood, config.maxRecoveryChance);
+        float worsen = HomeRules.WorsenChance(config.conditionWorsenChance, HouseSum(world, lib, EffectOpType.SicknessChance), mood, config.sicknessPerMood, config.maxMoodSicknessCut);
+        float recover = HomeRules.MoodShare(mood, config.recoveryPerMood, config.maxRecoveryChance);
         if (evening != null)
-        {
             evening.mood = mood;
-            evening.recoveryChance = recover;
-        }
 
         for (int i = 0; i < world.family.members.Count; i++)
         {

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: house_water_purifier
   displayName: Water Purifier
   description: The tap water now tastes of nothing, which is a first.
-  cost: 150
+  cost: 230
   unlockEffect: {fileID: 11400000, guid: 34b2250d94464f94a9f7338abbadc1c4, type: 2}
   venue: 1
   branch: 7

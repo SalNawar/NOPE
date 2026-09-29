@@ -111,9 +111,20 @@ public class HomeRulesTests
     [TestCase(14f, 0.04f, 0.5f, 0.5f, Description = "capped")]
     [TestCase(-2f, 0.04f, 0.5f, 0f, Description = "a negative mood heals nobody")]
     [TestCase(5f, 0.04f, -1f, 0f, Description = "a negative cap is none")]
-    public void RecoveryChance_MoodTimesThePerPointRate_UpToTheCap(float mood, float perPoint, float cap, float expected)
+    public void MoodShare_MoodTimesThePerPointRate_UpToTheCap(float mood, float perPoint, float cap, float expected)
     {
-        Assert.AreEqual(expected, HomeRules.RecoveryChance(mood, perPoint, cap), 1e-6f);
+        Assert.AreEqual(expected, HomeRules.MoodShare(mood, perPoint, cap), 1e-6f);
+    }
+
+    [TestCase(0.25f, 0f, 0f, 0.25f, Description = "no house, no mood: the base chance")]
+    [TestCase(0.25f, -0.05f, 0f, 0.2f, Description = "the SicknessChance ops alone")]
+    [TestCase(0.25f, 0f, 4f, 0.21f, Description = "mood 4 at 0.01 a point")]
+    [TestCase(0.25f, -0.05f, 4f, 0.16f, Description = "both")]
+    [TestCase(0.25f, 0f, 30f, 0.15f, Description = "the mood's share capped at 0.1")]
+    [TestCase(0.05f, -0.05f, 10f, 0f, Description = "never below 0")]
+    public void WorsenChance_TheHouseAndTheMoodBothLowerIt(float chance, float sickness, float mood, float expected)
+    {
+        Assert.AreEqual(expected, HomeRules.WorsenChance(chance, sickness, mood, 0.01f, 0.1f), 1e-6f);
     }
 
     // The recovery stream: SeededRandom(Seeds.Mix(Seeds.ForRecovery(daySeed), index + 1)).Value();

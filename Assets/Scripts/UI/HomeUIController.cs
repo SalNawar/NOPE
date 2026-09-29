@@ -193,7 +193,7 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>
     /// Shows tonight's evening: a break-in first when there was one, the
     /// expense breakdown (rent and utilities, family upkeep, medical drain,
-    /// the house's upkeep), the household's mood with its recovery chance,
+    /// the house's upkeep), the household's mood in words (HouseEffects.MoodLine, never a number),
     /// who got worse or better overnight, and one row per family member with
     /// a Treat button at <paramref name="careCost"/> (calls onTreat with the
     /// member's index). Invokes onContinue when the player moves on to the
@@ -245,8 +245,9 @@ public sealed class HomeUIController : MonoBehaviour
 
         sb.AppendLine($"Total: -{report.total} {UiText.Currency(UiText.WalletForm.Inline)}   (Balance: {world.money})");
 
-        if (evening.mood > 0f)
-            sb.AppendLine($"Household mood: {evening.mood:0.#} (a sick member recovers {evening.recoveryChance * 100f:0}% of nights)");
+        string mood = HouseEffects.MoodLine(evening.mood);
+        if (mood.Length > 0)
+            sb.AppendLine(mood);
 
         if (evening.worse.Count > 0)
             sb.AppendLine($"Worse tonight: {string.Join(", ", evening.worse)}.");
