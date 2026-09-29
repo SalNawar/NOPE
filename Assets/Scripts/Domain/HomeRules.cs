@@ -39,9 +39,19 @@ public static class HomeRules
     /// <summary>A household cost in cr with the house upgrades' summed effect ops added (rent and utilities, care, the medical drain per point, upkeep from 0): <see cref="Adjusted"/>, rounded half to even.</summary>
     public static int Cost(int cost, float bonus) => (int)Math.Round(Adjusted(cost, bonus));
 
-    /// <summary>A sick member's nightly chance to get one point better: the household's <paramref name="mood"/> times <paramref name="perPoint"/>, from 0 up to <paramref name="cap"/> (a negative cap is none).</summary>
-    public static float RecoveryChance(float mood, float perPoint, float cap) =>
+    /// <summary>
+    /// What the household's mood is worth to one of its two effects (Saleh's
+    /// Q3, 2026-09-29: "both"): a sick member's nightly chance to get one point
+    /// better, and how much it lowers a member's nightly chance to get worse.
+    /// <paramref name="mood"/> times <paramref name="perPoint"/>, from 0 up to
+    /// <paramref name="cap"/> (a negative cap is none).
+    /// </summary>
+    public static float MoodShare(float mood, float perPoint, float cap) =>
         Math.Min(Math.Max(0f, cap), Math.Max(0f, mood * perPoint));
+
+    /// <summary>A member's nightly chance to get worse: the base <paramref name="chance"/> with the house's SicknessChance ops (<paramref name="sicknessBonus"/>) added and the mood's share (<see cref="MoodShare"/> of <paramref name="mood"/> at <paramref name="perMood"/>, up to <paramref name="cap"/>) taken off, never below 0 (<see cref="Adjusted"/>).</summary>
+    public static float WorsenChance(float chance, float sicknessBonus, float mood, float perMood, float cap) =>
+        Adjusted(chance, sicknessBonus - MoodShare(mood, perMood, cap));
 
     /// <summary>
     /// Whether the member at <paramref name="memberIndex"/> gets better tonight:
