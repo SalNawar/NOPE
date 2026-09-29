@@ -990,6 +990,10 @@
         "asset": "Assets/Data/Investigation/CaseBlueprint_PoorTourist.asset"
       },
       {
+        "kind": "Labourer",
+        "asset": "Assets/Data/Investigation/CaseBlueprint_Labourer.asset"
+      },
+      {
         "kind": "Displaced",
         "asset": "Assets/Data/Investigation/CaseBlueprint_Displaced.asset"
       }
@@ -1052,6 +1056,7 @@
       "validDaysMin": 3,
       "validDaysMax": 365,
       "tripsWithinDays": 1095,
+      "frozenWithinDays": 30,
       "waiverPrefix": "SW",
       "statuses": [
         {
@@ -1075,7 +1080,13 @@
           "tripsMin": 0,
           "tripsMax": 2
         }
-      ]
+      ],
+      "contract": {
+        "termMin": 90,
+        "termMax": 720,
+        "wageMin": 180,
+        "wageMax": 520
+      }
     },
     "transponders": [
       {
@@ -1147,7 +1158,59 @@
         "prefix": "TI"
       }
     ],
-    "strandChance": 0.08
+    "strandChance": 0.08,
+    "employers": [
+      {
+        "id": "nile_quarry",
+        "era": "ancient",
+        "name": "Nile Quarry Syndicate"
+      },
+      {
+        "id": "tigris_canal",
+        "era": "ancient",
+        "name": "Tigris Canal Works"
+      },
+      {
+        "id": "caravan_guild",
+        "era": "medieval",
+        "name": "Silk Road Caravan Guild"
+      },
+      {
+        "id": "cairo_aqueduct",
+        "era": "medieval",
+        "name": "Cairo Aqueduct Trust"
+      },
+      {
+        "id": "edo_timber",
+        "era": "earlymodern",
+        "name": "Edo Timber Company"
+      },
+      {
+        "id": "arsenal_holdings",
+        "era": "earlymodern",
+        "name": "Venetian Arsenal Holdings"
+      },
+      {
+        "id": "tyburn",
+        "era": "industrial",
+        "name": "Tyburn Mills Consortium"
+      },
+      {
+        "id": "ruhr_colliery",
+        "era": "industrial",
+        "name": "Ruhr Colliery Partners"
+      },
+      {
+        "id": "weimar_rail",
+        "era": "modern",
+        "name": "Weimar Rail Works"
+      },
+      {
+        "id": "showa_shipyard",
+        "era": "modern",
+        "name": "Showa Shipyard Group"
+      }
+    ]
   },
   "eras": [
     {
@@ -6660,6 +6723,33 @@
       "asset": "Rule_PaperDates",
       "type": "PaperDates",
       "description": "Depart only on the date on your manifest or return order, and never on an expired paper."
+    },
+    {
+      "asset": "Rule_TouristPaperSet",
+      "type": "PaperSet",
+      "description": "A Premium visa travels on a Premium transponder. A Standard visa needs an Economy transponder, a signed Stranding Waiver and a proof of means: a Holiday Credit Agreement, a Proof of Funds or Travel Insurance.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist"
+      ]
+    },
+    {
+      "asset": "Rule_LabourPaperSet",
+      "type": "PaperSet",
+      "description": "Debt Relief departures: a registered Labour Contract, an Economy transponder and a signed Stranding Waiver.",
+      "kinds": [
+        "Labourer"
+      ]
+    },
+    {
+      "asset": "Rule_DebtStanding",
+      "type": "DebtStanding",
+      "description": "Citizens in debt (Eligible) depart only on Debt Relief. Frozen accounts may not depart.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ]
     }
   ],
   "days": [
@@ -6704,7 +6794,8 @@
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.0
+      "costumeErrorChance": 0.0,
+      "violationChance": 0.0
     },
     {
       "asset": "DayPlan_Inv_Day2",
@@ -6717,12 +6808,18 @@
       ],
       "lies": [
         "PoorPosingAsRich",
-        "DoctoredIdentity"
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "ForgedProof"
       ],
       "kinds": [
         {
           "kind": "RichTourist",
           "weight": 3
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
         }
       ],
       "eras": [
@@ -6745,12 +6842,15 @@
       ],
       "rules": [
         "Rule_NoAncientEgypt",
-        "Rule_DressForDestination"
+        "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet"
       ],
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.1
+      "costumeErrorChance": 0.1,
+      "violationChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day3",
@@ -6764,11 +6864,23 @@
       ],
       "lies": [
         "PoorPosingAsRich",
-        "DoctoredIdentity"
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof"
       ],
       "kinds": [
         {
           "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
           "weight": 2
         }
       ],
@@ -6790,12 +6902,17 @@
       "rules": [
         "Rule_NoMedievalChina",
         "Rule_NoEarlyModernJapan",
-        "Rule_DressForDestination"
+        "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding"
       ],
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.1
+      "costumeErrorChance": 0.1,
+      "violationChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day4",
@@ -6810,11 +6927,23 @@
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
         "Smuggling"
       ],
       "kinds": [
         {
           "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
           "weight": 2
         }
       ],
@@ -6840,13 +6969,18 @@
       "rules": [
         "Rule_NoIndustrialBritain",
         "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
         "Rule_NoPresentGoods",
         "Rule_PaperDates"
       ],
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.1
+      "costumeErrorChance": 0.1,
+      "violationChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day5",
@@ -6861,6 +6995,10 @@
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
         "FalseOrigin",
         "FakeDisplaced",
         "Smuggling"
@@ -6868,6 +7006,14 @@
       "kinds": [
         {
           "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
           "weight": 2
         },
         {
@@ -6902,6 +7048,10 @@
         "Rule_NoModernGermany",
         "Rule_NoAncientEgypt",
         "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
         "Rule_DisplacedReturns",
         "Rule_ReturnHome",
         "Rule_NoPresentGoods",
@@ -6910,7 +7060,8 @@
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.1
+      "costumeErrorChance": 0.1,
+      "violationChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day6",
@@ -6925,6 +7076,10 @@
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
+        "FakeWaiver",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "ForgedProof",
         "FalseOrigin",
         "FakeDisplaced",
         "Smuggling"
@@ -6932,6 +7087,14 @@
       "kinds": [
         {
           "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
           "weight": 2
         },
         {
@@ -6965,6 +7128,10 @@
       "rules": [
         "Rule_NoModernJapan",
         "Rule_DressForDestination",
+        "Rule_LeisureDepartures",
+        "Rule_TouristPaperSet",
+        "Rule_LabourPaperSet",
+        "Rule_DebtStanding",
         "Rule_DisplacedReturns",
         "Rule_ReturnHome",
         "Rule_NoPresentGoods",
@@ -6993,7 +7160,8 @@
         }
       ],
       "premadeChance": 0.05,
-      "costumeErrorChance": 0.1
+      "costumeErrorChance": 0.1,
+      "violationChance": 0.1
     }
   ],
   "interview": {
@@ -7008,6 +7176,10 @@
       {
         "kind": "PoorTourist",
         "text": "One leisure departure to {place}, please."
+      },
+      {
+        "kind": "Labourer",
+        "text": "One Debt Relief departure to {place}. I have a contract to work."
       },
       {
         "kind": "Displaced",
@@ -7717,6 +7889,7 @@
   },
   "news": {
     "stranded": "Stranded: {name}, lost in {place} when an Economy transponder failed.",
+    "debtReliefCount": "Citizens who left on Debt Relief yesterday: {count}.",
     "debt": [
       "Debt Relief Departures reach a record high.",
       "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
@@ -8101,7 +8274,6 @@
         },
         {
           "type": "Labourer",
-          "dataOnly": true,
           "steps": [
             {
               "id": "rules",
@@ -11252,6 +11424,18 @@
         "tier": "Full"
       },
       {
+        "key": "results.leisureDepartures",
+        "text": "Leisure departures: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.debtReliefDepartures",
+        "text": "Debt Relief departures: {0}   ({1:N0} {2} of debt put to work)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "results.pay",
         "text": "Pay earned: +{0}",
         "gloss": "None",
@@ -12058,6 +12242,42 @@
       {
         "key": "category.Debt",
         "text": "DEBT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.standing.frozen",
+        "text": "Frozen: default, {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.acceptedWrong.incomplete",
+        "text": "Approved incomplete paperwork.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.acceptedWrong.frozen",
+        "text": "Approved a frozen account.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Employer",
+        "text": "EMPLOYER",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Term",
+        "text": "TERM",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Wage",
+        "text": "WAGE",
         "gloss": "None",
         "tier": "Full"
       },

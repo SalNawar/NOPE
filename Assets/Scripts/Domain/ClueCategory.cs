@@ -72,5 +72,17 @@ public enum ClueCategory
     PolicyNo,
 
     /// <summary>A waiver's signature: the signatory's hand, or blank (UNSIGNED). Directive-only: read against the paper-set directive, never compared, never a proof.</summary>
-    Signature
+    Signature,
+
+    // A labourer's registered Debt Relief Labour Contract (traveller types
+    // §3.7, phase 9): on TC-520 and the account's Forms on file.
+
+    /// <summary>The contract's employer ("Tyburn Mills Consortium").</summary>
+    Employer,
+
+    /// <summary>The contract's term ("180 days").</summary>
+    Term,
+
+    /// <summary>The contract's day wage ("420 cr").</summary>
+    Wage
 }

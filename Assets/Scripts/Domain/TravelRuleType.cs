@@ -59,5 +59,25 @@ public enum TravelRuleType
     /// a directive fault, no evidence needed). On its first day one traveller
     /// with a falsified date is guaranteed (Directives' makers).
     /// </summary>
-    PaperDates
+    PaperDates,
+
+    /// <summary>
+    /// The paper set of a kind (traveller types §5.3, phase 9): a Premium visa
+    /// travels on a Premium transponder; a Standard visa needs an Economy
+    /// transponder, a signed Stranding Waiver and a proof of means; a Debt
+    /// Relief departure needs a Labour Contract, an Economy transponder and a
+    /// signed waiver. Broken by a missing or unsigned form or the wrong
+    /// transponder class, read from the papers (Directives.Breaks,
+    /// DirectiveFault.IncompletePapers); on its first day one breaker is
+    /// guaranteed in the first half of the queue (Directives.Guarantees).
+    /// </summary>
+    PaperSet,
+
+    /// <summary>
+    /// The debt standing (traveller types §5.3, phase 9): a Frozen account may
+    /// not depart, read from the Citizen Account's Standing row
+    /// (Directives.Breaks, DirectiveFault.FrozenAccount); on its first day
+    /// one frozen debtor is guaranteed in the first half of the queue.
+    /// </summary>
+    DebtStanding
 }

@@ -228,7 +228,7 @@ public sealed class InterviewPresenter
             claimedEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null,
             documents = documents,
             askable = inst != null ? _day.AskableForms(inst.kind) : null,
-            missingVariant = MissingFormVariant.Honest,
+            missingVariant = inst != null ? inst.missingFormVariant : MissingFormVariant.Honest,
             answers = inst != null ? inst.answers : null,
             smallTalk = interviewReachable && inst != null ? inst.smallTalk : null,
             garments = appearanceReachable && inst != null && inst.look != null ? inst.look.Garments : null

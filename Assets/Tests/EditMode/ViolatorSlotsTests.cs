@@ -84,6 +84,22 @@ public class ViolatorSlotsTests
         }
     }
 
+    /// <summary>The day plan's guarantee counts (traveller types §2.3, phase 9): day 2's three of five, day 3's four of six, day 4's three of six, day 5's three of seven, distinct and in the first half.</summary>
+    [TestCase(10, 3, 5)]
+    [TestCase(12, 4, 6)]
+    [TestCase(12, 3, 6)]
+    [TestCase(13, 3, 7)]
+    public void TheGuaranteedFaultyTravellers_OfEachDay_FitTheFirstHalf(int queue, int planned, int window)
+    {
+        for (int seed = 0; seed < 100; seed++)
+        {
+            int[] slots = ViolatorSlots.Pick(queue, planned, new SeededRandom(seed));
+            Assert.AreEqual(planned, slots.Length, $"seed {seed}");
+            CollectionAssert.AllItemsAreUnique(slots, $"seed {seed}");
+            Assert.That(slots, Is.All.InRange(1, window), $"seed {seed}");
+        }
+    }
+
     [Test]
     public void SameSeed_SameSlots()
     {

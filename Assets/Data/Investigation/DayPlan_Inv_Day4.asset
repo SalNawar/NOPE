@@ -18,6 +18,12 @@ MonoBehaviour:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
     honest: 0
+  - blueprint: {fileID: 11400000, guid: 008d4e5dfc4a491396679dcae81673aa, type: 2}
+    weight: 2
+    honest: 0
+  - blueprint: {fileID: 11400000, guid: baa4a99b576b463cb6e604fe113a409c, type: 2}
+    weight: 2
+    honest: 0
   eraWeights:
   - era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
     weight: 1
@@ -33,10 +39,15 @@ MonoBehaviour:
   tellCount: 1
   tellChannels: 000000000100000002000000
   costumeErrorChance: 0.1
-  lieKinds: 010000000200000004000000
+  lieKinds: 01000000020000000700000005000000060000000800000004000000
+  violationChance: 0.1
   activeTravelRules:
   - {fileID: 11400000, guid: 715dc87bb156a1644811671799952619, type: 2}
   - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
+  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
+  - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
+  - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
   - {fileID: 11400000, guid: 790f58e093f5e4842a8a706ca0d1cf69, type: 2}
   - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   guaranteeRuleViolators: 1

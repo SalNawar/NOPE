@@ -33,6 +33,8 @@ public static class ShiftScoring
             visitorName = inst != null ? inst.visitorDisplayName : "Unknown",
             wasLegendary = inst != null && inst.isLegendary,
             accepted = accepted,
+            kind = inst != null ? inst.kind : default,
+            debt = inst?.account != null ? inst.account.Debt : 0,
             shouldAccept = shouldAccept,
             faultReason = inst != null ? inst.FaultReason : string.Empty,
             destinationLabel = inst != null ? inst.originLabel ?? string.Empty : string.Empty,
