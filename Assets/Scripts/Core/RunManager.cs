@@ -89,29 +89,10 @@ public sealed class RunManager : MonoBehaviour
         DevToolsState.ResetAll();
         SaveSystem.Delete();
 
-        World = new WorldState
-        {
-            day = Config.startingDay,
-            money = Config.startingMoney,
-            timelineStability = Config.startingStability,
-            runSeed = Config.fixedRunSeed != 0
-                ? Config.fixedRunSeed
-                : Random.Range(int.MinValue, int.MaxValue)
-        };
-
-        if (Config.startingFamilyMembers != null)
-        {
-            foreach (string name in Config.startingFamilyMembers)
-            {
-                if (string.IsNullOrWhiteSpace(name))
-                    continue;
-
-                World.family.members.Add(new FamilyMemberData { name = name, condition = 0 });
-            }
-        }
-
-        // Rank the baselines now, so the first night reports only what day 1 changed.
-        TimelineService.SeedDominance(World, Library, Config.gameConfig);
+        // The run config's start, the baselines ranked (DayCycle.NewWorld, which the balance simulation shares).
+        World = DayCycle.NewWorld(Config, Library, Config.fixedRunSeed != 0
+            ? Config.fixedRunSeed
+            : Random.Range(int.MinValue, int.MaxValue));
 
         Debug.Log($"[RunManager] New run started (day {World.day}, seed {World.runSeed}).");
     }
@@ -226,12 +207,8 @@ public sealed class RunManager : MonoBehaviour
     {
         Debug.Log($"[RunManager] >>> Entering AdvanceToNextDay (day {World.day} -> {World.day + 1}).");
 
-        // Nightly resolve runs BEFORE day++ so trigger conditions read "today".
-        TimelineService.NightlyResolve(World, Library, Config != null ? Config.gameConfig : null);
-
-        World.day++;
-        World.citationsToday = 0;
-        World.phase = RunPhase.Office;
+        // The nightly resolve runs before the day turns, so triggers read "today" (DayCycle.AdvanceNight).
+        DayCycle.AdvanceNight(World, Library, Config != null ? Config.gameConfig : null);
 
         Debug.Log($"[RunManager] <<< Exiting AdvanceToNextDay (now day {World.day}, money={World.money}, stability={World.timelineStability:0.#}; saving and loading Office).");
 
