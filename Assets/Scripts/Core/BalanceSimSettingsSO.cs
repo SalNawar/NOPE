@@ -31,4 +31,13 @@ public sealed class BalanceSimSettingsSO : ScriptableObject
 
     /// <summary>The condition at which the House buyer treats a family member (one point a treatment, the sickest first, while the reserve holds).</summary>
     [Min(1)] public int careThreshold = 3;
+
+    /// <summary>
+    /// The price from which a house upgrade counts as top tier (Saleh's Q6 of
+    /// the Home upgrades spec: a careful clerk should not reach it by day 15,
+    /// one who takes the bribes one or two): the climber saves for the
+    /// cheapest top-tier path and buys nothing else, and the summary counts
+    /// the top tier each variant owns by the run's end.
+    /// </summary>
+    [Min(0)] public int topTierPrice = 150;
 }
