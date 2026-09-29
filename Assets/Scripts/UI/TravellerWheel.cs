@@ -238,6 +238,45 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
             return;
 
         Close();
+        if (!_reacting)
+            Silence();
+    }
+
+    /// <summary>True while the traveller says their reaction after the stamp (the wheel may not open, yet the bubble speaks).</summary>
+    private bool _reacting;
+
+    /// <summary>
+    /// The traveller's reaction to the stamp (the personalities spec's R1, R4):
+    /// <paramref name="lines"/> said in the bubble in turn although the wheel
+    /// may not open (the traveller has been decided). Returns how long the
+    /// traveller stays: until the last line is fully shown, plus the desk's
+    /// reactionSeconds; 0 (the traveller leaves at once, nothing said) when
+    /// reactionSeconds is 0 or nothing is said. <see cref="EndReaction"/> silences it.
+    /// </summary>
+    public float React(IReadOnlyList<DialogLine> lines)
+    {
+        float linger = config != null ? config.reactionSeconds : 0f;
+        if (_speech == null || lines == null || lines.Count == 0 || linger <= 0f)
+            return 0f;
+
+        Silence();
+        _reacting = true;
+        Speak(lines);
+        return _speech.SecondsUntilShown + linger;
+    }
+
+    /// <summary>The traveller has left (or the next is called): the reaction's bubble hides and its lines are dropped.</summary>
+    public void EndReaction()
+    {
+        if (!_reacting)
+            return;
+        _reacting = false;
+        Silence();
+    }
+
+    /// <summary>Silences the traveller: the bubble hides, the lines not yet said are dropped (the PC transcript keeps them), a premade shows at once the last expression among them; the lines said this case and a bubble pick are forgotten.</summary>
+    private void Silence()
+    {
         if (_speech != null)
         {
             string pending = _speech.Clear();
@@ -308,6 +347,12 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         if (!_canOpen || _speech == null || lines == null)
             return;
 
+        Speak(lines);
+    }
+
+    /// <summary>Queues <paramref name="lines"/> in the bubble (each flipping line counting as shown once its flip ends) and draws.</summary>
+    private void Speak(IReadOnlyList<DialogLine> lines)
+    {
         SpeechTranslation speech = _translation.Speech;
         foreach (DialogLine line in lines)
         {

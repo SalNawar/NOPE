@@ -509,7 +509,7 @@ public sealed class GameManager : MonoBehaviour
     /// how they look) feeds the closing-time rule, the booth figure and the
     /// booth's input phase.
     /// </summary>
-    private void SetTravellerAtDesk(bool at, TravellerLook look = null)
+    private void SetTravellerAtDesk(bool at, TravellerLook look = null, bool keepFigure = false)
     {
         _travellerAtDesk = at;
 
@@ -517,7 +517,7 @@ public sealed class GameManager : MonoBehaviour
         {
             if (at)
                 travellerView.Show(look, _characterArt);
-            else
+            else if (!keepFigure)
                 travellerView.Clear();
         }
 
@@ -533,6 +533,10 @@ public sealed class GameManager : MonoBehaviour
     /// </summary>
     private void ShowActiveCase(CaseInstance inst)
     {
+        // Calling the next traveller ends the last one's linger at once (R4).
+        if (travellerView != null)
+            travellerView.EndLinger();
+        EndReaction();
         _characterArt?.Retain(inst.look != null ? inst.look.Keys : null);
         SetTravellerAtDesk(true, inst.look);
 
@@ -566,12 +570,15 @@ public sealed class GameManager : MonoBehaviour
     private void HandleDecision(bool accepted)
     {
         Debug.Log($"[GameManager] >>> Entering HandleDecision (slot {_activeCaseIndex1Based}, accepted={accepted}).");
-        SetTravellerAtDesk(false);
+        // The booth has no traveller from here (the wheel cannot open); the figure stays for their reaction (R4).
+        SetTravellerAtDesk(false, keepFigure: true);
 
         int idx = _activeCaseIndex1Based - 1;
 
         if (_dayCases == null || idx < 0 || idx >= _dayCases.Count)
         {
+            if (travellerView != null)
+                travellerView.Clear();
             Debug.LogError("Player decided but the active case index is invalid.");
             orchestrator.MarkCaseResolved();
             return;
@@ -585,6 +592,7 @@ public sealed class GameManager : MonoBehaviour
             bool simpleCorrect = accepted == inst.ShouldAccept;
             if (officeUI != null)
                 officeUI.SetResultText(UiText.Get(simpleCorrect ? "verdict.simpleCorrect" : "verdict.simpleWrong"));
+            React(inst, accepted);
             Debug.Log($"[GameManager] <<< Exiting HandleDecision (no GameConfig, simpleCorrect={simpleCorrect}).");
             orchestrator.MarkCaseResolved();
             return;
@@ -611,6 +619,9 @@ public sealed class GameManager : MonoBehaviour
 
         Debug.Log($"[Result] Case {_activeCaseIndex1Based}: accepted={accepted}, shouldAccept={inst.ShouldAccept}, fault='{inst.FaultReason}', home='{inst.HomeLabel}', directive={inst.directiveFault}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.00}->{_worldState.timelineStability:0.00}, firedNow={verdict.firedNow}.");
 
+        // The reaction (the personalities spec's R1-R5): presentation only, after the scoring, never changing it.
+        React(inst, accepted);
+
         EndingSO ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig, EndingMoment.Immediate);
 
         if (ending != null)
@@ -626,6 +637,26 @@ public sealed class GameManager : MonoBehaviour
         }
 
         ShowVerdictThen(verdict, () => orchestrator.MarkCaseResolved());
+    }
+
+    /// <summary>
+    /// The decided traveller's reaction (the personalities spec's R1-R4): the
+    /// investigation UI says it and returns the linger; the figure leaves
+    /// after it (at once for 0), and their bubble hides as they go.
+    /// </summary>
+    private void React(CaseInstance inst, bool accepted)
+    {
+        float linger = investigationUI != null ? investigationUI.React(inst, accepted) : 0f;
+        if (travellerView != null)
+            travellerView.Leave(linger, EndReaction);
+        else
+            EndReaction();
+    }
+
+    private void EndReaction()
+    {
+        if (investigationUI != null)
+            investigationUI.EndReaction();
     }
 
     /// <summary>
