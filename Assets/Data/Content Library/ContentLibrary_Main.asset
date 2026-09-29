@@ -12642,6 +12642,24 @@ MonoBehaviour:
     - 'Lost and found: one sense of purpose, answers to ''Hope''.'
     - The number you have called is under maintenance. Please hold until 2151.
     - Goodnight from the Directorate. Your account never sleeps; you should.
+  world:
+    factors:
+    - id: government
+      question: Who runs 2150?
+      answer: 0
+      foundAs: The Directorate
+    - id: future
+      question: What does 2150 run on?
+      answer: 0
+      foundAs: The Credit Age
+    - id: money
+      question: How does 2150 pay its way?
+      answer: 0
+      foundAs: The Debt
+    - id: culture
+      question: Whose culture leads?
+      answer: 1
+      foundAs: 'None: the neutral Temporal Customs Zone'
   news:
     debt:
     - Debt Relief Departures reach a record high.

@@ -71,6 +71,7 @@ public static class TitleSceneBuilder
         Button worldNewRunButton = FindOrCreateButton(world, "NewRunButton", "New Run",
             new Vector2(0.3f, 0.04f), new Vector2(0.7f, 0.14f));
         worldOutcomesText.textWrappingMode = TextWrappingModes.Normal;
+        MatchFace(worldNewRunButton, endingNewRunButton);
 
         // --- The Debt Relief ending's papers (redesign phase 13): the clerk's Labour Contract left of the panel, the account right ---
         Transform papers = FindOrCreatePanel(ending, "ClerkPapers", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -129,6 +130,37 @@ public static class TitleSceneBuilder
 
         EditorSceneManager.MarkSceneDirty(titleUI.gameObject.scene);
         Debug.Log("[TimeDesk] Title UI built and wired. Save the scene.");
+    }
+
+    /// <summary>
+    /// Gives <paramref name="button"/> <paramref name="model"/>'s hand-wired
+    /// face (its sprite, colour, transition and hover sprites, and its label
+    /// off when the face prints it), re-applied on every build, so the world
+    /// page's New Run looks like the ending panel's. Nothing when the model
+    /// has no sprite.
+    /// </summary>
+    private static void MatchFace(Button button, Button model)
+    {
+        Image image = button.GetComponent<Image>(), face = model.GetComponent<Image>();
+        if (image == null || face == null || face.sprite == null)
+            return;
+        Undo.RecordObject(image, "Match the New Run face");
+        Undo.RecordObject(button, "Match the New Run face");
+        image.sprite = face.sprite;
+        image.type = face.type;
+        image.color = face.color;
+        button.transition = model.transition;
+        button.spriteState = model.spriteState;
+        button.colors = model.colors;
+        Transform label = button.transform.Find("Label"), modelLabel = model.transform.Find("Label");
+        TMP_Text text = label != null ? label.GetComponent<TMP_Text>() : null, modelText = modelLabel != null ? modelLabel.GetComponent<TMP_Text>() : null;
+        if (text != null && modelText != null)
+        {
+            Undo.RecordObject(text, "Match the New Run face");
+            text.enabled = modelText.enabled;
+        }
+        EditorUtility.SetDirty(image);
+        EditorUtility.SetDirty(button);
     }
 
     /// <summary>

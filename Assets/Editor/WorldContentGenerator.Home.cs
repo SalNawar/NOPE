@@ -146,13 +146,4 @@ public static partial class WorldContentGenerator
         so.ApplyModifiedProperties();
         EditorUtility.SetDirty(lib);
     }
-
-    /// <summary>Writes world_source.json "world" (the factors the end of the demo answers, the endings spec E0; checked by WorldContent.Problems) into the library verbatim.</summary>
-    private static void WireWorld(ContentLibrarySO lib, WorldContent world)
-    {
-        var so = new SerializedObject(lib);
-        so.FindProperty("world").boxedValue = world ?? new WorldContent();
-        so.ApplyModifiedProperties();
-        EditorUtility.SetDirty(lib);
-    }
 }
