@@ -444,6 +444,8 @@ public sealed partial class AppPane : MonoBehaviour
             Transform chosen = chip.transform.Find("Chosen");
             if (chosen != null && chosen.gameObject.activeSelf != (i == view.Selected))
                 chosen.gameObject.SetActive(i == view.Selected);
+            if (chosen != null && i == view.Selected)
+                FitChosen(chip, chosen);
             ColorBlock colours = chip.colors;
             colours.normalColor = items[i].Available ? Color.white : unavailableTint;
             colours.selectedColor = colours.normalColor;
@@ -455,6 +457,22 @@ public sealed partial class AppPane : MonoBehaviour
         }
         if (chipRow != null)
             chipRow.Refresh(view.Selected >= 0 && view.Selected < _chips.Count ? (RectTransform)_chips[view.Selected].transform : null);
+    }
+
+    /// <summary>
+    /// The chosen chip is as wide as its bold name too: the chosen look draws
+    /// the name in bold over the chip, whose regular-weight name sizes it, so
+    /// without this a long name was cut ("Currency Le…") now that no chip
+    /// label shrinks (the row scrolls instead). Measured once the chosen look
+    /// is shown (TextMeshPro has set its label up).
+    /// </summary>
+    private static void FitChosen(Button chip, Transform chosen)
+    {
+        TMP_Text bold = chosen.GetComponentInChildren<TMP_Text>(true);
+        if (bold == null || bold.fontSharedMaterial == null || !chip.TryGetComponent(out LayoutElement size))
+            return;
+        float insets = -((RectTransform)bold.transform).sizeDelta.x;
+        size.minWidth = Mathf.Max(size.minWidth, bold.GetPreferredValues(bold.text).x + insets);
     }
 
     /// <summary>The tab's entry in an array indexed by the tab's value, or null.</summary>
