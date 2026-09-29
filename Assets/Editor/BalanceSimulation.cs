@@ -33,13 +33,16 @@ public static class BalanceSimulation
     public const int ExampleSeed = 12345;
 
     /// <summary>
-    /// The travellers a careful clerk gets through in a shift before the clock
-    /// closes (an estimate: 8 real minutes at about 45 s a traveller). Every
-    /// style is played twice, on the whole queue and at this pace (the rest of
-    /// the queue goes home, as when the shift clock closes); the epilogue
-    /// thresholds are read from perfect play at this pace.
+    /// The pace when BalanceSimSettings.asset is missing: the travellers a
+    /// careful clerk gets through in a shift before the clock closes (8 real
+    /// minutes at about 45 s a traveller). The knob itself is
+    /// BalanceSimSettingsSO.travellersPerShift (days 7-15 X3, Q11), which Saleh
+    /// edits in the Inspector.
     /// </summary>
     public const int ShiftPace = 10;
+
+    /// <summary>The pace this run plays at (BalanceSimSettingsSO.travellersPerShift, read at Run; <see cref="ShiftPace"/> without the asset).</summary>
+    private static int _pace = ShiftPace;
 
     /// <summary>The folder the summary and the example dumps go to (project-relative; Logs/ is not in git).</summary>
     public const string ReportFolder = "Logs/Balance";
@@ -50,7 +53,7 @@ public static class BalanceSimulation
     private const int SeedStep = 7919;
     private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
     private static readonly PlayStyle[] Styles = { PlayStyle.Perfect, PlayStyle.Imperfect, PlayStyle.Careless };
-    private static readonly int[] Paces = { 0, ShiftPace };
+    private static int[] Paces => _pace > 0 ? new[] { 0, _pace } : new[] { 0 };
 
     /// <summary>Runs the simulation with today's knobs and shows the summary's file (refused in play mode).</summary>
     [MenuItem("Tools/TimeDesk/Balance/Run 50-Run Simulation")]
@@ -84,6 +87,9 @@ public static class BalanceSimulation
             Debug.LogError("[Balance] Resources/RunConfig.asset, its content library or its game config is missing.");
             return null;
         }
+
+        var settings = AssetDatabase.LoadAssetAtPath<BalanceSimSettingsSO>(BalanceSimSettingsSO.AssetPath);
+        _pace = settings != null ? settings.travellersPerShift : ShiftPace;
 
         string dir = Path.IsPathRooted(folder) ? folder : Path.Combine(Directory.GetCurrentDirectory(), folder);
         Directory.CreateDirectory(dir);
@@ -153,6 +159,12 @@ public static class BalanceSimulation
         public readonly List<float> StabilityAfterShift = new List<float>();
         public int MinMoney = int.MaxValue;
         public int Cases, Faulty, Accepted, Wrong, Unproven, Pay, Penalties, Instalments, Household, Stranded, Carries;
+
+        /// <summary>The strandings and the carries of each day played (days 7-15 X5).</summary>
+        public readonly List<int> StrandedByDay = new List<int>(), CarriesByDay = new List<int>();
+
+        /// <summary>The past places whose Technology a carry rewrote by the run's end (an accepted liar's or smuggler's, a stranded citizen's; history rules apart; days 7-15 X5).</summary>
+        public int TechnologyChanged;
         public readonly List<CaseRecord> Records = new List<CaseRecord>();
         public readonly List<string> DialogsOffered = new List<string>();
         public readonly StringBuilder Dump = new StringBuilder();
@@ -163,8 +175,9 @@ public static class BalanceSimulation
     private sealed class CaseRecord
     {
         public int Day, Slot;
-        public string Kind, Source, Premade, Reason;
-        public bool Faulty, Deviation, Accepted, Correct, Economy;
+        public string Kind, Source, Premade, Reason, Entry, Closure;
+        public bool Faulty, Deviation, Accepted, Correct, Economy, Famous;
+        public float StabilityDelta;
     }
 
     /// <summary>A run of <see cref="Days"/> days from <paramref name="seed"/> under <paramref name="style"/>, through the game's own steps, <paramref name="pace"/> travellers a shift (0: the whole queue).</summary>
@@ -186,17 +199,19 @@ public static class BalanceSimulation
             List<CaseInstance> cases = new CaseFactory(lib, today).GenerateDayCases(plan, world, Seeds.Day(seed, day), interview, true);
             r.DialogsOffered.Add($"day {day}: [{string.Join(", ", interview.OfferedDialogs(null).Select(d => d.id))}]");
             policy.StartDay(day);
+            int carriesBefore = r.Carries;
 
             string ended = null;
-            int seen = pace > 0 ? Math.Min(pace, cases.Count) : cases.Count;
-            for (int i = 0; i < seen && ended == null; i++)
+            for (int i = 0; i < cases.Count && PlayPolicy.Reaches(i + 1, pace) && ended == null; i++)
             {
                 CaseInstance inst = cases[i];
+                // The traveller comes to the desk: a once-per-run premade is met (days 7-15 X1, the game's own step).
+                DayCycle.Present(world, inst);
                 PlayDecision decision = policy.Decide(inst.ShouldAccept, inst.HasDeviationFault);
                 int carries = world.history.pendingCarries.Count;
                 CaseVerdict verdict = DayCycle.Decide(inst, decision.Accept, i + 1, decision.Documented ? 1 : 0, world, today, ledger, lib, config);
                 r.Carries += world.history.pendingCarries.Count - carries;
-                r.Records.Add(Record(plan, day, i + 1, inst, decision.Accept, verdict.correct));
+                r.Records.Add(Record(plan, day, i + 1, inst, decision.Accept, verdict));
                 Count(r, inst, decision.Accept, verdict);
                 r.Dump.AppendLine($"d{day} #{i + 1} {inst.kind} {Source(plan, i + 1, inst)} '{inst.originLabel}' fault='{inst.FaultReason}' accept={decision.Accept} documented={decision.Documented} correct={verdict.correct} pay={verdict.payAwarded} penalty={verdict.moneyPenalty} money={world.money} stability={StabilityRules.Format(world.timelineStability)}");
                 EndingSO now = EndingService.Evaluate(world, lib, config, EndingMoment.Immediate);
@@ -211,6 +226,8 @@ public static class BalanceSimulation
             r.Penalties += ledger.TotalPenalties;
             r.Instalments += ledger.debtInstalment;
             r.Stranded += ledger.strandedCount;
+            r.StrandedByDay.Add(ledger.strandedCount);
+            r.CarriesByDay.Add(r.Carries - carriesBefore);
             r.MoneyAfterShift.Add(world.money);
             r.StabilityAfterShift.Add(world.timelineStability);
             r.MinMoney = Math.Min(r.MinMoney, world.money);
@@ -239,6 +256,8 @@ public static class BalanceSimulation
             r.Dump.AppendLine($"night {day}: household {bill.total} money {world.money} leader '{world.history.leaderId}'");
         }
 
+        r.TechnologyChanged = world.history.factEdits.Where(e => e != null && e.cause == EditCause.Carry && e.category == ClueCategory.Technology && e.eraId != "future")
+            .Select(e => e.nationId + "/" + e.eraId).Distinct().Count();
         r.Fingerprint = JsonUtility.ToJson(world.history) + JsonUtility.ToJson(world.timeline) + world.money.ToString(Inv) + r.Ending;
         return r;
     }
@@ -270,8 +289,12 @@ public static class BalanceSimulation
         return inst.isLegendary ? "premade" : "random";
     }
 
-    private static CaseRecord Record(DayPlanSO plan, int day, int slot, CaseInstance inst, bool accepted, bool correct) => new CaseRecord
+    private static CaseRecord Record(DayPlanSO plan, int day, int slot, CaseInstance inst, bool accepted, CaseVerdict verdict) => new CaseRecord
     {
+        Entry = inst.forcedAppearance != null ? (string.IsNullOrEmpty(inst.forcedAppearance.id) ? "(unnamed)" : inst.forcedAppearance.id) : "",
+        Closure = inst.directiveFault == DirectiveFault.ClosedDestination ? ClosureOf(plan, inst) : "",
+        Famous = inst.IsFamous,
+        StabilityDelta = verdict.stabilityDelta,
         Day = day,
         Slot = slot,
         Kind = inst.kind.ToString(),
@@ -281,9 +304,18 @@ public static class BalanceSimulation
         Faulty = !inst.ShouldAccept,
         Deviation = inst.HasDeviationFault,
         Accepted = accepted,
-        Correct = correct,
+        Correct = verdict.correct,
         Economy = inst.account != null && inst.account.TransponderClass == TransponderClass.Economy
     };
+
+    /// <summary>The type of the day's closure that bars the traveller (nation-era, nation, era; an era closure listing kinds is the range limit), days 7-15 X4.</summary>
+    private static string ClosureOf(DayPlanSO plan, CaseInstance inst)
+    {
+        TravelRuleSO rule = plan.ActiveTravelRules.FirstOrDefault(t => t != null && t.IsClosure && t.AppliesTo(inst.kind) && !t.Allows(inst.claimedNation, inst.claimedEra));
+        if (rule == null)
+            return "?";
+        return rule.type == TravelRuleType.EraForbidden && rule.kinds != null && rule.kinds.Length > 0 ? "range limit" : rule.type.ToString();
+    }
 
     // ------------------------------------------------------------------
     // The summary
@@ -292,7 +324,7 @@ public static class BalanceSimulation
     private static void Write(StringBuilder sb, RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, List<string> errors)
     {
         sb.AppendLine($"BALANCE SIMULATION  {DateTime.Now:yyyy-MM-dd HH:mm}  ({Runs} runs x {Days} days per play style and pace; Tools > TimeDesk > Balance > Run 50-Run Simulation)");
-        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no orders, no care, no slot machine, no dialog choices; once on the whole queue and once at the shift clock's pace ({ShiftPace} travellers a shift, BalanceSimulation.ShiftPace: the rest go home when the clock closes).");
+        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no orders, no care, no slot machine, no dialog choices; once on the whole queue and once at the shift clock's pace ({_pace} travellers a shift, {BalanceSimSettingsSO.AssetPath} travellersPerShift: the rest go home when the clock closes, PlayPolicy.Reaches).");
         sb.AppendLine("Perfect: every call right. Imperfect: one wrong call a day (odd days the first faulty traveller let through, even days the first deviation denial left unproven). Careless: both every day.");
         sb.AppendLine();
         Knobs(sb, run, lib, config);
@@ -304,6 +336,9 @@ public static class BalanceSimulation
 
         Queue(sb, results[(PlayStyle.Perfect, 0)]);
         Authored(sb, results[(PlayStyle.Perfect, 0)]);
+        Beats(sb, results);
+        Contamination(sb, results);
+        Bribe(sb, lib);
 
         sb.AppendLine();
         sb.AppendLine("== Checks ==");
@@ -322,7 +357,12 @@ public static class BalanceSimulation
                       $"stabilityChangeRate {config.stabilityChangeRate.ToString("0.####", Inv)}, stabilityLossPerWrong {F(config.stabilityLossPerWrong)}, extraStabilityLossLegendary {F(config.extraStabilityLossLegendary)}, stabilityGainPerCorrect {F(config.stabilityGainPerCorrect)}, firedAtStability {F(config.firedAtStability)}, stabilityWarningMargin {F(config.stabilityWarningMargin)}, stabilityCriticalMargin {F(config.stabilityCriticalMargin)}, bankruptcyMoneyThreshold {config.bankruptcyMoneyThreshold}, " +
                       $"baseDailyExpense {config.baseDailyExpense}, expensePerFamilyMember {config.expensePerFamilyMember}, expensePerConditionPoint {config.expensePerConditionPoint}, conditionWorsenChance {F(config.conditionWorsenChance)}");
         sb.AppendLine($"  {AssetDatabase.GetAssetPath(run)}: startingMoney {run.startingMoney}, startingStability {F(run.startingStability)}, startingFamilyMembers {run.startingFamilyMembers?.Count ?? 0}");
-        List<DayPlanSO> plans = Enumerable.Range(1, 6).Select(lib.GetDayPlan).Where(p => p != null).Distinct().ToList();
+        sb.AppendLine($"  {BalanceSimSettingsSO.AssetPath}: travellersPerShift {_pace} (the simulation's cap, days 7-15 X3)");
+        EffectSO bribe = lib.GetEffectByAssetName(BribeEffect);
+        if (bribe != null)
+            sb.AppendLine($"  {AssetDatabase.GetAssetPath(bribe)}: AddMoney {F(bribe.ops.Where(o => o != null && o.type == EffectOpType.AddMoney).Sum(o => o.floatParam))} (the bribe's amount, days 7-15 X6)");
+        int lastDay = Math.Max(6, lib.LastDay);
+        List<DayPlanSO> plans = Enumerable.Range(1, lastDay).Select(lib.GetDayPlan).Where(p => p != null).Distinct().ToList();
         foreach (CaseBlueprintSO bp in plans.SelectMany(p => p.PossibleBlueprints.Concat(p.ForcedBlueprints)).Where(b => b != null).Distinct().OrderBy(b => b.Kind))
             sb.AppendLine($"  {AssetDatabase.GetAssetPath(bp)}: contradictionChance {F(bp.ContradictionChance)} (the {bp.Kind} liar chance)");
         foreach (EndingSO e in lib.Endings.Where(e => e != null).OrderBy(e => e.conditionType).ThenBy(e => e.priority))
@@ -336,7 +376,10 @@ public static class BalanceSimulation
         foreach (DayPlanSO p in plans)
             sb.AppendLine($"  days/dayKinds, day {p.DayNumber}: queue {p.VisitorsCount}, kinds [{string.Join(", ", p.Kinds.Select(k => $"{(k.blueprint != null ? k.blueprint.Kind.ToString() : "?")} {F(k.weight)}{(k.honest ? " honest" : "")}"))}], " +
                           $"lies [{string.Join(", ", p.EnabledLies)}], violationChance {F(p.ViolationChance)}, costumeErrorChance {F(p.CostumeErrorChance)}, premadeChance {F(p.LegendaryBaseChance)}");
-        sb.AppendLine("  (days 7 and on replay day 6's plan)");
+        foreach (TravelRuleSO recall in plans.SelectMany(p => p.ActiveTravelRules).Where(t => t != null && t.type == TravelRuleType.TransponderRecall).Distinct())
+            sb.AppendLine($"  rules, {recall.name}: transponder {recall.transponder}, kinds [{string.Join(", ", recall.kinds ?? new TravellerKind[0])}], first day {lib.FirstDayOf(recall)}");
+        sb.AppendLine($"  violationChance by day (its ramp): {string.Join(" ", plans.Select(p => $"d{p.DayNumber}:{F(p.ViolationChance)}"))}");
+        sb.AppendLine($"  (a day past {lastDay} replays day {lastDay}'s plan)");
     }
 
     private static string PaceLabel(int pace) => pace > 0 ? $"{pace} a shift" : "whole queue";
@@ -371,7 +414,7 @@ public static class BalanceSimulation
         }
         if (style != PlayStyle.Perfect)
             return;
-        sb.AppendLine($"{(pace == ShiftPace ? "proposed epilogue thresholds" : "for comparison, whole-queue thresholds")} (the {F(BalanceStats.EpilogueQuantile * 100f)}th percentile of perfect play{(pace == ShiftPace ? " at the shift clock's pace" : "")}, rounded): {string.Join(", ", proposed.Select(kv => $"{kv.Key.id} {F(kv.Value)}"))}");
+        sb.AppendLine($"{(pace == _pace && pace > 0 ? "proposed epilogue thresholds" : "for comparison, whole-queue thresholds")} (the {F(BalanceStats.EpilogueQuantile * 100f)}th percentile of perfect play{(pace == _pace && pace > 0 ? " at the shift clock's pace" : "")}, rounded): {string.Join(", ", proposed.Select(kv => $"{kv.Key.id} {F(kv.Value)}"))}");
         sb.AppendLine($"endings with those thresholds: {string.Join(", ", full.GroupBy(r => Hypothetical(r.World, lib, config, proposed)).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}");
     }
 
@@ -422,6 +465,71 @@ public static class BalanceSimulation
         RunResult example = runs.FirstOrDefault();
         if (example != null)
             sb.AppendLine($"dialogs offered to drawn travellers (run seed {example.Seed}; the simulation makes no dialog choice, so a dialog's effect is not in these numbers): {string.Join("; ", example.DialogsOffered)}");
+    }
+
+    /// <summary>The dialog effect the bribe's choice names (dlg_rook, days 7-15 §4.3).</summary>
+    private const string BribeEffect = "Effect_Dialog_BribeTaken";
+
+    /// <summary>
+    /// Days 7-15 X2 and X8: each beat (a forced entry of a day plan) per style at
+    /// the shift clock's pace: how often it stood, which entry, why not (a met
+    /// premade or no entry's conditions), its fault, the right calls, the
+    /// famous beats' stability cost; then the story's branches: how many runs
+    /// fired each story rule.
+    /// </summary>
+    private static void Beats(StringBuilder sb, Dictionary<(PlayStyle, int), List<RunResult>> results)
+    {
+        sb.AppendLine();
+        sb.AppendLine($"== The beats of days 7-15 (forced entries; per style at {PaceLabel(_pace)}) ==");
+        int pace = Paces.Last();
+        foreach (PlayStyle style in Styles)
+        {
+            List<RunResult> runs = results[(style, pace)];
+            sb.AppendLine($"{style}:");
+            foreach (IGrouping<(int, int), CaseRecord> slot in runs.SelectMany(r => r.Records).Where(c => c.Day >= 7 && c.Source == "forced").GroupBy(c => (c.Day, c.Slot)).OrderBy(g => g.Key))
+            {
+                List<CaseRecord> all = slot.ToList();
+                string entries = string.Join(", ", all.GroupBy(c => c.Entry.Length > 0 ? $"{c.Entry} ({c.Premade})" : "none standing (met, or no entry's conditions)").Select(g => $"{g.Key} {g.Count()}"));
+                List<CaseRecord> famous = all.Where(c => c.Famous && c.Entry.Length > 0).ToList();
+                string cost = famous.Count > 0 ? $"; the famous beat's stability change per run {F(famous.Sum(c => c.StabilityDelta) / runs.Count)} (wrong {famous.Count(c => !c.Correct)})" : "";
+                sb.AppendLine($"  day {slot.Key.Item1} slot {slot.Key.Item2}: reached in {all.Count} of {runs.Count} runs: {entries}; {Judged(all.Where(c => c.Entry.Length > 0).ToList())}{cost}");
+            }
+            var fired = runs.SelectMany(r => r.World.flags.Where(f => f.StartsWith("trig:history_") && f.EndsWith(":fired")).Distinct())
+                .GroupBy(f => f.Substring("trig:history_".Length, f.Length - "trig:history_".Length - ":fired".Length)).OrderBy(g => g.Key);
+            sb.AppendLine($"  the story's branches (runs that fired each rule): {string.Join(", ", fired.Select(g => $"{g.Key} {g.Count()}"))}");
+            sb.AppendLine($"  verdicts remembered at the end: {string.Join(", ", runs.SelectMany(r => r.World.flags.Where(f => f.StartsWith("premade:") && !f.EndsWith(":met"))).GroupBy(f => f).OrderBy(g => g.Key).Select(g => $"{g.Key} {g.Count()}"))}");
+        }
+    }
+
+    /// <summary>Days 7-15 X4 and X5: the closures by type and the 2150 contamination (strandings, carries, past places whose Technology changed) by day.</summary>
+    private static void Contamination(StringBuilder sb, Dictionary<(PlayStyle, int), List<RunResult>> results)
+    {
+        sb.AppendLine();
+        sb.AppendLine("== Closures by type and the 2150 contamination ==");
+        foreach (int pace in Paces)
+            foreach (PlayStyle style in Styles)
+            {
+                List<RunResult> runs = results[(style, pace)];
+                string closures = string.Join(", ", runs.SelectMany(r => r.Records).Where(c => c.Closure.Length > 0).GroupBy(c => c.Closure).OrderBy(g => g.Key).Select(g => $"{g.Key} {F((float)g.Count() / runs.Count)}"));
+                string Daily(Func<RunResult, List<int>> of) => string.Join(" ", Enumerable.Range(0, Days)
+                    .Select(n => runs.Where(r => of(r).Count > n).Select(r => of(r)[n]).ToList()).TakeWhile(l => l.Count > 0)
+                    .Select((l, n) => $"d{n + 1}:{l.Average().ToString("0.##", Inv)}"));
+                List<float> changed = runs.Select(r => (float)r.TechnologyChanged).ToList();
+                sb.AppendLine($"{style}, {PaceLabel(pace)}: closure faults per run by type [{closures}]; recalled units per run {F((float)runs.SelectMany(r => r.Records).Count(c => c.Reason == Faults.Recalled) / runs.Count)}");
+                sb.AppendLine($"  strandings per day, mean: {Daily(r => r.StrandedByDay)}");
+                sb.AppendLine($"  carries per day, mean: {Daily(r => r.CarriesByDay)}");
+                sb.AppendLine($"  past places whose Technology a carry rewrote by the run's end: mean {F(BalanceStats.Mean(changed))}, median {F(BalanceStats.Quantile(changed, 0.5f))}, max {F(changed.Max())} (watch line: more than three in the median run lowers agency.strandChance)");
+            }
+    }
+
+    /// <summary>Days 7-15 X6: the bribe is a dialog choice, which the simulation never makes; its amount is reported apart.</summary>
+    private static void Bribe(StringBuilder sb, ContentLibrarySO lib)
+    {
+        EffectSO bribe = lib.GetEffectByAssetName(BribeEffect);
+        float amount = bribe != null ? bribe.ops.Where(o => o != null && o.type == EffectOpType.AddMoney).Sum(o => o.floatParam) : 0f;
+        sb.AppendLine();
+        sb.AppendLine($"== The bribe (day 11, dlg_rook) ==");
+        sb.AppendLine($"not in these numbers: the simulation makes no dialog choice. Taken, it adds {F(amount)} cr once at day 11's close ({BribeEffect}); its consequences are a story rule's 3 % of stability (rook_complaint if Rook is denied, audit_rook on day 14's night if he is approved).");
     }
 
     /// <summary>The days the records stood on, as a range when they run on ("6-15") or a list.</summary>

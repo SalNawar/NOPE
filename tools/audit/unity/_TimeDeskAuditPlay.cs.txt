@@ -457,6 +457,16 @@ public static class _TimeDeskAuditPlay
     }
 
     /// <summary>Proves each of a liar's tells through the real compare path: two papers that disagree first (the cross proof, one pair per category), then each tell picked against the claimed place's book row (or the traveller's own record row for a record category); a dress tell is picked through the wheel's Look menu.</summary>
+    /// <summary>The registry's lookup as it read before phase 19 moved it into search (by number first, then by full name, ignoring case): the static dump's FindRecord, so the play finds the same record.</summary>
+    private static CitizenRecord FindRecord(CitizenRegistry registry, string query)
+    {
+        if (registry == null || string.IsNullOrWhiteSpace(query))
+            return null;
+        string q = query.Trim();
+        return registry.Records.FirstOrDefault(r => !string.IsNullOrWhiteSpace(r.Number) && string.Equals(r.Number.Trim(), q, StringComparison.OrdinalIgnoreCase))
+               ?? registry.Records.FirstOrDefault(r => string.Equals(r.FullName.Trim(), q, StringComparison.OrdinalIgnoreCase));
+    }
+
     private static IEnumerator Evidence(Office o, CaseInstance c)
     {
         var compare = (CompareController)Field(o.Ui, "compareController");
@@ -470,7 +480,7 @@ public static class _TimeDeskAuditPlay
         {
             if (Forgery.IsRecordCategory(category) || category == ClueCategory.Name)
             {
-                CitizenRecord rec = registry.Find(c.visitorGivenName);
+                CitizenRecord rec = FindRecord(registry, c.visitorGivenName);
                 RecordRow? recordRow = rec?.Groups.SelectMany(g => g.Rows).Where(r => r.IsEvidence && r.Category == category).Cast<RecordRow?>().FirstOrDefault();
                 return rec != null && recordRow.HasValue ? EvidencePicks.ForRecord(rec, recordRow.Value) : (ComparePick?)null;
             }
