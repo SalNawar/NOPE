@@ -17,3 +17,8 @@ MonoBehaviour:
   description: Translates Egyptian, Akkadian and Arabic in speech.
   cost: 80
   unlockEffect: {fileID: 0}
+  venue: 0
+  branch: 1
+  requires:
+  - interview_protocols
+  installSlot: 

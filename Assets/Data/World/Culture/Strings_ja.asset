@@ -87,6 +87,10 @@ MonoBehaviour:
     text: "\u30E1\u30E2"
     gloss: 0
     tier: 0
+  - key: icon.orders
+    text: "\u6CE8\u6587"
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: "\u8ABF\u67FB"
     gloss: 0

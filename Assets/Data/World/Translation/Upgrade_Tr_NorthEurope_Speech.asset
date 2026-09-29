@@ -17,3 +17,8 @@ MonoBehaviour:
   description: Translates Brittonic, Old English, Proto-Germanic and German in speech.
   cost: 80
   unlockEffect: {fileID: 0}
+  venue: 0
+  branch: 1
+  requires:
+  - interview_protocols
+  installSlot: 

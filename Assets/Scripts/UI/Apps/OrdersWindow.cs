@@ -239,6 +239,12 @@ public sealed class OrdersWindow : MonoBehaviour
             y += head + band.Slots * cell.y;
         }
         treeContent.sizeDelta = new Vector2(Mathf.Max(1, _layout.Tiers) * cell.x, y + margin);
+        ScrollRect scroll = treeContent.GetComponentInParent<ScrollRect>(true);
+        if (scroll != null)
+        {
+            Canvas.ForceUpdateCanvases();
+            scroll.normalizedPosition = new Vector2(0f, 1f);
+        }
 
         var at = new Dictionary<string, Vector2>();
         foreach (TreeCell c in _layout.Cells)
@@ -256,7 +262,10 @@ public sealed class OrdersWindow : MonoBehaviour
             card.name = "Node_" + c.Id;
             Place((RectTransform)card.transform, at[c.Id], node);
             SetText(card.transform, "Name", upgrade.displayName);
-            SetImage(card.transform, "Glyph", SlotArt.Sprite(ArtSlots.OrderIcon(c.Id)) ?? Glyph("branch_" + ArtSlots.Key(c.Branch.ToString())));
+            Sprite art = SlotArt.Sprite(ArtSlots.OrderIcon(c.Id));
+            SetImage(card.transform, "Glyph", art ?? Glyph("branch_" + ArtSlots.Key(c.Branch.ToString())));
+            if (art != null)
+                ShowUntinted(card.transform.Find("Glyph"));
             string id = c.Id;
             card.onClick.AddListener(() => Select(id));
             card.gameObject.SetActive(true);
@@ -317,7 +326,7 @@ public sealed class OrdersWindow : MonoBehaviour
             UpgradeSO upgrade = lib.GetUpgradeById(pair.Key);
             OrderState state = OrderBook.StateOf(world, lib, upgrade);
             Transform card = pair.Value.transform;
-            SetText(card, "State", StateLine(world, lib, upgrade, state));
+            SetText(card, "State", StateLine(world, lib, upgrade, state, false));
             Sprite badge = state == OrderState.Locked ? Glyph("padlock") : state == OrderState.InTransit ? Glyph("clock") : state == OrderState.Owned ? Glyph("tick") : null;
             SetImage(card, "Badge", badge);
             Transform b = card.Find("Badge");
@@ -372,15 +381,15 @@ public sealed class OrdersWindow : MonoBehaviour
             { "item", upgrade.displayName },
             { "section", UiText.Get("app.orders.branch." + ArtSlots.Key(upgrade.branch.ToString())) },
             { "price", Money(OrderBook.Price(world, lib, upgrade)) },
-            { "status", StateLine(world, lib, upgrade, state) },
+            { "status", StateLine(world, lib, upgrade, state, true) },
             { "requires", Requires(world, lib, upgrade) },
             { "blurb", upgrade.description ?? string.Empty }
         };
         detail.Show(detailForm.form, page, _ => false);
     }
 
-    /// <summary>A node's state line: its price (or "not enough"), "Needs: …", "In transit · arrives day N", "Delivered day N" or "Owned", and for an owned scanner where it stands.</summary>
-    private static string StateLine(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade, OrderState state)
+    /// <summary>A node's state line: its price (or "not enough"), "Needs: …", "In transit · arrives day N", "Delivered day N" or "Owned"; for an owned scanner where it stands (on the node alone, where room is short; after the delivery day on the <paramref name="full"/> detail card).</summary>
+    private static string StateLine(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade, OrderState state, bool full)
     {
         switch (state)
         {
@@ -394,7 +403,7 @@ public sealed class OrdersWindow : MonoBehaviour
                 OrderEntry delivery = Orders.Delivery(world.orders, upgrade.id);
                 string owned = delivery != null ? UiText.Format("app.orders.delivered", delivery.deliveredDay) : UiText.Get("app.orders.owned");
                 string install = InstallLine(OrderBook.InstallStateOf(world, lib, upgrade));
-                return install != null ? owned + " · " + install : owned;
+                return install == null ? owned : full ? owned + " · " + install : install;
             default:
                 return Money(OrderBook.Price(world, lib, upgrade));
         }
@@ -474,6 +483,19 @@ public sealed class OrdersWindow : MonoBehaviour
         sprite.name = texture.name;
         _glyphs[key] = sprite;
         return sprite;
+    }
+
+    /// <summary>An upgrade's own icon shows in its colours (as Home's rows showed them): the clone's glyph drops its theme tint.</summary>
+    private static void ShowUntinted(Transform glyph)
+    {
+        if (glyph == null)
+            return;
+        ThemeTag tag = glyph.GetComponent<ThemeTag>();
+        if (tag != null)
+            Destroy(tag);
+        Image image = glyph.GetComponent<Image>();
+        if (image != null)
+            image.color = Color.white;
     }
 
     /// <summary>Puts a rect at a top-left position in the tree's content (y down) with a size.</summary>
