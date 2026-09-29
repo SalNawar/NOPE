@@ -77,6 +77,7 @@ public static class TitleSceneBuilder
         worldOutcomesText.textWrappingMode = TextWrappingModes.Normal;
         MatchFace(worldNewRunButton, endingNewRunButton);
         LayOutEndingButtons(endingBodyText, endingWorldButton, endingNewRunButton);
+        LayOutWorldPage(world, worldOutcomesText, worldNewRunButton, endingNewRunButton);
 
         // --- The Debt Relief ending's papers (redesign phase 13): the clerk's Labour Contract left of the panel, the account right ---
         Transform papers = FindOrCreatePanel(ending, "ClerkPapers", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -315,6 +316,42 @@ public static class TitleSceneBuilder
 
     /// <summary>The ending panel's buttons' width, in panel widths (the world button's label at 24 px or more).</summary>
     private const float EndingButtonWidth = 0.5f;
+
+    /// <summary>
+    /// The world page's room for the world's outcomes, re-applied on every
+    /// build: the panel <see cref="WorldPageSize"/>, the outcomes' box across
+    /// its width, and the outcomes shrinking (28 down to 20) instead of
+    /// spilling onto the END OF DEMO card when the answers are long (a split
+    /// answer such as "The Cybernetic Age and The Nuclear Age, one on each
+    /// bank of the river"); its New Run the ending panel's New Run's size, so
+    /// the face picture keeps its shape.
+    /// </summary>
+    private static void LayOutWorldPage(Transform world, TMP_Text outcomes, Button newRun, Button model)
+    {
+        var panel = (RectTransform)world;
+        Undo.RecordObject(panel, "Lay out the world page");
+        panel.sizeDelta = WorldPageSize;
+        Undo.RecordObject(outcomes.rectTransform, "Lay out the world page");
+        outcomes.rectTransform.anchorMin = new Vector2(0.05f, outcomes.rectTransform.anchorMin.y);
+        outcomes.rectTransform.anchorMax = new Vector2(0.95f, outcomes.rectTransform.anchorMax.y);
+        Undo.RecordObject(outcomes, "Lay out the world page");
+        outcomes.enableAutoSizing = true;
+        outcomes.fontSizeMin = 20f;
+        outcomes.fontSizeMax = 28f;
+        EditorUtility.SetDirty(outcomes);
+
+        var modelRect = (RectTransform)model.transform;
+        var modelPanel = (RectTransform)modelRect.parent;
+        Vector2 size = Vector2.Scale(modelRect.anchorMax - modelRect.anchorMin, modelPanel.sizeDelta);
+        var rect = (RectTransform)newRun.transform;
+        Undo.RecordObject(rect, "Lay out the world page");
+        rect.anchorMin = new Vector2(0.5f - size.x / 2f / WorldPageSize.x, 0.04f);
+        rect.anchorMax = new Vector2(0.5f + size.x / 2f / WorldPageSize.x, 0.04f + size.y / WorldPageSize.y);
+        rect.offsetMin = rect.offsetMax = Vector2.zero;
+    }
+
+    /// <summary>The world page's size on the 1920×1080 canvas (wide enough for a split answer on one line at 25 px or more).</summary>
+    private static readonly Vector2 WorldPageSize = new Vector2(1160f, 800f);
 
     /// <summary>The gap between the ending panel's buttons, and above them, in panel heights.</summary>
     private const float EndingButtonGap = 0.03f;
