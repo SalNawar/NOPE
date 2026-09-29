@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-/// <summary>Redesign phase 23: the balance report's statistics and the epilogue thresholds' rule (the history-facts design's R14).</summary>
+/// <summary>Redesign phase 23: the balance report's statistics (the day-15 world's distribution; the epilogue thresholds' rule retired with the epilogues, 2026-09-29).</summary>
 public class BalanceStatsTests
 {
     private static readonly float[] Ten = { 10, 1, 9, 2, 8, 3, 7, 4, 6, 5 };
@@ -28,15 +28,5 @@ public class BalanceStatsTests
         Assert.AreEqual(0f, BalanceStats.Quantile(new float[0], 0.5f));
         Assert.AreEqual(0f, BalanceStats.Mean(null));
         Assert.AreEqual(0f, BalanceStats.StandardDeviation(new float[0]));
-        Assert.AreEqual(0, BalanceStats.EpilogueThreshold(null));
-    }
-
-    [Test]
-    public void EpilogueThreshold_The65thPercentile_RoundedHalfAwayFromZero()
-    {
-        Assert.AreEqual(7, BalanceStats.EpilogueThreshold(Ten));
-        Assert.AreEqual(12, BalanceStats.EpilogueThreshold(new[] { 11.5f, 11.5f, 11.5f }), "11.5 rounds up");
-        Assert.AreEqual(-12, BalanceStats.EpilogueThreshold(new[] { -11.5f }), "and away from zero below it");
-        Assert.AreEqual(0.65f, BalanceStats.EpilogueQuantile);
     }
 }

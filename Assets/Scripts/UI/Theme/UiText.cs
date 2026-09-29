@@ -40,6 +40,16 @@ public static class UiText
     /// <summary>The string for a key.</summary>
     public static string Get(string key) => Format(key);
 
+    /// <summary>These tables as Domain's page words (IPageWords: Format), for the Internet's pages and the world summary.</summary>
+    public static readonly IPageWords Words = new PageWords();
+
+    /// <summary>The UI string tables behind IPageWords.</summary>
+    private sealed class PageWords : IPageWords
+    {
+        /// <inheritdoc />
+        public string Get(string key, params object[] args) => Format(key, args);
+    }
+
     /// <summary>The string for a key with its placeholders filled (UiStrings.Format).</summary>
     public static string Format(string key, params object[] args)
     {

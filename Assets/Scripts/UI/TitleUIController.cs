@@ -9,9 +9,12 @@ using UnityEngine.UI;
 /// UI for the title scene added in Alpha Phase 5: a title panel (Continue /
 /// New Run) and an ending panel (shown instead, when WorldState.endingId is
 /// set, displaying the reached EndingSO and offering New Run; on the Debt
-/// Relief ending, the clerk's own papers beside it, redesign phase 13). Both
-/// panels are optional; if unwired, TitleSceneController degrades to loading
-/// the office scene directly so the run stays playable.
+/// Relief ending, the clerk's own papers beside it, redesign phase 13); the
+/// run's last day shows the world panel instead (the neutral "world you made"
+/// ending: its text, the world summary in a scroll, and the END OF DEMO card
+/// set apart under it). The panels are optional; if unwired,
+/// TitleSceneController degrades to loading the office scene directly so the
+/// run stays playable.
 /// </summary>
 public sealed class TitleUIController : MonoBehaviour
 {
@@ -44,6 +47,25 @@ public sealed class TitleUIController : MonoBehaviour
     /// <summary>Clears the ended run and starts a new one.</summary>
     [SerializeField] private Button endingNewRunButton;
 
+    [Header("World Panel: the run's last day (2026-09-29)")]
+    /// <summary>Root panel of the neutral "world you made" ending, shown instead of the ending panel on the run's last day.</summary>
+    [SerializeField] private GameObject worldPanel;
+
+    /// <summary>The ending's display name.</summary>
+    [SerializeField] private TMP_Text worldTitleText;
+
+    /// <summary>The ending's text and the world summary under it (WorldSummary), inside the panel's scroll.</summary>
+    [SerializeField] private TMP_Text worldSummaryText;
+
+    /// <summary>The ending's closing card (the END OF DEMO card), set apart under the scroll; hidden when the ending has none.</summary>
+    [SerializeField] private TMP_Text worldCardText;
+
+    /// <summary>The scroll over the summary (back to its top each time the panel shows).</summary>
+    [SerializeField] private ScrollRect worldScroll;
+
+    /// <summary>Clears the ended run and starts a new one.</summary>
+    [SerializeField] private Button worldNewRunButton;
+
     [Header("Ending Panel: the clerk's papers (redesign phase 13)")]
     /// <summary>The Debt Relief ending's papers, beside the ending panel: the clerk's own Labour Contract and account (hidden for every other ending).</summary>
     [SerializeField] private GameObject clerkPapers;
@@ -60,6 +82,9 @@ public sealed class TitleUIController : MonoBehaviour
     /// <summary>True if the ending panel is wired.</summary>
     public bool HasEndingPanel => endingPanel != null;
 
+    /// <summary>True if the world panel (the run's last day) is wired.</summary>
+    public bool HasWorldPanel => worldPanel != null;
+
     /// <summary>
     /// Hides both panels until a Show* call activates one. The panels are
     /// optional, so each is tested with Unity's == (audit R4-010): an
@@ -70,6 +95,7 @@ public sealed class TitleUIController : MonoBehaviour
     {
         if (titlePanel != null) titlePanel.SetActive(false);
         if (endingPanel != null) endingPanel.SetActive(false);
+        if (worldPanel != null) worldPanel.SetActive(false);
         if (endingPicture != null) endingPicture.gameObject.SetActive(false);
     }
 
@@ -83,6 +109,7 @@ public sealed class TitleUIController : MonoBehaviour
             return;
 
         if (endingPanel != null) endingPanel.SetActive(false);
+        if (worldPanel != null) worldPanel.SetActive(false);
         titlePanel.SetActive(true);
 
         if (titleText != null)
@@ -116,6 +143,7 @@ public sealed class TitleUIController : MonoBehaviour
             return;
 
         if (titlePanel != null) titlePanel.SetActive(false);
+        if (worldPanel != null) worldPanel.SetActive(false);
         endingPanel.SetActive(true);
 
         if (endingTitleText != null)
@@ -128,18 +156,78 @@ public sealed class TitleUIController : MonoBehaviour
                 : string.IsNullOrWhiteSpace(ending.closingCard) ? ending.bodyText
                 : $"{ending.bodyText}\n\n{ending.closingCard}";
 
-        if (endingPicture != null)
+        ShowPicture(ending);
+        Wire(endingNewRunButton, onNewRun);
+    }
+
+    /// <summary>
+    /// Shows the world panel for the run's last day (the neutral "world you
+    /// made" ending): its title, its text followed by the world summary's
+    /// sections (WorldSummary.Sections: each heading in bold over its lines),
+    /// and its closing card set apart under the scroll, always shown when the
+    /// ending has one (the END OF DEMO card).
+    /// </summary>
+    public void ShowWorld(EndingSO ending, IReadOnlyList<SummarySection> summary, Action onNewRun)
+    {
+        if (worldPanel == null)
+            return;
+
+        if (titlePanel != null) titlePanel.SetActive(false);
+        if (endingPanel != null) endingPanel.SetActive(false);
+        worldPanel.SetActive(true);
+
+        if (worldTitleText != null)
+            worldTitleText.text = ending != null && !string.IsNullOrEmpty(ending.displayName) ? ending.displayName : "The End";
+
+        if (worldSummaryText != null)
+            worldSummaryText.text = Summary(ending != null ? ending.bodyText : null, summary);
+
+        if (worldCardText != null)
         {
-            Sprite picture = ending != null ? ending.picture : null;
-            endingPicture.sprite = picture;
-            endingPicture.gameObject.SetActive(picture != null);
+            string card = ending != null ? ending.closingCard : null;
+            worldCardText.text = card ?? string.Empty;
+            worldCardText.gameObject.SetActive(!string.IsNullOrWhiteSpace(card));
         }
 
-        if (endingNewRunButton != null)
+        if (worldScroll != null)
+            worldScroll.verticalNormalizedPosition = 1f;
+
+        ShowPicture(ending);
+        Wire(worldNewRunButton, onNewRun);
+    }
+
+    /// <summary>The ending's picture full screen behind the panel (EndingSO.picture); hidden when it has none.</summary>
+    private void ShowPicture(EndingSO ending)
+    {
+        if (endingPicture == null)
+            return;
+        Sprite picture = ending != null ? ending.picture : null;
+        endingPicture.sprite = picture;
+        endingPicture.gameObject.SetActive(picture != null);
+    }
+
+    /// <summary>Points a New Run button at <paramref name="onNewRun"/> alone.</summary>
+    private static void Wire(Button button, Action onNewRun)
+    {
+        if (button == null)
+            return;
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() => onNewRun?.Invoke());
+    }
+
+    /// <summary>The world panel's text: the ending's text, then each section's heading in bold over its lines.</summary>
+    private static string Summary(string body, IReadOnlyList<SummarySection> sections)
+    {
+        var sb = new StringBuilder();
+        if (!string.IsNullOrWhiteSpace(body))
+            sb.Append(body).Append('\n');
+        foreach (SummarySection section in sections ?? Array.Empty<SummarySection>())
         {
-            endingNewRunButton.onClick.RemoveAllListeners();
-            endingNewRunButton.onClick.AddListener(() => onNewRun?.Invoke());
+            sb.Append("\n<b>").Append(section.Heading).Append("</b>\n");
+            foreach (string line in section.Lines)
+                sb.Append(line).Append('\n');
         }
+        return sb.ToString().TrimEnd('\n');
     }
 
     /// <summary>

@@ -681,9 +681,9 @@ public static partial class ContentLibraryValidator
     }
 
     /// <summary>
-    /// Endings: an attribute ending needs an attribute and a threshold above 0,
-    /// a day ending a threshold of at least 1; an attribute ending without any
-    /// day ending could never fire (an epilogue replaces a reached milestone).
+    /// Endings: a retired condition (EndingRules.IsRetired: the attribute
+    /// epilogues, retired 2026-09-29) is an error, since it never ends a run;
+    /// a day ending needs a threshold of at least 1.
     /// </summary>
     private static int CheckEndings(ContentLibrarySO lib)
     {
@@ -692,9 +692,9 @@ public static partial class ContentLibraryValidator
         {
             if (e == null)
                 continue;
-            if (e.conditionType == EndingConditionType.AttrTotalAtLeast && (e.attribute == null || e.threshold <= 0f))
+            if (EndingRules.IsRetired(e.conditionType))
             {
-                Debug.LogError($"[ContentLibraryValidator] Ending '{e.name}' (AttrTotalAtLeast) needs an attribute and a threshold above 0 in '{lib.name}'.", e);
+                Debug.LogError($"[ContentLibraryValidator] Ending '{e.name}' uses the retired condition {e.conditionType} (the attribute epilogues, retired 2026-09-29: no ending judges the world); it never ends a run, so take it out of '{lib.name}'.", e);
                 issues++;
             }
             if (e.conditionType == EndingConditionType.DayAtLeast && e.threshold < 1f)
@@ -702,13 +702,6 @@ public static partial class ContentLibraryValidator
                 Debug.LogError($"[ContentLibraryValidator] Ending '{e.name}' (DayAtLeast) needs a threshold of at least 1 in '{lib.name}'.", e);
                 issues++;
             }
-        }
-
-        if (lib.Endings.Any(e => e != null && e.conditionType == EndingConditionType.AttrTotalAtLeast) &&
-            !lib.Endings.Any(e => e != null && e.conditionType == EndingConditionType.DayAtLeast))
-        {
-            Debug.LogWarning($"[ContentLibraryValidator] '{lib.name}' has attribute endings but no day ending: an epilogue only replaces a reached milestone, so they could never fire.", lib);
-            issues++;
         }
 
         return issues;

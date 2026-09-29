@@ -8,7 +8,10 @@ using UnityEngine;
 /// - If WorldState.endingId is set: shows the ending panel (display name +
 ///   body from the matching EndingSO) with a New Run option that clears the
 ///   save and starts fresh; on the Debt Relief ending (the bankrupt one), the
-///   clerk's own Labour Contract beside the clerk's account, now Frozen.
+///   clerk's own Labour Contract beside the clerk's account, now Frozen. The
+///   run's last day (the neutral "world you made" ending, EndingKind.Milestone)
+///   shows the world panel instead: the world summary of the run
+///   (WorldOutcomes, WorldSummary) and the END OF DEMO card.
 /// - Otherwise: shows the title panel with Continue (only if a save exists;
 ///   it resumes where the save was made: Home after the end-of-shift save,
 ///   otherwise the Office) and New Run.
@@ -43,6 +46,12 @@ public sealed class TitleSceneController : MonoBehaviour
         if (ended && titleUI != null && titleUI.HasEndingPanel)
         {
             EndingSO ending = run.Library != null ? run.Library.GetEndingById(world.endingId) : null;
+            if (ending != null && EndingRules.KindOf(ending.conditionType) == EndingKind.Milestone && titleUI.HasWorldPanel)
+            {
+                titleUI.ShowWorld(ending, WorldSummary.Sections(WorldOutcomes.From(world, run.Library), UiText.Words), HandleNewRun);
+                return;
+            }
+
             titleUI.ShowEnding(ending, HandleNewRun);
             ShowClerkPapers(run, ending);
             return;

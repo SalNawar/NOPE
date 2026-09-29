@@ -17333,6 +17333,126 @@
         "tier": "Full"
       },
       {
+        "key": "ending.world.present",
+        "text": "The present",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.leader",
+        "text": "{0} has shaped the timeline since day {1}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.noLeader",
+        "text": "No country shapes the timeline.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.presentPlace",
+        "text": "The present is {0}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.fact",
+        "text": "{0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.influenceHeading",
+        "text": "Each country's influence on the past",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.influence",
+        "text": "{0}: {1:0.#}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.noInfluence",
+        "text": "No country's influence is on record.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.attributesHeading",
+        "text": "Across the timeline",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.attribute",
+        "text": "{0}: {1:0.#}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.noAttributes",
+        "text": "No attribute is on record.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.dominantHeading",
+        "text": "What stands out in each place",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.dominant",
+        "text": "{0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.noDominant",
+        "text": "Nothing stands out in any place.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.changesHeading",
+        "text": "Places history rewrote",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.change",
+        "text": "{0}, {1}: {2} (was {3}; from day {4})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.pending",
+        "text": "{0}, {1}: {2} on its way (now {3}; carried on day {4})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.noChanges",
+        "text": "Every place's facts stand as recorded.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.eventsHeading",
+        "text": "What happened",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "ending.world.noEvents",
+        "text": "No event reached the history books.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "settings.language",
         "text": "UI language",
         "gloss": "None",

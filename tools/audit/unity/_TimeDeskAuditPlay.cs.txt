@@ -269,20 +269,25 @@ public static class _TimeDeskAuditPlay
             Report($"COVER {t.Key}: {t.Value}");
     }
 
-    /// <summary>The ending screen on the Title: its title and body as shown; the demo ends on the END OF DEMO card (authored on Retirement, "Quarter's End", EndingSO.closingCard).</summary>
+    /// <summary>The ending screen on the Title: the day-15 ending's world panel (the neutral "world you made" ending: its title, its text and the world summary, and the END OF DEMO card set apart, EndingSO.closingCard), else a failure's ending panel; each as shown.</summary>
     private static IEnumerator EndingScreen(string endingId)
     {
         TitleUIController ui = null;
-        yield return Until(() => (ui = Object.FindFirstObjectByType<TitleUIController>()) != null && ((GameObject)Field(ui, "endingPanel")).activeInHierarchy, 60f, "the ending screen on the Title");
+        bool Shown(string panel) => ((GameObject)Field(ui, panel)).activeInHierarchy;
+        yield return Until(() => (ui = Object.FindFirstObjectByType<TitleUIController>()) != null && (Shown("worldPanel") || Shown("endingPanel")), 60f, "the ending screen on the Title");
         yield return Frames(3);
-        string title = ((TMP_Text)Field(ui, "endingTitleText")).text;
-        string body = ((TMP_Text)Field(ui, "endingBodyText")).text;
-        Line($"== ENDING SCREEN '{endingId}': {title}");
+        bool world = Shown("worldPanel");
+        string title = ((TMP_Text)Field(ui, world ? "worldTitleText" : "endingTitleText")).text;
+        string body = ((TMP_Text)Field(ui, world ? "worldSummaryText" : "endingBodyText")).text;
+        TMP_Text cardText = world ? (TMP_Text)Field(ui, "worldCardText") : null;
+        string card = cardText != null && cardText.gameObject.activeInHierarchy ? cardText.text : "";
+        Line($"== ENDING SCREEN '{endingId}' ({(world ? "the world panel" : "the ending panel")}): {title}");
         foreach (string l in Lines(body))
             Line("   | " + l);
-        EndingSO ending = RunManager.Instance.Library.Endings.FirstOrDefault(e => e != null && e.id == endingId);
-        bool card = ending != null && !string.IsNullOrWhiteSpace(ending.closingCard);
-        Check(body.Contains("END OF DEMO"), $"the demo ends on the END OF DEMO card, whichever day-15 ending it is ('{endingId}', card {(card ? "authored" : "none")}, shown {body.Contains("END OF DEMO")})");
+        foreach (string l in Lines(card))
+            Line("   [card] " + l);
+        Check(world, $"the day-15 ending shows the world panel with the world summary ('{endingId}')");
+        Check(card.Contains("END OF DEMO"), $"the demo ends on the END OF DEMO card under the world summary ('{endingId}', shown {card.Contains("END OF DEMO")})");
         if (ShotsOn)
             yield return Shots($"ending_{endingId}");
     }

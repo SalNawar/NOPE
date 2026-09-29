@@ -187,8 +187,8 @@ public sealed class RunManager : MonoBehaviour
     }
 
     /// <summary>
-    /// End of the Home phase: the day-boundary ending check first (failures,
-    /// the Retirement milestone and the attribute epilogues); an ending is saved
+    /// End of the Home phase: the day-boundary ending check first (failures
+    /// and the run's last day, the "world you made" ending); an ending is saved
     /// and shown on the title scene; otherwise the nightly resolve and the next
     /// day (AdvanceToNextDay). Home's Sleep, the no-Home path of
     /// GoHomeOrAdvance and the debug panel's Skip Day all come here.

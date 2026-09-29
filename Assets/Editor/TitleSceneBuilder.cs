@@ -15,7 +15,9 @@ using static SceneUiKit;
 /// art slots (redesign phase 27): the three buttons take the text-free Title
 /// face with their labels on when it exists (else their hand-wired sprites,
 /// labels off), and the ending's picture shows full screen behind the ending
-/// panel (EndingSO.picture).
+/// panel (EndingSO.picture). The world panel (2026-09-29) is the run's last
+/// day: the neutral "world you made" ending's title, its text and the world
+/// summary in a scroll, the END OF DEMO card set apart under it, and New Run.
 /// </summary>
 public static class TitleSceneBuilder
 {
@@ -69,6 +71,17 @@ public static class TitleSceneBuilder
         contractText.textWrappingMode = TextWrappingModes.Normal;
         accountText.textWrappingMode = TextWrappingModes.Normal;
 
+        // --- The world panel (2026-09-29): the run's last day, the neutral "world you made" ending ---
+        Transform world = FindOrCreatePanel(uiRoot, "WorldPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(1280f, 960f), withBackground: true, bgColor: new Color(0.08f, 0.09f, 0.14f, 0.97f));
+        TMP_Text worldTitleText = FindOrCreateText(world, "WorldTitleText", "The World You Made", 40,
+            TextAlignmentOptions.Center, new Vector2(0.05f, 0.91f), new Vector2(0.95f, 0.98f));
+        ScrollRect worldScroll = BuildWorldScroll(world, out TMP_Text worldSummaryText);
+        TMP_Text worldCardText = FindOrCreateText(world, "WorldCardText", "END OF DEMO", 26,
+            TextAlignmentOptions.Center, new Vector2(0.05f, 0.13f), new Vector2(0.95f, 0.23f));
+        Button worldNewRunButton = FindOrCreateButton(world, "NewRunButton", "New Run",
+            new Vector2(0.35f, 0.03f), new Vector2(0.65f, 0.11f));
+
         // --- Wire TitleUIController ---
         var soUi = new SerializedObject(titleUI);
 
@@ -81,12 +94,18 @@ public static class TitleSceneBuilder
         soUi.FindProperty("endingTitleText").objectReferenceValue = endingTitleText;
         soUi.FindProperty("endingBodyText").objectReferenceValue = endingBodyText;
         soUi.FindProperty("endingNewRunButton").objectReferenceValue = endingNewRunButton;
+        soUi.FindProperty("worldPanel").objectReferenceValue = world.gameObject;
+        soUi.FindProperty("worldTitleText").objectReferenceValue = worldTitleText;
+        soUi.FindProperty("worldSummaryText").objectReferenceValue = worldSummaryText;
+        soUi.FindProperty("worldCardText").objectReferenceValue = worldCardText;
+        soUi.FindProperty("worldScroll").objectReferenceValue = worldScroll;
+        soUi.FindProperty("worldNewRunButton").objectReferenceValue = worldNewRunButton;
         soUi.FindProperty("clerkPapers").objectReferenceValue = papers.gameObject;
         soUi.FindProperty("clerkContractText").objectReferenceValue = contractText;
         soUi.FindProperty("clerkAccountText").objectReferenceValue = accountText;
         soUi.ApplyModifiedProperties();
 
-        BuildArtSlots(titleUI, ending, continueButton, newRunButton, endingNewRunButton);
+        BuildArtSlots(titleUI, ending, continueButton, newRunButton, endingNewRunButton, worldNewRunButton);
 
         // --- Wire TitleSceneController ---
         var soController = new SerializedObject(titleController);
@@ -101,10 +120,63 @@ public static class TitleSceneBuilder
         // Panels start hidden (TitleUIController.Awake also enforces this; ShowClerkPapers shows the papers).
         title.gameObject.SetActive(false);
         ending.gameObject.SetActive(false);
+        world.gameObject.SetActive(false);
         papers.gameObject.SetActive(false);
 
         EditorSceneManager.MarkSceneDirty(titleUI.gameObject.scene);
         Debug.Log("[TimeDesk] Title UI built and wired. Save the scene.");
+    }
+
+    /// <summary>
+    /// The world panel's scroll (create-only, like every piece here): a dark
+    /// area between the title and the card, its masked viewport, the summary
+    /// text growing downwards from the top (a ContentSizeFitter) as the scroll's
+    /// content, and a vertical scrollbar on the right; the wheel and a drag
+    /// scroll it too.
+    /// </summary>
+    private static ScrollRect BuildWorldScroll(Transform world, out TMP_Text text)
+    {
+        Transform area = FindOrCreatePanel(world, "WorldScroll", new Vector2(0.04f, 0.24f), new Vector2(0.96f, 0.9f),
+            Vector2.zero, Vector2.zero, withBackground: true, bgColor: new Color(0.05f, 0.06f, 0.09f, 1f));
+        Transform viewport = FindOrCreatePanel(area, "Viewport", Vector2.zero, Vector2.one,
+            new Vector2(-12f, 0f), new Vector2(-24f, 0f), withBackground: false);
+        Ensure<RectMask2D>(viewport.gameObject);
+
+        text = FindOrCreateText(viewport, "WorldSummaryText", "...", 22,
+            TextAlignmentOptions.TopLeft, new Vector2(0f, 1f), new Vector2(1f, 1f));
+        text.textWrappingMode = TextWrappingModes.Normal;
+        text.margin = new Vector4(20f, 16f, 20f, 16f);
+        var content = (RectTransform)text.transform;
+        content.pivot = new Vector2(0.5f, 1f);
+        ContentSizeFitter fitter = Ensure<ContentSizeFitter>(text.gameObject);
+        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        Transform bar = FindOrCreatePanel(area, "Scrollbar", new Vector2(1f, 0f), new Vector2(1f, 1f),
+            new Vector2(-12f, 0f), new Vector2(24f, 0f), withBackground: true, bgColor: new Color(0.14f, 0.15f, 0.2f, 1f));
+        Transform handle = FindOrCreatePanel(bar, "Handle", Vector2.zero, Vector2.one,
+            Vector2.zero, Vector2.zero, withBackground: true, bgColor: new Color(0.62f, 0.65f, 0.72f, 1f));
+        Scrollbar scrollbar = Ensure<Scrollbar>(bar.gameObject);
+        scrollbar.direction = Scrollbar.Direction.BottomToTop;
+        scrollbar.handleRect = (RectTransform)handle;
+        scrollbar.targetGraphic = handle.GetComponent<Image>();
+
+        ScrollRect scroll = Ensure<ScrollRect>(area.gameObject);
+        scroll.viewport = (RectTransform)viewport;
+        scroll.content = content;
+        scroll.horizontal = false;
+        scroll.vertical = true;
+        scroll.movementType = ScrollRect.MovementType.Clamped;
+        scroll.scrollSensitivity = 40f;
+        scroll.verticalScrollbar = scrollbar;
+        scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent;
+        return scroll;
+    }
+
+    /// <summary>The object's <typeparamref name="T"/>, added (with undo) when it has none.</summary>
+    private static T Ensure<T>(GameObject go) where T : Component
+    {
+        T existing = go.GetComponent<T>();
+        return existing != null ? existing : Undo.AddComponent<T>(go);
     }
 
     /// <summary>

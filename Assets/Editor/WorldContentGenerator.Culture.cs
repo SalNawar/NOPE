@@ -88,6 +88,8 @@ public static partial class WorldContentGenerator
                 RequireKey(keys, Discrepancy.ReportKeyFor(proof, kind), "Discrepancy.ReportKeyFor", errors);
         foreach (LookSlot slot in Looks.Slots)
             RequireKey(keys, Looks.SlotKey(slot), "Looks.SlotKey", errors);
+        foreach (string key in WorldSummary.WordKeys)
+            RequireKey(keys, key, "the world summary on the run's last day (WorldSummary.WordKeys)", errors);
 
         foreach (LanguageData l in ui.languages ?? Array.Empty<LanguageData>())
         {

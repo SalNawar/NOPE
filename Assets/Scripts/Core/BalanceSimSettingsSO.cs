@@ -16,8 +16,8 @@ public sealed class BalanceSimSettingsSO : ScriptableObject
     /// The travellers a careful clerk gets through in a shift before the clock
     /// closes (8 real minutes at about 45 s a traveller: 10). The simulation
     /// plays every style twice, on the whole queue and at this pace (the rest
-    /// of the queue goes home, PlayPolicy.Reaches), and reads the epilogue
-    /// thresholds from perfect play at this pace. 0: the whole queue only.
+    /// of the queue goes home, PlayPolicy.Reaches), and reports the world
+    /// each style leaves at day 15 at this pace. 0: the whole queue only.
     /// </summary>
     [Min(0)] public int travellersPerShift = 10;
 

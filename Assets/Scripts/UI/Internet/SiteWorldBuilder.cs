@@ -12,20 +12,10 @@ using System.Linq;
 /// </summary>
 public static class SiteWorldBuilder
 {
-    /// <summary>The pages' words: the UI string tables through UiText.</summary>
-    private sealed class UiPageWords : IPageWords
-    {
-        /// <inheritdoc />
-        public string Get(string key, params object[] args) => UiText.Format(key, args);
-    }
-
-    /// <summary>The one words instance.</summary>
-    private static readonly IPageWords Words = new UiPageWords();
-
     /// <summary>The run's Internet (a world with no sites when the library or the run is missing).</summary>
     public static SiteWorld Build(ContentLibrarySO lib, WorldState world)
     {
-        var w = new SiteWorld { Words = Words, Day = world != null ? world.day : 1 };
+        var w = new SiteWorld { Words = UiText.Words, Day = world != null ? world.day : 1 };
         if (lib == null || world == null)
             return w;
 
@@ -42,8 +32,8 @@ public static class SiteWorldBuilder
         return w;
     }
 
-    /// <summary>Every place with a nation and an era, by the library's nation order then era order.</summary>
-    private static List<PlaceInfo> Places(ContentLibrarySO lib)
+    /// <summary>Every place with a nation and an era, by the library's nation order then era order (also the world summary's places, WorldOutcomes).</summary>
+    public static List<PlaceInfo> Places(ContentLibrarySO lib)
     {
         var nationOrder = new Dictionary<NationSO, int>();
         for (int i = 0; i < lib.Nations.Count; i++)

@@ -261,9 +261,6 @@ MonoBehaviour:
   endings:
   - {fileID: 11400000, guid: e9bfefb53bf2f01458c64477e06012ea, type: 2}
   - {fileID: 11400000, guid: 08663b4e21d516c4f8feefb45a561e45, type: 2}
-  - {fileID: 11400000, guid: 50eeaa4da13118c4ea36492bc53b3e35, type: 2}
-  - {fileID: 11400000, guid: 257bd7d52b3af8d4e996bca9ac4ab4ee, type: 2}
-  - {fileID: 11400000, guid: bd8940c844f228f4696f38dd9281cd20, type: 2}
   - {fileID: 11400000, guid: 183b80e98b093704daf36b815af0abf3, type: 2}
   referenceBooks:
   - {fileID: 11400000, guid: 3438e9ab0eb7f3b46a1831faa3e18ff7, type: 2}
