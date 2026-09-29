@@ -19,7 +19,7 @@ public enum EffectOpType
     /// <summary>floatParam = credits (can be negative)</summary>
     AddMoney,
 
-    /// <summary>floatParam = stability delta</summary>
+    /// <summary>floatParam = a stability change in percent, compounding (StabilityRules.ApplyPercent: a loss takes that share of the current value, a gain closes that share of the gap to 100)</summary>
     AddStability,
 
     /// <summary>stringParam = upgrade id</summary>

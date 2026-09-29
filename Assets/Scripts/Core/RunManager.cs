@@ -63,7 +63,7 @@ public sealed class RunManager : MonoBehaviour
         if (!mgr.ContinueRun())
             mgr.NewRun();
 
-        Debug.Log($"[RunManager] <<< Exiting GetOrCreate (day {mgr.World?.day}, money={mgr.World?.money}, stability={mgr.World?.timelineStability:0.#}).");
+        Debug.Log($"[RunManager] <<< Exiting GetOrCreate (day {mgr.World?.day}, money={mgr.World?.money}, stability={mgr.World?.timelineStability:0.00}).");
 
         return mgr;
     }
@@ -181,7 +181,7 @@ public sealed class RunManager : MonoBehaviour
     /// </summary>
     public void Sleep()
     {
-        Debug.Log($"[RunManager] >>> Entering Sleep (day {World.day}, money={World.money}, stability={World.timelineStability:0.#}).");
+        Debug.Log($"[RunManager] >>> Entering Sleep (day {World.day}, money={World.money}, stability={World.timelineStability:0.00}).");
 
         EndingSO ending = EndingService.Evaluate(World, Library, Config != null ? Config.gameConfig : null, EndingMoment.DayBoundary);
         if (ending != null)
@@ -210,7 +210,7 @@ public sealed class RunManager : MonoBehaviour
         // The nightly resolve runs before the day turns, so triggers read "today" (DayCycle.AdvanceNight).
         DayCycle.AdvanceNight(World, Library, Config != null ? Config.gameConfig : null);
 
-        Debug.Log($"[RunManager] <<< Exiting AdvanceToNextDay (now day {World.day}, money={World.money}, stability={World.timelineStability:0.#}; saving and loading Office).");
+        Debug.Log($"[RunManager] <<< Exiting AdvanceToNextDay (now day {World.day}, money={World.money}, stability={World.timelineStability:0.00}; saving and loading Office).");
 
         SaveNow();
         LoadOfficeScene();

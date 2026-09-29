@@ -108,7 +108,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: tray.stability
-    text: 'Stability: {0:0}%'
+    text: 'Stability: {0}'
     gloss: 0
     tier: 1
   - key: taskbar.desk
@@ -148,11 +148,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: verdict.wrong
-    text: WRONG  ({0:+0.#;-0.#} stability)
+    text: WRONG  ({0} stability)
     gloss: 0
     tier: 0
   - key: verdict.wrongPenalty
-    text: WRONG  ({0:+0.#;-0.#} stability, -{1} {2})
+    text: WRONG  ({0} stability, -{1} {2})
     gloss: 0
     tier: 0
   - key: verdict.simpleCorrect
@@ -1386,7 +1386,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: results.stability
-    text: 'Timeline stability: {0:0}% ({1:+0.#;-0.#;0} today)'
+    text: 'Timeline stability: {0} ({1} today)'
     gloss: 0
     tier: 0
   - key: results.citations
@@ -1738,7 +1738,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.stability
-    text: Stability {0:+0.#;-0.#}
+    text: Stability {0}
     gloss: 0
     tier: 0
   - key: citation.layout

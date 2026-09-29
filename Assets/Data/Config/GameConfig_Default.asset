@@ -14,12 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameConfigSO
   basePayPerCorrect: 10
   legendaryBonusPay: 15
-  freeWarningsPerDay: 0
+  freeWarningsPerDay: 1
   wrongDecisionPenalty: 10
+  stabilityChangeRate: 0.005
   stabilityLossPerWrong: 5
   extraStabilityLossLegendary: 10
   stabilityGainPerCorrect: 0
-  firedAtStability: 0
+  firedAtStability: 60
+  stabilityWarningMargin: 10
+  stabilityCriticalMargin: 3
   leaderFloor: 4
   leaderKeepFloor: 2
   leaderMargin: 2

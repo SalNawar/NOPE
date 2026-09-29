@@ -109,7 +109,7 @@ public sealed class DebugPanelController : MonoBehaviour
             return;
         }
 
-        GUILayout.Label($"Day {world.day}   Money {world.money}   Stability {world.timelineStability:0.#}   Ending '{world.endingId}'");
+        GUILayout.Label($"Day {world.day}   Money {world.money}   Stability {StabilityRules.Format(world.timelineStability)}   Ending '{world.endingId}'");
 
         int tab = GUILayout.Toolbar(_tab, TabLabels);
         if (tab != _tab)
@@ -335,19 +335,19 @@ public sealed class DebugPanelController : MonoBehaviour
         Debug.Log($"[DebugPanelController] Cheat: money {before} -> {world.money} ({delta:+0;-0}).");
     }
 
-    /// <summary>Adds to world.timelineStability (clamped 0..100) and logs the change.</summary>
+    /// <summary>Adds a flat step to world.timelineStability (a cheat, not the compounding rule; in hundredths, 0..100) and logs the change.</summary>
     private static void AddStability(WorldState world, float delta)
     {
         float before = world.timelineStability;
-        world.timelineStability = Mathf.Clamp(world.timelineStability + delta, 0f, 100f);
-        Debug.Log($"[DebugPanelController] Cheat: stability {before:0.#} -> {world.timelineStability:0.#} ({delta:+0.#;-0.#}).");
+        world.timelineStability = StabilityRules.Round(world.timelineStability + delta);
+        Debug.Log($"[DebugPanelController] Cheat: stability {StabilityRules.Format(before)} -> {StabilityRules.Format(world.timelineStability)} ({StabilityRules.FormatChange(delta)}).");
     }
 
-    /// <summary>Sets world.timelineStability (clamped 0..100) and logs the change.</summary>
+    /// <summary>Sets world.timelineStability (in hundredths, 0..100) and logs the change.</summary>
     private static void SetStability(WorldState world, float value)
     {
         float before = world.timelineStability;
-        world.timelineStability = Mathf.Clamp(value, 0f, 100f);
-        Debug.Log($"[DebugPanelController] Cheat: stability {before:0.#} -> {world.timelineStability:0.#} (set).");
+        world.timelineStability = StabilityRules.Round(value);
+        Debug.Log($"[DebugPanelController] Cheat: stability {StabilityRules.Format(before)} -> {StabilityRules.Format(world.timelineStability)} (set).");
     }
 }
