@@ -128,6 +128,30 @@ public class UpgradeTreeTests
         CollectionAssert.AreEqual(new[] { "a" }, layout.Cells.Select(c => c.Id).ToArray());
     }
 
+    /// <summary>The House panel draws Home's tree with the same layout (the Home upgrades spec HU9): only Home's upgrades, a band per category in branch order, a chain in its slot.</summary>
+    [Test]
+    public void Layout_ForHome_DrawsOnlyHomesUpgrades_OneBandPerCategory()
+    {
+        TreeNode Home(string id, int cost, UpgradeBranch branch, params string[] requires) => new TreeNode(id, UpgradeVenue.Home, branch, cost, requires);
+        TreeLayout layout = UpgradeTree.Layout(new[]
+        {
+            Node("a", 10, UpgradeBranch.Desk),
+            Home("house_air_filter", 90, UpgradeBranch.Health),
+            Home("house_water_purifier", 150, UpgradeBranch.Health, "house_air_filter"),
+            Home("house_medicine_cabinet", 100, UpgradeBranch.Health),
+            Home("house_clinic", 200, UpgradeBranch.Health, "house_medicine_cabinet"),
+            Home("house_rations_b", 40, UpgradeBranch.Food),
+        }, UpgradeVenue.Home);
+
+        CollectionAssert.AreEquivalent(new[] { "house_air_filter", "house_water_purifier", "house_medicine_cabinet", "house_clinic", "house_rations_b" }, layout.Cells.Select(c => c.Id).ToArray());
+        CollectionAssert.AreEqual(new[] { UpgradeBranch.Food, UpgradeBranch.Health }, layout.Bands.Select(b => b.Branch).ToArray());
+        Assert.AreEqual(Cell(layout, "house_air_filter").Slot, Cell(layout, "house_water_purifier").Slot, "a chain keeps its slot");
+        Assert.AreEqual(Cell(layout, "house_medicine_cabinet").Slot, Cell(layout, "house_clinic").Slot, "a chain keeps its slot");
+        Assert.AreNotEqual(Cell(layout, "house_air_filter").Slot, Cell(layout, "house_medicine_cabinet").Slot);
+        Assert.AreEqual(1, Cell(layout, "house_clinic").Tier);
+        Assert.AreEqual(2, layout.Links.Count);
+    }
+
     [Test]
     public void Layout_ACycleOrAnUnknownPrerequisite_StillPlacesEveryNode()
     {
@@ -238,14 +262,50 @@ public class UpgradeTreeTests
     {
         List<string> problems = UpgradeTree.Problems(new[]
         {
-            new TreeNode("house_air_filter", UpgradeVenue.Home, UpgradeBranch.Desk, 120, new[] { "a" }),
+            new TreeNode("house_air_filter", UpgradeVenue.Home, UpgradeBranch.Health, 120, new[] { "a" }),
             Node("a", 10, UpgradeBranch.Desk, "house_insulation"),
-            new TreeNode("house_insulation", UpgradeVenue.Home, UpgradeBranch.Desk, 180, null),
+            new TreeNode("house_insulation", UpgradeVenue.Home, UpgradeBranch.Housing, 180, null),
         });
 
         Assert.AreEqual(2, problems.Count, string.Join("\n", problems));
-        Assert.IsTrue(problems.Any(p => p.Contains("'house_air_filter'") && p.Contains("Home")), "Home's list is no tree");
+        Assert.IsTrue(problems.Any(p => p.Contains("'house_air_filter'") && p.Contains("'a'")), "a Home item cannot need an Orders node");
         Assert.IsTrue(problems.Any(p => p.Contains("'a'") && p.Contains("'house_insulation'")), "an Orders node cannot need a Home item");
+    }
+
+    /// <summary>Home's upgrades are a tree too (Saleh 2026-09-29, the Home upgrades spec HU2): a prerequisite sold at Home is sound.</summary>
+    [Test]
+    public void Problems_AHomeUpgradeMayRequireAHomeUpgrade()
+    {
+        CollectionAssert.IsEmpty(UpgradeTree.Problems(new[]
+        {
+            new TreeNode("house_draught_seals", UpgradeVenue.Home, UpgradeBranch.Housing, 30, null),
+            new TreeNode("house_insulation", UpgradeVenue.Home, UpgradeBranch.Housing, 150, new[] { "house_draught_seals" }),
+        }));
+    }
+
+    /// <summary>Each venue has its own bands (the Home upgrades spec HU1): the Orders app's four, then Home's five, every branch in exactly one.</summary>
+    [Test]
+    public void BranchesOf_EachVenueItsOwn_EveryBranchInOne()
+    {
+        CollectionAssert.AreEqual(new[] { UpgradeBranch.Desk, UpgradeBranch.Interview, UpgradeBranch.Portals, UpgradeBranch.Contacts }, UpgradeTree.BranchesOf(UpgradeVenue.Orders));
+        CollectionAssert.AreEqual(new[] { UpgradeBranch.Food, UpgradeBranch.Housing, UpgradeBranch.Security, UpgradeBranch.Health, UpgradeBranch.Comfort }, UpgradeTree.BranchesOf(UpgradeVenue.Home));
+        CollectionAssert.AreEquivalent((UpgradeBranch[])System.Enum.GetValues(typeof(UpgradeBranch)),
+                                       UpgradeTree.BranchesOf(UpgradeVenue.Orders).Concat(UpgradeTree.BranchesOf(UpgradeVenue.Home)).ToArray());
+    }
+
+    [Test]
+    public void Problems_ABranchOfTheOtherVenue()
+    {
+        List<string> problems = UpgradeTree.Problems(new[]
+        {
+            new TreeNode("house_plant", UpgradeVenue.Home, UpgradeBranch.Desk, 15, null),
+            Node("a", 10, UpgradeBranch.Comfort),
+            new TreeNode("house_radio", UpgradeVenue.Home, UpgradeBranch.Comfort, 45, null),
+        });
+
+        Assert.AreEqual(2, problems.Count, string.Join("\n", problems));
+        Assert.IsTrue(problems.Any(p => p.Contains("'house_plant'") && p.Contains("Desk")));
+        Assert.IsTrue(problems.Any(p => p.Contains("'a'") && p.Contains("Comfort")));
     }
 
     [Test]

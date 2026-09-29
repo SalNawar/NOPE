@@ -30,13 +30,13 @@ public sealed class UpgradeSO : ScriptableObject
     /// <summary>Optional effect applied once when this upgrade arrives (an order's delivery at the start of the next day) or is bought at Home, with its instant ops.</summary>
     public EffectSO unlockEffect;
 
-    /// <summary>Where it is sold: the PC's Orders app (a node of the upgrade tree, delivered the day after it is ordered) or Home's evening list (owned at once).</summary>
+    /// <summary>Where it is sold: the PC's Orders app (a node of the upgrade tree, delivered the day after it is ordered) or Home's House panel (bought and owned at once).</summary>
     public UpgradeVenue venue = UpgradeVenue.Orders;
 
-    /// <summary>Its band in the Orders tree (Desk equipment, Interview, Portals: a portal's repair, Contacts); unused at Home.</summary>
+    /// <summary>Its band: one of the Orders tree's (Desk equipment, Interview, Portals: a portal's repair, Contacts) or Home's categories (Food, Housing, Security, Health, Comfort), per its venue (UpgradeTree.BranchesOf).</summary>
     public UpgradeBranch branch = UpgradeBranch.Desk;
 
-    /// <summary>The upgrade ids that must be owned (delivered) before it can be ordered; empty for a root of the tree. A Home upgrade requires nothing (UpgradeTree.Problems).</summary>
+    /// <summary>The upgrade ids that must be owned (delivered) before it can be ordered or bought; empty for a root of the tree. Each is sold at the same venue (UpgradeTree.Problems).</summary>
     public string[] requires = System.Array.Empty<string>();
 
     /// <summary>Its install slot ("scanner" for both upgraded scanners; empty for none): of the owned upgrades sharing a slot only the installed one is in force (Installs; Saleh 2026-09-29: one upgraded scanner at a time).</summary>

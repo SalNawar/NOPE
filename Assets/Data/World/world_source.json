@@ -16398,7 +16398,9 @@
         "category": "Comfort",
         "cost": 45,
         "upkeep": 1,
-        "requires": [],
+        "requires": [
+          "house_photo"
+        ],
         "householdExpense": 0,
         "sicknessChance": 0,
         "careCost": 0,
@@ -16414,7 +16416,9 @@
         "category": "Comfort",
         "cost": 110,
         "upkeep": 0,
-        "requires": [],
+        "requires": [
+          "house_radio"
+        ],
         "householdExpense": 0,
         "sicknessChance": 0,
         "careCost": 0,

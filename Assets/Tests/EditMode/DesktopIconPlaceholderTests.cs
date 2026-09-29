@@ -14,7 +14,7 @@ public class DesktopIconPlaceholderTests
     public void OrdersHasAGlyph_AndTheTreeHasItsBandsAndBadges()
     {
         Assert.IsNotNull(DesktopIconPlaceholder.Render(DesktopAppIds.Orders));
-        foreach (UpgradeBranch branch in (UpgradeBranch[])System.Enum.GetValues(typeof(UpgradeBranch)))
+        foreach (UpgradeBranch branch in UpgradeTree.BranchesOf(UpgradeVenue.Orders))
             CollectionAssert.Contains(DesktopIconPlaceholder.OrdersGlyphs, ArtSlots.OrderBranch(branch).Substring("Orders/".Length),
                                       "each band's glyph is its art slot's file name");
         CollectionAssert.IsSubsetOf(new[] { "padlock", "clock", "tick" }, DesktopIconPlaceholder.OrdersGlyphs);

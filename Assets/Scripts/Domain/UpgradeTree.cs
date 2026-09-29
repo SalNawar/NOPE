@@ -11,7 +11,7 @@ public enum UpgradeVenue
     /// <summary>The PC's Orders app: paid when ordered, delivered at the start of the next day, a node of the upgrade tree.</summary>
     Orders,
 
-    /// <summary>Home's evening list (household improvements): bought and owned at once, no tree.</summary>
+    /// <summary>Home's House panel (household improvements): bought and owned at once, a tree of its own (Home's categories, prerequisites at Home).</summary>
     Home
 }
 
@@ -33,7 +33,22 @@ public enum UpgradeBranch
     Portals,
 
     /// <summary>The clerk's contacts.</summary>
-    Contacts
+    Contacts,
+
+    /// <summary>Home: the family's diet (the Home upgrades spec HU1: fewer sick nights, a better mood, a nightly upkeep).</summary>
+    Food,
+
+    /// <summary>Home: the flat itself (rent and utilities, insulation, a better flat).</summary>
+    Housing,
+
+    /// <summary>Home: locks, a strongbox, an alarm (the night's break-in).</summary>
+    Security,
+
+    /// <summary>Home: the medicine cabinet, the filters, the clinic (sickness, care, the medical drain).</summary>
+    Health,
+
+    /// <summary>Home: small comforts (the household's mood).</summary>
+    Comfort
 }
 
 /// <summary>One upgrade as the tree reads it: its id, venue, branch, listed cost and the ids it requires.</summary>
@@ -168,13 +183,13 @@ public sealed class TreeLayout
 /// </summary>
 public static class UpgradeTree
 {
-    /// <summary>The layout of the Orders nodes among <paramref name="nodes"/> (Home's are left out); a cycle or an unknown prerequisite never hangs it (Problems reports them).</summary>
-    public static TreeLayout Layout(IReadOnlyList<TreeNode> nodes)
+    /// <summary>The layout of the nodes among <paramref name="nodes"/> sold at <paramref name="venue"/> (the Orders app's by default; Home's House panel draws Home's, the Home upgrades spec HU9); a cycle or an unknown prerequisite never hangs it (Problems reports them).</summary>
+    public static TreeLayout Layout(IReadOnlyList<TreeNode> nodes, UpgradeVenue venue = UpgradeVenue.Orders)
     {
         var drawn = new List<TreeNode>();
         var byId = new Dictionary<string, TreeNode>(StringComparer.Ordinal);
         foreach (TreeNode n in nodes ?? Array.Empty<TreeNode>())
-            if (n.Venue == UpgradeVenue.Orders && n.Id.Length > 0 && !byId.ContainsKey(n.Id))
+            if (n.Venue == venue && n.Id.Length > 0 && !byId.ContainsKey(n.Id))
             {
                 drawn.Add(n);
                 byId.Add(n.Id, n);
@@ -323,11 +338,18 @@ public static class UpgradeTree
         return missing;
     }
 
+    /// <summary>The branches <paramref name="venue"/> draws, in band order: the Orders app's Desk, Interview, Portals and Contacts; Home's Food, Housing, Security, Health and Comfort (an explicit list, so a branch appended later is placed on purpose).</summary>
+    public static UpgradeBranch[] BranchesOf(UpgradeVenue venue) => venue == UpgradeVenue.Home
+        ? new[] { UpgradeBranch.Food, UpgradeBranch.Housing, UpgradeBranch.Security, UpgradeBranch.Health, UpgradeBranch.Comfort }
+        : new[] { UpgradeBranch.Desk, UpgradeBranch.Interview, UpgradeBranch.Portals, UpgradeBranch.Contacts };
+
     /// <summary>
     /// What Generate World and the validator refuse in the catalogue (every
     /// upgrade, both venues): a blank or repeated id, a negative cost, a
-    /// prerequisite that is unknown, the node itself or at another venue, a
-    /// Home upgrade with prerequisites (Home's list is no tree), and a
+    /// branch of the other venue (BranchesOf), a
+    /// prerequisite that is unknown, the node itself or sold at another venue
+    /// (a prerequisite must be sold where its dependant is: Home's upgrades
+    /// are a tree of their own, the Home upgrades spec HU2), and a
     /// prerequisite cycle (reported once). Empty when sound.
     /// </summary>
     public static List<string> Problems(IReadOnlyList<TreeNode> nodes)
@@ -353,11 +375,8 @@ public static class UpgradeTree
         {
             if (n.Cost < 0)
                 problems.Add($"Upgrade '{n.Id}' has a cost of {n.Cost}: 0 cr or more.");
-            if (n.Venue == UpgradeVenue.Home && n.Requires.Count > 0)
-            {
-                problems.Add($"Upgrade '{n.Id}' is sold at Home but requires {string.Join(", ", n.Requires)}: Home's list is no tree, so a Home upgrade requires nothing.");
-                continue;
-            }
+            if (Array.IndexOf(BranchesOf(n.Venue), n.Branch) < 0)
+                problems.Add($"Upgrade '{n.Id}' is sold at {n.Venue} but sits in the {n.Branch} band, one of the other venue's: its branch is one of {string.Join(", ", BranchesOf(n.Venue))}.");
             foreach (string need in n.Requires)
             {
                 if (need == n.Id)
