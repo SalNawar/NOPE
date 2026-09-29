@@ -15,8 +15,8 @@ public sealed class InterviewAnswer
 
 /// <summary>
 /// The interview's wording and answer rules, pure so they are tested
-/// headless: what a traveller answers, the desk's opener, the claim sentence,
-/// the small-talk pick, and the token fills and checks (with the worst-case
+/// headless: what a traveller answers, the desk's opener, the claim lines per
+/// kind, and the token fills and checks (with the worst-case
 /// length the generator checks lines against).
 /// </summary>
 public static class Interview
@@ -129,20 +129,6 @@ public static class Interview
                 problems.Add($"interview.claims: {kind} has no claim line, but a blueprint makes that kind.");
 
         return problems;
-    }
-
-    /// <summary>
-    /// A traveller's small talk: from their claimed place's lines, or its
-    /// era's when the place has none. One Range draw when there is a line;
-    /// null, with no draw, when there is none or <paramref name="rng"/> is null.
-    /// </summary>
-    public static LineText PickSmallTalk(IReadOnlyList<LineText> placeLines, IReadOnlyList<LineText> eraLines, IRandomSource rng)
-    {
-        IReadOnlyList<LineText> pool = placeLines != null && placeLines.Count > 0 ? placeLines : eraLines;
-        if (rng == null || pool == null || pool.Count == 0)
-            return null;
-
-        return pool[rng.Range(0, pool.Count)];
     }
 
     /// <summary>The template's length with every {token} filled by a value <paramref name="longestValue"/> characters long (0 for null).</summary>

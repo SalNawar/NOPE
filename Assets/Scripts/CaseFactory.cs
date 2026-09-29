@@ -84,8 +84,11 @@ public sealed class CaseFactory
     /// <summary>The current traveller's lie stream (Seeds.ForLies), apart from <see cref="_rng"/> so lie tuning never changes who travellers are.</summary>
     private IRandomSource _lieRng = new SeededRandom(0);
 
-    /// <summary>The current traveller's dialog stream (Seeds.ForDialog): the small-talk pick, apart from the case and lie streams.</summary>
-    private IRandomSource _dialogRng = new SeededRandom(0);
+    /// <summary>The current traveller's dialog seed (Seeds.ForDialog): a value every line pick reads (Voices.Pick), never a stream.</summary>
+    private int _dialogSeed;
+
+    /// <summary>The current traveller's personality stream (Seeds.ForPersonality): one draw for a generated traveller, which reads nothing else.</summary>
+    private IRandomSource _personalityRng = new SeededRandom(0);
 
     /// <summary>The current traveller's look stream (Seeds.ForLooks): gender when unknown, skin, face, hair colour.</summary>
     private IRandomSource _looksRng = new SeededRandom(0);
@@ -221,7 +224,8 @@ public sealed class CaseFactory
             int caseSeed = Seeds.ForCase(daySeed, caseIndex1Based);
             _rng = new SeededRandom(caseSeed);
             _lieRng = new SeededRandom(Seeds.ForLies(caseSeed));
-            _dialogRng = new SeededRandom(Seeds.ForDialog(caseSeed));
+            _dialogSeed = Seeds.ForDialog(caseSeed);
+            _personalityRng = new SeededRandom(Seeds.ForPersonality(caseSeed));
             _looksRng = new SeededRandom(Seeds.ForLooks(caseSeed));
             _legendaryRng = new SeededRandom(Seeds.ForLegendary(caseSeed));
             _accountRng = new SeededRandom(Seeds.ForAccount(caseSeed));
@@ -411,6 +415,16 @@ public sealed class CaseFactory
             introLine = intro
         };
 
+        // 4.55) The voice (the personalities spec's PS2-PS5): a generated traveller's personality is one draw on its own stream,
+        //       which reads nothing else (never the kind, a lie or a fault); a premade draws nothing and speaks its own lines. The
+        //       debug panel's force overrides after the draw, so no stream moves.
+        inst.dialogSeed = _dialogSeed;
+        if (legendary == null)
+        {
+            Personality drawn = Personalities.Pick(_lib.Personalities, _personalityRng);
+            inst.personality = !string.IsNullOrEmpty(DevToolsState.ForcedPersonality) ? DevToolsState.ForcedPersonality : drawn != null ? drawn.id : string.Empty;
+        }
+
         if (blueprint == null)
         {
             Debug.LogError($"CaseFactory generated a case with a null blueprint (Day {plan.DayNumber}, slot {caseIndex1Based}). Check DayPlanSO.possibleBlueprints / forcedCases.");
@@ -469,9 +483,14 @@ public sealed class CaseFactory
             FalsifyDate(inst, caseIndex1Based);
         AddAnswers(inst, lie);
 
-        // Small talk: the claimed place's lines, else its era's (glue: only resolves the two lists).
+        // Small talk (the personalities spec's V5): the personality's, the home's (a displaced person's claimed place, else its
+        // era; a 2150 citizen's present, else the Future era) or the kind's lines, by the weights, as values of the dialog seed
+        // (glue: only resolves the lists).
         EraSO talkEra = place != null ? place.era : claimedEra;
-        inst.smallTalk = Interview.PickSmallTalk(place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null, _dialogRng);
+        NationEraProfileSO present = _present != null ? _lib.Profiles.FirstOrDefault(p => p != null && p.nation != null && p.era != null && p.nation.id == _present.NationId && p.era.id == _present.EraId) : null;
+        inst.smallTalk = Voices.SmallTalk(_lib.Interview, inst.Voice, new VoiceContext(inst.kind, claimedEra != null ? claimedEra.id : null),
+                                          Voices.Home(inst.kind, place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null,
+                                                      present != null ? present.smallTalk : null, _lib.FutureEra != null ? _lib.FutureEra.smallTalk : null));
 
         bool plannedDress = plannedRule != null && plannedRule.type == TravelRuleType.DressForDestination;
         (LookSource source, bool whole) costume = broken != null ? (null, false) : PlanCostume(inst, place, legendary, forcedCostume, honest, plannedDress, plan, caseIndex1Based);
@@ -486,7 +505,7 @@ public sealed class CaseFactory
         string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
         string look = inst.look != null ? inst.look.Describe() : "none";
         string recordTells = string.Join(", ", inst.recordTells.Select(t => $"{t.Category}@{t.Document}"));
-        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, honestEntry={honest}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, broken={(broken != null ? broken.name : "none")}, paperSet={paperBreak}, standing={inst.account?.Standing.ToString() ?? "none"}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, honestEntry={honest}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, personality={(string.IsNullOrEmpty(inst.personality) ? "none" : inst.personality)}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, broken={(broken != null ? broken.name : "none")}, paperSet={paperBreak}, standing={inst.account?.Standing.ToString() ?? "none"}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
     }

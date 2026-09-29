@@ -230,6 +230,7 @@ public sealed class InterviewPresenter
             missingVariant = inst != null ? inst.missingFormVariant : MissingFormVariant.Honest,
             answers = inst != null ? inst.answers : null,
             smallTalk = interviewReachable && inst != null ? inst.smallTalk : null,
+            voice = inst != null ? inst.Voice : null,
             garments = appearanceReachable && inst != null && inst.look != null ? inst.look.Garments : null
         };
 

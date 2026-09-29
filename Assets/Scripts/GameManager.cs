@@ -66,6 +66,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Currently active case slot (1-based).</summary>
     private int _activeCaseIndex1Based;
 
+    /// <summary>The case of the active slot (the traveller at the desk or waiting behind READY), or null between days; the debug panel shows its voice.</summary>
+    public CaseInstance ActiveCase => _dayCases != null && _activeCaseIndex1Based >= 1 && _activeCaseIndex1Based <= _dayCases.Count ? _dayCases[_activeCaseIndex1Based - 1] : null;
+
     /// <summary>Verdict record for the current shift (results screen reads this).</summary>
     private ShiftLedger _ledger;
 

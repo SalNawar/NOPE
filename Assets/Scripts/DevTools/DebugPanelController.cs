@@ -128,7 +128,44 @@ public sealed class DebugPanelController : MonoBehaviour
         GUILayout.EndArea();
     }
 
-    /// <summary>Cheats tab: day skip, history (force leader), money/stability adjust, flags, force legendary, upgrades.</summary>
+    /// <summary>
+    /// The voice (the personalities spec's PS4): the active traveller's
+    /// personality, or the premade they are (shown here only, never in the
+    /// game), and the force every generated traveller's personality takes
+    /// from the next generation ("Drawn" lifts it).
+    /// </summary>
+    private void DrawPersonality(ContentLibrarySO lib)
+    {
+        GameManager game = FindFirstObjectByType<GameManager>();
+        CaseInstance active = game != null ? game.ActiveCase : null;
+        GUILayout.Label(active == null ? "Traveller: none"
+            : $"Traveller: {active.visitorDisplayName}, voice {(active.legendarySource != null ? "premade " + active.legendarySource.id : string.IsNullOrEmpty(active.personality) ? "none (the defaults)" : active.personality)}");
+        GUILayout.Label($"Personality of every generated case: {DevToolsState.ForcedPersonality ?? "drawn"} (from the next generation)");
+
+        var choices = new System.Collections.Generic.List<string> { null };
+        if (lib != null)
+            foreach (Personality p in lib.Personalities)
+                if (p != null && !string.IsNullOrWhiteSpace(p.id))
+                    choices.Add(p.id);
+        for (int i = 0; i < choices.Count; i += 4)
+        {
+            GUILayout.BeginHorizontal();
+            for (int j = i; j < i + 4 && j < choices.Count; j++)
+            {
+                string id = choices[j];
+                if (!GUILayout.Button(id ?? "Drawn", GUILayout.Width(100f)) || DevToolsState.ForcedPersonality == id)
+                    continue;
+                AfterPass(() =>
+                {
+                    Debug.Log($"[DebugPanelController] Cheat: ForcedPersonality set to '{id ?? "drawn"}' (from the next generation).");
+                    DevToolsState.ForcedPersonality = id;
+                });
+            }
+            GUILayout.EndHorizontal();
+        }
+    }
+
+    /// <summary>Cheats tab: day skip, history (force leader), money/stability adjust, flags, force legendary, the voice, upgrades.</summary>
     private void DrawCheatsTab(RunManager run, WorldState world, ContentLibrarySO lib)
     {
         GUILayout.Label("Day flow");
@@ -270,6 +307,8 @@ public sealed class DebugPanelController : MonoBehaviour
             });
         }
         GUILayout.EndHorizontal();
+
+        DrawPersonality(lib);
 
         bool forceStrandings = DevToolsState.ForceStrandings;
         bool newForceStrandings = GUILayout.Toggle(forceStrandings, "Force strandings (every accepted Economy transponder fails at the shift's end)");

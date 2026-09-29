@@ -288,42 +288,6 @@ public class InterviewTests
     }
 
     // -----------------------------
-    // Small talk
-    // -----------------------------
-
-    private static readonly LineText[] PlaceLines = { new LineText("egypt_ancient.smalltalk.1", "The Nile rose."), new LineText("egypt_ancient.smalltalk.2", "The fields are black.") };
-    private static readonly LineText[] EraLines = { new LineText("ancient.smalltalk.1", "The harvest was good.") };
-
-    [Test]
-    public void PickSmallTalk_ThePlacesLinesWin_OneDraw()
-    {
-        var rng = new ScriptedRandom(ScriptStep.Range(1));
-        Assert.AreEqual("egypt_ancient.smalltalk.2", Interview.PickSmallTalk(PlaceLines, EraLines, rng).id);
-        Assert.IsTrue(rng.Done);
-    }
-
-    [Test]
-    public void PickSmallTalk_TheErasLines_WhenThePlaceHasNone()
-    {
-        var rng = new ScriptedRandom(ScriptStep.Range(0));
-        Assert.AreEqual("ancient.smalltalk.1", Interview.PickSmallTalk(new LineText[0], EraLines, rng).id);
-        Assert.IsTrue(rng.Done);
-
-        var fromNull = new ScriptedRandom(ScriptStep.Range(0));
-        Assert.AreEqual("ancient.smalltalk.1", Interview.PickSmallTalk(null, EraLines, fromNull).id);
-        Assert.IsTrue(fromNull.Done);
-    }
-
-    [Test]
-    public void PickSmallTalk_NoLines_IsNull_WithNoDraw()
-    {
-        var rng = new ScriptedRandom();
-        Assert.IsNull(Interview.PickSmallTalk(new LineText[0], null, rng));
-        Assert.AreEqual(0, rng.Draws);
-        Assert.IsNull(Interview.PickSmallTalk(PlaceLines, EraLines, null), "no stream, no pick");
-    }
-
-    // -----------------------------
     // Token fills
     // -----------------------------
 

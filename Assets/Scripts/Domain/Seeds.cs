@@ -66,9 +66,11 @@ public static class Seeds
     public static int ForLies(int caseSeed) => Mix(caseSeed, LieSalt);
 
     /// <summary>
-    /// Seed for one traveller's dialog variant picks (small talk), apart from
-    /// the case and lie streams so content never changes who travellers are
-    /// or who lies.
+    /// One traveller's dialog seed: every line pick is a value of it and the
+    /// slot's key (Voices.Pick, OfKey; the personalities spec's V4), never a
+    /// draw, apart from the case and lie streams so content never changes who
+    /// travellers are or who lies, and adding a line to one slot never moves
+    /// another's pick.
     /// </summary>
     public static int ForDialog(int caseSeed) => Mix(caseSeed, DialogSalt);
 
