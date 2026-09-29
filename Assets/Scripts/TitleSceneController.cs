@@ -94,7 +94,7 @@ public sealed class TitleSceneController : MonoBehaviour
     private void ShowWorld(RunManager run, string heading)
     {
         EndingSO lastDay = run.Library.LastDayEnding;
-        titleUI.ShowWorld(heading, run.Library.WorldOutcomes(run.World.history), lastDay != null ? lastDay.closingCard : null, HandleNewRun);
+        titleUI.ShowWorld(heading, run.Library.WorldOutcomes(run.World, run.Config != null ? run.Config.gameConfig : null), lastDay != null ? lastDay.closingCard : null, HandleNewRun);
     }
 
     /// <summary>

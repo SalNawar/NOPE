@@ -30,3 +30,7 @@ MonoBehaviour:
   citizenId: 
   debt: 0
   employer: 
+  pulls:
+  - factor: government
+    outcome: monarchy
+    amount: 6

@@ -711,7 +711,43 @@ public static partial class ContentLibraryValidator
             issues++;
         }
 
-        return issues;
+        return issues + CheckWorldRefs(lib);
+    }
+
+    /// <summary>
+    /// The world's references in the assets (the endings spec §8.1, the rule
+    /// Generate World applies to the source): every place's leaning, every
+    /// premade's pull and every PullOutcome op (a history rule's or a dialog
+    /// effect's, EffectOpType.PullOutcome) names a factor answered by pulls
+    /// and one of its outcomes, a pull by more than 0; every role names an
+    /// archetype of the library. Returns the number of problems.
+    /// </summary>
+    private static int CheckWorldRefs(ContentLibrarySO lib)
+    {
+        WorldContent world = lib.World;
+        var problems = new List<(string text, UnityEngine.Object where)>();
+        foreach (NationEraProfileSO place in lib.Profiles.Where(p => p != null))
+            foreach (OutcomeRef l in place.leanings ?? new List<OutcomeRef>())
+                problems.AddRange(world.RefProblems($"Place '{place.id}' leaning", l?.factor, l?.outcome, null).Select(p => (p, (UnityEngine.Object)place)));
+        foreach (LegendarySO premade in lib.Legendaries.Where(m => m != null))
+            foreach (OutcomePull pull in premade.pulls ?? new List<OutcomePull>())
+                problems.AddRange(world.RefProblems($"Premade '{premade.id}' pull", pull?.factor, pull?.outcome, pull?.amount ?? 0f).Select(p => (p, (UnityEngine.Object)premade)));
+        IEnumerable<EffectSO> effects = lib.Effects.Concat(lib.Triggers.Where(t => t != null).SelectMany(t => t.outcomes ?? new List<TriggerOutcome>()).Where(o => o != null).Select(o => o.effect));
+        foreach (EffectSO fx in effects.Where(e => e != null).Distinct())
+            foreach (EffectOp op in (fx.ops ?? new List<EffectOp>()).Where(op => op != null && op.type == EffectOpType.PullOutcome))
+            {
+                if (!WorldPulls.TryParseOpKey(op.stringParam, out string factor, out string outcome))
+                    problems.Add(($"Effect '{fx.name}' has a PullOutcome op whose stringParam '{op.stringParam}' is not \"factor/outcome\" (WorldPulls.OpKey).", fx));
+                else
+                    problems.AddRange(world.RefProblems($"Effect '{fx.name}' PullOutcome op", factor, outcome, op.floatParam).Select(p => (p, (UnityEngine.Object)fx)));
+            }
+        var archetypes = new HashSet<string>(lib.Archetypes.Where(a => a != null).Select(a => a.id));
+        foreach (WorldRole role in world.roles.Where(r => r != null && !archetypes.Contains(r.archetype)))
+            problems.Add(($"world.roles '{role.archetype}' is no archetype of the library.", lib));
+
+        foreach ((string text, UnityEngine.Object where) in problems)
+            Debug.LogError($"[ContentLibraryValidator] World: {text} ('{lib.name}'; edit world_source.json and Generate World, or the effect asset).", where);
+        return problems.Count;
     }
 
     /// <summary>

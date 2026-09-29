@@ -131,7 +131,10 @@ public sealed class RunManager : MonoBehaviour
         // The present culture's cue from the saved history, idempotently (an
         // older save may lack it; piece 6 Z5).
         if (Library != null)
+        {
             HistoryService.RebuildLeaderEffect(World, Library, World.day);
+            WorldOutcomeService.SeedOlderSave(World, Library);
+        }
         Debug.Log($"[RunManager] Continued run (day {World.day}).");
         NotifyEffectsChanged();
         return true;
@@ -189,8 +192,9 @@ public sealed class RunManager : MonoBehaviour
     /// <summary>
     /// End of the Home phase: the day-boundary ending check first (failures
     /// and the run's last day, the "world you made" ending); an ending is saved
-    /// and shown on the title scene; otherwise the nightly resolve and the next
-    /// day (AdvanceToNextDay). Home's Sleep, the no-Home path of
+    /// and shown on the title scene, the last day after its own night resolve
+    /// (DayCycle.EndRun: the world's answers include the day's choices);
+    /// otherwise the nightly resolve and the next day (AdvanceToNextDay). Home's Sleep, the no-Home path of
     /// GoHomeOrAdvance and the debug panel's Skip Day all come here.
     /// </summary>
     public void Sleep()
@@ -200,6 +204,7 @@ public sealed class RunManager : MonoBehaviour
         EndingSO ending = EndingService.Evaluate(World, Library, Config != null ? Config.gameConfig : null, EndingMoment.DayBoundary);
         if (ending != null)
         {
+            DayCycle.EndRun(World, ending, Library, Config != null ? Config.gameConfig : null);
             Debug.Log($"[RunManager] <<< Exiting Sleep (ending '{ending.id}' ({ending.displayName}); saving and loading the title scene).");
             World.endingId = ending.id;
             SaveNow();

@@ -137,6 +137,45 @@ public sealed class GameConfigSO : ScriptableObject
     [Min(1)]
     public int maxHistoryNewsPerNight = 3;
 
+    [Header("World (the endings spec §4, §8.2)")]
+    /// <summary>The "as you found it" outcome's head start on every factor answered by pulls: the world's inertia (WorldPulls.Lead).</summary>
+    [Min(0f)]
+    public float worldStatusQuoWeight = DefaultWorldStatusQuoWeight;
+
+    /// <summary>How far ahead an outcome must be to lead its factor (else the factor is split between the top two), and how far another must pass a held lead to take it (WorldPulls.Lead).</summary>
+    [Min(0f)]
+    public float worldLeadMargin = DefaultWorldLeadMargin;
+
+    /// <summary>A denial's pull toward each factor's "as you found it" outcome: the past stays untouched (WorldPulls.ForDenial). Small: a shift denies many, and at the spec's first cut (0.5) no simulated run ever left 2150 as it found it (balance 2026-09-30).</summary>
+    [Min(0f)]
+    public float worldDenialPull = 0.05f;
+
+    /// <summary>A rich tourist's scale on their role's pull (a holiday leaves a lighter mark; WorldPulls.KindScale).</summary>
+    [Min(0f)]
+    public float worldKindScaleRich = 0.5f;
+
+    /// <summary>A poor tourist's scale on their role's pull.</summary>
+    [Min(0f)]
+    public float worldKindScalePoor = 0.5f;
+
+    /// <summary>A labourer's scale on their role's pull.</summary>
+    [Min(0f)]
+    public float worldKindScaleLabourer = 1f;
+
+    /// <summary>A displaced person's scale on their role's pull (they go home for good).</summary>
+    [Min(0f)]
+    public float worldKindScaleDisplaced = 1f;
+
+    /// <summary>The default of <see cref="worldStatusQuoWeight"/> (the endings spec's first cut), also used without a config.</summary>
+    public const float DefaultWorldStatusQuoWeight = 6f;
+
+    /// <summary>The default of <see cref="worldLeadMargin"/> (the endings spec's first cut), also used without a config.</summary>
+    public const float DefaultWorldLeadMargin = 2f;
+
+    /// <summary>A traveller kind's scale on their role's pull (WorldPulls.KindScale over the four knobs).</summary>
+    public float WorldKindScale(TravellerKind kind) =>
+        WorldPulls.KindScale(kind, worldKindScaleRich, worldKindScalePoor, worldKindScaleLabourer, worldKindScaleDisplaced);
+
     [Header("Home / Expenses")]
     /// <summary>Base daily living expense (rent/utilities) deducted at Home.</summary>
     [Min(0)]

@@ -28,3 +28,9 @@ MonoBehaviour:
     attribute: {fileID: 0}
     nation: {fileID: 0}
     profile: {fileID: 0}
+  - type: 26
+    stringParam: money/company_towns
+    floatParam: 1
+    attribute: {fileID: 0}
+    nation: {fileID: 0}
+    profile: {fileID: 0}

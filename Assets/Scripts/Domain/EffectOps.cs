@@ -89,7 +89,12 @@ public enum EffectOpType
     BreakInChance,
 
     /// <summary>floatParam = +share (negative lowers) of a positive wallet a break-in takes, never below 0 in all</summary>
-    BreakInShare
+    BreakInShare,
+
+    // ---- Instant, the world's outcomes (docs/superpowers/specs/2026-09-30-endings-and-strandings-design.md §4.1) ----
+
+    /// <summary>Instant: stringParam = the outcome (WorldPulls.OpKey: "{factor}/{outcome}"), floatParam = the pull, greater than 0 (a story rule's or a dialog choice's authored pull on the world, WorldState.pulls)</summary>
+    PullOutcome
 }
 
 /// <summary>Rules over effect ops, pure so they are tested headless.</summary>

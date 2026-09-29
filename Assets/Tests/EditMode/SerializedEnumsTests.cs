@@ -137,7 +137,8 @@ public class SerializedEnumsTests
     {
         Assert.AreEqual(0, (int)FactorAnswer.AsFound);
         Assert.AreEqual(1, (int)FactorAnswer.Leader);
-        Assert.AreEqual(2, System.Enum.GetValues(typeof(FactorAnswer)).Length, "a new member is appended here too");
+        Assert.AreEqual(2, (int)FactorAnswer.Pulls);
+        Assert.AreEqual(3, System.Enum.GetValues(typeof(FactorAnswer)).Length, "a new member is appended here too");
     }
 
     /// <summary>MissingFormVariant: stored in the content library's missing-form replies (interview.missingFormReplies).</summary>

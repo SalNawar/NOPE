@@ -168,3 +168,10 @@ MonoBehaviour:
     baseScore: 2
     dominantEffect: {fileID: 0}
     supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: monarchy
+  - factor: future
+    outcome: space_age
+  - factor: money
+    outcome: company_towns

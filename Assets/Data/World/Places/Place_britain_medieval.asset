@@ -169,3 +169,10 @@ MonoBehaviour:
     baseScore: 2
     dominantEffect: {fileID: 0}
     supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: democracy
+  - factor: future
+    outcome: naturalism
+  - factor: money
+    outcome: commons

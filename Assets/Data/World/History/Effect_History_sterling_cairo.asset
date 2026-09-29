@@ -23,3 +23,10 @@ MonoBehaviour:
     nation: {fileID: 0}
     profile: {fileID: 11400000, guid: dd26bd086168a3c42af31e542ba3c485, type: 2}
     category: 4
+  - type: 26
+    stringParam: money/banking_houses
+    floatParam: 2
+    attribute: {fileID: 0}
+    nation: {fileID: 0}
+    profile: {fileID: 0}
+    category: 0

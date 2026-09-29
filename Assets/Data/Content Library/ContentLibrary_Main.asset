@@ -80,9 +80,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a90bef86fe34c0a45b5c39ae844ce54e, type: 2}
   - {fileID: 11400000, guid: 0dc691958e7d94c43a5b91c6d73df636, type: 2}
   - {fileID: 11400000, guid: c7db0569adee270418a8787fa94ce7c4, type: 2}
+  - {fileID: 11400000, guid: fd6077008c0bce6478da67be200f687a, type: 2}
+  - {fileID: 11400000, guid: 20f0d1bd612f90b4293a4f17a17c1b7a, type: 2}
+  - {fileID: 11400000, guid: b49d9d1d33f53ba49973f513f31e10c0, type: 2}
+  - {fileID: 11400000, guid: a4fa4d9064b5b2d46a54b2c57a1ca93f, type: 2}
+  - {fileID: 11400000, guid: def76e832d5a66d40822b42f38af9a7b, type: 2}
   - {fileID: 11400000, guid: 7bd3330429b28be4dbecdedd3dc403d5, type: 2}
+  - {fileID: 11400000, guid: bf5b6ef567cdcaf42adae62b75250cdb, type: 2}
+  - {fileID: 11400000, guid: e4def52eb9a475d479aec17680d47863, type: 2}
   - {fileID: 11400000, guid: a286a56aac48a86439986d94c04d9564, type: 2}
+  - {fileID: 11400000, guid: 404b11f0ab2ad7f43949fb7e99cfd472, type: 2}
+  - {fileID: 11400000, guid: 5eaa97f9c74721941b271a881ab0891b, type: 2}
+  - {fileID: 11400000, guid: 35d6a5e3f61a230439ca10e1e87e4de7, type: 2}
+  - {fileID: 11400000, guid: 38f14127f50093341a6fc79b7bbd1b2a, type: 2}
+  - {fileID: 11400000, guid: ebdf7e2e8fd24e44d9b01373e27a1779, type: 2}
+  - {fileID: 11400000, guid: e2c30f9dbd8ee504caecc73f6c122d30, type: 2}
+  - {fileID: 11400000, guid: 02926c9518e8fb646ad005bff9dbd1c2, type: 2}
   - {fileID: 11400000, guid: b73d3f5565b1e31419f4b46af99413f3, type: 2}
+  - {fileID: 11400000, guid: 50ccae4cd34864047917930af7c0b2dc, type: 2}
   - {fileID: 11400000, guid: 1edb0ebb45e7ac845b7ac23a97dcd87c, type: 2}
   - {fileID: 11400000, guid: 136e76ea283226747b9ff36ae84eda84, type: 2}
   - {fileID: 11400000, guid: e05b62c69932d8f48aa54ffda14f0f21, type: 2}
@@ -12646,20 +12661,189 @@ MonoBehaviour:
     factors:
     - id: government
       question: Who runs 2150?
-      answer: 0
-      foundAs: The Directorate
+      answer: 2
+      foundAs: 
+      statusQuo: directorate
+      splitLine: '{a} and {b}, sharing the building'
+      splitHeadline: 'TWO GOVERNMENTS: {a} and {b} both claim the Directorate building.
+        Each has opened its own queue.'
     - id: future
       question: What does 2150 run on?
-      answer: 0
-      foundAs: The Credit Age
+      answer: 2
+      foundAs: 
+      statusQuo: credit_age
+      splitLine: '{a} and {b}, one on each bank of the river'
+      splitHeadline: '2150 IS SPLIT: {a} on one bank of the river, {b} on the other.
+        The bridge is very busy.'
     - id: money
       question: How does 2150 pay its way?
-      answer: 0
-      foundAs: The Debt
+      answer: 2
+      foundAs: 
+      statusQuo: debt
+      splitLine: '{a} and {b}, side by side'
+      splitHeadline: 'TWO PURSES: 2150 pays its way through {a} and {b} at once.
+        Every till now has two drawers.'
     - id: culture
       question: Whose culture leads?
       answer: 1
       foundAs: 'None: the neutral Temporal Customs Zone'
+      statusQuo: 
+      splitLine: 
+      splitHeadline: 
+    outcomes:
+    - factor: government
+      id: directorate
+      name: The Directorate
+      headline: 'DIRECTORATE: the Customs Directorate carries on running 2150. The
+        queues reopen at nine, as always.'
+      report: 'The Customs Directorate runs 2150 as it always has: by form, by queue
+        and by stamp. Every citizen knows exactly which counter to stand at.'
+    - factor: government
+      id: democracy
+      name: Democracy
+      headline: '2150 VOTES: the Directorate hands the building to an elected assembly.
+        Its first sitting ran eleven hours.'
+      report: An elected assembly runs 2150 and votes on everything, including the
+        colour of the ballot papers. Anyone may stand for office, and nearly everyone
+        does.
+    - factor: government
+      id: monarchy
+      name: Monarchy
+      headline: 'A CROWN FOR 2150: a monarch is proclaimed on the Directorate steps.
+        The queues are now royal queues.'
+      report: A monarch reigns over 2150 from a palace that used to be a transit
+        hall. Every form carries the royal crest, and people have started framing
+        them.
+    - factor: government
+      id: fascism
+      name: Fascism
+      headline: 'ORDER: a single party takes charge of 2150. Uniforms are issued,
+        and every portal opens to the second.'
+      report: One party runs 2150, and one flag hangs over every portal. The timetables
+        are exact, the parades are long, and nobody steps out of the queue.
+    - factor: government
+      id: communism
+      name: Communism
+      headline: 'THE PEOPLE''S DESK: workers'' councils take over the Directorate.
+        Every desk now has a committee.'
+      report: Workers' councils run 2150 and hold the portals in common. Every clerk
+        is a comrade, every queue is shared equally, and the five-year plan has a
+        ten-year appendix.
+    - factor: government
+      id: theocracy
+      name: Theocracy
+      headline: 'BY SACRED ORDER: 2150''s temple councils take up the Directorate''s
+        duties. The stamps are blessed each morning.'
+      report: Temple councils govern 2150, and every departure begins with a blessing
+        of the portal. The calendar has many more holidays, and the queues wait in
+        respectful silence.
+    - factor: government
+      id: technocracy
+      name: Technocracy
+      headline: 'RUN BY EXPERTS: a council of engineers takes over 2150. Its first
+        decree is a flowchart.'
+      report: Engineers and statisticians run 2150 through committees of specialists.
+        Every law comes with footnotes, and every citizen with a user manual.
+    - factor: government
+      id: corporate_board
+      name: The Corporate Board
+      headline: 'UNDER NEW MANAGEMENT: a board of directors acquires 2150. Every
+        citizen receives a shareholder newsletter.'
+      report: A corporate board runs 2150 as a going concern, with quarterly meetings
+        open to anyone holding a share. The minutes are glossy, and the annual report
+        has a mascot.
+    - factor: future
+      id: credit_age
+      name: The Credit Age
+      headline: 'THE CREDIT AGE: wrist comms, queues and the debt grid carry on.
+        2150 runs on credit, as before.'
+      report: 2150 runs on wrist comms, credit lines and very long queues. Everything
+        is on account, and the account is always open.
+    - factor: future
+      id: nuclear
+      name: The Nuclear Age
+      headline: 'ATOMS FOR ALL: 2150''s first home reactor goes on sale. Kettles
+        now boil in a second.'
+      report: '2150 runs on the atom: reactors in the basements and a gentle glow
+        on the night shift. Power is too cheap to meter, so nobody meters it.'
+    - factor: future
+      id: cybernetic
+      name: The Cybernetic Age
+      headline: 'WIRED: 2150 connects its citizens straight to the city grid. Queue
+        numbers now arrive by thought.'
+      report: 2150 runs on implants and thinking machines. Its citizens talk to the
+        city, and the city answers back, usually politely.
+    - factor: future
+      id: space_age
+      name: The Space Age
+      headline: 'LIFT-OFF: the first launch ring opens over the Aegean. The Space
+        League is hiring.'
+      report: '2150 looks up: launch rings, orbital suburbs and a weekend commute
+        to the Moon. The luggage limits are strict; the view is spectacular.'
+    - factor: future
+      id: naturalism
+      name: Naturalism
+      headline: 'BACK TO THE LAND: 2150 switched off the grid for a week, and nobody
+        switched it back on. Vineyards climb the arcologies.'
+      report: '2150 has rewilded itself: gardens in the transit halls, goats on the
+        portals and meetings held under trees. Everything grows, and the paperwork
+        is composted.'
+    - factor: future
+      id: anarchy
+      name: Anarchy
+      headline: 'NOBODY''S PLAN: 2150''s master plans are cancelled by general agreement.
+        Every street now runs itself.'
+      report: '2150 runs on whatever works that day: self-built districts, street
+        assemblies and improvised machines. There is no timetable, and yet things
+        arrive.'
+    - factor: money
+      id: debt
+      name: The Debt
+      headline: 'THE DEBT HOLDS: every account in 2150 carries over. Interest compounds
+        as usual.'
+      report: '2150 pays its way on credit: every citizen carries a debt, and every
+        debt passes to kin. The ledger has never once lost track of a cent.'
+    - factor: money
+      id: jubilee
+      name: Jubilee
+      headline: 'JUBILEE: every debt in 2150 is forgiven at midnight. Collections
+        throws a party.'
+      report: Every debt in 2150 was forgiven, and the ledgers were shredded into
+        confetti. Nobody owes anybody, and the collectors are learning to knit.
+    - factor: money
+      id: company_towns
+      name: Company Towns
+      headline: 'COMPANY TOWN: 2150''s employers take over housing, schools and the
+        portals. Wages are paid in company scrip.'
+      report: '2150''s employers run daily life: company housing, company schools,
+        company songs. Payday comes in scrip, and the canteen is very popular.'
+    - factor: money
+      id: commons
+      name: The Commons
+      headline: 'SHARE AND SHARE ALIKE: everything in 2150 goes into common stores.
+        The first swap market opens in the transit hall.'
+      report: '2150 shares what it has: common stores, swap markets and a library
+        of tools. Nothing is bought; everything is borrowed and, mostly, returned.'
+    - factor: money
+      id: banking_houses
+      name: The Banking Houses
+      headline: 'HOUSES OF CREDIT: the merchant dynasties open their vaults to 2150.
+        Every family now has a banker.'
+      report: Merchant banking dynasties finance 2150 from marble halls, lending
+        by letter and by handshake. The interest is negotiable, and lunch is included.
+    roles:
+    - archetype: scientist
+      factor: future
+      pull: 3
+    - archetype: diplomat
+      factor: government
+      pull: 2
+    - archetype: soldier
+      factor: government
+      pull: 2
+    - archetype: merchant
+      factor: money
+      pull: 3
   news:
     debt:
     - Debt Relief Departures reach a record high.

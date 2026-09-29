@@ -164,3 +164,10 @@ MonoBehaviour:
     baseScore: 4
     dominantEffect: {fileID: 0}
     supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: communism
+  - factor: future
+    outcome: nuclear
+  - factor: money
+    outcome: jubilee

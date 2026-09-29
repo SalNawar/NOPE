@@ -419,92 +419,156 @@ S1-S2 and E1-E2 can run as two parallel tracks; they meet at E4 (the report read
 
 ## 14. Open questions for Saleh
 
-Each question lists the recommended option first (A). **Status (2026-09-30): all sixteen are answered**; each question's line carries the answer and §15 records Saleh's words. Where an answer differs from the text of §1-§13, §15 wins.
+Each question lists the recommended option first (A). **Status (2026-09-30): all sixteen are answered**; each question's line carries the answer and §16 records Saleh's words. Where an answer differs from the text of §1-§13, §16 wins.
 
-1. **What should the ending describe about 2150?** *(answered: A, and for now no ending story (§15.1))* Example of a finished run: "Japanese culture, a Cybernetic future, a Theocracy, every debt forgiven."
+1. **What should the ending describe about 2150?** *(answered: A, and for now no ending story (§16.1))* Example of a finished run: "Japanese culture, a Cybernetic future, a Theocracy, every debt forgiven."
    - **A (recommended)** Four things: who runs 2150, what 2150 runs on, how 2150 pays its way (the debt), and whose culture leads (already in the game).
    - **B** Three things: who runs it, what it runs on, and whose culture leads (drop the money question).
    - **C** Five things: A plus "what 2150 believes in" (faith, art, fun), a new line to write.
 
-2. **Which governments can 2150 end up with?** *(answered: 8 or 12 options, the list lives in config (§15.1))*
+2. **Which governments can 2150 end up with?** *(answered: 8 or 12 options, the list lives in config (§16.1))*
    - **A (recommended)** The Directorate (how 2150 is at the start), Democracy, Monarchy, Fascism, Communism, Theocracy.
    - **B** A, plus Anarchy moved here from the futures list (so "no government" is a government answer, not a future).
    - **C** A shorter list: The Directorate, Democracy, Fascism, Communism.
 
-3. **Which futures can 2150 end up with?** *(answered: many combinations, the outcome lists live in config and the combos are calculated (§15.1))*
+3. **Which futures can 2150 end up with?** *(answered: many combinations, the outcome lists live in config and the combos are calculated (§16.1))*
    - **A (recommended)** The Credit Age (how 2150 is at the start: wrist comms and queues), Nuclear, Cybernetic, Space Age, Naturalism, Anarchy.
    - **B** A, plus a Clockwork future (brass and steam, from Victorian London and Renaissance Nuremberg).
    - **C** Only your five (Nuclear, Cybernetic, Space Age, Naturalism, Anarchy): 2150 always ends up changed, never as it started.
 
-4. **How does a traveller change the world?** *(answered: A, plus famous travellers have big impacts and story beats offer opportunities and surprises (§15.1))* Example: on day 4 you approve a scientist going to Meiji Nagoya, home of the automatic loom.
+4. **How does a traveller change the world?** *(answered: A, plus famous travellers have big impacts and story beats offer opportunities and surprises (§16.1))* Example: on day 4 you approve a scientist going to Meiji Nagoya, home of the automatic loom.
    - **A (recommended)** Every traveller you let through nudges 2150 toward what their destination is known for, through their job: that scientist nudges the future toward Cybernetic. Even a by-the-book clerk shapes the world through who comes to the desk; breaking a rule on purpose (and paying the fine) steers it further.
    - **B** Only your deliberate choices count: letting a rule-breaker through, turning an honest person away, and dialog choices. A perfect by-the-book run leaves 2150 as it started.
    - **C** Only the story characters (Pell, Gutenberg, Rook...) and dialog choices change the world.
 
-5. **Should the player see the world changing during the run?** *(answered: A, widened: the change shows in everything that can change, never the variables (§15.1))*
+5. **Should the player see the world changing during the run?** *(answered: A, widened: the change shows in everything that can change, never the variables (§16.1))*
    - **A (recommended)** Yes, in words only: the morning paper reports when something takes over ("The first launch ring opens over the Aegean"), and the Internet's History site has a "2150 today" page. No bars, no numbers.
    - **B** No: the world is a surprise on the last day.
    - **C** Yes, with bars for each outcome (not recommended: bars invite chasing a score, the linear feel you rejected).
 
-6. **What if two outcomes are neck and neck at the end?** *(answered: A (§15.1))* Example: Space Age and Naturalism end one pull apart.
+6. **What if two outcomes are neck and neck at the end?** *(answered: A (§16.1))* Example: Space Age and Naturalism end one pull apart.
    - **A (recommended)** The ending says the world is split, as its own answer: "Launch rings over the Aegean, rewilded valleys along the Rhine."
    - **B** 2150 stays as it started on that question until one side clearly leads.
    - **C** Whichever of the two took the lead most recently wins.
 
-7. **What does the last screen look like?** *(answered: for now no ending story; day 15 ends the demo showing the four outcomes (§15.1))*
+7. **What does the last screen look like?** *(answered: for now no ending story; day 15 ends the demo showing the four outcomes (§16.1))*
    - **A (recommended)** The last morning paper (the Temporal Times, day 16): a headline naming your world ("The Cybernetic Monarchy"), a picture, one short column per question, then "The past you rewrote", "Where are they now" (Pell, Ines, Gutenberg...), "Your desk" (the clerk, still working: "Desk 3 opens at 9:00."), then END OF DEMO.
    - **B** One illustrated card: the world's name and one paragraph.
    - **C** A short slideshow, one slide per question, then the people, then END OF DEMO.
 
-8. **Pictures for the ending.** *(answered: later, layered (§15.1))*
+8. **Pictures for the ending.** *(answered: later, layered (§16.1))*
    - **A (recommended)** Twelve pictures layered: one background per future (6) and one banner per government (6) in front of it. Every combination is covered.
    - **B** One picture per combination (36 or more), the richest and costliest.
    - **C** No pictures in the demo: text on the paper only.
 
-9. **When the clerk is fired or goes bankrupt, what comes after the failure screen?** *(answered: A (§15.1))*
+9. **When the clerk is fired or goes bankrupt, what comes after the failure screen?** *(answered: A (§16.1))*
    - **A (recommended)** The same last paper, titled "The world you leave behind": the world you shaped still exists.
    - **B** Only the failure screen, as today.
 
-10. **The waiver fine and your "one penalty for any mistake" rule.** *(answered: D, 100 cr, a knowing exception to the one-fine rule (§15.2))* Example: Pell arrives with an unsigned waiver and you approve her anyway. That approval is a wrong decision, so you pay the one penalty (25 cr) at the stamp. Two days later her cheap unit fails in Athens and she tells everyone about wrist computers, breaking the waiver's promise she never signed. Should that cost you again?
+10. **The waiver fine and your "one penalty for any mistake" rule.** *(answered: D, 100 cr, a knowing exception to the one-fine rule (§16.2))* Example: Pell arrives with an unsigned waiver and you approve her anyway. That approval is a wrong decision, so you pay the one penalty (25 cr) at the stamp. Two days later her cheap unit fails in Athens and she tells everyone about wrist computers, breaking the waiver's promise she never signed. Should that cost you again?
     - **A (recommended)** Yes, the same one fine (25 cr, the same setting as every other fine), charged again by the agency's failure report, only in this case. No new fine amount exists anywhere.
     - **B** No: the fine at the stamp was the whole price; the report only reminds you of it.
     - **C** No money: it costs timeline stability instead, like the extra loss for getting a famous traveller wrong.
     - **D** A separate, bigger stranding fine (like the old 150 cr). This breaks the one-penalty rule.
 
-11. **How often does each fate happen?** *(answered: A (§15.2))* (For you only; the player never sees these numbers.)
+11. **How often does each fate happen?** *(answered: A (§16.2))* (For you only; the player never sees these numbers.)
     - **A (recommended)** With a signed waiver: forgotten 40 %, in the news 25 %, brings 2150 technology 20 %, shakes the timeline 10 %, Time Police 5 %. Without one: forgotten 20 %, news 20 %, technology 20 %, shakes 15 %, Time Police 25 % (nobody registered them, so the police clean up).
     - **B** All five equally likely, with or without a waiver.
     - **C** A's first column for everyone: the waiver only decides who pays, not what happens.
 
-12. **What is left of a "forgotten" traveller?** *(answered: A (§15.2))*
+12. **What is left of a "forgotten" traveller?** *(answered: A (§16.2))*
     - **A (recommended)** Only the agency's failure report in the clerk's Mail ("Unit HP-40718 failed in Periclean Athens. Traveller: Pell Quimby. Status: not recovered."), never mentioned again.
     - **B** Nothing at all: no mail, and the shift report stops counting them.
     - **C** A line in the paper: "No trace was found of a traveller lost in Periclean Athens."
 
-13. **How does the paper report the Time Police?** *(answered: A (§15.2))*
+13. **How does the paper report the Time Police?** *(answered: A (§16.2))*
     - **A (recommended)** In the Directorate's dry voice, so the killing is clear but deadpan: "TIME POLICE: an unregistered traveller was removed from Periclean Athens. The file is closed."
     - **B** Openly: "TIME POLICE execute a stranded traveller in Periclean Athens."
     - **C** They arrest instead of kill: "...was brought back to 2150 in cuffs."
 
-14. **Can the clerk get a waiver signed at the desk?** *(answered: A (§15.2))* Example: Pell hands over her waiver unsigned.
+14. **Can the clerk get a waiver signed at the desk?** *(answered: A (§16.2))* Example: Pell hands over her waiver unsigned.
     - **A (recommended)** Yes: you hand her a blank waiver from a pad on the desk. Most travellers sign; some refuse in character (a Grand traveller: "I do not sign things. People sign things for me."). Once signed you can approve her correctly; turning her away stays correct too.
     - **B** No: travellers must arrive with it signed; unsigned means deny (today's rule).
     - **C** Yes, and the clerk may even sign it for them: a forgery that saves time but counts as a wrong approval if an auditor checks.
 
-15. **What does getting a waiver signed cost the clerk?** *(answered: A (§15.2))*
+15. **What does getting a waiver signed cost the clerk?** *(answered: A (§16.2))*
     - **A (recommended)** Only time: the shift clock runs on about as long as asking a question, so fewer travellers reach the desk before closing.
     - **B** Blank waivers are a desk supply you buy from the Orders app (for example a pad of ten for 20 cr).
     - **C** The traveller pays a waiver fee; it costs the clerk nothing, but some travellers refuse to pay it.
 
-16. **Where is the waiver's promise ("I will not reveal the future or alter history") written?** *(answered: A, plus a death clause in the fine print (§15.2))*
+16. **Where is the waiver's promise ("I will not reveal the future or alter history") written?** *(answered: A, plus a death clause in the fine print (§16.2))*
     - **A (recommended)** In the waiver's printed text above the signature, next to "my debt passes to my next of kin". Nothing new to check: the signature covers it.
     - **B** As a separate tick box on the waiver that can be left empty, a new thing for the clerk to check.
 
-## 15. Saleh's answers (2026-09-30)
+## 15. Build record: the world's outcomes (phases E1-E3, branch `feat/world-outcomes`, 2026-09-30)
+
+Built overnight on Saleh's answers of 2026-09-30 (four factors; 8 governments with room for 12; "many combinations, the game is config based, we will calculate the combos"; every traveller nudges, the famous nudge hard, beats bring opportunities and surprises; the world shows in words, never variables; a split is its own answer; the fired and bankrupt runs show "the world you leave behind"), on top of the neutral patch E0 (main `5f782f4`). Where this section and §1-§14 differ, this section records what was built; every choice made without Saleh is listed in §15.3 for his review.
+
+### 15.1 What was built
+
+| Piece | Where |
+|---|---|
+| The rules: pulls, the lead with hysteresis and the split, the night's latch, the one-time seed of an older save, the answer in words | `Assets/Scripts/Domain/WorldPulls.cs` (tests: `WorldPullsTests`) |
+| The content types and checks: `FactorAnswer.Pulls` (appended, pinned), the factor's `statusQuo`, `splitLine`, `splitHeadline`; `WorldContent.outcomes` and `roles`; `Problems` and `RefProblems`; `JudgingWords` (whole words) and the percentage check; the outcome lines with their reports | `Assets/Scripts/Domain/WorldFactors.cs` (tests: `WorldFactorsTests`) |
+| Content | `world_source.json` `world.factors` (three `Pulls` rows), `world.outcomes` (19 rows), `world.roles` (4 rows: scientist 3, diplomat 2, soldier 2, merchant 3), `places[].leanings` (40 places), `premades[].pulls` (21 famous travellers), `history.rules[].pulls` (28 rules), the UI string `site.history.today`; sheets `worldOutcomes`, `worldRoles`, `placeLeanings`, `premadePulls`, `historyPulls` (`ContentSheetMap`, `docs/CONTENT_SHEETS.md`) |
+| Generation and validation | `WorldContentGenerator.World.cs` (the world block, `CheckWorldRefs`), the places' `leanings`, the premades' `pulls`, the history rules' `PullOutcome` ops; `ContentLibraryValidator.CheckWorldRefs` (leanings, premade pulls, every `PullOutcome` op in any effect, the roles' archetypes) |
+| Knobs | `GameConfigSO` "World": `worldStatusQuoWeight` 6, `worldLeadMargin` 2, `worldDenialPull` 0.05 (the first cut 0.5 froze every simulated run, §15.5), `worldKindScaleRich` 0.5, `worldKindScalePoor` 0.5, `worldKindScaleLabourer` 1, `worldKindScaleDisplaced` 1 |
+| Play | `WorldOutcomeService`: `RecordDecision` in `DayCycle.Decide` (the game and the balance simulation), `Latch` in `TimelineService.NightlyResolve` (after the story rules, before the carries, under the history news cap), `SeedOlderSave` on Continue; `EffectOpType.PullOutcome` (appended, pinned) applied as an instant op; Rook's bribe effect pulls Company Towns 1 |
+| The END OF DEMO seam (E0) | `ContentLibrarySO.WorldOutcomes(world, config)` reads the pull factors now (`WorldContent.AnswersNow`), so the last shift counts; `DayCycle.EndRun` gives the run's last day its own night resolve before the page (E0's known gap: day 15's choices now shape the page); the fired and bankrupt runs' "the world you leave behind" reads the same answers (their last night's latch plus that day's decisions) |
+| 2150 today | Chronopedia's present ends with a box per factor (question, answer, the answer's report), as the paper last reported it (`ContentLibrarySO.WorldLatched`, `SiteWorld.WorldToday`, `HistoryPages.Present`; tested: `HistoryPagesTests`) |
+| Balance | the simulation's world section keeps E0's distribution per factor and per style and adds §10's watch lines (as found, splits, outcomes no run reached) and the mean pull a run gathers per factor |
+| Saves | version stays 3; `WorldState.pulls` and `leads` are additive; an older save with neither, past day 1, is seeded once |
+
+### 15.2 The outcome lists (content; a row each, any number)
+
+- **Who runs 2150?** The Directorate *(as found)*, Democracy, Monarchy, Fascism, Communism, Theocracy, **Technocracy**, **The Corporate Board** (8; the config holds 12 or more: nothing in code counts them).
+- **What does 2150 run on?** The Credit Age *(as found)*, The Nuclear Age, The Cybernetic Age, The Space Age, Naturalism, Anarchy.
+- **How does 2150 pay its way?** The Debt *(as found)*, Jubilee, Company Towns, The Commons, The Banking Houses.
+- **Whose culture leads?** the leader (unchanged from E0).
+
+### 15.3 Decisions taken without Saleh (review these)
+
+1. **Q1-Q6, Q9: option A** of each, with Saleh's Q2 answer (8 governments: A's six plus Technocracy and The Corporate Board, worded neutrally like the rest).
+2. **No separate `WorldFactorsSO`** (§11 E1): E0 had already put the world block into `ContentLibrary_Main` (`ContentLibrarySO.World`), so the outcomes and roles join it there: one source, Generate World writes it, Saleh edits the sheets.
+3. **Outcome rows carry `name`, `headline`, `report` only.** The composed title's `adjective`, `noun`, `clause` and the `picture` key (§3, §5.2-§5.3) belong to E4's World Report and are not added before a reader exists (no dead content).
+4. **Leanings: §4.2's table as written, plus the blank government cells filled for the two new governments** (Saleh must review every cell):
+   Late Ming Suzhou and Showa Tokyo lean **Technocracy** (the examination scholar-gentry; the ministry planners); Qing Shanghai and Renaissance Nuremberg lean **The Corporate Board** (the treaty port's municipal council of trading houses; the patrician merchant council). Ottoman Iraq's government stays blank. The Future places lean nowhere.
+5. **Famous travellers' pulls (unscaled, 4 to 6; a role's is 2 times the kind's 0.5 or 1):** Senenmut Monarchy 6; Socrates Democracy 6; Aspasia Democracy 5; Ban Zhao Technocracy 5; Arib The Banking Houses 5; al-Khwarizmi Cybernetic 6; Gutenberg The Commons 6 and Anarchy 3; Leonardo Cybernetic 5 and Space Age 3; Lanyer Democracy 4; Gallerani Monarchy 4; Ada Lovelace Cybernetic 6; al-Tahtawi Technocracy 5; Umm Kulthum The Commons 4; al-Mala'ika Anarchy 4; al-Sayyab Naturalism 4; Elytis Space Age 4; Fellini Jubilee 4; He Zehui Nuclear 6; Toyoda Cybernetic 4 and Company Towns 4; Turing Cybernetic 6; Meitner Nuclear 6. The 2150 story characters (Pell, Ines, Rook, Hollis, the auditor) have no premade pulls: their beats pull through their story rules (5), and when accepted they pull like anyone through their role.
+6. **Story and history rules' pulls (2 to 4, the night they fire):** movable_type_florence Commons 2; yen_reichsmark Banking Houses 2; roman_aljabr Technocracy 2; sterling_cairo Banking Houses 2; greek_thebes Democracy 2; mark_britain Company Towns 2; florin_mystras Banking Houses 2; hieroglyphs_babylon Theocracy 2; babbage_engine Cybernetic 3; athenian_steam Nuclear 2; elected_pharaoh Democracy 3; drive_begins The Debt 1; pell_departed Democracy 2; ines_mills Company Towns 4; ines_rebooked The Debt 2; rift_storm Anarchy 1 (a surprise); driftbox_recall The Directorate 1; rook_departed Company Towns 3; rook_complaint Democracy 2; ada_departed Cybernetic 2; audit_week The Directorate 1; range_limit Space Age 1; hollis_departed Jubilee 3; hollis_collections The Debt 3; audit_passed The Directorate 3; audit_failed Technocracy 2; audit_rook Company Towns 2 (§4.1); drive_last_day The Debt 2 (§4.1's 4, halved). The rules that fire in every run by the day (drive_begins, rift_storm, driftbox_recall, audit_week, range_limit, drive_last_day) pull 1 or 2 only: they fire whatever the player does, so a bigger pull acts as inertia; the rules that follow a choice (a verdict, a bribe) pull 2 to 4. Dialog: taking Rook's 200 cr pulls Company Towns 1 (§4.1).
+7. **A denial pulls every pull factor's "as you found it" outcome by 0.05** (§4.1's 0.5 is a tenth too strong: a shift denies about half its travellers in the second week, and at 0.5 all 300 simulated runs ended as the run found 2150, §15.5), a displaced person's included; the `displacedStayed`, `panics` and `debtReliefTotal` counters (§2.2) are E4's report lines and are not added yet.
+8. **The lead (§4.3)**, exactly: the "as you found it" outcome starts 6 ahead; a held single answer stays until another passes it by more than 2; otherwise the heaviest leads when ahead of the next by more than 2, else the factor is split between the top two (ties in content order). A split is re-read each night (no hysteresis of its own); a held single answer never turns into a split with its own challenger (the challenger must pass it first), so splits appear when a lead changes hands into a close race.
+9. **The split's words** are the factor's own authored lines: "{a} and {b}, sharing the building" (government), "{a} and {b}, one on each bank of the river" (future), "{a} and {b}, side by side" (money), and a split headline each for the paper.
+10. **Where the answers are read.** The END OF DEMO page and "the world you leave behind" read the answers *now* (the held answers' hysteresis applied to the latest pulls), so a decision of the last shift counts even when the night did not latch it; the last day also gets its own night resolve first (`DayCycle.EndRun`), so its story rules, leader and pulls land. A failure does not run a night (the world is left as it stood). Chronopedia's "2150 today" reads the latched answers (what the morning paper reported), so the site never announces a change the paper has not.
+11. **The morning paper**: a changed answer's headline goes after the leader line and before the carries, under the one history news cap (3); nothing prints while nothing changes, and the first night's "as you found it" is saved silently.
+12. **The older save's seed (§9)** runs only when the save has no pull *and* no latched answer (a run of this build latches every night, so it can never be re-seeded); which attribute seeds which factor is derived, not listed: an attribute seeds the factor of the one role whose archetype moves it (Science: the scientists, the future; Democracy: the diplomats and soldiers, the government); Art, moved by artists, merchants and wanderers alike, seeds nothing, so the money line starts as found (§9).
+13. **Names.** E0 named its line builder `WorldFactors`, so the rules of §4 (`WorldFactors.Pull`, `Lead`, `WorldPulls.FromScores` in §11) live together in `WorldPulls`; the play glue is `WorldOutcomeService`.
+14. **Roles: scientist 3, merchant 3, diplomat 2, soldier 2** (§4.1 has 2 each): the government has two roles pulling it and the future and the money one each, so the single roles pull 3 and every factor gathers about as much over a run (§15.5).
+15. **No ranking words**: `WorldFactors.JudgingWords` (best, worst, better, worse, good, bad, win, lose, score, rank, retire, triumph, success, fail, victory, defeat, ideal, utopia, dystopia and their listed forms) are matched as whole words so "goods" and "window" stay free; Generate World, the validator and `WorldFactorsTests` refuse any world text using one or printing a percentage.
+
+### 15.4 Follow-ups (not built)
+
+- **The world reflected everywhere** (Saleh: "the changing world shows in EVERYTHING that can change"): the PC's look and font, the languages, the city out of the window, the hall, the office's banners per government and future: a later epic, with the layered pictures of §5.3 (Q8).
+- **E4, the World Report**: the composed title ("The Cybernetic Monarchy"), the four columns, the rewritten past, 2150 in the past, where they are now, your desk; `WorldState.worldReport`; the Title's "The world you made"; the counters of §2.2.
+- **S1-S2, the strandings' fates and the waiver at the desk** (§6-§7): not in this track.
+- **Tuning**: the balance simulation's watch lines (the report of this track) against the leanings and knobs; Saleh reviews the leanings (15.3 item 4) first.
+
+### 15.5 Balance (the 50-run simulation, 2026-09-30, main `cfe6846` merged)
+
+At the spec's first cut (a denial pulls 0.5, every role 2, the day-fired story rules 2 to 4) **all 300 simulated runs ended as the run found 2150** on all three factors: a shift denies about half its travellers in the second week, and every denial pulled all three "as found" outcomes. The build ships a first tuning pass (knob and content, all editable): a denial pulls 0.05, scientists and merchants 3 (so the future and the money gather about as much as the government's two roles), the day-fired story rules 1 or 2. The day-15 answers per style at the shift clock's pace (10 a shift, 50 runs each; a distribution, never a target):
+
+| Style | Who runs 2150? | What does 2150 run on? | How does 2150 pay its way? |
+|---|---|---|---|
+| Perfect | Monarchy 27, Democracy 12, The Directorate 6, splits 3, Communism 1, Theocracy 1 | Cybernetic 21, Credit Age 11, Nuclear 6, Anarchy 5, Space Age 2, Naturalism 1, splits 4 | The Debt 29, Company Towns 10, Commons 6, Banking Houses 2, Jubilee 1, splits 2 |
+| Imperfect | Monarchy 30, Democracy 11, Directorate 3, Theocracy 3, Communism 1, splits 2 | Cybernetic 21, Credit Age 9, Anarchy 5, Nuclear 5, Space Age 5, Naturalism 2, splits 3 | The Debt 20, Company Towns 17, Commons 7, Banking Houses 3, Jubilee 1, splits 2 |
+| Careless (bankrupt or fired early) | Monarchy 30, Directorate 9, Democracy 5, Theocracy 2, splits 4 | Credit Age 37, Cybernetic 8, Anarchy 2, others 1 each | The Debt 35, Company Towns 7, Commons 4, Banking Houses 2, splits 2 |
+
+Watch lines (§10) against this: every future and every way to pay leads in some perfect run at the pace; **Fascism, Technocracy and The Corporate Board lead in none** (two places lean each, 15.3 item 4) and **Monarchy leads more than a quarter of perfect runs** (twelve places lean Monarchy, five of the eight Industrial places the second week's labourers go to). Both are the leanings' to fix, Saleh's review first (15.3 item 4), not a knob's: no outcome is made "harder". The "as found" answers lead in fewer than half of the perfect runs on the government and the future, and in 29 of 50 on the money (the Drive's story rules and a slow merchant inflow). The whole-queue runs, with more travellers, drift further from "as found".
+
+## 16. Saleh's answers (2026-09-30)
 
 Recorded from Saleh's answers to §14. They override the text of §1-§13 wherever the two disagree; the build of S1-S2 (branch `feat/strandings`) follows them.
 
-### 15.1 Endings (Q1-Q9)
+### 16.1 Endings (Q1-Q9)
 
 - **No ending story for now (Q1, Q7).** Day 15 just ends the demo showing the **four outcomes**: who runs 2150, what it runs on, how it pays its way, and whose culture leads. No World Report paper, no "Where are they now" story yet; the four answers, then END OF DEMO.
 - **Governments (Q2): 8 or 12 options.** The list is config, not code.
@@ -515,7 +579,7 @@ Recorded from Saleh's answers to §14. They override the text of §1-§13 wherev
 - **Fired or bankrupt (Q9): "the world you leave behind"** follows the failure screen too (option A).
 - **Pictures (Q8): later, layered** (a background per future and a banner per government in front of it).
 
-### 15.2 Strandings (Q10-Q16)
+### 16.2 Strandings (Q10-Q16)
 
 - **Q10 = D: a separate stranding fine of 100 cr** (a knob, `GameConfigSO.strandingFine`), charged by the agency's failure report only when the stranded traveller had **no valid signed waiver** on file. **Saleh chose this knowingly as an exception to his rule "one penalty for any wrong decision"** (2026-09-29): the rule still governs every decision at the stamp (one amount, approval or rejection alike, after the free warning); the stranding fine is not a decision penalty but the agency billing the desk for an unregistered traveller lost in the past, a consequence that lands days later. It is the only fine in the game with its own amount. The switch of §7.4 (`waiverBreachConsequence`) is not built: the answer is fixed, the amount is the knob.
   - Scope, as built: the fine is charged for **every** fate of a stranding without a valid signed waiver (Forgotten and the Time Police included), because Saleh's answer ties it to the missing waiver, not to the promise being broken; §7.2's "nobody pays" rows for unwaivered strandings are superseded. No free warning applies to it.

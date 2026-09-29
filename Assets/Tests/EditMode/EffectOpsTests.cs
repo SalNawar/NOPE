@@ -32,6 +32,7 @@ public class EffectOpsTests
     [TestCase(EffectOpType.Mood, true)]
     [TestCase(EffectOpType.BreakInChance, true)]
     [TestCase(EffectOpType.BreakInShare, true)]
+    [TestCase(EffectOpType.PullOutcome, false)]
     public void ActsWhileActive_OnlyTheContinuousModifiersAndCues(EffectOpType type, bool expected)
     {
         Assert.AreEqual(expected, EffectOps.ActsWhileActive(type));
@@ -66,7 +67,8 @@ public class EffectOpsTests
         Assert.AreEqual(23, (int)EffectOpType.Mood);
         Assert.AreEqual(24, (int)EffectOpType.BreakInChance);
         Assert.AreEqual(25, (int)EffectOpType.BreakInShare);
-        Assert.AreEqual(26, System.Enum.GetValues(typeof(EffectOpType)).Length, "a new member is appended here too");
+        Assert.AreEqual(26, (int)EffectOpType.PullOutcome);
+        Assert.AreEqual(27, System.Enum.GetValues(typeof(EffectOpType)).Length, "a new member is appended here too");
     }
 
     [Test]
