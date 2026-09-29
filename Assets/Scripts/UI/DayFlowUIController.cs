@@ -139,9 +139,6 @@ public sealed class DayFlowUIController : MonoBehaviour
             if (ledger.strandedCount > 0)
                 sb.AppendLine(UiText.Format("results.stranded", ledger.strandedCount));
 
-            if (ledger.strandingFines > 0)
-                sb.AppendLine(UiText.Format("results.strandingFine", ledger.strandingFines));
-
             if (ledger.debtOwed != Account.Unknown)
                 sb.AppendLine(UiText.Format("results.debtRelief", ledger.debtInstalment, ledger.debtOwed, UiText.Currency(UiText.WalletForm.Short)));
 

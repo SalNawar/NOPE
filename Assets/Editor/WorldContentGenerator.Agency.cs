@@ -18,8 +18,8 @@ using UnityEditor;
 /// </summary>
 public static partial class WorldContentGenerator
 {
-    /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models; phase 8 the proofs of means, "proofs"; phase 13b the stranding knobs).</summary>
-    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public ProofData[] proofs; public float strandChance; public int strandFine; }
+    /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models; phase 8 the proofs of means, "proofs"; phase 13b the stranding chance).</summary>
+    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public ProofData[] proofs; public float strandChance; }
 
     /// <summary>The clerk's own account as authored ("agency.clerk").</summary>
     [Serializable] private sealed class ClerkData
@@ -87,8 +87,7 @@ public static partial class WorldContentGenerator
                     prefix = p.prefix ?? string.Empty
                 })
                 .ToList(),
-            strandChance = a.strandChance,
-            strandFine = a.strandFine
+            strandChance = a.strandChance
         };
 
     /// <summary>The clerk's rows (verbatim; a missing block reads blank and fails ClerkContent.Problems).</summary>

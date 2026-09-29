@@ -5,8 +5,7 @@ using NUnit.Framework;
 /// <summary>
 /// Cheap transponders fail (the traveller-types spec's S1-S3; redesign phase
 /// 13b): one draw per accepted Economy traveller in queue order on the day's
-/// own stream, the real class deciding; the waiver's standing and the fine's
-/// cases; the morning paper's stranding lines.
+/// own stream, the real class deciding; the morning paper's stranding lines.
 /// </summary>
 public class StrandingsTests
 {
@@ -69,63 +68,6 @@ public class StrandingsTests
         CollectionAssert.IsEmpty(Strandings.Roll(new TransponderClass?[0], 1f, new SeededRandom(seed)));
         CollectionAssert.IsEmpty(Strandings.Roll(null, 1f, new SeededRandom(seed)));
         CollectionAssert.IsEmpty(Strandings.Roll(many, 1f, null));
-    }
-
-    [TestCase(false, "T. Marlow", "SW-204817", "SW-204817", WaiverStanding.None, Description = "no waiver handed over")]
-    [TestCase(true, "UNSIGNED", "SW-204817", "SW-204817", WaiverStanding.Unsigned)]
-    [TestCase(true, "unsigned", "SW-204817", "SW-204817", WaiverStanding.Unsigned, Description = "whatever its case")]
-    [TestCase(true, " ", "SW-204817", "SW-204817", WaiverStanding.Unsigned, Description = "a blank signature row")]
-    [TestCase(true, "T. Marlow", "SW-999999", "SW-204817", WaiverStanding.Unregistered, Description = "a forged waiver is no waiver")]
-    [TestCase(true, "T. Marlow", "SW-204817", "", WaiverStanding.Unregistered, Description = "the account registers no waiver")]
-    [TestCase(true, "T. Marlow", "SW-204817", null, WaiverStanding.Unregistered)]
-    [TestCase(true, "T. Marlow", " sw-204817 ", "SW-204817", WaiverStanding.Signed, Description = "Values.Match: case and spacing")]
-    [TestCase(true, "T. Marlow", "SW-204817", "SW-204817", WaiverStanding.Signed)]
-    public void Standing_ByWhatTheDeskSawOfTheWaiver(bool handedOver, string signature, string waiverNo, string registeredNo, WaiverStanding expected)
-    {
-        Assert.AreEqual(expected, Strandings.Standing(handedOver, signature, waiverNo, registeredNo));
-    }
-
-    private static DocumentField F(ClueCategory category, string value) => new DocumentField { category = category, label = category.ToString(), value = value };
-
-    /// <summary>The TC-310 as printed: the signatory's hand and the waiver number.</summary>
-    private static List<DocumentField> Waiver(string signature, string number) => new List<DocumentField>
-    {
-        F(ClueCategory.Name, "Oren Hale"), F(ClueCategory.CitizenId, "552-1804-33"), F(ClueCategory.TransponderId, "Skip Lite · SL-11952"),
-        F(ClueCategory.Debt, "9,800 cr"), F(ClueCategory.WaiverNo, number), F(ClueCategory.Signature, signature)
-    };
-
-    /// <summary>Phase 8: the waiver paper handed over sets the standing through Standing; any other paper leaves it alone.</summary>
-    [Test]
-    public void StandingOf_TheWaiverPaper_ElseNone()
-    {
-        Assert.AreEqual(WaiverStanding.Signed, Strandings.StandingOf(Waiver("Oren", "SW-204817"), "SW-204817"));
-        Assert.AreEqual(WaiverStanding.Unsigned, Strandings.StandingOf(Waiver("", "SW-204817"), "SW-204817"), "a blank signature box");
-        Assert.AreEqual(WaiverStanding.Unsigned, Strandings.StandingOf(Waiver(Strandings.UnsignedMark, "SW-204817"), "SW-204817"));
-        Assert.AreEqual(WaiverStanding.Unregistered, Strandings.StandingOf(Waiver("Oren", "SW-999999"), "SW-204817"), "a forged number");
-        Assert.AreEqual(WaiverStanding.Unregistered, Strandings.StandingOf(Waiver("Oren", "SW-204817"), null), "a Premium account registers no waiver");
-        var manifest = new List<DocumentField> { F(ClueCategory.CitizenId, "552-1804-33"), F(ClueCategory.TransponderId, "Skip Lite · SL-11952") };
-        Assert.AreEqual(WaiverStanding.None, Strandings.StandingOf(manifest, "SW-204817"), "not a waiver");
-        Assert.AreEqual(WaiverStanding.None, Strandings.StandingOf(null, "SW-204817"));
-    }
-
-    [TestCase(WaiverStanding.None, true)]
-    [TestCase(WaiverStanding.Unsigned, true)]
-    [TestCase(WaiverStanding.Unregistered, true)]
-    [TestCase(WaiverStanding.Signed, false)]
-    public void Fined_UnlessAValidSignedWaiverWasPresented(WaiverStanding waiver, bool fined)
-    {
-        Assert.AreEqual(fined, Strandings.Fined(waiver));
-        Assert.AreEqual(fined ? 150 : 0, Strandings.Fine(waiver, 150));
-        Assert.AreEqual(0, Strandings.Fine(waiver, -20), "a fine is never below 0");
-    }
-
-    [Test]
-    public void WaiverStanding_KeepsItsValues()
-    {
-        Assert.AreEqual(0, (int)WaiverStanding.None);
-        Assert.AreEqual(1, (int)WaiverStanding.Unsigned);
-        Assert.AreEqual(2, (int)WaiverStanding.Unregistered);
-        Assert.AreEqual(3, (int)WaiverStanding.Signed);
     }
 
     [Test]
