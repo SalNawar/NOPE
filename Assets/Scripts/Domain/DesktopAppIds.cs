@@ -2,7 +2,8 @@ using System.Collections.Generic;
 
 /// <summary>
 /// The PC's apps by id (the PC redesign DK1; Saleh 2026-09-29 added Orders,
-/// the seventh, overriding DK1's "six"): the desktop holds exactly one icon
+/// the seventh, overriding DK1's "six", and the portals spec v3 Portals, the
+/// eighth): the desktop holds exactly one icon
 /// per app, in <see cref="DefaultOrder"/>, and nothing else, ever.
 /// These ids are the one app contract: an icon, a Start menu entry and any
 /// later link open an app through DesktopApps.OpenApp(id), and each app's
@@ -12,6 +13,9 @@ public static class DesktopAppIds
 {
     /// <summary>The Investigation app (phase 16): every case source in one window.</summary>
     public const string Investigation = "investigation";
+
+    /// <summary>Portals (the portals spec v3 PA1): today's portal schedule, read-only.</summary>
+    public const string Portals = "portals";
 
     /// <summary>The Internet browser.</summary>
     public const string Internet = "internet";
@@ -31,6 +35,6 @@ public static class DesktopAppIds
     /// <summary>Settings.</summary>
     public const string Settings = "settings";
 
-    /// <summary>The seven ids in the desktop's default order (Arrange lays them out in it; the Start menu lists them in it): Orders after the account it spends from.</summary>
-    public static readonly IReadOnlyList<string> DefaultOrder = new[] { Investigation, Internet, Mail, CitizenAccount, Orders, Notes, Settings };
+    /// <summary>The eight ids in the desktop's default order (Arrange lays them out in it; the Start menu lists them in it): Portals after the case it serves, Orders after the account it spends from.</summary>
+    public static readonly IReadOnlyList<string> DefaultOrder = new[] { Investigation, Portals, Internet, Mail, CitizenAccount, Orders, Notes, Settings };
 }

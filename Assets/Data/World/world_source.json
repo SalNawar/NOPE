@@ -15552,6 +15552,12 @@
         "tier": "Full"
       },
       {
+        "key": "portals.state.underMaintenance",
+        "text": "Under maintenance",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "portals.state.maintenance",
         "text": "Under maintenance · repair it in Orders ({0})",
         "gloss": "None",

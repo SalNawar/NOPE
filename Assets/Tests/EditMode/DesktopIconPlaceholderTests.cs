@@ -11,6 +11,12 @@ public class DesktopIconPlaceholderTests
     private static IEnumerable<string> Everything => DesktopAppIds.DefaultOrder.Concat(DesktopIconPlaceholder.OrdersGlyphs);
 
     [Test]
+    public void PortalsHasAGlyph()
+    {
+        Assert.IsNotNull(DesktopIconPlaceholder.Render(DesktopAppIds.Portals), "the portals spec v3 PA1: a ring on its base");
+    }
+
+    [Test]
     public void OrdersHasAGlyph_AndTheTreeHasItsBandsAndBadges()
     {
         Assert.IsNotNull(DesktopIconPlaceholder.Render(DesktopAppIds.Orders));
