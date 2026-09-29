@@ -1278,4 +1278,39 @@ public class InterviewScriptTests
         Assert.AreEqual("But... I did everything right.", said[0].Text);
         CollectionAssert.IsEmpty(InterviewScript.Reaction(ReactingLines(), Case(), ReactionVerdict.Accepted, ReactionIntent.Lying, string.Empty), "no row: nothing said");
     }
+
+    // ---- The slip (T10) ----
+
+    private static InterviewCase Slipped(InterviewCase c)
+    {
+        c.slip = new LineText("interview.slips.4", "Home. Yes. {place}. I say it every morning so I don't forget.");
+        return c;
+    }
+
+    [Test]
+    public void Build_ASlipFollowsTheSmallTalkReply()
+    {
+        DialogChoice talk = Build(Slipped(Case())).Node(InterviewScript.AskNodeId).Choices.Single(c => c.Id == "smalltalk");
+        Assert.AreEqual(3, talk.Lines.Count);
+        Assert.AreEqual("The Nile rose right on time.", talk.Lines[1].Text);
+        Assert.AreEqual(("interview.slips.4", DialogSpeaker.Traveller, "Home. Yes. New Kingdom Egypt (Ancient). I say it every morning so I don't forget."),
+                        (talk.Lines[2].Id, talk.Lines[2].Speaker, talk.Lines[2].Text));
+    }
+
+    [Test]
+    public void Build_ASlipIsNotAnAnswerLine()
+    {
+        DialogChoice talk = Build(Slipped(Case())).Node(InterviewScript.AskNodeId).Choices.Single(c => c.Id == "smalltalk");
+        Assert.IsFalse(talk.Lines[2].IsAnswer, "never compare-clickable, never evidence");
+        Assert.IsNull(talk.Lines[2].Value);
+    }
+
+    [Test]
+    public void Build_NoSlipLeavesSmallTalkAsBefore()
+    {
+        DialogChoice talk = Build(Case()).Node(InterviewScript.AskNodeId).Choices.Single(c => c.Id == "smalltalk");
+        Assert.AreEqual(2, talk.Lines.Count);
+        CollectionAssert.IsEmpty(Build(Slipped(Case(smallTalk: false))).Node(InterviewScript.AskNodeId).Choices.Where(c => c.Id == "smalltalk"),
+                                 "no small talk: nowhere to slip");
+    }
 }

@@ -36,6 +36,9 @@ public sealed class InterviewCase
     /// <summary>Who speaks (CaseInstance's personality or premade and dialog seed): every reply is resolved in their voice (Voices); null says the defaults.</summary>
     public Voice voice;
 
+    /// <summary>The liar's slip (CaseInstance.slip, resolved at generation: Voices.Slip; {place} filled here), said once right after their small-talk reply; null for none (the personalities spec's T9-T10).</summary>
+    public LineText slip;
+
     /// <summary>The traveller's visible garments (TravellerLook.Garments); none means no look menu.</summary>
     public IReadOnlyList<Garment> garments;
 }
@@ -269,6 +272,10 @@ public static class InterviewScript
                 Kind = DialogChoiceKind.Question
             });
         }
+
+        // The slip (T10): a plain traveller line after the small-talk reply, never an answer.
+        if (c != null && c.smallTalk != null && c.slip != null && !string.IsNullOrWhiteSpace(c.slip.text))
+            ask.Choices[ask.Choices.Count - 1].Lines.Add(Say(c.slip, c, null));
 
         if (ask.Choices.Count > 1)
             hub.Choices.Add(new DialogChoice { Id = "ask", Label = lines.askLabel, Next = AskNodeId, Kind = DialogChoiceKind.Question });
