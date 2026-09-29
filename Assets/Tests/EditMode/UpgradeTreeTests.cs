@@ -182,6 +182,23 @@ public class UpgradeTreeTests
     }
 
     [Test]
+    public void Step_TheArrowsFollowTheLinksAndTheTiers()
+    {
+        TreeLayout layout = UpgradeTree.Layout(Catalogue);
+
+        Assert.AreEqual("scanner_autofeed", UpgradeTree.Step(layout, null, 1, 0), "no selection: the first node");
+        Assert.AreEqual("adv_scanner", UpgradeTree.Step(layout, "scanner_autofeed", 1, 0), "right: its dependant");
+        Assert.AreEqual("scanner_autofeed", UpgradeTree.Step(layout, "adv_scanner", -1, 0), "left: its prerequisite");
+        Assert.IsNull(UpgradeTree.Step(layout, "adv_scanner", 1, 0), "nothing needs it");
+        Assert.AreEqual("tr_east_asia_spoken", UpgradeTree.Step(layout, "interview_protocols", 1, 0), "the first of its dependants");
+        Assert.AreEqual("interview_protocols", UpgradeTree.Step(layout, "scanner_autofeed", 0, 1), "down: the next node of the tier, across bands");
+        Assert.AreEqual("tr_mediterranean_spoken", UpgradeTree.Step(layout, "tr_east_asia_spoken", 0, 1));
+        Assert.AreEqual("adv_scanner", UpgradeTree.Step(layout, "tr_east_asia_spoken", 0, -1), "up: the tier's node above");
+        Assert.IsNull(UpgradeTree.Step(layout, "scanner_autofeed", 0, -1));
+        Assert.AreEqual("repair_portal_05", UpgradeTree.Step(layout, "repair_portal_04", 1, 0));
+    }
+
+    [Test]
     public void Problems_NoneForTheCatalogue()
     {
         CollectionAssert.IsEmpty(UpgradeTree.Problems(Catalogue));

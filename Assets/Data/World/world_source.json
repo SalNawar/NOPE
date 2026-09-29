@@ -9522,6 +9522,168 @@
         "tier": "Flavour"
       },
       {
+        "key": "icon.orders",
+        "text": "Orders",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "window.orders",
+        "text": "Orders",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.wallet",
+        "text": "Wallet {0} · Orders are paid now and arrive at the start of tomorrow's shift; cancel one today for a refund.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.price",
+        "text": "{0} {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.tooDear",
+        "text": "{0} {1} · not enough {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.needs",
+        "text": "Needs: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.inTransit",
+        "text": "In transit · arrives day {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.delivered",
+        "text": "Delivered day {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.owned",
+        "text": "Owned",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.installed",
+        "text": "Installed",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.stored",
+        "text": "In storage",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.installsTomorrow",
+        "text": "Installs tomorrow",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.leavesTomorrow",
+        "text": "Swapped out tomorrow",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.order",
+        "text": "Order",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.cancel",
+        "text": "Cancel order",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.install",
+        "text": "Install tomorrow",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.keep",
+        "text": "Keep installed",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.cancelInstall",
+        "text": "Cancel install",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.select",
+        "text": "Select an item in the tree to see it here.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.none",
+        "text": "None",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.branch.desk",
+        "text": "Desk equipment",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.branch.interview",
+        "text": "Interview",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.branch.portals",
+        "text": "Portals",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.branch.contacts",
+        "text": "Contacts",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.from.supply",
+        "text": "Temporal Customs Supply",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.subject.delivery",
+        "text": "Your order has arrived",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.body.delivery",
+        "text": "Delivered this morning and in force from today's shift:",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "icon.investigation",
         "text": "Investigation",
         "gloss": "None",
@@ -10784,6 +10946,18 @@
       {
         "key": "keys.icons",
         "text": "Desktop: select the nearest icon that way",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.orders",
+        "text": "Orders: move along the tree (to a prerequisite, a dependant, or up and down a column)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.ordersAct",
+        "text": "Orders: order, cancel or install the selected item",
         "gloss": "None",
         "tier": "Full"
       },
@@ -12396,6 +12570,10 @@
             "text": "ملاحظات"
           },
           {
+            "key": "icon.orders",
+            "text": "الطلبات"
+          },
+          {
             "key": "icon.investigation",
             "text": "التحقيق"
           },
@@ -12512,6 +12690,10 @@
           {
             "key": "icon.notes",
             "text": "Σημειώσεις"
+          },
+          {
+            "key": "icon.orders",
+            "text": "Παραγγελίες"
           },
           {
             "key": "icon.investigation",
@@ -12632,6 +12814,10 @@
             "text": "Appunti"
           },
           {
+            "key": "icon.orders",
+            "text": "Ordini"
+          },
+          {
             "key": "icon.investigation",
             "text": "Indagine"
           },
@@ -12748,6 +12934,10 @@
           {
             "key": "icon.notes",
             "text": "Notizen"
+          },
+          {
+            "key": "icon.orders",
+            "text": "Bestellungen"
           },
           {
             "key": "icon.investigation",
@@ -12868,6 +13058,10 @@
             "text": "便笺"
           },
           {
+            "key": "icon.orders",
+            "text": "订单"
+          },
+          {
             "key": "icon.investigation",
             "text": "调查"
           },
@@ -12984,6 +13178,10 @@
           {
             "key": "icon.notes",
             "text": "メモ"
+          },
+          {
+            "key": "icon.orders",
+            "text": "注文"
           },
           {
             "key": "icon.investigation",

@@ -250,6 +250,66 @@ public static class UpgradeTree
         return Chain(id ?? string.Empty, byId, new HashSet<string>(StringComparer.Ordinal));
     }
 
+    /// <summary>
+    /// The node the arrows move the selection to (the portals spec v3 OR9):
+    /// right (<paramref name="dx"/> 1) the first dependant, left (-1) the
+    /// first prerequisite (the first in band then slot order), up or down
+    /// (<paramref name="dy"/> -1 or 1) the nearest node of the same tier in
+    /// that direction, reading the bands top to bottom; null when nothing lies
+    /// that way. With no selection (or an unknown one) any arrow selects the
+    /// first node.
+    /// </summary>
+    public static string Step(TreeLayout layout, string from, int dx, int dy)
+    {
+        if (layout == null || layout.Cells.Count == 0)
+            return null;
+
+        var top = new int[layout.Bands.Count];
+        for (int i = 1; i < top.Length; i++)
+            top[i] = top[i - 1] + layout.Bands[i - 1].Slots;
+        int Row(TreeCell c) => top[c.Band] + c.Slot;
+
+        TreeCell? current = null;
+        foreach (TreeCell c in layout.Cells)
+            if (c.Id == from)
+                current = c;
+        TreeCell? best = null;
+        if (current == null)
+        {
+            foreach (TreeCell c in layout.Cells)
+                if (best == null || Row(c) < Row(best.Value) || (Row(c) == Row(best.Value) && c.Tier < best.Value.Tier))
+                    best = c;
+            return best?.Id;
+        }
+
+        TreeCell at = current.Value;
+        foreach (TreeCell c in layout.Cells)
+        {
+            bool candidate;
+            if (dx > 0)
+                candidate = HasLink(layout, at.Id, c.Id);
+            else if (dx < 0)
+                candidate = HasLink(layout, c.Id, at.Id);
+            else
+                candidate = c.Tier == at.Tier && (dy > 0 ? Row(c) > Row(at) : Row(c) < Row(at));
+            if (!candidate)
+                continue;
+            bool better = best == null || (dx != 0 ? Row(c) < Row(best.Value) : dy > 0 ? Row(c) < Row(best.Value) : Row(c) > Row(best.Value));
+            if (better)
+                best = c;
+        }
+        return best?.Id;
+    }
+
+    /// <summary>True when the layout links <paramref name="from"/> to <paramref name="to"/>.</summary>
+    private static bool HasLink(TreeLayout layout, string from, string to)
+    {
+        foreach (TreeLink link in layout.Links)
+            if (link.From == from && link.To == to)
+                return true;
+        return false;
+    }
+
     /// <summary>True when every prerequisite of <paramref name="node"/> is owned (a prerequisite in transit is not).</summary>
     public static bool Unlocked(TreeNode node, Func<string, bool> owned) => Missing(node, owned).Count == 0;
 

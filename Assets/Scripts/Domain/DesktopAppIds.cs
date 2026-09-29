@@ -31,6 +31,6 @@ public static class DesktopAppIds
     /// <summary>Settings.</summary>
     public const string Settings = "settings";
 
-    /// <summary>The ids in the desktop's default order (Arrange lays them out in it; the Start menu lists them in it). Orders joins after the account it spends from once its window is built (parked: not yet).</summary>
-    public static readonly IReadOnlyList<string> DefaultOrder = new[] { Investigation, Internet, Mail, CitizenAccount, Notes, Settings };
+    /// <summary>The seven ids in the desktop's default order (Arrange lays them out in it; the Start menu lists them in it): Orders after the account it spends from.</summary>
+    public static readonly IReadOnlyList<string> DefaultOrder = new[] { Investigation, Internet, Mail, CitizenAccount, Orders, Notes, Settings };
 }

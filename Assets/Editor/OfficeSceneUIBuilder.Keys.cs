@@ -100,6 +100,7 @@ public static partial class OfficeSceneUIBuilder
         DesktopWindow card = Need(windowLayer, "ShortcutsWindow")?.GetComponent<DesktopWindow>();
         DesktopContextMenu menu = Need(root, "ContextMenu")?.GetComponent<DesktopContextMenu>();
         NotesWindow notes = root.GetComponentInChildren<NotesWindow>(true);
+        OrdersWindow orders = root.GetComponentInChildren<OrdersWindow>(true);
 
         DesktopKeyboard keyboard = GetOrAdd<DesktopKeyboard>(root.gameObject);
         var so = new SerializedObject(keyboard);
@@ -110,6 +111,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "contextMenu", menu);
         Wire(so, "app", app.App);
         Wire(so, "notes", notes);
+        Wire(so, "orders", orders);
         Wire(so, "card", card);
         so.ApplyModifiedProperties();
 
