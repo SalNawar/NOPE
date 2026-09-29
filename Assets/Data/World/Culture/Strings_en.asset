@@ -1396,10 +1396,6 @@ MonoBehaviour:
     text: 'Stranded in transit: {0}   (an Economy transponder failed)'
     gloss: 0
     tier: 0
-  - key: results.strandingFine
-    text: 'Stranding fine: -{0}   (let through without a signed waiver)'
-    gloss: 0
-    tier: 0
   - key: scanner.idle
     text: 'No deviations documented.
 

@@ -1982,7 +1982,6 @@ MonoBehaviour:
       amountMax: 0
       prefix: TI
     strandChance: 0.08
-    strandFine: 150
   news:
     debt:
     - Debt Relief Departures reach a record high.
