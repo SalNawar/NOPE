@@ -28,6 +28,8 @@ public static partial class ContentLibraryValidator
         int slots = desk.paperSpawnSlots != null ? desk.paperSpawnSlots.Length : 0;
         if (slots < maxPapers)
             problems.Add($"The desk has {slots} paper spawn slots but a traveller can carry {maxPapers} papers; add slots in Desk_Default.");
+        if (desk.reactionSeconds < 0f || desk.reactionSeconds > 10f)
+            problems.Add($"Desk_Default's reactionSeconds is {desk.reactionSeconds}; keep it within 0 (the traveller leaves at once) and 10.");
 
         problems.AddRange(FormFitProblems(library));
 

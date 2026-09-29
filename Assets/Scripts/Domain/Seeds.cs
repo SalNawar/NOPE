@@ -193,6 +193,17 @@ public static class Seeds
     /// </summary>
     public static int ForStrandings(int daySeed) => Mix(daySeed, StrandingSalt);
 
+    /// <summary>Salt for a liar's slip stream ("SLIP").</summary>
+    public const int SlipSalt = 0x534C4950;
+
+    /// <summary>
+    /// Seed for one liar's slip roll (the personalities spec's T9): one draw
+    /// against the day's slipChance, after the lie is planned; apart from every
+    /// other stream, so a slip never moves who travels, who lies or what they
+    /// carry, and nothing but the slip reads it.
+    /// </summary>
+    public static int ForSlip(int caseSeed) => Mix(caseSeed, SlipSalt);
+
     /// <summary>Salt for a traveller's personality stream ("PRSN").</summary>
     public const int PersonalitySalt = 0x5052534E;
 

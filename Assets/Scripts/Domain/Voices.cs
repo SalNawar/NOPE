@@ -33,8 +33,23 @@ public sealed class VoiceLine
     /// <summary>A missing form's variant (Honest: the kind never needs it; Missing: they left it out).</summary>
     public MissingFormVariant variant;
 
+    /// <summary>A reaction's verdict (the stamp: Accepted or Denied; the personalities spec's R2).</summary>
+    public ReactionVerdict verdict;
+
+    /// <summary>A reaction's intent (Honest or Lying; R2).</summary>
+    public ReactionIntent intent;
+
+    /// <summary>A reaction's fault reason (Faults.Reasons: forged, smuggled, closed, panic...); blank: any.</summary>
+    public string reason = string.Empty;
+
+    /// <summary>A slip's lie kind (a LieKind's name); blank: any (the personalities spec's T10).</summary>
+    public string lie = string.Empty;
+
     /// <summary>The line ("interview.voices.{list}.{voice}.{n}"), with the slot's tokens.</summary>
     public LineText line = new LineText();
+
+    /// <summary>A reaction's second line ("{line id}.then"); blank text: none (R1).</summary>
+    public LineText then = new LineText();
 }
 
 /// <summary>The personalities' and premades' rows, one list per voice slot (world_source.json interview.voices; the defaults stay where they were, InterviewLines).</summary>
@@ -58,6 +73,12 @@ public sealed class VoiceBook
 
     /// <summary>The personality's (or a premade's) small talk ({place}).</summary>
     public List<VoiceLine> smallTalk = new List<VoiceLine>();
+
+    /// <summary>The reaction to the stamp, by verdict, intent and optionally a fault reason: a line and an optional then line ({place}; the personalities spec's R1-R3).</summary>
+    public List<VoiceLine> reactions = new List<VoiceLine>();
+
+    /// <summary>A liar's slip after small talk, optionally by lie kind ({place}; T9-T11).</summary>
+    public List<VoiceLine> slips = new List<VoiceLine>();
 }
 
 /// <summary>How small talk picks its source (world_source.json interview.smallTalkWeights; the personalities spec's V5): the personality's lines, the home's, the kind's.</summary>
@@ -142,6 +163,12 @@ public static class VoiceKeys
 
     /// <summary>The answer to question <paramref name="questionId"/>.</summary>
     public static string Answer(string questionId) => "answer:" + questionId;
+
+    /// <summary>A liar's slip.</summary>
+    public const string Slip = "slip";
+
+    /// <summary>The reaction to <paramref name="verdict"/> with <paramref name="intent"/>.</summary>
+    public static string Reaction(ReactionVerdict verdict, ReactionIntent intent) => $"reaction:{verdict}:{intent}";
 }
 
 /// <summary>
@@ -266,6 +293,42 @@ public static class Voices
         double u = (uint)Seeds.Mix(voice.Seed, Seeds.OfKey(VoiceKeys.SmallTalkSource)) / 4294967296.0;
         (float weight, IReadOnlyList<LineText> lines) source = WeightedRandom.Pick(sources, s => s.weight, new FixedValue((float)u));
         return source.lines != null ? source.lines[Pick(voice.Seed, VoiceKeys.SmallTalk, source.lines.Count)] : null;
+    }
+
+    /// <summary>
+    /// The traveller's reaction to the stamp (the personalities spec's R1-R3,
+    /// §6): the voice's rows of <paramref name="verdict"/> and
+    /// <paramref name="intent"/> (a row naming <paramref name="reason"/>, the
+    /// case's fault reason, scores 4; a row naming another reason never
+    /// matches), else the defaults (interview.reactions) the same way; one row
+    /// as a value of "reaction:{verdict}:{intent}", its line and then line.
+    /// Null when neither has one.
+    /// </summary>
+    public static VoiceLine Reaction(InterviewLines lines, Voice voice, VoiceContext context, ReactionVerdict verdict, ReactionIntent intent, string reason)
+    {
+        int Key(VoiceLine r) => r.verdict != verdict || r.intent != intent ? ContextMatch.NoMatch
+                              : string.IsNullOrEmpty(r.reason) ? 0 : r.reason == reason ? NamedKeyScore : ContextMatch.NoMatch;
+        return Row(Pool(Book(lines).reactions, voice, context, Key), Defaults(lines?.reactions, context, Key), voice, VoiceKeys.Reaction(verdict, intent));
+    }
+
+    /// <summary>
+    /// A liar's slip (the personalities spec's T10): the voice's slip rows (a
+    /// row naming the traveller's <paramref name="lie"/> kind scores 4; one
+    /// naming another never matches), else the defaults (interview.slips) the
+    /// same way; one line as a value of "slip". Null when neither has one.
+    /// </summary>
+    public static LineText Slip(InterviewLines lines, Voice voice, VoiceContext context, LieKind? lie)
+    {
+        string name = lie.HasValue ? lie.Value.ToString() : string.Empty;
+        int Key(VoiceLine r) => string.IsNullOrEmpty(r.lie) ? 0 : r.lie == name ? NamedKeyScore : ContextMatch.NoMatch;
+        return Row(Pool(Book(lines).slips, voice, context, Key), Defaults(lines?.slips, context, Key), voice, VoiceKeys.Slip)?.line;
+    }
+
+    /// <summary>One row of the voice's pool, else of the defaults' pool, as a value of <paramref name="slotKey"/>; null when both are empty.</summary>
+    private static VoiceLine Row(List<VoiceLine> pool, List<VoiceLine> defaults, Voice voice, string slotKey)
+    {
+        List<VoiceLine> from = pool.Count > 0 ? pool : defaults;
+        return from.Count == 0 ? null : from[Pick(voice != null ? voice.Seed : 0, slotKey, from.Count)];
     }
 
     /// <summary>The best tier of default rows (a row names no voice, or its voice is ignored): the kinds' small talk.</summary>

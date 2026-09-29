@@ -81,6 +81,13 @@ public sealed class DayPlanSO : ScriptableObject
     [SerializeField, Range(0f, 1f)] private float costumeErrorChance;
 
     /// <summary>
+    /// Chance per generated liar of a slip after their small talk (the
+    /// personalities spec's T9; Slips.Roll on Seeds.ForSlip). Written by
+    /// Tools > TimeDesk > Generate World from world_source.json days[].slipChance.
+    /// </summary>
+    [SerializeField, Range(0f, 1f)] private float slipChance;
+
+    /// <summary>
     /// The lies enabled today (traveller types §6.1; a traveller draws among
     /// those that fit their kind, LieKinds.For, on the lie roll). Written by
     /// Tools > TimeDesk > Generate World from world_source.json days[].lies.
@@ -156,6 +163,9 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Chance per 2150 citizen of a costume error today.</summary>
     public float CostumeErrorChance => costumeErrorChance;
+
+    /// <summary>Chance per generated liar of a slip today (T9).</summary>
+    public float SlipChance => slipChance;
 
     /// <summary>The lies enabled today, in authored order (empty when unset).</summary>
     public IReadOnlyList<LieKind> EnabledLies => lieKinds ?? Array.Empty<LieKind>();

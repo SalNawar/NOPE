@@ -444,6 +444,32 @@ public sealed class InvestigationUIController : MonoBehaviour
             app.SetCounters(_documents.Papers, _evidence.Count);
     }
 
+    /// <summary>
+    /// The decided traveller's reaction (the personalities spec's R1-R4): the
+    /// verdict, their intent (ReactionIntents.Of: a place lie or a record lie
+    /// is Lying) and fault reason choose one or two lines in their voice,
+    /// appended to the transcript and said in the bubble in turn. Returns how
+    /// long the traveller stays (0: they leave at once). Scores nothing.
+    /// </summary>
+    public float React(CaseInstance inst, bool accepted)
+    {
+        if (inst == null || _interview == null)
+            return 0f;
+
+        ReactionVerdict verdict = accepted ? ReactionVerdict.Accepted : ReactionVerdict.Denied;
+        ReactionIntent intent = ReactionIntents.Of(inst.IsLiar, inst.IsForger);
+        IReadOnlyList<DialogLine> lines = _interview.React(inst, verdict, intent);
+        Debug.Log($"[InvestigationUIController] Reaction ({verdict} · {intent}, reason '{inst.FaultReason}'): {string.Join(" / ", lines.Select(l => l.Text))}");
+        return wheel != null ? wheel.React(lines) : 0f;
+    }
+
+    /// <summary>The decided traveller has left (or the next is called): their reaction's bubble hides.</summary>
+    public void EndReaction()
+    {
+        if (wheel != null)
+            wheel.EndReaction();
+    }
+
     private void Accept() => Decide(true);
 
     private void Deny() => Decide(false);

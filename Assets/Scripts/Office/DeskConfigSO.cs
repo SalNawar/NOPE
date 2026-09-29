@@ -114,6 +114,9 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Where the bubble's centre sits from the traveller's anchor (overlay reference px): above the head, clear of the wheel's top item (radius y + half an item + half the bubble).</summary>
     public Vector2 bubbleOffset = new Vector2(0f, 290f);
 
+    /// <summary>Seconds the traveller stays after their reaction's last line is fully shown, then leaves (the personalities spec's R4; 0 leaves at once, the reaction only in the transcript); calling the next traveller ends it at once. Authored here: Generate World never writes it.</summary>
+    [Min(0f)] public float reactionSeconds = 2.5f;
+
     [Header("Examine (piece 10)")]
     /// <summary>Papers held in the hand: the office slots, the dip under the wheel, the region beside the PC frame, the distance from the camera and the rise's time (screen heights, metres, seconds).</summary>
     public ExamineTuning examine = new ExamineTuning();

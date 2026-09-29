@@ -66,6 +66,9 @@ public static class Faults
     /// <summary>A recalled transponder ("Approved a recalled transponder."; days 7-15 §6).</summary>
     public const string Recalled = "recalled";
 
+    /// <summary>Every fault reason a reaction row may name (the personalities spec's R2): the lies', the directive faults' and the costume error's panic.</summary>
+    public static readonly string[] Reasons = { Forged, Disguised, Smuggled, Closed, WrongDate, Expired, Incomplete, Frozen, CostumeErrors.FaultReason };
+
     /// <summary>The reason of a directive fault; empty for none.</summary>
     public static string Reason(DirectiveFault fault)
     {

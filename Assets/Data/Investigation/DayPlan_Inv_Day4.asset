@@ -39,6 +39,7 @@ MonoBehaviour:
   tellCount: 1
   tellChannels: 000000000100000002000000
   costumeErrorChance: 0.05
+  slipChance: 0.15
   lieKinds: 01000000020000000700000005000000060000000800000004000000
   violationChance: 0.05
   activeTravelRules:

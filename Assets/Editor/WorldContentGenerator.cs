@@ -1773,6 +1773,7 @@ public static partial class WorldContentGenerator
         SerializedArrays.Set(so, "availableLegendaries", (d.premades ?? Array.Empty<string>()).Select(id => (Object)premades[id]).ToArray());
         so.FindProperty("legendaryBaseChance").floatValue = d.premadeChance;
         so.FindProperty("costumeErrorChance").floatValue = d.costumeErrorChance;
+        so.FindProperty("slipChance").floatValue = d.slipChance;
         so.FindProperty("violationChance").floatValue = d.violationChance;
         SerializedArrays.Set(so, "allowedNations", (d.countries ?? Array.Empty<string>()).Select(c => (Object)nations[c]).ToArray());
         SerializedArrays.Set(so, "activeTravelRules", (d.rules ?? Array.Empty<string>()).Select(r => (Object)rules[r]).ToArray());
@@ -1874,7 +1875,9 @@ public static partial class WorldContentGenerator
         menuCapacity = i.menuCapacity,
         smallTalkWeights = BuildWeights(i.smallTalkWeights),
         kindSmallTalk = BuildKindTalk(i.kindSmallTalk),
-        voices = BuildVoices(i.voices)
+        voices = BuildVoices(i.voices),
+        reactions = VoiceRows("reactions", i.reactions, r => null, "reactions"),
+        slips = VoiceRows("slips", i.slips, r => null, "slips")
     };
 
     /// <summary>The id of a missing-form reply's line, "interview.missingFormReplies.{kind}.{request}.{variant}": BuildReplies writes it, CheckInterview checks it.</summary>
@@ -2384,6 +2387,8 @@ public static partial class WorldContentGenerator
         public float premadeChance;
         /// <summary>Chance per 2150 citizen of a costume error (0..1).</summary>
         public float costumeErrorChance;
+        /// <summary>Chance per generated liar of a slip after small talk (0..1; the personalities spec's T9).</summary>
+        public float slipChance;
         /// <summary>Chance per honest traveller of breaking a rolled procedure (0..1; traveller types P4).</summary>
         public float violationChance;
     }
@@ -2421,6 +2426,10 @@ public static partial class WorldContentGenerator
         public SmallTalkWeightsData smallTalkWeights;
         /// <summary>The kinds' small talk, one of its three sources.</summary>
         public KindTalkData[] kindSmallTalk;
+        /// <summary>The default reactions to the stamp (verdict, intent, reason, kinds, era, text, then; the personalities spec's R1-R3).</summary>
+        public VoiceRowData[] reactions;
+        /// <summary>The default slips, by lie kind (T10).</summary>
+        public VoiceRowData[] slips;
         /// <summary>The personalities' and premades' own lines, one list per slot.</summary>
         public VoicesData voices;
     }

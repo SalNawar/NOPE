@@ -1240,4 +1240,77 @@ public class InterviewScriptTests
         Assert.IsTrue(ask.Choices.SelectMany(c => c.Lines).All(l => l.Expression == null), "prompts, answers and small talk carry no expression");
         Assert.IsTrue(graph.Node(InterviewScript.HubNodeId).Choices.SelectMany(c => c.Lines).All(l => l.Expression == null), "requests carry none");
     }
+
+    // ---- The reaction (R1, §6) ----
+
+    private static InterviewLines ReactingLines()
+    {
+        InterviewLines lines = VoicedLines();
+        lines.reactions.Add(new VoiceLine { verdict = ReactionVerdict.Denied, intent = ReactionIntent.Honest, line = new LineText("interview.reactions.1", "But... I did everything right.") });
+        lines.voices.reactions.Add(new VoiceLine
+        {
+            personality = "curt",
+            verdict = ReactionVerdict.Denied,
+            intent = ReactionIntent.Honest,
+            line = new LineText("interview.voices.reactions.curt.1", "Unbelievable. Home, they said."),
+            then = new LineText("interview.voices.reactions.curt.1.then", "And I paid for the queue to {place}.")
+        });
+        return lines;
+    }
+
+    [Test]
+    public void Reaction_IsOneOrTwoTravellerLinesWithKeyWordSpans()
+    {
+        IReadOnlyList<DialogLine> said = InterviewScript.Reaction(ReactingLines(), Voiced(Case(keyWords: KeyWordRule())), ReactionVerdict.Denied, ReactionIntent.Honest, "closed");
+        Assert.AreEqual(2, said.Count);
+        Assert.AreEqual(("interview.voices.reactions.curt.1", DialogSpeaker.Traveller, "Unbelievable. Home, they said."), (said[0].Id, said[0].Speaker, said[0].Text));
+        Assert.AreEqual(("interview.voices.reactions.curt.1.then", "And I paid for the queue to New Kingdom Egypt (Ancient)."), (said[1].Id, said[1].Text));
+        Assert.AreEqual("Home", English(said[0]));
+        Assert.AreEqual("New Kingdom Egypt (Ancient)", English(said[1]), "the place's fill stays English");
+        Assert.IsFalse(said[0].IsAnswer || said[1].IsAnswer, "never evidence");
+    }
+
+    [Test]
+    public void Reaction_NoVoiceSaysTheDefault()
+    {
+        IReadOnlyList<DialogLine> said = InterviewScript.Reaction(ReactingLines(), Case(), ReactionVerdict.Denied, ReactionIntent.Honest, string.Empty);
+        Assert.AreEqual(1, said.Count, "no then line: one line");
+        Assert.AreEqual("But... I did everything right.", said[0].Text);
+        CollectionAssert.IsEmpty(InterviewScript.Reaction(ReactingLines(), Case(), ReactionVerdict.Accepted, ReactionIntent.Lying, string.Empty), "no row: nothing said");
+    }
+
+    // ---- The slip (T10) ----
+
+    private static InterviewCase Slipped(InterviewCase c)
+    {
+        c.slip = new LineText("interview.slips.4", "Home. Yes. {place}. I say it every morning so I don't forget.");
+        return c;
+    }
+
+    [Test]
+    public void Build_ASlipFollowsTheSmallTalkReply()
+    {
+        DialogChoice talk = Build(Slipped(Case())).Node(InterviewScript.AskNodeId).Choices.Single(c => c.Id == "smalltalk");
+        Assert.AreEqual(3, talk.Lines.Count);
+        Assert.AreEqual("The Nile rose right on time.", talk.Lines[1].Text);
+        Assert.AreEqual(("interview.slips.4", DialogSpeaker.Traveller, "Home. Yes. New Kingdom Egypt (Ancient). I say it every morning so I don't forget."),
+                        (talk.Lines[2].Id, talk.Lines[2].Speaker, talk.Lines[2].Text));
+    }
+
+    [Test]
+    public void Build_ASlipIsNotAnAnswerLine()
+    {
+        DialogChoice talk = Build(Slipped(Case())).Node(InterviewScript.AskNodeId).Choices.Single(c => c.Id == "smalltalk");
+        Assert.IsFalse(talk.Lines[2].IsAnswer, "never compare-clickable, never evidence");
+        Assert.IsNull(talk.Lines[2].Value);
+    }
+
+    [Test]
+    public void Build_NoSlipLeavesSmallTalkAsBefore()
+    {
+        DialogChoice talk = Build(Case()).Node(InterviewScript.AskNodeId).Choices.Single(c => c.Id == "smalltalk");
+        Assert.AreEqual(2, talk.Lines.Count);
+        CollectionAssert.IsEmpty(Build(Slipped(Case(smallTalk: false))).Node(InterviewScript.AskNodeId).Choices.Where(c => c.Id == "smalltalk"),
+                                 "no small talk: nowhere to slip");
+    }
 }

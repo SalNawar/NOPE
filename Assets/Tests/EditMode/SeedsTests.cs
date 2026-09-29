@@ -106,7 +106,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.RecoverySalt, Seeds.BreakInSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -166,6 +166,13 @@ public class SeedsTests
     }
 
     /// <summary>The personality stream's salt is "PRSN" (the personalities spec's PS2).</summary>
+    [Test]
+    public void SlipSalt_IsPinned()
+    {
+        Assert.AreEqual(0x534C4950, Seeds.SlipSalt, "\"SLIP\"");
+        Assert.AreEqual(Seeds.Mix(12345, 0x534C4950), Seeds.ForSlip(12345));
+    }
+
     [Test]
     public void PersonalitySalt_IsPinned()
     {

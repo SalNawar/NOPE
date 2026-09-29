@@ -414,4 +414,22 @@ public class SpeechQueueTests
         instant.Tick(1f);
         Assert.AreEqual("Hi", instant.Text, "even with no minimum and no hold");
     }
+
+    /// <summary>The reaction's linger reads how long the queued lines take to be fully shown (the personalities spec's R4).</summary>
+    [Test]
+    public void SecondsUntilShown_CoversEveryQueuedLine()
+    {
+        SpeechQueue q = Queue();
+        Assert.AreEqual(0f, q.SecondsUntilShown, "nothing said");
+
+        q.Say("0123456789", null);
+        Assert.AreEqual(1f, q.SecondsUntilShown, 1e-4f, "one line: its typing");
+        q.Say("01234", null);
+        Assert.AreEqual(1f + 1f + 0.5f, q.SecondsUntilShown, 1e-4f, "the first line's typing and minimum, then the second's typing");
+
+        q.Tick(0.5f);
+        Assert.AreEqual(2f, q.SecondsUntilShown, 1e-4f);
+        q.Tick(2f);
+        Assert.AreEqual(0f, q.SecondsUntilShown, 1e-4f, "the last line is fully shown");
+    }
 }

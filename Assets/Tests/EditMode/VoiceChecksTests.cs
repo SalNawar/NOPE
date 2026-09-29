@@ -59,7 +59,34 @@ public class VoiceChecksTests
         input.Voices.spoken.Add(Row("Said it once. That was billed.", key: "speak_up"));
         input.Voices.answers.Add(Row("{value}. Not that it'll be enough.", "glum", key: "q_currency"));
         input.Voices.smallTalk.Add(Row("The maglev was late. So was my pay.", "glum"));
+        foreach (ReactionVerdict verdict in new[] { ReactionVerdict.Accepted, ReactionVerdict.Denied })
+            foreach (ReactionIntent intent in new[] { ReactionIntent.Honest, ReactionIntent.Lying })
+            {
+                input.DefaultReactions.Add(Reaction($"Default {verdict} {intent}.", null, verdict, intent));
+                input.Voices.reactions.Add(Reaction($"Curt {verdict} {intent}.", "curt", verdict, intent));
+                input.Voices.reactions.Add(Reaction($"Glum {verdict} {intent}.", "glum", verdict, intent, then: "Same time tomorrow, then."));
+            }
+        input.DefaultSlips.Add(Slip("Everything's in order. Don't check.", null));
+        input.Voices.slips.Add(Slip("If this goes wrong, tell my creditors I tried.", "glum"));
+        input.SlipChances = new[] { (1, 0.15f), (2, 0f), (3, 1f) };
         return input;
+    }
+
+    private static VoiceLine Reaction(string text, string personality, ReactionVerdict verdict, ReactionIntent intent, string reason = null, string then = null, string premade = null)
+    {
+        VoiceLine row = Row(text, personality, premade);
+        row.verdict = verdict;
+        row.intent = intent;
+        row.reason = reason ?? string.Empty;
+        row.then = new LineText("id.then", then);
+        return row;
+    }
+
+    private static VoiceLine Slip(string text, string personality, string lie = null)
+    {
+        VoiceLine row = Row(text, personality);
+        row.lie = lie ?? string.Empty;
+        return row;
     }
 
     private static string Errors(VoiceCheckInput input) => string.Join("\n", VoiceChecks.Problems(input).Errors);
@@ -260,8 +287,171 @@ public class VoiceChecksTests
         List<string> info = VoiceChecks.Problems(Input()).Info;
         CollectionAssert.AreEqual(new[]
         {
-            "Personality 'curt' (Curt) has its own lines for claims, handOver, missingForms, spoken; the defaults speak its answers, smallTalk.",
-            "Personality 'glum' (Glum) has its own lines for answers, smallTalk; the defaults speak its claims, handOver, missingForms, spoken."
+            "Personality 'curt' (Curt) has its own lines for claims, handOver, missingForms, spoken, reactions; the defaults speak its answers, smallTalk, slips.",
+            "Personality 'glum' (Glum) has its own lines for answers, smallTalk, reactions, slips; the defaults speak its claims, handOver, missingForms, spoken."
         }, info);
+    }
+
+    // ---- The reactions (the personalities spec's R1-R3) ----
+
+    [Test]
+    public void Reactions_TheFourDefaultsAreRequired()
+    {
+        VoiceCheckInput input = Input();
+        input.DefaultReactions.RemoveAll(r => r.verdict == ReactionVerdict.Denied && r.intent == ReactionIntent.Lying);
+        StringAssert.Contains("interview.reactions has no base row for Denied · Lying", Errors(input));
+
+        input = Input();
+        input.DefaultReactions.ForEach(r => { if (r.verdict == ReactionVerdict.Accepted && r.intent == ReactionIntent.Honest) r.kinds.Add(TravellerKind.Displaced); });
+        StringAssert.Contains("no base row for Accepted · Honest", Errors(input), "a row naming kinds is not the base row");
+    }
+
+    [Test]
+    public void Reactions_EveryWeightedPersonalityHasItsFour()
+    {
+        VoiceCheckInput input = Input();
+        input.Voices.reactions.RemoveAll(r => r.personality == "glum" && r.verdict == ReactionVerdict.Accepted && r.intent == ReactionIntent.Lying);
+        StringAssert.Contains("Personality 'glum' (Glum) has no base reaction for Accepted · Lying", Errors(input));
+
+        ((List<Personality>)input.Cast)[1].weight = 0f;
+        StringAssert.DoesNotContain("Personality 'glum'", Errors(input), "a benched personality is never drawn");
+    }
+
+    [Test]
+    public void Reaction_AnUnknownReason()
+    {
+        VoiceCheckInput input = Input();
+        input.Voices.reactions.Add(Reaction("Fine. Keep it.", "curt", ReactionVerdict.Denied, ReactionIntent.Lying, reason: "smuggled"));
+        input.Voices.reactions.Add(Reaction("Closed? How exciting!", "curt", ReactionVerdict.Denied, ReactionIntent.Honest, reason: "panic"));
+        Assert.AreEqual(string.Empty, Errors(input), "smuggled and panic are reasons");
+
+        input.Voices.reactions.Add(Reaction("Oops.", "curt", ReactionVerdict.Denied, ReactionIntent.Lying, reason: "sneezed"));
+        StringAssert.Contains("names the reason 'sneezed'", Errors(input));
+    }
+
+    [Test]
+    public void Reaction_TokensArePlaceOnlyInBothLines()
+    {
+        VoiceCheckInput input = Input();
+        input.Voices.reactions.Add(Reaction("Off to {place}!", "curt", ReactionVerdict.Accepted, ReactionIntent.Honest, reason: "closed", then: "{place} awaits."));
+        Assert.AreEqual(string.Empty, Errors(input));
+
+        input.Voices.reactions.Add(Reaction("Fine.", "curt", ReactionVerdict.Denied, ReactionIntent.Honest, reason: "expired", then: "Keep your {value}."));
+        StringAssert.Contains("(then) holds {value}", Errors(input));
+    }
+
+    [Test]
+    public void Reaction_ThenTooLong()
+    {
+        VoiceCheckInput input = Input();
+        input.Voices.reactions.Add(Reaction("Fine.", "curt", ReactionVerdict.Denied, ReactionIntent.Honest, reason: "expired", then: "{place}! " + new string('a', 80)));
+        StringAssert.Contains("(then) can render", Errors(input));
+    }
+
+    // ---- The slips (T9-T11) ----
+
+    [Test]
+    public void Slip_AFactValueIsRefused()
+    {
+        VoiceCheckInput input = Input();
+        input.Voices.slips.Add(Slip("No Credits in my bag. None.", "curt", "Smuggling"));
+        StringAssert.Contains("a slip hints and never names a value", Errors(input));
+        StringAssert.DoesNotContain("No Credits", Warnings(input), "refused, not warned");
+    }
+
+    [Test]
+    public void Slip_ATransponderModelOrEmployerIsRefused()
+    {
+        VoiceCheckInput input = Input();
+        input.Voices.slips.Add(Slip("My Chronos Elite is definitely mine.", "curt"));
+        input.DefaultSlips.Add(Slip("The Nile Quarry Syndicate never heard of me.", null));
+        string errors = Errors(input);
+        StringAssert.Contains("the transponder model 'Chronos Elite'", errors);
+        StringAssert.Contains("the employer 'Nile Quarry Syndicate'", errors);
+    }
+
+    [Test]
+    public void Slips_ADefaultWithABlankLieIsRequired()
+    {
+        VoiceCheckInput input = Input();
+        input.DefaultSlips[0].lie = "Smuggling";
+        StringAssert.Contains("interview.slips has no row with a blank lie", Errors(input));
+    }
+
+    [Test]
+    public void Slip_AnUnknownLieKind()
+    {
+        VoiceCheckInput input = Input();
+        input.Voices.slips.Add(Slip("Premium, naturally.", "curt", "PoorPosingAsRich"));
+        Assert.AreEqual(string.Empty, Errors(input));
+        input.Voices.slips.Add(Slip("Oops.", "curt", "Jaywalking"));
+        StringAssert.Contains("names the lie kind 'Jaywalking'", Errors(input));
+    }
+
+    [Test]
+    public void SlipChance_WithinZeroAndOne()
+    {
+        VoiceCheckInput input = Input();
+        input.SlipChances = new[] { (1, 0.15f), (4, 1.5f), (5, -0.1f) };
+        string errors = Errors(input);
+        StringAssert.Contains("day 4's slipChance is 1.5", errors);
+        StringAssert.Contains("day 5's slipChance is -0.1", errors);
+        StringAssert.DoesNotContain("day 1's", errors);
+    }
+
+    // ---- The premades (PS3, §4.5) ----
+
+    /// <summary>Senenmut, honest and displaced, with every slot he can reach (the input's two questions, two spoken requests, three refusals).</summary>
+    private static VoiceCheckInput WithSenenmut()
+    {
+        VoiceCheckInput input = Input();
+        VoiceLine P(string text, string key = null, MissingFormVariant variant = MissingFormVariant.Honest) => Row(text, null, "senenmut", key: key, variant: variant);
+        input.Voices.claims.Add(P("Home to {place}. The temple will not finish itself."));
+        input.Voices.handOver.Add(P("Here. Mind the corners; it is my only copy."));
+        input.Voices.spoken.Add(P("Closer. As to a good plan.", "step_closer"));
+        input.Voices.spoken.Add(P("I have addressed quarries louder than this.", "speak_up"));
+        input.Voices.answers.Add(P("{value}, by weight.", "q_currency"));
+        input.Voices.answers.Add(P("{value}. Every overseer has one.", "q_device"));
+        input.Voices.smallTalk.Add(P("Your hall has fine columns. Too thin, but fine."));
+        foreach (string request in new[] { "TC-230", "TC-310", "proof" })
+            input.Voices.missingForms.Add(P($"No {request}. The sky did not ask.", request));
+        input.Voices.reactions.Add(Reaction("May your granaries overflow.", null, ReactionVerdict.Accepted, ReactionIntent.Honest, premade: "senenmut"));
+        input.Voices.reactions.Add(Reaction("The Pharaoh will hear of this.", null, ReactionVerdict.Denied, ReactionIntent.Honest, premade: "senenmut"));
+        input.PremadeIntents = new Dictionary<string, IReadOnlyCollection<ReactionIntent>> { ["senenmut"] = new[] { ReactionIntent.Honest } };
+        input.DisplacedPremades = new[] { "senenmut" };
+        return input;
+    }
+
+    [Test]
+    public void Premades_EverySlotCovered()
+    {
+        Assert.AreEqual(string.Empty, Errors(WithSenenmut()));
+
+        VoiceCheckInput input = WithSenenmut();
+        input.Voices.answers.RemoveAll(r => r.premade == "senenmut" && r.key == "q_device");
+        input.Voices.missingForms.RemoveAll(r => r.premade == "senenmut" && r.key == "proof");
+        input.Voices.reactions.RemoveAll(r => r.premade == "senenmut" && r.verdict == ReactionVerdict.Denied);
+        string errors = Errors(input);
+        StringAssert.Contains("The premade 'senenmut' has no line of its own for", errors);
+        StringAssert.Contains("the answer to 'q_device'", errors);
+        StringAssert.Contains("the refusal of 'proof'", errors);
+        StringAssert.Contains("the Denied · Honest reaction", errors);
+
+        input = WithSenenmut();
+        input.PremadeIntents = new Dictionary<string, IReadOnlyCollection<ReactionIntent>> { ["senenmut"] = new[] { ReactionIntent.Honest, ReactionIntent.Lying } };
+        StringAssert.Contains("the Accepted · Lying reaction, the Denied · Lying reaction", Errors(input), "a premade who can lie reacts as a liar too");
+    }
+
+    [Test]
+    public void Premades_ASlipOnlyForALiar()
+    {
+        VoiceCheckInput input = WithSenenmut();
+        input.Voices.slips.Add(Row("I know nothing of forgery.", null, "senenmut"));
+        StringAssert.Contains("The premade 'senenmut' never lies, so it never slips", Errors(input));
+
+        input.PremadeIntents = new Dictionary<string, IReadOnlyCollection<ReactionIntent>> { ["senenmut"] = new[] { ReactionIntent.Lying } };
+        input.Voices.reactions.Add(Reaction("Worth it.", null, ReactionVerdict.Accepted, ReactionIntent.Lying, premade: "senenmut"));
+        input.Voices.reactions.Add(Reaction("Caught.", null, ReactionVerdict.Denied, ReactionIntent.Lying, premade: "senenmut"));
+        StringAssert.DoesNotContain("senenmut", Errors(input));
     }
 }
