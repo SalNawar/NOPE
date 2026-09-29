@@ -8,9 +8,11 @@
 // two papers that disagree through the cross proof first), then a scripted
 // verdict (the right one, except four planned mistakes: an honest traveller
 // denied on day 1, a deviation fault accepted on day 2, one denied without
-// evidence on day 3, a closed destination accepted on day 4). Home: treat any family member at condition 2+,
-// buy Interview Protocols, then the Near East Speech translator, when there is
-// money for it (never the slot machine: its draw is unseeded). Driven by direct
+// evidence on day 3, a closed destination accepted on day 4). During each shift, order at the PC (the Orders
+// app's rule, OrderBook.Order) Interview Protocols, then the Near East Speech translator (it needs the
+// Protocols delivered), at most one a day, once the wallet holds its price and 20 cr more; it arrives the
+// next morning, the day a Home purchase used to take effect. Home: treat any family member at condition 2+
+// (the shop step is skipped: Home stocks no upgrade; never the slot machine: its draw is unseeded). Driven by direct
 // calls from EditorApplication.update in the persistent editor (job runner);
 // never exits the editor. The transcript holds only deterministic content:
 // <out root>/<tag>/play_transcript.txt (+ saves/ and a report; see Root).
@@ -238,6 +240,7 @@ public static class _TimeDeskAuditPlay
             yield return Until(() => o.ReadyArmed || o.Results.activeInHierarchy || _ended, 30f, $"day {day}: READY or the shift report");
             if (o.Results.activeInHierarchy || _ended)
                 break;
+            OrderAtThePc(day);
             ExecuteEvents.Execute(o.Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
             yield return Until(() => Field(o.Ui, "_currentCase") != null && (bool)Field(o.Game, "_travellerAtDesk"), 10f, "the traveller at the desk");
             presented++;
@@ -263,6 +266,24 @@ public static class _TimeDeskAuditPlay
               $"day {day}: every traveller in the queue was decided before closing ({ledger.verdicts.Count}/{RunManager.Instance.GetCurrentDayPlan().VisitorsCount})");
         RecordSave($"day{day}_shift");
         o.GoHome.onClick.Invoke();
+    }
+
+    /// <summary>The day's order, if any: the first of the plan's upgrades that can be ordered now with 20 cr to spare (one a day), through the Orders app's rule.</summary>
+    private static void OrderAtThePc(int day)
+    {
+        WorldState w = RunManager.Instance.World;
+        ContentLibrarySO lib = RunManager.Instance.Library;
+        if (w.orders.Any(e => e.orderedDay == day))
+            return;
+        foreach (string id in new[] { "interview_protocols", "tr_near_east_spoken" })
+        {
+            UpgradeSO upgrade = lib.GetUpgradeById(id);
+            if (upgrade == null || OrderBook.StateOf(w, lib, upgrade) != OrderState.Orderable || w.money < OrderBook.Price(w, lib, upgrade) + 20)
+                continue;
+            bool placed = OrderBook.Order(w, lib, upgrade);
+            Line($"   ordered {id} at the PC: placed={placed} money={w.money} arrives day {day + 1}");
+            return;
+        }
     }
 
     private static IEnumerator Traveller(Office o, int day)
@@ -616,18 +637,7 @@ public static class _TimeDeskAuditPlay
 
         ((Button)Field(ui, "expensesContinueButton")).onClick.Invoke();
         yield return Frames(3);
-        ContentLibrarySO lib = RunManager.Instance.Library;
-        foreach (string id in new[] { "interview_protocols", "tr_near_east_spoken" })
-        {
-            UpgradeSO upgrade = lib.GetUpgradeById(id);
-            if (upgrade == null || w.HasUpgrade(id) || w.money < upgrade.cost + 20)
-                continue;
-            Call(manager, "HandleBuyUpgrade", upgrade);
-            Line($"   bought {id}: owned={w.HasUpgrade(id)} money={w.money}");
-            break;
-        }
-        ((Button)Field(ui, "shopContinueButton")).onClick.Invoke();
-        yield return Frames(3);
+        Check(!((GameObject)Field(ui, "shopPanel")).activeInHierarchy, $"night {day}: Home sells no office upgrade, so its shop step is skipped");
         ((Button)Field(ui, "slotContinueButton")).onClick.Invoke();
         yield return Frames(3);
         foreach (string l in Lines(((TMP_Text)Field(ui, "sleepBodyText")).text))
