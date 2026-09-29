@@ -110,6 +110,7 @@ public static partial class ContentLibraryValidator
         issues += CheckVoices(lib);
         issues += CheckDeskFit(lib);
         issues += CheckUpgradeIds(lib);
+        issues += CheckUpgradeTree(lib);
         issues += CheckTellChannels(lib);
         issues += CheckSmallTalk(lib);
 
@@ -789,6 +790,30 @@ public static partial class ContentLibraryValidator
             }
         }
 
+        return issues;
+    }
+
+    /// <summary>
+    /// The Orders app's upgrade tree (Saleh 2026-09-29): what Generate World
+    /// also checks (UpgradeTree.Problems over every library upgrade: unknown
+    /// or cyclic prerequisites, a prerequisite at another venue, a Home
+    /// upgrade with prerequisites, a negative cost), and an install slot only
+    /// on an Orders upgrade (Home's are owned at once and never swapped).
+    /// </summary>
+    private static int CheckUpgradeTree(ContentLibrarySO lib)
+    {
+        int issues = 0;
+        foreach (string problem in UpgradeTree.Problems(OrderBook.Nodes(lib)))
+        {
+            Debug.LogError($"[ContentLibraryValidator] Upgrades: {problem} ('{lib.name}'; edit the upgrade's Inspector fields, or translation.packs[].requires and Generate World for a translator).", lib);
+            issues++;
+        }
+        foreach (UpgradeSO u in lib.Upgrades)
+            if (u != null && u.venue == UpgradeVenue.Home && !string.IsNullOrEmpty(u.installSlot))
+            {
+                Debug.LogError($"[ContentLibraryValidator] Upgrades: '{u.id}' is sold at Home but has the install slot '{u.installSlot}'; only an Orders upgrade can be swapped.", u);
+                issues++;
+            }
         return issues;
     }
 

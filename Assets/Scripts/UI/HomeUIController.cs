@@ -7,7 +7,8 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Owns the Home phase panels (Phase 4): daily expenses + family condition,
-/// upgrade shop, slot machine, and the sleep prompt that hands off to the
+/// the upgrade shop (Home's upgrades only: the office's are the PC's Orders
+/// app's), slot machine, and the sleep prompt that hands off to the
 /// next day. All references are optional; unwired panels are skipped so the
 /// flow degrades gracefully (HomeManager just calls straight through).
 /// Dynamic rows (family members, shop items) are spawned at runtime in their
@@ -177,9 +178,9 @@ public sealed class HomeUIController : MonoBehaviour
     /// who got worse or better overnight, and one row per family member with
     /// a Treat button at <paramref name="careCost"/> (calls onTreat with the
     /// member's index). Invokes onContinue when the player moves on to the
-    /// House (or immediately if unwired).
+    /// House, or the slot machine when <paramref name="shopNext"/> is false (or immediately if unwired); the continue button names the next step.
     /// </summary>
-    public void ShowExpenses(WorldState world, HomeEconomy.Evening evening, GameConfigSO config, int careCost, Action<int> onTreat, Action onContinue)
+    public void ShowExpenses(WorldState world, HomeEconomy.Evening evening, GameConfigSO config, int careCost, Action<int> onTreat, Action onContinue, bool shopNext)
     {
         if (!HasExpensesPanel || world == null)
         {
@@ -188,6 +189,9 @@ public sealed class HomeUIController : MonoBehaviour
         }
 
         _onExpensesContinue = onContinue;
+        TMP_Text continueLabel = expensesContinueButton.GetComponentInChildren<TMP_Text>(true);
+        if (continueLabel != null)
+            continueLabel.text = shopNext ? "Continue to Shop" : "Continue to Slots";
 
         if (expensesTitleText != null)
             expensesTitleText.text = $"Day {world.day} — Home";
@@ -282,14 +286,14 @@ public sealed class HomeUIController : MonoBehaviour
     // =========================================================
 
     /// <summary>
-    /// Shows the upgrade shop: one row per upgrade with its (discounted) cost
-    /// (HomeEconomy.UpgradeCost, the price the purchase charges) and a Buy
-    /// button, a page at a time. Invokes onBuy(upgrade) when
-    /// purchased, onContinue when the player moves on to the slot machine (or
-    /// immediately if unwired). Opening the shop shows its first page; showing
-    /// it again while open (after a purchase) keeps the page.
+    /// Shows the upgrade shop: one row per upgrade of <paramref name="upgrades"/>
+    /// (Home's) with its (discounted) cost (HomeEconomy.UpgradeCost, the price
+    /// the purchase charges) and a Buy button, a page at a time. Invokes
+    /// onBuy(upgrade) when purchased, onContinue when the player moves on to
+    /// the slot machine (or immediately if unwired). Opening the shop shows its
+    /// first page; showing it again while open (after a purchase) keeps the page.
     /// </summary>
-    public void ShowShop(WorldState world, ContentLibrarySO lib, Action<UpgradeSO> onBuy, Action onContinue)
+    public void ShowShop(WorldState world, ContentLibrarySO lib, IReadOnlyList<UpgradeSO> upgrades, Action<UpgradeSO> onBuy, Action onContinue)
     {
         if (!HasShopPanel || world == null)
         {
@@ -309,29 +313,18 @@ public sealed class HomeUIController : MonoBehaviour
 
         if (!shopPanel.activeSelf)
             _shopPage = 0;
-        BuildShopRows(world, lib, onBuy);
+        BuildShopRows(world, lib, upgrades, onBuy);
 
         shopPanel.SetActive(true);
     }
 
     /// <summary>Rebuilds the shop page's item rows (the upgrade's icon when its art exists, ArtSlots.UpgradeIcon; name + cost, Buy/Owned button), then a pager row ("Page n/m", "Next >", wrapping round) when there is more than one page.</summary>
-    private void BuildShopRows(WorldState world, ContentLibrarySO lib, Action<UpgradeSO> onBuy)
+    private void BuildShopRows(WorldState world, ContentLibrarySO lib, IReadOnlyList<UpgradeSO> upgrades, Action<UpgradeSO> onBuy)
     {
-        if (shopRowsRoot == null)
+        if (shopRowsRoot == null || upgrades == null)
             return;
 
         ClearRows(_shopRows);
-
-        var upgrades = new List<UpgradeSO>();
-        foreach (UpgradeSO u in lib != null ? lib.Upgrades : System.Array.Empty<UpgradeSO>())
-            if (u != null)
-                upgrades.Add(u);
-
-        if (upgrades.Count == 0)
-        {
-            _shopRows.Add(CreateLabelRow(shopRowsRoot, "No upgrades stocked yet.", PanelInk(shopBodyText)));
-            return;
-        }
 
         _shopPage = Paging.Clamp(_shopPage, upgrades.Count, shopRowsPerPage);
         int end = Paging.End(_shopPage, upgrades.Count, shopRowsPerPage);
@@ -364,7 +357,7 @@ public sealed class HomeUIController : MonoBehaviour
             _shopRows.Add(CreateRow(shopRowsRoot, $"Page {_shopPage + 1}/{pages}", "Next >", true, () =>
             {
                 _shopPage = (_shopPage + 1) % pages;
-                BuildShopRows(world, lib, onBuy);
+                BuildShopRows(world, lib, upgrades, onBuy);
             }, PanelInk(shopBodyText)));
         }
     }

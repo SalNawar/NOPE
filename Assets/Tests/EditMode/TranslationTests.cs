@@ -143,6 +143,25 @@ public class TranslationTests
         Assert.AreEqual(Gates.UnlockNight(fromDay) - 1, Translation.NoticeNight(fromDay), "one night before the unlock night");
     }
 
+    /// <summary>Saleh 2026-09-29 (prerequisites on everything): a translator after Interview Protocols is a chain of two orders, so the notice runs two days ahead.</summary>
+    [TestCase(5, 2, 2, Description = "day 5's speech, two orders: night 2, so day 3's paper; Protocols ordered on day 3 arrive on day 4, the translator ordered on day 4 on day 5")]
+    [TestCase(5, 1, 3, Description = "one order: day 4's paper, as before")]
+    [TestCase(4, 2, 1, Description = "the earliest fromDay for two orders: the first night")]
+    public void NoticeNight_RunsOneDayAheadPerOrderInTheChain(int fromDay, int orders, int night)
+    {
+        Assert.AreEqual(night, Translation.NoticeNight(fromDay, orders));
+    }
+
+    [Test]
+    public void NoticeProblem_TheChainMustFitBeforeFromDay()
+    {
+        Assert.IsNull(Translation.NoticeProblem(5, 2));
+        Assert.IsNull(Translation.NoticeProblem(4, 2));
+        StringAssert.Contains("at least 4", Translation.NoticeProblem(3, 2));
+        Assert.IsNull(Translation.NoticeProblem(1, 3), "no notice from day 1");
+        Assert.IsNotNull(Translation.NoticeProblem(2, 1));
+    }
+
     [Test]
     public void Problems_FromDayTwo_LeavesNoNightForTheNotice()
     {

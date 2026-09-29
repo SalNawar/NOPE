@@ -18,3 +18,8 @@ MonoBehaviour:
     scanned papers on the PC, from the next shift.
   cost: 300
   unlockEffect: {fileID: 0}
+  venue: 0
+  branch: 0
+  requires:
+  - scanner_autofeed
+  installSlot: scanner

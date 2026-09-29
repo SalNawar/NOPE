@@ -28,7 +28,7 @@ public sealed class AccountDay
     /// <summary>Home's household costs: the day's living expenses and any care paid.</summary>
     public int household;
 
-    /// <summary>Home's purchases: upgrades bought and slot spins paid.</summary>
+    /// <summary>The day's purchases: the Orders app's orders placed that day (Orders.SpentOn), and Home's upgrades bought and slot spins paid.</summary>
     public int purchases;
 
     /// <summary>The wallet after the day's last entry.</summary>
@@ -207,10 +207,11 @@ public static class Account
     /// <summary>
     /// Writes the shift's part of <paramref name="day"/>'s row (a replayed
     /// shift replaces it): the ledger's pay, its wrong-decision penalties as
-    /// the FINES cell, the source's instalment, wallet and debt; Home's part
-    /// starts empty.
+    /// the FINES cell, the source's instalment, wallet and debt, and the
+    /// day's orders so far (<paramref name="purchases"/>: the Orders app's,
+    /// paid during the shift) as its purchases; Home's household starts empty.
     /// </summary>
-    public static AccountDay RecordShift(List<AccountDay> days, int day, ShiftLedger ledger, IClerkAccountSource source, int cap)
+    public static AccountDay RecordShift(List<AccountDay> days, int day, ShiftLedger ledger, IClerkAccountSource source, int cap, int purchases = 0)
     {
         AccountDay row = Row(days, day, cap);
         if (row == null)
@@ -219,13 +220,13 @@ public static class Account
         row.fines = ledger != null ? ledger.TotalPenalties : 0;
         row.debtRelief = source != null ? source.ShiftInstalment : Unknown;
         row.household = 0;
-        row.purchases = 0;
+        row.purchases = purchases;
         row.balance = source != null ? source.Balance : 0;
         row.owed = source != null ? source.Debt.Owed : Unknown;
         return row;
     }
 
-    /// <summary>Writes Home's part of <paramref name="day"/>'s row (Home's running totals so far) and the wallet after.</summary>
+    /// <summary>Writes Home's part of <paramref name="day"/>'s row (its household costs and the day's purchases so far: the shift's orders and Home's own) and the wallet after.</summary>
     public static AccountDay RecordHome(List<AccountDay> days, int day, int household, int purchases, IClerkAccountSource source, int cap)
     {
         AccountDay row = Row(days, day, cap);

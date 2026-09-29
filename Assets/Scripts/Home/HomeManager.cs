@@ -4,9 +4,11 @@ using UnityEngine;
 /// <summary>
 /// Drives the Home phase (Phase 4): on scene load, bills today's living
 /// expenses and rolls family condition drift, then walks the player through
-/// Expenses -> Shop -> Slot Machine -> Sleep. Sleep hands off to
-/// RunManager.Sleep() (day-boundary endings, else nightly resolve, day++,
-/// back to Office).
+/// Expenses -> Shop -> Slot Machine -> Sleep. The shop lists only the Home
+/// upgrades (UpgradeSO.venue Home: household improvements; the office's
+/// moved to the PC's Orders app, Saleh 2026-09-29) and is skipped while none
+/// is stocked. Sleep hands off to RunManager.Sleep() (day-boundary endings,
+/// else nightly resolve, day++ and the Orders app's deliveries, back to Office).
 /// All HomeUIController panels are optional; unwired panels are skipped.
 /// </summary>
 public sealed class HomeManager : MonoBehaviour
@@ -32,7 +34,7 @@ public sealed class HomeManager : MonoBehaviour
     /// <summary>Tonight's household costs so far (the expenses and any care), for the clerk's statement.</summary>
     private int _household;
 
-    /// <summary>Tonight's purchases so far (upgrades and slot spins), for the clerk's statement.</summary>
+    /// <summary>Tonight's purchases at Home so far (Home upgrades and slot spins), for the clerk's statement (the shift's orders are added by ClerkAccountSource.RecordHome).</summary>
     private int _purchases;
 
     /// <summary>Acquires the run, bills expenses, and starts the panel flow.</summary>
@@ -74,13 +76,27 @@ public sealed class HomeManager : MonoBehaviour
         Debug.Log("[HomeManager] >>> Entering ShowExpenses.");
 
         if (homeUI != null && homeUI.HasExpensesPanel)
-            homeUI.ShowExpenses(_world, _evening, _config, HomeEconomy.GetCareCost(_world, _lib, _config), HandleTreatFamilyMember, ShowShop);
+            homeUI.ShowExpenses(_world, _evening, _config, HomeEconomy.GetCareCost(_world, _lib, _config), HandleTreatFamilyMember, ShowShop, ShopNext);
         else
         {
             Debug.Log("[HomeManager] ShowExpenses: no expenses panel, skipping to Shop.");
             ShowShop();
         }
     }
+
+    /// <summary>The upgrades Home sells (venue Home: household improvements), in the library's order.</summary>
+    private List<UpgradeSO> HomeUpgrades()
+    {
+        var upgrades = new List<UpgradeSO>();
+        if (_lib != null)
+            foreach (UpgradeSO u in _lib.Upgrades)
+                if (u != null && u.venue == UpgradeVenue.Home)
+                    upgrades.Add(u);
+        return upgrades;
+    }
+
+    /// <summary>True when the shop step shows (its panel is wired and Home stocks an upgrade).</summary>
+    private bool ShopNext => homeUI != null && homeUI.HasShopPanel && HomeUpgrades().Count > 0;
 
     /// <summary>Treats a family member, then refreshes the expenses panel.</summary>
     private void HandleTreatFamilyMember(int memberIndex)
@@ -96,7 +112,7 @@ public sealed class HomeManager : MonoBehaviour
 
             // Refresh the panel in place (report numbers don't change; rows do).
             if (homeUI != null && homeUI.HasExpensesPanel)
-                homeUI.ShowExpenses(_world, _evening, _config, careCost, HandleTreatFamilyMember, ShowShop);
+                homeUI.ShowExpenses(_world, _evening, _config, careCost, HandleTreatFamilyMember, ShowShop, ShopNext);
 
             Debug.Log($"[HomeManager] <<< Exiting HandleTreatFamilyMember (treated, money={_world.money}).");
         }
@@ -106,30 +122,30 @@ public sealed class HomeManager : MonoBehaviour
         }
     }
 
-    /// <summary>Step 2: upgrade shop.</summary>
+    /// <summary>Step 2: Home's upgrade shop (the Home upgrades only), skipped while Home stocks none.</summary>
     private void ShowShop()
     {
         Debug.Log("[HomeManager] >>> Entering ShowShop.");
 
         RefreshHud();
 
-        if (homeUI != null && homeUI.HasShopPanel)
-            homeUI.ShowShop(_world, _lib, HandleBuyUpgrade, ShowSlot);
+        if (ShopNext)
+            homeUI.ShowShop(_world, _lib, HomeUpgrades(), HandleBuyUpgrade, ShowSlot);
         else
         {
-            Debug.Log("[HomeManager] ShowShop: no shop panel, skipping to Slot.");
+            Debug.Log("[HomeManager] ShowShop: no shop panel or no Home upgrade stocked (the office's are in the PC's Orders app), skipping to Slot.");
             ShowSlot();
         }
     }
 
-    /// <summary>Purchases an upgrade (if affordable at its discounted price, HomeEconomy.UpgradeCost, and not already owned), then refreshes the shop.</summary>
+    /// <summary>Purchases a Home upgrade (if affordable at its discounted price, HomeEconomy.UpgradeCost, and not already owned): owned at once, its unlock effect from tonight; then refreshes the shop.</summary>
     private void HandleBuyUpgrade(UpgradeSO upgrade)
     {
         Debug.Log($"[HomeManager] >>> Entering HandleBuyUpgrade (upgrade='{upgrade?.displayName}').");
 
-        if (upgrade == null || _world.HasUpgrade(upgrade.id))
+        if (upgrade == null || upgrade.venue != UpgradeVenue.Home || _world.HasUpgrade(upgrade.id))
         {
-            Debug.Log("[HomeManager] <<< Exiting HandleBuyUpgrade — null upgrade or already owned.");
+            Debug.Log("[HomeManager] <<< Exiting HandleBuyUpgrade — null, not a Home upgrade, or already owned.");
             return;
         }
 
@@ -157,7 +173,7 @@ public sealed class HomeManager : MonoBehaviour
 
         // Re-show to refresh rows (costs/owned state) without advancing the flow.
         if (homeUI != null && homeUI.HasShopPanel)
-            homeUI.ShowShop(_world, _lib, HandleBuyUpgrade, ShowSlot);
+            homeUI.ShowShop(_world, _lib, HomeUpgrades(), HandleBuyUpgrade, ShowSlot);
 
         Debug.Log($"[HomeManager] <<< Exiting HandleBuyUpgrade (bought '{upgrade.displayName}' for {cost} [discount={discountPercent:0.#}%], money={_world.money}).");
     }
