@@ -38,8 +38,6 @@ public sealed class HomeManager : MonoBehaviour
     /// <summary>Acquires the run, bills expenses, and starts the panel flow.</summary>
     private void Start()
     {
-        Debug.Log("[HomeManager] >>> Entering Start.");
-
         RunManager run = RunManager.GetOrCreate();
 
         if (run == null)
@@ -63,17 +61,12 @@ public sealed class HomeManager : MonoBehaviour
         RecordStatement();
 
         RefreshHud();
-
-        Debug.Log("[HomeManager] <<< Exiting Start (showing Expenses panel).");
-
         ShowExpenses();
     }
 
     /// <summary>Step 1: expense breakdown + family conditions (Treat option).</summary>
     private void ShowExpenses()
     {
-        Debug.Log("[HomeManager] >>> Entering ShowExpenses.");
-
         if (homeUI != null && homeUI.HasExpensesPanel)
             homeUI.ShowExpenses(_world, _expenseReport, _config, HandleTreatFamilyMember, ShowShop);
         else
@@ -86,31 +79,21 @@ public sealed class HomeManager : MonoBehaviour
     /// <summary>Treats a family member, then refreshes the expenses panel.</summary>
     private void HandleTreatFamilyMember(int memberIndex)
     {
-        Debug.Log($"[HomeManager] >>> Entering HandleTreatFamilyMember (memberIndex={memberIndex}).");
+        if (!HomeEconomy.TreatFamilyMember(_world, _config, memberIndex))
+            return;
 
-        if (HomeEconomy.TreatFamilyMember(_world, _config, memberIndex))
-        {
-            _household += HomeEconomy.GetCareCost(_config);
-            RecordStatement();
-            RefreshHud();
+        _household += HomeEconomy.GetCareCost(_config);
+        RecordStatement();
+        RefreshHud();
 
-            // Refresh the panel in place (report numbers don't change; rows do).
-            if (homeUI != null && homeUI.HasExpensesPanel)
-                homeUI.ShowExpenses(_world, _expenseReport, _config, HandleTreatFamilyMember, ShowShop);
-
-            Debug.Log($"[HomeManager] <<< Exiting HandleTreatFamilyMember (treated, money={_world.money}).");
-        }
-        else
-        {
-            Debug.Log("[HomeManager] <<< Exiting HandleTreatFamilyMember (treatment not applied).");
-        }
+        // Refresh the panel in place (report numbers don't change; rows do).
+        if (homeUI != null && homeUI.HasExpensesPanel)
+            homeUI.ShowExpenses(_world, _expenseReport, _config, HandleTreatFamilyMember, ShowShop);
     }
 
     /// <summary>Step 2: upgrade shop.</summary>
     private void ShowShop()
     {
-        Debug.Log("[HomeManager] >>> Entering ShowShop.");
-
         RefreshHud();
 
         if (homeUI != null && homeUI.HasShopPanel)
@@ -125,21 +108,12 @@ public sealed class HomeManager : MonoBehaviour
     /// <summary>Purchases an upgrade (if affordable at its discounted price, HomeEconomy.UpgradeCost, and not already owned), then refreshes the shop.</summary>
     private void HandleBuyUpgrade(UpgradeSO upgrade)
     {
-        Debug.Log($"[HomeManager] >>> Entering HandleBuyUpgrade (upgrade='{upgrade?.displayName}').");
-
         if (upgrade == null || _world.HasUpgrade(upgrade.id))
-        {
-            Debug.Log("[HomeManager] <<< Exiting HandleBuyUpgrade — null upgrade or already owned.");
             return;
-        }
 
         int cost = HomeEconomy.UpgradeCost(_world, _lib, upgrade, out float discountPercent);
-
         if (_world.money < cost)
-        {
-            Debug.Log($"[HomeManager] <<< Exiting HandleBuyUpgrade — not enough money ({_world.money} < {cost}).");
             return;
-        }
 
         _world.money -= cost;
         _world.UnlockUpgrade(upgrade.id);
@@ -159,14 +133,12 @@ public sealed class HomeManager : MonoBehaviour
         if (homeUI != null && homeUI.HasShopPanel)
             homeUI.ShowShop(_world, _lib, HandleBuyUpgrade, ShowSlot);
 
-        Debug.Log($"[HomeManager] <<< Exiting HandleBuyUpgrade (bought '{upgrade.displayName}' for {cost} [discount={discountPercent:0.#}%], money={_world.money}).");
+        Debug.Log($"[HomeManager] Bought '{upgrade.displayName}' for {cost} (discount {discountPercent:0.#}%), money={_world.money}.");
     }
 
     /// <summary>Step 3: slot machine.</summary>
     private void ShowSlot()
     {
-        Debug.Log("[HomeManager] >>> Entering ShowSlot.");
-
         RefreshHud();
 
         if (homeUI != null && homeUI.HasSlotPanel)
@@ -185,23 +157,15 @@ public sealed class HomeManager : MonoBehaviour
     /// </summary>
     private string HandleSpin()
     {
-        Debug.Log($"[HomeManager] >>> Entering HandleSpin (money={_world.money}).");
-
         int spinCost = _config != null ? _config.slotSpinCost : 0;
 
         if (_world.money < spinCost)
-        {
-            Debug.Log($"[HomeManager] <<< Exiting HandleSpin — not enough credits ({_world.money} < {spinCost}).");
             return $"Not enough {UiText.Currency(UiText.WalletForm.Inline)} to spin.";
-        }
 
         IReadOnlyList<SlotOutcomeSO> outcomes = _lib != null ? _lib.SlotOutcomes : System.Array.Empty<SlotOutcomeSO>();
 
         if (outcomes.Count == 0)
-        {
-            Debug.Log("[HomeManager] <<< Exiting HandleSpin — no slot outcomes configured.");
             return "The slot machine is out of order.";
-        }
 
         _world.money -= spinCost;
         _purchases += spinCost;
@@ -212,7 +176,6 @@ public sealed class HomeManager : MonoBehaviour
         {
             RefreshHud();
             RecordStatement();
-            Debug.Log("[HomeManager] <<< Exiting HandleSpin — no outcome picked (nothing happens).");
             return "...nothing happens.";
         }
 
@@ -237,7 +200,7 @@ public sealed class HomeManager : MonoBehaviour
 
         string line = !string.IsNullOrEmpty(outcome.resultLine) ? outcome.resultLine : outcome.displayName;
 
-        Debug.Log($"[HomeManager] <<< Exiting HandleSpin (outcome='{outcome.displayName}', spinCost={spinCost}, moneyDelta={outcome.moneyDelta}, money={_world.money}).");
+        Debug.Log($"[HomeManager] Spin: '{outcome.displayName}' (cost {spinCost}, {outcome.moneyDelta:+0;-0}), money={_world.money}.");
 
         return outcome.moneyDelta != 0
             ? $"{line} ({outcome.moneyDelta:+0;-0} {UiText.Currency(UiText.WalletForm.Inline)})"
@@ -251,8 +214,6 @@ public sealed class HomeManager : MonoBehaviour
     /// <summary>Step 4: sleep prompt.</summary>
     private void ShowSleep()
     {
-        Debug.Log("[HomeManager] >>> Entering ShowSleep.");
-
         RefreshHud();
 
         if (homeUI != null && homeUI.HasSleepPanel)
@@ -271,8 +232,6 @@ public sealed class HomeManager : MonoBehaviour
     /// </summary>
     private void HandleSleep()
     {
-        Debug.Log($"[HomeManager] HandleSleep (day {_world?.day}): handing off to RunManager.Sleep.");
-
         if (!RunManager.HasInstance)
         {
             Debug.LogError("HomeManager.HandleSleep called with no RunManager instance.");
