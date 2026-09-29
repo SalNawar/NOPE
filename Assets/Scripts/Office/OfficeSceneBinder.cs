@@ -17,8 +17,10 @@ using UnityEngine.SceneManagement;
 /// paper examiner the camera, poses the desk view from the art's Cinemachine
 /// camera and the mat, stands the traveller,
 /// binds the readouts to the art's texts (or shows the fallback HUD), points
-/// the anime hall's presentation at the shift clock (AnimeHallShiftLink) when
-/// the art carries one, and readies the office camera (a PhysicsRaycaster on
+/// the anime hall's presentation at the shift clock (AnimeHallShiftLink) and
+/// its portal rings at the day's portals (AnimeHallPortalLink) when the art
+/// carries one, puts the Departure Board's rows and click box on its display
+/// (DepartureBoardView), and readies the office camera (a PhysicsRaycaster on
 /// the Interactable layer, the gameplay's layers drawn and the desktop's
 /// culled, an AudioListener when no scene has one, its Cinemachine camera on
 /// top) and orders the desktop's cameras around it (the PC frame's right
@@ -145,6 +147,16 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The fallback HUD's clock text.</summary>
     [SerializeField] private TMP_Text hudClock;
 
+    [Header("Portals (the portals spec v3)")]
+    /// <summary>The shift, whose day-start portals the board and the rings show.</summary>
+    [SerializeField] private GameManager game;
+
+    /// <summary>The Departure Board's rows and click box (placed on the DepartureBoard anchor; hidden without one).</summary>
+    [SerializeField] private DepartureBoardView board;
+
+    /// <summary>The portal rings' effects, one per DeskConfigSO.hallPortalLayers entry, in its order (driven by AnimeHallPortalLink in the anime hall).</summary>
+    [SerializeField] private PortalEffect[] portalEffects;
+
     /// <summary>A desk anchor's size when it has no renderers (metres, XZ).</summary>
     private static readonly Vector2 DefaultDeskSize = new Vector2(1.6f, 1f);
 
@@ -231,6 +243,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         BindReadySign();
         BindReadouts();
         BindProps();
+        BindBoard();
         BindHall(art);
         Report();
     }
@@ -513,7 +526,21 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     // The anime hall
     // -----------------------------
 
-    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock, and the ink of the art's calendar with it (the config's hall knobs); an art office without one needs nothing.</summary>
+    /// <summary>The Departure Board's rows and click box on the DepartureBoard anchor's rect (a sized marker, or the display layer's opaque pixels); hidden without one (the 3D room).</summary>
+    private void BindBoard()
+    {
+        if (board == null)
+            return;
+        ResolvedAnchor anchor = At(OfficeAnchorId.DepartureBoard);
+        if (!OfficeAnchors.TryLocalRect(anchor.Transform, out Transform frame, out Rect rect))
+        {
+            board.gameObject.SetActive(false);
+            return;
+        }
+        board.Bind(frame, rect, anchor.Transform.GetComponentsInChildren<Renderer>(false));
+    }
+
+    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock, and the ink of the art's calendar with it (the config's hall knobs), and a second link its portal rings from the day's portals; an art office without one needs nothing.</summary>
     private void BindHall(Scene art)
     {
         if (config == null)
@@ -525,6 +552,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             if (hall == null)
                 continue;
             gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config, TextOf(OfficeAnchorId.ReadoutDay));
+            gameObject.AddComponent<AnimeHallPortalLink>().Configure(hall, config, game, portalEffects);
             return;
         }
     }

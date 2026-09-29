@@ -204,7 +204,8 @@ public class SerializedEnumsTests
         Assert.AreEqual(20, (int)OfficeAnchorId.Calculator);
         Assert.AreEqual(21, (int)OfficeAnchorId.PenPot);
         Assert.AreEqual(22, (int)OfficeAnchorId.Stapler);
-        Assert.AreEqual(23, System.Enum.GetValues(typeof(OfficeAnchorId)).Length, "a new member is appended here too");
+        Assert.AreEqual(23, (int)OfficeAnchorId.DepartureBoard);
+        Assert.AreEqual(24, System.Enum.GetValues(typeof(OfficeAnchorId)).Length, "a new member is appended here too");
     }
 
     /// <summary>UpgradeVenue: stored in UpgradeSO.venue (the Orders app or Home; Saleh 2026-09-29, the portals spec v3 OR1).</summary>

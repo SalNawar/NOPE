@@ -26,6 +26,9 @@ public sealed class OverlayCallout : MonoBehaviour
     /// <summary>The band at the overlay's top the box never covers (canvas reference px): the office case HUD's strips for the speech bubble; 0 for the tooltips.</summary>
     [SerializeField] private float topInset;
 
+    /// <summary>True when the box grows with its lines (a content size fitter on the panel: the departure board's tooltip), so its size is laid out before it is placed.</summary>
+    [SerializeField] private bool grows;
+
     private Camera _camera;
     private RectTransform _canvasRect;
 
@@ -67,6 +70,8 @@ public sealed class OverlayCallout : MonoBehaviour
         _offset = offset;
         _remaining = seconds;
         panel.gameObject.SetActive(true);
+        if (grows)
+            UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(panel);
         if (!OverlayProjection.TryPlace(panel, _canvasRect, _camera, follow.position, offset, keepOnScreen, topInset))
             Hide();
     }

@@ -29,10 +29,14 @@ at runtime only.
 For each anchor id the binder tries, in order:
 
 1. **`Anchor_{id}`** anywhere in the art scene (an empty GameObject; its position
-   and rotation are the place). Put them under one top-level `GameplayAnchors`
+   and rotation are the place; an empty RectTransform's rect is also its size:
+   `Anchor_DepartureBoard`). Put them under one top-level `GameplayAnchors`
    root, never under `ImportedOfficeDress` (its builders rebuild that tree).
 2. **Fallbacks**: existing art objects, by root path or bare name (inactive ones
-   are skipped). Where a fallback has renderers, their bounds are the place.
+   are skipped). Where a fallback has renderers, their bounds are the place; a
+   sprite's are its opaque pixels' (its physics shape, which Unity generates
+   from the alpha at import: the hall's layers are whole-canvas sprites, so a
+   layer's own bounds would be the whole hall).
 3. **A default pose** written in the contract (`Assets/Data/Config/OfficeSceneContract.asset`), for places the art has no object for yet.
 4. **Missing**: the piece is hidden or, where the game needs it, a working
    placeholder is used.
@@ -62,6 +66,7 @@ The anime hall's are in the next section.
 | `ReadoutNext` | the NEXT sign's caption (the game writes the `desk.readyCaption` UI string) | bare name `NextLabel` | — |
 | `OfficeCamera` | the camera the player sees through (the 3D raycaster goes on it) | fallback `Main Camera` | — |
 | `OfficeVCam` | the Cinemachine camera that frames the office (the game raises its priority) | fallback `Cameras/OfficeVCam` | — |
+| `DepartureBoard` | the Departure Board (the portals spec v3 BD1-BD5): the day's portal rows, a gameplay text fitted inside it, and its click box with the portals' tooltip | none in the room: the board is skipped there (no default pose) | `Anchor_DepartureBoard` (a sized empty RectTransform) over a board's display |
 
 **For the art side:** `Tools > TimeDesk > Add Gameplay Anchors (art office)`,
 run with the knob's art scene open, adds an empty `GameplayAnchors/Anchor_{id}` at
@@ -102,13 +107,15 @@ it; a click box, its hover outline and its reaction cover that part):
 | `Scanner`, `Traveller`, `HandOver` | `GameplayAnchors/Anchor_Scanner`, `Anchor_Traveller`, `Anchor_HandOver` | at the room's defaults (the same desk layout), for the art side to move |
 | `OfficeCamera` | `Anime hall player preview` | tagged `MainCamera`, with a `CinemachineBrain` (so it follows `OfficeVCam`: move that to move the view), depth 100, culled to layer 29, no AudioListener: the binder orders the PC frame's camera after it and the clone's before it, and adds the gameplay's layers to its culling mask (`OfficeLayers.GameplayMask`) and an AudioListener when no scene has one |
 | `OfficeVCam` | `Cameras/OfficeVCam` | a CinemachineCamera at the camera's pose, its lens copied (55°, 0.05 to 400 m), as the room's: the desk view works |
+| `DepartureBoard` | `GameplayAnchors/Anchor_DepartureBoard` (an empty RectTransform over the display's opaque pixels, added by Add Anime Hall Hooks); else the fallback `16 Departure board blank display` (its opaque pixels) | the rows sit inside it, inset by `DeskConfigSO.hallBoardInset` (8 % a side) so they stay below the claim strip; the tooltip opens under it |
 
 What the hall carries for the game to be whole since 2026-09-29 (`Add Anime
 Hall Hooks`; nothing else reads these names): the five readouts above, the
 four static previews gone; `Cameras/OfficeVCam` and the brain on the player
 camera, tagged `MainCamera`, for the desk view; `Anchor_Scanner`,
 `Anchor_Traveller`, `Anchor_HandOver` (a scanner model under `Anchor_Scanner`
-hides the placeholder); and the daylight's culling mask includes Default and
+hides the placeholder); `Anchor_DepartureBoard` (since 2026-09-30, Saleh's OK,
+the portals spec v3); and the daylight's culling mask includes Default and
 Interactable, so the papers on the desk are lit by it (and dim with it in the
 evening).
 
@@ -141,6 +148,24 @@ text on the art's paper, which the evening dims to nearly black):
 reads 4.5:1 or better all day as drawn; the text's own authored colour is not
 used during a shift. Without a gameplay clock the hall keeps the time and the
 ink its art authored. Pan is left to the art.
+
+The gameplay layer also drives **the portal rings** (the portals spec v3
+VX1-VX7): at load the binder adds an `AnimeHallPortalLink` beside the shift
+link; at the day's start it tints each metal ring through `SetLayerTint` (its
+own colour times `DeskConfigSO.hallPortalIdleTint` under maintenance, its own
+colour otherwise) and draws a `PortalEffect` inside each ring (the glow of an
+open departure portal, the Return Gate's amber spiral, or nothing for a CLOSED
+portal or one under maintenance; a departure flares it). The effects are the one
+gameplay drawing on the art's **Default** sorting layer: sorting order = the
+ring's secure-bay order − 1 (read from the bay's renderer, `FindLayer`), so they
+draw under the bay's front fence and panels, the metal ring (the gate frame) and
+the painted glass, over the floor and walls seen through the ring; each is
+placed on its ring's opaque pixels (its diameter `hallPortalGlowSize` × the
+ring's width) and follows them if the art pans. A renamed or renumbered layer
+is a `DeskConfigSO.hallPortalLayers` edit; the art side keeps each ring's
+centre free of other layers at the bay's order − 1 (at art c75e1fe the orders
+the effects share, the stone bust's 37 and each lower ring's order, have no
+pixel inside any ring's centre).
 
 ## What the art scene must not do (and what the game does about leftovers)
 
@@ -183,6 +208,9 @@ Other art-side fixes found by the move:
   Transparent objects sort by sorting layer and order before depth, so the art
   may use any orders on `Default` (the hall's registered layers use 0..57) and
   the traveller still draws in front of them. Art sprites stay on `Default`.
+  The one exception: the portal rings' effects draw on `Default` at each ring's
+  secure-bay order − 1 (above), under the ring's frame. The Departure Board's
+  rows are on `Gameplay`.
 - The office camera is the art's, but at load the binder adds the gameplay's
   layers (`Default`, `Interactable`) to its culling mask, removes `PCDesktop`,
   and adds an `AudioListener` when no loaded scene has one. It also orders the

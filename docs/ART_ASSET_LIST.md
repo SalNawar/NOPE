@@ -54,6 +54,8 @@ The room and every prop in it are the art side's 3D models in `Assets/Scenes/Off
 | The wall exhibits and the city outside | `HybridOffice/Exhibits`, `HybridOffice/Exterior` | done |
 | A poster frame | none | deferred: the culture posters return when the art side adds a frame with an anchor |
 | Desk decoration spots | the gameplay layer's empty slots `photo`, `free_1`, `free_2` | no art planned; any decoration would be a 3D model |
+| The anime hall's departure board: its display stays blank; the game draws the day's portal rows on it (the portals spec v3 BD1-BD5) | `DepartureBoard`: `GameplayAnchors/Anchor_DepartureBoard` over the hall's `16 Departure board blank display` | done: keep the display text-free |
+| The anime hall's five portal rings: the game dims a ring under maintenance and draws the glow and the Return Gate's spiral inside it, under the bay, the ring and the glass (orders: the bay's − 1; VX1-VX6) | the layers `38`-`47` and `53`-`57` (`DeskConfigSO.hallPortalLayers`) | done; keep each ring's centre free of other layers at the bay's order − 1 |
 
 ## 2. The 2D layers over the office
 
@@ -70,6 +72,8 @@ Drawn on the office overlay canvas (1920 × 1080 reference; it scales with the s
 | Speech bubble tail | under the bubble's bottom centre, its top on the bubble's bottom edge | `Assets/Art/UI/Resources/Office/speech_bubble_tail.png` | none (the bubble has no tail until it lands) | about 32 × 24 on screen, pointing down, white or light grey with the bubble's outline; deliver 64 × 48 | 1 | missing |
 | Wheel choices and the "< Back" centre | on an ellipse around the traveller, 240 × 44 and 150 × 44 | the UI kit's `ui_button.png` (section 3) | code-drawn themed buttons | from the kit | 2 | code-drawn, later |
 | Desk tooltip | above a clicked prop (credits, day, stability, time), 360 × 60 | the UI kit's `tooltip.png` (section 3) | code-drawn yellow panel | from the kit | 2 | code-drawn, later |
+| Portal glow | inside an open departure portal's ring in the anime hall (the portals spec v3 VX1), about 150 px across at 1080p for the front ring; tinted pale cyan and drawn additive by the game, slowly turning | `Assets/Art/UI/Resources/Office/portal_glow.png` | a code-drawn radial glow (`PortalGlowPlaceholder`) | 512 × 512, a soft swirl of light on transparent, greyscale, clear at the rim | 1 | missing |
+| Return Gate spiral | inside the Return Gate's ring (portal 03) while it is in service (VX5); tinted amber and drawn additive | `Assets/Art/UI/Resources/Office/portal_return_glow.png` | a code-drawn inward spiral (`PortalGlowPlaceholder`) | the same format: an inward spiral | 1 | missing |
 
 - The wheel's icons are in section 8.
 - **Drawn by code, no art:** the fallback HUD (it shows only when the art office lacks a readout) and the floating hints.
@@ -83,12 +87,12 @@ A 4:3 canvas of 1440 × 1080, seen in the PC frame (its glass is 1120 × 840 at 
 |---|---|---|---|---|---|---|
 | Neutral wallpaper | behind the desktop until a country leads history | `Assets/Art/Generated/xp_bliss.png` (via `Theme_neutral`) | 1920 × 1080; the 4:3 desktop shows its middle 1440 × 1080 | keep | 1 | done |
 | Culture wallpapers × 8 | behind the desktop from the morning after a country leads | `Assets/Art/Culture/<id>/wallpaper.png` for `egypt`, `iraq`, `greece`, `italy`, `china`, `japan`, `britain`, `germany` (via `Theme_<id>`) | Generate World placeholders, 960 × 540 | **1440 × 1080**: ask ChatGPT for 1536 × 1024 and Claude crops the middle (UI_ART_RULES, "Wallpapers" and "The eight cultures") | 1 | placeholder |
-| Desktop icons × 6 | the six free-placed desktop icons (plan phase 17): a 72 × 72 glyph over its label in a 120 × 132 cell, tinted by the theme | `Assets/Art/UI/Resources/Desktop/icon_<id>.png` (ids below) | code-drawn placeholder glyphs (`DesktopIconPlaceholder`); the old interim `icon_internet`, `icon_notes` and `icon_settings` in `UI/Desktop/` (cream plates) are not used | 128 × 128, a bold greyscale glyph on transparent (it shows about 56 px tall at 1080p), no plate | 1 | placeholder |
+| Desktop icons × 8 | the eight free-placed desktop icons (plan phase 17; + `portals`, a portal ring, the portals spec v3 PA1; + `orders`, a parcel with a tick): a 72 × 72 glyph over its label in a 120 × 132 cell, tinted by the theme | `Assets/Art/UI/Resources/Desktop/icon_<id>.png` (ids below) | code-drawn placeholder glyphs (`DesktopIconPlaceholder`); the old interim `icon_internet`, `icon_notes` and `icon_settings` in `UI/Desktop/` (cream plates) are not used | 128 × 128, a bold greyscale glyph on transparent (it shows about 56 px tall at 1080p), no plate | 1 | placeholder |
 | Cursors: arrow, hand | everywhere: the game's cursor, the hand over anything clickable | `Assets/Art/UI/Desktop/cursor_arrow.png`, `cursor_hand.png` (found by name, set in `InteractionFeedback_Default`) | interim 32 × 32 | 32 × 32; the tip (arrow) and the fingertip (hand) are the click point: the stored points are (3, 2) and (13, 3), so Claude re-measures them when new art lands | 1 | interim |
 | Cursors: grab, grabbing | over a desk paper and while dragging it | `cursor_grab.png`, `cursor_grabbing.png` | none (the hand shows) | 32 × 32 | 2 | missing, later |
 | UI kit × 9 | every window, button, bar and menu (table below) | `Assets/Art/UI/Desktop/` | code-drawn themed panels | greyscale 9-slice pieces | 2 | later |
 
-**Desktop icon ids** (the PC redesign DK1; `DesktopAppIds`): `investigation`, `internet`, `mail`, `citizen_account`, `notes`, `settings`, and nothing else. The old tiles' interim glyphs (`directives`, `scanner`, `citizen_records`, `cluelog`, the books) move to the Investigation app's tab glyphs with the app (plan phase 16); `lexicon`, `dialect` and `material` are retired with their placeholder apps. The slot is wired (plan phase 27): each icon shows its file when it exists, else the placeholder glyph for its id.
+**Desktop icon ids** (the PC redesign DK1, with Orders and Portals added; `DesktopAppIds`): `investigation`, `portals`, `internet`, `mail`, `citizen_account`, `orders`, `notes`, `settings`, and nothing else. The old tiles' interim glyphs (`directives`, `scanner`, `citizen_records`, `cluelog`, the books) move to the Investigation app's tab glyphs with the app (plan phase 16); `lexicon`, `dialect` and `material` are retired with their placeholder apps. The slot is wired (plan phase 27): each icon shows its file when it exists, else the placeholder glyph for its id.
 
 **The UI kit (later).** UI_ART_RULES rule 5: greyscale only (white to mid grey), a flat middle and even borders so each piece stretches, no text or letter-shaped glyphs. The culture theme tints every piece. Not needed until Claude adds the theme slots.
 
@@ -214,14 +218,14 @@ New 2D files (the Blender scanner and the characters are counted apart):
 | Section | Tier 1 | Tier 2 | Files |
 |---|---|---|---|
 | 1. The office (Blender) | – | – | the scanner model (Tier 3) |
-| 2. 2D layers over the office | 5 | 0 | 5 |
-| 3. PC desktop | 16 | 11 | 27 |
+| 2. 2D layers over the office | 7 | 0 | 7 |
+| 3. PC desktop | 18 | 11 | 29 |
 | 4. Documents | 22 | 0 | 22 |
 | 5. Day flow | 3 | 0 | 3 |
 | 6. Home | 19 | 7 | 26 |
 | 7. Title and endings | 10 | 1 | 11 |
 | 8. Icons | 6 | 0 | 6 |
-| **Total** | **81** | **19** | **100** |
+| **Total** | **85** | **19** | **104** |
 
 - Every decision was answered yes, so all are wanted. The count moved from 107 to 100 with the redesign: six desktop icons instead of seventeen, one Title face (normal and hover) instead of four baked buttons, eight upgrade icons, and ten per-kind faces, the plain agency face and the seal instead of the passport and permit faces.
 - Tier 2 now: the UI kit (9) and the grab cursors (2), the slot and sleep panels and the ending panel (their white text needs a dark panel), the slot outcome symbols (5); the scanned copy waits on plan phase 5 and reuses the faces.

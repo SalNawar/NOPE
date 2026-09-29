@@ -588,7 +588,7 @@ public static partial class OfficeSceneUIBuilder
     /// </summary>
     private static BoothCoordinator BuildOffice(OfficeViewController view, MonitorScreen screen, Button framePower, DeskConfigSO config,
                                                 OfficeSceneContractSO contract, TravellerWheel wheel, OverlayCallout[] callouts,
-                                                OverlayCallout tooltip, TMP_Text trayClockText, ShiftClockDriver clock,
+                                                OverlayCallout tooltip, OverlayCallout boardTooltip, GameManager game, TMP_Text trayClockText, ShiftClockDriver clock,
                                                 ContentLibrarySO library, FallbackHud hud, PcFrame pcFrame, StampTray stampTray,
                                                 OfficeCaseHud caseHud, Button deskViewBack, out Clickable readySign)
     {
@@ -658,6 +658,11 @@ public static partial class OfficeSceneUIBuilder
         Prop("Stapler", OfficeAnchorId.Stapler, EnsureDeskReaction("Reaction_Stapler", ReactionKind.Squash, ""), null, "stapler");
         WirePersistentVoid(propsRoot.Find("Intercom").GetComponent<Clickable>(), "onClick", wheel, nameof(TravellerWheel.Open));
         WirePersistentVoid(propsRoot.Find("Stamp").GetComponent<Clickable>(), "onClick", stampTray, nameof(StampTray.Open));
+
+        // The hall's Departure Board and portal rings (the portals spec v3; OfficeSceneUIBuilder.Portals.cs).
+        DepartureBoardView board = BuildDepartureBoard(office, config, boardTooltip, game);
+        clicks.Add(board.transform.Find("ClickBox").GetComponent<Clickable>());
+        PortalEffect[] portalEffects = BuildPortalEffects(office, config);
         AssetDatabase.SaveAssets();
 
         // The readouts (the binder hands them the art's texts or the fallback HUD's).
@@ -736,6 +741,9 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "hudStability", hud.stability);
         SetRef(soBinder, "hudCredits", hud.credits);
         SetRef(soBinder, "hudClock", hud.clock);
+        SetRef(soBinder, "game", game);
+        SetRef(soBinder, "board", board);
+        SerializedArrays.Set(soBinder, "portalEffects", portalEffects);
         soBinder.ApplyModifiedProperties();
 
         // Checks (the validator runs the same, audit R6-021): every paper a traveller carries has a spawn slot, every document's rows fit its paper's face, the wheel shows the menu capacity.
@@ -1401,7 +1409,7 @@ public static partial class OfficeSceneUIBuilder
     /// object is out of view, below the case HUD's strips (the speech bubble),
     /// else it hides (the tooltip).
     /// </summary>
-    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background, ThemeRoleId role, bool keepOnScreen)
+    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background, ThemeRoleId role, bool keepOnScreen, bool grows = false)
     {
         DestroyChildIfPresent(overlay, name);
         Transform host = Panel(overlay, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -1415,6 +1423,8 @@ public static partial class OfficeSceneUIBuilder
         label.fontSizeMax = 24f;
         label.textWrappingMode = TextWrappingModes.Normal;
         label.raycastTarget = false;
+        if (grows)
+            Grow(panel, label, size);
 
         OverlayCallout callout = host.gameObject.AddComponent<OverlayCallout>();
         var so = new SerializedObject(callout);
@@ -1422,6 +1432,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "label", label);
         so.FindProperty("keepOnScreen").boolValue = keepOnScreen;
         so.FindProperty("topInset").floatValue = keepOnScreen ? OverlayTopClearance : 0f;
+        so.FindProperty("grows").boolValue = grows;
         so.ApplyModifiedProperties();
 
         panel.gameObject.SetActive(false);

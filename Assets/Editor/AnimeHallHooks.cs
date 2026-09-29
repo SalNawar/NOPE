@@ -20,6 +20,10 @@ using UnityEngine.SceneManagement;
 /// Cameras/OfficeVCam, framing the office as the hall's camera does, its lens
 /// copied) and a CinemachineBrain on that camera, tagged MainCamera; the
 /// hall's daylight lighting the gameplay's layers (Default, Interactable);
+/// the Departure Board's marker (GameplayAnchors/Anchor_DepartureBoard: an
+/// empty RectTransform over the board display layer's opaque pixels, its
+/// sprite's physics shape, which the gameplay draws the day's portal rows on;
+/// the portals spec v3 BD1, authorised by Saleh 2026-09-30);
 /// and, through Add Gameplay Anchors, an anchor for every place on its default
 /// pose (the scanner, the traveller, the hand-over point). What exists is left
 /// alone, so a second run changes nothing. The scene is marked dirty, not
@@ -131,6 +135,7 @@ public static class AnimeHallHooks
         var changes = new List<string>();
         Transform anchors = AnchorRoot(hall, changes);
         AddReadouts(contract, anchors, camera.gameObject.layer, changes);
+        AddBoardMarker(hall, contract, anchors, camera.gameObject.layer, changes);
         DeletePreviews(hall, changes);
         AddDeskViewCamera(hall, contract, camera, changes);
         LightGameplayLayers(hall, changes);
@@ -189,6 +194,39 @@ public static class AnimeHallHooks
             text.color = r.OnLightCard ? Ink : Glow;
             changes.Add($"added {OfficeContract.AnchorRoot}/{name}");
         }
+    }
+
+    /// <summary>
+    /// The Departure Board's marker when the root lacks it: an empty
+    /// RectTransform named Anchor_DepartureBoard, standing and facing as the
+    /// board display layer (the contract's fallback) does, sized to its opaque
+    /// pixels (OfficeAnchors.OpaqueRect), so the art side can move or resize
+    /// where the rows print.
+    /// </summary>
+    private static void AddBoardMarker(Scene hall, OfficeSceneContractSO contract, Transform root, int layer, List<string> changes)
+    {
+        string name = OfficeContract.AnchorName(OfficeAnchorId.DepartureBoard);
+        if (root.Find(name) != null)
+            return;
+        string display = contract.Spec(OfficeAnchorId.DepartureBoard)?.fallbacks.FirstOrDefault(OfficeContract.IsBareName);
+        Transform found = string.IsNullOrEmpty(display) ? null : OfficeAnchors.Find(hall, display, includeInactive: false);
+        SpriteRenderer sprite = found != null ? found.GetComponent<SpriteRenderer>() : null;
+        if (sprite == null || sprite.sprite == null)
+        {
+            Debug.LogWarning($"[AnimeHallHooks] No board display '{display}' with a sprite: {name} was not added.");
+            return;
+        }
+
+        Rect opaque = OfficeAnchors.OpaqueRect(sprite.sprite);
+        Transform frame = sprite.transform;
+        var go = new GameObject(name, typeof(RectTransform));
+        Undo.RegisterCreatedObjectUndo(go, UndoName);
+        go.layer = layer;
+        go.transform.SetParent(root, false);
+        go.transform.SetPositionAndRotation(frame.TransformPoint(opaque.center), frame.rotation);
+        Vector3 scale = frame.lossyScale, parent = root.lossyScale;
+        ((RectTransform)go.transform).sizeDelta = new Vector2(opaque.width * scale.x / parent.x, opaque.height * scale.y / parent.y);
+        changes.Add($"added {OfficeContract.AnchorRoot}/{name} over '{display}'");
     }
 
     /// <summary>Deletes the static preview TextMeshes (the readouts replace them; they would show stale values beside them).</summary>
