@@ -122,7 +122,7 @@ public static partial class WorldContentGenerator
 
         WireBlueprints(authored);
 
-        DayPlanSO[] days = src.days.Select(d => MakeDay(d, src.content.dayPlanFolder, authored, eras, nations, rules, premadesById)).ToArray();
+        DayPlanSO[] days = src.days.Select(d => MakeDay(d, src.content.dayPlanFolder, authored, eras, nations, rules, premadesById, refs)).ToArray();
 
         // --- Interview: questions, dialogs, unlock announcements ---
         QuestionData[] questionData = src.questions ?? Array.Empty<QuestionData>();
@@ -1608,11 +1608,12 @@ public static partial class WorldContentGenerator
     /// <summary>
     /// Writes the day's queue, tell count, tell channels, lies, eras, countries,
     /// rules, the violation chance, the premade pool and chance, and the
-    /// forced slots (premade, blueprint or both; authoritative).
+    /// forced slots (premade, blueprint or both, and each appearance's id,
+    /// authored fault and conditions, days 7-15; authoritative).
     /// </summary>
     private static DayPlanSO MakeDay(DayData d, string folder, Authored authored, Dictionary<string, EraSO> eras,
                                      Dictionary<string, NationSO> nations, Dictionary<string, TravelRuleSO> rules,
-                                     Dictionary<string, LegendarySO> premades)
+                                     Dictionary<string, LegendarySO> premades, ConditionRefs refs)
     {
         DayPlanSO plan = LoadOrCreate<DayPlanSO>($"{folder}/{d.asset}.asset", null);
         var so = new SerializedObject(plan);
@@ -1646,6 +1647,11 @@ public static partial class WorldContentGenerator
             el.FindPropertyRelative("caseIndex1Based").intValue = forcedData[i].slot;
             el.FindPropertyRelative("caseBlueprint").objectReferenceValue = string.IsNullOrEmpty(forcedData[i].blueprint) ? null : authored.forcedBlueprints[forcedData[i].blueprint];
             el.FindPropertyRelative("legendary").objectReferenceValue = string.IsNullOrEmpty(forcedData[i].premade) ? null : premades[forcedData[i].premade];
+            el.FindPropertyRelative("id").stringValue = forcedData[i].id ?? string.Empty;
+            bool hasLie = ParseEnum(forcedData[i].lie, out LieKind lie);
+            el.FindPropertyRelative("hasLie").boolValue = hasLie;
+            el.FindPropertyRelative("lie").enumValueIndex = hasLie ? (int)lie : 0;
+            el.FindPropertyRelative("directive").enumValueIndex = ParseEnum(forcedData[i].directive, out PlannedDirective directive) ? (int)directive : 0;
         }
 
         EraWeightData[] weightsData = d.eras ?? Array.Empty<EraWeightData>();
@@ -1659,6 +1665,11 @@ public static partial class WorldContentGenerator
         }
 
         so.ApplyModifiedProperties();
+
+        // The appearances' conditions (object references resolved like a dialog's), in the forced slots' order.
+        for (int i = 0; i < forcedData.Length; i++)
+            plan.ForcedCases[i].conditions = Conditions(forcedData[i].conditions, refs).ToList();
+
         EditorUtility.SetDirty(plan);
         return plan;
     }
@@ -2110,8 +2121,17 @@ public static partial class WorldContentGenerator
     /// <summary>A premade's timeline impact; a missing skipNationScore means the delta also moves the nation's score.</summary>
     [Serializable] private sealed class ImpactData { public string attribute; public float onCorrect; public float onWrong; public bool skipNationScore; }
 
-    /// <summary>A forced slot: a premade id, a blueprint asset path, or both.</summary>
-    [Serializable] private sealed class ForcedData { public int slot; public string premade; public string blueprint; }
+    /// <summary>A forced slot: a premade id, a blueprint asset path, or both; and, each left out when blank (days 7-15), the appearance's id, its authored lie (a LieKind) or directive fault (a PlannedDirective), and its conditions.</summary>
+    [Serializable] private sealed class ForcedData
+    {
+        public int slot;
+        public string premade;
+        public string blueprint;
+        public string id;
+        public string lie;
+        public string directive;
+        public ConditionData[] conditions;
+    }
 
     /// <summary>Authored assets the world is wired into (asset paths).</summary>
     [Serializable] private sealed class ContentData

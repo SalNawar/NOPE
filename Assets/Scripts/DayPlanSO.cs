@@ -327,6 +327,15 @@ public sealed class ForcedCaseSlot
     /// <summary>A premade who stands in this slot (null = none); the slot is never a rule violator's.</summary>
     public LegendarySO legendary;
 
+    /// <summary>True when the appearance tells an authored lie (<see cref="lie"/>; days 7-15 B6): the slot's authoring, never a roll.</summary>
+    public bool hasLie;
+
+    /// <summary>The appearance's authored lie (read only when <see cref="hasLie"/>): its variant and false values drawn on the traveller's lie stream, as a rolled lie's are.</summary>
+    public LieKind lie;
+
+    /// <summary>The appearance's authored directive fault (None: none; days 7-15 B6): the maker's variant pinned (Directives.Plan), its values drawn on the traveller's fault stream.</summary>
+    public PlannedDirective directive;
+
     /// <summary>When this appearance stands (all must pass on the day-start snapshot; none: always): the verdict memory's flags, dialog flags, the day (days 7-15 B9).</summary>
     public List<TriggerCondition> conditions = new();
 }

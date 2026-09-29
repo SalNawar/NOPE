@@ -92,6 +92,21 @@ public class SerializedEnumsTests
         Assert.AreEqual(10, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
     }
 
+    /// <summary>PlannedDirective: stored in DayPlanSO's forced slots (world_source.json days[].forced[].directive; days 7-15 B6).</summary>
+    [Test]
+    public void PlannedDirective_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)PlannedDirective.None);
+        Assert.AreEqual(1, (int)PlannedDirective.EconomyManifest);
+        Assert.AreEqual(2, (int)PlannedDirective.WaiverMissing);
+        Assert.AreEqual(3, (int)PlannedDirective.WaiverUnsigned);
+        Assert.AreEqual(4, (int)PlannedDirective.ProofMissing);
+        Assert.AreEqual(5, (int)PlannedDirective.Frozen);
+        Assert.AreEqual(6, (int)PlannedDirective.DepartureDate);
+        Assert.AreEqual(7, (int)PlannedDirective.Expired);
+        Assert.AreEqual(8, System.Enum.GetValues(typeof(PlannedDirective)).Length, "a new member is appended here too");
+    }
+
     /// <summary>MissingFormVariant: stored in the content library's missing-form replies (interview.missingFormReplies).</summary>
     [Test]
     public void MissingFormVariant_KeepsItsSerializedInts()

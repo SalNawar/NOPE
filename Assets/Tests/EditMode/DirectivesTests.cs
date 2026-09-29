@@ -521,6 +521,74 @@ public class DirectivesTests
     }
 
     [Test]
+    public void Plan_MapsEachPlannedDirectiveToItsRuleAndVariant()
+    {
+        (PlannedDirective planned, TravelRuleType rule, PaperSetBreak paper, PaperDateFault date)[] table =
+        {
+            (PlannedDirective.EconomyManifest, TravelRuleType.PaperSet, PaperSetBreak.EconomyManifest, PaperDateFault.None),
+            (PlannedDirective.WaiverMissing, TravelRuleType.PaperSet, PaperSetBreak.WaiverMissing, PaperDateFault.None),
+            (PlannedDirective.WaiverUnsigned, TravelRuleType.PaperSet, PaperSetBreak.WaiverUnsigned, PaperDateFault.None),
+            (PlannedDirective.ProofMissing, TravelRuleType.PaperSet, PaperSetBreak.ProofMissing, PaperDateFault.None),
+            (PlannedDirective.Frozen, TravelRuleType.DebtStanding, PaperSetBreak.None, PaperDateFault.None),
+            (PlannedDirective.DepartureDate, TravelRuleType.PaperDates, PaperSetBreak.None, PaperDateFault.Departure),
+            (PlannedDirective.Expired, TravelRuleType.PaperDates, PaperSetBreak.None, PaperDateFault.Expiry)
+        };
+        foreach ((PlannedDirective planned, TravelRuleType rule, PaperSetBreak paper, PaperDateFault date) in table)
+        {
+            DirectivePlan plan = Directives.Plan(planned);
+            Assert.IsTrue(plan.IsFault, planned.ToString());
+            Assert.AreEqual(rule, plan.Rule, planned.ToString());
+            Assert.AreEqual(paper, plan.PaperBreak, planned.ToString());
+            Assert.AreEqual(date, plan.DateFault, planned.ToString());
+            Assert.IsTrue(Directives.IsRolled(plan.Rule), $"{planned}: its rule has a maker the pinned variant drives");
+        }
+    }
+
+    [Test]
+    public void Plan_NoneIsNoFault()
+    {
+        DirectivePlan plan = Directives.Plan(PlannedDirective.None);
+        Assert.IsFalse(plan.IsFault);
+        Assert.AreEqual(PaperSetBreak.None, plan.PaperBreak);
+        Assert.AreEqual(PaperDateFault.None, plan.DateFault);
+    }
+
+    [Test]
+    public void PickPaperSetBreak_APinnedVariantDrawsNothing()
+    {
+        var rng = new ScriptedRandom();
+        Assert.AreEqual(PaperSetBreak.WaiverUnsigned, Directives.PickPaperSetBreak(TravellerKind.PoorTourist, PoorSet, rng, PaperSetBreak.WaiverUnsigned));
+        Assert.IsTrue(rng.Done, "the slot's authoring chose it: no draw");
+    }
+
+    [Test]
+    public void PickPaperSetBreak_APinnedVariantThatCannotShowIsNone()
+    {
+        var rng = new ScriptedRandom();
+        Assert.AreEqual(PaperSetBreak.None, Directives.PickPaperSetBreak(TravellerKind.RichTourist, RichSet, rng, PaperSetBreak.WaiverUnsigned), "a rich tourist carries no waiver");
+        Assert.AreEqual(PaperSetBreak.None, Directives.PickPaperSetBreak(TravellerKind.Labourer, LabourSet, rng, PaperSetBreak.ProofMissing), "a labourer carries no proof of means");
+        Assert.IsTrue(rng.Done);
+    }
+
+    [Test]
+    public void PlanDateFault_APinnedDepartureDrawsNothing()
+    {
+        var rng = Script();
+        PaperDatePlan plan = Directives.PlanDateFault(true, 2, rng, PaperDateFault.Departure);
+        Assert.AreEqual((PaperDateFault.Departure, -1), (plan.Fault, plan.ExpiryIndex));
+        Assert.IsTrue(rng.Done);
+        Assert.AreEqual(PaperDateFault.None, Directives.PlanDateFault(false, 2, Script(), PaperDateFault.Departure).Fault, "no departure printed: nothing to falsify");
+    }
+
+    [Test]
+    public void PlanDateFault_APinnedExpiryDrawsOnlyTheForm()
+    {
+        PaperDatePlan plan = Directives.PlanDateFault(true, 2, Script(R(1)), PaperDateFault.Expiry);
+        Assert.AreEqual((PaperDateFault.Expiry, 1), (plan.Fault, plan.ExpiryIndex), "the draw is over the expiring forms only, never the departure");
+        Assert.AreEqual(PaperDateFault.None, Directives.PlanDateFault(true, 0, Script(), PaperDateFault.Expiry).Fault, "nothing expires: nothing to falsify");
+    }
+
+    [Test]
     public void PlanDateFault_NothingPrinted_OrNoStream_IsNone_WithNoDraw()
     {
         Assert.AreEqual(PaperDateFault.None, Directives.PlanDateFault(false, 0, Script()).Fault);

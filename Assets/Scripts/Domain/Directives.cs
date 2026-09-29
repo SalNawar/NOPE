@@ -25,6 +25,65 @@ public enum PaperSetBreak
     ProofMissing
 }
 
+/// <summary>
+/// A forced slot's authored directive fault (days 7-15 B6): which procedure
+/// the appearance breaks and how, so a beat's scene can name it (an
+/// unsigned waiver, a frozen account). Serialized in DayPlanSO's forced slots
+/// (world_source.json days[].forced[].directive): append only
+/// (SerializedEnumsTests pins every value).
+/// </summary>
+public enum PlannedDirective
+{
+    /// <summary>No authored directive fault.</summary>
+    None,
+
+    /// <summary>The paper set: a Premium visa on an Economy transponder (a rich tourist).</summary>
+    EconomyManifest,
+
+    /// <summary>The paper set: the Stranding Waiver left out (a kind that carries one).</summary>
+    WaiverMissing,
+
+    /// <summary>The paper set: the Stranding Waiver handed over unsigned (a kind that carries one).</summary>
+    WaiverUnsigned,
+
+    /// <summary>The paper set: the proof of means left out (a poor tourist).</summary>
+    ProofMissing,
+
+    /// <summary>The debt standing: a Frozen account (a 2150 citizen).</summary>
+    Frozen,
+
+    /// <summary>The papers' dates: a departure dated another day (a kind whose papers print one).</summary>
+    DepartureDate,
+
+    /// <summary>The papers' dates: a Valid Until that has passed (a kind whose papers print one).</summary>
+    Expired
+}
+
+/// <summary>What an authored directive fault makes (Directives.Plan): the rule it breaks and the maker's variant, pinned instead of drawn.</summary>
+public readonly struct DirectivePlan
+{
+    /// <summary>True for a fault; false for PlannedDirective.None.</summary>
+    public readonly bool IsFault;
+
+    /// <summary>The procedure the traveller breaks (read only when <see cref="IsFault"/>).</summary>
+    public readonly TravelRuleType Rule;
+
+    /// <summary>The paper set's pinned variant (None for another rule).</summary>
+    public readonly PaperSetBreak PaperBreak;
+
+    /// <summary>The papers' dates' pinned variant (None for another rule).</summary>
+    public readonly PaperDateFault DateFault;
+
+    /// <summary>Creates a plan.</summary>
+    public DirectivePlan(bool isFault, TravelRuleType rule, PaperSetBreak paperBreak, PaperDateFault dateFault)
+    {
+        IsFault = isFault;
+        Rule = rule;
+        PaperBreak = paperBreak;
+        DateFault = dateFault;
+    }
+}
+
 /// <summary>One of today's Directives as the rules see it: its type and the kinds it applies to (empty: every kind).</summary>
 public readonly struct Directive
 {
@@ -360,14 +419,47 @@ public static class Directives
     /// The paper-set maker's variant for a traveller of <paramref name="kind"/>
     /// carrying <paramref name="forms"/>: one Range draw over
     /// <see cref="PaperSetBreaks"/> when two or more can show, none when one
-    /// can, None with no draw when none can or without a stream.
+    /// can, None with no draw when none can or without a stream. A
+    /// <paramref name="pinned"/> variant (a forced slot's authored fault)
+    /// is taken with no draw when it can show, else None.
     /// </summary>
-    public static PaperSetBreak PickPaperSetBreak(TravellerKind kind, IReadOnlyCollection<string> forms, IRandomSource rng)
+    public static PaperSetBreak PickPaperSetBreak(TravellerKind kind, IReadOnlyCollection<string> forms, IRandomSource rng, PaperSetBreak pinned = PaperSetBreak.None)
     {
         List<PaperSetBreak> breaks = PaperSetBreaks(kind, forms);
+        if (pinned != PaperSetBreak.None)
+            return breaks.Contains(pinned) ? pinned : PaperSetBreak.None;
         if (breaks.Count == 0 || rng == null)
             return PaperSetBreak.None;
         return breaks.Count == 1 ? breaks[0] : breaks[rng.Range(0, breaks.Count)];
+    }
+
+    /// <summary>
+    /// A forced slot's authored directive fault (days 7-15 B6) as its maker
+    /// runs it: the procedure it breaks and the variant pinned for the
+    /// maker (the paper set's missing, unsigned or Economy variant, the
+    /// papers' dates' departure or expiry); not a fault for None.
+    /// </summary>
+    public static DirectivePlan Plan(PlannedDirective planned)
+    {
+        switch (planned)
+        {
+            case PlannedDirective.EconomyManifest:
+                return new DirectivePlan(true, TravelRuleType.PaperSet, PaperSetBreak.EconomyManifest, PaperDateFault.None);
+            case PlannedDirective.WaiverMissing:
+                return new DirectivePlan(true, TravelRuleType.PaperSet, PaperSetBreak.WaiverMissing, PaperDateFault.None);
+            case PlannedDirective.WaiverUnsigned:
+                return new DirectivePlan(true, TravelRuleType.PaperSet, PaperSetBreak.WaiverUnsigned, PaperDateFault.None);
+            case PlannedDirective.ProofMissing:
+                return new DirectivePlan(true, TravelRuleType.PaperSet, PaperSetBreak.ProofMissing, PaperDateFault.None);
+            case PlannedDirective.Frozen:
+                return new DirectivePlan(true, TravelRuleType.DebtStanding, PaperSetBreak.None, PaperDateFault.None);
+            case PlannedDirective.DepartureDate:
+                return new DirectivePlan(true, TravelRuleType.PaperDates, PaperSetBreak.None, PaperDateFault.Departure);
+            case PlannedDirective.Expired:
+                return new DirectivePlan(true, TravelRuleType.PaperDates, PaperSetBreak.None, PaperDateFault.Expiry);
+            default:
+                return new DirectivePlan(false, TravelRuleType.EraForbidden, PaperSetBreak.None, PaperDateFault.None);
+        }
     }
 
     /// <summary>
@@ -527,9 +619,17 @@ public static class Directives
     /// print: the departure when <paramref name="hasDeparture"/>, then each of
     /// the <paramref name="expiringForms"/> Valid Untils in paper order. None,
     /// with no draw, when nothing is printed or <paramref name="rng"/> is null.
+    /// A <paramref name="pinned"/> variant (a forced slot's authored fault)
+    /// skips the choice: the departure with no draw (None when none is
+    /// printed), or an expiry drawn over the expiring forms only.
     /// </summary>
-    public static PaperDatePlan PlanDateFault(bool hasDeparture, int expiringForms, IRandomSource rng)
+    public static PaperDatePlan PlanDateFault(bool hasDeparture, int expiringForms, IRandomSource rng, PaperDateFault pinned = PaperDateFault.None)
     {
+        if (pinned == PaperDateFault.Departure)
+            return new PaperDatePlan(hasDeparture ? PaperDateFault.Departure : PaperDateFault.None, -1);
+        if (pinned == PaperDateFault.Expiry)
+            hasDeparture = false;
+
         int options = (hasDeparture ? 1 : 0) + Math.Max(0, expiringForms);
         if (rng == null || options == 0)
             return new PaperDatePlan(PaperDateFault.None, -1);
