@@ -142,13 +142,17 @@ public sealed class CultureThemeService : TimelineCueReceiver
         Instance = this;
     }
 
-    private void OnEnable()
+    /// <summary>Themes each scene as it loads, and follows the run's effect changes (TimelineCueReceiver).</summary>
+    protected override void OnEnable()
     {
+        base.OnEnable();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnDisable()
+    /// <summary>Stops both.</summary>
+    protected override void OnDisable()
     {
+        base.OnDisable();
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
