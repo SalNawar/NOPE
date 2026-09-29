@@ -209,7 +209,7 @@ public class WorldPullsTests
     }
 
     [Test]
-    public void FromScores_SeedsOnce_OnlyPastDayOne_ByMagnitude()
+    public void FromScores_SeedsAnOlderSaveOnce_OnlyPastDayOne_ByMagnitude()
     {
         var seeds = new Dictionary<string, string> { ["science"] = "future", ["democracy"] = "government" };
         var deltas = new List<(string, string, float)>
@@ -220,13 +220,14 @@ public class WorldPullsTests
         IEnumerable<OutcomeRef> LeaningsOf(string place) => place == "japan_industrial" ? MeijiNagoya : new List<OutcomeRef>();
 
         var pulls = new List<OutcomePull>();
-        Assert.IsFalse(WorldPulls.FromScores(pulls, 1, deltas, seeds, LeaningsOf), "a day-1 save has nothing to seed");
-        Assert.IsTrue(WorldPulls.FromScores(pulls, 5, deltas, seeds, LeaningsOf));
+        Assert.IsFalse(WorldPulls.FromScores(pulls, null, 1, deltas, seeds, LeaningsOf), "a day-1 save has nothing to seed");
+        Assert.IsFalse(WorldPulls.FromScores(pulls, new[] { Held("directorate") }, 5, deltas, seeds, LeaningsOf), "a run of this build has latched leads: never seeded");
+        Assert.IsTrue(WorldPulls.FromScores(pulls, new FactorLead[0], 5, deltas, seeds, LeaningsOf));
         Assert.AreEqual(3f, WorldPulls.Weight(pulls, "future", "cybernetic"));
         Assert.AreEqual(2f, WorldPulls.Weight(pulls, "government", "monarchy"), "a magnitude, never a sign");
         Assert.AreEqual(2, pulls.Count, "art seeds nothing; a place with no leaning adds nothing");
 
-        Assert.IsFalse(WorldPulls.FromScores(pulls, 6, deltas, seeds, LeaningsOf), "a later load finds pulls and skips the seed");
+        Assert.IsFalse(WorldPulls.FromScores(pulls, null, 6, deltas, seeds, LeaningsOf), "a later load finds pulls and skips the seed");
         Assert.AreEqual(3f, WorldPulls.Weight(pulls, "future", "cybernetic"));
     }
 

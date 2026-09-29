@@ -60,10 +60,12 @@ public static class DayCycle
     /// <paramref name="evidenceCount"/>, -1 when the evidence system is not
     /// active) goes onto <paramref name="ledger"/>; a premade's verdict is
     /// remembered (FlagKeys.PremadeVerdictChange: the latest decision wins),
-    /// for the forced slots and story rules that read it; an accepted
-    /// traveller is dispatched: the timeline impacts land on the claimed
-    /// place, their tell source's carry is recorded and a costume error's
-    /// panic is noted.
+    /// for the forced slots and story rules that read it; the decision pulls
+    /// the world's outcomes (WorldOutcomeService.RecordDecision: an accepted
+    /// traveller toward their destination's leanings, a denial toward "as you
+    /// found it"); an accepted traveller is dispatched: the timeline impacts
+    /// land on the claimed place, their tell source's carry is recorded and a
+    /// costume error's panic is noted.
     /// </summary>
     public static CaseVerdict Decide(CaseInstance inst, bool accepted, int caseIndex1Based, int evidenceCount,
                                      WorldState world, TodaysWorld today, ShiftLedger ledger, ContentLibrarySO lib, GameConfigSO config)
@@ -77,6 +79,8 @@ public static class DayCycle
             world.SetFlag(memory.set);
             world.ClearFlag(memory.clear);
         }
+
+        WorldOutcomeService.RecordDecision(world, inst, accepted, lib, config);
 
         if (accepted)
         {
@@ -134,12 +138,37 @@ public static class DayCycle
     /// </summary>
     public static void AdvanceNight(WorldState world, ContentLibrarySO lib, GameConfigSO config)
     {
-        TimelineService.NightlyResolve(world, lib, config);
+        CloseDay(world, lib, config);
 
         world.day++;
         world.citationsToday = 0;
         world.phase = RunPhase.Office;
         OrderBook.Deliver(world, lib);
+    }
+
+    /// <summary>
+    /// The day's night resolve (TimelineService.NightlyResolve: the leader,
+    /// the story and history rules, the world's answers, the carries, the next
+    /// morning's paper) without turning the day: AdvanceNight's first step,
+    /// and the run's last night (EndRun).
+    /// </summary>
+    private static void CloseDay(WorldState world, ContentLibrarySO lib, GameConfigSO config)
+    {
+        TimelineService.NightlyResolve(world, lib, config);
+    }
+
+    /// <summary>
+    /// The run ends at the day boundary on <paramref name="ending"/>
+    /// (RunManager.Sleep, and the balance simulation): the run's last day
+    /// (EndingKind.Milestone) still gets its own night resolve, so the world
+    /// the end of the demo shows includes that day's choices (the leader, the
+    /// story rules' pulls, the world's answers); a failure leaves the world as
+    /// its last night latched it. The day does not turn.
+    /// </summary>
+    public static void EndRun(WorldState world, EndingSO ending, ContentLibrarySO lib, GameConfigSO config)
+    {
+        if (world != null && ending != null && EndingRules.KindOf(ending.conditionType) == EndingKind.Milestone)
+            CloseDay(world, lib, config);
     }
 
     /// <summary>

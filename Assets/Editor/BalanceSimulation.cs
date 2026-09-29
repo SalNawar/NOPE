@@ -275,6 +275,7 @@ public static class BalanceSimulation
             EndingSO sleep = EndingService.Evaluate(world, lib, config, EndingMoment.DayBoundary);
             if (sleep != null)
             {
+                DayCycle.EndRun(world, sleep, lib, config);
                 r.Dump.AppendLine($"night {day}: household {bill.total} money {world.money} ENDING {sleep.id}");
                 End(r, sleep.id, day);
                 break;
@@ -462,7 +463,7 @@ public static class BalanceSimulation
             .TakeWhile(l => l.Count > 0)
             .Select((l, n) => $"d{n + 1}:{BalanceStats.Mean(l).ToString("0.00", Inv)}/{l.Min().ToString("0.00", Inv)}")));
 
-        World(sb, runs, lib);
+        World(sb, runs, lib, config);
     }
 
     /// <summary>
@@ -472,17 +473,31 @@ public static class BalanceSimulation
     /// distribution per factor, never against a target (Saleh 2026-09-29:
     /// "we dont make judgements").
     /// </summary>
-    private static void World(StringBuilder sb, List<RunResult> runs, ContentLibrarySO lib)
+    private static void World(StringBuilder sb, List<RunResult> runs, ContentLibrarySO lib, GameConfigSO config)
     {
         if (runs.Count == 0)
             return;
-        List<List<OutcomeLine>> worlds = runs.Select(r => lib.WorldOutcomes(r.World.history)).ToList();
+        List<List<OutcomeLine>> worlds = runs.Select(r => lib.WorldOutcomes(r.World, config)).ToList();
         sb.AppendLine($"the world the runs leave ({runs.Count} runs, the outcomes under END OF DEMO; a distribution, not a target):");
         foreach (OutcomeLine factor in worlds[0])
         {
             IEnumerable<string> answers = worlds.Select(w => w.FirstOrDefault(l => l.FactorId == factor.FactorId).Answer ?? "none");
             sb.AppendLine($"  {factor.Question} " + string.Join(", ", answers.GroupBy(a => a).OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal).Select(g => $"{g.Key} x{g.Count()}")));
         }
+
+        // The endings spec §10's watch lines (variety, not a target): which outcomes no run reached, how often the world
+        // stayed as the run found it, how many splits; tuned in the leanings and the Inspector, never by making one outcome "harder".
+        List<List<FactorLead>> leads = runs.Select(r => lib.WorldAnswersNow(r.World, config)).ToList();
+        foreach (WorldFactor f in lib.World.factors.Where(f => f != null && f.answer == FactorAnswer.Pulls))
+        {
+            List<FactorLead> of = leads.Select(a => a.FirstOrDefault(l => l.factor == f.id)).Where(l => l != null).ToList();
+            IEnumerable<string> reached = of.SelectMany(l => l.IsSplit ? new[] { l.outcome, l.split } : new[] { l.outcome });
+            List<string> never = lib.World.OutcomesOf(f.id).Select(o => o.id).Except(reached).ToList();
+            sb.AppendLine($"  watch, {f.id}: as found ({f.statusQuo}) in {of.Count(l => !l.IsSplit && l.outcome == f.statusQuo)} of {of.Count}; splits {of.Count(l => l.IsSplit)}; " +
+                          $"outcomes no run reached: {(never.Count > 0 ? string.Join(", ", never) : "none")}");
+        }
+        sb.AppendLine("  watch, pull per run at the end (mean, all outcomes of a factor): " + string.Join(", ", lib.World.PullFactors()
+            .Select(f => $"{f.Id} {F(BalanceStats.Mean(runs.Select(r => r.World.pulls.Where(p => p.factor == f.Id).Sum(p => p.amount))))}")));
     }
 
     /// <summary>The random draws of the perfect runs by day: how many, how many faulty and why, by kind.</summary>

@@ -76,7 +76,9 @@ public static partial class WorldContentGenerator
         CulturePlan culture = PlanCulture(src, errors);
         CheckTranslation(src, authored, errors);
         CheckHome(src, authored, errors);
-        errors.AddRange(BuildWorld(src.world, errors).Problems());
+        WorldContent world = BuildWorld(src.world, errors);
+        errors.AddRange(world.Problems());
+        CheckWorldRefs(src, world, authored, errors);
         CheckAgency(src, errors);
         CheckPortals(src, authored, errors);
         CheckDayKinds(src, authored, errors);

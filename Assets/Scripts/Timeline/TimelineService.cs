@@ -118,7 +118,8 @@ public static class TimelineService
     /// <summary>
     /// Runs the full nightly resolve. Call at sleep, BEFORE world.day increments.
     /// Order: dominance (news only for tomorrow's places) -> tier effects ->
-    /// the timeline leader -> triggers (history rules latch here) -> carries ->
+    /// the timeline leader -> triggers (history rules latch here, and their
+    /// pulls land) -> the world's answers (WorldOutcomeService.Latch) -> carries ->
     /// today's panics -> the debt line -> expiry -> tomorrow package.
     /// </summary>
     public static void NightlyResolve(WorldState world, ContentLibrarySO lib, GameConfigSO config)
@@ -139,6 +140,7 @@ public static class TimelineService
         RebuildTierEffects(world, lib, tomorrow);
         int historyLines = HistoryService.LatchLeader(world, lib, config, tomorrow, news);
         EvaluateTriggers(world, lib, tomorrow, news, desk);
+        historyLines += WorldOutcomeService.Latch(world, lib, config, tomorrow, news, historyLines);
         HistoryService.PromoteCarries(world, lib, config, tomorrow, news, historyLines);
         HistoryService.ReportPanics(world, lib, news);
         HistoryService.ReportStrandings(world, lib, news);

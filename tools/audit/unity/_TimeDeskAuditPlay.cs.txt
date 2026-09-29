@@ -287,6 +287,13 @@ public static class _TimeDeskAuditPlay
         foreach (string l in Lines(card))
             Line("   [card] " + l);
         Check(world, $"the day-15 ending shows the world page with the world's outcomes ('{endingId}')");
+        if (world)
+        {
+            // The endings spec E1-E2: every factor's question with its answer as the run left it (ContentLibrarySO.WorldOutcomes), never a number.
+            foreach (OutcomeLine o in RunManager.Instance.Library.WorldOutcomes(RunManager.Instance.World, RunManager.Instance.Config.gameConfig))
+                Check(body.Contains(o.Question) && !string.IsNullOrWhiteSpace(o.Answer) && body.Contains(o.Answer), $"the world page answers '{o.Question}' with '{o.Answer}'");
+            Check(!body.Contains("%"), "the world page shows no percentage (no pull, weight or score)");
+        }
         Check(card.Contains("END OF DEMO"), $"the demo ends on the END OF DEMO card under the outcomes ('{endingId}', shown {card.Contains("END OF DEMO")})");
         if (ShotsOn)
             yield return Shots($"ending_{endingId}");
@@ -1094,6 +1101,7 @@ public static class _TimeDeskAuditPlay
     {
         WorldState w = RunManager.Instance.World;
         Line($"   world: day={w.day} runSeed={w.runSeed} daySeed={RunManager.Instance.GetDaySeed()} money={w.money} stability={F(w.timelineStability)} leader='{w.history.leaderId}' upgrades=[{string.Join(",", w.unlockedUpgradeIds)}] phase={w.phase}");
+        Line($"   world answers (latched): {string.Join(" | ", w.leads.Select(l => $"{l.factor}={l.outcome}{(l.IsSplit ? "/" + l.split : "")} since {l.sinceDay}"))}; pulls: {string.Join(", ", w.pulls.Select(p => $"{p.factor}/{p.outcome} {F(p.amount)}"))}");
         Line($"   plan: {RunManager.Instance.GetCurrentDayPlan().name} visitors={RunManager.Instance.GetCurrentDayPlan().VisitorsCount}");
         Line($"   rules: {string.Join(" | ", RunManager.Instance.GetCurrentDayPlan().ActiveTravelRules.Where(r => r != null).Select(r => r.Summary()))}");
     }

@@ -347,17 +347,19 @@ public static class WorldPulls
     /// <summary>
     /// The one-time seed of an older save continued mid-run (the endings spec
     /// §9): true (and <paramref name="pulls"/> filled) only when it has no
-    /// pull yet and <paramref name="day"/> is past 1. Each saved per-place
+    /// pull and no latched lead yet (<paramref name="leads"/>: a run of this
+    /// build latches every factor each night, so only an older save has
+    /// none) and <paramref name="day"/> is past 1. Each saved per-place
     /// attribute delta (<paramref name="placeDeltas"/>: place id, attribute
     /// id, delta) whose attribute seeds a factor (<paramref name="seeds"/>,
     /// from <see cref="SeedFactors"/>) pulls that factor toward the place's
     /// leaning (<paramref name="leaningsOf"/>) by the delta's magnitude (the
     /// sign is never read: a pull is never negative).
     /// </summary>
-    public static bool FromScores(List<OutcomePull> pulls, int day, IEnumerable<(string place, string attribute, float delta)> placeDeltas,
+    public static bool FromScores(List<OutcomePull> pulls, IReadOnlyCollection<FactorLead> leads, int day, IEnumerable<(string place, string attribute, float delta)> placeDeltas,
                                   IReadOnlyDictionary<string, string> seeds, Func<string, IEnumerable<OutcomeRef>> leaningsOf)
     {
-        if (pulls == null || pulls.Count > 0 || day <= 1 || seeds == null || leaningsOf == null)
+        if (pulls == null || pulls.Count > 0 || (leads != null && leads.Count > 0) || day <= 1 || seeds == null || leaningsOf == null)
             return false;
 
         foreach ((string place, string attribute, float delta) in placeDeltas ?? Enumerable.Empty<(string, string, float)>())
