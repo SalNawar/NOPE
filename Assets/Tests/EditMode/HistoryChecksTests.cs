@@ -69,6 +69,55 @@ public class HistoryChecksTests
         CollectionAssert.IsEmpty(Problems(E("egypt", ClueCategory.Currency, new string('x', 28))));
     }
 
+    private static readonly string[] Premades = { "pell", "rook", "auditor" };
+
+    [Test]
+    public void RuleProblems_ARuleWithNoEditAndANewsLineIsValid()
+    {
+        CollectionAssert.IsEmpty(HistoryChecks.RuleProblems("drive_begins", 0, true, 1, new string[0], 0f, Premades));
+        CollectionAssert.IsEmpty(HistoryChecks.RuleProblems("pell_departed", 0, true, 1, new[] { FlagKeys.PremadeVerdict("pell", true) }, 0f, Premades));
+        CollectionAssert.IsEmpty(HistoryChecks.RuleProblems("gutenberg_press", 1, true, 1, new string[0], 0f, Premades), "a history rule proper");
+    }
+
+    [Test]
+    public void RuleProblems_ARuleWithNoEditNeedsANewsLine()
+    {
+        List<string> problems = HistoryChecks.RuleProblems("silent", 0, false, 1, new string[0], 0f, Premades);
+        Assert.AreEqual(1, problems.Count);
+        StringAssert.Contains("'silent'", problems[0]);
+        StringAssert.Contains("news", problems[0]);
+        CollectionAssert.IsEmpty(HistoryChecks.RuleProblems("edit_only", 1, false, 1, new string[0], 0f, Premades), "an edit changes the books even without a line");
+    }
+
+    [Test]
+    public void RuleProblems_ARuleWithNoEditNeedsACondition()
+    {
+        List<string> problems = HistoryChecks.RuleProblems("first_night", 0, true, 0, new string[0], 0f, Premades);
+        Assert.AreEqual(1, problems.Count);
+        StringAssert.Contains("condition", problems[0]);
+        Assert.AreEqual(1, HistoryChecks.RuleProblems("edit_first_night", 1, true, 0, new string[0], 0f, Premades).Count, "every rule needs a condition");
+    }
+
+    [Test]
+    public void RuleProblems_AVerdictFlagNamesAKnownPremade()
+    {
+        CollectionAssert.IsEmpty(HistoryChecks.RuleProblems("audit_rook", 0, true, 3, new[] { "bribe:rook:taken", FlagKeys.PremadeVerdict("rook", true) }, -3f, Premades), "a story flag that is no premade's is not read");
+        List<string> problems = HistoryChecks.RuleProblems("typo", 0, true, 1, new[] { FlagKeys.PremadeVerdict("rooke", true) }, 0f, Premades);
+        Assert.AreEqual(1, problems.Count);
+        StringAssert.Contains("'rooke'", problems[0]);
+        Assert.AreEqual(1, HistoryChecks.RuleProblems("met", 0, true, 1, new[] { FlagKeys.PremadeMet("nobody") }, 0f, Premades).Count);
+    }
+
+    [TestCase(-100f, 0)]
+    [TestCase(100f, 0)]
+    [TestCase(-3f, 0)]
+    [TestCase(-100.5f, 1)]
+    [TestCase(250f, 1)]
+    public void RuleProblems_StabilityWithinAHundred(float stability, int expected)
+    {
+        Assert.AreEqual(expected, HistoryChecks.RuleProblems("rook_complaint", 0, true, 2, new string[0], stability, Premades).Count);
+    }
+
     [Test]
     public void NullInputs_AreSafe()
     {

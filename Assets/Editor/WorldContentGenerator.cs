@@ -314,8 +314,11 @@ public static partial class WorldContentGenerator
     /// it; every place fact fits a book row (FactTable.MaxValueLength); the
     /// history lines are ASCII and hold their tokens; history rules have
     /// unique lower-case ids, ASCII text, conditions whose references resolve,
-    /// edits of known places and categories, and values HistoryChecks proves
-    /// unique against every place's facts and every other rule.
+    /// what HistoryChecks.RuleProblems asks of a rule (a condition; a news
+    /// line when it has no edit, a story rule; verdict flags naming known
+    /// premades; a stability change within a hundred), edits of known places
+    /// and categories, and values HistoryChecks proves unique against every
+    /// place's facts and every other rule.
     /// </summary>
     private static void CheckHistory(WorldSource src, Authored authored, List<string> errors)
     {
@@ -366,6 +369,7 @@ public static partial class WorldContentGenerator
 
         var ruleIds = new HashSet<string>();
         var placeIds = new HashSet<string>(src.places.Select(PlaceId));
+        var premadeIds = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Select(m => m.id));
         var edits = new List<FactEdit>();
         foreach (HistoryRuleData r in h.rules ?? Array.Empty<HistoryRuleData>())
         {
@@ -382,12 +386,9 @@ public static partial class WorldContentGenerator
                 CheckAscii($"history.{r.id}.{field}", text, errors);
             }
 
-            if (r.conditions == null || r.conditions.Length == 0)
-                errors.Add($"{owner} needs at least one condition (it would fire on the first night).");
             CheckConditions(r.conditions, owner, false, authored, src, errors);
-
-            if (r.edits == null || r.edits.Length == 0)
-                errors.Add($"{owner} needs at least one edit.");
+            errors.AddRange(HistoryChecks.RuleProblems(r.id, r.edits?.Length ?? 0, !string.IsNullOrWhiteSpace(r.news), r.conditions?.Length ?? 0,
+                                                       (r.conditions ?? Array.Empty<ConditionData>()).Select(c => c.key), r.stability, premadeIds));
             foreach (EditData e in r.edits ?? Array.Empty<EditData>())
             {
                 CheckAscii($"history.{r.id}.edit", e.value, errors);
@@ -1334,17 +1335,23 @@ public static partial class WorldContentGenerator
     /// <summary>Writes History/Effect_History_{id}.asset: one SetFact op per edit of the rule (latched when its trigger fires).</summary>
     private static EffectSO MakeHistoryEffect(HistoryRuleData r, ConditionRefs refs, HashSet<string> written)
     {
+        EditData[] editData = r.edits ?? Array.Empty<EditData>();
+        if (editData.Length == 0 && r.stability == 0f)
+            return null; // a story rule that only prints its line has no effect
+
         EffectSO fx = LoadOrCreate<EffectSO>($"{HistoryFolder}/Effect_History_{r.id}.asset", written);
         fx.displayName = r.name;
         fx.channel = EffectChannel.General;
         fx.defaultDurationDays = 1;
-        fx.ops = (r.edits ?? Array.Empty<EditData>()).Select(e => new EffectOp
+        fx.ops = editData.Select(e => new EffectOp
         {
             type = EffectOpType.SetFact,
             profile = refs.places[e.place],
             category = (ClueCategory)Enum.Parse(typeof(ClueCategory), e.category),
             stringParam = e.value
         }).ToList();
+        if (r.stability != 0f)
+            fx.ops.Add(new EffectOp { type = EffectOpType.AddStability, floatParam = r.stability });
         EditorUtility.SetDirty(fx);
         return fx;
     }
@@ -1359,7 +1366,7 @@ public static partial class WorldContentGenerator
         t.oneShot = true;
         t.newsLineOnFire = r.news;
         t.conditions = Conditions(r.conditions, refs).ToList();
-        t.outcomes = new List<TriggerOutcome> { new TriggerOutcome { effect = effect, durationDaysOverride = 0 } };
+        t.outcomes = effect != null ? new List<TriggerOutcome> { new TriggerOutcome { effect = effect, durationDaysOverride = 0 } } : new List<TriggerOutcome>();
         EditorUtility.SetDirty(t);
         return t;
     }
@@ -1936,7 +1943,7 @@ public static partial class WorldContentGenerator
         so.FindProperty("historyLines").boxedValue = historyLines;
         SerializedArrays.Set(so, "timelineTriggers", HandAuthored(so, "timelineTriggers").Concat(unlocks).Concat(notices).Concat(historyTriggers).ToArray());
         SerializedArrays.Set(so, "upgrades", HandAuthored(so, "upgrades").Concat(translators).ToArray());
-        SerializedArrays.Set(so, "effects", HandAuthored(so, "effects").Concat(historyEffects).Concat(leaderEffects).ToArray());
+        SerializedArrays.Set(so, "effects", HandAuthored(so, "effects").Concat(historyEffects.Where(fx => fx != null)).Concat(leaderEffects).ToArray());
         SerializedArrays.Set(so, "legendaries", premades);
         so.FindProperty("lookRules").boxedValue = lookRules;
         so.FindProperty("cultureUi.readingLanguage").stringValue = ui.readingLanguage;
@@ -2277,8 +2284,8 @@ public static partial class WorldContentGenerator
     /// <summary>The templated history lines ({nation}, {place}, {value}).</summary>
     [Serializable] private sealed class HistoryLinesData { public string leaderGained; public string leaderLost; public string carry; public string dominant; public string panic; }
 
-    /// <summary>A history rule: when its conditions pass at night it fires once, latches its edits and prints its news line.</summary>
-    [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; }
+    /// <summary>A history rule: when its conditions pass at night it fires once, latches its edits, moves stability by its percent (missing: 0) and prints its news line; with no edit it is a story rule (days 7-15 B10).</summary>
+    [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; public float stability; }
 
     /// <summary>A fact edit: place ("{country}_{era}"), category and the new value.</summary>
     [Serializable] private sealed class EditData { public string place; public string category; public string value; }

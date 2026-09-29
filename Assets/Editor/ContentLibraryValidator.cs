@@ -491,15 +491,28 @@ public static partial class ContentLibraryValidator
     /// Every trigger condition names what its type needs (a profile and an
     /// attribute, an attribute, a nation, a key): without it the condition can
     /// never pass. A trigger whose outcome effect holds a history-only op must
-    /// be one-shot (a repeatable one would latch an edit every night).
+    /// be one-shot (a repeatable one would latch an edit every night). Each
+    /// trigger is read as a history rule (HistoryChecks.RuleProblems, the
+    /// generator's rule): a condition, a news line or an outcome, verdict
+    /// flags naming known premades, a stability change within a hundred.
     /// </summary>
     private static int CheckTriggers(ContentLibrarySO lib)
     {
         int issues = 0;
+        var premadeIds = new HashSet<string>(lib.Legendaries.Where(l => l != null).Select(l => l.id));
         foreach (TimelineTriggerSO t in lib.Triggers)
         {
             if (t == null)
                 continue;
+
+            List<EffectOp> ops = (t.outcomes ?? new List<TriggerOutcome>()).Where(o => o != null && o.effect != null).SelectMany(o => o.effect.ops ?? new List<EffectOp>()).Where(op => op != null).ToList();
+            List<TriggerCondition> conditions = (t.conditions ?? new List<TriggerCondition>()).Where(c => c != null).ToList();
+            foreach (string problem in HistoryChecks.RuleProblems(t.name, ops.Count, !string.IsNullOrWhiteSpace(t.newsLineOnFire), conditions.Count,
+                                                                  conditions.Select(c => c.key), ops.Where(op => op.type == EffectOpType.AddStability).Sum(op => op.floatParam), premadeIds))
+            {
+                Debug.LogError($"[ContentLibraryValidator] {problem} (in '{lib.name}'; run Tools > TimeDesk > Generate World)", t);
+                issues++;
+            }
 
             foreach (TriggerCondition c in t.conditions ?? new List<TriggerCondition>())
             {
