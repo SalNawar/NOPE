@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -74,19 +75,64 @@ public sealed class CaseFacts
     /// <summary>True when the Citizen Account's standing is Frozen.</summary>
     public bool Frozen;
 
+    /// <summary>The departure dates the papers print (the manifest's, the return order's), as printed; the PaperDates rule reads them against <see cref="Today"/>.</summary>
+    public IEnumerable<string> Departures = new string[0];
+
+    /// <summary>The Valid Until dates the papers print, as printed.</summary>
+    public IEnumerable<string> ValidUntils = new string[0];
+
+    /// <summary>Today on the agency calendar; null when the calendar cannot count today (the dates are then not read).</summary>
+    public DateTime? Today;
+
     /// <summary>True when the traveller carries the form numbered <paramref name="formNumber"/>.</summary>
     public bool Carries(string formNumber) => Forms != null && Forms.Contains(formNumber);
 }
 
+/// <summary>Which date a planned paper-dates fault falsifies (Directives.PlanDateFault).</summary>
+public enum PaperDateFault
+{
+    /// <summary>No date fault (nothing printed to falsify).</summary>
+    None,
+
+    /// <summary>The departure date (the manifest's or the return order's) is another day than today.</summary>
+    Departure,
+
+    /// <summary>One Valid Until (the visa's, a proof of means' or the certificate's) has passed.</summary>
+    Expiry
+}
+
+/// <summary>A traveller's planned paper-dates fault: the variant and, for an expiry, which of the expiring forms (in paper order).</summary>
+public readonly struct PaperDatePlan
+{
+    /// <summary>The variant (None: nothing to falsify).</summary>
+    public readonly PaperDateFault Fault;
+
+    /// <summary>The index of the expiring form whose Valid Until has passed, among the expiring forms in paper order; -1 unless <see cref="PaperDateFault.Expiry"/>.</summary>
+    public readonly int ExpiryIndex;
+
+    /// <summary>Creates a plan.</summary>
+    public PaperDatePlan(PaperDateFault fault, int expiryIndex)
+    {
+        Fault = fault;
+        ExpiryIndex = expiryIndex;
+    }
+}
+
 /// <summary>
-/// The Directives' rules (traveller types P3, P4, §5.3-5.4): which rule types
-/// are closures, a rule's first day and which rules guarantee a faulty
-/// traveller in the first half of the queue (CaseFactory.PlanViolators asks
-/// each such rule's maker for its slot); each type's predicate over CaseFacts
-/// (Breaks) and the fault a broken rule is; the paper-set maker's variants
-/// and their pick; the violation roll; and the content checks Generate World
-/// and the validator share (R6-006). Pure, so every decision table is
-/// tested headless.
+/// The Directives' rules over the rule types (traveller types P3, P4, §5.3):
+/// which types close destinations, which day a rule first stands on, and
+/// which rules guarantee a faulty traveller in the first half of the queue
+/// (CaseFactory.PlanViolators asks each such rule's maker for its slot); and
+/// the PaperDates procedure's predicate and makers (F7, §5.4): depart only on
+/// the date on the manifest or the return order, never on an expired paper,
+/// read against the agency calendar; its faulty traveller has one date
+/// falsified. NoPresentGoods has no predicate: a smuggler breaks it, a
+/// deviation fault (LieKind.Smuggling). The paper set and the debt standing
+/// (phase 9) have their predicates over CaseFacts (Breaks; Fault reads every
+/// rule once over the finished papers and account), the paper-set maker's
+/// variants, the violation roll of a later day, and the content checks
+/// Generate World and the validator share (R6-006). Pure, so the decision
+/// tables and the draws are tested headless.
 /// </summary>
 public static class Directives
 {
@@ -107,6 +153,12 @@ public static class Directives
 
     /// <summary>What an unsigned waiver's signature box reads (the paper-set maker writes it; the facts read it).</summary>
     public const string Unsigned = "UNSIGNED";
+
+    /// <summary>How many days off, at most, a falsified departure is (1 to 3 days before or after today, §5.4).</summary>
+    public const int DepartureOffsetMaxDays = 3;
+
+    /// <summary>How many days ago, at most, a falsified Valid Until passed (1 to 30 days before today, §5.4).</summary>
+    public const int ExpiredMaxDays = 30;
 
     /// <summary>True for the closure types (a forbidden era, nation or place), which forbid destinations; false for a standing procedure.</summary>
     public static bool IsClosure(TravelRuleType type) =>
@@ -133,22 +185,26 @@ public static class Directives
     /// <summary>
     /// Whether an active rule plans a guaranteed faulty traveller in the
     /// first half of today's queue (P4): a closure every day it is active
-    /// (a traveller bound for a place it forbids); on its first day the
-    /// displaced's return home (a false-origin liar, L7 or L8, on the day the
-    /// rule is announced), the paper set (a breaker made by
+    /// (a traveller bound for a place it forbids); the displaced's return
+    /// home (a false-origin liar, L7 or L8), no 2150 goods (a smuggler, L6),
+    /// the papers' dates (a falsified date), the paper set (a breaker made by
     /// <see cref="PickPaperSetBreak"/>), the debt standing (a frozen debtor)
-    /// and dress for the destination (a costume error); never a procedure
-    /// line.
+    /// and dress for the destination (a costume error) each on its first day,
+    /// the day the rule is announced; never a procedure line.
     /// </summary>
     public static bool Guarantees(TravelRuleType type, int today, int firstDay) =>
-        IsClosure(type) || (today == firstDay && (type == TravelRuleType.ReturnHome || type == TravelRuleType.PaperSet ||
-                                                  type == TravelRuleType.DebtStanding || type == TravelRuleType.DressForDestination));
+        IsClosure(type) || (HasMaker(type) && today == firstDay);
 
-    /// <summary>True for a procedure the violation roll may break on a later day (traveller types P4): the paper set and the debt standing (dress has its own roll, the costume roll; the return home is broken by the lie roll).</summary>
+    /// <summary>True for the procedures with a maker, guaranteed one faulty traveller on their first day: the return home, no 2150 goods, the papers' dates, the paper set, the debt standing and dress for the destination (a costume error); never a procedure line.</summary>
+    public static bool HasMaker(TravelRuleType type) =>
+        type == TravelRuleType.ReturnHome || type == TravelRuleType.NoPresentGoods || type == TravelRuleType.PaperDates ||
+        type == TravelRuleType.PaperSet || type == TravelRuleType.DebtStanding || type == TravelRuleType.DressForDestination;
+
+    /// <summary>True for a procedure the violation roll may break on a later day (traveller types P4): the paper set, the debt standing and the papers' dates (dress has its own roll, the costume roll; the return home and no 2150 goods are broken by the lie roll).</summary>
     public static bool IsRolled(TravelRuleType type) =>
-        type == TravelRuleType.PaperSet || type == TravelRuleType.DebtStanding;
+        type == TravelRuleType.PaperSet || type == TravelRuleType.DebtStanding || type == TravelRuleType.PaperDates;
 
-    /// <summary>The directive fault a broken rule of <paramref name="type"/> is: a closed destination, incomplete papers, a frozen account; None for the types with no predicate.</summary>
+    /// <summary>The directive fault a broken rule of <paramref name="type"/> is: a closed destination, incomplete papers, a frozen account, a wrong departure date (the papers' dates' first fault; an expired paper is their second, <see cref="PaperDates"/>); None for the types with no predicate.</summary>
     public static DirectiveFault FaultOf(TravelRuleType type)
     {
         if (IsClosure(type))
@@ -159,6 +215,8 @@ public static class Directives
                 return DirectiveFault.IncompletePapers;
             case TravelRuleType.DebtStanding:
                 return DirectiveFault.FrozenAccount;
+            case TravelRuleType.PaperDates:
+                return DirectiveFault.WrongDepartureDate;
             default:
                 return DirectiveFault.None;
         }
@@ -171,26 +229,33 @@ public static class Directives
     /// manifest or lacks a signed waiver or a proof of means, and for a
     /// labourer without a contract, a signed waiver or on a Premium manifest
     /// (a form not carried states nothing about its class); the debt
-    /// standing breaks on a Frozen account; the dress rule, the return home
-    /// and a procedure line never break here (a costume error and a false
-    /// origin are deviation faults; a line has no predicate). The displaced
-    /// break no paper set.
+    /// standing breaks on a Frozen account; the papers' dates break on a
+    /// departure dated another day or an expired Valid Until (<see cref="PaperDates"/>,
+    /// when the calendar counts today); the dress rule, the return home, no
+    /// 2150 goods and a procedure line never break here (a costume error, a
+    /// false origin and smuggling are deviation faults; a line has no
+    /// predicate). The displaced break no paper set.
     /// </summary>
-    public static bool Breaks(TravelRuleType type, CaseFacts facts)
+    public static bool Breaks(TravelRuleType type, CaseFacts facts) => facts != null && FaultOf(type, facts) != DirectiveFault.None;
+
+    /// <summary>The fault a rule of <paramref name="type"/> finds in <paramref name="facts"/>: the type's fault when it breaks (<see cref="FaultOf(TravelRuleType)"/>; the papers' dates the first of their two), None otherwise.</summary>
+    public static DirectiveFault FaultOf(TravelRuleType type, CaseFacts facts)
     {
         if (facts == null)
-            return false;
+            return DirectiveFault.None;
         if (IsClosure(type))
-            return facts.ClosedDestination;
+            return facts.ClosedDestination ? DirectiveFault.ClosedDestination : DirectiveFault.None;
 
         switch (type)
         {
             case TravelRuleType.PaperSet:
-                return PaperSetBroken(facts);
+                return PaperSetBroken(facts) ? DirectiveFault.IncompletePapers : DirectiveFault.None;
             case TravelRuleType.DebtStanding:
-                return TravellerKinds.IsCitizen(facts.Kind) && facts.Frozen;
+                return TravellerKinds.IsCitizen(facts.Kind) && facts.Frozen ? DirectiveFault.FrozenAccount : DirectiveFault.None;
+            case TravelRuleType.PaperDates:
+                return facts.Today.HasValue ? PaperDates(facts.Departures, facts.ValidUntils, facts.Today.Value) : DirectiveFault.None;
             default:
-                return false;
+                return DirectiveFault.None;
         }
     }
 
@@ -225,8 +290,13 @@ public static class Directives
             return DirectiveFault.None;
 
         foreach (Directive rule in rules)
-            if (rule.AppliesTo(facts.Kind) && Breaks(rule.Type, facts))
-                return FaultOf(rule.Type);
+        {
+            if (!rule.AppliesTo(facts.Kind))
+                continue;
+            DirectiveFault fault = FaultOf(rule.Type, facts);
+            if (fault != DirectiveFault.None)
+                return fault;
+        }
 
         return DirectiveFault.None;
     }
@@ -290,7 +360,9 @@ public static class Directives
     /// <paramref name="forms"/> can break a rule of <paramref name="type"/>
     /// through its maker (§5.4): the paper set when a variant can show, the
     /// debt standing for a 2150 citizen (a frozen account), dress for a 2150
-    /// citizen (a costume error). Never a closure, the return home (the lie
+    /// citizen (a costume error), the papers' dates for every kind (each
+    /// prints a departure or a Valid Until; the maker warns when none is
+    /// printed). Never a closure, the return home or no 2150 goods (the lie
     /// roll's) or a procedure line here.
     /// </summary>
     public static bool CanBreak(TravelRuleType type, TravellerKind kind, IReadOnlyCollection<string> forms)
@@ -302,6 +374,8 @@ public static class Directives
             case TravelRuleType.DebtStanding:
             case TravelRuleType.DressForDestination:
                 return TravellerKinds.IsCitizen(kind);
+            case TravelRuleType.PaperDates:
+                return true;
             default:
                 return false;
         }
@@ -386,8 +460,8 @@ public static class Directives
     /// through its maker (<see cref="CanBreak"/>), so nobody could ever test
     /// it; and a procedure guaranteed a breaker today (<see cref="Guarantees"/>,
     /// its first day) that no kind of the day can break, so its guarantee
-    /// would plan nobody (the return home has its own check, the day's
-    /// displaced and place lies). Empty when sound.
+    /// would plan nobody (the return home and no 2150 goods have their own
+    /// checks, the day's displaced and lies). Empty when sound.
     /// </summary>
     public static List<string> DayProblems(string day, int today, IReadOnlyList<RuleEntry> active, IReadOnlyList<(TravellerKind kind, IReadOnlyCollection<string> forms)> kinds)
     {
@@ -408,4 +482,58 @@ public static class Directives
 
         return problems;
     }
+
+    /// <summary>
+    /// The PaperDates directive (F7): the first fault it finds, in this
+    /// order: a readable departure date that is not <paramref name="today"/>
+    /// (DirectiveFault.WrongDepartureDate), then a readable Valid Until before
+    /// today (DirectiveFault.ExpiredPaper); None when every readable date
+    /// passes. A date the calendar cannot read (a placeholder) is skipped:
+    /// a broken calendar is the content's problem, never the traveller's.
+    /// Null lists count as empty.
+    /// </summary>
+    public static DirectiveFault PaperDates(IEnumerable<string> departures, IEnumerable<string> validUntils, DateTime today)
+    {
+        if (departures != null)
+            foreach (string text in departures)
+                if (AgencyCalendar.TryRead(text, out DateTime departure) && departure.Date != today.Date)
+                    return DirectiveFault.WrongDepartureDate;
+
+        if (validUntils != null)
+            foreach (string text in validUntils)
+                if (AgencyCalendar.TryRead(text, out DateTime validUntil) && validUntil.Date < today.Date)
+                    return DirectiveFault.ExpiredPaper;
+
+        return DirectiveFault.None;
+    }
+
+    /// <summary>
+    /// The maker's variant (§5.4), one Range draw over the dates the papers
+    /// print: the departure when <paramref name="hasDeparture"/>, then each of
+    /// the <paramref name="expiringForms"/> Valid Untils in paper order. None,
+    /// with no draw, when nothing is printed or <paramref name="rng"/> is null.
+    /// </summary>
+    public static PaperDatePlan PlanDateFault(bool hasDeparture, int expiringForms, IRandomSource rng)
+    {
+        int options = (hasDeparture ? 1 : 0) + Math.Max(0, expiringForms);
+        if (rng == null || options == 0)
+            return new PaperDatePlan(PaperDateFault.None, -1);
+
+        int pick = rng.Range(0, options);
+        if (hasDeparture && pick == 0)
+            return new PaperDatePlan(PaperDateFault.Departure, -1);
+
+        return new PaperDatePlan(PaperDateFault.Expiry, hasDeparture ? pick - 1 : pick);
+    }
+
+    /// <summary>A departure 1 to <see cref="DepartureOffsetMaxDays"/> days before or after <paramref name="today"/>, never today: one Range draw over the six offsets.</summary>
+    public static DateTime OffsetDeparture(DateTime today, IRandomSource rng)
+    {
+        int pick = rng.Range(0, DepartureOffsetMaxDays * 2);
+        int offset = pick < DepartureOffsetMaxDays ? pick - DepartureOffsetMaxDays : pick - DepartureOffsetMaxDays + 1;
+        return today.AddDays(offset);
+    }
+
+    /// <summary>A Valid Until 1 to <see cref="ExpiredMaxDays"/> days before <paramref name="today"/>: one draw (AgencyNumbers.DaysAgo).</summary>
+    public static DateTime ExpiredValidUntil(DateTime today, IRandomSource rng) => AgencyNumbers.DaysAgo(today, ExpiredMaxDays, rng);
 }

@@ -1,16 +1,25 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
-/// The Directives' rules (traveller types P3, P4, §5.3-5.4; redesign phases
-/// 9 and 12): the closure types, a rule's first day and the guarantee table;
-/// each type's decision table over CaseFacts, the fault a broken rule is,
-/// the paper-set maker's variants and pick, the violation roll, and the
-/// content checks Generate World and the validator share.
+/// The Directives' rules (traveller types P3, P4, F7, §5.3-5.4; redesign
+/// phases 9, 11 and 12): the closure types, a rule's first day and the
+/// guarantee table; the PaperDates directive (a departure dated another day,
+/// an expired Valid Until, in that order; unreadable dates skipped) and its
+/// maker's draws; each type's decision table over CaseFacts, the fault a
+/// broken rule is, the paper-set maker's variants and pick, the violation
+/// roll, and the content checks Generate World and the validator share.
+/// Today is 17 Mar 2150, day 4 of the agency calendar.
 /// </summary>
 public class DirectivesTests
 {
+    private static readonly DateTime Today = new DateTime(2150, 3, 17);
+
+    private static string On(int daysFromToday) => AgencyCalendar.Write(Today.AddDays(daysFromToday));
+
+    private static ScriptedRandom Script(params ScriptStep[] steps) => new ScriptedRandom(steps);
     private static ScriptStep V(float roll) => ScriptStep.Value(roll);
     private static ScriptStep R(int offset) => ScriptStep.Range(offset);
 
@@ -45,6 +54,8 @@ public class DirectivesTests
     [TestCase(TravelRuleType.DressForDestination, false)]
     [TestCase(TravelRuleType.Procedure, false)]
     [TestCase(TravelRuleType.ReturnHome, false)]
+    [TestCase(TravelRuleType.NoPresentGoods, false)]
+    [TestCase(TravelRuleType.PaperDates, false)]
     [TestCase(TravelRuleType.PaperSet, false)]
     [TestCase(TravelRuleType.DebtStanding, false)]
     public void IsClosure_TheThreeForbiddenTypes(TravelRuleType type, bool expected)
@@ -61,13 +72,18 @@ public class DirectivesTests
         Assert.AreEqual(5, Directives.FirstDay(new[] { 6, 5, 7 }), "unordered plans");
     }
 
-    /// <summary>P4: a closure guarantees a violator every day; the return home, the paper set, the debt standing and dress guarantee a breaker on their first day only; a procedure line never.</summary>
+    /// <summary>P4: a closure guarantees a violator every day; the procedures with a maker (the return home, no 2150 goods, the papers' dates, the paper set, the debt standing and dress) a breaker on their first day only; a procedure line never.</summary>
     [TestCase(TravelRuleType.EraForbidden, 3, 2, true)]
     [TestCase(TravelRuleType.NationForbidden, 2, 2, true)]
     [TestCase(TravelRuleType.NationEraForbidden, 6, 2, true)]
     [TestCase(TravelRuleType.ReturnHome, 5, 5, true)]
     [TestCase(TravelRuleType.ReturnHome, 6, 5, false)]
     [TestCase(TravelRuleType.ReturnHome, 5, 0, false, Description = "a rule no plan lists guarantees nothing")]
+    [TestCase(TravelRuleType.NoPresentGoods, 4, 4, true)]
+    [TestCase(TravelRuleType.NoPresentGoods, 5, 4, false)]
+    [TestCase(TravelRuleType.PaperDates, 4, 4, true)]
+    [TestCase(TravelRuleType.PaperDates, 6, 4, false)]
+    [TestCase(TravelRuleType.PaperDates, 4, 0, false)]
     [TestCase(TravelRuleType.PaperSet, 2, 2, true)]
     [TestCase(TravelRuleType.PaperSet, 3, 2, false)]
     [TestCase(TravelRuleType.DebtStanding, 3, 3, true)]
@@ -81,9 +97,9 @@ public class DirectivesTests
     }
 
     [Test]
-    public void IsRolled_ThePaperSetAndTheDebtStanding()
+    public void IsRolled_ThePaperSetTheDebtStandingAndThePapersDates()
     {
-        CollectionAssert.AreEquivalent(new[] { TravelRuleType.PaperSet, TravelRuleType.DebtStanding },
+        CollectionAssert.AreEquivalent(new[] { TravelRuleType.PaperSet, TravelRuleType.DebtStanding, TravelRuleType.PaperDates },
                                        System.Enum.GetValues(typeof(TravelRuleType)).Cast<TravelRuleType>().Where(Directives.IsRolled).ToList());
     }
 
@@ -92,6 +108,8 @@ public class DirectivesTests
     [TestCase(TravelRuleType.NationEraForbidden, DirectiveFault.ClosedDestination)]
     [TestCase(TravelRuleType.PaperSet, DirectiveFault.IncompletePapers)]
     [TestCase(TravelRuleType.DebtStanding, DirectiveFault.FrozenAccount)]
+    [TestCase(TravelRuleType.PaperDates, DirectiveFault.WrongDepartureDate)]
+    [TestCase(TravelRuleType.NoPresentGoods, DirectiveFault.None)]
     [TestCase(TravelRuleType.DressForDestination, DirectiveFault.None)]
     [TestCase(TravelRuleType.ReturnHome, DirectiveFault.None)]
     [TestCase(TravelRuleType.Procedure, DirectiveFault.None)]
@@ -222,8 +240,27 @@ public class DirectivesTests
         facts.WaiverSigned = false;
         Assert.IsFalse(Directives.Breaks(TravelRuleType.DressForDestination, facts), "a costume error is a deviation fault, proven against the Costume Guide");
         Assert.IsFalse(Directives.Breaks(TravelRuleType.ReturnHome, facts), "a false origin is a deviation fault, proven against the books");
+        Assert.IsFalse(Directives.Breaks(TravelRuleType.NoPresentGoods, facts), "smuggling is a deviation fault, proven against the books");
         Assert.IsFalse(Directives.Breaks(TravelRuleType.Procedure, facts));
         Assert.IsFalse(Directives.Breaks(TravelRuleType.PaperSet, null));
+    }
+
+    /// <summary>The papers' dates over CaseFacts: read against today when the calendar counts it, the departure first; not read without a calendar.</summary>
+    [Test]
+    public void ThePapersDates_AreReadAgainstToday_OnlyWithACalendar()
+    {
+        CaseFacts facts = Honest(TravellerKind.RichTourist, RichSet);
+        facts.Today = Today;
+        facts.Departures = new[] { On(0) };
+        facts.ValidUntils = new[] { On(10) };
+        Assert.AreEqual(DirectiveFault.None, Directives.FaultOf(TravelRuleType.PaperDates, facts));
+        facts.ValidUntils = new[] { On(-2) };
+        Assert.AreEqual(DirectiveFault.ExpiredPaper, Directives.FaultOf(TravelRuleType.PaperDates, facts));
+        Assert.IsTrue(Directives.Breaks(TravelRuleType.PaperDates, facts));
+        facts.Departures = new[] { On(1) };
+        Assert.AreEqual(DirectiveFault.WrongDepartureDate, Directives.FaultOf(TravelRuleType.PaperDates, facts), "the departure first");
+        facts.Today = null;
+        Assert.AreEqual(DirectiveFault.None, Directives.FaultOf(TravelRuleType.PaperDates, facts), "no calendar: the dates are not read");
     }
 
     [Test]
@@ -306,6 +343,8 @@ public class DirectivesTests
         Assert.IsFalse(Directives.CanBreak(TravelRuleType.DressForDestination, TravellerKind.Displaced, DisplacedSet));
         Assert.IsFalse(Directives.CanBreak(TravelRuleType.NationEraForbidden, TravellerKind.RichTourist, RichSet), "a closure's violator is made by place, not here");
         Assert.IsFalse(Directives.CanBreak(TravelRuleType.ReturnHome, TravellerKind.Displaced, DisplacedSet), "the return home's liar is made by the lie roll");
+        Assert.IsFalse(Directives.CanBreak(TravelRuleType.NoPresentGoods, TravellerKind.RichTourist, RichSet), "a smuggler is made by the lie roll");
+        Assert.IsTrue(Directives.CanBreak(TravelRuleType.PaperDates, TravellerKind.Displaced, DisplacedSet), "every kind prints a date");
         Assert.IsFalse(Directives.CanBreak(TravelRuleType.Procedure, TravellerKind.RichTourist, RichSet));
     }
 
@@ -422,5 +461,95 @@ public class DirectivesTests
 
         StringAssert.Contains("'Rule_LabourPaperSet' (PaperSet), which none of its kinds can break",
                               Directives.DayProblems("D", 3, new List<Directives.RuleEntry> { active[0] }, Day3Kinds()).Single(), "a labourer without a waiver has no paper-set variant to break");
+    }
+
+    // -----------------------------
+    // The PaperDates directive and its maker (phase 11)
+    // -----------------------------
+
+    [Test]
+    public void PaperDates_HonestPapers_DepartTodayAndHaveNotExpired()
+    {
+        Assert.AreEqual(DirectiveFault.None, Directives.PaperDates(new[] { On(0) }, new[] { On(3), On(365) }, Today));
+        Assert.AreEqual(DirectiveFault.None, Directives.PaperDates(new[] { On(0), On(0) }, new[] { On(0) }, Today), "a paper valid until today is still valid");
+        Assert.AreEqual(DirectiveFault.None, Directives.PaperDates(null, null, Today), "nothing printed");
+        Assert.AreEqual(DirectiveFault.None, Directives.PaperDates(new string[0], new string[0], Today));
+    }
+
+    [Test]
+    public void PaperDates_ADepartureOnAnotherDay_IsTheWrongDate_EitherWay()
+    {
+        Assert.AreEqual(DirectiveFault.WrongDepartureDate, Directives.PaperDates(new[] { On(1) }, null, Today), "tomorrow");
+        Assert.AreEqual(DirectiveFault.WrongDepartureDate, Directives.PaperDates(new[] { On(-3) }, null, Today), "three days ago");
+        Assert.AreEqual(DirectiveFault.WrongDepartureDate, Directives.PaperDates(new[] { On(0), On(2) }, null, Today), "any departure printed");
+    }
+
+    [Test]
+    public void PaperDates_AValidUntilBeforeToday_IsExpired()
+    {
+        Assert.AreEqual(DirectiveFault.ExpiredPaper, Directives.PaperDates(new[] { On(0) }, new[] { On(-1) }, Today), "yesterday");
+        Assert.AreEqual(DirectiveFault.ExpiredPaper, Directives.PaperDates(null, new[] { On(30), On(-30) }, Today), "any Valid Until printed");
+    }
+
+    [Test]
+    public void PaperDates_TheDepartureIsReadFirst_AndUnreadableDatesAreSkipped()
+    {
+        Assert.AreEqual(DirectiveFault.WrongDepartureDate, Directives.PaperDates(new[] { On(1) }, new[] { On(-1) }, Today), "both wrong: the departure names the fault");
+        Assert.AreEqual(DirectiveFault.None, Directives.PaperDates(new[] { "DepartureDate:none" }, new[] { "Expiry:none", null, "" }, Today), "placeholders are no fault");
+        Assert.AreEqual(DirectiveFault.ExpiredPaper, Directives.PaperDates(new[] { "DepartureDate:none" }, new[] { On(-5) }, Today));
+    }
+
+    [Test]
+    public void PlanDateFault_OneDrawOverTheDatesPrinted_TheDepartureFirst()
+    {
+        PaperDatePlan plan = Directives.PlanDateFault(true, 2, Script(R(0)));
+        Assert.AreEqual(PaperDateFault.Departure, plan.Fault);
+        Assert.AreEqual(-1, plan.ExpiryIndex);
+
+        plan = Directives.PlanDateFault(true, 2, Script(R(1)));
+        Assert.AreEqual(PaperDateFault.Expiry, plan.Fault);
+        Assert.AreEqual(0, plan.ExpiryIndex, "the first expiring form");
+
+        plan = Directives.PlanDateFault(true, 2, Script(R(2)));
+        Assert.AreEqual((PaperDateFault.Expiry, 1), (plan.Fault, plan.ExpiryIndex), "the second");
+
+        plan = Directives.PlanDateFault(false, 1, Script(R(0)));
+        Assert.AreEqual((PaperDateFault.Expiry, 0), (plan.Fault, plan.ExpiryIndex), "no departure printed: the draw is over the expiring forms");
+
+        plan = Directives.PlanDateFault(true, 0, Script(R(0)));
+        Assert.AreEqual(PaperDateFault.Departure, plan.Fault);
+    }
+
+    [Test]
+    public void PlanDateFault_NothingPrinted_OrNoStream_IsNone_WithNoDraw()
+    {
+        Assert.AreEqual(PaperDateFault.None, Directives.PlanDateFault(false, 0, Script()).Fault);
+        Assert.AreEqual(PaperDateFault.None, Directives.PlanDateFault(false, -2, Script()).Fault);
+        Assert.AreEqual(PaperDateFault.None, Directives.PlanDateFault(true, 1, null).Fault);
+    }
+
+    [Test]
+    public void OffsetDeparture_OneDraw_OneToThreeDaysEitherWay_NeverToday()
+    {
+        var seen = new System.Collections.Generic.List<int>();
+        for (int pick = 0; pick < Directives.DepartureOffsetMaxDays * 2; pick++)
+        {
+            DateTime date = Directives.OffsetDeparture(Today, Script(R(pick)));
+            int offset = (date - Today).Days;
+            Assert.AreNotEqual(0, offset, $"pick {pick}");
+            Assert.LessOrEqual(Math.Abs(offset), Directives.DepartureOffsetMaxDays, $"pick {pick}");
+            seen.Add(offset);
+        }
+        CollectionAssert.AreEqual(new[] { -3, -2, -1, 1, 2, 3 }, seen, "every offset once, in draw order");
+        Assert.AreEqual(DirectiveFault.WrongDepartureDate, Directives.PaperDates(new[] { AgencyCalendar.Write(Directives.OffsetDeparture(Today, Script(R(5)))) }, null, Today), "the maker's date breaks the directive");
+    }
+
+    [Test]
+    public void ExpiredValidUntil_OneDraw_OneToThirtyDaysAgo()
+    {
+        Assert.AreEqual(Today.AddDays(-1), Directives.ExpiredValidUntil(Today, Script(R(0))));
+        Assert.AreEqual(Today.AddDays(-30), Directives.ExpiredValidUntil(Today, Script(R(29))));
+        Assert.AreEqual(Today.AddDays(-30), Directives.ExpiredValidUntil(Today, Script(R(99))), "the draw is clamped to the range");
+        Assert.AreEqual(DirectiveFault.ExpiredPaper, Directives.PaperDates(null, new[] { AgencyCalendar.Write(Directives.ExpiredValidUntil(Today, Script(R(0)))) }, Today), "the maker's date breaks the directive");
     }
 }

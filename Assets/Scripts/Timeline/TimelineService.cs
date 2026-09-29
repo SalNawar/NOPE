@@ -95,19 +95,6 @@ public static class TimelineService
             if (impact.alsoAffectsNationScore && inst.claimedNation != null)
                 world.timeline.AddScore(TimelineKeys.Nation(inst.claimedNation), delta);
         }
-
-        // Tag counters for trigger conditions ("sent:tag:greek-warrior:greece480").
-        if (inst.archetype != null && inst.archetype.tags != null)
-        {
-            foreach (string tag in inst.archetype.tags)
-            {
-                if (string.IsNullOrEmpty(tag))
-                    continue;
-
-                world.AddCounter($"sent:tag:{tag}", 1);
-                world.AddCounter($"sent:tag:{tag}:{chosenEra.id}", 1);
-            }
-        }
     }
 
     /// <summary>

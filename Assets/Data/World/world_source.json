@@ -6685,6 +6685,16 @@
       "description": "The displaced return only to their own time: their declaration must match their origin."
     },
     {
+      "asset": "Rule_NoPresentGoods",
+      "type": "NoPresentGoods",
+      "description": "No 2150 currency or technology leaves 2150."
+    },
+    {
+      "asset": "Rule_PaperDates",
+      "type": "PaperDates",
+      "description": "Depart only on the date on your manifest or return order, and never on an expired paper."
+    },
+    {
       "asset": "Rule_TouristPaperSet",
       "type": "PaperSet",
       "description": "A Premium visa travels on a Premium transponder. A Standard visa needs an Economy transponder, a signed Stranding Waiver and a proof of means: a Holiday Credit Agreement, a Proof of Funds or Travel Insurance.",
@@ -6870,7 +6880,8 @@
         "PoorPosingAsRich",
         "DoctoredIdentity",
         "DebtorPosingAsTourist",
-        "ForgedContract"
+        "ForgedContract",
+        "Smuggling"
       ],
       "kinds": [
         {
@@ -6906,7 +6917,9 @@
         "Rule_DressForDestination",
         "Rule_LeisureDepartures",
         "Rule_TouristPaperSet",
-        "Rule_DebtStanding"
+        "Rule_DebtStanding",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates"
       ],
       "premades": [],
       "forced": [],
@@ -6930,7 +6943,8 @@
         "DebtorPosingAsTourist",
         "ForgedContract",
         "FalseOrigin",
-        "FakeDisplaced"
+        "FakeDisplaced",
+        "Smuggling"
       ],
       "kinds": [
         {
@@ -6977,7 +6991,9 @@
         "Rule_TouristPaperSet",
         "Rule_DebtStanding",
         "Rule_DisplacedReturns",
-        "Rule_ReturnHome"
+        "Rule_ReturnHome",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates"
       ],
       "premades": [],
       "forced": [],
@@ -7001,7 +7017,8 @@
         "DebtorPosingAsTourist",
         "ForgedContract",
         "FalseOrigin",
-        "FakeDisplaced"
+        "FakeDisplaced",
+        "Smuggling"
       ],
       "kinds": [
         {
@@ -7047,7 +7064,9 @@
         "Rule_TouristPaperSet",
         "Rule_DebtStanding",
         "Rule_DisplacedReturns",
-        "Rule_ReturnHome"
+        "Rule_ReturnHome",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates"
       ],
       "premades": [
         "aspasia",
@@ -7102,6 +7121,7 @@
     "requestPrompt": "Your {document}, please.",
     "requestReply": "Here you are.",
     "askLabel": "Ask about home >",
+    "tripAskLabel": "Ask about the trip >",
     "backLabel": "< Back",
     "smallTalkLabel": "Small talk",
     "smallTalkPrompt": "How is life back home?",
@@ -7127,6 +7147,9 @@
     {
       "id": "q_currency",
       "category": "Currency",
+      "kinds": [
+        "Displaced"
+      ],
       "label": "Currency",
       "prompt": "What money do you pay with at home?",
       "answer": "We pay in {value}.",
@@ -7144,6 +7167,9 @@
     {
       "id": "q_language",
       "category": "Language",
+      "kinds": [
+        "Displaced"
+      ],
       "label": "Language",
       "prompt": "What language do you speak at home?",
       "answer": "At home we speak {value}.",
@@ -7155,6 +7181,9 @@
     {
       "id": "q_device",
       "category": "Technology",
+      "kinds": [
+        "Displaced"
+      ],
       "label": "Device",
       "prompt": "What tool do you use every day?",
       "answer": "Every day I use {value}.",
@@ -7166,6 +7195,9 @@
     {
       "id": "q_capital",
       "category": "Geography",
+      "kinds": [
+        "Displaced"
+      ],
       "label": "Capital",
       "prompt": "What is the capital of your land?",
       "answer": "Our capital is {value}.",
@@ -7177,11 +7209,46 @@
     {
       "id": "q_ruler",
       "category": "Politics",
+      "kinds": [
+        "Displaced"
+      ],
       "label": "Ruler",
       "prompt": "Who rules your land?",
       "answer": "We are ruled by {value}.",
       "fromDay": 5,
       "announce": "BUREAU NOTICE: desk officers may now ask travellers who rules them. Check answers against Rulers & Regents.",
+      "conditions": [],
+      "overrides": []
+    },
+    {
+      "id": "q_trip_currency",
+      "category": "Currency",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "label": "Currency",
+      "prompt": "What will you pay with in {place}?",
+      "answer": "I've changed my money into {value}.",
+      "fromDay": 4,
+      "announce": "BUREAU NOTICE: from today, desk officers ask departing citizens what they will pay with. Check answers against the Currency Ledger: nothing from 2150 leaves 2150.",
+      "conditions": [],
+      "overrides": []
+    },
+    {
+      "id": "q_trip_device",
+      "category": "Technology",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "label": "Device",
+      "prompt": "What are you taking with you?",
+      "answer": "Just the approved kit: {value}.",
+      "fromDay": 4,
+      "announce": "BUREAU NOTICE: from today, desk officers ask departing citizens what they are taking with them. Check answers against the Index of Devices: nothing from 2150 leaves 2150.",
       "conditions": [],
       "overrides": []
     },
@@ -11712,6 +11779,24 @@
       {
         "key": "citation.acceptedWrong.closed",
         "text": "Approved a closed destination.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.acceptedWrong.smuggled",
+        "text": "Let 2150 goods leave 2150.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.acceptedWrong.wrongDate",
+        "text": "Approved a departure on the wrong date.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.acceptedWrong.expired",
+        "text": "Approved an expired paper.",
         "gloss": "None",
         "tier": "Full"
       },

@@ -299,6 +299,7 @@ public static partial class WorldContentGenerator
             CheckLies(d, errors);
             CheckDirectives(src, d, authored, errors);
             CheckReturnHome(d, src.rules, errors);
+            CheckPresentGoods(d, src.rules, errors);
         }
 
         errors.AddRange(DayPlans.Problems(src.days.Select(d => new DayPlanEntry(d.asset, d.day, d.queue)).ToList()));
@@ -455,8 +456,8 @@ public static partial class WorldContentGenerator
             ("deskName", iv.deskName), ("opener", iv.opener), ("openerLegendary", iv.openerLegendary),
             ("honorificMale", iv.honorificMale), ("honorificFemale", iv.honorificFemale), ("honorificUnknown", iv.honorificUnknown),
             ("requestLabel", iv.requestLabel), ("papersLabel", iv.papersLabel), ("requestPrompt", iv.requestPrompt), ("requestReply", iv.requestReply),
-            ("askLabel", iv.askLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel), ("smallTalkPrompt", iv.smallTalkPrompt),
-            ("lookLabel", iv.lookLabel)
+            ("askLabel", iv.askLabel), ("tripAskLabel", iv.tripAskLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel),
+            ("smallTalkPrompt", iv.smallTalkPrompt), ("lookLabel", iv.lookLabel)
         };
         foreach ((string field, string text) in wording)
         {
@@ -509,7 +510,7 @@ public static partial class WorldContentGenerator
         var bookCategories = new HashSet<ClueCategory>((authored.books ?? Array.Empty<ReferenceBookSO>()).Select(b => b.category));
         var eraIds = new HashSet<string>(src.eras.Select(e => e.id));
         var questionIds = new HashSet<string>();
-        var askedCategories = new HashSet<ClueCategory>();
+        var built = new List<InterviewQuestion>();
         QuestionData[] questions = src.questions ?? Array.Empty<QuestionData>();
         foreach (QuestionData q in questions)
         {
@@ -519,17 +520,29 @@ public static partial class WorldContentGenerator
             else if (!questionIds.Add(q.id))
                 errors.Add($"Question id '{q.id}' is listed twice.");
 
-            if (!ParseEnum(q.category, out ClueCategory category))
-            {
+            bool categorySound = ParseEnum(q.category, out ClueCategory category);
+            if (!categorySound)
                 errors.Add($"{owner} has unknown category '{q.category}'.");
-            }
-            else
+            else if (!Forgery.IsProvableCategory(category, bookCategories))
+                errors.Add($"{owner} asks about {category}, which no reference book (or, for a birth date, the Citizen Record) can prove.");
+
+            // The kinds it is asked of (traveller types I1): known, none twice; blank asks every kind.
+            bool kindsSound = true;
+            var seenKinds = new HashSet<string>();
+            foreach (string name in q.kinds ?? Array.Empty<string>())
             {
-                if (!Forgery.IsProvableCategory(category, bookCategories))
-                    errors.Add($"{owner} asks about {category}, which no reference book (or, for a birth date, the Citizen Record) can prove.");
-                if (!askedCategories.Add(category))
-                    errors.Add($"{owner} asks about {category} again (one question per category).");
+                if (!ParseEnum(name, out TravellerKind _))
+                {
+                    errors.Add($"{owner} names '{name}' in \"kinds\", which is not a traveller kind ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}).");
+                    kindsSound = false;
+                }
+                else if (!seenKinds.Add(name))
+                {
+                    errors.Add($"{owner} names the kind {name} twice.");
+                }
             }
+            if (categorySound && kindsSound)
+                built.Add(BuildQuestion(q));
 
             if (string.IsNullOrWhiteSpace(q.label))
                 errors.Add($"{owner} has a blank label.");
@@ -573,6 +586,8 @@ public static partial class WorldContentGenerator
                 Id(OverrideLineId(q.id, o.era, AnswerPart), $"question '{q.id}' override '{o.era}'");
             }
         }
+
+        errors.AddRange(InterviewQuestions.Problems(built));
 
         // --- Dialogs ---
         var dialogIds = new HashSet<string>();
@@ -660,7 +675,7 @@ public static partial class WorldContentGenerator
         bool anySmallTalk = src.eras.Any(e => e.smallTalk != null && e.smallTalk.Length > 0) ||
                             src.places.Any(p => p.smallTalk != null && p.smallTalk.Length > 0);
         var premadeDialogs = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => !string.IsNullOrEmpty(m.dialog)).Select(m => m.dialog));
-        foreach (string problem in DialogChecks.MenuProblems(questions.Length, anySmallTalk, ContentLibraryValidator.MaxRequestedDocuments(Blueprints(authored)), requests.Length,
+        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.MostForOneKind(built), anySmallTalk, ContentLibraryValidator.MaxRequestedDocuments(Blueprints(authored)), requests.Length,
                                                              dialogs.Count(d => !premadeDialogs.Contains(d.id)), dialogs.Count(d => premadeDialogs.Contains(d.id)), iv.menuCapacity))
             errors.Add(problem);
 
@@ -699,11 +714,11 @@ public static partial class WorldContentGenerator
         foreach (QuestionData q in questions)
         {
             int longestValue = ParseEnum(q.category, out ClueCategory category) ? LongestValue(src, category) : 0;
-            Fits(QuestionLineId(q.id, PromptPart), q.prompt, Interview.ValueToken, 0);
+            Fits(QuestionLineId(q.id, PromptPart), q.prompt, Interview.PlaceToken, longestPlace);
             Fits(QuestionLineId(q.id, AnswerPart), q.answer, Interview.ValueToken, longestValue);
             foreach (OverrideData o in q.overrides ?? Array.Empty<OverrideData>())
             {
-                Fits(OverrideLineId(q.id, o.era, PromptPart), o.prompt, Interview.ValueToken, 0);
+                Fits(OverrideLineId(q.id, o.era, PromptPart), o.prompt, Interview.PlaceToken, longestPlace);
                 Fits(OverrideLineId(q.id, o.era, AnswerPart), o.answer, Interview.ValueToken, longestValue);
             }
         }
@@ -1555,6 +1570,19 @@ public static partial class WorldContentGenerator
     }
 
     /// <summary>
+    /// Refuses a day that lists no 2150 goods (a NoPresentGoods rule) without
+    /// enabling Smuggling: the rule's guaranteed smuggler (Directives.Guarantees)
+    /// could not be made, and its line would name a fault nobody has.
+    /// </summary>
+    private static void CheckPresentGoods(DayData d, RuleData[] rules, List<string> errors)
+    {
+        bool goods = (d.rules ?? Array.Empty<string>())
+            .Any(id => (rules ?? Array.Empty<RuleData>()).Any(r => r != null && r.asset == id && ParseEnum(r.type, out TravelRuleType type) && type == TravelRuleType.NoPresentGoods));
+        if (goods && !(d.lies ?? Array.Empty<string>()).Any(name => ParseEnum(name, out LieKind lie) && lie == LieKind.Smuggling))
+            errors.Add($"Day '{d.asset}' lists no 2150 goods (a NoPresentGoods rule) but does not enable Smuggling, so no traveller could break it.");
+    }
+
+    /// <summary>
     /// Writes the day's queue, tell count, tell channels, lies, eras, countries,
     /// rules, the violation chance, the premade pool and chance, and the
     /// forced slots (premade, blueprint or both; authoritative).
@@ -1655,6 +1683,7 @@ public static partial class WorldContentGenerator
         requestPrompt = new LineText(InterviewLineId("requestPrompt"), i.requestPrompt),
         requestReply = new LineText(InterviewLineId("requestReply"), i.requestReply),
         askLabel = i.askLabel,
+        tripAskLabel = i.tripAskLabel,
         backLabel = i.backLabel,
         smallTalkLabel = i.smallTalkLabel,
         lookLabel = i.lookLabel,
@@ -1669,11 +1698,12 @@ public static partial class WorldContentGenerator
         menuCapacity = i.menuCapacity
     };
 
-    /// <summary>A question with generated line ids ("{id}.prompt", "{id}.{era}.answer", ...).</summary>
+    /// <summary>A question with generated line ids ("{id}.prompt", "{id}.{era}.answer", ...) and the kinds it is asked of (CheckInterview parsed them first).</summary>
     private static InterviewQuestion BuildQuestion(QuestionData q) => new InterviewQuestion
     {
         id = q.id,
         category = (ClueCategory)Enum.Parse(typeof(ClueCategory), q.category),
+        kinds = (q.kinds ?? Array.Empty<string>()).Select(k => (TravellerKind)Enum.Parse(typeof(TravellerKind), k)).ToList(),
         label = q.label,
         prompt = new LineText(QuestionLineId(q.id, PromptPart), q.prompt),
         answer = new LineText(QuestionLineId(q.id, AnswerPart), q.answer),
@@ -2110,6 +2140,8 @@ public static partial class WorldContentGenerator
         public string requestPrompt;
         public string requestReply;
         public string askLabel;
+        /// <summary>The ask entry for a 2150 citizen ("Ask about the trip >").</summary>
+        public string tripAskLabel;
         public string backLabel;
         public string smallTalkLabel;
         public string smallTalkPrompt;
@@ -2122,11 +2154,12 @@ public static partial class WorldContentGenerator
     /// <summary>A spoken request: the hub entry, the desk's prompt and the traveller's reply (line ids are generated from the id).</summary>
     [Serializable] private sealed class RequestData { public string id; public string label; public string prompt; public string reply; }
 
-    /// <summary>A question; fromDay is required (0 = missing), announce is required exactly when the question is gated.</summary>
+    /// <summary>A question; fromDay is required (0 = missing), announce is required exactly when the question is gated; kinds names the traveller kinds it is asked of (blank: every kind).</summary>
     [Serializable] private sealed class QuestionData
     {
         public string id;
         public string category;
+        public string[] kinds;
         public string label;
         public string prompt;
         public string answer;

@@ -21,6 +21,15 @@ public enum LieKind
     /// <summary>L8, the fake displaced: a 2150 citizen posing as a displaced person, whose papers or answers leak the present's values (a place lie whose one candidate home is the present).</summary>
     FakeDisplaced,
 
+    /// <summary>
+    /// L6, smuggling: 2150 currency or technology on the way out. The
+    /// traveller's claim is honest; the manifest (or the declaration) or an
+    /// answer gives the present's value for Currency or Technology, proven
+    /// against the destination's book row or the present's (Lies.Plan with
+    /// the present as the only candidate and Lies.SmuggledCategories).
+    /// </summary>
+    Smuggling,
+
     /// <summary>L4, a debtor posing as a tourist: an Eligible citizen drawn from a tourist entry, whose visa and manifest print the tourist's classes.</summary>
     DebtorPosingAsTourist,
 
@@ -37,8 +46,9 @@ public static class LieKinds
     /// displaced's (a 2150 citizen is who they say and comes from where they
     /// say), and so is the fake displaced (a 2150 citizen posing as one);
     /// poor posing as rich is drawn from the rich entry; a doctored identity
-    /// and a debtor posing as a tourist are a tourist's; a forged contract
-    /// is a labourer's.
+    /// is a tourist's, and so is a debtor posing as a tourist; a forged
+    /// contract is a labourer's; smuggling is every kind's (the days decide
+    /// when: 2150 citizens from day 4, the displaced from day 5).
     /// </summary>
     public static bool AppliesTo(LieKind lie, TravellerKind kind)
     {
@@ -52,6 +62,8 @@ public static class LieKinds
             case LieKind.DoctoredIdentity:
             case LieKind.DebtorPosingAsTourist:
                 return kind == TravellerKind.RichTourist || kind == TravellerKind.PoorTourist;
+            case LieKind.Smuggling:
+                return true;
             case LieKind.ForgedContract:
                 return kind == TravellerKind.Labourer;
             default:
@@ -73,8 +85,8 @@ public static class LieKinds
         return lies;
     }
 
-    /// <summary>True for a place lie, planned by Lies.Plan: the false origin (another of today's places) or the fake displaced (the present as the one candidate home).</summary>
-    public static bool IsPlaceLie(LieKind lie) => lie == LieKind.FalseOrigin || lie == LieKind.FakeDisplaced;
+    /// <summary>True for a place lie, planned by Lies.Plan: the false origin (another of today's places), the fake displaced (the present as the one candidate home) or smuggling (the present's goods).</summary>
+    public static bool IsPlaceLie(LieKind lie) => lie == LieKind.FalseOrigin || lie == LieKind.FakeDisplaced || lie == LieKind.Smuggling;
 
     /// <summary>True for a record lie, planned by RecordLies against the traveller's own record; false for a place lie.</summary>
     public static bool IsRecordLie(LieKind lie) => !IsPlaceLie(lie);

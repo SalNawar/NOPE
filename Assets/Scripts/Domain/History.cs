@@ -223,7 +223,10 @@ public static class History
     /// reference books mark such rows "revised" for as long as it lasts (piece 6 R14).
     /// </summary>
     public static bool IsRevised(HistoryState history, string nationId, string eraId, ClueCategory category, string baseValue) =>
-        !Values.Match(Resolve(history, nationId, eraId, category, baseValue), baseValue);
+        IsRevised(Resolve(history, nationId, eraId, category, baseValue), baseValue);
+
+    /// <summary>True when <paramref name="resolvedValue"/> (the cell's value with history applied, <see cref="Resolve"/>) differs from its authored <paramref name="baseValue"/> (Values.Match); a caller that resolved the cell already reads this one (audit R1-020: no second scan of the edits).</summary>
+    public static bool IsRevised(string resolvedValue, string baseValue) => !Values.Match(resolvedValue, baseValue);
 
     /// <summary>Appends an edit and returns true, unless the state or edit is null, its value is blank, or its category is not editable.</summary>
     public static bool Latch(HistoryState history, FactEdit edit)

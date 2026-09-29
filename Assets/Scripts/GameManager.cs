@@ -179,10 +179,7 @@ public sealed class GameManager : MonoBehaviour
         // where no garment can be looked at, no dress tell is generated.
         bool spoken = investigationUI != null && investigationUI.InterviewReachable;
         bool dress = investigationUI != null && investigationUI.AppearanceReachable;
-        _dayCases = _caseFactory.GenerateDayCases(dayPlan, _worldState, seed,
-            spoken ? interview.AskableCategories : System.Array.Empty<ClueCategory>(),
-            spoken ? interview.AnswerTellCategories : System.Array.Empty<ClueCategory>(),
-            dress);
+        _dayCases = _caseFactory.GenerateDayCases(dayPlan, _worldState, seed, spoken ? interview : null, dress);
         Debug.Log($"[GameManager] Interview: spoken={spoken}, dress={dress}, askable=[{string.Join(", ", interview.AskableCategories)}], spoken tells may come from [{string.Join(", ", interview.AnswerTellCategories)}], dialogs offered={interview.OfferedDialogs(null).Count}.");
 
         // Investigation: surface today's travel directives (rules to deny), the

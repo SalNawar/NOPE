@@ -44,6 +44,24 @@ public enum TravelRuleType
     ReturnHome,
 
     /// <summary>
+    /// A standing procedure (traveller types P3, L6; from day 4): no 2150
+    /// currency or technology leaves 2150. It closes no destination and has
+    /// no predicate: a smuggler breaks it, a deviation fault proven against
+    /// the books (LieKind.Smuggling). On its first day one smuggler is
+    /// guaranteed in the first half of the queue (Directives.Guarantees).
+    /// </summary>
+    NoPresentGoods,
+
+    /// <summary>
+    /// A standing procedure (traveller types P3, F7; from day 4): depart only
+    /// on the date on the manifest or the return order, and never on an
+    /// expired paper, read against the agency calendar (Directives.PaperDates:
+    /// a directive fault, no evidence needed). On its first day one traveller
+    /// with a falsified date is guaranteed (Directives' makers).
+    /// </summary>
+    PaperDates,
+
+    /// <summary>
     /// The paper set of a kind (traveller types §5.3, phase 9): a Premium visa
     /// travels on a Premium transponder; a Standard visa needs an Economy
     /// transponder, a signed Stranding Waiver and a proof of means; a Debt
