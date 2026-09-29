@@ -24,8 +24,9 @@ public static class Forgery
     /// True for a record category: a value the traveller's own record (the
     /// Citizen Account or the Displacement Registry entry) holds and proves,
     /// whatever the books: the birth date, the agency number, the destination,
-    /// the incident, and the account's status, transponder, class, debt,
-    /// waiver and proof of means (a credit line, savings or a policy number).
+    /// the incident, the account's status, transponder, class, debt,
+    /// waiver and proof of means (a credit line, savings or a policy number),
+    /// and the registered contract's employer, term and wage.
     /// </summary>
     public static bool IsRecordCategory(ClueCategory category)
     {
@@ -43,6 +44,9 @@ public static class Forgery
             case ClueCategory.Credit:
             case ClueCategory.Funds:
             case ClueCategory.PolicyNo:
+            case ClueCategory.Employer:
+            case ClueCategory.Term:
+            case ClueCategory.Wage:
                 return true;
             default:
                 return false;

@@ -565,12 +565,15 @@ public static class TimelineService
         Debug.Log($"[TimelineService] ActivateEffect: effectId='{effect.name}', sourceLabel='{sourceLabel}', startDay={startDay}, durationDays={durationDays}, applyInstantOps={applyInstantOps}.");
     }
 
-    /// <summary>The morning paper's debt line (redesign phase 13; the traveller-types spec's §10): tomorrow's line of the news.debt pool in the run's order (DebtNews.Line); none when the pool is empty.</summary>
+    /// <summary>The morning paper's debt lines (redesign phases 13 and 9; the traveller-types spec's §10): tomorrow's line of the news.debt pool in the run's order (DebtNews.Line; none when the pool is empty), then the count of the Debt Relief departures the last shift approved (WorldState.debtReliefYesterday; DebtNews.YesterdayLine; none for none).</summary>
     private static void AddDebtLine(WorldState world, ContentLibrarySO lib, int tomorrow, List<string> news)
     {
         string line = DebtNews.Line(lib.News.debt, world.runSeed, tomorrow);
         if (!string.IsNullOrEmpty(line))
             news.Add(line);
+        string count = DebtNews.YesterdayLine(lib.News.debtReliefCount, world.debtReliefYesterday);
+        if (!string.IsNullOrEmpty(count))
+            news.Add(count);
     }
 
     /// <summary>Removes effects that are no longer active on the given day.</summary>

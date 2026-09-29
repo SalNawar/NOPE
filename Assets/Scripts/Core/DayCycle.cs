@@ -68,7 +68,9 @@ public static class DayCycle
     /// <summary>
     /// The shift's close, applied before the end-of-shift save so a Continue
     /// replay of the day never applies it twice: the strandings among the
-    /// accepted travellers (their carries and news; no money), the clerk's
+    /// accepted travellers (their carries and news; no money), the count of
+    /// the shift's Debt Relief departures for the next morning's paper
+    /// (WorldState.debtReliefYesterday, redesign phase 9), the clerk's
     /// Debt Relief instalment out of the shift's pay, and the narrative
     /// dialogs' outcomes. True when the instalment was taken or a dialog's
     /// effect applied, so the caller checks the endings (the wallet may have moved).
@@ -76,6 +78,7 @@ public static class DayCycle
     public static bool CloseShift(WorldState world, ShiftLedger ledger, IReadOnlyList<CaseInstance> cases, TodaysWorld today, ContentLibrarySO lib, GameConfigSO config)
     {
         ShiftStrandings.Resolve(world, ledger, cases, today, lib, config);
+        world.debtReliefYesterday = ledger != null ? ledger.DebtReliefDepartures : 0;
         bool instalmentTaken = ClerkAccountSource.TakeInstalment(world, ledger, lib) > 0;
         bool effectApplied = ApplyDialogOutcomes(world, ledger, lib);
         return instalmentTaken || effectApplied;

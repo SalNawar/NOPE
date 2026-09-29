@@ -34,6 +34,54 @@ public enum TransponderClass
     Economy
 }
 
+/// <summary>
+/// A Citizen Account's standing (traveller types §4.1): Good, or Frozen for
+/// a debtor in default, who may not depart (TravelRuleType.DebtStanding).
+/// Runtime only (not serialized).
+/// </summary>
+public enum AccountStanding
+{
+    /// <summary>In good standing.</summary>
+    Good,
+
+    /// <summary>Frozen: in default since a date ("Frozen: default, 2 Mar 2150"); a directive fault.</summary>
+    Frozen
+}
+
+/// <summary>One employer of the Debt Relief programme (world_source.json agency.employers; traveller types §4.3): a labourer's contract names one of their worksite's era.</summary>
+[Serializable]
+public sealed class Employer
+{
+    /// <summary>The employer's id ("tyburn"), unique.</summary>
+    public string id;
+
+    /// <summary>The era it hires for (an era id, "industrial").</summary>
+    public string era;
+
+    /// <summary>Its printed name ("Tyburn Mills Consortium").</summary>
+    public string name;
+}
+
+/// <summary>The ranges a labourer's registered contract is drawn from (world_source.json agency.accounts.contract; traveller types §4.1: a term of 90-720 days, a day wage of 180-520 cr).</summary>
+[Serializable]
+public sealed class ContractRanges
+{
+    /// <summary>The longest term a contract may hold, so the widest term fits its box on a form (FieldLengths.Longest; "99999 days").</summary>
+    public const int MaxTermDays = 99_999;
+
+    /// <summary>The shortest term, in days (a whole number of 30-day months).</summary>
+    public int termMin;
+
+    /// <summary>The longest term, in days.</summary>
+    public int termMax;
+
+    /// <summary>The lowest day wage, in credits.</summary>
+    public int wageMin;
+
+    /// <summary>The highest day wage, in credits.</summary>
+    public int wageMax;
+}
+
 /// <summary>One transponder model a citizen can travel on (world_source.json agency.transponders; a weighted list per class).</summary>
 [Serializable]
 public sealed class TransponderModel
@@ -126,9 +174,14 @@ public sealed class AccountRanges
 
     /// <summary>The Stranding Waiver number's prefix ("SW" gives "SW-204817"; F3): every account on an Economy transponder registers one.</summary>
     public string waiverPrefix = string.Empty;
+    /// <summary>A Frozen account went into default 1 to this many days before today (the debt-standing maker, CaseFactory.PlanViolation).</summary>
+    public int frozenWithinDays;
 
     /// <summary>Each status's ranges (one entry per status).</summary>
     public List<StatusRanges> statuses = new();
+
+    /// <summary>The ranges a labourer's registered contract is drawn from (agency.accounts.contract).</summary>
+    public ContractRanges contract = new ContractRanges();
 
     /// <summary>The ranges of <paramref name="status"/>, or null when none are authored.</summary>
     public StatusRanges For(CitizenStatus status) => statuses?.FirstOrDefault(s => s != null && s.status == status);
@@ -146,7 +199,10 @@ public sealed class AccountRanges
     /// holds one), a form listed twice or blank, a category that is not a
     /// proof's (AccountMaker.IsProofCategory), a weight of 0 or less, an
     /// amount range out of order or above <see cref="MaxDebt"/>, and a number
-    /// proof with a blank prefix or one wider than a book row. Empty when sound.
+    /// proof with a blank prefix or one wider than a book row; and (phase 9)
+    /// a freeze window below 1 day, a contract range out of order, a term
+    /// below one month (AccountMaker.MonthDays) or above the widest a form
+    /// prints, or a day wage below 1 cr or above the widest. Empty when sound.
     /// </summary>
     public List<string> Problems(IReadOnlyList<TransponderModel> transponders, IReadOnlyList<ProofOfMeans> proofs)
     {
@@ -159,6 +215,21 @@ public sealed class AccountRanges
             problems.Add("agency.accounts.waiverPrefix is blank: the Stranding Waiver number's prefix (\"SW\").");
         else if (AccountMaker.Numbered(waiverPrefix, new TopDraws()).Length > FactTable.MaxValueLength)
             problems.Add($"agency.accounts.waiverPrefix '{waiverPrefix}': a waiver number is wider than the {FactTable.MaxValueLength} characters a form's box holds.");
+        if (frozenWithinDays < 1)
+            problems.Add($"agency.accounts.frozenWithinDays is {frozenWithinDays}: a frozen account went into default at least 1 day before today.");
+        if (contract == null)
+            problems.Add("agency.accounts.contract is missing: the term and day wage ranges a labourer's contract is drawn from.");
+        else
+        {
+            if (contract.termMin < AccountMaker.MonthDays || contract.termMin > contract.termMax)
+                problems.Add($"agency.accounts.contract: the term range {contract.termMin}-{contract.termMax} must run from at least {AccountMaker.MonthDays} days upwards.");
+            if (contract.termMax > ContractRanges.MaxTermDays)
+                problems.Add($"agency.accounts.contract: the term {contract.termMax} is above {AccountMaker.Term(ContractRanges.MaxTermDays)}, the widest a form prints.");
+            if (contract.wageMin < 1 || contract.wageMin > contract.wageMax)
+                problems.Add($"agency.accounts.contract: the day wage range {contract.wageMin}-{contract.wageMax} must run from at least 1 cr upwards.");
+            if (contract.wageMax > MaxDebt)
+                problems.Add($"agency.accounts.contract: the day wage {contract.wageMax} is above {AccountMaker.Credits(MaxDebt)}, the widest a form prints.");
+        }
 
         foreach (CitizenStatus status in (CitizenStatus[])Enum.GetValues(typeof(CitizenStatus)))
         {
@@ -274,6 +345,20 @@ public sealed class AccountRequest
 
     /// <summary>The forms of the traveller's blueprint, in paper order: the account decides which of them the traveller carries (AccountMaker.Carries), and one honest Valid Until is drawn for each carried form that expires, in form order.</summary>
     public IReadOnlyList<FormEntry> Forms;
+
+    /// <summary>True for a labourer: a registered Debt Relief Labour Contract is drawn (an employer, a term and a day wage).</summary>
+    public bool Contract;
+
+    /// <summary>The employers the contract may name: those of the worksite's era, by printed name (agency.employers).</summary>
+    public IReadOnlyList<string> Employers;
+
+    /// <summary>
+    /// True for a debtor posing as a poor tourist (L4's poor variant, phase
+    /// 9): a proof of means is drawn where a Standard account's would be, and
+    /// the traveller carries it, but the account does not hold it
+    /// (CitizenAccount.ProofForged: the record shows none on file).
+    /// </summary>
+    public bool ForgedProof;
 }
 
 /// <summary>One form of a blueprint as the account maker sees it (phase 8): its number, its request group and whether it prints a Valid Until.</summary>
@@ -329,6 +414,30 @@ public sealed class CitizenAccount
 
     /// <summary>The proof's value as papers and the record print it ("9,400 cr", "TI-551902"); null without a proof.</summary>
     public string ProofValue;
+
+    /// <summary>The proof's amount in credits (a credit line or savings), which a forged proof inflates (L10); 0 for a policy or without a proof.</summary>
+    public int ProofAmount;
+
+    /// <summary>True when the proof the traveller carries is not on file (L4's poor variant, AccountRequest.ForgedProof): their paper prints it, the record shows none.</summary>
+    public bool ProofForged;
+
+    /// <summary>The account's standing: Good, or Frozen for a debtor in default (the debt-standing maker sets it; TravelRuleType.DebtStanding reads it).</summary>
+    public AccountStanding Standing = AccountStanding.Good;
+
+    /// <summary>The date the account was frozen ("2 Mar 2150"; the Standing row prints it); null while Good.</summary>
+    public string FrozenSince;
+
+    /// <summary>The registered contract's employer (the category Employer); null without a contract.</summary>
+    public string Employer;
+
+    /// <summary>The registered contract's term in days (the category Term prints AccountMaker.Term); 0 without a contract.</summary>
+    public int TermDays;
+
+    /// <summary>The registered contract's day wage in credits (the category Wage prints AccountMaker.Credits); 0 without a contract.</summary>
+    public int Wage;
+
+    /// <summary>True when a Debt Relief Labour Contract is registered on the account.</summary>
+    public bool HasContract => Employer != null;
 
     /// <summary>The family's lineage: a past place (flavour, traveller types R4); null when none is authored.</summary>
     public string Lineage;
@@ -403,11 +512,15 @@ public static class AccountMaker
         string.IsNullOrEmpty(askGroup) ||
         (askGroup == ProofGroup && account != null && account.ProofForm != null && account.ProofForm == formNumber);
 
+    /// <summary>The days of a contract month: terms are drawn and printed in whole months (30 days).</summary>
+    public const int MonthDays = 30;
+
     /// <summary>
     /// A citizen's account, in the fixed draw order (§4.3): the Citizen ID
     /// (<see cref="CitizenId"/>, redrawn while taken today); the debt
     /// (<see cref="Amount"/>, one draw); for an account that holds a proof of
-    /// means (<see cref="HoldsProof"/>) the proof (one weighted draw over
+    /// means (<see cref="HoldsProof"/>), or a debtor posing as a poor tourist
+    /// who carries one not on file (AccountRequest.ForgedProof), the proof (one weighted draw over
     /// <paramref name="proofs"/>; none without proofs) and its value (an
     /// amount: <see cref="Amount"/>, one draw; a number: <see cref="Numbered"/>,
     /// redrawn while taken); the transponder model (one weighted
@@ -420,8 +533,11 @@ public static class AccountMaker
     /// one honest Valid Until per carried form that expires
     /// (<see cref="Carries"/> over the request's forms, in form order;
     /// AgencyNumbers.DaysAhead). The ID, the serial and every number join
-    /// <paramref name="takenToday"/>. A later phase adds a labourer's contract
-    /// after the waiver.
+    /// <paramref name="takenToday"/>. For a labourer (AccountRequest.Contract)
+    /// the registered contract is drawn right after the waiver: its employer
+    /// (one draw over the era's employers; none without one), its term
+    /// (<see cref="TermDays"/>, one draw) and its day wage (<see cref="Amount"/>,
+    /// one draw).
     /// </summary>
     public static CitizenAccount Make(AccountRequest request, AccountRanges ranges, IReadOnlyList<TransponderModel> transponders,
                                       IReadOnlyList<ProofOfMeans> proofs, DateTime today, ISet<string> takenToday, IRandomSource rng)
@@ -440,7 +556,7 @@ public static class AccountMaker
         account.CitizenId = AgencyNumbers.TakeUnique(takenToday, () => CitizenId(rng));
         account.Debt = Amount(status.debtMin, status.debtMax, rng);
 
-        if (HoldsProof(request.Status))
+        if (HoldsProof(request.Status) || request.ForgedProof)
         {
             List<ProofOfMeans> held = (proofs ?? Array.Empty<ProofOfMeans>()).Where(p => p != null && p.weight > 0f).ToList();
             ProofOfMeans proof = WeightedRandom.Pick(held, p => p.weight, rng);
@@ -448,9 +564,16 @@ public static class AccountMaker
             {
                 account.ProofForm = proof.form;
                 account.ProofCategory = proof.category;
-                account.ProofValue = IsAmount(proof.category)
-                    ? Credits(Amount(proof.amountMin, proof.amountMax, rng))
-                    : AgencyNumbers.TakeUnique(takenToday, () => Numbered(proof.prefix, rng));
+                account.ProofForged = !HoldsProof(request.Status);
+                if (IsAmount(proof.category))
+                {
+                    account.ProofAmount = Amount(proof.amountMin, proof.amountMax, rng);
+                    account.ProofValue = Credits(account.ProofAmount);
+                }
+                else
+                {
+                    account.ProofValue = AgencyNumbers.TakeUnique(takenToday, () => Numbered(proof.prefix, rng));
+                }
             }
         }
 
@@ -463,6 +586,14 @@ public static class AccountMaker
 
         if (HoldsWaiver(request.Status))
             account.WaiverNo = AgencyNumbers.TakeUnique(takenToday, () => Numbered(ranges.waiverPrefix, rng));
+        IReadOnlyList<string> employers = request.Employers ?? Array.Empty<string>();
+        if (request.Contract && employers.Count > 0)
+        {
+            ContractRanges contract = ranges.contract ?? new ContractRanges();
+            account.Employer = employers[rng.Range(0, employers.Count)];
+            account.TermDays = TermDays(contract.termMin, contract.termMax, rng);
+            account.Wage = Amount(contract.wageMin, contract.wageMax, rng);
+        }
 
         IReadOnlyList<string> lineages = request.Lineages ?? Array.Empty<string>();
         if (lineages.Count > 0)
@@ -509,13 +640,22 @@ public static class AccountMaker
     public static string Credits(int amount) => amount.ToString("N0", CultureInfo.InvariantCulture) + " cr";
 
     /// <summary>An amount from <paramref name="min"/> to <paramref name="max"/> in whole tens of credits: one draw, even for a fixed amount (so the draw order never depends on the range).</summary>
-    public static int Amount(int min, int max, IRandomSource rng)
+    public static int Amount(int min, int max, IRandomSource rng) => Steps(min, max, 10, rng);
+
+    /// <summary>A contract term from <paramref name="min"/> to <paramref name="max"/> days in whole months (<see cref="MonthDays"/>): one draw, even for a fixed term.</summary>
+    public static int TermDays(int min, int max, IRandomSource rng) => Steps(min, max, MonthDays, rng);
+
+    /// <summary>A value from <paramref name="min"/> up in steps of <paramref name="step"/>, never above <paramref name="max"/>: one Range draw over the steps that fit.</summary>
+    private static int Steps(int min, int max, int step, IRandomSource rng)
     {
         if (max < min)
             (min, max) = (max, min);
-        int steps = (max - min) / 10;
-        return min + 10 * rng.Range(0, steps + 1);
+        int steps = (max - min) / step;
+        return min + step * rng.Range(0, steps + 1);
     }
+
+    /// <summary>A contract term as papers and accounts print it (§3.7): "180 days".</summary>
+    public static string Term(int days) => days.ToString(CultureInfo.InvariantCulture) + " days";
 }
 
 /// <summary>
@@ -523,7 +663,10 @@ public static class AccountMaker
 /// three groups (Records, Forms on file, Travel) and the note, found by the
 /// Citizen ID or the name. A row whose category is compared is evidence (a
 /// compare pick): the waiver and the proof of means (under the proof's own
-/// category) when the account holds them; the rest (standing, lineage, the
+/// category) when the account holds them (a forged proof, carried but not
+/// on file, shows none), and a labourer's registered
+/// contract (three rows: Employer, Term and Wage); the rest (standing, Good
+/// or Frozen with its date, lineage, the
 /// forms not on file, the departure date, past trips, the note) is shown only. Labels and fixed
 /// words come through <c>text</c> (UI string keys), values from the account.
 /// The clerk's own account is a record too, with no evidence row.
@@ -545,7 +688,9 @@ public static class AccountRecords
             new RecordRow(text("records.row.citizenId"), account.CitizenId, ClueCategory.CitizenId),
             new RecordRow(text("records.row.born"), born, ClueCategory.BirthDate),
             new RecordRow(text("records.row.status"), account.Status.ToString(), ClueCategory.AccountStatus),
-            new RecordRow(text("records.row.standing"), text("records.standing.good")),
+            new RecordRow(text("records.row.standing"), account.Standing == AccountStanding.Frozen
+                ? string.Format(CultureInfo.InvariantCulture, text("records.standing.frozen"), account.FrozenSince)
+                : text("records.standing.good")),
             new RecordRow(text("records.row.debt"), AccountMaker.Credits(account.Debt), ClueCategory.Debt),
             new RecordRow(text("records.row.lineage"), account.Lineage ?? none)
         };
@@ -555,9 +700,16 @@ public static class AccountRecords
             new RecordRow(text("records.row.transponder"), account.Transponder ?? none, ClueCategory.TransponderId),
             new RecordRow(text("records.row.transponderClass"), account.TransponderClass.ToString(), ClueCategory.TransponderClass),
             account.WaiverNo != null ? new RecordRow(text("records.row.waiver"), account.WaiverNo, ClueCategory.WaiverNo) : new RecordRow(text("records.row.waiver"), none),
-            account.ProofForm != null ? new RecordRow(text("records.row.proof"), account.ProofValue, account.ProofCategory) : new RecordRow(text("records.row.proof"), none),
-            new RecordRow(text("records.row.contract"), none)
+            account.ProofForm != null && !account.ProofForged ? new RecordRow(text("records.row.proof"), account.ProofValue, account.ProofCategory) : new RecordRow(text("records.row.proof"), none)
         };
+        if (account.HasContract)
+        {
+            forms.Add(new RecordRow(text("contract.row.employer"), account.Employer, ClueCategory.Employer));
+            forms.Add(new RecordRow(text("contract.row.term"), AccountMaker.Term(account.TermDays), ClueCategory.Term));
+            forms.Add(new RecordRow(text("contract.row.wage"), AccountMaker.Credits(account.Wage), ClueCategory.Wage));
+        }
+        else
+            forms.Add(new RecordRow(text("records.row.contract"), none));
 
         var travel = new List<RecordRow>
         {

@@ -146,6 +146,9 @@ public sealed class CaseInstance
     /// </summary>
     public DirectiveFault directiveFault;
 
+    /// <summary>Why the traveller lacks a form the desk asks for: Honest (they never needed it), or Missing when a broken paper set left their waiver or proof of means out (CaseFactory.BreakPapers; the interview's reply, MissingFormVariant).</summary>
+    public MissingFormVariant missingFormVariant;
+
     /// <summary>True when the Directives forbid the traveller's claim or papers (a directive fault).</summary>
     public bool HasDirectiveFault => directiveFault != DirectiveFault.None;
 

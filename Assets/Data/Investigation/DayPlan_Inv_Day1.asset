@@ -35,6 +35,7 @@ MonoBehaviour:
   tellChannels: 00000000
   costumeErrorChance: 0
   lieKinds: 0100000002000000
+  violationChance: 0
   activeTravelRules:
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
   guaranteeRuleViolators: 1

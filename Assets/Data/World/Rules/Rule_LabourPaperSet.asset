@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b665400328840749af7b71736f3560a, type: 3}
-  m_Name: Rule_NoEarlyModernJapan
+  m_Name: Rule_LabourPaperSet
   m_EditorClassIdentifier: Assembly-CSharp::TravelRuleSO
-  type: 2
-  era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
-  nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
-  description: 'Sakoku seal: no travel to Tokugawa Edo today.'
-  kinds: 
+  type: 8
+  era: {fileID: 0}
+  nation: {fileID: 0}
+  description: 'Debt Relief departures: a registered Labour Contract, an Economy
+    transponder and a signed Stranding Waiver.'
+  kinds: 02000000
