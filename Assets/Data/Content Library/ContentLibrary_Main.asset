@@ -1992,7 +1992,6 @@ MonoBehaviour:
       amountMax: 0
       prefix: TI
     strandChance: 0.08
-    strandFine: 150
     employers:
     - id: nile_quarry
       era: ancient
