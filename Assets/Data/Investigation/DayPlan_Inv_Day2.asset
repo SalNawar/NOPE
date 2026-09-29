@@ -37,9 +37,9 @@ MonoBehaviour:
   availableLegendaries: []
   tellCount: 1
   tellChannels: 0000000001000000
-  costumeErrorChance: 0.1
+  costumeErrorChance: 0.05
   lieKinds: 01000000020000000700000008000000
-  violationChance: 0.1
+  violationChance: 0.05
   activeTravelRules:
   - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}
   - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
