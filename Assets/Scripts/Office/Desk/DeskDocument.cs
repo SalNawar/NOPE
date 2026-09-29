@@ -126,6 +126,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     private float _slideElapsed;
     private Action _slideDone;
 
+    /// <summary>The paper's drag (the builder wires it): the desk reaches it without a GetComponent each time.</summary>
+    public DeskDraggable Drag => drag;
+
     /// <summary>The paper's index in the case (DeskController maps a drag or a click to it).</summary>
     public int Index { get; private set; }
 

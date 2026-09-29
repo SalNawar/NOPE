@@ -46,9 +46,6 @@ public sealed class SearchResultsView : MonoBehaviour
     /// <summary>✕: closes the panel.</summary>
     [SerializeField] private Button closeButton;
 
-    /// <summary>The marked text's highlight in a snippet.</summary>
-    [SerializeField] private Color markColour = new Color(1f, 0.84f, 0.2f, 0.6f);
-
     /// <summary>The chosen chip's tint (pressed).</summary>
     [SerializeField] private Color chosenTint = new Color(0.72f, 0.72f, 0.72f, 1f);
 
@@ -231,24 +228,31 @@ public sealed class SearchResultsView : MonoBehaviour
             label.text = text;
     }
 
-    /// <summary>The snippet with its marks highlighted (TextMeshPro's mark tag); the rest shown as written.</summary>
-    private string Marked(string text, IReadOnlyList<Mark> marks)
+    /// <summary>
+    /// The snippet with its marks in bold and underlined, in the row's own ink
+    /// (so a mark reads as well as the row in every theme); the rest shown as
+    /// written. TextMeshPro's mark tag would draw a tint over the glyphs and
+    /// blend the ink into it: the matched text read about 2:1 in every theme.
+    /// </summary>
+    private static string Marked(string text, IReadOnlyList<Mark> marks)
     {
         text ??= string.Empty;
-        var sb = new StringBuilder(text.Length + 48 * marks.Count);
-        string open = "<mark=#" + ColorUtility.ToHtmlStringRGBA(markColour) + ">";
+        var sb = new StringBuilder(text.Length + 32 * marks.Count);
         int at = 0;
         foreach (Mark mark in marks)
         {
             if (mark.Start < at || mark.Start + mark.Length > text.Length)
                 continue;
             sb.Append(Escape(text.Substring(at, mark.Start - at)));
-            sb.Append(open).Append(Escape(text.Substring(mark.Start, mark.Length))).Append("</mark>");
+            sb.Append(MarkOpen).Append(Escape(text.Substring(mark.Start, mark.Length))).Append(MarkClose);
             at = mark.Start + mark.Length;
         }
         sb.Append(Escape(text.Substring(at)));
         return sb.ToString();
     }
+
+    /// <summary>The tags around a marked run: bold and underlined.</summary>
+    private const string MarkOpen = "<b><u>", MarkClose = "</u></b>";
 
     /// <summary>A text shown as written: its rich-text tags are not read.</summary>
     private static string Escape(string text) => string.IsNullOrEmpty(text) ? string.Empty : "<noparse>" + text + "</noparse>";

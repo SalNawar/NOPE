@@ -191,6 +191,21 @@ public class CaseStepsTests
     }
 
     [Test]
+    public void Evaluate_IntoAList_ReplacesWhatItHeld_AndReturnsThatList()
+    {
+        CaseProgress p = Progress();
+        StepSpec papers = Step("papers", StepWhen.PapersReceived), visa = Step("visa", StepWhen.PaperRead, forms: new[] { "TC-101" });
+        var states = new List<StepState> { new StepState("stale", true, 1, 1, false) };
+
+        List<StepState> returned = CaseSteps.Evaluate(new[] { papers, visa }, p, states);
+
+        Assert.AreSame(states, returned, "the steps panel reuses its list: no list per redraw");
+        CollectionAssert.AreEqual(new[] { "papers" }, states.Select(s => s.Id), "the stale state went; the visa step has no parts here");
+        CollectionAssert.AreEqual(CaseSteps.Evaluate(new[] { papers, visa }, p).Select(s => (s.Id, s.Done, s.Have, s.Need)), states.Select(s => (s.Id, s.Done, s.Have, s.Need)),
+                                  "the same states as a new list");
+    }
+
+    [Test]
     public void PaperRead_CountsEachPaperRead_AtTheDeskOrInAPane()
     {
         CaseProgress p = Progress();

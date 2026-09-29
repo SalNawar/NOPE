@@ -513,7 +513,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     // The anime hall
     // -----------------------------
 
-    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock (the config's hall knobs); an art office without one needs nothing.</summary>
+    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock, and the ink of the art's calendar with it (the config's hall knobs); an art office without one needs nothing.</summary>
     private void BindHall(Scene art)
     {
         if (config == null)
@@ -524,7 +524,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             AnimeHallPresentation hall = root.GetComponentInChildren<AnimeHallPresentation>(false);
             if (hall == null)
                 continue;
-            gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config.hallEveningStartsAt, config.hallEveningFullAt);
+            gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config, TextOf(OfficeAnchorId.ReadoutDay));
             return;
         }
     }

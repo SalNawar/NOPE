@@ -55,7 +55,7 @@ public sealed class StepsPanel : MonoBehaviour
 
     private readonly List<StepRowView> _rows = new List<StepRowView>();
     private IReadOnlyList<StepSpec> _steps = Array.Empty<StepSpec>();
-    private List<StepState> _states = new List<StepState>();
+    private readonly List<StepState> _states = new List<StepState>();
     private CaseProgress _progress;
     private StepSetData _sets;
     private string _kind = string.Empty;
@@ -205,10 +205,13 @@ public sealed class StepsPanel : MonoBehaviour
         }
     }
 
-    /// <summary>Each row from the steps' states (a step with no parts this case hides), then the section's visibility.</summary>
+    /// <summary>Each row from the steps' states (a step with no parts this case hides; the states' list is reused, so a redraw from LateUpdate allocates no list), then the section's visibility.</summary>
     private void Redraw()
     {
-        _states = _progress != null ? CaseSteps.Evaluate(_steps, _progress) : new List<StepState>();
+        if (_progress != null)
+            CaseSteps.Evaluate(_steps, _progress, _states);
+        else
+            _states.Clear();
         for (int i = 0; i < _rows.Count; i++)
         {
             int s = IndexOfState(_steps[i].id);
