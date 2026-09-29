@@ -92,6 +92,7 @@ public static partial class ContentLibraryValidator
         issues += CheckDayPlanEntries(lib);
         issues += CheckDayPlanLegendaries(lib);
         issues += CheckForcedEntries(lib);
+        issues += CheckPremadeRows(lib);
 
         // --- Cross references ---
         issues += CheckLegendaryReferences(lib);
@@ -1147,7 +1148,7 @@ public static partial class ContentLibraryValidator
             var forced = new List<ForcedCheck>();
             foreach (ForcedCaseSlot f in plan.ForcedCases.Where(f => f != null))
             {
-                TravellerKind kind = f.legendary != null ? TravellerKind.Displaced : f.caseBlueprint != null ? f.caseBlueprint.Kind : TravellerKind.Displaced;
+                TravellerKind kind = f.legendary != null ? f.legendary.kind : f.caseBlueprint != null ? f.caseBlueprint.Kind : TravellerKind.Displaced;
                 CaseBlueprintSO blueprint = f.caseBlueprint ?? plan.Kinds.Where(k => k != null && k.blueprint != null && k.blueprint.Kind == kind).Select(k => k.blueprint).FirstOrDefault();
                 forced.Add(new ForcedCheck
                 {
@@ -1186,6 +1187,44 @@ public static partial class ContentLibraryValidator
             Debug.LogError($"[ContentLibraryValidator] {e} (run Tools > TimeDesk > Generate World)", lib);
         foreach (string w in warnings)
             Debug.LogWarning($"[ContentLibraryValidator] {w}", lib);
+        return errors.Count + warnings.Count;
+    }
+
+    /// <summary>
+    /// The premades' rows (days 7-15 V6, Premades.Problems: the rule Generate
+    /// World checks its source with): the famous hold no account; a story
+    /// character's birth years, family, Citizen ID, debt, employer and that no
+    /// day pools it.
+    /// </summary>
+    private static int CheckPremadeRows(ContentLibrarySO lib)
+    {
+        var employers = (lib.Agency.employers ?? new List<Employer>()).Where(e => e != null && !string.IsNullOrEmpty(e.id)).GroupBy(e => e.id).ToDictionary(g => g.Key, g => g.First());
+        var pooled = new HashSet<LegendarySO>(lib.DayPlans.Where(p => p != null).SelectMany(p => p.AvailableLegendaries ?? Array.Empty<LegendarySO>()).Where(l => l != null));
+        List<PremadeCheck> checks = lib.Legendaries.Where(l => l != null).Select(l => new PremadeCheck
+        {
+            Id = l.id,
+            Kind = l.kind,
+            HasTruePlace = l.truePlace != null,
+            PlaceEraId = l.trueEra != null ? l.trueEra.id : null,
+            BirthYear = BirthDates.TryParse(l.birthDate, out _, out _, out int born) ? born : (int?)null,
+            HasFamily = l.family != null,
+            FamilyKnown = true,
+            CitizenId = l.citizenId,
+            Debt = l.debt,
+            Employer = l.employer,
+            EmployerEraId = !string.IsNullOrEmpty(l.employer) && employers.TryGetValue(l.employer, out Employer e) ? e.era : null,
+            Pooled = pooled.Contains(l)
+        }).ToList();
+
+        PresentPlace present = lib.BuildPresent(null);
+        var errors = new List<string>();
+        var warnings = new List<string>();
+        Premades.Problems(checks, present != null ? present.BirthYearMin : 0, present != null ? present.BirthYearMax : 0,
+                          lib.Agency.clerk != null ? lib.Agency.clerk.citizenId : null, lib.Agency.accounts, errors, warnings);
+        foreach (string problem in errors)
+            Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", lib);
+        foreach (string problem in warnings)
+            Debug.LogWarning($"[ContentLibraryValidator] {problem}", lib);
         return errors.Count + warnings.Count;
     }
 

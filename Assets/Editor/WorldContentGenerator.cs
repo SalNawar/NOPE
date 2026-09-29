@@ -116,7 +116,7 @@ public static partial class WorldContentGenerator
         var placesById = places.ToDictionary(p => p.id);
         var archetypesById = authored.archetypes.ToDictionary(a => a.id);
         var premades = (src.premades ?? Array.Empty<PremadeData>())
-            .Select(m => MakePremade(m, placesById, archetypesById, authored.attributes, written))
+            .Select(m => MakePremade(m, placesById, archetypesById, authored.attributes, nations, written))
             .ToArray();
         var premadesById = premades.ToDictionary(m => m.id);
 
@@ -1054,9 +1054,12 @@ public static partial class WorldContentGenerator
             if (home != null && futureEras.Contains(home.era))
                 errors.Add($"{owner} comes from the Future place '{m.truePlace}', which is in the world only while its nation leads; no premade may claim or come from the Future.");
 
+            if (!string.IsNullOrEmpty(m.kind) && !ParseEnum(m.kind, out TravellerKind _))
+                errors.Add($"{owner} has unknown kind '{m.kind}' ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}; blank: Displaced, the famous).");
+            bool storyCharacter = TravellerKinds.IsCitizen(PremadeKind(m));
             if (!BirthDates.TryParse(m.birthDate, out _, out _, out int year))
                 errors.Add($"{owner} has unreadable birth date '{m.birthDate}' (\"14 Mar 1505 BCE\").");
-            else if (place != null)
+            else if (place != null && !storyCharacter) // a story character is born in the present's years (Premades.Problems)
             {
                 (int min, int max) = BirthYears(place, src.travellerAgeMin, src.travellerAgeMax);
                 if (year < min || year > max)
@@ -1081,6 +1084,32 @@ public static partial class WorldContentGenerator
                     errors.Add($"{owner} has an impact on '{impact.attribute}' with both deltas 0 (a missing delta reads 0).");
             }
         }
+
+        // --- The premades' rows: the famous hold no account, a story character's account and scheduling (days 7-15 V6; the validator's rule) ---
+        AgencyContent agency = src.agency != null ? BuildAgency(src.agency) : null;
+        var employersById = (agency?.employers ?? new List<Employer>()).Where(e => e != null && !string.IsNullOrEmpty(e.id)).GroupBy(e => e.id).ToDictionary(g => g.Key, g => g.First());
+        var countryIds = new HashSet<string>(src.countries.Select(c => c.id));
+        var pooledIds = new HashSet<string>(src.days.SelectMany(d => d.premades ?? Array.Empty<string>()));
+        var premadeChecks = (src.premades ?? Array.Empty<PremadeData>()).Select(m => new PremadeCheck
+        {
+            Id = m.id,
+            Kind = PremadeKind(m),
+            HasTruePlace = !string.IsNullOrEmpty(m.truePlace),
+            PlaceEraId = src.places.FirstOrDefault(p => PlaceId(p) == m.place)?.era,
+            BirthYear = BirthDates.TryParse(m.birthDate, out _, out _, out int born) ? born : (int?)null,
+            HasFamily = !string.IsNullOrEmpty(m.family),
+            FamilyKnown = string.IsNullOrEmpty(m.family) || countryIds.Contains(m.family),
+            CitizenId = m.citizenId,
+            Debt = m.debt,
+            Employer = m.employer,
+            EmployerEraId = !string.IsNullOrEmpty(m.employer) && employersById.TryGetValue(m.employer, out Employer e) ? e.era : null,
+            Pooled = pooledIds.Contains(m.id)
+        }).ToList();
+        var premadeWarnings = new List<string>();
+        int presentYear = src.present != null ? src.present.year : 0;
+        Premades.Problems(premadeChecks, presentYear - src.travellerAgeMax, presentYear - src.travellerAgeMin, src.agency?.clerk?.citizenId, agency?.accounts, errors, premadeWarnings);
+        foreach (string warning in premadeWarnings)
+            Debug.LogWarning($"[WorldContentGenerator] {warning}");
 
         // --- Days: pools, forced slots, chance ---
         foreach (DayData d in src.days)
@@ -1496,7 +1525,7 @@ public static partial class WorldContentGenerator
 
     /// <summary>Writes Premades/Premade_{id}.asset: every field (once per run unless repeatable; impacts move the nation's score unless skipNationScore).</summary>
     private static LegendarySO MakePremade(PremadeData m, Dictionary<string, NationEraProfileSO> places, Dictionary<string, ArchetypeSO> archetypes,
-                                           Dictionary<string, AttributeSO> attributes, HashSet<string> written)
+                                           Dictionary<string, AttributeSO> attributes, Dictionary<string, NationSO> nations, HashSet<string> written)
     {
         LegendarySO premade = LoadOrCreate<LegendarySO>($"{WorldRoot}/Premades/Premade_{m.id}.asset", written);
         NationEraProfileSO claim = places[m.place];
@@ -1512,6 +1541,11 @@ public static partial class WorldContentGenerator
         premade.recordNote = m.recordNote ?? string.Empty;
         premade.dialogId = m.dialog ?? string.Empty;
         premade.oncePerRun = !m.repeatable;
+        premade.kind = PremadeKind(m);
+        premade.family = !string.IsNullOrEmpty(m.family) && nations.TryGetValue(m.family, out NationSO family) ? family : null;
+        premade.citizenId = m.citizenId ?? string.Empty;
+        premade.debt = m.debt;
+        premade.employer = m.employer ?? string.Empty;
         premade.authoredImpacts = (m.impacts ?? Array.Empty<ImpactData>()).Select(i => new TimelineImpact
         {
             attribute = attributes[i.attribute],
@@ -1616,8 +1650,9 @@ public static partial class WorldContentGenerator
         };
     }
 
-    /// <summary>The kind a premade stands as: the displaced (the famous).</summary>
-    private static TravellerKind PremadeKind(PremadeData m) => TravellerKind.Displaced;
+    /// <summary>The kind a premade stands as (premades[].kind): blank is the famous' Displaced; an unknown name reads Displaced too (CheckCharacters reports it).</summary>
+    private static TravellerKind PremadeKind(PremadeData m) =>
+        !string.IsNullOrEmpty(m.kind) && ParseEnum(m.kind, out TravellerKind kind) ? kind : TravellerKind.Displaced;
 
     /// <summary>Null for a blank id (a rule's missing country or era).</summary>
     private static string NullIfBlank(string id) => string.IsNullOrEmpty(id) ? null : id;
@@ -2192,7 +2227,7 @@ public static partial class WorldContentGenerator
     /// <summary>A worn item; the flags read false when missing, and a missing artNation files its art under the place's own nation.</summary>
     [Serializable] private sealed class ItemData { public string label; public bool leakable; public bool wig; public bool back; public string[] covers; public string artNation; }
 
-    /// <summary>A premade: missing truePlace, intro, recordNote and dialog mean none; missing repeatable means once per run.</summary>
+    /// <summary>A premade: missing truePlace, intro, recordNote and dialog mean none; missing repeatable means once per run; a missing kind is the famous' (Displaced); a 2150 story character (days 7-15 B2) also names its family country, Citizen ID, and optionally its debt (0: drawn) and a labourer's employer (an agency.employers id).</summary>
     [Serializable] private sealed class PremadeData
     {
         public string id;
@@ -2207,6 +2242,11 @@ public static partial class WorldContentGenerator
         public string dialog;
         public bool repeatable;
         public ImpactData[] impacts;
+        public string kind;
+        public string family;
+        public string citizenId;
+        public int debt;
+        public string employer;
     }
 
     /// <summary>A premade's timeline impact; a missing skipNationScore means the delta also moves the nation's score.</summary>

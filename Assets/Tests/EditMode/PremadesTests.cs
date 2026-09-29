@@ -266,6 +266,133 @@ public class PremadesTests
         StringAssert.Contains("'pell'", warnings[0]);
     }
 
+    // ---- Problems (days 7-15 V6: a story character's row) ----
+
+    private static AccountRanges Ranges() => new AccountRanges
+    {
+        statuses = new List<StatusRanges>
+        {
+            new StatusRanges { status = CitizenStatus.Premium, debtMin = 0, debtMax = 0 },
+            new StatusRanges { status = CitizenStatus.Standard, debtMin = 0, debtMax = 18000 },
+            new StatusRanges { status = CitizenStatus.Eligible, debtMin = 40000, debtMax = 320000 }
+        }
+    };
+
+    private static PremadeCheck Ines() => new PremadeCheck
+    {
+        Id = "ines", Kind = TravellerKind.Labourer, PlaceEraId = "industrial", BirthYear = 2098, FamilyKnown = true,
+        CitizenId = "773-1102-07", Debt = 88200, Employer = "tyburn", EmployerEraId = "industrial"
+    };
+
+    private static PremadeCheck Senenmut() => new PremadeCheck { Id = "senenmut", Kind = TravellerKind.Displaced, PlaceEraId = "ancient", BirthYear = -1505, FamilyKnown = true, Pooled = true };
+
+    private static (List<string> errors, List<string> warnings) Problems(params PremadeCheck[] premades)
+    {
+        var errors = new List<string>();
+        var warnings = new List<string>();
+        Premades.Problems(premades, 2080, 2132, "773-2840-19", Ranges(), errors, warnings);
+        return (errors, warnings);
+    }
+
+    [Test]
+    public void Problems_ASoundStoryCharacterAndAFamousOne_HaveNone()
+    {
+        (List<string> errors, List<string> warnings) = Problems(Ines(), Senenmut());
+        CollectionAssert.IsEmpty(errors);
+        CollectionAssert.IsEmpty(warnings);
+    }
+
+    [Test]
+    public void Problems_AFamousPremadeHoldsNoAccount()
+    {
+        PremadeCheck famous = Senenmut();
+        famous.CitizenId = "100-0001-01";
+        famous.Debt = 5000;
+        Assert.AreEqual(1, Problems(famous).errors.Count);
+    }
+
+    [Test]
+    public void Problems_ACitizenKindWithATruePlace()
+    {
+        PremadeCheck p = Ines();
+        p.HasTruePlace = true;
+        Assert.AreEqual(1, Problems(p).errors.Count);
+    }
+
+    [TestCase(2079)]
+    [TestCase(2133)]
+    [TestCase(1815)]
+    public void Problems_ABirthDateOutsideThePresentsYears(int year)
+    {
+        PremadeCheck p = Ines();
+        p.BirthYear = year;
+        List<string> errors = Problems(p).errors;
+        Assert.AreEqual(1, errors.Count);
+        StringAssert.Contains("2080", errors[0]);
+    }
+
+    [TestCase("", "a story character's Citizen ID is what the player remembers: authored")]
+    [TestCase("7731102-07", "the format")]
+    [TestCase("773-2840-19", "the clerk's own")]
+    public void Problems_ACitizenIdMissingMalformedOrTheClerks(string id, string why)
+    {
+        PremadeCheck p = Ines();
+        p.CitizenId = id;
+        Assert.AreEqual(1, Problems(p).errors.Count, why);
+    }
+
+    [Test]
+    public void Problems_ACitizenIdSharedByTwoPremades()
+    {
+        PremadeCheck other = Ines();
+        other.Id = "rook";
+        other.Debt = 0;
+        Assert.AreEqual(1, Problems(Ines(), other).errors.Count);
+    }
+
+    [Test]
+    public void Problems_ADebtOutsideItsStatusRange_IsAWarning()
+    {
+        PremadeCheck p = Ines();
+        p.Debt = 500000;
+        (List<string> errors, List<string> warnings) = Problems(p);
+        CollectionAssert.IsEmpty(errors);
+        Assert.AreEqual(1, warnings.Count);
+        p.Debt = -1;
+        Assert.AreEqual(1, Problems(p).errors.Count, "a debt below 0 is an error");
+    }
+
+    [Test]
+    public void Problems_AnEmployerOfAnotherEra_OrOnANonLabourer_OrUnknown()
+    {
+        PremadeCheck p = Ines();
+        p.EmployerEraId = "modern";
+        Assert.AreEqual(1, Problems(p).errors.Count, "another era's employer");
+        p = Ines();
+        p.EmployerEraId = null;
+        Assert.AreEqual(1, Problems(p).errors.Count, "no such employer");
+        p = Ines();
+        p.Kind = TravellerKind.PoorTourist;
+        p.Debt = 0;
+        Assert.AreEqual(1, Problems(p).errors.Count, "a poor tourist has no contract");
+    }
+
+    [Test]
+    public void Problems_APooledStoryCharacter()
+    {
+        PremadeCheck p = Ines();
+        p.Pooled = true;
+        Assert.AreEqual(1, Problems(p).errors.Count, "a story character is forced only");
+    }
+
+    [Test]
+    public void Problems_AnUnknownFamily()
+    {
+        PremadeCheck p = Ines();
+        p.FamilyKnown = false;
+        Assert.AreEqual(1, Problems(p).errors.Count);
+    }
+
     [Test]
     public void Appearance_NoneStandingIsAnOrdinaryTraveller()
     {

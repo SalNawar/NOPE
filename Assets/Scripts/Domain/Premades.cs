@@ -57,6 +57,46 @@ public sealed class ForcedCheck
     public int Conditions;
 }
 
+/// <summary>A premade as its row's checks see it (Premades.Problems; Generate World builds it from the source, the validator from the premade assets).</summary>
+public sealed class PremadeCheck
+{
+    /// <summary>The premade's id.</summary>
+    public string Id;
+
+    /// <summary>The kind it stands as (Displaced: the famous).</summary>
+    public TravellerKind Kind;
+
+    /// <summary>True when it has a true place (an authored liar from it).</summary>
+    public bool HasTruePlace;
+
+    /// <summary>The era id of the place it claims.</summary>
+    public string PlaceEraId;
+
+    /// <summary>Its registered birth year (negative BCE); null when unreadable (reported apart).</summary>
+    public int? BirthYear;
+
+    /// <summary>False when it names a family country the world does not have (blank reads true).</summary>
+    public bool FamilyKnown = true;
+
+    /// <summary>True when it names a family country at all.</summary>
+    public bool HasFamily;
+
+    /// <summary>Its authored Citizen ID (blank: none).</summary>
+    public string CitizenId;
+
+    /// <summary>Its authored debt in cr (0: none).</summary>
+    public int Debt;
+
+    /// <summary>Its authored employer's id (blank: none).</summary>
+    public string Employer;
+
+    /// <summary>The era its employer hires for; null when the id names no employer.</summary>
+    public string EmployerEraId;
+
+    /// <summary>True when a day pools it.</summary>
+    public bool Pooled;
+}
+
 /// <summary>A day as the forced entries' checks see it.</summary>
 public sealed class ForcedDayCheck
 {
@@ -152,6 +192,81 @@ public static class Premades
     /// keeps them out of the day's roll.
     /// </summary>
     public static bool IsRollable(bool met, bool nameTaken) => !met && !nameTaken;
+
+    /// <summary>
+    /// What Generate World refuses (<paramref name="errors"/>) and warns about
+    /// (<paramref name="warnings"/>) in the premades' rows, and the validator
+    /// reports in the same words (days 7-15 V6). A famous premade (the
+    /// displaced kind) holds no Citizen Account: no family, Citizen ID, debt
+    /// or employer. A story character (a 2150 citizen kind): no true place; a
+    /// birth year in the present's (<paramref name="presentBirthMin"/> to
+    /// <paramref name="presentBirthMax"/>); a known family country; a Citizen
+    /// ID, authored (the player remembers it), in the agency's format, its own
+    /// among the premades and never the clerk's; a debt of 0 or more, within
+    /// its status's range (<paramref name="ranges"/>; a warning); an employer
+    /// only on a labourer, one the agency has, of its destination's era; never
+    /// pooled (forced only, rule 4). That a day forcing it weights its kind is
+    /// the day checks' (a premade stands only as its own kind).
+    /// </summary>
+    public static void Problems(IReadOnlyList<PremadeCheck> premades, int presentBirthMin, int presentBirthMax, string clerkCitizenId, AccountRanges ranges,
+                                List<string> errors, List<string> warnings)
+    {
+        var ids = new Dictionary<string, string>();
+        foreach (PremadeCheck p in premades ?? new PremadeCheck[0])
+        {
+            if (p == null)
+                continue;
+
+            string owner = $"Premade '{p.Id}'";
+            if (IsFamous(p.Kind))
+            {
+                if (p.HasFamily || !string.IsNullOrWhiteSpace(p.CitizenId) || p.Debt != 0 || !string.IsNullOrWhiteSpace(p.Employer))
+                    errors.Add($"{owner} is famous (a displaced person) and holds no Citizen Account: leave its family, citizenId, debt and employer blank, or give it a 2150 kind.");
+                continue;
+            }
+
+            if (p.HasTruePlace)
+                errors.Add($"{owner} is a 2150 story character ({p.Kind}) with a true place; a story character's lie, if any, is its forced slot's.");
+            if (p.BirthYear != null && (p.BirthYear < presentBirthMin || p.BirthYear > presentBirthMax))
+                errors.Add($"{owner} is a 2150 story character born in {p.BirthYear}, outside the present's birth years {presentBirthMin}..{presentBirthMax}.");
+            if (!p.FamilyKnown)
+                errors.Add($"{owner} names a family country the world does not have.");
+
+            string id = (p.CitizenId ?? string.Empty).Trim();
+            if (id.Length == 0)
+                errors.Add($"{owner} is a 2150 story character with no Citizen ID; author one (\"citizenId\"), the same at every appearance.");
+            else if (!IsCitizenId(id))
+                errors.Add($"{owner} has the Citizen ID '{id}'; the agency's format is 000-0000-00.");
+            else if (!string.IsNullOrWhiteSpace(clerkCitizenId) && id == clerkCitizenId.Trim())
+                errors.Add($"{owner} has the clerk's own Citizen ID '{id}'.");
+            else if (ids.TryGetValue(id, out string other))
+                errors.Add($"{owner} shares the Citizen ID '{id}' with premade '{other}'.");
+            else
+                ids.Add(id, p.Id);
+
+            if (p.Debt < 0)
+                errors.Add($"{owner} has a debt of {p.Debt} cr; a debt is 0 (drawn) or more.");
+            else if (p.Debt > 0 && AccountMaker.StatusOf(p.Kind, out CitizenStatus status) && ranges?.For(status) is StatusRanges range && (p.Debt < range.debtMin || p.Debt > range.debtMax))
+                warnings.Add($"{owner} has a debt of {p.Debt} cr, outside a {status} account's range {range.debtMin}..{range.debtMax}.");
+
+            if (!string.IsNullOrWhiteSpace(p.Employer))
+            {
+                if (p.Kind != TravellerKind.Labourer)
+                    errors.Add($"{owner} is a {p.Kind} with an employer; only a labourer registers a contract.");
+                else if (p.EmployerEraId == null)
+                    errors.Add($"{owner} names employer '{p.Employer}', which agency.employers does not have.");
+                else if (p.EmployerEraId != p.PlaceEraId)
+                    errors.Add($"{owner} names employer '{p.Employer}', who hires for the {p.EmployerEraId} era, not its destination's ({p.PlaceEraId}).");
+            }
+
+            if (p.Pooled)
+                errors.Add($"{owner} is a 2150 story character in a day's pool; a story character is forced only (authored cases stay outside the random draws).");
+        }
+    }
+
+    /// <summary>True for a Citizen ID in the agency's format, "000-0000-00" (AccountMaker.CitizenId's).</summary>
+    public static bool IsCitizenId(string id) =>
+        id != null && id.Length == 11 && id[3] == '-' && id[8] == '-' && id.Where((c, i) => i != 3 && i != 8).All(c => c >= '0' && c <= '9');
 
     /// <summary>
     /// What Generate World refuses (<paramref name="errors"/>) and warns about

@@ -73,7 +73,7 @@ public static class ContentSheetMap
                     Int("amountMax").Note("an amount proof's most value in cr (0 for a number)"),
                     Text("prefix").Note("a number proof's prefix (TI gives TI-551902); blank for an amount")).Note("the proofs of means a Standard account may hold, one per proof form"),
                 Num("strandChance").Note("the chance an accepted traveller on an Economy transponder is stranded at the shift's end (0.08 = 8%)"),
-                Rows("agencyEmployers", "employers",
+                Rows("agencyEmployers", "employers", Key("id"),
                     Text("id").Required(),
                     Text("era").Ref("eras").Note("the era the employer hires for"),
                     Text("name").Note("the printed name on a labourer's contract")).Note("the Debt Relief programme's employers: a labourer's contract names one of the worksite's era")),
@@ -319,7 +319,12 @@ public static class ContentSheetMap
                 Text("attribute").Ref("contentAttributes"),
                 Num("onCorrect"),
                 Num("onWrong"),
-                Bool("skipNationScore").Omit())).Note("premade characters: real people and written stories");
+                Bool("skipNationScore").Omit()),
+            Text("kind").Omit().OneOf("RichTourist", "PoorTourist", "Labourer", "Displaced").Note("a 2150 story character's kind (blank: Displaced, the famous)"),
+            Text("family").Omit().Ref("countries").Note("a story character's family country: its lineage and generated look (blank: its place's country)"),
+            Text("citizenId").Omit().Note("a story character's Citizen ID (000-0000-00), the same at every appearance"),
+            Int("debt").Omit().Note("a story character's debt in cr (blank: drawn from its status's range)"),
+            Text("employer").Omit().Ref("agencyEmployers").Note("a labourer story character's employer (an agency.employers id of its destination's era; blank: drawn)")).Note("premade characters: real people and written stories");
 
     private static SheetSpec History() =>
         Single("history", "history",
