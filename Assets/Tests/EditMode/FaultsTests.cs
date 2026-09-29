@@ -12,6 +12,7 @@ public class FaultsTests
     [TestCase(DirectiveFault.ExpiredPaper, "expired")]
     [TestCase(DirectiveFault.IncompletePapers, "incomplete")]
     [TestCase(DirectiveFault.FrozenAccount, "frozen")]
+    [TestCase(DirectiveFault.RecalledTransponder, "recalled")]
     public void Reason_OfADirectiveFault(DirectiveFault fault, string expected)
     {
         Assert.AreEqual(expected, Faults.Reason(fault));

@@ -97,10 +97,87 @@ public class DirectivesTests
     }
 
     [Test]
-    public void IsRolled_ThePaperSetTheDebtStandingAndThePapersDates()
+    public void IsRolled_ThePaperSetTheDebtStandingThePapersDatesAndTheRecall()
     {
-        CollectionAssert.AreEquivalent(new[] { TravelRuleType.PaperSet, TravelRuleType.DebtStanding, TravelRuleType.PaperDates },
+        CollectionAssert.AreEquivalent(new[] { TravelRuleType.PaperSet, TravelRuleType.DebtStanding, TravelRuleType.PaperDates, TravelRuleType.TransponderRecall },
                                        System.Enum.GetValues(typeof(TravelRuleType)).Cast<TravelRuleType>().Where(Directives.IsRolled).ToList());
+    }
+
+    [Test]
+    public void HasMaker_AndIsRolled_IncludeTheRecall()
+    {
+        Assert.IsTrue(Directives.HasMaker(TravelRuleType.TransponderRecall));
+        Assert.IsTrue(Directives.IsRolled(TravelRuleType.TransponderRecall));
+    }
+
+    [TestCase(10, 10, true)]
+    [TestCase(11, 10, false)]
+    [TestCase(15, 10, false)]
+    public void Guarantees_TheRecallOnItsFirstDayOnly(int today, int firstDay, bool expected)
+    {
+        Assert.AreEqual(expected, Directives.Guarantees(TravelRuleType.TransponderRecall, today, firstDay));
+    }
+
+    // ---- the Driftbox 3 recall (days 7-15 §6) ----
+
+    private static readonly Directive Recall = new Directive(TravelRuleType.TransponderRecall, new[] { TravellerKind.PoorTourist, TravellerKind.Labourer }, transponder: "driftbox3");
+
+    private static CaseFacts OnUnit(TravellerKind kind, string modelId)
+    {
+        CaseFacts facts = Honest(kind, SetOf(kind));
+        facts.ManifestModelId = modelId;
+        return facts;
+    }
+
+    [Test]
+    public void Breaks_TransponderRecall_ARecalledModelOnTheManifest()
+    {
+        Assert.IsTrue(Directives.Breaks(Recall, OnUnit(TravellerKind.PoorTourist, "driftbox3")));
+        Assert.AreEqual(DirectiveFault.RecalledTransponder, Directives.Fault(new[] { Recall }, OnUnit(TravellerKind.Labourer, "driftbox3")));
+    }
+
+    [Test]
+    public void Breaks_TransponderRecall_AnotherModel()
+    {
+        Assert.IsFalse(Directives.Breaks(Recall, OnUnit(TravellerKind.PoorTourist, "ticktock")));
+        Assert.AreEqual(DirectiveFault.None, Directives.Fault(new[] { Recall }, OnUnit(TravellerKind.RichTourist, "driftbox3")), "the rule is read for the Economy kinds only");
+    }
+
+    [Test]
+    public void Breaks_TransponderRecall_NoManifestBreaksNothing()
+    {
+        Assert.IsFalse(Directives.Breaks(Recall, OnUnit(TravellerKind.PoorTourist, null)), "no manifest: the paper set catches it");
+        Assert.IsFalse(Directives.Breaks(new Directive(TravelRuleType.TransponderRecall, null), OnUnit(TravellerKind.PoorTourist, "driftbox3")), "a recall naming no model recalls nothing");
+    }
+
+    [Test]
+    public void FaultOf_TransponderRecall_IsRecalledTransponder()
+    {
+        Assert.AreEqual(DirectiveFault.RecalledTransponder, Directives.FaultOf(TravelRuleType.TransponderRecall));
+    }
+
+    [Test]
+    public void CanBreak_TheRecall_AnEconomyKindCarryingAManifest()
+    {
+        Assert.IsTrue(Directives.CanBreak(TravelRuleType.TransponderRecall, TravellerKind.PoorTourist, PoorSet));
+        Assert.IsTrue(Directives.CanBreak(TravelRuleType.TransponderRecall, TravellerKind.Labourer, LabourSet));
+        Assert.IsFalse(Directives.CanBreak(TravelRuleType.TransponderRecall, TravellerKind.RichTourist, RichSet), "a Premium account travels Premium");
+        Assert.IsFalse(Directives.CanBreak(TravelRuleType.TransponderRecall, TravellerKind.Displaced, DisplacedSet));
+        Assert.IsFalse(Directives.CanBreak(TravelRuleType.TransponderRecall, TravellerKind.PoorTourist, new[] { Directives.Visa }), "no manifest to print the unit on");
+    }
+
+    [Test]
+    public void ModelIdOf_ReadsThePrintedModel()
+    {
+        var models = new List<TransponderModel>
+        {
+            new TransponderModel { id = "driftbox3", model = "Driftbox 3", prefix = "DB", transponderClass = TransponderClass.Economy },
+            new TransponderModel { id = "skiplite", model = "Skip Lite", prefix = "SL", transponderClass = TransponderClass.Economy }
+        };
+        Assert.AreEqual("driftbox3", RecordLies.ModelIdOf("Driftbox 3 · DB-00412", models));
+        Assert.AreEqual("skiplite", RecordLies.ModelIdOf("Skip Lite · SL-99999", models));
+        Assert.IsNull(RecordLies.ModelIdOf("TransponderId:none", models));
+        Assert.IsNull(RecordLies.ModelIdOf(null, models));
     }
 
     [TestCase(TravelRuleType.EraForbidden, DirectiveFault.ClosedDestination)]

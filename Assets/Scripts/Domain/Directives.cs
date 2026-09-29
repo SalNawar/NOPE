@@ -99,13 +99,17 @@ public readonly struct Directive
     /// <summary>The era id a closure names (EraForbidden, NationEraForbidden); null otherwise.</summary>
     public readonly string EraId;
 
+    /// <summary>The model a recall grounds (an agency.transponders id; TransponderRecall); null otherwise.</summary>
+    public readonly string Transponder;
+
     /// <summary>Creates a directive.</summary>
-    public Directive(TravelRuleType type, IReadOnlyList<TravellerKind> kinds, string nationId = null, string eraId = null)
+    public Directive(TravelRuleType type, IReadOnlyList<TravellerKind> kinds, string nationId = null, string eraId = null, string transponder = null)
     {
         Type = type;
         Kinds = kinds ?? new TravellerKind[0];
         NationId = nationId;
         EraId = eraId;
+        Transponder = transponder;
     }
 
     /// <summary>True when the rule applies to a traveller of <paramref name="kind"/>: listed, or no kind is listed.</summary>
@@ -135,6 +139,9 @@ public sealed class CaseFacts
 
     /// <summary>The class the Departure Manifest (TC-230) prints; null without a manifest or an unreadable class.</summary>
     public TransponderClass? ManifestClass;
+
+    /// <summary>The id of the transponder model the manifest prints (RecordLies.ModelIdOf over the agency's models); null without a manifest or an unreadable unit.</summary>
+    public string ManifestModelId;
 
     /// <summary>The form numbers of the papers the traveller carries ("TC-520").</summary>
     public IReadOnlyCollection<string> Forms = new string[0];
@@ -301,14 +308,15 @@ public static class Directives
     public static bool Guarantees(TravelRuleType type, int today, int firstDay) =>
         IsClosure(type) || (HasMaker(type) && today == firstDay);
 
-    /// <summary>True for the procedures with a maker, guaranteed one faulty traveller on their first day: the return home, no 2150 goods, the papers' dates, the paper set, the debt standing and dress for the destination (a costume error); never a procedure line.</summary>
+    /// <summary>True for the procedures with a maker, guaranteed one faulty traveller on their first day: the return home, no 2150 goods, the papers' dates, the paper set, the debt standing, dress for the destination (a costume error) and a transponder recall (days 7-15); never a procedure line.</summary>
     public static bool HasMaker(TravelRuleType type) =>
         type == TravelRuleType.ReturnHome || type == TravelRuleType.NoPresentGoods || type == TravelRuleType.PaperDates ||
-        type == TravelRuleType.PaperSet || type == TravelRuleType.DebtStanding || type == TravelRuleType.DressForDestination;
+        type == TravelRuleType.PaperSet || type == TravelRuleType.DebtStanding || type == TravelRuleType.DressForDestination ||
+        type == TravelRuleType.TransponderRecall;
 
-    /// <summary>True for a procedure the violation roll may break on a later day (traveller types P4): the paper set, the debt standing and the papers' dates (dress has its own roll, the costume roll; the return home and no 2150 goods are broken by the lie roll).</summary>
+    /// <summary>True for a procedure the violation roll may break on a later day (traveller types P4): the paper set, the debt standing, the papers' dates and a transponder recall (dress has its own roll, the costume roll; the return home and no 2150 goods are broken by the lie roll).</summary>
     public static bool IsRolled(TravelRuleType type) =>
-        type == TravelRuleType.PaperSet || type == TravelRuleType.DebtStanding || type == TravelRuleType.PaperDates;
+        type == TravelRuleType.PaperSet || type == TravelRuleType.DebtStanding || type == TravelRuleType.PaperDates || type == TravelRuleType.TransponderRecall;
 
     /// <summary>The directive fault a broken rule of <paramref name="type"/> is: a closed destination, incomplete papers, a frozen account, a wrong departure date (the papers' dates' first fault; an expired paper is their second, <see cref="PaperDates"/>); None for the types with no predicate.</summary>
     public static DirectiveFault FaultOf(TravelRuleType type)
@@ -323,6 +331,8 @@ public static class Directives
                 return DirectiveFault.FrozenAccount;
             case TravelRuleType.PaperDates:
                 return DirectiveFault.WrongDepartureDate;
+            case TravelRuleType.TransponderRecall:
+                return DirectiveFault.RecalledTransponder;
             default:
                 return DirectiveFault.None;
         }
@@ -343,6 +353,26 @@ public static class Directives
     /// predicate). The displaced break no paper set.
     /// </summary>
     public static bool Breaks(TravelRuleType type, CaseFacts facts) => facts != null && FaultOf(type, facts) != DirectiveFault.None;
+
+    /// <summary>
+    /// <see cref="Breaks(TravelRuleType, CaseFacts)"/> for one rule, which a
+    /// transponder recall needs (its model): the recall breaks when the
+    /// manifest prints the recalled model (CaseFacts.ManifestModelId); no
+    /// manifest breaks nothing (the paper set catches it).
+    /// </summary>
+    public static bool Breaks(Directive rule, CaseFacts facts) => facts != null && FaultOf(rule, facts) != DirectiveFault.None;
+
+    /// <summary>The fault one rule finds in <paramref name="facts"/> (a recall reads its model; every other type, <see cref="FaultOf(TravelRuleType, CaseFacts)"/>).</summary>
+    public static DirectiveFault FaultOf(Directive rule, CaseFacts facts)
+    {
+        if (facts == null)
+            return DirectiveFault.None;
+        if (rule.Type == TravelRuleType.TransponderRecall)
+            return !string.IsNullOrEmpty(rule.Transponder) && string.Equals(facts.ManifestModelId, rule.Transponder, StringComparison.Ordinal)
+                ? DirectiveFault.RecalledTransponder
+                : DirectiveFault.None;
+        return FaultOf(rule.Type, facts);
+    }
 
     /// <summary>The fault a rule of <paramref name="type"/> finds in <paramref name="facts"/>: the type's fault when it breaks (<see cref="FaultOf(TravelRuleType)"/>; the papers' dates the first of their two), None otherwise.</summary>
     public static DirectiveFault FaultOf(TravelRuleType type, CaseFacts facts)
@@ -399,7 +429,7 @@ public static class Directives
         {
             if (!rule.AppliesTo(facts.Kind))
                 continue;
-            DirectiveFault fault = FaultOf(rule.Type, facts);
+            DirectiveFault fault = FaultOf(rule, facts);
             if (fault != DirectiveFault.None)
                 return fault;
         }
@@ -515,6 +545,8 @@ public static class Directives
                 return TravellerKinds.IsCitizen(kind);
             case TravelRuleType.PaperDates:
                 return true;
+            case TravelRuleType.TransponderRecall:
+                return forms != null && forms.Contains(Manifest) && AccountMaker.StatusOf(kind, out CitizenStatus status) && AccountMaker.ClassOf(status) == TransponderClass.Economy;
             default:
                 return false;
         }

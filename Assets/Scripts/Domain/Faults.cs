@@ -1,9 +1,9 @@
 /// <summary>
 /// A traveller's directive fault (traveller types P1, §5.2): what the
 /// Directives forbid in the presented papers and the claim, read against
-/// them with no evidence needed. Runtime only (not serialized); later phases
-/// append nothing more: the closures, the papers' dates, the paper set and the
-/// frozen account are every directive fault of the traveller-types spec.
+/// them with no evidence needed. Runtime only (not serialized): the closures,
+/// the papers' dates, the paper set and the frozen account of the
+/// traveller-types spec, and the recalled transponder of days 7-15 (§6).
 /// </summary>
 public enum DirectiveFault
 {
@@ -23,7 +23,10 @@ public enum DirectiveFault
     IncompletePapers,
 
     /// <summary>The Citizen Account's standing is Frozen (TravelRuleType.DebtStanding).</summary>
-    FrozenAccount
+    FrozenAccount,
+
+    /// <summary>The manifest prints a recalled transponder model (TravelRuleType.TransponderRecall; days 7-15 §6).</summary>
+    RecalledTransponder
 }
 
 /// <summary>
@@ -60,6 +63,9 @@ public static class Faults
     /// <summary>A frozen account ("Approved a frozen account.").</summary>
     public const string Frozen = "frozen";
 
+    /// <summary>A recalled transponder ("Approved a recalled transponder."; days 7-15 §6).</summary>
+    public const string Recalled = "recalled";
+
     /// <summary>The reason of a directive fault; empty for none.</summary>
     public static string Reason(DirectiveFault fault)
     {
@@ -70,6 +76,7 @@ public static class Faults
             case DirectiveFault.ExpiredPaper: return Expired;
             case DirectiveFault.IncompletePapers: return Incomplete;
             case DirectiveFault.FrozenAccount: return Frozen;
+            case DirectiveFault.RecalledTransponder: return Recalled;
             default: return string.Empty;
         }
     }

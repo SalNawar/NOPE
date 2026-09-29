@@ -637,6 +637,7 @@ public sealed class CaseFactory
             ClosedDestination = !plan.ClaimAllowed(inst.claimedNation, inst.claimedEra),
             VisaClass = System.Enum.TryParse(FieldValue(inst, Directives.Visa, ClueCategory.AccountStatus), out CitizenStatus visa) ? visa : (CitizenStatus?)null,
             ManifestClass = System.Enum.TryParse(FieldValue(inst, Directives.Manifest, ClueCategory.TransponderClass), out TransponderClass manifest) ? manifest : (TransponderClass?)null,
+            ManifestModelId = RecordLies.ModelIdOf(FieldValue(inst, Directives.Manifest, ClueCategory.TransponderId), _lib.Agency.transponders),
             Forms = inst.documents.Where(d => d.template != null).Select(d => d.template.formNumber).ToList(),
             WaiverSigned = waiver != null && Directives.IsSigned(waiver.fields),
             Frozen = inst.account != null && inst.account.Standing == AccountStanding.Frozen,

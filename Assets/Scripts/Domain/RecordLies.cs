@@ -403,6 +403,10 @@ public static class RecordLies
         return AccountMaker.TransponderName(model.model, AgencyNumbers.TakeUnique(takenToday, () => AccountMaker.Serial(model.prefix, rng)));
     }
 
+    /// <summary>The id of the model a printed transponder ("Driftbox 3 · DB-00412") is of, among <paramref name="models"/>; null when none is (a placeholder, no manifest).</summary>
+    public static string ModelIdOf(string transponder, IReadOnlyList<TransponderModel> models) =>
+        (models ?? Array.Empty<TransponderModel>()).FirstOrDefault(m => m != null && IsModelOf(transponder, m))?.id;
+
     /// <summary>True when a printed transponder ("Hopper Mk II · HP-40718") is of <paramref name="model"/>.</summary>
     private static bool IsModelOf(string transponder, TransponderModel model) =>
         !string.IsNullOrEmpty(transponder) && !string.IsNullOrEmpty(model.model) &&
