@@ -190,14 +190,24 @@ public static class HistoryPages
         return page;
     }
 
-    /// <summary>The present: the leader's Future place's article, or, with no leader, the unsettled present.</summary>
+    /// <summary>
+    /// The present: the leader's Future place's article, or, with no leader,
+    /// the unsettled present; then "2150 today" (the endings spec §5.1): a box
+    /// per world factor, its question over its answer and what that answer
+    /// means for 2150, in words only (no number, no bar, no arrow).
+    /// </summary>
     public static SitePage Present(SiteWorld world, SiteSpec site)
     {
         string leader = History.FutureNation(world.History);
         PlaceInfo present = leader != null ? world.Places.FirstOrDefault(p => p != null && p.IsFuture && p.NationId == leader) : null;
-        if (present != null)
-            return Article(world, site, present, true);
+        SitePage page = present != null ? Article(world, site, present, true) : Unsettled(world, site);
+        AddToday(world, page);
+        return page;
+    }
 
+    /// <summary>The present with no leader: the unsettled present, with the link to the index.</summary>
+    private static SitePage Unsettled(SiteWorld world, SiteSpec site)
+    {
         IPageWords w = world.Words;
         var page = new SitePage { Address = Sites.Address(site.domain, PresentPath), Title = w.Get("site.history.present") };
         page.Blocks.Add(PageBlock.Of(PageBlockKind.Masthead, site.name));
@@ -205,6 +215,16 @@ public static class HistoryPages
         page.Blocks.Add(PageBlock.Of(PageBlockKind.Paragraph, w.Get("site.history.presentNone")));
         page.Blocks.Add(PageBlock.LinkTo(w.Get("site.history.index"), Sites.Address(site.domain)));
         return page;
+    }
+
+    /// <summary>"2150 today" on the present (nothing when the world has no factor): a heading, then a box per factor (question; answer; its report when it has one).</summary>
+    private static void AddToday(SiteWorld world, SitePage page)
+    {
+        if (world.WorldToday == null || world.WorldToday.Count == 0)
+            return;
+        page.Blocks.Add(PageBlock.Of(PageBlockKind.Heading, world.Words.Get("site.history.today")));
+        foreach (OutcomeLine line in world.WorldToday)
+            page.Blocks.Add(PageBlock.Box(line.Question, new[] { line.Answer, line.Report }.Where(s => !string.IsNullOrWhiteSpace(s))));
     }
 
     /// <summary>

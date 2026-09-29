@@ -164,3 +164,10 @@ MonoBehaviour:
     baseScore: 2.5
     dominantEffect: {fileID: 0}
     supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: theocracy
+  - factor: future
+    outcome: cybernetic
+  - factor: money
+    outcome: banking_houses

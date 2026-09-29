@@ -165,3 +165,10 @@ MonoBehaviour:
     baseScore: 5
     dominantEffect: {fileID: 0}
     supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: democracy
+  - factor: future
+    outcome: space_age
+  - factor: money
+    outcome: banking_houses

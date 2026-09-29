@@ -116,10 +116,23 @@ public static class ContentSheetMap
             Translation(),
             Home(),
             Rows("worldFactors", "world.factors", Key("id"),
-                Text("id").Required().Note("the factor's id (the endings spec's outcomes name their factor by it)"),
+                Text("id").Required().Note("the factor's id (the outcomes, leanings and pulls name their factor by it)"),
                 Text("question").Note("the question the end of the demo answers about 2150"),
-                Text("answer").OneOf("AsFound", "Leader").Note("AsFound: the foundAs text; Leader: the leading nation's name (foundAs while none leads)"),
-                Text("foundAs").Note("the answer as the run found 2150")).Note("the world's outcomes listed under END OF DEMO, in this order"));
+                Text("answer").OneOf("AsFound", "Leader", "Pulls").Note("AsFound: the foundAs text; Leader: the leading nation's name (foundAs while none leads); Pulls: the outcome the run's choices pull most (worldOutcomes)"),
+                Text("foundAs").Omit().Note("the answer as the run found 2150 (a Pulls factor's is its statusQuo outcome: blank)"),
+                Text("statusQuo").Omit().Note("a Pulls factor's \"as you found it\" outcome id: it starts ahead (GameConfigSO worldStatusQuoWeight) and a denial pulls it"),
+                Text("splitLine").Omit().Note("a Pulls factor's answer when split between two outcomes: {a} and {b} are their names"),
+                Text("splitHeadline").Omit().Note("the morning paper's line when the factor splits: {a} and {b}")).Note("the world's outcomes listed under END OF DEMO, in this order"),
+            Rows("worldOutcomes", "world.outcomes",
+                Text("factor").Required().Ref("worldFactors").Note("the factor it answers (a Pulls factor)"),
+                Text("id").Required().Note("the outcome's id within its factor (leanings and pulls name it)"),
+                Text("name").Note("the answer as the player reads it"),
+                Text("headline").Note("the morning paper's line the morning after it takes the lead"),
+                Text("report").Note("2150 under this answer in a sentence or two, with a joke and an upside, never a verdict")).Note("every answer of every factor answered by pulls: add rows for more combinations"),
+            Rows("worldRoles", "world.roles",
+                Text("archetype").Required().Note("an archetype id (content.archetypes)"),
+                Text("factor").Ref("worldFactors").Note("the factor its accepted travellers pull, toward their destination's leaning"),
+                Num("pull").Note("one accepted traveller's pull, before the kind's scale (GameConfigSO)")).Note("which factor each role pulls; a role not listed pulls nothing"));
 
     private static SheetSpec Looks() =>
         Single("looks", "looks",
@@ -184,7 +197,10 @@ public static class ContentSheetMap
             Nums("looks.skin").Omit().Note("overrides the country's skin weights"),
             Rows("placeHair", "looks.hair",
                 Text("colour"),
-                Num("weight")).OmitEmpty().Note("overrides the country's hair weights"))
+                Num("weight")).OmitEmpty().Note("overrides the country's hair weights"),
+            Rows("placeLeanings", "leanings",
+                Text("factor").Ref("worldFactors"),
+                Text("outcome").Note("an outcome id of the factor (worldOutcomes)")).OmitEmpty().Note("where an idea has roots: an accepted traveller sent here pulls the factor toward this outcome (no row: nowhere)"))
             .Note("a place is a country in an era; child sheets name it {country}_{era}");
 
     /// <summary>The neutral present (the present while no nation leads): its name, year and facts; its clothes (its Culture fact is derived from them, and a 2150 citizen who forgot their costume wears them whole) and its 2150 accessory kit (costume errors).</summary>
@@ -411,7 +427,11 @@ public static class ContentSheetMap
             Text("family").Omit().Ref("countries").Note("a story character's family country: its lineage and generated look (blank: its place's country)"),
             Text("citizenId").Omit().Note("a story character's Citizen ID (000-0000-00), the same at every appearance"),
             Int("debt").Omit().Note("a story character's debt in cr (blank: drawn from its status's range)"),
-            Text("employer").Omit().Ref("agencyEmployers").Note("a labourer story character's employer (an agency.employers id of its destination's era; blank: drawn)")).Note("premade characters: real people and written stories");
+            Text("employer").Omit().Ref("agencyEmployers").Note("a labourer story character's employer (an agency.employers id of its destination's era; blank: drawn)"),
+            Rows("premadePulls", "pulls",
+                Text("factor").Ref("worldFactors"),
+                Text("outcome").Note("an outcome id of the factor (worldOutcomes)"),
+                Num("amount").Note("the pull when accepted, instead of the role's, unscaled")).OmitEmpty().Note("a famous traveller's big pull on the world")).Note("premade characters: real people and written stories");
 
     private static SheetSpec History() =>
         Single("history", "history",
@@ -436,7 +456,11 @@ public static class ContentSheetMap
                     Text("category"),
                     Text("value")),
                 Num("stability").Omit().Note("a change of stability the night the rule fires, a percent of where it stands (-3 takes 3%); blank: none"),
-                Text("section").Omit().OneOf("News", "Desk", "Return").Note("where the line goes: the paper's news (blank), the paper's desk section, or nowhere until the character returns (its fired flag, trig:history_{id}:fired)")).Note("history rules: when their conditions pass at night they rewrite a place's fact; a rule with no edit is a story rule, which prints its news line"));
+                Text("section").Omit().OneOf("News", "Desk", "Return").Note("where the line goes: the paper's news (blank), the paper's desk section, or nowhere until the character returns (its fired flag, trig:history_{id}:fired)"),
+                Rows("historyPulls", "pulls",
+                    Text("factor").Ref("worldFactors"),
+                    Text("outcome").Note("an outcome id of the factor (worldOutcomes)"),
+                    Num("amount").Note("the pull the night the rule fires")).OmitEmpty().Note("a story beat's pull on the world")).Note("history rules: when their conditions pass at night they rewrite a place's fact; a rule with no edit is a story rule, which prints its news line"));
 
     /// <summary>The PC block: the steps checklist's sets, the Internet's sites, the Static sites' authored pages, the Lineage Archive's people and relations, and Mail's authored messages.</summary>
     private static SheetSpec Pc() =>

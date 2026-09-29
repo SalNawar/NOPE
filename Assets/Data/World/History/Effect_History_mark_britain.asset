@@ -23,3 +23,10 @@ MonoBehaviour:
     nation: {fileID: 0}
     profile: {fileID: 11400000, guid: 36224045c942e254bad4369748544cfd, type: 2}
     category: 4
+  - type: 26
+    stringParam: money/company_towns
+    floatParam: 2
+    attribute: {fileID: 0}
+    nation: {fileID: 0}
+    profile: {fileID: 0}
+    category: 0

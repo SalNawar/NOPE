@@ -114,6 +114,12 @@ public sealed class WorldState
     /// <summary>History: the timeline leader, latched fact edits and pending carries (piece 5; an old save loads it empty).</summary>
     public HistoryState history = new();
 
+    /// <summary>The pull each outcome of the world's factors has gathered from the run's choices, one entry per outcome, never negative (WorldPulls; the endings spec §2.2, §4.1). Additive: an older save loads it empty and is seeded once on Continue (WorldPulls.FromScores).</summary>
+    public List<OutcomePull> pulls = new();
+
+    /// <summary>Each world factor's answer as last latched at night, and since which day (WorldPulls.Latch; the morning paper reports a change once). Additive: an older save loads none and reads every factor as the run found it.</summary>
+    public List<FactorLead> leads = new();
+
     /// <summary>The morning papers as printed, one issue per day in day order (the News site's back issues: recorded at the briefing, at most DesktopConfigSO.newsArchiveIssues; an old save loads it empty).</summary>
     public List<NewsIssue> newsArchive = new();
 

@@ -106,6 +106,31 @@ public class HistoryPagesTests
     }
 
     [Test]
+    public void Present_2150Today_ABoxPerFactor_InWordsOnly_WithOrWithoutALeader()
+    {
+        SiteWorld w = SiteFixture.World();
+        w.WorldToday = new List<OutcomeLine>
+        {
+            new OutcomeLine("government", "Who runs 2150?", "Monarchy", "A monarch reigns."),
+            new OutcomeLine("culture", "Whose culture leads?", "China"),
+        };
+
+        foreach (string leader in new[] { "china", "" })
+        {
+            w.History.leaderId = leader;
+            SitePage present = Open(w, "chronet://chronopedia/present");
+            Assert.AreEqual("site.history.today", present.Blocks.Single(b => b.Kind == PageBlockKind.Heading && b.Text == "site.history.today").Text, leader);
+            List<PageBlock> boxes = present.Blocks.Where(b => b.Kind == PageBlockKind.Box).ToList();
+            CollectionAssert.AreEqual(new[] { "Who runs 2150?", "Whose culture leads?" }, boxes.Select(b => b.Text).ToArray());
+            CollectionAssert.AreEqual(new[] { "Monarchy", "A monarch reigns." }, boxes[0].Lines);
+            CollectionAssert.AreEqual(new[] { "China" }, boxes[1].Lines, "no report: the answer alone");
+        }
+
+        w.WorldToday = new List<OutcomeLine>();
+        Assert.IsFalse(Open(w, "chronet://chronopedia/present").Blocks.Any(b => b.Text == "site.history.today"), "no world factors: no section");
+    }
+
+    [Test]
     public void Revisions_EveryEditAndPendingCarry_NewestFirst()
     {
         SiteWorld w = SiteFixture.World();

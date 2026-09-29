@@ -2662,7 +2662,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
+        }
+      ]
     },
     {
       "country": "egypt",
@@ -2755,7 +2769,21 @@
             "label": "filigree collar"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "theocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
     },
     {
       "country": "egypt",
@@ -2846,7 +2874,17 @@
             "label": "disc-drop earrings"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
     },
     {
       "country": "egypt",
@@ -2934,7 +2972,17 @@
             "label": "kirdan choker"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns"
+        }
+      ]
     },
     {
       "country": "egypt",
@@ -3018,7 +3066,21 @@
             "label": "gold bangles"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "communism"
+        },
+        {
+          "factor": "future",
+          "outcome": "nuclear"
+        },
+        {
+          "factor": "money",
+          "outcome": "jubilee"
+        }
+      ]
     },
     {
       "country": "iraq",
@@ -3105,7 +3167,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "theocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "jubilee"
+        }
+      ]
     },
     {
       "country": "iraq",
@@ -3192,7 +3268,21 @@
             "label": "pearl choker"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "theocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "cybernetic"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
     },
     {
       "country": "iraq",
@@ -3282,7 +3372,13 @@
             "label": "qilada necklace"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "theocracy"
+        }
+      ]
     },
     {
       "country": "iraq",
@@ -3372,7 +3468,13 @@
             "label": "filigree bangles"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "future",
+          "outcome": "anarchy"
+        }
+      ]
     },
     {
       "country": "iraq",
@@ -3459,7 +3561,17 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns"
+        }
+      ]
     },
     {
       "country": "greece",
@@ -3546,7 +3658,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "democracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "jubilee"
+        }
+      ]
     },
     {
       "country": "greece",
@@ -3637,7 +3763,17 @@
             "label": "lunate earrings"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "theocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "anarchy"
+        }
+      ]
     },
     {
       "country": "greece",
@@ -3724,7 +3860,13 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "theocracy"
+        }
+      ]
     },
     {
       "country": "greece",
@@ -3811,7 +3953,13 @@
             "label": "gold disc necklace"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        }
+      ]
     },
     {
       "country": "greece",
@@ -3893,7 +4041,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "democracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "anarchy"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
+        }
+      ]
     },
     {
       "country": "italy",
@@ -3971,7 +4133,17 @@
             "label": "pearl monile"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "democracy"
+        },
+        {
+          "factor": "money",
+          "outcome": "jubilee"
+        }
+      ]
     },
     {
       "country": "italy",
@@ -4052,7 +4224,21 @@
             "label": "pearl pendant jewel"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "democracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
     },
     {
       "country": "italy",
@@ -4133,7 +4319,21 @@
             "label": "jet bead necklace"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "fascism"
+        },
+        {
+          "factor": "future",
+          "outcome": "cybernetic"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
     },
     {
       "country": "italy",
@@ -4217,7 +4417,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "communism"
+        },
+        {
+          "factor": "future",
+          "outcome": "cybernetic"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
+        }
+      ]
     },
     {
       "country": "italy",
@@ -4295,7 +4509,17 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "democracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "nuclear"
+        }
+      ]
     },
     {
       "country": "china",
@@ -4376,7 +4600,17 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "communism"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        }
+      ]
     },
     {
       "country": "china",
@@ -4460,7 +4694,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "communism"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
     },
     {
       "country": "china",
@@ -4544,7 +4792,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "technocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
     },
     {
       "country": "china",
@@ -4625,7 +4887,21 @@
             "label": "white jade bangle"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "corporate_board"
+        },
+        {
+          "factor": "future",
+          "outcome": "anarchy"
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns"
+        }
+      ]
     },
     {
       "country": "china",
@@ -4709,7 +4985,21 @@
             "label": "khaki satchel"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "communism"
+        },
+        {
+          "factor": "future",
+          "outcome": "nuclear"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
+        }
+      ]
     },
     {
       "country": "japan",
@@ -4787,7 +5077,17 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism"
+        }
+      ]
     },
     {
       "country": "japan",
@@ -4868,7 +5168,17 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "theocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism"
+        }
+      ]
     },
     {
       "country": "japan",
@@ -4946,7 +5256,17 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "fascism"
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism"
+        }
+      ]
     },
     {
       "country": "japan",
@@ -5024,7 +5344,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "future",
+          "outcome": "cybernetic"
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns"
+        }
+      ]
     },
     {
       "country": "japan",
@@ -5102,7 +5436,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "technocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "cybernetic"
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns"
+        }
+      ]
     },
     {
       "country": "britain",
@@ -5184,7 +5532,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "communism"
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
+        }
+      ]
     },
     {
       "country": "britain",
@@ -5268,7 +5630,21 @@
             ]
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "democracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
+        }
+      ]
     },
     {
       "country": "britain",
@@ -5355,7 +5731,21 @@
             "label": "pomander girdle"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns"
+        }
+      ]
     },
     {
       "country": "britain",
@@ -5442,7 +5832,21 @@
             "label": "Paisley shawl"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "future",
+          "outcome": "cybernetic"
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns"
+        }
+      ]
     },
     {
       "country": "britain",
@@ -5553,7 +5957,21 @@
             "weight": 1
           }
         ]
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "democracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "nuclear"
+        },
+        {
+          "factor": "money",
+          "outcome": "jubilee"
+        }
+      ]
     },
     {
       "country": "germany",
@@ -5631,7 +6049,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "communism"
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
+        }
+      ]
     },
     {
       "country": "germany",
@@ -5715,7 +6147,17 @@
             ]
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "theocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "anarchy"
+        }
+      ]
     },
     {
       "country": "germany",
@@ -5802,7 +6244,21 @@
             "label": "layered gold chains"
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "corporate_board"
+        },
+        {
+          "factor": "future",
+          "outcome": "cybernetic"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
     },
     {
       "country": "germany",
@@ -5886,7 +6342,21 @@
             "leakable": true
           }
         }
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "future",
+          "outcome": "nuclear"
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns"
+        }
+      ]
     },
     {
       "country": "germany",
@@ -5982,7 +6452,17 @@
           1,
           0
         ]
-      }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "democracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "nuclear"
+        }
+      ]
     },
     {
       "country": "egypt",
@@ -13564,7 +14044,14 @@
       "recordNote": "Steward of the Pharaoh's household and architect of her temple.",
       "dialog": "dlg_senenmut",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "monarchy",
+          "amount": 6
+        }
+      ]
     },
     {
       "id": "socrates",
@@ -13578,7 +14065,14 @@
       "recordNote": "Philosopher. Known to question officials at length.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "democracy",
+          "amount": 6
+        }
+      ]
     },
     {
       "id": "aspasia",
@@ -13592,7 +14086,14 @@
       "recordNote": "Teacher of rhetoric. Keeps the company of Athens' first citizen.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "democracy",
+          "amount": 5
+        }
+      ]
     },
     {
       "id": "banzhao",
@@ -13606,7 +14107,14 @@
       "recordNote": "Court historian and tutor to the empress. Finishing her brother's history.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "technocracy",
+          "amount": 5
+        }
+      ]
     },
     {
       "id": "arib",
@@ -13620,7 +14128,14 @@
       "recordNote": "Singer and poet of the caliph's court. Travels with her own musicians.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "banking_houses",
+          "amount": 5
+        }
+      ]
     },
     {
       "id": "khwarizmi",
@@ -13634,7 +14149,14 @@
       "recordNote": "Scholar of the House of Wisdom. Writes on calculation.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "cybernetic",
+          "amount": 6
+        }
+      ]
     },
     {
       "id": "gutenberg",
@@ -13648,7 +14170,19 @@
       "recordNote": "Goldsmith of Mainz. Business in Strasbourg undisclosed.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "commons",
+          "amount": 6
+        },
+        {
+          "factor": "future",
+          "outcome": "anarchy",
+          "amount": 3
+        }
+      ]
     },
     {
       "id": "leonardo",
@@ -13662,7 +14196,19 @@
       "recordNote": "Painter and engineer in the service of the Duke of Milan.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "cybernetic",
+          "amount": 5
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age",
+          "amount": 3
+        }
+      ]
     },
     {
       "id": "lanyer",
@@ -13676,7 +14222,14 @@
       "recordNote": "Poet of London, raised in a countess's household.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "democracy",
+          "amount": 4
+        }
+      ]
     },
     {
       "id": "gallerani",
@@ -13690,7 +14243,14 @@
       "recordNote": "Lady of the Milanese court. Sat for a portrait with an ermine.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "monarchy",
+          "amount": 4
+        }
+      ]
     },
     {
       "id": "pell",
@@ -13758,7 +14318,14 @@
       "recordNote": "Mathematician, of London. Registered on arrival, in her own hand.",
       "dialog": "dlg_ada",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "cybernetic",
+          "amount": 6
+        }
+      ]
     },
     {
       "id": "hollis",
@@ -13808,7 +14375,14 @@
       "recordNote": "Scholar of Cairo. Heads the School of Languages; translates Paris into Arabic.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "technocracy",
+          "amount": 5
+        }
+      ]
     },
     {
       "id": "kulthum",
@@ -13822,7 +14396,14 @@
       "recordNote": "Singer of Cairo. Her Thursday concerts empty the streets.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "commons",
+          "amount": 4
+        }
+      ]
     },
     {
       "id": "malaika",
@@ -13836,7 +14417,14 @@
       "recordNote": "Poet of Baghdad. Broke the old metres for free verse.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "anarchy",
+          "amount": 4
+        }
+      ]
     },
     {
       "id": "sayyab",
@@ -13850,7 +14438,14 @@
       "recordNote": "Poet of Basra. Writes of rain over the Gulf.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "naturalism",
+          "amount": 4
+        }
+      ]
     },
     {
       "id": "elytis",
@@ -13864,7 +14459,14 @@
       "recordNote": "Poet of Athens. Writes about the light of the Aegean.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "space_age",
+          "amount": 4
+        }
+      ]
     },
     {
       "id": "fellini",
@@ -13878,7 +14480,14 @@
       "recordNote": "Film director of Rome. Shooting a sweet life on the Via Veneto.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "jubilee",
+          "amount": 4
+        }
+      ]
     },
     {
       "id": "hezehui",
@@ -13892,7 +14501,14 @@
       "recordNote": "Nuclear physicist of Beijing. Trained in Berlin; counts particles.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "nuclear",
+          "amount": 6
+        }
+      ]
     },
     {
       "id": "toyoda",
@@ -13906,7 +14522,19 @@
       "recordNote": "Carpenter's son and loom inventor of Nagoya. His looms run on steam.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "cybernetic",
+          "amount": 4
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns",
+          "amount": 4
+        }
+      ]
     },
     {
       "id": "turing",
@@ -13920,7 +14548,14 @@
       "recordNote": "Mathematician at Manchester. Asks whether machines can think.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "cybernetic",
+          "amount": 6
+        }
+      ]
     },
     {
       "id": "meitner",
@@ -13934,7 +14569,14 @@
       "recordNote": "Physicist of Berlin. The first woman professor of physics in Germany.",
       "dialog": "",
       "repeatable": false,
-      "impacts": []
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "nuclear",
+          "amount": 6
+        }
+      ]
     }
   ],
   "history": {
@@ -13962,6 +14604,13 @@
             "category": "Technology",
             "value": "Chinese movable type press"
           }
+        ],
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "commons",
+            "amount": 2
+          }
         ]
       },
       {
@@ -13979,6 +14628,13 @@
             "place": "germany_modern",
             "category": "Currency",
             "value": "Yen-backed Reichsmark"
+          }
+        ],
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "banking_houses",
+            "amount": 2
           }
         ]
       },
@@ -13998,6 +14654,13 @@
             "category": "Technology",
             "value": "Al-jabr reckoning tables"
           }
+        ],
+        "pulls": [
+          {
+            "factor": "government",
+            "outcome": "technocracy",
+            "amount": 2
+          }
         ]
       },
       {
@@ -14015,6 +14678,13 @@
             "place": "egypt_industrial",
             "category": "Currency",
             "value": "British pound sterling"
+          }
+        ],
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "banking_houses",
+            "amount": 2
           }
         ]
       },
@@ -14034,6 +14704,13 @@
             "category": "Language",
             "value": "Greek-Egyptian (Koine)"
           }
+        ],
+        "pulls": [
+          {
+            "factor": "government",
+            "outcome": "democracy",
+            "amount": 2
+          }
         ]
       },
       {
@@ -14051,6 +14728,13 @@
             "place": "britain_modern",
             "category": "Currency",
             "value": "Deutsche Mark & shilling"
+          }
+        ],
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "company_towns",
+            "amount": 2
           }
         ]
       },
@@ -14070,6 +14754,13 @@
             "category": "Currency",
             "value": "Florentine florin (Morea)"
           }
+        ],
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "banking_houses",
+            "amount": 2
+          }
         ]
       },
       {
@@ -14087,6 +14778,13 @@
             "place": "iraq_ancient",
             "category": "Language",
             "value": "Hieroglyphic Akkadian"
+          }
+        ],
+        "pulls": [
+          {
+            "factor": "government",
+            "outcome": "theocracy",
+            "amount": 2
           }
         ]
       },
@@ -14107,6 +14805,13 @@
             "category": "Technology",
             "value": "Babbage analytical engine"
           }
+        ],
+        "pulls": [
+          {
+            "factor": "future",
+            "outcome": "cybernetic",
+            "amount": 3
+          }
         ]
       },
       {
@@ -14125,6 +14830,13 @@
             "place": "greece_ancient",
             "category": "Technology",
             "value": "Aeolipile steam engine"
+          }
+        ],
+        "pulls": [
+          {
+            "factor": "future",
+            "outcome": "nuclear",
+            "amount": 2
           }
         ]
       },
@@ -14145,6 +14857,13 @@
             "category": "Politics",
             "value": "Elected Pharaoh Hatshepsut"
           }
+        ],
+        "pulls": [
+          {
+            "factor": "government",
+            "outcome": "democracy",
+            "amount": 3
+          }
         ]
       },
       {
@@ -14157,7 +14876,14 @@
             "threshold": 6
           }
         ],
-        "edits": []
+        "edits": [],
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "debt",
+            "amount": 1
+          }
+        ]
       },
       {
         "id": "pell_departed",
@@ -14170,7 +14896,14 @@
           }
         ],
         "edits": [],
-        "section": "Desk"
+        "section": "Desk",
+        "pulls": [
+          {
+            "factor": "government",
+            "outcome": "democracy",
+            "amount": 2
+          }
+        ]
       },
       {
         "id": "pell_turned_away",
@@ -14209,7 +14942,14 @@
           }
         ],
         "edits": [],
-        "section": "Desk"
+        "section": "Desk",
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "company_towns",
+            "amount": 4
+          }
+        ]
       },
       {
         "id": "ines_rebooked",
@@ -14222,7 +14962,14 @@
           }
         ],
         "edits": [],
-        "section": "Desk"
+        "section": "Desk",
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "debt",
+            "amount": 2
+          }
+        ]
       },
       {
         "id": "rift_storm",
@@ -14234,7 +14981,14 @@
             "threshold": 8
           }
         ],
-        "edits": []
+        "edits": [],
+        "pulls": [
+          {
+            "factor": "future",
+            "outcome": "anarchy",
+            "amount": 1
+          }
+        ]
       },
       {
         "id": "gutenberg_press",
@@ -14264,7 +15018,14 @@
             "threshold": 9
           }
         ],
-        "edits": []
+        "edits": [],
+        "pulls": [
+          {
+            "factor": "government",
+            "outcome": "directorate",
+            "amount": 1
+          }
+        ]
       },
       {
         "id": "rook_departed",
@@ -14277,7 +15038,14 @@
           }
         ],
         "edits": [],
-        "section": "Desk"
+        "section": "Desk",
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "company_towns",
+            "amount": 3
+          }
+        ]
       },
       {
         "id": "rook_complaint",
@@ -14295,7 +15063,14 @@
         ],
         "edits": [],
         "stability": -3,
-        "section": "Desk"
+        "section": "Desk",
+        "pulls": [
+          {
+            "factor": "government",
+            "outcome": "democracy",
+            "amount": 2
+          }
+        ]
       },
       {
         "id": "ada_departed",
@@ -14307,7 +15082,14 @@
             "key": "premade:ada:accepted"
           }
         ],
-        "edits": []
+        "edits": [],
+        "pulls": [
+          {
+            "factor": "future",
+            "outcome": "cybernetic",
+            "amount": 2
+          }
+        ]
       },
       {
         "id": "ada_returned",
@@ -14331,7 +15113,14 @@
             "threshold": 12
           }
         ],
-        "edits": []
+        "edits": [],
+        "pulls": [
+          {
+            "factor": "government",
+            "outcome": "directorate",
+            "amount": 1
+          }
+        ]
       },
       {
         "id": "range_limit",
@@ -14343,7 +15132,14 @@
             "threshold": 12
           }
         ],
-        "edits": []
+        "edits": [],
+        "pulls": [
+          {
+            "factor": "future",
+            "outcome": "space_age",
+            "amount": 1
+          }
+        ]
       },
       {
         "id": "hollis_departed",
@@ -14356,7 +15152,14 @@
           }
         ],
         "edits": [],
-        "section": "Desk"
+        "section": "Desk",
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "jubilee",
+            "amount": 3
+          }
+        ]
       },
       {
         "id": "hollis_collections",
@@ -14369,7 +15172,14 @@
           }
         ],
         "edits": [],
-        "section": "Desk"
+        "section": "Desk",
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "debt",
+            "amount": 3
+          }
+        ]
       },
       {
         "id": "audit_passed",
@@ -14381,7 +15191,14 @@
             "key": "premade:auditor:denied"
           }
         ],
-        "edits": []
+        "edits": [],
+        "pulls": [
+          {
+            "factor": "government",
+            "outcome": "directorate",
+            "amount": 3
+          }
+        ]
       },
       {
         "id": "audit_failed",
@@ -14393,7 +15210,14 @@
             "key": "premade:auditor:accepted"
           }
         ],
-        "edits": []
+        "edits": [],
+        "pulls": [
+          {
+            "factor": "government",
+            "outcome": "technocracy",
+            "amount": 2
+          }
+        ]
       },
       {
         "id": "audit_rook",
@@ -14414,7 +15238,14 @@
           }
         ],
         "edits": [],
-        "stability": -3
+        "stability": -3,
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "company_towns",
+            "amount": 2
+          }
+        ]
       },
       {
         "id": "drive_last_day",
@@ -14426,7 +15257,14 @@
             "threshold": 14
           }
         ],
-        "edits": []
+        "edits": [],
+        "pulls": [
+          {
+            "factor": "money",
+            "outcome": "debt",
+            "amount": 2
+          }
+        ]
       }
     ]
   },
@@ -17173,6 +18011,12 @@
       {
         "key": "site.history.presentNone",
         "text": "No power holds the Future. The present is unsettled until one rises.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.today",
+        "text": "2150 today",
         "gloss": "None",
         "tier": "Full"
       },
@@ -20624,26 +21468,189 @@
       {
         "id": "government",
         "question": "Who runs 2150?",
-        "answer": "AsFound",
-        "foundAs": "The Directorate"
+        "answer": "Pulls",
+        "statusQuo": "directorate",
+        "splitLine": "{a} and {b}, sharing the building",
+        "splitHeadline": "TWO GOVERNMENTS: {a} and {b} both claim the Directorate building. Each has opened its own queue."
       },
       {
         "id": "future",
         "question": "What does 2150 run on?",
-        "answer": "AsFound",
-        "foundAs": "The Credit Age"
+        "answer": "Pulls",
+        "statusQuo": "credit_age",
+        "splitLine": "{a} and {b}, one on each bank of the river",
+        "splitHeadline": "2150 IS SPLIT: {a} on one bank of the river, {b} on the other. The bridge is very busy."
       },
       {
         "id": "money",
         "question": "How does 2150 pay its way?",
-        "answer": "AsFound",
-        "foundAs": "The Debt"
+        "answer": "Pulls",
+        "statusQuo": "debt",
+        "splitLine": "{a} and {b}, side by side",
+        "splitHeadline": "TWO PURSES: 2150 pays its way through {a} and {b} at once. Every till now has two drawers."
       },
       {
         "id": "culture",
         "question": "Whose culture leads?",
         "answer": "Leader",
         "foundAs": "None: the neutral Temporal Customs Zone"
+      }
+    ],
+    "outcomes": [
+      {
+        "factor": "government",
+        "id": "directorate",
+        "name": "The Directorate",
+        "headline": "DIRECTORATE: the Customs Directorate carries on running 2150. The queues reopen at nine, as always.",
+        "report": "The Customs Directorate runs 2150 as it always has: by form, by queue and by stamp. Every citizen knows exactly which counter to stand at."
+      },
+      {
+        "factor": "government",
+        "id": "democracy",
+        "name": "Democracy",
+        "headline": "2150 VOTES: the Directorate hands the building to an elected assembly. Its first sitting ran eleven hours.",
+        "report": "An elected assembly runs 2150 and votes on everything, including the colour of the ballot papers. Anyone may stand for office, and nearly everyone does."
+      },
+      {
+        "factor": "government",
+        "id": "monarchy",
+        "name": "Monarchy",
+        "headline": "A CROWN FOR 2150: a monarch is proclaimed on the Directorate steps. The queues are now royal queues.",
+        "report": "A monarch reigns over 2150 from a palace that used to be a transit hall. Every form carries the royal crest, and people have started framing them."
+      },
+      {
+        "factor": "government",
+        "id": "fascism",
+        "name": "Fascism",
+        "headline": "ORDER: a single party takes charge of 2150. Uniforms are issued, and every portal opens to the second.",
+        "report": "One party runs 2150, and one flag hangs over every portal. The timetables are exact, the parades are long, and nobody steps out of the queue."
+      },
+      {
+        "factor": "government",
+        "id": "communism",
+        "name": "Communism",
+        "headline": "THE PEOPLE'S DESK: workers' councils take over the Directorate. Every desk now has a committee.",
+        "report": "Workers' councils run 2150 and hold the portals in common. Every clerk is a comrade, every queue is shared equally, and the five-year plan has a ten-year appendix."
+      },
+      {
+        "factor": "government",
+        "id": "theocracy",
+        "name": "Theocracy",
+        "headline": "BY SACRED ORDER: 2150's temple councils take up the Directorate's duties. The stamps are blessed each morning.",
+        "report": "Temple councils govern 2150, and every departure begins with a blessing of the portal. The calendar has many more holidays, and the queues wait in respectful silence."
+      },
+      {
+        "factor": "government",
+        "id": "technocracy",
+        "name": "Technocracy",
+        "headline": "RUN BY EXPERTS: a council of engineers takes over 2150. Its first decree is a flowchart.",
+        "report": "Engineers and statisticians run 2150 through committees of specialists. Every law comes with footnotes, and every citizen with a user manual."
+      },
+      {
+        "factor": "government",
+        "id": "corporate_board",
+        "name": "The Corporate Board",
+        "headline": "UNDER NEW MANAGEMENT: a board of directors acquires 2150. Every citizen receives a shareholder newsletter.",
+        "report": "A corporate board runs 2150 as a going concern, with quarterly meetings open to anyone holding a share. The minutes are glossy, and the annual report has a mascot."
+      },
+      {
+        "factor": "future",
+        "id": "credit_age",
+        "name": "The Credit Age",
+        "headline": "THE CREDIT AGE: wrist comms, queues and the debt grid carry on. 2150 runs on credit, as before.",
+        "report": "2150 runs on wrist comms, credit lines and very long queues. Everything is on account, and the account is always open."
+      },
+      {
+        "factor": "future",
+        "id": "nuclear",
+        "name": "The Nuclear Age",
+        "headline": "ATOMS FOR ALL: 2150's first home reactor goes on sale. Kettles now boil in a second.",
+        "report": "2150 runs on the atom: reactors in the basements and a gentle glow on the night shift. Power is too cheap to meter, so nobody meters it."
+      },
+      {
+        "factor": "future",
+        "id": "cybernetic",
+        "name": "The Cybernetic Age",
+        "headline": "WIRED: 2150 connects its citizens straight to the city grid. Queue numbers now arrive by thought.",
+        "report": "2150 runs on implants and thinking machines. Its citizens talk to the city, and the city answers back, usually politely."
+      },
+      {
+        "factor": "future",
+        "id": "space_age",
+        "name": "The Space Age",
+        "headline": "LIFT-OFF: the first launch ring opens over the Aegean. The Space League is hiring.",
+        "report": "2150 looks up: launch rings, orbital suburbs and a weekend commute to the Moon. The luggage limits are strict; the view is spectacular."
+      },
+      {
+        "factor": "future",
+        "id": "naturalism",
+        "name": "Naturalism",
+        "headline": "BACK TO THE LAND: 2150 switched off the grid for a week, and nobody switched it back on. Vineyards climb the arcologies.",
+        "report": "2150 has rewilded itself: gardens in the transit halls, goats on the portals and meetings held under trees. Everything grows, and the paperwork is composted."
+      },
+      {
+        "factor": "future",
+        "id": "anarchy",
+        "name": "Anarchy",
+        "headline": "NOBODY'S PLAN: 2150's master plans are cancelled by general agreement. Every street now runs itself.",
+        "report": "2150 runs on whatever works that day: self-built districts, street assemblies and improvised machines. There is no timetable, and yet things arrive."
+      },
+      {
+        "factor": "money",
+        "id": "debt",
+        "name": "The Debt",
+        "headline": "THE DEBT HOLDS: every account in 2150 carries over. Interest compounds as usual.",
+        "report": "2150 pays its way on credit: every citizen carries a debt, and every debt passes to kin. The ledger has never once lost track of a cent."
+      },
+      {
+        "factor": "money",
+        "id": "jubilee",
+        "name": "Jubilee",
+        "headline": "JUBILEE: every debt in 2150 is forgiven at midnight. Collections throws a party.",
+        "report": "Every debt in 2150 was forgiven, and the ledgers were shredded into confetti. Nobody owes anybody, and the collectors are learning to knit."
+      },
+      {
+        "factor": "money",
+        "id": "company_towns",
+        "name": "Company Towns",
+        "headline": "COMPANY TOWN: 2150's employers take over housing, schools and the portals. Wages are paid in company scrip.",
+        "report": "2150's employers run daily life: company housing, company schools, company songs. Payday comes in scrip, and the canteen is very popular."
+      },
+      {
+        "factor": "money",
+        "id": "commons",
+        "name": "The Commons",
+        "headline": "SHARE AND SHARE ALIKE: everything in 2150 goes into common stores. The first swap market opens in the transit hall.",
+        "report": "2150 shares what it has: common stores, swap markets and a library of tools. Nothing is bought; everything is borrowed and, mostly, returned."
+      },
+      {
+        "factor": "money",
+        "id": "banking_houses",
+        "name": "The Banking Houses",
+        "headline": "HOUSES OF CREDIT: the merchant dynasties open their vaults to 2150. Every family now has a banker.",
+        "report": "Merchant banking dynasties finance 2150 from marble halls, lending by letter and by handshake. The interest is negotiable, and lunch is included."
+      }
+    ],
+    "roles": [
+      {
+        "archetype": "scientist",
+        "factor": "future",
+        "pull": 3
+      },
+      {
+        "archetype": "diplomat",
+        "factor": "government",
+        "pull": 2
+      },
+      {
+        "archetype": "soldier",
+        "factor": "government",
+        "pull": 2
+      },
+      {
+        "archetype": "merchant",
+        "factor": "money",
+        "pull": 3
       }
     ]
   }

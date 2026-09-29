@@ -162,3 +162,8 @@ MonoBehaviour:
     baseScore: 4
     dominantEffect: {fileID: 0}
     supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: theocracy
+  - factor: future
+    outcome: naturalism

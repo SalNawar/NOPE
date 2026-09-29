@@ -387,13 +387,30 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The world block: the factors the end of the demo answers (never null).</summary>
     public WorldContent World => world ?? new WorldContent();
 
-    /// <summary>The world's outcomes as <paramref name="history"/> leaves them (WorldFactors.Lines): each factor's question and answer, the culture answered by the leading nation's name.</summary>
-    public List<OutcomeLine> WorldOutcomes(HistoryState history)
+    /// <summary>
+    /// The world's outcomes as <paramref name="world"/> leaves them
+    /// (WorldFactors.Lines): each factor's question and answer, the culture
+    /// answered by the leading nation's name, the factors answered by pulls
+    /// read now (WorldContent.AnswersNow with <paramref name="config"/>'s
+    /// world knobs), so the run's latest choices count.
+    /// </summary>
+    public List<OutcomeLine> WorldOutcomes(WorldState world, GameConfigSO config) => WorldLines(world, WorldAnswersNow(world, config));
+
+    /// <summary>The world's outcomes as the last night latched them (WorldState.leads, what the morning paper reported): Chronopedia's "2150 today".</summary>
+    public List<OutcomeLine> WorldLatched(WorldState world) => WorldLines(world, world?.leads);
+
+    /// <summary>The outcome lines (WorldFactors.Lines) with <paramref name="answers"/> for the factors answered by pulls and the leading nation's name for the culture.</summary>
+    private List<OutcomeLine> WorldLines(WorldState world, IEnumerable<FactorLead> answers)
     {
-        string leader = History.FutureNation(history);
+        string leader = History.FutureNation(world?.history);
         NationSO nation = leader != null ? GetNationById(leader) : null;
-        return WorldFactors.Lines(World.factors, nation != null && !string.IsNullOrWhiteSpace(nation.displayName) ? nation.displayName : leader);
+        return WorldFactors.Lines(World, nation != null && !string.IsNullOrWhiteSpace(nation.displayName) ? nation.displayName : leader, answers);
     }
+
+    /// <summary>Each factor answered by pulls, answered now (WorldContent.AnswersNow over <paramref name="world"/>'s pulls and held leads, with <paramref name="config"/>'s knobs; the defaults without one).</summary>
+    public List<FactorLead> WorldAnswersNow(WorldState world, GameConfigSO config) =>
+        World.AnswersNow(world?.pulls, world?.leads, config != null ? config.worldStatusQuoWeight : GameConfigSO.DefaultWorldStatusQuoWeight,
+                         config != null ? config.worldLeadMargin : GameConfigSO.DefaultWorldLeadMargin);
 
     /// <summary>The morning paper's debt-theme lines (never null).</summary>
     public NewsContent News => news ?? new NewsContent();

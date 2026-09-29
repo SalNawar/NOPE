@@ -170,3 +170,10 @@ MonoBehaviour:
     baseScore: 3.1
     dominantEffect: {fileID: 0}
     supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: corporate_board
+  - factor: future
+    outcome: cybernetic
+  - factor: money
+    outcome: banking_houses

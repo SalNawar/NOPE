@@ -30,3 +30,7 @@ MonoBehaviour:
   citizenId: 
   debt: 0
   employer: 
+  pulls:
+  - factor: future
+    outcome: space_age
+    amount: 4

@@ -168,3 +168,8 @@ MonoBehaviour:
     baseScore: 3.1
     dominantEffect: {fileID: 0}
     supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: theocracy
+  - factor: future
+    outcome: anarchy

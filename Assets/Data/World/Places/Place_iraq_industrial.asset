@@ -164,3 +164,6 @@ MonoBehaviour:
     baseScore: 2.5
     dominantEffect: {fileID: 0}
     supportingEffect: {fileID: 0}
+  leanings:
+  - factor: future
+    outcome: anarchy

@@ -181,6 +181,9 @@ public sealed class SiteWorld
     /// <summary>The Static sites' authored pages.</summary>
     public IReadOnlyList<StaticPage> StaticPages = Array.Empty<StaticPage>();
 
+    /// <summary>2150 today: each world factor's answer as this morning's paper last reported it (ContentLibrarySO.WorldLatched; the endings spec §5.1), in content order; Chronopedia's present shows it.</summary>
+    public IReadOnlyList<OutcomeLine> WorldToday = Array.Empty<OutcomeLine>();
+
     /// <summary>A place by nation and era id, or null.</summary>
     public PlaceInfo Place(string nationId, string eraId) =>
         Places.FirstOrDefault(p => p != null && p.NationId == nationId && p.EraId == eraId);

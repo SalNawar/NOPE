@@ -30,3 +30,10 @@ MonoBehaviour:
   citizenId: 
   debt: 0
   employer: 
+  pulls:
+  - factor: money
+    outcome: commons
+    amount: 6
+  - factor: future
+    outcome: anarchy
+    amount: 3
