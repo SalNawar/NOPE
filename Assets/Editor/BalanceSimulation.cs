@@ -32,6 +32,15 @@ public static class BalanceSimulation
     /// <summary>The run seed whose every decision is dumped per style, and whose runs are played twice to prove the simulation deterministic.</summary>
     public const int ExampleSeed = 12345;
 
+    /// <summary>
+    /// The travellers a careful clerk gets through in a shift before the clock
+    /// closes (an estimate: 8 real minutes at about 45 s a traveller). Every
+    /// style is played twice, on the whole queue and at this pace (the rest of
+    /// the queue goes home, as when the shift clock closes); the epilogue
+    /// thresholds are read from perfect play at this pace.
+    /// </summary>
+    public const int ShiftPace = 10;
+
     /// <summary>The folder the summary and the example dumps go to (project-relative; Logs/ is not in git).</summary>
     public const string ReportFolder = "Logs/Balance";
 
@@ -41,6 +50,7 @@ public static class BalanceSimulation
     private const int SeedStep = 7919;
     private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
     private static readonly PlayStyle[] Styles = { PlayStyle.Perfect, PlayStyle.Imperfect, PlayStyle.Careless };
+    private static readonly int[] Paces = { 0, ShiftPace };
 
     /// <summary>Runs the simulation with today's knobs and shows the summary's file (refused in play mode).</summary>
     [MenuItem("Tools/TimeDesk/Balance/Run 50-Run Simulation")]
@@ -91,21 +101,24 @@ public static class BalanceSimulation
         Debug.unityLogger.filterLogType = LogType.Error;
         try
         {
-            var results = new Dictionary<PlayStyle, List<RunResult>>();
-            int step = 0, steps = Styles.Length * (Runs + 2);
+            var results = new Dictionary<(PlayStyle, int), List<RunResult>>();
+            int step = 0, steps = Styles.Length * (Paces.Length * Runs + 2);
             foreach (PlayStyle style in Styles)
             {
-                var runs = new List<RunResult>();
-                for (int i = 1; i <= Runs; i++)
+                foreach (int pace in Paces)
                 {
-                    EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play, run {i} of {Runs}", (float)step++ / steps);
-                    runs.Add(Play(run, lib, config, i * SeedStep, style));
+                    var runs = new List<RunResult>();
+                    for (int i = 1; i <= Runs; i++)
+                    {
+                        EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play, {PaceLabel(pace)}, run {i} of {Runs}", (float)step++ / steps);
+                        runs.Add(Play(run, lib, config, i * SeedStep, style, pace));
+                    }
+                    results[(style, pace)] = runs;
                 }
-                results[style] = runs;
 
                 EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play, seed {ExampleSeed} twice", (float)step / steps);
-                RunResult a = Play(run, lib, config, ExampleSeed, style);
-                RunResult b = Play(run, lib, config, ExampleSeed, style);
+                RunResult a = Play(run, lib, config, ExampleSeed, style, 0);
+                RunResult b = Play(run, lib, config, ExampleSeed, style, 0);
                 step += 2;
                 File.WriteAllText(Path.Combine(dir, $"balance_seed{ExampleSeed}_{style.ToString().ToLowerInvariant()}.txt"), a.Dump.ToString());
                 if (a.Fingerprint != b.Fingerprint || a.Dump.ToString() != b.Dump.ToString())
@@ -124,7 +137,7 @@ public static class BalanceSimulation
 
         string path = Path.Combine(dir, SummaryFile);
         File.WriteAllText(path, summary.ToString());
-        Debug.Log($"[Balance] {Styles.Length} x {Runs} runs of {Days} days: {path}{(errors.Count > 0 ? $" ({errors.Count} error(s): see its last section)" : "")}.");
+        Debug.Log($"[Balance] {Styles.Length} x {Paces.Length} x {Runs} runs of {Days} days: {path}{(errors.Count > 0 ? $" ({errors.Count} error(s): see its last section)" : "")}.");
         return path;
     }
 
@@ -154,8 +167,8 @@ public static class BalanceSimulation
         public bool Faulty, Deviation, Accepted, Correct, Economy;
     }
 
-    /// <summary>A run of <see cref="Days"/> days from <paramref name="seed"/> under <paramref name="style"/>, through the game's own steps.</summary>
-    private static RunResult Play(RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, int seed, PlayStyle style)
+    /// <summary>A run of <see cref="Days"/> days from <paramref name="seed"/> under <paramref name="style"/>, through the game's own steps, <paramref name="pace"/> travellers a shift (0: the whole queue).</summary>
+    private static RunResult Play(RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, int seed, PlayStyle style, int pace)
     {
         DevToolsState.ResetAll();
         var r = new RunResult { Seed = seed };
@@ -175,7 +188,8 @@ public static class BalanceSimulation
             policy.StartDay(day);
 
             string ended = null;
-            for (int i = 0; i < cases.Count && ended == null; i++)
+            int seen = pace > 0 ? Math.Min(pace, cases.Count) : cases.Count;
+            for (int i = 0; i < seen && ended == null; i++)
             {
                 CaseInstance inst = cases[i];
                 PlayDecision decision = policy.Decide(inst.ShouldAccept, inst.HasDeviationFault);
@@ -275,20 +289,21 @@ public static class BalanceSimulation
     // The summary
     // ------------------------------------------------------------------
 
-    private static void Write(StringBuilder sb, RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, Dictionary<PlayStyle, List<RunResult>> results, List<string> errors)
+    private static void Write(StringBuilder sb, RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, List<string> errors)
     {
-        sb.AppendLine($"BALANCE SIMULATION  {DateTime.Now:yyyy-MM-dd HH:mm}  ({Runs} runs x {Days} days per play style; Tools > TimeDesk > Balance > Run 50-Run Simulation)");
-        sb.AppendLine("Each run plays the whole queue each day through the game's own steps (DayCycle), with no scene: no shift clock, no shop, no care, no slot machine, no dialog choices.");
+        sb.AppendLine($"BALANCE SIMULATION  {DateTime.Now:yyyy-MM-dd HH:mm}  ({Runs} runs x {Days} days per play style and pace; Tools > TimeDesk > Balance > Run 50-Run Simulation)");
+        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no shop, no care, no slot machine, no dialog choices; once on the whole queue and once at the shift clock's pace ({ShiftPace} travellers a shift, BalanceSimulation.ShiftPace: the rest go home when the clock closes).");
         sb.AppendLine("Perfect: every call right. Imperfect: one wrong call a day (odd days the first faulty traveller let through, even days the first deviation denial left unproven). Careless: both every day.");
         sb.AppendLine();
         Knobs(sb, run, lib, config);
 
         List<EndingSO> epilogues = lib.Endings.Where(e => e != null && e.conditionType == EndingConditionType.AttrTotalAtLeast && e.attribute != null).ToList();
-        foreach (PlayStyle style in Styles)
-            Style(sb, style, results[style], lib, config, epilogues);
+        foreach (int pace in Paces)
+            foreach (PlayStyle style in Styles)
+                Style(sb, style, pace, results[(style, pace)], lib, config, epilogues);
 
-        Queue(sb, results[PlayStyle.Perfect]);
-        Authored(sb, results[PlayStyle.Perfect]);
+        Queue(sb, results[(PlayStyle.Perfect, 0)]);
+        Authored(sb, results[(PlayStyle.Perfect, 0)]);
 
         sb.AppendLine();
         sb.AppendLine("== Checks ==");
@@ -320,14 +335,16 @@ public static class BalanceSimulation
                       $"proofs [{string.Join(", ", agency.proofs.Select(p => $"{p.form} {F(p.weight)}"))}]; transponders [{string.Join(", ", agency.transponders.Select(t => $"{t.id} {t.transponderClass} {F(t.weight)}"))}]");
         foreach (DayPlanSO p in plans)
             sb.AppendLine($"  days/dayKinds, day {p.DayNumber}: queue {p.VisitorsCount}, kinds [{string.Join(", ", p.Kinds.Select(k => $"{(k.blueprint != null ? k.blueprint.Kind.ToString() : "?")} {F(k.weight)}{(k.honest ? " honest" : "")}"))}], " +
-                          $"lies [{string.Join(", ", p.EnabledLies)}], costumeErrorChance {F(p.CostumeErrorChance)}, premadeChance {F(p.LegendaryBaseChance)}");
+                          $"lies [{string.Join(", ", p.EnabledLies)}], violationChance {F(p.ViolationChance)}, costumeErrorChance {F(p.CostumeErrorChance)}, premadeChance {F(p.LegendaryBaseChance)}");
         sb.AppendLine("  (days 7 and on replay day 6's plan)");
     }
 
-    private static void Style(StringBuilder sb, PlayStyle style, List<RunResult> runs, ContentLibrarySO lib, GameConfigSO config, List<EndingSO> epilogues)
+    private static string PaceLabel(int pace) => pace > 0 ? $"{pace} a shift" : "whole queue";
+
+    private static void Style(StringBuilder sb, PlayStyle style, int pace, List<RunResult> runs, ContentLibrarySO lib, GameConfigSO config, List<EndingSO> epilogues)
     {
         sb.AppendLine();
-        sb.AppendLine($"== {style} play, {runs.Count} runs ==");
+        sb.AppendLine($"== {style} play, {PaceLabel(pace)}, {runs.Count} runs ==");
         sb.AppendLine($"endings: {string.Join(", ", runs.GroupBy(r => r.Ending).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}");
         List<RunResult> early = runs.Where(r => r.EndingDay < Days).ToList();
         sb.AppendLine($"runs ending before day {Days}'s night: {early.Count}{(early.Count > 0 ? $" ({string.Join(", ", early.GroupBy(r => r.Ending).Select(g => $"{g.Key} on days {string.Join(",", g.Select(r => r.EndingDay).OrderBy(d => d))}"))})" : "")}");
@@ -354,7 +371,7 @@ public static class BalanceSimulation
         }
         if (style != PlayStyle.Perfect)
             return;
-        sb.AppendLine($"proposed epilogue thresholds (the {F(BalanceStats.EpilogueQuantile * 100f)}th percentile of perfect play, rounded): {string.Join(", ", proposed.Select(kv => $"{kv.Key.id} {F(kv.Value)}"))}");
+        sb.AppendLine($"{(pace == ShiftPace ? "proposed epilogue thresholds" : "for comparison, whole-queue thresholds")} (the {F(BalanceStats.EpilogueQuantile * 100f)}th percentile of perfect play{(pace == ShiftPace ? " at the shift clock's pace" : "")}, rounded): {string.Join(", ", proposed.Select(kv => $"{kv.Key.id} {F(kv.Value)}"))}");
         sb.AppendLine($"endings with those thresholds: {string.Join(", ", full.GroupBy(r => Hypothetical(r.World, lib, config, proposed)).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}");
     }
 
@@ -377,7 +394,7 @@ public static class BalanceSimulation
     private static void Queue(StringBuilder sb, List<RunResult> runs)
     {
         sb.AppendLine();
-        sb.AppendLine($"== The random draws by day (perfect play, {runs.Count} runs; a day counts while its run lasted; authored travellers apart, below) ==");
+        sb.AppendLine($"== The random draws by day (perfect play, whole queue, {runs.Count} runs; a day counts while its run lasted; authored travellers apart, below) ==");
         foreach (IGrouping<int, CaseRecord> day in runs.SelectMany(r => r.Records).Where(c => c.Source == "random").GroupBy(c => c.Day).OrderBy(g => g.Key))
         {
             List<CaseRecord> all = day.ToList();
@@ -392,7 +409,7 @@ public static class BalanceSimulation
     private static void Authored(StringBuilder sb, List<RunResult> runs)
     {
         sb.AppendLine();
-        sb.AppendLine($"== Authored travellers (not random draws; perfect play, {runs.Count} runs) ==");
+        sb.AppendLine($"== Authored travellers (not random draws; perfect play, whole queue, {runs.Count} runs) ==");
         List<CaseRecord> authored = runs.SelectMany(r => r.Records).Where(c => c.Source != "random").ToList();
         if (authored.Count == 0)
             sb.AppendLine("none stood in these runs");
