@@ -1,12 +1,13 @@
-OfficeGameplay: committed vs rebuilt: 7772 vs 7772 lines; same set=True; same order=True; only-left 0, only-right 0
-OfficeGameplay: rebuilt vs rebuilt again: 7772 vs 7772 lines; same set=True; same order=True; only-left 0, only-right 0
-HomeScene: committed vs rebuilt: 185 vs 185 lines; same set=True; same order=True; only-left 0, only-right 0
-HomeScene: rebuilt vs rebuilt again: 185 vs 185 lines; same set=True; same order=True; only-left 0, only-right 0
+OfficeGameplay: committed vs rebuilt: 16106 vs 16106 lines; same set=True; same order=True; only-left 0, only-right 0
+OfficeGameplay: rebuilt vs rebuilt again: 16106 vs 16106 lines; same set=True; same order=True; only-left 0, only-right 0
+HomeScene: committed vs rebuilt: 200 vs 200 lines; same set=True; same order=True; only-left 0, only-right 0
+HomeScene: rebuilt vs rebuilt again: 200 vs 200 lines; same set=True; same order=True; only-left 0, only-right 0
 TitleScene: committed vs rebuilt: 129 vs 129 lines; same set=True; same order=True; only-left 0, only-right 0
 TitleScene: rebuilt vs rebuilt again: 129 vs 129 lines; same set=True; same order=True; only-left 0, only-right 0
 build errors: office 0, home 0, title 0
 build warnings: office 0, home 0, title 0
-art office byte-unchanged by the builders: True
-committed scene file hashes: f8f397ec777dd606df9d366ab8d8465fb48b7aac Assets/Scenes/OfficeGameplay.unity; 8b230240949e579372f0ee50b9b119526d88d9ae Assets/Scenes/HomeScene.unity; da7fdaf1009bf3df17e50916b7b735385448fb1e Assets/Scenes/TitleScene.unity; 953385d3ca698dd02a5744cbe0d23073861e428e Assets/Scenes/OfficeScene.unity
-build settings: Assets/Scenes/TitleScene.unity, Assets/Scenes/OfficeScene.unity, Assets/Scenes/OfficeGameplay.unity, Assets/Scenes/HomeScene.unity, Assets/Scenes/Test_DayLoop.unity(off)
-contract report written; art dirty after it: False; art still byte-unchanged: True
+art office Assets/Art/Office/AnimeHallLayers/AnimeHall.unity byte-unchanged by the builders: True
+art office Assets/Scenes/OfficeScene.unity byte-unchanged by the builders: True
+committed scene file hashes: 85d24474ecd38b8930633ce926f1659e1331c14c Assets/Scenes/OfficeGameplay.unity; c8460493d9b0feb89c7c4c9811922d55cc963fac Assets/Scenes/HomeScene.unity; da7fdaf1009bf3df17e50916b7b735385448fb1e Assets/Scenes/TitleScene.unity; 0a4e6595779042f0b6ae9281b4498c6071ecad2e Assets/Art/Office/AnimeHallLayers/AnimeHall.unity; 953385d3ca698dd02a5744cbe0d23073861e428e Assets/Scenes/OfficeScene.unity
+build settings: Assets/Scenes/TitleScene.unity, Assets/Art/Office/AnimeHallLayers/AnimeHall.unity, Assets/Scenes/OfficeGameplay.unity, Assets/Scenes/HomeScene.unity, Assets/Scenes/OfficeScene.unity(off), Assets/Scenes/Test_DayLoop.unity(off)
+contract report on Assets/Art/Office/AnimeHallLayers/AnimeHall.unity written; art dirty after it: False; art still byte-unchanged: True

@@ -1,20 +1,21 @@
 {
     "version": 3,
     "world": {
-        "day": 5,
+        "day": 7,
         "runSeed": 12345,
-        "money": 66,
+        "money": 122,
         "stabilityHundredths": 9036,
         "totalCitations": 4,
         "citationsToday": 0,
-        "clerkDebtPaid": 125,
-        "debtReliefYesterday": 1,
+        "clerkDebtPaid": 209,
+        "debtReliefYesterday": 3,
         "endingId": "",
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
         "payRateMultiplier": 1.0,
         "unlockedUpgradeIds": [
-            "interview_protocols"
+            "interview_protocols",
+            "tr_near_east_spoken"
         ],
         "orders": [
             {
@@ -22,6 +23,12 @@
                 "orderedDay": 3,
                 "price": 120,
                 "deliveredDay": 4
+            },
+            {
+                "upgradeId": "tr_near_east_spoken",
+                "orderedDay": 6,
+                "price": 80,
+                "deliveredDay": 7
             }
         ],
         "installs": [],
@@ -36,7 +43,18 @@
             "trig:unlock_q_language:fired",
             "trig:unlock_q_capital:fired",
             "trig:unlock_q_ruler:fired",
-            "trig:unlock_q_born:fired"
+            "trig:unlock_q_born:fired",
+            "premade:senenmut:met",
+            "premade:senenmut:accepted",
+            "premade:socrates:met",
+            "premade:socrates:denied",
+            "trig:art_renaissance:fired",
+            "trig:history_drive_begins:fired",
+            "premade:pell:denied",
+            "premade:toyoda:met",
+            "premade:toyoda:accepted",
+            "premade:gutenberg:met",
+            "premade:gutenberg:accepted"
         ],
         "counters": [
             {
@@ -52,11 +70,11 @@
                 },
                 {
                     "key": "attrTotal:art",
-                    "value": 19.0
+                    "value": 36.0
                 },
                 {
                     "key": "nation:greece",
-                    "value": 7.0
+                    "value": 9.0
                 },
                 {
                     "key": "attr:greece_ancient:democracy",
@@ -64,7 +82,7 @@
                 },
                 {
                     "key": "attrTotal:democracy",
-                    "value": 1.5
+                    "value": 0.0
                 },
                 {
                     "key": "attr:iraq_ancient:art",
@@ -72,11 +90,11 @@
                 },
                 {
                     "key": "nation:iraq",
-                    "value": 12.0
+                    "value": 15.5
                 },
                 {
                     "key": "attr:iraq_medieval:art",
-                    "value": -1.0
+                    "value": 1.0
                 },
                 {
                     "key": "attr:britain_medieval:art",
@@ -84,7 +102,7 @@
                 },
                 {
                     "key": "nation:britain",
-                    "value": 2.5
+                    "value": 7.5
                 },
                 {
                     "key": "attr:iraq_ancient:science",
@@ -92,7 +110,7 @@
                 },
                 {
                     "key": "attrTotal:science",
-                    "value": 8.0
+                    "value": 18.0
                 },
                 {
                     "key": "attr:germany_medieval:art",
@@ -100,7 +118,7 @@
                 },
                 {
                     "key": "nation:germany",
-                    "value": -2.0
+                    "value": 2.0
                 },
                 {
                     "key": "attr:egypt_medieval:democracy",
@@ -108,7 +126,7 @@
                 },
                 {
                     "key": "nation:egypt",
-                    "value": -1.0
+                    "value": 3.0
                 },
                 {
                     "key": "attr:japan_medieval:science",
@@ -116,7 +134,7 @@
                 },
                 {
                     "key": "nation:japan",
-                    "value": 6.0
+                    "value": 10.0
                 },
                 {
                     "key": "attr:italy_earlymodern:democracy",
@@ -124,7 +142,7 @@
                 },
                 {
                     "key": "nation:italy",
-                    "value": 4.0
+                    "value": 6.0
                 },
                 {
                     "key": "attr:germany_medieval:democracy",
@@ -173,14 +191,88 @@
                 {
                     "key": "attr:iraq_industrial:art",
                     "value": 1.0
+                },
+                {
+                    "key": "attr:britain_industrial:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:germany_modern:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:iraq_earlymodern:democracy",
+                    "value": -1.5
+                },
+                {
+                    "key": "attr:egypt_ancient:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:egypt_industrial:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:italy_earlymodern:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "attr:britain_earlymodern:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "attr:iraq_industrial:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:britain_modern:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:italy_modern:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "attr:japan_industrial:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:greece_industrial:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:germany_medieval:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:japan_ancient:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:iraq_earlymodern:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "attr:china_medieval:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "nation:china",
+                    "value": 1.0
                 }
             ],
             "activeEffects": [
                 {
                     "effectId": "Effect_Leader_iraq",
                     "sourceLabel": "history:leader Iraq",
-                    "startDay": 5,
+                    "startDay": 7,
                     "durationDays": -1
+                },
+                {
+                    "effectId": "Effect_Trigger_LegendaryBoost",
+                    "sourceLabel": "Trigger: Art Renaissance",
+                    "startDay": 7,
+                    "durationDays": 3
                 }
             ],
             "dominantKeys": [
@@ -217,7 +309,7 @@
                 "britain_ancient:democracy",
                 "britain_medieval:science",
                 "britain_earlymodern:democracy",
-                "britain_industrial:democracy",
+                "britain_industrial:science",
                 "britain_modern:democracy",
                 "germany_ancient:science",
                 "germany_medieval:science",
@@ -292,7 +384,7 @@
                 "britain_medieval:art",
                 "britain_earlymodern:science",
                 "britain_earlymodern:art",
-                "britain_industrial:science",
+                "britain_industrial:democracy",
                 "britain_industrial:art",
                 "britain_modern:science",
                 "britain_modern:art",
@@ -312,7 +404,7 @@
             "members": [
                 {
                     "name": "Partner",
-                    "condition": 0
+                    "condition": 1
                 },
                 {
                     "name": "Kid",
@@ -323,13 +415,11 @@
         "tomorrow": {
             "briefingLines": [],
             "newsLines": [
-                "Science is now DOMINANT in Anglo-Saxon England.",
-                "BUREAU NOTICE: desk officers may now ask every traveller what language they will speak. Check answers against Tongues & Scripts.",
-                "BUREAU NOTICE: desk officers may now ask every traveller which city they are headed for. Check answers against the Capitals Gazetteer.",
-                "BUREAU NOTICE: desk officers may now ask every traveller who rules where they are going. Check answers against Rulers & Regents.",
-                "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
-                "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
-                "Citizens who left on Debt Relief yesterday: 5."
+                "Science is now DOMINANT in Victorian Britain.",
+                "A renaissance of artistic movements ripples through every era.",
+                "DIRECTORATE: the Debt Relief Drive begins. Every Eligible account departs this quarter.",
+                "Premium families book Periclean Athens for the summer.",
+                "Citizens who left on Debt Relief yesterday: 4."
             ],
             "deskLines": []
         },
@@ -339,7 +429,7 @@
             "ranking": [
                 {
                     "id": "iraq",
-                    "score": 11.0
+                    "score": 12.5
                 },
                 {
                     "id": "greece",
@@ -347,15 +437,19 @@
                 },
                 {
                     "id": "japan",
-                    "score": 4.0
-                },
-                {
-                    "id": "italy",
-                    "score": 1.0
+                    "score": 6.0
                 },
                 {
                     "id": "britain",
-                    "score": 0.5
+                    "score": 5.5
+                },
+                {
+                    "id": "italy",
+                    "score": 5.0
+                },
+                {
+                    "id": "egypt",
+                    "score": 3.0
                 },
                 {
                     "id": "china",
@@ -363,11 +457,7 @@
                 },
                 {
                     "id": "germany",
-                    "score": -0.5
-                },
-                {
-                    "id": "egypt",
-                    "score": -1.0
+                    "score": 0.0
                 }
             ],
             "factEdits": [
@@ -450,6 +540,27 @@
                     "Citizens who left on Debt Relief yesterday: 5."
                 ],
                 "desk": []
+            },
+            {
+                "day": 6,
+                "briefing": [],
+                "news": [
+                    "12,000 accounts frozen in default.",
+                    "Citizens who left on Debt Relief yesterday: 1."
+                ],
+                "desk": []
+            },
+            {
+                "day": 7,
+                "briefing": [],
+                "news": [
+                    "Science is now DOMINANT in Victorian Britain.",
+                    "A renaissance of artistic movements ripples through every era.",
+                    "DIRECTORATE: the Debt Relief Drive begins. Every Eligible account departs this quarter.",
+                    "Premium families book Periclean Athens for the summer.",
+                    "Citizens who left on Debt Relief yesterday: 4."
+                ],
+                "desk": []
             }
         ],
         "phase": 1,
@@ -500,10 +611,30 @@
                 "wages": 130,
                 "fines": 0,
                 "debtRelief": 32,
+                "household": 60,
+                "purchases": 0,
+                "balance": 6,
+                "owed": 125305
+            },
+            {
+                "day": 6,
+                "wages": 170,
+                "fines": 0,
+                "debtRelief": 42,
+                "household": 60,
+                "purchases": 80,
+                "balance": -6,
+                "owed": 125263
+            },
+            {
+                "day": 7,
+                "wages": 170,
+                "fines": 0,
+                "debtRelief": 42,
                 "household": 0,
                 "purchases": 0,
-                "balance": 66,
-                "owed": 125305
+                "balance": 122,
+                "owed": 125221
             }
         ],
         "notes": []

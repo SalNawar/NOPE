@@ -12,12 +12,12 @@ changes that a slice documents as intended. A slice with such a change re-packs
 | Path | What | Deterministic |
 |---|---|---|
 | `metrics/metrics_baseline.json.gz`, `.md` | Static metrics: size per type and method, cyclomatic complexity (Roslyn CA1502, plus a token-count approximation calibrated against it), compiler warnings, unused private members (IDE0051/IDE0052/CA1823), duplicate blocks (token-window hash, exact and normalised), magic numbers and strings in rule code, Find/GetComponent and allocations on per-frame paths, static mutable state, singleton access sites | yes |
-| `metrics/inventory.json.gz`, `.md` | Every type in `Assets/Scripts`, `Assets/Editor` (without `OfficeArt/`) and `Assets/Tests`: assembly, files, lines, public surface, callers (token scan) and scene/prefab/asset references (script GUIDs) | yes |
+| `metrics/inventory.json.gz`, `.md` | Every type in `Assets/Scripts`, `Assets/Editor` (without the art side's `OfficeArt/` and `TerminalArt/`) and `Assets/Tests`: assembly, files, lines, public surface, callers (token scan) and scene/prefab/asset references (script GUIDs) | yes |
 | `metrics/analyzer.json.gz` | The raw analyzer build output the metrics use | yes |
-| `golden/cases.txt.gz` | Case generation, days 1-6 x 20 run seeds (the static job dumps days 1-15 since days 7-15 D4; the baseline gains them at the next re-pack, days 1-6 unchanged), plus day 6 under each of the 8 possible leaders: every traveller's claim, name, papers, tells, answers, look and garments, premade, violator, citizen record; each variant's world (plan, places, rules, interview, every fact) | yes |
+| `golden/cases.txt.gz` | Case generation, days 1-15 x 20 run seeds (packed at the end-of-epic pass), plus day 6 under each of the 8 possible leaders: every traveller's claim, name, papers, tells, answers, look and garments, premade, violator, citizen record; each variant's world (plan, places, rules, interview, every fact) | yes |
 | `golden/world_generate.txt`, `validator.txt`, `data_hashes.txt` | Generate World run twice (files it changed; content hashes of `Assets/Data`), the validator's output | yes |
 | `golden/scene_*.txt`, `scenes_summary.txt`, `contract.txt` | Semantic dumps of the committed OfficeGameplay, HomeScene and TitleScene; each builder's rebuild compared with them; the office scene contract report | yes |
-| `golden/play_transcript.txt.gz`, `play_warnings.txt`, `play_saves/*.json` | Scripted play-through, seed 12345, days 1-6 in the art office and Home between them, to day 7's morning paper: briefings, every traveller, the interview, the evidence, the verdict, the ledger, Home and the save after each shift and each night | yes |
+| `golden/play_transcript.txt.gz`, `play_warnings.txt`, `play_saves/*.json` | Scripted play-through, seed 12345, days 1-15 in the art office (the anime hall) and Home between them, to the day-15 ending on the Title: briefings, the day's portals and the Departure Board, every traveller, the interview, the evidence, the verdict and its reaction, the orders placed at the PC, the ledger, Home's evening and the House, and the save after each shift and each night | yes |
 | `golden/profile_A.txt`, `profile_B.txt` | Profiled play-through (two runs): PlayerLoop GC alloc and frame time per window, the allocation sites, scene load times | GC per frame yes; times are measurements |
 | `golden/MANIFEST.sha256` | sha256 of every deterministic golden file (uncompressed, LF line endings; `golden.py` compares with line endings normalised) | |
 
@@ -50,7 +50,8 @@ ignored) and exits 1. `--allow key,...` accepts named, documented regressions.
    `Library/AuditBaseline/out_root.txt`.
 2. Queue one job at a time: `_TimeDeskAuditStatic.RunA`, then `_TimeDeskAuditStatic.RunB`
    (tags `runA`, `runB`; synchronous, about 25 s), `_TimeDeskAuditPlay.RunA` / `RunB`
-   (`playA`, `playB`; play mode, about 80 s, done when `play_report.txt` ends with `done`),
+   (`playA`, `playB`; play mode, about 4.5 min for the 15 days, done when `play_report.txt` ends with `done`;
+   `_TimeDeskAuditPlay.RunShots`, tag `playShots`, plays the same run with the screenshots, about 10 min),
    `_TimeDeskAuditProfile.RunA` / `RunB` (`profA`, `profB`; about 50 s).
 3. After each static job, restore what the builders and Generate World rewrote. The job
    ends on an untitled scene; never restore a scene that is open in the editor, or it
@@ -78,23 +79,50 @@ and commit with the reason.
 
 ## The scripted play-through
 
-Title, New Run with run seed 12345 (`RunConfig.fixedRunSeed`, set in memory), days 1-6.
+Title, New Run with run seed 12345 (`RunConfig.fixedRunSeed`, set in memory), days 1-15 in the art office
+RunConfig names (the anime hall), Home between them, until night 15's sleep ends the run on the Title.
 
+- **Each morning:** the paper, the world line (day, seeds, wallet, leader, upgrades), the day's rules, the
+  portal schedule (`GameManager.Portals`) and the Departure Board's rows as drawn.
 - **Each traveller:**
   1. READY.
-  2. Every request (documents, through the papers menu when there are two or more, and spoken requests), then every question in the ask menu. Slot 1 also runs the first offered dialog, taking the first choice at each step.
-  3. For a liar, each tell is proven through the real compare path: the tell (paper row, answer line, or a garment through Look) against the claimed place's book row. A birth date goes against the citizen record, and the true home's row is the fallback.
-  4. The verdict: odd slots at the stamp tray, even slots on the PC.
-- **Verdicts are right except four planned mistakes:**
+  2. Every request (documents, through the papers menu when there are two or more; a request group, the
+     proof of means, as one entry; a form the traveller does not carry gets its missing-form reply), the
+     spoken requests, then every question in the ask menu. Slot 1 also runs the first offered dialog,
+     taking the first choice at each step.
+  3. For a deviation fault (a liar, a forger, a costume error), each tell is proven through the real
+     compare path: two papers that disagree first (the cross proof), then the tell (paper row, answer
+     line, or a garment through Look) against the claimed place's book row, else the row its value
+     belongs to (the present's for a smuggler or a fake displaced person); a record category against the
+     traveller's own record row. A category already documented is not proven twice.
+  4. The verdict (odd slots at the stamp tray, even slots on the PC) and the traveller's reaction line.
+     A directive fault (a closure, a wrong date, an expired paper, an incomplete paper set, a frozen
+     account, a recalled transponder) is denied without evidence; the rest are accepted.
+- **Verdicts are right except four planned mistakes** (each checked in the report):
   - Day 1: the first honest traveller from slot 2 on is denied.
-  - Day 2: the first liar is accepted.
-  - Day 3: the first liar is denied without evidence.
-  - Day 4: the first rule violator is accepted.
+  - Day 2: the first deviation fault is accepted.
+  - Day 3: the first deviation fault is denied without evidence.
+  - Day 4: the first directive fault is accepted.
+- **During each shift, at the PC (the Orders app's rule, `OrderBook.Order`):** Interview Protocols, then
+  the Near East Speech translator (it needs the Protocols), at most one order a day, once the wallet holds
+  its price and 20 cr more; it arrives the next morning.
 - **Home each night:**
   1. Treat every family member at condition 2 or worse, if affordable.
-  2. Buy Interview Protocols, then the Near East Speech translator, each once there is money to spare (the Near East Papers translator until the redesign's phase 1 retired it).
-  3. Never spin the slot machine (its draw is unseeded, see below).
+  2. The House: every Home upgrade's state and price is recorded; the first buyable one with 60 cr to
+     spare is bought (one a night).
+  3. Never spin the slot machine (its draw is seeded, `Seeds.ForSlot`, but kept out of the run).
   4. Sleep.
+- **The end:** night 15's sleep reaches the day-15 ending; the ending screen's title and body are recorded,
+  and the report checks the demo ends on the END OF DEMO card.
+- **The report's checks** (`play_report.txt`, not a golden file): each verdict right unless planned, each
+  deviation fault proven before its denial, every traveller decided before closing, the log free of errors,
+  the four mistakes made, the run's coverage (`COVER` lines: kinds, lies, faults, proofs, strandings).
+- **RunShots** (tag `playShots`) plays the same run and saves, in `<tag>/shots/`, the screenshots of the
+  redesign's states at 1920 x 1080 and 1280 x 720 (each day's paper and shift report, each traveller kind's
+  desk, wheel and forms held, the app's tabs, two panes and one, search, the steps, each lie kind caught on
+  the office strip and in the app, each citation, the Orders and Portals windows, the Departure Board's
+  tooltip, the House, the ending) and, while the PC frame is open, a render of the desktop itself; its
+  transcript must equal RunA's.
 
 ## Re-baselines
 
@@ -129,6 +157,30 @@ Title, New Run with run seed 12345 (`RunConfig.fixedRunSeed`, set in memory), da
   - `data_hashes.txt`, `world_generate.txt`: `Assets/Data` 437 -> 448 files: phase 6's TC-101, TC-230 and `CaseBlueprint_RichTourist` (with metas), phase 4's `Forms/FormStyle_Agency`, phase 10's `Rule_DressForDestination`; the library (the present with its clothes and kit, the accounts' ranges, the transponders, the kinds per day, the clerk and its debt, the debt news), `Strings_en.asset`, the day plans, the places' wardrobes and `world_source.json`.
   - `profile_A.txt`, `profile_B.txt`: re-measured. No new per-frame allocation or allocation site; every load within 25% of the old baseline in the runs packed (title -> office 1126 / 1122 ms, office -> home 364 / 421 ms, home -> office 937 / 940 ms). Loads were noisy while five other editors worked: earlier runs of this phase each had one load over 25% (home -> office 917 ms; title -> office 1384 and 4767 ms; office -> home 470 ms), a different load each time.
   - Unchanged: `contract.txt`, `play_warnings.txt`, the Home dump. Runs A and B were identical.
+
+- **The end-of-epic pass** (`epic/pass-1`, main at `eb11080` merged in: redesign phases 7-9, 11-13b, 16 part 2,
+  18-23, the anime hall, days 7-15, Orders, personalities, portals and the Home upgrades). No re-pack happened
+  since the readable tabs (`e68498d`), so every effect of those phases is in this pack:
+  - `cases.txt`: days 1-15 (11,785 lines, was days 1-6); every traveller kind, lie, costume error, directive
+    fault and procedure of the phases above, the personalities' voices and the spoken claim.
+  - `world_generate.txt`, `data_hashes.txt`: `Assets/Data` 456 -> 715 files (the new forms, rules, day plans
+    7-15, questions, voices, portals, Orders and Home upgrades, themes and string tables).
+  - `validator.txt`: the personalities' checks and the character-art line.
+  - `scene_OfficeGameplay.txt`: the panes, search, keys, steps, scanners, the app's form views, Orders,
+    Portals and the Departure Board (16,106 lines); `scene_HomeScene.txt`: the House panel. Each rebuild
+    equals its committed scene; the Title dump is unchanged.
+  - `scenes_summary.txt`, `contract.txt`: the live art office is the anime hall (`RunConfig.officeSceneName`);
+    the static job now reports its contract (4 anchors, 20 fallbacks, 0 defaults, 0 missing) and checks both
+    art offices stay byte-unchanged.
+  - `play_transcript.txt` and the 30 saves: the play-through as described above, days 1-15 (215 travellers),
+    to the day-15 ending (`scientific_age` in this run). Runs A and B and the screenshot run were identical.
+  - `play_warnings.txt`: 104 missing-glyph warnings from Home's `StabilityText` (Arabic labels in
+    LiberationSans while Iraq leads). A known fault, packed so the file is exact; it is not accepted as intended.
+  - `profile_A.txt`, `profile_B.txt`: re-measured. The office windows allocate 398 B per frame: URP's 368 B
+    and 30 B from `PortalEffect.LateUpdate` (new site; a known fault, not accepted). Loads: title -> office
+    1119 / 1099 ms, office -> Home 365 / 384 ms (run B 28% over the old 299 ms), Home -> office 760 / 768 ms.
+  - The static metrics leave out `Assets/Editor/TerminalArt/` (the art side's tooling) exactly as they leave
+    out `Assets/Editor/OfficeArt/` (`tools/audit/sources.py`); the `metrics/` baseline stays `ff3a6e0`'s.
 
 ## Baseline results (ff3a6e0)
 

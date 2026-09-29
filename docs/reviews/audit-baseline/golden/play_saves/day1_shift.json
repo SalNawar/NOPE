@@ -1,99 +1,23 @@
 {
-    "version": 2,
+    "version": 3,
     "world": {
         "day": 1,
         "runSeed": 12345,
-        "money": 114,
-        "timelineStability": 95.0,
+        "money": 103,
+        "stabilityHundredths": 9750,
         "totalCitations": 1,
         "citationsToday": 1,
-        "clerkDebtPaid": 21,
+        "clerkDebtPaid": 17,
+        "debtReliefYesterday": 0,
         "endingId": "",
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
         "payRateMultiplier": 1.0,
         "unlockedUpgradeIds": [],
-        "flags": [
-            "premade:senenmut:met"
-        ],
-        "counters": [
-            {
-                "key": "sent:era:ancient",
-                "value": 6
-            },
-            {
-                "key": "sent:tag:merchant",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:merchant:ancient",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:trade",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:trade:ancient",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:economy",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:economy:ancient",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:artist",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:artist:ancient",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:art",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:art:ancient",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:culture",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:culture:ancient",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:diplomat",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:diplomat:ancient",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:politics",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:politics:ancient",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:democracy",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:democracy:ancient",
-                "value": 1
-            }
-        ],
+        "orders": [],
+        "installs": [],
+        "flags": [],
+        "counters": [],
         "timeline": {
             "scores": [
                 {
@@ -102,22 +26,14 @@
                 },
                 {
                     "key": "attrTotal:art",
-                    "value": 8.0
+                    "value": 6.0
                 },
                 {
                     "key": "nation:greece",
-                    "value": 2.0
+                    "value": 4.0
                 },
                 {
-                    "key": "attr:egypt_ancient:art",
-                    "value": 2.0
-                },
-                {
-                    "key": "nation:egypt",
-                    "value": 2.0
-                },
-                {
-                    "key": "attr:iraq_ancient:democracy",
+                    "key": "attr:greece_ancient:democracy",
                     "value": 2.0
                 },
                 {
@@ -125,11 +41,11 @@
                     "value": 2.0
                 },
                 {
-                    "key": "nation:iraq",
-                    "value": 6.0
+                    "key": "attr:iraq_ancient:art",
+                    "value": 4.0
                 },
                 {
-                    "key": "attr:iraq_ancient:art",
+                    "key": "nation:iraq",
                     "value": 4.0
                 }
             ],
@@ -273,7 +189,8 @@
         },
         "tomorrow": {
             "briefingLines": [],
-            "newsLines": []
+            "newsLines": [],
+            "deskLines": []
         },
         "history": {
             "leaderId": "",
@@ -281,13 +198,15 @@
             "ranking": [],
             "factEdits": [],
             "pendingCarries": [],
-            "pendingPanics": []
+            "pendingPanics": [],
+            "pendingStrandings": []
         },
         "newsArchive": [
             {
                 "day": 1,
                 "briefing": [],
-                "news": []
+                "news": [],
+                "desk": []
             }
         ],
         "phase": 1,
@@ -295,13 +214,13 @@
         "accountDays": [
             {
                 "day": 1,
-                "wages": 85,
+                "wages": 70,
                 "fines": 0,
-                "debtRelief": 21,
+                "debtRelief": 17,
                 "household": 0,
                 "purchases": 0,
-                "balance": 114,
-                "owed": 125409
+                "balance": 103,
+                "owed": 125413
             }
         ],
         "notes": []

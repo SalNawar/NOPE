@@ -1,13 +1,14 @@
 {
-    "version": 2,
+    "version": 3,
     "world": {
         "day": 4,
         "runSeed": 12345,
-        "money": 94,
-        "timelineStability": 75.0,
+        "money": -46,
+        "stabilityHundredths": 9268,
         "totalCitations": 3,
         "citationsToday": 0,
-        "clerkDebtPaid": 74,
+        "clerkDebtPaid": 66,
+        "debtReliefYesterday": 2,
         "endingId": "",
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
@@ -15,222 +16,27 @@
         "unlockedUpgradeIds": [
             "interview_protocols"
         ],
+        "orders": [
+            {
+                "upgradeId": "interview_protocols",
+                "orderedDay": 3,
+                "price": 120,
+                "deliveredDay": 4
+            }
+        ],
+        "installs": [],
         "flags": [
-            "premade:senenmut:met",
-            "trig:unlock_q_capital:fired",
-            "trig:translation_notice:fired",
-            "trig:history_roman_aljabr:fired",
-            "premade:socrates:met",
             "dlg:dlg_rumour:done",
             "rumour_calculators",
-            "trig:unlock_q_ruler:fired",
-            "trig:unlock_q_born:fired",
-            "premade:arib:met",
-            "dlg:dlg_rumour_followup:done"
+            "trig:translation_notice:fired",
+            "trig:history_roman_aljabr:fired",
+            "dlg:dlg_rumour_followup:done",
+            "trig:unlock_q_currency:fired",
+            "trig:unlock_q_device:fired"
         ],
         "counters": [
             {
-                "key": "sent:era:ancient",
-                "value": 9
-            },
-            {
-                "key": "sent:tag:merchant",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:merchant:ancient",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:trade",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:trade:ancient",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:economy",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:economy:ancient",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:artist",
-                "value": 7
-            },
-            {
-                "key": "sent:tag:artist:ancient",
-                "value": 5
-            },
-            {
-                "key": "sent:tag:art",
-                "value": 7
-            },
-            {
-                "key": "sent:tag:art:ancient",
-                "value": 5
-            },
-            {
-                "key": "sent:tag:culture",
-                "value": 7
-            },
-            {
-                "key": "sent:tag:culture:ancient",
-                "value": 5
-            },
-            {
-                "key": "sent:tag:diplomat",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:diplomat:ancient",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:politics",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:politics:ancient",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:democracy",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:democracy:ancient",
-                "value": 1
-            },
-            {
-                "key": "sent:era:medieval",
-                "value": 6
-            },
-            {
-                "key": "sent:tag:artist:medieval",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:art:medieval",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:culture:medieval",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:wanderer",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:wanderer:ancient",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:legendary",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:legendary:ancient",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:unaffiliated",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:unaffiliated:ancient",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:merchant:medieval",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:trade:medieval",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:economy:medieval",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:diplomat:medieval",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:politics:medieval",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:democracy:medieval",
-                "value": 1
-            },
-            {
-                "key": "sent:era:earlymodern",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:soldier",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:soldier:earlymodern",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:military",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:military:earlymodern",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:authority",
-                "value": 3
-            },
-            {
-                "key": "sent:tag:authority:earlymodern",
-                "value": 2
-            },
-            {
-                "key": "sent:tag:scientist",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:scientist:medieval",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:science",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:science:medieval",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:tech",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:tech:medieval",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:soldier:medieval",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:military:medieval",
-                "value": 1
-            },
-            {
-                "key": "sent:tag:authority:medieval",
+                "key": "stranded",
                 "value": 1
             }
         ],
@@ -242,38 +48,46 @@
                 },
                 {
                     "key": "attrTotal:art",
-                    "value": 17.0
+                    "value": 13.0
                 },
                 {
                     "key": "nation:greece",
-                    "value": 2.0
+                    "value": 4.0
                 },
                 {
-                    "key": "attr:egypt_ancient:art",
-                    "value": 2.0
-                },
-                {
-                    "key": "nation:egypt",
-                    "value": 2.5
-                },
-                {
-                    "key": "attr:iraq_ancient:democracy",
+                    "key": "attr:greece_ancient:democracy",
                     "value": 2.0
                 },
                 {
                     "key": "attrTotal:democracy",
-                    "value": -0.5
-                },
-                {
-                    "key": "nation:iraq",
-                    "value": 14.0
+                    "value": 3.0
                 },
                 {
                     "key": "attr:iraq_ancient:art",
-                    "value": 8.0
+                    "value": 10.0
+                },
+                {
+                    "key": "nation:iraq",
+                    "value": 11.0
                 },
                 {
                     "key": "attr:iraq_medieval:art",
+                    "value": -1.0
+                },
+                {
+                    "key": "attr:britain_medieval:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "nation:britain",
+                    "value": 1.0
+                },
+                {
+                    "key": "attr:iraq_ancient:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attrTotal:science",
                     "value": 4.0
                 },
                 {
@@ -289,23 +103,23 @@
                     "value": 2.0
                 },
                 {
-                    "key": "attr:china_earlymodern:democracy",
-                    "value": -1.5
-                },
-                {
-                    "key": "nation:china",
-                    "value": -1.5
+                    "key": "nation:egypt",
+                    "value": 0.5
                 },
                 {
                     "key": "attr:japan_medieval:science",
                     "value": 2.0
                 },
                 {
-                    "key": "attrTotal:science",
+                    "key": "nation:japan",
                     "value": 2.0
                 },
                 {
-                    "key": "nation:japan",
+                    "key": "attr:italy_earlymodern:democracy",
+                    "value": 2.0
+                },
+                {
+                    "key": "nation:italy",
                     "value": 2.0
                 },
                 {
@@ -332,11 +146,11 @@
                 "egypt_industrial:art",
                 "egypt_modern:art",
                 "iraq_ancient:art",
-                "iraq_medieval:art",
+                "iraq_medieval:science",
                 "iraq_earlymodern:science",
                 "iraq_industrial:science",
                 "iraq_modern:science",
-                "greece_ancient:art",
+                "greece_ancient:democracy",
                 "greece_medieval:democracy",
                 "greece_earlymodern:democracy",
                 "greece_industrial:democracy",
@@ -381,15 +195,15 @@
                 "iraq_ancient:democracy",
                 "iraq_ancient:science",
                 "iraq_medieval:democracy",
-                "iraq_medieval:science",
+                "iraq_medieval:art",
                 "iraq_earlymodern:democracy",
                 "iraq_earlymodern:art",
                 "iraq_industrial:democracy",
                 "iraq_industrial:art",
                 "iraq_modern:democracy",
                 "iraq_modern:art",
-                "greece_ancient:democracy",
                 "greece_ancient:science",
+                "greece_ancient:art",
                 "greece_medieval:science",
                 "greece_medieval:art",
                 "greece_earlymodern:science",
@@ -458,30 +272,34 @@
                 },
                 {
                     "name": "Kid",
-                    "condition": 1
+                    "condition": 0
                 }
             ]
         },
         "tomorrow": {
             "briefingLines": [],
             "newsLines": [
-                "A stranded tourist's family inherits 212,000 cr."
-            ]
+                "BUREAU NOTICE: from today, desk officers ask every traveller what they will pay with. Check answers against the Currency Ledger: nothing from 2150 leaves 2150.",
+                "BUREAU NOTICE: from today, desk officers ask every traveller what they are taking with them. Check answers against the Index of Devices: nothing from 2150 leaves 2150.",
+                "A stranded tourist's family inherits 212,000 cr.",
+                "Citizens who left on Debt Relief yesterday: 2."
+            ],
+            "deskLines": []
         },
         "history": {
             "leaderId": "iraq",
-            "leaderSinceDay": 2,
+            "leaderSinceDay": 3,
             "ranking": [
                 {
                     "id": "iraq",
-                    "score": 14.0
-                },
-                {
-                    "id": "egypt",
-                    "score": 2.5
+                    "score": 11.0
                 },
                 {
                     "id": "greece",
+                    "score": 4.0
+                },
+                {
+                    "id": "italy",
                     "score": 2.0
                 },
                 {
@@ -489,20 +307,20 @@
                     "score": 2.0
                 },
                 {
-                    "id": "italy",
-                    "score": 0.0
+                    "id": "britain",
+                    "score": 1.0
                 },
                 {
-                    "id": "britain",
+                    "id": "egypt",
+                    "score": 0.5
+                },
+                {
+                    "id": "china",
                     "score": 0.0
                 },
                 {
                     "id": "germany",
                     "score": -0.5
-                },
-                {
-                    "id": "china",
-                    "score": -1.5
                 }
             ],
             "factEdits": [
@@ -511,41 +329,39 @@
                     "eraId": "ancient",
                     "category": 3,
                     "value": "Al-jabr reckoning tables",
-                    "sinceDay": 2,
+                    "sinceDay": 3,
                     "cause": 0,
                     "source": "Trigger: Al-jabr reaches Rome"
                 },
                 {
-                    "nationId": "greece",
+                    "nationId": "iraq",
                     "eraId": "ancient",
                     "category": 3,
-                    "value": "Al-jabr reckoning tables",
+                    "value": "Wrist comm",
                     "sinceDay": 3,
                     "cause": 1,
-                    "source": "Republican Rome (Ancient)"
+                    "source": "neutral_future"
                 }
             ],
             "pendingCarries": [],
-            "pendingPanics": []
+            "pendingPanics": [],
+            "pendingStrandings": []
         },
         "newsArchive": [
             {
                 "day": 1,
                 "briefing": [],
-                "news": []
+                "news": [],
+                "desk": []
             },
             {
                 "day": 2,
                 "briefing": [],
                 "news": [
                     "Art is now DOMINANT in Babylonia.",
-                    "Art is now DOMINANT in Periclean Athens.",
-                    "HISTORY: Iraq now dominates the timeline. The Future belongs to Baghdad Garden City (Future).",
-                    "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
-                    "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
-                    "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad.",
                     "Premium families book Periclean Athens for the summer."
-                ]
+                ],
+                "desk": []
             },
             {
                 "day": 3,
@@ -553,12 +369,15 @@
                     "A traveller's tip: someone is smuggling pocket calculators into the past. Keep your eyes open."
                 ],
                 "news": [
-                    "Art is now DOMINANT in Abbasid Baghdad.",
-                    "BUREAU NOTICE: desk officers may now ask travellers who rules them. Check answers against Rulers & Regents.",
-                    "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
-                    "HISTORY: travellers brought Al-jabr reckoning tables to Periclean Athens (Ancient).",
+                    "HISTORY: Iraq now dominates the timeline. The Future belongs to Baghdad Garden City (2150).",
+                    "Budget cuts close the interpreter pool. From the day after tomorrow, the displaced reach the desk speaking their own tongues, untranslated but for their key words. Order Interview Protocols today and a Speech translator tomorrow in Orders: each arrives the morning after it is ordered. Papers are still filled in English.",
+                    "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad.",
+                    "HISTORY: travellers brought Wrist comm to Babylonia (Ancient).",
+                    "PANIC in Abbasid Baghdad (Medieval): a traveller from the agency was seen in \"tech jacket\" and the street fled.",
+                    "Stranded: Alice (Artist), lost in Babylonia (Ancient) when an Economy transponder failed.",
                     "Debt Relief Departures reach a record high."
-                ]
+                ],
+                "desk": []
             }
         ],
         "phase": 0,
@@ -566,33 +385,33 @@
         "accountDays": [
             {
                 "day": 1,
-                "wages": 85,
+                "wages": 70,
                 "fines": 0,
-                "debtRelief": 21,
-                "household": 20,
+                "debtRelief": 17,
+                "household": 60,
                 "purchases": 0,
-                "balance": 94,
-                "owed": 125409
+                "balance": 43,
+                "owed": 125413
             },
             {
                 "day": 2,
                 "wages": 90,
                 "fines": 0,
                 "debtRelief": 22,
-                "household": 21,
-                "purchases": 120,
-                "balance": 21,
-                "owed": 125387
+                "household": 60,
+                "purchases": 0,
+                "balance": 51,
+                "owed": 125391
             },
             {
                 "day": 3,
-                "wages": 125,
+                "wages": 110,
                 "fines": 0,
-                "debtRelief": 31,
-                "household": 21,
-                "purchases": 0,
-                "balance": 94,
-                "owed": 125356
+                "debtRelief": 27,
+                "household": 60,
+                "purchases": 120,
+                "balance": -46,
+                "owed": 125364
             }
         ],
         "notes": []

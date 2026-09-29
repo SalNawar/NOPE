@@ -11,7 +11,7 @@ Canvas active=True layer=5 tag=Untagged components=[RectTransform,Canvas,CanvasS
 Canvas transform pos=(960.000,540.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas rect min=(0.0,0.0) max=(0.0,0.0) pivot=(0.5,0.5) pos=(960.0,540.0) size=(1920.0,1080.0)
 Canvas canvas mode=ScreenSpaceOverlay order=0 camera=null override=False
-Canvas scaler mode=ConstantPixelSize ref=(800.0,600.0) match=0 screenMatch=MatchWidthOrHeight
+Canvas scaler mode=ScaleWithScreenSize ref=(1920.0,1080.0) match=0 screenMatch=MatchWidthOrHeight
 Canvas HomeUIController enabled=True
 Canvas HomeUIController.moneyText=Canvas/HUD/MoneyText:TextMeshProUGUI
 Canvas HomeUIController.stabilityText=Canvas/HUD/StabilityText:TextMeshProUGUI
@@ -24,9 +24,10 @@ Canvas HomeUIController.expensesContinueButton=Canvas/ExpensesPanel/ContinueButt
 Canvas HomeUIController.shopPanel=Canvas/ShopPanel
 Canvas HomeUIController.shopTitleText=Canvas/ShopPanel/TitleText:TextMeshProUGUI
 Canvas HomeUIController.shopBodyText=Canvas/ShopPanel/BodyText:TextMeshProUGUI
-Canvas HomeUIController.shopRowsRoot=Canvas/ShopPanel/ShopRows:RectTransform
+Canvas HomeUIController.houseTreeRoot=Canvas/ShopPanel/HouseTree:RectTransform
+Canvas HomeUIController.houseDetailText=Canvas/ShopPanel/DetailText:TextMeshProUGUI
+Canvas HomeUIController.houseBuyButton=Canvas/ShopPanel/BuyButton:Button
 Canvas HomeUIController.shopContinueButton=Canvas/ShopPanel/ContinueButton:Button
-Canvas HomeUIController.shopRowsPerPage=6
 Canvas HomeUIController.slotPanel=Canvas/SlotPanel
 Canvas HomeUIController.slotTitleText=Canvas/SlotPanel/TitleText:TextMeshProUGUI
 Canvas HomeUIController.slotBodyText=Canvas/SlotPanel/BodyText:TextMeshProUGUI
@@ -42,7 +43,7 @@ Canvas/ArtBackground rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0
 Canvas/ArtBackground image sprite=Assets/Art/Home/home_bg.png:home_bg color=#FFFFFFFF type=Simple raycast=False material=null
 Canvas/HUD active=True layer=0 tag=Untagged components=[RectTransform]
 Canvas/HUD transform pos=(0.000,490.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/HUD rect min=(0.0,1.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,-50.0) size=(0.0,0.0)
+Canvas/HUD rect min=(0.0,1.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,-50.0) size=(0.0,50.0)
 Canvas/HUD/Backing active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
 Canvas/HUD/Backing transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/HUD/Backing rect min=(0.0,0.5) max=(1.0,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,64.0)
@@ -61,22 +62,22 @@ Canvas/HUD/StabilityText rect min=(0.8,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0
 Canvas/HUD/StabilityText text='Stability: 100%' size=28 auto=False min=18 max=72 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Right wrap=Normal raycast=True
 Canvas/ExpensesPanel active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
 Canvas/ExpensesPanel transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/ExpensesPanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(760.0,600.0)
+Canvas/ExpensesPanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(900.0,780.0)
 Canvas/ExpensesPanel image sprite=Assets/Art/Home/panel_expenses.png:panel_expenses color=#FFFFFFFF type=Simple raycast=True material=null
 Canvas/ExpensesPanel/TitleText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/ExpensesPanel/TitleText transform pos=(0.000,258.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ExpensesPanel/TitleText transform pos=(0.000,323.700,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/ExpensesPanel/TitleText rect min=(0.1,0.9) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/ExpensesPanel/TitleText text='Day 1 — Home' size=34 auto=False min=18 max=72 color=#304A54FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
 Canvas/ExpensesPanel/BodyText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/ExpensesPanel/BodyText transform pos=(0.000,123.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/ExpensesPanel/BodyText rect min=(0.1,0.6) max=(0.9,0.9) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/ExpensesPanel/BodyText transform pos=(0.000,117.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ExpensesPanel/BodyText rect min=(0.1,0.4) max=(0.9,0.9) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/ExpensesPanel/BodyText text='...' size=22 auto=False min=18 max=72 color=#304A54FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=TopLeft wrap=Normal raycast=True
 Canvas/ExpensesPanel/FamilyRows active=True layer=0 tag=Untagged components=[RectTransform,VerticalLayoutGroup]
-Canvas/ExpensesPanel/FamilyRows transform pos=(0.000,-93.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/ExpensesPanel/FamilyRows rect min=(0.1,0.2) max=(0.9,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/ExpensesPanel/FamilyRows transform pos=(0.000,-171.600,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ExpensesPanel/FamilyRows rect min=(0.1,0.1) max=(0.9,0.4) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/ExpensesPanel/ContinueButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button]
-Canvas/ExpensesPanel/ContinueButton transform pos=(0.000,-249.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/ExpensesPanel/ContinueButton rect min=(0.4,0.0) max=(0.7,0.1) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/ExpensesPanel/ContinueButton transform pos=(0.000,-335.400,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ExpensesPanel/ContinueButton rect min=(0.3,0.0) max=(0.7,0.1) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/ExpensesPanel/ContinueButton image sprite=null color=#F2F2F2FF type=Simple raycast=True material=null
 Canvas/ExpensesPanel/ContinueButton Button interactable=True transition=ColorTint target=Canvas/ExpensesPanel/ContinueButton:Image
 Canvas/ExpensesPanel/ContinueButton button calls=[]
@@ -85,23 +86,20 @@ Canvas/ExpensesPanel/ContinueButton/Label transform pos=(0.000,0.000,0.000) rot=
 Canvas/ExpensesPanel/ContinueButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/ExpensesPanel/ContinueButton/Label text='Continue to Shop' size=26 auto=False min=18 max=72 color=#304A54FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
 Canvas/ShopPanel active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
-Canvas/ShopPanel transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/ShopPanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(760.0,600.0)
+Canvas/ShopPanel transform pos=(0.000,-30.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ShopPanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,-30.0) size=(1840.0,920.0)
 Canvas/ShopPanel image sprite=Assets/Art/Home/panel_shop.png:panel_shop color=#FFFFFFFF type=Simple raycast=True material=null
 Canvas/ShopPanel/TitleText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/ShopPanel/TitleText transform pos=(0.000,258.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ShopPanel/TitleText transform pos=(0.000,391.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/ShopPanel/TitleText rect min=(0.1,0.9) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
-Canvas/ShopPanel/TitleText text='Upgrade Shop' size=34 auto=False min=18 max=72 color=#304A54FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/ShopPanel/TitleText text='House' size=34 auto=False min=18 max=72 color=#304A54FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
 Canvas/ShopPanel/BodyText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/ShopPanel/BodyText transform pos=(0.000,192.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/ShopPanel/BodyText rect min=(0.1,0.8) max=(0.9,0.9) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/ShopPanel/BodyText transform pos=(0.000,340.400,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ShopPanel/BodyText rect min=(0.0,0.9) max=(1.0,0.9) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/ShopPanel/BodyText text='...' size=22 auto=False min=18 max=72 color=#304A54FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=TopLeft wrap=Normal raycast=True
-Canvas/ShopPanel/ShopRows active=True layer=0 tag=Untagged components=[RectTransform,VerticalLayoutGroup]
-Canvas/ShopPanel/ShopRows transform pos=(0.000,-24.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/ShopPanel/ShopRows rect min=(0.1,0.2) max=(0.9,0.8) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/ShopPanel/ContinueButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button]
-Canvas/ShopPanel/ContinueButton transform pos=(0.000,-249.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/ShopPanel/ContinueButton rect min=(0.4,0.0) max=(0.7,0.1) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/ShopPanel/ContinueButton transform pos=(0.000,-411.700,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ShopPanel/ContinueButton rect min=(0.4,0.0) max=(0.6,0.1) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/ShopPanel/ContinueButton image sprite=null color=#F2F2F2FF type=Simple raycast=True material=null
 Canvas/ShopPanel/ContinueButton Button interactable=True transition=ColorTint target=Canvas/ShopPanel/ContinueButton:Image
 Canvas/ShopPanel/ContinueButton button calls=[]
@@ -109,6 +107,23 @@ Canvas/ShopPanel/ContinueButton/Label active=True layer=0 tag=Untagged component
 Canvas/ShopPanel/ContinueButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/ShopPanel/ContinueButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/ShopPanel/ContinueButton/Label text='Continue to Slots' size=26 auto=False min=18 max=72 color=#304A54FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/ShopPanel/HouseTree active=True layer=0 tag=Untagged components=[RectTransform]
+Canvas/ShopPanel/HouseTree transform pos=(0.000,66.700,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ShopPanel/HouseTree rect min=(0.0,0.3) max=(1.0,0.8) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/ShopPanel/DetailText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/ShopPanel/DetailText transform pos=(-156.400,-276.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ShopPanel/DetailText rect min=(0.0,0.1) max=(0.8,0.3) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/ShopPanel/DetailText text='...' size=24 auto=False min=0 max=0 color=#304A54FF font=null align=TopLeft wrap=Normal raycast=True
+Canvas/ShopPanel/BuyButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button]
+Canvas/ShopPanel/BuyButton transform pos=(736.000,-276.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ShopPanel/BuyButton rect min=(0.8,0.2) max=(1.0,0.3) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/ShopPanel/BuyButton image sprite=null color=#F2F2F2FF type=Simple raycast=True material=null
+Canvas/ShopPanel/BuyButton Button interactable=True transition=ColorTint target=Canvas/ShopPanel/BuyButton:Image
+Canvas/ShopPanel/BuyButton button calls=[]
+Canvas/ShopPanel/BuyButton/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/ShopPanel/BuyButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/ShopPanel/BuyButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/ShopPanel/BuyButton/Label text='Buy' size=26 auto=False min=0 max=0 color=#000000FF font=null align=Center wrap=NoWrap raycast=True
 Canvas/SlotPanel active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
 Canvas/SlotPanel transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/SlotPanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(560.0,360.0)

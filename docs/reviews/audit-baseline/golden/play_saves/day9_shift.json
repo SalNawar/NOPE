@@ -1,20 +1,22 @@
 {
     "version": 3,
     "world": {
-        "day": 5,
+        "day": 9,
         "runSeed": 12345,
-        "money": 66,
+        "money": 206,
         "stabilityHundredths": 9036,
         "totalCitations": 4,
         "citationsToday": 0,
-        "clerkDebtPaid": 125,
-        "debtReliefYesterday": 1,
+        "clerkDebtPaid": 291,
+        "debtReliefYesterday": 3,
         "endingId": "",
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
         "payRateMultiplier": 1.0,
         "unlockedUpgradeIds": [
-            "interview_protocols"
+            "interview_protocols",
+            "tr_near_east_spoken",
+            "house_rations_b"
         ],
         "orders": [
             {
@@ -22,6 +24,12 @@
                 "orderedDay": 3,
                 "price": 120,
                 "deliveredDay": 4
+            },
+            {
+                "upgradeId": "tr_near_east_spoken",
+                "orderedDay": 6,
+                "price": 80,
+                "deliveredDay": 7
             }
         ],
         "installs": [],
@@ -36,12 +44,36 @@
             "trig:unlock_q_language:fired",
             "trig:unlock_q_capital:fired",
             "trig:unlock_q_ruler:fired",
-            "trig:unlock_q_born:fired"
+            "trig:unlock_q_born:fired",
+            "premade:senenmut:met",
+            "premade:senenmut:accepted",
+            "premade:socrates:met",
+            "premade:socrates:denied",
+            "trig:art_renaissance:fired",
+            "trig:history_drive_begins:fired",
+            "premade:pell:denied",
+            "premade:toyoda:met",
+            "premade:toyoda:accepted",
+            "premade:gutenberg:met",
+            "premade:gutenberg:accepted",
+            "trig:science_boom:fired",
+            "trig:history_pell_turned_away:fired",
+            "trig:history_gutenberg_press:fired",
+            "premade:ines:met",
+            "premade:ines:accepted",
+            "trig:history_babbage_engine:fired",
+            "trig:history_desk4_closes:fired",
+            "trig:history_ines_mills:fired",
+            "trig:history_rift_storm:fired",
+            "premade:khwarizmi:met",
+            "premade:khwarizmi:accepted",
+            "premade:malaika:met",
+            "premade:malaika:accepted"
         ],
         "counters": [
             {
                 "key": "stranded",
-                "value": 1
+                "value": 2
             }
         ],
         "timeline": {
@@ -52,19 +84,19 @@
                 },
                 {
                     "key": "attrTotal:art",
-                    "value": 19.0
+                    "value": 41.0
                 },
                 {
                     "key": "nation:greece",
-                    "value": 7.0
+                    "value": 11.5
                 },
                 {
                     "key": "attr:greece_ancient:democracy",
-                    "value": 2.0
+                    "value": 0.5
                 },
                 {
                     "key": "attrTotal:democracy",
-                    "value": 1.5
+                    "value": 10.5
                 },
                 {
                     "key": "attr:iraq_ancient:art",
@@ -72,11 +104,11 @@
                 },
                 {
                     "key": "nation:iraq",
-                    "value": 12.0
+                    "value": 23.5
                 },
                 {
                     "key": "attr:iraq_medieval:art",
-                    "value": -1.0
+                    "value": 1.0
                 },
                 {
                     "key": "attr:britain_medieval:art",
@@ -84,7 +116,7 @@
                 },
                 {
                     "key": "nation:britain",
-                    "value": 2.5
+                    "value": 8.5
                 },
                 {
                     "key": "attr:iraq_ancient:science",
@@ -92,7 +124,7 @@
                 },
                 {
                     "key": "attrTotal:science",
-                    "value": 8.0
+                    "value": 26.0
                 },
                 {
                     "key": "attr:germany_medieval:art",
@@ -100,7 +132,7 @@
                 },
                 {
                     "key": "nation:germany",
-                    "value": -2.0
+                    "value": 8.0
                 },
                 {
                     "key": "attr:egypt_medieval:democracy",
@@ -108,7 +140,7 @@
                 },
                 {
                     "key": "nation:egypt",
-                    "value": -1.0
+                    "value": 5.0
                 },
                 {
                     "key": "attr:japan_medieval:science",
@@ -116,7 +148,7 @@
                 },
                 {
                     "key": "nation:japan",
-                    "value": 6.0
+                    "value": 10.0
                 },
                 {
                     "key": "attr:italy_earlymodern:democracy",
@@ -124,7 +156,7 @@
                 },
                 {
                     "key": "nation:italy",
-                    "value": 4.0
+                    "value": 6.0
                 },
                 {
                     "key": "attr:germany_medieval:democracy",
@@ -173,14 +205,158 @@
                 {
                     "key": "attr:iraq_industrial:art",
                     "value": 1.0
+                },
+                {
+                    "key": "attr:britain_industrial:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:germany_modern:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:iraq_earlymodern:democracy",
+                    "value": -1.5
+                },
+                {
+                    "key": "attr:egypt_ancient:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:egypt_industrial:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:italy_earlymodern:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "attr:britain_earlymodern:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "attr:iraq_industrial:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:britain_modern:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:italy_modern:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "attr:japan_industrial:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:greece_industrial:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:germany_medieval:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:japan_ancient:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:iraq_earlymodern:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "attr:china_medieval:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "nation:china",
+                    "value": 5.0
+                },
+                {
+                    "key": "attr:britain_industrial:art",
+                    "value": 1.0
+                },
+                {
+                    "key": "attr:germany_ancient:democracy",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:china_ancient:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:germany_industrial:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:iraq_industrial:democracy",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:iraq_ancient:democracy",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:egypt_modern:democracy",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:iraq_medieval:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:iraq_modern:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:germany_industrial:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:china_earlymodern:democracy",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:greece_industrial:science",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:greece_earlymodern:democracy",
+                    "value": 2.0
                 }
             ],
             "activeEffects": [
                 {
+                    "effectId": "Effect_Trigger_LegendaryBoost",
+                    "sourceLabel": "Trigger: Art Renaissance",
+                    "startDay": 7,
+                    "durationDays": 3
+                },
+                {
+                    "effectId": "Effect_Trigger_ScienceDiscount",
+                    "sourceLabel": "Trigger: Science Boom",
+                    "startDay": 8,
+                    "durationDays": 3
+                },
+                {
+                    "effectId": "Effect_HouseRationsB",
+                    "sourceLabel": "Upgrade: Tier B Rations",
+                    "startDay": 8,
+                    "durationDays": -1
+                },
+                {
                     "effectId": "Effect_Leader_iraq",
                     "sourceLabel": "history:leader Iraq",
-                    "startDay": 5,
+                    "startDay": 9,
                     "durationDays": -1
+                },
+                {
+                    "effectId": "Effect_History_babbage_engine",
+                    "sourceLabel": "Trigger: The analytical engine runs",
+                    "startDay": 9,
+                    "durationDays": 1
                 }
             ],
             "dominantKeys": [
@@ -197,7 +373,7 @@
                 "greece_ancient:democracy",
                 "greece_medieval:democracy",
                 "greece_earlymodern:democracy",
-                "greece_industrial:democracy",
+                "greece_industrial:art",
                 "greece_modern:democracy",
                 "italy_ancient:art",
                 "italy_medieval:art",
@@ -209,7 +385,7 @@
                 "china_earlymodern:science",
                 "china_industrial:science",
                 "china_modern:science",
-                "japan_ancient:science",
+                "japan_ancient:art",
                 "japan_medieval:science",
                 "japan_earlymodern:science",
                 "japan_industrial:science",
@@ -217,9 +393,9 @@
                 "britain_ancient:democracy",
                 "britain_medieval:science",
                 "britain_earlymodern:democracy",
-                "britain_industrial:democracy",
+                "britain_industrial:science",
                 "britain_modern:democracy",
-                "germany_ancient:science",
+                "germany_ancient:democracy",
                 "germany_medieval:science",
                 "germany_earlymodern:science",
                 "germany_industrial:science",
@@ -252,8 +428,8 @@
                 "greece_medieval:art",
                 "greece_earlymodern:science",
                 "greece_earlymodern:art",
+                "greece_industrial:democracy",
                 "greece_industrial:science",
-                "greece_industrial:art",
                 "greece_modern:science",
                 "greece_modern:art",
                 "italy_ancient:democracy",
@@ -277,7 +453,7 @@
                 "china_modern:democracy",
                 "china_modern:art",
                 "japan_ancient:democracy",
-                "japan_ancient:art",
+                "japan_ancient:science",
                 "japan_medieval:democracy",
                 "japan_medieval:art",
                 "japan_earlymodern:democracy",
@@ -292,11 +468,11 @@
                 "britain_medieval:art",
                 "britain_earlymodern:science",
                 "britain_earlymodern:art",
-                "britain_industrial:science",
+                "britain_industrial:democracy",
                 "britain_industrial:art",
                 "britain_modern:science",
                 "britain_modern:art",
-                "germany_ancient:democracy",
+                "germany_ancient:science",
                 "germany_ancient:art",
                 "germany_medieval:democracy",
                 "germany_medieval:art",
@@ -312,26 +488,27 @@
             "members": [
                 {
                     "name": "Partner",
-                    "condition": 0
+                    "condition": 1
                 },
                 {
                     "name": "Kid",
-                    "condition": 0
+                    "condition": 1
                 }
             ]
         },
         "tomorrow": {
             "briefingLines": [],
             "newsLines": [
-                "Science is now DOMINANT in Anglo-Saxon England.",
-                "BUREAU NOTICE: desk officers may now ask every traveller what language they will speak. Check answers against Tongues & Scripts.",
-                "BUREAU NOTICE: desk officers may now ask every traveller which city they are headed for. Check answers against the Capitals Gazetteer.",
-                "BUREAU NOTICE: desk officers may now ask every traveller who rules where they are going. Check answers against Rulers & Regents.",
-                "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
-                "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
-                "Citizens who left on Debt Relief yesterday: 5."
+                "Democracy is now DOMINANT in Germania.",
+                "HISTORY: Babbage's analytical engine hums in Victorian London.",
+                "RIFT STORM: hundreds were pulled out of their own time overnight. The intake halls are full.",
+                "A stranded tourist's family inherits 212,000 cr.",
+                "Citizens who left on Debt Relief yesterday: 4."
             ],
-            "deskLines": []
+            "deskLines": [
+                "Desk 4 is closed for the Drive. From today its queue joins Desk 3, and its portal (05, upper right) is Desk 3's, still under maintenance.",
+                "Ines Varga, late of Desk 4, clocks in at the Tyburn Mills. Her first shift runs fourteen hours."
+            ]
         },
         "history": {
             "leaderId": "iraq",
@@ -339,35 +516,35 @@
             "ranking": [
                 {
                     "id": "iraq",
-                    "score": 11.0
-                },
-                {
-                    "id": "greece",
-                    "score": 7.0
+                    "score": 19.5
                 },
                 {
                     "id": "japan",
-                    "score": 4.0
+                    "score": 10.0
                 },
                 {
-                    "id": "italy",
-                    "score": 1.0
+                    "id": "greece",
+                    "score": 9.0
                 },
                 {
                     "id": "britain",
-                    "score": 0.5
+                    "score": 8.5
                 },
                 {
-                    "id": "china",
-                    "score": 0.0
+                    "id": "italy",
+                    "score": 6.0
                 },
                 {
                     "id": "germany",
-                    "score": -0.5
+                    "score": 6.0
                 },
                 {
                     "id": "egypt",
-                    "score": -1.0
+                    "score": 3.0
+                },
+                {
+                    "id": "china",
+                    "score": 3.0
                 }
             ],
             "factEdits": [
@@ -388,11 +565,45 @@
                     "sinceDay": 3,
                     "cause": 1,
                     "source": "neutral_future"
+                },
+                {
+                    "nationId": "germany",
+                    "eraId": "medieval",
+                    "category": 3,
+                    "value": "Gutenberg printing press",
+                    "sinceDay": 8,
+                    "cause": 0,
+                    "source": "Trigger: Gutenberg's press"
+                },
+                {
+                    "nationId": "britain",
+                    "eraId": "industrial",
+                    "category": 3,
+                    "value": "Babbage analytical engine",
+                    "sinceDay": 9,
+                    "cause": 0,
+                    "source": "Trigger: The analytical engine runs"
                 }
             ],
-            "pendingCarries": [],
+            "pendingCarries": [
+                {
+                    "fromNationId": "iraq",
+                    "fromEraId": "future",
+                    "toNationId": "egypt",
+                    "toEraId": "modern",
+                    "category": 3,
+                    "value": "Vertical date-palm farm",
+                    "day": 9
+                }
+            ],
             "pendingPanics": [],
-            "pendingStrandings": []
+            "pendingStrandings": [
+                {
+                    "travellerName": "Leni (Diplomat)",
+                    "placeLabel": "Nasser's Egypt (Modern)",
+                    "day": 9
+                }
+            ]
         },
         "newsArchive": [
             {
@@ -450,6 +661,55 @@
                     "Citizens who left on Debt Relief yesterday: 5."
                 ],
                 "desk": []
+            },
+            {
+                "day": 6,
+                "briefing": [],
+                "news": [
+                    "12,000 accounts frozen in default.",
+                    "Citizens who left on Debt Relief yesterday: 1."
+                ],
+                "desk": []
+            },
+            {
+                "day": 7,
+                "briefing": [],
+                "news": [
+                    "Science is now DOMINANT in Victorian Britain.",
+                    "A renaissance of artistic movements ripples through every era.",
+                    "DIRECTORATE: the Debt Relief Drive begins. Every Eligible account departs this quarter.",
+                    "Premium families book Periclean Athens for the summer.",
+                    "Citizens who left on Debt Relief yesterday: 4."
+                ],
+                "desk": []
+            },
+            {
+                "day": 8,
+                "briefing": [],
+                "news": [
+                    "Art is now DOMINANT in Athens, Kingdom of Greece.",
+                    "Art is now DOMINANT in Kofun Yamato.",
+                    "Breaking: a wave of scientific breakthroughs sweeps across the timeline!",
+                    "HISTORY: Mainz prints with movable metal type. The Rhineland's presses start rolling.",
+                    "Debt Relief Departures reach a record high.",
+                    "Citizens who left on Debt Relief yesterday: 3."
+                ],
+                "desk": []
+            },
+            {
+                "day": 9,
+                "briefing": [],
+                "news": [
+                    "Democracy is now DOMINANT in Germania.",
+                    "HISTORY: Babbage's analytical engine hums in Victorian London.",
+                    "RIFT STORM: hundreds were pulled out of their own time overnight. The intake halls are full.",
+                    "A stranded tourist's family inherits 212,000 cr.",
+                    "Citizens who left on Debt Relief yesterday: 4."
+                ],
+                "desk": [
+                    "Desk 4 is closed for the Drive. From today its queue joins Desk 3, and its portal (05, upper right) is Desk 3's, still under maintenance.",
+                    "Ines Varga, late of Desk 4, clocks in at the Tyburn Mills. Her first shift runs fourteen hours."
+                ]
             }
         ],
         "phase": 1,
@@ -500,10 +760,50 @@
                 "wages": 130,
                 "fines": 0,
                 "debtRelief": 32,
+                "household": 60,
+                "purchases": 0,
+                "balance": 6,
+                "owed": 125305
+            },
+            {
+                "day": 6,
+                "wages": 170,
+                "fines": 0,
+                "debtRelief": 42,
+                "household": 60,
+                "purchases": 80,
+                "balance": -6,
+                "owed": 125263
+            },
+            {
+                "day": 7,
+                "wages": 170,
+                "fines": 0,
+                "debtRelief": 42,
+                "household": 69,
+                "purchases": 0,
+                "balance": 53,
+                "owed": 125221
+            },
+            {
+                "day": 8,
+                "wages": 140,
+                "fines": 0,
+                "debtRelief": 35,
+                "household": 61,
+                "purchases": 34,
+                "balance": 63,
+                "owed": 125186
+            },
+            {
+                "day": 9,
+                "wages": 190,
+                "fines": 0,
+                "debtRelief": 47,
                 "household": 0,
                 "purchases": 0,
-                "balance": 66,
-                "owed": 125305
+                "balance": 206,
+                "owed": 125139
             }
         ],
         "notes": []
