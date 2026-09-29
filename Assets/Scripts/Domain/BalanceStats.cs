@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// The balance report's statistics (redesign phase 23): the mean, the spread
-/// and quantiles, which describe the world the runs leave at day 15 (the
-/// attribute totals' distribution; no threshold is proposed since the
-/// attribute epilogues were retired, 2026-09-29). Pure, so the numbers are
-/// tested headless.
+/// The balance report's statistics (redesign phase 23): the mean and
+/// quantiles of the runs' wallets and counts. The epilogue thresholds' rule
+/// and the spread it reported retired with the attribute epilogues
+/// (2026-09-29). Pure, so the numbers are tested headless.
 /// </summary>
 public static class BalanceStats
 {
@@ -26,15 +25,5 @@ public static class BalanceStats
     {
         List<float> v = values != null ? values.ToList() : new List<float>();
         return v.Count == 0 ? 0f : (float)v.Average(x => (double)x);
-    }
-
-    /// <summary>The population standard deviation; 0 for no values.</summary>
-    public static float StandardDeviation(IEnumerable<float> values)
-    {
-        List<float> v = values != null ? values.ToList() : new List<float>();
-        if (v.Count == 0)
-            return 0f;
-        double mean = v.Average(x => (double)x);
-        return (float)Math.Sqrt(v.Sum(x => (x - mean) * (x - mean)) / v.Count);
     }
 }

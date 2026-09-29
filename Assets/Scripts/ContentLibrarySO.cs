@@ -111,6 +111,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Home's radio: which house upgrade plays it and its lines (written by Generate World from world_source.json "home"; the house upgrades are in the upgrades list).</summary>
     [SerializeField] private HomeContent home = new();
 
+    [Header("The world's outcomes (the endings spec E0)")]
+    /// <summary>The questions the end of the demo answers about 2150 and how each is answered today (written by Generate World from world_source.json "world").</summary>
+    [SerializeField] private WorldContent world = new();
+
     [Header("News (redesign phase 13)")]
     /// <summary>The morning paper's debt-theme lines (written by Generate World from world_source.json "news").</summary>
     [SerializeField] private NewsContent news = new();
@@ -320,8 +324,11 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Public read-only access to endings.</summary>
     public IReadOnlyList<EndingSO> Endings => endings ?? System.Array.Empty<EndingSO>();
 
-    /// <summary>The run's last day: the earliest DayAtLeast ending's threshold (the "world you made" ending, day 15), which every day up to must plan (DayPlans.Unplanned); 0 without one.</summary>
-    public int LastDay => (int)Endings.Where(e => e != null && e.conditionType == EndingConditionType.DayAtLeast).Select(e => e.threshold).DefaultIfEmpty(0f).Min();
+    /// <summary>The run's last day's ending: the DayAtLeast ending with the earliest threshold (the "world you made" ending, day 15, whose closing card is the END OF DEMO card); null without one.</summary>
+    public EndingSO LastDayEnding => Endings.Where(e => e != null && e.conditionType == EndingConditionType.DayAtLeast).OrderBy(e => e.threshold).FirstOrDefault();
+
+    /// <summary>The run's last day: <see cref="LastDayEnding"/>'s threshold (day 15), which every day up to must plan (DayPlans.Unplanned); 0 without one.</summary>
+    public int LastDay => LastDayEnding != null ? (int)LastDayEnding.threshold : 0;
 
     /// <summary>Public read-only access to attributes.</summary>
     public IReadOnlyList<AttributeSO> Attributes => attributes ?? System.Array.Empty<AttributeSO>();
@@ -376,6 +383,17 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>Home's radio block (never null).</summary>
     public HomeContent Home => home ?? new HomeContent();
+
+    /// <summary>The world block: the factors the end of the demo answers (never null).</summary>
+    public WorldContent World => world ?? new WorldContent();
+
+    /// <summary>The world's outcomes as <paramref name="history"/> leaves them (WorldFactors.Lines): each factor's question and answer, the culture answered by the leading nation's name.</summary>
+    public List<OutcomeLine> WorldOutcomes(HistoryState history)
+    {
+        string leader = History.FutureNation(history);
+        NationSO nation = leader != null ? GetNationById(leader) : null;
+        return WorldFactors.Lines(World.factors, nation != null && !string.IsNullOrWhiteSpace(nation.displayName) ? nation.displayName : leader);
+    }
 
     /// <summary>The morning paper's debt-theme lines (never null).</summary>
     public NewsContent News => news ?? new NewsContent();

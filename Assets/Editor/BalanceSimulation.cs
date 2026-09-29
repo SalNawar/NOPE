@@ -17,8 +17,8 @@ using UnityEngine;
 /// config, the game config, the blueprints and endings in the Inspector; the
 /// day mixes and the agency's chances through the content spreadsheet) and
 /// writes a summary (Logs/Balance/balance_summary.txt): each knob's value and
-/// where it is edited, the endings, the money, the world the runs leave at
-/// day 15 (a distribution, never a target), the queue's faults by day and kind, and the
+/// where it is edited, the endings, the money, the world the runs leave
+/// (the outcomes under END OF DEMO, a distribution, never a target), the queue's faults by day and kind, and the
 /// authored travellers (forced slots, premades, dialogs) apart from the random draws.
 /// </summary>
 public static class BalanceSimulation
@@ -462,40 +462,27 @@ public static class BalanceSimulation
             .TakeWhile(l => l.Count > 0)
             .Select((l, n) => $"d{n + 1}:{BalanceStats.Mean(l).ToString("0.00", Inv)}/{l.Min().ToString("0.00", Inv)}")));
 
-        World(sb, runs.Where(r => lib.GetEndingById(r.Ending) is EndingSO e && EndingRules.KindOf(e.conditionType) == EndingKind.Milestone).ToList(), lib);
+        World(sb, runs, lib);
     }
 
     /// <summary>
-    /// The world the runs that reached the last day's ending leave (WorldOutcomes,
-    /// the ending screen's own reading), as a distribution, never against a
-    /// target (Saleh 2026-09-29: "we dont make judgements"): who shapes the
-    /// timeline and the present, each attribute's total, each attribute's
-    /// dominant places, the place facts history rewrote and the carries still
-    /// on their way (WorldSummary.Changes, Pending), and the history rules fired.
+    /// The world each run leaves (the endings spec E0: the outcomes listed
+    /// under END OF DEMO, on the last day and after a failure alike;
+    /// ContentLibrarySO.WorldOutcomes, the Title's own reading), as a
+    /// distribution per factor, never against a target (Saleh 2026-09-29:
+    /// "we dont make judgements").
     /// </summary>
-    private static void World(StringBuilder sb, List<RunResult> full, ContentLibrarySO lib)
+    private static void World(StringBuilder sb, List<RunResult> runs, ContentLibrarySO lib)
     {
-        if (full.Count == 0)
+        if (runs.Count == 0)
             return;
-        List<WorldOutcome> worlds = full.Select(r => WorldOutcomes.From(r.World, lib)).ToList();
-        string Counts(IEnumerable<string> values) =>
-            string.Join(", ", values.GroupBy(v => v).OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal).Select(g => $"{g.Key} x{g.Count()}"));
-        string Spread(List<float> v) =>
-            $"mean {F(BalanceStats.Mean(v))} sd {F(BalanceStats.StandardDeviation(v))} min {F(v.Min())} p50 {F(BalanceStats.Quantile(v, 0.5f))} max {F(v.Max())}";
-
-        sb.AppendLine($"day-{Days} world ({full.Count} runs reached the last day's ending; a distribution, not a target):");
-        sb.AppendLine("  shaped by: " + Counts(worlds.Select(w => History.FutureNation(w.History) is string id ? w.NationName(id) : "no country")));
-        sb.AppendLine("  the present: " + Counts(worlds.Select(w => w.Present != null ? w.Present.Label : "none")));
-        foreach (string attribute in worlds[0].Attributes.Select(a => a.Key))
+        List<List<OutcomeLine>> worlds = runs.Select(r => lib.WorldOutcomes(r.World.history)).ToList();
+        sb.AppendLine($"the world the runs leave ({runs.Count} runs, the outcomes under END OF DEMO; a distribution, not a target):");
+        foreach (OutcomeLine factor in worlds[0])
         {
-            sb.AppendLine($"  {attribute} total: {Spread(worlds.Select(w => w.Attributes.First(a => a.Key == attribute).Value).ToList())}; " +
-                          $"dominant in {F(BalanceStats.Mean(worlds.Select(w => (float)w.Dominant.Count(d => d.Key == attribute))))} places a run");
+            IEnumerable<string> answers = worlds.Select(w => w.FirstOrDefault(l => l.FactorId == factor.FactorId).Answer ?? "none");
+            sb.AppendLine($"  {factor.Question} " + string.Join(", ", answers.GroupBy(a => a).OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal).Select(g => $"{g.Key} x{g.Count()}")));
         }
-        List<List<PlaceChange>> changes = worlds.Select(w => WorldSummary.Changes(w.Places, w.History)).ToList();
-        sb.AppendLine($"  place facts history rewrote: {Spread(changes.Select(c => (float)c.Count).ToList())} a run, in {F(BalanceStats.Mean(changes.Select(c => (float)c.Select(x => x.Place).Distinct().Count())))} places; " +
-                      $"carries still on their way: {F(BalanceStats.Mean(worlds.Select(w => (float)WorldSummary.Pending(w.Places, w.History).Count)))} a run");
-        sb.AppendLine("  rewritten facts: " + Counts(changes.SelectMany(c => c.Select(x => $"'{x.Place} {x.Category}: {x.Value}'"))));
-        sb.AppendLine("  history rules fired: " + Counts(worlds.SelectMany(w => w.Events)));
     }
 
     /// <summary>The random draws of the perfect runs by day: how many, how many faulty and why, by kind.</summary>

@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-/// <summary>Redesign phase 23: the balance report's statistics (the day-15 world's distribution; the epilogue thresholds' rule retired with the epilogues, 2026-09-29).</summary>
+/// <summary>Redesign phase 23: the balance report's statistics (the epilogue thresholds' rule and the spread retired with the epilogues, 2026-09-29).</summary>
 public class BalanceStatsTests
 {
     private static readonly float[] Ten = { 10, 1, 9, 2, 8, 3, 7, 4, 6, 5 };
@@ -16,10 +16,9 @@ public class BalanceStatsTests
     }
 
     [Test]
-    public void MeanAndStandardDeviation_OverThePopulation()
+    public void Mean_OverThePopulation()
     {
         Assert.AreEqual(5.5f, BalanceStats.Mean(Ten), 1e-5f);
-        Assert.AreEqual(2.8723f, BalanceStats.StandardDeviation(Ten), 1e-3f);
     }
 
     [Test]
@@ -27,6 +26,5 @@ public class BalanceStatsTests
     {
         Assert.AreEqual(0f, BalanceStats.Quantile(new float[0], 0.5f));
         Assert.AreEqual(0f, BalanceStats.Mean(null));
-        Assert.AreEqual(0f, BalanceStats.StandardDeviation(new float[0]));
     }
 }

@@ -9,9 +9,10 @@ using UnityEngine;
 ///   body from the matching EndingSO) with a New Run option that clears the
 ///   save and starts fresh; on the Debt Relief ending (the bankrupt one), the
 ///   clerk's own Labour Contract beside the clerk's account, now Frozen. The
-///   run's last day (the neutral "world you made" ending, EndingKind.Milestone)
-///   shows the world panel instead: the world summary of the run
-///   (WorldOutcomes, WorldSummary) and the END OF DEMO card.
+///   world's outcomes (the endings spec E0; ContentLibrarySO.WorldOutcomes)
+///   and the END OF DEMO card: on the run's last day (EndingKind.Milestone)
+///   the world panel shows instead, under the ending's name; after a failure
+///   the ending panel's button opens it as "The world you leave behind".
 /// - Otherwise: shows the title panel with Continue (only if a save exists;
 ///   it resumes where the save was made: Home after the end-of-shift save,
 ///   otherwise the Office) and New Run.
@@ -46,13 +47,11 @@ public sealed class TitleSceneController : MonoBehaviour
         if (ended && titleUI != null && titleUI.HasEndingPanel)
         {
             EndingSO ending = run.Library != null ? run.Library.GetEndingById(world.endingId) : null;
-            if (ending != null && EndingRules.KindOf(ending.conditionType) == EndingKind.Milestone && titleUI.HasWorldPanel)
-            {
-                titleUI.ShowWorld(ending, WorldSummary.Sections(WorldOutcomes.From(world, run.Library), UiText.Words), HandleNewRun);
+            if (ShowLastDay(run, ending))
                 return;
-            }
 
-            titleUI.ShowEnding(ending, HandleNewRun);
+            string leftBehind = UiText.Get(WorldFactors.LeftBehindKey);
+            titleUI.ShowEnding(ending, HandleNewRun, leftBehind, titleUI.HasWorldPanel && run.Library != null ? () => ShowWorld(run, leftBehind) : (System.Action)null);
             ShowClerkPapers(run, ending);
             return;
         }
@@ -76,6 +75,26 @@ public sealed class TitleSceneController : MonoBehaviour
         // No title UI wired yet: keep the loop playable.
         Debug.Log("[TitleSceneController] No title UI wired: resuming the run directly.");
         run.ResumeRun();
+    }
+
+    /// <summary>
+    /// The run's last day (EndingKind.Milestone: the "world you made" ending):
+    /// the world panel under the ending's name instead of the ending panel.
+    /// False for any other ending, or without a world panel.
+    /// </summary>
+    private bool ShowLastDay(RunManager run, EndingSO ending)
+    {
+        if (ending == null || EndingRules.KindOf(ending.conditionType) != EndingKind.Milestone || !titleUI.HasWorldPanel || run.Library == null)
+            return false;
+        ShowWorld(run, ending.displayName);
+        return true;
+    }
+
+    /// <summary>The world panel under <paramref name="heading"/>: the world's outcomes as the run left them and the END OF DEMO card (the run's last day's closing card).</summary>
+    private void ShowWorld(RunManager run, string heading)
+    {
+        EndingSO lastDay = run.Library.LastDayEnding;
+        titleUI.ShowWorld(heading, run.Library.WorldOutcomes(run.World.history), lastDay != null ? lastDay.closingCard : null, HandleNewRun);
     }
 
     /// <summary>

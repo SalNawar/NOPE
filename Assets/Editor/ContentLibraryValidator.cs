@@ -683,7 +683,8 @@ public static partial class ContentLibraryValidator
     /// <summary>
     /// Endings: a retired condition (EndingRules.IsRetired: the attribute
     /// epilogues, retired 2026-09-29) is an error, since it never ends a run;
-    /// a day ending needs a threshold of at least 1.
+    /// a day ending needs a threshold of at least 1; and the world's outcomes
+    /// every ending lists (the library's world block, WorldContent.Problems).
     /// </summary>
     private static int CheckEndings(ContentLibrarySO lib)
     {
@@ -702,6 +703,12 @@ public static partial class ContentLibraryValidator
                 Debug.LogError($"[ContentLibraryValidator] Ending '{e.name}' (DayAtLeast) needs a threshold of at least 1 in '{lib.name}'.", e);
                 issues++;
             }
+        }
+
+        foreach (string problem in lib.World.Problems())
+        {
+            Debug.LogError($"[ContentLibraryValidator] World: {problem} ('{lib.name}'; edit world_source.json \"world\" and Generate World).", lib);
+            issues++;
         }
 
         return issues;

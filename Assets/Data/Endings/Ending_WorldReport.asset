@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndingSO
   id: world_report
   displayName: The World You Made
-  bodyText: Fifteen shifts at Desk 3 are over. This is the timeline as your
-    decisions left it.
+  bodyText:
   closingCard: "END OF DEMO\nThank you for playing Time Sorter."
   picture: {fileID: 0}
   conditionType: 3
