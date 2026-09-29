@@ -353,4 +353,20 @@ public class VoicesTests
         Assert.AreEqual("smalltalk:source", VoiceKeys.SmallTalkSource);
         Assert.AreEqual("smalltalk", VoiceKeys.SmallTalk);
     }
+
+    // ---- The reaction's intent (the personalities spec's R2) ----
+
+    [Test]
+    public void Intent_OfAPlaceLieSmugglingOrARecordLieIsLying()
+    {
+        Assert.AreEqual(ReactionIntent.Lying, ReactionIntents.Of(true, false), "a place lie, smuggling included (IsLiar)");
+        Assert.AreEqual(ReactionIntent.Lying, ReactionIntents.Of(false, true), "a record lie (IsForger)");
+        Assert.AreEqual(ReactionIntent.Lying, ReactionIntents.Of(true, true));
+    }
+
+    [Test]
+    public void Intent_OfADirectiveFaultACostumeErrorOrNoFaultIsHonest()
+    {
+        Assert.AreEqual(ReactionIntent.Honest, ReactionIntents.Of(false, false), "no lie: a directive fault, a costume error or no fault at all");
+    }
 }
