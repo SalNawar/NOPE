@@ -19,6 +19,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0653bc62c7819e34081ac6e795aa31de, type: 2}
   - {fileID: 11400000, guid: aa8945a0cbaf7e541abfd7080990320f, type: 2}
   - {fileID: 11400000, guid: deafb8e7c80635c439458e5d10fb7813, type: 2}
+  - {fileID: 11400000, guid: 3b3c77d42d2849145a8288aee1da60b2, type: 2}
+  - {fileID: 11400000, guid: c73ada3e7ed8f3e4bb787a6ea4205d00, type: 2}
+  - {fileID: 11400000, guid: 359c5bdb06cd2b94e9a6bcc983850835, type: 2}
+  - {fileID: 11400000, guid: f9815f81b21307e40919965caa9055a6, type: 2}
+  - {fileID: 11400000, guid: d464a37ecec477e4f80b16eea96195f2, type: 2}
+  - {fileID: 11400000, guid: d87be2ecbd292c94ea03ea123d19c0a4, type: 2}
+  - {fileID: 11400000, guid: b6b33f4b0364b1341a3bd779603bb515, type: 2}
+  - {fileID: 11400000, guid: d8fe5b3d54698d04db2d05608b42da42, type: 2}
+  - {fileID: 11400000, guid: b94ff92ee3c570849b75686f8ee45cb2, type: 2}
   eras:
   - {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
   - {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
@@ -37,12 +46,29 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
   - {fileID: 11400000, guid: 99eaeeca4c1051241918113a32ab7256, type: 2}
   - {fileID: 11400000, guid: 3493007bf4998db4e809fd90a977ab75, type: 2}
+  - {fileID: 11400000, guid: 6aeaf57f8061d8b498aaefb6f30413e8, type: 2}
+  - {fileID: 11400000, guid: 275a3706fd56e374db695c8f9cb5a28d, type: 2}
+  - {fileID: 11400000, guid: a8c220539675f994fb7aaa9549004937, type: 2}
+  - {fileID: 11400000, guid: 8c56a684575357745b28c301ddceb3e0, type: 2}
+  - {fileID: 11400000, guid: d171f52877791594c869d5a820c5e40d, type: 2}
+  - {fileID: 11400000, guid: 143df44c5b867ee478900d18038e0354, type: 2}
+  - {fileID: 11400000, guid: 7b3797395c6bf1c4ab2010fa7b858e5f, type: 2}
+  - {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
+  - {fileID: 11400000, guid: 1c8c6e552007f2e4e902697ca0e5131c, type: 2}
+  - {fileID: 11400000, guid: 994c774aeaa0ec84f9c7a9c1d29d742d, type: 2}
+  - {fileID: 11400000, guid: 518f2d7d697b9c346ac1b51f6188f07d, type: 2}
+  - {fileID: 11400000, guid: 2546e7e5d93f43a49a3f4c7476fe65c6, type: 2}
+  - {fileID: 11400000, guid: fe0258a60478d084284a6d18023a0ca4, type: 2}
+  - {fileID: 11400000, guid: 61ad2f31d886dba4dabfff1a76d7d87a, type: 2}
+  - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
+  - {fileID: 11400000, guid: 050c1e3bba096ac41adc70495a9874f4, type: 2}
   effects:
   - {fileID: 11400000, guid: 42e1353d8857b2f41a8b91b0a6aa2c3d, type: 2}
   - {fileID: 11400000, guid: 0305c253639018445aab40a9a8999063, type: 2}
   - {fileID: 11400000, guid: 0ccbbc48b44738946aa53c9ba0b76dcd, type: 2}
   - {fileID: 11400000, guid: 5ab449e622cfeb847bc6cab15cc1cf7e, type: 2}
   - {fileID: 11400000, guid: 8400fe10969c4ecc8639da5d1a9e8484, type: 2}
+  - {fileID: 11400000, guid: b5122f876c8a4094866eb5a45bc4d381, type: 2}
   - {fileID: 11400000, guid: d81aebfeda3115d48b93bf628c05e41b, type: 2}
   - {fileID: 11400000, guid: 92b204384f449134fac99c7114fe827f, type: 2}
   - {fileID: 11400000, guid: 7197e27cfd59a82418412be3e324947f, type: 2}
@@ -54,6 +80,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a90bef86fe34c0a45b5c39ae844ce54e, type: 2}
   - {fileID: 11400000, guid: 0dc691958e7d94c43a5b91c6d73df636, type: 2}
   - {fileID: 11400000, guid: c7db0569adee270418a8787fa94ce7c4, type: 2}
+  - {fileID: 11400000, guid: 7bd3330429b28be4dbecdedd3dc403d5, type: 2}
+  - {fileID: 11400000, guid: a286a56aac48a86439986d94c04d9564, type: 2}
+  - {fileID: 11400000, guid: b73d3f5565b1e31419f4b46af99413f3, type: 2}
   - {fileID: 11400000, guid: 1edb0ebb45e7ac845b7ac23a97dcd87c, type: 2}
   - {fileID: 11400000, guid: 136e76ea283226747b9ff36ae84eda84, type: 2}
   - {fileID: 11400000, guid: e05b62c69932d8f48aa54ffda14f0f21, type: 2}
@@ -144,10 +173,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 980f3b06ffcb15e4898bbec157072d81, type: 2}
   - {fileID: 11400000, guid: b88af8ce247b44a479d9f321a9b04a5f, type: 2}
   - {fileID: 11400000, guid: 9ff9da122c991fc459d831c09cd523eb, type: 2}
+  - {fileID: 11400000, guid: 39cd185c394a9384fbc090bf7d012609, type: 2}
+  - {fileID: 11400000, guid: f58b6c760e5e3824e9cad6ab03760098, type: 2}
+  - {fileID: 11400000, guid: a2af4cc6061311a46812d747845a92cb, type: 2}
   - {fileID: 11400000, guid: c3fb011a0dec4c94bb1a24978e1bcf78, type: 2}
   - {fileID: 11400000, guid: 5b4a14c18c1434d44bc1e220e94d34d2, type: 2}
-  - {fileID: 11400000, guid: cec6c4ad2fccb1c4fbd099fec3218972, type: 2}
-  - {fileID: 11400000, guid: a4aa7a46c000b714294dccb3f98b1add, type: 2}
   - {fileID: 11400000, guid: e654e3aa0bc6bae449fcdca1aaaef69b, type: 2}
   - {fileID: 11400000, guid: f13d3ee5d615e02498845a500b2e25d5, type: 2}
   - {fileID: 11400000, guid: f3311937c05234244bf44a92a293d6f7, type: 2}
@@ -161,6 +191,27 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6b74a891385ac0a46bbf79dcc2ca07ac, type: 2}
   - {fileID: 11400000, guid: f026e60f7ffde19419c8bf8c4d2cbcae, type: 2}
   - {fileID: 11400000, guid: cdf048f2b241d984da5b4fed9cd1852a, type: 2}
+  - {fileID: 11400000, guid: 2ae74fa8a74fcf74bbca54a05dfe3e2a, type: 2}
+  - {fileID: 11400000, guid: 970fc695982b6104fb1323ed4b2fe74c, type: 2}
+  - {fileID: 11400000, guid: 1ccf9ee63e7209548bd04b69699a987c, type: 2}
+  - {fileID: 11400000, guid: b62262423bd5047419c07ce378da8a3a, type: 2}
+  - {fileID: 11400000, guid: 936be91df72858b4bb1eda9b7f59503a, type: 2}
+  - {fileID: 11400000, guid: 6536c1c7d62ec7842bc14031c85ebbfc, type: 2}
+  - {fileID: 11400000, guid: 331eeab1399476a40b0b687fc92b229b, type: 2}
+  - {fileID: 11400000, guid: a62dce8af96a27f4da560c04ede37ce0, type: 2}
+  - {fileID: 11400000, guid: 09f2f63935509bd46a50789ffee6d1b5, type: 2}
+  - {fileID: 11400000, guid: e186657db931256479ee71864787bd00, type: 2}
+  - {fileID: 11400000, guid: e755b4c6c6919c448bbcde332887fa40, type: 2}
+  - {fileID: 11400000, guid: 63d6e37cbc5900a46882394c75c58da7, type: 2}
+  - {fileID: 11400000, guid: b70144ba668984142b47e5292209dc38, type: 2}
+  - {fileID: 11400000, guid: a6727134959aed5479b759a65d593e8d, type: 2}
+  - {fileID: 11400000, guid: eefe1431cd2e1764a850aa05e99305fc, type: 2}
+  - {fileID: 11400000, guid: c49d76c8620a18c42904d2258f9b1164, type: 2}
+  - {fileID: 11400000, guid: 894fa8aeda4d4234a8ae036036c7f71d, type: 2}
+  - {fileID: 11400000, guid: a05d82947b2d64f4eb3b8d48548be227, type: 2}
+  - {fileID: 11400000, guid: c0dbdb25b3382a34f96354e8b3027f42, type: 2}
+  - {fileID: 11400000, guid: 1cd0597d8f2027d4d83bf50d45481928, type: 2}
+  - {fileID: 11400000, guid: 0a71dd413baea2741a3e2e6692ac1382, type: 2}
   slotOutcomes:
   - {fileID: 11400000, guid: cb2cd8c5f1c374845a8b2fff345e8611, type: 2}
   - {fileID: 11400000, guid: cea4755b11e6eb9458b38a903853ca50, type: 2}
@@ -251,14 +302,67 @@ MonoBehaviour:
       line:
         id: interview.missingFormReplies.Labourer.TC-310.Missing
         text: I... didn't get round to that one.
+    - kind: 3
+      request: TC-230
+      variant: 0
+      line:
+        id: interview.missingFormReplies.Displaced.TC-230.Honest
+        text: A manifest? I was pulled out of my own time. I didn't pack.
+    - kind: 3
+      request: TC-310
+      variant: 0
+      line:
+        id: interview.missingFormReplies.Displaced.TC-310.Honest
+        text: A waiver? Nobody asked me anything before the sky opened.
+    - kind: 3
+      request: proof
+      variant: 0
+      line:
+        id: interview.missingFormReplies.Displaced.proof.Honest
+        text: Means? I have what was in my pockets when the sky opened.
+    - kind: 0
+      request: TC-620
+      variant: 0
+      line:
+        id: interview.missingFormReplies.RichTourist.TC-620.Honest
+        text: An intake declaration? I'm leaving, not arriving.
+    - kind: 0
+      request: TC-630
+      variant: 0
+      line:
+        id: interview.missingFormReplies.RichTourist.TC-630.Honest
+        text: A return order? I have a return booking. Is that the same thing?
+    - kind: 1
+      request: TC-620
+      variant: 0
+      line:
+        id: interview.missingFormReplies.PoorTourist.TC-620.Honest
+        text: An intake declaration? I'm leaving, not arriving.
+    - kind: 1
+      request: TC-630
+      variant: 0
+      line:
+        id: interview.missingFormReplies.PoorTourist.TC-630.Honest
+        text: A return order? I have a return booking. Is that the same thing?
+    - kind: 2
+      request: TC-620
+      variant: 0
+      line:
+        id: interview.missingFormReplies.Labourer.TC-620.Honest
+        text: An intake declaration? I'm leaving, not arriving.
+    - kind: 2
+      request: TC-630
+      variant: 0
+      line:
+        id: interview.missingFormReplies.Labourer.TC-630.Honest
+        text: A return order? I have a return booking. Is that the same thing?
     requestPrompt:
       id: interview.requestPrompt
       text: Your {document}, please.
     requestReply:
       id: interview.requestReply
       text: Here you are.
-    askLabel: Ask about home >
-    tripAskLabel: Ask about the trip >
+    askLabel: Ask about the trip >
     backLabel: < Back
     smallTalkLabel: Small talk
     lookLabel: Look >
@@ -283,19 +387,418 @@ MonoBehaviour:
         id: interview.requests.speak_up.reply
         text: Sorry. Is this better?
     menuCapacity: 8
+    smallTalkWeights:
+      personality: 1
+      home: 1
+      kind: 1
+    kindSmallTalk:
+    - personality: 
+      premade: 
+      kinds: 00000000
+      era: 
+      key: 
+      variant: 0
+      line:
+        id: interview.kindSmallTalk.1
+        text: We do three eras a year. The children prefer the ones with castles.
+    - personality: 
+      premade: 
+      kinds: 01000000
+      era: 
+      key: 
+      variant: 0
+      line:
+        id: interview.kindSmallTalk.2
+        text: Two years of saving, and the credit company paid the rest. So kind
+          of them.
+    - personality: 
+      premade: 
+      kinds: 02000000
+      era: 
+      key: 
+      variant: 0
+      line:
+        id: interview.kindSmallTalk.3
+        text: They say the past has fresh air. And fourteen-hour shifts.
+    - personality: 
+      premade: 
+      kinds: 03000000
+      era: 
+      key: 
+      variant: 0
+      line:
+        id: interview.kindSmallTalk.4
+        text: Everything in this century hums. Even the walls.
+    voices:
+      claims:
+      - personality: chatty
+        premade: 
+        kinds: 0000000001000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.chatty.1
+          text: '{place}! Our anniversary. Well, mine. He left. Long story!'
+      - personality: chatty
+        premade: 
+        kinds: 03000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.chatty.2
+          text: Home to {place}. My goat's been alone for days. Or centuries?
+      - personality: curt
+        premade: 
+        kinds: 0000000001000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.curt.1
+          text: '{place}. Leisure. Go.'
+      - personality: curt
+        premade: 
+        kinds: 03000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.curt.2
+          text: '{place}. Home. Now.'
+      - personality: anxious
+        premade: 
+        kinds: 0000000001000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.anxious.1
+          text: '{place}, please. Is it safe? They said it''s safe. It''s safe?'
+      - personality: sunny
+        premade: 
+        kinds: 02000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.sunny.1
+          text: Debt Relief to {place}! A fresh start! Like the brochure!
+      - personality: grand
+        premade: 
+        kinds: 0000000001000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.grand.1
+          text: '{place}. Somewhere with a view, and a better class of peasant.'
+      - personality: grand
+        premade: 
+        kinds: 03000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.grand.2
+          text: Return me to {place} at once. I was somebody there.
+      - personality: stickler
+        premade: 
+        kinds: 0000000001000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.stickler.1
+          text: One leisure departure to {place}, as the notice words it.
+      - personality: glum
+        premade: 
+        kinds: 02000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.glum.1
+          text: Debt Relief to {place}. It's all in the contract. So am I.
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.senenmut.1
+          text: Home to {place}. The Pharaoh's temple will not finish itself.
+      - personality: 
+        premade: socrates
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.claims.socrates.1
+          text: 'Send me home to {place}. But first: what is a home?'
+      handOver:
+      - personality: curt
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.handOver.curt.1
+          text: Here.
+      - personality: stickler
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.handOver.stickler.1
+          text: Face up, top edge first, as the sign above you requires.
+      missingForms:
+      - personality: chatty
+        premade: 
+        kinds: 00000000
+        era: 
+        key: TC-310
+        variant: 0
+        line:
+          id: interview.voices.missingForms.chatty.1
+          text: No waiver, it's the Premium unit! My cousin went Economy once. We
+            don't talk about him.
+      - personality: anxious
+        premade: 
+        kinds: 00000000
+        era: 
+        key: TC-310
+        variant: 0
+        line:
+          id: interview.voices.missingForms.anxious.1
+          text: A waiver? Do I need one? It's Premium. Premium never fails. Does
+            it?
+      - personality: sunny
+        premade: 
+        kinds: 03000000
+        era: 
+        key: proof
+        variant: 0
+        line:
+          id: interview.voices.missingForms.sunny.1
+          text: Proof of means? I have a smile and a leaflet! Attendance required!
+      - personality: grand
+        premade: 
+        kinds: 00000000
+        era: 
+        key: TC-310
+        variant: 0
+        line:
+          id: interview.voices.missingForms.grand.1
+          text: A waiver? My transponder has people for that.
+      - personality: stickler
+        premade: 
+        kinds: 00000000
+        era: 
+        key: TC-310
+        variant: 0
+        line:
+          id: interview.voices.missingForms.stickler.1
+          text: Premium units are exempt from the {document}. It's on the back of
+            the form.
+      spoken:
+      - personality: curt
+        premade: 
+        kinds: 
+        era: 
+        key: speak_up
+        variant: 0
+        line:
+          id: interview.voices.spoken.curt.1
+          text: Said it once. That was billed.
+      - personality: grand
+        premade: 
+        kinds: 
+        era: 
+        key: step_closer
+        variant: 0
+        line:
+          id: interview.voices.spoken.grand.1
+          text: I don't step. I proceed.
+      answers:
+      - personality: chatty
+        premade: 
+        kinds: 000000000100000002000000
+        era: 
+        key: q_device
+        variant: 0
+        line:
+          id: interview.voices.answers.chatty.1
+          text: 'Just the approved kit: {value}. My therapist says I overpack. Emotionally.'
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        line:
+          id: interview.voices.answers.anxious.1
+          text: '{value}. Is that right? I checked the list twice. Three times.'
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        line:
+          id: interview.voices.answers.anxious.2
+          text: '{value}. Is that right? I checked the list twice. Three times.'
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        line:
+          id: interview.voices.answers.anxious.3
+          text: '{value}. Is that right? I checked the list twice. Three times.'
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        line:
+          id: interview.voices.answers.anxious.4
+          text: '{value}. Is that right? I checked the list twice. Three times.'
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        line:
+          id: interview.voices.answers.anxious.5
+          text: '{value}. Is that right? I checked the list twice. Three times.'
+      - personality: glum
+        premade: 
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        line:
+          id: interview.voices.answers.glum.1
+          text: '{value}. Not that it''ll be enough.'
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        line:
+          id: interview.voices.answers.senenmut.1
+          text: '{value}. May she live forever, and read my plans.'
+      smallTalk:
+      - personality: anxious
+        premade: 
+        kinds: 000000000100000002000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.smallTalk.anxious.1
+          text: I read one sneeze in the past can delete a whole family tree. Is
+            that true?
+      - personality: sunny
+        premade: 
+        kinds: 000000000100000002000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.smallTalk.sunny.1
+          text: My whole block got frozen in default! Everyone's home all day now!
+            So cosy!
+      - personality: stickler
+        premade: 
+        kinds: 03000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.smallTalk.stickler.1
+          text: I've read all your forms. Four days in the intake hall. Two have
+            typos.
+      - personality: glum
+        premade: 
+        kinds: 000000000100000002000000
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.smallTalk.glum.1
+          text: The maglev was late. So was my pay. So, apparently, was my birth.
+      - personality: 
+        premade: gutenberg
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        line:
+          id: interview.voices.smallTalk.gutenberg.1
+          text: My business in Strasbourg is private. It involves letters. Movable
+            ones.
   questions:
   - {fileID: 11400000, guid: eb47f92eb6aa00d4cb626ee29787a348, type: 2}
   - {fileID: 11400000, guid: 37fad6847b586444a948159a953fddd5, type: 2}
   - {fileID: 11400000, guid: 1562f77be6cc1814aaef56e11a8aafc2, type: 2}
   - {fileID: 11400000, guid: 2fc68eb6daa19434a8bd8e9e0a36ad4a, type: 2}
   - {fileID: 11400000, guid: 5e062f2ca111eaf42843494b0fa32990, type: 2}
-  - {fileID: 11400000, guid: ef9b31f8e47014647bcac369073b1cf8, type: 2}
-  - {fileID: 11400000, guid: 74c771b7d3015ea4badaf339f1c984ec, type: 2}
   - {fileID: 11400000, guid: 4e129f565a2b6744d8a133e8c39bda8f, type: 2}
+  personalities:
+  - id: chatty
+    name: Chatty
+    weight: 1
+    note: Tells you everything, then a bit more.
+  - id: curt
+    name: Curt
+    weight: 1
+    note: Time is money, and in 2150 the queue bills by the minute.
+  - id: anxious
+    name: Anxious
+    weight: 1
+    note: Worried about paradoxes, transponders, butterflies and you.
+  - id: sunny
+    name: Sunny
+    weight: 1
+    note: Believes every word the agency prints.
+  - id: grand
+    name: Grand
+    weight: 1
+    note: Treats the desk as staff, whatever their account says.
+  - id: stickler
+    name: Stickler
+    weight: 1
+    note: Knows the regulations better than the clerk and says so.
+  - id: glum
+    name: Glum
+    weight: 1
+    note: The debt won years ago; this is just the paperwork.
   dialogs:
   - {fileID: 11400000, guid: 330b52d57beff584e9353e8cddf2e621, type: 2}
   - {fileID: 11400000, guid: bcda9ea69ca7a6a4ebabdc7ddf5b030a, type: 2}
   - {fileID: 11400000, guid: 611adeb2169076c4882c5daaecbd3e8a, type: 2}
+  - {fileID: 11400000, guid: 5c2987777cbab484f9a138a3a1915c06, type: 2}
+  - {fileID: 11400000, guid: 5f432a4a52e2d8343a72cf71ab905f3d, type: 2}
+  - {fileID: 11400000, guid: 8c8908243a82e9547a43b4e30a5b5cb4, type: 2}
+  - {fileID: 11400000, guid: cb7c00b7f1e876d4f892b929cb43ff1a, type: 2}
+  - {fileID: 11400000, guid: 9787f9c0b139b1c459e234669e20c8ba, type: 2}
+  - {fileID: 11400000, guid: 010109c8e0567b04b8d30f11218d4303, type: 2}
+  - {fileID: 11400000, guid: 1ef0a9b31b4083642afa9a3ca3c663de, type: 2}
+  - {fileID: 11400000, guid: 1659b5f194760d54a8f2ed1c225ea195, type: 2}
+  - {fileID: 11400000, guid: 7914445603d6ed14d9171fca243d4289, type: 2}
+  - {fileID: 11400000, guid: 17e39465df3f9144c8aa9b20fc5f9949, type: 2}
   historyLines:
     leaderGained:
       id: history.leaderGained
@@ -374,7 +877,7 @@ MonoBehaviour:
           link: 3
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 4
         - id: questions
           when: 6
           categories: []
@@ -405,7 +908,7 @@ MonoBehaviour:
           link: 4
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 2
       - type: Displaced
         inherit: 
         dataOnly: 0

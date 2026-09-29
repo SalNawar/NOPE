@@ -25,3 +25,8 @@ MonoBehaviour:
   recordNote: Singer and poet of the caliph's court. Travels with her own musicians.
   dialogId: 
   oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 

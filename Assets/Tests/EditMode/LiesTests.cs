@@ -218,6 +218,27 @@ public class LiesTests
     }
 
     [Test]
+    public void Smuggling_TheOneWheelsOtherQuestions_MoveNoDraw()
+    {
+        // The personalities spec's T8: on days 5-6 a 2150 citizen is asked Language, Capital and Ruler too, but a smuggler
+        // keeps only Currency and Technology before any draw, so their plan and the stream after it are today's.
+        var trip = new[] { ClueCategory.Currency, ClueCategory.Technology };
+        var oneWheel = new[] { ClueCategory.Currency, ClueCategory.Language, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Politics };
+        for (int seed = 1; seed <= 200; seed++)
+        {
+            var a = new SeededRandom(seed);
+            var b = new SeededRandom(seed);
+            LiePlan before = Smuggle(a, Both, trip, tellCount: 1 + seed % 3);
+            LiePlan after = Smuggle(b, Both, oneWheel, tellCount: 1 + seed % 3);
+            Assert.AreEqual((before.Outcome, before.HomeIndex), (after.Outcome, after.HomeIndex), $"seed {seed}");
+            CollectionAssert.AreEqual(before.Tells, after.Tells, $"seed {seed}");
+            foreach (ClueCategory c in before.Tells)
+                Assert.AreEqual((before.ChannelOf(c), before.TellValue(c)), (after.ChannelOf(c), after.TellValue(c)), $"seed {seed}: {c}");
+            Assert.AreEqual(a.Range(0, 1000000), b.Range(0, 1000000), $"seed {seed}: the stream is where it was");
+        }
+    }
+
+    [Test]
     public void Smuggling_NeverLeaksInDress_AndNeverFromAnotherPlace()
     {
         var leakable = new HomeCandidate("neutral", "future", 2080, 2132, appearanceLeakable: true);

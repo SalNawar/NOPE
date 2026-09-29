@@ -29,7 +29,6 @@ MonoBehaviour:
     label: Day Wage
   handOver: 1
   showsPhoto: 1
-  askableBy: 
   form:
     formNumber: 
     title: 

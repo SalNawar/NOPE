@@ -106,7 +106,9 @@ public sealed class TitleUIController : MonoBehaviour
 
     /// <summary>
     /// Shows the ending panel for the reached EndingSO (may be null if the id
-    /// has no matching content yet — falls back to a generic message).
+    /// has no matching content yet — falls back to a generic message): its
+    /// title, its body and, set apart under it, its closing card when it has
+    /// one (the END OF DEMO card).
     /// </summary>
     public void ShowEnding(EndingSO ending, Action onNewRun)
     {
@@ -122,7 +124,9 @@ public sealed class TitleUIController : MonoBehaviour
                 : "The End";
 
         if (endingBodyText != null)
-            endingBodyText.text = ending != null ? ending.bodyText : string.Empty;
+            endingBodyText.text = ending == null ? string.Empty
+                : string.IsNullOrWhiteSpace(ending.closingCard) ? ending.bodyText
+                : $"{ending.bodyText}\n\n{ending.closingCard}";
 
         if (endingPicture != null)
         {

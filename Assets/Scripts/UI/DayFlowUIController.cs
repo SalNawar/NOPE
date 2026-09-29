@@ -83,7 +83,7 @@ public sealed class DayFlowUIController : MonoBehaviour
         {
             var sb = new System.Text.StringBuilder();
 
-            if (world.tomorrow.briefingLines.Count == 0 && world.tomorrow.newsLines.Count == 0)
+            if (world.tomorrow.briefingLines.Count == 0 && world.tomorrow.newsLines.Count == 0 && world.tomorrow.deskLines.Count == 0)
             {
                 sb.AppendLine(UiText.Get("briefing.empty"));
             }
@@ -98,6 +98,16 @@ public sealed class DayFlowUIController : MonoBehaviour
                     sb.AppendLine(UiText.Get("briefing.newsHeader"));
 
                     foreach (string line in world.tomorrow.newsLines)
+                        sb.AppendLine(UiText.Format("list.bullet", line));
+                }
+
+                // The desk's own stories (days 7-15, Q9), after the news.
+                if (world.tomorrow.deskLines.Count > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine(UiText.Get("briefing.deskHeader"));
+
+                    foreach (string line in world.tomorrow.deskLines)
                         sb.AppendLine(UiText.Format("list.bullet", line));
                 }
             }

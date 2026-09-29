@@ -72,6 +72,22 @@ public sealed class CharacterArt : IDisposable
                 _eraOrder[era.id] = era.order;
     }
 
+    /// <summary>
+    /// True when final art is delivered for <paramref name="keyName"/>
+    /// (Resources/Characters/{key}): a premade shows its whole picture once
+    /// its neutral one is, and its generated stand-in look until then (days
+    /// 7-15 B4). Loads the sprite to look, then releases its texture (a later
+    /// Get loads it again).
+    /// </summary>
+    public static bool HasFinalArt(string keyName)
+    {
+        Sprite sprite = string.IsNullOrEmpty(keyName) ? null : Resources.Load<Sprite>($"{ResourcesFolder}/{keyName}");
+        if (sprite == null)
+            return false;
+        Resources.UnloadAsset(sprite.texture);
+        return true;
+    }
+
     /// <summary>The layer's full-canvas sprite (final art, else a placeholder).</summary>
     public Sprite Get(LookKey key) => EntryOf(key).Full;
 

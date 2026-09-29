@@ -29,10 +29,6 @@ MonoBehaviour:
     label: Departure
   handOver: 0
   showsPhoto: 0
-  askableBy:
-  - 0
-  - 1
-  - 2
   form:
     formNumber: 
     title: 

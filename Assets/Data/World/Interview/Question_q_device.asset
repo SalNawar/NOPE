@@ -18,10 +18,20 @@ MonoBehaviour:
     label: Device
     prompt:
       id: q_device.prompt
-      text: What tool do you use every day?
+      text: What are you taking with you?
     answer:
       id: q_device.answer
-      text: Every day I use {value}.
-    overrides: []
-    kinds: 03000000
-  conditions: []
+      text: 'Just the approved kit: {value}.'
+    overrides:
+    - eraId: 
+      kinds: 03000000
+      answer:
+        id: q_device.overrides.1.answer
+        text: Every day I use {value}.
+  conditions:
+  - type: 8
+    key: 
+    threshold: 4
+    attribute: {fileID: 0}
+    profile: {fileID: 0}
+    nation: {fileID: 0}

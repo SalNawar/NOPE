@@ -66,6 +66,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Currently active case slot (1-based).</summary>
     private int _activeCaseIndex1Based;
 
+    /// <summary>The case of the active slot (the traveller at the desk or waiting behind READY), or null between days; the debug panel shows its voice.</summary>
+    public CaseInstance ActiveCase => _dayCases != null && _activeCaseIndex1Based >= 1 && _activeCaseIndex1Based <= _dayCases.Count ? _dayCases[_activeCaseIndex1Based - 1] : null;
+
     /// <summary>Verdict record for the current shift (results screen reads this).</summary>
     private ShiftLedger _ledger;
 
@@ -218,7 +221,8 @@ public sealed class GameManager : MonoBehaviour
 
         // The morning paper is printed: its lines go to the News site's back issues (the night rebuilds them, so they are kept now).
         if (desktopConfig != null)
-            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues);
+            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
+                               _worldState.tomorrow.deskLines);
         else
             Debug.LogWarning("[GameManager] No DesktopConfigSO wired: today's paper is not kept for the News site. Run Tools > TimeDesk > Build Office UI.");
 
@@ -453,7 +457,7 @@ public sealed class GameManager : MonoBehaviour
         if (booth != null)
             booth.SetPhase(BoothPhase.NoTraveller);
 
-        orchestrator.StartDay(_worldState, plan, daySeed);
+        orchestrator.StartDay(_worldState, plan, daySeed, _dayCases);
 
         if (shiftClock != null)
             shiftClock.StartShift();
@@ -524,7 +528,7 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>
     /// Presents a case via the investigation UI: keeps only this traveller's
     /// art, shows them in the booth, and marks a once-per-run premade as met
-    /// (FlagKeys.PremadeMet: they never come back this run). Without the
+    /// (DayCycle.Present: they never come back this run). Without the
     /// investigation UI no case can be shown: an error, and the slot resolves.
     /// </summary>
     private void ShowActiveCase(CaseInstance inst)
@@ -532,8 +536,7 @@ public sealed class GameManager : MonoBehaviour
         _characterArt?.Retain(inst.look != null ? inst.look.Keys : null);
         SetTravellerAtDesk(true, inst.look);
 
-        if (inst.isLegendary && inst.legendarySource != null && inst.legendarySource.oncePerRun)
-            _worldState.SetFlag(FlagKeys.PremadeMet(inst.legendarySource.id));
+        DayCycle.Present(_worldState, inst);
 
         if (investigationUI == null)
         {

@@ -31,14 +31,13 @@ public static class ShiftScoring
         {
             caseIndex1Based = caseIndex1Based,
             visitorName = inst != null ? inst.visitorDisplayName : "Unknown",
-            wasLegendary = inst != null && inst.isLegendary,
+            wasLegendary = inst != null && inst.IsFamous,
             accepted = accepted,
             kind = inst != null ? inst.kind : default,
             debt = inst?.account != null ? inst.account.Debt : 0,
             shouldAccept = shouldAccept,
             faultReason = inst != null ? inst.FaultReason : string.Empty,
             destinationLabel = inst != null ? inst.originLabel ?? string.Empty : string.Empty,
-            claimSummary = inst != null ? inst.claimLine : string.Empty,
             evidenceCount = Mathf.Max(0, evidenceCount),
             correct = inst != null && accepted == shouldAccept
         };

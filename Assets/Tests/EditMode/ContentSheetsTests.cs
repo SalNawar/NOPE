@@ -195,6 +195,64 @@ public class ContentSheetsTests
         Assert.Less(json.IndexOf("\"coat\""), json.IndexOf("\"hat\""));
     }
 
+    // ---- a composite key with an optional part (days 7-15: a forced slot's alternatives) ----
+
+    private static SheetSpec SlotMap() =>
+        Single("world", "",
+            Rows("slots", "slots", Key("{slot}{id}", "entry").Optional("id"),
+                Int("slot"),
+                Text("id").Omit(),
+                Rows("slotConditions", "conditions", Text("type")).OmitEmpty()));
+
+    private const string SlotFixture =
+        "{\n" +
+        "  \"slots\": [\n" +
+        "    {\n" +
+        "      \"slot\": 1\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"slot\": 2,\n" +
+        "      \"id\": \"a\",\n" +
+        "      \"conditions\": [\n" +
+        "        {\n" +
+        "          \"type\": \"FlagSet\"\n" +
+        "        }\n" +
+        "      ]\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"slot\": 2,\n" +
+        "      \"id\": \"b\"\n" +
+        "    }\n" +
+        "  ]\n" +
+        "}\n";
+
+    [Test]
+    public void Key_AnOptionalPartMayBeBlank_TheRestNamesTheRow()
+    {
+        var problems = new List<string>();
+        List<RowTable> tables = ContentSheets.Export(SlotMap(), ContentJson.Parse(SlotFixture), problems);
+        CollectionAssert.IsEmpty(problems);
+        CollectionAssert.AreEqual(new[] { "2a" }, Sheet(tables, "slotConditions").Rows.Select(r => r[0]).ToArray(), "the child names its parent by the whole key");
+        var errors = new List<string>();
+        ContentNode root = ContentSheets.Import(SlotMap(), tables, errors);
+        CollectionAssert.IsEmpty(errors);
+        Assert.AreEqual(SlotFixture, ContentJson.Write(root));
+    }
+
+    [Test]
+    public void Key_AnOptionalPartLeftBlankTwice_IsADuplicate()
+    {
+        var problems = new List<string>();
+        List<RowTable> tables = ContentSheets.Export(SlotMap(), ContentJson.Parse(SlotFixture), problems);
+        RowTable slots = Sheet(tables, "slots");
+        slots.Rows[2][slots.Headers.IndexOf("id")] = "";
+        slots.Rows[1][slots.Headers.IndexOf("id")] = "";
+        Sheet(tables, "slotConditions").Rows[0][0] = "2";
+        var errors = new List<string>();
+        Assert.IsNull(ContentSheets.Import(SlotMap(), tables, errors));
+        Assert.IsTrue(errors.Any(e => e.StartsWith("slots") && e.Contains("duplicate")), string.Join("\n", errors));
+    }
+
     // ---- errors, with the sheet, row and column ----
 
     [Test]

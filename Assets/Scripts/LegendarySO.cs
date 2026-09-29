@@ -50,4 +50,20 @@ public sealed class LegendarySO : ScriptableObject
 
     /// <summary>Met once, never again this run (written by Generate World as !repeatable).</summary>
     public bool oncePerRun = true;
+
+    /// <summary>The kind the premade stands as (premades[].kind; days 7-15 B2): Displaced for the famous (blank in the source), a 2150 citizen kind for a story character (Premades.IsFamous).</summary>
+    public TravellerKind kind = TravellerKind.Displaced;
+
+    [Header("Story character (a 2150 citizen)")]
+    /// <summary>A story character's family country (premades[].family; null: the claimed place's nation): their lineage and, until their art lands, the looks their generated stand-in is drawn with.</summary>
+    public NationSO family;
+
+    /// <summary>A story character's Citizen ID (premades[].citizenId; blank: drawn), reserved before slot 1, the same at every appearance.</summary>
+    public string citizenId;
+
+    /// <summary>A story character's debt in cr (premades[].debt; 0: drawn from its status's range).</summary>
+    public int debt;
+
+    /// <summary>A labourer story character's employer (premades[].employer, an agency.employers id; blank: drawn among its worksite era's).</summary>
+    public string employer;
 }

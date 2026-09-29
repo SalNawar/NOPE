@@ -25,3 +25,8 @@ MonoBehaviour:
   recordNote: Teacher of rhetoric. Keeps the company of Athens' first citizen.
   dialogId: 
   oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 

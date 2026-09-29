@@ -27,35 +27,28 @@ public sealed class TravelRuleSO : ScriptableObject
     /// <summary>Optional custom briefing line; auto-generated if blank (a standing procedure's is authored).</summary>
     [TextArea] public string description;
 
-    /// <summary>The kinds a standing procedure is read for (traveller types §5.3; written by Generate World from rules[].kinds); empty for every kind, and always empty for a closure.</summary>
+    /// <summary>The kinds the rule is read for (traveller types §5.3; written by Generate World from rules[].kinds); empty for every kind; on a closure, the kinds it closes for (the Economy range limit, days 7-15 §6.1).</summary>
     public TravellerKind[] kinds;
+
+    /// <summary>The model a transponder recall grounds (rules[].transponder, an agency.transponders id; days 7-15 §6); blank for every other rule.</summary>
+    public string transponder;
 
     /// <summary>True for a closure: it forbids destinations, and each active one gets a planned violator (CaseFactory.PlanViolators).</summary>
     public bool IsClosure => Directives.IsClosure(type);
 
-    /// <summary>The rule as the Domain predicates see it: its type and kinds.</summary>
-    public Directive Directive => new Directive(type, kinds ?? System.Array.Empty<TravellerKind>());
+    /// <summary>The rule as the Domain predicates see it: its type, kinds and a closure's place by ids.</summary>
+    public Directive Directive => new Directive(type, kinds ?? System.Array.Empty<TravellerKind>(), nation != null ? nation.id : null, era != null ? era.id : null,
+                                                string.IsNullOrWhiteSpace(transponder) ? null : transponder);
 
     /// <summary>True when the rule is read for a traveller of <paramref name="kind"/> (Directive.AppliesTo).</summary>
     public bool AppliesTo(TravellerKind kind) => Directive.AppliesTo(kind);
 
     /// <summary>
-    /// Returns true if this rule permits the given claimed destination.
+    /// Returns true if this rule permits the given claimed destination (the
+    /// closure predicate, Directives.Closes).
     /// </summary>
-    public bool Allows(NationSO claimNation, EraSO claimEra)
-    {
-        switch (type)
-        {
-            case TravelRuleType.EraForbidden:
-                return claimEra != era;
-            case TravelRuleType.NationForbidden:
-                return claimNation != nation;
-            case TravelRuleType.NationEraForbidden:
-                return !(claimNation == nation && claimEra == era);
-            default:
-                return true;
-        }
-    }
+    public bool Allows(NationSO claimNation, EraSO claimEra) =>
+        !Directive.Closes(claimNation != null ? claimNation.id : null, claimEra != null ? claimEra.id : null);
 
     /// <summary>Briefing line describing the restriction.</summary>
     public string Summary()

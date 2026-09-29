@@ -17,6 +17,7 @@ MonoBehaviour:
   description: Generated from world_source.json history.rules.
   oneShot: 1
   newsLineOnFire: 'HISTORY: Weimar Berlin''s banks peg the Reichsmark to the yen.'
+  section: 0
   conditions:
   - type: 11
     key: 

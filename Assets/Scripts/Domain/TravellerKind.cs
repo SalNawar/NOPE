@@ -4,7 +4,7 @@ using System;
 /// The four kinds of traveller of the debt dystopia (traveller types, K1):
 /// each kind has one blueprint (CaseBlueprintSO.kind), its own papers and
 /// its own claim line. The famous displaced are Displaced premades.
-/// Serialized in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy: append
+/// Serialized in CaseBlueprintSO.kind and the questions' WordingOverride.kinds: append
 /// only (SerializedEnumsTests pins every value).
 /// </summary>
 public enum TravellerKind
@@ -35,11 +35,12 @@ public static class TravellerKinds
     /// <summary>
     /// A blueprint's weight in the day's kind pick (DayPlanSO kinds, one
     /// weighted draw on the case stream): the day's weight, never below 0,
-    /// and 0 for every kind but the displaced in a slot that is theirs
-    /// (<paramref name="displacedOnly"/>: a premade's, since the famous are
-    /// displaced premades, K1; or the planned liar's of the displaced's
-    /// return home, Directives.Guarantees), so the pick stays one draw.
+    /// and 0 for every kind but <paramref name="onlyKind"/> in a slot that is
+    /// that kind's (a premade's: the premade's kind, the famous being
+    /// displaced, K1, a story character a 2150 citizen, days 7-15 B2; or the
+    /// planned liar's of the displaced's return home, Directives.Guarantees),
+    /// so the pick stays one draw. Null: every kind at its weight.
     /// </summary>
-    public static float PickWeight(TravellerKind kind, float dayWeight, bool displacedOnly) =>
-        displacedOnly && kind != TravellerKind.Displaced ? 0f : Math.Max(0f, dayWeight);
+    public static float PickWeight(TravellerKind kind, float dayWeight, TravellerKind? onlyKind) =>
+        onlyKind != null && kind != onlyKind.Value ? 0f : Math.Max(0f, dayWeight);
 }

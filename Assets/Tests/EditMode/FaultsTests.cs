@@ -12,6 +12,7 @@ public class FaultsTests
     [TestCase(DirectiveFault.ExpiredPaper, "expired")]
     [TestCase(DirectiveFault.IncompletePapers, "incomplete")]
     [TestCase(DirectiveFault.FrozenAccount, "frozen")]
+    [TestCase(DirectiveFault.RecalledTransponder, "recalled")]
     public void Reason_OfADirectiveFault(DirectiveFault fault, string expected)
     {
         Assert.AreEqual(expected, Faults.Reason(fault));
@@ -53,6 +54,7 @@ public class FaultsTests
     [TestCase("smuggled", "2150 goods")]
     [TestCase("wrongDate", "wrong date")]
     [TestCase("expired", "expired paper")]
+    [TestCase("recalled", "recalled transponder")]
     public void EveryReason_HasItsCitationLine(string reason, string says)
     {
         string key = new CaseVerdict { accepted = true, faultReason = reason }.MistakeKey;

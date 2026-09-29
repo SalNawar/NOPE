@@ -8,8 +8,8 @@ using UnityEngine.UI;
 /// The office builder's Investigation app (redesign phases 16, 18 and 21; the
 /// PC spec's AP1-AP9, ST1, WN4, WN5, §2.2-§2.10, §5.2): one desktop window on
 /// the window layer ("Investigation"; the restored size from DesktopConfigSO,
-/// maximised on its first open) with its case header (the claim, the
-/// counters, the PC's Accept and Deny with their fixed glyphs), its toolbar
+/// maximised on its first open) with its case header (the counters, the PC's
+/// Accept and Deny with their fixed glyphs; no claim), its toolbar
 /// (Back, Forward and Split live; the search field search's, its SearchBox and
 /// results panel (OfficeSceneUIBuilder.Search), and the keys', its chip; Keys
 /// the keys' (OfficeSceneUIBuilder.Keys); Steps the steps' (OfficeSceneUIBuilder.Steps)),
@@ -133,7 +133,7 @@ public static partial class OfficeSceneUIBuilder
         float top = config.titleBarHeight;
 
         var parts = new AppParts { Window = window };
-        BuildAppHeader(win, top, out TMP_Text claim, out TMP_Text counters, out parts.Accept, out parts.Deny);
+        BuildAppHeader(win, top, out TMP_Text counters, out parts.Accept, out parts.Deny);
         AppToolbar toolbar = BuildAppToolbar(win, top + AppHeaderHeight);
 
         Transform body = Panel(win, "AppBody", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -161,7 +161,6 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "rightPane", right);
         Wire(so, "body", body);
         Wire(so, "sidebar", sidebar);
-        Wire(so, "claimText", claim);
         Wire(so, "countersText", counters);
         Wire(so, "backButton", toolbar.Back);
         Wire(so, "forwardButton", toolbar.Forward);
@@ -175,14 +174,12 @@ public static partial class OfficeSceneUIBuilder
         return parts;
     }
 
-    /// <summary>The case header (AP1): the claim and the counters on a strip, the PC's Accept and Deny at its right with their fixed glyphs (piece 6 R8).</summary>
-    private static void BuildAppHeader(Transform win, float top, out TMP_Text claim, out TMP_Text counters, out Button accept, out Button deny)
+    /// <summary>The case header (AP1; the personalities spec's B2): the counters on a strip at its full height (the idle line between travellers; no claim is printed), the PC's Accept and Deny at its right with their fixed glyphs (piece 6 R8).</summary>
+    private static void BuildAppHeader(Transform win, float top, out TMP_Text counters, out Button accept, out Button deny)
     {
         Transform header = Panel(win, "CaseHeader", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(top + AppHeaderHeight / 2f)),
                                  new Vector2(0f, AppHeaderHeight), ScreenStripColor, ThemeRoleId.ClaimStrip);
-        claim = Text(header, "ClaimText", UiText.Get("idle.waiting"), 20, TextAlignmentOptions.MidlineLeft, new Vector2(0.01f, 0.38f), new Vector2(0.66f, 0.98f),
-                     Color.white, ThemeRoleId.ClaimStrip, fit: true);
-        counters = Text(header, "CountersText", string.Empty, 18, TextAlignmentOptions.MidlineLeft, new Vector2(0.01f, 0.02f), new Vector2(0.66f, 0.38f),
+        counters = Text(header, "CountersText", UiText.Get("idle.waiting"), 20, TextAlignmentOptions.MidlineLeft, new Vector2(0.01f, 0.02f), new Vector2(0.66f, 0.98f),
                         Color.white, ThemeRoleId.ClaimStrip, fit: true);
         accept = MakeButton(header, "AcceptButton", null, new Vector2(0.68f, 0.12f), new Vector2(0.835f, 0.88f), new Color(0.2f, 0.5f, 0.24f, 1f),
                             ThemeRoleId.AcceptButton, "accept");

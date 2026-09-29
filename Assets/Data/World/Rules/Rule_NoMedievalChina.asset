@@ -17,3 +17,4 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
   description: 'Quarantine: no travel to Northern Song Kaifeng today.'
   kinds: 
+  transponder: 

@@ -18,3 +18,4 @@ MonoBehaviour:
   description: 'Debt Relief departures: a registered Labour Contract, an Economy
     transponder and a signed Stranding Waiver.'
   kinds: 02000000
+  transponder: 

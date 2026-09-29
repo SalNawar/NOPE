@@ -18,10 +18,20 @@ MonoBehaviour:
     label: Language
     prompt:
       id: q_language.prompt
-      text: What language do you speak at home?
+      text: What language will you speak in {place}?
     answer:
       id: q_language.answer
-      text: At home we speak {value}.
-    overrides: []
-    kinds: 03000000
-  conditions: []
+      text: I've been practising my {value}.
+    overrides:
+    - eraId: 
+      kinds: 03000000
+      answer:
+        id: q_language.overrides.1.answer
+        text: At home we speak {value}.
+  conditions:
+  - type: 8
+    key: 
+    threshold: 5
+    attribute: {fileID: 0}
+    profile: {fileID: 0}
+    nation: {fileID: 0}

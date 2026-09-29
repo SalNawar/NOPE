@@ -18,17 +18,25 @@ MonoBehaviour:
     label: Currency
     prompt:
       id: q_currency.prompt
-      text: What money do you pay with at home?
+      text: What will you pay with in {place}?
     answer:
       id: q_currency.answer
-      text: We pay in {value}.
+      text: I've changed my money into {value}.
     overrides:
-    - eraId: ancient
-      prompt:
-        id: q_currency.ancient.prompt
-        text: What do you trade with at home?
+    - eraId: 
+      kinds: 03000000
       answer:
-        id: q_currency.ancient.answer
+        id: q_currency.overrides.1.answer
+        text: We pay in {value}.
+    - eraId: ancient
+      kinds: 03000000
+      answer:
+        id: q_currency.overrides.2.answer
         text: We trade with {value}.
-    kinds: 03000000
-  conditions: []
+  conditions:
+  - type: 8
+    key: 
+    threshold: 4
+    attribute: {fileID: 0}
+    profile: {fileID: 0}
+    nation: {fileID: 0}

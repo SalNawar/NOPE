@@ -89,7 +89,34 @@ public class SerializedEnumsTests
         Assert.AreEqual(7, (int)TravelRuleType.PaperDates);
         Assert.AreEqual(8, (int)TravelRuleType.PaperSet);
         Assert.AreEqual(9, (int)TravelRuleType.DebtStanding);
-        Assert.AreEqual(10, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
+        Assert.AreEqual(10, (int)TravelRuleType.TransponderRecall, "days 7-15: the Driftbox 3 recall");
+        Assert.AreEqual(11, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>PlannedDirective: stored in DayPlanSO's forced slots (world_source.json days[].forced[].directive; days 7-15 B6).</summary>
+    [Test]
+    public void PlannedDirective_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)PlannedDirective.None);
+        Assert.AreEqual(1, (int)PlannedDirective.EconomyManifest);
+        Assert.AreEqual(2, (int)PlannedDirective.WaiverMissing);
+        Assert.AreEqual(3, (int)PlannedDirective.WaiverUnsigned);
+        Assert.AreEqual(4, (int)PlannedDirective.ProofMissing);
+        Assert.AreEqual(5, (int)PlannedDirective.Frozen);
+        Assert.AreEqual(6, (int)PlannedDirective.DepartureDate);
+        Assert.AreEqual(7, (int)PlannedDirective.Expired);
+        Assert.AreEqual(8, (int)PlannedDirective.Recalled);
+        Assert.AreEqual(9, System.Enum.GetValues(typeof(PlannedDirective)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>StorySection: stored in TimelineTriggerSO.section (world_source.json history.rules[].section; days 7-15 B10, Saleh's Q9).</summary>
+    [Test]
+    public void StorySection_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)StorySection.News);
+        Assert.AreEqual(1, (int)StorySection.Desk);
+        Assert.AreEqual(2, (int)StorySection.Return);
+        Assert.AreEqual(3, System.Enum.GetValues(typeof(StorySection)).Length, "a new member is appended here too");
     }
 
     /// <summary>MissingFormVariant: stored in the content library's missing-form replies (interview.missingFormReplies).</summary>
@@ -101,7 +128,7 @@ public class SerializedEnumsTests
         Assert.AreEqual(2, System.Enum.GetValues(typeof(MissingFormVariant)).Length, "a new member is appended here too");
     }
 
-    /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy.</summary>
+    /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and the questions' WordingOverride.kinds.</summary>
     [Test]
     public void TravellerKind_KeepsItsSerializedInts()
     {

@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216f58e381e1445588efbd033278b8d9, type: 3}
+  m_Name: Dialog_dlg_hollis
+  m_EditorClassIdentifier: Assembly-CSharp::DialogSO
+  dialog:
+    id: dlg_hollis
+    label: Ask about the account >
+    oneShot: 1
+    nodes:
+    - id: start
+      lines:
+      - id: dlg_hollis.start.1
+        speaker: 1
+        text: It froze on Tuesday. The Drive put me on its list on Monday. You see
+          my problem.
+        expression: 
+      choices:
+      - id: what
+        label: What happened?
+        lines: []
+        next: what
+        effect: 
+      - id: cant
+        label: I can't help you.
+        lines: []
+        next: cant
+        effect: 
+    - id: what
+      lines:
+      - id: dlg_hollis.what.1
+        speaker: 1
+        text: My father's waiver passed his debt to me when he didn't come back.
+          The colliery was my way out.
+        expression: 
+      choices:
+      - id: sorry
+        label: I'm sorry.
+        lines: []
+        next: 
+        effect: 
+    - id: cant
+      lines:
+      - id: dlg_hollis.cant.1
+        speaker: 1
+        text: Nobody can. Stamp it quickly, then. Everyone else does.
+        expression: 
+      choices:
+      - id: bye
+        label: Next!
+        lines: []
+        next: 
+        effect: 
+  conditions: []

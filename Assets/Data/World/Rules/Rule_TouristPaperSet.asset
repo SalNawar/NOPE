@@ -19,3 +19,4 @@ MonoBehaviour:
     needs an Economy transponder, a signed Stranding Waiver and a proof of means:
     a Holiday Credit Agreement, a Proof of Funds or Travel Insurance.'
   kinds: 0000000001000000
+  transponder: 
