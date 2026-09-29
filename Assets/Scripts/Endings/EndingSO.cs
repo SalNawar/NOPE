@@ -21,6 +21,10 @@ public sealed class EndingSO : ScriptableObject
     [TextArea]
     public string bodyText;
 
+    /// <summary>A closing card shown under the body, set apart (blank: none): the day-15 ending's END OF DEMO card (Saleh's Q7, days 7-15 E3).</summary>
+    [TextArea]
+    public string closingCard;
+
     /// <summary>The ending's illustration, full screen behind the ending panel (Assets/Art/Title/ending_&lt;id&gt;.png, replaced in place); none leaves the title's background.</summary>
     public Sprite picture;
 
