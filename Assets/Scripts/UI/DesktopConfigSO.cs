@@ -116,8 +116,11 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The width a tab's name is given before the strip collapses: a strip narrower than six of these shows the inactive tabs' glyphs, a wider one every name (six names that just fit shrink a little) (AP3, AppPanes.TabsNarrow).</summary>
     [Min(1f)] public float tabLabelWidth = 130f;
 
-    /// <summary>An inactive tab's width while it shows its glyph and its badge.</summary>
+    /// <summary>An inactive tab's narrowest width while it shows its glyph and its badge; the collapsed tabs share what the active tab leaves of the strip.</summary>
     [Min(1f)] public float tabGlyphWidth = 48f;
+
+    /// <summary>A collapsed tab's glyph size (22 units read 11.4 px at 720p; every glyph fits a split pane's strip at it beside the active tab's name and the badge's slot, and one with less room shrinks to fit).</summary>
+    [Min(1f)] public float tabGlyphSize = 22f;
 
     [Header("The Investigation app's chrome (readability; desktop units)")]
     /// <summary>A pane's tab strip height (the tabs stand on the strip's bottom edge, joined to the row under it).</summary>

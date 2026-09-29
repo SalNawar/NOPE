@@ -161,8 +161,9 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// One tab of a pane's strip: the app's tab (BuildTab: the plate with its
     /// name, its active look, its badge in its slot), plus its glyph (a layout
-    /// child after the name, hidden: a narrow strip's inactive tab shows it in
-    /// the name's place, the badge beside it), a tooltip above it naming it,
+    /// child after the name at DesktopConfigSO's glyph size, shrinking to fit
+    /// its room, hidden: a narrow strip's inactive tab shows it in the name's
+    /// place, the badge beside it), a tooltip above it naming it,
     /// and its handle (drag along the strip, right-click for its menu).
     /// </summary>
     private static Button BuildPaneTab(Transform strip, AppTab tab, AppPane pane, DesktopConfigSO config, out GameObject active, out GameObject badge,
@@ -171,8 +172,8 @@ public static partial class OfficeSceneUIBuilder
         Button button = BuildTab(strip, tab, config, out active, out badge);
         label = button.transform.Find("Label").gameObject;
 
-        TMP_Text glyphText = Text(button.transform, "Glyph", null, Mathf.RoundToInt(config.tabLabelSize), TextAlignmentOptions.Center, Vector2.zero, Vector2.one,
-                                  Color.white, ThemeRoleId.Tab, AppTabGlyphKeys[tab], FontStyles.Bold, ThemeTextKind.Button);
+        TMP_Text glyphText = Text(button.transform, "Glyph", null, Mathf.RoundToInt(config.tabGlyphSize), TextAlignmentOptions.Center, Vector2.zero, Vector2.one,
+                                  Color.white, ThemeRoleId.Tab, AppTabGlyphKeys[tab], FontStyles.Bold, ThemeTextKind.Button, true);
         glyphText.raycastTarget = false;
         glyph = glyphText.gameObject;
         glyph.transform.SetSiblingIndex(label.transform.GetSiblingIndex() + 1);

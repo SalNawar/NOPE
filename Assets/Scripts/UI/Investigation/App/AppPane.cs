@@ -12,9 +12,10 @@ using UnityEngine.UI;
 /// with a badge and a tooltip naming it; the active tab wears its active
 /// look, the paper plate with the ink bar the builder made; on a strip too
 /// narrow for every name the inactive tabs collapse to their glyphs and their
-/// badges: AppPanes.TabsNarrow), its header (the active view's chips: a click
-/// shows that item; the chosen chip wears its "Chosen" accent look, one not
-/// readable yet is dimmed) and its content (the active tab's view; between
+/// badges, sharing what the active tab's name leaves: AppPanes.TabsNarrow),
+/// its header (the active view's chips: a click shows that item; the chosen
+/// chip wears its "Chosen" accent look, one not readable yet is dimmed) and
+/// its content (the active tab's view; between
 /// travellers a case source shows the no-case state, "Waiting for the next
 /// traveller", instead). The views are IAppView components, so a view drawn
 /// by the forms engine drops in for today's. The app has two
@@ -334,10 +335,12 @@ public sealed partial class AppPane : MonoBehaviour
 
     /// <summary>
     /// On a narrow strip the inactive tabs collapse to their glyphs and badges
-    /// at the glyph width (the plate's padding gone, the glyph and the badge
-    /// centred), the active one keeps its name; otherwise every tab is as wide
-    /// as its name, on the plate the builder made (its padding and narrowest
-    /// width, read once before the first collapse).
+    /// (the plate's padding gone, the glyph and the badge's slot centred), at
+    /// least the glyph width each and sharing what the active tab, which keeps
+    /// its name at its own width, leaves of the strip; the glyph shrinks to fit
+    /// its room (its theme tag's fit), so it never draws over a neighbour.
+    /// Otherwise every tab is as wide as its name, on the plate the builder
+    /// made (its padding and narrowest width, read once before the first collapse).
     /// </summary>
     private void LayoutTabs()
     {
@@ -362,6 +365,7 @@ public sealed partial class AppPane : MonoBehaviour
             }
             size.minWidth = glyph ? config.tabGlyphWidth : _tabMinWidth;
             size.preferredWidth = glyph ? config.tabGlyphWidth : -1f;
+            size.flexibleWidth = glyph ? 1f : 0f;
             int padding = glyph ? 0 : _tabPadding;
             if (plate.padding.left != padding)
             {
