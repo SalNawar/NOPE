@@ -48,8 +48,18 @@ public sealed class TranscriptView : AppView, IAppItems
 
     private readonly List<(FormSlot slot, Button button)> _armed = new List<(FormSlot, Button)>();
 
-    /// <summary>The statements this draw shows in their tongue's script (as shown): the form measures and prints them in the script's font (ScriptOf).</summary>
+    /// <summary>The statements this draw shows in their tongue's script (as shown): each is measured and printed in the script's font (ScriptOf), as DisplayText.FontFor decides for it.</summary>
     private readonly HashSet<string> _scriptLines = new HashSet<string>();
+
+    /// <summary>
+    /// The characters only those statements draw: their shown text's, less
+    /// every character of the transcript's English. A word of a statement the
+    /// layout measures on its own is measured in the script's font when it
+    /// holds one (an English key word, or a word the script shares with
+    /// English, measures in the form's font: the same letters); an English
+    /// text never holds one.
+    /// </summary>
+    private readonly HashSet<char> _scriptGlyphs = new HashSet<char>();
     private readonly List<int> _lineOfRow = new List<int>();
     private IReadOnlyList<DialogLine> _lines = System.Array.Empty<DialogLine>();
     private string _deskName = string.Empty;
@@ -176,10 +186,17 @@ public sealed class TranscriptView : AppView, IAppItems
             { InterviewPage.RowsSlot, InterviewPage.Rows(_lines, answersOnly != null && answersOnly.isOn, _deskName, _travellerName, Shown, UiText.Get("form.interview.answerMark"), _lineOfRow) }
         };
         _scriptLines.Clear();
+        _scriptGlyphs.Clear();
         SpeechTranslation speech = _translation.Speech;
         foreach (DialogLine line in _lines)
             if (DisplayText.FontFor(line.Text, _translation.Line(line), speech.Timing, speech.ReducedMotion, _translation.Font, null) != null)
-                _scriptLines.Add(Shown(line));
+            {
+                string shown = Shown(line);
+                _scriptLines.Add(shown);
+                _scriptGlyphs.UnionWith(shown);
+            }
+        foreach (DialogLine line in _lines)
+            _scriptGlyphs.ExceptWith(line.Text ?? string.Empty);
         Form.Bind(_compare, slot => TryLine(slot, out int line) && _lines[line].IsAnswer ? PickKeys.Line(line) : null);
         page.Show(interviewForm.form, data, slot => TryLine(slot, out _), LinkHint, null, ScriptOf);
         MarkRows();
@@ -197,8 +214,18 @@ public sealed class TranscriptView : AppView, IAppItems
         return DisplayText.For(line.Text, _translation.Line(line), speech.Timing, speech.ReducedMotion);
     }
 
-    /// <summary>The font the form measures and prints <paramref name="text"/> in: the script's for a statement shown in its tongue, else none (the form's own).</summary>
-    private TMP_FontAsset ScriptOf(string text) => _scriptLines.Contains(text) ? _translation.Font : null;
+    /// <summary>The font the form measures and prints <paramref name="text"/> in: the script's for a statement shown in its tongue or a text holding one of the script's own glyphs (a word of such a statement), else none (the form's own).</summary>
+    private TMP_FontAsset ScriptOf(string text)
+    {
+        if (_scriptLines.Count == 0 || string.IsNullOrEmpty(text))
+            return null;
+        if (_scriptLines.Contains(text))
+            return _translation.Font;
+        foreach (char c in text)
+            if (_scriptGlyphs.Contains(c))
+                return _translation.Font;
+        return null;
+    }
 
     /// <summary>The transcript line a slot's row shows; false for any other slot.</summary>
     private bool TryLine(FormSlot slot, out int line)
