@@ -87,6 +87,12 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Read-only access to the current shift's ledger.</summary>
     public ShiftLedger Ledger => _ledger;
 
+    /// <summary>Today's portals (TodaysWorld.Portals, the portals spec v3 RT3), fixed at the day's start; none before it: the board, the rings and the Portals app read it.</summary>
+    public PortalDay Portals => _today != null ? _today.Portals : PortalDay.None;
+
+    /// <summary>Raised when an accepted traveller leaves, with the portal they leave through (PortalDay.DepartureFor; the hall's rings pulse it, VX4).</summary>
+    public event System.Action<int> Departed;
+
     /// <summary>Raised when the player acknowledges a citation slip (Mail's citation notice arrives then; redesign phase 25).</summary>
     public event System.Action<CaseVerdict> CitationAcknowledged;
 
@@ -605,6 +611,8 @@ public sealed class GameManager : MonoBehaviour
         // panic there (tomorrow's news). DayCycle holds the step, so the balance
         // simulation plays the same one.
         CaseVerdict verdict = DayCycle.Decide(inst, accepted, _activeCaseIndex1Based, evidenceCount, _worldState, _today, _ledger, contentLibrary, _gameConfig);
+        if (accepted)
+            AnnounceDeparture(inst);
 
         if (officeUI != null)
             officeUI.UpdateHud(_worldState);
@@ -626,6 +634,18 @@ public sealed class GameManager : MonoBehaviour
         }
 
         ShowVerdictThen(verdict, () => orchestrator.MarkCaseResolved());
+    }
+
+    /// <summary>An accepted traveller leaves through today's portal for them (the displaced by the Return Gate once repaired, else 01; a citizen by the open route to their destination, else 01): the portal is announced for the hall's pulse; none when the hall has no portals.</summary>
+    private void AnnounceDeparture(CaseInstance inst)
+    {
+        if (_today == null || inst.claimedNation == null || inst.claimedEra == null)
+            return;
+        int portal = _today.Portals.DepartureFor(new PlaceRef(inst.claimedNation.id, inst.claimedEra.id), inst.kind == TravellerKind.Displaced);
+        if (portal <= 0)
+            return;
+        Debug.Log($"[GameManager] Case {_activeCaseIndex1Based} leaves through portal {PortalText.Number(portal)}.");
+        Departed?.Invoke(portal);
     }
 
     /// <summary>

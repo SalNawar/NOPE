@@ -1183,6 +1183,7 @@ public static partial class OfficeSceneUIBuilder
         var windows = new Dictionary<string, DesktopWindow>
         {
             { DesktopAppIds.Investigation, app.Window },
+            { DesktopAppIds.Portals, BuildPortalsWindow(windowLayer, config, game) },
             { DesktopAppIds.Internet, internet },
             { DesktopAppIds.Mail, BuildMailWindow(windowLayer, config, feed, apps, internet.GetComponent<BrowserWindow>(), app.App) },
             { DesktopAppIds.CitizenAccount, BuildAccountWindow(windowLayer, config) },

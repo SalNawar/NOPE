@@ -477,6 +477,15 @@ public sealed class ContentLibrarySO : ScriptableObject
         return _profileById.TryGetValue(id, out NationEraProfileSO profile) ? profile : null;
     }
 
+    /// <summary>The place of <paramref name="place"/>'s nation and era ids (a portal's route), or null.</summary>
+    public NationEraProfileSO GetProfile(PlaceRef place)
+    {
+        foreach (NationEraProfileSO p in Profiles)
+            if (p != null && p.nation != null && p.era != null && p.nation.id == place.NationId && p.era.id == place.EraId)
+                return p;
+        return null;
+    }
+
     /// <summary>The theme of a culture id ("neutral" or a nation id), or null for an unknown or blank id.</summary>
     public ThemeSO GetThemeByCultureId(string id)
     {
