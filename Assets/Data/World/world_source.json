@@ -1377,7 +1377,7 @@
       {
         "id": "credit",
         "name": "Leisure Credit Bureau",
-        "shape": "Diamond",
+        "shape": "Ellipse",
         "ink": "Violet",
         "legend": "LC",
         "forgedLegend": "LE",

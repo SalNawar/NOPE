@@ -65,5 +65,5 @@ public static class SealArt
     public static Color Ink(SealInk ink) => ColorUtility.TryParseHtmlString(Seals.InkHex(ink), out Color c) ? c : Color.black;
 
     /// <summary>A legend's size inside its seal: this share of the seal's side (two bold capitals fill the hairline's middle, 14 px on a paper held at 720p).</summary>
-    public const float LegendShare = 0.42f;
+    public const float LegendShare = 0.5f;
 }

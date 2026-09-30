@@ -14,8 +14,8 @@ public enum SealShape
     /// <summary>A heater shield: flat top, pointed foot.</summary>
     Shield,
 
-    /// <summary>A square stood on its corner.</summary>
-    Diamond,
+    /// <summary>An oval ring, wider than it is tall.</summary>
+    Ellipse,
 
     /// <summary>An eight-sided ring.</summary>
     Octagon,

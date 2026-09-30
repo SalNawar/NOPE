@@ -22,23 +22,24 @@ office. The ten traveller forms:
 
 | Form | Frame | Accent | Paper | Aspect | Size |
 |---|---|---|---|---|---|
-| TC-101 visa | top band | navy | cool white | 0.72 | 0.86 (a card) |
+| TC-101 visa | top band | navy | cool white | 0.765 | 0.86 (a card) |
 | TC-230 manifest | ticket stub + perforation | green | pale green | 0.765 | 0.95 |
 | TC-310 waiver | certificate frame | oxblood | pale rose | 0.765 | 1.05 (legal) |
 | TC-415 credit agreement | side band | plum | pale lilac | 0.765 | 0.93 |
 | TC-416 proof of funds | letterhead | plum | pale lilac | 0.765 | 0.90 |
 | TC-417 insurance | top band | umber | cream | 0.765 | 0.90 |
 | TC-520 labour contract | letterhead | black | grey | 0.765 | 1.12 (large) |
-| TC-610 displacement certificate | certificate frame | slate | cool white | 0.72 | 1.00 |
+| TC-610 displacement certificate | certificate frame | slate | cool white | 0.765 | 1.00 |
 | TC-620 intake declaration | side band | slate | off-white | 0.765 | 0.95 |
 | TC-630 return order | top band | rust | peach | 0.765 | 0.92 |
 
 The PC page kinds: the Directive Memo (today's rules) a red top band, the Record Extract (citizen
 record, agency account extract) a navy side band, the Statement (the agency account) a green
 letterhead, the Register (every reference book) and the Seal Register an umber certificate frame.
-Aspects stay at or below the style's (0.72 at the narrowest) because the half-width boxes hold a
-28-character value on two lines at the value floor only at about that width; the frames and tints
-carry most of the recognition. The citation slip is an art slot (`ArtSlots.CitationSlip`), not a
+Every form keeps the style's aspect for now: the validator showed the visa and the certificate at
+0.72 running 0.13 page heights past their page (their boxes hold a 28-character value on two lines at
+the value floor only at the full width), so the silhouette is the frame, the band colour, the tint,
+the size on the desk and the seal; the aspect knob stays for a form that has the room. The citation slip is an art slot (`ArtSlots.CitationSlip`), not a
 form, and stays track C's.
 
 Contrast: every look's palette passes the forms' pairs (`FormContrast.Problems`), and every seal ink
@@ -69,13 +70,15 @@ masters for no new check. Whether any should become faultable is an open questio
 ## D4: seals
 
 Each issuing office (`agency.offices`: eight, each issuing one to two forms) prints its seal on its
-forms: an outline (`SealShape`: circle, hexagon, shield, diamond, octagon, square) in an ink
+forms: an outline (`SealShape`: circle, hexagon, shield, ellipse, octagon, square: outlines whose middle holds the legend) in an ink
 (`SealInk`: six dark inks) with a two-letter legend inside; no two offices share an outline and ink.
 The office's name is the form's programme line. The seal sits in a box at the header's right (the
 header's words stay clear of it) and is a field of the form (category `Seal`, "Issuing Seal"), so it
 is picked like any value; its canonical value is its description ("Blue hexagon · VO"). The seals are
-drawn by code (`SealOutlines`, `SealArt`: a ring and a hairline, tinted by the ink); the legend is
-printed at 0.42 of the seal's side, about 14 px on a paper held at 720p.
+drawn by code (`SealOutlines`, `SealArt`: a ring and a hairline, tinted by the ink); the seal's side
+is 0.085 page heights, no taller than the header's words (so no form grows), and the legend is printed
+at half the seal's side, about 13.5 px on a paper held at 720p and 20 px at 1080p. Beside a seal the
+agency and programme lines shrink (to 80 % at most) to keep one line.
 
 The **Seal Register** is a reference book (`RefBook_Seals`, category `Seal`, the 7th book, TC-917),
 drawn on its own page kind (`Form_SealRegister`: a `SealGrid` block, three seals to a row, each over

@@ -149,5 +149,5 @@ MonoBehaviour:
       frame: 3
       accent: '#2F4F6F'
       paper: '#EEF1F3'
-      aspect: 0.72
+      aspect: 0
       scale: 1

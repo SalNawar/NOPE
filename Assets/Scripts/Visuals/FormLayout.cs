@@ -173,7 +173,7 @@ public sealed class FormMetrics
     public float finePrintSize = 0.020f;
 
     /// <summary>The seal's side: faint behind the header, or the issuing office's seal at the header's right (the document design spec, D4) and each seal of the Seal Register.</summary>
-    public float sealSize = 0.11f;
+    public float sealSize = 0.085f;
 
     /// <summary>The barcode's height.</summary>
     public float barcodeHeight = 0.03f;
@@ -804,9 +804,12 @@ public static class FormLayout
 
         // ---------------- Blocks ----------------
 
+        /// <summary>Beside an office seal the agency and programme lines shrink to keep one line, down to this share of their size, and the title down to this share of its floor.</summary>
+        private const float OfficeLineFloor = 0.8f;
+
         /// <summary>
         /// The header: the agency line at the left and the programme line at
-        /// the right; under them the title (one line, shrinking to its floor)
+        /// the right (beside an office seal each, and the title, shrinks further to keep one line); under them the title (one line, shrinking to its floor)
         /// and the form number at its right. The seal: faint behind the
         /// header, or, when the block names a field (a document's Seal field,
         /// the document design spec D4), the issuing office's seal in a box at
@@ -829,12 +832,15 @@ public static class FormLayout
                 Add(FormItemKind.Seal, FaceRect.FromTop(_left, top, side, side));
             }
             float agencyWidth = width * 0.55f;
-            float agency = Text(FormTextRole.Agency, (_data.Agency ?? string.Empty).ToUpperInvariant(), _left, top, agencyWidth, G(_m.agencySize));
-            float programme = Text(FormTextRole.Programme, _data.Programme, _left + agencyWidth, top, width - agencyWidth, G(_m.programmeSize), -1, FormTextAlign.Right);
+            string agencyLine = (_data.Agency ?? string.Empty).ToUpperInvariant();
+            float agencySize = office ? OneLine(agencyLine, FormTextRole.Agency, _m.agencySize, _m.agencySize * OfficeLineFloor, agencyWidth) : G(_m.agencySize);
+            float programmeSize = office ? OneLine(_data.Programme ?? string.Empty, FormTextRole.Programme, _m.programmeSize, _m.programmeSize * OfficeLineFloor, width - agencyWidth) : G(_m.programmeSize);
+            float agency = Text(FormTextRole.Agency, agencyLine, _left, top, agencyWidth, agencySize);
+            float programme = Text(FormTextRole.Programme, _data.Programme, _left + agencyWidth, top, width - agencyWidth, programmeSize, -1, FormTextAlign.Right);
             float titleTop = top + Math.Max(agency, programme) + G(_m.rowGap);
             float titleWidth = width * 0.84f;
             string title = (_data.Title ?? string.Empty).ToUpperInvariant();
-            float size = OneLine(title, FormTextRole.Title, _m.titleSize, _m.titleFloor, titleWidth);
+            float size = OneLine(title, FormTextRole.Title, _m.titleSize, office ? _m.titleFloor * OfficeLineFloor : _m.titleFloor, titleWidth);
             float titleHeight = Text(FormTextRole.Title, title, _left, titleTop, titleWidth, size);
             float number = string.IsNullOrEmpty(_data.FormNumber) ? 0f : Line(FormTextRole.FormNumber, G(_m.formNumberSize));
             Text(FormTextRole.FormNumber, _data.FormNumber, _left + titleWidth, titleTop + Math.Max(0f, titleHeight - number), width - titleWidth, G(_m.formNumberSize), -1, FormTextAlign.Right);
