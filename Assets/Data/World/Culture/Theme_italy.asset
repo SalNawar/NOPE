@@ -235,7 +235,7 @@ MonoBehaviour:
     hasFill: 1
     fill: {r: 1, g: 1, b: 1, a: 1}
     hasInk: 1
-    ink: {r: 0.4509804, g: 0.4509804, b: 0.4509804, a: 0.8}
+    ink: {r: 0.43137255, g: 0.43137255, b: 0.43137255, a: 1}
     textClass: 4
   - role: 35
     hasFill: 1

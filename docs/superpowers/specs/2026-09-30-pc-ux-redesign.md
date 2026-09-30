@@ -139,7 +139,7 @@ The tokens are the builder's `PcType` and `PcSize` (`OfficeSceneUIBuilder.Tokens
 | `TabActive` | paper / ink | unchanged | the shown item under its source |
 | `FocusRing` | accent | unchanged | the active pane's underline, "beside", the focus ring |
 
-The neutral theme's seeds move off Windows XP: chrome `#2157DB` → `#33507A` (steel), chromeDeep `#1A52C7` → `#1C2636` (deep slate), accent `#2E7D32` → `#2F6BD8` (clear blue), face `#ECE9D8` → `#E2E0D6` (a warm grey under the paper), faceInk `#000000` → `#1C1B19`; its screen and claim strips follow the slate (`#1C2636CC`). The eight cultures keep their seeds (their chromeDeep already carried their tray text at AA). Glosses are no longer drawn (the `TaskbarGloss` and `TitleGloss` roles stay in the map, taken by no graphic).
+The neutral theme's seeds move off Windows XP: chrome `#2157DB` → `#33507A` (steel), chromeDeep `#1A52C7` → `#1C2636` (deep slate), accent `#2E7D32` → `#2F6BD8` (clear blue), face `#ECE9D8` → `#E2E0D6` (a warm grey under the paper), faceInk `#000000` → `#1C1B19`, muted `#737373CC` → `#6E6E6E` (opaque: the translucent placeholder ink measured 2.7:1 on screen in the linear pipeline, under the hint's 3:1; every culture takes it); its screen and claim strips follow the slate (`#1C2636CC`). The eight cultures keep their seeds (their chromeDeep already carried their tray text at AA). Glosses are no longer drawn (the `TaskbarGloss` and `TitleGloss` roles stay in the map, taken by no graphic).
 
 ## 5. Components
 
