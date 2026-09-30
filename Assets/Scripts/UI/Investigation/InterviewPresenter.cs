@@ -61,6 +61,16 @@ public sealed class InterviewPresenter
     /// <summary>The categories of the questions offered to the current traveller (none when the interview is not reachable).</summary>
     private IReadOnlyList<ClueCategory> _questionCategories = Array.Empty<ClueCategory>();
 
+    /// <summary>The current traveller's graph (the differences menu joins it as the clerk logs differences) and the traveller as the script reads them.</summary>
+    private DialogGraph _graph;
+    private InterviewCase _interviewCase;
+
+    /// <summary>True while the current traveller's spoken lines can be read (a question about a difference needs the transcript).</summary>
+    private bool _interviewReachable;
+
+    /// <summary>True once the current traveller cracked over a difference (a liar who confessed once confesses again).</summary>
+    private bool _cracked;
+
     /// <summary>Raised for each answer the traveller gives, with its category.</summary>
     public event Action<ClueCategory> Answered;
 
@@ -161,6 +171,10 @@ public sealed class InterviewPresenter
             _wheel.SetTranslation(_caseTranslation);
 
         _runner = null;
+        _graph = null;
+        _interviewCase = null;
+        _cracked = false;
+        _interviewReachable = interviewReachable;
         _questionCategories = Array.Empty<ClueCategory>();
         if (_day == null)
         {
@@ -177,6 +191,8 @@ public sealed class InterviewPresenter
             interviewReachable ? _day.Questions : Array.Empty<InterviewQuestion>(),
             interviewReachable ? _day.OfferedDialogs(premadeDialog) : Array.Empty<AuthoredDialog>(),
             interviewCase);
+        _graph = graph;
+        _interviewCase = interviewCase;
         _runner = new DialogRunner(graph, InterviewScript.Opening(_day.Lines, interviewCase));
 
         CaseClaim claim = AppLinks.Claim(inst);
@@ -330,6 +346,37 @@ public sealed class InterviewPresenter
         if (choice.Action == DialogAction.CompleteDialog)
             _day.Complete(choice.DialogId, choice.EffectName);
 
+        RefreshChoices();
+    }
+
+    /// <summary>
+    /// A difference the clerk just logged (EvidencePresenter.Documented; wave
+    /// 5, lesson 3): the traveller wheel gains a question about exactly it in
+    /// the differences menu (InterviewScript.Confront and AddConfront, up to
+    /// the wheel's capacity), the same verb for every traveller; the answer is
+    /// decided now in the traveller's voice (Confrontations.Outcome: the
+    /// honest explain, a liar cracks by their personality's chance or doubles
+    /// down, once cracked always). Asking it costs the shift the time the
+    /// exchange takes, as every question does. Nothing without a traveller at
+    /// the desk or a readable interview.
+    /// </summary>
+    public void Confront(Discrepancy difference)
+    {
+        CaseInstance inst = _currentCase();
+        if (difference == null || inst == null || _runner == null || _graph == null || _day == null || !_interviewReachable)
+            return;
+
+        ReactionIntent intent = ReactionIntents.Of(inst.IsLiar, inst.IsForger);
+        ConfrontOutcome outcome = Confrontations.Outcome(intent, inst.legendarySource != null, inst.confess, inst.dialogSeed, difference.category, _cracked);
+        DialogChoice question = InterviewScript.Confront(_day.Lines, _interviewCase, difference, UiText.Category(difference.category), outcome, inst.FaultReason, inst.lie);
+        if (question == null)
+        {
+            Debug.LogWarning($"[InvestigationUIController] No question about a {difference.provedBy} · {difference.source} difference is authored (world_source.json interview.confront.prompts), so the wheel cannot ask about it. Run Tools > TimeDesk > Generate World.", _context);
+            return;
+        }
+        if (!InterviewScript.AddConfront(_graph, _day.Lines, question, _day.Lines.menuCapacity))
+            return;
+        _cracked |= outcome == ConfrontOutcome.Crack;
         RefreshChoices();
     }
 

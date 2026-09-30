@@ -69,6 +69,10 @@ public class VoiceChecksTests
         input.DefaultSlips.Add(Slip("Everything's in order. Don't check.", null));
         input.Voices.slips.Add(Slip("If this goes wrong, tell my creditors I tried.", "glum"));
         input.SlipChances = new[] { (1, 0.15f), (2, 0f), (3, 1f) };
+        input.Confront = ConfrontFixture.Wording();
+        foreach (string p in new[] { "curt", "glum" })
+            foreach (ConfrontOutcome outcome in (ConfrontOutcome[])System.Enum.GetValues(typeof(ConfrontOutcome)))
+                input.Voices.confront.Add(ConfrontFixture.Reply($"{p} {outcome}: {{value}}.", outcome, personality: p));
         return input;
     }
 
@@ -287,8 +291,8 @@ public class VoiceChecksTests
         List<string> info = VoiceChecks.Problems(Input()).Info;
         CollectionAssert.AreEqual(new[]
         {
-            "Personality 'curt' (Curt) has its own lines for claims, handOver, missingForms, spoken, reactions; the defaults speak its answers, smallTalk, waiverPad, slips.",
-            "Personality 'glum' (Glum) has its own lines for answers, smallTalk, reactions, slips; the defaults speak its claims, handOver, missingForms, spoken, waiverPad."
+            "Personality 'curt' (Curt) has its own lines for claims, handOver, missingForms, spoken, reactions, confront; the defaults speak its answers, smallTalk, waiverPad, slips.",
+            "Personality 'glum' (Glum) has its own lines for answers, smallTalk, reactions, slips, confront; the defaults speak its claims, handOver, missingForms, spoken, waiverPad."
         }, info);
     }
 
@@ -483,6 +487,52 @@ public class VoiceChecksTests
         input.PremadeIntents = new Dictionary<string, IReadOnlyCollection<ReactionIntent>> { ["senenmut"] = new[] { ReactionIntent.Lying } };
         input.Voices.reactions.Add(Reaction("Worth it.", null, ReactionVerdict.Accepted, ReactionIntent.Lying, premade: "senenmut"));
         input.Voices.reactions.Add(Reaction("Caught.", null, ReactionVerdict.Denied, ReactionIntent.Lying, premade: "senenmut"));
+        StringAssert.Contains("The premade 'senenmut' lies, so the desk can ask about a difference it logged, but it has no base DoubleDown reply", Errors(input));
+        input.Voices.confront.Add(ConfrontFixture.Reply("{value}. As the Pharaoh wills.", ConfrontOutcome.DoubleDown, premade: "senenmut"));
         StringAssert.DoesNotContain("senenmut", Errors(input));
+    }
+
+    // ---- The questions about logged differences (wave 5, lesson 3) ----
+
+    [Test]
+    public void Confront_EveryPersonalityAnswersInItsOwnVoice_ForEveryOutcome()
+    {
+        StringAssert.DoesNotContain("difference", Errors(Input()));
+
+        VoiceCheckInput input = Input();
+        input.Voices.confront.RemoveAll(r => r.personality == "glum" && r.outcome == ConfrontOutcome.Crack);
+        input.Voices.confront.Add(ConfrontFixture.Reply("glum cracks over a forgery.", ConfrontOutcome.Crack, personality: "glum", reason: "forged"));
+        StringAssert.Contains("Personality 'glum' (Glum) has no base Crack reply to a question about a difference", Errors(input), "a reason's row is no base row");
+
+        input = Input();
+        input.Cast = input.Cast.Concat(new[] { new Personality { id = "benched", name = "Benched", weight = 0f } }).ToList();
+        StringAssert.DoesNotContain("benched", Errors(input), "a personality out of the draw needs none");
+    }
+
+    [Test]
+    public void Confront_TheDefaultsNeedABaseRowPerOutcome_AndTheRowsTheirRules()
+    {
+        VoiceCheckInput input = Input();
+        input.Confront.replies.RemoveAll(r => r.outcome == ConfrontOutcome.DoubleDown);
+        input.Confront.replies.Add(ConfrontFixture.Reply("Named default.", ConfrontOutcome.Explain, personality: "curt"));
+        input.Voices.confront.Add(ConfrontFixture.Reply("A {document} and {weird}.", ConfrontOutcome.Crack, personality: "curt", reason: "sneezing", lie: "Fibbing"));
+        string errors = Errors(input);
+        StringAssert.Contains("interview.confront.replies has no base row for DoubleDown", errors);
+        StringAssert.Contains("interview.confront.replies row 5 names a voice", errors);
+        StringAssert.Contains("names the reason 'sneezing'", errors);
+        StringAssert.Contains("names the lie kind 'Fibbing'", errors);
+        StringAssert.Contains("holds {document}, which a reply to a difference cannot fill", errors);
+        StringAssert.Contains("holds the unknown token {weird}", errors);
+    }
+
+    [Test]
+    public void Confront_ThePromptsFitATranscriptRow_WithTheLongestFills()
+    {
+        VoiceCheckInput input = Input();
+        input.Confront.prompts[0].line.text = "Your {document} says {value}, and your {otherDocument} disagrees, and the book for {place} says {other}.";
+        string errors = Errors(input);
+        StringAssert.Contains("interview.confront.prompts row 1 can render", errors);
+        StringAssert.Contains("split it with its then line", errors);
+        StringAssert.Contains("holds {otherDocument}, which only a cross proof", errors, "the wording's own rules run with the voices'");
     }
 }

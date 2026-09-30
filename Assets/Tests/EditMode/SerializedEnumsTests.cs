@@ -350,4 +350,23 @@ public class SerializedEnumsTests
         Assert.AreEqual(5, (int)LookArtFallbackStep.NeutralExpression);
         Assert.AreEqual(6, System.Enum.GetValues(typeof(LookArtFallbackStep)).Length, "a new member is appended here too");
     }
+
+    /// <summary>ConfrontOutcome: stored in the voice rows (world_source.json interview.confront.replies and interview.voices.confront; wave 5, lesson 3).</summary>
+    [Test]
+    public void ConfrontOutcome_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)ConfrontOutcome.Explain);
+        Assert.AreEqual(1, (int)ConfrontOutcome.Crack);
+        Assert.AreEqual(2, (int)ConfrontOutcome.DoubleDown);
+        Assert.AreEqual(3, System.Enum.GetValues(typeof(ConfrontOutcome)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>ReturnStory: stored in the save (WorldState.returns; wave 5, lesson 9).</summary>
+    [Test]
+    public void ReturnStory_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)ReturnStory.Corrected);
+        Assert.AreEqual(1, (int)ReturnStory.NewStory);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(ReturnStory)).Length, "a new member is appended here too");
+    }
 }

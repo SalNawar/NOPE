@@ -219,6 +219,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             Arrived(AppTab.Report);
             ShowCounters();
         }, () => _currentCase, index, () => _agency, () => _reference.Day);
+        _evidence.Documented += _interview.Confront;
     }
 
     /// <summary>The start-up error and warnings for what is not wired (each changes what the day can show or generate).</summary>

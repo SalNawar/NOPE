@@ -239,6 +239,9 @@ public sealed class InterviewLines
     /// <summary>The desk's opener for a legendary ({name}).</summary>
     public LineText openerLegendary = new();
 
+    /// <summary>The desk's opener for a traveller who comes back after a denial ({honorific}, {day}: the day they were turned away; wave 5, lesson 9); blank: the plain opener.</summary>
+    public LineText openerReturning = new();
+
     /// <summary>The traveller's claim per kind ({place}; traveller types §8: the displaced "Please. Send me home to {place}."): the spoken claim's default when their voice has no row (Voices.Claim).</summary>
     public List<KindLine> claims = new();
 
@@ -307,6 +310,9 @@ public sealed class InterviewLines
 
     /// <summary>The desk's waiver pad (interview.waiverPad: the entry, the desk's words, the default replies; the endings and strandings spec §7.3).</summary>
     public WaiverPadWording waiverPad = new WaiverPadWording();
+
+    /// <summary>The wheel's questions about logged differences (interview.confront: the hub entry, each difference's entry, the desk's questions, the default replies; wave 5, lesson 3).</summary>
+    public ConfrontWording confront = new ConfrontWording();
 }
 
 /// <summary>

@@ -164,6 +164,9 @@ public sealed class DialogLine
 /// <summary>One choice the player can pick at a node.</summary>
 public sealed class DialogChoice
 {
+    /// <summary>A sub-menu entry offered only while the menu it opens (Next) offers a choice besides Back (the wheel's differences menu: shown once a logged difference can be asked about, gone once every one was).</summary>
+    public bool HideWhenSpent;
+
     /// <summary>Id, unique within the graph.</summary>
     public string Id;
 
@@ -278,7 +281,7 @@ public sealed class DialogRunner
                 _transcript.Add(line);
     }
 
-    /// <summary>The current node's choices minus the used one-shot ones, as a fresh list.</summary>
+    /// <summary>The current node's choices minus the used one-shot ones and any spent sub-menu entry (DialogChoice.HideWhenSpent), as a fresh list.</summary>
     public IReadOnlyList<DialogChoice> Choices
     {
         get
@@ -286,10 +289,22 @@ public sealed class DialogRunner
             var choices = new List<DialogChoice>();
             if (_current != null)
                 foreach (DialogChoice c in _current.Choices)
-                    if (c != null && !(c.OneShot && _used.Contains(c.Id)))
+                    if (c != null && !(c.OneShot && _used.Contains(c.Id)) && !(c.HideWhenSpent && !Offers(c.Next)))
                         choices.Add(c);
             return choices;
         }
+    }
+
+    /// <summary>True when node <paramref name="nodeId"/> offers a choice besides Back (its one-shot choices not yet used).</summary>
+    private bool Offers(string nodeId)
+    {
+        DialogNode node = _graph != null ? _graph.Node(nodeId) : null;
+        if (node == null)
+            return false;
+        foreach (DialogChoice c in node.Choices)
+            if (c != null && c.Kind != DialogChoiceKind.Back && !(c.OneShot && _used.Contains(c.Id)))
+                return true;
+        return false;
     }
 
     /// <summary>

@@ -723,4 +723,23 @@ public class DiscrepancyLogTests
         Assert.AreEqual(0, log.Count);
         Assert.IsTrue(log.Add(Currency()), "a new case documents the category again");
     }
+
+    /// <summary>Wave 5, lesson 3: a proof keeps the papers it names (the wheel's question about it names them): the stated paper, and a cross proof's other one; a spoken or worn statement is on no paper.</summary>
+    [Test]
+    public void Proofs_KeepThePapersTheyName()
+    {
+        CompareEvidence onPaper = TellDocField();
+        onPaper.document = 2;
+        Discrepancy byBook = DiscrepancyLog.Prove(onPaper, Entry(ClaimNation, ClaimEra, "Longship"), ClaimNation, ClaimEra, Traveller);
+        Assert.AreEqual((2, -1), (byBook.statementDocument, byBook.otherDocument));
+        Discrepancy said = DiscrepancyLog.Prove(SaidDevice(), Entry(ClaimNation, ClaimEra, "Longship"), ClaimNation, ClaimEra, Traveller);
+        Assert.AreEqual((-1, -1), (said.statementDocument, said.otherDocument));
+
+        var manifest = new CompareEvidence { kind = EvidenceKind.DocumentField, category = ClueCategory.TransponderClass, value = "Premium", isAnachronism = true, document = 3 };
+        var visa = new CompareEvidence { kind = EvidenceKind.DocumentField, category = ClueCategory.TransponderClass, value = "Economy", document = 1 };
+        Discrepancy cross = DiscrepancyLog.Prove(manifest, visa, ClaimNation, ClaimEra, Traveller);
+        Assert.AreEqual(DiscrepancyProof.CrossMismatch, cross.provedBy);
+        Assert.AreEqual((1, 3), (cross.statementDocument, cross.otherDocument), "in paper order");
+        Assert.AreEqual(("Economy", "Premium"), (cross.documentValue, cross.expectedValue));
+    }
 }

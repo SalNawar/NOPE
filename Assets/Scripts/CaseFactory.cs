@@ -153,6 +153,12 @@ public sealed class CaseFactory
     /// <summary>Guaranteed liars for the day being generated (the displaced's return home on its first day: the place lie they tell), by 1-based slot.</summary>
     private Dictionary<int, LieKind> _plannedLiars = new Dictionary<int, LieKind>();
 
+    /// <summary>The denied travellers who come back today (wave 5, lesson 9; PlanReturns), by 1-based slot.</summary>
+    private Dictionary<int, ReturningTraveller> _returning = new Dictionary<int, ReturningTraveller>();
+
+    /// <summary>The current slot's case seed (Seeds.ForCase), kept on the traveller for their return.</summary>
+    private int _caseSeed;
+
     /// <summary>
     /// Construct a factory over a content library and today's world: its
     /// places and their facts, history applied (ContentLibrarySO.BuildToday
@@ -238,6 +244,7 @@ public sealed class CaseFactory
             Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber} has no places (its eras x allowed nations match no profile). Run Tools > TimeDesk > Generate World.");
 
         _violators = PlanViolators(plan, total, daySeed, out _plannedLiars, out _plannedRules, out _violatorRules);
+        _returning = PlanReturns(plan, state, total, daySeed);
 
         Debug.Log($"[CaseFactory] Generating {total} case(s) for day {state.day} from {_todays.Count} place(s); guaranteed violators in slot(s) [{string.Join(", ", _violators.Keys)}], guaranteed liars in slot(s) [{string.Join(", ", _plannedLiars.Select(l => $"{l.Key}:{l.Value}"))}], guaranteed breakers in slot(s) [{string.Join(", ", _plannedRules.Select(r => $"{r.Key}:{r.Value.name}"))}].");
 
@@ -245,6 +252,7 @@ public sealed class CaseFactory
         {
             int caseIndex1Based = i + 1;
             int caseSeed = Seeds.ForCase(daySeed, caseIndex1Based);
+            _caseSeed = caseSeed;
             _rng = new SeededRandom(caseSeed);
             _lieRng = new SeededRandom(Seeds.ForLies(caseSeed));
             _dialogSeed = Seeds.ForDialog(caseSeed);
@@ -387,8 +395,21 @@ public sealed class CaseFactory
         _appearances.TryGetValue(caseIndex1Based, out ForcedCaseSlot appearance);
         CaseBlueprintSO forcedBlueprint = appearance != null ? appearance.caseBlueprint : null;
 
-        // 2) A premade (the appearance's, or rolled from the day's pool on the premade stream).
-        LegendarySO legendary = ResolvePremade(plan, state, caseIndex1Based, appearance, out bool forcedPremade);
+        // 1.5) A denied traveller who comes back (wave 5, lesson 9): the same person (name, kind, role, claim, birth date,
+        //      personality, Citizen ID) with their first visit's look and account streams, so the same face comes back;
+        //      corrected papers are an honest entry (no roll), a new story rolls everything again.
+        _returning.TryGetValue(caseIndex1Based, out ReturningTraveller back);
+        NationEraProfileSO backPlace = back != null ? PlaceOf(back) : null;
+        bool corrected = back != null && back.story == ReturnStory.Corrected;
+        if (back != null)
+        {
+            _looksRng = new SeededRandom(Seeds.ForLooks(back.caseSeed));
+            _accountRng = new SeededRandom(Seeds.ForAccount(back.caseSeed));
+        }
+
+        // 2) A premade (the appearance's, or rolled from the day's pool on the premade stream); none in a returning traveller's slot.
+        bool forcedPremade = false;
+        LegendarySO legendary = back != null ? null : ResolvePremade(plan, state, caseIndex1Based, appearance, out forcedPremade);
 
         // 2.5) A planned faulty traveller stands in this slot (never a premade's: see ResolvePremade): a closure's violator
         //      claims its place; a planned liar's slot is read at the lie roll; a planned procedure's breaker is made below.
@@ -397,7 +418,8 @@ public sealed class CaseFactory
         _plannedRules.TryGetValue(caseIndex1Based, out TravelRuleSO plannedRule);
 
         // 3) Decide the claimed era (the traveller's stated home and destination).
-        EraSO claimedEra = legendary != null ? legendary.trueEra
+        EraSO claimedEra = backPlace != null ? backPlace.era
+            : legendary != null ? legendary.trueEra
             : violatorPlace != null ? violatorPlace.era
             : PickEraFromPlan(plan);
 
@@ -407,7 +429,8 @@ public sealed class CaseFactory
         //    a planned procedure's slot only the kinds its rule reads and its maker
         //    can break, never an honest entry). A traveller drawn from an honest
         //    entry rolls no fault (K5, FaultOrder).
-        TravellerKind? onlyKind = legendary != null ? legendary.kind
+        TravellerKind? onlyKind = back != null ? back.kind
+            : legendary != null ? legendary.kind
             : _plannedLiars.TryGetValue(caseIndex1Based, out LieKind plannedLie) && plannedLie != LieKind.Smuggling ? TravellerKind.Displaced
             : (TravellerKind?)null;
         KindWeight entry = forcedBlueprint != null ? null :
@@ -416,30 +439,36 @@ public sealed class CaseFactory
                 ? TravellerKinds.PickWeight(k.blueprint.Kind, k.weight, onlyKind) * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, k.blueprint.name)
                 : 0f, _rng);
         CaseBlueprintSO blueprint = forcedBlueprint != null ? forcedBlueprint : entry?.blueprint;
-        bool honest = entry != null && entry.honest;
+        bool honest = (entry != null && entry.honest) || corrected;
 
         // A 2150 citizen (traveller types K2, K4) comes from the present: a drawn one, or a story character (a citizen premade, days 7-15 B2).
         bool citizen = blueprint != null && TravellerKinds.IsCitizen(blueprint.Kind);
 
         // 4.5) Timeline identity: archetype, place, visitor identity.
-        ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
-        NationEraProfileSO place = violatorPlace != null ? violatorPlace
+        ArchetypeSO archetype = back != null && _lib.Archetypes.Any(a => a != null && a.id == back.archetypeId)
+            ? _lib.Archetypes.First(a => a != null && a.id == back.archetypeId)
+            : PickArchetype(blueprint, legendary, state);
+        NationEraProfileSO place = backPlace != null ? backPlace
+            : violatorPlace != null ? violatorPlace
             : PickPlace(legendary, claimedEra, _plannedLiars.ContainsKey(caseIndex1Based) || plannedRule != null ? plan : null, blueprint != null ? blueprint.Kind : default);
         NationSO nation = legendary != null && legendary.nation != null ? legendary.nation : place != null ? place.nation : null;
         string originLabel = place != null ? PlaceLabel(place) : FallbackOriginLabel(nation, claimedEra);
-        string givenName = ResolveGivenName(legendary, forcedPremade, citizen ? _citizenNames.All : place != null ? place.AllNames : null, caseIndex1Based);
-        TravellerGender gender = legendary != null ? legendary.gender
+        string givenName = back != null ? back.name : ResolveGivenName(legendary, forcedPremade, citizen ? _citizenNames.All : place != null ? place.AllNames : null, caseIndex1Based);
+        TravellerGender gender = back != null ? back.gender
+            : legendary != null ? legendary.gender
             : citizen ? _citizenNames.GenderOf(givenName)
             : place == null ? TravellerGender.Unknown
             : TravellerGenders.FromNameLists(givenName, place.maleNames, place.femaleNames);
         string role = archetype != null ? archetype.displayName : UiText.Get("case.roleUnknown");
         string visitorName = legendary != null ? givenName : $"{givenName} ({role})";
-        string birthDate = legendary != null ? legendary.birthDate
+        string birthDate = back != null ? back.birthDate
+            : legendary != null ? legendary.birthDate
             : citizen ? GenerateBirthDate(_present != null ? _present.BirthYearMin : 0, _present != null ? _present.BirthYearMax : 0)
             : GenerateBirthDate(place != null ? place.birthYearMin : 0, place != null ? place.birthYearMax : 0);
         NationEraProfileSO family = !citizen ? null : legendary != null ? PremadeFamily(legendary) : FamilyOf(givenName);
         string intro = Interview.Opener(_lib.Interview, gender, legendary != null && Premades.IsFamous(legendary.kind) ? legendary.displayName : null,
-                                        Premades.Voice(appearance != null ? appearance.introLine : null, legendary != null ? legendary.introLine : null));
+                                        back != null ? Interview.ReturningOpener(_lib.Interview, gender, back.deniedDay)
+                                        : Premades.Voice(appearance != null ? appearance.introLine : null, legendary != null ? legendary.introLine : null));
 
         var inst = new CaseInstance
         {
@@ -455,6 +484,8 @@ public sealed class CaseFactory
             tongueId = !citizen && place != null && place.tongue != null ? place.tongue : string.Empty,
             visitorDisplayName = visitorName,
             visitorGivenName = givenName,
+            caseSeed = _caseSeed,
+            returning = back,
             trueBirthDate = birthDate,
             gender = gender,
             introLine = intro
@@ -467,7 +498,9 @@ public sealed class CaseFactory
         if (legendary == null)
         {
             Personality drawn = Personalities.Pick(_lib.Personalities, _personalityRng);
-            inst.personality = !string.IsNullOrEmpty(DevToolsState.ForcedPersonality) ? DevToolsState.ForcedPersonality : drawn != null ? drawn.id : string.Empty;
+            inst.personality = !string.IsNullOrEmpty(DevToolsState.ForcedPersonality) ? DevToolsState.ForcedPersonality
+                : back != null ? back.personality ?? string.Empty
+                : drawn != null ? drawn.id : string.Empty;
         }
 
         if (blueprint == null)
@@ -503,7 +536,7 @@ public sealed class CaseFactory
         if (inst.kind == TravellerKind.Displaced && _today != null)
             inst.displacement = AgencyNumbers.Displaced(_today.Value, _lib.Agency.displaced, _agencyNumbers, _accountRng);
         else if (citizen && _today != null && AccountMaker.StatusOf(inst.kind, out CitizenStatus status))
-            inst.account = AccountMaker.Make(AccountRequestFor(LieKinds.TrueStatus(lieKind, status), family, blueprint, claimedEra, lieKind == LieKind.DebtorPosingAsTourist, legendary),
+            inst.account = AccountMaker.Make(AccountRequestFor(LieKinds.TrueStatus(lieKind, status), family, blueprint, claimedEra, lieKind == LieKind.DebtorPosingAsTourist, legendary, back?.citizenId),
                                              _lib.Agency.accounts, _transponders, _lib.Agency.proofs, _today.Value, _agencyNumbers, _accountRng);
 
         // 4.9) The violation (K5: after the lie roll, before the costume roll): the slot's authored directive fault or a
@@ -567,6 +600,7 @@ public sealed class CaseFactory
             inst.faultWithDeskWaiver = Directives.Fault(plan.ActiveTravelRules.Where(r => r != null).Select(r => r.Directive).ToList(), signed);
         }
         Personality voice = _lib.Personalities.FirstOrDefault(p => p != null && p.id == inst.personality);
+        inst.confess = voice != null ? voice.confess : 0f;
         bool carriesSigned = inst.documents.Any(d => d != null && d.template != null && d.template.formNumber == Directives.Waiver && Directives.IsSigned(d.fields));
         inst.waiverPadReply = Waivers.PadReply(inst.deskWaiver != null, carriesSigned, voice != null ? voice.waiverRefusal : 0f, _waiverSignRng);
 
@@ -1430,11 +1464,14 @@ public sealed class CaseFactory
     /// (<paramref name="debtorPosing"/>) from an entry that carries a proof of
     /// means draws one they do not hold (L4's poor variant); a story
     /// character (<paramref name="premade"/>, days 7-15 B3) brings its
-    /// authored Citizen ID, debt and employer (by its agency.employers id).
+    /// authored Citizen ID, debt and employer (by its agency.employers id);
+    /// a returning traveller (wave 5, lesson 9) brings their own Citizen ID
+    /// (<paramref name="citizenId"/>).
     /// </summary>
-    private AccountRequest AccountRequestFor(CitizenStatus status, NationEraProfileSO family, CaseBlueprintSO blueprint, EraSO worksiteEra, bool debtorPosing, LegendarySO premade) => new AccountRequest
+    private AccountRequest AccountRequestFor(CitizenStatus status, NationEraProfileSO family, CaseBlueprintSO blueprint, EraSO worksiteEra, bool debtorPosing, LegendarySO premade,
+                                             string citizenId = null) => new AccountRequest
     {
-        CitizenId = premade != null ? premade.citizenId : null,
+        CitizenId = premade != null ? premade.citizenId : !string.IsNullOrWhiteSpace(citizenId) ? citizenId : null,
         Debt = premade != null ? premade.debt : 0,
         Employer = premade != null && !string.IsNullOrWhiteSpace(premade.employer)
             ? (_lib.Agency.employers ?? new List<Employer>()).FirstOrDefault(e => e != null && e.id == premade.employer)?.name
@@ -1565,6 +1602,51 @@ public sealed class CaseFactory
                 return RollPremade(plan, state);
         }
     }
+
+    /// <summary>
+    /// The denied travellers who come back today (wave 5, lesson 9): those of
+    /// the world's returns due today who fit it (Returns.Due, at most the day
+    /// plan's ReturnsMax: the plan takes their kind, their place is in today's
+    /// world and open to their kind, their name is free and so is their
+    /// Citizen ID), each in a slot no forced appearance or planned faulty
+    /// traveller holds (Returns.Slots on the day's own return stream, drawn
+    /// after the violators, so a day with none draws as before). Their names
+    /// and numbers are reserved before slot 1.
+    /// </summary>
+    private Dictionary<int, ReturningTraveller> PlanReturns(DayPlanSO plan, WorldState state, int total, int daySeed)
+    {
+        var planned = new Dictionary<int, ReturningTraveller>();
+        List<ReturningTraveller> due = Returns.Due(state.returns, state.day, r => ReturnFits(plan, r), plan.ReturnsMax);
+        if (due.Count == 0)
+            return planned;
+
+        var taken = new HashSet<int>(_appearances.Keys.Concat(_violators.Keys).Concat(_plannedLiars.Keys).Concat(_plannedRules.Keys));
+        List<int> slots = Returns.Slots(total, taken, due.Count, new SeededRandom(Seeds.ForReturnSlots(daySeed)));
+        for (int i = 0; i < slots.Count; i++)
+        {
+            ReturningTraveller r = due[i];
+            planned[slots[i]] = r;
+            _roster.Reserve(r.name);
+            if (!string.IsNullOrWhiteSpace(r.citizenId))
+                _agencyNumbers.Add(r.citizenId.Trim());
+            Debug.Log($"[CaseFactory] Day {state.day} slot {slots[i]}: '{r.displayName}' comes back ({r.story}), turned away on day {r.deniedDay}.");
+        }
+        return planned;
+    }
+
+    /// <summary>True when a returning traveller fits today: the plan draws their kind, their place is among today's and open to them, and their name and Citizen ID are free.</summary>
+    private bool ReturnFits(DayPlanSO plan, ReturningTraveller r)
+    {
+        NationEraProfileSO place = PlaceOf(r);
+        return place != null && plan.Kinds.Any(k => k != null && k.blueprint != null && k.blueprint.Kind == r.kind && k.weight > 0f)
+               && plan.ClaimAllowed(place.nation, place.era, r.kind)
+               && !_roster.IsTaken(r.name)
+               && (string.IsNullOrWhiteSpace(r.citizenId) || !_agencyNumbers.Contains(r.citizenId.Trim()));
+    }
+
+    /// <summary>A returning traveller's claimed place among today's places; null when today's world does not hold it.</summary>
+    private NationEraProfileSO PlaceOf(ReturningTraveller r) =>
+        _todays.FirstOrDefault(p => p != null && p.nation != null && p.era != null && p.nation.id == r.nationId && p.era.id == r.eraId);
 
     /// <summary>
     /// Each forced slot's appearance today (days 7-15 B9): its entries in the

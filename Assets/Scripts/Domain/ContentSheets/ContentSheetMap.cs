@@ -127,6 +127,8 @@ public static class ContentSheetMap
             Single("news", "news",
                 Text("stranded").Note("the morning paper's line per traveller stranded the day before: {name} and {place}"),
                 Text("debtReliefCount").Note("the morning paper's count of the Debt Relief departures the last shift approved: {count}"),
+                Text("returnedAccepted").Note("the desk section's line for a traveller turned away who came back and was let through: {name}, {day} (the first denial), {back} (the return)"),
+                Text("returnedDenied").Note("the desk section's line for a traveller turned away twice: {name}, {day}, {back}"),
                 Values("newsDebt", "debt", Text("text")).Note("the morning paper's debt lines: one a day, in a shuffled order per run")).Note("the morning paper's debt-theme lines"),
             Pc(),
             Ui(),
@@ -280,6 +282,7 @@ public static class ContentSheetMap
             Float("costumeErrorChance").Note("chance per 2150 citizen of a costume error (0 before the dress rule's first day)"),
             Float("slipChance").Note("chance per generated liar of a slip after small talk (the personalities spec's T9; 0 never)"),
             Float("violationChance").Note("chance per honest traveller of breaking a rolled procedure, the paper set or the debt standing (0 before their first day)"),
+            Int("returns").Omit().Note("the most travellers turned away earlier who may come back that day, same name and face (0: none; the chance and the days are Game Config knobs)"),
             Rows("dayPortals", "portals",
                 Int("portal").Required().Ref("agencyPortals"),
                 Text("country").Ref("countries"),
@@ -290,6 +293,7 @@ public static class ContentSheetMap
             Text("deskName"),
             Text("opener"),
             Text("openerLegendary"),
+            Text("openerReturning").Note("the desk's opener for a traveller back after a denial: {honorific} and {day} (the day they were turned away)"),
             Rows("claims", "claims",
                 Text("kind").Required().OneOf("RichTourist", "PoorTourist", "Labourer", "Displaced"),
                 Text("text")).Note("the claim per traveller kind ({place}): one row per kind a blueprint makes"),
@@ -363,6 +367,10 @@ public static class ContentSheetMap
                 Text("lie").Omit().Note("a lie kind (blank: any)")),
             VoiceSheet("voiceWaiverPad", "voices.waiverPad", "the answer to the desk's waiver pad in a voice ({place}): every personality signs and refuses in its own words",
                 Text("reply").Required().OneOf(System.Enum.GetNames(typeof(WaiverPadReply)))),
+            VoiceSheet("voiceConfront", "voices.confront", "the answer to the desk's question about a logged difference in a voice ({value}, {other}, {place}): every personality explains, cracks and doubles down in its own words",
+                Text("outcome").Required().OneOf(System.Enum.GetNames(typeof(ConfrontOutcome))).Note("Explain: an honest traveller (a clerical slip; it clears nothing); Crack: a liar confesses; DoubleDown: a liar insists"),
+                Text("reason").Omit().Note("a fault reason (forged, disguised, smuggled, panic...; blank: any)"),
+                Text("lie").Omit().Note("a lie kind (blank: any)")),
             Single("waiverPad", "waiverPad",
                 Text("label").Note("the entry every traveller of a day whose papers menu holds the waiver is offered"),
                 Text("prompt").Note("what the desk says as it slides a blank across"),
@@ -370,7 +378,23 @@ public static class ContentSheetMap
                     Text("reply").Required().OneOf(System.Enum.GetNames(typeof(WaiverPadReply))),
                     List("kinds").Omit().Note("the kinds it is for (blank: any)"),
                     Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
-                    Text("text")).Note("the default replies: one base row per reply is required")).Note("the desk's waiver pad (the endings and strandings spec §7.3)")).Note("the interview's wording");
+                    Text("text")).Note("the default replies: one base row per reply is required")).Note("the desk's waiver pad (the endings and strandings spec §7.3)"),
+            Single("confront", "confront",
+                Text("label").Note("the hub entry that opens the questions about the differences the clerk logged (shown while one is still to be asked)"),
+                Text("entryLabel").Note("one difference's entry: {category} and {value}"),
+                Rows("confrontPrompts", "prompts",
+                    Text("proof").Required().OneOf(System.Enum.GetNames(typeof(DiscrepancyProof))),
+                    Text("source").Required().OneOf("DocumentField", "Answer", "Appearance").Note("what the statement was: papers, said or worn (a cross proof is always DocumentField)"),
+                    Text("category").Omit().Note("the clue category it is for (blank: any)"),
+                    Text("text").Note("the desk's question: {value} and {other} required (here or in then); {category}, {place}, {document} (papers) and {otherDocument} (a cross proof) allowed"),
+                    Text("then").Omit().Note("an optional second desk line (each line fits a transcript row)")).Note("the desk's questions: one base row (blank category) per proof and statement kind is required"),
+                Rows("confrontReplies", "replies",
+                    Text("outcome").Required().OneOf(System.Enum.GetNames(typeof(ConfrontOutcome))),
+                    Text("reason").Omit().Note("a fault reason (blank: any)"),
+                    Text("lie").Omit().Note("a lie kind (blank: any)"),
+                    List("kinds").Omit().Note("the kinds it is for (blank: any)"),
+                    Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                    Text("text").Note("{value}, {other} and {place} allowed")).Note("the default answers: one base row per outcome is required")).Note("the wheel's questions about logged differences (wave 5, lesson 3)")).Note("the interview's wording");
 
     /// <summary>The cast (world_source.json "personalities"; the personalities spec's PS1-PS2).</summary>
     private static SheetSpec PersonalitiesSheet() =>
@@ -380,7 +404,8 @@ public static class ContentSheetMap
             Num("weight").Note("its weight in the draw, the same for every kind (0 benches it)"),
             Text("note").Note("for authors: the tone in one line (never shown in the game)"),
             Num("waiverRefusal").Note("the chance they refuse the desk's waiver pad, in character (0 to 1; never shown)"),
-            Text("strandingFate").Omit().OneOf(System.Enum.GetNames(typeof(StrandingFate))).Note("the stranding fate their tilt multiplies (blank: none)")).Note("the cast: every generated traveller is one of them; the premades speak their own lines");
+            Text("strandingFate").Omit().OneOf(System.Enum.GetNames(typeof(StrandingFate))).Note("the stranding fate their tilt multiplies (blank: none)"),
+            Num("confess").Note("the chance a lying traveller cracks when the desk asks about a difference the clerk logged (0 to 1; otherwise they double down; never shown)")).Note("the cast: every generated traveller is one of them; the premades speak their own lines");
 
     /// <summary>One voice slot's sheet (interview.voices.{list}; the personalities spec's §9.1): the voice (a personality or a premade, exactly one), the slot's keys, the kinds and era it is for, the line.</summary>
     private static SheetSpec VoiceSheet(string sheet, string path, string note, params ColumnSpec[] keys) =>
@@ -469,6 +494,9 @@ public static class ContentSheetMap
             Text("lines.carry"),
             Text("lines.dominant").Note("an attribute becomes dominant in a place: {attribute} and {place}"),
             Text("lines.panic").Note("an accepted costume error caused a panic: {place} and {value} (the wrong item)"),
+            Text("lines.carryBy").Note("a carry traced to its face: {value}, {place}, {name} (the traveller stamped) and {day}"),
+            Text("lines.panicBy").Note("a panic traced to its face: {place}, {value}, {name} and {day}"),
+            Text("lines.traced").Note("what a world-outcome headline ends with: the last traveller whose verdict pulled it, {name} and {day}"),
             Rows("historyRules", "rules", Key("id", "rule"),
                 Text("id").Required(),
                 Text("name"),

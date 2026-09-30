@@ -46,12 +46,15 @@ public static class DayCycle
     /// A traveller comes to the desk: a once-per-run premade is marked met
     /// (FlagKeys.PremadeMet), so they never roll again and a later forced slot
     /// for them holds an ordinary traveller. The game calls it when it shows
-    /// the case; a repeatable premade is never marked.
+    /// the case; a repeatable premade is never marked. A returning traveller
+    /// (wave 5, lesson 9) is marked returned: they come back once.
     /// </summary>
     public static void Present(WorldState world, CaseInstance inst)
     {
         if (world != null && inst != null && inst.isLegendary && inst.legendarySource != null && inst.legendarySource.oncePerRun)
             world.SetFlag(FlagKeys.PremadeMet(inst.legendarySource.id));
+        if (world != null && inst != null && inst.returning != null)
+            inst.returning.returned = true;
     }
 
     /// <summary>
@@ -65,7 +68,9 @@ public static class DayCycle
     /// traveller toward their destination's leanings, a denial toward "as you
     /// found it"); an accepted traveller is dispatched: the timeline impacts
     /// land on the claimed place, their tell source's carry is recorded and a
-    /// costume error's panic is noted.
+    /// costume error's panic is noted. A returning traveller's second verdict
+    /// is kept for the paper's desk section; a generated traveller denied on
+    /// a first visit may come back (PlanReturn; wave 5, lesson 9).
     /// </summary>
     public static CaseVerdict Decide(CaseInstance inst, bool accepted, int caseIndex1Based, int evidenceCount,
                                      WorldState world, TodaysWorld today, ShiftLedger ledger, ContentLibrarySO lib, GameConfigSO config)
@@ -89,7 +94,50 @@ public static class DayCycle
             HistoryService.RecordPanic(world, inst);
         }
 
+        if (inst != null && inst.returning != null && world != null)
+        {
+            inst.returning.backDay = world.day;
+            inst.returning.acceptedBack = accepted;
+            inst.returning.reported = false;
+        }
+        else if (!accepted)
+        {
+            PlanReturn(world, inst, config);
+        }
+
         return verdict;
+    }
+
+    /// <summary>
+    /// A generated traveller denied on a first visit may come back (wave 5,
+    /// lesson 9): Returns.Plan on their own return stream (Seeds.ForReturn of
+    /// their case seed) with GameConfigSO's recurring-faces knobs; when they
+    /// will, who they are is kept in WorldState.returns (name, role, kind,
+    /// claim, gender, birth date, personality, Citizen ID, case seed). A
+    /// premade never enters (their returns are the day plans').
+    /// </summary>
+    private static void PlanReturn(WorldState world, CaseInstance inst, GameConfigSO config)
+    {
+        if (world == null || inst == null || config == null || inst.claimedNation == null || inst.claimedEra == null)
+            return;
+        ReturningTraveller back = Returns.Plan(!inst.isLegendary, config.returnChance, config.returnAfterDaysMin, config.returnAfterDaysMax,
+                                               config.returnCorrectedChance, world.day, Seeds.ForReturn(inst.caseSeed));
+        if (back == null)
+            return;
+        back.name = inst.visitorGivenName ?? string.Empty;
+        back.displayName = inst.visitorDisplayName ?? string.Empty;
+        back.kind = inst.kind;
+        back.archetypeId = inst.archetype != null ? inst.archetype.id : string.Empty;
+        back.nationId = inst.claimedNation.id;
+        back.eraId = inst.claimedEra.id;
+        back.gender = inst.gender;
+        back.birthDate = inst.trueBirthDate ?? string.Empty;
+        back.personality = inst.personality ?? string.Empty;
+        back.citizenId = inst.account != null ? inst.account.CitizenId ?? string.Empty : string.Empty;
+        back.caseSeed = inst.caseSeed;
+        world.returns ??= new List<ReturningTraveller>();
+        world.returns.Add(back);
+        Debug.Log($"[DayCycle] '{back.displayName}' may come back ({back.story}) between day {back.fromDay} and day {back.untilDay}.");
     }
 
     /// <summary>

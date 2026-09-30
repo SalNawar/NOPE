@@ -57,6 +57,12 @@ public sealed class FactEdit
     /// <summary>The trigger label for a rule, the origin place's label for a carry.</summary>
     public string source;
 
+    /// <summary>A carry's traveller: the one whose stamp carried the value (the latest of the pair's records; wave 5, lesson 10); blank for a rule, or a record of an older save.</summary>
+    public string traveller = string.Empty;
+
+    /// <summary>The day that traveller was stamped (0 with no traveller).</summary>
+    public int travellerDay;
+
     /// <summary>An empty edit (for serialization).</summary>
     public FactEdit()
     {
@@ -99,6 +105,9 @@ public sealed class CarryRecord
 
     /// <summary>The day of the accept.</summary>
     public int day;
+
+    /// <summary>The traveller whose stamp carried it, as the paper names them (wave 5, lesson 10); blank in an older save.</summary>
+    public string traveller = string.Empty;
 }
 
 /// <summary>
@@ -146,6 +155,9 @@ public sealed class PanicRecord
 
     /// <summary>The day of the accept.</summary>
     public int day;
+
+    /// <summary>The traveller the clerk stamped through, as the paper names them (wave 5, lesson 10); blank in an older save.</summary>
+    public string traveller = string.Empty;
 }
 
 /// <summary>Wording of the templated history news (content; English text in v1).</summary>
@@ -158,14 +170,23 @@ public sealed class HistoryLines
     /// <summary>The leader loses the lead with no successor; token {nation}.</summary>
     public LineText leaderLost = new();
 
-    /// <summary>A carry latched; tokens {value} and {place}.</summary>
+    /// <summary>A carry latched; tokens {value} and {place}: the line for a carry whose traveller is unknown (an older save's).</summary>
     public LineText carry = new();
+
+    /// <summary>A carry latched, traced to its face (wave 5, lesson 10); tokens {value}, {place}, {name} (the traveller stamped) and {day} (the stamp's day).</summary>
+    public LineText carryBy = new();
 
     /// <summary>An attribute becomes dominant in a place (the dominance news, audit R3-007); tokens {attribute} and {place}.</summary>
     public LineText dominant = new();
 
-    /// <summary>An accepted costume error caused a panic (traveller types P5); tokens {place} and {value} (the wrong item).</summary>
+    /// <summary>An accepted costume error caused a panic (traveller types P5); tokens {place} and {value} (the wrong item): the line for a panic whose traveller is unknown (an older save's).</summary>
     public LineText panic = new();
+
+    /// <summary>A panic traced to its face (wave 5, lesson 10); tokens {place}, {value}, {name} and {day}.</summary>
+    public LineText panicBy = new();
+
+    /// <summary>What a world-outcome headline ends with, traced to the last traveller whose verdict pulled it (wave 5, lesson 10); tokens {name} and {day}.</summary>
+    public LineText traced = new();
 }
 
 /// <summary>
@@ -275,10 +296,12 @@ public static class History
     /// <summary>
     /// The next morning's panic lines (traveller types P5): one per accepted
     /// costume error, in accept order, the template's {place} and {value}
-    /// filled with its destination and wrong item. None for a blank template
-    /// or no panics (null records skipped).
+    /// filled with its destination and wrong item; a panic whose traveller is
+    /// known says <paramref name="byTemplate"/> when it is not blank, with
+    /// {name} and {day} too (wave 5, lesson 10: the headline names the face).
+    /// None for a blank template or no panics (null records skipped).
     /// </summary>
-    public static List<string> PanicLines(string template, IReadOnlyList<PanicRecord> panics)
+    public static List<string> PanicLines(string template, IReadOnlyList<PanicRecord> panics, string byTemplate = null)
     {
         var lines = new List<string>();
         if (string.IsNullOrWhiteSpace(template) || panics == null)
@@ -286,7 +309,10 @@ public static class History
 
         foreach (PanicRecord panic in panics)
             if (panic != null)
-                lines.Add(Interview.Fill(Interview.Fill(template, Interview.PlaceToken, panic.placeLabel), Interview.ValueToken, panic.item));
+            {
+                string traced = Traces.Fill(byTemplate, panic.traveller, panic.day);
+                lines.Add(Interview.Fill(Interview.Fill(traced ?? template, Interview.PlaceToken, panic.placeLabel), Interview.ValueToken, panic.item));
+            }
         return lines;
     }
 }
