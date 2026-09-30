@@ -23,7 +23,12 @@
 // each shift, order at the PC (the Orders app's rule, OrderBook.Order)
 // Interview Protocols, then the Near East Speech translator (it needs the
 // Protocols delivered), at most one a day, once the wallet holds its price and
-// 20 cr more; it arrives the next morning. Home: treat any family member at
+// 20 cr more; it arrives the next morning. The re-paced days (wave 5 track C,
+// Papers Please lessons 4-6 and D7) are checked on the way: each day's
+// briefing opens with its bulletin (days 1-5 each have one), every traveller
+// carries only the day's issued papers (day 1: the visa alone), every
+// citation slip names its rule and a value, and every shift report shows
+// tonight's bills and the wallet after them. Home: treat any family member at
 // condition 2+ (the shop step is skipped: Home stocks no upgrade; never the
 // slot machine: its draw is unseeded).
 // RunShots plays the same run and also takes the screenshots of the redesign's
@@ -323,6 +328,11 @@ public static class _TimeDeskAuditPlay
         RecordBriefing();
         RecordWorld();
         RecordPortals(o);
+        DayPlanSO paced = RunManager.Instance.GetCurrentDayPlan();
+        string brief = ((TMP_Text)Field(Office.One<DayFlowUIController>(), "briefingBodyText")).text;
+        Check(day > 5 || !string.IsNullOrWhiteSpace(paced.Bulletin), $"day {day}: days 1-5 each announce their one new paper or check in a bulletin ('{paced.Bulletin}')");
+        Check(string.IsNullOrWhiteSpace(paced.Bulletin) || (brief.StartsWith(UiText.Get("briefing.bulletinHeader")) && brief.Contains(paced.Bulletin.Trim())),
+              $"day {day}: the briefing opens with the day's bulletin");
         WorldHeadlines(day);
         if (ShotsOn)
             yield return Shots($"d{day}_briefing");
@@ -377,8 +387,11 @@ public static class _TimeDeskAuditPlay
         yield return Frames(3);
         Line($"-- day {day} shift report ({presented} presented)");
         Line("   " + ((TMP_Text)Field(o.DayFlow(), "resultsTitleText")).text);
-        foreach (string l in Lines(((TMP_Text)Field(o.DayFlow(), "resultsBodyText")).text))
+        string report = ((TMP_Text)Field(o.DayFlow(), "resultsBodyText")).text;
+        foreach (string l in Lines(report))
             Line("   | " + l);
+        Check(report.Contains(UiText.Get("results.row.bills")) && report.Contains(UiText.Get("results.row.after")) && report.Contains(UiText.Get("results.row.net")),
+              $"day {day}: the shift report shows the net, tonight's bills and the wallet after them");
         ShiftLedger ledger = o.Game.Ledger;
         Line($"   ledger: {ledger.verdicts.Count} verdicts, correct {ledger.CorrectCount}, wrong {ledger.WrongCount}, pay {ledger.TotalPay}, penalties {ledger.TotalPenalties}, stability {ledger.TotalStabilityDelta.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture)}, unproven {ledger.UnprovenDenialCount}");
         Line($"   debt relief: instalment {ledger.debtInstalment}, owed {ledger.debtOwed}, paid so far {RunManager.Instance.World.clerkDebtPaid}");
@@ -435,6 +448,11 @@ public static class _TimeDeskAuditPlay
         if (c.look != null)
             Line($"   look: {c.look.Describe()} | {string.Join("; ", c.look.Garments.Select(g => $"{g.Slot}:{g.Label}{(g.IsTell ? "[TELL]" : "")}"))}");
         Count($"kind {c.kind}");
+        DayPlanSO issuing = RunManager.Instance.GetCurrentDayPlan();
+        Check(c.documents.All(d => d.template != null && issuing.Issues(d.template.formNumber)),
+              $"d{day} slot {slot}: the traveller carries only the day's issued papers [{string.Join(",", c.documents.Select(d => d.template != null ? d.template.formNumber : "?"))}] of [{string.Join(",", issuing.Papers)}]");
+        if (day == 1)
+            Check(c.documents.All(d => d.template != null && d.template.formNumber == Directives.Visa), $"d1 slot {slot}: day 1's traveller carries the Leisure Visa alone");
         if (c.lie.HasValue)
             Count($"lie {c.lie.Value}");
         if (c.costumeFault != CostumeError.None)
@@ -544,7 +562,12 @@ public static class _TimeDeskAuditPlay
         }
         if (o.CitationPanel.activeInHierarchy)
         {
-            Line($"   citation slip: {((TMP_Text)Field(o.OfficeUi, "citationText")).text.Replace("\n", " / ")}");
+            string slip = ((TMP_Text)Field(o.OfficeUi, "citationText")).text;
+            Line($"   citation slip: {slip.Replace("\n", " / ")}");
+            string rule = v.unprovenDenial ? UiText.Get("citation.rule.evidence") : Citations.RuleLine(c.citation, UiText.Get, UiText.Get("citation.rule.numbered"));
+            string value = v.unprovenDenial ? "0" : c.citation?.Values.Select(x => x.Value).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
+            Check(!string.IsNullOrEmpty(rule) && slip.Contains(rule) && !string.IsNullOrEmpty(value) && slip.Contains(value),
+                  $"d{day} slot {slot}: the citation slip names the exact rule ('{rule}') and value ('{value}')");
             if (ShotsOn && First($"citation {v.faultReason}/{v.unprovenDenial}/{v.accepted}"))
                 yield return Shots($"citation_{(v.accepted ? "accepted" : "denied")}_{(string.IsNullOrEmpty(v.faultReason) ? "honest" : v.faultReason)}{(v.unprovenDenial ? "_unproven" : "")}");
             ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
