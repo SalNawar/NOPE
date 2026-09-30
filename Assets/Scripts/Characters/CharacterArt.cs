@@ -1,125 +1,122 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 /// <summary>
-/// Loads character layer sprites by key (LookKeys): final art from
+/// Loads character layer sprites by key (LookKeys) from
 /// Resources/Characters/{key} (Assets/Art/Characters/Resources/Characters,
-/// imported by CharacterArtImporter), else a runtime placeholder drawn by
-/// LayerPlaceholder and kept in memory only (nothing is written to disk).
-/// Also makes each layer's passport-photo crop (LookCanvas.PhotoRect). Every
-/// sprite is one unit tall with its pivot at the feet. Retain keeps only the
-/// current traveller's textures; Dispose releases everything.
+/// the ChatGPT art imported by CharacterArtImporter). A key with no art is
+/// drawn with its nearest key that has art (LookArtFallback, by the steps of
+/// CharacterArtFallbackSO), and not drawn at all when there is none: nothing
+/// is drawn by code. Development builds log each stand-in once. Also makes
+/// each layer's passport-photo crop (LookCanvas.PhotoRect). Every sprite is
+/// one unit tall with its pivot at the feet. Retain keeps only the current
+/// traveller's textures; Dispose releases everything.
 /// </summary>
 public sealed class CharacterArt : IDisposable
 {
     /// <summary>The Resources sub-folder character art loads from.</summary>
     public const string ResourcesFolder = "Characters";
 
-    /// <summary>Where final character art goes ({key}.png).</summary>
+    /// <summary>Where character art goes ({key}.png).</summary>
     public const string AssetFolder = "Assets/Art/Characters/Resources/" + ResourcesFolder;
 
-    /// <summary>Saturation of garment placeholders.</summary>
-    private const float GarmentSaturation = 0.6f;
-
-    /// <summary>Brightness of the earliest era's garments; each later era is darker by <see cref="EraShadeStep"/>.</summary>
-    private const float FirstEraShade = 0.92f;
-
-    /// <summary>How much darker each later era's garments are.</summary>
-    private const float EraShadeStep = 0.11f;
-
-    /// <summary>A body or head placeholder's border: its skin at this brightness.</summary>
-    private const float SkinBorderShade = 0.7f;
-
-    /// <summary>A garment placeholder's border: its nation colour at this brightness.</summary>
-    private const float GarmentBorderShade = 0.55f;
-
-    /// <summary>A premade's whole-figure placeholder's stripes and mark: a warm off-white.</summary>
-    private static readonly (byte r, byte g, byte b) WholeFigureAccent = (240, 236, 224);
-
-    /// <summary>One key's sprites.</summary>
+    /// <summary>One drawn key's sprites.</summary>
     private sealed class Entry
     {
-        /// <summary>The full-canvas sprite.</summary>
+        /// <summary>The full-canvas sprite (loaded from Resources).</summary>
         public Sprite Full;
 
         /// <summary>The photo crop (made on first use).</summary>
         public Sprite Photo;
-
-        /// <summary>The placeholder's texture (null for final art).</summary>
-        public Texture2D Placeholder;
     }
 
+    /// <summary>The loaded art, by the name of the key actually drawn.</summary>
     private readonly Dictionary<string, Entry> _cache = new Dictionary<string, Entry>();
-    private readonly Dictionary<string, float> _nationHue = new Dictionary<string, float>();
-    private readonly Dictionary<string, int> _eraOrder = new Dictionary<string, int>();
-    private bool _toldAboutPlaceholders;
 
-    /// <summary>Reads the placeholder colours from the library: a nation's index in its nations sets the hue, an era's order the shade.</summary>
+    /// <summary>Each asked key's drawn key (null: nothing to draw), resolved once per run: the art does not change while the game runs.</summary>
+    private readonly Dictionary<string, string> _drawn = new Dictionary<string, string>();
+
+    private readonly LookArtFallbackTable _table;
+    private readonly LookArtUniverse _universe;
+
+    /// <summary>
+    /// Reads what the fallback chooses among from the library (its nations and
+    /// the shared "neutral" art nation, its eras in order, the face bands'
+    /// faces) and the fallback table from Resources (CharacterArtFallbackSO;
+    /// without it a key with no art is not drawn).
+    /// </summary>
     public CharacterArt(ContentLibrarySO library)
     {
-        if (library == null)
-            return;
+        var nations = new List<string>();
+        var eras = new List<string>();
+        var faces = new List<string>();
+        if (library != null)
+        {
+            nations.AddRange(library.Nations.Where(n => n != null && !string.IsNullOrEmpty(n.id)).Select(n => n.id));
+            eras.AddRange(library.Eras.Where(e => e != null && !string.IsNullOrEmpty(e.id)).OrderBy(e => e.order).Select(e => e.id));
+            if (library.LookRules?.faceBands != null)
+                foreach (FaceBand band in library.LookRules.faceBands)
+                    if (band?.faces != null)
+                        faces.AddRange(band.faces.Where(f => !faces.Contains(f)));
+        }
+        if (!nations.Contains(Present.NeutralNationId))
+            nations.Add(Present.NeutralNationId);
+        _universe = new LookArtUniverse(nations, eras, faces);
 
-        IReadOnlyList<NationSO> nations = library.Nations;
-        for (int i = 0; i < nations.Count; i++)
-            if (nations[i] != null && !string.IsNullOrEmpty(nations[i].id))
-                _nationHue[nations[i].id] = i / (float)Math.Max(1, nations.Count);
-
-        foreach (EraSO era in library.Eras)
-            if (era != null && !string.IsNullOrEmpty(era.id))
-                _eraOrder[era.id] = era.order;
+        _table = Resources.Load<CharacterArtFallbackSO>(CharacterArtFallbackSO.ResourcePath)?.table;
+        if (_table == null)
+            Debug.LogWarning($"[CharacterArt] No fallback table at Resources/{CharacterArtFallbackSO.ResourcePath}: a layer with no art is not drawn.");
     }
 
     /// <summary>
-    /// True when final art is delivered for <paramref name="keyName"/>
-    /// (Resources/Characters/{key}): a premade shows its whole picture once
-    /// its neutral one is, and its generated stand-in look until then (days
-    /// 7-15 B4). Loads the sprite to look, then releases its texture (a later
-    /// Get loads it again).
+    /// True when art is delivered for <paramref name="keyName"/>
+    /// (Resources/Characters/{key}), with no fallback: a premade shows its
+    /// whole picture once its neutral one is, and its layered stand-in look
+    /// until then (days 7-15 B4). Loads the sprite to look, then releases its
+    /// texture (a later Get loads it again).
     /// </summary>
     public static bool HasFinalArt(string keyName)
     {
-        Sprite sprite = string.IsNullOrEmpty(keyName) ? null : Resources.Load<Sprite>($"{ResourcesFolder}/{keyName}");
+        Sprite sprite = Load(keyName);
         if (sprite == null)
             return false;
         Resources.UnloadAsset(sprite.texture);
         return true;
     }
 
-    /// <summary>The layer's full-canvas sprite (final art, else a placeholder).</summary>
-    public Sprite Get(LookKey key) => EntryOf(key).Full;
+    /// <summary>The layer's full-canvas sprite: its own art, else its nearest stand-in's; null when there is none (the layer is not drawn).</summary>
+    public Sprite Get(LookKey key) => EntryOf(key)?.Full;
 
-    /// <summary>The layer's passport-photo crop (the head and shoulders).</summary>
+    /// <summary>The layer's passport-photo crop (the head and shoulders) of the sprite Get draws; null when Get has none.</summary>
     public Sprite GetPhoto(LookKey key)
     {
         Entry e = EntryOf(key);
+        if (e == null)
+            return null;
         if (e.Photo == null)
         {
             Rect r = e.Full.rect;
             (float x, float y, float w, float h) = LookCanvas.PhotoRect;
             var crop = new Rect(r.x + x * r.width, r.y + y * r.height, w * r.width, h * r.height);
             e.Photo = Sprite.Create(e.Full.texture, crop, new Vector2(0.5f, 0.5f), crop.height, 0, SpriteMeshType.FullRect);
-            e.Photo.name = key.Name + "_photo";
+            e.Photo.name = e.Full.name + "_photo";
         }
         return e.Photo;
     }
 
-    /// <summary>Releases every cached key not in <paramref name="keys"/> (the traveller now at the desk).</summary>
+    /// <summary>Releases every loaded texture the keys in <paramref name="keys"/> (the traveller now at the desk) do not draw.</summary>
     public void Retain(IEnumerable<LookKey> keys)
     {
         var keep = new HashSet<string>();
         if (keys != null)
             foreach (LookKey key in keys)
-                keep.Add(key.Name);
+                if (_drawn.TryGetValue(key.Name, out string drawn) && drawn != null)
+                    keep.Add(drawn);
 
-        var drop = new List<string>();
-        foreach (KeyValuePair<string, Entry> pair in _cache)
-            if (!keep.Contains(pair.Key))
-                drop.Add(pair.Key);
-
-        foreach (string name in drop)
+        foreach (string name in _cache.Keys.Where(n => !keep.Contains(n)).ToList())
         {
             Release(_cache[name]);
             _cache.Remove(name);
@@ -129,133 +126,70 @@ public sealed class CharacterArt : IDisposable
     /// <summary>Releases everything.</summary>
     public void Dispose() => Retain(null);
 
-    /// <summary>The cached entry of a key, loading or drawing it on first use.</summary>
+    /// <summary>The entry a key draws (its own art or its stand-in's), loading it on first use; null when nothing is drawn.</summary>
     private Entry EntryOf(LookKey key)
     {
-        if (_cache.TryGetValue(key.Name, out Entry cached))
+        if (!_drawn.TryGetValue(key.Name, out string drawn))
+            drawn = _drawn[key.Name] = Resolve(key);
+        if (drawn == null)
+            return null;
+
+        if (_cache.TryGetValue(drawn, out Entry cached))
             return cached;
 
-        var entry = new Entry { Full = Resources.Load<Sprite>($"{ResourcesFolder}/{key.Name}") };
-        if (entry.Full == null)
-        {
-            if (!_toldAboutPlaceholders)
-            {
-                Debug.Log($"[CharacterArt] No final art for '{key.Name}' (and maybe others); drawing a placeholder. Final art goes to {AssetFolder}/<key>.png (docs/CHARACTER_ART_CONTRACT.md).");
-                _toldAboutPlaceholders = true;
-            }
-
-            entry.Placeholder = DrawPlaceholder(key);
-            entry.Full = Sprite.Create(entry.Placeholder, new Rect(0f, 0f, LayerPlaceholder.Width, LayerPlaceholder.Height),
-                                       new Vector2(0.5f, LookCanvas.FeetPivotY), LayerPlaceholder.Height, 0, SpriteMeshType.FullRect);
-            entry.Full.name = key.Name;
-        }
-
-        _cache[key.Name] = entry;
+        Sprite full = Load(drawn);
+        if (full == null)
+            return null;
+        var entry = new Entry { Full = full };
+        _cache[drawn] = entry;
         return entry;
     }
 
-    /// <summary>A readable placeholder texture: the layer's region in the key's colours.</summary>
-    private Texture2D DrawPlaceholder(LookKey key)
+    /// <summary>The name of the key to draw for <paramref name="key"/> (the first of its fallback candidates with art), logged once in development builds when it is a stand-in or nothing.</summary>
+    private string Resolve(LookKey key)
     {
-        (byte r, byte g, byte b) nation = NationColour(key);
-        (byte r, byte g, byte b) fill, accent;
-        PlaceholderMark mark = PlaceholderMark.None;
-        switch (key.Layer)
+        foreach (LookKey candidate in LookArtFallback.Candidates(key, _table, _universe))
         {
-            case LookLayer.Body:
-            case LookLayer.Head:
-                fill = PlaceholderPalette.Skin(key.SkinTone);
-                accent = PlaceholderPalette.Darker(fill, SkinBorderShade);
-                break;
-            case LookLayer.HairBack:
-            case LookLayer.Hair:
-            case LookLayer.FacialHair:
-                fill = key.HairColour != null ? PlaceholderPalette.Hair(key.HairColour) : nation;
-                accent = nation;
-                break;
-            case LookLayer.Whole:
-                fill = nation;
-                accent = WholeFigureAccent;
-                mark = Mark(key.Expression);
-                break;
-            default:
-                fill = nation;
-                accent = PlaceholderPalette.Darker(nation, GarmentBorderShade);
-                break;
+            if (HasArt(candidate.Name))
+            {
+                if (candidate.Name != key.Name && Debug.isDebugBuild)
+                    Debug.Log($"[CharacterArt] No ChatGPT art for '{key.Name}' yet; drawing '{candidate.Name}' in its place (CharacterArtFallback, docs/CHARACTER_ART_CONTRACT.md section 9).");
+                return candidate.Name;
+            }
         }
 
-        byte[] rgba = LayerPlaceholder.Render(RegionOf(key.Layer), fill, accent, mark);
-        var tex = new Texture2D(LayerPlaceholder.Width, LayerPlaceholder.Height, TextureFormat.RGBA32, false)
-        {
-            name = key.Name,
-            filterMode = FilterMode.Bilinear,
-            wrapMode = TextureWrapMode.Clamp
-        };
-        tex.LoadRawTextureData(rgba);
-        tex.Apply(false, false);
-        return tex;
+        if (Debug.isDebugBuild)
+            Debug.Log($"[CharacterArt] No ChatGPT art for '{key.Name}' and no stand-in; the layer is not drawn (CharacterArtFallback, docs/CHARACTER_ART_CONTRACT.md section 9).");
+        return null;
     }
 
-    /// <summary>A garment's (or premade's) colour: its nation's hue at its era's shade; grey for a nation the library does not list.</summary>
-    private (byte r, byte g, byte b) NationColour(LookKey key)
+    /// <summary>True when the key has art; the loaded sprite is kept for its first Get.</summary>
+    private bool HasArt(string keyName)
     {
-        if (key.NationId == null || !_nationHue.TryGetValue(key.NationId, out float hue))
-            return PlaceholderPalette.Unknown;
-
-        int order = key.EraId != null && _eraOrder.TryGetValue(key.EraId, out int o) ? o : 0;
-        return PlaceholderPalette.FromHsv(hue, GarmentSaturation, FirstEraShade - EraShadeStep * order);
+        if (_cache.ContainsKey(keyName))
+            return true;
+        Sprite sprite = Load(keyName);
+        if (sprite == null)
+            return false;
+        _cache[keyName] = new Entry { Full = sprite };
+        return true;
     }
 
-    /// <summary>The placeholder region a layer is drawn in.</summary>
-    private static PlaceholderRegion RegionOf(LookLayer layer)
-    {
-        switch (layer)
-        {
-            case LookLayer.HairBack: return PlaceholderRegion.HairBehind;
-            case LookLayer.Body: return PlaceholderRegion.Body;
-            case LookLayer.Outfit: return PlaceholderRegion.Clothes;
-            case LookLayer.Head: return PlaceholderRegion.Head;
-            case LookLayer.FacialHair: return PlaceholderRegion.Beard;
-            case LookLayer.Hair: return PlaceholderRegion.HairCap;
-            case LookLayer.Headwear: return PlaceholderRegion.Hat;
-            case LookLayer.Accessory: return PlaceholderRegion.Collar;
-            default: return PlaceholderRegion.WholeFigure;
-        }
-    }
+    /// <summary>The key's sprite from Resources, or null.</summary>
+    private static Sprite Load(string keyName) =>
+        string.IsNullOrEmpty(keyName) ? null : Resources.Load<Sprite>($"{ResourcesFolder}/{keyName}");
 
-    /// <summary>A premade expression's placeholder mark (the marks follow LookKeys.Expressions' order; unknown = neutral).</summary>
-    private static PlaceholderMark Mark(string expression)
-    {
-        int index = 0;
-        for (int i = 0; i < LookKeys.Expressions.Count; i++)
-            if (LookKeys.Expressions[i] == expression)
-                index = i;
-        return PlaceholderMark.Neutral + index;
-    }
-
-    /// <summary>Frees one entry: the photo crop always; a placeholder's texture and sprite; a loaded sprite's texture back to Resources.</summary>
+    /// <summary>Frees one entry: its photo crop, and its texture back to Resources.</summary>
     private static void Release(Entry e)
     {
-        DestroyObject(e.Photo);
-        if (e.Placeholder != null)
+        if (e.Photo != null)
         {
-            DestroyObject(e.Full);
-            DestroyObject(e.Placeholder);
+            if (Application.isPlaying)
+                Object.Destroy(e.Photo);
+            else
+                Object.DestroyImmediate(e.Photo);
         }
-        else if (e.Full != null)
-        {
+        if (e.Full != null)
             Resources.UnloadAsset(e.Full.texture);
-        }
-    }
-
-    /// <summary>Destroys a runtime object (immediately outside play mode).</summary>
-    private static void DestroyObject(Object o)
-    {
-        if (o == null)
-            return;
-        if (Application.isPlaying)
-            Object.Destroy(o);
-        else
-            Object.DestroyImmediate(o);
     }
 }

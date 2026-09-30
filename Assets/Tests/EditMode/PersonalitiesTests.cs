@@ -81,4 +81,22 @@ public class PersonalitiesTests
         CollectionAssert.AreEqual(new[] { "personalities: 'curt' has a blank name." },
                                   Personalities.Problems(new List<Personality> { P("chatty"), P("curt", 1f, " ") }));
     }
+    /// <summary>The endings and strandings spec §6.2, §7.3: a refusal chance from 0 to 1, a tilt that names a fate.</summary>
+    [Test]
+    public void Problems_WaiverRefusalAndStrandingTilt()
+    {
+        Personality grand = P("grand");
+        grand.waiverRefusal = 0.5f;
+        grand.strandingFate = "Carry";
+        Assert.AreEqual(StrandingFate.Carry, grand.StrandingTilt);
+        CollectionAssert.IsEmpty(Personalities.Problems(new List<Personality> { grand }));
+
+        grand.waiverRefusal = 1.5f;
+        grand.strandingFate = "Brunch";
+        string all = string.Join("\n", Personalities.Problems(new List<Personality> { grand }));
+        StringAssert.Contains("'grand' has a waiverRefusal of 1.5; it is a chance from 0 to 1.", all);
+        StringAssert.Contains("'grand' names the stranding fate 'Brunch'", all);
+        Assert.IsNull(grand.StrandingTilt);
+        Assert.IsNull(P("sunny").StrandingTilt, "blank: no tilt");
+    }
 }

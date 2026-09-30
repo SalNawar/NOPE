@@ -45,8 +45,17 @@ public sealed class ShiftLedger
     /// <summary>How many of this shift's accepted travellers were stranded at its end (Strandings.Roll; the traveller-types spec's S1).</summary>
     public int strandedCount;
 
-    /// <summary>Net money change for the shift: the pay less the wrong-decision penalties and the Debt Relief instalment (a stranding fines nothing; redesign phase 23).</summary>
-    public int NetMoney => TotalPay - TotalPenalties - debtInstalment;
+    /// <summary>The stranding fines the failure reports charged at the shift's end (GameConfigSO.strandingFine per stranded traveller without a valid signed waiver; Saleh's Q10 = D).</summary>
+    public int strandingFines;
+
+    /// <summary>The stability the shift's strandings moved at its end (a tremor's loss; signed).</summary>
+    public float strandingStabilityDelta;
+
+    /// <summary>Every fine of the shift: the wrong-decision penalties and the stranding fines (the statement's FINES cell).</summary>
+    public int TotalFines => TotalPenalties + strandingFines;
+
+    /// <summary>Net money change for the shift: the pay less the fines (the wrong-decision penalties and the stranding fines) and the Debt Relief instalment.</summary>
+    public int NetMoney => TotalPay - TotalFines - debtInstalment;
 
     /// <summary>The leisure departures the shift approved (traveller types §10): accepted rich and poor tourists.</summary>
     public int LeisureDepartures
@@ -112,12 +121,12 @@ public sealed class ShiftLedger
         }
     }
 
-    /// <summary>Total stability change across the shift (signed).</summary>
+    /// <summary>Total stability change across the shift (signed): the verdicts' and the strandings'.</summary>
     public float TotalStabilityDelta
     {
         get
         {
-            float sum = 0f;
+            float sum = strandingStabilityDelta;
             foreach (CaseVerdict v in verdicts) sum += v.stabilityDelta;
             return sum;
         }

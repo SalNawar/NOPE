@@ -115,8 +115,11 @@ class Pilot:
         skin_src = layers.skin_colour(crgb, calpha)
         head_a, body_rgb, body_a = layers.split_head_body(crgb, calpha, chin_c, C["CenterX"])
         w_head = layers.skin_weight(crgb, head_a, skin_src)
-        head_rgb = layers.recolour(crgb, w_head, skin_src, self.swatches[0])
-        self.save(contract.head_key(g, 1, "a"), head_rgb, head_a, src["raw"])
+        # heads 2..5 (face a) are recoloured like the bodies, the contract's section 6 rule; they stand
+        # in until Batch 2's own base figures replace them (README: "Interim heads")
+        for tone in range(1, 6):
+            head_rgb = layers.recolour(crgb, w_head, skin_src, self.swatches[tone - 1])
+            self.save(contract.head_key(g, tone, "a"), head_rgb, head_a, src["raw"])
         w_body = layers.skin_weight(body_rgb, body_a, skin_src)
         for tone in range(1, 6):
             body = layers.recolour(body_rgb, w_body, skin_src, self.swatches[tone - 1])

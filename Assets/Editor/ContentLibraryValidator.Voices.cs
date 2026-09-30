@@ -66,6 +66,8 @@ public static partial class ContentLibraryValidator
             Employers = lib.Agency.employers.Where(e => e != null).Select(e => e.name).ToList(),
             DefaultReactions = lines.reactions ?? new List<VoiceLine>(),
             DefaultSlips = lines.slips ?? new List<VoiceLine>(),
+            DefaultPadReplies = lines.waiverPad?.replies ?? new List<VoiceLine>(),
+            PadOffered = InterviewScript.OffersPad(kindForms.SelectMany(k => k.Askable ?? new AskableForm[0]).ToList(), lines),
             SlipChances = lib.DayPlans.Where(p => p != null).Select(p => (p.DayNumber, p.SlipChance)).ToList(),
             PremadeIntents = PremadeIntents(lib),
             DisplacedPremades = lib.Legendaries.Where(l => l != null && l.kind == TravellerKind.Displaced).Select(l => l.id).ToList()

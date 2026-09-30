@@ -204,6 +204,14 @@ MonoBehaviour:
     text: Your order has arrived
     gloss: 0
     tier: 0
+  - key: mail.from.liability
+    text: Transponder Liability Office
+    gloss: 0
+    tier: 0
+  - key: mail.subject.stranding
+    text: 'Transponder failure report: {0}'
+    gloss: 0
+    tier: 0
   - key: mail.body.delivery
     text: 'Delivered this morning and in force from today''s shift:'
     gloss: 0
@@ -1558,6 +1566,10 @@ MonoBehaviour:
     tier: 0
   - key: results.stranded
     text: 'Stranded in transit: {0}   (an Economy transponder failed)'
+    gloss: 0
+    tier: 0
+  - key: results.strandingFines
+    text: 'Stranding fines: -{0}   (no valid signed waiver on file)'
     gloss: 0
     tier: 0
   - key: scanner.idle

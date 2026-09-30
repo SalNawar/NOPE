@@ -12,7 +12,9 @@ public static class ShiftScoring
     /// Resolves a binary ACCEPT/DENY decision (investigation feature) into a
     /// CaseVerdict and applies its consequences. Correct = the player's choice
     /// matches CaseInstance.ShouldAccept (accept a traveller with no fault;
-    /// deny a deviation fault or a directive fault, traveller types P1).
+    /// deny a deviation fault or a directive fault, traveller types P1), or
+    /// denies a traveller whose waiver fault the desk's pad cured
+    /// (VerdictRules.IsCorrect; the endings and strandings spec §7.3).
     /// </summary>
     public static CaseVerdict ResolveDecision(
         CaseInstance inst,
@@ -39,7 +41,7 @@ public static class ShiftScoring
             faultReason = inst != null ? inst.FaultReason : string.Empty,
             destinationLabel = inst != null ? inst.originLabel ?? string.Empty : string.Empty,
             evidenceCount = Mathf.Max(0, evidenceCount),
-            correct = inst != null && accepted == shouldAccept
+            correct = inst != null && VerdictRules.IsCorrect(accepted, shouldAccept, inst.curedAtDesk != DirectiveFault.None)
         };
 
         if (world == null || config == null)

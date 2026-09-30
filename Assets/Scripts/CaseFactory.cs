@@ -93,6 +93,9 @@ public sealed class CaseFactory
     /// <summary>The current traveller's slip stream (Seeds.ForSlip): one roll for a generated liar, which reads nothing but the chance.</summary>
     private IRandomSource _slipRng = new SeededRandom(0);
 
+    /// <summary>The current traveller's waiver-signing stream (Seeds.ForWaiverSign): their one answer to the desk's pad, which reads nothing but the chance.</summary>
+    private IRandomSource _waiverSignRng = new SeededRandom(0);
+
     /// <summary>The current traveller's look stream (Seeds.ForLooks): gender when unknown, skin, face, hair colour.</summary>
     private IRandomSource _looksRng = new SeededRandom(0);
 
@@ -247,6 +250,7 @@ public sealed class CaseFactory
             _dialogSeed = Seeds.ForDialog(caseSeed);
             _personalityRng = new SeededRandom(Seeds.ForPersonality(caseSeed));
             _slipRng = new SeededRandom(Seeds.ForSlip(caseSeed));
+            _waiverSignRng = new SeededRandom(Seeds.ForWaiverSign(caseSeed));
             _looksRng = new SeededRandom(Seeds.ForLooks(caseSeed));
             _legendaryRng = new SeededRandom(Seeds.ForLegendary(caseSeed));
             _accountRng = new SeededRandom(Seeds.ForAccount(caseSeed));
@@ -550,6 +554,22 @@ public sealed class CaseFactory
         if (broken != null && !inst.HasDirectiveFault)
             Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: was to break '{broken.name}' ({broken.type}), but the finished papers read no fault. Check the kind's templates and the account ranges.");
 
+        // 8.2) The desk's waiver pad (the endings and strandings spec §7.3): the waiver their kind carries, filled from their
+        //      account and signed in their hand, and the fault a carried, signed waiver leaves (a missing or unsigned one cured,
+        //      a forged one not: the pad never touches the papers they carry); their answer, one draw on their own stream.
+        DocumentTemplateSO waiverForm = blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates.FirstOrDefault(t => t != null && t.formNumber == Directives.Waiver) : null;
+        if (waiverForm != null && inst.account != null)
+        {
+            inst.deskWaiver = DeskWaiver(inst, waiverForm);
+            CaseFacts signed = Facts(inst, plan);
+            signed.Forms = signed.Forms.Append(Directives.Waiver).ToList();
+            signed.WaiverSigned = true;
+            inst.faultWithDeskWaiver = Directives.Fault(plan.ActiveTravelRules.Where(r => r != null).Select(r => r.Directive).ToList(), signed);
+        }
+        Personality voice = _lib.Personalities.FirstOrDefault(p => p != null && p.id == inst.personality);
+        bool carriesSigned = inst.documents.Any(d => d != null && d.template != null && d.template.formNumber == Directives.Waiver && Directives.IsSigned(d.fields));
+        inst.waiverPadReply = Waivers.PadReply(inst.deskWaiver != null, carriesSigned, voice != null ? voice.waiverRefusal : 0f, _waiverSignRng);
+
         // 8.5) The slip (the personalities spec's T9-T10): a generated liar rolls once on their own stream against the day's
         //      slipChance, after the lie is planned; a liar premade slips when their line is authored; the honest never do.
         ReactionIntent intent = ReactionIntents.Of(inst.IsLiar, inst.IsForger);
@@ -563,7 +583,7 @@ public sealed class CaseFactory
         string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
         string look = inst.look != null ? inst.look.Describe() : "none";
         string recordTells = string.Join(", ", inst.recordTells.Select(t => $"{t.Category}@{t.Document}"));
-        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, honestEntry={honest}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, personality={(string.IsNullOrEmpty(inst.personality) ? "none" : inst.personality)}, slip={(inst.slip != null ? inst.slip.id : "none")}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, broken={(broken != null ? broken.name : "none")}, paperSet={paperBreak}, standing={inst.account?.Standing.ToString() ?? "none"}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, honestEntry={honest}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, personality={(string.IsNullOrEmpty(inst.personality) ? "none" : inst.personality)}, slip={(inst.slip != null ? inst.slip.id : "none")}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, broken={(broken != null ? broken.name : "none")}, paperSet={paperBreak}, pad={inst.waiverPadReply}, standing={inst.account?.Standing.ToString() ?? "none"}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
     }
@@ -1145,7 +1165,7 @@ public sealed class CaseFactory
                                       (LookSource source, bool whole) costume, int caseIndex1Based)
     {
         if (legendary != null)
-            return CharacterArt.HasFinalArt(LookKeys.Premade(legendary.id, LookKeys.NeutralExpression, null, null).Name)
+            return CharacterArt.HasFinalArt(LookKeys.Premade(legendary.id, LookKeys.NeutralExpression).Name)
                 ? Looks.Whole(legendary.id, place != null ? SourceOf(place) : null, _lib.LookRules)
                 : PremadeStandIn(inst, place, legendary, family);
 
@@ -1636,6 +1656,27 @@ public sealed class CaseFactory
     /// <summary>True when the premade was presented earlier this run (WorldState.HasMetPremade).</summary>
     private static bool IsMet(WorldState state, LegendarySO premade) =>
         state != null && premade != null && state.HasMetPremade(premade.id);
+
+    /// <summary>
+    /// The waiver the desk's pad files when the traveller signs (the endings
+    /// and strandings spec §7.3): the waiver form's fields filled from the
+    /// traveller's file as the desk writes them (ResolveFieldValue: their
+    /// account's registered number and unit, their own hand on the Signature),
+    /// never their papers' printed (possibly forged) values.
+    /// </summary>
+    private DocumentInstance DeskWaiver(CaseInstance inst, DocumentTemplateSO form)
+    {
+        var doc = new DocumentInstance { template = form };
+        foreach (DocumentFieldSpec spec in form.fieldSpecs ?? System.Array.Empty<DocumentFieldSpec>())
+            if (spec != null)
+                doc.fields.Add(new DocumentField
+                {
+                    category = spec.category,
+                    label = string.IsNullOrEmpty(spec.label) ? spec.category.ToString() : spec.label,
+                    value = ResolveFieldValue(spec.category, inst)
+                });
+        return doc;
+    }
 
     /// <summary>
     /// Creates the traveller's runtime documents from the blueprint's

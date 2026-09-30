@@ -322,7 +322,7 @@ public class LooksTests
         Assert.AreEqual(1, look.Parts.Count);
         Assert.AreEqual(LookLayer.Whole, look.Parts[0].Layer);
         Assert.AreEqual("premade_socrates_neutral", look.Parts[0].Key.Name);
-        Assert.AreEqual("greece", look.Parts[0].Key.NationId);
+        Assert.AreEqual("socrates", look.Parts[0].Key.PremadeId);
         Garment garment = look.Garments.Single();
         Assert.AreEqual(LookSlot.Outfit, garment.Slot);
         Assert.AreEqual("Period dress", garment.Label);

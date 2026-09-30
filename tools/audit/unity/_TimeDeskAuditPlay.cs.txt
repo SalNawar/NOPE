@@ -4,7 +4,9 @@
 // Home between them, up to day 7's morning paper. Every traveller: the READY
 // sign, the interview (every request, the papers menu and its request groups
 // included, so a rich tourist gives the honest missing-form replies and a poor
-// tourist hands over the waiver and the proof; every question of the ask menu;
+// tourist hands over the waiver and the proof; the desk's waiver pad is left
+// unused (its answer is logged: offering it would spend shift minutes and cure
+// waiver faults); every question of the ask menu;
 // slot 1 also runs its first dialog to the end), the evidence for each tell of
 // a deviation fault through the real compare path (two papers that disagree
 // through the cross proof first; a place tell against the claimed place's book
@@ -347,7 +349,12 @@ public static class _TimeDeskAuditPlay
         ShiftLedger ledger = o.Game.Ledger;
         Line($"   ledger: {ledger.verdicts.Count} verdicts, correct {ledger.CorrectCount}, wrong {ledger.WrongCount}, pay {ledger.TotalPay}, penalties {ledger.TotalPenalties}, stability {ledger.TotalStabilityDelta.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture)}, unproven {ledger.UnprovenDenialCount}");
         Line($"   debt relief: instalment {ledger.debtInstalment}, owed {ledger.debtOwed}, paid so far {RunManager.Instance.World.clerkDebtPaid}");
-        Line($"   strandings: {ledger.strandedCount} stranded");
+        Line($"   strandings: {ledger.strandedCount} stranded, fines {ledger.strandingFines}, stability {ledger.strandingStabilityDelta.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)}");
+        foreach (StrandingRecord s in RunManager.Instance.World.history.strandingLog.Where(s => s != null && s.day == day))
+        {
+            Line($"   stranded: '{s.travellerName}' in {s.placeLabel}: {s.fate}, waivered {s.waivered}, fine {s.fine}, paper '{s.line}'");
+            Count($"fate {s.fate}");
+        }
         foreach (DialogOutcome d in ledger.dialogOutcomes)
             Line($"   dialog outcome: {JsonUtility.ToJson(d)}");
         Check(ledger.verdicts.Count == RunManager.Instance.GetCurrentDayPlan().VisitorsCount,
@@ -390,7 +397,7 @@ public static class _TimeDeskAuditPlay
         CitizenAccount a = c.account;
         Line($"-- d{day} slot {slot}: '{c.visitorDisplayName}' kind={c.kind} claims '{c.originLabel}' role={(c.archetype != null ? c.archetype.displayName : "-")} gender={c.gender} liar={c.IsLiar} lie={(c.lie.HasValue ? c.lie.Value.ToString() : "-")} home='{c.HomeLabel}' costume={c.costumeFault} directive={c.directiveFault} fault='{c.FaultReason}' shouldAccept={c.ShouldAccept} premade={(c.legendarySource != null ? c.legendarySource.id : "none")} tells=[{tells}] recordTells=[{recordTells}]");
         if (a != null)
-            Line($"   account: {a.CitizenId} {a.Status} debt {a.Debt} transponder '{a.Transponder}' {a.TransponderClass} waiver {a.WaiverNo ?? "none"} proof {a.ProofForm ?? "none"}");
+            Line($"   account: {a.CitizenId} {a.Status} debt {a.Debt} transponder '{a.Transponder}' {a.TransponderClass} waiver {a.WaiverNo ?? "none"} proof {a.ProofForm ?? "none"} pad {c.waiverPadReply} waivered {c.Waivered}");
         Line($"   papers: {string.Join(" ; ", c.documents.Select(d => (d.template != null ? d.template.formNumber + " " + d.template.displayName : "?") + ": " + string.Join(", ", d.fields.Select(f => $"{f.label}={f.value}{(f.isAnachronism ? "[TELL]" : "")}"))))}");
         if (c.look != null)
             Line($"   look: {c.look.Describe()} | {string.Join("; ", c.look.Garments.Select(g => $"{g.Slot}:{g.Label}{(g.IsTell ? "[TELL]" : "")}"))}");
@@ -535,9 +542,12 @@ public static class _TimeDeskAuditPlay
         }
 
         // Every request, in the papers menu ("Request papers >", phase 3) too: out of it by "< Back" once its forms are handed over.
+        // The waiver pad's entry is noted, never chosen (report only).
+        bool padOffered = false;
         for (int guard = 0; guard < 24; guard++)
         {
-            DialogChoice request = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Request && !chosen.Contains(x.Id));
+            padOffered |= runner.Choices.Any(x => x.Id == InterviewScript.PadChoiceId);
+            DialogChoice request = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Request && !chosen.Contains(x.Id) && x.Id != InterviewScript.PadChoiceId);
             if (request == null)
             {
                 DialogChoice up = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Back);
@@ -548,6 +558,7 @@ public static class _TimeDeskAuditPlay
             }
             Choose(request);
         }
+        Count(padOffered ? "waiver pad offered" : "waiver pad not offered");
         yield return Seconds(0.4f);
 
         DialogChoice ask = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Question && !string.IsNullOrEmpty(x.Next));

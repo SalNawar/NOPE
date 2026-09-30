@@ -2,8 +2,13 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// A traveller stranded in the past (the traveller-types spec's S1-S2),
-/// reported in the next morning's paper (Strandings.Lines) and then cleared.
+/// A traveller stranded in the past (the traveller-types spec's S1; the
+/// endings and strandings spec §6): who, where, the fate they met, whether a
+/// valid signed waiver was on file and the fine it cost the desk. Kept for
+/// the next morning's paper (HistoryState.pendingStrandings, then cleared) and
+/// for good in the run's stranding log (HistoryState.strandingLog: the Mail
+/// failure reports); the fields after day are additive (an old record reads
+/// their defaults).
 /// </summary>
 [Serializable]
 public sealed class StrandingRecord
@@ -16,6 +21,30 @@ public sealed class StrandingRecord
 
     /// <summary>The day of the shift that sent them.</summary>
     public int day;
+
+    /// <summary>The fate they met (StrandingFates.Pick; a carry that could not be made reads News).</summary>
+    public StrandingFate fate;
+
+    /// <summary>True when a valid signed waiver was on file when they left (Waivers.OnFile).</summary>
+    public bool waivered;
+
+    /// <summary>The stranding fine charged to the desk for them, in cr (GameConfigSO.strandingFine when no valid signed waiver was on file; 0 otherwise).</summary>
+    public int fine;
+
+    /// <summary>Their Citizen ID (the account's), for the failure report.</summary>
+    public string citizenId = string.Empty;
+
+    /// <summary>The unit that failed (the account's transponder serial), for the failure report.</summary>
+    public string transponder = string.Empty;
+
+    /// <summary>The waiver number registered on their account, for the failure report.</summary>
+    public string waiverNo = string.Empty;
+
+    /// <summary>Their debt in cr (it passes to kin under a waiver), for the failure report.</summary>
+    public int debt;
+
+    /// <summary>The morning paper's line for them (StrandingFates.Line); blank for a forgotten traveller.</summary>
+    public string line = string.Empty;
 }
 
 /// <summary>
@@ -23,12 +52,10 @@ public sealed class StrandingRecord
 /// 13b): at the shift's end each accepted traveller whose real transponder
 /// (the account's, whatever the manifest claims) is Economy is rolled on the
 /// day's stranding stream (<see cref="Seeds.ForStrandings"/>), in queue order,
-/// one draw each; a stranded traveller does not come back, carries the
-/// present's Technology into the destination through the carries (S2) and
-/// makes the next morning's paper. A stranding fines nothing (redesign phase
-/// 23: the clerk's only fine is the one wrong-decision penalty,
-/// VerdictRules.WrongDecisionPenalty, so S3's fine is retired). Pure: the
-/// draws and the news lines are tested headless.
+/// one draw each; a stranded traveller does not come back and meets one fate (StrandingFates, the endings and strandings spec §6). The
+/// stranding fine (Saleh's Q10 = D, a knowing exception to the one-penalty
+/// rule) is charged only when no valid signed waiver was on file
+/// (ShiftStrandings). Pure: the draws are tested headless.
 /// </summary>
 public static class Strandings
 {
@@ -56,20 +83,13 @@ public static class Strandings
         return stranded;
     }
 
-    /// <summary>
-    /// The next morning's stranding lines (S2): one per record, in order,
-    /// <paramref name="template"/> (news.stranded) with its {name} and {place}
-    /// filled. None for a blank template or no records (null records skipped).
-    /// </summary>
-    public static List<string> Lines(string template, IReadOnlyList<StrandingRecord> strandings)
+    /// <summary>The next morning's stranding lines: each record's line, in order (a forgotten traveller's blank line and null records skipped).</summary>
+    public static List<string> Lines(IReadOnlyList<StrandingRecord> strandings)
     {
         var lines = new List<string>();
-        if (string.IsNullOrWhiteSpace(template) || strandings == null)
-            return lines;
-
-        foreach (StrandingRecord s in strandings)
-            if (s != null)
-                lines.Add(Interview.Fill(Interview.Fill(template, Interview.NameToken, s.travellerName), Interview.PlaceToken, s.placeLabel));
+        foreach (StrandingRecord s in strandings ?? Array.Empty<StrandingRecord>())
+            if (s != null && !string.IsNullOrWhiteSpace(s.line))
+                lines.Add(s.line);
         return lines;
     }
 }

@@ -276,7 +276,7 @@ public static partial class ContentLibraryValidator
 
         foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.Count(questions), smallTalk, maxRequests,
                                                              (lines.requests ?? new List<InterviewRequest>()).Count(r => r != null),
-                                                             lib.Dialogs.Count(d => d != null) - bound, bound, lines.menuCapacity))
+                                                             lib.Dialogs.Count(d => d != null) - bound, bound, lines.menuCapacity, InterviewScript.OffersPad(forms, lines)))
             Error(problem, lib);
 
         return issues;
@@ -1453,12 +1453,14 @@ public static partial class ContentLibraryValidator
     }
 
     /// <summary>
-    /// Logs (never counted as an issue) how many character art keys have final
-    /// art at CharacterArt.AssetFolder: the bases, every place's garments, the
+    /// Logs (never counted as an issue) how many character art keys have art
+    /// at CharacterArt.AssetFolder: the bases, every place's garments, the
     /// present's clothes and 2150 accessory kit, and every premade's
     /// expressions, each distinct name once (a drawing places share through an
-    /// item's artNation counts once), with the first 20 missing names (the rest
-    /// are drawn as placeholders at runtime).
+    /// item's artNation counts once), with the first 20 missing names (at
+    /// runtime each is drawn with its nearest stand-in, CharacterArtFallbackSO,
+    /// or not at all); and warns when that table is missing or leaves a
+    /// nation without neighbours.
     /// </summary>
     private static void ReportCharacterArt(ContentLibrarySO lib)
     {
@@ -1475,7 +1477,15 @@ public static partial class ContentLibraryValidator
         List<string> distinct = keys.Distinct().ToList();
         List<string> missing = distinct.Where(k => !System.IO.File.Exists($"{CharacterArt.AssetFolder}/{k}.png")).ToList();
         int total = distinct.Count;
-        Debug.Log($"[ContentLibraryValidator] Character art: {total - missing.Count}/{total} key(s) have final art in {CharacterArt.AssetFolder}; placeholders are drawn for the rest{(missing.Count > 0 ? $" (first missing: {string.Join(", ", missing.Take(20))})" : string.Empty)}.");
+        Debug.Log($"[ContentLibraryValidator] Character art: {total - missing.Count}/{total} key(s) have art in {CharacterArt.AssetFolder}; the rest are drawn with their nearest stand-in (CharacterArtFallback) or not at all{(missing.Count > 0 ? $" (first missing: {string.Join(", ", missing.Take(20))})" : string.Empty)}.");
+
+        LookArtFallbackTable table = Resources.Load<CharacterArtFallbackSO>(CharacterArtFallbackSO.ResourcePath)?.table;
+        if (table == null)
+            Debug.LogWarning($"[ContentLibraryValidator] No character art fallback table at Resources/{CharacterArtFallbackSO.ResourcePath}: a layer with no art is not drawn.");
+        else
+            foreach (NationSO nation in lib.Nations)
+                if (nation != null && table.NeighboursOf(nation.id).Count == 0)
+                    Debug.LogWarning($"[ContentLibraryValidator] The character art fallback table lists no neighbours for '{nation.id}': its garments without art only borrow from its own other eras (and AnyPlace).");
     }
 
     /// <summary>Reports look rules a traveller's look cannot be composed from: a face band with no face, no grey age, no premade garment label.</summary>

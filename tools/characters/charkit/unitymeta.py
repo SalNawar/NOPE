@@ -5,9 +5,11 @@ serializedVersion 13, as in Assets/Art/Office/Placeholder/traveller.png.meta,
 the retired traveller sprite) with exactly the settings CharacterArtImporter
 enforces on every import: Sprite, Single, FullRect mesh, custom pivot at the
 soles (0.5, LookCanvas.FeetPivotY), pixels per unit = the texture's height
-(one unit tall), readable, no mipmaps, no crunch, max size 2048, alpha is
-transparency. Because the importer re-applies these, Unity's first import
-should leave the file unchanged; if it does rewrite it, the rewrite wins.
+(one unit tall), readable, mipmaps with trilinear filtering, high-quality
+(BC7) compression, no crunch, max size 2048, alpha is transparency, in the
+form Unity writes it (the WebGL block, empty values with a trailing space).
+Because the importer re-applies these, Unity's first import should leave the
+file unchanged; if it does rewrite it, the rewrite wins.
 An existing meta is never replaced (its GUID is kept).
 """
 
@@ -22,7 +24,7 @@ TextureImporter:
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -50,7 +52,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 2
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -88,7 +90,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -101,7 +103,20 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,24 +128,24 @@ TextureImporter:
     serializedVersion: 2
     sprites: []
     outline: []
-    customData:
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
-    indices:
+    indices: 
     edges: []
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
     nameFileIdTable: {{}}
-  mipmapLimitGroupName:
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 """
 
 FOLDER = """fileFormatVersion: 2

@@ -9,7 +9,7 @@ public class LookKeysTests
     {
         Assert.AreEqual("body_m_skin3", LookKeys.Body(TravellerGender.Male, 3).Name);
         Assert.AreEqual("head_f_skin5_facec", LookKeys.Head(TravellerGender.Female, 5, "c").Name);
-        Assert.AreEqual("premade_socrates_worried", LookKeys.Premade("socrates", "worried", "greece", "ancient").Name);
+        Assert.AreEqual("premade_socrates_worried", LookKeys.Premade("socrates", "worried").Name);
     }
 
     [TestCase(LookLayer.HairBack, null, "hairback_m_egypt_ancient")]

@@ -34,10 +34,18 @@ public static class DevToolsState
     /// <summary>
     /// While true, every accepted traveller on an Economy transponder is
     /// stranded at the shift's end (ShiftStrandings: the chance reads 1), so a
-    /// stranding, its carry, its news line and its fine can be seen at will.
-    /// The draws still run on the day's stream.
+    /// stranding, its fate, its paper line, its Mail report and its fine can
+    /// be seen at will. The draws still run on the day's stream.
     /// </summary>
     public static bool ForceStrandings;
+
+    /// <summary>
+    /// While set, every stranded traveller meets this fate instead of the
+    /// fate stream's draw (ShiftStrandings; the endings and strandings spec
+    /// §6), so each fate can be seen at will. The fate stream still draws.
+    /// Null = no force.
+    /// </summary>
+    public static StrandingFate? ForcedStrandingFate;
 
     /// <summary>
     /// While set (a Personality.id), every generated traveller who is not a
@@ -64,11 +72,14 @@ public static class DevToolsState
             Debug.Log($"[DevToolsState] ResetAll: clearing ForcedCostumeError '{ForcedCostumeError}'.");
         if (ForcedPersonality != null)
             Debug.Log($"[DevToolsState] ResetAll: clearing ForcedPersonality '{ForcedPersonality}'.");
+        if (ForcedStrandingFate != null)
+            Debug.Log($"[DevToolsState] ResetAll: clearing ForcedStrandingFate '{ForcedStrandingFate}'.");
 
         ForceLegendaryNextCase = false;
         ForcedLeaderId = null;
         ForcedCostumeError = CostumeError.None;
         ForceStrandings = false;
         ForcedPersonality = null;
+        ForcedStrandingFate = null;
     }
 }
