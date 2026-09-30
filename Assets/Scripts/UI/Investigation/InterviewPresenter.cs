@@ -218,17 +218,26 @@ public sealed class InterviewPresenter
         }
     }
 
-    /// <summary>The traveller as the interview script reads them: the day's papers menu (the same for everyone), small talk only when the interview is reachable, the garments only when the look is.</summary>
+    /// <summary>The traveller as the interview script reads them, with this presenter's day and key words (<see cref="CaseFor(CaseInstance, IReadOnlyList{CaseDocument}, InterviewDay, KeyWordRule, bool, bool)"/>).</summary>
     private InterviewCase CaseFor(CaseInstance inst, IReadOnlyList<CaseDocument> documents, bool interviewReachable, bool appearanceReachable) =>
+        CaseFor(inst, documents, _day, _keyWords, interviewReachable, appearanceReachable);
+
+    /// <summary>
+    /// The traveller as the interview script reads them: <paramref name="day"/>'s
+    /// papers menu (the same for everyone), small talk and the slip only when the
+    /// interview is reachable, the garments only when the look is. The game's
+    /// interview and the narrative workbook's Cases sheet both build it here.
+    /// </summary>
+    public static InterviewCase CaseFor(CaseInstance inst, IReadOnlyList<CaseDocument> documents, InterviewDay day, KeyWordRule keyWords, bool interviewReachable, bool appearanceReachable) =>
         new InterviewCase
         {
             introLine = inst != null ? inst.introLine : null,
             kind = inst != null ? inst.kind : default,
             claimPlace = inst != null ? inst.originLabel : null,
-            keyWords = _keyWords,
+            keyWords = keyWords,
             claimedEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null,
             documents = documents,
-            askable = inst != null ? _day.AskableForms : null,
+            askable = inst != null ? day?.AskableForms : null,
             missingVariant = inst != null ? inst.missingFormVariant : MissingFormVariant.Honest,
             answers = inst != null ? inst.answers : null,
             smallTalk = interviewReachable && inst != null ? inst.smallTalk : null,

@@ -551,7 +551,19 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         board.Bind(frame, rect, anchor.Transform.GetComponentsInChildren<Renderer>(false));
     }
 
-    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock, and the ink of the art's calendar with it (the config's hall knobs), and a second link its portal rings from the day's portals; an art office without one needs nothing.</summary>
+    /// <summary>The anime hall's lights (HallLightingRig, added by Add Anime Hall Hooks), or null when the hall has none.</summary>
+    private static HallLightingRig FindLights(Scene art)
+    {
+        foreach (GameObject root in art.GetRootGameObjects())
+        {
+            HallLightingRig rig = root.GetComponentInChildren<HallLightingRig>(false);
+            if (rig != null)
+                return rig;
+        }
+        return null;
+    }
+
+    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock (and the hall's lights, their day-night cycle, and the traveller's shade with it), and the ink of the art's calendar with it (the config's hall knobs), and a second link its portal rings (and their lights) from the day's portals; an art office without one needs nothing.</summary>
     private void BindHall(Scene art)
     {
         if (config == null)
@@ -562,8 +574,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             AnimeHallPresentation hall = root.GetComponentInChildren<AnimeHallPresentation>(false);
             if (hall == null)
                 continue;
-            gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config, TextOf(OfficeAnchorId.ReadoutDay));
-            gameObject.AddComponent<AnimeHallPortalLink>().Configure(hall, config, game, portalEffects);
+            HallLightingRig lights = FindLights(art);
+            gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config, TextOf(OfficeAnchorId.ReadoutDay), lights, traveller);
+            gameObject.AddComponent<AnimeHallPortalLink>().Configure(hall, config, game, portalEffects, lights);
             return;
         }
     }

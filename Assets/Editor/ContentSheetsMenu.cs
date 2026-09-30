@@ -15,7 +15,9 @@ using UnityEngine;
 /// <see cref="ContentSheets"/> and the map in <see cref="ContentSheetMap"/>; this file
 /// only reads and writes files. An import writes nothing when any check fails, and
 /// refuses while the current source holds content the map does not cover, so it never
-/// drops a section another change added.
+/// drops a section another change added. The narrative workbook (NarrativeWorkbookMenu)
+/// reads today's tables here (<see cref="Tables"/>) and imports through the same path
+/// (<see cref="ImportTables"/>).
 /// </summary>
 public static class ContentSheetsMenu
 {
@@ -108,7 +110,24 @@ public static class ContentSheetsMenu
         List<RowTable> tables = ReadTables(path, errors);
         if (!Check(errors, $"reading {path}") || tables == null)
             return false;
+        return ImportTables(tables, path, generate, null, out _);
+    }
 
+    /// <summary>Today's source as the content tables (one per sheet of the map, no README): what the narrative workbook is built on and edits; null (errors logged) when the source cannot be exported.</summary>
+    public static List<RowTable> Tables() => Workbook(0)?.Skip(1).ToList();
+
+    /// <summary>
+    /// Imports content tables (a workbook's or a CSV folder's, or today's tables with the
+    /// narrative workbook's edits applied) into world_source.json, then runs Generate World
+    /// when <paramref name="generate"/>. Writes nothing and returns false when anything is
+    /// wrong (every error logged, first passed through <paramref name="explain"/> when given:
+    /// the narrative workbook names the row each came from). <paramref name="changed"/> says
+    /// whether world_source.json changed. <paramref name="what"/> names the source in the log.
+    /// </summary>
+    public static bool ImportTables(IReadOnlyList<RowTable> tables, string what, bool generate, Func<List<string>, List<string>> explain, out bool changed)
+    {
+        changed = false;
+        var errors = new List<string>();
         ContentNode current = LoadSource(errors);
         if (!Check(errors, "reading world_source.json") || current == null)
             return false;
@@ -118,19 +137,22 @@ public static class ContentSheetsMenu
             return false;
 
         ContentNode imported = ContentSheets.Import(ContentSheetMap.World, tables, errors);
-        if (!Check(errors, $"importing {path}") || imported == null)
+        if (explain != null)
+            errors = explain(errors);
+        if (!Check(errors, $"importing {what}") || imported == null)
             return false;
 
         string full = Full(SourcePath);
         string existing = File.ReadAllText(full);
         string text = ContentJson.Write(imported);
         if (existing.Replace("\r\n", "\n") == text)
-            Debug.Log($"[ContentSheets] Imported {path} ({tables.Count} sheets): world_source.json is unchanged.");
+            Debug.Log($"[ContentSheets] Imported {what} ({tables.Count} sheets): world_source.json is unchanged.");
         else
         {
             File.WriteAllText(full, existing.Contains("\r\n") ? text.Replace("\n", "\r\n") : text, new UTF8Encoding(false));
+            changed = true;
             AssetDatabase.ImportAsset(SourcePath);
-            Debug.Log($"[ContentSheets] Imported {path} ({tables.Count} sheets) into world_source.json.");
+            Debug.Log($"[ContentSheets] Imported {what} ({tables.Count} sheets) into world_source.json.");
         }
 
         if (generate)

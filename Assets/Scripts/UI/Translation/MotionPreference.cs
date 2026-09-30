@@ -25,6 +25,10 @@ public static class MotionPreference
         {
             PlayerPrefs.SetString(Key, value ? ReducedValue : FullValue);
             PlayerPrefs.Save();
+            Changed?.Invoke();
         }
     }
+
+    /// <summary>Raised after the choice is set, so a reader that runs every frame (the hall's lights and dust, HallLightingRig) caches it instead of reading PlayerPrefs each frame.</summary>
+    public static event System.Action Changed;
 }

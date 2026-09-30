@@ -15,7 +15,7 @@ TagManager:
   - 
   - Interactable
   - PCDesktop
-  - 
+  - HallBackdrop
   - 
   - 
   - 
@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: HallDisplays
+    uniqueID: 470064635
+    locked: 0
+  - name: HallSky
+    uniqueID: 1918828759
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

@@ -23,7 +23,10 @@ using UnityEngine.SceneManagement;
 /// the Departure Board's marker (GameplayAnchors/Anchor_DepartureBoard: an
 /// empty RectTransform over the board display layer's opaque pixels, its
 /// sprite's physics shape, which the gameplay draws the day's portal rows on;
-/// the portals spec v3 BD1, authorised by Saleh 2026-09-30);
+/// the portals spec v3 BD1, authorised by Saleh 2026-09-30); the hall's
+/// lights, shadows and dust through a day-night cycle (AnimeHallLightingHooks:
+/// the HallLighting root, its knobs, the painted layers lit through the 2D
+/// Renderer; docs/HALL_LIGHTING.md, Saleh 2026-09-30);
 /// and, through Add Gameplay Anchors, an anchor for every place on its default
 /// pose (the scanner, the traveller, the hand-over point). What exists is left
 /// alone, so a second run changes nothing. The scene is marked dirty, not
@@ -139,11 +142,12 @@ public static class AnimeHallHooks
         DeletePreviews(hall, changes);
         AddDeskViewCamera(hall, contract, camera, changes);
         LightGameplayLayers(hall, changes);
+        AnimeHallLightingHooks.Add(hall, camera, changes);
         if (changes.Count > 0)
             EditorSceneManager.MarkSceneDirty(hall);
         Debug.Log(changes.Count > 0
             ? $"[AnimeHallHooks] {string.Join("; ", changes)}. Save the scene."
-            : "[AnimeHallHooks] The hall already carries its readouts, the desk view's camera and brain and the lit gameplay layers; nothing was changed.");
+            : "[AnimeHallHooks] The hall already carries its readouts, the desk view's camera and brain, the lit gameplay layers and its lights; nothing was changed.");
 
         OfficeSceneContractTools.AddAnchors();
     }

@@ -65,6 +65,13 @@ public sealed class TravellerView : MonoBehaviour
         }
     }
 
+    /// <summary>Re-tints the figure (the anime hall's time of day, AnimeHallShiftLink: the art is unlit, the tint sits it into the hall's light).</summary>
+    public void Tint(Color tint)
+    {
+        if (figure != null)
+            figure.SetTint(tint);
+    }
+
     /// <summary>The pending leave (Leave), or null.</summary>
     private Coroutine _leaving;
 
