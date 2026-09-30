@@ -101,30 +101,35 @@ MonoBehaviour:
     defaultYaw: 0
   - id: 13
     fallbacks:
+    - GameplayAnchors/DayNumber
     - DayNumber
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 14
     fallbacks:
+    - GameplayAnchors/StabilityPercent
     - StabilityPercent
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 15
     fallbacks:
+    - GameplayAnchors/CreditsNumber
     - CreditsNumber
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 16
     fallbacks:
+    - GameplayAnchors/ShiftClockDisplay
     - ShiftClockDisplay
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 17
     fallbacks:
+    - GameplayAnchors/NextLabel
     - NextLabel
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
