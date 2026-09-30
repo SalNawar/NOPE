@@ -564,33 +564,6 @@ At the spec's first cut (a denial pulls 0.5, every role 2, the day-fired story r
 
 Watch lines (§10) against this: every future and every way to pay leads in some perfect run at the pace; **Fascism, Technocracy and The Corporate Board lead in none** (two places lean each, 15.3 item 4) and **Monarchy leads more than a quarter of perfect runs** (twelve places lean Monarchy, five of the eight Industrial places the second week's labourers go to). Both are the leanings' to fix, Saleh's review first (15.3 item 4), not a knob's: no outcome is made "harder". The "as found" answers lead in fewer than half of the perfect runs on the government and the future, and in 29 of 50 on the money (the Drive's story rules and a slow merchant inflow). The whole-queue runs, with more travellers, drift further from "as found".
 
-<<<<<<< HEAD
-## 16. Saleh's answers (2026-09-30)
-
-Recorded from Saleh's answers to §14. They override the text of §1-§13 wherever the two disagree; the build of S1-S2 (branch `feat/strandings`) follows them.
-
-### 16.1 Endings (Q1-Q9)
-
-- **No ending story for now (Q1, Q7).** Day 15 just ends the demo showing the **four outcomes**: who runs 2150, what it runs on, how it pays its way, and whose culture leads. No World Report paper, no "Where are they now" story yet; the four answers, then END OF DEMO.
-- **Governments (Q2): 8 or 12 options.** The list is config, not code.
-- **Futures (Q3): many combinations.** The game is config-based: the outcome lists live in config (spreadsheet rows), and the combinations get calculated, never authored one by one.
-- **Influence (Q4): every traveller nudges** (option A); **famous travellers have big impacts**; **story beats offer opportunities and surprises**.
-- **Visibility (Q5): the change shows in everything that can change**: the paper, the websites, the PC, its font, languages, the city out of the window, the hall. **Never the variables** (no meters, numbers or bars).
-- **Ties (Q6): a split world is its own answer** (option A).
-- **Fired or bankrupt (Q9): "the world you leave behind"** follows the failure screen too (option A).
-- **Pictures (Q8): later, layered** (a background per future and a banner per government in front of it).
-
-### 16.2 Strandings (Q10-Q16)
-
-- **Q10 = D: a separate stranding fine of 100 cr** (a knob, `GameConfigSO.strandingFine`), charged by the agency's failure report only when the stranded traveller had **no valid signed waiver** on file. **Saleh chose this knowingly as an exception to his rule "one penalty for any wrong decision"** (2026-09-29): the rule still governs every decision at the stamp (one amount, approval or rejection alike, after the free warning); the stranding fine is not a decision penalty but the agency billing the desk for an unregistered traveller lost in the past, a consequence that lands days later. It is the only fine in the game with its own amount. The switch of §7.4 (`waiverBreachConsequence`) is not built: the answer is fixed, the amount is the knob.
-  - Scope, as built: the fine is charged for **every** fate of a stranding without a valid signed waiver (Forgotten and the Time Police included), because Saleh's answer ties it to the missing waiver, not to the promise being broken; §7.2's "nobody pays" rows for unwaivered strandings are superseded. No free warning applies to it.
-- **Q11 = A: fate odds by waiver**, knobs (content rows): signed 40 / 25 / 20 / 10 / 5, unsigned 20 / 20 / 20 / 15 / 25 (Forgotten / In the news / Brings 2150 technology / Tremor / Time Police).
-- **Q12 = A: a Forgotten traveller leaves only the agency's failure report in Mail.**
-- **Q13 = A: the Time Police are reported dry and deadpan**, in the Directorate's voice.
-- **Q14 = A: the clerk can get a waiver signed at the desk** from a pad; some travellers refuse in character; denying stays correct.
-- **Q15 = A: it costs only shift-clock time**, about one question's worth.
-- **Q16 = A, plus a death clause.** The promise not to reveal the future or alter history is in the printed text above the signature, **and the fine print carries a death clause** (authored wording, deadpan, in content): the signatory accepts that the Time Police may remove them from the past.
-=======
 ### 15.6 The leanings rebalance (branch `fix/world-leanings`, 2026-09-30): provisional, needs Saleh's review
 
 After §15.5 the demo's world barely varied: Monarchy led 27 of 50 perfect runs at the pace, Fascism, Technocracy and The Corporate Board never led, and the money stayed The Debt in 29 of 50. A content-only rebalance (no code, no knob): the Industrial worksites' leanings spread over several governments and ways to pay, a few blank cells filled, and the roles' pulls raised so every factor's answers can outweigh "as found" by the second week. The rows were chosen with an offline model of the simulation's own runs (every place's traffic per run, a search over plausible options only: places where an idea has roots, never where atrocities happened), then checked in the simulation itself.
@@ -641,4 +614,29 @@ Against the brief's targets:
 - **"As found"**: still possible (The Directorate in 1 to 6 runs, The Credit Age in 1 to 3, The Debt in 1 to 5 at the pace) but no longer dominant. The money moves off The Debt in 45 to 49 of 50 careful runs.
 - **Careless play**: most of these runs end bankrupt or fired early. They weigh the Ancient and Medieval days (Theocracy 20/50) and leave the future as found in 25/50: few accepts, a short run.
 - **The whole queue**: more travellers, so the world moves further. "As found" leads no run; the largest share is Cybernetic, 21/50.
->>>>>>> origin/main
+
+## 16. Saleh's answers (2026-09-30)
+
+Recorded from Saleh's answers to §14. They override the text of §1-§13 wherever the two disagree; the build of S1-S2 (branch `feat/strandings`) follows them.
+
+### 16.1 Endings (Q1-Q9)
+
+- **No ending story for now (Q1, Q7).** Day 15 just ends the demo showing the **four outcomes**: who runs 2150, what it runs on, how it pays its way, and whose culture leads. No World Report paper, no "Where are they now" story yet; the four answers, then END OF DEMO.
+- **Governments (Q2): 8 or 12 options.** The list is config, not code.
+- **Futures (Q3): many combinations.** The game is config-based: the outcome lists live in config (spreadsheet rows), and the combinations get calculated, never authored one by one.
+- **Influence (Q4): every traveller nudges** (option A); **famous travellers have big impacts**; **story beats offer opportunities and surprises**.
+- **Visibility (Q5): the change shows in everything that can change**: the paper, the websites, the PC, its font, languages, the city out of the window, the hall. **Never the variables** (no meters, numbers or bars).
+- **Ties (Q6): a split world is its own answer** (option A).
+- **Fired or bankrupt (Q9): "the world you leave behind"** follows the failure screen too (option A).
+- **Pictures (Q8): later, layered** (a background per future and a banner per government in front of it).
+
+### 16.2 Strandings (Q10-Q16)
+
+- **Q10 = D: a separate stranding fine of 100 cr** (a knob, `GameConfigSO.strandingFine`), charged by the agency's failure report only when the stranded traveller had **no valid signed waiver** on file. **Saleh chose this knowingly as an exception to his rule "one penalty for any wrong decision"** (2026-09-29): the rule still governs every decision at the stamp (one amount, approval or rejection alike, after the free warning); the stranding fine is not a decision penalty but the agency billing the desk for an unregistered traveller lost in the past, a consequence that lands days later. It is the only fine in the game with its own amount. The switch of §7.4 (`waiverBreachConsequence`) is not built: the answer is fixed, the amount is the knob.
+  - Scope, as built: the fine is charged for **every** fate of a stranding without a valid signed waiver (Forgotten and the Time Police included), because Saleh's answer ties it to the missing waiver, not to the promise being broken; §7.2's "nobody pays" rows for unwaivered strandings are superseded. No free warning applies to it.
+- **Q11 = A: fate odds by waiver**, knobs (content rows): signed 40 / 25 / 20 / 10 / 5, unsigned 20 / 20 / 20 / 15 / 25 (Forgotten / In the news / Brings 2150 technology / Tremor / Time Police).
+- **Q12 = A: a Forgotten traveller leaves only the agency's failure report in Mail.**
+- **Q13 = A: the Time Police are reported dry and deadpan**, in the Directorate's voice.
+- **Q14 = A: the clerk can get a waiver signed at the desk** from a pad; some travellers refuse in character; denying stays correct.
+- **Q15 = A: it costs only shift-clock time**, about one question's worth.
+- **Q16 = A, plus a death clause.** The promise not to reveal the future or alter history is in the printed text above the signature, **and the fine print carries a death clause** (authored wording, deadpan, in content): the signatory accepts that the Time Police may remove them from the past.
