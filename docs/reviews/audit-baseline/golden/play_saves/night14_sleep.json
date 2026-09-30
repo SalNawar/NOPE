@@ -3,7 +3,7 @@
     "world": {
         "day": 15,
         "runSeed": 12345,
-        "money": 132,
+        "money": 141,
         "stabilityHundredths": 9036,
         "totalCitations": 4,
         "citationsToday": 0,
@@ -455,6 +455,18 @@
                     "sourceLabel": "history:leader Iraq",
                     "startDay": 15,
                     "durationDays": -1
+                },
+                {
+                    "effectId": "Effect_History_audit_passed",
+                    "sourceLabel": "Trigger: The audit passed",
+                    "startDay": 15,
+                    "durationDays": 1
+                },
+                {
+                    "effectId": "Effect_History_drive_last_day",
+                    "sourceLabel": "Trigger: The Drive's last day",
+                    "startDay": 15,
+                    "durationDays": 1
                 }
             ],
             "dominantKeys": [
@@ -732,6 +744,123 @@
             "pendingPanics": [],
             "pendingStrandings": []
         },
+        "pulls": [
+            {
+                "factor": "money",
+                "outcome": "jubilee",
+                "amount": 7.5
+            },
+            {
+                "factor": "government",
+                "outcome": "directorate",
+                "amount": 9.750004768371582
+            },
+            {
+                "factor": "future",
+                "outcome": "credit_age",
+                "amount": 4.75
+            },
+            {
+                "factor": "money",
+                "outcome": "debt",
+                "amount": 10.750004768371582
+            },
+            {
+                "factor": "government",
+                "outcome": "democracy",
+                "amount": 19.5
+            },
+            {
+                "factor": "money",
+                "outcome": "commons",
+                "amount": 16.0
+            },
+            {
+                "factor": "future",
+                "outcome": "space_age",
+                "amount": 17.0
+            },
+            {
+                "factor": "government",
+                "outcome": "technocracy",
+                "amount": 13.0
+            },
+            {
+                "factor": "government",
+                "outcome": "theocracy",
+                "amount": 21.0
+            },
+            {
+                "factor": "future",
+                "outcome": "naturalism",
+                "amount": 8.0
+            },
+            {
+                "factor": "government",
+                "outcome": "fascism",
+                "amount": 6.0
+            },
+            {
+                "factor": "government",
+                "outcome": "monarchy",
+                "amount": 15.0
+            },
+            {
+                "factor": "government",
+                "outcome": "communism",
+                "amount": 10.5
+            },
+            {
+                "factor": "government",
+                "outcome": "corporate_board",
+                "amount": 6.0
+            },
+            {
+                "factor": "money",
+                "outcome": "banking_houses",
+                "amount": 42.5
+            },
+            {
+                "factor": "future",
+                "outcome": "cybernetic",
+                "amount": 15.0
+            },
+            {
+                "factor": "future",
+                "outcome": "anarchy",
+                "amount": 24.0
+            },
+            {
+                "factor": "money",
+                "outcome": "company_towns",
+                "amount": 28.0
+            },
+            {
+                "factor": "future",
+                "outcome": "nuclear",
+                "amount": 8.0
+            }
+        ],
+        "leads": [
+            {
+                "factor": "government",
+                "outcome": "theocracy",
+                "split": "",
+                "sinceDay": 5
+            },
+            {
+                "factor": "future",
+                "outcome": "anarchy",
+                "split": "",
+                "sinceDay": 8
+            },
+            {
+                "factor": "money",
+                "outcome": "banking_houses",
+                "split": "",
+                "sinceDay": 7
+            }
+        ],
         "newsArchive": [
             {
                 "day": 1,
@@ -784,6 +913,7 @@
                     "BUREAU NOTICE: desk officers may now ask every traveller which city they are headed for. Check answers against the Capitals Gazetteer.",
                     "BUREAU NOTICE: desk officers may now ask every traveller who rules where they are going. Check answers against Rulers & Regents.",
                     "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
+                    "BY SACRED ORDER: 2150's temple councils take up the Directorate's duties. The stamps are blessed each morning.",
                     "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
                     "Citizens who left on Debt Relief yesterday: 5."
                 ],
@@ -793,6 +923,7 @@
                 "day": 6,
                 "briefing": [],
                 "news": [
+                    "SHARE AND SHARE ALIKE: everything in 2150 goes into common stores. The first swap market opens in the transit hall.",
                     "12,000 accounts frozen in default.",
                     "Citizens who left on Debt Relief yesterday: 1."
                 ],
@@ -805,6 +936,7 @@
                     "Science is now DOMINANT in Victorian Britain.",
                     "A renaissance of artistic movements ripples through every era.",
                     "DIRECTORATE: the Debt Relief Drive begins. Every Eligible account departs this quarter.",
+                    "HOUSES OF CREDIT: the merchant dynasties open their vaults to 2150. Every family now has a banker.",
                     "Premium families book Periclean Athens for the summer.",
                     "Citizens who left on Debt Relief yesterday: 4."
                 ],
@@ -818,6 +950,7 @@
                     "Art is now DOMINANT in Kofun Yamato.",
                     "Breaking: a wave of scientific breakthroughs sweeps across the timeline!",
                     "HISTORY: Mainz prints with movable metal type. The Rhineland's presses start rolling.",
+                    "NOBODY'S PLAN: 2150's master plans are cancelled by general agreement. Every street now runs itself.",
                     "Debt Relief Departures reach a record high.",
                     "Citizens who left on Debt Relief yesterday: 3."
                 ],
@@ -945,9 +1078,9 @@
                 "wages": 110,
                 "fines": 0,
                 "debtRelief": 27,
-                "household": 69,
+                "household": 60,
                 "purchases": 0,
-                "balance": -32,
+                "balance": -23,
                 "owed": 125337
             },
             {
@@ -957,7 +1090,7 @@
                 "debtRelief": 32,
                 "household": 60,
                 "purchases": 0,
-                "balance": 6,
+                "balance": 15,
                 "owed": 125305
             },
             {
@@ -967,7 +1100,7 @@
                 "debtRelief": 42,
                 "household": 60,
                 "purchases": 80,
-                "balance": -6,
+                "balance": 3,
                 "owed": 125263
             },
             {
@@ -977,7 +1110,7 @@
                 "debtRelief": 42,
                 "household": 69,
                 "purchases": 0,
-                "balance": 53,
+                "balance": 62,
                 "owed": 125221
             },
             {
@@ -987,7 +1120,7 @@
                 "debtRelief": 35,
                 "household": 61,
                 "purchases": 34,
-                "balance": 63,
+                "balance": 72,
                 "owed": 125186
             },
             {
@@ -997,7 +1130,7 @@
                 "debtRelief": 47,
                 "household": 64,
                 "purchases": 76,
-                "balance": 66,
+                "balance": 75,
                 "owed": 125139
             },
             {
@@ -1007,7 +1140,7 @@
                 "debtRelief": 43,
                 "household": 76,
                 "purchases": 26,
-                "balance": 96,
+                "balance": 105,
                 "owed": 125096
             },
             {
@@ -1017,7 +1150,7 @@
                 "debtRelief": 40,
                 "household": 67,
                 "purchases": 35,
-                "balance": 114,
+                "balance": 123,
                 "owed": 125056
             },
             {
@@ -1027,7 +1160,7 @@
                 "debtRelief": 46,
                 "household": 66,
                 "purchases": 80,
-                "balance": 107,
+                "balance": 116,
                 "owed": 125010
             },
             {
@@ -1037,7 +1170,7 @@
                 "debtRelief": 42,
                 "household": 66,
                 "purchases": 90,
-                "balance": 79,
+                "balance": 88,
                 "owed": 124968
             },
             {
@@ -1047,7 +1180,7 @@
                 "debtRelief": 45,
                 "household": 67,
                 "purchases": 15,
-                "balance": 132,
+                "balance": 141,
                 "owed": 124923
             }
         ],

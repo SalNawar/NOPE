@@ -171,3 +171,5 @@ MonoBehaviour:
     outcome: theocracy
   - factor: future
     outcome: anarchy
+  - factor: money
+    outcome: commons

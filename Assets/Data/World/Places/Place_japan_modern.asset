@@ -165,7 +165,5 @@ MonoBehaviour:
   leanings:
   - factor: government
     outcome: technocracy
-  - factor: future
-    outcome: cybernetic
   - factor: money
     outcome: company_towns

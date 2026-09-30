@@ -3,7 +3,7 @@
     "world": {
         "day": 5,
         "runSeed": 12345,
-        "money": -32,
+        "money": -23,
         "stabilityHundredths": 9036,
         "totalCitations": 4,
         "citationsToday": 0,
@@ -304,6 +304,7 @@
                 "BUREAU NOTICE: desk officers may now ask every traveller which city they are headed for. Check answers against the Capitals Gazetteer.",
                 "BUREAU NOTICE: desk officers may now ask every traveller who rules where they are going. Check answers against Rulers & Regents.",
                 "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
+                "BY SACRED ORDER: 2150's temple councils take up the Directorate's duties. The stamps are blessed each morning.",
                 "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
                 "Citizens who left on Debt Relief yesterday: 5."
             ],
@@ -370,6 +371,93 @@
             "pendingPanics": [],
             "pendingStrandings": []
         },
+        "pulls": [
+            {
+                "factor": "money",
+                "outcome": "jubilee",
+                "amount": 7.5
+            },
+            {
+                "factor": "government",
+                "outcome": "directorate",
+                "amount": 0.8500001430511475
+            },
+            {
+                "factor": "future",
+                "outcome": "credit_age",
+                "amount": 0.8500001430511475
+            },
+            {
+                "factor": "money",
+                "outcome": "debt",
+                "amount": 0.8500001430511475
+            },
+            {
+                "factor": "government",
+                "outcome": "democracy",
+                "amount": 3.0
+            },
+            {
+                "factor": "money",
+                "outcome": "commons",
+                "amount": 7.5
+            },
+            {
+                "factor": "future",
+                "outcome": "space_age",
+                "amount": 4.0
+            },
+            {
+                "factor": "government",
+                "outcome": "technocracy",
+                "amount": 2.0
+            },
+            {
+                "factor": "government",
+                "outcome": "theocracy",
+                "amount": 9.0
+            },
+            {
+                "factor": "future",
+                "outcome": "naturalism",
+                "amount": 2.0
+            },
+            {
+                "factor": "government",
+                "outcome": "fascism",
+                "amount": 6.0
+            },
+            {
+                "factor": "government",
+                "outcome": "monarchy",
+                "amount": 3.0
+            },
+            {
+                "factor": "government",
+                "outcome": "communism",
+                "amount": 3.0
+            }
+        ],
+        "leads": [
+            {
+                "factor": "government",
+                "outcome": "theocracy",
+                "split": "",
+                "sinceDay": 5
+            },
+            {
+                "factor": "future",
+                "outcome": "credit_age",
+                "split": "",
+                "sinceDay": 0
+            },
+            {
+                "factor": "money",
+                "outcome": "debt",
+                "split": "",
+                "sinceDay": 0
+            }
+        ],
         "newsArchive": [
             {
                 "day": 1,
@@ -452,9 +540,9 @@
                 "wages": 110,
                 "fines": 0,
                 "debtRelief": 27,
-                "household": 69,
+                "household": 60,
                 "purchases": 0,
-                "balance": -32,
+                "balance": -23,
                 "owed": 125337
             }
         ],

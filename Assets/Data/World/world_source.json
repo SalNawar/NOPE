@@ -2762,7 +2762,7 @@
       "leanings": [
         {
           "factor": "government",
-          "outcome": "monarchy"
+          "outcome": "theocracy"
         },
         {
           "factor": "future",
@@ -3072,7 +3072,7 @@
       "leanings": [
         {
           "factor": "government",
-          "outcome": "monarchy"
+          "outcome": "corporate_board"
         },
         {
           "factor": "money",
@@ -3368,11 +3368,11 @@
       "leanings": [
         {
           "factor": "government",
-          "outcome": "theocracy"
+          "outcome": "technocracy"
         },
         {
           "factor": "future",
-          "outcome": "cybernetic"
+          "outcome": "space_age"
         },
         {
           "factor": "money",
@@ -3567,8 +3567,16 @@
       },
       "leanings": [
         {
+          "factor": "government",
+          "outcome": "corporate_board"
+        },
+        {
           "factor": "future",
           "outcome": "anarchy"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
         }
       ]
     },
@@ -3661,7 +3669,7 @@
       "leanings": [
         {
           "factor": "government",
-          "outcome": "monarchy"
+          "outcome": "corporate_board"
         },
         {
           "factor": "money",
@@ -3868,6 +3876,10 @@
         {
           "factor": "future",
           "outcome": "anarchy"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
         }
       ]
     },
@@ -4324,7 +4336,7 @@
       "leanings": [
         {
           "factor": "government",
-          "outcome": "democracy"
+          "outcome": "corporate_board"
         },
         {
           "factor": "future",
@@ -4995,7 +5007,7 @@
         },
         {
           "factor": "money",
-          "outcome": "company_towns"
+          "outcome": "banking_houses"
         }
       ]
     },
@@ -5444,7 +5456,7 @@
       "leanings": [
         {
           "factor": "government",
-          "outcome": "monarchy"
+          "outcome": "corporate_board"
         },
         {
           "factor": "future",
@@ -5537,10 +5549,6 @@
         {
           "factor": "government",
           "outcome": "technocracy"
-        },
-        {
-          "factor": "future",
-          "outcome": "cybernetic"
         },
         {
           "factor": "money",
@@ -5839,7 +5847,7 @@
         },
         {
           "factor": "money",
-          "outcome": "company_towns"
+          "outcome": "banking_houses"
         }
       ]
     },
@@ -6057,7 +6065,7 @@
       "leanings": [
         {
           "factor": "government",
-          "outcome": "democracy"
+          "outcome": "technocracy"
         },
         {
           "factor": "future",
@@ -6442,7 +6450,7 @@
       "leanings": [
         {
           "factor": "government",
-          "outcome": "monarchy"
+          "outcome": "technocracy"
         },
         {
           "factor": "future",
@@ -6556,7 +6564,11 @@
         },
         {
           "factor": "future",
-          "outcome": "nuclear"
+          "outcome": "anarchy"
+        },
+        {
+          "factor": "money",
+          "outcome": "jubilee"
         }
       ]
     },
@@ -21868,22 +21880,22 @@
       {
         "archetype": "scientist",
         "factor": "future",
-        "pull": 3
+        "pull": 4
       },
       {
         "archetype": "diplomat",
         "factor": "government",
-        "pull": 2
+        "pull": 3
       },
       {
         "archetype": "soldier",
         "factor": "government",
-        "pull": 2
+        "pull": 3
       },
       {
         "archetype": "merchant",
         "factor": "money",
-        "pull": 3
+        "pull": 5
       }
     ]
   }

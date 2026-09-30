@@ -16,6 +16,12 @@ Canvas TitleUIController.endingTitleText=Canvas/EndingPanel/EndingTitleText:Text
 Canvas TitleUIController.endingPicture=Canvas/EndingPicture:Image
 Canvas TitleUIController.endingBodyText=Canvas/EndingPanel/EndingBodyText:TextMeshProUGUI
 Canvas TitleUIController.endingNewRunButton=Canvas/EndingPanel/NewRunButton:Button
+Canvas TitleUIController.endingWorldButton=Canvas/EndingPanel/WorldButton:Button
+Canvas TitleUIController.worldPanel=Canvas/WorldPanel
+Canvas TitleUIController.worldTitleText=Canvas/WorldPanel/WorldTitleText:TextMeshProUGUI
+Canvas TitleUIController.worldOutcomesText=Canvas/WorldPanel/WorldOutcomesText:TextMeshProUGUI
+Canvas TitleUIController.worldCardText=Canvas/WorldPanel/WorldCardText:TextMeshProUGUI
+Canvas TitleUIController.worldNewRunButton=Canvas/WorldPanel/NewRunButton:Button
 Canvas TitleUIController.clerkPapers=Canvas/EndingPanel/ClerkPapers
 Canvas TitleUIController.clerkContractText=Canvas/EndingPanel/ClerkPapers/ContractCard/ContractText:TextMeshProUGUI
 Canvas TitleUIController.clerkAccountText=Canvas/EndingPanel/ClerkPapers/AccountCard/AccountText:TextMeshProUGUI
@@ -23,17 +29,21 @@ Canvas/ArtBackground active=True layer=0 tag=Untagged components=[RectTransform,
 Canvas/ArtBackground transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/ArtBackground rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/ArtBackground image sprite=Assets/Art/Title/title_bg.png:title_bg color=#FFFFFFFF type=Simple raycast=False material=null
-Canvas/TitlePanel active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
-Canvas/TitlePanel transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/TitlePanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(640.0,420.0)
-Canvas/TitlePanel image sprite=null color=#FFFFFF00 type=Simple raycast=True material=null
+Canvas/TitlePanel active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,VerticalLayoutGroup,ContentSizeFitter]
+Canvas/TitlePanel transform pos=(-670.000,-20.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/TitlePanel rect min=(0.0,0.5) max=(0.0,0.5) pivot=(0.0,0.5) pos=(290.0,-20.0) size=(480.0,570.0)
+Canvas/TitlePanel image sprite=null color=#141724F0 type=Simple raycast=True material=null
 Canvas/TitlePanel/TitleText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/TitlePanel/TitleText transform pos=(0.000,136.500,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/TitlePanel/TitleText rect min=(0.1,0.7) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
-Canvas/TitlePanel/TitleText text='Time Sorter' size=44 auto=False min=18 max=72 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/TitlePanel/TitleText transform pos=(240.000,245.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/TitlePanel/TitleText rect min=(0.5,1.0) max=(0.5,1.0) pivot=(0.5,1.0) pos=(0.0,-40.0) size=(400.0,232.0)
+Canvas/TitlePanel/TitleText text='Time Sorter' size=44 auto=True min=64 max=108 color=#F4EDDBFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=False
+Canvas/TitlePanel/TitleRule active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
+Canvas/TitlePanel/TitleRule transform pos=(240.000,-9.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/TitlePanel/TitleRule rect min=(0.5,1.0) max=(0.5,1.0) pivot=(0.5,1.0) pos=(0.0,-294.0) size=(360.0,4.0)
+Canvas/TitlePanel/TitleRule image sprite=null color=#CC994FFF type=Simple raycast=False material=null
 Canvas/TitlePanel/ContinueButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button,ArtSlotImage]
-Canvas/TitlePanel/ContinueButton transform pos=(0.000,-10.500,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/TitlePanel/ContinueButton rect min=(0.2,0.4) max=(0.8,0.6) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/TitlePanel/ContinueButton transform pos=(240.000,-35.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/TitlePanel/ContinueButton rect min=(0.5,1.0) max=(0.5,1.0) pivot=(0.5,1.0) pos=(0.0,-320.0) size=(360.0,90.0)
 Canvas/TitlePanel/ContinueButton image sprite=Assets/Art/Title/btn_continue_normal.png:btn_continue_normal color=#FFFFFFFF type=Simple raycast=True material=null
 Canvas/TitlePanel/ContinueButton Button interactable=True transition=SpriteSwap target=Canvas/TitlePanel/ContinueButton:Image
 Canvas/TitlePanel/ContinueButton button calls=[]
@@ -45,12 +55,12 @@ Canvas/TitlePanel/ContinueButton ArtSlotImage.hideWithoutArt=False
 Canvas/TitlePanel/ContinueButton ArtSlotImage.showWithArt.Array.size=1
 Canvas/TitlePanel/ContinueButton ArtSlotImage.showWithArt.Array.data[0]=Canvas/TitlePanel/ContinueButton/Label:TextMeshProUGUI
 Canvas/TitlePanel/ContinueButton/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/TitlePanel/ContinueButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/TitlePanel/ContinueButton/Label transform pos=(0.000,-45.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/TitlePanel/ContinueButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/TitlePanel/ContinueButton/Label text='Continue' size=26 auto=False min=18 max=72 color=#000000FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
 Canvas/TitlePanel/NewRunButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button,ArtSlotImage]
-Canvas/TitlePanel/NewRunButton transform pos=(0.000,-102.900,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/TitlePanel/NewRunButton rect min=(0.2,0.2) max=(0.8,0.3) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/TitlePanel/NewRunButton transform pos=(240.000,-147.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/TitlePanel/NewRunButton rect min=(0.5,1.0) max=(0.5,1.0) pivot=(0.5,1.0) pos=(0.0,-432.0) size=(360.0,90.0)
 Canvas/TitlePanel/NewRunButton image sprite=Assets/Art/Title/btn_new_run_normal.png:btn_new_run_normal color=#FFFFFFFF type=Simple raycast=True material=null
 Canvas/TitlePanel/NewRunButton Button interactable=True transition=SpriteSwap target=Canvas/TitlePanel/NewRunButton:Image
 Canvas/TitlePanel/NewRunButton button calls=[]
@@ -62,11 +72,11 @@ Canvas/TitlePanel/NewRunButton ArtSlotImage.hideWithoutArt=False
 Canvas/TitlePanel/NewRunButton ArtSlotImage.showWithArt.Array.size=1
 Canvas/TitlePanel/NewRunButton ArtSlotImage.showWithArt.Array.data[0]=Canvas/TitlePanel/NewRunButton/Label:TextMeshProUGUI
 Canvas/TitlePanel/NewRunButton/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/TitlePanel/NewRunButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/TitlePanel/NewRunButton/Label transform pos=(0.000,-45.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/TitlePanel/NewRunButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/TitlePanel/NewRunButton/Label text='New Run' size=26 auto=False min=18 max=72 color=#000000FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
-Canvas/TitlePanel/ArtLogo active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
-Canvas/TitlePanel/ArtLogo transform pos=(0.000,126.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/TitlePanel/ArtLogo active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
+Canvas/TitlePanel/ArtLogo transform pos=(240.000,171.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/TitlePanel/ArtLogo rect min=(0.2,0.7) max=(0.8,0.9) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/TitlePanel/ArtLogo image sprite=Assets/Art/Title/logo_time_sorter.png:logo_time_sorter color=#FFFFFFFF type=Simple raycast=False material=null
 Canvas/EndingPicture active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
@@ -82,12 +92,12 @@ Canvas/EndingPanel/EndingTitleText transform pos=(0.000,205.400,0.000) rot=(0.00
 Canvas/EndingPanel/EndingTitleText rect min=(0.1,0.8) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/EndingPanel/EndingTitleText text='The End' size=40 auto=False min=18 max=72 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
 Canvas/EndingPanel/EndingBodyText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
-Canvas/EndingPanel/EndingBodyText transform pos=(0.000,26.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/EndingPanel/EndingBodyText rect min=(0.1,0.3) max=(0.9,0.8) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/EndingPanel/EndingBodyText transform pos=(0.000,71.600,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/EndingPanel/EndingBodyText rect min=(0.1,0.5) max=(0.9,0.8) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/EndingPanel/EndingBodyText text='...' size=24 auto=False min=18 max=72 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=TopLeft wrap=Normal raycast=True
 Canvas/EndingPanel/NewRunButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button,ArtSlotImage]
-Canvas/EndingPanel/NewRunButton transform pos=(0.000,-192.400,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
-Canvas/EndingPanel/NewRunButton rect min=(0.3,0.1) max=(0.7,0.2) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/EndingPanel/NewRunButton transform pos=(0.000,-186.500,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/EndingPanel/NewRunButton rect min=(0.3,0.1) max=(0.8,0.2) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/EndingPanel/NewRunButton image sprite=Assets/Art/Title/btn_new_run_normal.png:btn_new_run_normal color=#FFFFFFFF type=Simple raycast=True material=null
 Canvas/EndingPanel/NewRunButton Button interactable=True transition=SpriteSwap target=Canvas/EndingPanel/NewRunButton:Image
 Canvas/EndingPanel/NewRunButton button calls=[]
@@ -121,6 +131,56 @@ Canvas/EndingPanel/ClerkPapers/AccountCard/AccountText active=True layer=0 tag=U
 Canvas/EndingPanel/ClerkPapers/AccountCard/AccountText transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/EndingPanel/ClerkPapers/AccountCard/AccountText rect min=(0.1,0.0) max=(0.9,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/EndingPanel/ClerkPapers/AccountCard/AccountText text='...' size=16 auto=False min=0 max=0 color=#FFFFFFFF font=null align=TopLeft wrap=Normal raycast=True
+Canvas/EndingPanel/WorldButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button,ArtSlotImage]
+Canvas/EndingPanel/WorldButton transform pos=(0.000,-75.900,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/EndingPanel/WorldButton rect min=(0.3,0.3) max=(0.8,0.4) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/EndingPanel/WorldButton image sprite=null color=#F4EDDBFF type=Simple raycast=True material=null
+Canvas/EndingPanel/WorldButton Button interactable=True transition=ColorTint target=Canvas/EndingPanel/WorldButton:Image
+Canvas/EndingPanel/WorldButton button calls=[]
+Canvas/EndingPanel/WorldButton ArtSlotImage enabled=True
+Canvas/EndingPanel/WorldButton ArtSlotImage.slot='Title/title_button'
+Canvas/EndingPanel/WorldButton ArtSlotImage.hoverSlot='Title/title_button_hover'
+Canvas/EndingPanel/WorldButton ArtSlotImage.fullColour=True
+Canvas/EndingPanel/WorldButton ArtSlotImage.hideWithoutArt=False
+Canvas/EndingPanel/WorldButton ArtSlotImage.showWithArt.Array.size=1
+Canvas/EndingPanel/WorldButton ArtSlotImage.showWithArt.Array.data[0]=Canvas/EndingPanel/WorldButton/Label:TextMeshProUGUI
+Canvas/EndingPanel/WorldButton/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/EndingPanel/WorldButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/EndingPanel/WorldButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/EndingPanel/WorldButton/Label text='The world you leave behind' size=26 auto=True min=22 max=26 color=#2E4A54FF font=null align=Center wrap=NoWrap raycast=True
+Canvas/WorldPanel active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
+Canvas/WorldPanel transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/WorldPanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(1160.0,800.0)
+Canvas/WorldPanel image sprite=null color=#141724F7 type=Simple raycast=True material=null
+Canvas/WorldPanel/WorldTitleText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/WorldPanel/WorldTitleText transform pos=(0.000,332.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/WorldPanel/WorldTitleText rect min=(0.1,0.9) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/WorldPanel/WorldTitleText text='The World You Made' size=40 auto=False min=18 max=72 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/WorldPanel/WorldOutcomesText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/WorldPanel/WorldOutcomesText transform pos=(0.000,68.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/WorldPanel/WorldOutcomesText rect min=(0.1,0.3) max=(1.0,0.8) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/WorldPanel/WorldOutcomesText text='...' size=28 auto=True min=20 max=28 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Top wrap=Normal raycast=True
+Canvas/WorldPanel/WorldCardText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/WorldPanel/WorldCardText transform pos=(0.000,-208.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/WorldPanel/WorldCardText rect min=(0.1,0.2) max=(1.0,0.3) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/WorldPanel/WorldCardText text='END OF DEMO' size=28 auto=False min=18 max=72 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/WorldPanel/NewRunButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button,ArtSlotImage]
+Canvas/WorldPanel/NewRunButton transform pos=(0.000,-320.500,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/WorldPanel/NewRunButton rect min=(0.3,0.0) max=(0.7,0.2) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/WorldPanel/NewRunButton image sprite=Assets/Art/Title/btn_new_run_normal.png:btn_new_run_normal color=#FFFFFFFF type=Simple raycast=True material=null
+Canvas/WorldPanel/NewRunButton Button interactable=True transition=SpriteSwap target=Canvas/WorldPanel/NewRunButton:Image
+Canvas/WorldPanel/NewRunButton button calls=[]
+Canvas/WorldPanel/NewRunButton ArtSlotImage enabled=True
+Canvas/WorldPanel/NewRunButton ArtSlotImage.slot='Title/title_button'
+Canvas/WorldPanel/NewRunButton ArtSlotImage.hoverSlot='Title/title_button_hover'
+Canvas/WorldPanel/NewRunButton ArtSlotImage.fullColour=True
+Canvas/WorldPanel/NewRunButton ArtSlotImage.hideWithoutArt=False
+Canvas/WorldPanel/NewRunButton ArtSlotImage.showWithArt.Array.size=1
+Canvas/WorldPanel/NewRunButton ArtSlotImage.showWithArt.Array.data[0]=Canvas/WorldPanel/NewRunButton/Label:TextMeshProUGUI
+Canvas/WorldPanel/NewRunButton/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/WorldPanel/NewRunButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/WorldPanel/NewRunButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/WorldPanel/NewRunButton/Label text='New Run' size=26 auto=False min=18 max=72 color=#000000FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
 EventSystem active=True layer=0 tag=Untagged components=[Transform,EventSystem,InputSystemUIInputModule]
 EventSystem transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 TitleSceneController active=True layer=0 tag=Untagged components=[Transform,TitleSceneController]

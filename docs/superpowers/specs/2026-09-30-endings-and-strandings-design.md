@@ -510,7 +510,7 @@ Built overnight on Saleh's answers of 2026-09-30 (four factors; 8 governments wi
 |---|---|
 | The rules: pulls, the lead with hysteresis and the split, the night's latch, the one-time seed of an older save, the answer in words | `Assets/Scripts/Domain/WorldPulls.cs` (tests: `WorldPullsTests`) |
 | The content types and checks: `FactorAnswer.Pulls` (appended, pinned), the factor's `statusQuo`, `splitLine`, `splitHeadline`; `WorldContent.outcomes` and `roles`; `Problems` and `RefProblems`; `JudgingWords` (whole words) and the percentage check; the outcome lines with their reports | `Assets/Scripts/Domain/WorldFactors.cs` (tests: `WorldFactorsTests`) |
-| Content | `world_source.json` `world.factors` (three `Pulls` rows), `world.outcomes` (19 rows), `world.roles` (4 rows: scientist 3, diplomat 2, soldier 2, merchant 3), `places[].leanings` (40 places), `premades[].pulls` (21 famous travellers), `history.rules[].pulls` (28 rules), the UI string `site.history.today`; sheets `worldOutcomes`, `worldRoles`, `placeLeanings`, `premadePulls`, `historyPulls` (`ContentSheetMap`, `docs/CONTENT_SHEETS.md`) |
+| Content | `world_source.json` `world.factors` (three `Pulls` rows), `world.outcomes` (19 rows), `world.roles` (4 rows: scientist 4, diplomat 3, soldier 3, merchant 5, since §15.6), `places[].leanings` (40 places), `premades[].pulls` (21 famous travellers), `history.rules[].pulls` (28 rules), the UI string `site.history.today`; sheets `worldOutcomes`, `worldRoles`, `placeLeanings`, `premadePulls`, `historyPulls` (`ContentSheetMap`, `docs/CONTENT_SHEETS.md`) |
 | Generation and validation | `WorldContentGenerator.World.cs` (the world block, `CheckWorldRefs`), the places' `leanings`, the premades' `pulls`, the history rules' `PullOutcome` ops; `ContentLibraryValidator.CheckWorldRefs` (leanings, premade pulls, every `PullOutcome` op in any effect, the roles' archetypes) |
 | Knobs | `GameConfigSO` "World": `worldStatusQuoWeight` 6, `worldLeadMargin` 2, `worldDenialPull` 0.05 (the first cut 0.5 froze every simulated run, §15.5), `worldKindScaleRich` 0.5, `worldKindScalePoor` 0.5, `worldKindScaleLabourer` 1, `worldKindScaleDisplaced` 1 |
 | Play | `WorldOutcomeService`: `RecordDecision` in `DayCycle.Decide` (the game and the balance simulation), `Latch` in `TimelineService.NightlyResolve` (after the story rules, before the carries, under the history news cap), `SeedOlderSave` on Continue; `EffectOpType.PullOutcome` (appended, pinned) applied as an instant op; Rook's bribe effect pulls Company Towns 1 |
@@ -542,7 +542,7 @@ Built overnight on Saleh's answers of 2026-09-30 (four factors; 8 governments wi
 11. **The morning paper**: a changed answer's headline goes after the leader line and before the carries, under the one history news cap (3); nothing prints while nothing changes, and the first night's "as you found it" is saved silently.
 12. **The older save's seed (§9)** runs only when the save has no pull *and* no latched answer (a run of this build latches every night, so it can never be re-seeded); which attribute seeds which factor is derived, not listed: an attribute seeds the factor of the one role whose archetype moves it (Science: the scientists, the future; Democracy: the diplomats and soldiers, the government); Art, moved by artists, merchants and wanderers alike, seeds nothing, so the money line starts as found (§9).
 13. **Names.** E0 named its line builder `WorldFactors`, so the rules of §4 (`WorldFactors.Pull`, `Lead`, `WorldPulls.FromScores` in §11) live together in `WorldPulls`; the play glue is `WorldOutcomeService`.
-14. **Roles: scientist 3, merchant 3, diplomat 2, soldier 2** (§4.1 has 2 each): the government has two roles pulling it and the future and the money one each, so the single roles pull 3 and every factor gathers about as much over a run (§15.5).
+14. **Roles: scientist 3, merchant 3, diplomat 2, soldier 2** (§4.1 has 2 each; raised again in §15.6 to scientist 4, diplomat 3, soldier 3, merchant 5): the government has two roles pulling it and the future and the money one each, so the single roles pull 3 and every factor gathers about as much over a run (§15.5).
 15. **No ranking words**: `WorldFactors.JudgingWords` (best, worst, better, worse, good, bad, win, lose, score, rank, retire, triumph, success, fail, victory, defeat, ideal, utopia, dystopia and their listed forms) are matched as whole words so "goods" and "window" stay free; Generate World, the validator and `WorldFactorsTests` refuse any world text using one or printing a percentage.
 
 ### 15.4 Follow-ups (not built)
@@ -564,6 +564,7 @@ At the spec's first cut (a denial pulls 0.5, every role 2, the day-fired story r
 
 Watch lines (§10) against this: every future and every way to pay leads in some perfect run at the pace; **Fascism, Technocracy and The Corporate Board lead in none** (two places lean each, 15.3 item 4) and **Monarchy leads more than a quarter of perfect runs** (twelve places lean Monarchy, five of the eight Industrial places the second week's labourers go to). Both are the leanings' to fix, Saleh's review first (15.3 item 4), not a knob's: no outcome is made "harder". The "as found" answers lead in fewer than half of the perfect runs on the government and the future, and in 29 of 50 on the money (the Drive's story rules and a slow merchant inflow). The whole-queue runs, with more travellers, drift further from "as found".
 
+<<<<<<< HEAD
 ## 16. Saleh's answers (2026-09-30)
 
 Recorded from Saleh's answers to §14. They override the text of §1-§13 wherever the two disagree; the build of S1-S2 (branch `feat/strandings`) follows them.
@@ -589,3 +590,55 @@ Recorded from Saleh's answers to §14. They override the text of §1-§13 wherev
 - **Q14 = A: the clerk can get a waiver signed at the desk** from a pad; some travellers refuse in character; denying stays correct.
 - **Q15 = A: it costs only shift-clock time**, about one question's worth.
 - **Q16 = A, plus a death clause.** The promise not to reveal the future or alter history is in the printed text above the signature, **and the fine print carries a death clause** (authored wording, deadpan, in content): the signatory accepts that the Time Police may remove them from the past.
+=======
+### 15.6 The leanings rebalance (branch `fix/world-leanings`, 2026-09-30): provisional, needs Saleh's review
+
+After §15.5 the demo's world barely varied: Monarchy led 27 of 50 perfect runs at the pace, Fascism, Technocracy and The Corporate Board never led, and the money stayed The Debt in 29 of 50. A content-only rebalance (no code, no knob): the Industrial worksites' leanings spread over several governments and ways to pay, a few blank cells filled, and the roles' pulls raised so every factor's answers can outweigh "as found" by the second week. The rows were chosen with an offline model of the simulation's own runs (every place's traffic per run, a search over plausible options only: places where an idea has roots, never where atrocities happened), then checked in the simulation itself.
+
+**Every changed row below is PROVISIONAL and needs Saleh's review.**
+
+| Place | Factor | Was | Now | Why it has roots there |
+|---|---|---|---|---|
+| New Kingdom Egypt | government | Monarchy | Theocracy | the pharaoh as a living god; the temple estates |
+| Khedivate of Egypt | government | Monarchy | The Corporate Board | the Suez Canal Company |
+| Abbasid Baghdad | government | Theocracy | Technocracy | the House of Wisdom's scholars and translators |
+| Abbasid Baghdad | future | Cybernetic | Space Age | al-Ma'mun's observatory and his measure of the Earth |
+| Ottoman Iraq (Baghdad Vilayet) | government | none | The Corporate Board | the river steamship and railway companies |
+| Ottoman Iraq (Baghdad Vilayet) | money | none | The Banking Houses | Baghdad's merchant banking families |
+| Kingdom of Iraq | government | Monarchy | The Corporate Board | the Iraq Petroleum Company |
+| Byzantine Mystras | money | none | The Commons | Plethon's proposals for land held in common |
+| Florentine Republic | government | Democracy | The Corporate Board | the guilds (the Arti) that ran the republic |
+| Qing Shanghai | money | Company Towns | The Banking Houses | the Shanxi banks and the treaty port's banks |
+| Meiji Nagoya | government | Monarchy | The Corporate Board | the zaibatsu boards |
+| Showa Tokyo | future | Cybernetic | none | spread: the Cybernetic Age already has six places and four famous travellers |
+| Elizabethan England | money | Company Towns | The Banking Houses | the goldsmith bankers and Gresham's Royal Exchange |
+| Post-war Britain | government | Democracy | Technocracy | the post-war planners and the new health service |
+| Wilhelmine Germany | government | Monarchy | Technocracy | the Prussian civil service and the engineering houses |
+| Weimar Berlin | future | Nuclear | Anarchy | Dada Berlin's patchwork |
+| Weimar Berlin | money | none | Jubilee | the 1923 inflation erased every mortgage |
+
+Roles (`world.roles`, provisional too): scientist 3 to 4, diplomat 2 to 3, soldier 2 to 3, merchant 3 to 5.
+
+Not changed, on purpose: the Fascism list stays the spec's two places (Sforza Milan, Tokugawa Edo). The search tried Republican Rome (the fasces of its lictors) and it was taken out again: a byword for the republic should not lean that way to move a statistic. The result: **Fascism leads in no simulated run**. It stays reachable by the player's own choices (soldiers and diplomats sent to its two places), which the by-the-book simulation never makes. Widening it is Saleh's call (§4.2).
+
+**Before and after** (the simulation's day-15 answers, 50 runs a style at the shift clock's pace, 10 a shift; each outcome's runs out of 50, splits apart):
+
+| Style | Factor | Before (§15.5, `eab4718`) | After |
+|---|---|---|---|
+| Perfect | government | Monarchy 27, Democracy 12, The Directorate 6, Communism 1, Theocracy 1, splits 3 | Democracy 13, Monarchy 13, Theocracy 10, Technocracy 5, The Directorate 3, The Corporate Board 2, Communism 1, splits 3 |
+| Perfect | future | Cybernetic 21, Credit Age 11, Nuclear 6, Anarchy 5, Space Age 2, Naturalism 1, splits 4 | Cybernetic 15, Anarchy 9, Space Age 8, Naturalism 6, Nuclear 5, Credit Age 3, splits 4 |
+| Perfect | money | The Debt 29, Company Towns 10, Commons 6, Banking Houses 2, Jubilee 1, splits 2 | Company Towns 15, Commons 15, Banking Houses 13, The Debt 5, Jubilee 1, splits 1 |
+| Imperfect | government | Monarchy 30, Democracy 11, Directorate 3, Theocracy 3, Communism 1, splits 2 | Theocracy 14, Democracy 12, Monarchy 11, Technocracy 5, The Corporate Board 2, Communism 1, The Directorate 1, splits 4 |
+| Imperfect | future | Cybernetic 21, Credit Age 9, Anarchy 5, Nuclear 5, Space Age 5, Naturalism 2, splits 3 | Anarchy 12, Cybernetic 12, Space Age 12, Naturalism 5, Nuclear 4, Credit Age 1, splits 4 |
+| Imperfect | money | The Debt 20, Company Towns 17, Commons 7, Banking Houses 3, Jubilee 1, splits 2 | Company Towns 17, Commons 16, Banking Houses 13, The Debt 1, Jubilee 1, splits 2 |
+| Careless | government | Monarchy 30, The Directorate 9, Democracy 5, Theocracy 2, splits 4 | Theocracy 20, Monarchy 10, The Directorate 6, Democracy 5, Communism 2, splits 7 |
+| Careless | future | Credit Age 37, Cybernetic 8, Anarchy 2, Nuclear 1, Space Age 1, splits 1 | Credit Age 25, Naturalism 6, Cybernetic 5, Space Age 5, Anarchy 3, Nuclear 1, splits 5 |
+| Careless | money | The Debt 35, Company Towns 7, Commons 4, Banking Houses 2, splits 2 | The Debt 14, Commons 13, Banking Houses 11, Company Towns 6, Jubilee 6 |
+
+Against the brief's targets:
+- **Perfect and imperfect play**: the most frequent answer leads 24 to 34 % of runs (26 % for the government in perfect play), against about 70 % before.
+- **Coverage**: every future and every way to pay leads in some run. Every government but Fascism does; The Corporate Board leads 2 runs at the pace (8 to 9 on the whole queue).
+- **"As found"**: still possible (The Directorate in 1 to 6 runs, The Credit Age in 1 to 3, The Debt in 1 to 5 at the pace) but no longer dominant. The money moves off The Debt in 45 to 49 of 50 careful runs.
+- **Careless play**: most of these runs end bankrupt or fired early. They weigh the Ancient and Medieval days (Theocracy 20/50) and leave the future as found in 25/50: few accepts, a short run.
+- **The whole queue**: more travellers, so the world moves further. "As found" leads no run; the largest share is Cybernetic, 21/50.
+>>>>>>> origin/main

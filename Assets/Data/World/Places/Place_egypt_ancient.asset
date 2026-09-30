@@ -169,7 +169,7 @@ MonoBehaviour:
     supportingEffect: {fileID: 0}
   leanings:
   - factor: government
-    outcome: monarchy
+    outcome: theocracy
   - factor: future
     outcome: naturalism
   - factor: money

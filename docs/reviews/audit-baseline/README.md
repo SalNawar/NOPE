@@ -112,8 +112,13 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
      spare is bought (one a night).
   3. Never spin the slot machine (its draw is seeded, `Seeds.ForSlot`, but kept out of the run).
   4. Sleep.
-- **The end:** night 15's sleep reaches the day-15 ending; the ending screen's title and body are recorded,
-  and the report checks the demo ends on the END OF DEMO card.
+- **The end:** night 15's sleep reaches the day-15 ending, the world page ("The World You Made"): its heading,
+  the world's four answers and the END OF DEMO card are recorded, and the report checks every factor's
+  question is answered as the run left it, with no percentage.
+- **Also checked each day** (report only): the hall's rings (only the open portals show an effect, a closed
+  ring stays plain), the world answers latched overnight print their headlines in the morning paper, no
+  break-in before `GameConfigSO.breakInFromDay` (11), and (RunShots) the Orders tree zooms in and Ctrl+0
+  puts it back at 100 %.
 - **The report's checks** (`play_report.txt`, not a golden file): each verdict right unless planned, each
   deviation fault proven before its denial, every traveller decided before closing, the log free of errors,
   the four mistakes made, the run's coverage (`COVER` lines: kinds, lies, faults, proofs, strandings).
@@ -181,6 +186,26 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
     1119 / 1099 ms, office -> Home 365 / 384 ms (run B 28% over the old 299 ms), Home -> office 760 / 768 ms.
   - The static metrics leave out `Assets/Editor/TerminalArt/` (the art side's tooling) exactly as they leave
     out `Assets/Editor/OfficeArt/` (`tools/audit/sources.py`); the `metrics/` baseline stays `ff3a6e0`'s.
+
+- **The end-of-epic pass, round 3** (`epic/pass-3` from main `7076b2c`: the hall's portals fix, the Orders zoom,
+  drag and scroll, the Home balance, the neutral endings E0, the world's outcomes E1 and the leanings, the demo
+  build script, the Title layout). Re-packed from runs A and B, which were identical (the screenshot run's
+  transcript equals A's):
+  - `play_transcript.txt` and the 30 saves: the day-15 end is now the world page ("The World You Made", the four
+    answers, END OF DEMO) in place of the Science epilogue; each morning's world line adds the latched answers and
+    the pulls, the rings line, and the world headlines (four printed in this run); Home's evening reads the new
+    balance (no break-in before day 11; none rolled from day 11 on in this run).
+  - `play_warnings.txt`: empty. Round 2's known fault is gone (Home's `StabilityText` boxes, the Arabic fix).
+  - `profile_A.txt`, `profile_B.txt`: re-measured. The office windows allocate 368 B per frame again (URP's
+    alone): round 2's known fault is gone (`PortalEffect.LateUpdate`, now 0 B). Loads: title -> office
+    1076 / 1108 ms, office -> Home 359 / 369 ms, Home -> office 824 / 796 ms.
+  - `scene_OfficeGameplay.txt` (the portals' hooks, the Orders zoom and scroll: 16,198 lines),
+    `scene_HomeScene.txt` (the Home balance's panel changes, 214 lines) and `scene_TitleScene.txt` (the Title layout
+    and the world page, 189 lines): each rebuild equals its committed scene.
+  - `contract.txt`, `scenes_summary.txt`: the hall's `Anchor_DepartureBoard` and the moved readouts; the scene
+    hashes. `world_generate.txt`, `data_hashes.txt`: `Assets/Data` 715 -> 739 files (the world's outcomes,
+    factors, roles and leanings, the endings).
+  - Unchanged: `cases.txt` (the leanings move no traveller) and `validator.txt`.
 
 ## Baseline results (ff3a6e0)
 

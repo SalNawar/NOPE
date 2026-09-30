@@ -363,6 +363,93 @@
             "pendingPanics": [],
             "pendingStrandings": []
         },
+        "pulls": [
+            {
+                "factor": "money",
+                "outcome": "jubilee",
+                "amount": 7.5
+            },
+            {
+                "factor": "government",
+                "outcome": "directorate",
+                "amount": 0.8500001430511475
+            },
+            {
+                "factor": "future",
+                "outcome": "credit_age",
+                "amount": 0.8500001430511475
+            },
+            {
+                "factor": "money",
+                "outcome": "debt",
+                "amount": 0.8500001430511475
+            },
+            {
+                "factor": "government",
+                "outcome": "democracy",
+                "amount": 3.0
+            },
+            {
+                "factor": "money",
+                "outcome": "commons",
+                "amount": 7.5
+            },
+            {
+                "factor": "future",
+                "outcome": "space_age",
+                "amount": 4.0
+            },
+            {
+                "factor": "government",
+                "outcome": "technocracy",
+                "amount": 2.0
+            },
+            {
+                "factor": "government",
+                "outcome": "theocracy",
+                "amount": 9.0
+            },
+            {
+                "factor": "future",
+                "outcome": "naturalism",
+                "amount": 2.0
+            },
+            {
+                "factor": "government",
+                "outcome": "fascism",
+                "amount": 6.0
+            },
+            {
+                "factor": "government",
+                "outcome": "monarchy",
+                "amount": 3.0
+            },
+            {
+                "factor": "government",
+                "outcome": "communism",
+                "amount": 3.0
+            }
+        ],
+        "leads": [
+            {
+                "factor": "government",
+                "outcome": "directorate",
+                "split": "",
+                "sinceDay": 0
+            },
+            {
+                "factor": "future",
+                "outcome": "credit_age",
+                "split": "",
+                "sinceDay": 0
+            },
+            {
+                "factor": "money",
+                "outcome": "debt",
+                "split": "",
+                "sinceDay": 0
+            }
+        ],
         "newsArchive": [
             {
                 "day": 1,

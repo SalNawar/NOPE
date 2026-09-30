@@ -166,6 +166,6 @@ MonoBehaviour:
     supportingEffect: {fileID: 0}
   leanings:
   - factor: government
-    outcome: monarchy
+    outcome: corporate_board
   - factor: money
     outcome: company_towns
