@@ -13,7 +13,11 @@ using System.Xml.Linq;
 /// worksheet per table (a frozen, bold header row; text columns formatted as text so
 /// the spreadsheet never turns an id or a date-like text into a number); reads every
 /// worksheet's cells as text (shared, inline and formula strings, numbers as written,
-/// booleans as "true"/"false"). Excel's "_xHHHH_" escapes are written and read.
+/// booleans as "true"/"false"). Excel's "_xHHHH_" escapes are written and read. A table
+/// with a <see cref="SheetLook"/> is drawn styled (Arial; editable cells pale yellow and
+/// unlocked, the rest locked; banners, widths, hidden columns and sheets, frozen columns,
+/// a header filter, password-less protection, drop-down lists): the narrative workbook.
+/// A workbook of plain tables is written exactly as before.
 /// </summary>
 public static class Xlsx
 {
@@ -27,6 +31,7 @@ public static class Xlsx
     /// <summary>Writes the tables as one worksheet each, in order.</summary>
     public static byte[] Write(IList<RowTable> sheets)
     {
+        bool styled = sheets.Any(t => t.Look != null);
         using var stream = new MemoryStream();
         using (var zip = new ZipArchive(stream, ZipArchiveMode.Create, true))
         {
@@ -50,17 +55,24 @@ public static class Xlsx
             rels.Append($"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<Relationships xmlns=\"{PackageRelNs}\">");
             for (int i = 0; i < sheets.Count; i++)
             {
-                book.Append($"<sheet name=\"{Attr(sheets[i].Name)}\" sheetId=\"{i + 1}\" r:id=\"rId{i + 1}\"/>");
+                string state = sheets[i].Look != null && sheets[i].Look.Hidden ? " state=\"hidden\"" : string.Empty;
+                book.Append($"<sheet name=\"{Attr(sheets[i].Name)}\" sheetId=\"{i + 1}\"{state} r:id=\"rId{i + 1}\"/>");
                 rels.Append($"<Relationship Id=\"rId{i + 1}\" Type=\"{RelNs}/worksheet\" Target=\"worksheets/sheet{i + 1}.xml\"/>");
             }
-            book.Append("</sheets></workbook>");
+            book.Append("</sheets>");
+            string filters = string.Concat(sheets.Select((t, i) => t.Look != null && t.Look.Filter && t.Headers.Count > 0
+                ? $"<definedName name=\"_xlnm._FilterDatabase\" localSheetId=\"{i}\" hidden=\"1\">{Attr(FilterRange(t, true))}</definedName>"
+                : string.Empty));
+            if (filters.Length > 0)
+                book.Append("<definedNames>").Append(filters).Append("</definedNames>");
+            book.Append("</workbook>");
             rels.Append($"<Relationship Id=\"rId{sheets.Count + 1}\" Type=\"{RelNs}/styles\" Target=\"styles.xml\"/></Relationships>");
             Put(zip, "xl/workbook.xml", book.ToString());
             Put(zip, "xl/_rels/workbook.xml.rels", rels.ToString());
-            Put(zip, "xl/styles.xml", Styles);
+            Put(zip, "xl/styles.xml", styled ? StyledStyles : Styles);
 
             for (int i = 0; i < sheets.Count; i++)
-                Put(zip, $"xl/worksheets/sheet{i + 1}.xml", Sheet(sheets[i]));
+                Put(zip, $"xl/worksheets/sheet{i + 1}.xml", sheets[i].Look != null ? StyledSheet(sheets[i]) : Sheet(sheets[i]));
         }
         return stream.ToArray();
     }
@@ -118,6 +130,167 @@ public static class Xlsx
         "<xf numFmtId=\"49\" fontId=\"0\" fillId=\"0\" borderId=\"0\" xfId=\"0\" applyNumberFormat=\"1\"/>" +
         "<xf numFmtId=\"49\" fontId=\"1\" fillId=\"2\" borderId=\"0\" xfId=\"0\" applyNumberFormat=\"1\" applyFont=\"1\" applyFill=\"1\"/></cellXfs>" +
         "<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\"/></cellStyles></styleSheet>";
+
+    /// <summary>
+    /// The styled workbook's cell styles: 0-2 as <see cref="Styles"/> (in Arial), then
+    /// 3 editable (pale yellow, unlocked), 4 locked (grey text), 5 not applicable (shaded),
+    /// 6 section banner, 7 an editable column's header (amber), 8 a locked column's header
+    /// (slate, white text), 9 a locked number or true/false. Data cells wrap at the top.
+    /// </summary>
+    private static readonly string StyledStyles =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<styleSheet xmlns=\"" + Main + "\">" +
+        "<fonts count=\"5\">" + Font(false, null) + Font(true, null) + Font(false, "FF595959") + Font(true, "FF1F3864") + Font(true, "FFFFFFFF") + "</fonts>" +
+        "<fills count=\"8\"><fill><patternFill patternType=\"none\"/></fill><fill><patternFill patternType=\"gray125\"/></fill>" +
+        Fill("FFDCE3EC") + Fill("FFFFF2CC") + Fill("FFEDEDED") + Fill("FFDDEBF7") + Fill("FFFFC000") + Fill("FF44546A") + "</fills>" +
+        "<borders count=\"2\"><border><left/><right/><top/><bottom/><diagonal/></border><border>" + Side("left") + Side("right") + Side("top") + Side("bottom") + "<diagonal/></border></borders>" +
+        "<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>" +
+        "<cellXfs count=\"10\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\" xfId=\"0\"/>" +
+        "<xf numFmtId=\"49\" fontId=\"0\" fillId=\"0\" borderId=\"0\" xfId=\"0\" applyNumberFormat=\"1\"/>" +
+        "<xf numFmtId=\"49\" fontId=\"1\" fillId=\"2\" borderId=\"0\" xfId=\"0\" applyNumberFormat=\"1\" applyFont=\"1\" applyFill=\"1\"/>" +
+        Xf(49, 0, 3, false) + Xf(49, 2, 0, true) + Xf(49, 2, 4, true) + Xf(49, 3, 5, true) + Xf(49, 1, 6, true) + Xf(49, 4, 7, true) + Xf(0, 2, 0, true) +
+        "</cellXfs><cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\"/></cellStyles></styleSheet>";
+
+    private static string Font(bool bold, string argb) =>
+        "<font>" + (bold ? "<b/>" : string.Empty) + "<sz val=\"10\"/>" + (argb != null ? $"<color rgb=\"{argb}\"/>" : string.Empty) + "<name val=\"Arial\"/><family val=\"2\"/></font>";
+
+    private static string Fill(string argb) => $"<fill><patternFill patternType=\"solid\"><fgColor rgb=\"{argb}\"/><bgColor indexed=\"64\"/></patternFill></fill>";
+
+    private static string Side(string side) => $"<{side} style=\"thin\"><color rgb=\"FFD9D9D9\"/></{side}>";
+
+    private static string Xf(int format, int font, int fill, bool locked) =>
+        $"<xf numFmtId=\"{format}\" fontId=\"{font}\" fillId=\"{fill}\" borderId=\"1\" xfId=\"0\" applyNumberFormat=\"1\" applyFont=\"1\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\" applyProtection=\"1\">" +
+        $"<alignment vertical=\"top\" wrapText=\"1\"/><protection locked=\"{(locked ? 1 : 0)}\"/></xf>";
+
+    /// <summary>The style index of a look (<see cref="StyledStyles"/>).</summary>
+    private static int StyleOf(CellLook look)
+    {
+        switch (look)
+        {
+            case CellLook.Editable: return 3;
+            case CellLook.NotApplicable: return 5;
+            case CellLook.Section: return 6;
+            default: return 4;
+        }
+    }
+
+    /// <summary>The header row and the data as a range ("A1:K40"; absolute and sheet-qualified for a defined name).</summary>
+    private static string FilterRange(RowTable t, bool qualified)
+    {
+        string last = RowTable.ColumnLetter(Math.Max(0, t.Headers.Count - 1));
+        int rows = t.Rows.Count + 1;
+        return qualified ? $"'{t.Name.Replace("'", "''")}'!$A$1:${last}${rows}" : $"A1:{last}{rows}";
+    }
+
+    /// <summary>A sheet drawn with its <see cref="SheetLook"/>.</summary>
+    private static string StyledSheet(RowTable t)
+    {
+        SheetLook look = t.Look;
+        int width = t.Headers.Count;
+        CellKind Kind(int col) => t.Kinds != null && col < t.Kinds.Length ? t.Kinds[col] : CellKind.Text;
+        CellLook ColumnLook(int col) => col < look.Columns.Length ? look.Columns[col] : CellLook.Locked;
+
+        var sb = new StringBuilder();
+        sb.Append($"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<worksheet xmlns=\"{Main}\">");
+        if (!string.IsNullOrEmpty(look.TabColor))
+            sb.Append($"<sheetPr><tabColor rgb=\"{Attr(look.TabColor)}\"/></sheetPr>");
+        int freeze = Math.Max(0, Math.Min(look.FreezeColumns, width));
+        sb.Append(freeze > 0
+            ? $"<sheetViews><sheetView workbookViewId=\"0\"><pane xSplit=\"{freeze}\" ySplit=\"1\" topLeftCell=\"{RowTable.ColumnLetter(freeze)}2\" activePane=\"bottomRight\" state=\"frozen\"/></sheetView></sheetViews>"
+            : "<sheetViews><sheetView workbookViewId=\"0\"><pane ySplit=\"1\" topLeftCell=\"A2\" activePane=\"bottomLeft\" state=\"frozen\"/></sheetView></sheetViews>");
+        sb.Append("<sheetFormatPr defaultRowHeight=\"13\"/>");
+        if (width > 0)
+        {
+            sb.Append("<cols>");
+            for (int c = 0; c < width; c++)
+            {
+                int w = c < look.Widths.Length && look.Widths[c] > 0
+                    ? look.Widths[c]
+                    : Math.Max(8, Math.Min(60, new[] { t.Headers[c] }.Concat(t.Rows.Select(r => c < r.Length ? r[c] : null)).Max(s => (s ?? string.Empty).Split('\n').Max(line => line.Length)) + 2));
+                string hidden = c < look.HiddenColumns.Length && look.HiddenColumns[c] ? " hidden=\"1\"" : string.Empty;
+                sb.Append($"<col min=\"{c + 1}\" max=\"{c + 1}\" width=\"{w}\" style=\"{StyleOf(ColumnLook(c))}\"{hidden} customWidth=\"1\"/>");
+            }
+            sb.Append("</cols>");
+        }
+
+        sb.Append("<sheetData><row r=\"1\">");
+        for (int c = 0; c < width; c++)
+            sb.Append($"<c r=\"{RowTable.ColumnLetter(c)}1\" s=\"{(ColumnLook(c) == CellLook.Editable ? 7 : 8)}\" t=\"inlineStr\"><is><t xml:space=\"preserve\">{Text(t.Headers[c] ?? string.Empty)}</t></is></c>");
+        sb.Append("</row>");
+        for (int r = 0; r < t.Rows.Count; r++)
+        {
+            int number = r + 2;
+            sb.Append($"<row r=\"{number}\">");
+            string[] cells = t.Rows[r];
+            for (int c = 0; c < width; c++)
+            {
+                string v = c < cells.Length ? cells[c] ?? string.Empty : string.Empty;
+                CellLook cellLook = look.LookOf(r, c);
+                string at = RowTable.ColumnLetter(c) + number.ToString(CultureInfo.InvariantCulture);
+                int style = StyleOf(cellLook);
+                if (v.Length == 0)
+                {
+                    if (cellLook != ColumnLook(c))
+                        sb.Append($"<c r=\"{at}\" s=\"{style}\"/>");
+                    continue;
+                }
+                CellKind k = Kind(c);
+                int valueStyle = cellLook == CellLook.Locked ? 9 : style;
+                if (k == CellKind.Number && IsNumberLiteral(v))
+                    sb.Append($"<c r=\"{at}\" s=\"{valueStyle}\"><v>{v}</v></c>");
+                else if (k == CellKind.Bool && (v == "true" || v == "false"))
+                    sb.Append($"<c r=\"{at}\" s=\"{valueStyle}\" t=\"b\"><v>{(v == "true" ? 1 : 0)}</v></c>");
+                else
+                    sb.Append($"<c r=\"{at}\" s=\"{style}\" t=\"inlineStr\"><is><t xml:space=\"preserve\">{Text(v)}</t></is></c>");
+            }
+            sb.Append("</row>");
+        }
+        sb.Append("</sheetData>");
+
+        if (look.Protect)
+            sb.Append("<sheetProtection sheet=\"1\" objects=\"1\" scenarios=\"1\" formatCells=\"0\" formatColumns=\"0\" formatRows=\"0\" insertRows=\"0\" deleteRows=\"0\" sort=\"0\" autoFilter=\"0\"/>");
+        if (look.Filter && width > 0)
+            sb.Append($"<autoFilter ref=\"{FilterRange(t, false)}\"/>");
+        List<ListRule> lists = look.Lists.Where(l => l.Spans.Count > 0).ToList();
+        if (lists.Count > 0)
+        {
+            sb.Append($"<dataValidations count=\"{lists.Count}\">");
+            foreach (ListRule rule in lists)
+                sb.Append($"<dataValidation type=\"list\" allowBlank=\"1\" showInputMessage=\"1\" showErrorMessage=\"1\" sqref=\"{Sqref(rule)}\"><formula1>{Text(rule.Source)}</formula1></dataValidation>");
+            sb.Append("</dataValidations>");
+        }
+        sb.Append("</worksheet>");
+        return sb.ToString();
+    }
+
+    /// <summary>A list rule's cells as a space-separated reference list, each column's adjacent rows merged into one range.</summary>
+    private static string Sqref(ListRule rule)
+    {
+        var parts = new List<string>();
+        foreach (IGrouping<int, (int first, int last, int column)> column in rule.Spans.GroupBy(s => s.column).OrderBy(g => g.Key))
+        {
+            string letter = RowTable.ColumnLetter(column.Key);
+            int start = -1, end = -2;
+            foreach ((int first, int last, int _) in column.OrderBy(s => s.first))
+            {
+                if (start >= 0 && first <= end + 1)
+                {
+                    end = Math.Max(end, last);
+                    continue;
+                }
+                if (start >= 0)
+                    parts.Add(CellRange(letter, start, end));
+                start = first;
+                end = last;
+            }
+            if (start >= 0)
+                parts.Add(CellRange(letter, start, end));
+        }
+        return string.Join(" ", parts);
+    }
+
+    private static string CellRange(string letter, int first, int last) =>
+        first == last ? $"{letter}{first + 2}" : $"{letter}{first + 2}:{letter}{last + 2}";
+
 
     private static string Sheet(RowTable t)
     {
