@@ -101,6 +101,21 @@ public sealed class CaseDocumentsPresenter
     /// <summary>Sets the character art the passport photos are drawn with.</summary>
     public void SetCharacterArt(CharacterArt art) => _art = art;
 
+    /// <summary>A traveller's document as the desk, the PC and the interview read it: its name, fields, hand-over, photo, form number and request group (the game's papers and the narrative workbook's Cases sheet).</summary>
+    public static CaseDocument DocumentOf(DocumentInstance doc)
+    {
+        DocumentTemplateSO template = doc != null ? doc.template : null;
+        return new CaseDocument
+        {
+            name = doc != null ? doc.DisplayName : UiText.Get("document.untitled"),
+            fields = doc != null ? doc.fields : null,
+            handOver = template != null ? template.handOver : DocumentHandOver.OnRequest,
+            showsPhoto = template != null && template.showsPhoto,
+            formNumber = template != null ? template.formNumber : string.Empty,
+            askGroup = template != null ? template.askGroup : string.Empty
+        };
+    }
+
     /// <summary>
     /// Presents the traveller's documents: handed over, never taken: those
     /// marked "on arrival" when the traveller steps up, the others through the
@@ -123,17 +138,9 @@ public sealed class CaseDocumentsPresenter
             foreach (DocumentInstance doc in inst.documents)
             {
                 DocumentTemplateSO template = doc != null ? doc.template : null;
-                string name = doc != null ? doc.DisplayName : UiText.Get("document.untitled");
-                _caseDocuments.Add(new CaseDocument
-                {
-                    name = name,
-                    fields = doc != null ? doc.fields : null,
-                    handOver = template != null ? template.handOver : DocumentHandOver.OnRequest,
-                    showsPhoto = template != null && template.showsPhoto,
-                    formNumber = template != null ? template.formNumber : string.Empty,
-                    askGroup = template != null ? template.askGroup : string.Empty
-                });
-                requestNames.Add(FormRequests.RequestLabel(template != null ? template.askGroup : null, name, interview != null ? interview.askGroups : null));
+                CaseDocument document = DocumentOf(doc);
+                _caseDocuments.Add(document);
+                requestNames.Add(FormRequests.RequestLabel(template != null ? template.askGroup : null, document.name, interview != null ? interview.askGroups : null));
                 _caseForms.Add(DocumentForm.For(doc, agency));
             }
 

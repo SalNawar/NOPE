@@ -20,6 +20,10 @@ the generated world assets
 - **Import Content Spreadsheet** reads the workbook, writes `world_source.json`, then runs **Generate World**. It writes nothing if any check fails.
 - The .xlsx is read and written with `System.IO.Compression` and `System.Xml` only (an .xlsx is a zip of XML parts). There is no third-party package. A workbook re-saved by Excel imports back byte for byte, and so do sheets saved by Excel as "CSV UTF-8".
 
+## The narrative workbook
+
+`Time Sorter > Narrative Workbook > Export` writes `ContentSheets/NarrativeWorkbook.xlsx`, a writer's view of these same tables: the days, a reference run's travellers with every line they say, the authored narratives, the voice lines and the triggers. Its editable cells are bound to cells of the sheets above (each row names its sheet and row, `dialogLines#57`, and keeps a hidden copy of the row), and `Import` writes back only what changed, then goes through this import. It is not a second format: a column added here appears there. See `docs/narrative/README.md`.
+
 ## Row rules (every sheet)
 
 - One record per row, one table per sheet, one field per column. Headers are the JSON field names. A dotted header (`culture.language`) is a field of a nested object.

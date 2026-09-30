@@ -31,7 +31,7 @@ defect, even when its value is correct.
   dependencies, covered by EditMode tests. MonoBehaviours orchestrate and
   render; they do not decide.
 - **Boundaries are typed.** Systems talk through small structs, events, and
-  interfaces (`ICameraRig`, `CompareEvidence`, `ReadyGate`), not by reaching
+  interfaces (`ICameraRig`, `CompareEvidence`, `DeskAvailability`), not by reaching
   into each other's hierarchies or statics. Static mutable state is forbidden
   in rule code.
 - **Null-safe, optional wiring.** UI controllers degrade gracefully when a

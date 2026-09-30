@@ -14,7 +14,10 @@ using NUnit.Framework;
 /// the desk view, Escape and the right-click return from it (X), the desk
 /// View allowed, then (the readability fix) the "▲ Back" control and the wheel
 /// rolled up (B), the wheel rolled down over the mat (I), then (audit R5-001)
-/// a held paper's drag Out of the hand (O) ('1' = true).
+/// a held paper's drag Out of the hand (O) ('1' = true). The desk flow
+/// (Saleh 2026-09-30): the papers on the desk move only while tilted (when
+/// there is a desk view), and the wheel or the PC frame opening returns the
+/// desk view.
 /// </summary>
 public class BoothRulesTests
 {
@@ -29,7 +32,10 @@ public class BoothRulesTests
         R(name, focused, screenOn, phase, wheelOpen, stampOpen, papersHeld, false, expected);
 
     private static Row R(string name, bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool stampOpen, bool papersHeld, bool deskView, string expected) =>
-        new Row { Name = name, Context = new BoothContext(focused, screenOn, phase, wheelOpen, false, stampOpen, papersHeld, deskView), Expected = expected.Replace(" ", "") };
+        R(name, focused, screenOn, phase, wheelOpen, stampOpen, papersHeld, deskView, true, expected);
+
+    private static Row R(string name, bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool stampOpen, bool papersHeld, bool deskView, bool bound, string expected) =>
+        new Row { Name = name, Context = new BoothContext(focused, screenOn, phase, wheelOpen, false, stampOpen, papersHeld, deskView, bound), Expected = expected.Replace(" ", "") };
 
     /// <summary>The rows of the input table (the citation row is tested separately).</summary>
     private static readonly Row[] Rows =
@@ -38,25 +44,28 @@ public class BoothRulesTests
         R("newsletter, office view",                false,  true,  BoothPhase.Newsletter,      false, false, false,        "0000000 00000 000 00 0"),
         R("newsletter, frame open",                 true,   true,  BoothPhase.Newsletter,      false, false, false,        "0000000 00000 000 00 0"),
         R("office, no traveller",                   false,  true,  BoothPhase.NoTraveller,     false, false, false,        "0111000 00000 101 01 0"),
-        R("office, traveller at the desk",          false,  true,  BoothPhase.TravellerAtDesk, false, false, false,        "0111111 10011 101 01 1"),
-        R("wheel open",                             false,  true,  BoothPhase.TravellerAtDesk, true,  false, false,        "0000010 00011 001 00 0"),
-        R("frame open, screen on",                  true,   true,  BoothPhase.TravellerAtDesk, false, false, false,        "1010000 10000 001 00 0"),
-        R("frame open, screen off",                 true,   false, BoothPhase.TravellerAtDesk, false, false, false,        "0010000 10000 001 00 0"),
-        R("frame open, no traveller",               true,   true,  BoothPhase.NoTraveller,     false, false, false,        "1010000 00000 001 00 0"),
-        R("office, papers held",                    false,  true,  BoothPhase.TravellerAtDesk, false, false, true,         "0111111 11111 001 00 1"),
+        R("office, traveller at the desk",          false,  true,  BoothPhase.TravellerAtDesk, false, false, false,        "0111011 10011 101 01 0"),
+        R("wheel open",                             false,  true,  BoothPhase.TravellerAtDesk, true,  false, false,        "0000010 00011 000 00 0"),
+        R("frame open, screen on",                  true,   true,  BoothPhase.TravellerAtDesk, false, false, false,        "1010000 10000 000 00 0"),
+        R("frame open, screen off",                 true,   false, BoothPhase.TravellerAtDesk, false, false, false,        "0010000 10000 000 00 0"),
+        R("frame open, no traveller",               true,   true,  BoothPhase.NoTraveller,     false, false, false,        "1010000 00000 000 00 0"),
+        R("office, papers held",                    false,  true,  BoothPhase.TravellerAtDesk, false, false, true,         "0111011 11111 001 00 0"),
         R("stamp tray open",                        false,  true,  BoothPhase.TravellerAtDesk, false, true,  false,        "0000010 00011 001 00 0"),
         R("stamp tray open, papers held",           false,  true,  BoothPhase.TravellerAtDesk, false, true,  true,         "0000010 00011 001 00 0"),
-        R("wheel open, papers held",                false,  true,  BoothPhase.TravellerAtDesk, true,  false, true,         "0000010 00011 001 00 0"),
-        R("frame open, papers held",                true,   true,  BoothPhase.TravellerAtDesk, false, false, true,         "1010000 10000 001 00 0"),
+        R("wheel open, papers held",                false,  true,  BoothPhase.TravellerAtDesk, true,  false, true,         "0000010 00011 000 00 0"),
+        R("frame open, papers held",                true,   true,  BoothPhase.TravellerAtDesk, false, false, true,         "1010000 10000 000 00 0"),
         R("office, no traveller, papers held",      false,  true,  BoothPhase.NoTraveller,     false, false, true,         "0111000 00000 001 00 0"),
         //                                          focused screen phase                      wheel  stamp  held   desk   DCPRAWT HKESU MXV BI O
         R("desk view, traveller at the desk",       false,  true,  BoothPhase.TravellerAtDesk, false, false, false, true,  "0111111 10011 111 10 1"),
         R("desk view, no traveller",                false,  true,  BoothPhase.NoTraveller,     false, false, false, true,  "0111000 00000 111 10 0"),
         R("desk view, papers held",                 false,  true,  BoothPhase.TravellerAtDesk, false, false, true,  true,  "0111111 11111 001 10 1"),
-        R("desk view, wheel open",                  false,  true,  BoothPhase.TravellerAtDesk, true,  false, false, true,  "0000010 00011 001 00 0"),
+        R("desk view, wheel open",                  false,  true,  BoothPhase.TravellerAtDesk, true,  false, false, true,  "0000010 00011 000 00 0"),
         R("desk view, stamp tray open",             false,  true,  BoothPhase.TravellerAtDesk, false, true,  false, true,  "0000010 00011 001 00 0"),
-        R("desk view, frame open",                  true,   true,  BoothPhase.TravellerAtDesk, false, false, false, true,  "1010000 10000 001 00 0"),
+        R("desk view, frame open",                  true,   true,  BoothPhase.TravellerAtDesk, false, false, false, true,  "1010000 10000 000 00 0"),
         R("desk view, newsletter",                  false,  true,  BoothPhase.Newsletter,      false, false, false, true,  "0000000 00000 000 00 0"),
+        //                                          focused screen phase                      wheel  stamp  held   desk   bound  DCPRAWT HKESU MXV BI O
+        R("no desk view, traveller at the desk",    false,  true,  BoothPhase.TravellerAtDesk, false, false, false, false, false, "0111111 10011 101 01 1"),
+        R("no desk view, papers held",              false,  true,  BoothPhase.TravellerAtDesk, false, false, true,  false, false, "0111111 11111 001 00 1"),
     };
 
     /// <summary>The outputs in the order of the expected strings.</summary>
@@ -96,7 +105,34 @@ public class BoothRulesTests
     public void PropsLive_InTheOfficeView_WithoutANewsletterOrAnOpenWheel() => CheckColumn(3, "PropsLive");
 
     [Test]
-    public void PapersLive_LikeProps_WhileATravellerIsAtTheDesk() => CheckColumn(4, "PapersLive");
+    public void PapersLive_LikeProps_WhileATravellerIsAtTheDesk_OnlyTilted() => CheckColumn(4, "PapersLive");
+
+    /// <summary>Saleh 2026-09-30: "moving papers should only be possible when camera is tilted": in the normal view no paper on the desk drags or takes a click (a click reaches the mat under it and tilts in), nor does a held paper drag out onto the desk; tilted, they work as the props do; with no desk view at all they work in the normal view.</summary>
+    [Test]
+    public void PapersOnTheDesk_MoveOnlyWhileTilted_OrWithoutADeskView()
+    {
+        foreach (BoothContext c in AllContexts())
+        {
+            BoothInput o = BoothRules.Evaluate(c);
+            string name = $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}, bound {c.DeskViewBound}";
+            bool reach = c.DeskView || !c.DeskViewBound;
+            Assert.AreEqual(o.PropsLive && c.Phase == BoothPhase.TravellerAtDesk && reach, o.PapersLive, name);
+            if (!reach)
+                Assert.IsFalse(o.PapersLive || o.HeldDragOutLive, $"nothing moves on the desk in the normal view: {name}");
+        }
+    }
+
+    /// <summary>Saleh 2026-09-30: from the tilted view the intercom, the traveller or the PC is one click away: the wheel or the PC frame opening returns the desk view (the camera blends straight up), and the desk view is never allowed beside them.</summary>
+    [Test]
+    public void TheWheelOrThePcFrame_ReturnsTheDeskView()
+    {
+        foreach (BoothContext c in AllContexts())
+        {
+            BoothInput o = BoothRules.Evaluate(c);
+            Assert.AreEqual(c.Phase != BoothPhase.Newsletter && !c.WheelOpen && !c.Focused, o.DeskViewAllowed,
+                $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}");
+        }
+    }
 
     [Test]
     public void WheelAllowed_InTheOfficeView_WhileATravellerIsAtTheDesk() => CheckColumn(5, "WheelAllowed");
@@ -109,7 +145,7 @@ public class BoothRulesTests
     {
         foreach (bool held in new[] { false, true })
         {
-            BoothInput open = BoothRules.Evaluate(new BoothContext(false, true, BoothPhase.TravellerAtDesk, false, false, true, held, false));
+            BoothInput open = BoothRules.Evaluate(new BoothContext(false, true, BoothPhase.TravellerAtDesk, false, false, true, held, true, true));
             Assert.IsFalse(open.CrtFocusable, "the PC");
             Assert.IsFalse(open.PowerButtonLive, "the power buttons");
             Assert.IsFalse(open.PropsLive, "the props");
@@ -125,7 +161,7 @@ public class BoothRulesTests
     public void HeldPapersLive_InBothViews_NotWithWheelStampOrNewsletter()
     {
         CheckColumn(7, "HeldPapersLive");
-        Assert.IsTrue(BoothRules.Evaluate(new BoothContext(true, false, BoothPhase.TravellerAtDesk, false, false, false, true, false)).HeldPapersLive,
+        Assert.IsTrue(BoothRules.Evaluate(new BoothContext(true, false, BoothPhase.TravellerAtDesk, false, false, false, true, false, true)).HeldPapersLive,
             "beside the open frame, even on a dark screen");
     }
 
@@ -151,15 +187,16 @@ public class BoothRulesTests
     }
 
     [Test]
-    public void DeskCatcherAndEscape_NeedHeldPapersInOfficeView()
+    public void DeskCatcherAndEscape_NeedHeldPapersInOfficeView_InEitherView()
     {
         CheckColumn(8, "DeskCatcherLive");
         CheckColumn(9, "ExamineEscapeLive");
-        foreach (Row row in Rows)
+        foreach (BoothContext c in AllContexts())
         {
-            BoothInput o = BoothRules.Evaluate(row.Context);
-            Assert.AreEqual(o.PapersLive && row.Context.PapersHeld, o.DeskCatcherLive, row.Name);
-            Assert.AreEqual(o.DeskCatcherLive, o.ExamineEscapeLive, row.Name);
+            BoothInput o = BoothRules.Evaluate(c);
+            string name = $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}, bound {c.DeskViewBound}";
+            Assert.AreEqual(o.PropsLive && c.Phase == BoothPhase.TravellerAtDesk && c.PapersHeld, o.DeskCatcherLive, name);
+            Assert.AreEqual(o.DeskCatcherLive, o.ExamineEscapeLive, name);
         }
     }
 
@@ -192,7 +229,7 @@ public class BoothRulesTests
     }
 
     [Test]
-    public void DeskViewAllowed_UnlessANewsletterIsUp() => CheckColumn(14, "DeskViewAllowed");
+    public void DeskViewAllowed_UnlessANewsletterTheWheelOrTheFrameIsUp() => CheckColumn(14, "DeskViewAllowed");
 
     /// <summary>The visible way out: the "▲ Back" control shows (and the wheel rolled up returns) while tilted and the office takes input, papers held or not.</summary>
     [Test]
@@ -230,32 +267,32 @@ public class BoothRulesTests
         }
     }
 
-    /// <summary>The desk view only moves the camera: it changes no output but its own ways out and in (the return, the Back control, the wheel).</summary>
+    /// <summary>The desk view changes no output but the papers on the desk (and so a held paper's drag out onto it) and its own ways out and in (the return, the Back control, the wheel); with no desk view, not even the papers.</summary>
     [Test]
-    public void TheDeskView_ChangesNoOtherOutput_InAnyContext()
+    public void TheDeskView_ChangesOnlyThePapersAndItsOwnWays_InAnyContext()
     {
         foreach (BoothContext c in AllContexts())
         {
-            bool[] a = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, c.CitationPending, c.StampOpen, c.PapersHeld, false)));
-            bool[] b = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, c.CitationPending, c.StampOpen, c.PapersHeld, true)));
+            bool[] a = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, c.CitationPending, c.StampOpen, c.PapersHeld, false, c.DeskViewBound)));
+            bool[] b = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, c.CitationPending, c.StampOpen, c.PapersHeld, true, c.DeskViewBound)));
             for (int i = 0; i < a.Length; i++)
-                if (i != 13 && i != 15 && i != 16)
-                    Assert.AreEqual(a[i], b[i], $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}: output {i} must not depend on the desk view");
+                if (i != 13 && i != 15 && i != 16 && (!c.DeskViewBound || (i != 4 && i != 17)))
+                    Assert.AreEqual(a[i], b[i], $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, bound {c.DeskViewBound}: output {i} must not depend on the desk view");
         }
     }
 
-    /// <summary>Every context: each phase, and every combination of the six flags and the desk view.</summary>
+    /// <summary>Every context: each phase, and every combination of the six flags, the desk view and whether there is one.</summary>
     private static IEnumerable<BoothContext> AllContexts()
     {
         foreach (BoothPhase phase in (BoothPhase[])Enum.GetValues(typeof(BoothPhase)))
-            for (int bits = 0; bits < 128; bits++)
-                yield return new BoothContext((bits & 1) != 0, (bits & 2) != 0, phase, (bits & 4) != 0, (bits & 8) != 0, (bits & 16) != 0, (bits & 32) != 0, (bits & 64) != 0);
+            for (int bits = 0; bits < 256; bits++)
+                yield return new BoothContext((bits & 1) != 0, (bits & 2) != 0, phase, (bits & 4) != 0, (bits & 8) != 0, (bits & 16) != 0, (bits & 32) != 0, (bits & 64) != 0, (bits & 128) != 0);
     }
 
     [Test]
     public void AnOpenWheel_StaysAllowed_SoOpeningItNeverClosesIt_ButTheTravellerGoesInert()
     {
-        BoothInput open = BoothRules.Evaluate(new BoothContext(false, true, BoothPhase.TravellerAtDesk, true, false, false, false, false));
+        BoothInput open = BoothRules.Evaluate(new BoothContext(false, true, BoothPhase.TravellerAtDesk, true, false, false, false, false, true));
         Assert.IsTrue(open.WheelAllowed);
         Assert.IsFalse(open.TravellerLive);
     }
@@ -267,7 +304,7 @@ public class BoothRulesTests
         {
             BoothContext c = row.Context;
             BoothInput plain = BoothRules.Evaluate(c);
-            BoothInput held = BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, true, c.StampOpen, c.PapersHeld, c.DeskView));
+            BoothInput held = BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, true, c.StampOpen, c.PapersHeld, c.DeskView, c.DeskViewBound));
 
             Assert.IsFalse(held.PowerButtonLive, row.Name);
             bool[] a = Outputs(plain), b = Outputs(held);
@@ -311,6 +348,7 @@ public class BoothRulesTests
         BoothContext c = default;
         Assert.AreEqual(BoothPhase.NoTraveller, c.Phase, "NoTraveller is the first phase, the default before Start");
         Assert.IsFalse(c.DeskView, "the normal view is the default");
+        Assert.IsFalse(c.DeskViewBound, "no desk view is the default (the papers then move in the normal view)");
         CollectionAssert.AreEqual(new[] { false, true, true, true, false, false, false, false, false, false, false, false, true, false, true, false, true, false }, Outputs(BoothRules.Evaluate(c)));
     }
 }

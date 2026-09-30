@@ -41,7 +41,7 @@ using UnityEngine.UI;
 ///   HoverHint, StampTray]
 /// - The Office root: click boxes for the art's props, the physical desk
 ///   (papers, the scanner, the mat's click), the desk view's camera, the
-///   traveller, the READY sign, the readouts and the office's input rules,
+///   traveller, the AVAILABLE sign, the readouts and the office's input rules,
 ///   all put on the art office at load by the binder through the scene
 ///   contract  [OfficeSceneBinder, DeskController, DeskView, DeskReaction,
 ///   TravellerView, BoothCoordinator]
@@ -1216,7 +1216,7 @@ public static partial class OfficeSceneUIBuilder
     /// sections), their icons and the context menu
     /// (OfficeSceneUIBuilder.Desktop.cs), a Start menu (the six apps, Arrange
     /// icons, Turn off screen and Quit game) wired to a DesktopShell on the
-    /// canvas, and the taskbar's "&lt; Desk" button (FocusOffice; built here,
+    /// canvas, and the taskbar's Back to desk button (FocusDesk; built here,
     /// after the view exists). The retired Lexicon, Dialect and Material
     /// placeholders and their icons go; Mail's Rules link opens the app's Rules
     /// tab. Idempotent. Returns the icons.
@@ -1260,14 +1260,14 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soFeed, "mailWindow", windows[DesktopAppIds.Mail]);
         soFeed.ApplyModifiedProperties();
 
-        // The taskbar's way back to the office (closes the PC frame), next to Start.
+        // The taskbar's way back to the desk (closes the PC frame into the desk view: OfficeViewController.FocusDesk), next to Start.
         Transform taskbar = root.Find("Taskbar");
         Button deskButton = MakeButton(taskbar, "DeskButton", null, Vector2.zero, new Vector2(0f, 1f), new Color(0.2f, 0.3f, 0.5f, 0.95f),
                                        ThemeRoleId.DeskButton, "taskbar.desk");
         PlaceRect(deskButton.transform, Vector2.zero, new Vector2(0f, 1f), new Vector2(PcSize.S + MenuButtonWidth + PcSize.S, 3f),
                   new Vector2(PcSize.S + MenuButtonWidth + PcSize.S + DeskButtonWidth, -3f));
         ButtonLabel(deskButton, PcType.Body).lineSpacing = -10f; // a culture's words over their English gloss keep their size in the bar
-        WirePersistentVoid(deskButton, "m_OnClick", view, nameof(OfficeViewController.FocusOffice));
+        WirePersistentVoid(deskButton, "m_OnClick", view, nameof(OfficeViewController.FocusDesk));
 
         Button startBtn = null;
         Transform taskbarStart = root.Find("Taskbar/StartButton");

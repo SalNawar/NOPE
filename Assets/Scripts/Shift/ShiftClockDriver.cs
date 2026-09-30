@@ -23,6 +23,9 @@ public sealed class ShiftClockDriver : MonoBehaviour, IShiftProgress
     /// <summary>0 at opening, 1 at closing (<see cref="ShiftClock.Progress01"/>); 0 until Configure.</summary>
     public float Progress01 => Clock != null ? Clock.Progress01 : 0f;
 
+    /// <summary>The clock's minute of the day (<see cref="ShiftClock.CurrentMinute"/>); 09:00 until Configure.</summary>
+    public float MinuteOfDay => Clock != null ? Clock.CurrentMinute : 540f;
+
     /// <summary>Raised once, when the clock reaches closing time.</summary>
     public event Action Closed;
 

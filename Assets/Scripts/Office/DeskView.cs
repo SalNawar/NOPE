@@ -13,9 +13,11 @@ using UnityEngine.UI;
 /// mat does) also return; so do the "▲ Back" control at the top of the office
 /// overlay (shown while tilted) and the mouse wheel rolled up, and the wheel
 /// rolled down over the empty mat tilts in (the readability fix: a visible way
-/// out). BoothCoordinator returns it when the next traveller is called or a
-/// newsletter shows, and says when the mat, the returns, the Back control and
-/// the wheel are live (BoothRules). The view is a gameplay-owned Cinemachine
+/// out). BoothCoordinator returns it when the next traveller is called, a
+/// newsletter shows, or the wheel or the PC frame opens (a click on the
+/// intercom, the traveller or the PC from the tilted view blends straight up
+/// there; Saleh 2026-09-30), and says when the mat, the returns, the Back
+/// control and the wheel are live (BoothRules). The view is a gameplay-owned Cinemachine
 /// camera, posed at bind (OfficeSceneBinder) from the art office's camera and
 /// the mat's centre (DeskViewPose, DeskConfigSO.deskView), and raised above the
 /// art camera's priority while on, so the art camera's brain blends. The
@@ -59,6 +61,9 @@ public sealed class DeskView : MonoBehaviour
 
     /// <summary>True while the camera is (or is blending) over the desk.</summary>
     public bool IsOn { get; private set; }
+
+    /// <summary>True once posed from the art office's Cinemachine camera (Bind): the view can tilt, so the papers on the desk move only while it is on (BoothRules).</summary>
+    public bool IsBound => _office != null;
 
     /// <summary>Raised after the view turns on or off.</summary>
     public event Action Changed;
@@ -119,6 +124,13 @@ public sealed class DeskView : MonoBehaviour
     {
         if (_toggleLive)
             Set(!IsOn);
+    }
+
+    /// <summary>Tilts into the desk view (no-op if it is on, or while the mat's toggle is not live): the PC's "&lt; Desk" button, once its frame has closed.</summary>
+    public void TiltIn()
+    {
+        if (_toggleLive)
+            Set(true);
     }
 
     /// <summary>Returns to the normal view (no-op if it is on): Escape, the right-click, the next traveller, a newsletter.</summary>

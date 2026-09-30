@@ -20,7 +20,7 @@ that exists for the code it touches.
 - Style: decision tables, not happy paths — every rule branch has a test
   (see `DiscrepancyLogTests`: 3 proof modalities × junk rejections × dedupe).
 - Current suites: `DiscrepancyLogTests`, `CitizenRegistryTests`,
-  `ReadyGateTests`, `ShiftLedgerTests`.
+  `DeskAvailabilityTests`, `ShiftLedgerTests`.
 - Run: Unity Test Runner (EditMode) or UnitySkills `test_run`.
 - Rule: new domain code ships with its decision table in the same push.
 

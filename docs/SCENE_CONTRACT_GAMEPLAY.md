@@ -58,12 +58,12 @@ The anime hall's are in the next section.
 | `Scanner` | the scanner (drop bed, scan pulse) | **default** pose (1.02, 1.06, −0.46): right of the mat (its left edge on the mat's border), between the calculator and the ink pad, where it touches no prop and its click box covers no other prop's box as the office camera sees it; the gameplay layer shows a placeholder flatbed there (with its feeder tray and analysis lamp while those shop upgrades are owned) | a scanner model with `Anchor_Scanner` (the placeholder hides when an art scanner is found) |
 | `Traveller` | where the traveller's feet stand (the figure turns to the camera) | **default** (0, 0, 1.6) | `Anchor_Traveller` behind the desk |
 | `HandOver` | where handed-over papers slide in from and back to | **default** (0.05, 1.07, 0.45): right behind the NEXT sign, which hides a paper there from the office camera, so papers slide out from under the sign and back under it. Since the 633e2e5 layout the sign stands against the mat's back edge and the lamp behind it: every path from the far side of the desk to the mat crosses the sign's base, and the old default (0.45, 1.07, 0.95) lay on the lamp's cord, so papers came out of the lamp. This spot touches no prop, and no path from it to the mat or the scanner crosses the lamp | `Anchor_HandOver` at the traveller's edge of the desk, with a clear run to the mat |
-| `NextSign` | READY / NEXT: the click box | fallback `HybridOffice/Booth/Blender_Next` (beside the mat's back edge since 633e2e5); without it, **default** (0.13, 1.06, 0.16), where the art's sign stands, with the gameplay's READY placeholder | — |
+| `NextSign` | the AVAILABLE sign (the art's NEXT sign): the click box that turns the desk available or pauses it | fallback `HybridOffice/Booth/Blender_Next` (beside the mat's back edge since 633e2e5); without it, **default** (0.13, 1.06, 0.16), where the art's sign stands, with the gameplay's READY placeholder | — |
 | `Intercom` | opens the wheel | fallback `ImportedOfficeDress/Desk/Clerk hotline`, the phone at the desk's right rear since 633e2e5 (then `HybridOffice/Booth/Finish_Intercom`) | — |
 | `Stamp`, `Till`, `StabilityMonitor`, `Calendar`, `Clock` | reacting props with tooltips | fallbacks under `HybridOffice/Booth/` | — |
 | `Calculator`, `PenPot`, `Stapler` | flavour props (react on click) | fallbacks under `ImportedOfficeDress/Desk/` | — |
 | `ReadoutDay`, `ReadoutStability`, `ReadoutCredits`, `ReadoutClock` | the art's TMP texts the game writes (day, stability %, credits, digital shift clock) | bare names `DayNumber`, `StabilityPercent`, `CreditsNumber`, `ShiftClockDisplay` | keep these names on the texts (or add anchors on them). Without them the game shows a small fallback HUD. |
-| `ReadoutNext` | the NEXT sign's caption (the game writes the `desk.readyCaption` UI string) | bare name `NextLabel` | — |
+| `ReadoutNext` | the NEXT sign's caption (the game writes the `desk.readyCaption` UI string, "AVAILABLE", in the label's own ink while the desk is available and in `DeskConfigSO.readyPausedInk` while paused) | bare name `NextLabel` | — |
 | `OfficeCamera` | the camera the player sees through (the 3D raycaster goes on it) | fallback `Main Camera` | — |
 | `OfficeVCam` | the Cinemachine camera that frames the office (the game raises its priority) | fallback `Cameras/OfficeVCam` | — |
 | `DepartureBoard` | the Departure Board (the portals spec v3 BD1-BD5): the day's portal rows, a gameplay text fitted inside it, and its click box with the portals' tooltip | none in the room: the board is skipped there (no default pose) | `Anchor_DepartureBoard` (a sized empty RectTransform) over a board's display |
@@ -115,9 +115,21 @@ four static previews gone; `Cameras/OfficeVCam` and the brain on the player
 camera, tagged `MainCamera`, for the desk view; `Anchor_Scanner`,
 `Anchor_Traveller`, `Anchor_HandOver` (a scanner model under `Anchor_Scanner`
 hides the placeholder); `Anchor_DepartureBoard` (since 2026-09-30, Saleh's OK,
-the portals spec v3); and the daylight's culling mask includes Default and
+the portals spec v3); the daylight's culling mask includes Default and
 Interactable, so the papers on the desk are lit by it (and dim with it in the
-evening).
+evening); and, since 2026-09-30 (Saleh: lights, shadows, dust and a full
+day-night cycle; `docs/HALL_LIGHTING.md`), the hall's lights: its 58 painted
+layers on the `HallBackdrop` layer with URP's `Sprite-Lit-Default` material
+(the exterior layer `03` on the `HallSky` sorting layer and the board display
+`16` on `HallDisplays`, both listed before Default: the layers are mutually
+exclusive masks, so they draw where they did), and a
+`HallLighting` root with the `HallBackdrop` (the painted layers drawn through
+a 2D Renderer, `Assets/Settings/HallRenderer2D.asset`, by a camera made at runtime, shown behind
+everything by the office camera, which never draws that layer itself), the
+`HallLightingRig` and its lights (`Plane`, following the presentation: a global
+and a sky light, the window shafts, the ceiling fixtures, the screens, the door
+signs, a light per portal ring, the piers' shadow casters, the dust; `Desk`: the
+green lamp's spot and the PC screen's glow, 3D lights on the art's layer).
 
 Still optional for the art side: group each prop's parts under one parent
 (`Retro CRT` with the glass among its children, `Clerk hotline`,
@@ -132,7 +144,7 @@ the gameplay side for a new hook when the art needs one.
 
 | Hook | What it gives | Used by |
 |---|---|---|
-| `ShiftClockDriver.Live` (`IShiftProgress`) | today's shift progress, `Progress01`: 0 at opening, 1 at closing (`ShiftClock.Progress01`); null when no gameplay layer is loaded (the art office on its own, edit mode) | `OfficeHallCrowdPalette` (the crowds' morning to evening colours); `AnimeHallShiftLink` (the anime hall's daylight and ambient) |
+| `ShiftClockDriver.Live` (`IShiftProgress`) | today's shift progress, `Progress01`: 0 at opening, 1 at closing (`ShiftClock.Progress01`), and the clock's `MinuteOfDay` (540 is 09:00); null when no gameplay layer is loaded (the art office on its own, edit mode) | `OfficeHallCrowdPalette` (the crowds' morning to evening colours); `AnimeHallShiftLink` (the anime hall's daylight and ambient, and its lights' hour) |
 
 The anime hall's `AnimeHallPresentation` offers `SetTime(normalizedEvening)` and
 `SetPan(normalizedPan)` ("gameplay supplies time and pan"). The gameplay layer
@@ -166,7 +178,19 @@ ring's width) and follows them if the art pans. A renamed or renumbered layer
 is a `DeskConfigSO.hallPortalLayers` edit; the art side keeps each ring's
 centre free of other layers at the bay's order − 1 (at art c75e1fe the orders
 the effects share, the stone bust's 37 and each lower ring's order, have no
-pixel inside any ring's centre).
+pixel inside any ring's centre). With the hall's lights the effects move to the
+`HallBackdrop` layer, so the 2D pass that draws the painted layers draws them in
+that order, and each ring's state also sets its light (on while it shows a
+glow or the spiral, off while closed).
+
+The gameplay layer also drives **the hall's lights** (`docs/HALL_LIGHTING.md`):
+the shift link hands the hall's `HallLightingRig` the clock's minute each
+frame; the rig's day-night cycle (`HallDayCycle`, its knobs
+`Assets/Data/Config/HallLighting_Default.asset`) then gives the presentation's
+`SetTime` its evening (1 − the daylight) instead of the crowds' curve, and the
+traveller's tint its shade. The rig and its lights are hall objects (Add Anime
+Hall Hooks places them); the art side may move, retune or duplicate a light
+(its `HallLight` says what drives it).
 
 ## What the art scene must not do (and what the game does about leftovers)
 
@@ -204,6 +228,13 @@ Other art-side fixes found by the move:
 - Two layers are the gameplay layer's: `Interactable` (every click box; the
   office camera's `PhysicsRaycaster` sees only it) and `PCDesktop` (the desktop
   canvas and its two cameras, far below the office; the office camera never draws it).
+- One more layer and one more sorting layer come with the anime hall's lights
+  (Add Anime Hall Hooks adds them): the layer `HallBackdrop` (the hall's painted
+  layers, the portal rings' effects, the dust and the Light2Ds: only the hall's
+  2D backdrop camera draws it, never the office camera) and the sorting layers
+  `HallSky` and `HallDisplays`, before `Default` (the hall's exterior, which only
+  the sky light reaches; the Departure Board's display, which only the global
+  light and the board's own light reach).
 - One sorting layer is the gameplay layer's: `Gameplay`, after `Default`, for
   its world sprites and notes (the traveller's figure, the day-1 desk notes).
   Transparent objects sort by sorting layer and order before depth, so the art

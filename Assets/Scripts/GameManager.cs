@@ -30,10 +30,10 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Briefing + end-of-day panels (optional; flow skips if unassigned).</summary>
     [SerializeField] private DayFlowUIController dayFlowUI;
 
-    /// <summary>Optional: pulls back to the booth and arms the READY sign per case.</summary>
+    /// <summary>Optional: closes the PC frame when a traveller is called and for the shift report.</summary>
     [SerializeField] private OfficeViewController officeView;
 
-    /// <summary>Optional: the READY sign that releases the per-case gate.</summary>
+    /// <summary>Optional: the AVAILABLE sign (the art's NEXT sign): a click turns the desk available or pauses it (DeskAvailability). Without it each traveller is shown as their slot starts.</summary>
     [SerializeField] private Clickable readySign;
 
     /// <summary>Scene clock for today's shift (optional: without it the day ends only when the queue is empty).</summary>
@@ -66,14 +66,17 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Currently active case slot (1-based).</summary>
     private int _activeCaseIndex1Based;
 
-    /// <summary>The case of the active slot (the traveller at the desk or waiting behind READY), or null between days; the debug panel shows its voice.</summary>
+    /// <summary>The case of the active slot (the traveller at the desk or waiting for the AVAILABLE sign), or null between days; the debug panel shows its voice.</summary>
     public CaseInstance ActiveCase => _dayCases != null && _activeCaseIndex1Based >= 1 && _activeCaseIndex1Based <= _dayCases.Count ? _dayCases[_activeCaseIndex1Based - 1] : null;
 
     /// <summary>Verdict record for the current shift (results screen reads this).</summary>
     private ShiftLedger _ledger;
 
-    /// <summary>Per-case readiness gate, released by the READY sign.</summary>
-    private readonly ReadyGate _readyGate = new ReadyGate();
+    /// <summary>The AVAILABLE sign's state: whether travellers are called one after another, and who waits (Saleh 2026-09-30).</summary>
+    private readonly DeskAvailability _desk = new DeskAvailability();
+
+    /// <summary>The desk's availability (the AVAILABLE sign lights up while it is on; the sign's link reads it).</summary>
+    public DeskAvailability Desk => _desk;
 
     /// <summary>True from presenting a traveller until the player's decision (closing-time rule).</summary>
     private bool _travellerAtDesk;
@@ -219,9 +222,13 @@ public sealed class GameManager : MonoBehaviour
         orchestrator.OnCaseSlotEnded += HandleCaseSlotEnded;
         orchestrator.OnDayCompleted += HandleDayCompleted;
 
-        // READY sign releases the per-case gate (only meaningful when wired).
+        // The AVAILABLE sign toggles the desk (only meaningful when wired): while it is on, each waiting traveller is called as the desk frees up.
+        _desk.Called += CallTraveller;
         if (readySign != null)
-            readySign.onClick.AddListener(() => _readyGate.Release());
+        {
+            readySign.Interactable = false;
+            readySign.onClick.AddListener(ToggleAvailable);
+        }
 
         // The booth's day (its day-1 notes; the scanner upgrades fixed at day start, like the translation) and phase: the briefing comes first.
         if (booth != null)
@@ -310,7 +317,8 @@ public sealed class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the last case of the day resolves: applies the narrative
+    /// Called when the last case of the day resolves: closes the desk and ends
+    /// the last traveller's reaction (no bubble over the report), applies the narrative
     /// dialogs' consequences (then refreshes the HUD and checks endings), saves
     /// the run, shows the shift report and leads into the Home scene (or the
     /// title scene when an ending was reached).
@@ -319,8 +327,14 @@ public sealed class GameManager : MonoBehaviour
     {
         Debug.Log($"[GameManager] >>> Entering HandleDayCompleted (day {_worldState.day}).");
 
-        // The booth is shut: freeze the clock (the queue may have run out before closing).
+        // The booth is shut: freeze the clock (the queue may have run out before closing) and close the desk.
         _travellerAtDesk = false;
+        CloseDesk();
+
+        // The last traveller's reaction ends as the booth shuts: the figure leaves and their bubble hides, so it never sits over the shift report.
+        if (travellerView != null)
+            travellerView.EndLinger();
+        EndReaction();
         if (shiftClock != null)
             shiftClock.StopShift();
         _characterArt?.Retain(null);
@@ -456,28 +470,24 @@ public sealed class GameManager : MonoBehaviour
         if (officeUI != null)
             officeUI.SetResultText(string.Empty);
 
-        // Return to the booth and wait for the player to tap READY before
-        // presenting the visitor. With no view/sign wired, show immediately.
-        if (officeView != null && readySign != null)
-        {
-            officeView.FocusOffice();
-            readySign.Interactable = true;
-            _readyGate.Arm();
-            _readyGate.Released += ShowActiveCaseOnce;
-        }
+        // The traveller waits in the queue: called at once while the desk is
+        // available and free, else when the AVAILABLE sign is clicked (or the
+        // last traveller has left). With no sign wired, show immediately.
+        if (readySign != null)
+            _desk.Arm();
         else
-        {
             ShowActiveCase(inst);
-        }
 
         Debug.Log($"[GameManager] <<< Exiting HandleCaseSlotStarted (slot {caseIndex1Based}, awaiting player decision).");
     }
 
-    /// <summary>Starts the day loop and the shift clock together (after the briefing).</summary>
+    /// <summary>Starts the day loop and the shift clock together (after the briefing); the AVAILABLE sign takes clicks from here (the desk starts paused).</summary>
     private void BeginShift(DayPlanSO plan, int daySeed)
     {
         if (booth != null)
             booth.SetPhase(BoothPhase.NoTraveller);
+        if (readySign != null)
+            readySign.Interactable = true;
 
         orchestrator.StartDay(_worldState, plan, daySeed, _dayCases);
 
@@ -486,43 +496,46 @@ public sealed class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Closing time: a traveller already at the desk may be finished; otherwise
-    /// the booth closes at once, and a traveller still behind READY is never called.
+    /// Closing time: the desk closes (the AVAILABLE sign goes off and inert, and
+    /// a traveller still waiting in the queue is never called); a traveller
+    /// already at the desk may be finished, otherwise the booth closes at once.
     /// </summary>
     private void HandleShiftClosed()
     {
         ClosingAction action = ShiftFlow.OnClosing(_travellerAtDesk);
-        Debug.Log($"[GameManager] Closing time (travellerAtDesk={_travellerAtDesk}) -> {action}.");
+        Debug.Log($"[GameManager] Closing time (travellerAtDesk={_travellerAtDesk}, waiting={_desk.IsWaiting}) -> {action}.");
+        CloseDesk();
 
         if (action == ClosingAction.FinishCurrent)
-        {
             orchestrator.CloseAfterCurrentSlot();
-            return;
-        }
-
-        if (_readyGate.IsArmed)
-        {
-            _readyGate.Released -= ShowActiveCaseOnce;
-            _readyGate.Disarm();
-            if (readySign != null)
-                readySign.Interactable = false;
-        }
-
-        orchestrator.CloseNow();
+        else
+            orchestrator.CloseNow();
     }
 
-    /// <summary>One-shot handler so the gate shows the case a single time.</summary>
-    private void ShowActiveCaseOnce()
+    /// <summary>The AVAILABLE sign's click: turns the desk available (the waiting traveller is called once the desk is free) or pauses it (the traveller at the desk is finished normally; the shift clock keeps running).</summary>
+    private void ToggleAvailable()
     {
-        _readyGate.Released -= ShowActiveCaseOnce;
+        _desk.Toggle();
+        Debug.Log($"[GameManager] Desk {(_desk.IsAvailable ? "available" : "paused")} (waiting={_desk.IsWaiting}, departing={_desk.IsDeparting}, travellerAtDesk={_travellerAtDesk}).");
+    }
 
+    /// <summary>The shift is over (closing time or the day's end): nobody else is called and the AVAILABLE sign goes off and takes no clicks.</summary>
+    private void CloseDesk()
+    {
+        _desk.Close();
+        if (readySign != null)
+            readySign.Interactable = false;
+    }
+
+    /// <summary>The desk calls the waiting traveller (DeskAvailability.Called): the PC frame closes, so the arrival is seen, and the active slot's case is shown.</summary>
+    private void CallTraveller()
+    {
         int idx = _activeCaseIndex1Based - 1;
         if (_dayCases == null || idx < 0 || idx >= _dayCases.Count)
             return;
 
-        if (readySign != null)
-            readySign.Interactable = false;
-
+        if (officeView != null)
+            officeView.FocusOffice();
         ShowActiveCase(_dayCases[idx]);
     }
 
@@ -678,15 +691,24 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>
     /// The decided traveller's reaction (the personalities spec's R1-R4): the
     /// investigation UI says it and returns the linger; the figure leaves
-    /// after it (at once for 0), and their bubble hides as they go.
+    /// after it (at once for 0), and their bubble hides as they go. The desk
+    /// calls nobody new until they have left.
     /// </summary>
     private void React(CaseInstance inst, bool accepted)
     {
         float linger = investigationUI != null ? investigationUI.React(inst, accepted) : 0f;
-        if (travellerView != null)
-            travellerView.Leave(linger, EndReaction);
-        else
+        if (travellerView == null)
+        {
             EndReaction();
+            return;
+        }
+
+        _desk.SetDeparting(true);
+        travellerView.Leave(linger, () =>
+        {
+            EndReaction();
+            _desk.SetDeparting(false);
+        });
     }
 
     private void EndReaction()

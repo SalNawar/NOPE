@@ -1,7 +1,7 @@
 /// <summary>Where the shift is, as the booth's input rules need it. Set by GameManager.</summary>
 public enum BoothPhase
 {
-    /// <summary>No traveller at the desk: before the shift, behind READY or between travellers (the default before Start).</summary>
+    /// <summary>No traveller at the desk: before the shift, waiting for the AVAILABLE sign or between travellers (the default before Start).</summary>
     NoTraveller,
 
     /// <summary>A traveller is at the desk, from presentation until the decision.</summary>
@@ -38,8 +38,11 @@ public readonly struct BoothContext
     /// <summary>The camera is tilted forward over the desk (the desk view, piece 10 section 11).</summary>
     public readonly bool DeskView;
 
+    /// <summary>The desk view exists (the art office has a Cinemachine camera to tilt): without it the papers on the desk move in the normal view (false in the default context).</summary>
+    public readonly bool DeskViewBound;
+
     /// <summary>Creates a context.</summary>
-    public BoothContext(bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool citationPending, bool stampOpen, bool papersHeld, bool deskView)
+    public BoothContext(bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool citationPending, bool stampOpen, bool papersHeld, bool deskView, bool deskViewBound)
     {
         Focused = focused;
         ScreenOn = screenOn;
@@ -49,6 +52,7 @@ public readonly struct BoothContext
         StampOpen = stampOpen;
         PapersHeld = papersHeld;
         DeskView = deskView;
+        DeskViewBound = deskViewBound;
     }
 }
 
@@ -67,7 +71,7 @@ public readonly struct BoothInput
     /// <summary>The desk props react to clicks: the office view, no newsletter, the wheel and the stamp tray closed.</summary>
     public readonly bool PropsLive;
 
-    /// <summary>The papers on the desk can be dragged and clicked: as the props, while a traveller is at the desk.</summary>
+    /// <summary>The papers on the desk can be dragged and clicked: as the props, while a traveller is at the desk and the camera is tilted over the desk (Saleh 2026-09-30: "moving papers should only be possible when camera is tilted"; a click on a paper in the normal view reaches the mat under it and tilts in); in the normal view only when there is no desk view.</summary>
     public readonly bool PapersLive;
 
     /// <summary>The wheel may be open: the office view while a traveller is at the desk (false closes an open wheel).</summary>
@@ -79,7 +83,7 @@ public readonly struct BoothInput
     /// <summary>Papers held in the hand take clicks (their rows, a put-back): a traveller at the desk, in either view (beside the open frame too), no newsletter, the wheel and the stamp tray closed.</summary>
     public readonly bool HeldPapersLive;
 
-    /// <summary>A click on the desk puts every held paper back: the papers are live and one is held.</summary>
+    /// <summary>A click on the desk puts every held paper back: as the props, while a traveller is at the desk and a paper is held (in either view).</summary>
     public readonly bool DeskCatcherLive;
 
     /// <summary>Escape puts every held paper back: as the desk catcher (Escape closes the frame, the wheel or the stamp tray first).</summary>
@@ -97,7 +101,7 @@ public readonly struct BoothInput
     /// <summary>Escape and a right-click on empty space return from the desk view: the desk view is on and the mat's toggle is live (Escape closes the frame, the wheel or the stamp tray and puts held papers back first).</summary>
     public readonly bool DeskViewReturnLive;
 
-    /// <summary>The desk view may stay: no newsletter (false returns to the normal view).</summary>
+    /// <summary>The desk view may stay: no newsletter, the wheel closed and the PC frame closed (false returns to the normal view: a click on the intercom, the traveller or the PC from the tilted view blends straight up to the wheel or the frame; Saleh 2026-09-30).</summary>
     public readonly bool DeskViewAllowed;
 
     /// <summary>The "▲ Back" control shows at the top of the office overlay and the mouse wheel rolled up returns from the desk view: the desk view is on and the props are live (no frame, newsletter, wheel or stamp tray), papers held or not.</summary>
@@ -148,8 +152,8 @@ public readonly struct BoothInput
 /// move changed it: the PC opens a frame over the office at once, with no
 /// camera blend; piece 10 adds the stamp tray, papers held in the hand and the
 /// desk view): from the frame, the screen's power, the shift's phase, the
-/// wheel, a pending citation slip, the stamp tray, held papers and the desk
-/// view, which of the desktop, the PC, the power buttons, the props, the
+/// wheel, a pending citation slip, the stamp tray, held papers, the desk
+/// view and whether there is one, which of the desktop, the PC, the power buttons, the props, the
 /// papers (on the desk and in the hand), the desk catcher, Escape, the wheel,
 /// the stamp tray, the traveller, the case HUD, the mat, the desk view's
 /// return, its "▲ Back" control, the mouse wheel and a held paper's drag out
@@ -167,8 +171,8 @@ public static class BoothRules
         bool modal = c.WheelOpen || c.StampOpen;
         bool props = !c.Focused && !newsletter && !modal;
         bool office = !c.Focused && atDesk;
-        bool papers = props && atDesk;
-        bool catcher = papers && c.PapersHeld;
+        bool papers = props && atDesk && (c.DeskView || !c.DeskViewBound);
+        bool catcher = props && atDesk && c.PapersHeld;
         bool mat = props && !c.PapersHeld;
         bool held = atDesk && !modal;
         return new BoothInput(
@@ -186,7 +190,7 @@ public static class BoothRules
             caseHudVisible: office,
             deskViewToggleLive: mat,
             deskViewReturnLive: c.DeskView && mat,
-            deskViewAllowed: !newsletter,
+            deskViewAllowed: !newsletter && !c.WheelOpen && !c.Focused,
             deskViewBackLive: c.DeskView && props,
             deskViewScrollInLive: mat && !c.DeskView,
             heldDragOutLive: held && papers);

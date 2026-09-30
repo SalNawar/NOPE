@@ -1,8 +1,10 @@
 // Audit baseline automation (kept as text in tools/audit/unity; copied into Assets/Editor as .cs only to run it, never committed there): the Phase 0 scripted
 // play-through golden master. Title -> New Run (fixed seed 12345) -> days 1-6
 // in the art office RunConfig names (the anime hall) with the gameplay layer,
-// Home between them, up to day 7's morning paper. Every traveller: the READY
-// sign, the interview (every request, the papers menu and its request groups
+// Home between them, up to day 7's morning paper. Each shift: one click on the
+// AVAILABLE sign after Start Shift, then the travellers come one after another
+// (day 1 also pauses the desk at its second traveller, checks nobody new is
+// called after them, and resumes). Every traveller: the interview (every request, the papers menu and its request groups
 // included, so a rich tourist gives the honest missing-form replies and a poor
 // tourist hands over the waiver and the proof; the desk's waiver pad is left
 // unused (its answer is logged: offering it would spend shift minutes and cure
@@ -325,21 +327,49 @@ public static class _TimeDeskAuditPlay
         if (ShotsOn)
             yield return Shots($"d{day}_briefing");
         o.StartShift.onClick.Invoke();
+        yield return Frames(2);
+
+        // The AVAILABLE sign (Saleh 2026-09-30): the desk starts paused; one click and the travellers come one after another.
+        Check(!o.Game.Desk.IsAvailable && o.Ready.Interactable, $"day {day}: the desk starts paused and the AVAILABLE sign takes clicks");
+        OrderAtThePc(day);
+        o.ClickSign();
+        Check(o.Game.Desk.IsAvailable, $"day {day}: one click turns the desk available");
 
         int presented = 0;
+        bool paused = false;
         while (true)
         {
-            yield return Until(() => o.ReadyArmed || o.Results.activeInHierarchy || _ended, 30f, $"day {day}: READY or the shift report");
+            yield return Until(() => o.AtDesk || o.Results.activeInHierarchy || _ended, 30f, $"day {day}: the next traveller or the shift report");
             if (o.Results.activeInHierarchy || _ended)
                 break;
-            OrderAtThePc(day);
-            ExecuteEvents.Execute(o.Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
-            yield return Until(() => Field(o.Ui, "_currentCase") != null && (bool)Field(o.Game, "_travellerAtDesk"), 10f, "the traveller at the desk");
             presented++;
             yield return Seconds(0.4f);
+
+            // Day 1: pause while the second traveller is at the desk; they are finished normally.
+            if (day == 1 && presented == 2)
+            {
+                o.ClickSign();
+                paused = true;
+                Check(!o.Game.Desk.IsAvailable && o.AtDesk, "day 1: a second click pauses the desk, the traveller at it stays");
+            }
+
             yield return Traveller(o, day);
             if (_ended)
                 break;
+
+            if (paused)
+            {
+                // Nobody new while paused (the clock runs on), until the sign is clicked again.
+                yield return Until(() => (o.Game.Desk.IsWaiting && !o.Game.Desk.IsDeparting) || o.Results.activeInHierarchy, 30f, "day 1: the next traveller waiting while paused");
+                float clockBefore = o.Clock.Clock.CurrentMinute;
+                yield return Seconds(2f);
+                Check(!o.AtDesk && o.Game.Desk.IsWaiting, "day 1: paused, nobody new is called after the traveller at the desk");
+                Check(o.Clock.Clock.CurrentMinute > clockBefore, $"day 1: the shift clock keeps running on a break ({clockBefore:0.0} -> {o.Clock.Clock.CurrentMinute:0.0})");
+                o.ClickSign();
+                Check(o.Game.Desk.IsAvailable && o.AtDesk, "day 1: a third click resumes and calls the waiting traveller at once");
+                paused = false;
+            }
+            OrderAtThePc(day);
         }
 
         if (_ended)
@@ -1301,7 +1331,13 @@ public static class _TimeDeskAuditPlay
 
         public DayFlowUIController DayFlow() => One<DayFlowUIController>();
         public Clickable Ready => (Clickable)Field(Game, "readySign");
-        public bool ReadyArmed => Ready.Interactable && ((ReadyGate)Field(Game, "_readyGate")).IsArmed;
+        public ShiftClockDriver Clock => (ShiftClockDriver)Field(Game, "shiftClock");
+
+        /// <summary>A traveller is at the desk (presented, not yet decided).</summary>
+        public bool AtDesk => Field(Ui, "_currentCase") != null && (bool)Field(Game, "_travellerAtDesk");
+
+        /// <summary>A click on the AVAILABLE sign, as the EventSystem delivers it.</summary>
+        public void ClickSign() => ExecuteEvents.Execute(Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
         public StampTray Tray => (StampTray)Field(Coordinator, "stampTray");
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
