@@ -22,6 +22,15 @@ public sealed class Personality
 
     /// <summary>For authors: the tone in one line (never shown in the game).</summary>
     public string note;
+
+    /// <summary>The chance they refuse the desk's waiver pad, in character (the endings and strandings spec §7.3; Waivers.PadReply): 0 to 1.</summary>
+    public float waiverRefusal;
+
+    /// <summary>The stranding fate their tilt multiplies (a StrandingFate's name; the spec's §6.2: GameConfigSO.strandingFateTilt); blank: none.</summary>
+    public string strandingFate = string.Empty;
+
+    /// <summary>The fate <see cref="strandingFate"/> names, or null (blank or unknown).</summary>
+    public StrandingFate? StrandingTilt => Enum.TryParse(strandingFate, out StrandingFate fate) && Enum.IsDefined(typeof(StrandingFate), fate) ? fate : (StrandingFate?)null;
 }
 
 /// <summary>
@@ -42,7 +51,8 @@ public static class Personalities
 
     /// <summary>
     /// Every problem of the cast: an empty entry, a blank or repeated id, a
-    /// blank name, a negative weight, and, for a cast that is not empty, no
+    /// blank name, a negative weight, a waiver refusal outside 0 to 1, a
+    /// stranding fate that names no fate, and, for a cast that is not empty, no
     /// weight above 0. Empty when sound (an empty cast is sound: every
     /// traveller says the defaults).
     /// </summary>
@@ -68,6 +78,10 @@ public static class Personalities
                 problems.Add($"personalities: '{p.id}' has a blank name.");
             if (p.weight < 0f)
                 problems.Add($"personalities: '{p.id}' has a negative weight ({p.weight.ToString("0.###", CultureInfo.InvariantCulture)}).");
+            if (!(p.waiverRefusal >= 0f && p.waiverRefusal <= 1f))
+                problems.Add($"personalities: '{p.id}' has a waiverRefusal of {p.waiverRefusal.ToString("0.###", CultureInfo.InvariantCulture)}; it is a chance from 0 to 1.");
+            if (!string.IsNullOrWhiteSpace(p.strandingFate) && p.StrandingTilt == null)
+                problems.Add($"personalities: '{p.id}' names the stranding fate '{p.strandingFate}' ({string.Join(", ", Enum.GetNames(typeof(StrandingFate)))}).");
             positive |= p.weight > 0f;
         }
 

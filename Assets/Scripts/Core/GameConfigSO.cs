@@ -30,6 +30,24 @@ public sealed class GameConfigSO : ScriptableObject
     [Min(0)]
     public int wrongDecisionPenalty = 10;
 
+    [Header("Strandings and the waiver (the endings and strandings spec, Saleh's answers 2026-09-30)")]
+    /// <summary>
+    /// The stranding fine the agency's failure report charges the desk for a
+    /// stranded traveller who had no valid signed waiver on file (Saleh's Q10 =
+    /// D: a separate amount, chosen knowingly as the one exception to the
+    /// one-penalty rule; no free warning applies). 0 turns it off.
+    /// </summary>
+    [Min(0)]
+    public int strandingFine = 100;
+
+    /// <summary>What a personality's tilt multiplies its stranding fate's weight by (Personality.strandingFate; the spec's §6.2: 2 doubles it; 1 tilts nothing).</summary>
+    [Min(0f)]
+    public float strandingFateTilt = 2f;
+
+    /// <summary>The shift minutes a waiver signed from the desk's pad takes (Saleh's Q15 = A: time only, about one question's worth; ShiftClock.Spend).</summary>
+    [Min(0f)]
+    public float waiverSignMinutes = 5f;
+
     [Header("Evidence (deny gating)")]
     /// <summary>
     /// When true, denying a liar without documented scanner evidence earns a

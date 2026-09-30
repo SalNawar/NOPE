@@ -287,8 +287,8 @@ public class VoiceChecksTests
         List<string> info = VoiceChecks.Problems(Input()).Info;
         CollectionAssert.AreEqual(new[]
         {
-            "Personality 'curt' (Curt) has its own lines for claims, handOver, missingForms, spoken, reactions; the defaults speak its answers, smallTalk, slips.",
-            "Personality 'glum' (Glum) has its own lines for answers, smallTalk, reactions, slips; the defaults speak its claims, handOver, missingForms, spoken."
+            "Personality 'curt' (Curt) has its own lines for claims, handOver, missingForms, spoken, reactions; the defaults speak its answers, smallTalk, waiverPad, slips.",
+            "Personality 'glum' (Glum) has its own lines for answers, smallTalk, reactions, slips; the defaults speak its claims, handOver, missingForms, spoken, waiverPad."
         }, info);
     }
 
@@ -440,6 +440,37 @@ public class VoiceChecksTests
         input = WithSenenmut();
         input.PremadeIntents = new Dictionary<string, IReadOnlyCollection<ReactionIntent>> { ["senenmut"] = new[] { ReactionIntent.Honest, ReactionIntent.Lying } };
         StringAssert.Contains("the Accepted · Lying reaction, the Denied · Lying reaction", Errors(input), "a premade who can lie reacts as a liar too");
+    }
+
+    /// <summary>The endings and strandings spec §7.3: when some day offers the waiver pad, a base default per reply and every personality's own Signs and Refuses; the rows name a known reply and hold only {place}.</summary>
+    [Test]
+    public void WaiverPad_DefaultsAndEveryPersonalitysSignAndRefusal()
+    {
+        VoiceCheckInput input = Input();
+        CollectionAssert.IsEmpty(input.DefaultPadReplies);
+        StringAssert.DoesNotContain("waiver pad", Errors(input), "no day offers the pad: nothing is required");
+
+        input.PadOffered = true;
+        string errors = Errors(input);
+        StringAssert.Contains("interview.waiverPad.replies has no base row for Signs", errors);
+        StringAssert.Contains("interview.waiverPad.replies has no base row for AlreadySigned", errors);
+        StringAssert.Contains("Personality 'glum' (Glum) has no base Refuses line for the waiver pad", errors);
+
+        foreach (WaiverPadReply reply in (WaiverPadReply[])System.Enum.GetValues(typeof(WaiverPadReply)))
+            input.DefaultPadReplies.Add(Row($"Default {reply}.", null, key: reply.ToString()));
+        foreach (string p in new[] { "curt", "glum" })
+        {
+            input.Voices.waiverPad.Add(Row($"{p} signs.", p, key: "Signs"));
+            input.Voices.waiverPad.Add(Row($"{p} refuses.", p, key: "Refuses"));
+        }
+        StringAssert.DoesNotContain("waiver pad", Errors(input));
+
+        input.Voices.waiverPad.Add(Row("Signing for {document}.", "curt", key: "Maybe"));
+        input.DefaultPadReplies.Add(Row("Named default.", "glum", key: "Signs"));
+        errors = Errors(input);
+        StringAssert.Contains("names the reply 'Maybe'", errors);
+        StringAssert.Contains("holds {document}, which a waiver-pad reply cannot fill", errors);
+        StringAssert.Contains("interview.waiverPad.replies row 5 names a voice", errors);
     }
 
     [Test]

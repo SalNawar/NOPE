@@ -193,6 +193,28 @@ public static class Seeds
     /// </summary>
     public static int ForStrandings(int daySeed) => Mix(daySeed, StrandingSalt);
 
+    /// <summary>Salt for the day's stranding-fate stream ("FATE").</summary>
+    public const int StrandingFateSalt = 0x46415445;
+
+    /// <summary>
+    /// Seed for the day's stranding fates (the endings and strandings spec
+    /// §6.1; StrandingFates.Pick and Line): two values per stranded traveller,
+    /// in queue order, after the roll. Apart from the stranding stream, so who
+    /// is stranded never moves, and from every traveller's.
+    /// </summary>
+    public static int ForStrandingFates(int daySeed) => Mix(daySeed, StrandingFateSalt);
+
+    /// <summary>Salt for a traveller's waiver-signing stream ("SIGN").</summary>
+    public const int WaiverSignSalt = 0x5349474E;
+
+    /// <summary>
+    /// Seed for one traveller's answer to the desk's waiver pad (the endings
+    /// and strandings spec §7.3; Waivers.PadReply): one draw against their
+    /// personality's refusal chance. Its own stream, so offering the pad never
+    /// moves who travels, who lies or what they carry.
+    /// </summary>
+    public static int ForWaiverSign(int caseSeed) => Mix(caseSeed, WaiverSignSalt);
+
     /// <summary>Salt for a liar's slip stream ("SLIP").</summary>
     public const int SlipSalt = 0x534C4950;
 

@@ -213,7 +213,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         _reference = new DayReference(rulesViews, recordsViews, compareController, referenceViews, index);
         _documents = new CaseDocumentsPresenter(documentsViews, wiring.DeskReachable ? desk : null, compareController, () => _evidence.DocumentedCategories, index);
         _interview = new InterviewPresenter(interactionPanel, transcriptViews, () => Arrived(AppTab.Transcript), wheel, compareController,
-                                            RequestPaper, () => _currentCase, this, index);
+                                            RequestPaper, SignWaiver, () => _currentCase, this, index);
         _evidence = new EvidencePresenter(compareController, reportViews, () =>
         {
             Arrived(AppTab.Report);
@@ -365,6 +365,18 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>A document's form number (blank without a template).</summary>
     private static string FormOf(DocumentInstance doc) => doc != null && doc.template != null ? doc.template.formNumber : string.Empty;
+
+    /// <summary>A waiver signed from the desk's pad was filed (the endings and strandings spec §7.3): GameManager spends the shift minutes it takes.</summary>
+    public event Action WaiverSigned;
+
+    /// <summary>The traveller signed the pad's blank: the desk files it on their case (CaseInstance.SignWaiverAtDesk: a valid signed waiver on file, a missing or unsigned waiver's fault cured) and the shift hears of it.</summary>
+    private void SignWaiver()
+    {
+        if (_currentCase == null || !_currentCase.SignWaiverAtDesk())
+            return;
+        Debug.Log($"[InvestigationUIController] '{_currentCase.visitorDisplayName}' signed a waiver from the pad; filed (directive fault now {_currentCase.directiveFault}, cured {_currentCase.curedAtDesk}).", this);
+        WaiverSigned?.Invoke();
+    }
 
     /// <summary>A paper asked for through the wheel: it is handed over and the steps hear of the request.</summary>
     private void RequestPaper(int index)

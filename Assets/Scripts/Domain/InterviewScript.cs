@@ -41,6 +41,9 @@ public sealed class InterviewCase
 
     /// <summary>The traveller's visible garments (TravellerLook.Garments); none means no look menu.</summary>
     public IReadOnlyList<Garment> garments;
+
+    /// <summary>The traveller's answer to the desk's waiver pad (CaseInstance.waiverPadReply, resolved at generation: Waivers.PadReply).</summary>
+    public WaiverPadReply padReply = WaiverPadReply.NotNeeded;
 }
 
 /// <summary>
@@ -76,6 +79,25 @@ public static class InterviewScript
 
     /// <summary>The id of the traveller's claim line, composed per case at runtime (Generate World reserves it).</summary>
     public const string ClaimLineId = "case.claim";
+
+    /// <summary>The waiver pad's entry (the endings and strandings spec §7.3): the same id for every traveller.</summary>
+    public const string PadChoiceId = "pad:waiver";
+
+    /// <summary>
+    /// True when a traveller of a day with the papers menu <paramref name="askable"/>
+    /// is offered the waiver pad: the menu holds the Stranding Waiver
+    /// (Directives.Waiver) and the pad's entry is authored. The same for every
+    /// traveller of the day (rule 3).
+    /// </summary>
+    public static bool OffersPad(IReadOnlyList<AskableForm> askable, InterviewLines lines)
+    {
+        if (lines?.waiverPad == null || string.IsNullOrWhiteSpace(lines.waiverPad.label))
+            return false;
+        foreach (AskableForm f in askable ?? System.Array.Empty<AskableForm>())
+            if (f != null && f.FormNumber == Directives.Waiver)
+                return true;
+        return false;
+    }
 
     /// <summary>
     /// The id of an authored choice: "{dialogId}.{choiceId}". It is both the
@@ -174,7 +196,10 @@ public static class InterviewScript
     /// missing-form line, no hand-over), or,
     /// with two or more, "papers" (the papers menu: "back" first, then one
     /// entry per request, labelled with the form's name or the group's label,
-    /// staying in the menu), then "act:{id}" per spoken
+    /// staying in the menu), then the waiver pad ("pad:waiver", OffersPad: the
+    /// day's menu holds the waiver; last in the papers menu, or on the hub when
+    /// the traveller has one request at most; one-shot, the traveller's
+    /// answer, DialogAction.SignWaiver when they sign), then "act:{id}" per spoken
     /// request (one-shot, the desk's prompt and the traveller's reply, no
     /// action), then "ask" when the ask menu has a question or small talk, then
     /// "look" when the traveller has a visible garment, then "dlg:{id}" per
@@ -213,6 +238,9 @@ public static class InterviewScript
             foreach (FormRequest r in requests)
                 papers.Choices.Add(Request(lines, r, r.Label, c, keyWords));
         }
+
+        if (OffersPad(c != null ? c.askable : null, lines))
+            (requests.Count > 1 ? papers : hub).Choices.Add(Pad(lines, c));
 
         if (lines.requests != null)
         {
@@ -346,6 +374,30 @@ public static class InterviewScript
                 choice.Lines.Add(Say(reply, c, request.Label));
         }
 
+        return choice;
+    }
+
+    /// <summary>
+    /// The waiver pad's entry (one-shot, the same for every traveller): the
+    /// desk's words as a blank slides across, then the traveller's answer in
+    /// their voice (Voices.WaiverPad for the case's padReply); a traveller who
+    /// signs makes the desk file it (DialogAction.SignWaiver).
+    /// </summary>
+    private static DialogChoice Pad(InterviewLines lines, InterviewCase c)
+    {
+        WaiverPadReply reply = c != null ? c.padReply : WaiverPadReply.NotNeeded;
+        var choice = new DialogChoice
+        {
+            Id = PadChoiceId,
+            Label = lines.waiverPad.label,
+            Lines = { new DialogLine(Id(lines.waiverPad.prompt), DialogSpeaker.Desk, Text(lines.waiverPad.prompt)) },
+            OneShot = true,
+            Kind = DialogChoiceKind.Request,
+            Action = reply == WaiverPadReply.Signs ? DialogAction.SignWaiver : DialogAction.None
+        };
+        LineText said = Voices.WaiverPad(lines, c?.voice, Context(c), reply);
+        if (said != null)
+            choice.Lines.Add(Say(said, c, null));
         return choice;
     }
 
@@ -589,10 +641,12 @@ public static class DialogChecks
     /// direct request or the papers menu, + every spoken request + the ask
     /// entry + the look entry + every dialog bound to no premade, counted as
     /// offered at once, + 1 when any dialog is bound to a premade: at most one
-    /// premade stands at the desk). Skipped when <paramref name="maxChoices"/>
-    /// is 0 or less.
+    /// premade stands at the desk). The waiver pad (<paramref name="pad"/>: some
+    /// day offers it, InterviewScript.OffersPad) is one more entry of the papers
+    /// menu, or of the hub when no traveller has two requests. Skipped when
+    /// <paramref name="maxChoices"/> is 0 or less.
     /// </summary>
-    public static List<string> MenuProblems(int questions, bool smallTalk, int maxRequests, int spokenRequests, int dialogs, int premadeDialogs, int maxChoices)
+    public static List<string> MenuProblems(int questions, bool smallTalk, int maxRequests, int spokenRequests, int dialogs, int premadeDialogs, int maxChoices, bool pad = false)
     {
         var problems = new List<string>();
         if (maxChoices <= 0)
@@ -606,12 +660,15 @@ public static class DialogChecks
         if (look > maxChoices)
             problems.Add($"The look menu holds up to {look} choices (< Back, one per garment slot); the traveller wheel shows at most {maxChoices}.");
 
-        int papers = 1 + maxRequests;
+        bool padInPapers = pad && maxRequests > 1;
+        int papers = 1 + maxRequests + (padInPapers ? 1 : 0);
         if (maxRequests > 1 && papers > maxChoices)
-            problems.Add($"The papers menu holds {papers} choices (< Back, {maxRequests} request(s)); the traveller wheel shows at most {maxChoices}.");
+            problems.Add($"The papers menu holds {papers} choices (< Back, {maxRequests} request(s){(padInPapers ? ", the waiver pad" : string.Empty)}); the traveller wheel shows at most {maxChoices}.");
 
         string paperEntry = maxRequests > 1 ? "the papers menu" : maxRequests == 1 ? "1 document request" : "no document request";
-        int hub = (maxRequests > 0 ? 1 : 0) + spokenRequests + 2 + dialogs + (premadeDialogs > 0 ? 1 : 0);
+        if (pad && !padInPapers)
+            paperEntry += ", the waiver pad";
+        int hub = (maxRequests > 0 ? 1 : 0) + (pad && !padInPapers ? 1 : 0) + spokenRequests + 2 + dialogs + (premadeDialogs > 0 ? 1 : 0);
         if (hub > maxChoices)
             problems.Add($"The hub holds {hub} choices ({paperEntry}, {spokenRequests} spoken request(s), the ask and look entries, {dialogs} dialog(s){(premadeDialogs > 0 ? ", one premade's dialog" : string.Empty)}); the traveller wheel shows at most {maxChoices}.");
 

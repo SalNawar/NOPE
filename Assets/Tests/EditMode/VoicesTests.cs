@@ -515,4 +515,31 @@ public class VoicesTests
             lines.voices.slips.Add(SlipRow($"Slip {i}.", "curt"));
         Assert.AreEqual($"Slip {Voices.Pick(Seed, VoiceKeys.Slip, 4)}.", Voices.Slip(lines, Curt, RichAncient, LieKind.Smuggling).text);
     }
+    // ---- The waiver pad (the endings and strandings spec §7.3) ----
+
+    [Test]
+    public void WaiverPad_TheVoicesRowByReply_ElseTheDefault()
+    {
+        InterviewLines lines = Lines();
+        lines.waiverPad.replies.Add(Row("Where do I... there? Lovely.", key: "Signs"));
+        lines.waiverPad.replies.Add(Row("I'd rather not sign anything today.", key: "Refuses"));
+        lines.voices.waiverPad.Add(Row("Billed per signature? Fine. Done.", personality: "curt", key: "Signs"));
+        lines.voices.waiverPad.Add(Row("I do not sign things. People sign things for me.", personality: "grand", key: "Refuses"));
+
+        Assert.AreEqual("Billed per signature? Fine. Done.", Voices.WaiverPad(lines, Curt, RichAncient, WaiverPadReply.Signs).text);
+        Assert.AreEqual("I'd rather not sign anything today.", Voices.WaiverPad(lines, Curt, RichAncient, WaiverPadReply.Refuses).text, "Curt has no refusal of its own: the default");
+        Assert.AreEqual("I do not sign things. People sign things for me.", Voices.WaiverPad(lines, new Voice("grand", null, Seed), RichAncient, WaiverPadReply.Refuses).text);
+        Assert.AreEqual("Where do I... there? Lovely.", Voices.WaiverPad(lines, new Voice(null, "pell", Seed), RichAncient, WaiverPadReply.Signs).text, "a premade with no row says the default");
+        Assert.IsNull(Voices.WaiverPad(lines, Curt, RichAncient, WaiverPadReply.AlreadySigned), "no row anywhere");
+        Assert.IsNull(Voices.WaiverPad(null, Curt, RichAncient, WaiverPadReply.Signs));
+    }
+
+    [Test]
+    public void WaiverPad_PickIsAValueOfItsKey()
+    {
+        InterviewLines lines = Lines();
+        for (int i = 0; i < 3; i++)
+            lines.voices.waiverPad.Add(Row($"Sign {i}.", personality: "curt", key: "Signs"));
+        Assert.AreEqual($"Sign {Voices.Pick(Seed, VoiceKeys.WaiverPad(WaiverPadReply.Signs), 3)}.", Voices.WaiverPad(lines, Curt, RichAncient, WaiverPadReply.Signs).text);
+    }
 }

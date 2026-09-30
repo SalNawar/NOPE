@@ -129,6 +129,9 @@ public sealed class HistoryState
 
     /// <summary>Travellers stranded at today's shift's end (Strandings.Roll), reported in the next morning's news (then cleared), in queue order; an old save loads none.</summary>
     public List<StrandingRecord> pendingStrandings = new();
+
+    /// <summary>Every traveller stranded in the run, in order, never cleared (the endings and strandings spec §2.2): the Mail failure reports read it; an old save loads none.</summary>
+    public List<StrandingRecord> strandingLog = new();
 }
 
 /// <summary>An accepted costume error (traveller types P5): the traveller would cause a panic where they were sent.</summary>

@@ -196,4 +196,30 @@ public class MailboxTests
         Assert.IsTrue(problems.Any(p => p.Contains("no body")));
         CollectionAssert.IsEmpty(Mailbox.AuthoredProblems(new[] { mail[0] }));
     }
+    /// <summary>The endings and strandings spec §6.3 (Q12): each stranding sends one failure report the morning after its shift, in the log's order, after the day's delivery notice; the forgotten get theirs too.</summary>
+    [Test]
+    public void ForDays_AFailureReportPerStranding_TheMorningAfter()
+    {
+        MailSources s = Sources(3);
+        s.Strandings = new List<StrandingRecord>
+        {
+            new StrandingRecord { travellerName = "Hori", day = 1, fate = StrandingFate.Forgotten },
+            null,
+            new StrandingRecord { travellerName = "Pell Quimby", day = 2, fate = StrandingFate.Police },
+            new StrandingRecord { travellerName = "Ines", day = 2, fate = StrandingFate.News },
+            new StrandingRecord { travellerName = "Lysimache", day = 3 }
+        };
+        s.StrandingReport = r => new[] { "report of " + r.travellerName };
+
+        List<MailItem> items = Mailbox.ForDays(s);
+
+        CollectionAssert.AreEqual(new[] { "memo:3", "times:3", "stranding:3", "stranding:4", "memo:2", "times:2", "stranding:1", "memo:1", "times:1" },
+                                  items.Select(i => i.Id).ToArray(), "day 3 reports day 2's strandings; day 3's own wait for day 4");
+        MailItem pell = items.Single(i => i.Id == "stranding:3");
+        Assert.AreEqual(MailKind.StrandingReport, pell.Kind);
+        Assert.AreEqual("Pell Quimby", pell.Subject);
+        Assert.AreEqual(3, pell.Slot, "its place in the run's log");
+        CollectionAssert.AreEqual(new[] { "report of Pell Quimby" }, pell.Body);
+        CollectionAssert.IsEmpty(Mailbox.ForDays(Sources(3)).Where(i => i.Kind == MailKind.StrandingReport), "no log, no reports");
+    }
 }
