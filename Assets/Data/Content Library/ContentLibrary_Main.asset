@@ -12975,8 +12975,7 @@ MonoBehaviour:
       text: 'HISTORY: travellers brought {value} to {place}.'
     carryBy:
       id: history.carryBy
-      text: 'HISTORY: {name}, stamped through Desk 3 on day {day}, brought {value}
-        to {place}.'
+      text: 'HISTORY: {name}, stamped day {day}, brought {value} to {place}.'
     dominant:
       id: history.dominant
       text: '{attribute} is now DOMINANT in {place}.'
@@ -12986,11 +12985,11 @@ MonoBehaviour:
         and the street fled.'
     panicBy:
       id: history.panicBy
-      text: 'PANIC in {place}: {name}, sent through Desk 3 on day {day}, was seen
-        in "{value}" and the street fled.'
+      text: 'PANIC in {place}: {name}, stamped day {day}, wore "{value}". The street
+        fled.'
     traced:
       id: history.traced
-      text: It began at Desk 3 with {name}, stamped on day {day}.
+      text: 'Traced to Desk 3: {name}, day {day}.'
   pc:
     steps:
       sets:
@@ -15013,10 +15012,10 @@ MonoBehaviour:
     - A stranded tourist's family inherits 212,000 cr.
     stranded: 'Stranded: {name}, lost in {place} when an Economy transponder failed.'
     debtReliefCount: 'Citizens who left on Debt Relief yesterday: {count}.'
-    returnedAccepted: 'Second time lucky: {name}, turned away at Desk 3 on day {day},
-      came back on day {back} and was stamped through.'
-    returnedDenied: '{name} tried Desk 3 again on day {back}, after a refusal on
-      day {day}. Turned away twice.'
+    returnedAccepted: 'Second time lucky: {name}, turned away on day {day}, stamped
+      through on day {back}.'
+    returnedDenied: '{name}, turned away on day {day}, tried again on day {back}.
+      Turned away twice.'
   mail:
   - id: welcome
     fromDay: 1

@@ -35,6 +35,7 @@ Saleh's rules applied: one penalty per wrong decision (nothing here fines anyone
 | T2 | Panics name the traveller (`PanicRecord.traveller`), `history.lines.panicBy`. | Same. |
 | T3 | World-outcome headlines end with the last traveller whose verdict pulled that outcome and the day (`WorldState.pullTraces`, `Traces.Record` at every decision, accept or deny, since a denial pulls "as found"; a split names the later of its two), `history.lines.traced`. An answer only a story rule pulled names no one. | "world-outcome headlines too". |
 | T4 | The name is the display name (given name and role, "Omar (Merchant)"), as strandings print it. An older save's pending records have no name and keep the old lines. | Recognisable, and old saves stay readable. |
+| T5 | The paper's sheet (morning briefing and shift report, `BuildNewsletter`) grows from 700 x 780 to 860 x 860 and its body auto-sizes from 21 down to 19 units (12.7 px at 720p, above the 12.5 px floor). The traced lines are kept short ("HISTORY: Omar (Merchant), stamped day 3, brought ... to ..."). | Day 3 of the reference run already filled the old sheet; named lines and the desk section's returned travellers overflowed it under the Start Shift button. Track C owns the briefing's content; this is only the sheet's size. |
 
 ## Open questions for Saleh
 
