@@ -185,11 +185,12 @@ public static class _TimeDeskAuditProfile
         yield return Window("office + morning briefing (idle)");
 
         o.StartShift.onClick.Invoke();
-        yield return Until(() => o.ReadyArmed, 20f, "READY");
+        yield return Until(() => o.Game.Desk.IsWaiting, 20f, "the first traveller waiting for the AVAILABLE sign");
         yield return Seconds(1.5f);
+        // The window's name is kept from the READY sign's days, so the profile compares with the baseline's.
         yield return Window("office view, before READY (no traveller)");
 
-        ExecuteEvents.Execute(o.Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+        o.ClickSign();
         yield return Until(() => Field(o.Ui, "_currentCase") != null, 10f, "the traveller");
         yield return Seconds(6f);
         yield return Window("office view, traveller at the desk (idle, bubble done)");
@@ -219,11 +220,10 @@ public static class _TimeDeskAuditProfile
                 if (o.CitationPanel.activeInHierarchy)
                     ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
             }
-            yield return Until(() => o.ReadyArmed || o.Results.activeInHierarchy, 20f, "READY or the report");
+            // The desk stays available: the next traveller comes once the last has left.
+            yield return Until(() => o.AtDesk || o.Results.activeInHierarchy, 20f, "the next traveller or the report");
             if (o.Results.activeInHierarchy)
                 break;
-            ExecuteEvents.Execute(o.Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
-            yield return Until(() => Field(o.Ui, "_currentCase") != null, 10f, "the traveller");
             yield return Frames(3);
         }
         yield return Seconds(1f);
@@ -404,7 +404,12 @@ public static class _TimeDeskAuditProfile
 
         public DayFlowUIController DayFlow() => One<DayFlowUIController>();
         public Clickable Ready => (Clickable)Field(Game, "readySign");
-        public bool ReadyArmed => Ready.Interactable && ((ReadyGate)Field(Game, "_readyGate")).IsArmed;
+
+        /// <summary>A traveller is at the desk (presented, not yet decided).</summary>
+        public bool AtDesk => Field(Ui, "_currentCase") != null && (bool)Field(Game, "_travellerAtDesk");
+
+        /// <summary>A click on the AVAILABLE sign, as the EventSystem delivers it (once a shift: the desk then stays available).</summary>
+        public void ClickSign() => ExecuteEvents.Execute(Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");

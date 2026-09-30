@@ -16,7 +16,8 @@ using UnityEngine.SceneManagement;
 /// on the PC's glass, sizes the desk, its catcher and the scanner, hands the
 /// paper examiner the camera, poses the desk view from the art's Cinemachine
 /// camera and the mat, stands the traveller,
-/// binds the readouts to the art's texts (or shows the fallback HUD), points
+/// binds the readouts to the art's texts (or shows the fallback HUD), has the
+/// AVAILABLE sign's caption follow the desk's availability (AvailableSignLink), points
 /// the anime hall's presentation at the shift clock (AnimeHallShiftLink) and
 /// its portal rings at the day's portals (AnimeHallPortalLink) when the art
 /// carries one, puts the Departure Board's rows and click box on its display
@@ -53,7 +54,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>Where each place is in the art office.</summary>
     [SerializeField] private OfficeSceneContractSO contract;
 
-    /// <summary>The desk tuning (the traveller's height and tint, the READY caption, the anime hall's evening).</summary>
+    /// <summary>The desk tuning (the traveller's height and tint, the AVAILABLE sign's caption and paused ink, the anime hall's evening).</summary>
     [SerializeField] private DeskConfigSO config;
 
     [Header("Office camera users")]
@@ -114,8 +115,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The day-1 wheel note (floats over the traveller's head, facing the camera).</summary>
     [SerializeField] private Transform wheelHint;
 
-    [Header("READY sign")]
-    /// <summary>The READY sign's click (GameManager's gate); its box is fitted to the art's NEXT sign.</summary>
+    [Header("AVAILABLE sign")]
+    /// <summary>The AVAILABLE sign's click (GameManager's toggle); its box is fitted to the art's NEXT sign.</summary>
     [SerializeField] private Clickable readySign;
 
     /// <summary>The gameplay's stand-in sign, shown when the art office has none.</summary>
@@ -148,7 +149,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     [SerializeField] private TMP_Text hudClock;
 
     [Header("Portals (the portals spec v3)")]
-    /// <summary>The shift, whose day-start portals the board and the rings show.</summary>
+    /// <summary>The shift, whose day-start portals the board and the rings show and whose desk availability the AVAILABLE sign shows.</summary>
     [SerializeField] private GameManager game;
 
     /// <summary>The Departure Board's rows and click box (placed on the DepartureBoard anchor; hidden without one).</summary>
@@ -242,6 +243,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         BindTraveller(viewer, deskTop);
         BindReadySign();
         BindReadouts();
+        BindAvailableSign();
         BindProps();
         BindBoard();
         BindHall(art);
@@ -439,7 +441,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     }
 
     // -----------------------------
-    // READY sign, props, readouts
+    // AVAILABLE sign, props, readouts
     // -----------------------------
 
     private void BindReadySign()
@@ -489,7 +491,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         }
     }
 
-    /// <summary>Binds each readout to the art's text, or to the fallback HUD's when the art has none (the HUD shows only then); writes the READY caption.</summary>
+    /// <summary>Binds each readout to the art's text, or to the fallback HUD's when the art has none (the HUD shows only then).</summary>
     private void BindReadouts()
     {
         bool hud = false;
@@ -516,10 +518,19 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 unused.gameObject.SetActive(unused == day || unused == stability || unused == credits || unused == time);
         if (fallbackHud != null)
             fallbackHud.SetActive(hud);
+    }
+
+    /// <summary>The AVAILABLE sign's caption and lit or paused ink follow the desk's availability (AvailableSignLink): on the art's NEXT label, else on the stand-in sign's when it shows.</summary>
+    private void BindAvailableSign()
+    {
+        if (game == null || config == null)
+            return;
 
         TMP_Text caption = TextOf(OfficeAnchorId.ReadoutNext);
-        if (caption != null && config != null && !string.IsNullOrWhiteSpace(config.readyCaptionKey))
-            caption.text = UiText.Get(config.readyCaptionKey);
+        if (caption == null && readyPlaceholder != null && readyPlaceholder.activeSelf)
+            caption = readyPlaceholder.GetComponentInChildren<TMP_Text>(true);
+        if (caption != null)
+            gameObject.AddComponent<AvailableSignLink>().Configure(caption, config, game.Desk);
     }
 
     // -----------------------------

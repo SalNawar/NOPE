@@ -185,9 +185,12 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>A departure's flare: seconds, up and down (with reduced motion: one step up, then down at its end).</summary>
     [Min(0.05f)] public float hallPortalPulseSeconds = 0.8f;
 
-    [Header("READY sign")]
-    /// <summary>The caption the game writes on the READY sign's label (the art's NEXT sign): a UI string key (world_source.json ui.strings).</summary>
+    [Header("AVAILABLE sign")]
+    /// <summary>The caption the game writes on the AVAILABLE sign's label (the art's NEXT sign; "AVAILABLE"): a UI string key (world_source.json ui.strings).</summary>
     public string readyCaptionKey = "desk.readyCaption";
+
+    /// <summary>The caption's ink while the desk is paused (the shift's start, a break, after closing; AvailableSignLink): a dimmed version of the art's lit ink that still reads on the sign's dark glass (large text, 3:1 or better as drawn). Lit, the label keeps the art's own ink.</summary>
+    public Color readyPausedInk = new Color(0.56f, 0.53f, 0.48f, 1f);
 }
 
 /// <summary>One portal's art layers in the anime hall (DeskConfigSO.hallPortalLayers), by their AnimeHallPresentation ids.</summary>

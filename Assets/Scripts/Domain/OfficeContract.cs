@@ -28,7 +28,7 @@ public enum OfficeAnchorId
     /// <summary>Where papers slide in from and back to (the traveller's side of the desk).</summary>
     HandOver,
 
-    /// <summary>The READY sign (the art's NEXT sign): a click calls the next traveller.</summary>
+    /// <summary>The AVAILABLE sign (the art's NEXT sign): a click turns the desk available (travellers are called one after another) or pauses it.</summary>
     NextSign,
 
     /// <summary>The desk intercom (a phone): a click opens the traveller wheel.</summary>
@@ -61,7 +61,7 @@ public enum OfficeAnchorId
     /// <summary>The shift clock's digital text ("09:00") the game writes.</summary>
     ReadoutClock,
 
-    /// <summary>The READY sign's caption the game writes.</summary>
+    /// <summary>The AVAILABLE sign's caption the game writes (lit while available, dimmed while paused).</summary>
     ReadoutNext,
 
     /// <summary>The office camera the player sees through (its raycasts reach the desk).</summary>
