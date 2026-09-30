@@ -1562,6 +1562,10 @@ MonoBehaviour:
     text: Papers disagree
     gloss: 0
     tier: 0
+  - key: report.proof.personMismatch
+    text: Not the person
+    gloss: 0
+    tier: 0
   - key: form.report.caseLine
     text: "{0} \xB7 {1}"
     gloss: 0
@@ -1628,6 +1632,18 @@ MonoBehaviour:
     tier: 0
   - key: compare.travellerLabel
     text: "Traveller \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.faceSlot
+    text: FACE
+    gloss: 0
+    tier: 0
+  - key: compare.faceShown
+    text: the person at the desk
+    gloss: 0
+    tier: 0
+  - key: compare.photoShown
+    text: the photo
     gloss: 0
     tier: 0
   - key: compare.untranslated
@@ -1983,6 +1999,11 @@ MonoBehaviour:
     text: "{0} INCONSISTENT \u2014 the papers disagree: \"{1}\"  /  \"{2}\""
     gloss: 0
     tier: 0
+  - key: deviation.personMismatch.papers
+    text: "{0} INCORRECT \u2014 the photo on the papers is not the traveller at the
+      desk"
+    gloss: 0
+    tier: 0
   - key: category.Language
     text: LANGUAGE
     gloss: 0
@@ -2101,6 +2122,14 @@ MonoBehaviour:
     tier: 0
   - key: category.Signature
     text: SIGNATURE
+    gloss: 0
+    tier: 0
+  - key: category.Seal
+    text: SEAL
+    gloss: 0
+    tier: 0
+  - key: category.Photo
+    text: PHOTO
     gloss: 0
     tier: 0
   - key: icon.portals

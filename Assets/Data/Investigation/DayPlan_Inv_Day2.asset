@@ -39,7 +39,7 @@ MonoBehaviour:
   tellChannels: 0000000001000000
   costumeErrorChance: 0.05
   slipChance: 0.15
-  lieKinds: 01000000020000000700000008000000
+  lieKinds: 010000000200000007000000080000000a000000
   violationChance: 0.05
   activeTravelRules:
   - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}

@@ -284,6 +284,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f4a8944939c8454f90f50df9a7898f2c, type: 2}
   - {fileID: 11400000, guid: 2fb3a1caac37490aac9f1df4ff62901a, type: 2}
   - {fileID: 11400000, guid: 1e0cac879e5b4c6391ca8a166f781240, type: 2}
+  - {fileID: 11400000, guid: 81ffcca21f744861b2d2269751c327ac, type: 2}
   interview:
     deskName: DESK
     opener:
@@ -418,6 +419,7 @@ MonoBehaviour:
     backLabel: < Back
     smallTalkLabel: Small talk
     lookLabel: Look >
+    faceLabel: Their face
     smallTalkPrompt:
       id: interview.smallTalkPrompt
       text: How is life back home?
@@ -13072,6 +13074,569 @@ MonoBehaviour:
       role: 0
       fromDay: 0
       repair: repair_portal_05
+    offices:
+    - id: visa
+      name: Visa Office
+      shape: Hexagon
+      ink: Blue
+      legend: VO
+      forgedLegend: VD
+      forms:
+      - TC-101
+    - id: dispatch
+      name: Portal Hall Dispatch
+      shape: Circle
+      ink: Green
+      legend: PH
+      forgedLegend: PR
+      forms:
+      - TC-230
+    - id: relief
+      name: Debt Relief Directorate
+      shape: Shield
+      ink: Red
+      legend: DR
+      forgedLegend: DK
+      forms:
+      - TC-310
+    - id: credit
+      name: Leisure Credit Bureau
+      shape: Ellipse
+      ink: Violet
+      legend: LC
+      forgedLegend: LE
+      forms:
+      - TC-415
+      - TC-416
+    - id: insurance
+      name: Transit Insurance Desk
+      shape: Octagon
+      ink: Brown
+      legend: TI
+      forgedLegend: TJ
+      forms:
+      - TC-417
+    - id: labour
+      name: Labour Placement Bureau
+      shape: Square
+      ink: Black
+      legend: LB
+      forgedLegend: LP
+      forms:
+      - TC-520
+    - id: registry
+      name: Displacement Registry
+      shape: Circle
+      ink: Violet
+      legend: DP
+      forgedLegend: DB
+      forms:
+      - TC-610
+      - TC-620
+    - id: returns
+      name: Returns Office
+      shape: Shield
+      ink: Green
+      legend: RO
+      forgedLegend: RD
+      forms:
+      - TC-630
+    faults:
+    - id: richVisaClass
+      form: TC-101
+      field: AccountStatus
+      lie: PoorPosingAsRich
+      directive: 
+      variant: richForged
+      optional: 0
+      against: "Citizen Account \xB7 Status"
+      note: The visa's class reads above the account's status.
+    - id: richManifestClass
+      form: TC-230
+      field: TransponderClass
+      lie: PoorPosingAsRich
+      directive: 
+      variant: richForged
+      optional: 0
+      against: "Citizen Account \xB7 Transponder class"
+      note: The manifest's class reads Premium on an Economy account.
+    - id: borrowedVisaClass
+      form: TC-101
+      field: AccountStatus
+      lie: PoorPosingAsRich
+      directive: 
+      variant: richBorrowed
+      optional: 0
+      against: "Citizen Account \xB7 Status"
+      note: The visa's class reads above the account's status.
+    - id: borrowedManifestId
+      form: TC-230
+      field: CitizenId
+      lie: PoorPosingAsRich
+      directive: 
+      variant: richBorrowed
+      optional: 0
+      against: "Citizen Account \xB7 Citizen ID; the visa"
+      note: 'A rich citizen''s manifest: their Citizen ID.'
+    - id: borrowedManifestUnit
+      form: TC-230
+      field: TransponderId
+      lie: PoorPosingAsRich
+      directive: 
+      variant: richBorrowed
+      optional: 0
+      against: "Citizen Account \xB7 Transponder"
+      note: 'A rich citizen''s manifest: their transponder.'
+    - id: borrowedManifestClass
+      form: TC-230
+      field: TransponderClass
+      lie: PoorPosingAsRich
+      directive: 
+      variant: richBorrowed
+      optional: 0
+      against: "Citizen Account \xB7 Transponder class"
+      note: 'A rich citizen''s manifest: their Premium class.'
+    - id: doctoredVisaId
+      form: TC-101
+      field: CitizenId
+      lie: DoctoredIdentity
+      directive: 
+      variant: doctoredId
+      optional: 0
+      against: "Citizen Account \xB7 Citizen ID; the manifest"
+      note: The visa carries another Citizen ID.
+    - id: doctoredVisaYear
+      form: TC-101
+      field: BirthDate
+      lie: DoctoredIdentity
+      directive: 
+      variant: doctoredYear
+      optional: 0
+      against: "Citizen Account \xB7 Born"
+      note: The visa's birth date has another year.
+    - id: debtorRichVisaClass
+      form: TC-101
+      field: AccountStatus
+      lie: DebtorPosingAsTourist
+      directive: 
+      variant: debtorAsRich
+      optional: 0
+      against: "Citizen Account \xB7 Status"
+      note: A debtor's visa reads a tourist's class.
+    - id: debtorRichManifestClass
+      form: TC-230
+      field: TransponderClass
+      lie: DebtorPosingAsTourist
+      directive: 
+      variant: debtorAsRich
+      optional: 0
+      against: "Citizen Account \xB7 Transponder class"
+      note: A debtor's manifest reads a tourist's class.
+    - id: debtorPoorVisaClass
+      form: TC-101
+      field: AccountStatus
+      lie: DebtorPosingAsTourist
+      directive: 
+      variant: debtorAsPoor
+      optional: 0
+      against: "Citizen Account \xB7 Status"
+      note: A debtor's visa reads Standard.
+    - id: debtorWaiverDebt
+      form: TC-310
+      field: Debt
+      lie: DebtorPosingAsTourist
+      directive: 
+      variant: debtorAsPoor
+      optional: 0
+      against: "Citizen Account \xB7 Debt"
+      note: The waiver passes a sliver of the real debt to kin.
+    - id: debtorCreditClass
+      form: TC-415
+      field: AccountStatus
+      lie: DebtorPosingAsTourist
+      directive: 
+      variant: debtorAsPoor
+      optional: 1
+      against: "Citizen Account \xB7 Status"
+      note: The credit agreement reads the posed class.
+    - id: debtorFundsClass
+      form: TC-416
+      field: AccountStatus
+      lie: DebtorPosingAsTourist
+      directive: 
+      variant: debtorAsPoor
+      optional: 1
+      against: "Citizen Account \xB7 Status"
+      note: The proof of funds reads the posed class.
+    - id: contractWage
+      form: TC-520
+      field: Wage
+      lie: ForgedContract
+      directive: 
+      variant: wage
+      optional: 0
+      against: "Citizen Account \xB7 Forms on file (the contract)"
+      note: The day wage is 1.5 to 3 times the registered one.
+    - id: contractTerm
+      form: TC-520
+      field: Term
+      lie: ForgedContract
+      directive: 
+      variant: term
+      optional: 0
+      against: "Citizen Account \xB7 Forms on file (the contract)"
+      note: The term is a quarter to six tenths of the registered one.
+    - id: contractEmployer
+      form: TC-520
+      field: Employer
+      lie: ForgedContract
+      directive: 
+      variant: employer
+      optional: 0
+      against: "Citizen Account \xB7 Forms on file (the contract)"
+      note: Another employer of the era.
+    - id: contractWorksite
+      form: TC-520
+      field: Destination
+      lie: ForgedContract
+      directive: 
+      variant: worksite
+      optional: 0
+      against: "Citizen Account \xB7 Forms on file (the contract)"
+      note: Another place open today.
+    - id: waiverNumber
+      form: TC-310
+      field: WaiverNo
+      lie: FakeWaiver
+      directive: 
+      variant: number
+      optional: 0
+      against: "Citizen Account \xB7 Waiver"
+      note: A waiver number the account never registered.
+    - id: waiverUnit
+      form: TC-310
+      field: TransponderId
+      lie: FakeWaiver
+      directive: 
+      variant: transponder
+      optional: 0
+      against: "Citizen Account \xB7 Transponder; the manifest"
+      note: Made out for another unit of the account's class.
+    - id: proofCredit
+      form: TC-415
+      field: Credit
+      lie: ForgedProof
+      directive: 
+      variant: credit
+      optional: 0
+      against: "Citizen Account \xB7 Forms on file"
+      note: A credit line 3 to 10 times the one on file.
+    - id: proofFunds
+      form: TC-416
+      field: Funds
+      lie: ForgedProof
+      directive: 
+      variant: funds
+      optional: 0
+      against: "Citizen Account \xB7 Forms on file"
+      note: Savings 3 to 10 times those on file.
+    - id: proofPolicy
+      form: TC-417
+      field: PolicyNo
+      lie: ForgedProof
+      directive: 
+      variant: policy
+      optional: 0
+      against: "Citizen Account \xB7 Forms on file"
+      note: A policy number the account does not hold.
+    - id: sealShape
+      form: '*'
+      field: Seal
+      lie: ForgedSeal
+      directive: 
+      variant: shape
+      optional: 0
+      against: the Seal Register
+      note: One paper's seal has another outline than its office's.
+    - id: sealInk
+      form: '*'
+      field: Seal
+      lie: ForgedSeal
+      directive: 
+      variant: ink
+      optional: 0
+      against: the Seal Register
+      note: One paper's seal is in another ink than its office's.
+    - id: sealLegend
+      form: '*'
+      field: Seal
+      lie: ForgedSeal
+      directive: 
+      variant: legend
+      optional: 0
+      against: the Seal Register
+      note: One paper's seal carries a wrong legend.
+    - id: photoVisa
+      form: TC-101
+      field: Photo
+      lie: SwappedPhoto
+      directive: 
+      variant: photo
+      optional: 1
+      against: the traveller at the desk
+      note: The visa's photo shows someone else.
+    - id: photoContract
+      form: TC-520
+      field: Photo
+      lie: SwappedPhoto
+      directive: 
+      variant: photo
+      optional: 1
+      against: the traveller at the desk
+      note: The contract's photo shows someone else.
+    - id: photoCertificate
+      form: TC-610
+      field: Photo
+      lie: SwappedPhoto
+      directive: 
+      variant: photo
+      optional: 1
+      against: the traveller at the desk
+      note: The certificate's photo shows someone else.
+    - id: originBirth
+      form: TC-610
+      field: BirthDate
+      lie: FalseOrigin
+      directive: 
+      variant: tell
+      optional: 0
+      against: "Displacement Registry \xB7 Born"
+      note: A birth year of another of today's places.
+    - id: originCoin
+      form: TC-620
+      field: Currency
+      lie: FalseOrigin
+      directive: 
+      variant: tell
+      optional: 0
+      against: Currency Ledger
+      note: The coin of another of today's places.
+    - id: originTongue
+      form: TC-620
+      field: Language
+      lie: FalseOrigin
+      directive: 
+      variant: tell
+      optional: 0
+      against: Tongues & Scripts
+      note: The tongue of another of today's places.
+    - id: originEffects
+      form: TC-620
+      field: Technology
+      lie: FalseOrigin
+      directive: 
+      variant: tell
+      optional: 0
+      against: Index of Devices
+      note: The devices of another of today's places.
+    - id: fakeDisplacedBirth
+      form: TC-610
+      field: BirthDate
+      lie: FakeDisplaced
+      directive: 
+      variant: tell
+      optional: 0
+      against: "Displacement Registry \xB7 Born"
+      note: A birth year of 2150.
+    - id: fakeDisplacedCoin
+      form: TC-620
+      field: Currency
+      lie: FakeDisplaced
+      directive: 
+      variant: tell
+      optional: 0
+      against: Currency Ledger
+      note: The coin of 2150.
+    - id: fakeDisplacedTongue
+      form: TC-620
+      field: Language
+      lie: FakeDisplaced
+      directive: 
+      variant: tell
+      optional: 0
+      against: Tongues & Scripts
+      note: The tongue of 2150.
+    - id: fakeDisplacedEffects
+      form: TC-620
+      field: Technology
+      lie: FakeDisplaced
+      directive: 
+      variant: tell
+      optional: 0
+      against: Index of Devices
+      note: The devices of 2150.
+    - id: smuggleCurrency
+      form: TC-230
+      field: Currency
+      lie: Smuggling
+      directive: 
+      variant: tell
+      optional: 0
+      against: Currency Ledger
+      note: 2150 currency carried out.
+    - id: smuggleDevices
+      form: TC-230
+      field: Technology
+      lie: Smuggling
+      directive: 
+      variant: tell
+      optional: 0
+      against: Index of Devices
+      note: 2150 devices carried out.
+    - id: smuggleCoin
+      form: TC-620
+      field: Currency
+      lie: Smuggling
+      directive: 
+      variant: tell
+      optional: 0
+      against: Currency Ledger
+      note: 2150 currency carried out.
+    - id: smuggleEffects
+      form: TC-620
+      field: Technology
+      lie: Smuggling
+      directive: 
+      variant: tell
+      optional: 0
+      against: Index of Devices
+      note: 2150 devices carried out.
+    - id: expiredVisa
+      form: TC-101
+      field: Expiry
+      lie: 
+      directive: ExpiredPaper
+      variant: expired
+      optional: 0
+      against: the desk calendar
+      note: Valid Until has passed.
+    - id: expiredCredit
+      form: TC-415
+      field: Expiry
+      lie: 
+      directive: ExpiredPaper
+      variant: expired
+      optional: 0
+      against: the desk calendar
+      note: Valid Until has passed.
+    - id: expiredFunds
+      form: TC-416
+      field: Expiry
+      lie: 
+      directive: ExpiredPaper
+      variant: expired
+      optional: 0
+      against: the desk calendar
+      note: Valid Until has passed.
+    - id: expiredPolicy
+      form: TC-417
+      field: Expiry
+      lie: 
+      directive: ExpiredPaper
+      variant: expired
+      optional: 0
+      against: the desk calendar
+      note: Valid Until has passed.
+    - id: expiredCertificate
+      form: TC-610
+      field: Expiry
+      lie: 
+      directive: ExpiredPaper
+      variant: expired
+      optional: 0
+      against: the desk calendar
+      note: Valid Until has passed.
+    - id: wrongDateManifest
+      form: TC-230
+      field: DepartureDate
+      lie: 
+      directive: WrongDepartureDate
+      variant: date
+      optional: 0
+      against: the desk calendar
+      note: The departure is dated another day.
+    - id: wrongDateReturn
+      form: TC-630
+      field: DepartureDate
+      lie: 
+      directive: WrongDepartureDate
+      variant: date
+      optional: 0
+      against: the desk calendar
+      note: The departure is dated another day.
+    - id: waiverUnsigned
+      form: TC-310
+      field: Signature
+      lie: 
+      directive: IncompletePapers
+      variant: unsigned
+      optional: 0
+      against: "Today's rules \xB7 paper set"
+      note: The waiver is not signed.
+    - id: waiverMissing
+      form: TC-310
+      field: 
+      lie: 
+      directive: IncompletePapers
+      variant: missing
+      optional: 0
+      against: "Today's rules \xB7 paper set"
+      note: The waiver is not carried.
+    - id: proofMissingCredit
+      form: TC-415
+      field: 
+      lie: 
+      directive: IncompletePapers
+      variant: missing
+      optional: 0
+      against: "Today's rules \xB7 paper set"
+      note: The proof of means is not carried.
+    - id: proofMissingFunds
+      form: TC-416
+      field: 
+      lie: 
+      directive: IncompletePapers
+      variant: missing
+      optional: 0
+      against: "Today's rules \xB7 paper set"
+      note: The proof of means is not carried.
+    - id: proofMissingPolicy
+      form: TC-417
+      field: 
+      lie: 
+      directive: IncompletePapers
+      variant: missing
+      optional: 0
+      against: "Today's rules \xB7 paper set"
+      note: The proof of means is not carried.
+    - id: economyManifest
+      form: TC-230
+      field: TransponderClass
+      lie: 
+      directive: IncompletePapers
+      variant: economy
+      optional: 0
+      against: "Today's rules \xB7 paper set"
+      note: A Premium citizen's manifest books an Economy unit.
+    - id: recalledUnit
+      form: TC-230
+      field: TransponderId
+      lie: 
+      directive: RecalledTransponder
+      variant: recall
+      optional: 0
+      against: "Today's rules \xB7 recalls"
+      note: The manifest books a recalled model.
   home:
     radioUpgrade: house_radio
     radio:
