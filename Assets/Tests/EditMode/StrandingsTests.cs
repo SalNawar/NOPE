@@ -70,6 +70,16 @@ public class StrandingsTests
         CollectionAssert.IsEmpty(Strandings.Roll(many, 1f, null));
     }
 
+    /// <summary>Saleh's Q10 = D with lesson D7: the stranding fine is charged when no valid signed waiver was on file, and only on a day the agency issues the waiver.</summary>
+    [Test]
+    public void Fine_OnlyWithoutAWaiver_OnADayThatIssuesIt()
+    {
+        Assert.AreEqual(100, Strandings.Fine(false, true, 100));
+        Assert.AreEqual(0, Strandings.Fine(true, true, 100), "a valid signed waiver on file");
+        Assert.AreEqual(0, Strandings.Fine(false, false, 100), "no waiver issued yet (days 1-3): nobody could have checked one");
+        Assert.AreEqual(0, Strandings.Fine(false, true, -5), "never below 0");
+    }
+
     [Test]
     public void Lines_EachRecordsLine_InOrder_TheForgottenSilent()
     {

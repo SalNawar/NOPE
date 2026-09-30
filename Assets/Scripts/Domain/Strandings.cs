@@ -54,8 +54,9 @@ public sealed class StrandingRecord
 /// day's stranding stream (<see cref="Seeds.ForStrandings"/>), in queue order,
 /// one draw each; a stranded traveller does not come back and meets one fate (StrandingFates, the endings and strandings spec §6). The
 /// stranding fine (Saleh's Q10 = D, a knowing exception to the one-penalty
-/// rule) is charged only when no valid signed waiver was on file
-/// (ShiftStrandings). Pure: the draws are tested headless.
+/// rule) is charged only when no valid signed waiver was on file on a day
+/// the agency issues the waiver (<see cref="Fine"/>, ShiftStrandings). Pure:
+/// the draws are tested headless.
 /// </summary>
 public static class Strandings
 {
@@ -82,6 +83,17 @@ public static class Strandings
         }
         return stranded;
     }
+
+    /// <summary>
+    /// The fine a stranding charges: <paramref name="strandingFine"/>
+    /// (GameConfigSO.strandingFine; never below 0) when no valid signed
+    /// waiver was on file and the day issued the Stranding Waiver
+    /// (<paramref name="waiverIssued"/>, DayPapers; lesson D7: before the
+    /// waiver arrives nobody could have checked one, so no approval was wrong
+    /// and the desk is not liable); 0 otherwise.
+    /// </summary>
+    public static int Fine(bool waivered, bool waiverIssued, int strandingFine) =>
+        waivered || !waiverIssued ? 0 : Math.Max(0, strandingFine);
 
     /// <summary>The next morning's stranding lines: each record's line, in order (a forgotten traveller's blank line and null records skipped).</summary>
     public static List<string> Lines(IReadOnlyList<StrandingRecord> strandings)

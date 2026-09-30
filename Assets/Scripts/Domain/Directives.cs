@@ -164,8 +164,14 @@ public sealed class CaseFacts
     /// <summary>Today on the agency calendar; null when the calendar cannot count today (the dates are then not read).</summary>
     public DateTime? Today;
 
+    /// <summary>The forms in circulation today (DayPapers, world_source.json days[].papers); empty: every form. A paper set never asks for a form not issued yet.</summary>
+    public IReadOnlyCollection<string> Issued = new string[0];
+
     /// <summary>True when the traveller carries the form numbered <paramref name="formNumber"/>.</summary>
     public bool Carries(string formNumber) => Forms != null && Forms.Contains(formNumber);
+
+    /// <summary>True when the form numbered <paramref name="formNumber"/> is issued today (DayPapers.Issued over <see cref="Issued"/>).</summary>
+    public bool IsIssued(string formNumber) => DayPapers.Issued(Issued, formNumber);
 }
 
 /// <summary>Which date a planned paper-dates fault falsifies (Directives.PlanDateFault).</summary>
@@ -347,7 +353,8 @@ public static class Directives
     /// visa rides an Economy manifest, or a Standard visa rides a Premium
     /// manifest or lacks a signed waiver or a proof of means, and for a
     /// labourer without a contract, a signed waiver or on a Premium manifest
-    /// (a form not carried states nothing about its class); the debt
+    /// (a form not carried states nothing about its class; a form not issued
+    /// yet, CaseFacts.Issued, is never asked for: lesson D7); the debt
     /// standing breaks on a Frozen account; the papers' dates break on a
     /// departure dated another day or an expired Valid Until (<see cref="PaperDates"/>,
     /// when the calendar counts today); the dress rule, the return home, no
@@ -409,9 +416,11 @@ public static class Directives
                     return false;
                 if (facts.VisaClass == CitizenStatus.Premium)
                     return facts.ManifestClass == TransponderClass.Economy;
-                return facts.ManifestClass == TransponderClass.Premium || !facts.WaiverSigned || !Proofs.Any(facts.Carries);
+                return facts.ManifestClass == TransponderClass.Premium || (facts.IsIssued(Waiver) && !facts.WaiverSigned)
+                       || (Proofs.Any(facts.IsIssued) && !Proofs.Any(facts.Carries));
             case TravellerKind.Labourer:
-                return !facts.Carries(Contract) || facts.ManifestClass == TransponderClass.Premium || !facts.WaiverSigned;
+                return (facts.IsIssued(Contract) && !facts.Carries(Contract)) || facts.ManifestClass == TransponderClass.Premium
+                       || (facts.IsIssued(Waiver) && !facts.WaiverSigned);
             default:
                 return false;
         }

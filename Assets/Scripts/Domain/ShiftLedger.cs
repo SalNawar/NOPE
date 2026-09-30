@@ -54,8 +54,11 @@ public sealed class ShiftLedger
     /// <summary>Every fine of the shift: the wrong-decision penalties and the stranding fines (the statement's FINES cell).</summary>
     public int TotalFines => TotalPenalties + strandingFines;
 
-    /// <summary>Net money change for the shift: the pay less the fines (the wrong-decision penalties and the stranding fines) and the Debt Relief instalment.</summary>
-    public int NetMoney => TotalPay - TotalFines - debtInstalment;
+    /// <summary>Other money the shift moved at its end, signed: what its completed dialogs' effects added to the wallet (a bribe taken; DayCycle.CloseShift). The shift report shows it (lesson 5: no number hidden).</summary>
+    public int otherMoney;
+
+    /// <summary>Net money change for the shift: the pay less the fines (the wrong-decision penalties and the stranding fines) and the Debt Relief instalment, plus the other money.</summary>
+    public int NetMoney => TotalPay - TotalFines - debtInstalment + otherMoney;
 
     /// <summary>The leisure departures the shift approved (traveller types §10): accepted rich and poor tourists.</summary>
     public int LeisureDepartures
