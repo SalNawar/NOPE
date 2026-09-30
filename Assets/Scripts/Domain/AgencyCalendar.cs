@@ -41,6 +41,12 @@ public sealed class AgencyContent
     /// <summary>The chance an accepted traveller on an Economy transponder is stranded at the shift's end (agency.strandChance, 0.08; Strandings.Roll; the traveller-types spec's S1).</summary>
     public float strandChance;
 
+    /// <summary>The fate table (agency.strandingFates: one row per StrandingFate, weighted by waiver; the endings and strandings spec §6.2; StrandingFates.Problems checks it).</summary>
+    public List<StrandingFateRow> strandingFates = new List<StrandingFateRow>();
+
+    /// <summary>The failure report Mail sends for every stranding (agency.strandingReport; the spec's §6.3; StrandingFates.ReportProblems checks it).</summary>
+    public StrandingReportContent strandingReport = new StrandingReportContent();
+
     /// <summary>The Debt Relief programme's employers (agency.employers: one per row, each of one era; a labourer's contract names one of the worksite's era, AccountMaker.Make).</summary>
     public List<Employer> employers = new List<Employer>();
 

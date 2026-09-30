@@ -5,7 +5,8 @@ using System.Collections.Generic;
 /// The morning paper's debt-theme lines as authored (world_source.json
 /// "news"; the traveller-types spec's §10, T1; redesign phase 13), written by
 /// Generate World into the content library: the debt lines and the
-/// strandings' line ("news.stranded"; Strandings.Lines).
+/// strandings' line ("news.stranded": the paper's line of a stranding fate
+/// with no lines of its own, StrandingFates.Line).
 /// </summary>
 [Serializable]
 public sealed class NewsContent
@@ -13,7 +14,7 @@ public sealed class NewsContent
     /// <summary>The debt-economy lines, one of which each morning's paper carries ("news.debt"; DebtNews.Line). Empty prints none.</summary>
     public List<string> debt = new();
 
-    /// <summary>The line the morning paper prints per traveller stranded the day before ("news.stranded"; tokens {name} and {place}; Strandings.Lines).</summary>
+    /// <summary>The line the morning paper prints for a traveller stranded the day before whose fate has no lines of its own (a carry of 2150 technology; "news.stranded"; tokens {name} and {place}; StrandingFates.Line).</summary>
     public string stranded = string.Empty;
 
     /// <summary>The line the morning paper prints when the last shift approved Debt Relief departures ("news.debtReliefCount"; the token {count}; DebtNews.YesterdayLine).</summary>

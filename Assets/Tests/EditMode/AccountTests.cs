@@ -62,17 +62,18 @@ public class AccountTests
         Assert.AreEqual(205, days.Single().purchases, "the orders and a slot spin");
     }
 
-    /// <summary>Redesign phase 23: the FINES cell is the wrong-decision penalties alone; a stranding fines nothing.</summary>
+    /// <summary>The FINES cell is every fine of the shift: the wrong-decision penalties and the stranding fines (Saleh's Q10 = D); a stranding with a waiver on file fines nothing.</summary>
     [Test]
-    public void RecordShift_FinesAreThePenaltiesAlone()
+    public void RecordShift_FinesAreThePenaltiesAndTheStrandingFines()
     {
         var days = new List<AccountDay>();
         ShiftLedger ledger = Ledger(100, 20);
         ledger.strandedCount = 2;
 
-        AccountDay row = Account.RecordShift(days, 1, ledger, new Source(), 60);
+        Assert.AreEqual(20, Account.RecordShift(days, 1, ledger, new Source(), 60).fines);
 
-        Assert.AreEqual(20, row.fines);
+        ledger.strandingFines = 100;
+        Assert.AreEqual(120, Account.RecordShift(days, 1, ledger, new Source(), 60).fines);
     }
 
     [Test]

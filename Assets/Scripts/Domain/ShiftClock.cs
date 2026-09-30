@@ -99,6 +99,25 @@ public sealed class ShiftClock
         }
     }
 
+    /// <summary>
+    /// Spends <paramref name="minutes"/> of shift time at once (a desk task that
+    /// takes time, such as a waiver signed from the pad: GameConfigSO.waiverSignMinutes),
+    /// whether or not the clock is paused; clamps at closing and raises Closed
+    /// once. Nothing before Start, once closed, or for no positive minutes.
+    /// </summary>
+    public void Spend(float minutes)
+    {
+        if (!IsStarted || IsClosed || !(minutes > 0f))
+            return;
+
+        CurrentMinute = Math.Min(EndMinute, CurrentMinute + minutes);
+        if (CurrentMinute >= EndMinute)
+        {
+            IsClosed = true;
+            Closed?.Invoke();
+        }
+    }
+
     /// <summary>24-hour "HH:MM" for a minute of day (fractions round down).</summary>
     public static string Format(float minuteOfDay)
     {

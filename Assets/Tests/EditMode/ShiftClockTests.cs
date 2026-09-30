@@ -17,6 +17,29 @@ public class ShiftClockTests
     }
 
     [Test]
+    public void Spend_JumpsAhead_EvenPaused_AndClosesAtClosing()
+    {
+        var clock = NineToFive();
+        clock.Spend(5f);
+        Assert.AreEqual(540f, clock.CurrentMinute, "nothing before the shift starts");
+
+        clock.Start();
+        clock.Pause();
+        clock.Spend(5f);
+        Assert.AreEqual(545f, clock.CurrentMinute, 1e-3f, "a desk task spends time even while the clock holds");
+        clock.Spend(-3f);
+        Assert.AreEqual(545f, clock.CurrentMinute, 1e-3f);
+
+        int closed = 0;
+        clock.Closed += () => closed++;
+        clock.Spend(1000f);
+        Assert.AreEqual(1020f, clock.CurrentMinute);
+        Assert.IsTrue(clock.IsClosed);
+        clock.Spend(5f);
+        Assert.AreEqual(1, closed);
+    }
+
+    [Test]
     public void Tick_BeforeStart_DoesNothing()
     {
         var clock = NineToFive();

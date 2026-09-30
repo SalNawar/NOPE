@@ -713,8 +713,9 @@ public static partial class WorldContentGenerator
         // A premade's dialog and a forced slot's (days 7-15 B7) are offered only while that appearance stands at the desk (TimelineService.PremadeDialogIds).
         var premadeDialogs = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => !string.IsNullOrEmpty(m.dialog)).Select(m => m.dialog)
             .Concat(src.days.SelectMany(day => day.forced ?? Array.Empty<ForcedData>()).Where(f => !string.IsNullOrEmpty(f.dialog)).Select(f => f.dialog)));
+        bool padOffered = InterviewScript.OffersPad(kindForms.SelectMany(k => k.Askable ?? Array.Empty<AskableForm>()).ToList(), BuildLines(iv));
         foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.Count(built), anySmallTalk, kindForms.Select(k => FormRequests.Count(k.Askable)).DefaultIfEmpty(0).Max(), requests.Length,
-                                                             dialogs.Count(d => !premadeDialogs.Contains(d.id)), dialogs.Count(d => premadeDialogs.Contains(d.id)), iv.menuCapacity))
+                                                             dialogs.Count(d => !premadeDialogs.Contains(d.id)), dialogs.Count(d => premadeDialogs.Contains(d.id)), iv.menuCapacity, padOffered))
             errors.Add(problem);
 
         // --- The cast and the voices (the personalities spec's §9.2) ---
@@ -746,6 +747,7 @@ public static partial class WorldContentGenerator
         Fits(InterviewLineId("requestPrompt"), iv.requestPrompt, Interview.DocumentToken, longestDocument);
         Fits(InterviewLineId("requestReply"), iv.requestReply, Interview.ValueToken, 0);
         Fits(InterviewLineId("smallTalkPrompt"), iv.smallTalkPrompt, Interview.ValueToken, 0);
+        Fits(InterviewLineId("waiverPad.prompt"), iv.waiverPad?.prompt, Interview.ValueToken, 0);
         foreach (RequestData r in requests)
         {
             Fits(RequestLineId(r.id, PromptPart), r.prompt, Interview.ValueToken, 0);
@@ -1887,7 +1889,13 @@ public static partial class WorldContentGenerator
         kindSmallTalk = BuildKindTalk(i.kindSmallTalk),
         voices = BuildVoices(i.voices),
         reactions = VoiceRows("reactions", i.reactions, r => null, "reactions"),
-        slips = VoiceRows("slips", i.slips, r => null, "slips")
+        slips = VoiceRows("slips", i.slips, r => null, "slips"),
+        waiverPad = new WaiverPadWording
+        {
+            label = i.waiverPad?.label ?? string.Empty,
+            prompt = new LineText(InterviewLineId("waiverPad.prompt"), i.waiverPad?.prompt),
+            replies = VoiceRows("waiverPad", i.waiverPad?.replies, r => r.reply, "waiverPad.replies")
+        }
     };
 
     /// <summary>The id of a missing-form reply's line, "interview.missingFormReplies.{kind}.{request}.{variant}": BuildReplies writes it, CheckInterview checks it.</summary>
@@ -2449,7 +2457,12 @@ public static partial class WorldContentGenerator
         public VoiceRowData[] slips;
         /// <summary>The personalities' and premades' own lines, one list per slot.</summary>
         public VoicesData voices;
+        /// <summary>The desk's waiver pad (the endings and strandings spec §7.3): the entry, the desk's words, the default replies.</summary>
+        public WaiverPadData waiverPad;
     }
+
+    /// <summary>interview.waiverPad: the entry, the desk's prompt and the default replies (a reply by name, kinds, era, text).</summary>
+    [Serializable] private sealed class WaiverPadData { public string label; public string prompt; public VoiceRowData[] replies; }
 
     /// <summary>A spoken request: the hub entry, the desk's prompt and the traveller's reply (line ids are generated from the id).</summary>
     [Serializable] private sealed class RequestData { public string id; public string label; public string prompt; public string reply; }
