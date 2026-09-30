@@ -173,7 +173,7 @@ public class SerializedEnumsTests
         Assert.AreEqual(5, System.Enum.GetValues(typeof(LookSlot)).Length, "a new member is appended here too");
     }
 
-    /// <summary>LookLayer: serialized arrays are indexed by it.</summary>
+    /// <summary>LookLayer: serialized arrays are indexed by it, and the character art fallback table stores it.</summary>
     [Test]
     public void LookLayer_KeepsItsSerializedInts()
     {
@@ -336,5 +336,18 @@ public class SerializedEnumsTests
         Assert.AreEqual(0, (int)ReactionIntent.Honest);
         Assert.AreEqual(1, (int)ReactionIntent.Lying);
         Assert.AreEqual(2, System.Enum.GetValues(typeof(ReactionIntent)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>LookArtFallbackStep: stored in the character art fallback table (Assets/Resources/CharacterArtFallback.asset).</summary>
+    [Test]
+    public void LookArtFallbackStep_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)LookArtFallbackStep.OtherFace);
+        Assert.AreEqual(1, (int)LookArtFallbackStep.OtherSkin);
+        Assert.AreEqual(2, (int)LookArtFallbackStep.OtherEra);
+        Assert.AreEqual(3, (int)LookArtFallbackStep.NeighbourNation);
+        Assert.AreEqual(4, (int)LookArtFallbackStep.AnyPlace);
+        Assert.AreEqual(5, (int)LookArtFallbackStep.NeutralExpression);
+        Assert.AreEqual(6, System.Enum.GetValues(typeof(LookArtFallbackStep)).Length, "a new member is appended here too");
     }
 }

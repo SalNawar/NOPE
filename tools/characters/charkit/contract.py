@@ -2,7 +2,7 @@
 
 Nothing here is a second copy of a game number: the canvas landmarks come
 from LookCanvas.cs, the skin swatches and hair colours from
-PlaceholderPalette.cs, the hair-colour tokens from LookKeys.cs, and the
+CharacterSwatches.cs, the hair-colour tokens from LookKeys.cs, and the
 wardrobe flags (wig, back, covers, artNation) from world_source.json. The
 key names are built with the LookKeys grammar and then checked against
 coverage.json (the list the brief generated from LookKeys), so a name the
@@ -16,7 +16,7 @@ import re
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 LOOK_CANVAS = "Assets/Scripts/Visuals/LookCanvas.cs"
-PALETTE = "Assets/Scripts/Visuals/PlaceholderPalette.cs"
+PALETTE = "Assets/Scripts/Visuals/CharacterSwatches.cs"
 LOOK_KEYS = "Assets/Scripts/Domain/LookKeys.cs"
 CHARACTER_ART = "Assets/Scripts/Characters/CharacterArt.cs"
 WORLD_SOURCE = "Assets/Data/World/world_source.json"
@@ -40,7 +40,7 @@ def canvas():
 
 
 def skin_swatches():
-    """The five skin swatches (tone 1..5) as RGB tuples, from PlaceholderPalette.SkinSwatches."""
+    """The five skin swatches (tone 1..5) as RGB tuples, from CharacterSwatches.SkinSwatches."""
     src = _read(PALETTE)
     block = re.search(r"SkinSwatches\s*=\s*\{(.*?)\};", src, re.S)
     if not block:
@@ -52,7 +52,7 @@ def skin_swatches():
 
 
 def hair_colours():
-    """Every hair colour token in LookKeys.HairColours order, with its RGB from PlaceholderPalette.Hair."""
+    """Every hair colour token in LookKeys.HairColours order, with its RGB from CharacterSwatches.Hair."""
     keys_src = _read(LOOK_KEYS)
     m = re.search(r"HairColours = new\[\] \{ (.*?) \};", keys_src)
     if not m:
@@ -67,7 +67,7 @@ def hair_colours():
            for name, r, g, b in re.findall(r'case "(\w+)": return \(0x(\w\w), 0x(\w\w), 0x(\w\w)\);', pal_src)}
     missing = [t for t in tokens if t not in rgb]
     if missing:
-        raise RuntimeError(f"PlaceholderPalette.Hair has no colour for {missing}")
+        raise RuntimeError(f"CharacterSwatches.Hair has no colour for {missing}")
     return [(t, rgb[t]) for t in tokens]
 
 

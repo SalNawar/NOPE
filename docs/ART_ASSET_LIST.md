@@ -187,9 +187,75 @@ A traveller hands over Temporal Customs forms (the TC forms of the redesign). Ea
 
 ## Characters (pointer)
 
-About 880 files (50 bases, 759 garments, 31 Future outfits, 40 premade expressions) from about 406 ChatGPT images, at `Assets/Art/Characters/Resources/Characters/<key>.png`, 1024 × 1536. Tier 1: the game loads each by key at run time and draws a 256 × 384 placeholder until it lands. Status: missing (the folder does not exist yet). Everything else is in the character brief and `coverage.json`.
+About 880 files (50 bases, 759 garments, 31 Future outfits, 40 premade expressions) from about 406 ChatGPT images, at `Assets/Art/Characters/Resources/Characters/<key>.png`, 1024 × 1536. Tier 1: the game loads each by key at run time. Status: **50 files in** (2026-09-30): the pilot's 42 keys (batch 1: both base figures, the Athens man and woman, the Mamluk woman's outfit, braids and hood, the tripartite wig, the magatama) and 8 interim heads (skins 2-5, face a, recoloured from the pilot's skin-1 heads until Batch 2 draws its own). Everything else is in the character brief and `coverage.json`.
 
-A premade (a character drawn whole) shows its picture once its neutral image is in the folder; until then the game draws it as a generated traveller in its place's costume, the same face at every appearance (days 7-15 B4), never the flat placeholder.
+**Travellers use only the ChatGPT art** (Saleh, 2026-09-30). A key with no art yet is drawn with its nearest key that has art, by the table in `Assets/Resources/CharacterArtFallback.asset` (`CharacterArtFallbackSO`; the order is in `CHARACTER_ART_CONTRACT.md` section 9): the same nation in the nearest era, then the same era of a neighbouring nation, then (outfit, hair, beard, headwear) the nearest place that has one; an accessory or a hair-back with no art is simply not drawn. The procedural placeholder figure is retired. So every new file replaces a stand-in the moment it lands, with no code change.
+
+A premade (a character drawn whole) shows its picture once its neutral image is in the folder; until then the game draws it as a layered traveller in its claimed place's costume (from the same ChatGPT layers and stand-ins), the same face at every appearance (days 7-15 B4).
+
+### Coverage today (what each place's travellers are drawn with)
+
+`**own**` = the place's own ChatGPT art; a place name = the stand-in drawn instead (hair and beards in the traveller's baked colour); `none` = not drawn (no stand-in); blank = the place has no item there. Bodies: all 10 are ChatGPT art. Heads: face a in all five skins (skin 1 drawn, 2-5 interim recolours); faces b, c and d show face a of the same skin. Premades: no whole picture yet; each is drawn as the layered stand-in of its claim (Socrates, Aspasia and Pell wear their own Athens art). The per-key table is regenerated from the game's own fallback code (`LookArtFallback`) with each art drop.
+
+| Place | ♂ outfit | ♂ hair | ♂ beard | ♂ headwear | ♂ accessory | ♀ outfit | ♀ hair | ♀ headwear | ♀ accessory |
+|---|---|---|---|---|---|---|---|---|---|
+| egypt ancient | greece ancient | none |  |  | greece ancient | egypt medieval | **own** | egypt medieval | none |
+| egypt medieval | greece ancient | greece ancient | greece ancient | greece ancient | none | **own** | **own** | **own** | none |
+| egypt earlymodern | greece ancient | greece ancient | greece ancient | greece ancient | none | egypt medieval | egypt medieval | egypt medieval | none |
+| egypt industrial | greece ancient | greece ancient | greece ancient | greece ancient | none | egypt medieval | egypt medieval | egypt medieval | none |
+| egypt modern | greece ancient | greece ancient | greece ancient |  | none | egypt medieval | egypt medieval | egypt medieval | none |
+| iraq ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient |  |
+| iraq medieval | greece ancient | greece ancient | greece ancient | greece ancient | none | egypt medieval | egypt medieval | egypt medieval | none |
+| iraq earlymodern | greece ancient | greece ancient | greece ancient | greece ancient |  | egypt medieval | egypt medieval | egypt medieval | none |
+| iraq industrial | greece ancient | greece ancient | greece ancient | greece ancient |  | egypt medieval | egypt medieval | egypt medieval | none |
+| iraq modern | greece ancient | greece ancient | greece ancient | greece ancient | none | egypt medieval | egypt medieval | egypt medieval | none |
+| greece ancient | **own** | **own** | **own** | **own** | **own** | **own** | **own** | **own** |  |
+| greece medieval | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | none |
+| greece earlymodern | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | none |
+| greece industrial | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | greece ancient | none |
+| greece modern | greece ancient | greece ancient | greece ancient |  | greece ancient | greece ancient | greece ancient |  | none |
+| italy ancient | greece ancient | greece ancient |  |  |  | greece ancient | greece ancient |  | none |
+| italy medieval | greece ancient | greece ancient |  | greece ancient |  | egypt medieval | egypt medieval | egypt medieval | none |
+| italy earlymodern | greece ancient | greece ancient |  | greece ancient |  | egypt medieval | egypt medieval | egypt medieval | none |
+| italy industrial | greece ancient | greece ancient | greece ancient | greece ancient | none | egypt medieval | egypt medieval |  | none |
+| italy modern | greece ancient | greece ancient |  |  | none | egypt medieval | egypt medieval |  | none |
+| china ancient | greece ancient | greece ancient | greece ancient | greece ancient |  | greece ancient | greece ancient |  | none |
+| china medieval | greece ancient | greece ancient | greece ancient | greece ancient | none | egypt medieval | egypt medieval | egypt medieval |  |
+| china earlymodern | greece ancient | greece ancient | greece ancient | greece ancient | none | egypt medieval | egypt medieval | egypt medieval |  |
+| china industrial | greece ancient | greece ancient |  | greece ancient |  | egypt medieval | egypt medieval | egypt medieval | none |
+| china modern | greece ancient | greece ancient |  | greece ancient | none | egypt medieval | egypt medieval | egypt medieval | none |
+| japan ancient | greece ancient | greece ancient |  |  | **own** | greece ancient | greece ancient |  | none |
+| japan medieval | greece ancient | greece ancient | greece ancient | greece ancient |  | egypt medieval | egypt medieval | egypt medieval |  |
+| japan earlymodern | greece ancient | greece ancient | greece ancient |  |  | egypt medieval | egypt medieval | egypt medieval |  |
+| japan industrial | greece ancient | greece ancient | greece ancient | greece ancient |  | egypt medieval | egypt medieval |  |  |
+| japan modern | greece ancient | greece ancient |  |  | japan ancient | egypt medieval | egypt medieval |  | none |
+| britain ancient | greece ancient | greece ancient | greece ancient |  | none | greece ancient | greece ancient |  | none |
+| britain medieval | greece ancient | greece ancient | greece ancient |  | none | egypt medieval | egypt medieval | egypt medieval |  |
+| britain earlymodern | greece ancient | greece ancient | greece ancient | greece ancient |  | egypt medieval | egypt medieval | egypt medieval | none |
+| britain industrial | greece ancient | greece ancient | greece ancient | greece ancient | none | egypt medieval | egypt medieval | egypt medieval | none |
+| britain modern | greece ancient | greece ancient |  | greece ancient | none | egypt medieval | egypt medieval | egypt medieval | none |
+| germany ancient | greece ancient | greece ancient | greece ancient |  |  | greece ancient | greece ancient |  | none |
+| germany medieval | greece ancient | greece ancient |  | greece ancient |  | egypt medieval | egypt medieval | egypt medieval |  |
+| germany earlymodern | greece ancient | greece ancient | greece ancient | greece ancient | none | egypt medieval | egypt medieval | egypt medieval | none |
+| germany industrial | greece ancient | greece ancient | greece ancient | greece ancient | none | egypt medieval | egypt medieval |  | none |
+| germany modern | greece ancient | greece ancient | greece ancient | greece ancient | none | egypt medieval | egypt medieval | egypt medieval | none |
+| egypt future | greece ancient | greece ancient | greece ancient |  |  | egypt medieval | egypt medieval |  |  |
+| iraq future | greece ancient | greece ancient | greece ancient |  |  | egypt medieval | egypt medieval |  |  |
+| greece future | greece ancient | greece ancient | greece ancient |  |  | greece ancient | egypt medieval |  |  |
+| italy future | greece ancient | greece ancient | greece ancient |  |  | egypt medieval | egypt medieval |  |  |
+| china future | greece ancient | greece ancient | greece ancient |  |  | egypt medieval | egypt medieval |  |  |
+| japan future | greece ancient | greece ancient | greece ancient |  |  | egypt medieval | egypt medieval |  |  |
+| britain future | greece ancient | greece ancient | greece ancient |  |  | egypt medieval | egypt medieval |  |  |
+| germany future | greece ancient | greece ancient | greece ancient |  |  | egypt medieval | egypt medieval |  |  |
+| present (2150) | greece ancient | greece ancient |  |  |  | egypt medieval | egypt medieval |  |  |
+
+### Commission next (the most visible gaps first)
+
+1. **Batch 2 base figures:** `base_{m,f}_skin[2-5]_facea` and the faces b, c, d (`head_{g}_skin{N}_face{b,c,d}`): every traveller shows a head, and today all ages share face a and skins 2-5 are recolours.
+2. **Day 1 (ancient Egypt, Iraq, Greece, Italy):** the men's Egyptian kilt, bobbed wig (drawn bald today) and wesekh collar; the women's linen sheath dress and lotus fillet; Iraq's and Italy's ancient outfits, hair and headwear for both genders (both draw the Athens art today).
+3. **Day 2 (adds medieval, China, Britain):** a man's medieval outfit and turban (every man's hat is the petasos today), the women's medieval outfits of Iraq, Italy, China and Britain (they wear the Mamluk qamis and hood today), China's and Britain's ancient looks.
+4. **Days 3-6 and the premades' places:** early-modern, industrial and modern outfits for both genders (every modern traveller wears an ancient or medieval stand-in), then the accessories (none but the Athens pouch and the magatama exist, so most travellers show none), the Future outfits and the present's kit.
+5. **The premades' whole pictures** (`premade_<id>_<expression>`, the table below): each replaces its layered stand-in at once.
 
 ### Premades of days 7-15 (by-name slots)
 

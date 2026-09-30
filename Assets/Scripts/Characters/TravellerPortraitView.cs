@@ -4,7 +4,8 @@ using UnityEngine.UI;
 /// <summary>
 /// The passport photo on a scanned page: one uGUI Image per LookLayer (index =
 /// the layer, stacked in order inside a 4:5 box), each showing its layer's
-/// photo crop (CharacterArt.GetPhoto). Not clickable.
+/// photo crop (CharacterArt.GetPhoto); a layer with nothing to draw is off.
+/// Not clickable.
 /// </summary>
 public sealed class TravellerPortraitView : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public sealed class TravellerPortraitView : MonoBehaviour
 
             LookPart? part = look.PartOn((LookLayer)i);
             layers[i].sprite = part.HasValue ? art.GetPhoto(part.Value.Key) : null;
-            layers[i].enabled = part.HasValue;
+            layers[i].enabled = layers[i].sprite != null;
         }
     }
 

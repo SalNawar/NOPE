@@ -3,7 +3,8 @@ using UnityEngine;
 /// <summary>
 /// A traveller's look drawn with one SpriteRenderer per LookLayer (children
 /// sorted in stack order inside a SortingGroup): the booth figure (full
-/// sprites) and the paper's passport photo (crop sprites). A premade's whole
+/// sprites) and the paper's passport photo (crop sprites). A layer CharacterArt
+/// has no art for (not even a stand-in) is switched off. A premade's whole
 /// picture can swap its expression.
 /// </summary>
 public sealed class LookSpriteStack : MonoBehaviour
@@ -26,7 +27,7 @@ public sealed class LookSpriteStack : MonoBehaviour
             Clear();
     }
 
-    /// <summary>Shows a look; a null look or art clears the stack.</summary>
+    /// <summary>Shows a look (a layer with nothing to draw is off); a null look or art clears the stack.</summary>
     public void Show(TravellerLook look, CharacterArt art)
     {
         if (look == null || art == null)
@@ -44,17 +45,19 @@ public sealed class LookSpriteStack : MonoBehaviour
 
             LookPart? part = look.PartOn((LookLayer)i);
             layers[i].sprite = part.HasValue ? SpriteOf(part.Value.Key) : null;
-            layers[i].enabled = part.HasValue;
+            layers[i].enabled = layers[i].sprite != null;
         }
     }
 
-    /// <summary>A premade's whole picture changes to an expression (blank or unknown = neutral); nothing for a generated traveller or no look.</summary>
+    /// <summary>A premade's whole picture changes to an expression (blank or unknown = neutral; its neutral picture while that expression has no art); nothing for a generated traveller or no look.</summary>
     public void SetExpression(string expression)
     {
         if (_look == null || _look.PremadeId == null || layers == null || layers.Length <= (int)LookLayer.Whole || layers[(int)LookLayer.Whole] == null)
             return;
 
-        layers[(int)LookLayer.Whole].sprite = SpriteOf(_look.WholeKey(expression));
+        Sprite sprite = SpriteOf(_look.WholeKey(expression));
+        if (sprite != null)
+            layers[(int)LookLayer.Whole].sprite = sprite;
     }
 
     /// <summary>Tints every layer (the art is unlit: the tint sits it into the room's light).</summary>
@@ -84,6 +87,6 @@ public sealed class LookSpriteStack : MonoBehaviour
         }
     }
 
-    /// <summary>The key's sprite: its photo crop on a photo, else the full canvas.</summary>
+    /// <summary>The key's sprite (its own art or its stand-in's; null for none): its photo crop on a photo, else the full canvas.</summary>
     private Sprite SpriteOf(LookKey key) => photo ? _art.GetPhoto(key) : _art.Get(key);
 }
