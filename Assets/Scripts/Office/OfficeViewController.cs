@@ -15,11 +15,14 @@ public enum OfficeView
 /// <summary>
 /// The office's two views: clicking the PC opens its frame over the office
 /// (MonitorFocus); Escape, a click outside the frame, its close button and the
-/// desktop's "&lt; Desk" button close it (OfficeFocus). Escape closes the frame
+/// desktop's "&lt; Desk" button close it (OfficeFocus); a click outside the
+/// frame then goes on to what it lands on (the traveller or the intercom opens
+/// the wheel, the desk tilts the view: the exit catcher's pass-through, Saleh
+/// 2026-09-30). Escape closes the frame
 /// only when the desktop did not take the press (its keyboard poller ran the
 /// Escape chain first and stamped the frame: a menu or the shortcut card
 /// closed, the search cleared, a field left, the Start menu closed, a drag
-/// cancelled; the PC redesign KB3, section 3.5). The camera never moves. BoothCoordinator reads the view to gate the office's input.
+/// cancelled; the PC redesign KB3, section 3.5). The frame itself moves no camera (from the desk view, BoothCoordinator blends it back up as the frame opens). BoothCoordinator reads the view to gate the office's input.
 /// </summary>
 public sealed class OfficeViewController : MonoBehaviour
 {

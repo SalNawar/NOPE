@@ -13,7 +13,8 @@ using UnityEngine.UI;
 /// the mouse wheel take input, whether the office case HUD shows, and where
 /// held papers sit (beside the open frame,
 /// dipped under the open wheel: PaperExaminer); it returns the desk view when
-/// the next traveller is called or a newsletter shows, wakes the screen for a
+/// the next traveller is called, a newsletter shows or the wheel or the PC
+/// frame opens (the papers on the desk move only while tilted), wakes the screen for a
 /// presented traveller and a finished scan, holds it on for a citation slip,
 /// and shows the day-1 wheel note. Every reference is optional: a missing view
 /// counts as the office view; a missing screen counts as on. Event-driven (no
@@ -118,7 +119,7 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>The first application, once every component has woken (Awake runs before any Start).</summary>
     private void Start() => Apply();
 
-    /// <summary>Where the shift is (GameManager); presenting a traveller (NEXT) also wakes the screen and returns the desk view, so the arrival is seen.</summary>
+    /// <summary>Where the shift is (GameManager); presenting a traveller (the AVAILABLE sign calls them) also wakes the screen and returns the desk view, so the arrival is seen.</summary>
     public void SetPhase(BoothPhase phase)
     {
         _phase = phase;
@@ -177,7 +178,8 @@ public sealed class BoothCoordinator : MonoBehaviour
         citationPending: _citationPending,
         stampOpen: stampTray != null && stampTray.IsOpen,
         papersHeld: desk != null && desk.HeldCount > 0,
-        deskView: deskView != null && deskView.IsOn);
+        deskView: deskView != null && deskView.IsOn,
+        deskViewBound: deskView != null && deskView.IsBound);
 
     /// <summary>Applies the rules. The wheel, the stamp tray and the desk view first: closing or returning either changes the context the rest reads (their events re-apply too, harmlessly).</summary>
     private void Apply()

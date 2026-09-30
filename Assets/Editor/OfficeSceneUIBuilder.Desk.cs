@@ -17,7 +17,7 @@ using UnityEngine.UI;
 /// load, the desk (its plane, the paper template with its face, the desk
 /// catcher, the mat's click and the paper examiner, the scanner and its
 /// stand-in machine, the day-1 notes), the desk view's camera, the traveller,
-/// the READY sign, the readouts, the decoration slots, the booth coordinator
+/// the AVAILABLE sign, the readouts, the decoration slots, the booth coordinator
 /// and the binder; on the overlay the office case HUD and the stamp tray
 /// (piece 10). Nothing here
 /// knows where the art puts things: the binder reads the scene contract at
@@ -379,7 +379,8 @@ public static partial class OfficeSceneUIBuilder
     /// The PC frame on the office overlay canvas, rebuilt each run: an
     /// always-active host with the PcFrame; its Root (inactive until opened)
     /// holds the full-screen exit catcher (a click outside the frame closes
-    /// it), the bezel (placeholder art; clicks on it do nothing), the Glass the
+    /// it and goes on to what it lands on: the traveller, the intercom, the
+    /// desk), the bezel (placeholder art; clicks on it do nothing), the Glass the
     /// frame camera draws into (4:3; the catcher and the bezel let clicks
     /// through there), the red close X, the power button and LED, and the
     /// brand plate, in the neutral theme's DiegeticDevice ink. Returns the power LED and button through out parameters.
@@ -393,6 +394,9 @@ public static partial class OfficeSceneUIBuilder
         Transform catcher = Panel(root, "ExitCatcher", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, 0f), ThemeRoleId.ClickCatcher);
         ClickCatcher exit = catcher.gameObject.AddComponent<ClickCatcher>();
         WirePersistentVoid(exit, "onClick", view, nameof(OfficeViewController.FocusOffice));
+        var soExit = new SerializedObject(exit);
+        soExit.FindProperty("passThrough").boolValue = true;
+        soExit.ApplyModifiedProperties();
 
         Transform frame = Panel(root, "Frame", new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), Vector2.zero, FrameSize, Color.white, ThemeRoleId.DiegeticDevice);
         var frameRect = (RectTransform)frame;
@@ -579,7 +583,7 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The Office root's gameplay objects, all placed by the office binder at
-    /// load: the PC's and its power knob's click boxes, the READY sign (with a
+    /// load: the PC's and its power knob's click boxes, the AVAILABLE sign (with a
     /// stand-in sign), the desk (its plane, the papers' root, the hand-over
     /// point, the paper template, the decoration slots), the scanner (with a
     /// stand-in machine) and the two day-1 notes, the traveller, the props'
@@ -601,7 +605,7 @@ public static partial class OfficeSceneUIBuilder
         WirePersistentVoid(pcPower, "onClick", screen, nameof(MonitorScreen.TogglePower));
         WirePersistentVoid(framePower, "m_OnClick", screen, nameof(MonitorScreen.TogglePower));
 
-        // READY only releases GameManager's gate (its Clickable is GameManager.readySign).
+        // The AVAILABLE sign only toggles GameManager's desk (its Clickable is GameManager.readySign).
         readySign = EnsureClickBox(office, "ReadySign");
         ClearPersistentCalls(readySign, "onClick");
         GameObject readyPlaceholder = BuildReadyPlaceholder(readySign.transform);
@@ -754,7 +758,7 @@ public static partial class OfficeSceneUIBuilder
         return coordinator;
     }
 
-    /// <summary>The READY sign's stand-in (shown by the binder only when the art office has no NEXT sign): a small lit box with "NEXT" on it. Idempotent.</summary>
+    /// <summary>The AVAILABLE sign's stand-in (shown by the binder only when the art office has no NEXT sign): a small lit box with "AVAILABLE" on it (the binder's AvailableSignLink writes the caption and dims it while paused). Idempotent.</summary>
     private static GameObject BuildReadyPlaceholder(Transform sign)
     {
         DestroyChildIfPresent(sign, "Placeholder");
@@ -763,7 +767,7 @@ public static partial class OfficeSceneUIBuilder
         TextMeshPro label = FloatingNote(placeholder, "Label");
         label.transform.localPosition = new Vector3(0f, 0.1f, -0.065f);
         label.transform.localRotation = Quaternion.identity;
-        label.text = "NEXT";
+        label.text = "AVAILABLE";
         label.color = new Color(0.9f, 0.95f, 0.9f, 1f);
         placeholder.gameObject.SetActive(false);
         return placeholder.gameObject;

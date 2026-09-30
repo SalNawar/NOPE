@@ -41,7 +41,7 @@ using UnityEngine.UI;
 ///   HoverHint, StampTray]
 /// - The Office root: click boxes for the art's props, the physical desk
 ///   (papers, the scanner, the mat's click), the desk view's camera, the
-///   traveller, the READY sign, the readouts and the office's input rules,
+///   traveller, the AVAILABLE sign, the readouts and the office's input rules,
 ///   all put on the art office at load by the binder through the scene
 ///   contract  [OfficeSceneBinder, DeskController, DeskView, DeskReaction,
 ///   TravellerView, BoothCoordinator]
