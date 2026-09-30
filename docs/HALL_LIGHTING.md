@@ -31,7 +31,9 @@ two cameras cannot simply draw over each other.
 
 So the hall is drawn in two passes (`HallBackdrop`):
 
-1. A camera made at runtime (never saved) with the pipeline's 2D Renderer draws
+1. A camera made at runtime (never saved) with its own 2D Renderer
+   (`Assets/Settings/HallRenderer2D.asset`, a copy of the pipeline's
+   `Renderer2D`, listed in `UniversalRP`'s renderers by the hooks tool) draws
    only the `HallBackdrop` layer (the 58 painted layers, the portal rings'
    effects, the dust and the Light2Ds) into a texture of the screen's size. It
    copies the office camera's pose and lens every frame before any camera
@@ -62,10 +64,21 @@ the windows) moved to its own sorting layer `HallSky` (listed before Default)
 draws exactly where it did; only the sky light reaches it, so the interior's
 fixtures never light the sky.
 
-Cost (measured in play, 1920×1080, the editor): the lights' components allocate
-0 B a frame; the 2D pass costs about 0.7 to 1.4 ms of main-thread time a frame
-in the editor (a second camera: culling, the light textures at half size, the
-58 layers); the frame stays far under 16 ms.
+Cost (measured in play, 1920×1080, the editor; the audit profile job and the
+track's play job): the lights' components allocate 0 B a frame (the rig, the
+backdrop, the two links, measured call by call). The backdrop camera has its
+own 2D Renderer because a renderer's per-frame light and shadow texture tables
+are rebuilt whenever cameras with different layer batches share it: sharing the
+default `Renderer2D` with the PC's desktop cameras cost 1188 B a frame. What is
+left is URP's: its 2D Renderer keeps the layer batches in one static table for
+every 2D camera, and the backdrop camera (two blend styles) and the PC's clone
+camera (none) resize its small index arrays as they alternate, 36 B + 32 B a
+frame (the office frame: 436 B, was 368 B). The 2D pass costs about 0.6 to 1.2 ms
+of main-thread time a frame in the editor (a second camera: culling, the light
+textures at half size, the 58 layers; frame time median 4.9 ms, was 4.3 ms), and
+the first office load of a session about 250 ms more (1.34 s, was 1.08 s: the 2D
+Renderer's first use and the heavier scene; the day's later loads are within
+10 %).
 
 ## The inventory: every painted light source
 

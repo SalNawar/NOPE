@@ -123,7 +123,7 @@ layers on the `HallBackdrop` layer with URP's `Sprite-Lit-Default` material
 (the exterior layer `03` on the `HallSky` sorting layer, listed before Default:
 the layers are mutually exclusive masks, so it draws where it did), and a
 `HallLighting` root with the `HallBackdrop` (the painted layers drawn through
-the pipeline's 2D Renderer by a camera made at runtime, shown behind
+a 2D Renderer, `Assets/Settings/HallRenderer2D.asset`, by a camera made at runtime, shown behind
 everything by the office camera, which never draws that layer itself), the
 `HallLightingRig` and its lights (`Plane`, following the presentation: a global
 and a sky light, the window shafts, the ceiling fixtures, the screens, the door

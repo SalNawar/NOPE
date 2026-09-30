@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
@@ -16,7 +17,8 @@ using UnityEngine.SceneManagement;
 /// shows the 2D Renderer's picture of them behind the desk) and the exterior
 /// on HallSky (the layers are mutually exclusive masks, so it still draws where
 /// it did, but only the sky light reaches it); creates the knobs (Assets/Data/Config/HallLighting_Default.asset),
-/// the dust's mote and material; and adds the HallLighting root with its
+/// the dust's mote and material, and the backdrop camera's own 2D Renderer
+/// (Assets/Settings/HallRenderer2D.asset, listed in the pipeline); and adds the HallLighting root with its
 /// HallLightingRig and HallBackdrop, a Plane (following the art's
 /// presentation) carrying one Light2D per painted light source of the
 /// inventory (the global light, the sky light, the window shafts, the ceiling fixtures in
@@ -40,6 +42,9 @@ public static class AnimeHallLightingHooks
     private const string DustMaterialPath = "Assets/Art/Office/Gameplay/Materials/HallDust.mat";
     private const string BackdropShaderPath = "Assets/Art/Office/Gameplay/Shaders/HallBackdrop.shader";
     private const string DustShaderPath = "Assets/Art/Office/Gameplay/Shaders/HallDust.shader";
+
+    /// <summary>The backdrop camera's own 2D Renderer (a copy of the pipeline's), listed in every URP asset the project uses.</summary>
+    private const string HallRendererPath = "Assets/Settings/HallRenderer2D.asset";
 
     /// <summary>The root this step adds.</summary>
     public const string RootName = "HallLighting";
@@ -134,6 +139,16 @@ public static class AnimeHallLightingHooks
             so.ApplyModifiedPropertiesWithoutUndo();
             changes.Add($"added the HallBackdrop on {RootName}");
         }
+        ScriptableRendererData hallRenderer = HallRenderer(changes);
+        var backdropSo = new SerializedObject(backdrop);
+        SerializedProperty rendererProperty = backdropSo.FindProperty("renderer2D");
+        if (hallRenderer != null && rendererProperty.objectReferenceValue != hallRenderer)
+        {
+            Undo.RecordObject(backdrop, UndoName);
+            rendererProperty.objectReferenceValue = hallRenderer;
+            backdropSo.ApplyModifiedProperties();
+            changes.Add($"the HallBackdrop renders with {HallRendererPath}");
+        }
 
         AddGlobal(plane, layer, changes);
         AddWindows(plane, canvas, layer, changes);
@@ -176,6 +191,55 @@ public static class AnimeHallLightingHooks
         AssetDatabase.SaveAssets();
         changes.Add($"created {SettingsPath}");
         return settings;
+    }
+
+    /// <summary>
+    /// The backdrop camera's own 2D Renderer: a copy of the pipeline's first 2D
+    /// Renderer (made once), listed in the renderer list of every URP asset the
+    /// project uses (the default and each quality level's), so its per-frame
+    /// texture tables are not shared with the PC's desktop cameras; null when
+    /// the pipeline has no 2D Renderer to copy.
+    /// </summary>
+    private static ScriptableRendererData HallRenderer(List<string> changes)
+    {
+        var pipelines = new List<UniversalRenderPipelineAsset>();
+        if (GraphicsSettings.defaultRenderPipeline is UniversalRenderPipelineAsset main)
+            pipelines.Add(main);
+        for (int q = 0; q < QualitySettings.names.Length; q++)
+            if (QualitySettings.GetRenderPipelineAssetAt(q) is UniversalRenderPipelineAsset level && !pipelines.Contains(level))
+                pipelines.Add(level);
+
+        var data = AssetDatabase.LoadAssetAtPath<Renderer2DData>(HallRendererPath);
+        if (data == null)
+        {
+            Renderer2DData source = null;
+            foreach (UniversalRenderPipelineAsset p in pipelines)
+                foreach (ScriptableRendererData r in p.rendererDataList)
+                    if (source == null && r is Renderer2DData r2)
+                        source = r2;
+            if (source == null || !AssetDatabase.CopyAsset(AssetDatabase.GetAssetPath(source), HallRendererPath))
+                return null;
+            data = AssetDatabase.LoadAssetAtPath<Renderer2DData>(HallRendererPath);
+            changes.Add($"created {HallRendererPath} (a copy of '{source.name}')");
+        }
+
+        foreach (UniversalRenderPipelineAsset p in pipelines)
+        {
+            var so = new SerializedObject(p);
+            SerializedProperty list = so.FindProperty("m_RendererDataList");
+            bool listed = false;
+            for (int i = 0; i < list.arraySize; i++)
+                listed |= list.GetArrayElementAtIndex(i).objectReferenceValue == data;
+            if (listed)
+                continue;
+            list.arraySize++;
+            list.GetArrayElementAtIndex(list.arraySize - 1).objectReferenceValue = data;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(p);
+            AssetDatabase.SaveAssets();
+            changes.Add($"listed {HallRendererPath} in '{p.name}'");
+        }
+        return data;
     }
 
     /// <summary>The dust's material (TimeDesk/HallDust) with its soft mote (a 32 px radial falloff), made once.</summary>

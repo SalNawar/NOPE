@@ -10,8 +10,8 @@ using UnityEngine.Rendering.Universal;
 /// Anime shader has no 2D pass: under a 2D Renderer the desk would not draw
 /// at all) and everything the gameplay draws over it (docs/HALL_LIGHTING.md,
 /// "The renderer"). URP cannot stack a 2D camera and a forward one, so this
-/// makes, at runtime and never saved, a camera with the pipeline's 2D Renderer
-/// that sees only the HallBackdrop layer (the painted layers, the portal
+/// makes, at runtime and never saved, a camera with a 2D Renderer of its own
+/// (see <see cref="renderer2D"/>) that sees only the HallBackdrop layer (the painted layers, the portal
 /// effects, the dust and the Light2Ds live there), copies the office camera's
 /// pose and lens each frame before any camera renders, and renders into a
 /// texture of the screen's size; and a full-screen triangle under the office
@@ -30,6 +30,15 @@ public sealed class HallBackdrop : MonoBehaviour
 
     /// <summary>TimeDesk/HallBackdrop (the full-screen draw of the lit hall).</summary>
     [SerializeField] private Shader composite;
+
+    /// <summary>
+    /// The 2D Renderer the camera renders with (Assets/Settings/HallRenderer2D.asset,
+    /// in the pipeline's renderer list): its own, so its per-frame light and
+    /// shadow texture tables are not rebuilt each time the PC's desktop cameras
+    /// (on the default 2D Renderer, with other layer batches) render, which
+    /// allocated every frame; null or unlisted: the pipeline's first 2D Renderer.
+    /// </summary>
+    [SerializeField] private ScriptableRendererData renderer2D;
 
     private static readonly int BackdropTex = Shader.PropertyToID("_BackdropTex");
 
@@ -80,7 +89,7 @@ public sealed class HallBackdrop : MonoBehaviour
     {
         Teardown();
         int layer = Layer;
-        int renderer = Renderer2DIndex();
+        int renderer = Renderer2DIndex(renderer2D);
         if (source == null || layer < 0)
             return;
         if (renderer < 0 || composite == null)
@@ -212,16 +221,21 @@ public sealed class HallBackdrop : MonoBehaviour
         _camera.aspect = source.aspect;
     }
 
-    /// <summary>The index of the pipeline's first 2D Renderer, or -1.</summary>
-    private static int Renderer2DIndex()
+    /// <summary>The index of <paramref name="wanted"/> in the pipeline's renderer list, else of its first 2D Renderer, or -1.</summary>
+    private static int Renderer2DIndex(ScriptableRendererData wanted)
     {
         if (!(GraphicsSettings.currentRenderPipeline is UniversalRenderPipelineAsset urp))
             return -1;
         System.ReadOnlySpan<ScriptableRendererData> list = urp.rendererDataList;
+        int first = -1;
         for (int i = 0; i < list.Length; i++)
-            if (list[i] is Renderer2DData)
+        {
+            if (wanted != null && ReferenceEquals(list[i], wanted))
                 return i;
-        return -1;
+            if (first < 0 && list[i] is Renderer2DData)
+                first = i;
+        }
+        return first;
     }
 
     private static void Kill(Object o)
