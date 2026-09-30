@@ -19,49 +19,46 @@ public sealed class DesktopConfigSO : ScriptableObject
 {
     [Header("The bars under the icon area (desktop units)")]
     /// <summary>The taskbar's height at the bottom of the desktop.</summary>
-    [Min(1f)] public float taskbarHeight = 36f;
+    [Min(1f)] public float taskbarHeight = 48f;
 
     /// <summary>The compare dock's height, right above the taskbar (reserved even while it is hidden, so a maximised window never changes size).</summary>
-    [Min(1f)] public float dockHeight = 56f;
+    [Min(1f)] public float dockHeight = 64f;
 
     /// <summary>The gap between the dock and the Start menu above it.</summary>
     [Min(0f)] public float startMenuGap = 4f;
 
     [Header("Windows")]
-    /// <summary>A window's title bar height.</summary>
-    [Min(1f)] public float titleBarHeight = 36f;
+    /// <summary>A window's title bar height (the PC UX redesign: 44 u, the title and the drawn controls).</summary>
+    [Min(1f)] public float titleBarHeight = 44f;
 
-    /// <summary>A window's title size.</summary>
-    [Min(1f)] public float titleFontSize = 20f;
+    /// <summary>A window's title size (26 u: 13.5 px at 720p).</summary>
+    [Min(1f)] public float titleFontSize = 26f;
 
-    [Header("Taskbar buttons (one per open window)")]
-    /// <summary>A button's width while there is room.</summary>
-    [Min(1f)] public float taskbarButtonMaxWidth = 200f;
-
-    /// <summary>The width buttons shrink to when many windows are open.</summary>
-    [Min(1f)] public float taskbarButtonMinWidth = 48f;
+    [Header("Taskbar buttons (one per open window: the app's glyph, its name in a hover hint)")]
+    /// <summary>A window button's width (the glyph and its focus bar; the PC UX redesign IA12).</summary>
+    [Min(1f)] public float taskbarButtonWidth = 56f;
 
     [Header("Desktop icons (the PC redesign DK2-DK5; desktop units)")]
     /// <summary>An icon's cell: the glyph over its label.</summary>
-    public Vector2 iconCellSize = new Vector2(120f, 132f);
+    public Vector2 iconCellSize = new Vector2(188f, 156f);
 
     /// <summary>The glyph's square at the top of the cell.</summary>
     [Min(1f)] public float iconGlyphSize = 72f;
 
-    /// <summary>The label's text size (at most two lines under the glyph).</summary>
-    [Min(1f)] public float iconLabelSize = 20f;
+    /// <summary>The label's text size (at most two lines under the glyph; 24 u is the 720p floor, and the label never shrinks under it).</summary>
+    [Min(1f)] public float iconLabelSize = 24f;
 
     /// <summary>The badge's circle at the glyph's top right.</summary>
-    [Min(1f)] public float iconBadgeSize = 28f;
+    [Min(1f)] public float iconBadgeSize = 34f;
 
     /// <summary>The first arrange spot's top-left, from the icon area's top-left.</summary>
     public Vector2 iconOrigin = new Vector2(20f, 20f);
 
     /// <summary>From one arrange column to the next.</summary>
-    [Min(1f)] public float iconColumnStep = 132f;
+    [Min(1f)] public float iconColumnStep = 200f;
 
     /// <summary>From one arrange row to the next.</summary>
-    [Min(1f)] public float iconRowStep = 140f;
+    [Min(1f)] public float iconRowStep = 164f;
 
     /// <summary>The icons' default order (DesktopAppIds): Arrange lays them out column-first in it, and the Start menu lists the apps in it.</summary>
     public string[] iconOrder = System.Linq.Enumerable.ToArray(DesktopAppIds.DefaultOrder);
@@ -85,16 +82,16 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     [Header("App windows (redesign phase 25; restored sizes, desktop units)")]
     /// <summary>The Mail window's size.</summary>
-    public Vector2 mailWindowSize = new Vector2(920f, 720f);
+    public Vector2 mailWindowSize = new Vector2(1060f, 780f);
 
     /// <summary>The Citizen Account window's size: wide enough for the Statement's landscape page (982 u across, so its cells print at 13 px at 720p).</summary>
     public Vector2 accountWindowSize = new Vector2(1020f, 800f);
 
     /// <summary>The Notes window's size.</summary>
-    public Vector2 notesWindowSize = new Vector2(780f, 720f);
+    public Vector2 notesWindowSize = new Vector2(960f, 800f);
 
     /// <summary>The Settings window's size.</summary>
-    public Vector2 settingsWindowSize = new Vector2(640f, 720f);
+    public Vector2 settingsWindowSize = new Vector2(800f, 880f);
 
     /// <summary>The Portals window's size (the portals spec v3 PA3: 880 x 600 u, restored; it can be maximised).</summary>
     public Vector2 portalsWindowSize = new Vector2(880f, 600f);
@@ -103,13 +100,13 @@ public sealed class DesktopConfigSO : ScriptableObject
     public Vector2 ordersWindowSize = new Vector2(1120f, 820f);
 
     /// <summary>One cell of the Orders tree: a node and the gap to the next tier (where its links bend) and the next slot.</summary>
-    public Vector2 ordersCellSize = new Vector2(290f, 108f);
+    public Vector2 ordersCellSize = new Vector2(350f, 166f);
 
     /// <summary>A node of the Orders tree: its glyph, its name and its state line, two lines each at most (22 u and 19 u text, never under 17 and 16 u: 8.8 and 8.3 px at 720p).</summary>
-    public Vector2 ordersNodeSize = new Vector2(260f, 98f);
+    public Vector2 ordersNodeSize = new Vector2(320f, 152f);
 
     /// <summary>A band's head (its glyph and branch name) above the band's nodes.</summary>
-    [Min(1f)] public float ordersBandHead = 40f;
+    [Min(1f)] public float ordersBandHead = 52f;
 
     /// <summary>The detail card's width beside the tree (the TC-980 requisition form).</summary>
     [Min(1f)] public float ordersDetailWidth = 500f;
@@ -131,7 +128,7 @@ public sealed class DesktopConfigSO : ScriptableObject
     [Min(0.5f)] public float toastSeconds = 4f;
 
     [Header("The Investigation app's panes (redesign phase 18)")]
-    /// <summary>A pane's narrowest readable width: two panes show only while the body holds the sidebar and two of these (AP3).</summary>
+    /// <summary>A pane's narrowest readable width: two panes show only while the body holds the navigator and two of these (AP3; the PC UX redesign IA6).</summary>
     [Min(1f)] public float paneMinWidth = 520f;
 
     /// <summary>The divider between the two panes.</summary>
@@ -139,25 +136,6 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     /// <summary>The places a pane's Back can return through (AP9).</summary>
     [Min(1)] public int paneHistory = 30;
-
-    /// <summary>An inactive tab's narrowest width while it shows its glyph and its badge; the collapsed tabs share what the active tab leaves of the strip.</summary>
-    [Min(1f)] public float tabGlyphWidth = 48f;
-
-    /// <summary>A collapsed tab's glyph size (22 units read 11.4 px at 720p; every glyph fits a split pane's strip at it beside the active tab's name and the badge's slot, and one with less room shrinks to fit).</summary>
-    [Min(1f)] public float tabGlyphSize = 22f;
-
-    [Header("The Investigation app's chrome (readability; desktop units)")]
-    /// <summary>A pane's tab strip height (the tabs stand on the strip's bottom edge, joined to the row under it).</summary>
-    [Min(1f)] public float tabStripHeight = 48f;
-
-    /// <summary>A tab's label size (26 units read 20 px at 1080p and 13.5 px at 720p; a label never wraps and never shrinks: a strip that cannot hold every name at this size shows the inactive tabs' glyphs instead, AppPanes.TabsNarrow).</summary>
-    [Min(1f)] public float tabLabelSize = 26f;
-
-    /// <summary>The pane header's (the chip row's) height.</summary>
-    [Min(1f)] public float chipRowHeight = 48f;
-
-    /// <summary>A chip's label size: a chip is as wide as its label at it; a row too narrow for its chips scrolls sideways (ChipRow), so no chip is squeezed.</summary>
-    [Min(1f)] public float chipLabelSize = 22f;
 
     [Header("Notes (redesign phase 25)")]
     /// <summary>The most day pages Notes keeps (WorldState.notes); the oldest go first.</summary>
@@ -183,7 +161,7 @@ public sealed class DesktopConfigSO : ScriptableObject
     [Min(1f)] public float focusRingWidth = 3f;
 
     /// <summary>The shortcut card's size (F1).</summary>
-    public Vector2 shortcutCardSize = new Vector2(760f, 800f);
+    public Vector2 shortcutCardSize = new Vector2(960f, 860f);
 
     [Header("Search (redesign phase 19; the PC spec's SE1)")]
     /// <summary>How long typing pauses before the results update, in seconds.</summary>

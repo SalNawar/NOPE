@@ -13,8 +13,7 @@ using UnityEngine.UI;
 /// Desktop, Keyboard) with the shortcut card. The memo, the account's extract
 /// and its statement are forms (phase 5: Form_Memo, Form_RecordExtract and
 /// Form_Statement on FormViews, OfficeSceneUIBuilder.PcForms), diegetic and
-/// never themed. The three app windows are rebuilt fresh on each run
-/// (like Records); Settings keeps its objects. Part of
+/// never themed. Every app window is rebuilt fresh on each run. Part of
 /// <see cref="OfficeSceneUIBuilder"/>; the desktop shell builds each app and
 /// registers it in DesktopApps (phase 17: BuildDesktopShell), before the
 /// window manager (which wires every window's chrome).
@@ -33,8 +32,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The gap between the Citizen Account's two pages (desktop units).</summary>
     private const float AccountPageGap = 16f;
 
-    /// <summary>A list row's height (the inbox, the day list).</summary>
-    private const float AppRowHeight = 52f;
+    /// <summary>The Mail list's width and a message row's height (the subject over the day and sender).</summary>
+    private const float MailListWidth = 360f, MailRowHeight = 72f;
+
+    /// <summary>The Notes day list's width.</summary>
+    private const float NotesDaysWidth = 220f;
 
     /// <summary>Wires a single persistent call with a string argument on a UnityEvent (as WirePersistentVoid, String mode).</summary>
     private static void WirePersistentString(Object host, string eventProp, Object target, string method, string argument)
@@ -60,7 +62,14 @@ public static partial class OfficeSceneUIBuilder
     // Mail (ML1, §2.12)
     // -----------------------------
 
-    /// <summary>The Mail window: INBOX (a scrolling list of message rows) on the left; on the right the message's link over the memo, a Form_Memo page (TC-950) on a FormView in a scroll; the directive memo's link opens <paramref name="investigation"/> on its Rules tab. Rebuilt fresh.</summary>
+    /// <summary>
+    /// The Mail window (the PC UX redesign's list and detail): "Inbox" over a
+    /// scrolling list of message rows (the subject at Body size, the day and
+    /// sender under it) on the left; on the right the message's link over the
+    /// memo, a Form_Memo page (TC-950) on a FormView in a scroll; the directive
+    /// memo's link opens <paramref name="investigation"/> on today's rules.
+    /// Rebuilt fresh.
+    /// </summary>
     private static DesktopWindow BuildMailWindow(Transform windowLayer, DesktopConfigSO config, MailFeed feed, DesktopApps apps, BrowserWindow browser,
                                                  InvestigationApp investigation)
     {
@@ -69,21 +78,27 @@ public static partial class OfficeSceneUIBuilder
         Transform win = chrome.transform;
         Object.DestroyImmediate(win.Find("Body").gameObject);
         win.Find("Header/TitleText").GetComponent<TMP_Text>().text = UiText.Get("window.mail");
+        float top = config.titleBarHeight + PcSize.M;
 
-        Text(win, "InboxLabel", null, 16, TextAlignmentOptions.BottomLeft, new Vector2(0.02f, 0.885f), new Vector2(0.36f, 0.935f), Ink,
-             ThemeRoleId.WindowBody, "mail.inbox", FontStyles.Bold);
-        RectTransform list = BuildScrollList(win, "Inbox", new Vector2(0.02f, 0.02f), new Vector2(0.36f, 0.88f), 4f);
+        SectionHeading(win, "InboxLabel", "mail.inbox", PcSize.L, top, MailListWidth);
+        RectTransform list = BuildScrollList(win, "Inbox", Vector2.zero, new Vector2(0f, 1f), 4f);
+        PlaceRect(list.parent.parent, Vector2.zero, new Vector2(0f, 1f), new Vector2(PcSize.L, PcSize.L), new Vector2(PcSize.L + MailListWidth, -(top + 48f)));
         Button row = BuildListRow(list, "MailRowTemplate");
-        TMP_Text empty = Text(win, "EmptyText", null, 16, TextAlignmentOptions.Center, new Vector2(0.03f, 0.7f), new Vector2(0.35f, 0.8f), Ink,
+        GetOrAdd<LayoutElement>(row.gameObject).minHeight = MailRowHeight;
+        TMP_Text empty = Text(list.parent.parent, "EmptyText", null, PcType.Body, TextAlignmentOptions.Top, Vector2.zero, Vector2.one, Ink,
                               ThemeRoleId.InputField, "mail.none", FontStyles.Italic);
+        PlaceRect(empty.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.M, 0f), new Vector2(-PcSize.M, -PcSize.L));
         empty.raycastTarget = false;
 
-        Button link = MakeButton(win, "LinkButton", "", new Vector2(0.52f, 0.885f), new Vector2(0.98f, 0.935f), new Color(0.15f, 0.3f, 0.5f, 1f), ThemeRoleId.SearchButton);
-        FitLabel(link, 17f);
-        Transform page = Panel(win, "MemoPage", new Vector2(0.38f, 0.02f), new Vector2(0.98f, 0.875f), Vector2.zero, Vector2.zero, FormPaper, ThemeRoleId.DiegeticPaper);
-        TMP_Text select = Text(page, "SelectText", null, 18, TextAlignmentOptions.Center, new Vector2(0.05f, 0.4f), new Vector2(0.95f, 0.6f), Ink,
+        float detail = PcSize.L + MailListWidth + PcSize.L;
+        Button link = MakeButton(win, "LinkButton", "", Vector2.zero, Vector2.one, new Color(0.15f, 0.3f, 0.5f, 1f), ThemeRoleId.SearchButton);
+        PlaceRect(link.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(detail, -(top + PcSize.Control)), new Vector2(-PcSize.L, -top));
+        ButtonLabel(link, PcType.Body, TextAlignmentOptions.MidlineLeft, PcSize.L);
+        Transform page = Panel(win, "MemoPage", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, FormPaper, ThemeRoleId.DiegeticPaper);
+        PlaceRect(page, Vector2.zero, Vector2.one, new Vector2(detail, PcSize.L), new Vector2(-PcSize.L, -(top + PcSize.Control + PcSize.M)));
+        TMP_Text select = Text(page, "SelectText", null, PcType.Body, TextAlignmentOptions.Center, new Vector2(0.05f, 0.4f), new Vector2(0.95f, 0.6f), Ink,
                                ThemeRoleId.DiegeticRow, "mail.select", FontStyles.Italic);
-        float memoWidth = config.mailWindowSize.x * 0.6f - DocMargin - DocGap - DocScrollbar;
+        float memoWidth = config.mailWindowSize.x - detail - PcSize.L - DocMargin - DocGap - DocScrollbar;
         ScrollRect memo = BuildFormScroll(page, "Memo", memoWidth, out FormView memoView);
 
         MailWindow component = win.gameObject.AddComponent<MailWindow>();
@@ -105,6 +120,16 @@ public static partial class OfficeSceneUIBuilder
         memo.gameObject.SetActive(false);
         win.gameObject.SetActive(false);
         return chrome;
+    }
+
+    /// <summary>A window's section heading: Title size, bold, <paramref name="width"/> wide at <paramref name="x"/>, its top <paramref name="top"/> under the window's top.</summary>
+    private static TMP_Text SectionHeading(Transform win, string name, string key, float x, float top, float width)
+    {
+        TMP_Text heading = Text(win, name, null, PcType.Title, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.WindowBody, key,
+                                FontStyles.Bold, ThemeTextKind.Heading, true);
+        PlaceRect(heading.transform, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(x, -(top + 40f)), new Vector2(x + width, -top));
+        heading.raycastTarget = false;
+        return heading;
     }
 
     // -----------------------------
@@ -153,10 +178,11 @@ public static partial class OfficeSceneUIBuilder
     // -----------------------------
 
     /// <summary>
-    /// The Notes window: DAYS (a scrolling list) on the left; on the right the
-    /// page's heading, CLIPPINGS with Paste clipping and the cards' list (the
-    /// empty page's hint over it), and NOTES with its counter and the typed
-    /// notes' field. Rebuilt fresh.
+    /// The Notes window: "Days" (a scrolling list) on the left; on the right
+    /// the page's heading, "Clippings" with Paste clipping and the cards' list
+    /// (the empty page's hint over it), and "Notes" with its counter and the
+    /// typed notes' field; every label at the PC's scale (the PC UX redesign
+    /// §4). Rebuilt fresh.
     /// </summary>
     private static DesktopWindow BuildNotesWindow(Transform windowLayer, DesktopConfigSO config)
     {
@@ -164,34 +190,47 @@ public static partial class OfficeSceneUIBuilder
         DesktopWindow chrome = BuildOSWindow(windowLayer, "NotesWindow", "window.notes", null, null, config.notesWindowSize);
         Transform win = chrome.transform;
         Object.DestroyImmediate(win.Find("Body").gameObject);
+        float top = config.titleBarHeight + PcSize.M;
+        float right = PcSize.L + NotesDaysWidth + PcSize.L;
 
-        Text(win, "DaysLabel", null, 16, TextAlignmentOptions.BottomLeft, new Vector2(0.02f, 0.885f), new Vector2(0.22f, 0.935f), Ink,
-             ThemeRoleId.WindowBody, "notes.days", FontStyles.Bold);
-        RectTransform days = BuildScrollList(win, "Days", new Vector2(0.02f, 0.02f), new Vector2(0.22f, 0.88f), 4f);
+        SectionHeading(win, "DaysLabel", "notes.days", PcSize.L, top, NotesDaysWidth);
+        RectTransform days = BuildScrollList(win, "Days", Vector2.zero, new Vector2(0f, 1f), 4f);
+        PlaceRect(days.parent.parent, Vector2.zero, new Vector2(0f, 1f), new Vector2(PcSize.L, PcSize.L), new Vector2(PcSize.L + NotesDaysWidth, -(top + 48f)));
         Button day = BuildListRow(days, "DayTemplate");
-        SetLayoutHeight(day, 40f);
 
-        TMP_Text title = Text(win, "PageTitle", "", 20, TextAlignmentOptions.BottomLeft, new Vector2(0.25f, 0.885f), new Vector2(0.97f, 0.935f), Ink,
+        TMP_Text title = Text(win, "PageTitle", "", PcType.Title, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
                               ThemeRoleId.WindowBody, style: FontStyles.Bold);
-        Text(win, "ClippingsLabel", null, 15, TextAlignmentOptions.BottomLeft, new Vector2(0.25f, 0.82f), new Vector2(0.6f, 0.865f), Ink,
-             ThemeRoleId.WindowBody, "notes.clippings", FontStyles.Bold);
-        Button paste = MakeButton(win, "PasteButton", null, new Vector2(0.68f, 0.82f), new Vector2(0.97f, 0.875f), null, ThemeRoleId.Button, "notes.paste");
-        RectTransform clips = BuildScrollList(win, "Clippings", new Vector2(0.25f, 0.47f), new Vector2(0.97f, 0.81f), 4f);
-        TMP_Text group = LayoutText(clips, "GroupTemplate", 15, FontStyles.Bold, ThemeRoleId.InputField);
+        PlaceRect(title.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(right, -(top + 40f)), new Vector2(-PcSize.L, -top));
+        Chrome(title, PcType.Title);
+        TMP_Text clipsLabel = Text(win, "ClippingsLabel", null, PcType.Caption, TextAlignmentOptions.BottomLeft, new Vector2(0f, 0.82f), new Vector2(0.6f, 0.87f), Ink,
+                                   ThemeRoleId.WindowBody, "notes.clippings", FontStyles.Bold);
+        PlaceRect(clipsLabel.transform, new Vector2(0f, 0.82f), new Vector2(0.6f, 0.87f), new Vector2(right, 0f), Vector2.zero);
+        Button paste = MakeButton(win, "PasteButton", null, new Vector2(1f, 0.82f), new Vector2(1f, 0.875f), null, ThemeRoleId.Button, "notes.paste");
+        PlaceRect(paste.transform, new Vector2(1f, 0.82f), new Vector2(1f, 0.875f), new Vector2(-(PcSize.L + 220f), 0f), new Vector2(-PcSize.L, 0f));
+        ButtonLabel(paste, PcType.Body);
+        RectTransform clips = BuildScrollList(win, "Clippings", new Vector2(0f, 0.47f), new Vector2(1f, 0.81f), 4f);
+        PlaceRect(clips.parent.parent, new Vector2(0f, 0.47f), new Vector2(1f, 0.81f), new Vector2(right, 0f), new Vector2(-PcSize.L, 0f));
+        TMP_Text group = LayoutText(clips, "GroupTemplate", PcType.Caption, FontStyles.Bold, ThemeRoleId.InputField);
         RectTransform card = BuildClipCard(clips, "ClipTemplate");
-        TMP_Text hint = Text(win, "HintText", null, 16, TextAlignmentOptions.Center, new Vector2(0.28f, 0.55f), new Vector2(0.94f, 0.73f), Ink,
+        TMP_Text hint = Text(win, "HintText", null, PcType.Caption, TextAlignmentOptions.Center, new Vector2(0f, 0.55f), new Vector2(1f, 0.73f), Ink,
                              ThemeRoleId.InputField, "notes.hint", FontStyles.Italic);
-        hint.textWrappingMode = TextWrappingModes.Normal;
+        PlaceRect(hint.transform, new Vector2(0f, 0.5f), new Vector2(1f, 0.78f), new Vector2(right + PcSize.L, 0f), new Vector2(-(PcSize.L * 2f), 0f));
+        Chrome(hint, PcType.Caption, true);
         hint.raycastTarget = false;
 
-        Text(win, "NotesLabel", null, 15, TextAlignmentOptions.BottomLeft, new Vector2(0.25f, 0.41f), new Vector2(0.6f, 0.455f), Ink,
-             ThemeRoleId.WindowBody, "notes.notes", FontStyles.Bold);
-        TMP_Text counter = Text(win, "CounterText", "", 14, TextAlignmentOptions.BottomRight, new Vector2(0.6f, 0.41f), new Vector2(0.97f, 0.455f), Ink,
+        TMP_Text notesLabel = Text(win, "NotesLabel", null, PcType.Caption, TextAlignmentOptions.BottomLeft, new Vector2(0f, 0.41f), new Vector2(0.6f, 0.455f), Ink,
+                                   ThemeRoleId.WindowBody, "notes.notes", FontStyles.Bold);
+        PlaceRect(notesLabel.transform, new Vector2(0f, 0.405f), new Vector2(0.6f, 0.455f), new Vector2(right, 0f), Vector2.zero);
+        TMP_Text counter = Text(win, "CounterText", "", PcType.Caption, TextAlignmentOptions.BottomRight, new Vector2(0.6f, 0.41f), new Vector2(1f, 0.455f), Ink,
                                 ThemeRoleId.WindowBody);
-        TMP_InputField field = BuildInputField(win, "NotesField", "notes.placeholder", new Vector2(0.25f, 0.03f), new Vector2(0.97f, 0.4f));
+        PlaceRect(counter.transform, new Vector2(0.6f, 0.405f), new Vector2(1f, 0.455f), Vector2.zero, new Vector2(-PcSize.L, 0f));
+        Chrome(counter, PcType.Caption);
+        TMP_InputField field = BuildInputField(win, "NotesField", "notes.placeholder", new Vector2(0f, 0f), new Vector2(1f, 0.4f));
+        PlaceRect(field.transform, Vector2.zero, new Vector2(1f, 0.4f), new Vector2(right, PcSize.L), new Vector2(-PcSize.L, 0f));
         field.textComponent.alignment = TextAlignmentOptions.TopLeft;
         field.textComponent.textWrappingMode = TextWrappingModes.Normal;
         ((TMP_Text)field.placeholder).alignment = TextAlignmentOptions.TopLeft;
+        ((TMP_Text)field.placeholder).textWrappingMode = TextWrappingModes.Normal;
         field.lineType = TMP_InputField.LineType.MultiLineNewline;
         field.characterLimit = config.notesMaxChars;
 
@@ -221,78 +260,75 @@ public static partial class OfficeSceneUIBuilder
     // -----------------------------
 
     /// <summary>
-    /// The Settings window (piece 6 U12, piece 9 R17, redesign phase 25 SG1),
-    /// 640 × 720, in titled sections: Language (Follow history / Always
-    /// English), Motion (Full / Reduced), Desktop (open icons with Double
-    /// click / Single click, Reset icon positions: phase 17; its icons wired
-    /// by WireIconSettings), Investigation (Text size: a button per zoom
-    /// level, redesign phase 20, on the row's left half; Steps shown / Steps
-    /// hidden on its right half, phase 21: BuildSettingsSteps; phase 18 adds
-    /// its row), Keyboard (Show shortcuts, which opens the F1 card:
-    /// BuildShortcutCard), then the
-    /// note. Existing objects are kept; every row's anchors are re-applied on
-    /// each build.
+    /// The Settings window (piece 6 U12, piece 9 R17, redesign phase 25 SG1;
+    /// the PC UX redesign §7: System Settings' grouped rows), rebuilt fresh: a
+    /// column of titled groups, each heading at Title size over a row of
+    /// choices that share the row (the chosen one in the accent colours:
+    /// SettingsWindowController): Language (Follow history / Always English),
+    /// Motion (Full / Reduced), Desktop icons open with (Double click /
+    /// Single click) and Reset icon positions (its icons wired by
+    /// WireIconSettings), Investigation's Text size (a choice per zoom level,
+    /// redesign phase 20) and its Checklist (shown / hidden, phase 21),
+    /// Keyboard (Show shortcuts, which opens the F1 card: BuildShortcutCard),
+    /// then the note at Caption size.
     /// </summary>
     private static DesktopWindow BuildSettingsWindow(Transform windowLayer)
     {
-        DesktopWindow chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", "settings.language", null, EnsureDesktopConfig().settingsWindowSize);
-        Transform win = chrome.transform;
-        Heading(win.Find("Body").GetComponent<TMP_Text>(), "settings.language", new Vector2(0.05f, 0.875f), new Vector2(0.95f, 0.93f));
-        Button follow = MakeButton(win, "FollowHistoryButton", null, new Vector2(0.05f, 0.795f), new Vector2(0.48f, 0.865f), null, ThemeRoleId.Button, "settings.followHistory");
-        SetAnchors(follow.transform, new Vector2(0.05f, 0.795f), new Vector2(0.48f, 0.865f));
-        Button english = MakeButton(win, "AlwaysEnglishButton", null, new Vector2(0.52f, 0.795f), new Vector2(0.95f, 0.865f), null, ThemeRoleId.Button, "settings.alwaysEnglish");
-        SetAnchors(english.transform, new Vector2(0.52f, 0.795f), new Vector2(0.95f, 0.865f));
-
-        TMP_Text motion = Text(win, "MotionLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.725f), new Vector2(0.95f, 0.78f), Ink,
-                               ThemeRoleId.WindowBody, "settings.motion");
-        Heading(motion, "settings.motion", new Vector2(0.05f, 0.725f), new Vector2(0.95f, 0.78f));
-        Button full = MakeButton(win, "FullMotionButton", null, new Vector2(0.05f, 0.645f), new Vector2(0.48f, 0.715f), null, ThemeRoleId.Button, "settings.motionFull");
-        SetAnchors(full.transform, new Vector2(0.05f, 0.645f), new Vector2(0.48f, 0.715f));
-        Button reduced = MakeButton(win, "ReducedMotionButton", null, new Vector2(0.52f, 0.645f), new Vector2(0.95f, 0.715f), null, ThemeRoleId.Button, "settings.motionReduced");
-        SetAnchors(reduced.transform, new Vector2(0.52f, 0.645f), new Vector2(0.95f, 0.715f));
-
-        TMP_Text desktop = Text(win, "DesktopLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.575f), new Vector2(0.95f, 0.63f), Ink,
-                                ThemeRoleId.WindowBody, "settings.desktop");
-        Heading(desktop, "settings.desktop", new Vector2(0.05f, 0.575f), new Vector2(0.95f, 0.63f));
-        Button iconDouble = MakeButton(win, "IconDoubleClickButton", null, new Vector2(0.05f, 0.495f), new Vector2(0.48f, 0.565f), null, ThemeRoleId.Button, "settings.iconDouble");
-        SetAnchors(iconDouble.transform, new Vector2(0.05f, 0.495f), new Vector2(0.48f, 0.565f));
-        Button iconSingle = MakeButton(win, "IconSingleClickButton", null, new Vector2(0.52f, 0.495f), new Vector2(0.95f, 0.565f), null, ThemeRoleId.Button, "settings.iconSingle");
-        SetAnchors(iconSingle.transform, new Vector2(0.52f, 0.495f), new Vector2(0.95f, 0.565f));
-        Button resetIcons = MakeButton(win, "ResetIconsButton", null, new Vector2(0.05f, 0.415f), new Vector2(0.48f, 0.485f), null, ThemeRoleId.Button, "settings.resetIcons");
-        SetAnchors(resetIcons.transform, new Vector2(0.05f, 0.415f), new Vector2(0.48f, 0.485f));
-
         DesktopConfigSO config = EnsureDesktopConfig();
-        TMP_Text investigation = Text(win, "InvestigationLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.345f), new Vector2(0.95f, 0.4f), Ink,
-                                      ThemeRoleId.WindowBody, "settings.investigation");
-        Heading(investigation, "settings.investigation", new Vector2(0.05f, 0.345f), new Vector2(0.95f, 0.4f));
+        DestroyChildIfPresent(windowLayer, "SettingsWindow");
+        DesktopWindow chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", null, null, config.settingsWindowSize);
+        Transform win = chrome.transform;
+        Object.DestroyImmediate(win.Find("Body").gameObject);
+
+        Transform column = Panel(win, "Column", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(column, Vector2.zero, Vector2.one, new Vector2(PcSize.L + 8f, PcSize.L), new Vector2(-(PcSize.L + 8f), -(config.titleBarHeight + PcSize.M)));
+        VerticalLayoutGroup layout = GetOrAdd<VerticalLayoutGroup>(column.gameObject);
+        layout.spacing = 6f;
+        layout.childAlignment = TextAnchor.UpperLeft;
+        layout.childControlWidth = true;
+        layout.childControlHeight = true;
+        layout.childForceExpandWidth = true;
+        layout.childForceExpandHeight = false;
+
+        SettingsHeading(column, "LanguageLabel", "settings.language");
+        Transform language = SettingsRow(column, "LanguageRow");
+        Button follow = SettingsChoice(language, "FollowHistoryButton", "settings.followHistory");
+        Button english = SettingsChoice(language, "AlwaysEnglishButton", "settings.alwaysEnglish");
+
+        SettingsHeading(column, "MotionLabel", "settings.motion");
+        Transform motion = SettingsRow(column, "MotionRow");
+        Button full = SettingsChoice(motion, "FullMotionButton", "settings.motionFull");
+        Button reduced = SettingsChoice(motion, "ReducedMotionButton", "settings.motionReduced");
+
+        SettingsHeading(column, "DesktopLabel", "settings.desktop");
+        Transform icons = SettingsRow(column, "IconOpenRow");
+        Button iconDouble = SettingsChoice(icons, "IconDoubleClickButton", "settings.iconDouble");
+        Button iconSingle = SettingsChoice(icons, "IconSingleClickButton", "settings.iconSingle");
+        Button resetIcons = SettingsChoice(SettingsRow(column, "ResetIconsRow"), "ResetIconsButton", "settings.resetIcons");
+
+        SettingsHeading(column, "InvestigationLabel", "settings.investigation");
+        Transform sizes = SettingsRow(column, "TextSizeRow");
         var textSizes = new List<Object>();
-        int levels = config.zoomLevels.Length;
-        for (int i = 0; i < levels; i++)
+        foreach (int level in config.zoomLevels)
         {
-            float from = 0.05f + i * 0.43f / levels;
-            var aMin = new Vector2(from + (i > 0 ? 0.005f : 0f), 0.265f);
-            var aMax = new Vector2(from + 0.43f / levels - (i < levels - 1 ? 0.005f : 0f), 0.335f);
-            Button size = MakeButton(win, "TextSizeButton_" + config.zoomLevels[i], null, aMin, aMax, null, ThemeRoleId.Button);
-            SetAnchors(size.transform, aMin, aMax);
+            Button size = SettingsChoice(sizes, "TextSizeButton_" + level, null);
             TMP_Text sizeLabel = size.transform.Find("Label").GetComponent<TMP_Text>();
-            sizeLabel.text = UiText.Format("settings.textSize", config.zoomLevels[i]);
+            sizeLabel.text = UiText.Format("settings.textSize", level);
             SceneUiKit.Tag(sizeLabel, ThemeRoleId.Button, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button);
             textSizes.Add(size);
         }
-        BuildSettingsSteps(win);
+        Transform checklist = SettingsRow(column, "ChecklistRow");
+        Button stepsShown = SettingsChoice(checklist, "StepsShownButton", "settings.stepsShown");
+        Button stepsHidden = SettingsChoice(checklist, "StepsHiddenButton", "settings.stepsHidden");
 
-        TMP_Text keyboard = Text(win, "KeyboardLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.195f), new Vector2(0.95f, 0.25f), Ink,
-                                 ThemeRoleId.WindowBody, "settings.keyboard");
-        Heading(keyboard, "settings.keyboard", new Vector2(0.05f, 0.195f), new Vector2(0.95f, 0.25f));
-        Button shortcuts = MakeButton(win, "ShowShortcutsButton", null, new Vector2(0.05f, 0.115f), new Vector2(0.48f, 0.185f), null, ThemeRoleId.Button, "settings.showShortcuts");
-        SetAnchors(shortcuts.transform, new Vector2(0.05f, 0.115f), new Vector2(0.48f, 0.185f));
+        SettingsHeading(column, "KeyboardLabel", "settings.keyboard");
+        Button shortcuts = SettingsChoice(SettingsRow(column, "ShortcutsRow"), "ShowShortcutsButton", "settings.showShortcuts");
 
-        TMP_Text note = Text(win, "NoteText", null, 15, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.01f), new Vector2(0.95f, 0.105f), Ink,
+        TMP_Text note = Text(column, "NoteText", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink,
                              ThemeRoleId.WindowBody, "settings.note");
-        SetAnchors(note.transform, new Vector2(0.05f, 0.01f), new Vector2(0.95f, 0.105f));
-        note.fontSize = 15f;
-        note.text = UiText.Get("settings.note");
-        note.textWrappingMode = TextWrappingModes.Normal;
+        Chrome(note, PcType.Caption, true);
+        note.margin = new Vector4(0f, PcSize.M, 0f, 0f);
+        note.raycastTarget = false;
 
         // The shortcut card (F1; OfficeSceneUIBuilder.Keys), rebuilt fresh, so it keeps its place after the rebuilt windows.
         DesktopWindow card = BuildShortcutCard(windowLayer);
@@ -308,20 +344,45 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "resetIconsButton", resetIcons);
         SerializedArrays.Set(so, "textSizeButtons", textSizes);
         SetRef(so, "config", config);
+        SetRef(so, "stepsShownButton", stepsShown);
+        SetRef(so, "stepsHiddenButton", stepsHidden);
         SetRef(so, "showShortcutsButton", shortcuts);
         SetRef(so, "shortcutsWindow", card);
         so.ApplyModifiedProperties();
+        win.gameObject.SetActive(false);
         return chrome;
     }
 
-    /// <summary>A section heading: bold, 20 u, its anchors re-applied (an existing text keeps its object).</summary>
-    private static void Heading(TMP_Text text, string key, Vector2 aMin, Vector2 aMax)
+    /// <summary>A Settings group's heading: Title size, bold, with room above it.</summary>
+    private static void SettingsHeading(Transform column, string name, string key)
     {
-        SetAnchors(text.transform, aMin, aMax);
-        text.fontSize = 20f;
-        text.fontStyle = FontStyles.Bold;
-        text.alignment = TextAlignmentOptions.BottomLeft;
-        SceneUiKit.Tag(text, ThemeRoleId.WindowBody, ThemePart.Ink, key, FontStyles.Bold, ThemeTextKind.Heading);
+        TMP_Text heading = Text(column, name, null, PcType.Title, TextAlignmentOptions.BottomLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.WindowBody, key,
+                                FontStyles.Bold, ThemeTextKind.Heading, true);
+        heading.raycastTarget = false;
+        SetLayoutHeight(heading, 52f);
+    }
+
+    /// <summary>A Settings row: its choices share its width, PcSize.Row tall.</summary>
+    private static Transform SettingsRow(Transform column, string name)
+    {
+        Transform row = Panel(column, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        SetLayoutHeight(row, PcSize.Row);
+        HorizontalLayoutGroup line = GetOrAdd<HorizontalLayoutGroup>(row.gameObject);
+        line.spacing = PcSize.S;
+        line.childControlWidth = true;
+        line.childControlHeight = true;
+        line.childForceExpandWidth = true;
+        line.childForceExpandHeight = true;
+        return row;
+    }
+
+    /// <summary>A choice in a Settings row: a Button-role plate with its keyed label at Body size.</summary>
+    private static Button SettingsChoice(Transform row, string name, string key)
+    {
+        Button choice = MakeButton(row, name, null, Vector2.zero, Vector2.one, null, ThemeRoleId.Button, key);
+        GetOrAdd<LayoutElement>(choice.gameObject).flexibleWidth = 1f;
+        ButtonLabel(choice, PcType.Body, TextAlignmentOptions.Center, 8f);
+        return choice;
     }
 
     // -----------------------------
@@ -329,15 +390,15 @@ public static partial class OfficeSceneUIBuilder
     // -----------------------------
 
     /// <summary>
-    /// A scrolling vertical list: a box (an input-field white by default, the
-    /// scroll's raycast target) with a masked viewport and a content that
+    /// A scrolling vertical list: a box (the sidebar's surface by default, so
+    /// its rows' white plates stand out; the scroll's raycast target) with a masked viewport and a content that
     /// grows with its children (a vertical layout, fitted to its preferred
     /// height). Returns the content.
     /// </summary>
     private static RectTransform BuildScrollList(Transform parent, string name, Vector2 aMin, Vector2 aMax, float spacing, Color? fill = null,
-                                                 ThemeRoleId role = ThemeRoleId.InputField)
+                                                 ThemeRoleId role = ThemeRoleId.Sidebar)
     {
-        Transform box = Panel(parent, name, aMin, aMax, Vector2.zero, Vector2.zero, fill ?? Color.white, role);
+        Transform box = Panel(parent, name, aMin, aMax, Vector2.zero, Vector2.zero, fill ?? XpFace, role);
         Transform viewport = Panel(box, "Viewport", Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-8f, -8f), null);
         GetOrAdd<RectMask2D>(viewport.gameObject);
         var content = (RectTransform)Panel(viewport, "Content", new Vector2(0f, 1f), Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -396,21 +457,28 @@ public static partial class OfficeSceneUIBuilder
         return scrollbar;
     }
 
-    /// <summary>A list row: a button of <see cref="AppRowHeight"/> whose left-aligned label holds two lines (rich text), with a "Selected" bar at its left edge (hidden; the window shows it on the open row).</summary>
+    /// <summary>A list row: a button of PcSize.Row whose left-aligned label (Body size, rich text: a second line may follow at Caption size) wraps, over a "Selected" plate across the whole row (hidden; the window shows it on the open row: a tint, never a side stripe).</summary>
     private static Button BuildListRow(Transform list, string name)
     {
         Button row = MakeButton(list, name, "", Vector2.zero, Vector2.one, null, ThemeRoleId.Button);
-        SetLayoutHeight(row, AppRowHeight);
-        Transform bar = Panel(row.transform, "Selected", Vector2.zero, new Vector2(0f, 1f), new Vector2(3f, 0f), new Vector2(6f, -8f), new Color(0.15f, 0.35f, 0.85f, 1f),
-                              ThemeRoleId.SelectionHighlight);
-        bar.GetComponent<Image>().raycastTarget = false;
-        bar.gameObject.SetActive(false);
+        GetOrAdd<LayoutElement>(row.gameObject).minHeight = PcSize.Row;
+        VerticalLayoutGroup grow = GetOrAdd<VerticalLayoutGroup>(row.gameObject);
+        grow.padding = new RectOffset(0, 0, 6, 6);
+        grow.childControlWidth = true;
+        grow.childControlHeight = true;
+        grow.childForceExpandWidth = true;
+        grow.childForceExpandHeight = false;
+        Transform plate = Panel(row.transform, "Selected", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(1f, 0.92f, 0.35f, 0.7f),
+                                ThemeRoleId.SelectionHighlight);
+        plate.GetComponent<Image>().raycastTarget = false;
+        GetOrAdd<LayoutElement>(plate.gameObject).ignoreLayout = true;
+        plate.SetAsFirstSibling();
+        plate.gameObject.SetActive(false);
         TMP_Text label = row.transform.Find("Label").GetComponent<TMP_Text>();
-        label.fontSize = 16f;
+        Chrome(label, PcType.Body, true);
         label.alignment = TextAlignmentOptions.MidlineLeft;
-        label.textWrappingMode = TextWrappingModes.NoWrap;
-        label.overflowMode = TextOverflowModes.Ellipsis;
-        label.margin = new Vector4(10f, 2f, 8f, 2f);
+        label.margin = new Vector4(PcSize.M, 2f, PcSize.S, 2f);
+        label.lineSpacing = -6f;
         label.richText = true;
         return row;
     }
@@ -420,23 +488,24 @@ public static partial class OfficeSceneUIBuilder
     {
         var card = (RectTransform)Panel(list, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(1f, 0.97f, 0.8f, 1f), ThemeRoleId.StickyNote);
         VerticalLayoutGroup layout = GetOrAdd<VerticalLayoutGroup>(card.gameObject);
-        layout.padding = new RectOffset(10, 44, 6, 6);
+        layout.padding = new RectOffset(12, 128, 8, 8);
         layout.spacing = 2f;
         layout.childControlWidth = true;
         layout.childControlHeight = true;
         layout.childForceExpandWidth = true;
         layout.childForceExpandHeight = false;
 
-        TMP_Text text = LayoutText(card, "Text", 16, FontStyles.Normal, ThemeRoleId.StickyNote);
+        TMP_Text text = LayoutText(card, "Text", PcType.Body, FontStyles.Normal, ThemeRoleId.StickyNote);
         text.color = Ink;
-        TMP_Text label = LayoutText(card, "Label", 13, FontStyles.Italic, ThemeRoleId.StickyNote);
+        TMP_Text label = LayoutText(card, "Label", PcType.Caption, FontStyles.Italic, ThemeRoleId.StickyNote);
         label.color = Ink;
 
-        Button remove = MakeButton(card, "RemoveButton", null, new Vector2(1f, 1f), new Vector2(1f, 1f), XpRed, ThemeRoleId.CloseButton, "notes.remove");
+        Button remove = MakeButton(card, "RemoveButton", null, new Vector2(1f, 1f), new Vector2(1f, 1f), null, ThemeRoleId.Button, "notes.remove");
         var rt = (RectTransform)remove.transform;
         rt.pivot = new Vector2(1f, 1f);
-        rt.sizeDelta = new Vector2(30f, 30f);
-        rt.anchoredPosition = new Vector2(-6f, -4f);
+        rt.sizeDelta = new Vector2(112f, 36f);
+        rt.anchoredPosition = new Vector2(-6f, -6f);
+        ButtonLabel(remove, PcType.Caption, TextAlignmentOptions.Center, 4f);
         GetOrAdd<LayoutElement>(remove.gameObject).ignoreLayout = true;
         return card;
     }
@@ -452,13 +521,4 @@ public static partial class OfficeSceneUIBuilder
         return text;
     }
 
-    /// <summary>A button's label shrinks to fit from <paramref name="size"/>.</summary>
-    private static void FitLabel(Button button, float size)
-    {
-        TMP_Text label = button.transform.Find("Label").GetComponent<TMP_Text>();
-        label.enableAutoSizing = true;
-        label.fontSizeMax = size;
-        label.fontSizeMin = 12f;
-        label.textWrappingMode = TextWrappingModes.NoWrap;
-    }
 }

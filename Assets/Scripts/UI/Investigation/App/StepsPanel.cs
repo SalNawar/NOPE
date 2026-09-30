@@ -4,8 +4,10 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// The Investigation app's optional steps checklist, the sidebar's Steps
-/// section (the PC redesign ST1-ST4; redesign phase 21). While a traveller is
+/// The Investigation app's optional steps checklist, the navigator's last
+/// section, "Checklist" (the PC redesign ST1-ST4; redesign phase 21; the PC
+/// UX redesign IA8, C6: its heading counts the steps done, "2 of 6", and a
+/// click on it folds or unfolds the list, its chevron turning). While a traveller is
 /// at the desk it lists the default steps until a paper handed over on arrival
 /// has been read (lifted into the hand, or its scanned copy seen), then their
 /// kind's (CaseSteps.SetName and Resolve over the library's pc.steps; the
@@ -18,7 +20,7 @@ using UnityEngine;
 /// looked at, a record looked up). The tick box ticks or unticks a step by
 /// hand for the rest of the case; the label jumps where the step is done
 /// (CaseSteps.Target: a tab, a record looked up, a book) or, for work at the
-/// desk, toasts a hint. The toolbar's Steps, Settings and phase 20's key
+/// desk, toasts a hint. The heading, Settings and phase 20's key
 /// (Toggle) show or hide the list, remembered per player
 /// (DesktopPreferences.StepsShown); hidden, the section collapses to a line.
 /// The app's window may be closed while a case runs, so nothing here waits for
@@ -38,6 +40,12 @@ public sealed class StepsPanel : MonoBehaviour
 
     /// <summary>The line shown instead of the list: steps are hidden, or no traveller is at the desk.</summary>
     [SerializeField] private TMP_Text stateText;
+
+    /// <summary>The heading's disclosure chevron (the whole heading is the button that folds the list): pointing down while the list shows, right while it is hidden.</summary>
+    [SerializeField] private RectTransform toggleGlyph;
+
+    /// <summary>The heading's count: the steps done of those listed ("2 of 6"); empty between travellers.</summary>
+    [SerializeField] private TMP_Text countText;
 
     [Header("The app")]
     /// <summary>The app: what the player sees (the showing panes' tabs and scanned copies), and where a jump goes (its active pane).</summary>
@@ -63,11 +71,25 @@ public sealed class StepsPanel : MonoBehaviour
     private string _setName = string.Empty;
     private bool _wired;
     private readonly List<int> _copies = new List<int>();
+    private readonly List<UnityEngine.UI.Button> _buttons = new List<UnityEngine.UI.Button>();
 
     /// <summary>Raised when the steps are shown or hidden (Settings repaints its choice).</summary>
     public event Action ShownChanged;
 
-    /// <summary>Shows the steps when hidden, hides them when shown (the toolbar's Steps; phase 20's key).</summary>
+    /// <summary>The listed steps' labels (they jump), top to bottom: the keys' checklist region.</summary>
+    public IReadOnlyList<UnityEngine.UI.Button> RowButtons
+    {
+        get
+        {
+            _buttons.Clear();
+            foreach (StepRowView row in _rows)
+                if (row != null && row.Label != null && row.gameObject.activeInHierarchy)
+                    _buttons.Add(row.Label);
+            return _buttons;
+        }
+    }
+
+    /// <summary>Shows the steps when hidden, hides them when shown (the heading's Hide or Show; phase 20's key).</summary>
     public void Toggle() => SetShown(!DesktopPreferences.StepsShown);
 
     /// <summary>Shows or hides the steps and remembers it for the player.</summary>
@@ -212,10 +234,17 @@ public sealed class StepsPanel : MonoBehaviour
             CaseSteps.Evaluate(_steps, _progress, _states);
         else
             _states.Clear();
+        int done = 0, listedCount = 0;
         for (int i = 0; i < _rows.Count; i++)
         {
             int s = IndexOfState(_steps[i].id);
             bool listed = s >= 0;
+            if (listed)
+            {
+                listedCount++;
+                if (_states[s].Done)
+                    done++;
+            }
             if (_rows[i].gameObject.activeSelf != listed)
                 _rows[i].gameObject.SetActive(listed);
             if (!listed)
@@ -224,6 +253,8 @@ public sealed class StepsPanel : MonoBehaviour
             string name = UiText.Get(StepSets.LabelKey(state.Id));
             _rows[i].Show(state.Done, state.Need > 1 ? UiText.Format("steps.progress", name, state.Have, state.Need) : name);
         }
+        if (countText != null)
+            countText.text = _progress != null && listedCount > 0 ? UiText.Format("steps.count", done, listedCount) : string.Empty;
         Apply();
     }
 
@@ -234,6 +265,10 @@ public sealed class StepsPanel : MonoBehaviour
         bool listing = shown && _progress != null;
         if (list != null && list.activeSelf != listing)
             list.SetActive(listing);
+        if (toggleGlyph != null)
+            toggleGlyph.localRotation = Quaternion.Euler(0f, 0f, shown ? 0f : 90f);
+        if (countText != null && _progress == null)
+            countText.text = string.Empty;
         if (stateText == null)
             return;
         if (stateText.gameObject.activeSelf == listing)

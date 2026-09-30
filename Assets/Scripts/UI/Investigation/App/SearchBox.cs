@@ -15,7 +15,11 @@ using UnityEngine.UI;
 /// only equal untranslated lines of its tongue. It reads the app's index
 /// (CaseIndex) and fills the results panel (SearchResultsView); a chosen hit
 /// is Opened for the app to jump to; Escape's CloseResults closes the panel
-/// and leaves the text.
+/// and leaves the text. The field is a palette (the PC UX redesign IA9, C5):
+/// selected while it holds nothing, it opens the quick-open panel under it
+/// (the pinned and the recent items, InvestigationApp.Keys' lists); typing
+/// turns it into the results; a press outside the field and its panels,
+/// Escape, a jump or a chosen hit closes it.
 /// </summary>
 public sealed class SearchBox : MonoBehaviour
 {
@@ -28,6 +32,9 @@ public sealed class SearchBox : MonoBehaviour
     /// <summary>The desktop's knobs: the debounce and the hits per group.</summary>
     [SerializeField] private DesktopConfigSO config;
 
+    /// <summary>The quick-open panel (Pinned and Recent), shown under the empty field while it has the keyboard.</summary>
+    [SerializeField] private GameObject quickOpen;
+
     private CaseIndex _index;
     private SearchChip? _chip;
     private AppTab? _only;
@@ -38,8 +45,16 @@ public sealed class SearchBox : MonoBehaviour
     /// <summary>Raised when the player opens a hit (a click, Enter on the first or on the focused one): the hit, and true to open it in the other pane (Ctrl held).</summary>
     public event Action<SearchHit, bool> Opened;
 
-    /// <summary>True while the results panel shows.</summary>
-    public bool ResultsOpen => results != null && results.IsOpen;
+    /// <summary>True while the results panel or the quick-open panel shows (Escape closes them before it clears the field).</summary>
+    public bool ResultsOpen => (results != null && results.IsOpen) || QuickOpenShowing;
+
+    /// <summary>True while the quick-open panel shows.</summary>
+    public bool QuickOpenShowing => quickOpen != null && quickOpen.activeInHierarchy;
+
+    /// <summary>True for the field and its panels (a press there leaves the palette open).</summary>
+    public bool IsPart(GameObject go) =>
+        go != null && ((field != null && go.transform.IsChildOf(field.transform)) || (results != null && go.transform.IsChildOf(results.transform)) ||
+                       (quickOpen != null && go.transform.IsChildOf(quickOpen.transform)));
 
     /// <summary>The listed hits' rows (none while the panel is closed): the keys' Results region.</summary>
     public IReadOnlyList<Button> HitRows => results != null && results.IsOpen ? results.HitRows : (IReadOnlyList<Button>)Array.Empty<Button>();
@@ -62,7 +77,10 @@ public sealed class SearchBox : MonoBehaviour
         {
             field.onValueChanged.AddListener(_ => Typed());
             field.onSubmit.AddListener(_ => OpenFirst());
+            field.onSelect.AddListener(_ => ShowQuick());
         }
+        if (quickOpen != null)
+            quickOpen.SetActive(false);
         if (results != null)
         {
             results.Chosen += Open;
@@ -80,19 +98,21 @@ public sealed class SearchBox : MonoBehaviour
     {
         _chip = chip;
         _only = null;
+        ShowQuick();
         Run();
     }
 
     /// <summary>The current traveller's script font: an untranslated snippet is drawn in it (null: the text's own font).</summary>
     public void SetScript(TMP_FontAsset font) => _script = font;
 
-    /// <summary>Closes the results panel (Escape); the typed text stays, and typing on reopens it.</summary>
+    /// <summary>Closes the results panel and the quick-open panel (Escape, a press outside, a jump); the typed text stays, and typing on reopens it.</summary>
     public void CloseResults()
     {
         _due = -1f;
         enabled = false;
         if (results != null)
             results.Hide();
+        SetQuick(false);
     }
 
     /// <summary>The case ended: the results close, the clip goes, the typed text stays for the next traveller.</summary>
@@ -102,9 +122,10 @@ public sealed class SearchBox : MonoBehaviour
         CloseResults();
     }
 
-    /// <summary>Typing: the results update after the pause (the filter goes back to All).</summary>
+    /// <summary>Typing: the results update after the pause (the filter goes back to All); the quick-open panel shows only while the field is empty.</summary>
     private void Typed()
     {
+        ShowQuick();
         _only = null;
         _due = Time.unscaledTime + (config != null ? config.searchDebounceSeconds : 0.15f);
         enabled = true;
@@ -153,8 +174,22 @@ public sealed class SearchBox : MonoBehaviour
     /// <summary>A hit is opened: the panel closes and the app jumps there (in the other pane when <paramref name="otherPane"/>).</summary>
     private void Open(SearchHit hit, bool otherPane)
     {
-        if (results != null)
-            results.Hide();
+        CloseResults();
         Opened?.Invoke(hit, otherPane);
+    }
+
+    /// <summary>The quick-open panel shows while the field has the keyboard (it is focused, or the EventSystem's selection on this frame's select), holds no text and no pasted chip.</summary>
+    private void ShowQuick()
+    {
+        UnityEngine.EventSystems.EventSystem events = UnityEngine.EventSystems.EventSystem.current;
+        bool focused = field != null && (field.isFocused || (events != null && events.currentSelectedGameObject == field.gameObject));
+        SetQuick(focused && field.text.Length == 0 && !_chip.HasValue);
+    }
+
+    /// <summary>Shows or hides the quick-open panel.</summary>
+    private void SetQuick(bool on)
+    {
+        if (quickOpen != null && quickOpen.activeSelf != on)
+            quickOpen.SetActive(on);
     }
 }

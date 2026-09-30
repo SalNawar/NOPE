@@ -24,7 +24,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: taskbar.start
-    text: Start
+    text: "Men\xFC"
     gloss: 0
     tier: 0
   - key: startmenu.settings
@@ -56,7 +56,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: records.search
-    text: SUCHEN
+    text: Suchen
     gloss: 0
     tier: 0
   - key: compare.match
@@ -116,7 +116,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: taskbar.desk
-    text: < Schreibtisch
+    text: "Zur\xFCck zum Schreibtisch"
     gloss: 0
     tier: 0
   - key: briefing.title

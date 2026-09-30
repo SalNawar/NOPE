@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -6,26 +5,23 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The office builder's Investigation app panes (redesign phase 18; the PC
-/// spec's AP2-AP4, AP9, LK2, CM3): a pane (AppPane) with its tab strip (the
-/// six tabs of OfficeSceneUIBuilder.App's BuildTab, each with its glyph for a
-/// narrow strip, a tooltip naming it and the handle that drags it or opens
-/// its menu), its chip row (BuildChipRow: a sideways scroll with an arrow at
-/// each end, around BuildChipTemplate's chips), its content with a view per
-/// tab and the no-case state (its words wrapping and shrinking to fit a split
-/// pane), and its 3 u accent frame; the ↗ (a drawn glyph
-/// in the link ink, 28 u, with its hover hint) and the found outline, which
-/// the forms' FormView clones; and the small hover hints of the toolbar and
-/// the tabs. Rebuilt fresh with the app (its one convergence
-/// policy, audit R6-008); every reference is checked (Wire, audit R6-004).
-/// Part of <see cref="OfficeSceneUIBuilder"/>; BuildInvestigationApp calls it.
+/// spec's AP2, AP9, LK2, CM3; the PC UX redesign IA6, IA7, C4, C11): a pane
+/// (AppPane) with its header (the title naming the source and the item it
+/// shows, wrapping to two lines rather than being cut; Pin; Open beside in
+/// the left pane, Close in the right one; a hairline under it and the
+/// active pane's accent underline), its content with a view per source and
+/// the no-case state (its words wrapping and shrinking to fit a split
+/// pane); the ↗ (a drawn glyph in the link ink, 28 u, with its hover hint)
+/// and the found outline, which the forms' FormView clones; and the hover
+/// hints of the chrome, sized to their words. Rebuilt fresh with the app
+/// (its one convergence policy, audit R6-008); every reference is checked
+/// (Wire, audit R6-004). Part of <see cref="OfficeSceneUIBuilder"/>;
+/// BuildInvestigationApp calls it.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The active pane's accent frame's width.</summary>
+    /// <summary>The active pane's accent underline's height.</summary>
     private const float AppFrameWidth = 3f;
-
-    /// <summary>The chip row's arrows' width, and the gap between chips.</summary>
-    private const float ChipArrowWidth = 24f, ChipGap = 6f;
 
     /// <summary>The no-case state's words: their size, and the least they shrink to (wrapping onto a second line first) in a split pane.</summary>
     private const float NoCaseText = 80f, NoCaseTextMin = 40f;
@@ -36,27 +32,16 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The ↗'s hit box (a square).</summary>
     private const float LinkSize = 28f;
 
-    /// <summary>A tab's tooltip, the Split button's hint and a ↗'s hint (their sizes).</summary>
-    private static readonly Vector2 AppTabHintSize = new Vector2(200f, 34f), AppSplitHintSize = new Vector2(380f, 34f), AppLinkHintSize = new Vector2(420f, 34f);
+    /// <summary>A pane header's icon button (Pin, Open beside, Close: a drawn glyph, its name in a hover hint).</summary>
+    private const float HeaderIconSize = 44f;
 
-    /// <summary>The accent (the active pane's frame, the found mark): the focus ring's built colour.</summary>
+    /// <summary>The accent (the active pane's underline, the found mark): the focus ring's built colour.</summary>
     private static readonly Color AccentInk = new Color(0.95f, 0.55f, 0.1f, 1f);
 
     /// <summary>The link ink of the ↗ on a paper or a row (diegetic: never themed).</summary>
     private static readonly Color LinkInk = new Color(0.12f, 0.3f, 0.72f, 1f);
 
-    /// <summary>The tabs' glyph keys (a narrow strip's inactive tabs), by tab.</summary>
-    private static readonly Dictionary<AppTab, string> AppTabGlyphKeys = new Dictionary<AppTab, string>
-    {
-        { AppTab.Documents, "app.tabGlyph.documents" },
-        { AppTab.Records, "app.tabGlyph.records" },
-        { AppTab.Reference, "app.tabGlyph.reference" },
-        { AppTab.Transcript, "app.tabGlyph.transcript" },
-        { AppTab.Report, "app.tabGlyph.report" },
-        { AppTab.Rules, "app.tabGlyph.rules" },
-    };
-
-    /// <summary>One pane's views, for the façade (each tab's view).</summary>
+    /// <summary>One pane's views, for the façade (each source's view).</summary>
     private struct PaneViews
     {
         public DocumentsView Documents;
@@ -69,54 +54,60 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// A pane named <paramref name="name"/> filling <paramref name="area"/>
-    /// (the app lays the two out at runtime): the tab strip, the chip row, the
-    /// content with the six views and the no-case state, the accent frame; it
-    /// shows <paramref name="start"/> first and its rows pick into
-    /// <paramref name="compare"/>. Its views come back in <paramref name="views"/>.
+    /// (the app lays the two out at runtime): the header (its title, Pin, and
+    /// Open beside when <paramref name="left"/>, else Close, returned in
+    /// <paramref name="split"/>), the content with the six views and the
+    /// no-case state, the active underline; it shows <paramref name="start"/>
+    /// first and its rows pick into <paramref name="compare"/>. Its views come
+    /// back in <paramref name="views"/>.
     /// </summary>
-    private static AppPane BuildAppPane(Transform area, string name, AppTab start, CompareController compare, DesktopConfigSO config, out PaneViews views)
+    private static AppPane BuildAppPane(Transform area, string name, AppTab start, CompareController compare, DesktopConfigSO config, bool left,
+                                        out PaneViews views, out Button split)
     {
         Transform paneRoot = Panel(area, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         AppPane pane = paneRoot.gameObject.AddComponent<AppPane>();
 
-        float stripHeight = config.tabStripHeight;
-        float rowHeight = config.chipRowHeight;
-        Transform strip = Panel(paneRoot, "TabStrip", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -stripHeight / 2f),
-                                new Vector2(0f, stripHeight), XpBlue, ThemeRoleId.TabStrip);
-        HorizontalLayoutGroup tabs = GetOrAdd<HorizontalLayoutGroup>(strip.gameObject);
-        tabs.padding = new RectOffset(8, 8, 6, 0);
-        tabs.spacing = 3f;
-        tabs.childAlignment = TextAnchor.LowerLeft;
-        tabs.childControlWidth = true;
-        tabs.childControlHeight = true;
-        tabs.childForceExpandWidth = false;
-        tabs.childForceExpandHeight = true;
-        var tabButtons = new List<Object>();
-        var tabActive = new List<Object>();
-        var tabBadges = new List<Object>();
-        var tabLabels = new List<Object>();
-        var tabGlyphs = new List<Object>();
-        foreach (AppTab tab in TabOrder.Default)
-        {
-            Button button = BuildPaneTab(strip, tab, pane, config, out GameObject active, out GameObject badge, out GameObject label, out GameObject glyph);
-            tabButtons.Add(button);
-            tabActive.Add(active);
-            tabBadges.Add(badge);
-            tabLabels.Add(label);
-            tabGlyphs.Add(glyph);
-        }
+        float headerHeight = PcSize.PaneHeader;
+        Transform header = Panel(paneRoot, "PaneHeader", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -headerHeight / 2f),
+                                 new Vector2(0f, headerHeight), Paper, ThemeRoleId.WindowBody);
+        float buttons = PcSize.S + 2f * HeaderIconSize + 4f + PcSize.S;
+        TMP_Text title = Text(header, "TitleText", UiText.Get(AppTabKeys[start]), PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
+                              ThemeRoleId.WindowBody, kind: ThemeTextKind.Heading);
+        PlaceRect(title.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.L, 2f), new Vector2(-buttons, -2f));
+        Chrome(title, PcType.Body, true);
+        title.lineSpacing = -12f;
+        title.richText = true;
+        title.raycastTarget = false;
 
-        Transform header = Panel(paneRoot, "PaneHeader", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(stripHeight + rowHeight / 2f)),
-                                 new Vector2(0f, rowHeight), Paper, ThemeRoleId.WindowBody);
-        ChipRow chipRow = BuildChipRow(header, config, out RectTransform chips);
-        Button chip = BuildChipTemplate(chips, config);
-        Transform rule = Panel(header, "Rule", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, AppPaneRuleHeight / 2f), new Vector2(0f, AppPaneRuleHeight),
-                               XpBlue, ThemeRoleId.TabStrip);
+        split = HeaderIcon(header, left ? "BesideButton" : "CloseButton", left ? "app.pane.beside" : "app.pane.close", PcSize.S);
+        if (left)
+        {
+            // Open beside: two panes side by side.
+            IconOutline(split.transform, "Left", new Vector2(-6f, 0f), new Vector2(11f, 18f));
+            IconOutline(split.transform, "Right", new Vector2(6f, 0f), new Vector2(11f, 18f));
+        }
+        else
+        {
+            ButtonStroke(split.transform, "Stroke1", Vector2.zero, new Vector2(2.5f, 20f), 45f);
+            ButtonStroke(split.transform, "Stroke2", Vector2.zero, new Vector2(2.5f, 20f), -45f);
+        }
+        Button pin = HeaderIcon(header, "PinButton", "app.pin", PcSize.S + HeaderIconSize + 4f);
+        Transform head = Panel(pin.transform, "Head", Center, Center, new Vector2(0f, 5f), new Vector2(12f, 12f), Ink);
+        Image headImage = head.GetComponent<Image>();
+        headImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
+        headImage.raycastTarget = false;
+        SceneUiKit.Tag(headImage, ThemeRoleId.Button, ThemePart.Ink);
+        ButtonStroke(pin.transform, "Needle", new Vector2(0f, -5f), new Vector2(2.5f, 12f), 0f);
+
+        Transform rule = Panel(header, "Rule", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, 1f), new Vector2(0f, 2f), XpFace, ThemeRoleId.Sidebar);
         rule.GetComponent<Image>().raycastTarget = false;
-        GetOrAdd<LayoutElement>(rule.gameObject).ignoreLayout = true;
+        Transform underline = Panel(header, "ActiveFrame", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, AppFrameWidth / 2f), new Vector2(0f, AppFrameWidth),
+                                    AccentInk, ThemeRoleId.FocusRing);
+        underline.GetComponent<Image>().raycastTarget = false;
+        underline.gameObject.SetActive(false);
 
         Transform content = Panel(paneRoot, "Content", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Paper, ThemeRoleId.WindowBody);
-        PlaceRect(content, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -(stripHeight + rowHeight)));
+        PlaceRect(content, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -headerHeight));
         content.gameObject.AddComponent<RectMask2D>();
 
         views = new PaneViews
@@ -141,144 +132,63 @@ public static partial class OfficeSceneUIBuilder
         noCaseText.fontSizeMin = NoCaseTextMin;
         noCase.gameObject.SetActive(false);
 
-        Transform frame = BuildFrame(paneRoot, "ActiveFrame", AppFrameWidth, AccentInk, ThemeRoleId.FocusRing);
-        frame.gameObject.SetActive(false);
-
         var so = new SerializedObject(pane);
-        SerializedArrays.Set(so, "tabButtons", tabButtons);
-        SerializedArrays.Set(so, "tabActive", tabActive);
-        SerializedArrays.Set(so, "tabBadges", tabBadges);
-        SerializedArrays.Set(so, "tabLabels", tabLabels);
-        SerializedArrays.Set(so, "tabGlyphs", tabGlyphs);
-        Wire(so, "tabStrip", strip);
         SerializedArrays.Set(so, "views", new Object[] { documents, views.Records, views.Reference, views.Transcript, views.Report, views.Rules });
-        Wire(so, "chipStrip", chips);
-        Wire(so, "chipRow", chipRow);
-        Wire(so, "chipTemplate", chip);
+        Wire(so, "titleText", title);
         Wire(so, "noCase", noCase.gameObject);
-        Wire(so, "activeFrame", frame.gameObject);
+        Wire(so, "activeFrame", underline.gameObject);
         so.FindProperty("startTab").enumValueIndex = (int)start;
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
         return pane;
     }
 
-    /// <summary>
-    /// The pane header's chip row (Saleh 2026-09-29, "Scroll the row";
-    /// ChipRow): the chip area (inside the header's old row padding; the Pin
-    /// button, BuildPinButton, insets its right end), a sideways ScrollRect
-    /// whose viewport cuts the chips and whose content, <paramref name="chips"/>,
-    /// lays them out at their preferred width (a ContentSizeFitter, so no chip
-    /// is squeezed), and a small "&lt;" and "&gt;" at the area's ends, hidden
-    /// until the chips overflow it.
-    /// </summary>
-    private static ChipRow BuildChipRow(Transform header, DesktopConfigSO config, out RectTransform chips)
+    /// <summary>A pane header's icon button (Pin, Open beside, Close): HeaderIconSize square, <paramref name="right"/> from the header's right end, its label gone (the caller draws its glyph) and its name (<paramref name="hintKey"/>) in a hover hint under it.</summary>
+    private static Button HeaderIcon(Transform header, string name, string hintKey, float right)
     {
-        Transform area = Panel(header, "ChipArea", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(area, Vector2.zero, Vector2.one, new Vector2(8f, 8f), new Vector2(-8f, -6f));
-
-        Transform viewport = Panel(area, "Viewport", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        viewport.gameObject.AddComponent<RectMask2D>();
-
-        Transform content = Panel(viewport, "Chips", Vector2.zero, new Vector2(0f, 1f), Vector2.zero, Vector2.zero, null);
-        ((RectTransform)content).pivot = new Vector2(0f, 0.5f);
-        HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(content.gameObject);
-        row.spacing = ChipGap;
-        row.childAlignment = TextAnchor.MiddleLeft;
-        row.childControlWidth = true;
-        row.childControlHeight = true;
-        row.childForceExpandWidth = false;
-        row.childForceExpandHeight = true;
-        ContentSizeFitter fit = GetOrAdd<ContentSizeFitter>(content.gameObject);
-        fit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-        fit.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
-
-        ScrollRect scroll = GetOrAdd<ScrollRect>(area.gameObject);
-        scroll.viewport = (RectTransform)viewport;
-        scroll.content = (RectTransform)content;
-        scroll.horizontal = true;
-        scroll.vertical = false;
-        scroll.movementType = ScrollRect.MovementType.Clamped;
-        scroll.inertia = false;
-        scroll.scrollSensitivity = ChipArrowWidth;
-
-        Button left = ChipArrow(area, "ScrollLeft", "<", 0f, config);
-        Button right = ChipArrow(area, "ScrollRight", ">", 1f, config);
-
-        ChipRow chipRow = GetOrAdd<ChipRow>(area.gameObject);
-        var so = new SerializedObject(chipRow);
-        Wire(so, "scroll", scroll);
-        Wire(so, "viewport", viewport);
-        Wire(so, "content", content);
-        Wire(so, "left", left);
-        Wire(so, "right", right);
-        so.FindProperty("arrowWidth").floatValue = ChipArrowWidth;
-        so.ApplyModifiedProperties();
-        chips = (RectTransform)content;
-        return chipRow;
-    }
-
-    /// <summary>One of the chip row's arrows: a small button at the area's left (<paramref name="side"/> 0) or right (1) end, its glyph at the chip size, hidden.</summary>
-    private static Button ChipArrow(Transform area, string name, string glyph, float side, DesktopConfigSO config)
-    {
-        Button arrow = MakeButton(area, name, glyph, new Vector2(side, 0f), new Vector2(side, 1f), null, ThemeRoleId.Button);
-        var rect = (RectTransform)arrow.transform;
-        rect.pivot = new Vector2(side, 0.5f);
-        rect.sizeDelta = new Vector2(ChipArrowWidth, 0f);
-        rect.anchoredPosition = Vector2.zero;
-        TMP_Text label = arrow.transform.Find("Label").GetComponent<TMP_Text>();
-        label.fontSize = config.chipLabelSize;
-        label.raycastTarget = false;
-        arrow.gameObject.SetActive(false);
-        return arrow;
-    }
-
-    /// <summary>
-    /// One tab of a pane's strip: the app's tab (BuildTab: the plate with its
-    /// name, its active look, its badge in its slot), plus its glyph (a layout
-    /// child after the name at DesktopConfigSO's glyph size, shrinking to fit
-    /// its room, hidden: a narrow strip's inactive tab shows it in the name's
-    /// place, the badge beside it), a tooltip above it naming it,
-    /// and its handle (drag along the strip, right-click for its menu).
-    /// </summary>
-    private static Button BuildPaneTab(Transform strip, AppTab tab, AppPane pane, DesktopConfigSO config, out GameObject active, out GameObject badge,
-                                       out GameObject label, out GameObject glyph)
-    {
-        Button button = BuildTab(strip, tab, config, out active, out badge);
-        label = button.transform.Find("Label").gameObject;
-
-        TMP_Text glyphText = Text(button.transform, "Glyph", null, Mathf.RoundToInt(config.tabGlyphSize), TextAlignmentOptions.Center, Vector2.zero, Vector2.one,
-                                  Color.white, ThemeRoleId.Tab, AppTabGlyphKeys[tab], FontStyles.Bold, ThemeTextKind.Button, true);
-        glyphText.raycastTarget = false;
-        glyph = glyphText.gameObject;
-        glyph.transform.SetSiblingIndex(label.transform.GetSiblingIndex() + 1);
-        glyph.SetActive(false);
-
-        BuildHoverHint(button, AppTabKeys[tab], null, AppTabHintSize, new Vector2(0.5f, 1f), new Vector2(0.5f, 0f));
-
-        AppTabHandle handle = button.gameObject.AddComponent<AppTabHandle>();
-        var so = new SerializedObject(handle);
-        Wire(so, "pane", pane);
-        so.FindProperty("tab").enumValueIndex = (int)tab;
-        so.ApplyModifiedProperties();
+        Button button = MakeButton(header, name, null, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), null, ThemeRoleId.Button);
+        PlaceRect(button.transform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(right + HeaderIconSize), -HeaderIconSize / 2f), new Vector2(-right, HeaderIconSize / 2f));
+        DestroyChildIfPresent(button.transform, "Label");
+        BuildHoverHint(button, hintKey, null, new Vector2(1f, 0f), new Vector2(1f, 1f));
         return button;
     }
 
-    /// <summary>
-    /// A hover hint on <paramref name="control"/> (HoverHint): a tooltip of
-    /// <paramref name="size"/> at the control's <paramref name="anchor"/>, by
-    /// its <paramref name="pivot"/> (a 4 u gap), reading the keyed
-    /// <paramref name="labelKey"/>, else <paramref name="text"/> (a hint the
-    /// runtime writes); hidden, never a raycast target. Returns its text.
-    /// </summary>
-    private static TMP_Text BuildHoverHint(Component control, string labelKey, string text, Vector2 size, Vector2 anchor, Vector2 pivot)
+    /// <summary>A drawn outlined rectangle (four strokes in the Button role's ink) centred at <paramref name="centre"/>: a glyph's part.</summary>
+    private static void IconOutline(Transform parent, string name, Vector2 centre, Vector2 size)
     {
-        Transform hint = Panel(control.transform, "Hint", anchor, anchor, new Vector2(0f, pivot.y < 0.5f ? 4f : -4f), size, Tooltip, ThemeRoleId.Tooltip);
+        const float w = 2.5f;
+        Transform box = Panel(parent, name, Center, Center, centre, size, null);
+        ButtonStroke(box, "Top", new Vector2(0f, size.y / 2f - w / 2f), new Vector2(size.x, w), 0f);
+        ButtonStroke(box, "Bottom", new Vector2(0f, -size.y / 2f + w / 2f), new Vector2(size.x, w), 0f);
+        ButtonStroke(box, "Left", new Vector2(-size.x / 2f + w / 2f, 0f), new Vector2(w, size.y), 0f);
+        ButtonStroke(box, "Right", new Vector2(size.x / 2f - w / 2f, 0f), new Vector2(w, size.y), 0f);
+    }
+
+    /// <summary>
+    /// A hover hint on <paramref name="control"/> (HoverHint): a tooltip at
+    /// the control's <paramref name="anchor"/>, by its <paramref name="pivot"/>
+    /// (a 4 u gap), sized to its words (one line at Caption size), reading the
+    /// keyed <paramref name="labelKey"/>, else <paramref name="text"/> (a hint
+    /// the runtime writes); hidden, never a raycast target. Returns its text.
+    /// </summary>
+    private static TMP_Text BuildHoverHint(Component control, string labelKey, string text, Vector2 anchor, Vector2 pivot)
+    {
+        Transform hint = Panel(control.transform, "Hint", anchor, anchor, new Vector2(0f, pivot.y < 0.5f ? 4f : -4f), new Vector2(200f, 40f), Tooltip, ThemeRoleId.Tooltip);
         ((RectTransform)hint).pivot = pivot;
         hint.GetComponent<Image>().raycastTarget = false;
         GetOrAdd<LayoutElement>(hint.gameObject).ignoreLayout = true;
-        TMP_Text line = Text(hint, "Label", text, 16, TextAlignmentOptions.Center, new Vector2(0.03f, 0.05f), new Vector2(0.97f, 0.95f), Ink,
-                             ThemeRoleId.Tooltip, labelKey, FontStyles.Normal, ThemeTextKind.Body, true);
+        HorizontalLayoutGroup pad = GetOrAdd<HorizontalLayoutGroup>(hint.gameObject);
+        pad.padding = new RectOffset(12, 12, 6, 6);
+        pad.childControlWidth = true;
+        pad.childControlHeight = true;
+        pad.childForceExpandWidth = false;
+        pad.childForceExpandHeight = false;
+        ContentSizeFitter fit = GetOrAdd<ContentSizeFitter>(hint.gameObject);
+        fit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        fit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        TMP_Text line = Text(hint, "Label", text, PcType.Caption, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Ink,
+                             ThemeRoleId.Tooltip, labelKey, FontStyles.Normal, ThemeTextKind.Body);
+        Chrome(line, PcType.Caption);
         line.raycastTarget = false;
         hint.gameObject.SetActive(false);
 
@@ -323,7 +233,7 @@ public static partial class OfficeSceneUIBuilder
         LinkBar(glyph, "HeadTop", new Vector2(2f, 5f), new Vector2(8f, 2.5f), 0f, role);
         LinkBar(glyph, "HeadSide", new Vector2(5f, 2f), new Vector2(2.5f, 8f), 0f, role);
 
-        hint = BuildHoverHint(button, null, string.Empty, AppLinkHintSize, Vector2.zero, new Vector2(1f, 1f));
+        hint = BuildHoverHint(button, null, string.Empty, Vector2.zero, new Vector2(1f, 1f));
         return button;
     }
 

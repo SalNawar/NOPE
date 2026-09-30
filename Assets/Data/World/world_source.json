@@ -16454,7 +16454,7 @@
       },
       {
         "role": "Taskbar",
-        "fill": "chrome",
+        "fill": "chromeDeep",
         "alpha": 1,
         "ink": "",
         "textClass": "None"
@@ -16468,9 +16468,9 @@
       },
       {
         "role": "StartButton",
-        "fill": "accent",
+        "fill": "chrome",
         "alpha": 1,
-        "ink": "accentInk",
+        "ink": "chromeInk",
         "textClass": "Text"
       },
       {
@@ -16489,7 +16489,7 @@
       },
       {
         "role": "TitleBar",
-        "fill": "chrome",
+        "fill": "chromeDeep",
         "alpha": 1,
         "ink": "chromeInk",
         "textClass": "Text"
@@ -16503,7 +16503,7 @@
       },
       {
         "role": "Button",
-        "fill": "face",
+        "fill": "white",
         "alpha": 1,
         "ink": "faceInk",
         "textClass": "Text"
@@ -16770,7 +16770,7 @@
         },
         {
           "name": "chrome",
-          "hex": "#2157DB"
+          "hex": "#33507A"
         },
         {
           "name": "chromeInk",
@@ -16778,11 +16778,11 @@
         },
         {
           "name": "chromeDeep",
-          "hex": "#1A52C7"
+          "hex": "#1C2636"
         },
         {
           "name": "accent",
-          "hex": "#2E7D32"
+          "hex": "#2F6BD8"
         },
         {
           "name": "accentInk",
@@ -16798,11 +16798,11 @@
         },
         {
           "name": "face",
-          "hex": "#ECE9D8"
+          "hex": "#E2E0D6"
         },
         {
           "name": "faceInk",
-          "hex": "#000000"
+          "hex": "#1C1B19"
         },
         {
           "name": "note",
@@ -16874,12 +16874,12 @@
         },
         {
           "role": "ScreenStrip",
-          "fill": "#0F2E6BCC",
+          "fill": "#1C2636CC",
           "ink": "#FFFFFF"
         },
         {
           "role": "ClaimStrip",
-          "fill": "#0F2E6BCC",
+          "fill": "#1C2636CC",
           "ink": "#FFFFFF"
         },
         {
@@ -17037,7 +17037,7 @@
       },
       {
         "key": "taskbar.start",
-        "text": "start",
+        "text": "Menu",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -17085,7 +17085,7 @@
       },
       {
         "key": "records.search",
-        "text": "SEARCH",
+        "text": "Search",
         "gloss": "Below",
         "tier": "Flavour"
       },
@@ -17157,7 +17157,7 @@
       },
       {
         "key": "app.orders.tooDear",
-        "text": "{0} {1} · not enough {1}",
+        "text": "{0} {1} · you cannot afford it yet",
         "gloss": "None",
         "tier": "Full"
       },
@@ -17361,7 +17361,7 @@
       },
       {
         "key": "taskbar.desk",
-        "text": "< Desk",
+        "text": "Back to desk",
         "gloss": "Below",
         "tier": "Flavour"
       },
@@ -17469,25 +17469,25 @@
       },
       {
         "key": "app.counters",
-        "text": "Papers {0} of {1} received · {2} scanned · Deviations {3}",
+        "text": "Papers received: {0} of {1}\nScanned: {2}\nDeviations logged: {3}",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.tab.documents",
-        "text": "Documents",
+        "text": "Papers",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.tab.records",
-        "text": "Records",
+        "text": "Citizen records",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.tab.reference",
-        "text": "Reference",
+        "text": "Reference books",
         "gloss": "None",
         "tier": "Full"
       },
@@ -17499,13 +17499,13 @@
       },
       {
         "key": "app.tab.report",
-        "text": "Report",
+        "text": "Deviation report",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.tab.rules",
-        "text": "Rules",
+        "text": "Today's rules",
         "gloss": "None",
         "tier": "Full"
       },
@@ -17547,49 +17547,49 @@
       },
       {
         "key": "app.search",
-        "text": "Search this case and today's records",
+        "text": "Search papers, records, books, rules and the transcript",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "app.toolbar.steps",
-        "text": "Steps",
+        "key": "app.pane.beside",
+        "text": "Open beside",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "app.toolbar.split",
-        "text": "Split",
+        "key": "app.pane.close",
+        "text": "Close",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "app.toolbar.keys",
-        "text": "F1 Keys",
+        "key": "app.pane.path",
+        "text": "{0}  ›  <b>{1}</b>",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.sidebar.steps",
-        "text": "STEPS",
+        "text": "Checklist",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.sidebar.pinned",
-        "text": "PINNED",
+        "text": "Pinned",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.sidebar.recent",
-        "text": "RECENT",
+        "text": "Recent",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "app.sidebar.empty",
-        "text": "Nothing here yet.",
+        "key": "app.pins.title",
+        "text": "Pinned and recent",
         "gloss": "None",
         "tier": "Full"
       },
@@ -17648,42 +17648,6 @@
         "tier": "Full"
       },
       {
-        "key": "search.glyph.documents",
-        "text": "DOC",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "search.glyph.records",
-        "text": "REC",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "search.glyph.reference",
-        "text": "BOOK",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "search.glyph.transcript",
-        "text": "TRN",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "search.glyph.report",
-        "text": "DEV",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "search.glyph.rules",
-        "text": "RULE",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "search.title.row",
         "text": "{0} · {1}",
         "gloss": "None",
@@ -17727,7 +17691,7 @@
       },
       {
         "key": "steps.identity",
-        "text": "Name, number and birth date in Records",
+        "text": "Name, number and birth date in Citizen records",
         "gloss": "None",
         "tier": "Full"
       },
@@ -17829,97 +17793,67 @@
       },
       {
         "key": "steps.none",
-        "text": "Steps show while a traveller is at the desk.",
+        "text": "The checklist shows while a traveller is at the desk.",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "steps.hidden",
-        "text": "Steps are hidden: Steps in the toolbar shows them.",
+        "text": "The checklist is hidden: click its heading to show it.",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "app.tabGlyph.documents",
-        "text": "DOC",
+        "key": "steps.count",
+        "text": "{0} of {1}",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "app.tabGlyph.records",
-        "text": "REC",
+        "key": "app.tabMenu.up",
+        "text": "Move up",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "app.tabGlyph.reference",
-        "text": "REF",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.tabGlyph.transcript",
-        "text": "TRN",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.tabGlyph.report",
-        "text": "RPT",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.tabGlyph.rules",
-        "text": "RUL",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.tabMenu.left",
-        "text": "Move left",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.tabMenu.right",
-        "text": "Move right",
+        "key": "app.tabMenu.down",
+        "text": "Move down",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.tabMenu.reset",
-        "text": "Reset tab order",
+        "text": "Reset order",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.split.hint",
-        "text": "Two panes side by side, or one",
+        "text": "Show a second source beside this one",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.split.tooNarrow",
-        "text": "Maximise the window for two panes",
+        "text": "Maximise the window to open a second pane",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.link.reference",
-        "text": "Open the Reference: {0}, the claimed place",
+        "text": "Open Reference books: {0}, the claimed place",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.link.records",
-        "text": "Open Records: {0}",
+        "text": "Open Citizen records: {0}",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "app.link.rules",
-        "text": "Open the Rules",
+        "text": "Open today's rules",
         "gloss": "None",
         "tier": "Full"
       },
@@ -17931,7 +17865,7 @@
       },
       {
         "key": "app.link.place",
-        "text": "Open the Reference: {0}",
+        "text": "Open Reference books: {0}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -17943,7 +17877,7 @@
       },
       {
         "key": "app.transcript.newLine",
-        "text": "New line ▼",
+        "text": "New line below",
         "gloss": "None",
         "tier": "Full"
       },
@@ -17973,19 +17907,19 @@
       },
       {
         "key": "window.minimize",
-        "text": "_",
+        "text": "Minimise",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "window.maximize",
-        "text": "[]",
+        "text": "Maximise",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "window.close",
-        "text": "X",
+        "text": "Close",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18003,13 +17937,13 @@
       },
       {
         "key": "browser.back",
-        "text": "<",
+        "text": "Back",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "browser.forward",
-        "text": ">",
+        "text": "Forward",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18447,7 +18381,7 @@
       },
       {
         "key": "settings.language",
-        "text": "UI language",
+        "text": "Language",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18597,7 +18531,7 @@
       },
       {
         "key": "keys.escape",
-        "text": "Close a menu, this card or the search; clear the search; leave a text field; close the Start menu or cancel a drag. With none of those, leave the PC",
+        "text": "Close a menu, this card or the search; clear the search; leave a text field; close the Menu or cancel a drag. With none of those, leave the PC",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18633,19 +18567,19 @@
       },
       {
         "key": "keys.tabs",
-        "text": "Investigation: show the tab at that place",
+        "text": "Investigation: show the source at that place in the list",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.nextTab",
-        "text": "The next or previous tab (← → on the tab strip)",
+        "text": "The next or previous source (↑ ↓ on the list)",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.moveTab",
-        "text": "Move the tab left or right",
+        "text": "Move the source up or down the list",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18657,19 +18591,19 @@
       },
       {
         "key": "keys.split",
-        "text": "Two panes, or back to one",
+        "text": "Open a second pane beside, or close it",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.sidebar",
-        "text": "Show or hide the sidebar",
+        "text": "Show or hide the list of sources",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.steps",
-        "text": "Show or hide the steps",
+        "text": "Show or hide the checklist",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18681,13 +18615,13 @@
       },
       {
         "key": "keys.regions",
-        "text": "The next or previous part of the app: search, tabs, items, rows, sidebar, compare, Accept and Deny",
+        "text": "The next or previous part of the app: search, sources, items, rows, checklist, compare, Accept and Deny",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.rows",
-        "text": "Move the focus over the rows, chips, pins or buttons (← → too)",
+        "text": "Move the focus over the rows, items, pins or buttons",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18759,7 +18693,7 @@
       },
       {
         "key": "app.item.record",
-        "text": "Records · {0}",
+        "text": "Citizen records · {0}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18777,7 +18711,7 @@
       },
       {
         "key": "app.pins.empty",
-        "text": "Ctrl+P pins the focused row, or this pane's item (Pin). Right-click a pin to unpin it.",
+        "text": "Ctrl+P pins the row you are on, or use Pin in a pane's header. Right-click a pin to unpin it.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18837,13 +18771,13 @@
       },
       {
         "key": "settings.stepsShown",
-        "text": "Steps shown",
+        "text": "Checklist shown",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "settings.stepsHidden",
-        "text": "Steps hidden",
+        "text": "Checklist hidden",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18855,7 +18789,7 @@
       },
       {
         "key": "mail.inbox",
-        "text": "INBOX",
+        "text": "Inbox",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19167,7 +19101,7 @@
       },
       {
         "key": "notes.days",
-        "text": "DAYS",
+        "text": "Days",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19185,19 +19119,19 @@
       },
       {
         "key": "notes.pageTitle",
-        "text": "NOTES · DAY {0}",
+        "text": "Notes · day {0}",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "notes.clippings",
-        "text": "CLIPPINGS",
+        "text": "Clippings",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "notes.notes",
-        "text": "NOTES",
+        "text": "Notes",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19227,7 +19161,7 @@
       },
       {
         "key": "notes.remove",
-        "text": "X",
+        "text": "Remove",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19486,6 +19420,12 @@
       {
         "key": "compare.dockHint",
         "text": "COMPARE    Click two values to compare them.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.clear",
+        "text": "Clear the comparison",
         "gloss": "None",
         "tier": "Full"
       },
@@ -20327,7 +20267,7 @@
           },
           {
             "key": "taskbar.start",
-            "text": "ابدأ"
+            "text": "القائمة"
           },
           {
             "key": "startmenu.settings",
@@ -20453,7 +20393,7 @@
           },
           {
             "key": "taskbar.start",
-            "text": "έναρξη"
+            "text": "Μενού"
           },
           {
             "key": "startmenu.settings",
@@ -20485,7 +20425,7 @@
           },
           {
             "key": "records.search",
-            "text": "ΑΝΑΖΗΤΗΣΗ"
+            "text": "Αναζήτηση"
           },
           {
             "key": "compare.match",
@@ -20545,7 +20485,7 @@
           },
           {
             "key": "taskbar.desk",
-            "text": "< Γραφείο"
+            "text": "Πίσω στο γραφείο"
           },
           {
             "key": "briefing.title",
@@ -20579,7 +20519,7 @@
           },
           {
             "key": "taskbar.start",
-            "text": "avvio"
+            "text": "Menu"
           },
           {
             "key": "startmenu.settings",
@@ -20611,7 +20551,7 @@
           },
           {
             "key": "records.search",
-            "text": "CERCA"
+            "text": "Cerca"
           },
           {
             "key": "compare.match",
@@ -20671,7 +20611,7 @@
           },
           {
             "key": "taskbar.desk",
-            "text": "< Scrivania"
+            "text": "Torna alla scrivania"
           },
           {
             "key": "briefing.title",
@@ -20705,7 +20645,7 @@
           },
           {
             "key": "taskbar.start",
-            "text": "Start"
+            "text": "Menü"
           },
           {
             "key": "startmenu.settings",
@@ -20737,7 +20677,7 @@
           },
           {
             "key": "records.search",
-            "text": "SUCHEN"
+            "text": "Suchen"
           },
           {
             "key": "compare.match",
@@ -20797,7 +20737,7 @@
           },
           {
             "key": "taskbar.desk",
-            "text": "< Schreibtisch"
+            "text": "Zurück zum Schreibtisch"
           },
           {
             "key": "briefing.title",
@@ -20831,7 +20771,7 @@
           },
           {
             "key": "taskbar.start",
-            "text": "开始"
+            "text": "菜单"
           },
           {
             "key": "startmenu.settings",
@@ -20923,7 +20863,7 @@
           },
           {
             "key": "taskbar.desk",
-            "text": "< 办公桌"
+            "text": "返回办公桌"
           },
           {
             "key": "briefing.title",
@@ -20957,7 +20897,7 @@
           },
           {
             "key": "taskbar.start",
-            "text": "スタート"
+            "text": "メニュー"
           },
           {
             "key": "startmenu.settings",
@@ -21049,7 +20989,7 @@
           },
           {
             "key": "taskbar.desk",
-            "text": "< デスク"
+            "text": "デスクに戻る"
           },
           {
             "key": "briefing.title",

@@ -70,10 +70,13 @@ public static partial class OfficeSceneUIBuilder
     {
         DesktopConfigSO config = EnsureDesktopConfig();
 
+        DestroyChildIfPresent(investHost, "CompareDock"); // rebuilt fresh (its texts take the PC UX redesign's sizes; an older build's leftovers go)
         Transform strip = Panel(investHost, "CompareDock", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, config.taskbarHeight + config.dockHeight / 2f),
                                 new Vector2(0f, config.dockHeight), Tooltip, ThemeRoleId.CompareBar);
-        TMP_Text hint = Text(strip, "Hint", null, 20, TextAlignmentOptions.Left, new Vector2(0.02f, 0f), new Vector2(0.98f, 1f), Ink,
+        TMP_Text hint = Text(strip, "Hint", null, PcType.Body, TextAlignmentOptions.Left, new Vector2(0.02f, 0f), new Vector2(0.98f, 1f), Ink,
                              ThemeRoleId.CompareBar, "compare.dockHint", FontStyles.Italic);
+        Chrome(hint, PcType.Body);
+        hint.alignment = TextAlignmentOptions.MidlineLeft;
         hint.raycastTarget = false;
 
         Transform pair = Panel(strip, "Pair", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Tooltip, ThemeRoleId.CompareBar);
@@ -81,8 +84,12 @@ public static partial class OfficeSceneUIBuilder
         Button verdict = DockColumn(pair, "Verdict", new Vector2(0.44f, 0f), new Vector2(0.6f, 1f), TextAlignmentOptions.Center, FontStyles.Bold, out TMP_Text verdictText);
         Button sideB = DockColumn(pair, "SideB", new Vector2(0.61f, 0f), new Vector2(0.945f, 1f), TextAlignmentOptions.Left, FontStyles.Normal, out TMP_Text sideBText);
 
-        Button clear = MakeButton(pair, "ClearButton", null, new Vector2(0.955f, 0.15f), new Vector2(0.99f, 0.85f), XpRed, ThemeRoleId.CloseButton, "window.close");
-        SetAnchors(clear.transform, new Vector2(0.955f, 0.15f), new Vector2(0.99f, 0.85f));
+        Button clear = MakeButton(pair, "ClearButton", null, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), null, ThemeRoleId.Button);
+        PlaceRect(clear.transform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(PcSize.M + PcSize.Control), -PcSize.Control / 2f), new Vector2(-PcSize.M, PcSize.Control / 2f));
+        DestroyChildIfPresent(clear.transform, "Label");
+        ButtonStroke(clear.transform, "Stroke1", Vector2.zero, new Vector2(2.5f, 20f), 45f);
+        ButtonStroke(clear.transform, "Stroke2", Vector2.zero, new Vector2(2.5f, 20f), -45f);
+        BuildHoverHint(clear, "compare.clear", null, new Vector2(0.5f, 1f), new Vector2(1f, 0f));
         WirePersistentVoid(clear, "m_OnClick", compare, nameof(CompareController.Clear));
         pair.gameObject.SetActive(false);
 
@@ -112,10 +119,11 @@ public static partial class OfficeSceneUIBuilder
         Button button = GetOrAdd<Button>(column.gameObject);
         button.transition = Selectable.Transition.None;
         button.targetGraphic = column.GetComponent<Image>();
-        text = Text(column, "Text", string.Empty, 20, align, new Vector2(0.01f, 0f), new Vector2(0.99f, 1f), Ink, ThemeRoleId.CompareBar, style: style);
+        text = Text(column, "Text", string.Empty, PcType.Body, align, new Vector2(0.01f, 0f), new Vector2(0.99f, 1f), Ink, ThemeRoleId.CompareBar, style: style);
         text.enableAutoSizing = true;
-        text.fontSizeMin = 11f;
-        text.fontSizeMax = 20f;
+        text.fontSizeMin = PcType.Caption;
+        text.fontSizeMax = PcType.Body;
+        text.lineSpacing = -8f;
         text.textWrappingMode = TextWrappingModes.Normal;
         text.overflowMode = TextOverflowModes.Ellipsis;
         text.raycastTarget = false;
@@ -139,8 +147,9 @@ public static partial class OfficeSceneUIBuilder
         DesktopWindowManager manager = GetOrAdd<DesktopWindowManager>(root.gameObject);
 
         Transform taskbar = root.Find("Taskbar");
-        Transform strip = Panel(taskbar, "WindowButtons", new Vector2(0.25f, 0.1f), new Vector2(0.635f, 0.9f), Vector2.zero, Vector2.zero, null);
-        SetAnchors(strip, new Vector2(0.25f, 0.1f), new Vector2(0.635f, 0.9f));
+        float from = PcSize.S + MenuButtonWidth + PcSize.S + DeskButtonWidth + PcSize.L;
+        Transform strip = Panel(taskbar, "WindowButtons", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(strip, Vector2.zero, Vector2.one, new Vector2(from, 4f), new Vector2(-(PcSize.S + TrayWidth + PcSize.L), -4f));
         HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(strip.gameObject);
         row.spacing = 4f;
         row.childAlignment = TextAnchor.MiddleLeft;
@@ -149,18 +158,26 @@ public static partial class OfficeSceneUIBuilder
         row.childForceExpandWidth = false;
         row.childForceExpandHeight = true;
 
-        Button template = MakeButton(strip, "WindowButtonTemplate", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.DeskButton);
+        // A window's button (the PC UX redesign IA12, C7): the app's glyph on a Tab plate, the title only when the window has no glyph, an accent bar under the focused one, the title in a hover hint above it.
+        Button template = MakeButton(strip, "WindowButtonTemplate", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.Tab);
         LayoutElement size = GetOrAdd<LayoutElement>(template.gameObject);
-        size.minWidth = config.taskbarButtonMinWidth;
-        size.preferredWidth = config.taskbarButtonMaxWidth;
+        size.minWidth = config.taskbarButtonWidth;
+        size.preferredWidth = config.taskbarButtonWidth;
         size.flexibleWidth = 0f;
         TMP_Text label = template.transform.Find("Label").GetComponent<TMP_Text>();
-        label.enableAutoSizing = true;
-        label.fontSizeMin = 12f;
-        label.fontSizeMax = 18f;
-        label.textWrappingMode = TextWrappingModes.NoWrap;
-        label.overflowMode = TextOverflowModes.Ellipsis;
-        label.margin = new Vector4(6f, 0f, 6f, 0f);
+        Chrome(label, PcType.Caption);
+        label.margin = new Vector4(PcSize.M, 0f, PcSize.M, 0f);
+        label.raycastTarget = false;
+        Transform glyph = Panel(template.transform, "Glyph", Center, Center, new Vector2(0f, 2f), new Vector2(30f, 30f), Color.white);
+        Image glyphImage = glyph.GetComponent<Image>();
+        glyphImage.raycastTarget = false;
+        glyphImage.preserveAspect = true;
+        SceneUiKit.Tag(glyphImage, ThemeRoleId.Tab, ThemePart.Ink);
+        Transform focus = Panel(template.transform, "Focus", new Vector2(0.2f, 0f), new Vector2(0.8f, 0f), new Vector2(0f, 2f), new Vector2(0f, 4f), new Color(0.95f, 0.6f, 0.1f, 1f),
+                                ThemeRoleId.FocusRing);
+        focus.GetComponent<Image>().raycastTarget = false;
+        focus.gameObject.SetActive(false);
+        BuildHoverHint(template, null, string.Empty, new Vector2(0.5f, 1f), new Vector2(0.5f, 0f));
         template.gameObject.SetActive(false);
 
         var so = new SerializedObject(manager);
@@ -168,6 +185,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "raycaster", canvas.GetComponent<GraphicRaycaster>());
         SetRef(so, "taskbarButtons", strip);
         SetRef(so, "taskbarButtonTemplate", template);
+        Transform iconLayer = root.Find("DesktopIcons");
+        SetRef(so, "icons", iconLayer != null ? iconLayer.GetComponent<DesktopIcons>() : null);
         so.ApplyModifiedProperties();
 
         foreach (DesktopWindow window in root.GetComponentsInChildren<DesktopWindow>(true))

@@ -16,25 +16,25 @@ using UnityEngine.UI;
 public sealed class SiteRenderer : MonoBehaviour
 {
     /// <summary>The masthead's size (canvas units; 1 u is 0.52 px at 720p, so the smallest text below stays about 8 px there).</summary>
-    private const float MastheadSize = 40f;
+    private const float MastheadSize = 44f;
 
     /// <summary>A headline's size.</summary>
-    private const float HeadlineSize = 31f;
+    private const float HeadlineSize = 36f;
 
     /// <summary>A section heading's size.</summary>
-    private const float HeadingSize = 25f;
+    private const float HeadingSize = 30f;
 
     /// <summary>Body text and links.</summary>
-    private const float BodySize = 21f;
+    private const float BodySize = 26f;
 
     /// <summary>Table cells and box lines.</summary>
-    private const float CellSize = 19f;
+    private const float CellSize = 24f;
 
     /// <summary>Notes and revised notes.</summary>
-    private const float NoteSize = 17f;
+    private const float NoteSize = 24f;
 
     /// <summary>Box titles, field labels and column heads.</summary>
-    private const float LabelSize = 16f;
+    private const float LabelSize = 24f;
 
     /// <summary>Infobox cells and start-page tiles per row.</summary>
     private const int CellsPerRow = 3;

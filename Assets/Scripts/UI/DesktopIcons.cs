@@ -127,6 +127,18 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
         Save();
     }
 
+    /// <summary>The glyph of the app whose window is <paramref name="window"/> (the taskbar's window button, the PC UX redesign IA12), or null for a window no icon opens.</summary>
+    public Sprite GlyphOf(DesktopWindow window)
+    {
+        string id = apps != null ? apps.IdOf(window) : null;
+        if (id == null)
+            return null;
+        foreach (DesktopIconView icon in icons)
+            if (icon != null && icon.AppId == id)
+                return icon.GlyphSprite;
+        return null;
+    }
+
     /// <summary>Shows an app's badge: a count, IconBadge.Dot, or 0 for none.</summary>
     public void SetBadge(string appId, int count)
     {

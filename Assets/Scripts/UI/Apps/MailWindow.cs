@@ -125,7 +125,7 @@ public sealed class MailWindow : MonoBehaviour
             string subject = read ? MailText.Subject(m) : "<b>" + UiText.Format("mail.unreadRow", MailText.Subject(m)) + "</b>";
             TMP_Text label = _rows[i].GetComponentInChildren<TMP_Text>(true);
             if (label != null)
-                label.text = subject + "\n<size=80%>" + UiText.Format("mail.rowMeta", m.Day, MailText.From(m)) + "</size>";
+                label.text = subject + "\n<size=92%>" + UiText.Format("mail.rowMeta", m.Day, MailText.From(m)) + "</size>";
             AppRows.MarkSelected(_rows[i], m == open);
         }
     }

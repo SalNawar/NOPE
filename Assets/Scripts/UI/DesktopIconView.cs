@@ -52,6 +52,9 @@ public sealed class DesktopIconView : MonoBehaviour, IPointerDownHandler, IPoint
     /// <summary>The app this icon opens.</summary>
     public string AppId => appId;
 
+    /// <summary>The glyph's sprite (the art or the drawn placeholder; null before the icon woke): the taskbar's window button shows it too.</summary>
+    public Sprite GlyphSprite => glyph != null ? glyph.sprite : null;
+
     /// <summary>Where the icon sits now (its cell's top-left in the icon area, y down).</summary>
     public IconPlace Place => new IconPlace(appId, Rect.anchoredPosition.x, -Rect.anchoredPosition.y);
 

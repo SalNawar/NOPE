@@ -12,10 +12,10 @@ using UnityEngine.UI;
 /// with a "Double click" (the default) or a "Single click"
 /// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange);
 /// and the Investigation app (the PC redesign ST1, SG1): its steps checklist
-/// "Steps shown" (the default) or "Steps hidden" (StepsPanel.SetShown,
-/// remembered in DesktopPreferences; the toolbar's Steps repaints the pair).
+/// "Checklist shown" (the default) or "Checklist hidden" (StepsPanel.SetShown,
+/// remembered in DesktopPreferences; the checklist's own Hide or Show repaints the pair).
 /// In each pair the chosen button shows the theme's accent colours (the
-/// SearchButton role), the other the default button colours. The
+/// Badge role, as the navigator's selected source: the PC UX redesign), the other the default button colours. The
 /// Investigation section's Text size (100, 125, 150 %: the zoom levels) is
 /// the app's default zoom (InvestigationApp.SetZoomDefault, saved in
 /// DesktopPreferences; Ctrl+0 goes back to it). The Keyboard section's "Show
@@ -189,7 +189,7 @@ public sealed class SettingsWindowController : MonoBehaviour
         if (button == null || theme == null)
             return;
 
-        PaletteEntry entry = theme.Get(selected ? ThemeRoleId.SearchButton : ThemeRoleId.Button);
+        PaletteEntry entry = theme.Get(selected ? ThemeRoleId.Badge : ThemeRoleId.Button);
         if (entry == null)
             return;
         if (button.targetGraphic != null && entry.hasFill)

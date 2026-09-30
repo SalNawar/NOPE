@@ -894,29 +894,58 @@ public static partial class OfficeSceneUIBuilder
         return panel;
     }
 
+    /// <summary>The taskbar's Menu button's width, and Back to desk's (desktop units; the PC UX redesign's section 3).</summary>
+    private const float MenuButtonWidth = 136f, DeskButtonWidth = 216f;
+
+    /// <summary>The tray's width at the taskbar's right end (Day, Credits, Stability, the clock at Caption size).</summary>
+    private const float TrayWidth = 600f;
+
+    /// <summary>
+    /// The taskbar (the PC UX redesign C7), rebuilt fresh: a flat bar in the
+    /// Taskbar role (the culture's deep colour; no gloss), the Menu button
+    /// (the StartButton role) at its left, the tray at its right with Day,
+    /// Credits, Stability and the clock at Caption size in a row sized by
+    /// their words. Back to desk and the window buttons are added after it
+    /// (BuildDesktopShell, BuildWindowManager).
+    /// </summary>
     private static void BuildTaskbar(Transform root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText, out TMP_Text clockText)
     {
+        DestroyChildIfPresent(root, "Taskbar");
         Transform bar = Panel(root, "Taskbar", new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, TaskbarHeight / 2f), new Vector2(0f, TaskbarHeight), XpBlue, ThemeRoleId.Taskbar);
-        Panel(bar, "TaskbarGloss", new Vector2(0f, 0.72f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.18f), ThemeRoleId.TaskbarGloss);
 
-        Transform start = Panel(bar, "StartButton", new Vector2(0f, 0f), new Vector2(0.12f, 1f), Vector2.zero, Vector2.zero, XpGreen, ThemeRoleId.StartButton);
-        Panel(start, "StartGloss", new Vector2(0f, 0.55f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.18f), ThemeRoleId.TaskbarGloss);
-        Text(start, "Label", null, 20, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white,
-             ThemeRoleId.StartButton, "taskbar.start", FontStyles.Bold | FontStyles.Italic, ThemeTextKind.Button, true);
+        Transform start = Panel(bar, "StartButton", new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(PcSize.S + MenuButtonWidth / 2f, 0f), new Vector2(MenuButtonWidth, -PcSize.S),
+                                XpGreen, ThemeRoleId.StartButton);
+        TMP_Text menu = Text(start, "Label", null, PcType.Body, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white,
+                             ThemeRoleId.StartButton, "taskbar.start", FontStyles.Bold, ThemeTextKind.Button, true);
+        menu.raycastTarget = false;
 
-        // System tray: Day | Credits | Stability | Clock. Text() returns existing
-        // objects unchanged, so the slot anchors are re-applied here (authoritative).
-        Transform tray = Panel(bar, "Tray", new Vector2(0.64f, 0.12f), new Vector2(0.995f, 0.88f), Vector2.zero, Vector2.zero, new Color(0.1f, 0.32f, 0.78f, 1f), ThemeRoleId.Tray);
-        dayText = Text(tray, "DayText", "Day 1", 18, TextAlignmentOptions.Center, new Vector2(0f, 0f), new Vector2(0.2f, 1f), Color.white, ThemeRoleId.Tray, fit: true);
-        moneyText = Text(tray, "MoneyText", "Credits: 0", 18, TextAlignmentOptions.Center, new Vector2(0.2f, 0f), new Vector2(0.48f, 1f), Color.white, ThemeRoleId.Tray, fit: true);
-        stabilityText = Text(tray, "StabilityText", "Stability: 100%", 18, TextAlignmentOptions.Center, new Vector2(0.48f, 0f), new Vector2(0.8f, 1f), Color.white, ThemeRoleId.Tray, fit: true);
-        clockText = Text(tray, "ClockText", "09:00", 18, TextAlignmentOptions.Center, new Vector2(0.8f, 0f), new Vector2(1f, 1f), Color.white, ThemeRoleId.Tray);
-        SetAnchors(dayText.transform, new Vector2(0f, 0f), new Vector2(0.2f, 1f));
-        SetAnchors(moneyText.transform, new Vector2(0.2f, 0f), new Vector2(0.48f, 1f));
-        SetAnchors(stabilityText.transform, new Vector2(0.48f, 0f), new Vector2(0.8f, 1f));
-        SetAnchors(clockText.transform, new Vector2(0.8f, 0f), new Vector2(1f, 1f));
+        // System tray: Day | Credits | Stability | Clock, right to left from the bar's end, each as wide as its words.
+        Transform tray = Panel(bar, "Tray", new Vector2(1f, 0f), Vector2.one, new Vector2(-(PcSize.S + TrayWidth / 2f), 0f), new Vector2(TrayWidth, 0f),
+                               new Color(0.1f, 0.32f, 0.78f, 1f), ThemeRoleId.Tray);
+        tray.GetComponent<Image>().raycastTarget = false;
+        HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(tray.gameObject);
+        row.padding = new RectOffset(12, 12, 0, 0);
+        row.spacing = 28f;
+        row.childAlignment = TextAnchor.MiddleRight;
+        row.childControlWidth = true;
+        row.childControlHeight = true;
+        row.childForceExpandWidth = false;
+        row.childForceExpandHeight = true;
+        dayText = TrayText(tray, "DayText", "Day 1");
+        moneyText = TrayText(tray, "MoneyText", "Credits: 0");
+        stabilityText = TrayText(tray, "StabilityText", "Stability: 100%");
+        clockText = TrayText(tray, "ClockText", "09:00");
 
         bar.SetAsLastSibling();
+    }
+
+    /// <summary>A tray readout: one line at Caption size in the tray's ink, as wide as its text.</summary>
+    private static TMP_Text TrayText(Transform tray, string name, string sample)
+    {
+        TMP_Text text = Text(tray, name, sample, PcType.Caption, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white, ThemeRoleId.Tray);
+        Chrome(text, PcType.Caption);
+        text.raycastTarget = false;
+        return text;
     }
 
     /// <summary>
@@ -931,9 +960,16 @@ public static partial class OfficeSceneUIBuilder
         DestroyChildIfPresent(header, "MaxBtn");
         DestroyChildIfPresent(header, "CloseBtn");
 
-        Button minB = MakeButton(header, "MinBtn", null, new Vector2(0.79f, 0.16f), new Vector2(0.85f, 0.86f), null, ThemeRoleId.Button, "window.minimize");
-        Button maxB = MakeButton(header, "MaxBtn", null, new Vector2(0.855f, 0.16f), new Vector2(0.915f, 0.86f), null, ThemeRoleId.Button, "window.maximize");
-        Button closeB = MakeButton(header, "CloseBtn", null, new Vector2(0.925f, 0.16f), new Vector2(0.985f, 0.86f), XpRed, ThemeRoleId.CloseButton, "window.close");
+        Button minB = WindowControl(header, "MinBtn", 2, ThemeRoleId.Tab, "window.minimize");
+        GlyphLine(minB.transform, "Bar", new Vector2(0f, -6f), new Vector2(16f, 2.5f), 0f);
+        Button maxB = WindowControl(header, "MaxBtn", 1, ThemeRoleId.Tab, "window.maximize");
+        GlyphLine(maxB.transform, "Top", new Vector2(0f, 7f), new Vector2(16f, 2.5f), 0f);
+        GlyphLine(maxB.transform, "Bottom", new Vector2(0f, -7f), new Vector2(16f, 2.5f), 0f);
+        GlyphLine(maxB.transform, "Left", new Vector2(-7f, 0f), new Vector2(2.5f, 16f), 0f);
+        GlyphLine(maxB.transform, "Right", new Vector2(7f, 0f), new Vector2(2.5f, 16f), 0f);
+        Button closeB = WindowControl(header, "CloseBtn", 0, ThemeRoleId.CloseButton, "window.close");
+        GlyphLine(closeB.transform, "Stroke1", Vector2.zero, new Vector2(2.5f, 20f), 45f);
+        GlyphLine(closeB.transform, "Stroke2", Vector2.zero, new Vector2(2.5f, 20f), -45f);
 
         DesktopWindow chrome = win.GetComponent<DesktopWindow>();
         if (chrome == null)
@@ -945,6 +981,42 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "closeButton", closeB);
         so.ApplyModifiedProperties();
         return chrome;
+    }
+
+    /// <summary>
+    /// A title-bar control (the PC UX redesign C1): a ghost button of
+    /// PcSize.WindowControl, <paramref name="slot"/> places from the bar's
+    /// right end (0 = the last), whose plate (<paramref name="role"/>: the
+    /// steel Tab, or the close's red) shows only under the pointer (its tint's
+    /// alpha is 0 at rest) and whose glyph is drawn by GlyphLine in the title
+    /// bar's ink; a hover hint names it (<paramref name="hintKey"/>).
+    /// </summary>
+    private static Button WindowControl(Transform header, string name, int slot, ThemeRoleId role, string hintKey)
+    {
+        float w = PcSize.WindowControl;
+        Transform plate = Panel(header, name, new Vector2(1f, 0f), Vector2.one, new Vector2(-(slot * w + w / 2f), 0f), new Vector2(w, 0f), role == ThemeRoleId.CloseButton ? XpRed : XpBlue, role);
+        Button button = GetOrAdd<Button>(plate.gameObject);
+        button.targetGraphic = plate.GetComponent<Image>();
+        ColorBlock tint = button.colors;
+        tint.normalColor = new Color(1f, 1f, 1f, 0f);
+        tint.highlightedColor = Color.white;
+        tint.pressedColor = new Color(0.8f, 0.8f, 0.8f, 1f);
+        tint.selectedColor = new Color(1f, 1f, 1f, 0f);
+        tint.disabledColor = new Color(1f, 1f, 1f, 0f);
+        tint.fadeDuration = 0.08f;
+        button.colors = tint;
+        BuildHoverHint(button, hintKey, null, new Vector2(0.5f, 0f), new Vector2(slot == 0 ? 1f : 0.5f, 1f));
+        return button;
+    }
+
+    /// <summary>One stroke of a drawn chrome glyph (a window control's): a plain rect in the title bar's ink, rotated by <paramref name="angle"/>, taking no raycasts.</summary>
+    private static void GlyphLine(Transform parent, string name, Vector2 centre, Vector2 size, float angle)
+    {
+        Transform bar = Panel(parent, name, Center, Center, centre, size, Color.white);
+        bar.localRotation = Quaternion.Euler(0f, 0f, angle);
+        Image image = bar.GetComponent<Image>();
+        image.raycastTarget = false;
+        SceneUiKit.Tag(image, ThemeRoleId.TitleBar, ThemePart.Ink);
     }
 
     // ----------------------------- Placeholder art -----------------------------
@@ -1190,9 +1262,11 @@ public static partial class OfficeSceneUIBuilder
 
         // The taskbar's way back to the office (closes the PC frame), next to Start.
         Transform taskbar = root.Find("Taskbar");
-        Button deskButton = MakeButton(taskbar, "DeskButton", null, new Vector2(0.125f, 0.1f), new Vector2(0.245f, 0.9f), new Color(0.2f, 0.3f, 0.5f, 0.95f),
+        Button deskButton = MakeButton(taskbar, "DeskButton", null, Vector2.zero, new Vector2(0f, 1f), new Color(0.2f, 0.3f, 0.5f, 0.95f),
                                        ThemeRoleId.DeskButton, "taskbar.desk");
-        SetAnchors(deskButton.transform, new Vector2(0.125f, 0.1f), new Vector2(0.245f, 0.9f));
+        PlaceRect(deskButton.transform, Vector2.zero, new Vector2(0f, 1f), new Vector2(PcSize.S + MenuButtonWidth + PcSize.S, 4f),
+                  new Vector2(PcSize.S + MenuButtonWidth + PcSize.S + DeskButtonWidth, -4f));
+        ButtonLabel(deskButton, PcType.Body);
         WirePersistentVoid(deskButton, "m_OnClick", view, nameof(OfficeViewController.FocusOffice));
 
         Button startBtn = null;
@@ -1247,10 +1321,12 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soDrag, "windowRoot", (RectTransform)win);
         soDrag.ApplyModifiedProperties();
 
-        Text(header, "TitleText", null, TitleFontSize, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.7f, 1f), Color.white,
-             ThemeRoleId.TitleBar, titleKey, FontStyles.Bold, ThemeTextKind.Heading, true);
+        TMP_Text title = Text(header, "TitleText", null, TitleFontSize, TextAlignmentOptions.Left, Vector2.zero, Vector2.one, Color.white,
+                              ThemeRoleId.TitleBar, titleKey, FontStyles.Bold, ThemeTextKind.Heading, true);
+        PlaceRect(title.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.L + 4f, 0f), new Vector2(-(3f * PcSize.WindowControl + PcSize.S), 0f));
+        title.raycastTarget = false;
 
-        TMP_Text bodyText = Text(win, "Body", bodySample, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.08f), new Vector2(0.95f, 0.82f), Ink, bodyRole, bodyKey);
+        TMP_Text bodyText = Text(win, "Body", bodySample, PcType.Body, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.08f), new Vector2(0.95f, 0.82f), Ink, bodyRole, bodyKey);
         bodyText.textWrappingMode = TextWrappingModes.Normal;
         bodyText.overflowMode = TextOverflowModes.Truncate;
         if (win.GetComponent<RectMask2D>() == null)
@@ -1268,11 +1344,11 @@ public static partial class OfficeSceneUIBuilder
         DestroyChildIfPresent(parent, name);
         Transform box = Panel(parent, name, aMin, aMax, Vector2.zero, Vector2.zero, Color.white, ThemeRoleId.InputField);
 
-        Transform area = Panel(box, "TextArea", Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-14f, -8f), null);
+        Transform area = Panel(box, "TextArea", Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-24f, -8f), null);
         area.gameObject.AddComponent<RectMask2D>();
-        TMP_Text ph = Text(area, "Placeholder", null, 17, TextAlignmentOptions.Left, Vector2.zero, Vector2.one, new Color(0.45f, 0.45f, 0.45f, 0.8f),
+        TMP_Text ph = Text(area, "Placeholder", null, PcType.Body, TextAlignmentOptions.Left, Vector2.zero, Vector2.one, new Color(0.45f, 0.45f, 0.45f, 0.8f),
                            ThemeRoleId.InputPlaceholder, placeholderKey, FontStyles.Italic, ThemeTextKind.Body, true);
-        TMP_Text text = Text(area, "Text", "", 17, TextAlignmentOptions.Left, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField);
+        TMP_Text text = Text(area, "Text", "", PcType.Body, TextAlignmentOptions.Left, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField);
 
         TMP_InputField input = box.gameObject.AddComponent<TMP_InputField>();
         input.textViewport = (RectTransform)area;
@@ -1281,9 +1357,6 @@ public static partial class OfficeSceneUIBuilder
         input.targetGraphic = box.GetComponent<Image>();
         return input;
     }
-
-    /// <summary>Smallest font size a desktop icon's label shrinks to.</summary>
-    private const float IconLabelMinSize = 10f;
 
 
 

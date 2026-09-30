@@ -10,8 +10,8 @@ using UnityEngine.UI;
 /// A form drawn with uGUI on the PC (redesign phase 5, PC spec FO1, §6.5): the
 /// twin of the desk paper (DeskDocument). FormLayout places the form at the
 /// width the caller gives (Show's width, else the view's own), and every size
-/// follows it (FormLayout.Layout): a document copy takes 542 u, a page H =
-/// 708 u tall; a page kind in the Investigation app's pane takes the pane's
+/// follows it (FormLayout.Layout): a document copy takes 520 u, a page H =
+/// 679 u tall (the PC UX redesign: a split pane holds it whole); a page kind in the Investigation app's pane takes the pane's
 /// width, so its table cells reach 13 px at 720p (from about 564 u); a flow
 /// page grows with its rows. The view draws that placed form: the paper (its
 /// kind's face on a document when the art exists, ArtSlots.PaperFaces), the
@@ -176,7 +176,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// Draws <paramref name="spec"/> showing <paramref name="data"/> at
     /// <paramref name="width"/> (above 0: the view takes that width first;
     /// else its own, fixed by its anchors) and sets the view's height to the
-    /// form's. Pass a document copy 542 u and a page kind its pane's width,
+    /// form's. Pass a document copy 520 u and a page kind its pane's width,
     /// and Show again when the pane's width changes (a maximise). The slots
     /// <paramref name="pickable"/> accepts (every slot when null) get a button
     /// and tint under the pointer, lit while their key is picked (Bind); the

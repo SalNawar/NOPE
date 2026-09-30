@@ -11,8 +11,9 @@ using UnityEngine.UI;
 /// Investigation app's panes under the toolbar's search field. Its header
 /// holds a chip per source with hits ("Reference (3)") after "All", the chosen
 /// one pressed (a chip filters to its source); under it the groups in the
-/// tab order, each a heading over its hits (the source's glyph, the title and
-/// the snippet with the matched text marked; an untranslated line's snippet
+/// tab order, each a heading (the source's full name) over its hits (the title and
+/// the snippet with the matched text marked; no source letters: the PC UX
+/// redesign IA10; an untranslated line's snippet
 /// shows its glyphs in the script's font, unmarked) and "Show all n in
 /// Reference" when the group has more; with no hit, one line says nothing
 /// matches. A click on a hit chooses it (the app jumps there; Ctrl+click: in
@@ -34,7 +35,7 @@ public sealed class SearchResultsView : MonoBehaviour
     /// <summary>A group's heading (inactive), cloned per group.</summary>
     [SerializeField] private TMP_Text headingTemplate;
 
-    /// <summary>A hit (inactive): children Glyph, Title and Snippet texts; cloned per hit.</summary>
+    /// <summary>A hit (inactive): children Title and Snippet texts; cloned per hit.</summary>
     [SerializeField] private Button hitTemplate;
 
     /// <summary>"Show all n in …" (inactive), cloned per group with more hits.</summary>
@@ -106,7 +107,7 @@ public sealed class SearchResultsView : MonoBehaviour
         foreach (ResultGroup group in shown)
         {
             TMP_Text heading = Clone(headingTemplate.gameObject).GetComponent<TMP_Text>();
-            heading.text = TabName(group.Source).ToUpperInvariant();
+            heading.text = TabName(group.Source);
             foreach (SearchHit hit in group.Hits)
                 Hit(hit, script);
             if (group.More > 0 && !only.HasValue)
@@ -175,13 +176,12 @@ public sealed class SearchResultsView : MonoBehaviour
         chip.onClick.AddListener(() => Filtered?.Invoke(source));
     }
 
-    /// <summary>A hit's row: its source's glyph, its title and its snippet (marked; an untranslated one in the script's font).</summary>
+    /// <summary>A hit's row: its title and its snippet (marked; an untranslated one in the script's font), under its source's heading.</summary>
     private void Hit(SearchHit hit, TMP_FontAsset script)
     {
         Button row = Clone(hitTemplate.gameObject).GetComponent<Button>();
         row.name = "Hit_" + hit.Entry.Key;
         Transform t = row.transform;
-        SetText(t, "Glyph", UiText.Get("search.glyph." + hit.Entry.Source.ToString().ToLowerInvariant()));
         SetText(t, "Title", Escape(hit.Title));
         TMP_Text snippet = t.Find("Snippet") != null ? t.Find("Snippet").GetComponent<TMP_Text>() : null;
         if (snippet != null)
@@ -257,6 +257,6 @@ public sealed class SearchResultsView : MonoBehaviour
     /// <summary>A text shown as written: its rich-text tags are not read.</summary>
     private static string Escape(string text) => string.IsNullOrEmpty(text) ? string.Empty : "<noparse>" + text + "</noparse>";
 
-    /// <summary>A source's tab name ("Reference").</summary>
+    /// <summary>A source's full name ("Reference books").</summary>
     private static string TabName(AppTab source) => UiText.Get("app.tab." + source.ToString().ToLowerInvariant());
 }

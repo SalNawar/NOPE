@@ -7,8 +7,9 @@ using UnityEngine.UI;
 /// The desktop's right-click menu (the PC redesign DK5, AP4, CP1, PR1, section
 /// 3.2): one themed panel whose builder-made entries are shown per target: on
 /// the empty desktop "Arrange icons" (DesktopIcons.Arrange), on an icon "Open"
-/// (its app), on a tab of the Investigation app "Move left", "Move right" and
-/// "Reset tab order" (InvestigationApp.MoveTab, ResetTabOrder), on a row of the
+/// (its app), on a source of the Investigation app's navigator "Move up",
+/// "Move down" and "Reset order" (InvestigationApp.MoveTab, ResetTabOrder;
+/// the PC UX redesign IA11), on a row of the
 /// Investigation app "Copy value", "Copy row", "Pin" or "Unpin" and, when the
 /// row can be picked, "Pick for compare". It opens with its top-left at the
 /// pointer, kept inside the desktop, above every window; an entry closes it,
@@ -24,13 +25,13 @@ public sealed class DesktopContextMenu : MonoBehaviour
     /// <summary>"Open" (an icon's entry).</summary>
     [SerializeField] private Button openEntry;
 
-    /// <summary>"Move left" (a tab's entry).</summary>
-    [SerializeField] private Button moveLeftEntry;
+    /// <summary>"Move up" (a source's entry: one place up the navigator).</summary>
+    [SerializeField] private Button moveUpEntry;
 
-    /// <summary>"Move right" (a tab's entry).</summary>
-    [SerializeField] private Button moveRightEntry;
+    /// <summary>"Move down" (a source's entry).</summary>
+    [SerializeField] private Button moveDownEntry;
 
-    /// <summary>"Reset tab order" (a tab's entry).</summary>
+    /// <summary>"Reset order" (a source's entry: the default order).</summary>
     [SerializeField] private Button resetTabsEntry;
 
     /// <summary>"Copy value" (a row's entry).</summary>
@@ -79,7 +80,7 @@ public sealed class DesktopContextMenu : MonoBehaviour
         Show(Target.Icon, false, eventData);
     }
 
-    /// <summary>Opens a tab's menu (Move left, Move right, Reset tab order) at the pointer.</summary>
+    /// <summary>Opens a source's menu (Move up, Move down, Reset order) at the pointer.</summary>
     public void ShowForTab(InvestigationApp app, AppTab tab, PointerEventData eventData)
     {
         _app = app;
@@ -115,8 +116,8 @@ public sealed class DesktopContextMenu : MonoBehaviour
             _row = null;
         Entry(arrangeEntry, target == Target.Desktop);
         Entry(openEntry, target == Target.Icon);
-        Entry(moveLeftEntry, target == Target.Tab);
-        Entry(moveRightEntry, target == Target.Tab);
+        Entry(moveUpEntry, target == Target.Tab);
+        Entry(moveDownEntry, target == Target.Tab);
         Entry(resetTabsEntry, target == Target.Tab);
         Entry(copyEntry, target == Target.Row);
         Entry(copyRowEntry, target == Target.Row);
@@ -164,10 +165,10 @@ public sealed class DesktopContextMenu : MonoBehaviour
             arrangeEntry.onClick.AddListener(Arrange);
         if (openEntry != null)
             openEntry.onClick.AddListener(OpenTarget);
-        if (moveLeftEntry != null)
-            moveLeftEntry.onClick.AddListener(() => OnTab((app, tab) => app.MoveTab(tab, -1)));
-        if (moveRightEntry != null)
-            moveRightEntry.onClick.AddListener(() => OnTab((app, tab) => app.MoveTab(tab, 1)));
+        if (moveUpEntry != null)
+            moveUpEntry.onClick.AddListener(() => OnTab((app, tab) => app.MoveTab(tab, -1)));
+        if (moveDownEntry != null)
+            moveDownEntry.onClick.AddListener(() => OnTab((app, tab) => app.MoveTab(tab, 1)));
         if (resetTabsEntry != null)
             resetTabsEntry.onClick.AddListener(() => OnTab((app, _) => app.ResetTabOrder()));
         if (copyEntry != null)
@@ -180,7 +181,7 @@ public sealed class DesktopContextMenu : MonoBehaviour
             pickEntry.onClick.AddListener(() => OnRow((app, row) => row.Pick()));
     }
 
-    /// <summary>A tab's entry: the menu closes, then the app moves its tabs.</summary>
+    /// <summary>A source's entry: the menu closes, then the app moves its sources.</summary>
     private void OnTab(System.Action<InvestigationApp, AppTab> act)
     {
         InvestigationApp app = _app;

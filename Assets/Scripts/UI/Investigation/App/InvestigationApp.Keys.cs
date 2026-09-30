@@ -10,33 +10,36 @@ using UnityEngine.UI;
 /// and zoom (redesign phase 20; the PC redesign KB1-KB5, CP1-CP3, PR1-PR2,
 /// section 3.4). The desktop's keyboard poller (DesktopKeyboard) runs the
 /// app's commands here. Ctrl+F opens or restores the app and focuses its
-/// search field; Ctrl+1…6 show the tab at that position, Ctrl+Tab and
-/// Ctrl+Shift+Tab (and ← → on the tab strip) the next or previous one;
-/// Ctrl+B hides or shows the sidebar (the pane widens; saved per player).
-/// Tab and Shift+Tab walk the regions (AppFocus: search, its results' hits,
-/// the tab strip, the pane header, the pane's content, the sidebar, the
-/// dock, Accept/Deny) with the focus ring; ↓ in the search field takes it to
+/// search field; Ctrl+1…6 show the source at that place in the navigator,
+/// Ctrl+Tab and Ctrl+Shift+Tab (and the arrows on the navigator's sources)
+/// the next or previous one; Ctrl+B hides or shows the sidebar (the pane
+/// widens; saved per player). Tab and Shift+Tab walk the regions (AppFocus:
+/// search, its results' hits, the navigator's sources (the TabStrip
+/// region), the source's items and the pane header's buttons (PaneHeader),
+/// the pane's content, the checklist and the palette's pins and recent items
+/// (Sidebar), the dock, Accept/Deny; the PC UX redesign §6) with the focus
+/// ring, which scrolls the sidebar or the palette to what it is on; ↓ in the search field takes it to
 /// the first hit, ↑ on the first hit back to the field, Enter opens the
 /// focused hit (Ctrl+Enter: in the other pane); inside a region the arrows, Home, End, PgUp and PgDn move
 /// the ring over its items (the content's rows in reading order, turning the
-/// page at a page's end), Enter presses the focused item (a chip, the pin
-/// button, a pin or recent item, the dock's clear, Accept or Deny), Space
+/// page at a page's end), Enter presses the focused item (an item, the pin
+/// button, Open beside or Close, a step, a pin or recent item, the dock's clear, Accept or Deny), Space
 /// picks the focused row, Ctrl+C copies its value as shown and Ctrl+Shift+C
 /// "Label: value" (the one clipboard, AppClipboard, and the system
 /// clipboard), Ctrl+P pins the focused row, a sidebar pin (unpinned) or the
 /// pane's item. Pins (PinBoard, at most DesktopConfigSO.pinsMax) and recent
 /// items (RecentList: the items the player opens or jumps to) show in the
-/// sidebar; a click on one jumps (its tab, its item, its row with the ring
+/// search palette before anything is typed; a click on one jumps (its source, its item, its row with the ring
 /// on it); the case's are dropped when a case starts or ends, the day's when
 /// the day starts. Ctrl+= and Ctrl+- zoom the panes' content (PaneZoom) to
 /// the next level (100, 125, 150 %), Ctrl+0 back to Settings' Text size.
 /// A mouse press hides the ring. With the two panes (phase 18) the keys act on
 /// the active pane: Alt+← and Alt+→ walk its history, F6 makes the other pane
-/// active, Ctrl+\ splits or joins, Ctrl+Shift+PgUp/PgDn move the active tab
-/// in the shared order, Ctrl+1…6 follow that order, Tab also visits the other
+/// active, Ctrl+\ splits or joins, Ctrl+Shift+PgUp/PgDn move the active source
+/// in the saved order, Ctrl+1…6 follow that order, Tab also visits the other
 /// pane's content, and Enter on a row with a smart link follows it in the same
 /// pane (Ctrl+Enter: the other pane). Ctrl+Shift+S shows or hides the
-/// sidebar's steps checklist (StepsPanel, phase 21).
+/// navigator's checklist (StepsPanel, phase 21).
 /// </summary>
 public sealed partial class InvestigationApp
 {
@@ -50,10 +53,10 @@ public sealed partial class InvestigationApp
     /// <summary>The panes' area beside the sidebar (it widens while the sidebar is hidden).</summary>
     [SerializeField] private RectTransform panes;
 
-    /// <summary>The sidebar's Pinned list.</summary>
+    /// <summary>The search palette's Pinned list.</summary>
     [SerializeField] private SidebarEntryList pinsList;
 
-    /// <summary>The sidebar's Recent list.</summary>
+    /// <summary>The search palette's Recent list.</summary>
     [SerializeField] private SidebarEntryList recentList;
 
     /// <summary>Each pane header's pin button (it pins the active pane's item; a press on it makes its pane the active one first).</summary>
@@ -304,6 +307,8 @@ public sealed partial class InvestigationApp
             searchChip.Clear();
         else if (searchField != null)
             searchField.text = string.Empty;
+        if (searchBox != null)
+            searchBox.CloseResults(); // cleared by Escape, the palette stays closed until the field is chosen again
     }
 
     /// <summary>Escape left <paramref name="field"/>: a field of the app hands the keyboard back to its pane.</summary>
@@ -361,6 +366,8 @@ public sealed partial class InvestigationApp
         Init();
         if (window != null)
             window.Open();
+        if (searchBox != null)
+            searchBox.CloseResults();
         LinkTarget target = SmartLinks.ForEntry(item.Ref.Key, _papers);
         if (target.IsNone || !ActivePane.Go(target))
         {
@@ -595,15 +602,21 @@ public sealed partial class InvestigationApp
                         Add(hit);
                 break;
             case AppRegion.TabStrip:
-                foreach (AppTab tab in _order.Tabs)
-                    Add(ActivePane.TabButton(tab));
+                if (nav != null)
+                    foreach (AppTab tab in _order.Tabs)
+                        Add(nav.Entry(tab));
                 break;
             case AppRegion.PaneHeader:
-                foreach (Button chip in ActivePane.ChipButtons)
-                    Add(chip);
+                if (nav != null)
+                    foreach (Button item in nav.Items)
+                        Add(item);
                 foreach (Button pin in pinButtons)
                     if (pin != null && pin.transform.IsChildOf(ActivePane.transform))
                         Add(pin);
+                if (splitButton != null && splitButton.transform.IsChildOf(ActivePane.transform))
+                    Add(splitButton);
+                if (closeSplitButton != null && closeSplitButton.transform.IsChildOf(ActivePane.transform))
+                    Add(closeSplitButton);
                 break;
             case AppRegion.PaneContent:
             case AppRegion.OtherPane:
@@ -616,6 +629,9 @@ public sealed partial class InvestigationApp
                 }
                 break;
             case AppRegion.Sidebar:
+                if (steps != null)
+                    foreach (Button step in steps.RowButtons)
+                        Add(step);
                 AddRows(pinsList);
                 AddRows(recentList);
                 break;
@@ -661,13 +677,8 @@ public sealed partial class InvestigationApp
                     clip = RevealInView(target, (RectTransform)zoom.transform);
                     zoom.Reveal(target);
                 }
-        if (_region == AppRegion.Results && target != null)
+        if ((_region == AppRegion.Results || _region == AppRegion.TabStrip || _region == AppRegion.PaneHeader || _region == AppRegion.Sidebar) && target != null)
             clip = RevealInView(target, null);
-        if (_region == AppRegion.PaneHeader && target != null && ActivePane.Chips != null && target.IsChildOf(ActivePane.Chips.transform))
-        {
-            ActivePane.Chips.Reveal(target);
-            clip = ActivePane.Chips.Viewport;
-        }
         focusRing.Show(target, clip);
     }
 

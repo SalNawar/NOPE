@@ -58,6 +58,13 @@ public sealed partial class InvestigationApp
             searchBox.SetScript(font);
     }
 
+    /// <summary>A press on the desktop outside the search field and its panels closes them (the palette: the PC UX redesign IA9).</summary>
+    private void PressedForSearch(GameObject top)
+    {
+        if (searchBox != null && searchBox.ResultsOpen && !searchBox.IsPart(top))
+            CloseResults();
+    }
+
     /// <summary>Wires the search field to the index and the jumps (Init, once).</summary>
     private void InitSearch()
     {

@@ -19,11 +19,14 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The browser's restored size (it opens maximised: BrowserWindow).</summary>
     private static readonly Vector2 BrowserRestoredSize = new Vector2(1200f, 820f);
 
-    /// <summary>The browser's toolbar height.</summary>
-    private const float BrowserToolbarHeight = 44f;
+    /// <summary>The browser's toolbar height (the Investigation app's toolbar row: the PC UX redesign §3).</summary>
+    private const float BrowserToolbarHeight = PcSize.Toolbar;
 
     /// <summary>The status line's height under the page.</summary>
-    private const float BrowserStatusHeight = 26f;
+    private const float BrowserStatusHeight = 36f;
+
+    /// <summary>The Home and Go buttons' widths, and the site search box's (its field and Search).</summary>
+    private const float BrowserHomeWidth = 108f, BrowserGoWidth = 84f, BrowserSearchWidth = 440f;
 
     /// <summary>The page's scrollbar width.</summary>
     private const float BrowserScrollbarWidth = 16f;
@@ -32,7 +35,7 @@ public static partial class OfficeSceneUIBuilder
     private const float BrowserGap = 4f;
 
     /// <summary>The page texts' template size (SiteRenderer sets each block's).</summary>
-    private const int BrowserTextSize = 21;
+    private const int BrowserTextSize = PcType.Body;
 
     /// <summary>
     /// Builds the Internet window and its desktop icon, and checks the sites'
@@ -55,23 +58,28 @@ public static partial class OfficeSceneUIBuilder
         SiteStyle style = SiteStyles.For(null);
 
         // --- The toolbar ---
-        Transform bar = Panel(win, "Toolbar", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.WindowBody);
-        PlaceRect(bar, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(BrowserGap, -(top + BrowserGap + BrowserToolbarHeight)), new Vector2(-BrowserGap, -(top + BrowserGap)));
-        Button back = BrowserButton(bar, "BackButton", "browser.back", 0.004f, 0.04f);
-        Button forward = BrowserButton(bar, "ForwardButton", "browser.forward", 0.044f, 0.08f);
-        Button home = BrowserButton(bar, "HomeButton", "browser.home", 0.084f, 0.14f);
-        TMP_InputField address = BuildInputField(bar, "AddressField", "browser.address", new Vector2(0.146f, 0.12f), new Vector2(0.6f, 0.88f));
-        Button go = BrowserButton(bar, "GoButton", "browser.go", 0.604f, 0.65f);
-        Transform searchBox = Panel(bar, "SearchBox", new Vector2(0.66f, 0f), new Vector2(0.996f, 1f), Vector2.zero, Vector2.zero, null);
-        SetAnchors(searchBox, new Vector2(0.66f, 0f), new Vector2(0.996f, 1f));
-        TMP_InputField search = BuildInputField(searchBox, "SearchField", "browser.search", new Vector2(0f, 0.12f), new Vector2(0.72f, 0.88f));
-        Button searchButton = BrowserButton(searchBox, "SearchButton", "browser.searchButton", 0.74f, 1f);
+        Transform bar = Panel(win, "Toolbar", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.Sidebar);
+        PlaceRect(bar, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -(top + BrowserToolbarHeight)), new Vector2(0f, -top));
+        Button back = ChevronButton(bar, "BackButton", "browser.back", PcSize.M, true);
+        Button forward = ChevronButton(bar, "ForwardButton", "browser.forward", PcSize.M + PcSize.Control + 4f, false);
+        float x = PcSize.M + 2f * PcSize.Control + 4f + PcSize.S;
+        Button home = BrowserButton(bar, "HomeButton", "browser.home", x, BrowserHomeWidth);
+        x += BrowserHomeWidth + PcSize.S;
+        float right = PcSize.M + BrowserSearchWidth + PcSize.M;
+        TMP_InputField address = BuildInputField(bar, "AddressField", "browser.address", Vector2.zero, Vector2.one);
+        PlaceRect(address.transform, Vector2.zero, Vector2.one, new Vector2(x, 10f), new Vector2(-(right + BrowserGoWidth + PcSize.S), -10f));
+        Button go = BrowserButton(bar, "GoButton", "browser.go", -(right + BrowserGoWidth), BrowserGoWidth);
+        Transform searchBox = Panel(bar, "SearchBox", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(searchBox, new Vector2(1f, 0f), Vector2.one, new Vector2(-(PcSize.M + BrowserSearchWidth), 0f), new Vector2(-PcSize.M, 0f));
+        TMP_InputField search = BuildInputField(searchBox, "SearchField", "browser.search", Vector2.zero, Vector2.one);
+        PlaceRect(search.transform, Vector2.zero, Vector2.one, new Vector2(0f, 10f), new Vector2(-(128f + PcSize.S), -10f));
+        Button searchButton = BrowserButton(searchBox, "SearchButton", "browser.searchButton", -128f, 128f);
         searchBox.gameObject.SetActive(false);
 
         // --- The status line (the window's body text) ---
         TMP_Text status = win.Find("Body").GetComponent<TMP_Text>();
-        PlaceRect(status.transform, Vector2.zero, new Vector2(1f, 0f), new Vector2(10f, BrowserGap), new Vector2(-10f, BrowserGap + BrowserStatusHeight));
-        status.fontSize = 16;
+        PlaceRect(status.transform, Vector2.zero, new Vector2(1f, 0f), new Vector2(PcSize.L, BrowserGap), new Vector2(-PcSize.L, BrowserGap + BrowserStatusHeight));
+        status.fontSize = PcType.Caption;
         status.alignment = TextAlignmentOptions.MidlineLeft;
         status.textWrappingMode = TextWrappingModes.NoWrap;
         status.overflowMode = TextOverflowModes.Ellipsis;
@@ -79,7 +87,7 @@ public static partial class OfficeSceneUIBuilder
         // --- The page: a scroll view whose viewport is the site's paper ---
         Transform area = Panel(win, "PageArea", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(area, Vector2.zero, Vector2.one, new Vector2(BrowserGap, 2f * BrowserGap + BrowserStatusHeight),
-              new Vector2(-BrowserGap, -(top + 2f * BrowserGap + BrowserToolbarHeight)));
+              new Vector2(-BrowserGap, -(top + BrowserGap + BrowserToolbarHeight)));
         Transform viewport = Panel(area, "Viewport", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, SiteColor(style.Paper), ThemeRoleId.DiegeticPaper);
         PlaceRect(viewport, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-(BrowserScrollbarWidth + BrowserGap), 0f));
         viewport.gameObject.AddComponent<RectMask2D>();
@@ -160,11 +168,14 @@ public static partial class OfficeSceneUIBuilder
         return chrome;
     }
 
-    /// <summary>A toolbar button between two horizontal anchors (its label keyed).</summary>
-    private static Button BrowserButton(Transform bar, string name, string labelKey, float from, float to)
+    /// <summary>A toolbar button <paramref name="width"/> wide at <paramref name="x"/> from the bar's left (a negative <paramref name="x"/>: from its right), its keyed label at Body size.</summary>
+    private static Button BrowserButton(Transform bar, string name, string labelKey, float x, float width)
     {
-        Button b = MakeButton(bar, name, null, new Vector2(from, 0.12f), new Vector2(to, 0.88f), null, ThemeRoleId.Button, labelKey);
-        SetAnchors(b.transform, new Vector2(from, 0.12f), new Vector2(to, 0.88f));
+        Button b = MakeButton(bar, name, null, Vector2.zero, Vector2.one, null, ThemeRoleId.Button, labelKey);
+        float pad = (BrowserToolbarHeight - PcSize.Control) / 2f;
+        Vector2 anchor = x < 0f ? new Vector2(1f, 0f) : Vector2.zero;
+        PlaceRect(b.transform, anchor, new Vector2(anchor.x, 1f), new Vector2(x, pad), new Vector2(x + width, -pad));
+        ButtonLabel(b, PcType.Body, TextAlignmentOptions.Center, 4f);
         return b;
     }
 

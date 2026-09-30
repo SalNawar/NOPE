@@ -25,8 +25,11 @@ public static partial class OfficeSceneUIBuilder
     private const string RegisterFormPath = "Assets/Data/Forms/Form_Register.asset", InterviewFormPath = "Assets/Data/Forms/Form_InterviewRecord.asset",
                          ReportFormPath = "Assets/Data/Forms/Form_DeviationReport.asset", DirectiveMemoFormPath = "Assets/Data/Forms/Form_DirectiveMemo.asset";
 
-    /// <summary>A view's strip (the lookup, the toggles) at its top, and where its page starts under it (shares of the view's height).</summary>
-    private const float AppViewStripBottom = 0.91f, AppViewStripTop = 0.985f, AppViewPageTop = 0.9f;
+    /// <summary>A view's strip (the lookup, the toggles) at its top: its gap from the top and its height; the page starts under it (desktop units; the PC UX redesign §3).</summary>
+    private const float AppViewStripGap = 12f, AppViewStripHeight = 48f, AppViewPageTop = AppViewStripGap + AppViewStripHeight + 8f;
+
+    /// <summary>The Records lookup's Search button width.</summary>
+    private const float RecordsSearchWidth = 168f;
 
     /// <summary>A page kind asset by its path; a missing one is an error (the view then shows nothing).</summary>
     private static FormSpecSO PageKind(string path)
@@ -37,21 +40,33 @@ public static partial class OfficeSceneUIBuilder
         return form;
     }
 
-    /// <summary>A page kind's FormPage under <paramref name="root"/>: a scroll from the root's bottom up to <paramref name="top"/> (a share of the height), its form fitting the viewport.</summary>
+    /// <summary>A page kind's FormPage under <paramref name="root"/>: a scroll from the root's bottom up to <paramref name="top"/> units under its top, its form fitting the viewport.</summary>
     private static FormPage BuildPageKind(Transform root, string name, float top)
     {
         FormPage page = BuildFormPage(root, name, PcPageWidth, true);
-        PlaceRect(page.transform, Vector2.zero, new Vector2(1f, top), new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, 0f));
+        PlaceRect(page.transform, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -Mathf.Max(top, DocMargin)));
         return page;
+    }
+
+    /// <summary>A control in a view's strip, from <paramref name="left"/> to <paramref name="right"/> units in from the view's sides (a negative <paramref name="left"/>: that far left of the right edge).</summary>
+    private static void InStrip(Transform control, float left, float right)
+    {
+        bool fromRight = left < 0f;
+        PlaceRect(control, fromRight ? new Vector2(1f, 1f) : new Vector2(0f, 1f), Vector2.one,
+                  new Vector2(left, -(AppViewStripGap + AppViewStripHeight)), new Vector2(-right, -AppViewStripGap));
     }
 
     /// <summary>The Records tab (§2.5): the lookup (a name or a number, SEARCH) over the Record Extract; its evidence boxes pick into <paramref name="compare"/>.</summary>
     private static RecordsView BuildRecordsView(Transform content, CompareController compare)
     {
         Transform root = ViewRoot(content, "RecordsView", Paper, ThemeRoleId.WindowBody);
-        TMP_InputField input = BuildInputField(root, "SearchInput", "records.placeholder", new Vector2(0.03f, AppViewStripBottom), new Vector2(0.7f, AppViewStripTop));
-        Button search = MakeButton(root, "SearchButton", null, new Vector2(0.72f, AppViewStripBottom), new Vector2(0.97f, AppViewStripTop), new Color(0.15f, 0.3f, 0.5f, 1f),
+        TMP_InputField input = BuildInputField(root, "SearchInput", "records.placeholder", Vector2.zero, Vector2.one);
+        PlaceRect(input.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(PcSize.L, -(AppViewStripGap + AppViewStripHeight)),
+                  new Vector2(-(PcSize.L + RecordsSearchWidth + PcSize.S), -AppViewStripGap));
+        Button search = MakeButton(root, "SearchButton", null, Vector2.zero, Vector2.one, new Color(0.15f, 0.3f, 0.5f, 1f),
                                    ThemeRoleId.SearchButton, "records.search");
+        InStrip(search.transform, -(PcSize.L + RecordsSearchWidth), PcSize.L);
+        ButtonLabel(search, PcType.Body);
         FormPage page = BuildPageKind(root, "Extract", AppViewPageTop);
 
         RecordsView view = root.gameObject.AddComponent<RecordsView>();
@@ -69,7 +84,8 @@ public static partial class OfficeSceneUIBuilder
     private static ReferenceView BuildReferenceView(Transform content)
     {
         Transform root = ViewRoot(content, "ReferenceView", Paper, ThemeRoleId.WindowBody);
-        Toggle claimedOnly = BuildToggle(root, "ClaimedOnly", "app.ref.claimedOnly", new Vector2(0.62f, AppViewStripBottom), new Vector2(0.98f, AppViewStripTop));
+        Toggle claimedOnly = BuildToggle(root, "ClaimedOnly", "app.ref.claimedOnly", Vector2.zero, Vector2.one);
+        InStrip(claimedOnly.transform, -300f, PcSize.L);
         FormPage template = BuildPageKind(root, "PageTemplate", AppViewPageTop);
         template.gameObject.SetActive(false);
 
@@ -86,10 +102,12 @@ public static partial class OfficeSceneUIBuilder
     private static TranscriptView BuildTranscriptView(Transform content)
     {
         Transform root = ViewRoot(content, "TranscriptView", Paper, ThemeRoleId.WindowBody);
-        Toggle answersOnly = BuildToggle(root, "AnswersOnly", "app.transcript.answersOnly", new Vector2(0.62f, AppViewStripBottom), new Vector2(0.98f, AppViewStripTop));
+        Toggle answersOnly = BuildToggle(root, "AnswersOnly", "app.transcript.answersOnly", Vector2.zero, Vector2.one);
+        InStrip(answersOnly.transform, -240f, PcSize.L);
         answersOnly.isOn = false;
-        Button newLine = MakeButton(root, "NewLineButton", null, new Vector2(0.3f, AppViewStripBottom), new Vector2(0.6f, AppViewStripTop), null, ThemeRoleId.Button,
-                                    "app.transcript.newLine");
+        Button newLine = MakeButton(root, "NewLineButton", null, Vector2.zero, Vector2.one, null, ThemeRoleId.Button, "app.transcript.newLine");
+        InStrip(newLine.transform, PcSize.L, PcSize.L + 240f + PcSize.S);
+        ButtonLabel(newLine, PcType.Body);
         newLine.gameObject.SetActive(false);
         FormPage page = BuildPageKind(root, "Record", AppViewPageTop);
 
@@ -107,7 +125,7 @@ public static partial class OfficeSceneUIBuilder
     private static ReportView BuildReportView(Transform content)
     {
         Transform root = ViewRoot(content, "ReportView", Paper, ThemeRoleId.WindowBody);
-        FormPage page = BuildPageKind(root, "Report", 1f);
+        FormPage page = BuildPageKind(root, "Report", 0f);
         ReportView view = root.gameObject.AddComponent<ReportView>();
         var so = new SerializedObject(view);
         Wire(so, "page", page);
@@ -120,7 +138,7 @@ public static partial class OfficeSceneUIBuilder
     private static RulesView BuildRulesView(Transform content)
     {
         Transform root = ViewRoot(content, "RulesView", Paper, ThemeRoleId.WindowBody);
-        FormPage page = BuildPageKind(root, "Memo", 1f);
+        FormPage page = BuildPageKind(root, "Memo", 0f);
         RulesView view = root.gameObject.AddComponent<RulesView>();
         var so = new SerializedObject(view);
         Wire(so, "page", page);

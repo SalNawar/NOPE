@@ -15,7 +15,9 @@ using UnityEngine.UI;
 /// and selection frame, and a link segment dim and lit), and on the right the
 /// detail card: the selected node as Form_Requisition (TC-980) on a FormView
 /// in a scroll (diegetic, never themed), the hint while nothing is selected,
-/// and the one action button under it. Rebuilt fresh. Part of
+/// and the one action button under it; every label at the PC's scale, a
+/// node's name and state wrapping, never cut (the PC UX redesign §7).
+/// Rebuilt fresh. Part of
 /// <see cref="OfficeSceneUIBuilder"/>; BuildDesktopShell registers it under
 /// DesktopAppIds.Orders.
 /// </summary>
@@ -25,10 +27,10 @@ public static partial class OfficeSceneUIBuilder
     private const string RequisitionFormPath = "Assets/Data/Forms/Form_Requisition.asset";
 
     /// <summary>The wallet line's height and the action button's height (desktop units).</summary>
-    private const float OrdersHeader = 48f, OrdersActionHeight = 52f;
+    private const float OrdersHeader = 64f, OrdersActionHeight = 52f;
 
     /// <summary>The zoom bar's height, its buttons' width and its level's width (desktop units).</summary>
-    private const float OrdersZoomHeight = 40f, OrdersZoomButton = 44f, OrdersZoomLevel = 84f;
+    private const float OrdersZoomHeight = 48f, OrdersZoomButton = 44f, OrdersZoomLevel = 96f;
 
     /// <summary>The Orders window (see the class summary).</summary>
     private static DesktopWindow BuildOrdersWindow(Transform windowLayer, DesktopConfigSO config)
@@ -39,12 +41,9 @@ public static partial class OfficeSceneUIBuilder
         Object.DestroyImmediate(win.Find("Body").gameObject);
         float top = config.titleBarHeight + DocGap;
 
-        TMP_Text wallet = Text(win, "WalletText", "", 20, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.WindowBody, style: FontStyles.Bold);
-        PlaceRect(wallet.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(DocMargin, -(top + OrdersHeader)), new Vector2(-DocMargin, -top));
-        wallet.textWrappingMode = TextWrappingModes.Normal;
-        wallet.enableAutoSizing = true;
-        wallet.fontSizeMax = 20f;
-        wallet.fontSizeMin = 14f;
+        TMP_Text wallet = Text(win, "WalletText", "", PcType.Caption, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.WindowBody, style: FontStyles.Bold);
+        PlaceRect(wallet.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(PcSize.L, -(top + OrdersHeader)), new Vector2(-PcSize.L, -top));
+        Chrome(wallet, PcType.Caption, true);
 
         // The tree: a scroll both ways over a plate.
         float below = top + OrdersHeader + DocGap;
@@ -80,7 +79,7 @@ public static partial class OfficeSceneUIBuilder
         Transform page = Panel(win, "DetailPage", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, FormPaper, ThemeRoleId.DiegeticPaper);
         PlaceRect(page, new Vector2(1f, 0f), Vector2.one, new Vector2(-(config.ordersDetailWidth + DocMargin), DocMargin + OrdersActionHeight + DocGap),
                   new Vector2(-DocMargin, -below));
-        TMP_Text select = Text(page, "SelectText", null, 20, TextAlignmentOptions.Center, new Vector2(0.06f, 0.4f), new Vector2(0.94f, 0.6f), Ink,
+        TMP_Text select = Text(page, "SelectText", null, PcType.Body, TextAlignmentOptions.Center, new Vector2(0.06f, 0.4f), new Vector2(0.94f, 0.6f), Ink,
                                ThemeRoleId.DiegeticRow, "app.orders.select", FontStyles.Italic);
         select.textWrappingMode = TextWrappingModes.Normal;
         float formWidth = config.ordersDetailWidth - 2f * DocMargin - DocGap - DocScrollbar;
@@ -89,7 +88,7 @@ public static partial class OfficeSceneUIBuilder
         Button action = MakeButton(win, "ActionButton", null, Vector2.zero, Vector2.zero, null, ThemeRoleId.Button, "app.orders.order");
         PlaceRect(action.transform, new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(-(config.ordersDetailWidth + DocMargin), DocMargin),
                   new Vector2(-DocMargin, DocMargin + OrdersActionHeight));
-        FitLabel(action, 22f);
+        ButtonLabel(action, PcType.Body);
 
         OrdersWindow component = win.gameObject.AddComponent<OrdersWindow>();
         var so = new SerializedObject(component);
@@ -131,13 +130,14 @@ public static partial class OfficeSceneUIBuilder
         float inner = OrdersZoomHeight - 2f * DocGap;
         zoomOut = MakeButton(bar, "ZoomOut", null, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), null, ThemeRoleId.Button, "app.orders.zoomOut");
         PlaceRect(zoomOut.transform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(DocGap, -inner / 2f), new Vector2(DocGap + OrdersZoomButton, inner / 2f));
-        FitLabel(zoomOut, 24f);
-        level = Text(bar, "Level", "100 %", 20, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Ink, ThemeRoleId.Sidebar, style: FontStyles.Bold);
+        ButtonLabel(zoomOut, PcType.Title, TextAlignmentOptions.Center, 0f);
+        level = Text(bar, "Level", "100 %", PcType.Caption, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Ink, ThemeRoleId.Sidebar, style: FontStyles.Bold);
+        Chrome(level, PcType.Caption);
         PlaceRect(level.transform, Vector2.zero, Vector2.one, new Vector2(2f * DocGap + OrdersZoomButton, 0f), new Vector2(-(2f * DocGap + OrdersZoomButton), 0f));
         level.raycastTarget = false;
         zoomIn = MakeButton(bar, "ZoomIn", null, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), null, ThemeRoleId.Button, "app.orders.zoomIn");
         PlaceRect(zoomIn.transform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(DocGap + OrdersZoomButton), -inner / 2f), new Vector2(-DocGap, inner / 2f));
-        FitLabel(zoomIn, 24f);
+        ButtonLabel(zoomIn, PcType.Title, TextAlignmentOptions.Center, 0f);
     }
 
     /// <summary>A band head's template: a plate in the sidebar's role with the band's glyph (the role's ink) and its bold name.</summary>
@@ -152,14 +152,15 @@ public static partial class OfficeSceneUIBuilder
         glyph.preserveAspect = true;
         glyph.raycastTarget = false;
         SceneUiKit.Tag(glyph, ThemeRoleId.Sidebar, ThemePart.Ink);
-        TMP_Text label = Text(band, "Label", "", 22, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.Sidebar, style: FontStyles.Bold,
+        TMP_Text label = Text(band, "Label", "", PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.Sidebar, style: FontStyles.Bold,
                               kind: ThemeTextKind.Heading);
+        Chrome(label, PcType.Body);
         PlaceRect(label.transform, Vector2.zero, Vector2.one, new Vector2(height + 12f, 0f), new Vector2(-8f, 0f));
         label.raycastTarget = false;
         return band;
     }
 
-    /// <summary>A node's template: a card button in the input-field role with the upgrade's glyph, its name (two lines at most), its state line, the state badge at the top right (the padlock, clock or tick, hidden until drawn), the selection frame (hidden) and a CanvasGroup (a locked card is greyed).</summary>
+    /// <summary>A node's template: a card button in the input-field role with the upgrade's glyph, its name (bold, wrapping up to three lines), its state line (wrapping up to two), the state badge at the top right (the padlock, clock or tick, hidden until drawn), the selection frame (hidden) and a CanvasGroup (a locked card is greyed).</summary>
     private static Button BuildOrdersNode(Transform content, DesktopConfigSO config)
     {
         Button node = MakeButton(content, "NodeTemplate", "", new Vector2(0f, 1f), new Vector2(0f, 1f), Color.white, ThemeRoleId.InputField);
@@ -170,29 +171,21 @@ public static partial class OfficeSceneUIBuilder
         GetOrAdd<CanvasGroup>(node.gameObject);
 
         Image glyph = Panel(node.transform, "Glyph", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Ink).GetComponent<Image>();
-        PlaceRect(glyph.transform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(10f, -24f), new Vector2(58f, 24f));
+        PlaceRect(glyph.transform, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(10f, -62f), new Vector2(58f, -14f));
         glyph.preserveAspect = true;
         glyph.raycastTarget = false;
         SceneUiKit.Tag(glyph, ThemeRoleId.InputField, ThemePart.Ink);
 
-        TMP_Text name = Text(node.transform, "Name", "", 22, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField, style: FontStyles.Bold);
-        PlaceRect(name.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(66f, -52f), new Vector2(-34f, -5f));
-        name.textWrappingMode = TextWrappingModes.Normal;
-        name.overflowMode = TextOverflowModes.Ellipsis;
-        name.maxVisibleLines = 2;
-        name.enableAutoSizing = true;
-        name.fontSizeMax = 22f;
-        name.fontSizeMin = 17f;
+        TMP_Text name = Text(node.transform, "Name", "", PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField, style: FontStyles.Bold);
+        PlaceRect(name.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(66f, -90f), new Vector2(-34f, -8f));
+        Chrome(name, PcType.Caption, true);
+        name.lineSpacing = -10f;
         name.raycastTarget = false;
 
-        TMP_Text state = Text(node.transform, "State", "", 19, TextAlignmentOptions.BottomLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField);
-        PlaceRect(state.transform, Vector2.zero, new Vector2(1f, 0f), new Vector2(66f, 5f), new Vector2(-8f, 46f));
-        state.textWrappingMode = TextWrappingModes.Normal;
-        state.overflowMode = TextOverflowModes.Ellipsis;
-        state.maxVisibleLines = 2;
-        state.enableAutoSizing = true;
-        state.fontSizeMax = 19f;
-        state.fontSizeMin = 16f;
+        TMP_Text state = Text(node.transform, "State", "", PcType.Caption, TextAlignmentOptions.BottomLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField);
+        PlaceRect(state.transform, Vector2.zero, new Vector2(1f, 0f), new Vector2(12f, 6f), new Vector2(-8f, 58f));
+        Chrome(state, PcType.Caption, true);
+        state.lineSpacing = -10f;
         state.raycastTarget = false;
 
         Image badge = Panel(node.transform, "Badge", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Ink).GetComponent<Image>();

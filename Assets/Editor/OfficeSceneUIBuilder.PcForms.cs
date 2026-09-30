@@ -12,17 +12,17 @@ using UnityEngine.UI;
 /// DiegeticForm so no theme touches it; the hints and the outline are chrome)
 /// the FormPage that scrolls it (a page kind fitting its viewport, a copy at
 /// its own width), and the scanned-copy page of the Investigation app's
-/// Documents tab built on it: the scanner's dark backing, the document's
+/// Papers view built on it: the scanner's dark backing, the document's
 /// name, the scan strip and the form in a scroll, a document page at the PC
-/// width (542 u, so H = 708 u). Part of <see cref="OfficeSceneUIBuilder"/>.
+/// width (520 u, so H = 679 u: a split pane holds the page whole). Part of <see cref="OfficeSceneUIBuilder"/>.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
     /// <summary>A form page's width on the PC: the 580 u pane less its padding and scrollbar (PC spec §6.3).</summary>
-    private const float PcPageWidth = 542f;
+    private const float PcPageWidth = 520f;
 
     /// <summary>The scanned-copy page's margin, its gaps, the scrollbar's width, the name's and the scan strip's heights and text sizes (u).</summary>
-    private const float DocMargin = 10f, DocGap = 4f, DocScrollbar = 14f, DocTitle = 28f, DocTitleText = 20f, DocStrip = 22f, DocStripText = 18f, DocTagGap = 8f;
+    private const float DocMargin = 10f, DocGap = 4f, DocScrollbar = 14f, DocTitle = 36f, DocTitleText = 26f, DocStrip = 30f, DocStripText = 24f, DocTagGap = 8f;
 
     /// <summary>The MATCH tag's plate padding either side of its word.</summary>
     private const int DocTagPadding = 8;

@@ -5,38 +5,42 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// The Investigation app (the PC redesign AP1-AP4, AP8, AP9, LK2, WN5, DK2):
-/// one desktop window, "Investigation" (· the traveller's name while one is at
-/// the desk), that fills the desktop the first time it opens. Its case header
-/// holds the counters ("Papers 2 of 3 received · 1 scanned · Deviations 1";
-/// "Waiting for the next traveller" between travellers) and the PC's Accept
-/// and Deny (the façade wires them); it prints no claim, which the traveller
-/// only says (the personalities spec's B1-B3); its
-/// toolbar holds Back and Forward (the active pane's history), the search
-/// field, Steps (it shows or hides the sidebar's steps checklist, StepsPanel,
-/// phase 21), Split (two panes side by side, saved per player, possible only
-/// while each pane gets a readable width: AppPanes.CanSplit, so a restored
-/// window has one pane and the button says why) and Keys (the search field is
-/// live since phase 19, InvestigationApp.Search, and Keys since phase 20); the
-/// sidebar holds the steps checklist,
-/// Pinned and Recent. The keys, the focus ring, copy and paste, pins, recent
-/// items and zoom are in InvestigationApp.Keys (redesign phase 20). Two
-/// panes share one tab order (TabOrder: dragged or moved from a tab's menu,
-/// saved per player in DesktopPreferences.AppTabs). The active pane is the
-/// last one pressed (the desktop's press, DesktopWindowManager.Pressed) or
-/// sent somewhere; it wears the accent frame. A row's smart link goes to the
-/// other pane (Ctrl held, or one pane: the same pane, and Back returns);
-/// the compare dock's sides, the toast, Mail's memo and a step's label open
-/// in the active pane (Open). The steps checklist reads what the player sees
-/// (Sees, CopiesSeen: the showing panes' tabs and scanned copies). Nothing
-/// steals the view: something new for a tab badges it unless a showing pane
-/// shows it (AppBadges), and dots the desktop's Investigation icon while the
-/// app is closed or minimised; a scan (ScanArrival) opens the app only when
-/// it is closed, shows the paper only in a Documents view showing none, and
-/// toasts ("… scanned", Open shows it). A new case shows Documents in the
-/// left pane (the right one keeps its source), drops the last traveller's
-/// places from both histories and clears the badges; at the decision the
-/// case sources show the no-case state. InvestigationUIController drives it.
+/// The Investigation app (the PC redesign AP1, AP4, AP8, AP9, LK2, WN5, DK2;
+/// the PC UX redesign IA1-IA9): one desktop window, "Investigation" (· the
+/// traveller's name while one is at the desk), that fills the desktop the
+/// first time it opens. Its toolbar holds Back and Forward (the active
+/// pane's history), the search field (the palette: InvestigationApp.Search)
+/// and the PC's Accept and Deny (the façade wires them). Its navigator
+/// (AppNav) tops the sidebar with the case summary (the counters: papers
+/// received and scanned, deviations logged; "Waiting for the next
+/// traveller" between travellers; it prints no claim, which the traveller
+/// only says: the personalities spec's B1-B3), then every case source in
+/// full words in the saved order (TabOrder: dragged or moved from a source's
+/// menu, saved per player in DesktopPreferences.AppTabs), the active pane's
+/// source selected with its items under it, and ends with the checklist
+/// (StepsPanel, phase 21). The navigator drives the active pane: a source's
+/// click shows it there (Ctrl+click: in the other pane, opening the split
+/// when it fits), an item's click shows that item. Two panes side by side
+/// (Open beside in the left pane's header, Close in the right one's, Ctrl+\:
+/// saved per player, possible only while each pane gets a readable width:
+/// AppPanes.CanSplit, so a restored window has one pane and Open beside says
+/// why). The keys, the focus ring, copy and paste, pins, recent items and
+/// zoom are in InvestigationApp.Keys (redesign phase 20). The active pane is
+/// the last one pressed (the desktop's press, DesktopWindowManager.Pressed)
+/// or sent somewhere; its header wears the accent underline. A row's smart
+/// link goes to the other pane (Ctrl held, or one pane: the same pane, and
+/// Back returns); the compare dock's sides, the toast, Mail's memo and a
+/// step's label open in the active pane (Open). The steps checklist reads
+/// what the player sees (Sees, CopiesSeen: the showing panes' sources and
+/// scanned copies). Nothing steals the view: something new for a source
+/// badges its navigator entry unless a showing pane shows it (AppBadges),
+/// and dots the desktop's Investigation icon while the app is closed or
+/// minimised; a scan (ScanArrival) opens the app only when it is closed,
+/// shows the paper only in a Papers view showing none, and toasts ("…
+/// scanned", Open shows it). A new case shows Papers in the left pane (the
+/// right one keeps its source), drops the last traveller's places from both
+/// histories and clears the badges; at the decision the case sources show
+/// the no-case state. InvestigationUIController drives it.
 /// </summary>
 public sealed partial class InvestigationApp : MonoBehaviour
 {
@@ -55,25 +59,28 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>The sidebar at the body's left (its width counts against the panes).</summary>
     [SerializeField] private RectTransform sidebar;
 
-    [Header("Case header")]
-    /// <summary>The counters: papers received and scanned, deviations logged; between travellers the idle line (the header's full height: it prints no claim).</summary>
+    /// <summary>The navigator: the sources, the active one's items.</summary>
+    [SerializeField] private AppNav nav;
+
+    [Header("Case summary")]
+    /// <summary>The counters: papers received and scanned, deviations logged; between travellers the idle line.</summary>
     [SerializeField] private TMP_Text countersText;
 
-    [Header("Toolbar")]
+    [Header("Toolbar and pane headers")]
     /// <summary>Back in the active pane.</summary>
     [SerializeField] private Button backButton;
 
     /// <summary>Forward in the active pane.</summary>
     [SerializeField] private Button forwardButton;
 
-    /// <summary>Split: two panes or one.</summary>
+    /// <summary>Open beside, in the left pane's header: the right pane opens.</summary>
     [SerializeField] private Button splitButton;
 
-    /// <summary>The Split button's hover hint: what it does, or why it cannot.</summary>
+    /// <summary>Open beside's hover hint: what it does, or why it cannot.</summary>
     [SerializeField] private TMP_Text splitHint;
 
-    /// <summary>The Split button's tint while the split is on (pressed).</summary>
-    [SerializeField] private Color splitOnTint = new Color(0.72f, 0.72f, 0.72f, 1f);
+    /// <summary>Close, in the right pane's header: back to one pane.</summary>
+    [SerializeField] private Button closeSplitButton;
 
     [Header("Desktop")]
     /// <summary>The scan toast (on the desktop, above the windows: it shows while the app is down too).</summary>
@@ -85,7 +92,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>The desktop's icons (the Investigation icon's dot).</summary>
     [SerializeField] private DesktopIcons icons;
 
-    /// <summary>The desktop's right-click menu (a tab's Move left, Move right, Reset tab order).</summary>
+    /// <summary>The desktop's right-click menu (a source's Move up, Move down, Reset order).</summary>
     [SerializeField] private DesktopContextMenu contextMenu;
 
     private readonly AppBadges _badges = new AppBadges();
@@ -101,10 +108,10 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>True while the app shows (open and not minimised).</summary>
     public bool IsShowing => window != null && window.gameObject.activeSelf;
 
-    /// <summary>True when the panes host a view for the tab.</summary>
+    /// <summary>True when the panes host a view for the source.</summary>
     public bool Hosts(AppTab tab) => leftPane != null && leftPane.Hosts(tab);
 
-    /// <summary>True when a showing pane shows the tab (the steps checklist: the Rules read while the player looks at the PC).</summary>
+    /// <summary>True when a showing pane shows the source (the steps checklist: the Rules read while the player looks at the PC).</summary>
     public bool Sees(AppTab tab)
     {
         foreach (AppTab shown in ShownTabs())
@@ -113,7 +120,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
         return false;
     }
 
-    /// <summary>Fills <paramref name="into"/> with the papers whose scanned copies the showing panes show on Documents (the steps checklist: a paper read on the PC).</summary>
+    /// <summary>Fills <paramref name="into"/> with the papers whose scanned copies the showing panes show on Papers (the steps checklist: a paper read on the PC).</summary>
     public void CopiesSeen(List<int> into)
     {
         into.Clear();
@@ -123,10 +130,9 @@ public sealed partial class InvestigationApp : MonoBehaviour
             if ((pane == leftPane || _split) && pane.ActiveTab == AppTab.Documents && pane.View(AppTab.Documents) is DocumentsView documents && documents.ShowsCopy)
                 into.Add(documents.Selected);
     }
+
     /// <summary>The app's window (the keyboard poller's "app focused").</summary>
     public DesktopWindow Window => window;
-
-
 
     /// <summary>The first open: the app fills the desktop (P spec WN4).</summary>
     private void Start()
@@ -135,7 +141,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
             window.ToggleMaximise();
     }
 
-    /// <summary>The app shows (opened or restored): the shown tabs are seen, the icon's dot goes, and the panes fit the window.</summary>
+    /// <summary>The app shows (opened or restored): the shown sources are seen, the icon's dot goes, and the panes fit the window.</summary>
     private void OnEnable()
     {
         if (leftPane == null)
@@ -161,7 +167,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
             Layout();
     }
 
-    /// <summary>A traveller is presented: the title (who stands at the desk, never what they ask for), the left pane on Documents, the histories without the last traveller, the badges and the icon's dot cleared, the toast gone, search's case layer empty.</summary>
+    /// <summary>A traveller is presented: the title (who stands at the desk, never what they ask for), the left pane on Papers, the histories without the last traveller, the badges and the icon's dot cleared, the toast gone, search's case layer empty.</summary>
     public void BeginCase(string travellerName)
     {
         Init();
@@ -169,10 +175,10 @@ public sealed partial class InvestigationApp : MonoBehaviour
         if (window != null)
             window.SetTitle(UiText.Format("app.titleCase", travellerName));
         _badges.Clear();
+        foreach (AppTab tab in TabOrder.Default)
+            SetBadge(tab, false);
         foreach (AppPane pane in Panes())
         {
-            foreach (AppTab tab in TabOrder.Default)
-                pane.SetBadge(tab, false);
             pane.SetCase(true);
             pane.DropCaseHistory();
         }
@@ -184,7 +190,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
         KeysBeginCase(travellerName);
     }
 
-    /// <summary>The decision: the case sources show the no-case state; the header's counters wait for the next traveller; search forgets the case.</summary>
+    /// <summary>The decision: the case sources show the no-case state; the summary waits for the next traveller; search forgets the case.</summary>
     public void EndCase()
     {
         Init();
@@ -209,18 +215,17 @@ public sealed partial class InvestigationApp : MonoBehaviour
             countersText.text = UiText.Format("app.counters", papers.Received, papers.Count, papers.Scanned, deviations);
     }
 
-    /// <summary>Something new for the tab (a transcript line, a logged deviation): badged unless a showing pane shows it; the icon dotted while the app is down.</summary>
+    /// <summary>Something new for the source (a transcript line, a logged deviation): badged unless a showing pane shows it; the icon dotted while the app is down.</summary>
     public void Arrived(AppTab tab)
     {
         Init();
         if (_badges.Arrived(tab, ShownTabs()))
-            foreach (AppPane pane in Panes())
-                pane.SetBadge(tab, true);
+            SetBadge(tab, true);
         if (!IsShowing && icons != null)
             icons.SetBadge(DesktopAppIds.Investigation, IconBadge.Dot);
     }
 
-    /// <summary>Paper <paramref name="paper"/> was scanned (ScanArrival): the app opens when closed, the paper shows in each Documents view showing none, Documents is badged unless seen, a toast names it.</summary>
+    /// <summary>Paper <paramref name="paper"/> was scanned (ScanArrival): the app opens when closed, the paper shows in each Papers view showing none, Papers is badged unless seen, a toast names it.</summary>
     public void Scanned(int paper, string paperName)
     {
         Init();
@@ -243,15 +248,14 @@ public sealed partial class InvestigationApp : MonoBehaviour
                        () => Open(LinkTarget.ToTab(AppTab.Documents, paper), false));
     }
 
-    /// <summary>Opens the app (a minimised one restores) on the tab in the active pane: Mail's directive memo shows the Rules.</summary>
+    /// <summary>Opens the app (a minimised one restores) on the source in the active pane: Mail's directive memo shows today's rules.</summary>
     public void ShowTab(AppTab tab) => Open(LinkTarget.ToTab(tab), false);
 
     /// <summary>
     /// Opens the app (a minimised one restores) at <paramref name="target"/>:
     /// in the active pane, or the other one (<paramref name="otherPane"/>, while
-    /// split), which then becomes active. The compare dock's sides, the toast
-    /// and Mail come here; phases 19 and 20 (a search hit, a pin, a recent)
-    /// come here too.
+    /// split), which then becomes active. The compare dock's sides, the toast,
+    /// Mail, a search hit, a pin and a recent item come here.
     /// </summary>
     public void Open(LinkTarget target, bool otherPane)
     {
@@ -268,7 +272,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>Where a pick was picked (SmartLinks.ForKey over the case's papers): the dock's sides.</summary>
     public LinkTarget LinkFor(string pickKey) => SmartLinks.ForKey(pickKey, _papers);
 
-    /// <summary>Moves a tab by <paramref name="delta"/> positions in both strips and saves the order (a tab's Move left and Move right).</summary>
+    /// <summary>Moves a source by <paramref name="delta"/> places in the navigator and saves the order (a source's Move up and Move down).</summary>
     public void MoveTab(AppTab tab, int delta)
     {
         Init();
@@ -277,7 +281,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
             OrderChanged();
     }
 
-    /// <summary>Back to the default tab order in both strips, saved ("Reset tab order").</summary>
+    /// <summary>Back to the default order of the sources, saved ("Reset order").</summary>
     public void ResetTabOrder()
     {
         Init();
@@ -285,7 +289,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
             OrderChanged();
     }
 
-    /// <summary>Wires the panes, the toolbar and the desktop's press, reads the saved order and split, and turns the toolbar's not-yet-live controls off (once; the app is driven while its window is closed).</summary>
+    /// <summary>Wires the panes, the navigator, the buttons and the desktop's press, and reads the saved order and split (once; the app is driven while its window is closed).</summary>
     private void Init()
     {
         if (_ready)
@@ -295,16 +299,20 @@ public sealed partial class InvestigationApp : MonoBehaviour
         _splitWanted = DesktopPreferences.AppSplit;
         _active = leftPane;
 
-        foreach (AppPane pane in new[] { leftPane, rightPane })
+        foreach (AppPane pane in Panes())
         {
-            if (pane == null)
-                continue;
             pane.Shown += PaneShown;
+            pane.Changed += PaneChanged;
             pane.HistoryChanged += HistoryChanged;
             pane.LinkFollowed += Follow;
-            pane.TabDragged += (tab, position) => MoveTabTo(tab, position);
-            pane.TabMenuRequested += TabMenu;
-            pane.ApplyOrder(_order);
+        }
+        if (nav != null)
+        {
+            nav.SourceClicked += SourceClicked;
+            nav.ItemClicked += index => ActivePane.ShowItem(index);
+            nav.SourceDragged += MoveTabTo;
+            nav.SourceMenuRequested += SourceMenu;
+            nav.ApplyOrder(_order);
         }
 
         if (backButton != null)
@@ -313,6 +321,8 @@ public sealed partial class InvestigationApp : MonoBehaviour
             forwardButton.onClick.AddListener(() => _active.Forward());
         if (splitButton != null)
             splitButton.onClick.AddListener(ToggleSplit);
+        if (closeSplitButton != null)
+            closeSplitButton.onClick.AddListener(ToggleSplit);
 
         _manager = window != null ? window.Manager : null;
         if (_manager != null)
@@ -321,9 +331,10 @@ public sealed partial class InvestigationApp : MonoBehaviour
         InitSearch();
         Layout();
         RefreshHistoryButtons();
+        RefreshNav();
     }
 
-    /// <summary>The Split button: two panes or one, saved per player.</summary>
+    /// <summary>Open beside and Close: two panes or one, saved per player.</summary>
     private void ToggleSplit()
     {
         _splitWanted = !_splitWanted;
@@ -334,8 +345,8 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>
     /// Two panes when the player wants them and the body holds them
     /// (AppPanes.CanSplit), else the left one alone (the right one's history
-    /// and view stay for the next split); the Split button greys, with its
-    /// hint saying why, when they cannot fit.
+    /// and view stay for the next split); Open beside shows only while one
+    /// pane does and greys, with its hint saying why, when two cannot fit.
     /// </summary>
     private void Layout()
     {
@@ -359,21 +370,18 @@ public sealed partial class InvestigationApp : MonoBehaviour
         }
         if (!_split)
             _active = leftPane;
-        leftPane.SetFrame(_split && _active == leftPane);
-        if (rightPane != null)
-            rightPane.SetFrame(_split && _active == rightPane);
+        Frames();
 
         if (splitButton != null)
         {
+            if (splitButton.gameObject.activeSelf == _split)
+                splitButton.gameObject.SetActive(!_split);
             splitButton.interactable = fits;
-            ColorBlock colours = splitButton.colors;
-            colours.normalColor = _split ? splitOnTint : Color.white;
-            colours.selectedColor = colours.normalColor;
-            splitButton.colors = colours;
         }
         if (splitHint != null)
             splitHint.text = UiText.Get(fits ? "app.split.hint" : "app.split.tooNarrow");
         RefreshHistoryButtons();
+        RefreshNav();
     }
 
     /// <summary>Both panes (the right one keeps its case state, badges and views current while it is hidden, for the next split).</summary>
@@ -385,7 +393,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
             yield return rightPane;
     }
 
-    /// <summary>The tabs the player sees: the showing panes' active tabs (none while the app is down).</summary>
+    /// <summary>The sources the player sees: the showing panes' sources (none while the app is down).</summary>
     private IReadOnlyList<AppTab> ShownTabs()
     {
         _shown.Clear();
@@ -401,33 +409,72 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>The other pane.</summary>
     private AppPane Other(AppPane pane) => pane == leftPane ? rightPane : leftPane;
 
-    /// <summary>The pane becomes the active one (its frame, the toolbar's history).</summary>
+    /// <summary>The pane becomes the active one (its underline, the toolbar's history, the navigator).</summary>
     private void Activate(AppPane pane)
     {
         if (pane == null || (!_split && pane == rightPane))
             return;
         _active = pane;
+        Frames();
+        RefreshHistoryButtons();
+        RefreshNav();
+    }
+
+    /// <summary>The active pane's underline, while split.</summary>
+    private void Frames()
+    {
         leftPane.SetFrame(_split && _active == leftPane);
         if (rightPane != null)
             rightPane.SetFrame(_split && _active == rightPane);
-        RefreshHistoryButtons();
     }
 
-    /// <summary>A press on the desktop (DesktopWindowManager.Pressed): inside a pane, that pane is active.</summary>
+    /// <summary>A press on the desktop (DesktopWindowManager.Pressed): inside a pane, that pane is active; outside the palette, it closes.</summary>
     private void Pressed(GameObject top)
     {
+        PressedForSearch(top);
         if (top == null)
             return;
         foreach (AppPane pane in Panes())
-            if (pane.gameObject.activeInHierarchy && top.transform.IsChildOf(pane.transform))
+            if (pane.gameObject.activeInHierarchy && top.transform.IsChildOf(pane.transform) && pane != _active)
                 Activate(pane);
     }
 
-    /// <summary>A pane showed a tab: the tab is seen when the pane shows.</summary>
+    /// <summary>A navigator source clicked: shown in the active pane, or in the other one with Ctrl (the split opening when it fits).</summary>
+    private void SourceClicked(AppTab tab, bool otherPane)
+    {
+        if (otherPane && !_split)
+        {
+            _splitWanted = true;
+            DesktopPreferences.AppSplit = true;
+            Layout();
+        }
+        AppPane pane = otherPane && _split ? Other(ActivePane) : ActivePane;
+        pane.Show(tab);
+        Activate(pane);
+    }
+
+    /// <summary>A pane showed a source: it is seen when the pane shows.</summary>
     private void PaneShown(AppPane pane, AppTab tab)
     {
         if (IsShowing && (pane == leftPane || _split))
             Seen(tab);
+    }
+
+    /// <summary>A pane's source, item or items changed: the navigator follows.</summary>
+    private void PaneChanged(AppPane pane)
+    {
+        if (_ready)
+            RefreshNav();
+    }
+
+    /// <summary>The navigator: the active pane's source and its items, the other pane's source (while split).</summary>
+    private void RefreshNav()
+    {
+        if (nav == null || _active == null)
+            return;
+        AppPane other = _split ? Other(_active) : null;
+        AppTab tab = _active.ActiveTab;
+        nav.Show(tab, other != null ? other.ActiveTab : (AppTab?)null, _active.Blocked ? null : _active.View(tab));
     }
 
     /// <summary>A pane's history changed: the toolbar follows the active pane's.</summary>
@@ -454,33 +501,40 @@ public sealed partial class InvestigationApp : MonoBehaviour
         Activate(to);
     }
 
-    /// <summary>A tab dragged past a neighbour's middle: to its new position in both strips, saved.</summary>
+    /// <summary>A source dragged past a neighbour's middle: to its new place, saved.</summary>
     private void MoveTabTo(AppTab tab, int position)
     {
         if (_order.Move(_order.PositionOf(tab), position))
             OrderChanged();
     }
 
-    /// <summary>A tab's right-click: its menu.</summary>
-    private void TabMenu(AppTab tab, PointerEventData eventData)
+    /// <summary>A source's right-click: its menu.</summary>
+    private void SourceMenu(AppTab tab, PointerEventData eventData)
     {
         if (contextMenu != null)
             contextMenu.ShowForTab(this, tab, eventData);
     }
 
-    /// <summary>The order changed: both strips follow, and it is saved.</summary>
+    /// <summary>The order changed: the navigator follows, and it is saved.</summary>
     private void OrderChanged()
     {
-        foreach (AppPane pane in Panes())
-            pane.ApplyOrder(_order);
+        if (nav != null)
+            nav.ApplyOrder(_order);
         DesktopPreferences.AppTabs = _order.Save();
+        RefreshNav();
     }
 
-    /// <summary>The player sees the tab: its badge goes.</summary>
+    /// <summary>A source's badge dot on the navigator.</summary>
+    private void SetBadge(AppTab tab, bool on)
+    {
+        if (nav != null)
+            nav.SetBadge(tab, on);
+    }
+
+    /// <summary>The player sees the source: its badge goes.</summary>
     private void Seen(AppTab tab)
     {
         _badges.Seen(tab);
-        foreach (AppPane pane in Panes())
-            pane.SetBadge(tab, false);
+        SetBadge(tab, false);
     }
 }

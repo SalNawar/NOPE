@@ -24,7 +24,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: taskbar.start
-    text: "\u03AD\u03BD\u03B1\u03C1\u03BE\u03B7"
+    text: "\u039C\u03B5\u03BD\u03BF\u03CD"
     gloss: 0
     tier: 0
   - key: startmenu.settings
@@ -58,7 +58,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: records.search
-    text: "\u0391\u039D\u0391\u0396\u0397\u03A4\u0397\u03A3\u0397"
+    text: "\u0391\u03BD\u03B1\u03B6\u03AE\u03C4\u03B7\u03C3\u03B7"
     gloss: 0
     tier: 0
   - key: compare.match
@@ -119,7 +119,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: taskbar.desk
-    text: "< \u0393\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF"
+    text: "\u03A0\u03AF\u03C3\u03C9 \u03C3\u03C4\u03BF \u03B3\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF"
     gloss: 0
     tier: 0
   - key: briefing.title

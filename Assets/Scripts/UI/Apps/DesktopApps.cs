@@ -40,6 +40,17 @@ public sealed class DesktopApps : MonoBehaviour
             Debug.LogWarning($"[DesktopApps] No window for the app '{id}' on this desktop.", this);
     }
 
+    /// <summary>The id of the app whose window is <paramref name="window"/>, or null (a window no app opens: the shortcut card).</summary>
+    public string IdOf(DesktopWindow window)
+    {
+        if (apps == null || window == null)
+            return null;
+        foreach (App app in apps)
+            if (app.window == window)
+                return app.id;
+        return null;
+    }
+
     /// <summary>The app's window, or null.</summary>
     private DesktopWindow Window(string id)
     {

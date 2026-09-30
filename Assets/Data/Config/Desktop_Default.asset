@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a14beeccd6847c2b1e3775a55484898, type: 3}
   m_Name: Desktop_Default
   m_EditorClassIdentifier: Assembly-CSharp::DesktopConfigSO
-  taskbarHeight: 36
-  dockHeight: 56
+  taskbarHeight: 48
+  dockHeight: 64
   startMenuGap: 4
-  titleBarHeight: 36
-  titleFontSize: 20
-  taskbarButtonMaxWidth: 200
-  taskbarButtonMinWidth: 48
+  titleBarHeight: 44
+  titleFontSize: 26
+  taskbarButtonWidth: 56
   doubleClickSeconds: 0.4
   doubleClickDistance: 6

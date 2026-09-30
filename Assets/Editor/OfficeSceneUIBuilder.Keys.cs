@@ -13,9 +13,9 @@ using UnityEngine.UI;
 /// to its stamp); the F1 card (the ShortcutsWindow: a scrolling list the
 /// card fills from ShortcutMap.Card); the context menu's row entries (Copy
 /// value, Copy row, Pin, Pick for compare); and the app's parts: the search
-/// field made live with its chip for a pasted untranslated line, the Keys
-/// button toggling the card, the sidebar's Pinned and Recent lists (their
-/// placeholders replaced), the pane header's Pin button, the focus ring
+/// field made live with its chip for a pasted untranslated line, the search
+/// palette's Pinned and Recent lists (the quick-open panel's: the PC UX
+/// redesign IA9), each pane header's Pin button, the focus ring
 /// (four FocusRing edges above everything in the window), each pane's zoom
 /// (its content becomes a scrolling viewport over a zoom root holding the
 /// views), and the references the keys read (Accept, Deny, the dock's
@@ -28,17 +28,12 @@ using UnityEngine.UI;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>A sidebar row's height.</summary>
-    private const float SidebarRowHeight = 34f;
 
     /// <summary>The card's keys column width (what they do takes the rest; a row is as tall as its text).</summary>
-    private const float CardKeysWidth = 250f;
-
-    /// <summary>The pane header's Pin button width (at its right end).</summary>
-    private const float PinButtonWidth = 72f;
+    private const float CardKeysWidth = 300f;
 
     /// <summary>The search field's chip width (at the field's right end).</summary>
-    private const float SearchChipWidth = 340f;
+    private const float SearchChipWidth = 420f;
 
     /// <summary>
     /// The F1 card (KB1, §3.4): a desktop window of DesktopConfigSO's card size
@@ -64,15 +59,15 @@ public static partial class OfficeSceneUIBuilder
         line.childControlHeight = true;
         line.childForceExpandWidth = false;
         line.childForceExpandHeight = false;
-        TMP_Text keys = Text(row, "Keys", "", 18, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField, style: FontStyles.Bold);
-        keys.textWrappingMode = TextWrappingModes.Normal;
+        TMP_Text keys = Text(row, "Keys", "", PcType.Body, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField, style: FontStyles.Bold);
+        Chrome(keys, PcType.Body, true);
         keys.raycastTarget = false;
         LayoutElement keysSize = GetOrAdd<LayoutElement>(keys.gameObject);
         keysSize.minWidth = CardKeysWidth;
         keysSize.preferredWidth = CardKeysWidth;
         keysSize.flexibleWidth = 0f;
-        TMP_Text what = Text(row, "Text", "", 18, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField);
-        what.textWrappingMode = TextWrappingModes.Normal;
+        TMP_Text what = Text(row, "Text", "", PcType.Body, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField);
+        Chrome(what, PcType.Body, true);
         what.raycastTarget = false;
         LayoutElement whatSize = GetOrAdd<LayoutElement>(what.gameObject);
         whatSize.preferredWidth = 1f;
@@ -121,7 +116,7 @@ public static partial class OfficeSceneUIBuilder
 
         if (menu != null)
             BuildRowMenuEntries(menu);
-        BuildAppKeys(app, keyboard, menu, config);
+        BuildAppKeys(app, menu, config);
 
         if (notes != null)
         {
@@ -148,34 +143,29 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(menu);
         for (int i = 0; i < names.Length; i++)
         {
-            Button entry = MakeButton(panel, names[i], null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, keys[i]);
-            SetLayoutHeight(entry, ContextMenuEntry.y);
-            Wire(so, props[i], entry);
+            Wire(so, props[i], MenuEntry(panel, names[i], keys[i], ContextMenuEntry.y));
         }
         so.ApplyModifiedProperties();
     }
 
     /// <summary>The app's parts for the keys (the class summary), wired into the app.</summary>
-    private static void BuildAppKeys(AppParts app, DesktopKeyboard keyboard, DesktopContextMenu menu, DesktopConfigSO config)
+    private static void BuildAppKeys(AppParts app, DesktopContextMenu menu, DesktopConfigSO config)
     {
         Transform win = app.Window.transform;
 
         TMP_InputField search = Need(win, "Toolbar/SearchField")?.GetComponent<TMP_InputField>();
         SearchFieldChip chip = search != null ? BuildSearchChip(search, app.App) : null;
-        Button keys = Need(win, "Toolbar/KeysButton")?.GetComponent<Button>();
-        if (keys != null)
-            WirePersistentVoid(keys, "m_OnClick", keyboard, nameof(DesktopKeyboard.ToggleCard));
 
-        Transform sidebar = Need(win, "AppBody/Sidebar");
-        SidebarEntryList pins = sidebar != null ? BuildSidebarList(sidebar, app.App, "Pinned", true, "app.pins.empty", SidebarListBottom(0), SidebarListTop(0)) : null;
-        SidebarEntryList recent = sidebar != null ? BuildSidebarList(sidebar, app.App, "Recent", false, "app.recent.empty", SidebarListBottom(1), SidebarListTop(1)) : null;
+        Transform quick = Need(win, "QuickOpen");
+        SidebarEntryList pins = quick != null ? BuildQuickOpenList(quick, app.App, "Pinned", true, "app.sidebar.pinned", "app.pins.empty", 0.52f, 0.915f) : null;
+        SidebarEntryList recent = quick != null ? BuildQuickOpenList(quick, app.App, "Recent", false, "app.sidebar.recent", "app.recent.empty", 0.02f, 0.49f) : null;
 
         var zooms = new List<Object>();
         var pinButtons = new List<Object>();
         foreach (AppPane pane in win.GetComponentsInChildren<AppPane>(true))
         {
             zooms.Add(BuildPaneZoom(pane));
-            pinButtons.Add(BuildPinButton(pane));
+            pinButtons.Add(Need(pane.transform, "PaneHeader/PinButton")?.GetComponent<Button>());
         }
 
         AppFocusRing ring = BuildFocusRing(win, config);
@@ -204,13 +194,14 @@ public static partial class OfficeSceneUIBuilder
         Transform box = search.transform;
         Transform plate = Panel(box, "Chip", new Vector2(1f, 0.1f), new Vector2(1f, 0.9f), new Vector2(-SearchChipWidth / 2f - 4f, 0f), new Vector2(SearchChipWidth, 0f),
                                 XpFace, ThemeRoleId.Button);
-        TMP_Text label = Text(plate, "Label", "", 16, TextAlignmentOptions.MidlineLeft, Vector2.zero, new Vector2(0.86f, 1f), Ink, ThemeRoleId.Button, fit: true);
+        TMP_Text label = Text(plate, "Label", "", PcType.Caption, TextAlignmentOptions.MidlineLeft, Vector2.zero, new Vector2(0.7f, 1f), Ink, ThemeRoleId.Button, fit: true);
         label.textWrappingMode = TextWrappingModes.NoWrap;
         label.overflowMode = TextOverflowModes.Ellipsis;
         label.margin = new Vector4(8f, 0f, 4f, 0f);
         label.raycastTarget = false;
-        Button remove = MakeButton(plate, "RemoveButton", null, new Vector2(0.87f, 0.1f), new Vector2(0.98f, 0.9f), null, ThemeRoleId.CloseButton, "window.close");
-        SetAnchors(remove.transform, new Vector2(0.87f, 0.1f), new Vector2(0.98f, 0.9f));
+        Button remove = MakeButton(plate, "RemoveButton", null, new Vector2(0.72f, 0.1f), new Vector2(0.98f, 0.9f), null, ThemeRoleId.Button, "notes.remove");
+        SetAnchors(remove.transform, new Vector2(0.72f, 0.1f), new Vector2(0.98f, 0.9f));
+        ButtonLabel(remove, PcType.Caption, TextAlignmentOptions.Center, 2f);
         plate.gameObject.SetActive(false);
 
         SearchFieldChip chip = GetOrAdd<SearchFieldChip>(box.gameObject);
@@ -224,29 +215,29 @@ public static partial class OfficeSceneUIBuilder
         return chip;
     }
 
-    /// <summary>The top of the sidebar's section <paramref name="index"/> (0 Pinned, 1 Recent) under the steps' share (BuildAppSidebar lays the headings out the same way).</summary>
-    private static float SidebarSectionTop(int index) => (1f - StepsSectionShare) * (1f - index / 2f);
-
-    /// <summary>Where section <paramref name="index"/>'s list starts, under its heading.</summary>
-    private static float SidebarListTop(int index) => SidebarSectionTop(index) - 0.075f;
-
-    /// <summary>Where section <paramref name="index"/>'s list ends, above the next section.</summary>
-    private static float SidebarListBottom(int index) => SidebarSectionTop(index) - (1f - StepsSectionShare) / 2f + 0.01f;
-
-    /// <summary>A sidebar list (PR1, PR2) under its heading, between <paramref name="bottom"/> and <paramref name="top"/>: a scrolling list of jump rows and its empty hint; the section's placeholder goes.</summary>
-    private static SidebarEntryList BuildSidebarList(Transform sidebar, InvestigationApp app, string section, bool pins, string hintKey, float bottom, float top)
+    /// <summary>
+    /// A list of the search palette's quick-open panel (IA9; PR1, PR2), between
+    /// <paramref name="bottom"/> and <paramref name="top"/> of the panel: its
+    /// heading (<paramref name="headingKey"/>), a scrolling list of jump rows
+    /// and its empty hint (<paramref name="hintKey"/>).
+    /// </summary>
+    private static SidebarEntryList BuildQuickOpenList(Transform panel, InvestigationApp app, string section, bool pins, string headingKey, string hintKey,
+                                                       float bottom, float top)
     {
-        DestroyChildIfPresent(sidebar, section + "Empty");
-        DestroyChildIfPresent(sidebar, section + "List");
-        RectTransform rows = BuildScrollList(sidebar, section + "List", new Vector2(0.04f, bottom), new Vector2(0.96f, top), 2f, XpFace, ThemeRoleId.Sidebar);
+        TMP_Text heading = Text(panel, section + "Heading", null, PcType.Caption, TextAlignmentOptions.BottomLeft, new Vector2(0f, top), new Vector2(1f, top),
+                                Ink, ThemeRoleId.WindowBody, headingKey, FontStyles.Bold, ThemeTextKind.Heading, true);
+        PlaceRect(heading.transform, new Vector2(0f, top), new Vector2(1f, top), new Vector2(PcSize.L, -40f), new Vector2(-PcSize.L, 0f));
+        heading.raycastTarget = false;
+        RectTransform rows = BuildScrollList(panel, section + "List", new Vector2(0f, bottom), new Vector2(1f, top), 2f, Color.white, ThemeRoleId.WindowBody);
         Transform box = rows.parent.parent;
-        TMP_Text hint = Text(box, "EmptyHint", null, 16, TextAlignmentOptions.TopLeft, new Vector2(0.04f, 0.05f), new Vector2(0.96f, 0.95f), Ink,
-                             ThemeRoleId.Sidebar, hintKey, FontStyles.Italic, ThemeTextKind.Body);
-        hint.textWrappingMode = TextWrappingModes.Normal;
+        PlaceRect(box, new Vector2(0f, bottom), new Vector2(1f, top), new Vector2(PcSize.S, 0f), new Vector2(-PcSize.S, -44f));
+        TMP_Text hint = Text(box, "EmptyHint", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink,
+                             ThemeRoleId.WindowBody, hintKey, FontStyles.Italic, ThemeTextKind.Body);
+        PlaceRect(hint.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.M, PcSize.S), new Vector2(-PcSize.M, -PcSize.S));
+        Chrome(hint, PcType.Caption, true);
         hint.raycastTarget = false;
 
         Button row = BuildListRow(rows, "EntryTemplate");
-        SetLayoutHeight(row, SidebarRowHeight);
         TMP_Text label = row.transform.Find("Label").GetComponent<TMP_Text>();
         SidebarEntryRow entry = GetOrAdd<SidebarEntryRow>(row.gameObject);
         var soRow = new SerializedObject(entry);
@@ -302,24 +293,6 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "zoomRoot", zoom);
         so.ApplyModifiedProperties();
         return paneZoom;
-    }
-
-    /// <summary>The pane header's Pin button (PR1: it pins the pane's item), at the header's right end, beside the chip row (whose area ends before it).</summary>
-    private static Button BuildPinButton(AppPane pane)
-    {
-        Transform header = Need(pane.transform, "PaneHeader");
-        if (header == null)
-            return null;
-        Button pin = MakeButton(header, "PinButton", null, new Vector2(1f, 0.1f), new Vector2(1f, 0.9f), null, ThemeRoleId.Button, "app.pin");
-        var rect = (RectTransform)pin.transform;
-        rect.anchorMin = new Vector2(1f, 0.1f);
-        rect.anchorMax = new Vector2(1f, 0.9f);
-        rect.sizeDelta = new Vector2(PinButtonWidth, 0f);
-        rect.anchoredPosition = new Vector2(-PinButtonWidth / 2f - 6f, 0f);
-        GetOrAdd<LayoutElement>(pin.gameObject).ignoreLayout = true;
-        if (header.Find("ChipArea") is RectTransform chips)
-            chips.offsetMax = new Vector2(-(PinButtonWidth + 12f), chips.offsetMax.y);
-        return pin;
     }
 
     /// <summary>The focus ring (KB4): four FocusRing edges of DesktopConfigSO's width just outside its rect, last in the window (above everything), taking no raycasts, hidden.</summary>

@@ -33,14 +33,17 @@ public static partial class OfficeSceneUIBuilder
         { DesktopAppIds.Settings, "icon.settings" },
     };
 
-    /// <summary>The Start menu's entry height (desktop units).</summary>
-    private const float StartMenuEntryHeight = 40f;
+    /// <summary>The Menu's entry height (desktop units; the PC UX redesign C8).</summary>
+    private const float StartMenuEntryHeight = PcSize.Row;
 
-    /// <summary>The gap between Start menu entries.</summary>
-    private const float StartMenuSpacing = 4f;
+    /// <summary>The Menu's width, at the taskbar's left end.</summary>
+    private const float StartMenuWidth = 380f;
+
+    /// <summary>The gap between Menu entries.</summary>
+    private const float StartMenuSpacing = 2f;
 
     /// <summary>The context menu's width and entry height.</summary>
-    private static readonly Vector2 ContextMenuEntry = new Vector2(240f, 40f);
+    private static readonly Vector2 ContextMenuEntry = new Vector2(300f, PcSize.Row);
 
     /// <summary>
     /// The window layer: every desktop window's parent, on the investigation
@@ -131,10 +134,10 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// One icon cell (DK2): a transparent hit area, the selection plate
+    /// One icon cell (DK2; the PC UX redesign C9): a transparent hit area, the selection plate
     /// (IconSelection), the glyph on its plate (the DesktopIcon role; no art
     /// yet, so the runtime draws the placeholder glyph), the label (its
-    /// Flavour key, at most two lines, shrinking) on its plate, and the badge
+    /// Flavour key at the icon label size, up to two lines, never shrinking under the 720p floor) on its plate, and the badge
     /// (a Badge circle with its count) at the glyph's top right.
     /// </summary>
     private static DesktopIconView BuildIcon(Transform layer, IconPlace place, DesktopIcons board, DesktopConfigSO config)
@@ -166,13 +169,9 @@ public static partial class OfficeSceneUIBuilder
         TMP_Text label = Text(labelPlate, "Label", null, Mathf.RoundToInt(config.iconLabelSize), TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white,
                               ThemeRoleId.DesktopIcon, labelKey, FontStyles.Normal, ThemeTextKind.Button, false);
         label.raycastTarget = false;
-        label.enableAutoSizing = true;
-        label.fontSizeMax = config.iconLabelSize;
-        label.fontSizeMin = IconLabelMinSize;
-        label.textWrappingMode = TextWrappingModes.Normal;
-        label.overflowMode = TextOverflowModes.Ellipsis;
-        label.maxVisibleLines = 2;
-        label.margin = new Vector4(3f, 1f, 3f, 1f);
+        Chrome(label, Mathf.RoundToInt(config.iconLabelSize), true);
+        label.lineSpacing = -10f;
+        label.margin = new Vector4(4f, 2f, 4f, 2f);
 
         float badgeSize = config.iconBadgeSize;
         Transform badge = Panel(cell, "Badge", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(glyphSize / 2f, -4f), new Vector2(badgeSize, badgeSize),
@@ -180,7 +179,7 @@ public static partial class OfficeSceneUIBuilder
         Image badgeImage = badge.GetComponent<Image>();
         badgeImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
         badgeImage.raycastTarget = false;
-        TMP_Text badgeText = Text(badge, "Count", string.Empty, 16, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white, ThemeRoleId.Badge,
+        TMP_Text badgeText = Text(badge, "Count", string.Empty, PcType.Caption - 2, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white, ThemeRoleId.Badge,
                                   null, FontStyles.Bold);
         badgeText.raycastTarget = false;
         badge.gameObject.SetActive(false);
@@ -207,23 +206,18 @@ public static partial class OfficeSceneUIBuilder
         AddVLayout(menu, StartMenuSpacing);
         ContentSizeFitter fit = GetOrAdd<ContentSizeFitter>(menu.gameObject);
         fit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-        Button arrange = MakeButton(menu, "ArrangeEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "desktop.arrange");
-        SetLayoutHeight(arrange, ContextMenuEntry.y);
-        Button open = MakeButton(menu, "OpenEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "menu.open");
-        SetLayoutHeight(open, ContextMenuEntry.y);
-        Button moveLeft = MakeButton(menu, "MoveLeftEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "app.tabMenu.left");
-        SetLayoutHeight(moveLeft, ContextMenuEntry.y);
-        Button moveRight = MakeButton(menu, "MoveRightEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "app.tabMenu.right");
-        SetLayoutHeight(moveRight, ContextMenuEntry.y);
-        Button resetTabs = MakeButton(menu, "ResetTabsEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "app.tabMenu.reset");
-        SetLayoutHeight(resetTabs, ContextMenuEntry.y);
+        Button arrange = MenuEntry(menu, "ArrangeEntry", "desktop.arrange", ContextMenuEntry.y);
+        Button open = MenuEntry(menu, "OpenEntry", "menu.open", ContextMenuEntry.y);
+        Button moveUp = MenuEntry(menu, "MoveUpEntry", "app.tabMenu.up", ContextMenuEntry.y);
+        Button moveDown = MenuEntry(menu, "MoveDownEntry", "app.tabMenu.down", ContextMenuEntry.y);
+        Button resetTabs = MenuEntry(menu, "ResetTabsEntry", "app.tabMenu.reset", ContextMenuEntry.y);
 
         DesktopContextMenu contextMenu = menu.gameObject.AddComponent<DesktopContextMenu>();
         var so = new SerializedObject(contextMenu);
         SetRef(so, "arrangeEntry", arrange);
         SetRef(so, "openEntry", open);
-        Wire(so, "moveLeftEntry", moveLeft);
-        Wire(so, "moveRightEntry", moveRight);
+        Wire(so, "moveUpEntry", moveUp);
+        Wire(so, "moveDownEntry", moveDown);
         Wire(so, "resetTabsEntry", resetTabs);
         SetRef(so, "icons", icons);
         so.ApplyModifiedProperties();
@@ -248,26 +242,33 @@ public static partial class OfficeSceneUIBuilder
         float height = count * StartMenuEntryHeight + (count - 1) * StartMenuSpacing + 2f * VLayoutPadding;
 
         DestroyChildIfPresent(root, "StartMenu");
-        Transform startMenu = Panel(root, "StartMenu", new Vector2(0f, 0f), new Vector2(0.2f, 0f), new Vector2(0f, StartMenuCentre(height)), new Vector2(0f, height),
+        Transform startMenu = Panel(root, "StartMenu", Vector2.zero, Vector2.zero, new Vector2(PcSize.S + StartMenuWidth / 2f, StartMenuCentre(height)), new Vector2(StartMenuWidth, height),
                                     new Color(0.1f, 0.12f, 0.18f, 0.97f), ThemeRoleId.StartMenu);
         AddVLayout(startMenu, StartMenuSpacing);
         mailLabel = null;
         foreach (string id in config.iconOrder)
         {
-            Button entry = MakeButton(startMenu, "App_" + id, null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, StartMenuLabelKey(id));
-            SetLayoutHeight(entry, StartMenuEntryHeight);
+            Button entry = MenuEntry(startMenu, "App_" + id, StartMenuLabelKey(id), StartMenuEntryHeight);
             WirePersistentString(entry, "m_OnClick", apps, nameof(DesktopApps.OpenApp), id);
             if (id == DesktopAppIds.Mail)
                 mailLabel = entry.transform.Find("Label").GetComponent<TMP_Text>();
         }
-        arrange = MakeButton(startMenu, "ArrangeEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "desktop.arrange");
-        SetLayoutHeight(arrange, StartMenuEntryHeight);
-        screenOff = MakeButton(startMenu, "ScreenOffEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "startmenu.screenOff");
-        SetLayoutHeight(screenOff, StartMenuEntryHeight);
+        arrange = MenuEntry(startMenu, "ArrangeEntry", "desktop.arrange", StartMenuEntryHeight);
+        screenOff = MenuEntry(startMenu, "ScreenOffEntry", "startmenu.screenOff", StartMenuEntryHeight);
         quit = MakeButton(startMenu, "QuitEntry", null, Vector2.zero, Vector2.one, new Color(0.5f, 0.2f, 0.2f, 1f), ThemeRoleId.QuitEntry, "startmenu.quit");
         SetLayoutHeight(quit, StartMenuEntryHeight);
+        ButtonLabel(quit, PcType.Body, TextAlignmentOptions.MidlineLeft, PcSize.L + 4f);
         startMenu.gameObject.SetActive(false);
         return startMenu;
+    }
+
+    /// <summary>A menu entry (C8): a MenuEntry-role row of <paramref name="height"/> whose keyed label sits at Body size, left-aligned.</summary>
+    private static Button MenuEntry(Transform menu, string name, string labelKey, float height)
+    {
+        Button entry = MakeButton(menu, name, null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, labelKey);
+        SetLayoutHeight(entry, height);
+        ButtonLabel(entry, PcType.Body, TextAlignmentOptions.MidlineLeft, PcSize.L + 4f);
+        return entry;
     }
 
     /// <summary>An app's Start menu label: phase 25's for Mail, Citizen Account and Notes, the Start menu's own for Settings, else the desktop label.</summary>

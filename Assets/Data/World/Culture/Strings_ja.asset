@@ -24,7 +24,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: taskbar.start
-    text: "\u30B9\u30BF\u30FC\u30C8"
+    text: "\u30E1\u30CB\u30E5\u30FC"
     gloss: 0
     tier: 0
   - key: startmenu.settings
@@ -116,7 +116,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: taskbar.desk
-    text: "< \u30C7\u30B9\u30AF"
+    text: "\u30C7\u30B9\u30AF\u306B\u623B\u308B"
     gloss: 0
     tier: 0
   - key: briefing.title

@@ -24,7 +24,7 @@ MonoBehaviour:
     gloss: 1
     tier: 1
   - key: taskbar.start
-    text: start
+    text: Menu
     gloss: 0
     tier: 1
   - key: startmenu.settings
@@ -56,7 +56,7 @@ MonoBehaviour:
     gloss: 1
     tier: 1
   - key: records.search
-    text: SEARCH
+    text: Search
     gloss: 1
     tier: 1
   - key: compare.match
@@ -105,7 +105,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.orders.tooDear
-    text: "{0} {1} \xB7 not enough {1}"
+    text: "{0} {1} \xB7 you cannot afford it yet"
     gloss: 0
     tier: 0
   - key: app.orders.needs
@@ -241,7 +241,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: taskbar.desk
-    text: < Desk
+    text: Back to desk
     gloss: 1
     tier: 1
   - key: briefing.title
@@ -313,19 +313,24 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.counters
-    text: "Papers {0} of {1} received \xB7 {2} scanned \xB7 Deviations {3}"
+    text: 'Papers received: {0} of {1}
+
+      Scanned: {2}
+
+      Deviations logged:
+      {3}'
     gloss: 0
     tier: 0
   - key: app.tab.documents
-    text: Documents
+    text: Papers
     gloss: 0
     tier: 0
   - key: app.tab.records
-    text: Records
+    text: Citizen records
     gloss: 0
     tier: 0
   - key: app.tab.reference
-    text: Reference
+    text: Reference books
     gloss: 0
     tier: 0
   - key: app.tab.transcript
@@ -333,11 +338,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.tab.report
-    text: Report
+    text: Deviation report
     gloss: 0
     tier: 0
   - key: app.tab.rules
-    text: Rules
+    text: Today's rules
     gloss: 0
     tier: 0
   - key: app.chip.onDesk
@@ -365,35 +370,35 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.search
-    text: Search this case and today's records
+    text: Search papers, records, books, rules and the transcript
     gloss: 0
     tier: 0
-  - key: app.toolbar.steps
-    text: Steps
+  - key: app.pane.beside
+    text: Open beside
     gloss: 0
     tier: 0
-  - key: app.toolbar.split
-    text: Split
+  - key: app.pane.close
+    text: Close
     gloss: 0
     tier: 0
-  - key: app.toolbar.keys
-    text: F1 Keys
+  - key: app.pane.path
+    text: "{0}  \u203A  <b>{1}</b>"
     gloss: 0
     tier: 0
   - key: app.sidebar.steps
-    text: STEPS
+    text: Checklist
     gloss: 0
     tier: 0
   - key: app.sidebar.pinned
-    text: PINNED
+    text: Pinned
     gloss: 0
     tier: 0
   - key: app.sidebar.recent
-    text: RECENT
+    text: Recent
     gloss: 0
     tier: 0
-  - key: app.sidebar.empty
-    text: Nothing here yet.
+  - key: app.pins.title
+    text: Pinned and recent
     gloss: 0
     tier: 0
   - key: app.toast.scanned
@@ -432,30 +437,6 @@ MonoBehaviour:
     text: Close
     gloss: 0
     tier: 0
-  - key: search.glyph.documents
-    text: DOC
-    gloss: 0
-    tier: 0
-  - key: search.glyph.records
-    text: REC
-    gloss: 0
-    tier: 0
-  - key: search.glyph.reference
-    text: BOOK
-    gloss: 0
-    tier: 0
-  - key: search.glyph.transcript
-    text: TRN
-    gloss: 0
-    tier: 0
-  - key: search.glyph.report
-    text: DEV
-    gloss: 0
-    tier: 0
-  - key: search.glyph.rules
-    text: RULE
-    gloss: 0
-    tier: 0
   - key: search.title.row
     text: "{0} \xB7 {1}"
     gloss: 0
@@ -485,7 +466,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: steps.identity
-    text: Name, number and birth date in Records
+    text: Name, number and birth date in Citizen records
     gloss: 0
     tier: 0
   - key: steps.facts
@@ -553,67 +534,47 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: steps.none
-    text: Steps show while a traveller is at the desk.
+    text: The checklist shows while a traveller is at the desk.
     gloss: 0
     tier: 0
   - key: steps.hidden
-    text: 'Steps are hidden: Steps in the toolbar shows them.'
+    text: 'The checklist is hidden: click its heading to show it.'
     gloss: 0
     tier: 0
-  - key: app.tabGlyph.documents
-    text: DOC
+  - key: steps.count
+    text: '{0} of {1}'
     gloss: 0
     tier: 0
-  - key: app.tabGlyph.records
-    text: REC
+  - key: app.tabMenu.up
+    text: Move up
     gloss: 0
     tier: 0
-  - key: app.tabGlyph.reference
-    text: REF
-    gloss: 0
-    tier: 0
-  - key: app.tabGlyph.transcript
-    text: TRN
-    gloss: 0
-    tier: 0
-  - key: app.tabGlyph.report
-    text: RPT
-    gloss: 0
-    tier: 0
-  - key: app.tabGlyph.rules
-    text: RUL
-    gloss: 0
-    tier: 0
-  - key: app.tabMenu.left
-    text: Move left
-    gloss: 0
-    tier: 0
-  - key: app.tabMenu.right
-    text: Move right
+  - key: app.tabMenu.down
+    text: Move down
     gloss: 0
     tier: 0
   - key: app.tabMenu.reset
-    text: Reset tab order
+    text: Reset order
     gloss: 0
     tier: 0
   - key: app.split.hint
-    text: Two panes side by side, or one
+    text: Show a second source beside this one
     gloss: 0
     tier: 0
   - key: app.split.tooNarrow
-    text: Maximise the window for two panes
+    text: Maximise the window to open a second pane
     gloss: 0
     tier: 0
   - key: app.link.reference
-    text: 'Open the Reference: {0}, the claimed place'
+    text: 'Open Reference books: {0}, the claimed place'
     gloss: 0
     tier: 0
   - key: app.link.records
-    text: 'Open Records: {0}'
+    text: 'Open Citizen records: {0}'
     gloss: 0
     tier: 0
   - key: app.link.rules
-    text: Open the Rules
+    text: Open today's rules
     gloss: 0
     tier: 0
   - key: app.link.pick
@@ -621,7 +582,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.link.place
-    text: 'Open the Reference: {0}'
+    text: 'Open Reference books: {0}'
     gloss: 0
     tier: 0
   - key: app.transcript.answersOnly
@@ -629,7 +590,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.transcript.newLine
-    text: "New line \u25BC"
+    text: New line below
     gloss: 0
     tier: 0
   - key: compare.dockSide
@@ -649,15 +610,15 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: window.minimize
-    text: _
+    text: Minimise
     gloss: 0
     tier: 0
   - key: window.maximize
-    text: '[]'
+    text: Maximise
     gloss: 0
     tier: 0
   - key: window.close
-    text: X
+    text: Close
     gloss: 0
     tier: 0
   - key: window.internet
@@ -669,11 +630,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: browser.back
-    text: <
+    text: Back
     gloss: 0
     tier: 0
   - key: browser.forward
-    text: '>'
+    text: Forward
     gloss: 0
     tier: 0
   - key: browser.home
@@ -968,7 +929,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: settings.language
-    text: UI language
+    text: Language
     gloss: 0
     tier: 0
   - key: settings.followHistory
@@ -1072,7 +1033,7 @@ MonoBehaviour:
     tier: 0
   - key: keys.escape
     text: Close a menu, this card or the search; clear the search; leave a text field;
-      close the Start menu or cancel a drag. With none of those, leave the PC
+      close the Menu or cancel a drag. With none of those, leave the PC
     gloss: 0
     tier: 0
   - key: keys.help
@@ -1097,15 +1058,15 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.tabs
-    text: 'Investigation: show the tab at that place'
+    text: 'Investigation: show the source at that place in the list'
     gloss: 0
     tier: 0
   - key: keys.nextTab
-    text: "The next or previous tab (\u2190 \u2192 on the tab strip)"
+    text: "The next or previous source (\u2191 \u2193 on the list)"
     gloss: 0
     tier: 0
   - key: keys.moveTab
-    text: Move the tab left or right
+    text: Move the source up or down the list
     gloss: 0
     tier: 0
   - key: keys.otherPane
@@ -1113,15 +1074,15 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.split
-    text: Two panes, or back to one
+    text: Open a second pane beside, or close it
     gloss: 0
     tier: 0
   - key: keys.sidebar
-    text: Show or hide the sidebar
+    text: Show or hide the list of sources
     gloss: 0
     tier: 0
   - key: keys.steps
-    text: Show or hide the steps
+    text: Show or hide the checklist
     gloss: 0
     tier: 0
   - key: keys.history
@@ -1129,12 +1090,12 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.regions
-    text: 'The next or previous part of the app: search, tabs, items, rows, sidebar,
+    text: 'The next or previous part of the app: search, sources, items, rows, checklist,
       compare, Accept and Deny'
     gloss: 0
     tier: 0
   - key: keys.rows
-    text: "Move the focus over the rows, chips, pins or buttons (\u2190 \u2192 too)"
+    text: Move the focus over the rows, items, pins or buttons
     gloss: 0
     tier: 0
   - key: keys.follow
@@ -1183,7 +1144,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.item.record
-    text: "Records \xB7 {0}"
+    text: "Citizen records \xB7 {0}"
     gloss: 0
     tier: 0
   - key: app.pin
@@ -1195,8 +1156,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.pins.empty
-    text: Ctrl+P pins the focused row, or this pane's item (Pin). Right-click a pin
-      to unpin it.
+    text: Ctrl+P pins the row you are on, or use Pin in a pane's header. Right-click
+      a pin to unpin it.
     gloss: 0
     tier: 0
   - key: app.recent.empty
@@ -1236,11 +1197,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: settings.stepsShown
-    text: Steps shown
+    text: Checklist shown
     gloss: 0
     tier: 0
   - key: settings.stepsHidden
-    text: Steps hidden
+    text: Checklist hidden
     gloss: 0
     tier: 0
   - key: settings.textSize
@@ -1248,7 +1209,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: mail.inbox
-    text: INBOX
+    text: Inbox
     gloss: 0
     tier: 0
   - key: mail.none
@@ -1456,7 +1417,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: notes.days
-    text: DAYS
+    text: Days
     gloss: 0
     tier: 0
   - key: notes.day
@@ -1468,15 +1429,15 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: notes.pageTitle
-    text: "NOTES \xB7 DAY {0}"
+    text: "Notes \xB7 day {0}"
     gloss: 0
     tier: 0
   - key: notes.clippings
-    text: CLIPPINGS
+    text: Clippings
     gloss: 0
     tier: 0
   - key: notes.notes
-    text: NOTES
+    text: Notes
     gloss: 0
     tier: 0
   - key: notes.counter
@@ -1497,7 +1458,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: notes.remove
-    text: X
+    text: Remove
     gloss: 0
     tier: 0
   - key: notes.placeholder
@@ -1675,6 +1636,10 @@ MonoBehaviour:
     tier: 0
   - key: compare.dockHint
     text: COMPARE    Click two values to compare them.
+    gloss: 0
+    tier: 0
+  - key: compare.clear
+    text: Clear the comparison
     gloss: 0
     tier: 0
   - key: slot.Outfit

@@ -2,6 +2,8 @@
 
 *2026-09-26 · spec only (no code) · decisions by Claude under Saleh's answers below, finalized the same day with his answers to the three Q-items (§13), his translation change and his content-source note · read at `main` = `ff3a6e0` in `E:\unity\NOPE-feat-clock` (pieces 0–10, the readability pass) · built in the phases of `docs/superpowers/plans/2026-09-26-redesign-plan.md` (§11 maps them), each on its own branch from `main` · the code wins over this text*
 
+> **Layout and look superseded (2026-09-30):** the PC UX redesign, `2026-09-30-pc-ux-redesign.md`, replaces this spec's layout, navigation and look (DK2's icon anatomy, DK8's taskbar, WN3's title bar, AP2-AP4's toolbar, tab strips, chip rows and sidebar, ST1's toolbar toggle, PR1's sidebar lists, KB4's regions' places and the §2 wire-frames): one navigator of full-word sources with their items, a search palette holding Pinned and Recent, Open beside and Close in the pane headers. Every behaviour here stands (the index, matching, smart links, compare, pins' scopes, histories, the Escape chain, the steps' rules).
+
 Saleh, verbatim:
 - "I want to improve the icons on the computer there are too many and it is confusing and too static. they should be real icons that I can move around. we need to group everything related to investigation in one icon once you open it it should be like an app with tabs and search bar and accibility feature for ease of access so the user can easily find what they need."
 - "all the permits and all the documents and all the pages on the pc need to start to look like forms and actual documents not just rectangles there should be proper texts and formating on them."

@@ -421,7 +421,7 @@ public static class FormLayout
     /// <paramref name="width"/> (the caller's units). Every size is in page
     /// heights, H = width / aspect (width × aspect on a landscape page): the
     /// wider the page, the larger its print. A document copy on the PC takes
-    /// 542 u (H = 708 u); a page kind in a pane takes the pane's width, so its
+    /// 520 u (H = 679 u); a page kind in a pane takes the pane's width, so its
     /// table cells reach 13 px at 720p from about 564 u. A page whose table
     /// rows carry a smart link's ↗ at their top right (FormView) passes the
     /// ↗'s side, <paramref name="rowLinkRoom"/>, in the caller's units: each

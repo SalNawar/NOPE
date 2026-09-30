@@ -11,9 +11,12 @@ using UnityEngine.UI;
 /// the desktop canvas). It owns the one WindowStack and applies it: a window
 /// shows while it is open and not minimised, the visible ones take the
 /// stack's z-order as their sibling order on the window layer, and the
-/// taskbar has one button per open window in open order (the focused
-/// window's pressed, a minimised one's faded; a click minimises the focused
-/// window, else restores and focuses it). While the desktop takes input (its
+/// taskbar has one button per open window in open order: the app's desktop
+/// glyph (DesktopIcons.GlyphOf; a window no icon opens shows its title
+/// instead), its title in a hover hint, the focused window's with an accent
+/// bar under it, a minimised one's faded (the PC UX redesign IA12: no title
+/// is ever cut); a click minimises the focused window, else restores and
+/// focuses it. While the desktop takes input (its
 /// raycaster is on: BoothRules.DesktopInteractive), a press anywhere on the
 /// desktop closes the context menu and the Start menu when it lands outside
 /// them, focuses the window under the pointer (its own raycast through the
@@ -49,8 +52,8 @@ public sealed class DesktopWindowManager : MonoBehaviour
     /// <summary>The empty desktop's graphics (the wallpaper and the icon layer): a press on one, or on anything in it (an icon), leaves no window focused.</summary>
     [SerializeField] private Graphic[] emptyDesktop;
 
-    /// <summary>The focused window's button tint (pressed).</summary>
-    [SerializeField] private Color focusedTint = new Color(0.72f, 0.72f, 0.72f, 1f);
+    /// <summary>The desktop's icons: a window button shows its app's glyph.</summary>
+    [SerializeField] private DesktopIcons icons;
 
     /// <summary>A minimised window's button tint (flat, faded).</summary>
     [SerializeField] private Color minimisedTint = new Color(1f, 1f, 1f, 0.55f);
@@ -70,11 +73,14 @@ public sealed class DesktopWindowManager : MonoBehaviour
     /// <summary>Numbers the windows' ids.</summary>
     private int _registered;
 
-    /// <summary>One taskbar button and its label.</summary>
+    /// <summary>One taskbar button: its glyph, its label (a window without a glyph), its hover hint's text and its focus bar.</summary>
     private struct TaskbarButton
     {
         public Button Button;
+        public Image Glyph;
         public TMP_Text Label;
+        public TMP_Text Hint;
+        public GameObject Focus;
     }
 
     /// <summary>The focused window, or null (no window has the focus: the desktop's icons take the arrows and Enter).</summary>
@@ -210,7 +216,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
         ApplyTaskbar();
     }
 
-    /// <summary>One button per open window in open order: the title, pressed when focused, faded when minimised.</summary>
+    /// <summary>One button per open window in open order: the glyph (or the title), the title in its hint, the focus bar when focused, faded when minimised.</summary>
     private void ApplyTaskbar()
     {
         if (taskbarButtons == null || taskbarButtonTemplate == null)
@@ -247,15 +253,37 @@ public sealed class DesktopWindowManager : MonoBehaviour
             clone.gameObject.name = "WindowButton";
             clone.gameObject.SetActive(true);
             clone.onClick.AddListener(() => _stack.TaskbarClick(id));
-            button = new TaskbarButton { Button = clone, Label = clone.GetComponentInChildren<TMP_Text>(true) };
+            Transform glyph = clone.transform.Find("Glyph"), label = clone.transform.Find("Label"), hint = clone.transform.Find("Hint/Label"), focus = clone.transform.Find("Focus");
+            button = new TaskbarButton
+            {
+                Button = clone,
+                Glyph = glyph != null ? glyph.GetComponent<Image>() : null,
+                Label = label != null ? label.GetComponent<TMP_Text>() : null,
+                Hint = hint != null ? hint.GetComponent<TMP_Text>() : null,
+                Focus = focus != null ? focus.gameObject : null,
+            };
+            Sprite sprite = icons != null ? icons.GlyphOf(window) : null;
+            if (button.Glyph != null)
+            {
+                button.Glyph.sprite = sprite;
+                button.Glyph.gameObject.SetActive(sprite != null);
+            }
+            if (button.Label != null)
+                button.Label.gameObject.SetActive(sprite == null);
+            if (sprite == null && clone.TryGetComponent(out LayoutElement size))
+                size.preferredWidth = -1f;
             _buttons.Add(id, button);
         }
 
         button.Button.transform.SetAsLastSibling();
         if (button.Label != null)
             button.Label.text = window.Title;
+        if (button.Hint != null)
+            button.Hint.text = window.Title;
+        if (button.Focus != null && button.Focus.activeSelf != (_stack.Focused == id))
+            button.Focus.SetActive(_stack.Focused == id);
         ColorBlock colours = button.Button.colors;
-        colours.normalColor = _stack.Focused == id ? focusedTint : _stack.IsMinimised(id) ? minimisedTint : Color.white;
+        colours.normalColor = _stack.IsMinimised(id) ? minimisedTint : Color.white;
         colours.selectedColor = colours.normalColor;
         button.Button.colors = colours;
     }

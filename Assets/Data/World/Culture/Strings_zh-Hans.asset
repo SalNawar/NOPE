@@ -24,7 +24,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: taskbar.start
-    text: "\u5F00\u59CB"
+    text: "\u83DC\u5355"
     gloss: 0
     tier: 0
   - key: startmenu.settings
@@ -116,7 +116,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: taskbar.desk
-    text: "< \u529E\u516C\u684C"
+    text: "\u8FD4\u56DE\u529E\u516C\u684C"
     gloss: 0
     tier: 0
   - key: briefing.title

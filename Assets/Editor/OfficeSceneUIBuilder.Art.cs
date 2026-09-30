@@ -87,9 +87,9 @@ public static partial class OfficeSceneUIBuilder
     {
         if (reference == null)
             return;
-        Transform cover = Panel(reference.transform, "Cover", new Vector2(0f, AppViewStripBottom), new Vector2(0f, AppViewStripTop), new Vector2(BookCoverGap, 0f),
-                                new Vector2(BookCoverWidth, 0f), Color.white, ThemeRoleId.DiegeticPaper);
-        ((RectTransform)cover).pivot = new Vector2(0f, 0.5f);
+        Transform cover = Panel(reference.transform, "Cover", new Vector2(0f, 1f), new Vector2(0f, 1f), Vector2.zero, Vector2.zero, Color.white, ThemeRoleId.DiegeticPaper);
+        PlaceRect(cover, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(BookCoverGap, -(AppViewStripGap + AppViewStripHeight)),
+                  new Vector2(BookCoverGap + BookCoverWidth, -AppViewStripGap));
         Image image = cover.GetComponent<Image>();
         image.raycastTarget = false;
         image.preserveAspect = true;
