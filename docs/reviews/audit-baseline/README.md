@@ -207,6 +207,48 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
     factors, roles and leanings, the endings).
   - Unchanged: `cases.txt` (the leanings move no traveller) and `validator.txt`.
 
+- **The end-of-epic pass, round 4, the final pass** (`epic/pass-4b` from main `4ee9666`: the hall readouts fix
+  `c089333`, the strandings, travellers drawn only from the ChatGPT art, the narrative workbook, the hall's lights,
+  the desk flow and the PC UX redesign). Re-packed from runs A and B, which were identical (41 deterministic files;
+  the screenshot run's transcript equals A's); the play reports pass 593 checks each (the screenshot run 1000), 0 fail:
+  - `play_transcript.txt` and the 30 saves (the strandings): each accepted Economy traveller may strand at the shift's
+    end and gets a fate (`COVER` in this run: 5 stranded, fates Carry 1, Tremor 3, Forgotten 2); each morning's paper
+    prints the fate's headline ("TIMELINE TREMOR near ...") in place of round 3's plain "Stranded: ..." line and a
+    carried technology; a tremor costs stability (day 9 -0.90, day 14 -1.78), so the world lines read 89.46 from
+    night 10 and 87.68 from night 15 (was 90.36 throughout); every traveller's account line adds the waiver pad's
+    answer and whether a signed waiver is on file (the golden play never chooses the pad); the saves gain
+    `history.strandingLog` (the Mail failure reports) and the pending strandings carry their fate, waiver and fine.
+    No stranding fine fell due in this run (every stranded traveller was waivered). Every verdict, payment, purchase,
+    the money after each night and the ending (`world_report`, the four answers) are round 3's.
+  - `scene_OfficeGameplay.txt` (16,651 lines, was 16,198): the desk flow (the AVAILABLE toggle in place of NEXT, the
+    exit catcher's pass-through, the desk view) and the PC UX redesign (one navigator in full words, the search
+    palette, the new shell, the taskbar's tray, the context menu's entries); the hall readouts' root path. Each rebuild
+    equals the committed scene: `Build Office UI` now lays the taskbar's tray out before saving
+    (`LayoutRebuilder.ForceRebuildLayoutImmediate`), because the redesign's tray is a `HorizontalLayoutGroup` whose
+    four readouts a fresh build left at their pre-layout rects while an opened scene holds the laid-out ones (8 dump
+    lines, no runtime effect); the committed scene already holds the laid-out rects, so it is not re-committed.
+  - `contract.txt`: the readouts resolve by their root path (`GameplayAnchors/DayNumber` and the rest, `c089333`).
+    `scenes_summary.txt`: the office scene's and the hall's file hashes (the hall's lights, dust and backdrop camera
+    placed by Add Anime Hall Hooks; a second run of the hooks on the committed hall changes nothing and it stays
+    byte-unchanged by the builders).
+  - `validator.txt`: 50 of 954 character keys have art; the rest are drawn with their nearest stand-in
+    (`CharacterArtFallback`) or not at all, no procedural placeholder. The 50 character textures reimport with their
+    committed metas byte-unchanged (mipmapped, trilinear, CompressedHQ: `CharacterArtImporter` and the metas agree).
+  - `world_generate.txt`, `data_hashes.txt`: `Assets/Data` 739 -> 743 files (`HallLighting_Default` and
+    `NarrativeWorkbookSettings` with their metas); the library, the strings and the themes (the strandings' voices,
+    the failure report, the stranding fine, AVAILABLE, the redesign's full-word labels), `Desktop_Default`,
+    `OfficeSceneContract`, `DocTemplate_TC310` (the waiver's fine print) and `world_source.json`. Generate World
+    changes 0 files on a second run. The narrative workbook's export reads this data and adds no golden file.
+  - `profile_A.txt`, `profile_B.txt`: re-measured, accepted with `--allow profile` for the office windows: they
+    allocate 436 B per frame (was 368 B), all URP's (`Record Render Graph` for the hall's runtime backdrop camera,
+    36 B, and the PC's clone camera, 32 B, which share URP's static 2D layer-batch table; the lights' own components
+    allocate 0 B; docs/HALL_LIGHTING.md). No new allocation site in our assemblies. Loads: title -> office
+    1106 / 1153 ms, office -> Home 344 / 322 ms, Home -> office 739 / 739 ms, each within 25% here; the hall-lights
+    track measured the first office load of a session at 1.34 s (+27%, the 2D Renderer's first use and the heavier
+    scene), which is accepted as the cost of the lights should a run measure it again.
+  - Unchanged: `cases.txt` (the strandings draw from their own streams after the shift, so no traveller moves), the
+    Home and Title dumps and `play_warnings.txt` (empty). No known fault is packed.
+
 ## Baseline results (ff3a6e0)
 
 - **Tests:** compile 0 errors; offline EditMode 1067 passed, 0 failed.

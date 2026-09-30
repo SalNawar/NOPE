@@ -65,6 +65,10 @@
             {
                 "key": "stranded",
                 "value": 1
+            },
+            {
+                "key": "stranded:carry",
+                "value": 1
             }
         ],
         "timeline": {
@@ -534,7 +538,22 @@
             ],
             "pendingCarries": [],
             "pendingPanics": [],
-            "pendingStrandings": []
+            "pendingStrandings": [],
+            "strandingLog": [
+                {
+                    "travellerName": "Alice (Artist)",
+                    "placeLabel": "Babylonia (Ancient)",
+                    "day": 2,
+                    "fate": 2,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "913-1565-06",
+                    "transponder": "Tick-Tock Basic · TT-97927",
+                    "waiverNo": "SW-316721",
+                    "debt": 9840,
+                    "line": "Stranded: Alice (Artist), lost in Babylonia (Ancient) when an Economy transponder failed."
+                }
+            ]
         },
         "pulls": [
             {

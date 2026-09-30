@@ -935,6 +935,9 @@ public static partial class OfficeSceneUIBuilder
         moneyText = TrayText(tray, "MoneyText", "Credits: 0");
         stabilityText = TrayText(tray, "StabilityText", "Stability: 100%");
         clockText = TrayText(tray, "ClockText", "09:00");
+        // Lay the row out now, so the saved scene holds the rects the layout group drives
+        // (as a scene opened in the editor does) and a rebuild compares equal to it.
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)tray);
 
         bar.SetAsLastSibling();
     }

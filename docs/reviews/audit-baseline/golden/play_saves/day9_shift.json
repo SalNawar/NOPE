@@ -4,7 +4,7 @@
         "day": 9,
         "runSeed": 12345,
         "money": 215,
-        "stabilityHundredths": 9036,
+        "stabilityHundredths": 8946,
         "totalCitations": 4,
         "citationsToday": 0,
         "clerkDebtPaid": 291,
@@ -74,6 +74,14 @@
             {
                 "key": "stranded",
                 "value": 2
+            },
+            {
+                "key": "stranded:carry",
+                "value": 1
+            },
+            {
+                "key": "stranded:tremor",
+                "value": 1
             }
         ],
         "timeline": {
@@ -597,23 +605,49 @@
                     "source": "Trigger: The analytical engine runs"
                 }
             ],
-            "pendingCarries": [
-                {
-                    "fromNationId": "iraq",
-                    "fromEraId": "future",
-                    "toNationId": "egypt",
-                    "toEraId": "modern",
-                    "category": 3,
-                    "value": "Vertical date-palm farm",
-                    "day": 9
-                }
-            ],
+            "pendingCarries": [],
             "pendingPanics": [],
             "pendingStrandings": [
                 {
                     "travellerName": "Leni (Diplomat)",
                     "placeLabel": "Nasser's Egypt (Modern)",
-                    "day": 9
+                    "day": 9,
+                    "fate": 3,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "726-3566-08",
+                    "transponder": "Tick-Tock Basic · TT-76013",
+                    "waiverNo": "SW-199848",
+                    "debt": 294820,
+                    "line": "TIMELINE TREMOR near Nasser's Egypt (Modern). The Directorate says it is nothing."
+                }
+            ],
+            "strandingLog": [
+                {
+                    "travellerName": "Alice (Artist)",
+                    "placeLabel": "Babylonia (Ancient)",
+                    "day": 2,
+                    "fate": 2,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "913-1565-06",
+                    "transponder": "Tick-Tock Basic · TT-97927",
+                    "waiverNo": "SW-316721",
+                    "debt": 9840,
+                    "line": "Stranded: Alice (Artist), lost in Babylonia (Ancient) when an Economy transponder failed."
+                },
+                {
+                    "travellerName": "Leni (Diplomat)",
+                    "placeLabel": "Nasser's Egypt (Modern)",
+                    "day": 9,
+                    "fate": 3,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "726-3566-08",
+                    "transponder": "Tick-Tock Basic · TT-76013",
+                    "waiverNo": "SW-199848",
+                    "debt": 294820,
+                    "line": "TIMELINE TREMOR near Nasser's Egypt (Modern). The Directorate says it is nothing."
                 }
             ]
         },

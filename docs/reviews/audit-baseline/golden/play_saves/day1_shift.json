@@ -199,7 +199,8 @@
             "factEdits": [],
             "pendingCarries": [],
             "pendingPanics": [],
-            "pendingStrandings": []
+            "pendingStrandings": [],
+            "strandingLog": []
         },
         "pulls": [
             {

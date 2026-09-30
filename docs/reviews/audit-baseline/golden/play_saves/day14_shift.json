@@ -4,7 +4,7 @@
         "day": 14,
         "runSeed": 12345,
         "money": 223,
-        "stabilityHundredths": 9036,
+        "stabilityHundredths": 8768,
         "totalCitations": 4,
         "citationsToday": 0,
         "clerkDebtPaid": 507,
@@ -95,6 +95,18 @@
             {
                 "key": "stranded",
                 "value": 6
+            },
+            {
+                "key": "stranded:carry",
+                "value": 1
+            },
+            {
+                "key": "stranded:tremor",
+                "value": 3
+            },
+            {
+                "key": "stranded:forgotten",
+                "value": 2
             }
         ],
         "timeline": {
@@ -677,72 +689,122 @@
                 },
                 {
                     "nationId": "egypt",
-                    "eraId": "modern",
-                    "category": 3,
-                    "value": "Vertical date-palm farm",
-                    "sinceDay": 10,
-                    "cause": 1,
-                    "source": "Baghdad Garden City (2150)"
-                },
-                {
-                    "nationId": "egypt",
                     "eraId": "ancient",
                     "category": 2,
                     "value": "Elected Pharaoh Hatshepsut",
                     "sinceDay": 11,
                     "cause": 0,
                     "source": "Trigger: An elected pharaoh"
-                },
-                {
-                    "nationId": "greece",
-                    "eraId": "ancient",
-                    "category": 3,
-                    "value": "Vertical date-palm farm",
-                    "sinceDay": 11,
-                    "cause": 1,
-                    "source": "Baghdad Garden City (2150)"
-                },
-                {
-                    "nationId": "greece",
-                    "eraId": "modern",
-                    "category": 3,
-                    "value": "Vertical date-palm farm",
-                    "sinceDay": 12,
-                    "cause": 1,
-                    "source": "Baghdad Garden City (2150)"
                 }
             ],
-            "pendingCarries": [
-                {
-                    "fromNationId": "iraq",
-                    "fromEraId": "future",
-                    "toNationId": "egypt",
-                    "toEraId": "earlymodern",
-                    "category": 3,
-                    "value": "Vertical date-palm farm",
-                    "day": 14
-                },
-                {
-                    "fromNationId": "iraq",
-                    "fromEraId": "future",
-                    "toNationId": "egypt",
-                    "toEraId": "earlymodern",
-                    "category": 3,
-                    "value": "Vertical date-palm farm",
-                    "day": 14
-                }
-            ],
+            "pendingCarries": [],
             "pendingPanics": [],
             "pendingStrandings": [
                 {
                     "travellerName": "Rin (Merchant)",
                     "placeLabel": "Ottoman Egypt (Early modern)",
-                    "day": 14
+                    "day": 14,
+                    "fate": 3,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "251-1216-94",
+                    "transponder": "Tick-Tock Basic · TT-80679",
+                    "waiverNo": "SW-722555",
+                    "debt": 186050,
+                    "line": "TIMELINE TREMOR near Ottoman Egypt (Early modern). The Directorate says it is nothing."
                 },
                 {
                     "travellerName": "Kaito (Soldier)",
                     "placeLabel": "Ottoman Egypt (Early modern)",
-                    "day": 14
+                    "day": 14,
+                    "fate": 3,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "008-3693-03",
+                    "transponder": "Skip Lite · SL-23554",
+                    "waiverNo": "SW-953394",
+                    "debt": 5560,
+                    "line": "TIMELINE TREMOR near Ottoman Egypt (Early modern). The Directorate says it is nothing."
+                }
+            ],
+            "strandingLog": [
+                {
+                    "travellerName": "Alice (Artist)",
+                    "placeLabel": "Babylonia (Ancient)",
+                    "day": 2,
+                    "fate": 2,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "913-1565-06",
+                    "transponder": "Tick-Tock Basic · TT-97927",
+                    "waiverNo": "SW-316721",
+                    "debt": 9840,
+                    "line": "Stranded: Alice (Artist), lost in Babylonia (Ancient) when an Economy transponder failed."
+                },
+                {
+                    "travellerName": "Leni (Diplomat)",
+                    "placeLabel": "Nasser's Egypt (Modern)",
+                    "day": 9,
+                    "fate": 3,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "726-3566-08",
+                    "transponder": "Tick-Tock Basic · TT-76013",
+                    "waiverNo": "SW-199848",
+                    "debt": 294820,
+                    "line": "TIMELINE TREMOR near Nasser's Egypt (Modern). The Directorate says it is nothing."
+                },
+                {
+                    "travellerName": "Idris (Diplomat)",
+                    "placeLabel": "Periclean Athens (Ancient)",
+                    "day": 10,
+                    "fate": 0,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "513-8185-46",
+                    "transponder": "Skip Lite · SL-68032",
+                    "waiverNo": "SW-264241",
+                    "debt": 2420,
+                    "line": ""
+                },
+                {
+                    "travellerName": "Zahra (Soldier)",
+                    "placeLabel": "Metapolitefsi Athens (Modern)",
+                    "day": 11,
+                    "fate": 0,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "338-9435-10",
+                    "transponder": "Tick-Tock Basic · TT-07361",
+                    "waiverNo": "SW-867575",
+                    "debt": 180530,
+                    "line": ""
+                },
+                {
+                    "travellerName": "Rin (Merchant)",
+                    "placeLabel": "Ottoman Egypt (Early modern)",
+                    "day": 14,
+                    "fate": 3,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "251-1216-94",
+                    "transponder": "Tick-Tock Basic · TT-80679",
+                    "waiverNo": "SW-722555",
+                    "debt": 186050,
+                    "line": "TIMELINE TREMOR near Ottoman Egypt (Early modern). The Directorate says it is nothing."
+                },
+                {
+                    "travellerName": "Kaito (Soldier)",
+                    "placeLabel": "Ottoman Egypt (Early modern)",
+                    "day": 14,
+                    "fate": 3,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "008-3693-03",
+                    "transponder": "Skip Lite · SL-23554",
+                    "waiverNo": "SW-953394",
+                    "debt": 5560,
+                    "line": "TIMELINE TREMOR near Ottoman Egypt (Early modern). The Directorate says it is nothing."
                 }
             ]
         },
@@ -980,8 +1042,7 @@
                     "Art is now DOMINANT in Kingdom of Iraq.",
                     "Art is now DOMINANT in Periclean Athens.",
                     "RECALL: a Driftbox 3 tour group is lost in Babylonia. Every Driftbox 3 is grounded from today.",
-                    "HISTORY: travellers brought Vertical date-palm farm to Nasser's Egypt (Modern).",
-                    "Stranded: Leni (Diplomat), lost in Nasser's Egypt (Modern) when an Economy transponder failed.",
+                    "TIMELINE TREMOR near Nasser's Egypt (Modern). The Directorate says it is nothing.",
                     "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
                     "Citizens who left on Debt Relief yesterday: 3."
                 ],
@@ -994,8 +1055,6 @@
                     "Democracy is now DOMINANT in Periclean Athens.",
                     "Democracy is now DOMINANT in Victorian Britain.",
                     "HISTORY: Thebes votes: Hatshepsut now rules as an elected pharaoh.",
-                    "HISTORY: travellers brought Vertical date-palm farm to Periclean Athens (Ancient).",
-                    "Stranded: Idris (Diplomat), lost in Periclean Athens (Ancient) when an Economy transponder failed.",
                     "12,000 accounts frozen in default."
                 ],
                 "desk": []
@@ -1008,8 +1067,6 @@
                     "Science is now DOMINANT in Metapolitefsi Athens.",
                     "Art is now DOMINANT in Renaissance Nuremberg.",
                     "Art is now DOMINANT in Wilhelmine Germany.",
-                    "HISTORY: travellers brought Vertical date-palm farm to Metapolitefsi Athens (Modern).",
-                    "Stranded: Zahra (Soldier), lost in Metapolitefsi Athens (Modern) when an Economy transponder failed.",
                     "Premium families book Periclean Athens for the summer.",
                     "Citizens who left on Debt Relief yesterday: 3."
                 ],

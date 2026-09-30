@@ -4,7 +4,7 @@
         "day": 10,
         "runSeed": 12345,
         "money": 75,
-        "stabilityHundredths": 9036,
+        "stabilityHundredths": 8946,
         "totalCitations": 4,
         "citationsToday": 0,
         "clerkDebtPaid": 291,
@@ -76,6 +76,14 @@
             {
                 "key": "stranded",
                 "value": 2
+            },
+            {
+                "key": "stranded:carry",
+                "value": 1
+            },
+            {
+                "key": "stranded:tremor",
+                "value": 1
             }
         ],
         "timeline": {
@@ -504,8 +512,7 @@
                 "Art is now DOMINANT in Kingdom of Iraq.",
                 "Art is now DOMINANT in Periclean Athens.",
                 "RECALL: a Driftbox 3 tour group is lost in Babylonia. Every Driftbox 3 is grounded from today.",
-                "HISTORY: travellers brought Vertical date-palm farm to Nasser's Egypt (Modern).",
-                "Stranded: Leni (Diplomat), lost in Nasser's Egypt (Modern) when an Economy transponder failed.",
+                "TIMELINE TREMOR near Nasser's Egypt (Modern). The Directorate says it is nothing.",
                 "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
                 "Citizens who left on Debt Relief yesterday: 3."
             ],
@@ -584,20 +591,39 @@
                     "sinceDay": 9,
                     "cause": 0,
                     "source": "Trigger: The analytical engine runs"
-                },
-                {
-                    "nationId": "egypt",
-                    "eraId": "modern",
-                    "category": 3,
-                    "value": "Vertical date-palm farm",
-                    "sinceDay": 10,
-                    "cause": 1,
-                    "source": "Baghdad Garden City (2150)"
                 }
             ],
             "pendingCarries": [],
             "pendingPanics": [],
-            "pendingStrandings": []
+            "pendingStrandings": [],
+            "strandingLog": [
+                {
+                    "travellerName": "Alice (Artist)",
+                    "placeLabel": "Babylonia (Ancient)",
+                    "day": 2,
+                    "fate": 2,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "913-1565-06",
+                    "transponder": "Tick-Tock Basic · TT-97927",
+                    "waiverNo": "SW-316721",
+                    "debt": 9840,
+                    "line": "Stranded: Alice (Artist), lost in Babylonia (Ancient) when an Economy transponder failed."
+                },
+                {
+                    "travellerName": "Leni (Diplomat)",
+                    "placeLabel": "Nasser's Egypt (Modern)",
+                    "day": 9,
+                    "fate": 3,
+                    "waivered": true,
+                    "fine": 0,
+                    "citizenId": "726-3566-08",
+                    "transponder": "Tick-Tock Basic · TT-76013",
+                    "waiverNo": "SW-199848",
+                    "debt": 294820,
+                    "line": "TIMELINE TREMOR near Nasser's Egypt (Modern). The Directorate says it is nothing."
+                }
+            ]
         },
         "pulls": [
             {
