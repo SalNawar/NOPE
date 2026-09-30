@@ -4,9 +4,10 @@ using System.Collections.Generic;
 /// <summary>
 /// The character art's file-name grammar: the only code that writes a
 /// character file name (its key). Final art lives at
-/// Assets/Art/Characters/Resources/Characters/{key}.png, and every key without
-/// art is drawn as a placeholder, so art drops in by name. Pure, so every
-/// name form and the enumerations (the validator's art report) are tested.
+/// Assets/Art/Characters/Resources/Characters/{key}.png, and a key without art
+/// is drawn with its nearest delivered stand-in (LookArtFallback), so art
+/// drops in by name. Pure, so every name form and the enumerations (the
+/// validator's art report) are tested.
 /// </summary>
 public static class LookKeys
 {
@@ -61,11 +62,11 @@ public static class LookKeys
 
     /// <summary>The body: "body_{g}_skin{N}".</summary>
     public static LookKey Body(TravellerGender gender, int skin) =>
-        new LookKey($"body_{GenderToken(gender)}_skin{skin}", LookLayer.Body, null, null, skin, null, null);
+        new LookKey($"body_{GenderToken(gender)}_skin{skin}", LookLayer.Body, gender, null, null, skin, null, null, null, null, null);
 
     /// <summary>The head: "head_{g}_skin{N}_face{v}".</summary>
     public static LookKey Head(TravellerGender gender, int skin, string face) =>
-        new LookKey($"head_{GenderToken(gender)}_skin{skin}_face{face}", LookLayer.Head, null, null, skin, null, null);
+        new LookKey($"head_{GenderToken(gender)}_skin{skin}_face{face}", LookLayer.Head, gender, null, null, skin, face, null, null, null, null);
 
     /// <summary>
     /// A garment layer: "{layer}_{g}_{nation}_{era}", plus "_{variant}" when
@@ -75,16 +76,17 @@ public static class LookKeys
     public static LookKey Garment(LookLayer layer, TravellerGender gender, string nationId, string eraId, string colour, string variant = null)
     {
         string name = $"{LayerToken(layer)}_{GenderToken(gender)}_{nationId}_{eraId}";
-        if (!string.IsNullOrWhiteSpace(variant))
+        bool hasVariant = !string.IsNullOrWhiteSpace(variant);
+        if (hasVariant)
             name += "_" + variant;
         if (colour != null)
             name += "_" + colour;
-        return new LookKey(name, layer, nationId, eraId, 0, colour, null);
+        return new LookKey(name, layer, gender, nationId, eraId, 0, null, colour, hasVariant ? variant : null, null, null);
     }
 
-    /// <summary>A premade's whole image: "premade_{id}_{expression}" (the claim's ids only colour its placeholder).</summary>
-    public static LookKey Premade(string premadeId, string expression, string claimNationId, string claimEraId) =>
-        new LookKey($"premade_{premadeId}_{expression}", LookLayer.Whole, claimNationId, claimEraId, 0, null, expression);
+    /// <summary>A premade's whole image: "premade_{id}_{expression}".</summary>
+    public static LookKey Premade(string premadeId, string expression) =>
+        new LookKey($"premade_{premadeId}_{expression}", LookLayer.Whole, TravellerGender.Unknown, null, null, 0, null, null, null, premadeId, expression);
 
     /// <summary>
     /// Every garment key a place's wardrobe can need, both genders: one key per
@@ -163,7 +165,7 @@ public static class LookKeys
     public static IEnumerable<string> PremadeSet(string premadeId)
     {
         foreach (string expression in Expressions)
-            yield return Premade(premadeId, expression, null, null).Name;
+            yield return Premade(premadeId, expression).Name;
     }
 
     /// <summary>The file-name token of a layer.</summary>

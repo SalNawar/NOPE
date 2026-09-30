@@ -1165,7 +1165,7 @@ public sealed class CaseFactory
                                       (LookSource source, bool whole) costume, int caseIndex1Based)
     {
         if (legendary != null)
-            return CharacterArt.HasFinalArt(LookKeys.Premade(legendary.id, LookKeys.NeutralExpression, null, null).Name)
+            return CharacterArt.HasFinalArt(LookKeys.Premade(legendary.id, LookKeys.NeutralExpression).Name)
                 ? Looks.Whole(legendary.id, place != null ? SourceOf(place) : null, _lib.LookRules)
                 : PremadeStandIn(inst, place, legendary, family);
 

@@ -21,7 +21,7 @@ Needs Python 3 with numpy and Pillow only. A full run takes about 5 minutes
 | File | What it does |
 |---|---|
 | `process_pilot.py` | The pilot's source table (raw file, layer, gender, place, how it is registered) and the run: bases first, then each layer; writes the keys, their metas and the report. |
-| `charkit/contract.py` | Reads the game's numbers from the game: `LookCanvas.cs` (landmarks, photo rect), `PlaceholderPalette.cs` (skin swatches, hair colours), `LookKeys.cs` (hair-colour tokens), `CharacterArt.cs` (the Resources folder), `world_source.json` (wig / back / covers flags). Builds key names with the LookKeys grammar and checks every name against `coverage.json` (the brief's LookKeys-derived list): a name the game would not load stops the run. |
+| `charkit/contract.py` | Reads the game's numbers from the game: `LookCanvas.cs` (landmarks, photo rect), `CharacterSwatches.cs` (skin swatches, hair colours), `LookKeys.cs` (hair-colour tokens), `CharacterArt.cs` (the Resources folder), `world_source.json` (wig / back / covers flags). Builds key names with the LookKeys grammar and checks every name against `coverage.json` (the brief's LookKeys-derived list): a name the game would not load stops the run. |
 | `charkit/keying.py` | The keyer (green and magenta removal, despill). |
 | `charkit/landmarks.py`, `charkit/measure.py` | Landmarks: silhouette top and bottom, centre line, eyes, nose, mouth, chin, contours. |
 | `charkit/register.py` | Similarity transforms, least-squares point fits, contour (chamfer + ICP) registration. |
@@ -50,9 +50,14 @@ Needs Python 3 with numpy and Pillow only. A full run takes about 5 minutes
   `Assets/Art/Office/Placeholder/traveller.png.meta`) with exactly what
   `CharacterArtImporter` enforces on import: Sprite, Single, FullRect mesh,
   custom pivot (0.5, 46/1536 = the soles), pixels per unit 1536 (one unit
-  tall), readable, no mipmaps, no crunch, max size 2048, alpha is
-  transparency. The three new folders get folder metas. An existing meta is
-  never replaced (re-runs keep GUIDs).
+  tall), readable, mipmaps with trilinear filtering, high-quality (BC7)
+  compression, no crunch, max size 2048, alpha is transparency, in the form
+  Unity writes it. The three new folders get folder metas. An existing meta
+  is never replaced (re-runs keep GUIDs). (2026-09-30: mipmaps and BC7
+  replaced "no mipmaps, normal compression", the pilot review's open import
+  question: at the desk a figure is drawn at about a third of its size, where
+  thin outlines sampled without mips break up and shimmer, and the default
+  compression's 4x4 blocks smear the line art.)
 
 ### Keying (`keying.py`)
 
@@ -162,7 +167,7 @@ was found.
 - The brief (sections 6, 7, 8; coverage.json) has Claude make
   `body_{g}_skin1`..`skin5` from the approved skin-1 base: skin 1 is cut
   from it and **bodies 2-5 are recoloured** to the section-7 swatches
-  (from `PlaceholderPalette.SkinSwatches`). Skin pixels (within about 25
+  (from `CharacterSwatches.SkinSwatches`). Skin pixels (within about 25
   degrees of the measured skin hue, not grey, not outline) are moved from the
   measured skin fill to the swatch per channel in linear light, so the one
   hard shade keeps its ratio. The grey undergarment and the outlines keep
@@ -170,16 +175,21 @@ was found.
 - **Skin 1 is normalised to its swatch too** (#F1D3C0; the drawings measured
   (243, 201, 178) and (250, 208, 182)), head and body with the same mapping,
   so they agree. The review asked for the skin to be normalised/validated.
-- Heads for skins 2-5 and faces b, c, d are **not made**: the brief takes
-  them from Batch 2 generations (`base_{g}_skin[2-5]_facea`,
-  `head_{g}_skin{N}_face[b/c/d]`), not from a recolour. Until then those keys
-  stay runtime placeholders.
+- **Interim heads** (2026-09-30, Saleh: "characters should only use new
+  assets by chat gpt"; the game no longer draws placeholders): heads for
+  skins 2-5 with face a are recoloured from the skin-1 head with the same
+  mapping as the bodies (the contract's section 6: skins 2-5 are recoloured
+  from skin 1), so a traveller's face always matches their body. The brief
+  still asks Batch 2 for its own `base_{g}_skin[2-5]_facea`; when they
+  arrive, their heads replace these files by name. Faces b, c and d are not
+  made: until Batch 2 draws them the game shows face a of the same skin
+  (`CharacterArtFallback`, contract section 9).
 
 ### Hair colours (brief 7, 8)
 
 - Natural hair and every beard are baked into the five `LookKeys.HairColours`
   (black, brown, blond, red, grey) using the game's own colours from
-  `PlaceholderPalette.Hair`, so a baked file and its placeholder agree. Brown
+  `CharacterSwatches.Hair`, so every baked file uses the same five colours. Brown
   is re-baked too, so every place's brown is the same brown.
 - A hair pixel (hue within about 30 degrees of the drawing's measured fill,
   saturated) becomes the target colour scaled by the pixel's luminance

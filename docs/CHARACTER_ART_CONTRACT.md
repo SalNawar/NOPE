@@ -12,7 +12,7 @@ Simpler, ReStory-like textures, neutral even lighting, front view, the civilian 
 
 - Every layer and every premade image is **1024 × 1536 px** (2:3), RGBA PNG, untrimmed, the figure in the same place on every file.
 - Landmarks (px from the top): head top 260, chin 424, shoulders 500, waist 760, hips 900, knees 1170, soles 1490. Safe area x 120..904, y 10..1490. Headroom above 260 is for hats and buns.
-- The sprite pivot is the soles (x 512, y 1490): the importer makes each image one unit tall with that pivot, so final art and the 256 × 384 runtime placeholders are interchangeable.
+- The sprite pivot is the soles (x 512, y 1490): the importer makes each image one unit tall with that pivot, so every layer registers with every other whatever its resolution.
 - The passport photo is the crop (362, 215)–(662, 590), 4:5; tall headwear is cut by it.
 
 ## 3. Layers and stack order (`LookLayer`)
@@ -34,7 +34,7 @@ Nation, era and premade ids are lowercase letters and digits. A Future place (pi
 
 ## 5. Delivery
 
-Put each file at `Assets/Art/Characters/Resources/Characters/{key}.png`. Import is automatic (`CharacterArtImporter`: sprite, full rect, pivot at the soles, one unit tall, readable, no mipmaps, no crunch, at most 2048 px; a non-2:3 file is reported). Every key without a file is drawn as a placeholder at runtime, so art can arrive in any order. Tools > TimeDesk > Validate Content Library logs how many keys have art and the first missing names.
+Put each file at `Assets/Art/Characters/Resources/Characters/{key}.png`. Import is automatic (`CharacterArtImporter`: sprite, full rect, pivot at the soles, one unit tall, readable, mipmaps with trilinear filtering, high-quality BC7 compression, no crunch, at most 2048 px; a non-2:3 file is reported). A key without a file is drawn with its nearest delivered stand-in (section 9), so art can arrive in any order and replaces its stand-in the moment it lands. Tools > TimeDesk > Validate Content Library logs how many keys have art and the first missing names. Raw ChatGPT sources are processed into keys by `tools/characters/process_pilot.py` (keying, registration, the variants; `tools/characters/README.md`); rejected candidates under `revisions/` are never processed.
 
 ## 6. Drawing rules that keep dress tells fair
 
@@ -50,3 +50,19 @@ Ten real, long-dead people who are not rulers, five women and five men (the cast
 ## 8. Other art
 
 `refbook_cover_culture.png` (the Costume Guide's cover) is still to come. The passport photo frame on the paper and on the scanned page is a builder placeholder; final document art keeps a 4:5 photo window.
+
+## 9. Only ChatGPT art, and the fallback (2026-09-30)
+
+Saleh: "characters should only use new assets by chat gpt". The game draws no character art of its own: every layer is a ChatGPT file (or a variant baked from one by `tools/characters`: the five baked hair colours, bodies 2-5 and the interim heads 2-5 recoloured from skin 1 per section 6). A key with no file is drawn with its **nearest key that has a file**, found by `LookArtFallback` from the table in `Assets/Resources/CharacterArtFallback.asset` (`CharacterArtFallbackSO`, edited in the inspector; Generate World never writes it). A stand-in keeps the layer, the gender, the hair colour (a wig's uncoloured name only meets wigs) and the art variant; its steps, tried in order after the key itself:
+
+| Layer | Steps |
+|---|---|
+| Body | another skin tone, the nearest first (the lighter on a tie) |
+| Head | another face of the same skin (a, b, c, d), then the nearest skin |
+| Outfit, hair, facial hair, headwear | the same nation in the nearest era (the earlier on a tie); the same era of each neighbouring nation; then any place, the nearest era first and the neighbours before the other nations |
+| Hair back, accessory | the same nation in the nearest era; the same era of each neighbouring nation (no further: a missing collar or back of hair reads better than a wrong one) |
+| Premade whole picture | the same premade's neutral picture |
+
+Neighbours (the nearest first): Egypt: Iraq, Greece, Italy. Iraq: Egypt, Greece, Italy. Greece: Italy, Egypt, Iraq. Italy: Greece, Germany, Britain. China: Japan, Iraq. Japan: China. Britain: Germany, Italy. Germany: Britain, Italy. The shared `neutral` nation has none (it reaches art through "any place").
+
+A layer whose steps find nothing is not drawn (the pilot has no man's wig, so an Egyptian man of the Old Kingdom shows his shaved head). Development builds log each stand-in once (`[CharacterArt] No ChatGPT art for '<key>' yet; drawing '<stand-in>' in its place`). What a stand-in shows is only art: the garments the player looks at, their labels and the Costume Guide rows never change with it. `docs/ART_ASSET_LIST.md` ("Coverage today") lists what each place is drawn with and what to commission next.
