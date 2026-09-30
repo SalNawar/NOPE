@@ -14,7 +14,9 @@
 // through the cross proof first; a place tell against the claimed place's book
 // row, else the row it really belongs to (the present's for a smuggler or a
 // fake displaced person); a record tell against the traveller's own record
-// row; a worn tell through Look against the Costume Guide), then a scripted
+// row; a worn tell through Look against the Costume Guide; a forged seal
+// against its office's row of the Seal Register; someone else's photo against
+// the traveller's face through Look), then a scripted
 // verdict: the right one (deny a deviation fault with its evidence, deny a
 // directive fault (a closed destination, a wrong departure date, an expired
 // paper) without, accept the rest), except four planned mistakes (an honest
@@ -31,7 +33,8 @@
 // report, each traveller kind's papers held and wheel, the app's sources
 // (driven through its navigator, the PC UX redesign: a click on a source
 // shows it in the active pane, the other pane is sent through the app's
-// Open), the two panes and one, search and its quick-open palette, the
+// Open), each form's scanned copy beside the Seal Register (the document
+// design spec: every document type on the PC), the two panes and one, search and its quick-open palette, the
 // checklist, each lie kind caught in the dock and
 // on the office strip, each citation reason, and after the transcript's END a
 // shots-only day 7 with the Auto-Feed and Analysis scanners set on the desk);
@@ -727,7 +730,7 @@ public static class _TimeDeskAuditPlay
             }
         }
 
-        // Papers: the first tell field of each category not yet documented.
+        // Papers: the first tell field of each category not yet documented (a seal against the Seal Register, a photo against the face).
         for (int d = 0; d < c.documents.Count; d++)
         {
             DocumentInstance doc = c.documents[d];
@@ -741,7 +744,12 @@ public static class _TimeDeskAuditPlay
                 int index = d;
                 DocumentRow r = row;
                 string docName = doc.template != null ? doc.template.displayName : "?";
-                yield return Pair($"papers {row.Field.category}", () => EvidencePicks.ForField(index, r, docName), row.Field.category, row.Field.value);
+                if (row.Field.category == ClueCategory.Seal)
+                    yield return PairVisual(o, compare, $"papers Seal ({docName})", EvidencePicks.ForField(index, r, docName), () => SealRow(lib, row.Field.issuer), day, slot);
+                else if (row.Field.category == ClueCategory.Photo)
+                    yield return PairVisual(o, compare, $"papers Photo ({docName})", EvidencePicks.ForField(index, r, docName), () => Face(o, runner), day, slot);
+                else
+                    yield return Pair($"papers {row.Field.category}", () => EvidencePicks.ForField(index, r, docName), row.Field.category, row.Field.value);
             }
         }
 
@@ -798,6 +806,44 @@ public static class _TimeDeskAuditPlay
         }
         foreach (Discrepancy dsc in log.Items)
             Count($"proof {dsc.provedBy}");
+    }
+
+    /// <summary>The Seal Register's row of office <paramref name="officeId"/> (the true seal a paper's seal is held against), or null.</summary>
+    private static ComparePick? SealRow(ContentLibrarySO lib, string officeId)
+    {
+        AgencyOffice office = lib.Agency.offices.FirstOrDefault(x => x != null && x.id == officeId);
+        ReferenceBookSO book = lib.ReferenceBooks.FirstOrDefault(b => b != null && b.category == ClueCategory.Seal);
+        return office != null && office.TryGetSeal(out Seal seal) ? EvidencePicks.ForSeal(book, office, Seals.Describe(seal)) : (ComparePick?)null;
+    }
+
+    /// <summary>Look > Their face through the wheel (the interview presenter puts the face into the compare); null: the pick is the presenter's.</summary>
+    private static ComparePick? Face(Office o, DialogRunner runner)
+    {
+        DialogChoice look = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Look && !string.IsNullOrEmpty(x.Next));
+        if (look != null)
+            Call(Field(o.Ui, "_interview"), "Choose", look.Id);
+        DialogChoice face = runner.Choices.FirstOrDefault(x => x.Action == DialogAction.InspectFace);
+        if (face != null)
+            Call(Field(o.Ui, "_interview"), "Choose", face.Id);
+        else
+            Line("   no Look choice for the face");
+        return null;
+    }
+
+    /// <summary>A visual tell (the document design spec, D4, D8): the paper's box, then its truth (the Seal Register's row, or the face through Look, which picks itself).</summary>
+    private static IEnumerator PairVisual(Office o, CompareController compare, string what, ComparePick tell, Func<ComparePick?> truth, int day, int slot)
+    {
+        int before = o.Ui.EvidenceCount;
+        compare.Clear();
+        compare.Select(tell, null);
+        ComparePick? t = truth();
+        if (t != null)
+            compare.Select(t.Value, null);
+        yield return Frames(1);
+        if (o.Ui.EvidenceCount > before)
+            yield break;
+        Line($"   evidence FAILED for {what}");
+        Check(false, $"d{day} slot {slot}: the {what} tell is proven through the compare path");
     }
 
     private static IEnumerator PairDress(Office o, CompareController compare, Func<ComparePick?> look, Func<ComparePick?> claimed, Func<ComparePick?> home, string what, int day, int slot)
@@ -876,6 +922,8 @@ public static class _TimeDeskAuditPlay
             yield return AppShots(o, c, $"app_{kind}_documents", AppTab.Documents, AppTab.Reference);
             yield return AppShots(o, c, $"app_{kind}_records", AppTab.Records, AppTab.Transcript);
         }
+        foreach (int i in forms)
+            yield return FormCopyShots(o, c, i, $"pc_form_{c.documents[i].template.formNumber}");
         if (firstOfDay)
         {
             yield return AppShots(o, c, $"app_d{day}_rules_steps", AppTab.Rules, AppTab.Documents);
@@ -886,6 +934,25 @@ public static class _TimeDeskAuditPlay
             yield return OnePaneShots(o, c);
             yield return DesktopAppShots(o);
         }
+    }
+
+    /// <summary>
+    /// A form's scanned copy (the document design spec: every document type
+    /// on the PC): paper <paramref name="index"/> in the left pane beside the
+    /// Seal Register in the right, its seal held against its office's; shot as <paramref name="name"/>.
+    /// </summary>
+    private static IEnumerator FormCopyShots(Office o, CaseInstance c, int index, string name)
+    {
+        yield return OpenApp(o);
+        AppPane l = o.LeftPane, r = o.RightPane;
+        Call(o.App, "Activate", l);
+        o.App.Open(LinkTarget.ToTab(AppTab.Documents, index), false);
+        int seals = RunManager.Instance.Library.ReferenceBooks.Where(b => b != null).ToList().FindIndex(b => b.category == ClueCategory.Seal);
+        if (r != null && r.gameObject.activeInHierarchy && seals >= 0)
+            o.App.Open(LinkTarget.ToTab(AppTab.Reference, seals), true);
+        yield return Frames(4);
+        yield return Shots(name);
+        yield return CloseApp(o);
     }
 
     /// <summary>A deviation fault's tells proven: the first of each fault kind, on the office strip and in the app (the Report tab, the dock's verdict).</summary>
@@ -900,6 +967,20 @@ public static class _TimeDeskAuditPlay
             key += "_cross";
         yield return Shots($"caught_{key}_office");
         yield return AppShots(o, c, $"caught_{key}_report", AppTab.Report, AppTab.Transcript);
+
+        // The visual lies (the document design spec, D4, D8): the paper held beside its truth, a forged seal next to the Seal Register, someone else's photo at the desk.
+        int visual = c.lie == LieKind.ForgedSeal || c.lie == LieKind.SwappedPhoto ? c.recordTells.Select(t => t.Document).DefaultIfEmpty(-1).First() : -1;
+        DeskDocument paper = visual >= 0 ? o.Paper(visual) : null;
+        if (paper != null)
+        {
+            Call(o.Desk, "Examine", paper);
+            yield return Seconds(0.6f);
+            yield return Shots($"caught_{key}_held");
+            Call(o.Desk, "PutBackAll", true);
+            yield return Frames(3);
+        }
+        if (visual >= 0 && c.lie == LieKind.ForgedSeal)
+            yield return FormCopyShots(o, c, visual, $"caught_{key}_pc");
     }
 
     /// <summary>
