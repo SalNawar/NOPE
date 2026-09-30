@@ -226,7 +226,7 @@ public static class AppRows
 /// <summary>The Mail app's wording of a message by kind (UI strings): sender, subject, date, reference and body.</summary>
 public static class MailText
 {
-    /// <summary>The sender: the Customs Directorate (memo), the Times, the Timeline Integrity Office (citation), Temporal Customs Supply (a delivery) or the authored sender.</summary>
+    /// <summary>The sender: the Customs Directorate (memo), the Times, the Timeline Integrity Office (citation), Temporal Customs Supply (a delivery), Transponder Liability (a failure report) or the authored sender.</summary>
     public static string From(MailItem m) =>
         m.Kind == MailKind.Authored ? m.From
         : UiText.Get(m.Kind switch
@@ -234,6 +234,7 @@ public static class MailText
             MailKind.TimesIssue => "mail.from.times",
             MailKind.CitationNotice => "mail.from.integrity",
             MailKind.Delivery => "mail.from.supply",
+            MailKind.StrandingReport => "mail.from.liability",
             _ => "mail.from.directorate"
         });
 
@@ -245,6 +246,7 @@ public static class MailText
             MailKind.TimesIssue => UiText.Format("mail.subject.times", m.Day),
             MailKind.CitationNotice => UiText.Format("mail.subject.citation", m.Slot),
             MailKind.Delivery => UiText.Get("mail.subject.delivery"),
+            MailKind.StrandingReport => UiText.Format("mail.subject.stranding", m.Subject),
             _ => m.Subject
         };
 
@@ -259,7 +261,7 @@ public static class MailText
     /// <summary>The directive memo's reference for <paramref name="day"/> ("D-3"): Mail's copy and the Investigation app's Rules tab print the same.</summary>
     public static string DirectiveRef(int day) => "D-" + day;
 
-    /// <summary>The memo's reference: D-3 (directives), TT-3 (the Times), C-3-2 (a citation), DL-3 (a delivery), M-welcome (authored).</summary>
+    /// <summary>The memo's reference: D-3 (directives), TT-3 (the Times), C-3-2 (a citation), DL-3 (a delivery), TF-3-1 (a failure report: its day and its place in the run's log), M-welcome (authored).</summary>
     public static string Ref(MailItem m) =>
         m.Kind switch
         {
@@ -267,10 +269,11 @@ public static class MailText
             MailKind.TimesIssue => "TT-" + m.Day,
             MailKind.CitationNotice => "C-" + m.Day + "-" + m.Slot,
             MailKind.Delivery => "DL-" + m.Day,
+            MailKind.StrandingReport => "TF-" + m.Day + "-" + m.Slot,
             _ => "M-" + m.Id.Substring(Mailbox.AuthoredPrefix.Length)
         };
 
-    /// <summary>The body: the directives as a list, the paper's lines and where the edition is (today's on the News site, an earlier one in its archive), the slip's copy, what was delivered as a list, or the authored paragraphs.</summary>
+    /// <summary>The body: the directives as a list, the paper's lines and where the edition is (today's on the News site, an earlier one in its archive), the slip's copy, what was delivered as a list, a failure report's lines, or the authored paragraphs.</summary>
     public static string Body(MailItem m)
     {
         var sb = new StringBuilder();
@@ -298,6 +301,10 @@ public static class MailText
             case MailKind.CitationNotice:
                 sb.AppendLine(UiText.Get("mail.body.citation"));
                 sb.AppendLine();
+                foreach (string line in m.Body)
+                    sb.AppendLine(line);
+                break;
+            case MailKind.StrandingReport:
                 foreach (string line in m.Body)
                     sb.AppendLine(line);
                 break;

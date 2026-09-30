@@ -143,7 +143,7 @@ public static class TimelineService
         historyLines += WorldOutcomeService.Latch(world, lib, config, tomorrow, news, historyLines);
         HistoryService.PromoteCarries(world, lib, config, tomorrow, news, historyLines);
         HistoryService.ReportPanics(world, lib, news);
-        HistoryService.ReportStrandings(world, lib, news);
+        HistoryService.ReportStrandings(world, news);
         AddDebtLine(world, lib, tomorrow, news);
         ExpireEffects(world, tomorrow);
         BuildTomorrowPackage(world, lib, news, desk);

@@ -19,7 +19,10 @@ using UnityEditor;
 public static partial class WorldContentGenerator
 {
     /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models; phase 8 the proofs of means, "proofs"; phase 13b the stranding chance; phase 9 the employers).</summary>
-    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public ProofData[] proofs; public float strandChance; public Employer[] employers; public PortalData[] portals; }
+    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public ProofData[] proofs; public float strandChance; public FateData[] strandingFates; public StrandingReportContent strandingReport; public Employer[] employers; public PortalData[] portals; }
+
+    /// <summary>One stranding fate as authored ("agency.strandingFates"; the fate by name; the endings and strandings spec §6.2).</summary>
+    [Serializable] private sealed class FateData { public string id; public string fate; public float weightWaivered; public float weightUnwaivered; public float stability; public string status; public StrandingFateLine[] lines; }
 
     /// <summary>The clerk's own account as authored ("agency.clerk").</summary>
     [Serializable] private sealed class ClerkData
@@ -90,6 +93,20 @@ public static partial class WorldContentGenerator
                 })
                 .ToList(),
             strandChance = a.strandChance,
+            strandingFates = (a.strandingFates ?? Array.Empty<FateData>())
+                .Select(f => f == null ? null : new StrandingFateRow
+                {
+                    id = f.id ?? string.Empty,
+                    fate = ParseEnum(f.fate, out StrandingFate fate) ? fate : default,
+                    weightWaivered = f.weightWaivered,
+                    weightUnwaivered = f.weightUnwaivered,
+                    stability = f.stability,
+                    status = f.status ?? string.Empty,
+                    lines = (f.lines ?? Array.Empty<StrandingFateLine>()).Where(l => l != null)
+                        .Select(l => new StrandingFateLine { era = l.era ?? string.Empty, text = l.text ?? string.Empty }).ToList()
+                })
+                .ToList(),
+            strandingReport = a.strandingReport ?? new StrandingReportContent(),
             employers = (a.employers ?? Array.Empty<Employer>()).Where(e => e != null).ToList(),
             portals = BuildPortals(a.portals)
         };
@@ -124,6 +141,13 @@ public static partial class WorldContentGenerator
         foreach (ProofData p in src.agency.proofs ?? Array.Empty<ProofData>())
             if (!ParseEnum(p.category, out ClueCategory _))
                 errors.Add($"agency.proofs '{p.form}': '{p.category}' is not a category (Credit, Funds or PolicyNo).");
+
+        // The strandings' fates and the failure report (the endings and strandings spec §6).
+        foreach (FateData f in src.agency.strandingFates ?? Array.Empty<FateData>())
+            if (f != null && !ParseEnum(f.fate, out StrandingFate _))
+                errors.Add($"agency.strandingFates '{f.id}': '{f.fate}' is not a fate ({string.Join(", ", Enum.GetNames(typeof(StrandingFate)))}).");
+        errors.AddRange(StrandingFates.Problems(agency.strandingFates, (src.eras ?? Array.Empty<EraData>()).Select(e => e.id).ToList()));
+        errors.AddRange(StrandingFates.ReportProblems(agency.strandingReport));
 
         // The employers (phase 9): each of a known era, and every past era with at least one, so a labourer bound anywhere has a contract.
         var eraIds = new HashSet<string>((src.eras ?? Array.Empty<EraData>()).Select(e => e.id));

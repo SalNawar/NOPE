@@ -24,7 +24,10 @@ public enum DialogAction
     CompleteDialog,
 
     /// <summary>The player looks at one of the traveller's garments (DialogChoice.GarmentIndex): it goes into the compare bar.</summary>
-    InspectGarment
+    InspectGarment,
+
+    /// <summary>The traveller signs a blank Stranding Waiver from the desk's pad and the desk files it (the endings and strandings spec §7.3): a valid signed waiver on file, the shift clock spends its minutes.</summary>
+    SignWaiver
 }
 
 /// <summary>

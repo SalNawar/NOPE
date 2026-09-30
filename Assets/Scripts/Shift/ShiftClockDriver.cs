@@ -63,6 +63,9 @@ public sealed class ShiftClockDriver : MonoBehaviour, IShiftProgress
     /// <summary>Releases one Pause().</summary>
     public void Resume() => Clock?.Resume();
 
+    /// <summary>Spends <paramref name="minutes"/> of shift time at once (ShiftClock.Spend: a waiver signed from the desk's pad).</summary>
+    public void Spend(float minutes) => Clock?.Spend(minutes);
+
     /// <summary>Advances the clock with scaled time.</summary>
     private void Update() => Clock?.Tick(Time.deltaTime);
 

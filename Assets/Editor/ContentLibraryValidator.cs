@@ -276,7 +276,7 @@ public static partial class ContentLibraryValidator
 
         foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.Count(questions), smallTalk, maxRequests,
                                                              (lines.requests ?? new List<InterviewRequest>()).Count(r => r != null),
-                                                             lib.Dialogs.Count(d => d != null) - bound, bound, lines.menuCapacity))
+                                                             lib.Dialogs.Count(d => d != null) - bound, bound, lines.menuCapacity, InterviewScript.OffersPad(forms, lines)))
             Error(problem, lib);
 
         return issues;

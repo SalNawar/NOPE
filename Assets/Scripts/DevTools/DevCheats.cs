@@ -117,4 +117,11 @@ public static class DevCheats
         Debug.Log($"[DebugPanelController] Cheat: ForceStrandings set to {on}.");
         DevToolsState.ForceStrandings = on;
     }
+
+    /// <summary>The "Stranding fate" choice (null: the fate stream's draw), logged.</summary>
+    public static void ForceStrandingFate(StrandingFate? fate)
+    {
+        Debug.Log($"[DebugPanelController] Cheat: ForcedStrandingFate set to {(fate.HasValue ? fate.Value.ToString() : "drawn")}.");
+        DevToolsState.ForcedStrandingFate = fate;
+    }
 }

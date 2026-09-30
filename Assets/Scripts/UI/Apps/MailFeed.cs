@@ -111,7 +111,10 @@ public sealed class MailFeed : MonoBehaviour
             Authored = library != null ? library.Mail : Array.Empty<AuthoredMail>(),
             HasFlag = world.HasFlag,
             Orders = world.orders,
-            UpgradeName = id => library != null && library.GetUpgradeById(id) != null ? library.GetUpgradeById(id).displayName : null
+            UpgradeName = id => library != null && library.GetUpgradeById(id) != null ? library.GetUpgradeById(id).displayName : null,
+            Strandings = world.history != null ? world.history.strandingLog : null,
+            StrandingReport = r => StrandingFates.Report(r, library != null ? library.Agency.strandingReport : null,
+                                                         library != null ? StrandingFates.Of(library.Agency.strandingFates, r.fate)?.status : null, AccountMaker.Credits)
         });
         Announce();
     }

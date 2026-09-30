@@ -405,6 +405,69 @@ public class InterviewScriptTests
         CollectionAssert.AreEqual(new[] { "back", "q:q_currency", "q:q_capital", "q:q_ruler", "smalltalk" }, Ids(rich.Node(InterviewScript.AskNodeId).Choices));
     }
 
+    /// <summary>Day 5's wording with the waiver pad (the endings and strandings spec §7.3): its entry, the desk's words and a default reply per answer.</summary>
+    private static InterviewLines Day5PadLines()
+    {
+        InterviewLines lines = Day5Lines();
+        lines.waiverPad.label = "Waiver pad: sign here";
+        lines.waiverPad.prompt = new LineText("interview.waiverPad.prompt", "A blank from the pad. Sign at the foot, please; I'll file it.");
+        foreach ((WaiverPadReply reply, string text) in new[]
+                 {
+                     (WaiverPadReply.Signs, "Where do I... there? Lovely."), (WaiverPadReply.Refuses, "I'd rather not sign anything today."),
+                     (WaiverPadReply.NotNeeded, "I don't need one of those, surely."), (WaiverPadReply.AlreadySigned, "I signed one already. It's in the pile.")
+                 })
+            lines.waiverPad.replies.Add(new VoiceLine { key = reply.ToString(), line = new LineText("interview.waiverPad.replies." + reply, text) });
+        return lines;
+    }
+
+    [Test]
+    public void Build_TheWaiverPadIsTheSamePapersEntryForEveryTraveller_OnlyTheReplyChanges()
+    {
+        var travellers = new[]
+        {
+            (Day5(TravellerKind.RichTourist, RichForms()), WaiverPadReply.NotNeeded),
+            (Day5(TravellerKind.PoorTourist, PoorForms()), WaiverPadReply.AlreadySigned),
+            (Day5(TravellerKind.Labourer, LabourerForms()), WaiverPadReply.Signs),
+            (Day5(TravellerKind.PoorTourist, PoorForms()), WaiverPadReply.Refuses),
+            (Day5(TravellerKind.Displaced, DisplacedForms()), WaiverPadReply.NotNeeded)
+        };
+        var menus = new List<string>();
+        foreach ((InterviewCase c, WaiverPadReply reply) in travellers)
+        {
+            c.padReply = reply;
+            DialogGraph graph = Build(c, lines: Day5PadLines());
+            menus.Add(Menu(graph, InterviewScript.PapersNodeId));
+            DialogChoice pad = graph.Node(InterviewScript.PapersNodeId).Choices.Last();
+            Assert.AreEqual(InterviewScript.PadChoiceId, pad.Id);
+            Assert.AreEqual("Waiver pad: sign here", pad.Label);
+            Assert.IsTrue(pad.OneShot);
+            Assert.AreEqual(DialogChoiceKind.Request, pad.Kind);
+            Assert.AreEqual("A blank from the pad. Sign at the foot, please; I'll file it.", pad.Lines[0].Text, "the desk's words are everyone's");
+            Assert.AreEqual(DialogSpeaker.Traveller, pad.Lines[1].Speaker);
+            Assert.AreEqual("interview.waiverPad.replies." + reply, pad.Lines[1].Id);
+            Assert.AreEqual(reply == WaiverPadReply.Signs ? DialogAction.SignWaiver : DialogAction.None, pad.Action, reply.ToString());
+        }
+        Assert.AreEqual(1, menus.Distinct().Count(), string.Join("\n", menus));
+    }
+
+    [Test]
+    public void Build_NoWaiverOnTheDaysMenu_OrNoPadAuthored_NoPad()
+    {
+        InterviewCase c = Day5(TravellerKind.Labourer, LabourerForms());
+        c.askable = c.askable.Where(f => f.FormNumber != Directives.Waiver).ToList();
+        CollectionAssert.DoesNotContain(Ids(Build(c, lines: Day5PadLines()).Node(InterviewScript.PapersNodeId).Choices), InterviewScript.PadChoiceId);
+        CollectionAssert.DoesNotContain(Ids(Build(Day5(TravellerKind.Labourer, LabourerForms()), lines: Day5Lines()).Node(InterviewScript.PapersNodeId).Choices), InterviewScript.PadChoiceId);
+        Assert.IsFalse(InterviewScript.OffersPad(null, Day5PadLines()));
+    }
+
+    [Test]
+    public void MenuProblems_ThePadIsOneMoreEntry()
+    {
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(0, false, 6, 0, 0, 0, 8, pad: true), "< Back + 6 + the pad = 8");
+        StringAssert.Contains("The papers menu holds 9 choices (< Back, 7 request(s), the waiver pad)", string.Join("\n", DialogChecks.MenuProblems(0, false, 7, 0, 0, 0, 8, pad: true)));
+        StringAssert.Contains("the waiver pad, 3 spoken request(s)", string.Join("\n", DialogChecks.MenuProblems(0, false, 1, 3, 2, 0, 8, pad: true)), "one request: the pad joins the hub");
+    }
+
     [Test]
     public void Build_TheAskEntryIsTheAskLabelForEveryKind()
     {

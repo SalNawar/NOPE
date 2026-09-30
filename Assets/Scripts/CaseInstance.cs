@@ -199,6 +199,59 @@ public sealed class CaseInstance
 
     /// <summary>Runtime documents built from templates.</summary>
     public readonly List<DocumentInstance> documents = new();
+
+    /// <summary>
+    /// The Stranding Waiver the desk's pad would file for them (the endings
+    /// and strandings spec §7.3): the waiver form filled from their Citizen
+    /// Account (its registered number and unit) and signed in their hand;
+    /// null when their kind carries no waiver (the pad is not theirs to sign).
+    /// Filed only when they sign (<see cref="SignWaiverAtDesk"/>).
+    /// </summary>
+    public DocumentInstance deskWaiver;
+
+    /// <summary>Their directive fault once a waiver is carried and signed (Directives.Fault over the finished papers with the pad's waiver): what signing at the desk leaves.</summary>
+    public DirectiveFault faultWithDeskWaiver;
+
+    /// <summary>Their answer to the desk's waiver pad (Waivers.PadReply, on their own stream, Seeds.ForWaiverSign).</summary>
+    public WaiverPadReply waiverPadReply = WaiverPadReply.NotNeeded;
+
+    /// <summary>True once they signed the pad's waiver and the desk filed it.</summary>
+    public bool waiverSignedAtDesk;
+
+    /// <summary>The directive fault the desk's signature cured (None when it cured nothing): denying them stays right (VerdictRules.IsCorrect).</summary>
+    public DirectiveFault curedAtDesk;
+
+    /// <summary>
+    /// They sign the pad's waiver and the desk files it: a valid signed waiver
+    /// on file, their directive fault becomes <see cref="faultWithDeskWaiver"/>
+    /// and the fault it cured is remembered. False (nothing changes) when the
+    /// pad is not theirs, they do not sign, or they signed already.
+    /// </summary>
+    public bool SignWaiverAtDesk()
+    {
+        if (deskWaiver == null || waiverSignedAtDesk || waiverPadReply != WaiverPadReply.Signs)
+            return false;
+        waiverSignedAtDesk = true;
+        curedAtDesk = directiveFault != faultWithDeskWaiver ? directiveFault : DirectiveFault.None;
+        directiveFault = faultWithDeskWaiver;
+        return true;
+    }
+
+    /// <summary>Every waiver of theirs, as fields: the ones they carry and the desk's filed copy (Waivers.OnFile reads them).</summary>
+    public IEnumerable<IReadOnlyList<DocumentField>> WaiverPapers
+    {
+        get
+        {
+            foreach (DocumentInstance d in documents)
+                if (d != null && d.template != null && d.template.formNumber == Directives.Waiver)
+                    yield return d.fields;
+            if (waiverSignedAtDesk && deskWaiver != null)
+                yield return deskWaiver.fields;
+        }
+    }
+
+    /// <summary>True when a valid signed waiver of theirs is on file (Waivers.OnFile against their account's registered number and unit).</summary>
+    public bool Waivered => account != null && Waivers.OnFile(WaiverPapers, account.WaiverNo, account.Transponder);
 }
 
 /// <summary>

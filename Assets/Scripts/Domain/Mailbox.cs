@@ -17,7 +17,10 @@ public enum MailKind
     Authored,
 
     /// <summary>Temporal Customs Supply's delivery notice: what the Orders app delivered at the start of the day (the portals spec v3 OR6).</summary>
-    Delivery
+    Delivery,
+
+    /// <summary>The agency's transponder failure report: one per stranded traveller, the morning after (the endings and strandings spec §6.3; a forgotten traveller's only trace, Q12).</summary>
+    StrandingReport
 }
 
 /// <summary>Where a message's link leads (the view decides how it opens).</summary>
@@ -102,13 +105,13 @@ public sealed class MailItem
     /// <summary>What the message is.</summary>
     public MailKind Kind;
 
-    /// <summary>The citation's traveller slot (citation notices only).</summary>
+    /// <summary>The citation's traveller slot (citation notices), or the stranding's place in the run's log, from 1 (failure reports).</summary>
     public int Slot;
 
     /// <summary>An authored message's sender (empty for the generated kinds).</summary>
     public string From = string.Empty;
 
-    /// <summary>An authored message's subject (empty for the generated kinds).</summary>
+    /// <summary>An authored message's subject, or a failure report's traveller (the view words it); empty for the other generated kinds.</summary>
     public string Subject = string.Empty;
 
     /// <summary>The body's lines: the directives, the day's headlines, the slip's text, the authored paragraphs or the names of what was delivered (may be empty).</summary>
@@ -151,6 +154,12 @@ public sealed class MailSources
 
     /// <summary>An upgrade's name by its id, for the delivery memo's lines (null, or a blank name: the id).</summary>
     public Func<string, string> UpgradeName;
+
+    /// <summary>The run's stranding log (HistoryState.strandingLog): each stranding sends one failure report the morning after its shift (null: none).</summary>
+    public IReadOnlyList<StrandingRecord> Strandings;
+
+    /// <summary>A failure report's body for a stranding (StrandingFates.Report over the content; null: no body).</summary>
+    public Func<StrandingRecord, IReadOnlyList<string>> StrandingReport;
 }
 
 /// <summary>
@@ -158,7 +167,9 @@ public sealed class MailSources
 /// its sources by id, newest day first; within a day the citation notices
 /// (latest traveller first), then the directive memo, the Times issue, the
 /// delivery notice (what the Orders app delivered that morning, the portals
-/// spec v3 OR6) and the authored messages. Opening a message marks it read; the read flags are the
+/// spec v3 OR6), the transponder failure reports (one per traveller stranded
+/// at the last shift's end, in the log's order: the endings and strandings
+/// spec §6.3) and the authored messages. Opening a message marks it read; the read flags are the
 /// only saved state. Pure, so the inbox and its badge are tested headless.
 /// </summary>
 public static class Mailbox
@@ -168,6 +179,9 @@ public static class Mailbox
 
     /// <summary>The id prefix of a delivery notice (the day follows).</summary>
     public const string DeliveryPrefix = "delivery:";
+
+    /// <summary>The id prefix of a failure report (the stranding's place in the run's log, from 1, follows).</summary>
+    public const string StrandingPrefix = "stranding:";
 
     /// <summary>The inbox for days 1 to <see cref="MailSources.Today"/>, newest first.</summary>
     public static List<MailItem> ForDays(MailSources s)
@@ -209,6 +223,18 @@ public static class Mailbox
                     Id = DeliveryPrefix + day, Day = day, Kind = MailKind.Delivery,
                     Body = delivered.ConvertAll(id => Named(id, s.UpgradeName))
                 });
+
+            for (int n = 0; s.Strandings != null && n < s.Strandings.Count; n++)
+            {
+                StrandingRecord r = s.Strandings[n];
+                if (r != null && r.day + 1 == day)
+                    items.Add(new MailItem
+                    {
+                        Id = StrandingPrefix + (n + 1), Day = day, Kind = MailKind.StrandingReport, Slot = n + 1,
+                        Subject = r.travellerName ?? string.Empty,
+                        Body = s.StrandingReport?.Invoke(r) ?? Array.Empty<string>()
+                    });
+            }
 
             foreach (AuthoredMail a in s.Authored ?? Array.Empty<AuthoredMail>())
                 if (a != null && a.fromDay == day && Delivered(a, s))

@@ -34,6 +34,12 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>The costume error buttons' labels (the variants' names, made once).</summary>
     private static readonly string[] CostumeErrorNames = Array.ConvertAll(CostumeErrorChoices, e => e.ToString());
 
+    /// <summary>The stranding fates the panel can force (null: the fate stream's draw; the endings and strandings spec §6), and their button names, built once.</summary>
+    private static readonly StrandingFate?[] FateChoices = { null, StrandingFate.Forgotten, StrandingFate.News, StrandingFate.Carry, StrandingFate.Tremor, StrandingFate.Police };
+
+    /// <summary>The stranding fate buttons' names (made once).</summary>
+    private static readonly string[] FateNames = Array.ConvertAll(FateChoices, f => f.HasValue ? f.Value.ToString() : "Drawn");
+
     /// <summary>The layout options the panel uses, made once (GUILayout.Width and Height make a new option per call).</summary>
     private static readonly GUILayoutOption ScrollHeight = GUILayout.Height(PanelHeight - 90f), Width50 = GUILayout.Width(50f), Width60 = GUILayout.Width(60f),
                                             Width100 = GUILayout.Width(100f), Width120 = GUILayout.Width(120f), Width240 = GUILayout.Width(240f),
@@ -358,6 +364,13 @@ public sealed class DebugPanelController : MonoBehaviour
         bool newForceStrandings = GUILayout.Toggle(forceStrandings, "Force strandings (every accepted Economy transponder fails at the shift's end)");
         if (newForceStrandings != forceStrandings)
             DevCheats.SetForceStrandings(newForceStrandings);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Stranding fate:", Width100);
+        for (int i = 0; i < FateChoices.Length; i++)
+            if (GUILayout.Button(FateNames[i]) && DevToolsState.ForcedStrandingFate != FateChoices[i])
+                DevCheats.ForceStrandingFate(FateChoices[i]);
+        GUILayout.EndHorizontal();
 
         GUILayout.Space(6f);
         GUILayout.Label("Upgrades");

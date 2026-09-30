@@ -16,6 +16,15 @@ public static class VerdictRules
     public static bool ShouldAccept(bool hasDeviationFault, bool hasDirectiveFault) => !hasDeviationFault && !hasDirectiveFault;
 
     /// <summary>
+    /// True when the decision is right: it matches <paramref name="shouldAccept"/>,
+    /// or it is a denial of a traveller whose directive fault the desk cured by
+    /// getting a waiver signed from the pad (<paramref name="curedAtDesk"/>; the
+    /// endings and strandings spec §7.3, Saleh's Q14 = A: approving is then
+    /// right, and denying stays right, the rule refusing unsigned papers).
+    /// </summary>
+    public static bool IsCorrect(bool accepted, bool shouldAccept, bool curedAtDesk) => accepted == shouldAccept || (!accepted && curedAtDesk);
+
+    /// <summary>
     /// True when a denial is right but unproven: the evidence gate is on, the
     /// evidence system is active and logged nothing (<paramref name="evidenceCount"/>
     /// is -1 when the system is inactive), and the denied traveller has a
@@ -39,8 +48,11 @@ public static class VerdictRules
     /// accept, a wrong deny and an unproven denial all cost
     /// <paramref name="penalty"/> (GameConfigSO.wrongDecisionPenalty), whatever
     /// the fault and however many came before; 0 while the day's free warnings
-    /// last (<see cref="IsFreeWarning"/>); never below 0. Nothing else fines
-    /// the clerk (a stranding is a world consequence, not a fine).
+    /// last (<see cref="IsFreeWarning"/>); never below 0. The one other fine is
+    /// Saleh's knowing exception (2026-09-30, Q10 = D): the stranding fine the
+    /// agency's failure report charges when a stranded traveller had no valid
+    /// signed waiver (GameConfigSO.strandingFine; ShiftStrandings), a
+    /// consequence of a stranding, not of a decision.
     /// </summary>
     public static int WrongDecisionPenalty(int citationNumberToday, int freeWarningsPerDay, int penalty) =>
         IsFreeWarning(citationNumberToday, freeWarningsPerDay) ? 0 : Math.Max(0, penalty);

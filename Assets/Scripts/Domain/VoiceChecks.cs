@@ -64,6 +64,12 @@ public sealed class VoiceCheckInput
     /// <summary>The default slips (interview.slips).</summary>
     public List<VoiceLine> DefaultSlips = new List<VoiceLine>();
 
+    /// <summary>The waiver pad's default replies (interview.waiverPad.replies; the endings and strandings spec §7.3).</summary>
+    public List<VoiceLine> DefaultPadReplies = new List<VoiceLine>();
+
+    /// <summary>True when some day's papers menu offers the waiver pad (InterviewScript.OffersPad): then the defaults and every personality's own sign and refusal lines are required.</summary>
+    public bool PadOffered;
+
     /// <summary>Each day's slip chance (days[].slipChance), by day number.</summary>
     public IReadOnlyList<(int day, float chance)> SlipChances = Array.Empty<(int, float)>();
 
@@ -117,7 +123,8 @@ public static class VoiceChecks
         ("missingForms", "a refusal", new[] { Interview.DocumentToken, Interview.PlaceToken }, null, "request"),
         ("spoken", "a spoken request's reply", new[] { Interview.PlaceToken }, null, "spoken"),
         ("answers", "an answer", new[] { Interview.ValueToken, Interview.PlaceToken }, Interview.ValueToken, "question"),
-        ("smallTalk", "small talk", new[] { Interview.PlaceToken }, null, null)
+        ("smallTalk", "small talk", new[] { Interview.PlaceToken }, null, null),
+        ("waiverPad", "a waiver-pad reply", new[] { Interview.PlaceToken }, null, "pad")
     };
 
     /// <summary>Every problem of the voice lines in <paramref name="input"/>.</summary>
@@ -181,6 +188,7 @@ public static class VoiceChecks
                 result.Errors.Add($"days: day {day}'s slipChance is {chance.ToString("0.###", CultureInfo.InvariantCulture)}; it must be within 0 and 1.");
 
         CheckPremades(book, input, result);
+        CheckPad(book, input, result);
 
         List<VoiceLine> kindTalk = input.KindSmallTalk ?? new List<VoiceLine>();
         var talked = new HashSet<TravellerKind>();
@@ -309,6 +317,46 @@ public static class VoiceChecks
         }
     }
 
+    /// <summary>
+    /// The waiver pad (the endings and strandings spec §7.3): each default row
+    /// names no voice, a reply and a known era, and its line holds only
+    /// {place} and fits; when some day offers the pad, a base default row
+    /// (blank kinds and era) for every reply, and every personality in the draw
+    /// says its own Signs and Refuses lines (the refusal in character, rule 2).
+    /// </summary>
+    private static void CheckPad(VoiceBook book, VoiceCheckInput input, VoiceCheckResult result)
+    {
+        List<VoiceLine> defaults = input.DefaultPadReplies ?? new List<VoiceLine>();
+        for (int i = 0; i < defaults.Count; i++)
+        {
+            VoiceLine row = defaults[i];
+            string at = $"interview.waiverPad.replies row {i + 1}";
+            if (row == null)
+            {
+                result.Errors.Add($"{at} is empty.");
+                continue;
+            }
+            if (!string.IsNullOrWhiteSpace(row.personality) || !string.IsNullOrWhiteSpace(row.premade))
+                result.Errors.Add($"{at} names a voice; a default row names none (voices' own rows go in interview.voices.waiverPad).");
+            CheckEra(row.era, at, input, result);
+            CheckKey(row, "pad", at, input, result);
+            CheckText(row.line?.text, at, "a waiver-pad reply", new[] { Interview.PlaceToken }, null, input, result);
+        }
+
+        if (!input.PadOffered)
+            return;
+        bool Base(VoiceLine r, WaiverPadReply reply) =>
+            r != null && r.key == reply.ToString() && (r.kinds == null || r.kinds.Count == 0) && string.IsNullOrWhiteSpace(r.era) && r.line != null && !string.IsNullOrWhiteSpace(r.line.text);
+        foreach (WaiverPadReply reply in (WaiverPadReply[])Enum.GetValues(typeof(WaiverPadReply)))
+            if (!defaults.Exists(r => Base(r, reply)))
+                result.Errors.Add($"interview.waiverPad.replies has no base row for {reply} (blank kinds and era): every traveller the pad is offered to falls back to it.");
+        foreach (Personality p in input.Cast ?? Array.Empty<Personality>())
+            if (p != null && !string.IsNullOrWhiteSpace(p.id) && p.weight > 0f)
+                foreach (WaiverPadReply reply in new[] { WaiverPadReply.Signs, WaiverPadReply.Refuses })
+                    if (!(book.waiverPad ?? new List<VoiceLine>()).Exists(r => Base(r, reply) && string.IsNullOrEmpty(r.premade) && r.personality == p.id))
+                        result.Errors.Add($"Personality '{p.id}' ({p.name}) has no base {reply} line for the waiver pad (blank kinds and era); every personality in the draw signs and refuses in its own words (rule 2).");
+    }
+
     /// <summary>A base reaction of <paramref name="verdict"/> and <paramref name="intent"/>: no reason, kinds or era.</summary>
     private static bool IsBase(VoiceLine r, ReactionVerdict verdict, ReactionIntent intent) =>
         r != null && r.verdict == verdict && r.intent == intent && string.IsNullOrWhiteSpace(r.reason) && (r.kinds == null || r.kinds.Count == 0) && string.IsNullOrWhiteSpace(r.era)
@@ -356,6 +404,10 @@ public static class VoiceChecks
                     result.Errors.Add($"{owner} names no question.");
                 else if (!Contains(input.Questions, row.key))
                     result.Errors.Add($"{owner} names the question '{row.key}', which questions does not list.");
+                return;
+            case "pad":
+                if (blank || !Enum.TryParse(row.key, out WaiverPadReply reply) || !Enum.IsDefined(typeof(WaiverPadReply), reply) || reply.ToString() != row.key)
+                    result.Errors.Add($"{owner} names the reply '{row.key}' ({string.Join(", ", Enum.GetNames(typeof(WaiverPadReply)))}).");
                 return;
         }
     }
@@ -442,6 +494,7 @@ public static class VoiceChecks
             "answers" => book.answers,
             "reactions" => book.reactions,
             "slips" => book.slips,
+            "waiverPad" => book.waiverPad,
             _ => book.smallTalk
         }) ?? new List<VoiceLine>();
 }

@@ -31,6 +31,7 @@ public sealed class InterviewPresenter
     private readonly TravellerWheel _wheel;
     private readonly CompareController _compare;
     private readonly Action<int> _handOver;
+    private readonly Action _signWaiver;
     private readonly Func<CaseInstance> _currentCase;
     private readonly Object _context;
     private readonly CaseIndex _index;
@@ -73,14 +74,15 @@ public sealed class InterviewPresenter
     /// The wheel's ring, the transcripts (one per pane; null entries are
     /// skipped), the wheel and the compare (any may be missing), what new
     /// transcript lines tell (the app's Transcript tab), the hand-over of a
-    /// document by index (CaseDocumentsPresenter.HandOver), the façade's
-    /// current case, the object the logs name and search's index (null:
-    /// nothing indexed).
+    /// document by index (CaseDocumentsPresenter.HandOver), the desk's pad
+    /// filing a waiver the traveller signed, the façade's current case, the
+    /// object the logs name and search's index (null: nothing indexed).
     /// </summary>
     public InterviewPresenter(InteractionPanelController ring, IReadOnlyList<TranscriptView> transcripts, Action spoke,
-                              TravellerWheel wheel, CompareController compare, Action<int> handOver, Func<CaseInstance> currentCase, Object context,
+                              TravellerWheel wheel, CompareController compare, Action<int> handOver, Action signWaiver, Func<CaseInstance> currentCase, Object context,
                               CaseIndex index)
     {
+        _signWaiver = signWaiver ?? throw new ArgumentNullException(nameof(signWaiver));
         _index = index;
         _ring = ring;
         _transcripts = transcripts ?? Array.Empty<TranscriptView>();
@@ -232,7 +234,8 @@ public sealed class InterviewPresenter
             smallTalk = interviewReachable && inst != null ? inst.smallTalk : null,
             voice = inst != null ? inst.Voice : null,
             slip = interviewReachable && inst != null ? inst.slip : null,
-            garments = appearanceReachable && inst != null && inst.look != null ? inst.look.Garments : null
+            garments = appearanceReachable && inst != null && inst.look != null ? inst.look.Garments : null,
+            padReply = inst != null ? inst.waiverPadReply : WaiverPadReply.NotNeeded
         };
 
     /// <summary>
@@ -267,7 +270,8 @@ public sealed class InterviewPresenter
     /// document over (a paper onto the desk, or straight to the PC where no
     /// desk is wired) and closes the wheel so the player can take it; a look at
     /// a garment puts it into the compare bar (the player then compares it with
-    /// a Costume Guide row on the PC) and closes the wheel; the traveller's lines, when
+    /// a Costume Guide row on the PC) and closes the wheel; a waiver signed from
+    /// the desk's pad is filed (the wheel stays); the traveller's lines, when
     /// the choice adds some, go to the wheel's bubble (the spoken reveal point),
     /// queued after what they are saying, each changing a premade's picture as
     /// it starts (a choice without one, such as "Ask about home >" or "&lt;
@@ -305,6 +309,10 @@ public sealed class InterviewPresenter
             LookAt(choice.GarmentIndex);
             if (_wheel != null)
                 _wheel.Close();
+        }
+        else if (choice.Action == DialogAction.SignWaiver)
+        {
+            _signWaiver();
         }
 
         if (_wheel != null)

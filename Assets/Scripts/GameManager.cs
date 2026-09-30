@@ -163,6 +163,10 @@ public sealed class GameManager : MonoBehaviour
             shiftClock.Configure(_gameConfig);
             shiftClock.Closed += HandleShiftClosed;
         }
+
+        // A waiver signed from the desk's pad costs shift time (the endings and strandings spec §7.3, Q15 = A).
+        if (investigationUI != null)
+            investigationUI.WaiverSigned += HandleWaiverSigned;
         else
         {
             Debug.LogWarning("GameManager: no ShiftClockDriver wired, so the day ends only when the queue empties (no closing time). Run Tools > TimeDesk > Build Office UI.");
@@ -276,6 +280,15 @@ public sealed class GameManager : MonoBehaviour
         return interview;
     }
 
+    /// <summary>A waiver signed from the desk's pad: the shift clock spends its minutes (GameConfigSO.waiverSignMinutes; time only, no money).</summary>
+    private void HandleWaiverSigned()
+    {
+        float minutes = _gameConfig != null ? _gameConfig.waiverSignMinutes : 0f;
+        if (shiftClock != null)
+            shiftClock.Spend(minutes);
+        Debug.Log($"[GameManager] A waiver was signed from the desk's pad and filed: the shift spends {minutes:0.#} minute(s).");
+    }
+
     /// <summary>
     /// Unsubscribes to prevent event leaks on scene unload / play mode exit.
     /// </summary>
@@ -283,6 +296,8 @@ public sealed class GameManager : MonoBehaviour
     {
         if (shiftClock != null)
             shiftClock.Closed -= HandleShiftClosed;
+        if (investigationUI != null)
+            investigationUI.WaiverSigned -= HandleWaiverSigned;
 
         _characterArt?.Dispose();
 
@@ -329,13 +344,14 @@ public sealed class GameManager : MonoBehaviour
         int totalCases = _ledger != null ? _ledger.verdicts.Count : 0;
         Debug.Log($"[GameManager] Day {_worldState.day} shift complete: {correctCount}/{totalCases} correct, totalPay={totalPay}, totalPenalty={totalPenalty}, money={_worldState.money}, stability={_worldState.timelineStability:0.00}.");
 
-        // The strandings among the accepted travellers (their carries and their
-        // news; redesign phase 13b; they move no money since phase 23), the
+        // The strandings among the accepted travellers (their fates: carries,
+        // tremors, the paper's lines and the stranding fine where no valid signed
+        // waiver was on file; the endings and strandings spec §6-§7), the
         // clerk's Debt Relief instalment out of the shift's pay (phase 13) and
         // the narrative dialogs' consequences all apply before the save
         // (DayCycle.CloseShift), so a Continue replay of this day can never apply
-        // them twice. The instalment and the dialogs may move the wallet, so the
-        // ending check runs after them.
+        // them twice. A stranding's fine or tremor, the instalment and the dialogs
+        // may move the wallet or stability, so the ending check runs after them.
         EndingSO ending = null;
         if (DayCycle.CloseShift(_worldState, _ledger, _dayCases, _today, contentLibrary, _gameConfig))
         {

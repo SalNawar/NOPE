@@ -71,22 +71,21 @@ public class StrandingsTests
     }
 
     [Test]
-    public void Lines_OnePerStranding_InOrder()
+    public void Lines_EachRecordsLine_InOrder_TheForgottenSilent()
     {
         var strandings = new List<StrandingRecord>
         {
-            new StrandingRecord { travellerName = "Lysimache", placeLabel = "Periclean Athens (Ancient)", day = 2 },
+            new StrandingRecord { travellerName = "Lysimache", placeLabel = "Periclean Athens (Ancient)", day = 2, fate = StrandingFate.Police, line = "TIME POLICE: an unregistered traveller was removed from Periclean Athens (Ancient)." },
             null,
-            new StrandingRecord { travellerName = "Hori", placeLabel = "New Kingdom Egypt (Ancient)", day = 2 }
+            new StrandingRecord { travellerName = "Hori", placeLabel = "New Kingdom Egypt (Ancient)", day = 2, fate = StrandingFate.Forgotten },
+            new StrandingRecord { travellerName = "Ines", placeLabel = "Mamluk Egypt (Medieval)", day = 2, fate = StrandingFate.Carry, line = "Stranded: Ines, lost in Mamluk Egypt (Medieval)." }
         };
-        const string template = "Stranded: {name}, lost in {place} when an Economy transponder failed.";
 
         CollectionAssert.AreEqual(new[]
         {
-            "Stranded: Lysimache, lost in Periclean Athens (Ancient) when an Economy transponder failed.",
-            "Stranded: Hori, lost in New Kingdom Egypt (Ancient) when an Economy transponder failed."
-        }, Strandings.Lines(template, strandings));
-        CollectionAssert.IsEmpty(Strandings.Lines(" ", strandings), "a blank template");
-        CollectionAssert.IsEmpty(Strandings.Lines(template, null));
+            "TIME POLICE: an unregistered traveller was removed from Periclean Athens (Ancient).",
+            "Stranded: Ines, lost in Mamluk Egypt (Medieval)."
+        }, Strandings.Lines(strandings));
+        CollectionAssert.IsEmpty(Strandings.Lines(null));
     }
 }

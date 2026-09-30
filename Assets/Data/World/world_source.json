@@ -1159,6 +1159,102 @@
       }
     ],
     "strandChance": 0.08,
+    "strandingFates": [
+      {
+        "id": "forgotten",
+        "fate": "Forgotten",
+        "weightWaivered": 40,
+        "weightUnwaivered": 20,
+        "status": "Status: not recovered. No trace in the record."
+      },
+      {
+        "id": "news",
+        "fate": "News",
+        "weightWaivered": 25,
+        "weightUnwaivered": 20,
+        "status": "Status: not recovered. Traces in the record are under review.",
+        "lines": [
+          {
+            "text": "Chroniclers in {place} record a stranger called {name} who predicted the weather, the harvest and the queue."
+          },
+          {
+            "text": "{place}: a traveller named {name} sells horoscopes that are, unhelpfully, all correct."
+          },
+          {
+            "era": "ancient",
+            "text": "Scribes in {place} record a stranger who spoke to their wrist and was answered."
+          },
+          {
+            "era": "ancient",
+            "text": "An oracle near {place} starts answering in credit ratings. The pilgrims pay anyway."
+          },
+          {
+            "era": "medieval",
+            "text": "Monks in {place} copy out a sermon by one {name} against compound interest."
+          },
+          {
+            "era": "earlymodern",
+            "text": "A pamphlet from {place}, signed {name}, explains the queue in forty pages. Nobody understands it."
+          },
+          {
+            "era": "industrial",
+            "text": "The papers in {place} laugh at {name}, who says one day every letter will arrive at once."
+          },
+          {
+            "era": "modern",
+            "text": "A caller to a radio show in {place}, calling in as {name}, reads out tomorrow's results. The line goes dead."
+          }
+        ]
+      },
+      {
+        "id": "carry",
+        "fate": "Carry",
+        "weightWaivered": 20,
+        "weightUnwaivered": 20,
+        "status": "Status: not recovered. 2150 technology reported at the destination."
+      },
+      {
+        "id": "tremor",
+        "fate": "Tremor",
+        "weightWaivered": 10,
+        "weightUnwaivered": 15,
+        "stability": 1,
+        "status": "Status: not recovered. Timeline Integrity notified of a tremor.",
+        "lines": [
+          {
+            "text": "TIMELINE TREMOR near {place}. The Directorate says it is nothing."
+          },
+          {
+            "text": "Clocks near {place} ran eleven minutes backward last night. The Directorate calls this normal."
+          }
+        ]
+      },
+      {
+        "id": "police",
+        "fate": "Police",
+        "weightWaivered": 5,
+        "weightUnwaivered": 25,
+        "status": "Status: removed by the Time Police. File closed.",
+        "lines": [
+          {
+            "text": "TIME POLICE: an unregistered traveller was removed from {place}. The file is closed."
+          },
+          {
+            "text": "TIME POLICE report one removal in {place}. No further action. No further traveller."
+          },
+          {
+            "text": "TIME POLICE: a stranded traveller in {place} was located and retired. The paperwork is complete."
+          }
+        ]
+      }
+    ],
+    "strandingReport": {
+      "unit": "Unit {unit} failed in {place}.",
+      "traveller": "Traveller: {name}, Citizen ID {id}.",
+      "waivered": "Waiver {waiver} on file: the traveller's debt of {debt} passes to kin.",
+      "unwaivered": "No valid signed waiver on file. Liability referred to Desk 3.",
+      "fine": "A stranding fine of {fine} has been charged to Desk 3."
+    },
     "employers": [
       {
         "id": "nile_quarry",
@@ -9142,43 +9238,54 @@
       "id": "chatty",
       "name": "Chatty",
       "weight": 1,
-      "note": "Tells you everything, then a bit more."
+      "note": "Tells you everything, then a bit more.",
+      "waiverRefusal": 0.05,
+      "strandingFate": "News"
     },
     {
       "id": "curt",
       "name": "Curt",
       "weight": 1,
-      "note": "Time is money, and in 2150 the queue bills by the minute."
+      "note": "Time is money, and in 2150 the queue bills by the minute.",
+      "waiverRefusal": 0.3
     },
     {
       "id": "anxious",
       "name": "Anxious",
       "weight": 1,
-      "note": "Worried about paradoxes, transponders, butterflies and you."
+      "note": "Worried about paradoxes, transponders, butterflies and you.",
+      "waiverRefusal": 0.05,
+      "strandingFate": "Forgotten"
     },
     {
       "id": "sunny",
       "name": "Sunny",
       "weight": 1,
-      "note": "Believes every word the agency prints."
+      "note": "Believes every word the agency prints.",
+      "waiverRefusal": 0.05
     },
     {
       "id": "grand",
       "name": "Grand",
       "weight": 1,
-      "note": "Treats the desk as staff, whatever their account says."
+      "note": "Treats the desk as staff, whatever their account says.",
+      "waiverRefusal": 0.5,
+      "strandingFate": "Carry"
     },
     {
       "id": "stickler",
       "name": "Stickler",
       "weight": 1,
-      "note": "Knows the regulations better than the clerk and says so."
+      "note": "Knows the regulations better than the clerk and says so.",
+      "waiverRefusal": 0.1
     },
     {
       "id": "glum",
       "name": "Glum",
       "weight": 1,
-      "note": "The debt won years ago; this is just the paperwork."
+      "note": "The debt won years ago; this is just the paperwork.",
+      "waiverRefusal": 0.05,
+      "strandingFate": "Forgotten"
     }
   ],
   "interview": {
@@ -13134,6 +13241,78 @@
           "premade": "socrates",
           "text": "I know that I know nothing. Especially about where I was born."
         }
+      ],
+      "waiverPad": [
+        {
+          "personality": "chatty",
+          "reply": "Signs",
+          "text": "Ooh, a form! I love a form. Am I dotting the i's? I'm dotting the i's."
+        },
+        {
+          "personality": "chatty",
+          "reply": "Refuses",
+          "text": "I'd love to, but my sister says never sign what you haven't read, and I never read."
+        },
+        {
+          "personality": "curt",
+          "reply": "Signs",
+          "text": "Signed. That's a minute of my time, billed."
+        },
+        {
+          "personality": "curt",
+          "reply": "Refuses",
+          "text": "No. Nobody mentioned a waiver at booking."
+        },
+        {
+          "personality": "anxious",
+          "reply": "Signs",
+          "text": "What does that clause... is it binding? It says binding. Signed. Oh no."
+        },
+        {
+          "personality": "anxious",
+          "reply": "Refuses",
+          "text": "Sign my debt over to my kin? What if it works? I can't. I can't."
+        },
+        {
+          "personality": "sunny",
+          "reply": "Signs",
+          "text": "Of course! If the agency printed it, it must be good for me."
+        },
+        {
+          "personality": "sunny",
+          "reply": "Refuses",
+          "text": "Oh, I'd love to, but I promised Mum I'd never sign anything with small print."
+        },
+        {
+          "personality": "grand",
+          "reply": "Signs",
+          "text": "Very well. Have it framed."
+        },
+        {
+          "personality": "grand",
+          "reply": "Refuses",
+          "text": "I do not sign things. People sign things for me."
+        },
+        {
+          "personality": "stickler",
+          "reply": "Signs",
+          "text": "Clause 9 is badly drafted, but it's in order. Signed, dated, initialled."
+        },
+        {
+          "personality": "stickler",
+          "reply": "Refuses",
+          "text": "Only after I read clause 9. There is no clause 9. Come back when there is."
+        },
+        {
+          "personality": "glum",
+          "reply": "Signs",
+          "text": "Another signature. The debt collects them."
+        },
+        {
+          "personality": "glum",
+          "reply": "Refuses",
+          "text": "What's the point. You'll lose it anyway."
+        }
       ]
     },
     "reactions": [
@@ -13198,7 +13377,43 @@
         "lie": "FakeDisplaced",
         "text": "The sky opened and took me from the past. The very old past. Ancient-ish."
       }
-    ]
+    ],
+    "waiverPad": {
+      "label": "Waiver pad: sign here",
+      "prompt": "Here's a blank waiver from the pad. Sign at the foot, please, and I'll file it.",
+      "replies": [
+        {
+          "reply": "Signs",
+          "text": "Where do I... there? Lovely."
+        },
+        {
+          "reply": "Refuses",
+          "text": "I'd rather not sign anything today, thank you."
+        },
+        {
+          "reply": "NotNeeded",
+          "text": "I don't think that one is for me."
+        },
+        {
+          "reply": "NotNeeded",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "It's a Premium unit, I don't need one."
+        },
+        {
+          "reply": "NotNeeded",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Sign? I don't even know which century that pen is from."
+        },
+        {
+          "reply": "AlreadySigned",
+          "text": "I signed one already. It's in the pile you have."
+        }
+      ]
+    }
   },
   "questions": [
     {
@@ -17091,6 +17306,18 @@
         "tier": "Full"
       },
       {
+        "key": "mail.from.liability",
+        "text": "Transponder Liability Office",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.subject.stranding",
+        "text": "Transponder failure report: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "mail.body.delivery",
         "text": "Delivered this morning and in force from today's shift:",
         "gloss": "None",
@@ -19103,6 +19330,12 @@
       {
         "key": "results.stranded",
         "text": "Stranded in transit: {0}   (an Economy transponder failed)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.strandingFines",
+        "text": "Stranding fines: -{0}   (no valid signed waiver on file)",
         "gloss": "None",
         "tier": "Full"
       },
