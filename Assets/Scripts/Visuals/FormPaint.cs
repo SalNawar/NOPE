@@ -36,8 +36,10 @@ public readonly struct FormQuad
 /// <summary>
 /// The lines and fills a placed form prints (redesign phase 5, PC spec FO1,
 /// FO8: the code draws the lines): each box's fill and its outline, each
-/// section band, rule and barcode bar, each checkbox's outline and tick and
-/// the stamp area's dash, as coloured rectangles in form space. Both renderers
+/// section band, rule and barcode bar, each checkbox's outline and tick, the
+/// stamp area's dash, and a look's frame bands (in its accent) and a ticket's
+/// perforation (in the rule colour; the document design spec, D1), as
+/// coloured rectangles in form space. Both renderers
 /// draw these quads: the desk paper (DeskDocument, one mesh per layer) and the
 /// PC (FormView, one graphic per layer), so the paper and its scanned copy
 /// print the same strokes. The PC alone adds the Analysis Scanner's marks
@@ -95,6 +97,12 @@ public static class FormPaint
                     break;
                 case FormItemKind.StampArea:
                     Dashed(quads, item.Rect, rule, rule * DashRules, palette.StampDash);
+                    break;
+                case FormItemKind.Stripe:
+                    Add(quads, item.Rect, palette.Accent, FormPaintLayer.Fill);
+                    break;
+                case FormItemKind.Perforation:
+                    Add(quads, item.Rect, palette.Rule, FormPaintLayer.Line);
                     break;
             }
         }

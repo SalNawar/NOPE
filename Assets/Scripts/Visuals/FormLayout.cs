@@ -850,8 +850,9 @@ public static class FormLayout
         /// <summary>
         /// The Seal Register's grid (the document design spec, D4): each of
         /// FormData.Seals in reading order, three to a row, its seal centred
-        /// over its office's name in a box; each box a slot of the block's
-        /// slot, its Row the seal's place.
+        /// over its office's name in a box (the name sized as a table cell:
+        /// no word breaks while the floor holds it); each box a slot of the
+        /// block's slot, its Row the seal's place.
         /// </summary>
         private void SealGrid(FormBlock b)
         {
@@ -863,8 +864,12 @@ public static class FormLayout
             for (int start = 0; start < seals.Count; start += perRow)
             {
                 float top = _y, captions = 0f;
+                var sizes = new float[perRow];
                 for (int k = start; k < Math.Min(seals.Count, start + perRow); k++)
-                    captions = Math.Max(captions, Height(seals[k].Caption ?? string.Empty, FormTextRole.Cell, G(_m.cellSize), width - 2f * pad));
+                {
+                    sizes[k - start] = CellSize(seals[k].Caption ?? string.Empty, FormTextRole.Cell, width - 2f * pad);
+                    captions = Math.Max(captions, Height(seals[k].Caption ?? string.Empty, FormTextRole.Cell, sizes[k - start], width - 2f * pad));
+                }
                 float height = pad + side + pad + captions + pad;
                 for (int k = start; k < Math.Min(seals.Count, start + perRow); k++)
                 {
@@ -873,7 +878,7 @@ public static class FormLayout
                     int slot = AddSlot(-1, k, b.slot, rect);
                     Add(FormItemKind.Box, rect, slot);
                     Add(FormItemKind.Seal, FaceRect.FromTop(x + (width - side) / 2f, top + pad, side, side), slot, seals[k].Value);
-                    Text(FormTextRole.Cell, seals[k].Caption, x + pad, top + pad + side + pad, width - 2f * pad, G(_m.cellSize), slot, FormTextAlign.Centre);
+                    Text(FormTextRole.Cell, seals[k].Caption, x + pad, top + pad + side + pad, width - 2f * pad, sizes[k - start], slot, FormTextAlign.Centre);
                 }
                 _lastRowBottom = top + height;
                 _y = _lastRowBottom + G(_m.rowGap);

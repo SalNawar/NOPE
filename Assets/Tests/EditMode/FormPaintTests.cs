@@ -142,4 +142,20 @@ public class FormPaintTests
         CollectionAssert.IsEmpty(FormPaint.MarkQuads(form, new[] { 7 }, mark, M), "a field the form does not place");
         Assert.AreEqual(2f, FormPaint.MarkRules);
     }
+
+    [Test]
+    public void AFramesBands_AreFillsInTheAccent_AndAPerforationsHoles_LinesInTheRule()
+    {
+        var band = FaceRect.FromTop(0f, 0f, 100f, 2f);
+        var hole = FaceRect.FromTop(3f, 10f, 0.4f, 0.4f);
+        FormPalette palette = Palette();
+        palette.Accent = new Rgba(0.1f, 0.2f, 0.5f);
+        List<FormQuad> quads = FormPaint.Quads(Form(Item(FormItemKind.Stripe, band), Item(FormItemKind.Perforation, hole)), palette, M);
+        Assert.AreEqual(2, quads.Count);
+        Assert.AreEqual(FormPaintLayer.Fill, quads[0].Layer);
+        Assert.IsTrue(quads[0].Colour.Equals(palette.Accent), "the band in the look's accent");
+        Assert.AreEqual(band.Width * band.Height, Area(quads.Take(1)), Eps);
+        Assert.AreEqual(FormPaintLayer.Line, quads[1].Layer);
+        Assert.IsTrue(quads[1].Colour.Equals(RuleC), "a hole in the rule colour");
+    }
 }
