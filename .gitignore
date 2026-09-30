@@ -22,3 +22,7 @@ ArtDeliverables/TimeDesk/HybridScene/BlenderPC/unity-editing.log
 # Unity's crash-recovery copies of unsaved scenes, never committed (audit R6-024)
 _Recovery/
 _Recovery.meta
+# The narrative workbook is derived from world_source.json (docs/narrative/README.md); its import report and Excel lock files
+ContentSheets/NarrativeWorkbook.xlsx
+ContentSheets/NarrativeWorkbook_import.txt
+ContentSheets/~$*

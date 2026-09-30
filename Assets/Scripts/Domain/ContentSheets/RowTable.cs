@@ -45,6 +45,9 @@ public sealed class RowTable
     /// <summary>How the workbook writes each column (null: all text).</summary>
     public CellKind[] Kinds { get; set; }
 
+    /// <summary>How a styled workbook draws the sheet (null: the plain look of the content workbook).</summary>
+    public SheetLook Look { get; set; }
+
     /// <summary>Appends a row; its number is the next row down unless given.</summary>
     public void Add(string[] cells, int rowNumber = 0)
     {
