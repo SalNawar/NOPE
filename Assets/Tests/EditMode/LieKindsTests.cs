@@ -77,13 +77,27 @@ public class LieKindsTests
     }
 
     [Test]
-    public void ThePlaceLies_AreTheFalseOriginTheFakeDisplacedAndSmuggling_EveryOtherLieIsARecordLie()
+    public void ThePlaceLies_AreTheFalseOriginTheFakeDisplacedAndSmuggling_TheVisualLiesTheSealAndThePhoto_EveryOtherLieIsARecordLie()
     {
         foreach (LieKind lie in (LieKind[])System.Enum.GetValues(typeof(LieKind)))
         {
             bool place = lie == LieKind.FalseOrigin || lie == LieKind.FakeDisplaced || lie == LieKind.Smuggling;
+            bool visual = lie == LieKind.ForgedSeal || lie == LieKind.SwappedPhoto;
             Assert.AreEqual(place, LieKinds.IsPlaceLie(lie), lie.ToString());
-            Assert.AreEqual(!place, LieKinds.IsRecordLie(lie), lie.ToString());
+            Assert.AreEqual(visual, LieKinds.IsVisualLie(lie), lie.ToString());
+            Assert.AreEqual(!place && !visual, LieKinds.IsRecordLie(lie), lie.ToString());
         }
+    }
+
+    [Test]
+    public void TheVisualLies_FitEveryKind_AndAreForgedPapers()
+    {
+        foreach (TravellerKind kind in (TravellerKind[])System.Enum.GetValues(typeof(TravellerKind)))
+        {
+            Assert.IsTrue(LieKinds.AppliesTo(LieKind.ForgedSeal, kind), kind.ToString());
+            Assert.IsTrue(LieKinds.AppliesTo(LieKind.SwappedPhoto, kind), kind.ToString());
+        }
+        Assert.AreEqual(Faults.Forged, Faults.Reason(DirectiveFault.None, CostumeError.None, LieKind.ForgedSeal));
+        Assert.AreEqual(Faults.Forged, Faults.Reason(DirectiveFault.None, CostumeError.None, LieKind.SwappedPhoto));
     }
 }

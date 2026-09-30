@@ -84,5 +84,13 @@ public enum ClueCategory
     Term,
 
     /// <summary>The contract's day wage ("420 cr").</summary>
-    Wage
+    Wage,
+
+    // The documents' visual checks (the document design spec, D4 and D8).
+
+    /// <summary>A paper's issuing seal ("Blue hexagon · VO", Seals.Describe): printed in its header, proven only against the Seal Register's row of the office that issues the form (DiscrepancyLog's seal proof); never a place fact, never cross-compared between papers.</summary>
+    Seal,
+
+    /// <summary>A paper's photo: who it shows (Looks.IdentityKey), proven only against the traveller at the desk (DiscrepancyLog's photo proof); never cross-compared between papers.</summary>
+    Photo
 }

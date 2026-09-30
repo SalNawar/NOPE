@@ -189,6 +189,12 @@ public sealed class CaseInstance
     /// </summary>
     public TravellerLook look;
 
+    /// <summary>Someone else's look on the traveller's photo (the SwappedPhoto lie, Looks.Stranger; the document design spec, D8); null when the photo is their own.</summary>
+    public TravellerLook strangerPhoto;
+
+    /// <summary>Who the papers' photo shows: a stranger's look for someone else's photo, else the traveller's own.</summary>
+    public TravellerLook PhotoLook => strangerPhoto ?? look;
+
     /// <summary>
     /// The correct decision (traveller types §5.2): accept only a traveller
     /// with no fault; deny a deviation fault (a liar, a smuggler, a forger, a

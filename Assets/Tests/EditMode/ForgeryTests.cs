@@ -177,7 +177,7 @@ public class ForgeryTests
     {
         foreach (ClueCategory category in (ClueCategory[])System.Enum.GetValues(typeof(ClueCategory)))
         {
-            int kinds = (category == ClueCategory.Name ? 1 : 0) + (Forgery.IsDirectiveOnly(category) ? 1 : 0) + (Forgery.IsRecordCategory(category) ? 1 : 0)
+            int kinds = (category == ClueCategory.Name ? 1 : 0) + (Forgery.IsDirectiveOnly(category) ? 1 : 0) + (Forgery.IsRecordCategory(category) ? 1 : 0) + (Forgery.IsVisual(category) ? 1 : 0)
                         + (Forgery.IsProvableCategory(category, EveryBook()) && !Forgery.IsRecordCategory(category) ? 1 : 0);
             Assert.AreEqual(1, kinds, category.ToString());
         }

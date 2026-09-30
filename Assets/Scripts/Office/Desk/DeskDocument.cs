@@ -16,7 +16,11 @@ using UnityEngine.EventSystems;
 /// fills and the section bands are one mesh under the hover and pick quads,
 /// and every outline, rule, barcode bar and checkbox one mesh over them, both
 /// built once when the paper binds; the seal
-/// is a faint quad behind the header, and the photo sits in its cell. The
+/// is a faint quad behind the header, or the issuing office's seal (its
+/// outline in its ink, SealArt, its legend printed over it) in the header's
+/// box, and the photo sits in its cell. Its form's look (the document design
+/// spec, D1) sizes the paper (its height a share of the desk's paper, its
+/// width by the look's aspect), tints it and colours its frame's bands. The
 /// paper wears its kind's face and the photo frame its art when those files
 /// exist (redesign phase 27, ArtSlots: the paper's placeholder and the grey
 /// frame otherwise), and after the verdict its ink mark lands in the stamp
@@ -132,6 +136,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>The paper's index in the case (DeskController maps a drag or a click to it).</summary>
     public int Index { get; private set; }
 
+    /// <summary>The paper's size in metres, its look's (the document design spec, D1): the desk's paper height times the look's scale, by the look's aspect; the desk's paper before it binds.</summary>
+    public Vector2 Size { get; private set; }
+
     /// <summary>True while the paper slides (it takes no input then).</summary>
     public bool IsSliding { get; private set; }
 
@@ -186,13 +193,18 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         _config = config;
         _slots.Clear();
         _form = null;
+        if (config != null)
+            Size = config.paperSize;
         if (config == null || doc == null || form == null || style == null || textTemplate == null)
             return;
 
-        ShowPaperArt(form.Data.FormNumber);
+        FormLook look = form.Spec.look ?? new FormLook();
+        FormPalette palette = look.Palette(style.Palette());
+        float height = config.paperSize.y * look.Scale;
+        Resize(new Vector2(height * look.AspectOr(style.metrics.aspect), height));
+        ShowPaperArt(form.Data.FormNumber, string.IsNullOrEmpty(look.paper) ? (Color?)null : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f));
 
-        float width = config.paperSize.x;
-        _form = FormLayout.Layout(form.Spec, form.Data, width, style.metrics, new TmpFormText(textTemplate));
+        _form = FormLayout.Layout(form.Spec, form.Data, Size.x, style.metrics, new TmpFormText(textTemplate));
 
         foreach (FormItem item in _form.Items)
         {
@@ -202,7 +214,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                     Print(item);
                     break;
                 case FormItemKind.Seal:
-                    PlaceSeal(item.Rect);
+                    PlaceSeal(item);
                     break;
                 case FormItemKind.Photo:
                     PlacePhoto(item.Rect);
@@ -211,7 +223,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         }
         var fillMesh = new MeshBuilder();
         var lineMesh = new MeshBuilder();
-        foreach (FormQuad q in FormPaint.Quads(_form, style.Palette(), style.metrics))
+        foreach (FormQuad q in FormPaint.Quads(_form, palette, style.metrics))
             (q.Layer == FormPaintLayer.Fill ? fillMesh : lineMesh).Rect(Local(q.Rect), new Color(q.Colour.R, q.Colour.G, q.Colour.B, q.Colour.A));
         fillMesh.Apply(fills, FillLift);
         lineMesh.Apply(lines, LineLift);
@@ -442,15 +454,26 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         text.GetComponent<MeshRenderer>().enabled = true;
     }
 
+    /// <summary>The paper's quad and its collider at <paramref name="size"/> (metres): the sheet the form is laid out on.</summary>
+    private void Resize(Vector2 size)
+    {
+        Size = size;
+        if (paperQuad != null)
+            paperQuad.transform.localScale = new Vector3(size.x, size.y, 1f);
+        if (sheet != null && sheet.TryGetComponent(out BoxCollider box))
+            box.size = new Vector3(size.x, size.y, box.size.z);
+    }
+
     /// <summary>
     /// The paper's art when delivered (redesign phase 27, ArtSlots): its kind's
     /// face by <paramref name="formNumber"/>, else the agency's plain face, on
     /// the paper quad (held or lying: the block outlives the examine material's
-    /// swap); the photo frame's art over the photo; the agency seal's on the
-    /// seal. A missing file keeps the placeholder paper, the grey frame and the
-    /// code-drawn ring.
+    /// swap); without a face, the look's paper <paramref name="tint"/> (the
+    /// document design spec, D1) on a plain sheet; the photo frame's art over
+    /// the photo; the agency seal's on the seal. A missing file keeps the
+    /// placeholder paper, the grey frame and the code-drawn ring.
     /// </summary>
-    private void ShowPaperArt(string formNumber)
+    private void ShowPaperArt(string formNumber, Color? tint)
     {
         _block ??= new MaterialPropertyBlock();
         Texture2D face = paperQuad != null ? SlotArt.Texture(ArtSlots.PaperFaces(formNumber)) : null;
@@ -458,6 +481,13 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         {
             paperQuad.GetPropertyBlock(_block);
             _block.SetTexture(BaseMapId, face);
+            paperQuad.SetPropertyBlock(_block);
+        }
+        else if (paperQuad != null && tint != null)
+        {
+            paperQuad.GetPropertyBlock(_block);
+            _block.SetTexture(BaseMapId, Texture2D.whiteTexture);
+            _block.SetColor(BaseColorId, tint.Value);
             paperQuad.SetPropertyBlock(_block);
         }
 
@@ -479,19 +509,49 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         }
     }
 
-    /// <summary>The seal: its quad over the header's seal rectangle, faint.</summary>
-    private void PlaceSeal(FaceRect rect)
+    /// <summary>
+    /// The seal: its quad over the header's seal rectangle, faint (the
+    /// agency's), or, for a seal the form names (the issuing office's, the
+    /// document design spec D4; its value Seals.Describe's words), its
+    /// outline (SealArt) in its ink with its legend printed in the middle.
+    /// </summary>
+    private void PlaceSeal(FormItem item)
     {
         if (seal == null)
             return;
-        Rect r = Local(rect);
+        Rect r = Local(item.Rect);
         seal.transform.localPosition = new Vector3(r.center.x, r.center.y, -SealLift);
         seal.transform.localScale = new Vector3(r.width, r.height, 1f);
         _block ??= new MaterialPropertyBlock();
         seal.GetPropertyBlock(_block);
-        _block.SetColor(BaseColorId, style.seal);
+        bool office = Seals.TryParse(item.Text, out Seal mark);
+        if (office)
+        {
+            _block.SetTexture(BaseMapId, SealArt.Texture(mark.Shape));
+            _block.SetColor(BaseColorId, SealArt.Ink(mark.Ink));
+        }
+        else
+        {
+            _block.SetColor(BaseColorId, style.seal);
+        }
         seal.SetPropertyBlock(_block);
         seal.gameObject.SetActive(true);
+        if (office)
+            PrintLegend(r, mark);
+    }
+
+    /// <summary>A seal's legend: a clone of the text template in bold capitals and the seal's ink, centred in <paramref name="r"/> (the seal's local rectangle).</summary>
+    private void PrintLegend(Rect r, Seal mark)
+    {
+        TextMeshPro text = Instantiate(textTemplate, textTemplate.transform.parent);
+        text.name = "SealLegend";
+        TmpFormText.Style(text, FormTextRole.Title, r.height * SealArt.LegendShare);
+        text.text = mark.Legend;
+        text.color = SealArt.Ink(mark.Ink);
+        text.alignment = TextAlignmentOptions.Center;
+        text.rectTransform.sizeDelta = new Vector2(r.width, r.height);
+        text.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -TextLift);
+        text.GetComponent<MeshRenderer>().enabled = true;
     }
 
     /// <summary>The photo frame over the photo's rectangle (its quad is PhotoAspect by 1, so it scales by the height).</summary>

@@ -11,7 +11,8 @@ using UnityEditor;
 /// Citizen Account app shows, and from phase 13 the clerk's debt, its share
 /// of pay and the clerk's own Debt Relief Labour Contract; the accounts'
 /// ranges and the transponder models, phase 6; the waiver prefix and the
-/// proofs of means, phase 8) is checked
+/// proofs of means, phase 8; the issuing offices and the fault canon, the
+/// document design spec's D4 and D9, checked by CheckDocuments) is checked
 /// (AgencyContent.Problems) and written into the content library, where the
 /// desk calendar, the Records app, the Citizen Account app and case
 /// generation read it.
@@ -19,7 +20,7 @@ using UnityEditor;
 public static partial class WorldContentGenerator
 {
     /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models; phase 8 the proofs of means, "proofs"; phase 13b the stranding chance; phase 9 the employers).</summary>
-    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public ProofData[] proofs; public float strandChance; public FateData[] strandingFates; public StrandingReportContent strandingReport; public Employer[] employers; public PortalData[] portals; }
+    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public ProofData[] proofs; public float strandChance; public FateData[] strandingFates; public StrandingReportContent strandingReport; public Employer[] employers; public PortalData[] portals; public AgencyOffice[] offices; public FaultEntry[] faults; }
 
     /// <summary>One stranding fate as authored ("agency.strandingFates"; the fate by name; the endings and strandings spec §6.2).</summary>
     [Serializable] private sealed class FateData { public string id; public string fate; public float weightWaivered; public float weightUnwaivered; public float stability; public string status; public StrandingFateLine[] lines; }
@@ -108,7 +109,9 @@ public static partial class WorldContentGenerator
                 .ToList(),
             strandingReport = a.strandingReport ?? new StrandingReportContent(),
             employers = (a.employers ?? Array.Empty<Employer>()).Where(e => e != null).ToList(),
-            portals = BuildPortals(a.portals)
+            portals = BuildPortals(a.portals),
+            offices = (a.offices ?? Array.Empty<AgencyOffice>()).Where(o => o != null).ToList(),
+            faults = (a.faults ?? Array.Empty<FaultEntry>()).Where(f => f != null).ToList()
         };
 
     /// <summary>The clerk's rows (verbatim; a missing block reads blank and fails ClerkContent.Problems).</summary>
@@ -157,6 +160,16 @@ public static partial class WorldContentGenerator
         foreach (EraData era in (src.eras ?? Array.Empty<EraData>()).Where(e => !e.future))
             if (agency.EmployersOf(era.id).Count == 0)
                 errors.Add($"agency.employers has no employer for the era '{era.id}', so a labourer bound there would have no registered contract.");
+    }
+
+    /// <summary>The issuing offices and the published fault canon against the kinds' forms (the document design spec, D4, D9; DocumentContentChecks, the validator's rule).</summary>
+    private static void CheckDocuments(WorldSource src, Authored authored, List<string> errors)
+    {
+        if (src.agency == null)
+            return;
+        var carried = authored.blueprints.SelectMany(b => (b.Value != null ? b.Value.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>() : Array.Empty<DocumentTemplateSO>())
+                                                            .Select(t => (b.Key, t)));
+        errors.AddRange(DocumentContentChecks.Problems(BuildAgency(src.agency), carried));
     }
 
     /// <summary>Writes the agency block into the content library.</summary>

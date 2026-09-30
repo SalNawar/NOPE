@@ -38,7 +38,7 @@ MonoBehaviour:
     paragraphSize: 0.034
     captionSize: 0.024
     finePrintSize: 0.02
-    sealSize: 0.1
+    sealSize: 0.11
     barcodeHeight: 0.03
     barcodeWidth: 0.22
     barcodeModules: 60

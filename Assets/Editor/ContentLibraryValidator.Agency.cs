@@ -15,6 +15,15 @@ public static partial class ContentLibraryValidator
             Debug.LogError($"[ContentLibraryValidator] Agency: {problem.TrimEnd('.')} in '{lib.name}' (Tools > TimeDesk > Generate World writes world_source.json \"agency\").", lib);
             issues++;
         }
+
+        // The issuing offices and the fault canon against the kinds' forms (the document design spec, D4, D9).
+        var carried = TravellerBlueprints(lib).Where(b => b != null)
+            .SelectMany(b => (b.DocumentTemplates ?? new DocumentTemplateSO[0]).Select(t => (b.Kind, t)));
+        foreach (string problem in DocumentContentChecks.Problems(lib.Agency, carried))
+        {
+            Debug.LogError($"[ContentLibraryValidator] Documents: {problem.TrimEnd('.')} in '{lib.name}' (world_source.json agency.offices and agency.faults; docs/DOCUMENT_FAULTS.md).", lib);
+            issues++;
+        }
         return issues;
     }
 }

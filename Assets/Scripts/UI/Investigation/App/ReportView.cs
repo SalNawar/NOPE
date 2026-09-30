@@ -70,11 +70,12 @@ public sealed class ReportView : AppView
         page.Show(reportForm.form, data, _ => false, null, CellLinkHint);
     }
 
-    /// <summary>The proof's word on the report ("Mismatch", "Belongs elsewhere", "Agency records", "Papers disagree").</summary>
+    /// <summary>The proof's word on the report ("Mismatch", "Belongs elsewhere", "Agency records", "Papers disagree", "Not the person").</summary>
     private static string Proof(DiscrepancyProof proof) =>
         UiText.Get(proof == DiscrepancyProof.ForeignOrigin ? "report.proof.foreignOrigin"
                  : proof == DiscrepancyProof.RecordMismatch ? "report.proof.recordMismatch"
                  : proof == DiscrepancyProof.CrossMismatch ? "report.proof.crossMismatch"
+                 : proof == DiscrepancyProof.PersonMismatch ? "report.proof.personMismatch"
                  : "report.proof.claimMismatch");
 
     /// <summary>The entry a row's slot shows, or null.</summary>

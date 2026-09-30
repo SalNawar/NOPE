@@ -88,7 +88,8 @@ public static class Faults
     /// A traveller's one fault reason: the directive fault's when there is
     /// one; else the costume error's panic (CostumeErrors.FaultReason), or
     /// the lie's (<paramref name="lie"/>, the lie the traveller carries, or
-    /// null): a record lie's forgery, smuggling, or a false origin's
+    /// null): a record or visual lie's forgery (a forged seal and someone
+    /// else's photo are forged papers too), smuggling, or a false origin's
     /// disguise; empty for no fault.
     /// </summary>
     public static string Reason(DirectiveFault directive, CostumeError costume, LieKind? lie)
@@ -99,7 +100,7 @@ public static class Faults
             return CostumeErrors.FaultReason;
         if (lie == null)
             return string.Empty;
-        if (LieKinds.IsRecordLie(lie.Value))
+        if (LieKinds.IsRecordLie(lie.Value) || LieKinds.IsVisualLie(lie.Value))
             return Forged;
         return lie == LieKind.Smuggling ? Smuggled : Disguised;
     }

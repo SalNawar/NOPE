@@ -3,11 +3,13 @@ using System.Collections.Generic;
 /// <summary>
 /// The form a document prints (redesign phase 4, PC spec FO1, FO3): its
 /// template's FormSpec and what it shows (FormData): the agency block's name
-/// and programme, the template's form number and name, the paper's serial, the
-/// photo, and each field's label and value, always in English (forms are
-/// diegetic). The desk paper prints it, and the PC's scanned copy draws it (phase 5).
-/// Probe and Problems are the one form check Build Office UI and the content
-/// validator run on every template (FO10).
+/// and, as its programme line, the name of the office that issues the form
+/// (agency.offices; the document design spec, D4), the template's form number
+/// and name, the paper's serial, the photo, and each field's label and value,
+/// always in English (forms are diegetic), each box keeping the room its
+/// longest value needs (FieldReserve; D2). The desk paper prints it, and the
+/// PC's scanned copy draws it (phase 5). Probe and Problems are the one form
+/// check Build Office UI and the content validator run on every template (FO10).
 /// </summary>
 public sealed class DocumentForm
 {
@@ -24,8 +26,8 @@ public sealed class DocumentForm
     /// <summary>What it shows.</summary>
     public FormData Data { get; }
 
-    /// <summary>The form <paramref name="doc"/> prints, with <paramref name="agency"/>'s name and programme; null without a template.</summary>
-    public static DocumentForm For(DocumentInstance doc, AgencyContent agency)
+    /// <summary>The form <paramref name="doc"/> prints, with <paramref name="agency"/>'s name and its office's (the programme's without one), each box keeping the room of its category's longest value (an origin at <paramref name="longestOrigin"/> characters: ContentLibrarySO.LongestOriginLabel); null without a template.</summary>
+    public static DocumentForm For(DocumentInstance doc, AgencyContent agency, int longestOrigin)
     {
         if (doc == null || doc.template == null)
             return null;
@@ -40,6 +42,8 @@ public sealed class DocumentForm
         data.Serial = doc.serial ?? string.Empty;
         data.FieldLabels = labels;
         data.FieldValues = values;
+        FieldSpecsOf(doc.template, longestOrigin, out _, out List<int> longest);
+        data.FieldReserve = FormLayout.Reserve(values, longest);
         return new DocumentForm(doc.template.form, data);
     }
 
@@ -47,9 +51,13 @@ public sealed class DocumentForm
     /// Every problem of <paramref name="template"/>'s form (FormLayout.Check):
     /// its fields' labels, each value at its category's longest
     /// (FieldLengths, an origin at <paramref name="longestOrigin"/>
-    /// characters), a full serial; plus a form that sets its own number or
-    /// title (a document prints its template's) or breaks onto a second page
-    /// (a paper is one page, traveller-types F1). Empty when it fits.
+    /// characters), a full serial, each box reserving that longest value, so a
+    /// box that would move with its value is one too (the document design spec,
+    /// D2); plus a form that sets its own number or title (a document prints
+    /// its template's) or breaks onto a second page (a paper is one page,
+    /// traveller-types F1); its look (FormLook.Problems); and the visual
+    /// checks' places (D4, D8): one Seal field, printed by the header; a
+    /// photo document's one Photo field, named by its photo cell. Empty when it fits.
     /// </summary>
     public static List<string> Problems(DocumentTemplateSO template, AgencyContent agency, int longestOrigin, FormMetrics metrics, ITextMeasure measure)
     {
@@ -70,22 +78,61 @@ public sealed class DocumentForm
             problems.Add("its form is landscape; a paper is portrait");
         if (spec.PageCount > 1)
             problems.Add($"its form has {spec.PageCount} pages; a paper is one page");
+        foreach (string p in (spec.look ?? new FormLook()).Problems(metrics != null ? metrics.aspect : new FormMetrics().aspect))
+            problems.Add(p);
+        problems.AddRange(VisualFieldProblems(template, spec));
 
         FieldSpecsOf(template, longestOrigin, out List<string> labels, out List<int> longest);
         FormData probe = Heading(template, agency);
         probe.Serial = FormSerials.Make(template.formNumber, 0, 0);
         probe.FieldLabels = labels;
         probe.FieldValues = labels.ConvertAll(_ => string.Empty);
-        foreach (string p in FormLayout.Check(spec, FormLayout.Probe(probe, longest), metrics, measure))
+        FormData full = FormLayout.Probe(probe, longest);
+        full.FieldReserve = full.FieldValues;
+        foreach (string p in FormLayout.Check(spec, full, metrics, measure))
             problems.Add(p);
         return problems;
     }
 
-    /// <summary>The header's words and the photo: the agency's name and programme, the template's number and name.</summary>
+    /// <summary>The seal's and the photo's places (the document design spec, D4, D8): exactly one Seal field, the one the header prints; with a photo, exactly one Photo field, the one the photo cell names; without, none.</summary>
+    private static IEnumerable<string> VisualFieldProblems(DocumentTemplateSO template, FormSpec spec)
+    {
+        var specs = template.fieldSpecs ?? new DocumentFieldSpec[0];
+        var seals = new List<int>();
+        var photos = new List<int>();
+        for (int i = 0; i < specs.Length; i++)
+        {
+            if (specs[i] != null && specs[i].category == ClueCategory.Seal)
+                seals.Add(i);
+            if (specs[i] != null && specs[i].category == ClueCategory.Photo)
+                photos.Add(i);
+        }
+        int header = -1, cell = -1;
+        foreach (FormBlock b in spec.blocks ?? new FormBlock[0])
+        {
+            if (b == null)
+                continue;
+            if (b.kind == FormBlockKind.Header)
+                header = b.field;
+            foreach (FormCell c in b.cells ?? new FormCell[0])
+                if (c != null && c.IsPhoto)
+                    cell = c.field;
+        }
+        if (seals.Count != 1)
+            yield return $"it has {seals.Count} Seal fields; a paper has one, its issuing office's seal";
+        else if (header != seals[0])
+            yield return $"its header prints field {header}, not its Seal field {seals[0]}";
+        if (template.showsPhoto && (photos.Count != 1 || cell != photos[0]))
+            yield return $"it shows a photo but its photo cell names field {cell}, not its one Photo field";
+        if (!template.showsPhoto && photos.Count > 0)
+            yield return "it has a Photo field but shows no photo";
+    }
+
+    /// <summary>The header's words and the photo: the agency's name, the issuing office's name as the programme line (the agency's programme when no office issues the form), the template's number and name.</summary>
     private static FormData Heading(DocumentTemplateSO template, AgencyContent agency) => new FormData
     {
         Agency = agency != null ? agency.name ?? string.Empty : string.Empty,
-        Programme = agency != null ? agency.programme ?? string.Empty : string.Empty,
+        Programme = agency == null ? string.Empty : Seals.OfficeOf(agency.offices, template.formNumber)?.name ?? agency.programme ?? string.Empty,
         FormNumber = template.formNumber ?? string.Empty,
         Title = template.displayName ?? string.Empty,
         HasPhoto = template.showsPhoto

@@ -526,11 +526,11 @@ public sealed class CaseFactory
 
         // 7) Investigation layer: structured fields (the claim is only spoken: InterviewScript.Opening), then the rolled
         //    lie planned and printed, or the paper side of a broken directive (a form left out or unsigned, a date falsified).
-        List<DocumentField> fields = PopulateDocumentFields(inst);
-        LiePlan lie = lieKind == null ? null
+        PopulateDocumentFields(inst);
+        LiePlan lie = lieKind == null || LieKinds.IsVisualLie(lieKind.Value) ? null
             : !LieKinds.IsPlaceLie(lieKind.Value) ? Forge(inst, lieKind.Value, plan, place, caseIndex1Based)
-            : lieKind == LieKind.Smuggling ? Smuggle(inst, fields, plan, caseIndex1Based)
-            : Disguise(inst, fields, plan, caseIndex1Based, place, legendary, lieKind.Value);
+            : lieKind == LieKind.Smuggling ? Smuggle(inst, plan, caseIndex1Based)
+            : Disguise(inst, plan, caseIndex1Based, place, legendary, lieKind.Value);
         BreakPapers(inst, paperBreak);
         if (broken != null && broken.type == TravelRuleType.PaperDates)
             FalsifyDate(inst, caseIndex1Based, authoredPlan.DateFault);
@@ -548,6 +548,12 @@ public sealed class CaseFactory
         bool plannedDress = plannedRule != null && plannedRule.type == TravelRuleType.DressForDestination;
         (LookSource source, bool whole) costume = broken != null ? (null, false) : PlanCostume(inst, place, legendary, forcedCostume, honest, plannedDress, authoredFault, plan, caseIndex1Based);
         inst.look = ComposeLook(inst, place, lie, legendary, family, costume, caseIndex1Based);
+
+        // 7.5) The photos show who stands at the desk; a visual lie (the document design spec, D4, D8) is printed now, on the lie
+        //      stream after the look: a forged seal on one paper, or someone else's photo.
+        PrintPhotos(inst);
+        if (lieKind != null && LieKinds.IsVisualLie(lieKind.Value))
+            ForgeVisual(inst, lieKind.Value, caseIndex1Based);
 
         // 8) The Directives read the finished papers and account (traveller types P1, P3): the first rule broken is the fault.
         inst.directiveFault = Directives.Fault(plan.ActiveTravelRules.Where(r => r != null).Select(r => r.Directive).ToList(), Facts(inst, plan));
@@ -743,15 +749,12 @@ public sealed class CaseFactory
     /// Fills each document's structured fields from today's facts for the
     /// case's claimed place (identity fields from the registered identity;
     /// a citizen's Valid Until is their account's date for that form, the
-    /// expiring forms counted in paper order) and returns them in paper
-    /// order. Never null: empty when there are no documents.
+    /// expiring forms counted in paper order).
     /// </summary>
-    private List<DocumentField> PopulateDocumentFields(CaseInstance inst)
+    private void PopulateDocumentFields(CaseInstance inst)
     {
-        var allFields = new List<DocumentField>();
-
         if (inst == null || _lib == null)
-            return allFields;
+            return;
 
         int expiring = 0;
         foreach (DocumentInstance doc in inst.documents)
@@ -766,20 +769,90 @@ public sealed class CaseFactory
                 if (spec == null)
                     continue;
 
-                var field = new DocumentField
-                {
-                    category = spec.category,
-                    label = string.IsNullOrEmpty(spec.label) ? spec.category.ToString() : spec.label,
-                    value = ResolveFieldValue(spec.category, inst, expiryIndex),
-                    page = doc.template.form != null ? Mathf.Max(0, doc.template.form.PageOf(doc.fields.Count)) : 0
-                };
+                DocumentField field = NewField(spec, inst, doc.template, expiryIndex);
+                field.page = doc.template.form != null ? Mathf.Max(0, doc.template.form.PageOf(doc.fields.Count)) : 0;
 
                 doc.fields.Add(field);
-                allFields.Add(field);
             }
         }
+    }
 
-        return allFields;
+    /// <summary>
+    /// One field of <paramref name="template"/> as the traveller's file fills
+    /// it (ResolveFieldValue; the <paramref name="expiryIndex"/>th expiring
+    /// form's Valid Until); a Seal field prints the true seal of the office
+    /// that issues the form, which it names as its issuer (the document design
+    /// spec, D4).
+    /// </summary>
+    private DocumentField NewField(DocumentFieldSpec spec, CaseInstance inst, DocumentTemplateSO template, int expiryIndex = 0)
+    {
+        AgencyOffice office = spec.category == ClueCategory.Seal ? Seals.OfficeOf(_lib.Agency.offices, template.formNumber) : null;
+        return new DocumentField
+        {
+            category = spec.category,
+            label = string.IsNullOrEmpty(spec.label) ? spec.category.ToString() : spec.label,
+            value = spec.category == ClueCategory.Seal ? SealValue(office, template.formNumber) : ResolveFieldValue(spec.category, inst, expiryIndex),
+            issuer = office != null ? office.id : string.Empty
+        };
+    }
+
+    /// <summary>
+    /// A paper's true seal (the document design spec, D4): the description of
+    /// the seal of the office that issues <paramref name="formNumber"/>
+    /// (agency.offices), or a stable placeholder with a warning when no office
+    /// issues it (Generate World refuses that content).
+    /// </summary>
+    private static string SealValue(AgencyOffice office, string formNumber)
+    {
+        if (office != null && office.TryGetSeal(out Seal seal))
+            return Seals.Describe(seal);
+        Debug.LogWarning($"[CaseFactory] No office issues form {formNumber} with a valid seal (agency.offices); its seal prints a placeholder. Run Tools > TimeDesk > Generate World.");
+        return AgencyValue(null, ClueCategory.Seal);
+    }
+
+    /// <summary>Every Photo field shows who stands at the desk (Looks.IdentityKey of the traveller's look; the document design spec, D8); ForgeVisual may then swap one for a stranger's.</summary>
+    private static void PrintPhotos(CaseInstance inst)
+    {
+        string who = Looks.IdentityKey(inst.look);
+        foreach (DocumentInstance doc in inst.documents)
+            foreach (DocumentField f in doc.fields)
+                if (f != null && f.category == ClueCategory.Photo)
+                    f.value = who;
+    }
+
+    /// <summary>
+    /// Prints a rolled visual lie (the document design spec, D4, D8), drawing
+    /// only from the published canon (agency.faults) on the lie stream after
+    /// the look: a forged seal on one paper (VisualLies.PlanSeal) or someone
+    /// else's photo (VisualLies.PlanPhoto; the stranger's look is the one the
+    /// photo draws, CaseInstance.PhotoLook). Each printed value is a record
+    /// tell (the traveller is a forger: HasDeviationFault). Nothing to print
+    /// (no canon row, no office seal, a premade's whole picture) leaves the
+    /// traveller honest with a warning.
+    /// </summary>
+    private void ForgeVisual(CaseInstance inst, LieKind kind, int caseIndex1Based)
+    {
+        List<RecordForm> forms = inst.documents.Select(d => new RecordForm(d.template != null ? d.template.formNumber : null, d.fields)).ToList();
+        TravellerLook stranger = null;
+        List<RecordTell> tells = kind == LieKind.ForgedSeal
+            ? VisualLies.PlanSeal(_lib.Agency.faults, forms, _lib.Agency.offices, _lieRng)
+            : VisualLies.PlanPhoto(_lib.Agency.faults, forms, inst.look, _lieRng, out stranger);
+        if (tells.Count == 0)
+        {
+            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled {kind}, but no paper of theirs can carry it (the canon's rows, the offices' seals, a photo that can be swapped), so the traveller stays honest. Check agency.faults and agency.offices.");
+            return;
+        }
+
+        foreach (RecordTell tell in tells)
+            foreach (DocumentField f in inst.documents[tell.Document].fields)
+                if (f != null && f.category == tell.Category)
+                {
+                    f.value = tell.Value;
+                    f.isAnachronism = true;
+                }
+        inst.strangerPhoto = stranger;
+        inst.recordTells = tells;
+        inst.lie = kind;
     }
 
     /// <summary>A place's label as today's FactTable (and so the scanner) prints it; the profile's own label when the place is not in today's table.</summary>
@@ -826,7 +899,9 @@ public sealed class CaseFactory
     /// (L7) gets a true home among today's other places; the fake displaced
     /// (L8, <paramref name="kind"/>) come from the present, the one candidate
     /// (TodaysWorld.Present, whose row today's facts hold, so the origin
-    /// proof names 2150). Every field of each Papers-tell category is
+    /// proof names 2150). The tells are drawn from the fields the published
+    /// canon names for the lie (CanonFields; the document design spec, D9).
+    /// Every field of each Papers-tell category is
     /// rewritten with the source's value, while an Answer or Appearance tell
     /// leaves the papers on the cover (AddAnswers speaks an answer;
     /// ComposeLook dresses the garment). A home's dress may leak only when
@@ -838,7 +913,7 @@ public sealed class CaseFactory
     /// premade whose true place is not in today's world, or a fake displaced
     /// person without a present (they stay honest).
     /// </summary>
-    private LiePlan Disguise(CaseInstance inst, List<DocumentField> fields, DayPlanSO plan, int caseIndex1Based, NationEraProfileSO place, LegendarySO legendary, LieKind kind)
+    private LiePlan Disguise(CaseInstance inst, DayPlanSO plan, int caseIndex1Based, NationEraProfileSO place, LegendarySO legendary, LieKind kind)
     {
         // The homes the lie may come from: today's places (L7), the present (L8), or a lying premade's own true place.
         List<NationEraProfileSO> homes = _todays;
@@ -888,7 +963,7 @@ public sealed class CaseFactory
             inst.claimedEra != null ? inst.claimedEra.id : null,
             inst.trueBirthDate,
             todays,
-            fields,
+            CanonFields(inst, kind),
             _answerTellCategories,
             channels,
             _facts,
@@ -916,7 +991,8 @@ public sealed class CaseFactory
     /// <summary>
     /// Plans rolled smuggling and applies it (traveller types L1, L6;
     /// Lies.Plan on the lie stream with the present as the only candidate and
-    /// Lies.SmuggledCategories as the only options): the traveller's claim is
+    /// Lies.SmuggledCategories as the only options, on the fields the published
+    /// canon names for smuggling, CanonFields): the traveller's claim is
     /// honest, but every Currency or Technology field of a Papers tell reads
     /// the present's value (the manifest's currency carried and declared
     /// effects, a displaced person's coin of home and effects carried), or an
@@ -926,7 +1002,7 @@ public sealed class CaseFactory
     /// when neither category can show today, the traveller stays honest with a
     /// warning.
     /// </summary>
-    private LiePlan Smuggle(CaseInstance inst, List<DocumentField> fields, DayPlanSO plan, int caseIndex1Based)
+    private LiePlan Smuggle(CaseInstance inst, DayPlanSO plan, int caseIndex1Based)
     {
         if (_present == null)
         {
@@ -941,7 +1017,7 @@ public sealed class CaseFactory
             inst.claimedEra != null ? inst.claimedEra.id : null,
             inst.trueBirthDate,
             present,
-            fields,
+            CanonFields(inst, LieKind.Smuggling),
             _answerTellCategories,
             _channels,
             _facts,
@@ -966,12 +1042,22 @@ public sealed class CaseFactory
         return lie;
     }
 
+    /// <summary>The fields of the traveller's papers the published canon lets <paramref name="lie"/> print a tell on (agency.faults; the document design spec, D9), in paper and field order.</summary>
+    private List<DocumentField> CanonFields(CaseInstance inst, LieKind lie) => CanonFields(inst, FaultCanon.Of(lie));
+
+    /// <summary>The fields of the traveller's papers the published canon's rows (<paramref name="fault"/>) name, in paper and field order: the only fields a maker may rewrite (D9).</summary>
+    private List<DocumentField> CanonFields(CaseInstance inst, System.Func<FaultEntry, bool> fault) =>
+        inst.documents.Where(d => d != null && d.template != null)
+            .SelectMany(d => d.fields.Where(f => f != null && FaultCanon.Allows(_lib.Agency.faults, fault, d.template.formNumber, f.category)))
+            .ToList();
+
     /// <summary>
     /// The PaperDates maker (traveller types §5.4; Directives), for a planned
     /// slot: one Range draw on the fault stream picks the date (the departure,
     /// or one of the expiring forms' Valid Until, Directives.PlanDateFault;
     /// an authored fault's <paramref name="pinned"/> variant skips the choice),
-    /// then one draw the false date (1-3 days off, or 1-30 days past); every
+    /// then one draw the false date (1-3 days off, or 1-30 days past), among the
+    /// dates the published canon names (CanonFields; the document design spec, D9); every
     /// field of that date is rewritten (a departure is printed once per
     /// traveller, the invariant of one value per category); the directive
     /// fault is what Directives.Fault reads back from the finished papers
@@ -980,8 +1066,8 @@ public sealed class CaseFactory
     /// </summary>
     private void FalsifyDate(CaseInstance inst, int caseIndex1Based, PaperDateFault pinned)
     {
-        List<DocumentField> departures = inst.documents.SelectMany(d => d.fields).Where(f => f.category == ClueCategory.DepartureDate).ToList();
-        List<DocumentField> expiries = inst.documents.SelectMany(d => d.fields).Where(f => f.category == ClueCategory.Expiry).ToList();
+        List<DocumentField> departures = CanonFields(inst, FaultCanon.Of(DirectiveFault.WrongDepartureDate)).Where(f => f.category == ClueCategory.DepartureDate).ToList();
+        List<DocumentField> expiries = CanonFields(inst, FaultCanon.Of(DirectiveFault.ExpiredPaper)).Where(f => f.category == ClueCategory.Expiry).ToList();
         PaperDatePlan dates = _today != null ? Directives.PlanDateFault(departures.Count > 0, expiries.Count, _faultRng, pinned) : new PaperDatePlan(PaperDateFault.None, -1);
         if (dates.Fault == PaperDateFault.None)
         {
@@ -1027,7 +1113,8 @@ public sealed class CaseFactory
             Employers = _lib.Agency.EmployersOf(inst.claimedEra != null ? inst.claimedEra.id : null),
             OpenPlaces = _todays.Where(p => p != place && plan.ClaimAllowed(p.nation, p.era, inst.kind)).Select(PlaceLabel).ToList(),
             WaiverPrefix = _lib.Agency.accounts != null ? _lib.Agency.accounts.waiverPrefix : null,
-            Proofs = _lib.Agency.proofs
+            Proofs = _lib.Agency.proofs,
+            Canon = _lib.Agency.faults
         };
         LiePlan lie = RecordLies.Plan(kind, forms, inst.account, context, _lieRng);
 
@@ -1293,6 +1380,7 @@ public sealed class CaseFactory
             case ClueCategory.PolicyNo:
                 return AgencyValue(account != null && account.ProofForm != null && account.ProofCategory == category ? account.ProofValue : null, category);
             case ClueCategory.Signature: return inst.visitorGivenName;
+            case ClueCategory.Photo: return Looks.IdentityKey(inst.look);
             case ClueCategory.Employer: return AgencyValue(account?.Employer, category);
             case ClueCategory.Term: return AgencyValue(account != null && account.HasContract ? AccountMaker.Term(account.TermDays) : null, category);
             case ClueCategory.Wage: return AgencyValue(account != null && account.HasContract ? AccountMaker.Credits(account.Wage) : null, category);
@@ -1669,12 +1757,7 @@ public sealed class CaseFactory
         var doc = new DocumentInstance { template = form };
         foreach (DocumentFieldSpec spec in form.fieldSpecs ?? System.Array.Empty<DocumentFieldSpec>())
             if (spec != null)
-                doc.fields.Add(new DocumentField
-                {
-                    category = spec.category,
-                    label = string.IsNullOrEmpty(spec.label) ? spec.category.ToString() : spec.label,
-                    value = ResolveFieldValue(spec.category, inst)
-                });
+                doc.fields.Add(NewField(spec, inst, form));
         return doc;
     }
 

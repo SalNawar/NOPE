@@ -58,3 +58,9 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
+    look:
+      frame: 3
+      accent: '#5E3A12'
+      paper: 
+      aspect: 0
+      scale: 1

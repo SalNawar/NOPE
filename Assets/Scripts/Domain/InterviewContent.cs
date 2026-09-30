@@ -281,6 +281,9 @@ public sealed class InterviewLines
     /// <summary>Hub entry that opens the look menu (the traveller's visible garments).</summary>
     public string lookLabel;
 
+    /// <summary>The look menu's entry for the traveller's face (the document design spec, D8: a photo is held against it).</summary>
+    public string faceLabel;
+
     /// <summary>The desk's small-talk question.</summary>
     public LineText smallTalkPrompt = new();
 

@@ -22,10 +22,7 @@ public static partial class ContentLibraryValidator
         string[] styles = AssetDatabase.FindAssets("t:" + nameof(FormStyleSO));
         FormStyleSO style = styles.Length > 0 ? AssetDatabase.LoadAssetAtPath<FormStyleSO>(AssetDatabase.GUIDToAssetPath(styles[0])) : null;
         FormMetrics metrics = style != null ? style.metrics : new FormMetrics();
-        int longestOrigin = 0;
-        foreach (NationEraProfileSO place in lib.Profiles)
-            if (place != null)
-                longestOrigin = Mathf.Max(longestOrigin, place.OriginLabel.Length);
+        int longestOrigin = lib.LongestOriginLabel;
         var probe = new GameObject("FormsCheckText", typeof(TextMeshPro)) { hideFlags = HideFlags.HideAndDontSave };
         try
         {

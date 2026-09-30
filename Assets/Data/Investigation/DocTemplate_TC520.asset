@@ -27,6 +27,10 @@ MonoBehaviour:
     label: Term
   - category: 25
     label: Day Wage
+  - category: 26
+    label: Issuing Seal
+  - category: 27
+    label: Photo
   handOver: 1
   showsPhoto: 1
   form:
@@ -40,7 +44,7 @@ MonoBehaviour:
       columns: []
       shares: []
       options: []
-      field: -1
+      field: 6
       slot: 
     - kind: 1
       text: 1  CONTRACT
@@ -58,7 +62,7 @@ MonoBehaviour:
         caption: 
         span: 8
         rows: 1
-      - field: -1
+      - field: 7
         slot: photo
         caption: 
         span: 4
@@ -133,3 +137,9 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
+    look:
+      frame: 5
+      accent: '#1E1E1E'
+      paper: '#F0EEE8'
+      aspect: 0
+      scale: 1.12

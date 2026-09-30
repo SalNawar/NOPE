@@ -25,6 +25,8 @@ MonoBehaviour:
     label: Policy No.
   - category: 13
     label: Valid Until
+  - category: 26
+    label: Issuing Seal
   handOver: 0
   showsPhoto: 0
   askGroup: proof
@@ -40,7 +42,7 @@ MonoBehaviour:
       columns: []
       shares: []
       options: []
-      field: -1
+      field: 5
       slot: 
     - kind: 1
       text: 1  INSURED
@@ -115,3 +117,9 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
+    look:
+      frame: 1
+      accent: '#5E3A12'
+      paper: '#F6F0E4'
+      aspect: 0
+      scale: 0.9

@@ -40,7 +40,13 @@ public enum LieKind
     FakeWaiver,
 
     /// <summary>L10, a forged proof of means: a credit line, savings or a policy number the account does not hold on file.</summary>
-    ForgedProof
+    ForgedProof,
+
+    /// <summary>L11, a forged seal (the document design spec, D4): one of the traveller's papers carries a seal that differs from its office's in the Seal Register (another outline, ink or legend); every value printed is true.</summary>
+    ForgedSeal,
+
+    /// <summary>L12, someone else's photo (the document design spec, D8): the primary form's photo shows another person (another skin tone and hair colour) than the traveller at the desk; every value printed is true.</summary>
+    SwappedPhoto
 }
 
 /// <summary>The lies' rules: which kinds of traveller each lie fits, and which lies are record lies. Pure.</summary>
@@ -56,12 +62,17 @@ public static class LieKinds
     /// contract is a labourer's; a fake waiver is a poor tourist's or a
     /// labourer's (the kinds that carry one); a forged proof of means is a
     /// poor tourist's; smuggling is every kind's (the days decide when: 2150
-    /// citizens from day 4, the displaced from day 5).
+    /// citizens from day 4, the displaced from day 5); so are the visual lies,
+    /// a forged seal and someone else's photo (every kind's papers carry
+    /// seals and a photo).
     /// </summary>
     public static bool AppliesTo(LieKind lie, TravellerKind kind)
     {
         switch (lie)
         {
+            case LieKind.ForgedSeal:
+            case LieKind.SwappedPhoto:
+                return true;
             case LieKind.FalseOrigin:
             case LieKind.FakeDisplaced:
                 return kind == TravellerKind.Displaced;
@@ -100,8 +111,11 @@ public static class LieKinds
     /// <summary>True for a place lie, planned by Lies.Plan: the false origin (another of today's places), the fake displaced (the present as the one candidate home) or smuggling (the present's goods).</summary>
     public static bool IsPlaceLie(LieKind lie) => lie == LieKind.FalseOrigin || lie == LieKind.FakeDisplaced || lie == LieKind.Smuggling;
 
-    /// <summary>True for a record lie, planned by RecordLies against the traveller's own record; false for a place lie.</summary>
-    public static bool IsRecordLie(LieKind lie) => !IsPlaceLie(lie);
+    /// <summary>True for a visual lie (the document design spec, D4, D8): a forged seal, proven against the Seal Register, or someone else's photo, proven against the traveller at the desk; planned by their own makers (Seals.Forge, Looks.Stranger), never by RecordLies or Lies.Plan.</summary>
+    public static bool IsVisualLie(LieKind lie) => lie == LieKind.ForgedSeal || lie == LieKind.SwappedPhoto;
+
+    /// <summary>True for a record lie, planned by RecordLies against the traveller's own record; false for a place lie or a visual lie.</summary>
+    public static bool IsRecordLie(LieKind lie) => !IsPlaceLie(lie) && !IsVisualLie(lie);
 
     /// <summary>
     /// The status of the account a citizen really holds (the truth their

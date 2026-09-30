@@ -25,6 +25,8 @@ MonoBehaviour:
     label: Funds Held
   - category: 13
     label: Valid Until
+  - category: 26
+    label: Issuing Seal
   handOver: 0
   showsPhoto: 0
   askGroup: proof
@@ -40,7 +42,7 @@ MonoBehaviour:
       columns: []
       shares: []
       options: []
-      field: -1
+      field: 5
       slot: 
     - kind: 1
       text: 1  ACCOUNT HOLDER
@@ -115,3 +117,9 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
+    look:
+      frame: 5
+      accent: '#4F2A70'
+      paper: '#F2EEF5'
+      aspect: 0
+      scale: 0.9

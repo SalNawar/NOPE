@@ -9,15 +9,27 @@
 /// </summary>
 public static class EvidencePicks
 {
-    /// <summary>A document's field row (the scanned page's or the desk paper's): "Travel Passport · Coin of Issue", its value as it is (papers are always English).</summary>
+    /// <summary>A document's field row (the scanned page's or the desk paper's): "Travel Passport · Coin of Issue", its value as it is (papers are always English); a photo shows as the photo (its value is who it shows, never printed; the document design spec, D8).</summary>
     public static ComparePick ForField(int document, DocumentRow row, string documentName)
     {
         DocumentField f = row.Field;
         return new ComparePick(PickKeys.Field(document, row.Index),
             UiText.Format("document.compareLabel", documentName, f.label),
-            f.value,
+            f.category == ClueCategory.Photo ? UiText.Get("compare.photoShown") : f.value,
             CompareEvidence.FromDocumentField(f, document));
     }
+
+    /// <summary>The traveller's face (the look menu; the document design spec, D8): "Traveller · FACE", shown as the person at the desk, its evidence who they are (Looks.IdentityKey), the truth a photo is held against.</summary>
+    public static ComparePick ForFace(TravellerLook look) =>
+        new ComparePick(PickKeys.Face, UiText.Format("compare.travellerLabel", UiText.Get("compare.faceSlot")), UiText.Get("compare.faceShown"),
+                        CompareEvidence.ForPerson(Looks.IdentityKey(look)));
+
+    /// <summary>A Seal Register row (the document design spec, D4): "Seal Register · Visa Office", the office's true seal as its value (Seals.Describe's words), a truth source for that office's papers.</summary>
+    public static ComparePick ForSeal(ReferenceBookSO book, AgencyOffice office, string seal) =>
+        new ComparePick(PickKeys.Seal(office.id),
+            UiText.Format("book.compareLabel", book != null ? book.displayName : UiText.Get("book.untitled"), office.name),
+            seal,
+            CompareEvidence.ForSealRow(seal, office.id, office.name));
 
     /// <summary>A traveller's answer (the transcript's row or the bubble's line <paramref name="lineIndex"/> of the transcript): "Traveller · CURRENCY"; an untranslated answer shows the placeholder.</summary>
     public static ComparePick ForAnswer(int lineIndex, DialogLine line, CaseTranslation tr)

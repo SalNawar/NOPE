@@ -42,11 +42,13 @@ public static class PaperChecks
 {
     /// <summary>
     /// True when two papers are compared on <paramref name="category"/>: every
-    /// category but a name (never a tell, Forgery) and the directive-only
-    /// dates (read against the calendar, Forgery.IsDirectiveOnly).
+    /// category but a name (never a tell, Forgery), the directive-only
+    /// dates (read against the calendar, Forgery.IsDirectiveOnly) and the
+    /// visual checks (Forgery.IsVisual: each paper's seal is its own office's
+    /// and each photo is held against the person, never against another paper).
     /// </summary>
     public static bool IsCompared(ClueCategory category) =>
-        category != ClueCategory.Name && !Forgery.IsDirectiveOnly(category);
+        category != ClueCategory.Name && !Forgery.IsDirectiveOnly(category) && !Forgery.IsVisual(category);
 
     /// <summary>
     /// The one rule: two boxes contradict when they share a compared category,

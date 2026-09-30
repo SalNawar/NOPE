@@ -106,7 +106,8 @@ public sealed class FormStyleSO : ScriptableObject
         StampDash = Rgb(stampDash),
         Backing = Rgb(backing),
         BackingInk = Rgb(backingInk),
-        Analysis = Rgb(analysis)
+        Analysis = Rgb(analysis),
+        Accent = Rgb(band)
     };
 
     /// <summary>A Unity colour as an Rgba.</summary>

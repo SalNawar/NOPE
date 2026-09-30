@@ -36,6 +36,12 @@ public sealed class FormPalette
 
     /// <summary>The Analysis Scanner's mark: the dashed outline on a contradicting pair's boxes on the PC (the PC redesign SC4).</summary>
     public Rgba Analysis;
+
+    /// <summary>A form's frame bands (FormLook.accent; the document design spec, D1): no text is printed on them.</summary>
+    public Rgba Accent;
+
+    /// <summary>A copy (a look's palette starts from the style's, FormLook.Palette).</summary>
+    public FormPalette Copy() => (FormPalette)MemberwiseClone();
 }
 
 /// <summary>
@@ -76,6 +82,24 @@ public static class FormContrast
         Pair("scan strip text on the scanner backing", p.BackingInk, p.Backing, ContrastClass.Text);
         foreach ((string name, Rgba fill) in overlays ?? new List<(string, Rgba)>())
             Pair($"ink on {name} over a box", p.Ink, Contrast.Over(fill, p.BoxFill.WithAlpha(1f)), ContrastClass.Text);
+        return problems;
+    }
+
+    /// <summary>
+    /// Each seal ink (the document design spec, D4: a legend is text) on a
+    /// form's paper, below the body-text minimum; one message each (empty when
+    /// every ink reads).
+    /// </summary>
+    public static List<string> SealProblems(FormPalette p, IEnumerable<(string name, Rgba ink)> inks, ContrastRules rules)
+    {
+        var problems = new List<string>();
+        float min = rules.Min(ContrastClass.Text);
+        foreach ((string name, Rgba ink) in inks ?? new List<(string, Rgba)>())
+        {
+            double ratio = Contrast.Ratio(ink.WithAlpha(1f), p.Paper.WithAlpha(1f));
+            if (ratio + 1e-6 < min)
+                problems.Add($"Form seal ink {name} on the paper is {F(ratio)}:1; it needs {F(min)}:1.");
+        }
         return problems;
     }
 

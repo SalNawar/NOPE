@@ -95,8 +95,12 @@ public class RecordLiesTests
         Employers = Employers,
         OpenPlaces = OpenPlaces,
         WaiverPrefix = "SW",
-        Proofs = Proofs()
+        Proofs = Proofs(),
+        Canon = Canon
     };
+
+    /// <summary>The published fault canon (world_source.json agency.faults): the variants the lies draw from.</summary>
+    private static readonly List<FaultEntry> Canon = ContentFixture.Faults();
 
     private static LiePlan Plan(LieKind kind, IRandomSource rng, CitizenAccount account = null, IReadOnlyList<RecordForm> forms = null,
                                 int yearMin = YearMin, int yearMax = YearMax, ISet<string> taken = null, IReadOnlyList<TransponderModel> transponders = null,

@@ -112,7 +112,7 @@ public class PaperAnalysisTests
         Assert.IsFalse(PaperChecks.IsCompared(ClueCategory.Signature), "a waiver's signature is read against the paper-set directive (phase 8)");
         Assert.IsFalse(PaperChecks.IsCompared(ClueCategory.Name), "never a tell (Forgery), so never a pair");
         foreach (ClueCategory category in System.Enum.GetValues(typeof(ClueCategory)))
-            if (!Forgery.IsDirectiveOnly(category) && category != ClueCategory.Name)
+            if (!Forgery.IsDirectiveOnly(category) && category != ClueCategory.Name && !Forgery.IsVisual(category))
                 Assert.IsTrue(PaperChecks.IsCompared(category), category.ToString());
     }
 

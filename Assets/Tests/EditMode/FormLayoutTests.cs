@@ -775,4 +775,162 @@ public class FormLayoutTests
         const float pane = 860f;
         Assert.AreEqual(Cell(PcWidth) * pane / PcWidth, Cell(pane), 0.01f, "at a pane's width it grows with the width");
     }
+
+    // ---------------- The document design spec (2026-09-30): D1, D2, D4, D8 ----------------
+
+    /// <summary>TC-610 as the templates print it now: the seal field (6) in the header, the photo cell naming the photo field (7).</summary>
+    private static FormSpec Tc610Sealed(FormLook look = null)
+    {
+        FormSpec spec = Tc610();
+        spec.blocks[0].field = 6;
+        foreach (FormBlock b in spec.blocks)
+            foreach (FormCell c in b.cells ?? new FormCell[0])
+                if (c.IsPhoto)
+                    c.field = 7;
+        spec.look = look ?? new FormLook();
+        return spec;
+    }
+
+    private static FormData Tc610SealedData(params string[] values)
+    {
+        FormData data = Tc610Data();
+        data.FieldLabels = data.FieldLabels.Concat(new[] { "Issuing Seal", "Photo" }).ToArray();
+        data.FieldValues = values.Length > 0 ? values : data.FieldValues.Concat(new[] { "Violet circle · DP", "m/skin3/face-a/black" }).ToArray();
+        data.FieldReserve = FormLayout.Reserve(data.FieldValues, new[] { 28, 16, 16, 28, 16, 16, 28, 28 });
+        return data;
+    }
+
+    [Test]
+    public void AReservedBox_NeverMoves_WhateverItsValue()
+    {
+        PlacedForm longest = Desk(Tc610Sealed(), Tc610SealedData());
+        FormData shortValues = Tc610SealedData("Io", "D", "1 Jan 1", "Rome", "R", "1 Jan 2150", "Violet circle · DP", "x");
+        shortValues.FieldReserve = Tc610SealedData().FieldReserve;
+        PlacedForm brief = Desk(Tc610Sealed(), shortValues);
+        FormData blank = Tc610SealedData();
+        blank.FieldValues = blank.FieldValues.Select(_ => string.Empty).ToArray();
+        PlacedForm empty = Desk(Tc610Sealed(), blank);
+        foreach (PlacedForm other in new[] { brief, empty })
+            for (int i = 0; i < longest.Slots.Count; i++)
+            {
+                Assert.AreEqual(longest.Slots[i].Hit.YMin, other.Slots[i].Hit.YMin, Eps, $"slot {i}'s top");
+                Assert.AreEqual(longest.Slots[i].Hit.YMax, other.Slots[i].Hit.YMax, Eps, $"slot {i}'s bottom");
+            }
+        List<string> problems = FormLayout.Check(Tc610Sealed(), Tc610SealedData(), M, new FakeMeasure());
+        Assert.IsFalse(problems.Any(p => p.Contains("moves")), "the check lays the form out full and empty, no box moves: " + string.Join("; ", problems));
+    }
+
+    [Test]
+    public void AValueLongerThanItsReserve_ShrinksBelowTheFloor_InsteadOfMovingItsBox()
+    {
+        FormData data = Tc610SealedData();
+        PlacedForm reserved = Desk(Tc610Sealed(), data);
+        FormData over = Tc610SealedData();
+        over.FieldReserve = data.FieldReserve;
+        var values = over.FieldValues.ToArray();
+        values[3] = "Periclean Athens and the Long Walls to the Piraeus (Ancient)";
+        over.FieldValues = values;
+        PlacedForm squeezed = Desk(Tc610Sealed(), over);
+        for (int i = 0; i < reserved.Slots.Count; i++)
+            Assert.AreEqual(reserved.Slots[i].Hit.YMax, squeezed.Slots[i].Hit.YMax, Eps, $"slot {i}");
+        FormItem origin = squeezed.Items.First(i => i.Kind == FormItemKind.Text && i.Text == values[3]);
+        Assert.Less(origin.Size, M.valueFloor, "below the floor, so the box keeps its size");
+    }
+
+    [Test]
+    public void TheOfficeSeal_IsAPickableBoxAtTheHeadersRight_ClearOfTheWords()
+    {
+        PlacedForm f = Desk(Tc610Sealed(), Tc610SealedData());
+        FormSlot seal = f.Slots.First(s => s.Field == 6);
+        Assert.AreEqual(0, seal.Index, "the header's seal is the first slot in reading order");
+        FormItem mark = Of(f, FormItemKind.Seal).Single();
+        Assert.AreEqual("Violet circle · DP", mark.Text, "the seal's value, for the renderers to draw");
+        Assert.AreEqual(seal.Index, mark.Slot);
+        Assert.AreEqual(M.aspect - M.marginX, seal.Hit.XMax, Eps, "at the content's right edge");
+        Assert.AreEqual(M.sealSize, seal.Hit.Width, Eps);
+        foreach (FormTextRole role in new[] { FormTextRole.Agency, FormTextRole.Programme, FormTextRole.Title, FormTextRole.FormNumber })
+            Assert.IsFalse(Overlaps(TextOf(f, role).Rect, seal.Hit), $"the {role} stays clear of the seal");
+        Assert.AreEqual(6, FormLayout.SlotAt(f, seal.Hit.CentreX, seal.Hit.CentreY) >= 0 ? f.Slots[FormLayout.SlotAt(f, seal.Hit.CentreX, seal.Hit.CentreY)].Field : -1);
+    }
+
+    [Test]
+    public void ThePhoto_IsAPickableBox_OfItsField()
+    {
+        PlacedForm f = Desk(Tc610Sealed(), Tc610SealedData());
+        FormSlot photo = f.Slots.First(s => s.Field == 7);
+        FormItem picture = Of(f, FormItemKind.Photo).Single();
+        Assert.IsTrue(Inside(picture.Rect, photo.Hit), "the picture lies in its box");
+        Assert.AreEqual(photo.Index, picture.Slot);
+        Assert.AreEqual(photo.Index, FormLayout.SlotAt(f, picture.Rect.CentreX, picture.Rect.CentreY));
+    }
+
+    [Test]
+    public void EachFrame_LiesInTheMargins_AndMovesNothing()
+    {
+        PlacedForm plain = Desk(Tc610Sealed(), Tc610SealedData());
+        Assert.IsEmpty(Of(plain, FormItemKind.Stripe));
+        foreach (FormFrame frame in (FormFrame[])Enum.GetValues(typeof(FormFrame)))
+        {
+            if (frame == FormFrame.Plain)
+                continue;
+            PlacedForm f = Desk(Tc610Sealed(new FormLook { frame = frame, accent = "#1C3A78" }), Tc610SealedData());
+            Assert.IsNotEmpty(Of(f, FormItemKind.Stripe), frame.ToString());
+            var content = new FaceRect(M.marginX, M.marginTop, M.aspect - M.marginX, 1f - M.marginBottom);
+            foreach (FormItem band in Of(f, FormItemKind.Stripe).Concat(Of(f, FormItemKind.Perforation)))
+            {
+                Assert.IsTrue(Inside(band.Rect, new FaceRect(0f, 0f, M.aspect, 1f)), $"{frame}: on the page");
+                foreach (FormSlot s in f.Slots)
+                    Assert.IsFalse(Overlaps(band.Rect, s.Hit), $"{frame}: a band over slot {s.Index}");
+            }
+            for (int i = 0; i < plain.Slots.Count; i++)
+                Assert.AreEqual(plain.Slots[i].Hit.YMin, f.Slots[i].Hit.YMin, Eps, $"{frame}: slot {i}");
+        }
+        Assert.IsNotEmpty(Of(Desk(Tc610Sealed(new FormLook { frame = FormFrame.Ticket, accent = "#1C3A78" }), Tc610SealedData()), FormItemKind.Perforation), "a ticket's perforation");
+    }
+
+    [Test]
+    public void ALooksAspect_SetsThePageHeight_AtTheSamePrintSizes()
+    {
+        const float aspect = 0.7f;
+        PlacedForm f = FormLayout.Layout(Tc610Sealed(new FormLook { aspect = aspect }), Tc610SealedData(), aspect, M, new FakeMeasure());
+        Assert.AreEqual(1f, f.PageHeight, Eps, "H = width / the look's aspect");
+        Assert.AreEqual(M.valueSize, TextOf(f, FormTextRole.Value).Size, Eps, "the print keeps its size in page heights");
+        Assert.AreEqual(aspect - 2f * M.marginX, f.Slots.Max(s => s.Hit.XMax) - M.marginX, Eps, "the grid fills the narrower page");
+    }
+
+    [Test]
+    public void TheSealRegister_PicturesEachSealOverItsOffice_ThreeToARow()
+    {
+        var spec = new FormSpec { fixedPage = false, blocks = new[] { new FormBlock { kind = FormBlockKind.SealGrid, slot = FormSlots.Seals } } };
+        var data = new FormData
+        {
+            Seals = new[] { ("Visa Office", "Blue hexagon · VO"), ("Portal Hall Dispatch", "Green circle · PH"), ("Debt Relief Directorate", "Red shield · DR"), ("Returns Office", "Green shield · RO") }
+        };
+        PlacedForm f = FormLayout.Layout(spec, data, PcWidth, M, new FakeMeasure());
+        Assert.AreEqual(4, f.Slots.Count);
+        CollectionAssert.AreEqual(new[] { 0, 1, 2, 3 }, f.Slots.Select(s => s.Row));
+        Assert.IsTrue(f.Slots.All(s => s.Source == FormSlots.Seals && s.Field == -1));
+        Assert.AreEqual(f.Slots[0].Hit.YMin, f.Slots[2].Hit.YMin, Eps, "three to a row");
+        Assert.Greater(f.Slots[3].Hit.YMin, f.Slots[0].Hit.YMax, "the fourth starts the next row");
+        List<FormItem> seals = Of(f, FormItemKind.Seal).ToList();
+        CollectionAssert.AreEqual(data.Seals.Select(s => s.Value), seals.Select(s => s.Text));
+        for (int i = 0; i < seals.Count; i++)
+            Assert.IsTrue(Inside(seals[i].Rect, f.Slots[i].Hit), $"seal {i} in its box");
+        Assert.IsTrue(f.Items.Any(i => i.Kind == FormItemKind.Text && i.Text == "Returns Office" && i.Slot == 3));
+    }
+
+    [Test]
+    public void ALooksPalette_TintsThePaperAndBands_AndKeepsTheInks()
+    {
+        var style = new FormPalette { Paper = new Rgba(0.95f, 0.92f, 0.82f), Ink = new Rgba(0.1f, 0.1f, 0.1f), Band = new Rgba(0.87f, 0.84f, 0.76f), BoxFill = new Rgba(1f, 1f, 1f) };
+        FormPalette p = new FormLook { paper = "#EEF2F6", accent = "#1C3A78" }.Palette(style);
+        Assert.AreEqual(0xEE / 255f, p.Paper.R, 1e-3f);
+        Assert.AreEqual(0x1C / 255f, p.Accent.R, 1e-3f);
+        Assert.Greater(p.BoxFill.R, p.Paper.R - 1e-4f, "a box is a lighter shade of the paper");
+        Assert.Less(p.Band.B, p.Paper.B + 1e-4f, "a section band is a pale shade of the accent over the paper");
+        Assert.AreEqual(style.Ink.R, p.Ink.R, 1e-6f, "the inks are the style's");
+        Assert.AreEqual(style.Paper.R, new FormLook().Palette(style).Paper.R, 1e-6f, "no tint: the style's paper");
+        CollectionAssert.IsEmpty(new FormLook { frame = FormFrame.TopBand, accent = "#1C3A78", aspect = 0.7f, scale = 0.9f }.Problems(M.aspect));
+        Assert.AreEqual(4, new FormLook { frame = FormFrame.TopBand, paper = "blue", aspect = 0.9f, scale = 2f }.Problems(M.aspect).Count);
+    }
 }

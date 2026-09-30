@@ -386,10 +386,10 @@ public sealed class DeskController : MonoBehaviour
         return points[Mathf.Max(0, choice.Spot)];
     }
 
-    /// <summary>The corners of a paper lying with its root at <paramref name="at"/> (every paper lies as the template does: the new paper's sheet gives the offsets).</summary>
+    /// <summary>The corners of a paper lying with its root at <paramref name="at"/> (every paper lies as the template does: the new paper's sheet gives the offsets; its size is its look's, DeskDocument.Size).</summary>
     private Vector3[] Footprint(DeskDocument paper, Vector3 at)
     {
-        Vector2 size = config.paperSize;
+        Vector2 size = paper.Size;
         Transform sheet = paper.Sheet;
         Vector3 root = paper.transform.position;
         return new[]

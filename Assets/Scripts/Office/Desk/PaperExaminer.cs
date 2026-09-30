@@ -300,7 +300,8 @@ public sealed class PaperExaminer : MonoBehaviour
         Quaternion rotation = cam.rotation * Quaternion.Euler(0f, 0f, entry.Slot == ExamineSlot.Left ? -t.roll : t.roll);
         Transform parent = entry.Paper.Sheet.parent;
         float parentScale = parent != null && parent.lossyScale.x > 0f ? parent.lossyScale.x : 1f;
-        return (position, rotation, Vector3.one * (height / config.paperSize.y / parentScale));
+        float paperHeight = entry.Paper.Size.y > 0f ? entry.Paper.Size.y : config.paperSize.y;
+        return (position, rotation, Vector3.one * (height / paperHeight / parentScale));
     }
 
     /// <summary>A held paper's box on the screen: beside the open frame when the papers fit there, else its office slot (dipped under the wheel).</summary>
@@ -422,6 +423,7 @@ public sealed class PaperExaminer : MonoBehaviour
         return null;
     }
 
+    /// <summary>The desk paper's aspect: the widest a paper is (a look's aspect is at most the style's), so every paper fits the slot boxes laid out for it.</summary>
     private float PaperAspect => config.paperSize.x / config.paperSize.y;
 
     private static float ScreenAspect => Screen.height > 0 ? (float)Screen.width / Screen.height : 16f / 9f;

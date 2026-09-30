@@ -25,6 +25,8 @@ MonoBehaviour:
     label: Native Tongue
   - category: 3
     label: Effects Carried
+  - category: 26
+    label: Issuing Seal
   handOver: 0
   showsPhoto: 0
   form:
@@ -38,7 +40,7 @@ MonoBehaviour:
       columns: []
       shares: []
       options: []
-      field: -1
+      field: 5
       slot: 
     - kind: 1
       text: 1  DECLARANT
@@ -122,3 +124,9 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
+    look:
+      frame: 2
+      accent: '#2F4F6F'
+      paper: '#F1F1EE'
+      aspect: 0
+      scale: 0.95

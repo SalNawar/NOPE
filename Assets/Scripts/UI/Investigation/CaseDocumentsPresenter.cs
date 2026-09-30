@@ -127,8 +127,12 @@ public sealed class CaseDocumentsPresenter
     /// form (phase 5). A paper not handed over is named as the desk asks for
     /// it: its request group's label (<paramref name="interview"/>'s
     /// askGroups, "Proof of means") until it is handed over, else its own name.
+    /// Its boxes keep the room of their longest values (an origin at
+    /// <paramref name="longestOrigin"/> characters; the document design spec,
+    /// D2), and a photo shows who the papers say (CaseInstance.PhotoLook: a
+    /// stranger for someone else's photo, D8).
     /// </summary>
-    public void Present(CaseInstance inst, AgencyContent agency, InterviewLines interview)
+    public void Present(CaseInstance inst, AgencyContent agency, InterviewLines interview, int longestOrigin)
     {
         _caseDocuments.Clear();
         _caseForms.Clear();
@@ -141,17 +145,17 @@ public sealed class CaseDocumentsPresenter
                 CaseDocument document = DocumentOf(doc);
                 _caseDocuments.Add(document);
                 requestNames.Add(FormRequests.RequestLabel(template != null ? template.askGroup : null, document.name, interview != null ? interview.askGroups : null));
-                _caseForms.Add(DocumentForm.For(doc, agency));
+                _caseForms.Add(DocumentForm.For(doc, agency, longestOrigin));
             }
 
         _papers = new CasePapers(_caseDocuments.Count);
         CaseClaim claim = AppLinks.Claim(inst);
         foreach (DocumentsView view in _views)
             if (view != null)
-                view.SetCase(inst != null ? inst.documents : null, _caseForms, _papers, _compare, inst != null ? inst.look : null, _art, claim, requestNames);
+                view.SetCase(inst != null ? inst.documents : null, _caseForms, _papers, _compare, inst != null ? inst.PhotoLook : null, _art, claim, requestNames);
 
         if (_desk != null)
-            _desk.BeginCase(_caseDocuments, _caseForms, inst != null ? inst.look : null, _art);
+            _desk.BeginCase(_caseDocuments, _caseForms, inst != null ? inst.PhotoLook : null, _art);
         foreach (int i in CaseDocuments.ArrivalIndices(_caseDocuments))
             Receive(i);
         PapersChanged?.Invoke();
@@ -254,7 +258,7 @@ public sealed class CaseDocumentsPresenter
         CaseDocument doc = _caseDocuments[index];
         var fields = new List<(string label, string value)>();
         foreach (DocumentField field in doc.fields ?? new List<DocumentField>())
-            fields.Add(field != null ? (field.label, field.value) : (null, null));
+            fields.Add(field != null ? (field.label, field.category == ClueCategory.Photo ? UiText.Get("compare.photoShown") : field.value) : (null, null));
         foreach (IndexEntry entry in IndexEntries.Paper(index, doc.name, fields, UiText.Get("search.title.row")))
             _index.Add(entry);
     }

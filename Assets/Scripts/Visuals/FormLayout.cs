@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 /// <summary>
@@ -34,6 +35,17 @@ public sealed class FormData
 
     /// <summary>Each template field's shown value, by field index.</summary>
     public IReadOnlyList<string> FieldValues = Array.Empty<string>();
+
+    /// <summary>
+    /// The value each field's box keeps room for, by field index (the document
+    /// design spec, D2: a document's longest value, FormLayout.Probe's): a box
+    /// is as tall as this value needs, whatever it shows, so no field moves
+    /// when a value changes; empty (a PC page kind) lets boxes fit their values.
+    /// </summary>
+    public IReadOnlyList<string> FieldReserve = Array.Empty<string>();
+
+    /// <summary>The Seal Register's seals (a SealGrid block; the document design spec, D4): each office's name and its seal's value (its description, drawn by the renderers).</summary>
+    public IReadOnlyList<(string Caption, string Value)> Seals = Array.Empty<(string, string)>();
 
     /// <summary>A page kind's text slots (a Paragraph's slot, a named cell's slot).</summary>
     public IReadOnlyDictionary<string, string> Text = new Dictionary<string, string>();
@@ -160,8 +172,8 @@ public sealed class FormMetrics
     /// <summary>Fine print's size.</summary>
     public float finePrintSize = 0.020f;
 
-    /// <summary>The seal's side, printed behind the header.</summary>
-    public float sealSize = 0.1f;
+    /// <summary>The seal's side: faint behind the header, or the issuing office's seal at the header's right (the document design spec, D4) and each seal of the Seal Register.</summary>
+    public float sealSize = 0.11f;
 
     /// <summary>The barcode's height.</summary>
     public float barcodeHeight = 0.03f;
@@ -189,7 +201,7 @@ public interface ITextMeasure
 /// <summary>What a placed item is: the renderers draw each kind their way.</summary>
 public enum FormItemKind
 {
-    /// <summary>The agency seal, printed faintly behind the header.</summary>
+    /// <summary>A seal: its text is the seal's value (Seals.Describe's words, drawn by the renderers: the issuing office's seal, the Seal Register's), or blank for the agency's faint seal behind the header.</summary>
     Seal,
 
     /// <summary>A text (its role gives its style).</summary>
@@ -214,7 +226,13 @@ public enum FormItemKind
     StampArea,
 
     /// <summary>A filled band: a section head's bar, a table's head row.</summary>
-    RowBand
+    RowBand,
+
+    /// <summary>A frame's band in the look's accent (the document design spec, D1).</summary>
+    Stripe,
+
+    /// <summary>One hole of a ticket frame's perforation.</summary>
+    Perforation
 }
 
 /// <summary>A text's role: its style and colour class. Bold, capitals and small capitals follow it (FormTextStyles).</summary>
@@ -395,7 +413,11 @@ public sealed class PlacedForm
 /// draw the same placed form, so a paper and its scanned copy are one form.
 /// FieldRows sit on a 12-column grid; a cell may span rows (the 4:5 photo
 /// beside two boxes). A value keeps its size on one line, else shrinks to the
-/// floor, where it may wrap to two lines, and its box grows to fit.
+/// floor, where it may wrap to two lines; a document's box keeps the room its
+/// longest value needs (FormData.FieldReserve, the document design spec D2),
+/// so no field ever moves, and a value that would need more shrinks below
+/// the floor instead. A form's look (FormLook) sets its page's aspect and
+/// adds its frame's bands.
 /// SlotAt is the hit test; Check is Build Office UI's and the validator's face
 /// check (FO10). Pure and engine-free.
 /// </summary>
@@ -419,7 +441,8 @@ public static class FormLayout
     /// <summary>
     /// Lays out <paramref name="spec"/> showing <paramref name="data"/> at
     /// <paramref name="width"/> (the caller's units). Every size is in page
-    /// heights, H = width / aspect (width × aspect on a landscape page): the
+    /// heights, H = width / aspect (width × aspect on a landscape page; the
+    /// aspect is the form's look's, else the style's): the
     /// wider the page, the larger its print. A document copy on the PC takes
     /// 520 u (H = 679 u); a page kind in a pane takes the pane's width, so its
     /// table cells reach 13 px at 720p from about 564 u. A page whose table
@@ -451,11 +474,23 @@ public static class FormLayout
     public static FormData Probe(FormData data, IReadOnlyList<int> longest)
     {
         FormData probe = data.Copy();
-        var values = new string[data.FieldValues.Count];
-        for (int i = 0; i < values.Length; i++)
-            values[i] = longest != null && i < longest.Count ? ProbeValue(longest[i]) : data.FieldValues[i];
-        probe.FieldValues = values;
+        probe.FieldValues = Reserve(data.FieldValues, longest);
         return probe;
+    }
+
+    /// <summary>
+    /// The value each field's box keeps room for (FormData.FieldReserve; the
+    /// document design spec, D2): a probe <paramref name="longest"/>[i]
+    /// characters long, cut from real words (Probe's); fields past the list
+    /// keep <paramref name="values"/>' own.
+    /// </summary>
+    public static IReadOnlyList<string> Reserve(IReadOnlyList<string> values, IReadOnlyList<int> longest)
+    {
+        values = values ?? Array.Empty<string>();
+        var reserve = new string[values.Count];
+        for (int i = 0; i < reserve.Length; i++)
+            reserve[i] = longest != null && i < longest.Count ? ProbeValue(longest[i]) : values[i];
+        return reserve;
     }
 
     /// <summary>
@@ -464,8 +499,10 @@ public static class FormLayout
     /// one message each: a field placed twice or never, a cell naming a field
     /// the template does not have, a row wider than the grid, a photo cell on a
     /// form without a photo (or the reverse), a value that needs more lines
-    /// than a box holds at the floor, and a fixed page whose content runs past
-    /// its bottom margin. Empty when the form fits.
+    /// than a box holds at the floor, a fixed page whose content runs past
+    /// its bottom margin (at the look's aspect), and, when the probe reserves
+    /// its boxes (FieldReserve), a field whose box moves between its longest
+    /// value and none (the document design spec, D2). Empty when the form fits.
     /// </summary>
     public static List<string> Check(FormSpec spec, FormData probe, FormMetrics m, ITextMeasure measure)
     {
@@ -498,7 +535,20 @@ public static class FormLayout
         if (!photoCell && probe.HasPhoto)
             problems.Add("the template shows a photo but its form has no photo cell");
 
-        new Placer(spec, probe, m.aspect, m, measure, problems).Run();
+        float aspect = (spec.look ?? new FormLook()).AspectOr(m.aspect);
+        PlacedForm full = new Placer(spec, probe, aspect, m, measure, problems).Run();
+        if (probe.FieldReserve != null && probe.FieldReserve.Count > 0)
+        {
+            FormData blank = probe.Copy();
+            blank.FieldValues = probe.FieldValues.Select(_ => string.Empty).ToList();
+            PlacedForm empty = new Placer(spec, blank, aspect, m, measure, null).Run();
+            foreach (FormSlot s in full.Slots)
+            {
+                FormSlot t = empty.Slots.FirstOrDefault(x => x.Field == s.Field && x.Row == s.Row && x.Source == s.Source);
+                if (s.Field >= 0 && (t.Hit.XMin != s.Hit.XMin || t.Hit.YMin != s.Hit.YMin || t.Hit.XMax != s.Hit.XMax || t.Hit.YMax != s.Hit.YMax))
+                    problems.Add($"field {s.Field} ({probe.FieldLabels[s.Field]}) moves when its value changes; a document's boxes are fixed");
+            }
+        }
         return problems;
     }
 
@@ -564,7 +614,8 @@ public static class FormLayout
             _measure = measure;
             _problems = problems;
             _width = width;
-            _h = _spec.landscape ? width * _m.aspect : width / _m.aspect;
+            float aspect = (_spec.look ?? new FormLook()).AspectOr(_m.aspect);
+            _h = _spec.landscape ? width * aspect : width / aspect;
             _left = _m.marginX * _h;
             _content = width - 2f * _left;
             _column = (_content - (Columns - 1) * G(_m.gutter)) / Columns;
@@ -584,7 +635,8 @@ public static class FormLayout
                     FinishTall(true);
                 switch (b.kind)
                 {
-                    case FormBlockKind.Header: Header(); break;
+                    case FormBlockKind.Header: Header(b); break;
+                    case FormBlockKind.SealGrid: SealGrid(b); break;
                     case FormBlockKind.Section: Section(b.text); break;
                     case FormBlockKind.FieldRow: FieldRow(b); break;
                     case FormBlockKind.RecordGroups: RecordGroups(b); break;
@@ -617,8 +669,60 @@ public static class FormLayout
             {
                 height = _y + G(_m.marginBottom);
             }
+            Frame(height);
             return new PlacedForm(_width, height, _h, _items, _slots, _pageTops);
         }
+
+        // ---------------- The frame (the document design spec, D1) ----------------
+
+        /// <summary>A frame band's thickness, in H: a top band, a side band, a certificate's frame, a ticket's stub, a letterhead's foot and head.</summary>
+        private const float TopBand = 0.018f, SideBand = 0.022f, FrameBand = 0.006f, FrameInset = 0.006f, StubBand = 0.014f, FootBand = 0.012f, HeadBand = 0.005f;
+
+        /// <summary>A ticket's perforation: its line's distance from the left edge, a hole's side and the step between holes, in H.</summary>
+        private const float PerforationX = 0.03f, Hole = 0.004f, HoleStep = 0.012f;
+
+        /// <summary>The look's frame on each page (a flow page: one page as tall as its content), in the page's margins, so nothing printed moves.</summary>
+        private void Frame(float height)
+        {
+            FormFrame frame = _spec.look != null ? _spec.look.frame : FormFrame.Plain;
+            if (frame == FormFrame.Plain)
+                return;
+            int pages = _spec.fixedPage ? _page + 1 : 1;
+            for (int p = 0; p < pages; p++)
+            {
+                float top = _spec.fixedPage ? p * _h : 0f;
+                float h = _spec.fixedPage ? _h : height;
+                switch (frame)
+                {
+                    case FormFrame.TopBand:
+                        Stripe(0f, top, _width, G(TopBand));
+                        break;
+                    case FormFrame.SideBand:
+                        Stripe(0f, top, G(SideBand), h);
+                        break;
+                    case FormFrame.Framed:
+                        float i = G(FrameInset), t = G(FrameBand);
+                        Stripe(i, top + i, _width - 2f * i, t);
+                        Stripe(i, top + h - i - t, _width - 2f * i, t);
+                        Stripe(i, top + i + t, t, h - 2f * (i + t));
+                        Stripe(_width - i - t, top + i + t, t, h - 2f * (i + t));
+                        break;
+                    case FormFrame.Ticket:
+                        Stripe(0f, top, G(StubBand), h);
+                        for (float y = top + G(HoleStep) / 2f; y + G(Hole) <= top + h; y += G(HoleStep))
+                            _items.Add(new FormItem(FormItemKind.Perforation, FormTextRole.Paragraph, FaceRect.FromTop(G(PerforationX), y, G(Hole), G(Hole)), -1, string.Empty, 0f, FormTextAlign.Left));
+                        break;
+                    case FormFrame.BottomBand:
+                        Stripe(0f, top, _width, G(HeadBand));
+                        Stripe(0f, top + h - G(FootBand), _width, G(FootBand));
+                        break;
+                }
+            }
+        }
+
+        /// <summary>One band of the frame (not counted in a page's content: it lies in the margins).</summary>
+        private void Stripe(float x, float y, float w, float h) =>
+            _items.Add(new FormItem(FormItemKind.Stripe, FormTextRole.Paragraph, FaceRect.FromTop(x, y, w, h), -1, string.Empty, 0f, FormTextAlign.Left));
 
         // ---------------- Measuring ----------------
 
@@ -701,25 +805,74 @@ public static class FormLayout
         // ---------------- Blocks ----------------
 
         /// <summary>
-        /// The header: the seal behind it; the agency line at the left and the
-        /// programme line at the right; under them the title (one line,
-        /// shrinking to its floor) and the form number at its right.
+        /// The header: the agency line at the left and the programme line at
+        /// the right; under them the title (one line, shrinking to its floor)
+        /// and the form number at its right. The seal: faint behind the
+        /// header, or, when the block names a field (a document's Seal field,
+        /// the document design spec D4), the issuing office's seal in a box at
+        /// the header's right, a pickable slot the header's words stay clear of.
         /// </summary>
-        private void Header()
+        private void Header(FormBlock b)
         {
             float top = _y;
-            Add(FormItemKind.Seal, FaceRect.FromTop(_left, top, G(_m.sealSize), G(_m.sealSize)));
-            float agencyWidth = _content * 0.55f;
+            float side = G(_m.sealSize);
+            bool office = b.field >= 0;
+            float width = office ? _content - side - G(_m.gutter) : _content;
+            if (office)
+            {
+                var box = FaceRect.FromTop(_left + _content - side, top, side, side);
+                int slot = AddSlot(b.field, -1, string.Empty, box);
+                Add(FormItemKind.Seal, box, slot, FieldValue(b.field));
+            }
+            else
+            {
+                Add(FormItemKind.Seal, FaceRect.FromTop(_left, top, side, side));
+            }
+            float agencyWidth = width * 0.55f;
             float agency = Text(FormTextRole.Agency, (_data.Agency ?? string.Empty).ToUpperInvariant(), _left, top, agencyWidth, G(_m.agencySize));
-            float programme = Text(FormTextRole.Programme, _data.Programme, _left + agencyWidth, top, _content - agencyWidth, G(_m.programmeSize), -1, FormTextAlign.Right);
+            float programme = Text(FormTextRole.Programme, _data.Programme, _left + agencyWidth, top, width - agencyWidth, G(_m.programmeSize), -1, FormTextAlign.Right);
             float titleTop = top + Math.Max(agency, programme) + G(_m.rowGap);
-            float titleWidth = _content * 0.84f;
+            float titleWidth = width * 0.84f;
             string title = (_data.Title ?? string.Empty).ToUpperInvariant();
             float size = OneLine(title, FormTextRole.Title, _m.titleSize, _m.titleFloor, titleWidth);
             float titleHeight = Text(FormTextRole.Title, title, _left, titleTop, titleWidth, size);
             float number = string.IsNullOrEmpty(_data.FormNumber) ? 0f : Line(FormTextRole.FormNumber, G(_m.formNumberSize));
-            Text(FormTextRole.FormNumber, _data.FormNumber, _left + titleWidth, titleTop + Math.Max(0f, titleHeight - number), _content - titleWidth, G(_m.formNumberSize), -1, FormTextAlign.Right);
-            _y = titleTop + Math.Max(titleHeight, number) + G(_m.blockGap);
+            Text(FormTextRole.FormNumber, _data.FormNumber, _left + titleWidth, titleTop + Math.Max(0f, titleHeight - number), width - titleWidth, G(_m.formNumberSize), -1, FormTextAlign.Right);
+            _y = Math.Max(titleTop + Math.Max(titleHeight, number), office ? top + side : top) + G(_m.blockGap);
+        }
+
+        /// <summary>
+        /// The Seal Register's grid (the document design spec, D4): each of
+        /// FormData.Seals in reading order, three to a row, its seal centred
+        /// over its office's name in a box; each box a slot of the block's
+        /// slot, its Row the seal's place.
+        /// </summary>
+        private void SealGrid(FormBlock b)
+        {
+            const int perRow = 3;
+            float pad = G(_m.boxPadding), side = G(_m.sealSize);
+            int span = Columns / perRow;
+            float width = span * _column + (span - 1) * G(_m.gutter);
+            IReadOnlyList<(string Caption, string Value)> seals = _data.Seals ?? Array.Empty<(string, string)>();
+            for (int start = 0; start < seals.Count; start += perRow)
+            {
+                float top = _y, captions = 0f;
+                for (int k = start; k < Math.Min(seals.Count, start + perRow); k++)
+                    captions = Math.Max(captions, Height(seals[k].Caption ?? string.Empty, FormTextRole.Cell, G(_m.cellSize), width - 2f * pad));
+                float height = pad + side + pad + captions + pad;
+                for (int k = start; k < Math.Min(seals.Count, start + perRow); k++)
+                {
+                    float x = _left + (k - start) * (width + G(_m.gutter));
+                    var rect = FaceRect.FromTop(x, top, width, height);
+                    int slot = AddSlot(-1, k, b.slot, rect);
+                    Add(FormItemKind.Box, rect, slot);
+                    Add(FormItemKind.Seal, FaceRect.FromTop(x + (width - side) / 2f, top + pad, side, side), slot, seals[k].Value);
+                    Text(FormTextRole.Cell, seals[k].Caption, x + pad, top + pad + side + pad, width - 2f * pad, G(_m.cellSize), slot, FormTextAlign.Centre);
+                }
+                _lastRowBottom = top + height;
+                _y = _lastRowBottom + G(_m.rowGap);
+            }
+            _y += G(_m.blockGap);
         }
 
         /// <summary>A section head: its text in capitals on a band across the content.</summary>
@@ -737,10 +890,17 @@ public static class FormLayout
 
         /// <summary>A cell's box content: its label (its caption, else its field's) and value (its field's, else its slot's).</summary>
         private (string label, string value, float valueSize, float valueHeight, float labelHeight, float boxHeight) BoxContent(FormCell c, float width) =>
-            BoxContent(!string.IsNullOrEmpty(c.caption) ? c.caption : FieldLabel(c.field), c.field >= 0 ? FieldValue(c.field) : SlotText(c.slot), width, $"field {c.field}");
+            BoxContent(!string.IsNullOrEmpty(c.caption) ? c.caption : FieldLabel(c.field), c.field >= 0 ? FieldValue(c.field) : SlotText(c.slot), width, $"field {c.field}", FieldReserve(c.field));
 
-        /// <summary>A box's content: its label and value, the value's fitted size and height; and the box's height (a value over the lines a box holds is reported as <paramref name="what"/>).</summary>
-        private (string label, string value, float valueSize, float valueHeight, float labelHeight, float boxHeight) BoxContent(string label, string value, float width, string what)
+        /// <summary>
+        /// A box's content: its label and value, the value's fitted size and
+        /// height; and the box's height (a value over the lines a box holds is
+        /// reported as <paramref name="what"/>). With a <paramref name="reserve"/>
+        /// (the document design spec, D2) the box is as tall as the reserve
+        /// needs, whatever its value; a value taller than that shrinks below
+        /// the floor until it fits (never moving a box).
+        /// </summary>
+        private (string label, string value, float valueSize, float valueHeight, float labelHeight, float boxHeight) BoxContent(string label, string value, float width, string what, string reserve = null)
         {
             float pad = G(_m.boxPadding);
             float inner = width - 2f * pad;
@@ -750,8 +910,34 @@ public static class FormLayout
             (float size, float height, int lines) = FitValue(value, inner);
             if (lines > _m.maxValueLines)
                 _problems?.Add($"{what} ({label})'s longest value needs {lines} lines at the floor; a box holds {_m.maxValueLines}");
+            if (reserve != null)
+            {
+                float room = FitValue(reserve, inner).height;
+                (size, height) = Squeeze(value, size, height, room, inner);
+                height = room;
+            }
             return (label, value, size, height, labelHeight, pad + labelHeight + height + pad);
         }
+
+        /// <summary>The smallest share of the floor a value shrinks to when it would overflow its reserved room.</summary>
+        private const float SqueezeFloor = 0.7f;
+
+        /// <summary>A value that needs more than <paramref name="room"/> at <paramref name="size"/>: smaller in eighths down to SqueezeFloor of the floor, until it fits.</summary>
+        private (float size, float height) Squeeze(string value, float size, float height, float room, float width)
+        {
+            const int steps = 8;
+            float floor = G(_m.valueFloor), least = floor * SqueezeFloor;
+            for (int i = 1; height > room + 1e-4f * _h && i <= steps; i++)
+            {
+                size = floor - (floor - least) * i / steps;
+                height = Measure(value, FormTextRole.Value, size, width);
+            }
+            return (size, height);
+        }
+
+        /// <summary>The value field <paramref name="field"/>'s box keeps room for (FormData.FieldReserve), or null (no field, or no reserve: the box fits its value).</summary>
+        private string FieldReserve(int field) =>
+            field >= 0 && _data.FieldReserve != null && field < _data.FieldReserve.Count ? _data.FieldReserve[field] ?? string.Empty : null;
 
         /// <summary>A value's size and height: full size on one line, else the floor, on one line or wrapped (a box reserves the lines its value needs at the floor, FO6).</summary>
         private (float size, float height, int lines) FitValue(string value, float width)
@@ -800,7 +986,8 @@ public static class FormLayout
                 float w = span * _column + (span - 1) * G(_m.gutter);
                 if (c.rows > 1)
                 {
-                    int slot = c.IsPhoto || (c.field < 0 && string.IsNullOrEmpty(c.slot)) ? -1 : AddSlot(c.field, -1, c.field >= 0 ? string.Empty : c.slot, FaceRect.FromTop(x, top, w, 0f));
+                    int slot = c.IsPhoto ? (c.field >= 0 ? AddSlot(c.field, -1, string.Empty, FaceRect.FromTop(x, top, w, 0f)) : -1)
+                        : c.field < 0 && string.IsNullOrEmpty(c.slot) ? -1 : AddSlot(c.field, -1, c.field >= 0 ? string.Empty : c.slot, FaceRect.FromTop(x, top, w, 0f));
                     _tall.Add(new Tall { Cell = c, X = x, Width = w, Top = top, RowsLeft = c.rows, Column = col, Span = span, Slot = slot });
                     for (int k = col; k < col + span; k++)
                         _occupied[k] = c.rows;
@@ -844,14 +1031,16 @@ public static class FormLayout
                 var rect = new FaceRect(t.X, t.Top, t.X + t.Width, Math.Max(_lastRowBottom, t.Top));
                 if (t.Cell.IsPhoto)
                 {
-                    Add(FormItemKind.Box, rect);
+                    if (t.Slot >= 0)
+                        _slots[t.Slot] = new FormSlot(t.Slot, _slots[t.Slot].Field, -1, _slots[t.Slot].Source, rect, _page);
+                    Add(FormItemKind.Box, rect, t.Slot);
                     if (_data.HasPhoto)
                     {
                         float pad = G(_m.boxPadding);
                         float innerW = rect.Width - 2f * pad, innerH = rect.Height - 2f * pad;
                         float w = Math.Min(innerW, innerH * LookCanvas.PhotoAspect);
                         float h = w / LookCanvas.PhotoAspect;
-                        Add(FormItemKind.Photo, FaceRect.FromTop(rect.CentreX - w / 2f, rect.CentreY - h / 2f, w, h));
+                        Add(FormItemKind.Photo, FaceRect.FromTop(rect.CentreX - w / 2f, rect.CentreY - h / 2f, w, h), t.Slot);
                     }
                 }
                 else
@@ -1078,6 +1267,9 @@ public static class FormLayout
             bool blank = string.IsNullOrWhiteSpace(value);
             int slot = _slots.Count;
             float hand = Text(FormTextRole.Value, blank ? Unsigned : value, _left + pad, top, width - 2f * pad, blank ? G(_m.captionSize) : G(_m.valueSize), slot);
+            string reserve = FieldReserve(b.field);
+            if (reserve != null)
+                hand = Math.Max(Measure(reserve, FormTextRole.Value, G(_m.valueSize), width - 2f * pad), Line(FormTextRole.Value, G(_m.valueSize)));
             float ruleTop = top + hand + pad;
             Add(FormItemKind.Rule, FaceRect.FromTop(_left, ruleTop, width, G(_m.ruleWidth)), slot);
             float caption = Text(FormTextRole.Caption, b.text, _left, ruleTop + G(_m.ruleWidth) + pad / 2f, width, G(_m.captionSize), slot);

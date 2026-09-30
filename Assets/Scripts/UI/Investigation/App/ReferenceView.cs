@@ -24,7 +24,11 @@ using UnityEngine.UI;
 /// middle). Each row is marked with its key for the keys, the copy and the
 /// pins (AppRow). Each pane has one; DayReference fills them all. Its item is
 /// the chosen book ("bookof:Currency", IAppItems), which a jump to it names as
-/// the target's key.
+/// the target's key. The Seal Register (a book whose category is Seal; the
+/// document design spec, D4) is drawn instead on its own page kind
+/// (Form_SealRegister): each issuing office's true seal pictured over its
+/// name (agency.offices), each a pick (EvidencePicks.ForSeal, PickKeys.Seal),
+/// the truth a paper's seal is held against.
 /// </summary>
 public sealed class ReferenceView : AppView, IAppItems
 {
@@ -33,6 +37,9 @@ public sealed class ReferenceView : AppView, IAppItems
 
     /// <summary>The Register's page kind (Form_Register, TC-911; each book counts on from it).</summary>
     [SerializeField] private FormSpecSO registerForm;
+
+    /// <summary>The Seal Register's page kind (Form_SealRegister: the offices' seals in a grid; the document design spec, D4).</summary>
+    [SerializeField] private FormSpecSO sealRegisterForm;
 
     /// <summary>"Claimed place only": on, the register shows the claimed row alone.</summary>
     [SerializeField] private Toggle claimedOnly;
@@ -208,6 +215,11 @@ public sealed class ReferenceView : AppView, IAppItems
         if (page == null || page.Form == null || registerForm == null)
             return;
         ReferenceBookSO book = _books[index];
+        if (book.category == ClueCategory.Seal)
+        {
+            DrawSeals(index, page, book);
+            return;
+        }
         bool only = claimedOnly != null && claimedOnly.isOn;
         IReadOnlyList<FactRow> rows = _facts != null ? _facts.Rows(book.category) : null;
         _lines[index] = ReferenceRows.Arrange(rows, _claimedNation, _claimedEra, only, book.groupByEra, _eraOrder, _presentEra);
@@ -224,6 +236,49 @@ public sealed class ReferenceView : AppView, IAppItems
         page.Form.Bind(_compare, slot => TryFact(index, slot, out FactRow fact) ? PickKeys.BookRow(fact.Category, fact.NationId, fact.EraId) : null);
         page.Show(registerForm.form, data, slot => TryFact(index, slot, out _) && _compare != null);
         MarkRows(index);
+    }
+
+    /// <summary>
+    /// The Seal Register (book <paramref name="index"/>): the edition line and
+    /// each office with a valid seal, its seal pictured over its name, in the
+    /// agency's order (a SealGrid), numbered on from the register's form as
+    /// every book is; each seal a pick of its office (EvidencePicks.ForSeal).
+    /// </summary>
+    private void DrawSeals(int index, FormPage page, ReferenceBookSO book)
+    {
+        if (sealRegisterForm == null)
+            return;
+        List<(AgencyOffice office, string seal)> seals = Offices();
+        FormData data = sealRegisterForm.Page(_agency);
+        data.FormNumber = RegisterPage.FormNumber(registerForm.form.formNumber, index);
+        data.Title = book.displayName;
+        data.Text = new Dictionary<string, string> { { RegisterPage.EditionSlot, UiText.Format("book.edition", _day) } };
+        data.Seals = seals.Select(s => (s.office.name, s.seal)).ToList();
+        page.Form.Bind(_compare, slot => TrySeal(slot, out AgencyOffice office, out _) ? PickKeys.Seal(office.id) : null);
+        page.Show(sealRegisterForm.form, data, slot => TrySeal(slot, out _, out _) && _compare != null);
+        MarkRows(index);
+    }
+
+    /// <summary>The offices with a valid seal (agency.offices, in order) and each one's seal (Seals.Describe's words).</summary>
+    private List<(AgencyOffice office, string seal)> Offices()
+    {
+        var offices = new List<(AgencyOffice, string)>();
+        foreach (AgencyOffice office in _agency != null ? _agency.offices : new List<AgencyOffice>())
+            if (office != null && office.TryGetSeal(out Seal seal))
+                offices.Add((office, Seals.Describe(seal)));
+        return offices;
+    }
+
+    /// <summary>The office and seal a slot of the Seal Register shows; false for any other slot.</summary>
+    private bool TrySeal(FormSlot slot, out AgencyOffice office, out string seal)
+    {
+        office = null;
+        seal = null;
+        List<(AgencyOffice office, string seal)> offices = Offices();
+        if (slot.Source != FormSlots.Seals || slot.Row < 0 || slot.Row >= offices.Count)
+            return false;
+        (office, seal) = offices[slot.Row];
+        return true;
     }
 
     /// <summary>An era's name by its id (null when the library does not know it).</summary>
@@ -261,6 +316,12 @@ public sealed class ReferenceView : AppView, IAppItems
         int found = -1;
         foreach ((FormSlot slot, Button button) in _armed)
         {
+            if (TrySeal(slot, out AgencyOffice office, out string seal))
+            {
+                ComparePick sealPick = EvidencePicks.ForSeal(_books[index], office, seal);
+                AppRow.Mark(button.gameObject, AppTab.Reference, sealPick.Key, sealPick.Label, office.name, seal, button);
+                continue;
+            }
             if (!TryFact(index, slot, out FactRow fact))
                 continue;
             ComparePick pick = EvidencePicks.ForBookRow(_books[index], fact);
@@ -274,7 +335,9 @@ public sealed class ReferenceView : AppView, IAppItems
     /// <summary>A row of book <paramref name="index"/>'s register was clicked: the entry goes into the compare as a truth source.</summary>
     private void Pick(int index, FormSlot slot)
     {
-        if (_compare != null && TryFact(index, slot, out FactRow fact))
+        if (_compare != null && TrySeal(slot, out AgencyOffice office, out string seal))
+            _compare.Select(EvidencePicks.ForSeal(_books[index], office, seal), null);
+        else if (_compare != null && TryFact(index, slot, out FactRow fact))
             _compare.Select(EvidencePicks.ForBookRow(_books[index], fact), null);
     }
 }

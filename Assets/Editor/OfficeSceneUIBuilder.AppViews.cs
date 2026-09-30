@@ -21,6 +21,9 @@ using UnityEngine.UI;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
+    /// <summary>The Seal Register's page kind (the document design spec, D4), which ReferenceView draws for the Seal book.</summary>
+    private const string SealRegisterFormPath = "Assets/Data/Forms/Form_SealRegister.asset";
+
     /// <summary>The page kinds the views draw.</summary>
     private const string RegisterFormPath = "Assets/Data/Forms/Form_Register.asset", InterviewFormPath = "Assets/Data/Forms/Form_InterviewRecord.asset",
                          ReportFormPath = "Assets/Data/Forms/Form_DeviationReport.asset", DirectiveMemoFormPath = "Assets/Data/Forms/Form_DirectiveMemo.asset";
@@ -93,6 +96,7 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(view);
         Wire(so, "pageTemplate", template);
         Wire(so, "registerForm", PageKind(RegisterFormPath));
+        Wire(so, "sealRegisterForm", PageKind(SealRegisterFormPath));
         Wire(so, "claimedOnly", claimedOnly);
         so.ApplyModifiedProperties();
         return view;

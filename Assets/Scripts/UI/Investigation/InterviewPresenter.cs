@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -244,6 +245,7 @@ public sealed class InterviewPresenter
             voice = inst != null ? inst.Voice : null,
             slip = interviewReachable && inst != null ? inst.slip : null,
             garments = appearanceReachable && inst != null && inst.look != null ? inst.look.Garments : null,
+            face = appearanceReachable && inst != null && inst.look != null && documents != null && documents.Any(d => d != null && d.showsPhoto),
             padReply = inst != null ? inst.waiverPadReply : WaiverPadReply.NotNeeded
         };
 
@@ -319,6 +321,12 @@ public sealed class InterviewPresenter
             if (_wheel != null)
                 _wheel.Close();
         }
+        else if (choice.Action == DialogAction.InspectFace)
+        {
+            LookAtFace();
+            if (_wheel != null)
+                _wheel.Close();
+        }
         else if (choice.Action == DialogAction.SignWaiver)
         {
             _signWaiver();
@@ -372,6 +380,18 @@ public sealed class InterviewPresenter
         LookedAt?.Invoke();
         if (_compare != null)
             _compare.Select(EvidencePicks.ForGarment(garmentIndex, garments[garmentIndex]), null);
+    }
+
+    /// <summary>Puts the current traveller's face into the compare bar (the document design spec, D8): who they are, to hold a paper's photo against (EvidencePicks.ForFace).</summary>
+    private void LookAtFace()
+    {
+        CaseInstance current = _currentCase();
+        if (current == null || current.look == null)
+            return;
+
+        LookedAt?.Invoke();
+        if (_compare != null)
+            _compare.Select(EvidencePicks.ForFace(current.look), null);
     }
 
     /// <summary>The bubble's answer picked at the desk: it goes into the compare as the transcript's row would (the same pick), lighting the bubble while it shows.</summary>

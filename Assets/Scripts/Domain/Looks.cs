@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -529,6 +530,63 @@ public static class Looks
         },
         CultureValue = present?.CultureValue
     };
+
+    /// <summary>
+    /// Who a look shows, as a photo's and a person's canonical value (the
+    /// document design spec, D8): a premade's id, else the gender, skin tone,
+    /// face and hair colour ("f/skin3/face-a/black"); the garments are not
+    /// who someone is. Blank for no look.
+    /// </summary>
+    public static string IdentityKey(TravellerLook look)
+    {
+        if (look == null)
+            return string.Empty;
+        if (look.PremadeId != null)
+            return "premade:" + look.PremadeId;
+        string g = look.Gender == TravellerGender.Unknown ? "?" : LookKeys.GenderToken(look.Gender);
+        return $"{g}/skin{look.SkinTone}/face-{look.Face}/{look.HairColour}";
+    }
+
+    /// <summary>The least distance between a traveller's skin tone and a stranger's on their papers' photo (Stranger): a whole step reads as the same person under the room's light, two do not.</summary>
+    public const int StrangerSkinSteps = 2;
+
+    /// <summary>
+    /// Someone else's photo (the document design spec, D8; the SwappedPhoto
+    /// lie): <paramref name="person"/>'s look drawn for another person of
+    /// the same gender in the same clothes, from the same ChatGPT layer set:
+    /// another skin tone at least StrangerSkinSteps from theirs (one Range
+    /// draw over the tones, in order) and another hair colour
+    /// (LookKeys.HairColours but theirs; one Range draw), their face token
+    /// kept (the art has one face per skin). Body and head take the tone; hair,
+    /// hair back and facial hair that take a colour take the new one. Null,
+    /// with no draw, for no look or a premade's (a whole picture has no layers
+    /// to swap), so the lie cannot show.
+    /// </summary>
+    public static TravellerLook Stranger(TravellerLook person, IRandomSource rng)
+    {
+        if (person == null || person.PremadeId != null || rng == null)
+            return null;
+
+        var tones = new List<int>();
+        for (int t = 1; t <= LookKeys.SkinTones; t++)
+            if (Math.Abs(t - person.SkinTone) >= StrangerSkinSteps)
+                tones.Add(t);
+        int skin = tones.Count > 0 ? tones[rng.Range(0, tones.Count)] : person.SkinTone;
+        List<string> colours = LookKeys.HairColours.Where(c => c != person.HairColour).ToList();
+        string colour = colours[rng.Range(0, colours.Count)];
+
+        var parts = new List<LookPart>(person.Parts.Count);
+        foreach (LookPart part in person.Parts)
+        {
+            LookKey k = part.Key;
+            LookKey key = part.Layer == LookLayer.Body ? LookKeys.Body(person.Gender, skin)
+                : part.Layer == LookLayer.Head ? LookKeys.Head(person.Gender, skin, person.Face)
+                : k.HairColour != null ? LookKeys.Garment(part.Layer, k.Gender, k.NationId, k.EraId, colour, k.Variant)
+                : k;
+            parts.Add(new LookPart(part.Layer, key, part.GarmentIndex));
+        }
+        return new TravellerLook(parts, person.Garments, null, person.Gender, skin, person.Face, colour);
+    }
 
     /// <summary>A premade's look: one whole picture (neutral), one garment (the whole-figure label, the claim's Culture value, never a tell). No draws.</summary>
     public static TravellerLook Whole(string premadeId, LookSource claim, LookRules rules)

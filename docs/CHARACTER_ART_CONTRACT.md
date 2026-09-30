@@ -6,7 +6,7 @@ It supersedes the older character contracts: the 2026-09-23 `ART_ASSET_LIST.md` 
 
 ## 1. Style
 
-Simpler, ReStory-like textures, neutral even lighting, front view, the civilian dress of the claimed place and moment. No text, insignia, regalia or religious vestments. Skin and hair colour are never evidence.
+Simpler, ReStory-like textures, neutral even lighting, front view, the civilian dress of the claimed place and moment. No text, insignia, regalia or religious vestments. Skin and hair colour are never evidence of where someone is from; the only check that reads them is a paper's photo against the person at the desk (someone else's photo shows another skin tone and hair colour from these same layers; the document design spec, D8).
 
 ## 2. Canvas (`LookCanvas`)
 

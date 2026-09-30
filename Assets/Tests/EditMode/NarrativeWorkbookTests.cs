@@ -71,7 +71,10 @@ public class NarrativeWorkbookTests
     public void Build_HasEverySheet_ReadmeFirst_ListsHidden()
     {
         List<RowTable> book = NarrativeWorkbook.Build(ContentSheetMap.World, Content(), null);
-        CollectionAssert.AreEqual(new[] { "README", "Days", "Cases", "Narrative", "Lines", "Triggers", "Lists" }, book.Select(t => t.Name));
+        CollectionAssert.AreEqual(new[] { "README", "Days", "Cases", "Narrative", "Lines", "Triggers", "Faults", "Lists" }, book.Select(t => t.Name));
+        RowTable faults = book.Single(t => t.Name == "Faults");
+        Assert.IsTrue(faults.Rows.Any(r => r[0] == "any paper" && r[2] == "ForgedSeal"), "the canon's view: a forged seal on any paper");
+        Assert.IsTrue(faults.Rows.Any(r => r[0] == "TC-101" && r[1] == "Photo" && r[4] == "the traveller at the desk"));
         Assert.IsTrue(Sheet(book, "Lists").Look.Hidden);
         Assert.IsFalse(book[0].Look.Hidden);
         Assert.AreEqual(15, Sheet(book, "Days").Rows.Count, "one row per day");

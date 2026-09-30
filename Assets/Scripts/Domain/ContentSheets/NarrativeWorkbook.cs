@@ -44,6 +44,12 @@ public static class NarrativeWorkbook
     /// <summary>The drop-downs' values (hidden).</summary>
     public const string ListsSheet = "Lists";
 
+    /// <summary>The published fault canon's view (the document design spec, D9): every fault a document can carry, read from the agencyFaults table.</summary>
+    public const string FaultsSheet = "Faults";
+
+    /// <summary>The Faults sheet's columns.</summary>
+    public static readonly string[] FaultHeaders = { "document", "field", "fault", "variant", "proved against", "what the forger did", "id" };
+
     /// <summary>The ref of a Narrative row shown read-only (a text authored outside world_source.json): the import skips it.</summary>
     public const string ReadOnlyRef = "(read-only)";
 
@@ -103,8 +109,9 @@ public static class NarrativeWorkbook
         RowTable days = BuildDays(book, context);
         RowTable cases = BuildCases(context);
         RowTable triggers = BuildTriggers(book, context);
-        RowTable readme = BuildReadme(context, new[] { days, cases, narrative, lines, triggers });
-        return new List<RowTable> { readme, days, cases, narrative, lines, triggers, lists.Table() };
+        RowTable faults = BuildFaults(book);
+        RowTable readme = BuildReadme(context, new[] { days, cases, narrative, lines, triggers, faults });
+        return new List<RowTable> { readme, days, cases, narrative, lines, triggers, faults, lists.Table() };
     }
 
     // =====================================================================
@@ -681,8 +688,32 @@ public static class NarrativeWorkbook
             case NarrativeSheet: return "Editable (the text column). One block per story character, dialog and story beat: its triggers, then every line, choice, effect, condition and pull.";
             case LinesSheet: return "Editable. Every personality line and every default line, by voice slot (the premades' own lines are in Narrative); pool says which of the lines one pick chooses among.";
             case TriggersSheet: return "Read-only. Every appearance, premade pool, dialog, story beat, question and mail: when it fires, the player choices it depends on, what it does, and when the reference run saw it.";
+            case FaultsSheet: return "Read-only. The published fault canon (docs/DOCUMENT_FAULTS.md): every fault a document can carry, what proves it, and the lie or directive that puts it there; the case generator draws only from it. Edit it in the content spreadsheet (agencyFaults).";
             default: return string.Empty;
         }
+    }
+
+    /// <summary>The Faults sheet (the document design spec, D9): the canon's rows as the content spreadsheet holds them (agencyFaults), a document per row, a whole paper named "(the paper)".</summary>
+    private static RowTable BuildFaults(Book b)
+    {
+        var t = new RowTable(FaultsSheet, FaultHeaders);
+        foreach (int r in b.Rows("agencyFaults"))
+        {
+            string lie = b.Get("agencyFaults", r, "lie"), directive = b.Get("agencyFaults", r, "directive");
+            string form = b.Get("agencyFaults", r, "form"), field = b.Get("agencyFaults", r, "field");
+            t.Add(new[]
+            {
+                form == "*" ? "any paper" : form,
+                field.Length > 0 ? field : "(the paper)",
+                lie.Length > 0 ? lie : directive,
+                b.Get("agencyFaults", r, "variant"),
+                b.Get("agencyFaults", r, "against"),
+                b.Get("agencyFaults", r, "note"),
+                b.Get("agencyFaults", r, "id")
+            });
+        }
+        t.Look = ReadOnlyLook(new[] { 12, 16, 22, 14, 34, 60, 22 }, 1, "FF7F7F7F");
+        return t;
     }
 
     // =====================================================================

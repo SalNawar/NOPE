@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -182,5 +183,31 @@ public static partial class OfficeSceneUIBuilder
         ContrastRules rules = library != null && library.CultureUi.contrast != null ? library.CultureUi.contrast : new ContrastRules();
         foreach (string problem in FormContrast.Problems(style.Palette(), overlays, rules))
             Debug.LogError($"[TimeDesk] {problem} (FormStyle_Agency; the forms' contrast check, FO7).", style);
+
+        // Each form's look (the document design spec, D1): its tinted paper and bands keep the same pairs, and every seal ink reads on it (D4).
+        var inks = ((SealInk[])System.Enum.GetValues(typeof(SealInk))).Select(i => (i.ToString(), Rgba.TryParseHex(Seals.InkHex(i), out Rgba c) ? c : new Rgba(0f, 0f, 0f))).ToList();
+        foreach ((string name, FormSpec form) in FormsWithLooks())
+        {
+            FormPalette palette = (form.look ?? new FormLook()).Palette(style.Palette());
+            foreach (string problem in FormContrast.Problems(palette, overlays, rules).Concat(FormContrast.SealProblems(palette, inks, rules)))
+                Debug.LogError($"[TimeDesk] {name}: {problem} (its look's paper and accent; the forms' contrast check, FO7).", style);
+        }
+    }
+
+    /// <summary>Every document template's and PC page kind's form, by asset name (the looks CheckFormStyle checks).</summary>
+    private static IEnumerable<(string name, FormSpec form)> FormsWithLooks()
+    {
+        foreach (string guid in AssetDatabase.FindAssets("t:" + nameof(DocumentTemplateSO)))
+        {
+            var template = AssetDatabase.LoadAssetAtPath<DocumentTemplateSO>(AssetDatabase.GUIDToAssetPath(guid));
+            if (template != null && template.form != null)
+                yield return (template.name, template.form);
+        }
+        foreach (string guid in AssetDatabase.FindAssets("t:" + nameof(FormSpecSO)))
+        {
+            var kind = AssetDatabase.LoadAssetAtPath<FormSpecSO>(AssetDatabase.GUIDToAssetPath(guid));
+            if (kind != null && kind.form != null)
+                yield return (kind.name, kind.form);
+        }
     }
 }

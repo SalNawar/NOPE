@@ -39,8 +39,11 @@ public sealed class InterviewCase
     /// <summary>The liar's slip (CaseInstance.slip, resolved at generation: Voices.Slip; {place} filled here), said once right after their small-talk reply; null for none (the personalities spec's T9-T10).</summary>
     public LineText slip;
 
-    /// <summary>The traveller's visible garments (TravellerLook.Garments); none means no look menu.</summary>
+    /// <summary>The traveller's visible garments (TravellerLook.Garments); none and no face means no look menu.</summary>
     public IReadOnlyList<Garment> garments;
+
+    /// <summary>True when the look menu offers the traveller's face (a paper of theirs shows a photo; the document design spec, D8).</summary>
+    public bool face;
 
     /// <summary>The traveller's answer to the desk's waiver pad (CaseInstance.waiverPadReply, resolved at generation: Waivers.PadReply).</summary>
     public WaiverPadReply padReply = WaiverPadReply.NotNeeded;
@@ -205,7 +208,9 @@ public static class InterviewScript
     /// "look" when the traveller has a visible garment, then "dlg:{id}" per
     /// dialog (one-shot). Ask: "back" first (so an overlong menu can never hide
     /// the way back), then "q:{id}" per question the traveller has an answer
-    /// for (one-shot), then "smalltalk". Look: "back" first, then "look:{i}"
+    /// for (one-shot), then "smalltalk". Look: "back" first, then "look:face"
+    /// when a paper shows a photo (InspectFace, never one-shot, no line; the
+    /// document design spec, D8), then "look:{i}"
     /// per garment, labelled with the item's name (InspectGarment, never
     /// one-shot, no line). Authored nodes become "{dialogId}/{nodeId}" and their
     /// choices "{dialogId}.{choiceId}" (the desk speaks the label); every
@@ -310,6 +315,8 @@ public static class InterviewScript
 
         var look = new DialogNode { Id = LookNodeId };
         look.Choices.Add(new DialogChoice { Id = "back", Label = lines.backLabel, Next = HubNodeId, Kind = DialogChoiceKind.Back });
+        if (c != null && c.face)
+            look.Choices.Add(new DialogChoice { Id = "look:face", Label = lines.faceLabel, Action = DialogAction.InspectFace, Kind = DialogChoiceKind.Look });
         IReadOnlyList<Garment> garments = c != null && c.garments != null ? c.garments : new Garment[0];
         for (int i = 0; i < garments.Count; i++)
             if (garments[i] != null)

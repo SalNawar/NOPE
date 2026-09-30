@@ -2,12 +2,12 @@ using System;
 
 /// <summary>
 /// The blocks a form is made of (PC spec FO2). Serialized in every form
-/// asset as an int, so the values are fixed: 14 (Masthead) and 15 (Headline)
+/// asset as an int, so the values are fixed (16 is SealGrid): 14 (Masthead) and 15 (Headline)
 /// are held for the Internet's sites.
 /// </summary>
 public enum FormBlockKind
 {
-    /// <summary>The agency seal (behind), the agency and programme lines, the form number and the title.</summary>
+    /// <summary>The agency and programme lines, the form number and the title; the seal faint behind them, or, when the block names a field (a document's Seal field, the document design spec D4), the issuing office's seal printed at the header's right as a pickable box.</summary>
     Header = 0,
 
     /// <summary>A numbered heading bar ("1  DISPLACED PERSON"): the block's text on a band.</summary>
@@ -47,14 +47,20 @@ public enum FormBlockKind
     Footer = 12,
 
     /// <summary>The next page starts here (fixed pages); PageOf counts pages at these.</summary>
-    PageBreak = 13
+    PageBreak = 13,
+
+    /// <summary>The Seal Register's grid (the document design spec, D4): FormData.Seals, three to a row, each seal pictured over its office's name, each a slot of the block's slot (its Row the seal's place).</summary>
+    SealGrid = 16
 }
 
 /// <summary>The named content slots a form's cells and blocks read.</summary>
 public static class FormSlots
 {
-    /// <summary>The traveller's 4:5 photo (a cell).</summary>
+    /// <summary>The traveller's 4:5 photo (a cell; a document's photo cell also names its Photo field, so the photo is a pickable box: the document design spec, D8).</summary>
     public const string Photo = "photo";
+
+    /// <summary>The Seal Register's seals (a SealGrid block's slot; FormData.Seals).</summary>
+    public const string Seals = "seals";
 }
 
 /// <summary>One box of a FieldRow (PC spec FO2): a template field, or a named slot such as the photo.</summary>
@@ -102,7 +108,7 @@ public sealed class FormBlock
     /// <summary>A Checkboxes block's options.</summary>
     public string[] options = new string[0];
 
-    /// <summary>The template field a Checkboxes or Signature block shows, or -1.</summary>
+    /// <summary>The template field a Checkboxes, Signature or Header block shows (a header's: the paper's seal), or -1.</summary>
     public int field = -1;
 
     /// <summary>The content slot a Table's rows, a Paragraph's text, a page kind's Signature or a RecordGroups block's picks come from.</summary>
@@ -134,6 +140,9 @@ public sealed class FormSpec
     /// <summary>The blocks, top to bottom.</summary>
     public FormBlock[] blocks = new FormBlock[0];
 
+    /// <summary>The form's silhouette (the document design spec, D1): its frame, colours, aspect and size on the desk.</summary>
+    public FormLook look = new FormLook();
+
     /// <summary>How many pages the form has (one more than its page breaks).</summary>
     public int PageCount
     {
@@ -163,7 +172,7 @@ public sealed class FormSpec
         return -1;
     }
 
-    /// <summary>The template fields a block shows: a FieldRow's cells' fields, a Checkboxes or Signature block's field (none for a null block).</summary>
+    /// <summary>The template fields a block shows: a FieldRow's cells' fields, a Checkboxes, Signature or Header block's field (a header's is its seal; none for a null block).</summary>
     public static int[] FieldsOf(FormBlock block)
     {
         if (block == null)
@@ -176,6 +185,6 @@ public sealed class FormSpec
                     fields.Add(c.field);
             return fields.ToArray();
         }
-        return (block.kind == FormBlockKind.Checkboxes || block.kind == FormBlockKind.Signature) && block.field >= 0 ? new[] { block.field } : new int[0];
+        return (block.kind == FormBlockKind.Checkboxes || block.kind == FormBlockKind.Signature || block.kind == FormBlockKind.Header) && block.field >= 0 ? new[] { block.field } : new int[0];
     }
 }

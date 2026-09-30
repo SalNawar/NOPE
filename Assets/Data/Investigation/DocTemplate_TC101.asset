@@ -27,6 +27,10 @@ MonoBehaviour:
     label: Visa Class
   - category: 13
     label: Valid Until
+  - category: 26
+    label: Issuing Seal
+  - category: 27
+    label: Photo
   handOver: 1
   showsPhoto: 1
   form:
@@ -40,7 +44,7 @@ MonoBehaviour:
       columns: []
       shares: []
       options: []
-      field: -1
+      field: 6
       slot: 
     - kind: 1
       text: 1  TRAVELLER
@@ -58,7 +62,7 @@ MonoBehaviour:
         caption: 
         span: 8
         rows: 1
-      - field: -1
+      - field: 7
         slot: photo
         caption: 
         span: 4
@@ -141,3 +145,9 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
+    look:
+      frame: 1
+      accent: '#1C3A78'
+      paper: '#EDF1F6'
+      aspect: 0.72
+      scale: 0.86

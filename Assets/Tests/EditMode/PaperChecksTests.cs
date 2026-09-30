@@ -139,11 +139,11 @@ public class PaperChecksTests
     }
 
     [Test]
-    public void IsCompared_EverythingButANameAndTheDirectiveOnlyDates()
+    public void IsCompared_EverythingButANameTheDirectiveOnlyDatesAndTheVisualChecks()
     {
         foreach (ClueCategory category in (ClueCategory[])System.Enum.GetValues(typeof(ClueCategory)))
         {
-            bool expected = category != ClueCategory.Name && !Forgery.IsDirectiveOnly(category);
+            bool expected = category != ClueCategory.Name && !Forgery.IsDirectiveOnly(category) && category != ClueCategory.Seal && category != ClueCategory.Photo;
             Assert.AreEqual(expected, PaperChecks.IsCompared(category), category.ToString());
         }
     }

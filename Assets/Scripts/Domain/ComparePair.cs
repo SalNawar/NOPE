@@ -130,6 +130,12 @@ public static class PickKeys
     /// <summary>A Citizen Records row by the record it belongs to (CitizenRecord.Id: its number, else its name) and its category ("record:552-1804-33:BirthDate"), so two records' rows are two picks (audit R4-009).</summary>
     public static string Record(ClueCategory category, string recordId) => "record:" + recordId + ":" + category;
 
+    /// <summary>The traveller's face (the look menu; the document design spec, D8): one per case.</summary>
+    public const string Face = "face";
+
+    /// <summary>A Seal Register row: the seal of office <paramref name="officeId"/> (the document design spec, D4).</summary>
+    public static string Seal(string officeId) => "seal:" + officeId;
+
     /// <summary>Reads a Field key back: true with its document's and field's indices.</summary>
     public static bool TryField(string key, out int document, out int field)
     {

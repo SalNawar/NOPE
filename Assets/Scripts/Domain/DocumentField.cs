@@ -39,4 +39,7 @@ public sealed class DocumentField
 
     /// <summary>True if this value is a liar's tell (anachronistic for the claim).</summary>
     public bool isAnachronism;
+
+    /// <summary>A seal field's office (the document design spec, D4): the office that issues the paper's form (agency.offices), whose Seal Register row the seal is held against; blank on every other field.</summary>
+    public string issuer = string.Empty;
 }

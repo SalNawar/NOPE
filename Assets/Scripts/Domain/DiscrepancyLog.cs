@@ -19,7 +19,10 @@ public enum EvidenceKind
     Answer,
 
     /// <summary>A garment the traveller wears (the traveller wheel's look menu).</summary>
-    Appearance
+    Appearance,
+
+    /// <summary>The traveller at the desk as seen (the Look menu's face; the document design spec, D8): the truth a paper's photo is held against.</summary>
+    Person
 }
 
 /// <summary>How a discrepancy was proved.</summary>
@@ -39,7 +42,10 @@ public enum DiscrepancyProof
     /// (PaperChecks; redesign phase 7, traveller types L4): one of them is
     /// forged, and the report names neither.
     /// </summary>
-    CrossMismatch
+    CrossMismatch,
+
+    /// <summary>A paper's photo shows someone other than the traveller at the desk (the document design spec, D8): a statement against the person.</summary>
+    PersonMismatch
 }
 
 /// <summary>
@@ -77,6 +83,9 @@ public struct CompareEvidence
     /// <summary>Document side: the paper the field is on, by its index in the case (EvidencePicks.ForField; -1 when unknown, 0 when unset). Two fields of one paper never cross-prove.</summary>
     public int document;
 
+    /// <summary>A seal's office (the document design spec, D4): a paper's seal names the office that issues its form (DocumentField.issuer), a Seal Register row the office it pictures; blank for everything else.</summary>
+    public string issuer;
+
     /// <summary>Evidence for a clicked document-field row of paper <paramref name="document"/> (its index in the case; -1 when unknown).</summary>
     public static CompareEvidence FromDocumentField(DocumentField field, int document) => new CompareEvidence
     {
@@ -84,7 +93,8 @@ public struct CompareEvidence
         category = field.category,
         value = field.value,
         isAnachronism = field.isAnachronism,
-        document = document
+        document = document,
+        issuer = field.issuer
     };
 
     /// <summary>Evidence for a clicked reference-book entry row.</summary>
@@ -96,6 +106,24 @@ public struct CompareEvidence
         entryNationId = nationId,
         entryEraId = eraId,
         entryOriginLabel = originLabel
+    };
+
+    /// <summary>Evidence for a Seal Register row: <paramref name="office"/>'s true seal (its description, Seals.Describe), a truth source named <paramref name="officeName"/>.</summary>
+    public static CompareEvidence ForSealRow(string value, string office, string officeName) => new CompareEvidence
+    {
+        kind = EvidenceKind.ReferenceEntry,
+        category = ClueCategory.Seal,
+        value = value,
+        issuer = office,
+        entryOriginLabel = officeName
+    };
+
+    /// <summary>Evidence for the traveller at the desk as seen: who they are (Looks.IdentityKey), the truth a photo is held against.</summary>
+    public static CompareEvidence ForPerson(string identity) => new CompareEvidence
+    {
+        kind = EvidenceKind.Person,
+        category = ClueCategory.Photo,
+        value = identity
     };
 
     /// <summary>Evidence for a clicked field of <paramref name="owner"/>'s citizen record.</summary>
@@ -171,7 +199,8 @@ public sealed class Discrepancy
     /// foreignOrigin / recordMismatch + "." + said (an answer), worn (a garment
     /// the traveller wears) or papers (any other statement); a cross proof is
     /// always two papers, so "deviation.crossMismatch.papers" whatever the
-    /// statement kind. The English templates live in world_source.json
+    /// statement kind; a photo against the person is always a paper's,
+    /// "deviation.personMismatch.papers". The English templates live in world_source.json
     /// ui.strings ({0} = the category word, {1} = the stated value, {2} = ReportOther).
     /// </summary>
     public static string ReportKeyFor(DiscrepancyProof proof, EvidenceKind statement)
@@ -179,8 +208,9 @@ public sealed class Discrepancy
         string how = proof == DiscrepancyProof.ForeignOrigin ? "foreignOrigin"
                    : proof == DiscrepancyProof.RecordMismatch ? "recordMismatch"
                    : proof == DiscrepancyProof.CrossMismatch ? "crossMismatch"
+                   : proof == DiscrepancyProof.PersonMismatch ? "personMismatch"
                    : "claimMismatch";
-        string who = proof == DiscrepancyProof.CrossMismatch ? "papers"
+        string who = proof == DiscrepancyProof.CrossMismatch || proof == DiscrepancyProof.PersonMismatch ? "papers"
                    : statement == EvidenceKind.Answer ? "said" : statement == EvidenceKind.Appearance ? "worn" : "papers";
         return "deviation." + how + "." + who;
     }
@@ -236,10 +266,18 @@ public sealed class DiscrepancyLog
     /// entry, or a field of the traveller's own citizen record that holds a
     /// value) of the same category; two spoken or worn statements, an answer
     /// against a paper (a hint, never a proof) or two truths prove nothing.
+    /// A seal or a photo (the document design spec, D4, D8) proves only its
+    /// own way: SealProof against a Seal Register row, PhotoProof against the
+    /// person; never across papers.
     /// Pure: no log changes.
     /// </summary>
     public static Discrepancy Prove(CompareEvidence a, CompareEvidence b, string claimedNationId, string claimedEraId, string travellerName)
     {
+        if (a.category == ClueCategory.Seal || b.category == ClueCategory.Seal)
+            return SealProof(a, b);
+        if (a.category == ClueCategory.Photo || b.category == ClueCategory.Photo)
+            return PhotoProof(a, b);
+
         if (a.kind == EvidenceKind.DocumentField && b.kind == EvidenceKind.DocumentField)
             return CrossProof(a, b);
 
@@ -319,6 +357,72 @@ public sealed class DiscrepancyLog
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Seal proof (the document design spec, D4): a paper's seal that is a
+    /// tell against a Seal Register row. MISMATCH when the row is the office
+    /// that issues the paper's form (the issuer) and the seals differ; MATCH
+    /// when the row is another office's and the seals are the same (the paper
+    /// carries that office's seal: its name is where it belongs). Anything
+    /// else (two papers, a seal and another category, an honest seal) proves
+    /// nothing.
+    /// </summary>
+    private static Discrepancy SealProof(CompareEvidence a, CompareEvidence b)
+    {
+        CompareEvidence statement = a.kind == EvidenceKind.DocumentField ? a : b;
+        CompareEvidence truth = a.kind == EvidenceKind.DocumentField ? b : a;
+        if (statement.kind != EvidenceKind.DocumentField || truth.kind != EvidenceKind.ReferenceEntry ||
+            statement.category != ClueCategory.Seal || truth.category != ClueCategory.Seal || !statement.isAnachronism ||
+            string.IsNullOrEmpty(statement.issuer) || string.IsNullOrEmpty(truth.issuer))
+            return null;
+
+        bool sameOffice = statement.issuer == truth.issuer;
+        bool same = Values.Match(statement.value, truth.value);
+        if (sameOffice && !same)
+            return new Discrepancy
+            {
+                category = ClueCategory.Seal,
+                documentValue = statement.value,
+                expectedValue = truth.value,
+                provedBy = DiscrepancyProof.ClaimMismatch,
+                source = EvidenceKind.DocumentField
+            };
+        if (!sameOffice && same)
+            return new Discrepancy
+            {
+                category = ClueCategory.Seal,
+                documentValue = statement.value,
+                actualOrigin = truth.entryOriginLabel,
+                provedBy = DiscrepancyProof.ForeignOrigin,
+                source = EvidenceKind.DocumentField
+            };
+        return null;
+    }
+
+    /// <summary>
+    /// Photo proof (the document design spec, D8): a paper's photo that is a
+    /// tell against the traveller at the desk (the Look menu's face) when they
+    /// are not the same person. Anything else (two photos, a photo and
+    /// another category, an honest photo) proves nothing.
+    /// </summary>
+    private static Discrepancy PhotoProof(CompareEvidence a, CompareEvidence b)
+    {
+        CompareEvidence statement = a.kind == EvidenceKind.DocumentField ? a : b;
+        CompareEvidence person = a.kind == EvidenceKind.DocumentField ? b : a;
+        if (statement.kind != EvidenceKind.DocumentField || person.kind != EvidenceKind.Person ||
+            statement.category != ClueCategory.Photo || person.category != ClueCategory.Photo ||
+            !statement.isAnachronism || Values.Match(statement.value, person.value))
+            return null;
+
+        return new Discrepancy
+        {
+            category = ClueCategory.Photo,
+            documentValue = statement.value,
+            expectedValue = person.value,
+            provedBy = DiscrepancyProof.PersonMismatch,
+            source = EvidenceKind.DocumentField
+        };
     }
 
     /// <summary>

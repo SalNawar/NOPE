@@ -25,6 +25,8 @@ MonoBehaviour:
     label: Incident
   - category: 12
     label: Departure
+  - category: 26
+    label: Issuing Seal
   handOver: 0
   showsPhoto: 0
   form:
@@ -38,7 +40,7 @@ MonoBehaviour:
       columns: []
       shares: []
       options: []
-      field: -1
+      field: 5
       slot: 
     - kind: 1
       text: 1  RETURNEE
@@ -122,3 +124,9 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
+    look:
+      frame: 1
+      accent: '#A0521D'
+      paper: '#F8EFE3'
+      aspect: 0
+      scale: 0.92

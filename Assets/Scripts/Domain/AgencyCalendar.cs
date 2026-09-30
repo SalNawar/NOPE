@@ -53,6 +53,12 @@ public sealed class AgencyContent
     /// <summary>The hall's portals (agency.portals: one per ring of the art; the portals spec v3 PO1-PO3; PortalSchedule.PortalProblems checks them), in authored order.</summary>
     public List<PortalSpec> portals = new List<PortalSpec>();
 
+    /// <summary>The issuing offices (agency.offices; the document design spec, D4): each prints its seal on the forms it issues and its name as their programme line; the Seal Register pictures their seals (Seals.Problems checks them).</summary>
+    public List<AgencyOffice> offices = new List<AgencyOffice>();
+
+    /// <summary>The published fault canon (agency.faults; the document design spec, D9): every fault a document can carry; the case factory draws only from it (FaultCanon.Problems checks it).</summary>
+    public List<FaultEntry> faults = new List<FaultEntry>();
+
     /// <summary>The printed names of the employers of <paramref name="eraId"/>, in authored order.</summary>
     public List<string> EmployersOf(string eraId) =>
         (employers ?? new List<Employer>()).Where(e => e != null && e.era == eraId).Select(e => e.name).ToList();

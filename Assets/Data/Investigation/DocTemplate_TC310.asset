@@ -27,6 +27,8 @@ MonoBehaviour:
     label: Waiver No.
   - category: 22
     label: Signature
+  - category: 26
+    label: Issuing Seal
   handOver: 0
   showsPhoto: 0
   askGroup: 
@@ -42,7 +44,7 @@ MonoBehaviour:
       columns: []
       shares: []
       options: []
-      field: -1
+      field: 6
       slot: 
     - kind: 1
       text: 1  SIGNATORY AND TERMS
@@ -125,3 +127,9 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
+    look:
+      frame: 3
+      accent: '#8A1C1C'
+      paper: '#F6ECE7'
+      aspect: 0
+      scale: 1.05

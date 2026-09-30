@@ -25,8 +25,9 @@ public readonly struct RecordForm
 /// year maker), the agency's transponder models and today's numbers (the
 /// transponder and number makers), the status a debtor's tourist papers pose
 /// as (L4), the era's employers and today's other open places (the
-/// contract makers, L5), the waiver prefix (a fake waiver's number, L3) and
-/// the proofs of means (a forged policy's prefix, L10).
+/// contract makers, L5), the waiver prefix (a fake waiver's number, L3),
+/// the proofs of means (a forged policy's prefix, L10) and the published
+/// fault canon whose variants the lies draw from (D9).
 /// </summary>
 public sealed class RecordLieContext
 {
@@ -59,13 +60,17 @@ public sealed class RecordLieContext
 
     /// <summary>The agency's proofs of means (agency.proofs): a forged policy is a fresh number with its proof's prefix (L10).</summary>
     public IReadOnlyList<ProofOfMeans> Proofs;
+
+    /// <summary>The published fault canon (agency.faults; the document design spec, D9): each record lie's variants are its rows (FaultCanon.Variants); none, and no lie can show, without it.</summary>
+    public IReadOnlyList<FaultEntry> Canon;
 }
 
 /// <summary>
 /// The record lies (traveller types L2, §6.2-6.3): a 2150 citizen who is who
 /// they say, from where they say, but whose papers forge fields their own
 /// Citizen Account disproves. Each lie names its forged fields (form,
-/// category) per variant, and each record category has a false-value maker,
+/// category) per variant in the published fault canon (agency.faults; the
+/// document design spec, D9), and each record category has a false-value maker,
 /// so every forged field differs from the account and is provable
 /// (Forgery.IsRecordCategory). Draws on the traveller's lie stream after
 /// Lies.Roll, in this order: the variant (one Range draw when two or more
@@ -111,103 +116,27 @@ public static class RecordLies
         /// <summary>True when the variant shows without it: forged only when its form is carried and prints it.</summary>
         public readonly bool Optional;
 
-        /// <summary>Creates a named field.</summary>
-        public Forged(string form, ClueCategory category, bool optional = false)
+        /// <summary>A field from its canon row.</summary>
+        public Forged(FaultEntry row)
         {
-            Form = form;
-            Category = category;
-            Optional = optional;
+            Form = row.form;
+            row.TryField(out Category);
+            Optional = row.optional;
         }
     }
-
-    /// <summary>Poor posing as rich, forged (L1): the visa's class and the manifest's class read Premium.</summary>
-    private static readonly Forged[] RichForged =
-    {
-        new Forged(Visa, ClueCategory.AccountStatus),
-        new Forged(Manifest, ClueCategory.TransponderClass)
-    };
-
-    /// <summary>Poor posing as rich, borrowed (L1): the visa's class reads Premium and the manifest is a rich citizen's (their ID, transponder and class).</summary>
-    private static readonly Forged[] RichBorrowed =
-    {
-        new Forged(Visa, ClueCategory.AccountStatus),
-        new Forged(Manifest, ClueCategory.CitizenId),
-        new Forged(Manifest, ClueCategory.TransponderId),
-        new Forged(Manifest, ClueCategory.TransponderClass)
-    };
-
-    /// <summary>A doctored identity (L2), the ID: the visa's Citizen ID is another number (so it also contradicts the manifest's).</summary>
-    private static readonly Forged[] DoctoredId = { new Forged(Visa, ClueCategory.CitizenId) };
-
-    /// <summary>A doctored identity (L2), the year: the visa's birth date has another year.</summary>
-    private static readonly Forged[] DoctoredYear = { new Forged(Visa, ClueCategory.BirthDate) };
-
-    /// <summary>A debtor posing as a tourist (L4), with rich papers: the visa's class and the manifest's class read the posed status's (Premium); the same fields as the forged rich set.</summary>
-    private static readonly Forged[] DebtorAsRich = RichForged;
 
     /// <summary>
-    /// A debtor posing as a tourist (L4), with poor papers: the visa's class
-    /// reads the posed status (Standard) and the waiver's debt a sliver of the
-    /// real one; the carried proof of means, which the account does not hold
-    /// (AccountRequest.ForgedProof), prints the posed class too where it has
-    /// one (the credit agreement and the proof of funds).
+    /// Each record lie's variants, in draw order (the variant draw indexes the
+    /// ones that can show): the published canon's (the document design spec,
+    /// D9; world_source.json agency.faults, FaultCanon.Variants), each
+    /// variant's rows in canon order; a row whose field names no category is
+    /// left out (FaultCanon.Problems reports it).
     /// </summary>
-    private static readonly Forged[] DebtorAsPoor =
-    {
-        new Forged(Visa, ClueCategory.AccountStatus),
-        new Forged(Waiver, ClueCategory.Debt),
-        new Forged(CreditAgreement, ClueCategory.AccountStatus, optional: true),
-        new Forged(ProofOfFunds, ClueCategory.AccountStatus, optional: true)
-    };
-
-    /// <summary>A forged contract (L5), the wage: the contract's day wage is 1.5 to 3 times the registered one.</summary>
-    private static readonly Forged[] ContractWage = { new Forged(Contract, ClueCategory.Wage) };
-
-    /// <summary>A forged contract (L5), the term: the contract's term is a quarter to six tenths of the registered one.</summary>
-    private static readonly Forged[] ContractTerm = { new Forged(Contract, ClueCategory.Term) };
-
-    /// <summary>A forged contract (L5), the employer: another employer of the era.</summary>
-    private static readonly Forged[] ContractEmployer = { new Forged(Contract, ClueCategory.Employer) };
-
-    /// <summary>A forged contract (L5), the worksite: another place open today.</summary>
-    private static readonly Forged[] ContractWorksite = { new Forged(Contract, ClueCategory.Destination) };
-
-    /// <summary>A fake waiver (L3), the number: a waiver number the account never registered.</summary>
-    private static readonly Forged[] WaiverNumber = { new Forged(Waiver, ClueCategory.WaiverNo) };
-
-    /// <summary>A fake waiver (L3), the transponder: made out for another unit of the account's class (so it also contradicts the manifest).</summary>
-    private static readonly Forged[] WaiverTransponder = { new Forged(Waiver, ClueCategory.TransponderId) };
-
-    /// <summary>A forged proof of means (L10), a credit line: the agreement's line is 3 to 10 times the one on file.</summary>
-    private static readonly Forged[] ProofCredit = { new Forged(CreditAgreement, ClueCategory.Credit) };
-
-    /// <summary>A forged proof of means (L10), savings: the funds held are 3 to 10 times those on file.</summary>
-    private static readonly Forged[] ProofFunds = { new Forged(ProofOfFunds, ClueCategory.Funds) };
-
-    /// <summary>A forged proof of means (L10), a policy: a policy number the account does not hold.</summary>
-    private static readonly Forged[] ProofPolicy = { new Forged(Insurance, ClueCategory.PolicyNo) };
-
-    /// <summary>Each record lie's variants, in draw order (the variant draw indexes the ones that can show).</summary>
-    private static IReadOnlyList<Forged[]> VariantsOf(LieKind kind)
-    {
-        switch (kind)
-        {
-            case LieKind.PoorPosingAsRich:
-                return new[] { RichForged, RichBorrowed };
-            case LieKind.DoctoredIdentity:
-                return new[] { DoctoredId, DoctoredYear };
-            case LieKind.DebtorPosingAsTourist:
-                return new[] { DebtorAsRich, DebtorAsPoor };
-            case LieKind.ForgedContract:
-                return new[] { ContractWage, ContractTerm, ContractEmployer, ContractWorksite };
-            case LieKind.FakeWaiver:
-                return new[] { WaiverNumber, WaiverTransponder };
-            case LieKind.ForgedProof:
-                return new[] { ProofCredit, ProofFunds, ProofPolicy };
-            default:
-                return new Forged[0][];
-        }
-    }
+    private static List<Forged[]> VariantsOf(LieKind kind, IReadOnlyList<FaultEntry> canon) =>
+        FaultCanon.Variants(canon, kind)
+            .Select(v => v.Rows.Where(r => r.TryField(out _)).Select(r => new Forged(r)).ToArray())
+            .Where(v => v.Length > 0)
+            .ToList();
 
     /// <summary>
     /// Plans a rolled record lie of <paramref name="kind"/> against
@@ -227,7 +156,7 @@ public static class RecordLies
 
         forms = forms ?? new RecordForm[0];
         var showable = new List<Forged[]>();
-        foreach (Forged[] variant in VariantsOf(kind))
+        foreach (Forged[] variant in VariantsOf(kind, context.Canon))
             if (variant.All(f => f.Optional || Forgeable(kind, f, forms, account, context)))
                 showable.Add(variant);
 

@@ -27,7 +27,10 @@ public enum DialogAction
     InspectGarment,
 
     /// <summary>The traveller signs a blank Stranding Waiver from the desk's pad and the desk files it (the endings and strandings spec §7.3): a valid signed waiver on file, the shift clock spends its minutes.</summary>
-    SignWaiver
+    SignWaiver,
+
+    /// <summary>The player looks at the traveller's face (the document design spec, D8): who they are goes into the compare bar, to hold a paper's photo against.</summary>
+    InspectFace
 }
 
 /// <summary>

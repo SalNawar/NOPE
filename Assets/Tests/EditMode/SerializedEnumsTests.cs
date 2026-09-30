@@ -7,7 +7,7 @@ using NUnit.Framework;
 /// </summary>
 public class SerializedEnumsTests
 {
-    /// <summary>ClueCategory: stored in templates, books, places, effects, the config and saves (FactEdit, CarryRecord); phase 3 appends CitizenId, Destination, Incident, DepartureDate and Expiry; phase 6 AccountStatus, TransponderId, TransponderClass and Debt; phase 8 WaiverNo, Credit, Funds, PolicyNo and Signature; phase 9 Employer, Term and Wage.</summary>
+    /// <summary>ClueCategory: stored in templates, books, places, effects, the config and saves (FactEdit, CarryRecord); phase 3 appends CitizenId, Destination, Incident, DepartureDate and Expiry; phase 6 AccountStatus, TransponderId, TransponderClass and Debt; phase 8 WaiverNo, Credit, Funds, PolicyNo and Signature; phase 9 Employer, Term and Wage; the document design spec Seal and Photo.</summary>
     [Test]
     public void ClueCategory_KeepsItsSerializedInts()
     {
@@ -37,7 +37,9 @@ public class SerializedEnumsTests
         Assert.AreEqual(23, (int)ClueCategory.Employer);
         Assert.AreEqual(24, (int)ClueCategory.Term);
         Assert.AreEqual(25, (int)ClueCategory.Wage);
-        Assert.AreEqual(26, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
+        Assert.AreEqual(26, (int)ClueCategory.Seal);
+        Assert.AreEqual(27, (int)ClueCategory.Photo);
+        Assert.AreEqual(28, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
     }
 
     /// <summary>CitizenStatus: stored in the content library's account ranges (agency.accounts.statuses).</summary>
@@ -72,7 +74,9 @@ public class SerializedEnumsTests
         Assert.AreEqual(6, (int)LieKind.ForgedContract);
         Assert.AreEqual(7, (int)LieKind.FakeWaiver);
         Assert.AreEqual(8, (int)LieKind.ForgedProof);
-        Assert.AreEqual(9, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
+        Assert.AreEqual(9, (int)LieKind.ForgedSeal);
+        Assert.AreEqual(10, (int)LieKind.SwappedPhoto);
+        Assert.AreEqual(11, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
     }
 
     /// <summary>TravelRuleType: stored in TravelRuleSO.type (world_source.json rules[].type); phase 10 appends DressForDestination, phase 7 Procedure, phase 12 ReturnHome, phase 11 NoPresentGoods and PaperDates, phase 9 PaperSet and DebtStanding.</summary>
@@ -349,5 +353,27 @@ public class SerializedEnumsTests
         Assert.AreEqual(4, (int)LookArtFallbackStep.AnyPlace);
         Assert.AreEqual(5, (int)LookArtFallbackStep.NeutralExpression);
         Assert.AreEqual(6, System.Enum.GetValues(typeof(LookArtFallbackStep)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>FormFrame: stored in every form asset's look (DocTemplate_*, Form_*; the document design spec, D1).</summary>
+    [Test]
+    public void FormFrame_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)FormFrame.Plain);
+        Assert.AreEqual(1, (int)FormFrame.TopBand);
+        Assert.AreEqual(2, (int)FormFrame.SideBand);
+        Assert.AreEqual(3, (int)FormFrame.Framed);
+        Assert.AreEqual(4, (int)FormFrame.Ticket);
+        Assert.AreEqual(5, (int)FormFrame.BottomBand);
+        Assert.AreEqual(6, System.Enum.GetValues(typeof(FormFrame)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>FormBlockKind: stored in every form asset; 14 and 15 are held for the Internet's sites, 16 is the Seal Register's grid (the document design spec, D4).</summary>
+    [Test]
+    public void FormBlockKind_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)FormBlockKind.Header);
+        Assert.AreEqual(13, (int)FormBlockKind.PageBreak);
+        Assert.AreEqual(16, (int)FormBlockKind.SealGrid);
     }
 }

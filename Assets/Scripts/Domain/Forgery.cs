@@ -21,6 +21,14 @@ public static class Forgery
         category == ClueCategory.DepartureDate || category == ClueCategory.Expiry || category == ClueCategory.Signature;
 
     /// <summary>
+    /// True for a visual check (the document design spec, D4, D8): a paper's
+    /// seal, held against the Seal Register, or its photo, held against the
+    /// traveller at the desk; never a place fact, a record category, a
+    /// spoken answer or a place lie's tell (IsProvableCategory is false).
+    /// </summary>
+    public static bool IsVisual(ClueCategory category) => category == ClueCategory.Seal || category == ClueCategory.Photo;
+
+    /// <summary>
     /// True for a record category: a value the traveller's own record (the
     /// Citizen Account or the Displacement Registry entry) holds and proves,
     /// whatever the books: the birth date, the agency number, the destination,
@@ -56,13 +64,14 @@ public static class Forgery
     /// <summary>
     /// Whether any tell in this category could ever be proven: the one rule
     /// interview questions and tells share. Never a name; never a
-    /// directive-only date; always a record category (the traveller's own
+    /// directive-only date; never a visual check (IsVisual: the Seal
+    /// Register is a book, but no place's fact); always a record category (the traveller's own
     /// record proves it, redesign phase 7); a place fact exactly when
     /// <paramref name="bookCategories"/> is non-null and holds the category.
     /// </summary>
     public static bool IsProvableCategory(ClueCategory category, ICollection<ClueCategory> bookCategories)
     {
-        if (category == ClueCategory.Name || IsDirectiveOnly(category))
+        if (category == ClueCategory.Name || IsDirectiveOnly(category) || IsVisual(category))
             return false;
         if (IsRecordCategory(category))
             return true;

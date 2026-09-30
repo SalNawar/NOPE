@@ -282,12 +282,12 @@ public sealed class ContentLibrarySO : ScriptableObject
         }
     }
 
-    /// <summary>Categories that have a reference book (only these can carry a place-fact tell, on papers or in an answer).</summary>
+    /// <summary>Categories that have a reference book of place facts (only these can carry a place-fact tell, on papers or in an answer); the Seal Register pictures the offices' seals, no place's fact (Forgery.IsVisual).</summary>
     public HashSet<ClueCategory> ReferenceBookCategories()
     {
         var categories = new HashSet<ClueCategory>();
         foreach (ReferenceBookSO book in ReferenceBooks)
-            if (book != null)
+            if (book != null && !Forgery.IsVisual(book.category))
                 categories.Add(book.category);
         return categories;
     }
@@ -338,6 +338,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>Public read-only access to nation-era profiles.</summary>
     public IReadOnlyList<NationEraProfileSO> Profiles => nationEraProfiles ?? System.Array.Empty<NationEraProfileSO>();
+
+    /// <summary>The longest origin label of every place, in characters: a document's Destination box keeps its room (FieldLengths.Longest; the document design spec, D2) and the content validator probes it.</summary>
+    public int LongestOriginLabel => Profiles.Where(p => p != null).Select(p => p.OriginLabel.Length).DefaultIfEmpty(0).Max();
 
     /// <summary>Public read-only access to archetypes.</summary>
     public IReadOnlyList<ArchetypeSO> Archetypes => archetypes ?? System.Array.Empty<ArchetypeSO>();

@@ -13,9 +13,14 @@ using UnityEngine.UI;
 /// follows it (FormLayout.Layout): a document copy takes 520 u, a page H =
 /// 679 u tall (the PC UX redesign: a split pane holds it whole); a page kind in the Investigation app's pane takes the pane's
 /// width, so its table cells reach 13 px at 720p (from about 564 u); a flow
-/// page grows with its rows. The view draws that placed form: the paper (its
-/// kind's face on a document when the art exists, ArtSlots.PaperFaces), the
-/// seal behind the header, the fills and bands under the slots' tints and
+/// page grows with its rows. A document whose look is narrower (the document
+/// design spec, D1: FormLook.aspect) is drawn that much narrower at the same
+/// page height, so its print keeps its size. The view draws that placed form:
+/// the paper (its kind's face on a document when the art exists,
+/// ArtSlots.PaperFaces, else the look's tint), the seal faint behind the
+/// header, or each named seal (the issuing office's in a document's header,
+/// the Seal Register's) as its outline in its ink with its legend over it
+/// (SealArt, pooled clones of the seal), the frame's bands, the fills and bands under the slots' tints and
 /// every outline, rule, barcode bar, tick and the stamp area's dash over them
 /// (FormPaint's quads, which the desk paper prints too, one FormStrokes graphic
 /// per layer), a TextMeshPro per text cloned from one template and styled by
@@ -111,6 +116,12 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     }
 
     private readonly List<TextMeshProUGUI> _texts = new List<TextMeshProUGUI>();
+
+    /// <summary>The named seals' pooled images (clones of the seal) and their legends.</summary>
+    private readonly List<(Image mark, TextMeshProUGUI legend)> _seals = new List<(Image, TextMeshProUGUI)>();
+
+    /// <summary>A document's width at the style's aspect (the width of the first document shown), which a narrower look scales down.</summary>
+    private float _documentWidth;
     private readonly List<SlotPart> _parts = new List<SlotPart>();
     private readonly List<LinkPart> _links = new List<LinkPart>();
 
@@ -199,20 +210,31 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
             return null;
 
         var rt = (RectTransform)transform;
+        FormLook look = spec != null && spec.look != null ? spec.look : new FormLook();
+        if (spec != null && spec.fixedPage)
+        {
+            if (_documentWidth <= 0f)
+                _documentWidth = width > 0f ? width : rt.rect.width;
+            width = (width > 0f ? width : _documentWidth) * look.AspectOr(style.metrics.aspect) / style.metrics.aspect;
+        }
         if (width > 0f)
             rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         _measure ??= new TmpFormText(MeasureText());
         _measure.ScriptOf = scriptOf;
         _form = FormLayout.Layout(spec, data, rt.rect.width, style.metrics, _measure, linkHint != null ? linkSize : 0f);
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _form.Height);
-        ShowArt(spec != null && spec.fixedPage && data != null ? data.FormNumber : null);
+        FormPalette palette = look.Palette(style.Palette());
+        ShowArt(spec != null && spec.fixedPage && data != null ? data.FormNumber : null,
+                string.IsNullOrEmpty(look.paper) ? style.paper : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f));
 
-        int texts = 0;
+        int texts = 0, seals = 0;
         bool sealShown = false, photoShown = false;
         foreach (FormItem item in _form.Items)
         {
             if (item.Kind == FormItemKind.Text)
                 Print(texts++, item);
+            else if (item.Kind == FormItemKind.Seal && seal != null && Seals.TryParse(item.Text, out Seal mark))
+                ShowSeal(seals++, item.Rect, mark);
             else if (item.Kind == FormItemKind.Seal && seal != null)
             {
                 Place(seal.rectTransform, item.Rect);
@@ -227,6 +249,8 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         }
         for (int i = texts; i < _texts.Count; i++)
             _texts[i].gameObject.SetActive(false);
+        for (int i = seals; i < _seals.Count; i++)
+            _seals[i].mark.gameObject.SetActive(false);
         if (seal != null)
             seal.gameObject.SetActive(sealShown);
         if (photoFrame != null)
@@ -234,7 +258,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         if (photoFrameArt != null)
             photoFrameArt.gameObject.SetActive(photoShown && photoFrameArt.sprite != null);
 
-        _quads = FormPaint.Quads(_form, style.Palette(), style.metrics);
+        _quads = FormPaint.Quads(_form, palette, style.metrics);
         if (fills != null)
             fills.Set(_quads, FormPaintLayer.Fill);
         DrawLines();
@@ -294,17 +318,17 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// The form's art when delivered (redesign phase 27, ArtSlots): a
     /// document's face by <paramref name="formNumber"/> (its kind's, else the
     /// agency's plain face) on the paper, the agency seal's on the seal, the
-    /// photo frame's over the photo. A missing file keeps the style's plain
-    /// paper, the code-drawn ring and no frame; a page kind (no number) keeps
-    /// the plain paper.
+    /// photo frame's over the photo. A missing file keeps a plain paper in
+    /// <paramref name="tint"/> (the look's, else the style's), the code-drawn
+    /// ring and no frame; a page kind (no number) keeps the plain paper.
     /// </summary>
-    private void ShowArt(string formNumber)
+    private void ShowArt(string formNumber, Color tint)
     {
         if (paper != null)
         {
             Sprite face = formNumber != null ? SlotArt.Sprite(ArtSlots.PaperFaces(formNumber).ToArray()) : null;
             paper.sprite = face;
-            paper.color = face != null ? Color.white : style.paper;
+            paper.color = face != null ? Color.white : tint;
         }
         if (seal != null)
         {
@@ -338,6 +362,39 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         var all = new List<FormQuad>(_quads);
         all.AddRange(FormPaint.MarkQuads(_form, _marks, FormStyleSO.Rgb(style.analysis), style.metrics));
         lines.Set(all, FormPaintLayer.Line);
+    }
+
+    /// <summary>
+    /// Named seal <paramref name="index"/> (the document design spec, D4): a
+    /// pooled clone of the seal image over <paramref name="rect"/>, its
+    /// outline (SealArt) in its ink, and its legend in bold capitals over it
+    /// (a pooled text of the template), both among the texts, so a seal in a
+    /// box (the Seal Register's) is drawn over the box's fill.
+    /// </summary>
+    private void ShowSeal(int index, FaceRect rect, Seal mark)
+    {
+        if (index >= _seals.Count)
+        {
+            Image image = Instantiate(seal, textsRoot != null ? textsRoot : seal.transform.parent);
+            image.name = "OfficeSeal";
+            image.raycastTarget = false;
+            TextMeshProUGUI legend = Instantiate(textTemplate, textsRoot != null ? textsRoot : textTemplate.transform.parent);
+            legend.name = "SealLegend";
+            legend.raycastTarget = false;
+            _seals.Add((image, legend));
+        }
+        (Image markImage, TextMeshProUGUI text) = _seals[index];
+        markImage.gameObject.SetActive(true);
+        markImage.sprite = SealArt.Sprite(mark.Shape);
+        markImage.color = SealArt.Ink(mark.Ink);
+        Place(markImage.rectTransform, rect);
+        text.gameObject.SetActive(true);
+        _measure.SetFont(text, mark.Legend);
+        TmpFormText.Style(text, FormTextRole.Title, rect.Height * SealArt.LegendShare);
+        text.text = mark.Legend;
+        text.color = SealArt.Ink(mark.Ink);
+        text.alignment = TextAlignmentOptions.Center;
+        Place(text.rectTransform, rect);
     }
 
     /// <summary>Shows the traveller's photo in the photo cell (a null look empties it).</summary>

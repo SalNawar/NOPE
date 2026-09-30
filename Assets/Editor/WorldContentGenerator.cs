@@ -80,6 +80,7 @@ public static partial class WorldContentGenerator
         errors.AddRange(world.Problems());
         CheckWorldRefs(src, world, authored, errors);
         CheckAgency(src, errors);
+        CheckDocuments(src, authored, errors);
         CheckPortals(src, authored, errors);
         CheckDayKinds(src, authored, errors);
         CheckPresent(src, errors);
@@ -480,7 +481,7 @@ public static partial class WorldContentGenerator
             ("honorificMale", iv.honorificMale), ("honorificFemale", iv.honorificFemale), ("honorificUnknown", iv.honorificUnknown),
             ("requestLabel", iv.requestLabel), ("papersLabel", iv.papersLabel), ("requestPrompt", iv.requestPrompt), ("requestReply", iv.requestReply),
             ("askLabel", iv.askLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel),
-            ("smallTalkPrompt", iv.smallTalkPrompt), ("lookLabel", iv.lookLabel)
+            ("smallTalkPrompt", iv.smallTalkPrompt), ("lookLabel", iv.lookLabel), ("faceLabel", iv.faceLabel)
         };
         foreach ((string field, string text) in wording)
         {
@@ -1876,6 +1877,7 @@ public static partial class WorldContentGenerator
         backLabel = i.backLabel,
         smallTalkLabel = i.smallTalkLabel,
         lookLabel = i.lookLabel,
+        faceLabel = i.faceLabel,
         smallTalkPrompt = new LineText(InterviewLineId("smallTalkPrompt"), i.smallTalkPrompt),
         requests = (i.requests ?? Array.Empty<RequestData>()).Select(r => new InterviewRequest
         {
@@ -2442,6 +2444,7 @@ public static partial class WorldContentGenerator
         public string smallTalkLabel;
         public string smallTalkPrompt;
         public string lookLabel;
+        public string faceLabel;
         public RequestData[] requests;
         /// <summary>The missing-form replies (phase 8): a kind's line when asked for a request it carries no form of.</summary>
         public MissingReplyData[] missingFormReplies;
