@@ -980,7 +980,12 @@ public static class _TimeDeskAuditPlay
             yield return Frames(3);
         }
         if (visual >= 0 && c.lie == LieKind.ForgedSeal)
+        {
+            if (((CaseDocumentsPresenter)Field(o.Ui, "_documents")).Papers.State(visual) == PaperState.OnDesk)
+                Call(Field(o.Ui, "_documents"), "Scan", visual);
+            yield return Frames(3);
             yield return FormCopyShots(o, c, visual, $"caught_{key}_pc");
+        }
     }
 
     /// <summary>
