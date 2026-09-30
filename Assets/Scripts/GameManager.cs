@@ -317,7 +317,8 @@ public sealed class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the last case of the day resolves: applies the narrative
+    /// Called when the last case of the day resolves: closes the desk and ends
+    /// the last traveller's reaction (no bubble over the report), applies the narrative
     /// dialogs' consequences (then refreshes the HUD and checks endings), saves
     /// the run, shows the shift report and leads into the Home scene (or the
     /// title scene when an ending was reached).
@@ -329,6 +330,11 @@ public sealed class GameManager : MonoBehaviour
         // The booth is shut: freeze the clock (the queue may have run out before closing) and close the desk.
         _travellerAtDesk = false;
         CloseDesk();
+
+        // The last traveller's reaction ends as the booth shuts: the figure leaves and their bubble hides, so it never sits over the shift report.
+        if (travellerView != null)
+            travellerView.EndLinger();
+        EndReaction();
         if (shiftClock != null)
             shiftClock.StopShift();
         _characterArt?.Retain(null);
