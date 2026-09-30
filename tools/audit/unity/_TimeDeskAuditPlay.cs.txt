@@ -26,8 +26,11 @@
 // slot machine: its draw is unseeded).
 // RunShots plays the same run and also takes the screenshots of the redesign's
 // states at 1920x1080 and 1280x720 (<tag>/shots/: each day's paper and shift
-// report, each traveller kind's papers held and wheel, the app's tabs, the
-// two panes and one, search, the steps, each lie kind caught in the dock and
+// report, each traveller kind's papers held and wheel, the app's sources
+// (driven through its navigator, the PC UX redesign: a click on a source
+// shows it in the active pane, the other pane is sent through the app's
+// Open), the two panes and one, search and its quick-open palette, the
+// checklist, each lie kind caught in the dock and
 // on the office strip, each citation reason, and after the transcript's END a
 // shots-only day 7 with the Auto-Feed and Analysis scanners set on the desk);
 // its transcript must equal RunA's (screenshots never change the run).
@@ -869,28 +872,73 @@ public static class _TimeDeskAuditPlay
         yield return AppShots(o, c, $"caught_{key}_report", AppTab.Report, AppTab.Transcript);
     }
 
-    /// <summary>The PC frame open on the Investigation app, the left pane on <paramref name="left"/> (a record looked up on Records), the right on <paramref name="right"/>; shot, then the office again.</summary>
+    /// <summary>
+    /// The PC frame open on the Investigation app, driven the way the clerk
+    /// does (the PC UX redesign): the left pane made active, then its source
+    /// clicked in the navigator (Citizen records: the traveller's name looked
+    /// up), the right one sent through the app's Open to the other pane; the
+    /// navigator is checked (every source in full words, the active pane's
+    /// source selected with its items under it, the other pane's outlined);
+    /// shot, then the office again.
+    /// </summary>
     private static IEnumerator AppShots(Office o, CaseInstance c, string name, AppTab left, AppTab right)
     {
         yield return OpenApp(o);
         AppPane l = o.LeftPane, r = o.RightPane;
+        Call(o.App, "Activate", l);
         if (left == AppTab.Records)
-            l.Go(LinkTarget.ToRecords(c.visitorGivenName));
+            o.App.Open(LinkTarget.ToRecords(c.visitorGivenName), false);
         else
-            l.Show(left);
-        if (r != null && r.gameObject.activeInHierarchy)
-            r.Show(right);
+            o.Nav.Entry(left).onClick.Invoke();
+        Check(l.ActiveTab == left, $"{name}: a click on {left} in the navigator shows it in the active pane (shows {l.ActiveTab})");
+        bool split = r != null && r.gameObject.activeInHierarchy;
+        if (split)
+            o.App.Open(LinkTarget.ToTab(right), true);
         yield return Frames(4);
+        CheckNavigator(o, name, split ? r : l, split ? l : null);
         yield return Shots(name);
         yield return CloseApp(o);
     }
 
-    /// <summary>A search typed into the app's toolbar field: the results panel over the panes; closed and cleared after.</summary>
+    /// <summary>
+    /// The navigator as the clerk reads it (the PC UX redesign IA1-IA3): each
+    /// source's entry reads its full name (the ui string, never letters), the
+    /// <paramref name="active"/> pane's source is selected and lists the
+    /// view's items (one per chip), and the <paramref name="other"/> pane's
+    /// source (while split) wears the beside outline.
+    /// </summary>
+    private static void CheckNavigator(Office o, string name, AppPane active, AppPane other)
+    {
+        foreach (AppTab tab in TabOrder.Default)
+        {
+            string label = o.Nav.Entry(tab).GetComponentInChildren<TMP_Text>(true).text;
+            string full = UiText.Get("app.tab." + tab.ToString().ToLowerInvariant());
+            Check(label == full && label.Length > 4 && label != label.ToUpperInvariant(), $"{name}: the navigator names {tab} in full words ('{label}')");
+        }
+        AppTab shown = active.ActiveTab;
+        var selected = (GameObject[])Field(o.Nav, "selected");
+        Check(selected[(int)shown].activeSelf, $"{name}: the navigator selects the active pane's source ({shown})");
+        IAppView view = active.View(shown);
+        int items = view != null && !active.Blocked ? view.Chips.Count : 0;
+        Check(o.Nav.Items.Count == items, $"{name}: the navigator lists {shown}'s {items} items under it ({o.Nav.Items.Count})");
+        if (other != null && other.ActiveTab != shown)
+        {
+            var beside = (GameObject[])Field(o.Nav, "beside");
+            Check(beside[(int)other.ActiveTab].activeSelf, $"{name}: the navigator outlines the other pane's source ({other.ActiveTab})");
+        }
+    }
+
+    /// <summary>A search typed into the app's toolbar field: the palette's quick-open panel (Pinned, Recent) while it is empty and has the keyboard, then the results panel over the panes; closed and cleared after.</summary>
     private static IEnumerator SearchShots(Office o, CaseInstance c, string name, string query)
     {
         yield return OpenApp(o);
         var box = (SearchBox)Field(o.App, "searchBox");
         var field = (TMP_InputField)Field(box, "field");
+        o.App.Run(AppCommand.FocusSearch);
+        yield return Frames(3);
+        Check(box.QuickOpenShowing, $"{name}: the empty search field opens the quick-open palette (Pinned and Recent)");
+        if (First("quick open"))
+            yield return Shots("search_quick_open");
         field.text = query;
         yield return Seconds(0.6f);
         Report($"   shots: search '{query}': results open {o.App.ResultsOpen}");
@@ -1261,6 +1309,7 @@ public static class _TimeDeskAuditPlay
         public GameObject CitationPanel => (GameObject)Field(OfficeUi, "citationPanel");
         public InvestigationApp App => (InvestigationApp)Field(Ui, "app");
         public AppPane LeftPane => (AppPane)Field(App, "leftPane");
+        public AppNav Nav => (AppNav)Field(App, "nav");
         public AppPane RightPane => (AppPane)Field(App, "rightPane");
         public List<DeskDocument> Papers() => ((Transform)Field(Desk, "paperRoot")).GetComponentsInChildren<DeskDocument>().ToList();
         public DeskDocument Paper(int index) => Papers().FirstOrDefault(p => p.Index == index);
