@@ -164,6 +164,19 @@ public class RecordLiesTests
             plan.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray());
     }
 
+    /// <summary>Lesson D7: on day 1 the visa travels alone; poor posing as rich forges its class only (the borrowed variant needs a manifest, so no variant draw).</summary>
+    [Test]
+    public void PoorPosingAsRich_OnTheVisaAlone_ForgesItsClass_WithNoVariantDraw()
+    {
+        CitizenAccount account = Standard();
+        var visaOnly = new List<RecordForm> { new RecordForm(RecordLies.Visa, VisaFields(account, true)) };
+        var rng = new ScriptedRandom(R(0));
+        LiePlan plan = Plan(LieKind.PoorPosingAsRich, rng, account, visaOnly);
+        Assert.IsTrue(rng.Done, "the status's draw only");
+        Assert.AreEqual(LieOutcome.Forger, plan.Outcome);
+        CollectionAssert.AreEqual(new[] { (0, ClueCategory.AccountStatus, "Premium") }, plan.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray());
+    }
+
     [Test]
     public void PoorPosingAsRich_Borrowed_ForgesTheVisasClass_AndTheManifestsIdTransponderAndClass()
     {

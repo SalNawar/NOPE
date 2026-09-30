@@ -74,20 +74,21 @@ The tell channels follow the checks: papers only on days 1-6, dress from day 7, 
 
 ## 4. Lesson 5: the shift report
 
-`ShiftReport` (Domain; tested) reads the ledger, the queue size, the wallet and tonight's bill. The presenter prints amounts in one column (`<pos>`), with the net and the wallet after bills in bold:
+`ShiftReport` (Domain; tested) reads the ledger, the queue size, the wallet and tonight's bill. The presenter names the currency once, in a header, and prints the amounts bare in one column (`<pos>`), with the net and the wallet after bills in bold. A culture's currency ("Mesopotamian dinar token") would otherwise wrap every row at 720p, as the first audit play showed:
 
 ```
 Travellers processed: 10 of 12 (2 still waiting at closing, unpaid)
 
-Right calls: 7 x 10 cr                         +70 cr
-Wrong calls: 1, the free warning                 0 cr
-Wrong calls: 2 x 25 cr fine                    -50 cr
-Stranded in transit: 1, fined (no signed waiver) -100 cr
-Debt Relief instalment (125,000 cr still owed)  -17 cr
-Other money                                     +200 cr   (only when a dialog moved money: Rook's bribe)
-Shift net                                       +103 cr
-Bills due tonight                               -62 cr
-Wallet after bills                          91 cr (now 153)
+Money, in Credits
+Right calls: 7 x 10                              +70
+Wrong calls: 1, the free warning                   0
+Wrong calls: 2 x 25 fine                         -50
+Stranded in transit: 1, fined (no signed waiver) -100
+Debt Relief instalment (125,000 still owed)      -17
+Other money                                     +200   (only when a dialog moved money: Rook's bribe)
+Shift net                                       +103
+Bills due tonight                                -62
+Wallet after bills                          91 (now 153)
 ```
 
 - **Speed**: travellers still waiting at closing are shown and unpaid.
@@ -119,24 +120,25 @@ Warning 1/1 · no pay deduction.  Stability -0.50
   - The account standing.
 - **Wrong denial**: "No directive and no record refuses this traveller. Destination: X, open today."
 - **Unproven denial**: "A denial needs a logged deviation. Deviations logged: 0."
+- On day 1 the visa travels alone, so poor posing as rich forges the visa's class only (`RecordLies`: the manifest's class is optional in that variant; the debtor's rich variant keeps both).
 - The first mistake of a day is still free (`freeWarningsPerDay`). The slip grew from 560×320 to 720×420 (Build Office UI) to hold the two new lines at 24 pt.
 
 ## 6. Balance (50-run simulation, before → after)
 
 Knobs are unchanged. Full summaries are in `SCRATCH/wave5/C/balance_before` and `balance_after`.
 
-| Style, pace | Endings | Pay/run | Wrong calls/run | Stability at end (mean) | Lowest wallet (mean/min) |
-|---|---|---|---|---|---|
-| Perfect, whole queue | world ×50 → world ×50 | 2331 → 2320 | 0 → 0 | 99.72 → 99.62 | 50/50 → 50/50 |
-| Imperfect, whole queue | world ×50 → world ×50 | 2177 → 2175 | 14.7 → 14.1 | 66.8 → 68.3 | 41/-57 → 46/29 |
-| Careless, whole queue | fired 46, bankrupt 4 → fired 50 | 1165 → 1351 | 19.5 → 20.5 | 60.8 → 58.6 | -31/-110 → -5/-80 |
-| Perfect, 10 a shift | world ×50 → world ×50 | 1595 → 1586 | 0 → 0 | 99.82 → 99.76 | 50/50 → 50/50 |
-| Imperfect, 10 a shift | world ×50 → world ×50 | 1442 → 1445 | 14.5 → 13.6 | 67.3 → 69.2 | 41/-57 → 42/-23 |
-| Careless, 10 a shift | bankrupt 44, fired 6 → bankrupt 32, fired 18 | 625 → 823 | 13.9 → 15.9 | 70.2 → 66.2 | -104/-138 → -94/-150 |
+| Style, pace | Endings | Pay/run | Faulty/run | Wrong calls/run | Stability at end (mean) | Lowest wallet (mean/min) |
+|---|---|---|---|---|---|---|
+| Perfect, whole queue | world ×50 → world ×50 | 2331 → 2322 | 105.2 → 94.4 | 0 → 0 | 99.72 → 99.62 | 50/50 → 50/50 |
+| Imperfect, whole queue | world ×50 → world ×50 | 2176 → 2173 | 104.9 → 94.6 | 14.7 → 14.4 | 66.8 → 67.9 | 41/-57 → 44/22 |
+| Careless, whole queue | fired 46, bankrupt 4 → fired 49, bankrupt 1 | 1165 → 1293 | 58.6 → 53.3 | 19.5 → 20.3 | 60.8 → 59.2 | -31/-110 → -17/-101 |
+| Perfect, 10 a shift | world ×50 → world ×50 | 1595 → 1587 | 77.9 → 70.3 | 0 → 0 | 99.82 → 99.76 | 50/50 → 50/50 |
+| Imperfect, 10 a shift | world ×50 → world ×50 | 1442 → 1443 | 78.0 → 70.3 | 14.5 → 13.9 | 67.3 → 68.7 | 41/-57 → 40/-30 |
+| Careless, 10 a shift | bankrupt 44, fired 6 → bankrupt 33, fired 17 | 625 → 776 | 36.0 → 34.9 | 13.9 → 15.7 | 70.2 → 66.7 | -104/-138 → -98/-150 |
 
-- **Careless play still ends every run.** Its early days are gentler (fewer checks means fewer faults), so the careless clerk now lasts to days 5-14 instead of 3-12.
-- **Faulty travellers per run** (perfect play): 105 → 93. Days 1-3 are lighter (8 %, 20 %, 31 % faulty); days 12-15 are as before.
-- **Strandings**: 4.24 → 4.38 a run for the perfect clerk. Fines are 0 for the perfect clerk and 12 cr a run for the imperfect one.
+- **Careless play still ends every run.** Its early days are gentler (fewer checks means fewer faults), so it lasts a little longer.
+- **Faulty travellers**: 10 % fewer a run. Day 1 stays 19 % faulty (the visa alone still carries L1 and L2); days 2-3 are lighter (20 %, 31 %); days 12-15 are as before.
+- **Strandings**: 4.24 → 4.28 a run for the perfect clerk. Fines are 0 for the perfect clerk and 12 cr a run for the imperfect one.
 - **Every story beat stands**: day 7-15 beats stand in 50 of 50 perfect runs, with the same right calls.
 - **The top-tier House target still holds**: at 10 a shift, no top tier without bribes, and about one with them.
 - **World outcomes** stay a spread: no outcome dominates, and the "as found" watch lines are unchanged in kind.

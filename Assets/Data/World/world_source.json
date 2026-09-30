@@ -19291,6 +19291,12 @@
         "tier": "Full"
       },
       {
+        "key": "results.moneyHeader",
+        "text": "<b>Money, in {0}</b>",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "results.row",
         "text": "{0}<pos=76%>{1}",
         "gloss": "None",
@@ -19304,13 +19310,13 @@
       },
       {
         "key": "results.amount",
-        "text": "{0:+#,0;-#,0;0} {1}",
+        "text": "{0:+#,0;-#,0;0}",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "results.row.pay",
-        "text": "Right calls: {0} x {1} {2}",
+        "text": "Right calls: {0} x {1}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19328,7 +19334,7 @@
       },
       {
         "key": "results.row.fined",
-        "text": "Wrong calls: {0} x {1} {2} fine",
+        "text": "Wrong calls: {0} x {1} fine",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19352,7 +19358,7 @@
       },
       {
         "key": "results.row.instalment",
-        "text": "Debt Relief instalment ({0:N0} {1} still owed)",
+        "text": "Debt Relief instalment ({0:N0} still owed)",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19382,7 +19388,7 @@
       },
       {
         "key": "results.wallet",
-        "text": "{0} {1} (now {2})",
+        "text": "{0} (now {1})",
         "gloss": "None",
         "tier": "Full"
       },

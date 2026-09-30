@@ -120,8 +120,15 @@ public static class RecordLies
         }
     }
 
-    /// <summary>Poor posing as rich, forged (L1): the visa's class and the manifest's class read Premium.</summary>
+    /// <summary>Poor posing as rich, forged (L1): the visa's class and the manifest's class read Premium; the manifest only when it is carried (lesson D7: on day 1 the visa travels alone, and its class is the lie).</summary>
     private static readonly Forged[] RichForged =
+    {
+        new Forged(Visa, ClueCategory.AccountStatus),
+        new Forged(Manifest, ClueCategory.TransponderClass, optional: true)
+    };
+
+    /// <summary>The visa's class and the manifest's class, both required: a debtor's rich papers (DebtorAsRich).</summary>
+    private static readonly Forged[] RichClasses =
     {
         new Forged(Visa, ClueCategory.AccountStatus),
         new Forged(Manifest, ClueCategory.TransponderClass)
@@ -143,7 +150,7 @@ public static class RecordLies
     private static readonly Forged[] DoctoredYear = { new Forged(Visa, ClueCategory.BirthDate) };
 
     /// <summary>A debtor posing as a tourist (L4), with rich papers: the visa's class and the manifest's class read the posed status's (Premium); the same fields as the forged rich set.</summary>
-    private static readonly Forged[] DebtorAsRich = RichForged;
+    private static readonly Forged[] DebtorAsRich = RichClasses;
 
     /// <summary>
     /// A debtor posing as a tourist (L4), with poor papers: the visa's class

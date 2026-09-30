@@ -132,6 +132,7 @@ public sealed class DayFlowUIController : MonoBehaviour
     /// <summary>
     /// Shows the end-of-day report (Papers Please lesson 5): the travellers
     /// processed out of the queue, then a money ledger read in one glance
+    /// (its currency named once in its header, the amounts bare in one column)
     /// (the right calls times their pay, the free warnings, the wrong calls
     /// times their fine, the stranding fines, the Debt Relief instalment, any
     /// other money, the shift's net in bold, tonight's bills and, in bold, the
@@ -155,27 +156,28 @@ public sealed class DayFlowUIController : MonoBehaviour
         {
             var sb = new System.Text.StringBuilder();
             string cr = UiText.Currency(UiText.WalletForm.Short);
-            string Amount(int amount) => UiText.Format("results.amount", amount, cr);
+            string Amount(int amount) => UiText.Format("results.amount", amount);
             void Row(string label, int amount) => sb.AppendLine(UiText.Format("results.row", label, Amount(amount)));
 
             sb.AppendLine(report.Waiting > 0
                 ? UiText.Format("results.processedOf", report.Processed, report.Queued, report.Waiting)
                 : UiText.Format("results.processedAll", report.Processed));
             sb.AppendLine();
-            Row(report.PayRate > 0 ? UiText.Format("results.row.pay", report.Right, report.PayRate, cr) : UiText.Format("results.row.payTotal", report.Right), report.Pay);
+            sb.AppendLine(UiText.Format("results.moneyHeader", cr));
+            Row(report.PayRate > 0 ? UiText.Format("results.row.pay", report.Right, report.PayRate) : UiText.Format("results.row.payTotal", report.Right), report.Pay);
             if (report.Warned > 0)
                 Row(UiText.Format("results.row.warned", report.Warned), 0);
             if (report.Fined > 0)
-                Row(report.PenaltyRate > 0 ? UiText.Format("results.row.fined", report.Fined, report.PenaltyRate, cr) : UiText.Format("results.row.finedTotal", report.Fined), -report.Penalties);
+                Row(report.PenaltyRate > 0 ? UiText.Format("results.row.fined", report.Fined, report.PenaltyRate) : UiText.Format("results.row.finedTotal", report.Fined), -report.Penalties);
             if (report.Stranded > 0)
                 Row(UiText.Format(report.StrandingFines > 0 ? "results.row.strandedFined" : "results.row.stranded", report.Stranded), -report.StrandingFines);
             if (report.DebtOwed != Account.Unknown)
-                Row(UiText.Format("results.row.instalment", report.DebtOwed, cr), -report.Instalment);
+                Row(UiText.Format("results.row.instalment", report.DebtOwed), -report.Instalment);
             if (report.Other != 0)
                 Row(UiText.Get("results.row.other"), report.Other);
             sb.AppendLine(UiText.Format("results.rowBold", UiText.Get("results.row.net"), Amount(report.Net)));
             Row(UiText.Get("results.row.bills"), -report.Bills);
-            sb.AppendLine(UiText.Format("results.rowBold", UiText.Get("results.row.after"), UiText.Format("results.wallet", report.WalletAfterBills, cr, report.WalletNow)));
+            sb.AppendLine(UiText.Format("results.rowBold", UiText.Get("results.row.after"), UiText.Format("results.wallet", report.WalletAfterBills, report.WalletNow)));
             sb.AppendLine();
             sb.AppendLine(UiText.Format("results.stability", StabilityRules.Format(world.timelineStability), StabilityRules.FormatChange(ledger.TotalStabilityDelta)));
 
