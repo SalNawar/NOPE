@@ -46,13 +46,16 @@ public static partial class OfficeSceneUIBuilder
         public const float L = 16f;
 
         /// <summary>The Investigation app's toolbar row (Back, Forward, search, Accept, Deny).</summary>
-        public const float Toolbar = 64f;
+        public const float Toolbar = 68f;
 
         /// <summary>A control's height inside a toolbar row.</summary>
         public const float Control = 44f;
 
+        /// <summary>Accept's and Deny's height in the toolbar row: room for a culture's word over its English gloss.</summary>
+        public const float Decision = 58f;
+
         /// <summary>The navigator's width.</summary>
-        public const float Nav = 300f;
+        public const float Nav = 308f;
 
         /// <summary>The navigator's case summary block.</summary>
         public const float NavCase = 96f;
@@ -67,7 +70,7 @@ public static partial class OfficeSceneUIBuilder
         public const float NavIndent = 24f;
 
         /// <summary>A pane's header.</summary>
-        public const float PaneHeader = 56f;
+        public const float PaneHeader = 64f;
 
         /// <summary>A list row (the inbox, the day list, menus).</summary>
         public const float Row = 48f;

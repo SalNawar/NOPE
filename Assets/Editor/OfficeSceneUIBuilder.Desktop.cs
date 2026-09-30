@@ -179,7 +179,7 @@ public static partial class OfficeSceneUIBuilder
         Image badgeImage = badge.GetComponent<Image>();
         badgeImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
         badgeImage.raycastTarget = false;
-        TMP_Text badgeText = Text(badge, "Count", string.Empty, PcType.Caption - 2, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white, ThemeRoleId.Badge,
+        TMP_Text badgeText = Text(badge, "Count", string.Empty, PcType.Caption, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white, ThemeRoleId.Badge,
                                   null, FontStyles.Bold);
         badgeText.raycastTarget = false;
         badge.gameObject.SetActive(false);

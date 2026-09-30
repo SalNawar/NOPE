@@ -71,11 +71,11 @@ public static partial class OfficeSceneUIBuilder
         Transform header = Panel(paneRoot, "PaneHeader", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -headerHeight / 2f),
                                  new Vector2(0f, headerHeight), Paper, ThemeRoleId.WindowBody);
         float buttons = PcSize.S + 2f * HeaderIconSize + 4f + PcSize.S;
-        TMP_Text title = Text(header, "TitleText", UiText.Get(AppTabKeys[start]), PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
+        TMP_Text title = Text(header, "TitleText", UiText.Get(AppTabKeys[start]), PcType.Caption, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
                               ThemeRoleId.WindowBody, kind: ThemeTextKind.Heading);
         PlaceRect(title.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.L, 2f), new Vector2(-buttons, -2f));
-        Chrome(title, PcType.Body, true);
-        title.lineSpacing = -12f;
+        Chrome(title, PcType.Caption, true);
+        title.lineSpacing = -10f;
         title.richText = true;
         title.raycastTarget = false;
 

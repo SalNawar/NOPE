@@ -26,7 +26,7 @@ public static partial class OfficeSceneUIBuilder
                          ReportFormPath = "Assets/Data/Forms/Form_DeviationReport.asset", DirectiveMemoFormPath = "Assets/Data/Forms/Form_DirectiveMemo.asset";
 
     /// <summary>A view's strip (the lookup, the toggles) at its top: its gap from the top and its height; the page starts under it (desktop units; the PC UX redesign §3).</summary>
-    private const float AppViewStripGap = 12f, AppViewStripHeight = 48f, AppViewPageTop = AppViewStripGap + AppViewStripHeight + 8f;
+    private const float AppViewStripGap = 10f, AppViewStripHeight = 56f, AppViewPageTop = AppViewStripGap + AppViewStripHeight + 8f;
 
     /// <summary>The Records lookup's Search button width.</summary>
     private const float RecordsSearchWidth = 168f;
@@ -66,7 +66,7 @@ public static partial class OfficeSceneUIBuilder
         Button search = MakeButton(root, "SearchButton", null, Vector2.zero, Vector2.one, new Color(0.15f, 0.3f, 0.5f, 1f),
                                    ThemeRoleId.SearchButton, "records.search");
         InStrip(search.transform, -(PcSize.L + RecordsSearchWidth), PcSize.L);
-        ButtonLabel(search, PcType.Body);
+        ButtonLabel(search, PcType.Body).lineSpacing = -6f;
         FormPage page = BuildPageKind(root, "Extract", AppViewPageTop);
 
         RecordsView view = root.gameObject.AddComponent<RecordsView>();

@@ -895,7 +895,7 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>The taskbar's Menu button's width, and Back to desk's (desktop units; the PC UX redesign's section 3).</summary>
-    private const float MenuButtonWidth = 136f, DeskButtonWidth = 216f;
+    private const float MenuButtonWidth = 148f, DeskButtonWidth = 272f;
 
     /// <summary>The tray's width at the taskbar's right end (Day, Credits, Stability, the clock at Caption size).</summary>
     private const float TrayWidth = 600f;
@@ -1264,9 +1264,9 @@ public static partial class OfficeSceneUIBuilder
         Transform taskbar = root.Find("Taskbar");
         Button deskButton = MakeButton(taskbar, "DeskButton", null, Vector2.zero, new Vector2(0f, 1f), new Color(0.2f, 0.3f, 0.5f, 0.95f),
                                        ThemeRoleId.DeskButton, "taskbar.desk");
-        PlaceRect(deskButton.transform, Vector2.zero, new Vector2(0f, 1f), new Vector2(PcSize.S + MenuButtonWidth + PcSize.S, 4f),
-                  new Vector2(PcSize.S + MenuButtonWidth + PcSize.S + DeskButtonWidth, -4f));
-        ButtonLabel(deskButton, PcType.Body);
+        PlaceRect(deskButton.transform, Vector2.zero, new Vector2(0f, 1f), new Vector2(PcSize.S + MenuButtonWidth + PcSize.S, 3f),
+                  new Vector2(PcSize.S + MenuButtonWidth + PcSize.S + DeskButtonWidth, -3f));
+        ButtonLabel(deskButton, PcType.Body).lineSpacing = -10f; // a culture's words over their English gloss keep their size in the bar
         WirePersistentVoid(deskButton, "m_OnClick", view, nameof(OfficeViewController.FocusOffice));
 
         Button startBtn = null;

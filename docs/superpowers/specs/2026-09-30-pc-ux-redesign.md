@@ -103,13 +103,13 @@ The desktop canvas is 1440 × 1080 units (u) drawn into the frame's glass: 1 u =
 
 | Part | Size | Notes |
 |---|---|---|
-| Taskbar | 48 u high | Menu (136 u), Back to desk (208 u), the window glyphs (52 × 40 u each), the tray (Day, Credits, Stability, the clock) |
-| Compare dock | 56 u, right above the taskbar | unchanged role and behaviour |
-| Window title bar | 44 u | title 26 u at 16 u from the left; three 52 × 44 u controls drawn as glyphs |
-| Investigation toolbar | 64 u | 12 u padding; Back and Forward 48 × 44 u; the search field flexible; Accept 176 × 44 u, Deny 160 × 44 u |
-| Navigator | 300 u wide | 12 u side padding; case summary 96 u; a source entry 48 u; an item at least 44 u (indented 24 u, growing when its name wraps); the checklist follows; the whole column scrolls when it outgrows the window |
-| Pane header | 56 u | "Papers  ›  Leisure Departure Visa" (the source regular, the item bold, at Body size, wrapping to a second line rather than cut); Pin and Open beside or Close as 44 u icon buttons at its right |
-| Two panes | (1440 − 300 − 8) / 2 = 566 u each, maximised (less half the 6 u gap) | a pane is never under `paneMinWidth` (520 u); a restored window (1120 u) has one pane; a scanned copy is drawn 520 u wide (it was 542 u) so a split pane holds its 558 u page whole |
+| Taskbar | 60 u high | Menu (148 u), Back to desk (272 u: room for a culture's words over their English gloss), the window glyphs (56 u each), the tray (Day, Credits, Stability, the clock) |
+| Compare dock | 64 u, right above the taskbar | unchanged role and behaviour; its texts at 24-26 u, two lines when a side is long |
+| Window title bar | 44 u | title 26 u at 20 u from the left; three 52 × 44 u controls drawn as glyphs |
+| Investigation toolbar | 68 u | 12 u padding; Back and Forward 44 × 44 u; the search field flexible; Accept 184 × 58 u, Deny 168 × 58 u (a culture's word over its English gloss) |
+| Navigator | 308 u wide | 8 u side padding; case summary 96 u; a source entry 48 u; an item at least 44 u (indented 24 u, growing when its name wraps); the checklist follows; the whole column scrolls when it outgrows the window |
+| Pane header | 64 u | "Papers  ›  Leisure Departure Visa" (the source regular, the item bold, at Caption size, wrapping to a second line rather than cut); Pin and Open beside or Close as 44 u icon buttons at its right |
+| Two panes | (1440 − 308 − 8) / 2 = 562 u each, maximised (less half the 6 u gap) | a pane is never under `paneMinWidth` (520 u); a restored window (1120 u) has one pane; a scanned copy is drawn 520 u wide (it was 542 u) so a split pane holds its 558 u page whole |
 
 ## 4. Type scale and tokens
 
@@ -148,10 +148,10 @@ The neutral theme's seeds move off Windows XP: chrome `#2157DB` → `#33507A` (s
 | C1 | **Window chrome** (`BuildOSWindow`, `BuildWinControls`) | chromeDeep title bar, the title at 26 u bold, left; minimise (a 14 × 2 u bar), maximise (a 14 × 14 u outline) and close (two crossed 18 × 2 u bars) drawn as rects in the title ink, on ghost buttons (hover and pressed tints). No text glyphs. |
 | C2 | **Navigator entry** (`AppNav`) | 48 u row, the label at `Body`, the badge dot at its right; states: rest (face), hover (tint), selected (accent plate, accentInk label), beside (2 u accent outline), focused (the focus ring). |
 | C3 | **Navigator item** | 44 u row indented 24 u, label at `Body` wrapping to two lines (the row grows to 64 u); shown: paper plate and bold; unavailable: 55 % alpha. |
-| C4 | **Pane header** | 56 u, paper, a 2 u rule under it; "Papers  ›  Leisure Departure Visa" (the source regular, the item bold, at `Body`; a long item wraps to a second line rather than being cut; an item named after its source, a record's "Citizen records · Mio", drops the repeat); Pin and Open beside (left pane) or Close (right pane) as 44 u icon buttons with hover hints; the active pane's 3 u accent underline. |
+| C4 | **Pane header** | 64 u, paper, a 2 u rule under it; "Papers  ›  Leisure Departure Visa" (the source regular, the item bold, at `Caption`; a long item wraps to a second line rather than being cut; an item named after its source, a record's "Citizen records · Mio", drops the repeat); Pin and Open beside (left pane) or Close (right pane) as 44 u icon buttons with hover hints; the active pane's 3 u accent underline. |
 | C5 | **Search palette** | the field (white, `Body`, placeholder "Search papers, records, rules and the transcript"); under it a panel the field's width over the panes: before typing, "Pinned" and "Recent" lists (rows at `Body`, empty hints at `Caption`); typing, filter chips ("All", "Papers (3)"), group headings in full words, hits (title bold, snippet marked), "Show all 7 in Reference books". |
 | C6 | **Checklist** | its heading row (48 u) is the fold's button: a chevron (down open, right folded), "Checklist" (bold, `Body`) and the count of steps done ("2 of 6", `Caption`, at its right end); rows: a 28 u tick box and the label at `Body`, wrapping. |
-| C7 | **Taskbar** | chromeDeep; Menu (chrome plate, `Body`); Back to desk (the accent plate, `Body`); window glyphs (the app's desktop glyph, 32 u, on a Tab plate; focused: a 3 u accent bar under it; minimised: 50 % alpha; a hover hint names the window); the tray (`Caption`). |
+| C7 | **Taskbar** | chromeDeep, 60 u; Menu (chrome plate, `Body`); Back to desk (the accent plate, `Body`, its gloss under a culture's words); window glyphs (the app's desktop glyph, 32 u, on a Tab plate; focused: a 3 u accent bar under it; minimised: 50 % alpha; a hover hint names the window); the tray (`Caption`). |
 | C8 | **Menus** (Menu, the context menu) | a chromeDeep-tinted panel, entries 48 u at `Body`, left-aligned with 20 u padding. |
 | C9 | **Desktop icon** | 188 × 156 u cell (a seven-kana label fits one line): the glyph (72 u) over its label (`Caption`, up to two lines, never under it), both on translucent plates as before; the badge 34 u with its count at 22 u. |
 | C10 | **Toast** | chromeDeep strip, `Body` text, an Open button. |

@@ -176,14 +176,17 @@ public static partial class OfficeSceneUIBuilder
         TMP_InputField search = BuildInputField(bar, "SearchField", "app.search", Vector2.zero, Vector2.one);
         PlaceRect(search.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.M + 2f * PcSize.Control + 4f + PcSize.L, pad), new Vector2(-right, -pad));
 
+        float decisionPad = (PcSize.Toolbar - PcSize.Decision) / 2f;
         accept = MakeButton(bar, "AcceptButton", null, new Vector2(1f, 0f), Vector2.one, new Color(0.2f, 0.5f, 0.24f, 1f), ThemeRoleId.AcceptButton, "accept");
-        PlaceRect(accept.transform, new Vector2(1f, 0f), Vector2.one, new Vector2(-(PcSize.M + DenyWidth + PcSize.S + AcceptWidth), pad), new Vector2(-(PcSize.M + DenyWidth + PcSize.S), -pad));
+        PlaceRect(accept.transform, new Vector2(1f, 0f), Vector2.one, new Vector2(-(PcSize.M + DenyWidth + PcSize.S + AcceptWidth), decisionPad),
+                  new Vector2(-(PcSize.M + DenyWidth + PcSize.S), -decisionPad));
         deny = MakeButton(bar, "DenyButton", null, new Vector2(1f, 0f), Vector2.one, new Color(0.72f, 0.2f, 0.18f, 1f), ThemeRoleId.DenyButton, "deny");
-        PlaceRect(deny.transform, new Vector2(1f, 0f), Vector2.one, new Vector2(-(PcSize.M + DenyWidth), pad), new Vector2(-PcSize.M, -pad));
+        PlaceRect(deny.transform, new Vector2(1f, 0f), Vector2.one, new Vector2(-(PcSize.M + DenyWidth), decisionPad), new Vector2(-PcSize.M, -decisionPad));
         foreach (Button decision in new[] { accept, deny })
         {
             TMP_Text label = ButtonLabel(decision, PcType.Body, TextAlignmentOptions.Center, 0f);
             label.fontStyle = FontStyles.Bold;
+            label.lineSpacing = -6f; // a culture's word over its English gloss (CJK fonts are tall) keeps its size
         }
         BuildDecisionGlyph(accept, ThemeRoleId.AcceptButton, true);
         BuildDecisionGlyph(deny, ThemeRoleId.DenyButton, false);
@@ -232,7 +235,7 @@ public static partial class OfficeSceneUIBuilder
         list = (RectTransform)Panel(viewport, "List", new Vector2(0f, 1f), Vector2.one, Vector2.zero, Vector2.zero, null);
         list.pivot = new Vector2(0.5f, 1f);
         VerticalLayoutGroup layout = GetOrAdd<VerticalLayoutGroup>(list.gameObject);
-        layout.padding = new RectOffset(12, 12, 12, 16);
+        layout.padding = new RectOffset(8, 8, 12, 16);
         layout.spacing = 2f;
         layout.childAlignment = TextAnchor.UpperCenter;
         layout.childControlWidth = true;
@@ -328,21 +331,21 @@ public static partial class OfficeSceneUIBuilder
         Button entry = MakeButton(list, "Source_" + tab, null, Vector2.zero, Vector2.one, XpFace, ThemeRoleId.Sidebar, AppTabKeys[tab]);
         SetLayoutHeight(entry, PcSize.NavEntry);
         TMP_Text label = ButtonLabel(entry, PcType.Body, TextAlignmentOptions.MidlineLeft, PcSize.M);
-        label.margin = new Vector4(PcSize.M, 0f, PcSize.L + NavBadgeSize, 0f);
+        label.margin = new Vector4(PcSize.M, 0f, PcSize.S + NavBadgeSize, 0f);
 
         Transform plate = Panel(entry.transform, "Selected", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, XpGreen, ThemeRoleId.Badge);
         plate.GetComponent<Image>().raycastTarget = false;
         TMP_Text chosen = Text(plate, "Label", null, PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Color.white,
                                ThemeRoleId.Badge, AppTabKeys[tab], FontStyles.Bold, ThemeTextKind.Button, true);
         Chrome(chosen, PcType.Body);
-        chosen.margin = new Vector4(PcSize.M, 0f, PcSize.L + NavBadgeSize, 0f);
+        chosen.margin = new Vector4(PcSize.M, 0f, PcSize.S + NavBadgeSize, 0f);
         chosen.raycastTarget = false;
         plate.gameObject.SetActive(false);
 
         Transform outline = BuildFrame(entry.transform, "Beside", 2f, new Color(0.95f, 0.55f, 0.1f, 1f), ThemeRoleId.FocusRing);
         outline.gameObject.SetActive(false);
 
-        Transform dot = Panel(entry.transform, "Badge", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(PcSize.M + NavBadgeSize / 2f), 0f),
+        Transform dot = Panel(entry.transform, "Badge", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(PcSize.S + NavBadgeSize / 2f), 0f),
                               new Vector2(NavBadgeSize, NavBadgeSize), XpGreen, ThemeRoleId.Badge);
         Image dotImage = dot.GetComponent<Image>();
         dotImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");

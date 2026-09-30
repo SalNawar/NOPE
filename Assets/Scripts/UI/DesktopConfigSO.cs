@@ -19,7 +19,7 @@ public sealed class DesktopConfigSO : ScriptableObject
 {
     [Header("The bars under the icon area (desktop units)")]
     /// <summary>The taskbar's height at the bottom of the desktop.</summary>
-    [Min(1f)] public float taskbarHeight = 48f;
+    [Min(1f)] public float taskbarHeight = 60f;
 
     /// <summary>The compare dock's height, right above the taskbar (reserved even while it is hidden, so a maximised window never changes size).</summary>
     [Min(1f)] public float dockHeight = 64f;
@@ -91,7 +91,7 @@ public sealed class DesktopConfigSO : ScriptableObject
     public Vector2 notesWindowSize = new Vector2(960f, 800f);
 
     /// <summary>The Settings window's size.</summary>
-    public Vector2 settingsWindowSize = new Vector2(800f, 880f);
+    public Vector2 settingsWindowSize = new Vector2(800f, 940f);
 
     /// <summary>The Portals window's size (the portals spec v3 PA3: 880 x 600 u, restored; it can be maximised).</summary>
     public Vector2 portalsWindowSize = new Vector2(880f, 600f);
