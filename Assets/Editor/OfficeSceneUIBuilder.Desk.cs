@@ -180,8 +180,8 @@ public static partial class OfficeSceneUIBuilder
     // Layers and the build list
     // -----------------------------
 
-    /// <summary>Makes sure the project has a user layer named <paramref name="name"/> (the first free one from 8).</summary>
-    private static void EnsureLayer(string name)
+    /// <summary>Makes sure the project has a user layer named <paramref name="name"/> (the first free one from 8; also Add Anime Hall Hooks' HallBackdrop).</summary>
+    internal static void EnsureLayer(string name)
     {
         if (LayerMask.NameToLayer(name) >= 0)
             return;
@@ -203,10 +203,12 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// Makes sure the project has a sorting layer named <paramref name="name"/>,
-    /// listed after every existing one (so it draws over Default). Its id is a
-    /// stable hash of the name, as the tag manager wants a unique non-zero one.
+    /// listed after every existing one (so it draws over Default), or before
+    /// every one with <paramref name="first"/> (Add Anime Hall Hooks' HallSky,
+    /// drawn under the hall's painted layers). Its id is a stable hash of the
+    /// name, as the tag manager wants a unique non-zero one.
     /// </summary>
-    private static void EnsureSortingLayer(string name)
+    internal static void EnsureSortingLayer(string name, bool first = false)
     {
         if (SortingLayer.layers.Any(l => l.name == name))
             return;
@@ -219,7 +221,7 @@ public static partial class OfficeSceneUIBuilder
 
         var tags = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
         SerializedProperty layers = tags.FindProperty("m_SortingLayers");
-        int index = layers.arraySize;
+        int index = first ? 0 : layers.arraySize;
         layers.InsertArrayElementAtIndex(index);
         SerializedProperty layer = layers.GetArrayElementAtIndex(index);
         layer.FindPropertyRelative("name").stringValue = name;
@@ -227,7 +229,7 @@ public static partial class OfficeSceneUIBuilder
         layer.FindPropertyRelative("locked").boolValue = false;
         tags.ApplyModifiedProperties();
         if (!SortingLayer.layers.Any(l => l.name == name))
-            Debug.LogError($"[TimeDesk] The sorting layer '{name}' could not be added to ProjectSettings/TagManager.asset; the traveller and the desk notes will draw behind the art's sprites.");
+            Debug.LogError($"[TimeDesk] The sorting layer '{name}' could not be added to ProjectSettings/TagManager.asset.");
     }
 
     /// <summary>The gameplay sorting layer's id (Default's, with an error, when the project lacks it).</summary>

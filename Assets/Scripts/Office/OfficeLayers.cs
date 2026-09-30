@@ -7,7 +7,8 @@ using UnityEngine;
 /// a click) and PCDesktop (the desktop canvas: only the PC frame and clone
 /// cameras draw it; the office camera never does), and the sorting layer
 /// Gameplay (the traveller's figure and the desk notes, drawn in front of the
-/// art's sprites whatever their orders). Build Office UI adds all three.
+/// art's sprites whatever their orders). Build Office UI adds all three; Add
+/// Anime Hall Hooks adds the anime hall's HallBackdrop layer.
 /// </summary>
 public static class OfficeLayers
 {
@@ -25,6 +26,26 @@ public static class OfficeLayers
     /// in front of them: transparent objects sort by layer and order before depth).
     /// </summary>
     public const string SortingLayer = "Gameplay";
+
+    /// <summary>
+    /// The anime hall's painted layers' layer (with the portal rings' effects,
+    /// the hall's Light2Ds and its dust): only the hall's 2D backdrop camera
+    /// draws it (HallBackdrop), never the office camera, which shows that
+    /// camera's picture behind the desk instead. Add Anime Hall Hooks adds it.
+    /// </summary>
+    public const string HallBackdrop = "HallBackdrop";
+
+    /// <summary>
+    /// The sorting layer of the anime hall's sky (its exterior layer), listed
+    /// before Default: the hall's layers are mutually exclusive masks, so the
+    /// sky still draws where it did, but the interior's lights (fixtures,
+    /// screens, shafts) never light it; its own global light gives it the
+    /// day's sky (HallLightKind.Sky). Add Anime Hall Hooks adds it.
+    /// </summary>
+    public const string SkySortingLayer = "HallSky";
+
+    /// <summary>The HallBackdrop layer's index (-1 when the project lacks it).</summary>
+    public static int HallBackdropLayer => LayerMask.NameToLayer(HallBackdrop);
 
     /// <summary>The Interactable layer's index (-1 when the project lacks it).</summary>
     public static int InteractableLayer => LayerMask.NameToLayer(Interactable);

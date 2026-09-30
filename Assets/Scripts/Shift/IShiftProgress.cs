@@ -9,4 +9,7 @@ public interface IShiftProgress
 {
     /// <summary>0 at opening, 1 at closing (<see cref="ShiftClock.Progress01"/>); 0 until today's clock exists.</summary>
     float Progress01 { get; }
+
+    /// <summary>The clock's minute of the day (<see cref="ShiftClock.CurrentMinute"/>; 540 is 09:00): the anime hall's day-night cycle reads its hour; the opening minute until today's clock exists.</summary>
+    float MinuteOfDay { get; }
 }
