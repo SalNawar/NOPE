@@ -6,8 +6,11 @@ using UnityEngine;
 /// every import (authoritative): a Single, FullRect sprite one unit tall (its
 /// pixels per unit is its own height, so any resolution of the 2:3 canvas
 /// lays out the same), pivoted at the feet (LookCanvas.FeetPivotY), readable
-/// (the photo crop and alpha tests), no mipmaps, no crunch, at most 2048 px.
-/// A source that is not 2:3 is reported.
+/// (the photo crop and alpha tests), mipmapped with trilinear filtering (the
+/// office draws a figure at about a third of its size and the passport photo
+/// smaller: without mips the thin outlines break up and shimmer), high-quality
+/// compression (BC7: no block artefacts on the line art), no crunch, at most
+/// 2048 px. A source that is not 2:3 is reported.
 /// </summary>
 public sealed class CharacterArtImporter : AssetPostprocessor
 {
@@ -26,7 +29,9 @@ public sealed class CharacterArtImporter : AssetPostprocessor
         importer.textureType = TextureImporterType.Sprite;
         importer.spriteImportMode = SpriteImportMode.Single;
         importer.isReadable = true;
-        importer.mipmapEnabled = false;
+        importer.mipmapEnabled = true;
+        importer.filterMode = FilterMode.Trilinear;
+        importer.textureCompression = TextureImporterCompression.CompressedHQ;
         importer.crunchedCompression = false;
         importer.maxTextureSize = MaxSize;
         importer.alphaIsTransparency = true;

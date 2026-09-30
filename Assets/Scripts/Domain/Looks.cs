@@ -35,7 +35,7 @@ public enum LookLayer
     Whole
 }
 
-/// <summary>One layer's art key: its file name and what its placeholder is coloured by. Built only by LookKeys.</summary>
+/// <summary>One layer's art key: its file name and the parts it is named from (LookArtFallback builds its stand-ins from them). Built only by LookKeys.</summary>
 public readonly struct LookKey
 {
     /// <summary>The file name (no extension).</summary>
@@ -44,30 +44,47 @@ public readonly struct LookKey
     /// <summary>The layer it is drawn on.</summary>
     public readonly LookLayer Layer;
 
-    /// <summary>A garment's art nation (its item's LookItem.ArtNation) or a premade's claimed nation id; null for body and head.</summary>
+    /// <summary>Whose figure it is drawn for (Unknown for a premade's whole image).</summary>
+    public readonly TravellerGender Gender;
+
+    /// <summary>A garment's art nation (its item's LookItem.ArtNation); null otherwise.</summary>
     public readonly string NationId;
 
-    /// <summary>A garment's (or a premade's claimed) era id; null for body and head.</summary>
+    /// <summary>A garment's era id; null otherwise.</summary>
     public readonly string EraId;
 
     /// <summary>Body and head: the skin tone (1..5); 0 otherwise.</summary>
     public readonly int SkinTone;
 
+    /// <summary>A head's face token; null otherwise.</summary>
+    public readonly string Face;
+
     /// <summary>Hair, hair back and facial hair: the colour (null for a wig and every other layer).</summary>
     public readonly string HairColour;
+
+    /// <summary>A garment's art variant (LookItem.artVariant); null otherwise.</summary>
+    public readonly string Variant;
+
+    /// <summary>A premade's id (Whole only).</summary>
+    public readonly string PremadeId;
 
     /// <summary>A premade's expression (Whole only).</summary>
     public readonly string Expression;
 
     /// <summary>Creates a key (LookKeys only).</summary>
-    internal LookKey(string name, LookLayer layer, string nationId, string eraId, int skinTone, string hairColour, string expression)
+    internal LookKey(string name, LookLayer layer, TravellerGender gender, string nationId, string eraId, int skinTone, string face,
+                     string hairColour, string variant, string premadeId, string expression)
     {
         Name = name;
         Layer = layer;
+        Gender = gender;
         NationId = nationId;
         EraId = eraId;
         SkinTone = skinTone;
+        Face = face;
         HairColour = hairColour;
+        Variant = variant;
+        PremadeId = premadeId;
         Expression = expression;
     }
 }
@@ -195,7 +212,7 @@ public sealed class TravellerLook
             throw new System.InvalidOperationException("Only a premade has a whole image.");
 
         string e = expression != null && LookKeys.Expressions.Contains(expression) ? expression : LookKeys.NeutralExpression;
-        return LookKeys.Premade(PremadeId, e, whole.Value.Key.NationId, whole.Value.Key.EraId);
+        return LookKeys.Premade(PremadeId, e);
     }
 
     /// <summary>For the case log: "m skin3 face-b brown; dress tell: Headwear 'top hat'" or "premade socrates".</summary>
@@ -516,7 +533,7 @@ public static class Looks
     /// <summary>A premade's look: one whole picture (neutral), one garment (the whole-figure label, the claim's Culture value, never a tell). No draws.</summary>
     public static TravellerLook Whole(string premadeId, LookSource claim, LookRules rules)
     {
-        var parts = new[] { new LookPart(LookLayer.Whole, LookKeys.Premade(premadeId, LookKeys.NeutralExpression, claim?.NationId, claim?.EraId), 0) };
+        var parts = new[] { new LookPart(LookLayer.Whole, LookKeys.Premade(premadeId, LookKeys.NeutralExpression), 0) };
         var garments = new[] { new Garment(LookSlot.Outfit, rules?.wholeFigureLabel ?? string.Empty, claim?.CultureValue, false) };
         return new TravellerLook(parts, garments, premadeId, TravellerGender.Unknown, 0, null, null);
     }
