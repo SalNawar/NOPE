@@ -94,7 +94,8 @@ public class NarrativeWorkbookTests
         Assert.IsTrue(narrative.Rows.Any(r => r[Col(narrative, "narrative")] == "pell" && r[Col(narrative, "part")] == "story beat pell_departed" && r[Col(narrative, "field")] == "news"),
             "Pell's beat (its condition names her verdict) sits in her block");
         Assert.AreEqual(CellLook.Editable, narrative.Look.Columns[Col(narrative, "text")]);
-        Assert.AreEqual(CellLook.Locked, narrative.Look.Columns[Col(narrative, "ref")]);
+        Assert.AreEqual(CellLook.Binding, narrative.Look.Columns[Col(narrative, "ref")]);
+        Assert.AreEqual(CellLook.Locked, narrative.Look.Columns[Col(narrative, "when")]);
     }
 
     [Test]
@@ -182,6 +183,20 @@ public class NarrativeWorkbookTests
         CollectionAssert.IsEmpty(result.Errors);
         Assert.AreEqual(1, result.Edited);
         Assert.IsTrue(result.Tables.Single(t => t.Name == "dialogLines").Rows.Any(r => r[lines.Headers.IndexOf("text")] == "Moved but found."));
+    }
+
+    [Test]
+    public void AReadOnlyNote_IsShownLockedAndSkippedByTheImport()
+    {
+        var context = new NarrativeContext();
+        context.Notes.Add(new NarrativeNote { Narrative = "strandings", Part = "waiver form", Field = "fine print", Text = "The Time Police may remove you.", Where = "DocTemplate_TC310.asset" });
+        List<RowTable> content = Content();
+        List<RowTable> book = ThroughXlsx(NarrativeWorkbook.Build(ContentSheetMap.World, content, context));
+        RowTable narrative = Sheet(book, "Narrative");
+        string[] note = narrative.Rows.Single(r => r[Col(narrative, "text")] == "The Time Police may remove you.");
+        Assert.AreEqual(NarrativeWorkbook.ReadOnlyRef, note[Col(narrative, "ref")]);
+        note[Col(narrative, "text")] = "Edited where it cannot be imported.";
+        Assert.AreEqual(Source(), Import(content, book, out _));
     }
 
     [Test]

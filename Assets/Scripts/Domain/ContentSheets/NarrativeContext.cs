@@ -140,6 +140,31 @@ public sealed class NarrativeContext
     /// <summary>Each effect's flags it sets (story beats and appearances read them).</summary>
     public Dictionary<string, List<string>> EffectFlags { get; } = new Dictionary<string, List<string>>();
 
+    /// <summary>Texts the narrative touches that are authored outside world_source.json (the waiver form's fine print): shown read-only, never imported.</summary>
+    public List<NarrativeNote> Notes { get; } = new List<NarrativeNote>();
+
     /// <summary>How the reference run was played, for the README ("seeds 12345, 7919 · Perfect play · the whole queue").</summary>
     public string RunNote = string.Empty;
+}
+
+/// <summary>A text authored outside world_source.json that a narrative block shows read-only, with where to edit it.</summary>
+public sealed class NarrativeNote
+{
+    /// <summary>The narrative block it belongs to ("strandings").</summary>
+    public string Narrative = string.Empty;
+
+    /// <summary>When it is seen.</summary>
+    public string When = string.Empty;
+
+    /// <summary>The part of the block.</summary>
+    public string Part = string.Empty;
+
+    /// <summary>The field's name.</summary>
+    public string Field = string.Empty;
+
+    /// <summary>The text.</summary>
+    public string Text = string.Empty;
+
+    /// <summary>Where it is edited (an asset path and field).</summary>
+    public string Where = string.Empty;
 }

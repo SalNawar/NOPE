@@ -135,7 +135,8 @@ public static class Xlsx
     /// The styled workbook's cell styles: 0-2 as <see cref="Styles"/> (in Arial), then
     /// 3 editable (pale yellow, unlocked), 4 locked (grey text), 5 not applicable (shaded),
     /// 6 section banner, 7 an editable column's header (amber), 8 a locked column's header
-    /// (slate, white text), 9 a locked number or true/false. Data cells wrap at the top.
+    /// (slate, white text), 9 a locked number or true/false, 10 a binding cell (grey, never
+    /// wrapped). The other data cells wrap at the top.
     /// </summary>
     private static readonly string StyledStyles =
         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<styleSheet xmlns=\"" + Main + "\">" +
@@ -144,10 +145,10 @@ public static class Xlsx
         Fill("FFDCE3EC") + Fill("FFFFF2CC") + Fill("FFEDEDED") + Fill("FFDDEBF7") + Fill("FFFFC000") + Fill("FF44546A") + "</fills>" +
         "<borders count=\"2\"><border><left/><right/><top/><bottom/><diagonal/></border><border>" + Side("left") + Side("right") + Side("top") + Side("bottom") + "<diagonal/></border></borders>" +
         "<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>" +
-        "<cellXfs count=\"10\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\" xfId=\"0\"/>" +
+        "<cellXfs count=\"11\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\" xfId=\"0\"/>" +
         "<xf numFmtId=\"49\" fontId=\"0\" fillId=\"0\" borderId=\"0\" xfId=\"0\" applyNumberFormat=\"1\"/>" +
         "<xf numFmtId=\"49\" fontId=\"1\" fillId=\"2\" borderId=\"0\" xfId=\"0\" applyNumberFormat=\"1\" applyFont=\"1\" applyFill=\"1\"/>" +
-        Xf(49, 0, 3, false) + Xf(49, 2, 0, true) + Xf(49, 2, 4, true) + Xf(49, 3, 5, true) + Xf(49, 1, 6, true) + Xf(49, 4, 7, true) + Xf(0, 2, 0, true) +
+        Xf(49, 0, 3, false) + Xf(49, 2, 0, true) + Xf(49, 2, 4, true) + Xf(49, 3, 5, true) + Xf(49, 1, 6, true) + Xf(49, 4, 7, true) + Xf(0, 2, 0, true) + Xf(49, 2, 0, true, false) +
         "</cellXfs><cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\"/></cellStyles></styleSheet>";
 
     private static string Font(bool bold, string argb) =>
@@ -157,9 +158,9 @@ public static class Xlsx
 
     private static string Side(string side) => $"<{side} style=\"thin\"><color rgb=\"FFD9D9D9\"/></{side}>";
 
-    private static string Xf(int format, int font, int fill, bool locked) =>
+    private static string Xf(int format, int font, int fill, bool locked, bool wrap = true) =>
         $"<xf numFmtId=\"{format}\" fontId=\"{font}\" fillId=\"{fill}\" borderId=\"1\" xfId=\"0\" applyNumberFormat=\"1\" applyFont=\"1\" applyFill=\"1\" applyBorder=\"1\" applyAlignment=\"1\" applyProtection=\"1\">" +
-        $"<alignment vertical=\"top\" wrapText=\"1\"/><protection locked=\"{(locked ? 1 : 0)}\"/></xf>";
+        $"<alignment vertical=\"top\"{(wrap ? " wrapText=\"1\"" : string.Empty)}/><protection locked=\"{(locked ? 1 : 0)}\"/></xf>";
 
     /// <summary>The style index of a look (<see cref="StyledStyles"/>).</summary>
     private static int StyleOf(CellLook look)
@@ -169,6 +170,7 @@ public static class Xlsx
             case CellLook.Editable: return 3;
             case CellLook.NotApplicable: return 5;
             case CellLook.Section: return 6;
+            case CellLook.Binding: return 10;
             default: return 4;
         }
     }

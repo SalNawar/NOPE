@@ -44,6 +44,9 @@ public static class NarrativeWorkbook
     /// <summary>The drop-downs' values (hidden).</summary>
     public const string ListsSheet = "Lists";
 
+    /// <summary>The ref of a Narrative row shown read-only (a text authored outside world_source.json): the import skips it.</summary>
+    public const string ReadOnlyRef = "(read-only)";
+
     /// <summary>The value of the Lines sheet's remove column that removes a line.</summary>
     public const string RemoveMark = "remove";
 
@@ -51,20 +54,16 @@ public static class NarrativeWorkbook
     public static readonly string[] NarrativeHeaders = { "narrative", "who", "when", "part", "field", "speaker", "text", "notes", "ref", "was" };
 
     /// <summary>The Lines sheet's columns: the slot, the voice, the content columns a voice row may have (read back where the slot's sheet has them), remove, then the pool and the binding.</summary>
-    public static readonly string[] LinesHeaders = { "slot", "voice", "personality", "premade", "kind", "kinds", "era", "request", "variant", "question", "verdict", "intent", "reason", "lie", "text", "then", "remove", "pool", "ref", "was" };
+    public static readonly string[] LinesHeaders = { "slot", "voice", "personality", "premade", "kind", "kinds", "era", "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply", "text", "then", "remove", "pool", "ref", "was" };
 
     /// <summary>The Lines sheet's columns that name content columns (read back).</summary>
-    public static readonly string[] LineContentHeaders = { "personality", "premade", "kind", "kinds", "era", "request", "variant", "question", "verdict", "intent", "reason", "lie", "text", "then" };
+    public static readonly string[] LineContentHeaders = { "personality", "premade", "kind", "kinds", "era", "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply", "text", "then" };
 
     /// <summary>The voice slots: the content sheets the Lines sheet shows, the personalities' and premades' first, then the defaults.</summary>
-    public static readonly string[] LineSlots =
-    {
-        "voiceClaims", "voiceHandOver", "voiceMissingForms", "voiceSpoken", "voiceAnswers", "voiceSmallTalk", "voiceReactions", "voiceSlips",
-        "claims", "kindSmallTalk", "missingFormReplies", "interviewReactions", "interviewSlips"
-    };
+    public static readonly string[] LineSlots = VoiceSlots().Concat(new[] { "claims", "kindSmallTalk", "missingFormReplies", "interviewReactions", "interviewSlips", "waiverPadReplies" }).ToArray();
 
-    /// <summary>The voice slots a personality or a premade speaks in (the rest are the defaults).</summary>
-    private static readonly string[] VoiceSlots = LineSlots.Take(8).ToArray();
+    /// <summary>The voice slots a personality or a premade speaks in (interview.voices; the rest of <see cref="LineSlots"/> are the defaults).</summary>
+    private static string[] VoiceSlots() => new[] { "voiceClaims", "voiceHandOver", "voiceMissingForms", "voiceSpoken", "voiceAnswers", "voiceSmallTalk", "voiceReactions", "voiceSlips", "voiceWaiverPad" };
 
     /// <summary>The Cases sheet's columns.</summary>
     public static readonly string[] CaseHeaders =
@@ -144,6 +143,10 @@ public static class NarrativeWorkbook
                 AddAppearance(b, sheet, "(forced slots)", "slots without a premade", r);
         }
 
+        AddStrandings(b, sheet, context);
+        AddMail(b, sheet);
+        AddPaper(b, sheet);
+
         foreach (int r in b.Rows("historyRules"))
         {
             string rule = b.Get("historyRules", r, "id");
@@ -155,7 +158,7 @@ public static class NarrativeWorkbook
         }
 
         RowTable table = sheet.Table();
-        table.Look.Columns = NarrativeHeaders.Select(h => h == "text" ? CellLook.Editable : CellLook.Locked).ToArray();
+        table.Look.Columns = NarrativeHeaders.Select(h => h == "text" ? CellLook.Editable : h == "ref" || h == "was" ? CellLook.Binding : CellLook.Locked).ToArray();
         table.Look.Widths = new[] { 14, 18, 34, 26, 16, 12, 70, 34, 18, 0 };
         table.Look.HiddenColumns = NarrativeHeaders.Select(h => h == "was").ToArray();
         table.Look.FreezeColumns = 2;
@@ -194,7 +197,7 @@ public static class NarrativeWorkbook
         foreach (string d in dialogs.Where(d => d.Length > 0).Distinct())
             AddDialog(b, sheet, context, d, who, placedDialogs);
 
-        foreach (string slot in VoiceSlots)
+        foreach (string slot in VoiceSlots())
             foreach (int r in b.Rows(slot).Where(r => b.Get(slot, r, "premade") == id))
             {
                 string part = "voice: " + SlotLabel(b, slot, r);
@@ -213,6 +216,87 @@ public static class NarrativeWorkbook
             foreach (string field in new[] { "factor", "outcome", "amount" })
                 sheet.Field(b, id, who, "when stamped Accepted", "world pull", "premadePulls", r, field, string.Empty, field == "amount" ? "the pull, instead of the role's" : string.Empty, $"pull {pull} · {field}");
         }
+    }
+
+    /// <summary>
+    /// The strandings (the endings and strandings spec): the desk's waiver pad, each
+    /// fate's weights, report line and paper lines, the agency's failure report in Mail,
+    /// the paper's fallback line, and the texts authored outside world_source.json (the
+    /// waiver form's fine print) as read-only rows naming where they are edited.
+    /// </summary>
+    private static void AddStrandings(Book b, SheetWriter sheet, NarrativeContext context)
+    {
+        const string id = "strandings", who = "Strandings";
+        if (!b.Has("agencyStrandingFates", "id") && !b.Has("waiverPad", "label"))
+            return;
+        string chance = b.Rows("agency").Select(r => b.Get("agency", r, "strandChance")).FirstOrDefault() ?? string.Empty;
+        sheet.Section(id, who, "an accepted traveller on an Economy transponder may be stranded at the shift's end" + (chance.Length > 0 ? $" ({Percent(chance)})" : string.Empty),
+            "the waiver pad, the fates, the failure report; the pad answers of the personalities are in Lines (voiceWaiverPad, waiverPadReplies)");
+        foreach (int r in b.Rows("waiverPad"))
+        {
+            sheet.Field(b, id, who, "a day whose papers menu holds the Stranding Waiver", "waiver pad", "waiverPad", r, "label", "Desk", "the entry every traveller of the day is offered");
+            sheet.Field(b, id, who, "the clerk picks the pad", "waiver pad", "waiverPad", r, "prompt", "Desk", "the desk's words as a blank slides across");
+        }
+        foreach (NarrativeNote note in context.Notes.Where(n => n.Narrative == id))
+            sheet.Note(id, who, note);
+        foreach (int r in b.Rows("agencyStrandingFates"))
+        {
+            string fate = b.Get("agencyStrandingFates", r, "id");
+            string part = $"fate {fate} ({b.Get("agencyStrandingFates", r, "fate")})";
+            const string when = "a stranding: one fate, drawn by the waiver's weights";
+            sheet.Field(b, id, who, when, part, "agencyStrandingFates", r, "weightWaivered", string.Empty, "its weight with a valid signed waiver (never shown)");
+            sheet.Field(b, id, who, when, part, "agencyStrandingFates", r, "weightUnwaivered", string.Empty, "its weight without one");
+            if (b.Get("agencyStrandingFates", r, "stability").Length > 0)
+                sheet.Field(b, id, who, when, part, "agencyStrandingFates", r, "stability", string.Empty, "a tremor's stability loss, a percent");
+            sheet.Field(b, id, who, when, part, "agencyStrandingFates", r, "status", string.Empty, "the failure report's last line");
+            foreach (int l in b.Rows("strandingFateLines").Where(l => b.Get("strandingFateLines", l, "strandingFate") == fate))
+                sheet.Field(b, id, who, "the next morning's paper" + (b.Get("strandingFateLines", l, "era").Length > 0 ? $" (era {b.Get("strandingFateLines", l, "era")})" : string.Empty),
+                    part, "strandingFateLines", l, "text", string.Empty, "{place} required, {name} optional");
+        }
+        foreach (int r in b.Rows("agencyStrandingReport"))
+            foreach ((string field, string note) in new[] { ("unit", "{unit}, {place}"), ("traveller", "{name}, {id}"), ("waivered", "a valid signed waiver on file: {waiver}, {debt}"), ("unwaivered", "no valid signed waiver on file"), ("fine", "the stranding fine: {fine}") })
+                sheet.Field(b, id, who, "Mail, the morning after every stranding", "failure report", "agencyStrandingReport", r, field, string.Empty, note);
+        foreach (int r in b.Rows("news"))
+            sheet.Field(b, id, who, "the morning paper, per stranding without a fate line", "paper", "news", r, "stranded", string.Empty, "{name} and {place}");
+    }
+
+    /// <summary>Mail's authored messages: each one's sender, subject and paragraphs.</summary>
+    private static void AddMail(Book b, SheetWriter sheet)
+    {
+        const string id = "mail", who = "Mail";
+        List<int> mail = b.Rows("pcMail").ToList();
+        if (mail.Count == 0)
+            return;
+        sheet.Section(id, who, "the PC's Mail: each message arrives on its day (and after its flag)", "the stranding failure report is under Strandings");
+        foreach (int r in mail)
+        {
+            string m = b.Get("pcMail", r, "id"), flag = b.Get("pcMail", r, "flag"), until = b.Get("pcMail", r, "untilDay");
+            string when = $"day {b.Get("pcMail", r, "fromDay")}" + (flag.Length > 0 ? " if " + b.Flag(flag) : string.Empty) + (until.Length > 0 && until != "0" ? $", until day {until}" : string.Empty);
+            string part = "mail " + m;
+            sheet.Field(b, id, who, when, part, "pcMail", r, "from", string.Empty, string.Empty);
+            sheet.Field(b, id, who, when, part, "pcMail", r, "subject", string.Empty, string.Empty);
+            int n = 0;
+            foreach (int body in b.Rows("pcMailBody").Where(x => b.Get("pcMailBody", x, "mail") == m))
+                sheet.Field(b, id, who, when, part, "pcMailBody", body, "text", string.Empty, string.Empty, $"paragraph {++n}");
+        }
+    }
+
+    /// <summary>The morning paper's authored lines (the history templates and the debt lines) and the radio at home.</summary>
+    private static void AddPaper(Book b, SheetWriter sheet)
+    {
+        const string id = "paper", who = "The paper and the radio";
+        sheet.Section(id, who, "every morning's paper, and the radio at home each night", "the story beats' own news lines are in their blocks");
+        foreach (int r in b.Rows("history"))
+            foreach ((string field, string note) in new[] { ("lines.leaderGained", "a nation takes the lead"), ("lines.leaderLost", "a nation loses the lead"), ("lines.carry", "a carry changed a place"), ("lines.dominant", "{attribute} and {place}"), ("lines.panic", "{place} and {value}") })
+                sheet.Field(b, id, who, "the morning after", "history lines", "history", r, field, string.Empty, note, field.Substring("lines.".Length));
+        foreach (int r in b.Rows("news"))
+            sheet.Field(b, id, who, "the morning after a shift with Debt Relief departures", "debt lines", "news", r, "debtReliefCount", string.Empty, "{count}");
+        int n = 0;
+        foreach (int r in b.Rows("newsDebt"))
+            sheet.Field(b, id, who, "one a morning, in a shuffled order per run", "debt lines", "newsDebt", r, "text", string.Empty, string.Empty, $"debt line {++n}");
+        n = 0;
+        foreach (int r in b.Rows("homeRadio"))
+            sheet.Field(b, id, who, "one a night at home, in order, once the radio is owned", "radio", "homeRadio", r, "text", string.Empty, string.Empty, $"night {++n}");
     }
 
     private static void AddAppearance(Book b, SheetWriter sheet, string narrative, string who, int r)
@@ -366,10 +450,11 @@ public static class NarrativeWorkbook
         Column("intent", lists.Source("intent", Enum.GetNames(typeof(ReactionIntent))));
         Column("reason", lists.Source("reason", Faults.Reasons));
         Column("lie", lists.Source("lie", Enum.GetNames(typeof(LieKind))));
+        Column("reply", lists.Source("reply", Enum.GetNames(typeof(WaiverPadReply))));
         Column("remove", lists.Source("remove", new[] { RemoveMark }));
 
-        table.Look.Columns = LinesHeaders.Select(h => h == "slot" || h == "remove" || LineContentHeaders.Contains(h) ? CellLook.Editable : CellLook.Locked).ToArray();
-        table.Look.Widths = new[] { 18, 12, 12, 10, 12, 14, 10, 12, 9, 12, 9, 8, 10, 14, 70, 40, 9, 8, 18, 0 };
+        table.Look.Columns = LinesHeaders.Select(h => h == "slot" || h == "remove" || LineContentHeaders.Contains(h) ? CellLook.Editable : h == "ref" || h == "was" ? CellLook.Binding : CellLook.Locked).ToArray();
+        table.Look.Widths = new[] { 18, 12, 12, 10, 12, 14, 10, 12, 9, 12, 9, 8, 10, 14, 12, 70, 40, 9, 8, 18, 0 };
         table.Look.HiddenColumns = LinesHeaders.Select(h => h == "was").ToArray();
         table.Look.FreezeColumns = 2;
         table.Look.TabColor = "FFFFC000";
@@ -378,7 +463,7 @@ public static class NarrativeWorkbook
 
     /// <summary>The rows one line is picked among: the same slot, voice and keys.</summary>
     private static string PoolKey(Book b, string slot, int r) =>
-        slot + "\u001f" + string.Join("\u001f", new[] { "personality", "kind", "request", "variant", "question", "verdict", "intent", "reason", "lie" }.Select(h => b.Get(slot, r, h)));
+        slot + "\u001f" + string.Join("\u001f", new[] { "personality", "kind", "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply" }.Select(h => b.Get(slot, r, h)));
 
     // =====================================================================
     // Days, Cases, Triggers
@@ -403,7 +488,7 @@ public static class NarrativeWorkbook
                 b.Get("days", r, "queue"),
                 authored.Length > 0 ? authored : "none",
                 Math.Max(0, queue - slots.Count).ToString(CultureInfo.InvariantCulture),
-                pool.Count > 0 ? $"{chance} a generated slot: " + string.Join(", ", pool.Select(b.PremadeName)) : "none",
+                pool.Count > 0 ? $"{chance} per generated slot: " + string.Join(", ", pool.Select(b.PremadeName)) : "none",
                 string.Join(", ", b.Rows("dayKinds").Where(k => b.Get("dayKinds", k, "day") == day).Select(k => $"{b.Get("dayKinds", k, "kind")} {b.Get("dayKinds", k, "weight")}{(b.Get("dayKinds", k, "honest") == "true" ? " (honest)" : string.Empty)}")),
                 string.Join(", ", b.Rows("dayEras").Where(k => b.Get("dayEras", k, "day") == day).Select(k => $"{b.Get("dayEras", k, "era")} {b.Get("dayEras", k, "weight")}")),
                 string.Join(", ", Items(b.Get("days", r, "countries"))),
@@ -504,7 +589,7 @@ public static class NarrativeWorkbook
             List<string> effects = b.Rows("dialogChoices").Where(c => b.Get("dialogChoices", c, "dialog") == d && b.Get("dialogChoices", c, "effect").Length > 0)
                 .Select(c => $"'{b.Get("dialogChoices", c, "label")}' applies {b.Get("dialogChoices", c, "effect")}").ToList();
             var offered = context.Events.Where(e => e.Kind == NarrativeEvent.DialogOffered && e.Id == d).GroupBy(e => e.Seed)
-                .Select(g => $"seed {g.Key}: days {Spans(g.Select(e => e.Day).ToList())}");
+                .Select(g => $"seed {g.Key}: day{(g.Select(e => e.Day).Distinct().Count() > 1 ? "s" : string.Empty)} {Spans(g.Select(e => e.Day).ToList())}");
             t.Add(new[]
             {
                 "dialog", d, owner ?? string.Empty, Day(b.DayGate("dialogConditions", "dialog", d)),
@@ -628,7 +713,7 @@ public static class NarrativeWorkbook
 
     private static string SlotLabel(Book b, string slot, int r)
     {
-        string keys = string.Join(" · ", new[] { "request", "variant", "question", "verdict", "intent", "reason", "lie" }.Select(h => b.Get(slot, r, h)).Where(v => v.Length > 0));
+        string keys = string.Join(" · ", new[] { "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply" }.Select(h => b.Get(slot, r, h)).Where(v => v.Length > 0));
         string name;
         switch (slot)
         {
@@ -640,6 +725,7 @@ public static class NarrativeWorkbook
             case "voiceSmallTalk": name = "small talk"; break;
             case "voiceReactions": name = "reaction"; break;
             case "voiceSlips": name = "slip"; break;
+            case "voiceWaiverPad": name = "waiver pad"; break;
             default: name = slot; break;
         }
         return keys.Length > 0 ? $"{name} ({keys})" : name;
@@ -657,6 +743,7 @@ public static class NarrativeWorkbook
             case "voiceSmallTalk": return "small talk";
             case "voiceReactions": return $"stamped {b.Get(slot, r, "verdict")} ({b.Get(slot, r, "intent")}{(b.Get(slot, r, "reason").Length > 0 ? ", " + b.Get(slot, r, "reason") : string.Empty)})";
             case "voiceSlips": return "after small talk, when lying" + (b.Get(slot, r, "lie").Length > 0 ? $" ({b.Get(slot, r, "lie")})" : string.Empty);
+            case "voiceWaiverPad": return $"handed the waiver pad: {b.Get(slot, r, "reply")}";
             default: return string.Empty;
         }
     }
@@ -751,14 +838,12 @@ public static class NarrativeWorkbook
             return c < 0 || row < 0 || row >= t.Rows.Count || c >= t.Rows[row].Length ? string.Empty : t.Rows[row][c] ?? string.Empty;
         }
 
-        /// <summary>The row as it was exported: a JSON object of its cells by header (the "was" binding).</summary>
+        /// <summary>The row as it was exported: a one-line JSON object of its cells by header (the "was" binding; ContentJson escapes each text).</summary>
         public string Json(string sheet, int row)
         {
             RowTable t = Table(sheet);
-            var obj = ContentNode.NewObject();
-            for (int c = 0; c < t.Headers.Count; c++)
-                obj.Add(t.Headers[c], ContentNode.FromString(c < t.Rows[row].Length ? t.Rows[row][c] ?? string.Empty : string.Empty));
-            return ContentJson.Write(obj).TrimEnd('\n');
+            string Quote(string s) => ContentJson.Write(ContentNode.FromString(s ?? string.Empty)).TrimEnd('\n');
+            return "{" + string.Join(", ", t.Headers.Select((h, c) => Quote(h) + ": " + Quote(c < t.Rows[row].Length ? t.Rows[row][c] : string.Empty))) + "}";
         }
 
         public ColumnSpec Column(string sheet, string header)
@@ -1012,6 +1097,13 @@ public static class NarrativeWorkbook
         {
             int at = Add(Row(narrative, who, when, string.Empty, string.Empty, string.Empty, string.Empty, notes, string.Empty, string.Empty));
             Look.SectionRows.Add(at);
+        }
+
+        /// <summary>A read-only Narrative row: a text authored outside world_source.json, with where it is edited (the import never reads it).</summary>
+        public void Note(string narrative, string who, NarrativeNote note)
+        {
+            int at = Add(Row(narrative, who, note.When, note.Part, note.Field, string.Empty, note.Text, "read-only here: edit it in " + note.Where, ReadOnlyRef, string.Empty));
+            Look.Cells[(at, Array.IndexOf(NarrativeHeaders, "text"))] = CellLook.NotApplicable;
         }
 
         /// <summary>A Narrative row bound to one cell of a content table (its text editable), with the column's drop-down when it has one.</summary>

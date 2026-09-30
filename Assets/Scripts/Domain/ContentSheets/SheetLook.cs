@@ -13,7 +13,10 @@ public enum CellLook
     NotApplicable,
 
     /// <summary>A section banner: bold on a blue band, locked.</summary>
-    Section
+    Section,
+
+    /// <summary>A binding cell the import reads but the author never edits (a ref, a hidden copy): grey, locked, never wrapped, so it never grows its row.</summary>
+    Binding
 }
 
 /// <summary>A list rule on some cells of a styled sheet: the spreadsheet offers <see cref="Source"/>'s values in a drop-down and refuses others.</summary>

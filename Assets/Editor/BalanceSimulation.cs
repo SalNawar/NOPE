@@ -101,14 +101,8 @@ public static class BalanceSimulation
     /// </summary>
     public static string Run(string folder)
     {
-        RunConfigSO run = Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath);
-        ContentLibrarySO lib = run != null ? run.contentLibrary : null;
-        GameConfigSO config = run != null ? run.gameConfig : null;
-        if (lib == null || config == null)
-        {
-            Debug.LogError("[Balance] Resources/RunConfig.asset, its content library or its game config is missing.");
+        if (!Load(out RunConfigSO run, out ContentLibrarySO lib, out GameConfigSO config))
             return null;
-        }
 
         var settings = AssetDatabase.LoadAssetAtPath<BalanceSimSettingsSO>(BalanceSimSettingsSO.AssetPath);
         _pace = settings != null ? settings.travellersPerShift : ShiftPace;
@@ -184,6 +178,63 @@ public static class BalanceSimulation
         return path;
     }
 
+    /// <summary>The run config, its content library and its game config; false (logged) when one is missing.</summary>
+    private static bool Load(out RunConfigSO run, out ContentLibrarySO lib, out GameConfigSO config)
+    {
+        run = Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath);
+        lib = run != null ? run.contentLibrary : null;
+        config = run != null ? run.gameConfig : null;
+        if (lib != null && config != null)
+            return true;
+        Debug.LogError("[Balance] Resources/RunConfig.asset, its content library or its game config is missing.");
+        return false;
+    }
+
+    /// <summary>
+    /// What a caller watches while a run plays (the narrative workbook's reference run,
+    /// NarrativeWorkbookMenu): each day's queue as generated, each traveller as they come
+    /// to the desk (before the decision), each night after the day turned, and the
+    /// ending. Null members are skipped.
+    /// </summary>
+    public sealed class RunObserver
+    {
+        /// <summary>A day's queue: the day, its interview (the day's lines, questions and dialogs) and its cases.</summary>
+        public Action<int, InterviewDay, IReadOnlyList<CaseInstance>> DayStarted;
+
+        /// <summary>A traveller comes to the desk: the day, the 1-based slot, the case and the day's interview.</summary>
+        public Action<int, int, CaseInstance, InterviewDay> Presented;
+
+        /// <summary>A night passed: the day just played and the world after the night's resolve.</summary>
+        public Action<int, WorldState> NightTurned;
+
+        /// <summary>The run ended: the day and the ending's id.</summary>
+        public Action<int, string> Ended;
+    }
+
+    /// <summary>
+    /// Plays one run from <paramref name="seed"/> under <paramref name="style"/> over the
+    /// whole queue (no shopper, no bribes), through the simulation's own steps, telling
+    /// <paramref name="observer"/>; false when the run config is missing. Messages below
+    /// errors are muted while it plays, as in <see cref="Run"/>.
+    /// </summary>
+    public static bool Observe(int seed, PlayStyle style, RunObserver observer)
+    {
+        if (!Load(out RunConfigSO run, out ContentLibrarySO lib, out GameConfigSO config))
+            return false;
+        LogType filter = Debug.unityLogger.filterLogType;
+        Debug.unityLogger.filterLogType = LogType.Error;
+        try
+        {
+            Play(run, lib, config, seed, style, 0, Shopper.None, false, observer);
+        }
+        finally
+        {
+            Debug.unityLogger.filterLogType = filter;
+            DevToolsState.ResetAll();
+        }
+        return true;
+    }
+
     /// <summary>One run's numbers, its final world and its decisions.</summary>
     private sealed class RunResult
     {
@@ -232,8 +283,8 @@ public static class BalanceSimulation
         public float StabilityDelta;
     }
 
-    /// <summary>A run of <see cref="Days"/> days from <paramref name="seed"/> under <paramref name="style"/>, through the game's own steps, <paramref name="pace"/> travellers a shift (0: the whole queue); with a <paramref name="shopper"/>, each night at Home it treats and buys (<see cref="ShopperNight"/>); with <paramref name="bribes"/>, the clerk takes every bribe a traveller at the desk offers (BribePolicy, applied at the shift's close as the game applies a dialog's effect).</summary>
-    private static RunResult Play(RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, int seed, PlayStyle style, int pace, Shopper shopper, bool bribes)
+    /// <summary>A run of <see cref="Days"/> days from <paramref name="seed"/> under <paramref name="style"/>, through the game's own steps, <paramref name="pace"/> travellers a shift (0: the whole queue); with a <paramref name="shopper"/>, each night at Home it treats and buys (<see cref="ShopperNight"/>); with <paramref name="bribes"/>, the clerk takes every bribe a traveller at the desk offers (BribePolicy, applied at the shift's close as the game applies a dialog's effect); an <paramref name="observer"/> is told each day, traveller, night and the ending.</summary>
+    private static RunResult Play(RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, int seed, PlayStyle style, int pace, Shopper shopper, bool bribes, RunObserver observer = null)
     {
         DevToolsState.ResetAll();
         var r = new RunResult { Seed = seed };
@@ -250,6 +301,7 @@ public static class BalanceSimulation
             TodaysWorld today = lib.BuildToday(plan, world);
             List<CaseInstance> cases = new CaseFactory(lib, today).GenerateDayCases(plan, world, Seeds.Day(seed, day), interview, true);
             r.DialogsOffered.Add($"day {day}: [{string.Join(", ", interview.OfferedDialogs(null).Select(d => d.id))}]");
+            observer?.DayStarted?.Invoke(day, interview, cases);
             policy.StartDay(day);
             int carriesBefore = r.Carries;
 
@@ -259,6 +311,7 @@ public static class BalanceSimulation
                 CaseInstance inst = cases[i];
                 // The traveller comes to the desk: a once-per-run premade is met (days 7-15 X1, the game's own step).
                 DayCycle.Present(world, inst);
+                observer?.Presented?.Invoke(day, i + 1, inst, interview);
                 if (bribes)
                     foreach ((string dialogId, string effect) in BribePolicy.Take(interview.OfferedDialogs(inst.premadeDialogId), e => Pays(lib, e)))
                         if (interview.Complete(dialogId, effect))
@@ -295,6 +348,7 @@ public static class BalanceSimulation
             if (ended != null)
             {
                 End(r, ended, day);
+                observer?.Ended?.Invoke(day, ended);
                 break;
             }
 
@@ -318,9 +372,12 @@ public static class BalanceSimulation
                 DayCycle.EndRun(world, sleep, lib, config);
                 r.Dump.AppendLine($"night {day}: household {bill.total} money {world.money} ENDING {sleep.id}");
                 End(r, sleep.id, day);
+                observer?.NightTurned?.Invoke(day, world);
+                observer?.Ended?.Invoke(day, sleep.id);
                 break;
             }
             DayCycle.AdvanceNight(world, lib, config);
+            observer?.NightTurned?.Invoke(day, world);
             r.Dump.AppendLine($"night {day}: household {bill.total} money {world.money} leader '{world.history.leaderId}'");
         }
 

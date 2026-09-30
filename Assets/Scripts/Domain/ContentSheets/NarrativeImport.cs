@@ -134,6 +134,8 @@ public sealed class NarrativeImport
             string[] row = t.Rows[i];
             string origin = $"{t.Name} row {t.RowNumbers[i]}";
             string r = Cell(row, reference).Trim();
+            if (r == NarrativeWorkbook.ReadOnlyRef)
+                continue;
             if (r.Length == 0)
             {
                 if (Cell(row, text).Length > 0)
