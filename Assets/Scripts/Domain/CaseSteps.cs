@@ -248,14 +248,15 @@ public readonly struct StepTarget
 }
 
 /// <summary>
-/// The optional steps checklist's rules (the PC redesign ST1-ST4, §4.4;
+/// The steps checklist's rules (the PC redesign ST1-ST4, §4.4;
 /// redesign phase 21): the set a traveller gets (the default set until a paper
 /// handed over on arrival is read, then their kind's, the personalities spec's
 /// B5; inheriting and overriding by id; the default for a kind without one; a
 /// step from its first day), each step's parts and tick from what the player has done this case
 /// (CaseProgress; a hand-set tick holds), and where a click goes. A step ticks
 /// when the player made the check, never on what the check found, so the list
-/// gives no answer away. Pure; the Investigation app's StepsPanel draws it.
+/// gives no answer away. Pure; the Investigation app's guided steps
+/// (GuideBar, CaseGuide) read it: each step's checks, its tick, its jumps.
 /// </summary>
 public static class CaseSteps
 {
@@ -308,7 +309,7 @@ public static class CaseSteps
     /// Each listed step's state this case (a step with no parts is left out):
     /// its parts checked and needed, ticked when all are (or as set by hand,
     /// which holds). Written into <paramref name="into"/> (cleared first; the
-    /// steps panel reuses one list) or a new list, which is returned.
+    /// guided steps reuse one list) or a new list, which is returned.
     /// </summary>
     public static List<StepState> Evaluate(IReadOnlyList<StepSpec> steps, CaseProgress progress, List<StepState> into = null)
     {

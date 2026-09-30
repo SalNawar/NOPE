@@ -4,12 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// The office builder's desktop window parts (the PC redesign WN1-WN3, DK8,
-/// DK9, CM2): the desktop's knobs (DesktopConfigSO), the compare dock above
-/// the taskbar (outside every window: the window layer, the icon area above
-/// it, draws over the desktop's icons and shows with or without a case; the
-/// dock draws over every window), the
-/// taskbar's window buttons, and the window manager on the desktop canvas,
+/// The office builder's desktop window parts (the PC redesign WN1-WN3, DK8):
+/// the desktop's knobs (DesktopConfigSO), the taskbar's window buttons, and
+/// the window manager on the desktop canvas,
 /// wired to every window's chrome and to the frame's Escape. Part of
 /// <see cref="OfficeSceneUIBuilder"/>; Build() calls these in its order.
 /// </summary>
@@ -47,87 +44,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A window title's size (a new title text; the window manager's wiring re-applies it to existing ones).</summary>
     private static int TitleFontSize => Mathf.RoundToInt(EnsureDesktopConfig().titleFontSize);
 
-    /// <summary>The Start menu's centre above the desktop's bottom: it opens right above the dock, so the dock is never covered.</summary>
+    /// <summary>The Start menu's centre above the desktop's bottom: it opens right above the taskbar.</summary>
     private static float StartMenuCentre(float menuHeight)
     {
         DesktopConfigSO config = EnsureDesktopConfig();
         return config.MaximisedBottom + config.startMenuGap + menuHeight / 2f;
-    }
-
-    /// <summary>
-    /// The compare dock (DK9, CM2): a strip the width of the desktop right
-    /// above the taskbar, built hidden and shown with the case (<paramref name="dock"/>,
-    /// the façade's). It is the investigation host's last child, so it draws
-    /// over the window layer and the scan toast. Empty, it reads the keyed
-    /// hint; its Pair (shown while a value is picked) covers the hint with
-    /// three columns (redesign phase 18): side A, the verdict and side B, each
-    /// a button (a side links back to its source in <paramref name="app"/>, the
-    /// verdict to the Report after a proof), and a clear button
-    /// (CompareController.Clear). Returns the CompareDock, which
-    /// <paramref name="compare"/> draws.
-    /// </summary>
-    private static CompareDock BuildCompareDock(Transform investHost, CompareController compare, InvestigationApp app, out GameObject dock)
-    {
-        DesktopConfigSO config = EnsureDesktopConfig();
-
-        DestroyChildIfPresent(investHost, "CompareDock"); // rebuilt fresh (its texts take the PC UX redesign's sizes; an older build's leftovers go)
-        Transform strip = Panel(investHost, "CompareDock", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, config.taskbarHeight + config.dockHeight / 2f),
-                                new Vector2(0f, config.dockHeight), Tooltip, ThemeRoleId.CompareBar);
-        TMP_Text hint = Text(strip, "Hint", null, PcType.Body, TextAlignmentOptions.Left, new Vector2(0.02f, 0f), new Vector2(0.98f, 1f), Ink,
-                             ThemeRoleId.CompareBar, "compare.dockHint", FontStyles.Italic);
-        Chrome(hint, PcType.Body);
-        hint.alignment = TextAlignmentOptions.MidlineLeft;
-        hint.raycastTarget = false;
-
-        Transform pair = Panel(strip, "Pair", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Tooltip, ThemeRoleId.CompareBar);
-        Button sideA = DockColumn(pair, "SideA", new Vector2(0.01f, 0f), new Vector2(0.43f, 1f), TextAlignmentOptions.Right, FontStyles.Normal, out TMP_Text sideAText);
-        Button verdict = DockColumn(pair, "Verdict", new Vector2(0.44f, 0f), new Vector2(0.6f, 1f), TextAlignmentOptions.Center, FontStyles.Bold, out TMP_Text verdictText);
-        Button sideB = DockColumn(pair, "SideB", new Vector2(0.61f, 0f), new Vector2(0.945f, 1f), TextAlignmentOptions.Left, FontStyles.Normal, out TMP_Text sideBText);
-
-        Button clear = MakeButton(pair, "ClearButton", null, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), null, ThemeRoleId.Button);
-        PlaceRect(clear.transform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(PcSize.M + PcSize.Control), -PcSize.Control / 2f), new Vector2(-PcSize.M, PcSize.Control / 2f));
-        DestroyChildIfPresent(clear.transform, "Label");
-        ButtonStroke(clear.transform, "Stroke1", Vector2.zero, new Vector2(2.5f, 20f), 45f);
-        ButtonStroke(clear.transform, "Stroke2", Vector2.zero, new Vector2(2.5f, 20f), -45f);
-        BuildHoverHint(clear, "compare.clear", null, new Vector2(0.5f, 1f), new Vector2(1f, 0f));
-        WirePersistentVoid(clear, "m_OnClick", compare, nameof(CompareController.Clear));
-        pair.gameObject.SetActive(false);
-
-        CompareDock columns = GetOrAdd<CompareDock>(strip.gameObject);
-        var so = new SerializedObject(columns);
-        Wire(so, "pair", pair.gameObject);
-        Wire(so, "sideA", sideA);
-        Wire(so, "sideAText", sideAText);
-        Wire(so, "verdict", verdict);
-        Wire(so, "verdictText", verdictText);
-        Wire(so, "sideB", sideB);
-        Wire(so, "sideBText", sideBText);
-        Wire(so, "app", app);
-        so.ApplyModifiedProperties();
-
-        strip.SetAsLastSibling();
-        strip.gameObject.SetActive(false);
-        dock = strip.gameObject;
-        return columns;
-    }
-
-    /// <summary>A column of the dock's pair: a flat button (no tint: CompareDock underlines a link) holding one auto-sizing line.</summary>
-    private static Button DockColumn(Transform pair, string name, Vector2 aMin, Vector2 aMax, TextAlignmentOptions align, FontStyles style, out TMP_Text text)
-    {
-        Transform column = Panel(pair, name, aMin, aMax, Vector2.zero, Vector2.zero, Tooltip, ThemeRoleId.CompareBar);
-        SetAnchors(column, aMin, aMax);
-        Button button = GetOrAdd<Button>(column.gameObject);
-        button.transition = Selectable.Transition.None;
-        button.targetGraphic = column.GetComponent<Image>();
-        text = Text(column, "Text", string.Empty, PcType.Body, align, new Vector2(0.01f, 0f), new Vector2(0.99f, 1f), Ink, ThemeRoleId.CompareBar, style: style);
-        text.enableAutoSizing = true;
-        text.fontSizeMin = PcType.Caption;
-        text.fontSizeMax = PcType.Body;
-        text.lineSpacing = -8f;
-        text.textWrappingMode = TextWrappingModes.Normal;
-        text.overflowMode = TextOverflowModes.Ellipsis;
-        text.raycastTarget = false;
-        return button;
     }
 
     /// <summary>
@@ -201,6 +122,11 @@ public static partial class OfficeSceneUIBuilder
             SetRef(soWindow, "manager", manager);
             SetRef(soWindow, "titleText", titleText);
             soWindow.ApplyModifiedProperties();
+
+            // The PC workbench spec §6: a hairline under the title bar and a stronger one round the window, over everything in it.
+            if (drag != null)
+                HairlineEdge(drag.transform, "Rule", 1);
+            HairlineFrame(window.transform, WbLineStrong, ThemeRoleId.HairlineStrong, 1f, "Edge").SetAsLastSibling();
         }
 
         return manager;

@@ -13,13 +13,12 @@ using UnityEngine.UI;
 /// to its stamp); the F1 card (the ShortcutsWindow: a scrolling list the
 /// card fills from ShortcutMap.Card); the context menu's row entries (Copy
 /// value, Copy row, Pin, Pick for compare); and the app's parts: the search
-/// field made live with its chip for a pasted untranslated line, the search
-/// palette's Pinned and Recent lists (the quick-open panel's: the PC UX
-/// redesign IA9), each pane header's Pin button, the focus ring
-/// (four FocusRing edges above everything in the window), each pane's zoom
-/// (its content becomes a scrolling viewport over a zoom root holding the
-/// views), and the references the keys read (Accept, Deny, the dock's
-/// clear). Notes and Settings get the app. It runs on the freshly built app
+/// drawer's field made live with its chip for a pasted untranslated line,
+/// the drawer's Pinned and Recent lists (its quick-open panel's: the PC
+/// workbench spec IA9), the focus ring (four FocusRing edges above
+/// everything in the window), each pane's zoom (its content becomes a
+/// scrolling viewport over a zoom root holding the views), and the
+/// references the keys read (Accept, Deny). Notes and Settings get the app. It runs on the freshly built app
 /// each time (the app's partial rebuilds the window), so it is idempotent;
 /// every reference it wires is checked (Wire, audit R6-004) and every part
 /// it looks up by path logs an error when missing. Part of
@@ -153,37 +152,28 @@ public static partial class OfficeSceneUIBuilder
     {
         Transform win = app.Window.transform;
 
-        TMP_InputField search = Need(win, "Toolbar/SearchField")?.GetComponent<TMP_InputField>();
+        TMP_InputField search = Need(win, "AppBody/SearchDrawer/Panel/SearchField")?.GetComponent<TMP_InputField>();
         SearchFieldChip chip = search != null ? BuildSearchChip(search, app.App) : null;
 
-        Transform quick = Need(win, "QuickOpen");
-        SidebarEntryList pins = quick != null ? BuildQuickOpenList(quick, app.App, "Pinned", true, "app.sidebar.pinned", "app.pins.empty", 0.52f, 0.915f) : null;
+        Transform quick = Need(win, "AppBody/SearchDrawer/Panel/QuickOpen");
+        SidebarEntryList pins = quick != null ? BuildQuickOpenList(quick, app.App, "Pinned", true, "app.sidebar.pinned", "app.pins.empty", 0.52f, 1f) : null;
         SidebarEntryList recent = quick != null ? BuildQuickOpenList(quick, app.App, "Recent", false, "app.sidebar.recent", "app.recent.empty", 0.02f, 0.49f) : null;
 
         var zooms = new List<Object>();
-        var pinButtons = new List<Object>();
         foreach (AppPane pane in win.GetComponentsInChildren<AppPane>(true))
-        {
             zooms.Add(BuildPaneZoom(pane));
-            pinButtons.Add(Need(pane.transform, "PaneHeader/PinButton")?.GetComponent<Button>());
-        }
 
         AppFocusRing ring = BuildFocusRing(win, config);
-        Transform dockClear = Need(win.parent.parent, "CompareDock/Pair/ClearButton");
 
         var so = new SerializedObject(app.App);
         Wire(so, "searchField", search);
         Wire(so, "searchChip", chip);
-        Wire(so, "panes", Need(win, "AppBody/Panes"));
         Wire(so, "pinsList", pins);
         Wire(so, "recentList", recent);
-        SerializedArrays.Set(so, "pinButtons", pinButtons);
         Wire(so, "focusRing", ring);
         SerializedArrays.Set(so, "zooms", zooms);
         Wire(so, "acceptButton", app.Accept);
         Wire(so, "denyButton", app.Deny);
-        Wire(so, "dockClearButton", dockClear != null ? dockClear.GetComponent<Button>() : null);
-        Wire(so, "compareDock", Need(win.parent.parent, "CompareDock"));
         Wire(so, "rowMenu", menu);
         so.ApplyModifiedProperties();
     }
@@ -216,7 +206,7 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// A list of the search palette's quick-open panel (IA9; PR1, PR2), between
+    /// A list of the search drawer's quick-open panel (IA9; PR1, PR2), between
     /// <paramref name="bottom"/> and <paramref name="top"/> of the panel: its
     /// heading (<paramref name="headingKey"/>), a scrolling list of jump rows
     /// and its empty hint (<paramref name="hintKey"/>).
@@ -225,14 +215,14 @@ public static partial class OfficeSceneUIBuilder
                                                        float bottom, float top)
     {
         TMP_Text heading = Text(panel, section + "Heading", null, PcType.Caption, TextAlignmentOptions.BottomLeft, new Vector2(0f, top), new Vector2(1f, top),
-                                Ink, ThemeRoleId.WindowBody, headingKey, FontStyles.Bold, ThemeTextKind.Heading, true);
+                                WbMuted, ThemeRoleId.SurfaceMuted, headingKey, FontStyles.Bold, ThemeTextKind.Heading, true);
         PlaceRect(heading.transform, new Vector2(0f, top), new Vector2(1f, top), new Vector2(PcSize.L, -40f), new Vector2(-PcSize.L, 0f));
         heading.raycastTarget = false;
-        RectTransform rows = BuildScrollList(panel, section + "List", new Vector2(0f, bottom), new Vector2(1f, top), 2f, Color.white, ThemeRoleId.WindowBody);
+        RectTransform rows = BuildScrollList(panel, section + "List", new Vector2(0f, bottom), new Vector2(1f, top), 2f, WbSurface, ThemeRoleId.Surface);
         Transform box = rows.parent.parent;
         PlaceRect(box, new Vector2(0f, bottom), new Vector2(1f, top), new Vector2(PcSize.S, 0f), new Vector2(-PcSize.S, -44f));
-        TMP_Text hint = Text(box, "EmptyHint", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink,
-                             ThemeRoleId.WindowBody, hintKey, FontStyles.Italic, ThemeTextKind.Body);
+        TMP_Text hint = Text(box, "EmptyHint", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, WbMuted,
+                             ThemeRoleId.SurfaceMuted, hintKey, FontStyles.Normal, ThemeTextKind.Body);
         PlaceRect(hint.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.M, PcSize.S), new Vector2(-PcSize.M, -PcSize.S));
         Chrome(hint, PcType.Caption, true);
         hint.raycastTarget = false;

@@ -7,18 +7,20 @@ using UnityEngine.UI;
 /// <summary>
 /// The office investigation's façade (the PC redesign RF1, audit R4-001): the
 /// one component GameManager talks to, with the scene's references. It
-/// presents each case in the Investigation app (InvestigationApp: the
-/// counters in its case header, never the claim, which the traveller only
-/// says; two panes of the six tabs; every tab
-/// has one view per pane and the presenters fill them all) and offers the binary
-/// Accept/Deny (the app header's buttons and the desk's stamp tray, wired
-/// once); the work is its presenters': CaseDocumentsPresenter (the papers,
+/// presents each case in the Investigation app (InvestigationApp, the PC
+/// workbench: the traveller's face, name and counters in its header, never
+/// the claim, which the traveller only says; the guided steps; the shelf;
+/// two panes; every source has one view per pane and the presenters fill
+/// them all) and offers the binary Accept/Deny (the app's decision step, whose
+/// Deny waits for a logged difference or broken rule, MatchBoard's findings;
+/// and the desk's stamp tray, ungated; wired once); the work is its
+/// presenters': CaseDocumentsPresenter (the papers,
 /// the hand-over and the scan: the Documents tab), InterviewPresenter (the
 /// dialog runner on the traveller wheel, the Transcript tab, the bubble),
 /// EvidencePresenter (the discrepancy log, the Report tab, the compare's
 /// DEVIATION LOGGED) and DayReference (the Rules, the Reference books' facts,
-/// the Records tab's registry); it feeds the sidebar's steps checklist
-/// (StepsPanel) the case and its events (papers handed over, asked for and
+/// the Records tab's registry, the Calendar); it feeds the guided steps
+/// (GuideBar) the case and its events (papers handed over, asked for and
 /// read at the desk, pairs compared, answers heard, garments looked at).
 /// Nothing opens or closes a window by itself
 /// but a scan (the app's ScanArrival): new lines and deviations badge their
@@ -39,20 +41,14 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The Investigation app: its window, header, counters, badges, toast and pane.</summary>
     [SerializeField] private InvestigationApp app;
 
-    /// <summary>The app header's Accept (and the stamp tray's) decide the case.</summary>
+    /// <summary>The decision step's Accept (the stamp tray's decides too).</summary>
     [SerializeField] private Button acceptButton;
 
-    /// <summary>The app header's Deny.</summary>
+    /// <summary>The decision step's Deny (interactable once a difference or a broken rule is logged).</summary>
     [SerializeField] private Button denyButton;
 
     /// <summary>The one compare: every pickable row on the PC, on a held paper, in the bubble and through the Look menu.</summary>
     [SerializeField] private CompareController compareController;
-
-    /// <summary>The PC's compare dock (DK9), above the window layer so no window covers it; shown while a traveller is at the desk.</summary>
-    [SerializeField] private GameObject compareDock;
-
-    /// <summary>The sidebar's steps checklist (optional: without it no steps show).</summary>
-    [SerializeField] private StepsPanel stepsPanel;
 
     [Header("The app's tabs (one view per pane, the left pane's first)")]
     /// <summary>The Documents tabs: a chip per paper, the scanned copies.</summary>
@@ -72,6 +68,9 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>The Rules tabs: the day's Directive Memo.</summary>
     [SerializeField] private RulesView[] rulesViews = new RulesView[0];
+
+    /// <summary>The Calendar tabs: today in the agency's calendar.</summary>
+    [SerializeField] private CalendarView[] calendarViews = new CalendarView[0];
 
     [Header("Office")]
     /// <summary>The traveller wheel's ring: shows the current interview node's choices (requests, questions, dialog replies).</summary>
@@ -116,8 +115,17 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The stamp tray whose decisions this listens to (null while detached; audit R4-003).</summary>
     private StampTray _stampTrayListening;
 
+    /// <summary>The character art the traveller's face is drawn with.</summary>
+    private CharacterArt _art;
+
     /// <summary>Number of discrepancies documented for the current case.</summary>
     public int EvidenceCount => _evidence.Count;
+
+    /// <summary>The app's guided steps (null without the app).</summary>
+    private GuideBar Steps => app != null ? app.Guide : null;
+
+    /// <summary>The app's workbench (null without the app).</summary>
+    private MatchBoard Board => app != null ? app.Board : null;
 
     /// <summary>
     /// True when the evidence loop is playable (the app and the compare wired),
@@ -185,6 +193,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         _reference.RecordLookedUp += StepsRecordViewed;
         if (compareController != null)
             compareController.PairCompared += StepsCompared;
+        if (Board != null)
+            Board.Changed += RefreshDecision;
 
         if (stampTray != null)
         {
@@ -202,23 +212,19 @@ public sealed class InvestigationUIController : MonoBehaviour
         ShowCaseLayers(false);
         if (app != null)
             app.EndCase();
-        if (stepsPanel != null)
-            stepsPanel.EndCase();
+        if (Steps != null)
+            Steps.EndCase();
     }
 
     /// <summary>The presenters over this component's references (the desk only when it is reachable), each filling the app's search index.</summary>
     private void BuildPresenters(InvestigationWiring wiring)
     {
         CaseIndex index = app != null ? app.Index : null;
-        _reference = new DayReference(rulesViews, recordsViews, compareController, referenceViews, index);
+        _reference = new DayReference(rulesViews, recordsViews, compareController, referenceViews, calendarViews, index);
         _documents = new CaseDocumentsPresenter(documentsViews, wiring.DeskReachable ? desk : null, compareController, () => _evidence.DocumentedCategories, index);
         _interview = new InterviewPresenter(interactionPanel, transcriptViews, () => Arrived(AppTab.Transcript), wheel, compareController,
                                             RequestPaper, SignWaiver, () => _currentCase, this, index);
-        _evidence = new EvidencePresenter(compareController, reportViews, () =>
-        {
-            Arrived(AppTab.Report);
-            ShowCounters();
-        }, () => _currentCase, index, () => _agency, () => _reference.Day);
+        _evidence = new EvidencePresenter(compareController, reportViews, () => Arrived(AppTab.Report), () => _currentCase, index, () => _agency, () => _reference.Day);
     }
 
     /// <summary>The start-up error and warnings for what is not wired (each changes what the day can show or generate).</summary>
@@ -263,6 +269,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         _reference.RecordLookedUp -= StepsRecordViewed;
         if (compareController != null)
             compareController.PairCompared -= StepsCompared;
+        if (Board != null)
+            Board.Changed -= RefreshDecision;
         if (_stampTrayListening != null)
         {
             _stampTrayListening.Decided -= Decide;
@@ -284,8 +292,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Injects today's interview (questions, dialogs and wording, fixed at day start).</summary>
     public void SetInterviewDay(InterviewDay day) => _interview.SetInterviewDay(day);
 
-    /// <summary>Injects the character art the passport photos are drawn with.</summary>
-    public void SetCharacterArt(CharacterArt art) => _documents.SetCharacterArt(art);
+    /// <summary>Injects the character art the passport photos and the app's face of the traveller are drawn with.</summary>
+    public void SetCharacterArt(CharacterArt art)
+    {
+        _art = art;
+        _documents.SetCharacterArt(art);
+    }
 
     /// <summary>Injects the day-start translation (which tongues are foreign and translated today) and the library's translation settings (their key-word rule included).</summary>
     public void SetTranslation(TranslationDay day, TranslationSettings settings) => _interview.SetTranslation(day, settings);
@@ -305,23 +317,35 @@ public sealed class InvestigationUIController : MonoBehaviour
             ShowRich(inst, lib);
     }
 
-    /// <summary>Between cases: the compare dock hides, the desktop shows its idle line, the app's case tabs show the no-case state and the steps go. No window closes.</summary>
+    /// <summary>Between cases: the desktop shows its idle line, the app's case sources show the no-case state, the workbench empties and the steps go. No window closes.</summary>
     public void Hide()
     {
         ShowCaseLayers(false);
         if (app != null)
             app.EndCase();
-        if (stepsPanel != null)
-            stepsPanel.EndCase();
+        if (Steps != null)
+            Steps.EndCase();
     }
 
-    /// <summary>Shows the compare dock and Accept and Deny (a traveller is at the desk), or hides the dock, turns the buttons off and shows the desktop's idle line.</summary>
+    /// <summary>Accept and Deny on (a traveller is at the desk; Deny once something can be cited) or off with the desktop's idle line shown.</summary>
     private void ShowCaseLayers(bool on)
     {
-        if (compareDock != null) compareDock.SetActive(on);
         if (idleScreen != null) idleScreen.SetActive(!on);
+        RefreshDecision();
+    }
+
+    /// <summary>
+    /// The decision step's buttons (the PC workbench spec IA10; Saleh's
+    /// prototype: "Deny needs a logged difference or a broken rule to cite"):
+    /// Accept while a traveller is at the desk, Deny once the findings hold a
+    /// difference (FindingLog.HasDifference). The desk's stamp tray is not
+    /// gated (a moral choice can still deny anyone).
+    /// </summary>
+    private void RefreshDecision()
+    {
+        bool on = _currentCase != null;
         if (acceptButton != null) acceptButton.interactable = on;
-        if (denyButton != null) denyButton.interactable = on;
+        if (denyButton != null) denyButton.interactable = on && Board != null && Board.Log.HasDifference;
     }
 
     /// <summary>
@@ -336,9 +360,10 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// </summary>
     private void ShowRich(CaseInstance inst, ContentLibrarySO lib)
     {
+        app.BeginCase(inst != null ? inst.visitorDisplayName : string.Empty, inst != null ? inst.look : null, _art);
+        if (Board != null)
+            Board.BeginCase(inst);
         ShowCaseLayers(true);
-
-        app.BeginCase(inst != null ? inst.visitorDisplayName : string.Empty);
 
         _reference.ShowDirectives();
         _interview.BeginCase(inst);
@@ -347,15 +372,14 @@ public sealed class InvestigationUIController : MonoBehaviour
         _interview.Start(inst, _documents.Documents, InterviewReachable, AppearanceReachable, _agency, _reference.Day);
         _reference.BuildBooks(lib);
         _reference.SetClaim(inst);
-        if (stepsPanel != null && inst != null)
-        {
-            stepsPanel.BeginCase(lib != null ? lib.Pc.steps : null, inst.kind, _reference.Day, StepPapers(inst), _interview.QuestionCategories,
-                                 lib != null ? lib.ReferenceBooks.Where(b => b != null).Select(b => b.category) : null);
-            StepsReceived();
-        }
-
         if (compareController != null)
             compareController.Clear();
+        if (Steps != null && inst != null)
+        {
+            Steps.BeginCase(lib != null ? lib.Pc.steps : null, inst.kind, _reference.Day, StepPapers(inst), _interview.QuestionCategories,
+                            lib != null ? lib.ReferenceBooks.Where(b => b != null).Select(b => b.category) : null);
+            StepsReceived();
+        }
     }
 
     /// <summary>The traveller's papers as the steps count them: each form's number, whether it is asked for, whether it is the photo paper, its fields.</summary>
@@ -384,54 +408,54 @@ public sealed class InvestigationUIController : MonoBehaviour
         _documents.HandOver(index);
         if (_currentCase == null || index < 0 || index >= _currentCase.documents.Count)
             return;
-        if (stepsPanel != null)
-            stepsPanel.Requested(FormOf(_currentCase.documents[index]));
+        if (Steps != null)
+            Steps.Requested(FormOf(_currentCase.documents[index]));
     }
 
     /// <summary>The steps hear of every paper handed over so far (on arrival, or asked for).</summary>
     private void StepsReceived()
     {
-        if (stepsPanel == null || _currentCase == null)
+        if (Steps == null || _currentCase == null)
             return;
         CasePapers papers = _documents.Papers;
         for (int i = 0; i < papers.Count; i++)
             if (papers.State(i) != PaperState.NotHandedOver)
-                stepsPanel.Received(i);
+                Steps.Received(i);
     }
 
     /// <summary>A paper lifted into the hand: the steps count it read.</summary>
     private void StepsRead(int paper)
     {
-        if (stepsPanel != null && _currentCase != null)
-            stepsPanel.Read(paper);
+        if (Steps != null && _currentCase != null)
+            Steps.Read(paper);
     }
 
     /// <summary>An answer heard: the steps count its category asked.</summary>
     private void StepsAsked(ClueCategory category)
     {
-        if (stepsPanel != null && _currentCase != null)
-            stepsPanel.Asked(category);
+        if (Steps != null && _currentCase != null)
+            Steps.Asked(category);
     }
 
     /// <summary>A garment looked at: the steps hear of it.</summary>
     private void StepsLookedAt()
     {
-        if (stepsPanel != null && _currentCase != null)
-            stepsPanel.LookedAt();
+        if (Steps != null && _currentCase != null)
+            Steps.LookedAt();
     }
 
     /// <summary>A record looked up in a Records tab (either pane): the steps hear of it.</summary>
     private void StepsRecordViewed()
     {
-        if (stepsPanel != null && _currentCase != null)
-            stepsPanel.RecordViewed();
+        if (Steps != null && _currentCase != null)
+            Steps.RecordViewed();
     }
 
     /// <summary>A pair compared (whatever it showed): the steps hear of the check.</summary>
     private void StepsCompared(CompareEvidence a, CompareEvidence b)
     {
-        if (stepsPanel != null && _currentCase != null)
-            stepsPanel.Compared(a, b);
+        if (Steps != null && _currentCase != null)
+            Steps.Compared(a, b);
     }
 
     /// <summary>Something new for a case tab: the app badges it unless the player sees it.</summary>
@@ -449,11 +473,11 @@ public sealed class InvestigationUIController : MonoBehaviour
             app.Scanned(paper, documents[paper].name);
     }
 
-    /// <summary>The app header's counters: papers received and scanned, deviations logged.</summary>
+    /// <summary>The app header's counters: papers received and scanned.</summary>
     private void ShowCounters()
     {
         if (app != null && _currentCase != null)
-            app.SetCounters(_documents.Papers, _evidence.Count);
+            app.SetCounters(_documents.Papers);
     }
 
     /// <summary>
@@ -499,8 +523,8 @@ public sealed class InvestigationUIController : MonoBehaviour
             return;
 
         _documents.EndCase(accepted);
-        Hide();
         _currentCase = null;
+        Hide();
         OneShot.Fire(ref _onDecision, accepted);
     }
 }

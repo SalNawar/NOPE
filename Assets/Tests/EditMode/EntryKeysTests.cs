@@ -22,6 +22,10 @@ public class EntryKeysTests
         Assert.AreEqual(ClueCategory.Culture, book);
         Assert.IsTrue(EntryKeys.TryRecordCard("rec:Aster Vale", out string card));
         Assert.AreEqual("Aster Vale", card);
+        Assert.IsTrue(EntryKeys.TryRule(EntryKeys.Rule(3), out int rule));
+        Assert.AreEqual(3, rule);
+        Assert.IsFalse(EntryKeys.TryRule(EntryKeys.CalendarToday, out _));
+        Assert.IsFalse(EntryKeys.TryRule("rule:x", out _));
     }
 
     [Test]

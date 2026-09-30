@@ -145,7 +145,7 @@ public sealed class DesktopKeyboard : MonoBehaviour
             searchFocused: app != null && app.IsSearchField(field),
             menuOpen: (contextMenu != null && contextMenu.IsOpen) || (shell != null && shell.StartMenuOpen),
             listFocused: appFocused && app.ListFocused,
-            tabStripFocused: appFocused && app.TabStripFocused,
+            stepsFocused: appFocused && app.StepsFocused,
             resultsShown: appFocused && app.ResultsListed,
             ordersFocused: orders != null && focused != null && focused == orders.Window);
         if (ShortcutMap.Resolve(chord, context, out AppCommand command))
@@ -223,7 +223,8 @@ public sealed class DesktopKeyboard : MonoBehaviour
             app != null && app.SearchHasText,
             field != null,
             shell != null && shell.StartMenuOpen,
-            manager != null && manager.Dragging);
+            manager != null && manager.Dragging,
+            app != null && app.Holding);
         DesktopEscape step = DesktopEscapeRule.Resolve(state);
         if (step == DesktopEscape.None)
             return;
@@ -261,6 +262,9 @@ public sealed class DesktopKeyboard : MonoBehaviour
                 break;
             case DesktopEscape.CancelDrag:
                 manager.CancelDrag();
+                break;
+            case DesktopEscape.ReleaseHold:
+                app.ReleaseHold();
                 break;
         }
         EscapeTakenFrame = Time.frameCount;

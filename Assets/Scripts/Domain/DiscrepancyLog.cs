@@ -324,9 +324,7 @@ public sealed class DiscrepancyLog
         if (string.IsNullOrEmpty(claimedEraId))
             return null;
 
-        bool entryAppliesToClaim =
-            !string.IsNullOrEmpty(truth.entryEraId) && truth.entryEraId == claimedEraId &&
-            (string.IsNullOrEmpty(truth.entryNationId) || truth.entryNationId == claimedNationId);
+        bool entryAppliesToClaim = AppliesToClaim(truth, claimedNationId, claimedEraId);
 
         bool valuesMatch = Values.Match(statement.value, truth.value);
 
@@ -424,6 +422,16 @@ public sealed class DiscrepancyLog
             source = EvidenceKind.DocumentField
         };
     }
+
+    /// <summary>
+    /// True when a reference entry is about the claimed place: its era is the
+    /// claimed era and it names the claimed nation or none. The rule of both
+    /// reference proofs, and the workbench's "not the claimed place"
+    /// (FindingRules.Classify).
+    /// </summary>
+    public static bool AppliesToClaim(CompareEvidence entry, string claimedNationId, string claimedEraId) =>
+        !string.IsNullOrEmpty(entry.entryEraId) && entry.entryEraId == claimedEraId &&
+        (string.IsNullOrEmpty(entry.entryNationId) || entry.entryNationId == claimedNationId);
 
     /// <summary>
     /// Cross proof (redesign phase 7, traveller types L4): two fields of two
