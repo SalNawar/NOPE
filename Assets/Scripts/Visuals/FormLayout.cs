@@ -676,10 +676,10 @@ public static class FormLayout
         // ---------------- The frame (the document design spec, D1) ----------------
 
         /// <summary>A frame band's thickness, in H: a top band, a side band, a certificate's frame, a ticket's stub, a letterhead's foot and head.</summary>
-        private const float TopBand = 0.018f, SideBand = 0.022f, FrameBand = 0.006f, FrameInset = 0.006f, StubBand = 0.014f, FootBand = 0.012f, HeadBand = 0.005f;
+        private const float TopBand = 0.022f, SideBand = 0.03f, FrameBand = 0.008f, FrameInset = 0.006f, StubBand = 0.02f, FootBand = 0.014f, HeadBand = 0.008f;
 
         /// <summary>A ticket's perforation: its line's distance from the left edge, a hole's side and the step between holes, in H.</summary>
-        private const float PerforationX = 0.03f, Hole = 0.004f, HoleStep = 0.012f;
+        private const float PerforationX = 0.03f, Hole = 0.005f, HoleStep = 0.012f;
 
         /// <summary>The look's frame on each page (a flow page: one page as tall as its content), in the page's margins, so nothing printed moves.</summary>
         private void Frame(float height)
