@@ -204,11 +204,11 @@ public class StepSetsTests
     }
 
     [Test]
-    public void Problems_ThePanelsOwnKeys()
+    public void Problems_TheGuidedStepsOwnKeys()
     {
         List<string> p = StepSets.Problems(Data(Set(CaseSteps.DefaultType, Spec("rules", StepWhen.RulesViewed))), new HashSet<string> { "steps.rules" }, Forms);
 
-        CollectionAssert.AreEquivalent(StepSets.PanelKeys.Select(k => $"the UI strings have no '{k}', which the steps panel writes with"), p);
+        CollectionAssert.AreEquivalent(StepSets.PanelKeys.Select(k => $"the UI strings have no '{k}', which the guided steps write with"), p);
     }
 
     // ---- Today's content ----

@@ -155,6 +155,12 @@ public sealed class CaseInstance
     /// </summary>
     public DirectiveFault directiveFault;
 
+    /// <summary>What the Directives read of the traveller (CaseFactory's facts: the kind, the closure, the classes, the forms, the waiver, the standing, the dates): the workbench holds today's rules against their values with them (RuleChecks, the PC workbench spec §4.3). A waiver signed at the desk swaps in <see cref="factsWithDeskWaiver"/>.</summary>
+    [System.NonSerialized] public CaseFacts facts;
+
+    /// <summary>The facts with the pad's waiver carried and signed (null when their kind carries none).</summary>
+    [System.NonSerialized] public CaseFacts factsWithDeskWaiver;
+
     /// <summary>Why the traveller lacks a form the desk asks for: Honest (they never needed it), or Missing when a broken paper set left their waiver or proof of means out (CaseFactory.BreakPapers; the interview's reply, MissingFormVariant).</summary>
     public MissingFormVariant missingFormVariant;
 
@@ -237,6 +243,8 @@ public sealed class CaseInstance
         waiverSignedAtDesk = true;
         curedAtDesk = directiveFault != faultWithDeskWaiver ? directiveFault : DirectiveFault.None;
         directiveFault = faultWithDeskWaiver;
+        if (factsWithDeskWaiver != null)
+            facts = factsWithDeskWaiver;
         return true;
     }
 

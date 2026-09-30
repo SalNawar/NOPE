@@ -5,7 +5,8 @@ using System.Linq;
 /// The investigation's day reference (the PC redesign RF1): today's travel
 /// directives (the app's Rules tab: the Directive Memo), facts (the
 /// Reference tab's registers) and citizen registry (the Records tab: the
-/// Record Extract), set once a day by GameManager through the façade, and
+/// Record Extract) and the day in the agency's calendar (the Calendar tab),
+/// set once a day by GameManager through the façade, and
 /// the reference books, built from the library into the Reference tab on
 /// the first case. A case's claim puts its row first in every register. Day
 /// sources: they work between travellers. Each tab has one view per pane of
@@ -21,6 +22,7 @@ public sealed class DayReference
     private readonly IReadOnlyList<RecordsView> _records;
     private readonly CompareController _compare;
     private readonly IReadOnlyList<ReferenceView> _books;
+    private readonly IReadOnlyList<CalendarView> _calendars;
     private readonly CaseIndex _index;
 
     private IReadOnlyList<TravelRuleSO> _rules;
@@ -35,10 +37,11 @@ public sealed class DayReference
     /// <summary>Raised after a lookup of a name or number in any Records tab (typed, or a link's or a jump's), whatever it found; not after a blank one (the steps checklist's "a record looked up").</summary>
     public event System.Action RecordLookedUp;
 
-    /// <summary>The Rules tabs (one each per pane; null entries are skipped), the Records tabs' lookups (each announces its lookups here; each searches the index), the compare (the book rows pick into it), the Reference tabs and search's index (its day layer).</summary>
+    /// <summary>The Rules tabs (one each per pane; null entries are skipped), the Records tabs' lookups (each announces its lookups here; each searches the index), the compare (the book rows pick into it), the Reference tabs, the Calendar tabs and search's index (its day layer).</summary>
     public DayReference(IReadOnlyList<RulesView> rulesViews, IReadOnlyList<RecordsView> records, CompareController compare,
-                        IReadOnlyList<ReferenceView> books, CaseIndex index)
+                        IReadOnlyList<ReferenceView> books, IReadOnlyList<CalendarView> calendars, CaseIndex index)
     {
+        _calendars = calendars ?? System.Array.Empty<CalendarView>();
         _rulesViews = rulesViews ?? System.Array.Empty<RulesView>();
         _records = records ?? System.Array.Empty<RecordsView>();
         _compare = compare;
@@ -106,6 +109,9 @@ public sealed class DayReference
         foreach (ReferenceView books in _books)
             if (books != null)
                 books.SetAgency(agency, day);
+        foreach (CalendarView calendar in _calendars)
+            if (calendar != null)
+                calendar.SetDay(agency, day);
         ShowDirectives();
     }
 

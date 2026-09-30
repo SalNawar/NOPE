@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Desktop_Default
   m_EditorClassIdentifier: Assembly-CSharp::DesktopConfigSO
   taskbarHeight: 60
-  dockHeight: 64
   startMenuGap: 4
   titleBarHeight: 44
   titleFontSize: 26

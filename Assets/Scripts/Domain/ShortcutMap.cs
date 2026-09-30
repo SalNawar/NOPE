@@ -3,36 +3,30 @@ using System.Collections.Generic;
 /// <summary>What a desktop shortcut does (the PC redesign KB1, section 3.4). Not serialized.</summary>
 public enum AppCommand
 {
-    /// <summary>Ctrl+F: opens or restores the Investigation app and focuses its search field.</summary>
+    /// <summary>Ctrl+K, Ctrl+F: opens or restores the Investigation app and opens its search drawer, the field focused.</summary>
     FocusSearch,
-    /// <summary>Ctrl+1: the tab at position 1.</summary>
-    Tab1,
-    /// <summary>Ctrl+2: the tab at position 2.</summary>
-    Tab2,
-    /// <summary>Ctrl+3: the tab at position 3.</summary>
-    Tab3,
-    /// <summary>Ctrl+4: the tab at position 4.</summary>
-    Tab4,
-    /// <summary>Ctrl+5: the tab at position 5.</summary>
-    Tab5,
-    /// <summary>Ctrl+6: the tab at position 6.</summary>
-    Tab6,
-    /// <summary>Ctrl+Tab (and → or ↓ on the navigator's sources): the next source.</summary>
-    NextTab,
-    /// <summary>Ctrl+Shift+Tab (and ← or ↑ on the navigator's sources): the previous source.</summary>
-    PrevTab,
-    /// <summary>Ctrl+Shift+PgUp: moves the active tab left.</summary>
-    MoveTabLeft,
-    /// <summary>Ctrl+Shift+PgDn: moves the active tab right.</summary>
-    MoveTabRight,
-    /// <summary>F6, Shift+F6: the other pane becomes active.</summary>
+    /// <summary>Ctrl+1: the guided step 1 (Papers).</summary>
+    Step1,
+    /// <summary>Ctrl+2: the guided step 2 (Records).</summary>
+    Step2,
+    /// <summary>Ctrl+3: the guided step 3 (Books).</summary>
+    Step3,
+    /// <summary>Ctrl+4: the guided step 4 (Rules).</summary>
+    Step4,
+    /// <summary>Ctrl+5: the guided step 5 (Decision).</summary>
+    Step5,
+    /// <summary>Ctrl+Tab (and → or ↓ on the steps): the next step.</summary>
+    NextStep,
+    /// <summary>Ctrl+Shift+Tab (and ← or ↑ on the steps): the previous step.</summary>
+    PrevStep,
+    /// <summary>F6, Shift+F6: the other side becomes the target.</summary>
     OtherPane,
-    /// <summary>Ctrl+\: the split on or off.</summary>
+    /// <summary>Ctrl+\: two panes or one.</summary>
     ToggleSplit,
-    /// <summary>Ctrl+B: the sidebar on or off.</summary>
-    ToggleSidebar,
-    /// <summary>Ctrl+Shift+S: the steps on or off.</summary>
-    ToggleSteps,
+    /// <summary>Ctrl+B: the findings column on or off.</summary>
+    ToggleFindings,
+    /// <summary>Ctrl+Shift+S: the steps' hints on or off.</summary>
+    ToggleHints,
     /// <summary>Alt+←: back in the active pane.</summary>
     Back,
     /// <summary>Alt+→: forward in the active pane.</summary>
@@ -106,6 +100,8 @@ public enum ShortcutKey
 {
     /// <summary>F.</summary>
     F,
+    /// <summary>K.</summary>
+    K,
     /// <summary>1.</summary>
     Digit1,
     /// <summary>2.</summary>
@@ -227,8 +223,8 @@ public readonly struct ShortcutContext
     /// <summary>The app's focus ring is on an item of a list (a row, a chip, a pin, the decision's buttons).</summary>
     public readonly bool ListFocused;
 
-    /// <summary>The app's focus ring is on the navigator's sources (the TabStrip region).</summary>
-    public readonly bool TabStripFocused;
+    /// <summary>The app's focus ring is on the guided steps (the Steps region).</summary>
+    public readonly bool StepsFocused;
 
     /// <summary>The search results panel lists hits (↓ in the search field goes into them).</summary>
     public readonly bool ResultsShown;
@@ -236,7 +232,7 @@ public readonly struct ShortcutContext
     /// <summary>A context.</summary>
     public ShortcutContext(bool frameOpen = false, bool desktopFocused = false, bool iconSelected = false, bool appFocused = false, bool notesFocused = false,
                            bool textFieldFocused = false, bool searchFocused = false, bool menuOpen = false, bool listFocused = false,
-                           bool tabStripFocused = false, bool resultsShown = false, bool ordersFocused = false)
+                           bool stepsFocused = false, bool resultsShown = false, bool ordersFocused = false)
     {
         FrameOpen = frameOpen;
         DesktopFocused = desktopFocused;
@@ -247,7 +243,7 @@ public readonly struct ShortcutContext
         SearchFocused = searchFocused;
         MenuOpen = menuOpen;
         ListFocused = listFocused;
-        TabStripFocused = tabStripFocused;
+        StepsFocused = stepsFocused;
         ResultsShown = resultsShown;
         OrdersFocused = ordersFocused;
     }
@@ -264,10 +260,10 @@ public sealed class ShortcutCardRow
         Commands = commands;
     }
 
-    /// <summary>The keys as printed on the card ("Ctrl+1 … Ctrl+6").</summary>
+    /// <summary>The keys as printed on the card ("Ctrl+1 … Ctrl+5").</summary>
     public string Keys { get; }
 
-    /// <summary>The ui string key of what they do ("keys.tabs").</summary>
+    /// <summary>The ui string key of what they do ("keys.step").</summary>
     public string TextKey { get; }
 
     /// <summary>The commands the row stands for.</summary>
@@ -279,14 +275,14 @@ public sealed class ShortcutCardRow
 /// the R5-005 lesson: one tested map instead of keys scattered over
 /// components). Resolve turns a chord in a context into a command: nothing
 /// while the frame is closed; only Escape while a menu is open; while a text
-/// field has the keyboard only the chords that cannot be typing pass (Ctrl+F,
-/// Ctrl+1…6, F6, Ctrl+\, Ctrl+B, Esc, F1; the field keeps its own
+/// field has the keyboard only the chords that cannot be typing pass (Ctrl+K,
+/// Ctrl+F, Ctrl+1…5, F6, Ctrl+\, Ctrl+B, Esc, F1; the field keeps its own
 /// Ctrl+C/V/X/A, arrows and Enter), and in the app's search field Tab and
 /// Shift+Tab (the next region: KB4's order starts there) and, while the
 /// results list hits, ↓ into them (the ring then walks the hits: Enter opens
 /// one, Ctrl+Enter in the other pane). The icons take the arrows and Enter
 /// while no window has the focus; the app's chords need the app focused, its
-/// row keys a focused list, the arrows the focused navigator's sources; Ctrl+V adds a
+/// row keys a focused list, the arrows the focused guided steps; Ctrl+V adds a
 /// clipping with Notes focused; with Orders focused the arrows walk its
 /// tree, Enter acts, and the zoom chords (Ctrl+=, Ctrl+-, Ctrl+0) zoom the
 /// tree instead of the panes. Card is the F1 card: every command once.
@@ -297,7 +293,7 @@ public static class ShortcutMap
     /// <summary>The F1 card, in the order of section 3.4: every command on exactly one row.</summary>
     public static readonly IReadOnlyList<ShortcutCardRow> Card = new[]
     {
-        new ShortcutCardRow("Ctrl+F", "keys.focusSearch", AppCommand.FocusSearch),
+        new ShortcutCardRow("Ctrl+K, Ctrl+F", "keys.focusSearch", AppCommand.FocusSearch),
         new ShortcutCardRow("↓", "keys.intoResults", AppCommand.IntoResults),
         new ShortcutCardRow("Esc", "keys.escape", AppCommand.Escape),
         new ShortcutCardRow("F1", "keys.help", AppCommand.Help),
@@ -305,13 +301,12 @@ public static class ShortcutMap
         new ShortcutCardRow("← → ↑ ↓", "keys.icons", AppCommand.IconLeft, AppCommand.IconRight, AppCommand.IconUp, AppCommand.IconDown),
         new ShortcutCardRow("← → ↑ ↓", "keys.orders", AppCommand.NodeLeft, AppCommand.NodeRight, AppCommand.NodeUp, AppCommand.NodeDown),
         new ShortcutCardRow("Enter", "keys.ordersAct", AppCommand.NodeAct),
-        new ShortcutCardRow("Ctrl+1 … Ctrl+6", "keys.tabs", AppCommand.Tab1, AppCommand.Tab2, AppCommand.Tab3, AppCommand.Tab4, AppCommand.Tab5, AppCommand.Tab6),
-        new ShortcutCardRow("Ctrl+Tab, Ctrl+Shift+Tab", "keys.nextTab", AppCommand.NextTab, AppCommand.PrevTab),
-        new ShortcutCardRow("Ctrl+Shift+PgUp, Ctrl+Shift+PgDn", "keys.moveTab", AppCommand.MoveTabLeft, AppCommand.MoveTabRight),
+        new ShortcutCardRow("Ctrl+1 … Ctrl+5", "keys.step", AppCommand.Step1, AppCommand.Step2, AppCommand.Step3, AppCommand.Step4, AppCommand.Step5),
+        new ShortcutCardRow("Ctrl+Tab, Ctrl+Shift+Tab", "keys.nextStep", AppCommand.NextStep, AppCommand.PrevStep),
         new ShortcutCardRow("F6, Shift+F6", "keys.otherPane", AppCommand.OtherPane),
         new ShortcutCardRow("Ctrl+\\", "keys.split", AppCommand.ToggleSplit),
-        new ShortcutCardRow("Ctrl+B", "keys.sidebar", AppCommand.ToggleSidebar),
-        new ShortcutCardRow("Ctrl+Shift+S", "keys.steps", AppCommand.ToggleSteps),
+        new ShortcutCardRow("Ctrl+B", "keys.findings", AppCommand.ToggleFindings),
+        new ShortcutCardRow("Ctrl+Shift+S", "keys.hints", AppCommand.ToggleHints),
         new ShortcutCardRow("Alt+←, Alt+→", "keys.history", AppCommand.Back, AppCommand.Forward),
         new ShortcutCardRow("Tab, Shift+Tab", "keys.regions", AppCommand.NextRegion, AppCommand.PrevRegion),
         new ShortcutCardRow("↑ ↓ Home End PgUp PgDn", "keys.rows", AppCommand.RowUp, AppCommand.RowDown, AppCommand.RowFirst, AppCommand.RowLast,
@@ -325,9 +320,9 @@ public static class ShortcutMap
         new ShortcutCardRow("Ctrl+=, Ctrl+-, Ctrl+0", "keys.zoom", AppCommand.ZoomIn, AppCommand.ZoomOut, AppCommand.ZoomReset),
     };
 
-    /// <summary>The tab position (1-6) a Tab1…Tab6 command shows, else 0.</summary>
-    public static int TabPosition(AppCommand command) =>
-        command >= AppCommand.Tab1 && command <= AppCommand.Tab6 ? command - AppCommand.Tab1 + 1 : 0;
+    /// <summary>The guided step (1-5) a Step1…Step5 command goes to, else 0.</summary>
+    public static int StepPosition(AppCommand command) =>
+        command >= AppCommand.Step1 && command <= AppCommand.Step5 ? command - AppCommand.Step1 + 1 : 0;
 
     /// <summary>The command <paramref name="chord"/> gives in <paramref name="context"/>; false when it gives none.</summary>
     public static bool Resolve(KeyChord chord, ShortcutContext context, out AppCommand command)
@@ -346,8 +341,8 @@ public static class ShortcutMap
 
     /// <summary>The chords that cannot be typing: they pass while a text field has the keyboard.</summary>
     private static bool PassesInField(AppCommand command) =>
-        command == AppCommand.FocusSearch || TabPosition(command) > 0 || command == AppCommand.OtherPane || command == AppCommand.ToggleSplit ||
-        command == AppCommand.ToggleSidebar || command == AppCommand.Escape || command == AppCommand.Help;
+        command == AppCommand.FocusSearch || StepPosition(command) > 0 || command == AppCommand.OtherPane || command == AppCommand.ToggleSplit ||
+        command == AppCommand.ToggleFindings || command == AppCommand.Escape || command == AppCommand.Help;
 
     /// <summary>The table: the chord's command in the context, before the menu and field filters.</summary>
     private static bool Lookup(KeyChord k, ShortcutContext c, out AppCommand command)
@@ -360,7 +355,7 @@ public static class ShortcutMap
             return Is(AppCommand.Escape, out command);
         if (k.Key == ShortcutKey.F1 && plain)
             return Is(AppCommand.Help, out command);
-        if (k.Key == ShortcutKey.F && ctrl)
+        if ((k.Key == ShortcutKey.F || k.Key == ShortcutKey.K) && ctrl)
             return Is(AppCommand.FocusSearch, out command);
 
         if (c.DesktopFocused && plain && Icons(k.Key, c.IconSelected, out command))
@@ -388,8 +383,8 @@ public static class ShortcutMap
             return Is(AppCommand.Forward, out command);
         if (k.Key == ShortcutKey.Tab && !k.Ctrl && !k.Alt)
             return Is(k.Shift ? AppCommand.PrevRegion : AppCommand.NextRegion, out command);
-        if (c.TabStripFocused && plain && (k.Key == ShortcutKey.Left || k.Key == ShortcutKey.Right || k.Key == ShortcutKey.Up || k.Key == ShortcutKey.Down))
-            return Is(k.Key == ShortcutKey.Left || k.Key == ShortcutKey.Up ? AppCommand.PrevTab : AppCommand.NextTab, out command);
+        if (c.StepsFocused && plain && (k.Key == ShortcutKey.Left || k.Key == ShortcutKey.Right || k.Key == ShortcutKey.Up || k.Key == ShortcutKey.Down))
+            return Is(k.Key == ShortcutKey.Left || k.Key == ShortcutKey.Up ? AppCommand.PrevStep : AppCommand.NextStep, out command);
         if (c.ListFocused)
             return List(k, plain, ctrl, ctrlShift, out command);
         return None(out command);
@@ -428,15 +423,14 @@ public static class ShortcutMap
     {
         switch (key)
         {
-            case ShortcutKey.Digit1: return Is(AppCommand.Tab1, out command);
-            case ShortcutKey.Digit2: return Is(AppCommand.Tab2, out command);
-            case ShortcutKey.Digit3: return Is(AppCommand.Tab3, out command);
-            case ShortcutKey.Digit4: return Is(AppCommand.Tab4, out command);
-            case ShortcutKey.Digit5: return Is(AppCommand.Tab5, out command);
-            case ShortcutKey.Digit6: return Is(AppCommand.Tab6, out command);
-            case ShortcutKey.Tab: return Is(AppCommand.NextTab, out command);
+            case ShortcutKey.Digit1: return Is(AppCommand.Step1, out command);
+            case ShortcutKey.Digit2: return Is(AppCommand.Step2, out command);
+            case ShortcutKey.Digit3: return Is(AppCommand.Step3, out command);
+            case ShortcutKey.Digit4: return Is(AppCommand.Step4, out command);
+            case ShortcutKey.Digit5: return Is(AppCommand.Step5, out command);
+            case ShortcutKey.Tab: return Is(AppCommand.NextStep, out command);
             case ShortcutKey.Backslash: return Is(AppCommand.ToggleSplit, out command);
-            case ShortcutKey.B: return Is(AppCommand.ToggleSidebar, out command);
+            case ShortcutKey.B: return Is(AppCommand.ToggleFindings, out command);
             case ShortcutKey.P: return Is(AppCommand.Pin, out command);
             default: return Zoom(key, out command);
         }
@@ -459,10 +453,8 @@ public static class ShortcutMap
     {
         switch (key)
         {
-            case ShortcutKey.Tab: return Is(AppCommand.PrevTab, out command);
-            case ShortcutKey.PageUp: return Is(AppCommand.MoveTabLeft, out command);
-            case ShortcutKey.PageDown: return Is(AppCommand.MoveTabRight, out command);
-            case ShortcutKey.S: return Is(AppCommand.ToggleSteps, out command);
+            case ShortcutKey.Tab: return Is(AppCommand.PrevStep, out command);
+            case ShortcutKey.S: return Is(AppCommand.ToggleHints, out command);
             default: return None(out command);
         }
     }
