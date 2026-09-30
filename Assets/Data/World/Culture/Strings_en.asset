@@ -1945,7 +1945,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: desk.readyCaption
-    text: NEXT
+    text: AVAILABLE
     gloss: 0
     tier: 0
   - key: deskView.back
