@@ -613,6 +613,9 @@ public static partial class OfficeSceneUIBuilder
         // The desk, the scanner and the notes.
         DeskController desk = BuildDesk(office, config, pcFrame, out DeskScanner scanner, out GameObject scannerPlaceholder, out TextMeshPro scanHint);
         DeskView deskView = BuildDeskView(office, config, desk.transform.Find("ViewCatcher").GetComponent<ClickCatcher>(), deskViewBack);
+        var soView = new SerializedObject(view);
+        SetRef(soView, "deskView", deskView);
+        soView.ApplyModifiedProperties();
         var soScanner = new SerializedObject(scanner);
         SetRef(soScanner, "reaction", WireReaction(scanner.GetComponent<Clickable>(), EnsureDeskReaction("Reaction_Scanner", ReactionKind.Pulse, ""), tooltip, null));
         soScanner.ApplyModifiedProperties();

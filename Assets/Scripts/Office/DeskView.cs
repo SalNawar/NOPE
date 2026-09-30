@@ -126,6 +126,13 @@ public sealed class DeskView : MonoBehaviour
             Set(!IsOn);
     }
 
+    /// <summary>Tilts into the desk view (no-op if it is on, or while the mat's toggle is not live): the PC's "&lt; Desk" button, once its frame has closed.</summary>
+    public void TiltIn()
+    {
+        if (_toggleLive)
+            Set(true);
+    }
+
     /// <summary>Returns to the normal view (no-op if it is on): Escape, the right-click, the next traveller, a newsletter.</summary>
     public void Return() => Set(false);
 
