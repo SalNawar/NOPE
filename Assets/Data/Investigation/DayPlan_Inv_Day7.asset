@@ -14,15 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 7
   visitorsCount: 14
+  bulletin: 'NEW: dress for the destination. A garment from another time or place
+    causes a panic: check the Costume Guide.'
+  papers:
+  - TC-101
+  - TC-230
+  - TC-310
+  - TC-415
+  - TC-416
+  - TC-417
+  - TC-610
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
     honest: 0
   - blueprint: {fileID: 11400000, guid: 008d4e5dfc4a491396679dcae81673aa, type: 2}
     weight: 2
-    honest: 0
-  - blueprint: {fileID: 11400000, guid: baa4a99b576b463cb6e604fe113a409c, type: 2}
-    weight: 3
     honest: 0
   - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
     weight: 2
@@ -41,7 +48,6 @@ MonoBehaviour:
   allowedNations: []
   legendaryBaseChance: 0.05
   availableLegendaries:
-  - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
   - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
   - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
   - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
@@ -61,10 +67,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
   - {fileID: 11400000, guid: 050c1e3bba096ac41adc70495a9874f4, type: 2}
   tellCount: 1
-  tellChannels: 000000000100000002000000
+  tellChannels: 0000000002000000
   costumeErrorChance: 0.05
   slipChance: 0.15
-  lieKinds: 010000000200000007000000050000000600000008000000000000000300000004000000
+  lieKinds: 01000000020000000700000008000000
   violationChance: 0.05
   activeTravelRules:
   - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}
@@ -72,12 +78,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
   - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
-  - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
-  - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
   - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
-  - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
-  - {fileID: 11400000, guid: 790f58e093f5e4842a8a706ca0d1cf69, type: 2}
-  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 5

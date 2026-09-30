@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b665400328840749af7b71736f3560a, type: 3}
-  m_Name: Rule_LeisureDepartures
+  m_Name: Rule_TouristWaiverSet
   m_EditorClassIdentifier: Assembly-CSharp::TravelRuleSO
-  type: 4
+  type: 8
   era: {fileID: 0}
   nation: {fileID: 0}
-  description: 'Leisure departures: every paper a tourist hands over must match their
-    Citizen Account.'
-  kinds: 
+  description: A Premium visa travels on a Premium transponder. A Standard visa needs
+    an Economy transponder and a signed Stranding Waiver.
+  kinds: 0000000001000000
   transponder: 

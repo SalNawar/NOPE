@@ -161,6 +161,9 @@ public sealed class CaseInstance
     /// <summary>True when the Directives forbid the traveller's claim or papers (a directive fault).</summary>
     public bool HasDirectiveFault => directiveFault != DirectiveFault.None;
 
+    /// <summary>What a citation slip names about the traveller (lesson 6; CaseFactory at generation): their fault's rule, its memo row and the exact values, or for an honest traveller the line a wrong denial prints. Null only for a case with no blueprint.</summary>
+    public CitationFacts citation;
+
     /// <summary>The traveller's one fault reason (Faults.Reason): a wrong accept's citation key suffix; empty with no fault.</summary>
     public string FaultReason => Faults.Reason(directiveFault, costumeFault, lie);
 
@@ -249,6 +252,9 @@ public sealed class CaseInstance
                 yield return deskWaiver.fields;
         }
     }
+
+    /// <summary>True when the agency issued the Stranding Waiver on the traveller's day (DayPlanSO.Issues, lesson D7; set at generation): a stranding without one on file is fined only then (Strandings.Fine).</summary>
+    public bool waiverIssued;
 
     /// <summary>True when a valid signed waiver of theirs is on file (Waivers.OnFile against their account's registered number and unit).</summary>
     public bool Waivered => account != null && Waivers.OnFile(WaiverPapers, account.WaiverNo, account.Transponder);

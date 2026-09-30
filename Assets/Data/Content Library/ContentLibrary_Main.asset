@@ -11317,7 +11317,7 @@ MonoBehaviour:
           link: 3
           tab: 0
           hint: 
-          fromDay: 4
+          fromDay: 11
         - id: questions
           when: 6
           categories: []
@@ -11327,7 +11327,7 @@ MonoBehaviour:
           link: 0
           tab: 0
           hint: steps.hint.wheel
-          fromDay: 1
+          fromDay: 11
         - id: answers
           when: 5
           categories: []
@@ -11337,7 +11337,7 @@ MonoBehaviour:
           link: 1
           tab: 3
           hint: 
-          fromDay: 1
+          fromDay: 11
         - id: dress
           when: 5
           categories:
@@ -11348,7 +11348,7 @@ MonoBehaviour:
           link: 4
           tab: 0
           hint: 
-          fromDay: 2
+          fromDay: 7
       - type: Displaced
         inherit: 
         dataOnly: 0
@@ -11405,7 +11405,7 @@ MonoBehaviour:
           link: 3
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 12
         - id: questions
           when: 6
           categories: []
@@ -11415,7 +11415,7 @@ MonoBehaviour:
           link: 0
           tab: 0
           hint: steps.hint.wheel
-          fromDay: 1
+          fromDay: 11
         - id: answers
           when: 5
           categories: []
@@ -11425,7 +11425,7 @@ MonoBehaviour:
           link: 1
           tab: 3
           hint: 
-          fromDay: 1
+          fromDay: 11
         - id: dress
           when: 5
           categories:
@@ -11436,7 +11436,7 @@ MonoBehaviour:
           link: 4
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 7
         - id: returnOrder
           when: 5
           categories:
@@ -11448,7 +11448,7 @@ MonoBehaviour:
           link: 1
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 15
         - id: dates
           when: 1
           categories: []
@@ -11460,7 +11460,7 @@ MonoBehaviour:
           link: 1
           tab: 0
           hint: 
-          fromDay: 4
+          fromDay: 14
       - type: RichTourist
         inherit: 
         dataOnly: 0
@@ -11530,7 +11530,7 @@ MonoBehaviour:
           link: 2
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 2
         - id: paperSet
           when: 1
           categories: []
@@ -11542,7 +11542,7 @@ MonoBehaviour:
           link: 1
           tab: 0
           hint: 
-          fromDay: 2
+          fromDay: 4
         - id: standing
           when: 4
           categories: []
@@ -11552,7 +11552,7 @@ MonoBehaviour:
           link: 2
           tab: 0
           hint: 
-          fromDay: 3
+          fromDay: 9
         - id: facts
           when: 5
           categories:
@@ -11564,7 +11564,7 @@ MonoBehaviour:
           link: 3
           tab: 0
           hint: 
-          fromDay: 4
+          fromDay: 11
         - id: dress
           when: 5
           categories:
@@ -11575,7 +11575,7 @@ MonoBehaviour:
           link: 4
           tab: 0
           hint: 
-          fromDay: 2
+          fromDay: 7
         - id: dates
           when: 1
           categories: []
@@ -11587,7 +11587,7 @@ MonoBehaviour:
           link: 1
           tab: 0
           hint: 
-          fromDay: 4
+          fromDay: 14
       - type: PoorTourist
         inherit: RichTourist
         dataOnly: 0
@@ -11607,7 +11607,7 @@ MonoBehaviour:
           link: 1
           tab: 0
           hint: 
-          fromDay: 2
+          fromDay: 4
         - id: dates
           when: 1
           categories: []
@@ -11622,7 +11622,7 @@ MonoBehaviour:
           link: 1
           tab: 0
           hint: 
-          fromDay: 4
+          fromDay: 14
         - id: askMeans
           when: 2
           categories: []
@@ -11635,7 +11635,7 @@ MonoBehaviour:
           link: 0
           tab: 0
           hint: steps.hint.wheel
-          fromDay: 1
+          fromDay: 5
         - id: waiver
           when: 5
           categories:
@@ -11648,7 +11648,7 @@ MonoBehaviour:
           link: 2
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 4
         - id: means
           when: 5
           categories:
@@ -11661,7 +11661,7 @@ MonoBehaviour:
           link: 2
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 5
       - type: Labourer
         inherit: 
         dataOnly: 0
@@ -11718,7 +11718,7 @@ MonoBehaviour:
           link: 2
           tab: 0
           hint: 
-          fromDay: 3
+          fromDay: 9
         - id: contract
           when: 5
           categories:
@@ -11732,7 +11732,7 @@ MonoBehaviour:
           link: 2
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 8
         - id: paperSet
           when: 1
           categories: []
@@ -11745,7 +11745,7 @@ MonoBehaviour:
           link: 1
           tab: 0
           hint: 
-          fromDay: 3
+          fromDay: 8
         - id: waiver
           when: 5
           categories:
@@ -11758,7 +11758,7 @@ MonoBehaviour:
           link: 2
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 8
         - id: facts
           when: 5
           categories:
@@ -11770,7 +11770,7 @@ MonoBehaviour:
           link: 3
           tab: 0
           hint: 
-          fromDay: 4
+          fromDay: 11
         - id: dress
           when: 5
           categories:
@@ -11781,7 +11781,7 @@ MonoBehaviour:
           link: 4
           tab: 0
           hint: 
-          fromDay: 2
+          fromDay: 7
         - id: dates
           when: 1
           categories: []
@@ -11792,7 +11792,7 @@ MonoBehaviour:
           link: 1
           tab: 0
           hint: 
-          fromDay: 4
+          fromDay: 14
     sites:
     - id: news
       kind: 0
@@ -12645,7 +12645,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7e9502c7ac4b26848bf53f9db563cc89, type: 2}
   translation:
     rules:
-      fromDay: 5
+      fromDay: 6
       tongues:
       - id: english
         displayName: English

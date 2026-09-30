@@ -14,6 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 13
   visitorsCount: 17
+  bulletin: 'NEW: range limit. Economy units no longer reach the Ancient era: refuse
+    poor tourists and labourers bound for it.'
+  papers:
+  - TC-101
+  - TC-230
+  - TC-310
+  - TC-415
+  - TC-416
+  - TC-417
+  - TC-520
+  - TC-610
+  - TC-620
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
@@ -78,7 +90,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
   - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
   - {fileID: 11400000, guid: 790f58e093f5e4842a8a706ca0d1cf69, type: 2}
-  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   - {fileID: 11400000, guid: ecff6c6a25ba0d648aa6289bee8e60ef, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:

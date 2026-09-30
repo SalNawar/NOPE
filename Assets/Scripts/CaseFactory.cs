@@ -332,7 +332,7 @@ public sealed class CaseFactory
             {
                 Debug.LogWarning($"[CaseFactory] Rule '{rule.name}' guarantees a smuggler on day {plan.DayNumber}, but the day does not enable Smuggling, so none can be planned. Check world_source.json days[].lies.");
             }
-            else if (rule.type != TravelRuleType.ReturnHome && rule.type != TravelRuleType.NoPresentGoods && !plan.Kinds.Any(k => k != null && k.blueprint != null && k.weight > 0f && CanBreak(rule, k.blueprint)))
+            else if (rule.type != TravelRuleType.ReturnHome && rule.type != TravelRuleType.NoPresentGoods && !plan.Kinds.Any(k => k != null && k.blueprint != null && k.weight > 0f && CanBreak(plan, rule, k.blueprint)))
             {
                 Debug.LogWarning($"[CaseFactory] Rule '{rule.name}' ({rule.type}) is guaranteed a breaker on day {plan.DayNumber}, but none of the day's kinds can break it, so none can be planned. Check world_source.json days[].kinds and the kinds' templates.");
             }
@@ -411,7 +411,7 @@ public sealed class CaseFactory
             : _plannedLiars.TryGetValue(caseIndex1Based, out LieKind plannedLie) && plannedLie != LieKind.Smuggling ? TravellerKind.Displaced
             : (TravellerKind?)null;
         KindWeight entry = forcedBlueprint != null ? null :
-            WeightedRandom.Pick(plan.Kinds, k => k != null && k.blueprint != null && (plannedRule == null || (!k.honest && CanBreak(plannedRule, k.blueprint)))
+            WeightedRandom.Pick(plan.Kinds, k => k != null && k.blueprint != null && (plannedRule == null || (!k.honest && CanBreak(plan, plannedRule, k.blueprint)))
                                                  && (violatorRule == null || violatorRule.AppliesTo(k.blueprint.Kind))
                 ? TravellerKinds.PickWeight(k.blueprint.Kind, k.weight, onlyKind) * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, k.blueprint.name)
                 : 0f, _rng);
@@ -477,6 +477,7 @@ public sealed class CaseFactory
         }
 
         inst.kind = blueprint.Kind;
+        inst.waiverIssued = plan.Issues(Directives.Waiver);
         _askable = _interview != null ? _interview.AskableCategories : System.Array.Empty<ClueCategory>();
         _answerTellCategories = _interview != null ? _interview.AnswerTellCategories : System.Array.Empty<ClueCategory>();
 
@@ -521,8 +522,8 @@ public sealed class CaseFactory
         if (legendary != null && legendary.authoredImpacts != null)
             inst.authoredImpacts.AddRange(legendary.authoredImpacts);
 
-        // 6) Build the documents the traveller carries (their fields are filled below).
-        BuildDocuments(inst, blueprint);
+        // 6) Build the documents the traveller carries today (their fields are filled below).
+        BuildDocuments(inst, plan, blueprint);
 
         // 7) Investigation layer: structured fields (the claim is only spoken: InterviewScript.Opening), then the rolled
         //    lie planned and printed, or the paper side of a broken directive (a form left out or unsigned, a date falsified).
@@ -557,7 +558,7 @@ public sealed class CaseFactory
         // 8.2) The desk's waiver pad (the endings and strandings spec §7.3): the waiver their kind carries, filled from their
         //      account and signed in their hand, and the fault a carried, signed waiver leaves (a missing or unsigned one cured,
         //      a forged one not: the pad never touches the papers they carry); their answer, one draw on their own stream.
-        DocumentTemplateSO waiverForm = blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates.FirstOrDefault(t => t != null && t.formNumber == Directives.Waiver) : null;
+        DocumentTemplateSO waiverForm = plan.TemplatesOf(blueprint).FirstOrDefault(t => t.formNumber == Directives.Waiver);
         if (waiverForm != null && inst.account != null)
         {
             inst.deskWaiver = DeskWaiver(inst, waiverForm);
@@ -569,6 +570,9 @@ public sealed class CaseFactory
         Personality voice = _lib.Personalities.FirstOrDefault(p => p != null && p.id == inst.personality);
         bool carriesSigned = inst.documents.Any(d => d != null && d.template != null && d.template.formNumber == Directives.Waiver && Directives.IsSigned(d.fields));
         inst.waiverPadReply = Waivers.PadReply(inst.deskWaiver != null, carriesSigned, voice != null ? voice.waiverRefusal : 0f, _waiverSignRng);
+
+        // 8.3) What a citation slip would name (lesson 6): the rule and the exact values of their fault, or the line of a wrong denial.
+        inst.citation = CitationOf(inst, plan, lie);
 
         // 8.5) The slip (the personalities spec's T9-T10): a generated liar rolls once on their own stream against the day's
         //      slipChance, after the lie is planned; a liar premade slips when their line is authored; the honest never do.
@@ -588,13 +592,13 @@ public sealed class CaseFactory
         return inst;
     }
 
-    /// <summary>The form numbers of a blueprint's templates (null templates skipped).</summary>
-    private static List<string> FormNumbers(CaseBlueprintSO blueprint) =>
-        (blueprint.DocumentTemplates ?? System.Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => t.formNumber).ToList();
+    /// <summary>The form numbers of a blueprint's templates issued on <paramref name="plan"/>'s day (DayPlanSO.TemplatesOf; null templates skipped).</summary>
+    private static List<string> FormNumbers(DayPlanSO plan, CaseBlueprintSO blueprint) =>
+        plan.TemplatesOf(blueprint).Select(t => t.formNumber).ToList();
 
-    /// <summary>True when a traveller of <paramref name="blueprint"/>'s kind can break <paramref name="rule"/> through its maker (Directives.CanBreak): the kinds a planned procedure's slot draws from.</summary>
-    private static bool CanBreak(TravelRuleSO rule, CaseBlueprintSO blueprint) =>
-        rule.AppliesTo(blueprint.Kind) && Directives.CanBreak(rule.type, blueprint.Kind, FormNumbers(blueprint));
+    /// <summary>True when a traveller of <paramref name="blueprint"/>'s kind, carrying today's issued forms, can break <paramref name="rule"/> through its maker (Directives.CanBreak): the kinds a planned procedure's slot draws from.</summary>
+    private static bool CanBreak(DayPlanSO plan, TravelRuleSO rule, CaseBlueprintSO blueprint) =>
+        rule.AppliesTo(blueprint.Kind) && Directives.CanBreak(rule.type, blueprint.Kind, FormNumbers(plan, blueprint));
 
     /// <summary>
     /// The traveller's violation (traveller types P4, §5.4): the rule of a
@@ -617,7 +621,7 @@ public sealed class CaseFactory
     private TravelRuleSO PlanViolation(CaseInstance inst, DayPlanSO plan, CaseBlueprintSO blueprint, TravelRuleSO plannedRule, DirectivePlan authored, bool honestEntry, int caseIndex1Based, out PaperSetBreak paperBreak)
     {
         paperBreak = PaperSetBreak.None;
-        List<string> forms = FormNumbers(blueprint);
+        List<string> forms = FormNumbers(plan, blueprint);
         TravelRuleSO broken;
         if (plannedRule != null)
             broken = Directives.IsRolled(plannedRule.type) ? plannedRule : null;
@@ -625,7 +629,7 @@ public sealed class CaseFactory
             return null;
         else
         {
-            List<TravelRuleSO> breakable = plan.ActiveTravelRules.Where(r => r != null && Directives.IsRolled(r.type) && CanBreak(r, blueprint)).ToList();
+            List<TravelRuleSO> breakable = plan.ActiveTravelRules.Where(r => r != null && Directives.IsRolled(r.type) && CanBreak(plan, r, blueprint)).ToList();
             int pick = Directives.Roll(plan.ViolationChance, breakable.Count, _faultRng);
             broken = pick < 0 ? null : breakable[pick];
         }
@@ -727,8 +731,167 @@ public sealed class CaseFactory
             Frozen = inst.account != null && inst.account.Standing == AccountStanding.Frozen,
             Departures = fields.Where(f => f.category == ClueCategory.DepartureDate).Select(f => f.value).ToList(),
             ValidUntils = fields.Where(f => f.category == ClueCategory.Expiry).Select(f => f.value).ToList(),
-            Today = _today
+            Today = _today,
+            Issued = plan.Papers.ToList()
         };
+    }
+
+    /// <summary>
+    /// What a citation slip names about the finished traveller (Papers Please
+    /// lesson 6, Citations; no draw): for a directive fault, the first of
+    /// today's rules that finds it (its memo row), its line (a closure's or a
+    /// recall's own summary; a paper set's broken condition, the frozen
+    /// standing or the papers' dates as a check's line) and the values that
+    /// break it (the destination, the box that is wrong, the date today);
+    /// for a costume error the dress rule, the garment and the destination;
+    /// for a forger the record check (the kind's procedure line's row), the
+    /// first forged box and what the record holds; for a place liar the
+    /// return-home or no-2150-goods rule, the first tell (a paper's box, an
+    /// answer or a garment) and the claimed place's value; for an honest
+    /// traveller the line a wrong denial prints (the destination open).
+    /// </summary>
+    private CitationFacts CitationOf(CaseInstance inst, DayPlanSO plan, LiePlan lie)
+    {
+        List<TravelRuleSO> rules = plan.ActiveTravelRules.Where(r => r != null).ToList();
+        List<string> lines = rules.Select(r => r.Summary()).ToList();
+        var c = new CitationFacts();
+        void Rule(TravelRuleSO rule, string key)
+        {
+            c.DirectiveNumber = rule != null ? Citations.MemoNumber(lines, rules.IndexOf(rule)) : 0;
+            c.RuleText = rule != null && key == null ? rule.Summary() : null;
+            c.RuleKey = key;
+        }
+        void Add(string label, string value) => c.Values.Add(new CitationValue(label, value));
+        TravelRuleSO Of(TravelRuleType type) => rules.FirstOrDefault(r => r.type == type && r.AppliesTo(inst.kind));
+        string record = UiText.Get(inst.kind == TravellerKind.Displaced ? "citation.label.registry" : "citation.label.account");
+        string today = _today != null ? AgencyCalendar.Write(_today.Value) : null;
+
+        if (inst.HasDirectiveFault)
+        {
+            CaseFacts facts = Facts(inst, plan);
+            TravelRuleSO broken = rules.FirstOrDefault(r => r.AppliesTo(inst.kind) && Directives.FaultOf(r.Directive, facts) == inst.directiveFault);
+            switch (inst.directiveFault)
+            {
+                case DirectiveFault.ClosedDestination:
+                    Rule(broken, null);
+                    Add(UiText.Get("citation.label.destination"), inst.originLabel);
+                    break;
+                case DirectiveFault.RecalledTransponder:
+                    Rule(broken, null);
+                    AddBox(c, inst, d => d.template.formNumber == Directives.Manifest, f => f.category == ClueCategory.TransponderId);
+                    break;
+                case DirectiveFault.IncompletePapers:
+                    string breach = Citations.PaperSetBreach(facts);
+                    Rule(broken, breach != null ? "citation.rule.paperSet." + breach : null);
+                    if (breach == Citations.EconomyManifest || breach == Citations.PremiumManifest)
+                    {
+                        AddBox(c, inst, d => d.template.formNumber == Directives.Visa, f => f.category == ClueCategory.AccountStatus);
+                        AddBox(c, inst, d => d.template.formNumber == Directives.Manifest, f => f.category == ClueCategory.TransponderClass);
+                    }
+                    else if (breach == Citations.WaiverUnsigned)
+                        AddBox(c, inst, d => d.template.formNumber == Directives.Waiver, f => f.category == ClueCategory.Signature);
+                    else if (breach != null)
+                        Add(UiText.Get("citation.label.missing." + breach), UiText.Get("citation.value.notHandedOver"));
+                    break;
+                case DirectiveFault.FrozenAccount:
+                    Rule(broken, "citation.rule.frozen");
+                    Add(UiText.Format("citation.label.standing", record), UiText.Format("citation.value.frozen", inst.account != null ? inst.account.FrozenSince : null));
+                    break;
+                case DirectiveFault.WrongDepartureDate:
+                    Rule(broken, "citation.rule.departure");
+                    AddBox(c, inst, d => true, f => f.category == ClueCategory.DepartureDate && f.value != today);
+                    Add(UiText.Get("citation.label.today"), today);
+                    break;
+                case DirectiveFault.ExpiredPaper:
+                    Rule(broken, "citation.rule.expired");
+                    AddBox(c, inst, d => true, f => f.category == ClueCategory.Expiry && _today != null
+                                                    && Directives.PaperDates(new string[0], new[] { f.value }, _today.Value) == DirectiveFault.ExpiredPaper);
+                    Add(UiText.Get("citation.label.today"), today);
+                    break;
+            }
+        }
+        else if (inst.costumeFault != CostumeError.None)
+        {
+            TravelRuleSO dress = Of(TravelRuleType.DressForDestination);
+            Rule(dress, dress != null ? null : "citation.rule.dress");
+            Add(UiText.Get("citation.label.garment"), inst.CostumeItem);
+            Add(UiText.Get("citation.label.destination"), inst.originLabel);
+        }
+        else if (inst.IsForger)
+        {
+            Rule(Of(TravelRuleType.Procedure), "citation.rule.record");
+            RecordTell tell = inst.recordTells[0];
+            AddBox(c, inst, d => inst.documents.IndexOf(d) == tell.Document, f => f.category == tell.Category);
+            Add(record, ResolveFieldValue(tell.Category, inst));
+        }
+        else if (inst.IsLiar && lie != null && lie.Tells.Count > 0)
+        {
+            bool smuggler = inst.lie == LieKind.Smuggling;
+            TravelRuleSO rule = Of(smuggler ? TravelRuleType.NoPresentGoods : TravelRuleType.ReturnHome);
+            Rule(rule, rule != null ? null : smuggler ? "citation.rule.goods" : "citation.rule.origin");
+            ClueCategory tell = lie.Tells[0];
+            TellChannel? channel = lie.ChannelOf(tell);
+            if (channel == TellChannel.Papers)
+                AddBox(c, inst, d => true, f => f.category == tell && f.isAnachronism);
+            else if (channel == TellChannel.Answer)
+                Add(UiText.Format("citation.label.answer", UiText.Category(tell)), lie.TellValue(tell));
+            else
+                Add(UiText.Get("citation.label.garment"), inst.look?.Garments.FirstOrDefault(g => g.IsTell)?.Label);
+            if (channel != TellChannel.Appearance)
+                Add(OnFile(tell) ? record : UiText.Format("citation.label.book", UiText.Category(tell), inst.originLabel), ResolveFieldValue(tell, inst));
+            else
+                Add(UiText.Get("citation.label.destination"), inst.originLabel);
+        }
+        else
+        {
+            Rule(null, "citation.rule.none");
+            Add(UiText.Get("citation.label.destination"), UiText.Format("citation.value.open", inst.originLabel));
+        }
+        return c;
+    }
+
+    /// <summary>Adds the first box of the traveller's papers that <paramref name="field"/> picks on a paper <paramref name="paper"/> picks, as "{box} on the {paper}" with what it prints (nothing when no box matches).</summary>
+    private static void AddBox(CitationFacts c, CaseInstance inst, System.Func<DocumentInstance, bool> paper, System.Func<DocumentField, bool> field)
+    {
+        foreach (DocumentInstance d in inst.documents)
+        {
+            if (d == null || d.template == null || !paper(d))
+                continue;
+            DocumentField box = d.fields.FirstOrDefault(f => f != null && field(f));
+            if (box == null)
+                continue;
+            c.Values.Add(new CitationValue(UiText.Format("citation.label.onPaper", box.label, d.DisplayName), box.value));
+            return;
+        }
+    }
+
+    /// <summary>True for a category the agency's file holds (the record, the registry or the calendar), not a place's fact: what ResolveFieldValue reads from the traveller, never from the books.</summary>
+    private static bool OnFile(ClueCategory category)
+    {
+        switch (category)
+        {
+            case ClueCategory.Name:
+            case ClueCategory.BirthDate:
+            case ClueCategory.CitizenId:
+            case ClueCategory.Incident:
+            case ClueCategory.Expiry:
+            case ClueCategory.DepartureDate:
+            case ClueCategory.AccountStatus:
+            case ClueCategory.TransponderId:
+            case ClueCategory.TransponderClass:
+            case ClueCategory.Debt:
+            case ClueCategory.WaiverNo:
+            case ClueCategory.Credit:
+            case ClueCategory.Funds:
+            case ClueCategory.PolicyNo:
+            case ClueCategory.Signature:
+            case ClueCategory.Employer:
+            case ClueCategory.Term:
+            case ClueCategory.Wage:
+                return true;
+            default:
+                return false;
+        }
     }
 
     /// <summary>The value the form numbered <paramref name="formNumber"/> prints for <paramref name="category"/>; null without the form or the box.</summary>
@@ -1680,18 +1843,19 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Creates the traveller's runtime documents from the blueprint's
-    /// templates the traveller carries (AccountMaker.Carries: every form
-    /// outside a request group, and of the proof group the one form their
-    /// account holds), in paper order (null templates skipped); their fields
-    /// are filled next (PopulateDocumentFields).
+    /// templates issued today (DayPlanSO.TemplatesOf, lesson D7) that the
+    /// traveller carries (AccountMaker.Carries: every form outside a request
+    /// group, and of the proof group the one form their account holds), in
+    /// paper order (null templates skipped); their fields are filled next
+    /// (PopulateDocumentFields).
     /// </summary>
-    private static void BuildDocuments(CaseInstance inst, CaseBlueprintSO blueprint)
+    private static void BuildDocuments(CaseInstance inst, DayPlanSO plan, CaseBlueprintSO blueprint)
     {
-        if (inst == null || blueprint == null || blueprint.DocumentTemplates == null)
+        if (inst == null || plan == null || blueprint == null)
             return;
 
-        foreach (DocumentTemplateSO dt in blueprint.DocumentTemplates)
-            if (dt != null && AccountMaker.Carries(dt.askGroup, dt.formNumber, inst.account))
+        foreach (DocumentTemplateSO dt in plan.TemplatesOf(blueprint))
+            if (AccountMaker.Carries(dt.askGroup, dt.formNumber, inst.account))
                 inst.documents.Add(new DocumentInstance { template = dt });
     }
 }

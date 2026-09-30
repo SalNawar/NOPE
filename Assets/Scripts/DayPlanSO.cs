@@ -8,6 +8,7 @@ using UnityEngine;
 /// Owns:
 /// - Day identity (dayNumber)
 /// - How many travellers queue that day (visitorsCount; the shift clock may close first)
+/// - What the day brings for the first time (bulletin, the briefing's first line) and the papers in circulation (papers; lessons 4 and D7, DayPacing, DayPapers)
 /// - Procedural generation knobs (the kinds' blueprints and weights, eras, the premade pool and chance)
 /// - Which lies today's liars may tell (lie kinds), and where a place lie may leak tells (tell count and tell channels)
 /// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut"; a slot may list alternatives, the first standing wins)
@@ -38,6 +39,23 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Queue size: most travellers this day can hold. The shift clock usually closes the booth first.</summary>
     [SerializeField, Min(1)] private int visitorsCount = 6;
+
+    /// <summary>
+    /// The day's bulletin (Papers Please lesson 4): one line naming the check
+    /// or paper the day brings, the first line of the morning briefing; blank
+    /// on a day that brings nothing new. Written by Generate World from
+    /// world_source.json days[].bulletin (DayPacing checks that every day
+    /// bringing something names it).
+    /// </summary>
+    [SerializeField, TextArea] private string bulletin = string.Empty;
+
+    /// <summary>
+    /// The papers in circulation today (lesson D7, "documents arrive one day
+    /// at a time"): the form numbers a traveller may carry, the papers menu
+    /// offers and a paper set may ask for (DayPapers); empty issues every
+    /// form. Written by Generate World from world_source.json days[].papers.
+    /// </summary>
+    [SerializeField] private string[] papers;
 
     // -----------------------------
     // Procedural generation
@@ -131,6 +149,23 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Public read-only number of visitors/cases.</summary>
     public int VisitorsCount => visitorsCount;
+
+    /// <summary>The day's bulletin line (blank: nothing new today).</summary>
+    public string Bulletin => bulletin ?? string.Empty;
+
+    /// <summary>The form numbers issued today (empty: every form).</summary>
+    public IReadOnlyList<string> Papers => papers ?? Array.Empty<string>();
+
+    /// <summary>True when the form numbered <paramref name="formNumber"/> is issued today (DayPapers.Issued).</summary>
+    public bool Issues(string formNumber) => DayPapers.Issued(Papers, formNumber);
+
+    /// <summary>The templates of <paramref name="blueprint"/> issued today, in paper order (null templates skipped; none for a null blueprint): what a traveller of its kind may carry today.</summary>
+    public IEnumerable<DocumentTemplateSO> TemplatesOf(CaseBlueprintSO blueprint)
+    {
+        foreach (DocumentTemplateSO t in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : Array.Empty<DocumentTemplateSO>())
+            if (t != null && Issues(t.formNumber))
+                yield return t;
+    }
 
     /// <summary>The day's traveller mix: each kind's blueprint and weight, in authored order.</summary>
     public IReadOnlyList<KindWeight> Kinds => kinds ?? Array.Empty<KindWeight>();

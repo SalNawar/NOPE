@@ -39,8 +39,8 @@ MonoBehaviour:
       lines:
       - id: dlg_auditor_found.contract.1
         speaker: 1
-        text: Stamped here, on day eleven. Fifty credits went missing the same day.
-          Curious, isn't it?
+        text: Stamped here, on day eleven. Two hundred credits went missing the same
+          day. Curious, isn't it?
         expression: 
       choices:
       - id: bye

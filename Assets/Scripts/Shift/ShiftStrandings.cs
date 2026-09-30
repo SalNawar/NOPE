@@ -11,8 +11,9 @@ using UnityEngine;
 /// waiver, their personality's tilt) and applies it: a carry of the present's
 /// Technology (falling back to the news when none can be made), a tremor's
 /// stability loss, or nothing but the paper's line (or, for the forgotten, not
-/// even that). When no valid signed waiver was on file the agency's failure
-/// report charges the stranding fine (GameConfigSO.strandingFine; Q10 = D).
+/// even that). When no valid signed waiver was on file, on a day the agency
+/// issues the waiver, the agency's failure report charges the stranding fine
+/// (GameConfigSO.strandingFine; Q10 = D; Strandings.Fine).
 /// Each stranding is kept for the next morning's paper and in the run's log
 /// (the Mail report), counted on the ledger and in the run's counters. Every
 /// decision is a Domain call; this class reads the cases, the content and the
@@ -95,7 +96,7 @@ public static class ShiftStrandings
             moved = true;
         }
 
-        int fine = waivered || config == null ? 0 : Mathf.Max(0, config.strandingFine);
+        int fine = config == null ? 0 : Strandings.Fine(waivered, inst.waiverIssued, config.strandingFine);
         if (fine > 0)
         {
             world.money -= fine;

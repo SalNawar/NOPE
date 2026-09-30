@@ -14,6 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 14
   visitorsCount: 18
+  bulletin: 'NEW: paper dates. Depart only on the date printed on the travel papers,
+    and never on an expired paper.'
+  papers:
+  - TC-101
+  - TC-230
+  - TC-310
+  - TC-415
+  - TC-416
+  - TC-417
+  - TC-520
+  - TC-610
+  - TC-620
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
