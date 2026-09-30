@@ -17,9 +17,9 @@ public enum AppCommand
     Tab5,
     /// <summary>Ctrl+6: the tab at position 6.</summary>
     Tab6,
-    /// <summary>Ctrl+Tab (and → on the tab strip): the next tab.</summary>
+    /// <summary>Ctrl+Tab (and → or ↓ on the navigator's sources): the next source.</summary>
     NextTab,
-    /// <summary>Ctrl+Shift+Tab (and ← on the tab strip): the previous tab.</summary>
+    /// <summary>Ctrl+Shift+Tab (and ← or ↑ on the navigator's sources): the previous source.</summary>
     PrevTab,
     /// <summary>Ctrl+Shift+PgUp: moves the active tab left.</summary>
     MoveTabLeft,
@@ -227,7 +227,7 @@ public readonly struct ShortcutContext
     /// <summary>The app's focus ring is on an item of a list (a row, a chip, a pin, the decision's buttons).</summary>
     public readonly bool ListFocused;
 
-    /// <summary>The app's focus ring is on its tab strip.</summary>
+    /// <summary>The app's focus ring is on the navigator's sources (the TabStrip region).</summary>
     public readonly bool TabStripFocused;
 
     /// <summary>The search results panel lists hits (↓ in the search field goes into them).</summary>
@@ -286,7 +286,7 @@ public sealed class ShortcutCardRow
 /// results list hits, ↓ into them (the ring then walks the hits: Enter opens
 /// one, Ctrl+Enter in the other pane). The icons take the arrows and Enter
 /// while no window has the focus; the app's chords need the app focused, its
-/// row keys a focused list, ← → the focused tab strip; Ctrl+V adds a
+/// row keys a focused list, the arrows the focused navigator's sources; Ctrl+V adds a
 /// clipping with Notes focused; with Orders focused the arrows walk its
 /// tree, Enter acts, and the zoom chords (Ctrl+=, Ctrl+-, Ctrl+0) zoom the
 /// tree instead of the panes. Card is the F1 card: every command once.
@@ -388,8 +388,8 @@ public static class ShortcutMap
             return Is(AppCommand.Forward, out command);
         if (k.Key == ShortcutKey.Tab && !k.Ctrl && !k.Alt)
             return Is(k.Shift ? AppCommand.PrevRegion : AppCommand.NextRegion, out command);
-        if (c.TabStripFocused && plain && (k.Key == ShortcutKey.Left || k.Key == ShortcutKey.Right))
-            return Is(k.Key == ShortcutKey.Left ? AppCommand.PrevTab : AppCommand.NextTab, out command);
+        if (c.TabStripFocused && plain && (k.Key == ShortcutKey.Left || k.Key == ShortcutKey.Right || k.Key == ShortcutKey.Up || k.Key == ShortcutKey.Down))
+            return Is(k.Key == ShortcutKey.Left || k.Key == ShortcutKey.Up ? AppCommand.PrevTab : AppCommand.NextTab, out command);
         if (c.ListFocused)
             return List(k, plain, ctrl, ctrlShift, out command);
         return None(out command);

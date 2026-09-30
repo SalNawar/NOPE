@@ -133,10 +133,13 @@ public class ShortcutMapTests
     }
 
     [Test]
-    public void TheTabStripFocused_LeftAndRightSwitchTabs()
+    public void TheNavigatorFocused_TheArrowsSwitchSources()
     {
+        // The navigator's sources are the TabStrip region (the PC UX redesign §6): a vertical list, so ↑ ↓ step it, and ← → still do.
         Assert.AreEqual(AppCommand.PrevTab, Resolve(K(ShortcutKey.Left), AppTabs));
         Assert.AreEqual(AppCommand.NextTab, Resolve(K(ShortcutKey.Right), AppTabs));
+        Assert.AreEqual(AppCommand.PrevTab, Resolve(K(ShortcutKey.Up), AppTabs));
+        Assert.AreEqual(AppCommand.NextTab, Resolve(K(ShortcutKey.Down), AppTabs));
         Assert.IsNull(Resolve(K(ShortcutKey.Space), AppTabs));
     }
 
