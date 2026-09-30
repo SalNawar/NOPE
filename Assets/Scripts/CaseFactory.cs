@@ -550,7 +550,8 @@ public sealed class CaseFactory
         inst.look = ComposeLook(inst, place, lie, legendary, family, costume, caseIndex1Based);
 
         // 8) The Directives read the finished papers and account (traveller types P1, P3): the first rule broken is the fault.
-        inst.directiveFault = Directives.Fault(plan.ActiveTravelRules.Where(r => r != null).Select(r => r.Directive).ToList(), Facts(inst, plan));
+        inst.facts = Facts(inst, plan);
+        inst.directiveFault = Directives.Fault(plan.ActiveTravelRules.Where(r => r != null).Select(r => r.Directive).ToList(), inst.facts);
         if (broken != null && !inst.HasDirectiveFault)
             Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: was to break '{broken.name}' ({broken.type}), but the finished papers read no fault. Check the kind's templates and the account ranges.");
 
@@ -565,6 +566,7 @@ public sealed class CaseFactory
             signed.Forms = signed.Forms.Append(Directives.Waiver).ToList();
             signed.WaiverSigned = true;
             inst.faultWithDeskWaiver = Directives.Fault(plan.ActiveTravelRules.Where(r => r != null).Select(r => r.Directive).ToList(), signed);
+            inst.factsWithDeskWaiver = signed;
         }
         Personality voice = _lib.Personalities.FirstOrDefault(p => p != null && p.id == inst.personality);
         bool carriesSigned = inst.documents.Any(d => d != null && d.template != null && d.template.formNumber == Directives.Waiver && Directives.IsSigned(d.fields));

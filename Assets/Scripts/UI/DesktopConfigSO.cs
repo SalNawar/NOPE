@@ -2,8 +2,8 @@ using UnityEngine;
 
 /// <summary>
 /// The PC desktop's layout and timing knobs (the PC redesign section 4.9;
-/// DeskConfigSO stays the physical desk): the taskbar and the compare dock
-/// under the icon area, the windows' title bars, the taskbar's window
+/// DeskConfigSO stays the physical desk): the taskbar under the icon area,
+/// the windows' title bars, the taskbar's window
 /// buttons, the desktop's icons (their cell, the arrange grid, the default
 /// order, the drop's overlap share), the double-click, the Internet's caps
 /// (the news back issues, the browser's history), the app windows' sizes,
@@ -21,10 +21,7 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The taskbar's height at the bottom of the desktop.</summary>
     [Min(1f)] public float taskbarHeight = 60f;
 
-    /// <summary>The compare dock's height, right above the taskbar (reserved even while it is hidden, so a maximised window never changes size).</summary>
-    [Min(1f)] public float dockHeight = 64f;
-
-    /// <summary>The gap between the dock and the Start menu above it.</summary>
+    /// <summary>The gap between the taskbar and the Start menu above it.</summary>
     [Min(0f)] public float startMenuGap = 4f;
 
     [Header("Windows")]
@@ -128,11 +125,11 @@ public sealed class DesktopConfigSO : ScriptableObject
     [Min(0.5f)] public float toastSeconds = 4f;
 
     [Header("The Investigation app's panes (redesign phase 18)")]
-    /// <summary>A pane's narrowest readable width: two panes show only while the body holds the navigator and two of these (AP3; the PC UX redesign IA6).</summary>
+    /// <summary>A pane's narrowest readable width: two panes show only while the main column (beside the findings) holds two of these (AP3; the PC workbench spec IA5).</summary>
     [Min(1f)] public float paneMinWidth = 520f;
 
     /// <summary>The divider between the two panes.</summary>
-    [Min(0f)] public float paneGap = 6f;
+    [Min(0f)] public float paneGap = 14f;
 
     /// <summary>The places a pane's Back can return through (AP9).</summary>
     [Min(1)] public int paneHistory = 30;
@@ -170,6 +167,6 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The hits a source's group shows before "Show all n".</summary>
     [Min(1)] public int searchPerGroup = 5;
 
-    /// <summary>A maximised window's bottom edge above the desktop's bottom: the taskbar and the dock (the icon area starts there).</summary>
-    public float MaximisedBottom => taskbarHeight + dockHeight;
+    /// <summary>A maximised window's bottom edge above the desktop's bottom: the taskbar (the icon area starts there; the compare dock retired with the PC workbench).</summary>
+    public float MaximisedBottom => taskbarHeight;
 }

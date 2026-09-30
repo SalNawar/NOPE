@@ -3,9 +3,9 @@ using UnityEngine;
 /// <summary>
 /// The player's desktop preferences (the PC redesign DK4, DK6, AP3, AP4, KB5,
 /// ST1, section 4.7): where the icons sit, whether one click or two opens an
-/// icon, the Investigation app's tab order, whether it shows two panes, its
-/// default zoom (Settings' Text size), whether its sidebar shows and whether
-/// its steps checklist shows. Per-player values in PlayerPrefs (the
+/// icon, whether the Investigation app shows two panes, its default zoom
+/// (Settings' Text size), whether its findings column shows and whether its
+/// step hints show. Per-player values in PlayerPrefs (the
 /// UiLanguagePreference pattern), outside the run save, so New Run keeps
 /// them; saved at once when set.
 /// </summary>
@@ -20,7 +20,7 @@ public static class DesktopPreferences
     /// <summary>The app's default zoom key ("100", "125" or "150"; AppZoom.Parse reads it).</summary>
     private const string ZoomKey = "TimeDesk.AppZoom";
 
-    /// <summary>The app's sidebar key ("shown" or "hidden").</summary>
+    /// <summary>The app's findings column key ("shown" or "hidden"; the sidebar's key kept, so a player's choice carries over).</summary>
     private const string SidebarKey = "TimeDesk.SidebarShown";
 
     /// <summary>The stored value for "Single click" ("double" or absent = double click).</summary>
@@ -28,9 +28,6 @@ public static class DesktopPreferences
 
     /// <summary>The stored value for "Double click".</summary>
     private const string Double = "double";
-
-    /// <summary>The Investigation app's tab order key (TabOrder.Save: "Documents,Records,...").</summary>
-    private const string AppTabsKey = "TimeDesk.AppTabs";
 
     /// <summary>The Investigation app's split key ("on" or "off").</summary>
     private const string AppSplitKey = "TimeDesk.AppSplit";
@@ -41,7 +38,7 @@ public static class DesktopPreferences
     /// <summary>The stored value for one pane.</summary>
     private const string Off = "off";
 
-    /// <summary>The steps checklist's key (the PC redesign ST1).</summary>
+    /// <summary>The step hints' key (the PC workbench spec §7; the PC redesign ST1's checklist key kept, so a player's choice carries over).</summary>
     private const string StepsKey = "TimeDesk.StepsShown";
 
     /// <summary>The stored value for a hidden sidebar or hidden steps ("shown" or absent = shown).</summary>
@@ -57,17 +54,6 @@ public static class DesktopPreferences
         set
         {
             PlayerPrefs.SetString(IconsKey, value ?? string.Empty);
-            PlayerPrefs.Save();
-        }
-    }
-
-    /// <summary>The Investigation app's saved tab order (TabOrder.Parse reads it), or "" for the default order.</summary>
-    public static string AppTabs
-    {
-        get => PlayerPrefs.GetString(AppTabsKey, string.Empty);
-        set
-        {
-            PlayerPrefs.SetString(AppTabsKey, value ?? string.Empty);
             PlayerPrefs.Save();
         }
     }
@@ -105,7 +91,7 @@ public static class DesktopPreferences
         }
     }
 
-    /// <summary>True (the default) while the Investigation app's sidebar shows; Ctrl+B hides it.</summary>
+    /// <summary>True (the default) while the Investigation app's findings column shows; Ctrl+B hides it.</summary>
     public static bool SidebarShown
     {
         get => PlayerPrefs.GetString(SidebarKey, Shown) != Hidden;
@@ -116,7 +102,7 @@ public static class DesktopPreferences
         }
     }
 
-    /// <summary>True (the default) when the Investigation app's sidebar shows the steps checklist; false when the player hid it (the toolbar's Steps, Settings).</summary>
+    /// <summary>True (the default) when the Investigation app shows its step hints (the lead's sentence, the status line's teaching hint); false when the player hid them (Settings, Ctrl+Shift+S).</summary>
     public static bool StepsShown
     {
         get => PlayerPrefs.GetString(StepsKey, Shown) != Hidden;
