@@ -101,6 +101,12 @@ public static class _TimeDeskAuditPlay
     private static readonly HashSet<string> MistakesMade = new HashSet<string>();
     private static readonly HashSet<string> Seen = new HashSet<string>();
     private static readonly SortedDictionary<string, int> Tally = new SortedDictionary<string, int>(StringComparer.Ordinal);
+
+    /// <summary>Wave 5, lesson 9: the face (skin/face/hair) of each generated traveller turned away, by name, so a returning traveller is checked to come back with it.</summary>
+    private static readonly Dictionary<string, string> DeniedFaces = new Dictionary<string, string>(StringComparer.Ordinal);
+
+    /// <summary>Wave 5, lesson 10: every traveller decided so far, as the paper names them.</summary>
+    private static readonly HashSet<string> Decided = new HashSet<string>(StringComparer.Ordinal);
     private static bool _ended;
     private static bool _frameOpen;
 
@@ -247,6 +253,8 @@ public static class _TimeDeskAuditPlay
         MistakesMade.Clear();
         Seen.Clear();
         Tally.Clear();
+        DeniedFaces.Clear();
+        Decided.Clear();
         _ended = false;
         yield return Until(() => Object.FindFirstObjectByType<TitleSceneController>() != null && RunManager.HasInstance, 60f, "the title scene");
         RunManager.Instance.Config.fixedRunSeed = Seed;
@@ -324,6 +332,7 @@ public static class _TimeDeskAuditPlay
         RecordWorld();
         RecordPortals(o);
         WorldHeadlines(day);
+        PaperNames(day);
         if (ShotsOn)
             yield return Shots($"d{day}_briefing");
         o.StartShift.onClick.Invoke();
@@ -431,6 +440,18 @@ public static class _TimeDeskAuditPlay
         Line($"-- d{day} slot {slot}: '{c.visitorDisplayName}' kind={c.kind} claims '{c.originLabel}' role={(c.archetype != null ? c.archetype.displayName : "-")} gender={c.gender} liar={c.IsLiar} lie={(c.lie.HasValue ? c.lie.Value.ToString() : "-")} home='{c.HomeLabel}' costume={c.costumeFault} directive={c.directiveFault} fault='{c.FaultReason}' shouldAccept={c.ShouldAccept} premade={(c.legendarySource != null ? c.legendarySource.id : "none")} tells=[{tells}] recordTells=[{recordTells}]");
         if (a != null)
             Line($"   account: {a.CitizenId} {a.Status} debt {a.Debt} transponder '{a.Transponder}' {a.TransponderClass} waiver {a.WaiverNo ?? "none"} proof {a.ProofForm ?? "none"} pad {c.waiverPadReply} waivered {c.Waivered}");
+        if (c.returning != null)
+        {
+            // Wave 5, lesson 9: a traveller turned away comes back, same name and face, corrected or with a new story.
+            Line($"   returning: turned away on day {c.returning.deniedDay} ({c.returning.story}), window days {c.returning.fromDay}-{c.returning.untilDay}; intro '{c.introLine}'");
+            Count($"returning {c.returning.story}");
+            Check(DeniedFaces.TryGetValue(c.visitorGivenName, out string face) && face == Face(c),
+                  $"d{day} slot {slot}: '{c.visitorDisplayName}' comes back with the face they were turned away with ({face ?? "never denied"} / {Face(c)})");
+            if (c.returning.story == ReturnStory.Corrected)
+                Check(!c.HasDeviationFault && !c.HasDirectiveFault, $"d{day} slot {slot}: corrected papers carry no fault ({FaultKey(c)})");
+            if (ShotsOn && First("returning"))
+                yield return Shots($"d{day}_returning");
+        }
         Line($"   papers: {string.Join(" ; ", c.documents.Select(d => (d.template != null ? d.template.formNumber + " " + d.template.displayName : "?") + ": " + string.Join(", ", d.fields.Select(f => $"{f.label}={f.value}{(f.isAnachronism ? "[TELL]" : "")}"))))}");
         if (c.look != null)
             Line($"   look: {c.look.Describe()} | {string.Join("; ", c.look.Garments.Select(g => $"{g.Slot}:{g.Label}{(g.IsTell ? "[TELL]" : "")}"))}");
@@ -495,6 +516,7 @@ public static class _TimeDeskAuditPlay
             yield return Evidence(o, c, day, slot);
             if (ShotsOn)
                 yield return CaughtShots(o, c);
+            yield return Confront(o, c, day, slot);
         }
         ((CompareController)Field(o.Ui, "compareController")).Clear();
         if (ShotsOn && c.HasDirectiveFault && First($"rules {c.directiveFault}"))
@@ -526,6 +548,9 @@ public static class _TimeDeskAuditPlay
             Line($"   decided on the PC: {(accept ? "ACCEPT" : "DENY")}");
         }
         Check(o.Game.Ledger.verdicts.Count == before + 1, $"d{day} slot {slot}: the decision recorded one verdict");
+        Decided.Add(c.visitorDisplayName);
+        if (!accept && c.legendarySource == null && c.returning == null)
+            DeniedFaces[c.visitorGivenName] = Face(c);
         CaseVerdict v = o.Game.Ledger.verdicts.Last();
         Line($"   verdict: {JsonUtility.ToJson(v)}");
         bool mistake = plan.StartsWith("MISTAKE");
@@ -554,6 +579,65 @@ public static class _TimeDeskAuditPlay
     }
 
     private static bool Once(string key) => MistakesMade.Add(key);
+
+    /// <summary>A traveller's face as a returning traveller must bring it back: skin, face and hair.</summary>
+    private static string Face(CaseInstance c) => c.look != null ? $"{c.look.SkinTone}/{c.look.Face}/{c.look.HairColour}" : "none";
+
+    /// <summary>
+    /// Wave 5, lesson 3: after the evidence, the wheel's differences menu asks
+    /// about each logged difference (the desk names its stated value; the
+    /// traveller answers, their outcome counted: the honest explain, a liar
+    /// cracks or doubles down).
+    /// </summary>
+    private static IEnumerator Confront(Office o, CaseInstance c, int day, int slot)
+    {
+        object interview = Field(o.Ui, "_interview");
+        var runner = (DialogRunner)Field(interview, "_runner");
+        var log = (DiscrepancyLog)Field(Field(o.Ui, "_evidence"), "_discrepancies");
+        if (log.Count == 0 || !(bool)Field(interview, "_interviewReachable"))
+            yield break;
+        DialogChoice entry = runner.Choices.FirstOrDefault(x => x.Id == InterviewScript.DifferencesNodeId);
+        Check(entry != null, $"d{day} slot {slot}: the wheel offers a question about the {log.Count} logged difference(s)");
+        if (entry == null)
+            yield break;
+        Call(interview, "Choose", entry.Id);
+        bool cracked = false;
+        for (int guard = 0; guard < 12; guard++)
+        {
+            DialogChoice q = runner.Choices.FirstOrDefault(x => x.Id.StartsWith("confront:", StringComparison.Ordinal));
+            if (q == null)
+                break;
+            Discrepancy d = log.Items.FirstOrDefault(x => Confrontations.ChoiceId(x.category) == q.Id);
+            ConfrontOutcome outcome = Confrontations.Outcome(ReactionIntents.Of(c.IsLiar, c.IsForger), c.legendarySource != null, c.confess, c.dialogSeed, d != null ? d.category : default, cracked);
+            cracked |= outcome == ConfrontOutcome.Crack;
+            int before = runner.Transcript.Count;
+            if (ShotsOn && First($"difference {outcome}"))
+                yield return Shots($"d{day}_difference_{outcome}");
+            Call(interview, "Choose", q.Id);
+            List<DialogLine> said = runner.Transcript.Skip(before).ToList();
+            Line($"   asked about a difference: '{q.Label}' -> {outcome}: {string.Join(" / ", said.Select(l => $"[{l.Speaker}] {l.Text}"))}");
+            Count($"difference answered {outcome}");
+            Check(d != null && said.Count >= 2 && said[0].Speaker == DialogSpeaker.Desk && said[0].Text.Contains(d.documentValue) && said.Last().Speaker == DialogSpeaker.Traveller,
+                  $"d{day} slot {slot}: the desk names the difference ('{d?.documentValue}') and the traveller answers ({outcome})");
+            yield return Seconds(0.3f);
+        }
+        DialogChoice back = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Back);
+        if (back != null)
+            Call(interview, "Choose", back.Id);
+        Check(runner.Choices.All(x => x.Id != InterviewScript.DifferencesNodeId), $"d{day} slot {slot}: every difference asked, the entry leaves the wheel");
+        yield return Frames(2);
+    }
+
+    /// <summary>Wave 5, lesson 10: the morning paper's lines that name a traveller the clerk decided (a carry, a panic, a world outcome, a returning traveller's second visit, a stranding).</summary>
+    private static void PaperNames(int day)
+    {
+        string paper = ((TMP_Text)Field(Office.One<DayFlowUIController>(), "briefingBodyText")).text;
+        List<string> named = Lines(paper).Where(l => Decided.Any(n => l.Contains(n))).ToList();
+        foreach (string l in named)
+            Line($"   paper names a traveller: {l}");
+        if (named.Count > 0)
+            Count("paper names a traveller");
+    }
 
     private static bool First(string key) => Seen.Add(key);
 
@@ -1246,9 +1330,14 @@ public static class _TimeDeskAuditPlay
         if (today.Count == 0)
             return;
         string paper = ((TMP_Text)Field(Office.One<DayFlowUIController>(), "briefingBodyText")).text;
-        List<string> headlines = today.Select(l => content.Headline(l)).Where(h => !string.IsNullOrWhiteSpace(h)).ToList();
+        // Wave 5, lesson 10: each headline ends with the last traveller whose verdict pulled it, and the day.
+        string traced = RunManager.Instance.Library.HistoryLines.traced?.text;
+        List<string> headlines = today.Select(l => Traces.Traced(content.Headline(l), traced, Traces.Of(w.pullTraces, l))).Where(h => !string.IsNullOrWhiteSpace(h)).ToList();
         int printed = headlines.Count(h => paper.Contains(h));
-        Line($"   world headlines today: {printed} of {headlines.Count} printed");
+        int named = today.Count(l => Traces.Of(w.pullTraces, l) != null);
+        Line($"   world headlines today: {printed} of {headlines.Count} printed, {named} traced to a traveller");
+        if (named > 0)
+            Count("world headline traced to a traveller");
         Count("world headline");
         Check(printed > 0 || headlines.Count == 0, $"day {day}: a world answer changed overnight and the paper prints its headline ({printed} of {headlines.Count})");
     }
