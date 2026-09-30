@@ -15,8 +15,10 @@ using UnityEngine.SceneManagement;
 /// layers on the layer with URP's Sprite-Lit-Default material (the Light2Ds
 /// light them; the office camera, forward, never draws them: HallBackdrop
 /// shows the 2D Renderer's picture of them behind the desk) and the exterior
-/// on HallSky (the layers are mutually exclusive masks, so it still draws where
-/// it did, but only the sky light reaches it); creates the knobs (Assets/Data/Config/HallLighting_Default.asset),
+/// on HallSky, the Departure Board's display on HallDisplays (the layers are
+/// mutually exclusive masks, so they still draw where they did, but only the sky
+/// light reaches the sky, and only the global light and the board's own light
+/// the board, so the ceiling fixtures above it never wash out its rows); creates the knobs (Assets/Data/Config/HallLighting_Default.asset),
 /// the dust's mote and material, and the backdrop camera's own 2D Renderer
 /// (Assets/Settings/HallRenderer2D.asset, listed in the pipeline); and adds the HallLighting root with its
 /// HallLightingRig and HallBackdrop, a Plane (following the art's
@@ -56,6 +58,12 @@ public static class AnimeHallLightingHooks
 
     /// <summary>The painted exterior (the sky and the city through the windows), which goes on the HallSky sorting layer.</summary>
     private const string SkyLayer = "03 Exterior placeholder single layer";
+
+    /// <summary>The painted Departure Board display (the gameplay prints the day's rows on it), which goes on the HallDisplays sorting layer.</summary>
+    private const string BoardLayer = "16 Departure board blank display";
+
+    /// <summary>The board display's light (its halo also lights the frame, on Default).</summary>
+    private const string BoardLight = "Departure Board display";
 
     /// <summary>The dust's sorting order: above the hall's 58 layers (0..57), under everything the office camera draws (the desk, the traveller).</summary>
     private const int DustOrder = 58;
@@ -109,10 +117,12 @@ public static class AnimeHallLightingHooks
         int layer = OfficeLayers.HallBackdropLayer;
         if (layer < 0)
             return;
-        if (!SortingLayer.layers.Any(l => l.name == OfficeLayers.SkySortingLayer))
+        foreach (string sorting in new[] { OfficeLayers.SkySortingLayer, OfficeLayers.DisplaySortingLayer })
         {
-            OfficeSceneUIBuilder.EnsureSortingLayer(OfficeLayers.SkySortingLayer, first: true);
-            changes.Add($"added the sorting layer {OfficeLayers.SkySortingLayer} before Default");
+            if (SortingLayer.layers.Any(l => l.name == sorting))
+                continue;
+            OfficeSceneUIBuilder.EnsureSortingLayer(sorting, first: true);
+            changes.Add($"added the sorting layer {sorting} before Default");
         }
 
         HallLightingSO settings = Settings(changes);
@@ -154,6 +164,8 @@ public static class AnimeHallLightingHooks
         AddWindows(plane, canvas, layer, changes);
         AddFixtures(plane, canvas, layer, changes);
         AddScreensAndSigns(plane, canvas, layer, changes);
+        Target(plane.Find("Global light"), new[] { "Default", OfficeLayers.DisplaySortingLayer }, changes);
+        Target(plane.Find("Screens/" + BoardLight), new[] { "Default", OfficeLayers.DisplaySortingLayer }, changes);
         AddPortals(plane, canvas, layer, changes);
         AddShadows(plane, canvas, layer, changes);
         List<ParticleSystem> motes = AddDust(plane, canvas, layer, dust, changes);
@@ -286,29 +298,44 @@ public static class AnimeHallLightingHooks
     private static void LitLayers(AnimeHallPresentation presentation, int layer, List<string> changes)
     {
         var lit = AssetDatabase.LoadAssetAtPath<Material>(SpriteLitPath);
-        int sky = SortingLayer.NameToID(OfficeLayers.SkySortingLayer);
+        int sky = SortingLayer.NameToID(OfficeLayers.SkySortingLayer), display = SortingLayer.NameToID(OfficeLayers.DisplaySortingLayer);
         int moved = 0;
         foreach (AnimeHallPresentation.Layer l in presentation.layers)
         {
             SpriteRenderer r = l.renderer;
-            bool isSky = l.id == SkyLayer;
-            if (r == null || (r.gameObject.layer == layer && r.sharedMaterial == lit && (!isSky || r.sortingLayerID == sky)))
+            int own = l.id == SkyLayer ? sky : l.id == BoardLayer ? display : -1;
+            if (r == null || (r.gameObject.layer == layer && r.sharedMaterial == lit && (own == -1 || r.sortingLayerID == own)))
                 continue;
             Undo.RecordObject(r.gameObject, UndoName);
             Undo.RecordObject(r, UndoName);
             r.gameObject.layer = layer;
             r.sharedMaterial = lit;
-            if (isSky)
-                r.sortingLayerID = sky;
+            if (own != -1)
+                r.sortingLayerID = own;
             moved++;
         }
         if (moved > 0)
-            changes.Add($"{moved} painted layers on {OfficeLayers.HallBackdrop} with Sprite-Lit-Default ('{SkyLayer}' on the sorting layer {OfficeLayers.SkySortingLayer})");
+            changes.Add($"{moved} painted layers on {OfficeLayers.HallBackdrop} with Sprite-Lit-Default ('{SkyLayer}' on the sorting layer {OfficeLayers.SkySortingLayer}, '{BoardLayer}' on {OfficeLayers.DisplaySortingLayer})");
     }
 
     // -----------------------------
     // Lights
     // -----------------------------
+
+    /// <summary>Makes <paramref name="light"/>'s Light2D reach every sorting layer of <paramref name="names"/> (the global light and the board's light reach the HallDisplays layer too); what it already reaches stays.</summary>
+    private static void Target(Transform light, string[] names, List<string> changes)
+    {
+        Light2D l = light != null ? light.GetComponent<Light2D>() : null;
+        if (l == null)
+            return;
+        int[] want = names.Select(SortingLayer.NameToID).ToArray();
+        int[] have = l.targetSortingLayers ?? System.Array.Empty<int>();
+        if (want.All(have.Contains))
+            return;
+        Undo.RecordObject(l, UndoName);
+        l.targetSortingLayers = have.Union(want).ToArray();
+        changes.Add($"'{light.name}' lights {string.Join(", ", names)}");
+    }
 
     private static void AddGlobal(Transform plane, int layer, List<string> changes)
     {

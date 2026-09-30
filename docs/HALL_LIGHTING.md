@@ -59,10 +59,14 @@ material would draw unlit there; instead its tint is multiplied by the cycle's
 that the face reads), through `AnimeHallShiftLink` and `TravellerView.Tint`.
 
 The layers are mutually exclusive masks (`layers.json`: "Mutually exclusive
-visible-pixel masks"), so the exterior layer (`03`, the sky and the city through
-the windows) moved to its own sorting layer `HallSky` (listed before Default)
-draws exactly where it did; only the sky light reaches it, so the interior's
-fixtures never light the sky.
+visible-pixel masks"), so a layer moved to another sorting layer still draws
+exactly where it did. Two are: the exterior (`03`, the sky and the city through
+the windows) on `HallSky`, which only the sky light reaches (the interior's
+fixtures never light the sky), and the Departure Board's display (`16`) on
+`HallDisplays`, which only the global light and the board's own light reach (the
+two front ceiling fixtures hang right above the board and washed its rows down
+to 4.3:1 at dusk; with them kept off it the rows read 5:1 or better at every
+hour). Both are listed before Default.
 
 Cost (measured in play, 1920×1080, the editor; the audit profile job and the
 track's play job): the lights' components allocate 0 B a frame (the rig, the
@@ -163,7 +167,7 @@ What each kind of light does (`HallLightingRig`, every frame, 0 B):
 
 | Kind | Driven by |
 |---|---|
-| Global | `globalColour` × `globalIntensity` at the solar position (multiplied over the art: 0.88 at noon, 0.4 blue at night) |
+| Global | `globalColour` × `globalIntensity` at the solar position (multiplied over the art: 0.88 at noon, 0.4 blue at night); it reaches Default and `HallDisplays` |
 | Sky | `skyColour` × `skyIntensity` (only the `HallSky` layer: bright by day, orange at sunset, deep blue at night) |
 | Window (the shafts, additive) | `windowColour` × `windowIntensity` (strongest with a low sun, none at night); each turns about its pane's top from `shaftAngleAtSunrise` to `shaftAngleAtSunset` along the sun's arc and lengthens with a low sun (`shaftLowSunLength`); they cast the piers' shadows while `shaftShadows` |
 | Fixture | `fixtureColour` × its level (`fixtureOffShare` while off) × the strike flicker (`fixtureFlicker`, never with reduced motion) |
@@ -206,8 +210,12 @@ for dark ink, against the median of the other half; `SCRATCH/halllights/contrast
 at opening, midday, late afternoon, dusk, night and dawn: the stability, credits
 and clock digits and the NEXT sign read 12:1 or better at every hour (they are
 light digits on the dark desk glasses, lit by the forward pass as before), the
-board's rows 4.5:1 or better, and the calendar's date as before (its ink switch
-is on the same evening blend). The report's figures are in the track's report.
+board's rows 5.0:1 or better (5.2 at opening, 5.0 at midday, 5.3 late
+afternoon, 5.9 at dusk, 6.5 at night, 5.9 at dawn; 5.7 by day before the
+lights), and the calendar's date exactly as before for the same evening (its
+ink switch is on the same evening blend: this measure, which undercounts thin
+antialiased ink, gives 3.5 on the day paper both before and after, 4.6 at dusk
+and 8.4 at night with the evening ink).
 
 ## Reinstalling the hall's art
 

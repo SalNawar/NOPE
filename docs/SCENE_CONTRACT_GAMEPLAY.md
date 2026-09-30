@@ -120,8 +120,9 @@ Interactable, so the papers on the desk are lit by it (and dim with it in the
 evening); and, since 2026-09-30 (Saleh: lights, shadows, dust and a full
 day-night cycle; `docs/HALL_LIGHTING.md`), the hall's lights: its 58 painted
 layers on the `HallBackdrop` layer with URP's `Sprite-Lit-Default` material
-(the exterior layer `03` on the `HallSky` sorting layer, listed before Default:
-the layers are mutually exclusive masks, so it draws where it did), and a
+(the exterior layer `03` on the `HallSky` sorting layer and the board display
+`16` on `HallDisplays`, both listed before Default: the layers are mutually
+exclusive masks, so they draw where they did), and a
 `HallLighting` root with the `HallBackdrop` (the painted layers drawn through
 a 2D Renderer, `Assets/Settings/HallRenderer2D.asset`, by a camera made at runtime, shown behind
 everything by the office camera, which never draws that layer itself), the
@@ -230,9 +231,10 @@ Other art-side fixes found by the move:
 - One more layer and one more sorting layer come with the anime hall's lights
   (Add Anime Hall Hooks adds them): the layer `HallBackdrop` (the hall's painted
   layers, the portal rings' effects, the dust and the Light2Ds: only the hall's
-  2D backdrop camera draws it, never the office camera) and the sorting layer
-  `HallSky`, before `Default` (the hall's exterior, which only the sky light
-  reaches).
+  2D backdrop camera draws it, never the office camera) and the sorting layers
+  `HallSky` and `HallDisplays`, before `Default` (the hall's exterior, which only
+  the sky light reaches; the Departure Board's display, which only the global
+  light and the board's own light reach).
 - One sorting layer is the gameplay layer's: `Gameplay`, after `Default`, for
   its world sprites and notes (the traveller's figure, the day-1 desk notes).
   Transparent objects sort by sorting layer and order before depth, so the art

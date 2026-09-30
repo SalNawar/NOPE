@@ -44,6 +44,14 @@ public static class OfficeLayers
     /// </summary>
     public const string SkySortingLayer = "HallSky";
 
+    /// <summary>
+    /// The sorting layer of the anime hall's Departure Board display, listed
+    /// before Default like HallSky: only the hall's global light and the board's
+    /// own light reach it, so the ceiling fixtures above it never wash out the
+    /// day's rows printed on it. Add Anime Hall Hooks adds it.
+    /// </summary>
+    public const string DisplaySortingLayer = "HallDisplays";
+
     /// <summary>The HallBackdrop layer's index (-1 when the project lacks it).</summary>
     public static int HallBackdropLayer => LayerMask.NameToLayer(HallBackdrop);
 
