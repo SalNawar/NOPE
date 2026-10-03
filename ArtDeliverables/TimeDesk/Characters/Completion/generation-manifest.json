@@ -2,8 +2,8 @@
   "branch": "codex/hall-art-completion",
   "generationTool": "built-in image_gen",
   "requiredNewRawSources": 455,
-  "generatedNewRawSources": 353,
-  "rawSourceGenerationComplete": false,
+  "generatedNewRawSources": 455,
+  "rawSourceGenerationComplete": true,
   "installedPilotModified": false,
   "gameReadyLayerProcessingComplete": false,
   "generated": [
@@ -4067,6 +4067,1657 @@
       "status": "raw-unverified"
     },
     {
+      "index": 249,
+      "name": "headwear_m_japan_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_japan_industrial.png",
+      "produces": [
+        "headwear_m_japan_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b870b2f90cdd06f9faae7e557c95e518038cb7c26787c0ac9e5ddf089e2b2336",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e58044b7-d535-4ce1-be99-8ad8388991f0.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 250,
+      "name": "outfit_f_japan_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_japan_industrial.png",
+      "produces": [
+        "outfit_f_japan_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3e2fe647d8f89e2458bbc77a212c909f25621b964923ed3a790ee4842d97a87f",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0885d13c-d398-437b-936b-dc7d058be111.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 251,
+      "name": "hair_f_japan_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_japan_industrial.png",
+      "produces": [
+        "hair_f_japan_industrial_black",
+        "hair_f_japan_industrial_brown",
+        "hair_f_japan_industrial_blond",
+        "hair_f_japan_industrial_red",
+        "hair_f_japan_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ded3e1f69abb3b957e9f127642c2138cc415dde50e072fe3072e3f74702336d4",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-99d5d468-b682-44c8-8f84-4b03c8326350.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 252,
+      "name": "outfit_m_britain_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_britain_industrial.png",
+      "produces": [
+        "outfit_m_britain_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1d2af1232fca04c59efa55e398df4a8f3ef036c72d911cec23e4317adfca41e0",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-77ce20e1-bb64-4d3f-9422-cffc7c6cf38e.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 253,
+      "name": "hair_m_britain_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_britain_industrial.png",
+      "produces": [
+        "hair_m_britain_industrial_black",
+        "hair_m_britain_industrial_brown",
+        "hair_m_britain_industrial_blond",
+        "hair_m_britain_industrial_red",
+        "hair_m_britain_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4a7d7952da31246b8aadbcd082965ea030637555242f4c8f79788f597e266a9b",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0865f2f3-7f36-4d46-81d9-50e8eba63700.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 254,
+      "name": "facialhair_m_britain_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_britain_industrial.png",
+      "produces": [
+        "facialhair_m_britain_industrial_black",
+        "facialhair_m_britain_industrial_brown",
+        "facialhair_m_britain_industrial_blond",
+        "facialhair_m_britain_industrial_red",
+        "facialhair_m_britain_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ebb16ac3efbd0a4ab6c6fb0d8d609f3b54081839caa62e7e9658539a8d33d4e4",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-44c0c339-9704-40f1-b9a3-e37b5b15e9df.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 255,
+      "name": "headwear_m_britain_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_britain_industrial.png",
+      "produces": [
+        "headwear_m_britain_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "83ef10c626c33b1e23de5c5ac9994043857bdd5602fb8748231a257d0437a8f6",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-51f5d94f-8b70-42ec-8334-0bd77b228a44.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 256,
+      "name": "accessory_m_britain_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_m_britain_industrial.png",
+      "produces": [
+        "accessory_m_britain_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0cfb2ba78669430237bd8314058c33bb39f5fd0841c7924be939433733054836",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e61fd09d-b7c3-497a-bac3-e50f69408a8c.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 257,
+      "name": "outfit_f_britain_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_britain_industrial.png",
+      "produces": [
+        "outfit_f_britain_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "80097db3a45f60040be98e2e8e8a297a16b9682afb7efda1e321ff76f892199f",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9b5645f1-661f-465d-9af0-84221af3cd91.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 258,
+      "name": "hair_f_britain_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_britain_industrial.png",
+      "produces": [
+        "hair_f_britain_industrial_black",
+        "hair_f_britain_industrial_brown",
+        "hair_f_britain_industrial_blond",
+        "hair_f_britain_industrial_red",
+        "hair_f_britain_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fa1472bbb23caa6fe5397768c1d2c3611161c3ba190317e9d154c28be3ece6a7",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b7dc5d44-1a82-4e56-b846-99ff17b40627.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 259,
+      "name": "headwear_f_britain_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_f_britain_industrial.png",
+      "produces": [
+        "headwear_f_britain_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3170fe0da71948b119774a5cc9368677783c393603a750fd31fa92180bac0f0e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5bcbdfb2-2dcb-4523-aaf1-5f1b9de1347e.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 260,
+      "name": "accessory_f_britain_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_britain_industrial.png",
+      "produces": [
+        "accessory_f_britain_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "666de63400458c5367fc42656fd8a5f5a3dbef18b09b8a4f185fedab4a7141e5",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c04c811a-aa17-4c53-9a9c-66edccfbe648.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 261,
+      "name": "outfit_m_germany_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_germany_industrial.png",
+      "produces": [
+        "outfit_m_germany_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "935906a98dc801103554882dad3521399ae39eb1abe38b00ced69a17a71c37fa",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-451811ad-3de7-44f2-b1d8-0552487dee1b.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 262,
+      "name": "hair_m_germany_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_germany_industrial.png",
+      "produces": [
+        "hair_m_germany_industrial_black",
+        "hair_m_germany_industrial_brown",
+        "hair_m_germany_industrial_blond",
+        "hair_m_germany_industrial_red",
+        "hair_m_germany_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7c7674c7e70043a3e154938b054af6715e727c4b8cdf7f3894e40e1366fae8fb",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4a95b4d3-30da-461a-9937-f2345138d4c5.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 263,
+      "name": "facialhair_m_germany_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_germany_industrial.png",
+      "produces": [
+        "facialhair_m_germany_industrial_black",
+        "facialhair_m_germany_industrial_brown",
+        "facialhair_m_germany_industrial_blond",
+        "facialhair_m_germany_industrial_red",
+        "facialhair_m_germany_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "79c40302f5672f0aa5a07e751e16a6a28ea4a6f209b2ce7fd4d1a0554f381666",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8ff743ec-a1d8-4a08-b6e8-b94dbb3f0277.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 264,
+      "name": "headwear_m_germany_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_germany_industrial.png",
+      "produces": [
+        "headwear_m_germany_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "84624d98ea71920d9c23453ad476062f722813119f38197f4d37302165d77961",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9f191dfe-e446-4821-b125-15714baa8c45.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 265,
+      "name": "accessory_m_germany_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_m_germany_industrial.png",
+      "produces": [
+        "accessory_m_germany_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8da9fad43e5e02bb7905fab91506b0536439fd776feeb08fdbfa7e4b62cbcfb1",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-927cbc87-d5d2-4645-b060-b759e5b2b742.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 266,
+      "name": "outfit_f_germany_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_germany_industrial.png",
+      "produces": [
+        "outfit_f_germany_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5a537be441f41fed669a191f82003b59e3f216de69b9a8e96c8489cc81962f4e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-34a4af56-2f15-4f13-8092-09318c122464.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 267,
+      "name": "hair_f_germany_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_germany_industrial.png",
+      "produces": [
+        "hair_f_germany_industrial_black",
+        "hair_f_germany_industrial_brown",
+        "hair_f_germany_industrial_blond",
+        "hair_f_germany_industrial_red",
+        "hair_f_germany_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1c8e1dcf65076916e78cf4d4929ac375d57854a318bf3be86903ac1d671b1f87",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d5af8581-34af-417a-863c-48e3df910fc3.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 268,
+      "name": "accessory_f_germany_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_germany_industrial.png",
+      "produces": [
+        "accessory_f_germany_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "feb621cfba9e77011c4d2db384a8a9cd62edf51fdcd5d5a813c8d25e37c1d617",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e143e11c-c99c-451c-85b5-9274b47869f6.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 269,
+      "name": "outfit_m_egypt_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_egypt_modern.png",
+      "produces": [
+        "outfit_m_egypt_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b891ac36c7daca154e24f2a7f3648cdd798785f7fd5ff0e97873fd5ca109adb9",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4835ced4-e807-4052-9201-5fa908b1a31d.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 270,
+      "name": "hair_m_egypt_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_egypt_modern.png",
+      "produces": [
+        "hair_m_egypt_modern_black",
+        "hair_m_egypt_modern_brown",
+        "hair_m_egypt_modern_blond",
+        "hair_m_egypt_modern_red",
+        "hair_m_egypt_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fb8726dc0490f2c6bd7d2d00c2a84b47ef55473a562a2391e439fc29a48019ad",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c7d75104-fe59-4b94-b22c-b6c53de9fb89.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 271,
+      "name": "facialhair_m_egypt_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/facialhair_m_egypt_modern.png",
+      "produces": [
+        "facialhair_m_egypt_modern_black",
+        "facialhair_m_egypt_modern_brown",
+        "facialhair_m_egypt_modern_blond",
+        "facialhair_m_egypt_modern_red",
+        "facialhair_m_egypt_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4ef9ec4d9ac130807bce364e38123fa7fd4fadae0a5e2dc7eeec68ba2eb823ee",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-35a933d2-dc01-4953-9ad6-e03e19d7d3e6.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 272,
+      "name": "accessory_m_egypt_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_egypt_modern.png",
+      "produces": [
+        "accessory_m_egypt_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0669c1f871932783b5511ce01ebd8d3bffb2348f0137109a27910f89cf0cdea3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e45d72a9-cb3b-4c85-a4fe-79406dfe08b2.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 273,
+      "name": "outfit_f_egypt_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_egypt_modern.png",
+      "produces": [
+        "outfit_f_egypt_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7dd9aef957d398ec19cfa97a054500ca1b7bb00abd1b21fd0929cc64beb6aabc",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b4d7d2c6-19d0-4e11-a1df-2f9b073c66bf.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 274,
+      "name": "hair_f_egypt_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_egypt_modern.png",
+      "produces": [
+        "hair_f_egypt_modern_black",
+        "hair_f_egypt_modern_brown",
+        "hair_f_egypt_modern_blond",
+        "hair_f_egypt_modern_red",
+        "hair_f_egypt_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f4e44e298a4903c9576cbaaad9e3d41beb353c11d80778c83b8a3267d6e41d46",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-77ecc4cb-a679-4490-931c-c572c472b029.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 275,
+      "name": "headwear_f_egypt_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_f_egypt_modern.png",
+      "produces": [
+        "headwear_f_egypt_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dc579b07d089095250d9b4989d62450068aea17722a91d41102acb22b3df5271",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b7335830-cbdf-4eee-a2e1-a355dcdbf0cd.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 276,
+      "name": "accessory_f_egypt_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_egypt_modern.png",
+      "produces": [
+        "accessory_f_egypt_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c8c8b84ff8d6ab50e613d557f026bc6efeac31395ddce98e98b37d561b237eb7",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8a1383bd-1c10-498f-bbc7-f2ffbd4d28fe.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 277,
+      "name": "outfit_m_iraq_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_iraq_modern.png",
+      "produces": [
+        "outfit_m_iraq_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f900174a62fdf4514eb3fc554c0c38b036017aa7fede167be383ec1fd78b63eb",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-30ee26ef-da1c-4e9a-b381-ceb77c9d8bcf.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 278,
+      "name": "hair_m_iraq_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_iraq_modern.png",
+      "produces": [
+        "hair_m_iraq_modern_black",
+        "hair_m_iraq_modern_brown",
+        "hair_m_iraq_modern_blond",
+        "hair_m_iraq_modern_red",
+        "hair_m_iraq_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5b9d3258f92aee058dd4da846d8d1d89acb15dda33f2cd30cb60eacdee72102a",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e34b2ed9-d770-4e83-a6a6-c4979efa7472.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 279,
+      "name": "facialhair_m_iraq_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/facialhair_m_iraq_modern.png",
+      "produces": [
+        "facialhair_m_iraq_modern_black",
+        "facialhair_m_iraq_modern_brown",
+        "facialhair_m_iraq_modern_blond",
+        "facialhair_m_iraq_modern_red",
+        "facialhair_m_iraq_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1525dac312069b673ccccceade45f61a43541b3df4442299e6b376b45e6fc9ab",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-82658b62-1f03-4f71-afea-08ead9713470.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 280,
+      "name": "headwear_m_iraq_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_m_iraq_modern.png",
+      "produces": [
+        "headwear_m_iraq_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "eead89cfb4e8fef953ec9f2fe82a38b0c4949392eae230ef00198421c389023f",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-13a0d659-92df-4179-840f-808812cc6b72.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 281,
+      "name": "accessory_m_iraq_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_iraq_modern.png",
+      "produces": [
+        "accessory_m_iraq_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ef21ca6236c486da0e0b065818d3787f680a83a0e610a5f445b00d472baadeda",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d3353e0e-8e6d-4fbb-a37a-0c0d8e4d20a0.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 282,
+      "name": "outfit_f_iraq_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_iraq_modern.png",
+      "produces": [
+        "outfit_f_iraq_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8acbe38357e5a5ebf311574df58c9afab618ebc72f3bd8257a6d4de0d04ff602",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a21c5433-23c2-460e-914f-365c5eebca9f.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 283,
+      "name": "hair_f_iraq_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_iraq_modern.png",
+      "produces": [
+        "hair_f_iraq_modern_black",
+        "hair_f_iraq_modern_brown",
+        "hair_f_iraq_modern_blond",
+        "hair_f_iraq_modern_red",
+        "hair_f_iraq_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c20ea76084c880bddc7e1a03b2507e4f79878238d5d3a924c2033536d106dc5a",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-366d322b-8307-4c0d-8cd8-8232d192c0bd.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 284,
+      "name": "headwear_f_iraq_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_f_iraq_modern.png",
+      "produces": [
+        "headwear_f_iraq_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "32b60c92e91f89b9dae30aaaa0288ca83140e76bd390e0ea15878e508d73bb29",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5f099947-5687-41b8-813f-ea08a511b973.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 285,
+      "name": "accessory_f_iraq_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_iraq_modern.png",
+      "produces": [
+        "accessory_f_iraq_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "82b3474bcfd432dd3a786b9eb06cd7d2d34b3f80bd2abb2697c66f88d9ce607a",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0ce4d8ce-ecae-48cd-bb29-83b8256629de.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 286,
+      "name": "outfit_m_greece_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_greece_modern.png",
+      "produces": [
+        "outfit_m_greece_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "862b27cd279cf06b92a393ee074e664467e99c1b1dc0bb99251f6900bf373674",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a8a0c12d-9206-4fcb-a088-93119017311b.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 287,
+      "name": "hair_m_greece_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_greece_modern.png",
+      "produces": [
+        "hair_m_greece_modern_black",
+        "hair_m_greece_modern_brown",
+        "hair_m_greece_modern_blond",
+        "hair_m_greece_modern_red",
+        "hair_m_greece_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3dd17e47b3a2465224216be23c3761315995cd58ad6aba4ead2ff7052bc6d2b8",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-329f244c-25d9-45af-b388-30704ec76a9a.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 288,
+      "name": "facialhair_m_greece_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/facialhair_m_greece_modern.png",
+      "produces": [
+        "facialhair_m_greece_modern_black",
+        "facialhair_m_greece_modern_brown",
+        "facialhair_m_greece_modern_blond",
+        "facialhair_m_greece_modern_red",
+        "facialhair_m_greece_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "05c7ee19c5605ffb77d6b35b7d919cfc0997759e3088ca227b8d0bc563b3ef66",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cd9c2207-b22b-41f0-87af-d20c3eeda928.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 289,
+      "name": "accessory_m_greece_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_greece_modern.png",
+      "produces": [
+        "accessory_m_greece_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e240bf5deafdd6367e296199a22b836c98c6280e7accc2f3dc3ea763ffa69b94",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a8d13179-b40a-471f-914b-473b01f2f186.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 290,
+      "name": "outfit_f_greece_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_greece_modern.png",
+      "produces": [
+        "outfit_f_greece_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0836d5e138ae75e065b499a6a12627e95174ddda77c5ab69e25629f5b5f695a8",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-99860041-8057-49cc-9cba-386eb5d43547.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 291,
+      "name": "hair_f_greece_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_greece_modern.png",
+      "produces": [
+        "hair_f_greece_modern_black",
+        "hair_f_greece_modern_brown",
+        "hair_f_greece_modern_blond",
+        "hair_f_greece_modern_red",
+        "hair_f_greece_modern_grey",
+        "hairback_f_greece_modern_black",
+        "hairback_f_greece_modern_brown",
+        "hairback_f_greece_modern_blond",
+        "hairback_f_greece_modern_red",
+        "hairback_f_greece_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "80ba4238b88b39cbcf7e836b722c287543c7ff681ca89e155153a7d79135e2ac",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d6994561-9ac7-4ab9-a848-4d41317716fb.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 292,
+      "name": "accessory_f_greece_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_greece_modern.png",
+      "produces": [
+        "accessory_f_greece_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4713384fc5cece92e3fe569961215c45d238eacb2268e51110139460af2d95e0",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2e0fb5ec-1a4e-4d88-bb5b-2b6bf7326b20.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 293,
+      "name": "outfit_m_italy_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_italy_modern.png",
+      "produces": [
+        "outfit_m_italy_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "45ee0c0ac21d64e6b3352b9144c27360a78b810fecc62feb1f915d1d7d5ab489",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2e45d2d1-29cf-4598-9956-389ce04fa4e2.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 294,
+      "name": "hair_m_italy_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_italy_modern.png",
+      "produces": [
+        "hair_m_italy_modern_black",
+        "hair_m_italy_modern_brown",
+        "hair_m_italy_modern_blond",
+        "hair_m_italy_modern_red",
+        "hair_m_italy_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "999adfde4dbae538383cbf4f003acf47a794bfbf56f54fad36fd89a88aaa838d",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f8a33d03-278d-4ac0-abe6-7066331e2fa0.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 295,
+      "name": "accessory_m_italy_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_italy_modern.png",
+      "produces": [
+        "accessory_m_italy_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a49309929785636086737f2c2be2b091ce12558504d1f7703bb00c6da34eafff",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d809dd56-f1a4-42a6-aa28-8faeaeb7ae01.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 296,
+      "name": "outfit_f_italy_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_italy_modern.png",
+      "produces": [
+        "outfit_f_italy_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dc86b65d74d4c4155a6c31b9f1bcb41660b73a3317c0066e662a8e5a14e084ae",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f22dca74-ed22-47c3-a40e-8d8f6b39bd49.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 297,
+      "name": "hair_f_italy_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_italy_modern.png",
+      "produces": [
+        "hair_f_italy_modern_black",
+        "hair_f_italy_modern_brown",
+        "hair_f_italy_modern_blond",
+        "hair_f_italy_modern_red",
+        "hair_f_italy_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ad70be0c5496e53d12b704ef161d727baaa32c43ef984b8e6a8c79cce9379143",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c1698e12-f06f-4eec-b5c7-bdf9e7299f7e.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 298,
+      "name": "accessory_f_italy_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_italy_modern.png",
+      "produces": [
+        "accessory_f_italy_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "95fa99d4ecf185f15ff8348ac3d3595daf1672d77cbe268ae5c5d80a58765412",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-55684b5c-d5a7-4bae-aa58-78c7ca071281.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 299,
+      "name": "outfit_m_china_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_china_modern.png",
+      "produces": [
+        "outfit_m_china_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c3325076529fba9b75d4dfa016ef3b3a495694617fb6fece3b0bfa859b828f19",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a12b0098-afc4-41ac-8553-78a5703e6de1.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 300,
+      "name": "hair_m_china_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_china_modern.png",
+      "produces": [
+        "hair_m_china_modern_black",
+        "hair_m_china_modern_brown",
+        "hair_m_china_modern_blond",
+        "hair_m_china_modern_red",
+        "hair_m_china_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f150da79a6be965064a696ccfe576033dfbeed1b0f6f6500efc24a2114af0c4e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-91be4f86-3639-491a-841b-3d7423b58257.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 301,
+      "name": "headwear_m_china_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_m_china_modern.png",
+      "produces": [
+        "headwear_m_china_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "501a12c7bc63551564583d15e0c13550d02967df374e46bbbc394abad0819369",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b2b6d510-3227-4caa-b903-cdd5746b5822.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 302,
+      "name": "accessory_m_china_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_china_modern.png",
+      "produces": [
+        "accessory_m_china_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cba152cd5a41ea70ae9deb4542caba939111085b9f0166f7b6d0575eb35a483e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-228074a9-8c35-4cba-9868-d728db7ec366.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 303,
+      "name": "outfit_f_china_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_china_modern.png",
+      "produces": [
+        "outfit_f_china_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a6aa4860672279802dd3cdae4f5dcf6e0d7d151455459ecbc304e624bff7c87d",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-23853b81-4637-4033-b8ea-a622eb5c983a.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 304,
+      "name": "hair_f_china_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_china_modern.png",
+      "produces": [
+        "hair_f_china_modern_black",
+        "hair_f_china_modern_brown",
+        "hair_f_china_modern_blond",
+        "hair_f_china_modern_red",
+        "hair_f_china_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "704db9be3a9736e6d12df43e9d52b4dd775f2095f11bff7b62b9150de01b1d85",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8c41a94c-14b3-4474-8596-7049dac6bc36.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 305,
+      "name": "headwear_f_china_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_f_china_modern.png",
+      "produces": [
+        "headwear_f_china_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d091a4b687be755eecbbf55cf629cdfb08ee52b103845d2a04f55f282d911f33",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-34758612-b492-4787-a03c-91a104e539bc.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 306,
+      "name": "accessory_f_china_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_china_modern.png",
+      "produces": [
+        "accessory_f_china_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "73c5bd3d85bd9b500c854f396b01fa76810451a602df0e1fa6318c22bf663c00",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b3cf4cc8-26e6-4e83-91e2-c187cb0e794c.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 307,
+      "name": "outfit_m_japan_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_japan_modern.png",
+      "produces": [
+        "outfit_m_japan_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "117657d8914953d61b1ce1b9985fc1a7fcae90bbc5bdb9925cc0ca728da76105",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b5baf770-1616-45ee-b945-c64aac31eb50.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 308,
+      "name": "hair_m_japan_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_japan_modern.png",
+      "produces": [
+        "hair_m_japan_modern_black",
+        "hair_m_japan_modern_brown",
+        "hair_m_japan_modern_blond",
+        "hair_m_japan_modern_red",
+        "hair_m_japan_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7ecfb8f5b46eaece982ba120bf7c87e49ab31c922b4b406d775abd521fc87e35",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-06085756-0704-4acc-a9ec-bdf1f0705084.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 309,
+      "name": "accessory_m_japan_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_japan_modern.png",
+      "produces": [
+        "accessory_m_japan_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a74f5546007a3fd18912f2cbc2071e5f388393956c3d8b73b83524c9ddfe9d37",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-64015c1a-253f-4d4f-9b87-124fd93ed7e3.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 310,
+      "name": "outfit_f_japan_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_japan_modern.png",
+      "produces": [
+        "outfit_f_japan_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6b4dc5ccaa96a7e72d2e096581c3b0836dc5a5e21108d333e53f5f3b2c1acf7b",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a4369523-4201-4161-8490-b0721c468268.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 311,
+      "name": "hair_f_japan_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_japan_modern.png",
+      "produces": [
+        "hair_f_japan_modern_black",
+        "hair_f_japan_modern_brown",
+        "hair_f_japan_modern_blond",
+        "hair_f_japan_modern_red",
+        "hair_f_japan_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9540f6d80904a70228e20b0380e6a48adfd238b0c7589666e9e1e22800c0f52f",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5f25dcaf-8c48-4bff-9f38-2e7cb42b0367.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 312,
+      "name": "accessory_f_japan_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_japan_modern.png",
+      "produces": [
+        "accessory_f_japan_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "78ce6437ac40d592522ff9caeaf52ec31ed220d9873236e542482dc66a406a26",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5d71e606-fcd2-4154-96b3-ed07f948a735.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 313,
+      "name": "outfit_m_britain_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_britain_modern.png",
+      "produces": [
+        "outfit_m_britain_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d2f2309d0b9505273f1a68eba951605aadd50f63fbb23a466d760abaf7783d0e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d33f8ca8-a1c8-4d33-b7f8-cefdffd7a15f.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 314,
+      "name": "hair_m_britain_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_britain_modern.png",
+      "produces": [
+        "hair_m_britain_modern_black",
+        "hair_m_britain_modern_brown",
+        "hair_m_britain_modern_blond",
+        "hair_m_britain_modern_red",
+        "hair_m_britain_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d598cd201ae407c191573a942a20ebe4d73da6e9c9bc95a39bbe8e40f2dfbfcb",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d0e1f92e-b9f9-47fe-a06b-6be5874d3e8c.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 315,
+      "name": "headwear_m_britain_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_m_britain_modern.png",
+      "produces": [
+        "headwear_m_britain_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ccccdbe2db76c9343bca603c14f1c7593f1bba558f41ff322990b2751d352472",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-19b3957f-931f-401d-9008-43424a2a117d.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 316,
+      "name": "accessory_m_britain_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_britain_modern.png",
+      "produces": [
+        "accessory_m_britain_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4da879c7636dfdfa673f5a499635d59c392221eceaec6b435baa996eaa6986cd",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c69ce109-e7bf-4ce4-ac9f-0ebb54f9d1d6.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 317,
+      "name": "outfit_f_britain_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_britain_modern.png",
+      "produces": [
+        "outfit_f_britain_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9c791e291605be245bc96256a754e75cdda7c484ffe2c8a14500bfdec13b75e0",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4c200809-d93d-4d8e-9a10-deca5464a1a5.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 318,
+      "name": "hair_f_britain_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_britain_modern.png",
+      "produces": [
+        "hair_f_britain_modern_black",
+        "hair_f_britain_modern_brown",
+        "hair_f_britain_modern_blond",
+        "hair_f_britain_modern_red",
+        "hair_f_britain_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b9282a91b79567d4b0f19eefc4f03a514dc7e9f1f534a844415e39e83a207258",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2147e04d-3574-483e-a61a-3b4c08177952.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 319,
+      "name": "headwear_f_britain_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_f_britain_modern.png",
+      "produces": [
+        "headwear_f_britain_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b3b71b6c237255467c34629fd5d7bcdc1a90923999d19b95ea4d603b5fefccec",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-48f1503e-8a29-4c50-8c3a-d505a131ceac.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 320,
+      "name": "accessory_f_britain_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_britain_modern.png",
+      "produces": [
+        "accessory_f_britain_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "41af28011d602d09b041ad056e9e06a7fa059ddba90fa0a6ede869c370c1296d",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d983cafd-35e3-4f18-bb97-4d378f288bf8.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 321,
+      "name": "outfit_m_germany_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_germany_modern.png",
+      "produces": [
+        "outfit_m_germany_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "604281aeec0aa168bb3e3f2339e5f5d9bb8ca3fb921237edcc249daae2525493",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ebd53e4e-77be-49cc-be44-3f2798eeb771.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 322,
+      "name": "hair_m_germany_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_germany_modern.png",
+      "produces": [
+        "hair_m_germany_modern_black",
+        "hair_m_germany_modern_brown",
+        "hair_m_germany_modern_blond",
+        "hair_m_germany_modern_red",
+        "hair_m_germany_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "db046c349e9d5797d2501c8d72012eb1e7faf79f7eec2436d08496555d570be4",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-046a03e2-3ce8-4c54-abce-0f5c407a17ed.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 323,
+      "name": "facialhair_m_germany_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/facialhair_m_germany_modern.png",
+      "produces": [
+        "facialhair_m_germany_modern_black",
+        "facialhair_m_germany_modern_brown",
+        "facialhair_m_germany_modern_blond",
+        "facialhair_m_germany_modern_red",
+        "facialhair_m_germany_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a7facf7317658b08d36043aec3e6f67998d0c62e3346e5452c4052cfb9013e05",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-dbc95cc6-7887-4d51-81a0-cdcff8334f8f.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 324,
+      "name": "headwear_m_germany_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_m_germany_modern.png",
+      "produces": [
+        "headwear_m_germany_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dda5fd7092aca9d2f4d087ef83e9ad694c17bed552c47213021beb2fe42526e0",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-11d5d6b9-24a3-4656-97ce-365d20df38e7.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 325,
+      "name": "accessory_m_germany_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_germany_modern.png",
+      "produces": [
+        "accessory_m_germany_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dcc6dac561c32458bbc2398e5600ed6c6e487dea0d1d578aa2c91af6fe75e01a",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d20cddf2-616e-4ab6-a1be-4cb9bd3fc82a.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 326,
+      "name": "outfit_f_germany_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_germany_modern.png",
+      "produces": [
+        "outfit_f_germany_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9b83df823255f410b7d64e9b03085150596bfaf99b6a117c8aeec846d19fd45d",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-82bdff01-7af1-4156-881a-f07e7ff025d9.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 327,
+      "name": "hair_f_germany_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_germany_modern.png",
+      "produces": [
+        "hair_f_germany_modern_black",
+        "hair_f_germany_modern_brown",
+        "hair_f_germany_modern_blond",
+        "hair_f_germany_modern_red",
+        "hair_f_germany_modern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a96d46ea3fef02bd339122470f02fd2dc905456c4009973118ad0671cbe56388",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-de700aee-e0c8-4984-bbe6-cea8339f1845.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 328,
+      "name": "headwear_f_germany_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_f_germany_modern.png",
+      "produces": [
+        "headwear_f_germany_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2ab2c96267e460512d5179016298e37a02c6feb995c7a2ade433016647b3ed0f",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c5603025-8809-40d5-8f58-383ad3eaa674.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 329,
+      "name": "accessory_f_germany_modern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_germany_modern.png",
+      "produces": [
+        "accessory_f_germany_modern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8322b4d9c8ce88c1593c878eea7de0ee55da6643e4297fc45b4b43d0c67ff34f",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4eb76b5b-3a07-4b2d-b389-5418342f26d2.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 330,
+      "name": "outfit_m_neutral_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_neutral_future.png",
+      "produces": [],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "00e1d73cdb5e76c210ce5aacf5cb8834e6367f6d59dd4d3640865728604b0dcf",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8eb4d4d3-30c5-489e-b6a4-33ba57eadfc9.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 331,
+      "name": "outfit_f_neutral_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_neutral_future.png",
+      "produces": [],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dd9bffc7308ba1905c4965c11ff4bf0d564ae0fc2784194747cdee1a04a6d756",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e088ffa7-ca54-4550-932e-084c145c0956.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 332,
+      "name": "hair_m_neutral_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/hair_m_neutral_future.png",
+      "produces": [
+        "hair_m_neutral_future_black",
+        "hair_m_neutral_future_brown",
+        "hair_m_neutral_future_blond",
+        "hair_m_neutral_future_red",
+        "hair_m_neutral_future_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5399b217c4bfc5866c73079f9b961bf828217fc058fe1fbecd89279382c22e43",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-276fe348-b517-4f3b-9bba-113fb3ac7c11.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 333,
+      "name": "hair_f_neutral_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/hair_f_neutral_future.png",
+      "produces": [
+        "hair_f_neutral_future_black",
+        "hair_f_neutral_future_brown",
+        "hair_f_neutral_future_blond",
+        "hair_f_neutral_future_red",
+        "hair_f_neutral_future_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ff36a9bef53dc75f17d88af9d8cc2790c39b1ec14917eb2d351f61026dd401c9",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6b95ac2e-f839-4214-ba0b-15a515de8435.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 334,
+      "name": "facialhair_m_neutral_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/facialhair_m_neutral_future.png",
+      "produces": [
+        "facialhair_m_neutral_future_black",
+        "facialhair_m_neutral_future_brown",
+        "facialhair_m_neutral_future_blond",
+        "facialhair_m_neutral_future_red",
+        "facialhair_m_neutral_future_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6c4f8c195d2b6ae86fc4dedd5071b74b26913a7c42119120511c660e1dc4a000",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-786ce97c-f488-49a9-82e2-6d0613ccfd9f.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 335,
+      "name": "outfit_m_egypt_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_egypt_future.png",
+      "produces": [
+        "outfit_m_egypt_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8ee27b49caa6aad3a31c3fd3abb7458613e4e45eadda5e53c0f73e386751db96",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e6470a04-5e07-4e04-96ee-6c64c4bbd4d6.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 336,
+      "name": "outfit_f_egypt_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_egypt_future.png",
+      "produces": [
+        "outfit_f_egypt_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3fa31d62ff6daa4269a9cd779efac07d00746cd9256e6c1b92369763536e887a",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b5a21c39-2d73-42c9-8bc9-9d9853e24c3d.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 337,
+      "name": "outfit_m_iraq_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_iraq_future.png",
+      "produces": [
+        "outfit_m_iraq_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "998d6061c8111ff73df990476ce2fe97a5d8d7518b335511afebc63c3884d260",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4867b980-470c-4457-a40a-235cb44af758.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 338,
+      "name": "outfit_f_iraq_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_iraq_future.png",
+      "produces": [
+        "outfit_f_iraq_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "19c3816ea2e8175d89e35ed50998a97fcdf49ccbb77eab156d5edf844b2fe83d",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d017d42d-f847-47c6-8f18-cc739c6bdde7.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 339,
+      "name": "outfit_m_greece_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_greece_future.png",
+      "produces": [
+        "outfit_m_greece_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cbcd973d4b50e3594c2182f03feba2788e148213185253887e766c60c264fcc0",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-625d54f2-2120-4304-bc5f-0f976d572754.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 340,
+      "name": "outfit_f_greece_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_greece_future.png",
+      "produces": [
+        "outfit_f_greece_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2836400e7679842aee28fc4a24dd48255d70ea2e963b7739b42ad36119b34619",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0fff9078-d2dc-4743-92e7-52b96a87c25a.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 341,
+      "name": "outfit_m_italy_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_italy_future.png",
+      "produces": [
+        "outfit_m_italy_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "401d7d6eaaa4ebf0ee93e522082f2513656e2239ab3938831aa11fca693a1f78",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ea49b97d-177f-4924-a5b1-ad000d8f2d34.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 342,
+      "name": "outfit_f_italy_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_italy_future.png",
+      "produces": [
+        "outfit_f_italy_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "92ff8d27c7536023abb8afef3cebc47c68352a30678be970b2ed2b274f824481",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-34c2e781-f7fe-435f-97a2-1041f3321919.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 343,
+      "name": "outfit_m_china_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_china_future.png",
+      "produces": [
+        "outfit_m_china_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "64eb52dbca92c566b8ef6f2780702496f54f0d9fb33d4692a70ba95275437e60",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ef97ea0b-c1a2-4b40-b1ee-37954038dde8.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 344,
+      "name": "outfit_f_china_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_china_future.png",
+      "produces": [
+        "outfit_f_china_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0e0a1e1f2d686f2cac602df8748f9530fe84f2b97dcfdc49c6471164ef275f30",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3241ec24-97a3-4c05-bfa4-d102fc96f1e2.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 345,
+      "name": "outfit_m_japan_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_japan_future.png",
+      "produces": [
+        "outfit_m_japan_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c16ffd359e9615019604a8ad4d6aca28fa8741e9cb5b89e7534c21159ffe9d43",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-20398f1b-50bd-4a35-b9ef-868460f23f31.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 346,
+      "name": "outfit_f_japan_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_japan_future.png",
+      "produces": [
+        "outfit_f_japan_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "06c12d5987e87e7a48c885b75902374154c3e6811fff78681fd48d80c304ca82",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a7a27489-3498-4d9a-a10b-6dc3967e6244.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 347,
+      "name": "outfit_m_britain_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_britain_future.png",
+      "produces": [
+        "outfit_m_britain_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cecd272586b4d256b22c6c4039aa7f53856038b24d9cddf4ca50a26255c4fc25",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a36ed2c8-390a-4d44-b879-6c98258fbe1e.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 348,
+      "name": "outfit_f_britain_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_britain_future.png",
+      "produces": [
+        "outfit_f_britain_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3b197e013f07e2d80eae02749a04b3b8e43c5519387b0c2a78bacbc963fc8f86",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e2a3808d-0aa8-4f29-8dcc-b9380b4d563c.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 349,
+      "name": "outfit_m_germany_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_germany_future.png",
+      "produces": [
+        "outfit_m_germany_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ca47656254ce1e4d3117aa4941eafba1cf69c8171182999ed7610e0d27eee5a8",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bb150f98-2784-44e1-b9ac-e1574015395f.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 350,
+      "name": "outfit_f_germany_future",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_germany_future.png",
+      "produces": [
+        "outfit_f_germany_future"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e33070e30b0a73d6d6739e6a727e6de3269aa0aca30fff096ed537ceae2b0c9f",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b0e692a5-5a89-4fe1-85a4-d04e3242ce07.png",
+      "status": "raw-unverified"
+    },
+    {
       "index": 351,
       "name": "premade_senenmut_neutral",
       "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch03-premades/premade_senenmut_neutral.png",
@@ -5627,841 +7278,5 @@
       "status": "raw-unverified"
     }
   ],
-  "remaining": [
-    {
-      "name": "headwear_m_japan_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_japan_industrial.png",
-      "produces": [
-        "headwear_m_japan_industrial"
-      ]
-    },
-    {
-      "name": "outfit_f_japan_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_japan_industrial.png",
-      "produces": [
-        "outfit_f_japan_industrial"
-      ]
-    },
-    {
-      "name": "hair_f_japan_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_japan_industrial.png",
-      "produces": [
-        "hair_f_japan_industrial_black",
-        "hair_f_japan_industrial_brown",
-        "hair_f_japan_industrial_blond",
-        "hair_f_japan_industrial_red",
-        "hair_f_japan_industrial_grey"
-      ]
-    },
-    {
-      "name": "outfit_m_britain_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_britain_industrial.png",
-      "produces": [
-        "outfit_m_britain_industrial"
-      ]
-    },
-    {
-      "name": "hair_m_britain_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_britain_industrial.png",
-      "produces": [
-        "hair_m_britain_industrial_black",
-        "hair_m_britain_industrial_brown",
-        "hair_m_britain_industrial_blond",
-        "hair_m_britain_industrial_red",
-        "hair_m_britain_industrial_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_britain_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_britain_industrial.png",
-      "produces": [
-        "facialhair_m_britain_industrial_black",
-        "facialhair_m_britain_industrial_brown",
-        "facialhair_m_britain_industrial_blond",
-        "facialhair_m_britain_industrial_red",
-        "facialhair_m_britain_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_britain_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_britain_industrial.png",
-      "produces": [
-        "headwear_m_britain_industrial"
-      ]
-    },
-    {
-      "name": "accessory_m_britain_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_m_britain_industrial.png",
-      "produces": [
-        "accessory_m_britain_industrial"
-      ]
-    },
-    {
-      "name": "outfit_f_britain_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_britain_industrial.png",
-      "produces": [
-        "outfit_f_britain_industrial"
-      ]
-    },
-    {
-      "name": "hair_f_britain_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_britain_industrial.png",
-      "produces": [
-        "hair_f_britain_industrial_black",
-        "hair_f_britain_industrial_brown",
-        "hair_f_britain_industrial_blond",
-        "hair_f_britain_industrial_red",
-        "hair_f_britain_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_f_britain_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_f_britain_industrial.png",
-      "produces": [
-        "headwear_f_britain_industrial"
-      ]
-    },
-    {
-      "name": "accessory_f_britain_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_britain_industrial.png",
-      "produces": [
-        "accessory_f_britain_industrial"
-      ]
-    },
-    {
-      "name": "outfit_m_germany_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_germany_industrial.png",
-      "produces": [
-        "outfit_m_germany_industrial"
-      ]
-    },
-    {
-      "name": "hair_m_germany_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_germany_industrial.png",
-      "produces": [
-        "hair_m_germany_industrial_black",
-        "hair_m_germany_industrial_brown",
-        "hair_m_germany_industrial_blond",
-        "hair_m_germany_industrial_red",
-        "hair_m_germany_industrial_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_germany_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_germany_industrial.png",
-      "produces": [
-        "facialhair_m_germany_industrial_black",
-        "facialhair_m_germany_industrial_brown",
-        "facialhair_m_germany_industrial_blond",
-        "facialhair_m_germany_industrial_red",
-        "facialhair_m_germany_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_germany_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_germany_industrial.png",
-      "produces": [
-        "headwear_m_germany_industrial"
-      ]
-    },
-    {
-      "name": "accessory_m_germany_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_m_germany_industrial.png",
-      "produces": [
-        "accessory_m_germany_industrial"
-      ]
-    },
-    {
-      "name": "outfit_f_germany_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_germany_industrial.png",
-      "produces": [
-        "outfit_f_germany_industrial"
-      ]
-    },
-    {
-      "name": "hair_f_germany_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_germany_industrial.png",
-      "produces": [
-        "hair_f_germany_industrial_black",
-        "hair_f_germany_industrial_brown",
-        "hair_f_germany_industrial_blond",
-        "hair_f_germany_industrial_red",
-        "hair_f_germany_industrial_grey"
-      ]
-    },
-    {
-      "name": "accessory_f_germany_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_germany_industrial.png",
-      "produces": [
-        "accessory_f_germany_industrial"
-      ]
-    },
-    {
-      "name": "outfit_m_egypt_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_egypt_modern.png",
-      "produces": [
-        "outfit_m_egypt_modern"
-      ]
-    },
-    {
-      "name": "hair_m_egypt_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_egypt_modern.png",
-      "produces": [
-        "hair_m_egypt_modern_black",
-        "hair_m_egypt_modern_brown",
-        "hair_m_egypt_modern_blond",
-        "hair_m_egypt_modern_red",
-        "hair_m_egypt_modern_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_egypt_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/facialhair_m_egypt_modern.png",
-      "produces": [
-        "facialhair_m_egypt_modern_black",
-        "facialhair_m_egypt_modern_brown",
-        "facialhair_m_egypt_modern_blond",
-        "facialhair_m_egypt_modern_red",
-        "facialhair_m_egypt_modern_grey"
-      ]
-    },
-    {
-      "name": "accessory_m_egypt_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_egypt_modern.png",
-      "produces": [
-        "accessory_m_egypt_modern"
-      ]
-    },
-    {
-      "name": "outfit_f_egypt_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_egypt_modern.png",
-      "produces": [
-        "outfit_f_egypt_modern"
-      ]
-    },
-    {
-      "name": "hair_f_egypt_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_egypt_modern.png",
-      "produces": [
-        "hair_f_egypt_modern_black",
-        "hair_f_egypt_modern_brown",
-        "hair_f_egypt_modern_blond",
-        "hair_f_egypt_modern_red",
-        "hair_f_egypt_modern_grey"
-      ]
-    },
-    {
-      "name": "headwear_f_egypt_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_f_egypt_modern.png",
-      "produces": [
-        "headwear_f_egypt_modern"
-      ]
-    },
-    {
-      "name": "accessory_f_egypt_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_egypt_modern.png",
-      "produces": [
-        "accessory_f_egypt_modern"
-      ]
-    },
-    {
-      "name": "outfit_m_iraq_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_iraq_modern.png",
-      "produces": [
-        "outfit_m_iraq_modern"
-      ]
-    },
-    {
-      "name": "hair_m_iraq_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_iraq_modern.png",
-      "produces": [
-        "hair_m_iraq_modern_black",
-        "hair_m_iraq_modern_brown",
-        "hair_m_iraq_modern_blond",
-        "hair_m_iraq_modern_red",
-        "hair_m_iraq_modern_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_iraq_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/facialhair_m_iraq_modern.png",
-      "produces": [
-        "facialhair_m_iraq_modern_black",
-        "facialhair_m_iraq_modern_brown",
-        "facialhair_m_iraq_modern_blond",
-        "facialhair_m_iraq_modern_red",
-        "facialhair_m_iraq_modern_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_iraq_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_m_iraq_modern.png",
-      "produces": [
-        "headwear_m_iraq_modern"
-      ]
-    },
-    {
-      "name": "accessory_m_iraq_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_iraq_modern.png",
-      "produces": [
-        "accessory_m_iraq_modern"
-      ]
-    },
-    {
-      "name": "outfit_f_iraq_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_iraq_modern.png",
-      "produces": [
-        "outfit_f_iraq_modern"
-      ]
-    },
-    {
-      "name": "hair_f_iraq_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_iraq_modern.png",
-      "produces": [
-        "hair_f_iraq_modern_black",
-        "hair_f_iraq_modern_brown",
-        "hair_f_iraq_modern_blond",
-        "hair_f_iraq_modern_red",
-        "hair_f_iraq_modern_grey"
-      ]
-    },
-    {
-      "name": "headwear_f_iraq_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_f_iraq_modern.png",
-      "produces": [
-        "headwear_f_iraq_modern"
-      ]
-    },
-    {
-      "name": "accessory_f_iraq_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_iraq_modern.png",
-      "produces": [
-        "accessory_f_iraq_modern"
-      ]
-    },
-    {
-      "name": "outfit_m_greece_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_greece_modern.png",
-      "produces": [
-        "outfit_m_greece_modern"
-      ]
-    },
-    {
-      "name": "hair_m_greece_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_greece_modern.png",
-      "produces": [
-        "hair_m_greece_modern_black",
-        "hair_m_greece_modern_brown",
-        "hair_m_greece_modern_blond",
-        "hair_m_greece_modern_red",
-        "hair_m_greece_modern_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_greece_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/facialhair_m_greece_modern.png",
-      "produces": [
-        "facialhair_m_greece_modern_black",
-        "facialhair_m_greece_modern_brown",
-        "facialhair_m_greece_modern_blond",
-        "facialhair_m_greece_modern_red",
-        "facialhair_m_greece_modern_grey"
-      ]
-    },
-    {
-      "name": "accessory_m_greece_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_greece_modern.png",
-      "produces": [
-        "accessory_m_greece_modern"
-      ]
-    },
-    {
-      "name": "outfit_f_greece_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_greece_modern.png",
-      "produces": [
-        "outfit_f_greece_modern"
-      ]
-    },
-    {
-      "name": "hair_f_greece_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_greece_modern.png",
-      "produces": [
-        "hair_f_greece_modern_black",
-        "hair_f_greece_modern_brown",
-        "hair_f_greece_modern_blond",
-        "hair_f_greece_modern_red",
-        "hair_f_greece_modern_grey",
-        "hairback_f_greece_modern_black",
-        "hairback_f_greece_modern_brown",
-        "hairback_f_greece_modern_blond",
-        "hairback_f_greece_modern_red",
-        "hairback_f_greece_modern_grey"
-      ]
-    },
-    {
-      "name": "accessory_f_greece_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_greece_modern.png",
-      "produces": [
-        "accessory_f_greece_modern"
-      ]
-    },
-    {
-      "name": "outfit_m_italy_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_italy_modern.png",
-      "produces": [
-        "outfit_m_italy_modern"
-      ]
-    },
-    {
-      "name": "hair_m_italy_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_italy_modern.png",
-      "produces": [
-        "hair_m_italy_modern_black",
-        "hair_m_italy_modern_brown",
-        "hair_m_italy_modern_blond",
-        "hair_m_italy_modern_red",
-        "hair_m_italy_modern_grey"
-      ]
-    },
-    {
-      "name": "accessory_m_italy_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_italy_modern.png",
-      "produces": [
-        "accessory_m_italy_modern"
-      ]
-    },
-    {
-      "name": "outfit_f_italy_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_italy_modern.png",
-      "produces": [
-        "outfit_f_italy_modern"
-      ]
-    },
-    {
-      "name": "hair_f_italy_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_italy_modern.png",
-      "produces": [
-        "hair_f_italy_modern_black",
-        "hair_f_italy_modern_brown",
-        "hair_f_italy_modern_blond",
-        "hair_f_italy_modern_red",
-        "hair_f_italy_modern_grey"
-      ]
-    },
-    {
-      "name": "accessory_f_italy_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_italy_modern.png",
-      "produces": [
-        "accessory_f_italy_modern"
-      ]
-    },
-    {
-      "name": "outfit_m_china_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_china_modern.png",
-      "produces": [
-        "outfit_m_china_modern"
-      ]
-    },
-    {
-      "name": "hair_m_china_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_china_modern.png",
-      "produces": [
-        "hair_m_china_modern_black",
-        "hair_m_china_modern_brown",
-        "hair_m_china_modern_blond",
-        "hair_m_china_modern_red",
-        "hair_m_china_modern_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_china_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_m_china_modern.png",
-      "produces": [
-        "headwear_m_china_modern"
-      ]
-    },
-    {
-      "name": "accessory_m_china_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_china_modern.png",
-      "produces": [
-        "accessory_m_china_modern"
-      ]
-    },
-    {
-      "name": "outfit_f_china_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_china_modern.png",
-      "produces": [
-        "outfit_f_china_modern"
-      ]
-    },
-    {
-      "name": "hair_f_china_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_china_modern.png",
-      "produces": [
-        "hair_f_china_modern_black",
-        "hair_f_china_modern_brown",
-        "hair_f_china_modern_blond",
-        "hair_f_china_modern_red",
-        "hair_f_china_modern_grey"
-      ]
-    },
-    {
-      "name": "headwear_f_china_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_f_china_modern.png",
-      "produces": [
-        "headwear_f_china_modern"
-      ]
-    },
-    {
-      "name": "accessory_f_china_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_china_modern.png",
-      "produces": [
-        "accessory_f_china_modern"
-      ]
-    },
-    {
-      "name": "outfit_m_japan_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_japan_modern.png",
-      "produces": [
-        "outfit_m_japan_modern"
-      ]
-    },
-    {
-      "name": "hair_m_japan_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_japan_modern.png",
-      "produces": [
-        "hair_m_japan_modern_black",
-        "hair_m_japan_modern_brown",
-        "hair_m_japan_modern_blond",
-        "hair_m_japan_modern_red",
-        "hair_m_japan_modern_grey"
-      ]
-    },
-    {
-      "name": "accessory_m_japan_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_japan_modern.png",
-      "produces": [
-        "accessory_m_japan_modern"
-      ]
-    },
-    {
-      "name": "outfit_f_japan_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_japan_modern.png",
-      "produces": [
-        "outfit_f_japan_modern"
-      ]
-    },
-    {
-      "name": "hair_f_japan_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_japan_modern.png",
-      "produces": [
-        "hair_f_japan_modern_black",
-        "hair_f_japan_modern_brown",
-        "hair_f_japan_modern_blond",
-        "hair_f_japan_modern_red",
-        "hair_f_japan_modern_grey"
-      ]
-    },
-    {
-      "name": "accessory_f_japan_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_japan_modern.png",
-      "produces": [
-        "accessory_f_japan_modern"
-      ]
-    },
-    {
-      "name": "outfit_m_britain_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_britain_modern.png",
-      "produces": [
-        "outfit_m_britain_modern"
-      ]
-    },
-    {
-      "name": "hair_m_britain_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_britain_modern.png",
-      "produces": [
-        "hair_m_britain_modern_black",
-        "hair_m_britain_modern_brown",
-        "hair_m_britain_modern_blond",
-        "hair_m_britain_modern_red",
-        "hair_m_britain_modern_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_britain_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_m_britain_modern.png",
-      "produces": [
-        "headwear_m_britain_modern"
-      ]
-    },
-    {
-      "name": "accessory_m_britain_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_britain_modern.png",
-      "produces": [
-        "accessory_m_britain_modern"
-      ]
-    },
-    {
-      "name": "outfit_f_britain_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_britain_modern.png",
-      "produces": [
-        "outfit_f_britain_modern"
-      ]
-    },
-    {
-      "name": "hair_f_britain_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_britain_modern.png",
-      "produces": [
-        "hair_f_britain_modern_black",
-        "hair_f_britain_modern_brown",
-        "hair_f_britain_modern_blond",
-        "hair_f_britain_modern_red",
-        "hair_f_britain_modern_grey"
-      ]
-    },
-    {
-      "name": "headwear_f_britain_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_f_britain_modern.png",
-      "produces": [
-        "headwear_f_britain_modern"
-      ]
-    },
-    {
-      "name": "accessory_f_britain_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_britain_modern.png",
-      "produces": [
-        "accessory_f_britain_modern"
-      ]
-    },
-    {
-      "name": "outfit_m_germany_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_m_germany_modern.png",
-      "produces": [
-        "outfit_m_germany_modern"
-      ]
-    },
-    {
-      "name": "hair_m_germany_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_m_germany_modern.png",
-      "produces": [
-        "hair_m_germany_modern_black",
-        "hair_m_germany_modern_brown",
-        "hair_m_germany_modern_blond",
-        "hair_m_germany_modern_red",
-        "hair_m_germany_modern_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_germany_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/facialhair_m_germany_modern.png",
-      "produces": [
-        "facialhair_m_germany_modern_black",
-        "facialhair_m_germany_modern_brown",
-        "facialhair_m_germany_modern_blond",
-        "facialhair_m_germany_modern_red",
-        "facialhair_m_germany_modern_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_germany_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_m_germany_modern.png",
-      "produces": [
-        "headwear_m_germany_modern"
-      ]
-    },
-    {
-      "name": "accessory_m_germany_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_m_germany_modern.png",
-      "produces": [
-        "accessory_m_germany_modern"
-      ]
-    },
-    {
-      "name": "outfit_f_germany_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/outfit_f_germany_modern.png",
-      "produces": [
-        "outfit_f_germany_modern"
-      ]
-    },
-    {
-      "name": "hair_f_germany_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/hair_f_germany_modern.png",
-      "produces": [
-        "hair_f_germany_modern_black",
-        "hair_f_germany_modern_brown",
-        "hair_f_germany_modern_blond",
-        "hair_f_germany_modern_red",
-        "hair_f_germany_modern_grey"
-      ]
-    },
-    {
-      "name": "headwear_f_germany_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_f_germany_modern.png",
-      "produces": [
-        "headwear_f_germany_modern"
-      ]
-    },
-    {
-      "name": "accessory_f_germany_modern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_germany_modern.png",
-      "produces": [
-        "accessory_f_germany_modern"
-      ]
-    },
-    {
-      "name": "outfit_m_neutral_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_neutral_future.png",
-      "produces": []
-    },
-    {
-      "name": "outfit_f_neutral_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_neutral_future.png",
-      "produces": []
-    },
-    {
-      "name": "hair_m_neutral_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/hair_m_neutral_future.png",
-      "produces": [
-        "hair_m_neutral_future_black",
-        "hair_m_neutral_future_brown",
-        "hair_m_neutral_future_blond",
-        "hair_m_neutral_future_red",
-        "hair_m_neutral_future_grey"
-      ]
-    },
-    {
-      "name": "hair_f_neutral_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/hair_f_neutral_future.png",
-      "produces": [
-        "hair_f_neutral_future_black",
-        "hair_f_neutral_future_brown",
-        "hair_f_neutral_future_blond",
-        "hair_f_neutral_future_red",
-        "hair_f_neutral_future_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_neutral_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/facialhair_m_neutral_future.png",
-      "produces": [
-        "facialhair_m_neutral_future_black",
-        "facialhair_m_neutral_future_brown",
-        "facialhair_m_neutral_future_blond",
-        "facialhair_m_neutral_future_red",
-        "facialhair_m_neutral_future_grey"
-      ]
-    },
-    {
-      "name": "outfit_m_egypt_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_egypt_future.png",
-      "produces": [
-        "outfit_m_egypt_future"
-      ]
-    },
-    {
-      "name": "outfit_f_egypt_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_egypt_future.png",
-      "produces": [
-        "outfit_f_egypt_future"
-      ]
-    },
-    {
-      "name": "outfit_m_iraq_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_iraq_future.png",
-      "produces": [
-        "outfit_m_iraq_future"
-      ]
-    },
-    {
-      "name": "outfit_f_iraq_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_iraq_future.png",
-      "produces": [
-        "outfit_f_iraq_future"
-      ]
-    },
-    {
-      "name": "outfit_m_greece_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_greece_future.png",
-      "produces": [
-        "outfit_m_greece_future"
-      ]
-    },
-    {
-      "name": "outfit_f_greece_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_greece_future.png",
-      "produces": [
-        "outfit_f_greece_future"
-      ]
-    },
-    {
-      "name": "outfit_m_italy_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_italy_future.png",
-      "produces": [
-        "outfit_m_italy_future"
-      ]
-    },
-    {
-      "name": "outfit_f_italy_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_italy_future.png",
-      "produces": [
-        "outfit_f_italy_future"
-      ]
-    },
-    {
-      "name": "outfit_m_china_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_china_future.png",
-      "produces": [
-        "outfit_m_china_future"
-      ]
-    },
-    {
-      "name": "outfit_f_china_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_china_future.png",
-      "produces": [
-        "outfit_f_china_future"
-      ]
-    },
-    {
-      "name": "outfit_m_japan_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_japan_future.png",
-      "produces": [
-        "outfit_m_japan_future"
-      ]
-    },
-    {
-      "name": "outfit_f_japan_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_japan_future.png",
-      "produces": [
-        "outfit_f_japan_future"
-      ]
-    },
-    {
-      "name": "outfit_m_britain_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_britain_future.png",
-      "produces": [
-        "outfit_m_britain_future"
-      ]
-    },
-    {
-      "name": "outfit_f_britain_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_britain_future.png",
-      "produces": [
-        "outfit_f_britain_future"
-      ]
-    },
-    {
-      "name": "outfit_m_germany_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_germany_future.png",
-      "produces": [
-        "outfit_m_germany_future"
-      ]
-    },
-    {
-      "name": "outfit_f_germany_future",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_germany_future.png",
-      "produces": [
-        "outfit_f_germany_future"
-      ]
-    }
-  ]
+  "remaining": []
 }

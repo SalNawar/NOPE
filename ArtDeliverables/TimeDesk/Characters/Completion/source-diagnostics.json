@@ -2726,6 +2726,1526 @@
     "flags": []
   },
   {
+    "name": "headwear_m_greece_industrial",
+    "bbox": [
+      296,
+      194,
+      728,
+      1502
+    ],
+    "greenShare": 0.817,
+    "magentaPixels": 253255,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_greece_industrial",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.824,
+    "magentaPixels": 237072,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_greece_industrial",
+    "bbox": [
+      216,
+      237,
+      815,
+      1509
+    ],
+    "greenShare": 0.7092,
+    "magentaPixels": 28319,
+    "flags": []
+  },
+  {
+    "name": "hair_f_greece_industrial",
+    "bbox": [
+      289,
+      199,
+      735,
+      1503
+    ],
+    "greenShare": 0.8221,
+    "magentaPixels": 250828,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_greece_industrial",
+    "bbox": [
+      288,
+      185,
+      736,
+      1502
+    ],
+    "greenShare": 0.823,
+    "magentaPixels": 252759,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_greece_industrial",
+    "bbox": [
+      289,
+      236,
+      735,
+      1502
+    ],
+    "greenShare": 0.8316,
+    "magentaPixels": 247189,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_italy_industrial",
+    "bbox": [
+      249,
+      252,
+      759,
+      1497
+    ],
+    "greenShare": 0.7506,
+    "magentaPixels": 25049,
+    "flags": []
+  },
+  {
+    "name": "hair_m_italy_industrial",
+    "bbox": [
+      296,
+      224,
+      728,
+      1502
+    ],
+    "greenShare": 0.8206,
+    "magentaPixels": 262717,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_italy_industrial",
+    "bbox": [
+      296,
+      252,
+      729,
+      1501
+    ],
+    "greenShare": 0.8194,
+    "magentaPixels": 267241,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_italy_industrial",
+    "bbox": [
+      296,
+      204,
+      728,
+      1501
+    ],
+    "greenShare": 0.814,
+    "magentaPixels": 260803,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_italy_industrial",
+    "bbox": [
+      296,
+      252,
+      729,
+      1502
+    ],
+    "greenShare": 0.8249,
+    "magentaPixels": 213947,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_italy_industrial",
+    "bbox": [
+      219,
+      236,
+      805,
+      1502
+    ],
+    "greenShare": 0.7145,
+    "magentaPixels": 26111,
+    "flags": []
+  },
+  {
+    "name": "hair_f_italy_industrial",
+    "bbox": [
+      289,
+      178,
+      735,
+      1503
+    ],
+    "greenShare": 0.8217,
+    "magentaPixels": 249649,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_f_italy_industrial",
+    "bbox": [
+      288,
+      236,
+      736,
+      1504
+    ],
+    "greenShare": 0.8269,
+    "magentaPixels": 250696,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_china_industrial",
+    "bbox": [
+      259,
+      252,
+      767,
+      1500
+    ],
+    "greenShare": 0.7656,
+    "magentaPixels": 28475,
+    "flags": []
+  },
+  {
+    "name": "hair_m_china_industrial",
+    "bbox": [
+      296,
+      243,
+      728,
+      1501
+    ],
+    "greenShare": 0.8202,
+    "magentaPixels": 268646,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_china_industrial",
+    "bbox": [
+      296,
+      218,
+      728,
+      1502
+    ],
+    "greenShare": 0.8217,
+    "magentaPixels": 262279,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_china_industrial",
+    "bbox": [
+      259,
+      237,
+      764,
+      1502
+    ],
+    "greenShare": 0.7864,
+    "magentaPixels": 50722,
+    "flags": []
+  },
+  {
+    "name": "hair_f_china_industrial",
+    "bbox": [
+      288,
+      217,
+      735,
+      1502
+    ],
+    "greenShare": 0.8196,
+    "magentaPixels": 257194,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_china_industrial",
+    "bbox": [
+      288,
+      232,
+      736,
+      1503
+    ],
+    "greenShare": 0.8297,
+    "magentaPixels": 248307,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_china_industrial",
+    "bbox": [
+      288,
+      236,
+      736,
+      1504
+    ],
+    "greenShare": 0.8306,
+    "magentaPixels": 247502,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_japan_industrial",
+    "bbox": [
+      254,
+      252,
+      770,
+      1501
+    ],
+    "greenShare": 0.7549,
+    "magentaPixels": 30520,
+    "flags": []
+  },
+  {
+    "name": "hair_m_japan_industrial",
+    "bbox": [
+      296,
+      229,
+      728,
+      1502
+    ],
+    "greenShare": 0.8163,
+    "magentaPixels": 264356,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_japan_industrial",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8228,
+    "magentaPixels": 264536,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_japan_industrial",
+    "bbox": [
+      296,
+      185,
+      728,
+      1501
+    ],
+    "greenShare": 0.8147,
+    "magentaPixels": 266959,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_japan_industrial",
+    "bbox": [
+      285,
+      236,
+      740,
+      1503
+    ],
+    "greenShare": 0.7766,
+    "magentaPixels": 31018,
+    "flags": []
+  },
+  {
+    "name": "hair_f_japan_industrial",
+    "bbox": [
+      288,
+      182,
+      736,
+      1500
+    ],
+    "greenShare": 0.8214,
+    "magentaPixels": 249143,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_britain_industrial",
+    "bbox": [
+      296,
+      252,
+      728,
+      1505
+    ],
+    "greenShare": 0.8083,
+    "magentaPixels": 24760,
+    "flags": []
+  },
+  {
+    "name": "hair_m_britain_industrial",
+    "bbox": [
+      296,
+      209,
+      728,
+      1501
+    ],
+    "greenShare": 0.8179,
+    "magentaPixels": 262480,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_britain_industrial",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8134,
+    "magentaPixels": 33279,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_britain_industrial",
+    "bbox": [
+      296,
+      142,
+      728,
+      1501
+    ],
+    "greenShare": 0.8123,
+    "magentaPixels": 262847,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_m_britain_industrial",
+    "bbox": [
+      297,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8269,
+    "magentaPixels": 256653,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_britain_industrial",
+    "bbox": [
+      132,
+      236,
+      892,
+      1503
+    ],
+    "greenShare": 0.6745,
+    "magentaPixels": 43243,
+    "flags": []
+  },
+  {
+    "name": "hair_f_britain_industrial",
+    "bbox": [
+      288,
+      201,
+      735,
+      1501
+    ],
+    "greenShare": 0.8262,
+    "magentaPixels": 163823,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_britain_industrial",
+    "bbox": [
+      288,
+      139,
+      735,
+      1501
+    ],
+    "greenShare": 0.8097,
+    "magentaPixels": 239748,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_f_britain_industrial",
+    "bbox": [
+      289,
+      236,
+      735,
+      1501
+    ],
+    "greenShare": 0.8246,
+    "magentaPixels": 189497,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_germany_industrial",
+    "bbox": [
+      296,
+      252,
+      728,
+      1504
+    ],
+    "greenShare": 0.8059,
+    "magentaPixels": 23150,
+    "flags": []
+  },
+  {
+    "name": "hair_m_germany_industrial",
+    "bbox": [
+      295,
+      227,
+      729,
+      1501
+    ],
+    "greenShare": 0.808,
+    "magentaPixels": 33774,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_germany_industrial",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8236,
+    "magentaPixels": 261351,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_germany_industrial",
+    "bbox": [
+      296,
+      190,
+      728,
+      1501
+    ],
+    "greenShare": 0.8179,
+    "magentaPixels": 262938,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_germany_industrial",
+    "bbox": [
+      297,
+      251,
+      728,
+      1501
+    ],
+    "greenShare": 0.8229,
+    "magentaPixels": 265553,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_germany_industrial",
+    "bbox": [
+      289,
+      236,
+      735,
+      1503
+    ],
+    "greenShare": 0.7749,
+    "magentaPixels": 29409,
+    "flags": []
+  },
+  {
+    "name": "hair_f_germany_industrial",
+    "bbox": [
+      288,
+      202,
+      736,
+      1503
+    ],
+    "greenShare": 0.8215,
+    "magentaPixels": 251367,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_germany_industrial",
+    "bbox": [
+      289,
+      236,
+      735,
+      1503
+    ],
+    "greenShare": 0.8325,
+    "magentaPixels": 245552,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_egypt_modern",
+    "bbox": [
+      288,
+      252,
+      737,
+      1504
+    ],
+    "greenShare": 0.7708,
+    "magentaPixels": 28915,
+    "flags": []
+  },
+  {
+    "name": "hair_m_egypt_modern",
+    "bbox": [
+      296,
+      222,
+      728,
+      1505
+    ],
+    "greenShare": 0.8161,
+    "magentaPixels": 267283,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_egypt_modern",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8205,
+    "magentaPixels": 267831,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_egypt_modern",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.822,
+    "magentaPixels": 227438,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_egypt_modern",
+    "bbox": [
+      288,
+      236,
+      736,
+      1502
+    ],
+    "greenShare": 0.7676,
+    "magentaPixels": 39113,
+    "flags": []
+  },
+  {
+    "name": "hair_f_egypt_modern",
+    "bbox": [
+      289,
+      223,
+      735,
+      1501
+    ],
+    "greenShare": 0.8253,
+    "magentaPixels": 249596,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_egypt_modern",
+    "bbox": [
+      289,
+      221,
+      735,
+      1502
+    ],
+    "greenShare": 0.8229,
+    "magentaPixels": 252029,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_egypt_modern",
+    "bbox": [
+      288,
+      236,
+      736,
+      1501
+    ],
+    "greenShare": 0.8287,
+    "magentaPixels": 248264,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_iraq_modern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1504
+    ],
+    "greenShare": 0.809,
+    "magentaPixels": 24390,
+    "flags": []
+  },
+  {
+    "name": "hair_m_iraq_modern",
+    "bbox": [
+      295,
+      216,
+      729,
+      1501
+    ],
+    "greenShare": 0.8144,
+    "magentaPixels": 269959,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_iraq_modern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8218,
+    "magentaPixels": 263995,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_iraq_modern",
+    "bbox": [
+      296,
+      194,
+      728,
+      1502
+    ],
+    "greenShare": 0.8177,
+    "magentaPixels": 266218,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_iraq_modern",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8225,
+    "magentaPixels": 263183,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_iraq_modern",
+    "bbox": [
+      253,
+      236,
+      771,
+      1502
+    ],
+    "greenShare": 0.7421,
+    "magentaPixels": 56033,
+    "flags": []
+  },
+  {
+    "name": "hair_f_iraq_modern",
+    "bbox": [
+      288,
+      190,
+      736,
+      1502
+    ],
+    "greenShare": 0.8161,
+    "magentaPixels": 251837,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_iraq_modern",
+    "bbox": [
+      289,
+      206,
+      735,
+      1502
+    ],
+    "greenShare": 0.8125,
+    "magentaPixels": 233253,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_iraq_modern",
+    "bbox": [
+      289,
+      236,
+      736,
+      1502
+    ],
+    "greenShare": 0.8287,
+    "magentaPixels": 250869,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_greece_modern",
+    "bbox": [
+      292,
+      252,
+      733,
+      1500
+    ],
+    "greenShare": 0.7943,
+    "magentaPixels": 27534,
+    "flags": []
+  },
+  {
+    "name": "hair_m_greece_modern",
+    "bbox": [
+      296,
+      207,
+      729,
+      1502
+    ],
+    "greenShare": 0.8061,
+    "magentaPixels": 36092,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_greece_modern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8225,
+    "magentaPixels": 264612,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_greece_modern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8247,
+    "magentaPixels": 241608,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_greece_modern",
+    "bbox": [
+      287,
+      236,
+      735,
+      1508
+    ],
+    "greenShare": 0.7739,
+    "magentaPixels": 48961,
+    "flags": []
+  },
+  {
+    "name": "hair_f_greece_modern",
+    "bbox": [
+      289,
+      213,
+      736,
+      1504
+    ],
+    "greenShare": 0.8181,
+    "magentaPixels": 239277,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_greece_modern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1503
+    ],
+    "greenShare": 0.8284,
+    "magentaPixels": 233236,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_italy_modern",
+    "bbox": [
+      296,
+      253,
+      728,
+      1505
+    ],
+    "greenShare": 0.8238,
+    "magentaPixels": 28628,
+    "flags": []
+  },
+  {
+    "name": "hair_m_italy_modern",
+    "bbox": [
+      296,
+      230,
+      729,
+      1501
+    ],
+    "greenShare": 0.8179,
+    "magentaPixels": 263334,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_italy_modern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1500
+    ],
+    "greenShare": 0.8226,
+    "magentaPixels": 263146,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_italy_modern",
+    "bbox": [
+      289,
+      237,
+      735,
+      1504
+    ],
+    "greenShare": 0.8341,
+    "magentaPixels": 109356,
+    "flags": []
+  },
+  {
+    "name": "hair_f_italy_modern",
+    "bbox": [
+      288,
+      146,
+      736,
+      1501
+    ],
+    "greenShare": 0.8159,
+    "magentaPixels": 246536,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_f_italy_modern",
+    "bbox": [
+      289,
+      236,
+      736,
+      1500
+    ],
+    "greenShare": 0.8305,
+    "magentaPixels": 249065,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_china_modern",
+    "bbox": [
+      291,
+      252,
+      733,
+      1504
+    ],
+    "greenShare": 0.8009,
+    "magentaPixels": 25451,
+    "flags": []
+  },
+  {
+    "name": "hair_m_china_modern",
+    "bbox": [
+      296,
+      225,
+      728,
+      1501
+    ],
+    "greenShare": 0.8183,
+    "magentaPixels": 266124,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_china_modern",
+    "bbox": [
+      296,
+      216,
+      728,
+      1501
+    ],
+    "greenShare": 0.8195,
+    "magentaPixels": 259863,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_china_modern",
+    "bbox": [
+      296,
+      253,
+      728,
+      1502
+    ],
+    "greenShare": 0.8186,
+    "magentaPixels": 247070,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_china_modern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1503
+    ],
+    "greenShare": 0.8132,
+    "magentaPixels": 33369,
+    "flags": []
+  },
+  {
+    "name": "hair_f_china_modern",
+    "bbox": [
+      288,
+      198,
+      735,
+      1503
+    ],
+    "greenShare": 0.8186,
+    "magentaPixels": 250233,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_china_modern",
+    "bbox": [
+      289,
+      193,
+      735,
+      1501
+    ],
+    "greenShare": 0.8236,
+    "magentaPixels": 250359,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_china_modern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1502
+    ],
+    "greenShare": 0.8254,
+    "magentaPixels": 235699,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_japan_modern",
+    "bbox": [
+      296,
+      253,
+      728,
+      1500
+    ],
+    "greenShare": 0.8151,
+    "magentaPixels": 24776,
+    "flags": []
+  },
+  {
+    "name": "hair_m_japan_modern",
+    "bbox": [
+      296,
+      214,
+      729,
+      1502
+    ],
+    "greenShare": 0.8141,
+    "magentaPixels": 273341,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_japan_modern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1503
+    ],
+    "greenShare": 0.8226,
+    "magentaPixels": 263343,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_japan_modern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1504
+    ],
+    "greenShare": 0.8215,
+    "magentaPixels": 79988,
+    "flags": []
+  },
+  {
+    "name": "hair_f_japan_modern",
+    "bbox": [
+      287,
+      193,
+      736,
+      1501
+    ],
+    "greenShare": 0.8159,
+    "magentaPixels": 245348,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_japan_modern",
+    "bbox": [
+      288,
+      236,
+      735,
+      1501
+    ],
+    "greenShare": 0.8299,
+    "magentaPixels": 245413,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_britain_modern",
+    "bbox": [
+      292,
+      252,
+      733,
+      1504
+    ],
+    "greenShare": 0.7865,
+    "magentaPixels": 25725,
+    "flags": []
+  },
+  {
+    "name": "hair_m_britain_modern",
+    "bbox": [
+      296,
+      225,
+      728,
+      1503
+    ],
+    "greenShare": 0.8157,
+    "magentaPixels": 126264,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_britain_modern",
+    "bbox": [
+      296,
+      233,
+      728,
+      1501
+    ],
+    "greenShare": 0.8209,
+    "magentaPixels": 259834,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_britain_modern",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8207,
+    "magentaPixels": 232771,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_britain_modern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1500
+    ],
+    "greenShare": 0.8042,
+    "magentaPixels": 46768,
+    "flags": []
+  },
+  {
+    "name": "hair_f_britain_modern",
+    "bbox": [
+      289,
+      211,
+      735,
+      1501
+    ],
+    "greenShare": 0.8172,
+    "magentaPixels": 173637,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_britain_modern",
+    "bbox": [
+      289,
+      218,
+      735,
+      1501
+    ],
+    "greenShare": 0.825,
+    "magentaPixels": 242505,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_britain_modern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1501
+    ],
+    "greenShare": 0.8278,
+    "magentaPixels": 254137,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_germany_modern",
+    "bbox": [
+      280,
+      253,
+      742,
+      1505
+    ],
+    "greenShare": 0.7615,
+    "magentaPixels": 25054,
+    "flags": []
+  },
+  {
+    "name": "hair_m_germany_modern",
+    "bbox": [
+      296,
+      221,
+      728,
+      1502
+    ],
+    "greenShare": 0.8182,
+    "magentaPixels": 262930,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_germany_modern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8215,
+    "magentaPixels": 262239,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_germany_modern",
+    "bbox": [
+      296,
+      201,
+      728,
+      1501
+    ],
+    "greenShare": 0.8117,
+    "magentaPixels": 268673,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_germany_modern",
+    "bbox": [
+      296,
+      252,
+      729,
+      1502
+    ],
+    "greenShare": 0.8221,
+    "magentaPixels": 264397,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_germany_modern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1503
+    ],
+    "greenShare": 0.8238,
+    "magentaPixels": 111928,
+    "flags": []
+  },
+  {
+    "name": "hair_f_germany_modern",
+    "bbox": [
+      289,
+      214,
+      735,
+      1502
+    ],
+    "greenShare": 0.8245,
+    "magentaPixels": 241294,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_germany_modern",
+    "bbox": [
+      289,
+      198,
+      736,
+      1504
+    ],
+    "greenShare": 0.8179,
+    "magentaPixels": 255481,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_germany_modern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1502
+    ],
+    "greenShare": 0.8305,
+    "magentaPixels": 248484,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_neutral_future",
+    "bbox": [
+      296,
+      252,
+      730,
+      1503
+    ],
+    "greenShare": 0.8033,
+    "magentaPixels": 28645,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_neutral_future",
+    "bbox": [
+      289,
+      236,
+      735,
+      1506
+    ],
+    "greenShare": 0.8248,
+    "magentaPixels": 47684,
+    "flags": []
+  },
+  {
+    "name": "hair_m_neutral_future",
+    "bbox": [
+      296,
+      199,
+      729,
+      1502
+    ],
+    "greenShare": 0.8137,
+    "magentaPixels": 267556,
+    "flags": []
+  },
+  {
+    "name": "hair_f_neutral_future",
+    "bbox": [
+      289,
+      207,
+      735,
+      1503
+    ],
+    "greenShare": 0.8231,
+    "magentaPixels": 246520,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_neutral_future",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.821,
+    "magentaPixels": 266850,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_egypt_future",
+    "bbox": [
+      223,
+      252,
+      800,
+      1504
+    ],
+    "greenShare": 0.7438,
+    "magentaPixels": 40960,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_egypt_future",
+    "bbox": [
+      229,
+      236,
+      795,
+      1507
+    ],
+    "greenShare": 0.7289,
+    "magentaPixels": 46033,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_iraq_future",
+    "bbox": [
+      291,
+      253,
+      734,
+      1507
+    ],
+    "greenShare": 0.7535,
+    "magentaPixels": 54881,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_iraq_future",
+    "bbox": [
+      289,
+      236,
+      736,
+      1503
+    ],
+    "greenShare": 0.7822,
+    "magentaPixels": 41178,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_greece_future",
+    "bbox": [
+      296,
+      252,
+      731,
+      1505
+    ],
+    "greenShare": 0.8008,
+    "magentaPixels": 88201,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_greece_future",
+    "bbox": [
+      289,
+      236,
+      735,
+      1507
+    ],
+    "greenShare": 0.8139,
+    "magentaPixels": 100726,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_italy_future",
+    "bbox": [
+      278,
+      253,
+      788,
+      1507
+    ],
+    "greenShare": 0.7689,
+    "magentaPixels": 25007,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_italy_future",
+    "bbox": [
+      281,
+      236,
+      735,
+      1505
+    ],
+    "greenShare": 0.7654,
+    "magentaPixels": 37849,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_china_future",
+    "bbox": [
+      262,
+      252,
+      762,
+      1500
+    ],
+    "greenShare": 0.7693,
+    "magentaPixels": 28114,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_china_future",
+    "bbox": [
+      256,
+      236,
+      768,
+      1504
+    ],
+    "greenShare": 0.7497,
+    "magentaPixels": 28547,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_japan_future",
+    "bbox": [
+      244,
+      253,
+      779,
+      1504
+    ],
+    "greenShare": 0.7558,
+    "magentaPixels": 32644,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_japan_future",
+    "bbox": [
+      289,
+      236,
+      735,
+      1503
+    ],
+    "greenShare": 0.7685,
+    "magentaPixels": 46001,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_britain_future",
+    "bbox": [
+      295,
+      253,
+      729,
+      1503
+    ],
+    "greenShare": 0.7852,
+    "magentaPixels": 24959,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_britain_future",
+    "bbox": [
+      288,
+      236,
+      736,
+      1500
+    ],
+    "greenShare": 0.7834,
+    "magentaPixels": 26728,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_germany_future",
+    "bbox": [
+      271,
+      253,
+      752,
+      1503
+    ],
+    "greenShare": 0.7959,
+    "magentaPixels": 24772,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_germany_future",
+    "bbox": [
+      289,
+      236,
+      735,
+      1503
+    ],
+    "greenShare": 0.8096,
+    "magentaPixels": 27559,
+    "flags": []
+  },
+  {
     "name": "premade_senenmut_neutral",
     "bbox": [
       293,
@@ -3856,6 +5376,20 @@
     ]
   },
   {
+    "name": "premade_fellini_worried",
+    "bbox": [
+      292,
+      170,
+      733,
+      1492
+    ],
+    "greenShare": 0.7953,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
     "name": "premade_hezehui_neutral",
     "bbox": [
       290,
@@ -3864,6 +5398,42 @@
       1502
     ],
     "greenShare": 0.8048,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_hezehui_happy",
+    "bbox": [
+      290,
+      207,
+      732,
+      1502
+    ],
+    "greenShare": 0.805,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_hezehui_angry",
+    "bbox": [
+      290,
+      207,
+      732,
+      1502
+    ],
+    "greenShare": 0.8049,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_hezehui_worried",
+    "bbox": [
+      290,
+      207,
+      732,
+      1502
+    ],
+    "greenShare": 0.8049,
     "magentaPixels": 0,
     "flags": []
   },
@@ -3880,6 +5450,42 @@
     "flags": []
   },
   {
+    "name": "premade_toyoda_happy",
+    "bbox": [
+      243,
+      217,
+      784,
+      1503
+    ],
+    "greenShare": 0.7386,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_toyoda_angry",
+    "bbox": [
+      243,
+      217,
+      784,
+      1503
+    ],
+    "greenShare": 0.7386,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_toyoda_worried",
+    "bbox": [
+      243,
+      217,
+      784,
+      1504
+    ],
+    "greenShare": 0.7384,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
     "name": "premade_turing_neutral",
     "bbox": [
       297,
@@ -3888,6 +5494,90 @@
       1499
     ],
     "greenShare": 0.7878,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_turing_happy",
+    "bbox": [
+      296,
+      240,
+      728,
+      1499
+    ],
+    "greenShare": 0.7877,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_turing_angry",
+    "bbox": [
+      297,
+      240,
+      728,
+      1499
+    ],
+    "greenShare": 0.788,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_turing_worried",
+    "bbox": [
+      296,
+      240,
+      728,
+      1499
+    ],
+    "greenShare": 0.7875,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_meitner_neutral",
+    "bbox": [
+      289,
+      229,
+      733,
+      1502
+    ],
+    "greenShare": 0.8148,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_meitner_happy",
+    "bbox": [
+      289,
+      228,
+      733,
+      1502
+    ],
+    "greenShare": 0.8148,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_meitner_angry",
+    "bbox": [
+      289,
+      228,
+      733,
+      1502
+    ],
+    "greenShare": 0.8149,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_meitner_worried",
+    "bbox": [
+      289,
+      229,
+      733,
+      1502
+    ],
+    "greenShare": 0.815,
     "magentaPixels": 0,
     "flags": []
   }

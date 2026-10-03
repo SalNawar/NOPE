@@ -1,0 +1,13 @@
+# outfit_f_greece_modern
+
+Built-in image generation. Raw source candidate; pending registration and stack QA.
+
+Use case: precise-object-edit. Production raw sheet for a layered character in Time Sorter. Preserve the entire 1024x1536 portrait canvas, the reference silhouette, pose, head outline and head location. Never zoom or crop. Centre x512, head top y260, chin about y424, shoulders y500, waist y760, soles y1490. Arms relaxed slightly away, empty open hands. Outside the figure is fully opaque flat green #00FF00, including every gap between limbs. Every uncovered mannequin pixel is fully opaque flat magenta #FF00FF with sparse face registration marks. NO shades, highlights or shadows on magenta. Only the requested piece, all other pieces absent. Soft rounded 2D anime customer art matching the approved pilot, adults with adult proportions, not chibi. Expressive simple anime eyes, thin consistent 2-3px dark-brown #3B2A20 contours, restrained flat cel colours with exactly ONE hard-edged shadow tone, neutral even white front light. No gradient, airbrush, texture noise, lettering, logos, military or royal regalia, flags, religious symbols, weapons or manga emotion symbols. Avoid lime green, magenta, pink, purple on the piece; olive and bottle green are permitted. Reference 1 is the exact registration mannequin. Reference 2 is STYLE ONLY; never copy its Greek clothes. ONLY clothing and footwear. No hair, beard, headwear, jewellery or accessory. Keep the head bald and magenta; clothes remain below the chin.
+Subject: woman of Metapolitefsi Athens; Athens after the fall of the junta and the restoration of democracy, c. 1975.
+Draw: White cotton folk-revival blouse with red and black cross-stitch embroidery at the neckline and cuffs, under a loose chunky knit cardigan. Below are a long midi skirt or flared jeans and flat handmade leather strap sandals.
+Avoid: junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols); any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); 'Zorba' or taverna-dancer caricature; komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)
+Output one full-canvas raw outfit_f_greece_modern.
+
+References:
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\References\mannequin_f.png
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\Raw\batch01-pilot\outfit_f_greece_ancient.png

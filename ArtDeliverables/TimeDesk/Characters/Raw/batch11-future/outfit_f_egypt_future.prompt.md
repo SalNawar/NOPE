@@ -1,0 +1,13 @@
+# outfit_f_egypt_future
+
+Built-in image generation. Raw source candidate; pending registration and stack QA.
+
+Use case: precise-object-edit. Production raw sheet for a layered character in Time Sorter. Preserve the entire 1024x1536 portrait canvas, the reference silhouette, pose, head outline and head location. Never zoom or crop. Centre x512, head top y260, chin about y424, shoulders y500, waist y760, soles y1490. Arms relaxed slightly away, empty open hands. Outside the figure is fully opaque flat green #00FF00, including every gap between limbs. Every uncovered mannequin pixel is fully opaque flat magenta #FF00FF with sparse face registration marks. NO shades, highlights or shadows on magenta. Only the requested piece, all other pieces absent. Soft rounded 2D anime customer art matching the approved pilot, adults with adult proportions, not chibi. Expressive simple anime eyes, thin consistent 2-3px dark-brown #3B2A20 contours, restrained flat cel colours with exactly ONE hard-edged shadow tone, neutral even white front light. No gradient, airbrush, texture noise, lettering, logos, military or royal regalia, flags, religious symbols, weapons or manga emotion symbols. Avoid lime green, magenta, pink, purple on the piece; olive and bottle green are permitted. Reference 1 is the exact registration mannequin. Reference 2 is STYLE ONLY; never copy its Greek clothes. ONLY clothing and footwear. No hair, beard, headwear, jewellery or accessory. Keep the head bald and magenta; clothes remain below the chin.
+Subject: woman of Nile Arcology; .
+Draw: Complete functional futuristic civilian clothing and footwear with a clear gender-appropriate silhouette. Cultural design language: Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (blue-leaning Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; a printed or embroidered mashrabiya lattice pattern (not cut-through holes) and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs.. Keep all culture motifs visible on the upper chest/shoulders.
+Avoid: 
+Output one full-canvas raw outfit_f_egypt_future.
+
+References:
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\References\mannequin_f.png
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\Raw\batch01-pilot\outfit_f_greece_ancient.png
