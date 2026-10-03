@@ -10,6 +10,16 @@ manifest = json.loads((HERE / 'generation-manifest.json').read_text(encoding='ut
 queue = json.loads((HERE / 'prompt-queue.json').read_text(encoding='utf-8'))
 records = {record['name']: record for record in manifest['generated']}
 errors = []
+coverage = json.loads((HERE.parent / 'Production/coverage.json').read_text(encoding='utf-8-sig'))
+pilot_keys = {key for task in coverage['rawDeliverables']
+              if '/batch01-pilot/' in task['raw'] for key in task['produces']}
+planned_keys = {key for task in queue for key in task['produces']} | pilot_keys
+expected_keys = set(coverage['requiredFlat']) | {
+    key for task in queue for key in task['produces'] if key.startswith('premade_')}
+if planned_keys != expected_keys:
+    errors.append('Source plan key mismatch: ' + repr(sorted(planned_keys ^ expected_keys)))
+if len(planned_keys) != 944:
+    errors.append('Expected 944 planned keys, got ' + str(len(planned_keys)))
 for task in queue:
     record = records.get(task['name'])
     if record is None:
@@ -36,6 +46,7 @@ else:
             errors.append('Preserved pilot changed: ' + relative)
 report = {'requiredNewSources': len(queue), 'presentNewSources': len(records),
           'plannedNewLayerKeys': len({key for task in queue for key in task['produces']}),
+          'plannedTotalLayerKeys': len(planned_keys),
           'gameReadyLayerProcessingComplete': manifest['gameReadyLayerProcessingComplete'],
           'errors': errors}
 print(json.dumps(report, indent=2))

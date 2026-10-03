@@ -2252,6 +2252,480 @@
     "flags": []
   },
   {
+    "name": "hair_f_japan_earlymodern",
+    "bbox": [
+      289,
+      203,
+      735,
+      1501
+    ],
+    "greenShare": 0.8176,
+    "magentaPixels": 258969,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_japan_earlymodern",
+    "bbox": [
+      289,
+      216,
+      735,
+      1502
+    ],
+    "greenShare": 0.813,
+    "magentaPixels": 218038,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_britain_earlymodern",
+    "bbox": [
+      286,
+      252,
+      809,
+      1501
+    ],
+    "greenShare": 0.7801,
+    "magentaPixels": 24876,
+    "flags": []
+  },
+  {
+    "name": "hair_m_britain_earlymodern",
+    "bbox": [
+      296,
+      210,
+      728,
+      1501
+    ],
+    "greenShare": 0.8177,
+    "magentaPixels": 264855,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_britain_earlymodern",
+    "bbox": [
+      296,
+      253,
+      729,
+      1502
+    ],
+    "greenShare": 0.8239,
+    "magentaPixels": 260785,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_britain_earlymodern",
+    "bbox": [
+      296,
+      160,
+      728,
+      1501
+    ],
+    "greenShare": 0.8154,
+    "magentaPixels": 261761,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "outfit_f_britain_earlymodern",
+    "bbox": [
+      205,
+      236,
+      817,
+      1503
+    ],
+    "greenShare": 0.7084,
+    "magentaPixels": 30107,
+    "flags": []
+  },
+  {
+    "name": "hair_f_britain_earlymodern",
+    "bbox": [
+      289,
+      207,
+      735,
+      1500
+    ],
+    "greenShare": 0.824,
+    "magentaPixels": 253449,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_britain_earlymodern",
+    "bbox": [
+      288,
+      155,
+      735,
+      1502
+    ],
+    "greenShare": 0.8183,
+    "magentaPixels": 250657,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_f_britain_earlymodern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1502
+    ],
+    "greenShare": 0.831,
+    "magentaPixels": 240068,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_germany_earlymodern",
+    "bbox": [
+      260,
+      253,
+      763,
+      1496
+    ],
+    "greenShare": 0.7816,
+    "magentaPixels": 26056,
+    "flags": []
+  },
+  {
+    "name": "hair_m_germany_earlymodern",
+    "bbox": [
+      296,
+      229,
+      728,
+      1501
+    ],
+    "greenShare": 0.8196,
+    "magentaPixels": 261241,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_germany_earlymodern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8214,
+    "magentaPixels": 262810,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_germany_earlymodern",
+    "bbox": [
+      296,
+      196,
+      728,
+      1501
+    ],
+    "greenShare": 0.8143,
+    "magentaPixels": 264872,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_germany_earlymodern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8208,
+    "magentaPixels": 260633,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_germany_earlymodern",
+    "bbox": [
+      246,
+      237,
+      778,
+      1504
+    ],
+    "greenShare": 0.7246,
+    "magentaPixels": 26988,
+    "flags": []
+  },
+  {
+    "name": "hair_f_germany_earlymodern",
+    "bbox": [
+      288,
+      199,
+      736,
+      1502
+    ],
+    "greenShare": 0.8049,
+    "magentaPixels": 277454,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_germany_earlymodern",
+    "bbox": [
+      288,
+      171,
+      736,
+      1502
+    ],
+    "greenShare": 0.8159,
+    "magentaPixels": 245641,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_f_germany_earlymodern",
+    "bbox": [
+      289,
+      236,
+      736,
+      1502
+    ],
+    "greenShare": 0.8343,
+    "magentaPixels": 241598,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_egypt_industrial",
+    "bbox": [
+      296,
+      253,
+      728,
+      1502
+    ],
+    "greenShare": 0.8106,
+    "magentaPixels": 24182,
+    "flags": []
+  },
+  {
+    "name": "hair_m_egypt_industrial",
+    "bbox": [
+      297,
+      223,
+      728,
+      1501
+    ],
+    "greenShare": 0.8207,
+    "magentaPixels": 201738,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_egypt_industrial",
+    "bbox": [
+      296,
+      252,
+      728,
+      1504
+    ],
+    "greenShare": 0.821,
+    "magentaPixels": 265466,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_egypt_industrial",
+    "bbox": [
+      296,
+      210,
+      728,
+      1501
+    ],
+    "greenShare": 0.8178,
+    "magentaPixels": 263174,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_egypt_industrial",
+    "bbox": [
+      296,
+      253,
+      728,
+      1502
+    ],
+    "greenShare": 0.8238,
+    "magentaPixels": 257579,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_egypt_industrial",
+    "bbox": [
+      288,
+      236,
+      735,
+      1504
+    ],
+    "greenShare": 0.7765,
+    "magentaPixels": 31824,
+    "flags": []
+  },
+  {
+    "name": "hair_f_egypt_industrial",
+    "bbox": [
+      289,
+      217,
+      735,
+      1501
+    ],
+    "greenShare": 0.8182,
+    "magentaPixels": 248344,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_egypt_industrial",
+    "bbox": [
+      289,
+      216,
+      735,
+      1501
+    ],
+    "greenShare": 0.7752,
+    "magentaPixels": 210202,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_egypt_industrial",
+    "bbox": [
+      289,
+      236,
+      735,
+      1502
+    ],
+    "greenShare": 0.8316,
+    "magentaPixels": 243782,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_iraq_industrial",
+    "bbox": [
+      287,
+      252,
+      737,
+      1501
+    ],
+    "greenShare": 0.7478,
+    "magentaPixels": 30926,
+    "flags": []
+  },
+  {
+    "name": "hair_m_iraq_industrial",
+    "bbox": [
+      288,
+      231,
+      736,
+      1501
+    ],
+    "greenShare": 0.7974,
+    "magentaPixels": 110117,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_iraq_industrial",
+    "bbox": [
+      297,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8244,
+    "magentaPixels": 261174,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_iraq_industrial",
+    "bbox": [
+      296,
+      230,
+      728,
+      1501
+    ],
+    "greenShare": 0.8142,
+    "magentaPixels": 254775,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_iraq_industrial",
+    "bbox": [
+      273,
+      236,
+      750,
+      1507
+    ],
+    "greenShare": 0.7423,
+    "magentaPixels": 32236,
+    "flags": []
+  },
+  {
+    "name": "hair_f_iraq_industrial",
+    "bbox": [
+      288,
+      203,
+      736,
+      1502
+    ],
+    "greenShare": 0.8191,
+    "magentaPixels": 248065,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_iraq_industrial",
+    "bbox": [
+      289,
+      220,
+      736,
+      1502
+    ],
+    "greenShare": 0.8177,
+    "magentaPixels": 218365,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_iraq_industrial",
+    "bbox": [
+      289,
+      236,
+      736,
+      1500
+    ],
+    "greenShare": 0.8309,
+    "magentaPixels": 242581,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_greece_industrial",
+    "bbox": [
+      269,
+      252,
+      754,
+      1503
+    ],
+    "greenShare": 0.797,
+    "magentaPixels": 28231,
+    "flags": []
+  },
+  {
+    "name": "hair_m_greece_industrial",
+    "bbox": [
+      296,
+      223,
+      728,
+      1501
+    ],
+    "greenShare": 0.8188,
+    "magentaPixels": 265446,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_greece_industrial",
+    "bbox": [
+      296,
+      252,
+      728,
+      1500
+    ],
+    "greenShare": 0.8223,
+    "magentaPixels": 263262,
+    "flags": []
+  },
+  {
     "name": "premade_senenmut_neutral",
     "bbox": [
       293,
@@ -2864,6 +3338,18 @@
     "flags": []
   },
   {
+    "name": "premade_ines_worried",
+    "bbox": [
+      183,
+      193,
+      835,
+      1502
+    ],
+    "greenShare": 0.7029,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
     "name": "premade_rook_neutral",
     "bbox": [
       282,
@@ -2872,6 +3358,20 @@
       1505
     ],
     "greenShare": 0.7721,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_rook_happy",
+    "bbox": [
+      282,
+      159,
+      745,
+      1505
+    ],
+    "greenShare": 0.7723,
     "magentaPixels": 0,
     "flags": [
       "figure registration needs review"
@@ -2892,6 +3392,20 @@
     ]
   },
   {
+    "name": "premade_rook_worried",
+    "bbox": [
+      282,
+      159,
+      745,
+      1505
+    ],
+    "greenShare": 0.7723,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
     "name": "premade_ada_neutral",
     "bbox": [
       78,
@@ -2900,6 +3414,48 @@
       1502
     ],
     "greenShare": 0.5824,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_ada_happy",
+    "bbox": [
+      78,
+      122,
+      948,
+      1502
+    ],
+    "greenShare": 0.5823,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_ada_angry",
+    "bbox": [
+      78,
+      122,
+      948,
+      1502
+    ],
+    "greenShare": 0.5824,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_ada_worried",
+    "bbox": [
+      78,
+      122,
+      948,
+      1502
+    ],
+    "greenShare": 0.5823,
     "magentaPixels": 0,
     "flags": [
       "figure registration needs review"
@@ -2918,6 +3474,42 @@
     "flags": []
   },
   {
+    "name": "premade_hollis_happy",
+    "bbox": [
+      296,
+      208,
+      728,
+      1499
+    ],
+    "greenShare": 0.8022,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_hollis_angry",
+    "bbox": [
+      296,
+      208,
+      728,
+      1499
+    ],
+    "greenShare": 0.802,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_hollis_worried",
+    "bbox": [
+      296,
+      208,
+      728,
+      1499
+    ],
+    "greenShare": 0.8022,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
     "name": "premade_auditor_neutral",
     "bbox": [
       286,
@@ -2926,6 +3518,376 @@
       1491
     ],
     "greenShare": 0.7645,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_auditor_happy",
+    "bbox": [
+      287,
+      201,
+      743,
+      1491
+    ],
+    "greenShare": 0.7648,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_auditor_angry",
+    "bbox": [
+      287,
+      201,
+      743,
+      1491
+    ],
+    "greenShare": 0.7646,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_auditor_worried",
+    "bbox": [
+      287,
+      201,
+      743,
+      1491
+    ],
+    "greenShare": 0.7646,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_tahtawi_neutral",
+    "bbox": [
+      282,
+      117,
+      744,
+      1484
+    ],
+    "greenShare": 0.766,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_tahtawi_happy",
+    "bbox": [
+      282,
+      116,
+      744,
+      1484
+    ],
+    "greenShare": 0.766,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_tahtawi_angry",
+    "bbox": [
+      282,
+      117,
+      743,
+      1484
+    ],
+    "greenShare": 0.7663,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_tahtawi_worried",
+    "bbox": [
+      282,
+      116,
+      743,
+      1484
+    ],
+    "greenShare": 0.7662,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_kulthum_neutral",
+    "bbox": [
+      281,
+      161,
+      751,
+      1503
+    ],
+    "greenShare": 0.7342,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_kulthum_happy",
+    "bbox": [
+      281,
+      160,
+      751,
+      1503
+    ],
+    "greenShare": 0.7342,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_kulthum_angry",
+    "bbox": [
+      282,
+      160,
+      751,
+      1503
+    ],
+    "greenShare": 0.7344,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_kulthum_worried",
+    "bbox": [
+      281,
+      160,
+      751,
+      1503
+    ],
+    "greenShare": 0.7342,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_malaika_neutral",
+    "bbox": [
+      225,
+      208,
+      799,
+      1504
+    ],
+    "greenShare": 0.7187,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_malaika_happy",
+    "bbox": [
+      225,
+      207,
+      799,
+      1504
+    ],
+    "greenShare": 0.719,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_malaika_angry",
+    "bbox": [
+      226,
+      207,
+      799,
+      1504
+    ],
+    "greenShare": 0.719,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_malaika_worried",
+    "bbox": [
+      225,
+      208,
+      799,
+      1504
+    ],
+    "greenShare": 0.7185,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_sayyab_neutral",
+    "bbox": [
+      296,
+      193,
+      718,
+      1499
+    ],
+    "greenShare": 0.8057,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_sayyab_happy",
+    "bbox": [
+      296,
+      193,
+      718,
+      1499
+    ],
+    "greenShare": 0.8059,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_sayyab_angry",
+    "bbox": [
+      296,
+      193,
+      718,
+      1499
+    ],
+    "greenShare": 0.8058,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_sayyab_worried",
+    "bbox": [
+      296,
+      193,
+      718,
+      1499
+    ],
+    "greenShare": 0.8058,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_elytis_neutral",
+    "bbox": [
+      292,
+      200,
+      735,
+      1498
+    ],
+    "greenShare": 0.7829,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_elytis_happy",
+    "bbox": [
+      292,
+      200,
+      734,
+      1498
+    ],
+    "greenShare": 0.783,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_elytis_angry",
+    "bbox": [
+      291,
+      200,
+      735,
+      1498
+    ],
+    "greenShare": 0.7829,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_elytis_worried",
+    "bbox": [
+      291,
+      200,
+      735,
+      1498
+    ],
+    "greenShare": 0.7829,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_fellini_neutral",
+    "bbox": [
+      292,
+      170,
+      732,
+      1492
+    ],
+    "greenShare": 0.7955,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_fellini_happy",
+    "bbox": [
+      291,
+      170,
+      733,
+      1492
+    ],
+    "greenShare": 0.7955,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_fellini_angry",
+    "bbox": [
+      292,
+      170,
+      733,
+      1492
+    ],
+    "greenShare": 0.7956,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_hezehui_neutral",
+    "bbox": [
+      290,
+      207,
+      732,
+      1502
+    ],
+    "greenShare": 0.8048,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_toyoda_neutral",
+    "bbox": [
+      243,
+      217,
+      783,
+      1504
+    ],
+    "greenShare": 0.7384,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_turing_neutral",
+    "bbox": [
+      297,
+      241,
+      728,
+      1499
+    ],
+    "greenShare": 0.7878,
     "magentaPixels": 0,
     "flags": []
   }

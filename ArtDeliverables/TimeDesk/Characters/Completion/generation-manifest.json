@@ -2,7 +2,7 @@
   "branch": "codex/hall-art-completion",
   "generationTool": "built-in image_gen",
   "requiredNewRawSources": 455,
-  "generatedNewRawSources": 265,
+  "generatedNewRawSources": 353,
   "rawSourceGenerationComplete": false,
   "installedPilotModified": false,
   "gameReadyLayerProcessingComplete": false,
@@ -3225,6 +3225,848 @@
       "status": "raw-unverified"
     },
     {
+      "index": 198,
+      "name": "facialhair_m_germany_earlymodern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/facialhair_m_germany_earlymodern.png",
+      "produces": [
+        "facialhair_m_germany_earlymodern_black",
+        "facialhair_m_germany_earlymodern_brown",
+        "facialhair_m_germany_earlymodern_blond",
+        "facialhair_m_germany_earlymodern_red",
+        "facialhair_m_germany_earlymodern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5208c5d342386d9954c571cf0d230a68f99d7ab1a73bf625d56b01507507709e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2493b94a-e4fa-4360-9182-7def1fa9b591.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 199,
+      "name": "headwear_m_germany_earlymodern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/headwear_m_germany_earlymodern.png",
+      "produces": [
+        "headwear_m_germany_earlymodern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "eb88ee790ef43dc6474a3bf288e7c12a8f1b1ecd29a7353723b226890a20a0e8",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-83d8ac49-41f3-4470-8869-ac486d8659e7.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 200,
+      "name": "accessory_m_germany_earlymodern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/accessory_m_germany_earlymodern.png",
+      "produces": [
+        "accessory_m_germany_earlymodern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ae63cfdb7f5ca70c24cb5b0fd5b55c0a9ca000e6ab5ff9429676c9988353874a",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-27e18779-e7f5-49b2-9016-827d9529825f.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 201,
+      "name": "outfit_f_germany_earlymodern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/outfit_f_germany_earlymodern.png",
+      "produces": [
+        "outfit_f_germany_earlymodern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "03c7019212cb8206c0aa78849a11b0b3e6212e97f1ae9d28ea9a8e831f9ab7b3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f2a09349-9ab3-4b6b-9912-6c013944c3b0.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 202,
+      "name": "hair_f_germany_earlymodern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/hair_f_germany_earlymodern.png",
+      "produces": [
+        "hair_f_germany_earlymodern_black",
+        "hair_f_germany_earlymodern_brown",
+        "hair_f_germany_earlymodern_blond",
+        "hair_f_germany_earlymodern_red",
+        "hair_f_germany_earlymodern_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "48d466ad1b8bedd6fdbbf6756d556758d769300a72afb88f484e289192f48ad1",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f021261c-d226-4cdc-b3a3-fe97c5f3bf8d.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 203,
+      "name": "headwear_f_germany_earlymodern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/headwear_f_germany_earlymodern.png",
+      "produces": [
+        "headwear_f_germany_earlymodern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4679d31470a0a7fc3c1bd0430c1f4d24514aa82967b6e4e4edcca09ce544d7b4",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aea674b7-c997-4bed-aa48-7cdc2624d4d6.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 204,
+      "name": "accessory_f_germany_earlymodern",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/accessory_f_germany_earlymodern.png",
+      "produces": [
+        "accessory_f_germany_earlymodern"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7d80d5ff87f7f62c0f0ae257f10ddc53441ccc322858d91f3aa4bb92d9927edb",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0f2a4fac-2d33-4373-800d-1818d340942e.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 205,
+      "name": "outfit_m_egypt_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_egypt_industrial.png",
+      "produces": [
+        "outfit_m_egypt_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4d045258a051864bfa23a78dbe44a95498959ab2bb328927a7bdf83432ea96ac",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2d071700-0849-4ccc-962a-de6da9b17462.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 206,
+      "name": "hair_m_egypt_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_egypt_industrial.png",
+      "produces": [
+        "hair_m_egypt_industrial_black",
+        "hair_m_egypt_industrial_brown",
+        "hair_m_egypt_industrial_blond",
+        "hair_m_egypt_industrial_red",
+        "hair_m_egypt_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ae55e10f638ffc16c34dd02990162159a908d9c12436dc5da17cb24e1fadca74",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cbd31868-c1e9-4e49-8bac-2028bcc7837b.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 207,
+      "name": "facialhair_m_egypt_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_egypt_industrial.png",
+      "produces": [
+        "facialhair_m_egypt_industrial_black",
+        "facialhair_m_egypt_industrial_brown",
+        "facialhair_m_egypt_industrial_blond",
+        "facialhair_m_egypt_industrial_red",
+        "facialhair_m_egypt_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "528a7dc3ae19ea41ff84961a81302c19c3df5ab87b44bfa1924c9e14683f84b2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aed0650c-fb8f-4ea4-8b61-bf5cbf016e56.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 208,
+      "name": "headwear_m_egypt_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_egypt_industrial.png",
+      "produces": [
+        "headwear_m_egypt_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7c10ea0c21c829c20b1b6e1e75f045232247a42bc8294f995c3843008ba6a674",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9ebc0f06-ebde-40c4-83c7-443a5bcfbee2.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 209,
+      "name": "accessory_m_egypt_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_m_egypt_industrial.png",
+      "produces": [
+        "accessory_m_egypt_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c2e96c7f44d0878f2e2412d4dca62d41bd0bc1c32b8b3c18f68575cf99a528f3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-efcf0f02-e2ec-4086-b9c9-d043226781f8.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 210,
+      "name": "outfit_f_egypt_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_egypt_industrial.png",
+      "produces": [
+        "outfit_f_egypt_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b7b127c2ace82652a3f91c523085399cd690f148636af713c721c7653329072e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7243994c-5c77-4ecd-b94b-62433f355d83.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 211,
+      "name": "hair_f_egypt_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_egypt_industrial.png",
+      "produces": [
+        "hair_f_egypt_industrial_black",
+        "hair_f_egypt_industrial_brown",
+        "hair_f_egypt_industrial_blond",
+        "hair_f_egypt_industrial_red",
+        "hair_f_egypt_industrial_grey",
+        "hairback_f_egypt_industrial_black",
+        "hairback_f_egypt_industrial_brown",
+        "hairback_f_egypt_industrial_blond",
+        "hairback_f_egypt_industrial_red",
+        "hairback_f_egypt_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "08ee6fea64b460924e4a9de3827cfc917fa505cd8a12a87d2d6da2bd7ca281fe",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d6beef71-1904-4bb0-8ba7-57a1f7ddfa1b.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 212,
+      "name": "headwear_f_egypt_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_f_egypt_industrial.png",
+      "produces": [
+        "headwear_f_egypt_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dae3e8ba7a9d1cb6562af8b909ea880e7a815d433f1fe9f9d341b5ad0e414101",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-db7518f1-2313-4617-a6a9-c21fa5d29ca1.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 213,
+      "name": "accessory_f_egypt_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_egypt_industrial.png",
+      "produces": [
+        "accessory_f_egypt_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e8f66f7caa52e2710dff064057d36aef17fb6b3ccdcf00b14f36e4116180fa6e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d794a38f-2c7a-486a-84ac-573a08ec0fff.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 214,
+      "name": "outfit_m_iraq_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_iraq_industrial.png",
+      "produces": [
+        "outfit_m_iraq_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "16632dffb472edd4491e52f2ba7c3e1aaba26adbcc2889babf8eba63c0410721",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2d3daa01-ed3b-4072-bb48-6ca84ce4d820.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 215,
+      "name": "hair_m_iraq_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_iraq_industrial.png",
+      "produces": [
+        "hair_m_iraq_industrial_black",
+        "hair_m_iraq_industrial_brown",
+        "hair_m_iraq_industrial_blond",
+        "hair_m_iraq_industrial_red",
+        "hair_m_iraq_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c35f49ccd59847868a2af8f87e2dbee981d72932f735421a2014c6b2ca96dd29",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f0c6dc14-3b54-4072-8bde-6dbfefd3ddd1.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 216,
+      "name": "facialhair_m_iraq_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_iraq_industrial.png",
+      "produces": [
+        "facialhair_m_iraq_industrial_black",
+        "facialhair_m_iraq_industrial_brown",
+        "facialhair_m_iraq_industrial_blond",
+        "facialhair_m_iraq_industrial_red",
+        "facialhair_m_iraq_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "56597be33b14a399b103c09016ac26e9aea02d7460d324657becc7f51f1e0bc6",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-eda0456a-1e1c-4489-8557-07c996608c8d.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 217,
+      "name": "headwear_m_iraq_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_iraq_industrial.png",
+      "produces": [
+        "headwear_m_iraq_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e7f568534ed4dc8fb5bbc1f09fb8195be548b8fa118284153cdf0e11ea1588ed",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b44ba604-b89b-4c64-9752-38d91bdfd344.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 218,
+      "name": "outfit_f_iraq_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_iraq_industrial.png",
+      "produces": [
+        "outfit_f_iraq_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "811e7dd363172abcaf89d9b200e5e26896328f0d98c57c6a5751f723f92a6933",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b17826aa-a4a4-4a03-92ea-48bf7e9a5989.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 219,
+      "name": "hair_f_iraq_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_iraq_industrial.png",
+      "produces": [
+        "hair_f_iraq_industrial_black",
+        "hair_f_iraq_industrial_brown",
+        "hair_f_iraq_industrial_blond",
+        "hair_f_iraq_industrial_red",
+        "hair_f_iraq_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cd5aba278e3b93816471be92ab49d062599a86a06eb93d8c5b167b4d37c7807b",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-72c87a82-db68-48b4-ab84-8f9c890b1762.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 220,
+      "name": "headwear_f_iraq_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_f_iraq_industrial.png",
+      "produces": [
+        "headwear_f_iraq_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bfcb9f97c9c0aa0d4dfba7d8f78375d6275a9bc5349ab635e173af11decda4ab",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-005902ba-ece5-4932-a540-96341607ca0f.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 221,
+      "name": "accessory_f_iraq_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_iraq_industrial.png",
+      "produces": [
+        "accessory_f_iraq_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6813ba52db3d516cb5aaa8c09a806aebcf3a37dee33d36e63f49571e75bb7d80",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-79af21c0-647f-448b-8f2d-3deb89e3a872.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 222,
+      "name": "outfit_m_greece_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_greece_industrial.png",
+      "produces": [
+        "outfit_m_greece_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "241c408839bd9238a17a58137bedc5aa1aa495ae64520382bd8768eae793fe49",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-02ba63ea-5e9c-44c2-8874-03687695f5bf.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 223,
+      "name": "hair_m_greece_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_greece_industrial.png",
+      "produces": [
+        "hair_m_greece_industrial_black",
+        "hair_m_greece_industrial_brown",
+        "hair_m_greece_industrial_blond",
+        "hair_m_greece_industrial_red",
+        "hair_m_greece_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "88dc841f8bceeaea0da010a1e2445b4bc1b8c3ad5e8f9629962587805d3b54ef",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f4d3651b-6071-45e3-9bc2-cb04cb35452e.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 224,
+      "name": "facialhair_m_greece_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_greece_industrial.png",
+      "produces": [
+        "facialhair_m_greece_industrial_black",
+        "facialhair_m_greece_industrial_brown",
+        "facialhair_m_greece_industrial_blond",
+        "facialhair_m_greece_industrial_red",
+        "facialhair_m_greece_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ba3d380b7d2f8b01a533df22cbf30b4e0aa254498cd6ead5e963b6030185e2cb",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c69c890f-fb1c-406d-96ab-b41a9ce535f5.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 225,
+      "name": "headwear_m_greece_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_greece_industrial.png",
+      "produces": [
+        "headwear_m_greece_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fccd652b70737f0449210f400cdd38e3bdb7b49714dabef1a2642a72cb7829ff",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5c75bd8c-f39a-414b-a0fe-6294e0daf805.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 226,
+      "name": "accessory_m_greece_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_m_greece_industrial.png",
+      "produces": [
+        "accessory_m_greece_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e9ea4ed6ff41df233619b3ec1e44362b93bd277a42089e14e93ff45c87257e5a",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-97bd386b-bd81-4ac7-a6d6-7184bc1201a9.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 227,
+      "name": "outfit_f_greece_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_greece_industrial.png",
+      "produces": [
+        "outfit_f_greece_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "51344241c7c140471a9f87a157893523abe94d20cf22a5a815a8a85832c2c8f3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-db08a013-3561-472c-9a7a-2046bb8e86c0.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 228,
+      "name": "hair_f_greece_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_greece_industrial.png",
+      "produces": [
+        "hair_f_greece_industrial_black",
+        "hair_f_greece_industrial_brown",
+        "hair_f_greece_industrial_blond",
+        "hair_f_greece_industrial_red",
+        "hair_f_greece_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6d2b0bf2e67e83a3a77891f66a7e5345d0d3227d0d02ac3523d3c07299333e8d",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8f7e45a2-ae5e-4eb6-9127-c048a797ee9e.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 229,
+      "name": "headwear_f_greece_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_f_greece_industrial.png",
+      "produces": [
+        "headwear_f_greece_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "545b0391055e7f57bec9458f769c79986df5bdbb7408cd944bce4235592f8a7e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a3bb4b4a-aec1-48e1-a1dd-9d0613bb9739.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 230,
+      "name": "accessory_f_greece_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_greece_industrial.png",
+      "produces": [
+        "accessory_f_greece_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3662aa7e1cd421f06b90772ef9dbf8ca5ea8498c1085d6f59c102f3a81faf03d",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cca32d7d-4933-415c-9757-83ae22290e2a.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 231,
+      "name": "outfit_m_italy_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_italy_industrial.png",
+      "produces": [
+        "outfit_m_italy_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "96f2cc3c4b102c93f2fcce1f4251f686fd4740134e673a95116a4748eff15f6f",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3f81cc33-e038-4052-8b6f-dcd601084487.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 232,
+      "name": "hair_m_italy_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_italy_industrial.png",
+      "produces": [
+        "hair_m_italy_industrial_black",
+        "hair_m_italy_industrial_brown",
+        "hair_m_italy_industrial_blond",
+        "hair_m_italy_industrial_red",
+        "hair_m_italy_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3f65b606fe0ad75d6230c7944568014371ccd4379bb5fa79797b8ee61849e217",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cc32c166-8f9b-4736-b05c-78fc1d541ca1.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 233,
+      "name": "facialhair_m_italy_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_italy_industrial.png",
+      "produces": [
+        "facialhair_m_italy_industrial_black",
+        "facialhair_m_italy_industrial_brown",
+        "facialhair_m_italy_industrial_blond",
+        "facialhair_m_italy_industrial_red",
+        "facialhair_m_italy_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "312cbff29993fe91256e6df69518bc4fcb3c00f27c0676711ad5a5eda035d42e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1c1bb812-3399-4126-b9be-d7f212c84f8b.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 234,
+      "name": "headwear_m_italy_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_italy_industrial.png",
+      "produces": [
+        "headwear_m_italy_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2440e92e4e4a248bdd41bc1e34805a772da73970fec4fa0598787b9a3563452c",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cb2887a5-b490-4004-ab8e-f6d6c8cedb1e.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 235,
+      "name": "accessory_m_italy_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_m_italy_industrial.png",
+      "produces": [
+        "accessory_m_italy_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3f40095ba933f7029962e07ceb6724cd249c44463393d04e620ad63a8ed628fb",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-21ba433f-47c6-4b29-8457-4bb0c37fdf34.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 236,
+      "name": "outfit_f_italy_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_italy_industrial.png",
+      "produces": [
+        "outfit_f_italy_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d49077f4293bc4438e9601223d49d8510529497ea8e2de5c6027579aec3df0ce",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8a0ef7ce-bdcc-4f1e-aa68-58a1c2bc6d5a.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 237,
+      "name": "hair_f_italy_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_italy_industrial.png",
+      "produces": [
+        "hair_f_italy_industrial_black",
+        "hair_f_italy_industrial_brown",
+        "hair_f_italy_industrial_blond",
+        "hair_f_italy_industrial_red",
+        "hair_f_italy_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b78e26281e18bd4ac30dd95b3ebb028069f9ba43aabc66f6ef7286286abb0382",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-316128a3-cbef-4a6b-8f7f-718294c4b0a2.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 238,
+      "name": "accessory_f_italy_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_italy_industrial.png",
+      "produces": [
+        "accessory_f_italy_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "deea5000d967d6bda3824c816645b063e0e50c8c33132925b57779b2608c06b1",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f0547069-d7f1-430f-9f99-b43adc6c233c.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 239,
+      "name": "outfit_m_china_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_china_industrial.png",
+      "produces": [
+        "outfit_m_china_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fa6240c66d727785c69682e28eecb9da7ff5dd27a61db3adaf09899d42fb46c2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b24ec29a-d058-4189-88fc-f6a3328e403c.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 240,
+      "name": "hair_m_china_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_china_industrial.png",
+      "produces": [
+        "hair_m_china_industrial_black",
+        "hair_m_china_industrial_brown",
+        "hair_m_china_industrial_blond",
+        "hair_m_china_industrial_red",
+        "hair_m_china_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "aedec528b231a523405eaba0618d816a676db85ba73e99f8b844b89f25158b23",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b819f26c-9b22-4ff1-a5f9-64926dc8265a.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 241,
+      "name": "headwear_m_china_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_china_industrial.png",
+      "produces": [
+        "headwear_m_china_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "35264f219a694517ec055f4511e8e6f8385de60b6818b641517fbec31b9ca15b",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0668868d-24c2-4def-8229-b5632c5fc327.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 242,
+      "name": "outfit_f_china_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_china_industrial.png",
+      "produces": [
+        "outfit_f_china_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f7d8792d7a5e08a1696e6c51b0f1f0af118eae26c7934339fa4f4ed4b84422b2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5cf6c860-7c17-422a-a8dd-ada5dd33f21f.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 243,
+      "name": "hair_f_china_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_china_industrial.png",
+      "produces": [
+        "hair_f_china_industrial_black",
+        "hair_f_china_industrial_brown",
+        "hair_f_china_industrial_blond",
+        "hair_f_china_industrial_red",
+        "hair_f_china_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "92ecbce7fd2b003159c71dd85f5e12f4c0808e2a185b14311b0f7590bb6d3068",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d9c685c3-24af-4365-9e5c-19aa67e09e81.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 244,
+      "name": "headwear_f_china_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_f_china_industrial.png",
+      "produces": [
+        "headwear_f_china_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3676955020398a48d7ce2747aec4440e0f6eb41dd4019371bd110df4b0f17401",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2b21cf28-b823-450c-a0aa-ffa37e664c89.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 245,
+      "name": "accessory_f_china_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_china_industrial.png",
+      "produces": [
+        "accessory_f_china_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c479ef20d7ae5023841687d1149448efc33ecac3eb4e14dcbc1041c3281702f2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-017761f4-0ab6-4b05-a6e9-7f950895ec6b.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 246,
+      "name": "outfit_m_japan_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_japan_industrial.png",
+      "produces": [
+        "outfit_m_japan_industrial"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "48fc736334f947876ea45cbd5679ec81ae1833755a5bc2052efb4e3cabc46de7",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-51f74f6b-4d40-490f-94e8-df289b997524.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 247,
+      "name": "hair_m_japan_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_japan_industrial.png",
+      "produces": [
+        "hair_m_japan_industrial_black",
+        "hair_m_japan_industrial_brown",
+        "hair_m_japan_industrial_blond",
+        "hair_m_japan_industrial_red",
+        "hair_m_japan_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9b580337debb85fb84d2a755518da9397f54888f112fb00ea2209982e0fc9f0d",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-aad1d2f0-681d-4eb4-a917-319a72c5a40e.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 248,
+      "name": "facialhair_m_japan_industrial",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_japan_industrial.png",
+      "produces": [
+        "facialhair_m_japan_industrial_black",
+        "facialhair_m_japan_industrial_brown",
+        "facialhair_m_japan_industrial_blond",
+        "facialhair_m_japan_industrial_red",
+        "facialhair_m_japan_industrial_grey"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f71b3c82c3894a1adba6b0a150131749a9432bcb88047dc2d2ae073022621990",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-97af546a-6f6b-4331-9b2a-a30117268256.png",
+      "status": "raw-unverified"
+    },
+    {
       "index": 351,
       "name": "premade_senenmut_neutral",
       "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch03-premades/premade_senenmut_neutral.png",
@@ -4200,6 +5042,51 @@
       "status": "raw-unverified"
     },
     {
+      "index": 416,
+      "name": "premade_tahtawi_happy",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_tahtawi_happy.png",
+      "produces": [
+        "premade_tahtawi_happy"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ea1a669f915ab9432bbe9018e978af90700c4bd3bd309e6c1312fa2ce4a3217c",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4428982c-6dad-4b7a-87ab-80440dcc9c1b.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 417,
+      "name": "premade_tahtawi_angry",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_tahtawi_angry.png",
+      "produces": [
+        "premade_tahtawi_angry"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "eb850898cc3c2912e68fc29d606893620b261deb6fd7b76d1b82346da77058ad",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0e163317-8e82-4e68-b05d-cffe7fbef057.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 418,
+      "name": "premade_tahtawi_worried",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_tahtawi_worried.png",
+      "produces": [
+        "premade_tahtawi_worried"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1940d5ae650b40f8dbe578d0917740dd312348b9cb82a32c7822120f35de1c14",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-142be351-194f-405c-aa33-262c87a0e7df.png",
+      "status": "raw-unverified"
+    },
+    {
       "index": 419,
       "name": "premade_kulthum_neutral",
       "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_kulthum_neutral.png",
@@ -4212,6 +5099,51 @@
       ],
       "sha256": "daa4653a0441713f6b20dfb70ac3ff33da8e1120f08758bf1f48a6829535b190",
       "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e0ec0329-1941-4435-b715-c39e93936638.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 420,
+      "name": "premade_kulthum_happy",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_kulthum_happy.png",
+      "produces": [
+        "premade_kulthum_happy"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cd7de04929772da68d389487b903988846a29ba7fea3a85b50d1834e76fce14a",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-260a3d43-488f-4e02-bc8d-37602dfaf8d2.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 421,
+      "name": "premade_kulthum_angry",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_kulthum_angry.png",
+      "produces": [
+        "premade_kulthum_angry"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ad5e2b3cbb0c6884657717a8a48382579ccec89c2c7df5badc2ce44573b73625",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4be12836-7d4d-4495-8bfc-80ecfb433b61.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 422,
+      "name": "premade_kulthum_worried",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_kulthum_worried.png",
+      "produces": [
+        "premade_kulthum_worried"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d23a02f3b73e412822ad9fa6ff2c94021851e6f83fde516cfd3919969bc40db1",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5c199b31-8887-4ca3-ad00-17880683e03a.png",
       "status": "raw-unverified"
     },
     {
@@ -4228,443 +5160,474 @@
       "sha256": "9bd716ecf91b04a9891cdd326b0532bb50190cda624cc749e2bdfca68473c168",
       "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4787cda2-7e55-49f3-aca9-0859556771f9.png",
       "status": "raw-unverified"
+    },
+    {
+      "index": 424,
+      "name": "premade_malaika_happy",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_malaika_happy.png",
+      "produces": [
+        "premade_malaika_happy"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f50f90a489a4a76a1a6566ba14a3c38f93ee96b8149db808328f13383350e799",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ff70bd79-46b5-44b3-a8df-e223f2debc7a.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 425,
+      "name": "premade_malaika_angry",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_malaika_angry.png",
+      "produces": [
+        "premade_malaika_angry"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b7b4f6a5dde1f49956cd2a2fb2c1f7a3fccf953d8da4ab3fd252963f0b65b941",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5dfc3944-66a8-4d93-b2ef-dcd00aa018f7.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 426,
+      "name": "premade_malaika_worried",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_malaika_worried.png",
+      "produces": [
+        "premade_malaika_worried"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "33d93cb25358ba0119f60d4b4bc9d968d223e95294392d096f757bfeab8d3656",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-71bf2599-669d-41cf-8a3d-4c51cfb3e60e.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 427,
+      "name": "premade_sayyab_neutral",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_sayyab_neutral.png",
+      "produces": [
+        "premade_sayyab_neutral"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5e23a0baa346d7af40a581847a8fa1f43e587af9195b40789216f5333f3f5aa1",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6c889b7b-7d77-439e-acd9-a5ec7fa54197.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 428,
+      "name": "premade_sayyab_happy",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_sayyab_happy.png",
+      "produces": [
+        "premade_sayyab_happy"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "04ab106a65ce28147b823a78d2318bd4e4834a3f78de031b977272efa9969ba0",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-604a9436-74cf-4a01-afb0-c315863c2983.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 429,
+      "name": "premade_sayyab_angry",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_sayyab_angry.png",
+      "produces": [
+        "premade_sayyab_angry"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a6db4fd42bf92df59782c38f98dd64622400547ede2bdf23271eca9e4b402f60",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-87cbe5f0-1960-4369-8499-74ac11b17dbf.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 430,
+      "name": "premade_sayyab_worried",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_sayyab_worried.png",
+      "produces": [
+        "premade_sayyab_worried"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c85134d3cd68d319ff9c3f2785e1cb2393c0d1c1dba8d7496f667f4fb5cbd352",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-54093f78-34b6-4b3e-b35b-8f1f30b1bfb6.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 431,
+      "name": "premade_elytis_neutral",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_elytis_neutral.png",
+      "produces": [
+        "premade_elytis_neutral"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "717ef11825445d2ba2cee13f90d8b1c11ed9e1e656496d10c91dd4b3b957c4c8",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-12b83fe9-24dc-4f42-b09f-cd38779aac8c.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 432,
+      "name": "premade_elytis_happy",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_elytis_happy.png",
+      "produces": [
+        "premade_elytis_happy"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9c4b41508a3067fd4f8bb4bdf4bb01333abe4651f858be529da9d930a6427503",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ff2332ca-ad7d-48bf-bea7-8e3f6dc3933c.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 433,
+      "name": "premade_elytis_angry",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_elytis_angry.png",
+      "produces": [
+        "premade_elytis_angry"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "95e5b1158c0a9dac0366da1681149b2cbb5af55bce384b5ca7eb0e4fe62792c9",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-08757f21-23e7-48cb-af94-719a78374b2b.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 434,
+      "name": "premade_elytis_worried",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_elytis_worried.png",
+      "produces": [
+        "premade_elytis_worried"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5f106385c3ef31f4ab7e91d9b1fe2212ab8ace8539f056d614fdaf612e810640",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ca28a84f-052a-403d-82f8-a7947a45620c.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 435,
+      "name": "premade_fellini_neutral",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_fellini_neutral.png",
+      "produces": [
+        "premade_fellini_neutral"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6cc745b8e71c9dea116e35a6d7772d8c4bafb48cc3ca57a51d8293ffb2aff956",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d0b7e746-6741-48b1-893d-932bb761faac.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 436,
+      "name": "premade_fellini_happy",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_fellini_happy.png",
+      "produces": [
+        "premade_fellini_happy"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2fd558db5d041fce93ff85fc76e949e6969f1d8a04cdae5516c0f5fdf30adbeb",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f9056b7e-7623-4c01-9cd8-f57184d00d0b.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 437,
+      "name": "premade_fellini_angry",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_fellini_angry.png",
+      "produces": [
+        "premade_fellini_angry"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b7402ddb8c4979415e0a519767dedde2681589ad8166f5cc64e7ce0db5aa69dd",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2b62087e-b437-456b-b673-4336dbec1016.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 438,
+      "name": "premade_fellini_worried",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_fellini_worried.png",
+      "produces": [
+        "premade_fellini_worried"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6cbe13f715a9ce070bd0e589dbdf713ffe59b46191c8cc086f36043dda377e1e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fca61671-ec1b-4a4e-abf6-cd1b1ae2e6d6.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 439,
+      "name": "premade_hezehui_neutral",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_hezehui_neutral.png",
+      "produces": [
+        "premade_hezehui_neutral"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8dd9bf2391765634d0ff100ff029e0e627db5a5a75addf95889fc9dc2e59a228",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8ce7b510-38cb-4894-a344-f59205a91493.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 440,
+      "name": "premade_hezehui_happy",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_hezehui_happy.png",
+      "produces": [
+        "premade_hezehui_happy"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7635fc629cdf455d00696d46f800d3417f45363f5dae286014a0b999c60b8338",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-85cd9920-4e0b-4afa-890e-e0bc8a7e9218.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 441,
+      "name": "premade_hezehui_angry",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_hezehui_angry.png",
+      "produces": [
+        "premade_hezehui_angry"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2928639df836fc76ec42ad450e124f367c0072ae2e09ec7f3965b11914d912bf",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-52d33b6d-df5f-40a8-a280-931b4dcbd53c.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 442,
+      "name": "premade_hezehui_worried",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_hezehui_worried.png",
+      "produces": [
+        "premade_hezehui_worried"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7f6609928af16c9a7cf965ac4a2e93b9ea1e57e1a6a90742245abc9eb3c7eb8e",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f497854f-ae0a-46a5-b17b-4b1d10e3810d.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 443,
+      "name": "premade_toyoda_neutral",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_toyoda_neutral.png",
+      "produces": [
+        "premade_toyoda_neutral"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f93c2b792d9e5e3ee96282bd9c020dd17c6c68a92494140ecd7ebbf7c06dc39f",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-63bdf185-9a4d-4a0d-93ae-8c9374f00403.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 444,
+      "name": "premade_toyoda_happy",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_toyoda_happy.png",
+      "produces": [
+        "premade_toyoda_happy"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "26da1152e43de99720d7d59acf1d0af1cbcdb4cff3515eb781213e268f2d14c2",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-29593e50-73cf-4b7d-8cc0-e1e0d72ac72a.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 445,
+      "name": "premade_toyoda_angry",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_toyoda_angry.png",
+      "produces": [
+        "premade_toyoda_angry"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "60fc41b039f1699dcc773a9080148f8f92561de2eab15c1581158330615f6df3",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1fed76b3-c928-4732-9bd1-7857be7a8c4e.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 446,
+      "name": "premade_toyoda_worried",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_toyoda_worried.png",
+      "produces": [
+        "premade_toyoda_worried"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a2eaae00ada51d00b6754901cc782fd45b4df635842f48a974d82fc9dd6017c4",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-df43fd36-48b7-40be-998d-ed85d1f1f191.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 447,
+      "name": "premade_turing_neutral",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_turing_neutral.png",
+      "produces": [
+        "premade_turing_neutral"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e46a476be9fb5dfc135a91f84ec1d9d4784989c0c45835b3c5c29bba58bb095b",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a2afe801-8f35-4f6c-a0d7-36dae8d39ccd.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 448,
+      "name": "premade_turing_happy",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_turing_happy.png",
+      "produces": [
+        "premade_turing_happy"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5d17c2a11ed93b0f6d70d27d8e9482a521c3d1a9abc572d2193361279589b0bf",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-36dd930a-dab8-43a5-8d85-7fa3a6fdf7b2.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 449,
+      "name": "premade_turing_angry",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_turing_angry.png",
+      "produces": [
+        "premade_turing_angry"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4de5931c2da63b145a7e5d90a9aecab646c92f051dd068ed5d95a358e7e0ac78",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8ad80297-e62d-4621-bd3a-f4381b6d7945.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 450,
+      "name": "premade_turing_worried",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_turing_worried.png",
+      "produces": [
+        "premade_turing_worried"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ad396dc151d99e4716e0345d427983823848fd0e1307ac53be65e2323ae33905",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-327e1bba-1383-4a23-a4c2-4ca382df8a88.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 451,
+      "name": "premade_meitner_neutral",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_meitner_neutral.png",
+      "produces": [
+        "premade_meitner_neutral"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ec091e97d97d46984915369dc9cccce7bd7adc3925fcaa7fa41f4479580d0e70",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6ce6728f-c3a7-4fce-bc9e-5f8ff1be5cb2.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 452,
+      "name": "premade_meitner_happy",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_meitner_happy.png",
+      "produces": [
+        "premade_meitner_happy"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8f3a7c504c8dcc5823d803511a8aff9035a1bef1a63e143bce14216fbe375cab",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ce068d76-83a9-48a1-9803-9473e2375565.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 453,
+      "name": "premade_meitner_angry",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_meitner_angry.png",
+      "produces": [
+        "premade_meitner_angry"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "515c2d31a82aeea4401cfc04b01b8e0891c5db50271bd18ec4da10f2aff1b6c7",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-94a00efb-b951-4b2a-9161-1bb1613a8c32.png",
+      "status": "raw-unverified"
+    },
+    {
+      "index": 454,
+      "name": "premade_meitner_worried",
+      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_meitner_worried.png",
+      "produces": [
+        "premade_meitner_worried"
+      ],
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c021b4c96f0eefb7900e15ca7a610663c916ae419b6130d5d7da9460519ee9ac",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-291b8f91-d31c-415b-90c3-0933ff529722.png",
+      "status": "raw-unverified"
     }
   ],
   "remaining": [
-    {
-      "name": "facialhair_m_germany_earlymodern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/facialhair_m_germany_earlymodern.png",
-      "produces": [
-        "facialhair_m_germany_earlymodern_black",
-        "facialhair_m_germany_earlymodern_brown",
-        "facialhair_m_germany_earlymodern_blond",
-        "facialhair_m_germany_earlymodern_red",
-        "facialhair_m_germany_earlymodern_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_germany_earlymodern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/headwear_m_germany_earlymodern.png",
-      "produces": [
-        "headwear_m_germany_earlymodern"
-      ]
-    },
-    {
-      "name": "accessory_m_germany_earlymodern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/accessory_m_germany_earlymodern.png",
-      "produces": [
-        "accessory_m_germany_earlymodern"
-      ]
-    },
-    {
-      "name": "outfit_f_germany_earlymodern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/outfit_f_germany_earlymodern.png",
-      "produces": [
-        "outfit_f_germany_earlymodern"
-      ]
-    },
-    {
-      "name": "hair_f_germany_earlymodern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/hair_f_germany_earlymodern.png",
-      "produces": [
-        "hair_f_germany_earlymodern_black",
-        "hair_f_germany_earlymodern_brown",
-        "hair_f_germany_earlymodern_blond",
-        "hair_f_germany_earlymodern_red",
-        "hair_f_germany_earlymodern_grey"
-      ]
-    },
-    {
-      "name": "headwear_f_germany_earlymodern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/headwear_f_germany_earlymodern.png",
-      "produces": [
-        "headwear_f_germany_earlymodern"
-      ]
-    },
-    {
-      "name": "accessory_f_germany_earlymodern",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/accessory_f_germany_earlymodern.png",
-      "produces": [
-        "accessory_f_germany_earlymodern"
-      ]
-    },
-    {
-      "name": "outfit_m_egypt_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_egypt_industrial.png",
-      "produces": [
-        "outfit_m_egypt_industrial"
-      ]
-    },
-    {
-      "name": "hair_m_egypt_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_egypt_industrial.png",
-      "produces": [
-        "hair_m_egypt_industrial_black",
-        "hair_m_egypt_industrial_brown",
-        "hair_m_egypt_industrial_blond",
-        "hair_m_egypt_industrial_red",
-        "hair_m_egypt_industrial_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_egypt_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_egypt_industrial.png",
-      "produces": [
-        "facialhair_m_egypt_industrial_black",
-        "facialhair_m_egypt_industrial_brown",
-        "facialhair_m_egypt_industrial_blond",
-        "facialhair_m_egypt_industrial_red",
-        "facialhair_m_egypt_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_egypt_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_egypt_industrial.png",
-      "produces": [
-        "headwear_m_egypt_industrial"
-      ]
-    },
-    {
-      "name": "accessory_m_egypt_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_m_egypt_industrial.png",
-      "produces": [
-        "accessory_m_egypt_industrial"
-      ]
-    },
-    {
-      "name": "outfit_f_egypt_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_egypt_industrial.png",
-      "produces": [
-        "outfit_f_egypt_industrial"
-      ]
-    },
-    {
-      "name": "hair_f_egypt_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_egypt_industrial.png",
-      "produces": [
-        "hair_f_egypt_industrial_black",
-        "hair_f_egypt_industrial_brown",
-        "hair_f_egypt_industrial_blond",
-        "hair_f_egypt_industrial_red",
-        "hair_f_egypt_industrial_grey",
-        "hairback_f_egypt_industrial_black",
-        "hairback_f_egypt_industrial_brown",
-        "hairback_f_egypt_industrial_blond",
-        "hairback_f_egypt_industrial_red",
-        "hairback_f_egypt_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_f_egypt_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_f_egypt_industrial.png",
-      "produces": [
-        "headwear_f_egypt_industrial"
-      ]
-    },
-    {
-      "name": "accessory_f_egypt_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_egypt_industrial.png",
-      "produces": [
-        "accessory_f_egypt_industrial"
-      ]
-    },
-    {
-      "name": "outfit_m_iraq_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_iraq_industrial.png",
-      "produces": [
-        "outfit_m_iraq_industrial"
-      ]
-    },
-    {
-      "name": "hair_m_iraq_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_iraq_industrial.png",
-      "produces": [
-        "hair_m_iraq_industrial_black",
-        "hair_m_iraq_industrial_brown",
-        "hair_m_iraq_industrial_blond",
-        "hair_m_iraq_industrial_red",
-        "hair_m_iraq_industrial_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_iraq_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_iraq_industrial.png",
-      "produces": [
-        "facialhair_m_iraq_industrial_black",
-        "facialhair_m_iraq_industrial_brown",
-        "facialhair_m_iraq_industrial_blond",
-        "facialhair_m_iraq_industrial_red",
-        "facialhair_m_iraq_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_iraq_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_iraq_industrial.png",
-      "produces": [
-        "headwear_m_iraq_industrial"
-      ]
-    },
-    {
-      "name": "outfit_f_iraq_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_iraq_industrial.png",
-      "produces": [
-        "outfit_f_iraq_industrial"
-      ]
-    },
-    {
-      "name": "hair_f_iraq_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_iraq_industrial.png",
-      "produces": [
-        "hair_f_iraq_industrial_black",
-        "hair_f_iraq_industrial_brown",
-        "hair_f_iraq_industrial_blond",
-        "hair_f_iraq_industrial_red",
-        "hair_f_iraq_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_f_iraq_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_f_iraq_industrial.png",
-      "produces": [
-        "headwear_f_iraq_industrial"
-      ]
-    },
-    {
-      "name": "accessory_f_iraq_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_iraq_industrial.png",
-      "produces": [
-        "accessory_f_iraq_industrial"
-      ]
-    },
-    {
-      "name": "outfit_m_greece_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_greece_industrial.png",
-      "produces": [
-        "outfit_m_greece_industrial"
-      ]
-    },
-    {
-      "name": "hair_m_greece_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_greece_industrial.png",
-      "produces": [
-        "hair_m_greece_industrial_black",
-        "hair_m_greece_industrial_brown",
-        "hair_m_greece_industrial_blond",
-        "hair_m_greece_industrial_red",
-        "hair_m_greece_industrial_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_greece_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_greece_industrial.png",
-      "produces": [
-        "facialhair_m_greece_industrial_black",
-        "facialhair_m_greece_industrial_brown",
-        "facialhair_m_greece_industrial_blond",
-        "facialhair_m_greece_industrial_red",
-        "facialhair_m_greece_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_greece_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_greece_industrial.png",
-      "produces": [
-        "headwear_m_greece_industrial"
-      ]
-    },
-    {
-      "name": "accessory_m_greece_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_m_greece_industrial.png",
-      "produces": [
-        "accessory_m_greece_industrial"
-      ]
-    },
-    {
-      "name": "outfit_f_greece_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_greece_industrial.png",
-      "produces": [
-        "outfit_f_greece_industrial"
-      ]
-    },
-    {
-      "name": "hair_f_greece_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_greece_industrial.png",
-      "produces": [
-        "hair_f_greece_industrial_black",
-        "hair_f_greece_industrial_brown",
-        "hair_f_greece_industrial_blond",
-        "hair_f_greece_industrial_red",
-        "hair_f_greece_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_f_greece_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_f_greece_industrial.png",
-      "produces": [
-        "headwear_f_greece_industrial"
-      ]
-    },
-    {
-      "name": "accessory_f_greece_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_greece_industrial.png",
-      "produces": [
-        "accessory_f_greece_industrial"
-      ]
-    },
-    {
-      "name": "outfit_m_italy_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_italy_industrial.png",
-      "produces": [
-        "outfit_m_italy_industrial"
-      ]
-    },
-    {
-      "name": "hair_m_italy_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_italy_industrial.png",
-      "produces": [
-        "hair_m_italy_industrial_black",
-        "hair_m_italy_industrial_brown",
-        "hair_m_italy_industrial_blond",
-        "hair_m_italy_industrial_red",
-        "hair_m_italy_industrial_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_italy_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_italy_industrial.png",
-      "produces": [
-        "facialhair_m_italy_industrial_black",
-        "facialhair_m_italy_industrial_brown",
-        "facialhair_m_italy_industrial_blond",
-        "facialhair_m_italy_industrial_red",
-        "facialhair_m_italy_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_italy_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_italy_industrial.png",
-      "produces": [
-        "headwear_m_italy_industrial"
-      ]
-    },
-    {
-      "name": "accessory_m_italy_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_m_italy_industrial.png",
-      "produces": [
-        "accessory_m_italy_industrial"
-      ]
-    },
-    {
-      "name": "outfit_f_italy_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_italy_industrial.png",
-      "produces": [
-        "outfit_f_italy_industrial"
-      ]
-    },
-    {
-      "name": "hair_f_italy_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_italy_industrial.png",
-      "produces": [
-        "hair_f_italy_industrial_black",
-        "hair_f_italy_industrial_brown",
-        "hair_f_italy_industrial_blond",
-        "hair_f_italy_industrial_red",
-        "hair_f_italy_industrial_grey"
-      ]
-    },
-    {
-      "name": "accessory_f_italy_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_italy_industrial.png",
-      "produces": [
-        "accessory_f_italy_industrial"
-      ]
-    },
-    {
-      "name": "outfit_m_china_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_china_industrial.png",
-      "produces": [
-        "outfit_m_china_industrial"
-      ]
-    },
-    {
-      "name": "hair_m_china_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_china_industrial.png",
-      "produces": [
-        "hair_m_china_industrial_black",
-        "hair_m_china_industrial_brown",
-        "hair_m_china_industrial_blond",
-        "hair_m_china_industrial_red",
-        "hair_m_china_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_m_china_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_china_industrial.png",
-      "produces": [
-        "headwear_m_china_industrial"
-      ]
-    },
-    {
-      "name": "outfit_f_china_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_f_china_industrial.png",
-      "produces": [
-        "outfit_f_china_industrial"
-      ]
-    },
-    {
-      "name": "hair_f_china_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_f_china_industrial.png",
-      "produces": [
-        "hair_f_china_industrial_black",
-        "hair_f_china_industrial_brown",
-        "hair_f_china_industrial_blond",
-        "hair_f_china_industrial_red",
-        "hair_f_china_industrial_grey"
-      ]
-    },
-    {
-      "name": "headwear_f_china_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_f_china_industrial.png",
-      "produces": [
-        "headwear_f_china_industrial"
-      ]
-    },
-    {
-      "name": "accessory_f_china_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/accessory_f_china_industrial.png",
-      "produces": [
-        "accessory_f_china_industrial"
-      ]
-    },
-    {
-      "name": "outfit_m_japan_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/outfit_m_japan_industrial.png",
-      "produces": [
-        "outfit_m_japan_industrial"
-      ]
-    },
-    {
-      "name": "hair_m_japan_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/hair_m_japan_industrial.png",
-      "produces": [
-        "hair_m_japan_industrial_black",
-        "hair_m_japan_industrial_brown",
-        "hair_m_japan_industrial_blond",
-        "hair_m_japan_industrial_red",
-        "hair_m_japan_industrial_grey"
-      ]
-    },
-    {
-      "name": "facialhair_m_japan_industrial",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/facialhair_m_japan_industrial.png",
-      "produces": [
-        "facialhair_m_japan_industrial_black",
-        "facialhair_m_japan_industrial_brown",
-        "facialhair_m_japan_industrial_blond",
-        "facialhair_m_japan_industrial_red",
-        "facialhair_m_japan_industrial_grey"
-      ]
-    },
     {
       "name": "headwear_m_japan_industrial",
       "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch09-industrial-era/headwear_m_japan_industrial.png",
@@ -5498,265 +6461,6 @@
       "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_germany_future.png",
       "produces": [
         "outfit_f_germany_future"
-      ]
-    },
-    {
-      "name": "premade_tahtawi_happy",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_tahtawi_happy.png",
-      "produces": [
-        "premade_tahtawi_happy"
-      ]
-    },
-    {
-      "name": "premade_tahtawi_angry",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_tahtawi_angry.png",
-      "produces": [
-        "premade_tahtawi_angry"
-      ]
-    },
-    {
-      "name": "premade_tahtawi_worried",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_tahtawi_worried.png",
-      "produces": [
-        "premade_tahtawi_worried"
-      ]
-    },
-    {
-      "name": "premade_kulthum_happy",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_kulthum_happy.png",
-      "produces": [
-        "premade_kulthum_happy"
-      ]
-    },
-    {
-      "name": "premade_kulthum_angry",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_kulthum_angry.png",
-      "produces": [
-        "premade_kulthum_angry"
-      ]
-    },
-    {
-      "name": "premade_kulthum_worried",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_kulthum_worried.png",
-      "produces": [
-        "premade_kulthum_worried"
-      ]
-    },
-    {
-      "name": "premade_malaika_happy",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_malaika_happy.png",
-      "produces": [
-        "premade_malaika_happy"
-      ]
-    },
-    {
-      "name": "premade_malaika_angry",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_malaika_angry.png",
-      "produces": [
-        "premade_malaika_angry"
-      ]
-    },
-    {
-      "name": "premade_malaika_worried",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_malaika_worried.png",
-      "produces": [
-        "premade_malaika_worried"
-      ]
-    },
-    {
-      "name": "premade_sayyab_neutral",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_sayyab_neutral.png",
-      "produces": [
-        "premade_sayyab_neutral"
-      ]
-    },
-    {
-      "name": "premade_sayyab_happy",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_sayyab_happy.png",
-      "produces": [
-        "premade_sayyab_happy"
-      ]
-    },
-    {
-      "name": "premade_sayyab_angry",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_sayyab_angry.png",
-      "produces": [
-        "premade_sayyab_angry"
-      ]
-    },
-    {
-      "name": "premade_sayyab_worried",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_sayyab_worried.png",
-      "produces": [
-        "premade_sayyab_worried"
-      ]
-    },
-    {
-      "name": "premade_elytis_neutral",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_elytis_neutral.png",
-      "produces": [
-        "premade_elytis_neutral"
-      ]
-    },
-    {
-      "name": "premade_elytis_happy",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_elytis_happy.png",
-      "produces": [
-        "premade_elytis_happy"
-      ]
-    },
-    {
-      "name": "premade_elytis_angry",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_elytis_angry.png",
-      "produces": [
-        "premade_elytis_angry"
-      ]
-    },
-    {
-      "name": "premade_elytis_worried",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_elytis_worried.png",
-      "produces": [
-        "premade_elytis_worried"
-      ]
-    },
-    {
-      "name": "premade_fellini_neutral",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_fellini_neutral.png",
-      "produces": [
-        "premade_fellini_neutral"
-      ]
-    },
-    {
-      "name": "premade_fellini_happy",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_fellini_happy.png",
-      "produces": [
-        "premade_fellini_happy"
-      ]
-    },
-    {
-      "name": "premade_fellini_angry",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_fellini_angry.png",
-      "produces": [
-        "premade_fellini_angry"
-      ]
-    },
-    {
-      "name": "premade_fellini_worried",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_fellini_worried.png",
-      "produces": [
-        "premade_fellini_worried"
-      ]
-    },
-    {
-      "name": "premade_hezehui_neutral",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_hezehui_neutral.png",
-      "produces": [
-        "premade_hezehui_neutral"
-      ]
-    },
-    {
-      "name": "premade_hezehui_happy",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_hezehui_happy.png",
-      "produces": [
-        "premade_hezehui_happy"
-      ]
-    },
-    {
-      "name": "premade_hezehui_angry",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_hezehui_angry.png",
-      "produces": [
-        "premade_hezehui_angry"
-      ]
-    },
-    {
-      "name": "premade_hezehui_worried",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_hezehui_worried.png",
-      "produces": [
-        "premade_hezehui_worried"
-      ]
-    },
-    {
-      "name": "premade_toyoda_neutral",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_toyoda_neutral.png",
-      "produces": [
-        "premade_toyoda_neutral"
-      ]
-    },
-    {
-      "name": "premade_toyoda_happy",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_toyoda_happy.png",
-      "produces": [
-        "premade_toyoda_happy"
-      ]
-    },
-    {
-      "name": "premade_toyoda_angry",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_toyoda_angry.png",
-      "produces": [
-        "premade_toyoda_angry"
-      ]
-    },
-    {
-      "name": "premade_toyoda_worried",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_toyoda_worried.png",
-      "produces": [
-        "premade_toyoda_worried"
-      ]
-    },
-    {
-      "name": "premade_turing_neutral",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_turing_neutral.png",
-      "produces": [
-        "premade_turing_neutral"
-      ]
-    },
-    {
-      "name": "premade_turing_happy",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_turing_happy.png",
-      "produces": [
-        "premade_turing_happy"
-      ]
-    },
-    {
-      "name": "premade_turing_angry",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_turing_angry.png",
-      "produces": [
-        "premade_turing_angry"
-      ]
-    },
-    {
-      "name": "premade_turing_worried",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_turing_worried.png",
-      "produces": [
-        "premade_turing_worried"
-      ]
-    },
-    {
-      "name": "premade_meitner_neutral",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_meitner_neutral.png",
-      "produces": [
-        "premade_meitner_neutral"
-      ]
-    },
-    {
-      "name": "premade_meitner_happy",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_meitner_happy.png",
-      "produces": [
-        "premade_meitner_happy"
-      ]
-    },
-    {
-      "name": "premade_meitner_angry",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_meitner_angry.png",
-      "produces": [
-        "premade_meitner_angry"
-      ]
-    },
-    {
-      "name": "premade_meitner_worried",
-      "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-current-cast/premade_meitner_worried.png",
-      "produces": [
-        "premade_meitner_worried"
       ]
     }
   ]
