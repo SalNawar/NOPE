@@ -1,0 +1,11 @@
+# Character source completion
+
+Branch: `codex/hall-art-completion`, based on freshly fetched main with Claude's character pilot and hall lighting.
+
+The generation manifest records the exact progress and any remaining sources. The production queue contains 455 new raw sheets, alongside 15 preserved pilot sheets: 470 source deliverables in total. It covers the five skin tones and face families, all current wardrobe and future pieces, and all 26 named characters with neutral, happy, angry and worried expressions. The original production coverage file described only ten named characters; the current world adds sixteen more. The complete source plan supplies 944 eventual game layer keys (902 from this queue and 42 from the pilot).
+
+Each source has its own adjacent `.prompt.md`, original generator path, dimensions and SHA-256 in `generation-manifest.json`. The native image generator's files are preserved. The source canvas is 1024x1536, with green background and magenta fitting regions for separable wardrobe items. Hair/headwear/accessory supports use fully clothed magenta calibration figures. Expression edits use the corresponding generated neutral as the exact identity reference. References to local staging paths document provenance; the delivered files themselves are under `Raw`.
+
+These are generated source sheets. They are not yet the finished transparent, registered game layers. The handover assigns green/magenta extraction, template registration, exact palette normalization, hair colour variants, expression/head crops, hair rear/front separation, stack QA and import to the existing character processing stage. Some generation outputs include extra calibration clothing or minor registration/skin-colour drift; those must be handled and reviewed during extraction. Source diagnostics and contact sheets support that review. Tall hats and hair above the standard scalp position are intentionally retained when fully inside the canvas.
+
+The installed pilot is preserved. `tools/characters/process_pilot.py` was not rerun, and the new source sheets have not overwritten `Assets/Art/Characters/Resources/Characters`. The manifest keeps source-generation status separate from game-layer processing status. Run `validate_sources.py` to verify inventory, canvas dimensions, hashes and preserved pilot files without changing art.

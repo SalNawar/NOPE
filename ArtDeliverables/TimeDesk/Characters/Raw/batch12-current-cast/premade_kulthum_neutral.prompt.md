@@ -1,0 +1,11 @@
+# premade_kulthum_neutral
+
+Built-in image generation. Raw source candidate; pending registration and stack QA.
+
+Use case: stylized-concept. Production WHOLE-FIGURE named game character; Soft rounded 2D anime customer art matching the approved pilot, adults with adult proportions, not chibi. Expressive simple anime eyes, thin consistent 2-3px dark-brown #3B2A20 contours, restrained flat cel colours with exactly ONE hard-edged shadow tone, neutral even white front light. No gradient, airbrush, texture noise, lettering, logos, military or royal regalia, flags, religious symbols, weapons or manga emotion symbols. Avoid lime green, magenta, pink, purple on the piece; olive and bottle green are permitted. Reference 1 is the front-facing registration and proportions only. Reference 2 is the line, shade and colour style only. Dignified civilian figure of Umm Kulthum. Nasser's Egypt, 1962: an Egyptian singer of 58 in an elegant long evening dress, dark glasses, a handkerchief in her hand
+Costume context (the specific named costume above takes precedence): Village or provincial galabiya: an ankle-length, loose, long-sleeved dress in brightly printed cotton (small flowers on a saturated red, bottle-green or blue ground), with a round neck and a gathered yoke, often finished with a gathered flounce at the hem. Flat slippers.
+Expression: neutral; dignified expressive face, no manga symbols or tears. Full body front-facing, arms relaxed, empty hands unless the character description requires a carried item. Keep the same body/head scale and position as reference1 on 1024x1536 portrait canvas, head top260, soles1490, centre512. Plain fully opaque green #00FF00 background, no room or floor shadow. No text, extra people or collage. One figure only. Do not copy the neutral reference identity: draw the named character and visible authored age. Preserve clothing and silhouette across all expressions. Raw premade_kulthum_neutral.
+
+References:
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\Raw\batch01-pilot\base_f_skin1_facea.png
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\Raw\batch01-pilot\outfit_f_greece_ancient.png

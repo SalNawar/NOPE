@@ -1,0 +1,2932 @@
+[
+  {
+    "name": "base_m_skin2_facea",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8277,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "base_m_skin3_facea",
+    "bbox": [
+      296,
+      249,
+      728,
+      1501
+    ],
+    "greenShare": 0.8268,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "base_m_skin4_facea",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8275,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "base_m_skin5_facea",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8275,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "base_f_skin2_facea",
+    "bbox": [
+      290,
+      238,
+      734,
+      1501
+    ],
+    "greenShare": 0.837,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "base_f_skin3_facea",
+    "bbox": [
+      290,
+      238,
+      734,
+      1502
+    ],
+    "greenShare": 0.8365,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "base_f_skin4_facea",
+    "bbox": [
+      289,
+      238,
+      735,
+      1502
+    ],
+    "greenShare": 0.8353,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "base_f_skin5_facea",
+    "bbox": [
+      289,
+      237,
+      735,
+      1502
+    ],
+    "greenShare": 0.8356,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin1_faceb",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8269,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin1_facec",
+    "bbox": [
+      297,
+      253,
+      727,
+      1501
+    ],
+    "greenShare": 0.8281,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin1_faced",
+    "bbox": [
+      297,
+      253,
+      727,
+      1501
+    ],
+    "greenShare": 0.8285,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin2_faceb",
+    "bbox": [
+      296,
+      252,
+      727,
+      1501
+    ],
+    "greenShare": 0.8263,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin2_facec",
+    "bbox": [
+      297,
+      253,
+      727,
+      1501
+    ],
+    "greenShare": 0.8284,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin2_faced",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8278,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin3_faceb",
+    "bbox": [
+      295,
+      253,
+      728,
+      1503
+    ],
+    "greenShare": 0.8237,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin3_facec",
+    "bbox": [
+      296,
+      253,
+      727,
+      1501
+    ],
+    "greenShare": 0.8269,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin3_faced",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8273,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin4_faceb",
+    "bbox": [
+      296,
+      252,
+      729,
+      1502
+    ],
+    "greenShare": 0.8244,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin4_facec",
+    "bbox": [
+      296,
+      252,
+      727,
+      1501
+    ],
+    "greenShare": 0.8277,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin4_faced",
+    "bbox": [
+      296,
+      253,
+      727,
+      1501
+    ],
+    "greenShare": 0.8275,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin5_faceb",
+    "bbox": [
+      296,
+      252,
+      730,
+      1502
+    ],
+    "greenShare": 0.8261,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin5_facec",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8269,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_m_skin5_faced",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8273,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin1_faceb",
+    "bbox": [
+      290,
+      238,
+      734,
+      1501
+    ],
+    "greenShare": 0.8365,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin1_facec",
+    "bbox": [
+      290,
+      238,
+      734,
+      1502
+    ],
+    "greenShare": 0.8359,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin1_faced",
+    "bbox": [
+      290,
+      238,
+      734,
+      1501
+    ],
+    "greenShare": 0.8369,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin2_faceb",
+    "bbox": [
+      290,
+      238,
+      734,
+      1501
+    ],
+    "greenShare": 0.8358,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin2_facec",
+    "bbox": [
+      289,
+      237,
+      735,
+      1502
+    ],
+    "greenShare": 0.8348,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin2_faced",
+    "bbox": [
+      290,
+      239,
+      734,
+      1501
+    ],
+    "greenShare": 0.8369,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin3_faceb",
+    "bbox": [
+      290,
+      238,
+      734,
+      1501
+    ],
+    "greenShare": 0.8359,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin3_facec",
+    "bbox": [
+      290,
+      238,
+      734,
+      1502
+    ],
+    "greenShare": 0.8365,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin3_faced",
+    "bbox": [
+      290,
+      237,
+      734,
+      1502
+    ],
+    "greenShare": 0.8361,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin4_faceb",
+    "bbox": [
+      289,
+      238,
+      735,
+      1502
+    ],
+    "greenShare": 0.8345,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin4_facec",
+    "bbox": [
+      289,
+      238,
+      734,
+      1501
+    ],
+    "greenShare": 0.8362,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin4_faced",
+    "bbox": [
+      289,
+      237,
+      734,
+      1502
+    ],
+    "greenShare": 0.8357,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin5_faceb",
+    "bbox": [
+      290,
+      238,
+      734,
+      1501
+    ],
+    "greenShare": 0.8367,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin5_facec",
+    "bbox": [
+      290,
+      238,
+      734,
+      1501
+    ],
+    "greenShare": 0.8367,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "head_f_skin5_faced",
+    "bbox": [
+      289,
+      238,
+      734,
+      1502
+    ],
+    "greenShare": 0.8358,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_egypt_ancient",
+    "bbox": [
+      296,
+      252,
+      728,
+      1505
+    ],
+    "greenShare": 0.8134,
+    "magentaPixels": 158741,
+    "flags": []
+  },
+  {
+    "name": "hair_m_egypt_ancient",
+    "bbox": [
+      297,
+      223,
+      727,
+      1501
+    ],
+    "greenShare": 0.8182,
+    "magentaPixels": 254846,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_egypt_ancient",
+    "bbox": [
+      297,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8275,
+    "magentaPixels": 231749,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_egypt_ancient",
+    "bbox": [
+      289,
+      236,
+      735,
+      1503
+    ],
+    "greenShare": 0.8179,
+    "magentaPixels": 83422,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_egypt_ancient",
+    "bbox": [
+      289,
+      236,
+      736,
+      1502
+    ],
+    "greenShare": 0.8339,
+    "magentaPixels": 242380,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_egypt_ancient",
+    "bbox": [
+      289,
+      236,
+      735,
+      1501
+    ],
+    "greenShare": 0.8337,
+    "magentaPixels": 225804,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_iraq_ancient",
+    "bbox": [
+      296,
+      252,
+      728,
+      1504
+    ],
+    "greenShare": 0.7892,
+    "magentaPixels": 82751,
+    "flags": []
+  },
+  {
+    "name": "hair_m_iraq_ancient",
+    "bbox": [
+      296,
+      219,
+      728,
+      1501
+    ],
+    "greenShare": 0.8225,
+    "magentaPixels": 254874,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_iraq_ancient",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8274,
+    "magentaPixels": 246627,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_iraq_ancient",
+    "bbox": [
+      297,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.828,
+    "magentaPixels": 256326,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_iraq_ancient",
+    "bbox": [
+      297,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8278,
+    "magentaPixels": 254272,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_iraq_ancient",
+    "bbox": [
+      289,
+      236,
+      736,
+      1503
+    ],
+    "greenShare": 0.7997,
+    "magentaPixels": 68928,
+    "flags": []
+  },
+  {
+    "name": "hair_f_iraq_ancient",
+    "bbox": [
+      288,
+      212,
+      735,
+      1502
+    ],
+    "greenShare": 0.8236,
+    "magentaPixels": 252211,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_iraq_ancient",
+    "bbox": [
+      289,
+      221,
+      736,
+      1504
+    ],
+    "greenShare": 0.8269,
+    "magentaPixels": 250269,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_italy_ancient",
+    "bbox": [
+      296,
+      253,
+      728,
+      1507
+    ],
+    "greenShare": 0.7858,
+    "magentaPixels": 58353,
+    "flags": []
+  },
+  {
+    "name": "hair_m_italy_ancient",
+    "bbox": [
+      296,
+      234,
+      729,
+      1502
+    ],
+    "greenShare": 0.8194,
+    "magentaPixels": 264365,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_italy_ancient",
+    "bbox": [
+      289,
+      236,
+      735,
+      1499
+    ],
+    "greenShare": 0.7566,
+    "magentaPixels": 31115,
+    "flags": []
+  },
+  {
+    "name": "hair_f_italy_ancient",
+    "bbox": [
+      289,
+      198,
+      735,
+      1501
+    ],
+    "greenShare": 0.8216,
+    "magentaPixels": 253328,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_italy_ancient",
+    "bbox": [
+      288,
+      237,
+      736,
+      1502
+    ],
+    "greenShare": 0.8332,
+    "magentaPixels": 244714,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_china_ancient",
+    "bbox": [
+      236,
+      252,
+      788,
+      1487
+    ],
+    "greenShare": 0.7451,
+    "magentaPixels": 25578,
+    "flags": []
+  },
+  {
+    "name": "hair_m_china_ancient",
+    "bbox": [
+      296,
+      185,
+      728,
+      1501
+    ],
+    "greenShare": 0.8114,
+    "magentaPixels": 274127,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_china_ancient",
+    "bbox": [
+      296,
+      253,
+      728,
+      1499
+    ],
+    "greenShare": 0.8201,
+    "magentaPixels": 268002,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_china_ancient",
+    "bbox": [
+      296,
+      187,
+      729,
+      1501
+    ],
+    "greenShare": 0.818,
+    "magentaPixels": 258687,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_china_ancient",
+    "bbox": [
+      256,
+      236,
+      780,
+      1497
+    ],
+    "greenShare": 0.7556,
+    "magentaPixels": 27478,
+    "flags": []
+  },
+  {
+    "name": "hair_f_china_ancient",
+    "bbox": [
+      289,
+      219,
+      735,
+      1502
+    ],
+    "greenShare": 0.8244,
+    "magentaPixels": 249545,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_china_ancient",
+    "bbox": [
+      288,
+      236,
+      736,
+      1501
+    ],
+    "greenShare": 0.8313,
+    "magentaPixels": 244589,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_britain_ancient",
+    "bbox": [
+      296,
+      252,
+      771,
+      1500
+    ],
+    "greenShare": 0.7954,
+    "magentaPixels": 29349,
+    "flags": []
+  },
+  {
+    "name": "hair_m_britain_ancient",
+    "bbox": [
+      296,
+      213,
+      728,
+      1501
+    ],
+    "greenShare": 0.809,
+    "magentaPixels": 270182,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_britain_ancient",
+    "bbox": [
+      297,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8245,
+    "magentaPixels": 261560,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_britain_ancient",
+    "bbox": [
+      296,
+      252,
+      728,
+      1499
+    ],
+    "greenShare": 0.8231,
+    "magentaPixels": 262176,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_britain_ancient",
+    "bbox": [
+      288,
+      236,
+      737,
+      1504
+    ],
+    "greenShare": 0.7515,
+    "magentaPixels": 31610,
+    "flags": []
+  },
+  {
+    "name": "hair_f_britain_ancient",
+    "bbox": [
+      289,
+      212,
+      735,
+      1502
+    ],
+    "greenShare": 0.8216,
+    "magentaPixels": 231813,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_britain_ancient",
+    "bbox": [
+      288,
+      236,
+      736,
+      1501
+    ],
+    "greenShare": 0.8298,
+    "magentaPixels": 249698,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_egypt_medieval",
+    "bbox": [
+      249,
+      252,
+      776,
+      1499
+    ],
+    "greenShare": 0.7414,
+    "magentaPixels": 26551,
+    "flags": []
+  },
+  {
+    "name": "hair_m_egypt_medieval",
+    "bbox": [
+      296,
+      225,
+      728,
+      1499
+    ],
+    "greenShare": 0.8197,
+    "magentaPixels": 265109,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_egypt_medieval",
+    "bbox": [
+      296,
+      252,
+      728,
+      1502
+    ],
+    "greenShare": 0.8223,
+    "magentaPixels": 262816,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_egypt_medieval",
+    "bbox": [
+      297,
+      196,
+      728,
+      1501
+    ],
+    "greenShare": 0.8165,
+    "magentaPixels": 248012,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_egypt_medieval",
+    "bbox": [
+      296,
+      251,
+      728,
+      1501
+    ],
+    "greenShare": 0.8183,
+    "magentaPixels": 227391,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_egypt_medieval",
+    "bbox": [
+      289,
+      236,
+      735,
+      1503
+    ],
+    "greenShare": 0.83,
+    "magentaPixels": 239839,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_iraq_medieval",
+    "bbox": [
+      271,
+      252,
+      753,
+      1504
+    ],
+    "greenShare": 0.7705,
+    "magentaPixels": 25418,
+    "flags": []
+  },
+  {
+    "name": "hair_m_iraq_medieval",
+    "bbox": [
+      281,
+      215,
+      744,
+      1501
+    ],
+    "greenShare": 0.7888,
+    "magentaPixels": 88700,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_iraq_medieval",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8238,
+    "magentaPixels": 260787,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_iraq_medieval",
+    "bbox": [
+      296,
+      67,
+      728,
+      1502
+    ],
+    "greenShare": 0.8089,
+    "magentaPixels": 261929,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_m_iraq_medieval",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8233,
+    "magentaPixels": 207438,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_iraq_medieval",
+    "bbox": [
+      276,
+      236,
+      748,
+      1505
+    ],
+    "greenShare": 0.7821,
+    "magentaPixels": 33921,
+    "flags": []
+  },
+  {
+    "name": "hair_f_iraq_medieval",
+    "bbox": [
+      289,
+      184,
+      736,
+      1502
+    ],
+    "greenShare": 0.822,
+    "magentaPixels": 250741,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_iraq_medieval",
+    "bbox": [
+      288,
+      220,
+      736,
+      1501
+    ],
+    "greenShare": 0.8183,
+    "magentaPixels": 247715,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_iraq_medieval",
+    "bbox": [
+      289,
+      236,
+      735,
+      1501
+    ],
+    "greenShare": 0.8307,
+    "magentaPixels": 250263,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_greece_medieval",
+    "bbox": [
+      296,
+      252,
+      728,
+      1505
+    ],
+    "greenShare": 0.78,
+    "magentaPixels": 24601,
+    "flags": []
+  },
+  {
+    "name": "hair_m_greece_medieval",
+    "bbox": [
+      296,
+      232,
+      728,
+      1501
+    ],
+    "greenShare": 0.8177,
+    "magentaPixels": 259110,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_greece_medieval",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8226,
+    "magentaPixels": 255121,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_greece_medieval",
+    "bbox": [
+      296,
+      171,
+      729,
+      1501
+    ],
+    "greenShare": 0.8123,
+    "magentaPixels": 264323,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_m_greece_medieval",
+    "bbox": [
+      297,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8258,
+    "magentaPixels": 249084,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_greece_medieval",
+    "bbox": [
+      282,
+      236,
+      742,
+      1503
+    ],
+    "greenShare": 0.7568,
+    "magentaPixels": 32787,
+    "flags": []
+  },
+  {
+    "name": "hair_f_greece_medieval",
+    "bbox": [
+      288,
+      187,
+      736,
+      1502
+    ],
+    "greenShare": 0.807,
+    "magentaPixels": 105268,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_greece_medieval",
+    "bbox": [
+      289,
+      187,
+      735,
+      1502
+    ],
+    "greenShare": 0.8249,
+    "magentaPixels": 244518,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_greece_medieval",
+    "bbox": [
+      289,
+      207,
+      735,
+      1502
+    ],
+    "greenShare": 0.8164,
+    "magentaPixels": 242087,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_italy_medieval",
+    "bbox": [
+      273,
+      252,
+      753,
+      1507
+    ],
+    "greenShare": 0.7504,
+    "magentaPixels": 25337,
+    "flags": []
+  },
+  {
+    "name": "hair_m_italy_medieval",
+    "bbox": [
+      296,
+      225,
+      728,
+      1501
+    ],
+    "greenShare": 0.8213,
+    "magentaPixels": 256478,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_italy_medieval",
+    "bbox": [
+      296,
+      202,
+      728,
+      1501
+    ],
+    "greenShare": 0.8066,
+    "magentaPixels": 262820,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_italy_medieval",
+    "bbox": [
+      143,
+      236,
+      882,
+      1501
+    ],
+    "greenShare": 0.7284,
+    "magentaPixels": 37501,
+    "flags": []
+  },
+  {
+    "name": "hair_f_italy_medieval",
+    "bbox": [
+      288,
+      213,
+      736,
+      1502
+    ],
+    "greenShare": 0.8292,
+    "magentaPixels": 245503,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_italy_medieval",
+    "bbox": [
+      289,
+      194,
+      735,
+      1501
+    ],
+    "greenShare": 0.8189,
+    "magentaPixels": 259684,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_italy_medieval",
+    "bbox": [
+      289,
+      236,
+      735,
+      1502
+    ],
+    "greenShare": 0.8321,
+    "magentaPixels": 244206,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_china_medieval",
+    "bbox": [
+      265,
+      252,
+      759,
+      1505
+    ],
+    "greenShare": 0.7623,
+    "magentaPixels": 25634,
+    "flags": []
+  },
+  {
+    "name": "hair_m_china_medieval",
+    "bbox": [
+      278,
+      197,
+      744,
+      1501
+    ],
+    "greenShare": 0.8042,
+    "magentaPixels": 285205,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_china_medieval",
+    "bbox": [
+      296,
+      252,
+      729,
+      1501
+    ],
+    "greenShare": 0.8206,
+    "magentaPixels": 265440,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_china_medieval",
+    "bbox": [
+      260,
+      169,
+      764,
+      1501
+    ],
+    "greenShare": 0.809,
+    "magentaPixels": 262417,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_m_china_medieval",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8279,
+    "magentaPixels": 249369,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_china_medieval",
+    "bbox": [
+      288,
+      236,
+      735,
+      1502
+    ],
+    "greenShare": 0.7811,
+    "magentaPixels": 44959,
+    "flags": []
+  },
+  {
+    "name": "hair_f_china_medieval",
+    "bbox": [
+      289,
+      127,
+      735,
+      1502
+    ],
+    "greenShare": 0.8217,
+    "magentaPixels": 246089,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "headwear_f_china_medieval",
+    "bbox": [
+      288,
+      184,
+      735,
+      1503
+    ],
+    "greenShare": 0.8234,
+    "magentaPixels": 252627,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_britain_medieval",
+    "bbox": [
+      292,
+      252,
+      751,
+      1497
+    ],
+    "greenShare": 0.7928,
+    "magentaPixels": 30399,
+    "flags": []
+  },
+  {
+    "name": "hair_m_britain_medieval",
+    "bbox": [
+      295,
+      214,
+      729,
+      1500
+    ],
+    "greenShare": 0.8086,
+    "magentaPixels": 131929,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_britain_medieval",
+    "bbox": [
+      296,
+      253,
+      728,
+      1502
+    ],
+    "greenShare": 0.8255,
+    "magentaPixels": 260155,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_britain_medieval",
+    "bbox": [
+      296,
+      252,
+      728,
+      1500
+    ],
+    "greenShare": 0.8247,
+    "magentaPixels": 258160,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_britain_medieval",
+    "bbox": [
+      288,
+      236,
+      736,
+      1504
+    ],
+    "greenShare": 0.7502,
+    "magentaPixels": 30961,
+    "flags": []
+  },
+  {
+    "name": "hair_f_britain_medieval",
+    "bbox": [
+      288,
+      209,
+      736,
+      1502
+    ],
+    "greenShare": 0.8249,
+    "magentaPixels": 244740,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_britain_medieval",
+    "bbox": [
+      288,
+      212,
+      736,
+      1503
+    ],
+    "greenShare": 0.8056,
+    "magentaPixels": 240277,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_japan_ancient",
+    "bbox": [
+      285,
+      253,
+      739,
+      1501
+    ],
+    "greenShare": 0.8081,
+    "magentaPixels": 63360,
+    "flags": []
+  },
+  {
+    "name": "hair_m_japan_ancient",
+    "bbox": [
+      296,
+      233,
+      728,
+      1502
+    ],
+    "greenShare": 0.8172,
+    "magentaPixels": 260360,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_japan_ancient",
+    "bbox": [
+      289,
+      236,
+      735,
+      1504
+    ],
+    "greenShare": 0.793,
+    "magentaPixels": 36274,
+    "flags": []
+  },
+  {
+    "name": "hair_f_japan_ancient",
+    "bbox": [
+      288,
+      163,
+      736,
+      1504
+    ],
+    "greenShare": 0.8176,
+    "magentaPixels": 256982,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_f_japan_ancient",
+    "bbox": [
+      288,
+      236,
+      736,
+      1502
+    ],
+    "greenShare": 0.8329,
+    "magentaPixels": 240739,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_germany_ancient",
+    "bbox": [
+      296,
+      252,
+      794,
+      1504
+    ],
+    "greenShare": 0.7868,
+    "magentaPixels": 27985,
+    "flags": []
+  },
+  {
+    "name": "hair_m_germany_ancient",
+    "bbox": [
+      296,
+      237,
+      729,
+      1502
+    ],
+    "greenShare": 0.8179,
+    "magentaPixels": 265362,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_germany_ancient",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8225,
+    "magentaPixels": 263674,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_germany_ancient",
+    "bbox": [
+      288,
+      236,
+      735,
+      1502
+    ],
+    "greenShare": 0.7852,
+    "magentaPixels": 63809,
+    "flags": []
+  },
+  {
+    "name": "hair_f_germany_ancient",
+    "bbox": [
+      288,
+      215,
+      735,
+      1501
+    ],
+    "greenShare": 0.8266,
+    "magentaPixels": 242865,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_germany_ancient",
+    "bbox": [
+      288,
+      236,
+      736,
+      1501
+    ],
+    "greenShare": 0.8296,
+    "magentaPixels": 247424,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_japan_medieval",
+    "bbox": [
+      232,
+      252,
+      792,
+      1504
+    ],
+    "greenShare": 0.7448,
+    "magentaPixels": 27768,
+    "flags": []
+  },
+  {
+    "name": "hair_m_japan_medieval",
+    "bbox": [
+      296,
+      193,
+      728,
+      1501
+    ],
+    "greenShare": 0.8257,
+    "magentaPixels": 255947,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_japan_medieval",
+    "bbox": [
+      296,
+      252,
+      729,
+      1501
+    ],
+    "greenShare": 0.8248,
+    "magentaPixels": 260502,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_japan_medieval",
+    "bbox": [
+      297,
+      116,
+      728,
+      1501
+    ],
+    "greenShare": 0.8158,
+    "magentaPixels": 260714,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "outfit_f_japan_medieval",
+    "bbox": [
+      283,
+      236,
+      741,
+      1503
+    ],
+    "greenShare": 0.7828,
+    "magentaPixels": 30311,
+    "flags": []
+  },
+  {
+    "name": "hair_f_japan_medieval",
+    "bbox": [
+      289,
+      220,
+      736,
+      1502
+    ],
+    "greenShare": 0.8286,
+    "magentaPixels": 241745,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_japan_medieval",
+    "bbox": [
+      289,
+      158,
+      735,
+      1501
+    ],
+    "greenShare": 0.8101,
+    "magentaPixels": 249244,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "outfit_m_germany_medieval",
+    "bbox": [
+      255,
+      252,
+      769,
+      1495
+    ],
+    "greenShare": 0.7813,
+    "magentaPixels": 27208,
+    "flags": []
+  },
+  {
+    "name": "hair_m_germany_medieval",
+    "bbox": [
+      296,
+      223,
+      728,
+      1502
+    ],
+    "greenShare": 0.8176,
+    "magentaPixels": 258197,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_germany_medieval",
+    "bbox": [
+      297,
+      191,
+      728,
+      1501
+    ],
+    "greenShare": 0.8122,
+    "magentaPixels": 217797,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_germany_medieval",
+    "bbox": [
+      89,
+      236,
+      935,
+      1485
+    ],
+    "greenShare": 0.6752,
+    "magentaPixels": 30171,
+    "flags": []
+  },
+  {
+    "name": "hair_f_germany_medieval",
+    "bbox": [
+      288,
+      209,
+      735,
+      1502
+    ],
+    "greenShare": 0.7858,
+    "magentaPixels": 78658,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_germany_medieval",
+    "bbox": [
+      289,
+      187,
+      735,
+      1502
+    ],
+    "greenShare": 0.8073,
+    "magentaPixels": 243062,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_egypt_earlymodern",
+    "bbox": [
+      261,
+      252,
+      764,
+      1495
+    ],
+    "greenShare": 0.7527,
+    "magentaPixels": 31768,
+    "flags": []
+  },
+  {
+    "name": "hair_m_egypt_earlymodern",
+    "bbox": [
+      296,
+      240,
+      728,
+      1501
+    ],
+    "greenShare": 0.8186,
+    "magentaPixels": 160784,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_egypt_earlymodern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8231,
+    "magentaPixels": 262153,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_egypt_earlymodern",
+    "bbox": [
+      296,
+      190,
+      729,
+      1501
+    ],
+    "greenShare": 0.8124,
+    "magentaPixels": 267745,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_egypt_earlymodern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8233,
+    "magentaPixels": 223178,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_egypt_earlymodern",
+    "bbox": [
+      265,
+      236,
+      759,
+      1502
+    ],
+    "greenShare": 0.736,
+    "magentaPixels": 35431,
+    "flags": []
+  },
+  {
+    "name": "hair_f_egypt_earlymodern",
+    "bbox": [
+      289,
+      205,
+      735,
+      1502
+    ],
+    "greenShare": 0.8166,
+    "magentaPixels": 251794,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_egypt_earlymodern",
+    "bbox": [
+      288,
+      116,
+      735,
+      1501
+    ],
+    "greenShare": 0.8111,
+    "magentaPixels": 252306,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_f_egypt_earlymodern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1503
+    ],
+    "greenShare": 0.8297,
+    "magentaPixels": 249033,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_iraq_earlymodern",
+    "bbox": [
+      252,
+      252,
+      772,
+      1504
+    ],
+    "greenShare": 0.7388,
+    "magentaPixels": 30531,
+    "flags": []
+  },
+  {
+    "name": "hair_m_iraq_earlymodern",
+    "bbox": [
+      258,
+      232,
+      766,
+      1501
+    ],
+    "greenShare": 0.7669,
+    "magentaPixels": 55572,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_iraq_earlymodern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8191,
+    "magentaPixels": 266236,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_iraq_earlymodern",
+    "bbox": [
+      296,
+      202,
+      728,
+      1500
+    ],
+    "greenShare": 0.8137,
+    "magentaPixels": 263664,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_iraq_earlymodern",
+    "bbox": [
+      279,
+      235,
+      753,
+      1507
+    ],
+    "greenShare": 0.7502,
+    "magentaPixels": 32442,
+    "flags": []
+  },
+  {
+    "name": "hair_f_iraq_earlymodern",
+    "bbox": [
+      288,
+      214,
+      735,
+      1501
+    ],
+    "greenShare": 0.8234,
+    "magentaPixels": 252132,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_iraq_earlymodern",
+    "bbox": [
+      289,
+      213,
+      735,
+      1501
+    ],
+    "greenShare": 0.8192,
+    "magentaPixels": 212305,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_iraq_earlymodern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1502
+    ],
+    "greenShare": 0.8308,
+    "magentaPixels": 241626,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_greece_earlymodern",
+    "bbox": [
+      231,
+      252,
+      790,
+      1497
+    ],
+    "greenShare": 0.7376,
+    "magentaPixels": 28924,
+    "flags": []
+  },
+  {
+    "name": "hair_m_greece_earlymodern",
+    "bbox": [
+      292,
+      206,
+      733,
+      1501
+    ],
+    "greenShare": 0.8096,
+    "magentaPixels": 202892,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_greece_earlymodern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1501
+    ],
+    "greenShare": 0.8234,
+    "magentaPixels": 257990,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_greece_earlymodern",
+    "bbox": [
+      296,
+      153,
+      728,
+      1501
+    ],
+    "greenShare": 0.8132,
+    "magentaPixels": 262491,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "accessory_m_greece_earlymodern",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8235,
+    "magentaPixels": 234472,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_greece_earlymodern",
+    "bbox": [
+      283,
+      236,
+      741,
+      1500
+    ],
+    "greenShare": 0.7554,
+    "magentaPixels": 37132,
+    "flags": []
+  },
+  {
+    "name": "hair_f_greece_earlymodern",
+    "bbox": [
+      288,
+      227,
+      735,
+      1501
+    ],
+    "greenShare": 0.821,
+    "magentaPixels": 245197,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_greece_earlymodern",
+    "bbox": [
+      289,
+      209,
+      735,
+      1502
+    ],
+    "greenShare": 0.8174,
+    "magentaPixels": 257966,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_greece_earlymodern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1502
+    ],
+    "greenShare": 0.8328,
+    "magentaPixels": 238077,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_italy_earlymodern",
+    "bbox": [
+      296,
+      252,
+      728,
+      1507
+    ],
+    "greenShare": 0.8023,
+    "magentaPixels": 26002,
+    "flags": []
+  },
+  {
+    "name": "hair_m_italy_earlymodern",
+    "bbox": [
+      296,
+      219,
+      728,
+      1501
+    ],
+    "greenShare": 0.8153,
+    "magentaPixels": 258229,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_italy_earlymodern",
+    "bbox": [
+      296,
+      222,
+      728,
+      1500
+    ],
+    "greenShare": 0.8216,
+    "magentaPixels": 259253,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_italy_earlymodern",
+    "bbox": [
+      278,
+      236,
+      774,
+      1501
+    ],
+    "greenShare": 0.7456,
+    "magentaPixels": 40495,
+    "flags": []
+  },
+  {
+    "name": "hair_f_italy_earlymodern",
+    "bbox": [
+      288,
+      221,
+      736,
+      1503
+    ],
+    "greenShare": 0.8255,
+    "magentaPixels": 169858,
+    "flags": []
+  },
+  {
+    "name": "headwear_f_italy_earlymodern",
+    "bbox": [
+      288,
+      233,
+      736,
+      1501
+    ],
+    "greenShare": 0.83,
+    "magentaPixels": 248931,
+    "flags": []
+  },
+  {
+    "name": "accessory_f_italy_earlymodern",
+    "bbox": [
+      289,
+      236,
+      736,
+      1501
+    ],
+    "greenShare": 0.8312,
+    "magentaPixels": 244685,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_china_earlymodern",
+    "bbox": [
+      245,
+      252,
+      778,
+      1501
+    ],
+    "greenShare": 0.7496,
+    "magentaPixels": 27089,
+    "flags": []
+  },
+  {
+    "name": "hair_m_china_earlymodern",
+    "bbox": [
+      296,
+      192,
+      728,
+      1502
+    ],
+    "greenShare": 0.8086,
+    "magentaPixels": 278931,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_china_earlymodern",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8154,
+    "magentaPixels": 275513,
+    "flags": []
+  },
+  {
+    "name": "headwear_m_china_earlymodern",
+    "bbox": [
+      296,
+      192,
+      728,
+      1501
+    ],
+    "greenShare": 0.8156,
+    "magentaPixels": 265511,
+    "flags": []
+  },
+  {
+    "name": "accessory_m_china_earlymodern",
+    "bbox": [
+      296,
+      253,
+      728,
+      1501
+    ],
+    "greenShare": 0.8241,
+    "magentaPixels": 239461,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_china_earlymodern",
+    "bbox": [
+      268,
+      236,
+      756,
+      1503
+    ],
+    "greenShare": 0.7572,
+    "magentaPixels": 30881,
+    "flags": []
+  },
+  {
+    "name": "hair_f_china_earlymodern",
+    "bbox": [
+      288,
+      171,
+      736,
+      1503
+    ],
+    "greenShare": 0.8207,
+    "magentaPixels": 250863,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "headwear_f_china_earlymodern",
+    "bbox": [
+      288,
+      233,
+      736,
+      1502
+    ],
+    "greenShare": 0.825,
+    "magentaPixels": 250900,
+    "flags": []
+  },
+  {
+    "name": "outfit_m_japan_earlymodern",
+    "bbox": [
+      274,
+      252,
+      751,
+      1497
+    ],
+    "greenShare": 0.7618,
+    "magentaPixels": 30721,
+    "flags": []
+  },
+  {
+    "name": "hair_m_japan_earlymodern",
+    "bbox": [
+      296,
+      183,
+      728,
+      1502
+    ],
+    "greenShare": 0.82,
+    "magentaPixels": 268498,
+    "flags": []
+  },
+  {
+    "name": "facialhair_m_japan_earlymodern",
+    "bbox": [
+      297,
+      253,
+      727,
+      1503
+    ],
+    "greenShare": 0.8203,
+    "magentaPixels": 269628,
+    "flags": []
+  },
+  {
+    "name": "outfit_f_japan_earlymodern",
+    "bbox": [
+      289,
+      236,
+      735,
+      1503
+    ],
+    "greenShare": 0.7884,
+    "magentaPixels": 29684,
+    "flags": []
+  },
+  {
+    "name": "premade_senenmut_neutral",
+    "bbox": [
+      293,
+      218,
+      731,
+      1496
+    ],
+    "greenShare": 0.8055,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_senenmut_happy",
+    "bbox": [
+      294,
+      218,
+      731,
+      1496
+    ],
+    "greenShare": 0.8056,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_senenmut_angry",
+    "bbox": [
+      293,
+      218,
+      731,
+      1496
+    ],
+    "greenShare": 0.8053,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_senenmut_worried",
+    "bbox": [
+      293,
+      218,
+      731,
+      1496
+    ],
+    "greenShare": 0.8053,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_socrates_neutral",
+    "bbox": [
+      285,
+      189,
+      747,
+      1501
+    ],
+    "greenShare": 0.7669,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_socrates_happy",
+    "bbox": [
+      285,
+      189,
+      747,
+      1502
+    ],
+    "greenShare": 0.7667,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_socrates_angry",
+    "bbox": [
+      285,
+      189,
+      747,
+      1501
+    ],
+    "greenShare": 0.7669,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_socrates_worried",
+    "bbox": [
+      285,
+      189,
+      747,
+      1501
+    ],
+    "greenShare": 0.7667,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_aspasia_neutral",
+    "bbox": [
+      289,
+      207,
+      735,
+      1505
+    ],
+    "greenShare": 0.7771,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_aspasia_happy",
+    "bbox": [
+      289,
+      207,
+      736,
+      1505
+    ],
+    "greenShare": 0.7771,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_aspasia_angry",
+    "bbox": [
+      289,
+      207,
+      736,
+      1505
+    ],
+    "greenShare": 0.7769,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_aspasia_worried",
+    "bbox": [
+      289,
+      207,
+      736,
+      1505
+    ],
+    "greenShare": 0.777,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_banzhao_neutral",
+    "bbox": [
+      264,
+      174,
+      760,
+      1490
+    ],
+    "greenShare": 0.7201,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_banzhao_happy",
+    "bbox": [
+      264,
+      173,
+      760,
+      1490
+    ],
+    "greenShare": 0.72,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_banzhao_angry",
+    "bbox": [
+      264,
+      173,
+      760,
+      1490
+    ],
+    "greenShare": 0.7201,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_banzhao_worried",
+    "bbox": [
+      264,
+      173,
+      760,
+      1489
+    ],
+    "greenShare": 0.7202,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_arib_neutral",
+    "bbox": [
+      267,
+      148,
+      756,
+      1487
+    ],
+    "greenShare": 0.7247,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_arib_happy",
+    "bbox": [
+      267,
+      148,
+      755,
+      1487
+    ],
+    "greenShare": 0.7249,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_arib_angry",
+    "bbox": [
+      267,
+      148,
+      755,
+      1487
+    ],
+    "greenShare": 0.7248,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_arib_worried",
+    "bbox": [
+      267,
+      148,
+      756,
+      1487
+    ],
+    "greenShare": 0.7248,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_khwarizmi_neutral",
+    "bbox": [
+      252,
+      124,
+      771,
+      1499
+    ],
+    "greenShare": 0.7324,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_khwarizmi_happy",
+    "bbox": [
+      252,
+      124,
+      771,
+      1500
+    ],
+    "greenShare": 0.7326,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_khwarizmi_angry",
+    "bbox": [
+      252,
+      124,
+      771,
+      1500
+    ],
+    "greenShare": 0.7326,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_khwarizmi_worried",
+    "bbox": [
+      252,
+      124,
+      771,
+      1500
+    ],
+    "greenShare": 0.7327,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_gutenberg_neutral",
+    "bbox": [
+      234,
+      142,
+      789,
+      1484
+    ],
+    "greenShare": 0.7333,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_gutenberg_happy",
+    "bbox": [
+      234,
+      142,
+      789,
+      1483
+    ],
+    "greenShare": 0.7336,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_gutenberg_angry",
+    "bbox": [
+      234,
+      142,
+      789,
+      1484
+    ],
+    "greenShare": 0.7334,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_gutenberg_worried",
+    "bbox": [
+      234,
+      142,
+      789,
+      1484
+    ],
+    "greenShare": 0.7337,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_leonardo_neutral",
+    "bbox": [
+      283,
+      220,
+      737,
+      1493
+    ],
+    "greenShare": 0.8,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_leonardo_happy",
+    "bbox": [
+      283,
+      220,
+      737,
+      1493
+    ],
+    "greenShare": 0.7997,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_leonardo_angry",
+    "bbox": [
+      283,
+      220,
+      737,
+      1492
+    ],
+    "greenShare": 0.8,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_leonardo_worried",
+    "bbox": [
+      283,
+      220,
+      737,
+      1493
+    ],
+    "greenShare": 0.7999,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_lanyer_neutral",
+    "bbox": [
+      208,
+      152,
+      816,
+      1507
+    ],
+    "greenShare": 0.682,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_lanyer_happy",
+    "bbox": [
+      208,
+      152,
+      816,
+      1507
+    ],
+    "greenShare": 0.6818,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_lanyer_angry",
+    "bbox": [
+      208,
+      152,
+      816,
+      1507
+    ],
+    "greenShare": 0.6821,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_lanyer_worried",
+    "bbox": [
+      208,
+      152,
+      816,
+      1507
+    ],
+    "greenShare": 0.6821,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_gallerani_neutral",
+    "bbox": [
+      290,
+      234,
+      755,
+      1495
+    ],
+    "greenShare": 0.749,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_gallerani_happy",
+    "bbox": [
+      290,
+      234,
+      755,
+      1495
+    ],
+    "greenShare": 0.7491,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_gallerani_angry",
+    "bbox": [
+      289,
+      234,
+      754,
+      1495
+    ],
+    "greenShare": 0.749,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_gallerani_worried",
+    "bbox": [
+      290,
+      234,
+      754,
+      1495
+    ],
+    "greenShare": 0.7491,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_pell_neutral",
+    "bbox": [
+      287,
+      147,
+      739,
+      1502
+    ],
+    "greenShare": 0.7579,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_pell_happy",
+    "bbox": [
+      287,
+      146,
+      739,
+      1503
+    ],
+    "greenShare": 0.7579,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_pell_angry",
+    "bbox": [
+      287,
+      146,
+      739,
+      1503
+    ],
+    "greenShare": 0.7579,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_pell_worried",
+    "bbox": [
+      287,
+      146,
+      739,
+      1503
+    ],
+    "greenShare": 0.7579,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_ines_neutral",
+    "bbox": [
+      183,
+      193,
+      835,
+      1502
+    ],
+    "greenShare": 0.7028,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_ines_happy",
+    "bbox": [
+      183,
+      193,
+      836,
+      1502
+    ],
+    "greenShare": 0.7029,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_ines_angry",
+    "bbox": [
+      183,
+      193,
+      835,
+      1502
+    ],
+    "greenShare": 0.7027,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_rook_neutral",
+    "bbox": [
+      282,
+      159,
+      745,
+      1505
+    ],
+    "greenShare": 0.7721,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_rook_angry",
+    "bbox": [
+      282,
+      159,
+      745,
+      1505
+    ],
+    "greenShare": 0.7721,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_ada_neutral",
+    "bbox": [
+      78,
+      123,
+      948,
+      1502
+    ],
+    "greenShare": 0.5824,
+    "magentaPixels": 0,
+    "flags": [
+      "figure registration needs review"
+    ]
+  },
+  {
+    "name": "premade_hollis_neutral",
+    "bbox": [
+      296,
+      208,
+      728,
+      1499
+    ],
+    "greenShare": 0.802,
+    "magentaPixels": 0,
+    "flags": []
+  },
+  {
+    "name": "premade_auditor_neutral",
+    "bbox": [
+      286,
+      201,
+      743,
+      1491
+    ],
+    "greenShare": 0.7645,
+    "magentaPixels": 0,
+    "flags": []
+  }
+]

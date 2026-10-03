@@ -1,0 +1,14 @@
+# facialhair_m_germany_ancient
+
+Built-in image generation. Raw source candidate; pending registration and stack QA.
+
+Use case: precise-object-edit. Production raw sheet for a layered character in Time Sorter. Preserve the entire 1024x1536 portrait canvas, the reference silhouette, pose, head outline and head location. Never zoom or crop. Centre x512, head top y260, chin about y424, shoulders y500, waist y760, soles y1490. Arms relaxed slightly away, empty open hands. Outside the figure is fully opaque flat green #00FF00, including every gap between limbs. Every uncovered mannequin pixel is fully opaque flat magenta #FF00FF with sparse face registration marks. NO shades, highlights or shadows on magenta. Only the requested piece, all other pieces absent. Soft rounded 2D anime customer art matching the approved pilot, adults with adult proportions, not chibi. Expressive simple anime eyes, thin consistent 2-3px dark-brown #3B2A20 contours, restrained flat cel colours with exactly ONE hard-edged shadow tone, neutral even white front light. No gradient, airbrush, texture noise, lettering, logos, military or royal regalia, flags, religious symbols, weapons or manga emotion symbols. Avoid lime green, magenta, pink, purple on the piece; olive and bottle green are permitted. Reference 1 is the exact registration mannequin. Reference 2 is STYLE ONLY; never copy its Greek clothes. ONLY beard/moustache in brown #78513A. No scalp hair, hat or garment. Full mannequin canvas unchanged.
+Subject: man of Germania; Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania.
+Draw: Full short beard
+Avoid: horned or winged helmets; Viking or Wagnerian-opera stereotypes; fur trims, pelts or fur-loincloth barbarian caricature; spears, shields or any weapons; Roman armour; gold torc or bright multicoloured checks (that is Britain-ancient); fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient); snood or hairnet over the bun (too close to the Greek sakkos); Viking-age oval brooches with bead strings between them (the wrong period); Roman toga or Roman-style jewellery
+Output one full-canvas raw facialhair_m_germany_ancient.
+Support figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.
+
+References:
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\References\mannequin_m.png
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\Raw\batch01-pilot\outfit_m_greece_ancient.png
