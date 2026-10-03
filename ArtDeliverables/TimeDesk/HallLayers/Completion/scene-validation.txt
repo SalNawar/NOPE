@@ -1,0 +1,14 @@
+Scene: Assets/Art/Office/AnimeHallLayers/AnimeHall.unity
+Registered layers: 58
+Missing scripts: 0
+Lighting enabled: True
+Floor installed: True
+Portal: 5
+Window: 5
+Screen: 5
+Fixture: 6
+DeskScreen: 1
+Global: 1
+Sky: 1
+Sign: 3
+DeskLamp: 1

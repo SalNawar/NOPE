@@ -1,0 +1,15 @@
+# Hall foreground completion — 2026-10-03
+
+Branch: `codex/hall-art-completion`, created from freshly fetched `origin/main` at `5c7c2812adc2a750d733e388c1b7e43357b26f58`. This includes Claude's hall lighting, dust, day cycle, and character pilot installation. Unfinished document/day-progression/wheel branches were not merged.
+
+The desk camera moves from `(0, 2.16, -2.62)`, pitch 4°, to `(0, 2.46, -2.02)`, pitch approximately 38.86°. That exposes a black band below the finite hall painting and above the preserved 3D desk. The installed horizontal floor mesh fills this newly exposed area with real camera perspective. Its shader clips above the registered painting's lower edge, so it cannot cover the painted railing or portals. It follows the shared day-cycle ambient colour and intensity, with the painting's original terracotta palette preserved.
+
+Scene: `Assets/Art/Office/AnimeHallLayers/AnimeHall.unity`. New assets are in its `Completion` folder; runtime component `Assets/Scripts/Office/HallForegroundFloor.cs`; shader `Assets/Shaders/HallForegroundFloor.shader`. No legacy desk/hall rebuild was run. The 58 painted layers and existing gameplay hooks remain.
+
+The tile texture was created with the built-in image generation tool, using the approved master `hall-anime-platform-v8.png` as a palette/style reference. Prompt: seamless square top-down terracotta ceramic floor, 4×4 square tiles, thin pale grey grout, restrained hand-painted anime style, subtle scuffs and sparse chips, matte even illumination, muted dusty reddish brown around RGB (151,111,94), no baked perspective, objects, lettering, shadows or lighting gradient. Native generated source: `exec-143d28af-a363-4cd4-a39f-2b403be81147.png`; installed copy: `Assets/Art/Office/AnimeHallLayers/Completion/TerracottaFloor.png`.
+
+Validation: `scene-validation.txt` records 58 registered layers, zero missing scripts, lighting enabled, and 28 existing lights (6 fixtures, 5 window shafts, 5 screens, 5 portals, 3 signs, global/sky, desk lamp/PC glow). Unity console was cleared after fixing the authoring helper's missing-component handling; the subsequent full capture returned zero errors. `Before` preserves the original gap evidence. Current captures cover both art pans at five points along the actual desk-view transition, at noon, sunset and night. The final captures also apply the corresponding 3D desk daylight, so the desk lamp's night spill is visible. These are editor renders, not a packaged game build or performance measurement.
+
+Menus under `Tools > Terminal Art > Completion` install the floor idempotently, capture the camera transition, and validate the scene. Capture restores camera, Cinemachine, pan, evening and preview-hour controls. Unity rewrites derived Light2D bounds and the two generated pillar-shadow meshes on native scene save; the gameplay objects are retained. Unity YAML's generated blank fields include trailing spaces; source-code checks are separate.
+
+This extends the foreground of the approved painted hall. It does not reconstruct the entire hall as 3D geometry. The floor intentionally has no collider or gameplay input.
