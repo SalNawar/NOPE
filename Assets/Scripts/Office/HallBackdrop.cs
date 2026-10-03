@@ -54,6 +54,9 @@ public sealed class HallBackdrop : MonoBehaviour
     /// <summary>True while the 2D camera draws the hall (false: the office camera draws the layer unlit).</summary>
     public bool Active => _camera != null;
 
+    /// <summary>The current lit painting, for the art's foreground seam colour match.</summary>
+    public RenderTexture RenderedTexture => _texture;
+
     /// <summary>The layer the painted hall lives on (OfficeLayers.HallBackdrop; -1 when the project lacks it).</summary>
     public int Layer => OfficeLayers.HallBackdropLayer;
 

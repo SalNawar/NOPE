@@ -1,4 +1,4 @@
 Start: (0.00, 2.16, -2.62); rotation: (4.00, 0.00, 0.00)
 Desk: (0.00, 2.46, -2.02); rotation: (38.86, 0.00, 0.00)
 Mat centre: (0.13, 1.07, -0.52)
-Captures: 5 transition positions at noon, sunset and night; left pan.
+Captures: 5 transition positions at noon, sunset and night in both pans; lighting-off endpoints in both pans.

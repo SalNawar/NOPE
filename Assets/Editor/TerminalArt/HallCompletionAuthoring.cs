@@ -46,7 +46,8 @@ public static class HallCompletionAuthoring
         if(mesh==null){mesh=new Mesh{name="Hall foreground floor"};AssetDatabase.CreateAsset(mesh,meshPath);}
         mesh.Clear();
         mesh.vertices=new[]{new Vector3(-30,0,-12),new Vector3(-30,0,24),new Vector3(30,0,24),new Vector3(30,0,-12)};
-        mesh.uv=new[]{new Vector2(-30/3.2f,-12/3.2f),new Vector2(-30/3.2f,24/3.2f),new Vector2(30/3.2f,24/3.2f),new Vector2(30/3.2f,-12/3.2f)};
+        const float tileRepeat=1.8f;
+        mesh.uv=new[]{new Vector2(-30/tileRepeat,-12/tileRepeat),new Vector2(-30/tileRepeat,24/tileRepeat),new Vector2(30/tileRepeat,24/tileRepeat),new Vector2(30/tileRepeat,-12/tileRepeat)};
         mesh.triangles=new[]{0,1,2,0,2,3};
         mesh.RecalculateNormals();mesh.RecalculateBounds();EditorUtility.SetDirty(mesh);
         var materialPath=folder+"/ForegroundFloor.mat";
@@ -83,6 +84,7 @@ public static class HallCompletionAuthoring
         var startPosition = camera.transform.position;
         var startRotation = camera.transform.rotation;
         bool oldPreview = settings.previewHourOn;
+        bool oldLighting = settings.lightingOn;
         float oldHour = settings.previewHour;
         float oldPan = presentation.lookLeft;
         float oldEvening = presentation.evening;
@@ -121,13 +123,26 @@ public static class HallCompletionAuthoring
             lighting.GetType().GetMethod("LateUpdate",Private).Invoke(lighting,null);
             Find<HallForegroundFloor>()?.Apply();
             Capture(camera,backdrop,"left-pan.png");
-            File.WriteAllText(Report+"/camera-path.txt",$"Start: {startPosition}; rotation: {startRotation.eulerAngles}\nDesk: {endPosition}; rotation: {endRotation.eulerAngles}\nMat centre: {mat}\nCaptures: 5 transition positions at noon, sunset and night; left pan.\n");
+            settings.lightingOn=false;
+            presentation.SetTime(0);
+            foreach(float pan in new[]{0f,1f})
+            foreach(int i in new[]{0,4})
+            {
+                presentation.SetPan(pan);
+                float t=i/4f;
+                camera.transform.SetPositionAndRotation(Vector3.Lerp(startPosition,endPosition,t),Quaternion.Slerp(startRotation,endRotation,t));
+                lighting.GetType().GetMethod("LateUpdate",Private).Invoke(lighting,null);
+                Find<HallForegroundFloor>()?.Apply();
+                Capture(camera,backdrop,$"unlit-pan-{pan:0}-tilt-{i}.png");
+            }
+            File.WriteAllText(Report+"/camera-path.txt",$"Start: {startPosition}; rotation: {startRotation.eulerAngles}\nDesk: {endPosition}; rotation: {endRotation.eulerAngles}\nMat centre: {mat}\nCaptures: 5 transition positions at noon, sunset and night in both pans; lighting-off endpoints in both pans.\n");
         }
         finally
         {
             presentation.SetPan(oldPan);
             presentation.SetTime(oldEvening);
             settings.previewHourOn=oldPreview;
+            settings.lightingOn=oldLighting;
             settings.previewHour=oldHour;
             camera.transform.SetPositionAndRotation(startPosition,startRotation);
             if(brain != null) brain.enabled=brainOn;

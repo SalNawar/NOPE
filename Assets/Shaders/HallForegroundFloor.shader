@@ -17,6 +17,9 @@ Shader "NOPE/Hall Foreground Floor"
    CBUFFER_END
    float4 _HallFloorEdge;
    float4 _HallFloorShade;
+   TEXTURE2D(_HallFloorBackdrop); SAMPLER(sampler_HallFloorBackdrop);
+   float4 _HallFloorBackdropSize;
+   float _HallFloorHasBackdrop;
    struct Attributes { float4 positionOS:POSITION; float2 uv:TEXCOORD0; };
    struct Varyings { float4 positionCS:SV_POSITION; float2 uv:TEXCOORD0; float4 screen:TEXCOORD1; };
    Varyings vert(Attributes input) {
@@ -27,10 +30,21 @@ Shader "NOPE/Hall Foreground Floor"
     return o;
    }
    half4 frag(Varyings input):SV_Target {
-    // Keep the physical floor below the painted canvas throughout camera movement.
+    // Keep the visual floor proxy below the painted canvas throughout camera movement.
     float4 edge=ComputeScreenPos(TransformWorldToHClip(_HallFloorEdge.xyz));
     clip(edge.y/edge.w+0.0015-input.screen.y/input.screen.w);
-    return half4(SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap,input.uv).rgb*_BaseColor.rgb*_HallFloorShade.rgb,1);
+    half3 shade=_HallFloorShade.rgb;
+    if(_HallFloorHasBackdrop>0.5)
+    {
+     float2 seam=float2(input.screen.x/input.screen.w,edge.y/edge.w+3*_HallFloorBackdropSize.y);
+     // Average neighbouring tiles so a grout line cannot paint a vertical stripe.
+     half3 edgeColour=0;
+     [unroll] for(int i=-4;i<=4;i++)
+      edgeColour+=SAMPLE_TEXTURE2D(_HallFloorBackdrop,sampler_HallFloorBackdrop,saturate(seam+float2(i*0.025,abs(i)*_HallFloorBackdropSize.y))).rgb;
+     // Linear-light median of the generated texture's unlit RGB (152,104,86).
+     shade=edgeColour/(9*half3(0.314,0.1384,0.0931));
+    }
+    return half4(SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap,input.uv).rgb*_BaseColor.rgb*shade,1);
    }
    ENDHLSL
   }
