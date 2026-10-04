@@ -168,6 +168,8 @@ public class SmartLinksTests
         Assert.AreEqual(LinkTarget.ToRecords("Oren Hale", ClueCategory.Name), SmartLinks.ForKey(PickKeys.Record(ClueCategory.Name, "Oren Hale"), papers),
                         "a record without a number is found by its name");
         Assert.IsTrue(SmartLinks.ForKey(PickKeys.Garment(1), papers).IsNone, "a garment is picked at the wheel, not in the app");
+        Assert.AreEqual(LinkTarget.ToRow(AppTab.Reference, "seal:visa"), SmartLinks.ForKey(PickKeys.Seal("visa"), papers), "a seal to the Seal Register");
+        Assert.IsTrue(SmartLinks.ForKey(PickKeys.Face, papers).IsNone, "the face is picked at the wheel, not in the app");
         Assert.IsTrue(SmartLinks.ForKey(null, papers).IsNone);
         Assert.IsTrue(SmartLinks.ForKey("", papers).IsNone);
         Assert.IsTrue(SmartLinks.ForKey("book:Nonsense:greece:ancient", papers).IsNone);
@@ -216,6 +218,19 @@ public class SmartLinksTests
         Assert.IsFalse(PickKeys.TryRecord("record::Name", out _, out _));
         Assert.IsFalse(PickKeys.TryRecord("record:552-1804-33:Nonsense", out _, out _));
         Assert.IsFalse(PickKeys.TryRecord(null, out _, out _));
+        Assert.IsTrue(PickKeys.TrySeal(PickKeys.Seal("visa"), out string office));
+        Assert.AreEqual("visa", office);
+        Assert.IsFalse(PickKeys.TrySeal("seal:", out _));
+        Assert.IsFalse(PickKeys.TrySeal(PickKeys.Face, out _));
+    }
+
+    [Test]
+    public void ForField_ASeal_GoesToItsOfficesSeal_InTheSealRegister()
+    {
+        var seal = new DocumentField { category = ClueCategory.Seal, label = "Issuing Seal", value = "Blue hexagon · VO", issuer = "visa" };
+        Assert.AreEqual(LinkTarget.ToRow(AppTab.Reference, PickKeys.Seal("visa")), SmartLinks.ForField(seal, new[] { seal }, Athens));
+        seal.issuer = string.Empty;
+        Assert.IsTrue(SmartLinks.ForField(seal, new[] { seal }, Athens).IsNone, "no office: nowhere");
     }
 
     [Test]

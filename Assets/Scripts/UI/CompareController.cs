@@ -15,15 +15,13 @@ using UnityEngine;
 /// its item but matches on its place's Culture value). A PC row lights by its
 /// key (the PC redesign CM3: IsPicked and PicksChanged, so a value shown in
 /// both panes lights in both and stays lit after a redraw); a desk row and
-/// the bubble light through the ICompareHighlight they pass. The pair is
-/// drawn twice: in the PC's compare dock as side A, the verdict and side B
-/// (CompareDock: DK9, CM2) and on the office strip as one line (optional).
+/// the bubble light through the ICompareHighlight they pass. On the PC the
+/// workbench (MatchBoard) draws the pair: the held value, the line between
+/// the two and the finding (the PC workbench spec §4); at the office the
+/// strip shows the pair as one line (optional).
 /// </summary>
 public sealed class CompareController : MonoBehaviour
 {
-    /// <summary>The PC's compare dock: side A, the verdict, side B.</summary>
-    [SerializeField] private CompareDock dock;
-
     /// <summary>The office compare strip (piece 10; optional), shown while a value is picked; its parent, the office case HUD, shows only while the frame is closed.</summary>
     [SerializeField] private GameObject officeBar;
 
@@ -66,6 +64,12 @@ public sealed class CompareController : MonoBehaviour
 
     /// <summary>The second side as picked (default until a pair).</summary>
     public ComparePick SideB => _pair.B;
+
+    /// <summary>True while one value is picked and waits for the second (the workbench holds it).</summary>
+    public bool Holding => _pair.HasA && !_pair.IsPaired;
+
+    /// <summary>True while both sides are picked (the workbench lets go of them once every listener has read them).</summary>
+    public bool Paired => _pair.IsPaired;
 
     private void Awake()
     {
@@ -127,17 +131,15 @@ public sealed class CompareController : MonoBehaviour
     /// <summary>
     /// Replaces the verdict after a discrepancy registers, so an origin-proof
     /// never reads as a friendly green MATCH: the office strip names the
-    /// deviation, the dock reads DEVIATION LOGGED and leads to the Report.
+    /// deviation.
     /// </summary>
-    public void ShowDeviation(string summary) =>
-        WriteVerdict(UiText.Format("compare.deviationLogged", summary), UiText.Get("compare.dockDeviation"), mismatchColor, true);
+    public void ShowDeviation(string summary) => WriteVerdict(UiText.Format("compare.deviationLogged", summary), mismatchColor);
 
     /// <summary>
     /// Replaces the verdict when a pair proves a category that is already in
     /// the Deviation Report, so a second proof visibly adds nothing.
     /// </summary>
-    public void ShowAlreadyDocumented(string categoryLabel) =>
-        WriteVerdict(UiText.Format("compare.alreadyDocumented", categoryLabel), UiText.Get("compare.dockAlready"), neutralColor, true);
+    public void ShowAlreadyDocumented(string categoryLabel) => WriteVerdict(UiText.Format("compare.alreadyDocumented", categoryLabel), neutralColor);
 
     /// <summary>Clears the picks, their highlights and the bars.</summary>
     public void Clear()
@@ -157,41 +159,35 @@ public sealed class CompareController : MonoBehaviour
         _highlightB = null;
     }
 
-    /// <summary>Shows the bars while a value is picked: the dock's sides and the office strip, with MATCH or MISMATCH, the first pick waiting, or nothing.</summary>
+    /// <summary>Shows the office strip while a value is picked: the pair with MATCH or MISMATCH, the first pick waiting, or nothing.</summary>
     private void Draw()
     {
         bool active = _pair.HasA;
         if (officeBar != null)
             officeBar.SetActive(active);
-        if (dock != null)
-            dock.ShowSides(active ? _pair.A : (ComparePick?)null, _pair.IsPaired ? _pair.B : (ComparePick?)null);
 
         if (_pair.IsPaired)
         {
             bool match = _pair.Matches;
             string verdict = UiText.Get(match ? "compare.match" : "compare.mismatch");
-            WriteVerdict(UiText.Format("compare.pair", verdict, _pair.A.Label, _pair.A.Shown, _pair.B.Label, _pair.B.Shown), verdict,
-                         match ? matchColor : mismatchColor, false);
+            WriteVerdict(UiText.Format("compare.pair", verdict, _pair.A.Label, _pair.A.Shown, _pair.B.Label, _pair.B.Shown), match ? matchColor : mismatchColor);
         }
         else if (active)
         {
-            WriteVerdict(UiText.Format("compare.pickAnother", _pair.A.Label, _pair.A.Shown), UiText.Get("compare.dockPending"), neutralColor, false);
+            WriteVerdict(UiText.Format("compare.pickAnother", _pair.A.Label, _pair.A.Shown), neutralColor);
         }
         else
         {
-            WriteVerdict(string.Empty, string.Empty, neutralColor, false);
+            WriteVerdict(string.Empty, neutralColor);
         }
     }
 
-    /// <summary>Writes the office strip's line and the dock's verdict (<paramref name="toReport"/>: it leads to the Report) in one colour.</summary>
-    private void WriteVerdict(string officeLine, string dockVerdict, Color colour, bool toReport)
+    /// <summary>Writes the office strip's line in one colour.</summary>
+    private void WriteVerdict(string officeLine, Color colour)
     {
-        if (officeText != null)
-        {
-            officeText.color = colour;
-            officeText.text = officeLine;
-        }
-        if (dock != null)
-            dock.ShowVerdict(dockVerdict, colour, toReport);
+        if (officeText == null)
+            return;
+        officeText.color = colour;
+        officeText.text = officeLine;
     }
 }

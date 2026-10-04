@@ -17430,6 +17430,69 @@
         "alpha": 0.45,
         "ink": "",
         "textClass": "None"
+      },
+      {
+        "role": "Surface",
+        "fill": "white",
+        "alpha": 1,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "SurfaceMuted",
+        "fill": "white",
+        "alpha": 1,
+        "ink": "muted",
+        "textClass": "Text"
+      },
+      {
+        "role": "Hairline",
+        "fill": "line",
+        "alpha": 1,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "HairlineStrong",
+        "fill": "lineStrong",
+        "alpha": 1,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "PrimaryAction",
+        "fill": "chromeDeep",
+        "alpha": 1,
+        "ink": "chromeInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "FindingMatch",
+        "fill": "matchBg",
+        "alpha": 1,
+        "ink": "match",
+        "textClass": "Text"
+      },
+      {
+        "role": "FindingDiffer",
+        "fill": "mismatchBg",
+        "alpha": 1,
+        "ink": "mismatch",
+        "textClass": "Text"
+      },
+      {
+        "role": "Info",
+        "fill": "infoBg",
+        "alpha": 1,
+        "ink": "muted",
+        "textClass": "Text"
+      },
+      {
+        "role": "Holding",
+        "fill": "holdBg",
+        "alpha": 1,
+        "ink": "hold",
+        "textClass": "Text"
       }
     ],
     "neutral": {
@@ -17512,19 +17575,19 @@
         },
         {
           "name": "match",
-          "hex": "#0D731F"
+          "hex": "#2F5E33"
         },
         {
           "name": "mismatch",
-          "hex": "#B81A14"
+          "hex": "#9A2E2C"
         },
         {
           "name": "highlight",
-          "hex": "#FFEB59"
+          "hex": "#9CCFF2"
         },
         {
           "name": "muted",
-          "hex": "#6E6E6E"
+          "hex": "#6A6964"
         },
         {
           "name": "white",
@@ -17537,6 +17600,34 @@
         {
           "name": "ringLight",
           "hex": "#FFD76E"
+        },
+        {
+          "name": "line",
+          "hex": "#E6E4DF"
+        },
+        {
+          "name": "lineStrong",
+          "hex": "#C9C6BF"
+        },
+        {
+          "name": "matchBg",
+          "hex": "#EDF3EC"
+        },
+        {
+          "name": "mismatchBg",
+          "hex": "#FDEBEC"
+        },
+        {
+          "name": "infoBg",
+          "hex": "#F3F2EF"
+        },
+        {
+          "name": "holdBg",
+          "hex": "#E1F3FE"
+        },
+        {
+          "name": "hold",
+          "hex": "#1F6C9F"
         }
       ],
       "overrides": [
@@ -17674,6 +17765,21 @@
           "role": "SiteContent",
           "fill": "#FFFFFF",
           "ink": "#1A1714"
+        },
+        {
+          "role": "WindowBody",
+          "fill": "#FBFBFA",
+          "ink": "#1D1F21"
+        },
+        {
+          "role": "TitleBar",
+          "fill": "#FFFFFF",
+          "ink": "#1D1F21"
+        },
+        {
+          "role": "Sidebar",
+          "fill": "#FFFFFF",
+          "ink": "#1D1F21"
         }
       ],
       "art": [
@@ -18147,7 +18253,7 @@
       },
       {
         "key": "app.counters",
-        "text": "Papers received: {0} of {1}\nScanned: {2}\nDeviations logged: {3}",
+        "text": "Papers received: {0} of {1} · scanned: {2}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18184,6 +18290,588 @@
       {
         "key": "app.tab.rules",
         "text": "Today's rules",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.calendar",
+        "text": "Calendar",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.side.left",
+        "text": "Left",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.side.right",
+        "text": "Right",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.pane.shelfHere",
+        "text": "Shelf opens here",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.search.open",
+        "text": "Search   Ctrl K",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.row.rule",
+        "text": "Today's rules · rule {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "shelf.traveller",
+        "text": "Traveller",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "shelf.agency",
+        "text": "Agency",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "shelf.books",
+        "text": "Books",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.papers.name",
+        "text": "Papers",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.papers.title",
+        "text": "Read the papers",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.papers.text",
+        "text": "Click a value, then another to compare them: the papers against each other and against what the traveller said.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.records.name",
+        "text": "Records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.records.title",
+        "text": "Check the papers against the records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.records.text",
+        "text": "The traveller's citizen record is on the right. Match the details that matter: name, number, class, transponder, account.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.books.name",
+        "text": "Books",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.books.title",
+        "text": "Check the papers against the books",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.books.text",
+        "text": "Hold a paper's detail against the book row for the place the traveller claims. A value from another place is a lie.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.rules.name",
+        "text": "Rules",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.rules.title",
+        "text": "Check today's rules",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.rules.text",
+        "text": "Click a rule, then the value it is about. The calendar on the shelf holds today's date for departures and expiry dates.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.decision.name",
+        "text": "Decision",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.decision.title",
+        "text": "Decide",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.decision.text",
+        "text": "Accept sends the traveller through. Deny cites the first difference or broken rule you logged.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.idle.text",
+        "text": "The steps start when the next traveller steps up to the desk.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.next",
+        "text": "Next: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.back",
+        "text": "Back",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.progress",
+        "text": "Step {0} of {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.progressChecks",
+        "text": "Step {0} of {1} · To check: {2}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.progressDone",
+        "text": "Step {0} of {1} · All checks here done",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "status.holding",
+        "text": "Holding <b>{0}</b> ({1}). Click another value to compare.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "status.holdingRule",
+        "text": "Holding the rule: <b>{0}</b> Click the value it is about.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "status.holdingToday",
+        "text": "Holding today's date, <b>{0}</b>. Click a departure date or a Valid Until.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "status.logged",
+        "text": "{0}. Logged.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "status.evidence",
+        "text": "{0}. Logged as evidence.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "status.already",
+        "text": "You already compared those two. Shown again.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "status.shown",
+        "text": "{0}. Shown again.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "status.cancel",
+        "text": "Cancel   Esc",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.Match",
+        "text": "Matching data",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.Differs",
+        "text": "Data differs",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.Elsewhere",
+        "text": "Belongs elsewhere",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.DifferentDetails",
+        "text": "Different details",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.OtherPlace",
+        "text": "Not the claimed place",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.OtherPerson",
+        "text": "Another person",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.TwoTruths",
+        "text": "Both reference",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.RuleMet",
+        "text": "Meets the rule",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.RuleBroken",
+        "text": "Breaks the rule",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.RuleNotAbout",
+        "text": "Not what the rule covers",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.RuleByComparison",
+        "text": "Compare instead",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.RuleNotForTraveller",
+        "text": "Not for this traveller",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.NothingToCompare",
+        "text": "Nothing to compare",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.DepartsToday",
+        "text": "Departs today",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.NotToday",
+        "text": "Not today",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.StillValid",
+        "text": "Still valid",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.Expired",
+        "text": "Expired",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.SealIncorrect",
+        "text": "Seal incorrect",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.link.OtherOffice",
+        "text": "Another office",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.note.DifferentDetails",
+        "text": "{0} and {1} are different details. Nothing logged.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.note.OtherPlace",
+        "text": "That book row is about another place than the one claimed. Nothing logged.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.note.OtherPerson",
+        "text": "That record belongs to someone else. Nothing logged.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.note.TwoTruths",
+        "text": "Both are reference data. Hold a paper or an answer against one of them.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.note.RuleNotAbout",
+        "text": "That rule is not about the {1}. Nothing logged.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.note.RuleByComparison",
+        "text": "Check this rule by comparing: hold the value against the books or the record.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.note.RuleNotForTraveller",
+        "text": "This rule is not for this traveller. Nothing logged.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.note.NothingToCompare",
+        "text": "Hold a rule or today's date against the value it is about.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.note.OtherOffice",
+        "text": "Those seals are two offices'. Hold a paper's seal against its own office's seal in the Seal Register. Nothing logged.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.title.Match",
+        "text": "{0} matches",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.title.Differs",
+        "text": "{0} differs",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.title.Elsewhere",
+        "text": "{0} belongs to another place",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.title.RuleMet",
+        "text": "Meets the rule: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.title.RuleBroken",
+        "text": "Breaks the rule: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.title.DepartsToday",
+        "text": "Departs today",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.title.NotToday",
+        "text": "Departure is not today",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.title.StillValid",
+        "text": "{0} is still valid",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.title.Expired",
+        "text": "{0} has expired",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.title.SealIncorrect",
+        "text": "Seal incorrect",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.detail",
+        "text": "{0} ({1}) against {2} ({3})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.detail.rule",
+        "text": "{0} ({1})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.detail.today",
+        "text": "{0} ({1}) on {2}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.evidence",
+        "text": "Logged as evidence",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.what.today",
+        "text": "Today's date",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.what.rule",
+        "text": "The rule",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "findings.title",
+        "text": "Your findings",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "findings.report",
+        "text": "Open the report",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "findings.empty",
+        "text": "Nothing yet. Click a value, then the value to hold it against. Matches and differences collect here.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "decision.summary",
+        "text": "Findings logged: {0}. To cite if you deny: {1}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "decision.summaryNone",
+        "text": "Findings logged: {0}. None is a difference or a broken rule, so Deny has nothing to cite yet.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "decision.accept",
+        "text": "Stamp the papers. {0} goes through.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "decision.denyCites",
+        "text": "Cites: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "decision.denyWaits",
+        "text": "Log a difference or a broken rule first.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "calendar.title",
+        "text": "Agency calendar",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "calendar.today",
+        "text": "Today",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "calendar.todayTitle",
+        "text": "Calendar · Today",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "calendar.shiftDay",
+        "text": "Shift day {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "calendar.unknown",
+        "text": "Date unknown",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.drawer.title",
+        "text": "Search documents",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.drawer.hint",
+        "text": "Pick a result to open that document on the side the shelf opens on.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18225,31 +18913,7 @@
       },
       {
         "key": "app.search",
-        "text": "Search papers, records, books, rules and the transcript",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.pane.beside",
-        "text": "Open beside",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.pane.close",
-        "text": "Close",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.pane.path",
-        "text": "{0}  ›  <b>{1}</b>",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.sidebar.steps",
-        "text": "Checklist",
+        "text": "A name, a place or a number",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18262,12 +18926,6 @@
       {
         "key": "app.sidebar.recent",
         "text": "Recent",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.pins.title",
-        "text": "Pinned and recent",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18321,7 +18979,7 @@
       },
       {
         "key": "search.close",
-        "text": "Close",
+        "text": "Close   Esc",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18470,50 +19128,8 @@
         "tier": "Full"
       },
       {
-        "key": "steps.none",
-        "text": "The checklist shows while a traveller is at the desk.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "steps.hidden",
-        "text": "The checklist is hidden: click its heading to show it.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "steps.count",
-        "text": "{0} of {1}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.tabMenu.up",
-        "text": "Move up",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.tabMenu.down",
-        "text": "Move down",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.tabMenu.reset",
-        "text": "Reset order",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.split.hint",
-        "text": "Show a second source beside this one",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "app.split.tooNarrow",
-        "text": "Maximise the window to open a second pane",
+        "key": "app.link.seal",
+        "text": "Open the Seal Register: the issuing office's seal",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18556,30 +19172,6 @@
       {
         "key": "app.transcript.newLine",
         "text": "New line below",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "compare.dockSide",
-        "text": "{0}:  {1}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "compare.dockPending",
-        "text": "pick another value",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "compare.dockDeviation",
-        "text": "●  DEVIATION LOGGED · Report",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "compare.dockAlready",
-        "text": "ALREADY DOCUMENTED · Report",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19197,7 +19789,7 @@
       },
       {
         "key": "keys.focusSearch",
-        "text": "Open the Investigation app and put the cursor in its search field",
+        "text": "Open the Investigation app's search drawer",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19209,7 +19801,7 @@
       },
       {
         "key": "keys.escape",
-        "text": "Close a menu, this card or the search; clear the search; leave a text field; close the Menu or cancel a drag. With none of those, leave the PC",
+        "text": "Close a menu, this card or the search drawer; clear the search; leave a text field; let go of a held value; close the Menu or cancel a drag. With none of those, leave the PC",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19244,86 +19836,80 @@
         "tier": "Full"
       },
       {
-        "key": "keys.tabs",
-        "text": "Investigation: show the source at that place in the list",
+        "key": "keys.step",
+        "text": "Investigation: go to step 1 to 5 (Papers, Records, Books, Rules, Decision)",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "keys.nextTab",
-        "text": "The next or previous source (↑ ↓ on the list)",
+        "key": "keys.nextStep",
+        "text": "The next or previous step (← → on the steps)",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "keys.moveTab",
-        "text": "Move the source up or down the list",
+        "key": "keys.findings",
+        "text": "Show or hide the findings column",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.hints",
+        "text": "Show or hide the steps' hints",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.otherPane",
-        "text": "Make the other pane the active one",
+        "text": "Make the other side the one the shelf opens on",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.split",
-        "text": "Open a second pane beside, or close it",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "keys.sidebar",
-        "text": "Show or hide the list of sources",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "keys.steps",
-        "text": "Show or hide the checklist",
+        "text": "Two panes or one",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.history",
-        "text": "Back or forward in the pane",
+        "text": "Back or forward in the pane the shelf opens on",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.regions",
-        "text": "The next or previous part of the app: search, sources, items, rows, checklist, compare, Accept and Deny",
+        "text": "The next or previous part of the app: steps, shelf, panes, findings, Cancel, Accept and Deny",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.rows",
-        "text": "Move the focus over the rows, items, pins or buttons",
+        "text": "Move the focus over the values, chips, findings, pins or buttons",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.follow",
-        "text": "Open the focused item, or follow a row's link",
+        "text": "Open the focused item, or follow a value's link",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.followOther",
-        "text": "Follow a row's link, or open the focused search result, in the other pane",
+        "text": "Follow a value's link, or open the focused search result, on the other side",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.pick",
-        "text": "Pick the focused row for compare",
+        "text": "Hold the focused value, then compare it with the next one",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.copy",
-        "text": "Copy the focused row's value, or \"Label: value\"",
+        "text": "Copy the focused value, or \"Label: value\"",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19335,7 +19921,7 @@
       },
       {
         "key": "keys.pin",
-        "text": "Pin or unpin the focused row, or the pane's item",
+        "text": "Pin or unpin the focused value, or the pane's document",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19376,12 +19962,6 @@
         "tier": "Full"
       },
       {
-        "key": "app.pin",
-        "text": "Pin",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "app.pins.full",
         "text": "Unpin something first: the pins are full.",
         "gloss": "None",
@@ -19389,7 +19969,7 @@
       },
       {
         "key": "app.pins.empty",
-        "text": "Ctrl+P pins the row you are on, or use Pin in a pane's header. Right-click a pin to unpin it.",
+        "text": "Ctrl+P pins the value you are on. Right-click a pin to unpin it.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19449,13 +20029,13 @@
       },
       {
         "key": "settings.stepsShown",
-        "text": "Checklist shown",
+        "text": "Step hints shown",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "settings.stepsHidden",
-        "text": "Checklist hidden",
+        "text": "Step hints hidden",
         "gloss": "None",
         "tier": "Full"
       },
@@ -20116,18 +20696,6 @@
       {
         "key": "compare.untranslated",
         "text": "(untranslated {0}; {1} Translator)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "compare.dockHint",
-        "text": "COMPARE    Click two values to compare them.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "compare.clear",
-        "text": "Clear the comparison",
         "gloss": "None",
         "tier": "Full"
       },

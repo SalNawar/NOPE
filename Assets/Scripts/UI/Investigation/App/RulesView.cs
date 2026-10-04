@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// The Investigation app's Rules tab (the PC redesign AP5, FO9, §2.9): the
@@ -11,9 +12,12 @@ using UnityEngine;
 /// issuing line and the stamp area; with no directive, the line saying every
 /// destination is cleared. A closure of one place has a ↗ to that place's
 /// row in the first reference book (SmartLinks.ForPlace), once the books are
-/// built. Nothing on the memo says whether a rule applies to the current
-/// traveller. A day source: it works between travellers; Mail's directive
-/// memo links here. Each pane has one; DayReference writes them all.
+/// built. Each directive is a value of the workbench (the PC workbench spec
+/// §4.3; lesson D5): a click holds it (MatchBoard.PickRule) to be matched
+/// with the value it is about. Nothing on the memo says whether a rule
+/// applies to the current traveller. A day source: it works between
+/// travellers; Mail's directive memo links here. Each pane has one;
+/// DayReference writes them all.
 /// </summary>
 public sealed class RulesView : AppView
 {
@@ -22,6 +26,11 @@ public sealed class RulesView : AppView
 
     /// <summary>The Directive Memo's page kind (Form_DirectiveMemo, TC-940).</summary>
     [SerializeField] private FormSpecSO memoForm;
+
+    /// <summary>The workbench a directive is held on.</summary>
+    [SerializeField] private MatchBoard board;
+
+    private readonly List<(FormSlot slot, Button button)> _armed = new List<(FormSlot, Button)>();
 
     private IReadOnlyList<TravelRuleSO> _rules = System.Array.Empty<TravelRuleSO>();
     private ClueCategory? _firstBook;
@@ -34,14 +43,20 @@ public sealed class RulesView : AppView
 
     private void Awake()
     {
-        if (Form != null)
-            Form.LinkClicked += Follow;
+        if (Form == null)
+            return;
+        Form.LinkClicked += Follow;
+        Form.SlotClicked += Pick;
+        page.Redrawn += MarkRows;
     }
 
     private void OnDestroy()
     {
-        if (Form != null)
-            Form.LinkClicked -= Follow;
+        if (Form == null)
+            return;
+        Form.LinkClicked -= Follow;
+        Form.SlotClicked -= Pick;
+        page.Redrawn -= MarkRows;
     }
 
     /// <summary>
@@ -72,23 +87,55 @@ public sealed class RulesView : AppView
             { DirectiveMemoPage.NoneSlot, rows.Count == 0 ? UiText.Get("directives.none") : string.Empty }
         };
         data.Rows = new Dictionary<string, IReadOnlyList<string[]>> { { DirectiveMemoPage.RowsSlot, rows } };
-        page.Show(memoForm.form, data, _ => false, LinkHint);
+        page.Show(memoForm.form, data, slot => board != null && RuleOf(slot) != null, LinkHint);
+        MarkRows();
     }
 
     /// <summary>The rule a table row's slot shows (the rows count the directives with a summary, in order), or null.</summary>
-    private TravelRuleSO RuleOf(FormSlot slot)
+    private TravelRuleSO RuleOf(FormSlot slot) => RuleOf(slot, out _);
+
+    /// <summary>The rule a table row's slot shows and its index in the day's directives (<paramref name="index"/>, EntryKeys.Rule's), or null.</summary>
+    private TravelRuleSO RuleOf(FormSlot slot, out int index)
     {
+        index = -1;
         if (slot.Source != DirectiveMemoPage.RowsSlot || slot.Row < 0)
             return null;
         int at = 0;
-        foreach (TravelRuleSO rule in _rules)
+        for (int i = 0; i < _rules.Count; i++)
         {
+            TravelRuleSO rule = _rules[i];
             if (rule == null || string.IsNullOrWhiteSpace(rule.Summary()))
                 continue;
             if (at++ == slot.Row)
+            {
+                index = i;
                 return rule;
+            }
         }
         return null;
+    }
+
+    /// <summary>A directive clicked: held on the workbench.</summary>
+    private void Pick(FormSlot slot)
+    {
+        TravelRuleSO rule = RuleOf(slot, out int index);
+        if (rule != null && board != null)
+            board.PickRule(index, rule);
+    }
+
+    /// <summary>Marks each directive's row with its key (EntryKeys.Rule: the workbench's line, the keys, the copy); again after every redraw.</summary>
+    private void MarkRows()
+    {
+        if (Form == null)
+            return;
+        Form.ArmedSlots(_armed);
+        foreach ((FormSlot slot, Button button) in _armed)
+        {
+            TravelRuleSO rule = RuleOf(slot, out int index);
+            if (rule != null)
+                AppRow.Mark(button.gameObject, AppTab.Rules, EntryKeys.Rule(index), UiText.Format("app.row.rule", index + 1), UiText.Get("app.tab.rules"),
+                            rule.Summary(), button);
+        }
     }
 
     /// <summary>A directive's link: its place's row in the first book (SmartLinks.ForPlace); None for a closure of a whole era or nation, or a procedure.</summary>

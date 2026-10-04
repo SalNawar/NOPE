@@ -313,12 +313,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.counters
-    text: 'Papers received: {0} of {1}
-
-      Scanned: {2}
-
-      Deviations logged:
-      {3}'
+    text: "Papers received: {0} of {1} \xB7 scanned: {2}"
     gloss: 0
     tier: 0
   - key: app.tab.documents
@@ -343,6 +338,403 @@ MonoBehaviour:
     tier: 0
   - key: app.tab.rules
     text: Today's rules
+    gloss: 0
+    tier: 0
+  - key: app.tab.calendar
+    text: Calendar
+    gloss: 0
+    tier: 0
+  - key: app.side.left
+    text: Left
+    gloss: 0
+    tier: 0
+  - key: app.side.right
+    text: Right
+    gloss: 0
+    tier: 0
+  - key: app.pane.shelfHere
+    text: Shelf opens here
+    gloss: 0
+    tier: 0
+  - key: app.search.open
+    text: Search   Ctrl K
+    gloss: 0
+    tier: 0
+  - key: app.row.rule
+    text: "Today's rules \xB7 rule {0}"
+    gloss: 0
+    tier: 0
+  - key: shelf.traveller
+    text: Traveller
+    gloss: 0
+    tier: 0
+  - key: shelf.agency
+    text: Agency
+    gloss: 0
+    tier: 0
+  - key: shelf.books
+    text: Books
+    gloss: 0
+    tier: 0
+  - key: guide.papers.name
+    text: Papers
+    gloss: 0
+    tier: 0
+  - key: guide.papers.title
+    text: Read the papers
+    gloss: 0
+    tier: 0
+  - key: guide.papers.text
+    text: 'Click a value, then another to compare them: the papers against each other
+      and against what the traveller said.'
+    gloss: 0
+    tier: 0
+  - key: guide.records.name
+    text: Records
+    gloss: 0
+    tier: 0
+  - key: guide.records.title
+    text: Check the papers against the records
+    gloss: 0
+    tier: 0
+  - key: guide.records.text
+    text: 'The traveller''s citizen record is on the right. Match the details that
+      matter: name, number, class, transponder, account.'
+    gloss: 0
+    tier: 0
+  - key: guide.books.name
+    text: Books
+    gloss: 0
+    tier: 0
+  - key: guide.books.title
+    text: Check the papers against the books
+    gloss: 0
+    tier: 0
+  - key: guide.books.text
+    text: Hold a paper's detail against the book row for the place the traveller
+      claims. A value from another place is a lie.
+    gloss: 0
+    tier: 0
+  - key: guide.rules.name
+    text: Rules
+    gloss: 0
+    tier: 0
+  - key: guide.rules.title
+    text: Check today's rules
+    gloss: 0
+    tier: 0
+  - key: guide.rules.text
+    text: Click a rule, then the value it is about. The calendar on the shelf holds
+      today's date for departures and expiry dates.
+    gloss: 0
+    tier: 0
+  - key: guide.decision.name
+    text: Decision
+    gloss: 0
+    tier: 0
+  - key: guide.decision.title
+    text: Decide
+    gloss: 0
+    tier: 0
+  - key: guide.decision.text
+    text: Accept sends the traveller through. Deny cites the first difference or
+      broken rule you logged.
+    gloss: 0
+    tier: 0
+  - key: guide.idle.text
+    text: The steps start when the next traveller steps up to the desk.
+    gloss: 0
+    tier: 0
+  - key: guide.next
+    text: 'Next: {0}'
+    gloss: 0
+    tier: 0
+  - key: guide.back
+    text: Back
+    gloss: 0
+    tier: 0
+  - key: guide.progress
+    text: Step {0} of {1}
+    gloss: 0
+    tier: 0
+  - key: guide.progressChecks
+    text: "Step {0} of {1} \xB7 To check: {2}"
+    gloss: 0
+    tier: 0
+  - key: guide.progressDone
+    text: "Step {0} of {1} \xB7 All checks here done"
+    gloss: 0
+    tier: 0
+  - key: status.holding
+    text: Holding <b>{0}</b> ({1}). Click another value to compare.
+    gloss: 0
+    tier: 0
+  - key: status.holdingRule
+    text: 'Holding the rule: <b>{0}</b> Click the value it is about.'
+    gloss: 0
+    tier: 0
+  - key: status.holdingToday
+    text: Holding today's date, <b>{0}</b>. Click a departure date or a Valid Until.
+    gloss: 0
+    tier: 0
+  - key: status.logged
+    text: '{0}. Logged.'
+    gloss: 0
+    tier: 0
+  - key: status.evidence
+    text: '{0}. Logged as evidence.'
+    gloss: 0
+    tier: 0
+  - key: status.already
+    text: You already compared those two. Shown again.
+    gloss: 0
+    tier: 0
+  - key: status.shown
+    text: '{0}. Shown again.'
+    gloss: 0
+    tier: 0
+  - key: status.cancel
+    text: Cancel   Esc
+    gloss: 0
+    tier: 0
+  - key: finding.link.Match
+    text: Matching data
+    gloss: 0
+    tier: 0
+  - key: finding.link.Differs
+    text: Data differs
+    gloss: 0
+    tier: 0
+  - key: finding.link.Elsewhere
+    text: Belongs elsewhere
+    gloss: 0
+    tier: 0
+  - key: finding.link.DifferentDetails
+    text: Different details
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherPlace
+    text: Not the claimed place
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherPerson
+    text: Another person
+    gloss: 0
+    tier: 0
+  - key: finding.link.TwoTruths
+    text: Both reference
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleMet
+    text: Meets the rule
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleBroken
+    text: Breaks the rule
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleNotAbout
+    text: Not what the rule covers
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleByComparison
+    text: Compare instead
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleNotForTraveller
+    text: Not for this traveller
+    gloss: 0
+    tier: 0
+  - key: finding.link.NothingToCompare
+    text: Nothing to compare
+    gloss: 0
+    tier: 0
+  - key: finding.link.DepartsToday
+    text: Departs today
+    gloss: 0
+    tier: 0
+  - key: finding.link.NotToday
+    text: Not today
+    gloss: 0
+    tier: 0
+  - key: finding.link.StillValid
+    text: Still valid
+    gloss: 0
+    tier: 0
+  - key: finding.link.Expired
+    text: Expired
+    gloss: 0
+    tier: 0
+  - key: finding.link.SealIncorrect
+    text: Seal incorrect
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherOffice
+    text: Another office
+    gloss: 0
+    tier: 0
+  - key: finding.note.DifferentDetails
+    text: '{0} and {1} are different details. Nothing logged.'
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherPlace
+    text: That book row is about another place than the one claimed. Nothing logged.
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherPerson
+    text: That record belongs to someone else. Nothing logged.
+    gloss: 0
+    tier: 0
+  - key: finding.note.TwoTruths
+    text: Both are reference data. Hold a paper or an answer against one of them.
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleNotAbout
+    text: That rule is not about the {1}. Nothing logged.
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleByComparison
+    text: 'Check this rule by comparing: hold the value against the books or the
+      record.'
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleNotForTraveller
+    text: This rule is not for this traveller. Nothing logged.
+    gloss: 0
+    tier: 0
+  - key: finding.note.NothingToCompare
+    text: Hold a rule or today's date against the value it is about.
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherOffice
+    text: Those seals are two offices'. Hold a paper's seal against its own office's
+      seal in the Seal Register. Nothing logged.
+    gloss: 0
+    tier: 0
+  - key: finding.title.Match
+    text: '{0} matches'
+    gloss: 0
+    tier: 0
+  - key: finding.title.Differs
+    text: '{0} differs'
+    gloss: 0
+    tier: 0
+  - key: finding.title.Elsewhere
+    text: '{0} belongs to another place'
+    gloss: 0
+    tier: 0
+  - key: finding.title.RuleMet
+    text: 'Meets the rule: {0}'
+    gloss: 0
+    tier: 0
+  - key: finding.title.RuleBroken
+    text: 'Breaks the rule: {0}'
+    gloss: 0
+    tier: 0
+  - key: finding.title.DepartsToday
+    text: Departs today
+    gloss: 0
+    tier: 0
+  - key: finding.title.NotToday
+    text: Departure is not today
+    gloss: 0
+    tier: 0
+  - key: finding.title.StillValid
+    text: '{0} is still valid'
+    gloss: 0
+    tier: 0
+  - key: finding.title.Expired
+    text: '{0} has expired'
+    gloss: 0
+    tier: 0
+  - key: finding.title.SealIncorrect
+    text: Seal incorrect
+    gloss: 0
+    tier: 0
+  - key: finding.detail
+    text: '{0} ({1}) against {2} ({3})'
+    gloss: 0
+    tier: 0
+  - key: finding.detail.rule
+    text: '{0} ({1})'
+    gloss: 0
+    tier: 0
+  - key: finding.detail.today
+    text: '{0} ({1}) on {2}'
+    gloss: 0
+    tier: 0
+  - key: finding.evidence
+    text: Logged as evidence
+    gloss: 0
+    tier: 0
+  - key: finding.what.today
+    text: Today's date
+    gloss: 0
+    tier: 0
+  - key: finding.what.rule
+    text: The rule
+    gloss: 0
+    tier: 0
+  - key: findings.title
+    text: Your findings
+    gloss: 0
+    tier: 0
+  - key: findings.report
+    text: Open the report
+    gloss: 0
+    tier: 0
+  - key: findings.empty
+    text: Nothing yet. Click a value, then the value to hold it against. Matches
+      and differences collect here.
+    gloss: 0
+    tier: 0
+  - key: decision.summary
+    text: 'Findings logged: {0}. To cite if you deny: {1}.'
+    gloss: 0
+    tier: 0
+  - key: decision.summaryNone
+    text: 'Findings logged: {0}. None is a difference or a broken rule, so Deny has
+      nothing to cite yet.'
+    gloss: 0
+    tier: 0
+  - key: decision.accept
+    text: Stamp the papers. {0} goes through.
+    gloss: 0
+    tier: 0
+  - key: decision.denyCites
+    text: 'Cites: {0}'
+    gloss: 0
+    tier: 0
+  - key: decision.denyWaits
+    text: Log a difference or a broken rule first.
+    gloss: 0
+    tier: 0
+  - key: calendar.title
+    text: Agency calendar
+    gloss: 0
+    tier: 0
+  - key: calendar.today
+    text: Today
+    gloss: 0
+    tier: 0
+  - key: calendar.todayTitle
+    text: "Calendar \xB7 Today"
+    gloss: 0
+    tier: 0
+  - key: calendar.shiftDay
+    text: Shift day {0}
+    gloss: 0
+    tier: 0
+  - key: calendar.unknown
+    text: Date unknown
+    gloss: 0
+    tier: 0
+  - key: search.drawer.title
+    text: Search documents
+    gloss: 0
+    tier: 0
+  - key: search.drawer.hint
+    text: Pick a result to open that document on the side the shelf opens on.
     gloss: 0
     tier: 0
   - key: app.chip.onDesk
@@ -370,23 +762,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.search
-    text: Search papers, records, books, rules and the transcript
-    gloss: 0
-    tier: 0
-  - key: app.pane.beside
-    text: Open beside
-    gloss: 0
-    tier: 0
-  - key: app.pane.close
-    text: Close
-    gloss: 0
-    tier: 0
-  - key: app.pane.path
-    text: "{0}  \u203A  <b>{1}</b>"
-    gloss: 0
-    tier: 0
-  - key: app.sidebar.steps
-    text: Checklist
+    text: A name, a place or a number
     gloss: 0
     tier: 0
   - key: app.sidebar.pinned
@@ -395,10 +771,6 @@ MonoBehaviour:
     tier: 0
   - key: app.sidebar.recent
     text: Recent
-    gloss: 0
-    tier: 0
-  - key: app.pins.title
-    text: Pinned and recent
     gloss: 0
     tier: 0
   - key: app.toast.scanned
@@ -434,7 +806,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: search.close
-    text: Close
+    text: Close   Esc
     gloss: 0
     tier: 0
   - key: search.title.row
@@ -533,36 +905,8 @@ MonoBehaviour:
     text: '{0} ({1}/{2})'
     gloss: 0
     tier: 0
-  - key: steps.none
-    text: The checklist shows while a traveller is at the desk.
-    gloss: 0
-    tier: 0
-  - key: steps.hidden
-    text: 'The checklist is hidden: click its heading to show it.'
-    gloss: 0
-    tier: 0
-  - key: steps.count
-    text: '{0} of {1}'
-    gloss: 0
-    tier: 0
-  - key: app.tabMenu.up
-    text: Move up
-    gloss: 0
-    tier: 0
-  - key: app.tabMenu.down
-    text: Move down
-    gloss: 0
-    tier: 0
-  - key: app.tabMenu.reset
-    text: Reset order
-    gloss: 0
-    tier: 0
-  - key: app.split.hint
-    text: Show a second source beside this one
-    gloss: 0
-    tier: 0
-  - key: app.split.tooNarrow
-    text: Maximise the window to open a second pane
+  - key: app.link.seal
+    text: 'Open the Seal Register: the issuing office''s seal'
     gloss: 0
     tier: 0
   - key: app.link.reference
@@ -591,22 +935,6 @@ MonoBehaviour:
     tier: 0
   - key: app.transcript.newLine
     text: New line below
-    gloss: 0
-    tier: 0
-  - key: compare.dockSide
-    text: '{0}:  {1}'
-    gloss: 0
-    tier: 0
-  - key: compare.dockPending
-    text: pick another value
-    gloss: 0
-    tier: 0
-  - key: compare.dockDeviation
-    text: "\u25CF  DEVIATION LOGGED \xB7 Report"
-    gloss: 0
-    tier: 0
-  - key: compare.dockAlready
-    text: "ALREADY DOCUMENTED \xB7 Report"
     gloss: 0
     tier: 0
   - key: window.minimize
@@ -1023,7 +1351,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.focusSearch
-    text: Open the Investigation app and put the cursor in its search field
+    text: Open the Investigation app's search drawer
     gloss: 0
     tier: 0
   - key: keys.intoResults
@@ -1032,8 +1360,9 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.escape
-    text: Close a menu, this card or the search; clear the search; leave a text field;
-      close the Menu or cancel a drag. With none of those, leave the PC
+    text: Close a menu, this card or the search drawer; clear the search; leave a
+      text field; let go of a held value; close the Menu or cancel a drag. With none
+      of those, leave the PC
     gloss: 0
     tier: 0
   - key: keys.help
@@ -1057,61 +1386,58 @@ MonoBehaviour:
     text: 'Orders: order, cancel or install the selected item'
     gloss: 0
     tier: 0
-  - key: keys.tabs
-    text: 'Investigation: show the source at that place in the list'
+  - key: keys.step
+    text: 'Investigation: go to step 1 to 5 (Papers, Records, Books, Rules, Decision)'
     gloss: 0
     tier: 0
-  - key: keys.nextTab
-    text: "The next or previous source (\u2191 \u2193 on the list)"
+  - key: keys.nextStep
+    text: "The next or previous step (\u2190 \u2192 on the steps)"
     gloss: 0
     tier: 0
-  - key: keys.moveTab
-    text: Move the source up or down the list
+  - key: keys.findings
+    text: Show or hide the findings column
+    gloss: 0
+    tier: 0
+  - key: keys.hints
+    text: Show or hide the steps' hints
     gloss: 0
     tier: 0
   - key: keys.otherPane
-    text: Make the other pane the active one
+    text: Make the other side the one the shelf opens on
     gloss: 0
     tier: 0
   - key: keys.split
-    text: Open a second pane beside, or close it
-    gloss: 0
-    tier: 0
-  - key: keys.sidebar
-    text: Show or hide the list of sources
-    gloss: 0
-    tier: 0
-  - key: keys.steps
-    text: Show or hide the checklist
+    text: Two panes or one
     gloss: 0
     tier: 0
   - key: keys.history
-    text: Back or forward in the pane
+    text: Back or forward in the pane the shelf opens on
     gloss: 0
     tier: 0
   - key: keys.regions
-    text: 'The next or previous part of the app: search, sources, items, rows, checklist,
-      compare, Accept and Deny'
+    text: 'The next or previous part of the app: steps, shelf, panes, findings, Cancel,
+      Accept and Deny'
     gloss: 0
     tier: 0
   - key: keys.rows
-    text: Move the focus over the rows, items, pins or buttons
+    text: Move the focus over the values, chips, findings, pins or buttons
     gloss: 0
     tier: 0
   - key: keys.follow
-    text: Open the focused item, or follow a row's link
+    text: Open the focused item, or follow a value's link
     gloss: 0
     tier: 0
   - key: keys.followOther
-    text: Follow a row's link, or open the focused search result, in the other pane
+    text: Follow a value's link, or open the focused search result, on the other
+      side
     gloss: 0
     tier: 0
   - key: keys.pick
-    text: Pick the focused row for compare
+    text: Hold the focused value, then compare it with the next one
     gloss: 0
     tier: 0
   - key: keys.copy
-    text: 'Copy the focused row''s value, or "Label: value"'
+    text: 'Copy the focused value, or "Label: value"'
     gloss: 0
     tier: 0
   - key: keys.paste
@@ -1119,7 +1445,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.pin
-    text: Pin or unpin the focused row, or the pane's item
+    text: Pin or unpin the focused value, or the pane's document
     gloss: 0
     tier: 0
   - key: keys.zoom
@@ -1147,17 +1473,12 @@ MonoBehaviour:
     text: "Citizen records \xB7 {0}"
     gloss: 0
     tier: 0
-  - key: app.pin
-    text: Pin
-    gloss: 0
-    tier: 0
   - key: app.pins.full
     text: 'Unpin something first: the pins are full.'
     gloss: 0
     tier: 0
   - key: app.pins.empty
-    text: Ctrl+P pins the row you are on, or use Pin in a pane's header. Right-click
-      a pin to unpin it.
+    text: Ctrl+P pins the value you are on. Right-click a pin to unpin it.
     gloss: 0
     tier: 0
   - key: app.recent.empty
@@ -1197,11 +1518,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: settings.stepsShown
-    text: Checklist shown
+    text: Step hints shown
     gloss: 0
     tier: 0
   - key: settings.stepsHidden
-    text: Checklist hidden
+    text: Step hints hidden
     gloss: 0
     tier: 0
   - key: settings.textSize
@@ -1648,14 +1969,6 @@ MonoBehaviour:
     tier: 0
   - key: compare.untranslated
     text: (untranslated {0}; {1} Translator)
-    gloss: 0
-    tier: 0
-  - key: compare.dockHint
-    text: COMPARE    Click two values to compare them.
-    gloss: 0
-    tier: 0
-  - key: compare.clear
-    text: Clear the comparison
     gloss: 0
     tier: 0
   - key: slot.Outfit

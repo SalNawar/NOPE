@@ -16,8 +16,8 @@ public class ShortcutMapTests
     /// <summary>The app's focus ring is on a list's item.</summary>
     private static readonly ShortcutContext AppList = new ShortcutContext(frameOpen: true, appFocused: true, listFocused: true);
 
-    /// <summary>The app's focus ring is on its tab strip.</summary>
-    private static readonly ShortcutContext AppTabs = new ShortcutContext(frameOpen: true, appFocused: true, tabStripFocused: true);
+    /// <summary>The app's focus ring is on its guided steps.</summary>
+    private static readonly ShortcutContext AppSteps = new ShortcutContext(frameOpen: true, appFocused: true, stepsFocused: true);
 
     /// <summary>The app's search field has the keyboard and its results panel lists hits.</summary>
     private static readonly ShortcutContext SearchWithResults =
@@ -35,6 +35,7 @@ public class ShortcutMapTests
         foreach (ShortcutContext c in new[] { App, Icons, new ShortcutContext(frameOpen: true) })
         {
             Assert.AreEqual(AppCommand.FocusSearch, Resolve(K(ShortcutKey.F, ctrl: true), c));
+            Assert.AreEqual(AppCommand.FocusSearch, Resolve(K(ShortcutKey.K, ctrl: true), c));
             Assert.AreEqual(AppCommand.Escape, Resolve(K(ShortcutKey.Escape), c));
             Assert.AreEqual(AppCommand.Help, Resolve(K(ShortcutKey.F1), c));
         }
@@ -66,30 +67,31 @@ public class ShortcutMapTests
     }
 
     [Test]
-    public void CtrlDigits_ShowTheTabAtThatPosition()
+    public void CtrlDigits_GoToThatGuidedStep()
     {
-        ShortcutKey[] digits = { ShortcutKey.Digit1, ShortcutKey.Digit2, ShortcutKey.Digit3, ShortcutKey.Digit4, ShortcutKey.Digit5, ShortcutKey.Digit6 };
-        AppCommand[] tabs = { AppCommand.Tab1, AppCommand.Tab2, AppCommand.Tab3, AppCommand.Tab4, AppCommand.Tab5, AppCommand.Tab6 };
+        ShortcutKey[] digits = { ShortcutKey.Digit1, ShortcutKey.Digit2, ShortcutKey.Digit3, ShortcutKey.Digit4, ShortcutKey.Digit5 };
+        AppCommand[] steps = { AppCommand.Step1, AppCommand.Step2, AppCommand.Step3, AppCommand.Step4, AppCommand.Step5 };
         for (int i = 0; i < digits.Length; i++)
         {
-            Assert.AreEqual(tabs[i], Resolve(K(digits[i], ctrl: true), App));
-            Assert.AreEqual(i + 1, ShortcutMap.TabPosition(tabs[i]));
+            Assert.AreEqual(steps[i], Resolve(K(digits[i], ctrl: true), App));
+            Assert.AreEqual(i + 1, ShortcutMap.StepPosition(steps[i]));
         }
-        Assert.AreEqual(0, ShortcutMap.TabPosition(AppCommand.Pin));
+        Assert.AreEqual(CaseGuide.Stages.Count, steps.Length, "one chord per guided step");
+        Assert.AreEqual(0, ShortcutMap.StepPosition(AppCommand.Pin));
+        Assert.IsNull(Resolve(K(ShortcutKey.Digit6, ctrl: true), App), "no sixth step");
     }
 
     [Test]
     public void TheAppsChords()
     {
-        Assert.AreEqual(AppCommand.NextTab, Resolve(K(ShortcutKey.Tab, ctrl: true), App));
-        Assert.AreEqual(AppCommand.PrevTab, Resolve(K(ShortcutKey.Tab, ctrl: true, shift: true), App));
-        Assert.AreEqual(AppCommand.MoveTabLeft, Resolve(K(ShortcutKey.PageUp, ctrl: true, shift: true), App));
-        Assert.AreEqual(AppCommand.MoveTabRight, Resolve(K(ShortcutKey.PageDown, ctrl: true, shift: true), App));
+        Assert.AreEqual(AppCommand.NextStep, Resolve(K(ShortcutKey.Tab, ctrl: true), App));
+        Assert.AreEqual(AppCommand.PrevStep, Resolve(K(ShortcutKey.Tab, ctrl: true, shift: true), App));
+        Assert.IsNull(Resolve(K(ShortcutKey.PageUp, ctrl: true, shift: true), App), "the navigator's order is retired");
         Assert.AreEqual(AppCommand.OtherPane, Resolve(K(ShortcutKey.F6), App));
         Assert.AreEqual(AppCommand.OtherPane, Resolve(K(ShortcutKey.F6, shift: true), App));
         Assert.AreEqual(AppCommand.ToggleSplit, Resolve(K(ShortcutKey.Backslash, ctrl: true), App));
-        Assert.AreEqual(AppCommand.ToggleSidebar, Resolve(K(ShortcutKey.B, ctrl: true), App));
-        Assert.AreEqual(AppCommand.ToggleSteps, Resolve(K(ShortcutKey.S, ctrl: true, shift: true), App));
+        Assert.AreEqual(AppCommand.ToggleFindings, Resolve(K(ShortcutKey.B, ctrl: true), App));
+        Assert.AreEqual(AppCommand.ToggleHints, Resolve(K(ShortcutKey.S, ctrl: true, shift: true), App));
         Assert.AreEqual(AppCommand.Back, Resolve(K(ShortcutKey.Left, alt: true), App));
         Assert.AreEqual(AppCommand.Forward, Resolve(K(ShortcutKey.Right, alt: true), App));
         Assert.AreEqual(AppCommand.NextRegion, Resolve(K(ShortcutKey.Tab), App));
@@ -133,14 +135,13 @@ public class ShortcutMapTests
     }
 
     [Test]
-    public void TheNavigatorFocused_TheArrowsSwitchSources()
+    public void TheStepsFocused_TheArrowsWalkTheSteps()
     {
-        // The navigator's sources are the TabStrip region (the PC UX redesign §6): a vertical list, so ↑ ↓ step it, and ← → still do.
-        Assert.AreEqual(AppCommand.PrevTab, Resolve(K(ShortcutKey.Left), AppTabs));
-        Assert.AreEqual(AppCommand.NextTab, Resolve(K(ShortcutKey.Right), AppTabs));
-        Assert.AreEqual(AppCommand.PrevTab, Resolve(K(ShortcutKey.Up), AppTabs));
-        Assert.AreEqual(AppCommand.NextTab, Resolve(K(ShortcutKey.Down), AppTabs));
-        Assert.IsNull(Resolve(K(ShortcutKey.Space), AppTabs));
+        Assert.AreEqual(AppCommand.PrevStep, Resolve(K(ShortcutKey.Left), AppSteps));
+        Assert.AreEqual(AppCommand.NextStep, Resolve(K(ShortcutKey.Right), AppSteps));
+        Assert.AreEqual(AppCommand.PrevStep, Resolve(K(ShortcutKey.Up), AppSteps));
+        Assert.AreEqual(AppCommand.NextStep, Resolve(K(ShortcutKey.Down), AppSteps));
+        Assert.IsNull(Resolve(K(ShortcutKey.Space), AppSteps));
     }
 
     [Test]
@@ -160,10 +161,10 @@ public class ShortcutMapTests
     {
         var field = new ShortcutContext(frameOpen: true, appFocused: true, textFieldFocused: true, listFocused: true, notesFocused: true);
         Assert.AreEqual(AppCommand.FocusSearch, Resolve(K(ShortcutKey.F, ctrl: true), field));
-        Assert.AreEqual(AppCommand.Tab3, Resolve(K(ShortcutKey.Digit3, ctrl: true), field));
+        Assert.AreEqual(AppCommand.Step3, Resolve(K(ShortcutKey.Digit3, ctrl: true), field));
         Assert.AreEqual(AppCommand.OtherPane, Resolve(K(ShortcutKey.F6), field));
         Assert.AreEqual(AppCommand.ToggleSplit, Resolve(K(ShortcutKey.Backslash, ctrl: true), field));
-        Assert.AreEqual(AppCommand.ToggleSidebar, Resolve(K(ShortcutKey.B, ctrl: true), field));
+        Assert.AreEqual(AppCommand.ToggleFindings, Resolve(K(ShortcutKey.B, ctrl: true), field));
         Assert.AreEqual(AppCommand.Escape, Resolve(K(ShortcutKey.Escape), field));
         Assert.AreEqual(AppCommand.Help, Resolve(K(ShortcutKey.F1), field));
 
@@ -289,7 +290,7 @@ public class ShortcutMapTests
     {
         ShortcutContext[] contexts =
         {
-            App, AppList, AppTabs, Icons, SearchWithResults, new ShortcutContext(frameOpen: true, notesFocused: true),
+            App, AppList, AppSteps, Icons, SearchWithResults, new ShortcutContext(frameOpen: true, notesFocused: true),
             new ShortcutContext(frameOpen: true, ordersFocused: true)
         };
         var reached = new HashSet<AppCommand>();

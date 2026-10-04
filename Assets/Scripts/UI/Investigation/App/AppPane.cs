@@ -3,40 +3,50 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 /// <summary>
 /// One pane of the Investigation app (the PC redesign AP2, AP5, AP8, AP9;
-/// the PC UX redesign IA6, IA7, C4): its header, which names what it shows
-/// in full words ("Papers  ›  Leisure Departure Visa": the source, then the
-/// item it shows when the view has items) beside the header's Pin and Open
-/// beside or Close (the app wires those), and its content (the active
-/// source's view; between travellers a case source shows the no-case state,
-/// "Waiting for the next traveller", instead). The views are IAppView
-/// components, each drawing its page as a form (FormPage). The pane has no
-/// tabs of its own: the app's navigator (AppNav) chooses its source and its
-/// item, for the active pane. Each pane has its own views and its own
+/// the PC workbench spec IA5, §3): its header (a button: a click makes this
+/// side the target of the shelf) with its side tag ("Left", "Right"), the
+/// name of the document it shows and, on the target side, "Shelf opens
+/// here" (the other side's says a click makes it the target), and its
+/// content (the source's view; between travellers a case source shows the
+/// no-case state, "Waiting for the next traveller", instead). The views are
+/// IAppView components, each drawing its page as a form (FormPage). The
+/// pane has no tabs of its own: the app's shelf, steps and links choose its
+/// source and its item. Each pane has its own views and its own
 /// back/forward history (NavHistory of LinkTargets: every source switch,
 /// item switch, lookup and link is recorded; Back and Forward walk it
 /// without recording). A link followed from one of its rows (FollowLink)
 /// goes to the app, which sends it to the other pane (Ctrl held: this one).
-/// A source is shown only by the player or by the app's own rules (a new
-/// case shows Papers in the left pane, AP8); a view never switches it. The
-/// active pane's header wears its accent underline while the app is split
-/// (SetFrame). Changed tells the app to redraw the navigator.
+/// A source is shown only by the player or by the app's own rules (a step
+/// puts its pair up); a view never switches it. The target side's header
+/// shows its target parts (SetTarget). Changed tells the app to mark the
+/// shelf.
 /// </summary>
 public sealed partial class AppPane : MonoBehaviour
 {
     /// <summary>The views, one per source (their Tab says which).</summary>
     [SerializeField] private AppView[] views = new AppView[0];
 
-    /// <summary>The header's title: the source and the item it shows.</summary>
+    /// <summary>The header's title: the document it shows.</summary>
     [SerializeField] private TMP_Text titleText;
+
+    /// <summary>The header (a click makes this side the target).</summary>
+    [SerializeField] private Button headerButton;
 
     /// <summary>The no-case state over the content (a case source between travellers).</summary>
     [SerializeField] private GameObject noCase;
 
-    /// <summary>The active pane's accent underline under its header (shown while the app is split).</summary>
-    [SerializeField] private GameObject activeFrame;
+    /// <summary>The header's parts shown while this side is the target (the filled side tag, "Shelf opens here", the strong frame).</summary>
+    [SerializeField] private GameObject[] targetParts = new GameObject[0];
+
+    /// <summary>The header's parts shown while it is not (the quiet side tag, the hairline frame).</summary>
+    [SerializeField] private GameObject[] otherParts = new GameObject[0];
+
+    /// <summary>The title's right inset while this side is the target (room for "Shelf opens here"), and while it is not.</summary>
+    [SerializeField] private Vector2 titleRightInsets = new Vector2(-216f, -16f);
 
     /// <summary>The source the pane shows first.</summary>
     [SerializeField] private AppTab startTab = AppTab.Documents;
@@ -62,6 +72,9 @@ public sealed partial class AppPane : MonoBehaviour
     /// <summary>Raised when a row's link is followed here: the target, and true to stay in this pane (Ctrl held).</summary>
     public event Action<AppPane, LinkTarget, bool> LinkFollowed;
 
+    /// <summary>Raised when the header is clicked (this side becomes the target).</summary>
+    public event Action<AppPane> HeaderClicked;
+
     /// <summary>The source the pane shows.</summary>
     public AppTab ActiveTab
     {
@@ -80,6 +93,27 @@ public sealed partial class AppPane : MonoBehaviour
 
     /// <summary>True when Forward has somewhere to go.</summary>
     public bool CanForward => _history != null && _history.CanForward;
+
+    /// <summary>Where the pane is: its view's spot (its source, item, lookup).</summary>
+    public LinkTarget Current
+    {
+        get
+        {
+            Init();
+            return Spot();
+        }
+    }
+
+    /// <summary>The document the pane shows, as the shelf names it: its source, and its item for a source with items (a paper, a book); -1 for one without.</summary>
+    public (AppTab Tab, int Item) Document
+    {
+        get
+        {
+            Init();
+            IAppView view = View(_active);
+            return (_active, view != null && view.Chips.Count > 0 ? view.Selected : -1);
+        }
+    }
 
     /// <summary>The source's view, or null when the pane has none.</summary>
     public IAppView View(AppTab tab)
@@ -151,11 +185,17 @@ public sealed partial class AppPane : MonoBehaviour
         HistoryChanged?.Invoke(this);
     }
 
-    /// <summary>Shows or hides the active pane's accent underline.</summary>
-    public void SetFrame(bool on)
+    /// <summary>Shows this side's header as the target of the shelf, or not.</summary>
+    public void SetTarget(bool on)
     {
-        if (activeFrame != null && activeFrame.activeSelf != on)
-            activeFrame.SetActive(on);
+        foreach (GameObject part in targetParts)
+            if (part != null && part.activeSelf != on)
+                part.SetActive(on);
+        foreach (GameObject part in otherParts)
+            if (part != null && part.activeSelf == on)
+                part.SetActive(!on);
+        if (titleText != null)
+            titleText.rectTransform.offsetMax = new Vector2(on ? titleRightInsets.x : titleRightInsets.y, titleText.rectTransform.offsetMax.y);
     }
 
     /// <summary>The pane shows (the app split, the window opened): it is set up and shows its source.</summary>
@@ -169,6 +209,8 @@ public sealed partial class AppPane : MonoBehaviour
         _ready = true;
         _history = new NavHistory<LinkTarget>(config != null ? config.paneHistory : 30);
         _active = startTab;
+        if (headerButton != null)
+            headerButton.onClick.AddListener(() => HeaderClicked?.Invoke(this));
 
         foreach (AppView view in views)
             if (view != null)
@@ -237,15 +279,12 @@ public sealed partial class AppPane : MonoBehaviour
         Changed?.Invoke(this);
     }
 
-    /// <summary>The header's title: the source's full name, then the item it shows in bold (a view with items, while a case shows); the source alone in bold otherwise.</summary>
+    /// <summary>The header's title: the document's name (the item it shows: a paper, a book, a record looked up), else the source's.</summary>
     private void Title()
     {
         if (titleText == null)
             return;
-        string source = UiText.Get("app.tab." + _active.ToString().ToLowerInvariant());
         string item = !Blocked && _views.TryGetValue(_active, out IAppView view) && view is IAppItems items ? items.ItemTitle : null;
-        if (!string.IsNullOrEmpty(item) && item.StartsWith(source, StringComparison.Ordinal))
-            item = item.Substring(source.Length).TrimStart(' ', '\u00B7'); // "Citizen records · Mio" (a pin's title) under Citizen records: "Mio"
-        titleText.text = string.IsNullOrEmpty(item) ? "<b>" + source + "</b>" : UiText.Format("app.pane.path", source, item);
+        titleText.text = string.IsNullOrEmpty(item) ? UiText.Get("app.tab." + _active.ToString().ToLowerInvariant()) : item;
     }
 }

@@ -15,13 +15,20 @@
 // row, else the row it really belongs to (the present's for a smuggler or a
 // fake displaced person); a record tell against the traveller's own record
 // row; a worn tell through Look against the Costume Guide; a forged seal
-// against its office's row of the Seal Register; someone else's photo against
-// the traveller's face through Look), then a scripted
+// against its office's seal in the Seal Register and someone else's photo
+// against the traveller's face (Look > Their face) on the PC workbench: the
+// paper's box clicked in its scanned copy, the register's seal clicked beside
+// it, the findings logging "Seal incorrect" / "Data differs" as evidence with
+// the labelled line; the first accepted traveller whose papers show a seal and
+// a photo has both held against their truths there too: "Matching data", and
+// another office's seal "Another office", nothing logged), then a scripted
 // verdict: the right one (deny a deviation fault with its evidence, deny a
 // directive fault (a closed destination, a wrong departure date, an expired
-// paper) without, accept the rest), except four planned mistakes (an honest
+// paper) after holding the broken rule against the value it is about on the
+// PC workbench (MatchBoard, RuleChecks), accept the rest), except four planned mistakes (an honest
 // traveller denied on day 1, a deviation fault accepted on day 2, one denied
-// without evidence on day 3, a directive fault accepted on day 4). During
+// without evidence on day 3, a directive fault accepted on day 4; never a
+// visual lie, so the first forged seal or swapped photo is proven). During
 // each shift, order at the PC (the Orders app's rule, OrderBook.Order)
 // Interview Protocols, then the Near East Speech translator (it needs the
 // Protocols delivered), at most one a day, once the wallet holds its price and
@@ -30,13 +37,14 @@
 // slot machine: its draw is unseeded).
 // RunShots plays the same run and also takes the screenshots of the redesign's
 // states at 1920x1080 and 1280x720 (<tag>/shots/: each day's paper and shift
-// report, each traveller kind's papers held and wheel, the app's sources
-// (driven through its navigator, the PC UX redesign: a click on a source
-// shows it in the active pane, the other pane is sent through the app's
-// Open), each form's scanned copy beside the Seal Register (the document
-// design spec: every document type on the PC), the two panes and one, search and its quick-open palette, the
-// checklist, each lie kind caught in the dock and
-// on the office strip, each citation reason, and after the transcript's END a
+// report, each traveller kind's papers held and wheel, the app's documents
+// (driven as the clerk does on the PC workbench: a shelf chip opens its
+// document on the target side, a step puts its pair up), each form's scanned
+// copy beside the Seal Register (the document design spec: every document
+// type on the PC; the register from the shelf's books), each seal or photo
+// proven on the workbench, the two panes and one, the search drawer and its
+// pinned and recent items, each lie kind caught in the findings and on the
+// office strip, each citation reason, and after the transcript's END a
 // shots-only day 7 with the Auto-Feed and Analysis scanners set on the desk);
 // its transcript must equal RunA's (screenshots never change the run).
 // Driven by direct calls from EditorApplication.update in the persistent
@@ -457,13 +465,13 @@ public static class _TimeDeskAuditPlay
             accept = false;
             gatherEvidence = false;
         }
-        else if (day == 2 && c.HasDeviationFault && Once("d2-accept-liar"))
+        else if (day == 2 && c.HasDeviationFault && !Visual(c) && Once("d2-accept-liar"))
         {
             plan = "MISTAKE accept a deviation fault";
             accept = true;
             gatherEvidence = false;
         }
-        else if (day == 3 && c.HasDeviationFault && Once("d3-unproven-denial"))
+        else if (day == 3 && c.HasDeviationFault && !Visual(c) && Once("d3-unproven-denial"))
         {
             plan = "MISTAKE deny a deviation fault without evidence";
             accept = false;
@@ -493,6 +501,8 @@ public static class _TimeDeskAuditPlay
         if (ShotsOn)
             yield return KindShots(o, c, day);
 
+        if (accept && !plan.StartsWith("MISTAKE") && VisualProbeFits(c) && First("visual probe"))
+            yield return VisualProbe(o, c, day, slot);
         if (gatherEvidence)
         {
             yield return Evidence(o, c, day, slot);
@@ -513,9 +523,23 @@ public static class _TimeDeskAuditPlay
         if (gatherEvidence)
             Check(o.Ui.EvidenceCount > 0, $"d{day} slot {slot}: a deviation fault ({FaultKey(c)}) is proven before its denial ({o.Ui.EvidenceCount} logged)");
 
-        // Odd slots decide at the stamp tray, even ones on the PC.
+        // A directive fault's rule held against its value on the workbench (the PC workbench spec §4.3), so the PC's Deny can cite it.
+        if (!accept && c.HasDirectiveFault)
+            yield return CiteRule(o, c, day, slot);
+
+        // Odd slots decide at the stamp tray, even ones on the PC: at the workbench's decision step, where Deny waits for a logged
+        // difference or broken rule (an unproven denial, a planned mistake, then goes to the ungated stamp tray).
         int before = o.Game.Ledger.verdicts.Count;
-        if (slot % 2 == 1 && o.Tray != null)
+        o.App.Guide.Go(GuideStage.Decision);
+        yield return Frames(1);
+        Button pcDeny = (Button)Field(o.Ui, "denyButton");
+        if (slot % 2 == 0 && !accept)
+        {
+            Check(pcDeny.interactable == o.App.Board.Log.HasDifference, $"d{day} slot {slot}: the PC's Deny waits for a logged difference ({o.App.Board.Log.Differences} logged, interactable {pcDeny.interactable})");
+            if (c.HasDeviationFault && gatherEvidence || c.HasDirectiveFault)
+                Check(pcDeny.interactable, $"d{day} slot {slot}: a right denial ({FaultKey(c)}) can be cited on the PC");
+        }
+        if ((slot % 2 == 1 || (!accept && !pcDeny.interactable)) && o.Tray != null)
         {
             o.Tray.Open();
             yield return Frames(2);
@@ -557,6 +581,9 @@ public static class _TimeDeskAuditPlay
     }
 
     private static bool Once(string key) => MistakesMade.Add(key);
+
+    /// <summary>A visual lie (the document design spec, D4, D8): a forged seal or someone else's photo.</summary>
+    private static bool Visual(CaseInstance c) => c.lie.HasValue && LieKinds.IsVisualLie(c.lie.Value);
 
     private static bool First(string key) => Seen.Add(key);
 
@@ -744,10 +771,9 @@ public static class _TimeDeskAuditPlay
                 int index = d;
                 DocumentRow r = row;
                 string docName = doc.template != null ? doc.template.displayName : "?";
-                if (row.Field.category == ClueCategory.Seal)
-                    yield return PairVisual(o, compare, $"papers Seal ({docName})", EvidencePicks.ForField(index, r, docName), () => SealRow(lib, row.Field.issuer), day, slot);
-                else if (row.Field.category == ClueCategory.Photo)
-                    yield return PairVisual(o, compare, $"papers Photo ({docName})", EvidencePicks.ForField(index, r, docName), () => Face(o, runner), day, slot);
+                if (row.Field.category == ClueCategory.Seal || row.Field.category == ClueCategory.Photo)
+                    yield return PairVisual(o, compare, runner, $"papers {row.Field.category} ({docName})", index, r, row.Field.issuer,
+                                            row.Field.category == ClueCategory.Seal ? FindingKind.SealIncorrect : FindingKind.Differs, true, day, slot);
                 else
                     yield return Pair($"papers {row.Field.category}", () => EvidencePicks.ForField(index, r, docName), row.Field.category, row.Field.value);
             }
@@ -808,14 +834,6 @@ public static class _TimeDeskAuditPlay
             Count($"proof {dsc.provedBy}");
     }
 
-    /// <summary>The Seal Register's row of office <paramref name="officeId"/> (the true seal a paper's seal is held against), or null.</summary>
-    private static ComparePick? SealRow(ContentLibrarySO lib, string officeId)
-    {
-        AgencyOffice office = lib.Agency.offices.FirstOrDefault(x => x != null && x.id == officeId);
-        ReferenceBookSO book = lib.ReferenceBooks.FirstOrDefault(b => b != null && b.category == ClueCategory.Seal);
-        return office != null && office.TryGetSeal(out Seal seal) ? EvidencePicks.ForSeal(book, office, Seals.Describe(seal)) : (ComparePick?)null;
-    }
-
     /// <summary>Look > Their face through the wheel (the interview presenter puts the face into the compare); null: the pick is the presenter's.</summary>
     private static ComparePick? Face(Office o, DialogRunner runner)
     {
@@ -830,20 +848,116 @@ public static class _TimeDeskAuditPlay
         return null;
     }
 
-    /// <summary>A visual tell (the document design spec, D4, D8): the paper's box, then its truth (the Seal Register's row, or the face through Look, which picks itself).</summary>
-    private static IEnumerator PairVisual(Office o, CompareController compare, string what, ComparePick tell, Func<ComparePick?> truth, int day, int slot)
+    /// <summary>
+    /// A seal or a photo held against its truth on the PC workbench (the
+    /// document design spec, D4, D8; the PC workbench spec §4), as the clerk
+    /// does it: a photo's face first through Look > Their face at the desk
+    /// (the wheel holds it), then the paper (scanned) opened from its shelf
+    /// chip on the left and, for a seal, the Seal Register from the shelf's
+    /// books on the right; the paper's box is clicked in its copy, then the
+    /// register's seal of <paramref name="office"/>. The findings must say
+    /// <paramref name="expected"/> (with <paramref name="tell"/>: logged as
+    /// evidence, the evidence count up), a seal's line between the two boxes
+    /// labelled with it. An honest seal is also clicked against another
+    /// office's seal: "Another office", nothing logged.
+    /// </summary>
+    private static IEnumerator PairVisual(Office o, CompareController compare, DialogRunner runner, string what, int document, DocumentRow row, string office,
+                                          FindingKind expected, bool tell, int day, int slot)
     {
+        bool seal = row.Field.category == ClueCategory.Seal;
         int before = o.Ui.EvidenceCount;
         compare.Clear();
-        compare.Select(tell, null);
-        ComparePick? t = truth();
-        if (t != null)
-            compare.Select(t.Value, null);
-        yield return Frames(1);
-        if (o.Ui.EvidenceCount > before)
-            yield break;
-        Line($"   evidence FAILED for {what}");
-        Check(false, $"d{day} slot {slot}: the {what} tell is proven through the compare path");
+        var documents = (CaseDocumentsPresenter)Field(o.Ui, "_documents");
+        if (documents.Papers.State(document) == PaperState.OnDesk)
+            Call(documents, "Scan", document);
+        if (!seal)
+            Face(o, runner);
+        yield return OpenApp(o);
+        bool opened = PaperBesideRegister(o, document, seal);
+        yield return Frames(4);
+        string fieldKey = PickKeys.Field(document, row.Index), truthKey = seal ? PickKeys.Seal(office) : PickKeys.Face;
+        AppRow box = Row(o, fieldKey), truth = seal ? Row(o, truthKey) : null;
+        Check(opened && box != null && box.Pickable && (!seal || (truth != null && truth.Pickable)),
+              $"d{day} slot {slot}: {what}: the paper's box{(seal ? " and its office's seal in the Seal Register" : "")} are clickable on the workbench");
+        if (box != null)
+            box.Pick();
+        if (truth != null)
+            truth.Pick();
+        yield return Frames(2);
+        Finding found = o.App.Board.Log.Find(fieldKey, truthKey);
+        var lines = (MatchLines)Field(o.App.Board, "lines");
+        string want = UiText.Get(FindingRules.LinkKey(expected));
+        string label = ((TMP_Text)Field(lines, "labelText")).text;
+        string got = found != null ? found.Kind + (found.Proof ? ", evidence" : "") : "nothing logged";
+        Report($"   d{day} slot {slot}: {what} on the workbench: {got}, line '{label}' (showing {lines.Showing}), evidence {before} -> {o.Ui.EvidenceCount}");
+        Check(found != null && found.Kind == expected && found.Proof == tell, $"d{day} slot {slot}: {what}: the findings log '{want}'{(tell ? " as evidence" : "")} ({got})");
+        if (seal)
+            Check(lines.Showing && label == want, $"d{day} slot {slot}: {what}: the line joins the two seals labelled '{want}' ('{label}')");
+        if (tell && o.Ui.EvidenceCount <= before)
+        {
+            Line($"   evidence FAILED for {what}");
+            Check(false, $"d{day} slot {slot}: the {what} tell is proven through the workbench");
+        }
+        if (!tell)
+            Check(o.Ui.EvidenceCount == before, $"d{day} slot {slot}: {what}: an honest {row.Field.category} proves nothing ({o.Ui.EvidenceCount} evidence)");
+        if (ShotsOn && First($"workbench {row.Field.category} {expected}"))
+            yield return Shots($"workbench_{row.Field.category}_{expected}");
+        if (seal && !tell)
+        {
+            AgencyOffice other = RunManager.Instance.Library.Agency.offices.FirstOrDefault(x => x != null && x.id != office && x.TryGetSeal(out _));
+            AppRow otherSeal = other != null ? Row(o, PickKeys.Seal(other.id)) : null;
+            Check(otherSeal != null, $"d{day} slot {slot}: {what}: another office's seal is on the register");
+            if (otherSeal != null && box != null)
+            {
+                int count = o.App.Board.Log.Count;
+                string note = UiText.Get(FindingRules.LinkKey(FindingKind.OtherOffice));
+                box.Pick();
+                otherSeal.Pick();
+                yield return Frames(2);
+                string drawn = ((TMP_Text)Field(lines, "labelText")).text;
+                Check(o.App.Board.Log.Count == count && drawn == note,
+                      $"d{day} slot {slot}: {what}: against another office's seal the line reads '{note}' and nothing is logged ('{drawn}', {o.App.Board.Log.Count - count} logged)");
+                if (ShotsOn && First("workbench Seal OtherOffice"))
+                    yield return Shots("workbench_Seal_OtherOffice");
+            }
+        }
+        compare.Clear();
+        yield return CloseApp(o);
+    }
+
+    /// <summary>The app's row with <paramref name="key"/> in a showing pane, or null.</summary>
+    private static AppRow Row(Office o, string key)
+    {
+        RectTransform box = o.App.FindRow(key, new List<AppRow>());
+        return box != null ? box.GetComponent<AppRow>() : null;
+    }
+
+    /// <summary>The visual probe fits a traveller whose papers show an honest seal of an office and an honest photo.</summary>
+    private static bool VisualProbeFits(CaseInstance c) =>
+        c.documents.Any(d => d.fields.Any(f => f != null && f.category == ClueCategory.Seal && !string.IsNullOrEmpty(f.issuer) && !f.isAnachronism)) &&
+        c.documents.Any(d => d.fields.Any(f => f != null && f.category == ClueCategory.Photo && !f.isAnachronism));
+
+    /// <summary>
+    /// The first accepted traveller whose papers show an honest seal and photo
+    /// (the document design spec, D4, D8, on the PC workbench): the seal
+    /// against its office's seal in the Seal Register ("Matching data", then
+    /// another office's: "Another office", nothing logged) and the photo
+    /// against Look > Their face ("Matching data"); nothing proved.
+    /// </summary>
+    private static IEnumerator VisualProbe(Office o, CaseInstance c, int day, int slot)
+    {
+        var compare = (CompareController)Field(o.Ui, "compareController");
+        var runner = (DialogRunner)Field(Field(o.Ui, "_interview"), "_runner");
+        foreach (ClueCategory category in new[] { ClueCategory.Seal, ClueCategory.Photo })
+            for (int d = 0; d < c.documents.Count; d++)
+            {
+                int f = c.documents[d].fields.FindIndex(x => x != null && x.category == category && !x.isAnachronism && (category != ClueCategory.Seal || !string.IsNullOrEmpty(x.issuer)));
+                if (f < 0)
+                    continue;
+                DocumentField field = c.documents[d].fields[f];
+                yield return PairVisual(o, compare, runner, $"honest {category} ({c.documents[d].DisplayName})", d, new DocumentRow(f, field), field.issuer, FindingKind.Match, false, day, slot);
+                break;
+            }
     }
 
     private static IEnumerator PairDress(Office o, CompareController compare, Func<ComparePick?> look, Func<ComparePick?> claimed, Func<ComparePick?> home, string what, int day, int slot)
@@ -938,24 +1052,54 @@ public static class _TimeDeskAuditPlay
 
     /// <summary>
     /// A form's scanned copy (the document design spec: every document type
-    /// on the PC): paper <paramref name="index"/> in the left pane beside the
-    /// Seal Register in the right, its seal held against its office's; shot as <paramref name="name"/>.
+    /// on the PC), driven as the clerk does on the workbench: paper
+    /// <paramref name="index"/> opened from its shelf chip on the left, the
+    /// Seal Register from the shelf's books on the right; shot as <paramref name="name"/>.
     /// </summary>
     private static IEnumerator FormCopyShots(Office o, CaseInstance c, int index, string name)
     {
         yield return OpenApp(o);
-        AppPane l = o.LeftPane, r = o.RightPane;
-        Call(o.App, "Activate", l);
-        o.App.Open(LinkTarget.ToTab(AppTab.Documents, index), false);
-        int seals = RunManager.Instance.Library.ReferenceBooks.Where(b => b != null).ToList().FindIndex(b => b.category == ClueCategory.Seal);
-        if (r != null && r.gameObject.activeInHierarchy && seals >= 0)
-            o.App.Open(LinkTarget.ToTab(AppTab.Reference, seals), true);
+        PaperBesideRegister(o, index, true);
         yield return Frames(4);
         yield return Shots(name);
         yield return CloseApp(o);
     }
 
-    /// <summary>A deviation fault's tells proven: the first of each fault kind, on the office strip and in the app (the Report tab, the dock's verdict).</summary>
+    /// <summary>
+    /// Paper <paramref name="index"/> on the left from its shelf chip and, with
+    /// <paramref name="register"/>, the Seal Register on the right from its chip
+    /// in the shelf's Books group (checked there); false when a chip is missing.
+    /// </summary>
+    private static bool PaperBesideRegister(Office o, int index, bool register)
+    {
+        var shelf = (ShelfView)Field(o.App, "shelf");
+        AppPane l = o.LeftPane, r = o.RightPane;
+        ((Button)Field(l, "headerButton")).onClick.Invoke();
+        int paper = -1;
+        for (int i = 0; i < shelf.Items.Count && paper < 0; i++)
+            if (shelf.Items[i].Target.Tab == AppTab.Documents && shelf.Items[i].Target.Item == index)
+                paper = i;
+        if (paper >= 0)
+            shelf.Chips[paper].onClick.Invoke();
+        if (!register)
+            return paper >= 0;
+        ReferenceBookSO seals = RunManager.Instance.Library.ReferenceBooks.FirstOrDefault(b => b != null && b.category == ClueCategory.Seal);
+        int book = -1;
+        for (int i = 0; seals != null && i < shelf.Items.Count && book < 0; i++)
+            if (shelf.Items[i].GroupKey == "shelf.books" && shelf.Items[i].Label == seals.displayName)
+                book = i;
+        Check(book >= 0, $"the Seal Register is a document of the shelf's Books group ({(seals != null ? seals.displayName : "no Seal book")})");
+        if (r == null || !r.gameObject.activeInHierarchy)
+            o.App.Run(AppCommand.ToggleSplit);
+        if (book >= 0 && r != null)
+        {
+            ((Button)Field(r, "headerButton")).onClick.Invoke();
+            shelf.Chips[book].onClick.Invoke();
+        }
+        return paper >= 0 && book >= 0;
+    }
+
+    /// <summary>A deviation fault's tells proven: the first of each fault kind, on the office strip and in the app (the Deviation Report, opened from the findings).</summary>
     private static IEnumerator CaughtShots(Office o, CaseInstance c)
     {
         string key = FaultKey(c).Replace(' ', '_');
@@ -990,61 +1134,149 @@ public static class _TimeDeskAuditPlay
 
     /// <summary>
     /// The PC frame open on the Investigation app, driven the way the clerk
-    /// does (the PC UX redesign): the left pane made active, then its source
-    /// clicked in the navigator (Citizen records: the traveller's name looked
-    /// up), the right one sent through the app's Open to the other pane; the
-    /// navigator is checked (every source in full words, the active pane's
-    /// source selected with its items under it, the other pane's outlined);
-    /// shot, then the office again.
+    /// does on the workbench (the PC workbench spec IA4, IA5): the left pane
+    /// made the target (a click on its header), then the shelf's chip of
+    /// <paramref name="left"/> clicked (Citizen records: the traveller's name
+    /// looked up), the right pane made the target and <paramref name="right"/>'s
+    /// chip clicked; the shelf is checked (every document of the case and the
+    /// day on it, the two shown marked with their sides); shot, then the office
+    /// again.
     /// </summary>
     private static IEnumerator AppShots(Office o, CaseInstance c, string name, AppTab left, AppTab right)
     {
         yield return OpenApp(o);
         AppPane l = o.LeftPane, r = o.RightPane;
-        Call(o.App, "Activate", l);
-        if (left == AppTab.Records)
-            o.App.Open(LinkTarget.ToRecords(c.visitorGivenName), false);
-        else
-            o.Nav.Entry(left).onClick.Invoke();
-        Check(l.ActiveTab == left, $"{name}: a click on {left} in the navigator shows it in the active pane (shows {l.ActiveTab})");
+        ((Button)Field(l, "headerButton")).onClick.Invoke();
+        OpenFromShelf(o, left, c);
+        Check(l.ActiveTab == left, $"{name}: {left} opens on the target side from the shelf (the report: from the findings) (the left pane shows {l.ActiveTab})");
         bool split = r != null && r.gameObject.activeInHierarchy;
         if (split)
-            o.App.Open(LinkTarget.ToTab(right), true);
+        {
+            ((Button)Field(r, "headerButton")).onClick.Invoke();
+            OpenFromShelf(o, right, c);
+        }
         yield return Frames(4);
-        CheckNavigator(o, name, split ? r : l, split ? l : null);
+        CheckShelf(o, name, l, split ? r : null);
         yield return Shots(name);
         yield return CloseApp(o);
     }
 
-    /// <summary>
-    /// The navigator as the clerk reads it (the PC UX redesign IA1-IA3): each
-    /// source's entry reads its full name (the ui string, never letters), the
-    /// <paramref name="active"/> pane's source is selected and lists the
-    /// view's items (one per chip), and the <paramref name="other"/> pane's
-    /// source (while split) wears the beside outline.
-    /// </summary>
-    private static void CheckNavigator(Office o, string name, AppPane active, AppPane other)
+    /// <summary>A click on <paramref name="tab"/>'s first chip on the shelf (Citizen records looked up by the traveller's name through the target pane, as a lookup does); the Deviation Report, which is not on the shelf (the PC workbench spec §9.6), through the findings column's "Open the report".</summary>
+    private static void OpenFromShelf(Office o, AppTab tab, CaseInstance c)
     {
-        foreach (AppTab tab in TabOrder.Default)
+        if (tab == AppTab.Report)
         {
-            string label = o.Nav.Entry(tab).GetComponentInChildren<TMP_Text>(true).text;
-            string full = UiText.Get("app.tab." + tab.ToString().ToLowerInvariant());
-            Check(label == full && label.Length > 4 && label != label.ToUpperInvariant(), $"{name}: the navigator names {tab} in full words ('{label}')");
+            ((Button)Field(o.App.Board.Findings, "reportButton")).onClick.Invoke();
+            return;
         }
-        AppTab shown = active.ActiveTab;
-        var selected = (GameObject[])Field(o.Nav, "selected");
-        Check(selected[(int)shown].activeSelf, $"{name}: the navigator selects the active pane's source ({shown})");
-        IAppView view = active.View(shown);
-        int items = view != null && !active.Blocked ? view.Chips.Count : 0;
-        Check(o.Nav.Items.Count == items, $"{name}: the navigator lists {shown}'s {items} items under it ({o.Nav.Items.Count})");
-        if (other != null && other.ActiveTab != shown)
+        var shelf = (ShelfView)Field(o.App, "shelf");
+        for (int i = 0; i < shelf.Items.Count; i++)
+            if (shelf.Items[i].Target.Tab == tab)
+            {
+                shelf.Chips[i].onClick.Invoke();
+                break;
+            }
+        if (tab == AppTab.Records)
+            o.App.OpenOnTarget(LinkTarget.ToRecords(c.visitorGivenName));
+    }
+
+    /// <summary>
+    /// The shelf as the clerk reads it (the PC workbench spec IA4): a chip per
+    /// paper, Citizen records, a chip per book, the transcript, today's rules
+    /// and the calendar, each by its full name; the documents the two panes
+    /// show marked "Left" and "Right".
+    /// </summary>
+    private static void CheckShelf(Office o, string name, AppPane left, AppPane right)
+    {
+        var shelf = (ShelfView)Field(o.App, "shelf");
+        foreach (AppTab tab in new[] { AppTab.Documents, AppTab.Records, AppTab.Reference, AppTab.Transcript, AppTab.Rules, AppTab.Calendar })
+            Check(shelf.Items.Any(x => x.Target.Tab == tab), $"{name}: the shelf holds {tab}");
+        int marked = shelf.Chips.Count(chip => chip.transform.Find("Side").gameObject.activeSelf);
+        int shown = (left.Blocked ? 0 : 1) + (right != null && !right.Blocked ? 1 : 0);
+        Check(marked == shown || left.ActiveTab == AppTab.Report || (right != null && right.ActiveTab == AppTab.Report),
+              $"{name}: the shelf marks the {shown} documents shown with their side ({marked} marked)");
+    }
+
+    /// <summary>
+    /// A directive fault cited on the workbench: the first of today's rules
+    /// that the traveller breaks (Directives.FaultOf over their facts) held
+    /// against the value it is about (MatchBoard.PickRule, then the value
+    /// through the compare: a paper's field of the rule's detail, else the
+    /// traveller's record row), so the findings log "Breaks the rule".
+    /// </summary>
+    private static IEnumerator CiteRule(Office o, CaseInstance c, int day, int slot)
+    {
+        var rules = (IReadOnlyList<TravelRuleSO>)Field(Field(o.Ui, "_reference"), "_rules");
+        var compare = (CompareController)Field(o.Ui, "compareController");
+        int index = -1;
+        for (int i = 0; rules != null && i < rules.Count; i++)
+            if (rules[i] != null && rules[i].AppliesTo(c.kind) && (rules[i].IsClosure ? rules[i].Directive.Closes(c.claimedNation != null ? c.claimedNation.id : null, c.claimedEra != null ? c.claimedEra.id : null)
+                                                                    : Directives.FaultOf(rules[i].Directive, c.facts) != DirectiveFault.None))
+            {
+                index = i;
+                break;
+            }
+        if (index < 0)
         {
-            var beside = (GameObject[])Field(o.Nav, "beside");
-            Check(beside[(int)other.ActiveTab].activeSelf, $"{name}: the navigator outlines the other pane's source ({other.ActiveTab})");
+            Report($"   d{day} slot {slot}: no rule of today breaks for {c.directiveFault}");
+            yield break;
+        }
+        foreach (ClueCategory about in RuleDetails(rules[index].type, c.directiveFault))
+            for (int d = 0; d < c.documents.Count; d++)
+            {
+                List<DocumentField> fields = c.documents[d].fields;
+                for (int f = 0; f < fields.Count; f++)
+                {
+                    if (fields[f] == null || fields[f].category != about)
+                        continue;
+                    if (rules[index].type == TravelRuleType.PaperDates &&
+                        RuleChecks.Check(rules[index].Directive, about, fields[f].value, c.facts, null, null) != RuleVerdict.Breaks)
+                        continue;
+                    compare.Clear();
+                    o.App.Board.PickRule(index, rules[index]);
+                    compare.Select(EvidencePicks.ForField(d, new DocumentRow(f, fields[f]), c.documents[d].DisplayName), null);
+                    yield return Frames(1);
+                    Report($"   d{day} slot {slot}: rule {index + 1} held against {c.documents[d].DisplayName} · {fields[f].label}: {o.App.Board.Log.Differences} difference(s) logged");
+                    if (o.App.Board.Log.HasDifference)
+                        yield break;
+                }
+            }
+        CitizenRecord rec = RecordOf(o, c);
+        if (rec != null)
+            foreach (RecordGroup group in rec.Groups)
+                foreach (RecordRow row in group.Rows)
+                    if (RuleDetails(rules[index].type, c.directiveFault).Contains(row.Category))
+                    {
+                        compare.Clear();
+                        o.App.Board.PickRule(index, rules[index]);
+                        compare.Select(EvidencePicks.ForRecord(rec, row), null);
+                        yield return Frames(1);
+                        Report($"   d{day} slot {slot}: rule {index + 1} held against the record's {row.Label}: {o.App.Board.Log.Differences} difference(s) logged");
+                        if (o.App.Board.Log.HasDifference)
+                            yield break;
+                    }
+    }
+
+    /// <summary>The details a rule of <paramref name="type"/> is about (RuleChecks), the fault's own first.</summary>
+    private static List<ClueCategory> RuleDetails(TravelRuleType type, DirectiveFault fault)
+    {
+        switch (type)
+        {
+            case TravelRuleType.PaperDates:
+                return fault == DirectiveFault.ExpiredPaper ? new List<ClueCategory> { ClueCategory.Expiry, ClueCategory.DepartureDate }
+                                                            : new List<ClueCategory> { ClueCategory.DepartureDate, ClueCategory.Expiry };
+            case TravelRuleType.PaperSet:
+                return new List<ClueCategory> { ClueCategory.AccountStatus, ClueCategory.TransponderClass, ClueCategory.Signature, ClueCategory.WaiverNo };
+            case TravelRuleType.DebtStanding:
+                return new List<ClueCategory> { ClueCategory.AccountStatus, ClueCategory.Debt };
+            case TravelRuleType.TransponderRecall:
+                return new List<ClueCategory> { ClueCategory.TransponderId };
+            default:
+                return new List<ClueCategory> { ClueCategory.Destination };
         }
     }
 
-    /// <summary>A search typed into the app's toolbar field: the palette's quick-open panel (Pinned, Recent) while it is empty and has the keyboard, then the results panel over the panes; closed and cleared after.</summary>
+    /// <summary>A search typed into the app's search drawer (Ctrl+K): its pinned and recent items while the field is empty, then the results; closed after.</summary>
     private static IEnumerator SearchShots(Office o, CaseInstance c, string name, string query)
     {
         yield return OpenApp(o);
@@ -1052,7 +1284,7 @@ public static class _TimeDeskAuditPlay
         var field = (TMP_InputField)Field(box, "field");
         o.App.Run(AppCommand.FocusSearch);
         yield return Frames(3);
-        Check(box.QuickOpenShowing, $"{name}: the empty search field opens the quick-open palette (Pinned and Recent)");
+        Check(o.App.SearchOpen && box.QuickOpenShowing, $"{name}: Ctrl+K opens the search drawer with the pinned and recent items (Pinned and Recent)");
         if (First("quick open"))
             yield return Shots("search_quick_open");
         field.text = query;
@@ -1431,7 +1663,6 @@ public static class _TimeDeskAuditPlay
         public GameObject CitationPanel => (GameObject)Field(OfficeUi, "citationPanel");
         public InvestigationApp App => (InvestigationApp)Field(Ui, "app");
         public AppPane LeftPane => (AppPane)Field(App, "leftPane");
-        public AppNav Nav => (AppNav)Field(App, "nav");
         public AppPane RightPane => (AppPane)Field(App, "rightPane");
         public List<DeskDocument> Papers() => ((Transform)Field(Desk, "paperRoot")).GetComponentsInChildren<DeskDocument>().ToList();
         public DeskDocument Paper(int index) => Papers().FirstOrDefault(p => p.Index == index);

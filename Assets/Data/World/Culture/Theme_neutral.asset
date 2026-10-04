@@ -59,15 +59,15 @@ MonoBehaviour:
     textClass: 1
   - role: 6
     hasFill: 1
-    fill: {r: 0.9254902, g: 0.9137255, b: 0.84705883, a: 1}
+    fill: {r: 0.9843137, g: 0.9843137, b: 0.98039216, a: 1}
     hasInk: 1
-    ink: {r: 0.101960786, g: 0.09019608, b: 0.078431375, a: 1}
+    ink: {r: 0.11372549, g: 0.12156863, b: 0.12941177, a: 1}
     textClass: 1
   - role: 7
     hasFill: 1
-    fill: {r: 0.10980392, g: 0.14901961, b: 0.21176471, a: 1}
+    fill: {r: 1, g: 1, b: 1, a: 1}
     hasInk: 1
-    ink: {r: 1, g: 1, b: 1, a: 1}
+    ink: {r: 0.11372549, g: 0.12156863, b: 0.12941177, a: 1}
     textClass: 1
   - role: 8
     hasFill: 1
@@ -157,13 +157,13 @@ MonoBehaviour:
     hasFill: 1
     fill: {r: 1, g: 1, b: 0.8784314, a: 1}
     hasInk: 1
-    ink: {r: 0.050980393, g: 0.4509804, b: 0.12156863, a: 1}
+    ink: {r: 0.18431373, g: 0.36862746, b: 0.2, a: 1}
     textClass: 1
   - role: 23
     hasFill: 1
     fill: {r: 1, g: 1, b: 0.8784314, a: 1}
     hasInk: 1
-    ink: {r: 0.72156864, g: 0.101960786, b: 0.078431375, a: 1}
+    ink: {r: 0.6039216, g: 0.18039216, b: 0.17254902, a: 1}
     textClass: 1
   - role: 24
     hasFill: 1
@@ -173,7 +173,7 @@ MonoBehaviour:
     textClass: 1
   - role: 25
     hasFill: 1
-    fill: {r: 1, g: 0.92156863, b: 0.34901962, a: 0.7}
+    fill: {r: 0.6117647, g: 0.8117647, b: 0.9490196, a: 0.7}
     hasInk: 0
     ink: {r: 0, g: 0, b: 0, a: 0}
     textClass: 0
@@ -223,7 +223,7 @@ MonoBehaviour:
     hasFill: 1
     fill: {r: 1, g: 1, b: 1, a: 1}
     hasInk: 1
-    ink: {r: 0.43137255, g: 0.43137255, b: 0.43137255, a: 1}
+    ink: {r: 0.41568628, g: 0.4117647, b: 0.39215687, a: 1}
     textClass: 4
   - role: 35
     hasFill: 1
@@ -311,9 +311,9 @@ MonoBehaviour:
     textClass: 1
   - role: 49
     hasFill: 1
-    fill: {r: 0.8862745, g: 0.8784314, b: 0.8392157, a: 1}
+    fill: {r: 1, g: 1, b: 1, a: 1}
     hasInk: 1
-    ink: {r: 0.10980392, g: 0.105882354, b: 0.09803922, a: 1}
+    ink: {r: 0.11372549, g: 0.12156863, b: 0.12941177, a: 1}
     textClass: 1
   - role: 50
     hasFill: 1
@@ -357,6 +357,60 @@ MonoBehaviour:
     hasInk: 1
     ink: {r: 0.101960786, g: 0.09019608, b: 0.078431375, a: 1}
     textClass: 0
+  - role: 57
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 1}
+    hasInk: 1
+    ink: {r: 0.101960786, g: 0.09019608, b: 0.078431375, a: 1}
+    textClass: 1
+  - role: 58
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 1}
+    hasInk: 1
+    ink: {r: 0.41568628, g: 0.4117647, b: 0.39215687, a: 1}
+    textClass: 1
+  - role: 59
+    hasFill: 1
+    fill: {r: 0.9019608, g: 0.89411765, b: 0.8745098, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 60
+    hasFill: 1
+    fill: {r: 0.7882353, g: 0.7764706, b: 0.7490196, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 61
+    hasFill: 1
+    fill: {r: 0.10980392, g: 0.14901961, b: 0.21176471, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 62
+    hasFill: 1
+    fill: {r: 0.92941177, g: 0.9529412, b: 0.9254902, a: 1}
+    hasInk: 1
+    ink: {r: 0.18431373, g: 0.36862746, b: 0.2, a: 1}
+    textClass: 1
+  - role: 63
+    hasFill: 1
+    fill: {r: 0.99215686, g: 0.92156863, b: 0.9254902, a: 1}
+    hasInk: 1
+    ink: {r: 0.6039216, g: 0.18039216, b: 0.17254902, a: 1}
+    textClass: 1
+  - role: 64
+    hasFill: 1
+    fill: {r: 0.9529412, g: 0.9490196, b: 0.9372549, a: 1}
+    hasInk: 1
+    ink: {r: 0.41568628, g: 0.4117647, b: 0.39215687, a: 1}
+    textClass: 1
+  - role: 65
+    hasFill: 1
+    fill: {r: 0.88235295, g: 0.9529412, b: 0.99607843, a: 1}
+    hasInk: 1
+    ink: {r: 0.12156863, g: 0.42352942, b: 0.62352943, a: 1}
+    textClass: 1
   ringDark: {r: 0.03529412, g: 0.18039216, b: 0.4392157, a: 1}
   ringLight: {r: 1, g: 0.84313726, b: 0.43137255, a: 1}
   wallpaper: {fileID: 21300000, guid: 3b76634ee0f0e304ba0958315f4369f4, type: 3}

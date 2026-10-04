@@ -112,15 +112,23 @@ public readonly struct LinkTarget : IEquatable<LinkTarget>
 /// traveller's own record in Records, looked up by the paper's Citizen ID,
 /// else its Name, at that category's row. The directive-only dates (a
 /// departure date, a Valid Until) go to Rules. A category with no target (a
-/// later ClueCategory until it is mapped here) gives None. A link only shows
+/// later ClueCategory until it is mapped here) gives None. A paper's seal goes
+/// to its issuing office's seal in the Seal Register (the document design
+/// spec, D4). A link only shows
 /// where to look: it never picks. Pure; the app's rows and the compare dock
 /// follow it.
 /// </summary>
 public static class SmartLinks
 {
     /// <summary>A document field's link (<paramref name="paper"/>: all the fields of the field's own paper, for the record lookup).</summary>
-    public static LinkTarget ForField(DocumentField field, IReadOnlyList<DocumentField> paper, CaseClaim claim) =>
-        field == null ? LinkTarget.None : For(field.category, claim, RecordLookup(paper));
+    public static LinkTarget ForField(DocumentField field, IReadOnlyList<DocumentField> paper, CaseClaim claim)
+    {
+        if (field == null)
+            return LinkTarget.None;
+        if (field.category == ClueCategory.Seal)
+            return string.IsNullOrEmpty(field.issuer) ? LinkTarget.None : LinkTarget.ToRow(AppTab.Reference, PickKeys.Seal(field.issuer));
+        return For(field.category, claim, RecordLookup(paper));
+    }
 
     /// <summary>
     /// A traveller's answer's link: the same target as a field of its
@@ -133,8 +141,9 @@ public static class SmartLinks
     /// Where a pick was picked (the compare dock's sides; phase 20's pins and
     /// recents): a field to its scanned paper's row (a paper not scanned yet,
     /// held at the desk, links nowhere), a line to the Transcript, a book row
-    /// to the Reference, a record row to Records (looked up by the record's
-    /// id). A garment is picked at the wheel and has no place in the app.
+    /// and a Seal Register seal to the Reference, a record row to Records
+    /// (looked up by the record's id). A garment and the face are picked at
+    /// the wheel and have no place in the app.
     /// </summary>
     public static LinkTarget ForKey(string pickKey, CasePapers papers)
     {
@@ -142,7 +151,7 @@ public static class SmartLinks
             return papers != null && papers.State(document) == PaperState.Scanned ? LinkTarget.ToRow(AppTab.Documents, pickKey, document) : LinkTarget.None;
         if (PickKeys.TryLine(pickKey, out _))
             return LinkTarget.ToRow(AppTab.Transcript, pickKey);
-        if (PickKeys.TryBookRow(pickKey, out _, out _, out _))
+        if (PickKeys.TryBookRow(pickKey, out _, out _, out _) || PickKeys.TrySeal(pickKey, out _))
             return LinkTarget.ToRow(AppTab.Reference, pickKey);
         if (PickKeys.TryRecord(pickKey, out string recordId, out ClueCategory category))
             return LinkTarget.ToRecords(recordId, category);

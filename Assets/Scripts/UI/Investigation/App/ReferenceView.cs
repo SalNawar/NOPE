@@ -28,7 +28,9 @@ using UnityEngine.UI;
 /// document design spec, D4) is drawn instead on its own page kind
 /// (Form_SealRegister): each issuing office's true seal pictured over its
 /// name (agency.offices), each a pick (EvidencePicks.ForSeal, PickKeys.Seal),
-/// the truth a paper's seal is held against.
+/// the truth a paper's seal is held against; a link to a seal (a paper's
+/// seal's ↗, a finding revisited: PickKeys.Seal) chooses the register and
+/// outlines that office's seal.
 /// </summary>
 public sealed class ReferenceView : AppView, IAppItems
 {
@@ -177,6 +179,8 @@ public sealed class ReferenceView : AppView, IAppItems
     /// </summary>
     public override bool Reveal(LinkTarget target)
     {
+        if (PickKeys.TrySeal(target.Key, out string officeId))
+            return RevealSeal(target.Key, officeId);
         int book = target.Item;
         bool row = PickKeys.TryBookRow(target.Key, out ClueCategory category, out _, out _);
         if (row || EntryKeys.TryBook(target.Key, out category))
@@ -194,8 +198,21 @@ public sealed class ReferenceView : AppView, IAppItems
             claimedOnly.isOn = false;
         int line = row ? RegisterPage.LineOf(_lines[_selected], target.Key) : -1;
         _foundKeys[_selected] = line >= 0 ? target.Key : null;
-        _pages[_selected].Reveal(SlotOfLine(_selected, line));
+        _pages[_selected].Reveal(SlotOf(_selected, RegisterPage.RowsSlot, line));
         return line >= 0 || !row;
+    }
+
+    /// <summary>Chooses the Seal Register and outlines office <paramref name="officeId"/>'s seal (key <paramref name="key"/>), scrolled to the middle; false when the library has no Seal Register or the register no such office.</summary>
+    private bool RevealSeal(string key, string officeId)
+    {
+        int book = _books.FindIndex(b => b.category == ClueCategory.Seal);
+        if (book < 0)
+            return false;
+        Select(book);
+        int office = Offices().FindIndex(o => o.office.id == officeId);
+        _foundKeys[book] = office >= 0 ? key : null;
+        _pages[book].Reveal(SlotOf(book, FormSlots.Seals, office));
+        return office >= 0;
     }
 
     /// <summary>Every register is stale (the facts, the claim, the toggle or the day changed): the chosen one is drawn now, the others when chosen.</summary>
@@ -295,13 +312,13 @@ public sealed class ReferenceView : AppView, IAppItems
         return true;
     }
 
-    /// <summary>The slot of line <paramref name="line"/> of book <paramref name="index"/>'s register, or -1.</summary>
-    private int SlotOfLine(int index, int line)
+    /// <summary>The slot of row <paramref name="row"/> of block <paramref name="source"/> (a register's line, the Seal Register's seal) on book <paramref name="index"/>'s page, or -1.</summary>
+    private int SlotOf(int index, string source, int row)
     {
-        PlacedForm placed = line >= 0 ? _pages[index].Placed : null;
+        PlacedForm placed = row >= 0 ? _pages[index].Placed : null;
         if (placed != null)
             for (int s = 0; s < placed.Slots.Count; s++)
-                if (placed.Slots[s].Source == RegisterPage.RowsSlot && placed.Slots[s].Row == line)
+                if (placed.Slots[s].Source == source && placed.Slots[s].Row == row)
                     return s;
         return -1;
     }
@@ -320,6 +337,8 @@ public sealed class ReferenceView : AppView, IAppItems
             {
                 ComparePick sealPick = EvidencePicks.ForSeal(_books[index], office, seal);
                 AppRow.Mark(button.gameObject, AppTab.Reference, sealPick.Key, sealPick.Label, office.name, seal, button);
+                if (sealPick.Key == _foundKeys[index])
+                    found = slot.Index;
                 continue;
             }
             if (!TryFact(index, slot, out FactRow fact))

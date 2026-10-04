@@ -227,7 +227,7 @@ MonoBehaviour:
     hasFill: 1
     fill: {r: 1, g: 1, b: 1, a: 1}
     hasInk: 1
-    ink: {r: 0.43137255, g: 0.43137255, b: 0.43137255, a: 1}
+    ink: {r: 0.41568628, g: 0.4117647, b: 0.39215687, a: 1}
     textClass: 4
   - role: 35
     hasFill: 1
@@ -295,6 +295,60 @@ MonoBehaviour:
     hasInk: 0
     ink: {r: 0, g: 0, b: 0, a: 0}
     textClass: 0
+  - role: 57
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 1}
+    hasInk: 1
+    ink: {r: 0.10980392, g: 0.10980392, b: 0.10980392, a: 1}
+    textClass: 1
+  - role: 58
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 1}
+    hasInk: 1
+    ink: {r: 0.41568628, g: 0.4117647, b: 0.39215687, a: 1}
+    textClass: 1
+  - role: 59
+    hasFill: 1
+    fill: {r: 0.9019608, g: 0.89411765, b: 0.8745098, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 60
+    hasFill: 1
+    fill: {r: 0.7882353, g: 0.7764706, b: 0.7490196, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 61
+    hasFill: 1
+    fill: {r: 0.07058824, g: 0.101960786, b: 0.16862746, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 62
+    hasFill: 1
+    fill: {r: 0.92941177, g: 0.9529412, b: 0.9254902, a: 1}
+    hasInk: 1
+    ink: {r: 0.11764706, g: 0.3372549, b: 0.19215687, a: 1}
+    textClass: 1
+  - role: 63
+    hasFill: 1
+    fill: {r: 0.99215686, g: 0.92156863, b: 0.9254902, a: 1}
+    hasInk: 1
+    ink: {r: 0.54509807, g: 0.11764706, b: 0.11764706, a: 1}
+    textClass: 1
+  - role: 64
+    hasFill: 1
+    fill: {r: 0.9529412, g: 0.9490196, b: 0.9372549, a: 1}
+    hasInk: 1
+    ink: {r: 0.41568628, g: 0.4117647, b: 0.39215687, a: 1}
+    textClass: 1
+  - role: 65
+    hasFill: 1
+    fill: {r: 0.88235295, g: 0.9529412, b: 0.99607843, a: 1}
+    hasInk: 1
+    ink: {r: 0.12156863, g: 0.42352942, b: 0.62352943, a: 1}
+    textClass: 1
   ringDark: {r: 0.07058824, g: 0.101960786, b: 0.16862746, a: 1}
   ringLight: {r: 0.93333334, g: 0.8509804, b: 0.627451, a: 1}
   wallpaper: {fileID: 21300000, guid: 6c2877f063828cb4e9940e6b708a3cbd, type: 3}

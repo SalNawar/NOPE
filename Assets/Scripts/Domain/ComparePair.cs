@@ -136,6 +136,14 @@ public static class PickKeys
     /// <summary>A Seal Register row: the seal of office <paramref name="officeId"/> (the document design spec, D4).</summary>
     public static string Seal(string officeId) => "seal:" + officeId;
 
+    /// <summary>Reads a Seal key back: true with its office's id.</summary>
+    public static bool TrySeal(string key, out string officeId)
+    {
+        string[] parts = Parts(key, "seal:", 1);
+        officeId = parts != null ? parts[0] : null;
+        return parts != null;
+    }
+
     /// <summary>Reads a Field key back: true with its document's and field's indices.</summary>
     public static bool TryField(string key, out int document, out int field)
     {

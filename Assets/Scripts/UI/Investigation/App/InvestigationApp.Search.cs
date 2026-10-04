@@ -2,25 +2,27 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// The Investigation app's search (redesign phase 19; the PC spec's SE1-SE6):
-/// the app owns the index (CaseIndex: its day layer set by DayReference, its
-/// case layer by the presenters and emptied at each case's start and end),
-/// the toolbar's search field (SearchBox; the keys' SearchFieldChip hands a
-/// pasted untranslated line in through SetChip, and their Ctrl+F focuses the
-/// field) and its results panel (the Escape chain's CloseResults closes it
-/// before the field is cleared). ↓ in the field takes the focus ring into
-/// the hits (the Results region; ↑ on the first goes back to the field).
-/// A chosen hit jumps as a pin does (in the other pane while split for a
-/// Ctrl+click or Ctrl+Enter, as a row's link does; phase 18)
-/// (SmartLinks.ForEntry, then that pane's one navigation: the item
-/// shown, a filter that hides the row lifted, a form's box scrolled to the
-/// middle, the row marked found, the place recorded in the pane's history),
-/// goes first in Recent and takes the focus ring (Space picks it next).
+/// The Investigation app's search (redesign phase 19; the PC spec's SE1-SE6;
+/// the PC workbench spec IA9): the app owns the index (CaseIndex: its day
+/// layer set by DayReference, its case layer by the presenters and emptied
+/// at each case's start and end) and the search drawer (SearchBox: from the
+/// right over a dim, opened by the shelf's Search button, Ctrl+K and
+/// Ctrl+F; its field, the pinned and recent items before anything is typed,
+/// the results grouped by source as the player types; the keys'
+/// SearchFieldChip hands a pasted untranslated line in through SetChip).
+/// Escape clears the field, then closes the drawer; a press on the dim closes
+/// it. ↓ in the field takes the focus ring into the hits (the Results
+/// region; ↑ on the first goes back to the field). A chosen hit opens on the
+/// target side (SmartLinks.ForEntry, then that pane's one navigation: the
+/// item shown, a filter that hides the row lifted, a form's box scrolled to
+/// the middle, the row marked found, the place recorded in the pane's
+/// history; a Ctrl+click or Ctrl+Enter on the other side), goes first in
+/// Recent, closes the drawer and takes the focus ring (Space picks it next).
 /// </summary>
 public sealed partial class InvestigationApp
 {
     [Header("Search")]
-    /// <summary>The toolbar's search field's results and debounce.</summary>
+    /// <summary>The search drawer's field, results and debounce.</summary>
     [SerializeField] private SearchBox searchBox;
 
     private readonly CaseIndex _index = new CaseIndex();
@@ -28,19 +30,30 @@ public sealed partial class InvestigationApp
     /// <summary>The search index: its day layer (DayReference) and the case's layer (the presenters).</summary>
     public CaseIndex Index => _index;
 
-    /// <summary>True while the results panel shows (Escape closes it before it clears the field).</summary>
-    public bool ResultsOpen => searchBox != null && searchBox.ResultsOpen;
+    /// <summary>True while the search drawer is open (Escape closes it, once its field is empty).</summary>
+    public bool ResultsOpen => SearchOpen;
 
-    /// <summary>True while the results panel lists hits (↓ in the field goes into them; Tab visits them).</summary>
+    /// <summary>True while the search drawer is open.</summary>
+    public bool SearchOpen => searchBox != null && searchBox.IsOpen;
+
+    /// <summary>True while the drawer lists hits (↓ in the field goes into them; Tab visits them).</summary>
     public bool ResultsListed => searchBox != null && searchBox.HitRows.Count > 0;
 
-    /// <summary>Escape's CloseResults: the results panel closes; the field keeps its text and the keyboard (the ring on a hit goes back to it).</summary>
+    /// <summary>Opens the search drawer, its field empty and ready (the shelf's Search button, Ctrl+K).</summary>
+    public void OpenSearch()
+    {
+        Init();
+        if (searchBox != null)
+            searchBox.Open();
+    }
+
+    /// <summary>Escape's CloseResults (and a press on the dim): the drawer closes; the ring goes back to the panes.</summary>
     public void CloseResults()
     {
         if (searchBox != null)
             searchBox.CloseResults();
-        if (_region == AppRegion.Results)
-            SetRegion(AppRegion.Search, 0, _ringOn);
+        if (_region == AppRegion.Search || _region == AppRegion.Results)
+            SetRegion(AppFocus.Home(FocusState), 0, _ringOn);
     }
 
     /// <summary>Searches with a pasted foreign clip (null removes it): only equal untranslated lines of its tongue match (SE5; the search field's chip).</summary>
@@ -58,14 +71,14 @@ public sealed partial class InvestigationApp
             searchBox.SetScript(font);
     }
 
-    /// <summary>A press on the desktop outside the search field and its panels closes them (the palette: the PC UX redesign IA9).</summary>
+    /// <summary>A press on the desktop outside the drawer's panel closes the drawer.</summary>
     private void PressedForSearch(GameObject top)
     {
-        if (searchBox != null && searchBox.ResultsOpen && !searchBox.IsPart(top))
+        if (searchBox != null && searchBox.IsOpen && !searchBox.IsPart(top))
             CloseResults();
     }
 
-    /// <summary>Wires the search field to the index and the jumps (Init, once).</summary>
+    /// <summary>Wires the drawer to the index and the jumps (Init, once).</summary>
     private void InitSearch()
     {
         if (searchBox == null)
@@ -74,7 +87,7 @@ public sealed partial class InvestigationApp
         searchBox.Opened += Jump;
     }
 
-    /// <summary>A case starts or ends: the case layer empties and the results close.</summary>
+    /// <summary>A case starts or ends: the case layer empties and the drawer closes.</summary>
     private void ResetSearchCase()
     {
         _index.EndCase();
@@ -83,11 +96,11 @@ public sealed partial class InvestigationApp
     }
 
     /// <summary>
-    /// A result was opened (SE4): its place in the active pane, or the other
-    /// one while split (<paramref name="otherPane"/>: Ctrl+click, Ctrl+Enter;
-    /// it becomes the active one), as a pin's jump goes there (a rule or a
-    /// deviation, which have no row yet, opens its tab), the hit first in
-    /// Recent, the focus ring on its row; a hit whose item is gone says so.
+    /// A result was opened (SE4): its place on the target side, or the other
+    /// one (<paramref name="otherPane"/>: Ctrl+click, Ctrl+Enter), as a pin's
+    /// jump goes there (a rule or a deviation, which have no row, opens its
+    /// source), the hit first in Recent, the focus ring on its row; a hit
+    /// whose item is gone says so.
     /// </summary>
     private void Jump(SearchHit hit, bool otherPane)
     {
@@ -97,10 +110,9 @@ public sealed partial class InvestigationApp
         LinkTarget target = SmartLinks.ForEntry(e.Key, _papers);
         if (target.IsNone)
             target = LinkTarget.ToTab(e.Source);
-        AppPane pane = otherPane && _split ? Other(ActivePane) : ActivePane;
-        bool there = pane.Go(target);
-        Activate(pane);
-        if (!there)
+        if (otherPane && _split)
+            SetTarget(Other(TargetPane));
+        if (!OpenOnTarget(target))
         {
             Notice(UiText.Get("app.jump.gone"));
             return;

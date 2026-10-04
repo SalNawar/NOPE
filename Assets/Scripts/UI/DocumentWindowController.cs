@@ -157,7 +157,7 @@ public sealed class DocumentWindowController : MonoBehaviour
         {
             DocumentField field = _doc.fields[slot.Field];
             ComparePick pick = EvidencePicks.ForField(_index, new DocumentRow(slot.Field, field), _doc.DisplayName);
-            AppRow.Mark(button.gameObject, AppTab.Documents, pick.Key, pick.Label, field.label, field.value, button).SetLink(Link(slot));
+            AppRow.Mark(button.gameObject, AppTab.Documents, pick.Key, pick.Label, field.label, pick.Shown, button).SetLink(Link(slot));
         }
     }
 
