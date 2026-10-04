@@ -27,7 +27,8 @@
 // paper) after holding the broken rule against the value it is about on the
 // PC workbench (MatchBoard, RuleChecks), accept the rest), except four planned mistakes (an honest
 // traveller denied on day 1, a deviation fault accepted on day 2, one denied
-// without evidence on day 3, a directive fault accepted on day 4; never a
+// without evidence on day 3 (or the first later day with a deviation fault
+// that is no visual lie), a directive fault accepted on day 4; never a
 // visual lie, so the first forged seal or swapped photo is proven). During
 // each shift, order at the PC (the Orders app's rule, OrderBook.Order)
 // Interview Protocols, then the Near East Speech translator (it needs the
@@ -518,7 +519,7 @@ public static class _TimeDeskAuditPlay
             accept = true;
             gatherEvidence = false;
         }
-        else if (day == 3 && c.HasDeviationFault && !Visual(c) && Once("d3-unproven-denial"))
+        else if (day >= 3 && c.HasDeviationFault && !Visual(c) && Once("d3-unproven-denial"))
         {
             plan = "MISTAKE deny a deviation fault without evidence";
             accept = false;
