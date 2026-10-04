@@ -10,10 +10,10 @@ public enum DesktopEscape
     /// <summary>The shortcut card (F1) is open: it closes.</summary>
     CloseCard,
 
-    /// <summary>The search results panel is open: it closes (the panel comes with search, redesign phase 19).</summary>
+    /// <summary>The search drawer is open (its field empty): it closes (the PC workbench spec IA9).</summary>
     CloseResults,
 
-    /// <summary>The search field has the keyboard and holds text (or a pasted chip): it is cleared, and keeps the keyboard.</summary>
+    /// <summary>The search field has the keyboard and holds text (or a pasted chip): it is cleared, and keeps the keyboard (the drawer stays open).</summary>
     ClearSearch,
 
     /// <summary>A text field is focused: it is left (focus returns to its pane; the press types nothing and closes nothing).</summary>
@@ -23,7 +23,10 @@ public enum DesktopEscape
     CloseStartMenu,
 
     /// <summary>A window or icon drag is under way: it is cancelled, the window or icon back where it started.</summary>
-    CancelDrag
+    CancelDrag,
+
+    /// <summary>A value (or a rule, or the date) is held for click-and-match: it is let go (the PC workbench spec §4.1).</summary>
+    ReleaseHold
 }
 
 /// <summary>The desktop state the Escape rule reads.</summary>
@@ -35,7 +38,7 @@ public readonly struct DesktopEscapeState
     /// <summary>The shortcut card is open.</summary>
     public readonly bool CardOpen;
 
-    /// <summary>The search results panel is open.</summary>
+    /// <summary>The search drawer is open.</summary>
     public readonly bool ResultsOpen;
 
     /// <summary>The Investigation app's search field has the keyboard.</summary>
@@ -53,10 +56,14 @@ public readonly struct DesktopEscapeState
     /// <summary>A window is being dragged by its title bar, or an icon across the desktop.</summary>
     public readonly bool Dragging;
 
+    /// <summary>The workbench holds a value, a rule or the date for click-and-match.</summary>
+    public readonly bool Holding;
+
     /// <summary>Creates a state.</summary>
     public DesktopEscapeState(bool menuOpen, bool cardOpen, bool resultsOpen, bool searchFocused, bool searchHasText, bool fieldFocused, bool startMenuOpen,
-                              bool dragging)
+                              bool dragging, bool holding = false)
     {
+        Holding = holding;
         MenuOpen = menuOpen;
         CardOpen = cardOpen;
         ResultsOpen = resultsOpen;
@@ -71,9 +78,10 @@ public readonly struct DesktopEscapeState
 /// <summary>
 /// The desktop's part of the one Escape chain (the PC redesign KB3, section
 /// 3.5; the desktop's share of audit R5-005): one press does one thing, the
-/// first of: close a context menu, close the shortcut card, close the search
-/// results, clear the focused search field's text, leave a focused field,
-/// close the Start menu, cancel a drag, else None. The desktop's keyboard
+/// first of: close a context menu, close the shortcut card, clear the focused
+/// search field's text, close the search drawer, leave a focused field, let
+/// go of a held value (the workbench), close the Start menu, cancel a drag,
+/// else None. The desktop's keyboard
 /// poller (DesktopKeyboard) takes the press when the rule returns something
 /// and stamps the frame, so the PC frame's own Escape (OfficeViewController)
 /// skips that press; on None the frame closes and the office's order goes on.
@@ -88,12 +96,14 @@ public static class DesktopEscapeRule
             return DesktopEscape.CloseMenu;
         if (state.CardOpen)
             return DesktopEscape.CloseCard;
-        if (state.ResultsOpen)
-            return DesktopEscape.CloseResults;
         if (state.SearchFocused && state.SearchHasText)
             return DesktopEscape.ClearSearch;
+        if (state.ResultsOpen)
+            return DesktopEscape.CloseResults;
         if (state.FieldFocused)
             return DesktopEscape.LeaveField;
+        if (state.Holding)
+            return DesktopEscape.ReleaseHold;
         if (state.StartMenuOpen)
             return DesktopEscape.CloseStartMenu;
         if (state.Dragging)

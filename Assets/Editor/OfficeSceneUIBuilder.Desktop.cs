@@ -196,7 +196,7 @@ public static partial class OfficeSceneUIBuilder
         return view;
     }
 
-    /// <summary>The desktop's context menu (DK5, TH4, AP4): a Start-menu-styled panel whose entries (Arrange icons; Open; a tab's Move left, Move right and Reset tab order) show per target; hidden.</summary>
+    /// <summary>The desktop's context menu (DK5, TH4): a Start-menu-styled panel whose entries (Arrange icons; Open; a row's, added by the keys' builder) show per target; hidden.</summary>
     private static DesktopContextMenu BuildContextMenu(Transform root, DesktopIcons icons)
     {
         DestroyChildIfPresent(root, "ContextMenu");
@@ -208,17 +208,11 @@ public static partial class OfficeSceneUIBuilder
         fit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         Button arrange = MenuEntry(menu, "ArrangeEntry", "desktop.arrange", ContextMenuEntry.y);
         Button open = MenuEntry(menu, "OpenEntry", "menu.open", ContextMenuEntry.y);
-        Button moveUp = MenuEntry(menu, "MoveUpEntry", "app.tabMenu.up", ContextMenuEntry.y);
-        Button moveDown = MenuEntry(menu, "MoveDownEntry", "app.tabMenu.down", ContextMenuEntry.y);
-        Button resetTabs = MenuEntry(menu, "ResetTabsEntry", "app.tabMenu.reset", ContextMenuEntry.y);
 
         DesktopContextMenu contextMenu = menu.gameObject.AddComponent<DesktopContextMenu>();
         var so = new SerializedObject(contextMenu);
         SetRef(so, "arrangeEntry", arrange);
         SetRef(so, "openEntry", open);
-        Wire(so, "moveUpEntry", moveUp);
-        Wire(so, "moveDownEntry", moveDown);
-        Wire(so, "resetTabsEntry", resetTabs);
         SetRef(so, "icons", icons);
         so.ApplyModifiedProperties();
         menu.gameObject.SetActive(false);

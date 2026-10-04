@@ -35,7 +35,8 @@ public readonly struct EntryRef
 /// The keys of the Investigation app's items (the PC redesign section 4.2):
 /// a document ("doc:0"), a book ("bookof:Currency") and a record ("rec:{id}")
 /// as items, a rule ("rule:1") and a deviation ("dev:Currency") as search
-/// results, beside PickKeys' row keys (a field, a line, a book's row, a
+/// results, a rule and the calendar's today ("cal:today") as values the
+/// workbench holds (the PC workbench spec §4.3), beside PickKeys' row keys (a field, a line, a book's row, a
 /// record's row; PickKeys reads those back). TryRef says which tab a key's
 /// item lives in (and so its scope), for pins and recent items; where a key
 /// leads is SmartLinks.ForEntry. Pure.
@@ -47,6 +48,9 @@ public static class EntryKeys
     private const string RecordCardPrefix = "rec:";
     private const string RulePrefix = "rule:";
     private const string DeviationPrefix = "dev:";
+
+    /// <summary>The calendar's today as a value the workbench holds and matches (the PC workbench spec IA6).</summary>
+    public const string CalendarToday = "cal:today";
 
     /// <summary>Document <paramref name="document"/> of the case, as an item ("doc:0").</summary>
     public static string Document(int document) => DocumentPrefix + document.ToString(CultureInfo.InvariantCulture);
@@ -62,6 +66,9 @@ public static class EntryKeys
 
     /// <summary>The case's deviation of <paramref name="category"/> ("dev:Currency"; a search result's key).</summary>
     public static string Deviation(ClueCategory category) => DeviationPrefix + category;
+
+    /// <summary>Reads a rule's key (<see cref="Rule"/>).</summary>
+    public static bool TryRule(string key, out int index) => TryIndex(key, RulePrefix, out index);
 
     /// <summary>Reads a document item's key.</summary>
     public static bool TryDocument(string key, out int document) => TryIndex(key, DocumentPrefix, out document);

@@ -350,8 +350,9 @@ public sealed class InterviewPresenter
     }
 
     /// <summary>
-    /// A difference the clerk just logged (EvidencePresenter.Documented; wave
-    /// 5, lesson 3): the traveller wheel gains a question about exactly it in
+    /// A difference the clerk just logged as evidence on the workbench
+    /// (MatchBoard.Logged, Confrontations.About; wave 5, lesson 3; null:
+    /// nothing): the traveller wheel gains a question about exactly it in
     /// the differences menu (InterviewScript.Confront and AddConfront, up to
     /// the wheel's capacity), the same verb for every traveller; the answer is
     /// decided now in the traveller's voice (Confrontations.Outcome: the

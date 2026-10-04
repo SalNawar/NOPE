@@ -39,7 +39,9 @@ public class ThemeRolesTests
         ThemeRoleId.Newsletter, ThemeRoleId.NewsletterButton, ThemeRoleId.DeskDim, ThemeRoleId.InputField, ThemeRoleId.InputPlaceholder,
         ThemeRoleId.Tooltip, ThemeRoleId.ClickCatcher,
         ThemeRoleId.TabStrip, ThemeRoleId.Tab, ThemeRoleId.TabActive, ThemeRoleId.Sidebar, ThemeRoleId.SearchResults,
-        ThemeRoleId.Badge, ThemeRoleId.Toast, ThemeRoleId.FocusRing, ThemeRoleId.IconSelection
+        ThemeRoleId.Badge, ThemeRoleId.Toast, ThemeRoleId.FocusRing, ThemeRoleId.IconSelection,
+        ThemeRoleId.Surface, ThemeRoleId.SurfaceMuted, ThemeRoleId.Hairline, ThemeRoleId.HairlineStrong, ThemeRoleId.PrimaryAction,
+        ThemeRoleId.FindingMatch, ThemeRoleId.FindingDiffer, ThemeRoleId.Info, ThemeRoleId.Holding
     };
 
     [Test]
@@ -72,10 +74,12 @@ public class ThemeRolesTests
         ThemeRoleId.DiegeticLabel, ThemeRoleId.DiegeticNote, ThemeRoleId.DiegeticBacking, ThemeRoleId.DiegeticBookRow, ThemeRoleId.DiegeticBubble,
         ThemeRoleId.DiegeticDevice, ThemeRoleId.TabStrip, ThemeRoleId.Tab, ThemeRoleId.TabActive, ThemeRoleId.Sidebar,
         ThemeRoleId.SearchResults, ThemeRoleId.Badge, ThemeRoleId.Toast, ThemeRoleId.FocusRing, ThemeRoleId.IconSelection,
-        ThemeRoleId.DiegeticForm, ThemeRoleId.SiteContent
+        ThemeRoleId.DiegeticForm, ThemeRoleId.SiteContent,
+        ThemeRoleId.Surface, ThemeRoleId.SurfaceMuted, ThemeRoleId.Hairline, ThemeRoleId.HairlineStrong, ThemeRoleId.PrimaryAction,
+        ThemeRoleId.FindingMatch, ThemeRoleId.FindingDiffer, ThemeRoleId.Info, ThemeRoleId.Holding
     };
 
-    /// <summary>Audit R1-003 for this enum: ThemeTag serializes the role as an int, so inserting or reordering a role would silently remap every tag in OfficeGameplay. Desktop = 0 .. DiegeticDevice = 45, the PC redesign's appended roles 46 .. 56.</summary>
+    /// <summary>Audit R1-003 for this enum: ThemeTag serializes the role as an int, so inserting or reordering a role would silently remap every tag in OfficeGameplay. Desktop = 0 .. DiegeticDevice = 45, the PC redesign's appended roles 46 .. 56, the PC workbench's 57 .. 65.</summary>
     [Test]
     public void EveryRole_KeepsItsSerializedInt()
     {
@@ -85,6 +89,8 @@ public class ThemeRolesTests
         Assert.AreEqual(45, (int)ThemeRoleId.DiegeticDevice);
         Assert.AreEqual(54, (int)ThemeRoleId.IconSelection);
         Assert.AreEqual(56, (int)ThemeRoleId.SiteContent);
+        Assert.AreEqual(57, (int)ThemeRoleId.Surface);
+        Assert.AreEqual(65, (int)ThemeRoleId.Holding);
         Assert.AreEqual(InSerializedOrder.Length, Enum.GetValues(typeof(ThemeRoleId)).Length, "a new role is appended here too");
     }
 

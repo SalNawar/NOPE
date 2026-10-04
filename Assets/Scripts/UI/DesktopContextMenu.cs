@@ -7,9 +7,7 @@ using UnityEngine.UI;
 /// The desktop's right-click menu (the PC redesign DK5, AP4, CP1, PR1, section
 /// 3.2): one themed panel whose builder-made entries are shown per target: on
 /// the empty desktop "Arrange icons" (DesktopIcons.Arrange), on an icon "Open"
-/// (its app), on a source of the Investigation app's navigator "Move up",
-/// "Move down" and "Reset order" (InvestigationApp.MoveTab, ResetTabOrder;
-/// the PC UX redesign IA11), on a row of the
+/// (its app), on a row of the
 /// Investigation app "Copy value", "Copy row", "Pin" or "Unpin" and, when the
 /// row can be picked, "Pick for compare". It opens with its top-left at the
 /// pointer, kept inside the desktop, above every window; an entry closes it,
@@ -24,15 +22,6 @@ public sealed class DesktopContextMenu : MonoBehaviour
 
     /// <summary>"Open" (an icon's entry).</summary>
     [SerializeField] private Button openEntry;
-
-    /// <summary>"Move up" (a source's entry: one place up the navigator).</summary>
-    [SerializeField] private Button moveUpEntry;
-
-    /// <summary>"Move down" (a source's entry).</summary>
-    [SerializeField] private Button moveDownEntry;
-
-    /// <summary>"Reset order" (a source's entry: the default order).</summary>
-    [SerializeField] private Button resetTabsEntry;
 
     /// <summary>"Copy value" (a row's entry).</summary>
     [SerializeField] private Button copyEntry;
@@ -49,18 +38,16 @@ public sealed class DesktopContextMenu : MonoBehaviour
     /// <summary>The desktop's icons (Arrange, Open).</summary>
     [SerializeField] private DesktopIcons icons;
 
-    /// <summary>What the menu was opened on: the empty desktop, an icon, a tab or a row.</summary>
+    /// <summary>What the menu was opened on: the empty desktop, an icon or a row.</summary>
     private enum Target
     {
         Desktop,
         Icon,
-        Tab,
         Row
     }
 
     private DesktopIconView _target;
     private InvestigationApp _app;
-    private AppTab _tab;
     private AppRow _row;
     private bool _wired;
 
@@ -78,14 +65,6 @@ public sealed class DesktopContextMenu : MonoBehaviour
     {
         _target = icon;
         Show(Target.Icon, false, eventData);
-    }
-
-    /// <summary>Opens a source's menu (Move up, Move down, Reset order) at the pointer.</summary>
-    public void ShowForTab(InvestigationApp app, AppTab tab, PointerEventData eventData)
-    {
-        _app = app;
-        _tab = tab;
-        Show(Target.Tab, false, eventData);
     }
 
     /// <summary>Opens a row's menu (Copy value, Copy row, Pin or Unpin as <paramref name="pinned"/> says, Pick for compare when it can be picked) at the pointer.</summary>
@@ -110,15 +89,13 @@ public sealed class DesktopContextMenu : MonoBehaviour
         Wire();
         if (target != Target.Icon)
             _target = null;
-        if (target != Target.Tab && target != Target.Row)
-            _app = null;
         if (target != Target.Row)
+        {
+            _app = null;
             _row = null;
+        }
         Entry(arrangeEntry, target == Target.Desktop);
         Entry(openEntry, target == Target.Icon);
-        Entry(moveUpEntry, target == Target.Tab);
-        Entry(moveDownEntry, target == Target.Tab);
-        Entry(resetTabsEntry, target == Target.Tab);
         Entry(copyEntry, target == Target.Row);
         Entry(copyRowEntry, target == Target.Row);
         Entry(pinEntry, target == Target.Row);
@@ -165,12 +142,6 @@ public sealed class DesktopContextMenu : MonoBehaviour
             arrangeEntry.onClick.AddListener(Arrange);
         if (openEntry != null)
             openEntry.onClick.AddListener(OpenTarget);
-        if (moveUpEntry != null)
-            moveUpEntry.onClick.AddListener(() => OnTab((app, tab) => app.MoveTab(tab, -1)));
-        if (moveDownEntry != null)
-            moveDownEntry.onClick.AddListener(() => OnTab((app, tab) => app.MoveTab(tab, 1)));
-        if (resetTabsEntry != null)
-            resetTabsEntry.onClick.AddListener(() => OnTab((app, _) => app.ResetTabOrder()));
         if (copyEntry != null)
             copyEntry.onClick.AddListener(() => OnRow((app, row) => app.Copy(row, false)));
         if (copyRowEntry != null)
@@ -179,16 +150,6 @@ public sealed class DesktopContextMenu : MonoBehaviour
             pinEntry.onClick.AddListener(() => OnRow((app, row) => app.TogglePin(row)));
         if (pickEntry != null)
             pickEntry.onClick.AddListener(() => OnRow((app, row) => row.Pick()));
-    }
-
-    /// <summary>A source's entry: the menu closes, then the app moves its sources.</summary>
-    private void OnTab(System.Action<InvestigationApp, AppTab> act)
-    {
-        InvestigationApp app = _app;
-        AppTab tab = _tab;
-        Close();
-        if (app != null)
-            act(app, tab);
     }
 
     /// <summary>A row's entry: the menu closes, then the entry acts on the row (still there).</summary>

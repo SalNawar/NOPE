@@ -239,19 +239,16 @@ public static partial class OfficeSceneUIBuilder
 
         // --- Investigation desk ---
         // Persistent host (never toggled) holds the controllers; on it the window layer (every window, the icon area
-        // exactly; it shows with or without a case), the scan toast above it and the compare dock above that
-        // (BuildCompareDock). The case overlay retired: its Accept/Deny are in the Investigation app's header (its claim is only spoken now).
+        // exactly; it shows with or without a case) and the scan toast above it. The case overlay and the compare dock
+        // retired: Accept/Deny are the Investigation app's decision step (its claim is only spoken now), the compare is its workbench's.
         Transform investHost = Panel(root, "InvestigationUI", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         InvestigationUIController invest = GetOrAdd<InvestigationUIController>(investHost.gameObject);
         CompareController compare = GetOrAdd<CompareController>(investHost.gameObject);
         DestroyChildIfPresent(investHost, "InvestigationRoot");
         Transform windowLayer = EnsureWindowLayer(investHost);
 
-        // The Investigation app (OfficeSceneUIBuilder.App): every case source in one window, one tab each.
+        // The Investigation app (OfficeSceneUIBuilder.App): the workbench, every case source in one window.
         AppParts app = BuildInvestigationApp(windowLayer, investHost, compare);
-
-        // The compare dock above the taskbar (the PC redesign DK9): over every window and the toast; its sides link into the app.
-        CompareDock dockColumns = BuildCompareDock(investHost, compare, app.App, out GameObject compareDock);
 
         // --- Content + logic objects ---
         DayPlanSO dayPlan = null;
@@ -276,8 +273,6 @@ public static partial class OfficeSceneUIBuilder
         DesktopIcons icons = BuildDesktopShell(canvas, windowLayer, library, officeView, monitorScreen, app, gameManager);
         var soApp = new SerializedObject(app.App);
         Wire(soApp, "icons", icons);
-        Transform contextMenu = root.Find("ContextMenu");
-        Wire(soApp, "contextMenu", contextMenu != null ? contextMenu.GetComponent<DesktopContextMenu>() : null);
         soApp.ApplyModifiedProperties();
 
         // The window stack (every window built above) and the taskbar's window buttons (the PC redesign WN1-WN3).
@@ -333,7 +328,6 @@ public static partial class OfficeSceneUIBuilder
         soFlow.ApplyModifiedProperties();
 
         var soCompare = new SerializedObject(compare);
-        Wire(soCompare, "dock", dockColumns);
         SetRef(soCompare, "officeBar", officeCompareStrip);
         SetRef(soCompare, "officeText", officeCompareText);
         SetColor(soCompare, "matchColor", CompareMatchInk);
@@ -346,13 +340,13 @@ public static partial class OfficeSceneUIBuilder
         Wire(soInvest, "acceptButton", app.Accept);
         Wire(soInvest, "denyButton", app.Deny);
         Wire(soInvest, "compareController", compare);
-        Wire(soInvest, "compareDock", compareDock);
         SerializedArrays.Set(soInvest, "documentsViews", app.Documents);
         SerializedArrays.Set(soInvest, "recordsViews", app.Records);
         SerializedArrays.Set(soInvest, "referenceViews", app.Reference);
         SerializedArrays.Set(soInvest, "transcriptViews", app.Transcript);
         SerializedArrays.Set(soInvest, "reportViews", app.Report);
         SerializedArrays.Set(soInvest, "rulesViews", app.Rules);
+        SerializedArrays.Set(soInvest, "calendarViews", app.Calendar);
         Wire(soInvest, "interactionPanel", interaction);
         Wire(soInvest, "desk", officeView.transform.Find("Desk").GetComponent<DeskController>());
         Wire(soInvest, "hud", caseHud);
@@ -360,7 +354,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(soInvest, "wheel", wheel);
         Wire(soInvest, "idleScreen", idleScreen);
         soInvest.ApplyModifiedProperties();
-        WireStepsToOffice(app.Steps, monitorScreen, invest);
+        WireGuideToOffice(app.Guide, monitorScreen);
 
         var soOrch = new SerializedObject(orchestrator);
         SetRef(soOrch, "eventDirector", eventDirector);
@@ -1263,7 +1257,7 @@ public static partial class OfficeSceneUIBuilder
         };
         DesktopIcons icons = BuildDesktopIcons(canvas, windows, feed, out DesktopContextMenu contextMenu);
         WireIconSettings(windows[DesktopAppIds.Settings], icons);
-        WireStepsSettings(windows[DesktopAppIds.Settings], app.Steps);
+        WireStepsSettings(windows[DesktopAppIds.Settings], app.Guide);
 
         Transform startMenu = BuildStartMenu(root, apps, out TMP_Text mailEntry, out Button arrangeEntry, out Button screenOffEntry, out Button quitEntry);
         var soFeed = new SerializedObject(feed);

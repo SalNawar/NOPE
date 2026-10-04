@@ -242,4 +242,20 @@ public class ConfrontationsTests
         Assert.AreEqual("Oh! A clerical slip.", Voices.Confront(lines, Voice.None, context, ConfrontOutcome.Explain, string.Empty, null, ClueCategory.Culture).text, "no voice: the defaults");
         Assert.IsNull(Voices.Confront(new InterviewLines(), curt, context, ConfrontOutcome.Crack, Faults.Forged, null, ClueCategory.Currency));
     }
+
+    [Test]
+    public void About_AFindingTheWorkbenchLogged_RaisesItsProvedDeviation_OnlyForADifference()
+    {
+        Discrepancy proof = Record();
+        Finding Logged(FindingKind kind, Discrepancy deviation) => new Finding(kind, "a", "b", "Visa", "Premium", "Citizen record", "Economy", "Visa class", deviation);
+
+        Assert.AreSame(proof, Confrontations.About(Logged(FindingKind.Differs, proof)), "a proof logged as evidence raises its question");
+        Assert.AreSame(proof, Confrontations.About(Logged(FindingKind.Elsewhere, proof)), "a foreign-origin proof too");
+        Assert.IsTrue(Logged(FindingKind.Differs, proof).Proof, "the finding reads as evidence");
+        Assert.IsNull(Confrontations.About(Logged(FindingKind.Differs, null)), "a difference that proves nothing (an answer against a paper): no deviation, no question");
+        Assert.IsNull(Confrontations.About(Logged(FindingKind.RuleBroken, null)), "a broken rule is the rule's to decide");
+        Assert.IsNull(Confrontations.About(Logged(FindingKind.Expired, null)), "a date the calendar fails");
+        Assert.IsNull(Confrontations.About(Logged(FindingKind.Match, null)), "a match");
+        Assert.IsNull(Confrontations.About(null));
+    }
 }

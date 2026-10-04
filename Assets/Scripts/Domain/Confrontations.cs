@@ -98,7 +98,19 @@ public static class Confrontations
 
     private static readonly Regex Token = new Regex(@"\{(\w+)\}");
 
-    /// <summary>The differences menu's entry id of a difference in <paramref name="category"/> ("confront:Currency"; one per category, as the log holds).</summary>
+    /// <summary>
+    /// The difference a finding the workbench logged asks about (wave 5,
+    /// lesson 3; the workbench's FindingLog raises the question): its proved
+    /// deviation (Finding.Deviation, DiscrepancyLog.Prove's, the Deviation
+    /// Report's evidence) when it is a difference; null for a match, a rule's
+    /// or the calendar's verdict and a difference that proves nothing (an
+    /// answer against a paper): no question, since no deviation is logged and
+    /// a broken rule is the rule's to decide, not the traveller's to explain.
+    /// </summary>
+    public static Discrepancy About(Finding finding) =>
+        finding != null && FindingRules.IsDifference(finding.Kind) ? finding.Deviation : null;
+
+    /// <summary>The differences menu's entry id of a difference in <paramref name="category"/> ("confront:Currency"; one per category, as the Deviation Report holds).</summary>
     public static string ChoiceId(ClueCategory category) => "confront:" + category;
 
     /// <summary>

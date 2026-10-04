@@ -14,16 +14,29 @@ using UnityEngine.UI;
 /// (SetChip, from the keys' SearchFieldChip on the same field) that matches
 /// only equal untranslated lines of its tongue. It reads the app's index
 /// (CaseIndex) and fills the results panel (SearchResultsView); a chosen hit
-/// is Opened for the app to jump to; Escape's CloseResults closes the panel
-/// and leaves the text. The field is a palette (the PC UX redesign IA9, C5):
-/// selected while it holds nothing, it opens the quick-open panel under it
-/// (the pinned and the recent items, InvestigationApp.Keys' lists); typing
-/// turns it into the results; a press outside the field and its panels,
-/// Escape, a jump or a chosen hit closes it.
+/// is Opened for the app to jump to. The field lives in the search drawer
+/// (the PC workbench spec IA9): Open shows the drawer from the right over a
+/// dim, the field empty and focused, the quick-open panel (the pinned and
+/// the recent items, InvestigationApp.Keys' lists) showing until something
+/// is typed; typing turns it into the results; Close, a press on the dim,
+/// Escape (CloseResults, once the field is empty), a jump or a chosen hit
+/// closes the drawer.
 /// </summary>
 public sealed class SearchBox : MonoBehaviour
 {
-    /// <summary>The toolbar's text field.</summary>
+    /// <summary>The drawer (the dim and the panel), hidden while closed.</summary>
+    [SerializeField] private GameObject drawer;
+
+    /// <summary>The drawer's panel (a press inside it keeps the drawer open).</summary>
+    [SerializeField] private RectTransform panel;
+
+    /// <summary>The dim over the app (a press on it closes the drawer).</summary>
+    [SerializeField] private Button dimButton;
+
+    /// <summary>The drawer's Close.</summary>
+    [SerializeField] private Button closeButton;
+
+    /// <summary>The drawer's text field.</summary>
     [SerializeField] private TMP_InputField field;
 
     /// <summary>The results panel.</summary>
@@ -32,7 +45,7 @@ public sealed class SearchBox : MonoBehaviour
     /// <summary>The desktop's knobs: the debounce and the hits per group.</summary>
     [SerializeField] private DesktopConfigSO config;
 
-    /// <summary>The quick-open panel (Pinned and Recent), shown under the empty field while it has the keyboard.</summary>
+    /// <summary>The quick-open panel (Pinned and Recent), shown under the field while it is empty.</summary>
     [SerializeField] private GameObject quickOpen;
 
     private CaseIndex _index;
@@ -45,16 +58,14 @@ public sealed class SearchBox : MonoBehaviour
     /// <summary>Raised when the player opens a hit (a click, Enter on the first or on the focused one): the hit, and true to open it in the other pane (Ctrl held).</summary>
     public event Action<SearchHit, bool> Opened;
 
-    /// <summary>True while the results panel or the quick-open panel shows (Escape closes them before it clears the field).</summary>
-    public bool ResultsOpen => (results != null && results.IsOpen) || QuickOpenShowing;
+    /// <summary>True while the drawer is open.</summary>
+    public bool IsOpen => drawer != null && drawer.activeSelf;
 
     /// <summary>True while the quick-open panel shows.</summary>
     public bool QuickOpenShowing => quickOpen != null && quickOpen.activeInHierarchy;
 
-    /// <summary>True for the field and its panels (a press there leaves the palette open).</summary>
-    public bool IsPart(GameObject go) =>
-        go != null && ((field != null && go.transform.IsChildOf(field.transform)) || (results != null && go.transform.IsChildOf(results.transform)) ||
-                       (quickOpen != null && go.transform.IsChildOf(quickOpen.transform)));
+    /// <summary>True for the drawer's panel and what is in it (a press there leaves the drawer open; a press on the dim does not).</summary>
+    public bool IsPart(GameObject go) => go != null && panel != null && go.transform.IsChildOf(panel);
 
     /// <summary>The listed hits' rows (none while the panel is closed): the keys' Results region.</summary>
     public IReadOnlyList<Button> HitRows => results != null && results.IsOpen ? results.HitRows : (IReadOnlyList<Button>)Array.Empty<Button>();
@@ -77,10 +88,13 @@ public sealed class SearchBox : MonoBehaviour
         {
             field.onValueChanged.AddListener(_ => Typed());
             field.onSubmit.AddListener(_ => OpenFirst());
-            field.onSelect.AddListener(_ => ShowQuick());
         }
-        if (quickOpen != null)
-            quickOpen.SetActive(false);
+        if (dimButton != null)
+            dimButton.onClick.AddListener(CloseResults);
+        if (closeButton != null)
+            closeButton.onClick.AddListener(CloseResults);
+        if (drawer != null)
+            drawer.SetActive(false);
         if (results != null)
         {
             results.Chosen += Open;
@@ -93,9 +107,34 @@ public sealed class SearchBox : MonoBehaviour
         enabled = false;
     }
 
-    /// <summary>Sets the pasted foreign clip (null removes it) and shows the results at once.</summary>
+    /// <summary>Opens the drawer, its field empty and focused, the pinned and recent items showing.</summary>
+    public void Open()
+    {
+        if (drawer == null)
+            return;
+        drawer.SetActive(true);
+        drawer.transform.SetAsLastSibling();
+        _chip = null;
+        _only = null;
+        if (field != null)
+        {
+            field.SetTextWithoutNotify(string.Empty);
+            field.Select();
+            field.ActivateInputField();
+        }
+        if (results != null)
+            results.Hide();
+        ShowQuick();
+    }
+
+    /// <summary>Sets the pasted foreign clip (null removes it; the drawer opens) and shows the results at once.</summary>
     public void SetChip(SearchChip? chip)
     {
+        if (drawer != null && !drawer.activeSelf)
+        {
+            drawer.SetActive(true);
+            drawer.transform.SetAsLastSibling();
+        }
         _chip = chip;
         _only = null;
         ShowQuick();
@@ -105,14 +144,17 @@ public sealed class SearchBox : MonoBehaviour
     /// <summary>The current traveller's script font: an untranslated snippet is drawn in it (null: the text's own font).</summary>
     public void SetScript(TMP_FontAsset font) => _script = font;
 
-    /// <summary>Closes the results panel and the quick-open panel (Escape, a press outside, a jump); the typed text stays, and typing on reopens it.</summary>
+    /// <summary>Closes the drawer (Close, the dim, Escape, a jump).</summary>
     public void CloseResults()
     {
         _due = -1f;
         enabled = false;
         if (results != null)
             results.Hide();
-        SetQuick(false);
+        if (field != null && field.isFocused)
+            field.DeactivateInputField();
+        if (drawer != null)
+            drawer.SetActive(false);
     }
 
     /// <summary>The case ended: the results close, the clip goes, the typed text stays for the next traveller.</summary>
@@ -178,13 +220,8 @@ public sealed class SearchBox : MonoBehaviour
         Opened?.Invoke(hit, otherPane);
     }
 
-    /// <summary>The quick-open panel shows while the field has the keyboard (it is focused, or the EventSystem's selection on this frame's select), holds no text and no pasted chip.</summary>
-    private void ShowQuick()
-    {
-        UnityEngine.EventSystems.EventSystem events = UnityEngine.EventSystems.EventSystem.current;
-        bool focused = field != null && (field.isFocused || (events != null && events.currentSelectedGameObject == field.gameObject));
-        SetQuick(focused && field.text.Length == 0 && !_chip.HasValue);
-    }
+    /// <summary>The quick-open panel shows while the drawer is open and the field holds no text and no pasted chip.</summary>
+    private void ShowQuick() => SetQuick(IsOpen && field != null && field.text.Length == 0 && !_chip.HasValue);
 
     /// <summary>Shows or hides the quick-open panel.</summary>
     private void SetQuick(bool on)

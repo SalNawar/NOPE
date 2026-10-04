@@ -47,9 +47,6 @@ public sealed class EvidencePresenter
         _day = day ?? throw new ArgumentNullException(nameof(day));
     }
 
-    /// <summary>Raised with each newly documented discrepancy, after the report and the app hear of it (the traveller wheel's question about it; wave 5, lesson 3).</summary>
-    public event Action<Discrepancy> Documented;
-
     /// <summary>Number of discrepancies documented for the current case.</summary>
     public int Count => _discrepancies.Count;
 
@@ -121,7 +118,6 @@ public sealed class EvidencePresenter
             _compare.ShowDeviation(UiText.Deviation(proof));
 
         _logged();
-        Documented?.Invoke(proof);
     }
 
     /// <summary>Draws the Deviation Report from the log, in every pane: the case line (the traveller's name and role, as the app's title: no claim is printed, the personalities spec's B1), the entries, the agency block and the day.</summary>

@@ -223,7 +223,7 @@ MonoBehaviour:
     hasFill: 1
     fill: {r: 1, g: 1, b: 1, a: 1}
     hasInk: 1
-    ink: {r: 0.43137255, g: 0.43137255, b: 0.43137255, a: 1}
+    ink: {r: 0.41568628, g: 0.4117647, b: 0.39215687, a: 1}
     textClass: 4
   - role: 35
     hasFill: 1
@@ -291,6 +291,60 @@ MonoBehaviour:
     hasInk: 0
     ink: {r: 0, g: 0, b: 0, a: 0}
     textClass: 0
+  - role: 57
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 1}
+    hasInk: 1
+    ink: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 1}
+    textClass: 1
+  - role: 58
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 1}
+    hasInk: 1
+    ink: {r: 0.41568628, g: 0.4117647, b: 0.39215687, a: 1}
+    textClass: 1
+  - role: 59
+    hasFill: 1
+    fill: {r: 0.9019608, g: 0.89411765, b: 0.8745098, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 60
+    hasFill: 1
+    fill: {r: 0.7882353, g: 0.7764706, b: 0.7490196, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 61
+    hasFill: 1
+    fill: {r: 0.039215688, g: 0.23921569, b: 0.4509804, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 62
+    hasFill: 1
+    fill: {r: 0.92941177, g: 0.9529412, b: 0.9254902, a: 1}
+    hasInk: 1
+    ink: {r: 0.11764706, g: 0.41960785, b: 0.27058825, a: 1}
+    textClass: 1
+  - role: 63
+    hasFill: 1
+    fill: {r: 0.99215686, g: 0.92156863, b: 0.9254902, a: 1}
+    hasInk: 1
+    ink: {r: 0.6313726, g: 0.1764706, b: 0.1764706, a: 1}
+    textClass: 1
+  - role: 64
+    hasFill: 1
+    fill: {r: 0.9529412, g: 0.9490196, b: 0.9372549, a: 1}
+    hasInk: 1
+    ink: {r: 0.41568628, g: 0.4117647, b: 0.39215687, a: 1}
+    textClass: 1
+  - role: 65
+    hasFill: 1
+    fill: {r: 0.88235295, g: 0.9529412, b: 0.99607843, a: 1}
+    hasInk: 1
+    ink: {r: 0.12156863, g: 0.42352942, b: 0.62352943, a: 1}
+    textClass: 1
   ringDark: {r: 0.03529412, g: 0.21568628, b: 0.40784314, a: 1}
   ringLight: {r: 1, g: 0.8784314, b: 0.5411765, a: 1}
   wallpaper: {fileID: 21300000, guid: 75cce516b87e7354db11c06e04509b65, type: 3}
