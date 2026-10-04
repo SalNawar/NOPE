@@ -339,6 +339,45 @@ public class CaseGuideTests
     private static StepSpec Spec(string id, StepWhen when, TruthKind truth = TruthKind.Any) => new StepSpec { id = id, when = when, truth = truth };
 
     [Test]
+    public void TheStepsShown_NumberNextAndBack_SkipAStepNotShown()
+    {
+        var guide = new CaseGuide();
+        guide.Reset(new[] { GuideStage.Records, GuideStage.Rules });
+        CollectionAssert.AreEqual(new[] { GuideStage.Papers, GuideStage.Records, GuideStage.Rules, GuideStage.Decision }, guide.Shown, "Papers and the decision always show");
+        Assert.AreEqual(4, guide.Count);
+        Assert.IsTrue(guide.Next());
+        Assert.IsTrue(guide.Next());
+        Assert.AreEqual(GuideStage.Rules, guide.Current, "Next skips the Books");
+        Assert.AreEqual(3, guide.Number);
+        Assert.IsFalse(guide.Go(GuideStage.Books), "a step not shown cannot be gone to");
+        Assert.IsTrue(guide.Back());
+        Assert.AreEqual(GuideStage.Records, guide.Current);
+        guide.Reset();
+        Assert.AreEqual(5, guide.Count, "no list: every step");
+    }
+
+    [Test]
+    public void TheStepsShown_FollowTheDaysChecklist()
+    {
+        var sets = new StepSetData();
+        var basic = new StepSet { type = CaseSteps.DefaultType };
+        basic.steps.Add(Spec("rules", StepWhen.RulesViewed));
+        basic.steps.Add(Spec("identity", StepWhen.Compared, TruthKind.Record));
+        StepSpec dress = Spec("dress", StepWhen.Compared, TruthKind.Reference);
+        dress.fromDay = 7;
+        basic.steps.Add(dress);
+        sets.sets.Add(basic);
+        var future = new StepSet { type = "Labourer", dataOnly = true };
+        future.steps.Add(Spec("facts", StepWhen.Compared, TruthKind.Reference));
+        sets.sets.Add(future);
+
+        CollectionAssert.AreEqual(new[] { GuideStage.Papers, GuideStage.Records, GuideStage.Rules, GuideStage.Decision }, CaseGuide.StagesOn(sets, 1),
+                                  "no book check before day 7 (a data-only set counts for nothing)");
+        CollectionAssert.AreEqual(CaseGuide.Stages, CaseGuide.StagesOn(sets, 7), "the dress brings the Books");
+        CollectionAssert.AreEqual(CaseGuide.Stages, CaseGuide.StagesOn(null, 1), "no sets: every step");
+    }
+
+    [Test]
     public void EachChecklistItem_BelongsToOneStep()
     {
         Assert.AreEqual(GuideStage.Papers, CaseGuide.StageOf(Spec("papers", StepWhen.PapersReceived)));

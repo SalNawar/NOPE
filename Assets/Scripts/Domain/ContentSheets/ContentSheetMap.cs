@@ -273,6 +273,8 @@ public static class ContentSheetMap
             Text("asset").Required(),
             Int("day").Required(),
             Int("queue"),
+            Text("bulletin").Note("the morning briefing's first line: the one paper or check the day brings for the first time (blank: nothing new; lesson 4)"),
+            List("papers").Note("the form numbers in circulation this day (TC-101 ...): travellers carry only these, never one an earlier day issued left out; empty: every form (lesson D7)"),
             Int("tells"),
             List("channels"),
             List("lies").Note("the lies enabled this day (FalseOrigin, PoorPosingAsRich, DoctoredIdentity, FakeDisplaced, Smuggling, DebtorPosingAsTourist, ForgedContract, FakeWaiver, ForgedProof); a traveller draws among those that fit their kind"),

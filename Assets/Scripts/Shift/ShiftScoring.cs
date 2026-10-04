@@ -65,7 +65,7 @@ public static class ShiftScoring
         if (verdict.correct)
             ApplyCorrect(verdict, world, config, lib);
         else
-            ApplyWrongDecision(verdict, world, config);
+            ApplyWrongDecision(verdict, world, config, verdict.unprovenDenial ? Unproven(verdict.evidenceCount) : inst?.citation);
 
         verdict.firedNow = EndingRules.IsFired(world.timelineStability, config.firedAtStability);
 
@@ -74,8 +74,16 @@ public static class ShiftScoring
         return verdict;
     }
 
-    /// <summary>Citation + stability loss for a wrong accept/deny decision (the mistake line is the verdict's MistakeKey: the fault's reason for a wrong accept); the money is the one penalty for any mistake (VerdictRules.WrongDecisionPenalty).</summary>
-    private static void ApplyWrongDecision(CaseVerdict v, WorldState world, GameConfigSO config)
+    /// <summary>
+    /// Citation + stability loss for a wrong accept/deny decision (the mistake
+    /// line is the verdict's MistakeKey: the fault's reason for a wrong accept;
+    /// then the rule and the exact values of <paramref name="facts"/>, lesson
+    /// 6: the traveller's fault for a wrong accept, the open destination for a
+    /// wrong denial, the logged deviations for an unproven one); the money is
+    /// the one penalty for any mistake (VerdictRules.WrongDecisionPenalty),
+    /// the day's first mistakes free warnings (GameConfigSO.freeWarningsPerDay).
+    /// </summary>
+    private static void ApplyWrongDecision(CaseVerdict v, WorldState world, GameConfigSO config, CitationFacts facts)
     {
         world.citationsToday++;
         world.totalCitations++;
@@ -92,13 +100,13 @@ public static class ShiftScoring
         if (VerdictRules.IsFreeWarning(world.citationsToday, config.freeWarningsPerDay))
         {
             v.wasFreeWarning = true;
-            v.citationText = Citation(mistake, UiText.Format("citation.warning", world.citationsToday, config.freeWarningsPerDay), v.stabilityDelta);
+            v.citationText = Citation(mistake, facts, UiText.Format("citation.warning", world.citationsToday, config.freeWarningsPerDay), v.stabilityDelta);
         }
         else
         {
             v.moneyPenalty = VerdictRules.WrongDecisionPenalty(world.citationsToday, config.freeWarningsPerDay, config.wrongDecisionPenalty);
             world.money -= v.moneyPenalty;
-            v.citationText = Citation(mistake, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)), v.stabilityDelta);
+            v.citationText = Citation(mistake, facts, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)), v.stabilityDelta);
         }
 
         Debug.Log($"[ShiftScoring] ApplyWrongDecision: accepted={v.accepted}, mistake='{v.MistakeKey}', citationsToday={world.citationsToday}, penalty={v.moneyPenalty}, stabilityDelta={StabilityRules.FormatChange(v.stabilityDelta)}, money={world.money}.");
@@ -132,7 +140,18 @@ public static class ShiftScoring
         v.stabilityDelta = world.timelineStability - before;
     }
 
-    /// <summary>A citation slip's text: the title, the mistake, the warning or penalty line and the stability change (UI string keys; piece 6).</summary>
-    private static string Citation(string mistake, string consequence, float stabilityDelta) =>
-        UiText.Format("citation.layout", UiText.Get("citation.title"), mistake, consequence, UiText.Format("citation.stability", StabilityRules.FormatChange(stabilityDelta)));
+    /// <summary>What an unproven denial's slip names: the evidence rule and the deviations logged (lesson 6).</summary>
+    private static CitationFacts Unproven(int evidenceCount)
+    {
+        var facts = new CitationFacts { RuleKey = "citation.rule.evidence" };
+        facts.Values.Add(new CitationValue(UiText.Get("citation.label.logged"), evidenceCount.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+        return facts;
+    }
+
+    /// <summary>A citation slip's text (UI string keys; piece 6, lesson 6): the title, the mistake, the rule it broke with its Directive Memo row, the exact values involved (Citations), the warning or penalty line and the stability change.</summary>
+    private static string Citation(string mistake, CitationFacts facts, string consequence, float stabilityDelta) =>
+        UiText.Format("citation.layout", UiText.Get("citation.title"), mistake,
+                      Citations.RuleLine(facts, UiText.Get, UiText.Get("citation.rule.numbered")),
+                      Citations.ValuesLine(facts?.Values, UiText.Get("citation.value"), UiText.Get("citation.value.separator")),
+                      consequence, UiText.Format("citation.stability", StabilityRules.FormatChange(stabilityDelta)));
 }

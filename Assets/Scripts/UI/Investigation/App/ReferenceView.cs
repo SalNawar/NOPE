@@ -28,7 +28,9 @@ using UnityEngine.UI;
 /// document design spec, D4) is drawn instead on its own page kind
 /// (Form_SealRegister): each issuing office's true seal pictured over its
 /// name (agency.offices), each a pick (EvidencePicks.ForSeal, PickKeys.Seal),
-/// the truth a paper's seal is held against; a link to a seal (a paper's
+/// the truth a paper's seal is held against; it is on the shelf from the
+/// day the seal check arrives (the first day plan enabling a forged seal,
+/// LieKinds.FirstDay; OnShelf); a link to a seal (a paper's
 /// seal's ↗, a finding revisited: PickKeys.Seal) chooses the register and
 /// outlines that office's seal.
 /// </summary>
@@ -62,6 +64,7 @@ public sealed class ReferenceView : AppView, IAppItems
     private CompareController _compare;
     private AgencyContent _agency;
     private int _day = 1;
+    private int _sealDay;
     private string _presentEra;
     private string _claimedNation;
     private string _claimedEra;
@@ -100,7 +103,12 @@ public sealed class ReferenceView : AppView, IAppItems
         _agency = agency;
         _day = day;
         Redraw();
+        RaiseChipsChanged();
     }
+
+    /// <summary>True when book <paramref name="index"/> is on the workbench's shelf today: every book is, the Seal Register from the day the seal check arrives (the first day plan enabling a forged seal).</summary>
+    public bool OnShelf(int index) =>
+        index >= 0 && index < _books.Count && (_books[index].category != ClueCategory.Seal || (_sealDay > 0 && _day >= _sealDay));
 
     /// <summary>The first time only: a page and a chip per reference book of the library, the eras' order and names, the first book chosen.</summary>
     public void BuildBooks(ContentLibrarySO library)
@@ -115,6 +123,7 @@ public sealed class ReferenceView : AppView, IAppItems
             _eraNames[era.id] = era.displayName;
         }
         _presentEra = library.FutureEra != null ? library.FutureEra.id : null;
+        _sealDay = LieKinds.FirstDay(LieKind.ForgedSeal, library.DayPlans.Where(p => p != null).Select(p => (p.DayNumber, (IEnumerable<LieKind>)p.EnabledLies)));
 
         foreach (ReferenceBookSO book in library.ReferenceBooks)
         {

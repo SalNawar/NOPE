@@ -93,6 +93,7 @@ public static partial class ContentLibraryValidator
         issues += CheckDayPlanLegendaries(lib);
         issues += CheckForcedEntries(lib);
         issues += CheckPremadeRows(lib);
+        issues += CheckPacing(lib);
 
         // --- Cross references ---
         issues += CheckLegendaryReferences(lib);
@@ -312,7 +313,7 @@ public static partial class ContentLibraryValidator
                 {
                     Kind = g.Key,
                     Askable = menu,
-                    Carried = g.SelectMany(b => b.DocumentTemplates ?? new DocumentTemplateSO[0]).Where(t => t != null)
+                    Carried = g.SelectMany(plan.TemplatesOf)
                                .Select(t => byNumber.TryGetValue(t.formNumber ?? string.Empty, out AskableForm f) ? f : new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver)))
                                .ToList()
                 });
@@ -1097,7 +1098,7 @@ public static partial class ContentLibraryValidator
                 }
             List<Directives.RuleEntry> active = plan.ActiveTravelRules.Where(r => r != null).Select(r => new Directives.RuleEntry(r.name, r.type, r.kinds, lib.FirstDayOf(r), r.transponder)).ToList();
             var kinds = plan.Kinds.Where(k => k != null && k.blueprint != null && k.weight > 0f)
-                .Select(k => (k.blueprint.Kind, (IReadOnlyCollection<string>)(k.blueprint.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => t.formNumber).ToList()))
+                .Select(k => (k.blueprint.Kind, (IReadOnlyCollection<string>)plan.TemplatesOf(k.blueprint).Select(t => t.formNumber).ToList()))
                 .ToList();
             foreach (string problem in Directives.DayProblems(plan.name, plan.DayNumber, active, kinds, lib.Agency.transponders))
             {
@@ -1255,7 +1256,7 @@ public static partial class ContentLibraryValidator
                     Id = f.id,
                     Premade = f.legendary != null ? f.legendary.id : null,
                     Kind = kind,
-                    Forms = (blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => t.formNumber).ToList(),
+                    Forms = plan.TemplatesOf(blueprint).Select(t => t.formNumber).ToList(),
                     HasTruePlace = f.legendary != null && f.legendary.truePlace != null,
                     OncePerRun = f.legendary != null && f.legendary.oncePerRun,
                     ClosedPlace = f.legendary != null && !plan.ClaimAllowed(f.legendary.nation, f.legendary.trueEra, kind),

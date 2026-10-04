@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -238,7 +239,7 @@ public sealed class GameManager : MonoBehaviour
 
         // The morning paper is printed: its lines go to the News site's back issues (the night rebuilds them, so they are kept now).
         if (desktopConfig != null)
-            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
+            NewsArchive.Record(_worldState.newsArchive, _worldState.day, Briefing(dayPlan.Bulletin, _worldState.tomorrow.briefingLines), _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
                                _worldState.tomorrow.deskLines);
         else
             Debug.LogWarning("[GameManager] No DesktopConfigSO wired: today's paper is not kept for the News site. Run Tools > TimeDesk > Build Office UI.");
@@ -251,13 +252,23 @@ public sealed class GameManager : MonoBehaviour
             Debug.Log("[GameManager] <<< Exiting Start (showing morning briefing before day loop).");
             if (booth != null)
                 booth.SetPhase(BoothPhase.Newsletter);
-            dayFlowUI.ShowBriefing(_worldState, () => BeginShift(planToRun, seedToUse));
+            dayFlowUI.ShowBriefing(_worldState, dayPlan.Bulletin, () => BeginShift(planToRun, seedToUse));
         }
         else
         {
             Debug.Log("[GameManager] <<< Exiting Start (starting day loop directly).");
             BeginShift(dayPlan, seed);
         }
+    }
+
+    /// <summary>The morning paper's briefing as the News site keeps it: the day's bulletin first (lesson 4; none when blank), then the tomorrow package's briefing lines.</summary>
+    private static List<string> Briefing(string bulletin, IEnumerable<string> lines)
+    {
+        var briefing = new List<string>();
+        if (!string.IsNullOrWhiteSpace(bulletin))
+            briefing.Add(bulletin.Trim());
+        briefing.AddRange(lines ?? Enumerable.Empty<string>());
+        return briefing;
     }
 
     /// <summary>
@@ -409,7 +420,9 @@ public sealed class GameManager : MonoBehaviour
             Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (showing results panel, then {(ending != null ? "the title scene" : "Home")}).");
             if (booth != null)
                 booth.SetPhase(BoothPhase.Newsletter);
-            dayFlowUI.ShowResults(_worldState, _ledger, next);
+            // The report's money at a glance (lesson 5): tonight's bills are Home's own (HomeEconomy.DailyExpenses; a break-in is never foretold).
+            int bills = HomeEconomy.DailyExpenses(_worldState, contentLibrary, _gameConfig, 0).total;
+            dayFlowUI.ShowResults(_worldState, _ledger, ShiftReport.From(_ledger, _dayCases != null ? _dayCases.Count : 0, _worldState.money, bills), next);
         }
         else
         {

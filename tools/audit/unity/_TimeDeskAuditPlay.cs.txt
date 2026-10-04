@@ -32,7 +32,14 @@
 // each shift, order at the PC (the Orders app's rule, OrderBook.Order)
 // Interview Protocols, then the Near East Speech translator (it needs the
 // Protocols delivered), at most one a day, once the wallet holds its price and
-// 20 cr more; it arrives the next morning. Home: treat any family member at
+// 20 cr more; it arrives the next morning. The re-paced days (wave 5 track C,
+// Papers Please lessons 4-6 and D7) are checked on the way: each day's
+// briefing opens with its bulletin (days 1-5 each have one), every traveller
+// carries only the day's issued papers (day 1: the visa alone) and the PC
+// follows them (the shelf's papers, the Citizen Account's forms on file, the
+// guided steps shown: no Books before day 7), every
+// citation slip names its rule and a value, and every shift report shows
+// tonight's bills and the wallet after them. Home: treat any family member at
 // condition 2+ (the shop step is skipped: Home stocks no upgrade; never the
 // slot machine: its draw is unseeded).
 // RunShots plays the same run and also takes the screenshots of the redesign's
@@ -41,10 +48,12 @@
 // (driven as the clerk does on the PC workbench: a shelf chip opens its
 // document on the target side, a step puts its pair up), each form's scanned
 // copy beside the Seal Register (the document design spec: every document
-// type on the PC; the register from the shelf's books), each seal or photo
-// proven on the workbench, the two panes and one, the search drawer and its
-// pinned and recent items, each lie kind caught in the findings and on the
-// office strip, each citation reason, and after the transcript's END a
+// type on the PC; the register from the shelf's books once the seal check
+// has arrived), each seal or photo proven on the workbench, the two panes
+// and one, the search drawer and its pinned and recent items, each day's
+// first traveller's Citizen Account beside their papers with the guided
+// steps the day shows (ramp_d<day>), each lie kind caught in the findings
+// and on the office strip, each citation reason, and after the transcript's END a
 // shots-only day 7 with the Auto-Feed and Analysis scanners set on the desk);
 // its transcript must equal RunA's (screenshots never change the run).
 // Driven by direct calls from EditorApplication.update in the persistent
@@ -342,6 +351,11 @@ public static class _TimeDeskAuditPlay
         RecordBriefing();
         RecordWorld();
         RecordPortals(o);
+        DayPlanSO paced = RunManager.Instance.GetCurrentDayPlan();
+        string brief = ((TMP_Text)Field(Office.One<DayFlowUIController>(), "briefingBodyText")).text;
+        Check(day > 5 || !string.IsNullOrWhiteSpace(paced.Bulletin), $"day {day}: days 1-5 each announce their one new paper or check in a bulletin ('{paced.Bulletin}')");
+        Check(string.IsNullOrWhiteSpace(paced.Bulletin) || (brief.StartsWith(UiText.Get("briefing.bulletinHeader")) && brief.Contains(paced.Bulletin.Trim())),
+              $"day {day}: the briefing opens with the day's bulletin");
         WorldHeadlines(day);
         PaperNames(day);
         if (ShotsOn)
@@ -397,8 +411,11 @@ public static class _TimeDeskAuditPlay
         yield return Frames(3);
         Line($"-- day {day} shift report ({presented} presented)");
         Line("   " + ((TMP_Text)Field(o.DayFlow(), "resultsTitleText")).text);
-        foreach (string l in Lines(((TMP_Text)Field(o.DayFlow(), "resultsBodyText")).text))
+        string report = ((TMP_Text)Field(o.DayFlow(), "resultsBodyText")).text;
+        foreach (string l in Lines(report))
             Line("   | " + l);
+        Check(report.Contains(UiText.Get("results.row.bills")) && report.Contains(UiText.Get("results.row.after")) && report.Contains(UiText.Get("results.row.net")),
+              $"day {day}: the shift report shows the net, tonight's bills and the wallet after them");
         ShiftLedger ledger = o.Game.Ledger;
         Line($"   ledger: {ledger.verdicts.Count} verdicts, correct {ledger.CorrectCount}, wrong {ledger.WrongCount}, pay {ledger.TotalPay}, penalties {ledger.TotalPenalties}, stability {ledger.TotalStabilityDelta.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture)}, unproven {ledger.UnprovenDenialCount}");
         Line($"   debt relief: instalment {ledger.debtInstalment}, owed {ledger.debtOwed}, paid so far {RunManager.Instance.World.clerkDebtPaid}");
@@ -471,6 +488,11 @@ public static class _TimeDeskAuditPlay
         if (c.look != null)
             Line($"   look: {c.look.Describe()} | {string.Join("; ", c.look.Garments.Select(g => $"{g.Slot}:{g.Label}{(g.IsTell ? "[TELL]" : "")}"))}");
         Count($"kind {c.kind}");
+        DayPlanSO issuing = RunManager.Instance.GetCurrentDayPlan();
+        Check(c.documents.All(d => d.template != null && issuing.Issues(d.template.formNumber)),
+              $"d{day} slot {slot}: the traveller carries only the day's issued papers [{string.Join(",", c.documents.Select(d => d.template != null ? d.template.formNumber : "?"))}] of [{string.Join(",", issuing.Papers)}]");
+        if (day == 1)
+            Check(c.documents.All(d => d.template != null && d.template.formNumber == Directives.Visa), $"d1 slot {slot}: day 1's traveller carries the Leisure Visa alone");
         if (c.lie.HasValue)
             Count($"lie {c.lie.Value}");
         if (c.costumeFault != CostumeError.None)
@@ -523,10 +545,13 @@ public static class _TimeDeskAuditPlay
 
         // The interview: every request, every question (slot 1 also runs its first dialog).
         yield return Interview(o, c, slot == 1);
+        CheckRamp(o, c, day, slot);
         if (ShotsOn)
             yield return KindShots(o, c, day);
+        if (ShotsOn && First($"ramp d{day}"))
+            yield return AppShots(o, c, $"ramp_d{day}", AppTab.Records, AppTab.Documents);
 
-        if (accept && !plan.StartsWith("MISTAKE") && VisualProbeFits(c) && First("visual probe"))
+        if (accept && !plan.StartsWith("MISTAKE"))
             yield return VisualProbe(o, c, day, slot);
         if (gatherEvidence)
         {
@@ -600,7 +625,12 @@ public static class _TimeDeskAuditPlay
         }
         if (o.CitationPanel.activeInHierarchy)
         {
-            Line($"   citation slip: {((TMP_Text)Field(o.OfficeUi, "citationText")).text.Replace("\n", " / ")}");
+            string slip = ((TMP_Text)Field(o.OfficeUi, "citationText")).text;
+            Line($"   citation slip: {slip.Replace("\n", " / ")}");
+            string rule = v.unprovenDenial ? UiText.Get("citation.rule.evidence") : Citations.RuleLine(c.citation, UiText.Get, UiText.Get("citation.rule.numbered"));
+            string value = v.unprovenDenial ? "0" : c.citation?.Values.Select(x => x.Value).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
+            Check(!string.IsNullOrEmpty(rule) && slip.Contains(rule) && !string.IsNullOrEmpty(value) && slip.Contains(value),
+                  $"d{day} slot {slot}: the citation slip names the exact rule ('{rule}') and value ('{value}')");
             if (ShotsOn && First($"citation {v.faultReason}/{v.unprovenDenial}/{v.accepted}"))
                 yield return Shots($"citation_{(v.accepted ? "accepted" : "denied")}_{(string.IsNullOrEmpty(v.faultReason) ? "honest" : v.faultReason)}{(v.unprovenDenial ? "_unproven" : "")}");
             ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
@@ -802,6 +832,37 @@ public static class _TimeDeskAuditPlay
 
 
     /// <summary>The traveller's record in today's registry (by the registered name).</summary>
+    /// <summary>
+    /// The PC follows the day's ramp (lesson D7): the shelf's papers are the
+    /// traveller's issued ones and no other (no chip for a form not issued
+    /// yet), their Citizen Account lists a form on file only once the form is
+    /// issued, and the guided steps show only those with a check today
+    /// (CaseGuide.StagesOn: no Books before day 7).
+    /// </summary>
+    private static void CheckRamp(Office o, CaseInstance c, int day, int slot)
+    {
+        DayPlanSO plan = RunManager.Instance.GetCurrentDayPlan();
+        var shelf = (ShelfView)Field(o.App, "shelf");
+        List<string> chips = shelf.Items.Where(x => x.Target.Tab == AppTab.Documents).Select(x => x.Label).ToList();
+        Check(chips.Count == c.documents.Count, $"d{day} slot {slot}: the shelf holds the traveller's {c.documents.Count} issued paper(s) and no other [{string.Join(" | ", chips)}]");
+
+        CitizenRecord record = c.account != null ? RecordOf(o, c) : null;
+        if (record != null)
+        {
+            List<string> rows = record.Groups.SelectMany(g => g.Rows).Select(r => r.Label).ToList();
+            bool manifest = plan.Issues(Directives.Manifest), waiver = plan.Issues(Directives.Waiver), proof = Directives.Proofs.Any(plan.Issues);
+            Check(rows.Contains(UiText.Get("records.row.transponderClass")) == manifest && rows.Contains(UiText.Get("records.row.waiver")) == waiver &&
+                  rows.Contains(UiText.Get("records.row.proof")) == proof,
+                  $"d{day} slot {slot}: the Citizen Account lists only the issued forms on file (manifest {manifest}, waiver {waiver}, proof {proof}) [{string.Join(", ", rows)}]");
+        }
+
+        var guide = (CaseGuide)Field(o.App.Guide, "_guide");
+        List<GuideStage> today = CaseGuide.StagesOn((StepSetData)Field(o.App.Guide, "_sets"), day);
+        int pills = o.App.Guide.Pills.Count(p => p != null && p.gameObject.activeSelf);
+        Check(guide.Shown.SequenceEqual(today) && pills == today.Count && (day >= 7 || !today.Contains(GuideStage.Books)),
+              $"d{day} slot {slot}: the guided steps follow the ramp [{string.Join(", ", guide.Shown)}], {pills} pills");
+    }
+
     private static CitizenRecord RecordOf(Office o, CaseInstance c)
     {
         var registry = (CitizenRegistry)Field(Field(o.Ui, "_reference"), "_registry");
@@ -1062,32 +1123,35 @@ public static class _TimeDeskAuditPlay
         return box != null ? box.GetComponent<AppRow>() : null;
     }
 
-    /// <summary>The visual probe fits a traveller whose papers show an honest seal of an office and an honest photo.</summary>
-    private static bool VisualProbeFits(CaseInstance c) =>
-        c.documents.Any(d => d.fields.Any(f => f != null && f.category == ClueCategory.Seal && !string.IsNullOrEmpty(f.issuer) && !f.isAnachronism)) &&
-        c.documents.Any(d => d.fields.Any(f => f != null && f.category == ClueCategory.Photo && !f.isAnachronism));
-
     /// <summary>
-    /// The first accepted traveller whose papers show an honest seal and photo
-    /// (the document design spec, D4, D8, on the PC workbench): the seal
-    /// against its office's seal in the Seal Register ("Matching data", then
-    /// another office's: "Another office", nothing logged) and the photo
-    /// against Look > Their face ("Matching data"); nothing proved.
+    /// From the day each check arrives on the ramp (the photo's, the seal's:
+    /// CheckDay), the first accepted traveller whose papers show an honest
+    /// photo, and the first with an honest seal, has it held against its truth
+    /// on the PC workbench (the document design spec, D4, D8): the photo
+    /// against Look > Their face ("Matching data"), the seal against its
+    /// office's seal in the Seal Register ("Matching data", then another
+    /// office's: "Another office", nothing logged); nothing proved.
     /// </summary>
     private static IEnumerator VisualProbe(Office o, CaseInstance c, int day, int slot)
     {
         var compare = (CompareController)Field(o.Ui, "compareController");
         var runner = (DialogRunner)Field(Field(o.Ui, "_interview"), "_runner");
-        foreach (ClueCategory category in new[] { ClueCategory.Seal, ClueCategory.Photo })
+        foreach ((ClueCategory category, LieKind lie) in new[] { (ClueCategory.Photo, LieKind.SwappedPhoto), (ClueCategory.Seal, LieKind.ForgedSeal) })
+        {
+            int from = CheckDay(lie);
+            if (from == 0 || day < from || Seen.Contains($"visual probe {category}"))
+                continue;
             for (int d = 0; d < c.documents.Count; d++)
             {
                 int f = c.documents[d].fields.FindIndex(x => x != null && x.category == category && !x.isAnachronism && (category != ClueCategory.Seal || !string.IsNullOrEmpty(x.issuer)));
                 if (f < 0)
                     continue;
+                First($"visual probe {category}");
                 DocumentField field = c.documents[d].fields[f];
                 yield return PairVisual(o, compare, runner, $"honest {category} ({c.documents[d].DisplayName})", d, new DocumentRow(f, field), field.issuer, FindingKind.Match, false, day, slot);
                 break;
             }
+        }
     }
 
     private static IEnumerator PairDress(Office o, CompareController compare, Func<ComparePick?> look, Func<ComparePick?> claimed, Func<ComparePick?> home, string what, int day, int slot)
@@ -1195,10 +1259,16 @@ public static class _TimeDeskAuditPlay
         yield return CloseApp(o);
     }
 
+    /// <summary>The day a lie's check arrives on the ramp: the first day plan enabling it (LieKinds.FirstDay; 0: none).</summary>
+    private static int CheckDay(LieKind lie) =>
+        LieKinds.FirstDay(lie, RunManager.Instance.Library.DayPlans.Where(p => p != null).Select(p => (p.DayNumber, (IEnumerable<LieKind>)p.EnabledLies)));
+
     /// <summary>
     /// Paper <paramref name="index"/> on the left from its shelf chip and, with
     /// <paramref name="register"/>, the Seal Register on the right from its chip
-    /// in the shelf's Books group (checked there); false when a chip is missing.
+    /// in the shelf's Books group (checked there from the day the seal check
+    /// arrives; before it, checked absent and the right pane left alone);
+    /// false when a chip is missing.
     /// </summary>
     private static bool PaperBesideRegister(Office o, int index, bool register)
     {
@@ -1218,7 +1288,13 @@ public static class _TimeDeskAuditPlay
         for (int i = 0; seals != null && i < shelf.Items.Count && book < 0; i++)
             if (shelf.Items[i].GroupKey == "shelf.books" && shelf.Items[i].Label == seals.displayName)
                 book = i;
-        Check(book >= 0, $"the Seal Register is a document of the shelf's Books group ({(seals != null ? seals.displayName : "no Seal book")})");
+        int today = RunManager.Instance.World.day, sealDay = CheckDay(LieKind.ForgedSeal);
+        if (sealDay == 0 || today < sealDay)
+        {
+            Check(book < 0, $"day {today}: the Seal Register is not on the shelf before the seal check arrives (day {sealDay})");
+            return paper >= 0;
+        }
+        Check(book >= 0, $"day {today}: the Seal Register is a document of the shelf's Books group from day {sealDay} ({(seals != null ? seals.displayName : "no Seal book")})");
         if (r == null || !r.gameObject.activeInHierarchy)
             o.App.Run(AppCommand.ToggleSplit);
         if (book >= 0 && r != null)

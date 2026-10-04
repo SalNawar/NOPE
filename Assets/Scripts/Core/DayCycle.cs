@@ -148,7 +148,8 @@ public static class DayCycle
     /// the shift's Debt Relief departures for the next morning's paper
     /// (WorldState.debtReliefYesterday, redesign phase 9), the clerk's
     /// Debt Relief instalment out of the shift's pay, and the narrative
-    /// dialogs' outcomes. True when a stranding's fine or tremor, the
+    /// dialogs' outcomes (the money they move kept as the ledger's
+    /// otherMoney, the shift report's other money). True when a stranding's fine or tremor, the
     /// instalment or a dialog's effect applied, so the caller checks the
     /// endings (the wallet or stability may have moved).
     /// </summary>
@@ -157,7 +158,10 @@ public static class DayCycle
         bool stranded = ShiftStrandings.Resolve(world, ledger, cases, today, lib, config);
         world.debtReliefYesterday = ledger != null ? ledger.DebtReliefDepartures : 0;
         bool instalmentTaken = ClerkAccountSource.TakeInstalment(world, ledger, lib) > 0;
+        int walletBefore = world.money;
         bool effectApplied = ApplyDialogOutcomes(world, ledger, lib);
+        if (ledger != null)
+            ledger.otherMoney = world.money - walletBefore;
         return stranded || instalmentTaken || effectApplied;
     }
 

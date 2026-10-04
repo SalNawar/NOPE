@@ -583,8 +583,9 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// The shelf's documents from the left pane's views, in three groups:
     /// the traveller's (each paper by its chip's name, not readable yet:
     /// dimmed; the transcript), the agency's (Citizen records, today's rules,
-    /// the calendar) and the books (each by its name); drawn again only when
-    /// they change.
+    /// the calendar) and the books (each by its name; the Seal Register from
+    /// the day the seal check arrives, ReferenceView.OnShelf); drawn again only
+    /// when they change.
     /// </summary>
     private void RefreshShelf()
     {
@@ -605,7 +606,8 @@ public sealed partial class InvestigationApp : MonoBehaviour
             items.Add(new ShelfItem("shelf.agency", UiText.Get("app.tab.calendar"), LinkTarget.ToTab(AppTab.Calendar), true));
         IAppView books = leftPane.View(AppTab.Reference);
         for (int i = 0; books != null && i < books.Chips.Count; i++)
-            items.Add(new ShelfItem("shelf.books", books.Chips[i].Label, LinkTarget.ToTab(AppTab.Reference, i), books.Chips[i].Available));
+            if (!(books is ReferenceView reference) || reference.OnShelf(i))
+                items.Add(new ShelfItem("shelf.books", books.Chips[i].Label, LinkTarget.ToTab(AppTab.Reference, i), books.Chips[i].Available));
 
         if (!SameItems(items))
         {

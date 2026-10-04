@@ -214,12 +214,13 @@ public static partial class OfficeSceneUIBuilder
         verdictText.raycastTarget = false;
         verdictStrip.gameObject.SetActive(false);
 
-        // Citation slip (over the office and the frame; it still holds the day until Acknowledge).
+        // Citation slip (over the office and the frame; it still holds the day until Acknowledge). Sized for the rule and the exact
+        // values it names (lesson 6: title, mistake, the rule with its memo row, the values, the warning or penalty with stability).
         DestroyChildIfPresent(officeCanvas.transform, "CitationPanel");
-        Transform citation = Panel(officeCanvas.transform, "CitationPanel", Center, Center, Vector2.zero, new Vector2(560f, 320f), new Color(0.85f, 0.2f, 0.15f, 0.96f), ThemeRoleId.Alert);
-        TMP_Text citationText = Text(citation, "CitationText", UiText.Get("citation.title"), 24, TextAlignmentOptions.Center, new Vector2(0.05f, 0.28f), new Vector2(0.95f, 0.95f), Color.white,
+        Transform citation = Panel(officeCanvas.transform, "CitationPanel", Center, Center, Vector2.zero, new Vector2(720f, 420f), new Color(0.85f, 0.2f, 0.15f, 0.96f), ThemeRoleId.Alert);
+        TMP_Text citationText = Text(citation, "CitationText", UiText.Get("citation.title"), 24, TextAlignmentOptions.Center, new Vector2(0.05f, 0.24f), new Vector2(0.95f, 0.95f), Color.white,
                                      ThemeRoleId.Alert);
-        Button citationContinue = MakeButton(citation, "ContinueButton", null, new Vector2(0.3f, 0.06f), new Vector2(0.7f, 0.24f), null, ThemeRoleId.Button, "citation.acknowledge");
+        Button citationContinue = MakeButton(citation, "ContinueButton", null, new Vector2(0.34f, 0.05f), new Vector2(0.66f, 0.19f), null, ThemeRoleId.Button, "citation.acknowledge");
         citation.gameObject.SetActive(false);
 
         var soView = new SerializedObject(officeView);

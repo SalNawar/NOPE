@@ -680,6 +680,10 @@ public static class AccountMaker
 /// or Frozen with its date, lineage, the
 /// forms not on file, the departure date, past trips, the note) is shown only. Labels and fixed
 /// words come through <c>text</c> (UI string keys), values from the account.
+/// The Forms on file rows follow the day's papers (Papers Please lesson D7,
+/// see Day pacing): a form's row shows only once the form is issued (the
+/// transponder rows with the Departure Manifest, the waiver's, the proof's,
+/// the contract's), and the group is left out while none is.
 /// The clerk's own account is a record too, with no evidence row.
 /// </summary>
 public static class AccountRecords
@@ -688,9 +692,12 @@ public static class AccountRecords
     /// The record of a citizen named <paramref name="name"/>, born
     /// <paramref name="born"/>, booked to <paramref name="destination"/> today;
     /// its Note row reads <paramref name="note"/> (a story character's, days
-    /// 7-15 B3), none when blank.
+    /// 7-15 B3), none when blank; its Forms on file rows only for the forms
+    /// <paramref name="issued"/> (the day's papers, DayPapers.Issued: null or
+    /// empty, every form).
     /// </summary>
-    public static CitizenRecord Record(string name, string born, string destination, CitizenAccount account, Func<string, string> text, string note = null)
+    public static CitizenRecord Record(string name, string born, string destination, CitizenAccount account, Func<string, string> text, string note = null,
+                                       IReadOnlyCollection<string> issued = null)
     {
         account = account ?? new CitizenAccount();
         string none = text("records.none");
@@ -708,21 +715,27 @@ public static class AccountRecords
             new RecordRow(text("records.row.lineage"), account.Lineage ?? none)
         };
 
-        var forms = new List<RecordRow>
+        var forms = new List<RecordRow>();
+        if (DayPapers.Issued(issued, Directives.Manifest))
         {
-            new RecordRow(text("records.row.transponder"), account.Transponder ?? none, ClueCategory.TransponderId),
-            new RecordRow(text("records.row.transponderClass"), account.TransponderClass.ToString(), ClueCategory.TransponderClass),
-            account.WaiverNo != null ? new RecordRow(text("records.row.waiver"), account.WaiverNo, ClueCategory.WaiverNo) : new RecordRow(text("records.row.waiver"), none),
-            account.ProofForm != null && !account.ProofForged ? new RecordRow(text("records.row.proof"), account.ProofValue, account.ProofCategory) : new RecordRow(text("records.row.proof"), none)
-        };
-        if (account.HasContract)
-        {
-            forms.Add(new RecordRow(text("contract.row.employer"), account.Employer, ClueCategory.Employer));
-            forms.Add(new RecordRow(text("contract.row.term"), AccountMaker.Term(account.TermDays), ClueCategory.Term));
-            forms.Add(new RecordRow(text("contract.row.wage"), AccountMaker.Credits(account.Wage), ClueCategory.Wage));
+            forms.Add(new RecordRow(text("records.row.transponder"), account.Transponder ?? none, ClueCategory.TransponderId));
+            forms.Add(new RecordRow(text("records.row.transponderClass"), account.TransponderClass.ToString(), ClueCategory.TransponderClass));
         }
-        else
-            forms.Add(new RecordRow(text("records.row.contract"), none));
+        if (DayPapers.Issued(issued, Directives.Waiver))
+            forms.Add(account.WaiverNo != null ? new RecordRow(text("records.row.waiver"), account.WaiverNo, ClueCategory.WaiverNo) : new RecordRow(text("records.row.waiver"), none));
+        if (Directives.Proofs.Any(proof => DayPapers.Issued(issued, proof)))
+            forms.Add(account.ProofForm != null && !account.ProofForged ? new RecordRow(text("records.row.proof"), account.ProofValue, account.ProofCategory) : new RecordRow(text("records.row.proof"), none));
+        if (DayPapers.Issued(issued, Directives.Contract))
+        {
+            if (account.HasContract)
+            {
+                forms.Add(new RecordRow(text("contract.row.employer"), account.Employer, ClueCategory.Employer));
+                forms.Add(new RecordRow(text("contract.row.term"), AccountMaker.Term(account.TermDays), ClueCategory.Term));
+                forms.Add(new RecordRow(text("contract.row.wage"), AccountMaker.Credits(account.Wage), ClueCategory.Wage));
+            }
+            else
+                forms.Add(new RecordRow(text("records.row.contract"), none));
+        }
 
         var travel = new List<RecordRow>
         {
@@ -735,13 +748,12 @@ public static class AccountRecords
         foreach (PastTrip trip in trips)
             travel.Add(new RecordRow(text("records.row.trip"), $"{trip.Date}, {trip.Place}, {text("records.trip.returned")}"));
 
-        return new CitizenRecord(name, account.CitizenId, new[]
-        {
-            new RecordGroup(text("records.group.account"), records),
-            new RecordGroup(text("records.group.forms"), forms),
-            new RecordGroup(text("records.group.travel"), travel),
-            new RecordGroup(string.Empty, new[] { new RecordRow(text("records.row.note"), string.IsNullOrWhiteSpace(note) ? text("records.note.none") : note) })
-        });
+        var groups = new List<RecordGroup> { new RecordGroup(text("records.group.account"), records) };
+        if (forms.Count > 0)
+            groups.Add(new RecordGroup(text("records.group.forms"), forms));
+        groups.Add(new RecordGroup(text("records.group.travel"), travel));
+        groups.Add(new RecordGroup(string.Empty, new[] { new RecordRow(text("records.row.note"), string.IsNullOrWhiteSpace(note) ? text("records.note.none") : note) }));
+        return new CitizenRecord(name, account.CitizenId, groups);
     }
 
     /// <summary>

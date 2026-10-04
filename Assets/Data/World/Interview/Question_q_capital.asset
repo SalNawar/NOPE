@@ -31,7 +31,7 @@ MonoBehaviour:
   conditions:
   - type: 8
     key: 
-    threshold: 5
+    threshold: 12
     attribute: {fileID: 0}
     profile: {fileID: 0}
     nation: {fileID: 0}

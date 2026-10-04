@@ -413,7 +413,8 @@ public static class TimelineService
     /// <summary>
     /// Each day's agency forms from day 1 to <paramref name="lastDay"/>, in day
     /// order (item i is day i + 1's: the plan GetDayPlan picks for it, its
-    /// kinds' and forced blueprints' templates, each once, in order), one
+    /// kinds' and forced blueprints' templates issued that day
+    /// (DayPlanSO.TemplatesOf, lesson D7), each once, in order), one
     /// AskableForm per template across the days. A day without a plan lists none.
     /// </summary>
     public static List<IReadOnlyList<AskableForm>> DayForms(ContentLibrarySO lib, int lastDay)
@@ -426,10 +427,8 @@ public static class TimelineService
             DayPlanSO plan = lib != null ? lib.GetDayPlan(d) : null;
             if (plan != null)
                 foreach (CaseBlueprintSO blueprint in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints))
-                    foreach (DocumentTemplateSO t in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : System.Array.Empty<DocumentTemplateSO>())
+                    foreach (DocumentTemplateSO t in plan.TemplatesOf(blueprint))
                     {
-                        if (t == null)
-                            continue;
                         if (!byTemplate.TryGetValue(t, out AskableForm form))
                             byTemplate[t] = form = new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver));
                         if (!forms.Contains(form))

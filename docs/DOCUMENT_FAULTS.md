@@ -112,7 +112,7 @@ tell (`Forgery`).
 | id | Document | Field | Lie / directive | Variant | Proved against | What the forger did |
 |---|---|---|---|---|---|---|
 | richVisaClass | TC-101 | AccountStatus | PoorPosingAsRich | richForged | Citizen Account · Status | The visa's class reads above the account's status. |
-| richManifestClass | TC-230 | TransponderClass | PoorPosingAsRich | richForged | Citizen Account · Transponder class | The manifest's class reads Premium on an Economy account. |
+| richManifestClass | TC-230 | TransponderClass | PoorPosingAsRich | richForged (optional: on day 1 the visa travels alone) | Citizen Account · Transponder class | The manifest's class reads Premium on an Economy account. |
 | borrowedVisaClass | TC-101 | AccountStatus | PoorPosingAsRich | richBorrowed | Citizen Account · Status | The visa's class reads above the account's status. |
 | borrowedManifestId | TC-230 | CitizenId | PoorPosingAsRich | richBorrowed | Citizen Account · Citizen ID; the visa | A rich citizen's manifest: their Citizen ID. |
 | borrowedManifestUnit | TC-230 | TransponderId | PoorPosingAsRich | richBorrowed | Citizen Account · Transponder | A rich citizen's manifest: their transponder. |

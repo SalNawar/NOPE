@@ -1450,6 +1450,7 @@
         "lie": "PoorPosingAsRich",
         "directive": "",
         "variant": "richForged",
+        "optional": true,
         "against": "Citizen Account · Transponder class",
         "note": "The manifest's class reads Premium on an Economy account."
       },
@@ -8008,12 +8009,12 @@
     {
       "asset": "Rule_LeisureDepartures",
       "type": "Procedure",
-      "description": "Leisure departures: a Leisure Visa and a Departure Manifest; a Standard visa also needs a signed Stranding Waiver and a proof of means. Every paper must match the Citizen Account."
+      "description": "Leisure departures: every paper a tourist hands over must match their Citizen Account."
     },
     {
       "asset": "Rule_DisplacedReturns",
       "type": "Procedure",
-      "description": "Displaced returns: a Displacement Certificate, an Intake Declaration and a Return Order. Every paper must match the Displacement Registry."
+      "description": "Displaced returns: every paper a displaced person hands over must match the Displacement Registry."
     },
     {
       "asset": "Rule_ReturnHome",
@@ -8028,7 +8029,16 @@
     {
       "asset": "Rule_PaperDates",
       "type": "PaperDates",
-      "description": "Depart only on the date on your manifest or return order, and never on an expired paper."
+      "description": "Depart only on the date printed on your travel papers, and never on an expired paper."
+    },
+    {
+      "asset": "Rule_TouristWaiverSet",
+      "type": "PaperSet",
+      "description": "A Premium visa travels on a Premium transponder. A Standard visa needs an Economy transponder and a signed Stranding Waiver.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist"
+      ]
     },
     {
       "asset": "Rule_TouristPaperSet",
@@ -8073,6 +8083,10 @@
       "asset": "DayPlan_Inv_Day1",
       "day": 1,
       "queue": 8,
+      "bulletin": "NEW: the Leisure Visa. Its name, Citizen ID, date of birth and class must match the traveller's Citizen Account.",
+      "papers": [
+        "TC-101"
+      ],
       "tells": 1,
       "channels": [
         "Papers"
@@ -8140,16 +8154,18 @@
       "asset": "DayPlan_Inv_Day2",
       "day": 2,
       "queue": 10,
+      "bulletin": "NEW: the Departure Manifest. Its Citizen ID, transponder and class must match the Citizen Account. The visa's photo must be the person at the desk (Look > Their face).",
+      "papers": [
+        "TC-101",
+        "TC-230"
+      ],
       "tells": 1,
       "channels": [
-        "Papers",
-        "Answer"
+        "Papers"
       ],
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
-        "FakeWaiver",
-        "ForgedProof",
         "SwappedPhoto"
       ],
       "kinds": [
@@ -8159,7 +8175,8 @@
         },
         {
           "kind": "PoorTourist",
-          "weight": 2
+          "weight": 2,
+          "honest": true
         }
       ],
       "eras": [
@@ -8181,17 +8198,14 @@
         "britain"
       ],
       "rules": [
-        "Rule_NoAncientEgypt",
-        "Rule_DressForDestination",
-        "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet"
+        "Rule_LeisureDepartures"
       ],
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.05,
+      "costumeErrorChance": 0.0,
       "slipChance": 0.15,
-      "violationChance": 0.05,
+      "violationChance": 0.0,
       "returns": 1,
       "portals": [
         {
@@ -8220,34 +8234,30 @@
       "asset": "DayPlan_Inv_Day3",
       "day": 3,
       "queue": 12,
+      "bulletin": "NEW: closed destinations. Refuse anyone bound for a place today's Directive Memo closes. Every paper's seal must match its office's in the Seal Register, now on your shelf.",
+      "papers": [
+        "TC-101",
+        "TC-230"
+      ],
       "tells": 1,
       "channels": [
-        "Papers",
-        "Answer",
-        "Appearance"
+        "Papers"
       ],
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
-        "FakeWaiver",
-        "DebtorPosingAsTourist",
-        "ForgedContract",
-        "ForgedProof",
         "SwappedPhoto",
         "ForgedSeal"
       ],
       "kinds": [
         {
           "kind": "RichTourist",
-          "weight": 2
+          "weight": 3
         },
         {
           "kind": "PoorTourist",
-          "weight": 2
-        },
-        {
-          "kind": "Labourer",
-          "weight": 2
+          "weight": 2,
+          "honest": true
         }
       ],
       "eras": [
@@ -8266,20 +8276,15 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoMedievalChina",
-        "Rule_NoEarlyModernJapan",
-        "Rule_DressForDestination",
-        "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
-        "Rule_LabourPaperSet",
-        "Rule_DebtStanding"
+        "Rule_NoAncientEgypt",
+        "Rule_LeisureDepartures"
       ],
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.05,
+      "costumeErrorChance": 0.0,
       "slipChance": 0.15,
-      "violationChance": 0.05,
+      "violationChance": 0.0,
       "returns": 1,
       "portals": [
         {
@@ -8308,20 +8313,20 @@
       "asset": "DayPlan_Inv_Day4",
       "day": 4,
       "queue": 12,
+      "bulletin": "NEW: the Stranding Waiver. A Standard visa rides an Economy transponder with a signed waiver; a Premium visa rides a Premium one.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310"
+      ],
       "tells": 1,
       "channels": [
-        "Papers",
-        "Answer",
-        "Appearance"
+        "Papers"
       ],
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
         "FakeWaiver",
-        "DebtorPosingAsTourist",
-        "ForgedContract",
-        "ForgedProof",
-        "Smuggling",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -8332,10 +8337,6 @@
         },
         {
           "kind": "PoorTourist",
-          "weight": 2
-        },
-        {
-          "kind": "Labourer",
           "weight": 2
         }
       ],
@@ -8360,18 +8361,13 @@
       "countries": [],
       "rules": [
         "Rule_NoIndustrialBritain",
-        "Rule_DressForDestination",
         "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
-        "Rule_LabourPaperSet",
-        "Rule_DebtStanding",
-        "Rule_NoPresentGoods",
-        "Rule_PaperDates"
+        "Rule_TouristWaiverSet"
       ],
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.05,
+      "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
       "returns": 1,
@@ -8402,22 +8398,24 @@
       "asset": "DayPlan_Inv_Day5",
       "day": 5,
       "queue": 13,
+      "bulletin": "NEW: the proof of means. A Standard visa also needs a Holiday Credit Agreement, a Proof of Funds or Travel Insurance.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-415",
+        "TC-416",
+        "TC-417"
+      ],
       "tells": 1,
       "channels": [
-        "Papers",
-        "Answer",
-        "Appearance"
+        "Papers"
       ],
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
         "FakeWaiver",
-        "DebtorPosingAsTourist",
-        "ForgedContract",
         "ForgedProof",
-        "FalseOrigin",
-        "FakeDisplaced",
-        "Smuggling",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -8428,14 +8426,6 @@
         },
         {
           "kind": "PoorTourist",
-          "weight": 2
-        },
-        {
-          "kind": "Labourer",
-          "weight": 2
-        },
-        {
-          "kind": "Displaced",
           "weight": 2
         }
       ],
@@ -8465,20 +8455,13 @@
       "rules": [
         "Rule_NoModernGermany",
         "Rule_NoAncientEgypt",
-        "Rule_DressForDestination",
         "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
-        "Rule_LabourPaperSet",
-        "Rule_DebtStanding",
-        "Rule_DisplacedReturns",
-        "Rule_ReturnHome",
-        "Rule_NoPresentGoods",
-        "Rule_PaperDates"
+        "Rule_TouristPaperSet"
       ],
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
-      "costumeErrorChance": 0.05,
+      "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
       "returns": 1,
@@ -8509,22 +8492,25 @@
       "asset": "DayPlan_Inv_Day6",
       "day": 6,
       "queue": 14,
+      "bulletin": "NEW: the displaced. Their Displacement Certificate must match the Displacement Registry before they go home.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-415",
+        "TC-416",
+        "TC-417",
+        "TC-610"
+      ],
       "tells": 1,
       "channels": [
-        "Papers",
-        "Answer",
-        "Appearance"
+        "Papers"
       ],
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
         "FakeWaiver",
-        "DebtorPosingAsTourist",
-        "ForgedContract",
         "ForgedProof",
-        "FalseOrigin",
-        "FakeDisplaced",
-        "Smuggling",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -8535,10 +8521,6 @@
         },
         {
           "kind": "PoorTourist",
-          "weight": 2
-        },
-        {
-          "kind": "Labourer",
           "weight": 2
         },
         {
@@ -8571,15 +8553,9 @@
       "countries": [],
       "rules": [
         "Rule_NoModernJapan",
-        "Rule_DressForDestination",
         "Rule_LeisureDepartures",
         "Rule_TouristPaperSet",
-        "Rule_LabourPaperSet",
-        "Rule_DebtStanding",
-        "Rule_DisplacedReturns",
-        "Rule_ReturnHome",
-        "Rule_NoPresentGoods",
-        "Rule_PaperDates"
+        "Rule_DisplacedReturns"
       ],
       "premades": [
         "aspasia",
@@ -8596,15 +8572,10 @@
           "slot": 8,
           "premade": "senenmut",
           "blueprint": ""
-        },
-        {
-          "slot": 11,
-          "premade": "socrates",
-          "blueprint": ""
         }
       ],
       "premadeChance": 0.05,
-      "costumeErrorChance": 0.05,
+      "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
       "returns": 1,
@@ -8635,22 +8606,26 @@
       "asset": "DayPlan_Inv_Day7",
       "day": 7,
       "queue": 14,
+      "bulletin": "NEW: dress for the destination. A garment from another time or place causes a panic: check the Costume Guide.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-415",
+        "TC-416",
+        "TC-417",
+        "TC-610"
+      ],
       "tells": 1,
       "channels": [
         "Papers",
-        "Answer",
         "Appearance"
       ],
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
         "FakeWaiver",
-        "DebtorPosingAsTourist",
-        "ForgedContract",
         "ForgedProof",
-        "FalseOrigin",
-        "FakeDisplaced",
-        "Smuggling",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -8662,10 +8637,6 @@
         {
           "kind": "PoorTourist",
           "weight": 2
-        },
-        {
-          "kind": "Labourer",
-          "weight": 3
         },
         {
           "kind": "Displaced",
@@ -8701,15 +8672,9 @@
         "Rule_DressForDestination",
         "Rule_LeisureDepartures",
         "Rule_TouristPaperSet",
-        "Rule_LabourPaperSet",
-        "Rule_DebtStanding",
-        "Rule_DisplacedReturns",
-        "Rule_ReturnHome",
-        "Rule_NoPresentGoods",
-        "Rule_PaperDates"
+        "Rule_DisplacedReturns"
       ],
       "premades": [
-        "socrates",
         "aspasia",
         "banzhao",
         "arib",
@@ -8771,22 +8736,28 @@
       "asset": "DayPlan_Inv_Day8",
       "day": 8,
       "queue": 14,
+      "bulletin": "NEW: Debt Relief labourers. A registered Labour Contract, an Economy transponder and a signed Stranding Waiver.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-415",
+        "TC-416",
+        "TC-417",
+        "TC-520",
+        "TC-610"
+      ],
       "tells": 1,
       "channels": [
         "Papers",
-        "Answer",
         "Appearance"
       ],
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
         "FakeWaiver",
-        "DebtorPosingAsTourist",
         "ForgedContract",
         "ForgedProof",
-        "FalseOrigin",
-        "FakeDisplaced",
-        "Smuggling",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -8838,15 +8809,10 @@
         "Rule_LeisureDepartures",
         "Rule_TouristPaperSet",
         "Rule_LabourPaperSet",
-        "Rule_DebtStanding",
-        "Rule_DisplacedReturns",
-        "Rule_ReturnHome",
-        "Rule_NoPresentGoods",
-        "Rule_PaperDates"
+        "Rule_DisplacedReturns"
       ],
       "premades": [
         "senenmut",
-        "socrates",
         "aspasia",
         "banzhao",
         "arib",
@@ -8905,10 +8871,20 @@
       "asset": "DayPlan_Inv_Day9",
       "day": 9,
       "queue": 16,
+      "bulletin": "NEW: debt standing. Citizens in debt depart only on Debt Relief, and a Frozen account may not depart at all.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-415",
+        "TC-416",
+        "TC-417",
+        "TC-520",
+        "TC-610"
+      ],
       "tells": 1,
       "channels": [
         "Papers",
-        "Answer",
         "Appearance"
       ],
       "lies": [
@@ -8918,9 +8894,6 @@
         "DebtorPosingAsTourist",
         "ForgedContract",
         "ForgedProof",
-        "FalseOrigin",
-        "FakeDisplaced",
-        "Smuggling",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -8973,14 +8946,10 @@
         "Rule_TouristPaperSet",
         "Rule_LabourPaperSet",
         "Rule_DebtStanding",
-        "Rule_DisplacedReturns",
-        "Rule_ReturnHome",
-        "Rule_NoPresentGoods",
-        "Rule_PaperDates"
+        "Rule_DisplacedReturns"
       ],
       "premades": [
         "senenmut",
-        "socrates",
         "aspasia",
         "banzhao",
         "arib",
@@ -9040,10 +9009,20 @@
       "asset": "DayPlan_Inv_Day10",
       "day": 10,
       "queue": 16,
+      "bulletin": "NEW: transponder recall. Every Driftbox 3 unit is grounded: refuse any departure on one.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-415",
+        "TC-416",
+        "TC-417",
+        "TC-520",
+        "TC-610"
+      ],
       "tells": 1,
       "channels": [
         "Papers",
-        "Answer",
         "Appearance"
       ],
       "lies": [
@@ -9053,9 +9032,6 @@
         "DebtorPosingAsTourist",
         "ForgedContract",
         "ForgedProof",
-        "FalseOrigin",
-        "FakeDisplaced",
-        "Smuggling",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -9108,14 +9084,10 @@
         "Rule_LabourPaperSet",
         "Rule_DebtStanding",
         "Rule_DisplacedReturns",
-        "Rule_ReturnHome",
-        "Rule_NoPresentGoods",
-        "Rule_PaperDates",
         "Rule_DriftboxRecall"
       ],
       "premades": [
         "senenmut",
-        "socrates",
         "aspasia",
         "banzhao",
         "arib",
@@ -9205,6 +9177,17 @@
       "asset": "DayPlan_Inv_Day11",
       "day": 11,
       "queue": 16,
+      "bulletin": "NEW: no 2150 goods. Ask what they will pay with and what they carry: nothing from 2150 leaves 2150.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-415",
+        "TC-416",
+        "TC-417",
+        "TC-520",
+        "TC-610"
+      ],
       "tells": 1,
       "channels": [
         "Papers",
@@ -9218,8 +9201,6 @@
         "DebtorPosingAsTourist",
         "ForgedContract",
         "ForgedProof",
-        "FalseOrigin",
-        "FakeDisplaced",
         "Smuggling",
         "SwappedPhoto",
         "ForgedSeal"
@@ -9273,14 +9254,11 @@
         "Rule_LabourPaperSet",
         "Rule_DebtStanding",
         "Rule_DisplacedReturns",
-        "Rule_ReturnHome",
         "Rule_NoPresentGoods",
-        "Rule_PaperDates",
         "Rule_DriftboxRecall"
       ],
       "premades": [
         "senenmut",
-        "socrates",
         "aspasia",
         "banzhao",
         "arib",
@@ -9340,6 +9318,18 @@
       "asset": "DayPlan_Inv_Day12",
       "day": 12,
       "queue": 17,
+      "bulletin": "NEW: the Intake Declaration. A displaced person's coin, tongue and effects must be their origin's: they return only to their own time.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-415",
+        "TC-416",
+        "TC-417",
+        "TC-520",
+        "TC-610",
+        "TC-620"
+      ],
       "tells": 1,
       "channels": [
         "Papers",
@@ -9411,11 +9401,9 @@
         "Rule_DisplacedReturns",
         "Rule_ReturnHome",
         "Rule_NoPresentGoods",
-        "Rule_PaperDates",
         "Rule_DriftboxRecall"
       ],
       "premades": [
-        "socrates",
         "aspasia",
         "banzhao",
         "arib",
@@ -9442,6 +9430,11 @@
           "blueprint": "",
           "id": "ada",
           "lie": "FakeDisplaced"
+        },
+        {
+          "slot": 11,
+          "premade": "socrates",
+          "blueprint": ""
         }
       ],
       "premadeChance": 0.05,
@@ -9476,6 +9469,18 @@
       "asset": "DayPlan_Inv_Day13",
       "day": 13,
       "queue": 17,
+      "bulletin": "NEW: range limit. Economy units no longer reach the Ancient era: refuse poor tourists and labourers bound for it.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-415",
+        "TC-416",
+        "TC-417",
+        "TC-520",
+        "TC-610",
+        "TC-620"
+      ],
       "tells": 1,
       "channels": [
         "Papers",
@@ -9548,7 +9553,6 @@
         "Rule_DisplacedReturns",
         "Rule_ReturnHome",
         "Rule_NoPresentGoods",
-        "Rule_PaperDates",
         "Rule_DriftboxRecall"
       ],
       "premades": [
@@ -9613,6 +9617,18 @@
       "asset": "DayPlan_Inv_Day14",
       "day": 14,
       "queue": 18,
+      "bulletin": "NEW: paper dates. Depart only on the date printed on the travel papers, and never on an expired paper.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-415",
+        "TC-416",
+        "TC-417",
+        "TC-520",
+        "TC-610",
+        "TC-620"
+      ],
       "tells": 1,
       "channels": [
         "Papers",
@@ -9762,6 +9778,19 @@
       "asset": "DayPlan_Inv_Day15",
       "day": 15,
       "queue": 18,
+      "bulletin": "NEW: the Return Order. The displaced now carry one, and depart only on its date.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-310",
+        "TC-415",
+        "TC-416",
+        "TC-417",
+        "TC-520",
+        "TC-610",
+        "TC-620",
+        "TC-630"
+      ],
       "tells": 1,
       "channels": [
         "Papers",
@@ -14537,7 +14566,7 @@
       "label": "Currency",
       "prompt": "What will you pay with in {place}?",
       "answer": "I've changed my money into {value}.",
-      "fromDay": 4,
+      "fromDay": 11,
       "announce": "BUREAU NOTICE: from today, desk officers ask every traveller what they will pay with. Check answers against the Currency Ledger: nothing from 2150 leaves 2150.",
       "conditions": [],
       "overrides": [
@@ -14562,7 +14591,7 @@
       "label": "Language",
       "prompt": "What language will you speak in {place}?",
       "answer": "I've been practising my {value}.",
-      "fromDay": 5,
+      "fromDay": 12,
       "announce": "BUREAU NOTICE: desk officers may now ask every traveller what language they will speak. Check answers against Tongues & Scripts.",
       "conditions": [],
       "overrides": [
@@ -14580,7 +14609,7 @@
       "label": "Device",
       "prompt": "What are you taking with you?",
       "answer": "Just the approved kit: {value}.",
-      "fromDay": 4,
+      "fromDay": 11,
       "announce": "BUREAU NOTICE: from today, desk officers ask every traveller what they are taking with them. Check answers against the Index of Devices: nothing from 2150 leaves 2150.",
       "conditions": [],
       "overrides": [
@@ -14598,7 +14627,7 @@
       "label": "Capital",
       "prompt": "Which city in {place} are you headed for?",
       "answer": "{value}, like the brochure says.",
-      "fromDay": 5,
+      "fromDay": 12,
       "announce": "BUREAU NOTICE: desk officers may now ask every traveller which city they are headed for. Check answers against the Capitals Gazetteer.",
       "conditions": [],
       "overrides": [
@@ -14616,7 +14645,7 @@
       "label": "Ruler",
       "prompt": "Who rules {place} these days?",
       "answer": "{value}, I'm told.",
-      "fromDay": 5,
+      "fromDay": 12,
       "announce": "BUREAU NOTICE: desk officers may now ask every traveller who rules where they are going. Check answers against Rulers & Regents.",
       "conditions": [],
       "overrides": [
@@ -15357,7 +15386,7 @@
             {
               "id": "dlg_auditor_found.contract.1",
               "speaker": "Traveller",
-              "text": "Stamped here, on day eleven. Fifty credits went missing the same day. Curious, isn't it?"
+              "text": "Stamped here, on day eleven. Two hundred credits went missing the same day. Curious, isn't it?"
             }
           ],
           "choices": [
@@ -16675,12 +16704,13 @@
               "jump": {
                 "link": "FirstUncheckedField"
               },
-              "fromDay": 4
+              "fromDay": 11
             },
             {
               "id": "questions",
               "when": "Asked",
-              "hint": "steps.hint.wheel"
+              "hint": "steps.hint.wheel",
+              "fromDay": 11
             },
             {
               "id": "answers",
@@ -16688,7 +16718,8 @@
               "statement": "Answer",
               "jump": {
                 "source": "Transcript"
-              }
+              },
+              "fromDay": 11
             },
             {
               "id": "dress",
@@ -16701,7 +16732,7 @@
               "jump": {
                 "link": "CostumeClaimed"
               },
-              "fromDay": 2
+              "fromDay": 7
             }
           ]
         },
@@ -16750,12 +16781,14 @@
               "truth": "Reference",
               "jump": {
                 "link": "FirstUncheckedField"
-              }
+              },
+              "fromDay": 12
             },
             {
               "id": "questions",
               "when": "Asked",
-              "hint": "steps.hint.wheel"
+              "hint": "steps.hint.wheel",
+              "fromDay": 11
             },
             {
               "id": "answers",
@@ -16763,7 +16796,8 @@
               "statement": "Answer",
               "jump": {
                 "source": "Transcript"
-              }
+              },
+              "fromDay": 11
             },
             {
               "id": "dress",
@@ -16775,7 +16809,8 @@
               "truth": "Reference",
               "jump": {
                 "link": "CostumeClaimed"
-              }
+              },
+              "fromDay": 7
             },
             {
               "id": "returnOrder",
@@ -16788,7 +16823,8 @@
               "truth": "Paper",
               "jump": {
                 "source": "Documents"
-              }
+              },
+              "fromDay": 15
             },
             {
               "id": "dates",
@@ -16800,7 +16836,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 4
+              "fromDay": 14
             }
           ]
         },
@@ -16865,7 +16901,8 @@
               "truth": "Record",
               "jump": {
                 "link": "PrimaryName"
-              }
+              },
+              "fromDay": 2
             },
             {
               "id": "paperSet",
@@ -16877,7 +16914,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 2
+              "fromDay": 4
             },
             {
               "id": "standing",
@@ -16885,7 +16922,7 @@
               "jump": {
                 "link": "PrimaryName"
               },
-              "fromDay": 3
+              "fromDay": 9
             },
             {
               "id": "facts",
@@ -16899,7 +16936,7 @@
               "jump": {
                 "link": "FirstUncheckedField"
               },
-              "fromDay": 4
+              "fromDay": 11
             },
             {
               "id": "dress",
@@ -16912,7 +16949,7 @@
               "jump": {
                 "link": "CostumeClaimed"
               },
-              "fromDay": 2
+              "fromDay": 7
             },
             {
               "id": "dates",
@@ -16924,7 +16961,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 4
+              "fromDay": 14
             }
           ]
         },
@@ -16946,7 +16983,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 2
+              "fromDay": 4
             },
             {
               "id": "dates",
@@ -16961,7 +16998,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 4
+              "fromDay": 14
             },
             {
               "id": "askMeans",
@@ -16971,7 +17008,8 @@
                 "TC-416",
                 "TC-417"
               ],
-              "hint": "steps.hint.wheel"
+              "hint": "steps.hint.wheel",
+              "fromDay": 5
             },
             {
               "id": "waiver",
@@ -16984,7 +17022,8 @@
               "statement": "Field",
               "jump": {
                 "link": "PrimaryName"
-              }
+              },
+              "fromDay": 4
             },
             {
               "id": "means",
@@ -16998,7 +17037,8 @@
               "truth": "Record",
               "jump": {
                 "link": "PrimaryName"
-              }
+              },
+              "fromDay": 5
             }
           ]
         },
@@ -17046,7 +17086,7 @@
               "jump": {
                 "link": "PrimaryName"
               },
-              "fromDay": 3
+              "fromDay": 9
             },
             {
               "id": "contract",
@@ -17061,7 +17101,8 @@
               "truth": "Record",
               "jump": {
                 "link": "PrimaryName"
-              }
+              },
+              "fromDay": 8
             },
             {
               "id": "paperSet",
@@ -17074,7 +17115,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 3
+              "fromDay": 8
             },
             {
               "id": "waiver",
@@ -17087,7 +17128,8 @@
               "statement": "Field",
               "jump": {
                 "link": "PrimaryName"
-              }
+              },
+              "fromDay": 8
             },
             {
               "id": "facts",
@@ -17101,7 +17143,7 @@
               "jump": {
                 "link": "FirstUncheckedField"
               },
-              "fromDay": 4
+              "fromDay": 11
             },
             {
               "id": "dress",
@@ -17114,7 +17156,7 @@
               "jump": {
                 "link": "CostumeClaimed"
               },
-              "fromDay": 2
+              "fromDay": 7
             },
             {
               "id": "dates",
@@ -17125,7 +17167,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 4
+              "fromDay": 14
             }
           ]
         }
@@ -20890,20 +20932,20 @@
         "tier": "Full"
       },
       {
+        "key": "briefing.bulletinHeader",
+        "text": "BULLETIN · NEW TODAY",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "briefing.bulletin",
+        "text": "<b>{0}</b>",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "list.bullet",
         "text": "• {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "results.processed",
-        "text": "Subjects processed: {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "results.correctWrong",
-        "text": "Correct: {0}   Wrong: {1}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -20916,30 +20958,6 @@
       {
         "key": "results.debtReliefDepartures",
         "text": "Debt Relief departures: {0}   ({1:N0} {2} of debt put to work)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "results.pay",
-        "text": "Pay earned: +{0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "results.penalties",
-        "text": "Citation penalties: -{0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "results.debtRelief",
-        "text": "Debt Relief instalment: -{0}   (still owed: {1:N0} {2})",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "results.net",
-        "text": "Net: {0:+0;-0;0} {1}   (Balance: {2})",
         "gloss": "None",
         "tier": "Full"
       },
@@ -20962,14 +20980,116 @@
         "tier": "Full"
       },
       {
-        "key": "results.stranded",
-        "text": "Stranded in transit: {0}   (an Economy transponder failed)",
+        "key": "results.processedAll",
+        "text": "Travellers processed: {0}, the whole queue",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "results.strandingFines",
-        "text": "Stranding fines: -{0}   (no valid signed waiver on file)",
+        "key": "results.processedOf",
+        "text": "Travellers processed: {0} of {1} ({2} still waiting at closing, unpaid)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.moneyHeader",
+        "text": "<b>Money, in {0}</b>",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row",
+        "text": "{0}<pos=76%>{1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.rowBold",
+        "text": "<b>{0}<pos=76%>{1}</b>",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.amount",
+        "text": "{0:+#,0;-#,0;0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.pay",
+        "text": "Right calls: {0} x {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.payTotal",
+        "text": "Right calls: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.warned",
+        "text": "Wrong calls: {0}, the free warning",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.fined",
+        "text": "Wrong calls: {0} x {1} fine",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.finedTotal",
+        "text": "Wrong calls fined: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.stranded",
+        "text": "Stranded in transit: {0}, waivers on file",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.strandedFined",
+        "text": "Stranded in transit: {0}, fined (no signed waiver)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.instalment",
+        "text": "Debt Relief instalment ({0:N0} still owed)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.other",
+        "text": "Other money",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.net",
+        "text": "Shift net",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.bills",
+        "text": "Bills due tonight",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.row.after",
+        "text": "Wallet after bills",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.wallet",
+        "text": "{0} (now {1})",
         "gloss": "None",
         "tier": "Full"
       },
@@ -21485,7 +21605,7 @@
       },
       {
         "key": "citation.layout",
-        "text": "{0}\n{1}\n{2}\n{3}",
+        "text": "{0}\n<b>{1}</b>\n{2}\n{3}\n{4}  {5}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -21774,6 +21894,210 @@
       {
         "key": "citation.acceptedWrong.recalled",
         "text": "Approved a recalled transponder.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.numbered",
+        "text": "Directive {0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.value",
+        "text": "{0}: {1}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.value.separator",
+        "text": " ",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.record",
+        "text": "Every paper must match the Citizen Account.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.origin",
+        "text": "The displaced return only to their own time: their papers and answers must match their origin.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.goods",
+        "text": "No 2150 currency or technology leaves 2150.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.dress",
+        "text": "Dress for the destination: nothing from another time or place.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.paperSet.economyManifest",
+        "text": "A Premium visa travels on a Premium transponder.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.paperSet.premiumManifest",
+        "text": "A Standard visa travels on an Economy transponder.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.paperSet.waiverMissing",
+        "text": "This departure needs a signed Stranding Waiver.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.paperSet.waiverUnsigned",
+        "text": "This departure needs a signed Stranding Waiver.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.paperSet.proofMissing",
+        "text": "A Standard visa needs a proof of means.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.paperSet.contractMissing",
+        "text": "A Debt Relief departure needs a registered Labour Contract.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.frozen",
+        "text": "A Frozen account may not depart.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.departure",
+        "text": "Depart only on the date printed on the travel papers.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.expired",
+        "text": "Never depart on an expired paper.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.none",
+        "text": "No directive and no record refuses this traveller.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.rule.evidence",
+        "text": "A denial needs a logged deviation.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.destination",
+        "text": "Destination",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.account",
+        "text": "Citizen Account",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.registry",
+        "text": "Displacement Registry",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.standing",
+        "text": "Standing on the {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.today",
+        "text": "Today",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.garment",
+        "text": "Garment",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.onPaper",
+        "text": "{0} on the {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.answer",
+        "text": "Their answer ({0})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.book",
+        "text": "{0} of {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.logged",
+        "text": "Deviations logged",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.missing.waiverMissing",
+        "text": "Stranding Waiver",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.missing.proofMissing",
+        "text": "Proof of means",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.label.missing.contractMissing",
+        "text": "Labour Contract",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.value.notHandedOver",
+        "text": "not handed over",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.value.frozen",
+        "text": "Frozen since {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.value.open",
+        "text": "{0}, open today",
         "gloss": "None",
         "tier": "Full"
       },
@@ -22742,7 +23066,7 @@
     ]
   },
   "translation": {
-    "fromDay": 5,
+    "fromDay": 6,
     "announce": "Budget cuts close the interpreter pool. From the day after tomorrow, the displaced reach the desk speaking their own tongues, untranslated but for their key words. Order Interview Protocols today and a Speech translator tomorrow in Orders: each arrives the morning after it is ordered. Papers are still filled in English.",
     "flip": {
       "startDelay": 0.3,

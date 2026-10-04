@@ -93,13 +93,10 @@ public static class HomeEconomy
     }
 
     /// <summary>
-    /// Computes and deducts today's living expenses from world.money: rent and
-    /// utilities (the base expense with the HouseholdExpense ops), the upkeep
-    /// per family member, the medical drain per condition point
-    /// (HomeRules.DrainPoints; the per-point cost with the MedicalDrain ops)
-    /// and the house's upkeep (its Upkeep ops), each through HomeRules.Cost,
-    /// never below 0. <paramref name="breakInLoss"/>, already taken, joins the
-    /// report. Safe to call with a null config (falls back to zero expenses).
+    /// Computes and deducts today's living expenses from world.money
+    /// (<see cref="DailyExpenses"/>); <paramref name="breakInLoss"/>, already
+    /// taken, joins the report. Safe to call with a null config (falls back
+    /// to zero expenses).
     /// </summary>
     public static ExpenseReport ApplyDailyExpenses(WorldState world, ContentLibrarySO lib, GameConfigSO config, int breakInLoss)
     {
@@ -108,6 +105,26 @@ public static class HomeEconomy
             Debug.LogWarning("[HomeEconomy] ApplyDailyExpenses: no world, so nothing is billed.");
             return default;
         }
+
+        ExpenseReport report = DailyExpenses(world, lib, config, breakInLoss);
+        world.money -= report.total - breakInLoss;
+        return report;
+    }
+
+    /// <summary>
+    /// Tonight's living expenses, without paying them: rent and utilities
+    /// (the base expense with the HouseholdExpense ops), the upkeep per
+    /// family member, the medical drain per condition point
+    /// (HomeRules.DrainPoints; the per-point cost with the MedicalDrain ops)
+    /// and the house's upkeep (its Upkeep ops), each through HomeRules.Cost,
+    /// never below 0, with <paramref name="breakInLoss"/> in the report.
+    /// The shift report shows the bill due tonight from it (lesson 5) and Home
+    /// pays the same bill (ApplyDailyExpenses). Zero without a world or a config.
+    /// </summary>
+    public static ExpenseReport DailyExpenses(WorldState world, ContentLibrarySO lib, GameConfigSO config, int breakInLoss)
+    {
+        if (world == null)
+            return default;
 
         int memberCount = world.family.members.Count;
 
@@ -122,9 +139,7 @@ public static class HomeEconomy
         int perPoint = HomeRules.Cost(config != null ? config.expensePerConditionPoint : 0, HouseSum(world, lib, EffectOpType.MedicalDrain));
         int upkeep = HomeRules.Cost(0, HouseSum(world, lib, EffectOpType.Upkeep));
 
-        var report = new ExpenseReport(baseAmount, memberAmount, perPoint * conditionTotal, upkeep, breakInLoss, memberCount);
-        world.money -= report.total - breakInLoss;
-        return report;
+        return new ExpenseReport(baseAmount, memberAmount, perPoint * conditionTotal, upkeep, breakInLoss, memberCount);
     }
 
     /// <summary>Credits cost to treat one point of condition off a family member: the config's care cost with the house's CareCost ops (HomeRules.Cost).</summary>

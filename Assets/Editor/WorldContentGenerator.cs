@@ -83,6 +83,7 @@ public static partial class WorldContentGenerator
         CheckDocuments(src, authored, errors);
         CheckPortals(src, authored, errors);
         CheckDayKinds(src, authored, errors);
+        CheckPacing(src, authored, errors);
         CheckPresent(src, errors);
         CheckNews(src, errors);
         PcContent pc = CheckPc(src, authored, errors);
@@ -1627,7 +1628,7 @@ public static partial class WorldContentGenerator
         var kinds = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)>();
         foreach (KindWeightData k in d.kinds ?? Array.Empty<KindWeightData>())
             if (k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind kind))
-                kinds.Add((kind, authored.blueprints.TryGetValue(kind, out CaseBlueprintSO b) ? FormNumbers(b) : new string[0]));
+                kinds.Add((kind, authored.blueprints.TryGetValue(kind, out CaseBlueprintSO b) ? DayForms(d, b) : new List<string>()));
 
         errors.AddRange(Directives.DayProblems(d.asset, d.day, active, kinds, src.agency != null ? BuildAgency(src.agency).transponders : null));
     }
@@ -1662,7 +1663,7 @@ public static partial class WorldContentGenerator
                 Id = f.id,
                 Premade = f.premade,
                 Kind = kind,
-                Forms = kindBlueprint != null ? FormNumbers(kindBlueprint) : new List<string>(),
+                Forms = kindBlueprint != null ? DayForms(d, kindBlueprint) : new List<string>(),
                 HasTruePlace = m != null && !string.IsNullOrEmpty(m.truePlace),
                 OncePerRun = m != null && !m.repeatable,
                 ClosedPlace = place != null && rules.Any(r => r.AppliesTo(kind) && r.Closes(place.country, place.era)),
@@ -1765,7 +1766,8 @@ public static partial class WorldContentGenerator
     }
 
     /// <summary>
-    /// Writes the day's queue, tell count, tell channels, lies, eras, countries,
+    /// Writes the day's queue, bulletin, papers in circulation, tell count,
+    /// tell channels, lies, eras, countries,
     /// rules, the violation chance, the premade pool and chance, and the
     /// forced slots (premade, blueprint or both, and each appearance's id,
     /// authored fault and conditions, days 7-15; authoritative).
@@ -1778,6 +1780,12 @@ public static partial class WorldContentGenerator
         var so = new SerializedObject(plan);
         so.FindProperty("dayNumber").intValue = d.day;
         so.FindProperty("visitorsCount").intValue = d.queue;
+        so.FindProperty("bulletin").stringValue = d.bulletin ?? string.Empty;
+        string[] dayPapers = d.papers ?? Array.Empty<string>();
+        SerializedProperty papers = so.FindProperty("papers");
+        papers.arraySize = dayPapers.Length;
+        for (int i = 0; i < dayPapers.Length; i++)
+            papers.GetArrayElementAtIndex(i).stringValue = dayPapers[i];
         so.FindProperty("tellCount").intValue = d.tells;
         string[] channels = d.channels ?? Array.Empty<string>();
         SerializedProperty tellChannels = so.FindProperty("tellChannels");
@@ -1960,7 +1968,7 @@ public static partial class WorldContentGenerator
                 if (f != null && !string.IsNullOrEmpty(f.blueprint) && authored.forcedBlueprints.TryGetValue(f.blueprint, out CaseBlueprintSO b) && b != null && !blueprints.Contains(b))
                     blueprints.Add(b);
             dayBlueprints.Add(blueprints);
-            dayForms.Add(blueprints.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(FormOf).Distinct().ToList());
+            dayForms.Add(blueprints.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null && DayPapers.Issued(d?.papers, t.formNumber)).Select(FormOf).Distinct().ToList());
         }
 
         var kinds = new List<KindForms>();
@@ -1972,7 +1980,7 @@ public static partial class WorldContentGenerator
                 {
                     Kind = g.Key,
                     Askable = menu,
-                    Carried = g.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(FormOf).ToList()
+                    Carried = g.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null && DayPapers.Issued(sorted.LastOrDefault(x => x.day <= n)?.papers, t.formNumber)).Select(FormOf).ToList()
                 });
         }
         return kinds;
@@ -2404,6 +2412,10 @@ public static partial class WorldContentGenerator
         public string asset;
         public int day;
         public int queue;
+        /// <summary>The day's bulletin: one line naming what the day brings for the first time (blank: nothing; DayPacing).</summary>
+        public string bulletin;
+        /// <summary>The form numbers in circulation this day (empty: every form; DayPapers, lesson D7).</summary>
+        public string[] papers;
         /// <summary>Tells each liar leaks this day (at least 1).</summary>
         public int tells;
         /// <summary>Where this day's tells may show ("Papers", "Answer").</summary>

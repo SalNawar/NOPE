@@ -15,7 +15,7 @@ MonoBehaviour:
   type: 4
   era: {fileID: 0}
   nation: {fileID: 0}
-  description: 'Displaced returns: a Displacement Certificate, an Intake Declaration
-    and a Return Order. Every paper must match the Displacement Registry.'
+  description: 'Displaced returns: every paper a displaced person hands over must
+    match the Displacement Registry.'
   kinds: 
   transponder: 

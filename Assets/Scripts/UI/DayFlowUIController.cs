@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Owns the two day-flow panels in the office:
-/// - Morning briefing (day number + TomorrowPackage lines) before the shift
-/// - End-of-day results (ledger breakdown) after the last case
+/// - Morning briefing (day number, the day's bulletin naming its one new
+///   paper or check first, lesson 4, then the TomorrowPackage lines) before the shift
+/// - End-of-day results (the ShiftReport's money ledger at a glance, lesson 5) after the last case
 /// All references are optional; unwired panels are skipped gracefully.
 /// </summary>
 public sealed class DayFlowUIController : MonoBehaviour
@@ -63,10 +64,12 @@ public sealed class DayFlowUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Shows the morning briefing built from the world's tomorrow package.
+    /// Shows the morning briefing: the day's <paramref name="bulletin"/> first
+    /// under its header when the day brings something new (Papers Please
+    /// lesson 4, DayPlanSO.Bulletin), then the world's tomorrow package.
     /// Invokes onStartShift when the player clicks Start (or immediately if unwired).
     /// </summary>
-    public void ShowBriefing(WorldState world, Action onStartShift)
+    public void ShowBriefing(WorldState world, string bulletin, Action onStartShift)
     {
         if (!HasBriefingPanel || world == null)
         {
@@ -82,10 +85,18 @@ public sealed class DayFlowUIController : MonoBehaviour
         if (briefingBodyText != null)
         {
             var sb = new System.Text.StringBuilder();
+            bool hasBulletin = !string.IsNullOrWhiteSpace(bulletin);
+            if (hasBulletin)
+            {
+                sb.AppendLine(UiText.Get("briefing.bulletinHeader"));
+                sb.AppendLine(UiText.Format("briefing.bulletin", bulletin.Trim()));
+                sb.AppendLine();
+            }
 
             if (world.tomorrow.briefingLines.Count == 0 && world.tomorrow.newsLines.Count == 0 && world.tomorrow.deskLines.Count == 0)
             {
-                sb.AppendLine(UiText.Get("briefing.empty"));
+                if (!hasBulletin)
+                    sb.AppendLine(UiText.Get("briefing.empty"));
             }
             else
             {
@@ -119,12 +130,18 @@ public sealed class DayFlowUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Shows the end-of-day report from the shift ledger.
+    /// Shows the end-of-day report (Papers Please lesson 5): the travellers
+    /// processed out of the queue, then a money ledger read in one glance
+    /// (its currency named once in its header, the amounts bare in one column)
+    /// (the right calls times their pay, the free warnings, the wrong calls
+    /// times their fine, the stranding fines, the Debt Relief instalment, any
+    /// other money, the shift's net in bold, tonight's bills and, in bold, the
+    /// wallet after them), then stability, citations and the departures.
     /// Invokes onGoHome when the player clicks Go Home (or immediately if unwired).
     /// </summary>
-    public void ShowResults(WorldState world, ShiftLedger ledger, Action onGoHome)
+    public void ShowResults(WorldState world, ShiftLedger ledger, ShiftReport report, Action onGoHome)
     {
-        if (!HasResultsPanel || world == null || ledger == null)
+        if (!HasResultsPanel || world == null || ledger == null || report == null)
         {
             onGoHome?.Invoke();
             return;
@@ -138,26 +155,29 @@ public sealed class DayFlowUIController : MonoBehaviour
         if (resultsBodyText != null)
         {
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine(UiText.Format("results.processed", ledger.verdicts.Count));
-            sb.AppendLine(UiText.Format("results.correctWrong", ledger.CorrectCount, ledger.WrongCount));
-            sb.AppendLine(UiText.Format("results.leisureDepartures", ledger.LeisureDepartures));
-            sb.AppendLine(UiText.Format("results.debtReliefDepartures", ledger.DebtReliefDepartures, ledger.DebtPutToWork, UiText.Currency(UiText.WalletForm.Short)));
+            string cr = UiText.Currency(UiText.WalletForm.Short);
+            string Amount(int amount) => UiText.Format("results.amount", amount);
+            void Row(string label, int amount) => sb.AppendLine(UiText.Format("results.row", label, Amount(amount)));
+
+            sb.AppendLine(report.Waiting > 0
+                ? UiText.Format("results.processedOf", report.Processed, report.Queued, report.Waiting)
+                : UiText.Format("results.processedAll", report.Processed));
             sb.AppendLine();
-            sb.AppendLine(UiText.Format("results.pay", ledger.TotalPay));
-
-            if (ledger.TotalPenalties > 0)
-                sb.AppendLine(UiText.Format("results.penalties", ledger.TotalPenalties));
-
-            if (ledger.strandedCount > 0)
-                sb.AppendLine(UiText.Format("results.stranded", ledger.strandedCount));
-
-            if (ledger.strandingFines > 0)
-                sb.AppendLine(UiText.Format("results.strandingFines", ledger.strandingFines));
-
-            if (ledger.debtOwed != Account.Unknown)
-                sb.AppendLine(UiText.Format("results.debtRelief", ledger.debtInstalment, ledger.debtOwed, UiText.Currency(UiText.WalletForm.Short)));
-
-            sb.AppendLine(UiText.Format("results.net", ledger.NetMoney, UiText.Currency(UiText.WalletForm.Inline), world.money));
+            sb.AppendLine(UiText.Format("results.moneyHeader", cr));
+            Row(report.PayRate > 0 ? UiText.Format("results.row.pay", report.Right, report.PayRate) : UiText.Format("results.row.payTotal", report.Right), report.Pay);
+            if (report.Warned > 0)
+                Row(UiText.Format("results.row.warned", report.Warned), 0);
+            if (report.Fined > 0)
+                Row(report.PenaltyRate > 0 ? UiText.Format("results.row.fined", report.Fined, report.PenaltyRate) : UiText.Format("results.row.finedTotal", report.Fined), -report.Penalties);
+            if (report.Stranded > 0)
+                Row(UiText.Format(report.StrandingFines > 0 ? "results.row.strandedFined" : "results.row.stranded", report.Stranded), -report.StrandingFines);
+            if (report.DebtOwed != Account.Unknown)
+                Row(UiText.Format("results.row.instalment", report.DebtOwed), -report.Instalment);
+            if (report.Other != 0)
+                Row(UiText.Get("results.row.other"), report.Other);
+            sb.AppendLine(UiText.Format("results.rowBold", UiText.Get("results.row.net"), Amount(report.Net)));
+            Row(UiText.Get("results.row.bills"), -report.Bills);
+            sb.AppendLine(UiText.Format("results.rowBold", UiText.Get("results.row.after"), UiText.Format("results.wallet", report.WalletAfterBills, report.WalletNow)));
             sb.AppendLine();
             sb.AppendLine(UiText.Format("results.stability", StabilityRules.Format(world.timelineStability), StabilityRules.FormatChange(ledger.TotalStabilityDelta)));
 
@@ -166,6 +186,9 @@ public sealed class DayFlowUIController : MonoBehaviour
 
             if (ledger.UnprovenDenialCount > 0)
                 sb.AppendLine(UiText.Format("results.unproven", ledger.UnprovenDenialCount));
+
+            sb.AppendLine(UiText.Format("results.leisureDepartures", ledger.LeisureDepartures));
+            sb.AppendLine(UiText.Format("results.debtReliefDepartures", ledger.DebtReliefDepartures, ledger.DebtPutToWork, cr));
 
             resultsBodyText.text = sb.ToString();
         }

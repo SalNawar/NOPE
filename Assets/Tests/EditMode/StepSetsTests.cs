@@ -226,11 +226,19 @@ public class StepSetsTests
         CollectionAssert.AreEqual(new[] { CaseSteps.DefaultType, "Displaced", "RichTourist", "PoorTourist", "Labourer" }, data.sets.Select(s => s.type));
         CollectionAssert.AreEqual(new[] { false, false, false, false, false }, data.sets.Select(s => s.dataOnly), "the poor tourists are in play from phase 8, the labourers from phase 9");
 
-        CollectionAssert.AreEqual(new[] { "rules", "papers", "read", "identity", "facts", "questions", "answers", "dress", "returnOrder" },
-                                  CaseSteps.Resolve(data, "Displaced", 1).Select(s => s.id));
-        Assert.AreEqual("dates", CaseSteps.Resolve(data, "Displaced", 4).Last().id, "the dates directive's step from day 4");
-        CollectionAssert.AreEqual(new[] { "rules", "papers", "read", "identity", "class", "transponder" }, CaseSteps.Resolve(data, "RichTourist", 1).Select(s => s.id),
-                                  "a rich tourist's day-1 steps (the others start with their directives)");
+        CollectionAssert.AreEqual(new[] { "rules", "papers", "read", "identity" }, CaseSteps.Resolve(data, "Displaced", 6).Select(s => s.id),
+                                  "the displaced arrive on day 6 with their certificate only (lesson D7); each later step comes with its paper or check");
+        CollectionAssert.AreEqual(new[] { "rules", "papers", "read", "identity", "facts", "questions", "answers", "dress" },
+                                  CaseSteps.Resolve(data, "Displaced", 12).Select(s => s.id), "the Intake Declaration's facts from day 12");
+        Assert.AreEqual("dates", CaseSteps.Resolve(data, "Displaced", 14).Last().id, "the dates directive's step from day 14");
+        Assert.AreEqual("returnOrder", CaseSteps.Resolve(data, "Displaced", 15)[8].id, "the Return Order's step from day 15");
+        CollectionAssert.AreEqual(new[] { "rules", "papers", "read", "identity", "class" }, CaseSteps.Resolve(data, "RichTourist", 1).Select(s => s.id),
+                                  "a rich tourist's day-1 steps: the visa against the account (the manifest's step from day 2, the others with their directives)");
+        CollectionAssert.AreEqual(new[] { "rules", "papers", "read", "identity", "class", "transponder" }, CaseSteps.Resolve(data, "RichTourist", 2).Select(s => s.id));
+        for (int day = 1; day <= 6; day++)
+            CollectionAssert.AreEqual(new[] { GuideStage.Papers, GuideStage.Records, GuideStage.Rules, GuideStage.Decision }, CaseGuide.StagesOn(data, day),
+                                      $"day {day}: no check against the books yet, so the guided steps leave the Books out (the ramp)");
+        CollectionAssert.AreEqual(CaseGuide.Stages, CaseGuide.StagesOn(data, 7), "the dress of day 7 brings the Books step");
         Assert.AreEqual("RichTourist", data.sets.Single(s => s.type == "PoorTourist").inherit);
         CollectionAssert.IsSubsetOf(CaseSteps.Resolve(data, "RichTourist", 6).Select(s => s.id), CaseSteps.Resolve(data, "PoorTourist", 6).Select(s => s.id),
                                     "the poor tourist's set inherits the rich tourist's");
@@ -250,7 +258,7 @@ public class StepSetsTests
         };
         var progress = new CaseProgress(papers, new[] { ClueCategory.Currency, ClueCategory.BirthDate }, new[] { ClueCategory.Currency, ClueCategory.Culture });
 
-        List<StepState> states = CaseSteps.Evaluate(CaseSteps.Resolve(data, "Displaced", 5), progress);
+        List<StepState> states = CaseSteps.Evaluate(CaseSteps.Resolve(data, "Displaced", 15), progress);
 
         CollectionAssert.AreEqual(new[] { "rules", "papers", "read", "identity", "facts", "questions", "answers", "dress", "returnOrder", "dates" }, states.Select(s => s.Id));
         Assert.IsTrue(states.All(s => !s.Done), "nothing is ticked before the player does anything");

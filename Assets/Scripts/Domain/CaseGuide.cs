@@ -50,7 +50,12 @@ public readonly struct StageChecks
 /// record to Records; compares against a book to Books; the rules read to
 /// Rules; compares against anything, to Papers); a step with checks is
 /// finished when all of them are done, one without once it was left. The
-/// decision is never finished. Pure; the app's GuideBar owns one per case.
+/// decision is never finished. The steps follow the day's ramp (Papers
+/// Please lessons 4 and D7, see Day pacing): a step owning no checklist item
+/// on the day (StagesOn: no set lists one yet, so the Books step waits for
+/// the dress of day 7) is not shown, and the numbers, Next and Back run over
+/// the steps shown; Papers and the decision always show. Pure; the app's
+/// GuideBar owns one per case.
 /// </summary>
 public sealed class CaseGuide
 {
@@ -58,41 +63,80 @@ public sealed class CaseGuide
     public static readonly IReadOnlyList<GuideStage> Stages = (GuideStage[])Enum.GetValues(typeof(GuideStage));
 
     private readonly HashSet<GuideStage> _left = new HashSet<GuideStage>();
+    private readonly List<GuideStage> _shown = new List<GuideStage>(Stages);
 
     /// <summary>The step the clerk is on.</summary>
     public GuideStage Current { get; private set; }
 
-    /// <summary>The current step's position, 1-based ("Step 2 of 5").</summary>
-    public int Number => (int)Current + 1;
+    /// <summary>The steps shown this case, in order (every step until Reset is given fewer).</summary>
+    public IReadOnlyList<GuideStage> Shown => _shown;
+
+    /// <summary>The current step's position among the steps shown, 1-based ("Step 2 of 4").</summary>
+    public int Number => _shown.IndexOf(Current) + 1;
+
+    /// <summary>The number of steps shown ("Step 2 of 4").</summary>
+    public int Count => _shown.Count;
 
     /// <summary>True on the first step (Back has nowhere to go).</summary>
-    public bool IsFirst => Current == Stages[0];
+    public bool IsFirst => Current == _shown[0];
 
     /// <summary>True on the last step, the decision (Next has nowhere to go).</summary>
-    public bool IsLast => Current == Stages[Stages.Count - 1];
+    public bool IsLast => Current == _shown[_shown.Count - 1];
 
-    /// <summary>A new case: the first step, none left behind.</summary>
-    public void Reset()
+    /// <summary>A new case: the first step, none left behind; the steps shown are <paramref name="shown"/> (null: every step; Papers and the decision always), in order.</summary>
+    public void Reset(IEnumerable<GuideStage> shown = null)
     {
-        Current = Stages[0];
+        var keep = new HashSet<GuideStage>(shown ?? Stages) { GuideStage.Papers, GuideStage.Decision };
+        _shown.Clear();
+        foreach (GuideStage stage in Stages)
+            if (keep.Contains(stage))
+                _shown.Add(stage);
+        Current = _shown[0];
         _left.Clear();
     }
 
-    /// <summary>Goes to <paramref name="stage"/> (any step, at any time); the step left is remembered. False when it is the current one.</summary>
+    /// <summary>True when <paramref name="stage"/> is shown this case.</summary>
+    public bool IsShown(GuideStage stage) => _shown.Contains(stage);
+
+    /// <summary>Goes to <paramref name="stage"/> (any step shown, at any time); the step left is remembered. False when it is the current one or not shown.</summary>
     public bool Go(GuideStage stage)
     {
-        if (stage == Current)
+        if (stage == Current || !IsShown(stage))
             return false;
         _left.Add(Current);
         Current = stage;
         return true;
     }
 
-    /// <summary>The next step (false on the decision).</summary>
-    public bool Next() => !IsLast && Go(Current + 1);
+    /// <summary>The next step shown (false on the decision).</summary>
+    public bool Next() => !IsLast && Go(_shown[Number]);
 
-    /// <summary>The previous step (false on the first).</summary>
-    public bool Back() => !IsFirst && Go(Current - 1);
+    /// <summary>The previous step shown (false on the first).</summary>
+    public bool Back() => !IsFirst && Go(_shown[Number - 2]);
+
+    /// <summary>
+    /// The steps shown on <paramref name="day"/>: Papers and the decision, and
+    /// each other step some set of <paramref name="sets"/> (not a data-only
+    /// one) lists a checklist item of on that day (CaseSteps.Resolve,
+    /// StageOf), in order; every step
+    /// when there are no sets. The same for every traveller of the day, so
+    /// the steps never name the kind.
+    /// </summary>
+    public static List<GuideStage> StagesOn(StepSetData sets, int day)
+    {
+        if (sets == null || sets.sets == null || sets.sets.Count == 0)
+            return new List<GuideStage>(Stages);
+        var owned = new HashSet<GuideStage> { GuideStage.Papers, GuideStage.Decision };
+        foreach (StepSet set in sets.sets)
+            if (set != null && !set.dataOnly)
+                foreach (StepSpec step in CaseSteps.Resolve(sets, set.type, day))
+                    owned.Add(StageOf(step));
+        var shown = new List<GuideStage>();
+        foreach (GuideStage stage in Stages)
+            if (owned.Contains(stage))
+                shown.Add(stage);
+        return shown;
+    }
 
     /// <summary>True once the clerk has left <paramref name="stage"/> (visited it and gone on).</summary>
     public bool WasLeft(GuideStage stage) => _left.Contains(stage);

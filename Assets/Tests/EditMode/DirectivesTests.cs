@@ -322,6 +322,31 @@ public class DirectivesTests
         Assert.IsFalse(Directives.Breaks(TravelRuleType.PaperSet, displaced), "the displaced have no paper set to read");
     }
 
+    /// <summary>Lesson D7: papers arrive one day at a time, so a paper set never asks for a form the agency has not issued yet (CaseFacts.Issued; empty: every form).</summary>
+    [Test]
+    public void ThePaperSet_NeverAsksForAFormNotIssuedYet()
+    {
+        CaseFacts poor = Honest(TravellerKind.PoorTourist, Directives.Visa, Directives.Manifest, Directives.Waiver);
+        Assert.IsTrue(Directives.Breaks(TravelRuleType.PaperSet, poor), "every form issued: the proof of means is missing");
+        poor.Issued = new[] { Directives.Visa, Directives.Manifest, Directives.Waiver };
+        Assert.IsFalse(Directives.Breaks(TravelRuleType.PaperSet, poor), "the proofs are not issued yet (day 4): the waiver day asks only for the waiver");
+        poor.WaiverSigned = false;
+        Assert.IsTrue(Directives.Breaks(TravelRuleType.PaperSet, poor), "an issued waiver must be signed");
+
+        CaseFacts early = Honest(TravellerKind.PoorTourist, Directives.Visa, Directives.Manifest);
+        early.Issued = new[] { Directives.Visa, Directives.Manifest };
+        Assert.IsFalse(Directives.Breaks(TravelRuleType.PaperSet, early), "no waiver issued yet: nothing to sign");
+        early.ManifestClass = TransponderClass.Premium;
+        Assert.IsTrue(Directives.Breaks(TravelRuleType.PaperSet, early), "the class rule still reads the papers carried");
+
+        CaseFacts labourer = Honest(TravellerKind.Labourer, Directives.Manifest);
+        labourer.WaiverSigned = false;
+        labourer.Issued = new[] { Directives.Visa, Directives.Manifest };
+        Assert.IsFalse(Directives.Breaks(TravelRuleType.PaperSet, labourer), "neither the contract nor the waiver is issued");
+        labourer.Issued = new[] { Directives.Visa, Directives.Manifest, Directives.Contract };
+        Assert.IsTrue(Directives.Breaks(TravelRuleType.PaperSet, labourer), "an issued contract must be carried");
+    }
+
     [Test]
     public void TheDebtStanding_BreaksOnAFrozenAccount_ForCitizensOnly()
     {

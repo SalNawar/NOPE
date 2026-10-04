@@ -15,7 +15,7 @@ MonoBehaviour:
   type: 7
   era: {fileID: 0}
   nation: {fileID: 0}
-  description: Depart only on the date on your manifest or return order, and never
-    on an expired paper.
+  description: Depart only on the date printed on your travel papers, and never on
+    an expired paper.
   kinds: 
   transponder: 

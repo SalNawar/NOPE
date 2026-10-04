@@ -14,6 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 15
   visitorsCount: 18
+  bulletin: 'NEW: the Return Order. The displaced now carry one, and depart only
+    on its date.'
+  papers:
+  - TC-101
+  - TC-230
+  - TC-310
+  - TC-415
+  - TC-416
+  - TC-417
+  - TC-520
+  - TC-610
+  - TC-620
+  - TC-630
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 3

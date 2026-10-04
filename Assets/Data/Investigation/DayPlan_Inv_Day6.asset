@@ -14,14 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 6
   visitorsCount: 14
+  bulletin: 'NEW: the displaced. Their Displacement Certificate must match the Displacement
+    Registry before they go home.'
+  papers:
+  - TC-101
+  - TC-230
+  - TC-310
+  - TC-415
+  - TC-416
+  - TC-417
+  - TC-610
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
     honest: 0
   - blueprint: {fileID: 11400000, guid: 008d4e5dfc4a491396679dcae81673aa, type: 2}
-    weight: 2
-    honest: 0
-  - blueprint: {fileID: 11400000, guid: baa4a99b576b463cb6e604fe113a409c, type: 2}
     weight: 2
     honest: 0
   - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
@@ -50,39 +57,23 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 99eaeeca4c1051241918113a32ab7256, type: 2}
   - {fileID: 11400000, guid: 3493007bf4998db4e809fd90a977ab75, type: 2}
   tellCount: 1
-  tellChannels: 000000000100000002000000
-  costumeErrorChance: 0.05
+  tellChannels: 00000000
+  costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 0100000002000000070000000500000006000000080000000000000003000000040000000a00000009000000
+  lieKinds: 010000000200000007000000080000000a00000009000000
   violationChance: 0.05
   activeTravelRules:
   - {fileID: 11400000, guid: a450618c1ab42a64f9962c60774c598c, type: 2}
-  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
   - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
-  - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
-  - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
   - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
-  - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
-  - {fileID: 11400000, guid: 790f58e093f5e4842a8a706ca0d1cf69, type: 2}
-  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 8
     id: 
     caseBlueprint: {fileID: 0}
     legendary: {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
-    hasLie: 0
-    lie: 0
-    directive: 0
-    dialogId: 
-    introLine: 
-    conditions: []
-  - caseIndex1Based: 11
-    id: 
-    caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
     hasLie: 0
     lie: 0
     directive: 0
