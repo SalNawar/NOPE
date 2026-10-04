@@ -309,6 +309,8 @@ public static partial class WorldContentGenerator
                 errors.Add($"Day '{d.asset}' needs \"costumeErrorChance\" in 0..1.");
             if (d.violationChance < 0f || d.violationChance > 1f)
                 errors.Add($"Day '{d.asset}' needs \"violationChance\" in 0..1.");
+            if (d.returns < 0)
+                errors.Add($"Day '{d.asset}' needs \"returns\" of 0 or more (the most denied travellers who may come back that day).");
             CheckLies(d, errors);
             CheckDirectives(src, d, authored, errors);
             CheckReturnHome(d, src.rules, errors);
@@ -372,7 +374,10 @@ public static partial class WorldContentGenerator
                      ("leaderLost", h.lines?.leaderLost, new[] { History.NationToken }),
                      ("carry", h.lines?.carry, new[] { Interview.ValueToken, Interview.PlaceToken }),
                      ("dominant", h.lines?.dominant, new[] { History.AttributeToken, Interview.PlaceToken }),
-                     ("panic", h.lines?.panic, new[] { Interview.PlaceToken, Interview.ValueToken })
+                     ("panic", h.lines?.panic, new[] { Interview.PlaceToken, Interview.ValueToken }),
+                     ("carryBy", h.lines?.carryBy, new[] { Interview.ValueToken, Interview.PlaceToken, Interview.NameToken, Traces.DayToken }),
+                     ("panicBy", h.lines?.panicBy, new[] { Interview.PlaceToken, Interview.ValueToken, Interview.NameToken, Traces.DayToken }),
+                     ("traced", h.lines?.traced, new[] { Interview.NameToken, Traces.DayToken })
                  })
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -1441,8 +1446,11 @@ public static partial class WorldContentGenerator
         leaderGained = new LineText("history.leaderGained", l?.leaderGained),
         leaderLost = new LineText("history.leaderLost", l?.leaderLost),
         carry = new LineText("history.carry", l?.carry),
+        carryBy = new LineText("history.carryBy", l?.carryBy),
         dominant = new LineText("history.dominant", l?.dominant),
-        panic = new LineText("history.panic", l?.panic)
+        panic = new LineText("history.panic", l?.panic),
+        panicBy = new LineText("history.panicBy", l?.panicBy),
+        traced = new LineText("history.traced", l?.traced)
     };
 
     private static NationEraProfileSO MakePlace(PlaceData p, NationSO nation, EraSO era, CountryData country,
@@ -1786,6 +1794,7 @@ public static partial class WorldContentGenerator
         so.FindProperty("legendaryBaseChance").floatValue = d.premadeChance;
         so.FindProperty("costumeErrorChance").floatValue = d.costumeErrorChance;
         so.FindProperty("slipChance").floatValue = d.slipChance;
+        so.FindProperty("returnsMax").intValue = d.returns;
         so.FindProperty("violationChance").floatValue = d.violationChance;
         SerializedArrays.Set(so, "allowedNations", (d.countries ?? Array.Empty<string>()).Select(c => (Object)nations[c]).ToArray());
         SerializedArrays.Set(so, "activeTravelRules", (d.rules ?? Array.Empty<string>()).Select(r => (Object)rules[r]).ToArray());
@@ -1863,6 +1872,7 @@ public static partial class WorldContentGenerator
         deskName = i.deskName,
         opener = new LineText(InterviewLineId("opener"), i.opener),
         openerLegendary = new LineText(InterviewLineId("openerLegendary"), i.openerLegendary),
+        openerReturning = new LineText(InterviewLineId("openerReturning"), i.openerReturning),
         claims = BuildClaims(i.claims),
         honorificMale = i.honorificMale,
         honorificFemale = i.honorificFemale,
@@ -1897,7 +1907,8 @@ public static partial class WorldContentGenerator
             label = i.waiverPad?.label ?? string.Empty,
             prompt = new LineText(InterviewLineId("waiverPad.prompt"), i.waiverPad?.prompt),
             replies = VoiceRows("waiverPad", i.waiverPad?.replies, r => r.reply, "waiverPad.replies")
-        }
+        },
+        confront = BuildConfront(i.confront)
     };
 
     /// <summary>The id of a missing-form reply's line, "interview.missingFormReplies.{kind}.{request}.{variant}": BuildReplies writes it, CheckInterview checks it.</summary>
@@ -2414,6 +2425,8 @@ public static partial class WorldContentGenerator
         public float costumeErrorChance;
         /// <summary>Chance per generated liar of a slip after small talk (0..1; the personalities spec's T9).</summary>
         public float slipChance;
+        /// <summary>The most denied travellers who may come back this day (0 or more; wave 5, lesson 9).</summary>
+        public int returns;
         /// <summary>Chance per honest traveller of breaking a rolled procedure (0..1; traveller types P4).</summary>
         public float violationChance;
         /// <summary>The Directorate's route for each departure portal this day (the portals spec v3 RT2).</summary>
@@ -2426,6 +2439,8 @@ public static partial class WorldContentGenerator
         public string deskName;
         public string opener;
         public string openerLegendary;
+        /// <summary>The desk's opener for a traveller back after a denial ({honorific}, {day}; wave 5, lesson 9).</summary>
+        public string openerReturning;
         /// <summary>The claim per traveller kind (one row per kind; ids are generated).</summary>
         public ClaimData[] claims;
         public string honorificMale;
@@ -2462,6 +2477,8 @@ public static partial class WorldContentGenerator
         public VoicesData voices;
         /// <summary>The desk's waiver pad (the endings and strandings spec §7.3): the entry, the desk's words, the default replies.</summary>
         public WaiverPadData waiverPad;
+        /// <summary>The wheel's questions about logged differences (wave 5, lesson 3): the entries, the prompts, the default replies.</summary>
+        public ConfrontData confront;
     }
 
     /// <summary>interview.waiverPad: the entry, the desk's prompt and the default replies (a reply by name, kinds, era, text).</summary>
@@ -2500,7 +2517,7 @@ public static partial class WorldContentGenerator
     [Serializable] private sealed class HistoryData { public HistoryLinesData lines; public HistoryRuleData[] rules; }
 
     /// <summary>The templated history lines ({nation}, {place}, {value}).</summary>
-    [Serializable] private sealed class HistoryLinesData { public string leaderGained; public string leaderLost; public string carry; public string dominant; public string panic; }
+    [Serializable] private sealed class HistoryLinesData { public string leaderGained; public string leaderLost; public string carry; public string dominant; public string panic; public string carryBy; public string panicBy; public string traced; }
 
     /// <summary>A history rule: when its conditions pass at night it fires once, latches its edits, moves stability by its percent (missing: 0) and prints its news line; with no edit it is a story rule (days 7-15 B10).</summary>
     [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; public float stability; public string section; public OutcomePull[] pulls; }

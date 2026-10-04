@@ -30,7 +30,7 @@ public static class HistoryService
         if (inst.claimedNation == null || inst.claimedEra == null)
             return;
 
-        CarryRecord record = Carries.Make(inst.tellSourceNationId, inst.tellSourceEraId, inst.claimedNation.id, inst.claimedEra.id, config.carryCategory, today, world.day);
+        CarryRecord record = Carries.Make(inst.tellSourceNationId, inst.tellSourceEraId, inst.claimedNation.id, inst.claimedEra.id, config.carryCategory, today, world.day, inst.visitorDisplayName);
         if (record == null)
             return;
 
@@ -49,7 +49,7 @@ public static class HistoryService
             return;
 
         world.history.pendingPanics ??= new List<PanicRecord>();
-        world.history.pendingPanics.Add(new PanicRecord { placeLabel = inst.originLabel, item = inst.CostumeItem, day = world.day });
+        world.history.pendingPanics.Add(new PanicRecord { placeLabel = inst.originLabel, item = inst.CostumeItem, day = world.day, traveller = inst.visitorDisplayName });
         Debug.Log($"[HistoryService] Panic recorded: '{inst.CostumeItem}' ({inst.costumeFault}) worn to {inst.originLabel}.");
     }
 
@@ -74,7 +74,7 @@ public static class HistoryService
             return false;
         }
 
-        CarryRecord record = Carries.Make(present.NationId, present.EraId, inst.claimedNation.id, inst.claimedEra.id, config.carryCategory, today.Facts, world.day);
+        CarryRecord record = Carries.Make(present.NationId, present.EraId, inst.claimedNation.id, inst.claimedEra.id, config.carryCategory, today.Facts, world.day, inst.visitorDisplayName);
         if (record == null)
             return false;
 
@@ -102,8 +102,9 @@ public static class HistoryService
 
     /// <summary>
     /// At night: one news line per panic recorded today (History.PanicLines
-    /// over history.lines.panic), then the record is cleared. A blank line
-    /// warns and reports nothing.
+    /// over history.lines.panicBy, naming the traveller stamped and the day,
+    /// wave 5 lesson 10; history.lines.panic for an older save's record), then
+    /// the record is cleared. A blank line warns and reports nothing.
     /// </summary>
     public static void ReportPanics(WorldState world, ContentLibrarySO lib, List<string> news)
     {
@@ -111,7 +112,7 @@ public static class HistoryService
         if (panics == null || panics.Count == 0)
             return;
 
-        List<string> lines = History.PanicLines(lib.HistoryLines.panic?.text, panics);
+        List<string> lines = History.PanicLines(lib.HistoryLines.panic?.text, panics, lib.HistoryLines.panicBy?.text);
         if (lines.Count == 0)
             Debug.LogWarning("[HistoryService] Panics were recorded but the content library has no panic line. Run Tools > TimeDesk > Generate World.");
         news.AddRange(lines);
@@ -190,8 +191,9 @@ public static class HistoryService
     /// (Carries.Promote over every place's facts, history applied, the
     /// present's row among them so a stranding's carry names the present as
     /// its source) and announces them while the history news cap allows
-    /// (History.NewsSlots; the rest are logged). With no config nothing is
-    /// promoted.
+    /// (History.NewsSlots; the rest are logged), each naming the traveller
+    /// stamped and the day (Carries.Line over history.lines.carryBy; wave 5,
+    /// lesson 10). With no config nothing is promoted.
     /// </summary>
     public static void PromoteCarries(WorldState world, ContentLibrarySO lib, GameConfigSO config, int tomorrow, List<string> news, int historyLinesSoFar)
     {
@@ -206,13 +208,13 @@ public static class HistoryService
 
         List<FactEdit> edits = Carries.Promote(world.history, config.carryThreshold, tomorrow, worldFacts);
         int slots = History.NewsSlots(historyLinesSoFar, config.maxHistoryNewsPerNight, edits.Count);
-        LineText template = lib.HistoryLines.carry;
+        HistoryLines lines = lib.HistoryLines;
         for (int i = 0; i < edits.Count; i++)
         {
             string place = worldFacts.OriginLabel(edits[i].nationId, edits[i].eraId);
-            Debug.Log($"[HistoryService] Carry latched: {place} {edits[i].category} = '{edits[i].value}' from day {tomorrow} (brought from {edits[i].source}).");
+            Debug.Log($"[HistoryService] Carry latched: {place} {edits[i].category} = '{edits[i].value}' from day {tomorrow} (brought from {edits[i].source} by '{edits[i].traveller}', stamped day {edits[i].travellerDay}).");
             if (i < slots)
-                news.Add(Interview.Fill(Interview.Fill(template?.text, Interview.ValueToken, edits[i].value), Interview.PlaceToken, place));
+                news.Add(Carries.Line(lines.carry?.text, lines.carryBy?.text, edits[i], place));
         }
 
         if (edits.Count > slots)

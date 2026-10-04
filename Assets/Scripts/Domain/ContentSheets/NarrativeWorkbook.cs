@@ -60,16 +60,16 @@ public static class NarrativeWorkbook
     public static readonly string[] NarrativeHeaders = { "narrative", "who", "when", "part", "field", "speaker", "text", "notes", "ref", "was" };
 
     /// <summary>The Lines sheet's columns: the slot, the voice, the content columns a voice row may have (read back where the slot's sheet has them), remove, then the pool and the binding.</summary>
-    public static readonly string[] LinesHeaders = { "slot", "voice", "personality", "premade", "kind", "kinds", "era", "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply", "text", "then", "remove", "pool", "ref", "was" };
+    public static readonly string[] LinesHeaders = { "slot", "voice", "personality", "premade", "kind", "kinds", "era", "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply", "outcome", "text", "then", "remove", "pool", "ref", "was" };
 
     /// <summary>The Lines sheet's columns that name content columns (read back).</summary>
-    public static readonly string[] LineContentHeaders = { "personality", "premade", "kind", "kinds", "era", "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply", "text", "then" };
+    public static readonly string[] LineContentHeaders = { "personality", "premade", "kind", "kinds", "era", "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply", "outcome", "text", "then" };
 
     /// <summary>The voice slots: the content sheets the Lines sheet shows, the personalities' and premades' first, then the defaults.</summary>
-    public static readonly string[] LineSlots = VoiceSlots().Concat(new[] { "claims", "kindSmallTalk", "missingFormReplies", "interviewReactions", "interviewSlips", "waiverPadReplies" }).ToArray();
+    public static readonly string[] LineSlots = VoiceSlots().Concat(new[] { "claims", "kindSmallTalk", "missingFormReplies", "interviewReactions", "interviewSlips", "waiverPadReplies", "confrontReplies" }).ToArray();
 
     /// <summary>The voice slots a personality or a premade speaks in (interview.voices; the rest of <see cref="LineSlots"/> are the defaults).</summary>
-    private static string[] VoiceSlots() => new[] { "voiceClaims", "voiceHandOver", "voiceMissingForms", "voiceSpoken", "voiceAnswers", "voiceSmallTalk", "voiceReactions", "voiceSlips", "voiceWaiverPad" };
+    private static string[] VoiceSlots() => new[] { "voiceClaims", "voiceHandOver", "voiceMissingForms", "voiceSpoken", "voiceAnswers", "voiceSmallTalk", "voiceReactions", "voiceSlips", "voiceWaiverPad", "voiceConfront" };
 
     /// <summary>The Cases sheet's columns.</summary>
     public static readonly string[] CaseHeaders =
@@ -458,10 +458,11 @@ public static class NarrativeWorkbook
         Column("reason", lists.Source("reason", Faults.Reasons));
         Column("lie", lists.Source("lie", Enum.GetNames(typeof(LieKind))));
         Column("reply", lists.Source("reply", Enum.GetNames(typeof(WaiverPadReply))));
+        Column("outcome", lists.Source("outcome", Enum.GetNames(typeof(ConfrontOutcome))));
         Column("remove", lists.Source("remove", new[] { RemoveMark }));
 
         table.Look.Columns = LinesHeaders.Select(h => h == "slot" || h == "remove" || LineContentHeaders.Contains(h) ? CellLook.Editable : h == "ref" || h == "was" ? CellLook.Binding : CellLook.Locked).ToArray();
-        table.Look.Widths = new[] { 18, 12, 12, 10, 12, 14, 10, 12, 9, 12, 9, 8, 10, 14, 12, 70, 40, 9, 8, 18, 0 };
+        table.Look.Widths = new[] { 18, 12, 12, 10, 12, 14, 10, 12, 9, 12, 9, 8, 10, 14, 12, 11, 70, 40, 9, 8, 18, 0 };
         table.Look.HiddenColumns = LinesHeaders.Select(h => h == "was").ToArray();
         table.Look.FreezeColumns = 2;
         table.Look.TabColor = "FFFFC000";
@@ -470,7 +471,7 @@ public static class NarrativeWorkbook
 
     /// <summary>The rows one line is picked among: the same slot, voice and keys.</summary>
     private static string PoolKey(Book b, string slot, int r) =>
-        slot + "\u001f" + string.Join("\u001f", new[] { "personality", "kind", "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply" }.Select(h => b.Get(slot, r, h)));
+        slot + "\u001f" + string.Join("\u001f", new[] { "personality", "kind", "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply", "outcome" }.Select(h => b.Get(slot, r, h)));
 
     // =====================================================================
     // Days, Cases, Triggers
@@ -744,7 +745,7 @@ public static class NarrativeWorkbook
 
     private static string SlotLabel(Book b, string slot, int r)
     {
-        string keys = string.Join(" · ", new[] { "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply" }.Select(h => b.Get(slot, r, h)).Where(v => v.Length > 0));
+        string keys = string.Join(" · ", new[] { "request", "variant", "question", "verdict", "intent", "reason", "lie", "reply", "outcome" }.Select(h => b.Get(slot, r, h)).Where(v => v.Length > 0));
         string name;
         switch (slot)
         {
@@ -757,6 +758,7 @@ public static class NarrativeWorkbook
             case "voiceReactions": name = "reaction"; break;
             case "voiceSlips": name = "slip"; break;
             case "voiceWaiverPad": name = "waiver pad"; break;
+            case "voiceConfront": name = "difference"; break;
             default: name = slot; break;
         }
         return keys.Length > 0 ? $"{name} ({keys})" : name;
@@ -775,6 +777,7 @@ public static class NarrativeWorkbook
             case "voiceReactions": return $"stamped {b.Get(slot, r, "verdict")} ({b.Get(slot, r, "intent")}{(b.Get(slot, r, "reason").Length > 0 ? ", " + b.Get(slot, r, "reason") : string.Empty)})";
             case "voiceSlips": return "after small talk, when lying" + (b.Get(slot, r, "lie").Length > 0 ? $" ({b.Get(slot, r, "lie")})" : string.Empty);
             case "voiceWaiverPad": return $"handed the waiver pad: {b.Get(slot, r, "reply")}";
+            case "voiceConfront": return $"asked about a difference the clerk logged: {b.Get(slot, r, "outcome")}" + (b.Get(slot, r, "reason").Length > 0 ? $" ({b.Get(slot, r, "reason")})" : string.Empty);
             default: return string.Empty;
         }
     }
@@ -782,7 +785,8 @@ public static class NarrativeWorkbook
     private static string VoiceNote(Book b, string slot, int r)
     {
         string kinds = b.Get(slot, r, "kinds"), era = b.Get(slot, r, "era");
-        string tokens = slot == "voiceClaims" ? "{place} required" : slot == "voiceAnswers" ? "{value} required; {place}" : slot == "voiceHandOver" || slot == "voiceMissingForms" ? "{document}, {place}" : "{place}";
+        string tokens = slot == "voiceClaims" ? "{place} required" : slot == "voiceAnswers" ? "{value} required; {place}" : slot == "voiceHandOver" || slot == "voiceMissingForms" ? "{document}, {place}"
+                      : slot == "voiceConfront" ? "{value}, {other}, {place}" : "{place}";
         return tokens + (kinds.Length > 0 ? $" · kinds {kinds}" : string.Empty) + (era.Length > 0 ? $" · era {era}" : string.Empty);
     }
 

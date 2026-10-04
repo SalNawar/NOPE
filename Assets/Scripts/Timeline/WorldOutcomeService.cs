@@ -22,7 +22,8 @@ public static class WorldOutcomeService
     /// traveller's pulls toward their destination (the claimed place, where
     /// they go; a famous traveller's authored pulls instead), scaled by their
     /// kind (GameConfigSO); denied, the denial pull toward each factor's "as
-    /// you found it" outcome.
+    /// you found it" outcome. The traveller is traced as the last to pull each
+    /// of those outcomes (Traces.Record; wave 5, lesson 10).
     /// </summary>
     public static void RecordDecision(WorldState world, CaseInstance inst, bool accepted, ContentLibrarySO lib, GameConfigSO config)
     {
@@ -44,6 +45,8 @@ public static class WorldOutcomeService
         }
 
         int added = WorldPulls.AddAll(world.pulls, pulls);
+        world.pullTraces ??= new List<PullTrace>();
+        Traces.Record(world.pullTraces, pulls, inst.visitorDisplayName, world.day);
         if (added > 0)
             Debug.Log($"[WorldOutcomeService] {(accepted ? "Accepted" : "Denied")} '{inst.visitorDisplayName}': {string.Join(", ", pulls.Select(p => $"{p.factor}/{p.outcome} +{p.amount:0.##}"))}.");
     }
@@ -52,7 +55,9 @@ public static class WorldOutcomeService
     /// At night (after the triggers, whose PullOutcome ops have landed; before
     /// the carries): latches each factor answered by pulls (WorldPulls.Latch,
     /// GameConfigSO's world knobs), dated <paramref name="tomorrow"/>, and
-    /// prints a changed answer's headline (WorldContent.Headline) while the
+    /// prints a changed answer's headline (WorldContent.Headline, traced to the
+    /// last traveller who pulled it, Traces.Traced with history.lines.traced;
+    /// wave 5, lesson 10) while the
     /// history news cap allows after <paramref name="historyLinesSoFar"/>
     /// (History.NewsSlots; the rest are logged). Returns the lines added.
     /// </summary>
@@ -71,7 +76,7 @@ public static class WorldOutcomeService
         int added = 0;
         for (int i = 0; i < changed.Count; i++)
         {
-            string line = content.Headline(changed[i]);
+            string line = Traces.Traced(content.Headline(changed[i]), lib.HistoryLines.traced?.text, Traces.Of(world.pullTraces, changed[i]));
             Debug.Log($"[WorldOutcomeService] '{changed[i].factor}' now answers '{content.Words(changed[i])}' from day {tomorrow}.");
             if (i < slots && !string.IsNullOrWhiteSpace(line) && news != null)
             {

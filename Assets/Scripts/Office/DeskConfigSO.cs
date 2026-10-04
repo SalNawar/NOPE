@@ -83,8 +83,8 @@ public sealed class DeskConfigSO : ScriptableObject
     public Color travellerTint = new Color(0.9f, 0.88f, 0.84f, 1f);
 
     [Header("Traveller wheel (overlay reference px; Build Office UI checks the fit)")]
-    /// <summary>The ring's horizontal and vertical radii (read at runtime; Build Office UI checks that the content's menu fits).</summary>
-    public Vector2 wheelRadii = new Vector2(300f, 200f);
+    /// <summary>The ring's horizontal and vertical radii (read at runtime; Build Office UI checks that the content's menu fits): 365 x 225 fits nine choices, the hub's worst case with the differences entry (wave 5, lesson 3).</summary>
+    public Vector2 wheelRadii = new Vector2(365f, 225f);
 
     /// <summary>Every ring item's size (read at runtime; Build Office UI checks that the content's menu fits).</summary>
     public Vector2 wheelItemSize = new Vector2(240f, 44f);

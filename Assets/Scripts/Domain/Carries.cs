@@ -14,9 +14,11 @@ public static class Carries
     /// Null when an id is blank, home equals claim, the category is not
     /// editable, the table is null, has no value for the home or does not hold
     /// the claim, or the claim already has that value (Values.Match).
+    /// <paramref name="traveller"/> is who was stamped (wave 5, lesson 10: the
+    /// paper names them).
     /// </summary>
     public static CarryRecord Make(string fromNationId, string fromEraId, string toNationId, string toEraId,
-                                   ClueCategory category, FactTable today, int day)
+                                   ClueCategory category, FactTable today, int day, string traveller = null)
     {
         if (string.IsNullOrWhiteSpace(fromNationId) || string.IsNullOrWhiteSpace(fromEraId) ||
             string.IsNullOrWhiteSpace(toNationId) || string.IsNullOrWhiteSpace(toEraId) ||
@@ -34,7 +36,7 @@ public static class Carries
         return new CarryRecord
         {
             fromNationId = fromNationId, fromEraId = fromEraId, toNationId = toNationId, toEraId = toEraId,
-            category = category, value = value, day = day
+            category = category, value = value, day = day, traveller = traveller ?? string.Empty
         };
     }
 
@@ -44,7 +46,8 @@ public static class Carries
     /// <paramref name="threshold"/> records (below 1 counts as 1) is due: its
     /// latest record's value is latched for the claim from
     /// <paramref name="sinceDay"/> (History.Latch, EditCause.Carry, source =
-    /// the home's label in <paramref name="world"/>), unless it equals the
+    /// the home's label in <paramref name="world"/>; the latest record's
+    /// traveller and day, wave 5 lesson 10), unless it equals the
     /// claim's current value (the value an edit latched earlier in this call
     /// gave it, else <paramref name="world"/>'s). A due pair's records are
     /// consumed either way; pairs below the threshold keep theirs. Returns the
@@ -87,12 +90,32 @@ public static class Carries
                 continue;
 
             string source = world.OriginLabel(pair.from, pair.fromEra) ?? $"{pair.from}_{pair.fromEra}";
-            var edit = new FactEdit(pair.to, pair.toEra, pair.category, value, sinceDay, EditCause.Carry, source);
+            CarryRecord latest = list[list.Count - 1];
+            var edit = new FactEdit(pair.to, pair.toEra, pair.category, value, sinceDay, EditCause.Carry, source)
+            {
+                traveller = latest.traveller ?? string.Empty,
+                travellerDay = string.IsNullOrWhiteSpace(latest.traveller) ? 0 : latest.day
+            };
             if (History.Latch(history, edit))
                 latched.Add(edit);
         }
 
         history.pendingCarries.RemoveAll(r => r == null || consumed.Contains(r));
         return latched;
+    }
+
+    /// <summary>
+    /// The morning paper's line for a latched carry: <paramref name="byTemplate"/>
+    /// with {name} and {day} (the traveller stamped and the day; wave 5,
+    /// lesson 10) when the edit knows its traveller and the template is not
+    /// blank, else <paramref name="template"/>; {value} the carried value and
+    /// {place} <paramref name="placeLabel"/> either way.
+    /// </summary>
+    public static string Line(string template, string byTemplate, FactEdit edit, string placeLabel)
+    {
+        if (edit == null)
+            return string.Empty;
+        string chosen = Traces.Fill(byTemplate, edit.traveller, edit.travellerDay) ?? template;
+        return Interview.Fill(Interview.Fill(chosen, Interview.ValueToken, edit.value), Interview.PlaceToken, placeLabel);
     }
 }

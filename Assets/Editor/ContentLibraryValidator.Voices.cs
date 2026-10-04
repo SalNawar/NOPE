@@ -67,6 +67,7 @@ public static partial class ContentLibraryValidator
             DefaultReactions = lines.reactions ?? new List<VoiceLine>(),
             DefaultSlips = lines.slips ?? new List<VoiceLine>(),
             DefaultPadReplies = lines.waiverPad?.replies ?? new List<VoiceLine>(),
+            Confront = lines.confront,
             PadOffered = InterviewScript.OffersPad(kindForms.SelectMany(k => k.Askable ?? new AskableForm[0]).ToList(), lines),
             SlipChances = lib.DayPlans.Where(p => p != null).Select(p => (p.DayNumber, p.SlipChance)).ToList(),
             PremadeIntents = PremadeIntents(lib),

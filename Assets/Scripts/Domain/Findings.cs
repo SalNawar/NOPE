@@ -296,8 +296,8 @@ public static class RuleChecks
 /// <summary>One logged comparison: what it said, the two values' keys (PickKeys', or a rule's or the calendar's) and what each side read.</summary>
 public sealed class Finding
 {
-    /// <summary>A finding.</summary>
-    public Finding(FindingKind kind, string keyA, string keyB, string titleA, string valueA, string titleB, string valueB, string subject, bool proof)
+    /// <summary>A finding; <paramref name="deviation"/> is the deviation the pair proved (DiscrepancyLog.Prove), or null.</summary>
+    public Finding(FindingKind kind, string keyA, string keyB, string titleA, string valueA, string titleB, string valueB, string subject, Discrepancy deviation)
     {
         Kind = kind;
         KeyA = keyA ?? string.Empty;
@@ -307,7 +307,7 @@ public sealed class Finding
         TitleB = titleB ?? string.Empty;
         ValueB = valueB ?? string.Empty;
         Subject = subject ?? string.Empty;
-        Proof = proof;
+        Deviation = deviation;
     }
 
     /// <summary>What the comparison said.</summary>
@@ -334,8 +334,11 @@ public sealed class Finding
     /// <summary>What was compared: the detail's word ("Visa class"), or the rule's line.</summary>
     public string Subject { get; }
 
+    /// <summary>The deviation the pair proved (DiscrepancyLog.Prove: the same proof the Deviation Report documents), or null. What the wheel's question about it reads (Confrontations.About; wave 5, lesson 3).</summary>
+    public Discrepancy Deviation { get; }
+
     /// <summary>True when the pair proved a deviation (DiscrepancyLog): "Logged as evidence".</summary>
-    public bool Proof { get; }
+    public bool Proof => Deviation != null;
 
     /// <summary>True when this finding joins the same two values as <paramref name="keyA"/> and <paramref name="keyB"/>, in either order.</summary>
     public bool Joins(string keyA, string keyB) =>

@@ -8192,6 +8192,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.05,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -8279,6 +8280,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.05,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -8372,6 +8374,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.05,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -8478,6 +8481,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.05,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -8603,6 +8607,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.05,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -8738,6 +8743,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.05,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -8871,6 +8877,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.05,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -9005,6 +9012,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.05,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -9169,6 +9177,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.06,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -9303,6 +9312,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.06,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -9438,6 +9448,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.06,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -9574,6 +9585,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.08,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -9722,6 +9734,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.08,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -9886,6 +9899,7 @@
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.08,
+      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -9917,14 +9931,16 @@
       "weight": 1,
       "note": "Tells you everything, then a bit more.",
       "waiverRefusal": 0.05,
-      "strandingFate": "News"
+      "strandingFate": "News",
+      "confess": 0.6
     },
     {
       "id": "curt",
       "name": "Curt",
       "weight": 1,
       "note": "Time is money, and in 2150 the queue bills by the minute.",
-      "waiverRefusal": 0.3
+      "waiverRefusal": 0.3,
+      "confess": 0.3
     },
     {
       "id": "anxious",
@@ -9932,14 +9948,16 @@
       "weight": 1,
       "note": "Worried about paradoxes, transponders, butterflies and you.",
       "waiverRefusal": 0.05,
-      "strandingFate": "Forgotten"
+      "strandingFate": "Forgotten",
+      "confess": 0.8
     },
     {
       "id": "sunny",
       "name": "Sunny",
       "weight": 1,
       "note": "Believes every word the agency prints.",
-      "waiverRefusal": 0.05
+      "waiverRefusal": 0.05,
+      "confess": 0.7
     },
     {
       "id": "grand",
@@ -9947,14 +9965,16 @@
       "weight": 1,
       "note": "Treats the desk as staff, whatever their account says.",
       "waiverRefusal": 0.5,
-      "strandingFate": "Carry"
+      "strandingFate": "Carry",
+      "confess": 0.15
     },
     {
       "id": "stickler",
       "name": "Stickler",
       "weight": 1,
       "note": "Knows the regulations better than the clerk and says so.",
-      "waiverRefusal": 0.1
+      "waiverRefusal": 0.1,
+      "confess": 0.5
     },
     {
       "id": "glum",
@@ -9962,13 +9982,15 @@
       "weight": 1,
       "note": "The debt won years ago; this is just the paperwork.",
       "waiverRefusal": 0.05,
-      "strandingFate": "Forgotten"
+      "strandingFate": "Forgotten",
+      "confess": 0.4
     }
   ],
   "interview": {
     "deskName": "DESK",
     "opener": "Next! Step forward, {honorific}.",
     "openerLegendary": "Priority arrival: {name}.",
+    "openerReturning": "Back again, {honorific}? You stood at this window on day {day}.",
     "claims": [
       {
         "kind": "RichTourist",
@@ -10110,7 +10132,7 @@
         "text": "A return order? I have a return booking. Is that the same thing?"
       }
     ],
-    "menuCapacity": 8,
+    "menuCapacity": 9,
     "maxLineChars": 100,
     "lookLabel": "Look >",
     "faceLabel": "Their face",
@@ -13991,6 +14013,217 @@
           "reply": "Refuses",
           "text": "What's the point. You'll lose it anyway."
         }
+      ],
+      "confront": [
+        {
+          "personality": "chatty",
+          "outcome": "Explain",
+          "text": "Oh, that's the agency's typing! My cousin had the same. Took weeks."
+        },
+        {
+          "personality": "chatty",
+          "outcome": "Explain",
+          "reason": "panic",
+          "text": "The costume desk said {value} was all the rage. Is it not?"
+        },
+        {
+          "personality": "chatty",
+          "outcome": "Crack",
+          "text": "Fine, fine. It's {other}. I was going to tell you, eventually."
+        },
+        {
+          "personality": "chatty",
+          "outcome": "Crack",
+          "reason": "forged",
+          "text": "My cousin did the paper. I said it looked wrong. I did say."
+        },
+        {
+          "personality": "chatty",
+          "outcome": "DoubleDown",
+          "text": "No, no, it's {value}. Ask anyone. Ask my cousin."
+        },
+        {
+          "personality": "curt",
+          "outcome": "Explain",
+          "text": "Clerical error. Not mine. Stamp it or don't."
+        },
+        {
+          "personality": "curt",
+          "outcome": "Explain",
+          "reason": "panic",
+          "text": "Rental costume. Take it up with the rental."
+        },
+        {
+          "personality": "curt",
+          "outcome": "Crack",
+          "text": "{other}. Happy? That cost me the queue fee."
+        },
+        {
+          "personality": "curt",
+          "outcome": "Crack",
+          "reason": "disguised",
+          "text": "Fine. Wrong home. Right fee. Can we go?"
+        },
+        {
+          "personality": "curt",
+          "outcome": "DoubleDown",
+          "text": "It says {value}. Read it again."
+        },
+        {
+          "personality": "anxious",
+          "outcome": "Explain",
+          "text": "Is that bad? Someone at the counter filled it in. Is it a paradox?"
+        },
+        {
+          "personality": "anxious",
+          "outcome": "Explain",
+          "reason": "panic",
+          "text": "They told me {value} was safe! Will someone faint?"
+        },
+        {
+          "personality": "anxious",
+          "outcome": "Crack",
+          "text": "It's {other}. I'm so sorry. I practised the other one."
+        },
+        {
+          "personality": "anxious",
+          "outcome": "Crack",
+          "reason": "smuggled",
+          "text": "It's from 2150! I'll leave it here. Please keep it. Please."
+        },
+        {
+          "personality": "anxious",
+          "outcome": "DoubleDown",
+          "text": "It's {value}. It is. Please say it is."
+        },
+        {
+          "personality": "sunny",
+          "outcome": "Explain",
+          "text": "Oh! A little typo! The agency's so busy. We'll laugh about this!"
+        },
+        {
+          "personality": "sunny",
+          "outcome": "Explain",
+          "reason": "panic",
+          "text": "The brochure said {value}! Isn't it the look there?"
+        },
+        {
+          "personality": "sunny",
+          "outcome": "Crack",
+          "text": "Ha! You got me! It's {other}. Worth a try!"
+        },
+        {
+          "personality": "sunny",
+          "outcome": "Crack",
+          "reason": "forged",
+          "text": "Caught! I edited it myself. It looked so official!"
+        },
+        {
+          "personality": "sunny",
+          "outcome": "DoubleDown",
+          "text": "{value}! Definitely {value}! Isn't it a lovely day?"
+        },
+        {
+          "personality": "grand",
+          "outcome": "Explain",
+          "text": "My secretary fills these in. Take it up with her."
+        },
+        {
+          "personality": "grand",
+          "outcome": "Explain",
+          "reason": "panic",
+          "text": "My tailor chose {value}. My tailor is never wrong."
+        },
+        {
+          "personality": "grand",
+          "outcome": "Crack",
+          "text": "Very well. {other}. Do be discreet, it's a family matter."
+        },
+        {
+          "personality": "grand",
+          "outcome": "Crack",
+          "reason": "disguised",
+          "text": "One travels under a better address. Everyone who matters does."
+        },
+        {
+          "personality": "grand",
+          "outcome": "DoubleDown",
+          "text": "It is {value} because I say it is {value}."
+        },
+        {
+          "personality": "stickler",
+          "outcome": "Explain",
+          "text": "A clerical slip. It changes nothing in the rules, I know."
+        },
+        {
+          "personality": "stickler",
+          "outcome": "Explain",
+          "reason": "panic",
+          "text": "The dress guide I was issued lists {value}. Your guide may differ."
+        },
+        {
+          "personality": "stickler",
+          "outcome": "Crack",
+          "text": "Correct. It's {other}. I'd have caught it too."
+        },
+        {
+          "personality": "stickler",
+          "outcome": "Crack",
+          "reason": "forged",
+          "text": "Noted. I altered it. Badly, it seems."
+        },
+        {
+          "personality": "stickler",
+          "outcome": "DoubleDown",
+          "text": "I've read the regulations. {value} is in order."
+        },
+        {
+          "personality": "glum",
+          "outcome": "Explain",
+          "text": "Someone typed it wrong. Somebody always does."
+        },
+        {
+          "personality": "glum",
+          "outcome": "Explain",
+          "reason": "panic",
+          "text": "They handed me {value}. I didn't ask questions. I never do."
+        },
+        {
+          "personality": "glum",
+          "outcome": "Crack",
+          "text": "{other}. Obviously. It always is."
+        },
+        {
+          "personality": "glum",
+          "outcome": "Crack",
+          "reason": "smuggled",
+          "text": "It's from 2150. I needed the money. Who doesn't."
+        },
+        {
+          "personality": "glum",
+          "outcome": "DoubleDown",
+          "text": "It's {value}. Not that it matters."
+        },
+        {
+          "premade": "socrates",
+          "outcome": "DoubleDown",
+          "text": "Is it {value}? And what is {value}, really?"
+        },
+        {
+          "premade": "ada",
+          "outcome": "DoubleDown",
+          "text": "{value}, darling. Quite certainly {value}."
+        },
+        {
+          "premade": "rook",
+          "outcome": "DoubleDown",
+          "text": "It says {value}. You don't want trouble over a number."
+        },
+        {
+          "premade": "auditor",
+          "outcome": "DoubleDown",
+          "text": "{value}. Note it down. I certainly will."
+        }
       ]
     },
     "reactions": [
@@ -14089,6 +14322,210 @@
         {
           "reply": "AlreadySigned",
           "text": "I signed one already. It's in the pile you have."
+        }
+      ]
+    },
+    "confront": {
+      "label": "Ask about a difference >",
+      "entryLabel": "{category}: {value}?",
+      "prompts": [
+        {
+          "proof": "ClaimMismatch",
+          "source": "DocumentField",
+          "text": "Your {document} gives {value}.",
+          "then": "The book for {place} says {other}."
+        },
+        {
+          "proof": "ClaimMismatch",
+          "source": "Answer",
+          "text": "You told me {value}.",
+          "then": "The book for {place} says {other}."
+        },
+        {
+          "proof": "ClaimMismatch",
+          "source": "Appearance",
+          "text": "You're wearing {value}.",
+          "then": "In {place} they wear {other}."
+        },
+        {
+          "proof": "ForeignOrigin",
+          "source": "DocumentField",
+          "text": "Your {document} gives {value}.",
+          "then": "That belongs to {other}."
+        },
+        {
+          "proof": "ForeignOrigin",
+          "source": "Answer",
+          "text": "You told me {value}.",
+          "then": "That's what they say in {other}."
+        },
+        {
+          "proof": "ForeignOrigin",
+          "source": "Appearance",
+          "text": "You're wearing {value}.",
+          "then": "That's how they dress in {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "text": "Your {document} says {value}.",
+          "then": "Your record says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "category": "AccountStatus",
+          "text": "Your {document} says {value}.",
+          "then": "Your account says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "category": "TransponderClass",
+          "text": "Your {document} says {value}.",
+          "then": "Your account says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "category": "TransponderId",
+          "text": "Your {document} says {value}.",
+          "then": "Your account says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "category": "Debt",
+          "text": "Your {document} says {value}.",
+          "then": "Your account says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "category": "WaiverNo",
+          "text": "Your {document} says {value}.",
+          "then": "Your account says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "category": "Credit",
+          "text": "Your {document} says {value}.",
+          "then": "Your account says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "category": "Funds",
+          "text": "Your {document} says {value}.",
+          "then": "Your account says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "category": "PolicyNo",
+          "text": "Your {document} says {value}.",
+          "then": "Your account says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "category": "Employer",
+          "text": "Your {document} says {value}.",
+          "then": "Your registered contract says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "category": "Wage",
+          "text": "Your {document} says {value}.",
+          "then": "Your registered contract says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "DocumentField",
+          "category": "Term",
+          "text": "Your {document} says {value}.",
+          "then": "Your registered contract says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "Answer",
+          "text": "You told me {value}.",
+          "then": "Your record says {other}."
+        },
+        {
+          "proof": "RecordMismatch",
+          "source": "Appearance",
+          "text": "You're wearing {value}.",
+          "then": "Your record says {other}."
+        },
+        {
+          "proof": "CrossMismatch",
+          "source": "DocumentField",
+          "text": "Your {document} says {value}.",
+          "then": "Your {otherDocument} says {other}."
+        },
+        {
+          "proof": "ClaimMismatch",
+          "source": "DocumentField",
+          "category": "Seal",
+          "text": "The seal on your {document} is {value}.",
+          "then": "The Seal Register shows that office's seal as {other}."
+        }
+      ],
+      "replies": [
+        {
+          "outcome": "Explain",
+          "text": "Oh! That must be a clerical slip. Someone at the agency typed it."
+        },
+        {
+          "outcome": "Explain",
+          "reason": "panic",
+          "text": "The costume desk said {value} was fine. I thought it was right."
+        },
+        {
+          "outcome": "Crack",
+          "text": "All right. It's {other}. It always was."
+        },
+        {
+          "outcome": "Crack",
+          "reason": "forged",
+          "text": "Fine. I changed it. {value} looked better on paper."
+        },
+        {
+          "outcome": "Crack",
+          "reason": "disguised",
+          "text": "I'm not from where I said. Please don't write that down."
+        },
+        {
+          "outcome": "Crack",
+          "reason": "smuggled",
+          "text": "It's from 2150. I was going to sell it. Everyone does it."
+        },
+        {
+          "outcome": "Crack",
+          "lie": "PoorPosingAsRich",
+          "text": "It's {other}. I just wanted one nice trip."
+        },
+        {
+          "outcome": "DoubleDown",
+          "text": "It's {value}. I don't know what your book says."
+        },
+        {
+          "outcome": "DoubleDown",
+          "reason": "forged",
+          "text": "The paper is correct. Your records are behind."
+        },
+        {
+          "outcome": "DoubleDown",
+          "reason": "disguised",
+          "text": "I know my own home. It's {value} there."
+        },
+        {
+          "outcome": "DoubleDown",
+          "reason": "smuggled",
+          "text": "It's a souvenir. People take souvenirs."
         }
       ]
     }
@@ -15490,7 +15927,10 @@
       "leaderLost": "HISTORY: {nation} no longer dominates the timeline. The Future is unsettled until a new power rises.",
       "carry": "HISTORY: travellers brought {value} to {place}.",
       "dominant": "{attribute} is now DOMINANT in {place}.",
-      "panic": "PANIC in {place}: a traveller from the agency was seen in \"{value}\" and the street fled."
+      "panic": "PANIC in {place}: a traveller from the agency was seen in \"{value}\" and the street fled.",
+      "carryBy": "HISTORY: {name}, stamped day {day}, brought {value} to {place}.",
+      "panicBy": "PANIC in {place}: {name}, stamped day {day}, wore \"{value}\". The street fled.",
+      "traced": "Traced to Desk 3: {name}, day {day}."
     },
     "rules": [
       {
@@ -16176,6 +16616,8 @@
   "news": {
     "stranded": "Stranded: {name}, lost in {place} when an Economy transponder failed.",
     "debtReliefCount": "Citizens who left on Debt Relief yesterday: {count}.",
+    "returnedAccepted": "Second time lucky: {name}, turned away on day {day}, stamped through on day {back}.",
+    "returnedDenied": "{name}, turned away on day {day}, tried again on day {back}. Turned away twice.",
     "debt": [
       "Debt Relief Departures reach a record high.",
       "CLEAR YOUR DEBT: 180 days in the Victorian mills.",

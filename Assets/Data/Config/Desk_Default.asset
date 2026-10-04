@@ -35,7 +35,7 @@ MonoBehaviour:
   heldPaperLift: 0.02
   travellerHeight: 1.8
   travellerTint: {r: 0.9, g: 0.88, b: 0.84, a: 1}
-  wheelRadii: {x: 300, y: 200}
+  wheelRadii: {x: 365, y: 225}
   wheelItemSize: {x: 240, y: 44}
   wheelCentreSize: {x: 150, y: 44}
   wheelItemGap: 8

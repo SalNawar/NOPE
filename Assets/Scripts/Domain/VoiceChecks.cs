@@ -67,6 +67,9 @@ public sealed class VoiceCheckInput
     /// <summary>The waiver pad's default replies (interview.waiverPad.replies; the endings and strandings spec §7.3).</summary>
     public List<VoiceLine> DefaultPadReplies = new List<VoiceLine>();
 
+    /// <summary>The wheel's questions about logged differences (interview.confront: the entries, the prompts, the default replies; wave 5, lesson 3).</summary>
+    public ConfrontWording Confront = new ConfrontWording();
+
     /// <summary>True when some day's papers menu offers the waiver pad (InterviewScript.OffersPad): then the defaults and every personality's own sign and refusal lines are required.</summary>
     public bool PadOffered;
 
@@ -114,6 +117,9 @@ public sealed class VoiceCheckResult
 public static class VoiceChecks
 {
     private static readonly Regex Token = new Regex(@"\{(\w+)\}");
+
+    /// <summary>The longest {category} fill the length check assumes (a category's word, "Transponder Class").</summary>
+    private const int LongestCategoryWord = 20;
 
     /// <summary>The slots' names as the JSON and the messages name them, their allowed tokens and their required one.</summary>
     private static readonly (string list, string noun, string[] allowed, string required, string key)[] Slots =
@@ -189,6 +195,7 @@ public static class VoiceChecks
 
         CheckPremades(book, input, result);
         CheckPad(book, input, result);
+        CheckConfront(book, input, cast, result);
 
         List<VoiceLine> kindTalk = input.KindSmallTalk ?? new List<VoiceLine>();
         var talked = new HashSet<TravellerKind>();
@@ -225,7 +232,7 @@ public static class VoiceChecks
                 continue;
             var own = new List<string>();
             var fallback = new List<string>();
-            foreach (string list in Array.ConvertAll(Slots, s => s.list).Concat(new[] { "reactions", "slips" }))
+            foreach (string list in Array.ConvertAll(Slots, s => s.list).Concat(new[] { "reactions", "slips", "confront" }))
                 (RowsOf(book, list).Exists(r => r != null && string.IsNullOrEmpty(r.premade) && r.personality == p.id) ? own : fallback).Add(list);
             result.Info.Add(own.Count == 0 ? $"Personality '{p.id}' ({p.name}) says the defaults in every slot."
                           : fallback.Count == 0 ? $"Personality '{p.id}' ({p.name}) has its own lines for every slot."
@@ -314,6 +321,8 @@ public static class VoiceChecks
                 result.Errors.Add($"The premade '{id}' has no line of its own for {string.Join(", ", missing)}; a premade speaks only its own lines (the personalities spec's PS3).");
             if (!intents.Contains(ReactionIntent.Lying) && Has(book.slips, _ => true))
                 result.Errors.Add($"The premade '{id}' never lies, so it never slips; its slip row is never said.");
+            if (intents.Contains(ReactionIntent.Lying) && !Has(book.confront, r => r.outcome == ConfrontOutcome.DoubleDown && string.IsNullOrWhiteSpace(r.reason) && string.IsNullOrWhiteSpace(r.lie)))
+                result.Errors.Add($"The premade '{id}' lies, so the desk can ask about a difference it logged, but it has no base DoubleDown reply to a difference (interview.voices.confront; a story beat never confesses, days 7-15 B7).");
         }
     }
 
@@ -355,6 +364,93 @@ public static class VoiceChecks
                 foreach (WaiverPadReply reply in new[] { WaiverPadReply.Signs, WaiverPadReply.Refuses })
                     if (!(book.waiverPad ?? new List<VoiceLine>()).Exists(r => Base(r, reply) && string.IsNullOrEmpty(r.premade) && r.personality == p.id))
                         result.Errors.Add($"Personality '{p.id}' ({p.name}) has no base {reply} line for the waiver pad (blank kinds and era); every personality in the draw signs and refuses in its own words (rule 2).");
+    }
+
+    /// <summary>
+    /// The questions about logged differences (wave 5, lesson 3): the wording's
+    /// rules (Confrontations.Problems) and each prompt's worst-case length;
+    /// the default replies and the voices' confront rows (a voice row names
+    /// one voice, a default none; a known era, a reason of Faults.Reasons, a
+    /// lie kind; a line holding only {value}, {other} and {place} that fits);
+    /// a base default reply (blank reason, lie, kinds and era) for every
+    /// outcome, and every personality in the draw says its own base reply for
+    /// every outcome (the lesson: authored per personality).
+    /// </summary>
+    private static void CheckConfront(VoiceBook book, VoiceCheckInput input, HashSet<string> cast, VoiceCheckResult result)
+    {
+        ConfrontWording wording = input.Confront;
+        result.Errors.AddRange(Confrontations.Problems(wording));
+        List<ConfrontPrompt> prompts = wording != null && wording.prompts != null ? wording.prompts : new List<ConfrontPrompt>();
+        for (int i = 0; i < prompts.Count; i++)
+            if (prompts[i] != null)
+                foreach ((LineText line, string part) in new[] { (prompts[i].line, string.Empty), (prompts[i].then, " (then)") })
+                    if (line != null && !string.IsNullOrWhiteSpace(line.text) && input.MaxLineChars > 0)
+                    {
+                        // {other} is a place for a foreign-origin proof, a value otherwise.
+                        int other = prompts[i].proof == DiscrepancyProof.ForeignOrigin ? input.LongestPlace : input.LongestValue;
+                        string t = line.text;
+                        int length = t.Length
+                            + Interview.WorstCaseLength(t, Interview.ValueToken, input.LongestValue) - t.Length
+                            + Interview.WorstCaseLength(t, Confrontations.OtherToken, other) - t.Length
+                            + Interview.WorstCaseLength(t, Confrontations.CategoryToken, LongestCategoryWord) - t.Length
+                            + Interview.WorstCaseLength(t, Interview.PlaceToken, input.LongestPlace) - t.Length
+                            + Interview.WorstCaseLength(t, Interview.DocumentToken, input.LongestDocument) - t.Length
+                            + Interview.WorstCaseLength(t, Confrontations.OtherDocumentToken, input.LongestDocument) - t.Length;
+                        if (length > input.MaxLineChars)
+                            result.Errors.Add($"interview.confront.prompts row {i + 1}{part} can render {length} characters with the longest fills; the transcript holds at most {input.MaxLineChars} (interview.maxLineChars): split it with its then line.");
+                    }
+
+        CheckConfrontRows(book.confront, "interview.voices.confront", true, cast, input, result);
+        List<VoiceLine> defaults = wording != null && wording.replies != null ? wording.replies : new List<VoiceLine>();
+        CheckConfrontRows(defaults, "interview.confront.replies", false, cast, input, result);
+
+        bool Base(VoiceLine r, ConfrontOutcome outcome) =>
+            r != null && r.outcome == outcome && string.IsNullOrWhiteSpace(r.reason) && string.IsNullOrWhiteSpace(r.lie) && (r.kinds == null || r.kinds.Count == 0)
+            && string.IsNullOrWhiteSpace(r.era) && r.line != null && !string.IsNullOrWhiteSpace(r.line.text);
+        foreach (ConfrontOutcome outcome in (ConfrontOutcome[])Enum.GetValues(typeof(ConfrontOutcome)))
+        {
+            if (!defaults.Exists(r => Base(r, outcome)))
+                result.Errors.Add($"interview.confront.replies has no base row for {outcome} (blank reason, lie, kinds and era): every voice falls back to it.");
+            foreach (Personality p in input.Cast ?? Array.Empty<Personality>())
+                if (p != null && !string.IsNullOrWhiteSpace(p.id) && p.weight > 0f &&
+                    !(book.confront ?? new List<VoiceLine>()).Exists(r => Base(r, outcome) && string.IsNullOrEmpty(r.premade) && r.personality == p.id))
+                    result.Errors.Add($"Personality '{p.id}' ({p.name}) has no base {outcome} reply to a question about a difference (blank reason, lie, kinds and era); every personality in the draw answers in its own voice (wave 5, lesson 3).");
+        }
+    }
+
+    /// <summary>The confront rows of <paramref name="list"/>: voiced (a voice row) or defaults, each checked as CheckConfront says.</summary>
+    private static void CheckConfrontRows(List<VoiceLine> rows, string list, bool voiced, HashSet<string> cast, VoiceCheckInput input, VoiceCheckResult result)
+    {
+        rows = rows ?? new List<VoiceLine>();
+        for (int i = 0; i < rows.Count; i++)
+        {
+            VoiceLine row = rows[i];
+            string at = $"{list} row {i + 1}";
+            if (row == null)
+            {
+                result.Errors.Add($"{at} is empty.");
+                continue;
+            }
+            if (voiced)
+                CheckVoice(row, at, cast, input, result);
+            else if (!string.IsNullOrWhiteSpace(row.personality) || !string.IsNullOrWhiteSpace(row.premade))
+                result.Errors.Add($"{at} names a voice; a default row names none (voices' own rows go in interview.voices.confront).");
+            string owner = voiced ? $"{at} ({Name(row)})" : at;
+            CheckEra(row.era, owner, input, result);
+            if (!Enum.IsDefined(typeof(ConfrontOutcome), row.outcome))
+                result.Errors.Add($"{owner} names an unknown outcome ({string.Join(", ", Enum.GetNames(typeof(ConfrontOutcome)))}).");
+            if (!string.IsNullOrWhiteSpace(row.reason) && Array.IndexOf(Faults.Reasons, row.reason) < 0)
+                result.Errors.Add($"{owner} names the reason '{row.reason}' ({string.Join(", ", Faults.Reasons)}).");
+            if (!string.IsNullOrWhiteSpace(row.lie) && !Enum.IsDefined(typeof(LieKind), row.lie))
+                result.Errors.Add($"{owner} names the lie kind '{row.lie}' ({string.Join(", ", Enum.GetNames(typeof(LieKind)))}).");
+            CheckText(row.line?.text, owner, "a reply to a difference", new[] { Interview.ValueToken, Confrontations.OtherToken, Interview.PlaceToken }, null, input, result);
+            for (int j = 0; j < i; j++)
+                if (rows[j] != null && Same(rows[j], row))
+                {
+                    result.Warnings.Add($"{owner} repeats row {j + 1} in every column.");
+                    break;
+                }
+        }
     }
 
     /// <summary>A base reaction of <paramref name="verdict"/> and <paramref name="intent"/>: no reason, kinds or era.</summary>
@@ -426,7 +522,8 @@ public static class VoiceChecks
         foreach (Match m in Token.Matches(text))
         {
             string token = m.Groups[1].Value;
-            if (token != Interview.PlaceToken && token != Interview.ValueToken && token != Interview.DocumentToken)
+            if (token != Interview.PlaceToken && token != Interview.ValueToken && token != Interview.DocumentToken && token != Confrontations.OtherToken &&
+                token != Confrontations.CategoryToken && token != Confrontations.OtherDocumentToken)
                 result.Errors.Add($"{owner} holds the unknown token {m.Value}.");
             else if (Array.IndexOf(allowed, token) < 0)
                 result.Errors.Add($"{owner} holds {m.Value}, which {noun} cannot fill (only {string.Join(", ", Array.ConvertAll(allowed, Interview.Placeholder))}).");
@@ -437,7 +534,10 @@ public static class VoiceChecks
             int length = text.Length
                 + Interview.WorstCaseLength(text, Interview.PlaceToken, input.LongestPlace) - text.Length
                 + Interview.WorstCaseLength(text, Interview.ValueToken, input.LongestValue) - text.Length
-                + Interview.WorstCaseLength(text, Interview.DocumentToken, input.LongestDocument) - text.Length;
+                + Interview.WorstCaseLength(text, Interview.DocumentToken, input.LongestDocument) - text.Length
+                + Interview.WorstCaseLength(text, Confrontations.OtherToken, Math.Max(input.LongestValue, input.LongestPlace)) - text.Length
+                + Interview.WorstCaseLength(text, Confrontations.CategoryToken, LongestCategoryWord) - text.Length
+                + Interview.WorstCaseLength(text, Confrontations.OtherDocumentToken, input.LongestDocument) - text.Length;
             if (length > input.MaxLineChars)
                 result.Errors.Add($"{owner} can render {length} characters with the longest fills; the transcript holds at most {input.MaxLineChars} (interview.maxLineChars).");
         }
@@ -464,7 +564,7 @@ public static class VoiceChecks
     private static bool Same(VoiceLine a, VoiceLine b) =>
         a.personality == b.personality && a.premade == b.premade && (a.era ?? string.Empty) == (b.era ?? string.Empty) && (a.key ?? string.Empty) == (b.key ?? string.Empty) &&
         a.variant == b.variant && (a.line?.text ?? string.Empty) == (b.line?.text ?? string.Empty) && SameKinds(a.kinds, b.kinds) &&
-        a.verdict == b.verdict && a.intent == b.intent && (a.reason ?? string.Empty) == (b.reason ?? string.Empty) && (a.lie ?? string.Empty) == (b.lie ?? string.Empty) &&
+        a.verdict == b.verdict && a.intent == b.intent && a.outcome == b.outcome && (a.reason ?? string.Empty) == (b.reason ?? string.Empty) && (a.lie ?? string.Empty) == (b.lie ?? string.Empty) &&
         (a.then?.text ?? string.Empty) == (b.then?.text ?? string.Empty);
 
     private static bool SameKinds(List<TravellerKind> a, List<TravellerKind> b)
@@ -495,6 +595,7 @@ public static class VoiceChecks
             "reactions" => book.reactions,
             "slips" => book.slips,
             "waiverPad" => book.waiverPad,
+            "confront" => book.confront,
             _ => book.smallTalk
         }) ?? new List<VoiceLine>();
 }

@@ -259,6 +259,28 @@ public static class Seeds
     /// </summary>
     public static int ForBreakIns(int daySeed) => Mix(daySeed, BreakInSalt);
 
+    /// <summary>Salt for a traveller's return stream ("BACK").</summary>
+    public const int ReturnSalt = 0x4241434B;
+
+    /// <summary>
+    /// Seed for whether and how a denied traveller comes back (wave 5, lesson
+    /// 9; Returns.Plan: the chance, then the story), drawn when the clerk
+    /// denies them. Its own stream, which nothing else draws on, so a return
+    /// moves no other draw of the traveller.
+    /// </summary>
+    public static int ForReturn(int caseSeed) => Mix(caseSeed, ReturnSalt);
+
+    /// <summary>Salt for the day's returning travellers' slots ("RSLT").</summary>
+    public const int ReturnSlotSalt = 0x52534C54;
+
+    /// <summary>
+    /// Seed for the slots the day's returning travellers stand in (wave 5,
+    /// lesson 9; Returns.Slots), drawn after the day's violators are placed,
+    /// apart from every other stream, so a day with no returning traveller
+    /// draws exactly as before.
+    /// </summary>
+    public static int ForReturnSlots(int daySeed) => Mix(daySeed, ReturnSlotSalt);
+
     /// <summary>Where <see cref="OfKey"/> starts ("KEYS"): the value of an empty key.</summary>
     public const int KeyStart = 0x4B455953;
 

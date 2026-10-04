@@ -120,6 +120,12 @@ public sealed class WorldState
     /// <summary>Each world factor's answer as last latched at night, and since which day (WorldPulls.Latch; the morning paper reports a change once). Additive: an older save loads none and reads every factor as the run found it.</summary>
     public List<FactorLead> leads = new();
 
+    /// <summary>The last traveller whose verdict pulled each outcome, and the day (Traces.Record; wave 5, lesson 10: a world-outcome headline names them). Additive: an older save loads none, and its headlines name no one until a verdict is traced.</summary>
+    public List<PullTrace> pullTraces = new();
+
+    /// <summary>The denied travellers who may come back, in denial order (Returns; wave 5, lesson 9), with how their second visit went. Additive: an older save loads none.</summary>
+    public List<ReturningTraveller> returns = new();
+
     /// <summary>The morning papers as printed, one issue per day in day order (the News site's back issues: recorded at the briefing, at most DesktopConfigSO.newsArchiveIssues; an old save loads it empty).</summary>
     public List<NewsIssue> newsArchive = new();
 

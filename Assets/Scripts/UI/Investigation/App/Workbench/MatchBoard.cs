@@ -81,6 +81,9 @@ public sealed class MatchBoard : MonoBehaviour
     /// <summary>Raised when the findings or what is held change (the decision's Deny, the keys' regions).</summary>
     public event Action Changed;
 
+    /// <summary>Raised with each finding newly logged in the findings column, before Changed (a logged difference's question on the traveller wheel; wave 5, lesson 3).</summary>
+    public event Action<Finding> Logged;
+
     /// <summary>The case's findings.</summary>
     public FindingLog Log => _log;
 
@@ -197,7 +200,7 @@ public sealed class MatchBoard : MonoBehaviour
                 Release();
                 return;
             }
-            Record(FindingKind.NothingToCompare, first.Key, first.Title, first.Value, special.Key, special.Title, special.Value, first.Value, What(first), What(special), false);
+            Record(FindingKind.NothingToCompare, first.Key, first.Title, first.Value, special.Key, special.Title, special.Value, first.Value, What(first), What(special), null);
             return;
         }
         if (compare != null && compare.Paired)
@@ -254,7 +257,7 @@ public sealed class MatchBoard : MonoBehaviour
         Discrepancy proof = _case != null ? DiscrepancyLog.Prove(ea, eb, nation, era, traveller) : null;
         FindingKind kind = FindingRules.Classify(ea, eb, proof, nation, era, traveller);
         string subject = FindingsView.What((IsTruth(ea) && !IsTruth(eb) ? b : a).Label);
-        Record(kind, a.Key, a.Label, a.Shown, b.Key, b.Label, b.Shown, subject, FindingsView.What(a.Label), FindingsView.What(b.Label), proof != null);
+        Record(kind, a.Key, a.Label, a.Shown, b.Key, b.Label, b.Shown, subject, FindingsView.What(a.Label), FindingsView.What(b.Label), proof);
         _clearA = a.Key;
         _clearB = b.Key;
     }
@@ -273,7 +276,7 @@ public sealed class MatchBoard : MonoBehaviour
                                                     _case != null && _case.claimedNation != null ? _case.claimedNation.id : null,
                                                     _case != null && _case.claimedEra != null ? _case.claimedEra.id : null));
         string subject = special.Today ? FindingsView.What(value.Label) : special.Value;
-        Record(kind, special.Key, special.Title, special.Value, value.Key, value.Label, value.Shown, subject, What(special), FindingsView.What(value.Label), false);
+        Record(kind, special.Key, special.Title, special.Value, value.Key, value.Label, value.Shown, subject, What(special), FindingsView.What(value.Label), null);
     }
 
     /// <summary>True for a truth source: a book row (a Seal Register seal too) or a record row.</summary>
@@ -282,9 +285,9 @@ public sealed class MatchBoard : MonoBehaviour
     /// <summary>What a held rule or the date is, in a note ("Today's date", "The rule").</summary>
     private static string What(Held special) => UiText.Get(special.Today ? "finding.what.today" : "finding.what.rule");
 
-    /// <summary>A result: the line between the two values, the status line (a note names <paramref name="whatA"/> and <paramref name="whatB"/>) and, for a logged kind, the findings, titled by <paramref name="subject"/> (a pair already logged is only shown again).</summary>
+    /// <summary>A result: the line between the two values, the status line (a note names <paramref name="whatA"/> and <paramref name="whatB"/>) and, for a logged kind, the findings, titled by <paramref name="subject"/> (a pair already logged is only shown again); <paramref name="proof"/> is the deviation the pair proved, or null.</summary>
     private void Record(FindingKind kind, string keyA, string titleA, string valueA, string keyB, string titleB, string valueB, string subject, string whatA,
-                        string whatB, bool proof)
+                        string whatB, Discrepancy proof)
     {
         var finding = new Finding(kind, keyA, keyB, titleA, valueA, titleB, valueB, subject, proof);
         FindingLook look = FindingRules.Look(kind);
@@ -296,9 +299,10 @@ public sealed class MatchBoard : MonoBehaviour
             ShowStatus(FindingLook.Info, UiText.Get("status.already"));
         else
         {
-            ShowStatus(look, UiText.Format(proof ? "status.evidence" : "status.logged", FindingsView.Title(finding)));
+            ShowStatus(look, UiText.Format(finding.Proof ? "status.evidence" : "status.logged", FindingsView.Title(finding)));
             if (findings != null)
                 findings.Show(_log);
+            Logged?.Invoke(finding);
         }
         Changed?.Invoke();
     }

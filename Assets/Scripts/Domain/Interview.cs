@@ -71,6 +71,19 @@ public static class Interview
         return Fill(lines.opener != null ? lines.opener.text : null, HonorificToken, Honorific(gender, lines));
     }
 
+    /// <summary>
+    /// The desk's opener for a traveller back after a denial on
+    /// <paramref name="deniedDay"/> (wave 5, lesson 9): interview.openerReturning
+    /// with {honorific} of <paramref name="gender"/> and {day}; null when it
+    /// is blank (the plain opener then).
+    /// </summary>
+    public static string ReturningOpener(InterviewLines lines, TravellerGender gender, int deniedDay)
+    {
+        string template = lines != null && lines.openerReturning != null ? lines.openerReturning.text : null;
+        return string.IsNullOrWhiteSpace(template) ? null
+            : Fill(Fill(template, HonorificToken, Honorific(gender, lines)), Returns.DeniedDayToken, Returns.Day(deniedDay));
+    }
+
     /// <summary>The missing-form reply of <paramref name="kind"/> asked for <paramref name="request"/> (a form number or a group id, FormRequests.IdOf) for <paramref name="variant"/> (null entries skipped), or null when none is authored.</summary>
     public static LineText MissingFormReply(InterviewLines lines, TravellerKind kind, string request, MissingFormVariant variant)
     {
