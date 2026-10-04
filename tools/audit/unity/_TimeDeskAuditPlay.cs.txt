@@ -39,7 +39,9 @@
 // report, each traveller kind's papers held and wheel, the app's documents
 // (driven as the clerk does on the PC workbench: a shelf chip opens its
 // document on the target side, a step puts its pair up), the two panes and
-// one, the search drawer and its pinned and recent items, each lie kind caught
+// one, the search drawer and its pinned and recent items, each day's first
+// traveller's Citizen Account beside their papers with the guided steps the
+// day shows (ramp_d<day>), each lie kind caught
 // in the findings and on the office strip, each citation reason, and after
 // the transcript's END a
 // shots-only day 7 with the Auto-Feed and Analysis scanners set on the desk);
@@ -511,6 +513,8 @@ public static class _TimeDeskAuditPlay
         CheckRamp(o, c, day, slot);
         if (ShotsOn)
             yield return KindShots(o, c, day);
+        if (ShotsOn && First($"ramp d{day}"))
+            yield return AppShots(o, c, $"ramp_d{day}", AppTab.Records, AppTab.Documents);
 
         if (gatherEvidence)
         {
