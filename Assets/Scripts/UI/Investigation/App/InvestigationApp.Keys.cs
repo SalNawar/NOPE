@@ -193,7 +193,7 @@ public sealed partial class InvestigationApp
             case AppCommand.Step4:
             case AppCommand.Step5:
                 if (guide != null)
-                    guide.Go(CaseGuide.Stages[ShortcutMap.StepPosition(command) - 1]);
+                    guide.GoTo(ShortcutMap.StepPosition(command));
                 Refocus();
                 break;
             case AppCommand.NextStep:

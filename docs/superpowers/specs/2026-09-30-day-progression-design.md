@@ -166,6 +166,15 @@ I audited every choice with a moral or story consequence (report in `SCRATCH/wav
 2. A paper arrives with the procedure that asks for it, and counts as one new thing. Questions arrive with their check and are not counted separately.
 3. There is no stranding fine before the waiver exists (§3).
 4. "Socrates" moves to day 12.
-5. The Citizen Account keeps showing forms on file (waiver number, proof) before those papers are issued. That keeps every random stream stable. **Open**: hide those record rows until the paper is issued?
-6. The Return Order arrives last (day 15). It carries no fault of its own until the paper dates apply to it. **Open**: move it earlier, beside the paper dates on day 14?
+5. The account is still drawn whole (every random stream stays stable), but since 2026-10-05 the Citizen Account shows a form on file only once the form is issued (Saleh: hide them, see §9).
+6. The Return Order arrives last (day 15). It carries no fault of its own until the paper dates apply to it. Saleh, 2026-10-05: it stays on day 15.
 7. The pacing check applies to every day, not only days 1-5.
+
+## 9. On the PC workbench (merged 2026-10-05)
+
+Saleh's screenshot of day 1 showed "Stranding Waiver: not handed over" and "Proof of means: not handed over" on the shelf. The workbench now follows the ramp:
+
+- **The shelf** lists the traveller's papers, and a traveller carries only the forms issued that day (`DayPlanSO.TemplatesOf`). A form not issued yet never appears. A paper issued but not handed over shows "not handed over" only from the day it is issued. On day 1 the shelf holds the Leisure Visa alone.
+- **The Citizen Account** (the traveller's record in Citizen records) shows each Forms on file row only once its form is issued (`AccountRecords.Record`, over `CaseFacts.Issued`). The Transponder rows arrive with the Departure Manifest (day 2), the waiver's on day 4, the proof's on day 5 and the contract's on day 8. On day 1 the group is left out.
+- **The guided steps** show only the steps that some checklist set lists an item for that day (`CaseGuide.StagesOn`). Papers and Decision always show. The Books step first lists an item with the dress on day 7, so days 1-6 show four steps, numbered 1-4 (Ctrl+1…4, "Step 2 of 4"). The "To check" foot already followed the ramp through each step's `fromDay`.
+- Decision: the reference books stay on the shelf from day 1. They are reference, not a check: nothing asks for them before day 7, and hiding them would hide the place lies' answers from a player who looks.

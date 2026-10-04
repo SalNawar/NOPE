@@ -27,7 +27,9 @@
 // 20 cr more; it arrives the next morning. The re-paced days (wave 5 track C,
 // Papers Please lessons 4-6 and D7) are checked on the way: each day's
 // briefing opens with its bulletin (days 1-5 each have one), every traveller
-// carries only the day's issued papers (day 1: the visa alone), every
+// carries only the day's issued papers (day 1: the visa alone) and the PC
+// follows them (the shelf's papers, the Citizen Account's forms on file, the
+// guided steps shown: no Books before day 7), every
 // citation slip names its rule and a value, and every shift report shows
 // tonight's bills and the wallet after them. Home: treat any family member at
 // condition 2+ (the shop step is skipped: Home stocks no upgrade; never the
@@ -506,6 +508,7 @@ public static class _TimeDeskAuditPlay
 
         // The interview: every request, every question (slot 1 also runs its first dialog).
         yield return Interview(o, c, slot == 1);
+        CheckRamp(o, c, day, slot);
         if (ShotsOn)
             yield return KindShots(o, c, day);
 
@@ -680,6 +683,37 @@ public static class _TimeDeskAuditPlay
 
 
     /// <summary>The traveller's record in today's registry (by the registered name).</summary>
+    /// <summary>
+    /// The PC follows the day's ramp (lesson D7): the shelf's papers are the
+    /// traveller's issued ones and no other (no chip for a form not issued
+    /// yet), their Citizen Account lists a form on file only once the form is
+    /// issued, and the guided steps show only those with a check today
+    /// (CaseGuide.StagesOn: no Books before day 7).
+    /// </summary>
+    private static void CheckRamp(Office o, CaseInstance c, int day, int slot)
+    {
+        DayPlanSO plan = RunManager.Instance.GetCurrentDayPlan();
+        var shelf = (ShelfView)Field(o.App, "shelf");
+        List<string> chips = shelf.Items.Where(x => x.Target.Tab == AppTab.Documents).Select(x => x.Label).ToList();
+        Check(chips.Count == c.documents.Count, $"d{day} slot {slot}: the shelf holds the traveller's {c.documents.Count} issued paper(s) and no other [{string.Join(" | ", chips)}]");
+
+        CitizenRecord record = c.account != null ? RecordOf(o, c) : null;
+        if (record != null)
+        {
+            List<string> rows = record.Groups.SelectMany(g => g.Rows).Select(r => r.Label).ToList();
+            bool manifest = plan.Issues(Directives.Manifest), waiver = plan.Issues(Directives.Waiver), proof = Directives.Proofs.Any(plan.Issues);
+            Check(rows.Contains(UiText.Get("records.row.transponderClass")) == manifest && rows.Contains(UiText.Get("records.row.waiver")) == waiver &&
+                  rows.Contains(UiText.Get("records.row.proof")) == proof,
+                  $"d{day} slot {slot}: the Citizen Account lists only the issued forms on file (manifest {manifest}, waiver {waiver}, proof {proof}) [{string.Join(", ", rows)}]");
+        }
+
+        var guide = (CaseGuide)Field(o.App.Guide, "_guide");
+        List<GuideStage> today = CaseGuide.StagesOn((StepSetData)Field(o.App.Guide, "_sets"), day);
+        int pills = o.App.Guide.Pills.Count(p => p != null && p.gameObject.activeSelf);
+        Check(guide.Shown.SequenceEqual(today) && pills == today.Count && (day >= 7 || !today.Contains(GuideStage.Books)),
+              $"d{day} slot {slot}: the guided steps follow the ramp [{string.Join(", ", guide.Shown)}], {pills} pills");
+    }
+
     private static CitizenRecord RecordOf(Office o, CaseInstance c)
     {
         var registry = (CitizenRegistry)Field(Field(o.Ui, "_reference"), "_registry");

@@ -1627,7 +1627,8 @@ public sealed class CaseFactory
     /// <summary>
     /// Builds the agency's citizen master record for a day's visitors: a 2150
     /// citizen's Citizen Account (AccountRecords.Record, traveller types §4.1:
-    /// the art's three groups, found by Citizen ID or name), or one
+    /// the art's three groups, found by Citizen ID or name; its Forms on file
+    /// rows only for the forms issued on the case's day, CaseFacts.Issued), or one
     /// Displacement Registry entry (traveller types §4.2), found by its
     /// Displacement No. or name, a group of rows under UI string labels: Name,
     /// Displacement No., Born, Origin and Incident (evidence of their
@@ -1653,7 +1654,8 @@ public sealed class CaseFactory
             if (inst.account != null)
             {
                 registry.Add(AccountRecords.Record(inst.visitorGivenName, inst.trueBirthDate, origin, inst.account, UiText.Get,
-                                                   inst.isLegendary && inst.legendarySource != null ? inst.legendarySource.recordNote : null));
+                                                   inst.isLegendary && inst.legendarySource != null ? inst.legendarySource.recordNote : null,
+                                                   inst.facts != null ? inst.facts.Issued : null));
                 continue;
             }
 

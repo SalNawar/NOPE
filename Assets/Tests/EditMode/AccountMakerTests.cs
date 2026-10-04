@@ -701,6 +701,25 @@ public class AccountMakerTests
                                   rec.Groups.Select(g => g.Title).ToArray());
     }
 
+    /// <summary>The Forms on file rows follow the day's papers (lesson D7): a form not issued yet has no row, and with none issued the group is left out.</summary>
+    [Test]
+    public void Record_ListsFormsOnFile_OnlyForTheFormsIssued()
+    {
+        List<string> Labels(params string[] issued) =>
+            AccountRecords.Record("Omar", "3 May 2101", "Periclean Athens (Ancient)", Account(), key => key, null, issued)
+                          .Groups.Where(g => g.Title == "records.group.forms").SelectMany(g => g.Rows).Select(r => r.Label).ToList();
+
+        CitizenRecord dayOne = AccountRecords.Record("Omar", "3 May 2101", "Periclean Athens (Ancient)", Account(), key => key, null, new[] { "TC-101" });
+        CollectionAssert.AreEqual(new[] { "records.group.account", "records.group.travel", string.Empty }, dayOne.Groups.Select(g => g.Title).ToArray(),
+                                  "the visa alone: no form on file to show");
+        CollectionAssert.AreEqual(new[] { "records.row.transponder", "records.row.transponderClass" }, Labels("TC-101", "TC-230"), "the manifest brings the transponder rows");
+        CollectionAssert.AreEqual(new[] { "records.row.transponder", "records.row.transponderClass", "records.row.waiver" }, Labels("TC-101", "TC-230", "TC-310"));
+        CollectionAssert.AreEqual(new[] { "records.row.transponder", "records.row.transponderClass", "records.row.waiver", "records.row.proof" },
+                                  Labels("TC-101", "TC-230", "TC-310", "TC-416"), "any of the three proofs brings the proof row");
+        CollectionAssert.AreEqual(new[] { "records.row.transponder", "records.row.transponderClass", "records.row.waiver", "records.row.proof", "records.row.contract" },
+                                  Labels(), "no staged papers: every form");
+    }
+
     /// <summary>A story character's record (days 7-15 B3) shows the premade's own note in the Note row; everyone else's reads none.</summary>
     [Test]
     public void Record_ShowsThePremadesNote()

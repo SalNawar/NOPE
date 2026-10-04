@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The Investigation app's guided steps (the PC workbench spec IA2, IA3; W1:
-/// one step at a time; steps suggest, they never lock): the five step pills
+/// one step at a time; steps suggest, they never lock): the step pills
 /// in the header (Papers, Records, Books, Rules, Decision: the current one
 /// filled with the primary colour, a finished one ticked), the lead over the
 /// work (the step's title; its one sentence is the status line's hint while
@@ -15,7 +15,9 @@ using UnityEngine.UI;
 /// default set until a paper handed over on arrival is read, then the
 /// kind's; progress by id, fed by the façade with the case's events and here
 /// with what the player sees: the Rules or a scanned paper shown while the PC
-/// is looked at), or, with none, once left. Going to a step raises
+/// is looked at), or, with none, once left. The steps follow the day's
+/// ramp (CaseGuide.StagesOn: a step owning no checklist item that day is
+/// hidden, the pills numbered over those shown). Going to a step raises
 /// StageShown (the app puts up its pair of documents). The step hints (the
 /// step's sentence on the status line) show or hide from
 /// Settings and Ctrl+Shift+S, remembered per player (DesktopPreferences.StepsShown).
@@ -56,6 +58,7 @@ public sealed class GuideBar : MonoBehaviour
     [SerializeField] private MonitorScreen screen;
 
     private readonly CaseGuide _guide = new CaseGuide();
+    private List<GuideStage> _dayStages;
     private readonly List<StepState> _states = new List<StepState>();
     private readonly List<int> _copies = new List<int>();
     private IReadOnlyList<StepSpec> _steps = Array.Empty<StepSpec>();
@@ -97,7 +100,8 @@ public sealed class GuideBar : MonoBehaviour
         _day = day;
         _progress = new CaseProgress(papers, questions, books);
         _setName = string.Empty;
-        _guide.Reset();
+        _dayStages = CaseGuide.StagesOn(sets, day);
+        _guide.Reset(_dayStages);
         ResolveSet();
         Redraw();
         StageShown?.Invoke(_guide.Current);
@@ -112,18 +116,25 @@ public sealed class GuideBar : MonoBehaviour
         _setName = string.Empty;
         _steps = Array.Empty<StepSpec>();
         _states.Clear();
-        _guide.Reset();
+        _guide.Reset(_dayStages);
         Redraw();
     }
 
-    /// <summary>Goes to <paramref name="stage"/> (a pill, Ctrl+1…5; any step, at any time) and puts its pair up.</summary>
+    /// <summary>Goes to <paramref name="stage"/> (a pill; any step shown, at any time) and puts its pair up.</summary>
     public void Go(GuideStage stage)
     {
-        if (_progress == null)
+        if (_progress == null || !_guide.IsShown(stage))
             return;
         _guide.Go(stage);
         Redraw();
         StageShown?.Invoke(_guide.Current);
+    }
+
+    /// <summary>Goes to the step shown at <paramref name="position"/> (1-based, Ctrl+1…5: the steps shown today, in order); none past the last.</summary>
+    public void GoTo(int position)
+    {
+        if (position >= 1 && position <= _guide.Count)
+            Go(_guide.Shown[position - 1]);
     }
 
     /// <summary>The next (1) or previous (-1) step (Next, Back, Ctrl+Tab), no further than the ends.</summary>
@@ -258,7 +269,11 @@ public sealed class GuideBar : MonoBehaviour
             GuideStage stage = CaseGuide.Stages[i];
             bool current = caseOn && stage == _guide.Current;
             bool done = caseOn && !current && _guide.IsDone(stage, CaseGuide.Checks(stage, _steps, _states));
-            Pill(pills[i], current, done, caseOn);
+            int number = 0;
+            for (int at = 0; at < _guide.Shown.Count; at++)
+                if (_guide.Shown[at] == stage)
+                    number = at + 1;
+            Pill(pills[i], number, current, done, caseOn);
         }
 
         string key = "guide." + _guide.Current.ToString().ToLowerInvariant();
@@ -272,12 +287,12 @@ public sealed class GuideBar : MonoBehaviour
         if (nextButton != null)
             nextButton.gameObject.SetActive(caseOn && !_guide.IsLast);
         if (nextLabel != null && !_guide.IsLast)
-            nextLabel.text = UiText.Format("guide.next", UiText.Get("guide." + (_guide.Current + 1).ToString().ToLowerInvariant() + ".name"));
+            nextLabel.text = UiText.Format("guide.next", UiText.Get("guide." + _guide.Shown[_guide.Number].ToString().ToLowerInvariant() + ".name"));
         if (progressText != null)
             progressText.text = caseOn ? Progress() : string.Empty;
     }
 
-    /// <summary>"Step 2 of 5 · To check: Class, Transponder" (the current step's checklist items not done yet, by their labels), "… · All checks here done", or the step alone when it owns none.</summary>
+    /// <summary>"Step 2 of 4 · To check: Class, Transponder" (numbered over the steps shown) (the current step's checklist items not done yet, by their labels), "… · All checks here done", or the step alone when it owns none.</summary>
     private string Progress()
     {
         var left = new List<string>();
@@ -296,17 +311,23 @@ public sealed class GuideBar : MonoBehaviour
                                         : UiText.Get(StepSets.LabelKey(state.Id)));
         }
         if (total == 0)
-            return UiText.Format("guide.progress", _guide.Number, CaseGuide.Stages.Count);
+            return UiText.Format("guide.progress", _guide.Number, _guide.Count);
         return left.Count == 0
-            ? UiText.Format("guide.progressDone", _guide.Number, CaseGuide.Stages.Count)
-            : UiText.Format("guide.progressChecks", _guide.Number, CaseGuide.Stages.Count, string.Join(", ", left));
+            ? UiText.Format("guide.progressDone", _guide.Number, _guide.Count)
+            : UiText.Format("guide.progressChecks", _guide.Number, _guide.Count, string.Join(", ", left));
     }
 
-    /// <summary>One pill: its plate while current, its circle (the number, the current number, the tick), its label (muted unless current); inert between travellers.</summary>
-    private static void Pill(Button pill, bool current, bool done, bool caseOn)
+    /// <summary>One pill: hidden when its step is not shown today (<paramref name="number"/> 0), else numbered among those shown, its plate while current, its circle (the number, the current number, the tick), its label (muted unless current); inert between travellers.</summary>
+    private static void Pill(Button pill, int number, bool current, bool done, bool caseOn)
     {
         if (pill == null)
             return;
+        if (pill.gameObject.activeSelf != number > 0)
+            pill.gameObject.SetActive(number > 0);
+        if (number == 0)
+            return;
+        Number(pill.transform, "Circle", number);
+        Number(pill.transform, "CircleCurrent", number);
         pill.interactable = caseOn;
         Show(pill.transform, "Current", current);
         Show(pill.transform, "Circle", !current && !done);
@@ -314,6 +335,18 @@ public sealed class GuideBar : MonoBehaviour
         Show(pill.transform, "CircleDone", done);
         Show(pill.transform, "Label", !current);
         Show(pill.transform, "LabelCurrent", current);
+    }
+
+    /// <summary>A pill's circle reads its step's number among those shown.</summary>
+    private static void Number(Transform pill, string circle, int number)
+    {
+        Transform text = pill.Find(circle + "/Number");
+        if (text != null && text.TryGetComponent(out TMP_Text label))
+        {
+            string value = number.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            if (label.text != value)
+                label.text = value;
+        }
     }
 
     /// <summary>A pill's part on or off.</summary>
