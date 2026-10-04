@@ -137,6 +137,23 @@ public sealed class GameConfigSO : ScriptableObject
     [Min(1)]
     public int maxHistoryNewsPerNight = 3;
 
+    [Header("Recurring faces (wave 5, lesson 9)")]
+    /// <summary>The chance a generated traveller the clerk denies comes back on a later day, same name and face (Returns.Plan; a premade's returns are the day plans'; a traveller comes back once at most; days[].returns caps a day's returning travellers).</summary>
+    [Range(0f, 1f)]
+    public float returnChance = 0.4f;
+
+    /// <summary>The fewest days after the denial a traveller may come back (1: the next day).</summary>
+    [Min(1)]
+    public int returnAfterDaysMin = 1;
+
+    /// <summary>The most days after the denial a traveller may come back; they give up after it (read as at least returnAfterDaysMin).</summary>
+    [Min(1)]
+    public int returnAfterDaysMax = 3;
+
+    /// <summary>The share of returning travellers who come back with corrected papers (honest this time); the rest come back with a new story (every roll made again).</summary>
+    [Range(0f, 1f)]
+    public float returnCorrectedChance = 0.5f;
+
     [Header("World (the endings spec §4, §8.2)")]
     /// <summary>The "as you found it" outcome's head start on every factor answered by pulls: the world's inertia (WorldPulls.Lead).</summary>
     [Min(0f)]
@@ -251,5 +268,7 @@ public sealed class GameConfigSO : ScriptableObject
             Debug.LogWarning($"[GameConfigSO] '{name}': carryCategory {carryCategory} is not a category history may edit, so carries would silently never record.", this);
         if (leaderKeepFloor > leaderFloor)
             Debug.LogWarning($"[GameConfigSO] '{name}': leaderKeepFloor {leaderKeepFloor} is above leaderFloor {leaderFloor} and counts as the floor (no hysteresis at the floor).", this);
+        if (returnAfterDaysMax < returnAfterDaysMin)
+            Debug.LogWarning($"[GameConfigSO] '{name}': returnAfterDaysMax {returnAfterDaysMax} is below returnAfterDaysMin {returnAfterDaysMin}, so a denied traveller may come back only on the first day of the window.", this);
     }
 }

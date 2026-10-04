@@ -99,4 +99,15 @@ public class PersonalitiesTests
         Assert.IsNull(grand.StrandingTilt);
         Assert.IsNull(P("sunny").StrandingTilt, "blank: no tilt");
     }
+
+    /// <summary>Wave 5, lesson 3: the chance a lying traveller cracks when the desk asks about a logged difference is a chance from 0 to 1.</summary>
+    [Test]
+    public void Problems_TheConfessChance()
+    {
+        Personality chatty = P("chatty");
+        chatty.confess = 1f;
+        CollectionAssert.IsEmpty(Personalities.Problems(new List<Personality> { chatty }));
+        chatty.confess = -0.2f;
+        StringAssert.Contains("'chatty' has a confess chance of -0.2; it is a chance from 0 to 1.", Personalities.Problems(new List<Personality> { chatty }).Single());
+    }
 }

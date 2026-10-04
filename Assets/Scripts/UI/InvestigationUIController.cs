@@ -194,7 +194,10 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (compareController != null)
             compareController.PairCompared += StepsCompared;
         if (Board != null)
+        {
             Board.Changed += RefreshDecision;
+            Board.Logged += Confront;
+        }
 
         if (stampTray != null)
         {
@@ -270,7 +273,10 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (compareController != null)
             compareController.PairCompared -= StepsCompared;
         if (Board != null)
+        {
             Board.Changed -= RefreshDecision;
+            Board.Logged -= Confront;
+        }
         if (_stampTrayListening != null)
         {
             _stampTrayListening.Decided -= Decide;
@@ -347,6 +353,13 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (acceptButton != null) acceptButton.interactable = on;
         if (denyButton != null) denyButton.interactable = on && Board != null && Board.Log.HasDifference;
     }
+
+    /// <summary>
+    /// A finding the workbench just logged (MatchBoard.Logged; wave 5, lesson
+    /// 3): when it is evidence of a difference (Confrontations.About), the
+    /// traveller wheel gains its question.
+    /// </summary>
+    private void Confront(Finding finding) => _interview.Confront(Confrontations.About(finding));
 
     /// <summary>
     /// A case on the desk: the app's title names the traveller (no claim is

@@ -56,6 +56,7 @@ public class SeedsTests
         { "faults", Seeds.ForFaults },
         { "personality", Seeds.ForPersonality },
         { "waiverSign", Seeds.ForWaiverSign },
+        { "return", Seeds.ForReturn },
     };
 
     [TestCase("lie")]
@@ -67,6 +68,7 @@ public class SeedsTests
     [TestCase("faults")]
     [TestCase("personality")]
     [TestCase("waiverSign")]
+    [TestCase("return")]
     public void TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream(string name)
     {
         Assert.AreEqual(TravellerStreams.Count, typeof(SeedsTests).GetMethod(nameof(TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream))
@@ -121,7 +123,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt, Seeds.StrandingFateSalt, Seeds.WaiverSignSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt, Seeds.StrandingFateSalt, Seeds.WaiverSignSalt, Seeds.ReturnSalt, Seeds.ReturnSlotSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -178,6 +180,18 @@ public class SeedsTests
         int caseSeed = Seeds.ForCase(Seeds.Day(12345, 7), 5);
         CollectionAssert.AreNotEqual(TenDraws(Seeds.ForLooks(caseSeed)), TenDraws(Seeds.ForPremadeLook("pell")), "apart from the slot's own look stream");
         Assert.AreEqual(Seeds.ForPremadeLook(null), Seeds.ForPremadeLook(string.Empty), "a missing id reads blank");
+    }
+
+    /// <summary>Wave 5, lesson 9: a denied traveller's return is their own stream ("BACK"), the day's returning travellers' slots the day's own ("RSLT"), apart from every other stream, so a day with none draws as before.</summary>
+    [Test]
+    public void ReturnStreams_ArePinned_AndTheSlotsTheDaysOwn()
+    {
+        Assert.AreEqual(0x4241434B, Seeds.ReturnSalt, "\"BACK\"");
+        Assert.AreEqual(0x52534C54, Seeds.ReturnSlotSalt, "\"RSLT\"");
+        int daySeed = Seeds.Day(12345, 2);
+        Assert.AreEqual(Seeds.Mix(daySeed, Seeds.ReturnSlotSalt), Seeds.ForReturnSlots(daySeed));
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "returnSlots"), Seeds.ForReturnSlots(daySeed));
+        CollectionAssert.AllItemsAreUnique(Enumerable.Range(1, 30).Select(day => Seeds.ForReturnSlots(Seeds.Day(12345, day))).ToList(), "each day its own slots");
     }
 
     /// <summary>The personality stream's salt is "PRSN" (the personalities spec's PS2).</summary>
@@ -338,6 +352,8 @@ public class SeedsTests
             streams.Add(Seeds.ForStrandings(daySeed));
         if (except != "fates")
             streams.Add(Seeds.ForStrandingFates(daySeed));
+        if (except != "returnSlots")
+            streams.Add(Seeds.ForReturnSlots(daySeed));
         foreach (int caseSeed in Enumerable.Range(1, 20).Select(slotIndex => Seeds.ForCase(daySeed, slotIndex)))
         {
             streams.Add(caseSeed);

@@ -120,7 +120,9 @@ public static class TimelineService
     /// Order: dominance (news only for tomorrow's places) -> tier effects ->
     /// the timeline leader -> triggers (history rules latch here, and their
     /// pulls land) -> the world's answers (WorldOutcomeService.Latch) -> carries ->
-    /// today's panics -> the debt line -> expiry -> tomorrow package.
+    /// today's panics -> today's strandings -> the returned travellers' desk
+    /// lines (Returns.Lines; wave 5, lesson 9) -> the debt line -> expiry ->
+    /// tomorrow package.
     /// </summary>
     public static void NightlyResolve(WorldState world, ContentLibrarySO lib, GameConfigSO config)
     {
@@ -144,6 +146,7 @@ public static class TimelineService
         HistoryService.PromoteCarries(world, lib, config, tomorrow, news, historyLines);
         HistoryService.ReportPanics(world, lib, news);
         HistoryService.ReportStrandings(world, news);
+        desk.AddRange(Returns.Lines(world.returns, world.day, lib.News.returnedAccepted, lib.News.returnedDenied));
         AddDebtLine(world, lib, tomorrow, news);
         ExpireEffects(world, tomorrow);
         BuildTomorrowPackage(world, lib, news, desk);

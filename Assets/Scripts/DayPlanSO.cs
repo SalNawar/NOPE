@@ -106,6 +106,13 @@ public sealed class DayPlanSO : ScriptableObject
     [SerializeField, Range(0f, 1f)] private float slipChance;
 
     /// <summary>
+    /// The most denied travellers who may come back today (wave 5, lesson 9;
+    /// Returns.Due; 0: none). Written by Tools > TimeDesk > Generate World
+    /// from world_source.json days[].returns.
+    /// </summary>
+    [SerializeField, Min(0)] private int returnsMax;
+
+    /// <summary>
     /// The lies enabled today (traveller types §6.1; a traveller draws among
     /// those that fit their kind, LieKinds.For, on the lie roll). Written by
     /// Tools > TimeDesk > Generate World from world_source.json days[].lies.
@@ -204,6 +211,9 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Chance per generated liar of a slip today (T9).</summary>
     public float SlipChance => slipChance;
+
+    /// <summary>The most denied travellers who may come back today (wave 5, lesson 9).</summary>
+    public int ReturnsMax => returnsMax;
 
     /// <summary>The lies enabled today, in authored order (empty when unset).</summary>
     public IReadOnlyList<LieKind> EnabledLies => lieKinds ?? Array.Empty<LieKind>();

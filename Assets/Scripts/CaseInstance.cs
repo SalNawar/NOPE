@@ -59,6 +59,15 @@ public sealed class CaseInstance
     /// <summary>Display name for the visitor (given name + role suffix).</summary>
     public string visitorDisplayName;
 
+    /// <summary>The slot's case seed (Seeds.ForCase): a denied traveller's return is drawn on Seeds.ForReturn of it, and their return reseeds their look and account streams with it (wave 5, lesson 9).</summary>
+    public int caseSeed;
+
+    /// <summary>The chance this liar cracks when the desk asks about a logged difference: their personality's confess (Confrontations.Outcome; wave 5, lesson 3); 0 without one.</summary>
+    public float confess;
+
+    /// <summary>A returning traveller's record (WorldState.returns: who they were, when they were denied, what they come back with); null on a first visit (wave 5, lesson 9).</summary>
+    public ReturningTraveller returning;
+
     /// <summary>The registered given name (a liar's cover name; citizen-records lookup key): from the claimed place's names, or for a 2150 citizen the Future places' lists together (traveller types K4).</summary>
     public string visitorGivenName;
 

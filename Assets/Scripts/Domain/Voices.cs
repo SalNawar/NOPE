@@ -42,8 +42,11 @@ public sealed class VoiceLine
     /// <summary>A reaction's fault reason (Faults.Reasons: forged, smuggled, closed, panic...); blank: any.</summary>
     public string reason = string.Empty;
 
-    /// <summary>A slip's lie kind (a LieKind's name); blank: any (the personalities spec's T10).</summary>
+    /// <summary>A slip's lie kind (a LieKind's name); blank: any (the personalities spec's T10). A reply to a question about a difference may name one too.</summary>
     public string lie = string.Empty;
+
+    /// <summary>A reply to the desk's question about a logged difference: how the traveller answers (Confrontations; wave 5, lesson 3). Its row may also name a fault reason and a lie kind.</summary>
+    public ConfrontOutcome outcome;
 
     /// <summary>The line ("interview.voices.{list}.{voice}.{n}"), with the slot's tokens.</summary>
     public LineText line = new LineText();
@@ -82,6 +85,9 @@ public sealed class VoiceBook
 
     /// <summary>The answer to the desk's waiver pad, by reply (the row's key: a WaiverPadReply's name; {place}; the endings and strandings spec §7.3).</summary>
     public List<VoiceLine> waiverPad = new List<VoiceLine>();
+
+    /// <summary>The reply to the desk's question about a logged difference, by outcome and optionally a fault reason or a lie kind ({value}, {other}, {place}; wave 5, lesson 3).</summary>
+    public List<VoiceLine> confront = new List<VoiceLine>();
 }
 
 /// <summary>How small talk picks its source (world_source.json interview.smallTalkWeights; the personalities spec's V5): the personality's lines, the home's, the kind's.</summary>
@@ -175,6 +181,12 @@ public static class VoiceKeys
 
     /// <summary>The answer to the waiver pad with <paramref name="reply"/>.</summary>
     public static string WaiverPad(WaiverPadReply reply) => "waiverpad:" + reply;
+
+    /// <summary>The reply to the question about a difference in <paramref name="category"/> (the line's pick).</summary>
+    public static string Confront(ClueCategory category) => "confront:" + category;
+
+    /// <summary>Whether a liar cracks over a difference in <paramref name="category"/> (Confrontations.Outcome: a value, never a draw).</summary>
+    public static string ConfrontRoll(ClueCategory category) => "confront:roll:" + category;
 }
 
 /// <summary>
@@ -342,6 +354,40 @@ public static class Voices
         string name = reply.ToString();
         int Key(VoiceLine r) => r.key == name ? 0 : ContextMatch.NoMatch;
         return Row(Pool(Book(lines).waiverPad, voice, context, Key), Defaults(lines?.waiverPad?.replies, context, Key), voice, VoiceKeys.WaiverPad(reply))?.line;
+    }
+
+    /// <summary>
+    /// The traveller's reply to the desk's question about a logged difference
+    /// in <paramref name="category"/> (wave 5, lesson 3): the voice's confront
+    /// rows of <paramref name="outcome"/> (a row naming the case's fault
+    /// <paramref name="reason"/> or the traveller's <paramref name="lie"/> kind
+    /// scores 4 for each; a row naming another never matches), else the
+    /// defaults (interview.confront.replies) the same way; one row as a value
+    /// of "confront:{category}". Null when neither has one.
+    /// </summary>
+    public static LineText Confront(InterviewLines lines, Voice voice, VoiceContext context, ConfrontOutcome outcome, string reason, LieKind? lie, ClueCategory category)
+    {
+        string lieName = lie.HasValue ? lie.Value.ToString() : string.Empty;
+        int Key(VoiceLine r)
+        {
+            if (r.outcome != outcome)
+                return ContextMatch.NoMatch;
+            int score = 0;
+            if (!string.IsNullOrEmpty(r.reason))
+            {
+                if (r.reason != reason)
+                    return ContextMatch.NoMatch;
+                score += NamedKeyScore;
+            }
+            if (!string.IsNullOrEmpty(r.lie))
+            {
+                if (r.lie != lieName)
+                    return ContextMatch.NoMatch;
+                score += NamedKeyScore;
+            }
+            return score;
+        }
+        return Row(Pool(Book(lines).confront, voice, context, Key), Defaults(lines?.confront?.replies, context, Key), voice, VoiceKeys.Confront(category))?.line;
     }
 
     /// <summary>One row of the voice's pool, else of the defaults' pool, as a value of <paramref name="slotKey"/>; null when both are empty.</summary>

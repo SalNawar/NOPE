@@ -160,6 +160,12 @@ public sealed class Discrepancy
     /// <summary>Where the tell was stated: DocumentField (papers), Answer (the traveller said it) or Appearance (the traveller wears it).</summary>
     public EvidenceKind source;
 
+    /// <summary>The paper the stated value is printed on, by its index in the case (a DocumentField statement; the first paper of a cross proof); -1 for a spoken or worn statement. Added for the wheel's question about a logged difference (Confrontations), which names the paper; nothing in the proof reads it.</summary>
+    public int statementDocument = -1;
+
+    /// <summary>A cross proof's other paper, by its index in the case; -1 for every other proof. Read only by the wheel's question (Confrontations).</summary>
+    public int otherDocument = -1;
+
     /// <summary>The UI string key of this deviation's report line (ReportKeyFor).</summary>
     public string ReportKey => ReportKeyFor(provedBy, source);
 
@@ -299,7 +305,8 @@ public sealed class DiscrepancyLog
                 documentValue = statement.value,
                 expectedValue = truth.value,
                 provedBy = DiscrepancyProof.ClaimMismatch,
-                source = statement.kind
+                source = statement.kind,
+                statementDocument = PaperOf(statement)
             };
         }
 
@@ -312,7 +319,8 @@ public sealed class DiscrepancyLog
                 documentValue = statement.value,
                 actualOrigin = truth.entryOriginLabel,
                 provedBy = DiscrepancyProof.ForeignOrigin,
-                source = statement.kind
+                source = statement.kind,
+                statementDocument = PaperOf(statement)
             };
         }
 
@@ -352,7 +360,9 @@ public sealed class DiscrepancyLog
             documentValue = first.value,
             expectedValue = second.value,
             provedBy = DiscrepancyProof.CrossMismatch,
-            source = EvidenceKind.DocumentField
+            source = EvidenceKind.DocumentField,
+            statementDocument = first.document,
+            otherDocument = second.document
         };
     }
 
@@ -376,9 +386,14 @@ public sealed class DiscrepancyLog
             documentValue = statement.value,
             expectedValue = record.value,
             provedBy = DiscrepancyProof.RecordMismatch,
-            source = statement.kind
+            source = statement.kind,
+            statementDocument = PaperOf(statement)
         };
     }
+
+    /// <summary>The paper a statement is printed on (a document field's index in the case), or -1 for a spoken or worn statement or an unknown paper.</summary>
+    private static int PaperOf(CompareEvidence statement) =>
+        statement.kind == EvidenceKind.DocumentField && statement.document >= 0 ? statement.document : -1;
 
     /// <summary>
     /// Documents a proof. False, with nothing added, when the proof is null or

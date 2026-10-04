@@ -292,6 +292,9 @@ MonoBehaviour:
     openerLegendary:
       id: interview.openerLegendary
       text: 'Priority arrival: {name}.'
+    openerReturning:
+      id: interview.openerReturning
+      text: Back again, {honorific}? You stood at this window on day {day}.
     claims:
     - kind: 0
       line:
@@ -438,7 +441,7 @@ MonoBehaviour:
       reply:
         id: interview.requests.speak_up.reply
         text: Sorry. Is this better?
-    menuCapacity: 8
+    menuCapacity: 9
     smallTalkWeights:
       personality: 1
       home: 1
@@ -454,6 +457,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: 
+      outcome: 0
       line:
         id: interview.kindSmallTalk.1
         text: We do three eras a year. The children prefer the ones with castles.
@@ -470,6 +474,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: 
+      outcome: 0
       line:
         id: interview.kindSmallTalk.2
         text: Two years of saving, and the credit company paid the rest. So kind
@@ -487,6 +492,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: 
+      outcome: 0
       line:
         id: interview.kindSmallTalk.3
         text: They say the past has fresh air. And fourteen-hour shifts.
@@ -503,6 +509,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: 
+      outcome: 0
       line:
         id: interview.kindSmallTalk.4
         text: Everything in this century hums. Even the walls.
@@ -521,6 +528,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.chatty.1
           text: '{place}! Our anniversary. Well, mine. He left. Long story!'
@@ -537,6 +545,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.chatty.2
           text: Home to {place}. My goat's been alone for days. Or centuries?
@@ -553,6 +562,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.curt.1
           text: '{place}. Leisure. Go.'
@@ -569,6 +579,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.curt.2
           text: '{place}. Home. Now.'
@@ -585,6 +596,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.anxious.1
           text: '{place}, please. Is it safe? They said it''s safe. It''s safe?'
@@ -601,6 +613,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.sunny.1
           text: Debt Relief to {place}! A fresh start! Like the brochure!
@@ -617,6 +630,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.grand.1
           text: '{place}. Somewhere with a view, and a better class of peasant.'
@@ -633,6 +647,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.grand.2
           text: Return me to {place} at once. I was somebody there.
@@ -649,6 +664,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.stickler.1
           text: One leisure departure to {place}, as the notice words it.
@@ -665,6 +681,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.glum.1
           text: Debt Relief to {place}. It's all in the contract. So am I.
@@ -681,6 +698,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.senenmut.1
           text: Home to {place}. The Pharaoh's temple will not finish itself.
@@ -697,6 +715,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.socrates.1
           text: 'Send me home to {place}. But first: what is a home?'
@@ -713,6 +732,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.chatty.3
           text: Debt Relief to {place}! Mum did it, Gran did it. Tradition!
@@ -729,6 +749,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.curt.3
           text: '{place}. Debt Relief. Contract''s signed.'
@@ -745,6 +766,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.anxious.2
           text: Debt Relief to {place}. It's safe. The small print says so.
@@ -761,6 +783,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.anxious.3
           text: Home to {place}? Now? Is it still there? Say it's there.
@@ -777,6 +800,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.sunny.2
           text: '{place}! Two weeks of sun and history! I bought the hat!'
@@ -793,6 +817,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.sunny.3
           text: Home to {place}! What an adventure! Can't wait to tell everyone!
@@ -809,6 +834,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.grand.3
           text: '{place}, under contract. A temporary arrangement, naturally.'
@@ -825,6 +851,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.stickler.2
           text: Debt Relief to {place}, per clause one. I've read the rest.
@@ -841,6 +868,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.stickler.3
           text: Return to {place}, per the displacement regulations.
@@ -857,6 +885,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.glum.2
           text: '{place}. A holiday. Apparently I''m owed one.'
@@ -873,6 +902,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.glum.3
           text: Home to {place}. If it's still there. Things usually aren't.
@@ -889,6 +919,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.aspasia.1
           text: Home to {place}, please. There are speeches to write.
@@ -905,6 +936,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.banzhao.1
           text: Home to {place}, please. The history will not finish itself.
@@ -921,6 +953,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.arib.1
           text: Home to {place}, please. The court will want a new song.
@@ -937,6 +970,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.khwarizmi.1
           text: Home to {place}, please. I left an equation unbalanced.
@@ -953,6 +987,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.gutenberg.1
           text: Home to {place}. Quickly. I have letters to set.
@@ -969,6 +1004,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.leonardo.1
           text: Home to {place}, please. I have a very large horse to finish.
@@ -985,6 +1021,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.lanyer.1
           text: Home to {place}, please. I have a book to see through the press.
@@ -1001,6 +1038,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.gallerani.1
           text: Home to {place}, please. The court will wonder where I went.
@@ -1017,6 +1055,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.tahtawi.1
           text: Home to {place}, please. A school and a book are waiting.
@@ -1033,6 +1072,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.kulthum.1
           text: Home to {place}, please. It is almost Thursday.
@@ -1049,6 +1089,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.malaika.1
           text: Home to {place}, please. I left a poem without its final line.
@@ -1065,6 +1106,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.sayyab.1
           text: Home to {place}, please. The rain will not wait for me.
@@ -1081,6 +1123,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.elytis.1
           text: Home to {place}, please. The light there needs a witness.
@@ -1097,6 +1140,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.fellini.1
           text: Home to {place}, please. My actors are standing in a fountain.
@@ -1113,6 +1157,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.hezehui.1
           text: Home to {place}, please. My counters will not read themselves.
@@ -1129,6 +1174,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.toyoda.1
           text: Home to {place}, please. My loom has a problem only I can hear.
@@ -1145,6 +1191,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.turing.1
           text: Home to {place}, please. I have a machine to ask a question.
@@ -1161,6 +1208,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.meitner.1
           text: Home to {place}, please. My colleagues are wrong again.
@@ -1177,6 +1225,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.ada.1
           text: Home to {place}, please! An engine needs my notes!
@@ -1193,6 +1242,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.pell.1
           text: One honeymoon to {place}, please! Just me and the brochure!
@@ -1209,6 +1259,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.ines.1
           text: Debt Relief to {place}. Never done this from this side.
@@ -1225,6 +1276,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.rook.1
           text: '{place}, under contract. The best the mills ever wrote.'
@@ -1241,6 +1293,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.hollis.1
           text: Debt Relief to {place}. The colliery. It's still open?
@@ -1257,6 +1310,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.claims.auditor.1
           text: One Premium leisure departure to {place}, as worded.
@@ -1274,6 +1328,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.curt.1
           text: Here.
@@ -1290,6 +1345,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.stickler.1
           text: Face up, top edge first, as the sign above you requires.
@@ -1306,6 +1362,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.chatty.1
           text: Here you go! Sorry about the crease, I sat on it. Twice.
@@ -1322,6 +1379,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.anxious.1
           text: Here. Is it the right one? It's the right one. Is it?
@@ -1338,6 +1396,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.sunny.1
           text: Here you go! Isn't paperwork fun? Everything in its box!
@@ -1354,6 +1413,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.grand.1
           text: Take it. Mind the fingerprints; they're mine.
@@ -1370,6 +1430,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.glum.1
           text: Here. It's probably wrong.
@@ -1386,6 +1447,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.senenmut.1
           text: 'Here. Handle it like a plan: by the edges, with respect.'
@@ -1402,6 +1464,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.socrates.1
           text: 'Take it. But ask yourself first: what is a paper?'
@@ -1418,6 +1481,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.aspasia.1
           text: Here. Read it aloud, if you like. Everything sounds better aloud.
@@ -1434,6 +1498,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.banzhao.1
           text: Here. Every record deserves care. Even this one.
@@ -1450,6 +1515,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.arib.1
           text: Here. Take it gently, as you would a lute.
@@ -1466,6 +1532,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.khwarizmi.1
           text: Here. I checked each figure. Twice, and then by another method.
@@ -1482,6 +1549,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.gutenberg.1
           text: Here. Careful. Paper matters. More than people think.
@@ -1498,6 +1566,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.leonardo.1
           text: Here. Forgive the drawings in the margin. I cannot help it.
@@ -1514,6 +1583,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.lanyer.1
           text: Here. Mind the pages; they are my own verse, in a way.
@@ -1530,6 +1600,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.gallerani.1
           text: Here. Please don't smudge it. I was painted once; I know about smudges.
@@ -1546,6 +1617,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.tahtawi.1
           text: Here. I have translated worse forms than this. Much worse.
@@ -1562,6 +1634,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.kulthum.1
           text: Here. Take it carefully. People queue for my signature.
@@ -1578,6 +1651,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.malaika.1
           text: Here. Your forms rhyme too much. Everything in boxes.
@@ -1594,6 +1668,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.sayyab.1
           text: Here. Forgive it; it has been rained on in my thoughts.
@@ -1610,6 +1685,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.elytis.1
           text: Here. Hold it to the light. Everything is better in light.
@@ -1626,6 +1702,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.fellini.1
           text: Here. Like a script. Please do not change the ending.
@@ -1642,6 +1719,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.hezehui.1
           text: Here. I measured the margins. They are even.
@@ -1658,6 +1736,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.toyoda.1
           text: Here. Folded along the grain.
@@ -1674,6 +1753,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.turing.1
           text: Here. The procedure seems quite mechanical. I like that.
@@ -1690,6 +1770,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.meitner.1
           text: Here. Signed, as ever, with my full title.
@@ -1706,6 +1787,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.ada.1
           text: Here! In my own hand! I do love a form. So many little boxes!
@@ -1722,6 +1804,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.pell.1
           text: Here you go! I laminated it! Well, I meant to!
@@ -1738,6 +1821,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.ines.1
           text: Here. You know the drill. So did I.
@@ -1754,6 +1838,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.rook.1
           text: Here. Read it slowly. Or quickly. Whatever suits a busy clerk.
@@ -1770,6 +1855,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.hollis.1
           text: Here. Is it all there? I counted twice. Three times.
@@ -1786,6 +1872,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.handOver.auditor.1
           text: Here. Take your time. I always do.
@@ -1803,6 +1890,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.chatty.1
           text: No waiver, it's the Premium unit! My cousin went Economy once. We
@@ -1820,6 +1908,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.anxious.1
           text: A waiver? Do I need one? It's Premium. Premium never fails. Does
@@ -1837,6 +1926,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sunny.1
           text: Proof of means? I have a smile and a leaflet! Attendance required!
@@ -1853,6 +1943,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.grand.1
           text: A waiver? My transponder has people for that.
@@ -1869,6 +1960,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.stickler.1
           text: Premium units are exempt from the {document}. It's on the back of
@@ -1886,6 +1978,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.chatty.2
           text: Proof of means? Look at my shoes. They're on a payment plan, but
@@ -1903,6 +1996,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.chatty.3
           text: Means? Debt Relief is paying! That's the whole point, isn't it? Isn't
@@ -1920,6 +2014,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.chatty.4
           text: A manifest? I had a basket once. The goat ate it.
@@ -1936,6 +2031,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.chatty.5
           text: A waiver? Nobody waived anything. The sky just opened. Rude, honestly.
@@ -1952,6 +2048,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.chatty.6
           text: Means? I have a goat. Well, I had a goat. Back home. Long story!
@@ -1968,6 +2065,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.chatty.7
           text: Oh, the waiver! I meant to, then my sister rang, and then...
@@ -1984,6 +2082,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.chatty.8
           text: Proof? I had it this morning. Then I had breakfast. Different pocket?
@@ -2000,6 +2099,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.chatty.9
           text: Intake? No, no, I'm going. Out. Away. Big difference!
@@ -2016,6 +2116,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.chatty.10
           text: A return order? I've got a return booking! Is that one of those?
@@ -2033,6 +2134,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.curt.1
           text: Premium. No.
@@ -2049,6 +2151,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.curt.2
           text: I pay. Proof enough.
@@ -2065,6 +2168,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.curt.3
           text: Relief pays. Next.
@@ -2081,6 +2185,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.curt.4
           text: Manifest. Didn't pack. Sky opened.
@@ -2097,6 +2202,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.curt.5
           text: Waiver. Never signed one. Never asked.
@@ -2113,6 +2219,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.curt.6
           text: Means. Pockets. That's it.
@@ -2129,6 +2236,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.curt.7
           text: Forgot it. Next question.
@@ -2145,6 +2253,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.curt.8
           text: Left it at home. Move on.
@@ -2161,6 +2270,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.curt.9
           text: Leaving. Not arriving.
@@ -2177,6 +2287,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.curt.10
           text: Got a return booking. Same thing.
@@ -2193,6 +2304,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.anxious.2
           text: Proof of means? Do Premiums need one? Nobody told me. Did they tell
@@ -2210,6 +2322,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.anxious.3
           text: Means? Debt Relief pays. They said. Did they say? I'm sure they said.
@@ -2226,6 +2339,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.anxious.4
           text: A manifest? Was I meant to pack? Nobody said the sky packs you.
@@ -2242,6 +2356,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.anxious.5
           text: A waiver? Did I sign something? I don't remember signing. Is that
@@ -2259,6 +2374,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.anxious.6
           text: Means? I have a spoon. It was in my pocket. Is a spoon enough?
@@ -2275,6 +2391,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.anxious.7
           text: The waiver. Oh no. Oh no. It's on the kitchen table. Isn't it.
@@ -2291,6 +2408,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.anxious.8
           text: Proof? I had it. I had it! Did I have it?
@@ -2307,6 +2425,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.anxious.9
           text: An intake declaration? Am I arriving? I thought I was leaving. Am
@@ -2324,6 +2443,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.anxious.10
           text: A return order? I have a return booking. Is that worse? Is it better?
@@ -2340,6 +2460,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sunny.2
           text: 'A waiver? Oh, it''s Premium! Like the advert: travel without a care!'
@@ -2356,6 +2477,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sunny.3
           text: Proof of means? I have the means to be happy! And a card!
@@ -2372,6 +2494,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sunny.4
           text: Means? Debt Relief pays! That's the fresh start part!
@@ -2388,6 +2511,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sunny.5
           text: A manifest? I came with nothing! Travelling light! Very modern!
@@ -2404,6 +2528,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sunny.6
           text: A waiver? I never waive anything! I say yes to everything!
@@ -2420,6 +2545,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sunny.7
           text: Oops! Left it at home! Home's lovely, though!
@@ -2436,6 +2562,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sunny.8
           text: Oh! I must have left it! Silly me! Silly, happy me!
@@ -2452,6 +2579,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sunny.9
           text: An intake declaration? I'm going out, not in! Out is the fun way!
@@ -2468,6 +2596,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sunny.10
           text: A return order? I've got a return booking! Round trip! The best kind!
@@ -2484,6 +2613,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.grand.2
           text: Proof of means? My means have means.
@@ -2500,6 +2630,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.grand.3
           text: Means? The Relief is paying. I allowed it.
@@ -2516,6 +2647,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.grand.4
           text: A manifest? I travel with staff. The staff did not come.
@@ -2532,6 +2664,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.grand.5
           text: A waiver? I waive nothing. I am waved through.
@@ -2548,6 +2681,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.grand.6
           text: Means? At home I have a house with two doors. Two.
@@ -2564,6 +2698,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.grand.7
           text: A waiver? My secretary handles those. I am between secretaries.
@@ -2580,6 +2715,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.grand.8
           text: Proof? I left it with my other coat.
@@ -2596,6 +2732,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.grand.9
           text: An intake declaration? I don't arrive. I make an entrance, and this
@@ -2613,6 +2750,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.grand.10
           text: A return order? I shall return when I choose. I have a booking for
@@ -2630,6 +2768,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.stickler.2
           text: Premium units are exempt from proof of means. Page four, footnote
@@ -2647,6 +2786,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.stickler.3
           text: A labourer's means are the Relief's, not mine. It's in the leaflet.
@@ -2663,6 +2803,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.stickler.4
           text: The displaced are not required to carry a manifest. I checked. Twice.
@@ -2679,6 +2820,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.stickler.5
           text: 'No waiver: none was offered at the time of displacement. Note that.'
@@ -2695,6 +2837,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.stickler.6
           text: Proof of means is waived for the displaced. The sign behind you says
@@ -2712,6 +2855,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.stickler.7
           text: I don't have it. I know. I've already filed a complaint about myself.
@@ -2728,6 +2872,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.stickler.8
           text: Absent. An oversight. I'll be writing to myself about it.
@@ -2744,6 +2889,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.stickler.9
           text: Intake declarations are for arrivals. I am a departure. Section one.
@@ -2760,6 +2906,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.stickler.10
           text: A return order is issued on return. I have not yet returned.
@@ -2776,6 +2923,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.glum.1
           text: Premium unit. They never fail, I'm told. I'm told a lot of things.
@@ -2792,6 +2940,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.glum.2
           text: Proof of means? Means are mostly a feeling.
@@ -2808,6 +2957,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.glum.3
           text: Means? That's why I'm going.
@@ -2824,6 +2974,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.glum.4
           text: A manifest? The sky didn't give me time to pack. Nothing does.
@@ -2840,6 +2991,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.glum.5
           text: No waiver. Nobody asked. Nobody ever asks.
@@ -2856,6 +3008,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.glum.6
           text: Means. I had some once. Different life.
@@ -2872,6 +3025,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.glum.7
           text: Didn't bring it. Of course I didn't.
@@ -2888,6 +3042,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.glum.8
           text: Left it somewhere. Along with my hopes.
@@ -2904,6 +3059,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.glum.9
           text: Intake? I'm leaving. Leaving's the one thing I'm good at.
@@ -2920,6 +3076,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.glum.10
           text: A return order? I've got a return booking. We'll see.
@@ -2936,6 +3093,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.senenmut.1
           text: A manifest? I brought my plans in my head. Nothing else survived
@@ -2953,6 +3111,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.senenmut.2
           text: A waiver? I sign nothing without an overseer present.
@@ -2969,6 +3128,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.senenmut.3
           text: Means? I have a royal favour. It does not fit in a pocket.
@@ -2985,6 +3145,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.socrates.1
           text: A manifest lists what one carries. I carry only questions.
@@ -3001,6 +3162,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.socrates.2
           text: A waiver? Can one waive what one never had?
@@ -3017,6 +3179,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.socrates.3
           text: Means? I own nothing, and I am rich in it.
@@ -3033,6 +3196,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.aspasia.1
           text: A manifest? I left with a thought half-finished. Nothing else.
@@ -3049,6 +3213,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.aspasia.2
           text: A waiver? At home a promise is spoken, not signed.
@@ -3065,6 +3230,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.aspasia.3
           text: Means? My means are my words. You have heard some.
@@ -3081,6 +3247,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.banzhao.1
           text: A manifest? I was carried off mid-sentence. I carried nothing.
@@ -3097,6 +3264,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.banzhao.2
           text: A waiver? No one asked my consent. I have made a note of it.
@@ -3113,6 +3281,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.banzhao.3
           text: Means? I have a brush and a good memory. The brush is at home.
@@ -3129,6 +3298,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.arib.1
           text: A manifest? My songs are all in my head. That is where I pack them.
@@ -3145,6 +3315,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.arib.2
           text: A waiver? The sky did not stop to ask a singer's leave.
@@ -3161,6 +3332,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.arib.3
           text: Means? A voice. It has kept me well so far.
@@ -3177,6 +3349,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.khwarizmi.1
           text: A manifest? What I carry is on no list. It is a method.
@@ -3193,6 +3366,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.khwarizmi.2
           text: A waiver? One cannot waive a quantity one never had.
@@ -3209,6 +3383,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.khwarizmi.3
           text: Means? Mostly ink. And a very good idea about nothing at all.
@@ -3225,6 +3400,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.gutenberg.1
           text: A manifest? I had tools. Did I have tools? I had tools.
@@ -3241,6 +3417,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.gutenberg.2
           text: A waiver? I signed nothing. I sign nothing. Lawyers everywhere.
@@ -3257,6 +3434,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.gutenberg.3
           text: Means? My means are invested. In an idea. Please don't ask which.
@@ -3273,6 +3451,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.leonardo.1
           text: A manifest? I carry notebooks. They were in my other coat.
@@ -3289,6 +3468,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.leonardo.2
           text: A waiver? I have sketched many machines. None for signing things.
@@ -3305,6 +3485,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.leonardo.3
           text: Means? My means are commissions. Most of them unfinished.
@@ -3321,6 +3502,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.lanyer.1
           text: A manifest? My only luggage was a manuscript, and the sky kept it.
@@ -3337,6 +3519,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.lanyer.2
           text: A waiver? I waive nothing. I have had to fight for every line.
@@ -3353,6 +3536,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.lanyer.3
           text: Means? My pen, and a patroness who may remember me.
@@ -3369,6 +3553,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.gallerani.1
           text: A manifest? I was holding a small animal. That was all.
@@ -3385,6 +3570,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.gallerani.2
           text: A waiver? At court we sign poems, not waivers.
@@ -3401,6 +3587,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.gallerani.3
           text: Means? The court provides. Usually.
@@ -3417,6 +3604,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.tahtawi.1
           text: A manifest? I travel with notebooks. The sky took the notebooks.
@@ -3433,6 +3621,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.tahtawi.2
           text: A waiver? I read every word before I sign. There was nothing to read.
@@ -3449,6 +3638,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.tahtawi.3
           text: Means? A scholar's stipend, and a great deal of curiosity.
@@ -3465,6 +3655,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.kulthum.1
           text: A manifest? My orchestra carries everything. My orchestra is not
@@ -3482,6 +3673,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.kulthum.2
           text: A waiver? I waive nothing. Ask any concert promoter.
@@ -3498,6 +3690,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.kulthum.3
           text: Means? A voice. It fills halls. It will fill this form, if you like.
@@ -3514,6 +3707,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.malaika.1
           text: A manifest? My luggage was a poem. It is still in my head.
@@ -3530,6 +3724,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.malaika.2
           text: A waiver? I have signed petitions. Never waivers.
@@ -3546,6 +3741,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.malaika.3
           text: Means? A teacher's salary and a restless pen.
@@ -3562,6 +3758,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sayyab.1
           text: A manifest? I carried a poem about rain. It is still wet.
@@ -3578,6 +3775,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sayyab.2
           text: A waiver? The rain never asks. Neither did the sky.
@@ -3594,6 +3792,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.sayyab.3
           text: Means? A teacher's wage and a great deal of weather.
@@ -3610,6 +3809,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.elytis.1
           text: A manifest? I carried a little sea salt. The sky shook it out.
@@ -3626,6 +3826,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.elytis.2
           text: A waiver? I sign poems. Waivers do not scan.
@@ -3642,6 +3843,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.elytis.3
           text: Means? A great deal of blue.
@@ -3658,6 +3860,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.fellini.1
           text: A manifest? I travel with a crew. The crew stayed.
@@ -3674,6 +3877,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.fellini.2
           text: A waiver? Actors sign those. I only shout.
@@ -3690,6 +3894,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.fellini.3
           text: Means? A producer. Somewhere. He owes me.
@@ -3706,6 +3911,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.hezehui.1
           text: A manifest? I had my notebook. The sky did not let me finish the
@@ -3723,6 +3929,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.hezehui.2
           text: A waiver? I sign only after reading the method.
@@ -3739,6 +3946,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.hezehui.3
           text: Means? A research post and a great many particles.
@@ -3755,6 +3963,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.toyoda.1
           text: A manifest? My tools are at home. My hands came with me.
@@ -3771,6 +3980,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.toyoda.2
           text: A waiver? I sign patents. Never waivers.
@@ -3787,6 +3997,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.toyoda.3
           text: Means? A workshop, and a loom that stops when the thread breaks.
@@ -3803,6 +4014,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.turing.1
           text: A manifest? I carried a pencil and a problem. Both are gone.
@@ -3819,6 +4031,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.turing.2
           text: A waiver? Logically, I never agreed to anything.
@@ -3835,6 +4048,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.turing.3
           text: Means? A university post and a bicycle. The bicycle is at home.
@@ -3851,6 +4065,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.meitner.1
           text: A manifest? My instruments stayed in the laboratory.
@@ -3867,6 +4082,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.meitner.2
           text: A waiver? I read the small print. There was none.
@@ -3883,6 +4099,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.meitner.3
           text: Means? A professor's salary. Earned twice over.
@@ -3899,6 +4116,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.ada.1
           text: A manifest? Heavens, no. I came as I was. As one does.
@@ -3915,6 +4133,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.ada.2
           text: A waiver? No one asked me to sign anything. How rude of the sky.
@@ -3931,6 +4150,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.missingForms.ada.3
           text: Means? My mother handles all that. She's very strict.
@@ -3948,6 +4168,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.curt.1
           text: Said it once. That was billed.
@@ -3964,6 +4185,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.grand.1
           text: I don't step. I proceed.
@@ -3980,6 +4202,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.chatty.1
           text: Closer? Ooh, like a secret. I love a secret.
@@ -3996,6 +4219,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.chatty.2
           text: SORRY. Is this better? My mum says I mumble. She mumbles too.
@@ -4012,6 +4236,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.curt.2
           text: Closer. Fine.
@@ -4028,6 +4253,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.anxious.1
           text: Closer? Is that the line? I don't want to cross the line.
@@ -4044,6 +4270,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.anxious.2
           text: Sorry! Sorry. Is this too loud now? Tell me if it's too loud.
@@ -4060,6 +4287,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.sunny.1
           text: Closer! Love a bit of closeness!
@@ -4076,6 +4304,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.sunny.2
           text: HELLO! Is this better? I love being heard!
@@ -4092,6 +4321,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.grand.2
           text: I do not raise my voice. People lean in.
@@ -4108,6 +4338,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.stickler.1
           text: The yellow line is here. I'm on the yellow line. Exactly on it.
@@ -4124,6 +4355,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.stickler.2
           text: Speaking at the regulation volume. As posted.
@@ -4140,6 +4372,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.glum.1
           text: Closer. Right. Here's closer.
@@ -4156,6 +4389,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.glum.2
           text: Sorry. I'll try to be louder. It won't help.
@@ -4172,6 +4406,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.senenmut.1
           text: Closer. As a builder approaches a good stone.
@@ -4188,6 +4423,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.senenmut.2
           text: I have shouted across quarries. Forgive me for whispering.
@@ -4204,6 +4440,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.socrates.1
           text: 'Closer? Then tell me: is the truth nearer here?'
@@ -4220,6 +4457,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.socrates.2
           text: I speak softly so that you must listen. It is a method.
@@ -4236,6 +4474,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.aspasia.1
           text: Closer. Good. A conversation needs no shouting.
@@ -4252,6 +4491,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.aspasia.2
           text: Better? I have taught orators. I can be heard across a market.
@@ -4268,6 +4508,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.banzhao.1
           text: Closer. Yes. A scholar should not be afraid of a desk.
@@ -4284,6 +4525,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.banzhao.2
           text: Forgive me. At court, the quiet voice is the one they remember.
@@ -4300,6 +4542,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.arib.1
           text: Closer? Singers always find the best spot in the room.
@@ -4316,6 +4559,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.arib.2
           text: Louder? I have filled palace halls. This is my speaking voice.
@@ -4332,6 +4576,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.khwarizmi.1
           text: Closer. The distance was not a problem. It was only a question.
@@ -4348,6 +4593,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.khwarizmi.2
           text: Better? I usually speak to students, and they sleep.
@@ -4364,6 +4610,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.gutenberg.1
           text: Closer? Is something wrong? Nothing is wrong. Is it?
@@ -4380,6 +4627,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.gutenberg.2
           text: Louder? Sorry. I am used to talking to metal.
@@ -4396,6 +4644,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.leonardo.1
           text: Closer. Ah, now the light falls better. Hold still.
@@ -4412,6 +4661,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.leonardo.2
           text: Forgive me. I was sketching your ceiling in my head.
@@ -4428,6 +4678,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.lanyer.1
           text: Closer. Good. Poets prefer an audience within reach.
@@ -4444,6 +4695,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.lanyer.2
           text: Better? I am used to reading to ladies in quiet rooms.
@@ -4460,6 +4712,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.gallerani.1
           text: Closer? I am used to holding still for painters. This is easy.
@@ -4476,6 +4729,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.gallerani.2
           text: Better? At court one learns to speak just loud enough.
@@ -4492,6 +4746,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.tahtawi.1
           text: Closer. A translator always leans in.
@@ -4508,6 +4763,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.tahtawi.2
           text: Forgive me. I was translating your sign in my head.
@@ -4524,6 +4780,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.kulthum.1
           text: Closer? The front row. Very well.
@@ -4540,6 +4797,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.kulthum.2
           text: Louder? Habibi, I have not yet begun.
@@ -4556,6 +4814,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.malaika.1
           text: Closer. The old metres kept us apart too. I broke them.
@@ -4572,6 +4831,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.malaika.2
           text: Better? A poem should be heard, not shouted.
@@ -4588,6 +4848,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.sayyab.1
           text: Closer. Yes. Like rain, a little at a time.
@@ -4604,6 +4865,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.sayyab.2
           text: Better? I speak softly, like rain on palms.
@@ -4620,6 +4882,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.elytis.1
           text: Closer. Out of the shadow, then.
@@ -4636,6 +4899,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.elytis.2
           text: Better? I usually speak to the sea, and it hears everything.
@@ -4652,6 +4916,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.fellini.1
           text: Closer. Yes! The close-up. Magnificent.
@@ -4668,6 +4933,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.fellini.2
           text: Louder? On set I have a megaphone. I left it on set.
@@ -4684,6 +4950,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.hezehui.1
           text: Closer. Carefully. Distance matters in my work.
@@ -4700,6 +4967,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.hezehui.2
           text: Louder? In the laboratory we whisper around the equipment.
@@ -4716,6 +4984,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.toyoda.1
           text: Closer. Like a carpenter checking a joint.
@@ -4732,6 +5001,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.toyoda.2
           text: Forgive me. The looms at home are louder than I am.
@@ -4748,6 +5018,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.turing.1
           text: Closer. Interesting. Do you ask everyone that?
@@ -4764,6 +5035,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.turing.2
           text: Sorry. I was thinking. It happens a lot.
@@ -4780,6 +5052,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.meitner.1
           text: Closer. I am used to being overlooked. Not today.
@@ -4796,6 +5069,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.meitner.2
           text: Louder? I will be heard. I always am, eventually.
@@ -4812,6 +5086,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.ada.1
           text: Closer? Delightful! Like a demonstration!
@@ -4828,6 +5103,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.ada.2
           text: Louder? Of course! Drawing rooms, you know. Very echoey.
@@ -4844,6 +5120,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.pell.1
           text: Closer! Love it! Like a photo booth!
@@ -4860,6 +5137,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.pell.2
           text: HELLO! Sorry! Honeymoon nerves!
@@ -4876,6 +5154,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.ines.1
           text: Closer. I know where the yellow line is, believe me.
@@ -4892,6 +5171,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.ines.2
           text: Sorry. I'm used to being the one who says speak up.
@@ -4908,6 +5188,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.rook.1
           text: Closer? Happy to. Let's be friends.
@@ -4924,6 +5205,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.rook.2
           text: Better? I can be very persuasive at any volume.
@@ -4940,6 +5222,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.hollis.1
           text: Closer? Is something wrong? Something's wrong.
@@ -4956,6 +5239,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.hollis.2
           text: Sorry. Sorry. Is this better? I don't want to be trouble.
@@ -4972,6 +5256,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.auditor.1
           text: Closer. Exactly to the line. Observe.
@@ -4988,6 +5273,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.spoken.auditor.2
           text: Speaking at the posted volume. You'll find it's regulation.
@@ -5005,6 +5291,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.chatty.1
           text: 'Just the approved kit: {value}. My therapist says I overpack. Emotionally.'
@@ -5021,6 +5308,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.anxious.1
           text: '{value}. Is that right? I checked the list twice. Three times.'
@@ -5037,6 +5325,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.anxious.2
           text: '{value}. Is that right? I checked the list twice. Three times.'
@@ -5053,6 +5342,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.anxious.3
           text: '{value}. Is that right? I checked the list twice. Three times.'
@@ -5069,6 +5359,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.anxious.4
           text: '{value}. Is that right? I checked the list twice. Three times.'
@@ -5085,6 +5376,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.anxious.5
           text: '{value}. Is that right? I checked the list twice. Three times.'
@@ -5101,6 +5393,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.glum.1
           text: '{value}. Not that it''ll be enough.'
@@ -5117,6 +5410,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.senenmut.1
           text: '{value}. May she live forever, and read my plans.'
@@ -5133,6 +5427,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.chatty.2
           text: '{value}. Don''t ask how much. Well, you can ask.'
@@ -5149,6 +5444,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.chatty.3
           text: '{value}! I learned it off a tape. Mostly the menu bits.'
@@ -5165,6 +5461,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.chatty.4
           text: '{value}, of course! I talk it all day. Ask anyone. Ask the goat.'
@@ -5181,6 +5478,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.chatty.5
           text: '{value}. Every day. I''d show you, but it''s back home with the
@@ -5198,6 +5496,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.chatty.6
           text: '{value}! Or near it. Near-ish. Is near-ish allowed?'
@@ -5214,6 +5513,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.chatty.7
           text: '{value}. Lovely person, I hear. I hear a lot of things.'
@@ -5230,6 +5530,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.chatty.8
           text: '{value}. Write that down, people always forget my birthday.'
@@ -5246,6 +5547,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.curt.1
           text: '{value}. Next.'
@@ -5262,6 +5564,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.curt.2
           text: '{value}. Fluent enough.'
@@ -5278,6 +5581,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.curt.3
           text: '{value}. Standard.'
@@ -5294,6 +5598,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.curt.4
           text: '{value}. Where else.'
@@ -5310,6 +5615,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.curt.5
           text: '{value}. Allegedly.'
@@ -5326,6 +5632,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.curt.6
           text: '{value}. It''s on the visa.'
@@ -5342,6 +5649,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.anxious.6
           text: '{value}. At least, that''s what my mother told me.'
@@ -5358,6 +5666,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sunny.1
           text: '{value}! Isn''t money pretty?'
@@ -5374,6 +5683,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sunny.2
           text: '{value}! What a lovely thing to say out loud!'
@@ -5390,6 +5700,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sunny.3
           text: '{value}! It does everything! Nearly!'
@@ -5406,6 +5717,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sunny.4
           text: '{value}! Gorgeous this time of year!'
@@ -5422,6 +5734,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sunny.5
           text: '{value}! I''m sure they''re doing their best!'
@@ -5438,6 +5751,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sunny.6
           text: '{value}! A happy day, I''m told!'
@@ -5454,6 +5768,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.grand.1
           text: '{value}. I have people who carry it.'
@@ -5470,6 +5785,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.grand.2
           text: '{value}. I speak it beautifully.'
@@ -5486,6 +5802,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.grand.3
           text: '{value}. The finest available.'
@@ -5502,6 +5819,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.grand.4
           text: '{value}. I know the best people there.'
@@ -5518,6 +5836,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.grand.5
           text: '{value}. We''ve met. Well, I''ve waved.'
@@ -5534,6 +5853,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.grand.6
           text: '{value}. A holiday, in some circles.'
@@ -5550,6 +5870,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.stickler.1
           text: '{value}. Exchanged at the posted rate.'
@@ -5566,6 +5887,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.stickler.2
           text: '{value}. Correctly pronounced.'
@@ -5582,6 +5904,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.stickler.3
           text: '{value}. On the approved list, item by item.'
@@ -5598,6 +5921,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.stickler.4
           text: '{value}. Spelled as on the form.'
@@ -5614,6 +5938,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.stickler.5
           text: '{value}. As of the last bulletin.'
@@ -5630,6 +5955,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.stickler.6
           text: '{value}. As recorded.'
@@ -5646,6 +5972,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.glum.2
           text: '{value}. For all the good it does.'
@@ -5662,6 +5989,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.glum.3
           text: '{value}. It works. Mostly. On good days.'
@@ -5678,6 +6006,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.glum.4
           text: '{value}. Where everything happens. To other people.'
@@ -5694,6 +6023,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.glum.5
           text: '{value}. Not that anyone asked me.'
@@ -5710,6 +6040,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.glum.6
           text: '{value}. It seemed like a good idea at the time.'
@@ -5726,6 +6057,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.senenmut.2
           text: '{value}. Weighed honestly, as the gods watch.'
@@ -5742,6 +6074,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.senenmut.3
           text: '{value}, as the scribes write it.'
@@ -5758,6 +6091,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.senenmut.4
           text: '{value}. No temple rises without one.'
@@ -5774,6 +6108,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.senenmut.5
           text: '{value}. Where the great works are.'
@@ -5790,6 +6125,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.senenmut.6
           text: '{value}. The scribes wrote it down, so it is so.'
@@ -5806,6 +6142,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.socrates.1
           text: '{value}. But what is money, if not a promise?'
@@ -5822,6 +6159,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.socrates.2
           text: '{value}. Though I prefer questions to words.'
@@ -5838,6 +6176,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.socrates.3
           text: '{value}. A tool. Do tools know they are tools?'
@@ -5854,6 +6193,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.socrates.4
           text: '{value}. A city is its people, is it not?'
@@ -5870,6 +6210,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.socrates.5
           text: '{value}. And who rules the ruler?'
@@ -5886,6 +6227,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.socrates.6
           text: '{value}. Or so I have been told. Who told me?'
@@ -5902,6 +6244,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.aspasia.1
           text: '{value}. Spent mostly on scrolls.'
@@ -5918,6 +6261,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.aspasia.2
           text: '{value}, spoken well, as it should be.'
@@ -5934,6 +6278,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.aspasia.3
           text: '{value}. Every household has one.'
@@ -5950,6 +6295,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.aspasia.4
           text: '{value}. The finest city, and it knows it.'
@@ -5966,6 +6312,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.aspasia.5
           text: '{value}. I may have helped with some of the speeches.'
@@ -5982,6 +6329,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.aspasia.6
           text: '{value}. Write it neatly.'
@@ -5998,6 +6346,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.banzhao.1
           text: '{value}. Counted twice, as my brother taught me.'
@@ -6014,6 +6363,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.banzhao.2
           text: '{value}. I write it every day.'
@@ -6030,6 +6380,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.banzhao.3
           text: '{value}. A scholar''s companion.'
@@ -6046,6 +6397,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.banzhao.4
           text: '{value}, where the archives are.'
@@ -6062,6 +6414,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.banzhao.5
           text: '{value}. May the reign be long and well recorded.'
@@ -6078,6 +6431,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.banzhao.6
           text: '{value}. It is in the family records.'
@@ -6094,6 +6448,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.arib.1
           text: '{value}. A song pays better, some nights.'
@@ -6110,6 +6465,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.arib.2
           text: '{value}. Poetry sounds best in it.'
@@ -6126,6 +6482,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.arib.3
           text: '{value}. Almost as useful as a lute.'
@@ -6142,6 +6499,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.arib.4
           text: '{value}. The city of songs.'
@@ -6158,6 +6516,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.arib.5
           text: '{value}. The court likes my singing. Most days.'
@@ -6174,6 +6533,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.arib.6
           text: '{value}. Ask any poet; I have told them all.'
@@ -6190,6 +6550,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.khwarizmi.1
           text: '{value}. I can calculate your change, if you like.'
@@ -6206,6 +6567,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.khwarizmi.2
           text: '{value}. The best tongue for numbers.'
@@ -6222,6 +6584,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.khwarizmi.3
           text: '{value}. A useful instrument, carefully used.'
@@ -6238,6 +6601,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.khwarizmi.4
           text: '{value}. The house of learning is there.'
@@ -6254,6 +6618,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.khwarizmi.5
           text: '{value}. A patron of learning, thank heaven.'
@@ -6270,6 +6635,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.khwarizmi.6
           text: '{value}. By my own reckoning, which is reliable.'
@@ -6286,6 +6652,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gutenberg.1
           text: '{value}. Not enough. Never enough. The investors...'
@@ -6302,6 +6669,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gutenberg.2
           text: '{value}. Every letter of it.'
@@ -6318,6 +6686,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gutenberg.3
           text: '{value}. Please don''t copy it. People copy things.'
@@ -6334,6 +6703,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gutenberg.4
           text: '{value}. Or near it. Near enough, I hope.'
@@ -6350,6 +6720,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gutenberg.5
           text: '{value}. I hope they like books. They will like books.'
@@ -6366,6 +6737,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gutenberg.6
           text: '{value}. Please don''t write it down twice.'
@@ -6382,6 +6754,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.leonardo.1
           text: '{value}. My patrons pay late, but they pay.'
@@ -6398,6 +6771,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.leonardo.2
           text: '{value}. I write it backwards, but I speak it forwards.'
@@ -6414,6 +6788,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.leonardo.3
           text: '{value}. I would improve it, given a week.'
@@ -6430,6 +6805,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.leonardo.4
           text: '{value}. Full of commissions, most unfinished.'
@@ -6446,6 +6822,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.leonardo.5
           text: '{value}. A generous patron, when reminded.'
@@ -6462,6 +6839,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.leonardo.6
           text: '{value}. My notebooks say so, mirrored.'
@@ -6478,6 +6856,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.lanyer.1
           text: '{value}. Poetry pays in praise, mostly.'
@@ -6494,6 +6873,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.lanyer.2
           text: '{value}, and some of it in verse.'
@@ -6510,6 +6890,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.lanyer.3
           text: '{value}. Useful, if not beautiful.'
@@ -6526,6 +6907,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.lanyer.4
           text: '{value}, where the printers are.'
@@ -6542,6 +6924,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.lanyer.5
           text: '{value}. Long may the reign last.'
@@ -6558,6 +6941,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.lanyer.6
           text: '{value}. A modest date for a modest poet.'
@@ -6574,6 +6958,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gallerani.1
           text: '{value}. The court pays for most things.'
@@ -6590,6 +6975,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gallerani.2
           text: '{value}. And a little verse on the side.'
@@ -6606,6 +6992,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gallerani.3
           text: '{value}. Every lady of the court has one.'
@@ -6622,6 +7009,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gallerani.4
           text: '{value}. Where the court is.'
@@ -6638,6 +7026,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gallerani.5
           text: '{value}. A great patron. Of mine, especially.'
@@ -6654,6 +7043,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.gallerani.6
           text: '{value}. Write it kindly.'
@@ -6670,6 +7060,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.tahtawi.1
           text: '{value}. I note every price. For the book.'
@@ -6686,6 +7077,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.tahtawi.2
           text: '{value}. And several others, professionally.'
@@ -6702,6 +7094,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.tahtawi.3
           text: '{value}. I shall describe it for my readers.'
@@ -6718,6 +7111,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.tahtawi.4
           text: '{value}. My school is there.'
@@ -6734,6 +7128,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.tahtawi.5
           text: '{value}. A reformer, and my employer.'
@@ -6750,6 +7145,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.tahtawi.6
           text: '{value}. Please spell the month carefully.'
@@ -6766,6 +7162,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.kulthum.1
           text: '{value}. Concerts are not cheap to give.'
@@ -6782,6 +7179,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.kulthum.2
           text: '{value}. Sung slowly, it takes hours.'
@@ -6798,6 +7196,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.kulthum.3
           text: '{value}. I prefer an orchestra.'
@@ -6814,6 +7213,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.kulthum.4
           text: '{value}. The whole city listens on Thursday.'
@@ -6830,6 +7230,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.kulthum.5
           text: '{value}. Who also listens on Thursday.'
@@ -6846,6 +7247,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.kulthum.6
           text: '{value}. Write it large.'
@@ -6862,6 +7264,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.malaika.1
           text: '{value}. Poets are rarely asked about money.'
@@ -6878,6 +7281,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.malaika.2
           text: '{value}, set free of its old metres.'
@@ -6894,6 +7298,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.malaika.3
           text: '{value}. A good tool; it does not rhyme.'
@@ -6910,6 +7315,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.malaika.4
           text: '{value}. A city of rivers and readers.'
@@ -6926,6 +7332,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.malaika.5
           text: '{value}. Not a subject for my poems.'
@@ -6942,6 +7349,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.malaika.6
           text: '{value}. In free verse it would be longer.'
@@ -6958,6 +7366,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sayyab.1
           text: '{value}. Never enough for a poet.'
@@ -6974,6 +7383,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sayyab.2
           text: '{value}. The language of rain.'
@@ -6990,6 +7400,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sayyab.3
           text: '{value}. It does not know the rain.'
@@ -7006,6 +7417,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sayyab.4
           text: '{value}. My heart is in the south, but yes.'
@@ -7022,6 +7434,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sayyab.5
           text: '{value}. Poets watch rulers. Rulers rarely watch poets.'
@@ -7038,6 +7451,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.sayyab.6
           text: '{value}. In a village of palms.'
@@ -7054,6 +7468,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.elytis.1
           text: '{value}. Enough for bread and a view.'
@@ -7070,6 +7485,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.elytis.2
           text: '{value}. Every word of it is sunlight.'
@@ -7086,6 +7502,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.elytis.3
           text: '{value}. It works best by a window.'
@@ -7102,6 +7519,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.elytis.4
           text: '{value}. Whitewashed and shining.'
@@ -7118,6 +7536,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.elytis.5
           text: '{value}. I leave politics to the waves.'
@@ -7134,6 +7553,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.elytis.6
           text: '{value}. On an island, facing east.'
@@ -7150,6 +7570,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.fellini.1
           text: '{value}. Producers never have enough.'
@@ -7166,6 +7587,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.fellini.2
           text: '{value}. But really I speak in pictures.'
@@ -7182,6 +7604,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.fellini.3
           text: '{value}. I would film it, if it held still.'
@@ -7198,6 +7621,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.fellini.4
           text: '{value}. A film set with bad parking.'
@@ -7214,6 +7638,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.fellini.5
           text: '{value}. Not in my picture, I''m afraid.'
@@ -7230,6 +7655,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.fellini.6
           text: '{value}. A dream, then a birth. The usual order.'
@@ -7246,6 +7672,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hezehui.1
           text: '{value}. Laboratories are expensive.'
@@ -7262,6 +7689,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hezehui.2
           text: '{value}. And the language of numbers.'
@@ -7278,6 +7706,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hezehui.3
           text: '{value}. Calibrated.'
@@ -7294,6 +7723,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hezehui.4
           text: '{value}. My laboratory is there.'
@@ -7310,6 +7740,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hezehui.5
           text: '{value}. I keep to my experiments.'
@@ -7326,6 +7757,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hezehui.6
           text: '{value}. Precisely.'
@@ -7342,6 +7774,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.toyoda.1
           text: '{value}. Every coin goes into the next loom.'
@@ -7358,6 +7791,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.toyoda.2
           text: '{value}. Plainly spoken, like good wood.'
@@ -7374,6 +7808,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.toyoda.3
           text: '{value}. I would add a small wheel here.'
@@ -7390,6 +7825,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.toyoda.4
           text: '{value}. Far from my workshop.'
@@ -7406,6 +7842,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.toyoda.5
           text: '{value}. May the country keep weaving.'
@@ -7422,6 +7859,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.toyoda.6
           text: '{value}. A carpenter''s son.'
@@ -7438,6 +7876,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.turing.1
           text: '{value}. I''d rather count something interesting.'
@@ -7454,6 +7893,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.turing.2
           text: '{value}. Though I prefer logic.'
@@ -7470,6 +7910,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.turing.3
           text: '{value}. Could it think, do you suppose?'
@@ -7486,6 +7927,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.turing.4
           text: '{value}. I run there, sometimes. Long distances.'
@@ -7502,6 +7944,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.turing.5
           text: '{value}, I believe.'
@@ -7518,6 +7961,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.turing.6
           text: '{value}. A computable date.'
@@ -7534,6 +7978,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.meitner.1
           text: '{value}. Research is never paid well.'
@@ -7550,6 +7995,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.meitner.2
           text: '{value}. Precisely spoken.'
@@ -7566,6 +8012,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.meitner.3
           text: '{value}. I have taken one apart.'
@@ -7582,6 +8029,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.meitner.4
           text: '{value}. My institute is there.'
@@ -7598,6 +8046,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.meitner.5
           text: '{value}. I keep to physics.'
@@ -7614,6 +8063,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.meitner.6
           text: '{value}. Correct to the day.'
@@ -7630,6 +8080,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ada.1
           text: '{value}! Terribly pretty, isn''t it?'
@@ -7646,6 +8097,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ada.2
           text: '{value}, naturally! I speak it all day.'
@@ -7662,6 +8114,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ada.3
           text: '{value}. Every day! Can''t do without it!'
@@ -7678,6 +8131,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ada.4
           text: '{value}! Such a lovely city!'
@@ -7694,6 +8148,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ada.5
           text: '{value}! Long may they reign!'
@@ -7710,6 +8165,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ada.6
           text: '{value}! A winter baby. Very mathematical.'
@@ -7726,6 +8182,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.pell.1
           text: '{value}! I practised counting it on the maglev!'
@@ -7742,6 +8199,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.pell.2
           text: '{value}! I know how to say table for one!'
@@ -7758,6 +8216,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.pell.3
           text: '{value}! Brand new! Well, new to me!'
@@ -7774,6 +8233,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.pell.4
           text: '{value}! The brochure has a map!'
@@ -7790,6 +8250,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.pell.5
           text: '{value}! I''ve heard they''re lovely!'
@@ -7806,6 +8267,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.pell.6
           text: '{value}! A summer baby!'
@@ -7822,6 +8284,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ines.1
           text: '{value}. I''ve converted it for others often enough.'
@@ -7838,6 +8301,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ines.2
           text: '{value}. I''ve heard it asked often enough.'
@@ -7854,6 +8318,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ines.3
           text: '{value}. The approved kit. I approved plenty.'
@@ -7870,6 +8335,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ines.4
           text: '{value}. Same as on every form I ever read.'
@@ -7886,6 +8352,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ines.5
           text: '{value}. Not that it matters from the mill.'
@@ -7902,6 +8369,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.ines.6
           text: '{value}. Check it twice. We always did at Desk 4.'
@@ -7918,6 +8386,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.rook.1
           text: '{value}. Plenty of it. More where that came from.'
@@ -7934,6 +8403,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.rook.2
           text: '{value}. I pick things up fast.'
@@ -7950,6 +8420,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.rook.3
           text: '{value}. Top of the line.'
@@ -7966,6 +8437,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.rook.4
           text: '{value}. I''ll be running the place within a year.'
@@ -7982,6 +8454,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.rook.5
           text: '{value}. We''ll get on.'
@@ -7998,6 +8471,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.rook.6
           text: '{value}. A lucky day, all round.'
@@ -8014,6 +8488,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hollis.1
           text: '{value}. Is that right? It has to be right.'
@@ -8030,6 +8505,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hollis.2
           text: '{value}. I''ve been practising. Every night.'
@@ -8046,6 +8522,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hollis.3
           text: '{value}. The approved one. I checked.'
@@ -8062,6 +8539,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hollis.4
           text: '{value}. That''s where the office is. They said.'
@@ -8078,6 +8556,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hollis.5
           text: '{value}. I think. Is it?'
@@ -8094,6 +8573,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.hollis.6
           text: '{value}. My father kept the record.'
@@ -8110,6 +8590,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.auditor.1
           text: '{value}. Exchanged at the posted rate, receipt kept.'
@@ -8126,6 +8607,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.auditor.2
           text: '{value}. Adequately.'
@@ -8142,6 +8624,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.auditor.3
           text: '{value}. Every item declared.'
@@ -8158,6 +8641,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.auditor.4
           text: '{value}. As the brochure spells it.'
@@ -8174,6 +8658,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.auditor.5
           text: '{value}. As of the last bulletin.'
@@ -8190,6 +8675,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.answers.auditor.6
           text: '{value}. As it says.'
@@ -8207,6 +8693,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.anxious.1
           text: I read one sneeze in the past can delete a whole family tree. Is
@@ -8224,6 +8711,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.sunny.1
           text: My whole block got frozen in default! Everyone's home all day now!
@@ -8241,6 +8729,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.stickler.1
           text: I've read all your forms. Four days in the intake hall. Two have
@@ -8258,6 +8747,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.glum.1
           text: The maglev was late. So was my pay. So, apparently, was my birth.
@@ -8274,6 +8764,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.gutenberg.1
           text: My business in Strasbourg is private. It involves letters. Movable
@@ -8291,6 +8782,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.chatty.1
           text: My neighbour went to the past last year. Came back with a tan and
@@ -8308,6 +8800,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.chatty.2
           text: The man next to me in the intake hall snores in three tongues.
@@ -8324,6 +8817,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.curt.1
           text: Queue's billed by the minute. This is costing us both.
@@ -8340,6 +8834,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.curt.2
           text: Four days in the intake hall. Food's grey. Chairs are grey.
@@ -8356,6 +8851,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.anxious.2
           text: The intake hall has no windows. Is the sky still up there? Is it
@@ -8373,6 +8869,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.sunny.2
           text: The intake hall has free soup! Grey soup, but free!
@@ -8389,6 +8886,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.grand.1
           text: The maglev had no first class. I stood. Like a statue. A noble one.
@@ -8405,6 +8903,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.grand.2
           text: In the intake hall they gave me a number. I am not a number. I am
@@ -8422,6 +8921,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.stickler.2
           text: Your queue sign has a typo. I've reported it. I report all the typos.
@@ -8438,6 +8938,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.glum.2
           text: The intake hall's got a clock. It's wrong. It's the only thing I
@@ -8455,6 +8956,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.senenmut.1
           text: Your hall has fine columns. Too thin. But fine.
@@ -8471,6 +8973,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.socrates.1
           text: Your queue is a fine place to think. Everyone here is waiting for
@@ -8488,6 +8991,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.aspasia.1
           text: In my city we argue in the open air. Here you argue with forms.
@@ -8504,6 +9008,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.banzhao.1
           text: Your records live in glowing boxes. Who copies them when the light
@@ -8521,6 +9026,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.arib.1
           text: Your hall hums one note all day. It needs a chorus.
@@ -8537,6 +9043,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.khwarizmi.1
           text: Your queue grows by a constant each minute. I could write the rule
@@ -8554,6 +9061,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.leonardo.1
           text: Your stamp moves on a lever. Have you thought of adding wings?
@@ -8570,6 +9078,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.lanyer.1
           text: Your hall is full of women working. I shall write about that.
@@ -8586,6 +9095,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.gallerani.1
           text: I once held a small animal still for four hours. Your queue is nothing.
@@ -8602,6 +9112,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.tahtawi.1
           text: In a foreign city I write down everything. Your queue will be chapter
@@ -8619,6 +9130,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.kulthum.1
           text: Your hall is quiet. On a Thursday at home, the streets would be quieter.
@@ -8635,6 +9147,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.malaika.1
           text: Your queue has a rhythm. Irregular. I approve.
@@ -8651,6 +9164,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.sayyab.1
           text: Does it rain here? No? Then what do you listen to?
@@ -8667,6 +9181,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.elytis.1
           text: Your hall has no windows. How do you know it is day?
@@ -8683,6 +9198,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.fellini.1
           text: This queue is a wonderful scene. Nobody knows why they are in it.
@@ -8699,6 +9215,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.hezehui.1
           text: Your scanner hums at a steady pitch. I would like to open it.
@@ -8715,6 +9232,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.toyoda.1
           text: Your stamp would work better with a stop on it. May I?
@@ -8731,6 +9249,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.turing.1
           text: Are you following a list of instructions? A machine could do that.
@@ -8748,6 +9267,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.meitner.1
           text: Your scanner has a shield? Good. Most people forget.
@@ -8764,6 +9284,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.ada.1
           text: An engine could weave numbers the way a loom weaves silk. Isn't that
@@ -8781,6 +9302,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.pell.1
           text: The honeymoon suite's just for one now. More room for the hat!
@@ -8797,6 +9319,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.ines.1
           text: Desk 4's chair squeaks on the left. Tell whoever gets it. They won't
@@ -8814,6 +9337,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.rook.1
           text: A clerk like you deserves a better chair. Just saying. Friends notice
@@ -8831,6 +9355,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.hollis.1
           text: My father went through a desk like this once. He was fine. He was
@@ -8848,6 +9373,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.smallTalk.auditor.1
           text: Your desk sign is four millimetres off centre. Just an observation.
@@ -8865,6 +9391,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.chatty.1
           text: Thank you! I'll bring you something back.
@@ -8881,6 +9408,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.chatty.2
           text: Oh, lovely! I knew we'd get on.
@@ -8897,6 +9425,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.chatty.3
           text: Denied? But I told you everything!
@@ -8913,6 +9442,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.chatty.4
           text: Fair enough. You're good at this.
@@ -8929,6 +9459,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.curt.1
           text: Good.
@@ -8945,6 +9476,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.curt.2
           text: Right.
@@ -8961,6 +9493,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.curt.3
           text: Unbelievable.
@@ -8977,6 +9510,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.curt.4
           text: Fine.
@@ -8993,6 +9527,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.anxious.1
           text: Oh, thank goodness.
@@ -9009,6 +9544,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.anxious.2
           text: Really? Oh. Oh good.
@@ -9025,6 +9561,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.anxious.3
           text: Denied? What did I do? What did I do?
@@ -9041,6 +9578,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.anxious.4
           text: I knew it. I knew you'd know.
@@ -9057,6 +9595,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.sunny.1
           text: Approved! Best day ever!
@@ -9073,6 +9612,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.sunny.2
           text: Approved! See? Positive thinking works!
@@ -9089,6 +9629,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.sunny.3
           text: Denied! That's fine!
@@ -9105,6 +9646,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.sunny.4
           text: Caught! Ha! Fair's fair!
@@ -9121,6 +9663,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.grand.1
           text: Naturally.
@@ -9137,6 +9680,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.grand.2
           text: As it should be.
@@ -9153,6 +9697,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.grand.3
           text: You'll hear from my lawyer.
@@ -9169,6 +9714,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.grand.4
           text: How very dull of you.
@@ -9185,6 +9731,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.stickler.1
           text: Stamped at a slight angle.
@@ -9201,6 +9748,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.stickler.2
           text: Correct procedure. Well done.
@@ -9217,6 +9765,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.stickler.3
           text: On what grounds? Cite the regulation.
@@ -9233,6 +9782,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.stickler.4
           text: Hm. Good catch.
@@ -9249,6 +9799,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.glum.1
           text: Approved. Great.
@@ -9265,6 +9816,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.glum.2
           text: Oh. Approved.
@@ -9281,6 +9833,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.glum.3
           text: Of course.
@@ -9297,6 +9850,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.glum.4
           text: Figures.
@@ -9313,6 +9867,7 @@ MonoBehaviour:
         intent: 0
         reason: closed
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.sunny.5
           text: Closed? How exciting!
@@ -9329,6 +9884,7 @@ MonoBehaviour:
         intent: 0
         reason: panic
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.anxious.5
           text: What's wrong with my outfit?
@@ -9345,6 +9901,7 @@ MonoBehaviour:
         intent: 1
         reason: smuggled
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.grand.5
           text: Fine. Keep it.
@@ -9361,6 +9918,7 @@ MonoBehaviour:
         intent: 0
         reason: wrongDate
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.chatty.5
           text: Wrong day? I've been telling everyone it's today!
@@ -9377,6 +9935,7 @@ MonoBehaviour:
         intent: 1
         reason: forged
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.chatty.6
           text: Forged? That's such a strong word.
@@ -9393,6 +9952,7 @@ MonoBehaviour:
         intent: 0
         reason: closed
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.curt.5
           text: Closed. Brilliant.
@@ -9409,6 +9969,7 @@ MonoBehaviour:
         intent: 0
         reason: frozen
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.curt.6
           text: Frozen. Of course.
@@ -9425,6 +9986,7 @@ MonoBehaviour:
         intent: 1
         reason: smuggled
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.curt.7
           text: Keep it, then.
@@ -9441,6 +10003,7 @@ MonoBehaviour:
         intent: 0
         reason: closed
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.anxious.6
           text: Closed? Is it dangerous? Is that why?
@@ -9457,6 +10020,7 @@ MonoBehaviour:
         intent: 0
         reason: expired
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.anxious.7
           text: Expired? When? Just now? Things expire just now?
@@ -9473,6 +10037,7 @@ MonoBehaviour:
         intent: 0
         reason: frozen
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.sunny.6
           text: Frozen? Like ice cream!
@@ -9489,6 +10054,7 @@ MonoBehaviour:
         intent: 0
         reason: closed
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.grand.6
           text: Closed? To me?
@@ -9505,6 +10071,7 @@ MonoBehaviour:
         intent: 0
         reason: incomplete
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.grand.7
           text: Incomplete? I am complete.
@@ -9521,6 +10088,7 @@ MonoBehaviour:
         intent: 0
         reason: wrongDate
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.stickler.5
           text: Wrong date? Impossible. I checked the calendar.
@@ -9537,6 +10105,7 @@ MonoBehaviour:
         intent: 0
         reason: expired
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.stickler.6
           text: Expired by how much?
@@ -9553,6 +10122,7 @@ MonoBehaviour:
         intent: 0
         reason: frozen
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.glum.5
           text: Frozen. Naturally.
@@ -9569,6 +10139,7 @@ MonoBehaviour:
         intent: 0
         reason: closed
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.glum.6
           text: Closed. Of course it's closed.
@@ -9585,6 +10156,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.senenmut.1
           text: May your granaries never empty.
@@ -9601,6 +10173,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.senenmut.2
           text: Then the temple waits.
@@ -9617,6 +10190,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.socrates.1
           text: Well reasoned.
@@ -9633,6 +10207,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.socrates.2
           text: You ask good questions.
@@ -9649,6 +10224,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.aspasia.1
           text: Thank you. You would have made a fine citizen.
@@ -9665,6 +10241,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.aspasia.2
           text: A poor argument, clerk.
@@ -9681,6 +10258,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.banzhao.1
           text: Thank you. I shall write that you were fair.
@@ -9697,6 +10275,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.banzhao.2
           text: I see.
@@ -9713,6 +10292,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.arib.1
           text: Thank you! You shall have a verse.
@@ -9729,6 +10309,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.arib.2
           text: A pity.
@@ -9745,6 +10326,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.khwarizmi.1
           text: Thank you. The sum comes out.
@@ -9761,6 +10343,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.khwarizmi.2
           text: Then something does not balance.
@@ -9777,6 +10360,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.gutenberg.1
           text: Thank you. Thank you. Now, quickly.
@@ -9793,6 +10377,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.gutenberg.2
           text: No? No. Of course.
@@ -9809,6 +10394,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.leonardo.1
           text: Grazie. You have a painter's eye.
@@ -9825,6 +10411,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.leonardo.2
           text: No? A pity.
@@ -9841,6 +10428,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.lanyer.1
           text: Thank you. You shall be in the dedication.
@@ -9857,6 +10445,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.lanyer.2
           text: Denied.
@@ -9873,6 +10462,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.gallerani.1
           text: Grazie. You were most gracious.
@@ -9889,6 +10479,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.gallerani.2
           text: How disappointing.
@@ -9905,6 +10496,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.tahtawi.1
           text: Thank you. You have been a courteous host.
@@ -9921,6 +10513,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.tahtawi.2
           text: I see.
@@ -9937,6 +10530,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.kulthum.1
           text: Thank you. Come to a concert.
@@ -9953,6 +10547,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.kulthum.2
           text: Then I will sing about this.
@@ -9969,6 +10564,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.malaika.1
           text: Thank you.
@@ -9985,6 +10581,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.malaika.2
           text: So the old metre wins today.
@@ -10001,6 +10598,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.sayyab.1
           text: Thank you. Rain, rain.
@@ -10017,6 +10615,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.sayyab.2
           text: So the drought goes on.
@@ -10033,6 +10632,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.elytis.1
           text: Thank you. Go and find a window.
@@ -10049,6 +10649,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.elytis.2
           text: Then I wait in the shade.
@@ -10065,6 +10666,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.fellini.1
           text: Grazie! Cut! Print it!
@@ -10081,6 +10683,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.fellini.2
           text: Cut.
@@ -10097,6 +10700,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.hezehui.1
           text: Thank you. A clean result.
@@ -10113,6 +10717,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.hezehui.2
           text: Unexpected.
@@ -10129,6 +10734,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.toyoda.1
           text: Thank you. Good work, like a good loom.
@@ -10145,6 +10751,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.toyoda.2
           text: So the thread breaks.
@@ -10161,6 +10768,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.turing.1
           text: Thank you. A sensible outcome.
@@ -10177,6 +10785,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.turing.2
           text: Hm. An unexpected output.
@@ -10193,6 +10802,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.meitner.1
           text: Thank you. Correctly done.
@@ -10209,6 +10819,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.meitner.2
           text: Hm.
@@ -10225,6 +10836,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.ada.1
           text: Oh, splendid! Thank you!
@@ -10241,6 +10853,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.ada.2
           text: Oh. Oh, bother.
@@ -10257,6 +10870,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.pell.1
           text: Yes! Honeymoon! Wish me luck!
@@ -10273,6 +10887,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.pell.2
           text: That's fine! I'll try again!
@@ -10289,6 +10904,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.ines.1
           text: Stamped. Right.
@@ -10305,6 +10921,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.ines.2
           text: Of course.
@@ -10321,6 +10938,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.rook.1
           text: Pleasure doing business.
@@ -10337,6 +10955,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.rook.2
           text: Shame.
@@ -10353,6 +10972,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.hollis.1
           text: Thank you. Thank you.
@@ -10369,6 +10989,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.hollis.2
           text: I know. I know.
@@ -10385,6 +11006,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.auditor.1
           text: Approved. Thank you.
@@ -10401,6 +11023,7 @@ MonoBehaviour:
         intent: 1
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.reactions.auditor.2
           text: Correct.
@@ -10418,6 +11041,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: Smuggling
+        outcome: 0
         line:
           id: interview.voices.slips.chatty.1
           text: Nothing in the bag but socks! Lots of socks. Don't open the socks.
@@ -10434,6 +11058,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.slips.chatty.2
           text: I've practised this bit. I mean, I haven't. Why would I?
@@ -10450,6 +11075,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.slips.curt.1
           text: Everything's in order. Don't check.
@@ -10466,6 +11092,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: PoorPosingAsRich
+        outcome: 0
         line:
           id: interview.voices.slips.curt.2
           text: Premium. Obviously. Next question.
@@ -10482,6 +11109,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.slips.anxious.1
           text: Is it normal to sweat this much when everything is completely legal?
@@ -10498,6 +11126,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: DoctoredIdentity
+        outcome: 0
         line:
           id: interview.voices.slips.anxious.2
           text: My birthday? It's... the one on the visa. Obviously.
@@ -10514,6 +11143,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: PoorPosingAsRich
+        outcome: 0
         line:
           id: interview.voices.slips.sunny.1
           text: Premium, like the advert! Well, like the advert for the credit card.
@@ -10530,6 +11160,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.slips.sunny.2
           text: I'm not nervous! This is just my happy face. It's stuck.
@@ -10546,6 +11177,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: PoorPosingAsRich
+        outcome: 0
         line:
           id: interview.voices.slips.grand.1
           text: Premium, naturally. I simply enjoy queueing with ordinary people.
@@ -10562,6 +11194,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.slips.grand.2
           text: I have nothing to declare. Except my genius. And perhaps a trifle.
@@ -10578,6 +11211,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: DoctoredIdentity
+        outcome: 0
         line:
           id: interview.voices.slips.stickler.1
           text: Every detail on that visa is correct. I corrected them myself.
@@ -10594,6 +11228,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.slips.stickler.2
           text: I have read the penalties section. Purely out of interest.
@@ -10610,6 +11245,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.slips.glum.1
           text: If this goes wrong, tell my creditors I tried.
@@ -10626,6 +11262,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: Smuggling
+        outcome: 0
         line:
           id: interview.voices.slips.glum.2
           text: My luggage is exactly as boring as it looks. Please don't look.
@@ -10642,6 +11279,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.slips.socrates.1
           text: I know that I know nothing. Especially about where I was born.
@@ -10659,6 +11297,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.chatty.1
           text: Ooh, a form! I love a form. Am I dotting the i's? I'm dotting the
@@ -10676,6 +11315,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.chatty.2
           text: I'd love to, but my sister says never sign what you haven't read,
@@ -10693,6 +11333,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.curt.1
           text: Signed. That's a minute of my time, billed.
@@ -10709,6 +11350,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.curt.2
           text: No. Nobody mentioned a waiver at booking.
@@ -10725,6 +11367,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.anxious.1
           text: What does that clause... is it binding? It says binding. Signed.
@@ -10742,6 +11385,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.anxious.2
           text: Sign my debt over to my kin? What if it works? I can't. I can't.
@@ -10758,6 +11402,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.sunny.1
           text: Of course! If the agency printed it, it must be good for me.
@@ -10774,6 +11419,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.sunny.2
           text: Oh, I'd love to, but I promised Mum I'd never sign anything with
@@ -10791,6 +11437,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.grand.1
           text: Very well. Have it framed.
@@ -10807,6 +11454,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.grand.2
           text: I do not sign things. People sign things for me.
@@ -10823,6 +11471,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.stickler.1
           text: Clause 9 is badly drafted, but it's in order. Signed, dated, initialled.
@@ -10839,6 +11488,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.stickler.2
           text: Only after I read clause 9. There is no clause 9. Come back when
@@ -10856,6 +11506,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.glum.1
           text: Another signature. The debt collects them.
@@ -10872,9 +11523,674 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.voices.waiverPad.glum.2
           text: What's the point. You'll lose it anyway.
+        then:
+          id: 
+          text: 
+      confront:
+      - personality: chatty
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.chatty.1
+          text: Oh, that's the agency's typing! My cousin had the same. Took weeks.
+        then:
+          id: 
+          text: 
+      - personality: chatty
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: panic
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.chatty.2
+          text: The costume desk said {value} was all the rage. Is it not?
+        then:
+          id: 
+          text: 
+      - personality: chatty
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.chatty.3
+          text: Fine, fine. It's {other}. I was going to tell you, eventually.
+        then:
+          id: 
+          text: 
+      - personality: chatty
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: forged
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.chatty.4
+          text: My cousin did the paper. I said it looked wrong. I did say.
+        then:
+          id: 
+          text: 
+      - personality: chatty
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.voices.confront.chatty.5
+          text: No, no, it's {value}. Ask anyone. Ask my cousin.
+        then:
+          id: 
+          text: 
+      - personality: curt
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.curt.1
+          text: Clerical error. Not mine. Stamp it or don't.
+        then:
+          id: 
+          text: 
+      - personality: curt
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: panic
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.curt.2
+          text: Rental costume. Take it up with the rental.
+        then:
+          id: 
+          text: 
+      - personality: curt
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.curt.3
+          text: '{other}. Happy? That cost me the queue fee.'
+        then:
+          id: 
+          text: 
+      - personality: curt
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: disguised
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.curt.4
+          text: Fine. Wrong home. Right fee. Can we go?
+        then:
+          id: 
+          text: 
+      - personality: curt
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.voices.confront.curt.5
+          text: It says {value}. Read it again.
+        then:
+          id: 
+          text: 
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.anxious.1
+          text: Is that bad? Someone at the counter filled it in. Is it a paradox?
+        then:
+          id: 
+          text: 
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: panic
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.anxious.2
+          text: They told me {value} was safe! Will someone faint?
+        then:
+          id: 
+          text: 
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.anxious.3
+          text: It's {other}. I'm so sorry. I practised the other one.
+        then:
+          id: 
+          text: 
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: smuggled
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.anxious.4
+          text: It's from 2150! I'll leave it here. Please keep it. Please.
+        then:
+          id: 
+          text: 
+      - personality: anxious
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.voices.confront.anxious.5
+          text: It's {value}. It is. Please say it is.
+        then:
+          id: 
+          text: 
+      - personality: sunny
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.sunny.1
+          text: Oh! A little typo! The agency's so busy. We'll laugh about this!
+        then:
+          id: 
+          text: 
+      - personality: sunny
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: panic
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.sunny.2
+          text: The brochure said {value}! Isn't it the look there?
+        then:
+          id: 
+          text: 
+      - personality: sunny
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.sunny.3
+          text: Ha! You got me! It's {other}. Worth a try!
+        then:
+          id: 
+          text: 
+      - personality: sunny
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: forged
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.sunny.4
+          text: Caught! I edited it myself. It looked so official!
+        then:
+          id: 
+          text: 
+      - personality: sunny
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.voices.confront.sunny.5
+          text: '{value}! Definitely {value}! Isn''t it a lovely day?'
+        then:
+          id: 
+          text: 
+      - personality: grand
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.grand.1
+          text: My secretary fills these in. Take it up with her.
+        then:
+          id: 
+          text: 
+      - personality: grand
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: panic
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.grand.2
+          text: My tailor chose {value}. My tailor is never wrong.
+        then:
+          id: 
+          text: 
+      - personality: grand
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.grand.3
+          text: Very well. {other}. Do be discreet, it's a family matter.
+        then:
+          id: 
+          text: 
+      - personality: grand
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: disguised
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.grand.4
+          text: One travels under a better address. Everyone who matters does.
+        then:
+          id: 
+          text: 
+      - personality: grand
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.voices.confront.grand.5
+          text: It is {value} because I say it is {value}.
+        then:
+          id: 
+          text: 
+      - personality: stickler
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.stickler.1
+          text: A clerical slip. It changes nothing in the rules, I know.
+        then:
+          id: 
+          text: 
+      - personality: stickler
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: panic
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.stickler.2
+          text: The dress guide I was issued lists {value}. Your guide may differ.
+        then:
+          id: 
+          text: 
+      - personality: stickler
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.stickler.3
+          text: Correct. It's {other}. I'd have caught it too.
+        then:
+          id: 
+          text: 
+      - personality: stickler
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: forged
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.stickler.4
+          text: Noted. I altered it. Badly, it seems.
+        then:
+          id: 
+          text: 
+      - personality: stickler
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.voices.confront.stickler.5
+          text: I've read the regulations. {value} is in order.
+        then:
+          id: 
+          text: 
+      - personality: glum
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.glum.1
+          text: Someone typed it wrong. Somebody always does.
+        then:
+          id: 
+          text: 
+      - personality: glum
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: panic
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.confront.glum.2
+          text: They handed me {value}. I didn't ask questions. I never do.
+        then:
+          id: 
+          text: 
+      - personality: glum
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.glum.3
+          text: '{other}. Obviously. It always is.'
+        then:
+          id: 
+          text: 
+      - personality: glum
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: smuggled
+        lie: 
+        outcome: 1
+        line:
+          id: interview.voices.confront.glum.4
+          text: It's from 2150. I needed the money. Who doesn't.
+        then:
+          id: 
+          text: 
+      - personality: glum
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.voices.confront.glum.5
+          text: It's {value}. Not that it matters.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: socrates
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.voices.confront.socrates.1
+          text: Is it {value}? And what is {value}, really?
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: ada
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.voices.confront.ada.1
+          text: '{value}, darling. Quite certainly {value}.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: rook
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.voices.confront.rook.1
+          text: It says {value}. You don't want trouble over a number.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: auditor
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.voices.confront.auditor.1
+          text: '{value}. Note it down. I certainly will.'
         then:
           id: 
           text: 
@@ -10889,6 +12205,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: 
+      outcome: 0
       line:
         id: interview.reactions.1
         text: Thank you!
@@ -10905,6 +12222,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: 
+      outcome: 0
       line:
         id: interview.reactions.2
         text: Thank you. Home, at last.
@@ -10921,6 +12239,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: 
+      outcome: 0
       line:
         id: interview.reactions.3
         text: But... I did everything right.
@@ -10937,6 +12256,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: 
+      outcome: 0
       line:
         id: interview.reactions.4
         text: Then how do I get home?
@@ -10953,6 +12273,7 @@ MonoBehaviour:
       intent: 1
       reason: 
       lie: 
+      outcome: 0
       line:
         id: interview.reactions.5
         text: Thank you. Thank you very much.
@@ -10969,6 +12290,7 @@ MonoBehaviour:
       intent: 1
       reason: 
       lie: 
+      outcome: 0
       line:
         id: interview.reactions.6
         text: Worth a try.
@@ -10986,6 +12308,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: 
+      outcome: 0
       line:
         id: interview.slips.1
         text: Nothing to see here. I mean, everything to see. It's all fine.
@@ -11002,6 +12325,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: Smuggling
+      outcome: 0
       line:
         id: interview.slips.2
         text: Nothing from home in my luggage. Home meaning here. Obviously.
@@ -11018,6 +12342,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: PoorPosingAsRich
+      outcome: 0
       line:
         id: interview.slips.3
         text: Premium, yes. We Premiums always... what is it we always do?
@@ -11034,6 +12359,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: DoctoredIdentity
+      outcome: 0
       line:
         id: interview.slips.4
         text: My details? It's all on the visa. That visa. The one you're holding.
@@ -11050,6 +12376,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: FalseOrigin
+      outcome: 0
       line:
         id: interview.slips.5
         text: Home. Yes. {place}. I say it every morning so I don't forget.
@@ -11066,6 +12393,7 @@ MonoBehaviour:
       intent: 0
       reason: 
       lie: FakeDisplaced
+      outcome: 0
       line:
         id: interview.slips.6
         text: The sky opened and took me from the past. The very old past. Ancient-ish.
@@ -11089,6 +12417,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.waiverPad.replies.1
           text: Where do I... there? Lovely.
@@ -11105,6 +12434,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.waiverPad.replies.2
           text: I'd rather not sign anything today, thank you.
@@ -11121,6 +12451,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.waiverPad.replies.3
           text: I don't think that one is for me.
@@ -11137,6 +12468,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.waiverPad.replies.4
           text: It's a Premium unit, I don't need one.
@@ -11153,6 +12485,7 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.waiverPad.replies.5
           text: Sign? I don't even know which century that pen is from.
@@ -11169,9 +12502,391 @@ MonoBehaviour:
         intent: 0
         reason: 
         lie: 
+        outcome: 0
         line:
           id: interview.waiverPad.replies.6
           text: I signed one already. It's in the pile you have.
+        then:
+          id: 
+          text: 
+    confront:
+      label: Ask about a difference >
+      entryLabel: '{category}: {value}?'
+      prompts:
+      - proof: 0
+        source: 1
+        category: 
+        line:
+          id: interview.confront.prompts.1
+          text: Your {document} gives {value}.
+        then:
+          id: interview.confront.prompts.1.then
+          text: The book for {place} says {other}.
+      - proof: 0
+        source: 4
+        category: 
+        line:
+          id: interview.confront.prompts.2
+          text: You told me {value}.
+        then:
+          id: interview.confront.prompts.2.then
+          text: The book for {place} says {other}.
+      - proof: 0
+        source: 5
+        category: 
+        line:
+          id: interview.confront.prompts.3
+          text: You're wearing {value}.
+        then:
+          id: interview.confront.prompts.3.then
+          text: In {place} they wear {other}.
+      - proof: 1
+        source: 1
+        category: 
+        line:
+          id: interview.confront.prompts.4
+          text: Your {document} gives {value}.
+        then:
+          id: interview.confront.prompts.4.then
+          text: That belongs to {other}.
+      - proof: 1
+        source: 4
+        category: 
+        line:
+          id: interview.confront.prompts.5
+          text: You told me {value}.
+        then:
+          id: interview.confront.prompts.5.then
+          text: That's what they say in {other}.
+      - proof: 1
+        source: 5
+        category: 
+        line:
+          id: interview.confront.prompts.6
+          text: You're wearing {value}.
+        then:
+          id: interview.confront.prompts.6.then
+          text: That's how they dress in {other}.
+      - proof: 2
+        source: 1
+        category: 
+        line:
+          id: interview.confront.prompts.7
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.7.then
+          text: Your record says {other}.
+      - proof: 2
+        source: 1
+        category: AccountStatus
+        line:
+          id: interview.confront.prompts.8
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.8.then
+          text: Your account says {other}.
+      - proof: 2
+        source: 1
+        category: TransponderClass
+        line:
+          id: interview.confront.prompts.9
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.9.then
+          text: Your account says {other}.
+      - proof: 2
+        source: 1
+        category: TransponderId
+        line:
+          id: interview.confront.prompts.10
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.10.then
+          text: Your account says {other}.
+      - proof: 2
+        source: 1
+        category: Debt
+        line:
+          id: interview.confront.prompts.11
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.11.then
+          text: Your account says {other}.
+      - proof: 2
+        source: 1
+        category: WaiverNo
+        line:
+          id: interview.confront.prompts.12
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.12.then
+          text: Your account says {other}.
+      - proof: 2
+        source: 1
+        category: Credit
+        line:
+          id: interview.confront.prompts.13
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.13.then
+          text: Your account says {other}.
+      - proof: 2
+        source: 1
+        category: Funds
+        line:
+          id: interview.confront.prompts.14
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.14.then
+          text: Your account says {other}.
+      - proof: 2
+        source: 1
+        category: PolicyNo
+        line:
+          id: interview.confront.prompts.15
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.15.then
+          text: Your account says {other}.
+      - proof: 2
+        source: 1
+        category: Employer
+        line:
+          id: interview.confront.prompts.16
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.16.then
+          text: Your registered contract says {other}.
+      - proof: 2
+        source: 1
+        category: Wage
+        line:
+          id: interview.confront.prompts.17
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.17.then
+          text: Your registered contract says {other}.
+      - proof: 2
+        source: 1
+        category: Term
+        line:
+          id: interview.confront.prompts.18
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.18.then
+          text: Your registered contract says {other}.
+      - proof: 2
+        source: 4
+        category: 
+        line:
+          id: interview.confront.prompts.19
+          text: You told me {value}.
+        then:
+          id: interview.confront.prompts.19.then
+          text: Your record says {other}.
+      - proof: 2
+        source: 5
+        category: 
+        line:
+          id: interview.confront.prompts.20
+          text: You're wearing {value}.
+        then:
+          id: interview.confront.prompts.20.then
+          text: Your record says {other}.
+      - proof: 3
+        source: 1
+        category: 
+        line:
+          id: interview.confront.prompts.21
+          text: Your {document} says {value}.
+        then:
+          id: interview.confront.prompts.21.then
+          text: Your {otherDocument} says {other}.
+      replies:
+      - personality: 
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.confront.replies.1
+          text: Oh! That must be a clerical slip. Someone at the agency typed it.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: panic
+        lie: 
+        outcome: 0
+        line:
+          id: interview.confront.replies.2
+          text: The costume desk said {value} was fine. I thought it was right.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 1
+        line:
+          id: interview.confront.replies.3
+          text: All right. It's {other}. It always was.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: forged
+        lie: 
+        outcome: 1
+        line:
+          id: interview.confront.replies.4
+          text: Fine. I changed it. {value} looked better on paper.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: disguised
+        lie: 
+        outcome: 1
+        line:
+          id: interview.confront.replies.5
+          text: I'm not from where I said. Please don't write that down.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: smuggled
+        lie: 
+        outcome: 1
+        line:
+          id: interview.confront.replies.6
+          text: It's from 2150. I was going to sell it. Everyone does it.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: PoorPosingAsRich
+        outcome: 1
+        line:
+          id: interview.confront.replies.7
+          text: It's {other}. I just wanted one nice trip.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 2
+        line:
+          id: interview.confront.replies.8
+          text: It's {value}. I don't know what your book says.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: forged
+        lie: 
+        outcome: 2
+        line:
+          id: interview.confront.replies.9
+          text: The paper is correct. Your records are behind.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: disguised
+        lie: 
+        outcome: 2
+        line:
+          id: interview.confront.replies.10
+          text: I know my own home. It's {value} there.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: 
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: smuggled
+        lie: 
+        outcome: 2
+        line:
+          id: interview.confront.replies.11
+          text: It's a souvenir. People take souvenirs.
         then:
           id: 
           text: 
@@ -11188,42 +12903,49 @@ MonoBehaviour:
     weight: 1
     note: Tells you everything, then a bit more.
     waiverRefusal: 0.05
+    confess: 0.6
     strandingFate: News
   - id: curt
     name: Curt
     weight: 1
     note: Time is money, and in 2150 the queue bills by the minute.
     waiverRefusal: 0.3
+    confess: 0.3
     strandingFate: 
   - id: anxious
     name: Anxious
     weight: 1
     note: Worried about paradoxes, transponders, butterflies and you.
     waiverRefusal: 0.05
+    confess: 0.8
     strandingFate: Forgotten
   - id: sunny
     name: Sunny
     weight: 1
     note: Believes every word the agency prints.
     waiverRefusal: 0.05
+    confess: 0.7
     strandingFate: 
   - id: grand
     name: Grand
     weight: 1
     note: Treats the desk as staff, whatever their account says.
     waiverRefusal: 0.5
+    confess: 0.15
     strandingFate: Carry
   - id: stickler
     name: Stickler
     weight: 1
     note: Knows the regulations better than the clerk and says so.
     waiverRefusal: 0.1
+    confess: 0.5
     strandingFate: 
   - id: glum
     name: Glum
     weight: 1
     note: The debt won years ago; this is just the paperwork.
     waiverRefusal: 0.05
+    confess: 0.4
     strandingFate: Forgotten
   dialogs:
   - {fileID: 11400000, guid: 330b52d57beff584e9353e8cddf2e621, type: 2}
@@ -11251,6 +12973,9 @@ MonoBehaviour:
     carry:
       id: history.carry
       text: 'HISTORY: travellers brought {value} to {place}.'
+    carryBy:
+      id: history.carryBy
+      text: 'HISTORY: {name}, stamped day {day}, brought {value} to {place}.'
     dominant:
       id: history.dominant
       text: '{attribute} is now DOMINANT in {place}.'
@@ -11258,6 +12983,13 @@ MonoBehaviour:
       id: history.panic
       text: 'PANIC in {place}: a traveller from the agency was seen in "{value}"
         and the street fled.'
+    panicBy:
+      id: history.panicBy
+      text: 'PANIC in {place}: {name}, stamped day {day}, wore "{value}". The street
+        fled.'
+    traced:
+      id: history.traced
+      text: 'Traced to Desk 3: {name}, day {day}.'
   pc:
     steps:
       sets:
@@ -13280,6 +15012,10 @@ MonoBehaviour:
     - A stranded tourist's family inherits 212,000 cr.
     stranded: 'Stranded: {name}, lost in {place} when an Economy transponder failed.'
     debtReliefCount: 'Citizens who left on Debt Relief yesterday: {count}.'
+    returnedAccepted: 'Second time lucky: {name}, turned away on day {day}, stamped
+      through on day {back}.'
+    returnedDenied: '{name}, turned away on day {day}, tried again on day {back}.
+      Turned away twice.'
   mail:
   - id: welcome
     fromDay: 1

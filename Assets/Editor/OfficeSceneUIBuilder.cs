@@ -865,14 +865,20 @@ public static partial class OfficeSceneUIBuilder
         return canvas;
     }
 
+    /// <summary>The morning paper's and the shift report's sheet (reference px): wide enough for a busy morning, whose headlines name the travellers behind them (wave 5, lesson 10).</summary>
+    private static readonly Vector2 NewsletterSize = new Vector2(860f, 860f);
+
+    /// <summary>The sheet's body text size, and the smallest it shrinks to on a busy day: 19 units is 12.7 px at 720p, above the 12.5 px floor.</summary>
+    private const int NewsletterBodySize = 21, NewsletterBodyMin = 19;
+
     /// <summary>
     /// Builds a newsletter-styled panel (masthead + rule + dateline title + body
-    /// + one action button) for the office view. Hidden by default.
+    /// + one action button) for the office view. Hidden by default; its body shrinks to fit a busy day (NewsletterBodyMin).
     /// </summary>
     private static Transform BuildNewsletter(Transform parent, string name, string mastheadKey, string buttonKey,
         out TMP_Text title, out TMP_Text body, out Button action)
     {
-        Transform panel = Panel(parent, name, Center, Center, Vector2.zero, new Vector2(700f, 780f), Ink, ThemeRoleId.NewsletterBorder);
+        Transform panel = Panel(parent, name, Center, Center, Vector2.zero, NewsletterSize, Ink, ThemeRoleId.NewsletterBorder);
         Transform paper = Panel(panel, "Paper", Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-10f, -10f), Paper, ThemeRoleId.Newsletter);
 
         Text(paper, "Masthead", null, 38, TextAlignmentOptions.Center, new Vector2(0.04f, 0.9f), new Vector2(0.96f, 0.99f), Ink,
@@ -881,7 +887,10 @@ public static partial class OfficeSceneUIBuilder
 
         title = Text(paper, "TitleText", "", 24, TextAlignmentOptions.Center, new Vector2(0.05f, 0.82f), new Vector2(0.95f, 0.875f), Ink,
                      ThemeRoleId.Newsletter, kind: ThemeTextKind.Heading, fit: true);
-        body = Text(paper, "BodyText", "...", 21, TextAlignmentOptions.TopLeft, new Vector2(0.08f, 0.14f), new Vector2(0.92f, 0.8f), Ink, ThemeRoleId.Newsletter);
+        body = Text(paper, "BodyText", "...", NewsletterBodySize, TextAlignmentOptions.TopLeft, new Vector2(0.08f, 0.14f), new Vector2(0.92f, 0.8f), Ink, ThemeRoleId.Newsletter);
+        body.enableAutoSizing = true;
+        body.fontSizeMax = NewsletterBodySize;
+        body.fontSizeMin = NewsletterBodyMin;
         action = MakeButton(paper, "ActionButton", null, new Vector2(0.3f, 0.03f), new Vector2(0.7f, 0.11f), new Color(0.16f, 0.15f, 0.13f, 1f),
                             ThemeRoleId.NewsletterButton, buttonKey);
 

@@ -10,6 +10,10 @@ using NUnit.Framework;
 /// </summary>
 public class DebtNewsTests
 {
+    /// <summary>The returned travellers' desk lines (wave 5, lesson 9).</summary>
+    private const string Through = "Second time lucky: {name}, turned away on day {day}.";
+    private const string Again = "{name} was turned away on day {day} and again on day {back}.";
+
     private static readonly string[] Pool =
     {
         "Debt Relief Departures reach a record high.",
@@ -69,18 +73,18 @@ public class DebtNewsTests
     [Test]
     public void NewsContentProblems_TheCountLineHoldsItsToken()
     {
-        StringAssert.Contains("news.debtReliefCount", new NewsContent { debt = Pool.ToList(), stranded = Stranded }.Problems().Single(), "a blank line");
-        StringAssert.Contains("{count}", new NewsContent { debt = Pool.ToList(), stranded = Stranded, debtReliefCount = "Citizens left on Debt Relief yesterday." }.Problems().Single(), "no count");
-        CollectionAssert.IsEmpty(new NewsContent { debt = Pool.ToList(), stranded = Stranded, debtReliefCount = Count }.Problems());
+        StringAssert.Contains("news.debtReliefCount", new NewsContent { returnedAccepted = Through, returnedDenied = Again, debt = Pool.ToList(), stranded = Stranded }.Problems().Single(), "a blank line");
+        StringAssert.Contains("{count}", new NewsContent { returnedAccepted = Through, returnedDenied = Again, debt = Pool.ToList(), stranded = Stranded, debtReliefCount = "Citizens left on Debt Relief yesterday." }.Problems().Single(), "no count");
+        CollectionAssert.IsEmpty(new NewsContent { returnedAccepted = Through, returnedDenied = Again, debt = Pool.ToList(), stranded = Stranded, debtReliefCount = Count }.Problems());
     }
 
     [Test]
     public void NewsContentProblems_RefuseABlankLine()
     {
-        CollectionAssert.IsEmpty(new NewsContent { debt = Pool.ToList(), stranded = Stranded, debtReliefCount = Count }.Problems());
-        CollectionAssert.IsEmpty(new NewsContent { stranded = Stranded, debtReliefCount = Count }.Problems(), "an empty pool prints no debt line");
+        CollectionAssert.IsEmpty(new NewsContent { returnedAccepted = Through, returnedDenied = Again, debt = Pool.ToList(), stranded = Stranded, debtReliefCount = Count }.Problems());
+        CollectionAssert.IsEmpty(new NewsContent { returnedAccepted = Through, returnedDenied = Again, stranded = Stranded, debtReliefCount = Count }.Problems(), "an empty pool prints no debt line");
 
-        List<string> problems = new NewsContent { debt = new List<string> { "A line.", " " }, stranded = Stranded, debtReliefCount = Count }.Problems();
+        List<string> problems = new NewsContent { returnedAccepted = Through, returnedDenied = Again, debt = new List<string> { "A line.", " " }, stranded = Stranded, debtReliefCount = Count }.Problems();
         Assert.AreEqual(1, problems.Count);
         StringAssert.Contains("news.debt", problems[0]);
     }
@@ -89,8 +93,21 @@ public class DebtNewsTests
     [Test]
     public void NewsContentProblems_TheStrandingLineHoldsItsTokens()
     {
-        StringAssert.Contains("news.stranded", new NewsContent { debt = Pool.ToList(), debtReliefCount = Count }.Problems().Single(), "a blank line");
-        StringAssert.Contains("{place}", new NewsContent { debt = Pool.ToList(), stranded = "Stranded: {name}.", debtReliefCount = Count }.Problems().Single(), "no place");
-        StringAssert.Contains("{name}", new NewsContent { debt = Pool.ToList(), stranded = "Lost in {place}.", debtReliefCount = Count }.Problems().Single(), "no name");
+        StringAssert.Contains("news.stranded", new NewsContent { returnedAccepted = Through, returnedDenied = Again, debt = Pool.ToList(), debtReliefCount = Count }.Problems().Single(), "a blank line");
+        StringAssert.Contains("{place}", new NewsContent { returnedAccepted = Through, returnedDenied = Again, debt = Pool.ToList(), stranded = "Stranded: {name}.", debtReliefCount = Count }.Problems().Single(), "no place");
+        StringAssert.Contains("{name}", new NewsContent { returnedAccepted = Through, returnedDenied = Again, debt = Pool.ToList(), stranded = "Lost in {place}.", debtReliefCount = Count }.Problems().Single(), "no name");
+    }
+
+    /// <summary>Wave 5, lesson 9: the desk section's lines for a traveller who came back after a denial name them and the day they were turned away.</summary>
+    [Test]
+    public void NewsContentProblems_TheReturnedLinesHoldTheirTokens()
+    {
+        var sound = new NewsContent { debt = Pool.ToList(), stranded = Stranded, debtReliefCount = Count, returnedAccepted = Through, returnedDenied = Again };
+        CollectionAssert.IsEmpty(sound.Problems());
+        sound.returnedAccepted = " ";
+        StringAssert.Contains("news.returnedAccepted is blank", sound.Problems().Single());
+        sound.returnedAccepted = Through;
+        sound.returnedDenied = "{name}, again.";
+        StringAssert.Contains("news.returnedDenied must hold {name} and {day}", sound.Problems().Single());
     }
 }

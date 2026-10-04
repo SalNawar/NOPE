@@ -51,17 +51,25 @@ public static partial class WorldContentGenerator
             for (int i = 0; i < rows.Length; i++)
                 if (rows[i] != null)
                     Names($"interview.voices.{list} row {i + 1}", rows[i].kinds, rows[i].variant, rows[i], list == "reactions");
-        foreach ((string list, VoiceRowData[] rows) in new[] { ("reactions", iv.reactions ?? Array.Empty<VoiceRowData>()), ("slips", iv.slips ?? Array.Empty<VoiceRowData>()), ("waiverPad.replies", iv.waiverPad?.replies ?? Array.Empty<VoiceRowData>()) })
+        foreach ((string list, VoiceRowData[] rows) in new[] { ("reactions", iv.reactions ?? Array.Empty<VoiceRowData>()), ("slips", iv.slips ?? Array.Empty<VoiceRowData>()), ("waiverPad.replies", iv.waiverPad?.replies ?? Array.Empty<VoiceRowData>()), ("confront.replies", iv.confront?.replies ?? Array.Empty<VoiceRowData>()) })
             for (int i = 0; i < rows.Length; i++)
                 if (rows[i] != null)
                     Names($"interview.{list} row {i + 1}", rows[i].kinds, null, rows[i], list == "reactions");
+        foreach ((string list, VoiceRowData[] rows) in new[] { ("interview.voices.confront", voices.confront ?? Array.Empty<VoiceRowData>()), ("interview.confront.replies", iv.confront?.replies ?? Array.Empty<VoiceRowData>()) })
+            for (int i = 0; i < rows.Length; i++)
+                if (rows[i] != null && !ParseEnum(rows[i].outcome, out ConfrontOutcome _))
+                    errors.Add($"{list} row {i + 1} needs an \"outcome\" ({string.Join(", ", Enum.GetNames(typeof(ConfrontOutcome)))}), not '{rows[i].outcome}'.");
+        ConfrontPromptData[] promptRows = iv.confront?.prompts ?? Array.Empty<ConfrontPromptData>();
+        for (int i = 0; i < promptRows.Length; i++)
+            if (promptRows[i] != null && (!ParseEnum(promptRows[i].proof, out DiscrepancyProof _) || !ParseEnum(promptRows[i].source, out EvidenceKind _)))
+                errors.Add($"interview.confront.prompts row {i + 1} needs a \"proof\" ({string.Join(", ", Enum.GetNames(typeof(DiscrepancyProof)))}) and a \"source\" (DocumentField, Answer, Appearance).");
         KindTalkData[] kindTalk = iv.kindSmallTalk ?? Array.Empty<KindTalkData>();
         for (int i = 0; i < kindTalk.Length; i++)
             if (kindTalk[i] != null)
                 Names($"interview.kindSmallTalk row {i + 1}", kindTalk[i].kinds, null);
 
         InterviewLines built = BuildLines(iv);
-        foreach ((string list, List<VoiceLine> rows) in BookLists(built.voices).Concat(new[] { ("default reactions", built.reactions), ("default slips", built.slips), ("default waiver-pad replies", built.waiverPad.replies) }))
+        foreach ((string list, List<VoiceLine> rows) in BookLists(built.voices).Concat(new[] { ("default reactions", built.reactions), ("default slips", built.slips), ("default waiver-pad replies", built.waiverPad.replies), ("default replies to a difference", built.confront.replies) }))
             foreach (VoiceLine row in rows.Where(r => r != null))
             {
                 id(row.line.id, $"the {list} row of '{VoiceOf(row)}'");
@@ -77,6 +85,24 @@ public static partial class WorldContentGenerator
             id(row.line.id, "the kinds' small talk");
             ascii(row.line.id, row.line.text);
         }
+        foreach (ConfrontPrompt prompt in built.confront.prompts.Where(p => p != null))
+        {
+            id(prompt.line.id, "a question about a difference");
+            ascii(prompt.line.id, prompt.line.text);
+            if (!string.IsNullOrEmpty(prompt.then?.text))
+            {
+                id(prompt.then.id, "a question about a difference (then)");
+                ascii(prompt.then.id, prompt.then.text);
+            }
+        }
+        ascii(InterviewLineId("confront.label"), built.confront.label);
+        ascii(InterviewLineId("confront.entryLabel"), built.confront.entryLabel);
+        id(built.openerReturning.id, "the returning traveller's opener");
+        ascii(built.openerReturning.id, built.openerReturning.text);
+        if (string.IsNullOrWhiteSpace(built.openerReturning.text))
+            errors.Add("interview.openerReturning is blank: the desk's opener for a traveller back after a denial ({honorific}, {day}).");
+        else if (!Interview.HoldsToken(built.openerReturning.text, Returns.DeniedDayToken))
+            errors.Add("interview.openerReturning must hold {day}: the day the traveller was turned away.");
         if (iv.waiverPad != null)
         {
             id(built.waiverPad.prompt.id, "the waiver pad's prompt");
@@ -114,6 +140,7 @@ public static partial class WorldContentGenerator
             DefaultReactions = built.reactions,
             DefaultSlips = built.slips,
             DefaultPadReplies = built.waiverPad.replies,
+            Confront = built.confront,
             PadOffered = InterviewScript.OffersPad(kindForms.SelectMany(k => k.Askable ?? Array.Empty<AskableForm>()).ToList(), built),
             SlipChances = (src.days ?? Array.Empty<DayData>()).Where(d => d != null).Select(d => (d.day, d.slipChance)).ToList(),
             PremadeIntents = PremadeIntents(src),
@@ -160,7 +187,8 @@ public static partial class WorldContentGenerator
     private static List<Personality> BuildCast(PersonalityData[] cast) =>
         (cast ?? Array.Empty<PersonalityData>()).Select(p => p == null ? null : new Personality
         {
-            id = p.id, name = p.name, weight = p.weight, note = p.note ?? string.Empty, waiverRefusal = p.waiverRefusal, strandingFate = p.strandingFate ?? string.Empty
+            id = p.id, name = p.name, weight = p.weight, note = p.note ?? string.Empty, waiverRefusal = p.waiverRefusal, strandingFate = p.strandingFate ?? string.Empty,
+            confess = p.confess
         }).ToList();
 
     /// <summary>Writes the cast into the library's personalities (field by field: the list holds plain rows).</summary>
@@ -178,6 +206,7 @@ public static partial class WorldContentGenerator
             row.FindPropertyRelative("weight").floatValue = built[i].weight;
             row.FindPropertyRelative("note").stringValue = built[i].note;
             row.FindPropertyRelative("waiverRefusal").floatValue = built[i].waiverRefusal;
+            row.FindPropertyRelative("confess").floatValue = built[i].confess;
             row.FindPropertyRelative("strandingFate").stringValue = built[i].strandingFate;
         }
         so.ApplyModifiedProperties();
@@ -198,9 +227,32 @@ public static partial class WorldContentGenerator
             smallTalk = VoiceRows("smallTalk", v.smallTalk, r => null),
             reactions = VoiceRows("reactions", v.reactions, r => null),
             slips = VoiceRows("slips", v.slips, r => null),
-            waiverPad = VoiceRows("waiverPad", v.waiverPad, r => r.reply)
+            waiverPad = VoiceRows("waiverPad", v.waiverPad, r => r.reply),
+            confront = VoiceRows("confront", v.confront, r => null)
         };
     }
+
+    /// <summary>
+    /// The wheel's questions about logged differences as the library holds
+    /// them (wave 5, lesson 3): the entries' labels, the prompts
+    /// ("interview.confront.prompts.{n}") and the default replies
+    /// ("interview.confront.replies.{n}"). Unknown proofs or statement kinds
+    /// read as the first value; CheckVoices reports them.
+    /// </summary>
+    private static ConfrontWording BuildConfront(ConfrontData c) => new ConfrontWording
+    {
+        label = c?.label ?? string.Empty,
+        entryLabel = c?.entryLabel ?? string.Empty,
+        prompts = (c?.prompts ?? Array.Empty<ConfrontPromptData>()).Select((p, i) => p == null ? null : new ConfrontPrompt
+        {
+            proof = ParseEnum(p.proof, out DiscrepancyProof proof) ? proof : default,
+            source = ParseEnum(p.source, out EvidenceKind source) ? source : default,
+            category = p.category ?? string.Empty,
+            line = new LineText(InterviewLineId($"confront.prompts.{i + 1}"), p.text),
+            then = string.IsNullOrEmpty(p.then) ? new LineText() : new LineText(InterviewLineId($"confront.prompts.{i + 1}.then"), p.then)
+        }).ToList(),
+        replies = VoiceRows("confront", c?.replies, r => null, "confront.replies")
+    };
 
     /// <summary>
     /// One list's rows with generated line ids: a voice's "interview.voices.{list}.{voice}.{n}" (n per list and voice), or,
@@ -232,6 +284,7 @@ public static partial class WorldContentGenerator
                 intent = ParseEnum(r.intent, out ReactionIntent intent) ? intent : ReactionIntent.Honest,
                 reason = r.reason ?? string.Empty,
                 lie = r.lie ?? string.Empty,
+                outcome = ParseEnum(r.outcome, out ConfrontOutcome outcome) ? outcome : ConfrontOutcome.Explain,
                 line = new LineText(LineIdOf(list, voice, counts[voice], defaults, built.Count + 1), r.text),
                 then = string.IsNullOrEmpty(r.then) ? new LineText() : new LineText(LineIdOf(list, voice, counts[voice], defaults, built.Count + 1) + ".then", r.then)
             });
@@ -272,6 +325,7 @@ public static partial class WorldContentGenerator
         yield return ("reactions", v.reactions ?? Array.Empty<VoiceRowData>());
         yield return ("slips", v.slips ?? Array.Empty<VoiceRowData>());
         yield return ("waiverPad", v.waiverPad ?? Array.Empty<VoiceRowData>());
+        yield return ("confront", v.confront ?? Array.Empty<VoiceRowData>());
     }
 
     private static IEnumerable<(string list, List<VoiceLine> rows)> BookLists(VoiceBook b)
@@ -285,6 +339,7 @@ public static partial class WorldContentGenerator
         yield return ("reactions", b.reactions);
         yield return ("slips", b.slips);
         yield return ("waiverPad", b.waiverPad);
+        yield return ("confront", b.confront);
     }
 
     // -----------------------------
@@ -292,7 +347,7 @@ public static partial class WorldContentGenerator
     // -----------------------------
 
     /// <summary>A personality of the cast (world_source.json "personalities").</summary>
-    [Serializable] private sealed class PersonalityData { public string id; public string name; public float weight; public string note; public float waiverRefusal; public string strandingFate; }
+    [Serializable] private sealed class PersonalityData { public string id; public string name; public float weight; public string note; public float waiverRefusal; public string strandingFate; public float confess; }
 
     /// <summary>interview.smallTalkWeights.</summary>
     [Serializable] private sealed class SmallTalkWeightsData { public float personality; public float home; public float kind; }
@@ -313,6 +368,8 @@ public static partial class WorldContentGenerator
         public string reason;
         public string lie;
         public string reply;
+        /// <summary>A reply to a question about a difference: Explain, Crack or DoubleDown (wave 5, lesson 3).</summary>
+        public string outcome;
         public string[] kinds;
         public string era;
         public string text;
@@ -331,5 +388,18 @@ public static partial class WorldContentGenerator
         public VoiceRowData[] reactions;
         public VoiceRowData[] slips;
         public VoiceRowData[] waiverPad;
+        public VoiceRowData[] confront;
     }
+
+    /// <summary>interview.confront (wave 5, lesson 3): the hub entry, a difference's entry, the desk's questions, the default replies.</summary>
+    [Serializable] private sealed class ConfrontData
+    {
+        public string label;
+        public string entryLabel;
+        public ConfrontPromptData[] prompts;
+        public VoiceRowData[] replies;
+    }
+
+    /// <summary>A question about a kind of difference: its proof, its statement kind, an optional category, the desk's words.</summary>
+    [Serializable] private sealed class ConfrontPromptData { public string proof; public string source; public string category; public string text; public string then; }
 }

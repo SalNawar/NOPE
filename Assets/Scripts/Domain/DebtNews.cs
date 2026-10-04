@@ -20,7 +20,13 @@ public sealed class NewsContent
     /// <summary>The line the morning paper prints when the last shift approved Debt Relief departures ("news.debtReliefCount"; the token {count}; DebtNews.YesterdayLine).</summary>
     public string debtReliefCount = string.Empty;
 
-    /// <summary>What Generate World and the validator refuse: a blank debt line, a stranding line that is blank or lacks {name} or {place}, or a Debt Relief count line that is blank or lacks {count}. Empty when sound.</summary>
+    /// <summary>The desk section's line for a traveller turned away who came back and was let through ("news.returnedAccepted"; {name}, {day} the first denial, {back} the return; Returns.Lines; wave 5, lesson 9).</summary>
+    public string returnedAccepted = string.Empty;
+
+    /// <summary>The desk section's line for a traveller turned away who came back and was turned away again ("news.returnedDenied"; {name}, {day}, {back}).</summary>
+    public string returnedDenied = string.Empty;
+
+    /// <summary>What Generate World and the validator refuse: a blank debt line, a stranding line that is blank or lacks {name} or {place}, a Debt Relief count line that is blank or lacks {count}, or a returned traveller's line that is blank or lacks {name} or {day}. Empty when sound.</summary>
     public List<string> Problems()
     {
         var problems = new List<string>();
@@ -32,6 +38,11 @@ public sealed class NewsContent
             problems.Add("news.debtReliefCount is blank: the line the morning paper prints for yesterday's Debt Relief departures, with {count}.");
         else if (!Interview.HoldsToken(debtReliefCount, DebtNews.CountToken))
             problems.Add("news.debtReliefCount must hold {count}: how many citizens left on Debt Relief yesterday.");
+        foreach ((string key, string line) in new[] { ("returnedAccepted", returnedAccepted), ("returnedDenied", returnedDenied) })
+            if (string.IsNullOrWhiteSpace(line))
+                problems.Add($"news.{key} is blank: the desk section's line for a traveller who came back after a denial, with {{name}} and {{day}}.");
+            else if (!Interview.HoldsToken(line, Interview.NameToken) || !Interview.HoldsToken(line, Returns.DeniedDayToken))
+                problems.Add($"news.{key} must hold {{name}} and {{day}}: who came back and the day they were first turned away.");
         if (debt == null)
             return problems;
         for (int i = 0; i < debt.Count; i++)

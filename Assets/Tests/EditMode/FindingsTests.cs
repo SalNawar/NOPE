@@ -139,7 +139,7 @@ public class FindingsTests
         Assert.AreEqual(FindingKind.RuleNotForTraveller, FindingRules.Of(RuleVerdict.NotForTraveller));
     }
 
-    private static Finding F(FindingKind kind, string a, string b) => new Finding(kind, a, b, "A", "1", "B", "2", "Detail", false);
+    private static Finding F(FindingKind kind, string a, string b) => new Finding(kind, a, b, "A", "1", "B", "2", "Detail", null);
 
     [Test]
     public void TheLog_KeepsOneFindingPerPair_InEitherOrder()
