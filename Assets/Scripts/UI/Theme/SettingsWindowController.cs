@@ -11,11 +11,12 @@ using UnityEngine.UI;
 /// traveller); and the desktop's icons (the PC redesign DK5, DK6): open
 /// with a "Double click" (the default) or a "Single click"
 /// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange);
-/// and the Investigation app (the PC redesign ST1, SG1): its steps checklist
-/// "Checklist shown" (the default) or "Checklist hidden" (StepsPanel.SetShown,
-/// remembered in DesktopPreferences; the checklist's own Hide or Show repaints the pair).
+/// and the Investigation app (the PC redesign SG1; the PC workbench spec
+/// §7): its step hints (the lead's sentence and the status line's teaching
+/// hint) "Hints shown" (the default) or "Hints hidden" (GuideBar.SetShown,
+/// remembered in DesktopPreferences; Ctrl+Shift+S repaints the pair).
 /// In each pair the chosen button shows the theme's accent colours (the
-/// Badge role, as the navigator's selected source: the PC UX redesign), the other the default button colours. The
+/// Badge role), the other the default button colours. The
 /// Investigation section's Text size (100, 125, 150 %: the zoom levels) is
 /// the app's default zoom (InvestigationApp.SetZoomDefault, saved in
 /// DesktopPreferences; Ctrl+0 goes back to it). The Keyboard section's "Show
@@ -56,14 +57,14 @@ public sealed class SettingsWindowController : MonoBehaviour
     /// <summary>The Investigation app (its default zoom).</summary>
     [SerializeField] private InvestigationApp app;
 
-    /// <summary>The Investigation app's steps checklist shows.</summary>
+    /// <summary>The Investigation app's step hints show.</summary>
     [SerializeField] private Button stepsShownButton;
 
-    /// <summary>The Investigation app's steps checklist is hidden.</summary>
+    /// <summary>The Investigation app's step hints are hidden.</summary>
     [SerializeField] private Button stepsHiddenButton;
 
-    /// <summary>The steps checklist the pair shows or hides.</summary>
-    [SerializeField] private StepsPanel steps;
+    /// <summary>The guided steps whose hints the pair shows or hides.</summary>
+    [SerializeField] private GuideBar steps;
 
     /// <summary>The Keyboard section's "Show shortcuts".</summary>
     [SerializeField] private Button showShortcutsButton;
@@ -144,7 +145,7 @@ public sealed class SettingsWindowController : MonoBehaviour
     private int Level(int index) =>
         config != null && config.zoomLevels != null && index < config.zoomLevels.Length ? config.zoomLevels[index] : AppZoom.Normal;
 
-    /// <summary>Shows or hides the Investigation app's steps (remembered for the player; the checklist repaints this pair).</summary>
+    /// <summary>Shows or hides the Investigation app's step hints (remembered for the player; the steps repaint this pair).</summary>
     private void ChooseSteps(bool shown)
     {
         if (steps != null)

@@ -176,7 +176,34 @@ public enum ThemeRoleId
     DiegeticForm,
 
     /// <summary>Diegetic: an Internet page's content.</summary>
-    SiteContent
+    SiteContent,
+
+    /// <summary>The workbench's white panels: the header, the shelf, the findings, the pane headers, the foot, the drawer (the PC workbench spec §5).</summary>
+    Surface,
+
+    /// <summary>Muted captions on a surface (group labels, hints, counters; AA like body text).</summary>
+    SurfaceMuted,
+
+    /// <summary>The 1-unit borders between surfaces and round quiet buttons and chips.</summary>
+    Hairline,
+
+    /// <summary>The 2-unit border of the target pane.</summary>
+    HairlineStrong,
+
+    /// <summary>The primary action: the step's Next, the current step's number, the target side's tag (the culture's deep colour).</summary>
+    PrimaryAction,
+
+    /// <summary>A match: its finding's plate, the status line after one, its line's colour (the ink).</summary>
+    FindingMatch,
+
+    /// <summary>A difference: its finding's plate, the status line after one, its line's colour (the ink).</summary>
+    FindingDiffer,
+
+    /// <summary>A note: the teaching and nothing-logged status lines, a grey line's colour (the ink).</summary>
+    Info,
+
+    /// <summary>The value held: the status line while holding, the held box and the dashed line (the ink), today's mark on the calendar.</summary>
+    Holding
 }
 
 /// <summary>The rule that keeps theming off evidence (piece 6 Z4), and the retired roles (the PC redesign TH2).</summary>

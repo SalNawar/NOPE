@@ -82,8 +82,8 @@ public sealed class StepJumpSource
 /// </summary>
 public static class StepSets
 {
-    /// <summary>The UI string keys the steps panel writes with (its progress, its no-case line, its hidden line).</summary>
-    public static readonly IReadOnlyList<string> PanelKeys = new[] { "steps.progress", "steps.none", "steps.hidden" };
+    /// <summary>The UI string keys the guided steps write a check with (its progress: GuideBar's "To check" line).</summary>
+    public static readonly IReadOnlyList<string> PanelKeys = new[] { "steps.progress" };
 
     /// <summary>A step's label key: "steps.{id}".</summary>
     public static string LabelKey(string id) => "steps." + id;
@@ -138,7 +138,7 @@ public static class StepSets
         }
 
         foreach (string key in PanelKeys.Where(k => stringKeys == null || !stringKeys.Contains(k)))
-            problems.Add($"the UI strings have no '{key}', which the steps panel writes with");
+            problems.Add($"the UI strings have no '{key}', which the guided steps write with");
         return problems;
     }
 

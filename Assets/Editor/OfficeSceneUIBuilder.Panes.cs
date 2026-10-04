@@ -5,26 +5,24 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The office builder's Investigation app panes (redesign phase 18; the PC
-/// spec's AP2, AP9, LK2, CM3; the PC UX redesign IA6, IA7, C4, C11): a pane
-/// (AppPane) with its header (the title naming the source and the item it
-/// shows, wrapping to two lines rather than being cut; Pin; Open beside in
-/// the left pane, Close in the right one; a hairline under it and the
-/// active pane's accent underline), its content with a view per source and
-/// the no-case state (its words wrapping and shrinking to fit a split
-/// pane); the ↗ (a drawn glyph in the link ink, 28 u, with its hover hint)
-/// and the found outline, which the forms' FormView clones; and the hover
-/// hints of the chrome, sized to their words. Rebuilt fresh with the app
-/// (its one convergence policy, audit R6-008); every reference is checked
-/// (Wire, audit R6-004). Part of <see cref="OfficeSceneUIBuilder"/>;
+/// spec's AP2, AP9, LK2, CM3; the PC workbench spec IA5, §3, §5): a pane
+/// (AppPane) framed by a hairline (the target's, a stronger one), its header
+/// (a button: a click makes the side the target; the side's tag, filled with
+/// the primary colour on the target, quiet on the other; the document's name,
+/// bold, wrapping to a second line rather than being cut; "Shelf opens here"
+/// on the target; a hairline under it), its content with a view per source
+/// and the no-case state (its words wrapping and shrinking to fit); the ↗ (a
+/// drawn glyph in the link ink, 28 u, with its hover hint) and the found
+/// outline, which the forms' FormView clones; and the hover hints of the
+/// chrome, sized to their words. Rebuilt fresh with the app (its one
+/// convergence policy, audit R6-008); every reference is checked (Wire,
+/// audit R6-004). Part of <see cref="OfficeSceneUIBuilder"/>;
 /// BuildInvestigationApp calls it.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The active pane's accent underline's height.</summary>
-    private const float AppFrameWidth = 3f;
-
-    /// <summary>The no-case state's words: their size, and the least they shrink to (wrapping onto a second line first) in a split pane.</summary>
-    private const float NoCaseText = 80f, NoCaseTextMin = 40f;
+    /// <summary>The no-case state's words: their size, and the least they shrink to (wrapping onto a second line first).</summary>
+    private const float NoCaseText = 40f, NoCaseTextMin = 28f;
 
     /// <summary>The found mark's outline width.</summary>
     private const float FoundFrameWidth = 2f;
@@ -32,10 +30,13 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The ↗'s hit box (a square).</summary>
     private const float LinkSize = 28f;
 
-    /// <summary>A pane header's icon button (Pin, Open beside, Close: a drawn glyph, its name in a hover hint).</summary>
-    private const float HeaderIconSize = 44f;
+    /// <summary>The side tag's size in a pane's header.</summary>
+    private static readonly Vector2 PaneTagSize = new Vector2(72f, 30f);
 
-    /// <summary>The accent (the active pane's underline, the found mark): the focus ring's built colour.</summary>
+    /// <summary>The target hint's width at a pane header's right.</summary>
+    private const float PaneHintWidth = 200f;
+
+    /// <summary>The accent (the found mark, the Orders' selection): the focus ring's built colour.</summary>
     private static readonly Color AccentInk = new Color(0.95f, 0.55f, 0.1f, 1f);
 
     /// <summary>The link ink of the ↗ on a paper or a row (diegetic: never themed).</summary>
@@ -50,64 +51,44 @@ public static partial class OfficeSceneUIBuilder
         public TranscriptView Transcript;
         public ReportView Report;
         public RulesView Rules;
+        public CalendarView Calendar;
     }
 
     /// <summary>
     /// A pane named <paramref name="name"/> filling <paramref name="area"/>
-    /// (the app lays the two out at runtime): the header (its title, Pin, and
-    /// Open beside when <paramref name="left"/>, else Close, returned in
-    /// <paramref name="split"/>), the content with the six views and the
-    /// no-case state, the active underline; it shows <paramref name="start"/>
-    /// first and its rows pick into <paramref name="compare"/>. Its views come
-    /// back in <paramref name="views"/>.
+    /// (the app lays the two out at runtime): its hairline frames, its header
+    /// (the side's tags, "Left" when <paramref name="left"/> else "Right", the
+    /// title, the target hint), the content with the seven views and the
+    /// no-case state; it shows <paramref name="start"/> first and its rows
+    /// pick into <paramref name="compare"/>. Its views come back in
+    /// <paramref name="views"/>.
     /// </summary>
-    private static AppPane BuildAppPane(Transform area, string name, AppTab start, CompareController compare, DesktopConfigSO config, bool left,
-                                        out PaneViews views, out Button split)
+    private static AppPane BuildAppPane(Transform area, string name, AppTab start, CompareController compare, DesktopConfigSO config, bool left, out PaneViews views)
     {
-        Transform paneRoot = Panel(area, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        Transform paneRoot = Panel(area, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, WbScreen, ThemeRoleId.WindowBody);
         AppPane pane = paneRoot.gameObject.AddComponent<AppPane>();
 
-        float headerHeight = PcSize.PaneHeader;
-        Transform header = Panel(paneRoot, "PaneHeader", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -headerHeight / 2f),
-                                 new Vector2(0f, headerHeight), Paper, ThemeRoleId.WindowBody);
-        float buttons = PcSize.S + 2f * HeaderIconSize + 4f + PcSize.S;
-        TMP_Text title = Text(header, "TitleText", UiText.Get(AppTabKeys[start]), PcType.Caption, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
-                              ThemeRoleId.WindowBody, kind: ThemeTextKind.Heading);
-        PlaceRect(title.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.L, 2f), new Vector2(-buttons, -2f));
-        Chrome(title, PcType.Caption, true);
+        float head = WbSize.PaneHead;
+        Button header = MakeButton(paneRoot, "PaneHeader", null, new Vector2(0f, 1f), Vector2.one, WbSurface, ThemeRoleId.Surface);
+        DestroyChildIfPresent(header.transform, "Label");
+        PlaceRect(header.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -head), Vector2.zero);
+        HairlineEdge(header.transform, "Rule", 1);
+        string sideKey = left ? "app.side.left" : "app.side.right";
+        Transform tagTarget = PaneTag(header.transform, "TagTarget", sideKey, WbAction, ThemeRoleId.PrimaryAction);
+        Transform tag = PaneTag(header.transform, "Tag", sideKey, WbInfoBg, ThemeRoleId.Info);
+        TMP_Text title = WbText(header.transform, "TitleText", AppTabTitleKey(start), null, PcType.Body, ThemeRoleId.Surface, TextAlignmentOptions.MidlineLeft,
+                                FontStyles.Bold, true);
+        PlaceRect(title.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.L + PaneTagSize.x + PcSize.M, 2f), new Vector2(-(PaneHintWidth + PcSize.L), -2f));
         title.lineSpacing = -10f;
-        title.richText = true;
-        title.raycastTarget = false;
+        title.enableAutoSizing = true;
+        title.fontSizeMax = PcType.Body;
+        title.fontSizeMin = PcType.Caption;
+        title.overflowMode = TextOverflowModes.Ellipsis;
+        TMP_Text hint = WbText(header.transform, "HintTarget", "app.pane.shelfHere", null, PcType.Caption, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.MidlineRight);
+        PlaceRect(hint.transform, new Vector2(1f, 0f), Vector2.one, new Vector2(-(PaneHintWidth + PcSize.L), 0f), new Vector2(-PcSize.L, 0f));
 
-        split = HeaderIcon(header, left ? "BesideButton" : "CloseButton", left ? "app.pane.beside" : "app.pane.close", PcSize.S);
-        if (left)
-        {
-            // Open beside: two panes side by side.
-            IconOutline(split.transform, "Left", new Vector2(-6f, 0f), new Vector2(11f, 18f));
-            IconOutline(split.transform, "Right", new Vector2(6f, 0f), new Vector2(11f, 18f));
-        }
-        else
-        {
-            ButtonStroke(split.transform, "Stroke1", Vector2.zero, new Vector2(2.5f, 20f), 45f);
-            ButtonStroke(split.transform, "Stroke2", Vector2.zero, new Vector2(2.5f, 20f), -45f);
-        }
-        Button pin = HeaderIcon(header, "PinButton", "app.pin", PcSize.S + HeaderIconSize + 4f);
-        Transform head = Panel(pin.transform, "Head", Center, Center, new Vector2(0f, 5f), new Vector2(12f, 12f), Ink);
-        Image headImage = head.GetComponent<Image>();
-        headImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
-        headImage.raycastTarget = false;
-        SceneUiKit.Tag(headImage, ThemeRoleId.Button, ThemePart.Ink);
-        ButtonStroke(pin.transform, "Needle", new Vector2(0f, -5f), new Vector2(2.5f, 12f), 0f);
-
-        Transform rule = Panel(header, "Rule", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, 1f), new Vector2(0f, 2f), XpFace, ThemeRoleId.Sidebar);
-        rule.GetComponent<Image>().raycastTarget = false;
-        Transform underline = Panel(header, "ActiveFrame", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, AppFrameWidth / 2f), new Vector2(0f, AppFrameWidth),
-                                    AccentInk, ThemeRoleId.FocusRing);
-        underline.GetComponent<Image>().raycastTarget = false;
-        underline.gameObject.SetActive(false);
-
-        Transform content = Panel(paneRoot, "Content", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Paper, ThemeRoleId.WindowBody);
-        PlaceRect(content, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -headerHeight));
+        Transform content = Panel(paneRoot, "Content", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, WbScreen, ThemeRoleId.WindowBody);
+        PlaceRect(content, Vector2.zero, Vector2.one, new Vector2(1f, 1f), new Vector2(-1f, -head));
         content.gameObject.AddComponent<RectMask2D>();
 
         views = new PaneViews
@@ -118,13 +99,14 @@ public static partial class OfficeSceneUIBuilder
             Transcript = BuildTranscriptView(content),
             Report = BuildReportView(content),
             Rules = BuildRulesView(content),
+            Calendar = BuildCalendarView(content),
         };
 
-        Transform noCase = Panel(content, "NoCase", new Vector2(0.03f, 0.38f), new Vector2(0.97f, 0.62f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ScreenStrip);
+        Transform noCase = Panel(content, "NoCase", new Vector2(0.06f, 0.4f), new Vector2(0.94f, 0.6f), Vector2.zero, Vector2.zero, WbInfoBg, ThemeRoleId.Info);
         noCase.GetComponent<Image>().raycastTarget = false;
-        TMP_Text noCaseText = Text(noCase, "Text", null, Mathf.RoundToInt(NoCaseText), TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white,
-                                   ThemeRoleId.ScreenStrip, "idle.waiting", FontStyles.Bold, ThemeTextKind.Heading);
-        SetAnchors(noCaseText.transform, new Vector2(0.02f, 0f), new Vector2(0.98f, 1f));
+        TMP_Text noCaseText = Text(noCase, "Text", null, Mathf.RoundToInt(NoCaseText), TextAlignmentOptions.Center, Vector2.zero, Vector2.one, WbMuted,
+                                   ThemeRoleId.Info, "idle.waiting", FontStyles.Bold, ThemeTextKind.Heading);
+        SetAnchors(noCaseText.transform, new Vector2(0.04f, 0f), new Vector2(0.96f, 1f));
         noCaseText.raycastTarget = false;
         noCaseText.textWrappingMode = TextWrappingModes.Normal;
         noCaseText.enableAutoSizing = true;
@@ -132,36 +114,35 @@ public static partial class OfficeSceneUIBuilder
         noCaseText.fontSizeMin = NoCaseTextMin;
         noCase.gameObject.SetActive(false);
 
+        Transform frame = HairlineFrame(paneRoot);
+        Transform strong = HairlineFrame(paneRoot, WbLineStrong, ThemeRoleId.HairlineStrong, 2f, "FrameStrong");
+        strong.gameObject.SetActive(false);
+
         var so = new SerializedObject(pane);
-        SerializedArrays.Set(so, "views", new Object[] { documents, views.Records, views.Reference, views.Transcript, views.Report, views.Rules });
+        SerializedArrays.Set(so, "views", new Object[] { documents, views.Records, views.Reference, views.Transcript, views.Report, views.Rules, views.Calendar });
         Wire(so, "titleText", title);
+        Wire(so, "headerButton", header);
         Wire(so, "noCase", noCase.gameObject);
-        Wire(so, "activeFrame", underline.gameObject);
+        SerializedArrays.Set(so, "targetParts", new Object[] { tagTarget.gameObject, hint.gameObject, strong.gameObject });
+        SerializedArrays.Set(so, "otherParts", new Object[] { tag.gameObject, frame.gameObject });
         so.FindProperty("startTab").enumValueIndex = (int)start;
+        so.FindProperty("titleRightInsets").vector2Value = new Vector2(-(PaneHintWidth + PcSize.L), -PcSize.L);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
         return pane;
     }
 
-    /// <summary>A pane header's icon button (Pin, Open beside, Close): HeaderIconSize square, <paramref name="right"/> from the header's right end, its label gone (the caller draws its glyph) and its name (<paramref name="hintKey"/>) in a hover hint under it.</summary>
-    private static Button HeaderIcon(Transform header, string name, string hintKey, float right)
-    {
-        Button button = MakeButton(header, name, null, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), null, ThemeRoleId.Button);
-        PlaceRect(button.transform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(right + HeaderIconSize), -HeaderIconSize / 2f), new Vector2(-right, HeaderIconSize / 2f));
-        DestroyChildIfPresent(button.transform, "Label");
-        BuildHoverHint(button, hintKey, null, new Vector2(1f, 0f), new Vector2(1f, 1f));
-        return button;
-    }
+    /// <summary>A source's name key ("app.tab.documents").</summary>
+    private static string AppTabTitleKey(AppTab tab) => "app.tab." + tab.ToString().ToLowerInvariant();
 
-    /// <summary>A drawn outlined rectangle (four strokes in the Button role's ink) centred at <paramref name="centre"/>: a glyph's part.</summary>
-    private static void IconOutline(Transform parent, string name, Vector2 centre, Vector2 size)
+    /// <summary>A side tag in a pane's header: a plate in <paramref name="role"/>'s colours with its keyed word (Caption, bold).</summary>
+    private static Transform PaneTag(Transform header, string name, string key, Color fill, ThemeRoleId role)
     {
-        const float w = 2.5f;
-        Transform box = Panel(parent, name, Center, Center, centre, size, null);
-        ButtonStroke(box, "Top", new Vector2(0f, size.y / 2f - w / 2f), new Vector2(size.x, w), 0f);
-        ButtonStroke(box, "Bottom", new Vector2(0f, -size.y / 2f + w / 2f), new Vector2(size.x, w), 0f);
-        ButtonStroke(box, "Left", new Vector2(-size.x / 2f + w / 2f, 0f), new Vector2(w, size.y), 0f);
-        ButtonStroke(box, "Right", new Vector2(size.x / 2f - w / 2f, 0f), new Vector2(w, size.y), 0f);
+        Transform tag = Panel(header, name, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(PcSize.L + PaneTagSize.x / 2f, 0f), PaneTagSize, fill, role);
+        tag.GetComponent<Image>().raycastTarget = false;
+        TMP_Text word = WbText(tag, "Text", key, null, PcType.Caption, role, TextAlignmentOptions.Center, FontStyles.Bold);
+        word.overflowMode = TextOverflowModes.Overflow;
+        return tag;
     }
 
     /// <summary>

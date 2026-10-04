@@ -235,6 +235,9 @@ public sealed class CultureThemeService : TimelineCueReceiver
 
         foreach (CompareController compare in root.GetComponentsInChildren<CompareController>(true))
             compare.ApplyTheme(Ink(ThemeRoleId.CompareMatch), Ink(ThemeRoleId.CompareMismatch), Ink(ThemeRoleId.CompareNeutral), Fill(ThemeRoleId.SelectionHighlight));
+
+        foreach (MatchLines lines in root.GetComponentsInChildren<MatchLines>(true))
+            lines.ApplyTheme(Ink(ThemeRoleId.FindingMatch), Ink(ThemeRoleId.FindingDiffer), Ink(ThemeRoleId.Info), Ink(ThemeRoleId.Holding));
     }
 
     /// <summary>

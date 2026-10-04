@@ -18,7 +18,7 @@ using UnityEngine.UI;
 /// Reference" when the group has more; with no hit, one line says nothing
 /// matches. A click on a hit chooses it (the app jumps there; Ctrl+click: in
 /// the other pane), and so does Enter on the hit the keys' focus ring is on
-/// (Choose; Ctrl+Enter: the other pane); ✕ closes the panel. SearchBox fills
+/// (Choose; Ctrl+Enter: the other pane); the drawer closes it. SearchBox fills
 /// it; its rows are clones of inactive templates.
 /// </summary>
 public sealed class SearchResultsView : MonoBehaviour
@@ -43,9 +43,6 @@ public sealed class SearchResultsView : MonoBehaviour
 
     /// <summary>The line shown when nothing matches.</summary>
     [SerializeField] private TMP_Text emptyText;
-
-    /// <summary>✕: closes the panel.</summary>
-    [SerializeField] private Button closeButton;
 
     /// <summary>The chosen chip's tint (pressed).</summary>
     [SerializeField] private Color chosenTint = new Color(0.72f, 0.72f, 0.72f, 1f);
@@ -142,8 +139,6 @@ public sealed class SearchResultsView : MonoBehaviour
         if (_wired)
             return;
         _wired = true;
-        if (closeButton != null)
-            closeButton.onClick.AddListener(Hide);
         foreach (Component template in new Component[] { chipTemplate, headingTemplate, hitTemplate, moreTemplate })
             if (template != null)
                 template.gameObject.SetActive(false);
