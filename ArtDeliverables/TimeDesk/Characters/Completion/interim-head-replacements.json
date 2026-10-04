@@ -1,0 +1,50 @@
+{
+  "Assets/Art/Characters/Resources/Characters/head_m_skin2_facea.png": {
+    "originalSha256": "ced9130a87ad6ea65087d59a459baf58e4b32de02bf104bc75afee1a07d13160",
+    "replacementSha256": "6f80f93fd46f0ce8bbbe49bbfc5fd74074a1660b6f2bf8d0ad120abece3a5044",
+    "backup": "ArtDeliverables/TimeDesk/Characters/Completion/InterimPilotHeads/head_m_skin2_facea.png",
+    "reason": "Replace the pilot interim recolour with its newly generated skin-specific face a; retain GUID."
+  },
+  "Assets/Art/Characters/Resources/Characters/head_m_skin3_facea.png": {
+    "originalSha256": "654ce327c263629ee4281dd54609eff2cf9d632661c4755c8e12f063799edfa4",
+    "replacementSha256": "6d5cc8e5c4ccc601e1b96d3f7b5b9abca8e04b8559d0a2b55ae9e2d43fe7f3ea",
+    "backup": "ArtDeliverables/TimeDesk/Characters/Completion/InterimPilotHeads/head_m_skin3_facea.png",
+    "reason": "Replace the pilot interim recolour with its newly generated skin-specific face a; retain GUID."
+  },
+  "Assets/Art/Characters/Resources/Characters/head_m_skin4_facea.png": {
+    "originalSha256": "f67c169f663043f2feeade4b3d90e21fb37770876acc6496190133e6ed522134",
+    "replacementSha256": "5c454fdd8570ffa377fd92704157e33b0913738261327f45c0db727f9c9b28f9",
+    "backup": "ArtDeliverables/TimeDesk/Characters/Completion/InterimPilotHeads/head_m_skin4_facea.png",
+    "reason": "Replace the pilot interim recolour with its newly generated skin-specific face a; retain GUID."
+  },
+  "Assets/Art/Characters/Resources/Characters/head_m_skin5_facea.png": {
+    "originalSha256": "b47b867e348c8b88ce2b0d65b413d1fd5e07428b73d7ff3e40323d69ea33bfef",
+    "replacementSha256": "108e3fc3370541ff343b903d5406b79530d28e79347dd80881c5fb599a67d791",
+    "backup": "ArtDeliverables/TimeDesk/Characters/Completion/InterimPilotHeads/head_m_skin5_facea.png",
+    "reason": "Replace the pilot interim recolour with its newly generated skin-specific face a; retain GUID."
+  },
+  "Assets/Art/Characters/Resources/Characters/head_f_skin2_facea.png": {
+    "originalSha256": "2037351fab49a7f450732ef5aeaea4eb3c2ef633833abfc032faf2114c553447",
+    "replacementSha256": "bca7c220be265a061627341317825593893698480051f58d0df67b62bb2935b4",
+    "backup": "ArtDeliverables/TimeDesk/Characters/Completion/InterimPilotHeads/head_f_skin2_facea.png",
+    "reason": "Replace the pilot interim recolour with its newly generated skin-specific face a; retain GUID."
+  },
+  "Assets/Art/Characters/Resources/Characters/head_f_skin3_facea.png": {
+    "originalSha256": "f86d758af1794b3fcd10e6213d6718b4ba8c82199e541f78f9afa727b233ca54",
+    "replacementSha256": "a992f9c90559e0e2f056cf72e4b3f0fe0edfd0aaf527b69e311631f1b4b6a6fb",
+    "backup": "ArtDeliverables/TimeDesk/Characters/Completion/InterimPilotHeads/head_f_skin3_facea.png",
+    "reason": "Replace the pilot interim recolour with its newly generated skin-specific face a; retain GUID."
+  },
+  "Assets/Art/Characters/Resources/Characters/head_f_skin4_facea.png": {
+    "originalSha256": "65f29f7da38d6e08118300b6f228ad827f989d8826d7480dd8336be83481f868",
+    "replacementSha256": "c516804fef02a9c6dc4879bd3b573df41a99f34c8b7042e49cf90219642f1506",
+    "backup": "ArtDeliverables/TimeDesk/Characters/Completion/InterimPilotHeads/head_f_skin4_facea.png",
+    "reason": "Replace the pilot interim recolour with its newly generated skin-specific face a; retain GUID."
+  },
+  "Assets/Art/Characters/Resources/Characters/head_f_skin5_facea.png": {
+    "originalSha256": "1d3e1b68838c2eec203bbfdcb11203d739b84ae1d4e77b60509fa578b9af57f9",
+    "replacementSha256": "7af52601344814b1b4b329088b119d4ca259bd99edd34e33e4267838b374acb3",
+    "backup": "ArtDeliverables/TimeDesk/Characters/Completion/InterimPilotHeads/head_f_skin5_facea.png",
+    "reason": "Replace the pilot interim recolour with its newly generated skin-specific face a; retain GUID."
+  }
+}

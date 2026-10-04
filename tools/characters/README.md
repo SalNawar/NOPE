@@ -1,5 +1,29 @@
 # Character art processing (`tools/characters`)
 
+## Full library completion — 2026-10-04
+
+The completion pipeline processes the 455 new sources without rerunning the approved pilot. It stages 902 outputs, then installs a complete 944-key library alongside the 42 pilot keys. The eight interim skin 2–5 face-a recolours are archived in `Completion/InterimPilotHeads` before replacement; existing Unity GUIDs are retained. All other pilot sources, resources and metadata remain unchanged.
+
+Run from the project root with Python, NumPy and Pillow:
+
+```
+python tools/characters/process_library.py --workers 8
+python tools/characters/seal_library_gaps.py
+python tools/characters/library_qa.py --previews
+# Review Completion/ProcessedQA and the processing reports before installation.
+python tools/characters/library_qa.py --install
+python tools/characters/test_processing_stencils.py
+python ArtDeliverables/TimeDesk/Characters/Completion/validate_sources.py
+```
+
+`process_library.py --resume` resumes checked source records; `--only NAME ...` reprocesses selected sources. Staging is under the ignored `Temp/CharacterLibrary` directory. `processing-overrides.json` records reviewed landmarks and isolation regions for ambiguous fringes and connected calibration garments. Head items fit the approved pilot eyes and nose; outfits fit scalp and soles; named expressions share their neutral character's scale. Wrist jewellery and bags retain the full accessory canvas. Natural hair/beards receive the five game palette variants; planned rear hair is separated. The finisher removes fitting marks, disconnected support clothing and enclosed mannequin gaps. No raw art is changed.
+
+`processing_stencils.py` uses exact disk footprints and bounded colour bleeding to accelerate the existing keyer. Its three equivalence tests cover boundaries, extrema and unvisited RGB. `library_qa.py` checks every required key, recorded output hashes, RGBA canvas, nonblank alpha, clear borders and key-colour contamination; it writes 23 source-stack sheets and ten plates covering 96 full/desk/passport wardrobe combinations. Installation verifies all 944 installed hashes and refuses unrelated changed resources. Reinstalling identical files is safe.
+
+Run `CharacterLibraryValidation.ValidateInBatch` in Unity batch mode, or use `Tools > Terminal Art > Completion > Validate Character Library`, to audit every sprite's actual import, canvas, foot pivot, pixels per unit, importer settings and runtime Resources lookup. Reports are saved under `ArtDeliverables/TimeDesk/Characters/Completion`. The remainder of this document records the preserved pilot implementation.
+
+Unity clears its `Temp` directory on editor exit. Finish extraction, preview review and installation before launching it; regenerate staging for a later processing run. Durable records and QA live under `Completion`, including `processing-report.json`. Save test results under `Completion` rather than `Temp`.
+
 Turns ChatGPT's raw green-and-magenta character sources into the game-ready
 layers the game loads by name. First used for the pilot (batch 1,
 2026-09-26); the steps are the brief's "Claude processes" steps

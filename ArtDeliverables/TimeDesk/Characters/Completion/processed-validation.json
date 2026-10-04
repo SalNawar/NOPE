@@ -1,0 +1,3785 @@
+{
+  "expectedKeys": 944,
+  "presentKeys": 944,
+  "sourceCount": 455,
+  "processedSourceCount": 455,
+  "errors": [],
+  "files": {
+    "accessory_f_britain_ancient": {
+      "sha256": "c8b4e99c7328287031b19b42457e990cbcc282823878c2939d9c3f0d6922a698",
+      "keyColourPixels": 0
+    },
+    "accessory_f_britain_earlymodern": {
+      "sha256": "c019daf9b8b8b67683c9ffbae30d7dfd91c09529977fe88193c0e5092ab47efe",
+      "keyColourPixels": 0
+    },
+    "accessory_f_britain_industrial": {
+      "sha256": "7744e81fea6910aabebe9a048c0ac4906a084b0a85940e3d446d702036a6c905",
+      "keyColourPixels": 0
+    },
+    "accessory_f_britain_modern": {
+      "sha256": "a53089cebc257849a9a187edaf8f2d2748e3e4f0d135c2008052ee3058176194",
+      "keyColourPixels": 0
+    },
+    "accessory_f_china_ancient": {
+      "sha256": "0ba8b8a740368c893f6abc27ba2cfe79a974268210ad67cbf4b0812405b002ad",
+      "keyColourPixels": 0
+    },
+    "accessory_f_china_industrial": {
+      "sha256": "73d6ad0949b0b534714cf3a9236223a81756d1640ff464505115b10f0b4df97f",
+      "keyColourPixels": 0
+    },
+    "accessory_f_china_modern": {
+      "sha256": "96493e5a90893c0042bd2e55469df9badc81d624c7aeea5fa0fee0ad99e38845",
+      "keyColourPixels": 0
+    },
+    "accessory_f_egypt_ancient": {
+      "sha256": "c80804e314d883f479175ca9b96faa71a79af3eeb55ead329520e3e73388fe86",
+      "keyColourPixels": 0
+    },
+    "accessory_f_egypt_earlymodern": {
+      "sha256": "db5bb3ae608150237223add88cdc57f647fce9e1f0ca7fe4825fefdc539ad36a",
+      "keyColourPixels": 0
+    },
+    "accessory_f_egypt_industrial": {
+      "sha256": "86f76fb64531b93ed5d6a18c250db68faaa3c64836490f138836b59e39fc9ee6",
+      "keyColourPixels": 0
+    },
+    "accessory_f_egypt_medieval": {
+      "sha256": "4cae48ccf36719acd132abfafbfafb620f9931800a6212bb3c54b42a531abab0",
+      "keyColourPixels": 0
+    },
+    "accessory_f_egypt_modern": {
+      "sha256": "5f0addc0a9e14783212af6768d49bd8815401e3957576bc88c5be36341acff41",
+      "keyColourPixels": 0
+    },
+    "accessory_f_germany_ancient": {
+      "sha256": "a4c127bb4585b490b019f9b468d40b6e40b532bbddadf03b4d0142f78589b2a9",
+      "keyColourPixels": 0
+    },
+    "accessory_f_germany_earlymodern": {
+      "sha256": "a4cb3f6338f6364543e78611a28b9487c053f8a866317c2b8e55f21d79651090",
+      "keyColourPixels": 0
+    },
+    "accessory_f_germany_industrial": {
+      "sha256": "49a109602bc76afff1f2c3f5e7aafbcbb9175055ca7d8d81ef84c1c776e3945a",
+      "keyColourPixels": 0
+    },
+    "accessory_f_germany_modern": {
+      "sha256": "2152141cd605559112cb0d547f8c48ba02a0918b3205d10335508625d91d14ed",
+      "keyColourPixels": 0
+    },
+    "accessory_f_greece_earlymodern": {
+      "sha256": "b25deeb2b41cb1a11199c4a2adaf77ca60d51c591f3f64bd4c927ee6ca333ca6",
+      "keyColourPixels": 0
+    },
+    "accessory_f_greece_industrial": {
+      "sha256": "a5d86174f671830965e88392b8f87780b26c07c97fc78ba7c98822ef9efb4fdb",
+      "keyColourPixels": 0
+    },
+    "accessory_f_greece_medieval": {
+      "sha256": "a04fd5d4b1e2f67358391d4c35c64867560854908adc727f04fa2f960159213d",
+      "keyColourPixels": 0
+    },
+    "accessory_f_greece_modern": {
+      "sha256": "37f94841f1c562962c4a0f37d2468a2bed4e5a54c7ab34afd16ed8b2e4025a62",
+      "keyColourPixels": 0
+    },
+    "accessory_f_iraq_earlymodern": {
+      "sha256": "0fb4e7b7f5b8d145bbea5534cb1afa7e0d7ff2291e4df921c97ce4f5e8ab5fac",
+      "keyColourPixels": 0
+    },
+    "accessory_f_iraq_industrial": {
+      "sha256": "f2670e6873d4b828bba8ee4a1aba3ca3be01982cbaeef168130630236e526c1f",
+      "keyColourPixels": 0
+    },
+    "accessory_f_iraq_medieval": {
+      "sha256": "363785daad5bb8862e2ac43888d16f951a761b2c0442d712e3cb1ef8103e9b53",
+      "keyColourPixels": 0
+    },
+    "accessory_f_iraq_modern": {
+      "sha256": "4627a1e21ebba528dc9b7784f78a5a5e5f392ed1de4913691b152e8b300792bc",
+      "keyColourPixels": 0
+    },
+    "accessory_f_italy_ancient": {
+      "sha256": "77c8e32d79c43eb6575488064aff000ffdd97046ecce91c1f1e9bfca5c9aa027",
+      "keyColourPixels": 0
+    },
+    "accessory_f_italy_earlymodern": {
+      "sha256": "3e3e9e0588314ba3667c4101e30523e7f2490eaf80f6b1758864f9e9b8430cfc",
+      "keyColourPixels": 0
+    },
+    "accessory_f_italy_industrial": {
+      "sha256": "fe5beb62a5cd1c6e5f24f429d1e56707ea104d1026ad0af27fc6c7bbb4c2e622",
+      "keyColourPixels": 0
+    },
+    "accessory_f_italy_medieval": {
+      "sha256": "3099db7a7abc0a8bfb5e05fbdcee6e55f8581501c9d0dc0afc47b135c443e3af",
+      "keyColourPixels": 0
+    },
+    "accessory_f_italy_modern": {
+      "sha256": "132b30f94ec6303d11afe0192e06a8e778546bdbcc25c8b8cbed5d4ca44e957f",
+      "keyColourPixels": 0
+    },
+    "accessory_f_japan_ancient": {
+      "sha256": "8f750bf0be22d19bc3e74d6d0d5d65b8280295011ee90a5cee939f3752633bbb",
+      "keyColourPixels": 0
+    },
+    "accessory_f_japan_modern": {
+      "sha256": "35b592f9fb3976435f4e7c464d3fe3f7f61eec2a85d38f1e8273b2cffb0bb132",
+      "keyColourPixels": 0
+    },
+    "accessory_m_britain_ancient": {
+      "sha256": "77916364e10e301f1946bd64e6af5f4cba6297cfeb1403375afca5a7055ded26",
+      "keyColourPixels": 0
+    },
+    "accessory_m_britain_industrial": {
+      "sha256": "b38e8b4a64f65ce46f86c4c34da4452ad260ac36f0137e56bb77a48f48559d1b",
+      "keyColourPixels": 0
+    },
+    "accessory_m_britain_medieval": {
+      "sha256": "639458cfc6437c4c5aec1717ebf412e27695cde0ae6a9dbdf83ea266a822a065",
+      "keyColourPixels": 0
+    },
+    "accessory_m_britain_modern": {
+      "sha256": "c59a20c4e640ada68fa3bab9db62567264d245adb03deefac77ff34aa5953726",
+      "keyColourPixels": 0
+    },
+    "accessory_m_china_earlymodern": {
+      "sha256": "9f4db1261f89879090004f0a274e84f4fbbaf55a6ea7ba040a14f5e1b1561448",
+      "keyColourPixels": 0
+    },
+    "accessory_m_china_medieval": {
+      "sha256": "7370e3ee5930626a50bd589b9c973f08d519f9d2e8d04c9004a6d426fe3a76d8",
+      "keyColourPixels": 0
+    },
+    "accessory_m_china_modern": {
+      "sha256": "d4a0c51b7c3252e01bfe9cef248416e23d6a6a5dab69ae4266830199cfc566d5",
+      "keyColourPixels": 0
+    },
+    "accessory_m_egypt_ancient": {
+      "sha256": "146a6c6c85a4f321a6bf1904fc15bdcd27a4f4d0ce1317e1cdd9b69f3f6b0e35",
+      "keyColourPixels": 0
+    },
+    "accessory_m_egypt_earlymodern": {
+      "sha256": "dcbd26a70b63696c26cfb099cd74c1a451f0221d452cfb62da6136623be05459",
+      "keyColourPixels": 0
+    },
+    "accessory_m_egypt_industrial": {
+      "sha256": "de4d066bbcc75baa46c7fd448cef7ff7b414d01fd0ca025d237b78da22ef111e",
+      "keyColourPixels": 0
+    },
+    "accessory_m_egypt_medieval": {
+      "sha256": "4a218bd1d3b9de41b575ef956696dee23ef4609faf86a6fb6b254aa8832e8a96",
+      "keyColourPixels": 0
+    },
+    "accessory_m_egypt_modern": {
+      "sha256": "01b75f8600d34e0d0f336438231495084193e7fdd89b035f6a00cfd0f0ad0b36",
+      "keyColourPixels": 0
+    },
+    "accessory_m_germany_earlymodern": {
+      "sha256": "ac568662a9f225a66ba02d6337eaf9af42dae3fcd46ba842ee73a539c1f7b543",
+      "keyColourPixels": 0
+    },
+    "accessory_m_germany_industrial": {
+      "sha256": "cebcdb6a26a2f3e5ed3c79df2b318822b0d7cbd7d63c9b324fe4c5b227ec24d8",
+      "keyColourPixels": 0
+    },
+    "accessory_m_germany_modern": {
+      "sha256": "428fe0890ddf0f338f3b5f101ca40e054fa4539d5cc71e62c595c01ab5c237f1",
+      "keyColourPixels": 0
+    },
+    "accessory_m_greece_ancient": {
+      "sha256": "7c8f40a0d3cb91799cc999ff0e2e04a1e212243318d37cbc82e49e7c22c9588e",
+      "keyColourPixels": 0
+    },
+    "accessory_m_greece_earlymodern": {
+      "sha256": "27db63fed9187ee7c1d2c024943f516ba1ff64ca11314a35641f6849a2c2ba50",
+      "keyColourPixels": 0
+    },
+    "accessory_m_greece_industrial": {
+      "sha256": "432026407d6bdb4f13a3419b2bb59131a60a0fb215b29cfec5db5da06092f5a3",
+      "keyColourPixels": 0
+    },
+    "accessory_m_greece_medieval": {
+      "sha256": "c33620071e35061424d167afa90e7428eac8a3da6949bd4cc12a9628c6109dad",
+      "keyColourPixels": 0
+    },
+    "accessory_m_greece_modern": {
+      "sha256": "0f6ee09fa7e298cbebcb941c384d50db28badce6e6496eeaf13427f892501680",
+      "keyColourPixels": 0
+    },
+    "accessory_m_iraq_ancient": {
+      "sha256": "0ddfd7cdc43f88aa0082a6a72945b7ca996e372680737bece115383f71c93555",
+      "keyColourPixels": 0
+    },
+    "accessory_m_iraq_medieval": {
+      "sha256": "faf79e00ee4643b3b5ddc74835f03c53c16b63df5531ccfc78dfc5cdf5f31b43",
+      "keyColourPixels": 0
+    },
+    "accessory_m_iraq_modern": {
+      "sha256": "6997d01b33b48a12cc4d391680d99d3027217aa87a2543c2bb71e1c8acfa9905",
+      "keyColourPixels": 0
+    },
+    "accessory_m_italy_industrial": {
+      "sha256": "65d8de9a165446094abeb327b5d4a3fb0059337f0b2d1aa5f72760c4a7bd431d",
+      "keyColourPixels": 0
+    },
+    "accessory_m_italy_modern": {
+      "sha256": "35b4664b8eb0292c88d13980fa8b53125763a5323ff8cd4caa96f55323eb1552",
+      "keyColourPixels": 0
+    },
+    "accessory_m_japan_ancient": {
+      "sha256": "4cbbc6bd217dd5b035cccb53f5af0d8a50fe2c04b54bd98e8af5d13ca66182b2",
+      "keyColourPixels": 0
+    },
+    "accessory_m_japan_modern": {
+      "sha256": "b9890574685d0cd25dc84e45574446e38cf8905626e3a9c97c504d94d7a72cae",
+      "keyColourPixels": 0
+    },
+    "body_f_skin1": {
+      "sha256": "07ccf4c47fe428914379666b1cd21c709e5c48ffa7b1f1f8a37aabb4b0be4d7e",
+      "keyColourPixels": 0
+    },
+    "body_f_skin2": {
+      "sha256": "68b955d01ec0f61e435d467c372fda0ab8f1af0094d8bf5297a1fd496b8c359e",
+      "keyColourPixels": 0
+    },
+    "body_f_skin3": {
+      "sha256": "8d6568567f0a5274ce17884777dfb8cacf87459e81ba98f53ed9438e61451cfa",
+      "keyColourPixels": 0
+    },
+    "body_f_skin4": {
+      "sha256": "ef00463fe91553458e9cb0de66d90da4f7fe360ac03b488070fda9a60402d4a6",
+      "keyColourPixels": 0
+    },
+    "body_f_skin5": {
+      "sha256": "d05d1909e293c49bd4ff40abbfc8bb93ea8d85174b341ec31f46c48b2236f18f",
+      "keyColourPixels": 0
+    },
+    "body_m_skin1": {
+      "sha256": "38ca9656f9c434578f219a4ad561875d51c72ccaf4635cb12bf213690f5170ee",
+      "keyColourPixels": 0
+    },
+    "body_m_skin2": {
+      "sha256": "a3328e1544a58c7a107a62952780d8a6efbb60db2f988c3e4a8fba7320c4dbb2",
+      "keyColourPixels": 0
+    },
+    "body_m_skin3": {
+      "sha256": "a0deb8f1cc603308397ddd1890f3a27a66373c6d04b3f3bb2624d21486424ae2",
+      "keyColourPixels": 0
+    },
+    "body_m_skin4": {
+      "sha256": "caf96fcf17c61b35297c44f70a6e8a42566b716038da74301276e2eb9a2345ee",
+      "keyColourPixels": 0
+    },
+    "body_m_skin5": {
+      "sha256": "11f36e16d2c0d5f67e700ab9bf463e995ef857e75a952feab0daabf2c50bf322",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_ancient_black": {
+      "sha256": "48b53ac98fe9e72d1c8ae1fdcc362ffc78dd1fa192a0e4c2e8c43986bd2b8a7f",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_ancient_blond": {
+      "sha256": "779d14b5b899151c8d57a81fe3293c400260c4f7fe6150540219a081dbd9e8e4",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_ancient_brown": {
+      "sha256": "b4a2659f2cf25daa0aca953760d3aa8d268012c07403fec2062a8c6c30d81932",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_ancient_grey": {
+      "sha256": "505ce786c6927fa9a7ddc8ece94a99392affd2fadac5c3990a11252c34c55bac",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_ancient_red": {
+      "sha256": "af5089332ee70cc95c4488b4c3698d794a477ce799eb6c4a025c4032c2b35761",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_earlymodern_black": {
+      "sha256": "0be06cfdff2715ef0b81e04088769a8dc16840a2fd87904dac91a47d9b26abac",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_earlymodern_blond": {
+      "sha256": "75fec313e137d5f1d8ff25ce54efe2b8e7af41eaabae5216ae2f0df0ab209820",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_earlymodern_brown": {
+      "sha256": "160cf7f4f6e20d04def15e1a79d01dfa18e8429e8b65c186aaf62cddcd849b94",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_earlymodern_grey": {
+      "sha256": "157721eda7fb74836beea12f543049a939e47b4f2638cda680ee0daa4f993d8f",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_earlymodern_red": {
+      "sha256": "6044e0d476cfb066c9a6625d95906c3c658f3885ea723f660727b927db29fd96",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_industrial_black": {
+      "sha256": "f30b3980ea8575a2030df9b361c5643b38c35e32218345d97d548c80e40176ef",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_industrial_blond": {
+      "sha256": "67123947d0e1f99c455579cb9aed44e7a30803558961535b62f738ef2b63ff96",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_industrial_brown": {
+      "sha256": "08f46b5fc51a30c94e975d6d17986c151a6c0d258747d8bd5047c6c9f2fc88da",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_industrial_grey": {
+      "sha256": "5d9d3818a8894bbf255d7357bc468f9aad0e90bf206bd0b03e165e19cab0304c",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_industrial_red": {
+      "sha256": "690e1a6c0dcb76e6cd3717dda022b99051f7d976572a7213b2b89fa2439cd732",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_medieval_black": {
+      "sha256": "0e402262554702ea2fbfd8f167b091413ac6f135b341d64274414ec036088850",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_medieval_blond": {
+      "sha256": "db3cf3a181053618f8ef28518372c0ac7faad01ce3c6048cd74c1f81fb155578",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_medieval_brown": {
+      "sha256": "b1175738686772622547ece31e62edbe5dcc4513c596dcd3b749f1300a45b1c9",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_medieval_grey": {
+      "sha256": "969f256639a71ff2b31cccda6a5e7724db0e6419316cd3f03728b6b5a0456f30",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_britain_medieval_red": {
+      "sha256": "633cd175af20b53fc76a70a1a9259427ca12acf17272fb50baa33722014e5327",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_ancient_black": {
+      "sha256": "a1474db5f3210fadea7b9c684915931bf1ca41dc8f31b2f7d91d5daf978c0964",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_ancient_blond": {
+      "sha256": "312c6f24945172a596d1ea6e29b5093e49ac781f95c41a802842f08df8ceb840",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_ancient_brown": {
+      "sha256": "c385e556c2852e45871c61d55d19255fea679b7a83a3eaf6243f9f71925f1e8f",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_ancient_grey": {
+      "sha256": "8b751fe677056358a9fcc122f10fda1161636b05f5158550fe2968889c79ba4a",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_ancient_red": {
+      "sha256": "02f14b6b1472d5bcaf36f0e14b7b4b7ac213b99770cf081ad16ac545e7292b45",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_earlymodern_black": {
+      "sha256": "32056dff76fa67170a990caaf36adbf3dbe01cb1fb0878515a1e5635dac39137",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_earlymodern_blond": {
+      "sha256": "cdf4aaf1a90bec1abc2b3e3e5360521ae8b70b1cc774e0527ae5c3de8c1bc010",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_earlymodern_brown": {
+      "sha256": "e46a395960707099a1c4478aa280b590e3ac33a61c92c2dd0be2a66c63f72bad",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_earlymodern_grey": {
+      "sha256": "1f41d0acca3d80d6d8ed6cd6b9f64f9d52237b687ca30e050bc0edfc5c541b6b",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_earlymodern_red": {
+      "sha256": "efc942e71945f5943b35cbcd97b9da56b9f36d9ed767423fd0af4d4e07fdec2a",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_medieval_black": {
+      "sha256": "6b864cc70826392d34569de3eb1c0046988e037844ca3b36a3d7bced9493f25a",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_medieval_blond": {
+      "sha256": "1ed959fad4482c88f2236faa09bb4d240924d6e7e8a365b2ae23480945fbda39",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_medieval_brown": {
+      "sha256": "08d0eee58a78c950485fce1d2e747dfe414d68a03211c9622f1ac0fad98b862f",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_medieval_grey": {
+      "sha256": "3cbe97de7cd7e450eb253ff1435655f016bf3cb20724602b54800c962225f872",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_china_medieval_red": {
+      "sha256": "8e107923a882c5449cfd1fff5586c77155a6a2486347f39b36dc3053dfaca233",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_earlymodern_black": {
+      "sha256": "3ecdc6d0a8eac215f31a15a2fc69bd7c4a742cf1e8587faa58154a627219ab72",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_earlymodern_blond": {
+      "sha256": "f646a76d1c33fdb0bc5838f0e1c5762a55e5197d5510ceb72b997f14ef2990ff",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_earlymodern_brown": {
+      "sha256": "922f6a0a1bd8e99eab12e50a9d49201cdfb7dac28fb6a92b17034e47b1d74a58",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_earlymodern_grey": {
+      "sha256": "1b19cb36f0b314bcb699a916fa21efa41219b5aa417323f4114c2764df18ab9d",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_earlymodern_red": {
+      "sha256": "0c8d655ef9c9bae996d308c938792981411c9ec2545898d035fed22db33ee916",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_industrial_black": {
+      "sha256": "d4705840ed24bdaed12eb9f58622f4d212bb5537def2627565d5103daf76d456",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_industrial_blond": {
+      "sha256": "45442481efd7681477365a74a6f165d20fde6225b7a716bf7eb1287cfbfb19d7",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_industrial_brown": {
+      "sha256": "45ec340471fcaac58f2c0642e18c1a66358579d411fa983d88b3b5a8f47317ba",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_industrial_grey": {
+      "sha256": "b243f4a80a90bede71fa19046cce8fb9c7acdd400b1495bf75605c88643b3e54",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_industrial_red": {
+      "sha256": "4a471963f0babd11c9b8a986891332b581f9ea76444cbee725ead1fd3897e78c",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_medieval_black": {
+      "sha256": "06e1daff44bc183e1aa9245ef90bb7d42c6dc737d1800f980f262f82040ad63e",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_medieval_blond": {
+      "sha256": "e678f91e6d4772661977f5e4ced5fd4b7f71ddbdf480c62ad3f44d24f30fadcb",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_medieval_brown": {
+      "sha256": "8aa7efa8a8219b8851b70b8c8f4663f21bb5a387cb71c32f9c099ac3a76cec49",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_medieval_grey": {
+      "sha256": "2326650dc0c5e69874ffb37ebcaea3ab5e9118dcc5a873f00dcb7dcc339fbcda",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_medieval_red": {
+      "sha256": "24e0897dd3378a799ebbed2b4ea1fc62a79831d907e8b05e70493d03974fb503",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_modern_black": {
+      "sha256": "1338a85a1121fe8bb336449fae34b669e9383978b296c5ef1cd8ef2de121d0a1",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_modern_blond": {
+      "sha256": "ec890acf59050ac423272afd95f0ba076fb16ae22d8991c2d8b2f4edf4e856ae",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_modern_brown": {
+      "sha256": "0057873e4da217a639f6e901c4e56a733ab6e49cffd44f716bc58434f7fc42bc",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_modern_grey": {
+      "sha256": "35893dd966b1612f1024ec4248619572ce383dcac3395ee2595ec34a824db25a",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_egypt_modern_red": {
+      "sha256": "c4d2ab1dd6bb7f84c7b782ed19a3fff5911abce298f6c6ebe68bab6c68cba060",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_ancient_black": {
+      "sha256": "772b9e1152092007516f271fa037e0936d6ff85afdd3b3299a12c573c93eaaf6",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_ancient_blond": {
+      "sha256": "1210d2423a5a7ea62d964d433b7c46b8fca1dd15e242613a6999c9af709352c5",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_ancient_brown": {
+      "sha256": "151853df009237df43ddfad9fc1ff4dd94a12c5c969a51ee5f97bc744fdb52cb",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_ancient_grey": {
+      "sha256": "04861eef2b5b4181c13985e594cbcf01861956086b8f1cdb253d522db99e0bd4",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_ancient_red": {
+      "sha256": "fb3e3a215697f77b743d9cadbf6460fd9b551a97189f1455a6f4365d9a508ff7",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_earlymodern_black": {
+      "sha256": "cf06b20feaf2dfc1e6d3e867a520e9b745c7d03a598c4ebc3096d87873614a76",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_earlymodern_blond": {
+      "sha256": "41eb6ec229ecddf23958a80c29544d0046e2eaffaea53b664adcf50a2f2c7c52",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_earlymodern_brown": {
+      "sha256": "9900c0891be0a4868c28e43b1d9efee1af06241f64c3ffa5305af64c29d89df2",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_earlymodern_grey": {
+      "sha256": "95d72119babefdc947c07cb7b0f92ca0a46746bfb499f6e9570d7d37802bb02a",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_earlymodern_red": {
+      "sha256": "169ff08f1593ae6aed0852abc2c1617cd82dca93f2f6f86a1b4ce92f560fbe0f",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_industrial_black": {
+      "sha256": "e5e9379edb2eebbbd6bd4fe65a6fdacc4dba7a576fa906977b377ba5ea7fbae7",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_industrial_blond": {
+      "sha256": "5f73983b2cae530d1d3dd2c2f4ad6693fcae5d0b7663529e01b3781ddb11e788",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_industrial_brown": {
+      "sha256": "f95b19ff298647d87b003e585f8820b08ccdafcdd09a652067b9cd2bfb0d080e",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_industrial_grey": {
+      "sha256": "9d23d33b509b8824db42c51bf6c7af1c1f35c7f0a8e16f4a44d4aca3e260c4de",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_industrial_red": {
+      "sha256": "d00033877f2f72261f18dbc1da666619debea7e32730a17af75cc5db041ae4f3",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_modern_black": {
+      "sha256": "fe5eaae212a7b6a4bb5d3e671b083b21fac81d0a0e817f20c620b54d74d4fd1f",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_modern_blond": {
+      "sha256": "5d86732f4650a3515b885b0a168ba254cbab5141089a663013ef33a1eed52af7",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_modern_brown": {
+      "sha256": "18ee385fba869211ffddb06091a451508bc4346661503400aaaa6c17da6a4d5a",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_modern_grey": {
+      "sha256": "2efa0779b30afe4947e65bd20cf24f5aefb77eb9346f7c6aceeac7b9b4caaa44",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_germany_modern_red": {
+      "sha256": "e75fab97fe1ad9bdb110d366e5c26ea62844efa35df66b46a3cd31e97ef42345",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_ancient_black": {
+      "sha256": "37ee8cef514995b57512dce8cb16092a10f1a82dcfdcd698323fc03c6cfde12c",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_ancient_blond": {
+      "sha256": "0e7891421b56a20e76430edee51e181b4be965f23f3d0456d41fe9ef20eac71c",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_ancient_brown": {
+      "sha256": "e7b4bd16cd39d6b74419e5d88d1c5ca50d2a84aed1756999a7f5c1a250f6f157",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_ancient_grey": {
+      "sha256": "73152f493157d4a34fd1a89ca84e09340062027ee98a16b6359aa86dce8f4040",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_ancient_red": {
+      "sha256": "4eade49c812bfd982a5be2412ad42159211dec7e44f900363091751c7c333ccd",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_earlymodern_black": {
+      "sha256": "82ae0436f184efd3b921af5d9d0c20e3f303c81ac174c0ff3027711d57b34775",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_earlymodern_blond": {
+      "sha256": "f977d1b465b78000a5bfcc6ba5d232ffc73bd0a6bb22ed2f21b2146cb7051c49",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_earlymodern_brown": {
+      "sha256": "e9571cdc7f75cf1cabd991db0626d1074844160aa77d663f311fcf9b4fe755a8",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_earlymodern_grey": {
+      "sha256": "d0f6b670087e3231f24722deaaa544710b7b0719fa7ea1904f339da078fe0996",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_earlymodern_red": {
+      "sha256": "d12b0d8dc1495f6c7b99a306009362103a3b9b8bb3716cf5f4d26f96f9447206",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_industrial_black": {
+      "sha256": "59a7b7d6a97939414bbfca2053f4724b716edf318d0f2f4732a2c53d7fa56305",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_industrial_blond": {
+      "sha256": "28fb15cb0fe4a292b27d12c55d2fb3afb39a45fe8d46d8a0c8ddc6a29fca4259",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_industrial_brown": {
+      "sha256": "8a569c68da637a94ce8838b49a608aa04d774ac85786b9aee921e34524dedc87",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_industrial_grey": {
+      "sha256": "94ce7f5cebf6de7aead830897bfcf061139232bc68b4b735bf6aeb16bdddaf82",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_industrial_red": {
+      "sha256": "4878c5edd3b95e59e056266c7d8f450e56fbf97319a29710891532230cd288d9",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_medieval_black": {
+      "sha256": "1a35ab6c7490100349049b3f6e24a6ebf6d63b4f1cb450f1f052c872b8b1c8a6",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_medieval_blond": {
+      "sha256": "b16469042d2e22f46c164e6154ea10ad9232c86a5a0c4584052112f1e7225d2a",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_medieval_brown": {
+      "sha256": "74387337fbc9a8fc53151496c77c45a6f00065c9b249ec9a62d6f2c5b9a18e7e",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_medieval_grey": {
+      "sha256": "8115b9f495aa909007918c8ff1994b7e0596028850ea8eb12b742bee3e55b5c3",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_medieval_red": {
+      "sha256": "49d87700010403bf1d5fb10ab953a7a528557c4440d3d39d1663981b636f1e74",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_modern_black": {
+      "sha256": "122710ef113fe1120d05d4d8330546afe7c783fad54afdd2229bd932f7ef0e16",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_modern_blond": {
+      "sha256": "6f746cc5ffff3dff391b082dfdb23079db9c5e8652fc108c9dbd9d8184957115",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_modern_brown": {
+      "sha256": "d6e71ea0dec8e3ba3a32dba2ab2c4a67e6c1f252cbdb92dc7822d0271e037adf",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_modern_grey": {
+      "sha256": "4c50b56c170bc7f939bcbe469b138984492c692c740154f7207f0afb0650b1e2",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_greece_modern_red": {
+      "sha256": "439227bfb219dcdc15353a5dfca4fe9f716b9908842bdafc7149c2350d5fd65f",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_ancient_black": {
+      "sha256": "1125b121e0b605df34eebd26e55874dfa4a1335f08d9d6500f4634b53af05cf8",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_ancient_blond": {
+      "sha256": "903ea50fe17f64b6afc1929f6a08f3c8b494d77d9ffd9830a752d0882258ca0e",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_ancient_brown": {
+      "sha256": "2947814e6d7cdb34aac166aca347d38b2d64cf00db748f5d7ae570804e1b0cdb",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_ancient_grey": {
+      "sha256": "4b9ffd26dba51b8d63cd86ec7b44640c5917a9f066fee192e8c0cf3bf1cf2725",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_ancient_red": {
+      "sha256": "d1743051d9ab6b77e3dcb4d1f20acc0c85e5111958824d8628c378ad5d74db86",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_earlymodern_black": {
+      "sha256": "606f0723ccb924b9c459194f9eb5c75d0f287fddee82ccc7be2d8cec968a0bc0",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_earlymodern_blond": {
+      "sha256": "b6e3e523dabcd55b7d4b92bfe07044d6ae7c9d9d434f73e09ed850260822cfe0",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_earlymodern_brown": {
+      "sha256": "5d094c785ec0efe55636c14937ee098f14a2ef538bdd61162b5715b415c885b4",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_earlymodern_grey": {
+      "sha256": "56b6dc8cd1f4e87bbcb3e0c01ef9882ff89bfdab71c67fac14a0a762ac963e16",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_earlymodern_red": {
+      "sha256": "23d3cc90a35bf53f092a8c83a5618a69d98cae6e2e97193415d8a300de83ed47",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_industrial_black": {
+      "sha256": "b35ca0c96ad8fadac71dbcccecf4eaddfaa0fde2d000f6ccd65fa8e6bc25f44f",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_industrial_blond": {
+      "sha256": "810b7716eed32112a397248a91ec62ae36f44bdb0ace13d150f5833ced0d2361",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_industrial_brown": {
+      "sha256": "ba91f8f185b0f5616ee073b6eeb0c25ca57e02ab86bc44993cc774b3d54b99d8",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_industrial_grey": {
+      "sha256": "a2dcfe0382f199a91950e48d190837c22aa2b8027c2ac5344115f98fda66d1b1",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_industrial_red": {
+      "sha256": "b8edcd140f9846d3b457b99478593b532d2217f73c30a89a94aeb2f109baba8b",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_medieval_black": {
+      "sha256": "d846912b39828406c8ccf4b22e4bfebf9bed10465f92793cc4c9981122cf8af5",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_medieval_blond": {
+      "sha256": "dcd5b6f5edd9529ea2bdca18346f5467b7703e04db18d1dec789e245ab17768b",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_medieval_brown": {
+      "sha256": "f464e70e27dce38b0fcac2d41d6af71f3a368d260a63b427474879e98887b809",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_medieval_grey": {
+      "sha256": "b2f28a0ce5ea35521d50a45d7427c3f98d0d3f35f261e78ff131f7705f74b3ec",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_medieval_red": {
+      "sha256": "a8a30458f95f826d5452d4c1a9f7986ba65372b941678da8e3fed383ec77317e",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_modern_black": {
+      "sha256": "7ba5a3f291965be868594afe90a1f3606d988b922e438a1de101ec45f2d7ca62",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_modern_blond": {
+      "sha256": "157b43fa070554f63ccecf7179624436ff89f387187a142fe4ca70ecb404bafc",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_modern_brown": {
+      "sha256": "4c0d146ef27eb39ed2301733d403cd7fe45bc0cdb4a0daae3a1149ed199be681",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_modern_grey": {
+      "sha256": "75555dc21c862bd8f6f8783841073fe6b04880f31c257e835a5b86cd80f9f498",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_iraq_modern_red": {
+      "sha256": "a14441c6f45844241df740333ce0d40300c0b0cb1b5d73b0eaf45b9443a1eecb",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_italy_industrial_black": {
+      "sha256": "500a31b2f1dc9eab0a702b9c0e912b4f0f5b7bfe1c450b405f8f55d70ae49f06",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_italy_industrial_blond": {
+      "sha256": "4b8d0a76215a58a6d9d15270ba63671b89212e3ed6a96a79ed5dcbd5668e0e70",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_italy_industrial_brown": {
+      "sha256": "299535769be506cdc5975678e1ce6bbf6136ee7c7ca86f77ed8f0b66f497c166",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_italy_industrial_grey": {
+      "sha256": "f5da9c09f145f4c9d0c41c0ed0b2405e7015201d1d2c6ce77d0fa9e95b143f39",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_italy_industrial_red": {
+      "sha256": "39876b3af7f707e67cfabd386ca05e24c864a99f77af34f683dddc29401d432b",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_earlymodern_black": {
+      "sha256": "0421223417f66c84791de1a11308b8313828ff8c4802939a3ea6625ea4522417",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_earlymodern_blond": {
+      "sha256": "a2435d81132fdec73a8d72ea8198002500bae91e61cb1d6395bd7c7eec94d431",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_earlymodern_brown": {
+      "sha256": "a5b30fc5fc466ddd41c8fd5491f46d3652609fa98b5db378591b5419a8f47144",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_earlymodern_grey": {
+      "sha256": "eb06c7ca9510680c5533eb827cf5e4ae7638421fac12966828b5a78f0b9ebc1b",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_earlymodern_red": {
+      "sha256": "98633439040566cae9b083f2637c35ed3422b9e19fe496bfc0fc9bcf31f5b215",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_industrial_black": {
+      "sha256": "ade1300b2ed665214bef67d450c2b14f49a11eee9015033a51b5498f72ca493a",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_industrial_blond": {
+      "sha256": "de2a7e25b25cc26edcab31d04fdb61b9d5f9506a48f60a200b0447f8fb103802",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_industrial_brown": {
+      "sha256": "d249256d671729e88fcaf0ea05bf28737a781768a8ca88263905bc17aba661d6",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_industrial_grey": {
+      "sha256": "0a20227b2a81feace8c713d9907db9a8d7412892034a85ab1e660f9ee4ef684d",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_industrial_red": {
+      "sha256": "c2f34c957656404ebdd37125f61c72d7dbc0216d59182db9a5f4ce9b91b650dd",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_medieval_black": {
+      "sha256": "3fcab4967db0f42129c32ba652bd09e58bd89806fb68fc26e4ce885d15d5bc03",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_medieval_blond": {
+      "sha256": "f8a6d3c0b5b4ff7d6654deea4e03430efcfaf8f8e9494e9d6fdd1727705dd916",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_medieval_brown": {
+      "sha256": "aa849f5245a18184ed20c2a9a0ef044ca49cf891cb5e5497c51ca40f1047d6d9",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_medieval_grey": {
+      "sha256": "bd93132fd292e692d554875ed081a74088364fd5d58e7ed8df1ba27a4ed69295",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_japan_medieval_red": {
+      "sha256": "dd534327b93085dac7be4394666700ab403163101bc068e917fe740ce0db2119",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_neutral_future_black": {
+      "sha256": "4899f841b3b15c2f169f8913cb837405b0f5fd80d8c9866bdc35139974581739",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_neutral_future_blond": {
+      "sha256": "dff0d7d9ca6dd3a1d92a0baabc8f8fdbea822773d7d81a1d3b74119b205b4a50",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_neutral_future_brown": {
+      "sha256": "a1b7c807d972939954de87fe859df1d8f65f255ede98387f50b21f2b770dfc59",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_neutral_future_grey": {
+      "sha256": "c290170fc71ab938cf8db9c69b1f22c7b252189cfd823c27bfdb8a617c6fdb15",
+      "keyColourPixels": 0
+    },
+    "facialhair_m_neutral_future_red": {
+      "sha256": "a82d563d6cde80257c90b20243a7796257b8e7ef74b92b1dbec4ad02a40d0544",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_ancient_black": {
+      "sha256": "2e559205c6c15fdd629fed7d72d3ff9eb816fea22cc94c10807bf1156c40d153",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_ancient_blond": {
+      "sha256": "0672446b1bef55aeaa9a409937254416543218eff54db11ebb34cb43431c36f0",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_ancient_brown": {
+      "sha256": "88d79a7aaeeeb83da41f7dbe20d9935ad6d5cb580b82019ac8e81eb2c7df3c43",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_ancient_grey": {
+      "sha256": "19b365825fb3c0a34460f101ec38779d92042f0a1f4dba04c14176abade9fd38",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_ancient_red": {
+      "sha256": "fe02aef3ff664db0768d28c1f24251e1c9f0f98d1370a9584175a4cfedf1ee5e",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_earlymodern_black": {
+      "sha256": "4a8354c4e2d506317cf2c8424ca46892f5e0dcecabe96ed7b278f4b26e9142b0",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_earlymodern_blond": {
+      "sha256": "c10cf9c9e1a059fe4a7cb6dc2bfe19cdbe49fe90ca54e394d072cf62716f8fd8",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_earlymodern_brown": {
+      "sha256": "91479e44833b797b6b966fee276c6e8208d57d0e98138fceb73094b70c2a7617",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_earlymodern_grey": {
+      "sha256": "e9ea2159a2d31cb9c07e3f4acf3e6df9694b6ead97905ef69a1819ef16854675",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_earlymodern_red": {
+      "sha256": "afb19d8cc2f2371d9d0e49cd9eaceda37f3ba39872838421bc008553cc9b2c52",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_industrial_black": {
+      "sha256": "fb6887f016086aa17e81fa745444b72bce0409126c604a4380ea595f6b731119",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_industrial_blond": {
+      "sha256": "4b941b8918a9558e72bf9139b712c3d3660284b35aee900ab6130a6c40481a49",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_industrial_brown": {
+      "sha256": "f6a7b028ef7baf15d942b1babcdffff1350f9f2b4defc2a3ff341135e6641036",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_industrial_grey": {
+      "sha256": "dafd15126c7baca24c05515fd35a03ccb51993a2edd473f4a40b92b5d9f5e9b2",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_industrial_red": {
+      "sha256": "f99c1e3f4f0eb698141bb42a18a7d463da9407f59cedb8433466f6f260c42948",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_medieval_black": {
+      "sha256": "9fda148dbd3c27efe03c6357fd0cf4daab0a0c7ffe76e1455fab8222767967a7",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_medieval_blond": {
+      "sha256": "bbdc3cc6e9de526c28a16f6b335259a85c9d38bcec0c3792a820b17f434e7cb9",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_medieval_brown": {
+      "sha256": "92c8eaf739450bf4c8da12fefccf1fafcc1241940616eb0675ac4a52937fa19e",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_medieval_grey": {
+      "sha256": "ef942988ca25d9cad50228e1f565d7c80d05431c445a9a208457d215f7868513",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_medieval_red": {
+      "sha256": "00edc0eb540a396e98c1931d075a884dda9c2ebcf8e7aeb417b43bc1673d2d23",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_modern_black": {
+      "sha256": "90765aca325b5046b808584b909c8528fb301dc6c042043f982aa1b25929371f",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_modern_blond": {
+      "sha256": "f17643b56f4edf065412831616b1e8a413bef781ae3a9b986f380059a4102395",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_modern_brown": {
+      "sha256": "7a7b771125b06080974f0447838d9a33f4fe2fa42c0953280f1a053a72c2b044",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_modern_grey": {
+      "sha256": "3eb4f858e74ac251d9aeeb30ad5fbce7143e6728231179c0742293b2bb76d2d6",
+      "keyColourPixels": 0
+    },
+    "hair_f_britain_modern_red": {
+      "sha256": "3e615944dfadba1e271348ddfad1b095151ce6f0915215aa2925e56fd3a9130b",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_ancient_black": {
+      "sha256": "130391fd982f5b8e40b8adc8cf5a9309554c368690b332b35644730d55d9e0bd",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_ancient_blond": {
+      "sha256": "09ff4fa7545107348062383c2f4e64508b7f012deb03a6fc18202ca2808211ab",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_ancient_brown": {
+      "sha256": "4b52f5055a08bccf81a05e35eafaf9ce081abffd1f5054034e6b3f6732c0fc02",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_ancient_grey": {
+      "sha256": "b1bdea338bc87f74a980b7c068add022a1ec2f45a555f5589e15fe7eeace741b",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_ancient_red": {
+      "sha256": "63e08214a7c437a46b46e0917a49474385d26d2981b0aefc40fd292ea6f02b4e",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_earlymodern_black": {
+      "sha256": "b036a5aa32b0cd8aa4f3d6292d4b2639b217550d9b6564ca6f41f8c2c888d16a",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_earlymodern_blond": {
+      "sha256": "6db6b4a14887b4e34c9e9448bd66256e3862ab2a72e98d7b1275f4fa9115ca06",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_earlymodern_brown": {
+      "sha256": "dd5d2c10589948fd1aa04a1b79b12d00f8477b419d9a754df4925582d1fbf995",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_earlymodern_grey": {
+      "sha256": "8f716d9e7b6c48c0b808a259514c358ca006a8fe4b602c8ab786c36677beca30",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_earlymodern_red": {
+      "sha256": "221b44f089c496337d50d2e241a4c1b5233cf2c3c042c45d68d3669c5a369dd0",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_industrial_black": {
+      "sha256": "18d8e0b579a24a5d6073e99daa148030aaa471ca7e1e5bc234c0abf121375e83",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_industrial_blond": {
+      "sha256": "64cc99721fee272f84ed3d9ddeb5b6caf6f05e82529945b33ffe58353546d51b",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_industrial_brown": {
+      "sha256": "6abcc8c7c0f41c7ac5df0c994ac0f108988e7274b4cd91dd9a751c25568dca7f",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_industrial_grey": {
+      "sha256": "beda61995e5d17bc6381fe65215f7be00d36f68667d6ab9ce168f8971f10d9c7",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_industrial_red": {
+      "sha256": "745b514833872b4427a3b3d0fdc402fdc734564406c1eccee0e177a7fc875187",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_medieval_black": {
+      "sha256": "415f638f505df8b1f59fc04e6f9259dd8125979bdf4ab5f1389db503ef2bf39e",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_medieval_blond": {
+      "sha256": "ea8da1237374b3500bf87cf5cdd0b2f295c48792c2e4985d604e545f98056395",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_medieval_brown": {
+      "sha256": "381bd6c258fd74ca2d154d6e3a90b0174edf5819f88b33908fff20663c9e9b50",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_medieval_grey": {
+      "sha256": "d4ab311c022300f819511ec2b5a787f60029e74e1315037d89bfb77ee467b1b3",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_medieval_red": {
+      "sha256": "0ddac69e339d9f68424438da47d910a9701e8e882ae4c534ff9d8736616cc21e",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_modern_black": {
+      "sha256": "3c0a95b88087a40758c1cecd8a89075ffaef799b02a0c610feab7da1b2e6b5bc",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_modern_blond": {
+      "sha256": "e65d50373d27010bbbc3054604be6cec1981b7c1f53dfbfdb08daa76296264ed",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_modern_brown": {
+      "sha256": "01229e8ef4e1a2817201e4cf468f67e6d4bbc789df94158c4e85f90082445917",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_modern_grey": {
+      "sha256": "8958caef0596518e6679f27dbb1568cbd3a7b5072afd70e47a097b5356b17106",
+      "keyColourPixels": 0
+    },
+    "hair_f_china_modern_red": {
+      "sha256": "565ea18fcef6e2d774f6087864d999545828de60992713a13cf8b6929fc64f41",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_ancient": {
+      "sha256": "33a61e21756e3e1d6852a2974a9db59fe3fc699c533db69c6c097dea5aa42b98",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_earlymodern_black": {
+      "sha256": "9e2c93a583956654fc1de7150f35ac8a02e540434eaa2e6360adf4cac3185324",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_earlymodern_blond": {
+      "sha256": "38f9faabcdab420b1412d32965c636cb847e8a36926b11e516477d608a7ee66a",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_earlymodern_brown": {
+      "sha256": "1d84187b64f019773c13b7c870a13ebc235646cbd327c94df74c1986452bb430",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_earlymodern_grey": {
+      "sha256": "7c22895bf8c8d815deb868158264a92f17ce1907ffaa9e2074f29be0d6a1f48f",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_earlymodern_red": {
+      "sha256": "231c82fda7a5e283a2699c887c36ee307f1811b107b6d2da9ba7d5a30fd5488a",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_industrial_black": {
+      "sha256": "87fdbfaa7d4be4b9288487618e4c2b8d51c873779eaa8e9fa28a61f2f66e04e9",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_industrial_blond": {
+      "sha256": "3c2312e4d84ae961ea4cc915bcf6c74a4e02554b32cf1b121eae7fbfc55d243a",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_industrial_brown": {
+      "sha256": "e87de6bb180951c64b998a250ebf725621099e248498de65869264625b39095e",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_industrial_grey": {
+      "sha256": "548ef9b6e87f406a94469ec42ccd2bbac5eebc507ae6daac199dfd55ed57eee6",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_industrial_red": {
+      "sha256": "4762f26b55adbb2cfde203143280a16cde4e4e63f120c66d11bd878e7fae0d89",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_medieval_black": {
+      "sha256": "dca34c5cefdd7b326e4887e8fc590551ca393eb512bda48cf1d982fefe1fc402",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_medieval_blond": {
+      "sha256": "e009387086e145f762b89887b0ba095d6e67229ea9fa88b656ba310763755693",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_medieval_brown": {
+      "sha256": "8d619fd9a938ce778455e2e3f625ed5dc90d52249b948a5a1f732fcf63cd1943",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_medieval_grey": {
+      "sha256": "7426f72f65447275df4040758e9ac82c2e35ec7be8e8faa7294ea6ec031c9c1e",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_medieval_red": {
+      "sha256": "30dffaa768f0492c52d123270774cfe1d6c7468f906ca1268fe1453a67be0957",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_modern_black": {
+      "sha256": "f4e60c616a9d94694ed1e9850452d12f70994c567eeb249d59cd30bac7ae5897",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_modern_blond": {
+      "sha256": "efc77b0bc295cab1f584502cbd127de68cc06314ca7aefab74988d9f7e81c0f9",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_modern_brown": {
+      "sha256": "35cd668c11441da5fc5a2a4df7e7be43289984833bfb725ad86551b2749ddbb6",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_modern_grey": {
+      "sha256": "694201001277ca9dc6ba82acd5324e89a5f745f22b3ef83538a9cb59616d1478",
+      "keyColourPixels": 0
+    },
+    "hair_f_egypt_modern_red": {
+      "sha256": "f1ed7f89c360c66d591212ba6d5303d86f5e321a13c72bffb7101f5f2f073fbc",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_ancient_black": {
+      "sha256": "46ad6f3c47e0a5714b5f848b0fe2f25a472e6bff38f526ab7e12757c75e64ade",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_ancient_blond": {
+      "sha256": "ba0c052515f2f4904db75ff8877cd28a6b46d74b882e98c20a0e7a03a6e023ae",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_ancient_brown": {
+      "sha256": "e4293175f9921bfbe7b04e9365340eadd457a4ea8a1d4736d2b496c486d4a493",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_ancient_grey": {
+      "sha256": "aebca404ce21b85304b3a7d0d04ca03295a298b9bf9c364bebe278dd9c3eed9c",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_ancient_red": {
+      "sha256": "3a35822c564b5a001d800e3daac7f8bbc2c61375d704c8dcbdaf80d545a4d475",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_earlymodern_black": {
+      "sha256": "50a858e9aac771b184b8eadcb965472ceedb5ad67444b0186a527507f7bec4b2",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_earlymodern_blond": {
+      "sha256": "1e6b460f201d3d3cf81fcfba637665449fc810b47e8f3d14559ac1999e6319cd",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_earlymodern_brown": {
+      "sha256": "6e779d0532d09b6fd588b9588b70fdc4e435169e9267676b25f498a73d0b9cc0",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_earlymodern_grey": {
+      "sha256": "d6e9c645392fe53a1801690b5e776eaf1b76141c026508a2152119b80bed767b",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_earlymodern_red": {
+      "sha256": "8d317d1a661b3a8f9a9f7522ee86c93d3905725ea4061631d06d5ff67d83b517",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_industrial_black": {
+      "sha256": "99189a6fc3b461eab928298f45d7a5980dc76b625f6130b90b309ddfa5f7a33b",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_industrial_blond": {
+      "sha256": "adde34fa97842d10ede9f247d1e4f10d4c75695522d74974f4a0ec31d9fa8e7f",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_industrial_brown": {
+      "sha256": "c920075992d0831a27ee59ba5073b582c09abe9eea59ca70d9876b1331c63268",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_industrial_grey": {
+      "sha256": "a616f266f1368c5f2a7f5f274f7f11566c75130bb719ab483eb59bdd2a08f6a1",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_industrial_red": {
+      "sha256": "f24483a797771893bbc413da638dcf510958e3f4ea529d571caba16b04a15c27",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_medieval_black": {
+      "sha256": "c37cad28033302d448404fb65d46e33d4f9bd2bb92c7a030a151835f5bce458a",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_medieval_blond": {
+      "sha256": "477026c0e16a357fa40921b4f7e743a8e5f26159ebed1fce647c6a93e8ac5c86",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_medieval_brown": {
+      "sha256": "7a371e564108ee197079457f5619d6197cda656513db76f5b338b9b308b5f601",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_medieval_grey": {
+      "sha256": "387cc22142a749da29dd3c05f30c3d805945ea06d6be23a9de054ae0ae2de9f8",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_medieval_red": {
+      "sha256": "67999dbf5386314bab9976bd5acd74c72157ed29a0f0b105011e93e79d0fac18",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_modern_black": {
+      "sha256": "94d46c59b405f97ff263eeeb278d70ffa386ff48876e2c1fe1537f599cd15a27",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_modern_blond": {
+      "sha256": "f1b63557fa21fdc30e7b3f82a575ef83a7521d931a0619134f8a750c44cdfbf8",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_modern_brown": {
+      "sha256": "c5dbd8b603729c0926f6afd6642a7792ed8496d6c88433779c2313b80d45295e",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_modern_grey": {
+      "sha256": "d64ba7049812566b51f591873a80293f1d29055b1a53db24671078e627bfae28",
+      "keyColourPixels": 0
+    },
+    "hair_f_germany_modern_red": {
+      "sha256": "80ed394237b8e8c3a78845a8e7469fcd4151ffa8cbc8a90dbb1a0706780535b2",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_ancient_black": {
+      "sha256": "9d570c1d203b93386f68465838b037df17d11337abf6dbefaca3d29562d8d4e8",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_ancient_blond": {
+      "sha256": "cd999ff5e442506952b1aa6185a872e19ca9f6129321d2eddc2b784698f72308",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_ancient_brown": {
+      "sha256": "a366d608ea600d1a0204875e9a1deb080ad5107bf96ec03b68225ad271308dbc",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_ancient_grey": {
+      "sha256": "6358c6f466e43276a6c6773acd840c93806765c1dd10fd8052ed653622229748",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_ancient_red": {
+      "sha256": "939f46694b389d079d08ffd8addd01de827080fca17091de28d0bc4278f98ecf",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_earlymodern_black": {
+      "sha256": "36f553e7625b8f787c023639ad058e07cd68256be8db8eb870c1fa7fe843f2e0",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_earlymodern_blond": {
+      "sha256": "4288c359aa08782e935d10897d7c6f7b6e42eea25f034d3bd024aa3eb83ae768",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_earlymodern_brown": {
+      "sha256": "5bc5d7f03c4b582b9bf526969b0f1320978e59570c4074c1a449efd94aaaba97",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_earlymodern_grey": {
+      "sha256": "3aefba29b1fee3557a425b7bf7b2030b4bb9a7a587270b0b29c4776ff4fe1b03",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_earlymodern_red": {
+      "sha256": "2c82c594ca62824a7895331a87ffd77060dd07d06527c4d0027989f84c8a3f53",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_industrial_black": {
+      "sha256": "d9d2c95a216bba84a02d7259b1be17daa5f7508bc1719ce85ca76686f34e5440",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_industrial_blond": {
+      "sha256": "749311136f5d66eb3b22d4cc00c252dcfc43e3ac5fd47f0e30383a7eb47d92bc",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_industrial_brown": {
+      "sha256": "d5b297998106fe8e41bbab0def7cd2926441a520e11acd90fdd641cd87e11624",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_industrial_grey": {
+      "sha256": "7000a89079e12069db2bdaf6b596a2679a528bfd95883c8b53d7db0f24caa7ca",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_industrial_red": {
+      "sha256": "0926d3c7d08ad266ac143256daa165716962ca27deaa1e81fa037787239ec778",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_medieval_black": {
+      "sha256": "24aa9bcedf81d22c0c814dd0c0b9dbfc397605a21f53b0e03841d28ddf0972d9",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_medieval_blond": {
+      "sha256": "a478a91fe7e3a6cb2ed4c0d266a84d81830d0bbf47a04afaa6b6d55ac4350056",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_medieval_brown": {
+      "sha256": "319d6711709c87a0b0518c2bbf3d26621b72dac652be7f235a06c099cc430ff0",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_medieval_grey": {
+      "sha256": "a5e392ad9bb9a87fe30ff93497a3d8cd26f74c7ba1392da04b11dcb84a3e6518",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_medieval_red": {
+      "sha256": "c42ed4bb83be22ff4be0fc916dce7add452385f24aa17fc135573d7dd0a76177",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_modern_black": {
+      "sha256": "cbb46d400d876152a5e204ebc2f0646ac0306c1511c5c0c3e761dcf02181f5cd",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_modern_blond": {
+      "sha256": "16e736c2a3fdd79fff6be54ea5d6236eb543d57d631f4277b4200e255dfbe4ca",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_modern_brown": {
+      "sha256": "7c4a14c6051afa08f511f8cb33113749aa70eb01707b2124d652f87ce4046341",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_modern_grey": {
+      "sha256": "5fe7a3ce13071f526d65195e4f63282df847b7c18d219ce02e3fb6eca77966e0",
+      "keyColourPixels": 0
+    },
+    "hair_f_greece_modern_red": {
+      "sha256": "93e55ccd10facc18e600bba0a2cca4ea9c65dbd6c2398aab57e0bc880dea7357",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_ancient_black": {
+      "sha256": "4bdda7b9773a19f6af3cc12c66cefb94ba9ec38b105e3ed30f80658a59883b52",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_ancient_blond": {
+      "sha256": "99dc1d274dd3f1f9b5f178255cdbf0f5667d70ed03caff354b7bad6f2eb65be7",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_ancient_brown": {
+      "sha256": "c67b235d5cace33c704d3a16e2da34a58164dbac46b497dd5465249ce7d30713",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_ancient_grey": {
+      "sha256": "360c429832aeb191a121c6c162fb4e85c502c87007838ec1554a4d3170eec81f",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_ancient_red": {
+      "sha256": "c9cdaa3e92cf95c24c781d2e1f0e7a8889ff37297be3cdd2f35d2f727e3b64f8",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_earlymodern_black": {
+      "sha256": "1df8ae5b1ca29ec3e7268bb1a54590a5b2e53be8e3d83004c2d3a20b931e9eed",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_earlymodern_blond": {
+      "sha256": "bce3e3b5d58bd3cd489a5380c794b45836f187bd0821707f64a3978c4b47e08b",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_earlymodern_brown": {
+      "sha256": "8703d713e822bdea71416be9ac734897f783002781503ce2ac9e3e983c18f5ad",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_earlymodern_grey": {
+      "sha256": "72e14473fcfb1a4ac296a55a4ccace56dfed6baa7708e36746105112e89a525e",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_earlymodern_red": {
+      "sha256": "89da3f4c220152a12db074d32be402410ea13a945bfa46967135eda7da10b534",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_industrial_black": {
+      "sha256": "af210fedb8dc3493d2af3f599b96c37dda35fa45cbd8dd9346530e210a3dcf80",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_industrial_blond": {
+      "sha256": "7316572d2c9142d4393a3da0db5aba261826389bac94f6f27c4de71af0a7485d",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_industrial_brown": {
+      "sha256": "a295d7028ba8b91f082a2a0b06ae96dcd68fab38e32a09560927c45f6689a3ed",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_industrial_grey": {
+      "sha256": "81ac3ebb513e01f254c5ffda7ce0aa7dc78e8c558662245bb4b51371c8853635",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_industrial_red": {
+      "sha256": "7433191517490bba65b513d32e507740d3f08d7cd5ef781370133f0fec3e27c2",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_medieval_black": {
+      "sha256": "fcd16841a96c32c41963870a00e6ea29c9fd004acf5baa79039535193a7559e7",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_medieval_blond": {
+      "sha256": "90e498fdcddb21d028d908723df00e75eea1181878bc8a78f40213e845d4a513",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_medieval_brown": {
+      "sha256": "385802a7fd142e167db2ccb75ef8d61cc229cf370ce32acd7a586899edc99998",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_medieval_grey": {
+      "sha256": "7cda2342d96ab8477a8166b6bd9e17e154dabcae4996833d7c849e9b856add58",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_medieval_red": {
+      "sha256": "b9f7b0e5973408a7c375aa17a271ae645dad364e846daa0d0c67d51109b4a6f5",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_modern_black": {
+      "sha256": "305ac4e514e7f6d7488e540f2c39240ca6c3d719568ae83392a5f498a453f87f",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_modern_blond": {
+      "sha256": "9270693b276b47934210d7c088e5f06166fabf2be307794279e06ab5ca5e64ad",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_modern_brown": {
+      "sha256": "b97b71c769a2a9650c1354892f3f1750d6a0f6c9d59696fc423184ed3aa783e4",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_modern_grey": {
+      "sha256": "aaebdf9a73f8d9cd316005f2d687a3270cb3d171da674bbbbce14ecddb64e233",
+      "keyColourPixels": 0
+    },
+    "hair_f_iraq_modern_red": {
+      "sha256": "5901fc0034df77648b453a73cb853c2f9804720a4ab9f4378b73cd9241a157cc",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_ancient_black": {
+      "sha256": "9586ac7ff642d2ac61c24362087af70ebf9d458be3f7e84fc03384ce31699463",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_ancient_blond": {
+      "sha256": "b54906e13d9f1adfebd892294577b0a7c6d327a24651d023189af8af4d5199c3",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_ancient_brown": {
+      "sha256": "d438f21312d5881560a103ec870a429ba685602bb66843de406641306e82dd7f",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_ancient_grey": {
+      "sha256": "3aa7eb4242749dc390b5f1b7fc14de337aee6370720103f748d61c8030ee5eaa",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_ancient_red": {
+      "sha256": "30187a106da002c79fac1bcad740078d1162748580bcb5d9c269410457fdfcba",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_earlymodern_black": {
+      "sha256": "074a206b83f7d964a751e885e8edee5f765284e1f41b746314bba0eef6e92393",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_earlymodern_blond": {
+      "sha256": "e1df84c124c0b74e87e68f5694b769c0763694eb4f5eb5495216221ed7e261e2",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_earlymodern_brown": {
+      "sha256": "8eb078856b16800aa28b4ba994bdedecf2ddee2ecc92f0e13be91cf755dac7fe",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_earlymodern_grey": {
+      "sha256": "9b8f952614851c96e8a6e0dbb63789ef413c963455f274538bcc5de13d2e0b12",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_earlymodern_red": {
+      "sha256": "772c45fb18bb3464082ca59bf194c30340e74eee70d41e4684f103f03e30e81a",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_industrial_black": {
+      "sha256": "60e54a84eec7f713afbdbad677add6e3fcc518a6164cecca508e49bdfb86a6dc",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_industrial_blond": {
+      "sha256": "1e7878de4ff517259522967a0dab34b8bfc859dc18f7401abd010464ce9c3ccf",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_industrial_brown": {
+      "sha256": "7f3bb4b4c7a85f656dd949f010f4e6a9e0e85dfa40de1095acab2b741ba1c89e",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_industrial_grey": {
+      "sha256": "a538ee9d3fae2bb718d781106372c7dda53717ffafb8da17d89eed70fc2c207e",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_industrial_red": {
+      "sha256": "4af7e5d91906323bcda0ca740c4eac803638a59d130d4273e2b4062cf31efe8f",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_medieval_black": {
+      "sha256": "16f1f523d3d5ab3afa48a11d06d56f6e099ed7798839ae3d4801fc43e079b022",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_medieval_blond": {
+      "sha256": "44ab412a31175ceeb9e4280c12ba0814777566dc02751c622430475aaa3022fe",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_medieval_brown": {
+      "sha256": "15fcd4c0b03599d7107a50beab788bb263b875afc8da736ab222565c919d385c",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_medieval_grey": {
+      "sha256": "684c3b9067fadb00d00afacdde8c273c4d07c04c57796cd5605f00a6e287ba2e",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_medieval_red": {
+      "sha256": "53a42a2657709895342da576a9c67da928b28085d8ef40d85202e027278b21e4",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_modern_black": {
+      "sha256": "056ddf6b6ac6bd8ddd94b845f6951ebdcfc0f998f20fd18238cdef0741a7560f",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_modern_blond": {
+      "sha256": "0c48056b31203e8ad594806cdfb9af6cf54fae6cd19e64bdaaea0de2e7545520",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_modern_brown": {
+      "sha256": "3bfc4b8ab27a921224f5a2a627b85303bdfe4da0af741e99e4e407e305d1f50e",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_modern_grey": {
+      "sha256": "1f302ff2d779e71c26bdaeb6aca905fcd5657eb48b276c72a0bac965581b2b58",
+      "keyColourPixels": 0
+    },
+    "hair_f_italy_modern_red": {
+      "sha256": "a1012e6fb1e90db092c34a79991096bd03b6446e9cfab0f1ae6dd65cc186ebe8",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_ancient_black": {
+      "sha256": "d9e10b534bcd6a817f1f3d47b1eef46b079afa8139dd604fae35ac7bffd027c2",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_ancient_blond": {
+      "sha256": "a14a4e8552e21ccb96b70188ca394cae617c237b74429e1a1aefc14e0a912ac1",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_ancient_brown": {
+      "sha256": "a6376a762ddfa44775d6a0cf925fbbe59f854effe556968c19eaf07fcbd331d5",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_ancient_grey": {
+      "sha256": "c873bb83c5c2b84a75627fa669505ec01c73ec90efb2d4c9f74e0ae6c473f2b8",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_ancient_red": {
+      "sha256": "91e78d38602da3763ae828ac315df887673203b5bc210fe1ddd05a1ba1603752",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_earlymodern_black": {
+      "sha256": "acc10fff2bb79b5c9b7ce5dfb8f4fb0a4d6c058dd21dfcf694d390c34678e547",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_earlymodern_blond": {
+      "sha256": "7124aa83dacbc8ead05a761392b87b6cf2a35c45c31239b0376c8717a4fd8aa8",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_earlymodern_brown": {
+      "sha256": "e536aa4123a570f21c38f9476f29871741a989c3cfd1c14b185788568cdd1b4a",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_earlymodern_grey": {
+      "sha256": "4fc53c28afa2fbe7282d820990766c2f09c910f564a5e44d12562dedc66b6961",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_earlymodern_red": {
+      "sha256": "85e14b418ae2d5137153bfe7b24e0ae0cd25106eae4d0b191d23073f6de5fb9b",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_industrial_black": {
+      "sha256": "643438697480550a62ecb7359f0a04d9edd4702d6914f5844ef38744ded0a65b",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_industrial_blond": {
+      "sha256": "d2d4cd1773a4b75ce319646b8e0920406fb933e14e109902d6b0836be9e09336",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_industrial_brown": {
+      "sha256": "61497635c5c54ebcee55f1e210c999cd8a29d1c4094145eff0becb8cbc27d83e",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_industrial_grey": {
+      "sha256": "e12c600e3bcb843b0518b8ba5f93690219e5fbddaa9fb876b3736cd1db0bb67d",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_industrial_red": {
+      "sha256": "ca808382aeaa72f770accfddf2043aa658c8f97f3fff7b3bb647697f128e4b9e",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_medieval_black": {
+      "sha256": "b9d9b934a05be8162378b6cd95be3f4fe987f48059ef3f782d66d91f5582cb92",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_medieval_blond": {
+      "sha256": "a35319bfff9babff6dd9f9fe2fa25f27db818d37d3e7b9924b6cbacfd69fa489",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_medieval_brown": {
+      "sha256": "efcc7d746d84822e67d750b61ff277e9f359fbeacca1cb3136a8dca02941c5cf",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_medieval_grey": {
+      "sha256": "d95c304b623173a305d412925cd37e2687152d71eda21018ddcfa020daa99812",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_medieval_red": {
+      "sha256": "08fecbd8829fb37821fa93af56e6508488c0c8027c4587c4d88ea2e4e56d24a5",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_modern_black": {
+      "sha256": "b922382147f55beff39387be03cc6303434034661b38ec68d3e8c297436fd041",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_modern_blond": {
+      "sha256": "378af6b7dc56bfae95f7b9351f4445aa62305b567939a6f80385eb9fdc1f004d",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_modern_brown": {
+      "sha256": "a738a3e9bc20c18d795b0cf17e9b3521ce5658033ea5c5a07b75cb6583751023",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_modern_grey": {
+      "sha256": "a4a9dde0ff238dad05cba3c1cdb6a950085ac86dbdedb64d7399e87577f1c480",
+      "keyColourPixels": 0
+    },
+    "hair_f_japan_modern_red": {
+      "sha256": "a1225d480459b68ce84fadce11e7e66924a7b6f7bde88cfa262c06157c0c5336",
+      "keyColourPixels": 0
+    },
+    "hair_f_neutral_future_black": {
+      "sha256": "642cf98493d7d553807072a715cf55e738feacd9c534e80d73d4267f96aa43e6",
+      "keyColourPixels": 0
+    },
+    "hair_f_neutral_future_blond": {
+      "sha256": "14f9750dbabda15b6a9a205e1b3a9126f21b1b56d0760e4396c2101f3ebbd536",
+      "keyColourPixels": 0
+    },
+    "hair_f_neutral_future_brown": {
+      "sha256": "697004f1c1132bf22c662b25f74379e93dc3cc5d1dc17b2396474b106a9423d8",
+      "keyColourPixels": 0
+    },
+    "hair_f_neutral_future_grey": {
+      "sha256": "aa2531524e116af060ea66c0f23f157bad9a4e493a709418dd3abd7b0b09499b",
+      "keyColourPixels": 0
+    },
+    "hair_f_neutral_future_red": {
+      "sha256": "2a266cff1b42a0b6fa77fb840ca562fd804622c6411b18da706dffbd026878c5",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_ancient_black": {
+      "sha256": "68c5ef021acb969596c1e40a2b0f30ef48b58f495c9f4079bdca7bb0f23dc594",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_ancient_blond": {
+      "sha256": "418b1fdbb4ad5b2ab61b71ba646e87e53b5ce20dd8e7587b7bcd1acf8e20f96a",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_ancient_brown": {
+      "sha256": "bd7a3c156923ff4c2d7ab847e399d281fec8243e78883ad10fa3b34cebb089ca",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_ancient_grey": {
+      "sha256": "b4155cad0cd7200e9cae888ac219d2f21165c0f7aec0027b5b009ce7f4e9bf5b",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_ancient_red": {
+      "sha256": "49a54d8a20fae50f83a205a85dcc541487cd101a19660b538d0624e62fc0db54",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_earlymodern_black": {
+      "sha256": "9b61847778f5770f2ace8c86456b7de3798ebe8226155558a22771a2f3150116",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_earlymodern_blond": {
+      "sha256": "472f4bb5b3cca904c6d2d2a6feec8f8204b3a72b5c7ce089dc4b96a833c31a14",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_earlymodern_brown": {
+      "sha256": "8eecef847e7ae9ce71af9c83cf1e014ae06ad8a2acbc7c5a1f996789df677045",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_earlymodern_grey": {
+      "sha256": "b50b041f6b65857eb71a99b20b1e6e9e5b44dfcb85812501fa9493a7a0f15325",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_earlymodern_red": {
+      "sha256": "21dca9cffdc2e602c1251d85ed8786a942055bc101dfc58c11e15b5dc86ff977",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_industrial_black": {
+      "sha256": "5ea43e6cdd56b691945fbb2312bbe76944da31cf491119a20ceb6bc27e2f0d62",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_industrial_blond": {
+      "sha256": "7daa939fdf82ee3869bd5b847200bc172a76917ca71f41ccf7e93def8bdeee1b",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_industrial_brown": {
+      "sha256": "dbcffd14ce246682fe4fb0d449484cae7893f8fe98ce4161fcd432423fb331d2",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_industrial_grey": {
+      "sha256": "39021ded8edab80e3283eb69b74109a51de0bdffa9b48b90e267d506a7fe6d31",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_industrial_red": {
+      "sha256": "9e2fb7efe741b02839432a3489f9c92a8ecd894512ed990aeb9476fbfd68c0a3",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_medieval_black": {
+      "sha256": "d250d7a2fee19931cb95cd934864b44e161afca9a21af20353ecddecfd91bcb1",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_medieval_blond": {
+      "sha256": "a33cafd0f8cff77c5b59492275393079abf28fc207d4d3b59392ac6d1a52a0f3",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_medieval_brown": {
+      "sha256": "95816f6883299cee02bc8fb9affb621f76b87f0e2989c0e24238a77befb928e8",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_medieval_grey": {
+      "sha256": "5cc2cacefc6549b682e32082aa9ea6fe45bfb804d2e8fe14017d6d2c579567b9",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_medieval_red": {
+      "sha256": "ed978bde903d771496f2f7c367fa8d6c330f9a7b4a6d342d288fd67d9af8274b",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_modern_black": {
+      "sha256": "d504c75bde86b2bbe12454d73a6d7a6bd6fd6f42747ae9771566017f409e42b6",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_modern_blond": {
+      "sha256": "e213698ee1a2d289648eaedf83e89e2304991884f34936306d776f342f583b9b",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_modern_brown": {
+      "sha256": "16410c4c7bcb2019cf8875360dceb14664a08dd250f0664435a65210034dd8fb",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_modern_grey": {
+      "sha256": "3b4329e013f21c5fa5af1b4f757ca0e0da87e08f1ea21fa688698fa6b5e3f043",
+      "keyColourPixels": 0
+    },
+    "hair_m_britain_modern_red": {
+      "sha256": "2cd42ff72120605415137d85acafcfcb7e809a99f62b9ecd86804011b40726d0",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_ancient_black": {
+      "sha256": "8f21c7e2c1aa5876d969ff42c16122fb619975474d960d4426d964625967ef70",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_ancient_blond": {
+      "sha256": "84df6a729aa63952f09bbad8a95f46dd13d3c8a47ebef313d4afe03419838ccd",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_ancient_brown": {
+      "sha256": "deaed03ff98092a74210b2b4cbe63fa35a8c392210cfac455391820836def5cb",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_ancient_grey": {
+      "sha256": "6cb4c11a4e1f76b6ab494871b54a47226c1ab8c868f8c8ce91c8b9368ade5077",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_ancient_red": {
+      "sha256": "faddcfc892e7d8133ccb62a40f2484d4d23d18056341ce5afe4f0b65af9f1c04",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_earlymodern_black": {
+      "sha256": "a284724e05451ff32282a56b2ec07d6f1b3509aad4985160cefad7704fa1adb5",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_earlymodern_blond": {
+      "sha256": "48a55223cd5b27f926c78a0072aacca17e0f003ab69f1a26a1865295b9385488",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_earlymodern_brown": {
+      "sha256": "3059d2e46492c7c2caad58d1bed47e0fadb4c8fa18f5c740488d613637f73213",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_earlymodern_grey": {
+      "sha256": "a640aaa9077fc7f711cf7828acdd7df39a2428d3fe635a4201a27962161020f9",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_earlymodern_red": {
+      "sha256": "b96c33232bb14849abb667385582ab146ee49fc460ed064956e28c4da451c6de",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_industrial_black": {
+      "sha256": "82efdc0ae5c9c53cd67484510c61218b9f8d50c7a500fec627c6dd8e2c2d3583",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_industrial_blond": {
+      "sha256": "01e03428621a51d56a7201443a656b56aa94d91cb22e7538601f2bb92654a997",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_industrial_brown": {
+      "sha256": "7d9e0e8c218e3ca35a609152bbf49a6db1e2cac677cff35247bdf46e27024ea1",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_industrial_grey": {
+      "sha256": "5acc3f58149e618711739787df410ab145d14f8e031f8d33ed35d44ff69f08a3",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_industrial_red": {
+      "sha256": "a3b4d80682cacf53f5995f8b62685d31618af40062e5032667a7387fe880be47",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_medieval_black": {
+      "sha256": "728c68df9bdea25c68693b751ca2abaa9d690bc0c8167113c849fb630edac487",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_medieval_blond": {
+      "sha256": "c5d44ffb4b23c5ee40dba242d2b4281c85c1c3d83b3cada287ae3f52c4473d2c",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_medieval_brown": {
+      "sha256": "fb2b34d4f6beaeb5676fbffa8691108c3bb5eb1ab67216565b8be5a5b12c6349",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_medieval_grey": {
+      "sha256": "93b674b0204f4254bf29cccea9778fd3bdd1a8dd7bbb4808f30ca22fc544e558",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_medieval_red": {
+      "sha256": "97ff7137e6f458192055d0c8e60d13f8ac12bcdfa1d117d3fb1566a0c70fb11b",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_modern_black": {
+      "sha256": "43db1146821b31608dd4e44d22b7ae040de4e8406496d47425c1b5a02d520f1c",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_modern_blond": {
+      "sha256": "2d5da209d45ed872aee61391b29dcb69e3157b7f4cd8fcf56b209cc850ab6ba9",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_modern_brown": {
+      "sha256": "17522c8c8cf805fd78cef2980f0d9bd5a23ac8df45c1776da5e3f47c4245ed85",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_modern_grey": {
+      "sha256": "f80f22ae9e580ab6c51875d6ab3c1d724872335500092885d8175ee492fc3435",
+      "keyColourPixels": 0
+    },
+    "hair_m_china_modern_red": {
+      "sha256": "1dd2c6db132b43acde4351e425a269f7ecf0fcd960924ba967e6ad857bbf8ee7",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_ancient": {
+      "sha256": "632901f6c4d12ae7f773dcf3a0a199165f07e851eafb62c9c7ed08cd7c538e59",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_earlymodern_black": {
+      "sha256": "cf540e474972e2a3092ba85651aaeba51f05ab812c1c4149d29cab689b33733b",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_earlymodern_blond": {
+      "sha256": "f7436068d6f13297b5fcf1d4748944e3d1c1ad909d9f1fe3d2ba608180019039",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_earlymodern_brown": {
+      "sha256": "72be155260fcd155bcbc04ae617f8d14e3788bcfbe97c262c15d0e8fc8d525fe",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_earlymodern_grey": {
+      "sha256": "5d499c3a8a4f26a42febb76af939d05a16691cae6ec57819efc29a088f3775a3",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_earlymodern_red": {
+      "sha256": "474478b38f4ea19fe3178c6059ff997258ce88cd365c36b5bbd6f4bd2f9d2e41",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_industrial_black": {
+      "sha256": "74967ea69381f5a335aa0e6ca374ccd219db4a480f27a396813371ab251e3496",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_industrial_blond": {
+      "sha256": "e5ff800aec3398c51d77daa4398b5a866606f7f95554622acfe68637a6acdfe9",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_industrial_brown": {
+      "sha256": "4c40890d2642a2c10eb1db05064cc6dfd3423aadb0ffa17ed5d6b866dbf26466",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_industrial_grey": {
+      "sha256": "b3b8311ea17963d4a15880a60b3cf0b98f83723e3e17679b96b3e259c8db3157",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_industrial_red": {
+      "sha256": "b98fa333b67b372c8a59d35adeda06aae0dab4c6cd87a97f2775a4481b3ec9c9",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_medieval_black": {
+      "sha256": "a6e9be55fba2f7a0d335b50e7e6f6ba3d96712c0f7e7dec0549b764c1c88cf87",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_medieval_blond": {
+      "sha256": "cc069d45495b779c225140cb316d6a43725fae977eb94a5a94d126d0845a034f",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_medieval_brown": {
+      "sha256": "471d9993a8447c92291ecbaf958d3c57770542a0fcc0c40539a159624cad7047",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_medieval_grey": {
+      "sha256": "37eb120687ce2622ebee002edfd9194b2557c264da0fa61b5898decd3917ddfe",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_medieval_red": {
+      "sha256": "882645b76a6d44239d361549ce584b6f323203f77995235cc1907c9b495f0ed2",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_modern_black": {
+      "sha256": "1f9927158f4cf7716d7ae6311a5f9852a459b59f50d3d6dabef598f2eef251ab",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_modern_blond": {
+      "sha256": "9aea1ebb3dce62e2bf718e799f22967cdc49b695492e5394faadecfab63645e9",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_modern_brown": {
+      "sha256": "972931a6ae9f0cfd61062fd0ba0ae9a1530503147b343f9dc323e9b6d511f877",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_modern_grey": {
+      "sha256": "9b6d07a97267394c49fb7f93b7494c23726ece3b997327361d5b4a67bd7ebb3d",
+      "keyColourPixels": 0
+    },
+    "hair_m_egypt_modern_red": {
+      "sha256": "a888f015bb2db2a33354f9cda58cfbc6c82b5d517a232c6a06db4361dc3556d6",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_ancient_black": {
+      "sha256": "2bf2b9b83dcae3fe4b65117a538468277aa9a77ba03a1278a55b7fb6738d4b0d",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_ancient_blond": {
+      "sha256": "39e79dc1d7b6b6f45a24902a8a77a2b47783a79845245e610561ec59bba83d95",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_ancient_brown": {
+      "sha256": "841c2d948d5fd4511232839239924998f006ff04bbdaa6c7ab2ebd3aab000334",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_ancient_grey": {
+      "sha256": "b9492afc7c31822ea85453b05b769205aa2ad836e0f281aae1ce2284b7a6512f",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_ancient_red": {
+      "sha256": "f2bb98afc8bf22eeede64a74d2ae2a8456d9fc7bf94fcf675880e28401e683ae",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_earlymodern_black": {
+      "sha256": "e18275551c200f5d2c9c90e709f4c54a9deda7b40bb38e2dd72c14b6c6b3b099",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_earlymodern_blond": {
+      "sha256": "df0174f04f93f68e649a37f5bc634bb3d2b407846f0f2dc6f1faa628c8fe087c",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_earlymodern_brown": {
+      "sha256": "a4b01d4df66512146beedbe5a7641c08a93bff04da2ac12b26b758988c26242b",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_earlymodern_grey": {
+      "sha256": "942dabecdc5b82e6b61a799ee139327e2f7214dc5ec1427d23592c0decad658c",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_earlymodern_red": {
+      "sha256": "8bc49e4965502c45928496a29d76e9882a86bf65dda46205ccfa862aae8d62c6",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_industrial_black": {
+      "sha256": "e8347acd7540d01463b0165a7c06f78844e45ce4f96328c3e7bc36f759a114f1",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_industrial_blond": {
+      "sha256": "bb6c4dc215ed3679b559631d31e866beab95f88791fb128237bea17e921a7029",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_industrial_brown": {
+      "sha256": "bb838938e8b1a3f7fd7aae223488d67849c2a02036b1fb79393b1940793f1640",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_industrial_grey": {
+      "sha256": "db0ae91169f3522a61fe797d3d91cb45142d9dc2e32518bb0b62360ca23d937d",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_industrial_red": {
+      "sha256": "a3ac26b002ae30b5adc0938faaa94d1bb84d4ce7aa8286ea56766ec1e8828dbb",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_medieval_black": {
+      "sha256": "f7bdd300e6eefa9c1daeea134581410b702ce84975388961c279fd46717d9b87",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_medieval_blond": {
+      "sha256": "7778af58697810e2f3f2f09f46c09658754d9c61cc712153b734dd40f78de2d0",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_medieval_brown": {
+      "sha256": "219f8792674a3ad00b7ed19f39b437ae6983f538d5e32e11875df5b7c81ff3a7",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_medieval_grey": {
+      "sha256": "32eea861cb4ec22aad48c51593b8ae477d178a96d400221d5525d0c55835b017",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_medieval_red": {
+      "sha256": "c5bd49d8d2690c5c0c27428f69e6627df76d3d1adba759913dc952544ce71438",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_modern_black": {
+      "sha256": "5383d034c02f15e7926d0748ddf58225099a64d928e516e97a0a2a4aa6f79766",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_modern_blond": {
+      "sha256": "a41538b8d08ec8c9dc90a5143bc01a28271b071b622e8a6e80f36e993f68ad8d",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_modern_brown": {
+      "sha256": "7e775b6fe0235c28e7ca5d5509921c6244fb2c07117e84758478d2ef25a5ef54",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_modern_grey": {
+      "sha256": "adc7fbda8a03a42bab67c11bbef823c506746e3382f1b3d81768f6ac4ff266aa",
+      "keyColourPixels": 0
+    },
+    "hair_m_germany_modern_red": {
+      "sha256": "a43cd8410d9d0bdcb96f27a917529f51d8ec4fb83eb4f2628a82803d28550787",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_ancient_black": {
+      "sha256": "59f303e3ecd654d7d34949def4af09298e29745cb3451b393f88b0565cec3637",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_ancient_blond": {
+      "sha256": "ea76b63a13df31132a57f530c118bd358c7df5d31b36002ba074581f6cc34504",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_ancient_brown": {
+      "sha256": "dec06a61b58c95f34b879cc8964354c27f5b008bd7af622a5aa16096057712d3",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_ancient_grey": {
+      "sha256": "9b375bd9e86caf1ad854f73db13655e6f1b82e61714db5ce28538dd96ad0107c",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_ancient_red": {
+      "sha256": "f0868a975ce0b5b2c7d2e0a27391e2e5936793a502f37760027268495abcceef",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_earlymodern_black": {
+      "sha256": "a9496bcbdaf39a61c706d0d304654468569df1979b7ee7f2f21f88f9a9891d37",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_earlymodern_blond": {
+      "sha256": "6da847bbf22f6434ce0df59756932d184c35f128cabd3f564bb205cd9db1f1ac",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_earlymodern_brown": {
+      "sha256": "54c0b7147af3e29b99a9358d28fd2ea73a0db03c39cd287bb7a9bf2b7c48b929",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_earlymodern_grey": {
+      "sha256": "c7e99d2423996e5541d1223309ec169610f22b6ecdf62a8526128eba532e1e02",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_earlymodern_red": {
+      "sha256": "b5211c54cff32fecccfbb25983b9e1da50283715f31fb519ec4943e71f7bf3f8",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_industrial_black": {
+      "sha256": "bdefbb3c18fb13466a32d915c49a5443bd6ab0650b4e828ea2f2c23d53f4cd34",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_industrial_blond": {
+      "sha256": "0f58964fc1cd26d9d721a86d43a1e4f5452b6af518014690c41665911b8337c7",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_industrial_brown": {
+      "sha256": "7d8a26bb006a9084ed89fa0092f3347243dd59087d2423707c9c91833dc4eaab",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_industrial_grey": {
+      "sha256": "cf39a8c571ab831425c72bda055c78313e58675674c5b1291f7c8c5abe3ebb6b",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_industrial_red": {
+      "sha256": "28484ed4aa49b83b0ffbea9b27fbb7b51fa0a049dcef09d4a55916d341e51ffc",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_medieval_black": {
+      "sha256": "07b2e76adde22e20b3cec7a3105f4ec9851aba3e95819f30a927ae052423981b",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_medieval_blond": {
+      "sha256": "11e06dd3e722e5357be56e69c785339aa459ce62d583c16f288183632aeae27c",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_medieval_brown": {
+      "sha256": "5fbd62e609e36470ff8786e2b758cc4533deae8f1349e7f9fdc5f1d513f4fe11",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_medieval_grey": {
+      "sha256": "32c9d35635e3d1d70dce4d9679786d2b0747d7bbe2df86b8a655e689fc3443ed",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_medieval_red": {
+      "sha256": "77b75a308fab97029496a94d96d3c7a1ef4d7c18b6aad13c2b34ea46d7eae853",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_modern_black": {
+      "sha256": "fa395cdab38d17a7832632ebcc8cbc82b1588b17d3b62066ac015e071d062851",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_modern_blond": {
+      "sha256": "e75bc64fdae2a4fa84eab4fb59d74fcc7733bece105c8bf15d09685dd79df0e2",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_modern_brown": {
+      "sha256": "2cf061fefff4ef04aab62b5f6a555db1f1df4d016df576196980ff3cb8af8b13",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_modern_grey": {
+      "sha256": "730273edfb3b79bee95d4c49ceb5da023fded13482e09eca67ea5e52998eee7e",
+      "keyColourPixels": 0
+    },
+    "hair_m_greece_modern_red": {
+      "sha256": "9d4b6a66db4d84b42ba65b771c0ea5ed4e18e07c8c1fff29e023f9a427a10a16",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_ancient_black": {
+      "sha256": "eb83f0a3b60bf91c7e87651dd1095ea27c7c6714c33c43b75ad9004a407bb48f",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_ancient_blond": {
+      "sha256": "e79f2d0c667c81bab6f5a31b1b01caf4b29021b01ac54f0913345693c3b68439",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_ancient_brown": {
+      "sha256": "aafb10508992cc63d49c664f38add2b7aed4ba67c98c0387898d6ab168644000",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_ancient_grey": {
+      "sha256": "f6654a42956962f8d13d3aacebbdb97de25e6a44b20f14450539e1452e6e6c8d",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_ancient_red": {
+      "sha256": "5dfa5519763d73c75bfa8408d7ea38641478e548e045d9850b94497c3a7c3369",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_earlymodern_black": {
+      "sha256": "ccb381d679ad38cfb33389f9a60136e5a8af94abfe90484b40b59bc20ff33dfa",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_earlymodern_blond": {
+      "sha256": "4e96af0285dd9800412b9d8145687187b90e5b6636aa58f22775166872e955be",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_earlymodern_brown": {
+      "sha256": "d4641f1b80ce47e15581c6078f194d6598eafb30268218f17e02e1d7857d56ac",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_earlymodern_grey": {
+      "sha256": "8f03d7c9946d5a3aa67502bd01ec6f77c0908256a4e291be6e11dbd99087fa02",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_earlymodern_red": {
+      "sha256": "19c4e707146d2e12f069f935b5d83f47d7dfc09880034f285543e3f415dcb221",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_industrial_black": {
+      "sha256": "134234bf185e6ef0ee8804b19e13760b723cbfcfc48d32a8353764c6bd50c006",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_industrial_blond": {
+      "sha256": "684123d40e5906d60206d4f8bf0077716a96c69491c4da1a2c12819dffa26da3",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_industrial_brown": {
+      "sha256": "f5c01a5b68aec35530a18595c7ff8881ca0e67084a34710ee825fa139f3b62b5",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_industrial_grey": {
+      "sha256": "b350466fb94f0fdf36108546d3e4c654020ba1adb2bc8b70df936db28ddb5c4b",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_industrial_red": {
+      "sha256": "244f44b082c2fc86c927864afb070590c478b5f929e1d914fcdc4fe4cf4a9fb9",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_medieval_black": {
+      "sha256": "74a4aca0d65015dcc103ee032d38f67101a2643c4ffc50f2a14d3a0a6ac4dbfe",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_medieval_blond": {
+      "sha256": "9441bf07f76f6aad772772c2b2b90cdb5717a327a58960466422103a3f1ccd20",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_medieval_brown": {
+      "sha256": "079b71bdbf292be2208534d350883189b0597f812400c938f4497341a139b5c2",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_medieval_grey": {
+      "sha256": "a9787f62cd68816c74a7f5b9a4ccdfb693291d7570d40fa379b349987b6c528d",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_medieval_red": {
+      "sha256": "558eb24ad437cff672172f3a1eeb1ba03677617113c454d0872813290bb12d11",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_modern_black": {
+      "sha256": "ff735432444415647e9ffdfb83631d81c9ab5480d793151c0df973f4d549f81b",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_modern_blond": {
+      "sha256": "baad24bd93b1cf70a16d4422de5249d9ba9658e22e9afa1032c552e24a5ea85d",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_modern_brown": {
+      "sha256": "3a942de4c499dc958eaac279c1bc73cc709d0bb98e8d4079e16679b507608627",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_modern_grey": {
+      "sha256": "83b7d31e974a2f80ad25f7d18cd6503e5894f5d5963926e9a6eaef4780d53fa4",
+      "keyColourPixels": 0
+    },
+    "hair_m_iraq_modern_red": {
+      "sha256": "62f1bda52b0156dc1af8ffbb3ee84db815750a28c23617ef461bca5478388c8d",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_ancient_black": {
+      "sha256": "792fcba7cfd225c122013dbd31e1adc236950e49f3868727742d0c00ac44247f",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_ancient_blond": {
+      "sha256": "9a02887f5dc34c42bce8db099bfad72b95f64f49488980e8b663d4ce91809cc2",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_ancient_brown": {
+      "sha256": "1018b0ec463aac61b8b378b9d6e20fe5eeb5d4a531fdd37d599be309973badf9",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_ancient_grey": {
+      "sha256": "66bf4dd5ac666f1dd520c41f8afbf5d298b7fce078e70edcbd46fef70ef1cee4",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_ancient_red": {
+      "sha256": "854454a35871257a5e23d7cd922729422705aa7e3bafc87153b1a0a5f454b676",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_earlymodern_black": {
+      "sha256": "6adb8de816f5273751299fabd457e513a24e4f45288eee1ad17f3998391747c9",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_earlymodern_blond": {
+      "sha256": "bd44494b6c5dd8c86c7a8cfd963d772768eb2ebd84d6421a9d2ec7a2ac01487b",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_earlymodern_brown": {
+      "sha256": "f5f2f61b55723c77392607b5042c0609a9b942310705efccbddd9942a90269cc",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_earlymodern_grey": {
+      "sha256": "b66b96aaf192b2188e322d58a27d415e8c264a19fedfc65571b179b44ecfa64f",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_earlymodern_red": {
+      "sha256": "aa7719667843b32ff2e4c730d12257a9ec48c72f029c7aa52f5ec40483f2e57c",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_industrial_black": {
+      "sha256": "7df4dd71cc304c405f98686dd83825c46712190d045005cc9d0b1a4121082329",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_industrial_blond": {
+      "sha256": "80ca30cef0fb9835e3a1133029bdde3274f986592a3ab0007e4a1210f6d425d4",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_industrial_brown": {
+      "sha256": "7c8cc5f4f673f4ef69714293bda90b4d968f27b3f5b3e08d6740eb7ecb2b3875",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_industrial_grey": {
+      "sha256": "3fc27c7f499703c7676edf7d52c55d224a1917ceed6bc3eeac51da8e0bcdff1d",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_industrial_red": {
+      "sha256": "99fdb62c84d962c7baf3e13a7ed4e6ba16c02fbc1a30afaa004b8ed4343b7b29",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_medieval_black": {
+      "sha256": "3a09161ccac9bc26df561fd0ee64cfebe85c1cb3afc3f57fb63ee64f451c3250",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_medieval_blond": {
+      "sha256": "eeed2f875dfd05507203f8dacc4c343afbfd73af336ddc483bb06ee9ef52f37c",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_medieval_brown": {
+      "sha256": "730b3fd0b8a13e12ea6ac2ed15fbe8d4603565dfab08438fcf44baaeba41701c",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_medieval_grey": {
+      "sha256": "aa6f875d9323e3a20926bdcd394ac9af4e0f4628809e202c17da35fd65ff2a4d",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_medieval_red": {
+      "sha256": "1aa599924ef01bdbdddfb8f0e12b7d9893ff0a763e47cafcf1f536b1dbcec018",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_modern_black": {
+      "sha256": "9f73c960f803b4159d97c7eab3bd87511b592df1de15a729cc7a05e5873e13c9",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_modern_blond": {
+      "sha256": "88cc4071c8ce8e80a85cca2d9e4051f5ac480da68a1f0ddf42ce3a46094eb915",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_modern_brown": {
+      "sha256": "45dbe60bdc90bf7afcd87fb0ba870f362848e214ad4539b8792d3708dfbc2251",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_modern_grey": {
+      "sha256": "6f5432d4723ba91c2cc5a29742d9bbf78ffbee7c76cdd186b9405453392063a9",
+      "keyColourPixels": 0
+    },
+    "hair_m_italy_modern_red": {
+      "sha256": "86d54a90f43bddf4b8b717f6e5455f308852f268295d383246be8651da7bd7d7",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_ancient_black": {
+      "sha256": "893a0f1f530a9a033c5ae8a414e915fda09658ce55243b0233adf13c9135ad33",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_ancient_blond": {
+      "sha256": "78d552e8a58364f18841ab9e787fb4e585d37b0f44e95d7bc5adf19bfa0e1a72",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_ancient_brown": {
+      "sha256": "d3a3f46a215d69e77f4ae1d7a98c1723e5a13d4363238feeaca05cdec9b40f09",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_ancient_grey": {
+      "sha256": "b0c5b6d4714d5ffb894d8be1c0a4445da2abd0e8bf4e398d3dc150f242666cdc",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_ancient_red": {
+      "sha256": "ac0aef61363d587a48267a03b65f45c3e9435c2011bca4c6b5e3adad2f17a228",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_earlymodern_black": {
+      "sha256": "ebc45b3a17560b8fd6091c28a3dd62f34a371919fd745d567cd7037022fd8da6",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_earlymodern_blond": {
+      "sha256": "9d2d2e48e5cce645d3fcfc220fd0a0247c5bf2f1f78d957125867beeb5866d94",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_earlymodern_brown": {
+      "sha256": "0e5ba8de9980c0c7e7e6a79634bb657b4ccdf011e9741e8e94473e21f89d9160",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_earlymodern_grey": {
+      "sha256": "d8d39a2f7e4526b265a29bb4dcac8ffad84d2dd81829cbc723e88cdb7fbbb8e8",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_earlymodern_red": {
+      "sha256": "1ed231cfc2b709d694dbb60fc707a3b7e22a2a5b8e07b360be7994d3a94a853d",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_industrial_black": {
+      "sha256": "54c7ce98ad0aefe7d85b75aaedffab88faa4f8784023aa2efdd5b431b2d605c9",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_industrial_blond": {
+      "sha256": "9d34b401178e64cdf7225623e9a02a2bb1946193c700c9e84fc2958baf72c2f5",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_industrial_brown": {
+      "sha256": "2885e26447fdc9667f71ebf80412b1c5ff848e345d793b5306834192eb89a295",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_industrial_grey": {
+      "sha256": "e0d3b97958c747c0e7c4ca3e178b58f525210e268e26ab947f3f085275d84752",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_industrial_red": {
+      "sha256": "3e7e7000b277b5880faef0e8fd575cd52a4efdf57e8b0ca1ec7b07923803a10e",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_medieval_black": {
+      "sha256": "43c2e913451db0e7f5ea699fe17656dfc89859bde2845b13cefe04dd63e79a3c",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_medieval_blond": {
+      "sha256": "e643ed1c5a2b48207416059aeb2c43b958a38646c3075c5a359a705231340ba6",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_medieval_brown": {
+      "sha256": "bf4f57e5fd9cbc67f73359edf3a9bf1e0d50a587b0a5a8a8cd400891e3ab711f",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_medieval_grey": {
+      "sha256": "f7109a04a8ce72318cb5518efb847692d169d1371d10476f5c72b47386267c5a",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_medieval_red": {
+      "sha256": "c89e58cdcd01d883e1ed9ad571e817f473ebfd31ea67e3b64e5d31f34a8be966",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_modern_black": {
+      "sha256": "6207f998c1a0af4442386fbd4289ed1ad7884e3c5d1852f6c98185816dc9b387",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_modern_blond": {
+      "sha256": "9aafcbafc4a64778f5cb3f29d13bedded9458c8b4c0271a3fd0c2339b42afe26",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_modern_brown": {
+      "sha256": "7e4428b5147594a949a23707459870fc70268a5f17cab59589f014110196046f",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_modern_grey": {
+      "sha256": "6869aee95c1902f26acf92b053876045e93f1fd7b6c5874f9fb3805a32c1ba93",
+      "keyColourPixels": 0
+    },
+    "hair_m_japan_modern_red": {
+      "sha256": "160c19c9d0ca90aaf15450db4d445f1d1400bac879b81d6ce925bd003dd79227",
+      "keyColourPixels": 0
+    },
+    "hair_m_neutral_future_black": {
+      "sha256": "b24edc6175e1cb8ebbacc0718cef7a2d833ec0384df2107ce7514beb2c56b2eb",
+      "keyColourPixels": 0
+    },
+    "hair_m_neutral_future_blond": {
+      "sha256": "de94a993e336058665754db24edc65a38b4f5c4d2825c3e5e58b42e43cceea69",
+      "keyColourPixels": 0
+    },
+    "hair_m_neutral_future_brown": {
+      "sha256": "2edd5e320699e2a53ddc082c04b84759b9aa17bbec7e90abea944f120d46ac44",
+      "keyColourPixels": 0
+    },
+    "hair_m_neutral_future_grey": {
+      "sha256": "a9c961d2c31c73fef21960ed65f05a533af90675b12cc3170d93a197c2d0751b",
+      "keyColourPixels": 0
+    },
+    "hair_m_neutral_future_red": {
+      "sha256": "88df5cd56f70352b97a9ffc1aec458d5d6291e78d67e7f8290e336d9f2a2f996",
+      "keyColourPixels": 0
+    },
+    "hairback_f_egypt_ancient": {
+      "sha256": "c2392ab12e19abe16f8406c13ec58b6ec7c6f746b2fff545789a53c7f35588a1",
+      "keyColourPixels": 0
+    },
+    "hairback_f_egypt_earlymodern_black": {
+      "sha256": "8c49ca165c3cf4b8c514e1e77989ceca42897f82aaa32d8b0390d045a40f9604",
+      "keyColourPixels": 0
+    },
+    "hairback_f_egypt_earlymodern_blond": {
+      "sha256": "bc4fb26649e267a7cb0d924a7d403664a3d897c2348c24b3dbb7447558a1e0c8",
+      "keyColourPixels": 0
+    },
+    "hairback_f_egypt_earlymodern_brown": {
+      "sha256": "bf230a328bbf59e63690749d4045bad37334ac4d81b0dcfe003ea8dd75cfa1ce",
+      "keyColourPixels": 0
+    },
+    "hairback_f_egypt_earlymodern_grey": {
+      "sha256": "32fba498d4f15c367302ddf70851f16a6b58b317e2f4955f9f0520d43a55f25c",
+      "keyColourPixels": 0
+    },
+    "hairback_f_egypt_earlymodern_red": {
+      "sha256": "4c706e69ab23b97dd36c1dcab76139fedf3423e8e764593079ce37271436a5c7",
+      "keyColourPixels": 0
+    },
+    "hairback_f_egypt_industrial_black": {
+      "sha256": "d71a3c8522dda79bc0208418ade2b9749769f4360d88f1bc99c7b41648497d34",
+      "keyColourPixels": 0
+    },
+    "hairback_f_egypt_industrial_blond": {
+      "sha256": "f964c8fc1c995a353be9277ac4f281f597b4b797b8205dec6ba21b6f5d041b33",
+      "keyColourPixels": 0
+    },
+    "hairback_f_egypt_industrial_brown": {
+      "sha256": "e28ae6798eddbdfecae7d7aed8788267c29e45df33ea2c61ef914dede1d0480a",
+      "keyColourPixels": 0
+    },
+    "hairback_f_egypt_industrial_grey": {
+      "sha256": "f3ba3e6f04b84694a324291c46fa576ce408587439841025bb7294ce8e3963b1",
+      "keyColourPixels": 0
+    },
+    "hairback_f_egypt_industrial_red": {
+      "sha256": "79db3e75bbf19d6e9d1c8e3522ef4d11b79203a6df806b4629182d8bf76ffe31",
+      "keyColourPixels": 0
+    },
+    "hairback_f_greece_modern_black": {
+      "sha256": "3067a55ac1134996c0975234f5e94a565f7815410325833149c75ff010b03834",
+      "keyColourPixels": 0
+    },
+    "hairback_f_greece_modern_blond": {
+      "sha256": "a388e1ad7b5b549ea2677c60c3fba1cbae069bcb65c454929b4ac4cf04305041",
+      "keyColourPixels": 0
+    },
+    "hairback_f_greece_modern_brown": {
+      "sha256": "23ce921e01a4a70f9e920ab8ac80803058af4cf1fbd1e115cee3a87e2f799898",
+      "keyColourPixels": 0
+    },
+    "hairback_f_greece_modern_grey": {
+      "sha256": "f761734134cd0d0777b2497b7bb25854b8c1ecbdf68a45c59fca8c0c8db23d16",
+      "keyColourPixels": 0
+    },
+    "hairback_f_greece_modern_red": {
+      "sha256": "fc11e31e36834daf8d95b0cd49456d686c716e013bd355277b685ea8157b43ff",
+      "keyColourPixels": 0
+    },
+    "hairback_m_britain_ancient_black": {
+      "sha256": "7102f453c3ad3eabf5308449eaf2cabf5df9efacfd31df15b68c7b64ecc21eee",
+      "keyColourPixels": 0
+    },
+    "hairback_m_britain_ancient_blond": {
+      "sha256": "0b94f8d50ef8a61718d38b7a6ddd481de2b23f5aaf5ea5ab1e0aa279f00fb1af",
+      "keyColourPixels": 0
+    },
+    "hairback_m_britain_ancient_brown": {
+      "sha256": "a18fe3dcffc5658f2b17eda5b75e251d422a1758840ece52c7c36776a856b078",
+      "keyColourPixels": 0
+    },
+    "hairback_m_britain_ancient_grey": {
+      "sha256": "1094cce2ab10a1f04a9efa011bf64190ff615a3f041d7d0abebc7e0ce279aad9",
+      "keyColourPixels": 0
+    },
+    "hairback_m_britain_ancient_red": {
+      "sha256": "a6ea2f6c9264e7c57978a271764890a69c202eed233bf67cf5f70bc7ea30e580",
+      "keyColourPixels": 0
+    },
+    "hairback_m_greece_medieval_black": {
+      "sha256": "843bc5076c4d98302d4fbd81c50b9fb39175a5c8bb7089368ed11ec13462b576",
+      "keyColourPixels": 0
+    },
+    "hairback_m_greece_medieval_blond": {
+      "sha256": "a3196205b39007365c96c58c9d0cceaf74bc8b08fcf737c1d27c386d667d8378",
+      "keyColourPixels": 0
+    },
+    "hairback_m_greece_medieval_brown": {
+      "sha256": "0f9440a87d1c6d9ab6dcfb187f95d51be69c5ef32d2c1c2fbac6a7923d358dce",
+      "keyColourPixels": 0
+    },
+    "hairback_m_greece_medieval_grey": {
+      "sha256": "1b21b475d509d73fb234741a94b161a43bbfcbe233e398d1f086771b099c2c4f",
+      "keyColourPixels": 0
+    },
+    "hairback_m_greece_medieval_red": {
+      "sha256": "2c222c123e6532625990bf15d13f3e40caffdbfd3fb902ceeac620436563a45c",
+      "keyColourPixels": 0
+    },
+    "head_f_skin1_facea": {
+      "sha256": "1d00283bed074ce6f87e45e4fec7393bab3d4452fba3dcfb78bd9cde954438ab",
+      "keyColourPixels": 0
+    },
+    "head_f_skin1_faceb": {
+      "sha256": "2fd5d1d45ff5b216bf3aa24fcdb32611ef923bd53bd5598013f3fd7ce8bd6f73",
+      "keyColourPixels": 0
+    },
+    "head_f_skin1_facec": {
+      "sha256": "acc6fecac255fdca99f5ffa1575beb76bb6fc5e2ef0809d95ea2cdf2b1e2c6ea",
+      "keyColourPixels": 0
+    },
+    "head_f_skin1_faced": {
+      "sha256": "d861fb6313ea61dc5afccfd8eba2d7eedc664254835ca3d4057eb2b26f044faa",
+      "keyColourPixels": 0
+    },
+    "head_f_skin2_facea": {
+      "sha256": "bca7c220be265a061627341317825593893698480051f58d0df67b62bb2935b4",
+      "keyColourPixels": 0
+    },
+    "head_f_skin2_faceb": {
+      "sha256": "ff9624c00b261b25d5c0535d8391e08df5904b53cd28ab61a71350d67c0857f2",
+      "keyColourPixels": 0
+    },
+    "head_f_skin2_facec": {
+      "sha256": "b8158a0c9ef41a36082e942d7183d170078a41057ea8b459ddbcd5b60e12c391",
+      "keyColourPixels": 0
+    },
+    "head_f_skin2_faced": {
+      "sha256": "2255a0b440f25359c238099ea2076a93061fd563d9a0aeda2d7107f0d457fb53",
+      "keyColourPixels": 0
+    },
+    "head_f_skin3_facea": {
+      "sha256": "a992f9c90559e0e2f056cf72e4b3f0fe0edfd0aaf527b69e311631f1b4b6a6fb",
+      "keyColourPixels": 0
+    },
+    "head_f_skin3_faceb": {
+      "sha256": "9dbaf5d8119ce36f718a6b98ecc9cbc155b07c461492a60e2e93897a5410aba0",
+      "keyColourPixels": 0
+    },
+    "head_f_skin3_facec": {
+      "sha256": "b97e72233cd4c8fcfa4631035706550e65a7aac64415691ce37cbf0fbd3ebad0",
+      "keyColourPixels": 0
+    },
+    "head_f_skin3_faced": {
+      "sha256": "4839cb0e621521d103410cd0fcc4ea02b0974426196d94a089529b43f7747d25",
+      "keyColourPixels": 0
+    },
+    "head_f_skin4_facea": {
+      "sha256": "c516804fef02a9c6dc4879bd3b573df41a99f34c8b7042e49cf90219642f1506",
+      "keyColourPixels": 0
+    },
+    "head_f_skin4_faceb": {
+      "sha256": "f920a0641f097e17342c0390b26c5bc638014e73fd2fcd75923e8d5197c62085",
+      "keyColourPixels": 0
+    },
+    "head_f_skin4_facec": {
+      "sha256": "4bac2eb64a1c29c61c31a86a8d4fab6287813cfafc6900825de76f60871bbe5f",
+      "keyColourPixels": 0
+    },
+    "head_f_skin4_faced": {
+      "sha256": "6fd95e480ceacaf41a87dba74cd3083e68f4ab462ebe43277a1e9fdc550f7f70",
+      "keyColourPixels": 0
+    },
+    "head_f_skin5_facea": {
+      "sha256": "7af52601344814b1b4b329088b119d4ca259bd99edd34e33e4267838b374acb3",
+      "keyColourPixels": 0
+    },
+    "head_f_skin5_faceb": {
+      "sha256": "6e46c6e6c0726050c223cbe0d10ae38c39b28aa00939f585823ebf01172165b2",
+      "keyColourPixels": 0
+    },
+    "head_f_skin5_facec": {
+      "sha256": "2de17a2a8ffa11b827a02f5146632e89f25fee59514ddb5aa40dc21a5ba98697",
+      "keyColourPixels": 0
+    },
+    "head_f_skin5_faced": {
+      "sha256": "a8a1347a7c564efd7fdab24a50892594ca5c91aa471f1c028e61ab2c041a4d79",
+      "keyColourPixels": 0
+    },
+    "head_m_skin1_facea": {
+      "sha256": "c05544d5e171f928284d4f76f040ee70a287bd0fad9251d4050bfa21c0a2b028",
+      "keyColourPixels": 0
+    },
+    "head_m_skin1_faceb": {
+      "sha256": "b29d4ebd6c3463b789a14b067ad13c1dab5c7f60e8f42bc5adb3c0da45472c78",
+      "keyColourPixels": 0
+    },
+    "head_m_skin1_facec": {
+      "sha256": "8e25942a94a4eba4da48c3c63686e452965a5d1b06d853b00af6eb3664ff211f",
+      "keyColourPixels": 0
+    },
+    "head_m_skin1_faced": {
+      "sha256": "e7e7952315e158cec42b0ec704fc238ecc5d084719cb0ffe5bfbf4aeabab95f0",
+      "keyColourPixels": 0
+    },
+    "head_m_skin2_facea": {
+      "sha256": "6f80f93fd46f0ce8bbbe49bbfc5fd74074a1660b6f2bf8d0ad120abece3a5044",
+      "keyColourPixels": 0
+    },
+    "head_m_skin2_faceb": {
+      "sha256": "cc72af82cb66decb68cdfd1e779297e1d685306ab42336d8fe0dd7321942a765",
+      "keyColourPixels": 0
+    },
+    "head_m_skin2_facec": {
+      "sha256": "2120ecb641eec2bf0096c6f30df83a906122946782f60258dd5660e379306aa6",
+      "keyColourPixels": 0
+    },
+    "head_m_skin2_faced": {
+      "sha256": "5ed1e77c451b4e5a9de90857c59d568adbbf0deb2a70d521a386a5e2d25e9210",
+      "keyColourPixels": 0
+    },
+    "head_m_skin3_facea": {
+      "sha256": "6d5cc8e5c4ccc601e1b96d3f7b5b9abca8e04b8559d0a2b55ae9e2d43fe7f3ea",
+      "keyColourPixels": 0
+    },
+    "head_m_skin3_faceb": {
+      "sha256": "bf907be29dcf0da1b913d03b11b0e8cc52374e0ae01b5dcc37ca3781c1d6299f",
+      "keyColourPixels": 0
+    },
+    "head_m_skin3_facec": {
+      "sha256": "230e46fc85f576355c1d7b0d165031bcf3c3b8ba14183de32295d6276257b58b",
+      "keyColourPixels": 0
+    },
+    "head_m_skin3_faced": {
+      "sha256": "bbedd2e30e5833f28133a2959a621d8f726ebcf3688030429e89667fb3e34149",
+      "keyColourPixels": 0
+    },
+    "head_m_skin4_facea": {
+      "sha256": "5c454fdd8570ffa377fd92704157e33b0913738261327f45c0db727f9c9b28f9",
+      "keyColourPixels": 0
+    },
+    "head_m_skin4_faceb": {
+      "sha256": "30d33cafe989fc5885211e0777084a4d479ca148303c13fbe93dbab25e3a696c",
+      "keyColourPixels": 0
+    },
+    "head_m_skin4_facec": {
+      "sha256": "de26525b29bd4cdee2720a3a898b5e79428bf5a18d55eea1624c3dcf3586aa80",
+      "keyColourPixels": 0
+    },
+    "head_m_skin4_faced": {
+      "sha256": "06895d900428d4a661832ff0bd548b8a354555560bdd09413937b9e765550ce2",
+      "keyColourPixels": 0
+    },
+    "head_m_skin5_facea": {
+      "sha256": "108e3fc3370541ff343b903d5406b79530d28e79347dd80881c5fb599a67d791",
+      "keyColourPixels": 0
+    },
+    "head_m_skin5_faceb": {
+      "sha256": "30bf45396bb66269a81f9b5b433166fb7da2ca88f4fec0f1d074aa2e3c8a2932",
+      "keyColourPixels": 0
+    },
+    "head_m_skin5_facec": {
+      "sha256": "7cb010177d0dd0e0676832b6f02f8bca4441470b49bd0875f0abf91ef86f0d44",
+      "keyColourPixels": 0
+    },
+    "head_m_skin5_faced": {
+      "sha256": "8826c81f0142683ec92d4ce2fd98b457167db17524f2dffbb3a3ab414cd67228",
+      "keyColourPixels": 0
+    },
+    "headwear_f_britain_earlymodern": {
+      "sha256": "71668a2dc3f5c0dead4cd48e9b9c17cb6ba1506575b9cd822a6508224b961031",
+      "keyColourPixels": 0
+    },
+    "headwear_f_britain_industrial": {
+      "sha256": "6c4751207d04809b5b8a0a561a78f4ae4516712cab56a10e2d0bcc181e775a78",
+      "keyColourPixels": 0
+    },
+    "headwear_f_britain_medieval": {
+      "sha256": "21b11f0b695b4dfc51ca53d904a4993b851b5b6c55c36100290b93ff83e57a57",
+      "keyColourPixels": 0
+    },
+    "headwear_f_britain_modern": {
+      "sha256": "06c31236682d8b7d4f69efaba8faa068cbf6778117df45ccee7f7481d0ac16be",
+      "keyColourPixels": 0
+    },
+    "headwear_f_china_earlymodern": {
+      "sha256": "17fef497c8b13c16dbad36f747cec2b7fb4308a0918a45f8fe22e1cb6770f8a3",
+      "keyColourPixels": 0
+    },
+    "headwear_f_china_industrial": {
+      "sha256": "bc496954f2172a49c3aed9c4735d0fe08d6905baeb5253d136ee5db62e2176e5",
+      "keyColourPixels": 0
+    },
+    "headwear_f_china_medieval": {
+      "sha256": "77ccb91bc5c6ef2f12ce631fc716a86282fe7d8156e3c099dda28b36a02fcb33",
+      "keyColourPixels": 0
+    },
+    "headwear_f_china_modern": {
+      "sha256": "c1f56fb188cc51128fdf39d3f458c8ac12ea37cac59f3d48fbfe574e40326d42",
+      "keyColourPixels": 0
+    },
+    "headwear_f_egypt_ancient": {
+      "sha256": "4c39ae2be19033541bbe40c52332b3de562972ecbb28f8746b1a5384d89ab5f5",
+      "keyColourPixels": 0
+    },
+    "headwear_f_egypt_earlymodern": {
+      "sha256": "d26e32377c293acda25cd99431aeecca5d32f3fd9d8797764e77a226e09ba565",
+      "keyColourPixels": 0
+    },
+    "headwear_f_egypt_industrial": {
+      "sha256": "9bbd23c9f3a47047bdcb674a40fa0ed6928c552c63b2a3c8acc04a687d95a337",
+      "keyColourPixels": 0
+    },
+    "headwear_f_egypt_medieval": {
+      "sha256": "d1e62f351c8ebcdf630af98bed4f08eb930ea4ffadf5fe5a7aa02c2176942695",
+      "keyColourPixels": 0
+    },
+    "headwear_f_egypt_modern": {
+      "sha256": "cb8c253414e76f3fd952d7595d6e1c1f9a070f85af14ab6a78091e563bb508fd",
+      "keyColourPixels": 0
+    },
+    "headwear_f_germany_earlymodern": {
+      "sha256": "d74fc1d762c0bd9a3446bb3e3a60c06a2017ee9d5457fb97dfed9cb6675ac465",
+      "keyColourPixels": 0
+    },
+    "headwear_f_germany_medieval": {
+      "sha256": "29aa6a5977c8f1cb1a580721fa4766a402aac437af5307e4bbca87270caeaac3",
+      "keyColourPixels": 0
+    },
+    "headwear_f_germany_modern": {
+      "sha256": "3816d55ded692d64dedbeeccd6895b789aba90c747c1d815582da2c6a2bc3cb3",
+      "keyColourPixels": 0
+    },
+    "headwear_f_greece_ancient": {
+      "sha256": "454c353926db5ba19be2376c83b7937b9c9cdd35d57722cecbb9f70c98f118cd",
+      "keyColourPixels": 0
+    },
+    "headwear_f_greece_earlymodern": {
+      "sha256": "0de4e06b7439ae84d43b100b22befa50a22819edbbc1a80503670d7063ebe6e3",
+      "keyColourPixels": 0
+    },
+    "headwear_f_greece_industrial": {
+      "sha256": "aa431cf8fdc76aeae013703cb21d15fa834dcb714cf8c5fa1329e18d4742ee85",
+      "keyColourPixels": 0
+    },
+    "headwear_f_greece_medieval": {
+      "sha256": "99ff636385431850a4d15d6237b2afc96f80d1cdac228c60f68ba42bc7f677ee",
+      "keyColourPixels": 0
+    },
+    "headwear_f_iraq_ancient": {
+      "sha256": "803a3906b216e914d70b64bac827a16d551071b398464d18ee34321651e7a857",
+      "keyColourPixels": 0
+    },
+    "headwear_f_iraq_earlymodern": {
+      "sha256": "9bcafbe53e85c197247e94f1ed815522dc033e0997a2da677077f2ed5c449db4",
+      "keyColourPixels": 0
+    },
+    "headwear_f_iraq_industrial": {
+      "sha256": "a2213864d0c24c5c99e3ddd40a313bbbc7c99d91c2ff2d77f0fd7e6cb443e25f",
+      "keyColourPixels": 0
+    },
+    "headwear_f_iraq_medieval": {
+      "sha256": "20fa8d4b98c159cdc257a2b2a695fd914097442979a4a1371abfe082887ad6f6",
+      "keyColourPixels": 0
+    },
+    "headwear_f_iraq_modern": {
+      "sha256": "7142a2df52f6cc5443db07c6ed10b65fd4681b34fff43b93654954cecaee7daa",
+      "keyColourPixels": 0
+    },
+    "headwear_f_italy_earlymodern": {
+      "sha256": "946139746aafea894f7a554b5639306e057861db1f1088641f96a60e0c44b65d",
+      "keyColourPixels": 0
+    },
+    "headwear_f_italy_medieval": {
+      "sha256": "52176c4487ed79fda942aa453656538c7f939fe15f02d7493c31059a8ebf114e",
+      "keyColourPixels": 0
+    },
+    "headwear_f_japan_earlymodern": {
+      "sha256": "c4c7fb6b7461abc925b9cf53cbb28e9e96518a926abeff51b3d5e23f4ba5363d",
+      "keyColourPixels": 0
+    },
+    "headwear_f_japan_medieval": {
+      "sha256": "8becb7c6971b334d2d4a05709b6a3dfc61f5be321aa9eb4bdde6f49431f63dc3",
+      "keyColourPixels": 0
+    },
+    "headwear_m_britain_earlymodern": {
+      "sha256": "9e2dea98e1b711bedff0754fd17068812d18c01fa437e3a6ca9ab6741e13c40e",
+      "keyColourPixels": 0
+    },
+    "headwear_m_britain_industrial": {
+      "sha256": "7ad799dc63738064d92cf690ca83829f2cbcd60d066a248c274b77c50d454230",
+      "keyColourPixels": 0
+    },
+    "headwear_m_britain_modern": {
+      "sha256": "5f62d893877d86baa14bc4910ba2cfa2519e3761d48dd87962a3bc9edb604252",
+      "keyColourPixels": 0
+    },
+    "headwear_m_china_ancient": {
+      "sha256": "79271d888d05fd6ee0d74bacdee5f1e85dfba5123b74397f5de0d6cbdaf1ba75",
+      "keyColourPixels": 0
+    },
+    "headwear_m_china_earlymodern": {
+      "sha256": "09bd18b926b30392466f6d450056c28318e2f2a370191962f2f123f2c8be76da",
+      "keyColourPixels": 0
+    },
+    "headwear_m_china_industrial": {
+      "sha256": "c642b3263ce3d57e78c1c18edb892168f518eda3146f2d73dd68f3516cfee45c",
+      "keyColourPixels": 0
+    },
+    "headwear_m_china_medieval": {
+      "sha256": "e945ad8242f99f22981a13a3782f477ec288b4329b72f7d82af112d3815d4a5c",
+      "keyColourPixels": 0
+    },
+    "headwear_m_china_modern": {
+      "sha256": "04f1ae251fd2037b2fe48f02f523a24df6b6884e1eb978eea298aa69568302f3",
+      "keyColourPixels": 0
+    },
+    "headwear_m_egypt_earlymodern": {
+      "sha256": "7b4ca974578c79e3768359d9140c7d47746a419d7d8c2d46be0ad80ac9899158",
+      "keyColourPixels": 0
+    },
+    "headwear_m_egypt_industrial": {
+      "sha256": "2978d363938ddaae9c52c0b5b1afd061233f88497d144cebf4a39aaf696f7215",
+      "keyColourPixels": 0
+    },
+    "headwear_m_egypt_medieval": {
+      "sha256": "a1af691db30fa65b7085c7ebc006f151dfd33c8280a8e024aa50d920be2a9e75",
+      "keyColourPixels": 0
+    },
+    "headwear_m_germany_earlymodern": {
+      "sha256": "4fdadd65b84b7c236ae998c8d726ae035fd46f495e65947e126ba7d0ed1dd453",
+      "keyColourPixels": 0
+    },
+    "headwear_m_germany_industrial": {
+      "sha256": "52aa036b033ff03a9694694a8be2901f55cf3e806accf65598c27cc151f30c06",
+      "keyColourPixels": 0
+    },
+    "headwear_m_germany_medieval": {
+      "sha256": "d76b0a40de2956d1a7ab0949847b9e884779e8cc0098cac75f47a2a4c1163659",
+      "keyColourPixels": 0
+    },
+    "headwear_m_germany_modern": {
+      "sha256": "93330cf84a4beedfcd6a103f2216af0c6e19255c321a04f44abce190428fa62d",
+      "keyColourPixels": 0
+    },
+    "headwear_m_greece_ancient": {
+      "sha256": "779945df96b03b7b66ae8fc7eeac5d4854c0786f624606877f12124612e93792",
+      "keyColourPixels": 0
+    },
+    "headwear_m_greece_earlymodern": {
+      "sha256": "40fc566a0c09be9113929deee0f9a8f8703aed55a175d5a54315c8b20d725498",
+      "keyColourPixels": 0
+    },
+    "headwear_m_greece_industrial": {
+      "sha256": "1d789e76576c59e2d97c3bcab9e4f55ac56a80b84536e03d64346684b8f12ef3",
+      "keyColourPixels": 0
+    },
+    "headwear_m_greece_medieval": {
+      "sha256": "ba11b6ab853ab87b347d54cb094d9ce007d6bdc03ccb674c18b7192f7500b4e5",
+      "keyColourPixels": 0
+    },
+    "headwear_m_iraq_ancient": {
+      "sha256": "a6fbe0157f2886a4a195645f485ec267cf8e48784da190c7533583ab52c4bdb7",
+      "keyColourPixels": 0
+    },
+    "headwear_m_iraq_earlymodern": {
+      "sha256": "13c68576917912a09d18d98121ed4ae5068f7953f6d28869754daa7ccbe79bdc",
+      "keyColourPixels": 0
+    },
+    "headwear_m_iraq_industrial": {
+      "sha256": "931bb7a74aaede1d12915b80ae0d9a2f3df987edb67858bc13b5684424504cb2",
+      "keyColourPixels": 0
+    },
+    "headwear_m_iraq_medieval": {
+      "sha256": "19c296ef9042cfdd415215d62964bfd072cf210a20aa97733ad96473d81b5fba",
+      "keyColourPixels": 0
+    },
+    "headwear_m_iraq_modern": {
+      "sha256": "d8f535a7cf18b73a5cac3a137207706cfe89069cad7b4750df5ce9853de093d6",
+      "keyColourPixels": 0
+    },
+    "headwear_m_italy_earlymodern": {
+      "sha256": "29e851adee9a0f4c3c06f3293edd80dfed1deb9008c250a432ad96e1306e73c6",
+      "keyColourPixels": 0
+    },
+    "headwear_m_italy_industrial": {
+      "sha256": "9ecda114d5716f076b55cf018e723c2aa31ed0fe1c137e18a49ee977ab137571",
+      "keyColourPixels": 0
+    },
+    "headwear_m_italy_medieval": {
+      "sha256": "a9a43a220d436286c35eac5cc0059c7f235427bfe03887ed0d1d417f2d8ac132",
+      "keyColourPixels": 0
+    },
+    "headwear_m_japan_industrial": {
+      "sha256": "db727dc1d0c40dfa8baa86d0336a78ab4a28c1297775ecc0cd12f9b545daeaef",
+      "keyColourPixels": 0
+    },
+    "headwear_m_japan_medieval": {
+      "sha256": "49558e21d612e0701e12a5fa8a6ba7f319323fa0e63749e2c674e05276d695bf",
+      "keyColourPixels": 0
+    },
+    "outfit_f_britain_ancient": {
+      "sha256": "934a254586bb5e2a77a3b55a8cf5e33ec03d7da8e553bffacb598d8312ef0b68",
+      "keyColourPixels": 0
+    },
+    "outfit_f_britain_earlymodern": {
+      "sha256": "b4c20e3e69062683aa3aae281d03c2e709bd2c37cb79e941a0c954d50a6e38ba",
+      "keyColourPixels": 0
+    },
+    "outfit_f_britain_future": {
+      "sha256": "153acb662156dd9ddd2b48fd44582255e3d739b8b975050844d596e41bc8188f",
+      "keyColourPixels": 0
+    },
+    "outfit_f_britain_industrial": {
+      "sha256": "8dd831d4eda9279bd6cda3b4ec0d682f0fe22d8d7956968a707a7d84491229d1",
+      "keyColourPixels": 0
+    },
+    "outfit_f_britain_medieval": {
+      "sha256": "a7733e122453d9a489b03eb48972273722968e8bde1d5c28fc3c233447fcba81",
+      "keyColourPixels": 0
+    },
+    "outfit_f_britain_modern": {
+      "sha256": "c17218968266019b44538f25048028106dc4d8f7c59d3b307bfa06db6ea27742",
+      "keyColourPixels": 0
+    },
+    "outfit_f_china_ancient": {
+      "sha256": "dd260bfb160220f28a72e1827d46703cbc99e87d833c7d5f951cbb5e3571fe5e",
+      "keyColourPixels": 0
+    },
+    "outfit_f_china_earlymodern": {
+      "sha256": "ab8f74db603a16a5a7b08cc5c73faed036cffaa81034b8150db7a0ef85df1cd4",
+      "keyColourPixels": 0
+    },
+    "outfit_f_china_future": {
+      "sha256": "f24b057a70fa5d4a7778409bc146fdddc270879dd4049323addec1d9f5c6b278",
+      "keyColourPixels": 0
+    },
+    "outfit_f_china_industrial": {
+      "sha256": "b8fdb3cef4dfde553400346445fdf586d9c12aa1bd953367a1f43b4a8c9fe99c",
+      "keyColourPixels": 0
+    },
+    "outfit_f_china_medieval": {
+      "sha256": "a9c87de5b5b932b69869a7695c285f061df0844102e9c94e446e369f3fc862f8",
+      "keyColourPixels": 0
+    },
+    "outfit_f_china_modern": {
+      "sha256": "ed5ace52668a10e5584119c2256d0b659ca7202745bf9deb55db49ddc7a90e94",
+      "keyColourPixels": 0
+    },
+    "outfit_f_egypt_ancient": {
+      "sha256": "933914cf0466bd96edc0dddf39ff1e728c62e0560dd7a140e9e82c8746c0ce19",
+      "keyColourPixels": 0
+    },
+    "outfit_f_egypt_earlymodern": {
+      "sha256": "4d55be8e5015f2e740310b32fd214b2d8ddd377459ddffe00e1b1fd4d7564adc",
+      "keyColourPixels": 0
+    },
+    "outfit_f_egypt_future": {
+      "sha256": "049c16cd543a248fb8b2c992533369c9580d3d37b2d4c07228aa14873d4d68f2",
+      "keyColourPixels": 0
+    },
+    "outfit_f_egypt_industrial": {
+      "sha256": "55963507137594d183df0e9646996a752e311fd16d7e874e0cf448794d77f201",
+      "keyColourPixels": 0
+    },
+    "outfit_f_egypt_medieval": {
+      "sha256": "f8ea330cefec9341d2f7bf5ea9ce35feb3643fe66f0e57bc4bf62f9b2b6e3dea",
+      "keyColourPixels": 0
+    },
+    "outfit_f_egypt_modern": {
+      "sha256": "8c02bc734611d51cde8d450b0bbfd711a30968220bf7529c1c77fff78130f472",
+      "keyColourPixels": 0
+    },
+    "outfit_f_germany_ancient": {
+      "sha256": "0e85913a64d260520fc9230601594406db8bde874688593c5b2f8ed4c447de07",
+      "keyColourPixels": 0
+    },
+    "outfit_f_germany_earlymodern": {
+      "sha256": "3f8b0a1815839e566d3c591057d07269b82a825f2cb20b7758ae85411fad2eba",
+      "keyColourPixels": 0
+    },
+    "outfit_f_germany_future": {
+      "sha256": "257b0f3836b071e520f17187f0de91c97fe0816c9064ae0d1fdf9aaa4ed55d02",
+      "keyColourPixels": 0
+    },
+    "outfit_f_germany_industrial": {
+      "sha256": "823fa2a7897eb6ac566033f408db4060ec6ea1eb12166a54a8fcbc47f394248f",
+      "keyColourPixels": 0
+    },
+    "outfit_f_germany_medieval": {
+      "sha256": "aa9c7ade27bef3e2a00aeede9969a565d388c00da2cd4b571f81caf00ca22adb",
+      "keyColourPixels": 0
+    },
+    "outfit_f_germany_modern": {
+      "sha256": "ecc042c4eabc412a2ba04d5d4eb1ece2f4e21c5f4c42a9e135ccc523b3576295",
+      "keyColourPixels": 0
+    },
+    "outfit_f_greece_ancient": {
+      "sha256": "9deb2313d32918d5725c0544d89d90da41b621b85648c76ba72953a09bc77182",
+      "keyColourPixels": 0
+    },
+    "outfit_f_greece_earlymodern": {
+      "sha256": "b6efa35c4e8764d063548672499ec82434320c939098e7dea53c2b99cb28306c",
+      "keyColourPixels": 0
+    },
+    "outfit_f_greece_future": {
+      "sha256": "65140e64209105ac17617d47f44c538d0d1aa3f269fd622a45d61665e3e155c3",
+      "keyColourPixels": 0
+    },
+    "outfit_f_greece_industrial": {
+      "sha256": "7f7a2cd3574c365fd6e36860b6d5c3877da9d627a2ca2208b34b8269fa7498ed",
+      "keyColourPixels": 0
+    },
+    "outfit_f_greece_medieval": {
+      "sha256": "4766a4d0b506580b7fc6bcc53c3659a6e5b0f992e0767280dfedd8ace1a44512",
+      "keyColourPixels": 0
+    },
+    "outfit_f_greece_modern": {
+      "sha256": "6f73fa5feff4d5c8e417f9b021725eff1a9ed170c7e6525f873f356ae78e7b12",
+      "keyColourPixels": 0
+    },
+    "outfit_f_iraq_ancient": {
+      "sha256": "52852c268f4af3f1e0717b74ee4cc9f757f9f64baf236383ca60a2811a54f7c1",
+      "keyColourPixels": 0
+    },
+    "outfit_f_iraq_earlymodern": {
+      "sha256": "7a3a818211647c2aef063c39c85754637afa857a49e119b4b9ef17a84937c6aa",
+      "keyColourPixels": 0
+    },
+    "outfit_f_iraq_future": {
+      "sha256": "ead651b7e2a15a4386628c971da3b667393936b8a7cd652ec12f733b05b7cdbf",
+      "keyColourPixels": 0
+    },
+    "outfit_f_iraq_industrial": {
+      "sha256": "fab438476bb51d515ce6efbe1798ab0b9b0191ee3cdf80de5abe37812d56ab21",
+      "keyColourPixels": 0
+    },
+    "outfit_f_iraq_medieval": {
+      "sha256": "38ea2218881bb0e461963746170e60998cb0126595ab9cd66cabe2559503e259",
+      "keyColourPixels": 0
+    },
+    "outfit_f_iraq_modern": {
+      "sha256": "34e26632150eda543c8f85a98c49ab270b6c4b2349e7fc6be72cafd265b8b23b",
+      "keyColourPixels": 0
+    },
+    "outfit_f_italy_ancient": {
+      "sha256": "474e3d651a1e729b34a53ba356ad1394b2ac41f2caa8248dbea8aed1c838fa63",
+      "keyColourPixels": 0
+    },
+    "outfit_f_italy_earlymodern": {
+      "sha256": "37e89e99a9e6a564399da54f9e6f904ebba4d5da18f65b53e034c204d765fa00",
+      "keyColourPixels": 0
+    },
+    "outfit_f_italy_future": {
+      "sha256": "df26868a6bc36fc649083123ababda9eb5e891fe7caa9bec01e9cfdbec59c88e",
+      "keyColourPixels": 0
+    },
+    "outfit_f_italy_industrial": {
+      "sha256": "a16cce32f2bc43cd61b12d3860d3e683cf65e4d9455d3741a8c13dc8f4d86047",
+      "keyColourPixels": 0
+    },
+    "outfit_f_italy_medieval": {
+      "sha256": "8e0a47c216d078f18ffbfbaaf8a624edb9be900714599c95d9427fd9b570a88c",
+      "keyColourPixels": 0
+    },
+    "outfit_f_italy_modern": {
+      "sha256": "7a1d088e79b428725571e216684c8eb06be21002f7bbf3678dedc568edf54b53",
+      "keyColourPixels": 0
+    },
+    "outfit_f_japan_ancient": {
+      "sha256": "b7837847e89e068234b1662e961f4367da72d3d051d5855b5f398de2b86b5540",
+      "keyColourPixels": 0
+    },
+    "outfit_f_japan_earlymodern": {
+      "sha256": "9a58241ff3ee1115391edbdbe99256d4b7dab85db68d1153689075f035daa6f2",
+      "keyColourPixels": 0
+    },
+    "outfit_f_japan_future": {
+      "sha256": "190650336f72ca276a67758513c30bd870a906a8f7610759cbd78ea401221e5a",
+      "keyColourPixels": 0
+    },
+    "outfit_f_japan_industrial": {
+      "sha256": "b12986763ce4763f31ed197f1ff925fe6c757c72f89952962a1a3dcc59b1c758",
+      "keyColourPixels": 0
+    },
+    "outfit_f_japan_medieval": {
+      "sha256": "5a864553c74be87b4440c8fa008582be8e9eb9d35db9ff670062a836bdc2ed7f",
+      "keyColourPixels": 0
+    },
+    "outfit_f_japan_modern": {
+      "sha256": "53eb37b9b2e23afa78146531f0d176638b7cbbc30da223cc5328e6a0bbc62470",
+      "keyColourPixels": 0
+    },
+    "outfit_m_britain_ancient": {
+      "sha256": "71dff198a6d3ed279c5efc8e553402188009c5f1760fedfc1906f0d43b1ea7d1",
+      "keyColourPixels": 0
+    },
+    "outfit_m_britain_earlymodern": {
+      "sha256": "575efd9dd4e4e4398ea8c821d71f62cc6a31b81b3fb8512cb03ea0254548f59e",
+      "keyColourPixels": 0
+    },
+    "outfit_m_britain_future": {
+      "sha256": "b52176736d1047f0a767dd245363efd5276d2343b3a5f23911c2cba3505636cf",
+      "keyColourPixels": 0
+    },
+    "outfit_m_britain_industrial": {
+      "sha256": "539171442cb36ff3b429d7fcb87c38dbe785229d89da98b5c26b6c854024adcc",
+      "keyColourPixels": 0
+    },
+    "outfit_m_britain_medieval": {
+      "sha256": "ae24829aeb28aed3684639bc6ecafc474c595b61773912d699064dbc1cb613cd",
+      "keyColourPixels": 0
+    },
+    "outfit_m_britain_modern": {
+      "sha256": "ef4b8656af961ded28bf341913c82ae0bcd83471dd7cc743eab6168f32d5c17c",
+      "keyColourPixels": 0
+    },
+    "outfit_m_china_ancient": {
+      "sha256": "f57c3089d4cf1091ecc698e37adae065014993d2bc9f35d999f6a7ba277acc15",
+      "keyColourPixels": 0
+    },
+    "outfit_m_china_earlymodern": {
+      "sha256": "c3eb4842f323338cadef5e1ecfa67d1a1e6b5208320931964ade1c9dc89ac277",
+      "keyColourPixels": 0
+    },
+    "outfit_m_china_future": {
+      "sha256": "7615f759ecaa39f30f17c41b5ba3102bc7bd5fe517276a71275f09cf4407823c",
+      "keyColourPixels": 0
+    },
+    "outfit_m_china_industrial": {
+      "sha256": "d330eef85ed9e20e9489feceaff5de44093c23beff797de324c7cecb5824ffcf",
+      "keyColourPixels": 0
+    },
+    "outfit_m_china_medieval": {
+      "sha256": "24d41b99ca0135b0f429a6a525523d12a9463b1b4551c0b144116fc2fe1af5fc",
+      "keyColourPixels": 0
+    },
+    "outfit_m_china_modern": {
+      "sha256": "ad40264ed1519b8b6ebda60d58721aba9ec47b92f51855c82e93850c4b2a97a7",
+      "keyColourPixels": 0
+    },
+    "outfit_m_egypt_ancient": {
+      "sha256": "e67ecaa70496958127fa485ada68bcd4948e92cdab6f003a7d3020d6bbb1f305",
+      "keyColourPixels": 0
+    },
+    "outfit_m_egypt_earlymodern": {
+      "sha256": "ad9eb12abd9562fc07a26dac759e90381135e99442f2e6c146d60b857ff87b8e",
+      "keyColourPixels": 0
+    },
+    "outfit_m_egypt_future": {
+      "sha256": "23e8a167425e9c99b28b53a483e01432a720ec85162d4ead37635bbf2f25e727",
+      "keyColourPixels": 0
+    },
+    "outfit_m_egypt_industrial": {
+      "sha256": "cd6718dbfe5f05e69c4e99716f51c67d070c753f17993070ddc80de3383a6822",
+      "keyColourPixels": 0
+    },
+    "outfit_m_egypt_medieval": {
+      "sha256": "d41957ae51518e178ca6fbb0011102eaf64f80ca22ee08408b68b7b749fdae10",
+      "keyColourPixels": 0
+    },
+    "outfit_m_egypt_modern": {
+      "sha256": "aa28bd4738cc3dd0a756bc9f43c7acdebbeb733def0525c97fa111d8f895cec4",
+      "keyColourPixels": 0
+    },
+    "outfit_m_germany_ancient": {
+      "sha256": "14dfc728d0a0394455eb36d6b51826193f7a2894d08042bca24f6d25c8d439ca",
+      "keyColourPixels": 0
+    },
+    "outfit_m_germany_earlymodern": {
+      "sha256": "3486266c3b0ea691cc7c6e866e2cdb0233192b9a7c5583b3baf48698478a0ae8",
+      "keyColourPixels": 0
+    },
+    "outfit_m_germany_future": {
+      "sha256": "4d79ab7bf96b8895521f7f069f4a60dc59662dd921c0a98487a2c84fa6403427",
+      "keyColourPixels": 0
+    },
+    "outfit_m_germany_industrial": {
+      "sha256": "aa9e57bb3beb8c6683a95b73e527b665fdc33a149c7f6efcfdaf026b2df9ffb2",
+      "keyColourPixels": 0
+    },
+    "outfit_m_germany_medieval": {
+      "sha256": "fca9838bebebfeb08d1fb76ba74f6d381e34b7b2f6da08e128e28d5f983655e5",
+      "keyColourPixels": 0
+    },
+    "outfit_m_germany_modern": {
+      "sha256": "cd1f6e8c2f1e363dedc4624a7c64d6071955d4033466ae620adca56fd264ba05",
+      "keyColourPixels": 0
+    },
+    "outfit_m_greece_ancient": {
+      "sha256": "6c26ef98ca0a454c77932b13e9de824d79174c0365ed5539df6a844e69d9592a",
+      "keyColourPixels": 0
+    },
+    "outfit_m_greece_earlymodern": {
+      "sha256": "e5f972db868b0c54ad17a86942493f8a2f2af5288a180dd867232d33dd4c00c2",
+      "keyColourPixels": 0
+    },
+    "outfit_m_greece_future": {
+      "sha256": "f6e5d327104d9416f8f706b3de574045c94a6ae2904c90659a09b4809a81bab7",
+      "keyColourPixels": 0
+    },
+    "outfit_m_greece_industrial": {
+      "sha256": "355589ce8a08c1b13a4bee96406ebcde29bdb8edbdd22c9abea96e660724772c",
+      "keyColourPixels": 0
+    },
+    "outfit_m_greece_medieval": {
+      "sha256": "c9ec5301a7f249ebfb4a1e0798b64c2712229a7bcb3d154f6caa0fb509e8ca67",
+      "keyColourPixels": 0
+    },
+    "outfit_m_greece_modern": {
+      "sha256": "b34ec8fee9a9ebf30042dbe35b2a59e5d43f644643338912a7d42eba50a98d2a",
+      "keyColourPixels": 0
+    },
+    "outfit_m_iraq_ancient": {
+      "sha256": "ecfe75886e3f0b626f3e3aff2669b90e7b897c4838a2a547d525f4a884255cec",
+      "keyColourPixels": 0
+    },
+    "outfit_m_iraq_earlymodern": {
+      "sha256": "acde8adc5b2bd757bdd48ba908165954ebe333fc3870021328fd272800361d11",
+      "keyColourPixels": 0
+    },
+    "outfit_m_iraq_future": {
+      "sha256": "9701ca2fe0bcd589a3a3590b1b24319a2872304b06160c24967de875af25cf1c",
+      "keyColourPixels": 0
+    },
+    "outfit_m_iraq_industrial": {
+      "sha256": "712f35c366e1596162757199479564c174eb80ac4bdd7a9df362cd0a74e5f20f",
+      "keyColourPixels": 0
+    },
+    "outfit_m_iraq_medieval": {
+      "sha256": "16ae912daf94ce4473ef06408f5f4f0509634a2c85320a49c037a1bf40254640",
+      "keyColourPixels": 0
+    },
+    "outfit_m_iraq_modern": {
+      "sha256": "27f39c04cf0d08d82476b9663600eb3b309b36d58d932eb0ff15c9c0a7f4a4e9",
+      "keyColourPixels": 0
+    },
+    "outfit_m_italy_ancient": {
+      "sha256": "2a29393ea690fd6ad8f7fda1e6286efe55bde35c39ccd656877d2409ff133574",
+      "keyColourPixels": 0
+    },
+    "outfit_m_italy_earlymodern": {
+      "sha256": "77cafe5f41def84abcc9025ab0ae84285a1808b6b8994992fccf34317a98dd23",
+      "keyColourPixels": 0
+    },
+    "outfit_m_italy_future": {
+      "sha256": "a56639d6af9d7f9bba0abafe0ef701a2dc19a5d2f083877c15daa77cc05aec37",
+      "keyColourPixels": 0
+    },
+    "outfit_m_italy_industrial": {
+      "sha256": "5d1f5f4ad8399f204bd451905b73b2dd9f1b87b2d40f8e26dd5e25358ad9e7c3",
+      "keyColourPixels": 0
+    },
+    "outfit_m_italy_medieval": {
+      "sha256": "472b4e1699afc8417e0e7f7344dd8bf0c1625680e0422e929f043f47bc3e4113",
+      "keyColourPixels": 0
+    },
+    "outfit_m_italy_modern": {
+      "sha256": "94e9dc06dd16a1d1fb0f21d0919c21758da260a4ba6a2b93e6a972b11f032959",
+      "keyColourPixels": 0
+    },
+    "outfit_m_japan_ancient": {
+      "sha256": "d2739f038c23fb9e6eb8954095e4859f4f7b70699f3920f8e47746bd890a6e28",
+      "keyColourPixels": 0
+    },
+    "outfit_m_japan_earlymodern": {
+      "sha256": "8df703e5ab74aa87eccf22c58534b6e711782e3824480a040956586c3f28c8e7",
+      "keyColourPixels": 0
+    },
+    "outfit_m_japan_future": {
+      "sha256": "5d8d0aee811e92fbc8dfc4e32814886b0a4d0f7ba37a44931b7263a303d89c64",
+      "keyColourPixels": 0
+    },
+    "outfit_m_japan_industrial": {
+      "sha256": "ba076e91dd925a1ed1c60fc3f65b51cd1698f79829a7d7408d57d37e78475717",
+      "keyColourPixels": 0
+    },
+    "outfit_m_japan_medieval": {
+      "sha256": "baade28d908785c412859eba6be828c5e123b2a1988628c82ad9df417399075c",
+      "keyColourPixels": 0
+    },
+    "outfit_m_japan_modern": {
+      "sha256": "2a813dc6b575c2b12484c5b95d4c15245527d81b4830281cca6d600bcaf4678a",
+      "keyColourPixels": 0
+    },
+    "premade_ada_angry": {
+      "sha256": "65e492beba6d29b8728d2a1d1eea095b492634bd6ab2f00cfd6e1bfb215258ce",
+      "keyColourPixels": 0
+    },
+    "premade_ada_happy": {
+      "sha256": "4c8c1061cb6fc98fed1f0cdc05581e26e98f08598538b69948ad5c9209748d2e",
+      "keyColourPixels": 0
+    },
+    "premade_ada_neutral": {
+      "sha256": "2f1bcec46935aabcfc9bb787f21d1acb9575cfe75281603463ce4a59dff64c0e",
+      "keyColourPixels": 0
+    },
+    "premade_ada_worried": {
+      "sha256": "f5a0fdf4b3774258c3a821b46b896b3789535576771b7cb090087becd29315dc",
+      "keyColourPixels": 0
+    },
+    "premade_arib_angry": {
+      "sha256": "916417b8cd5e35ac148b30aa8b33ef70ead24965d15ae864c620ab9f9157fb17",
+      "keyColourPixels": 0
+    },
+    "premade_arib_happy": {
+      "sha256": "37f88807bde7b2fc3629afcae16348a94c70b9fdcd78c1a053f50caf6891e334",
+      "keyColourPixels": 0
+    },
+    "premade_arib_neutral": {
+      "sha256": "d5b68534d9db47b343a747f7dfde22a53ead518e4d8cd589e4069bcdf88a48ca",
+      "keyColourPixels": 0
+    },
+    "premade_arib_worried": {
+      "sha256": "7aea3f7f96488080398509db6556689755e2cc0e8e99249ecbaef11776536cdd",
+      "keyColourPixels": 0
+    },
+    "premade_aspasia_angry": {
+      "sha256": "9f375e3bf64db4e9d453338ecd824f3aaa0743ff88457cc95eb894867a9f60dd",
+      "keyColourPixels": 0
+    },
+    "premade_aspasia_happy": {
+      "sha256": "e782e4b71e919a1eed07b70c76f9aa5c52f1931491699d4bff1ff235c2c65271",
+      "keyColourPixels": 0
+    },
+    "premade_aspasia_neutral": {
+      "sha256": "8524ec55f3b8ab4a47532df0c5e11a16eb863db29a84b29c394cd030742ca77c",
+      "keyColourPixels": 0
+    },
+    "premade_aspasia_worried": {
+      "sha256": "40f6690af6f4349d43c833f74bebeda8bb23bd01124332cb2405f12cecff1efd",
+      "keyColourPixels": 0
+    },
+    "premade_auditor_angry": {
+      "sha256": "d6466813ed211e86f6f69d9143b8de5aa0492f0be41e4709bbd423c51ea99205",
+      "keyColourPixels": 0
+    },
+    "premade_auditor_happy": {
+      "sha256": "1d7f3880113275801d09fa0483a3e5a7d0cff7ebf9e61a63d1cf996272b3778f",
+      "keyColourPixels": 0
+    },
+    "premade_auditor_neutral": {
+      "sha256": "d78912ad6cdcea5d99f33ef5f72b86e5d9626e5033ba9c38456fc161abc90333",
+      "keyColourPixels": 0
+    },
+    "premade_auditor_worried": {
+      "sha256": "43d18e825959fc7d863d78a8a385b4e38b7caf4db79af5509c4dd56c51f454c3",
+      "keyColourPixels": 0
+    },
+    "premade_banzhao_angry": {
+      "sha256": "57eda766f29918321cda23895b6da573ec35c82cd744c91eb2fe338deb2031fe",
+      "keyColourPixels": 0
+    },
+    "premade_banzhao_happy": {
+      "sha256": "4ffe27bf08c1fe76fadd4164c00b0c5461e1bad24173d6ae815283243f61bbf9",
+      "keyColourPixels": 0
+    },
+    "premade_banzhao_neutral": {
+      "sha256": "31a40206e4eae61c4108c56bf69beb873a4fb4ca57ed8bc017669f13e27627ec",
+      "keyColourPixels": 0
+    },
+    "premade_banzhao_worried": {
+      "sha256": "6c5b5202e00f0e106ffe9297a6149ab437d8389253d25e1bb550a5753b3409f7",
+      "keyColourPixels": 0
+    },
+    "premade_elytis_angry": {
+      "sha256": "41c9cddb50a82f5c1e88c5d9631e90c4307a4dc90d839d478f923ba791b565b9",
+      "keyColourPixels": 0
+    },
+    "premade_elytis_happy": {
+      "sha256": "34d71ad278d2d33013b89cfa49a51172544fe7ea0b156989013f35002e683672",
+      "keyColourPixels": 0
+    },
+    "premade_elytis_neutral": {
+      "sha256": "e1b4e560cc1d0630067152704ce44e4479573dd778d32e32e468462aeeb05823",
+      "keyColourPixels": 0
+    },
+    "premade_elytis_worried": {
+      "sha256": "1bc2045eba69b5c0b9f7008e6c063c14a8f88156ea4584b855a6f9a401139306",
+      "keyColourPixels": 0
+    },
+    "premade_fellini_angry": {
+      "sha256": "b929538c2e7e934c681487cadf23184e7ec07b4d664362d40dd9027cb0f37c4d",
+      "keyColourPixels": 0
+    },
+    "premade_fellini_happy": {
+      "sha256": "00ad9883452d60b8a56c6ebf534c5542dd50e5df9fb779b5bea065b5a9ea4f01",
+      "keyColourPixels": 0
+    },
+    "premade_fellini_neutral": {
+      "sha256": "15560c1dc81dd6af32b9cad46a5b65e3dc0183681a15a1e40d6bd00ce20710ff",
+      "keyColourPixels": 0
+    },
+    "premade_fellini_worried": {
+      "sha256": "0374b08670b5d8a09d0cf839aeac5f4b76a780d23a664930a2f4540ecbec3157",
+      "keyColourPixels": 0
+    },
+    "premade_gallerani_angry": {
+      "sha256": "75bbae07d7b56369ec26f9d703b42580ee56424c4ca43f0b7127ec7342e0a1f2",
+      "keyColourPixels": 0
+    },
+    "premade_gallerani_happy": {
+      "sha256": "a68beaff897c06b5f19e3f126b6e68b7d13a80b951d2c9e1afb46f27b7b47c7f",
+      "keyColourPixels": 0
+    },
+    "premade_gallerani_neutral": {
+      "sha256": "1b89ab8f98f85305d384ec5e5ab99c2c0027dd2d4585f32c885ff48e4a99dfbd",
+      "keyColourPixels": 0
+    },
+    "premade_gallerani_worried": {
+      "sha256": "ae07a48a238badd957a69164f87bd883cda22933dc1a177b744e71878ad6190e",
+      "keyColourPixels": 0
+    },
+    "premade_gutenberg_angry": {
+      "sha256": "0bcc803b06098c1440e8357d63fd2b885e21c5f12c5d444ac294330053671eee",
+      "keyColourPixels": 0
+    },
+    "premade_gutenberg_happy": {
+      "sha256": "0238ee312dddbfb8c095c6181f90976fecf2fe5b882ece3d39b940ce91fa00b0",
+      "keyColourPixels": 0
+    },
+    "premade_gutenberg_neutral": {
+      "sha256": "207c75f1d397e9e735b9e96f7c8ae4cfe7d375b63f22ba1e1a80b8d779751cfa",
+      "keyColourPixels": 0
+    },
+    "premade_gutenberg_worried": {
+      "sha256": "74abe0765b78f14dc9ea0f133914477a308e1e7fa7fd952f05c124dc71c8b62e",
+      "keyColourPixels": 0
+    },
+    "premade_hezehui_angry": {
+      "sha256": "982db0d57ea7601ae4576d9091e780e77980c4681dffd216a21abea40cb15914",
+      "keyColourPixels": 0
+    },
+    "premade_hezehui_happy": {
+      "sha256": "0f8cad7418420c4d7b783c0dbe9eeb470f111ad2cf4b5de9b7ddd474cc921cd4",
+      "keyColourPixels": 0
+    },
+    "premade_hezehui_neutral": {
+      "sha256": "1e3336caae3a90dfe2e1640c144b3df49814bb78532d1bf783975ea62d50ae7a",
+      "keyColourPixels": 0
+    },
+    "premade_hezehui_worried": {
+      "sha256": "ba7a962214fc9f25a841e92d118741cbf2f8a00aca699092cde593ee4317b1fc",
+      "keyColourPixels": 0
+    },
+    "premade_hollis_angry": {
+      "sha256": "002fa9bbf8172915b41121b4778568ad50bc126778b4593c11f7a18a18c4c15a",
+      "keyColourPixels": 0
+    },
+    "premade_hollis_happy": {
+      "sha256": "e5a597281496470b7cab75aae4db6577abf69640aad07759b5709afd986a4c3f",
+      "keyColourPixels": 0
+    },
+    "premade_hollis_neutral": {
+      "sha256": "c08c62147e15ad4d6cd8b1781a2f966b9ce429a0604b51c00fc2bf605292fae5",
+      "keyColourPixels": 0
+    },
+    "premade_hollis_worried": {
+      "sha256": "89e9c000972fc27269376c40a7a23ac453b4f2d3b844231813f6b90b9c44d001",
+      "keyColourPixels": 0
+    },
+    "premade_ines_angry": {
+      "sha256": "23be56afa27a3b6bdac7e1c7ca5a40129b88900bc73e2a3911d3668a18df41b6",
+      "keyColourPixels": 0
+    },
+    "premade_ines_happy": {
+      "sha256": "6fafc25761bd69c709e0b11c451a286430f9a95d1e4e57e1f5a73f8919aed4e3",
+      "keyColourPixels": 0
+    },
+    "premade_ines_neutral": {
+      "sha256": "02cc7774d916c897b285d2497563a05f31aaeda06538ec8f6ce81909906c38a9",
+      "keyColourPixels": 0
+    },
+    "premade_ines_worried": {
+      "sha256": "89687edd9e9e65b8872ae0d9df7ef8a58b95a4d98686fe8fb77a46f78b967d11",
+      "keyColourPixels": 0
+    },
+    "premade_khwarizmi_angry": {
+      "sha256": "eed8038f79793b1872950ffc691db63814bbce3c8020683811b5a06cd78a0e8e",
+      "keyColourPixels": 0
+    },
+    "premade_khwarizmi_happy": {
+      "sha256": "ab4e4e28918b8d9e535816c30b927a759aee6419d91671b179bbf8f7f862364e",
+      "keyColourPixels": 0
+    },
+    "premade_khwarizmi_neutral": {
+      "sha256": "2e9db70385065851661a8cdaeb47408431e4009596dff17ab33e5e516df6c8ef",
+      "keyColourPixels": 0
+    },
+    "premade_khwarizmi_worried": {
+      "sha256": "db4483e5735f1ea5429d10e424aa08a602f65595172fd5e9221e73068f587ed5",
+      "keyColourPixels": 0
+    },
+    "premade_kulthum_angry": {
+      "sha256": "f4aa3df50245045d949c9be33a633c78c84c90072c57864723cd9f559cf8833a",
+      "keyColourPixels": 0
+    },
+    "premade_kulthum_happy": {
+      "sha256": "35c082a37c49e62efe2d82081d4db1e492a4101bfb1cb87d42979d708fc97353",
+      "keyColourPixels": 0
+    },
+    "premade_kulthum_neutral": {
+      "sha256": "a06c840586d4e8bd853021d36fa483e139e318ded109b36754ca667897e966ce",
+      "keyColourPixels": 0
+    },
+    "premade_kulthum_worried": {
+      "sha256": "158f5c7586f9fd97f8a1ce7618a227366a67a477d3ae520df902d876fb6a451f",
+      "keyColourPixels": 0
+    },
+    "premade_lanyer_angry": {
+      "sha256": "064f7c37add983e74352c43b84e3ac0c5b511ad7705c2d241500935ee94158a6",
+      "keyColourPixels": 0
+    },
+    "premade_lanyer_happy": {
+      "sha256": "a5c9ff7598d30db1c0fe446fba9c18aa0269ad8a6c2e263d9bd4a0a3ad4052e6",
+      "keyColourPixels": 0
+    },
+    "premade_lanyer_neutral": {
+      "sha256": "bd83689aa874f5ab4dad6e65203f5e029352e1c005f22b90236cc40e6e010916",
+      "keyColourPixels": 0
+    },
+    "premade_lanyer_worried": {
+      "sha256": "16c56597f5acac08025e55bfd6f201d17017654db61acfae3fc901c3f005b00c",
+      "keyColourPixels": 0
+    },
+    "premade_leonardo_angry": {
+      "sha256": "28f771d863bcc9511e79e8b26edc566fa61c00c349dd9ceec06dc5f800125b6e",
+      "keyColourPixels": 0
+    },
+    "premade_leonardo_happy": {
+      "sha256": "50374ff93725cbc8ec9e1671cb94a694d708ad4660f26ddfe69ca1ba02725c00",
+      "keyColourPixels": 0
+    },
+    "premade_leonardo_neutral": {
+      "sha256": "b8c69b052f0a68703ff76b85eb46583b612423a027c1d9ee366083ae26046642",
+      "keyColourPixels": 0
+    },
+    "premade_leonardo_worried": {
+      "sha256": "0c585a945205752d56eef07af63d3ce617c35950c204b5997c16b44ddc33d09a",
+      "keyColourPixels": 0
+    },
+    "premade_malaika_angry": {
+      "sha256": "f45882cbaa3c031968a23f61706074d40ec8c959b3d7de56e43ca2e0a5c8b659",
+      "keyColourPixels": 0
+    },
+    "premade_malaika_happy": {
+      "sha256": "adf12b2bdde291fe0fae62298d6a6b7d26e8337e2210e0443bc4060ce1ee0125",
+      "keyColourPixels": 0
+    },
+    "premade_malaika_neutral": {
+      "sha256": "ce5340b3aecbe6b1472b6b3ce6cdfbf8e29ac44c9e097fa4e1213ff8378a13eb",
+      "keyColourPixels": 0
+    },
+    "premade_malaika_worried": {
+      "sha256": "1bfa2bc1fc3b8e4191838d3461f927f075f94b5050143a5743242040d28f6596",
+      "keyColourPixels": 0
+    },
+    "premade_meitner_angry": {
+      "sha256": "6f79563fed7540a4ffd758b4a4f87115f7f590d72521d81de02c108bc3e373a8",
+      "keyColourPixels": 0
+    },
+    "premade_meitner_happy": {
+      "sha256": "9ed318cf931c0f15a7ea4a4b911fabef2661f6312f1c27259de6d616411f01f6",
+      "keyColourPixels": 0
+    },
+    "premade_meitner_neutral": {
+      "sha256": "00b9fb99f11b942befffaa1fdbc1b72ec5cbdf3018f7b2bd5de5276002f69354",
+      "keyColourPixels": 0
+    },
+    "premade_meitner_worried": {
+      "sha256": "5c497b614ade0df7fcbc059c68e4a57f398a395625f28702aac33adf27f78fa7",
+      "keyColourPixels": 0
+    },
+    "premade_pell_angry": {
+      "sha256": "b9a7666730b7449a086d1a10884c4686918f4856d2af4d8967e982cba52cd87a",
+      "keyColourPixels": 0
+    },
+    "premade_pell_happy": {
+      "sha256": "c6789912d920540a06665baeb8ac7454100c018b673548172aa3e4de615798d7",
+      "keyColourPixels": 0
+    },
+    "premade_pell_neutral": {
+      "sha256": "213b0bc308fc7356e37dcbd7b2eb56b05ae874858735206f67e35cc7bf924c43",
+      "keyColourPixels": 0
+    },
+    "premade_pell_worried": {
+      "sha256": "b5105804471c85c7cd590172ee9d5b6a748c37e6b07cb79d32303fdc463fb61a",
+      "keyColourPixels": 0
+    },
+    "premade_rook_angry": {
+      "sha256": "e0f8a2d90bb37282fe04b9f042e6b441be45c59dd4cdb3a508c4b47184915d92",
+      "keyColourPixels": 0
+    },
+    "premade_rook_happy": {
+      "sha256": "75c71d9cdaf1fe40fd8a43f8761eaa803b4690af8cf062fe5e52161f4ae2c1ce",
+      "keyColourPixels": 0
+    },
+    "premade_rook_neutral": {
+      "sha256": "b37a475c54ad9b5408c397eeb3a635055dc7ea8ce14add98aa7f6da37a54ffcf",
+      "keyColourPixels": 0
+    },
+    "premade_rook_worried": {
+      "sha256": "fa07e61f7785326e139e4e2e7418f2f920689b109a0b6c00e41edf341efe503b",
+      "keyColourPixels": 0
+    },
+    "premade_sayyab_angry": {
+      "sha256": "1e4ac9a9f5c6cd83735647497b6a30174433c19daae9ecfea2fb2646b65fc518",
+      "keyColourPixels": 0
+    },
+    "premade_sayyab_happy": {
+      "sha256": "5c898b4316f9e7eecdb2edea8e21c04bbea93b02f3c3c4763aadc38ec43429d4",
+      "keyColourPixels": 0
+    },
+    "premade_sayyab_neutral": {
+      "sha256": "2087918e012ca7e179224afdc1f7d77292d4fe958403e09052e812a6f14f4da6",
+      "keyColourPixels": 0
+    },
+    "premade_sayyab_worried": {
+      "sha256": "706aa5f3529e094867f98ab87f7cfd5f31b98dc0768090d137c7bec823501424",
+      "keyColourPixels": 0
+    },
+    "premade_senenmut_angry": {
+      "sha256": "e5bb3b49e89d718a9b71d5e9c246ccedc3aebe234afe65c9192541249390a10a",
+      "keyColourPixels": 0
+    },
+    "premade_senenmut_happy": {
+      "sha256": "e1961554907d70347d22999ca472ce875e41d15bc929996aba2d4cf4c6476efa",
+      "keyColourPixels": 0
+    },
+    "premade_senenmut_neutral": {
+      "sha256": "c18eaca46dbc8d6e4a35e15a04c24cedc62c7fbb4ffe4572b6a5c4a303846fdc",
+      "keyColourPixels": 0
+    },
+    "premade_senenmut_worried": {
+      "sha256": "5c9af49db1aae4439c9fde670ef5a43ed7eca1bcd490c0a199fd8a12b9deceb9",
+      "keyColourPixels": 0
+    },
+    "premade_socrates_angry": {
+      "sha256": "4fcf39247b1b53364d9aef89304b2b66a827722d34e3def2e3d90f1f34dcde54",
+      "keyColourPixels": 0
+    },
+    "premade_socrates_happy": {
+      "sha256": "69997b031996d9256ea86ee274469ede6895733a8f6a2507173b3aaa1a9a7adb",
+      "keyColourPixels": 0
+    },
+    "premade_socrates_neutral": {
+      "sha256": "d878033c6cc542a7552d3cadceeb389eff5dfdf78638b5ba82a2e91cdd4d6624",
+      "keyColourPixels": 0
+    },
+    "premade_socrates_worried": {
+      "sha256": "b2cb62a1530f9aaf53b2cd2ba06efd5ab1d8a709179eb52c63921781e14f3300",
+      "keyColourPixels": 0
+    },
+    "premade_tahtawi_angry": {
+      "sha256": "438a2def676a6400af0fcb6544bbacbc7f88a9c0ae84779781ef14d72ea104b3",
+      "keyColourPixels": 0
+    },
+    "premade_tahtawi_happy": {
+      "sha256": "425f8d0dd5fc4403a5c2c7fbd80f020a88fb38f2c492a61d4f03225795acd4ed",
+      "keyColourPixels": 0
+    },
+    "premade_tahtawi_neutral": {
+      "sha256": "ca4c93f5d55546a9811b20e85fa1a5bca9d5850b18a6a076cb687ef0c9df8c6c",
+      "keyColourPixels": 0
+    },
+    "premade_tahtawi_worried": {
+      "sha256": "d0097a6b0c71ba054fe0390fa35c2c59ac0ae7f2ea1b4870ec43b16d8648e750",
+      "keyColourPixels": 0
+    },
+    "premade_toyoda_angry": {
+      "sha256": "2cd0f13c7cd9eb938419d13f519a361989f537795a8fb81ffcddd3699accedd1",
+      "keyColourPixels": 0
+    },
+    "premade_toyoda_happy": {
+      "sha256": "bdeb2beb22b5dffe15f9c48f0f4b7b026826217ac6624c60875ae75fd795bdff",
+      "keyColourPixels": 0
+    },
+    "premade_toyoda_neutral": {
+      "sha256": "2481066da9692f287a608fca121af0f480038dd3d5ac4e8066d78fc2d231e04a",
+      "keyColourPixels": 0
+    },
+    "premade_toyoda_worried": {
+      "sha256": "15647d5cce4e6b7ab8fa8ba84d9b1e08bbdbc498246aba8aab10bfb6efb25573",
+      "keyColourPixels": 0
+    },
+    "premade_turing_angry": {
+      "sha256": "5fe1c0119e68ce86fdf04517ac0f3421d4c912d3808bed375b570d907d88c2d2",
+      "keyColourPixels": 0
+    },
+    "premade_turing_happy": {
+      "sha256": "6ad50dcfc205bb818d7a3047388e52b5230a95a7152325d950025c971884ef90",
+      "keyColourPixels": 0
+    },
+    "premade_turing_neutral": {
+      "sha256": "5170d3880d2a9f2668da91cf88e8ae41aff695151c4036fb0844bb8061f988a0",
+      "keyColourPixels": 0
+    },
+    "premade_turing_worried": {
+      "sha256": "52feb18ec01f65089d5f4dbd9ed1b5167c385d9a37865fd5adc5c93791ffbe8e",
+      "keyColourPixels": 0
+    }
+  }
+}

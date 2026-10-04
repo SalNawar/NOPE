@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="92" result="Passed" total="92" passed="92" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.2204417">
+  <test-suite type="TestSuite" id="1000" name="Time Sorter" fullname="Time Sorter" runstate="Runnable" testcasecount="3107" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.220442" total="92" passed="92" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="4336" name="TimeDeskEditMode.dll" fullname="C:/Users/Saleh/.codex/worktrees/hall-art-completion/NOPE/Library/ScriptAssemblies/TimeDeskEditMode.dll" runstate="Runnable" testcasecount="2977" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.202897" total="92" passed="92" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="516264" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="2900" name="LookArtFallbackTests" fullname="LookArtFallbackTests" classname="LookArtFallbackTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.033170" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2906" name="AHead_OtherFaceOfItsSkin_ThenTheNearestSkins_TheLighterOnATie" fullname="LookArtFallbackTests.AHead_OtherFaceOfItsSkin_ThenTheNearestSkins_TheLighterOnATie" methodname="AHead_OtherFaceOfItsSkin_ThenTheNearestSkins_TheLighterOnATie" classname="LookArtFallbackTests" runstate="Runnable" seed="1859500516" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.016362" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2904" name="AnyPlace_NearestEraFirst_ThenNeighboursBeforeTheOtherNations" fullname="LookArtFallbackTests.AnyPlace_NearestEraFirst_ThenNeighboursBeforeTheOtherNations" methodname="AnyPlace_NearestEraFirst_ThenNeighboursBeforeTheOtherNations" classname="LookArtFallbackTests" runstate="Runnable" seed="295558822" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001820" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2908" name="APremadesExpression_FallsBackToItsNeutralPicture" fullname="LookArtFallbackTests.APremadesExpression_FallsBackToItsNeutralPicture" methodname="APremadesExpression_FallsBackToItsNeutralPicture" classname="LookArtFallbackTests" runstate="Runnable" seed="804079173" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000229" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2905" name="AStandIn_KeepsTheLayerGenderColourAndVariant" fullname="LookArtFallbackTests.AStandIn_KeepsTheLayerGenderColourAndVariant" methodname="AStandIn_KeepsTheLayerGenderColourAndVariant" classname="LookArtFallbackTests" runstate="Runnable" seed="2044451400" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001276" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2907" name="AStepOnlyAppliesToItsKindOfLayer" fullname="LookArtFallbackTests.AStepOnlyAppliesToItsKindOfLayer" methodname="AStepOnlyAppliesToItsKindOfLayer" classname="LookArtFallbackTests" runstate="Runnable" seed="331044456" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000191" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2903" name="NeighbourNation_TheSameEra_InTheTablesOrder_NoneForAnUnlistedNation" fullname="LookArtFallbackTests.NeighbourNation_TheSameEra_InTheTablesOrder_NoneForAnUnlistedNation" methodname="NeighbourNation_TheSameEra_InTheTablesOrder_NoneForAnUnlistedNation" classname="LookArtFallbackTests" runstate="Runnable" seed="468221816" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000174" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2902" name="OtherEra_TheSameNation_NearestEraFirst_EarlierOnATie" fullname="LookArtFallbackTests.OtherEra_TheSameNation_NearestEraFirst_EarlierOnATie" methodname="OtherEra_TheSameNation_NearestEraFirst_EarlierOnATie" classname="LookArtFallbackTests" runstate="Runnable" seed="1489467926" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000149" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2909" name="Resolve_TheFirstCandidateWithArt_NullWhenNone" fullname="LookArtFallbackTests.Resolve_TheFirstCandidateWithArt_NullWhenNone" methodname="Resolve_TheFirstCandidateWithArt_NullWhenNone" classname="LookArtFallbackTests" runstate="Runnable" seed="1991691828" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000878" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2901" name="TheKeyItselfComesFirst_AndAloneWithoutSteps" fullname="LookArtFallbackTests.TheKeyItselfComesFirst_AndAloneWithoutSteps" methodname="TheKeyItselfComesFirst_AndAloneWithoutSteps" classname="LookArtFallbackTests" runstate="Runnable" seed="912694422" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000373" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2910" name="TheTable_UnlistedLayerOrNation_IsEmpty" fullname="LookArtFallbackTests.TheTable_UnlistedLayerOrNation_IsEmpty" methodname="TheTable_UnlistedLayerOrNation_IsEmpty" classname="LookArtFallbackTests" runstate="Runnable" seed="1054845703" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000186" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="2911" name="LookCanvasTests" fullname="LookCanvasTests" classname="LookCanvasTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.003569" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2912" name="Constants_EqualTheGuide" fullname="LookCanvasTests.Constants_EqualTheGuide" methodname="Constants_EqualTheGuide" classname="LookCanvasTests" runstate="Runnable" seed="1440076502" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001334" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2913" name="FeetPivot_AndPhotoAspect" fullname="LookCanvasTests.FeetPivot_AndPhotoAspect" methodname="FeetPivot_AndPhotoAspect" classname="LookCanvasTests" runstate="Runnable" seed="1311028255" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000612" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2915" name="LocalCoordinates_AreCanvasHeightsFromTheFeetAndTheCentreLine" fullname="LookCanvasTests.LocalCoordinates_AreCanvasHeightsFromTheFeetAndTheCentreLine" methodname="LocalCoordinates_AreCanvasHeightsFromTheFeetAndTheCentreLine" classname="LookCanvasTests" runstate="Runnable" seed="137555285" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000123" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2914" name="PhotoRect_IsTheCropInBottomLeftFractions" fullname="LookCanvasTests.PhotoRect_IsTheCropInBottomLeftFractions" methodname="PhotoRect_IsTheCropInBottomLeftFractions" classname="LookCanvasTests" runstate="Runnable" seed="809285728" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000247" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="2916" name="LookKeysTests" fullname="LookKeysTests" classname="LookKeysTests" runstate="Runnable" testcasecount="29" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.015749" total="29" passed="29" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2945" name="ArtNation_IsTheItemsOverride_ElseThePlacesNation" fullname="LookKeysTests.ArtNation_IsTheItemsOverride_ElseThePlacesNation" methodname="ArtNation_IsTheItemsOverride_ElseThePlacesNation" classname="LookKeysTests" runstate="Runnable" seed="18289630" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000434" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-suite type="ParameterizedMethod" id="2931" name="AVariant_FollowsTheEra_BeforeAnyColour" fullname="LookKeysTests.AVariant_FollowsTheEra_BeforeAnyColour" classname="LookKeysTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000885" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2927" name="AVariant_FollowsTheEra_BeforeAnyColour(null,null,&quot;accessory_m_neutral_future&quot;)" fullname="LookKeysTests.AVariant_FollowsTheEra_BeforeAnyColour(null,null,&quot;accessory_m_neutral_future&quot;)" methodname="AVariant_FollowsTheEra_BeforeAnyColour" classname="LookKeysTests" runstate="Runnable" seed="1569277816" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000215" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2928" name="AVariant_FollowsTheEra_BeforeAnyColour(&quot;comm&quot;,null,&quot;accessory_m_neutral_future_comm&quot;)" fullname="LookKeysTests.AVariant_FollowsTheEra_BeforeAnyColour(&quot;comm&quot;,null,&quot;accessory_m_neutral_future_comm&quot;)" methodname="AVariant_FollowsTheEra_BeforeAnyColour" classname="LookKeysTests" runstate="Runnable" seed="37281211" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000047" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2929" name="AVariant_FollowsTheEra_BeforeAnyColour(&quot; &quot;,null,&quot;accessory_m_neutral_future&quot;)" fullname="LookKeysTests.AVariant_FollowsTheEra_BeforeAnyColour(&quot; &quot;,null,&quot;accessory_m_neutral_future&quot;)" methodname="AVariant_FollowsTheEra_BeforeAnyColour" classname="LookKeysTests" runstate="Runnable" seed="976095821" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000026" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2930" name="AVariant_FollowsTheEra_BeforeAnyColour(&quot;comm&quot;,&quot;brown&quot;,&quot;accessory_m_neutral_future_comm_brown&quot;)" fullname="LookKeysTests.AVariant_FollowsTheEra_BeforeAnyColour(&quot;comm&quot;,&quot;brown&quot;,&quot;accessory_m_neutral_future_comm_brown&quot;)" methodname="AVariant_FollowsTheEra_BeforeAnyColour" classname="LookKeysTests" runstate="Runnable" seed="1212492254" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000025" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-case id="2947" name="Bases_TenBodiesAndAHeadPerSkinAndFace" fullname="LookKeysTests.Bases_TenBodiesAndAHeadPerSkinAndFace" methodname="Bases_TenBodiesAndAHeadPerSkinAndFace" classname="LookKeysTests" runstate="Runnable" seed="1890241795" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.002578" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2933" name="BodyHeadAndWhole_AreNotGarmentKeys" fullname="LookKeysTests.BodyHeadAndWhole_AreNotGarmentKeys" methodname="BodyHeadAndWhole_AreNotGarmentKeys" classname="LookKeysTests" runstate="Runnable" seed="629822631" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001693" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2917" name="EveryNameForm" fullname="LookKeysTests.EveryNameForm" methodname="EveryNameForm" classname="LookKeysTests" runstate="Runnable" seed="1459772589" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000131" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-suite type="ParameterizedMethod" id="2926" name="GarmentNames" fullname="LookKeysTests.GarmentNames" classname="LookKeysTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001531" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2918" name="GarmentNames(HairBack,null,&quot;hairback_m_egypt_ancient&quot;)" fullname="LookKeysTests.GarmentNames(HairBack,null,&quot;hairback_m_egypt_ancient&quot;)" methodname="GarmentNames" classname="LookKeysTests" runstate="Runnable" seed="44873063" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000287" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2919" name="GarmentNames(HairBack,&quot;black&quot;,&quot;hairback_m_egypt_ancient_black&quot;)" fullname="LookKeysTests.GarmentNames(HairBack,&quot;black&quot;,&quot;hairback_m_egypt_ancient_black&quot;)" methodname="GarmentNames" classname="LookKeysTests" runstate="Runnable" seed="655429290" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000086" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2920" name="GarmentNames(Outfit,null,&quot;outfit_m_egypt_ancient&quot;)" fullname="LookKeysTests.GarmentNames(Outfit,null,&quot;outfit_m_egypt_ancient&quot;)" methodname="GarmentNames" classname="LookKeysTests" runstate="Runnable" seed="1633268213" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000057" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2921" name="GarmentNames(FacialHair,&quot;grey&quot;,&quot;facialhair_m_egypt_ancient_grey&quot;)" fullname="LookKeysTests.GarmentNames(FacialHair,&quot;grey&quot;,&quot;facialhair_m_egypt_ancient_grey&quot;)" methodname="GarmentNames" classname="LookKeysTests" runstate="Runnable" seed="726828980" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000043" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2922" name="GarmentNames(Hair,null,&quot;hair_m_egypt_ancient&quot;)" fullname="LookKeysTests.GarmentNames(Hair,null,&quot;hair_m_egypt_ancient&quot;)" methodname="GarmentNames" classname="LookKeysTests" runstate="Runnable" seed="1671086034" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000041" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2923" name="GarmentNames(Hair,&quot;red&quot;,&quot;hair_m_egypt_ancient_red&quot;)" fullname="LookKeysTests.GarmentNames(Hair,&quot;red&quot;,&quot;hair_m_egypt_ancient_red&quot;)" methodname="GarmentNames" classname="LookKeysTests" runstate="Runnable" seed="704850524" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000042" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2924" name="GarmentNames(Headwear,null,&quot;headwear_m_egypt_ancient&quot;)" fullname="LookKeysTests.GarmentNames(Headwear,null,&quot;headwear_m_egypt_ancient&quot;)" methodname="GarmentNames" classname="LookKeysTests" runstate="Runnable" seed="2091895640" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000040" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2925" name="GarmentNames(Accessory,null,&quot;accessory_m_egypt_ancient&quot;)" fullname="LookKeysTests.GarmentNames(Accessory,null,&quot;accessory_m_egypt_ancient&quot;)" methodname="GarmentNames" classname="LookKeysTests" runstate="Runnable" seed="1514554401" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000041" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-case id="2943" name="GenderToken_UnknownThrows" fullname="LookKeysTests.GenderToken_UnknownThrows" methodname="GenderToken_UnknownThrows" classname="LookKeysTests" runstate="Runnable" seed="1586719127" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000181" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-suite type="ParameterizedMethod" id="2942" name="IsToken" fullname="LookKeysTests.IsToken" classname="LookKeysTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001282" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2934" name="IsToken(&quot;egypt&quot;,True)" fullname="LookKeysTests.IsToken(&quot;egypt&quot;,True)" methodname="IsToken" classname="LookKeysTests" runstate="Runnable" seed="1812312642" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000344" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2935" name="IsToken(&quot;earlymodern&quot;,True)" fullname="LookKeysTests.IsToken(&quot;earlymodern&quot;,True)" methodname="IsToken" classname="LookKeysTests" runstate="Runnable" seed="1847068515" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000053" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2936" name="IsToken(&quot;abc123&quot;,True)" fullname="LookKeysTests.IsToken(&quot;abc123&quot;,True)" methodname="IsToken" classname="LookKeysTests" runstate="Runnable" seed="1411199768" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000033" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2937" name="IsToken(&quot;&quot;,False)" fullname="LookKeysTests.IsToken(&quot;&quot;,False)" methodname="IsToken" classname="LookKeysTests" runstate="Runnable" seed="408038490" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000028" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2938" name="IsToken(null,False)" fullname="LookKeysTests.IsToken(null,False)" methodname="IsToken" classname="LookKeysTests" runstate="Runnable" seed="1008340650" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000032" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2939" name="IsToken(&quot;early_modern&quot;,False)" fullname="LookKeysTests.IsToken(&quot;early_modern&quot;,False)" methodname="IsToken" classname="LookKeysTests" runstate="Runnable" seed="879778626" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000029" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2940" name="IsToken(&quot;Egypt&quot;,False)" fullname="LookKeysTests.IsToken(&quot;Egypt&quot;,False)" methodname="IsToken" classname="LookKeysTests" runstate="Runnable" seed="1512584922" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000028" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2941" name="IsToken(&quot;gal lerani&quot;,False)" fullname="LookKeysTests.IsToken(&quot;gal lerani&quot;,False)" methodname="IsToken" classname="LookKeysTests" runstate="Runnable" seed="839782398" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000042" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-case id="2948" name="PremadeSet_TheFourExpressions" fullname="LookKeysTests.PremadeSet_TheFourExpressions" methodname="PremadeSet_TheFourExpressions" classname="LookKeysTests" runstate="Runnable" seed="219893773" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000489" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2932" name="PresentRequired_ItsClothes_ThenEachKitItemUnderItsVariant_ForItsGenderOnly" fullname="LookKeysTests.PresentRequired_ItsClothes_ThenEachKitItemUnderItsVariant_ForItsGenderOnly" methodname="PresentRequired_ItsClothes_ThenEachKitItemUnderItsVariant_ForItsGenderOnly" classname="LookKeysTests" runstate="Runnable" seed="1030405605" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.002498" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2944" name="Required_AllColoursForHairAndItsBack_OneUncolouredKeyEachForAWig_FacialHairAlwaysInEveryColour" fullname="LookKeysTests.Required_AllColoursForHairAndItsBack_OneUncolouredKeyEachForAWig_FacialHairAlwaysInEveryColour" methodname="Required_AllColoursForHairAndItsBack_OneUncolouredKeyEachForAWig_FacialHairAlwaysInEveryColour" classname="LookKeysTests" runstate="Runnable" seed="196759111" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000663" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2946" name="Required_FilesAnArtNationItemUnderIt_SoPlacesSharingItShareTheNames_WithTheSameCounts" fullname="LookKeysTests.Required_FilesAnArtNationItemUnderIt_SoPlacesSharingItShareTheNames_WithTheSameCounts" methodname="Required_FilesAnArtNationItemUnderIt_SoPlacesSharingItShareTheNames_WithTheSameCounts" classname="LookKeysTests" runstate="Runnable" seed="799603458" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001861" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="2949" name="LooksTests" fullname="LooksTests" classname="LooksTests" runstate="Runnable" testcasecount="49" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.083046" total="49" passed="49" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2996" name="ACostumeError_CostsNoLookDraw" fullname="LooksTests.ACostumeError_CostsNoLookDraw" methodname="ACostumeError_CostsNoLookDraw" classname="LooksTests" runstate="Runnable" seed="2089843410" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.010504" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2965" name="ACoveredItem_IsNeitherAPartNorAGarment_AndALeakCanCover" fullname="LooksTests.ACoveredItem_IsNeitherAPartNorAGarment_AndALeakCanCover" methodname="ACoveredItem_IsNeitherAPartNorAGarment_AndALeakCanCover" classname="LooksTests" runstate="Runnable" seed="875355247" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.002035" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2995" name="AKitAccessory_KeepsTheLeakRules" fullname="LooksTests.AKitAccessory_KeepsTheLeakRules" methodname="AKitAccessory_KeepsTheLeakRules" classname="LooksTests" runstate="Runnable" seed="875872608" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000779" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2994" name="AKitAccessory_LeaksLikeASignatureItem_OverAnOtherwiseRightCostume" fullname="LooksTests.AKitAccessory_LeaksLikeASignatureItem_OverAnOtherwiseRightCostume" methodname="AKitAccessory_LeaksLikeASignatureItem_OverAnOtherwiseRightCostume" classname="LooksTests" runstate="Runnable" seed="1644096892" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000699" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2954" name="ALeak_PutsTheHomesSignatureInItsSlot_KeepingTheTravellersColour" fullname="LooksTests.ALeak_PutsTheHomesSignatureInItsSlot_KeepingTheTravellersColour" methodname="ALeak_PutsTheHomesSignatureInItsSlot_KeepingTheTravellersColour" classname="LooksTests" runstate="Runnable" seed="868697203" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000480" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2964" name="AnArtNationItem_IsDrawnUnderIt_WithTheTravellersColour_AndEveryKeyIsRequired" fullname="LooksTests.AnArtNationItem_IsDrawnUnderIt_WithTheTravellersColour_AndEveryKeyIsRequired" methodname="AnArtNationItem_IsDrawnUnderIt_WithTheTravellersColour_AndEveryKeyIsRequired" classname="LooksTests" runstate="Runnable" seed="2144761116" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001514" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2953" name="AnHonestLook_WearsTheClaim_InStackAndSlotOrder" fullname="LooksTests.AnHonestLook_WearsTheClaim_InStackAndSlotOrder" methodname="AnHonestLook_WearsTheClaim_InStackAndSlotOrder" classname="LooksTests" runstate="Runnable" seed="90422523" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001349" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2974" name="AnUnreadableDate_UsesTheFirstBand_AndBceAgesHaveNoYearZero" fullname="LooksTests.AnUnreadableDate_UsesTheFirstBand_AndBceAgesHaveNoYearZero" methodname="AnUnreadableDate_UsesTheFirstBand_AndBceAgesHaveNoYearZero" classname="LooksTests" runstate="Runnable" seed="699528684" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000303" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2955" name="AWig_IsUncoloured_ButTheBeardKeepsItsColour_AndBothKeysAreRequired" fullname="LooksTests.AWig_IsUncoloured_ButTheBeardKeepsItsColour_AndBothKeysAreRequired" methodname="AWig_IsUncoloured_ButTheBeardKeepsItsColour_AndBothKeysAreRequired" classname="LooksTests" runstate="Runnable" seed="1642655211" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000893" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2988" name="CanLeak_DecisionTable" fullname="LooksTests.CanLeak_DecisionTable" methodname="CanLeak_DecisionTable" classname="LooksTests" runstate="Runnable" seed="1684963204" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000884" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2989" name="CanLeak_RefusesALeakDrawnFromTheSameArtAsTheDisguisesItem" fullname="LooksTests.CanLeak_RefusesALeakDrawnFromTheSameArtAsTheDisguisesItem" methodname="CanLeak_RefusesALeakDrawnFromTheSameArtAsTheDisguisesItem" classname="LooksTests" runstate="Runnable" seed="1227035417" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000278" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2950" name="Compose_KnownGender_DrawsSkinFaceHair_InThatOrder" fullname="LooksTests.Compose_KnownGender_DrawsSkinFaceHair_InThatOrder" methodname="Compose_KnownGender_DrawsSkinFaceHair_InThatOrder" classname="LooksTests" runstate="Runnable" seed="1213942707" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000208" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2951" name="Compose_NoWeightOnTheFiveTones_TakesTheDefaultTone_WithoutASkinDraw" fullname="LooksTests.Compose_NoWeightOnTheFiveTones_TakesTheDefaultTone_WithoutASkinDraw" methodname="Compose_NoWeightOnTheFiveTones_TakesTheDefaultTone_WithoutASkinDraw" classname="LooksTests" runstate="Runnable" seed="675159443" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000184" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2952" name="Compose_UnknownGender_DrawsTheGenderFirst" fullname="LooksTests.Compose_UnknownGender_DrawsTheGenderFirst" methodname="Compose_UnknownGender_DrawsTheGenderFirst" classname="LooksTests" runstate="Runnable" seed="213336813" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000284" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2990" name="CultureValue_IsMenSlashWomen_OneLabelWhenTheyMatch_NullWhenOneIsMissing" fullname="LooksTests.CultureValue_IsMenSlashWomen_OneLabelWhenTheyMatch_NullWhenOneIsMissing" methodname="CultureValue_IsMenSlashWomen_OneLabelWhenTheyMatch_NullWhenOneIsMissing" classname="LooksTests" runstate="Runnable" seed="897303525" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000390" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2998" name="Describe_NamesTheDrawsAndTheTell" fullname="LooksTests.Describe_NamesTheDrawsAndTheTell" methodname="Describe_NamesTheDrawsAndTheTell" classname="LooksTests" runstate="Runnable" seed="1466966796" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000539" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2992" name="EveryKeyComposeEmits_IsRequiredOrABase" fullname="LooksTests.EveryKeyComposeEmits_IsRequiredOrABase" methodname="EveryKeyComposeEmits_IsRequiredOrABase" classname="LooksTests" runstate="Runnable" seed="472053167" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.041534" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2975" name="Grey_FromTheGreyAge_OnHairHairBackAndBeard" fullname="LooksTests.Grey_FromTheGreyAge_OnHairHairBackAndBeard" methodname="Grey_FromTheGreyAge_OnHairHairBackAndBeard" classname="LooksTests" runstate="Runnable" seed="1313218748" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000488" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2997" name="KitSource_IsThePresent_WithTheAccessoryAsItsSignature" fullname="LooksTests.KitSource_IsThePresent_WithTheAccessoryAsItsSignature" methodname="KitSource_IsThePresent_WithTheAccessoryAsItsSignature" classname="LooksTests" runstate="Runnable" seed="1109949870" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000764" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2991" name="LabelProblems_PerGenderRule" fullname="LooksTests.LabelProblems_PerGenderRule" methodname="LabelProblems_PerGenderRule" classname="LooksTests" runstate="Runnable" seed="2041337234" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.002081" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2977" name="NoWardrobe_GivesBodyAndHeadOnly_WithNoDraws" fullname="LooksTests.NoWardrobe_GivesBodyAndHeadOnly_WithNoDraws" methodname="NoWardrobe_GivesBodyAndHeadOnly_WithNoDraws" classname="LooksTests" runstate="Runnable" seed="1593500735" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000463" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-suite type="ParameterizedMethod" id="3002" name="SlotKey_IsTheSlotsUiStringKey" fullname="LooksTests.SlotKey_IsTheSlotsUiStringKey" classname="LooksTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001428" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2999" name="SlotKey_IsTheSlotsUiStringKey(Outfit,&quot;slot.Outfit&quot;)" fullname="LooksTests.SlotKey_IsTheSlotsUiStringKey(Outfit,&quot;slot.Outfit&quot;)" methodname="SlotKey_IsTheSlotsUiStringKey" classname="LooksTests" runstate="Runnable" seed="1178548955" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000296" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="3000" name="SlotKey_IsTheSlotsUiStringKey(FacialHair,&quot;slot.FacialHair&quot;)" fullname="LooksTests.SlotKey_IsTheSlotsUiStringKey(FacialHair,&quot;slot.FacialHair&quot;)" methodname="SlotKey_IsTheSlotsUiStringKey" classname="LooksTests" runstate="Runnable" seed="930203852" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000072" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="3001" name="SlotKey_IsTheSlotsUiStringKey(Accessory,&quot;slot.Accessory&quot;)" fullname="LooksTests.SlotKey_IsTheSlotsUiStringKey(Accessory,&quot;slot.Accessory&quot;)" methodname="SlotKey_IsTheSlotsUiStringKey" classname="LooksTests" runstate="Runnable" seed="2028301527" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000036" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-suite type="ParameterizedMethod" id="2963" name="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse" fullname="LooksTests.TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse" classname="LooksTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001800" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2956" name="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(FacialHair,False,True)" fullname="LooksTests.TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(FacialHair,False,True)" methodname="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse" classname="LooksTests" runstate="Runnable" seed="937911429" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000353" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2957" name="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(FacialHair,True,True)" fullname="LooksTests.TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(FacialHair,True,True)" methodname="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse" classname="LooksTests" runstate="Runnable" seed="1811122404" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000086" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2958" name="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(Hair,False,True)" fullname="LooksTests.TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(Hair,False,True)" methodname="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse" classname="LooksTests" runstate="Runnable" seed="677694401" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000050" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2959" name="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(Hair,True,False)" fullname="LooksTests.TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(Hair,True,False)" methodname="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse" classname="LooksTests" runstate="Runnable" seed="1386159130" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000043" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2960" name="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(Outfit,False,False)" fullname="LooksTests.TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(Outfit,False,False)" methodname="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse" classname="LooksTests" runstate="Runnable" seed="1661359134" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000043" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2961" name="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(Headwear,False,False)" fullname="LooksTests.TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(Headwear,False,False)" methodname="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse" classname="LooksTests" runstate="Runnable" seed="179431624" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000043" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2962" name="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(Accessory,False,False)" fullname="LooksTests.TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(Accessory,False,False)" methodname="TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse" classname="LooksTests" runstate="Runnable" seed="1872583165" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000042" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-suite type="ParameterizedMethod" id="2973" name="TheFace_FollowsTheAgeBand" fullname="LooksTests.TheFace_FollowsTheAgeBand" classname="LooksTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.001606" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2967" name="TheFace_FollowsTheAgeBand(18,&quot;a&quot;,&quot;b&quot;)" fullname="LooksTests.TheFace_FollowsTheAgeBand(18,&quot;a&quot;,&quot;b&quot;)" methodname="TheFace_FollowsTheAgeBand" classname="LooksTests" runstate="Runnable" seed="1440874808" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000324" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2968" name="TheFace_FollowsTheAgeBand(34,&quot;a&quot;,&quot;b&quot;)" fullname="LooksTests.TheFace_FollowsTheAgeBand(34,&quot;a&quot;,&quot;b&quot;)" methodname="TheFace_FollowsTheAgeBand" classname="LooksTests" runstate="Runnable" seed="494566725" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000087" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2969" name="TheFace_FollowsTheAgeBand(35,&quot;c&quot;,&quot;c&quot;)" fullname="LooksTests.TheFace_FollowsTheAgeBand(35,&quot;c&quot;,&quot;c&quot;)" methodname="TheFace_FollowsTheAgeBand" classname="LooksTests" runstate="Runnable" seed="1625684655" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000058" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2970" name="TheFace_FollowsTheAgeBand(59,&quot;c&quot;,&quot;c&quot;)" fullname="LooksTests.TheFace_FollowsTheAgeBand(59,&quot;c&quot;,&quot;c&quot;)" methodname="TheFace_FollowsTheAgeBand" classname="LooksTests" runstate="Runnable" seed="629531246" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000053" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2971" name="TheFace_FollowsTheAgeBand(60,&quot;d&quot;,&quot;d&quot;)" fullname="LooksTests.TheFace_FollowsTheAgeBand(60,&quot;d&quot;,&quot;d&quot;)" methodname="TheFace_FollowsTheAgeBand" classname="LooksTests" runstate="Runnable" seed="219568548" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000053" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2972" name="TheFace_FollowsTheAgeBand(70,&quot;d&quot;,&quot;d&quot;)" fullname="LooksTests.TheFace_FollowsTheAgeBand(70,&quot;d&quot;,&quot;d&quot;)" methodname="TheFace_FollowsTheAgeBand" classname="LooksTests" runstate="Runnable" seed="1535991476" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000052" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-case id="2966" name="TheHairBack_IsUnderTheBody_PointsAtTheHair_AndGoesWithCoveredHair" fullname="LooksTests.TheHairBack_IsUnderTheBody_PointsAtTheHair_AndGoesWithCoveredHair" methodname="TheHairBack_IsUnderTheBody_PointsAtTheHair_AndGoesWithCoveredHair" classname="LooksTests" runstate="Runnable" seed="1279407017" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000514" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2993" name="TheWholeLook_WearsOnlyTheLeaksItems_AndFlagsEveryGarment" fullname="LooksTests.TheWholeLook_WearsOnlyTheLeaksItems_AndFlagsEveryGarment" methodname="TheWholeLook_WearsOnlyTheLeaksItems_AndFlagsEveryGarment" classname="LooksTests" runstate="Runnable" seed="1327452618" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000389" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2978" name="Whole_IsOnePictureAndOneGarment_WithNoDraws" fullname="LooksTests.Whole_IsOnePictureAndOneGarment_WithNoDraws" methodname="Whole_IsOnePictureAndOneGarment_WithNoDraws" classname="LooksTests" runstate="Runnable" seed="678539739" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000643" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2987" name="WholeKey_OfAGeneratedLook_Throws" fullname="LooksTests.WholeKey_OfAGeneratedLook_Throws" methodname="WholeKey_OfAGeneratedLook_Throws" classname="LooksTests" runstate="Runnable" seed="2002940250" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000343" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-suite type="ParameterizedMethod" id="2986" name="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown" fullname="LooksTests.WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown" classname="LooksTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.002048" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2979" name="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;happy&quot;,&quot;premade_socrates_happy&quot;)" fullname="LooksTests.WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;happy&quot;,&quot;premade_socrates_happy&quot;)" methodname="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown" classname="LooksTests" runstate="Runnable" seed="2029372944" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000614" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2980" name="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;angry&quot;,&quot;premade_socrates_angry&quot;)" fullname="LooksTests.WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;angry&quot;,&quot;premade_socrates_angry&quot;)" methodname="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown" classname="LooksTests" runstate="Runnable" seed="623494452" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000070" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2981" name="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;worried&quot;,&quot;premade_socrates_worried&quot;)" fullname="LooksTests.WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;worried&quot;,&quot;premade_socrates_worried&quot;)" methodname="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown" classname="LooksTests" runstate="Runnable" seed="1261460690" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000039" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2982" name="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;neutral&quot;,&quot;premade_socrates_neutral&quot;)" fullname="LooksTests.WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;neutral&quot;,&quot;premade_socrates_neutral&quot;)" methodname="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown" classname="LooksTests" runstate="Runnable" seed="362559568" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000033" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2983" name="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;&quot;,&quot;premade_socrates_neutral&quot;)" fullname="LooksTests.WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;&quot;,&quot;premade_socrates_neutral&quot;)" methodname="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown" classname="LooksTests" runstate="Runnable" seed="130938627" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000033" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2984" name="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(null,&quot;premade_socrates_neutral&quot;)" fullname="LooksTests.WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(null,&quot;premade_socrates_neutral&quot;)" methodname="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown" classname="LooksTests" runstate="Runnable" seed="1183854375" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000032" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2985" name="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;furious&quot;,&quot;premade_socrates_neutral&quot;)" fullname="LooksTests.WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown(&quot;furious&quot;,&quot;premade_socrates_neutral&quot;)" methodname="WholeKey_PicksTheExpression_NeutralWhenBlankOrUnknown" classname="LooksTests" runstate="Runnable" seed="73725948" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.000034" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-case id="2976" name="ZeroSkinWeights_AreNeverDrawn_AllZeroGivesToneThree_NoHairWeightsGiveBrown" fullname="LooksTests.ZeroSkinWeights_AreNeverDrawn_AllZeroGivesToneThree_NoHairWeightsGiveBrown" methodname="ZeroSkinWeights_AreNeverDrawn_AllZeroGivesToneThree_NoHairWeightsGiveBrown" classname="LooksTests" runstate="Runnable" seed="423632585" result="Passed" start-time="2026-10-03 23:52:57Z" end-time="2026-10-03 23:52:57Z" duration="0.002783" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Saving results to: C:/Users/Saleh/AppData/LocalLow/NOPE/Time Sorter\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

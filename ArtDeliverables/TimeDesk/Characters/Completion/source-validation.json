@@ -1,8 +1,9 @@
 {
   "requiredNewSources": 455,
   "presentNewSources": 455,
+  "installedSpriteKeys": 944,
   "plannedNewLayerKeys": 902,
   "plannedTotalLayerKeys": 944,
-  "gameReadyLayerProcessingComplete": false,
+  "gameReadyLayerProcessingComplete": true,
   "errors": []
 }
