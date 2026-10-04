@@ -100,6 +100,8 @@ public class FindingsTests
     {
         FindingKind kind = Classify(Seal("Red hexagon · VO", "visa", true), CompareEvidence.ForSealRow("Blue hexagon · VO", "visa", "Visa Office"));
         Assert.AreEqual(FindingKind.SealIncorrect, kind);
+        Assert.AreEqual(2, DiscrepancyLog.Prove(Seal("Red hexagon · VO", "visa", true, document: 2), CompareEvidence.ForSealRow("Blue hexagon · VO", "visa", "Visa Office"), Nation, Era, Traveller).statementDocument,
+                        "the proof names the paper the seal is on (the wheel's question: \"The seal on your <paper> ...\")");
         Assert.IsTrue(FindingRules.IsLogged(kind));
         Assert.IsTrue(FindingRules.IsDifference(kind));
         Assert.AreEqual("finding.link.SealIncorrect", FindingRules.LinkKey(kind));

@@ -392,7 +392,8 @@ public sealed class DiscrepancyLog
                 documentValue = statement.value,
                 expectedValue = truth.value,
                 provedBy = DiscrepancyProof.ClaimMismatch,
-                source = EvidenceKind.DocumentField
+                source = EvidenceKind.DocumentField,
+                statementDocument = PaperOf(statement)
             };
         if (!sameOffice && same)
             return new Discrepancy
@@ -401,7 +402,8 @@ public sealed class DiscrepancyLog
                 documentValue = statement.value,
                 actualOrigin = truth.entryOriginLabel,
                 provedBy = DiscrepancyProof.ForeignOrigin,
-                source = EvidenceKind.DocumentField
+                source = EvidenceKind.DocumentField,
+                statementDocument = PaperOf(statement)
             };
         return null;
     }
@@ -427,7 +429,8 @@ public sealed class DiscrepancyLog
             documentValue = statement.value,
             expectedValue = person.value,
             provedBy = DiscrepancyProof.PersonMismatch,
-            source = EvidenceKind.DocumentField
+            source = EvidenceKind.DocumentField,
+            statementDocument = PaperOf(statement)
         };
     }
 
