@@ -37,16 +37,19 @@ public sealed class HallForegroundFloor : MonoBehaviour
         var bounds=registeredLayer.sprite.bounds;
         if(matchPaintedPerspective)
         {
-            float ppu=registeredLayer.sprite.pixelsPerUnit;
-            var rect=registeredLayer.sprite.rect;
-            var local=new Vector3((paintedVanishingPoint.x-rect.width*.5f)/ppu,(rect.height*.5f-paintedVanishingPoint.y)/ppu,0);
-            var direction=registeredLayer.transform.TransformPoint(local)-referenceCameraPosition;
             // The painted hall uses its own perspective. Align this visual-only
             // ground proxy to its vanishing direction rather than the desk's grid.
-            transform.rotation=Quaternion.LookRotation(direction,Vector3.up);
+            // The hall is an illustration, not a physical ground plane. Register
+            // the continuation in that same plane: a second perspective grid
+            // can match its vanishing point but cannot match its painted joints.
+            transform.SetPositionAndRotation(registeredLayer.transform.position,registeredLayer.transform.rotation);
+            transform.localScale=registeredLayer.transform.lossyScale;
         }
         var edge=registeredLayer.transform.TransformPoint(new Vector3(bounds.center.x,bounds.min.y,0));
         Shader.SetGlobalVector(Edge,new Vector4(edge.x,edge.y,edge.z,1));
+        Shader.SetGlobalVector("_HallFloorCanvas",new Vector4(registeredLayer.sprite.rect.width,registeredLayer.sprite.rect.height,paintedVanishingPoint.x,paintedVanishingPoint.y));
+        Shader.SetGlobalMatrix("_HallFloorCanvasToWorld",registeredLayer.transform.localToWorldMatrix);
+        Shader.SetGlobalVector("_HallFloorRegistration",new Vector4(registeredLayer.sprite.pixelsPerUnit,registeredLayer.sprite.pivot.x,registeredLayer.sprite.pivot.y,0));
         var colour=Color.white;
         if(lighting!=null && lighting.Settings!=null && lighting.Settings.lightingOn)
         {

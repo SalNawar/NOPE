@@ -1,0 +1,62 @@
+[
+  {
+    "success": true,
+    "jobId": "fd69e6ed",
+    "status": "completed",
+    "totalTests": 49,
+    "passedTests": 49,
+    "failedTests": 0,
+    "skippedTests": 0,
+    "inconclusiveTests": 0,
+    "otherTests": 0,
+    "failedTestNames": [],
+    "elapsedSeconds": 220,
+    "resultSummary": "Test run completed: 49/49 passed.",
+    "error": null
+  },
+  {
+    "success": true,
+    "jobId": "1759603f",
+    "status": "completed",
+    "totalTests": 29,
+    "passedTests": 29,
+    "failedTests": 0,
+    "skippedTests": 0,
+    "inconclusiveTests": 0,
+    "otherTests": 0,
+    "failedTestNames": [],
+    "elapsedSeconds": 176,
+    "resultSummary": "Test run completed: 29/29 passed.",
+    "error": null
+  },
+  {
+    "success": true,
+    "jobId": "db17f3a2",
+    "status": "completed",
+    "totalTests": 10,
+    "passedTests": 10,
+    "failedTests": 0,
+    "skippedTests": 0,
+    "inconclusiveTests": 0,
+    "otherTests": 0,
+    "failedTestNames": [],
+    "elapsedSeconds": 144,
+    "resultSummary": "Test run completed: 10/10 passed.",
+    "error": null
+  },
+  {
+    "success": true,
+    "jobId": "11282a23",
+    "status": "completed",
+    "totalTests": 4,
+    "passedTests": 4,
+    "failedTests": 0,
+    "skippedTests": 0,
+    "inconclusiveTests": 0,
+    "otherTests": 0,
+    "failedTestNames": [],
+    "elapsedSeconds": 108,
+    "resultSummary": "Test run completed: 4/4 passed.",
+    "error": null
+  }
+]

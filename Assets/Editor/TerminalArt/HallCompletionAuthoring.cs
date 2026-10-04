@@ -10,7 +10,7 @@ using UnityEngine.Rendering;
 /// <summary>Art-only, reversible captures of the actual office-to-desk camera path.</summary>
 public static class HallCompletionAuthoring
 {
-    const string Report = "ArtDeliverables/TimeDesk/HallLayers/Completion";
+    const string Report = "ArtDeliverables/TimeDesk/HallLayers/Completion/Review2";
     static readonly BindingFlags Private = BindingFlags.Instance | BindingFlags.NonPublic;
     static T Find<T>() where T : UnityEngine.Object => UnityEngine.Object.FindObjectsByType<T>(FindObjectsInactive.Include, FindObjectsSortMode.None).FirstOrDefault();
 
@@ -45,15 +45,21 @@ public static class HallCompletionAuthoring
         var mesh=AssetDatabase.LoadAssetAtPath<Mesh>(meshPath);
         if(mesh==null){mesh=new Mesh{name="Hall foreground floor"};AssetDatabase.CreateAsset(mesh,meshPath);}
         mesh.Clear();
-        mesh.vertices=new[]{new Vector3(-30,0,-12),new Vector3(-30,0,24),new Vector3(30,0,24),new Vector3(30,0,-12)};
-        const float tileRepeat=1.8f;
-        mesh.uv=new[]{new Vector2(-30/tileRepeat,-12/tileRepeat),new Vector2(-30/tileRepeat,24/tileRepeat),new Vector2(30/tileRepeat,24/tileRepeat),new Vector2(30/tileRepeat,-12/tileRepeat)};
+        var art=Find<AnimeHallPresentation>();
+        var reference=art.layers.First(l=>l.renderer!=null).renderer;
+        var sprite=reference.sprite;
+        float ppu=sprite.pixelsPerUnit, width=sprite.rect.width, height=sprite.rect.height;
+        float left=-sprite.pivot.x/ppu, right=(width-sprite.pivot.x)/ppu;
+        float bottom=-sprite.pivot.y/ppu, extension=1000/ppu;
+        mesh.vertices=new[]{new Vector3(left,bottom-extension,0),new Vector3(left,bottom+.5f/ppu,0),new Vector3(right,bottom+.5f/ppu,0),new Vector3(right,bottom-extension,0)};
+        mesh.uv=new[]{new Vector2(0,-1000/height),new Vector2(0,.5f/height),new Vector2(1,.5f/height),new Vector2(1,-1000/height)};
         mesh.triangles=new[]{0,1,2,0,2,3};
         mesh.RecalculateNormals();mesh.RecalculateBounds();EditorUtility.SetDirty(mesh);
         var materialPath=folder+"/ForegroundFloor.mat";
         var material=AssetDatabase.LoadAssetAtPath<Material>(materialPath);
         if(material==null){material=new Material(Shader.Find("NOPE/Hall Foreground Floor"));AssetDatabase.CreateAsset(material,materialPath);}
         material.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath));
+        material.SetTexture("_PaintedReference",AssetDatabase.LoadAssetAtPath<Texture2D>(folder+"/PaintedReference.png"));
         material.SetColor("_BaseColor",Color.white);EditorUtility.SetDirty(material);
         var go=GameObject.Find("Hall Foreground Floor");
         if(go==null){go=new GameObject("Hall Foreground Floor");Undo.RegisterCreatedObjectUndo(go,"Add hall floor");}
@@ -64,8 +70,7 @@ public static class HallCompletionAuthoring
         var renderer=go.GetComponent<MeshRenderer>();if(renderer==null)renderer=go.AddComponent<MeshRenderer>();renderer.sharedMaterial=material;
         renderer.shadowCastingMode=ShadowCastingMode.Off;renderer.receiveShadows=false;
         var floor=go.GetComponent<HallForegroundFloor>();if(floor==null)floor=go.AddComponent<HallForegroundFloor>();
-        var art=Find<AnimeHallPresentation>();
-        floor.Configure(art,Find<HallLightingRig>(),art.layers.First(l=>l.renderer!=null).renderer);
+        floor.Configure(art,Find<HallLightingRig>(),reference);
         EditorSceneManager.MarkSceneDirty(go.scene);
         AssetDatabase.SaveAssets();
         EditorSceneManager.SaveScene(go.scene);

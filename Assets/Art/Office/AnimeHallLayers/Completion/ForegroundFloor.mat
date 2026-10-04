@@ -27,6 +27,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 034c7d69c9b6ed7499d7f0374fb025c8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _PaintedReference:
+        m_Texture: {fileID: 2800000, guid: 79e8f660b929a3541b3b8491c63e3186, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats: []
     m_Colors:

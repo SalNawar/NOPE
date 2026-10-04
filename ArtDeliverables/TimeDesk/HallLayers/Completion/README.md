@@ -1,5 +1,7 @@
 # Hall foreground completion — 2026-10-03
 
+**Superseded after live review on 2026-10-04:** see `Review2/README.md` for the registered floor continuation, restrained lighting, shadows, closer traveller placement and pose animation. The inclined texture-grid method described below is retained as the history of the first pass.
+
 Branch: `codex/hall-art-completion`, created from freshly fetched `origin/main` at `5c7c2812adc2a750d733e388c1b7e43357b26f58`. This includes Claude's hall lighting, dust, day cycle, and character pilot installation. Unfinished document/day-progression/wheel branches were not merged.
 
 The desk camera moves from `(0, 2.16, -2.62)`, pitch 4°, to `(0, 2.46, -2.02)`, pitch approximately 38.86°. That exposes a black band below the finite hall painting and above the preserved 3D desk. The installed floor proxy fills this newly exposed area with camera perspective. Its grid is aligned to the painting's vanishing direction (canvas approximately 1000,280); the visual plane inclines to reconcile the painting's perspective with the preserved desk camera. The tile repeat is 1.8 m for the four-tile texture, calibrated against the painted tile size. Its shader clips above the registered painting's lower edge, so it cannot cover the painted railing or portals. Its colour follows a horizontally averaged sample of the lit painting's bottom strip, carrying window light and the day cycle through the join. Without the 2D pass it uses the unlit terracotta palette; no clock or gameplay state is added.

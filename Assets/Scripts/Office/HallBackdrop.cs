@@ -118,7 +118,7 @@ public sealed class HallBackdrop : MonoBehaviour
         data.antialiasing = AntialiasingMode.None;
         data.requiresColorOption = CameraOverrideOption.Off;
         data.requiresDepthOption = CameraOverrideOption.Off;
-        data.renderShadows = false;
+        data.renderShadows = true;
 
         _material = new Material(composite) { name = "HallBackdrop (runtime)", hideFlags = HideFlags.DontSave };
         _mesh = new Mesh { name = "HallBackdrop triangle", hideFlags = HideFlags.DontSave };

@@ -6,12 +6,14 @@ The attached Unity project checkout is `C:\Users\Saleh\.codex\worktrees\hall-art
 
 ## Completed priorities
 
-1. **Camera gap and perspective:** the finite hall painting previously revealed a black strip between the railing and the 3D desk when entering desk view. `Hall Foreground Floor` now fills that area with a terracotta tile plane aligned to the painting's vanishing direction. The shader clips above the painting's lower edge and follows its lit bottom-strip colour. This is a visual foreground extension; it has no collider.
-2. **Lights:** Claude's 28-light rig is included and enabled. The scene retains 6 fixture lights, 5 window shafts, 5 portal lights, 5 screens, 3 signs, global/sky lighting and the desk lamp/PC glow. Noon, sunset, night and lighting-off captures were checked.
-3. **Ground colour:** the generated floor texture uses the approved hall palette; the shader matches the lit painting through the seam and day cycle. Tile scale and convergence were refined against the painted floor.
+1. **Camera gap and perspective:** after live feedback exposed a broken tile join, the inclined repeating grid was replaced with a continuation registered to the painting itself. Fourteen actual grout intersections and tangents carry through the canvas edge; horizontal rows use perspective spacing. It clips above the painting and follows the lit edge colour. It has no collider.
+2. **Lights:** Claude's 28-light rig remains enabled. The oversized shafts are restrained, fixture strength is capped, desk meshes and the desk lamp/directional light cast soft shadows, and nine registered contact shadows supplement the pier casters. Both pans, noon, sunset, night and lighting-off captures were checked.
+3. **Ground colour:** the extension blends the lit seam into averaged terracotta colour and gentle surface variation. The competing generated texture grid is no longer drawn. An unchanged copy of the approved reconstruction supplies the unlit fallback.
 4. **All character art:** 455 new raw sheets are generated and processed, plus the 15 preserved pilot sheets: 470 source deliverables. The complete 944-key transparent sprite library is installed and natively validated in Unity. All 26 named characters have neutral, happy, angry and worried expressions (104 sprites). All required skin/face, wardrobe, modern and future layers are covered, including the sixteen cast additions absent from the older coverage document.
 
 ## Evidence and files
+
+- **Latest live corrections:** `ArtDeliverables/TimeDesk/HallLayers/Completion/Review2/README.md`, 35 camera captures, two live Game View frames and 104 named-character pose renders. Traveller placement is closer (z=.55) and height 1.9 m. Five resting stances and expression gestures animate the frontal art; passport crops remain unposed. The character regression suites passed 92/92 again. Unity has zero console errors. This review supersedes the older physical-floor description below and in the original completion report.
 
 - Scene: `Assets/Art/Office/AnimeHallLayers/AnimeHall.unity`.
 - Floor component: `Assets/Scripts/Office/HallForegroundFloor.cs`; shader: `Assets/Shaders/HallForegroundFloor.shader`; native floor assets: `Assets/Art/Office/AnimeHallLayers/Completion`.

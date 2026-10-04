@@ -361,9 +361,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  shaftAngleAtSunrise: -10
-  shaftAngleAtSunset: 8
-  shaftLowSunLength: 1.3
+  shaftAngleAtSunrise: -8
+  shaftAngleAtSunset: 6
+  shaftLowSunLength: 1
   fixtureColour: {r: 1, g: 0.9, b: 0.74, a: 1}
   fixturesOnBelow: 0.6
   fixtureFadeBand: 0.1
