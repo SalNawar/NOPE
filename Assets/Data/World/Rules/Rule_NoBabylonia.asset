@@ -18,3 +18,4 @@ MonoBehaviour:
   description: 'Search teams in Babylonia: no travel to Babylonia today.'
   kinds: 
   transponder: 
+  openPlaces: []

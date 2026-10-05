@@ -62,14 +62,13 @@ public static partial class WorldContentGenerator
             var countries = new HashSet<string>(d.countries ?? Array.Empty<string>());
             List<RuleData> closures = (d.rules ?? Array.Empty<string>())
                 .Where(rules.ContainsKey).Select(r => rules[r])
-                .Where(r => ParseEnum(r.type, out TravelRuleType type) && Directives.IsClosure(type) && (r.kinds == null || r.kinds.Length == 0))
+                .Where(r => ParseEnum(r.type, out TravelRuleType type) && Directives.IsClosure(type) && (r.kinds == null || r.kinds.Length == 0 || type == TravelRuleType.OpenDestinations))
                 .ToList();
             bool InWorld(PlaceRef p) =>
                 places.Contains(p) && !future.Contains(p.EraId) &&
                 ((d.eras ?? Array.Empty<EraWeightData>()).Length == 0 || eras.Contains(p.EraId)) &&
                 (countries.Count == 0 || countries.Contains(p.NationId));
-            bool Closed(PlaceRef p) =>
-                closures.Any(r => ParseEnum(r.type, out TravelRuleType type) && Directives.Closes(type, r.country, r.era, p.NationId, p.EraId));
+            bool Closed(PlaceRef p) => closures.Any(r => RuleDirective(r).Closes(p.NationId, p.EraId));
             errors.AddRange(PortalSchedule.DayProblems($"days[{d.day}]", portals, Routes(d), InWorld, Closed));
         }
     }

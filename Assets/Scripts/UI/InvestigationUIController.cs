@@ -119,8 +119,14 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The character art the traveller's face is drawn with.</summary>
     private CharacterArt _art;
 
-    /// <summary>Number of discrepancies documented for the current case.</summary>
-    public int EvidenceCount => _evidence.Count;
+    /// <summary>The evidence documented for the current case (or the case just decided): the deviations proven (DiscrepancyLog) and the directive faults' findings (a rule broken, a date that fails: FindingLog.DirectiveEvidence, counted as the decision is made, before the case's findings clear), which a denial needs (VerdictRules.IsUnprovenDenial).</summary>
+    public int EvidenceCount => _evidence.Count + (_currentCase != null ? DirectiveEvidence : _directiveEvidenceDecided);
+
+    /// <summary>The directive faults' findings logged for the case at the desk.</summary>
+    private int DirectiveEvidence => Board != null ? Board.Log.DirectiveEvidence : 0;
+
+    /// <summary>The directive faults' findings the last decided case logged (Decide), read by the verdict after the case closes.</summary>
+    private int _directiveEvidenceDecided;
 
     /// <summary>The app's guided steps (null without the app).</summary>
     private GuideBar Steps => app != null ? app.Guide : null;
@@ -228,7 +234,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         _documents = new CaseDocumentsPresenter(documentsViews, wiring.DeskReachable ? desk : null, compareController, () => _evidence.DocumentedCategories, index);
         _interview = new InterviewPresenter(interactionPanel, transcriptViews, () => Arrived(AppTab.Transcript), wheel, compareController,
                                             RequestPaper, SignWaiver, () => _currentCase, this, index);
-        _evidence = new EvidencePresenter(compareController, reportViews, () => Arrived(AppTab.Report), () => _currentCase, index, () => _agency, () => _reference.Day);
+        // No Report badge (the desk-first redesign: the Deviation Report leaves the player's view; the findings column is the evidence).
+        _evidence = new EvidencePresenter(compareController, reportViews, () => { }, () => _currentCase, index, () => _agency, () => _reference.Day);
     }
 
     /// <summary>The start-up error and warnings for what is not wired (each changes what the day can show or generate).</summary>
@@ -291,6 +298,21 @@ public sealed class InvestigationUIController : MonoBehaviour
         _reference.SetCitizenRegistry(registry, agency, day);
         if (app != null)
             app.BeginDay();
+    }
+
+    /// <summary>
+    /// The day's introductions (the desk-first redesign, items 3 and 9): the
+    /// fields the papers print (Introductions.ShowsField), the shelf's agency
+    /// documents and the desktop's apps; before the scanner is introduced
+    /// (<paramref name="scanners"/>.Hidden) a handed-over paper's copy reaches
+    /// the PC at once.
+    /// </summary>
+    public void SetIntroductions(Introductions introductions, int day, ScannerDay scanners)
+    {
+        Introductions known = introductions ?? Introductions.None;
+        _documents.SetDay((form, category) => known.ShowsField(day, form, category), scanners.Hidden);
+        if (app != null)
+            app.SetIntroductions(known, day);
     }
 
     /// <summary>Injects today's facts (the Reference tab's registers render these rows).</summary>
@@ -536,6 +558,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (_currentCase == null)
             return;
 
+        _directiveEvidenceDecided = DirectiveEvidence;
         _documents.EndCase(accepted);
         _currentCase = null;
         Hide();

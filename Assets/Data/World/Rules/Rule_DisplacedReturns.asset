@@ -19,3 +19,4 @@ MonoBehaviour:
     match the Displacement Registry.'
   kinds: 
   transponder: 
+  openPlaces: []

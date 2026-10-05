@@ -589,17 +589,45 @@ public sealed partial class InvestigationApp : MonoBehaviour
     }
 
     /// <summary>
+    /// The day's introductions (the desk-first redesign, items 3 and 9): the
+    /// shelf lists only the agency documents introduced (Citizen records,
+    /// today's rules, the calendar: Feature.Records, Rulebook, Calendar) and
+    /// the desktop shows only the apps introduced (Feature.App); a pane on
+    /// the books before any is introduced turns to today's rules; set at the
+    /// day's start.
+    /// </summary>
+    public void SetIntroductions(Introductions introductions, int day)
+    {
+        _introductions = introductions ?? Introductions.None;
+        _day = day;
+        if (icons != null)
+            icons.ShowApps(id => _introductions.Has(_day, Feature.App(id)));
+        RefreshShelf();
+        // A pane left on a book no day has introduced yet shows today's rules instead (the right pane starts on the books).
+        foreach (AppPane pane in new[] { leftPane, rightPane })
+            if (pane != null && pane.ActiveTab == AppTab.Reference && !_items.Exists(x => x.Group == ShelfGroup.Books) && pane.Hosts(AppTab.Rules))
+                pane.Show(AppTab.Rules);
+    }
+
+    /// <summary>What the day has introduced (SetIntroductions).</summary>
+    private Introductions _introductions = Introductions.None;
+
+    /// <summary>Today's day number (SetIntroductions).</summary>
+    private int _day;
+
+    /// <summary>
     /// The shelf's documents from the left pane's views, in three groups:
     /// the traveller's (each paper the day issues by its chip's name, not
     /// readable yet: dimmed; the transcript), the agency's (Citizen records,
-    /// today's rules, the calendar) and the books (each by its name, in the
-    /// Books menu; the Seal Register from the day the seal check arrives,
-    /// ReferenceView.OnShelf); drawn again only when they change.
+    /// today's rules, the calendar, each from the day it is introduced) and
+    /// the books (each by its name, in the Books menu, from the day it is
+    /// introduced: ReferenceView.OnShelf); drawn again only when they change.
     /// </summary>
     private void RefreshShelf()
     {
         if (shelf == null || leftPane == null)
             return;
+        bool Introduced(string feature) => _introductions.Has(_day, feature);
         var items = new List<ShelfItem>();
         IAppView documents = leftPane.View(AppTab.Documents);
         if (documents != null && _traveller != null)
@@ -607,11 +635,11 @@ public sealed partial class InvestigationApp : MonoBehaviour
                 items.Add(new ShelfItem(ShelfGroup.Traveller, documents.Chips[i].Label, LinkTarget.ToTab(AppTab.Documents, i), documents.Chips[i].Available));
         if (_traveller != null && Hosts(AppTab.Transcript))
             items.Add(new ShelfItem(ShelfGroup.Traveller, UiText.Get("app.tab.transcript"), LinkTarget.ToTab(AppTab.Transcript), true));
-        if (Hosts(AppTab.Records))
+        if (Hosts(AppTab.Records) && Introduced(Feature.Records))
             items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Get("app.tab.records"), LinkTarget.ToTab(AppTab.Records), true));
-        if (Hosts(AppTab.Rules))
+        if (Hosts(AppTab.Rules) && Introduced(Feature.Rulebook))
             items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Get("app.tab.rules"), LinkTarget.ToTab(AppTab.Rules), true));
-        if (Hosts(AppTab.Calendar))
+        if (Hosts(AppTab.Calendar) && Introduced(Feature.Calendar))
             items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Get("app.tab.calendar"), LinkTarget.ToTab(AppTab.Calendar), true));
         IAppView books = leftPane.View(AppTab.Reference);
         for (int i = 0; books != null && i < books.Chips.Count; i++)

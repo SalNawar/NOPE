@@ -19,3 +19,4 @@ MonoBehaviour:
     Refuse any poor tourist or Debt Relief labourer bound for it.'
   kinds: 0100000002000000
   transponder: 
+  openPlaces: []

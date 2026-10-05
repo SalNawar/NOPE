@@ -54,6 +54,10 @@ public class ScannerDayTests
     [Test]
     public void NoUpgrades_NoScanner()
     {
+        ScannerDay hidden = ScannerDay.From(Owning(ScannerDay.AutoFeedUpgradeId, ScannerDay.AnalysisUpgradeId), false);
+        Assert.IsTrue(hidden.Hidden, "before the scanner is introduced (the desk-first ramp)");
+        Assert.IsFalse(hidden.AutoFeed || hidden.Analysis, "no upgrade of a scanner the desk does not show");
+        Assert.IsFalse(ScannerDay.From(Owning(ScannerDay.AutoFeedUpgradeId)).Hidden);
         ScannerDay day = ScannerDay.From(null);
         Assert.IsFalse(day.AutoFeed);
         Assert.IsFalse(day.Analysis);

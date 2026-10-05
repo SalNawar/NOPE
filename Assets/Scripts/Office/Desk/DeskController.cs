@@ -434,7 +434,7 @@ public sealed class DeskController : MonoBehaviour
         foreach ((float u, float v) in PaperLanding.GridSpots(config.landingGrid.x, config.landingGrid.y))
         {
             Vector3 point = surface.PointAt(new Vector2(u, v));
-            if (!scanner.Contains(point))
+            if (!OnScanner(point))
                 points.Add(point);
         }
 
@@ -597,7 +597,7 @@ public sealed class DeskController : MonoBehaviour
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         _dragged = -1;
 
-        switch (_state.Drop(paper.Index, scanner.Contains(released)))
+        switch (_state.Drop(paper.Index, OnScanner(released)))
         {
             case DropOutcome.Scanning:
                 Slide(paper, scanner.BedPoint);
@@ -727,6 +727,9 @@ public sealed class DeskController : MonoBehaviour
                 paper.SetLift(paper.Index == _dragged ? top + config.heldPaperLift : (_stack.IndexOf(paper.Index) + 1) * config.paperStackStep);
     }
 
+    /// <summary>True when <paramref name="point"/> lies on the scanner's bed and the scanner is on the desk today (ScannerDay.Hidden: not before it is introduced).</summary>
+    private bool OnScanner(Vector3 point) => !_scanners.Hidden && scanner.Contains(point);
+
     /// <summary>The day-1 scan note (DeskHints): re-evaluated at every hand-over, read, drop, finished scan and case end; it goes after the day's first read or scan.</summary>
     private void RefreshHint()
     {
@@ -734,7 +737,7 @@ public sealed class DeskController : MonoBehaviour
             return;
 
         bool paperOnDesk = _state != null && _state.OnDeskCount > 0;
-        scanHint.gameObject.SetActive(config != null &&
+        scanHint.gameObject.SetActive(config != null && !_scanners.Hidden &&
                                       DeskHints.ScanHintVisible(config.scanHintKey, _day, config.scanHintUntilDay, _scansToday + _readsToday, paperOnDesk));
     }
 }

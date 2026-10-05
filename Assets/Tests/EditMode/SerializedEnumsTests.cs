@@ -94,7 +94,8 @@ public class SerializedEnumsTests
         Assert.AreEqual(8, (int)TravelRuleType.PaperSet);
         Assert.AreEqual(9, (int)TravelRuleType.DebtStanding);
         Assert.AreEqual(10, (int)TravelRuleType.TransponderRecall, "days 7-15: the Driftbox 3 recall");
-        Assert.AreEqual(11, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
+        Assert.AreEqual(11, (int)TravelRuleType.OpenDestinations, "the desk-first ramp: the open destinations");
+        Assert.AreEqual(12, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
     }
 
     /// <summary>PlannedDirective: stored in DayPlanSO's forced slots (world_source.json days[].forced[].directive; days 7-15 B6).</summary>

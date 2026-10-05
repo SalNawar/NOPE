@@ -34,6 +34,7 @@ public static partial class WorldContentGenerator
         var directives = new List<IEnumerable<string>>();
         foreach (DayData d in days)
         {
+            errors.AddRange(Introductions.Problems(d.asset, d.introduces ?? Array.Empty<string>()));
             errors.AddRange(DayPapers.Problems(d.asset, d.papers ?? Array.Empty<string>(), known, issuedBefore.ToList()));
             issuedBefore.UnionWith(known.Where(f => DayPapers.Issued(d.papers, f)));
 
@@ -53,14 +54,15 @@ public static partial class WorldContentGenerator
 
             directives.Add((d.rules ?? Array.Empty<string>())
                 .Where(name => name != null && rules.ContainsKey(name) && ParseEnum(rules[name].type, out TravelRuleType _))
-                .Select(name => DayPacing.RuleKey(name, Directives.IsClosure((TravelRuleType)Enum.Parse(typeof(TravelRuleType), rules[name].type)), (rules[name].kinds ?? Array.Empty<string>()).Length > 0))
+                .Select(name => DayPacing.RuleKey(name, Directives.IsClosure((TravelRuleType)Enum.Parse(typeof(TravelRuleType), rules[name].type)), (rules[name].kinds ?? Array.Empty<string>()).Length > 0,
+                                                  rules[name].type == nameof(TravelRuleType.OpenDestinations)))
                 .ToList());
         }
 
         List<List<string>> newPapers = DayPacing.NewByDay(papers), newRules = DayPacing.NewByDay(directives);
         for (int i = 0; i < days.Length; i++)
         {
-            errors.AddRange(DayPacing.Problems(days[i].asset, newPapers[i], newRules[i], days[i].bulletin));
+            errors.AddRange(DayPacing.Problems(days[i].asset, newPapers[i], newRules[i], days[i].bulletin, i == 0));
             if (!string.IsNullOrEmpty(days[i].bulletin) && !IsAscii(days[i].bulletin))
                 errors.Add($"Day '{days[i].asset}' has a non-ASCII \"bulletin\" (the briefing's fonts print ASCII).");
         }

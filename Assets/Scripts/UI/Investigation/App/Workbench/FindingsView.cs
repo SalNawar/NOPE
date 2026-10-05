@@ -100,6 +100,9 @@ public sealed class FindingsView : MonoBehaviour
             rowTemplate.gameObject.SetActive(false);
         if (reportButton != null && app != null)
             reportButton.onClick.AddListener(() => app.OpenOnTarget(LinkTarget.ToTab(AppTab.Report)));
+        // The desk-first redesign (Saleh 2026-10-05, item 10): the findings are the evidence; the separate Deviation Report leaves the player's view.
+        if (reportButton != null)
+            reportButton.gameObject.SetActive(false);
     }
 
     /// <summary>The rail while nothing is logged, else the column (the app sets the column's width).</summary>

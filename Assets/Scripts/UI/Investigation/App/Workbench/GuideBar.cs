@@ -22,6 +22,11 @@ using UnityEngine.UI;
 /// StageShown (the app puts up its pair of documents). The step hints (the
 /// step's sentence on the status line) show or hide from
 /// Settings and Ctrl+Shift+S, remembered per player (DesktopPreferences.StepsShown).
+/// Since the desk-first redesign (Saleh 2026-10-05, item 10: "far too much to
+/// check"; the desk leads now) none of this shows: the pills' panel and the
+/// foot are hidden when it wires, and the status line gets no step hint. The
+/// steps still run headless (the keys and Go reach a step, the decision
+/// view), until the PC's menu bar replaces them.
 /// The app's window may be closed while a case runs, so nothing here waits
 /// for Awake.
 /// </summary>
@@ -48,7 +53,7 @@ public sealed class GuideBar : MonoBehaviour
     /// <summary>The app: what the player sees (the showing panes' sources and scanned copies).</summary>
     [SerializeField] private InvestigationApp app;
 
-    /// <summary>The workbench (its status line's teaching hint follows the hints).</summary>
+    /// <summary>The workbench (its status line reads "waiting" between travellers; no step hint since the desk-first redesign).</summary>
     [SerializeField] private MatchBoard board;
 
     /// <summary>The PC's screen: the player looks at the desktop while it takes input (the frame open, the screen on).</summary>
@@ -222,6 +227,10 @@ public sealed class GuideBar : MonoBehaviour
         if (_wired)
             return;
         _wired = true;
+        if (pills.Length > 0 && pills[0] != null)
+            pills[0].transform.parent.gameObject.SetActive(false);
+        if (backButton != null)
+            backButton.transform.parent.gameObject.SetActive(false);
         for (int i = 0; i < pills.Length && i < CaseGuide.Stages.Count; i++)
         {
             GuideStage stage = CaseGuide.Stages[i];
@@ -260,7 +269,6 @@ public sealed class GuideBar : MonoBehaviour
         else
             _states.Clear();
         bool caseOn = _progress != null;
-        bool hints = DesktopPreferences.StepsShown;
         for (int i = 0; i < pills.Length && i < CaseGuide.Stages.Count; i++)
         {
             GuideStage stage = CaseGuide.Stages[i];
@@ -272,12 +280,8 @@ public sealed class GuideBar : MonoBehaviour
                     number = at + 1;
             Pill(pills[i], number, current, done, caseOn);
         }
-
-        string key = "guide." + _guide.Current.ToString().ToLowerInvariant();
-        string title = caseOn ? UiText.Get(key + ".title") : UiText.Get("idle.waiting");
-        string sentence = caseOn ? UiText.Get(key + ".text") : UiText.Get("guide.idle.text");
         if (board != null)
-            board.SetIdleHint(hints ? UiText.Format("guide.hint", title, sentence) : UiText.Format("guide.hintTitle", title));
+            board.SetIdleHint(caseOn ? string.Empty : UiText.Get("idle.waiting"));
 
         if (backButton != null)
             backButton.gameObject.SetActive(caseOn && !_guide.IsFirst);

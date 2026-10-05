@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 411096b30c5d9bb4f9142a8207326fb1, type: 3}
   m_Name: DocTemplate_TC101
   m_EditorClassIdentifier: Assembly-CSharp::DocumentTemplateSO
-  displayName: Passport
+  displayName: Citizen Travel Passport
   formNumber: TC-101
   fieldSpecs:
   - category: 7
@@ -24,7 +24,7 @@ MonoBehaviour:
   - category: 10
     label: Destination
   - category: 14
-    label: Visa Class
+    label: Travel Class
   - category: 13
     label: Valid Until
   - category: 26

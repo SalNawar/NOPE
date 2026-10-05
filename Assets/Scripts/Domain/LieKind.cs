@@ -114,27 +114,6 @@ public static class LieKinds
     /// <summary>True for a visual lie (the document design spec, D4, D8): a forged seal, proven against the Seal Register, or someone else's photo, proven against the traveller at the desk; planned by their own makers (Seals.Forge, Looks.Stranger), never by RecordLies or Lies.Plan.</summary>
     public static bool IsVisualLie(LieKind lie) => lie == LieKind.ForgedSeal || lie == LieKind.SwappedPhoto;
 
-    /// <summary>
-    /// The first of <paramref name="days"/> (each day's number and the lies it
-    /// enables) that enables <paramref name="lie"/>: the day its check arrives
-    /// in the ramp (the forged seal's is the day the Seal Register joins the
-    /// workbench's shelf; the document design spec, D4); 0 when no day does.
-    /// </summary>
-    public static int FirstDay(LieKind lie, IEnumerable<(int day, IEnumerable<LieKind> lies)> days)
-    {
-        int first = 0;
-        if (days != null)
-            foreach ((int day, IEnumerable<LieKind> lies) in days)
-                if (lies != null && (first == 0 || day < first))
-                    foreach (LieKind enabled in lies)
-                        if (enabled == lie)
-                        {
-                            first = day;
-                            break;
-                        }
-        return first;
-    }
-
     /// <summary>True for a record lie, planned by RecordLies against the traveller's own record; false for a place lie or a visual lie.</summary>
     public static bool IsRecordLie(LieKind lie) => !IsPlaceLie(lie) && !IsVisualLie(lie);
 

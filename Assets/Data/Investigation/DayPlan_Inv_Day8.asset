@@ -14,17 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 8
   visitorsCount: 14
-  bulletin: 'NEW: Debt Relief labourers. A registered Labour Contract, an Economy
-    transponder and a signed Stranding Waiver.'
+  bulletin: 'NEW: Debt Relief labourers. They carry a registered Work Permit, an
+    Economy transponder and a signed Stranding Waiver.'
   papers:
   - TC-101
   - TC-230
-  - TC-310
-  - TC-415
-  - TC-416
-  - TC-417
-  - TC-520
   - TC-610
+  - TC-240
+  - TC-310
+  - TC-520
+  introduces:
+  - field:Employer
+  - field:Term
+  - field:Wage
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
@@ -73,20 +75,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ea204f04a76efea4a892bee51f33e9a1, type: 2}
   - {fileID: 11400000, guid: 9a402b021c35d844a983774f29a7e95f, type: 2}
   tellCount: 1
-  tellChannels: 0000000002000000
-  costumeErrorChance: 0.05
+  tellChannels: 00000000
+  costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 01000000020000000700000006000000080000000a00000009000000
+  lieKinds: 010000000200000006000000070000000a00000009000000
   violationChance: 0.05
   activeTravelRules:
-  - {fileID: 11400000, guid: c6838f36d34d76a4ab89183d7ddc67b7, type: 2}
-  - {fileID: 11400000, guid: 5bb4a0a94cee20740a3b154dcbe5f43d, type: 2}
-  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: c3666c51d7e278c4ba3b8753516c1a39, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
-  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
+  - {fileID: 11400000, guid: e09af0da9ce92184a87ab3dc9bca91b3, type: 2}
   - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
-  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 3

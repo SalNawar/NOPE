@@ -50,11 +50,10 @@ public static class ShiftScoring
             return verdict;
         }
 
-        // Evidence gate: denying a deviation fault (a liar, a forger, a costume
-        // error) must be backed by documented scanner evidence. Directive
-        // faults are exempt (the daily rules are public knowledge), and
-        // evidenceCount < 0 means the evidence system is not active in this
-        // scene (fallback UI) so the gate is skipped.
+        // Evidence gate (Saleh, 2026-10-05): any right denial must be backed
+        // by logged evidence, a deviation's proof or a directive fault's
+        // finding; evidenceCount < 0 means the evidence system is not active
+        // in this scene (fallback UI) so the gate is skipped.
         if (inst != null && VerdictRules.IsUnprovenDenial(config.requireEvidenceToDeny, evidenceCount, accepted, inst.HasDeviationFault, inst.HasDirectiveFault))
         {
             verdict.correct = false;

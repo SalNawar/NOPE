@@ -67,6 +67,7 @@ public sealed class DeskScanner : MonoBehaviour
     /// <summary>Shows the placeholder parts of the day's upgrades: the feeder tray with the Auto-Feed, the lamp with the Analysis (SC6).</summary>
     public void ShowUpgrades(ScannerDay day)
     {
+        gameObject.SetActive(!day.Hidden);
         if (feederTray != null)
             feederTray.SetActive(day.AutoFeed);
         if (analysisLamp != null)

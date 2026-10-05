@@ -382,7 +382,8 @@ public static class TimelineService
 
         List<string> premadeDialogs = PremadeDialogIds(lib);
 
-        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs, AgencyForms(lib, world != null ? world.day : 1));
+        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs, AgencyForms(lib, world != null ? world.day : 1),
+                                lib.Introductions.Has(world != null ? world.day : 1, Feature.Clothes));
     }
 
     /// <summary>
@@ -450,7 +451,8 @@ public static class TimelineService
         new TranslationDay(lib != null && lib.Translation.HasData ? lib.Translation.rules : null, Snapshot(world, null));
 
     /// <summary>Today's scanner upgrade (the PC redesign SC1): the Auto-Feed or the Analysis Scanner, whichever is installed at the day's start (OrderBook.InForce: one upgraded scanner at a time), fixed at day start like the translation.</summary>
-    public static ScannerDay BuildScannerDay(WorldState world, ContentLibrarySO lib) => ScannerDay.From(OrderBook.InForce(world, lib));
+    public static ScannerDay BuildScannerDay(WorldState world, ContentLibrarySO lib) =>
+        ScannerDay.From(OrderBook.InForce(world, lib), lib == null || world == null || lib.Introductions.Has(world.day, Feature.Scanner));
 
     /// <summary>
     /// Returns true if every condition on the trigger passes (ConditionsPass):

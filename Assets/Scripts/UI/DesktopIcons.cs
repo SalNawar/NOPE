@@ -108,6 +108,26 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
                 i.SetSelected(i == icon);
     }
 
+    /// <summary>
+    /// Shows the icon of each app <paramref name="introduced"/> accepts and
+    /// hides the rest (the desk-first redesign, item 9: an app arrives on the
+    /// day it is introduced, Feature.App; the day's start). A hidden icon keeps
+    /// its place; the Start menu lists only the shown ones (IsShown).
+    /// </summary>
+    public void ShowApps(System.Func<string, bool> introduced)
+    {
+        foreach (DesktopIconView icon in icons)
+            if (icon != null)
+                icon.gameObject.SetActive(introduced == null || introduced(icon.AppId));
+    }
+
+    /// <summary>True when the app's icon shows today (ShowApps); false for an id no icon has.</summary>
+    public bool IsShown(string appId)
+    {
+        DesktopIconView icon = IconOf(appId);
+        return icon != null && icon.gameObject.activeSelf;
+    }
+
     /// <summary>Opens the icon's app.</summary>
     public void Open(DesktopIconView icon)
     {

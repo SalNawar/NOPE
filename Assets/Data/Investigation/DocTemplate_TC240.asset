@@ -23,7 +23,7 @@ MonoBehaviour:
     label: Transponder Class
   - category: 26
     label: Issuing Seal
-  handOver: 0
+  handOver: 1
   showsPhoto: 0
   askGroup: 
   form:

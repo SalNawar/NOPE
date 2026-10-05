@@ -19,12 +19,13 @@ MonoBehaviour:
   papers:
   - TC-101
   - TC-230
-  - TC-310
-  - TC-415
-  - TC-416
-  - TC-417
-  - TC-520
   - TC-610
+  - TC-240
+  - TC-310
+  - TC-520
+  introduces:
+  - wheel:clothes
+  - book:Culture
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
@@ -36,7 +37,7 @@ MonoBehaviour:
     weight: 3
     honest: 0
   - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
-    weight: 4
+    weight: 2
     honest: 0
   eraWeights:
   - era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
@@ -77,17 +78,15 @@ MonoBehaviour:
   costumeErrorChance: 0.05
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 0100000002000000070000000500000006000000080000000a00000009000000
+  lieKinds: 010000000200000006000000070000000a00000009000000
   violationChance: 0.05
   activeTravelRules:
-  - {fileID: 11400000, guid: ace5a94a5c07002409f456a3bc561d42, type: 2}
-  - {fileID: 11400000, guid: a23d6b403075707429acad1c0d651b50, type: 2}
-  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: 1576e3e3a476a1f4d88296c1c2951433, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
-  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
+  - {fileID: 11400000, guid: e09af0da9ce92184a87ab3dc9bca91b3, type: 2}
   - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
-  - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
-  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
+  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 3
@@ -135,8 +134,8 @@ MonoBehaviour:
   - portal: 1
     place: {fileID: 11400000, guid: dd26bd086168a3c42af31e542ba3c485, type: 2}
   - portal: 2
-    place: {fileID: 11400000, guid: 93680f3a1393d56498706822045daa46, type: 2}
+    place: {fileID: 11400000, guid: 863aba0c80035a64d8cfe5228c534551, type: 2}
   - portal: 4
     place: {fileID: 11400000, guid: 818eb0723bf59c54c95864aed6ac4a24, type: 2}
   - portal: 5
-    place: {fileID: 11400000, guid: 863aba0c80035a64d8cfe5228c534551, type: 2}
+    place: {fileID: 11400000, guid: 93680f3a1393d56498706822045daa46, type: 2}

@@ -282,7 +282,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
         foreach (FormSlot s in _form.Slots)
         {
-            if (s.Field < 0 || doc.fields == null || s.Field >= doc.fields.Count || doc.fields[s.Field] == null)
+            if (s.Hidden || s.Field < 0 || doc.fields == null || s.Field >= doc.fields.Count || doc.fields[s.Field] == null)
                 continue;
             var view = new SlotView { Row = new DocumentRow(s.Field, doc.fields[s.Field]) };
             if (highlightTemplate != null)

@@ -54,12 +54,20 @@ public sealed class DesktopShell : MonoBehaviour
             screenOffButton.onClick.AddListener(TurnOffScreen);
     }
 
-    /// <summary>Shows/hides the Start menu.</summary>
+    /// <summary>Shows/hides the Start menu; it lists only the apps whose icons show today (DesktopIcons.IsShown: the apps introduced).</summary>
     public void ToggleStartMenu()
     {
-        if (startMenu != null)
-            startMenu.SetActive(!startMenu.activeSelf);
+        if (startMenu == null)
+            return;
+        if (!startMenu.activeSelf && icons != null)
+            foreach (Transform entry in startMenu.transform)
+                if (entry.name.StartsWith(AppEntryPrefix, System.StringComparison.Ordinal))
+                    entry.gameObject.SetActive(icons.IsShown(entry.name.Substring(AppEntryPrefix.Length)));
+        startMenu.SetActive(!startMenu.activeSelf);
     }
+
+    /// <summary>The name prefix of a Start menu entry that opens an app ("App_" + its id; Build Office UI names them so).</summary>
+    private const string AppEntryPrefix = "App_";
 
     /// <summary>Closes the Start menu.</summary>
     public void CloseStartMenu()

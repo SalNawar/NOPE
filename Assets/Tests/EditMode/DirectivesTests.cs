@@ -58,6 +58,7 @@ public class DirectivesTests
     [TestCase(TravelRuleType.PaperDates, false)]
     [TestCase(TravelRuleType.PaperSet, false)]
     [TestCase(TravelRuleType.DebtStanding, false)]
+    [TestCase(TravelRuleType.OpenDestinations, true)]
     public void IsClosure_TheThreeForbiddenTypes(TravelRuleType type, bool expected)
     {
         Assert.AreEqual(expected, Directives.IsClosure(type));
@@ -545,6 +546,21 @@ public class DirectivesTests
         CollectionAssert.IsEmpty(Directives.RuleProblems("R", TravelRuleType.DressForDestination, new TravellerKind[0], false, true), "dress is read for every 2150 citizen by its own rule");
     }
 
+    /// <summary>The open destinations (the desk-first ramp): a closure that lists its places and names them in its line; no other rule lists places.</summary>
+    [Test]
+    public void RuleProblems_TheOpenDestinations_ListTheirPlacesAndLine()
+    {
+        var places = new[] { "greece:ancient" };
+        CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_OpenD1", TravelRuleType.OpenDestinations, Citizens, false, true, openPlaces: places));
+        StringAssert.Contains("lists no places", Directives.RuleProblems("R", TravelRuleType.OpenDestinations, null, false, true).Single());
+        StringAssert.Contains("directive line", Directives.RuleProblems("R", TravelRuleType.OpenDestinations, null, false, false, openPlaces: places).Single());
+        StringAssert.Contains("not a country or era", Directives.RuleProblems("R", TravelRuleType.OpenDestinations, null, true, true, openPlaces: places).Single());
+        StringAssert.Contains("only the open destinations", Directives.RuleProblems("R", TravelRuleType.NationEraForbidden, null, true, true, openPlaces: places).Single());
+    }
+
+    [Test]
+    public void PlaceKey_CountryColonEra() => Assert.AreEqual("greece:ancient", Directives.PlaceKey("greece", "ancient"));
+
     private static readonly List<TransponderModel> Units = new List<TransponderModel>
     {
         new TransponderModel { id = "hopper2", transponderClass = TransponderClass.Premium, model = "Hopper Mk II", prefix = "HP", weight = 1f },
@@ -723,6 +739,12 @@ public class DirectivesTests
         Assert.IsTrue(new Directive(TravelRuleType.NationEraForbidden, null, "egypt", "ancient").Closes("egypt", "ancient"));
         Assert.IsFalse(new Directive(TravelRuleType.NationEraForbidden, null, "egypt", "ancient").Closes("egypt", "medieval"));
         Assert.IsFalse(new Directive(TravelRuleType.PaperSet, null, "egypt", "ancient").Closes("egypt", "ancient"), "a procedure closes nothing");
+        var open = new Directive(TravelRuleType.OpenDestinations, null, open: new[] { "greece:ancient", "italy:ancient" });
+        Assert.IsFalse(open.Closes("greece", "ancient"), "an open destination");
+        Assert.IsFalse(open.Closes("italy", "ancient"), "the second open destination");
+        Assert.IsTrue(open.Closes("egypt", "ancient"), "every other place is closed");
+        Assert.IsTrue(open.Closes("greece", "medieval"), "the place, not the country");
+        Assert.IsTrue(new Directive(TravelRuleType.OpenDestinations, null).Closes("greece", "ancient"), "no place listed: all closed");
     }
 
     [Test]

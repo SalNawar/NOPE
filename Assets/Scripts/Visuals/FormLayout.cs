@@ -44,6 +44,15 @@ public sealed class FormData
     /// </summary>
     public IReadOnlyList<string> FieldReserve = Array.Empty<string>();
 
+    /// <summary>
+    /// The fields not introduced yet, by field index (the desk-first redesign,
+    /// item 3: "hide everything until introduced"; Introductions.ShowsField):
+    /// a hidden field's box, label, value or seal is not drawn and cannot be
+    /// picked, but keeps its place, so nothing moves when it arrives (D2).
+    /// Empty or shorter than the fields: every field shows.
+    /// </summary>
+    public IReadOnlyList<bool> FieldHidden = Array.Empty<bool>();
+
     /// <summary>The Seal Register's seals (a SealGrid block; the document design spec, D4): each office's name and its seal's value (its description, drawn by the renderers).</summary>
     public IReadOnlyList<(string Caption, string Value)> Seals = Array.Empty<(string, string)>();
 
@@ -381,8 +390,8 @@ public readonly struct FormItem
 /// <summary>One pickable place of a form, in reading order: a field's box, or a table's row.</summary>
 public readonly struct FormSlot
 {
-    /// <summary>A slot from its parts.</summary>
-    public FormSlot(int index, int field, int row, string source, FaceRect hit, int page)
+    /// <summary>A slot from its parts (<paramref name="hidden"/>: a field not introduced yet, FormData.FieldHidden).</summary>
+    public FormSlot(int index, int field, int row, string source, FaceRect hit, int page, bool hidden = false)
     {
         Index = index;
         Field = field;
@@ -390,7 +399,11 @@ public readonly struct FormSlot
         Source = source;
         Hit = hit;
         Page = page;
+        Hidden = hidden;
     }
+
+    /// <summary>True for a hidden field's slot (FormData.FieldHidden): nothing of it is drawn, its box hits nothing, and no pick, highlight or ↗ is armed on it.</summary>
+    public bool Hidden { get; }
 
     /// <summary>Its place in reading order (its index in PlacedForm.Slots).</summary>
     public int Index { get; }
@@ -496,7 +509,24 @@ public static class FormLayout
     /// over it; 0 (a document, the desk paper) keeps every column whole.
     /// </summary>
     public static PlacedForm Layout(FormSpec spec, FormData data, float width, FormMetrics m, ITextMeasure measure, float rowLinkRoom = 0f) =>
-        new Placer(spec, data, width, m, measure, null, rowLinkRoom).Run();
+        Hide(new Placer(spec, data, width, m, measure, null, rowLinkRoom).Run(), data);
+
+    /// <summary>
+    /// <paramref name="form"/> without the fields <paramref name="data"/> hides
+    /// (FormData.FieldHidden): their items are dropped and their slots keep
+    /// their index and field but hit nothing, so every other field keeps its
+    /// box and its slot number.
+    /// </summary>
+    private static PlacedForm Hide(PlacedForm form, FormData data)
+    {
+        IReadOnlyList<bool> hidden = data != null ? data.FieldHidden : null;
+        if (form == null || hidden == null || !hidden.Contains(true))
+            return form;
+        bool Hidden(int slot) => slot >= 0 && slot < form.Slots.Count && form.Slots[slot].Field >= 0 && form.Slots[slot].Field < hidden.Count && hidden[form.Slots[slot].Field];
+        var items = form.Items.Where(i => !Hidden(i.Slot)).ToList();
+        var slots = form.Slots.Select(s => !Hidden(s.Index) ? s : new FormSlot(s.Index, s.Field, s.Row, s.Source, new FaceRect(s.Hit.XMin, s.Hit.YMin, s.Hit.XMin - 1f, s.Hit.YMin - 1f), s.Page, true)).ToList();
+        return new PlacedForm(form.Width, form.Height, form.PageHeight, items, slots, form.PageTops);
+    }
 
     /// <summary>
     /// H, the unit every size of <paramref name="spec"/> laid out

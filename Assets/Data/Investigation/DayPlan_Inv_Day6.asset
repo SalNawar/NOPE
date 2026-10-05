@@ -14,16 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 6
   visitorsCount: 14
-  bulletin: 'NEW: the displaced. Their Displacement Certificate must match the Displacement
-    Registry before they go home.'
+  bulletin: 'NEW: the Transponder Card and travel class. A Premium passport travels
+    on a Premium transponder, a Standard passport on an Economy one: hold the Passport''s
+    class against the card''s.'
   papers:
   - TC-101
   - TC-230
-  - TC-310
-  - TC-415
-  - TC-416
-  - TC-417
   - TC-610
+  - TC-240
+  introduces:
+  - field:AccountStatus
+  - field:TransponderId
+  - field:TransponderClass
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
@@ -74,13 +76,13 @@ MonoBehaviour:
   costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 010000000200000007000000080000000a00000009000000
+  lieKinds: 01000000020000000a00000009000000
   violationChance: 0.05
   activeTravelRules:
-  - {fileID: 11400000, guid: a450618c1ab42a64f9962c60774c598c, type: 2}
+  - {fileID: 11400000, guid: 8030d2f6a915f884aa105943fac37a92, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
-  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
-  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
+  - {fileID: 11400000, guid: bbe3998703b68f240863fa5e82a2049d, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 3
@@ -116,7 +118,7 @@ MonoBehaviour:
   eventRules: []
   directorateRoutes:
   - portal: 1
-    place: {fileID: 11400000, guid: 417d7ffdedfb58c4f9ac1576309b7d8f, type: 2}
+    place: {fileID: 11400000, guid: 5f6e6311b2f4cc241a56a011b37769c1, type: 2}
   - portal: 2
     place: {fileID: 11400000, guid: 0f4b98a0c149f6c438b6ff24cae43f67, type: 2}
   - portal: 4

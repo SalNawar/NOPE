@@ -260,7 +260,7 @@ public sealed class InterviewPresenter
             smallTalk = interviewReachable && inst != null ? inst.smallTalk : null,
             voice = inst != null ? inst.Voice : null,
             slip = interviewReachable && inst != null ? inst.slip : null,
-            garments = appearanceReachable && inst != null && inst.look != null ? inst.look.Garments : null,
+            garments = appearanceReachable && (day == null || day.Clothes) && inst != null && inst.look != null ? inst.look.Garments : null,
             face = appearanceReachable && inst != null && inst.look != null && documents != null && documents.Any(d => d != null && d.showsPhoto),
             padReply = inst != null ? inst.waiverPadReply : WaiverPadReply.NotNeeded
         };

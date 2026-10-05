@@ -936,4 +936,29 @@ public partial class FormLayoutTests
         Assert.AreEqual(4, new FormLook { frame = FormFrame.TopBand, paper = "blue", aspect = 2.5f, scale = 2f }.Problems(M.aspect).Count);
         Assert.AreEqual(2, new FormLook { aspect = 0.4f, scale = 0.2f }.Problems(M.aspect).Count, "too narrow, too small");
     }
+
+    /// <summary>The desk-first redesign, item 3: a field not introduced yet draws nothing and cannot be picked, and no other box moves (D2).</summary>
+    [Test]
+    public void Layout_AHiddenField_DrawsNothing_PicksNothing_MovesNothing()
+    {
+        PlacedForm all = Desk(Tc610(), Tc610Data());
+        FormData data = Tc610Data();
+        data.FieldHidden = new[] { false, true, false, false, true };
+        PlacedForm some = Desk(Tc610(), data);
+
+        Assert.AreEqual(all.Slots.Count, some.Slots.Count, "every slot keeps its number");
+        foreach (FormSlot s in some.Slots)
+        {
+            bool hidden = s.Field == 1 || s.Field == 4;
+            Assert.AreEqual(hidden, s.Hidden, $"field {s.Field}: the slot says it is hidden");
+            Assert.AreEqual(hidden, !some.Items.Any(i => i.Slot == s.Index) && all.Items.Any(i => i.Slot == s.Index), $"field {s.Field}: drawn unless hidden");
+            if (hidden)
+                Assert.AreEqual(-1, FormLayout.SlotAt(some, all.Slots[s.Index].Hit.CentreX, all.Slots[s.Index].Hit.CentreY), $"field {s.Field} cannot be picked");
+            else
+                Assert.AreEqual(all.Slots[s.Index].Hit.YMin, s.Hit.YMin, 1e-6f, $"field {s.Field} does not move");
+        }
+        Assert.IsTrue(some.Items.Any(i => i.Kind == FormItemKind.Text && i.Text == "Lysimache"), "a shown field's value");
+        Assert.IsFalse(some.Items.Any(i => i.Text == "DP-4471-02" || i.Text == "R-0311-07"), "no hidden value");
+        Assert.AreEqual(all.Height, some.Height, 1e-6f);
+    }
 }

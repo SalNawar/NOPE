@@ -117,6 +117,9 @@ public sealed class CaseFactory
     /// <summary>Today's date on the agency calendar (AgencyCalendar.TryToday for the world's day); null when the agency block's first date is unreadable.</summary>
     private System.DateTime? _today;
 
+    /// <summary>Today's day number (GenerateDayCases): which document fields are introduced (ShowsField).</summary>
+    private int _day;
+
     /// <summary>The agency numbers handed out today (a number belongs to one traveller a day, AgencyNumbers.TakeUnique).</summary>
     private HashSet<string> _agencyNumbers = new HashSet<string>();
 
@@ -233,6 +236,7 @@ public sealed class CaseFactory
         foreach (ForcedCaseSlot forced in _appearances.Values)
             if (forced.legendary != null && !string.IsNullOrWhiteSpace(forced.legendary.citizenId))
                 _agencyNumbers.Add(forced.legendary.citizenId.Trim()); // a story character's own ID, reserved before slot 1 (days 7-15 B3)
+        _day = state.day;
         _today = AgencyCalendar.TryToday(_lib.Agency.firstDate, state.day, out System.DateTime today) ? today : (System.DateTime?)null;
         if (_today == null)
             Debug.LogError($"[CaseFactory] Day {state.day}: the agency calendar cannot count from agency.firstDate '{_lib.Agency.firstDate}', so the displaced's numbers and dates print placeholders. Run Tools > TimeDesk > Generate World.");
@@ -450,7 +454,10 @@ public sealed class CaseFactory
             : PickArchetype(blueprint, legendary, state);
         NationEraProfileSO place = backPlace != null ? backPlace
             : violatorPlace != null ? violatorPlace
+            : legendary == null && blueprint != null && plan.OpensOnly(blueprint.Kind) ? PickOpenPlace(plan, claimedEra, blueprint.Kind)
             : PickPlace(legendary, claimedEra, _plannedLiars.ContainsKey(caseIndex1Based) || plannedRule != null ? plan : null, blueprint != null ? blueprint.Kind : default);
+        if (place != null && legendary == null)
+            claimedEra = place.era; // an open place may be of another era than the weights' draw
         NationSO nation = legendary != null && legendary.nation != null ? legendary.nation : place != null ? place.nation : null;
         string originLabel = place != null ? PlaceLabel(place) : FallbackOriginLabel(nation, claimedEra);
         string givenName = back != null ? back.name : ResolveGivenName(legendary, forcedPremade, citizen ? _citizenNames.All : place != null ? place.AllNames : null, caseIndex1Based);
@@ -812,7 +819,9 @@ public sealed class CaseFactory
         if (inst.HasDirectiveFault)
         {
             CaseFacts facts = Facts(inst, plan);
-            TravelRuleSO broken = rules.FirstOrDefault(r => r.AppliesTo(inst.kind) && Directives.FaultOf(r.Directive, facts) == inst.directiveFault);
+            // A closed destination cites the closure that closes it (the open destinations, or the range limit beside them).
+            TravelRuleSO broken = rules.FirstOrDefault(r => r.AppliesTo(inst.kind) && Directives.FaultOf(r.Directive, facts) == inst.directiveFault
+                                                            && (!r.IsClosure || !r.Allows(inst.claimedNation, inst.claimedEra)));
             switch (inst.directiveFault)
             {
                 case DirectiveFault.ClosedDestination:
@@ -1021,6 +1030,22 @@ public sealed class CaseFactory
     }
 
     /// <summary>
+    /// The traveller's papers as the lie makers see them: each paper's fields
+    /// that are introduced today (Introductions.ShowsField; the desk-first
+    /// redesign, item 3), so a lie forges only what the player can read and
+    /// a variant whose field is still hidden cannot show.
+    /// </summary>
+    private List<RecordForm> ShownForms(CaseInstance inst)
+    {
+        Introductions intro = _lib.Introductions;
+        return inst.documents.Select(d =>
+        {
+            string form = d.template != null ? d.template.formNumber : null;
+            return new RecordForm(form, d.fields.Where(f => f != null && intro.ShowsField(_day, form, f.category)).ToList());
+        }).ToList();
+    }
+
+    /// <summary>
     /// Prints a rolled visual lie (the document design spec, D4, D8), drawing
     /// only from the published canon (agency.faults) on the lie stream after
     /// the look: a forged seal on one paper (VisualLies.PlanSeal) or someone
@@ -1032,7 +1057,7 @@ public sealed class CaseFactory
     /// </summary>
     private void ForgeVisual(CaseInstance inst, LieKind kind, int caseIndex1Based)
     {
-        List<RecordForm> forms = inst.documents.Select(d => new RecordForm(d.template != null ? d.template.formNumber : null, d.fields)).ToList();
+        List<RecordForm> forms = ShownForms(inst);
         TravellerLook stranger = null;
         List<RecordTell> tells = kind == LieKind.ForgedSeal
             ? VisualLies.PlanSeal(_lib.Agency.faults, forms, _lib.Agency.offices, _lieRng)
@@ -1301,7 +1326,7 @@ public sealed class CaseFactory
     /// </summary>
     private LiePlan Forge(CaseInstance inst, LieKind kind, DayPlanSO plan, NationEraProfileSO place, int caseIndex1Based)
     {
-        List<RecordForm> forms = inst.documents.Select(d => new RecordForm(d.template != null ? d.template.formNumber : null, d.fields)).ToList();
+        List<RecordForm> forms = ShownForms(inst);
         var context = new RecordLieContext
         {
             CoverBirthDate = inst.trueBirthDate,
@@ -1633,6 +1658,23 @@ public sealed class CaseFactory
     /// (K5: one fault per traveller, so no closure beside the planned fault),
     /// all of the era's when none is open; the same one draw either way.
     /// </summary>
+    /// <summary>
+    /// The destination of a traveller an open-destinations rule reads (the
+    /// desk-first ramp: "all other travellers want that destination"): one of
+    /// today's places every rule allows them, of <paramref name="claimedEra"/>
+    /// when one is (the era weights still lean the draw), else of any era;
+    /// with none open, the era's draw as before (PickPlace).
+    /// </summary>
+    private NationEraProfileSO PickOpenPlace(DayPlanSO plan, EraSO claimedEra, TravellerKind kind)
+    {
+        List<NationEraProfileSO> open = _todays.Where(p => plan.ClaimAllowed(p.nation, p.era, kind)).ToList();
+        if (open.Count == 0)
+            return PickPlace(null, claimedEra, plan, kind);
+        List<NationEraProfileSO> ofEra = open.Where(p => p.era == claimedEra).ToList();
+        List<NationEraProfileSO> candidates = ofEra.Count > 0 ? ofEra : open;
+        return candidates[_rng.Range(0, candidates.Count)];
+    }
+
     private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO claimedEra, DayPlanSO openOn, TravellerKind kind)
     {
         if (legendary != null && legendary.nation != null)
@@ -1764,7 +1806,7 @@ public sealed class CaseFactory
     /// liar's cover (claimed origin). They never reveal a true home. (Future:
     /// deliberately missing/corrupted records + family history.)
     /// </summary>
-    public static CitizenRegistry BuildRegistry(IReadOnlyList<CaseInstance> cases)
+    public static CitizenRegistry BuildRegistry(IReadOnlyList<CaseInstance> cases, bool standing = true)
     {
         var registry = new CitizenRegistry();
 
@@ -1781,7 +1823,7 @@ public sealed class CaseFactory
             {
                 registry.Add(AccountRecords.Record(inst.visitorGivenName, inst.trueBirthDate, origin, inst.account, UiText.Get,
                                                    inst.isLegendary && inst.legendarySource != null ? inst.legendarySource.recordNote : null,
-                                                   inst.facts != null ? inst.facts.Issued : null));
+                                                   inst.facts != null ? inst.facts.Issued : null, standing));
                 continue;
             }
 

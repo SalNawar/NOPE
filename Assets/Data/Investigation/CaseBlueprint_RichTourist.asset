@@ -16,6 +16,7 @@ MonoBehaviour:
   documentTemplates:
   - {fileID: 11400000, guid: 3d3d949a71f640ee997d316e81c9f803, type: 2}
   - {fileID: 11400000, guid: 17eb2ae45d4944169f09e0d143588211, type: 2}
+  - {fileID: 11400000, guid: 19f6bfd1bebd4c41be223a09ed73369e, type: 2}
   contradictionChance: 0.35
   archetypePool:
   - {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}

@@ -36,9 +36,12 @@
 // 20 cr more; it arrives the next morning. The re-paced days (wave 5 track C,
 // Papers Please lessons 4-6 and D7) are checked on the way: each day's
 // briefing opens with its bulletin (days 1-5 each have one), every traveller
-// carries only the day's issued papers (day 1: the visa alone) and the PC
-// follows them (the shelf's papers, the Citizen Account's forms on file, the
-// guided steps shown: no Books before day 7), every
+// carries only the day's issued papers (day 1: the Passport alone) and the PC
+// follows them (the shelf's papers, the Citizen Account's forms on file), and
+// the desk-first ramp hides what is not introduced yet (Introductions: the
+// scanner before day 5, the Departure Board before day 3, the Citizen records
+// chip before day 5, the PC apps, every document field; the guided steps and
+// their foot never show), every
 // citation slip names its rule and a value, and every shift report shows
 // tonight's bills and the wallet after them. New Run goes through the
 // adoption panel (the Home pet spec: a dog named "Biscuit"; a refused name is
@@ -498,7 +501,7 @@ public static class _TimeDeskAuditPlay
         Check(c.documents.All(d => d.template != null && issuing.Issues(d.template.formNumber)),
               $"d{day} slot {slot}: the traveller carries only the day's issued papers [{string.Join(",", c.documents.Select(d => d.template != null ? d.template.formNumber : "?"))}] of [{string.Join(",", issuing.Papers)}]");
         if (day == 1)
-            Check(c.documents.All(d => d.template != null && d.template.formNumber == Directives.Visa), $"d1 slot {slot}: day 1's traveller carries the Leisure Visa alone");
+            Check(c.documents.All(d => d.template != null && d.template.formNumber == Directives.Visa), $"d1 slot {slot}: day 1's traveller carries the Passport alone");
         if (c.lie.HasValue)
             Count($"lie {c.lie.Value}");
         if (c.costumeFault != CostumeError.None)
@@ -842,8 +845,10 @@ public static class _TimeDeskAuditPlay
     /// The PC follows the day's ramp (lesson D7): the shelf's papers are the
     /// traveller's issued ones and no other (no chip for a form not issued
     /// yet), their Citizen Account lists a form on file only once the form is
-    /// issued, and the guided steps show only those with a check today
-    /// (CaseGuide.StagesOn: no Books before day 7).
+    /// issued. The desk-first ramp (Introductions): the guided steps and their
+    /// foot never show; the scanner, the Departure Board's rows, the Citizen
+    /// records chip, the PC's app icons and each document field show only from
+    /// the day they are introduced.
     /// </summary>
     private static void CheckRamp(Office o, CaseInstance c, int day, int slot)
     {
@@ -863,11 +868,49 @@ public static class _TimeDeskAuditPlay
                   $"d{day} slot {slot}: the Citizen Account lists only the issued forms on file (manifest {manifest}, waiver {waiver}, proof {proof}) [{string.Join(", ", rows)}]");
         }
 
-        var guide = (CaseGuide)Field(o.App.Guide, "_guide");
-        List<GuideStage> today = CaseGuide.StagesOn((StepSetData)Field(o.App.Guide, "_sets"), day);
-        int pills = o.App.Guide.Pills.Count(p => p != null && p.gameObject.activeSelf);
-        Check(guide.Shown.SequenceEqual(today) && pills == today.Count && (day >= 7 || !today.Contains(GuideStage.Books)),
-              $"d{day} slot {slot}: the guided steps follow the ramp [{string.Join(", ", guide.Shown)}], {pills} pills");
+        Introductions intro = RunManager.Instance.Library.Introductions;
+        Button pill = o.App.Guide.Pills.FirstOrDefault(p => p != null);
+        Button back = (Button)Field(o.App.Guide, "backButton");
+        Check(pill != null && !pill.transform.parent.gameObject.activeInHierarchy && (back == null || !back.transform.parent.gameObject.activeInHierarchy),
+              $"d{day} slot {slot}: the guided steps and their foot are hidden (the desk leads)");
+
+        DeskScanner scanner = Office.One<DeskScanner>();
+        bool scannerIn = intro.Has(day, Feature.Scanner);
+        Check(scanner == null || scanner.gameObject.activeSelf == scannerIn, $"d{day} slot {slot}: the scanner is on the desk only from day {intro.FirstDay(Feature.Scanner)} (shown {scanner?.gameObject.activeSelf})");
+        var papers = (CasePapers)Field(Field(o.Ui, "_documents"), "_papers");
+        if (!scannerIn)
+            Check(Enumerable.Range(0, c.documents.Count).All(i => papers.State(i) != PaperState.OnDesk),
+                  $"d{day} slot {slot}: before the scanner, every handed-over paper's copy is on the PC");
+
+        DepartureBoardView board = Office.One<DepartureBoardView>();
+        var boardRows = board != null ? (TextMeshPro)Field(board, "rows") : null;
+        bool boardIn = intro.Has(day, Feature.Board);
+        Check(boardRows == null || string.IsNullOrWhiteSpace(boardRows.text) != boardIn, $"d{day} slot {slot}: the Departure Board prints its routes only from day {intro.FirstDay(Feature.Board)} ('{boardRows?.text.Replace("\n", " | ")}')");
+
+        bool recordsChip = shelf.Items.Any(x => x.Target.Tab == AppTab.Records);
+        Check(recordsChip == intro.Has(day, Feature.Records) && shelf.Items.Any(x => x.Target.Tab == AppTab.Calendar) && shelf.Items.Any(x => x.Target.Tab == AppTab.Rules),
+              $"d{day} slot {slot}: the shelf shows the calendar and the rules from day 1, Citizen records only from day {intro.FirstDay(Feature.Records)} ({recordsChip})");
+
+        DesktopIcons icons = Office.One<DesktopIcons>();
+        if (icons != null)
+        {
+            List<string> wrong = DesktopAppIds.DefaultOrder.Where(id => icons.IsShown(id) != intro.Has(day, Feature.App(id))).ToList();
+            Check(wrong.Count == 0, $"d{day} slot {slot}: the desktop shows only the apps introduced [{string.Join(", ", DesktopAppIds.DefaultOrder.Where(icons.IsShown))}]{(wrong.Count > 0 ? " wrong: " + string.Join(", ", wrong) : "")}");
+        }
+
+        var forms = (List<DocumentForm>)Field(Field(o.Ui, "_documents"), "_caseForms");
+        var shown = new List<string>();
+        bool fieldsFollow = true;
+        for (int d = 0; d < c.documents.Count && d < forms.Count; d++)
+            for (int f = 0; f < c.documents[d].fields.Count; f++)
+            {
+                DocumentField field = c.documents[d].fields[f];
+                bool hidden = forms[d] != null && f < forms[d].Data.FieldHidden.Count && forms[d].Data.FieldHidden[f];
+                fieldsFollow &= hidden != intro.ShowsField(day, c.documents[d].template.formNumber, field.category);
+                if (!hidden && d == 0)
+                    shown.Add(field.label);
+            }
+        Check(fieldsFollow, $"d{day} slot {slot}: each paper prints only the fields introduced (the first paper shows [{string.Join(", ", shown)}])");
     }
 
     private static CitizenRecord RecordOf(Office o, CaseInstance c)
@@ -1266,9 +1309,9 @@ public static class _TimeDeskAuditPlay
         yield return CloseApp(o);
     }
 
-    /// <summary>The day a lie's check arrives on the ramp: the first day plan enabling it (LieKinds.FirstDay; 0: none).</summary>
+    /// <summary>The day a lie's check arrives on the ramp: the first day plan enabling it (Introductions.FirstDay; 0: none).</summary>
     private static int CheckDay(LieKind lie) =>
-        LieKinds.FirstDay(lie, RunManager.Instance.Library.DayPlans.Where(p => p != null).Select(p => (p.DayNumber, (IEnumerable<LieKind>)p.EnabledLies)));
+        RunManager.Instance.Library.Introductions.FirstDay(Feature.Lie(lie));
 
     /// <summary>
     /// Paper <paramref name="index"/> on the left from its shelf chip and, with
@@ -1402,10 +1445,18 @@ public static class _TimeDeskAuditPlay
     private static void CheckShelf(Office o, string name, AppPane left, AppPane right)
     {
         var shelf = (ShelfView)Field(o.App, "shelf");
+        // The desk-first ramp: Citizen records and the books join the shelf on the day they are introduced.
+        int day = RunManager.Instance.World.day;
+        Introductions intro = RunManager.Instance.Library.Introductions;
+        bool books = intro.Keys.Any(k => k.StartsWith("book:") && intro.Has(day, k));
         foreach (AppTab tab in new[] { AppTab.Documents, AppTab.Records, AppTab.Reference, AppTab.Transcript, AppTab.Rules, AppTab.Calendar })
-            Check(shelf.Items.Any(x => x.Target.Tab == tab), $"{name}: the shelf holds {tab}");
+        {
+            bool expected = tab == AppTab.Records ? intro.Has(day, Feature.Records) : tab != AppTab.Reference || books;
+            Check(shelf.Items.Any(x => x.Target.Tab == tab) == expected, $"{name}: the shelf {(expected ? "holds" : "does not hold yet")} {tab}");
+        }
         int marked = shelf.Chips.Count(chip => chip.transform.Find("Side").gameObject.activeSelf);
-        int shown = (left.Blocked ? 0 : 1) + (right != null && !right.Blocked ? 1 : 0);
+        bool Shelved(AppPane pane) => pane != null && !pane.Blocked && shelf.Items.Any(x => x.Target.Tab == pane.ActiveTab);
+        int shown = (Shelved(left) ? 1 : 0) + (Shelved(right) ? 1 : 0);
         Check(marked == shown || left.ActiveTab == AppTab.Report || (right != null && right.ActiveTab == AppTab.Report),
               $"{name}: the shelf marks the {shown} documents shown with their side ({marked} marked)");
         CheckShelfLayout(o, name);
