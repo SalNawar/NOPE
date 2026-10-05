@@ -86,6 +86,9 @@ public static class HistoryPages
     /// <summary>The Revisions page's path.</summary>
     private const string RevisionsPath = "revisions";
 
+    /// <summary>How many of history's latest changes the present lists under "2150 today" (the Revisions page lists them all).</summary>
+    public const int PresentChanges = 8;
+
     /// <summary>An article's facts, in infobox order: capital, ruler, currency, language, technology, dress.</summary>
     private static readonly ClueCategory[] InfoboxOrder =
     {
@@ -193,8 +196,10 @@ public static class HistoryPages
     /// <summary>
     /// The present: the leader's Future place's article, or, with no leader,
     /// the unsettled present; then "2150 today" (the endings spec §5.1): a box
-    /// per world factor, its question over its answer and what that answer
-    /// means for 2150, in words only (no number, no bar, no arrow).
+    /// per world factor, its question over its answer, what that answer
+    /// means for 2150 and the traveller it traces to (Track E), in words only
+    /// (no number, no bar, no arrow); then history's latest changes, the
+    /// famous travellers' homecomings among them, with the link to Revisions.
     /// </summary>
     public static SitePage Present(SiteWorld world, SiteSpec site)
     {
@@ -202,6 +207,7 @@ public static class HistoryPages
         PlaceInfo present = leader != null ? world.Places.FirstOrDefault(p => p != null && p.IsFuture && p.NationId == leader) : null;
         SitePage page = present != null ? Article(world, site, present, true) : Unsettled(world, site);
         AddToday(world, page);
+        AddChanges(world, site, page);
         return page;
     }
 
@@ -217,14 +223,41 @@ public static class HistoryPages
         return page;
     }
 
-    /// <summary>"2150 today" on the present (nothing when the world has no factor): a heading, then a box per factor (question; answer; its report when it has one).</summary>
+    /// <summary>"2150 today" on the present (nothing when the world has no factor): a heading, then a box per factor (question; answer; its report when it has one; the traveller it traces to when there is one, SiteWorld.WorldTraces).</summary>
     private static void AddToday(SiteWorld world, SitePage page)
     {
         if (world.WorldToday == null || world.WorldToday.Count == 0)
             return;
         page.Blocks.Add(PageBlock.Of(PageBlockKind.Heading, world.Words.Get("site.history.today")));
         foreach (OutcomeLine line in world.WorldToday)
-            page.Blocks.Add(PageBlock.Box(line.Question, new[] { line.Answer, line.Report }.Where(s => !string.IsNullOrWhiteSpace(s))));
+        {
+            string trace = line.FactorId != null && world.WorldTraces != null && world.WorldTraces.TryGetValue(line.FactorId, out string t) ? t : null;
+            page.Blocks.Add(PageBlock.Box(line.Question, new[] { line.Answer, line.Report, trace }.Where(s => !string.IsNullOrWhiteSpace(s))));
+        }
+    }
+
+    /// <summary>
+    /// History's latest changes on the present (Track E: a famous traveller's
+    /// homecoming shows on the page that tells 2150 today): a box of the
+    /// <see cref="PresentChanges"/> newest latched edits (by day, the later
+    /// record first within a day), each its day, place, fact, new value and
+    /// why (the story rule's name, or the carry's home), then the link to
+    /// Revisions; nothing when history has not changed.
+    /// </summary>
+    private static void AddChanges(SiteWorld world, SiteSpec site, SitePage page)
+    {
+        IPageWords w = world.Words;
+        List<FactEdit> edits = (world.History?.factEdits ?? new List<FactEdit>()).Where(e => e != null && !string.IsNullOrWhiteSpace(e.value)).ToList();
+        if (edits.Count == 0)
+            return;
+
+        IEnumerable<string> rows = edits.Select((e, i) => (e, i)).OrderByDescending(x => x.e.sinceDay).ThenByDescending(x => x.i).Take(PresentChanges)
+            .Select(x => w.Get("site.history.changedRow", x.e.sinceDay, world.Place(x.e.nationId, x.e.eraId)?.Label ?? $"{x.e.nationId}_{x.e.eraId}",
+                               w.Get(ClueLabels.Key(x.e.category)), x.e.value,
+                               x.e.cause == EditCause.Carry ? w.Get("site.history.whyCarry", x.e.source) : History.RuleName(x.e.source)))
+            .ToList();
+        page.Blocks.Add(PageBlock.Box(w.Get("site.history.changed"), rows));
+        page.Blocks.Add(PageBlock.LinkTo(w.Get("site.history.revisions"), Sites.Address(site.domain, RevisionsPath)));
     }
 
     /// <summary>

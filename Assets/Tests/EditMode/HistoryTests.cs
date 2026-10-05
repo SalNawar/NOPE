@@ -197,4 +197,37 @@ public class HistoryTests
         CollectionAssert.IsEmpty(History.PanicLines(" ", panics), "a blank template");
         CollectionAssert.IsEmpty(History.PanicLines("PANIC in {place}.", null));
     }
+
+    [Test]
+    public void FileStory_EachSectionItsList_ReturnAndBlankNowhere()
+    {
+        var front = new List<string>();
+        var news = new List<string>();
+        var desk = new List<string>();
+        Assert.IsTrue(History.FileStory(StorySection.Front, "CLEOPATRA IN ROME", front, news, desk));
+        Assert.IsTrue(History.FileStory(StorySection.News, "Driftbox recall", front, news, desk));
+        Assert.IsTrue(History.FileStory(StorySection.Desk, "Desk 4 closes", front, news, desk));
+        Assert.IsFalse(History.FileStory(StorySection.Return, "Pell turned away", front, news, desk), "never printed");
+        Assert.IsFalse(History.FileStory(StorySection.Front, "", front, news, desk), "a blank line is never filed");
+        CollectionAssert.AreEqual(new[] { "CLEOPATRA IN ROME" }, front);
+        CollectionAssert.AreEqual(new[] { "Driftbox recall" }, news);
+        CollectionAssert.AreEqual(new[] { "Desk 4 closes" }, desk);
+    }
+
+    [Test]
+    public void FrontFirst_TheFrontPageLeadsThePaper_InFiringOrder()
+    {
+        CollectionAssert.AreEqual(new[] { "EINSTEIN HOME", "CLEOPATRA IN ROME", "Science is now DOMINANT in Athens.", "Debt line" },
+                                  History.FrontFirst(new[] { "EINSTEIN HOME", "CLEOPATRA IN ROME" }, new[] { "Science is now DOMINANT in Athens.", "Debt line" }));
+        CollectionAssert.AreEqual(new[] { "Debt line" }, History.FrontFirst(null, new[] { "Debt line" }), "no front page: the news as it was");
+        CollectionAssert.IsEmpty(History.FrontFirst(null, null));
+    }
+
+    [Test]
+    public void RuleName_TakesTheTriggerPrefixOff()
+    {
+        Assert.AreEqual("Cleopatra's Rome", History.RuleName(History.TriggerSourcePrefix + "Cleopatra's Rome"));
+        Assert.AreEqual("Carried from Rome", History.RuleName("Carried from Rome"), "no prefix: the source itself");
+        Assert.AreEqual(string.Empty, History.RuleName(null));
+    }
 }
