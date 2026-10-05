@@ -1148,22 +1148,12 @@ public static partial class WorldContentGenerator
         foreach (DayData d in src.days)
         {
             string owner = $"Day '{d.asset}'";
-            var world = new HashSet<string>(src.places
-                .Where(p => (d.eras ?? Array.Empty<EraWeightData>()).Any(w => w.era == p.era && w.weight > 0f) &&
-                            (d.countries == null || d.countries.Length == 0 || d.countries.Contains(p.country)))
-                .Select(PlaceId));
 
+            // A premade the day forces or pools brings its claimed place and true home into the day's world (EraGroups.InTodaysWorld), so it only has to exist.
             void InWorld(string premadeId, string how)
             {
-                if (!premadesById.TryGetValue(premadeId ?? string.Empty, out PremadeData m))
-                {
+                if (!premadesById.ContainsKey(premadeId ?? string.Empty))
                     errors.Add($"{owner} {how} unknown premade '{premadeId}'.");
-                    return;
-                }
-                if (!world.Contains(m.place))
-                    errors.Add($"{owner} {how} premade '{m.id}', whose claim '{m.place}' is not in the day's world.");
-                if (!string.IsNullOrEmpty(m.truePlace) && !world.Contains(m.truePlace))
-                    errors.Add($"{owner} {how} premade '{m.id}', whose true place '{m.truePlace}' is not in the day's world.");
             }
 
             string[] pool = d.premades ?? Array.Empty<string>();

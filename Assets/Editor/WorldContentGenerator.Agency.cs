@@ -152,12 +152,14 @@ public static partial class WorldContentGenerator
         errors.AddRange(StrandingFates.Problems(agency.strandingFates, (src.eras ?? Array.Empty<EraData>()).Select(e => e.id).ToList()));
         errors.AddRange(StrandingFates.ReportProblems(agency.strandingReport));
 
-        // The employers (phase 9): each of a known era, and every past era with at least one, so a labourer bound anywhere has a contract.
+        // The employers (phase 9): each of a known era, and every past main era with at least one, so a labourer bound anywhere has a contract;
+        // a second moment (EraGroups) needs one only when a day weights it, since only then can a drawn labourer be bound there.
         var eraIds = new HashSet<string>((src.eras ?? Array.Empty<EraData>()).Select(e => e.id));
         foreach (Employer e in src.agency.employers ?? Array.Empty<Employer>())
             if (e != null && !string.IsNullOrWhiteSpace(e.era) && !eraIds.Contains(e.era))
                 errors.Add($"agency.employers '{e.id}' hires for unknown era '{e.era}'.");
-        foreach (EraData era in (src.eras ?? Array.Empty<EraData>()).Where(e => !e.future))
+        var weighted = new HashSet<string>((src.days ?? Array.Empty<DayData>()).SelectMany(d => d.eras ?? Array.Empty<EraWeightData>()).Where(w => w != null && w.weight > 0f).Select(w => w.era));
+        foreach (EraData era in (src.eras ?? Array.Empty<EraData>()).Where(e => !e.future && (string.IsNullOrWhiteSpace(e.group) || weighted.Contains(e.id))))
             if (agency.EmployersOf(era.id).Count == 0)
                 errors.Add($"agency.employers has no employer for the era '{era.id}', so a labourer bound there would have no registered contract.");
     }
