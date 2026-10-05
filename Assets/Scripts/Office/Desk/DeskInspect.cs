@@ -16,8 +16,10 @@ using UnityEngine;
 /// rulebook is introduced). The workbench's line is drawn over the office too,
 /// between the two values where they lie (MatchLines over two proxy ends
 /// placed each frame on the values' places on the screen), dashed from a held
-/// value to the pointer; it shows while the PC frame is closed and both ends
-/// are on the desk (a value only on the PC draws nothing here). A logged
+/// value to the pointer; it shows while the PC frame is closed and both
+/// values are in the office (an end off the screen, the calendar or the face
+/// seen from the desk view, waits at the screen's edge toward it; a value only
+/// on the PC draws nothing here). A logged
 /// difference marks its papers' boxes (FindingMarks) for the rest of the
 /// case. Scanning stays optional: a scanned paper's copy, search and links
 /// reach the PC (CaseDocumentsPresenter). InvestigationUIController hands it
@@ -49,6 +51,9 @@ public sealed class DeskInspect : MonoBehaviour
     /// <summary>The office view (the line hides while the PC frame is open).</summary>
     [SerializeField] private OfficeViewController view;
 
+    /// <summary>The city view (optional): the line hides while the view looks at the city.</summary>
+    [SerializeField] private CityView city;
+
     /// <summary>The line over the office (the workbench's MatchLines, on the office overlay).</summary>
     [SerializeField] private MatchLines lines;
 
@@ -63,6 +68,9 @@ public sealed class DeskInspect : MonoBehaviour
 
     /// <summary>The smallest end on the screen, in canvas px (a far value still gets a visible box).</summary>
     [SerializeField] private Vector2 minimumEnd = new Vector2(24f, 18f);
+
+    /// <summary>How far inside the screen's edge (px) the end of a value off the screen waits.</summary>
+    private const float EdgeMargin = 24f;
 
     private Camera _camera;
     private CaseInstance _case;
@@ -169,7 +177,7 @@ public sealed class DeskInspect : MonoBehaviour
     {
         if (board == null || lines == null)
             return;
-        bool office = view == null || view.Current == OfficeView.OfficeFocus;
+        bool office = (view == null || view.Current == OfficeView.OfficeFocus) && (city == null || !city.IsOn);
         string hold = office ? board.HoldKey : null;
         (string a, string b, FindingLook look, string label) = board.Line;
         if (!office)
@@ -249,6 +257,22 @@ public sealed class DeskInspect : MonoBehaviour
         return EntryKeys.TryRule(key, out int rule) && rulebook != null && rulebook.TryRowBounds(rule, out bounds);
     }
 
+    /// <summary>A small rectangle at the screen's edge in the direction of <paramref name="world"/> as the camera sees it (a value beside or behind the view: the calendar or the face seen from the steep desk view).</summary>
+    private static bool TryEdgeToward(Camera cam, Vector3 world, out Rect rect)
+    {
+        Vector3 local = cam.transform.InverseTransformDirection(world - cam.transform.position);
+        Vector2 direction = new Vector2(local.x, local.y);
+        if (direction.sqrMagnitude < 1e-8f)
+            direction = Vector2.up;
+        direction.Normalize();
+        Vector2 half = new Vector2(Screen.width / 2f - EdgeMargin, Screen.height / 2f - EdgeMargin);
+        float scale = Mathf.Min(Mathf.Abs(direction.x) > 1e-5f ? half.x / Mathf.Abs(direction.x) : float.MaxValue,
+                                Mathf.Abs(direction.y) > 1e-5f ? half.y / Mathf.Abs(direction.y) : float.MaxValue);
+        Vector2 centre = new Vector2(Screen.width / 2f, Screen.height / 2f) + direction * scale;
+        rect = new Rect(centre - Vector2.one * EdgeMargin / 2f, Vector2.one * EdgeMargin);
+        return true;
+    }
+
     /// <summary>World bounds as a rectangle on the screen through the office camera (false when behind it or off the screen).</summary>
     private bool TryScreenRect(Bounds bounds, out Rect rect)
     {
@@ -267,13 +291,18 @@ public sealed class DeskInspect : MonoBehaviour
         {
             Vector3 s = cam.WorldToScreenPoint(corner);
             if (s.z <= 0f)
-                return false;
+                return TryEdgeToward(cam, bounds.center, out rect);
             minX = Mathf.Min(minX, s.x);
             minY = Mathf.Min(minY, s.y);
             maxX = Mathf.Max(maxX, s.x);
             maxY = Mathf.Max(maxY, s.y);
         }
         rect = Rect.MinMaxRect(minX, minY, maxX, maxY);
-        return rect.xMax > 0f && rect.yMax > 0f && rect.xMin < Screen.width && rect.yMin < Screen.height;
+        if (rect.xMax > 0f && rect.yMax > 0f && rect.xMin < Screen.width && rect.yMin < Screen.height)
+            return true;
+        // Off the screen (the calendar or the face seen from the desk view): the end waits at the screen's edge toward it, so the line still points there.
+        Vector2 centre = new Vector2(Mathf.Clamp(rect.center.x, EdgeMargin, Screen.width - EdgeMargin), Mathf.Clamp(rect.center.y, EdgeMargin, Screen.height - EdgeMargin));
+        rect = new Rect(centre - Vector2.one * EdgeMargin / 2f, Vector2.one * EdgeMargin);
+        return true;
     }
 }

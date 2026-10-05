@@ -635,7 +635,8 @@ public static partial class OfficeSceneUIBuilder
         // The traveller and the wheel's openers (the traveller and the desk intercom).
         TravellerView traveller = BuildTraveller(office, out Clickable travellerZone);
         // Inspection at the desk (the desk-first redesign, item 11): a click on the traveller holds their face against a held value, else opens the wheel.
-        DeskInspect inspect = GetOrAdd<DeskInspect>(EnsureChild(office, "DeskInspect").gameObject);
+        DestroyChildIfPresent(office, "DeskInspect");
+        DeskInspect inspect = EnsureChild(office, "DeskInspect").gameObject.AddComponent<DeskInspect>();
         DeskRulebook rulebook = BuildRulebook(office);
         WirePersistentVoid(travellerZone, "onClick", inspect, nameof(DeskInspect.TravellerClicked));
         var soWheel = new SerializedObject(wheel);
@@ -679,6 +680,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInspect, "calendar", propsRoot.Find("Calendar"));
         SetRef(soInspect, "rulebook", rulebook);
         SetRef(soInspect, "view", view);
+        SetRef(soInspect, "city", cityView);
         soInspect.ApplyModifiedProperties();
         WirePersistentVoid(propsRoot.Find("Stamp").GetComponent<Clickable>(), "onClick", stampTray, nameof(DeskStampTray.ToggleTray));
         var soStamps = new SerializedObject(stampTray);
@@ -1264,19 +1266,23 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The band at the overlay's top the speech bubble and the wheel's ring keep clear (reference px): the office case HUD's strips, the desk view's Back control and gaps (the desk view clamps both to the top).</summary>
     private static readonly float OverlayTopClearance = CaseHudClearance + DeskViewBackSize.y + 8f;
 
-    /// <summary>The city view's edge buttons (reference px).</summary>
+    /// <summary>The city view's edge buttons (reference px) and their height on the screen (a share from the bottom: above the corkboards' calendar and clock).</summary>
     private static readonly Vector2 CityButtonSize = new Vector2(170f, 44f);
+    private const float CityButtonHeight = 0.74f;
 
     /// <summary>The desk's rulebook card (metres, width by depth), its rows and their pitch (metres).</summary>
     private static readonly Vector2 RulebookSize = new Vector2(0.26f, 0.21f);
     private const int RulebookRows = 4;
     private const float RulebookRowPitch = 0.036f;
 
-    /// <summary>A "Hand the papers back" button (reference px), bottom centre.</summary>
-    private static readonly Vector2 HandBackSize = new Vector2(520f, 60f);
+    /// <summary>A "Hand the papers back" button (reference px), top right under the stamps' hint.</summary>
+    private static readonly Vector2 HandBackSize = new Vector2(440f, 60f);
 
-    /// <summary>The stamps' hint plate (reference px), above the hand-back buttons.</summary>
-    private static readonly Vector2 StampHintSize = new Vector2(520f, 44f);
+    /// <summary>The stamps' hint plate (reference px), at the top right over the hand-back buttons (clear of the case HUD's strip and of the papers held low in the hand).</summary>
+    private static readonly Vector2 StampHintSize = new Vector2(440f, 44f);
+
+    /// <summary>Where the stamps' hint plate starts below the overlay's top (reference px): under the case HUD's strip.</summary>
+    private static readonly float StampPlateTop = CaseHudClearance;
 
     /// <summary>A strip at the top centre of the overlay, <paramref name="top"/> px down, with its text (auto-sized, no raycasts).</summary>
     private static TMP_Text TopStrip(Transform parent, string name, Vector2 size, float top, Color background, ThemeRoleId role, int fontSize, Color ink, out Transform strip)
@@ -1364,9 +1370,10 @@ public static partial class OfficeSceneUIBuilder
     /// (Interactable layer, its pivot at its foot) with a block, a handle, a
     /// knob and an ink band shown while inked, and the ink pad (a case and its
     /// felt), each labelled on the base (keyed UI strings, printed flat); and
-    /// on the office overlay the two "Hand the papers back" buttons (bottom
-    /// centre, in the decision roles with their tick and cross, inactive) and
-    /// the step's hint on a plate above them (inactive).
+    /// on the office overlay the step's hint on a plate at the top right,
+    /// under the case HUD's strip (inactive), and under it the two "Hand the
+    /// papers back" buttons (in the decision roles with their tick and cross,
+    /// inactive).
     /// </summary>
     private static DeskStampTray BuildStampTray(Transform overlay, Transform office, DeskConfigSO config)
     {
@@ -1416,9 +1423,9 @@ public static partial class OfficeSceneUIBuilder
         {
             Button b = MakeButton(hand, name, null, Vector2.zero, Vector2.one, colour, role, key);
             var rt = (RectTransform)b.transform;
-            rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0f);
-            rt.pivot = Center;
-            rt.anchoredPosition = new Vector2(0f, HandBackSize.y / 2f + 24f);
+            rt.anchorMin = rt.anchorMax = new Vector2(1f, 1f);
+            rt.pivot = new Vector2(1f, 1f);
+            rt.anchoredPosition = new Vector2(-16f, -StampPlateTop - StampHintSize.y - 8f);
             rt.sizeDelta = HandBackSize;
             BuildDecisionGlyph(b, role, tick);
             b.gameObject.SetActive(false);
@@ -1426,8 +1433,8 @@ public static partial class OfficeSceneUIBuilder
         }
         Button backApproved = Back("HandBackApproved", ThemeRoleId.AcceptButton, new Color(0.2f, 0.5f, 0.24f, 1f), "stamp.handBack.approved", true);
         Button backDenied = Back("HandBackDenied", ThemeRoleId.DenyButton, new Color(0.72f, 0.2f, 0.18f, 1f), "stamp.handBack.denied", false);
-        Transform plate = Panel(hand, "Hint", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, HandBackSize.y + 48f + StampHintSize.y / 2f), StampHintSize, Tooltip, ThemeRoleId.Tooltip);
-        ((RectTransform)plate).pivot = Center;
+        Transform plate = Panel(hand, "Hint", new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-16f, -StampPlateTop), StampHintSize, Tooltip, ThemeRoleId.Tooltip);
+        ((RectTransform)plate).pivot = new Vector2(1f, 1f);
         plate.GetComponent<Image>().raycastTarget = false;
         TMP_Text hint = Text(plate, "Label", "", 22, TextAlignmentOptions.Center, new Vector2(0.03f, 0.06f), new Vector2(0.97f, 0.94f), Ink, ThemeRoleId.Tooltip, fit: true);
         hint.raycastTarget = false;
@@ -1643,7 +1650,7 @@ public static partial class OfficeSceneUIBuilder
             DestroyChildIfPresent(overlay, name);
             Button b = MakeButton(overlay, name, null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.DeskButton, key);
             var rt = (RectTransform)b.transform;
-            rt.anchorMin = rt.anchorMax = new Vector2(left ? 0f : 1f, 0.5f);
+            rt.anchorMin = rt.anchorMax = new Vector2(left ? 0f : 1f, CityButtonHeight);
             rt.pivot = new Vector2(left ? 0f : 1f, 0.5f);
             rt.anchoredPosition = new Vector2(left ? 12f : -12f, 0f);
             rt.sizeDelta = CityButtonSize;

@@ -61,9 +61,11 @@ public sealed class CityView : MonoBehaviour
     private int _liveSince;
     private float _lastEvening = -1f;
     private Renderer _sky;
+    private Renderer _frame;
     private readonly Renderer[] _bodies = new Renderer[Layers.Length];
     private readonly Renderer[] _windows = new Renderer[Layers.Length];
     private MaterialPropertyBlock _block;
+    private float _hideAt = -1f;
     private CinemachineCore.GetBlendOverrideDelegate _blend;
     private CinemachineCore.GetBlendOverrideDelegate _previous;
 
@@ -146,6 +148,11 @@ public sealed class CityView : MonoBehaviour
                 Set(false);
         }
         Light();
+        if (_hideAt >= 0f && Time.unscaledTime >= _hideAt && skyline != null)
+        {
+            skyline.gameObject.SetActive(false);
+            _hideAt = -1f;
+        }
     }
 
     private void Set(bool on)
@@ -159,6 +166,10 @@ public sealed class CityView : MonoBehaviour
             CinemachineCore.GetBlendOverride = _blend;
         }
         cityCamera.Priority = on ? _onPriority : 0;
+        // The city stands out there only while it is looked at (and through the turn back), so it never shows behind the hall's art from the desk.
+        if (skyline != null && on)
+            skyline.gameObject.SetActive(true);
+        _hideAt = on ? -1f : Time.unscaledTime + (config != null ? config.citySeconds : 0f) + 0.1f;
         Show();
         Changed?.Invoke();
     }
@@ -205,7 +216,7 @@ public sealed class CityView : MonoBehaviour
             go.transform.SetParent(skyline, false);
             float viewHeight = 2f * distance * tan;
             float height = viewHeight * heightShare;
-            float width = viewHeight * 3.2f;
+            float width = viewHeight * 2.4f;
             float bottom = -viewHeight / 2f + viewHeight * bottomShare;
             go.transform.localPosition = new Vector3(0f, bottom + height / 2f, distance);
             go.transform.localScale = new Vector3(width, height, 1f);
@@ -231,6 +242,7 @@ public sealed class CityView : MonoBehaviour
             _sky.transform.localScale = new Vector3(scale.y * aspect, scale.y, 1f);
             _lastEvening = -1f;
             Light();
+            skyline.gameObject.SetActive(IsOn);
             return;
         }
         _sky = Quad("Sky", d * 2.4f, 1.3f, -0.15f, SkyTexture());
@@ -241,8 +253,29 @@ public sealed class CityView : MonoBehaviour
             _bodies[i] = Quad("Towers" + (i + 1), distance, 0.75f, -0.05f, Mask(layer.Bodies, layer.Width, layer.Height, "Towers" + (i + 1)));
             _windows[i] = Quad("Windows" + (i + 1), distance * 0.999f, 0.75f, -0.05f, Mask(layer.Windows, layer.Width, layer.Height, "Windows" + (i + 1)));
         }
+        _frame = Quad("WindowFrame", d * 0.12f, 1.4f, -0.2f, FrameTexture());
         _lastEvening = -1f;
         Light();
+        skyline.gameObject.SetActive(IsOn);
+    }
+
+    /// <summary>The window's frame in front of the stand-in city: mullions, a transom and a sill (white; tinted the hall's dark frame colour).</summary>
+    private static Texture2D FrameTexture()
+    {
+        const int w = 256, h = 128;
+        var texture = new Texture2D(w, h, TextureFormat.RGBA32, true) { name = "CityWindowFrame", wrapMode = TextureWrapMode.Clamp };
+        var pixels = new Color32[w * h];
+        for (int y = 0; y < h; y++)
+            for (int x = 0; x < w; x++)
+            {
+                bool mullion = Mathf.Abs(x % 85 - 0) < 3 || x >= w - 3;
+                bool transom = Mathf.Abs(y - (int)(h * 0.78f)) < 2;
+                bool sill = y < (int)(h * 0.1f);
+                pixels[y * w + x] = new Color32(255, 255, 255, (byte)(mullion || transom || sill ? 255 : 0));
+            }
+        texture.SetPixels32(pixels);
+        texture.Apply(true, true);
+        return texture;
     }
 
     /// <summary>Tints the stand-in by the time of day: the sky and the towers from the day's palette to the evening's along the hall's evening curve, far layers paler, the windows lit as the evening comes (faint by day).</summary>
@@ -271,6 +304,7 @@ public sealed class CityView : MonoBehaviour
             window.a = Mathf.Lerp(0.12f, 1f, evening);
             Tint(_windows[i], window);
         }
+        Tint(_frame, Color.Lerp(config.cityNearDay * 0.55f, config.cityNearEvening * 0.7f, evening) + new Color(0f, 0f, 0f, 1f));
     }
 
     private void Tint(Renderer r, Color colour)

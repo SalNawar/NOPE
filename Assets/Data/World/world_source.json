@@ -22994,13 +22994,13 @@
       },
       {
         "key": "city.look",
-        "text": "◀ City (A)",
+        "text": "< City (A)",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "city.back",
-        "text": "Desk (D) ▶",
+        "text": "Desk (D) >",
         "gloss": "None",
         "tier": "Full"
       },

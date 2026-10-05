@@ -21,9 +21,9 @@ public class DeskViewPoseTests
         Assert.AreEqual(0.7071f, back, Eps);
         Assert.AreEqual(0.7071f, up, Eps);
 
-        (back, up) = DeskViewPose.Offset(Tuning(80f, 0.95f));
-        Assert.AreEqual(0.95f * 0.17365f, back, Eps, "80 degrees: nearly straight above");
-        Assert.AreEqual(0.95f * 0.98481f, up, Eps);
+        (back, up) = DeskViewPose.Offset(Tuning(80f, 0.62f));
+        Assert.AreEqual(0.62f * 0.17365f, back, Eps, "80 degrees: nearly straight above");
+        Assert.AreEqual(0.62f * 0.98481f, up, Eps);
         Assert.AreEqual(80f, DeskViewPose.Pitch(Tuning(80f, 1f)), Eps);
     }
 
