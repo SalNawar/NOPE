@@ -4,7 +4,7 @@ Shader "NOPE/Hall Contact Shadow"
  SubShader
  {
   Tags {"Queue"="Transparent" "RenderType"="Transparent" "RenderPipeline"="UniversalPipeline"}
-  Cull Off ZWrite Off Blend SrcAlpha OneMinusSrcAlpha
+  Cull Off ZWrite Off Blend DstColor Zero
   HLSLINCLUDE
   #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
   float _Strength;
@@ -12,7 +12,7 @@ Shader "NOPE/Hall Contact Shadow"
   struct V {float4 position:SV_POSITION;float2 uv:TEXCOORD0;};
   V vert(A v) {V o;o.position=TransformObjectToHClip(v.position.xyz);o.uv=v.uv;return o;}
   half4 frag(V v):SV_Target
-  {float r=length(v.uv*2-1);return half4(.13,.15,.18,(1-smoothstep(.15,1,r))*_Strength);}
+  {float r=length(v.uv*2-1);float shade=(1-smoothstep(.15,1,r))*_Strength;return half4((1-shade).xxx,1);}
   ENDHLSL
   Pass {Tags {"LightMode"="Universal2D"} HLSLPROGRAM
    #pragma vertex vert
@@ -26,3 +26,4 @@ Shader "NOPE/Hall Contact Shadow"
   }
  }
 }
+

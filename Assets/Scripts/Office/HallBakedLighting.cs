@@ -32,8 +32,12 @@ public sealed class HallBakedLighting : MonoBehaviour
         {
             art.daylight.color=Blend(weights,new Color(1,.88f,.7f),new Color(1,.97f,.91f),new Color(1,.66f,.4f),new Color(.47f,.58f,.87f));
             art.daylight.intensity=weights.x*.58f+weights.y*.7f+weights.z*.38f+weights.w*.12f;
+            var direction=new Vector3(1,-.55f,.65f)*weights.x+new Vector3(1,-1.5f,.08f)*weights.y+new Vector3(1,-.45f,-.65f)*weights.z+new Vector3(1,-.8f,.15f)*weights.w;
+            art.daylight.transform.rotation=Quaternion.LookRotation(direction.normalized,Vector3.up);
+            art.daylight.shadows=LightShadows.Soft;
         }
     }
 }
+
 
 

@@ -125,8 +125,9 @@ public static class HallFourStateBaker
             {
                 var color=new Vector3(colors[l].r,colors[l].g,colors[l].b);
                 float level=isFixture[l]?fixtureLevels[state]:1;
+                if(lamps[l].GetComponent<HallMountedFixture>()!=null)level*=2;
                 Pool(points[l],color,level,false,isFixture[l]);
-                if(isFixture[l])Pool(new Vector4(points[l].x,.2f+(.95f-points[l].y)*1.45f,.11f,.17f),color,level,true,true);
+                if(isFixture[l]){var mounted=lamps[l].GetComponent<HallMountedFixture>();Pool(mounted!=null?mounted.floorPool:new Vector4(points[l].x,.2f+(.95f-points[l].y)*1.45f,.11f,.17f),color,level,true,true);}
             }
             byte Byte(float value)=>(byte)Mathf.RoundToInt(Mathf.Clamp01(value)*255);
             for(int pass=0;pass<2;pass++)
@@ -203,6 +204,8 @@ public static class HallFourStateBaker
         EditorApplication.update+=Tick;
     }
 }
+
+
 
 
 

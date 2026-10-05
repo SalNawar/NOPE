@@ -53,7 +53,7 @@ public static class HallGestureReview
         }
         // Sun enters through the left windows. Shadows continue rightwards on
         // their own painted receiver plane, never over the objects themselves.
-        Cast(625,479,116,145,65,.85f);Cast(1422,520,116,165,60,.85f);
+        Cast(625,479,116,145,65,.85f); // No invented pier before the detention door.
         Cast(1033,626,300,145,57);Cast(866,428,135,72,29);Cast(1117,432,128,74,29);
         Cast(1855,653,180,115,34,.8f);Cast(1988,648,62,95,28,.8f);
         Cast(1670,604,65,70,31,.8f);Cast(1259,379,70,47,20,.7f);Cast(999,361,104,48,18,.7f);
@@ -73,3 +73,4 @@ public static class HallGestureReview
         Debug.Log($"Gesture review: original 1.6m distance, undeformed character art; {vertices.Count/4} visible receiver-masked cast shadows and corrected shadow sorting.");
     }
 }
+
