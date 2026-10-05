@@ -1,9 +1,11 @@
 using System;
 
 /// <summary>
-/// The balance simulation's careful carer at Home (the Home pet spec PS9;
-/// Tools > TimeDesk > Balance): every run pays the pet's bills this way each
-/// night, so the figures show what a careful clerk's pet costs. Food first,
+/// The careful carer at Home (the Home pet spec PS9): the balance
+/// simulation (Tools > TimeDesk > Balance) pays every run's bills this way
+/// each night, so the figures show what a careful clerk's pet costs; the
+/// game starts the bills step with it (no TV) when its default choice is more
+/// than the wallet. Food first,
 /// then the heating with its electricity, then medicine when the pet is
 /// unwell, each while the wallet covers it; the TV only when the pet is bored
 /// and the wallet keeps the reserve after it; a toy is played with when one

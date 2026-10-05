@@ -89,6 +89,8 @@ public sealed class HomeManager : MonoBehaviour
         // The break-in and the fixed bill, deterministically seeded by the day so it's stable on reload.
         _bill = DayCycle.OpenHome(_world, _lib, _config, _daySeed);
         _care = PetRules.DefaultCare(Pet.Needs);
+        if (HomeEconomy.BillsTotal(_world, _lib, _care) > Mathf.Max(0, _world.money))
+            _care = AffordableCare();
         _slotRandom = new SeededRandom(Seeds.ForSlot(_daySeed));
         _household = _bill.total;
         RecordStatement();
@@ -187,6 +189,10 @@ public sealed class HomeManager : MonoBehaviour
         return string.Join(separator, lines);
     }
 
+    /// <summary>What the wallet covers, in the careful carer's order (PetPolicy: food, the heating with its power, medicine when unwell; never the TV): the starting choice when the default is more than the wallet, so Pay is never offered beyond it.</summary>
+    private PetCare AffordableCare() =>
+        PetPolicy.Care(Pet.Needs, _world.money, bill => HomeEconomy.BillPrice(_world, _lib, bill), int.MaxValue, false);
+
     /// <summary>A bill's row clicked: paid or skipped (electricity going with the heating and the TV, PetCare.Toggle), then the panel again.</summary>
     private void HandleToggleBill(HomeBill bill)
     {
@@ -205,7 +211,7 @@ public sealed class HomeManager : MonoBehaviour
         if (paid < 0)
         {
             // Unwired panels pay what the wallet covers; a wired panel never offers Pay it cannot cover.
-            _care = PetPolicy.Care(Pet.Needs, _world.money, bill => HomeEconomy.BillPrice(_world, _lib, bill), int.MaxValue, false);
+            _care = AffordableCare();
             paid = Mathf.Max(0, HomeEconomy.PayBills(_world, _lib, _care));
         }
         _paid = true;

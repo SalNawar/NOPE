@@ -164,7 +164,7 @@ public sealed class PetStandIn : MonoBehaviour
         float headDrop = sad ? -18f : 0f;
 
         Part(_figure, "Shadow", new Vector2(0f, -140f), new Vector2(300f, 46f), Disc(), new Color(0f, 0f, 0f, 0.18f));
-        _tail = Part(_figure, "Tail", dog ? new Vector2(115f, -55f) : new Vector2(120f, -40f), dog ? new Vector2(34f, 110f) : new Vector2(26f, 170f), Disc(), dark).rectTransform;
+        _tail = Part(_figure, "Tail", dog ? new Vector2(115f, -55f) : new Vector2(95f, -60f), dog ? new Vector2(34f, 110f) : new Vector2(24f, 140f), Disc(), dark).rectTransform;
         _tail.pivot = new Vector2(0.5f, 0f);
         Part(_figure, "Body", new Vector2(10f, -70f), new Vector2(dog ? 250f : 220f, dog ? 150f : 130f), Disc(), fur);
         Part(_figure, "Chest", new Vector2(-60f, -80f), new Vector2(90f, 90f), Disc(), light);
@@ -198,11 +198,11 @@ public sealed class PetStandIn : MonoBehaviour
             Part(_figure, "Eye", new Vector2(x, eyeY), new Vector2(18f, eyeHeight), Disc(), ink);
 
         if (_look == PetLook.Sick)
-            Part(_figure, "Blanket", new Vector2(40f, -95f), new Vector2(210f, 90f), null, new Color(0.36f, 0.5f, 0.72f, 1f));
+            Part(_figure, "Blanket", new Vector2(35f, -95f), new Vector2(240f, 105f), Disc(), new Color(0.36f, 0.5f, 0.72f, 1f));
     }
 
     /// <summary>The tail's resting angle for how it looks (down when sad or sick).</summary>
-    private float TailAngle() => _look == PetLook.Sad || _look == PetLook.Sick ? -120f : _kind == PetKind.Dog ? -35f : -15f;
+    private float TailAngle() => _look == PetLook.Sad || _look == PetLook.Sick ? -150f : _kind == PetKind.Dog ? -35f : -15f;
 
     /// <summary>A child image at <paramref name="centre"/> (design box, y up) of <paramref name="size"/>, its sprite (null: a plain rectangle) and colour; no raycasts.</summary>
     private Image Part(Transform parent, string name, Vector2 centre, Vector2 size, Sprite sprite, Color colour)

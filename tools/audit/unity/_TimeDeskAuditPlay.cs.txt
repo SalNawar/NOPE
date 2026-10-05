@@ -1721,7 +1721,9 @@ public static class _TimeDeskAuditPlay
             Call(manager, "HandleToggleBill", HomeBill.Tv);
         var care = (PetCare)Field(manager, "_care");
         Line($"   care: food {care.Food} heating {care.Heating} electricity {care.Electricity} tv {care.Tv} medicine {care.Medicine}");
-        Check(care.Food && care.Warm, $"night {day}: the bills step starts with the essentials chosen");
+        int essentials = HomeEconomy.EssentialsPrice(w, RunManager.Instance.Library);
+        Check(w.money >= essentials ? care.Food && care.Warm : HomeEconomy.BillsTotal(w, RunManager.Instance.Library, care) <= System.Math.Max(0, w.money),
+              $"night {day}: the bills step starts with the essentials chosen, or what the wallet covers ({w.money} cr, essentials {essentials})");
         if (ShotsOn && First("bills"))
             yield return Shots($"bills_night{day}");
         int before = w.money;
