@@ -76,6 +76,10 @@ public static class _TimeDeskAuditStatic
         try
         {
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            // The committed scenes are dumped first, before Generate World: a scene opened after Generate World
+            // has its canvases laid out at once (a layout group's rects then read laid out), while a scene opened
+            // without it, and a fresh rebuild, hold the rects as saved (the final pass, round 5).
+            Dictionary<string, List<string>> committed = full ? DumpCommitted() : null;
             var lib = AssetDatabase.LoadAssetAtPath<ContentLibrarySO>(LibraryPath);
             WriteCases(lib, "cases.txt", "cases_log.txt");
             if (full)
@@ -83,7 +87,7 @@ public static class _TimeDeskAuditStatic
                 World();
                 lib = AssetDatabase.LoadAssetAtPath<ContentLibrarySO>(LibraryPath);
                 WriteCases(lib, "cases_after_generate.txt", "cases_after_generate_log.txt");
-                Scenes();
+                Scenes(committed);
             }
         }
         catch (Exception e)
@@ -262,14 +266,9 @@ public static class _TimeDeskAuditStatic
     // Scenes
     // =====================================================================
 
-    private static void Scenes()
+    /// <summary>The semantic dumps of the committed OfficeGameplay, HomeScene and TitleScene as they are (each also written to the output folder).</summary>
+    private static Dictionary<string, List<string>> DumpCommitted()
     {
-        Dictionary<string, string> artHashes = ArtScenes.Where(File.Exists).ToDictionary(p => p, FileHash);
-        var hashes = new List<string>();
-        foreach (string path in new[] { GameplayScene, HomeScene, TitleScene }.Concat(ArtScenes))
-            hashes.Add($"{FileHash(path)} {path}");
-
-        // The committed scenes as they are.
         var committed = new Dictionary<string, List<string>>();
         foreach (string path in new[] { GameplayScene, HomeScene, TitleScene })
         {
@@ -277,13 +276,24 @@ public static class _TimeDeskAuditStatic
             committed[path] = DumpScene();
             File.WriteAllLines(Path.Combine(_out, $"scene_{Path.GetFileNameWithoutExtension(path)}_committed.txt"), committed[path]);
         }
+        EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        return committed;
+    }
 
-        // The builders' rebuilds (the files are restored from git afterwards, outside Unity).
+    private static void Scenes(Dictionary<string, List<string>> committed)
+    {
+        Dictionary<string, string> artHashes = ArtScenes.Where(File.Exists).ToDictionary(p => p, FileHash);
+        var hashes = new List<string>();
+        foreach (string path in new[] { GameplayScene, HomeScene, TitleScene }.Concat(ArtScenes))
+            hashes.Add($"{FileHash(path)} {path}");
+
+        // The builders' rebuilds, each dumped as saved (reopened from disk), as the committed scenes are (the files
+        // are restored from git afterwards, outside Unity).
         EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         List<string> b1 = RunMenu(BuildOffice);
-        List<string> office1 = DumpScene();
+        List<string> office1 = DumpFromDisk(GameplayScene);
         List<string> b2 = RunMenu(BuildOffice);
-        List<string> office2 = DumpScene();
+        List<string> office2 = DumpFromDisk(GameplayScene);
         File.WriteAllLines(Path.Combine(_out, "scene_OfficeGameplay_rebuilt.txt"), office1);
         File.WriteAllLines(Path.Combine(_out, "scene_OfficeGameplay_rebuilt2.txt"), office2);
         File.WriteAllLines(Path.Combine(_out, "build_office_log.txt"), b1.Concat(new[] { "--- second build ---" }).Concat(b2).Where(l => !l.StartsWith("[Log]")));
@@ -343,6 +353,18 @@ public static class _TimeDeskAuditStatic
         var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
         log = RunMenu(menu);
         EditorSceneManager.SaveScene(scene);
+        return DumpFromDisk(path);
+    }
+
+    /// <summary>
+    /// The dump of a scene file as saved: closed and reopened, so the dump does not see what the editor changed in
+    /// memory after the save (the canvases' layout, which can run once a builder saves its assets: a layout group's
+    /// rects, which Unity saves as zero when driven, and the scroll views' content positions; the final pass, round 5).
+    /// </summary>
+    private static List<string> DumpFromDisk(string path)
+    {
+        EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
         return DumpScene();
     }
 
