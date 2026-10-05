@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216f58e381e1445588efbd033278b8d9, type: 3}
+  m_Name: Dialog_dlg_hatshepsut
+  m_EditorClassIdentifier: Assembly-CSharp::DialogSO
+  dialog:
+    id: dlg_hatshepsut
+    label: Ask about the temple >
+    oneShot: 1
+    nodes:
+    - id: start
+      lines:
+      - id: dlg_hatshepsut.start.1
+        speaker: 1
+        text: My temple at Deir el-Bahari rises in three terraces. Myrrh trees from
+          Punt grow on every one.
+        expression: happy
+      choices:
+      - id: more
+        label: And after you?
+        lines: []
+        next: worried
+        effect: 
+      - id: bye
+        label: Safe travels.
+        lines: []
+        next: 
+        effect: 
+    - id: worried
+      lines:
+      - id: dlg_hatshepsut.worried.1
+        speaker: 1
+        text: My stepson may chisel my name off every wall. Stamp me home before
+          he gets ideas.
+        expression: worried
+      choices:
+      - id: done
+        label: Next!
+        lines: []
+        next: 
+        effect: 
+  conditions: []
