@@ -39,6 +39,12 @@ using UnityEngine.UI;
 /// and ScanFinished says which pass it was, for the PC to mark the scanned
 /// papers or say the paper was analysed already. The
 /// placeholder scanner shows its tray and lamp for the owned upgrades (SC6).
+/// The desk-first polish (2026-10-05): a tilt into the desk view by the
+/// player brings the paper read last (else the passport) up to reading size
+/// (ReadFocus); a stamp picked up puts the held papers back down to be
+/// stamped; the stamp tray, out, keeps papers off its footprint as the
+/// scanner does (ScannerClearance); the stamped passport dropped on the
+/// traveller's side hands the papers back (DeskStampTray.OnTravellersSide).
 /// </summary>
 public sealed class DeskController : MonoBehaviour
 {
@@ -108,6 +114,12 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The paper being dragged, or -1.</summary>
     private int _dragged = -1;
 
+    /// <summary>The paper lifted into the hand last this case, or -1: a tilt into the desk view brings it back up (ReadFocus).</summary>
+    private int _lastRead = -1;
+
+    /// <summary>Whether the stamp tray was out when the stamps last changed (it sliding out moves the papers off its footprint).</summary>
+    private bool _trayWasOut;
+
     /// <summary>The office view's level right and forward on the desk (SetScannerView): the frame ScannerClearance works in.</summary>
     private Vector3 _viewRight = Vector3.right, _viewForward = Vector3.forward;
 
@@ -143,7 +155,66 @@ public sealed class DeskController : MonoBehaviour
             deskCatcher.onClick.AddListener(() => PutBackAll(false));
             deskCatcher.gameObject.SetActive(false);
         }
+        if (stamps != null)
+            stamps.Changed += HandleStampsChanged;
         RefreshHint();
+    }
+
+    private void OnDestroy()
+    {
+        if (stamps != null)
+            stamps.Changed -= HandleStampsChanged;
+    }
+
+    /// <summary>
+    /// The player tilted into the desk view to read (DeskView.ReadingTilt via
+    /// BoothCoordinator; the desk-first polish, 2026-10-05: "bring the
+    /// inspected paper to a comfortable reading size"): with nothing in the
+    /// hand and the papers taking input, the paper read last this case (else
+    /// the first paper handed over, the passport) rises into the hand, where
+    /// the desk view holds it at reading size (PaperExaminer, ExamineLayout.DeskSlot).
+    /// </summary>
+    public void ReadFocus()
+    {
+        if (_state == null || !_live || HeldCount > 0)
+            return;
+        if (_lastRead >= 0 && Readable(_lastRead))
+        {
+            Examine(_papers[_lastRead]);
+            return;
+        }
+        foreach (int i in _state.ArrivalIndices)
+        {
+            if (!Readable(i))
+                continue;
+            Examine(_papers[i]);
+            return;
+        }
+    }
+
+    /// <summary>True when paper <paramref name="i"/> lies on the desk and can be lifted: handed over, not held, not sliding, not scanning.</summary>
+    private bool Readable(int i) =>
+        i >= 0 && i < _papers.Count && _papers[i] != null && !_papers[i].IsSliding && _state.CanDrag(i) && !_state.IsHeld(i);
+
+    /// <summary>The stamps changed: a stamp picked up puts the held papers back down (a stamp presses papers lying on the desk), and the tray sliding out moves the papers lying on its footprint off it.</summary>
+    private void HandleStampsChanged()
+    {
+        if (stamps.IsHolding && HeldCount > 0)
+            PutBackAll(false);
+        bool trayOut = stamps.TrayOut;
+        if (trayOut == _trayWasOut)
+            return;
+        _trayWasOut = trayOut;
+        if (!trayOut)
+            return;
+        foreach (DeskDocument paper in _papers)
+        {
+            if (paper == null || _state == null || _state.IsHeld(paper.Index) || !_state.CanDrag(paper.Index) || paper.Index == _dragged)
+                continue;
+            Vector3 clear = ClearOfBlockers(paper, paper.transform.position);
+            if ((clear - paper.transform.position).sqrMagnitude > 1e-8f)
+                Slide(paper, clear);
+        }
     }
 
     /// <summary>Advances a running scan (a finished paper slides back to where it was picked up) or feeds the idle scanner its next queued paper (the Auto-Feed Scanner); Escape puts every held paper back while that is allowed.</summary>
@@ -166,7 +237,7 @@ public sealed class DeskController : MonoBehaviour
             return;
 
         DeskDocument paper = _papers[done];
-        Slide(paper, ClearOfScanner(paper, paper.Drag.PickUpPosition));
+        Slide(paper, ClearOfBlockers(paper, paper.Drag.PickUpPosition));
         scanner.Pulse();
         _scansToday++;
         RefreshHint();
@@ -236,6 +307,7 @@ public sealed class DeskController : MonoBehaviour
         _stack.Clear();
         _handedOver = 0;
         _dragged = -1;
+        _lastRead = -1;
 
         int passport = -1;
         foreach (int i in _state.ArrivalIndices)
@@ -452,7 +524,7 @@ public sealed class DeskController : MonoBehaviour
             Release(oldest, false);
             HoldsChanged?.Invoke();
         }
-        return ClearOfScanner(paper, points[Mathf.Max(0, choice.Spot)]);
+        return ClearOfBlockers(paper, points[Mathf.Max(0, choice.Spot)]);
     }
 
     /// <summary>The corners of a paper lying with its root at <paramref name="at"/> (every paper lies as the template does: the new paper's sheet gives the offsets; its size is its look's, DeskDocument.Size).</summary>
@@ -529,6 +601,7 @@ public sealed class DeskController : MonoBehaviour
         paper.SetExamined(true);
         paper.GetComponent<DeskDraggable>().GrabAtCentre = true;
         examiner.Hold(paper, hold.Slot);
+        _lastRead = paper.Index;
         ApplyLive(paper);
         _readsToday++;
         RefreshHint();
@@ -597,15 +670,15 @@ public sealed class DeskController : MonoBehaviour
                 Slide(paper, scanner.BedPoint);
                 break;
             case DropOutcome.Refused:
-                Slide(paper, ClearOfScanner(paper, drag.PickUpPosition));
+                Slide(paper, ClearOfBlockers(paper, drag.PickUpPosition));
                 break;
             default:
-                if (stamps != null && stamps.CanHandBack(paper.Index) && OnTravellersSide(released))
+                if (stamps != null && stamps.CanHandBack(paper.Index) && stamps.OnTravellersSide(released))
                 {
                     stamps.HandBack();
                     return;
                 }
-                Vector3 clear = ClearOfScanner(paper, paper.transform.position);
+                Vector3 clear = ClearOfBlockers(paper, paper.transform.position);
                 if ((clear - paper.transform.position).sqrMagnitude > 1e-8f)
                     Slide(paper, clear);
                 break;
@@ -629,60 +702,57 @@ public sealed class DeskController : MonoBehaviour
         if (paper == null || _state == null || !_state.CanDrag(paper.Index) || _state.IsHeld(paper.Index))
             return;
 
-        Slide(paper, ClearOfScanner(paper, drag.PickUpPosition));
+        Slide(paper, ClearOfBlockers(paper, drag.PickUpPosition));
         _stack.BringToFront(paper.Index);
         ApplyStack();
     }
 
-    /// <summary>True when <paramref name="point"/> lies in the strip of the desk's clamp area at its far edge along the office view (DeskConfigSO.handBackDepth): the traveller's side, where the stamped passport hands the papers back.</summary>
-    private bool OnTravellersSide(Vector3 point)
-    {
-        if (surface == null || config == null)
-            return false;
-        Vector3 origin = surface.transform.position;
-        float far = float.MinValue;
-        foreach (Vector3 corner in surface.Corners())
-            far = Mathf.Max(far, Vector3.Dot(corner - origin, _viewForward));
-        return Vector3.Dot(point - origin, _viewForward) >= far - config.handBackDepth;
-    }
-
     /// <summary>
     /// Where <paramref name="paper"/>, about to lie with its root at
-    /// <paramref name="at"/>, lies instead so the scanner never hides it
-    /// (ScannerClearance.Clear, in the office view's frame on the desk: the
-    /// scanner's footprint and the shadow its body casts away from the
-    /// camera, the paper moved the shortest way out to the left, right or
-    /// front, or to the eject spot); <paramref name="at"/> itself while the
-    /// scanner is off the desk.
+    /// <paramref name="at"/>, lies instead so nothing on the desk hides it
+    /// (ScannerClearance.Clear, in the office view's frame on the desk): the
+    /// scanner (its footprint and the shadow its body casts away from the
+    /// camera) while it is on the desk, then the stamp tray's footprint while
+    /// it is out (no shadow: it is low); each moves the paper the shortest way
+    /// out to the left, right or front, or to the eject spot. <paramref name="at"/>
+    /// itself when nothing is in the way.
     /// </summary>
-    private Vector3 ClearOfScanner(DeskDocument paper, Vector3 at)
+    private Vector3 ClearOfBlockers(DeskDocument paper, Vector3 at)
     {
-        if (scanner == null || !scanner.gameObject.activeInHierarchy || surface == null)
+        if (surface == null)
             return at;
+        if (scanner != null && scanner.gameObject.activeInHierarchy)
+            at = ClearOf(paper, at, scanner.Corners(), _scannerShadow);
+        if (stamps != null && stamps.TryFootprint(out Vector3[] tray))
+            at = ClearOf(paper, at, tray, 0f);
+        return at;
+    }
 
-        Vector3 origin = surface.transform.position;
-        DeskRect Bounds(IEnumerable<Vector3> corners)
-        {
-            float minX = float.MaxValue, minY = float.MaxValue, maxX = float.MinValue, maxY = float.MinValue;
-            foreach (Vector3 c in corners)
-            {
-                float x = Vector3.Dot(c - origin, _viewRight), y = Vector3.Dot(c - origin, _viewForward);
-                minX = Mathf.Min(minX, x);
-                maxX = Mathf.Max(maxX, x);
-                minY = Mathf.Min(minY, y);
-                maxY = Mathf.Max(maxY, y);
-            }
-            return new DeskRect((minX + maxX) / 2f, (minY + maxY) / 2f, maxX - minX, maxY - minY);
-        }
-
-        DeskRect sheet = Bounds(Footprint(paper, at));
-        DeskRect machine = Bounds(scanner.Corners());
-        DeskRect area = Bounds(surface.Corners());
-        (float x, float y) = ScannerClearance.Clear(sheet, machine, _scannerShadow, area);
+    /// <summary>One blocker (its corners on the desk, its <paramref name="shadow"/> behind it) cleared: where the paper lies instead (ScannerClearance.Clear), kept on the desk at its height.</summary>
+    private Vector3 ClearOf(DeskDocument paper, Vector3 at, IEnumerable<Vector3> blocker, float shadow)
+    {
+        DeskRect sheet = InViewFrame(Footprint(paper, at));
+        (float x, float y) = ScannerClearance.Clear(sheet, InViewFrame(blocker), shadow, InViewFrame(surface.Corners()));
         if (Mathf.Approximately(x, sheet.CentreX) && Mathf.Approximately(y, sheet.CentreY))
             return at;
         Vector3 moved = at + _viewRight * (x - sheet.CentreX) + _viewForward * (y - sheet.CentreY);
         return surface.Clamp(moved) + Vector3.up * (at.y - surface.transform.position.y);
+    }
+
+    /// <summary>The rectangle enclosing <paramref name="corners"/> in the office view's frame on the desk (x right, y away from the camera, from the desk's centre).</summary>
+    private DeskRect InViewFrame(IEnumerable<Vector3> corners)
+    {
+        Vector3 origin = surface.transform.position;
+        float minX = float.MaxValue, minY = float.MaxValue, maxX = float.MinValue, maxY = float.MinValue;
+        foreach (Vector3 c in corners)
+        {
+            float x = Vector3.Dot(c - origin, _viewRight), y = Vector3.Dot(c - origin, _viewForward);
+            minX = Mathf.Min(minX, x);
+            maxX = Mathf.Max(maxX, x);
+            minY = Mathf.Min(minY, y);
+            maxY = Mathf.Max(maxY, y);
+        }
+        return new DeskRect((minX + maxX) / 2f, (minY + maxY) / 2f, maxX - minX, maxY - minY);
     }
 
     /// <summary>Slides a paper; it is inert while sliding, and its liveness is re-applied when it lands.</summary>

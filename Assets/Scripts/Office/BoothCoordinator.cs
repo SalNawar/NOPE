@@ -98,7 +98,10 @@ public sealed class BoothCoordinator : MonoBehaviour
             desk.HoldsChanged += Apply;
         }
         if (deskView != null)
+        {
             deskView.Changed += Apply;
+            deskView.ReadingTilt += HandleReadingTilt;
+        }
         if (cityView != null)
             cityView.Changed += Apply;
     }
@@ -119,7 +122,10 @@ public sealed class BoothCoordinator : MonoBehaviour
             desk.HoldsChanged -= Apply;
         }
         if (deskView != null)
+        {
             deskView.Changed -= Apply;
+            deskView.ReadingTilt -= HandleReadingTilt;
+        }
         if (cityView != null)
             cityView.Changed -= Apply;
     }
@@ -163,6 +169,13 @@ public sealed class BoothCoordinator : MonoBehaviour
     }
 
     private void HandleView(OfficeView _) => Apply();
+
+    /// <summary>The player tilted the desk view in to read: the paper being read comes up to reading size (DeskController.ReadFocus; the desk-first polish).</summary>
+    private void HandleReadingTilt()
+    {
+        if (desk != null)
+            desk.ReadFocus();
+    }
 
     private void HandleWheel()
     {
@@ -235,7 +248,7 @@ public sealed class BoothCoordinator : MonoBehaviour
             deskView.SetScrollInLive(input.DeskViewScrollInLive);
         }
         if (examiner != null)
-            examiner.SetMode(view != null && view.Current == OfficeView.MonitorFocus, wheel != null && wheel.IsOpen);
+            examiner.SetMode(view != null && view.Current == OfficeView.MonitorFocus, wheel != null && wheel.IsOpen, deskView != null && deskView.IsOn);
         if (travellerHitZone != null)
             travellerHitZone.Interactable = input.TravellerLive;
         if (wheelHint != null)

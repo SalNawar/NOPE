@@ -6,7 +6,8 @@ using UnityEngine;
 /// Poses the papers held in the hand (piece 10 X1, X2, X9, X10): each held
 /// paper's Sheet leaves the desk and turns to face the office camera in its
 /// examine slot (ExamineLayout.OfficeSlot, low beside the screen's centre),
-/// dipped under the open wheel, or beside the open PC frame
+/// dipped under the open wheel, at reading size in the desk view
+/// (ExamineLayout.DeskSlot: the desk-first polish), or beside the open PC frame
 /// (ExamineLayout.InRegion) with the frame's examine hole sized over it so its
 /// rows stay clickable; where the region cannot hold it, it waits behind the
 /// frame with no hole (the frame's surround takes the click). The pose is in
@@ -55,6 +56,7 @@ public sealed class PaperExaminer : MonoBehaviour
     private Camera _camera;
     private bool _frameOpen;
     private bool _dipped;
+    private bool _deskView;
     private bool _holeOpen;
 
     // What the poses were computed for (a change re-poses).
@@ -95,12 +97,14 @@ public sealed class PaperExaminer : MonoBehaviour
         return new ScreenRect(xMin, yMin, xMax, yMax);
     }
 
-    /// <summary>Where a held paper can sit in the office, in pixels: its office slot raised and dipped under the wheel, together (a paper on the desk hidden there now or once the wheel closes); empty for a paper that is not held, or on its way back.</summary>
+    /// <summary>Where a held paper can sit in the office, in pixels: its office slot raised and dipped under the wheel, together (a paper on the desk hidden there now or once the wheel closes), or its reading place in the desk view; empty for a paper that is not held, or on its way back.</summary>
     public ScreenRect HeldPlaces(DeskDocument paper)
     {
         Entry entry = Find(paper);
         if (entry == null || entry.Releasing || config == null)
             return default;
+        if (_deskView && !_frameOpen)
+            return BoxOf(entry).InPixels(PaperAspect, Screen.width, Screen.height);
 
         bool right = entry.Slot == ExamineSlot.Right;
         return ScreenRect.Enclosing(ExamineLayout.OfficeSlot(right, PaperAspect, ScreenAspect, false, config.examine).InPixels(PaperAspect, Screen.width, Screen.height),
@@ -157,14 +161,15 @@ public sealed class PaperExaminer : MonoBehaviour
         RetargetHeld();
     }
 
-    /// <summary>Where held papers sit: beside the open frame (<paramref name="frameOpen"/>), else in their office slots, dipped under the open wheel (<paramref name="dipped"/>).</summary>
-    public void SetMode(bool frameOpen, bool dipped)
+    /// <summary>Where held papers sit: beside the open frame (<paramref name="frameOpen"/>), else at reading size in the desk view (<paramref name="deskView"/>), else in their office slots, dipped under the open wheel (<paramref name="dipped"/>).</summary>
+    public void SetMode(bool frameOpen, bool dipped, bool deskView)
     {
-        if (frameOpen == _frameOpen && dipped == _dipped)
+        if (frameOpen == _frameOpen && dipped == _dipped && deskView == _deskView)
             return;
 
         _frameOpen = frameOpen;
         _dipped = dipped;
+        _deskView = deskView;
         RetargetHeld();
     }
 
@@ -305,10 +310,10 @@ public sealed class PaperExaminer : MonoBehaviour
         return (position, rotation, Vector3.one * (height / Mathf.Max(paperHeight, paperWidth / paperAspect) / parentScale));
     }
 
-    /// <summary>A held paper's box on the screen: beside the open frame when the papers fit there, else its office slot (dipped under the wheel).</summary>
+    /// <summary>A held paper's box on the screen: beside the open frame when the papers fit there, else its reading place in the desk view, else its office slot (dipped under the wheel).</summary>
     private ScreenBox BoxOf(Entry entry) => BoxOf(entry, out _);
 
-    /// <summary>A held paper's box on the screen, and whether it sits beside the open frame (<paramref name="beside"/>) or in its office slot.</summary>
+    /// <summary>A held paper's box on the screen, and whether it sits beside the open frame (<paramref name="beside"/>), or else at reading size in the desk view or in its office slot.</summary>
     private ScreenBox BoxOf(Entry entry, out bool beside)
     {
         beside = false;
@@ -323,6 +328,11 @@ public sealed class PaperExaminer : MonoBehaviour
             }
         }
 
+        if (_deskView && !_frameOpen)
+        {
+            (int index, int count) = PlaceAmongHeld(entry);
+            return ExamineLayout.DeskSlot(index, count, PaperAspect, ScreenAspect, config.examine);
+        }
         return ExamineLayout.OfficeSlot(entry.Slot == ExamineSlot.Right, PaperAspect, ScreenAspect, _dipped, config.examine);
     }
 

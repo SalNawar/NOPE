@@ -24695,7 +24695,7 @@
       },
       {
         "key": "compare.pair",
-        "text": "{0}    {1}:  {2}    vs    {3}:  {4}",
+        "text": "{0}  ·  {2}  vs  {4}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25194,6 +25194,18 @@
       {
         "key": "stamp.hint.dry",
         "text": "No ink: press the stamp on the ink pad first.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.hint.handBack",
+        "text": "Slide the stamped passport onto HAND BACK, by the traveller.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.zone.handBack",
+        "text": "▲  HAND BACK  ▲",
         "gloss": "None",
         "tier": "Full"
       },

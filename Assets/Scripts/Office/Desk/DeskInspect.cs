@@ -18,8 +18,10 @@ using UnityEngine;
 /// placed each frame on the values' places on the screen), dashed from a held
 /// value to the pointer; it shows while the PC frame is closed and both
 /// values are in the office (an end off the screen, the calendar or the face
-/// seen from the desk view, waits at the screen's edge toward it; a value only
-/// on the PC draws nothing here). A logged
+/// seen from the desk view, waits at the screen's edge toward it with an arrow
+/// pointing the way; a value only on the PC draws nothing here). While the line
+/// labels a pair, the office compare strip does not repeat it
+/// (CompareController.SetStripCovered; the desk-first polish). A logged
 /// difference marks its papers' boxes (FindingMarks) for the rest of the
 /// case. Scanning stays optional: a scanned paper's copy, search and links
 /// reach the PC (CaseDocumentsPresenter). InvestigationUIController hands it
@@ -62,6 +64,12 @@ public sealed class DeskInspect : MonoBehaviour
 
     /// <summary>The second end.</summary>
     [SerializeField] private RectTransform endB;
+
+    /// <summary>The arrow at the first end, shown while that end waits at the screen's edge for a value off the screen (it points the way); its graphic points up unrotated.</summary>
+    [SerializeField] private RectTransform arrowA;
+
+    /// <summary>The arrow at the second end.</summary>
+    [SerializeField] private RectTransform arrowB;
 
     /// <summary>A clear mistake's mark on a paper's box (a translucent red; it stays for the case).</summary>
     [SerializeField] private Color mistakeMark = new Color(0.86f, 0.16f, 0.12f, 0.32f);
@@ -185,26 +193,29 @@ public sealed class DeskInspect : MonoBehaviour
 
         if (hold != null)
         {
-            bool shown = Place(endA, hold);
+            bool shown = Place(endA, arrowA, hold);
             if (hold != _drawnHold)
                 lines.ShowHold(endA);
             _drawnHold = hold;
             _drawnA = _drawnB = null;
             if (!shown)
                 endA.gameObject.SetActive(false);
+            Cover(false);
             return;
         }
         _drawnHold = null;
         if (a != null && b != null)
         {
-            Place(endA, a);
-            Place(endB, b);
+            bool shownA = Place(endA, arrowA, a);
+            bool shownB = Place(endB, arrowB, b);
             if (a != _drawnA || b != _drawnB)
                 lines.ShowLink(endA, endB, look, label);
             _drawnA = a;
             _drawnB = b;
+            Cover(shownA && shownB);
             return;
         }
+        Cover(false);
         if (_drawnA != null || endA.gameObject.activeSelf || endB.gameObject.activeSelf)
         {
             lines.Clear();
@@ -214,11 +225,19 @@ public sealed class DeskInspect : MonoBehaviour
         }
     }
 
-    /// <summary>Puts <paramref name="end"/> over the value with <paramref name="key"/> on the screen (shown), or hides it when the value is not on the desk or not in view.</summary>
-    private bool Place(RectTransform end, string key)
+    /// <summary>Tells the office compare strip whether the line over the office labels the pair now.</summary>
+    private void Cover(bool covered)
+    {
+        if (compare != null)
+            compare.SetStripCovered(covered);
+    }
+
+    /// <summary>Puts <paramref name="end"/> over the value with <paramref name="key"/> on the screen (shown), with its <paramref name="arrow"/> pointing the way when the value is off the screen, or hides it when the value is not on the desk or not in view.</summary>
+    private bool Place(RectTransform end, RectTransform arrow, string key)
     {
         Rect r = default;
-        bool on = _canvas != null && TryBounds(key, out Bounds bounds) && TryScreenRect(bounds, out r);
+        Vector2 toward = default;
+        bool on = _canvas != null && TryBounds(key, out Bounds bounds) && TryScreenRect(bounds, out r, out toward);
         if (end.gameObject.activeSelf != on)
             end.gameObject.SetActive(on);
         if (!on)
@@ -229,6 +248,14 @@ public sealed class DeskInspect : MonoBehaviour
         Vector2 size = Vector2.Max(max - min, minimumEnd);
         end.anchoredPosition = (min + max) / 2f;
         end.sizeDelta = size;
+        if (arrow != null)
+        {
+            bool edge = toward != Vector2.zero;
+            if (arrow.gameObject.activeSelf != edge)
+                arrow.gameObject.SetActive(edge);
+            if (edge)
+                arrow.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(toward.y, toward.x) * Mathf.Rad2Deg - 90f);
+        }
         return true;
     }
 
@@ -257,8 +284,8 @@ public sealed class DeskInspect : MonoBehaviour
         return EntryKeys.TryRule(key, out int rule) && rulebook != null && rulebook.TryRowBounds(rule, out bounds);
     }
 
-    /// <summary>A small rectangle at the screen's edge in the direction of <paramref name="world"/> as the camera sees it (a value beside or behind the view: the calendar or the face seen from the steep desk view).</summary>
-    private static bool TryEdgeToward(Camera cam, Vector3 world, out Rect rect)
+    /// <summary>A small rectangle at the screen's edge in the direction of <paramref name="world"/> as the camera sees it (a value beside or behind the view: the calendar or the face seen from the steep desk view), and that direction on the screen (<paramref name="toward"/>, unit).</summary>
+    private static bool TryEdgeToward(Camera cam, Vector3 world, out Rect rect, out Vector2 toward)
     {
         Vector3 local = cam.transform.InverseTransformDirection(world - cam.transform.position);
         Vector2 direction = new Vector2(local.x, local.y);
@@ -270,13 +297,15 @@ public sealed class DeskInspect : MonoBehaviour
                                 Mathf.Abs(direction.y) > 1e-5f ? half.y / Mathf.Abs(direction.y) : float.MaxValue);
         Vector2 centre = new Vector2(Screen.width / 2f, Screen.height / 2f) + direction * scale;
         rect = new Rect(centre - Vector2.one * EdgeMargin / 2f, Vector2.one * EdgeMargin);
+        toward = direction;
         return true;
     }
 
-    /// <summary>World bounds as a rectangle on the screen through the office camera (false when behind it or off the screen).</summary>
-    private bool TryScreenRect(Bounds bounds, out Rect rect)
+    /// <summary>World bounds as a rectangle on the screen through the office camera; a value off the screen gets a small rectangle at the screen's edge toward it and the way to it (<paramref name="toward"/>, unit; zero for a value on the screen). False without a camera.</summary>
+    private bool TryScreenRect(Bounds bounds, out Rect rect, out Vector2 toward)
     {
         rect = default;
+        toward = default;
         Camera cam = _camera;
         if (cam == null)
             return false;
@@ -291,7 +320,7 @@ public sealed class DeskInspect : MonoBehaviour
         {
             Vector3 s = cam.WorldToScreenPoint(corner);
             if (s.z <= 0f)
-                return TryEdgeToward(cam, bounds.center, out rect);
+                return TryEdgeToward(cam, bounds.center, out rect, out toward);
             minX = Mathf.Min(minX, s.x);
             minY = Mathf.Min(minY, s.y);
             maxX = Mathf.Max(maxX, s.x);
@@ -300,8 +329,10 @@ public sealed class DeskInspect : MonoBehaviour
         rect = Rect.MinMaxRect(minX, minY, maxX, maxY);
         if (rect.xMax > 0f && rect.yMax > 0f && rect.xMin < Screen.width && rect.yMin < Screen.height)
             return true;
-        // Off the screen (the calendar or the face seen from the desk view): the end waits at the screen's edge toward it, so the line still points there.
+        // Off the screen (the calendar or the face seen from the desk view): the end waits at the screen's edge toward it, so the line still points there, and its arrow points the way.
+        Vector2 middle = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Vector2 centre = new Vector2(Mathf.Clamp(rect.center.x, EdgeMargin, Screen.width - EdgeMargin), Mathf.Clamp(rect.center.y, EdgeMargin, Screen.height - EdgeMargin));
+        toward = (rect.center - middle).sqrMagnitude > 1e-6f ? (rect.center - middle).normalized : Vector2.up;
         rect = new Rect(centre - Vector2.one * EdgeMargin / 2f, Vector2.one * EdgeMargin);
         return true;
     }

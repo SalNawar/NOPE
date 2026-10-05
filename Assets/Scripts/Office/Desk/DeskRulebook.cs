@@ -12,9 +12,13 @@ using UnityEngine;
 /// EntryKeys.Rule index) and the rule: DeskInspect holds it on the workbench
 /// (MatchBoard.PickRule), so it is judged against a value like the PC's memo
 /// row. It shows from the day the rulebook is introduced (Feature.Rulebook).
-/// Build Office UI builds the card and its rows (a fixed number: more
-/// directives than rows print only the first ones); the office binder lays it
-/// on the desk.
+/// It lies tucked at the mat's edge (the desk-first polish, 2026-10-05: small,
+/// so the papers own the desk view): a click on the card opens it to full
+/// size where its rows take clicks; a click on the open card off its rows (its
+/// title, a margin) tucks it again; each new day's rules start tucked.
+/// Build Office UI builds the card, its click box and its rows (a fixed
+/// number: more directives than rows print only the first ones); the office
+/// binder lays it on the desk (Place).
 /// </summary>
 public sealed class DeskRulebook : MonoBehaviour
 {
@@ -27,14 +31,35 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The line printed when the day has no directive.</summary>
     [SerializeField] private TMP_Text none;
 
+    /// <summary>The whole card's click box (opens the tucked card; on the open card, under the rows, tucks it).</summary>
+    [SerializeField] private Clickable card;
+
+    /// <summary>The card's size on the desk, metres (width, depth): the tucked card shrinks toward its outer near corner.</summary>
+    [SerializeField] private Vector2 size = new Vector2(0.26f, 0.21f);
+
+    /// <summary>The tucked card's scale (1: open).</summary>
+    [SerializeField, Range(0.2f, 1f)] private float tuckedScale = 0.5f;
+
+    /// <summary>The card box's height while tucked (metres): it rises above the rows so the whole card takes the click.</summary>
+    private const float TuckedBoxHeight = 0.008f;
+
+    /// <summary>The card box's height while open (metres): it lies under the rows, which win the click over it.</summary>
+    private const float OpenBoxHeight = 0.0004f;
+
     private readonly List<int> _indices = new List<int>();
     private IReadOnlyList<TravelRuleSO> _rules = Array.Empty<TravelRuleSO>();
+    private Vector3 _at;
+    private Quaternion _rotation = Quaternion.identity;
+    private bool _placed;
 
     /// <summary>Raised when a row is clicked: the directive's index in the day's list and the rule.</summary>
     public event Action<int, TravelRuleSO> RowClicked;
 
     /// <summary>The rows' clicks (the booth makes them live with the props).</summary>
     public IReadOnlyList<Clickable> Rows => rows;
+
+    /// <summary>True while the card is open (full size, its rows taking clicks); false while tucked at the mat's edge.</summary>
+    public bool IsOpen { get; private set; }
 
     private void Awake()
     {
@@ -48,7 +73,37 @@ public sealed class DeskRulebook : MonoBehaviour
             if (rows[i] != null)
                 rows[i].onClick.AddListener(() => Click(row));
         }
+        if (card != null)
+            card.onClick.AddListener(() => SetOpen(!IsOpen));
         Show(_rules);
+    }
+
+    /// <summary>Lays the card on the desk (the office binder): open, it lies at <paramref name="at"/>; tucked, it shrinks toward its outer near corner from there.</summary>
+    public void Place(Vector3 at, Quaternion rotation)
+    {
+        _at = at;
+        _rotation = rotation;
+        _placed = true;
+        SetOpen(IsOpen);
+    }
+
+    /// <summary>Opens the card to full size (its rows take clicks) or tucks it at the mat's edge (the whole card takes the click that opens it).</summary>
+    public void SetOpen(bool open)
+    {
+        IsOpen = open;
+        if (_placed)
+        {
+            float s = open ? 1f : tuckedScale;
+            Vector3 corner = new Vector3(-size.x, 0f, -size.y) * ((1f - s) / 2f);
+            transform.SetPositionAndRotation(_at + _rotation * corner, _rotation);
+            transform.localScale = new Vector3(s, 1f, s);
+        }
+        if (card != null && card.TryGetComponent(out BoxCollider box))
+        {
+            float h = open ? OpenBoxHeight : TuckedBoxHeight;
+            box.center = new Vector3(0f, open ? -h / 2f : h / 2f, 0f);
+            box.size = new Vector3(size.x, h, size.y);
+        }
     }
 
     /// <summary>Prints today's directives (<paramref name="rules"/>, the day's list; a rule with no summary prints no row), one per row.</summary>
@@ -70,6 +125,7 @@ public sealed class DeskRulebook : MonoBehaviour
         }
         if (none != null)
             none.gameObject.SetActive(_indices.Count == 0);
+        SetOpen(false);
     }
 
     /// <summary>The world bounds of the row printing directive <paramref name="ruleIndex"/> (a match line meets it there); false when it prints no row or the card is hidden.</summary>

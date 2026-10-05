@@ -68,6 +68,9 @@ public sealed class DeskView : MonoBehaviour
     /// <summary>Raised after the view turns on or off.</summary>
     public event Action Changed;
 
+    /// <summary>Raised after the player tilts the view in to read (the mat, the mouse wheel, the PC's "&lt; Desk"; not a stamp picked up): the desk brings the paper being read up to reading size (the desk-first polish, 2026-10-05).</summary>
+    public event Action ReadingTilt;
+
     private void Awake()
     {
         _blend = Blend;
@@ -129,15 +132,19 @@ public sealed class DeskView : MonoBehaviour
     /// <summary>The mat's click: tilts into the desk view, or back (only while the toggle is live).</summary>
     public void Toggle()
     {
-        if (_toggleLive)
-            Set(!IsOn);
+        if (!_toggleLive)
+            return;
+        if (IsOn)
+            Set(false);
+        else
+            TiltToRead();
     }
 
     /// <summary>Tilts into the desk view (no-op if it is on, or while the mat's toggle is not live): the PC's "&lt; Desk" button, once its frame has closed.</summary>
     public void TiltIn()
     {
         if (_toggleLive)
-            Set(true);
+            TiltToRead();
     }
 
     /// <summary>Tilts into the desk view whatever the mat's toggle says (no-op if it is on or unbound): a stamp picked up from the tray, to be pressed on the papers lying on the desk (the desk-first redesign, item 12).</summary>
@@ -203,8 +210,17 @@ public sealed class DeskView : MonoBehaviour
         }
         else if (_scrollInLive && _scrollInLiveSince < Time.frameCount && scroll < 0f && mouse != null && OnMat(mouse.position.ReadValue()))
         {
-            Set(true);
+            TiltToRead();
         }
+    }
+
+    /// <summary>The player's tilt in (not a stamp's): the view turns on, then ReadingTilt.</summary>
+    private void TiltToRead()
+    {
+        if (IsOn || _office == null)
+            return;
+        Set(true);
+        ReadingTilt?.Invoke();
     }
 
     /// <summary>The Back control's click (only while it is live).</summary>
