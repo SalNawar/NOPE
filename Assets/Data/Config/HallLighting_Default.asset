@@ -364,7 +364,7 @@ MonoBehaviour:
   shaftAngleAtSunrise: -8
   shaftAngleAtSunset: 6
   shaftLowSunLength: 1
-  fixtureColour: {r: 1, g: 0.9, b: 0.74, a: 1}
+  fixtureColour: {r: 1, g: 0.79, b: 0.54, a: 1}
   fixturesOnBelow: 0.6
   fixtureFadeBand: 0.1
   fixtureStaggerMinutes: 4

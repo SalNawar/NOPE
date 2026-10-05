@@ -37,3 +37,15 @@ The existing character EditMode suites passed **92/92 tests**, zero failures or 
 Do not run the legacy AnimeHallLayerInstaller or desk rebuilds: they replace the current scene integration. Use native scene editing or the idempotent menus under `Tools > Terminal Art > Completion` for the foreground floor, camera captures and validation. The scene retains its 58 painted layers and gameplay hooks. Unity's native save regenerated derived Light2D bounds and two pillar-shadow meshes; gameplay objects were retained.
 
 Floor commits: `f660424`, `9973d70`. Character generation checkpoints: `3e2316b`, `32f012f`, `f467936`; the processing/import completion follows them on this branch. Main was fetched again after installation and remains at `5c7c281`. No remote publication or merge was performed.
+
+## Latest correction: Review3
+
+See `../Completion/Review3/README.md`. Original traveller distance restored to z=1.6; UV pose warp removed. Added 39 painted receiver-masked ground shadow shapes. Separate animated hand cutouts were rejected by the user and removed entirely. Gestures remain unfinished and require complete authored poses with attached arms. Do not reinstall the cutout-hand experiment or the UV pose warp.
+
+## Complete pose correction, 2026-10-05
+Detached animated hands were rejected and removed. Two full connected character poses each are installed for the exact Egyptian female and Greek male looks in Characters/Poses/pose-manifest.json. Exact-key matching preserves identity. Greek live screenshots verified at the original z=1.6; Game view open, zero Unity errors. All other cast poses remain pending. See Characters/Poses/README.md; do not use old Review3 gesture screenshots as current evidence.
+
+
+## Four lighting states, 2026-10-05
+User authorized a morning/noon/evening/night 2D art bake blended by time. Installed HallBakedLighting + HallBakedCycle + NOPE/Hall Four State with eight source-aligned illumination/emission textures. 58 sprites remain separate. Existing clock feeds weights and character/desk colour. Native CPU bake rasterizes floor receivers, 39 ground casts and 14 lamp/screen/sign pools. Ground cast runtime object is disabled to prevent double darkening. Emission uses bright approved painting pixels near fixtures, not the coarse diffuser mask. Seven cycle tests pass; zero Unity errors; 45 camera/pan/lighting-off checks captured. See Completion/FourState/README.md and comparison.html. This is an authored 2D trial, not a physical 3D bake; inspect in Unity before claiming approved.
+

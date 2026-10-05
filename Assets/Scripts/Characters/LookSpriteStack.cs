@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// A traveller's look drawn with one SpriteRenderer per LookLayer (children
@@ -17,9 +18,8 @@ public sealed class LookSpriteStack : MonoBehaviour
 
     private TravellerLook _look;
     private CharacterArt _art;
-    private MaterialPropertyBlock _poseBlock;
-    private Vector4 _restPose, _gesture, _currentPose;
-    private float _phase;
+    private CharacterPoseLibrary.Entry _poses;
+    private SpriteRenderer _posedFigure;
 
     /// <summary>Checks the wiring and starts empty, unless a look was shown before the first activation (the desk paper's photo slot is built inactive and shown as it wakes; audit R2-024).</summary>
     private void Awake()
@@ -39,28 +39,10 @@ public sealed class LookSpriteStack : MonoBehaviour
             return;
         }
 
+        if (_posedFigure != null) _posedFigure.enabled = false;
         _look = look;
         _art = art;
-        if (!photo)
-        {
-            int seed=17;
-            foreach(char letter in look.Describe()) seed=unchecked(seed*31+letter);
-            int stance=(seed&int.MaxValue)%5;
-            _phase=(seed&1023)*.01f;
-            _restPose=stance switch
-            {
-                0=>new Vector4(-18,.16f,-.08f,-.045f),
-                1=>new Vector4(16,-.10f,-.22f,.055f),
-                2=>new Vector4(-8,.27f,-.20f,.025f),
-                3=>new Vector4(12,.06f,-.30f,-.06f),
-                _=>new Vector4(0,.12f,-.12f,.02f)
-            };
-            _gesture=Vector4.zero;
-            _currentPose=_restPose;
-            var material=Resources.Load<Material>("CharacterPose");
-            if(material!=null) foreach(var layer in layers) if(layer!=null) layer.sharedMaterial=material;
-            ApplyPose();
-        }
+        _poses = !photo ? Resources.Load<CharacterPoseLibrary>("CharacterPoseLibrary")?.Find(look) : null;
         for (int i = 0; layers != null && i < layers.Length; i++)
         {
             if (layers[i] == null)
@@ -70,20 +52,13 @@ public sealed class LookSpriteStack : MonoBehaviour
             layers[i].sprite = part.HasValue ? SpriteOf(part.Value.Key) : null;
             layers[i].enabled = layers[i].sprite != null;
         }
+        if (_poses != null) DrawPose(_poses.explaining);
     }
 
     /// <summary>A premade's whole picture changes to an expression (blank or unknown = neutral; its neutral picture while that expression has no art); nothing for a generated traveller or no look.</summary>
     public void SetExpression(string expression)
     {
-        if(!photo)
-            _gesture=expression switch
-            {
-                "happy"=>new Vector4(25,.18f,-.14f,.085f),
-                "angry"=>new Vector4(-22,-.14f,.18f,-.085f),
-                "worried"=>new Vector4(-18,.14f,-.16f,-.075f),
-                _=>Vector4.zero
-            };
-        if(!photo && !Application.isPlaying) {_currentPose=_restPose+_gesture;ApplyPose();}
+        if (_poses != null) DrawPose(expression == "angry" || expression == "worried" ? _poses.guarded : _poses.explaining);
         if (_look == null || _look.PremadeId == null || layers == null || layers.Length <= (int)LookLayer.Whole || layers[(int)LookLayer.Whole] == null)
             return;
 
@@ -92,34 +67,10 @@ public sealed class LookSpriteStack : MonoBehaviour
             layers[(int)LookLayer.Whole].sprite = sprite;
     }
 
-    private void LateUpdate()
-    {
-        if(photo || _look==null) return;
-        _currentPose=Vector4.Lerp(_currentPose,_restPose+_gesture,1-Mathf.Exp(-Time.deltaTime*8));
-        ApplyPose();
-    }
-
-    private void ApplyPose()
-    {
-        _poseBlock??=new MaterialPropertyBlock();
-        var pose=_currentPose;
-        if(Application.isPlaying && !MotionPreference.Reduced)
-        {
-            pose.x+=Mathf.Sin(Time.time*.9f+_phase)*3;
-            pose.w+=Mathf.Sin(Time.time*.65f+_phase)*.012f;
-        }
-        foreach(var layer in layers)
-        {
-            if(layer==null) continue;
-            layer.GetPropertyBlock(_poseBlock);
-            _poseBlock.SetVector("_CharacterPose",pose);
-            layer.SetPropertyBlock(_poseBlock);
-        }
-    }
-
     /// <summary>Tints every layer (the art is unlit: the tint sits it into the room's light).</summary>
     public void SetTint(Color tint)
     {
+        if (_posedFigure != null) _posedFigure.color = tint;
         if (layers == null)
             return;
         foreach (SpriteRenderer layer in layers)
@@ -130,6 +81,8 @@ public sealed class LookSpriteStack : MonoBehaviour
     /// <summary>Empties every layer and forgets the look.</summary>
     public void Clear()
     {
+        _poses = null;
+        if (_posedFigure != null) {_posedFigure.enabled=false;_posedFigure.sprite=null;}
         _look = null;
         _art = null;
         if (layers == null)
@@ -142,6 +95,28 @@ public sealed class LookSpriteStack : MonoBehaviour
             layer.sprite = null;
             layer.enabled = false;
         }
+    }
+
+    private void DrawPose(CharacterPoseLibrary.Pose pose)
+    {
+        if (pose == null || pose.sprite == null) return;
+        if (_posedFigure == null)
+        {
+            var child = new GameObject("Complete authored pose");
+            child.transform.SetParent(transform, false);
+            _posedFigure = child.AddComponent<SpriteRenderer>();
+            var reference = layers.FirstOrDefault(r => r != null);
+            child.layer = reference.gameObject.layer;
+            _posedFigure.sortingLayerID = reference.sortingLayerID;
+            _posedFigure.sortingOrder = (int)LookLayer.Whole;
+            _posedFigure.sharedMaterial = reference.sharedMaterial;
+        }
+        _posedFigure.sprite = pose.sprite;
+        _posedFigure.color = layers.First(r => r != null).color;
+        _posedFigure.transform.localScale = Vector3.one * pose.scale;
+        _posedFigure.transform.localPosition = new Vector3(0, pose.footOffset, 0);
+        _posedFigure.enabled = true;
+        foreach (var layer in layers) if (layer != null) layer.enabled = false;
     }
 
     /// <summary>The key's sprite (its own art or its stand-in's; null for none): its photo crop on a photo, else the full canvas.</summary>

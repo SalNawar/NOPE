@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ContactShadows
-  m_Shader: {fileID: 4800000, guid: d722f6b53c2dd5949aef27ac9634e02e, type: 3}
+  m_Name: GroundShadows
+  m_Shader: {fileID: 4800000, guid: 9d88709eb086255409a5b9dd2fa6b658, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -22,10 +22,22 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _Gallery:
+        m_Texture: {fileID: 2800000, guid: 5b300a6eba4a9c945b6a8a4a3f38c673, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ground:
+        m_Texture: {fileID: 2800000, guid: 524e6c65d2e7c0340b754692e91c9cfe, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Platform:
+        m_Texture: {fileID: 2800000, guid: ade0d514543d2e4478a2ecc5222e7778, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Strength: 0.45
+    - _Strength: 0.42
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

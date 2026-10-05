@@ -1,0 +1,8 @@
+f skin3 face-b black
+hairback_f_egypt_ancient
+body_f_skin3
+outfit_f_egypt_ancient
+head_f_skin3_faceb
+hair_f_egypt_ancient
+headwear_f_egypt_ancient
+accessory_f_egypt_ancient

@@ -1,0 +1,5 @@
+Complete character pose registration
+egypt-current egypt-current-explaining.png: head 243, feet 1492, scale 0.99520, foot offset 0.00260
+egypt-current egypt-current-guarded.png: head 194, feet 1464, scale 0.97874, foot offset -0.01527
+greece-current greece-current-explaining.png: head 51, feet 1459, scale 0.90199, foot offset -0.01886
+greece-current greece-current-guarded.png: head 148, feet 1462, scale 0.96651, foot offset -0.01827

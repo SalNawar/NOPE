@@ -22,8 +22,8 @@ public static class HallVisualReview
         config.travellerHeight=1.9f;
         EditorUtility.SetDirty(config);
         var anchor=GameObject.Find("Anchor_Traveller");
-        // Stand at the counter, rather than halfway across the hall.
-        anchor.transform.position=new Vector3(0,0,.55f);
+        // Preserve the original gameplay distance; scale is controlled by DeskConfig.
+        anchor.transform.position=new Vector3(0,0,1.6f);
         var lighting=Find<HallLightingRig>();
         lighting.Settings.shaftAngleAtSunrise=-8;
         lighting.Settings.shaftAngleAtSunset=6;
@@ -141,7 +141,7 @@ public static class HallVisualReview
             mesh.uv=new[]{Vector2.zero,Vector2.up,Vector2.one,Vector2.right};mesh.triangles=new[]{0,1,2,0,2,3};mesh.RecalculateBounds();EditorUtility.SetDirty(mesh);
             filter.sharedMesh=mesh;
             var renderer=child.GetComponent<MeshRenderer>();if(renderer==null)renderer=child.gameObject.AddComponent<MeshRenderer>();
-            renderer.sharedMaterial=material;renderer.sortingOrder=58;renderer.shadowCastingMode=ShadowCastingMode.Off;
+            renderer.sharedMaterial=material;renderer.sortingLayerID=layer.sortingLayerID;renderer.sortingOrder=58;renderer.shadowCastingMode=ShadowCastingMode.Off;
         }
     }
     [MenuItem("Tools/Terminal Art/Review/Capture Pose Library")]

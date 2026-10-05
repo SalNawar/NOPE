@@ -10,7 +10,7 @@ using UnityEngine.Rendering;
 /// <summary>Art-only, reversible captures of the actual office-to-desk camera path.</summary>
 public static class HallCompletionAuthoring
 {
-    const string Report = "ArtDeliverables/TimeDesk/HallLayers/Completion/Review2";
+    const string Report = "ArtDeliverables/TimeDesk/HallLayers/Completion/FourState/Transitions";
     static readonly BindingFlags Private = BindingFlags.Instance | BindingFlags.NonPublic;
     static T Find<T>() where T : UnityEngine.Object => UnityEngine.Object.FindObjectsByType<T>(FindObjectsInactive.Include, FindObjectsSortMode.None).FirstOrDefault();
 
@@ -106,7 +106,7 @@ public static class HallCompletionAuthoring
         try
         {
             foreach(float pan in new[]{0f,1f})
-            foreach(float hour in new[]{12f,17f,22f})
+            foreach(float hour in new[]{8f,12f,16.5f,22f})
             {
                 presentation.SetPan(pan);
                 settings.previewHourOn = true;
@@ -118,6 +118,7 @@ public static class HallCompletionAuthoring
                     camera.transform.SetPositionAndRotation(Vector3.Lerp(startPosition,endPosition,t),Quaternion.Slerp(startRotation,endRotation,t));
                     lighting.GetType().GetMethod("LateUpdate",Private).Invoke(lighting,null);
                     Find<HallForegroundFloor>()?.Apply();
+                    Find<HallGroundShadows>()?.Apply(); Find<HallBakedLighting>()?.Apply();
                     Capture(camera,backdrop,$"{(pan>0?"left-":"")}hour-{hour:00}-tilt-{i}.png");
                 }
             }
@@ -127,6 +128,7 @@ public static class HallCompletionAuthoring
             presentation.SetTime(lighting.Evening);
             lighting.GetType().GetMethod("LateUpdate",Private).Invoke(lighting,null);
             Find<HallForegroundFloor>()?.Apply();
+            Find<HallGroundShadows>()?.Apply(); Find<HallBakedLighting>()?.Apply();
             Capture(camera,backdrop,"left-pan.png");
             settings.lightingOn=false;
             presentation.SetTime(0);
@@ -138,6 +140,7 @@ public static class HallCompletionAuthoring
                 camera.transform.SetPositionAndRotation(Vector3.Lerp(startPosition,endPosition,t),Quaternion.Slerp(startRotation,endRotation,t));
                 lighting.GetType().GetMethod("LateUpdate",Private).Invoke(lighting,null);
                 Find<HallForegroundFloor>()?.Apply();
+                Find<HallGroundShadows>()?.Apply(); Find<HallBakedLighting>()?.Apply();
                 Capture(camera,backdrop,$"unlit-pan-{pan:0}-tilt-{i}.png");
             }
             File.WriteAllText(Report+"/camera-path.txt",$"Start: {startPosition}; rotation: {startRotation.eulerAngles}\nDesk: {endPosition}; rotation: {endRotation.eulerAngles}\nMat centre: {mat}\nCaptures: 5 transition positions at noon, sunset and night in both pans; lighting-off endpoints in both pans.\n");
@@ -153,6 +156,7 @@ public static class HallCompletionAuthoring
             if(brain != null) brain.enabled=brainOn;
             lighting.GetType().GetMethod("LateUpdate",Private).Invoke(lighting,null);
             Find<HallForegroundFloor>()?.Apply();
+            Find<HallGroundShadows>()?.Apply(); Find<HallBakedLighting>()?.Apply();
         }
         Debug.Log("Hall completion camera captures saved to "+Report);
     }
@@ -193,3 +197,4 @@ public static class HallCompletionAuthoring
         }
     }
 }
+
