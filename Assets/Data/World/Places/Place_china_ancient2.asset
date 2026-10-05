@@ -1,0 +1,174 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_china_ancient2
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: china_ancient2
+  displayName: Spring and Autumn Lu
+  nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
+  era: {fileID: 11400000, guid: e086ccc3608ad51408596a220a17662a, type: 2}
+  year: -500
+  moment: Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn
+    period, while Confucius teaches the rites and generals across the states write
+    on the art of war
+  tongue: chinese
+  birthYearMin: -570
+  birthYearMax: -518
+  facts:
+  - category: 4
+    value: Bronze spade money
+  - category: 0
+    value: Old Chinese, bronze script
+  - category: 3
+    value: Bronze ritual bells
+  - category: 5
+    value: Qufu (state of Lu)
+  - category: 2
+    value: Duke Ding of Lu
+  - category: 6
+    value: guan cap / jade huang
+  maleNames:
+  - Zilu
+  - Yan Hui
+  - Zigong
+  - Zengzi
+  - Ran Qiu
+  - Zixia
+  - Ziyou
+  - Gongxi Hua
+  femaleNames:
+  - Mengjiang
+  - Jing Jiang
+  - Zhuang Jiang
+  - Wenjiang
+  - Mu Ji
+  - Dingjiang
+  - Xuanjiang
+  - Ai Jiang
+  smallTalk:
+  - id: china_ancient2.smalltalk.1
+    text: Everyone in Qufu has an opinion on the proper bow.
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: shenyi deep robe
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: simple topknot
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: long thin beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: guan cap
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+    female:
+      signature: 4
+      outfit:
+        label: layered shenyi robe
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: low tied hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: jade huang
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+  looks:
+    skin:
+    - 1
+    - 5
+    - 3
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 10
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 5
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: directorate
+  - factor: future
+    outcome: naturalism
+  - factor: money
+    outcome: commons

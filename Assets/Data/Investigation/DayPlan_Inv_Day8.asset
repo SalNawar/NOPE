@@ -52,26 +52,17 @@ MonoBehaviour:
   allowedNations: []
   legendaryBaseChance: 0.05
   availableLegendaries:
-  - {fileID: 11400000, guid: 0cfd772d9e4b4ce4c873a1fa73e58036, type: 2}
   - {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
   - {fileID: 11400000, guid: 28a33f99f3083054289db1cae6fe58be, type: 2}
-  - {fileID: 11400000, guid: 4cd562c550115f54dbf63209b2c6089d, type: 2}
-  - {fileID: 11400000, guid: d5d6d2c735f8edb478571c27e8ca1d3b, type: 2}
-  - {fileID: 11400000, guid: 8b4fc248d7749df468d3c557a12a0340, type: 2}
-  - {fileID: 11400000, guid: 6309579b953c3d0459f52208a2c85a2a, type: 2}
-  - {fileID: 11400000, guid: 011ce32acfd5da94db7890c006c2de7c, type: 2}
+  - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
+  - {fileID: 11400000, guid: 5462a20958d55a54c9aacbe8fe90559f, type: 2}
   - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
   - {fileID: 11400000, guid: 34da1b6f2ba1ada479d3174b62a4f942, type: 2}
-  - {fileID: 11400000, guid: 4ebf537d3e3bbcd44ba46babd98490ad, type: 2}
-  - {fileID: 11400000, guid: 4c6bd6ed062734645a8821fd59c1076c, type: 2}
-  - {fileID: 11400000, guid: fcb7d24e948523145beb44a3ad13002d, type: 2}
-  - {fileID: 11400000, guid: b7390dfdc90a76c4b826895a32a572de, type: 2}
-  - {fileID: 11400000, guid: 109ef1b03139e1f4c950e732b1c6d37e, type: 2}
-  - {fileID: 11400000, guid: 62ba3e842e3457542a3a0eb57fc30978, type: 2}
+  - {fileID: 11400000, guid: f6dafd30f2d3ff94094352f0d9777481, type: 2}
+  - {fileID: 11400000, guid: 102b1a1da431f264789642fcf5bdeddc, type: 2}
   - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
   - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
-  - {fileID: 11400000, guid: ea204f04a76efea4a892bee51f33e9a1, type: 2}
-  - {fileID: 11400000, guid: 9a402b021c35d844a983774f29a7e95f, type: 2}
+  - {fileID: 11400000, guid: a93b21ce48a40c940b31991a0450911c, type: 2}
   tellCount: 1
   tellChannels: 0000000002000000
   costumeErrorChance: 0.05
@@ -92,7 +83,7 @@ MonoBehaviour:
   - caseIndex1Based: 3
     id: 
     caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 102b1a1da431f264789642fcf5bdeddc, type: 2}
+    legendary: {fileID: 11400000, guid: 7747a67786131304d8f3c4761258e888, type: 2}
     hasLie: 0
     lie: 0
     directive: 0
@@ -112,7 +103,17 @@ MonoBehaviour:
   - caseIndex1Based: 8
     id: 
     caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
+    legendary: {fileID: 11400000, guid: 109ef1b03139e1f4c950e732b1c6d37e, type: 2}
+    hasLie: 0
+    lie: 0
+    directive: 0
+    dialogId: 
+    introLine: 
+    conditions: []
+  - caseIndex1Based: 9
+    id: 
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: b7390dfdc90a76c4b826895a32a572de, type: 2}
     hasLie: 0
     lie: 0
     directive: 0
@@ -122,7 +123,7 @@ MonoBehaviour:
   - caseIndex1Based: 10
     id: 
     caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 3615642cea3cdb94b8d9ffbfa4791da4, type: 2}
+    legendary: {fileID: 11400000, guid: 64d961c38e14376408b9065acbb0cf0e, type: 2}
     hasLie: 0
     lie: 0
     directive: 0

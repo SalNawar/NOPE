@@ -2002,12 +2002,42 @@
       ]
     },
     {
+      "id": "ancient2",
+      "displayName": "Ancient",
+      "order": 0,
+      "group": "ancient",
+      "smallTalk": [
+        "The new temple is finished, and they are already planning a bigger one.",
+        "The king's messengers ride faster every year."
+      ]
+    },
+    {
+      "id": "ancient3",
+      "displayName": "Ancient",
+      "order": 0,
+      "group": "ancient",
+      "smallTalk": [
+        "Everyone says the empire will last forever. Everyone always says that.",
+        "The harbour has more foreign ships than local ones these days."
+      ]
+    },
+    {
       "id": "medieval",
       "displayName": "Medieval",
       "order": 1,
       "smallTalk": [
         "The bells rang all week for the feast.",
         "Taxes again. Always taxes."
+      ]
+    },
+    {
+      "id": "medieval2",
+      "displayName": "Medieval",
+      "order": 1,
+      "group": "medieval",
+      "smallTalk": [
+        "Riders came through with news from the far side of the world.",
+        "The roads belong to whoever holds the next castle."
       ]
     },
     {
@@ -2020,12 +2050,42 @@
       ]
     },
     {
+      "id": "earlymodern2",
+      "displayName": "Early modern",
+      "order": 2,
+      "group": "earlymodern",
+      "smallTalk": [
+        "Every scholar in town owns a new instrument and argues about it.",
+        "The printers cannot keep up with the quarrels."
+      ]
+    },
+    {
       "id": "industrial",
       "displayName": "Industrial",
       "order": 3,
       "smallTalk": [
         "The smoke never lifts over the mills.",
         "Everyone talks about the railway."
+      ]
+    },
+    {
+      "id": "industrial2",
+      "displayName": "Industrial",
+      "order": 3,
+      "group": "industrial",
+      "smallTalk": [
+        "Concerts every night, and revolutions every other week.",
+        "The coffee houses are louder than the courts."
+      ]
+    },
+    {
+      "id": "industrial3",
+      "displayName": "Industrial",
+      "order": 3,
+      "group": "industrial",
+      "smallTalk": [
+        "The newspapers are banned on Monday and back on Tuesday.",
+        "Everyone is writing a manifesto. Even the baker."
       ]
     },
     {
@@ -3830,6 +3890,297 @@
       ]
     },
     {
+      "country": "egypt",
+      "era": "ancient2",
+      "displayName": "Ramesside Egypt",
+      "moment": "Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital of chariot workshops, the temples of Abu Simbel and the first written peace treaty, with the Hittites)",
+      "year": -1250,
+      "tongue": "egyptian",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Silver deben and kite"
+        },
+        {
+          "category": "Language",
+          "value": "Late Egyptian, hieratic"
+        },
+        {
+          "category": "Technology",
+          "value": "Bronze chariot workshop"
+        },
+        {
+          "category": "Geography",
+          "value": "Pi-Ramesses (Delta)"
+        },
+        {
+          "category": "Politics",
+          "value": "Pharaoh Ramesses II"
+        }
+      ],
+      "maleNames": [
+        "Paser",
+        "Panehsy",
+        "Huy",
+        "Nakhtmin",
+        "Amenemope",
+        "Hori",
+        "Penre",
+        "Meryre"
+      ],
+      "femaleNames": [
+        "Mutnofret",
+        "Henut",
+        "Takhat",
+        "Iuy",
+        "Baketmut",
+        "Sheritre",
+        "Wiay",
+        "Tamit"
+      ],
+      "smallTalk": [
+        "The new capital in the Delta smells of fresh paint and horses."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "pleated sash kilt"
+          },
+          "hair": {
+            "label": "striped short wig"
+          },
+          "headwear": {
+            "label": "khepresh cap",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "fringed pleated robe"
+          },
+          "hair": {
+            "label": "long braided wig"
+          },
+          "accessory": {
+            "label": "lotus studs",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "theocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns"
+        }
+      ]
+    },
+    {
+      "country": "egypt",
+      "era": "ancient3",
+      "displayName": "Ptolemaic Alexandria",
+      "moment": "Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum, the Pharos lighthouse and a harbour full of Roman grain ships)",
+      "year": -45,
+      "tongue": "greek",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Ptolemaic bronze obol"
+        },
+        {
+          "category": "Language",
+          "value": "Koine Greek and Demotic"
+        },
+        {
+          "category": "Technology",
+          "value": "Pharos lighthouse fire"
+        },
+        {
+          "category": "Geography",
+          "value": "Alexandria (Pharos)"
+        },
+        {
+          "category": "Politics",
+          "value": "Queen Cleopatra VII"
+        }
+      ],
+      "maleNames": [
+        "Apollonios",
+        "Ptolemaios",
+        "Herakleides",
+        "Sarapion",
+        "Didymos",
+        "Ammonios",
+        "Theon",
+        "Horion"
+      ],
+      "femaleNames": [
+        "Berenike",
+        "Arsinoe",
+        "Isidora",
+        "Tryphaina",
+        "Thermouthis",
+        "Apollonia",
+        "Didyme",
+        "Ptolema"
+      ],
+      "smallTalk": [
+        "The Library lent me a scroll. I am told I must return it this century."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "bordered Greek chiton"
+          },
+          "hair": {
+            "label": "short oiled curls"
+          },
+          "facialHair": {
+            "label": "trimmed short beard"
+          },
+          "headwear": {
+            "label": "wreath of ivy",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "chiton and mantle"
+          },
+          "hair": {
+            "label": "melon-rib bun"
+          },
+          "headwear": {
+            "label": "diadem band",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
+    },
+    {
+      "country": "egypt",
+      "era": "medieval2",
+      "displayName": "Ayyubid Cairo",
+      "moment": "Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel on the Muqattam hill and the long city walls",
+      "year": 1187,
+      "tongue": "arabic",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Ayyubid gold dinar"
+        },
+        {
+          "category": "Language",
+          "value": "Arabic (Kufic coinage)"
+        },
+        {
+          "category": "Technology",
+          "value": "Citadel well spiral"
+        },
+        {
+          "category": "Geography",
+          "value": "Cairo (Citadel)"
+        },
+        {
+          "category": "Politics",
+          "value": "Sultan Saladin"
+        }
+      ],
+      "maleNames": [
+        "Qaraqush",
+        "Baha al-Din",
+        "Imad al-Din",
+        "Al-Adil",
+        "Shirkuh",
+        "Turanshah",
+        "Al-Fadil",
+        "Taqi al-Din"
+      ],
+      "femaleNames": [
+        "Ismat al-Din",
+        "Sitt al-Sham",
+        "Rabia Khatun",
+        "Dayfa",
+        "Zumurrud",
+        "Khadija",
+        "Fatima Khatun",
+        "Shamsa"
+      ],
+      "smallTalk": [
+        "They are cutting a well into the rock under the new Citadel. It goes down forever."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "Ayyubid qaba coat"
+          },
+          "hair": {
+            "label": "cropped hair"
+          },
+          "facialHair": {
+            "label": "full dark beard"
+          },
+          "headwear": {
+            "label": "sharbush",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "embroidered tiraz robe"
+          },
+          "hair": {
+            "label": "long plaits"
+          },
+          "headwear": {
+            "label": "qina' scarf",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism"
+        },
+        {
+          "factor": "money",
+          "outcome": "jubilee"
+        }
+      ]
+    },
+    {
       "country": "iraq",
       "era": "ancient",
       "displayName": "Babylonia",
@@ -4817,6 +5168,101 @@
       ]
     },
     {
+      "country": "greece",
+      "era": "ancient2",
+      "displayName": "Macedonian Pella",
+      "moment": "Pella, capital of Macedon, in 336 BCE, as Philip II dies and his son Alexander takes the throne; Aristotle has tutored him at Mieza",
+      "year": -336,
+      "tongue": "greek",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Gold stater of Philip"
+        },
+        {
+          "category": "Language",
+          "value": "Macedonian Koine Greek"
+        },
+        {
+          "category": "Technology",
+          "value": "Sarissa pike workshop"
+        },
+        {
+          "category": "Geography",
+          "value": "Pella (Macedon)"
+        },
+        {
+          "category": "Politics",
+          "value": "King Alexander III"
+        }
+      ],
+      "maleNames": [
+        "Parmenion",
+        "Kleitos",
+        "Krateros",
+        "Perdikkas",
+        "Antipatros",
+        "Seleukos",
+        "Lysimachos",
+        "Nearchos"
+      ],
+      "femaleNames": [
+        "Kleopatra",
+        "Eurydike",
+        "Thessalonike",
+        "Kynane",
+        "Phila",
+        "Arsinoe",
+        "Stratonike",
+        "Laodike"
+      ],
+      "smallTalk": [
+        "The young king wants to march east. Everyone else wants to go home."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "chlamys and chiton"
+          },
+          "hair": {
+            "label": "lion-mane hair"
+          },
+          "headwear": {
+            "label": "kausia",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "Doric peplos"
+          },
+          "hair": {
+            "label": "braided crown of hair"
+          },
+          "accessory": {
+            "label": "oak-leaf diadem",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
+    },
+    {
       "country": "italy",
       "era": "ancient",
       "displayName": "Republican Rome",
@@ -5277,6 +5723,300 @@
         {
           "factor": "future",
           "outcome": "nuclear"
+        }
+      ]
+    },
+    {
+      "country": "italy",
+      "era": "ancient2",
+      "displayName": "Hellenistic Syracuse",
+      "moment": "Syracuse in Sicily under King Hiero II, c. 230 BCE, where Archimedes builds war machines and works out the lever, the screw and the volume of a crown",
+      "year": -230,
+      "tongue": "greek",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Syracusan silver litra"
+        },
+        {
+          "category": "Language",
+          "value": "Doric Greek (Sicilian)"
+        },
+        {
+          "category": "Technology",
+          "value": "Archimedean screw pump"
+        },
+        {
+          "category": "Geography",
+          "value": "Syracuse (Ortygia)"
+        },
+        {
+          "category": "Politics",
+          "value": "King Hiero II"
+        }
+      ],
+      "maleNames": [
+        "Gelon",
+        "Hieronymos",
+        "Dionysios",
+        "Phintias",
+        "Herakleitos",
+        "Agathokles",
+        "Theodotos",
+        "Andranodoros"
+      ],
+      "femaleNames": [
+        "Philistis",
+        "Damarete",
+        "Demarata",
+        "Harmonia",
+        "Kallisto",
+        "Sosis",
+        "Eukleia",
+        "Thraso"
+      ],
+      "smallTalk": [
+        "The old man by the harbour keeps shouting in the bath. Nobody minds any more."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "short exomis tunic"
+          },
+          "hair": {
+            "label": "wind-blown curls"
+          },
+          "facialHair": {
+            "label": "full grey beard"
+          },
+          "headwear": {
+            "label": "pilos cap",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "Sicilian peplos"
+          },
+          "hair": {
+            "label": "rolled hair band"
+          },
+          "accessory": {
+            "label": "Sicilian coral",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "technocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "nuclear"
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns"
+        }
+      ]
+    },
+    {
+      "country": "italy",
+      "era": "medieval2",
+      "displayName": "Venice of the Doges",
+      "moment": "Venice in 1295, as Marco Polo comes home from twenty-four years at the court of Kublai Khan with paper money in his pockets and stories nobody believes",
+      "year": 1295,
+      "tongue": "italian",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Venetian silver grosso"
+        },
+        {
+          "category": "Language",
+          "value": "Venetian Italian"
+        },
+        {
+          "category": "Technology",
+          "value": "Arsenale galley yard"
+        },
+        {
+          "category": "Geography",
+          "value": "Venice (Rialto)"
+        },
+        {
+          "category": "Politics",
+          "value": "Doge Pietro Gradenigo"
+        }
+      ],
+      "maleNames": [
+        "Niccolo",
+        "Maffeo",
+        "Rustichello",
+        "Zanino",
+        "Marino",
+        "Bertuccio",
+        "Andrea",
+        "Jacopo"
+      ],
+      "femaleNames": [
+        "Donata",
+        "Fantina",
+        "Bellela",
+        "Moreta",
+        "Fiordelise",
+        "Agnesina",
+        "Franceschina",
+        "Caterucia"
+      ],
+      "smallTalk": [
+        "Some merchant came home saying coins are made of paper. The whole Rialto laughed."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "long vesta gown"
+          },
+          "hair": {
+            "label": "pageboy bob"
+          },
+          "facialHair": {
+            "label": "short forked beard"
+          },
+          "headwear": {
+            "label": "capuccio",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "cotta and cioppa"
+          },
+          "hair": {
+            "label": "braided coronet"
+          },
+          "headwear": {
+            "label": "silk fillet",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "corporate_board"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
+    },
+    {
+      "country": "italy",
+      "era": "earlymodern2",
+      "displayName": "Galileo's Padua",
+      "moment": "Padua and Venice in 1610, when Galileo turns his telescope on the sky, finds four moons around Jupiter and publishes the Starry Messenger",
+      "year": 1610,
+      "tongue": "italian",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Venetian silver ducat"
+        },
+        {
+          "category": "Language",
+          "value": "Paduan Italian"
+        },
+        {
+          "category": "Technology",
+          "value": "Galilean telescope"
+        },
+        {
+          "category": "Geography",
+          "value": "Padua (Venetian)"
+        },
+        {
+          "category": "Politics",
+          "value": "Doge Leonardo Dona"
+        }
+      ],
+      "maleNames": [
+        "Cesare",
+        "Vincenzo",
+        "Paolo",
+        "Giovanfrancesco",
+        "Benedetto",
+        "Bonaventura",
+        "Evangelista",
+        "Girolamo"
+      ],
+      "femaleNames": [
+        "Virginia",
+        "Livia",
+        "Marina",
+        "Giulia",
+        "Isabella",
+        "Lucrezia",
+        "Cassandra",
+        "Ottavia"
+      ],
+      "smallTalk": [
+        "The professor sold the Senate a spyglass. Now everyone looks up instead of down."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "black scholar's gown"
+          },
+          "hair": {
+            "label": "receding short hair"
+          },
+          "facialHair": {
+            "label": "broad red beard"
+          },
+          "headwear": {
+            "label": "black biretta",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "stiff-bodiced gown"
+          },
+          "hair": {
+            "label": "raised curled hair"
+          },
+          "accessory": {
+            "label": "lace collar",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "technocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
         }
       ]
     },
@@ -5761,6 +6501,300 @@
       ]
     },
     {
+      "country": "china",
+      "era": "ancient2",
+      "displayName": "Spring and Autumn Lu",
+      "moment": "Qufu, capital of the state of Lu, c. 500 BCE, in the Spring and Autumn period, while Confucius teaches the rites and generals across the states write on the art of war",
+      "year": -500,
+      "tongue": "chinese",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Bronze spade money"
+        },
+        {
+          "category": "Language",
+          "value": "Old Chinese, bronze script"
+        },
+        {
+          "category": "Technology",
+          "value": "Bronze ritual bells"
+        },
+        {
+          "category": "Geography",
+          "value": "Qufu (state of Lu)"
+        },
+        {
+          "category": "Politics",
+          "value": "Duke Ding of Lu"
+        }
+      ],
+      "maleNames": [
+        "Zilu",
+        "Yan Hui",
+        "Zigong",
+        "Zengzi",
+        "Ran Qiu",
+        "Zixia",
+        "Ziyou",
+        "Gongxi Hua"
+      ],
+      "femaleNames": [
+        "Mengjiang",
+        "Jing Jiang",
+        "Zhuang Jiang",
+        "Wenjiang",
+        "Mu Ji",
+        "Dingjiang",
+        "Xuanjiang",
+        "Ai Jiang"
+      ],
+      "smallTalk": [
+        "Everyone in Qufu has an opinion on the proper bow."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "shenyi deep robe"
+          },
+          "hair": {
+            "label": "simple topknot"
+          },
+          "facialHair": {
+            "label": "long thin beard"
+          },
+          "headwear": {
+            "label": "guan cap",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "layered shenyi robe"
+          },
+          "hair": {
+            "label": "low tied hair"
+          },
+          "accessory": {
+            "label": "jade huang",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "directorate"
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
+        }
+      ]
+    },
+    {
+      "country": "china",
+      "era": "ancient3",
+      "displayName": "Qin Xianyang",
+      "moment": "Xianyang, capital of the first emperor, c. 215 BCE: one script, one coin, one standard axle width, the terracotta army and the first great walls",
+      "year": -215,
+      "tongue": "chinese",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Ban liang round coin"
+        },
+        {
+          "category": "Language",
+          "value": "Old Chinese, small seal"
+        },
+        {
+          "category": "Technology",
+          "value": "Bronze crossbow trigger"
+        },
+        {
+          "category": "Geography",
+          "value": "Xianyang (Qin)"
+        },
+        {
+          "category": "Politics",
+          "value": "First Emperor Qin Shi Huang"
+        }
+      ],
+      "maleNames": [
+        "Li Si",
+        "Meng Tian",
+        "Wang Jian",
+        "Zhao Gao",
+        "Fusu",
+        "Meng Yi",
+        "Feng Quji",
+        "Wang Ben"
+      ],
+      "femaleNames": [
+        "Qing",
+        "Ying Yue",
+        "Yin Shuang",
+        "Mi Rong",
+        "Zhao Ji",
+        "Han Lu",
+        "Qin Mei",
+        "Shi Yan"
+      ],
+      "smallTalk": [
+        "They have standardised the cart axles. Next, they say, the jokes."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "black quju robe"
+          },
+          "hair": {
+            "label": "side topknot"
+          },
+          "facialHair": {
+            "label": "curled moustache"
+          },
+          "headwear": {
+            "label": "Qin cap",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "black wrap robe"
+          },
+          "hair": {
+            "label": "low side bun"
+          },
+          "accessory": {
+            "label": "jade cicada",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "fascism"
+        },
+        {
+          "factor": "future",
+          "outcome": "nuclear"
+        },
+        {
+          "factor": "money",
+          "outcome": "debt"
+        }
+      ]
+    },
+    {
+      "country": "china",
+      "era": "medieval2",
+      "displayName": "Mongol Zhongdu",
+      "moment": "Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis Khan's riders take it; the Mongol relay posts reach across Asia",
+      "year": 1215,
+      "tongue": "chinese",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Jin paper jiaochao"
+        },
+        {
+          "category": "Language",
+          "value": "Middle Chinese and Mongolian"
+        },
+        {
+          "category": "Technology",
+          "value": "Yam relay post"
+        },
+        {
+          "category": "Geography",
+          "value": "Zhongdu (Beijing)"
+        },
+        {
+          "category": "Politics",
+          "value": "Genghis Khan"
+        }
+      ],
+      "maleNames": [
+        "Subutai",
+        "Jebe",
+        "Muqali",
+        "Yelu Chucai",
+        "Bo'orchu",
+        "Jochi",
+        "Ogedei",
+        "Tolui"
+      ],
+      "femaleNames": [
+        "Borte",
+        "Sorghaghtani",
+        "Qulan",
+        "Yesui",
+        "Yesugen",
+        "Checheyigen",
+        "Alaqai",
+        "Hoelun"
+      ],
+      "smallTalk": [
+        "A rider passed through with a message from three thousand miles away. He was not even tired."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "deel with right overlap"
+          },
+          "hair": {
+            "label": "braided side loops"
+          },
+          "facialHair": {
+            "label": "long drooping moustache"
+          },
+          "headwear": {
+            "label": "toortsog",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "silk deel and sash"
+          },
+          "hair": {
+            "label": "two long braids"
+          },
+          "headwear": {
+            "label": "boqta",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "technocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "cybernetic"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
+    },
+    {
       "country": "japan",
       "era": "ancient",
       "displayName": "Kofun Yamato",
@@ -6204,6 +7238,199 @@
         {
           "factor": "money",
           "outcome": "company_towns"
+        }
+      ]
+    },
+    {
+      "country": "japan",
+      "era": "earlymodern2",
+      "displayName": "Sengoku Azuchi",
+      "moment": "Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great castle keep and frees the markets in the middle of a hundred years of war",
+      "year": 1576,
+      "tongue": "japanese",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Eiraku tsuho coin"
+        },
+        {
+          "category": "Language",
+          "value": "Late Middle Japanese"
+        },
+        {
+          "category": "Technology",
+          "value": "Tenshu castle keep"
+        },
+        {
+          "category": "Geography",
+          "value": "Azuchi (Lake Biwa)"
+        },
+        {
+          "category": "Politics",
+          "value": "Lord Oda Nobunaga"
+        }
+      ],
+      "maleNames": [
+        "Mitsuhide",
+        "Hideyoshi",
+        "Katsuie",
+        "Nagahide",
+        "Kazumasu",
+        "Toshiie",
+        "Yasuke",
+        "Ranmaru"
+      ],
+      "femaleNames": [
+        "Nohime",
+        "Oichi",
+        "Nene",
+        "Matsu",
+        "Gotoku",
+        "Kitsuno",
+        "Chacha",
+        "Hatsu"
+      ],
+      "smallTalk": [
+        "The lord has opened the markets to anyone. Even the monks are selling."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "kamishimo and hakama"
+          },
+          "hair": {
+            "label": "shaved-pate topknot"
+          },
+          "facialHair": {
+            "label": "thin wispy moustache"
+          },
+          "headwear": {
+            "label": "eboshi",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "uchikake over kosode"
+          },
+          "hair": {
+            "label": "long loose hair"
+          },
+          "headwear": {
+            "label": "katsuki veil",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "future",
+          "outcome": "anarchy"
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns"
+        }
+      ]
+    },
+    {
+      "country": "japan",
+      "era": "industrial2",
+      "displayName": "Late Edo",
+      "moment": "Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock prints sold in the street and a great wave about to be printed",
+      "year": 1830,
+      "tongue": "japanese",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Tenpo oval oban"
+        },
+        {
+          "category": "Language",
+          "value": "Edo-period Japanese"
+        },
+        {
+          "category": "Technology",
+          "value": "Woodblock colour press"
+        },
+        {
+          "category": "Geography",
+          "value": "Edo (floating world)"
+        },
+        {
+          "category": "Politics",
+          "value": "Shogun Tokugawa Ienari"
+        }
+      ],
+      "maleNames": [
+        "Hiroshige",
+        "Kuniyoshi",
+        "Bakin",
+        "Ikku",
+        "Eisen",
+        "Toyokuni",
+        "Hokkei",
+        "Shunsen"
+      ],
+      "femaleNames": [
+        "Oei",
+        "Okichi",
+        "Otama",
+        "Osen",
+        "Ohisa",
+        "Okita",
+        "Oran",
+        "Ochiyo"
+      ],
+      "smallTalk": [
+        "A painter keeps changing his name. He is on his thirtieth."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Hair",
+          "outfit": {
+            "label": "striped kosode and haori"
+          },
+          "hair": {
+            "label": "chonmage",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "tobacco pouch"
+          }
+        },
+        "f": {
+          "signature": "Hair",
+          "outfit": {
+            "label": "patterned kosode and obi"
+          },
+          "hair": {
+            "label": "shimada",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "tortoiseshell kanzashi"
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "theocracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
         }
       ]
     },
@@ -6729,6 +7956,104 @@
       ]
     },
     {
+      "country": "britain",
+      "era": "earlymodern2",
+      "displayName": "Restoration London",
+      "moment": "London in 1687, rebuilt in brick after the Great Fire: the Royal Society, the coffee houses and Newton's Principia, the year it is printed",
+      "year": 1687,
+      "tongue": "english",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Milled silver crown"
+        },
+        {
+          "category": "Language",
+          "value": "Restoration English"
+        },
+        {
+          "category": "Technology",
+          "value": "Reflecting telescope"
+        },
+        {
+          "category": "Geography",
+          "value": "London (rebuilt)"
+        },
+        {
+          "category": "Politics",
+          "value": "King James II"
+        }
+      ],
+      "maleNames": [
+        "Edmond",
+        "Christopher",
+        "Samuel",
+        "Robert",
+        "Nicholas",
+        "Josiah",
+        "Titus",
+        "Ambrose"
+      ],
+      "femaleNames": [
+        "Aphra",
+        "Nell",
+        "Arabella",
+        "Barbara",
+        "Henrietta",
+        "Lettice",
+        "Dorothy",
+        "Temperance"
+      ],
+      "smallTalk": [
+        "Apples fall in London just as in Lincolnshire. A man wrote a book about it."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Hair",
+          "outfit": {
+            "label": "justaucorps coat"
+          },
+          "hair": {
+            "label": "periwig",
+            "leakable": true
+          },
+          "headwear": {
+            "label": "broad-brimmed cocked hat"
+          },
+          "accessory": {
+            "label": "lace cravat"
+          }
+        },
+        "f": {
+          "signature": "Hair",
+          "outfit": {
+            "label": "mantua gown"
+          },
+          "hair": {
+            "label": "fontange",
+            "leakable": true
+          },
+          "headwear": {
+            "label": "lace cap"
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "monarchy"
+        },
+        {
+          "factor": "future",
+          "outcome": "credit_age"
+        },
+        {
+          "factor": "money",
+          "outcome": "banking_houses"
+        }
+      ]
+    },
+    {
       "country": "germany",
       "era": "ancient",
       "displayName": "Germania",
@@ -7220,6 +8545,199 @@
         {
           "factor": "money",
           "outcome": "jubilee"
+        }
+      ]
+    },
+    {
+      "country": "germany",
+      "era": "industrial2",
+      "displayName": "Electoral Bonn",
+      "moment": "Bonn, seat of the Elector of Cologne, in 1790, where the young court organist Ludwig van Beethoven is about to leave for Vienna to study with Haydn",
+      "year": 1790,
+      "tongue": "german",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Cologne Reichstaler"
+        },
+        {
+          "category": "Language",
+          "value": "Rhenish German"
+        },
+        {
+          "category": "Technology",
+          "value": "Court fortepiano"
+        },
+        {
+          "category": "Geography",
+          "value": "Bonn (Electorate)"
+        },
+        {
+          "category": "Politics",
+          "value": "Elector Max Franz"
+        }
+      ],
+      "maleNames": [
+        "Franz",
+        "Ferdinand",
+        "Kaspar",
+        "Stephan",
+        "Nikolaus",
+        "Anton",
+        "Christian",
+        "Johann Peter"
+      ],
+      "femaleNames": [
+        "Eleonore",
+        "Helene",
+        "Magdalena",
+        "Babette",
+        "Josepha",
+        "Theresia",
+        "Ludovica",
+        "Walburga"
+      ],
+      "smallTalk": [
+        "The organist's boy plays so loud the chandeliers shake. He says that is the point."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "cutaway frock coat"
+          },
+          "hair": {
+            "label": "powdered queue"
+          },
+          "headwear": {
+            "label": "bicorne",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "chemise a la reine"
+          },
+          "hair": {
+            "label": "powdered pouf"
+          },
+          "headwear": {
+            "label": "straw bonnet",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "democracy"
+        },
+        {
+          "factor": "future",
+          "outcome": "anarchy"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
+        }
+      ]
+    },
+    {
+      "country": "germany",
+      "era": "industrial3",
+      "displayName": "Revolutionary Cologne",
+      "moment": "Cologne in 1848, the year of revolutions: barricades in the German cities, the Communist Manifesto just printed and Karl Marx editing the Neue Rheinische Zeitung",
+      "year": 1848,
+      "tongue": "german",
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Prussian Taler"
+        },
+        {
+          "category": "Language",
+          "value": "Rhineland High German"
+        },
+        {
+          "category": "Technology",
+          "value": "Rotary newspaper press"
+        },
+        {
+          "category": "Geography",
+          "value": "Cologne (Rhine Province)"
+        },
+        {
+          "category": "Politics",
+          "value": "King Frederick William IV"
+        }
+      ],
+      "maleNames": [
+        "Friedrich",
+        "Wilhelm",
+        "Ferdinand",
+        "Georg",
+        "Gottfried",
+        "Moses",
+        "Ernst",
+        "Heinrich"
+      ],
+      "femaleNames": [
+        "Jenny",
+        "Helene",
+        "Mathilde",
+        "Louise",
+        "Emma",
+        "Luise",
+        "Marie",
+        "Amalie"
+      ],
+      "smallTalk": [
+        "The paper was banned again this morning. It will be on sale again by noon."
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "frock coat and waistcoat"
+          },
+          "hair": {
+            "label": "thick swept-back hair"
+          },
+          "facialHair": {
+            "label": "full bushy beard"
+          },
+          "headwear": {
+            "label": "Kalabreser",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "Biedermeier day dress"
+          },
+          "hair": {
+            "label": "side ringlets"
+          },
+          "headwear": {
+            "label": "Biedermeier cap",
+            "leakable": true
+          }
+        }
+      },
+      "leanings": [
+        {
+          "factor": "government",
+          "outcome": "communism"
+        },
+        {
+          "factor": "future",
+          "outcome": "anarchy"
+        },
+        {
+          "factor": "money",
+          "outcome": "commons"
         }
       ]
     },
@@ -8558,42 +10076,33 @@
         "Rule_DisplacedReturns"
       ],
       "premades": [
-        "hatshepsut",
         "kulthum",
-        "sharif",
         "hammurabi",
-        "harun",
         "khwarizmi",
-        "hippocrates",
-        "callas",
-        "cosimo",
         "leonardo",
         "michelangelo",
-        "marconi",
-        "cailun",
-        "sudongpo",
-        "musashi",
+        "elizabeth",
         "shakespeare",
         "darwin",
-        "dickens",
+        "turing",
         "gutenberg",
-        "benz",
+        "luther",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "cleopatra",
+          "premade": "caesar",
           "blueprint": ""
         },
         {
           "slot": 8,
-          "premade": "turing",
+          "premade": "ramesses",
           "blueprint": ""
         },
         {
           "slot": 10,
-          "premade": "durer",
+          "premade": "saladin",
           "blueprint": ""
         }
       ],
@@ -8699,30 +10208,23 @@
       ],
       "premades": [
         "kulthum",
-        "sharif",
         "hammurabi",
-        "harun",
         "khwarizmi",
-        "hippocrates",
-        "callas",
-        "cleopatra",
-        "cosimo",
+        "caesar",
         "leonardo",
         "michelangelo",
-        "sudongpo",
-        "musashi",
+        "elizabeth",
         "shakespeare",
         "darwin",
-        "dickens",
         "turing",
         "gutenberg",
-        "durer",
-        "benz"
+        "luther",
+        "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "einstein",
+          "premade": "cleopatra",
           "blueprint": ""
         },
         {
@@ -8735,12 +10237,12 @@
         },
         {
           "slot": 8,
-          "premade": "marconi",
+          "premade": "beethoven",
           "blueprint": ""
         },
         {
           "slot": 10,
-          "premade": "cailun",
+          "premade": "nobunaga",
           "blueprint": ""
         }
       ],
@@ -8852,31 +10354,22 @@
         "Rule_DisplacedReturns"
       ],
       "premades": [
-        "hatshepsut",
         "kulthum",
         "hammurabi",
-        "harun",
-        "hippocrates",
-        "callas",
-        "cleopatra",
-        "cosimo",
+        "khwarizmi",
+        "caesar",
         "leonardo",
         "michelangelo",
-        "marconi",
-        "cailun",
-        "musashi",
-        "kurosawa",
-        "darwin",
-        "dickens",
+        "elizabeth",
+        "shakespeare",
         "turing",
         "gutenberg",
-        "durer",
-        "benz"
+        "luther"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "shakespeare",
+          "premade": "alexander",
           "blueprint": ""
         },
         {
@@ -8887,12 +10380,17 @@
         },
         {
           "slot": 8,
-          "premade": "khwarizmi",
+          "premade": "darwin",
+          "blueprint": ""
+        },
+        {
+          "slot": 9,
+          "premade": "kurosawa",
           "blueprint": ""
         },
         {
           "slot": 10,
-          "premade": "sharif",
+          "premade": "suntzu",
           "blueprint": ""
         }
       ],
@@ -9007,30 +10505,21 @@
       ],
       "premades": [
         "kulthum",
-        "sharif",
         "hammurabi",
-        "harun",
         "khwarizmi",
-        "hippocrates",
-        "callas",
-        "cleopatra",
-        "cosimo",
+        "caesar",
+        "leonardo",
         "michelangelo",
-        "marconi",
-        "cailun",
         "kurosawa",
+        "elizabeth",
         "shakespeare",
         "darwin",
-        "dickens",
-        "turing",
-        "durer",
-        "benz",
-        "einstein"
+        "turing"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "leonardo",
+          "premade": "einstein",
           "blueprint": ""
         },
         {
@@ -9042,12 +10531,12 @@
         },
         {
           "slot": 9,
-          "premade": "hatshepsut",
+          "premade": "marx",
           "blueprint": ""
         },
         {
           "slot": 11,
-          "premade": "sudongpo",
+          "premade": "luther",
           "blueprint": ""
         }
       ],
@@ -9161,33 +10650,22 @@
         "Rule_DriftboxRecall"
       ],
       "premades": [
-        "hatshepsut",
         "kulthum",
-        "sharif",
-        "harun",
         "khwarizmi",
-        "hippocrates",
-        "cleopatra",
-        "cosimo",
+        "caesar",
         "leonardo",
-        "michelangelo",
-        "marconi",
-        "cailun",
-        "sudongpo",
-        "musashi",
         "kurosawa",
+        "elizabeth",
         "shakespeare",
-        "dickens",
-        "turing",
+        "darwin",
         "gutenberg",
-        "durer",
-        "benz",
+        "luther",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "darwin",
+          "premade": "newton",
           "blueprint": ""
         },
         {
@@ -9228,7 +10706,12 @@
         },
         {
           "slot": 9,
-          "premade": "callas",
+          "premade": "michelangelo",
+          "blueprint": ""
+        },
+        {
+          "slot": 11,
+          "premade": "turing",
           "blueprint": ""
         }
       ],
@@ -9345,32 +10828,23 @@
         "Rule_DriftboxRecall"
       ],
       "premades": [
-        "hatshepsut",
-        "kulthum",
-        "sharif",
         "hammurabi",
-        "harun",
         "khwarizmi",
-        "hippocrates",
-        "callas",
-        "cleopatra",
-        "cosimo",
+        "caesar",
         "leonardo",
-        "marconi",
-        "cailun",
-        "sudongpo",
+        "michelangelo",
+        "elizabeth",
         "shakespeare",
         "darwin",
-        "dickens",
         "turing",
         "gutenberg",
-        "durer",
+        "luther",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "michelangelo",
+          "premade": "confucius",
           "blueprint": ""
         },
         {
@@ -9382,7 +10856,12 @@
         },
         {
           "slot": 9,
-          "premade": "benz",
+          "premade": "aristotle",
+          "blueprint": ""
+        },
+        {
+          "slot": 11,
+          "premade": "kulthum",
           "blueprint": ""
         }
       ],
@@ -9505,31 +10984,24 @@
       ],
       "premades": [
         "kulthum",
-        "sharif",
         "hammurabi",
-        "harun",
         "khwarizmi",
-        "callas",
-        "cleopatra",
-        "cosimo",
+        "caesar",
         "leonardo",
         "michelangelo",
-        "marconi",
-        "cailun",
-        "sudongpo",
+        "kurosawa",
+        "elizabeth",
         "shakespeare",
         "darwin",
-        "dickens",
         "turing",
         "gutenberg",
-        "durer",
-        "benz",
+        "luther",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "hippocrates",
+          "premade": "genghis",
           "blueprint": ""
         },
         {
@@ -9541,12 +11013,17 @@
         },
         {
           "slot": 10,
-          "premade": "kurosawa",
+          "premade": "qinshihuang",
           "blueprint": ""
         },
         {
           "slot": 11,
           "premade": "socrates",
+          "blueprint": ""
+        },
+        {
+          "slot": 12,
+          "premade": "hokusai",
           "blueprint": ""
         }
       ],
@@ -9669,33 +11146,22 @@
         "Rule_DriftboxRecall"
       ],
       "premades": [
-        "hatshepsut",
         "kulthum",
-        "sharif",
-        "harun",
-        "khwarizmi",
-        "hippocrates",
+        "hammurabi",
         "socrates",
-        "callas",
-        "cleopatra",
-        "cosimo",
-        "leonardo",
+        "caesar",
         "michelangelo",
-        "marconi",
-        "cailun",
         "kurosawa",
         "shakespeare",
         "darwin",
-        "dickens",
         "turing",
         "gutenberg",
-        "durer",
-        "benz"
+        "luther"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "hammurabi",
+          "premade": "leonardo",
           "blueprint": ""
         },
         {
@@ -9707,7 +11173,12 @@
         },
         {
           "slot": 10,
-          "premade": "musashi",
+          "premade": "elizabeth",
+          "blueprint": ""
+        },
+        {
+          "slot": 12,
+          "premade": "khwarizmi",
           "blueprint": ""
         }
       ],
@@ -9830,29 +11301,20 @@
         "Rule_DriftboxRecall"
       ],
       "premades": [
-        "hatshepsut",
-        "hammurabi",
-        "harun",
         "khwarizmi",
-        "hippocrates",
         "socrates",
-        "cleopatra",
+        "caesar",
         "leonardo",
         "michelangelo",
-        "marconi",
-        "cailun",
-        "sudongpo",
-        "musashi",
-        "shakespeare",
+        "elizabeth",
         "darwin",
         "gutenberg",
-        "durer",
-        "benz"
+        "luther"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "dickens",
+          "premade": "shakespeare",
           "blueprint": ""
         },
         {
@@ -9884,7 +11346,12 @@
         },
         {
           "slot": 10,
-          "premade": "cosimo",
+          "premade": "marcopolo",
+          "blueprint": ""
+        },
+        {
+          "slot": 12,
+          "premade": "hammurabi",
           "blueprint": ""
         }
       ],
@@ -10009,32 +11476,24 @@
         "Rule_DriftboxRecall"
       ],
       "premades": [
-        "hatshepsut",
-        "sharif",
+        "kulthum",
         "hammurabi",
         "khwarizmi",
-        "hippocrates",
         "socrates",
-        "callas",
-        "cleopatra",
-        "cosimo",
+        "caesar",
         "leonardo",
         "michelangelo",
-        "marconi",
-        "cailun",
-        "sudongpo",
-        "musashi",
+        "elizabeth",
         "shakespeare",
         "turing",
         "gutenberg",
-        "durer",
-        "benz",
+        "luther",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "kulthum",
+          "premade": "galileo",
           "blueprint": ""
         },
         {
@@ -10073,7 +11532,7 @@
         },
         {
           "slot": 10,
-          "premade": "harun",
+          "premade": "archimedes",
           "blueprint": ""
         }
       ],
@@ -10534,56 +11993,92 @@
           "text": "Home to {place}, please! An engine needs my notes!"
         },
         {
-          "premade": "hatshepsut",
-          "text": "Home to {place}. A pharaoh does not queue twice."
+          "premade": "ramesses",
+          "text": "Home to {place}. My statues are waiting. All of them."
         },
         {
-          "premade": "sharif",
-          "text": "Home to {place}, please. The desert scenes are finished."
+          "premade": "cleopatra",
+          "text": "Home to {place}. My barge is waiting, and it is gold."
+        },
+        {
+          "premade": "saladin",
+          "text": "Home to {place}, if you please. My Citadel is half built."
+        },
+        {
+          "premade": "alexander",
+          "text": "Home to {place}. My army does not conquer the world on its own."
+        },
+        {
+          "premade": "aristotle",
+          "text": "Home to {place}, please. My notes on your hall are done."
+        },
+        {
+          "premade": "confucius",
+          "text": "Home to {place}, if it is proper. My students are waiting."
+        },
+        {
+          "premade": "suntzu",
+          "text": "Home to {place}. The terrain there is more favourable."
+        },
+        {
+          "premade": "qinshihuang",
+          "text": "Home to {place}. My terracotta army is waiting."
+        },
+        {
+          "premade": "caesar",
+          "text": "Home to {place}. The Senate meets on the Ides. I may skip it."
+        },
+        {
+          "premade": "archimedes",
+          "text": "Home to {place}. Do not disturb my circles on the way out."
+        },
+        {
+          "premade": "marcopolo",
+          "text": "Home to {place}. Twenty-four years away. Nobody will know me."
+        },
+        {
+          "premade": "genghis",
+          "text": "Home to {place}. My riders wait for nobody but me."
+        },
+        {
+          "premade": "galileo",
+          "text": "Home to {place}. Jupiter will not observe itself."
+        },
+        {
+          "premade": "nobunaga",
+          "text": "Home to {place}. My castle needs an eighth floor."
+        },
+        {
+          "premade": "hokusai",
+          "text": "Home to {place}, please. The wave will not draw itself."
+        },
+        {
+          "premade": "elizabeth",
+          "text": "Home to {place}. We have a court to keep."
+        },
+        {
+          "premade": "newton",
+          "text": "Home to {place}. My laws apply there, as everywhere."
+        },
+        {
+          "premade": "luther",
+          "text": "Home to {place}. Here I stand. Then I would like to go."
+        },
+        {
+          "premade": "beethoven",
+          "text": "Home to {place}. Then Vienna. Haydn is expecting me, poor man."
+        },
+        {
+          "premade": "marx",
+          "text": "Home to {place}. The paper must go out before it is banned."
         },
         {
           "premade": "hammurabi",
           "text": "Home to {place}. My laws will not enforce themselves."
         },
         {
-          "premade": "harun",
-          "text": "Home to {place}. My son keeps the throne warm."
-        },
-        {
-          "premade": "hippocrates",
-          "text": "Home to {place}, please. I have patients waiting."
-        },
-        {
-          "premade": "callas",
-          "text": "Home to {place}, please. The orchestra is tuning."
-        },
-        {
-          "premade": "cleopatra",
-          "text": "To {place}. Caesar is expecting me. He hates waiting."
-        },
-        {
-          "premade": "cosimo",
-          "text": "Home to {place}, please. My bank does not run itself."
-        },
-        {
           "premade": "michelangelo",
           "text": "Home to {place}. A block of marble is waiting for me."
-        },
-        {
-          "premade": "marconi",
-          "text": "Home to {place}, please. My antenna is still on the hill."
-        },
-        {
-          "premade": "cailun",
-          "text": "Home to {place}, please. The court is short of paper."
-        },
-        {
-          "premade": "sudongpo",
-          "text": "Home to {place}, please. The moon is rising there."
-        },
-        {
-          "premade": "musashi",
-          "text": "Home to {place}. I am late, which is how I prefer it."
         },
         {
           "premade": "kurosawa",
@@ -10596,18 +12091,6 @@
         {
           "premade": "darwin",
           "text": "Home to {place}, please. My barnacles need me."
-        },
-        {
-          "premade": "dickens",
-          "text": "Home to {place}, please. My readers expect an instalment."
-        },
-        {
-          "premade": "durer",
-          "text": "Home to {place}, please. My workshop has orders."
-        },
-        {
-          "premade": "benz",
-          "text": "Home to {place}, please. Bertha took the car again."
         },
         {
           "premade": "einstein",
@@ -10692,56 +12175,92 @@
           "text": "Here! In my own hand! I do love a form. So many little boxes!"
         },
         {
-          "premade": "hatshepsut",
-          "text": "Here. Read it aloud. Pharaohs do not read their own papers."
+          "premade": "ramesses",
+          "text": "Here. You may keep a copy. I have it carved in several temples."
         },
         {
-          "premade": "sharif",
-          "text": "Here. Sign anything you like. People usually want an autograph."
+          "premade": "cleopatra",
+          "text": "Here. In Alexandria, papers are carried to me on a cushion."
+        },
+        {
+          "premade": "saladin",
+          "text": "Here. Take your time. Patience wins more cities than siege engines."
+        },
+        {
+          "premade": "alexander",
+          "text": "Here. Quickly. I have an empire to start before lunch."
+        },
+        {
+          "premade": "aristotle",
+          "text": "Here. A document has four causes. Yours has at least two."
+        },
+        {
+          "premade": "confucius",
+          "text": "Here. Handed with both hands, as is correct."
+        },
+        {
+          "premade": "suntzu",
+          "text": "Here. Know your papers and know your clerk, and you need not fear."
+        },
+        {
+          "premade": "qinshihuang",
+          "text": "Here. One form, one standard. As it should be everywhere."
+        },
+        {
+          "premade": "caesar",
+          "text": "Here. I came, I saw, I handed it over."
+        },
+        {
+          "premade": "archimedes",
+          "text": "Here. Give me a place to stand and I will stamp it myself."
+        },
+        {
+          "premade": "marcopolo",
+          "text": "Here. I have seen stranger papers. Paper money, for one."
+        },
+        {
+          "premade": "genghis",
+          "text": "Here. I cannot read it. That has never stopped me."
+        },
+        {
+          "premade": "galileo",
+          "text": "Here. I dropped two copies from a tower. They landed together."
+        },
+        {
+          "premade": "nobunaga",
+          "text": "Here. Quickly. I conquer faster than I read."
+        },
+        {
+          "premade": "hokusai",
+          "text": "Here. I signed it with my newest name. I have many."
+        },
+        {
+          "premade": "elizabeth",
+          "text": "Here. We do not usually hand things over. Mark it."
+        },
+        {
+          "premade": "newton",
+          "text": "Here. A body at rest. Now a body in motion. Thank you."
+        },
+        {
+          "premade": "luther",
+          "text": "Here. Do not nail it to anything, please. I have done enough of that."
+        },
+        {
+          "premade": "beethoven",
+          "text": "Here. Mind the ink. I write while I walk."
+        },
+        {
+          "premade": "marx",
+          "text": "Here. Note the means of production: a pen. Mine."
         },
         {
           "premade": "hammurabi",
           "text": "Here. Check it against my laws. Law 1 is very strict."
         },
         {
-          "premade": "harun",
-          "text": "Here. At home I walk in disguise. Today I am only paper."
-        },
-        {
-          "premade": "hippocrates",
-          "text": "Here. Your complexion is pale. Do you sleep?"
-        },
-        {
-          "premade": "callas",
-          "text": "Here. Handle it gently. It has been on tour."
-        },
-        {
-          "premade": "cleopatra",
-          "text": "Here. In Egypt, papers are carried to me on a cushion."
-        },
-        {
-          "premade": "cosimo",
-          "text": "Here. If anything is missing, I can arrange a loan."
-        },
-        {
           "premade": "michelangelo",
           "text": "Here. Careful, my hands are full of marble dust."
-        },
-        {
-          "premade": "marconi",
-          "text": "Here. Did it arrive? I am testing a theory about delivery."
-        },
-        {
-          "premade": "cailun",
-          "text": "Ah, paper. Good paper, too. Not as good as mine."
-        },
-        {
-          "premade": "sudongpo",
-          "text": "Here. I wrote a poem on the back. You may keep it."
-        },
-        {
-          "premade": "musashi",
-          "text": "Here. Read slowly. I am in no hurry. My opponents are."
         },
         {
           "premade": "kurosawa",
@@ -10754,18 +12273,6 @@
         {
           "premade": "darwin",
           "text": "Here. Pardon the beetle. It was in my pocket."
-        },
-        {
-          "premade": "dickens",
-          "text": "Here. It is the best of papers, it is the worst of papers."
-        },
-        {
-          "premade": "durer",
-          "text": "Here. Note my monogram. Anything without it is a forgery."
-        },
-        {
-          "premade": "benz",
-          "text": "Here. Careful, there is oil on it. There is always oil."
         },
         {
           "premade": "einstein",
@@ -11585,112 +13092,22 @@
           "text": "Means? My mother handles all that. She's very strict."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Incense trees from Punt. They are waiting outside."
+          "text": "A manifest? Two hundred chariots and a very large statue of me."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "request": "TC-310",
           "variant": "Honest",
-          "text": "A waiver? Pharaohs do not waive. They decree."
+          "text": "A waiver? I wrote the first peace treaty. I do not sign other people's."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "request": "proof",
           "variant": "Honest",
-          "text": "Means? All of Egypt. The receipt is a temple."
-        },
-        {
-          "premade": "sharif",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? A camel, two costumes and a deck of cards."
-        },
-        {
-          "premade": "sharif",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? I sign contracts. The studio reads them for me."
-        },
-        {
-          "premade": "sharif",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Last night's bridge winnings. Mostly."
-        },
-        {
-          "premade": "hammurabi",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? A stone with 282 laws on it. It is heavy."
-        },
-        {
-          "premade": "hammurabi",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? My laws waive a farmer's debt after a flood. Is this a flood?"
-        },
-        {
-          "premade": "hammurabi",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A kingdom, two rivers and a very large stone."
-        },
-        {
-          "premade": "harun",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? A cloak, a lamp and a book of stories."
-        },
-        {
-          "premade": "harun",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? In my city, the caliph does the waiving."
-        },
-        {
-          "premade": "harun",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A treasury. My son has the key now."
-        },
-        {
-          "premade": "hippocrates",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? Herbs, a knife and my notes on fevers."
-        },
-        {
-          "premade": "hippocrates",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? I swore an oath once. That was enough."
-        },
-        {
-          "premade": "hippocrates",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Grateful patients. They pay in figs."
-        },
-        {
-          "premade": "callas",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? Twelve gowns and a voice. The voice is insured."
-        },
-        {
-          "premade": "callas",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? I never waive an encore."
-        },
-        {
-          "premade": "callas",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Ask La Scala. They paid in roses."
+          "text": "Means? Egypt. And Nubia. And most of the Levant, on a good day."
         },
         {
           "premade": "cleopatra",
@@ -11711,22 +13128,346 @@
           "text": "Means? The grain of the Nile. Rome eats it daily."
         },
         {
-          "premade": "cosimo",
+          "premade": "saladin",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Ledgers. Several. All balanced."
+          "text": "A manifest? A horse, a sword and a book of poetry."
         },
         {
-          "premade": "cosimo",
+          "premade": "saladin",
           "request": "TC-310",
           "variant": "Honest",
-          "text": "A waiver? I prefer a contract. With interest, discreetly."
+          "text": "A waiver? I keep my word without one. It has been enough so far."
         },
         {
-          "premade": "cosimo",
+          "premade": "saladin",
           "request": "proof",
           "variant": "Honest",
-          "text": "Means? Branches in London, Bruges and Rome. Is that enough?"
+          "text": "Means? Very little. I gave the treasury away again."
+        },
+        {
+          "premade": "alexander",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? One horse. His name is Bucephalus. He is outside."
+        },
+        {
+          "premade": "alexander",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I cut through knots. I do not sign them."
+        },
+        {
+          "premade": "alexander",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? Macedon today. Persia by next spring."
+        },
+        {
+          "premade": "aristotle",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Notes on animals, plants, stars and your desk."
+        },
+        {
+          "premade": "aristotle",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? First define the waiver. Then we may discuss it."
+        },
+        {
+          "premade": "aristotle",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A royal salary. My pupil's father is generous."
+        },
+        {
+          "premade": "confucius",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Books of songs and rites. And my students' homework."
+        },
+        {
+          "premade": "confucius",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? Is it proper to waive one's duty? Let us think on it."
+        },
+        {
+          "premade": "confucius",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? My students bring dried meat. It is enough."
+        },
+        {
+          "premade": "suntzu",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Thirteen chapters on bamboo. Nothing else is needed."
+        },
+        {
+          "premade": "suntzu",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? The best victory is the one that needs no signature."
+        },
+        {
+          "premade": "suntzu",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? Every battle is won before it is fought. Funding too."
+        },
+        {
+          "premade": "qinshihuang",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Eight thousand clay soldiers. They are being made."
+        },
+        {
+          "premade": "qinshihuang",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I am searching for an elixir of life. Waivers are for others."
+        },
+        {
+          "premade": "qinshihuang",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? All under heaven. I counted it myself."
+        },
+        {
+          "premade": "caesar",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Eight legions. They are waiting at the Rubicon."
+        },
+        {
+          "premade": "caesar",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? The die is cast. I do not sign after the die."
+        },
+        {
+          "premade": "caesar",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? Debts, mostly. Very large debts. To very nervous men."
+        },
+        {
+          "premade": "archimedes",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? A compass, a lever and a crown I must weigh."
+        },
+        {
+          "premade": "archimedes",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? Is it heavier than water? Let me check."
+        },
+        {
+          "premade": "archimedes",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? The king pays me to keep the Romans away."
+        },
+        {
+          "premade": "marcopolo",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Silk, spices and a gold tablet from the Khan."
+        },
+        {
+          "premade": "marcopolo",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? At the Khan's court, a gold tablet was enough."
+        },
+        {
+          "premade": "marcopolo",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? Jewels sewn into my coat. Please do not check the lining."
+        },
+        {
+          "premade": "genghis",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? A horse, a bow and an empire."
+        },
+        {
+          "premade": "genghis",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? My law is the Yassa. It has no waivers."
+        },
+        {
+          "premade": "genghis",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? The whole steppe. And whatever is east of it."
+        },
+        {
+          "premade": "galileo",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? One telescope and my notes on the moons of Jupiter."
+        },
+        {
+          "premade": "galileo",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I have had enough trouble signing things."
+        },
+        {
+          "premade": "galileo",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A professor's salary. And a spyglass I sold the Senate."
+        },
+        {
+          "premade": "nobunaga",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Three thousand muskets. I fire them in rows."
+        },
+        {
+          "premade": "nobunaga",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I tore up the guild rules. I can tear up yours."
+        },
+        {
+          "premade": "nobunaga",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? Every market from Owari to Kyoto. They pay gladly."
+        },
+        {
+          "premade": "hokusai",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Brushes, blocks and thirty-six views of a mountain."
+        },
+        {
+          "premade": "hokusai",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I would rather draw one. Sign it? No."
+        },
+        {
+          "premade": "hokusai",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? Prints. They sell for the price of a bowl of noodles."
+        },
+        {
+          "premade": "elizabeth",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Our wardrobe. Three thousand gowns. Do not count them."
+        },
+        {
+          "premade": "elizabeth",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? We sign charters, not waivers."
+        },
+        {
+          "premade": "elizabeth",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? England. And a company that sails to the Indies."
+        },
+        {
+          "premade": "newton",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Principia, three books. A prism. One apple, eaten."
+        },
+        {
+          "premade": "newton",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? Every waiver has an equal and opposite clause."
+        },
+        {
+          "premade": "newton",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A professor's chair. Soon, I hope, the Mint."
+        },
+        {
+          "premade": "luther",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? A Bible, in German, for everyone. And a hammer."
+        },
+        {
+          "premade": "luther",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I read the small print. I wrote ninety-five objections."
+        },
+        {
+          "premade": "luther",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? None. A monk owns nothing. My wife disagrees."
+        },
+        {
+          "premade": "beethoven",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Sketchbooks. Many sketchbooks. One unfinished symphony."
+        },
+        {
+          "premade": "beethoven",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? Rules do not apply to music. Or to me."
+        },
+        {
+          "premade": "beethoven",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? Court wages. And lessons to rich young ladies."
+        },
+        {
+          "premade": "marx",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? A manifesto. A short one. It is selling well."
+        },
+        {
+          "premade": "marx",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? A worker waives nothing but his chains."
+        },
+        {
+          "premade": "marx",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? Very few. My friend Friedrich sends money."
+        },
+        {
+          "premade": "hammurabi",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? A stone with 282 laws on it. It is heavy."
+        },
+        {
+          "premade": "hammurabi",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? My laws waive a farmer's debt after a flood. Is this a flood?"
+        },
+        {
+          "premade": "hammurabi",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A kingdom, two rivers and a very large stone."
         },
         {
           "premade": "michelangelo",
@@ -11745,78 +13486,6 @@
           "request": "proof",
           "variant": "Honest",
           "text": "Means? A pope will owe me money. Several, in time."
-        },
-        {
-          "premade": "marconi",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? A spark coil, a kite and some very long wire."
-        },
-        {
-          "premade": "marconi",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? Can I send it wirelessly?"
-        },
-        {
-          "premade": "marconi",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? My mother's savings. And a patent, pending."
-        },
-        {
-          "premade": "cailun",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? Bark, rags and old fishing nets. For paper."
-        },
-        {
-          "premade": "cailun",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? On paper? I approve already."
-        },
-        {
-          "premade": "cailun",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? An imperial salary, mostly spent on rags."
-        },
-        {
-          "premade": "sudongpo",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? A brush, a jar of wine and a recipe for pork."
-        },
-        {
-          "premade": "sudongpo",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? Let me write you a poem instead."
-        },
-        {
-          "premade": "sudongpo",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? An official's salary. Spent on wine."
-        },
-        {
-          "premade": "musashi",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? Two swords. One long, one short."
-        },
-        {
-          "premade": "musashi",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? I do not sign. I win."
-        },
-        {
-          "premade": "musashi",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? None. A ronin owns his swords and his road."
         },
         {
           "premade": "kurosawa",
@@ -11871,60 +13540,6 @@
           "request": "proof",
           "variant": "Honest",
           "text": "Means? My father's allowance. He despairs of me."
-        },
-        {
-          "premade": "dickens",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? A pen, ink and a ghost or three."
-        },
-        {
-          "premade": "dickens",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? My father went to a debtors' prison over a paper."
-        },
-        {
-          "premade": "dickens",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Paid by the word. Expect many words."
-        },
-        {
-          "premade": "durer",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? Copper plates, burins and one rhinoceros, drawn."
-        },
-        {
-          "premade": "durer",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? I sign only my work. With a large AD."
-        },
-        {
-          "premade": "durer",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Prints. They sell at every fair in the Empire."
-        },
-        {
-          "premade": "benz",
-          "request": "TC-230",
-          "variant": "Honest",
-          "text": "A manifest? Spanners, a spare wheel and a can of fuel."
-        },
-        {
-          "premade": "benz",
-          "request": "TC-310",
-          "variant": "Honest",
-          "text": "A waiver? My wife never signed one. She just drove."
-        },
-        {
-          "premade": "benz",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A factory and many patents. And a mortgage."
         },
         {
           "premade": "einstein",
@@ -12087,64 +13702,14 @@
           "text": "Louder? Of course! Drawing rooms, you know. Very echoey."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "request": "step_closer",
-          "text": "Closer? Mind the beard. It is ceremonial."
+          "text": "Closer? Pharaohs are usually viewed from far below."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "request": "speak_up",
-          "text": "Louder? A pharaoh speaks once. Scribes write it down."
-        },
-        {
-          "premade": "sharif",
-          "request": "step_closer",
-          "text": "Closer. This is my good side, by the way."
-        },
-        {
-          "premade": "sharif",
-          "request": "speak_up",
-          "text": "Louder? In the desert we whispered. The sand carries."
-        },
-        {
-          "premade": "hammurabi",
-          "request": "step_closer",
-          "text": "Closer. An eye for an eye, and a step for a step."
-        },
-        {
-          "premade": "hammurabi",
-          "request": "speak_up",
-          "text": "Louder? Read my laws. They are carved large on purpose."
-        },
-        {
-          "premade": "harun",
-          "request": "step_closer",
-          "text": "Closer. I am used to hiding in crowds. This is new."
-        },
-        {
-          "premade": "harun",
-          "request": "speak_up",
-          "text": "Louder? I usually listen. People talk freely to a stranger."
-        },
-        {
-          "premade": "hippocrates",
-          "request": "step_closer",
-          "text": "Closer. Let me see your eyes. Yes, as I thought."
-        },
-        {
-          "premade": "hippocrates",
-          "request": "speak_up",
-          "text": "Louder? First, do no harm. Shouting harms."
-        },
-        {
-          "premade": "callas",
-          "request": "step_closer",
-          "text": "Closer? Darling, I am not in the chorus."
-        },
-        {
-          "premade": "callas",
-          "request": "speak_up",
-          "text": "Louder? I have not yet sung. You will know when I do."
+          "text": "Louder? My scribes will carve it larger, if you prefer."
         },
         {
           "premade": "cleopatra",
@@ -12157,14 +13722,194 @@
           "text": "Louder? I speak nine languages. Pick one."
         },
         {
-          "premade": "cosimo",
+          "premade": "saladin",
           "request": "step_closer",
-          "text": "Closer. Discretion is a banker's best friend."
+          "text": "Closer, certainly. A guest should not have to shout."
         },
         {
-          "premade": "cosimo",
+          "premade": "saladin",
           "request": "speak_up",
-          "text": "Louder? A banker never raises his voice. Only his rates."
+          "text": "Louder? Forgive me. In the camp we speak softly."
+        },
+        {
+          "premade": "alexander",
+          "request": "step_closer",
+          "text": "Closer? I only advance. Very well."
+        },
+        {
+          "premade": "alexander",
+          "request": "speak_up",
+          "text": "Louder? On the battlefield, they hear me fine."
+        },
+        {
+          "premade": "aristotle",
+          "request": "step_closer",
+          "text": "Closer. Observation precedes knowledge."
+        },
+        {
+          "premade": "aristotle",
+          "request": "speak_up",
+          "text": "Louder? Virtue lies in the mean. So does volume."
+        },
+        {
+          "premade": "confucius",
+          "request": "step_closer",
+          "text": "Closer, yes. Respect does not need distance."
+        },
+        {
+          "premade": "confucius",
+          "request": "speak_up",
+          "text": "Louder? The superior man is slow to speak."
+        },
+        {
+          "premade": "suntzu",
+          "request": "step_closer",
+          "text": "Closer. Appear weak when you are strong."
+        },
+        {
+          "premade": "suntzu",
+          "request": "speak_up",
+          "text": "Louder? All warfare is based on deception. Also whispering."
+        },
+        {
+          "premade": "qinshihuang",
+          "request": "step_closer",
+          "text": "Closer? Few are allowed this close. Note it."
+        },
+        {
+          "premade": "qinshihuang",
+          "request": "speak_up",
+          "text": "Louder? An emperor's word is carved, not shouted."
+        },
+        {
+          "premade": "caesar",
+          "request": "step_closer",
+          "text": "Closer? I prefer to keep my friends close. And my clerks."
+        },
+        {
+          "premade": "caesar",
+          "request": "speak_up",
+          "text": "Louder? I wrote my own war reports. They are quite loud."
+        },
+        {
+          "premade": "archimedes",
+          "request": "step_closer",
+          "text": "Closer? Careful. You are standing on my circles."
+        },
+        {
+          "premade": "archimedes",
+          "request": "speak_up",
+          "text": "Louder? EUREKA. Is that loud enough?"
+        },
+        {
+          "premade": "marcopolo",
+          "request": "step_closer",
+          "text": "Closer? I have crossed deserts. A desk is nothing."
+        },
+        {
+          "premade": "marcopolo",
+          "request": "speak_up",
+          "text": "Louder? I have told my story so often my voice is tired."
+        },
+        {
+          "premade": "genghis",
+          "request": "step_closer",
+          "text": "Closer? A horseman likes room. Very well."
+        },
+        {
+          "premade": "genghis",
+          "request": "speak_up",
+          "text": "Louder? I give orders across valleys. This is a desk."
+        },
+        {
+          "premade": "galileo",
+          "request": "step_closer",
+          "text": "Closer. Through a lens everything is closer anyway."
+        },
+        {
+          "premade": "galileo",
+          "request": "speak_up",
+          "text": "Louder? I am used to speaking softly. For safety."
+        },
+        {
+          "premade": "nobunaga",
+          "request": "step_closer",
+          "text": "Closer? A lord does not step closer. Very well, once."
+        },
+        {
+          "premade": "nobunaga",
+          "request": "speak_up",
+          "text": "Louder? Human life is fifty years. Speak quickly."
+        },
+        {
+          "premade": "hokusai",
+          "request": "step_closer",
+          "text": "Closer? At seventy I see everything better. Come."
+        },
+        {
+          "premade": "hokusai",
+          "request": "speak_up",
+          "text": "Louder? Forgive me. I was drawing your ear."
+        },
+        {
+          "premade": "elizabeth",
+          "request": "step_closer",
+          "text": "Closer? We have the heart and stomach of a king. Approach."
+        },
+        {
+          "premade": "elizabeth",
+          "request": "speak_up",
+          "text": "Louder? A queen need never raise her voice. Listen better."
+        },
+        {
+          "premade": "newton",
+          "request": "step_closer",
+          "text": "Closer. The force between us grows with the square. Mind it."
+        },
+        {
+          "premade": "newton",
+          "request": "speak_up",
+          "text": "Louder? I wrote the laws of motion. Not of shouting."
+        },
+        {
+          "premade": "luther",
+          "request": "step_closer",
+          "text": "Closer? Here I stand. I can do no other."
+        },
+        {
+          "premade": "luther",
+          "request": "speak_up",
+          "text": "Louder? Gladly. I preach to whole towns."
+        },
+        {
+          "premade": "beethoven",
+          "request": "step_closer",
+          "text": "Closer, yes. I like to hear things up close."
+        },
+        {
+          "premade": "beethoven",
+          "request": "speak_up",
+          "text": "Louder? Gladly! I always play fortissimo."
+        },
+        {
+          "premade": "marx",
+          "request": "step_closer",
+          "text": "Closer. A clerk and a traveller have more in common than you think."
+        },
+        {
+          "premade": "marx",
+          "request": "speak_up",
+          "text": "Louder? History repeats itself. So can I."
+        },
+        {
+          "premade": "hammurabi",
+          "request": "step_closer",
+          "text": "Closer. An eye for an eye, and a step for a step."
+        },
+        {
+          "premade": "hammurabi",
+          "request": "speak_up",
+          "text": "Louder? Read my laws. They are carved large on purpose."
         },
         {
           "premade": "michelangelo",
@@ -12175,46 +13920,6 @@
           "premade": "michelangelo",
           "request": "speak_up",
           "text": "Louder? I was listening to the stone."
-        },
-        {
-          "premade": "marconi",
-          "request": "step_closer",
-          "text": "Closer? The signal is better here, yes."
-        },
-        {
-          "premade": "marconi",
-          "request": "speak_up",
-          "text": "Louder? I am used to listening for very faint signals."
-        },
-        {
-          "premade": "cailun",
-          "request": "step_closer",
-          "text": "Closer. I want to see the grain of your forms."
-        },
-        {
-          "premade": "cailun",
-          "request": "speak_up",
-          "text": "Louder? Forgive me. I was feeling the paper."
-        },
-        {
-          "premade": "sudongpo",
-          "request": "step_closer",
-          "text": "Closer? The moonlight is better here."
-        },
-        {
-          "premade": "sudongpo",
-          "request": "speak_up",
-          "text": "Louder? A poet whispers. The page shouts."
-        },
-        {
-          "premade": "musashi",
-          "request": "step_closer",
-          "text": "Closer? Watch my hands, not my eyes."
-        },
-        {
-          "premade": "musashi",
-          "request": "speak_up",
-          "text": "Louder? The way is in silence."
         },
         {
           "premade": "kurosawa",
@@ -12245,36 +13950,6 @@
           "premade": "darwin",
           "request": "speak_up",
           "text": "Louder? Forgive me. I was observing your colleague."
-        },
-        {
-          "premade": "dickens",
-          "request": "step_closer",
-          "text": "Closer? Like a ghost of queues past. Very well."
-        },
-        {
-          "premade": "dickens",
-          "request": "speak_up",
-          "text": "Louder? Please, sir. I shall try for more."
-        },
-        {
-          "premade": "durer",
-          "request": "step_closer",
-          "text": "Closer. Hold still. I am drawing your hands."
-        },
-        {
-          "premade": "durer",
-          "request": "speak_up",
-          "text": "Louder? Forgive me, I was counting the hairs on your head."
-        },
-        {
-          "premade": "benz",
-          "request": "step_closer",
-          "text": "Closer? Mind your feet. I am used to engines."
-        },
-        {
-          "premade": "benz",
-          "request": "speak_up",
-          "text": "Louder? Sorry, it is quieter here than my workshop."
         },
         {
           "premade": "einstein",
@@ -12785,64 +14460,604 @@
           "text": "{value}! A winter baby. Very mathematical."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "question": "q_currency",
-          "text": "{value}. Weighed, never counted. We are not merchants."
+          "text": "{value}. Stamped with my name, naturally."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "question": "q_language",
-          "text": "{value}. My scribes carve it on every wall."
+          "text": "{value}. It looks best on a temple wall."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "question": "q_device",
-          "text": "{value}. My scribes would be lost without it."
+          "text": "{value}. I won Kadesh with it. Ask anyone. Ask my walls."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "question": "q_capital",
-          "text": "{value}. My temple is just across the river."
+          "text": "{value}. I built it. It is named after me."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "question": "q_ruler",
-          "text": "{value}. Yes. You are speaking to her."
+          "text": "{value}. You are looking at him."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "question": "q_born",
-          "text": "{value}. The priests say the god Amun was there."
+          "text": "{value}. A day of great rejoicing, I am told."
         },
         {
-          "premade": "sharif",
+          "premade": "cleopatra",
           "question": "q_currency",
-          "text": "{value}. I won some at cards last week."
+          "text": "{value}. Mine have a better portrait."
         },
         {
-          "premade": "sharif",
+          "premade": "cleopatra",
           "question": "q_language",
-          "text": "{value}. And English, French and Greek. For the films."
+          "text": "{value}. One of my nine."
         },
         {
-          "premade": "sharif",
+          "premade": "cleopatra",
           "question": "q_device",
-          "text": "{value}. Everyone in the crew had one."
+          "text": "{value}. You can see it from the sea at night."
         },
         {
-          "premade": "sharif",
+          "premade": "cleopatra",
           "question": "q_capital",
-          "text": "{value}. The premiere is there next month."
+          "text": "{value}. The Library alone is worth the trip."
         },
         {
-          "premade": "sharif",
+          "premade": "cleopatra",
           "question": "q_ruler",
-          "text": "{value}. He has not seen my film yet."
+          "text": "{value}. Yes. Do sit up straight."
         },
         {
-          "premade": "sharif",
+          "premade": "cleopatra",
           "question": "q_born",
-          "text": "{value}. In Alexandria, as it happens."
+          "text": "{value}. In a palace, naturally."
+        },
+        {
+          "premade": "saladin",
+          "question": "q_currency",
+          "text": "{value}. I give most of them away."
+        },
+        {
+          "premade": "saladin",
+          "question": "q_language",
+          "text": "{value}. And a little Kurdish, at home."
+        },
+        {
+          "premade": "saladin",
+          "question": "q_device",
+          "text": "{value}. It brings water up through solid rock."
+        },
+        {
+          "premade": "saladin",
+          "question": "q_capital",
+          "text": "{value}. Its walls will outlast me."
+        },
+        {
+          "premade": "saladin",
+          "question": "q_ruler",
+          "text": "{value}. I prefer to be called a servant."
+        },
+        {
+          "premade": "saladin",
+          "question": "q_born",
+          "text": "{value}. In Tikrit, the night my family left it."
+        },
+        {
+          "premade": "alexander",
+          "question": "q_currency",
+          "text": "{value}. Soon it will have my face on it."
+        },
+        {
+          "premade": "alexander",
+          "question": "q_language",
+          "text": "{value}. My tutor made me read everything in it."
+        },
+        {
+          "premade": "alexander",
+          "question": "q_device",
+          "text": "{value}. Excellent for a phalanx. Even better for two."
+        },
+        {
+          "premade": "alexander",
+          "question": "q_capital",
+          "text": "{value}. A fine city to leave in a hurry."
+        },
+        {
+          "premade": "alexander",
+          "question": "q_ruler",
+          "text": "{value}. That is me. Since last week."
+        },
+        {
+          "premade": "alexander",
+          "question": "q_born",
+          "text": "{value}. The night a temple burned. An omen, they say."
+        },
+        {
+          "premade": "aristotle",
+          "question": "q_currency",
+          "text": "{value}. Money is a measure, not a good."
+        },
+        {
+          "premade": "aristotle",
+          "question": "q_language",
+          "text": "{value}. The tool of all reasoning."
+        },
+        {
+          "premade": "aristotle",
+          "question": "q_device",
+          "text": "{value}. A tool for its purpose. Its final cause."
+        },
+        {
+          "premade": "aristotle",
+          "question": "q_capital",
+          "text": "{value}. A city exists for the good life."
+        },
+        {
+          "premade": "aristotle",
+          "question": "q_ruler",
+          "text": "{value}. My former pupil. Quite headstrong."
+        },
+        {
+          "premade": "aristotle",
+          "question": "q_born",
+          "text": "{value}. In Stagira, which explains a great deal."
+        },
+        {
+          "premade": "confucius",
+          "question": "q_currency",
+          "text": "{value}. Wealth gained wrongly is a floating cloud."
+        },
+        {
+          "premade": "confucius",
+          "question": "q_language",
+          "text": "{value}. When names are right, all is right."
+        },
+        {
+          "premade": "confucius",
+          "question": "q_device",
+          "text": "{value}. Music shapes the heart."
+        },
+        {
+          "premade": "confucius",
+          "question": "q_capital",
+          "text": "{value}. A city of rites, when it remembers them."
+        },
+        {
+          "premade": "confucius",
+          "question": "q_ruler",
+          "text": "{value}. I advise him. He listens, sometimes."
+        },
+        {
+          "premade": "confucius",
+          "question": "q_born",
+          "text": "{value}. My mother prayed at Mount Ni."
+        },
+        {
+          "premade": "suntzu",
+          "question": "q_currency",
+          "text": "{value}. An army marches on its supplies."
+        },
+        {
+          "premade": "suntzu",
+          "question": "q_language",
+          "text": "{value}. Orders must be clear, or the general is at fault."
+        },
+        {
+          "premade": "suntzu",
+          "question": "q_device",
+          "text": "{value}. Use what the enemy fears."
+        },
+        {
+          "premade": "suntzu",
+          "question": "q_capital",
+          "text": "{value}. A good place to defend. A bad place to attack."
+        },
+        {
+          "premade": "suntzu",
+          "question": "q_ruler",
+          "text": "{value}. Whom I serve, when it suits the campaign."
+        },
+        {
+          "premade": "suntzu",
+          "question": "q_born",
+          "text": "{value}. The rest is strategy."
+        },
+        {
+          "premade": "qinshihuang",
+          "question": "q_currency",
+          "text": "{value}. One coin for the whole empire."
+        },
+        {
+          "premade": "qinshihuang",
+          "question": "q_language",
+          "text": "{value}. One script for the whole empire."
+        },
+        {
+          "premade": "qinshihuang",
+          "question": "q_device",
+          "text": "{value}. Made to one measure in every workshop."
+        },
+        {
+          "premade": "qinshihuang",
+          "question": "q_capital",
+          "text": "{value}. The centre of all under heaven."
+        },
+        {
+          "premade": "qinshihuang",
+          "question": "q_ruler",
+          "text": "{value}. The first. There will be ten thousand more."
+        },
+        {
+          "premade": "qinshihuang",
+          "question": "q_born",
+          "text": "{value}. In Handan, as a hostage. I improved since."
+        },
+        {
+          "premade": "caesar",
+          "question": "q_currency",
+          "text": "{value}. I owe a great many of them."
+        },
+        {
+          "premade": "caesar",
+          "question": "q_language",
+          "text": "{value}. I write it in the third person."
+        },
+        {
+          "premade": "caesar",
+          "question": "q_device",
+          "text": "{value}. My engineers built a bridge with it in ten days."
+        },
+        {
+          "premade": "caesar",
+          "question": "q_capital",
+          "text": "{value}. All roads lead there. I checked."
+        },
+        {
+          "premade": "caesar",
+          "question": "q_ruler",
+          "text": "{value}. Officially, the Senate. Ask them who decides."
+        },
+        {
+          "premade": "caesar",
+          "question": "q_born",
+          "text": "{value}. By the knife, they say. I hope not twice."
+        },
+        {
+          "premade": "archimedes",
+          "question": "q_currency",
+          "text": "{value}. I could tell you if it is pure. Give me a bath."
+        },
+        {
+          "premade": "archimedes",
+          "question": "q_language",
+          "text": "{value}. Good for proofs. Bad for shouting in the street."
+        },
+        {
+          "premade": "archimedes",
+          "question": "q_device",
+          "text": "{value}. My invention, of course. It moves water uphill."
+        },
+        {
+          "premade": "archimedes",
+          "question": "q_capital",
+          "text": "{value}. My machines keep its walls safe."
+        },
+        {
+          "premade": "archimedes",
+          "question": "q_ruler",
+          "text": "{value}. He asked me about his crown. It was not pure."
+        },
+        {
+          "premade": "archimedes",
+          "question": "q_born",
+          "text": "{value}. I have calculated it to several places."
+        },
+        {
+          "premade": "marcopolo",
+          "question": "q_currency",
+          "text": "{value}. In Cathay, money is made of paper. Truly."
+        },
+        {
+          "premade": "marcopolo",
+          "question": "q_language",
+          "text": "{value}. Though I forgot most of it in China."
+        },
+        {
+          "premade": "marcopolo",
+          "question": "q_device",
+          "text": "{value}. Fine, but you should see the Khan's ships."
+        },
+        {
+          "premade": "marcopolo",
+          "question": "q_capital",
+          "text": "{value}. Smaller than Hangzhou. Do not tell them I said so."
+        },
+        {
+          "premade": "marcopolo",
+          "question": "q_ruler",
+          "text": "{value}. A good man. Not as rich as the Khan."
+        },
+        {
+          "premade": "marcopolo",
+          "question": "q_born",
+          "text": "{value}. I was a boy when my father left. He came back."
+        },
+        {
+          "premade": "genghis",
+          "question": "q_currency",
+          "text": "{value}. I take tribute instead."
+        },
+        {
+          "premade": "genghis",
+          "question": "q_language",
+          "text": "{value}. My scribes write. I ride."
+        },
+        {
+          "premade": "genghis",
+          "question": "q_device",
+          "text": "{value}. My riders change horses every few hours. Never stop."
+        },
+        {
+          "premade": "genghis",
+          "question": "q_capital",
+          "text": "{value}. Its walls were very thick. Were."
+        },
+        {
+          "premade": "genghis",
+          "question": "q_ruler",
+          "text": "{value}. I prefer to be called Khan."
+        },
+        {
+          "premade": "genghis",
+          "question": "q_born",
+          "text": "{value}. Born holding a blood clot. An omen, my mother said."
+        },
+        {
+          "premade": "galileo",
+          "question": "q_currency",
+          "text": "{value}. Never enough for good lenses."
+        },
+        {
+          "premade": "galileo",
+          "question": "q_language",
+          "text": "{value}. I write in it, not in Latin. It annoys people."
+        },
+        {
+          "premade": "galileo",
+          "question": "q_device",
+          "text": "{value}. My own. Ground the lenses myself."
+        },
+        {
+          "premade": "galileo",
+          "question": "q_capital",
+          "text": "{value}. The best university, the worst weather."
+        },
+        {
+          "premade": "galileo",
+          "question": "q_ruler",
+          "text": "{value}. He bought my spyglass. A wise man."
+        },
+        {
+          "premade": "galileo",
+          "question": "q_born",
+          "text": "{value}. In Pisa. The tower leans. I did not do it."
+        },
+        {
+          "premade": "nobunaga",
+          "question": "q_currency",
+          "text": "{value}. Free to trade in my markets."
+        },
+        {
+          "premade": "nobunaga",
+          "question": "q_language",
+          "text": "{value}. And a little Portuguese, from the missionaries."
+        },
+        {
+          "premade": "nobunaga",
+          "question": "q_device",
+          "text": "{value}. The tallest in Japan. For now."
+        },
+        {
+          "premade": "nobunaga",
+          "question": "q_capital",
+          "text": "{value}. My castle. My town. My market."
+        },
+        {
+          "premade": "nobunaga",
+          "question": "q_ruler",
+          "text": "{value}. Me. Others will say otherwise."
+        },
+        {
+          "premade": "nobunaga",
+          "question": "q_born",
+          "text": "{value}. The fool of Owari, they called me then."
+        },
+        {
+          "premade": "hokusai",
+          "question": "q_currency",
+          "text": "{value}. Enough for ink and noodles."
+        },
+        {
+          "premade": "hokusai",
+          "question": "q_language",
+          "text": "{value}. My prints need no words. I add them anyway."
+        },
+        {
+          "premade": "hokusai",
+          "question": "q_device",
+          "text": "{value}. Mine wear out quickly. I use them all day."
+        },
+        {
+          "premade": "hokusai",
+          "question": "q_capital",
+          "text": "{value}. I have lived in ninety houses there."
+        },
+        {
+          "premade": "hokusai",
+          "question": "q_ruler",
+          "text": "{value}. He has not bought a print. Yet."
+        },
+        {
+          "premade": "hokusai",
+          "question": "q_born",
+          "text": "{value}. At a hundred and ten, I will draw it perfectly."
+        },
+        {
+          "premade": "elizabeth",
+          "question": "q_currency",
+          "text": "{value}. We restored it. You are welcome."
+        },
+        {
+          "premade": "elizabeth",
+          "question": "q_language",
+          "text": "{value}. We speak six, and quarrel in all of them."
+        },
+        {
+          "premade": "elizabeth",
+          "question": "q_device",
+          "text": "{value}. Our courtiers smoke it. We do not approve."
+        },
+        {
+          "premade": "elizabeth",
+          "question": "q_capital",
+          "text": "{value}. Our city. Our stage. Our playwright."
+        },
+        {
+          "premade": "elizabeth",
+          "question": "q_ruler",
+          "text": "{value}. Yes. And no husband, before you ask."
+        },
+        {
+          "premade": "elizabeth",
+          "question": "q_born",
+          "text": "{value}. At Greenwich. A disappointment to our father."
+        },
+        {
+          "premade": "newton",
+          "question": "q_currency",
+          "text": "{value}. Clipped by forgers. I would hang them."
+        },
+        {
+          "premade": "newton",
+          "question": "q_language",
+          "text": "{value}. I write my books in Latin anyway."
+        },
+        {
+          "premade": "newton",
+          "question": "q_device",
+          "text": "{value}. My own design. Mirrors, not lenses."
+        },
+        {
+          "premade": "newton",
+          "question": "q_capital",
+          "text": "{value}. The plague drove me out once. I invented calculus."
+        },
+        {
+          "premade": "newton",
+          "question": "q_ruler",
+          "text": "{value}. A king. Gravity applies to him too."
+        },
+        {
+          "premade": "newton",
+          "question": "q_born",
+          "text": "{value}. Christmas Day. I was very small."
+        },
+        {
+          "premade": "luther",
+          "question": "q_currency",
+          "text": "{value}. Not for sale: forgiveness, I mean."
+        },
+        {
+          "premade": "luther",
+          "question": "q_language",
+          "text": "{value}. The language of the market and the kitchen."
+        },
+        {
+          "premade": "luther",
+          "question": "q_device",
+          "text": "{value}. Useful for printing pamphlets. Many pamphlets."
+        },
+        {
+          "premade": "luther",
+          "question": "q_capital",
+          "text": "{value}. Its printers print me, thank God."
+        },
+        {
+          "premade": "luther",
+          "question": "q_ruler",
+          "text": "{value}. He wanted me arrested. I declined."
+        },
+        {
+          "premade": "luther",
+          "question": "q_born",
+          "text": "{value}. The eve of Saint Martin. Hence the name."
+        },
+        {
+          "premade": "beethoven",
+          "question": "q_currency",
+          "text": "{value}. The court pays me in them. Slowly."
+        },
+        {
+          "premade": "beethoven",
+          "question": "q_language",
+          "text": "{value}. Music says it better."
+        },
+        {
+          "premade": "beethoven",
+          "question": "q_device",
+          "text": "{value}. Too delicate. I break the strings."
+        },
+        {
+          "premade": "beethoven",
+          "question": "q_capital",
+          "text": "{value}. Too small for my music."
+        },
+        {
+          "premade": "beethoven",
+          "question": "q_ruler",
+          "text": "{value}. A patron. He likes his music quiet."
+        },
+        {
+          "premade": "beethoven",
+          "question": "q_born",
+          "text": "{value}. My father made me younger on posters."
+        },
+        {
+          "premade": "marx",
+          "question": "q_currency",
+          "text": "{value}. Value comes from labour. Yours, today."
+        },
+        {
+          "premade": "marx",
+          "question": "q_language",
+          "text": "{value}. Every page of it underlined."
+        },
+        {
+          "premade": "marx",
+          "question": "q_device",
+          "text": "{value}. Owned by a man who does not use it."
+        },
+        {
+          "premade": "marx",
+          "question": "q_capital",
+          "text": "{value}. Its barricades are excellent this year."
+        },
+        {
+          "premade": "marx",
+          "question": "q_ruler",
+          "text": "{value}. Not for long, I expect."
+        },
+        {
+          "premade": "marx",
+          "question": "q_born",
+          "text": "{value}. In Trier. A bourgeois start, I admit."
         },
         {
           "premade": "hammurabi",
@@ -12875,156 +15090,6 @@
           "text": "{value}. The gods chose the day. I approved."
         },
         {
-          "premade": "harun",
-          "question": "q_currency",
-          "text": "{value}. My bankers write cheques. Cash one in Samarkand."
-        },
-        {
-          "premade": "harun",
-          "question": "q_language",
-          "text": "{value}. And stories, in all three."
-        },
-        {
-          "premade": "harun",
-          "question": "q_device",
-          "text": "{value}. The mills hum day and night."
-        },
-        {
-          "premade": "harun",
-          "question": "q_capital",
-          "text": "{value}. The round city. I know every gate."
-        },
-        {
-          "premade": "harun",
-          "question": "q_ruler",
-          "text": "{value}. My son. A clever boy."
-        },
-        {
-          "premade": "harun",
-          "question": "q_born",
-          "text": "{value}. In Rey. The stars were favourable."
-        },
-        {
-          "premade": "hippocrates",
-          "question": "q_currency",
-          "text": "{value}. Or figs. Patients prefer figs."
-        },
-        {
-          "premade": "hippocrates",
-          "question": "q_language",
-          "text": "{value}. I write my case notes in it."
-        },
-        {
-          "premade": "hippocrates",
-          "question": "q_device",
-          "text": "{value}. I use it to time a pulse."
-        },
-        {
-          "premade": "hippocrates",
-          "question": "q_capital",
-          "text": "{value}. Crowded. Good for a physician."
-        },
-        {
-          "premade": "hippocrates",
-          "question": "q_ruler",
-          "text": "{value}. A healthy man. I checked."
-        },
-        {
-          "premade": "hippocrates",
-          "question": "q_born",
-          "text": "{value}. On Kos. A healthy baby, by all accounts."
-        },
-        {
-          "premade": "callas",
-          "question": "q_currency",
-          "text": "{value}. Encores are free. Tickets are not."
-        },
-        {
-          "premade": "callas",
-          "question": "q_language",
-          "text": "{value}. I sing in Italian, of course."
-        },
-        {
-          "premade": "callas",
-          "question": "q_device",
-          "text": "{value}. In every cafe. I prefer a piano."
-        },
-        {
-          "premade": "callas",
-          "question": "q_capital",
-          "text": "{value}. They will open the old theatre for me."
-        },
-        {
-          "premade": "callas",
-          "question": "q_ruler",
-          "text": "{value}. He has tickets for Thursday."
-        },
-        {
-          "premade": "callas",
-          "question": "q_born",
-          "text": "{value}. In New York. Greek all the same."
-        },
-        {
-          "premade": "cleopatra",
-          "question": "q_currency",
-          "text": "{value}. Mine have a better portrait."
-        },
-        {
-          "premade": "cleopatra",
-          "question": "q_language",
-          "text": "{value}. One of my nine."
-        },
-        {
-          "premade": "cleopatra",
-          "question": "q_device",
-          "text": "{value}. Caesar's engineers are very proud of it."
-        },
-        {
-          "premade": "cleopatra",
-          "question": "q_capital",
-          "text": "{value}. Damp, after Alexandria."
-        },
-        {
-          "premade": "cleopatra",
-          "question": "q_ruler",
-          "text": "{value}, officially. Ask Caesar who decides."
-        },
-        {
-          "premade": "cleopatra",
-          "question": "q_born",
-          "text": "{value}. In Alexandria, in a palace, naturally."
-        },
-        {
-          "premade": "cosimo",
-          "question": "q_currency",
-          "text": "{value}. Accepted in every court of Europe."
-        },
-        {
-          "premade": "cosimo",
-          "question": "q_language",
-          "text": "{value}. Also the language of my ledgers."
-        },
-        {
-          "premade": "cosimo",
-          "question": "q_device",
-          "text": "{value}. My bank's own invention."
-        },
-        {
-          "premade": "cosimo",
-          "question": "q_capital",
-          "text": "{value}. I am paying for a dome there."
-        },
-        {
-          "premade": "cosimo",
-          "question": "q_ruler",
-          "text": "{value}. I hold no office. Officially."
-        },
-        {
-          "premade": "cosimo",
-          "question": "q_born",
-          "text": "{value}. Saint Cosmas's day. Hence the name."
-        },
-        {
           "premade": "michelangelo",
           "question": "q_currency",
           "text": "{value}. Never enough for good marble."
@@ -13053,126 +15118,6 @@
           "premade": "michelangelo",
           "question": "q_born",
           "text": "{value}. In Caprese. The air was full of stone dust."
-        },
-        {
-          "premade": "marconi",
-          "question": "q_currency",
-          "text": "{value}. Patents are expensive."
-        },
-        {
-          "premade": "marconi",
-          "question": "q_language",
-          "text": "{value}. And Morse, fluently."
-        },
-        {
-          "premade": "marconi",
-          "question": "q_device",
-          "text": "{value}. Fine, but it has no antenna."
-        },
-        {
-          "premade": "marconi",
-          "question": "q_capital",
-          "text": "{value}. A signal could reach it from my attic."
-        },
-        {
-          "premade": "marconi",
-          "question": "q_ruler",
-          "text": "{value}. He might like a wireless set."
-        },
-        {
-          "premade": "marconi",
-          "question": "q_born",
-          "text": "{value}. In Bologna. No signal then, of course."
-        },
-        {
-          "premade": "cailun",
-          "question": "q_currency",
-          "text": "{value}. Paper money would be lighter."
-        },
-        {
-          "premade": "cailun",
-          "question": "q_language",
-          "text": "{value}. Best written with a brush. On paper."
-        },
-        {
-          "premade": "cailun",
-          "question": "q_device",
-          "text": "{value}. You are welcome."
-        },
-        {
-          "premade": "cailun",
-          "question": "q_capital",
-          "text": "{value}. The archives there are very full now."
-        },
-        {
-          "premade": "cailun",
-          "question": "q_ruler",
-          "text": "{value}. A young emperor. He likes paper."
-        },
-        {
-          "premade": "cailun",
-          "question": "q_born",
-          "text": "{value}. In Guiyang. I wrote it down later."
-        },
-        {
-          "premade": "sudongpo",
-          "question": "q_currency",
-          "text": "{value}. Enough for wine, if I am careful."
-        },
-        {
-          "premade": "sudongpo",
-          "question": "q_language",
-          "text": "{value}. Good for poems, better for gossip."
-        },
-        {
-          "premade": "sudongpo",
-          "question": "q_device",
-          "text": "{value}. It prints my poems faster than I write them."
-        },
-        {
-          "premade": "sudongpo",
-          "question": "q_capital",
-          "text": "{value}. Crowded. I prefer the lakes."
-        },
-        {
-          "premade": "sudongpo",
-          "question": "q_ruler",
-          "text": "{value}. I have written him several letters."
-        },
-        {
-          "premade": "sudongpo",
-          "question": "q_born",
-          "text": "{value}. In Meishan, under a full moon."
-        },
-        {
-          "premade": "musashi",
-          "question": "q_currency",
-          "text": "{value}. I carve oars instead."
-        },
-        {
-          "premade": "musashi",
-          "question": "q_language",
-          "text": "{value}. I write books in it, about swords."
-        },
-        {
-          "premade": "musashi",
-          "question": "q_device",
-          "text": "{value}. Noisy. A sword is quieter."
-        },
-        {
-          "premade": "musashi",
-          "question": "q_capital",
-          "text": "{value}. I fought there once. I won."
-        },
-        {
-          "premade": "musashi",
-          "question": "q_ruler",
-          "text": "{value}. I serve no one. Politely."
-        },
-        {
-          "premade": "musashi",
-          "question": "q_born",
-          "text": "{value}. My first duel was at thirteen. I won that too."
         },
         {
           "premade": "kurosawa",
@@ -13263,96 +15208,6 @@
           "premade": "darwin",
           "question": "q_born",
           "text": "{value}. In Shrewsbury. A curious child."
-        },
-        {
-          "premade": "dickens",
-          "question": "q_currency",
-          "text": "{value}. Never enough. Ask my father."
-        },
-        {
-          "premade": "dickens",
-          "question": "q_language",
-          "text": "{value}. Sold by the instalment."
-        },
-        {
-          "premade": "dickens",
-          "question": "q_device",
-          "text": "{value}. My readers send me thousands of letters."
-        },
-        {
-          "premade": "dickens",
-          "question": "q_capital",
-          "text": "{value}. Foggy, crowded, full of stories."
-        },
-        {
-          "premade": "dickens",
-          "question": "q_ruler",
-          "text": "{value}. A young queen. She reads, I hope."
-        },
-        {
-          "premade": "dickens",
-          "question": "q_born",
-          "text": "{value}. In Portsmouth. A great expectation."
-        },
-        {
-          "premade": "durer",
-          "question": "q_currency",
-          "text": "{value}. A print sells for a few. I sell many prints."
-        },
-        {
-          "premade": "durer",
-          "question": "q_language",
-          "text": "{value}. I write my treatises in it."
-        },
-        {
-          "premade": "durer",
-          "question": "q_device",
-          "text": "{value}. I have drawn its insides."
-        },
-        {
-          "premade": "durer",
-          "question": "q_capital",
-          "text": "{value}. The best printers in the Empire."
-        },
-        {
-          "premade": "durer",
-          "question": "q_ruler",
-          "text": "{value}. He owes me a pension."
-        },
-        {
-          "premade": "durer",
-          "question": "q_born",
-          "text": "{value}. In Nuremberg. My father was a goldsmith."
-        },
-        {
-          "premade": "benz",
-          "question": "q_currency",
-          "text": "{value}. A motor carriage costs a great many."
-        },
-        {
-          "premade": "benz",
-          "question": "q_language",
-          "text": "{value}. With engineering words."
-        },
-        {
-          "premade": "benz",
-          "question": "q_device",
-          "text": "{value}. Good for a headache after a long drive."
-        },
-        {
-          "premade": "benz",
-          "question": "q_capital",
-          "text": "{value}. I would drive there, but the roads!"
-        },
-        {
-          "premade": "benz",
-          "question": "q_ruler",
-          "text": "{value}. He prefers horses. For now."
-        },
-        {
-          "premade": "benz",
-          "question": "q_born",
-          "text": "{value}. In Muhlburg. My father drove locomotives."
         },
         {
           "premade": "einstein",
@@ -13677,56 +15532,92 @@
           "text": "An engine could weave numbers the way a loom weaves silk. Isn't that thrilling?"
         },
         {
-          "premade": "hatshepsut",
-          "text": "Your hall has no obelisks. I could lend you two."
-        },
-        {
-          "premade": "sharif",
-          "text": "Your queue is longer than a film premiere. And less fun."
-        },
-        {
-          "premade": "hammurabi",
-          "text": "Your queue needs a law. I have drafted one. It is number 283."
-        },
-        {
-          "premade": "harun",
-          "text": "Tell me a story about your queue. I collect them. I have a thousand."
-        },
-        {
-          "premade": "hippocrates",
-          "text": "Your queue would benefit from fresh air. And less shouting."
-        },
-        {
-          "premade": "callas",
-          "text": "The acoustics in your hall are terrible. I could fix them with one aria."
+          "premade": "ramesses",
+          "text": "Your hall is very modest. Have you considered colossal statues of yourself?"
         },
         {
           "premade": "cleopatra",
           "text": "Your hall lacks gold. And a throne. And me, in a moment."
         },
         {
-          "premade": "cosimo",
-          "text": "Your agency would do well with a bank. I know a family."
+          "premade": "saladin",
+          "text": "Your clerks work hard. In my camp, they would eat first."
+        },
+        {
+          "premade": "alexander",
+          "text": "How far does your hall go? Is there more world after the door?"
+        },
+        {
+          "premade": "aristotle",
+          "text": "I count nine kinds of traveller in your queue. I may be wrong. There may be ten."
+        },
+        {
+          "premade": "confucius",
+          "text": "Your queue is orderly. When the queue is orderly, the state is orderly."
+        },
+        {
+          "premade": "suntzu",
+          "text": "Your hall has one entrance and many exits. A good position. I would hold it."
+        },
+        {
+          "premade": "qinshihuang",
+          "text": "Your forms are of many sizes. I would fix that in an afternoon."
+        },
+        {
+          "premade": "caesar",
+          "text": "Your hall is very orderly. I could use a man like you in Gaul."
+        },
+        {
+          "premade": "archimedes",
+          "text": "Your queue is an interesting curve. I could find its area before you call the next one."
+        },
+        {
+          "premade": "marcopolo",
+          "text": "In Cathay, the Khan's queue had elephants in it. Yours is quieter."
+        },
+        {
+          "premade": "genghis",
+          "text": "Your hall has no horses. How do your messages travel?"
+        },
+        {
+          "premade": "galileo",
+          "text": "From here I could see Jupiter's moons, if you opened a window. Do you have a window?"
+        },
+        {
+          "premade": "nobunaga",
+          "text": "Your hall has no tower. A tower is how people know who is in charge."
+        },
+        {
+          "premade": "hokusai",
+          "text": "The light in your hall would make a fine print. Thirty-seven views of a queue."
+        },
+        {
+          "premade": "elizabeth",
+          "text": "Your hall is very plain. We would add a portrait. Of us."
+        },
+        {
+          "premade": "newton",
+          "text": "Your stamp falls at thirty-two feet per second squared. I checked."
+        },
+        {
+          "premade": "luther",
+          "text": "Your queue has rules on the wall. I have some thoughts on them. Ninety-five."
+        },
+        {
+          "premade": "beethoven",
+          "text": "Da-da-da-DUM. Sorry. Your stamp gave me an idea."
+        },
+        {
+          "premade": "marx",
+          "text": "Who owns this desk? You work it. Interesting. Very interesting."
+        },
+        {
+          "premade": "hammurabi",
+          "text": "Your queue needs a law. I have drafted one. It is number 283."
         },
         {
           "premade": "michelangelo",
           "text": "Your ceiling is very plain. Give me four years and a scaffold."
-        },
-        {
-          "premade": "marconi",
-          "text": "The comms on your wrists are remarkable. Who invented them? I hope it was me."
-        },
-        {
-          "premade": "cailun",
-          "text": "So many forms in your hall. I feel strangely responsible."
-        },
-        {
-          "premade": "sudongpo",
-          "text": "The light in your hall is like a moon with no sky. I may write that down."
-        },
-        {
-          "premade": "musashi",
-          "text": "Your stamp is a fine weapon. You hold it badly."
         },
         {
           "premade": "kurosawa",
@@ -13739,18 +15630,6 @@
         {
           "premade": "darwin",
           "text": "Your queue has adapted to its desk. Remarkable. May I take notes?"
-        },
-        {
-          "premade": "dickens",
-          "text": "Your hall has the makings of a novel. Orphans, debts, a stern clerk."
-        },
-        {
-          "premade": "durer",
-          "text": "The light on your desk is good. I painted a hare in light like this."
-        },
-        {
-          "premade": "benz",
-          "text": "Your queue moves slower than my first car. And that was very slow."
         },
         {
           "premade": "einstein",
@@ -14209,32 +16088,284 @@
           "then": "It was such a good bonnet, too."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "verdict": "Accepted",
           "intent": "Honest",
-          "text": "Good. You may live forever, in a small way.",
-          "then": "I will have you carved on a wall."
+          "text": "Good. Your name will be carved on a wall.",
+          "then": "A small wall. Near the back."
         },
         {
-          "premade": "hatshepsut",
+          "premade": "ramesses",
           "verdict": "Denied",
           "intent": "Honest",
-          "text": "You deny a pharaoh?",
-          "then": "Your name goes on my list. The chisel list."
+          "text": "You deny the Pharaoh?",
+          "then": "I will have this recorded as a great victory."
         },
         {
-          "premade": "sharif",
+          "premade": "cleopatra",
           "verdict": "Accepted",
           "intent": "Honest",
-          "text": "Thank you. I will mention you in an interview.",
-          "then": "Under a different name."
+          "text": "Wise. Egypt remembers its friends.",
+          "then": "Briefly. Egypt is busy."
         },
         {
-          "premade": "sharif",
+          "premade": "cleopatra",
           "verdict": "Denied",
           "intent": "Honest",
-          "text": "No? A dramatic ending.",
-          "then": "The critics will love it."
+          "text": "You refuse a queen?",
+          "then": "Rome will hear of this. Rome hears everything I say."
+        },
+        {
+          "premade": "saladin",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. You are a just clerk.",
+          "then": "Come to Cairo. You will be my guest."
+        },
+        {
+          "premade": "saladin",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "So be it. I hold no grudge.",
+          "then": "I have forgiven greater refusals."
+        },
+        {
+          "premade": "alexander",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Excellent. Onward!",
+          "then": "To the edge of the map."
+        },
+        {
+          "premade": "alexander",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? Nobody denies me.",
+          "then": "I will simply come back with an army."
+        },
+        {
+          "premade": "aristotle",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "A reasoned decision.",
+          "then": "The mean between yes and no. Mostly yes."
+        },
+        {
+          "premade": "aristotle",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied. Let us examine your premises.",
+          "then": "I suspect a flaw in the second one."
+        },
+        {
+          "premade": "confucius",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Correct and proper.",
+          "then": "Your ancestors would approve."
+        },
+        {
+          "premade": "confucius",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Then I will reflect on my faults.",
+          "then": "And perhaps on yours."
+        },
+        {
+          "premade": "suntzu",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "You have chosen your ground well.",
+          "then": "Victory without a battle."
+        },
+        {
+          "premade": "suntzu",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "A tactical retreat. Noted.",
+          "then": "I will come back from another direction."
+        },
+        {
+          "premade": "qinshihuang",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Correct. You follow the standard.",
+          "then": "You may keep your post."
+        },
+        {
+          "premade": "qinshihuang",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "You refuse the Emperor?",
+          "then": "I will build a wall around your desk."
+        },
+        {
+          "premade": "caesar",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Good. Caesar remembers his friends.",
+          "then": "Write that down: in the third person."
+        },
+        {
+          "premade": "caesar",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Et tu, clerk?",
+          "then": "I have heard that before. It ended badly."
+        },
+        {
+          "premade": "archimedes",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Eureka! The right answer.",
+          "then": "I must tell someone. Possibly without my clothes."
+        },
+        {
+          "premade": "archimedes",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? Then I need a longer lever.",
+          "then": "And a place to stand."
+        },
+        {
+          "premade": "marcopolo",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Grazie. Another story for the book.",
+          "then": "Nobody will believe this one either."
+        },
+        {
+          "premade": "marcopolo",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? I have been refused by better desks.",
+          "then": "In Persia, mostly."
+        },
+        {
+          "premade": "genghis",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Good. You are loyal. I reward loyalty.",
+          "then": "With a horse, usually."
+        },
+        {
+          "premade": "genghis",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "You refuse the Khan?",
+          "then": "Few refuse twice. Think on it."
+        },
+        {
+          "premade": "galileo",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Grazie. And yet it moves.",
+          "then": "Your stamp, I mean. It moves very well."
+        },
+        {
+          "premade": "galileo",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? I have been denied by better courts.",
+          "then": "And yet it moves."
+        },
+        {
+          "premade": "nobunaga",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Good. Decisive.",
+          "then": "I respect a quick decision."
+        },
+        {
+          "premade": "nobunaga",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "You refuse me?",
+          "then": "Many refused me. Ask them how it went."
+        },
+        {
+          "premade": "hokusai",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. A view for you.",
+          "then": "Of Mount Fuji, behind your desk."
+        },
+        {
+          "premade": "hokusai",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? I will move house again.",
+          "then": "Ninety-one."
+        },
+        {
+          "premade": "elizabeth",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "We are pleased.",
+          "then": "You may kiss the ring. No, do not."
+        },
+        {
+          "premade": "elizabeth",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "We are not amused.",
+          "then": "That is someone else's line. We are less than amused."
+        },
+        {
+          "premade": "newton",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Correct. As calculated.",
+          "then": "Results may be repeated."
+        },
+        {
+          "premade": "newton",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied. An equal and opposite reaction follows.",
+          "then": "I shall write to the Royal Society."
+        },
+        {
+          "premade": "luther",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. Here I go.",
+          "then": "A mighty fortress is your desk."
+        },
+        {
+          "premade": "luther",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? I will not recant.",
+          "then": "I will write a pamphlet about you."
+        },
+        {
+          "premade": "beethoven",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you! Fortissimo!",
+          "then": "Da-da-da-DUM."
+        },
+        {
+          "premade": "beethoven",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? I shall take fate by the throat.",
+          "then": "Fortissimo."
+        },
+        {
+          "premade": "marx",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you, comrade.",
+          "then": "You have nothing to lose but your queue."
+        },
+        {
+          "premade": "marx",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied by a clerk of the system.",
+          "then": "History will judge. It does that."
         },
         {
           "premade": "hammurabi",
@@ -14251,76 +16382,6 @@
           "then": "A judge who errs pays twelvefold. Law 5."
         },
         {
-          "premade": "harun",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "You will be in a story.",
-          "then": "A small one. Night three hundred or so."
-        },
-        {
-          "premade": "harun",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "Denied? Then I shall hear your story.",
-          "then": "It had better be a long one."
-        },
-        {
-          "premade": "hippocrates",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "Thank you. Drink more water.",
-          "then": "Doctor's orders."
-        },
-        {
-          "premade": "hippocrates",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "Denied. A bitter remedy.",
-          "then": "Rest. Then reconsider."
-        },
-        {
-          "premade": "callas",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "Bravo. You may come backstage.",
-          "then": "Briefly."
-        },
-        {
-          "premade": "callas",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "No? I have walked out of better houses.",
-          "then": "And they begged me back."
-        },
-        {
-          "premade": "cleopatra",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "Wise. Egypt remembers its friends.",
-          "then": "Briefly. Egypt is busy."
-        },
-        {
-          "premade": "cleopatra",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "You refuse a queen?",
-          "then": "Rome will hear of this. Caesar is very fond of me."
-        },
-        {
-          "premade": "cosimo",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "Grazie. Consider it a favour owed.",
-          "then": "I always collect."
-        },
-        {
-          "premade": "cosimo",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "A pity. Your desk is a poor investment.",
-          "then": "I shall note it in the ledger."
-        },
-        {
           "premade": "michelangelo",
           "verdict": "Accepted",
           "intent": "Honest",
@@ -14333,62 +16394,6 @@
           "intent": "Honest",
           "text": "No? I have argued with popes.",
           "then": "I usually win."
-        },
-        {
-          "premade": "marconi",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "Grazie. Message received.",
-          "then": "Loud and clear."
-        },
-        {
-          "premade": "marconi",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "Denied? There must be interference.",
-          "then": "I will try another frequency."
-        },
-        {
-          "premade": "cailun",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "Thank you. Stamp it firmly.",
-          "then": "The paper can take it."
-        },
-        {
-          "premade": "cailun",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "Denied. On paper, at least.",
-          "then": "Paper can be torn, you know."
-        },
-        {
-          "premade": "sudongpo",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "Thank you. A poem for you.",
-          "then": "It rhymes in Chinese."
-        },
-        {
-          "premade": "sudongpo",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "Denied. That will be a sad poem.",
-          "then": "A long one."
-        },
-        {
-          "premade": "musashi",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "Good. A clean cut.",
-          "then": "No hesitation."
-        },
-        {
-          "premade": "musashi",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "A duel, then?",
-          "then": "No. I will arrive late tomorrow."
         },
         {
           "premade": "kurosawa",
@@ -14431,48 +16436,6 @@
           "intent": "Honest",
           "text": "Denied. A setback, not an extinction.",
           "then": "I shall adapt."
-        },
-        {
-          "premade": "dickens",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "God bless you, clerk!",
-          "then": "Every one of you."
-        },
-        {
-          "premade": "dickens",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "Bah! Humbug!",
-          "then": "No, that is another character."
-        },
-        {
-          "premade": "durer",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "Danke. I will sign a print for you.",
-          "then": "With the monogram."
-        },
-        {
-          "premade": "durer",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "Nein? Then I shall draw you.",
-          "then": "Unflatteringly."
-        },
-        {
-          "premade": "benz",
-          "verdict": "Accepted",
-          "intent": "Honest",
-          "text": "Danke! Full speed ahead.",
-          "then": "Well, eighteen kilometres an hour."
-        },
-        {
-          "premade": "benz",
-          "verdict": "Denied",
-          "intent": "Honest",
-          "text": "Stalled. It happens.",
-          "then": "I will crank it again tomorrow."
         },
         {
           "premade": "einstein",
@@ -15424,26 +17387,26 @@
       ]
     },
     {
-      "id": "dlg_hatshepsut",
-      "label": "Ask about the temple >",
+      "id": "dlg_ramesses",
+      "label": "Ask about the temples >",
       "conditions": [],
       "nodes": [
         {
           "id": "start",
           "lines": [
             {
-              "id": "dlg_hatshepsut.start.1",
+              "id": "dlg_ramesses.start.1",
               "speaker": "Traveller",
               "expression": "happy",
-              "text": "My temple at Deir el-Bahari rises in three terraces. Myrrh trees from Punt grow on every one."
+              "text": "My temple at Abu Simbel has four of me out front. Each one larger than the last."
             }
           ],
           "choices": [
             {
               "id": "more",
-              "label": "And after you?",
+              "label": "And the Hittites?",
               "lines": [],
-              "next": "worried",
+              "next": "treaty",
               "effect": ""
             },
             {
@@ -15456,13 +17419,13 @@
           ]
         },
         {
-          "id": "worried",
+          "id": "treaty",
           "lines": [
             {
-              "id": "dlg_hatshepsut.worried.1",
+              "id": "dlg_ramesses.treaty.1",
               "speaker": "Traveller",
               "expression": "worried",
-              "text": "My stepson may chisel my name off every wall. Stamp me home before he gets ideas."
+              "text": "We signed the first peace treaty ever written. They still say they won Kadesh. They did not."
             }
           ],
           "choices": [
@@ -16061,27 +18024,79 @@
   ],
   "premades": [
     {
-      "id": "hatshepsut",
-      "name": "Hatshepsut",
+      "id": "cleopatra",
+      "name": "Cleopatra",
       "gender": "Female",
-      "place": "egypt_ancient",
+      "place": "egypt_ancient3",
       "truePlace": "",
-      "birthDate": "2 Feb 1507 BCE",
+      "birthDate": "13 Jan 69 BCE",
       "archetype": "diplomat",
-      "intro": "Priority arrival: Hatshepsut, Pharaoh of Egypt. She has brought her own beard.",
-      "recordNote": "Pharaoh of Upper and Lower Egypt. Wears the royal beard on official business.",
-      "dialog": "dlg_hatshepsut",
+      "intro": "Priority arrival: Cleopatra, Queen of Egypt. Her barge is double-parked.",
+      "recordNote": "Queen of Egypt, last of the Ptolemies. Speaks nine languages. Rome owes her a great deal of grain.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "banking_houses",
+          "amount": 12
+        },
+        {
+          "factor": "government",
+          "outcome": "monarchy",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "ramesses",
+      "name": "Ramesses II",
+      "gender": "Male",
+      "place": "egypt_ancient2",
+      "truePlace": "",
+      "birthDate": "12 Jul 1303 BCE",
+      "archetype": "diplomat",
+      "intro": "Priority arrival: Ramesses II, Pharaoh of Egypt. He would like a bigger desk.",
+      "recordNote": "Pharaoh of Egypt, builder of Abu Simbel. Signed the first written peace treaty. Has over a hundred children.",
+      "dialog": "dlg_ramesses",
       "repeatable": false,
       "impacts": [],
       "pulls": [
         {
           "factor": "government",
-          "outcome": "monarchy",
+          "outcome": "theocracy",
           "amount": 12
         },
         {
+          "factor": "government",
+          "outcome": "monarchy",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "saladin",
+      "name": "Saladin",
+      "gender": "Male",
+      "place": "egypt_medieval2",
+      "truePlace": "",
+      "birthDate": "1 Mar 1137",
+      "archetype": "soldier",
+      "intro": "Priority arrival: Saladin, Sultan of Egypt and Syria. He is famously polite.",
+      "recordNote": "Sultan of Egypt and Syria. Retook Jerusalem. Known for mercy to his enemies and for giving his treasury away.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
           "factor": "money",
           "outcome": "jubilee",
+          "amount": 12
+        },
+        {
+          "factor": "government",
+          "outcome": "theocracy",
           "amount": 6
         }
       ]
@@ -16113,32 +18128,6 @@
       ]
     },
     {
-      "id": "sharif",
-      "name": "Omar Sharif",
-      "gender": "Male",
-      "place": "egypt_modern",
-      "truePlace": "",
-      "birthDate": "10 Apr 1932",
-      "archetype": "artist",
-      "intro": "",
-      "recordNote": "Film star of Cairo. Back from a long desert shoot. Plays bridge for money.",
-      "dialog": "",
-      "repeatable": false,
-      "impacts": [],
-      "pulls": [
-        {
-          "factor": "government",
-          "outcome": "corporate_board",
-          "amount": 12
-        },
-        {
-          "factor": "money",
-          "outcome": "debt",
-          "amount": 6
-        }
-      ]
-    },
-    {
       "id": "hammurabi",
       "name": "Hammurabi",
       "gender": "Male",
@@ -16160,32 +18149,6 @@
         {
           "factor": "government",
           "outcome": "directorate",
-          "amount": 6
-        }
-      ]
-    },
-    {
-      "id": "harun",
-      "name": "Harun al-Rashid",
-      "gender": "Male",
-      "place": "iraq_medieval",
-      "truePlace": "",
-      "birthDate": "17 Mar 766",
-      "archetype": "diplomat",
-      "intro": "",
-      "recordNote": "Caliph of Baghdad, retired. Walks the city at night in disguise. Story-tellers follow him.",
-      "dialog": "",
-      "repeatable": false,
-      "impacts": [],
-      "pulls": [
-        {
-          "factor": "money",
-          "outcome": "banking_houses",
-          "amount": 12
-        },
-        {
-          "factor": "government",
-          "outcome": "monarchy",
           "amount": 6
         }
       ]
@@ -16217,15 +18180,41 @@
       ]
     },
     {
-      "id": "hippocrates",
-      "name": "Hippocrates",
+      "id": "alexander",
+      "name": "Alexander the Great",
       "gender": "Male",
-      "place": "greece_ancient",
+      "place": "greece_ancient2",
       "truePlace": "",
-      "birthDate": "14 Jun 460 BCE",
+      "birthDate": "20 Jul 356 BCE",
+      "archetype": "soldier",
+      "intro": "Priority arrival: Alexander the Great, King of Macedon. He is twenty and in a hurry.",
+      "recordNote": "King of Macedon, twenty. Taught by Aristotle. Intends to march to the end of the world, possibly by Tuesday.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "jubilee",
+          "amount": 12
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "aristotle",
+      "name": "Aristotle",
+      "gender": "Male",
+      "place": "greece_ancient2",
+      "truePlace": "",
+      "birthDate": "15 Jun 384 BCE",
       "archetype": "scientist",
       "intro": "",
-      "recordNote": "Physician of Kos. Keeps notes on everyone's symptoms, including yours.",
+      "recordNote": "Philosopher and tutor to the prince of Macedon. Has written on everything, including queues, probably.",
       "dialog": "",
       "repeatable": false,
       "impacts": [],
@@ -16269,41 +18258,41 @@
       ]
     },
     {
-      "id": "callas",
-      "name": "Maria Callas",
-      "gender": "Female",
-      "place": "greece_modern",
+      "id": "archimedes",
+      "name": "Archimedes",
+      "gender": "Male",
+      "place": "italy_ancient2",
       "truePlace": "",
-      "birthDate": "2 Dec 1923",
-      "archetype": "artist",
+      "birthDate": "2 Mar 287 BCE",
+      "archetype": "scientist",
       "intro": "",
-      "recordNote": "Soprano of Athens and every opera house. Rehearses her high notes in queues.",
+      "recordNote": "Mathematician and engineer of Syracuse. Shouts in baths. Can move the Earth, given a place to stand.",
       "dialog": "",
       "repeatable": false,
       "impacts": [],
       "pulls": [
         {
           "factor": "future",
-          "outcome": "space_age",
+          "outcome": "nuclear",
           "amount": 12
         },
         {
-          "factor": "government",
-          "outcome": "democracy",
+          "factor": "money",
+          "outcome": "company_towns",
           "amount": 6
         }
       ]
     },
     {
-      "id": "cleopatra",
-      "name": "Cleopatra",
-      "gender": "Female",
+      "id": "caesar",
+      "name": "Julius Caesar",
+      "gender": "Male",
       "place": "italy_ancient",
       "truePlace": "",
-      "birthDate": "13 Jan 69 BCE",
-      "archetype": "diplomat",
-      "intro": "Priority arrival: Cleopatra, Queen of Egypt. Bound for Caesar's Rome.",
-      "recordNote": "Queen of Egypt, guest of Caesar at his villa across the Tiber. Speaks nine languages.",
+      "birthDate": "12 Jul 100 BCE",
+      "archetype": "soldier",
+      "intro": "Priority arrival: Gaius Julius Caesar. He came, he saw, he queued.",
+      "recordNote": "General and Dictator of Rome. Crossed the Rubicon. In debt to half the Senate. Avoid the Ides of March.",
       "dialog": "",
       "repeatable": false,
       "impacts": [],
@@ -16321,15 +18310,15 @@
       ]
     },
     {
-      "id": "cosimo",
-      "name": "Cosimo de' Medici",
+      "id": "marcopolo",
+      "name": "Marco Polo",
       "gender": "Male",
-      "place": "italy_medieval",
+      "place": "italy_medieval2",
       "truePlace": "",
-      "birthDate": "27 Sep 1389",
+      "birthDate": "15 Sep 1254",
       "archetype": "merchant",
       "intro": "",
-      "recordNote": "Banker of Florence. Holds no office and runs the city. Pays for domes.",
+      "recordNote": "Merchant of Venice, back from twenty-four years at Kublai Khan's court. Nobody believes his stories.",
       "dialog": "",
       "repeatable": false,
       "impacts": [],
@@ -16340,8 +18329,34 @@
           "amount": 12
         },
         {
-          "factor": "government",
-          "outcome": "corporate_board",
+          "factor": "money",
+          "outcome": "debt",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "galileo",
+      "name": "Galileo Galilei",
+      "gender": "Male",
+      "place": "italy_earlymodern2",
+      "truePlace": "",
+      "birthDate": "15 Feb 1564",
+      "archetype": "scientist",
+      "intro": "",
+      "recordNote": "Professor of mathematics at Padua. Has seen four moons around Jupiter. Argues with everyone about it.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "space_age",
+          "amount": 12
+        },
+        {
+          "factor": "future",
+          "outcome": "anarchy",
           "amount": 6
         }
       ]
@@ -16399,48 +18414,48 @@
       ]
     },
     {
-      "id": "marconi",
-      "name": "Guglielmo Marconi",
+      "id": "confucius",
+      "name": "Confucius",
       "gender": "Male",
-      "place": "italy_industrial",
+      "place": "china_ancient2",
       "truePlace": "",
-      "birthDate": "25 Apr 1874",
-      "archetype": "scientist",
-      "intro": "",
-      "recordNote": "Inventor of Bologna, twenty-one. Sends signals over the hill without a wire.",
+      "birthDate": "28 Sep 551 BCE",
+      "archetype": "diplomat",
+      "intro": "Priority arrival: Master Kong, called Confucius. He bows exactly the right amount.",
+      "recordNote": "Teacher of Lu. Believes in proper conduct, proper rites and proper forms. Approves of your desk, cautiously.",
       "dialog": "",
       "repeatable": false,
       "impacts": [],
       "pulls": [
         {
-          "factor": "future",
-          "outcome": "credit_age",
+          "factor": "government",
+          "outcome": "directorate",
           "amount": 12
         },
         {
-          "factor": "future",
-          "outcome": "cybernetic",
+          "factor": "money",
+          "outcome": "commons",
           "amount": 6
         }
       ]
     },
     {
-      "id": "cailun",
-      "name": "Cai Lun",
+      "id": "qinshihuang",
+      "name": "Qin Shi Huang",
       "gender": "Male",
-      "place": "china_ancient",
+      "place": "china_ancient3",
       "truePlace": "",
-      "birthDate": "8 Aug 62",
-      "archetype": "scientist",
-      "intro": "",
-      "recordNote": "Court official of the Han. Has improved paper and would like you to use more of it.",
+      "birthDate": "18 Feb 259 BCE",
+      "archetype": "diplomat",
+      "intro": "Priority arrival: Qin Shi Huang, First Emperor of China. He has standardised the queue.",
+      "recordNote": "First Emperor of a united China. Standardised the script, the coin and the axles. Searching for an elixir of life.",
       "dialog": "",
       "repeatable": false,
       "impacts": [],
       "pulls": [
         {
-          "factor": "money",
-          "outcome": "commons",
+          "factor": "government",
+          "outcome": "fascism",
           "amount": 12
         },
         {
@@ -16451,15 +18466,93 @@
       ]
     },
     {
-      "id": "sudongpo",
-      "name": "Su Dongpo",
+      "id": "suntzu",
+      "name": "Sun Tzu",
       "gender": "Male",
-      "place": "china_medieval",
+      "place": "china_ancient2",
       "truePlace": "",
-      "birthDate": "8 Jan 1037",
+      "birthDate": "10 Mar 544 BCE",
+      "archetype": "soldier",
+      "intro": "",
+      "recordNote": "General and author of The Art of War. Wins most battles without fighting. Treats the queue as terrain.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "corporate_board",
+          "amount": 12
+        },
+        {
+          "factor": "government",
+          "outcome": "technocracy",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "genghis",
+      "name": "Genghis Khan",
+      "gender": "Male",
+      "place": "china_medieval2",
+      "truePlace": "",
+      "birthDate": "16 Apr 1162",
+      "archetype": "soldier",
+      "intro": "Priority arrival: Genghis Khan, Great Khan of the Mongols. His horse is in the queue too.",
+      "recordNote": "Great Khan of the Mongols. Rules from the Pacific to the Caspian. Runs a postal relay faster than anything alive.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "cybernetic",
+          "amount": 12
+        },
+        {
+          "factor": "government",
+          "outcome": "technocracy",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "nobunaga",
+      "name": "Oda Nobunaga",
+      "gender": "Male",
+      "place": "japan_earlymodern2",
+      "truePlace": "",
+      "birthDate": "23 Jun 1534",
+      "archetype": "soldier",
+      "intro": "Priority arrival: Oda Nobunaga, lord of Azuchi. He is building the biggest castle in Japan.",
+      "recordNote": "Warlord of Owari and Azuchi. Unifying Japan by force. Freed the markets. Wears a European cape on special days.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "company_towns",
+          "amount": 12
+        },
+        {
+          "factor": "government",
+          "outcome": "fascism",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "hokusai",
+      "name": "Katsushika Hokusai",
+      "gender": "Male",
+      "place": "japan_industrial2",
+      "truePlace": "",
+      "birthDate": "31 Oct 1760",
       "archetype": "artist",
       "intro": "",
-      "recordNote": "Poet and official of the Song. Writes about the moon, wine and pork, in that order.",
+      "recordNote": "Painter of Edo, seventy. Has moved house ninety times and changed his name thirty. Working on a big wave.",
       "dialog": "",
       "repeatable": false,
       "impacts": [],
@@ -16471,33 +18564,7 @@
         },
         {
           "factor": "money",
-          "outcome": "jubilee",
-          "amount": 6
-        }
-      ]
-    },
-    {
-      "id": "musashi",
-      "name": "Miyamoto Musashi",
-      "gender": "Male",
-      "place": "japan_earlymodern",
-      "truePlace": "",
-      "birthDate": "12 Mar 1584",
-      "archetype": "soldier",
-      "intro": "",
-      "recordNote": "Swordsman of no master. Has never lost a duel. Usually arrives late on purpose.",
-      "dialog": "",
-      "repeatable": false,
-      "impacts": [],
-      "pulls": [
-        {
-          "factor": "future",
-          "outcome": "anarchy",
-          "amount": 12
-        },
-        {
-          "factor": "government",
-          "outcome": "technocracy",
+          "outcome": "commons",
           "amount": 6
         }
       ]
@@ -16524,6 +18591,58 @@
         {
           "factor": "future",
           "outcome": "anarchy",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "elizabeth",
+      "name": "Elizabeth I",
+      "gender": "Female",
+      "place": "britain_earlymodern",
+      "truePlace": "",
+      "birthDate": "7 Sep 1533",
+      "archetype": "diplomat",
+      "intro": "Priority arrival: Her Majesty Queen Elizabeth I. Do not mention marriage.",
+      "recordNote": "Queen of England and Ireland. Defeated the Armada. Signed the East India Company's charter this year.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "corporate_board",
+          "amount": 12
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "newton",
+      "name": "Isaac Newton",
+      "gender": "Male",
+      "place": "britain_earlymodern2",
+      "truePlace": "",
+      "birthDate": "25 Dec 1642",
+      "archetype": "scientist",
+      "intro": "",
+      "recordNote": "Lucasian Professor of Mathematics. Wrote the laws of motion and gravity. Later Master of the Royal Mint.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "credit_age",
+          "amount": 12
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age",
           "amount": 6
         }
       ]
@@ -16607,32 +18726,6 @@
       ]
     },
     {
-      "id": "dickens",
-      "name": "Charles Dickens",
-      "gender": "Male",
-      "place": "britain_industrial",
-      "truePlace": "",
-      "birthDate": "7 Feb 1812",
-      "archetype": "artist",
-      "intro": "",
-      "recordNote": "Novelist of London. Paid by the instalment. Writing a ghost story for Christmas.",
-      "dialog": "",
-      "repeatable": false,
-      "impacts": [],
-      "pulls": [
-        {
-          "factor": "money",
-          "outcome": "jubilee",
-          "amount": 12
-        },
-        {
-          "factor": "government",
-          "outcome": "democracy",
-          "amount": 6
-        }
-      ]
-    },
-    {
       "id": "turing",
       "name": "Alan Turing",
       "gender": "Male",
@@ -16685,53 +18778,79 @@
       ]
     },
     {
-      "id": "durer",
-      "name": "Albrecht Durer",
+      "id": "luther",
+      "name": "Martin Luther",
       "gender": "Male",
       "place": "germany_earlymodern",
       "truePlace": "",
-      "birthDate": "21 May 1471",
-      "archetype": "artist",
+      "birthDate": "10 Nov 1483",
+      "archetype": "wanderer",
       "intro": "",
-      "recordNote": "Painter and printmaker of Nuremberg. Has drawn a rhinoceros he has never seen.",
+      "recordNote": "Monk and professor of Wittenberg. Nailed 95 theses to a door. Translated the Bible into German for everyone.",
       "dialog": "",
       "repeatable": false,
       "impacts": [],
       "pulls": [
         {
           "factor": "government",
-          "outcome": "theocracy",
+          "outcome": "democracy",
           "amount": 12
         },
         {
           "factor": "money",
-          "outcome": "company_towns",
+          "outcome": "commons",
           "amount": 6
         }
       ]
     },
     {
-      "id": "benz",
-      "name": "Karl Benz",
+      "id": "beethoven",
+      "name": "Ludwig van Beethoven",
       "gender": "Male",
-      "place": "germany_industrial",
+      "place": "germany_industrial2",
       "truePlace": "",
-      "birthDate": "25 Nov 1844",
-      "archetype": "merchant",
+      "birthDate": "17 Dec 1770",
+      "archetype": "artist",
       "intro": "",
-      "recordNote": "Engineer of Mannheim. Builds motor carriages. His wife drives them farther than he does.",
+      "recordNote": "Court organist of Bonn, nineteen. Leaving for Vienna to study with Haydn. Plays everything very loudly.",
       "dialog": "",
       "repeatable": false,
       "impacts": [],
       "pulls": [
         {
-          "factor": "money",
-          "outcome": "company_towns",
+          "factor": "future",
+          "outcome": "anarchy",
           "amount": 12
         },
         {
           "factor": "government",
-          "outcome": "corporate_board",
+          "outcome": "democracy",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "marx",
+      "name": "Karl Marx",
+      "gender": "Male",
+      "place": "germany_industrial3",
+      "truePlace": "",
+      "birthDate": "5 May 1818",
+      "archetype": "wanderer",
+      "intro": "",
+      "recordNote": "Journalist and philosopher of Trier. Co-wrote the Communist Manifesto. Editing a newspaper that keeps being banned.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "communism",
+          "amount": 12
+        },
+        {
+          "factor": "money",
+          "outcome": "commons",
           "amount": 6
         }
       ]
@@ -17641,39 +19760,381 @@
         "section": "Front"
       },
       {
-        "id": "hatshepsut_home",
-        "name": "Hatshepsut's garden city",
-        "news": "PHARAOH RETURNS: Hatshepsut, stamped home at Desk 3, plants 2150's seeds along the Nile. Thebes is a garden city.",
+        "id": "ramesses_home",
+        "name": "Ramesses builds bigger",
+        "news": "COLOSSAL: Ramesses II, stamped home at Desk 3, builds a temple to 2150 at Abu Simbel. It has four of him out front.",
         "conditions": [
           {
             "type": "FlagSet",
-            "key": "premade:hatshepsut:accepted"
+            "key": "premade:ramesses:accepted"
           }
         ],
         "edits": [
           {
-            "place": "egypt_ancient",
-            "category": "Geography",
-            "value": "Thebes, the Garden City"
+            "place": "egypt_ancient2",
+            "category": "Technology",
+            "value": "Abu Simbel colossus of 2150"
           }
         ],
         "section": "Front"
       },
       {
-        "id": "sharif_home",
-        "name": "Omar Sharif's studios",
-        "news": "STAR RETURNS: Omar Sharif, stamped home at Desk 3, opens Cairo's first studio for 2150 films. Every queue gets a premiere.",
+        "id": "cleopatra_home",
+        "name": "Cleopatra's Alexandria",
+        "news": "THE QUEEN COMES HOME: Cleopatra, stamped home at Desk 3, opens 2150's library in Alexandria. Rome asks for a card.",
         "conditions": [
           {
             "type": "FlagSet",
-            "key": "premade:sharif:accepted"
+            "key": "premade:cleopatra:accepted"
           }
         ],
         "edits": [
           {
-            "place": "egypt_modern",
+            "place": "egypt_ancient3",
+            "category": "Currency",
+            "value": "Cleopatra's gold drachma"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "saladin_home",
+        "name": "Saladin's open treasury",
+        "news": "THE GENEROUS SULTAN: Saladin, stamped home at Desk 3, gives Cairo's treasury to 2150's poor. He dies with one coin.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:saladin:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "egypt_medieval2",
+            "category": "Currency",
+            "value": "Saladin's charity dinar"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "alexander_home",
+        "name": "Alexander pays every debt",
+        "news": "ALL DEBTS PAID: Alexander the Great, stamped home at Desk 3, pays his whole army's debts with 2150's credit. Macedon owes nothing.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:alexander:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "greece_ancient2",
+            "category": "Currency",
+            "value": "Alexander's debt-free stater"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "aristotle_home",
+        "name": "Aristotle classifies 2150",
+        "news": "EVERYTHING HAS A CATEGORY: Aristotle, stamped home at Desk 3, files 2150 under Logic. Every scholar in Greece adopts the system.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:aristotle:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "greece_ancient2",
+            "category": "Language",
+            "value": "Aristotelian logic Greek"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "confucius_home",
+        "name": "Confucius' examinations",
+        "news": "THE PROPER FORM: Confucius, stamped home at Desk 3, brings 2150's paperwork to Lu. Every official must now pass an exam.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:confucius:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "china_ancient2",
+            "category": "Politics",
+            "value": "Duke Ding, by examination"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "suntzu_home",
+        "name": "Sun Tzu's art of business",
+        "news": "THE ART OF WAR, VOLUME TWO: Sun Tzu, stamped home at Desk 3, writes a strategy for 2150. Every merchant in Lu buys a copy.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:suntzu:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "china_ancient2",
+            "category": "Technology",
+            "value": "The Art of War on bamboo"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "qinshihuang_home",
+        "name": "The First Emperor standardises 2150",
+        "news": "ONE STANDARD FOR ALL: Qin Shi Huang, stamped home at Desk 3, makes 2150's forms the law of China. All axles match.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:qinshihuang:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "china_ancient3",
+            "category": "Technology",
+            "value": "Standard-gauge chariot axle"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "caesar_home",
+        "name": "Caesar's new calendar",
+        "news": "VENI, VIDI, VICI: Julius Caesar, stamped home at Desk 3, gives Rome 2150's calendar. Nobody can find the Ides of March.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:caesar:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "italy_ancient",
+            "category": "Politics",
+            "value": "Dictator Julius Caesar"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "archimedes_home",
+        "name": "Archimedes moves the Earth",
+        "news": "EUREKA: Archimedes, stamped home at Desk 3, builds 2150's reactor with a lever and a mirror. Syracuse glows at night.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:archimedes:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "italy_ancient2",
+            "category": "Technology",
+            "value": "Archimedes' burning mirror"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "marcopolo_home",
+        "name": "Marco Polo's paper money",
+        "news": "IT IS ALL TRUE: Marco Polo, stamped home at Desk 3, tells Venice about 2150. This time the Rialto believes him.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:marcopolo:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "italy_medieval2",
+            "category": "Currency",
+            "value": "Marco Polo's paper ducat"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "genghis_home",
+        "name": "Genghis Khan's relay",
+        "news": "THE GREAT RELAY: Genghis Khan, stamped home at Desk 3, wires 2150's network into his post riders. A message crosses Asia in a day.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:genghis:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "china_medieval2",
+            "category": "Technology",
+            "value": "Khan's lightning relay"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "galileo_home",
+        "name": "Galileo's telescope",
+        "news": "AND YET IT MOVES: Galileo Galilei, stamped home at Desk 3, points 2150's telescope at the sky. Padua sees the rings of Saturn.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:galileo:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "italy_earlymodern2",
+            "category": "Technology",
+            "value": "Galileo's star-telescope"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "nobunaga_home",
+        "name": "Nobunaga's free markets",
+        "news": "FREE MARKETS, FREE GUILDS: Oda Nobunaga, stamped home at Desk 3, opens Azuchi to 2150's trade. Every castle town booms.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:nobunaga:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "japan_earlymodern2",
             "category": "Geography",
-            "value": "Cairo, Hollywood of the Nile"
+            "value": "Azuchi, the free market town"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "hokusai_home",
+        "name": "Hokusai's great wave",
+        "news": "THE GREAT WAVE OF 2150: Katsushika Hokusai, stamped home at Desk 3, prints 2150 rising behind Mount Fuji. Every house in Edo buys one.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:hokusai:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "japan_industrial2",
+            "category": "Technology",
+            "value": "Hokusai's wave print block"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "elizabeth_home",
+        "name": "Elizabeth's company",
+        "news": "THE GOLDEN AGE, CHARTERED: Elizabeth I, stamped home at Desk 3, charters a company for 2150's trade. London becomes a boardroom.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:elizabeth:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "britain_earlymodern",
+            "category": "Geography",
+            "value": "London (Royal Exchange)"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "newton_home",
+        "name": "Newton's laws of credit",
+        "news": "EVERY ACTION, AN EQUAL REACTION: Isaac Newton, stamped home at Desk 3, runs the Royal Mint on 2150's credit. London's coins never wear down.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:newton:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "britain_earlymodern2",
+            "category": "Currency",
+            "value": "Newton's milled credit crown"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "luther_home",
+        "name": "Luther's door",
+        "news": "95 THESES ON 2150: Martin Luther, stamped home at Desk 3, nails 2150's ideas to a church door. Every German reads them in print.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:luther:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "germany_earlymodern",
+            "category": "Language",
+            "value": "Luther's people's German"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "beethoven_home",
+        "name": "Beethoven's ninth",
+        "news": "ODE TO JOY: Ludwig van Beethoven, stamped home at Desk 3, writes a symphony for 2150. All men become brothers by the fourth movement.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:beethoven:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "germany_industrial2",
+            "category": "Technology",
+            "value": "Beethoven's thunder piano"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "marx_home",
+        "name": "Marx reads 2150's accounts",
+        "news": "WORKERS OF ALL TIMES: Karl Marx, stamped home at Desk 3, writes a book about 2150's debts. Cologne's workers form a council.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:marx:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "germany_industrial3",
+            "category": "Technology",
+            "value": "Marx's people's press"
           }
         ],
         "section": "Front"
@@ -17698,101 +20159,6 @@
         "section": "Front"
       },
       {
-        "id": "harun_home",
-        "name": "Harun al-Rashid's stories",
-        "news": "A THOUSAND AND ONE NIGHTS: Harun al-Rashid, stamped home at Desk 3, tells Baghdad about 2150. The stories run for years.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:harun:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "iraq_medieval",
-            "category": "Currency",
-            "value": "Dirham cheque (sakk)"
-          }
-        ],
-        "section": "Front"
-      },
-      {
-        "id": "hippocrates_home",
-        "name": "Hippocrates' hospital",
-        "news": "FIRST, DO NO HARM: Hippocrates, stamped home at Desk 3, opens an Athens hospital run on 2150's medicine. Fevers fall.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:hippocrates:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "greece_ancient",
-            "category": "Technology",
-            "value": "Kos fever thermometer"
-          }
-        ],
-        "section": "Front"
-      },
-      {
-        "id": "callas_home",
-        "name": "Callas sings to the Moon",
-        "news": "LA DIVINA: Maria Callas, stamped home at Desk 3, sings Tosca in Athens through 2150's speakers. The Moon hears it.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:callas:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "greece_modern",
-            "category": "Technology",
-            "value": "Orbital opera relay"
-          }
-        ],
-        "section": "Front"
-      },
-      {
-        "id": "cleopatra_home",
-        "name": "Cleopatra's Rome",
-        "news": "THE QUEEN IN ROME: Cleopatra, stamped through at Desk 3, tells Caesar about 2150. Rome mints coins with her face.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:cleopatra:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "italy_ancient",
-            "category": "Currency",
-            "value": "Cleopatra's gold denarius"
-          }
-        ],
-        "section": "Front"
-      },
-      {
-        "id": "cosimo_home",
-        "name": "The Medici bank of the future",
-        "news": "THE BANK OF 2150: Cosimo de' Medici, stamped home at Desk 3, opens a branch for the future in Florence. Every portal takes florins.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:cosimo:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "italy_medieval",
-            "category": "Currency",
-            "value": "Medici time-florin"
-          }
-        ],
-        "section": "Front"
-      },
-      {
         "id": "michelangelo_home",
         "name": "Michelangelo's ceiling",
         "news": "A CEILING FOR 2150: Michelangelo, stamped home at Desk 3, paints the future on a chapel ceiling. Pilgrims queue for a look.",
@@ -17807,82 +20173,6 @@
             "place": "italy_earlymodern",
             "category": "Geography",
             "value": "Milan, under a painted sky"
-          }
-        ],
-        "section": "Front"
-      },
-      {
-        "id": "marconi_home",
-        "name": "Marconi's wireless world",
-        "news": "WIRELESS WORLD: Guglielmo Marconi, stamped home at Desk 3, sends a 2150 signal across Italy. Bologna is online.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:marconi:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "italy_industrial",
-            "category": "Technology",
-            "value": "Marconi wrist wireless"
-          }
-        ],
-        "section": "Front"
-      },
-      {
-        "id": "cailun_home",
-        "name": "Cai Lun's paperwork",
-        "news": "PAPER FOR ALL: Cai Lun, stamped home at Desk 3, brings 2150's paperwork to the Han court. Every clerk in China gets a form.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:cailun:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "china_ancient",
-            "category": "Technology",
-            "value": "Cai Lun's form in triplicate"
-          }
-        ],
-        "section": "Front"
-      },
-      {
-        "id": "sudongpo_home",
-        "name": "Su Dongpo's willows",
-        "news": "A POEM FOR 2150: Su Dongpo, stamped home at Desk 3, writes Kaifeng a poem about the future. Willows line every causeway.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:sudongpo:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "china_medieval",
-            "category": "Geography",
-            "value": "Kaifeng of the Willow Dykes"
-          }
-        ],
-        "section": "Front"
-      },
-      {
-        "id": "musashi_home",
-        "name": "Musashi's way",
-        "news": "THE WAY OF NO MASTER: Miyamoto Musashi, stamped home at Desk 3, teaches Edo what he saw in 2150. Nobody takes orders now.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:musashi:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "japan_earlymodern",
-            "category": "Technology",
-            "value": "Musashi's wooden oar sword"
           }
         ],
         "section": "Front"
@@ -17940,63 +20230,6 @@
             "place": "britain_industrial",
             "category": "Geography",
             "value": "London (garden of species)"
-          }
-        ],
-        "section": "Front"
-      },
-      {
-        "id": "dickens_home",
-        "name": "Dickens' Christmas story",
-        "news": "GOD BLESS US, EVERY ONE: Charles Dickens, stamped home at Desk 3, publishes a ghost story about 2150's debts. London forgives them.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:dickens:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "britain_industrial",
-            "category": "Currency",
-            "value": "Debt-free sovereign"
-          }
-        ],
-        "section": "Front"
-      },
-      {
-        "id": "durer_home",
-        "name": "Durer's printed future",
-        "news": "THE PRINTED FUTURE: Albrecht Durer, stamped home at Desk 3, engraves 2150 in copper. Every house in Nuremberg buys a print.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:durer:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "germany_earlymodern",
-            "category": "Technology",
-            "value": "Durer copper engraving press"
-          }
-        ],
-        "section": "Front"
-      },
-      {
-        "id": "benz_home",
-        "name": "Benz's horseless future",
-        "news": "THE HORSELESS FUTURE: Karl Benz, stamped home at Desk 3, builds 2150's motor in Mannheim. Factories rise along the Rhine.",
-        "conditions": [
-          {
-            "type": "FlagSet",
-            "key": "premade:benz:accepted"
-          }
-        ],
-        "edits": [
-          {
-            "place": "germany_industrial",
-            "category": "Technology",
-            "value": "Benz hydrogen motorcar"
           }
         ],
         "section": "Front"
@@ -18595,6 +20828,14 @@
           "note": "Father of Senenmut. A man of modest rank from Armant."
         },
         {
+          "id": "hatshepsut",
+          "name": "Hatshepsut",
+          "born": "c. 1507 BCE",
+          "died": "1458 BCE",
+          "place": "egypt_ancient",
+          "note": "Pharaoh of Egypt. Senenmut stewarded her household and built her temple."
+        },
+        {
           "id": "senenmut",
           "name": "Senenmut",
           "born": "c. 1505 BCE",
@@ -18897,16 +21138,6 @@
           "person": "mamun",
           "kind": "Court singer",
           "other": "arib"
-        },
-        {
-          "person": "harun",
-          "kind": "Son",
-          "other": "mamun"
-        },
-        {
-          "person": "mamun",
-          "kind": "Father",
-          "other": "harun"
         },
         {
           "person": "gutenberg",

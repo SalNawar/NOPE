@@ -1,0 +1,180 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_britain_earlymodern2
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: britain_earlymodern2
+  displayName: Restoration London
+  nation: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
+  era: {fileID: 11400000, guid: c2b96992e8798b445a2e93efb9c92fe0, type: 2}
+  year: 1687
+  moment: 'London in 1687, rebuilt in brick after the Great Fire: the Royal Society,
+    the coffee houses and Newton''s Principia, the year it is printed'
+  tongue: english
+  birthYearMin: 1617
+  birthYearMax: 1669
+  facts:
+  - category: 4
+    value: Milled silver crown
+  - category: 0
+    value: Restoration English
+  - category: 3
+    value: Reflecting telescope
+  - category: 5
+    value: London (rebuilt)
+  - category: 2
+    value: King James II
+  - category: 6
+    value: periwig / fontange
+  maleNames:
+  - Edmond
+  - Christopher
+  - Samuel
+  - Robert
+  - Nicholas
+  - Josiah
+  - Titus
+  - Ambrose
+  femaleNames:
+  - Aphra
+  - Nell
+  - Arabella
+  - Barbara
+  - Henrietta
+  - Lettice
+  - Dorothy
+  - Temperance
+  smallTalk:
+  - id: britain_earlymodern2.smalltalk.1
+    text: Apples fall in London just as in Lincolnshire. A man wrote a book about
+      it.
+  wardrobe:
+    male:
+      signature: 1
+      outfit:
+        label: justaucorps coat
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: periwig
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: broad-brimmed cocked hat
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: lace cravat
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+    female:
+      signature: 1
+      outfit:
+        label: mantua gown
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: fontange
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: lace cap
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+  looks:
+    skin:
+    - 5
+    - 4
+    - 1
+    - 0
+    - 0
+    hair:
+    - colour: black
+      weight: 1
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 3
+    - colour: red
+      weight: 1
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 4.1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 4
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: monarchy
+  - factor: future
+    outcome: credit_age
+  - factor: money
+    outcome: banking_houses

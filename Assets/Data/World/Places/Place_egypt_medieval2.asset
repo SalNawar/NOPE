@@ -1,0 +1,176 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_egypt_medieval2
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: egypt_medieval2
+  displayName: Ayyubid Cairo
+  nation: {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
+  era: {fileID: 11400000, guid: e9718263d540e7144bcaf45ad9c5e662, type: 2}
+  year: 1187
+  moment: 'Cairo under Saladin, c. 1187, the year he takes Jerusalem: the new Citadel
+    on the Muqattam hill and the long city walls'
+  tongue: arabic
+  birthYearMin: 1117
+  birthYearMax: 1169
+  facts:
+  - category: 4
+    value: Ayyubid gold dinar
+  - category: 0
+    value: Arabic (Kufic coinage)
+  - category: 3
+    value: Citadel well spiral
+  - category: 5
+    value: Cairo (Citadel)
+  - category: 2
+    value: Sultan Saladin
+  - category: 6
+    value: sharbush / qina' scarf
+  maleNames:
+  - Qaraqush
+  - Baha al-Din
+  - Imad al-Din
+  - Al-Adil
+  - Shirkuh
+  - Turanshah
+  - Al-Fadil
+  - Taqi al-Din
+  femaleNames:
+  - Ismat al-Din
+  - Sitt al-Sham
+  - Rabia Khatun
+  - Dayfa
+  - Zumurrud
+  - Khadija
+  - Fatima Khatun
+  - Shamsa
+  smallTalk:
+  - id: egypt_medieval2.smalltalk.1
+    text: They are cutting a well into the rock under the new Citadel. It goes down
+      forever.
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: Ayyubid qaba coat
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: cropped hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: full dark beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: sharbush
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+    female:
+      signature: 3
+      outfit:
+        label: embroidered tiraz robe
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: long plaits
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: qina' scarf
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+  looks:
+    skin:
+    - 0
+    - 1
+    - 3
+    - 4
+    - 2
+    hair:
+    - colour: black
+      weight: 8
+    - colour: brown
+      weight: 2
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 4
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: monarchy
+  - factor: future
+    outcome: naturalism
+  - factor: money
+    outcome: jubilee

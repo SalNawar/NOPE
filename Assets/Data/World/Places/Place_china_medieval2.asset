@@ -1,0 +1,174 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_china_medieval2
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: china_medieval2
+  displayName: Mongol Zhongdu
+  nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
+  era: {fileID: 11400000, guid: e9718263d540e7144bcaf45ad9c5e662, type: 2}
+  year: 1215
+  moment: Zhongdu, the Jin capital where Beijing stands, in 1215, the year Genghis
+    Khan's riders take it; the Mongol relay posts reach across Asia
+  tongue: chinese
+  birthYearMin: 1145
+  birthYearMax: 1197
+  facts:
+  - category: 4
+    value: Jin paper jiaochao
+  - category: 0
+    value: Middle Chinese and Mongolian
+  - category: 3
+    value: Yam relay post
+  - category: 5
+    value: Zhongdu (Beijing)
+  - category: 2
+    value: Genghis Khan
+  - category: 6
+    value: toortsog / boqta
+  maleNames:
+  - Subutai
+  - Jebe
+  - Muqali
+  - Yelu Chucai
+  - Bo'orchu
+  - Jochi
+  - Ogedei
+  - Tolui
+  femaleNames:
+  - Borte
+  - Sorghaghtani
+  - Qulan
+  - Yesui
+  - Yesugen
+  - Checheyigen
+  - Alaqai
+  - Hoelun
+  smallTalk:
+  - id: china_medieval2.smalltalk.1
+    text: A rider passed through with a message from three thousand miles away. He
+      was not even tired.
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: deel with right overlap
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: braided side loops
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: long drooping moustache
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: toortsog
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+    female:
+      signature: 3
+      outfit:
+        label: silk deel and sash
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: two long braids
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: boqta
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+  looks:
+    skin:
+    - 1
+    - 5
+    - 3
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 10
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 5
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: technocracy
+  - factor: future
+    outcome: cybernetic
+  - factor: money
+    outcome: banking_houses

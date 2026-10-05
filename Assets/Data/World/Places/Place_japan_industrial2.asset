@@ -1,0 +1,173 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_japan_industrial2
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: japan_industrial2
+  displayName: Late Edo
+  nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
+  era: {fileID: 11400000, guid: c23119bf1591a2048944fe929e1ab6a7, type: 2}
+  year: 1830
+  moment: 'Edo, c. 1830, the floating world at its height: Kabuki, cheap woodblock
+    prints sold in the street and a great wave about to be printed'
+  tongue: japanese
+  birthYearMin: 1760
+  birthYearMax: 1812
+  facts:
+  - category: 4
+    value: Tenpo oval oban
+  - category: 0
+    value: Edo-period Japanese
+  - category: 3
+    value: Woodblock colour press
+  - category: 5
+    value: Edo (floating world)
+  - category: 2
+    value: Shogun Tokugawa Ienari
+  - category: 6
+    value: chonmage / shimada
+  maleNames:
+  - Hiroshige
+  - Kuniyoshi
+  - Bakin
+  - Ikku
+  - Eisen
+  - Toyokuni
+  - Hokkei
+  - Shunsen
+  femaleNames:
+  - Oei
+  - Okichi
+  - Otama
+  - Osen
+  - Ohisa
+  - Okita
+  - Oran
+  - Ochiyo
+  smallTalk:
+  - id: japan_industrial2.smalltalk.1
+    text: A painter keeps changing his name. He is on his thirtieth.
+  wardrobe:
+    male:
+      signature: 1
+      outfit:
+        label: striped kosode and haori
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: chonmage
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: tobacco pouch
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+    female:
+      signature: 1
+      outfit:
+        label: patterned kosode and obi
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: shimada
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: tortoiseshell kanzashi
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+  looks:
+    skin:
+    - 1
+    - 5
+    - 3
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 10
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 4.2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 4
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: theocracy
+  - factor: future
+    outcome: naturalism
+  - factor: money
+    outcome: commons

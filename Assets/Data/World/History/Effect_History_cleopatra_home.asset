@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c0cc60a29baede43870d511f5fc52e4, type: 3}
   m_Name: Effect_History_cleopatra_home
   m_EditorClassIdentifier: Assembly-CSharp::EffectSO
-  displayName: Cleopatra's Rome
+  displayName: Cleopatra's Alexandria
   channel: 0
   defaultDurationDays: 1
   ops:
   - type: 17
-    stringParam: Cleopatra's gold denarius
+    stringParam: Cleopatra's gold drachma
     floatParam: 0
     attribute: {fileID: 0}
     nation: {fileID: 0}
-    profile: {fileID: 11400000, guid: 863aba0c80035a64d8cfe5228c534551, type: 2}
+    profile: {fileID: 11400000, guid: e2186be3d5c9b9e498a34bf90391d36b, type: 2}
     category: 4
