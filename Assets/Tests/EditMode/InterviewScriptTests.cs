@@ -532,7 +532,7 @@ public class InterviewScriptTests
     [Test]
     public void MenuProblems_FiveRequestsFitThePapersMenu()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, 5, spokenRequests: 2, dialogs: 1, premadeDialogs: 1, maxChoices: 9),
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, 5, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 9),
                                  "< Back and five requests is six of the wheel's nine; the hub still counts the papers menu once");
         StringAssert.Contains("The papers menu holds 9 choices", string.Join("\n", DialogChecks.MenuProblems(6, true, 8, 2, 2, 1, 8)));
     }
@@ -678,8 +678,8 @@ public class InterviewScriptTests
     {
         int requests = FormRequests.Count(CitizenAskable());
         Assert.AreEqual(3, requests, "Manifest, Waiver, Proof of means");
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, requests, spokenRequests: 2, dialogs: 1, premadeDialogs: 1, maxChoices: 9),
-                                 "the papers menu + 2 spoken requests + small talk + ask + look + the differences entry (wave 5) + 1 dialog + one premade's dialog = 9");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, requests, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 9),
+                                 "the papers menu + 2 spoken requests + small talk + ask (its menu holds the questions about differences too) + look + 2 dialogs + one premade's dialog = 9");
     }
 
     [Test]
@@ -1192,25 +1192,26 @@ public class InterviewScriptTests
     [Test]
     public void MenuProblems_TheHub_PapersPlusAskPlusLookPlusDialogs_PremadeDialogsCountOnce()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequests: 1, spokenRequests: 0, dialogs: 3, premadeDialogs: 3, maxChoices: 8),
-                                 "1 request + ask + look + the differences entry + 3 dialogs + one premade's dialog = 8");
-        StringAssert.Contains("The hub holds 9 choices", Only(DialogChecks.MenuProblems(1, false, maxRequests: 1, spokenRequests: 0, dialogs: 4, premadeDialogs: 3, maxChoices: 8), "the traveller wheel shows at most 8"));
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequests: 1, spokenRequests: 0, dialogs: 4, premadeDialogs: 0, maxChoices: 8), "no premade dialog adds nothing");
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequests: 0, spokenRequests: 0, dialogs: 5, premadeDialogs: 0, maxChoices: 8), "no request adds nothing");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, true, maxRequests: 1, spokenRequests: 0, dialogs: 3, premadeDialogs: 3, maxChoices: 8),
+                                 "1 request + small talk + ask + look + 3 dialogs + one premade's dialog = 8");
+        StringAssert.Contains("The hub holds 9 choices", Only(DialogChecks.MenuProblems(1, true, maxRequests: 1, spokenRequests: 0, dialogs: 4, premadeDialogs: 3, maxChoices: 8), "the traveller wheel shows at most 8"));
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, true, maxRequests: 1, spokenRequests: 0, dialogs: 4, premadeDialogs: 0, maxChoices: 8), "no premade dialog adds nothing");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, true, maxRequests: 0, spokenRequests: 0, dialogs: 5, premadeDialogs: 0, maxChoices: 8), "no request adds nothing");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequests: 1, spokenRequests: 0, dialogs: 4, premadeDialogs: 1, maxChoices: 8), "no small talk adds nothing");
         CollectionAssert.IsEmpty(DialogChecks.MenuProblems(99, true, 99, 99, 99, 99, 0), "no capacity, no check");
     }
 
     [Test]
     public void MenuProblems_TheHub_CountsEverySpokenRequest_AndThePapersMenuAsOneEntry()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequests: 2, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 9),
-                                 "the displaced: the papers menu + 2 spoken requests + ask + look + differences + 2 dialogs + one premade's dialog = 9");
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequests: 3, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 9),
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, true, maxRequests: 2, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 9),
+                                 "the displaced: the papers menu + 2 spoken requests + small talk + ask + look + 2 dialogs + one premade's dialog = 9");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, true, maxRequests: 3, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 9),
                                  "the spec's worst case: three forms on request still take one hub entry");
-        string problem = Only(DialogChecks.MenuProblems(1, false, maxRequests: 2, spokenRequests: 3, dialogs: 2, premadeDialogs: 1, maxChoices: 9),
+        string problem = Only(DialogChecks.MenuProblems(1, true, maxRequests: 2, spokenRequests: 3, dialogs: 2, premadeDialogs: 1, maxChoices: 9),
                               "the traveller wheel shows at most 9");
-        StringAssert.Contains("The hub holds 10 choices (the papers menu, 3 spoken request(s), the ask, look and differences entries, 2 dialog(s), one premade's dialog)", problem);
-        StringAssert.Contains("(1 document request, 3 spoken request(s)", Only(DialogChecks.MenuProblems(1, false, 1, 3, 2, 1, 8), "the traveller wheel shows at most 8"), "one form on request is a direct entry");
+        StringAssert.Contains("The hub holds 10 choices (the papers menu, 3 spoken request(s), small talk, the ask and look entries, 2 dialog(s), one premade's dialog)", problem);
+        StringAssert.Contains("(1 document request, 3 spoken request(s)", Only(DialogChecks.MenuProblems(1, true, 1, 3, 2, 1, 8), "the traveller wheel shows at most 8"), "one form on request is a direct entry");
     }
 
     [Test]

@@ -51,10 +51,7 @@ public sealed class ConfrontPrompt
 [Serializable]
 public sealed class ConfrontWording
 {
-    /// <summary>The hub entry that opens the differences menu ("Ask about a difference >"); shown only while a logged difference is still to be asked about.</summary>
-    public string label;
-
-    /// <summary>One difference's entry in that menu ({category}, {value}: "{category}: {value}?").</summary>
+    /// <summary>One difference's entry in the ask menu ({category}, {value}: "{category}: {value}?").</summary>
     public string entryLabel;
 
     /// <summary>The desk's questions, by proof, statement kind and optionally category.</summary>
@@ -206,8 +203,6 @@ public static class Confrontations
             problems.Add("interview.confront is missing: the wheel cannot ask about a logged difference.");
             return problems;
         }
-        if (string.IsNullOrWhiteSpace(wording.label))
-            problems.Add("interview.confront.label is blank.");
         if (string.IsNullOrWhiteSpace(wording.entryLabel))
             problems.Add("interview.confront.entryLabel is blank.");
         else

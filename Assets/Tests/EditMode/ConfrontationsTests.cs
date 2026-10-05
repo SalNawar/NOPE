@@ -12,7 +12,7 @@ public static class ConfrontFixture
     /// <summary>A sound interview.confront.</summary>
     public static ConfrontWording Wording()
     {
-        var w = new ConfrontWording { label = "Ask about a difference >", entryLabel = "{category}: {value}?" };
+        var w = new ConfrontWording { entryLabel = "{category}: {value}?" };
         int n = 0;
         foreach ((DiscrepancyProof proof, EvidenceKind source) in Confrontations.Kinds)
         {
@@ -133,14 +133,12 @@ public class ConfrontationsTests
         StringAssert.Contains("interview.confront is missing", Confrontations.Problems(null).Single());
 
         ConfrontWording w = ConfrontFixture.Wording();
-        w.label = " ";
         w.entryLabel = "{place}?";
         w.prompts.RemoveAll(p => p.proof == DiscrepancyProof.CrossMismatch);
         w.prompts.Add(new ConfrontPrompt { proof = DiscrepancyProof.ClaimMismatch, source = EvidenceKind.Answer, category = "Nonsense", line = new LineText("x", "You said {value} to {document}. {weird}") });
         w.prompts.Add(new ConfrontPrompt { proof = DiscrepancyProof.CrossMismatch, source = EvidenceKind.Answer, line = new LineText("y", "{value} {other}") });
         w.prompts.Add(new ConfrontPrompt { proof = DiscrepancyProof.RecordMismatch, source = EvidenceKind.DocumentField, line = new LineText("z", "{value} and {otherDocument}"), then = new LineText("z2", "{other}") });
         string problems = string.Join("\n", Confrontations.Problems(w));
-        StringAssert.Contains("interview.confront.label is blank", problems);
         StringAssert.Contains("interview.confront.entryLabel holds {place}", problems);
         StringAssert.Contains("has no base row for CrossMismatch · DocumentField", problems);
         StringAssert.Contains("names the category 'Nonsense'", problems);
@@ -192,32 +190,34 @@ public class ConfrontationsTests
     }
 
     [Test]
-    public void AddConfront_TheMenuJoinsTheHubOnTheFirst_ShowsWhileAQuestionIsLeft()
+    public void AddConfront_JoinsTheAskMenu_ItsEntryShowingWhileAQuestionIsLeft()
     {
         InterviewLines lines = Lines();
         var hub = new DialogNode { Id = InterviewScript.HubNodeId };
-        hub.Choices.Add(new DialogChoice { Id = "ask", Label = "Ask >", Kind = DialogChoiceKind.Question });
+        var ask = new DialogNode { Id = InterviewScript.AskNodeId };
+        ask.Choices.Add(new DialogChoice { Id = "back", Next = InterviewScript.HubNodeId, Kind = DialogChoiceKind.Back });
         var graph = new DialogGraph(InterviewScript.HubNodeId);
         graph.Add(hub);
+        graph.Add(ask);
         var runner = new DialogRunner(graph, null);
-        CollectionAssert.AreEqual(new[] { "ask" }, runner.Choices.Select(c => c.Id).ToArray(), "no difference logged: no entry");
+        CollectionAssert.IsEmpty(runner.Choices, "no difference logged: no entry");
 
         DialogChoice first = InterviewScript.Confront(lines, Case(), Record(), "VISA CLASS", ConfrontOutcome.Crack, Faults.Forged, null);
         Assert.IsTrue(InterviewScript.AddConfront(graph, lines, first, 9));
         Assert.IsFalse(InterviewScript.AddConfront(graph, lines, first, 9), "one question per difference");
-        CollectionAssert.AreEqual(new[] { "ask", InterviewScript.DifferencesNodeId }, runner.Choices.Select(c => c.Id).ToArray());
-        Assert.AreEqual("Ask about a difference >", runner.Choices[1].Label);
+        CollectionAssert.AreEqual(new[] { InterviewScript.AskNodeId }, runner.Choices.Select(c => c.Id).ToArray(), "the ask entry joins the hub with the first question");
+        Assert.AreEqual(lines.askLabel, runner.Choices[0].Label);
 
-        runner.Choose(InterviewScript.DifferencesNodeId);
+        runner.Choose(InterviewScript.AskNodeId);
         CollectionAssert.AreEqual(new[] { "back", "confront:AccountStatus" }, runner.Choices.Select(c => c.Id).ToArray());
         runner.Choose("confront:AccountStatus");
         CollectionAssert.AreEqual(new[] { "Your Leisure Departure Visa says Premium.", "Your account says Economy.", "Fine. Economy. Happy?" }, runner.Transcript.Select(l => l.Text).ToArray());
         runner.Choose("back");
-        CollectionAssert.AreEqual(new[] { "ask" }, runner.Choices.Select(c => c.Id).ToArray(), "every difference asked: the entry is gone");
+        CollectionAssert.IsEmpty(runner.Choices, "every difference asked: the entry is gone");
 
         var culture = new Discrepancy { category = ClueCategory.Culture, documentValue = "top hat", expectedValue = "chiton", provedBy = DiscrepancyProof.ClaimMismatch, source = EvidenceKind.Appearance };
         Assert.IsTrue(InterviewScript.AddConfront(graph, lines, InterviewScript.Confront(lines, Case(), culture, "DRESS", ConfrontOutcome.Crack, Faults.Disguised, null), 9));
-        CollectionAssert.AreEqual(new[] { "ask", InterviewScript.DifferencesNodeId }, runner.Choices.Select(c => c.Id).ToArray(), "a new difference: the entry is back");
+        CollectionAssert.AreEqual(new[] { InterviewScript.AskNodeId }, runner.Choices.Select(c => c.Id).ToArray(), "a new difference: the entry is back");
 
         var tech = new Discrepancy { category = ClueCategory.Technology, documentValue = "a", expectedValue = "b", provedBy = DiscrepancyProof.ClaimMismatch, source = EvidenceKind.Answer };
         Assert.IsFalse(InterviewScript.AddConfront(graph, lines, InterviewScript.Confront(lines, Case(), tech, "DEVICE", ConfrontOutcome.Crack, Faults.Disguised, null), 3),

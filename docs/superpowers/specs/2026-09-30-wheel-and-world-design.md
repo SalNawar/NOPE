@@ -46,4 +46,4 @@ Saleh's rules applied: one penalty per wrong decision (nothing here fines anyone
 
 ## Since the desk-first redesign (2026-10-05)
 
-The wheel starts minimal: document requests unlock when the clerk flags a paper missing, trip questions when a finding about their detail is logged; W1-W8 stand. See `2026-10-05-wheel-pc-menus-design.md` §1-§2.
+The wheel starts minimal: document requests unlock when the clerk flags a paper missing, trip questions when a finding about their detail is logged; W2's differences menu is folded into the one ask menu ("Ask >"); the rest stands. See `2026-10-05-wheel-pc-menus-design.md` §1-§2.

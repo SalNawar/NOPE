@@ -77,9 +77,6 @@ public static class InterviewScript
     /// <summary>The look menu's id.</summary>
     public const string LookNodeId = "look";
 
-    /// <summary>The differences menu's id, and its hub entry's (wave 5, lesson 3): the questions about the differences the clerk logged.</summary>
-    public const string DifferencesNodeId = "differences";
-
     /// <summary>The id of the desk's opener line, composed per case at runtime (Generate World reserves it).</summary>
     public const string IntroLineId = "case.intro";
 
@@ -220,9 +217,8 @@ public static class InterviewScript
     /// visible garment or a face to look at, then "dlg:{id}" per dialog
     /// (one-shot). Ask: "back" first (so an overlong menu can never hide the
     /// way back), then "q:{id}" per question the traveller has an answer for
-    /// (one-shot, locked until a finding about its category). (The
-    /// differences menu joins the hub when the clerk logs a difference:
-    /// AddConfront.) Look: "back" first,
+    /// (one-shot, locked until a finding about its category); a question about
+    /// a logged difference joins it (AddConfront). Look: "back" first,
     /// then "look:face" when a paper shows a photo (InspectFace, never
     /// one-shot, no line; the document design spec, D8), then "look:{i}"
     /// per garment, labelled with the item's name (InspectGarment, never
@@ -330,7 +326,7 @@ public static class InterviewScript
         }
 
         if (ask.Choices.Count > 1)
-            hub.Choices.Add(new DialogChoice { Id = "ask", Label = lines.askLabel, Next = AskNodeId, Kind = DialogChoiceKind.Question, HideWhenSpent = true });
+            hub.Choices.Add(AskEntry(lines));
 
 
         var look = new DialogNode { Id = LookNodeId };
@@ -368,7 +364,7 @@ public static class InterviewScript
 
     /// <summary>
     /// The question about one logged <paramref name="difference"/> (wave 5,
-    /// lesson 3), the same verb for every traveller: "confront:{category}",
+    /// lesson 3; it joins the ask menu: AddConfront), the same verb for every traveller: "confront:{category}",
     /// one-shot, a Question labelled with interview.confront.entryLabel; the
     /// desk asks (the prompt's line, then its then line when it has one) with
     /// the prompt of its proof and statement kind
@@ -416,34 +412,32 @@ public static class InterviewScript
 
     /// <summary>
     /// Adds a difference's question (Confront) to <paramref name="graph"/>'s
-    /// differences menu, after the ones already there (wave 5, lesson 3). The
-    /// first one makes the menu ("back" first) and its hub entry
-    /// ("differences", a Question labelled interview.confront.label, after the
-    /// hub's other entries), which shows only while a question is still to be
+    /// ask menu, after the questions already there (wave 5, lesson 3; one ask
+    /// menu since the desk-first redesign, so the hub keeps one entry for every
+    /// question). The hub gains its ask entry when it has none yet (a traveller
+    /// with no trip question); it shows only while a question is still to be
     /// asked (DialogChoice.HideWhenSpent). False, adding nothing, for a null
-    /// graph, hub or question, a question of that id already there, or a menu
-    /// that already holds <paramref name="capacity"/> choices (Back included;
-    /// 0 or less: no cap).
+    /// graph, hub, ask menu or question, a question of that id already there,
+    /// or a menu that already holds <paramref name="capacity"/> choices (Back
+    /// and every question, locked or not; 0 or less: no cap).
     /// </summary>
     public static bool AddConfront(DialogGraph graph, InterviewLines lines, DialogChoice question, int capacity)
     {
         DialogNode hub = graph != null ? graph.Node(HubNodeId) : null;
-        if (hub == null || question == null)
+        DialogNode menu = graph != null ? graph.Node(AskNodeId) : null;
+        if (hub == null || menu == null || question == null)
             return false;
-        DialogNode menu = graph.Node(DifferencesNodeId);
-        if (menu == null)
-        {
-            menu = new DialogNode { Id = DifferencesNodeId };
-            menu.Choices.Add(new DialogChoice { Id = "back", Label = lines != null ? lines.backLabel : null, Next = HubNodeId, Kind = DialogChoiceKind.Back });
-            graph.Add(menu);
-            hub.Choices.Add(new DialogChoice { Id = DifferencesNodeId, Label = lines != null && lines.confront != null ? lines.confront.label : null, Next = DifferencesNodeId,
-                                               Kind = DialogChoiceKind.Question, HideWhenSpent = true });
-        }
         if (menu.Choices.Exists(c => c != null && c.Id == question.Id) || (capacity > 0 && menu.Choices.Count >= capacity))
             return false;
+        if (!hub.Choices.Exists(c => c != null && c.Id == AskNodeId))
+            hub.Choices.Add(AskEntry(lines));
         menu.Choices.Add(question);
         return true;
     }
+
+    /// <summary>The hub's ask entry ("ask", interview.askLabel): a Question opening the ask menu, shown only while an unlocked question is left in it.</summary>
+    private static DialogChoice AskEntry(InterviewLines lines) =>
+        new DialogChoice { Id = AskNodeId, Label = lines != null ? lines.askLabel : null, Next = AskNodeId, Kind = DialogChoiceKind.Question, HideWhenSpent = true };
 
     /// <summary>The name of paper <paramref name="index"/> of the case; blank when unknown.</summary>
     private static string DocumentName(InterviewCase c, int index) =>
@@ -762,7 +756,7 @@ public static class DialogChecks
     /// FormRequests.Count) or the hub (one entry for those requests, a
     /// direct request or the papers menu, + every spoken request + small talk
     /// (the desk-first redesign: the greeting moved to the hub) + the ask
-    /// entry + the look entry + the differences entry (wave 5) + every dialog bound to no premade, counted as
+    /// entry (the questions about logged differences join its menu) + the look entry + every dialog bound to no premade, counted as
     /// offered at once, + 1 when any dialog is bound to a premade: at most one
     /// premade stands at the desk). The waiver pad (<paramref name="pad"/>: some
     /// day offers it, InterviewScript.OffersPad) is one more entry of the papers
@@ -791,9 +785,9 @@ public static class DialogChecks
         string paperEntry = maxRequests > 1 ? "the papers menu" : maxRequests == 1 ? "1 document request" : "no document request";
         if (pad && !padInPapers)
             paperEntry += ", the waiver pad";
-        int hub = (maxRequests > 0 ? 1 : 0) + (pad && !padInPapers ? 1 : 0) + spokenRequests + (smallTalk ? 1 : 0) + 3 + dialogs + (premadeDialogs > 0 ? 1 : 0);
+        int hub = (maxRequests > 0 ? 1 : 0) + (pad && !padInPapers ? 1 : 0) + spokenRequests + (smallTalk ? 1 : 0) + 2 + dialogs + (premadeDialogs > 0 ? 1 : 0);
         if (hub > maxChoices)
-            problems.Add($"The hub holds {hub} choices ({paperEntry}, {spokenRequests} spoken request(s), {(smallTalk ? "small talk, " : string.Empty)}the ask, look and differences entries, {dialogs} dialog(s){(premadeDialogs > 0 ? ", one premade's dialog" : string.Empty)}); the traveller wheel shows at most {maxChoices}.");
+            problems.Add($"The hub holds {hub} choices ({paperEntry}, {spokenRequests} spoken request(s), {(smallTalk ? "small talk, " : string.Empty)}the ask and look entries, {dialogs} dialog(s){(premadeDialogs > 0 ? ", one premade's dialog" : string.Empty)}); the traveller wheel shows at most {maxChoices}.");
 
         return problems;
     }

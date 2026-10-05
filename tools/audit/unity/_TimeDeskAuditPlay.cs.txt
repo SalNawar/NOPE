@@ -657,7 +657,7 @@ public static class _TimeDeskAuditPlay
     private static string Face(CaseInstance c) => c.look != null ? $"{c.look.SkinTone}/{c.look.Face}/{c.look.HairColour}" : "none";
 
     /// <summary>
-    /// Wave 5, lesson 3: after the evidence, the wheel's differences menu asks
+    /// Wave 5, lesson 3: after the evidence, the wheel's ask menu asks
     /// about each difference the workbench's findings logged as evidence
     /// (Confrontations.About over MatchBoard's FindingLog: one question per
     /// category; the desk names its stated value; the traveller answers, their
@@ -677,14 +677,14 @@ public static class _TimeDeskAuditPlay
         if (askable == 0 || !(bool)Field(interview, "_interviewReachable"))
             yield break;
         // Back to the hub first (a garment's look leaves the wheel in the look menu).
-        for (int guard = 0; guard < 4 && runner.Choices.All(x => x.Id != InterviewScript.DifferencesNodeId); guard++)
+        for (int guard = 0; guard < 4 && runner.Choices.All(x => x.Id != InterviewScript.AskNodeId); guard++)
         {
             DialogChoice up = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Back);
             if (up == null)
                 break;
             Call(interview, "Choose", up.Id);
         }
-        DialogChoice entry = runner.Choices.FirstOrDefault(x => x.Id == InterviewScript.DifferencesNodeId);
+        DialogChoice entry = runner.Choices.FirstOrDefault(x => x.Id == InterviewScript.AskNodeId);
         Check(entry != null, $"d{day} slot {slot}: the wheel offers a question about the {log.Count} difference(s) logged as evidence");
         if (entry == null)
             yield break;
@@ -697,8 +697,9 @@ public static class _TimeDeskAuditPlay
         Call(interview, "Choose", entry.Id);
         int offered = runner.Choices.Count(x => x.Id.StartsWith("confront:", StringComparison.Ordinal));
         int menuCapacity = RunManager.Instance.Library.Interview.menuCapacity;
-        int expected = Math.Min(askable, menuCapacity > 0 ? menuCapacity - 1 : int.MaxValue);
-        Check(offered == expected, $"d{day} slot {slot}: the differences menu asks about each category logged as evidence ({offered} offered, {expected} expected)");
+        int others = ((DialogGraph)Field(interview, "_graph")).Node(InterviewScript.AskNodeId).Choices.Count(x => !x.Id.StartsWith("confront:", StringComparison.Ordinal));
+        int expected = Math.Min(askable, menuCapacity > 0 ? menuCapacity - others : int.MaxValue);
+        Check(offered == expected, $"d{day} slot {slot}: the ask menu asks about each category logged as evidence ({offered} offered, {expected} expected)");
         if (shots)
         {
             yield return Frames(4);
@@ -726,7 +727,7 @@ public static class _TimeDeskAuditPlay
             {
                 yield return Seconds(2.5f);
                 yield return Shots($"d{day}_difference_{outcome}");
-                yield return AppShots(o, c, $"d{day}_difference_{outcome}_transcript", AppTab.Transcript, AppTab.Report);
+                yield return AppShots(o, c, $"d{day}_difference_{outcome}_transcript", AppTab.Transcript, AppTab.Documents);
             }
             Line($"   asked about a difference: '{q.Label}' -> {outcome}: {string.Join(" / ", said.Select(l => $"[{l.Speaker}] {l.Text}"))}");
             Count($"difference answered {outcome}");
@@ -737,7 +738,7 @@ public static class _TimeDeskAuditPlay
         DialogChoice back = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Back);
         if (back != null)
             Call(interview, "Choose", back.Id);
-        Check(runner.Choices.All(x => x.Id != InterviewScript.DifferencesNodeId), $"d{day} slot {slot}: every difference asked, the entry leaves the wheel");
+        Check(runner.Choices.All(x => x.Id != InterviewScript.AskNodeId), $"d{day} slot {slot}: every question asked, the ask entry leaves the wheel");
         if (o.Wheel.IsOpen)
             o.Wheel.Close();
         yield return Frames(2);
@@ -762,11 +763,33 @@ public static class _TimeDeskAuditPlay
     private static string FaultKey(CaseInstance c) =>
         c.lie.HasValue ? c.lie.Value.ToString() : c.IsForger ? "record lie" : c.costumeFault != CostumeError.None ? "costume " + c.costumeFault : "?";
 
-    /// <summary>Every request at the hub and in the papers menu (a request group as one entry; a form the traveller does not carry gets its missing-form reply), then every question in the ask menu; with <paramref name="dialog"/> also the hub's first dialog, its first choice at each step, to its end.</summary>
+    /// <summary>
+    /// The desk-first redesign (item 7): the wheel starts minimal (no request,
+    /// no question); every paper of the day's papers menu not handed over is
+    /// flagged missing on the PC (as the Papers menu does), unlocking its
+    /// request; each of today's questions is unlocked as a finding about its
+    /// detail would. Then every request at the hub and in the papers menu (a
+    /// request group as one entry; a form the traveller does not carry gets
+    /// its missing-form reply and is logged "missing"), then every question in
+    /// the ask menu; with <paramref name="dialog"/> also the hub's first
+    /// dialog, its first choice at each step, to its end.
+    /// </summary>
     private static IEnumerator Interview(Office o, CaseInstance c, bool dialog)
     {
-        var runner = (DialogRunner)Field(Field(o.Ui, "_interview"), "_runner");
+        object interviewer = Field(o.Ui, "_interview");
+        var runner = (DialogRunner)Field(interviewer, "_runner");
         var chosen = new HashSet<string>();
+        int day = RunManager.Instance.World.day;
+        Check(runner.Choices.All(x => !x.Id.StartsWith("request:", StringComparison.Ordinal) && x.Id != InterviewScript.PapersNodeId && x.Id != InterviewScript.AskNodeId),
+              $"d{day} {c.visitorGivenName}: the wheel starts minimal [{string.Join(", ", runner.Choices.Select(x => x.Id))}]");
+        MissingPapers missing = o.Ui.MissingPapers;
+        List<FormRequest> open = missing.Open(o.Ui.Papers);
+        foreach (FormRequest r in open)
+            Check(o.Ui.FlagMissing(r.Id) && runner.IsUnlocked(InterviewUnlocks.Missing(r.Id)), $"d{day} {c.visitorGivenName}: {r.Label} flagged missing unlocks its request");
+        Count(open.Count > 0 ? "papers flagged missing" : "no paper to flag");
+        foreach (ClueCategory category in ((InterviewPresenter)interviewer).QuestionCategories)
+            Call(interviewer, "Unlock", InterviewUnlocks.About(category));
+        int missingBefore = o.App.Board.Log.Items.Count(f => f.Kind == FindingKind.PaperMissing);
         void Choose(DialogChoice choice)
         {
             chosen.Add(choice.Id);
@@ -791,6 +814,9 @@ public static class _TimeDeskAuditPlay
             Choose(request);
         }
         Count(padOffered ? "waiver pad offered" : "waiver pad not offered");
+        int notCarried = open.Count(r => !r.Carried);
+        int logged = o.App.Board.Log.Items.Count(f => f.Kind == FindingKind.PaperMissing) - missingBefore;
+        Check(logged == notCarried, $"d{day} {c.visitorGivenName}: each paper asked for and not carried is logged missing ({logged} logged, {notCarried} not carried)");
         yield return Seconds(0.4f);
 
         DialogChoice ask = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Question && !string.IsNullOrEmpty(x.Next));
@@ -842,20 +868,22 @@ public static class _TimeDeskAuditPlay
 
     /// <summary>The traveller's record in today's registry (by the registered name).</summary>
     /// <summary>
-    /// The PC follows the day's ramp (lesson D7): the shelf's papers are the
-    /// traveller's issued ones and no other (no chip for a form not issued
-    /// yet), their Citizen Account lists a form on file only once the form is
-    /// issued. The desk-first ramp (Introductions): the guided steps and their
-    /// foot never show; the scanner, the Departure Board's rows, the Citizen
-    /// records chip, the PC's app icons and each document field show only from
-    /// the day they are introduced.
+    /// The PC follows the day's ramp (lesson D7): the Papers menu lists the
+    /// traveller's papers handed over and no other, their Citizen Account
+    /// lists a form on file only once the form is issued. The desk-first ramp
+    /// (Introductions): the menu bar replaces the header, the shelf and the
+    /// guided steps' foot; the scanner, the Departure Board's rows, the
+    /// Records menu, the PC's app icons and each document field show only
+    /// from the day they are introduced.
     /// </summary>
     private static void CheckRamp(Office o, CaseInstance c, int day, int slot)
     {
         DayPlanSO plan = RunManager.Instance.GetCurrentDayPlan();
-        var shelf = (ShelfView)Field(o.App, "shelf");
+        MenuBarView shelf = Menus(o);
+        var handed = (CasePapers)Field(Field(o.Ui, "_documents"), "_papers");
+        int given = Enumerable.Range(0, c.documents.Count).Count(i => handed.State(i) != PaperState.NotHandedOver);
         List<string> chips = shelf.Items.Where(x => x.Target.Tab == AppTab.Documents).Select(x => x.Label).ToList();
-        Check(chips.Count == c.documents.Count, $"d{day} slot {slot}: the shelf holds the traveller's {c.documents.Count} issued paper(s) and no other [{string.Join(" | ", chips)}]");
+        Check(chips.Count == given, $"d{day} slot {slot}: the Papers menu lists the traveller's {given} paper(s) handed over and no other [{string.Join(" | ", chips)}]");
         CheckShelfLayout(o, $"d{day} slot {slot}");
 
         CitizenRecord record = c.account != null ? RecordOf(o, c) : null;
@@ -869,10 +897,9 @@ public static class _TimeDeskAuditPlay
         }
 
         Introductions intro = RunManager.Instance.Library.Introductions;
-        Button pill = o.App.Guide.Pills.FirstOrDefault(p => p != null);
-        Button back = (Button)Field(o.App.Guide, "backButton");
-        Check(pill != null && !pill.transform.parent.gameObject.activeInHierarchy && (back == null || !back.transform.parent.gameObject.activeInHierarchy),
-              $"d{day} slot {slot}: the guided steps and their foot are hidden (the desk leads)");
+        Transform body = o.App.transform.Find("AppBody");
+        Check(body != null && body.Find("MenuBar") != null && body.Find("Header") == null && body.Find("Shelf") == null && body.Find("Foot") == null,
+              $"d{day} slot {slot}: the menu bar replaces the header, the shelf and the steps' foot (the desk leads)");
 
         DeskScanner scanner = Office.One<DeskScanner>();
         bool scannerIn = intro.Has(day, Feature.Scanner);
@@ -889,7 +916,7 @@ public static class _TimeDeskAuditPlay
 
         bool recordsChip = shelf.Items.Any(x => x.Target.Tab == AppTab.Records);
         Check(recordsChip == intro.Has(day, Feature.Records) && shelf.Items.Any(x => x.Target.Tab == AppTab.Calendar) && shelf.Items.Any(x => x.Target.Tab == AppTab.Rules),
-              $"d{day} slot {slot}: the shelf shows the calendar and the rules from day 1, Citizen records only from day {intro.FirstDay(Feature.Records)} ({recordsChip})");
+              $"d{day} slot {slot}: the menus hold the calendar and the rules from day 1, Citizen records only from day {intro.FirstDay(Feature.Records)} ({recordsChip})");
 
         DesktopIcons icons = Office.One<DesktopIcons>();
         if (icons != null)
@@ -1322,7 +1349,7 @@ public static class _TimeDeskAuditPlay
     /// </summary>
     private static bool PaperBesideRegister(Office o, int index, bool register)
     {
-        var shelf = (ShelfView)Field(o.App, "shelf");
+        MenuBarView shelf = Menus(o);
         AppPane l = o.LeftPane, r = o.RightPane;
         ((Button)Field(l, "headerButton")).onClick.Invoke();
         int paper = -1;
@@ -1330,7 +1357,7 @@ public static class _TimeDeskAuditPlay
             if (shelf.Items[i].Target.Tab == AppTab.Documents && shelf.Items[i].Target.Item == index)
                 paper = i;
         if (paper >= 0)
-            shelf.Chips[paper].onClick.Invoke();
+            Pick(o, paper);
         if (!register)
             return paper >= 0;
         ReferenceBookSO seals = RunManager.Instance.Library.ReferenceBooks.FirstOrDefault(b => b != null && b.category == ClueCategory.Seal);
@@ -1341,16 +1368,16 @@ public static class _TimeDeskAuditPlay
         int today = RunManager.Instance.World.day, sealDay = CheckDay(LieKind.ForgedSeal);
         if (sealDay == 0 || today < sealDay)
         {
-            Check(book < 0, $"day {today}: the Seal Register is not on the shelf before the seal check arrives (day {sealDay})");
+            Check(book < 0, $"day {today}: the Seal Register is not in the Books menu before the seal check arrives (day {sealDay})");
             return paper >= 0;
         }
-        Check(book >= 0, $"day {today}: the Seal Register is a document of the shelf's Books group from day {sealDay} ({(seals != null ? seals.displayName : "no Seal book")})");
+        Check(book >= 0, $"day {today}: the Seal Register is a book of the Books menu from day {sealDay} ({(seals != null ? seals.displayName : "no Seal book")})");
         if (r == null || !r.gameObject.activeInHierarchy)
             o.App.Run(AppCommand.ToggleSplit);
         if (book >= 0 && r != null)
         {
             ((Button)Field(r, "headerButton")).onClick.Invoke();
-            shelf.Chips[book].onClick.Invoke();
+            Pick(o, book);
         }
         return paper >= 0 && book >= 0;
     }
@@ -1366,7 +1393,7 @@ public static class _TimeDeskAuditPlay
         if (cross)
             key += "_cross";
         yield return Shots($"caught_{key}_office");
-        yield return AppShots(o, c, $"caught_{key}_report", AppTab.Report, AppTab.Transcript);
+        yield return AppShots(o, c, $"caught_{key}_pc", AppTab.Documents, AppTab.Transcript);
 
         // The visual lies (the document design spec, D4, D8): the paper held beside its truth, a forged seal next to the Seal Register, someone else's photo at the desk.
         int visual = c.lie == LieKind.ForgedSeal || c.lie == LieKind.SwappedPhoto ? c.recordTells.Select(t => t.Document).DefaultIfEmpty(-1).First() : -1;
@@ -1417,19 +1444,14 @@ public static class _TimeDeskAuditPlay
         yield return CloseApp(o);
     }
 
-    /// <summary>A click on <paramref name="tab"/>'s first chip on the shelf (Citizen records looked up by the traveller's name through the target pane, as a lookup does); the Deviation Report, which is not on the shelf (the PC workbench spec §9.6), through the findings column's "Open the report".</summary>
+    /// <summary>A click on <paramref name="tab"/>'s first row in its menu (its menu dropped first, as the clerk does; Citizen records looked up by the traveller's name through the target pane, as a lookup does).</summary>
     private static void OpenFromShelf(Office o, AppTab tab, CaseInstance c)
     {
-        if (tab == AppTab.Report)
-        {
-            ((Button)Field(o.App.Board.Findings, "reportButton")).onClick.Invoke();
-            return;
-        }
-        var shelf = (ShelfView)Field(o.App, "shelf");
+        MenuBarView shelf = Menus(o);
         for (int i = 0; i < shelf.Items.Count; i++)
-            if (shelf.Items[i].Target.Tab == tab)
+            if (shelf.Items[i].Target.Tab == tab && shelf.Items[i].Action == ShelfAction.Open)
             {
-                shelf.Chips[i].onClick.Invoke();
+                Pick(o, i);
                 break;
             }
         if (tab == AppTab.Records)
@@ -1437,14 +1459,14 @@ public static class _TimeDeskAuditPlay
     }
 
     /// <summary>
-    /// The shelf as the clerk reads it (the PC workbench spec IA4): a chip per
-    /// paper, Citizen records, a chip per book, the transcript, today's rules
-    /// and the calendar, each by its full name; the documents the two panes
-    /// show marked "Left" and "Right".
+    /// The menus as the clerk reads them (the desk-first redesign, item 8): a
+    /// row per paper, Citizen records, a row per book, the transcript, today's
+    /// rules and the calendar, each by its full name; the menus of the
+    /// documents the two panes show marked with their sides.
     /// </summary>
     private static void CheckShelf(Office o, string name, AppPane left, AppPane right)
     {
-        var shelf = (ShelfView)Field(o.App, "shelf");
+        MenuBarView shelf = Menus(o);
         // The desk-first ramp: Citizen records and the books join the shelf on the day they are introduced.
         int day = RunManager.Instance.World.day;
         Introductions intro = RunManager.Instance.Library.Introductions;
@@ -1452,26 +1474,22 @@ public static class _TimeDeskAuditPlay
         foreach (AppTab tab in new[] { AppTab.Documents, AppTab.Records, AppTab.Reference, AppTab.Transcript, AppTab.Rules, AppTab.Calendar })
         {
             bool expected = tab == AppTab.Records ? intro.Has(day, Feature.Records) : tab != AppTab.Reference || books;
-            Check(shelf.Items.Any(x => x.Target.Tab == tab) == expected, $"{name}: the shelf {(expected ? "holds" : "does not hold yet")} {tab}");
+            Check(shelf.Items.Any(x => x.Target.Tab == tab) == expected, $"{name}: the menus {(expected ? "hold" : "do not hold yet")} {tab}");
         }
-        int marked = shelf.Chips.Count(chip => chip.transform.Find("Side").gameObject.activeSelf);
+        int marked = shelf.Buttons.Count(b => b.transform.Find("Side") != null && b.transform.Find("Side").gameObject.activeSelf);
         bool Shelved(AppPane pane) => pane != null && !pane.Blocked && shelf.Items.Any(x => x.Target.Tab == pane.ActiveTab);
-        int shown = (Shelved(left) ? 1 : 0) + (Shelved(right) ? 1 : 0);
-        Check(marked == shown || left.ActiveTab == AppTab.Report || (right != null && right.ActiveTab == AppTab.Report),
-              $"{name}: the shelf marks the {shown} documents shown with their side ({marked} marked)");
+        Check(marked >= 1 || !(Shelved(left) || Shelved(right)), $"{name}: a menu title carries the side of each document shown ({marked} marked)");
         CheckShelfLayout(o, name);
     }
 
-    /// <summary>The polish pass (wave 5 A3): the shelf's chips on one row, the books as rows of the Books menu, the findings column a rail exactly while nothing is logged.</summary>
+    /// <summary>The menu bar (the desk-first redesign, item 8): the titles on one row, no menu left open, the panes reaching the window's foot; the findings column a rail exactly while nothing is logged.</summary>
     private static void CheckShelfLayout(Office o, string name)
     {
-        var shelf = (ShelfView)Field(o.App, "shelf");
-        List<float> rows = Enumerable.Range(0, shelf.Items.Count).Where(i => shelf.Items[i].Group != ShelfGroup.Books)
-            .Select(i => Mathf.Round(shelf.Chips[i].transform.position.y * 10f)).Distinct().ToList();
-        Check(rows.Count == 1, $"{name}: the shelf's chips sit on one row ({rows.Count} rows)");
-        bool booksInMenu = Enumerable.Range(0, shelf.Items.Count).Where(i => shelf.Items[i].Group == ShelfGroup.Books)
-            .All(i => shelf.Chips[i].transform.parent.name == "BooksMenu");
-        Check(booksInMenu, $"{name}: the books are rows of the Books menu, not chips of the shelf");
+        MenuBarView shelf = Menus(o);
+        List<float> rows = shelf.Buttons.Select(b => Mathf.Round(b.transform.position.y * 10f)).Distinct().ToList();
+        Check(shelf.MenuOpen || rows.Count <= 1, $"{name}: the menu titles sit on one row ({rows.Count} rows)");
+        var work = (RectTransform)Field(o.App, "work");
+        Check(work != null && Mathf.Approximately(work.offsetMin.y, 0f), $"{name}: the work area reaches the window's foot (no step foot)");
         var rail = (GameObject)Field(o.App.Board.Findings, "rail");
         Check(rail.activeSelf == (o.App.Board.Log.Items.Count == 0), $"{name}: the findings column is a rail exactly while nothing is logged ({o.App.Board.Log.Items.Count} logged, rail {rail.activeSelf})");
     }
@@ -1957,6 +1975,17 @@ public static class _TimeDeskAuditPlay
     // =====================================================================
     // The office
     // =====================================================================
+
+    /// <summary>The app's menu bar.</summary>
+    private static MenuBarView Menus(Office o) => (MenuBarView)Field(o.App, "menus");
+
+    /// <summary>Row <paramref name="index"/> of the menus clicked, its menu dropped first, as the clerk does.</summary>
+    private static void Pick(Office o, int index)
+    {
+        MenuBarView menus = Menus(o);
+        menus.OpenDropdown(menus.Items[index].Menu);
+        Call(menus, "Choose", index);
+    }
 
     private sealed class Office
     {

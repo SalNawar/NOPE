@@ -10445,7 +10445,7 @@
     "askGroups": [],
     "requestPrompt": "Your {document}, please.",
     "requestReply": "Here you are.",
-    "askLabel": "Ask about the trip >",
+    "askLabel": "Ask >",
     "backLabel": "< Back",
     "smallTalkLabel": "Small talk",
     "smallTalkPrompt": "How is life back home?",
@@ -14815,7 +14815,6 @@
       ]
     },
     "confront": {
-      "label": "Ask about a difference >",
       "entryLabel": "{category}: {value}?",
       "prompts": [
         {
