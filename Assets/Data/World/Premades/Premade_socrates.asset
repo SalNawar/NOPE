@@ -34,4 +34,7 @@ MonoBehaviour:
   pulls:
   - factor: government
     outcome: democracy
+    amount: 12
+  - factor: future
+    outcome: anarchy
     amount: 6

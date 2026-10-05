@@ -33,4 +33,7 @@ MonoBehaviour:
   pulls:
   - factor: future
     outcome: cybernetic
+    amount: 12
+  - factor: money
+    outcome: banking_houses
     amount: 6

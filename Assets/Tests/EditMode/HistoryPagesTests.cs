@@ -120,7 +120,7 @@ public class HistoryPagesTests
             w.History.leaderId = leader;
             SitePage present = Open(w, "chronet://chronopedia/present");
             Assert.AreEqual("site.history.today", present.Blocks.Single(b => b.Kind == PageBlockKind.Heading && b.Text == "site.history.today").Text, leader);
-            List<PageBlock> boxes = present.Blocks.Where(b => b.Kind == PageBlockKind.Box).ToList();
+            List<PageBlock> boxes = present.Blocks.Where(b => b.Kind == PageBlockKind.Box && b.Text != "site.history.changed").ToList();
             CollectionAssert.AreEqual(new[] { "Who runs 2150?", "Whose culture leads?" }, boxes.Select(b => b.Text).ToArray());
             CollectionAssert.AreEqual(new[] { "Monarchy", "A monarch reigns." }, boxes[0].Lines);
             CollectionAssert.AreEqual(new[] { "China" }, boxes[1].Lines, "no report: the answer alone");
@@ -128,6 +128,46 @@ public class HistoryPagesTests
 
         w.WorldToday = new List<OutcomeLine>();
         Assert.IsFalse(Open(w, "chronet://chronopedia/present").Blocks.Any(b => b.Text == "site.history.today"), "no world factors: no section");
+    }
+
+    [Test]
+    public void Present_2150Today_AnAnswerNamesTheTravellerItTracesTo()
+    {
+        SiteWorld w = SiteFixture.World();
+        w.WorldToday = new List<OutcomeLine>
+        {
+            new OutcomeLine("government", "Who runs 2150?", "Monarchy", "A monarch reigns."),
+            new OutcomeLine("money", "How does 2150 pay its way?", "The Debt"),
+        };
+        w.WorldTraces = new Dictionary<string, string> { { "government", "Traced to Desk 3: Cleopatra, day 6." } };
+        List<PageBlock> boxes = Open(w, "chronet://chronopedia/present").Blocks.Where(b => b.Kind == PageBlockKind.Box && b.Text != "site.history.changed").ToList();
+        CollectionAssert.AreEqual(new[] { "Monarchy", "A monarch reigns.", "Traced to Desk 3: Cleopatra, day 6." }, boxes[0].Lines);
+        CollectionAssert.AreEqual(new[] { "The Debt" }, boxes[1].Lines, "untraced: no line");
+    }
+
+    [Test]
+    public void Present_HistorysLatestChanges_NewestFirst_ThenTheLinkToRevisions()
+    {
+        SiteWorld w = SiteFixture.World();
+        w.History.factEdits.Add(new FactEdit("egypt", "ancient", ClueCategory.Geography, "Thebes, the Garden City", 7, EditCause.Rule, History.TriggerSourcePrefix + "Hatshepsut's garden city"));
+        SitePage present = Open(w, "chronet://chronopedia/present");
+        PageBlock box = present.Blocks.Single(b => b.Kind == PageBlockKind.Box && b.Text == "site.history.changed");
+        CollectionAssert.AreEqual(new[]
+        {
+            "site.history.changedRow(7|New Kingdom Egypt (Ancient)|category.Geography|Thebes, the Garden City|Hatshepsut's garden city)",
+            "site.history.changedRow(3|Periclean Athens (Ancient)|category.Technology|Papyrus|site.history.whyCarry(New Kingdom Egypt (Ancient)))",
+            "site.history.changedRow(2|Florentine Republic (Medieval)|category.Technology|Chinese movable type press|Movable type reaches Florence)"
+        }, box.Lines, "newest first; a rule's name without the trigger prefix, a carry's home");
+        int at = present.Blocks.IndexOf(box);
+        Assert.AreEqual("chronet://chronopedia/revisions", present.Blocks[at + 1].Address, "then the link to every revision");
+
+        for (int day = 8; day < 8 + HistoryPages.PresentChanges; day++)
+            w.History.factEdits.Add(new FactEdit("egypt", "ancient", ClueCategory.Currency, "Coin " + day, day, EditCause.Rule, "r"));
+        box = Open(w, "chronet://chronopedia/present").Blocks.Single(b => b.Kind == PageBlockKind.Box && b.Text == "site.history.changed");
+        Assert.AreEqual(HistoryPages.PresentChanges, box.Lines.Count, "the newest few; Revisions lists them all");
+
+        w.History = new HistoryState();
+        Assert.IsFalse(Open(w, "chronet://chronopedia/present").Blocks.Any(b => b.Text == "site.history.changed"), "history unchanged: no box");
     }
 
     [Test]

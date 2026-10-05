@@ -16,9 +16,9 @@ MonoBehaviour:
   displayName: A lady with a glowing wrist
   description: Generated from world_source.json history.rules.
   oneShot: 1
-  newsLineOnFire: A London drawing room reports a lady with a glowing wrist. Society
-    is intrigued.
-  section: 0
+  newsLineOnFire: 'A LADY WITH A GLOWING WRIST: the "Ada Lovelace" stamped through
+    at Desk 3 shows London a 2150 wrist comm. Society is intrigued.'
+  section: 3
   conditions:
   - type: 1
     key: premade:ada:accepted

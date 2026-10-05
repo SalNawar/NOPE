@@ -33,4 +33,7 @@ MonoBehaviour:
   pulls:
   - factor: future
     outcome: cybernetic
+    amount: 12
+  - factor: government
+    outcome: technocracy
     amount: 6

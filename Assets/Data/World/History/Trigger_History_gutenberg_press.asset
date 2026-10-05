@@ -16,9 +16,9 @@ MonoBehaviour:
   displayName: Gutenberg's press
   description: Generated from world_source.json history.rules.
   oneShot: 1
-  newsLineOnFire: 'HISTORY: Mainz prints with movable metal type. The Rhineland''s
-    presses start rolling.'
-  section: 0
+  newsLineOnFire: 'THE PRESS ROLLS: Johannes Gutenberg, stamped home at Desk 3, prints
+    with movable metal type in Mainz. Every Rhine city reads.'
+  section: 3
   conditions:
   - type: 1
     key: premade:gutenberg:accepted

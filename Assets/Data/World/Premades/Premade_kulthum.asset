@@ -33,4 +33,7 @@ MonoBehaviour:
   pulls:
   - factor: money
     outcome: commons
-    amount: 4
+    amount: 12
+  - factor: government
+    outcome: democracy
+    amount: 6

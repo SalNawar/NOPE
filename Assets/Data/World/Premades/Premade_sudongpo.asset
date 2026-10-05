@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3468ee994c214946889c560775574ff, type: 3}
+  m_Name: Premade_sudongpo
+  m_EditorClassIdentifier: Assembly-CSharp::LegendarySO
+  id: sudongpo
+  displayName: Su Dongpo
+  birthDate: 8 Jan 1037
+  gender: 1
+  trueEra: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+  archetype: {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}
+  nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
+  authoredImpacts: []
+  truePlace: {fileID: 0}
+  introLine: 
+  recordNote: Poet and official of the Song. Writes about the moon, wine and pork,
+    in that order.
+  dialogId: 
+  oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 
+  pulls:
+  - factor: future
+    outcome: naturalism
+    amount: 12
+  - factor: money
+    outcome: jubilee
+    amount: 6

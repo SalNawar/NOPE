@@ -120,7 +120,8 @@ public class SerializedEnumsTests
         Assert.AreEqual(0, (int)StorySection.News);
         Assert.AreEqual(1, (int)StorySection.Desk);
         Assert.AreEqual(2, (int)StorySection.Return);
-        Assert.AreEqual(3, System.Enum.GetValues(typeof(StorySection)).Length, "a new member is appended here too");
+        Assert.AreEqual(3, (int)StorySection.Front);
+        Assert.AreEqual(4, System.Enum.GetValues(typeof(StorySection)).Length, "a new member is appended here too");
     }
 
     /// <summary>StrandingFate: stored in the content library's fate rows (agency.strandingFates) and in the saved stranding log (StrandingRecord.fate).</summary>

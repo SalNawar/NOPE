@@ -7,7 +7,8 @@ using System.Linq;
 /// news back issues and the ranking (WorldState), every place with its
 /// authored facts and moment, the history, and the Lineage Archive's cards
 /// (the premades and the authored people), and 2150 today (the world's
-/// answers as the morning paper last reported them). The pages write with the UI
+/// answers as the morning paper last reported them, each with the traveller it
+/// traces to). The pages write with the UI
 /// string tables (UiText). Built each time the browser opens, so it always
 /// shows the day as it stands.
 /// </summary>
@@ -39,6 +40,7 @@ public static class SiteWorldBuilder
         w.NationName = id => lib.GetNationById(id) is NationSO n && !string.IsNullOrWhiteSpace(n.displayName) ? n.displayName : id;
         w.Places = Places(lib);
         w.WorldToday = lib.WorldLatched(world);
+        w.WorldTraces = Traces.Lines(world.pullTraces, world.leads, lib.HistoryLines.traced?.text);
         w.People = AncestryPages.Cards(lib.Legendaries.Where(l => l != null).Select(l => new PremadeInfo(
             l.id, l.displayName, l.birthDate, lib.GetProfile(l.nation, l.trueEra)?.id, l.truePlace != null ? l.truePlace.id : null, l.recordNote)), pc.ancestry);
         return w;
