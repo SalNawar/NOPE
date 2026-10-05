@@ -163,7 +163,7 @@ The papers now look like real travel documents, each its own shape (the aspect i
 | Item | Where it shows | File | Now | Deliver | Tier | Status |
 |---|---|---|---|---|---|---|
 | Home background | behind every Home panel, full screen | `Assets/Art/Home/home_bg.png` (`Canvas/ArtBackground`) | interim 1920 × 1080, painted, warm lamp light | 1920 × 1080, opaque, redrawn in the cel style | 1 | interim |
-| Expenses panel | the night's bill, break-in, mood and the family rows, 900 × 780 | `Assets/Art/Home/panel_expenses.png` (`ExpensesPanel`) | interim 800 × 1000, stretched to 900 × 780 | 1520 × 1200, a text-free paper panel | 1 | interim |
+| Expenses panel | the bills step: the fixed costs, the pet's needs and the five bills' rows, 1000 × 880 | `Assets/Art/Home/panel_expenses.png` (`ExpensesPanel`) | interim 800 × 1000, stretched to 900 × 780 | 1520 × 1200, a text-free paper panel | 1 | interim |
 | House panel (the old shop panel) | the House tree (the Home upgrades spec §6), 1840 × 920 | `Assets/Art/Home/panel_shop.png` (`ShopPanel`) | interim 800 × 1000, stretched | 1840 × 920 or larger at that aspect, a text-free paper panel | 1 | interim |
 | Slot panel | the slot machine's panel, 560 × 360 | `Assets/Art/Home/panel_slot.png` | code-drawn (dark, with white text: a light panel needs the texts recoloured, so there is no slot yet) | 1120 × 720 | 2 | code-drawn |
 | Sleep panel | "Turn in", 560 × 320 | `Assets/Art/Home/panel_sleep.png` | code-drawn (as the slot panel) | 1120 × 640 | 2 | code-drawn |
@@ -171,7 +171,10 @@ The papers now look like real travel documents, each its own shape (the aspect i
 | Slot lever | at the machine box's right edge, 80 × 240 | `Assets/Art/UI/Resources/Home/slot_lever.png` | interim 200 × 600, wired | 160 × 480, standing | 1 | interim |
 | Slot outcome symbols × 5 | the result of a spin | `Assets/Art/Home/slot_<outcome id>.png` for `small_win`, `jackpot_cash`, `busted_machine`, `forgery_warning`, `legendary_omen` | 5 interim at 256 × 256, not wired (a spin shows text only); two still carry older names (`slot_jackpot`, `slot_busted`) | 256 × 256 | 2 | interim |
 | House upgrade icons × 18 | at the left of each House card, 56 × 56 | `Assets/Art/UI/Resources/Home/upgrade_<id>.png` (ids below) | none yet (the cards are text only); the office's upgrades moved to the PC's Orders app (section 3) | 256 × 256 | 1 | missing |
-| Family portraits × 6 | at the left of the member's family row, 44 × 44: the Partner and the Kid (`RunConfig.startingFamilyMembers`), whose condition runs from 0 to 10 | `Assets/Art/UI/Resources/Home/family_<member>_<band>.png`: members `partner`, `kid`; bands `well` (condition 0–3), `ill` (4–7), `grave` (8–10) | none: the rows are text only | 512 × 512, in the character style; 2 members × 3 condition bands | 1 | missing |
+| Pet × 8 | the pet's corner (left half of the 1180 × 800 panel) and the Title's adoption preview: a dog and a cat, four states each (the Home pet spec PS7) | `Assets/Art/UI/Resources/Home/pet_<kind>_<state>.png`: kinds `dog`, `cat`; states `idle`, `happy`, `sad`, `sick` | code-drawn stand-in (`PetStandIn`) | 1024 × 1024, transparent, the same pose and scale in a kind's four states (the brief: `docs/PET_ART_REQUEST.md`) | 1 | missing |
+| Pet corner | behind the pet in its corner | `Assets/Art/UI/Resources/Home/pet_corner.png` | a plain cream plate | 1100 × 1100, opaque, the middle third plain | 1 | missing |
+| Toys × 4 (pictures) | the pet's corner | `Assets/Art/UI/Resources/Home/toy_<toy id>.png` for `toy_ball`, `toy_rope`, `toy_feather`, `toy_squeaky` | none (the rows are text) | 256 × 256 | 1 | missing |
+| Toys × 4 (Orders icons) and the Toys band glyph | the Orders tree's Toys band | `Assets/Art/UI/Resources/Orders/upgrade_<toy id>.png`, `Orders/branch_toys.png` | the band's code-drawn ball | 256 × 256 and 128 × 128, white on transparent | 1 | missing |
 
 **House upgrade ids (18).** `house_rations_b`, `house_veg_box`, `house_hen_share`, `house_draught_seals`, `house_insulation`, `house_floor_up`, `house_corner_flat`, `house_second_lock`, `house_strongbox`, `house_alarm`, `house_air_filter`, `house_water_purifier`, `house_medicine_cabinet`, `house_clinic`, `house_plant`, `house_photo`, `house_radio`, `house_better_bed`.
 
@@ -305,10 +308,10 @@ New 2D files (the Blender scanner and the characters are counted apart):
 | 3. PC desktop | 34 | 11 | 45 |
 | 4. Documents | 39 | 8 | 47 |
 | 5. Day flow | 3 | 0 | 3 |
-| 6. Home | 11 | 7 | 18 |
+| 6. Home | 23 | 7 | 30 |
 | 7. Title and endings | 10 | 1 | 11 |
 | 8. Icons | 6 | 0 | 6 |
-| **Total** | **110** | **27** | **137** |
+| **Total** | **122** | **27** | **149** |
 
 - Every decision was answered yes, so all are wanted. The Orders app (2026-09-29) added the Orders icon, four branch glyphs and four portal-repair icons, and moved the eight upgrade icons from Home to it (109); the portals (the portals spec v3) added the Portals icon, the portal glow and the Return Gate's spiral (112). The count moved from 107 to 100 with the redesign: six desktop icons instead of seventeen, one Title face (normal and hover) instead of four baked buttons, eight upgrade icons, and ten per-kind faces, the plain agency face and the seal instead of the passport and permit faces.
 - Tier 2 now: the UI kit (9) and the grab cursors (2), the slot and sleep panels and the ending panel (their white text needs a dark panel), the slot outcome symbols (5); the scanned copy waits on plan phase 5 and reuses the faces.
@@ -324,7 +327,7 @@ What the player sees first comes first. Within a step, the Tier 1 files come fir
 4. **At the desk:** the wheel icons (6), the paper face (1), the speech bubble and its tail (2), all Tier 1.
 5. **The PC:** the frame, close X and power button (3); the culture wallpapers (8; the first one shows from day 2 at the earliest); the desktop icons (6), all Tier 1.
 6. **The end of the shift:** the citation slip and the shift ledger (2).
-7. **Home:** the background and the two panels (3); the upgrade icons (8); the slot machine and lever (2); the family (6), all Tier 1; the outcome symbols (5) and the slot and sleep panels (2), Tier 2.
+7. **Home:** the background and the two panels (3); the upgrade icons (8); the slot machine and lever (2); the pet, its corner and its toys (18, `docs/PET_ART_REQUEST.md`), all Tier 1; the outcome symbols (5) and the slot and sleep panels (2), Tier 2.
 8. **The endings:** the six illustrations (6, Tier 1) and the panel (1, Tier 2).
 9. **Polish:** the document faces (10 kinds and the agency's), the seal and the photo frame (2), the book covers (6), the ink marks (2), all Tier 1; the UI kit (9) and the cursors (2 Tier 1 and 2 Tier 2).
 
@@ -339,7 +342,7 @@ What the player sees first comes first. Within a step, the Tier 1 files come fir
 7. **Reference book covers:** shown on the book's tile and at the top of its window.
 8. **Verdict ink mark:** a text-free tick or cross mark lands on the papers after the verdict.
 9. **Translator icons:** four, one per region (speech).
-10. **Family:** the Partner and the Kid are drawn in the character style, three condition bands each.
+10. **Family:** retired with the Home pet spec (2026-10-05: "pet only for now"); the pet replaces it (section 6).
 11. **Slot machine:** "yes" did not pick between the two options here, so Claude chose a **landscape machine** drawn for the 560 × 360 panel: the Home screen's 800 × 600 layout has no room for a taller panel. (The art hooks stand it on the panel's top edge in a 375 × 240 box instead of behind the panel's white texts, which would not read on it.)
 
 ## Retired (don't make these)

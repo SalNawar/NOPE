@@ -198,27 +198,28 @@ public sealed class GameConfigSO : ScriptableObject
     [Min(0)]
     public int baseDailyExpense = 10;
 
-    /// <summary>Additional daily expense per family member.</summary>
-    [Min(0)]
-    public int expensePerFamilyMember = 5;
-
-    /// <summary>Ongoing medical drain per point of a family member's condition.</summary>
+    /// <summary>The sick pet's extra care a night per step of its sickness (the bill's drain line; the house's MedicalDrain ops lower it). The night's optional bills (food, heating, electricity, TV, medicine) are priced in world_source.json home.bills.</summary>
     [Min(0)]
     public int expensePerConditionPoint = 1;
 
-    /// <summary>Credits cost to treat one point of a family member's condition.</summary>
-    [Min(0)]
-    public int conditionCareCost = 8;
+    [Header("Home / Pet (the Home pet spec)")]
+    /// <summary>The worst level of each of the pet's needs (hunger, cold, boredom, sickness: 0 well); the player only ever reads them in words (home.pet).</summary>
+    [Min(1)]
+    public int petNeedMax = 3;
 
-    /// <summary>Chance (0..1) an untreated family member's condition worsens by 1 overnight.</summary>
+    /// <summary>The pet's nightly chance (0..1) to get a step sicker when well cared for, before hunger, cold, the house and the mood.</summary>
     [Range(0f, 1f)]
-    public float conditionWorsenChance = 0.25f;
+    public float conditionWorsenChance = 0.15f;
 
-    /// <summary>Maximum value a family member's condition can reach.</summary>
+    /// <summary>What each step of hunger and of cold after tonight's care adds to the pet's chance to get sicker (PetRules.SicknessChance).</summary>
+    [Range(0f, 1f)]
+    public float sicknessPerNeed = 0.1f;
+
+    /// <summary>The nights in a row the pet may end at the worst of hunger, cold or sickness: the first brings the Animal Welfare Office's notice, this many take the pet (the failure ending; 0: never).</summary>
     [Min(0)]
-    public int maxFamilyCondition = 10;
+    public int welfareNights = 2;
 
-    /// <summary>A sick member's nightly chance to get one point better per point of the household's mood (the house upgrades' Mood ops; HomeRules.MoodShare). Saleh's Q3 (2026-09-29): mood both heals and keeps the family well, each a little weaker than recovery alone was (0.04); never shown to the player as a number.</summary>
+    /// <summary>A sick pet's nightly chance to get one step better per point of its mood (the house's and the toys' Mood ops less its boredom; PetRules.RecoveryChance). Saleh's Q3 (2026-09-29): mood both heals and keeps the household well; never shown to the player as a number.</summary>
     [Range(0f, 1f)]
     public float recoveryPerMood = 0.03f;
 
@@ -226,11 +227,11 @@ public sealed class GameConfigSO : ScriptableObject
     [Range(0f, 1f)]
     public float maxRecoveryChance = 0.4f;
 
-    /// <summary>How much each point of the household's mood lowers a member's nightly chance to get worse (HomeRules.WorsenChance; Saleh's Q3).</summary>
+    /// <summary>How much each point of the pet's mood lowers its nightly chance to get sicker (HomeRules.WorsenChance; Saleh's Q3).</summary>
     [Range(0f, 1f)]
     public float sicknessPerMood = 0.01f;
 
-    /// <summary>The most the mood takes off a member's nightly chance to get worse.</summary>
+    /// <summary>The most the mood takes off the pet's nightly chance to get sicker.</summary>
     [Range(0f, 1f)]
     public float maxMoodSicknessCut = 0.1f;
 

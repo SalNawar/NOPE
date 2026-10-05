@@ -20,7 +20,10 @@ using static SceneUiKit;
 /// world button opens it after a failure ("The world you leave behind").
 /// The title panel is the title block (Saleh 2026-09-30), laid out on every
 /// build from the knobs in <see cref="TitleBlock"/>: the printed name, a gold
-/// rule and the menu on a navy plate over the painting's open floor.
+/// rule and the menu on a navy plate over the painting's open floor. The
+/// adoption panel (the Home pet spec PS1) shows after New Run: Dog and Cat,
+/// the chosen pet drawn by a PetStandIn, a name field, the refusal's line,
+/// Adopt and Back.
 /// </summary>
 public static class TitleSceneBuilder
 {
@@ -79,6 +82,28 @@ public static class TitleSceneBuilder
         LayOutEndingButtons(endingBodyText, endingWorldButton, endingNewRunButton);
         LayOutWorldPage(world, worldOutcomesText, worldNewRunButton, endingNewRunButton);
 
+        // --- The adoption panel (the Home pet spec PS1): a dog or a cat, and its name ---
+        Transform adopt = FindOrCreatePanel(uiRoot, "AdoptPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(1000f, 720f), withBackground: true, bgColor: new Color(0.08f, 0.09f, 0.14f, 0.97f));
+        TMP_Text adoptTitle = FindOrCreateText(adopt, "TitleText", "Adopt a companion", 40,
+            TextAlignmentOptions.Center, new Vector2(0.05f, 0.87f), new Vector2(0.95f, 0.97f));
+        TMP_Text adoptBody = FindOrCreateText(adopt, "BodyText", "...", 24,
+            TextAlignmentOptions.Top, new Vector2(0.06f, 0.73f), new Vector2(0.94f, 0.86f));
+        adoptBody.textWrappingMode = TextWrappingModes.Normal;
+        RectTransform preview = FindOrCreateArea(adopt, "Preview", new Vector2(0.05f, 0.17f), new Vector2(0.47f, 0.71f));
+        PetStandIn previewPet = preview.GetComponent<PetStandIn>();
+        if (previewPet == null)
+            previewPet = Undo.AddComponent<PetStandIn>(preview.gameObject);
+        Button dog = FindOrCreateButton(adopt, "DogButton", "Dog", new Vector2(0.52f, 0.6f), new Vector2(0.72f, 0.69f));
+        Button cat = FindOrCreateButton(adopt, "CatButton", "Cat", new Vector2(0.74f, 0.6f), new Vector2(0.94f, 0.69f));
+        TMP_InputField nameInput = FindOrCreateInputField(adopt, "NameInput", 28, new Vector2(0.52f, 0.46f), new Vector2(0.94f, 0.55f));
+        TMP_Text problem = FindOrCreateText(adopt, "ProblemText", "", 22,
+            TextAlignmentOptions.TopLeft, new Vector2(0.52f, 0.35f), new Vector2(0.94f, 0.45f));
+        problem.color = new Color(1f, 0.72f, 0.66f, 1f);
+        problem.textWrappingMode = TextWrappingModes.Normal;
+        Button adoptGo = FindOrCreateButton(adopt, "AdoptButton", "Adopt and start", new Vector2(0.52f, 0.2f), new Vector2(0.94f, 0.31f));
+        Button adoptBack = FindOrCreateButton(adopt, "BackButton", "Back", new Vector2(0.05f, 0.04f), new Vector2(0.27f, 0.12f));
+
         // --- The Debt Relief ending's papers (redesign phase 13): the clerk's Labour Contract left of the panel, the account right ---
         Transform papers = FindOrCreatePanel(ending, "ClerkPapers", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
             Vector2.zero, new Vector2(1880f, 520f), withBackground: false);
@@ -114,6 +139,16 @@ public static class TitleSceneBuilder
         soUi.FindProperty("clerkPapers").objectReferenceValue = papers.gameObject;
         soUi.FindProperty("clerkContractText").objectReferenceValue = contractText;
         soUi.FindProperty("clerkAccountText").objectReferenceValue = accountText;
+        soUi.FindProperty("adoptPanel").objectReferenceValue = adopt.gameObject;
+        soUi.FindProperty("adoptTitleText").objectReferenceValue = adoptTitle;
+        soUi.FindProperty("adoptBodyText").objectReferenceValue = adoptBody;
+        soUi.FindProperty("adoptDogButton").objectReferenceValue = dog;
+        soUi.FindProperty("adoptCatButton").objectReferenceValue = cat;
+        soUi.FindProperty("adoptPreview").objectReferenceValue = previewPet;
+        soUi.FindProperty("adoptNameInput").objectReferenceValue = nameInput;
+        soUi.FindProperty("adoptProblemText").objectReferenceValue = problem;
+        soUi.FindProperty("adoptButton").objectReferenceValue = adoptGo;
+        soUi.FindProperty("adoptBackButton").objectReferenceValue = adoptBack;
         soUi.ApplyModifiedProperties();
 
         BuildArtSlots(titleUI, ending, continueButton, newRunButton, endingNewRunButton, endingWorldButton, worldNewRunButton);
@@ -132,6 +167,7 @@ public static class TitleSceneBuilder
         title.gameObject.SetActive(false);
         ending.gameObject.SetActive(false);
         world.gameObject.SetActive(false);
+        adopt.gameObject.SetActive(false);
         papers.gameObject.SetActive(false);
 
         EditorSceneManager.MarkSceneDirty(titleUI.gameObject.scene);
@@ -358,6 +394,19 @@ public static class TitleSceneBuilder
 
     /// <summary>The ending panel's world button's ink: the Title button faces' printed teal.</summary>
     private static readonly Color EndingButtonInk = new Color(0.18f, 0.29f, 0.33f, 1f);
+
+    /// <summary>Finds a child area by name or creates an empty one filling the given relative anchors (the adoption's preview: PetStandIn draws into it).</summary>
+    private static RectTransform FindOrCreateArea(Transform parent, string name, Vector2 anchorMin, Vector2 anchorMax)
+    {
+        Transform existing = parent.Find(name);
+        if (existing != null)
+            return (RectTransform)existing;
+        var go = new GameObject(name, typeof(RectTransform));
+        go.transform.SetParent(parent, false);
+        Stretch((RectTransform)go.transform, anchorMin, anchorMax);
+        Undo.RegisterCreatedObjectUndo(go, $"Create {name}");
+        return (RectTransform)go.transform;
+    }
 
     /// <summary>The <typeparamref name="T"/> on <paramref name="host"/>, added (with undo) when it has none.</summary>
     private static T Ensure<T>(Transform host) where T : Component

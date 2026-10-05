@@ -30,4 +30,3 @@ MonoBehaviour:
   carryCategory: 3
   maxHistoryNewsPerNight: 3
   baseDailyExpense: 30
-  expensePerFamilyMember: 15

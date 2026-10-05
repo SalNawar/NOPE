@@ -1,5 +1,4 @@
 // ReSharper disable InconsistentNaming
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -62,7 +61,7 @@ public sealed class RunConfigSO : ScriptableObject
     /// <summary>If non-zero, every new run uses this seed (useful for testing). 0 = random.</summary>
     public int fixedRunSeed = 0;
 
-    [Header("Home / Family")]
-    /// <summary>Family member names seeded into a new run (condition starts at 0).</summary>
-    public List<string> startingFamilyMembers = new() { "Partner", "Kid" };
+    [Header("Home / Pet")]
+    /// <summary>The pet a run starts with when no adoption chose one (a run started outside the Title, the balance simulation, an older save): the Title's adoption panel replaces it (the Home pet spec PS1); its name is the content's suggested name for the kind (home.pet.kinds).</summary>
+    public PetKind startingPetKind = PetKind.Dog;
 }

@@ -1,17 +1,16 @@
 using System;
 
 /// <summary>
-/// The Home phase's family rules (audit R2-021) and the house upgrades'
-/// (the adjusted knobs, recovery and the break-in), pure so they are tested
-/// headless; HomeEconomy applies them to the run's family, wallet and config.
+/// The Home phase's household rules (audit R2-021; the household is the pet
+/// since the Home pet spec, PetRules building on these) and the house
+/// upgrades' (the adjusted knobs, recovery and the break-in), pure so they
+/// are tested headless; HomeEconomy applies them to the run's pet, wallet and
+/// config.
 /// </summary>
 public static class HomeRules
 {
     /// <summary>A member's points for the medical drain: their condition, never below 0.</summary>
     public static int DrainPoints(int condition) => Math.Max(0, condition);
-
-    /// <summary>Whether a member can be treated: they have a condition to treat and the wallet covers the care cost.</summary>
-    public static bool CanTreat(int condition, int money, int careCost) => condition > 0 && money >= careCost;
 
     /// <summary>A treated member's condition: one point better, never below 0.</summary>
     public static int Treated(int condition) => Math.Max(0, condition - 1);

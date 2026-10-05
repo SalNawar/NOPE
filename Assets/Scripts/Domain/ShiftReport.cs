@@ -63,7 +63,7 @@ public sealed class ShiftReport
     /// <summary>Other money the shift moved (the dialogs' effects at its end: a bribe taken), signed.</summary>
     public int Other;
 
-    /// <summary>Tonight's bills (rent and utilities, the family, their care, the house's upkeep), known at the shift's end; a break-in is never foretold.</summary>
+    /// <summary>Tonight's bills (rent and utilities, the sick pet's extra care, the house's upkeep, and the pet's food, heating and electricity), known at the shift's end; a break-in is never foretold.</summary>
     public int Bills;
 
     /// <summary>The wallet as the report shows it (after the shift, before the bills).</summary>

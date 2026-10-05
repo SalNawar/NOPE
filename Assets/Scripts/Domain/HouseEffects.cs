@@ -4,11 +4,12 @@ using System.Globalization;
 
 /// <summary>
 /// The House panel's effect line (the Home upgrades spec §6): a house
-/// upgrade's household ops in words ("Fewer sick nights · The family feels a
-/// little better"), in the order its effect lists them; and the expenses
-/// panel's mood line. Saleh's Q3 (2026-09-29): "dont reveal numbers to the
-/// player": a chance, a percentage or the mood is only ever words; a price in
-/// cr stays a number. Pure, so the wording is tested headless.
+/// upgrade's household ops in words ("Fewer sick nights · A little cheerier
+/// at home"), in the order its effect lists them; the sick nights and the
+/// mood are the pet's (the Home pet spec PS8). Saleh's Q3 (2026-09-29): "dont
+/// reveal numbers to the player": a chance, a percentage or the mood is only
+/// ever words; a price in cr stays a number. Pure, so the wording is tested
+/// headless.
 /// </summary>
 public static class HouseEffects
 {
@@ -23,22 +24,15 @@ public static class HouseEffects
         {
             case EffectOpType.HouseholdExpense: return $"Rent and utilities {Signed(value)} cr a night";
             case EffectOpType.SicknessChance: return value < 0f ? Degree(-value, "Slightly fewer", "Fewer", "Far fewer") + " sick nights" : Degree(value, "Slightly more", "More", "Far more") + " sick nights";
-            case EffectOpType.CareCost: return $"Treatment {Signed(value)} cr";
+            case EffectOpType.CareCost: return $"Medicine {Signed(value)} cr";
             case EffectOpType.Upkeep: return $"Upkeep {value.ToString("0.##", Inv)} cr a night";
-            case EffectOpType.MedicalDrain: return $"Medical drain {Signed(value)} cr a point";
-            case EffectOpType.Mood: return value < 0f ? "The family feels worse" : "The family feels " + (value < 1.5f ? "a little better" : value < 2.5f ? "better" : "much better");
+            case EffectOpType.MedicalDrain: return $"Sick pet's extra care {Signed(value)} cr a step";
+            case EffectOpType.Mood: return value < 0f ? "Gloomier at home" : (value < 1.5f ? "A little cheerier" : value < 2.5f ? "Cheerier" : "Much cheerier") + " at home";
             case EffectOpType.BreakInChance: return value < 0f ? "Fewer break-ins" : "More break-ins";
             case EffectOpType.BreakInShare: return value < 0f ? "A break-in takes less" : "A break-in takes more";
             default: return string.Empty;
         }
     }
-
-    /// <summary>The expenses panel's line for the household's mood (the house's Mood ops summed), in words: "" without a good mood, then a little better, in good spirits, happy.</summary>
-    public static string MoodLine(float mood) =>
-        mood <= 0f ? string.Empty
-        : mood < 3f ? "The family feels a little better at home."
-        : mood < 6f ? "The family is in good spirits."
-        : "The family is happy at home.";
 
     /// <summary>The ops' words joined by " · ", in order, skipping what <see cref="Describe"/> leaves empty.</summary>
     public static string Line(IEnumerable<(EffectOpType op, float value)> ops)

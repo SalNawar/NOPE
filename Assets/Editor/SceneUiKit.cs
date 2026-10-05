@@ -184,6 +184,61 @@ internal static class SceneUiKit
     }
 
     /// <summary>
+    /// Finds a child text field by name or creates one filling the given
+    /// relative anchors: a white box, a masked text area with a grey italic
+    /// placeholder and a dark text of <paramref name="fontSize"/>, and its
+    /// TMP_InputField (single line).
+    /// </summary>
+    public static TMP_InputField FindOrCreateInputField(Transform parent, string name, int fontSize, Vector2 anchorMin, Vector2 anchorMax)
+    {
+        Transform existing = parent.Find(name);
+
+        if (existing != null)
+            return existing.GetComponent<TMP_InputField>();
+
+        var go = new GameObject(name, typeof(RectTransform));
+        go.transform.SetParent(parent, false);
+        Stretch((RectTransform)go.transform, anchorMin, anchorMax);
+        Image box = go.AddComponent<Image>();
+        box.color = Color.white;
+
+        var area = new GameObject("TextArea", typeof(RectTransform));
+        area.transform.SetParent(go.transform, false);
+        var areaRect = (RectTransform)area.transform;
+        Stretch(areaRect, Vector2.zero, Vector2.one);
+        areaRect.offsetMin = new Vector2(14f, 4f);
+        areaRect.offsetMax = new Vector2(-14f, -4f);
+        area.AddComponent<RectMask2D>();
+
+        TextMeshProUGUI MakeText(string childName, Color colour, FontStyles style)
+        {
+            var t = new GameObject(childName, typeof(RectTransform));
+            t.transform.SetParent(area.transform, false);
+            Stretch((RectTransform)t.transform, Vector2.zero, Vector2.one);
+            var text = t.AddComponent<TextMeshProUGUI>();
+            text.fontSize = fontSize;
+            text.color = colour;
+            text.fontStyle = style;
+            text.alignment = TextAlignmentOptions.MidlineLeft;
+            text.textWrappingMode = TextWrappingModes.NoWrap;
+            return text;
+        }
+
+        TextMeshProUGUI placeholder = MakeText("Placeholder", new Color(0.4f, 0.4f, 0.42f, 1f), FontStyles.Italic);
+        TextMeshProUGUI value = MakeText("Text", new Color(0.1f, 0.1f, 0.12f, 1f), FontStyles.Normal);
+
+        TMP_InputField input = go.AddComponent<TMP_InputField>();
+        input.textViewport = areaRect;
+        input.textComponent = value;
+        input.placeholder = placeholder;
+        input.targetGraphic = box;
+        input.lineType = TMP_InputField.LineType.SingleLine;
+
+        Undo.RegisterCreatedObjectUndo(go, $"Create {name}");
+        return input;
+    }
+
+    /// <summary>
     /// Finds a child image by name or creates a white one (no raycasts) at the
     /// given anchors, pivot, position and size, keeping its aspect: the host
     /// of an art slot that has no image of its own today.

@@ -177,7 +177,7 @@ public static partial class WorldContentGenerator
         AssetDatabase.Refresh();
 
         int futurePlaces = src.places.Count(p => src.eras.Any(e => e.future && e.id == p.era));
-        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places ({futurePlaces} Future), {rules.Count} rules, {premades.Length} premades, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers, {historyTriggers.Length} history rules, {leaderEffects.Length} leader effects, {themes.Length + 1} themes, {stringTables.Length} UI string tables, {src.translation.tongues?.Length ?? 0} tongues, {translators.Length} translator upgrades, {notices.Length} translation notice, {houseUpgrades.Length} house upgrades; {pruned} unlisted generated asset(s) moved to the trash.");
+        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places ({futurePlaces} Future), {rules.Count} rules, {premades.Length} premades, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers, {historyTriggers.Length} history rules, {leaderEffects.Length} leader effects, {themes.Length + 1} themes, {stringTables.Length} UI string tables, {src.translation.tongues?.Length ?? 0} tongues, {translators.Length} translator upgrades, {notices.Length} translation notice, {houseUpgrades.Count(u => u.venue == UpgradeVenue.Home)} house upgrades, {houseUpgrades.Count(u => u.branch == UpgradeBranch.Toys)} toys; {pruned} unlisted generated asset(s) moved to the trash.");
     }
 
     // -----------------------------

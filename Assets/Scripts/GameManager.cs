@@ -420,8 +420,9 @@ public sealed class GameManager : MonoBehaviour
             Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (showing results panel, then {(ending != null ? "the title scene" : "Home")}).");
             if (booth != null)
                 booth.SetPhase(BoothPhase.Newsletter);
-            // The report's money at a glance (lesson 5): tonight's bills are Home's own (HomeEconomy.DailyExpenses; a break-in is never foretold).
-            int bills = HomeEconomy.DailyExpenses(_worldState, contentLibrary, _gameConfig, 0).total;
+            // The report's money at a glance (lesson 5): tonight's bills are Home's own fixed bill (HomeEconomy.DailyExpenses; a break-in is
+            // never foretold) and the pet's essentials (food, heating, electricity: HomeEconomy.EssentialsPrice; the Home pet spec PS9).
+            int bills = HomeEconomy.DailyExpenses(_worldState, contentLibrary, _gameConfig, 0).total + HomeEconomy.EssentialsPrice(_worldState, contentLibrary);
             dayFlowUI.ShowResults(_worldState, _ledger, ShiftReport.From(_ledger, _dayCases != null ? _dayCases.Count : 0, _worldState.money, bills), next);
         }
         else

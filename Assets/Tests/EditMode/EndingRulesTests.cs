@@ -13,6 +13,7 @@ public class EndingRulesTests
     [TestCase(EndingConditionType.Fired, EndingKind.Failure)]
     [TestCase(EndingConditionType.Bankrupt, EndingKind.Failure)]
     [TestCase(EndingConditionType.DayAtLeast, EndingKind.Milestone)]
+    [TestCase(EndingConditionType.PetTaken, EndingKind.Failure)]
     [TestCase(EndingConditionType.AttrTotalAtLeast, EndingKind.Failure, Description = "retired: never met, so its kind never counts")]
     [TestCase((EndingConditionType)99, EndingKind.Failure)]
     public void KindOf(EndingConditionType type, EndingKind expected)
@@ -27,6 +28,17 @@ public class EndingRulesTests
         Assert.AreEqual(1, (int)EndingConditionType.Bankrupt);
         Assert.AreEqual(2, (int)EndingConditionType.AttrTotalAtLeast);
         Assert.AreEqual(3, (int)EndingConditionType.DayAtLeast);
+        Assert.AreEqual(4, (int)EndingConditionType.PetTaken);
+        Assert.AreEqual(5, System.Enum.GetValues(typeof(EndingConditionType)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>The Welfare Office's ending (the Home pet spec PS6): met once the pet is taken, at any moment, whatever the threshold.</summary>
+    [Test]
+    public void Met_PetTaken_OnceTheWelfareOfficeTookThePet()
+    {
+        Assert.IsTrue(EndingRules.Met(EndingConditionType.PetTaken, 0f, new EndingCheck(80f, 100, 4, 0f, -100, petTaken: true)));
+        Assert.IsFalse(EndingRules.Met(EndingConditionType.PetTaken, 0f, new EndingCheck(80f, 100, 4, 0f, -100)));
+        Assert.IsFalse(EndingRules.IsRetired(EndingConditionType.PetTaken));
     }
 
     [Test]
