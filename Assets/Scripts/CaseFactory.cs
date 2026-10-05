@@ -874,7 +874,15 @@ public sealed class CaseFactory
             Rule(Of(TravelRuleType.Procedure), "citation.rule.record");
             RecordTell tell = inst.recordTells[0];
             AddBox(c, inst, d => inst.documents.IndexOf(d) == tell.Document, f => f.category == tell.Category);
-            Add(record, ResolveFieldValue(tell.Category, inst));
+            if (tell.Category == ClueCategory.Seal)
+            {
+                // A forged seal is held against its issuing office's seal in the Seal Register, never a place's fact.
+                string form = inst.documents[tell.Document].template != null ? inst.documents[tell.Document].template.formNumber : null;
+                AgencyOffice office = Seals.OfficeOf(_lib.Agency.offices, form);
+                Add(UiText.Format("citation.label.book", UiText.Category(ClueCategory.Seal), office != null ? office.name : form), SealValue(office, form));
+            }
+            else
+                Add(record, ResolveFieldValue(tell.Category, inst));
         }
         else if (inst.IsLiar && lie != null && lie.Tells.Count > 0)
         {
