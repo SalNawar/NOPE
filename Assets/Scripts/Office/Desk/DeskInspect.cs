@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -90,6 +91,9 @@ public sealed class DeskInspect : MonoBehaviour
     private string _drawnA, _drawnB, _drawnHold;
     private bool _wired;
 
+    /// <summary>Raised when a paper not handed over is flagged missing on the rulebook (its request's id): the controller flags it as the PC's Papers menu does.</summary>
+    public event Action<string> MissingFlagged;
+
     private void Awake()
     {
         _canvas = endA != null ? OverlayProjection.CanvasRectOf(endA) : null;
@@ -103,7 +107,10 @@ public sealed class DeskInspect : MonoBehaviour
         if (board != null)
             board.Logged -= Mark;
         if (rulebook != null)
+        {
             rulebook.RowClicked -= PickRule;
+            rulebook.PaperFlagged -= FlagPaper;
+        }
     }
 
     private void Wire()
@@ -114,8 +121,21 @@ public sealed class DeskInspect : MonoBehaviour
         if (board != null)
             board.Logged += Mark;
         if (rulebook != null)
+        {
             rulebook.RowClicked += PickRule;
+            rulebook.PaperFlagged += FlagPaper;
+        }
     }
+
+    /// <summary>The papers the traveller has not handed over and where each stands (the controller, whenever they change): the rulebook lists them to flag.</summary>
+    public void SetMissing(MissingPapers missing, CasePapers papers)
+    {
+        if (rulebook != null)
+            rulebook.ShowMissing(missing, papers);
+    }
+
+    /// <summary>A paper flagged missing on the rulebook.</summary>
+    private void FlagPaper(string requestId) => MissingFlagged?.Invoke(requestId);
 
     /// <summary>The office camera the values' places are seen through (the office binder's).</summary>
     public void SetCamera(Camera office) => _camera = office;
@@ -329,11 +349,7 @@ public sealed class DeskInspect : MonoBehaviour
         rect = Rect.MinMaxRect(minX, minY, maxX, maxY);
         if (rect.xMax > 0f && rect.yMax > 0f && rect.xMin < Screen.width && rect.yMin < Screen.height)
             return true;
-        // Off the screen (the calendar or the face seen from the desk view): the end waits at the screen's edge toward it, so the line still points there, and its arrow points the way.
-        Vector2 middle = new Vector2(Screen.width / 2f, Screen.height / 2f);
-        Vector2 centre = new Vector2(Mathf.Clamp(rect.center.x, EdgeMargin, Screen.width - EdgeMargin), Mathf.Clamp(rect.center.y, EdgeMargin, Screen.height - EdgeMargin));
-        toward = (rect.center - middle).sqrMagnitude > 1e-6f ? (rect.center - middle).normalized : Vector2.up;
-        rect = new Rect(centre - Vector2.one * EdgeMargin / 2f, Vector2.one * EdgeMargin);
-        return true;
+        // Off the screen (the calendar or the face seen from the desk view): the end waits at the screen's edge in the value's direction as the camera sees it (the projection of a point nearly beside the camera swings wide), so the line still points there, and its arrow points the way.
+        return TryEdgeToward(cam, bounds.center, out rect, out toward);
     }
 }

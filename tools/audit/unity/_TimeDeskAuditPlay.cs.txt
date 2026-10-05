@@ -802,8 +802,21 @@ public static class _TimeDeskAuditPlay
               $"d{day} {c.visitorGivenName}: the wheel starts minimal [{string.Join(", ", runner.Choices.Select(x => x.Id))}]");
         MissingPapers missing = o.Ui.MissingPapers;
         List<FormRequest> open = missing.Open(o.Ui.Papers);
-        foreach (FormRequest r in open)
+        // The desk polish: the first paper is flagged on the desk's rulebook card (its row lists it), the rest on the PC's list.
+        DeskRulebook book = o.Rulebook;
+        for (int i = 0; i < open.Count; i++)
+        {
+            FormRequest r = open[i];
+            if (i == 0 && book != null && book.gameObject.activeInHierarchy)
+            {
+                var row = ((Clickable[])Field(book, "paperRows"))[0];
+                Check(row.gameObject.activeSelf, $"d{day} {c.visitorGivenName}: the rulebook lists {r.Label} as not handed over");
+                row.onClick.Invoke();
+                Check(missing.State(r.Id) == MissingPaperState.Flagged && runner.IsUnlocked(InterviewUnlocks.Missing(r.Id)), $"d{day} {c.visitorGivenName}: {r.Label} flagged missing on the rulebook unlocks its request");
+                continue;
+            }
             Check(o.Ui.FlagMissing(r.Id) && runner.IsUnlocked(InterviewUnlocks.Missing(r.Id)), $"d{day} {c.visitorGivenName}: {r.Label} flagged missing unlocks its request");
+        }
         Count(open.Count > 0 ? "papers flagged missing" : "no paper to flag");
         foreach (ClueCategory category in ((InterviewPresenter)interviewer).QuestionCategories)
             Call(interviewer, "Unlock", InterviewUnlocks.About(category));
@@ -2052,6 +2065,7 @@ public static class _TimeDeskAuditPlay
         /// <summary>A click on the AVAILABLE sign, as the EventSystem delivers it.</summary>
         public void ClickSign() => ExecuteEvents.Execute(Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
         public DeskStampTray Stamps => (DeskStampTray)Field(Coordinator, "stampTray");
+        public DeskRulebook Rulebook => (DeskRulebook)Field(One<DeskInspect>(), "rulebook");
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");

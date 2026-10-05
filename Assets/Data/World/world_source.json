@@ -25101,6 +25101,30 @@
         "tier": "Full"
       },
       {
+        "key": "desk.rulebook.papers",
+        "text": "PAPERS NOT HANDED OVER",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.paperFlag",
+        "text": "{0}: missing? Click to flag it.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.paperFlagged",
+        "text": "{0}: flagged. Ask for it.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.paperNotCarried",
+        "text": "{0}: not carried.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "tooltip.credits",
         "text": "{1}: {0}",
         "gloss": "None",

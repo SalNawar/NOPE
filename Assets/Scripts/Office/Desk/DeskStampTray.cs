@@ -78,6 +78,9 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>How far above the desk the hand-back strip lies (metres), over the desk's own top and under the papers.</summary>
     private const float ZoneLift = 0.0004f;
 
+    /// <summary>The highest the traveller's side reaches on the screen in the desk view (a share of its height from the bottom): a passport can be slid there, under the overlay's top controls.</summary>
+    private const float ViewTop = 0.9f;
+
     private StampFlow _flow;
     private Camera _camera;
     private Vector3 _trayOut;
@@ -210,7 +213,7 @@ public sealed class DeskStampTray : MonoBehaviour
 
     /// <summary>True when <paramref name="point"/> lies in the strip of the desk's clamp area at its far edge along the office view (DeskConfigSO.handBackDepth): the traveller's side, where the stamped passport hands the papers back.</summary>
     public bool OnTravellersSide(Vector3 point) =>
-        TravellersSide(out float far, out _, out _) && Vector3.Dot(point - surface.transform.position, _forward) >= far - config.handBackDepth;
+        TravellersSide(out float far, out _, out _, out _) && Vector3.Dot(point - surface.transform.position, _forward) >= far - config.handBackDepth;
 
     /// <summary>The tray's footprint on the desk where it lies out (its four corners), while it is out; false while in.</summary>
     public bool TryFootprint(out Vector3[] corners)
@@ -371,11 +374,12 @@ public sealed class DeskStampTray : MonoBehaviour
             box.enabled = true;
     }
 
-    /// <summary>The far edge of the desk's clamp area along the office view and its left and right ends (metres from the desk's centre); false without a desk.</summary>
-    private bool TravellersSide(out float far, out float left, out float right)
+    /// <summary>The far edge of the traveller's side along the office view (the desk's clamp area's far edge, or nearer: as far as the desk view shows, ViewTop, so the passport can be slid there in it), the desk's left and right ends and the strip's middle across (the desk view's centre line, else the desk's), in metres from the desk's centre; false without a desk.</summary>
+    private bool TravellersSide(out float far, out float left, out float right, out float middle)
     {
         far = right = float.MinValue;
         left = float.MaxValue;
+        middle = 0f;
         if (surface == null || config == null)
             return false;
         Vector3 origin = surface.transform.position;
@@ -385,19 +389,25 @@ public sealed class DeskStampTray : MonoBehaviour
             left = Mathf.Min(left, Vector3.Dot(corner - origin, _right));
             right = Mathf.Max(right, Vector3.Dot(corner - origin, _right));
         }
+        middle = (left + right) / 2f;
+        if (deskView != null && deskView.TryViewPoint(new Vector2(0.5f, ViewTop), origin.y, out Vector3 shown))
+        {
+            far = Mathf.Min(far, Vector3.Dot(shown - origin, _forward));
+            middle = Mathf.Clamp(Vector3.Dot(shown - origin, _right), left, right);
+        }
         return true;
     }
 
-    /// <summary>Lays the hand-back strip over the traveller's side (the desk's width by handBackDepth at its far edge), facing the chair.</summary>
+    /// <summary>Lays the hand-back strip over the traveller's side (handBackDepth deep at its far edge, centred on the desk view's centre line so its label shows there, as wide as the desk allows either side of it), facing the chair.</summary>
     private void PlaceHandBackZone()
     {
-        if (handBackZone == null || !TravellersSide(out float far, out float left, out float right))
+        if (handBackZone == null || !TravellersSide(out float far, out float left, out float right, out float middle))
             return;
         float depth = config.handBackDepth;
-        Vector3 centre = surface.transform.position + _right * ((left + right) / 2f) + _forward * (far - depth / 2f) + Vector3.up * ZoneLift;
+        Vector3 centre = surface.transform.position + _right * middle + _forward * (far - depth / 2f) + Vector3.up * ZoneLift;
         handBackZone.transform.SetPositionAndRotation(centre, Quaternion.LookRotation(_forward, Vector3.up));
         if (handBackStrip != null)
-            handBackStrip.localScale = new Vector3(right - left, depth, 1f);
+            handBackStrip.localScale = new Vector3(2f * Mathf.Min(middle - left, right - middle), depth, 1f);
     }
 
     /// <summary>The held stamp's object, or null.</summary>

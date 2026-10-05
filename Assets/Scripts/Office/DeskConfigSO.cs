@@ -163,7 +163,7 @@ public sealed class DeskConfigSO : ScriptableObject
 
     [Header("Inspection at the desk (the desk-first redesign, item 11)")]
     /// <summary>Where the rulebook card lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat).</summary>
-    public Vector2 rulebookAt = new Vector2(-0.3f, -0.1f);
+    public Vector2 rulebookAt = new Vector2(-0.3f, -0.05f);
 
     [Header("Stamps (the desk-first redesign, item 12)")]
     /// <summary>How many presses one inking lasts (Saleh 2026-10-05: "the player picks stamps, inks them, then stamps on the document"; 1: ink before every stamp).</summary>

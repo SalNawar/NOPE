@@ -714,25 +714,31 @@ public sealed class DeskController : MonoBehaviour
     /// scanner (its footprint and the shadow its body casts away from the
     /// camera) while it is on the desk, then the stamp tray's footprint while
     /// it is out (no shadow: it is low); each moves the paper the shortest way
-    /// out to the left, right or front, or to the eject spot. <paramref name="at"/>
-    /// itself when nothing is in the way.
+    /// out to the left, right or front, or to the eject spot (the tray, at the
+    /// desk's near edge, sends it left or right only: nearer would leave the
+    /// desk view). <paramref name="at"/> itself when nothing is in the way.
     /// </summary>
     private Vector3 ClearOfBlockers(DeskDocument paper, Vector3 at)
     {
         if (surface == null)
             return at;
+        DeskRect desk = InViewFrame(surface.Corners());
         if (scanner != null && scanner.gameObject.activeInHierarchy)
-            at = ClearOf(paper, at, scanner.Corners(), _scannerShadow);
-        if (stamps != null && stamps.TryFootprint(out Vector3[] tray))
-            at = ClearOf(paper, at, tray, 0f);
+            at = ClearOf(paper, at, InViewFrame(scanner.Corners()), _scannerShadow, desk);
+        if (stamps != null && stamps.TryFootprint(out Vector3[] corners))
+        {
+            DeskRect tray = InViewFrame(corners);
+            float near = tray.CentreY - tray.Height / 2f, far = desk.CentreY + desk.Height / 2f;
+            at = ClearOf(paper, at, tray, 0f, new DeskRect(desk.CentreX, (near + far) / 2f, desk.Width, Mathf.Max(0f, far - near)));
+        }
         return at;
     }
 
-    /// <summary>One blocker (its corners on the desk, its <paramref name="shadow"/> behind it) cleared: where the paper lies instead (ScannerClearance.Clear), kept on the desk at its height.</summary>
-    private Vector3 ClearOf(DeskDocument paper, Vector3 at, IEnumerable<Vector3> blocker, float shadow)
+    /// <summary>One blocker (its rectangle in the view's frame, its <paramref name="shadow"/> behind it) cleared: where the paper lies instead (ScannerClearance.Clear, its centre kept in <paramref name="area"/>), kept on the desk at its height.</summary>
+    private Vector3 ClearOf(DeskDocument paper, Vector3 at, DeskRect blocker, float shadow, DeskRect area)
     {
         DeskRect sheet = InViewFrame(Footprint(paper, at));
-        (float x, float y) = ScannerClearance.Clear(sheet, InViewFrame(blocker), shadow, InViewFrame(surface.Corners()));
+        (float x, float y) = ScannerClearance.Clear(sheet, blocker, shadow, area);
         if (Mathf.Approximately(x, sheet.CentreX) && Mathf.Approximately(y, sheet.CentreY))
             return at;
         Vector3 moved = at + _viewRight * (x - sheet.CentreX) + _viewForward * (y - sheet.CentreY);

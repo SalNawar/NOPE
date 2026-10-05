@@ -1926,7 +1926,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: compare.pair
-    text: '{0}    {1}:  {2}    vs    {3}:  {4}'
+    text: "{0}  \xB7  {2}  vs  {4}"
     gloss: 0
     tier: 0
   - key: compare.pickAnother
@@ -2270,6 +2270,14 @@ MonoBehaviour:
     text: 'No ink: press the stamp on the ink pad first.'
     gloss: 0
     tier: 0
+  - key: stamp.hint.handBack
+    text: Slide the stamped passport onto HAND BACK, by the traveller.
+    gloss: 0
+    tier: 0
+  - key: stamp.zone.handBack
+    text: "\u25B2  HAND BACK  \u25B2"
+    gloss: 0
+    tier: 0
   - key: city.look
     text: < City (A)
     gloss: 0
@@ -2284,6 +2292,22 @@ MonoBehaviour:
     tier: 0
   - key: desk.rulebook.none
     text: No rules today.
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.papers
+    text: PAPERS NOT HANDED OVER
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperFlag
+    text: '{0}: missing? Click to flag it.'
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperFlagged
+    text: '{0}: flagged. Ask for it.'
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperNotCarried
+    text: '{0}: not carried.'
     gloss: 0
     tier: 0
   - key: tooltip.credits

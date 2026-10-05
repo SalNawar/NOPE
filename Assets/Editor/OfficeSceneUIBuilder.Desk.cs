@@ -1271,10 +1271,12 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Vector2 CityButtonSize = new Vector2(170f, 44f);
     private const float CityButtonHeight = 0.74f;
 
-    /// <summary>The desk's rulebook card (metres, width by depth), its rows and their pitch (metres).</summary>
-    private static readonly Vector2 RulebookSize = new Vector2(0.26f, 0.21f);
+    /// <summary>The desk's rulebook card (metres, width by depth), its rows and their pitch (metres), and its papers block's rows and pitch (the papers not handed over, to flag missing).</summary>
+    private static readonly Vector2 RulebookSize = new Vector2(0.26f, 0.3f);
     private const int RulebookRows = 4;
     private const float RulebookRowPitch = 0.036f;
+    private const int RulebookPaperRows = 3;
+    private const float RulebookPaperPitch = 0.024f;
 
     /// <summary>A "Hand the papers back" button (reference px), top right under the stamps' hint: the secondary way (the first is the stamped passport slid onto the traveller's side; the desk-first polish).</summary>
     private static readonly Vector2 HandBackSize = new Vector2(360f, 44f);
@@ -1485,9 +1487,9 @@ public static partial class OfficeSceneUIBuilder
 
         // The hand-back strip on the traveller's side (laid by DeskStampTray.Bind; shown while the stamped passport can be slid there).
         Transform zone = EnsureChild(host, "HandBackZone");
-        Material stripMaterial = EnsureMaterial("HandBack_Strip", "Universal Render Pipeline/Unlit", m =>
+        Material stripMaterial = EnsureMaterial("HandBack_Zone", "Universal Render Pipeline/Unlit", m =>
         {
-            m.SetColor("_BaseColor", new Color(1f, 0.96f, 0.84f, 0.42f));
+            m.SetColor("_BaseColor", new Color(1f, 0.96f, 0.84f, 0.22f));
             m.SetFloat("_Surface", 1f);
             m.SetFloat("_Blend", 0f);
             UnityEditor.BaseShaderGUI.SetMaterialKeywords(m);
@@ -1648,7 +1650,9 @@ public static partial class OfficeSceneUIBuilder
     /// each run: Office/Rulebook (the DeskRulebook; the office binder lays it
     /// beside the mat): a cream card lying face up, its title, four rows (each
     /// a click box on the Interactable layer over its text, two lines at
-    /// most), the line for a day with no directive and the card's own click
+    /// most), the line for a day with no directive, the papers block (its
+    /// heading and three rows, click boxes over their texts: the papers not
+    /// handed over, to flag missing) and the card's own click
     /// box (CardClick: it opens the tucked card and tucks the open one; the
     /// desk-first polish). Returns it.
     /// </summary>
@@ -1675,6 +1679,23 @@ public static partial class OfficeSceneUIBuilder
             rows.Add(row);
         }
         TextMeshPro none = FlatText(book, "None", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.058f), new Vector2(RulebookSize.x - 0.024f, 0.03f), 0.13f, ink, FontStyles.Italic);
+
+        // The papers block at the card's foot: its heading and a row per paper not handed over (a click flags it missing).
+        float papersTop = -RulebookSize.y / 2f + 0.012f + (RulebookPaperRows + 0.5f) * RulebookPaperPitch;
+        TextMeshPro papersTitle = FlatText(book, "PapersTitle", new Vector3(0f, 0.0006f, papersTop), new Vector2(RulebookSize.x - 0.024f, 0.022f), 0.13f, ink, FontStyles.Bold);
+        papersTitle.alignment = TextAlignmentOptions.MidlineLeft;
+        var paperRows = new List<Clickable>();
+        for (int i = 0; i < RulebookPaperRows; i++)
+        {
+            Clickable row = EnsureClickBox(book, "Paper" + (i + 1));
+            row.transform.localPosition = new Vector3(0f, 0.0006f, papersTop - (i + 1) * RulebookPaperPitch);
+            var box = row.GetComponent<BoxCollider>();
+            box.center = Vector3.zero;
+            box.size = new Vector3(RulebookSize.x - 0.016f, 0.004f, RulebookPaperPitch - 0.003f);
+            TextMeshPro text = FlatText(row.transform, "Text", Vector3.zero, new Vector2(RulebookSize.x - 0.024f, RulebookPaperPitch - 0.005f), 0.12f, ink, FontStyles.Normal);
+            text.alignment = TextAlignmentOptions.MidlineLeft;
+            paperRows.Add(row);
+        }
         Clickable cardClick = EnsureClickBox(book, "CardClick");
         var cardBox = cardClick.GetComponent<BoxCollider>();
         cardBox.center = Vector3.zero;
@@ -1687,6 +1708,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "title", title);
         SerializedArrays.Set(so, "rows", rows);
         SetRef(so, "none", none);
+        SetRef(so, "papersTitle", papersTitle);
+        SerializedArrays.Set(so, "paperRows", paperRows);
         so.ApplyModifiedProperties();
         return rulebook;
     }

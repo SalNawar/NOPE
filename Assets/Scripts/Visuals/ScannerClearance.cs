@@ -12,7 +12,8 @@ using System;
 /// further back), with a gap, kept on the desk; where none of those is clear
 /// it goes to the eject spot in front of the scanner. A scanned paper comes
 /// back to where it was picked up only when that spot is clear, else to the
-/// eject spot. Engine-free; DeskController applies it.
+/// eject spot. The stamp tray, out, is cleared the same way (a footprint with
+/// no shadow; the desk-first polish). Engine-free; DeskController applies it.
 /// </summary>
 public static class ScannerClearance
 {

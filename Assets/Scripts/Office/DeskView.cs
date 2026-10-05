@@ -129,6 +129,23 @@ public sealed class DeskView : MonoBehaviour
         deskCamera.gameObject.SetActive(true);
     }
 
+    /// <summary>Where the desk view's ray through <paramref name="viewport"/> (0..1 each, from the bottom left) meets the level plane at <paramref name="height"/>: what of the desk the view shows there (false while unbound, or for a ray that never comes down to it).</summary>
+    public bool TryViewPoint(Vector2 viewport, float height, out Vector3 point)
+    {
+        point = default;
+        if (_office == null || deskCamera == null)
+            return false;
+        Transform t = deskCamera.transform;
+        float tan = Mathf.Tan(deskCamera.Lens.FieldOfView * 0.5f * Mathf.Deg2Rad);
+        float aspect = Screen.height > 0 ? (float)Screen.width / Screen.height : 16f / 9f;
+        Vector3 ray = t.forward + t.up * ((viewport.y * 2f - 1f) * tan) + t.right * ((viewport.x * 2f - 1f) * tan * aspect);
+        if (ray.y > -1e-5f)
+            return false;
+        float along = (height - t.position.y) / ray.y;
+        point = t.position + ray * along;
+        return along > 0f;
+    }
+
     /// <summary>The mat's click: tilts into the desk view, or back (only while the toggle is live).</summary>
     public void Toggle()
     {
