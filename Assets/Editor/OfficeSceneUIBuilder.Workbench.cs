@@ -251,7 +251,7 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// A menu's title: a clear button WbSize.MenuTitle tall whose row holds
-    /// its unread dot, its name (Body, ink), a drawn chevron (muted) and its
+    /// its unread dot, its name (Body, ink) and its
     /// side's plate ("L", "R"); behind it the open menu's plate (warm grey
     /// with a bar of the primary colour along its foot, the step pills'
     /// look), shown while its menu is open.
@@ -290,14 +290,6 @@ public static partial class OfficeSceneUIBuilder
         SceneUiKit.Tag(label, ThemeRoleId.Surface, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button, false);
         label.transform.SetAsLastSibling();
 
-        Transform glyph = Panel(title.transform, "Chevron", Center, Center, Vector2.zero, new Vector2(14f, 14f), null);
-        LayoutElement glyphSize = GetOrAdd<LayoutElement>(glyph.gameObject);
-        glyphSize.minWidth = glyphSize.preferredWidth = 14f;
-        glyphSize.minHeight = glyphSize.preferredHeight = 14f;
-        GlyphBar(glyph, "Left", new Vector2(-2.6f, 0f), new Vector2(2f, 9f), 45f, ThemeRoleId.SurfaceMuted);
-        GlyphBar(glyph, "Right", new Vector2(2.6f, 0f), new Vector2(2f, 9f), -45f, ThemeRoleId.SurfaceMuted);
-        foreach (Image bar in glyph.GetComponentsInChildren<Image>(true))
-            bar.color = WbMuted;
         SidePlate(title.transform);
         return title;
     }

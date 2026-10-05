@@ -903,8 +903,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The taskbar's Menu button's width, and Back to desk's (desktop units; the PC UX redesign's section 3).</summary>
     private const float MenuButtonWidth = 148f, DeskButtonWidth = 272f;
 
-    /// <summary>The tray's width at the taskbar's right end (Day, Credits, Stability, the clock at Caption size): room for a culture's long currency word beside its own script (wave 5 A3: the readouts overlapped at 600).</summary>
-    private const float TrayWidth = 760f;
+    /// <summary>The tray's width at the taskbar's right end (Day, Credits, Stability, the clock at Caption size): room for a culture's long currency word beside its own script and today's date (wave 5 A3: the readouts overlapped at 600; at 760 with the date).</summary>
+    private const float TrayWidth = 1000f;
 
     /// <summary>
     /// The taskbar (the PC UX redesign C7), rebuilt fresh: a flat bar in the

@@ -35,7 +35,7 @@ The header (the face, the name, the counters, the steps' pills) and the shelf (a
 
 | Part | Now |
 |---|---|
-| Titles | Papers, Records, Rules, Books, Calendar (`AppMenu`): a clear button with a Body-size label, a chevron, the side its open document is on ("L", "R") and an unread dot; a menu with nothing introduced today shows no title (Records from day 5, Books from the Seal Register's day; the gating is track A's `Introductions`, read where the rows are made). |
+| Titles | Papers, Records, Rules, Books, Calendar (`AppMenu`): a clear button with a Body-size label (no chevron: it overlapped the word), the side its open document is on ("L", "R") and an unread dot; a menu with nothing introduced today shows no title (Records from day 5, Books from the Seal Register's day; the gating is track A's `Introductions`, read where the rows are made). |
 | Drop-down | one at a time, under its title, a white list framed by a strong hairline, 44-unit rows; the open title sits on a warm plate with a bar of the primary colour (the step pills' look). Clicking the title again, a press elsewhere, Escape or a choice closes it. |
 | Papers | the papers handed over (dimmed until scanned), the transcript, then "Not handed over" and the papers to flag (§2). |
 | Records, Rules, Books | Citizen records; today's rules; each reference book. |
@@ -46,7 +46,7 @@ Decisions: a one-entry menu (Records, Rules) still drops down (one pattern, and 
 
 ## 4. The date in the taskbar
 
-The tray reads Credits · Stability · **14 MAR 2150 · Day 1** · 09:00 (`tray.date`; the agency's calendar, `AgencyCalendar.Today`, in capitals as the desk calendar prints it). The date is a clear button (underlined, hover hint "Compare today's date"): a click opens the Investigation app and holds today on the workbench (`InvestigationApp.HoldToday` → `MatchBoard.PickToday`), so the next click on an expiry or a ticket's date judges it ("Expired", "Not today", logged). With no readable first date the tray falls back to "Day 1".
+The tray (widened from 760 to 1000 units so a culture's long currency word, the stability and the date never overlap) reads Credits · Stability · **14 MAR 2150 · Day 1** · 09:00 (`tray.date`; the agency's calendar, `AgencyCalendar.Today`, in capitals as the desk calendar prints it). The date is a clear button (underlined, hover hint "Compare today's date"): a click opens the Investigation app and holds today on the workbench (`InvestigationApp.HoldToday` → `MatchBoard.PickToday`), so the next click on an expiry or a ticket's date judges it ("Expired", "Not today", logged). With no readable first date the tray falls back to "Day 1".
 
 ## 5. Clean-up asked by track A
 

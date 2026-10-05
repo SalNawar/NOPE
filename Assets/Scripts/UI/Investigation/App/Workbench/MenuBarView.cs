@@ -143,7 +143,7 @@ public sealed class MenuBarView : MonoBehaviour
     /// <summary>The row the menu titles sit in (a HorizontalLayoutGroup).</summary>
     [SerializeField] private RectTransform row;
 
-    /// <summary>A menu's title (inactive): its Label, its Chevron, its Unread dot, its Side plate with its Text, its Current plate (shown while its menu is open).</summary>
+    /// <summary>A menu's title (inactive): its Label, its Unread dot, its Side plate with its Text, its Current plate (shown while its menu is open).</summary>
     [SerializeField] private Button titleTemplate;
 
     /// <summary>The drop-down (inactive until a menu opens; above the work area), where the rows go.</summary>
