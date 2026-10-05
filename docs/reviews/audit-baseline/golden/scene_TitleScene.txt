@@ -11,6 +11,16 @@ Canvas TitleUIController.titlePanel=Canvas/TitlePanel
 Canvas TitleUIController.titleText=Canvas/TitlePanel/TitleText:TextMeshProUGUI
 Canvas TitleUIController.continueButton=Canvas/TitlePanel/ContinueButton:Button
 Canvas TitleUIController.newRunButton=Canvas/TitlePanel/NewRunButton:Button
+Canvas TitleUIController.adoptPanel=Canvas/AdoptPanel
+Canvas TitleUIController.adoptTitleText=Canvas/AdoptPanel/TitleText:TextMeshProUGUI
+Canvas TitleUIController.adoptBodyText=Canvas/AdoptPanel/BodyText:TextMeshProUGUI
+Canvas TitleUIController.adoptDogButton=Canvas/AdoptPanel/DogButton:Button
+Canvas TitleUIController.adoptCatButton=Canvas/AdoptPanel/CatButton:Button
+Canvas TitleUIController.adoptPreview=Canvas/AdoptPanel/Preview:PetStandIn
+Canvas TitleUIController.adoptNameInput=Canvas/AdoptPanel/NameInput:TMP_InputField
+Canvas TitleUIController.adoptProblemText=Canvas/AdoptPanel/ProblemText:TextMeshProUGUI
+Canvas TitleUIController.adoptButton=Canvas/AdoptPanel/AdoptButton:Button
+Canvas TitleUIController.adoptBackButton=Canvas/AdoptPanel/BackButton:Button
 Canvas TitleUIController.endingPanel=Canvas/EndingPanel
 Canvas TitleUIController.endingTitleText=Canvas/EndingPanel/EndingTitleText:TextMeshProUGUI
 Canvas TitleUIController.endingPicture=Canvas/EndingPicture:Image
@@ -181,6 +191,83 @@ Canvas/WorldPanel/NewRunButton/Label active=True layer=0 tag=Untagged components
 Canvas/WorldPanel/NewRunButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/WorldPanel/NewRunButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/WorldPanel/NewRunButton/Label text='New Run' size=26 auto=False min=18 max=72 color=#000000FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/AdoptPanel active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
+Canvas/AdoptPanel transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(1000.0,720.0)
+Canvas/AdoptPanel image sprite=null color=#141724F7 type=Simple raycast=True material=null
+Canvas/AdoptPanel/TitleText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/AdoptPanel/TitleText transform pos=(0.000,302.400,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/TitleText rect min=(0.1,0.9) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/TitleText text='Adopt a companion' size=40 auto=False min=18 max=72 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/AdoptPanel/BodyText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/AdoptPanel/BodyText transform pos=(0.000,212.400,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/BodyText rect min=(0.1,0.7) max=(0.9,0.9) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/BodyText text='...' size=24 auto=False min=18 max=72 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Top wrap=Normal raycast=True
+Canvas/AdoptPanel/Preview active=True layer=0 tag=Untagged components=[RectTransform,PetStandIn]
+Canvas/AdoptPanel/Preview transform pos=(-240.000,-43.200,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/Preview rect min=(0.1,0.2) max=(0.5,0.7) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/Preview PetStandIn enabled=True
+Canvas/AdoptPanel/Preview PetStandIn.plateColour=#DBCCADFF
+Canvas/AdoptPanel/DogButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button]
+Canvas/AdoptPanel/DogButton transform pos=(120.000,104.400,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/DogButton rect min=(0.5,0.6) max=(0.7,0.7) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/DogButton image sprite=null color=#F2F2F2FF type=Simple raycast=True material=null
+Canvas/AdoptPanel/DogButton Button interactable=True transition=ColorTint target=Canvas/AdoptPanel/DogButton:Image
+Canvas/AdoptPanel/DogButton button calls=[]
+Canvas/AdoptPanel/DogButton/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/AdoptPanel/DogButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/DogButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/DogButton/Label text='Dog' size=26 auto=False min=18 max=72 color=#000000FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/AdoptPanel/CatButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button]
+Canvas/AdoptPanel/CatButton transform pos=(340.000,104.400,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CatButton rect min=(0.7,0.6) max=(0.9,0.7) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/CatButton image sprite=null color=#F2F2F2FF type=Simple raycast=True material=null
+Canvas/AdoptPanel/CatButton Button interactable=True transition=ColorTint target=Canvas/AdoptPanel/CatButton:Image
+Canvas/AdoptPanel/CatButton button calls=[]
+Canvas/AdoptPanel/CatButton/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/AdoptPanel/CatButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/CatButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/CatButton/Label text='Cat' size=26 auto=False min=18 max=72 color=#000000FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/AdoptPanel/NameInput active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,TMP_InputField]
+Canvas/AdoptPanel/NameInput transform pos=(230.000,3.600,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/NameInput rect min=(0.5,0.5) max=(0.9,0.6) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/NameInput image sprite=null color=#FFFFFFFF type=Simple raycast=True material=null
+Canvas/AdoptPanel/NameInput TMP_InputField interactable=True transition=ColorTint target=Canvas/AdoptPanel/NameInput:Image
+Canvas/AdoptPanel/NameInput/TextArea active=True layer=0 tag=Untagged components=[RectTransform,RectMask2D]
+Canvas/AdoptPanel/NameInput/TextArea transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/NameInput/TextArea rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(-28.0,-8.0)
+Canvas/AdoptPanel/NameInput/TextArea/Placeholder active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/AdoptPanel/NameInput/TextArea/Placeholder transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/NameInput/TextArea/Placeholder rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/NameInput/TextArea/Placeholder text='' size=28 auto=False min=18 max=72 color=#66666BFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=MidlineLeft wrap=NoWrap raycast=True
+Canvas/AdoptPanel/NameInput/TextArea/Text active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/AdoptPanel/NameInput/TextArea/Text transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/NameInput/TextArea/Text rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/NameInput/TextArea/Text text='' size=28 auto=False min=18 max=72 color=#1A1A1FFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=MidlineLeft wrap=PreserveWhitespaceNoWrap raycast=True
+Canvas/AdoptPanel/ProblemText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/AdoptPanel/ProblemText transform pos=(230.000,-72.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/ProblemText rect min=(0.5,0.4) max=(0.9,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/ProblemText text='' size=22 auto=False min=18 max=72 color=#FFB8A8FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=TopLeft wrap=Normal raycast=True
+Canvas/AdoptPanel/AdoptButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button]
+Canvas/AdoptPanel/AdoptButton transform pos=(230.000,-176.400,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/AdoptButton rect min=(0.5,0.2) max=(0.9,0.3) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/AdoptButton image sprite=null color=#F2F2F2FF type=Simple raycast=True material=null
+Canvas/AdoptPanel/AdoptButton Button interactable=True transition=ColorTint target=Canvas/AdoptPanel/AdoptButton:Image
+Canvas/AdoptPanel/AdoptButton button calls=[]
+Canvas/AdoptPanel/AdoptButton/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/AdoptPanel/AdoptButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/AdoptButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/AdoptButton/Label text='Adopt and start' size=26 auto=False min=18 max=72 color=#000000FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/AdoptPanel/BackButton active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,Button]
+Canvas/AdoptPanel/BackButton transform pos=(-340.000,-302.400,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/BackButton rect min=(0.1,0.0) max=(0.3,0.1) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/BackButton image sprite=null color=#F2F2F2FF type=Simple raycast=True material=null
+Canvas/AdoptPanel/BackButton Button interactable=True transition=ColorTint target=Canvas/AdoptPanel/BackButton:Image
+Canvas/AdoptPanel/BackButton button calls=[]
+Canvas/AdoptPanel/BackButton/Label active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/AdoptPanel/BackButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/AdoptPanel/BackButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/AdoptPanel/BackButton/Label text='Back' size=26 auto=False min=18 max=72 color=#000000FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
 EventSystem active=True layer=0 tag=Untagged components=[Transform,EventSystem,InputSystemUIInputModule]
 EventSystem transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 TitleSceneController active=True layer=0 tag=Untagged components=[Transform,TitleSceneController]

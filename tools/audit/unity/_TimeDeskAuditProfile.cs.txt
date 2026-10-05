@@ -17,6 +17,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using TMPro;
 using Unity.Profiling;
 using UnityEditor;
 using UnityEditor.Profiling;
@@ -175,9 +176,21 @@ public static class _TimeDeskAuditProfile
         yield return Seconds(2f);
         yield return Window("title (idle)");
 
+        // New Run opens the adoption panel (the Home pet spec PS1): the load is timed from its Adopt, which starts the run.
+        var title = Object.FindFirstObjectByType<TitleUIController>();
+        ((Button)Field(title, "newRunButton")).onClick.Invoke();
+        yield return Frames(3);
+        var adopt = (GameObject)Field(title, "adoptPanel");
         var load = Stopwatch.StartNew();
         int startFrame = Time.frameCount;
-        ((Button)Field(Object.FindFirstObjectByType<TitleUIController>(), "newRunButton")).onClick.Invoke();
+        if (adopt != null && adopt.activeInHierarchy)
+        {
+            ((Button)Field(title, "adoptDogButton")).onClick.Invoke();
+            ((TMP_InputField)Field(title, "adoptNameInput")).text = "Biscuit";
+            load = Stopwatch.StartNew();
+            startFrame = Time.frameCount;
+            ((Button)Field(title, "adoptButton")).onClick.Invoke();
+        }
         yield return Until(() => Office.Loaded() && Office.Briefing() != null && Office.Briefing().activeInHierarchy, 90f, "the office and its briefing");
         Summary($"LOAD title -> office (art + gameplay, briefing up): {load.ElapsedMilliseconds} ms, {Time.frameCount - startFrame} frames");
         var o = new Office();

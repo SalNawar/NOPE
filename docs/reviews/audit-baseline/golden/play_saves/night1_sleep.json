@@ -3,7 +3,7 @@
     "world": {
         "day": 2,
         "runSeed": 12345,
-        "money": 43,
+        "money": 45,
         "stabilityHundredths": 9750,
         "totalCitations": 1,
         "citationsToday": 0,
@@ -16,22 +16,12 @@
         "unlockedUpgradeIds": [],
         "orders": [],
         "installs": [],
-        "flags": [],
+        "flags": [
+            "trig:history_greek_thebes:fired"
+        ],
         "counters": [],
         "timeline": {
             "scores": [
-                {
-                    "key": "attr:greece_ancient:art",
-                    "value": 2.0
-                },
-                {
-                    "key": "attrTotal:art",
-                    "value": 6.0
-                },
-                {
-                    "key": "nation:greece",
-                    "value": 4.0
-                },
                 {
                     "key": "attr:greece_ancient:democracy",
                     "value": 2.0
@@ -41,56 +31,88 @@
                     "value": 2.0
                 },
                 {
-                    "key": "attr:iraq_ancient:art",
-                    "value": 4.0
+                    "key": "nation:greece",
+                    "value": 7.0
                 },
                 {
-                    "key": "nation:iraq",
-                    "value": 4.0
+                    "key": "attr:greece_ancient:art",
+                    "value": 5.0
+                },
+                {
+                    "key": "attrTotal:art",
+                    "value": 5.0
                 }
             ],
-            "activeEffects": [],
+            "activeEffects": [
+                {
+                    "effectId": "Effect_Leader_greece",
+                    "sourceLabel": "history:leader Greece",
+                    "startDay": 2,
+                    "durationDays": -1
+                },
+                {
+                    "effectId": "Effect_History_greek_thebes",
+                    "sourceLabel": "Trigger: Greek scribes in Thebes",
+                    "startDay": 2,
+                    "durationDays": 1
+                }
+            ],
             "dominantKeys": [
                 "egypt_ancient:art",
                 "egypt_medieval:art",
                 "egypt_earlymodern:art",
                 "egypt_industrial:art",
                 "egypt_modern:art",
-                "iraq_ancient:art",
+                "egypt_ancient2:art",
+                "egypt_ancient3:art",
+                "egypt_medieval2:art",
+                "iraq_ancient:science",
                 "iraq_medieval:science",
                 "iraq_earlymodern:science",
                 "iraq_industrial:science",
                 "iraq_modern:science",
-                "greece_ancient:democracy",
+                "greece_ancient:art",
                 "greece_medieval:democracy",
                 "greece_earlymodern:democracy",
                 "greece_industrial:democracy",
                 "greece_modern:democracy",
+                "greece_ancient2:democracy",
                 "italy_ancient:art",
                 "italy_medieval:art",
                 "italy_earlymodern:art",
                 "italy_industrial:art",
                 "italy_modern:art",
+                "italy_ancient2:art",
+                "italy_medieval2:art",
+                "italy_earlymodern2:art",
                 "china_ancient:science",
                 "china_medieval:science",
                 "china_earlymodern:science",
                 "china_industrial:science",
                 "china_modern:science",
+                "china_ancient2:science",
+                "china_ancient3:science",
+                "china_medieval2:science",
                 "japan_ancient:science",
                 "japan_medieval:science",
                 "japan_earlymodern:science",
                 "japan_industrial:science",
                 "japan_modern:science",
+                "japan_earlymodern2:science",
+                "japan_industrial2:science",
                 "britain_ancient:democracy",
                 "britain_medieval:democracy",
                 "britain_earlymodern:democracy",
                 "britain_industrial:democracy",
                 "britain_modern:democracy",
+                "britain_earlymodern2:democracy",
                 "germany_ancient:science",
                 "germany_medieval:science",
                 "germany_earlymodern:science",
                 "germany_industrial:science",
-                "germany_modern:science"
+                "germany_modern:science",
+                "germany_industrial2:science",
+                "germany_industrial3:science"
             ],
             "supportingKeys": [
                 "egypt_ancient:democracy",
@@ -103,8 +125,14 @@
                 "egypt_industrial:science",
                 "egypt_modern:democracy",
                 "egypt_modern:science",
+                "egypt_ancient2:democracy",
+                "egypt_ancient2:science",
+                "egypt_ancient3:democracy",
+                "egypt_ancient3:science",
+                "egypt_medieval2:democracy",
+                "egypt_medieval2:science",
                 "iraq_ancient:democracy",
-                "iraq_ancient:science",
+                "iraq_ancient:art",
                 "iraq_medieval:democracy",
                 "iraq_medieval:art",
                 "iraq_earlymodern:democracy",
@@ -113,8 +141,8 @@
                 "iraq_industrial:art",
                 "iraq_modern:democracy",
                 "iraq_modern:art",
+                "greece_ancient:democracy",
                 "greece_ancient:science",
-                "greece_ancient:art",
                 "greece_medieval:science",
                 "greece_medieval:art",
                 "greece_earlymodern:science",
@@ -123,6 +151,8 @@
                 "greece_industrial:art",
                 "greece_modern:science",
                 "greece_modern:art",
+                "greece_ancient2:science",
+                "greece_ancient2:art",
                 "italy_ancient:democracy",
                 "italy_ancient:science",
                 "italy_medieval:democracy",
@@ -133,6 +163,12 @@
                 "italy_industrial:science",
                 "italy_modern:democracy",
                 "italy_modern:science",
+                "italy_ancient2:democracy",
+                "italy_ancient2:science",
+                "italy_medieval2:democracy",
+                "italy_medieval2:science",
+                "italy_earlymodern2:democracy",
+                "italy_earlymodern2:science",
                 "china_ancient:democracy",
                 "china_ancient:art",
                 "china_medieval:democracy",
@@ -143,6 +179,12 @@
                 "china_industrial:art",
                 "china_modern:democracy",
                 "china_modern:art",
+                "china_ancient2:democracy",
+                "china_ancient2:art",
+                "china_ancient3:democracy",
+                "china_ancient3:art",
+                "china_medieval2:democracy",
+                "china_medieval2:art",
                 "japan_ancient:democracy",
                 "japan_ancient:art",
                 "japan_medieval:democracy",
@@ -153,6 +195,10 @@
                 "japan_industrial:art",
                 "japan_modern:democracy",
                 "japan_modern:art",
+                "japan_earlymodern2:democracy",
+                "japan_earlymodern2:art",
+                "japan_industrial2:democracy",
+                "japan_industrial2:art",
                 "britain_ancient:science",
                 "britain_ancient:art",
                 "britain_medieval:science",
@@ -163,6 +209,8 @@
                 "britain_industrial:art",
                 "britain_modern:science",
                 "britain_modern:art",
+                "britain_earlymodern2:science",
+                "britain_earlymodern2:art",
                 "germany_ancient:democracy",
                 "germany_ancient:art",
                 "germany_medieval:democracy",
@@ -172,43 +220,50 @@
                 "germany_industrial:democracy",
                 "germany_industrial:art",
                 "germany_modern:democracy",
-                "germany_modern:art"
+                "germany_modern:art",
+                "germany_industrial2:democracy",
+                "germany_industrial2:art",
+                "germany_industrial3:democracy",
+                "germany_industrial3:art"
             ]
         },
-        "family": {
-            "members": [
-                {
-                    "name": "Partner",
-                    "condition": 0
-                },
-                {
-                    "name": "Kid",
-                    "condition": 0
-                }
-            ]
+        "pet": {
+            "kind": 0,
+            "name": "Biscuit",
+            "adoptedDay": 1,
+            "hunger": 0,
+            "cold": 0,
+            "boredom": 1,
+            "sickness": 0,
+            "welfareNights": 0,
+            "taken": false,
+            "lastChange": 0
         },
         "tomorrow": {
             "briefingLines": [],
             "newsLines": [
-                "Art is now DOMINANT in Babylonia.",
-                "Premium families book Periclean Athens for the summer."
+                "Art is now DOMINANT in Periclean Athens.",
+                "HISTORY: Greece now dominates the timeline. The Future belongs to Aegean Commonwealth (2150).",
+                "HISTORY: New Kingdom scribes now write in Greek.",
+                "Premium families book Periclean Athens for the summer.",
+                "SHELTER NEWS: Biscuit the dog has gone home with a clerk of Temporal Customs, Desk 3."
             ],
             "deskLines": []
         },
         "history": {
-            "leaderId": "",
-            "leaderSinceDay": 0,
+            "leaderId": "greece",
+            "leaderSinceDay": 2,
             "ranking": [
                 {
-                    "id": "iraq",
-                    "score": 4.0
-                },
-                {
                     "id": "greece",
-                    "score": 4.0
+                    "score": 7.0
                 },
                 {
                     "id": "egypt",
+                    "score": 0.0
+                },
+                {
+                    "id": "iraq",
                     "score": 0.0
                 },
                 {
@@ -232,7 +287,19 @@
                     "score": 0.0
                 }
             ],
-            "factEdits": [],
+            "factEdits": [
+                {
+                    "nationId": "egypt",
+                    "eraId": "ancient",
+                    "category": 0,
+                    "value": "Greek-Egyptian (Koine)",
+                    "sinceDay": 2,
+                    "cause": 0,
+                    "source": "Trigger: Greek scribes in Thebes",
+                    "traveller": "",
+                    "travellerDay": 0
+                }
+            ],
             "pendingCarries": [],
             "pendingPanics": [],
             "pendingStrandings": [],
@@ -240,29 +307,29 @@
         },
         "pulls": [
             {
-                "factor": "money",
-                "outcome": "jubilee",
-                "amount": 5.0
-            },
-            {
                 "factor": "government",
                 "outcome": "directorate",
-                "amount": 0.15000000596046449
+                "amount": 0.20000000298023225
             },
             {
                 "factor": "future",
                 "outcome": "credit_age",
-                "amount": 0.15000000596046449
+                "amount": 0.20000000298023225
             },
             {
                 "factor": "money",
                 "outcome": "debt",
-                "amount": 0.15000000596046449
+                "amount": 0.20000000298023225
             },
             {
                 "factor": "government",
                 "outcome": "democracy",
-                "amount": 1.5
+                "amount": 3.5
+            },
+            {
+                "factor": "money",
+                "outcome": "jubilee",
+                "amount": 2.5
             }
         ],
         "leads": [
@@ -285,10 +352,88 @@
                 "sinceDay": 0
             }
         ],
+        "pullTraces": [
+            {
+                "factor": "government",
+                "outcome": "directorate",
+                "traveller": "Noah (Diplomat)",
+                "day": 1
+            },
+            {
+                "factor": "future",
+                "outcome": "credit_age",
+                "traveller": "Noah (Diplomat)",
+                "day": 1
+            },
+            {
+                "factor": "money",
+                "outcome": "debt",
+                "traveller": "Noah (Diplomat)",
+                "day": 1
+            },
+            {
+                "factor": "government",
+                "outcome": "democracy",
+                "traveller": "Hamza (Diplomat)",
+                "day": 1
+            },
+            {
+                "factor": "money",
+                "outcome": "jubilee",
+                "traveller": "Beatrice (Merchant)",
+                "day": 1
+            }
+        ],
+        "returns": [
+            {
+                "name": "Mio",
+                "displayName": "Mio (Merchant)",
+                "kind": 0,
+                "archetypeId": "merchant",
+                "nationId": "greece",
+                "eraId": "ancient",
+                "gender": 2,
+                "birthDate": "8 Feb 2114",
+                "personality": "curt",
+                "citizenId": "238-5108-55",
+                "caseSeed": 507799003,
+                "deniedDay": 1,
+                "fromDay": 2,
+                "untilDay": 4,
+                "story": 0,
+                "returned": false,
+                "backDay": 0,
+                "acceptedBack": false,
+                "reported": false
+            },
+            {
+                "name": "Elias",
+                "displayName": "Elias (Soldier)",
+                "kind": 0,
+                "archetypeId": "soldier",
+                "nationId": "greece",
+                "eraId": "ancient",
+                "gender": 1,
+                "birthDate": "21 Dec 2114",
+                "personality": "glum",
+                "citizenId": "431-2698-34",
+                "caseSeed": -423013292,
+                "deniedDay": 1,
+                "fromDay": 2,
+                "untilDay": 4,
+                "story": 1,
+                "returned": false,
+                "backDay": 0,
+                "acceptedBack": false,
+                "reported": false
+            }
+        ],
         "newsArchive": [
             {
                 "day": 1,
-                "briefing": [],
+                "briefing": [
+                    "NEW: your desk. Each traveller hands you a Passport. Approve only the destination open today (the Directive Memo names it), a Passport still valid (its Valid Until against the calendar) and a photo of the person at the desk."
+                ],
                 "news": [],
                 "desk": []
             }
@@ -301,9 +446,9 @@
                 "wages": 70,
                 "fines": 0,
                 "debtRelief": 17,
-                "household": 60,
+                "household": 58,
                 "purchases": 0,
-                "balance": 43,
+                "balance": 45,
                 "owed": 125413
             }
         ],

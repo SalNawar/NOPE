@@ -336,6 +336,11 @@ public static class _TimeDeskAuditStatic
 
         // The scene contract (read-only).
         var art = EditorSceneManager.OpenScene(ArtScene, OpenSceneMode.Single);
+        // The readouts' bounds are their text meshes', which a scene just opened in a job may not have built yet
+        // (whether the editor built them depended on what ran before): build them first (nothing is saved).
+        foreach (GameObject root in art.GetRootGameObjects())
+            foreach (TMP_Text text in root.GetComponentsInChildren<TMP_Text>(true))
+                text.ForceMeshUpdate();
         string contract = OfficeSceneContractTools.Report(art);
         File.WriteAllText(Path.Combine(_out, "contract.txt"), contract);
         summary.Add($"contract report on {ArtScene} written; art dirty after it: {art.isDirty}; art still byte-unchanged: {!artHashes.ContainsKey(ArtScene) || FileHash(ArtScene) == artHashes[ArtScene]}");

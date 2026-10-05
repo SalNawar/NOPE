@@ -79,13 +79,14 @@ and commit with the reason.
 
 ## The scripted play-through
 
-Title, New Run with run seed 12345 (`RunConfig.fixedRunSeed`, set in memory), days 1-15 in the art office
+Title, New Run with run seed 12345 (`RunConfig.fixedRunSeed`, set in memory) through the adoption panel (a name
+with digits refused first, then a dog named Biscuit; since round 5), days 1-15 in the art office
 RunConfig names (the anime hall), Home between them, until night 15's sleep ends the run on the Title.
 
 - **Each morning:** the paper, the world line (day, seeds, wallet, leader, upgrades), the day's rules, the
   portal schedule (`GameManager.Portals`) and the Departure Board's rows as drawn.
 - **Each traveller:**
-  1. READY.
+  1. AVAILABLE (clicked once a shift; the travellers then come one after another).
   2. Every request (documents, through the papers menu when there are two or more; a request group, the
      proof of means, as one entry; a form the traveller does not carry gets its missing-form reply), the
      spoken requests, then every question in the ask menu. Slot 1 also runs the first offered dialog,
@@ -95,9 +96,11 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
      line, or a garment through Look) against the claimed place's book row, else the row its value
      belongs to (the present's for a smuggler or a fake displaced person); a record category against the
      traveller's own record row. A category already documented is not proven twice.
-  4. The verdict (odd slots at the stamp tray, even slots on the PC) and the traveller's reaction line.
+  4. The verdict with the physical stamps (since round 5, the PC only investigates: the tray out, the stamp picked
+     up, a dry press, inked, pressed on the passport, the papers handed back) and the traveller's reaction line.
      A directive fault (a closure, a wrong date, an expired paper, an incomplete paper set, a frozen
-     account, a recalled transponder) is denied without evidence; the rest are accepted.
+     account, a recalled transponder) is denied once its broken rule is held against its value on the workbench
+     (a logged broken rule); the rest are accepted.
 - **Verdicts are right except four planned mistakes** (each checked in the report):
   - Day 1: the first honest traveller from slot 2 on is denied.
   - Day 2: the first deviation fault is accepted.
@@ -106,8 +109,9 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
 - **During each shift, at the PC (the Orders app's rule, `OrderBook.Order`):** Interview Protocols, then
   the Near East Speech translator (it needs the Protocols), at most one order a day, once the wallet holds
   its price and 20 cr more; it arrives the next morning.
-- **Home each night:**
-  1. Treat every family member at condition 2 or worse, if affordable.
+- **Home each night** (the pet's evening since round 5):
+  1. The bills step with its default care (food, heating, electricity; medicine when the pet is unwell; the TV when
+     it is bored), Pay, then the pet's corner (petted once, a toy played with when one is owned).
   2. The House: every Home upgrade's state and price is recorded; the first buyable one with 60 cr to
      spare is bought (one a night).
   3. Never spin the slot machine (its draw is seeded, `Seeds.ForSlot`, but kept out of the run).
@@ -248,6 +252,66 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
     scene), which is accepted as the cost of the lights should a run measure it again.
   - Unchanged: `cases.txt` (the strandings draw from their own streams after the shift, so no traveller moves), the
     Home and Title dumps and `play_warnings.txt` (empty). No known fault is packed.
+
+- **The final pass, round 5** (`epic/pass-5` from main `ed19d24`). Since round 4 (`fe96fe7`) main took in wave 5
+  (the PC workbench and its polish, track B documents and seals, track C day pacing, track D the wheel and the world)
+  and the desk-first redesign (track A the day ramp, D the travel documents, E the famous travellers and the fifteen
+  second places, F the pet, B the desk inspection and the physical stamps, C the wheel's unlocks and the PC's menus,
+  the desk polish, the PC clean-up). Re-packed from runs A and B, which were identical (41 deterministic files; the
+  screenshot run's transcript equals A's); the play reports pass 5,560 checks each (the screenshot run 6,213), 0 fail,
+  and log no warning:
+  - Round 5's own changes (each its commit): `Build Office UI` no longer lays the taskbar's tray out before saving
+    (`ac3f306`). Round 4's `LayoutRebuilder.ForceRebuildLayoutImmediate` made the tray readouts' rects *driven*, and
+    Unity writes a driven rect as zero when it saves a scene, so the committed file held four zero rects while the
+    rebuild in memory held the laid-out ones (every desk-first track reported that mismatch). Without it the readouts
+    keep their built rects in memory and in the file alike and the layout group lays them out on load, as every other
+    layout group of the builder; OfficeGameplay is rebuilt and committed. The static job (`32a2b03`, and the contract
+    step in this commit) compares the scene files as saved: the committed scenes are dumped first, before Generate
+    World, each rebuild is dumped after reopening its saved file, and the art office's text meshes are built before
+    the contract report reads the readouts' bounds. A scene opened after Generate World had its canvases laid out
+    at once, and a builder's scene in memory could be laid out after its save, so the old dumps compared laid-out
+    rects and scroll positions on one side with the saved ones on the other, and the readouts' bounds read zero or
+    not depending on what ran before. A forged seal's citation slip cites its office's seal in the Seal Register
+    (`9249fa6`: it looked the seal up among the claimed place's facts, logged "has no Seal fact today" 311 times in
+    the case dump and 11 times in the play, and would have printed "Seal:<era>"). A photo held against the face raises
+    no wheel question and no warning (`e80c5e2`, `Confrontations.Askable`: 16 warnings in the play). The play's
+    Papers-menu check counts the papers handed over, not the menu's rows that flag the day's other papers missing
+    (`7b0220e`: 100 false failures from day 5).
+  - `cases.txt` (11,983 lines, was 11,785; the same 6,540 travellers' lines): the desk-first ramp's papers per day
+    (day 1 the passport alone, the entry ticket from day 2, the issuing seals from day 4, the scanner and the records
+    from day 5, the waiver, the transponder card, the work permit), the travel documents (the passport booklet with its
+    photo and visa pages, the entry ticket, the waiver sheet, the work permit, the travel permit, the transponder card),
+    seals and photos on every form and the fault canon (forged seals, swapped photos), the famous travellers from day 6
+    and the fifteen second places of an era (`egypt_ancient2` and the rest: 198 more `WORLD` lines), the desk-first day
+    plans 1-15.
+  - `play_transcript.txt` (6,217 lines, was 9,011) and the 30 saves: the run adopts a dog named Biscuit on the Title;
+    each day opens with its bulletin and the ramp's papers; every traveller is decided with the physical stamps (picked,
+    a dry press, inked, pressed on the passport, the papers handed back); the PC only investigates (no decision step,
+    no guided steps; the menu bar in place of the header and the shelf; a paper not handed over flagged missing from
+    the Papers menu, 207 times); the findings raise the wheel's questions about the logged differences; Home is the
+    pet's evening with the night's bills. 215 travellers, 211 right and the four planned mistakes; the day-15 end is
+    the world page (`world_report`) with Britain leading, 125 cr and stability 86.81 (round 4: Iraq, 88 cr, 87.68).
+  - `play_warnings.txt`: empty.
+  - `scene_OfficeGameplay.txt` (18,449 lines, was 16,651: the workbench, the desk inspection's line and marks, the stamp
+    tray and the hand-back strip, the rulebook, the city view, the menu bar and the taskbar's date, without the decision
+    view and the step hints), `scene_HomeScene.txt` (266 lines, was 214: the bills and the pet's corner) and
+    `scene_TitleScene.txt` (276, was 189: the adoption panel): each rebuild equals its committed scene in both runs;
+    `scenes_summary.txt` their file hashes; both art offices stay byte-unchanged by the builders.
+  - `world_generate.txt`, `data_hashes.txt`: `Assets/Data` 743 -> 991 files (the documents, the travel documents, the
+    famous travellers and their places, the day plans, the pet's bills and toys, the menu and desk strings). Generate
+    World changes 0 files on a second run; the validator logs no warning or error. `validator.txt`: 50 of 1,263
+    character keys have art (was 954 keys: the famous travellers' and the new places' looks).
+  - `profile_A.txt`, `profile_B.txt`: re-measured (two measurements each, the same within 6%), accepted with `--allow profile`
+    for one load: title -> office takes 1465 / 1388 ms (round 4: 1106 / 1153 ms, so +32% / +25% over the 25% limit).
+    The office it loads is heavier: OfficeGameplay grew from 16,651 to 18,449 dump lines (the workbench, the desk
+    inspection with its line and marks, the stamp tray and the hand-back strip, the rulebook, the city view, the
+    menu bar) and the content library it loads from 743 to 991 assets (the documents, the travel documents, the famous
+    travellers and their places), and the load is now timed from the adoption panel's Adopt, which also creates the
+    run and its pet. Office -> Home 384 / 386 ms (+12%) and Home -> office 879 / 883 ms (+19%) stay within 25%. The
+    allocations are round 4's: every office window 436 B per frame (URP's), Title and Home 0 B, no new allocation site
+    in our assemblies. The profile job adopts the pet before it times the load (it timed out at the adoption panel).
+  - Unchanged: `contract.txt` (the static job builds the hall's text meshes before the report, so the readouts' bounds
+    read as in round 4 whatever ran before; a first run without that step read them as zero).
 
 ## Baseline results (ff3a6e0)
 
