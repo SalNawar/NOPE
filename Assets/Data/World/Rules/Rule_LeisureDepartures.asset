@@ -19,3 +19,4 @@ MonoBehaviour:
     Citizen Account.'
   kinds: 
   transponder: 
+  openPlaces: []

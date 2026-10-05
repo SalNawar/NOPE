@@ -18,3 +18,4 @@ MonoBehaviour:
   description: 'Rift storm over the Aegean: no travel to Byzantine Mystras today.'
   kinds: 
   transponder: 
+  openPlaces: []

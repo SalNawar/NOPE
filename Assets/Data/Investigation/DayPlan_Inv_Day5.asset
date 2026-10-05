@@ -14,15 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 5
   visitorsCount: 13
-  bulletin: 'NEW: the proof of means. A Standard visa also needs a Holiday Credit
-    Agreement, a Proof of Funds or Travel Insurance.'
+  bulletin: 'NEW: the scanner and Citizen Records. Scan a paper to read it on the
+    PC: its name, Citizen ID and date of birth must match the traveller''s record.'
   papers:
   - TC-101
   - TC-230
-  - TC-310
-  - TC-415
-  - TC-416
-  - TC-417
+  introduces:
+  - tool:scanner
+  - pc:records
+  - field:BirthDate
+  - app:citizen_account
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
@@ -49,22 +50,21 @@ MonoBehaviour:
   costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 010000000200000007000000080000000a00000009000000
+  lieKinds: 020000000a00000009000000
   violationChance: 0.05
   activeTravelRules:
-  - {fileID: 11400000, guid: 5bb4a0a94cee20740a3b154dcbe5f43d, type: 2}
-  - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}
+  - {fileID: 11400000, guid: 64cd1755c3d6d2640b2d3affdb67402d, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
-  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
   guaranteeRuleViolators: 1
   forcedCases: []
   eventRules: []
   directorateRoutes:
   - portal: 1
-    place: {fileID: 11400000, guid: 36224045c942e254bad4369748544cfd, type: 2}
+    place: {fileID: 11400000, guid: 417d7ffdedfb58c4f9ac1576309b7d8f, type: 2}
   - portal: 2
-    place: {fileID: 11400000, guid: 9383f580936f3af4fb17af0d5c75ca48, type: 2}
+    place: {fileID: 11400000, guid: 9b9a1dc515459b14aabe6a79a3bb06f3, type: 2}
   - portal: 4
     place: {fileID: 11400000, guid: 497aafc3a0eb9f449abc80a30bbb44c0, type: 2}
   - portal: 5
-    place: {fileID: 11400000, guid: 6e8a9876a0223c64e8d90c33c5898bff, type: 2}
+    place: {fileID: 11400000, guid: 9383f580936f3af4fb17af0d5c75ca48, type: 2}

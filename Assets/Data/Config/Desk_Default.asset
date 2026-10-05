@@ -23,7 +23,7 @@ MonoBehaviour:
   cloneFill: 0.92
   scanSeconds: 1.5
   scanHintKey: desk.scanHint
-  scanHintUntilDay: 1
+  scanHintUntilDay: 5
   paperSize: {x: 0.26, y: 0.34}
   paperSpawnSlots:
   - {x: 0.5, y: 0.62}

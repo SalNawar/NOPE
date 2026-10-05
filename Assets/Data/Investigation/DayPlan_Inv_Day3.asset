@@ -14,12 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 3
   visitorsCount: 12
-  bulletin: 'NEW: closed destinations. Refuse anyone bound for a place today''s Directive
-    Memo closes. Every paper''s seal must match its office''s in the Seal Register,
-    now on your shelf.'
+  bulletin: 'NEW: the Departure Board. A second destination opens: a traveller may
+    leave only for a route the board shows.'
   papers:
   - TC-101
   - TC-230
+  introduces:
+  - tool:board
+  - app:portals
+  - app:orders
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 3
@@ -42,19 +45,19 @@ MonoBehaviour:
   costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 01000000020000000a00000009000000
-  violationChance: 0
+  lieKinds: 020000000a000000
+  violationChance: 0.05
   activeTravelRules:
-  - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}
-  - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
+  - {fileID: 11400000, guid: 976aa5c1c6bee0642a39a3507a79b351, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   guaranteeRuleViolators: 1
   forcedCases: []
   eventRules: []
   directorateRoutes:
   - portal: 1
-    place: {fileID: 11400000, guid: 913de20918bf9e749b6a8f147296b5c6, type: 2}
+    place: {fileID: 11400000, guid: 417d7ffdedfb58c4f9ac1576309b7d8f, type: 2}
   - portal: 2
-    place: {fileID: 11400000, guid: d9d04a2eb65361449ba7281cbab00627, type: 2}
+    place: {fileID: 11400000, guid: 863aba0c80035a64d8cfe5228c534551, type: 2}
   - portal: 4
     place: {fileID: 11400000, guid: 9b9a1dc515459b14aabe6a79a3bb06f3, type: 2}
   - portal: 5

@@ -14,24 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 7
   visitorsCount: 14
-  bulletin: 'NEW: dress for the destination. A garment from another time or place
-    causes a panic: check the Costume Guide.'
+  bulletin: 'NEW: the Stranding Waiver. A Standard passport on an Economy transponder
+    also needs a signed waiver: ask for it.'
   papers:
   - TC-101
   - TC-230
   - TC-310
-  - TC-415
-  - TC-416
-  - TC-417
-  - TC-610
+  introduces:
+  - field:Signature
+  - field:WaiverNo
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
     honest: 0
   - blueprint: {fileID: 11400000, guid: 008d4e5dfc4a491396679dcae81673aa, type: 2}
-    weight: 2
-    honest: 0
-  - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
     weight: 2
     honest: 0
   eraWeights:
@@ -46,40 +42,20 @@ MonoBehaviour:
   - era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
     weight: 1
   allowedNations: []
-  legendaryBaseChance: 0.05
-  availableLegendaries:
-  - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
-  - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
-  - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
-  - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
-  - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
-  - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
-  - {fileID: 11400000, guid: 99eaeeca4c1051241918113a32ab7256, type: 2}
-  - {fileID: 11400000, guid: 3493007bf4998db4e809fd90a977ab75, type: 2}
-  - {fileID: 11400000, guid: 7b3797395c6bf1c4ab2010fa7b858e5f, type: 2}
-  - {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
-  - {fileID: 11400000, guid: 1c8c6e552007f2e4e902697ca0e5131c, type: 2}
-  - {fileID: 11400000, guid: 994c774aeaa0ec84f9c7a9c1d29d742d, type: 2}
-  - {fileID: 11400000, guid: 518f2d7d697b9c346ac1b51f6188f07d, type: 2}
-  - {fileID: 11400000, guid: 2546e7e5d93f43a49a3f4c7476fe65c6, type: 2}
-  - {fileID: 11400000, guid: fe0258a60478d084284a6d18023a0ca4, type: 2}
-  - {fileID: 11400000, guid: 61ad2f31d886dba4dabfff1a76d7d87a, type: 2}
-  - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
-  - {fileID: 11400000, guid: 050c1e3bba096ac41adc70495a9874f4, type: 2}
+  legendaryBaseChance: 0
+  availableLegendaries: []
   tellCount: 1
-  tellChannels: 0000000002000000
-  costumeErrorChance: 0.05
+  tellChannels: 00000000
+  costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 010000000200000007000000080000000a00000009000000
+  lieKinds: 0100000002000000070000000a00000009000000
   violationChance: 0.05
   activeTravelRules:
-  - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}
-  - {fileID: 11400000, guid: a450618c1ab42a64f9962c60774c598c, type: 2}
-  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: 61a6e8ebe7f718a4d8c4a134c284aae3, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
-  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
-  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
+  - {fileID: 11400000, guid: e09af0da9ce92184a87ab3dc9bca91b3, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 5

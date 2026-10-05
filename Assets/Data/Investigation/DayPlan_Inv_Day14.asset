@@ -20,12 +20,16 @@ MonoBehaviour:
   - TC-101
   - TC-230
   - TC-310
-  - TC-415
-  - TC-416
-  - TC-417
   - TC-520
   - TC-610
   - TC-620
+  introduces:
+  - field:TC-620/Currency
+  - field:TC-620/Language
+  - field:TC-620/Technology
+  - book:Language
+  - book:Geography
+  - book:Politics
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
@@ -53,8 +57,6 @@ MonoBehaviour:
   allowedNations: []
   legendaryBaseChance: 0.05
   availableLegendaries:
-  - {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
-  - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
   - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
   - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
   - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
@@ -64,27 +66,35 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 99eaeeca4c1051241918113a32ab7256, type: 2}
   - {fileID: 11400000, guid: 3493007bf4998db4e809fd90a977ab75, type: 2}
   - {fileID: 11400000, guid: 7b3797395c6bf1c4ab2010fa7b858e5f, type: 2}
+  - {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
+  - {fileID: 11400000, guid: 1c8c6e552007f2e4e902697ca0e5131c, type: 2}
+  - {fileID: 11400000, guid: 994c774aeaa0ec84f9c7a9c1d29d742d, type: 2}
+  - {fileID: 11400000, guid: 518f2d7d697b9c346ac1b51f6188f07d, type: 2}
+  - {fileID: 11400000, guid: 2546e7e5d93f43a49a3f4c7476fe65c6, type: 2}
+  - {fileID: 11400000, guid: fe0258a60478d084284a6d18023a0ca4, type: 2}
   - {fileID: 11400000, guid: 61ad2f31d886dba4dabfff1a76d7d87a, type: 2}
+  - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
+  - {fileID: 11400000, guid: 050c1e3bba096ac41adc70495a9874f4, type: 2}
+  - {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
   tellCount: 1
   tellChannels: 000000000100000002000000
   costumeErrorChance: 0.05
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 0100000002000000070000000500000006000000080000000000000003000000040000000a00000009000000
+  lieKinds: 000000000100000002000000030000000500000006000000070000000a00000009000000
   violationChance: 0.08
   activeTravelRules:
-  - {fileID: 11400000, guid: ed55a953fea5a654caa282e58b5103e8, type: 2}
-  - {fileID: 11400000, guid: 4f2fad0bf98cc0f48975ec34e2e9bb1d, type: 2}
-  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
-  - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
-  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
-  - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
-  - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
-  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
-  - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
-  - {fileID: 11400000, guid: 790f58e093f5e4842a8a706ca0d1cf69, type: 2}
+  - {fileID: 11400000, guid: 8d646392c5a45174195c1319f9caf851, type: 2}
   - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
+  - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
+  - {fileID: 11400000, guid: e09af0da9ce92184a87ab3dc9bca91b3, type: 2}
+  - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
+  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
   - {fileID: 11400000, guid: ecff6c6a25ba0d648aa6289bee8e60ef, type: 2}
+  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
+  - {fileID: 11400000, guid: 4f2fad0bf98cc0f48975ec34e2e9bb1d, type: 2}
+  - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 4
@@ -115,6 +125,26 @@ MonoBehaviour:
     legendary: {fileID: 11400000, guid: 143df44c5b867ee478900d18038e0354, type: 2}
     hasLie: 1
     lie: 2
+    directive: 0
+    dialogId: 
+    introLine: 
+    conditions: []
+  - caseIndex1Based: 5
+    id: ada
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: 8c56a684575357745b28c301ddceb3e0, type: 2}
+    hasLie: 1
+    lie: 3
+    directive: 0
+    dialogId: 
+    introLine: 
+    conditions: []
+  - caseIndex1Based: 11
+    id: 
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
+    hasLie: 0
+    lie: 0
     directive: 0
     dialogId: 
     introLine: 

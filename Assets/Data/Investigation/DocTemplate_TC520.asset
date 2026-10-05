@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 411096b30c5d9bb4f9142a8207326fb1, type: 3}
   m_Name: DocTemplate_TC520
   m_EditorClassIdentifier: Assembly-CSharp::DocumentTemplateSO
-  displayName: Labour Contract
+  displayName: Work Permit
   formNumber: TC-520
   fieldSpecs:
   - category: 7

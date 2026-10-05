@@ -21,6 +21,12 @@ MonoBehaviour:
     ask travellers when they were born. Check answers against Citizen Records.'
   section: 0
   conditions:
+  - type: 8
+    key: 
+    threshold: 4
+    attribute: {fileID: 0}
+    profile: {fileID: 0}
+    nation: {fileID: 0}
   - type: 10
     key: interview_protocols
     threshold: 0

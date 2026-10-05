@@ -15,8 +15,9 @@ MonoBehaviour:
   type: 8
   era: {fileID: 0}
   nation: {fileID: 0}
-  description: 'A Premium visa travels on a Premium transponder. A Standard visa
+  description: 'A Premium passport travels on a Premium transponder. A Standard passport
     needs an Economy transponder, a signed Stranding Waiver and a proof of means:
     a Holiday Credit Agreement, a Proof of Funds or Travel Insurance.'
   kinds: 0000000001000000
   transponder: 
+  openPlaces: []

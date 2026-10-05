@@ -20,13 +20,11 @@ MonoBehaviour:
   - TC-101
   - TC-230
   - TC-310
-  - TC-415
-  - TC-416
-  - TC-417
   - TC-520
   - TC-610
   - TC-620
   - TC-630
+  introduces: []
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 3
@@ -54,8 +52,6 @@ MonoBehaviour:
   allowedNations: []
   legendaryBaseChance: 0.05
   availableLegendaries:
-  - {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
-  - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
   - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
   - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
   - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
@@ -74,27 +70,27 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 61ad2f31d886dba4dabfff1a76d7d87a, type: 2}
   - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
   - {fileID: 11400000, guid: 050c1e3bba096ac41adc70495a9874f4, type: 2}
+  - {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
+  - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
   tellCount: 1
   tellChannels: 000000000100000002000000
   costumeErrorChance: 0.05
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 0100000002000000070000000500000006000000080000000000000003000000040000000a00000009000000
+  lieKinds: 000000000100000002000000030000000500000006000000070000000a00000009000000
   violationChance: 0.08
   activeTravelRules:
-  - {fileID: 11400000, guid: 715dc87bb156a1644811671799952619, type: 2}
-  - {fileID: 11400000, guid: a450618c1ab42a64f9962c60774c598c, type: 2}
-  - {fileID: 11400000, guid: 4f2fad0bf98cc0f48975ec34e2e9bb1d, type: 2}
-  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
-  - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
-  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
-  - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
-  - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
-  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
-  - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
-  - {fileID: 11400000, guid: 790f58e093f5e4842a8a706ca0d1cf69, type: 2}
+  - {fileID: 11400000, guid: 24929adce6f3b644db2fef4a77dceba1, type: 2}
   - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
+  - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
+  - {fileID: 11400000, guid: e09af0da9ce92184a87ab3dc9bca91b3, type: 2}
+  - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
+  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
   - {fileID: 11400000, guid: ecff6c6a25ba0d648aa6289bee8e60ef, type: 2}
+  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
+  - {fileID: 11400000, guid: 4f2fad0bf98cc0f48975ec34e2e9bb1d, type: 2}
+  - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 7
@@ -140,8 +136,8 @@ MonoBehaviour:
   - portal: 1
     place: {fileID: 11400000, guid: 417d7ffdedfb58c4f9ac1576309b7d8f, type: 2}
   - portal: 2
-    place: {fileID: 11400000, guid: 863aba0c80035a64d8cfe5228c534551, type: 2}
-  - portal: 4
     place: {fileID: 11400000, guid: 0f4b98a0c149f6c438b6ff24cae43f67, type: 2}
+  - portal: 4
+    place: {fileID: 11400000, guid: 863aba0c80035a64d8cfe5228c534551, type: 2}
   - portal: 5
     place: {fileID: 11400000, guid: 6e8a9876a0223c64e8d90c33c5898bff, type: 2}

@@ -19,3 +19,4 @@ MonoBehaviour:
     on a Driftbox 3.'
   kinds: 0100000002000000
   transponder: driftbox3
+  openPlaces: []

@@ -19,3 +19,4 @@ MonoBehaviour:
     an expired paper.
   kinds: 
   transponder: 
+  openPlaces: []
