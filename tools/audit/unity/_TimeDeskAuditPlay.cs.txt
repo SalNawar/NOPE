@@ -599,13 +599,31 @@ public static class _TimeDeskAuditPlay
             if (c.HasDeviationFault && gatherEvidence || c.HasDirectiveFault)
                 Check(pcDeny.interactable, $"d{day} slot {slot}: a right denial ({FaultKey(c)}) can be cited on the PC");
         }
-        if ((slot % 2 == 1 || (!accept && !pcDeny.interactable)) && o.Tray != null)
+        if ((slot % 2 == 1 || (!accept && !pcDeny.interactable)) && o.Stamps != null)
         {
-            o.Tray.Open();
+            // Track B: the physical stamps: the tray out, the stamp picked up, a dry press (faint, no verdict), inked on the pad, pressed on the passport, the papers handed back.
+            var flow = (StampFlow)Field(o.Stamps, "_flow");
+            if (flow == null || !flow.TrayOut)
+                o.Stamps.ToggleTray();
             yield return Frames(2);
-            string opened = o.Tray.IsOpen ? "open" : "NOT OPEN";
-            ((Button)Field(o.Tray, accept ? "acceptButton" : "denyButton")).onClick.Invoke();
-            Line($"   decided at the stamp tray ({opened}): {(accept ? "ACCEPT" : "DENY")}");
+            ((Clickable)Field(o.Stamps, accept ? "approvedStamp" : "deniedStamp")).onClick.Invoke();
+            yield return Frames(2);
+            DeskDocument passport = o.Paper((int)Field(o.Stamps, "_passport"));
+            Check(o.Stamps.IsHolding && passport != null, $"d{day} slot {slot}: a stamp is picked up from the tray and the passport lies on the desk");
+            if (passport != null)
+            {
+                o.Stamps.Press(passport, passport.Sheet.position);
+                Check(!o.Stamps.HasVerdict, $"d{day} slot {slot}: a dry press sets no verdict");
+                ((Clickable)Field(o.Stamps, "inkPad")).onClick.Invoke();
+                o.Stamps.Press(passport, passport.Sheet.position);
+                Check(o.Stamps.HasVerdict, $"d{day} slot {slot}: the inked press on the passport is the verdict");
+            }
+            ((Clickable)Field(o.Stamps, accept ? "approvedStamp" : "deniedStamp")).onClick.Invoke();
+            yield return Frames(2);
+            Button back = (Button)Field(o.Stamps, accept ? "handBackApproved" : "handBackDenied");
+            Check(back.gameObject.activeInHierarchy, $"d{day} slot {slot}: \"Hand the papers back\" shows with the verdict");
+            back.onClick.Invoke();
+            Line($"   decided with the stamps: {(accept ? "APPROVED" : "DENIED")}");
         }
         else
         {
@@ -2033,7 +2051,7 @@ public static class _TimeDeskAuditPlay
 
         /// <summary>A click on the AVAILABLE sign, as the EventSystem delivers it.</summary>
         public void ClickSign() => ExecuteEvents.Execute(Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
-        public StampTray Tray => (StampTray)Field(Coordinator, "stampTray");
+        public DeskStampTray Stamps => (DeskStampTray)Field(Coordinator, "stampTray");
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
