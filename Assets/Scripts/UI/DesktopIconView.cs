@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// app's glyph over its label on translucent plates, a selection plate and a
 /// badge. A press selects it; a click opens it when it completes a double
 /// click (ClickTiming, the desktop's knobs) or, with Settings' "Single
-/// click", at once; a right-click opens the icon's context menu (Open). Past
+/// click", at once (its context menu opens from the keyboard: DesktopIcons.ShowMenu). Past
 /// the EventSystem's drag threshold it drags: it follows the pointer keeping
 /// the grab offset, drawn above the other icons and kept inside the icon
 /// area, and on release DesktopIcons drops it (DesktopLayout.Drop) and saves
@@ -128,17 +128,12 @@ public sealed class DesktopIconView : MonoBehaviour, IPointerDownHandler, IPoint
             board.Select(this);
     }
 
-    /// <summary>A left click opens on a double click (or at once with "Single click"); a right click opens the icon's menu. A drag sends no click.</summary>
+    /// <summary>A left click opens on a double click (or at once with "Single click"); no other button acts (a right-click backs out). A drag sends no click.</summary>
     public void OnPointerClick(PointerEventData eventData)
     {
         if (board == null)
             return;
 
-        if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            board.ShowMenu(this, eventData);
-            return;
-        }
         if (eventData.button != PointerEventData.InputButton.Left || !TryArea(eventData.position, eventData, out Vector2 at))
             return;
 

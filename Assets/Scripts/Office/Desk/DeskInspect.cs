@@ -1,20 +1,29 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// Inspection at the desk (the desk-first redesign, Saleh 2026-10-05, item
 /// 11: "the player should be able to check documents at the desk, highlight
 /// clear mistakes and approve; scanning allows using additional features").
-/// The PC's click-and-match works on the desk with the one workbench
-/// (MatchBoard: the same findings, the same log, the same evidence for the
-/// decision): in the desk view a box of a paper lying on the desk is clicked
-/// where it lies (DeskController routes it into the compare), and it is held
-/// against another paper's box, the calendar on the desk (today's date, once
-/// the calendar is introduced), the traveller's face (a click on the
-/// traveller while a value is held; otherwise it opens the wheel as before)
-/// or a row of the rulebook on the desk (today's directives, once the
-/// rulebook is introduced). The workbench's line is drawn over the office too,
+/// Papers, Please's inspect mode (Saleh 2026-10-06): the red inspect button
+/// at the overlay's bottom right ("SPACE" printed on it) and the SPACE key
+/// (OfficeControls) toggle it (Toggle); a right-click or Esc lets go of a held
+/// value, then leaves it (ControlRules.BackOut). In inspect mode every
+/// comparable thing highlights (the papers' values, the rulebook's rows; the
+/// calendar and the traveller outline under the pointer) and a left-click on
+/// one holds it, a second judges the pair on the one workbench (MatchBoard:
+/// the same findings, the same log, the same evidence for the decision, and a
+/// difference unlocks its wheel question): a value on a paper
+/// (DeskController routes it into the compare), the calendar on the desk
+/// (today's date, once the calendar is introduced), the traveller's face, or
+/// a row of the rulebook on the desk (today's directives, once the rulebook
+/// is introduced). Outside inspect mode no click compares: the traveller
+/// opens the wheel, the calendar and the rulebook's rows are only read.
+/// Leaving inspect mode lets go of a held value. It is live while
+/// BoothRules.InspectLive (false leaves it). The workbench's line is drawn over the office too,
 /// between the two values where they lie (MatchLines over two proxy ends
 /// placed each frame on the values' places on the screen), dashed from a held
 /// value to the pointer; it shows while the PC frame is closed and both
@@ -78,6 +87,12 @@ public sealed class DeskInspect : MonoBehaviour
     /// <summary>The smallest end on the screen, in canvas px (a far value still gets a visible box).</summary>
     [SerializeField] private Vector2 minimumEnd = new Vector2(24f, 18f);
 
+    /// <summary>The red inspect button ("SPACE" printed on it) at the overlay's bottom right: a click toggles inspect mode.</summary>
+    [SerializeField] private Button inspectButton;
+
+    /// <summary>What shows while inspect mode is on (the button's lit ring and the hint beside it: "click two things to compare").</summary>
+    [SerializeField] private GameObject onState;
+
     /// <summary>How far inside the screen's edge (px) the end of a value off the screen waits.</summary>
     private const float EdgeMargin = 24f;
 
@@ -90,6 +105,23 @@ public sealed class DeskInspect : MonoBehaviour
     private readonly Vector3[] _corners = new Vector3[8];
     private string _drawnA, _drawnB, _drawnHold;
     private bool _wired;
+    private bool _live;
+
+    /// <summary>True while inspect mode is on: a click on a comparable thing compares.</summary>
+    public bool IsOn { get; private set; }
+
+    /// <summary>Raised when inspect mode turns on or off (the booth tints the papers and the rulebook).</summary>
+    public event Action Changed;
+
+    /// <summary>True while a value is held on the workbench (the first of a comparison): a right-click or Esc lets go of it first.</summary>
+    public bool ValueHeld => board != null && board.IsHolding;
+
+    /// <summary>Lets go of the value held on the workbench (a right-click or Esc: ControlRules.BackOut).</summary>
+    public void DropValue()
+    {
+        if (board != null && board.IsHolding)
+            board.Release();
+    }
 
     /// <summary>Raised when a paper not handed over is flagged missing on the rulebook (its request's id): the controller flags it as the PC's Papers menu does.</summary>
     public event Action<string> MissingFlagged;
@@ -97,7 +129,48 @@ public sealed class DeskInspect : MonoBehaviour
     private void Awake()
     {
         _canvas = endA != null ? OverlayProjection.CanvasRectOf(endA) : null;
+        if (inspectButton != null)
+            inspectButton.onClick.AddListener(Toggle);
+        if (onState != null)
+            onState.SetActive(false);
         Wire();
+    }
+
+    /// <summary>The red button, SPACE: inspect mode on, or off (nothing while it is not live).</summary>
+    public void Toggle()
+    {
+        if (EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(null);
+        if (_live || IsOn)
+            SetOn(!IsOn);
+    }
+
+    /// <summary>Turns inspect mode on (only while live) or off; off lets go of a value held on the workbench.</summary>
+    public void SetOn(bool on)
+    {
+        on &= _live;
+        if (on == IsOn)
+            return;
+        IsOn = on;
+        if (!on && board != null && board.IsHolding)
+            board.Release();
+        if (onState != null)
+            onState.SetActive(on);
+        Changed?.Invoke();
+    }
+
+    /// <summary>Lets inspect mode be used (<paramref name="live"/>: BoothRules.InspectLive; false leaves it) and shows the red button (<paramref name="shown"/>: BoothRules.PropsLive).</summary>
+    public void SetLive(bool live, bool shown)
+    {
+        _live = live;
+        if (inspectButton != null)
+        {
+            if (inspectButton.gameObject.activeSelf != shown)
+                inspectButton.gameObject.SetActive(shown);
+            inspectButton.interactable = live;
+        }
+        if (!live)
+            SetOn(false);
     }
 
     private void OnDestroy()
@@ -165,29 +238,30 @@ public sealed class DeskInspect : MonoBehaviour
     /// <summary>The decision: no case until the next.</summary>
     public void EndCase() => _case = null;
 
-    /// <summary>A click on the traveller: with a value held on the workbench, the traveller's face is held against it (the photo's check at the desk); otherwise the wheel opens.</summary>
+    /// <summary>A click on the traveller: in inspect mode their face is picked (held, or judged against the value held: the photo's check at the desk); otherwise the wheel opens.</summary>
     public void TravellerClicked()
     {
-        if (board != null && compare != null && board.IsHolding && compare.Holding && _case != null && _case.look != null)
+        if (IsOn)
         {
-            compare.Select(EvidencePicks.ForFace(_case.look), null);
+            if (compare != null && _case != null && _case.look != null)
+                compare.Select(EvidencePicks.ForFace(_case.look), null);
             return;
         }
         if (wheel != null)
             wheel.Open();
     }
 
-    /// <summary>A click on the desk's calendar: today's date is held on the workbench (or judged against the value held), once the calendar is introduced.</summary>
+    /// <summary>A click on the desk's calendar: in inspect mode today's date is held on the workbench (or judged against the value held), once the calendar is introduced.</summary>
     public void CalendarClicked()
     {
-        if (board != null && _today != null && _known.Has(_day, Feature.Calendar))
+        if (IsOn && board != null && _today != null && _known.Has(_day, Feature.Calendar))
             board.PickToday(_today);
     }
 
-    /// <summary>A rulebook row clicked: the directive is held on the workbench (or judged against the value held).</summary>
+    /// <summary>A rulebook row clicked: in inspect mode the directive is held on the workbench (or judged against the value held).</summary>
     private void PickRule(int index, TravelRuleSO rule)
     {
-        if (board != null && _known.Has(_day, Feature.Rulebook))
+        if (IsOn && board != null && _known.Has(_day, Feature.Rulebook))
             board.PickRule(index, rule);
     }
 

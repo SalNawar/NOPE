@@ -14,7 +14,10 @@ using UnityEngine.EventSystems;
 /// off); the moves and the release of that press are ignored if it is enabled
 /// again before the button comes up. While its owner takes it out of the
 /// raycast (SetRaycastable) the proxy is off too, so clicks reach what lies
-/// under it. Generic: papers use it now, decoration later.
+/// under it. Only the left button drags (Papers, Please's one mouse button:
+/// left-press and drag moves a document; a right-click backs out, and
+/// mid-drag it cancels the drag: Cancel, ControlRules). Generic: the papers
+/// and the rulebook use it.
 /// </summary>
 public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -32,17 +35,20 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// <summary>Raised when a drag ends, with the pointer projected onto the desk (or the object's position when the projection fails).</summary>
     public event Action<DeskDraggable, Vector3> DragEnded;
 
-    /// <summary>Raised when a drag is cut short: the object was disabled mid-drag (its owner took its input away, or it is being destroyed), so no release will come.</summary>
+    /// <summary>Raised when a drag is cut short: the object was disabled mid-drag (its owner took its input away, or it is being destroyed), or the drag was cancelled (a right-click or Esc), so no release will come.</summary>
     public event Action<DeskDraggable> DragCancelled;
+
+    /// <summary>Raised as the object follows the pointer, with the pointer projected onto the desk (the desk sizes a document by the zone it is over).</summary>
+    public event Action<DeskDraggable, Vector3> Dragged;
+
+    /// <summary>True while a drag runs.</summary>
+    public bool IsDragging => _dragging;
 
     /// <summary>Where the object was when the last drag started, or when RememberPosition last took note.</summary>
     public Vector3 PickUpPosition { get; private set; }
 
     /// <summary>Takes note of where the object lies now as its pick-up point: the scanner feeding itself a paper (the Auto-Feed Scanner) sends it back here after the scan, as a dragged paper goes back to where it was picked up.</summary>
     public void RememberPosition() => PickUpPosition = transform.position;
-
-    /// <summary>True while a drag should take the object by its centre (no grab offset): a paper dragged out of the hand drops under the pointer (DeskController sets it while the paper is held).</summary>
-    public bool GrabAtCentre { get; set; }
 
     /// <summary>Sets the desk this object moves on.</summary>
     public void Init(DeskSurface surface) => _surface = surface;
@@ -60,13 +66,15 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
             proxy.enabled = raycastable;
     }
 
-    /// <summary>Records the pick-up position and the grab offset (none while GrabAtCentre), and turns the proxy off.</summary>
+    /// <summary>Records the pick-up position and the grab offset, and turns the proxy off (the left button only).</summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
         _dragging = true;
         PickUpPosition = transform.position;
         _grabOffset = Vector3.zero;
-        if (!GrabAtCentre && _surface != null && _surface.TryProject(eventData.pressEventCamera, eventData.position, out Vector3 point))
+        if (_surface != null && _surface.TryProject(eventData.pressEventCamera, eventData.position, out Vector3 point))
             _grabOffset = transform.position - point;
         if (proxy != null)
             proxy.enabled = false;
@@ -79,7 +87,10 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         if (!_dragging)
             return;
         if (_surface != null && _surface.TryProject(eventData.pressEventCamera, eventData.position, out Vector3 point))
+        {
             transform.position = _surface.Clamp(point + _grabOffset);
+            Dragged?.Invoke(this, point);
+        }
     }
 
     /// <summary>Turns the proxy back on (unless the object is out of the raycast) and reports where the pointer was released (nothing once the drag was cut short).</summary>
@@ -96,7 +107,10 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         DragEnded?.Invoke(this, released);
     }
 
-    /// <summary>A drag cut short: disabled, the object gets no release from the EventSystem, so the drag ends here, the proxy follows the raycast again and DragCancelled says so.</summary>
+    /// <summary>Cancels a running drag (a right-click or Esc backs out of it, ControlRules.BackOut): the moves and the release of this press are ignored, the proxy follows the raycast again and DragCancelled says so (the owner puts the object back where it was picked up).</summary>
+    public void Cancel() => OnDisable();
+
+    /// <summary>A drag cut short: disabled (or cancelled), the object gets no release from the EventSystem, so the drag ends here, the proxy follows the raycast again and DragCancelled says so.</summary>
     private void OnDisable()
     {
         if (!_dragging)

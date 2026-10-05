@@ -5,21 +5,19 @@ using UnityEngine.UI;
 /// <summary>
 /// Applies BoothRules and the wake rules to the office: from the view (the PC
 /// frame open or not), the screen's power, the shift's phase (set by
-/// GameManager), the wheel, a pending citation slip, a stamp in the hand, the
-/// papers held in the hand and the desk view, it decides which of the desktop,
-/// the PC, the power buttons, the desk props, the papers (on the desk and in
-/// the hand; in the desk view their boxes pick where they lie), the desk
-/// catcher, Escape's put-back, the traveller, the wheel, the stamps, the mat,
-/// the desk view's return, its "▲ Back" control and
-/// the mouse wheel take input, whether the office case HUD shows, and where
-/// held papers sit (beside the open frame,
-/// dipped under the open wheel: PaperExaminer); it returns the desk view when
+/// GameManager), the wheel, a pending citation slip and the reading view, it
+/// decides which of the desktop, the PC, the power buttons, the desk props,
+/// the documents, the traveller, the wheel, the stamp bar, inspect mode, the
+/// mat, the reading view's "▲ Back" control and the mouse wheel, the city
+/// view and the PC's grey tab take input or show, whether the office case HUD
+/// shows, and whether the documents and the rulebook show their values as
+/// comparable (inspect mode: DeskInspect); it returns the reading view when
 /// the next traveller is called, a newsletter shows or the wheel or the PC
-/// frame opens (the papers on the desk move only while tilted), wakes the screen for a
-/// presented traveller and a finished scan, holds it on for a citation slip,
-/// and shows the day-1 wheel note. Every reference is optional: a missing view
-/// counts as the office view; a missing screen counts as on. Event-driven (no
-/// per-frame code).
+/// frame opens, wakes the screen for a presented traveller and a finished
+/// scan, holds it on for a citation slip, and shows the day-1 wheel note.
+/// What a right-click or Esc backs out of is ControlRules' (OfficeControls).
+/// Every reference is optional: a missing view counts as the office view; a
+/// missing screen counts as on. Event-driven (no per-frame code).
 /// </summary>
 public sealed class BoothCoordinator : MonoBehaviour
 {
@@ -44,10 +42,10 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>The PC frame's power button.</summary>
     [SerializeField] private Selectable framePowerButton;
 
-    /// <summary>The traveller's hit zone (opens the wheel).</summary>
+    /// <summary>The traveller's hit zone (opens the wheel, or picks the face in inspect mode).</summary>
     [SerializeField] private Clickable travellerHitZone;
 
-    /// <summary>The desk props (stamp, intercom, scanner, till, stability monitor, calendar, clock and the flavour props).</summary>
+    /// <summary>The desk props (stamp, intercom, scanner, till, stability monitor, calendar, clock, the flavour props and the rulebook's clicks).</summary>
     [SerializeField] private Clickable[] props;
 
     /// <summary>The day-1 note above the traveller.</summary>
@@ -56,16 +54,22 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>The desk tuning (the wheel note's text and last day).</summary>
     [SerializeField] private DeskConfigSO config;
 
-    /// <summary>Poses the papers held in the hand (piece 10; optional): beside the open frame, dipped under the open wheel.</summary>
-    [SerializeField] private PaperExaminer examiner;
-
-    /// <summary>The physical stamps (the desk-first redesign, item 12; optional): the verdict at the desk.</summary>
+    /// <summary>The stamp bar (optional): the verdict at the desk.</summary>
     [SerializeField] private DeskStampTray stampTray;
 
-    /// <summary>The office case HUD (piece 10; optional): the claim tag and the office compare strip.</summary>
+    /// <summary>Inspection at the desk (optional): inspect mode and its red button.</summary>
+    [SerializeField] private DeskInspect inspect;
+
+    /// <summary>The rulebook on the desk (optional): its rows are comparable in inspect mode.</summary>
+    [SerializeField] private DeskRulebook rulebook;
+
+    /// <summary>The one input model (optional): the PC's grey tab.</summary>
+    [SerializeField] private OfficeControls controls;
+
+    /// <summary>The office case HUD (piece 10; optional): the office compare strip.</summary>
     [SerializeField] private OfficeCaseHud hud;
 
-    /// <summary>The desk view (piece 10; optional): the camera tilted forward over the desk.</summary>
+    /// <summary>The reading view (piece 10; optional): the camera tilted forward over the desk.</summary>
     [SerializeField] private DeskView deskView;
 
     /// <summary>The city view (the desk-first redesign, item 6; optional): the camera turned left to the city.</summary>
@@ -75,6 +79,9 @@ public sealed class BoothCoordinator : MonoBehaviour
     private int _day;
     private bool _citationPending;
     private bool _wheelOpenedToday;
+
+    /// <summary>Where the shift is (GameManager): the one input model reads it.</summary>
+    public BoothPhase Phase => _phase;
 
     private void Awake()
     {
@@ -92,16 +99,12 @@ public sealed class BoothCoordinator : MonoBehaviour
             wheel.OpenChanged += HandleWheel;
         if (stampTray != null)
             stampTray.Changed += Apply;
+        if (inspect != null)
+            inspect.Changed += Apply;
         if (desk != null)
-        {
             desk.ScanFinished += HandleScanFinished;
-            desk.HoldsChanged += Apply;
-        }
         if (deskView != null)
-        {
             deskView.Changed += Apply;
-            deskView.ReadingTilt += HandleReadingTilt;
-        }
         if (cityView != null)
             cityView.Changed += Apply;
     }
@@ -116,16 +119,12 @@ public sealed class BoothCoordinator : MonoBehaviour
             wheel.OpenChanged -= HandleWheel;
         if (stampTray != null)
             stampTray.Changed -= Apply;
+        if (inspect != null)
+            inspect.Changed -= Apply;
         if (desk != null)
-        {
             desk.ScanFinished -= HandleScanFinished;
-            desk.HoldsChanged -= Apply;
-        }
         if (deskView != null)
-        {
             deskView.Changed -= Apply;
-            deskView.ReadingTilt -= HandleReadingTilt;
-        }
         if (cityView != null)
             cityView.Changed -= Apply;
     }
@@ -133,7 +132,7 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>The first application, once every component has woken (Awake runs before any Start).</summary>
     private void Start() => Apply();
 
-    /// <summary>Where the shift is (GameManager); presenting a traveller (the AVAILABLE sign calls them) also wakes the screen and returns the desk view, so the arrival is seen.</summary>
+    /// <summary>Where the shift is (GameManager); presenting a traveller (the AVAILABLE sign calls them) also wakes the screen and returns the reading view and the city view, so the arrival is seen.</summary>
     public void SetPhase(BoothPhase phase)
     {
         _phase = phase;
@@ -170,13 +169,6 @@ public sealed class BoothCoordinator : MonoBehaviour
 
     private void HandleView(OfficeView _) => Apply();
 
-    /// <summary>The player tilted the desk view in to read: the paper being read comes up to reading size (DeskController.ReadFocus; the desk-first polish).</summary>
-    private void HandleReadingTilt()
-    {
-        if (desk != null)
-            desk.ReadFocus();
-    }
-
     private void HandleWheel()
     {
         if (wheel.IsOpen)
@@ -199,25 +191,25 @@ public sealed class BoothCoordinator : MonoBehaviour
         phase: _phase,
         wheelOpen: wheel != null && wheel.IsOpen,
         citationPending: _citationPending,
-        stampHeld: stampTray != null && stampTray.IsHolding,
-        papersHeld: desk != null && desk.HeldCount > 0,
-        deskView: deskView != null && deskView.IsOn,
-        deskViewBound: deskView != null && deskView.IsBound);
+        deskView: deskView != null && deskView.IsOn);
 
-    /// <summary>Applies the rules. The wheel, the stamps and the desk view first: closing, putting down or returning changes the context the rest reads (their events re-apply too, harmlessly).</summary>
+    /// <summary>Applies the rules. The wheel, the stamp bar, inspect mode and the reading view first: closing, stowing, leaving or returning changes the context the rest reads (their events re-apply too, harmlessly).</summary>
     private void Apply()
     {
+        BoothInput first = BoothRules.Evaluate(Context());
         if (wheel != null)
-            wheel.SetCanOpen(BoothRules.Evaluate(Context()).WheelAllowed);
+            wheel.SetCanOpen(first.WheelAllowed);
         if (stampTray != null)
-            stampTray.SetLive(BoothRules.Evaluate(Context()).StampsLive);
-        if (deskView != null && !BoothRules.Evaluate(Context()).DeskViewAllowed)
+            stampTray.SetLive(first.StampsLive, first.PropsLive);
+        if (inspect != null)
+            inspect.SetLive(first.InspectLive, first.PropsLive);
+        if (deskView != null && !first.DeskViewAllowed)
             deskView.Return();
-        // The city view turns while the mat's toggle would be live in the normal view (the office view, nothing held, no newsletter, wheel or stamp); anything else returns it.
-        if (cityView != null)
-            cityView.SetLive(BoothRules.Evaluate(Context()).DeskViewToggleLive && (deskView == null || !deskView.IsOn));
 
         BoothInput input = BoothRules.Evaluate(Context());
+        bool inspecting = inspect != null && inspect.IsOn;
+        if (cityView != null)
+            cityView.SetLive(input.NormalViewLive);
         if (screen != null)
             screen.SetInteractive(input.DesktopInteractive);
         if (crt != null)
@@ -233,22 +225,20 @@ public sealed class BoothCoordinator : MonoBehaviour
         if (desk != null)
         {
             desk.SetPapersLive(input.PapersLive);
-            desk.SetHeldLive(input.HeldPapersLive, input.HeldDragOutLive);
-            desk.SetDeskCatcherLive(input.DeskCatcherLive);
-            desk.SetExamineEscapeLive(input.ExamineEscapeLive);
-            desk.SetRowsOnDesk(input.PapersLive && deskView != null && deskView.IsOn);
+            desk.SetInspecting(inspecting);
         }
+        if (rulebook != null)
+            rulebook.SetInspecting(inspecting);
         if (hud != null)
             hud.SetVisible(input.CaseHudVisible);
         if (deskView != null)
         {
-            deskView.SetToggleLive(input.DeskViewToggleLive);
-            deskView.SetReturnLive(input.DeskViewReturnLive);
+            deskView.SetToggleLive(input.DeskViewAllowed);
             deskView.SetBackLive(input.DeskViewBackLive);
-            deskView.SetScrollInLive(input.DeskViewScrollInLive);
+            deskView.SetScrollInLive(input.NormalViewLive);
         }
-        if (examiner != null)
-            examiner.SetMode(view != null && view.Current == OfficeView.MonitorFocus, wheel != null && wheel.IsOpen, deskView != null && deskView.IsOn);
+        if (controls != null)
+            controls.SetPcTab(input.PcSwitchLive, view != null && view.Current == OfficeView.MonitorFocus);
         if (travellerHitZone != null)
             travellerHitZone.Interactable = input.TravellerLive;
         if (wheelHint != null)

@@ -88,7 +88,9 @@ public enum AppCommand
     /// <summary>↓ in the Orders tree: the node below in the same tier.</summary>
     NodeDown,
     /// <summary>Enter in the Orders tree: the selected node's action (order, cancel, install or keep).</summary>
-    NodeAct
+    NodeAct,
+    /// <summary>Shift+F10 or the Menu key: the context menu of the focused row, the selected icon or the bare desktop (Papers, Please's controls, Saleh 2026-10-06: a right-click backs out everywhere, so the menus moved to the keyboard).</summary>
+    ContextMenu
 }
 
 /// <summary>The keys the desktop's shortcuts use (DesktopKeyboard maps the Input System's keys onto these; the numpad's Enter, plus and minus count as Enter, = and -).</summary>
@@ -155,7 +157,11 @@ public enum ShortcutKey
     /// <summary>F1.</summary>
     F1,
     /// <summary>Esc.</summary>
-    Escape
+    Escape,
+    /// <summary>F10 (with Shift: the context menu).</summary>
+    F10,
+    /// <summary>The Menu (context menu) key.</summary>
+    Menu
 }
 
 /// <summary>One key press with its modifiers.</summary>
@@ -277,7 +283,10 @@ public sealed class ShortcutCardRow
 /// row keys a focused list; Ctrl+V adds a
 /// clipping with Notes focused; with Orders focused the arrows walk its
 /// tree, Enter acts, and the zoom chords (Ctrl+=, Ctrl+-, Ctrl+0) zoom the
-/// tree instead of the panes. Card is the F1 card: every command once.
+/// tree instead of the panes; Shift+F10 or the Menu key opens the context
+/// menu (a right-click backs out instead, ControlRules). Card is the F1
+/// card: every command once (ControlRules.DeskCard prints the desk's keys
+/// above it).
 /// DesktopKeyboard polls the keys and runs what this returns. Pure.
 /// </summary>
 public static class ShortcutMap
@@ -309,6 +318,7 @@ public static class ShortcutMap
         new ShortcutCardRow("Ctrl+V", "keys.paste", AppCommand.Paste),
         new ShortcutCardRow("Ctrl+P", "keys.pin", AppCommand.Pin),
         new ShortcutCardRow("Ctrl+=, Ctrl+-, Ctrl+0", "keys.zoom", AppCommand.ZoomIn, AppCommand.ZoomOut, AppCommand.ZoomReset),
+        new ShortcutCardRow("Shift+F10, Menu", "keys.contextMenu", AppCommand.ContextMenu),
     };
 
     /// <summary>The guided step (1-4) a Step1…Step4 command goes to, else 0.</summary>
@@ -348,6 +358,8 @@ public static class ShortcutMap
             return Is(AppCommand.Help, out command);
         if ((k.Key == ShortcutKey.F || k.Key == ShortcutKey.K) && ctrl)
             return Is(AppCommand.FocusSearch, out command);
+        if ((k.Key == ShortcutKey.F10 && k.Shift && !k.Ctrl && !k.Alt) || (k.Key == ShortcutKey.Menu && plain))
+            return Is(AppCommand.ContextMenu, out command);
 
         if (c.DesktopFocused && plain && Icons(k.Key, c.IconSelected, out command))
             return true;

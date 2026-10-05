@@ -1,18 +1,20 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Tuning for the physical desk in the office (pieces 7 and the office move):
 /// screen power, the desktop's clone on the PC, the scanner, the papers on the
 /// desk, the traveller, the traveller wheel and its speech bubble's pacing
-/// (piece 8), the day-1 desk notes, papers read in the hand (piece 10: the
-/// examine pose; a paper's printed form is FormStyleSO's) and the desk view. Geometry that belongs to the art
+/// (piece 8), the day-1 desk notes, the counter and the desk (Papers,
+/// Please's zones: a document small on the counter, full size on the desk; a
+/// paper's printed form is FormStyleSO's), the stamp bar and the desk view. Geometry that belongs to the art
 /// (where the desk, the PC, the scanner and the traveller are) comes from the
 /// art scene's anchors (OfficeSceneContractSO), so another office supplies its
 /// own. Created and assigned by Tools > TimeDesk > Build Office UI
 /// (Assets/Data/Config/Desk_Default.asset). Every knob is read at runtime; the
-/// checks on them (paper spawn slots, the wheel's fit, the paper's size
+/// checks on them (the counter's spots, the wheel's fit, the paper's size
 /// against the form style's aspect) run only in the builder: re-run it after
-/// changing the spawn slots, a wheel size or the paper.
+/// changing the counter's spots, a wheel size or the paper.
 /// </summary>
 [CreateAssetMenu(fileName = "Desk_Default", menuName = "TimeDesk/Office/Desk Config")]
 public sealed class DeskConfigSO : ScriptableObject
@@ -60,14 +62,11 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>A paper's size on the desk in metres (width, depth): larger than life, so its title reads from the chair.</summary>
     public Vector2 paperSize = new Vector2(0.26f, 0.34f);
 
-    /// <summary>Where handed-over papers land, 0..1 across the desk anchor's rectangle (reused in order when a traveller has more papers). Read at runtime; Build Office UI checks that every paper a traveller carries has a slot.</summary>
-    public Vector2[] paperSpawnSlots =
-    {
-        new Vector2(0.5f, 0.62f), new Vector2(0.74f, 0.5f), new Vector2(0.27f, 0.45f), new Vector2(0.55f, 0.28f)
-    };
+    /// <summary>How many spots papers handed over land on along the counter (DeskZones.CounterSpot; reused in turn when a traveller has more papers). Read at runtime; Build Office UI checks that every paper a traveller carries has a spot.</summary>
+    [Min(1)] public int counterSpots = 4;
 
-    /// <summary>Where a handed-over paper may land when no spawn slot shows whole on the screen (papers held, the overlay over the mat): a grid of this many columns and rows of spots over the landing area, nearest its centre first (PaperLanding.GridSpots).</summary>
-    public Vector2Int landingGrid = new Vector2Int(5, 4);
+    /// <summary>The distance between two of the counter's spots, in metres (closer when the counter is too short).</summary>
+    [Min(0f)] public float counterSpacing = 0.17f;
 
     /// <summary>Seconds a paper takes to slide (hand-over, back from the scanner, away at the decision).</summary>
     [Min(0f)] public float paperSlideSeconds = 0.25f;
@@ -76,7 +75,20 @@ public sealed class DeskConfigSO : ScriptableObject
     [Min(0.0002f)] public float paperStackStep = 0.0015f;
 
     /// <summary>How high a dragged paper is lifted above the stack, in metres.</summary>
-    [Min(0f)] public float heldPaperLift = 0.02f;
+    [FormerlySerializedAs("heldPaperLift"), Min(0f)] public float dragLift = 0.02f;
+
+    [Header("The counter and the desk (Papers, Please's zones, Saleh 2026-10-06)")]
+    /// <summary>The counter: the strip this deep (metres) at the desk's far edge along the office view, on the traveller's side; papers arrive there, and the stamped passport dropped there hands the papers back.</summary>
+    [FormerlySerializedAs("handBackDepth"), Min(0.02f)] public float counterDepth = 0.14f;
+
+    /// <summary>A document's scale on the counter (small: a share of its own size).</summary>
+    [Range(0.2f, 1f)] public float counterScale = 0.6f;
+
+    /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): it reads in the reading view at 1280x720.</summary>
+    [Min(0.05f)] public float readingHeight = 0.34f;
+
+    /// <summary>The photo's tint while its paper lies on the desk, full size (evenly lit, unlike travellerTint on the counter).</summary>
+    [FormerlySerializedAs("examineTint")] public Color readingTint = Color.white;
 
     [Header("Traveller")]
     /// <summary>The traveller figure's height in metres (feet at the traveller anchor).</summary>
@@ -120,13 +132,6 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds the traveller stays after their reaction's last line is fully shown, then leaves (the personalities spec's R4; 0 leaves at once, the reaction only in the transcript); calling the next traveller ends it at once. Authored here: Generate World never writes it.</summary>
     [Min(0f)] public float reactionSeconds = 2.5f;
 
-    [Header("Examine (piece 10)")]
-    /// <summary>Papers held in the hand: the office slots, the dip under the wheel, the region beside the PC frame, the distance from the camera and the rise's time (screen heights, metres, seconds).</summary>
-    public ExamineTuning examine = new ExamineTuning();
-
-    /// <summary>The photo's tint while its paper is held (evenly lit, unlike travellerTint on the desk).</summary>
-    public Color examineTint = Color.white;
-
     [Header("The city view (the desk-first redesign, item 6)")]
     /// <summary>Degrees the city view turns left of the office view (toward the hall's window wall).</summary>
     [Range(0f, 180f)] public float cityYaw = 75f;
@@ -165,30 +170,15 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Where the rulebook card lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat).</summary>
     public Vector2 rulebookAt = new Vector2(-0.3f, -0.05f);
 
-    [Header("Stamps (the desk-first redesign, item 12)")]
-    /// <summary>How many presses one inking lasts (Saleh 2026-10-05: "the player picks stamps, inks them, then stamps on the document"; 1: ink before every stamp).</summary>
-    [Min(1)] public int stampPressesPerInking = 1;
+    [Header("Stamps (Papers, Please's stamp bar, Saleh 2026-10-06)")]
+    /// <summary>Seconds the stamp bar takes to slide out or back (a cut under Reduced Motion).</summary>
+    [FormerlySerializedAs("stampTraySeconds"), Min(0f)] public float stampBarSeconds = 0.3f;
 
-    /// <summary>Where the stamp tray lies out on the desk: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame).</summary>
-    public Vector2 stampTrayOut = new Vector2(0.27f, -0.13f);
-
-    /// <summary>How far the tray slides in toward the chair from where it lies out, in metres.</summary>
-    [Min(0f)] public float stampTraySlide = 0.22f;
-
-    /// <summary>How far below the desk top the tray rests while in, in metres (under the desk's near edge).</summary>
-    [Min(0f)] public float stampTrayDrop = 0.06f;
-
-    /// <summary>Seconds the tray takes to slide out or in (a cut under Reduced Motion).</summary>
-    [Min(0f)] public float stampTraySeconds = 0.3f;
-
-    /// <summary>How high a held stamp floats above the desk under the pointer, in metres.</summary>
-    [Min(0f)] public float stampLift = 0.06f;
-
-    /// <summary>Seconds a press takes, down and up (on a paper or the ink pad).</summary>
+    /// <summary>Seconds a press takes, down and up.</summary>
     [Min(0f)] public float stampPressSeconds = 0.18f;
 
-    /// <summary>The traveller's side of the desk where the stamped passport, dropped, hands the papers back: the strip this deep (metres) at the desk's far edge along the office view.</summary>
-    [Min(0f)] public float handBackDepth = 0.14f;
+    /// <summary>Seconds a refused press's note stays up ("Only the passport's ENTRY VISA box takes a stamp.").</summary>
+    [Min(0.5f)] public float stampNoteSeconds = 2.5f;
 
     [Header("Desk view (piece 10)")]
     /// <summary>The camera tilted forward over the desk (a click on the mat): how far it moves from the art office's view (forward and up, metres), how much further it pitches than aiming at the mat's centre (degrees), and the blend's seconds (a cut under Reduced Motion).</summary>

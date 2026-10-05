@@ -58,65 +58,43 @@ public static class CaseDocuments
     }
 }
 
-/// <summary>What happens to a paper released on the desk: it stays where it was dropped, it starts scanning, or it goes back to where it was picked up.</summary>
+//// <summary>What happens to a document released on the desk: it stays where it was dropped, it starts scanning, it goes back to where it was picked up, or (the stamped passport dropped on the counter) the papers are handed back.</summary>
 public enum DropOutcome
 {
-    /// <summary>It stays where it was dropped (not over the scanner).</summary>
+    /// <summary>It stays where it was dropped (not over the scanner), in the zone it was dropped in.</summary>
     Stays,
 
     /// <summary>It starts scanning (over the idle scanner).</summary>
     Scanning,
 
     /// <summary>It goes back to where it was picked up (the scanner is busy, or the paper could not be dropped).</summary>
-    Refused
+    Refused,
+
+    /// <summary>The stamped passport was dropped on the counter: the papers go back to the traveller with its verdict (Papers, Please's hand-back).</summary>
+    HandsBack
 }
 
-/// <summary>Where a paper held in the hand sits (piece 10): the two examine slots low beside the screen's centre.</summary>
-public enum ExamineSlot
+/// <summary>The desk's two zones (Papers, Please's, Saleh 2026-10-06): where a document lies decides its size.</summary>
+public enum DeskZone
 {
-    /// <summary>Not held.</summary>
-    None,
+    /// <summary>The counter: the strip on the traveller's side, where papers arrive and go back; a document there is small.</summary>
+    Counter,
 
-    /// <summary>The left slot.</summary>
-    Left,
-
-    /// <summary>The right slot.</summary>
-    Right
-}
-
-/// <summary>What DeskPapers.Hold did: whether the paper is now held, its slot, and the paper sent back to the desk to free it (-1 for none).</summary>
-public readonly struct HoldResult
-{
-    /// <summary>A hold's outcome.</summary>
-    public HoldResult(bool held, ExamineSlot slot, int evicted)
-    {
-        Held = held;
-        Slot = slot;
-        Evicted = evicted;
-    }
-
-    /// <summary>True when the paper is now held.</summary>
-    public bool Held { get; }
-
-    /// <summary>The slot it took (None when not held).</summary>
-    public ExamineSlot Slot { get; }
-
-    /// <summary>The paper held longest, put back on the desk to free its slot, or -1.</summary>
-    public int Evicted { get; }
+    /// <summary>The desk: the reading area; a document there is full size.</summary>
+    Desk
 }
 
 /// <summary>
 /// One case's papers: each is handed over once (from the traveller onto the
-/// desk), can be dragged while on the desk, and is scanned by dropping it on
-/// the scanner, one scan at a time, for a fixed duration; at the decision
-/// every paper goes back and a running scan is cancelled. A paper on the desk
-/// can be held in the hand (piece 10), two at a time: it takes the slot on its
-/// side when free, else the other; with both full, the paper held longest goes
-/// back to the desk and the new one takes its slot. A held paper can be dragged
-/// (out of the hand) but must be put back before it drops. With the Auto-Feed
-/// Scanner (the PC redesign SC3) handed-over papers join a queue and scan
-/// themselves in hand-over order, one at a time (FeedNext), a held or unready
-/// paper skipped until it is back on the desk; a scan by hand (a drop) takes
+/// counter), can be dragged while on the desk, and is scanned by dropping it
+/// on the scanner, one scan at a time, for a fixed duration; at the decision
+/// every paper goes back and a running scan is cancelled. Each paper lies in
+/// a zone (Papers, Please's counter and desk, Saleh 2026-10-06): it arrives on
+/// the counter and takes the zone it is dropped in; the stamped passport
+/// dropped on the counter hands the papers back (HandsBack). With the
+/// Auto-Feed Scanner (the PC redesign SC3) handed-over papers join a queue
+/// and scan themselves in hand-over order, one at a time (FeedNext), an
+/// unready paper skipped until it lies still; a scan by hand (a drop) takes
 /// its own duration (the Analysis Scanner's pass, SC4). Pure, so every
 /// state and outcome is tested headless; DeskController animates them.
 /// </summary>
@@ -131,11 +109,8 @@ public sealed class DeskPapers
         /// <summary>Not handed over yet.</summary>
         WithTraveller,
 
-        /// <summary>On the desk, draggable.</summary>
+        /// <summary>On the desk (the counter or the reading area), draggable.</summary>
         OnDesk,
-
-        /// <summary>Held in the hand (an examine slot); still draggable, and still on the desk for the day-1 note.</summary>
-        Held,
 
         /// <summary>On the scanner's bed, being scanned.</summary>
         Scanning,
@@ -145,6 +120,9 @@ public sealed class DeskPapers
     }
 
     private readonly PaperState[] _states;
+
+    /// <summary>Each paper's zone (the counter until it is dropped on the desk).</summary>
+    private readonly DeskZone[] _zones;
 
     /// <summary>Seconds a scan the scanner feeds itself takes.</summary>
     private readonly float _scanSeconds;
@@ -170,12 +148,6 @@ public sealed class DeskPapers
     /// <summary>Seconds the running scan has taken.</summary>
     private float _elapsed;
 
-    /// <summary>Each paper's examine slot (None unless held).</summary>
-    private readonly ExamineSlot[] _slots;
-
-    /// <summary>The held papers, held longest first.</summary>
-    private readonly List<int> _holdOrder = new List<int>();
-
     /// <summary>Every paper starts with the traveller; a null list means no papers; a scan shorter than 0.01 s is raised to it; no scanner upgrade.</summary>
     public DeskPapers(IReadOnlyList<CaseDocument> documents, float scanSeconds) : this(documents, scanSeconds, scanSeconds, default)
     {
@@ -185,7 +157,7 @@ public sealed class DeskPapers
     public DeskPapers(IReadOnlyList<CaseDocument> documents, float scanSeconds, float analysisSeconds, ScannerDay scanners)
     {
         _states = new PaperState[documents != null ? documents.Count : 0];
-        _slots = new ExamineSlot[_states.Length];
+        _zones = new DeskZone[_states.Length];
         _analysed = new bool[_states.Length];
         ArrivalIndices = CaseDocuments.ArrivalIndices(documents);
         _scanSeconds = scanSeconds > MinScanSeconds ? scanSeconds : MinScanSeconds;
@@ -211,40 +183,37 @@ public sealed class DeskPapers
     /// <summary>The papers handed over on arrival, in paper order (CaseDocuments.ArrivalIndices).</summary>
     public IReadOnlyList<int> ArrivalIndices { get; }
 
-    /// <summary>Papers on the desk, the one being scanned and those held in the hand included.</summary>
+    /// <summary>Papers on the desk, the one being scanned included.</summary>
     public int OnDeskCount
     {
         get
         {
             int n = 0;
             for (int i = 0; i < _states.Length; i++)
-                if (StateOf(i) == PaperState.OnDesk || StateOf(i) == PaperState.Scanning || StateOf(i) == PaperState.Held)
+                if (StateOf(i) == PaperState.OnDesk || StateOf(i) == PaperState.Scanning)
                     n++;
             return n;
         }
     }
 
-    /// <summary>How many papers are held in the hand (0 to 2).</summary>
-    public int HeldCount => _holdOrder.Count;
+    /// <summary>The zone paper <paramref name="i"/> lies in (the counter until it is dropped on the desk; the counter out of range).</summary>
+    public DeskZone ZoneOf(int i) => InRange(i) ? _zones[i] : DeskZone.Counter;
 
-    /// <summary>The paper held longest (the one a third paper sends back), or -1 when none is held.</summary>
-    public int HeldLongest => _holdOrder.Count > 0 ? _holdOrder[0] : -1;
-
-    /// <summary>Hands a paper over from the traveller onto the desk; false for any other state or an index out of range.</summary>
+    /// <summary>Hands a paper over from the traveller onto the counter; false for any other state or an index out of range.</summary>
     public bool HandOver(int i)
     {
         if (!InRange(i) || StateOf(i) != PaperState.WithTraveller)
             return false;
 
         _states[i] = PaperState.OnDesk;
+        _zones[i] = DeskZone.Counter;
         return true;
     }
 
     /// <summary>
     /// Queues a handed-over paper to scan itself (the Auto-Feed Scanner: the
     /// controller enqueues each hand-over while the upgrade is owned); false
-    /// when it is not on the desk or in the hand, is already queued, or is out
-    /// of range.
+    /// when it is not on the desk, is already queued, or is out of range.
     /// </summary>
     public bool Enqueue(int i)
     {
@@ -257,8 +226,8 @@ public sealed class DeskPapers
 
     /// <summary>
     /// Feeds the scanner its next paper while it is idle: the first queued
-    /// paper that lies on the desk (not held) and that <paramref name="ready"/>
-    /// admits (null: every paper; the controller: landed and not being dragged)
+    /// paper that lies on the desk and that <paramref name="ready"/> admits
+    /// (null: every paper; the controller: landed and not being dragged)
     /// leaves the queue and starts scanning, not by hand, and its index is
     /// returned; -1 while the scanner is busy or no queued paper is ready. A
     /// paper skipped keeps its place for the next turn.
@@ -279,92 +248,32 @@ public sealed class DeskPapers
         return -1;
     }
 
-    /// <summary>True while the paper is on the desk or held in the hand (the drag-out); false out of range.</summary>
-    public bool CanDrag(int i) => InRange(i) && (StateOf(i) == PaperState.OnDesk || StateOf(i) == PaperState.Held);
-
-    /// <summary>True while the paper is held in the hand (false out of range).</summary>
-    public bool IsHeld(int i) => InRange(i) && StateOf(i) == PaperState.Held;
+    /// <summary>True while the paper is on the desk (not scanning); false out of range.</summary>
+    public bool CanDrag(int i) => InRange(i) && StateOf(i) == PaperState.OnDesk;
 
     /// <summary>
-    /// Takes a paper on the desk into the hand (anything else, or an index out
-    /// of range, is not held and nothing changes): the slot on its side
-    /// (<paramref name="preferRight"/>) when free, else the other free one;
-    /// with both taken, the paper held longest goes back on the desk and the
-    /// new one takes its slot.
+    /// Decides a released paper: a paper that is not on the desk (or an index
+    /// out of range) is Refused and nothing changes; over the scanner it
+    /// starts scanning by hand while the scanner is idle (a queued paper
+    /// leaves the queue) and is Refused while it is busy; elsewhere it lies in
+    /// <paramref name="zone"/> (Stays), unless it is the passport carrying its
+    /// verdict (<paramref name="stampedPassport"/>) dropped on the counter,
+    /// which hands the papers back (HandsBack: the controller then ends the
+    /// case). A scanned paper may be scanned again; a scan keeps its zone.
     /// </summary>
-    public HoldResult Hold(int i, bool preferRight)
-    {
-        if (!InRange(i) || StateOf(i) != PaperState.OnDesk)
-            return new HoldResult(false, ExamineSlot.None, -1);
-
-        ExamineSlot preferred = preferRight ? ExamineSlot.Right : ExamineSlot.Left;
-        ExamineSlot other = preferRight ? ExamineSlot.Left : ExamineSlot.Right;
-        int evicted = -1;
-        ExamineSlot slot;
-        if (HolderOf(preferred) < 0)
-        {
-            slot = preferred;
-        }
-        else if (HolderOf(other) < 0)
-        {
-            slot = other;
-        }
-        else
-        {
-            evicted = _holdOrder[0];
-            slot = _slots[evicted];
-            PutBack(evicted);
-        }
-
-        _states[i] = PaperState.Held;
-        _slots[i] = slot;
-        _holdOrder.Add(i);
-        return new HoldResult(true, slot, evicted);
-    }
-
-    /// <summary>Puts a held paper back on the desk; false (nothing changes) when it is not held.</summary>
-    public bool PutBack(int i)
-    {
-        if (!IsHeld(i))
-            return false;
-
-        _states[i] = PaperState.OnDesk;
-        _slots[i] = ExamineSlot.None;
-        _holdOrder.Remove(i);
-        return true;
-    }
-
-    /// <summary>Puts every held paper back on the desk and returns them in slot order, left first.</summary>
-    public IReadOnlyList<int> PutBackAll()
-    {
-        var back = new List<int>();
-        foreach (ExamineSlot slot in new[] { ExamineSlot.Left, ExamineSlot.Right })
-        {
-            int i = HolderOf(slot);
-            if (i >= 0 && PutBack(i))
-                back.Add(i);
-        }
-        return back;
-    }
-
-    /// <summary>
-    /// Decides a released paper: a paper that is not on the desk (held in the
-    /// hand, or an index out of range) is Refused and nothing changes; a paper on the desk stays
-    /// where it was dropped unless it is over the scanner, where it starts
-    /// scanning by hand while the scanner is idle (a queued paper leaves the
-    /// queue) and is Refused while it is busy. A scanned paper may be scanned again.
-    /// </summary>
-    public DropOutcome Drop(int i, bool overScanner)
+    public DropOutcome Drop(int i, bool overScanner, DeskZone zone = DeskZone.Desk, bool stampedPassport = false)
     {
         if (!InRange(i) || StateOf(i) != PaperState.OnDesk)
             return DropOutcome.Refused;
-        if (!overScanner)
-            return DropOutcome.Stays;
-        if (ScannerBusy)
-            return DropOutcome.Refused;
-
-        BeginScan(i, true);
-        return DropOutcome.Scanning;
+        if (overScanner)
+        {
+            if (ScannerBusy)
+                return DropOutcome.Refused;
+            BeginScan(i, true);
+            return DropOutcome.Scanning;
+        }
+        _zones[i] = zone;
+        return zone == DeskZone.Counter && stampedPassport ? DropOutcome.HandsBack : DropOutcome.Stays;
     }
 
     /// <summary>
@@ -393,15 +302,14 @@ public sealed class DeskPapers
         return done;
     }
 
-    /// <summary>Every paper goes back to the traveller's side for good (none stays held, none stays queued); a running scan is cancelled and never finishes.</summary>
+    /// <summary>Every paper goes back to the traveller's side for good (none stays queued); a running scan is cancelled and never finishes.</summary>
     public void ReturnAll()
     {
         for (int i = 0; i < _states.Length; i++)
         {
             _states[i] = PaperState.Returned;
-            _slots[i] = ExamineSlot.None;
+            _zones[i] = DeskZone.Counter;
         }
-        _holdOrder.Clear();
         _queue.Clear();
         _scanning = -1;
         _elapsed = 0f;
@@ -422,85 +330,39 @@ public sealed class DeskPapers
     /// <summary>A paper's state (callers check the range).</summary>
     private PaperState StateOf(int i) => _states[i];
 
-    /// <summary>The paper held in a slot, or -1.</summary>
-    private int HolderOf(ExamineSlot slot)
-    {
-        foreach (int i in _holdOrder)
-            if (_slots[i] == slot)
-                return i;
-        return -1;
-    }
-
     /// <summary>True for a valid paper index.</summary>
     private bool InRange(int i) => i >= 0 && i < _states.Length;
 }
 
-/// <summary>
-/// Where a paper lifted into the hand goes (piece 10): the two examine slots
-/// cover most of the desk's mat, so it takes the side that hides no other
-/// paper on the desk when the side it lies on would hide one (where a paper
-/// handed over lands is PaperLanding's, in screen space).
-/// </summary>
-public static class HeldCover
-{
-    /// <summary>The side a lifted paper prefers: the side it lies on (<paramref name="liesRight"/>), unless that slot would hide papers on the desk and the other would hide none.</summary>
-    public static bool PreferRight(bool liesRight, int hiddenLeft, int hiddenRight)
-    {
-        int own = liesRight ? hiddenRight : hiddenLeft;
-        int other = liesRight ? hiddenLeft : hiddenRight;
-        return own > 0 && other == 0 ? !liesRight : liesRight;
-    }
-}
-
-/// <summary>What a click on a paper does (piece 10).</summary>
+/// <summary>What a left-click on a document does (Papers, Please's controls, Saleh 2026-10-06). Not serialized.</summary>
 public enum PaperClickAction
 {
-    /// <summary>Nothing.</summary>
+    /// <summary>Nothing (in inspect mode, a click off every value).</summary>
     None,
 
-    /// <summary>Takes a paper on the desk into the hand.</summary>
-    Examine,
+    /// <summary>A document on the counter goes to the desk, full size, to be read (as if dragged there).</summary>
+    Read,
 
-    /// <summary>Puts a held paper back where it lay.</summary>
-    PutBack,
+    /// <summary>A document on the desk comes to the top of the pile.</summary>
+    Front,
 
-    /// <summary>Picks the clicked row of a held paper, or of a paper lying on the desk in the desk view, for comparison.</summary>
-    Pick,
-
-    /// <summary>Presses the stamp in the hand on a paper lying on the desk (the desk-first redesign, item 12).</summary>
-    Press
+    /// <summary>In inspect mode, the value under the pointer is picked for comparison.</summary>
+    Pick
 }
 
-/// <summary>How a click on a paper routes (piece 10).</summary>
+/// <summary>How a left-click on a document routes (the one input model: only left-clicks act; a right-click backs out, ControlRules).</summary>
 public static class PaperClicks
 {
-    /// <summary>
-    /// On a paper on the desk, a left click examines it and a right click does
-    /// nothing; in the desk view (<paramref name="pickLying"/>: the desk-first
-    /// redesign, items 5 and 11) a left click on a row of a paper lying on the
-    /// desk picks the row where it lies; with a stamp in the hand
-    /// (<paramref name="stampHeld"/>, item 12) a left click on a paper lying on
-    /// the desk presses the stamp on it; on a held paper, a left click on a row
-    /// picks the row, a left click off every row (the title, the photo, a
-    /// margin) puts it back, and a right click puts it back.
-    /// </summary>
-    public static PaperClickAction Decide(bool held, bool secondary, bool onRow, bool pickLying = false, bool stampHeld = false)
+    /// <summary>In inspect mode (<paramref name="inspecting"/>) a click on a value (<paramref name="onRow"/>) picks it and a click off every value does nothing (outside inspect mode clicks never compare); otherwise a document on the counter goes to the desk to be read and one on the desk comes to the top.</summary>
+    public static PaperClickAction Decide(bool inspecting, bool onRow, DeskZone zone)
     {
-        if (!held)
-        {
-            if (secondary)
-                return PaperClickAction.None;
-            if (stampHeld)
-                return PaperClickAction.Press;
-            return onRow && pickLying ? PaperClickAction.Pick : PaperClickAction.Examine;
-        }
-        if (secondary)
-            return PaperClickAction.PutBack;
-        return onRow ? PaperClickAction.Pick : PaperClickAction.PutBack;
+        if (inspecting)
+            return onRow ? PaperClickAction.Pick : PaperClickAction.None;
+        return zone == DeskZone.Counter ? PaperClickAction.Read : PaperClickAction.Front;
     }
 }
 
-/// <summary>When the day-1 desk notes show (their text and last day are DeskConfigSO knobs).</summary>
+// <summary>When the day-1 desk notes show (their text and last day are DeskConfigSO knobs).</summary>
 public static class DeskHints
 {
     /// <summary>The scanner note: a non-blank hint, on or before its last day, while a paper is on the desk and no paper was read (examined) or scanned yet today (<paramref name="usesToday"/>: papers read or scanned today).</summary>

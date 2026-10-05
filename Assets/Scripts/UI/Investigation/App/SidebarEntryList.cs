@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// One of the Investigation app's sidebar lists (the PC redesign PR1, PR2):
-/// Pinned (the pins in pin order; a right-click on one unpins it) or Recent
+/// Pinned (the pins in pin order; Ctrl+P on one unpins it) or Recent
 /// (the last items opened or jumped to, newest first). A row reads the
 /// item's label; a click on it jumps there (the app shows its tab, its item
 /// and its row). An empty list shows its hint. Rows are pooled from the
@@ -11,11 +11,8 @@ using UnityEngine;
 /// </summary>
 public sealed class SidebarEntryList : MonoBehaviour
 {
-    /// <summary>The app (a row's jump, a pin's unpin).</summary>
+    /// <summary>The app (a row's jump).</summary>
     [SerializeField] private InvestigationApp app;
-
-    /// <summary>True for the pins (a right-click unpins); false for the recent items.</summary>
-    [SerializeField] private bool pins;
 
     /// <summary>Where the rows go (a vertical layout).</summary>
     [SerializeField] private RectTransform rowsRoot;
@@ -64,12 +61,5 @@ public sealed class SidebarEntryList : MonoBehaviour
     {
         if (app != null)
             app.Jump(item);
-    }
-
-    /// <summary>A row was right-clicked: a pin is unpinned.</summary>
-    public void RightClicked(EntryItem item)
-    {
-        if (pins && app != null)
-            app.Unpin(item.Ref.Key);
     }
 }

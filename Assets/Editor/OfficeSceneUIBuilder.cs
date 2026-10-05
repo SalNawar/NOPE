@@ -282,7 +282,7 @@ public static partial class OfficeSceneUIBuilder
 
         // The desktop's one keyboard poller and Escape chain, the F1 card, the focus ring, copy and paste, pins, recent items and zoom
         // (OfficeSceneUIBuilder.Keys, redesign phase 20); the frame's Escape defers to its stamp.
-        BuildDesktopKeys(canvas, officeView, app, icons);
+        BuildDesktopKeys(canvas, app, icons);
 
         // Cursor + hover outline settings (a persistent highlighter uses them in every scene).
         BuildInteractionFeedback();
@@ -389,7 +389,7 @@ public static partial class OfficeSceneUIBuilder
         EditorSceneManager.SaveScene(scene, GameplayScenePath);
         EnsureBuildSettings();
         AssetDatabase.SaveAssets();
-        Debug.Log($"[TimeDesk] {GameplayScenePath} built, wired and saved (every UI graphic theme-tagged, the PC frame and the desktop's clone on the office PC with screen power, the desk with papers (their whole face, the passport photo; examined in the hand), scanner and reacting props, the layered traveller + wheel + speech bubble (answers pickable), the office case HUD and the stamp tray, the office's input rules, the binder and its scene contract, HUD, citation and verdict line over the office, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare (the PC dock + office strip), the window manager and the taskbar's window buttons, the six desktop icons, their context menu and the Start menu, GameManager, DaySystem). It loads on {ArtScenePath}.");
+        Debug.Log($"[TimeDesk] {GameplayScenePath} built, wired and saved (every UI graphic theme-tagged, the PC frame and the desktop's clone on the office PC with screen power, the desk with papers (their whole face, the passport photo; small on the counter, full size on the desk), scanner and reacting props, the layered traveller + wheel + speech bubble (answers pickable), the office case HUD, the stamp bar, the inspect button and the PC tab, the office's input rules (one input model), the binder and its scene contract, HUD, citation and verdict line over the office, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare (the PC dock + office strip), the window manager and the taskbar's window buttons, the six desktop icons, their context menu and the Start menu, GameManager, DaySystem). It loads on {ArtScenePath}.");
     }
 
     // -----------------------------
@@ -747,42 +747,6 @@ public static partial class OfficeSceneUIBuilder
         Text(go.transform, "Label", label, 22, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, labelColor,
              role, labelKey, FontStyles.Normal, ThemeTextKind.Button, labelKey != null);
         return btn;
-    }
-
-    /// <summary>
-    /// A decision button's glyph (piece 6 R8): a 32-unit container at the
-    /// label's left holding two plain bars (no sprite, no raycast) in the
-    /// button's ink, a tick for Accept and a cross for Deny; the label starts
-    /// after it. Positions and glyphs never change with the culture.
-    /// </summary>
-    private static void BuildDecisionGlyph(Button button, ThemeRoleId role, bool tick)
-    {
-        Transform glyph = Panel(button.transform, "Glyph", new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(30f, 0f), new Vector2(32f, 32f), null);
-        ((RectTransform)glyph).pivot = Center;
-        if (tick)
-        {
-            GlyphBar(glyph, "Stroke1", new Vector2(-6.95f, -4.05f), new Vector2(6f, 14f), 45f, role);
-            GlyphBar(glyph, "Stroke2", new Vector2(7.19f, 0.19f), new Vector2(6f, 26f), -45f, role);
-        }
-        else
-        {
-            GlyphBar(glyph, "Stroke1", Vector2.zero, new Vector2(6f, 30f), 45f, role);
-            GlyphBar(glyph, "Stroke2", Vector2.zero, new Vector2(6f, 30f), -45f, role);
-        }
-
-        Transform label = button.transform.Find("Label");
-        if (label is RectTransform labelRt)
-            labelRt.offsetMin = new Vector2(56f, labelRt.offsetMin.y);
-    }
-
-    /// <summary>One glyph bar: a plain rotated rect in the role's ink.</summary>
-    private static void GlyphBar(Transform glyph, string name, Vector2 centre, Vector2 size, float angle, ThemeRoleId role)
-    {
-        Transform bar = Panel(glyph, name, Center, Center, centre, size, Color.white);
-        bar.localRotation = Quaternion.Euler(0f, 0f, angle);
-        Image image = bar.GetComponent<Image>();
-        image.raycastTarget = false;
-        SceneUiKit.Tag(image, role, ThemePart.Ink);
     }
 
     // ----------------------------- Windows XP theme -----------------------------

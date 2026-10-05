@@ -9,8 +9,9 @@ using UnityEngine.EventSystems;
 /// (DesktopPreferences, DesktopLayout.Restore: unknown ids dropped, a new id
 /// in the first free spot, off-screen places clamped), else the default
 /// arrangement. One icon at a time is selected (a press on it); a press on
-/// the empty icon area deselects, and a right-click there opens the
-/// desktop's context menu ("Arrange icons"). An icon opens its app through
+/// the empty icon area deselects. Shift+F10 or the Menu key opens the
+/// selected icon's context menu (Open), or with none selected the desktop's
+/// ("Arrange icons"): ShowMenu (a right-click backs out instead, ControlRules). An icon opens its app through
 /// DesktopApps.OpenApp on a double click (a single one with Settings'
 /// choice); a drop goes through DesktopLayout.Drop and saves the layout;
 /// Arrange (the context menu, the Start menu, Settings' "Reset icon
@@ -24,7 +25,7 @@ using UnityEngine.EventSystems;
 /// while it is closed or minimised, and clears the dot when it shows
 /// (InvestigationApp).
 /// </summary>
-public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
+public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler
 {
     /// <summary>The icon knobs (the cell, the arrange grid, the default order, the drop's overlap share, the double click).</summary>
     [SerializeField] private DesktopConfigSO config;
@@ -196,22 +197,19 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
         Save();
     }
 
-    /// <summary>A right-click on an icon: its context menu (Open).</summary>
-    public void ShowMenu(DesktopIconView icon, PointerEventData eventData)
+    /// <summary>Shift+F10 or the Menu key with no window focused (DesktopKeyboard): the selected icon's context menu (Open) beside it, else the desktop's (Arrange icons) at the icon area's top left.</summary>
+    public void ShowMenu()
     {
-        if (contextMenu != null)
-            contextMenu.ShowForIcon(icon, eventData);
+        if (contextMenu == null)
+            return;
+        if (_selected != null)
+            contextMenu.ShowForIcon(_selected, (RectTransform)_selected.transform);
+        else
+            contextMenu.ShowForDesktop((RectTransform)transform);
     }
 
     /// <summary>A press on the empty icon area deselects the icon.</summary>
     public void OnPointerDown(PointerEventData eventData) => Select(null);
-
-    /// <summary>A right-click on the empty icon area opens the desktop's context menu.</summary>
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Right && contextMenu != null)
-            contextMenu.ShowForDesktop(eventData);
-    }
 
     /// <summary>An arrow key (dx, dy: -1, 0 or 1; y down): the nearest icon that way becomes the selection (the first icon when none is selected).</summary>
     public void Step(int dx, int dy)

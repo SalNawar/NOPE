@@ -1,15 +1,15 @@
 using System;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 /// <summary>
 /// Looking left at the city (the desk-first redesign, Saleh 2026-10-05, item
-/// 6: "player can look left for a view at the city"): A or the left arrow, or
-/// the "◀ City" button at the office's left edge, turns the view left
-/// (DeskConfigSO.cityYaw) to a window view over the 2150 city; D, the right
-/// arrow, Escape or the "Desk ▶" button at the right edge turns back. The
+/// 6: "player can look left for a view at the city"): A or the left arrow
+/// (OfficeControls: Look), or the "◀ City" button at the office's left edge,
+/// turns the view left (DeskConfigSO.cityYaw) to a window view over the 2150
+/// city; D, the right arrow, a right-click, Esc (ControlRules) or the "Desk ▶"
+/// button at the right edge turns back (Return). The
 /// view is a gameplay-owned Cinemachine camera posed at bind from the art
 /// office's camera (its place kept, its yaw turned, its pitch the knob's),
 /// raised above the art camera's priority while on, with its own eased blend
@@ -20,9 +20,9 @@ using UnityEngine.UI;
 /// (CitySkyline), unlit, tinted from the day's palette to the evening's
 /// along the hall's evening curve (CrowdPaletteBlend, the shift clock), the
 /// towers' windows lighting up as the evening comes. BoothCoordinator says
-/// when it may turn (the office view, nothing held, no newsletter, wheel or
-/// stamp) and returns it when the next traveller steps up or the PC, the
-/// wheel or the desk view take over.
+/// when it may turn (BoothRules.NormalViewLive: the normal view, no
+/// newsletter, wheel or PC) and returns it when the next traveller steps up
+/// or the PC, the wheel or the reading view take over.
 /// </summary>
 public sealed class CityView : MonoBehaviour
 {
@@ -58,7 +58,6 @@ public sealed class CityView : MonoBehaviour
     private CinemachineCamera _office;
     private int _onPriority;
     private bool _live;
-    private int _liveSince;
     private float _lastEvening = -1f;
     private Renderer _sky;
     private Renderer _frame;
@@ -80,7 +79,7 @@ public sealed class CityView : MonoBehaviour
         _blend = Blend;
         if (lookButton != null)
         {
-            lookButton.onClick.AddListener(() => Set(true));
+            lookButton.onClick.AddListener(Look);
             lookButton.gameObject.SetActive(false);
         }
         if (backButton != null)
@@ -121,32 +120,25 @@ public sealed class CityView : MonoBehaviour
         BuildCity(art.position, look, office.Lens.FieldOfView);
     }
 
-    /// <summary>Lets the view turn to the city (BoothCoordinator: the office view with nothing held, no newsletter, wheel or stamp), from the next frame on; false returns it.</summary>
+    /// <summary>Lets the view turn to the city (BoothCoordinator: BoothRules.NormalViewLive); false returns it.</summary>
     public void SetLive(bool live)
     {
         live &= _office != null;
-        if (live && !_live)
-            _liveSince = Time.frameCount;
         _live = live;
         if (!live)
             Return();
         Show();
     }
 
-    /// <summary>Turns back to the desk (no-op when not looking at the city).</summary>
+    /// <summary>Turns to the city (no-op while it may not turn or looks there already): A, the left arrow, "◀ City".</summary>
+    public void Look() => Set(true);
+
+    /// <summary>Turns back to the desk (no-op when not looking at the city): D, the right arrow, a right-click, Esc, "Desk ▶".</summary>
     public void Return() => Set(false);
 
-    /// <summary>The keys (A or the left arrow turns to the city; D, the right arrow or Escape back) and the stand-in's light.</summary>
+    /// <summary>The stand-in's light, and the stand-in hidden once the turn back ends.</summary>
     private void Update()
     {
-        Keyboard kb = Keyboard.current;
-        if (kb != null && _live && _liveSince < Time.frameCount)
-        {
-            if (!IsOn && (kb.aKey.wasPressedThisFrame || kb.leftArrowKey.wasPressedThisFrame))
-                Set(true);
-            else if (IsOn && (kb.dKey.wasPressedThisFrame || kb.rightArrowKey.wasPressedThisFrame || kb.escapeKey.wasPressedThisFrame))
-                Set(false);
-        }
         Light();
         if (_hideAt >= 0f && Time.unscaledTime >= _hideAt && skyline != null)
         {

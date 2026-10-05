@@ -281,17 +281,37 @@ public partial class FormLayoutTests
         Assert.Greater(places, 1, "the visa page holds more than one mark before the rows start over");
     }
 
+    /// <summary>Papers, Please's stamps (Saleh 2026-10-06): a stamp takes only the passport's ENTRY VISA box, and its mark lands where it was pressed, kept whole in that box.</summary>
     [Test]
-    public void AStampPressedAtAPoint_IsCentredThere_AndKeptOnThePage()
+    public void AStampPressedInTheVisaBox_IsCentredThere_AndKeptInTheBox()
     {
         PlacedForm f = FormLayout.Layout(Booklet(), BookletData(), M.aspect, M, new FakeMeasure());
-        FaceRect at = StampSpots.At(f, 0.3f, 0.4f, 2f);
-        Assert.AreEqual(0.3f, at.CentreX, Eps);
-        Assert.AreEqual(0.4f, at.CentreY, Eps);
-        FaceRect edge = StampSpots.At(f, M.aspect - 0.01f, BookletHeight - 0.01f, 2f);
-        Assert.IsTrue(Inside(edge, new FaceRect(0f, 0f, M.aspect, BookletHeight)), "kept whole on the page");
+        FormItem visaItem = Of(f, FormItemKind.StampArea).Single();
+        Assert.AreEqual(FormLayout.VisaBox, visaItem.Text, "the passport's visa box is marked as such");
+        FaceRect visa = visaItem.Rect;
+        float cx = (visa.XMin + visa.XMax) / 2f, cy = (visa.YMin + visa.YMax) / 2f;
+        Assert.IsTrue(StampSpots.InArea(f, cx, cy));
+        Assert.IsFalse(StampSpots.InArea(f, cx, visa.YMin - 0.01f), "above the visa box");
+        FaceRect at = StampSpots.AtInArea(f, cx, cy, 2f);
+        Assert.AreEqual(cx, at.CentreX, Eps);
+        Assert.AreEqual(cy, at.CentreY, Eps);
+        FaceRect edge = StampSpots.AtInArea(f, visa.XMax - 0.001f, visa.YMax - 0.001f, 2f);
+        Assert.IsTrue(Inside(edge, visa), "kept whole in the visa box");
         var plain = new PlacedForm(1f, 1f, 1f, new FormItem[0], new FormSlot[0], new[] { 0f });
         Assert.AreEqual(1f - StampSpots.FallbackShare, StampSpots.Area(plain).XMin, Eps, "no stamp area: the bottom right");
+        Assert.IsFalse(StampSpots.InArea(plain, 0.9f, 0.9f), "a paper with no stamp area takes no stamp");
+        Assert.IsFalse(StampSpots.InArea(null, 0f, 0f));
+    }
+
+    [Test]
+    public void ThePassportsVisaBox_IsDrawnBolderThanAnyOtherStampArea()
+    {
+        PlacedForm f = FormLayout.Layout(Booklet(), BookletData(), M.aspect, M, new FakeMeasure());
+        FaceRect visa = Of(f, FormItemKind.StampArea).Single().Rect;
+        var palette = new FormPalette { Ink = new Rgba(0f, 0f, 0f), Rule = new Rgba(0.3f, 0.3f, 0.3f), BoxFill = new Rgba(1f, 1f, 1f), Band = new Rgba(0.9f, 0.9f, 0.9f),
+                                        StampDash = new Rgba(0.4f, 0.4f, 0.4f), Accent = new Rgba(0.2f, 0.2f, 0.5f) };
+        FormQuad dash = FormPaint.Quads(f, palette, M).First(q => q.Colour.Equals(palette.StampDash) && q.Rect.YMin == visa.YMin);
+        Assert.AreEqual(M.ruleWidth * f.Unit * FormPaint.VisaRules, dash.Rect.Height, 1e-3f);
     }
 
     // ---------------- The silhouettes and the emblems ----------------

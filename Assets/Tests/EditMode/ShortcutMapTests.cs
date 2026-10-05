@@ -173,6 +173,20 @@ public class ShortcutMapTests
         Assert.IsNull(Resolve(K(ShortcutKey.Tab), new ShortcutContext(frameOpen: true, appFocused: true, textFieldFocused: true)), "another field keeps Tab");
     }
 
+    /// <summary>A right-click backs out on the PC as everywhere (ControlRules), so the context menus open from the keyboard: Shift+F10 or the Menu key, never while a field types.</summary>
+    [Test]
+    public void ShiftF10OrTheMenuKey_OpenTheContextMenu()
+    {
+        foreach (ShortcutContext c in new[] { App, AppList, Icons, new ShortcutContext(frameOpen: true, desktopFocused: true) })
+        {
+            Assert.AreEqual(AppCommand.ContextMenu, Resolve(K(ShortcutKey.F10, shift: true), c));
+            Assert.AreEqual(AppCommand.ContextMenu, Resolve(K(ShortcutKey.Menu), c));
+        }
+        Assert.IsNull(Resolve(K(ShortcutKey.F10), App), "a plain F10 is nothing");
+        Assert.IsNull(Resolve(K(ShortcutKey.Menu), new ShortcutContext(frameOpen: true, appFocused: true, textFieldFocused: true)), "not while a field types");
+        Assert.IsNull(Resolve(K(ShortcutKey.Menu), new ShortcutContext(frameOpen: true, appFocused: true, menuOpen: true)), "one menu at a time");
+    }
+
     [Test]
     public void AMenuOpen_OnlyEscapePasses()
     {
@@ -270,7 +284,7 @@ public class ShortcutMapTests
     public void TheCardsTexts_AreTodaysUiStrings()
     {
         HashSet<string> keys = TodaysUiKeys();
-        foreach (ShortcutCardRow row in ShortcutMap.Card)
+        foreach (ShortcutCardRow row in ShortcutMap.Card.Concat(ControlRules.DeskCard))
             Assert.IsTrue(keys.Contains(row.TextKey), row.TextKey);
     }
 

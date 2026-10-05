@@ -12,7 +12,7 @@ using UnityEngine;
 public static partial class ContentLibraryValidator
 {
     /// <summary>
-    /// What the desk cannot show of this content: fewer paper spawn slots than
+    /// What the desk cannot show of this content: fewer counter spots than
     /// the most papers one traveller carries (MaxDocuments), a template whose
     /// form does not place each field once or does not fit the paper
     /// (FormFitProblems, redesign phase 4), and a traveller wheel that fits
@@ -28,9 +28,8 @@ public static partial class ContentLibraryValidator
         int maxPapers = library.DayPlans.Where(p => p != null)
                                .Select(p => MaxDocuments(p.PossibleBlueprints.Concat(p.ForcedBlueprints).Where(b => b != null), p))
                                .DefaultIfEmpty(0).Max();
-        int slots = desk.paperSpawnSlots != null ? desk.paperSpawnSlots.Length : 0;
-        if (slots < maxPapers)
-            problems.Add($"The desk has {slots} paper spawn slots but a traveller can carry {maxPapers} papers; add slots in Desk_Default.");
+        if (desk.counterSpots < maxPapers)
+            problems.Add($"The counter has {desk.counterSpots} spots but a traveller can carry {maxPapers} papers; raise counterSpots in Desk_Default.");
         if (desk.reactionSeconds < 0f || desk.reactionSeconds > 10f)
             problems.Add($"Desk_Default's reactionSeconds is {desk.reactionSeconds}; keep it within 0 (the traveller leaves at once) and 10.");
 

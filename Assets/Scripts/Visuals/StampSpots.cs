@@ -7,8 +7,9 @@ using System;
 /// into its largest stamp area (a passport's visa page, a form's footer box),
 /// in rows from its top left, each mark beside the last with a gap, so a second
 /// stamp never hides the first (the rows start over when the area is full); a
-/// mark pressed at a point is centred
-/// there and kept whole on the page. A form with no stamp area takes its marks
+/// mark pressed in the area (a passport's ENTRY VISA box, the only box a
+/// verdict stamp takes: InArea; Papers, Please's stamps, Saleh 2026-10-06) is
+/// centred there and kept whole in it (AtInArea). A form with no stamp area takes its marks
 /// at the page's bottom right. Pure, so it is tested headless; the desk paper
 /// prints the mark (DeskDocument.Stamp).
 /// </summary>
@@ -69,14 +70,27 @@ public static class StampSpots
         return FaceRect.FromTop(Math.Max(area.XMin, x), Math.Max(area.YMin, y), w, h);
     }
 
-    /// <summary>A mark of <paramref name="aspect"/> pressed at (<paramref name="x"/>, <paramref name="y"/>) in form space: centred there, moved just enough to lie whole on the page.</summary>
-    public static FaceRect At(PlacedForm form, float x, float y, float aspect)
+    /// <summary>True when (<paramref name="x"/>, <paramref name="y"/>) in form space lies in <paramref name="form"/>'s largest stamp area (a passport's ENTRY VISA box: Papers, Please's stamps press only there); false without a form or a stamp area.</summary>
+    public static bool InArea(PlacedForm form, float x, float y)
+    {
+        if (form == null)
+            return false;
+        bool any = false;
+        foreach (FormItem item in form.Items)
+            any |= item.Kind == FormItemKind.StampArea;
+        FaceRect area = Area(form);
+        return any && x >= area.XMin && x <= area.XMax && y >= area.YMin && y <= area.YMax;
+    }
+
+    /// <summary>A mark of <paramref name="aspect"/> pressed at (<paramref name="x"/>, <paramref name="y"/>) in form space inside the largest stamp area (the visa box the stamp landed on): centred there, moved just enough to lie whole in the area.</summary>
+    public static FaceRect AtInArea(PlacedForm form, float x, float y, float aspect)
     {
         if (form == null)
             return new FaceRect(0f, 0f, 0f, 0f);
-        (float w, float h) = MarkSize(form, new FaceRect(0f, 0f, form.Width, form.PageHeight), aspect);
-        float left = Math.Max(0f, Math.Min(form.Width - w, x - w / 2f));
-        float top = Math.Max(0f, Math.Min(form.PageHeight - h, y - h / 2f));
+        FaceRect area = Area(form);
+        (float w, float h) = MarkSize(form, area, aspect);
+        float left = Math.Max(area.XMin, Math.Min(area.XMax - w, x - w / 2f));
+        float top = Math.Max(area.YMin, Math.Min(area.YMax - h, y - h / 2f));
         return FaceRect.FromTop(left, top, w, h);
     }
 }

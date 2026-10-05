@@ -1277,9 +1277,9 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.escape
-    text: Close a menu, this card or the search drawer; clear the search; leave a
-      text field; let go of a held value; close the Menu or cancel a drag. With none
-      of those, leave the PC
+    text: 'Right-click or Esc: close a menu, this card or the search drawer; clear
+      the search; leave a text field; let go of a held value; close the Menu or cancel
+      a drag. With none of those, back to the desk'
     gloss: 0
     tier: 0
   - key: keys.help
@@ -1365,6 +1365,46 @@ MonoBehaviour:
   - key: keys.zoom
     text: 'Zoom the panes in, out, or back to Settings'' Text size (the Orders tree:
       in, out, or back to 100 %)'
+    gloss: 0
+    tier: 0
+  - key: keys.contextMenu
+    text: The context menu of the focused row or the selected icon (copy, pin, pick,
+      open, arrange)
+    gloss: 0
+    tier: 0
+  - key: keys.section.desk
+    text: At the desk
+    gloss: 0
+    tier: 0
+  - key: keys.section.pc
+    text: On the PC
+    gloss: 0
+    tier: 0
+  - key: keys.desk.drag
+    text: 'Move a document: on the counter it is small, on the desk full size; the
+      stamped passport dropped on the counter hands the papers back'
+    gloss: 0
+    tier: 0
+  - key: keys.desk.inspect
+    text: 'Inspect mode (the red button): click two things to compare them'
+    gloss: 0
+    tier: 0
+  - key: keys.desk.stamps
+    text: 'The stamp bar (the grey tab on the right): a stamp stamps the ENTRY VISA
+      box under it'
+    gloss: 0
+    tier: 0
+  - key: keys.desk.pc
+    text: To the PC and back (the grey tab on the left)
+    gloss: 0
+    tier: 0
+  - key: keys.desk.back
+    text: 'Back out: a drag, the wheel, the PC, a held value, inspect mode, the stamp
+      bar, the city, the reading view'
+    gloss: 0
+    tier: 0
+  - key: keys.desk.city
+    text: Look at the city, and back
     gloss: 0
     tier: 0
   - key: app.copyRow
@@ -2191,7 +2231,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: desk.scanHint
-    text: Click a paper to read it; drag it onto the scanner to open it on the PC.
+    text: Drag a paper onto the scanner to open it on the PC.
     gloss: 0
     tier: 0
   - key: desk.wheelHint
@@ -2207,7 +2247,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: deskView.backHint
-    text: Esc / right-click
+    text: Right-click / Esc
     gloss: 0
     tier: 0
   - key: stamp.label.approved
@@ -2218,36 +2258,52 @@ MonoBehaviour:
     text: DENIED
     gloss: 0
     tier: 0
-  - key: stamp.label.ink
-    text: INK
-    gloss: 0
-    tier: 0
-  - key: stamp.handBack.approved
-    text: 'Hand the papers back: APPROVED'
-    gloss: 0
-    tier: 0
-  - key: stamp.handBack.denied
-    text: 'Hand the papers back: DENIED'
-    gloss: 0
-    tier: 0
-  - key: stamp.hint.pick
-    text: Pick up the APPROVED or the DENIED stamp.
-    gloss: 0
-    tier: 0
-  - key: stamp.hint.ink
-    text: Press the stamp on the ink pad.
-    gloss: 0
-    tier: 0
-  - key: stamp.hint.press
-    text: Stamp the passport.
-    gloss: 0
-    tier: 0
-  - key: stamp.hint.dry
-    text: 'No ink: press the stamp on the ink pad first.'
-    gloss: 0
-    tier: 0
   - key: stamp.hint.handBack
-    text: Slide the stamped passport onto HAND BACK, by the traveller.
+    text: Drag the stamped passport onto the COUNTER to hand it back.
+    gloss: 0
+    tier: 0
+  - key: stamp.hint.place
+    text: Put the passport's ENTRY VISA box under a stamp, then click the stamp.
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.notPassport
+    text: Only the passport takes a verdict stamp.
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.outsideVisa
+    text: Only the passport's ENTRY VISA box takes the stamp.
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.already
+    text: This passport already carries a verdict.
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.nothing
+    text: 'Nothing under the stamp: put the passport''s ENTRY VISA box under it.'
+    gloss: 0
+    tier: 0
+  - key: desk.counter
+    text: COUNTER
+    gloss: 0
+    tier: 0
+  - key: controls.pcTab
+    text: 'PC
+
+      {0}'
+    gloss: 0
+    tier: 0
+  - key: controls.deskTab
+    text: 'DESK
+
+      {0}'
+    gloss: 0
+    tier: 0
+  - key: controls.stampsTab
+    text: STAMPS
+    gloss: 0
+    tier: 0
+  - key: controls.inspectHint
+    text: 'INSPECT: click two things to compare. Right-click or Esc to leave.'
     gloss: 0
     tier: 0
   - key: stamp.zone.handBack
@@ -2284,6 +2340,18 @@ MonoBehaviour:
     tier: 0
   - key: desk.rulebook.paperNotCarried
     text: '{0}: not carried.'
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.papersNone
+    text: Every paper is handed over.
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabRules
+    text: RULES
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabPapers
+    text: PAPERS
     gloss: 0
     tier: 0
   - key: tooltip.credits

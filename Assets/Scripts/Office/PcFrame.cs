@@ -11,10 +11,7 @@ using UnityEngine;
 /// camera (DrawAfter, set by the office binder at load), whatever depth the
 /// art gave its camera: a base camera drawn before the office's is covered
 /// by the office's clear (the anime hall's camera draws at depth 100, the
-/// room's at -1). OfficeViewController opens and closes it. Papers
-/// held in the hand sit right of it while it is open (piece 10), their rows
-/// clickable through a second hole in its click-outside catcher (the examine
-/// hole, sized by PaperExaminer).
+/// room's at -1). OfficeViewController opens and closes it.
 /// </summary>
 public sealed class PcFrame : MonoBehaviour
 {
@@ -27,43 +24,11 @@ public sealed class PcFrame : MonoBehaviour
     /// <summary>The camera that draws the desktop's layer into the glass (enabled only while open).</summary>
     [SerializeField] private Camera frameCamera;
 
-    /// <summary>The examine hole (piece 10; optional): a rect with no graphic on the overlay canvas, pivot at its bottom left, that a second RectHoleRaycastFilter on the exit catcher leaves open, so held papers beside the frame take clicks.</summary>
-    [SerializeField] private RectTransform examineHole;
-
     /// <summary>The glass's corners in screen pixels (reused; an overlay canvas's world space is the screen).</summary>
     private readonly Vector3[] _corners = new Vector3[4];
 
     /// <summary>True while the frame is open.</summary>
     public bool IsOpen => root != null && root.activeSelf;
-
-    /// <summary>The frame's (the bezel's) right edge on the screen, in pixels (0 without a glass).</summary>
-    public float RightEdgePixels
-    {
-        get
-        {
-            RectTransform bezel = glass != null ? glass.parent as RectTransform : null;
-            if (bezel == null)
-                return 0f;
-            bezel.GetWorldCorners(_corners);
-            return _corners[2].x;
-        }
-    }
-
-    /// <summary>
-    /// Opens the examine hole over a screen rectangle (pixels; the overlay
-    /// canvas's world space is the screen); an empty rectangle closes it.
-    /// </summary>
-    public void SetExamineHole(float xMin, float yMin, float xMax, float yMax)
-    {
-        if (examineHole == null)
-            return;
-
-        float scale = examineHole.lossyScale.x > 0f ? examineHole.lossyScale.x : 1f;
-        bool open = xMax > xMin && yMax > yMin;
-        examineHole.pivot = Vector2.zero;
-        examineHole.position = open ? new Vector3(xMin, yMin, 0f) : new Vector3(-100000f, -100000f, 0f);
-        examineHole.sizeDelta = open ? new Vector2((xMax - xMin) / scale, (yMax - yMin) / scale) : Vector2.zero;
-    }
 
     /// <summary>The frame starts closed.</summary>
     private void Awake() => SetOpen(false);

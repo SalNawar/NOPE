@@ -13,9 +13,9 @@ using UnityEngine.SceneManagement;
 /// then moves the layer's click boxes onto the art's props and fits them to
 /// their renderers (the art objects get no components of ours), hands the
 /// props' renderers to their outlines and reactions, puts the desktop's clone
-/// on the PC's glass, sizes the desk, its catcher and the scanner, hands the
-/// paper examiner the camera, poses the desk view from the art's Cinemachine
-/// camera and the mat, stands the traveller,
+/// on the PC's glass, sizes the desk, the mat and the scanner, poses the desk
+/// view from the art's Cinemachine camera and the mat, lays the counter and
+/// the rulebook, hands the stamp bar the camera, stands the traveller,
 /// binds the readouts to the art's texts (or shows the fallback HUD), has the
 /// AVAILABLE sign's caption follow the desk's availability (AvailableSignLink), points
 /// the anime hall's presentation at the shift clock (AnimeHallShiftLink) and
@@ -64,9 +64,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The overlay callouts (the speech bubble, the tooltip), placed through the office camera.</summary>
     [SerializeField] private OverlayCallout[] callouts;
 
-    /// <summary>Poses the papers held in the hand in front of the office camera (piece 10; optional).</summary>
-    [SerializeField] private PaperExaminer examiner;
-
     /// <summary>The city view (the desk-first redesign, item 6; optional): posed from the art's Cinemachine camera, turned left.</summary>
     [SerializeField] private CityView cityView;
 
@@ -76,8 +73,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The rulebook on the desk (optional): laid beside the mat in the office view's frame (DeskConfigSO.rulebookAt).</summary>
     [SerializeField] private DeskRulebook rulebook;
 
-    /// <summary>The physical stamps (the desk-first redesign, item 12; optional): the tray placed on the desk in the office view's frame, the pointer projected through the office camera.</summary>
+    /// <summary>The stamp bar (Papers, Please's, Saleh 2026-10-06; optional): a stamp's ray is cast through the office camera.</summary>
     [SerializeField] private DeskStampTray stampTray;
+
+    /// <summary>The counter (optional): laid along the desk's far edge in the office view's frame, once the desk view is posed.</summary>
+    [SerializeField] private DeskCounter counter;
 
     [Header("PC")]
     /// <summary>The desktop's clone on the PC's glass.</summary>
@@ -108,10 +108,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>Where papers slide in from and back to.</summary>
     [SerializeField] private Transform handOver;
 
-    /// <summary>The desk catcher's box (piece 10; optional): sized over the desk's clamp area, just under its plane, so papers and props above it win the raycast.</summary>
-    [SerializeField] private BoxCollider deskCatcher;
-
-    /// <summary>The mat's click box (the desk view's toggle; piece 10; optional): laid exactly like the desk catcher's.</summary>
+    /// <summary>The mat's click box (the desk view's toggle; piece 10; optional): sized over the desk's clamp area, just under its plane, so papers and props above it win the raycast.</summary>
     [SerializeField] private BoxCollider matCatcher;
 
     /// <summary>The desk view (piece 10; optional): posed from the art's Cinemachine camera and the mat.</summary>
@@ -194,9 +191,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>How far above the desk a hint floats (metres).</summary>
     private const float HintHeight = 0.28f;
 
-    /// <summary>The desk catcher's thickness and its top's depth under the desk plane (metres): papers and props above it win the raycast.</summary>
-    private const float DeskCatcherThickness = 0.001f;
-    private const float DeskCatcherDepth = 0.001f;
+    /// <summary>The mat's thickness and its top's depth under the desk plane (metres): papers and props above it win the raycast.</summary>
+    private const float MatThickness = 0.001f;
+    private const float MatDepth = 0.001f;
 
     /// <summary>The raycaster's hit buffer: a point can cross every stacked paper, the scanner, a prop and the traveller.</summary>
     private const int RaycastHits = 16;
@@ -251,8 +248,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         foreach (OverlayCallout callout in callouts ?? Array.Empty<OverlayCallout>())
             if (callout != null)
                 callout.SetCamera(office);
-        if (examiner != null)
-            examiner.SetCamera(office);
+        if (stampTray != null)
+            stampTray.Bind(office);
         if (frame != null)
             frame.DrawAfter(office);
 
@@ -429,12 +426,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                               new Vector2(deskRect.Width, deskRect.Height));
         }
 
-        var catcherCentre = new Vector3(area.CentreX, top - DeskCatcherDepth - DeskCatcherThickness / 2f, area.CentreY);
-        var catcherSize = new Vector3(area.Width, DeskCatcherThickness, area.Height);
-        if (deskCatcher != null)
-            PlaceBox(deskCatcher.transform, catcherCentre, catcherSize);
         if (matCatcher != null)
-            PlaceBox(matCatcher.transform, catcherCentre, catcherSize);
+            PlaceBox(matCatcher.transform, new Vector3(area.CentreX, top - MatDepth - MatThickness / 2f, area.CentreY), new Vector3(area.Width, MatThickness, area.Height));
 
         if (deskView != null)
         {
@@ -448,14 +441,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 Debug.LogWarning("[OfficeSceneBinder] The art office has no Cinemachine camera with a brain on the office camera (Anchor_OfficeVCam): the desk view stays off. See docs/SCENE_CONTRACT_GAMEPLAY.md.", this);
         }
 
-        // The stamp tray lies out right of and nearer than the mat's centre in the office view's frame (the desk-first redesign, item 12).
-        if (stampTray != null && config != null && _office != null)
-        {
-            Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
-            Vector3 right = Vector3.Cross(Vector3.up, level);
-            Vector3 outPoint = new Vector3(deskCentre.x, top, deskCentre.z) + right * config.stampTrayOut.x + level * config.stampTrayOut.y;
-            stampTray.Bind(_office, outPoint, level);
-        }
+        // The counter lies along the desk's far edge in the office view's frame, ending where the desk view shows the desk (Papers, Please's zones).
+        if (counter != null && _office != null)
+            counter.Bind(_office.transform.forward);
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;

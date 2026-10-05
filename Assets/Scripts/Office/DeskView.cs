@@ -7,17 +7,19 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 /// <summary>
-/// The desk view (piece 10 section 11, T1-T4): a click on the mat tilts the
-/// camera forward over the desk, and the same click tilts it back; Escape and
-/// a right-click on empty space (nothing under the pointer takes clicks, or the
-/// mat does) also return; so do the "▲ Back" control at the top of the office
-/// overlay (shown while tilted) and the mouse wheel rolled up, and the wheel
-/// rolled down over the empty mat tilts in (the readability fix: a visible way
-/// out). BoothCoordinator returns it when the next traveller is called, a
+/// The desk view, the reading view (piece 10 section 11, T1-T4; Papers,
+/// Please's desk, Saleh 2026-10-06: "the desk zone is the tilted reading view
+/// entered automatically when a paper is dragged onto it"): a document
+/// dropped on the desk tilts the camera forward over it (TiltIn: DeskController),
+/// as does the stamp bar slid out; a click on the mat tilts it in and back;
+/// the "▲ Back" control at the top of the office overlay (shown while tilted)
+/// and the mouse wheel rolled up return, and the wheel rolled down over the
+/// empty mat tilts in; a right-click and Esc return as the last thing they
+/// back out of (ControlRules.BackOut, OfficeControls). BoothCoordinator returns it when the next traveller is called, a
 /// newsletter shows, or the wheel or the PC frame opens (a click on the
 /// intercom, the traveller or the PC from the tilted view blends straight up
-/// there; Saleh 2026-09-30), and says when the mat, the returns, the Back
-/// control and the wheel are live (BoothRules). The view is a gameplay-owned Cinemachine
+/// there; Saleh 2026-09-30), and says when the mat, the Back control and the
+/// wheel are live (BoothRules). The view is a gameplay-owned Cinemachine
 /// camera, posed at bind (OfficeSceneBinder) from the art office's camera and
 /// the mat's centre (DeskViewPose, DeskConfigSO.deskView), and raised above the
 /// art camera's priority while on, so the art camera's brain blends. The
@@ -49,8 +51,6 @@ public sealed class DeskView : MonoBehaviour
 
     private int _onPriority;
     private bool _toggleLive;
-    private bool _returnLive;
-    private int _returnLiveSince;
     private bool _backLive;
     private int _backLiveSince;
     private bool _scrollInLive;
@@ -67,9 +67,6 @@ public sealed class DeskView : MonoBehaviour
 
     /// <summary>Raised after the view turns on or off.</summary>
     public event Action Changed;
-
-    /// <summary>Raised after the player tilts the view in to read (the mat, the mouse wheel, the PC's "&lt; Desk"; not a stamp picked up): the desk brings the paper being read up to reading size (the desk-first polish, 2026-10-05).</summary>
-    public event Action ReadingTilt;
 
     private void Awake()
     {
@@ -149,41 +146,26 @@ public sealed class DeskView : MonoBehaviour
     /// <summary>The mat's click: tilts into the desk view, or back (only while the toggle is live).</summary>
     public void Toggle()
     {
-        if (!_toggleLive)
-            return;
-        if (IsOn)
-            Set(false);
-        else
-            TiltToRead();
+        if (_toggleLive)
+            Set(!IsOn);
     }
 
-    /// <summary>Tilts into the desk view (no-op if it is on, or while the mat's toggle is not live): the PC's "&lt; Desk" button, once its frame has closed.</summary>
+    /// <summary>Tilts into the desk view (no-op if it is on, or while the desk takes no input): a document dropped on the desk, the stamp bar slid out, the PC's "&lt; Desk" button once its frame has closed.</summary>
     public void TiltIn()
     {
         if (_toggleLive)
-            TiltToRead();
+            Set(true);
     }
 
-    /// <summary>Tilts into the desk view whatever the mat's toggle says (no-op if it is on or unbound): a stamp picked up from the tray, to be pressed on the papers lying on the desk (the desk-first redesign, item 12).</summary>
-    public void TiltInNow() => Set(true);
-
-    /// <summary>Returns to the normal view (no-op if it is on): Escape, the right-click, the next traveller, a newsletter.</summary>
+    /// <summary>Returns to the normal view (no-op if it is off): a right-click or Esc with nothing else to back out of, the next traveller, a newsletter.</summary>
     public void Return() => Set(false);
 
-    /// <summary>Shows the mat's click box (a click toggles) or hides it (BoothCoordinator: BoothRules.DeskViewToggleLive); never while unbound.</summary>
+    /// <summary>Shows the mat's click box (a click toggles) and lets the view tilt in, or not (BoothCoordinator: BoothRules.DeskViewAllowed); never while unbound.</summary>
     public void SetToggleLive(bool live)
     {
         _toggleLive = live && _office != null;
         if (mat != null && mat.gameObject.activeSelf != _toggleLive)
             mat.gameObject.SetActive(_toggleLive);
-    }
-
-    /// <summary>Lets Escape and a right-click on empty space return, from the next frame on (BoothCoordinator: BoothRules.DeskViewReturnLive; X8's one press, one thing).</summary>
-    public void SetReturnLive(bool live)
-    {
-        if (live && !_returnLive)
-            _returnLiveSince = Time.frameCount;
-        _returnLive = live;
     }
 
     /// <summary>Shows the "▲ Back" control and lets the wheel rolled up return, from the next frame on, or hides it (BoothCoordinator: BoothRules.DeskViewBackLive).</summary>
@@ -196,7 +178,7 @@ public sealed class DeskView : MonoBehaviour
             backButton.gameObject.SetActive(live);
     }
 
-    /// <summary>Lets the wheel rolled down over the empty mat tilt in, from the next frame on (BoothCoordinator: BoothRules.DeskViewScrollInLive); never while unbound.</summary>
+    /// <summary>Lets the wheel rolled down over the empty mat tilt in, from the next frame on (BoothCoordinator: BoothRules.NormalViewLive); never while unbound.</summary>
     public void SetScrollInLive(bool live)
     {
         live &= _office != null;
@@ -206,38 +188,24 @@ public sealed class DeskView : MonoBehaviour
     }
 
     /// <summary>
-    /// While on: Escape, or a right-click on empty space, returns while the
-    /// return is live, and the wheel rolled up while the Back control is live.
+    /// While on: the wheel rolled up returns while the Back control is live.
     /// While off: the wheel rolled down with the pointer on the empty mat
-    /// (nothing above it takes the pointer, no UI) tilts in.
+    /// (nothing above it takes the pointer, no UI) tilts in. (A right-click and
+    /// Esc are the one input model's: OfficeControls.)
     /// </summary>
     private void Update()
     {
-        Keyboard keyboard = Keyboard.current;
         Mouse mouse = Mouse.current;
         float scroll = mouse != null ? mouse.scroll.ReadValue().y : 0f;
         if (IsOn)
         {
-            if (_returnLive && _returnLiveSince < Time.frameCount &&
-                ((keyboard != null && keyboard.escapeKey.wasPressedThisFrame) ||
-                 (mouse != null && mouse.rightButton.wasPressedThisFrame && OnEmptySpace(mouse.position.ReadValue()))))
-                Return();
-            else if (_backLive && _backLiveSince < Time.frameCount && scroll > 0f)
+            if (_backLive && _backLiveSince < Time.frameCount && scroll > 0f)
                 Return();
         }
         else if (_scrollInLive && _scrollInLiveSince < Time.frameCount && scroll < 0f && mouse != null && OnMat(mouse.position.ReadValue()))
         {
-            TiltToRead();
+            Set(true);
         }
-    }
-
-    /// <summary>The player's tilt in (not a stamp's): the view turns on, then ReadingTilt.</summary>
-    private void TiltToRead()
-    {
-        if (IsOn || _office == null)
-            return;
-        Set(true);
-        ReadingTilt?.Invoke();
     }
 
     /// <summary>The Back control's click (only while it is live).</summary>
@@ -245,13 +213,6 @@ public sealed class DeskView : MonoBehaviour
     {
         if (_backLive)
             Return();
-    }
-
-    /// <summary>True when nothing under the screen point takes clicks, or the mat does.</summary>
-    private bool OnEmptySpace(Vector2 screen)
-    {
-        GameObject handler = TopHandler(screen, out bool any);
-        return !any || handler == null || (mat != null && handler == mat.gameObject);
     }
 
     /// <summary>True when the mat is the first thing under the screen point (so no UI and no paper or prop covers it there).</summary>

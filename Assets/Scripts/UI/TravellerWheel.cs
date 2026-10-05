@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 /// <summary>
@@ -24,8 +23,9 @@ using UnityEngine.UI;
 /// hovering the bubble holds its line (SpeechQueue.Hold). This host
 /// is always active (so it wakes at load and paces the bubble while the ring is
 /// closed); its Catcher child, a full-screen click-to-close area holding the
-/// ring, is shown only while the wheel is open. Escape (not the one that opened
-/// it in the same frame) or a click outside the ring closes it.
+/// ring, is shown only while the wheel is open. A left-click outside the ring
+/// closes it, and so do a right-click and Esc (the one input model's back-out,
+/// ControlRules: OfficeControls closes it).
 /// </summary>
 public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
 {
@@ -87,9 +87,6 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     /// <summary>The picked line's tag (-1: none) and its highlight colour.</summary>
     private int _pickedTag = -1;
     private Color _pickColour;
-
-    /// <summary>The frame the wheel opened (the Escape of that frame does not close it).</summary>
-    private int _openedFrame;
 
     private bool _canOpen;
     private Camera _camera;
@@ -175,7 +172,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         _icons.Clear();
     }
 
-    /// <summary>Paces the speech bubble; only while open, follows the traveller, and Escape closes.</summary>
+    /// <summary>Paces the speech bubble; only while open, follows the traveller.</summary>
     private void LateUpdate()
     {
         if (_speech != null)
@@ -188,9 +185,6 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
             return;
 
         Place();
-        Keyboard kb = Keyboard.current;
-        if (kb != null && kb.escapeKey.wasPressedThisFrame && _openedFrame < Time.frameCount)
-            Close();
     }
 
     /// <summary>The office camera the ring and the bubble are placed through (the office binder's, from the art office).</summary>
@@ -208,7 +202,6 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         _flip.Complete();
         if (_speech != null)
             _speech.EndReveal();
-        _openedFrame = Time.frameCount;
         catcher.SetActive(true);
         Place();
         OpenChanged?.Invoke();
@@ -397,8 +390,12 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         return sprite;
     }
 
-    /// <summary>A click on the catcher (outside the ring's buttons) closes the wheel.</summary>
-    public void OnPointerClick(PointerEventData eventData) => Close();
+    /// <summary>A left-click on the catcher (outside the ring's buttons) closes the wheel (a right-click backs out through OfficeControls, once).</summary>
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+            Close();
+    }
 
     /// <summary>
     /// Draws the speech queue: when a line has started since the last draw, a

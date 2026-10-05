@@ -58,6 +58,9 @@ public static class FormPaint
     /// <summary>A dash's length, in rule widths.</summary>
     public const float DashRules = 4f;
 
+    /// <summary>How many rule widths a passport's visa box is drawn in (FormLayout.VisaBox: the one box a verdict stamp takes, clearly drawn; Saleh 2026-10-06).</summary>
+    public const float VisaRules = 2.5f;
+
     /// <summary>How far a tick sits inside its checkbox, as a share of the box's width.</summary>
     public const float TickInset = 0.22f;
 
@@ -111,7 +114,7 @@ public static class FormPaint
                         Add(quads, Inset(item.Rect, item.Rect.Width * TickInset), palette.Ink, FormPaintLayer.Line);
                     break;
                 case FormItemKind.StampArea:
-                    Dashed(quads, item.Rect, rule, rule * DashRules, palette.StampDash);
+                    Dashed(quads, item.Rect, item.Text == FormLayout.VisaBox ? rule * VisaRules : rule, rule * DashRules, palette.StampDash);
                     break;
                 case FormItemKind.Stripe:
                     Add(quads, item.Rect, palette.Accent, FormPaintLayer.Fill);

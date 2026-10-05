@@ -485,6 +485,9 @@ public static class FormLayout
     /// <summary>What a ticked checkbox holds.</summary>
     public const string Tick = "X";
 
+    /// <summary>What a passport's visa box carries as its stamp area's text (FormPaint draws it bolder: the one box a verdict stamp takes, Papers, Please's ENTRY VISA box).</summary>
+    public const string VisaBox = "visa";
+
     /// <summary>What an empty signature line prints (a real fault on a waiver, traveller-types F3).</summary>
     public const string Unsigned = "UNSIGNED";
 
@@ -1551,7 +1554,7 @@ public static class FormLayout
             float top = _y, pad = G(_m.boxPadding);
             float bottom = _spec.fixedPage ? PageTop + _h - G(_m.marginBottom) : top;
             var rect = FaceRect.FromTop(_left, top, _content, Math.Max(VisaLeast * G(_m.stampHeight), bottom - top));
-            Add(FormItemKind.StampArea, rect);
+            Add(FormItemKind.StampArea, rect, -1, VisaBox);
             Text(FormTextRole.Caption, b.text, _left + pad, top + pad, _content - 2f * pad, G(_m.captionSize), -1, FormTextAlign.Centre);
             _lastRowBottom = rect.YMax;
             _y = rect.YMax + G(_m.blockGap);

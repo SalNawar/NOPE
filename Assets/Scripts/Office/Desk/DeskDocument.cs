@@ -32,13 +32,17 @@ using UnityEngine.EventSystems;
 /// area, a passport's visa page, or a pressed point; TD4), the verdict's
 /// (ShowVerdict) in its stamp area: the mark's art, else a code-drawn stamp
 /// (a framed APPROVED or DENIED in green or red ink). Always
-/// English: a paper never flips. A click raises Clicked with the button and
-/// the slot under the pointer (FormLayout.SlotAt; DeskController routes it
-/// through PaperClicks). While examined (held in the hand; PaperExaminer owns
-/// the sheet's pose) the paper is evenly lit (its unlit examine material, the
-/// photo in the examine tint) and the box under the pointer tints; a picked
-/// box lights up (SlotHighlight). Slides are linear moves in Update, only
-/// while one runs.
+/// English: a paper never flips. Papers, Please's controls (Saleh
+/// 2026-10-06): a left-click raises Clicked with the box under the pointer in
+/// inspect mode (FormLayout.SlotAt; DeskController routes it through
+/// PaperClicks); a right-click is no click (it backs out, ControlRules). The
+/// paper's zone sizes it (SetZone: small on the counter, full size and evenly
+/// lit on the desk, its unlit reading material and the photo in the reading
+/// tint; DeskZones), easing between the two; in inspect mode every box is
+/// tinted as comparable and the one under the pointer stronger; a picked
+/// box lights up (SlotHighlight). Only the passport's ENTRY VISA box takes a
+/// stamp (InVisaBox; DeskStampTray presses). Slides and resizes are moves
+/// in Update, only while one runs.
 /// </summary>
 public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointerMoveHandler, IPointerExitHandler
 {
@@ -47,9 +51,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
     /// <summary>A code-drawn stamp's width over its height, its frame texture's size in pixels, its word's size as a share of its height, its ink's alpha, and its tilt in degrees (alternating with each mark).</summary>
     private const float StampAspect = 2.8f, StampWordShare = 0.5f, StampAlpha = 0.88f, StampTilt = 6f;
-
-    /// <summary>A dry stamp's mark: its ink's alpha (the desk-first redesign, item 12: an un-inked stamp leaves a faint mark and counts for nothing).</summary>
-    private const float FaintStampAlpha = 0.16f;
 
     /// <summary>The code-drawn stamp frame's texture size in pixels (width, height).</summary>
     private const int StampPixelsWide = 224, StampPixelsHigh = 80;
@@ -93,11 +94,17 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>The forms' sizes and colours.</summary>
     [SerializeField] private FormStyleSO style;
 
-    /// <summary>The paper quad (its material swaps to the examine material while held).</summary>
+    /// <summary>The paper quad (its material swaps to the reading material while on the desk).</summary>
     [SerializeField] private Renderer paperQuad;
 
-    /// <summary>The paper's unlit material while held in the hand (the paper's texture, evenly lit); optional.</summary>
+    /// <summary>The paper's unlit material while it lies on the desk, full size (the paper's texture, evenly lit); optional.</summary>
     [SerializeField] private Material examineMaterial;
+
+    /// <summary>Every box's tint in inspect mode (Papers, Please: every comparable thing highlights); the box under the pointer takes the style's hover tint over it.</summary>
+    [SerializeField] private Color inspectTint = new Color(1f, 0.78f, 0.1f, 0.34f);
+
+    /// <summary>How long a change of size between the counter and the desk takes (seconds; a cut under Reduced Motion).</summary>
+    [SerializeField, Min(0f)] private float resizeSeconds = 0.15f;
 
     /// <summary>The paper's click (hover outline, hand cursor and whether it takes input).</summary>
     [SerializeField] private Clickable click;
@@ -158,6 +165,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     private MaterialPropertyBlock _block;
     private int _hoveredSlot = -1;
 
+    /// <summary>The sheet's scale now, the scale it eases toward (the zone's) and where the ease started.</summary>
+    private float _sizeNow = 1f, _sizeTarget = 1f, _sizeFrom = 1f, _sizeElapsed;
+
     private Vector3 _slideFrom;
     private Vector3 _slideTo;
     private float _slideSeconds;
@@ -176,21 +186,33 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>True while the paper slides (it takes no input then).</summary>
     public bool IsSliding { get; private set; }
 
-    /// <summary>True while the paper is held in the hand (PaperExaminer owns the sheet's pose).</summary>
-    public bool IsExamined { get; private set; }
+    /// <summary>The zone the paper is shown for (DeskController sets it as it lies and while it is dragged).</summary>
+    public DeskZone Zone { get; private set; }
 
-    /// <summary>The lying sheet (PaperExaminer poses it while the paper is held).</summary>
+    /// <summary>True in inspect mode: every box is tinted and a click picks the box under the pointer.</summary>
+    public bool Inspecting { get; private set; }
+
+    /// <summary>The lying sheet (its scale is the zone's size).</summary>
     public Transform Sheet => sheet;
 
     /// <summary>How many pickable boxes the paper prints.</summary>
     public int SlotCount => _slots.Count;
 
-    /// <summary>Raised on a click while the paper takes input: the paper, true for a right click, and the box under the pointer while held (-1: none, or not held).</summary>
-    public event Action<DeskDocument, bool, int> Clicked;
+    /// <summary>Raised on a left-click while the paper takes input: the paper and, in inspect mode, the box under the pointer (-1: none, or not inspecting).</summary>
+    public event Action<DeskDocument, int> Clicked;
 
-    /// <summary>Only while sliding: moves along the slide (its done callback on landing).</summary>
+    /// <summary>Only while one runs: eases the sheet toward its zone's size, and moves along the slide (its done callback on landing).</summary>
     private void Update()
     {
+        if (!Mathf.Approximately(_sizeNow, _sizeTarget))
+        {
+            _sizeElapsed += Time.deltaTime;
+            float seconds = MotionPreference.Reduced ? 0f : resizeSeconds;
+            float eased = seconds > 0f ? Mathf.Clamp01(_sizeElapsed / seconds) : 1f;
+            _sizeNow = eased >= 1f ? _sizeTarget : Mathf.Lerp(_sizeFrom, _sizeTarget, DeskZones.Ease(eased));
+            if (sheet != null)
+                sheet.localScale = Vector3.one * _sizeNow;
+        }
         if (!IsSliding)
             return;
 
@@ -307,56 +329,64 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     public ICompareHighlight SlotHighlight(int slot) => new PaperSlotHighlight(this, slot);
 
     /// <summary>
-    /// Takes the paper into the hand or puts it back: while held it is evenly
-    /// lit (the examine material; the photo in the examine tint instead of the
-    /// room's tint), its sheet is the examiner's (SetLift waits), and the box
-    /// under the pointer tints.
+    /// Shows the paper for <paramref name="zone"/> (Papers, Please's counter and
+    /// desk): on the counter small (DeskConfigSO.counterScale of its size), lit
+    /// by the room; on the desk full size (DeskZones.ReadingScale to
+    /// DeskConfigSO.readingHeight) and evenly lit (the reading material; the
+    /// photo in the reading tint instead of the room's). The size eases there,
+    /// or is set at once (<paramref name="instant"/>).
     /// </summary>
-    public void SetExamined(bool examined)
+    public void SetZone(DeskZone zone, bool instant)
     {
-        if (IsExamined == examined)
-            return;
+        Zone = zone;
+        float target = _config == null ? 1f
+            : zone == DeskZone.Desk ? DeskZones.ReadingScale(Size.x, Size.y, _config.readingHeight, _config.paperSize.x / _config.paperSize.y)
+            : _config.counterScale;
+        _sizeFrom = _sizeNow;
+        _sizeTarget = target;
+        _sizeElapsed = 0f;
+        if (instant)
+        {
+            _sizeNow = target;
+            if (sheet != null)
+                sheet.localScale = Vector3.one * target;
+        }
 
-        IsExamined = examined;
+        bool reading = zone == DeskZone.Desk;
         if (paperQuad != null && examineMaterial != null)
         {
-            if (examined)
+            if (reading && paperQuad.sharedMaterial != examineMaterial)
                 _ownPaperMaterial = paperQuad.sharedMaterial;
-            paperQuad.sharedMaterial = examined ? examineMaterial : _ownPaperMaterial;
+            if (reading || _ownPaperMaterial != null)
+                paperQuad.sharedMaterial = reading ? examineMaterial : _ownPaperMaterial;
         }
         if (photo != null && _config != null)
-            photo.SetTint(examined ? _config.examineTint : _config.travellerTint);
-        if (!examined)
-            SetHovered(-1);
+            photo.SetTint(reading ? _config.readingTint : _config.travellerTint);
     }
 
-    /// <summary>True while the boxes of the paper lying on the desk are pickable where it lies (the desk view; the desk-first redesign, item 11: matching at the desk after the 80 degree tilt).</summary>
-    public bool RowsOnDesk { get; private set; }
-
-    /// <summary>Where the last click on the paper hit it, in world space (a stamp is pressed there).</summary>
-    public Vector3 LastPressPoint { get; private set; }
-
-    /// <summary>Lets the boxes of the paper lying on the desk be hovered and picked where it lies, or not (DeskController: in the desk view).</summary>
-    public void SetRowsOnDesk(bool live)
+    /// <summary>Inspect mode on or off (DeskController): every box tints as comparable and the box under the pointer stronger; off, no box tints but the picks and the marks.</summary>
+    public void SetInspecting(bool inspecting)
     {
-        RowsOnDesk = live;
-        if (!live && !IsExamined)
+        if (Inspecting == inspecting)
+            return;
+        Inspecting = inspecting;
+        if (!inspecting)
             SetHovered(-1);
+        for (int i = 0; i < _slots.Count; i++)
+            ApplySlotTint(i);
     }
 
-    /// <summary>A click while the paper takes input: Clicked with the button and, while held or while its rows are live on the desk, the box under the pointer; the hit is kept (LastPressPoint).</summary>
+    /// <summary>A left-click while the paper takes input: Clicked with, in inspect mode, the box under the pointer. Any other button is no click (a right-click backs out).</summary>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (click == null || !click.Interactable || eventData.button == PointerEventData.InputButton.Middle)
+        if (click == null || !click.Interactable || eventData.button != PointerEventData.InputButton.Left)
             return;
 
-        LastPressPoint = eventData.pointerPressRaycast.worldPosition;
-        int slot = IsExamined || RowsOnDesk ? SlotUnder(eventData) : -1;
-        Clicked?.Invoke(this, eventData.button == PointerEventData.InputButton.Right, slot);
+        Clicked?.Invoke(this, Inspecting ? SlotUnder(eventData) : -1);
     }
 
-    /// <summary>While held, or lying with its rows live, the box under the pointer tints.</summary>
-    public void OnPointerMove(PointerEventData eventData) => SetHovered((IsExamined || RowsOnDesk) && click != null && click.Interactable ? SlotUnder(eventData) : -1);
+    /// <summary>In inspect mode, the box under the pointer tints.</summary>
+    public void OnPointerMove(PointerEventData eventData) => SetHovered(Inspecting && click != null && click.Interactable ? SlotUnder(eventData) : -1);
 
     /// <summary>The box showing the document's row <paramref name="rowIndex"/> (DocumentRow.Index), or -1.</summary>
     public int SlotOfRow(int rowIndex)
@@ -384,6 +414,15 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             return;
         _slots[slot].MarkColour = colour;
         ApplySlotTint(slot);
+    }
+
+    /// <summary>True when <paramref name="world"/> (a point on the paper) lies in its ENTRY VISA box (the largest stamp area, StampSpots.InArea): where a verdict stamp lands on the passport.</summary>
+    public bool InVisaBox(Vector3 world)
+    {
+        if (_form == null)
+            return false;
+        Vector2 page = PagePoint(world);
+        return StampSpots.InArea(_form, page.x / _scale, page.y / _scale);
     }
 
     /// <summary>A world point on the paper as a point on its page: from the page's top-left, y down, in the paper's metres (what Stamp takes).</summary>
@@ -452,6 +491,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         Color colour = view.Picked ? view.PickColour
             : slot == _hoveredSlot && style != null ? style.hoverTint
             : view.MarkColour.a > 0f ? view.MarkColour
+            : Inspecting ? inspectTint
             : Color.clear;
         _block ??= new MaterialPropertyBlock();
         view.Highlight.GetPropertyBlock(_block);
@@ -475,28 +515,26 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     public void ShowVerdict(bool accepted) => Stamp(accepted);
 
     /// <summary>
-    /// Presses a desk stamp on the paper (the travel documents spec, TD4; the
-    /// stamps are track B's to pick and ink): APPROVED for
-    /// <paramref name="approved"/>, else DENIED, centred at
-    /// <paramref name="formPoint"/> (from the page's top-left, y down, in the
-    /// paper's metres; kept whole on the page) or, without one,
-    /// at the next place of its largest stamp area (StampSpots.Next: a
-    /// passport's visa page, a form's footer box). The mark is the art's
-    /// (ArtSlots.VerdictMark) at its own aspect, else a code-drawn stamp: a
-    /// double frame and the style's word (FormStyleSO.approvedStamp,
-    /// deniedStamp) in green or red ink, tilted a few degrees; a
-    /// <paramref name="faint"/> one (a dry stamp pressed: the desk-first
-    /// redesign, item 12) in a ghost of its ink. Returns the
-    /// mark's place, from the page's top-left in the paper's metres (an empty
-    /// one on a paper that prints no form).
+    /// Presses a desk stamp on the paper (the travel documents spec, TD4;
+    /// Papers, Please's stamps): APPROVED for <paramref name="approved"/>,
+    /// else DENIED, centred at <paramref name="formPoint"/> (from the page's
+    /// top-left, y down, in the paper's metres) and kept whole in the ENTRY
+    /// VISA box it was pressed on (StampSpots.AtInArea) or, without one (the
+    /// verdict's ink as the papers leave), at the next place of its largest
+    /// stamp area (StampSpots.Next: a passport's visa page, a form's footer
+    /// box). The mark is the art's (ArtSlots.VerdictMark) at its own aspect,
+    /// else a code-drawn stamp: a double frame and the style's word
+    /// (FormStyleSO.approvedStamp, deniedStamp) in green or red ink, tilted a
+    /// few degrees. Returns the mark's place, from the page's top-left in the
+    /// paper's metres (an empty one on a paper that prints no form).
     /// </summary>
-    public FaceRect Stamp(bool approved, Vector2? formPoint = null, bool faint = false)
+    public FaceRect Stamp(bool approved, Vector2? formPoint = null)
     {
         if (inkMark == null || _form == null)
             return new FaceRect(0f, 0f, 0f, 0f);
         Texture2D art = SlotArt.Texture(new[] { ArtSlots.VerdictMark(approved) });
         float aspect = art != null && art.height > 0 ? (float)art.width / art.height : StampAspect;
-        FaceRect place = formPoint.HasValue ? StampSpots.At(_form, formPoint.Value.x / _scale, formPoint.Value.y / _scale, aspect) : StampSpots.Next(_form, _stamps, aspect);
+        FaceRect place = formPoint.HasValue ? StampSpots.AtInArea(_form, formPoint.Value.x / _scale, formPoint.Value.y / _scale, aspect) : StampSpots.Next(_form, _stamps, aspect);
         float tilt = art != null ? 0f : (_stamps % 2 == 0 ? -StampTilt : StampTilt * 0.6f);
         _stamps++;
 
@@ -507,7 +545,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         mark.transform.localRotation = Quaternion.Euler(0f, 0f, tilt);
         mark.transform.localScale = new Vector3(r.width, r.height, 1f);
         Color ink = approved ? ApprovedInk : DeniedInk;
-        ink.a = faint ? FaintStampAlpha : StampAlpha;
+        ink.a = StampAlpha;
         _block ??= new MaterialPropertyBlock();
         mark.GetPropertyBlock(_block);
         _block.SetTexture(BaseMapId, art != null ? art : StampFrame());
@@ -624,17 +662,16 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         filter.sharedMesh = _shapedMesh;
     }
 
-    /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres; ignored while the paper is held in the hand (the examiner owns the sheet).</summary>
+    /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres.</summary>
     public void SetLift(float height)
     {
-        if (sheet != null && !IsExamined)
+        if (sheet != null)
             sheet.localPosition = new Vector3(0f, height, 0f);
     }
 
     /// <summary>
     /// Lets the paper be clicked (<paramref name="clickable"/>) and dragged
-    /// (<paramref name="draggable"/>), or not: a held paper beside the open
-    /// frame takes clicks but no drag (BoothRules.HeldDragOutLive). <paramref name="raycastable"/>
+    /// (<paramref name="draggable"/>), or not. <paramref name="raycastable"/>
     /// false also takes it out of the raycast: a paper the office has put away
     /// (the frame open, the wheel open, a newsletter up) must let clicks through
     /// to what lies under it. A paper inert only for itself (sliding,
@@ -696,8 +733,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// The paper's art when delivered (redesign phase 27, ArtSlots): its kind's
     /// face by <paramref name="formNumber"/> (a passport's for its holder's
     /// nation, <paramref name="issuer"/>, first), else the agency's plain face, on
-    /// the paper quad (held or lying: the block outlives the examine material's
-    /// swap); without a face, the look's paper <paramref name="tint"/> (the
+    /// the paper quad (on the counter or the desk: the block outlives the
+    /// reading material's swap); without a face, the look's paper <paramref name="tint"/> (the
     /// document design spec, D1) on a plain sheet; the photo frame's art over
     /// the photo; the agency seal's on the seal. A missing file keeps the
     /// placeholder paper, the grey frame and the code-drawn ring.

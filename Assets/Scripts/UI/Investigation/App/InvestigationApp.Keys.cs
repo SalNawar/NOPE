@@ -298,11 +298,14 @@ public sealed partial class InvestigationApp
             focusRing.Hide();
     }
 
-    /// <summary>A row's right-click: its context menu (Copy value, Copy row, Pin or Unpin, Pick for compare).</summary>
-    public void ShowRowMenu(AppRow row, PointerEventData eventData)
+    /// <summary>Shift+F10 or the Menu key with the app focused (DesktopKeyboard): the focused row's context menu (Copy value, Copy row, Pin or Unpin, Pick for compare) beside it; false when no row has the focus ring.</summary>
+    public bool ShowRowMenu()
     {
-        if (rowMenu != null && row != null)
-            rowMenu.ShowForRow(this, row, _pins.IsPinned(row.Key), eventData);
+        AppRow row = FocusedRow();
+        if (rowMenu == null || row == null)
+            return false;
+        rowMenu.ShowForRow(this, row, _pins.IsPinned(row.Key), (RectTransform)row.transform);
+        return true;
     }
 
     /// <summary>Copies <paramref name="row"/>'s value as shown, or "Label: value" (<paramref name="wholeRow"/>), to the clipboard and the system clipboard; the toast names an untranslated line by its source (its glyphs are not in the chrome's font).</summary>

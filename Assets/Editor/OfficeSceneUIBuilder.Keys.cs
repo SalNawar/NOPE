@@ -83,10 +83,10 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The desktop's keyboard poller and the app's keys, clipboard, pins and
-    /// zoom (the class summary); <paramref name="view"/>'s Escape defers to the
-    /// poller's stamp.
+    /// zoom (the class summary); the office's back-out (OfficeControls) defers
+    /// to the poller's stamp.
     /// </summary>
-    private static void BuildDesktopKeys(Canvas canvas, OfficeViewController view, AppParts app, DesktopIcons icons)
+    private static void BuildDesktopKeys(Canvas canvas, AppParts app, DesktopIcons icons)
     {
         Transform root = canvas.transform;
         DesktopConfigSO config = EnsureDesktopConfig();
@@ -108,10 +108,6 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "orders", orders);
         Wire(so, "card", card);
         so.ApplyModifiedProperties();
-
-        var soView = new SerializedObject(view);
-        Wire(soView, "keyboard", keyboard);
-        soView.ApplyModifiedProperties();
 
         if (menu != null)
             BuildRowMenuEntries(menu);
@@ -156,8 +152,8 @@ public static partial class OfficeSceneUIBuilder
         SearchFieldChip chip = search != null ? BuildSearchChip(search, app.App) : null;
 
         Transform quick = Need(win, "AppBody/SearchDrawer/Panel/QuickOpen");
-        SidebarEntryList pins = quick != null ? BuildQuickOpenList(quick, app.App, "Pinned", true, "app.sidebar.pinned", "app.pins.empty", 0.52f, 1f) : null;
-        SidebarEntryList recent = quick != null ? BuildQuickOpenList(quick, app.App, "Recent", false, "app.sidebar.recent", "app.recent.empty", 0.02f, 0.49f) : null;
+        SidebarEntryList pins = quick != null ? BuildQuickOpenList(quick, app.App, "Pinned", "app.sidebar.pinned", "app.pins.empty", 0.52f, 1f) : null;
+        SidebarEntryList recent = quick != null ? BuildQuickOpenList(quick, app.App, "Recent", "app.sidebar.recent", "app.recent.empty", 0.02f, 0.49f) : null;
 
         var zooms = new List<Object>();
         foreach (AppPane pane in win.GetComponentsInChildren<AppPane>(true))
@@ -209,7 +205,7 @@ public static partial class OfficeSceneUIBuilder
     /// heading (<paramref name="headingKey"/>), a scrolling list of jump rows
     /// and its empty hint (<paramref name="hintKey"/>).
     /// </summary>
-    private static SidebarEntryList BuildQuickOpenList(Transform panel, InvestigationApp app, string section, bool pins, string headingKey, string hintKey,
+    private static SidebarEntryList BuildQuickOpenList(Transform panel, InvestigationApp app, string section, string headingKey, string hintKey,
                                                        float bottom, float top)
     {
         TMP_Text heading = Text(panel, section + "Heading", null, PcType.Caption, TextAlignmentOptions.BottomLeft, new Vector2(0f, top), new Vector2(1f, top),
@@ -237,7 +233,6 @@ public static partial class OfficeSceneUIBuilder
         SidebarEntryList list = GetOrAdd<SidebarEntryList>(box.gameObject);
         var so = new SerializedObject(list);
         Wire(so, "app", app);
-        so.FindProperty("pins").boolValue = pins;
         Wire(so, "rowsRoot", rows);
         Wire(so, "rowTemplate", entry);
         Wire(so, "emptyHint", hint.gameObject);

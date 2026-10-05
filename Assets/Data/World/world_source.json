@@ -23608,7 +23608,7 @@
       },
       {
         "key": "keys.escape",
-        "text": "Close a menu, this card or the search drawer; clear the search; leave a text field; let go of a held value; close the Menu or cancel a drag. With none of those, leave the PC",
+        "text": "Right-click or Esc: close a menu, this card or the search drawer; clear the search; leave a text field; let go of a held value; close the Menu or cancel a drag. With none of those, back to the desk",
         "gloss": "None",
         "tier": "Full"
       },
@@ -23729,6 +23729,60 @@
       {
         "key": "keys.zoom",
         "text": "Zoom the panes in, out, or back to Settings' Text size (the Orders tree: in, out, or back to 100 %)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.contextMenu",
+        "text": "The context menu of the focused row or the selected icon (copy, pin, pick, open, arrange)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.section.desk",
+        "text": "At the desk",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.section.pc",
+        "text": "On the PC",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.desk.drag",
+        "text": "Move a document: on the counter it is small, on the desk full size; the stamped passport dropped on the counter hands the papers back",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.desk.inspect",
+        "text": "Inspect mode (the red button): click two things to compare them",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.desk.stamps",
+        "text": "The stamp bar (the grey tab on the right): a stamp stamps the ENTRY VISA box under it",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.desk.pc",
+        "text": "To the PC and back (the grey tab on the left)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.desk.back",
+        "text": "Back out: a drag, the wheel, the PC, a held value, inspect mode, the stamp bar, the city, the reading view",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.desk.city",
+        "text": "Look at the city, and back",
         "gloss": "None",
         "tier": "Full"
       },
@@ -24946,7 +25000,7 @@
       },
       {
         "key": "desk.scanHint",
-        "text": "Click a paper to read it; drag it onto the scanner to open it on the PC.",
+        "text": "Drag a paper onto the scanner to open it on the PC.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -24970,7 +25024,7 @@
       },
       {
         "key": "deskView.backHint",
-        "text": "Esc / right-click",
+        "text": "Right-click / Esc",
         "gloss": "None",
         "tier": "Full"
       },
@@ -24987,50 +25041,68 @@
         "tier": "Full"
       },
       {
-        "key": "stamp.label.ink",
-        "text": "INK",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "stamp.handBack.approved",
-        "text": "Hand the papers back: APPROVED",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "stamp.handBack.denied",
-        "text": "Hand the papers back: DENIED",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "stamp.hint.pick",
-        "text": "Pick up the APPROVED or the DENIED stamp.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "stamp.hint.ink",
-        "text": "Press the stamp on the ink pad.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "stamp.hint.press",
-        "text": "Stamp the passport.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "stamp.hint.dry",
-        "text": "No ink: press the stamp on the ink pad first.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "stamp.hint.handBack",
-        "text": "Slide the stamped passport onto HAND BACK, by the traveller.",
+        "text": "Drag the stamped passport onto the COUNTER to hand it back.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.hint.place",
+        "text": "Put the passport's ENTRY VISA box under a stamp, then click the stamp.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.refused.notPassport",
+        "text": "Only the passport takes a verdict stamp.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.refused.outsideVisa",
+        "text": "Only the passport's ENTRY VISA box takes the stamp.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.refused.already",
+        "text": "This passport already carries a verdict.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.refused.nothing",
+        "text": "Nothing under the stamp: put the passport's ENTRY VISA box under it.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.counter",
+        "text": "COUNTER",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "controls.pcTab",
+        "text": "PC\n{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "controls.deskTab",
+        "text": "DESK\n{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "controls.stampsTab",
+        "text": "STAMPS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "controls.inspectHint",
+        "text": "INSPECT: click two things to compare. Right-click or Esc to leave.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25085,6 +25157,24 @@
       {
         "key": "desk.rulebook.paperNotCarried",
         "text": "{0}: not carried.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.papersNone",
+        "text": "Every paper is handed over.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.tabRules",
+        "text": "RULES",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.tabPapers",
+        "text": "PAPERS",
         "gloss": "None",
         "tier": "Full"
       },

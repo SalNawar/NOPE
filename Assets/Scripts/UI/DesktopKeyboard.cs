@@ -41,7 +41,7 @@ public sealed class DesktopKeyboard : MonoBehaviour
         (Key.Enter, ShortcutKey.Enter), (Key.NumpadEnter, ShortcutKey.Enter), (Key.Space, ShortcutKey.Space), (Key.C, ShortcutKey.C),
         (Key.V, ShortcutKey.V), (Key.P, ShortcutKey.P), (Key.Equals, ShortcutKey.Equals), (Key.NumpadPlus, ShortcutKey.Equals),
         (Key.Minus, ShortcutKey.Minus), (Key.NumpadMinus, ShortcutKey.Minus), (Key.Digit0, ShortcutKey.Digit0), (Key.F1, ShortcutKey.F1),
-        (Key.Escape, ShortcutKey.Escape),
+        (Key.Escape, ShortcutKey.Escape), (Key.F10, ShortcutKey.F10), (Key.ContextMenu, ShortcutKey.Menu),
     };
 
     /// <summary>The desktop canvas's raycaster (on only while the desktop takes input).</summary>
@@ -79,6 +79,9 @@ public sealed class DesktopKeyboard : MonoBehaviour
     /// <summary>The frame in which the desktop last took an Escape press (-1: never); the PC frame's Escape skips that frame.</summary>
     public int EscapeTakenFrame { get; private set; } = -1;
 
+    /// <summary>True while a text field on the desktop has the keyboard (the PC key, Q, is typed there: ControlRules).</summary>
+    public bool TextFieldFocused => FocusedField() != null;
+
     /// <summary>True while the shortcut card shows.</summary>
     public bool CardOpen => card != null && card.IsOpen && !card.IsMinimised;
 
@@ -108,6 +111,9 @@ public sealed class DesktopKeyboard : MonoBehaviour
         Mouse mouse = Mouse.current;
         if (mouse != null && app != null && (mouse.leftButton.wasPressedThisFrame || mouse.rightButton.wasPressedThisFrame))
             app.PointerPressed();
+        // A right-click backs out as Esc does (Papers, Please's controls: ControlRules): the same chain, stamped when it takes the press.
+        if (mouse != null && mouse.rightButton.wasPressedThisFrame)
+            Press(new KeyChord(ShortcutKey.Escape));
 
         Keyboard keyboard = Keyboard.current;
         if (keyboard == null)
@@ -162,6 +168,9 @@ public sealed class DesktopKeyboard : MonoBehaviour
             case AppCommand.Help:
                 ToggleCard();
                 break;
+            case AppCommand.ContextMenu:
+                ShowContextMenu();
+                break;
             case AppCommand.OpenIcon:
                 icons.OpenSelected();
                 break;
@@ -211,7 +220,17 @@ public sealed class DesktopKeyboard : MonoBehaviour
         }
     }
 
-    /// <summary>The desktop's part of the Escape chain; a press it takes is stamped with the frame.</summary>
+    /// <summary>Shift+F10 or the Menu key: the focused row's context menu with the app focused, else (no window focused) the selected icon's or the desktop's.</summary>
+    private void ShowContextMenu()
+    {
+        DesktopWindow focused = manager != null ? manager.FocusedWindow : null;
+        if (app != null && focused != null && focused == app.Window)
+            app.ShowRowMenu();
+        else if (focused == null && icons != null)
+            icons.ShowMenu();
+    }
+
+    /// <summary>The desktop's part of the Escape chain (Esc, and a right-click: the one back-out); a press it takes is stamped with the frame.</summary>
     private void Escape(TMP_InputField field)
     {
         var state = new DesktopEscapeState(

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -13,11 +12,12 @@ using UnityEngine.UI;
 /// slot order); Space picks the row (its button, the same as a click), Enter
 /// follows its smart link (SetLink; the ↗ itself is the form's, FormView),
 /// Ctrl+C copies its value as shown and Ctrl+Shift+C "Label: value", Ctrl+P
-/// pins it; a right-click opens the row's context menu (Copy value, Copy row,
-/// Pin or Unpin, Pick for compare). The pick tint and the found mark are the
+/// pins it; Shift+F10 or the Menu key opens the row's context menu (Copy
+/// value, Copy row, Pin or Unpin, Pick for compare; a right-click backs out
+/// instead, ControlRules). The pick tint and the found mark are the
 /// form's, by key (CM3): nothing here draws.
 /// </summary>
-public sealed class AppRow : MonoBehaviour, IPointerClickHandler
+public sealed class AppRow : MonoBehaviour
 {
     private LinkTarget _target;
     private string _label;
@@ -95,15 +95,5 @@ public sealed class AppRow : MonoBehaviour, IPointerClickHandler
         return Foreign
             ? Clip.Untranslated(Value, Key, Title, traveller, _tongueId, _tongueName, _canonical)
             : Clip.Plain(Value, Key, Title, traveller);
-    }
-
-    /// <summary>A right-click opens the row's context menu.</summary>
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button != PointerEventData.InputButton.Right)
-            return;
-        InvestigationApp app = GetComponentInParent<InvestigationApp>();
-        if (app != null)
-            app.ShowRowMenu(this, eventData);
     }
 }
