@@ -846,6 +846,7 @@ public static class _TimeDeskAuditPlay
         var shelf = (ShelfView)Field(o.App, "shelf");
         List<string> chips = shelf.Items.Where(x => x.Target.Tab == AppTab.Documents).Select(x => x.Label).ToList();
         Check(chips.Count == c.documents.Count, $"d{day} slot {slot}: the shelf holds the traveller's {c.documents.Count} issued paper(s) and no other [{string.Join(" | ", chips)}]");
+        CheckShelfLayout(o, $"d{day} slot {slot}");
 
         CitizenRecord record = c.account != null ? RecordOf(o, c) : null;
         if (record != null)
@@ -1402,6 +1403,21 @@ public static class _TimeDeskAuditPlay
         int shown = (left.Blocked ? 0 : 1) + (right != null && !right.Blocked ? 1 : 0);
         Check(marked == shown || left.ActiveTab == AppTab.Report || (right != null && right.ActiveTab == AppTab.Report),
               $"{name}: the shelf marks the {shown} documents shown with their side ({marked} marked)");
+        CheckShelfLayout(o, name);
+    }
+
+    /// <summary>The polish pass (wave 5 A3): the shelf's chips on one row, the books as rows of the Books menu, the findings column a rail exactly while nothing is logged.</summary>
+    private static void CheckShelfLayout(Office o, string name)
+    {
+        var shelf = (ShelfView)Field(o.App, "shelf");
+        List<float> rows = Enumerable.Range(0, shelf.Items.Count).Where(i => shelf.Items[i].Group != ShelfGroup.Books)
+            .Select(i => Mathf.Round(shelf.Chips[i].transform.position.y * 10f)).Distinct().ToList();
+        Check(rows.Count == 1, $"{name}: the shelf's chips sit on one row ({rows.Count} rows)");
+        bool booksInMenu = Enumerable.Range(0, shelf.Items.Count).Where(i => shelf.Items[i].Group == ShelfGroup.Books)
+            .All(i => shelf.Chips[i].transform.parent.name == "BooksMenu");
+        Check(booksInMenu, $"{name}: the books are rows of the Books menu, not chips of the shelf");
+        var rail = (GameObject)Field(o.App.Board.Findings, "rail");
+        Check(rail.activeSelf == (o.App.Board.Log.Items.Count == 0), $"{name}: the findings column is a rail exactly while nothing is logged ({o.App.Board.Log.Items.Count} logged, rail {rail.activeSelf})");
     }
 
     /// <summary>
