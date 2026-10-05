@@ -263,7 +263,7 @@ public sealed class MatchBoard : MonoBehaviour
         Discrepancy proof = _case != null ? DiscrepancyLog.Prove(ea, eb, nation, era, traveller) : null;
         FindingKind kind = FindingRules.Classify(ea, eb, proof, nation, era, traveller);
         string subject = FindingsView.What((IsTruth(ea) && !IsTruth(eb) ? b : a).Label);
-        Record(kind, a.Key, a.Label, a.Shown, b.Key, b.Label, b.Shown, subject, FindingsView.What(a.Label), FindingsView.What(b.Label), proof);
+        Record(kind, a.Key, a.Label, a.Shown, b.Key, b.Label, b.Shown, subject, FindingsView.What(a.Label), FindingsView.What(b.Label), proof, ea.category);
         _clearA = a.Key;
         _clearB = b.Key;
     }
@@ -282,8 +282,33 @@ public sealed class MatchBoard : MonoBehaviour
                                                     _case != null && _case.claimedNation != null ? _case.claimedNation.id : null,
                                                     _case != null && _case.claimedEra != null ? _case.claimedEra.id : null));
         string subject = special.Today ? FindingsView.What(value.Label) : special.Value;
-        Record(kind, special.Key, special.Title, special.Value, value.Key, value.Label, value.Shown, subject, What(special), FindingsView.What(value.Label), null);
+        Record(kind, special.Key, special.Title, special.Value, value.Key, value.Label, value.Shown, subject, What(special), FindingsView.What(value.Label), null, e.category);
     }
+
+    /// <summary>
+    /// A paper flagged missing that the traveller, asked for it, does not
+    /// carry (the desk-first redesign, item 7): logged as a difference
+    /// ("Entry Ticket missing", FindingKind.PaperMissing; it can be cited
+    /// for Deny), once per case; no line is drawn (there is no value).
+    /// </summary>
+    public void LogMissing(FormRequest request)
+    {
+        if (request == null)
+            return;
+        Wire();
+        var finding = new Finding(FindingKind.PaperMissing, MissingKey(request.Id), string.Empty, request.Label, string.Empty, string.Empty, string.Empty,
+                                  request.Label, null);
+        if (!_log.Add(finding))
+            return;
+        ShowStatus(FindingLook.Differ, UiText.Format("status.logged", FindingsView.Title(finding)));
+        if (findings != null)
+            findings.Show(_log);
+        Logged?.Invoke(finding);
+        Changed?.Invoke();
+    }
+
+    /// <summary>A missing paper's finding key ("missing:TC-230"): no row has it, so a revisit opens nothing.</summary>
+    private static string MissingKey(string requestId) => InterviewUnlocks.Missing(requestId);
 
     /// <summary>True for a truth source: a book row (a Seal Register seal too) or a record row.</summary>
     private static bool IsTruth(CompareEvidence e) => e.kind == EvidenceKind.ReferenceEntry || e.kind == EvidenceKind.RecordField;
@@ -293,9 +318,9 @@ public sealed class MatchBoard : MonoBehaviour
 
     /// <summary>A result: the line between the two values, the status line (a note names <paramref name="whatA"/> and <paramref name="whatB"/>) and, for a logged kind, the findings, titled by <paramref name="subject"/> (a pair already logged is only shown again); <paramref name="proof"/> is the deviation the pair proved, or null.</summary>
     private void Record(FindingKind kind, string keyA, string titleA, string valueA, string keyB, string titleB, string valueB, string subject, string whatA,
-                        string whatB, Discrepancy proof)
+                        string whatB, Discrepancy proof, ClueCategory? category = null)
     {
-        var finding = new Finding(kind, keyA, keyB, titleA, valueA, titleB, valueB, subject, proof);
+        var finding = new Finding(kind, keyA, keyB, titleA, valueA, titleB, valueB, subject, proof, category);
         FindingLook look = FindingRules.Look(kind);
         _holdKey = null;
         Link(keyA, keyB, look, UiText.Get(FindingRules.LinkKey(kind)));

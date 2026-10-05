@@ -157,7 +157,7 @@ public static partial class OfficeSceneUIBuilder
         // XP desktop wallpaper (behind everything), the idle line between
         // travellers + taskbar with system-tray HUD.
         GameObject idleScreen = BuildDesktop(root, library);
-        BuildTaskbar(root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText, out TMP_Text trayClockText);
+        BuildTaskbar(root, out TMP_Text dayText, out Button dateButton, out TMP_Text moneyText, out TMP_Text stabilityText, out TMP_Text trayClockText);
 
         // The verdict line and the citation slip moved to the office overlay (piece 10): the desktop keeps no copy.
         DestroyChildIfPresent(root, "VerdictStrip");
@@ -310,6 +310,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soOffice, "moneyText", moneyText);
         SetRef(soOffice, "stabilityText", stabilityText);
         SetRef(soOffice, "dayText", dayText);
+        SetRef(soOffice, "dateButton", dateButton);
+        SetRef(soOffice, "app", app.App);
         SetRef(soOffice, "resultText", verdictText);
         SetRef(soOffice, "resultBackdrop", verdictStrip.gameObject);
         SetRef(soOffice, "citationPanel", citation.gameObject);
@@ -904,18 +906,22 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The taskbar's Menu button's width, and Back to desk's (desktop units; the PC UX redesign's section 3).</summary>
     private const float MenuButtonWidth = 148f, DeskButtonWidth = 272f;
 
-    /// <summary>The tray's width at the taskbar's right end (Day, Credits, Stability, the clock at Caption size): room for a culture's long currency word beside its own script (wave 5 A3: the readouts overlapped at 600).</summary>
-    private const float TrayWidth = 760f;
+    /// <summary>The tray's width at the taskbar's right end (Day, Credits, Stability, the clock at Caption size): room for a culture's long currency word beside its own script and today's date (wave 5 A3: the readouts overlapped at 600; at 760 with the date).</summary>
+    private const float TrayWidth = 1000f;
 
     /// <summary>
     /// The taskbar (the PC UX redesign C7), rebuilt fresh: a flat bar in the
     /// Taskbar role (the culture's deep colour; no gloss), the Menu button
-    /// (the StartButton role) at its left, the tray at its right with Day,
-    /// Credits, Stability and the clock at Caption size in a row sized by
-    /// their words. Back to desk and the window buttons are added after it
-    /// (BuildDesktopShell, BuildWindowManager).
+    /// (the StartButton role) at its left, the tray at its right with
+    /// Credits, Stability, today's date and the clock at Caption size in a
+    /// row sized by their words. The date ("14 MAR 2150 · Day 1"; the
+    /// desk-first redesign: "the date should be on the PC") sits beside the
+    /// clock on a clear button: a click holds today on the workbench, to
+    /// compare with an expiry or a ticket's date. Back to desk and the window
+    /// buttons are added after it (BuildDesktopShell, BuildWindowManager).
     /// </summary>
-    private static void BuildTaskbar(Transform root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText, out TMP_Text clockText)
+    private static void BuildTaskbar(Transform root, out TMP_Text dayText, out Button dateButton, out TMP_Text moneyText, out TMP_Text stabilityText,
+                                     out TMP_Text clockText)
     {
         DestroyChildIfPresent(root, "Taskbar");
         Transform bar = Panel(root, "Taskbar", new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, TaskbarHeight / 2f), new Vector2(0f, TaskbarHeight), XpBlue, ThemeRoleId.Taskbar);
@@ -938,9 +944,20 @@ public static partial class OfficeSceneUIBuilder
         row.childControlHeight = true;
         row.childForceExpandWidth = false;
         row.childForceExpandHeight = true;
-        dayText = TrayText(tray, "DayText", "Day 1");
         moneyText = TrayText(tray, "MoneyText", "Credits: 0");
         stabilityText = TrayText(tray, "StabilityText", "Stability: 100%");
+        dateButton = MakeButton(tray, "DateButton", null, Vector2.zero, Vector2.one, new Color(1f, 1f, 1f, 0f), ThemeRoleId.ClickCatcher);
+        DestroyChildIfPresent(dateButton.transform, "Label");
+        HorizontalLayoutGroup datePad = GetOrAdd<HorizontalLayoutGroup>(dateButton.gameObject);
+        datePad.padding = new RectOffset(8, 8, 0, 0);
+        datePad.childAlignment = TextAnchor.MiddleCenter;
+        datePad.childControlWidth = true;
+        datePad.childControlHeight = true;
+        datePad.childForceExpandWidth = false;
+        datePad.childForceExpandHeight = true;
+        dayText = TrayText(dateButton.transform, "DayText", "14 MAR 2150 · Day 1");
+        dayText.fontStyle = FontStyles.Underline;
+        BuildHoverHint(dateButton, "tray.date.hint", null, new Vector2(0.5f, 1f), new Vector2(0.5f, 0f));
         clockText = TrayText(tray, "ClockText", "09:00");
         // Lay the row out now, so the saved scene holds the rects the layout group drives
         // (as a scene opened in the editor does) and a rebuild compares equal to it.

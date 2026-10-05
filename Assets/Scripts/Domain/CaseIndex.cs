@@ -337,13 +337,6 @@ public static class IndexEntries
             Order = index
         };
 
-    /// <summary>Deviation <paramref name="index"/> of the case's log (Report, case layer, as it is logged): its category word as its label, its report line as its text.</summary>
-    public static IndexEntry Deviation(int index, ClueCategory category, string title, string categoryWord, string text) =>
-        new IndexEntry
-        {
-            Key = EntryKeys.Deviation(category), Source = AppTab.Report, Item = index, Title = title, Label = categoryWord, Text = text, Order = index
-        };
-
     /// <summary>Rule <paramref name="index"/> of the day's directives (Rules, day layer): its summary as its text.</summary>
     public static IndexEntry Rule(int index, string title, string summary) =>
         new IndexEntry

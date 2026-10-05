@@ -43,3 +43,7 @@ Saleh's rules applied: one penalty per wrong decision (nothing here fines anyone
 2. The ring is wider for a ninth choice (W3). Would you rather keep the 8-slot ring and move the two spoken requests into a sub-menu?
 3. Returning travellers keep their claim (R5). Should a new story also change destination (their face would still match; their dress would not)?
 4. Returns per day are 1 (content) and the chance 0.4 (Inspector). Tune after a play.
+
+## Since the desk-first redesign (2026-10-05)
+
+The wheel starts minimal: document requests unlock when the clerk flags a paper missing, trip questions when a finding about their detail is logged; W2's differences menu is folded into the one ask menu ("Ask >"); the rest stands. See `2026-10-05-wheel-pc-menus-design.md` §1-§2.

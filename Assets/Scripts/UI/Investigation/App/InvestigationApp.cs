@@ -6,20 +6,19 @@ using UnityEngine.UI;
 /// <summary>
 /// The Investigation app as a workbench (the PC workbench spec,
 /// docs/superpowers/specs/2026-09-30-pc-workbench-design.md; lessons 1, 2,
-/// D5, D6, D10; polished in wave 5 A3): one desktop window, "Investigation"
-/// (the header names the traveller, so the title does not repeat it), that
-/// fills the desktop the first time it opens. Its header says who is at the
-/// desk (their face: the person, drawn from their look, never the paper's
-/// photo; their name; one short line of counters; no claim, which the
-/// traveller only says) beside the guided steps as one segmented control
-/// (GuideBar: a step says what to do and puts a pair of documents up; it
-/// never locks). Under it the shelf (ShelfView) holds the case's and the
-/// day's documents on one row (the traveller's papers and transcript; the
-/// agency's Citizen records, rules and calendar; the books behind one Books
-/// menu); a chip opens its document on the target side, and a document
-/// already open on the other side swaps (OpenOnTarget). The work area holds
-/// the status line (the step's title and sentence, or what is held, or the
-/// last result) and two panes (AppPane: the left and the right, a gutter
+/// D5, D6, D10; polished in wave 5 A3; the desk-first redesign, items 7 and
+/// 8): one desktop window, "Investigation", that fills the desktop the first
+/// time it opens. Its menu bar (MenuBarView) holds the case's and the day's
+/// documents in drop-down menus (Papers: the traveller's papers, the
+/// transcript and the papers not handed over, to flag missing; Records;
+/// Rules; Books; Calendar, with today's date to hold), each shown from the
+/// day it is introduced, and at its right who is at the desk (their name,
+/// one short line of counters; no claim, which the traveller only says) and
+/// Search; a row opens its document on the target side, and a document
+/// already open on the other side swaps (OpenOnTarget). The guided steps
+/// run headless (GuideBar: a new case and the keys put a pair of documents
+/// up). The work area, the window's whole height under the bar, holds the
+/// status line (what is held, or the last result) and two panes (AppPane: the left and the right, a gutter
 /// between them where a line's label sits; a click on a header makes it the
 /// target, F6 too; the target is where the keys act and the history walks),
 /// over which the workbench (MatchBoard) draws the line between two compared
@@ -32,7 +31,7 @@ using UnityEngine.UI;
 /// always the target. The keys, the focus ring, copy and paste,
 /// pins, recent items and zoom are in InvestigationApp.Keys; the search
 /// drawer in InvestigationApp.Search. Nothing steals the view: something new
-/// for a source dots its chip until it is seen (AppBadges; a document not
+/// for a source dots its menu until it is seen (AppBadges; a document not
 /// opened yet this case is dotted too), and dots the desktop's Investigation
 /// icon while the app is closed or minimised; a scan (ScanArrival) opens the
 /// app only when it is closed, shows the paper only in a Papers view showing
@@ -64,22 +63,19 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>The main column (the lead, the status line, the panes or the decision), left of the findings.</summary>
     [SerializeField] private RectTransform mainColumn;
 
-    [Header("Header")]
-    /// <summary>The traveller's face (the person at the desk, from their look).</summary>
-    [SerializeField] private TravellerPortraitView face;
-
-    /// <summary>The traveller's name.</summary>
+    [Header("Menu bar")]
+    /// <summary>The traveller's name (at the menu bar's right).</summary>
     [SerializeField] private TMP_Text nameText;
 
-    /// <summary>The counters: papers received and scanned; between travellers the idle line.</summary>
+    /// <summary>The counters beside the name: papers received and scanned; between travellers the idle line.</summary>
     [SerializeField] private TMP_Text countersText;
 
     [Header("The workbench")]
-    /// <summary>The guided steps, the lead and the foot.</summary>
+    /// <summary>The guided steps (headless since the desk-first redesign: the decision view and the keys).</summary>
     [SerializeField] private GuideBar guide;
 
-    /// <summary>The document shelf.</summary>
-    [SerializeField] private ShelfView shelf;
+    /// <summary>The menu bar: the documents' menus (the desk-first redesign, item 8).</summary>
+    [SerializeField] private MenuBarView menus;
 
     /// <summary>The click-and-match and the findings.</summary>
     [SerializeField] private MatchBoard board;
@@ -185,23 +181,20 @@ public sealed partial class InvestigationApp : MonoBehaviour
     }
 
     /// <summary>
-    /// A traveller is presented: the header (their face from
-    /// <paramref name="look"/> and <paramref name="art"/>, their name; who
-    /// stands at the desk, never what they ask for), the histories without the
+    /// A traveller is presented: the menu bar names who stands at the desk
+    /// (never what they ask for), the histories without the
     /// last traveller, the dots and the icon's dot cleared, the toast gone,
     /// search's case layer empty; the façade then starts the workbench
     /// (MatchBoard.BeginCase) and the steps (GuideBar.BeginCase puts the first
     /// pair up).
     /// </summary>
-    public void BeginCase(string travellerName, TravellerLook look, CharacterArt art)
+    public void BeginCase(string travellerName)
     {
         Init();
         ResetSearchCase();
         _traveller = travellerName ?? string.Empty;
         if (nameText != null)
             nameText.text = _traveller;
-        if (face != null)
-            face.Show(look, art);
         _badges.Clear();
         _opened.Clear();
         foreach (AppPane pane in Panes())
@@ -225,11 +218,11 @@ public sealed partial class InvestigationApp : MonoBehaviour
         _traveller = null;
         ResetSearchCase();
         if (nameText != null)
-            nameText.text = UiText.Get("app.title");
+            nameText.text = string.Empty;
         if (countersText != null)
             countersText.text = UiText.Get("idle.waiting");
-        if (face != null)
-            face.Clear();
+        _missing = MissingPapers.None;
+        _missingPapers = null;
         foreach (AppPane pane in Panes())
             pane.SetCase(false);
         if (toast != null)
@@ -366,8 +359,12 @@ public sealed partial class InvestigationApp : MonoBehaviour
                     view.ChipsChanged += RefreshShelf;
             }
         }
-        if (shelf != null)
-            shelf.Opened += item => OpenOnTarget(item.Target);
+        if (menus != null)
+        {
+            menus.Opened += item => OpenOnTarget(item.Target);
+            menus.Flagged += id => MissingFlagged?.Invoke(id);
+            menus.TodayHeld += HoldToday;
+        }
         if (guide != null)
             guide.StageShown += StageShown;
         if (board != null)
@@ -542,23 +539,62 @@ public sealed partial class InvestigationApp : MonoBehaviour
             rightPane.SetTarget(_split && TargetPane == rightPane);
     }
 
-    /// <summary>A press on the desktop (DesktopWindowManager.Pressed): outside the search drawer's panel, the drawer closes; outside the Books menu (and its chip), the menu closes.</summary>
+    /// <summary>A press on the desktop (DesktopWindowManager.Pressed): outside the search drawer's panel, the drawer closes; outside the open menu (and the titles), the menu closes.</summary>
     private void Pressed(GameObject top)
     {
         PressedForSearch(top);
-        if (shelf != null && shelf.BooksOpen && !shelf.IsPart(top))
-            shelf.ShowBooks(false);
+        if (menus != null && menus.MenuOpen && !menus.IsPart(top))
+            menus.Close();
     }
 
-    /// <summary>True while the shelf's Books menu is open (Escape closes it first, as a menu).</summary>
-    public bool BooksMenuOpen => shelf != null && shelf.BooksOpen;
+    /// <summary>True while a menu of the menu bar is open (Escape closes it first, as a menu).</summary>
+    public bool MenuOpen => menus != null && menus.MenuOpen;
 
-    /// <summary>Escape's CloseMenu for the Books menu.</summary>
-    public void CloseBooksMenu()
+    /// <summary>Escape's CloseMenu for the menu bar's open menu.</summary>
+    public void CloseMenu()
     {
-        if (shelf != null)
-            shelf.ShowBooks(false);
+        if (menus != null)
+            menus.Close();
     }
+
+    /// <summary>Raised when the Papers menu flags a paper missing (its request id; the facade unlocks its request on the wheel).</summary>
+    public event System.Action<string> MissingFlagged;
+
+    /// <summary>The papers the clerk can flag missing for the traveller at the desk.</summary>
+    private MissingPapers _missing = MissingPapers.None;
+
+    /// <summary>Where each of the traveller's papers is (what is still not handed over).</summary>
+    private CasePapers _missingPapers;
+
+    /// <summary>The papers to flag missing (<paramref name="missing"/>, those not handed over by <paramref name="papers"/>) and their flags: the Papers menu redraws.</summary>
+    public void SetMissing(MissingPapers missing, CasePapers papers)
+    {
+        _missing = missing ?? MissingPapers.None;
+        _missingPapers = papers;
+        RefreshShelf();
+    }
+
+    /// <summary>
+    /// Holds today's date on the workbench (the Calendar menu's date, the
+    /// taskbar's date; the desk-first redesign: "the date should be on the
+    /// PC"), to match with an expiry or a ticket's date; the app opens. Nothing
+    /// when the agency's calendar has no readable date.
+    /// </summary>
+    public void HoldToday()
+    {
+        Init();
+        string today = Today;
+        if (today == null || board == null)
+            return;
+        if (window != null)
+            window.Open();
+        if (_deciding && guide != null)
+            guide.Step(-1);
+        board.PickToday(today);
+    }
+
+    /// <summary>Today's date as the papers print it (the Calendar view's), or null.</summary>
+    private string Today => leftPane != null && leftPane.View(AppTab.Calendar) is CalendarView calendar ? calendar.Today : null;
 
     /// <summary>A pane showed a source: it is seen when the pane shows.</summary>
     private void PaneShown(AppPane pane, AppTab tab)
@@ -616,23 +652,25 @@ public sealed partial class InvestigationApp : MonoBehaviour
     private int _day;
 
     /// <summary>
-    /// The shelf's documents from the left pane's views, in three groups:
-    /// the traveller's (each paper the day issues by its chip's name, not
-    /// readable yet: dimmed; the transcript), the agency's (Citizen records,
-    /// today's rules, the calendar, each from the day it is introduced) and
-    /// the books (each by its name, in the Books menu, from the day it is
-    /// introduced: ReferenceView.OnShelf); drawn again only when they change.
+    /// The menus' rows from the left pane's views, in three groups: the
+    /// traveller's (each paper handed over, by its name, not readable yet:
+    /// dimmed; the transcript; then the papers not handed over, to flag
+    /// missing), the agency's (Citizen records, today's rules, the calendar
+    /// and today's date, each from the day it is introduced) and the books
+    /// (each by its name, from the day it is introduced:
+    /// ReferenceView.OnShelf); drawn again only when they change.
     /// </summary>
     private void RefreshShelf()
     {
-        if (shelf == null || leftPane == null)
+        if (menus == null || leftPane == null)
             return;
         bool Introduced(string feature) => _introductions.Has(_day, feature);
         var items = new List<ShelfItem>();
         IAppView documents = leftPane.View(AppTab.Documents);
         if (documents != null && _traveller != null)
             for (int i = 0; i < documents.Chips.Count; i++)
-                items.Add(new ShelfItem(ShelfGroup.Traveller, documents.Chips[i].Label, LinkTarget.ToTab(AppTab.Documents, i), documents.Chips[i].Available));
+                if (_missingPapers == null || _missingPapers.State(i) != PaperState.NotHandedOver) // a paper not handed over is under "Not handed over", by its request (it tells nothing of what they carry)
+                    items.Add(new ShelfItem(ShelfGroup.Traveller, documents.Chips[i].Label, LinkTarget.ToTab(AppTab.Documents, i), documents.Chips[i].Available));
         if (_traveller != null && Hosts(AppTab.Transcript))
             items.Add(new ShelfItem(ShelfGroup.Traveller, UiText.Get("app.tab.transcript"), LinkTarget.ToTab(AppTab.Transcript), true));
         if (Hosts(AppTab.Records) && Introduced(Feature.Records))
@@ -645,38 +683,52 @@ public sealed partial class InvestigationApp : MonoBehaviour
         for (int i = 0; books != null && i < books.Chips.Count; i++)
             if (!(books is ReferenceView reference) || reference.OnShelf(i))
                 items.Add(new ShelfItem(ShelfGroup.Books, books.Chips[i].Label, LinkTarget.ToTab(AppTab.Reference, i), books.Chips[i].Available));
+        AddMenuExtras(items);
 
         if (!SameItems(items))
         {
             _items.Clear();
             _items.AddRange(items);
-            shelf.Show(_items);
+            menus.Show(_items);
         }
         MarkShelf();
     }
 
-    /// <summary>True when <paramref name="items"/> are the shelf's already (the same names, places and readability).</summary>
+    /// <summary>
+    /// The menus' rows beyond the documents (the desk-first redesign, items 7
+    /// and 8): in Papers, each paper of the day's papers menu the traveller
+    /// has not handed over, to flag missing (MissingPapers.Open, the same
+    /// list for every traveller); in Calendar, today's date to hold (with the
+    /// calendar, from the day it is introduced).
+    /// </summary>
+    private void AddMenuExtras(List<ShelfItem> items)
+    {
+        if (_traveller != null)
+            foreach (FormRequest request in _missing.Open(_missingPapers))
+                items.Add(ShelfItem.MissingPaper(request.Id, request.Label, _missing.State(request.Id)));
+        string today = Today;
+        if (today != null && items.Exists(x => x.Target.Tab == AppTab.Calendar))
+            items.Add(ShelfItem.Today(UiText.Format("menubar.today", today)));
+    }
+
+    /// <summary>True when <paramref name="items"/> are the menus' rows already (ShelfItem.Same, in order).</summary>
     private bool SameItems(List<ShelfItem> items)
     {
         if (items.Count != _items.Count)
             return false;
         for (int i = 0; i < items.Count; i++)
-            if (items[i].Label != _items[i].Label || !items[i].Target.Equals(_items[i].Target) || items[i].Available != _items[i].Available ||
-                items[i].Group != _items[i].Group)
+            if (!items[i].Same(_items[i]))
                 return false;
         return true;
     }
 
-    /// <summary>The chips' side tags (where each document is open), their dots (a paper or the transcript not opened yet this case, or something new in a source) and the Books chip's words.</summary>
+    /// <summary>The menus' side tags (where each document is open) and dots (a paper or the transcript not opened yet this case, or something new in a source).</summary>
     private void MarkShelf()
     {
-        if (shelf == null || leftPane == null)
+        if (menus == null || leftPane == null)
             return;
-        shelf.Mark(SideOf, Unread, BooksLabel);
+        menus.Mark(SideOf, Unread);
     }
-
-    /// <summary>The Books chip's words: "Books", or "Books · Costume Guide" while that book is open on a side.</summary>
-    private static string BooksLabel(string openBook) => openBook == null ? UiText.Get("shelf.books") : UiText.Format("shelf.booksOpen", openBook);
 
     /// <summary>"L" or "R" (the pane headers' "Left" and "Right", short so the shelf keeps one row) for the side a shelf document is open on, else null.</summary>
     private string SideOf(ShelfItem item)

@@ -109,16 +109,15 @@ public class CaseIndexTests
     }
 
     [Test]
-    public void CaseLayer_PapersLinesAndDeviations_ClearedAtTheCasesEnd_TheDayKept()
+    public void CaseLayer_PapersAndLines_ClearedAtTheCasesEnd_TheDayKept()
     {
         CaseIndex index = Day();
         foreach (IndexEntry e in IndexEntries.Paper(1, "Intake Declaration", new[] { ("Coin of Home", "Drachma"), ("Native Tongue", "Attic Greek") }, "{0} · {1}"))
             index.Add(e);
         index.Add(IndexEntries.Line(4, "Lysimache · line 5", "Lysimache", "We paid in Drachma.", null, null));
-        index.Add(IndexEntries.Deviation(0, ClueCategory.Currency, "Deviation · Currency", "Currency", "Coin of Home: Drachma is not of Thebes."));
 
         IReadOnlyList<ResultGroup> groups = Search(index, "drachma");
-        CollectionAssert.AreEqual(new[] { AppTab.Documents, AppTab.Reference, AppTab.Transcript, AppTab.Report, AppTab.Rules }, groups.Select(g => g.Source),
+        CollectionAssert.AreEqual(new[] { AppTab.Documents, AppTab.Reference, AppTab.Transcript, AppTab.Rules }, groups.Select(g => g.Source),
                                   "grouped in the given source order");
         CollectionAssert.AreEqual(new[] { "Intake Declaration · Coin of Home" }, Titles(groups[0]));
         Assert.AreEqual(PickKeys.Field(1, 0), groups[0].Hits[0].Entry.Key);
@@ -313,13 +312,9 @@ public class CaseIndexTests
     }
 
     [Test]
-    public void Rules_AndDeviations_AreIndexedByTheirText()
+    public void Rules_AreIndexedByTheirText()
     {
         CaseIndex index = Day();
-        index.Add(IndexEntries.Deviation(0, ClueCategory.BirthDate, "Deviation · Date of birth", "Date of birth", "Born 3 May 1131 against the record's 3 May 1129."));
-        ResultGroup report = Search(index, "1129").Single();
-        Assert.AreEqual(AppTab.Report, report.Source);
-        Assert.AreEqual("dev:BirthDate", report.Hits[0].Entry.Key);
         Assert.AreEqual("rule:1", Search(index, "born before").Single().Hits[0].Entry.Key);
     }
 }

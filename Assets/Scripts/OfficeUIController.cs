@@ -24,8 +24,14 @@ public sealed class OfficeUIController : MonoBehaviour
     /// <summary>Shows timeline stability.</summary>
     [SerializeField] private TMP_Text stabilityText;
 
-    /// <summary>Shows the current day number.</summary>
+    /// <summary>Shows today's date and the day number in the taskbar ("14 MAR 2150 · Day 1"; the desk-first redesign: "the date should be on the PC").</summary>
     [SerializeField] private TMP_Text dayText;
+
+    /// <summary>The date's button: a click holds today's date on the Investigation app's workbench, to compare with an expiry or a ticket's date.</summary>
+    [SerializeField] private Button dateButton;
+
+    /// <summary>The Investigation app (the date is held on its workbench).</summary>
+    [SerializeField] private InvestigationApp app;
 
     [Header("Citation Slip (optional — null-safe)")]
     /// <summary>Panel shown when a citation is issued.</summary>
@@ -70,7 +76,22 @@ public sealed class OfficeUIController : MonoBehaviour
             stabilityText.text = UiText.Format("tray.stability", StabilityRules.Format(world.timelineStability));
 
         if (dayText != null)
-            dayText.text = UiText.Format("tray.day", world.day);
+            dayText.text = TrayDate(world.day);
+    }
+
+    /// <summary>The taskbar's date for <paramref name="day"/>: today in the agency's calendar, in capitals, and the day ("14 MAR 2150 · Day 1"), or the plain day when the library has no readable first date.</summary>
+    private static string TrayDate(int day)
+    {
+        ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
+        string today = library != null ? AgencyCalendar.Today(library.Agency.firstDate, day) : null;
+        return today != null ? UiText.Format("tray.date", today.ToUpperInvariant(), day) : UiText.Format("tray.day", day);
+    }
+
+    /// <summary>The date's button holds today on the app's workbench.</summary>
+    private void Awake()
+    {
+        if (dateButton != null && app != null)
+            dateButton.onClick.AddListener(app.HoldToday);
     }
 
     /// <summary>

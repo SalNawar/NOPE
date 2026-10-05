@@ -420,8 +420,8 @@ MonoBehaviour:
     honorificMale: sir
     honorificFemale: madam
     honorificUnknown: traveller
-    requestLabel: Request {document}
-    papersLabel: Request papers >
+    requestLabel: Hand me your {document}
+    papersLabel: Ask for papers >
     askGroups: []
     missingFormReplies:
     - kind: 0
@@ -496,7 +496,7 @@ MonoBehaviour:
     requestReply:
       id: interview.requestReply
       text: Here you are.
-    askLabel: Ask about the trip >
+    askLabel: Ask >
     backLabel: < Back
     smallTalkLabel: Small talk
     lookLabel: Look >
@@ -14816,7 +14816,6 @@ MonoBehaviour:
           id: 
           text: 
     confront:
-      label: Ask about a difference >
       entryLabel: '{category}: {value}?'
       prompts:
       - proof: 0

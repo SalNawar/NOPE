@@ -416,4 +416,18 @@ public class CaseGuideTests
         guide.Go(GuideStage.Papers);
         Assert.IsFalse(guide.IsDone(GuideStage.Decision, new StageChecks(0, 0)), "the decision is never done");
     }
+
+    [Test]
+    public void APaperMissing_IsALoggedDifference_AboutNoDetail()
+    {
+        Assert.AreEqual(FindingLook.Differ, FindingRules.Look(FindingKind.PaperMissing));
+        Assert.IsTrue(FindingRules.IsDifference(FindingKind.PaperMissing), "Deny can cite it");
+        Assert.IsTrue(FindingRules.IsDirectiveEvidence(FindingKind.PaperMissing), "a paper set's fault: a denial on it is proven");
+        var finding = new Finding(FindingKind.PaperMissing, "missing:TC-230", string.Empty, "Entry Ticket", string.Empty, string.Empty, string.Empty, "Entry Ticket", null);
+        Assert.IsNull(finding.Category);
+        var log = new FindingLog();
+        Assert.IsTrue(log.Add(finding));
+        Assert.AreSame(finding, log.FirstDifference);
+        Assert.AreEqual(ClueCategory.Expiry, new Finding(FindingKind.Expired, "cal:today", "f:0:3", "", "", "", "", "", null, ClueCategory.Expiry).Category);
+    }
 }

@@ -11909,12 +11909,12 @@
     "honorificMale": "sir",
     "honorificFemale": "madam",
     "honorificUnknown": "traveller",
-    "requestLabel": "Request {document}",
-    "papersLabel": "Request papers >",
+    "requestLabel": "Hand me your {document}",
+    "papersLabel": "Ask for papers >",
     "askGroups": [],
     "requestPrompt": "Your {document}, please.",
     "requestReply": "Here you are.",
-    "askLabel": "Ask about the trip >",
+    "askLabel": "Ask >",
     "backLabel": "< Back",
     "smallTalkLabel": "Small talk",
     "smallTalkPrompt": "How is life back home?",
@@ -16752,7 +16752,6 @@
       ]
     },
     "confront": {
-      "label": "Ask about a difference >",
       "entryLabel": "{category}: {value}?",
       "prompts": [
         {
@@ -22066,6 +22065,18 @@
         "tier": "Flavour"
       },
       {
+        "key": "tray.date",
+        "text": "{0} · Day {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "tray.date.hint",
+        "text": "Compare today's date",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "tray.stability",
         "text": "Stability: {0}",
         "gloss": "None",
@@ -22252,18 +22263,6 @@
         "tier": "Full"
       },
       {
-        "key": "shelf.books",
-        "text": "Books",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "shelf.booksOpen",
-        "text": "Books · {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "shelf.side.left",
         "text": "L",
         "gloss": "None",
@@ -22276,146 +22275,8 @@
         "tier": "Full"
       },
       {
-        "key": "guide.papers.name",
+        "key": "menubar.papers",
         "text": "Papers",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.papers.title",
-        "text": "Read the papers",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.papers.text",
-        "text": "Click a value, then another to compare them: the papers against each other and against what the traveller said.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.records.name",
-        "text": "Records",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.records.title",
-        "text": "Check the papers against the records",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.records.text",
-        "text": "The traveller's citizen record is on the right. Match the details that matter: name, number, class, transponder, account.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.books.name",
-        "text": "Books",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.books.title",
-        "text": "Check the papers against the books",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.books.text",
-        "text": "Hold a paper's detail against the book row for the place the traveller claims. A value from another place is a lie.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.rules.name",
-        "text": "Rules",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.rules.title",
-        "text": "Check today's rules",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.rules.text",
-        "text": "Click a rule, then the value it is about. The calendar on the shelf holds today's date for departures and expiry dates.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.decision.name",
-        "text": "Decision",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.decision.title",
-        "text": "Decide",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.decision.text",
-        "text": "Accept sends the traveller through. Deny cites the first difference or broken rule you logged.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.idle.text",
-        "text": "The steps start when the next traveller steps up to the desk.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.hint",
-        "text": "<b>{0}.</b> {1}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.hintTitle",
-        "text": "<b>{0}</b>",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.next",
-        "text": "Next: {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.back",
-        "text": "Back",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.progress",
-        "text": "Step {0} of {1}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.progressDone",
-        "text": "Step {0} of {1} · All checks here done",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.progressNext",
-        "text": "Step {0} of {1} · Next: {2}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "guide.progressMore",
-        "text": "{0} (+{1} more)",
         "gloss": "None",
         "tier": "Full"
       },
@@ -22582,6 +22443,12 @@
         "tier": "Full"
       },
       {
+        "key": "finding.link.PaperMissing",
+        "text": "Not carried",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "finding.note.DifferentDetails",
         "text": "{0} and {1} are different details. Nothing logged.",
         "gloss": "None",
@@ -22696,6 +22563,12 @@
         "tier": "Full"
       },
       {
+        "key": "finding.title.PaperMissing",
+        "text": "{0} missing",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "finding.detail",
         "text": "{0} against {1}",
         "gloss": "None",
@@ -22710,6 +22583,12 @@
       {
         "key": "finding.detail.rule",
         "text": "{0} ({1})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.detail.missing",
+        "text": "Asked for, not carried",
         "gloss": "None",
         "tier": "Full"
       },
@@ -22734,12 +22613,6 @@
       {
         "key": "findings.title",
         "text": "Your findings",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "findings.report",
-        "text": "Open the report",
         "gloss": "None",
         "tier": "Full"
       },
@@ -22938,12 +22811,6 @@
       {
         "key": "search.title.rule",
         "text": "Rule {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "search.title.deviation",
-        "text": "Deviation · {0}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -26064,6 +25931,66 @@
       {
         "key": "adopt.problem.BadCharacters",
         "text": "Letters, spaces, hyphens and apostrophes only.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menubar.records",
+        "text": "Records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menubar.rules",
+        "text": "Rules",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menubar.books",
+        "text": "Books",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menubar.calendar",
+        "text": "Calendar",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menubar.notHandedOver",
+        "text": "Not handed over",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menubar.missing.flag",
+        "text": "Flag missing",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menubar.missing.flagged",
+        "text": "Flagged: ask for it",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menubar.missing.notCarried",
+        "text": "Not carried",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menubar.today",
+        "text": "Today: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menubar.today.note",
+        "text": "Hold to compare",
         "gloss": "None",
         "tier": "Full"
       }

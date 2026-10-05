@@ -216,7 +216,7 @@ public sealed class DesktopKeyboard : MonoBehaviour
     private void Escape(TMP_InputField field)
     {
         var state = new DesktopEscapeState(
-            (contextMenu != null && contextMenu.IsOpen) || (app != null && app.BooksMenuOpen),
+            (contextMenu != null && contextMenu.IsOpen) || (app != null && app.MenuOpen),
             CardOpen,
             app != null && app.ResultsOpen,
             app != null && app.IsSearchField(field),
@@ -238,7 +238,7 @@ public sealed class DesktopKeyboard : MonoBehaviour
                 if (contextMenu != null && contextMenu.IsOpen)
                     contextMenu.Close();
                 else
-                    app.CloseBooksMenu();
+                    app.CloseMenu();
                 _refocus = field;
                 break;
             case DesktopEscape.CloseCard:

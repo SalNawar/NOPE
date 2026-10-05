@@ -144,4 +144,47 @@ public class DialogRunnerTests
         Assert.IsFalse(spoken.IsTell);
         Assert.IsNull(spoken.Value);
     }
+
+    // ---- Locked choices (the desk-first redesign, item 7) ----
+
+    /// <summary>Node "a" offers "open" and "locked" (unlocked by "key"); node "m" (opened by "menu", hidden while it has nothing to offer) offers "back" and "inner" (unlocked by "key").</summary>
+    private static DialogGraph LockedGraph()
+    {
+        DialogChoice locked = Choice("locked", null, oneShot: true);
+        locked.Unlock = "key";
+        DialogChoice inner = Choice("inner", null, oneShot: true);
+        inner.Unlock = "key";
+        DialogChoice menu = Choice("menu", "m");
+        menu.HideWhenSpent = true;
+        var graph = new DialogGraph("a");
+        graph.Add(new DialogNode { Id = "a", Choices = new List<DialogChoice> { Choice("open", null), locked, menu } });
+        graph.Add(new DialogNode { Id = "m", Choices = new List<DialogChoice> { new DialogChoice { Id = "back", Next = "a", Kind = DialogChoiceKind.Back }, inner } });
+        return graph;
+    }
+
+    [Test]
+    public void ALockedChoice_IsNotOffered_NorChosen_UntilItsKeyIsGiven()
+    {
+        var runner = new DialogRunner(LockedGraph(), null);
+        CollectionAssert.AreEqual(new[] { "open" }, runner.Choices.Select(c => c.Id).ToArray(), "the locked choice and the menu holding only a locked choice are hidden");
+        Assert.IsNull(runner.Choose("locked"));
+        Assert.IsFalse(runner.IsUnlocked("key"));
+
+        Assert.IsTrue(runner.Unlock("key"));
+        Assert.IsTrue(runner.IsUnlocked("key"));
+        CollectionAssert.AreEqual(new[] { "open", "locked", "menu" }, runner.Choices.Select(c => c.Id).ToArray());
+        Assert.IsNotNull(runner.Choose("locked"));
+        CollectionAssert.AreEqual(new[] { "open", "menu" }, runner.Choices.Select(c => c.Id).ToArray(), "a one-shot unlocked choice is still used once");
+    }
+
+    [Test]
+    public void Unlock_IsFalse_ForABlankKey_OrOneGivenAlready()
+    {
+        var runner = new DialogRunner(LockedGraph(), null);
+        Assert.IsFalse(runner.Unlock(null));
+        Assert.IsFalse(runner.Unlock(string.Empty));
+        Assert.IsTrue(runner.Unlock("key"));
+        Assert.IsFalse(runner.Unlock("key"), "kept for the rest of the interview");
+        Assert.IsFalse(runner.IsUnlocked(null));
+    }
 }

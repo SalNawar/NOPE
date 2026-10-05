@@ -72,6 +72,18 @@ public sealed class InterviewPresenter
     /// <summary>True once the current traveller cracked over a difference (a liar who confessed once confesses again).</summary>
     private bool _cracked;
 
+    /// <summary>The papers the clerk can flag missing for the current traveller (the desk-first redesign, item 7).</summary>
+    private MissingPapers _missing = MissingPapers.None;
+
+    /// <summary>Raised when the traveller, asked for a paper flagged missing, says they do not carry it (the workbench logs it: FindingKind.PaperMissing).</summary>
+    public event Action<FormRequest> NotCarried;
+
+    /// <summary>Raised when a paper is flagged missing or its state changes (the PC's Papers menu redraws).</summary>
+    public event Action MissingChanged;
+
+    /// <summary>The papers the clerk can flag missing for the current traveller (MissingPapers.None between travellers).</summary>
+    public MissingPapers Missing => _missing;
+
     /// <summary>Raised for each answer the traveller gives, with its category.</summary>
     public event Action<ClueCategory> Answered;
 
@@ -175,6 +187,7 @@ public sealed class InterviewPresenter
         _graph = null;
         _interviewCase = null;
         _cracked = false;
+        _missing = MissingPapers.None;
         _interviewReachable = interviewReachable;
         _questionCategories = Array.Empty<ClueCategory>();
         if (_day == null)
@@ -195,6 +208,8 @@ public sealed class InterviewPresenter
         _graph = graph;
         _interviewCase = interviewCase;
         _runner = new DialogRunner(graph, InterviewScript.Opening(_day.Lines, interviewCase));
+        _missing = new MissingPapers(interviewCase.askable, FormRequests.Build(interviewCase.askable, documents, _day.Lines.askGroups));
+        MissingChanged?.Invoke();
 
         CaseClaim claim = AppLinks.Claim(inst);
         string lookup = SmartLinks.CaseLookup(Fields(documents), inst != null ? inst.visitorGivenName : null);
@@ -347,6 +362,11 @@ public sealed class InterviewPresenter
         {
             _signWaiver();
         }
+        else if (choice.Action == DialogAction.NotCarried && choice.Request != null && _missing.NotCarried(choice.Request.Id))
+        {
+            NotCarried?.Invoke(choice.Request);
+            MissingChanged?.Invoke();
+        }
 
         if (_wheel != null)
             _wheel.Say(InterviewScript.SaidSince(_runner.Transcript, before));
@@ -387,6 +407,28 @@ public sealed class InterviewPresenter
             return;
         _cracked |= outcome == ConfrontOutcome.Crack;
         RefreshChoices();
+    }
+
+    /// <summary>
+    /// Flags the current traveller's paper <paramref name="requestId"/> missing
+    /// (the desk-first redesign, item 7; the PC's Papers menu, or the desk):
+    /// the wheel then offers its request, "Hand me your ..." (and the waiver
+    /// pad for the waiver). True when it was flaggable and not flagged yet.
+    /// </summary>
+    public bool FlagMissing(string requestId)
+    {
+        if (_runner == null || !_missing.Flag(requestId))
+            return false;
+        Unlock(InterviewUnlocks.Missing(requestId));
+        MissingChanged?.Invoke();
+        return true;
+    }
+
+    /// <summary>Unlocks the wheel's choices locked behind <paramref name="key"/> (InterviewUnlocks: a finding about a detail, a paper flagged missing) and redraws the wheel; nothing between travellers.</summary>
+    public void Unlock(string key)
+    {
+        if (_runner != null && _runner.Unlock(key))
+            RefreshChoices();
     }
 
     /// <summary>

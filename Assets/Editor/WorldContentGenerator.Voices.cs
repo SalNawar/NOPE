@@ -95,7 +95,6 @@ public static partial class WorldContentGenerator
                 ascii(prompt.then.id, prompt.then.text);
             }
         }
-        ascii(InterviewLineId("confront.label"), built.confront.label);
         ascii(InterviewLineId("confront.entryLabel"), built.confront.entryLabel);
         id(built.openerReturning.id, "the returning traveller's opener");
         ascii(built.openerReturning.id, built.openerReturning.text);
@@ -241,7 +240,6 @@ public static partial class WorldContentGenerator
     /// </summary>
     private static ConfrontWording BuildConfront(ConfrontData c) => new ConfrontWording
     {
-        label = c?.label ?? string.Empty,
         entryLabel = c?.entryLabel ?? string.Empty,
         prompts = (c?.prompts ?? Array.Empty<ConfrontPromptData>()).Select((p, i) => p == null ? null : new ConfrontPrompt
         {
@@ -394,7 +392,6 @@ public static partial class WorldContentGenerator
     /// <summary>interview.confront (wave 5, lesson 3): the hub entry, a difference's entry, the desk's questions, the default replies.</summary>
     [Serializable] private sealed class ConfrontData
     {
-        public string label;
         public string entryLabel;
         public ConfrontPromptData[] prompts;
         public VoiceRowData[] replies;

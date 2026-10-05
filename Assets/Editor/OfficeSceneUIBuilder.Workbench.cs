@@ -11,45 +11,39 @@ using UnityEngine.UI;
 /// uGUI): white surfaces parted by hairlines, colour only for state,
 /// sentence-case labels at the type scale, quiet buttons with a hairline, one
 /// primary button per view, slim chrome so the documents get the room. The
-/// header (the face, the name, one short line, the steps' segmented
-/// control), the shelf (one row of chips, the groups' hairlines, the Books
-/// chip and its menu), the status line (one plate per state, Search), the
-/// line layer over the panes, the decision step, the findings column (its
-/// rail), the foot and the Calendar view. Neutral colours are
+/// menu bar (the desk-first redesign, item 8: the menus' titles and their
+/// drop-down, who is at the desk, Search; in place of the header, the shelf
+/// and the foot), the status line (one plate per state), the line layer over
+/// the panes, the decision step, the findings column (its rail) and the
+/// Calendar view. Neutral colours are
 /// baked (the theme recolours every tagged graphic at load). Part of
 /// <see cref="OfficeSceneUIBuilder"/>; BuildInvestigationApp calls it.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The workbench's sizes (desktop units; the spec's §3 as polished in wave 5 A3: slim chrome, the room to the documents).</summary>
+    /// <summary>The workbench's sizes (desktop units; the spec's §3 as polished in wave 5 A3, then the desk-first redesign's menu bar: slim chrome, the room to the documents).</summary>
     private static class WbSize
     {
-        /// <summary>The side padding of the header, the shelf, the foot and the main column.</summary>
+        /// <summary>The side padding of the menu bar and the main column.</summary>
         public const float Pad = 24f;
 
         /// <summary>The gap between the main column and the findings, and above and below the work.</summary>
         public const float Gap = 16f;
 
-        /// <summary>The header's height (the face, the name over one short line, the steps).</summary>
-        public const float Header = 84f;
+        /// <summary>The menu bar's height (the titles, who is at the desk, Search).</summary>
+        public const float MenuBar = 56f;
 
-        /// <summary>The shelf's one row.</summary>
-        public const float Shelf = 56f;
+        /// <summary>A menu title's height (and Search's).</summary>
+        public const float MenuTitle = 40f;
 
-        /// <summary>A chip's height.</summary>
-        public const float Chip = 36f;
+        /// <summary>The drop-down's least width.</summary>
+        public const float Menu = 420f;
 
-        /// <summary>A chip's least width when the row is short of room (its name is cut).</summary>
-        public const float ChipMin = 88f;
+        /// <summary>The room for who is at the desk (the name and the counters) left of Search.</summary>
+        public const float Who = 560f;
 
-        /// <summary>The Books menu's least width.</summary>
-        public const float Menu = 340f;
-
-        /// <summary>The Search button's width (at the status line's right).</summary>
+        /// <summary>The Search button's width (at the menu bar's right).</summary>
         public const float Search = 200f;
-
-        /// <summary>The foot's height.</summary>
-        public const float Foot = 60f;
 
         /// <summary>The findings column's width while something is logged.</summary>
         public const float Findings = 280f;
@@ -63,19 +57,10 @@ public static partial class OfficeSceneUIBuilder
         /// <summary>The panes' top under the main column's top: the status line and a gap.</summary>
         public const float PanesTop = Status + 12f;
 
-        /// <summary>A step's segment height.</summary>
-        public const float Pill = 44f;
-
-        /// <summary>A step's circle.</summary>
-        public const float Circle = 26f;
-
-        /// <summary>The traveller's face.</summary>
-        public const float Face = 52f;
-
         /// <summary>A pane's header (one line: the side, the document's name, the target hint).</summary>
         public const float PaneHead = 44f;
 
-        /// <summary>The name's size.</summary>
+        /// <summary>The decision's words' size.</summary>
         public const int Name = 30;
 
         /// <summary>The gutter between the two panes, where a line's label sits.</summary>
@@ -91,17 +76,17 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>An opaque colour from 0xRRGGBB.</summary>
     private static Color Hex(int rgb) => new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f, 1f);
 
-    /// <summary>The header's parts the app and the steps take.</summary>
-    private struct AppHeader
+    /// <summary>The menu bar's parts the app takes: the view, its drop-down (drawn last, over the work), who is at the desk and Search.</summary>
+    private struct AppMenuBar
     {
-        public Transform Root;
-        public TravellerPortraitView Face;
+        public MenuBarView View;
+        public RectTransform Dropdown;
         public TMP_Text Name;
         public TMP_Text Counters;
-        public List<Object> Pills;
+        public Button Search;
     }
 
-    /// <summary>The status line's plates' texts, Cancel and Search.</summary>
+    /// <summary>The status line's plates' texts and Cancel.</summary>
     private struct AppStatus
     {
         public Transform Root;
@@ -111,16 +96,6 @@ public static partial class OfficeSceneUIBuilder
         public TMP_Text Match;
         public TMP_Text Differ;
         public TMP_Text Info;
-        public Button Search;
-    }
-
-    /// <summary>The foot's controls.</summary>
-    private struct AppFoot
-    {
-        public Button Back;
-        public Button Next;
-        public TMP_Text NextLabel;
-        public TMP_Text Progress;
     }
 
     // ----------------------------- small parts -----------------------------
@@ -163,28 +138,6 @@ public static partial class OfficeSceneUIBuilder
         return button;
     }
 
-    /// <summary>The primary button: filled with the culture's deep colour, its label bold at Body size.</summary>
-    private static Button PrimaryButton(Transform parent, string name, string key)
-    {
-        Button button = MakeButton(parent, name, null, Vector2.zero, Vector2.one, WbAction, ThemeRoleId.PrimaryAction, key);
-        TMP_Text label = ButtonLabel(button, PcType.Body, TextAlignmentOptions.Center, PcSize.L);
-        label.fontStyle = FontStyles.Bold;
-        SceneUiKit.Tag(label, ThemeRoleId.PrimaryAction, ThemePart.Ink, key, FontStyles.Bold, ThemeTextKind.Button, key != null);
-        return button;
-    }
-
-    /// <summary>A text link: no plate, its keyed label muted and underlined at Body size.</summary>
-    private static Button LinkButton(Transform parent, string name, string key)
-    {
-        Button button = MakeButton(parent, name, null, Vector2.zero, Vector2.one, new Color(1f, 1f, 1f, 0f), ThemeRoleId.ClickCatcher);
-        TMP_Text label = ButtonLabel(button, PcType.Body, TextAlignmentOptions.MidlineLeft, 4f);
-        label.fontStyle = FontStyles.Underline;
-        label.text = UiText.Get(key);
-        label.color = WbMuted;
-        SceneUiKit.Tag(label, ThemeRoleId.SurfaceMuted, ThemePart.Ink, key, FontStyles.Underline, ThemeTextKind.Button, false);
-        return button;
-    }
-
     /// <summary>A toolbar button of PcSize.Control square at <paramref name="x"/> from the bar's left, its label gone and a chevron drawn in the Button role's ink (pointing left for Back), with a hover hint (<paramref name="hintKey"/>): the Internet's Back and Forward.</summary>
     private static Button ChevronButton(Transform bar, string name, string hintKey, float x, bool back)
     {
@@ -210,226 +163,177 @@ public static partial class OfficeSceneUIBuilder
         SceneUiKit.Tag(image, ThemeRoleId.Button, ThemePart.Ink);
     }
 
-    // ----------------------------- the header -----------------------------
+    // ----------------------------- the menu bar -----------------------------
 
     /// <summary>
-    /// The header (IA1, IA2; wave 5 A3): on a surface with a hairline under
-    /// it, the traveller's face (a 52-unit box holding the portrait's layers
-    /// over a warm grey, framed), their name (30 u, bold, shrinking no
-    /// further than Caption) over one short muted line (the counters), and at
-    /// its right the steps as one segmented control (a hairline frame around
-    /// the segments, a hairline between two; BuildStepPill), one segment per
-    /// CaseGuide stage.
+    /// The menu bar (the desk-first redesign, Saleh 2026-10-05, item 8: menus
+    /// at the top with drop-downs, in place of the header and the shelf, so
+    /// the documents get the height): a surface WbSize.MenuBar units tall with
+    /// a hairline under it; at its left the menu titles' row (MenuTitle,
+    /// cloned per menu by MenuBarView); at its right Search (Ctrl K) and, left
+    /// of it, one line naming who is at the desk (the name, bold, then the
+    /// counters, muted); on <paramref name="body"/>, above the work, the
+    /// drop-down: a white list framed by a strong hairline holding a row's
+    /// template (MenuRow) and a caption's template ("Not handed over").
     /// </summary>
-    private static AppHeader BuildAppHeader(Transform body)
+    private static AppMenuBar BuildMenuBar(Transform body)
     {
-        Transform root = Panel(body, "Header", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -WbSize.Header / 2f), new Vector2(0f, WbSize.Header), WbSurface,
+        Transform root = Panel(body, "MenuBar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -WbSize.MenuBar / 2f), new Vector2(0f, WbSize.MenuBar), WbSurface,
                                ThemeRoleId.Surface);
         HairlineEdge(root, "Rule", 1);
 
-        Transform faceBox = Panel(root, "Face", new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(WbSize.Pad + WbSize.Face / 2f, 0f),
-                                  new Vector2(WbSize.Face, WbSize.Face), WbInfoBg, ThemeRoleId.Info);
-        GetOrAdd<RectMask2D>(faceBox.gameObject);
-        TravellerPortraitView face = BuildPortrait(faceBox);
-        HairlineFrame(faceBox);
-
-        float textLeft = WbSize.Pad + WbSize.Face + 16f, textRight = 760f;
-        TMP_Text name = WbText(root, "Name", null, UiText.Get("app.title"), WbSize.Name, ThemeRoleId.Surface, TextAlignmentOptions.BottomLeft, FontStyles.Bold);
-        PlaceRect(name.transform, new Vector2(0f, 0.5f), Vector2.one, new Vector2(textLeft, -2f), new Vector2(-textRight, -4f));
-        name.enableAutoSizing = true;
-        name.fontSizeMax = WbSize.Name;
-        name.fontSizeMin = PcType.Caption;
-        TMP_Text counters = WbText(root, "Counters", null, UiText.Get("idle.waiting"), PcType.Caption, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.TopLeft);
-        PlaceRect(counters.transform, Vector2.zero, new Vector2(1f, 0.5f), new Vector2(textLeft, 8f), new Vector2(-textRight, -2f));
-
-        var steps = (RectTransform)Panel(root, "Steps", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), Vector2.zero, new Vector2(600f, WbSize.Pill), WbSurface,
-                                         ThemeRoleId.Surface);
-        steps.pivot = new Vector2(1f, 0.5f);
-        steps.anchoredPosition = new Vector2(-WbSize.Pad, 0f);
-        steps.GetComponent<Image>().raycastTarget = false;
-        HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(steps.gameObject);
-        row.spacing = 0f;
-        row.childAlignment = TextAnchor.MiddleRight;
-        row.childControlWidth = true;
-        row.childControlHeight = true;
-        row.childForceExpandWidth = false;
-        row.childForceExpandHeight = true;
-        ContentSizeFitter fit = GetOrAdd<ContentSizeFitter>(steps.gameObject);
-        fit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-        fit.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
-        var pills = new List<Object>();
-        for (int i = 0; i < CaseGuide.Stages.Count; i++)
-            pills.Add(BuildStepPill(steps, CaseGuide.Stages[i], i + 1, i > 0));
-        HairlineFrame(steps, WbLineStrong, ThemeRoleId.HairlineStrong);
-
-        return new AppHeader { Root = root, Face = face, Name = name, Counters = counters, Pills = pills };
-    }
-
-    /// <summary>
-    /// One step's segment: a clear button whose row holds its circle and its
-    /// name, a hairline at its left (<paramref name="divider"/>: every segment
-    /// but the first); the current step's plate behind it (warm grey with a
-    /// bar of the primary colour along its foot); three circles (the number on
-    /// warm grey, the number on the primary colour while current, a tick on
-    /// the match plate once done) and two labels (muted, and bold in ink while
-    /// current); the guide shows the right ones.
-    /// </summary>
-    private static Button BuildStepPill(Transform steps, GuideStage stage, int number, bool divider)
-    {
-        string key = "guide." + stage.ToString().ToLowerInvariant() + ".name";
-        Button pill = MakeButton(steps, "Step_" + stage, null, Vector2.zero, Vector2.one, new Color(1f, 1f, 1f, 0f), ThemeRoleId.ClickCatcher);
-        DestroyChildIfPresent(pill.transform, "Label");
-        HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(pill.gameObject);
-        row.padding = new RectOffset(14, 18, 0, 0);
-        row.spacing = 8f;
-        row.childAlignment = TextAnchor.MiddleLeft;
-        row.childControlWidth = true;
-        row.childControlHeight = true;
-        row.childForceExpandWidth = false;
-        row.childForceExpandHeight = false;
-
-        Transform current = Panel(pill.transform, "Current", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, WbInfoBg, ThemeRoleId.Info);
-        current.GetComponent<Image>().raycastTarget = false;
-        GetOrAdd<LayoutElement>(current.gameObject).ignoreLayout = true;
-        Panel(current, "Bar", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, 1.5f), new Vector2(0f, 3f), WbAction, ThemeRoleId.PrimaryAction)
-            .GetComponent<Image>().raycastTarget = false;
-        current.gameObject.SetActive(false);
-        if (divider)
-            HairlineEdge(pill.transform, "Divider", 2);
-
-        StepCircle(pill.transform, "Circle", number.ToString(), WbInfoBg, ThemeRoleId.Info, false);
-        StepCircle(pill.transform, "CircleCurrent", number.ToString(), WbAction, ThemeRoleId.PrimaryAction, false).gameObject.SetActive(false);
-        StepCircle(pill.transform, "CircleDone", null, WbOkBg, ThemeRoleId.FindingMatch, true).gameObject.SetActive(false);
-
-        TMP_Text label = WbText(pill.transform, "Label", key, null, PcType.Caption, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.MidlineLeft);
-        label.overflowMode = TextOverflowModes.Overflow;
-        TMP_Text chosen = WbText(pill.transform, "LabelCurrent", key, null, PcType.Caption, ThemeRoleId.Surface, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
-        chosen.overflowMode = TextOverflowModes.Overflow;
-        chosen.gameObject.SetActive(false);
-        return pill;
-    }
-
-    /// <summary>A step's circle in <paramref name="role"/>'s colours: its number, or a drawn tick (<paramref name="tick"/>).</summary>
-    private static Transform StepCircle(Transform pill, string name, string number, Color fill, ThemeRoleId role, bool tick)
-    {
-        Transform circle = Panel(pill, name, Center, Center, Vector2.zero, new Vector2(WbSize.Circle, WbSize.Circle), fill, role);
-        Image image = circle.GetComponent<Image>();
-        image.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
-        image.raycastTarget = false;
-        LayoutElement size = GetOrAdd<LayoutElement>(circle.gameObject);
-        size.minWidth = size.preferredWidth = WbSize.Circle;
-        size.minHeight = size.preferredHeight = WbSize.Circle;
-        if (tick)
-        {
-            GlyphBar(circle, "Stroke1", new Vector2(-3.5f, -1.5f), new Vector2(3f, 8f), 45f, role);
-            GlyphBar(circle, "Stroke2", new Vector2(3f, 1.5f), new Vector2(3f, 15f), -45f, role);
-            foreach (Image bar in circle.GetComponentsInChildren<Image>(true))
-                if (bar != image)
-                    bar.color = WbOk;
-        }
-        else
-        {
-            TMP_Text text = WbText(circle, "Number", null, number, PcType.Caption, role, TextAlignmentOptions.Center, FontStyles.Bold);
-            text.overflowMode = TextOverflowModes.Overflow;
-        }
-        return circle;
-    }
-
-    // ----------------------------- the shelf -----------------------------
-
-    /// <summary>
-    /// The shelf (IA4; wave 5 A3): a surface under the header with a hairline
-    /// under it holding one row (a HorizontalLayoutGroup that never wraps:
-    /// short of room, the chips give way to their least width and cut their
-    /// names), a chip's template (its unread dot, its name and its side's
-    /// plate, on the screen's paper with a hairline, dimmed by its CanvasGroup
-    /// when not readable), a group's hairline, the Books chip (a chevron after
-    /// its name) and, on <paramref name="body"/> above the work, the Books
-    /// menu (a white list framed by a strong hairline, a book's row template).
-    /// </summary>
-    private static ShelfView BuildShelf(Transform body, out RectTransform menu)
-    {
-        Transform root = Panel(body, "Shelf", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(WbSize.Header + WbSize.Shelf / 2f)), new Vector2(0f, WbSize.Shelf),
-                               WbSurface, ThemeRoleId.Surface);
-        HairlineEdge(root, "Rule", 1);
-
         var row = (RectTransform)Panel(root, "Row", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(row, Vector2.zero, Vector2.one, new Vector2(WbSize.Pad - 8f, 0f), new Vector2(-(WbSize.Pad + WbSize.Search + WbSize.Who + 2f * PcSize.L), 0f));
         HorizontalLayoutGroup line = GetOrAdd<HorizontalLayoutGroup>(row.gameObject);
-        line.padding = new RectOffset((int)WbSize.Pad, (int)WbSize.Pad, 0, 0);
-        line.spacing = 8f;
+        line.spacing = 4f;
         line.childAlignment = TextAnchor.MiddleLeft;
         line.childControlWidth = true;
         line.childControlHeight = true;
         line.childForceExpandWidth = false;
         line.childForceExpandHeight = false;
+        Button title = MenuTitle(row, "TitleTemplate");
+        title.gameObject.SetActive(false);
 
-        Button chip = ShelfChip(row, "ChipTemplate", WbScreen, ThemeRoleId.WindowBody, WbSize.Chip, false);
-        chip.gameObject.SetActive(false);
+        Button search = QuietButton(root, "SearchButton", "app.search.open");
+        PlaceRect(search.transform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(WbSize.Pad + WbSize.Search), -WbSize.MenuTitle / 2f),
+                  new Vector2(-WbSize.Pad, WbSize.MenuTitle / 2f));
 
-        Transform divider = Panel(row, "DividerTemplate", Center, Center, Vector2.zero, new Vector2(1f, 24f), WbLineStrong, ThemeRoleId.HairlineStrong);
-        divider.GetComponent<Image>().raycastTarget = false;
-        LayoutElement dividerSize = GetOrAdd<LayoutElement>(divider.gameObject);
-        dividerSize.minWidth = dividerSize.preferredWidth = 1f;
-        dividerSize.minHeight = dividerSize.preferredHeight = 24f;
-        divider.gameObject.SetActive(false);
+        var who = (RectTransform)Panel(root, "Who", new Vector2(1f, 0f), Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(who, new Vector2(1f, 0f), Vector2.one, new Vector2(-(WbSize.Pad + WbSize.Search + PcSize.L + WbSize.Who), 0f),
+                  new Vector2(-(WbSize.Pad + WbSize.Search + PcSize.L), 0f));
+        HorizontalLayoutGroup whoRow = GetOrAdd<HorizontalLayoutGroup>(who.gameObject);
+        whoRow.spacing = PcSize.M;
+        whoRow.childAlignment = TextAnchor.MiddleRight;
+        whoRow.childControlWidth = true;
+        whoRow.childControlHeight = true;
+        whoRow.childForceExpandWidth = false;
+        whoRow.childForceExpandHeight = false;
+        TMP_Text name = WbText(who, "Name", null, string.Empty, PcType.Caption, ThemeRoleId.Surface, TextAlignmentOptions.MidlineRight, FontStyles.Bold);
+        TMP_Text counters = WbText(who, "Counters", null, UiText.Get("idle.waiting"), PcType.Caption, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.MidlineRight);
+        GetOrAdd<LayoutElement>(name.gameObject).flexibleWidth = 0f;
+        GetOrAdd<LayoutElement>(counters.gameObject).flexibleWidth = 0f;
 
-        Button books = ShelfChip(row, "BooksButton", WbScreen, ThemeRoleId.WindowBody, WbSize.Chip, true);
-        books.transform.Find("Label").GetComponent<TMP_Text>().text = UiText.Get("shelf.books");
-        GetOrAdd<LayoutElement>(books.gameObject).minWidth = 120f;
-        books.gameObject.SetActive(false);
-
-        menu = (RectTransform)Panel(body, "BooksMenu", new Vector2(0f, 1f), new Vector2(0f, 1f), Vector2.zero, new Vector2(WbSize.Menu, 200f), WbSurface, ThemeRoleId.Surface);
-        menu.pivot = Vector2.one;
-        VerticalLayoutGroup list = GetOrAdd<VerticalLayoutGroup>(menu.gameObject);
+        var dropdown = (RectTransform)Panel(body, "MenuDropdown", new Vector2(0f, 1f), new Vector2(0f, 1f), Vector2.zero, new Vector2(WbSize.Menu, 200f), WbSurface,
+                                            ThemeRoleId.Surface);
+        dropdown.pivot = new Vector2(0f, 1f);
+        VerticalLayoutGroup list = GetOrAdd<VerticalLayoutGroup>(dropdown.gameObject);
         list.padding = new RectOffset(6, 6, 6, 6);
         list.spacing = 2f;
         list.childControlWidth = true;
         list.childControlHeight = true;
         list.childForceExpandWidth = true;
         list.childForceExpandHeight = false;
-        ContentSizeFitter fit = GetOrAdd<ContentSizeFitter>(menu.gameObject);
+        ContentSizeFitter fit = GetOrAdd<ContentSizeFitter>(dropdown.gameObject);
         fit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
         fit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-        GetOrAdd<LayoutElement>(menu.gameObject).minWidth = WbSize.Menu;
-        HairlineFrame(menu, WbLineStrong, ThemeRoleId.HairlineStrong);
-        Button bookRow = ShelfChip(menu, "BookTemplate", WbSurface, ThemeRoleId.Button, 44f, false);
-        bookRow.transform.Find("Frame").gameObject.SetActive(false);
-        bookRow.gameObject.SetActive(false);
-        menu.gameObject.SetActive(false);
+        GetOrAdd<LayoutElement>(dropdown.gameObject).minWidth = WbSize.Menu;
+        HairlineFrame(dropdown, WbLineStrong, ThemeRoleId.HairlineStrong);
+        Button rowTemplate = MenuRow(dropdown, "RowTemplate");
+        rowTemplate.gameObject.SetActive(false);
+        TMP_Text caption = WbText(dropdown, "CaptionTemplate", null, UiText.Get("menubar.notHandedOver"), PcType.Caption, ThemeRoleId.SurfaceMuted,
+                                  TextAlignmentOptions.BottomLeft);
+        caption.margin = new Vector4(PcSize.M, PcSize.S, PcSize.M, 2f);
+        LayoutElement captionSize = GetOrAdd<LayoutElement>(caption.gameObject);
+        captionSize.minHeight = captionSize.preferredHeight = 40f;
+        caption.gameObject.SetActive(false);
+        dropdown.gameObject.SetActive(false);
 
-        ShelfView shelf = GetOrAdd<ShelfView>(root.gameObject);
-        var so = new SerializedObject(shelf);
+        MenuBarView view = GetOrAdd<MenuBarView>(root.gameObject);
+        var so = new SerializedObject(view);
         Wire(so, "row", row);
-        Wire(so, "chipTemplate", chip);
-        Wire(so, "dividerTemplate", divider.gameObject);
-        Wire(so, "booksButton", books);
-        Wire(so, "booksMenu", menu);
-        Wire(so, "booksList", menu);
-        Wire(so, "bookRowTemplate", bookRow);
+        Wire(so, "titleTemplate", title);
+        Wire(so, "dropdown", dropdown);
+        Wire(so, "rowTemplate", rowTemplate);
+        Wire(so, "captionTemplate", caption);
         so.ApplyModifiedProperties();
-        return shelf;
+        return new AppMenuBar { View = view, Dropdown = dropdown, Name = name, Counters = counters, Search = search };
     }
 
-    /// <summary>A shelf chip (or a book's row): a plate in <paramref name="role"/> with a hairline, <paramref name="height"/> tall, giving way to WbSize.ChipMin; its unread dot, its name (Caption, cut with an ellipsis), its side's plate and, with <paramref name="chevron"/>, a drawn chevron.</summary>
-    private static Button ShelfChip(Transform parent, string name, Color fill, ThemeRoleId role, float height, bool chevron)
+    /// <summary>
+    /// A menu's title: a clear button WbSize.MenuTitle tall whose row holds
+    /// its unread dot, its side's plate and its name (Body, ink; the
+    /// side before the word, "L Papers") ("L", "R"); behind it the open menu's plate (warm grey
+    /// with a bar of the primary colour along its foot, the step pills'
+    /// look), shown while its menu is open.
+    /// </summary>
+    private static Button MenuTitle(Transform parent, string name)
     {
-        Button chip = MakeButton(parent, name, null, Vector2.zero, Vector2.one, fill, role);
-        HorizontalLayoutGroup chipRow = GetOrAdd<HorizontalLayoutGroup>(chip.gameObject);
-        chipRow.padding = new RectOffset(12, 12, 0, 0);
-        chipRow.spacing = 8f;
-        chipRow.childAlignment = TextAnchor.MiddleLeft;
-        chipRow.childControlWidth = true;
-        chipRow.childControlHeight = true;
-        chipRow.childForceExpandWidth = false;
-        chipRow.childForceExpandHeight = false;
-        LayoutElement size = GetOrAdd<LayoutElement>(chip.gameObject);
-        size.minHeight = size.preferredHeight = height;
-        size.minWidth = WbSize.ChipMin;
+        Button title = MakeButton(parent, name, null, Vector2.zero, Vector2.one, new Color(1f, 1f, 1f, 0f), ThemeRoleId.ClickCatcher);
+        HorizontalLayoutGroup content = GetOrAdd<HorizontalLayoutGroup>(title.gameObject);
+        content.padding = new RectOffset(14, 18, 0, 0);
+        content.spacing = 8f;
+        content.childAlignment = TextAnchor.MiddleLeft;
+        content.childControlWidth = true;
+        content.childControlHeight = true;
+        content.childForceExpandWidth = false;
+        content.childForceExpandHeight = false;
+        LayoutElement size = GetOrAdd<LayoutElement>(title.gameObject);
+        size.minHeight = size.preferredHeight = WbSize.MenuTitle;
         size.flexibleWidth = 0f;
-        GetOrAdd<CanvasGroup>(chip.gameObject);
-        HairlineFrame(chip.transform);
 
-        Transform dot = Panel(chip.transform, "Unread", Center, Center, Vector2.zero, new Vector2(8f, 8f), WbHold);
+        Transform current = Panel(title.transform, "Current", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, WbInfoBg, ThemeRoleId.Info);
+        current.GetComponent<Image>().raycastTarget = false;
+        GetOrAdd<LayoutElement>(current.gameObject).ignoreLayout = true;
+        current.SetSiblingIndex(0);
+        Panel(current, "Bar", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, 1.5f), new Vector2(0f, 3f), WbAction, ThemeRoleId.PrimaryAction)
+            .GetComponent<Image>().raycastTarget = false;
+        current.gameObject.SetActive(false);
+
+        UnreadDot(title.transform);
+        TMP_Text label = title.transform.Find("Label").GetComponent<TMP_Text>();
+        Chrome(label, PcType.Body);
+        label.alignment = TextAlignmentOptions.MidlineLeft;
+        label.textWrappingMode = TextWrappingModes.NoWrap;
+        label.overflowMode = TextOverflowModes.Overflow;
+        label.raycastTarget = false;
+        label.color = WbInk;
+        SceneUiKit.Tag(label, ThemeRoleId.Surface, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button, false);
+        label.transform.SetAsLastSibling();
+
+        SidePlate(title.transform);
+        // The side before the word ("L Papers"): a word drawn a little wider than measured never runs into it.
+        title.transform.Find("Side").SetSiblingIndex(label.transform.GetSiblingIndex());
+        return title;
+    }
+
+    /// <summary>A drop-down's row: a white plate (the Button role) 44 units tall, dimmed by its CanvasGroup when not readable; its unread dot, its name (Caption, cut with an ellipsis, taking the room), its note (Caption, muted: what a click does to a paper not handed over) and its side's plate.</summary>
+    private static Button MenuRow(Transform parent, string name)
+    {
+        Button button = MakeButton(parent, name, null, Vector2.zero, Vector2.one, WbSurface, ThemeRoleId.Button);
+        HorizontalLayoutGroup content = GetOrAdd<HorizontalLayoutGroup>(button.gameObject);
+        content.padding = new RectOffset(12, 12, 0, 0);
+        content.spacing = 8f;
+        content.childAlignment = TextAnchor.MiddleLeft;
+        content.childControlWidth = true;
+        content.childControlHeight = true;
+        content.childForceExpandWidth = false;
+        content.childForceExpandHeight = false;
+        LayoutElement size = GetOrAdd<LayoutElement>(button.gameObject);
+        size.minHeight = size.preferredHeight = 44f;
+        GetOrAdd<CanvasGroup>(button.gameObject);
+
+        UnreadDot(button.transform);
+        TMP_Text label = button.transform.Find("Label").GetComponent<TMP_Text>();
+        Chrome(label, PcType.Caption);
+        label.alignment = TextAlignmentOptions.MidlineLeft;
+        label.textWrappingMode = TextWrappingModes.NoWrap;
+        label.overflowMode = TextOverflowModes.Ellipsis;
+        label.raycastTarget = false;
+        label.color = WbInk;
+        GetOrAdd<LayoutElement>(label.gameObject).flexibleWidth = 1f;
+        label.transform.SetAsLastSibling();
+
+        TMP_Text note = WbText(button.transform, "Note", null, string.Empty, PcType.Caption, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.MidlineRight);
+        note.overflowMode = TextOverflowModes.Overflow;
+        note.gameObject.SetActive(false);
+        SidePlate(button.transform);
+        return button;
+    }
+
+    /// <summary>The small unread dot (the Holding role's ink) first in <paramref name="parent"/>'s row, hidden.</summary>
+    private static void UnreadDot(Transform parent)
+    {
+        Transform dot = Panel(parent, "Unread", Center, Center, Vector2.zero, new Vector2(8f, 8f), WbHold);
         Image dotImage = dot.GetComponent<Image>();
         dotImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
         dotImage.raycastTarget = false;
@@ -439,17 +343,12 @@ public static partial class OfficeSceneUIBuilder
         dotSize.minHeight = dotSize.preferredHeight = 8f;
         dot.SetSiblingIndex(0);
         dot.gameObject.SetActive(false);
+    }
 
-        TMP_Text label = chip.transform.Find("Label").GetComponent<TMP_Text>();
-        Chrome(label, PcType.Caption);
-        label.alignment = TextAlignmentOptions.MidlineLeft;
-        label.textWrappingMode = TextWrappingModes.NoWrap;
-        label.overflowMode = TextOverflowModes.Ellipsis;
-        label.raycastTarget = false;
-        label.color = WbInk;
-        GetOrAdd<LayoutElement>(label.gameObject).flexibleWidth = 1f;
-
-        Transform side = Panel(chip.transform, "Side", Center, Center, Vector2.zero, new Vector2(56f, 26f), WbAction, ThemeRoleId.PrimaryAction);
+    /// <summary>The side's plate ("L", "R": the primary colour, its text bold) last in <paramref name="parent"/>'s row, hidden.</summary>
+    private static void SidePlate(Transform parent)
+    {
+        Transform side = Panel(parent, "Side", Center, Center, Vector2.zero, new Vector2(56f, 26f), WbAction, ThemeRoleId.PrimaryAction);
         side.GetComponent<Image>().raycastTarget = false;
         HorizontalLayoutGroup sidePad = GetOrAdd<HorizontalLayoutGroup>(side.gameObject);
         sidePad.padding = new RectOffset(8, 8, 1, 1);
@@ -459,20 +358,8 @@ public static partial class OfficeSceneUIBuilder
         sidePad.childForceExpandHeight = false;
         TMP_Text sideText = WbText(side, "Text", null, "L", PcType.Caption, ThemeRoleId.PrimaryAction, TextAlignmentOptions.Center, FontStyles.Bold);
         sideText.overflowMode = TextOverflowModes.Overflow;
+        side.SetAsLastSibling();
         side.gameObject.SetActive(false);
-
-        if (chevron)
-        {
-            Transform glyph = Panel(chip.transform, "Chevron", Center, Center, Vector2.zero, new Vector2(14f, 14f), null);
-            LayoutElement glyphSize = GetOrAdd<LayoutElement>(glyph.gameObject);
-            glyphSize.minWidth = glyphSize.preferredWidth = 14f;
-            glyphSize.minHeight = glyphSize.preferredHeight = 14f;
-            GlyphBar(glyph, "Left", new Vector2(-2.6f, 0f), new Vector2(2f, 9f), 45f, ThemeRoleId.SurfaceMuted);
-            GlyphBar(glyph, "Right", new Vector2(2.6f, 0f), new Vector2(2f, 9f), -45f, ThemeRoleId.SurfaceMuted);
-            foreach (Image bar in glyph.GetComponentsInChildren<Image>(true))
-                bar.color = WbMuted;
-        }
-        return chip;
     }
 
     // ----------------------------- the work -----------------------------
@@ -489,7 +376,6 @@ public static partial class OfficeSceneUIBuilder
     {
         Transform root = Panel(main, "Status", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -WbSize.Status / 2f), new Vector2(0f, WbSize.Status), null);
         Transform plates = Panel(root, "Plates", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(plates, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-(WbSize.Search + 12f), 0f));
         var status = new AppStatus
         {
             Root = root,
@@ -504,8 +390,6 @@ public static partial class OfficeSceneUIBuilder
         PlaceRect(status.Cancel.transform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(180f + 8f), -20f), new Vector2(-8f, 20f));
         foreach (string plate in new[] { "Hold", "Match", "Differ", "Note" })
             plates.Find(plate).gameObject.SetActive(false);
-        status.Search = QuietButton(root, "SearchButton", "app.search.open");
-        PlaceRect(status.Search.transform, new Vector2(1f, 0f), Vector2.one, new Vector2(-WbSize.Search, 0f), Vector2.zero);
         return status;
     }
 
@@ -622,7 +506,7 @@ public static partial class OfficeSceneUIBuilder
     /// The findings column (IA8, §4.4; wave 5 A3): a surface at the work
     /// area's right with a hairline at its left. Its rail ("No findings yet"
     /// up its side, muted) shows while nothing is logged; then its full parts:
-    /// the heading (bold, muted), "Open the report" (a text link) and the
+    /// the heading (bold, muted) and the
     /// scrolling list of findings (a plate's template: a match plate and a
     /// difference plate, each a headline over one short line, both cut rather
     /// than wrapped). The app sets its width (the rail's or the column's).
@@ -646,12 +530,10 @@ public static partial class OfficeSceneUIBuilder
         Transform full = Panel(column, "Full", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         TMP_Text heading = WbText(full, "Heading", "findings.title", null, PcType.Caption, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
         PlaceRect(heading.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(16f, -48f), new Vector2(-16f, -8f));
-        Button report = LinkButton(full, "ReportButton", "findings.report");
-        PlaceRect(report.transform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(12f, 8f), new Vector2(-12f, 52f));
 
         RectTransform list = BuildScrollList(full, "List", Vector2.zero, Vector2.one, 8f, WbSurface, ThemeRoleId.Surface);
         Transform box = list.parent.parent;
-        PlaceRect(box, Vector2.zero, Vector2.one, new Vector2(10f, 60f), new Vector2(-10f, -52f));
+        PlaceRect(box, Vector2.zero, Vector2.one, new Vector2(10f, 8f), new Vector2(-10f, -52f));
 
         Button row = MakeButton(list, "FindingTemplate", null, Vector2.zero, Vector2.one, new Color(1f, 1f, 1f, 0f), ThemeRoleId.ClickCatcher);
         DestroyChildIfPresent(row.transform, "Label");
@@ -670,7 +552,6 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "rowTemplate", row);
         Wire(so, "full", full.gameObject);
         Wire(so, "rail", rail.gameObject);
-        Wire(so, "reportButton", report);
         so.ApplyModifiedProperties();
         return view;
     }
@@ -695,22 +576,6 @@ public static partial class OfficeSceneUIBuilder
             line.color = role == ThemeRoleId.FindingMatch ? WbOk : WbWarn;
         }
         return plate;
-    }
-
-    /// <summary>The foot (§3; wave 5 A3): a surface with a hairline over it: Back (a text link), the progress line (Caption, muted, one line, cut rather than wrapped) and Next (the primary button).</summary>
-    private static AppFoot BuildAppFoot(Transform body)
-    {
-        Transform root = Panel(body, "Foot", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, WbSize.Foot / 2f), new Vector2(0f, WbSize.Foot), WbSurface, ThemeRoleId.Surface);
-        HairlineEdge(root, "Rule", 0);
-        Button back = LinkButton(root, "BackButton", "guide.back");
-        PlaceRect(back.transform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(WbSize.Pad, -20f), new Vector2(WbSize.Pad + 110f, 20f));
-        TMP_Text progress = WbText(root, "Progress", null, string.Empty, PcType.Caption, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.MidlineLeft);
-        progress.textWrappingMode = TextWrappingModes.NoWrap;
-        progress.overflowMode = TextOverflowModes.Ellipsis;
-        PlaceRect(progress.transform, Vector2.zero, Vector2.one, new Vector2(WbSize.Pad + 110f + PcSize.L, 0f), new Vector2(-(WbSize.Pad + 300f + PcSize.L), 0f));
-        Button next = PrimaryButton(root, "NextButton", null);
-        PlaceRect(next.transform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(WbSize.Pad + 300f), -22f), new Vector2(-WbSize.Pad, 22f));
-        return new AppFoot { Back = back, Next = next, NextLabel = next.transform.Find("Label").GetComponent<TMP_Text>(), Progress = progress };
     }
 
     // ----------------------------- the Calendar view -----------------------------

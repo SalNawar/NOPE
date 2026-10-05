@@ -12,8 +12,10 @@ using UnityEngine.UI;
 /// per logged finding, newest first, so a new one is always in view (a match
 /// on the match plate, a difference on the difference plate, its headline in
 /// bold), each one headline and one short line (the two values; a proof ends
-/// "· evidence"), both cut rather than wrapped, and "Open the report" (the
-/// Deviation Report on the target side). A plate clicked shows its finding
+/// "· evidence"; a paper flagged missing and not carried reads "Asked for,
+/// not carried"), both cut rather than wrapped (the desk-first redesign: the
+/// findings are the evidence; the Deviation Report left the player's view
+/// with its link and its search entries). A plate clicked shows its finding
 /// again (MatchBoard), both documents opened at the values. The texts are
 /// built here from the finding's kind and sides (ui strings
 /// "finding.title.*", "finding.detail*").
@@ -26,17 +28,11 @@ public sealed class FindingsView : MonoBehaviour
     /// <summary>A finding's plate (inactive), cloned per finding: a button holding a "Match" and a "Differ" plate, each with its Title and Detail texts.</summary>
     [SerializeField] private Button rowTemplate;
 
-    /// <summary>The column's parts while something is logged: the heading, the list and Open the report.</summary>
+    /// <summary>The column's parts while something is logged: the heading and the list.</summary>
     [SerializeField] private GameObject full;
 
     /// <summary>The slim rail shown while nothing is logged ("No findings yet" up its side).</summary>
     [SerializeField] private GameObject rail;
-
-    /// <summary>Opens the Deviation Report on the target side.</summary>
-    [SerializeField] private Button reportButton;
-
-    /// <summary>The app (the report opens in it).</summary>
-    [SerializeField] private InvestigationApp app;
 
     private readonly List<Button> _rows = new List<Button>();
     private readonly List<Finding> _shown = new List<Finding>();
@@ -45,7 +41,7 @@ public sealed class FindingsView : MonoBehaviour
     /// <summary>Raised when a finding's plate is clicked.</summary>
     public event Action<Finding> Clicked;
 
-    /// <summary>The plates shown, top to bottom (the keys' Findings region), then Open the report.</summary>
+    /// <summary>The plates shown, top to bottom (the keys' Findings region).</summary>
     public IEnumerable<Button> Buttons
     {
         get
@@ -53,8 +49,6 @@ public sealed class FindingsView : MonoBehaviour
             foreach (Button row in _rows)
                 if (row != null && row.gameObject.activeInHierarchy)
                     yield return row;
-            if (reportButton != null && reportButton.gameObject.activeInHierarchy)
-                yield return reportButton;
         }
     }
 
@@ -65,6 +59,8 @@ public sealed class FindingsView : MonoBehaviour
     public static string Detail(Finding finding)
     {
         string line;
+        if (finding.Kind == FindingKind.PaperMissing)
+            return UiText.Get("finding.detail.missing");
         if (finding.KeyA == EntryKeys.CalendarToday || EntryKeys.TryRule(finding.KeyA, out _))
             line = UiText.Format("finding.detail.rule", finding.ValueB, Where(finding.TitleB));
         else if (string.Equals(finding.ValueA, finding.ValueB, StringComparison.OrdinalIgnoreCase))
@@ -90,7 +86,7 @@ public sealed class FindingsView : MonoBehaviour
 
     private void Awake() => Wire();
 
-    /// <summary>Hides the template and wires Open the report (once).</summary>
+    /// <summary>Hides the template (once).</summary>
     private void Wire()
     {
         if (_wired)
@@ -98,11 +94,6 @@ public sealed class FindingsView : MonoBehaviour
         _wired = true;
         if (rowTemplate != null)
             rowTemplate.gameObject.SetActive(false);
-        if (reportButton != null && app != null)
-            reportButton.onClick.AddListener(() => app.OpenOnTarget(LinkTarget.ToTab(AppTab.Report)));
-        // The desk-first redesign (Saleh 2026-10-05, item 10): the findings are the evidence; the separate Deviation Report leaves the player's view.
-        if (reportButton != null)
-            reportButton.gameObject.SetActive(false);
     }
 
     /// <summary>The rail while nothing is logged, else the column (the app sets the column's width).</summary>

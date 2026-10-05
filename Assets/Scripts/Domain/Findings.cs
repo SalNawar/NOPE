@@ -63,7 +63,10 @@ public enum FindingKind
     SealIncorrect,
 
     /// <summary>A seal held against another office's seal, proving nothing ("Another office"). Not logged.</summary>
-    OtherOffice
+    OtherOffice,
+
+    /// <summary>A paper flagged missing that the traveller, asked for it, says they do not carry ("Not carried"; the desk-first redesign, item 7). Logged; a difference.</summary>
+    PaperMissing
 }
 
 /// <summary>How a finding looks: its line's and plate's colour.</summary>
@@ -209,6 +212,7 @@ public static class FindingRules
             case FindingKind.NotToday:
             case FindingKind.Expired:
             case FindingKind.SealIncorrect:
+            case FindingKind.PaperMissing:
                 return FindingLook.Differ;
             default:
                 return FindingLook.Info;
@@ -225,11 +229,13 @@ public static class FindingRules
     /// True for a directive fault's evidence (Saleh, 2026-10-05: a denial with
     /// no logged evidence earns a citation, a directive fault's too): a rule
     /// held against the value it breaks, the calendar against a departure
-    /// dated another day or a Valid Until that has passed. A deviation's
-    /// evidence is its proof (DiscrepancyLog), never counted here.
+    /// dated another day or a Valid Until that has passed, a paper flagged
+    /// missing the traveller does not carry (a paper set's fault; the
+    /// desk-first redesign, item 7). A deviation's evidence is its proof
+    /// (DiscrepancyLog), never counted here.
     /// </summary>
     public static bool IsDirectiveEvidence(FindingKind kind) =>
-        kind == FindingKind.RuleBroken || kind == FindingKind.NotToday || kind == FindingKind.Expired;
+        kind == FindingKind.RuleBroken || kind == FindingKind.NotToday || kind == FindingKind.Expired || kind == FindingKind.PaperMissing;
 
     /// <summary>The ui string key of the line's label ("finding.link.Match").</summary>
     public static string LinkKey(FindingKind kind) => "finding.link." + kind;
@@ -307,8 +313,10 @@ public static class RuleChecks
 public sealed class Finding
 {
     /// <summary>A finding; <paramref name="deviation"/> is the deviation the pair proved (DiscrepancyLog.Prove), or null.</summary>
-    public Finding(FindingKind kind, string keyA, string keyB, string titleA, string valueA, string titleB, string valueB, string subject, Discrepancy deviation)
+    public Finding(FindingKind kind, string keyA, string keyB, string titleA, string valueA, string titleB, string valueB, string subject, Discrepancy deviation,
+                   ClueCategory? category = null)
     {
+        Category = category;
         Kind = kind;
         KeyA = keyA ?? string.Empty;
         KeyB = keyB ?? string.Empty;
@@ -346,6 +354,9 @@ public sealed class Finding
 
     /// <summary>The deviation the pair proved (DiscrepancyLog.Prove: the same proof the Deviation Report documents), or null. What the wheel's question about it reads (Confrontations.About; wave 5, lesson 3).</summary>
     public Discrepancy Deviation { get; }
+
+    /// <summary>The detail the finding is about (the value's category: a pair's statement, the value a rule or the date was held against), or null (a paper missing); a logged finding about it unlocks the wheel's question about it (InterviewUnlocks.About).</summary>
+    public ClueCategory? Category { get; }
 
     /// <summary>True when the pair proved a deviation (DiscrepancyLog): "Logged as evidence".</summary>
     public bool Proof => Deviation != null;

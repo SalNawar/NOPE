@@ -119,9 +119,6 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The stamps whose decisions this listens to (null while detached; audit R4-003).</summary>
     private DeskStampTray _stampTrayListening;
 
-    /// <summary>The character art the traveller's face is drawn with.</summary>
-    private CharacterArt _art;
-
     /// <summary>The evidence documented for the current case (or the case just decided): the deviations proven (DiscrepancyLog) and the directive faults' findings (a rule broken, a date that fails: FindingLog.DirectiveEvidence, counted as the decision is made, before the case's findings clear), which a denial needs (VerdictRules.IsUnprovenDenial).</summary>
     public int EvidenceCount => _evidence.Count + (_currentCase != null ? DirectiveEvidence : _directiveEvidenceDecided);
 
@@ -200,6 +197,9 @@ public sealed class InvestigationUIController : MonoBehaviour
         _documents.Examined += StepsRead;
         _interview.Answered += StepsAsked;
         _interview.LookedAt += StepsLookedAt;
+        _interview.NotCarried += LogNotCarried;
+        _interview.MissingChanged += ShowMissing;
+        _documents.PapersChanged += ShowMissing;
         _reference.RecordLookedUp += StepsRecordViewed;
         if (compareController != null)
             compareController.PairCompared += StepsCompared;
@@ -208,6 +208,8 @@ public sealed class InvestigationUIController : MonoBehaviour
             Board.Changed += RefreshDecision;
             Board.Logged += Confront;
         }
+        if (app != null)
+            app.MissingFlagged += FlagMissingFromApp;
 
         if (stampTray != null)
         {
@@ -238,7 +240,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         _interview = new InterviewPresenter(interactionPanel, transcriptViews, () => Arrived(AppTab.Transcript), wheel, compareController,
                                             RequestPaper, SignWaiver, () => _currentCase, this, index);
         // No Report badge (the desk-first redesign: the Deviation Report leaves the player's view; the findings column is the evidence).
-        _evidence = new EvidencePresenter(compareController, reportViews, () => { }, () => _currentCase, index, () => _agency, () => _reference.Day);
+        _evidence = new EvidencePresenter(compareController, reportViews, () => { }, () => _currentCase, () => _agency, () => _reference.Day);
     }
 
     /// <summary>The start-up error and warnings for what is not wired (each changes what the day can show or generate).</summary>
@@ -280,6 +282,9 @@ public sealed class InvestigationUIController : MonoBehaviour
         _documents.Examined -= StepsRead;
         _interview.Answered -= StepsAsked;
         _interview.LookedAt -= StepsLookedAt;
+        _interview.NotCarried -= LogNotCarried;
+        _interview.MissingChanged -= ShowMissing;
+        _documents.PapersChanged -= ShowMissing;
         _reference.RecordLookedUp -= StepsRecordViewed;
         if (compareController != null)
             compareController.PairCompared -= StepsCompared;
@@ -288,6 +293,8 @@ public sealed class InvestigationUIController : MonoBehaviour
             Board.Changed -= RefreshDecision;
             Board.Logged -= Confront;
         }
+        if (app != null)
+            app.MissingFlagged -= FlagMissingFromApp;
         if (_stampTrayListening != null)
         {
             _stampTrayListening.Decided -= Decide;
@@ -327,12 +334,8 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Injects today's interview (questions, dialogs and wording, fixed at day start).</summary>
     public void SetInterviewDay(InterviewDay day) => _interview.SetInterviewDay(day);
 
-    /// <summary>Injects the character art the passport photos and the app's face of the traveller are drawn with.</summary>
-    public void SetCharacterArt(CharacterArt art)
-    {
-        _art = art;
-        _documents.SetCharacterArt(art);
-    }
+    /// <summary>Injects the character art the passport photos are drawn with.</summary>
+    public void SetCharacterArt(CharacterArt art) => _documents.SetCharacterArt(art);
 
     /// <summary>Injects the day-start translation (which tongues are foreign and translated today) and the library's translation settings (their key-word rule included).</summary>
     public void SetTranslation(TranslationDay day, TranslationSettings settings) => _interview.SetTranslation(day, settings);
@@ -392,10 +395,60 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>
     /// A finding the workbench just logged (MatchBoard.Logged; wave 5, lesson
-    /// 3): when it is evidence of a difference (Confrontations.About), the
-    /// traveller wheel gains its question.
+    /// 3; the desk-first redesign, item 7): the traveller wheel's question
+    /// about its detail unlocks (InterviewUnlocks.About), and when it is
+    /// evidence of a difference (Confrontations.About) the wheel gains its
+    /// question about exactly it.
     /// </summary>
-    private void Confront(Finding finding) => _interview.Confront(Confrontations.About(finding));
+    private void Confront(Finding finding)
+    {
+        if (finding != null && finding.Category.HasValue)
+            _interview.Unlock(InterviewUnlocks.About(finding.Category.Value));
+        _interview.Confront(Confrontations.About(finding));
+    }
+
+    /// <summary>
+    /// The papers the clerk can flag missing for the traveller at the desk
+    /// (the desk-first redesign, item 7: the PC's Papers menu and the desk
+    /// read the same list; MissingPapers.Open over <see cref="Papers"/>
+    /// gives those not handed over yet). MissingPapers.None between
+    /// travellers.
+    /// </summary>
+    public MissingPapers MissingPapers => _interview != null ? _interview.Missing : MissingPapers.None;
+
+    /// <summary>Where each of the current traveller's papers is (not handed over, on the desk, scanned).</summary>
+    public CasePapers Papers => _documents != null ? _documents.Papers : null;
+
+    /// <summary>Raised when a paper was flagged missing or its state changed (the desk's rulebook can redraw its flags).</summary>
+    public event Action MissingChanged;
+
+    /// <summary>
+    /// Flags the current traveller's paper <paramref name="requestId"/>
+    /// (a FormRequest.Id of <see cref="MissingPapers"/>) missing: the wheel
+    /// then offers "Hand me your ..." (the desk-first redesign, item 7). The
+    /// PC's Papers menu calls it, and the desk's rulebook may (a line that
+    /// requires a paper: "Entry ticket missing"). True when it was flaggable
+    /// and not flagged yet.
+    /// </summary>
+    public bool FlagMissing(string requestId) => _currentCase != null && _interview.FlagMissing(requestId);
+
+    /// <summary>The Papers menu flagged a paper missing.</summary>
+    private void FlagMissingFromApp(string requestId) => FlagMissing(requestId);
+
+    /// <summary>The traveller does not carry a paper they were asked for: the workbench logs it as missing (a difference Deny can cite).</summary>
+    private void LogNotCarried(FormRequest request)
+    {
+        if (Board != null)
+            Board.LogMissing(request);
+    }
+
+    /// <summary>The missing papers' list or a paper's place changed: the PC's Papers menu redraws its flags, and the desk hears of it.</summary>
+    private void ShowMissing()
+    {
+        if (app != null)
+            app.SetMissing(_currentCase != null ? _interview.Missing : MissingPapers.None, _documents.Papers);
+        MissingChanged?.Invoke();
+    }
 
     /// <summary>
     /// A case on the desk: the app's title names the traveller (no claim is
@@ -409,7 +462,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// </summary>
     private void ShowRich(CaseInstance inst, ContentLibrarySO lib)
     {
-        app.BeginCase(inst != null ? inst.visitorDisplayName : string.Empty, inst != null ? inst.look : null, _art);
+        app.BeginCase(inst != null ? inst.visitorDisplayName : string.Empty);
         if (Board != null)
             Board.BeginCase(inst);
         ShowCaseLayers(true);
