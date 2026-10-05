@@ -5,8 +5,9 @@ using System;
 /// spec, TD4: the APPROVED and DENIED stamps, track B's to press): marks are
 /// MarkHeight H tall at the mark's own aspect; the next mark of a paper goes
 /// into its largest stamp area (a passport's visa page, a form's footer box),
-/// the first in its middle and each later one stepped across and down it so a
-/// second stamp never hides the first; a mark pressed at a point is centred
+/// in rows from its top left, each mark beside the last with a gap, so a second
+/// stamp never hides the first (the rows start over when the area is full); a
+/// mark pressed at a point is centred
 /// there and kept whole on the page. A form with no stamp area takes its marks
 /// at the page's bottom right. Pure, so it is tested headless; the desk paper
 /// prints the mark (DeskDocument.Stamp).
@@ -19,8 +20,8 @@ public static class StampSpots
     /// <summary>The share of the page's width and height at its bottom right a form without a stamp area takes its marks in.</summary>
     public const float FallbackShare = 0.3f;
 
-    /// <summary>How far each later mark steps from the one before, as a share of the mark's own size.</summary>
-    public const float Step = 0.55f;
+    /// <summary>The gap between two marks and round them inside the area, as a share of the mark's height.</summary>
+    public const float Gap = 0.3f;
 
     /// <summary>The largest stamp area of <paramref name="form"/> (by area; the first of equals), else the page's bottom right corner region; an empty rectangle without a form.</summary>
     public static FaceRect Area(PlacedForm form)
@@ -50,26 +51,22 @@ public static class StampSpots
 
     /// <summary>
     /// Where mark number <paramref name="index"/> (0 the first) of
-    /// <paramref name="aspect"/> lands on <paramref name="form"/>: the first in
-    /// the middle of its stamp area, each later one Step of the mark across
-    /// and down from the one before, wrapping inside the area.
+    /// <paramref name="aspect"/> lands on <paramref name="form"/>: in its stamp
+    /// area's rows from the top left, a Gap round each mark (as many to a row
+    /// and as many rows as fit, at least one; the rows start over when the
+    /// area is full).
     /// </summary>
     public static FaceRect Next(PlacedForm form, int index, float aspect)
     {
         FaceRect area = Area(form);
         (float w, float h) = MarkSize(form, area, aspect);
-        float roomX = Math.Max(0f, area.Width - w), roomY = Math.Max(0f, area.Height - h);
-        float x = area.XMin + roomX / 2f, y = area.YMin + roomY / 2f;
-        for (int i = 0; i < Math.Max(0, index); i++)
-        {
-            x += w * Step;
-            y += h * Step;
-            if (x > area.XMin + roomX + 1e-6f)
-                x = area.XMin + (x - area.XMin) % Math.Max(roomX, 1e-6f);
-            if (y > area.YMin + roomY + 1e-6f)
-                y = area.YMin + (y - area.YMin) % Math.Max(roomY, 1e-6f);
-        }
-        return FaceRect.FromTop(x, y, w, h);
+        float gap = h * Gap;
+        int across = Math.Max(1, (int)((area.Width - gap) / (w + gap)));
+        int down = Math.Max(1, (int)((area.Height - gap) / (h + gap)));
+        int k = Math.Max(0, index) % (across * down);
+        float x = Math.Min(area.XMin + gap + (k % across) * (w + gap), area.XMax - w);
+        float y = Math.Min(area.YMin + gap + (k / across) * (h + gap), area.YMax - h);
+        return FaceRect.FromTop(Math.Max(area.XMin, x), Math.Max(area.YMin, y), w, h);
     }
 
     /// <summary>A mark of <paramref name="aspect"/> pressed at (<paramref name="x"/>, <paramref name="y"/>) in form space: centred there, moved just enough to lie whole on the page.</summary>

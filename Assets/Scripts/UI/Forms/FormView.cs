@@ -125,7 +125,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// <summary>The emblems' pooled images (clones of the seal among the texts; the travel documents spec, TD3).</summary>
     private readonly List<Image> _emblems = new List<Image>();
 
-    /// <summary>The watermarks' pooled images (clones of the seal just over it, under the fills; TD1).</summary>
+    /// <summary>The watermarks' pooled images (clones of the seal just over the fills, under the slots' tints, the lines and the texts; TD1).</summary>
     private readonly List<Image> _watermarks = new List<Image>();
 
     /// <summary>A card's rounded paper (a 9-sliced sprite painted once; TD1).</summary>
@@ -449,8 +449,8 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// <summary>
     /// Watermark <paramref name="index"/> (the travel documents spec, TD1):
     /// a seal's outline in its ink, or an emblem in <paramref name="cover"/>,
-    /// faint (EmblemArt.WatermarkAlpha), just over the paper's faint seal and
-    /// under the fills.
+    /// faint (EmblemArt.WatermarkAlpha), just over the fills (so the boxes
+    /// never hide it) and under the slots' tints, the lines and the texts.
     /// </summary>
     private void ShowWatermark(int index, FormItem item, Color cover)
     {
@@ -459,7 +459,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         Color ink = isSeal ? SealArt.Ink(mark.Ink) : cover;
         ink.a = EmblemArt.WatermarkAlpha;
         Image image = ShowMark(_watermarks, index, seal.transform.parent, item.Rect, sprite, ink);
-        image.transform.SetSiblingIndex(seal.transform.GetSiblingIndex() + 1);
+        image.transform.SetSiblingIndex((fills != null ? fills.transform : seal.transform).GetSiblingIndex() + 1);
     }
 
     /// <summary>A card's paper: a white rounded square, 9-sliced at its corners, painted once.</summary>
@@ -554,8 +554,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         _measure.SetFont(text, item.Text);
         TmpFormText.Style(text, item.Role, item.Size);
         text.text = TmpFormText.Printed(item.Role, item.Text);
-        if (item.Role != FormTextRole.Mrz)
-            FitWords(text, item);
+        FitWords(text, item);
         text.color = style.Ink(item.Role);
         text.alignment = item.Align == FormTextAlign.Right ? TextAlignmentOptions.TopRight
             : item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Top
@@ -563,25 +562,13 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         Place(text.rectTransform, item.Rect);
     }
 
-    /// <summary>The least share of its size a printed text shrinks to so that its widest word fits its box (wave 5 A3: "TRANSPON / DER CLASS" never breaks mid-word).</summary>
-    private const float WordFitFloor = 0.6f;
-
-    /// <summary>Where a printed text's words part (a space, a line break).</summary>
-    private static readonly char[] WordBreaks = { ' ', '\n' };
-
     /// <summary>Shrinks printed <paramref name="text"/> (already styled as <paramref name="item"/>) just enough that its widest word fits the item's box, so a word wraps whole and never breaks in the middle; the box's place and size stay the layout's (the document design spec D2). Measured on the hidden measure text (a form is often filled while inactive).</summary>
     private void FitWords(TMP_Text text, FormItem item)
     {
-        float width = item.Rect.Width;
-        if (string.IsNullOrEmpty(item.Text) || width <= 0f || _measureText == null)
+        if (_measureText == null)
             return;
         _measure.SetFont(_measureText, item.Text);
-        TmpFormText.Style(_measureText, item.Role, item.Size);
-        float widest = 0f;
-        foreach (string word in item.Text.Split(WordBreaks, StringSplitOptions.RemoveEmptyEntries))
-            widest = Mathf.Max(widest, _measureText.GetPreferredValues(word, float.PositiveInfinity, float.PositiveInfinity).x);
-        if (widest > width)
-            text.fontSize *= Mathf.Max(WordFitFloor, width / widest * 0.98f);
+        text.fontSize *= TmpFormText.WordFit(_measureText, item.Text, item.Role, item.Size, item.Rect.Width);
     }
 
     /// <summary>Arms pooled button <paramref name="index"/> over slot <paramref name="slot"/>'s box, clear and unpicked.</summary>

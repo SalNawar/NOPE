@@ -267,7 +267,7 @@ public enum FormItemKind
     /// <summary>A large faint mark under the page's boxes: its text is a seal's value (the issuing office's) or an emblem's name, drawn by the renderers.</summary>
     Watermark,
 
-    /// <summary>A folded card's crease down the page, under the boxes.</summary>
+    /// <summary>A folded card's crease down the page (FormPaint shades it faintly over the boxes).</summary>
     Crease
 }
 
@@ -759,7 +759,7 @@ public static class FormLayout
         /// <summary>A ticket's perforation: its line's distance from the left edge, a hole's side and the step between holes, in H.</summary>
         private const float PerforationX = 0.03f, Hole = 0.005f, HoleStep = 0.012f;
 
-        /// <summary>The look's frame on each page (a flow page: one page as tall as its content), in the page's margins, so nothing printed moves; a folded card's crease runs down the middle under every box.</summary>
+        /// <summary>The look's frame on each page (a flow page: one page as tall as its content), in the page's margins, so nothing printed moves; a folded card's crease runs down the middle (first in drawing order; painted as a faint shade over the boxes).</summary>
         private void DrawFrame(float height)
         {
             FormFrame frame = Frame;
@@ -902,6 +902,9 @@ public static class FormLayout
         /// <summary>Beside an office seal the agency and programme lines shrink to keep one line, down to this share of their size, and the title down to this share of its floor.</summary>
         private const float OfficeLineFloor = 0.8f;
 
+        /// <summary>The form number shrinks to keep one line in its column, down to this share of its size (a booklet's narrower header).</summary>
+        private const float NumberFloor = 0.7f;
+
         /// <summary>
         /// The header: the agency line at the left and the programme line at
         /// the right (beside an office seal each, and the title, shrinks further to keep one line); under them the title (one line, shrinking to its floor)
@@ -944,8 +947,9 @@ public static class FormLayout
             string title = (_data.Title ?? string.Empty).ToUpperInvariant();
             float size = OneLine(title, FormTextRole.Title, _m.titleSize, office ? _m.titleFloor * OfficeLineFloor : _m.titleFloor, titleWidth);
             float titleHeight = Text(FormTextRole.Title, title, left, titleTop, titleWidth, size);
-            float number = string.IsNullOrEmpty(_data.FormNumber) ? 0f : Line(FormTextRole.FormNumber, G(_m.formNumberSize));
-            Text(FormTextRole.FormNumber, _data.FormNumber, left + titleWidth, titleTop + Math.Max(0f, titleHeight - number), width - titleWidth, G(_m.formNumberSize), -1, FormTextAlign.Right);
+            float numberSize = string.IsNullOrEmpty(_data.FormNumber) ? G(_m.formNumberSize) : OneLine(_data.FormNumber, FormTextRole.FormNumber, _m.formNumberSize, _m.formNumberSize * NumberFloor, width - titleWidth);
+            float number = string.IsNullOrEmpty(_data.FormNumber) ? 0f : Line(FormTextRole.FormNumber, numberSize);
+            Text(FormTextRole.FormNumber, _data.FormNumber, left + titleWidth, titleTop + Math.Max(0f, titleHeight - number), width - titleWidth, numberSize, -1, FormTextAlign.Right);
             _y = Math.Max(titleTop + Math.Max(titleHeight, number), office || emblem ? top + side : top) + G(_m.blockGap);
         }
 
@@ -1531,8 +1535,9 @@ public static class FormLayout
         /// holder's nation's emblem, centred across the page and down the room
         /// between the pen and the page's bottom margin (a letterhead's body
         /// after its header, a passport's visa page after its fold), under
-        /// every item (first in drawing order), taking no room; nothing when
-        /// there is no mark to draw (or no room, on a flowing page).
+        /// every item (first in drawing order; the renderers draw it over the
+        /// boxes' fills), taking no room; nothing when there is no mark to
+        /// draw (or no room, on a flowing page).
         /// </summary>
         private void Watermark(FormBlock b)
         {

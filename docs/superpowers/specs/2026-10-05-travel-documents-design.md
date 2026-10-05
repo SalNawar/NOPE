@@ -29,7 +29,9 @@ New blocks (`FormBlockKind`, appended: 17 to 20): `Fold` (a booklet's spine at `
 page), `Mrz` (the machine-readable zone), `Visa` (a visa page: the stamp area down to the bottom
 margin, its caption inside), `Watermark` (the field's seal, else the nation's emblem, faint and
 centred in the room below it). A `chip` cell (`FormSlots.Chip`) draws a card's chip. The new
-frames draw only in the margins, except the folded card's crease, which lies under every box.
+frames draw only in the margins, except the folded card's crease, a faint shade and highlight down
+the middle over the boxes (as a fold shows through print). A watermark is drawn over the boxes' fills,
+under the lines and the words, so no box hides it.
 Every look passes the forms' contrast pairs and every seal ink (Build Office UI checks them).
 
 ## TD2: every paper prints at one size; a long sheet is longer, a card shorter
@@ -65,8 +67,8 @@ from 0.3 to 1.3 (`FormLook.Problems`).
 ## TD4: the stamps (track B presses them)
 
 `StampSpots` places a mark: `Next(form, index, aspect)` in the paper's largest stamp area (the
-passport's visa page, a form's footer box; the page's bottom right without one), each next mark
-stepped across and down; `At(form, x, y, aspect)` centred on a pressed point, kept on the page.
+passport's visa page, a form's footer box; the page's bottom right without one), in rows from
+its top left, each mark beside the last with a gap; `At(form, x, y, aspect)` centred on a pressed point, kept on the page.
 `DeskDocument.Stamp(approved, formPoint?)` prints it: the art's mark (`ArtSlots.VerdictMark`), else
 a code-drawn stand-in (a double frame and the style's word, `FormStyleSO.approvedStamp` /
 `deniedStamp`, in green or red, tilted). The verdict's ink as the papers leave (`ShowVerdict`) now

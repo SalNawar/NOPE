@@ -40,7 +40,8 @@ public readonly struct FormQuad
 /// stamp area's dash, and a look's frame bands (in its accent) and a ticket's
 /// perforation (in the rule colour; the document design spec, D1), a
 /// booklet's cover edge (in the holder's nation's colour) and spine, a
-/// folded card's crease and a card's chip (the travel documents spec, TD1), as
+/// folded card's crease (a faint shade and highlight over the boxes, as a
+/// fold shows through print) and a card's chip (the travel documents spec, TD1), as
 /// coloured rectangles in form space. Both renderers
 /// draw these quads: the desk paper (DeskDocument, one mesh per layer) and the
 /// PC (FormView, one graphic per layer), so the paper and its scanned copy
@@ -70,7 +71,7 @@ public static class FormPaint
     public const float StitchRules = 6f;
 
     /// <summary>A card's chip: its gold and its contacts' lines.</summary>
-    public static readonly Rgba ChipGold = new Rgba(0.83f, 0.69f, 0.33f), ChipLine = new Rgba(0.45f, 0.35f, 0.12f);
+    public static readonly Rgba ChipGold = new Rgba(0.76f, 0.58f, 0.2f), ChipLine = new Rgba(0.4f, 0.28f, 0.06f);
 
     /// <summary>A crease's highlight beside its shadow: white at this alpha.</summary>
     public const float CreaseLight = 0.5f;
@@ -126,8 +127,8 @@ public static class FormPaint
                     Edge(quads, item.Rect.XMin, item.Rect.CentreY - rule / 2f, item.Rect.Width, true, rule, rule * StitchRules, palette.Rule);
                     break;
                 case FormItemKind.Crease:
-                    Add(quads, FaceRect.FromTop(item.Rect.XMin, item.Rect.YMin, item.Rect.Width / 2f, item.Rect.Height), palette.Rule.WithAlpha(FoldShade), FormPaintLayer.Fill);
-                    Add(quads, FaceRect.FromTop(item.Rect.CentreX, item.Rect.YMin, item.Rect.Width / 2f, item.Rect.Height), new Rgba(1f, 1f, 1f, CreaseLight), FormPaintLayer.Fill);
+                    Add(quads, FaceRect.FromTop(item.Rect.XMin, item.Rect.YMin, item.Rect.Width / 2f, item.Rect.Height), palette.Rule.WithAlpha(FoldShade), FormPaintLayer.Line);
+                    Add(quads, FaceRect.FromTop(item.Rect.CentreX, item.Rect.YMin, item.Rect.Width / 2f, item.Rect.Height), new Rgba(1f, 1f, 1f, CreaseLight), FormPaintLayer.Line);
                     break;
                 case FormItemKind.Chip:
                     Chip(quads, item.Rect, rule);

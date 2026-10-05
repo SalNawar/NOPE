@@ -216,15 +216,16 @@ public partial class FormLayoutTests
     }
 
     [Test]
-    public void AFoldedCardsCrease_RunsDownTheMiddle_UnderEveryBox()
+    public void AFoldedCardsCrease_RunsDownTheWholeMiddle_AFaintShadeOverTheBoxes()
     {
         PlacedForm f = Desk(Tc610Sealed(new FormLook { frame = FormFrame.Folded, accent = "#3E5C76" }), Tc610SealedData());
         FormItem crease = Of(f, FormItemKind.Crease).Single();
         Assert.AreEqual(M.aspect / 2f, crease.Rect.CentreX, Eps);
         Assert.AreEqual(1f, crease.Rect.Height, Eps, "down the whole page");
-        int creaseAt = f.Items.ToList().FindIndex(i => i.Kind == FormItemKind.Crease);
-        int firstBox = f.Items.ToList().FindIndex(i => i.Kind == FormItemKind.Box);
-        Assert.Less(creaseAt, firstBox, "drawn before (under) every box");
+        var palette = new FormPalette { Rule = new Rgba(0.3f, 0.3f, 0.3f), BoxFill = new Rgba(1f, 1f, 1f), Band = new Rgba(0.9f, 0.9f, 0.9f), Accent = new Rgba(0.2f, 0.3f, 0.4f) };
+        List<FormQuad> shade = FormPaint.Quads(f, palette, M).Where(q => Inside(q.Rect, crease.Rect)).ToList();
+        Assert.AreEqual(2, shade.Count, "a shade and a highlight");
+        Assert.IsTrue(shade.All(q => q.Layer == FormPaintLayer.Line && q.Colour.A < 1f), "faint, over the boxes' fills");
     }
 
     // ---------------- FormPaint: the new strokes ----------------
@@ -256,20 +257,28 @@ public partial class FormLayoutTests
     // ---------------- TD4: where the stamps land ----------------
 
     [Test]
-    public void AStamp_LandsInTheLargestStampArea_EachNextOneSteppedFromTheLast()
+    public void AStamp_LandsInTheLargestStampArea_EachNextOneBesideTheLast()
     {
         PlacedForm f = FormLayout.Layout(Booklet(), BookletData(), M.aspect, M, new FakeMeasure());
         FaceRect visa = Of(f, FormItemKind.StampArea).Single().Rect;
         Assert.AreEqual(visa.XMin, StampSpots.Area(f).XMin, Eps);
         FaceRect first = StampSpots.Next(f, 0, 2.8f);
-        Assert.AreEqual(visa.CentreX, first.CentreX, Eps, "the first in the middle");
-        Assert.AreEqual(visa.CentreY, first.CentreY, Eps);
         Assert.AreEqual(StampSpots.MarkHeight * f.Unit, first.Height, Eps);
         Assert.AreEqual(2.8f, first.Width / first.Height, 1e-3f, "at the mark's aspect");
-        FaceRect second = StampSpots.Next(f, 1, 2.8f);
-        Assert.AreNotEqual(first.XMin, second.XMin, "the second stepped across");
-        for (int i = 0; i < 6; i++)
-            Assert.IsTrue(Inside(StampSpots.Next(f, i, 2.8f), visa), $"mark {i} inside the visa page");
+        Assert.Less(first.XMin - visa.XMin, first.Width, "the first at the area's left");
+        Assert.Less(first.YMin - visa.YMin, first.Height, "and its top");
+        Assert.Greater(StampSpots.Next(f, 1, 2.8f).XMin, first.XMax, "the second beside the first, clear of it");
+        int places = 0;
+        while (places < 50 && !(places > 0 && StampSpots.Next(f, places, 2.8f).XMin == first.XMin && StampSpots.Next(f, places, 2.8f).YMin == first.YMin))
+            places++;
+        for (int i = 0; i < places; i++)
+        {
+            FaceRect mark = StampSpots.Next(f, i, 2.8f);
+            Assert.IsTrue(Inside(mark, visa), $"mark {i} inside the visa page");
+            for (int j = 0; j < i; j++)
+                Assert.IsFalse(Overlaps(mark, StampSpots.Next(f, j, 2.8f)), $"mark {i} hides mark {j}");
+        }
+        Assert.Greater(places, 1, "the visa page holds more than one mark before the rows start over");
     }
 
     [Test]

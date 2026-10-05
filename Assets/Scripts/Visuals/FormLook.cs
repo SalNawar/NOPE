@@ -32,7 +32,7 @@ public enum FormFrame
     /// <summary>A plastic card (TD1): rounded corners, a sheen band down the left edge in the accent, and a chip where a cell names the chip slot.</summary>
     Card,
 
-    /// <summary>A folded card (TD1): a band across the top in the accent and the crease down the middle of the page, under the boxes.</summary>
+    /// <summary>A folded card (TD1): a band across the top in the accent and the crease down the middle of the page, a faint shade over the boxes.</summary>
     Folded
 }
 
