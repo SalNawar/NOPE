@@ -9,9 +9,10 @@ using NUnit.Framework;
 /// caller's units with the origin at the page's top-left and y down; sizes
 /// are fractions of the page height H (FO6). A fake measure stands in for
 /// TextMeshPro: every character is 0.5 em wide (0.55 bold), a line is 1.15
-/// em, and words wrap. Piece 10's PaperFace tests are folded in here (SlotAt replaces RowAt).
+/// em, and words wrap. Piece 10's PaperFace tests are folded in here (SlotAt replaces RowAt);
+/// the travel documents' (2026-10-05) are in FormLayoutTests.TravelDocuments.cs.
 /// </summary>
-public class FormLayoutTests
+public partial class FormLayoutTests
 {
     private const float Eps = 1e-4f;
 
@@ -874,9 +875,8 @@ public class FormLayoutTests
             if (frame == FormFrame.Plain)
                 continue;
             PlacedForm f = Desk(Tc610Sealed(new FormLook { frame = frame, accent = "#1C3A78" }), Tc610SealedData());
-            Assert.IsNotEmpty(Of(f, FormItemKind.Stripe), frame.ToString());
-            var content = new FaceRect(M.marginX, M.marginTop, M.aspect - M.marginX, 1f - M.marginBottom);
-            foreach (FormItem band in Of(f, FormItemKind.Stripe).Concat(Of(f, FormItemKind.Perforation)))
+            Assert.IsNotEmpty(Of(f, FormItemKind.Stripe).Concat(Of(f, FormItemKind.Cover)), frame.ToString());
+            foreach (FormItem band in Of(f, FormItemKind.Stripe).Concat(Of(f, FormItemKind.Perforation)).Concat(Of(f, FormItemKind.Cover)))
             {
                 Assert.IsTrue(Inside(band.Rect, new FaceRect(0f, 0f, M.aspect, 1f)), $"{frame}: on the page");
                 foreach (FormSlot s in f.Slots)
@@ -889,13 +889,14 @@ public class FormLayoutTests
     }
 
     [Test]
-    public void ALooksAspect_SetsThePageHeight_AtTheSamePrintSizes()
+    public void ALooksAspect_SetsThePageHeight_AndThePrintFollowsTheWidth()
     {
         const float aspect = 0.7f;
-        PlacedForm f = FormLayout.Layout(Tc610Sealed(new FormLook { aspect = aspect }), Tc610SealedData(), aspect, M, new FakeMeasure());
-        Assert.AreEqual(1f, f.PageHeight, Eps, "H = width / the look's aspect");
-        Assert.AreEqual(M.valueSize, TextOf(f, FormTextRole.Value).Size, Eps, "the print keeps its size in page heights");
-        Assert.AreEqual(aspect - 2f * M.marginX, f.Slots.Max(s => s.Hit.XMax) - M.marginX, Eps, "the grid fills the narrower page");
+        PlacedForm f = FormLayout.Layout(Tc610Sealed(new FormLook { aspect = aspect }), Tc610SealedData(), M.aspect, M, new FakeMeasure());
+        Assert.AreEqual(M.aspect / aspect, f.PageHeight, Eps, "the page's height = width / the look's aspect: a narrower look is a longer page");
+        Assert.AreEqual(1f, f.Unit, Eps, "the print unit = width / the style's aspect (the travel documents spec, TD2)");
+        Assert.AreEqual(M.valueSize, TextOf(f, FormTextRole.Value).Size, Eps, "the print keeps the style page's size");
+        Assert.AreEqual(M.aspect - 2f * M.marginX, f.Slots.Max(s => s.Hit.XMax) - M.marginX, Eps, "the grid fills the page's width");
     }
 
     [Test]
@@ -931,6 +932,8 @@ public class FormLayoutTests
         Assert.AreEqual(style.Ink.R, p.Ink.R, 1e-6f, "the inks are the style's");
         Assert.AreEqual(style.Paper.R, new FormLook().Palette(style).Paper.R, 1e-6f, "no tint: the style's paper");
         CollectionAssert.IsEmpty(new FormLook { frame = FormFrame.TopBand, accent = "#1C3A78", aspect = 0.7f, scale = 0.9f }.Problems(M.aspect));
-        Assert.AreEqual(4, new FormLook { frame = FormFrame.TopBand, paper = "blue", aspect = 0.9f, scale = 2f }.Problems(M.aspect).Count);
+        CollectionAssert.IsEmpty(new FormLook { frame = FormFrame.Card, accent = "#1C3A78", aspect = 1.586f, scale = 0.35f }.Problems(M.aspect), "a card: wider than the style's page, small on the desk");
+        Assert.AreEqual(4, new FormLook { frame = FormFrame.TopBand, paper = "blue", aspect = 2.5f, scale = 2f }.Problems(M.aspect).Count);
+        Assert.AreEqual(2, new FormLook { aspect = 0.4f, scale = 0.2f }.Problems(M.aspect).Count, "too narrow, too small");
     }
 }

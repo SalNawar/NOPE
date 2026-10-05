@@ -103,6 +103,14 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
+    - kind: 1
+      text: 2  CONDITIONS OF TRAVEL
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
     - kind: 10
       text: I travel on an Economy unit at my own risk. If I am stranded, I will not reveal the future or alter history, and my debt passes to my next of kin.
       cells: []
@@ -110,7 +118,23 @@ MonoBehaviour:
       shares: []
       options: []
       field: -1
-      slot:
+      slot: 
+    - kind: 10
+      text: 2.1 The agency answers for the unit only up to the gate. A unit that fails in transit is the traveller's loss. 2.2 A stranded traveller is recovered when a Premium unit next calls at the era, at the rescue rate in force on the day of recovery, billed to the account above. 2.3 Time spent stranded accrues interest at the agency's standing rate. 2.4 No claim lies against the agency for loss of era, loss of language, loss of kin or loss of self.
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 10
+      text: 3.1 The signatory confirms that no one has promised them a return date. 3.2 The signatory waives any right to be told what became of them. 3.3 This waiver survives the signatory. 3.4 A copy is held on the citizen account and is produced to the next of kin on demand.
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
     - kind: 7
       text: Signature of the signatory
       cells: []
@@ -129,7 +153,7 @@ MonoBehaviour:
       slot: 
     look:
       frame: 3
-      accent: '#8A1C1C'
-      paper: '#F6ECE7'
-      aspect: 0
-      scale: 1.05
+      accent: '#7A1F2B'
+      paper: '#F7EEEA'
+      aspect: 0.56
+      scale: 1.3

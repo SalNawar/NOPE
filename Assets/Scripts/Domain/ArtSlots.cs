@@ -81,15 +81,23 @@ public static class ArtSlots
     public static string VerdictMark(bool accepted) => accepted ? "Forms/stamp_accept" : "Forms/stamp_deny";
 
     /// <summary>
-    /// The faces a desk paper tries, in order: its own kind's face by its form
-    /// number ("TC-610" gives Forms/paper_tc610), then the plain agency face.
-    /// A paper with no form number tries the agency face only.
+    /// The faces a desk paper tries, in order: a passport's page for its
+    /// holder's nation (<paramref name="issuer"/>, a nation id: "TC-101" and
+    /// "egypt" give Forms/paper_tc101_egypt; the travel documents spec, TD5),
+    /// its own kind's face by its form number ("TC-610" gives
+    /// Forms/paper_tc610), then the plain agency face. A paper with no form
+    /// number tries the agency face only.
     /// </summary>
-    public static IReadOnlyList<string> PaperFaces(string formNumber)
+    public static IReadOnlyList<string> PaperFaces(string formNumber, string issuer = null)
     {
-        string key = Key(formNumber);
-        return key.Length == 0 ? new[] { AgencyFace } : new[] { "Forms/paper_" + key, AgencyFace };
+        string key = Key(formNumber), nation = Key(issuer);
+        if (key.Length == 0)
+            return new[] { AgencyFace };
+        return nation.Length == 0 ? new[] { "Forms/paper_" + key, AgencyFace } : new[] { "Forms/paper_" + key + "_" + nation, "Forms/paper_" + key, AgencyFace };
     }
+
+    /// <summary>A nation's passport emblem by its emblem's name (EmblemShapes: "WingedSun" gives Forms/emblem_wingedsun; the travel documents spec, TD5): white or one ink on clear, tinted by the cover's colour like the code-drawn stand-in.</summary>
+    public static string Emblem(string emblem) => "Forms/emblem_" + Key(emblem);
 
     /// <summary>The pet's picture in its corner for how it looks (the Home pet spec PS7, the art request's four states): Home/pet_&lt;kind&gt;_&lt;look&gt; ("Home/pet_dog_happy"); without it the corner draws the code-drawn stand-in.</summary>
     public static string PetSprite(PetKind kind, PetLook look) => "Home/pet_" + Key(kind.ToString()) + "_" + Key(look.ToString());

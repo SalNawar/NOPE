@@ -208,6 +208,9 @@ public static class ContentSheetMap
             {
                 Text("id").Required(),
                 Text("displayName"),
+                Text("passport.cover").Required().Note("the passport cover's colour (#RRGGBB, dark enough to ink the emblem on the page; no two countries share one)"),
+                Text("passport.emblem").Required().Note("the passport emblem the code draws until the art lands (WingedSun, Laurel, Star, Octastar, FiveStars, Chrysanthemum, Crown, Eagle)"),
+                Text("passport.code").Required().Note("the three-letter code the passport's machine-readable zone prints (EGY)"),
                 Rows("countryBaselines", "baselines",
                     Text("attribute").Ref("contentAttributes"),
                     Float("score")),

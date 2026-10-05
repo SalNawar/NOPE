@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 411096b30c5d9bb4f9142a8207326fb1, type: 3}
   m_Name: DocTemplate_TC610
   m_EditorClassIdentifier: Assembly-CSharp::DocumentTemplateSO
-  displayName: Displacement Certificate
+  displayName: Travel Permit
   formNumber: TC-610
   fieldSpecs:
   - category: 7
@@ -37,6 +37,7 @@ MonoBehaviour:
     formNumber: 
     title: 
     fixedPage: 1
+    landscape: 0
     blocks:
     - kind: 0
       text: 
@@ -45,14 +46,6 @@ MonoBehaviour:
       shares: []
       options: []
       field: 6
-      slot: 
-    - kind: 1
-      text: 1  DISPLACED PERSON
-      cells: []
-      columns: []
-      shares: []
-      options: []
-      field: -1
       slot: 
     - kind: 2
       text: 
@@ -78,7 +71,12 @@ MonoBehaviour:
       - field: 1
         slot: 
         caption: 
-        span: 8
+        span: 4
+        rows: 1
+      - field: 4
+        slot: 
+        caption: 
+        span: 4
         rows: 1
       columns: []
       shares: []
@@ -103,14 +101,6 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
-    - kind: 1
-      text: 2  INCIDENT
-      cells: []
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
     - kind: 2
       text: 
       cells:
@@ -124,30 +114,9 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
-    - kind: 2
-      text: 
-      cells:
-      - field: 4
-        slot: 
-        caption: 
-        span: 6
-        rows: 1
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
-    - kind: 12
-      text: Temporal Customs Act of 2139. Any alteration voids this document.
-      cells: []
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
     look:
-      frame: 3
-      accent: '#2F4F6F'
-      paper: '#EEF1F3'
-      aspect: 0
-      scale: 1
+      frame: 8
+      accent: '#3E5C76'
+      paper: '#E9EFF5'
+      aspect: 1.0
+      scale: 0.6

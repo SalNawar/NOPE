@@ -2112,6 +2112,11 @@
     {
       "id": "egypt",
       "displayName": "Egypt",
+      "passport": {
+        "cover": "#1F4A2E",
+        "emblem": "WingedSun",
+        "code": "EGY"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -2276,6 +2281,11 @@
     {
       "id": "iraq",
       "displayName": "Iraq",
+      "passport": {
+        "cover": "#1E1E22",
+        "emblem": "Octastar",
+        "code": "IRQ"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -2440,6 +2450,11 @@
     {
       "id": "greece",
       "displayName": "Greece",
+      "passport": {
+        "cover": "#1E2F5C",
+        "emblem": "Laurel",
+        "code": "GRC"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -2583,6 +2598,11 @@
     {
       "id": "italy",
       "displayName": "Italy",
+      "passport": {
+        "cover": "#6B1F2A",
+        "emblem": "Star",
+        "code": "ITA"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -2745,6 +2765,11 @@
     {
       "id": "china",
       "displayName": "China",
+      "passport": {
+        "cover": "#8A1C1C",
+        "emblem": "FiveStars",
+        "code": "CHN"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -2905,6 +2930,11 @@
     {
       "id": "japan",
       "displayName": "Japan",
+      "passport": {
+        "cover": "#4B2C5E",
+        "emblem": "Chrysanthemum",
+        "code": "JPN"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -3065,6 +3095,11 @@
     {
       "id": "britain",
       "displayName": "Britain",
+      "passport": {
+        "cover": "#1B4B54",
+        "emblem": "Crown",
+        "code": "GBR"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -3219,6 +3254,11 @@
     {
       "id": "germany",
       "displayName": "Germany",
+      "passport": {
+        "cover": "#5A3A1E",
+        "emblem": "Eagle",
+        "code": "DEU"
+      },
       "baselines": [
         {
           "attribute": "democracy",

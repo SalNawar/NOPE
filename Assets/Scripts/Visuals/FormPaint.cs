@@ -38,7 +38,10 @@ public readonly struct FormQuad
 /// FO8: the code draws the lines): each box's fill and its outline, each
 /// section band, rule and barcode bar, each checkbox's outline and tick, the
 /// stamp area's dash, and a look's frame bands (in its accent) and a ticket's
-/// perforation (in the rule colour; the document design spec, D1), as
+/// perforation (in the rule colour; the document design spec, D1), a
+/// booklet's cover edge (in the holder's nation's colour) and spine, a
+/// folded card's crease (a faint shade and highlight over the boxes, as a
+/// fold shows through print) and a card's chip (the travel documents spec, TD1), as
 /// coloured rectangles in form space. Both renderers
 /// draw these quads: the desk paper (DeskDocument, one mesh per layer) and the
 /// PC (FormView, one graphic per layer), so the paper and its scanned copy
@@ -61,6 +64,18 @@ public static class FormPaint
     /// <summary>An analysis mark's width, in rule widths: the dashed outline reads over the box's own outline.</summary>
     public const float MarkRules = 2f;
 
+    /// <summary>A spine's shadow and a crease's, as the rule colour's alpha over the paper.</summary>
+    public const float FoldShade = 0.22f;
+
+    /// <summary>A spine's stitches: a dash's length in rule widths (the stitch line is drawn in the rule colour).</summary>
+    public const float StitchRules = 6f;
+
+    /// <summary>A card's chip: its gold and its contacts' lines.</summary>
+    public static readonly Rgba ChipGold = new Rgba(0.76f, 0.58f, 0.2f), ChipLine = new Rgba(0.4f, 0.28f, 0.06f);
+
+    /// <summary>A crease's highlight beside its shadow: white at this alpha.</summary>
+    public const float CreaseLight = 0.5f;
+
     /// <summary>
     /// The quads <paramref name="form"/> prints in <paramref name="palette"/>'s
     /// colours, in drawing order; the rule width is <paramref name="m"/>'s, in
@@ -72,7 +87,7 @@ public static class FormPaint
         if (form == null || palette == null)
             return quads;
 
-        float rule = (m ?? new FormMetrics()).ruleWidth * form.PageHeight;
+        float rule = (m ?? new FormMetrics()).ruleWidth * form.Unit;
         foreach (FormItem item in form.Items)
         {
             switch (item.Kind)
@@ -104,6 +119,20 @@ public static class FormPaint
                 case FormItemKind.Perforation:
                     Add(quads, item.Rect, palette.Rule, FormPaintLayer.Line);
                     break;
+                case FormItemKind.Cover:
+                    Add(quads, item.Rect, Rgba.TryParseHex(item.Text, out Rgba cover) ? cover.WithAlpha(1f) : palette.Accent, FormPaintLayer.Fill);
+                    break;
+                case FormItemKind.Spine:
+                    Add(quads, item.Rect, palette.Rule.WithAlpha(FoldShade), FormPaintLayer.Fill);
+                    Edge(quads, item.Rect.XMin, item.Rect.CentreY - rule / 2f, item.Rect.Width, true, rule, rule * StitchRules, palette.Rule);
+                    break;
+                case FormItemKind.Crease:
+                    Add(quads, FaceRect.FromTop(item.Rect.XMin, item.Rect.YMin, item.Rect.Width / 2f, item.Rect.Height), palette.Rule.WithAlpha(FoldShade), FormPaintLayer.Line);
+                    Add(quads, FaceRect.FromTop(item.Rect.CentreX, item.Rect.YMin, item.Rect.Width / 2f, item.Rect.Height), new Rgba(1f, 1f, 1f, CreaseLight), FormPaintLayer.Line);
+                    break;
+                case FormItemKind.Chip:
+                    Chip(quads, item.Rect, rule);
+                    break;
             }
         }
         return quads;
@@ -123,11 +152,21 @@ public static class FormPaint
         if (form == null || fields == null || fields.Count == 0)
             return quads;
 
-        float width = (m ?? new FormMetrics()).ruleWidth * form.PageHeight * MarkRules;
+        float width = (m ?? new FormMetrics()).ruleWidth * form.Unit * MarkRules;
         foreach (FormSlot slot in form.Slots)
             if (slot.Field >= 0 && fields.Contains(slot.Field))
                 Dashed(quads, slot.Hit, width, width * DashRules, colour);
         return quads;
+    }
+
+    /// <summary>A card's chip: its gold plate, outlined, and its contacts (a line across its middle and two down it, at its thirds), in the Line layer over the card's fills.</summary>
+    private static void Chip(List<FormQuad> quads, FaceRect r, float rule)
+    {
+        Add(quads, r, ChipGold, FormPaintLayer.Line);
+        Outline(quads, r, rule, ChipLine);
+        Add(quads, FaceRect.FromTop(r.XMin, r.CentreY - rule / 2f, r.Width, rule), ChipLine, FormPaintLayer.Line);
+        Add(quads, FaceRect.FromTop(r.XMin + r.Width / 3f - rule / 2f, r.YMin, rule, r.Height), ChipLine, FormPaintLayer.Line);
+        Add(quads, FaceRect.FromTop(r.XMin + 2f * r.Width / 3f - rule / 2f, r.YMin, rule, r.Height), ChipLine, FormPaintLayer.Line);
     }
 
     /// <summary>A quad, unless it has no area.</summary>

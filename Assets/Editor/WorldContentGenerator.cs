@@ -49,6 +49,9 @@ public static partial class WorldContentGenerator
     /// <summary>Folder for generated world assets.</summary>
     private const string WorldRoot = "Assets/Data/World";
 
+    /// <summary>The forms' style: its paper is the page a passport cover's emblem is checked against (PassportCovers).</summary>
+    private const string FormStylePath = "Assets/Data/Forms/FormStyle_Agency.asset";
+
     /// <summary>Generator-owned folders (under <see cref="WorldRoot"/>).</summary>
     private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview", "History", "Premades", "Culture", "Translation", "Home" };
 
@@ -265,6 +268,8 @@ public static partial class WorldContentGenerator
             foreach (BaselineData b in c.baselines ?? Array.Empty<BaselineData>())
                 if (!authored.attributes.ContainsKey(b.attribute))
                     errors.Add($"Country '{c.id}' has a baseline for unknown attribute '{b.attribute}'.");
+        FormStyleSO formStyle = AssetDatabase.LoadAssetAtPath<FormStyleSO>(FormStylePath);
+        errors.AddRange(PassportCovers.Problems(src.countries.Select(c => (c.id, c.passport)), formStyle != null ? FormStyleSO.Rgb(formStyle.paper) : new Rgba(0.95f, 0.92f, 0.82f)));
 
         var placeKeys = new HashSet<string>();
         foreach (PlaceData p in src.places)
@@ -1379,6 +1384,7 @@ public static partial class WorldContentGenerator
         nation.id = c.id;
         nation.displayName = c.displayName;
         nation.leaderEffect = leaderEffect;
+        nation.passport = c.passport ?? new PassportLook();
         EditorUtility.SetDirty(nation);
         return nation;
     }
@@ -2383,7 +2389,7 @@ public static partial class WorldContentGenerator
         public string group;
     }
 
-    [Serializable] private sealed class CountryData { public string id; public string displayName; public BaselineData[] baselines; public LooksWeightData looks; public CultureData culture; }
+    [Serializable] private sealed class CountryData { public string id; public string displayName; public PassportLook passport; public BaselineData[] baselines; public LooksWeightData looks; public CultureData culture; }
 
     [Serializable] private sealed class BaselineData { public string attribute; public float score; }
 

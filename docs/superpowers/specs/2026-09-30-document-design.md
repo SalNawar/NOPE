@@ -4,6 +4,10 @@ Saleh, 2026-09-30: apply the Papers, Please lessons to Time Sorter; this track o
 (D1, D2, D3, D4, D8, D9). Decided on his behalf (autonomous run); each decision below is his to
 overturn. The canon and the field audit are in `docs/DOCUMENT_FAULTS.md`.
 
+**2026-10-05:** the travel documents (`2026-10-05-travel-documents-design.md`) give six documents
+real travel-document looks (new frames, a passport booklet, a card) and size every paper's print by
+its width (TD2), which replaces D1's "at most the style's aspect" rule below.
+
 ## D1: each document type has its own silhouette
 
 A form's look (`FormLook`, held by the form itself, `FormSpec.look`, so a paper and its scanned copy

@@ -97,6 +97,15 @@ public sealed class CaseInstance
     public NationSO claimedNation;
 
     /// <summary>
+    /// The nation whose passport the traveller carries (the travel documents
+    /// spec, TD3: its cover, emblem and code): a 2150 citizen's family
+    /// country (the list their name came from; a story character's family),
+    /// anyone else's stated home (the claimed nation). Null when neither is
+    /// known; the passport then wears its form's own cover.
+    /// </summary>
+    public NationSO passportNation;
+
+    /// <summary>
     /// The era of the claimed place (the correct era on the legacy era-pick
     /// path). A liar's real era is tellSourceEraId. Set even when the case
     /// has no blueprint (audit R3-020 merged the duplicate `trueEra`).
