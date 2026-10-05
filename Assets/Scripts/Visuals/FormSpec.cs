@@ -2,7 +2,8 @@ using System;
 
 /// <summary>
 /// The blocks a form is made of (PC spec FO2). Serialized in every form
-/// asset as an int, so the values are fixed (16 is SealGrid): 14 (Masthead) and 15 (Headline)
+/// asset as an int, so the values are fixed (16 is SealGrid; 17 to 20 the
+/// travel documents': Fold, Mrz, Visa, Watermark): 14 (Masthead) and 15 (Headline)
 /// are held for the Internet's sites.
 /// </summary>
 public enum FormBlockKind
@@ -50,7 +51,19 @@ public enum FormBlockKind
     PageBreak = 13,
 
     /// <summary>The Seal Register's grid (the document design spec, D4): FormData.Seals, three to a row, each seal pictured over its office's name, each a slot of the block's slot (its Row the seal's place).</summary>
-    SealGrid = 16
+    SealGrid = 16,
+
+    /// <summary>A booklet's fold (the travel documents spec, TD3): the spine across the page at the block's place (shares[0], a share of the page's height; none: under the pen), the facing page's blocks below it.</summary>
+    Fold = 17,
+
+    /// <summary>A passport's machine-readable zone (TD3): FormData.Mrz's lines in monospaced capitals across the content, shrunk to keep each on one line; nothing to pick (it repeats the page).</summary>
+    Mrz = 18,
+
+    /// <summary>A visa page (TD3): a dashed stamp area across the content from the pen down to the page's bottom margin (at least 1.25 of the style's stamp height), the block's text its caption inside its top: where the APPROVED or DENIED stamp lands.</summary>
+    Visa = 19,
+
+    /// <summary>A watermark (TD1): the seal of the block's field (a letterhead's issuing office), else the holder's nation's emblem (FormData.Emblem), large and faint in the middle of the room below the pen, under every box; it takes no room.</summary>
+    Watermark = 20
 }
 
 /// <summary>The named content slots a form's cells and blocks read.</summary>
@@ -61,6 +74,9 @@ public static class FormSlots
 
     /// <summary>The Seal Register's seals (a SealGrid block's slot; FormData.Seals).</summary>
     public const string Seals = "seals";
+
+    /// <summary>A card's chip (a cell; the travel documents spec, TD1): drawn by the renderers' strokes, nothing to pick.</summary>
+    public const string Chip = "chip";
 }
 
 /// <summary>One box of a FieldRow (PC spec FO2): a template field, or a named slot such as the photo.</summary>
@@ -84,6 +100,9 @@ public sealed class FormCell
 
     /// <summary>True for the photo's cell.</summary>
     public bool IsPhoto => slot == FormSlots.Photo;
+
+    /// <summary>True for a card's chip cell.</summary>
+    public bool IsChip => slot == FormSlots.Chip;
 }
 
 /// <summary>One block of a form (PC spec FO2); which fields matter depends on its kind.</summary>
@@ -93,7 +112,7 @@ public sealed class FormBlock
     /// <summary>What the block is.</summary>
     public FormBlockKind kind;
 
-    /// <summary>The section title, paragraph, fine print, caption or issuing line: printed English (forms are diegetic).</summary>
+    /// <summary>The section title, paragraph, fine print, caption, issuing line or a visa page's caption: printed English (forms are diegetic).</summary>
     public string text = string.Empty;
 
     /// <summary>A FieldRow's boxes, left to right.</summary>
@@ -102,13 +121,13 @@ public sealed class FormBlock
     /// <summary>A Table's column heads.</summary>
     public string[] columns = new string[0];
 
-    /// <summary>A Table's column widths as shares of the content width (missing or zero: equal shares).</summary>
+    /// <summary>A Table's column widths as shares of the content width (missing or zero: equal shares); a Fold's place, shares[0], as a share of the page's height.</summary>
     public float[] shares = new float[0];
 
     /// <summary>A Checkboxes block's options.</summary>
     public string[] options = new string[0];
 
-    /// <summary>The template field a Checkboxes, Signature or Header block shows (a header's: the paper's seal), or -1.</summary>
+    /// <summary>The template field a Checkboxes, Signature or Header block shows (a header's: the paper's seal), or -1; a Watermark's: the field whose seal it pictures (it does not place the field).</summary>
     public int field = -1;
 
     /// <summary>The content slot a Table's rows, a Paragraph's text, a page kind's Signature or a RecordGroups block's picks come from.</summary>

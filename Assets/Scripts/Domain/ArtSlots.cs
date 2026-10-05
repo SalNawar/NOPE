@@ -83,15 +83,23 @@ public static class ArtSlots
     public static string VerdictMark(bool accepted) => accepted ? "Forms/stamp_accept" : "Forms/stamp_deny";
 
     /// <summary>
-    /// The faces a desk paper tries, in order: its own kind's face by its form
-    /// number ("TC-610" gives Forms/paper_tc610), then the plain agency face.
-    /// A paper with no form number tries the agency face only.
+    /// The faces a desk paper tries, in order: a passport's page for its
+    /// holder's nation (<paramref name="issuer"/>, a nation id: "TC-101" and
+    /// "egypt" give Forms/paper_tc101_egypt; the travel documents spec, TD5),
+    /// its own kind's face by its form number ("TC-610" gives
+    /// Forms/paper_tc610), then the plain agency face. A paper with no form
+    /// number tries the agency face only.
     /// </summary>
-    public static IReadOnlyList<string> PaperFaces(string formNumber)
+    public static IReadOnlyList<string> PaperFaces(string formNumber, string issuer = null)
     {
-        string key = Key(formNumber);
-        return key.Length == 0 ? new[] { AgencyFace } : new[] { "Forms/paper_" + key, AgencyFace };
+        string key = Key(formNumber), nation = Key(issuer);
+        if (key.Length == 0)
+            return new[] { AgencyFace };
+        return nation.Length == 0 ? new[] { "Forms/paper_" + key, AgencyFace } : new[] { "Forms/paper_" + key + "_" + nation, "Forms/paper_" + key, AgencyFace };
     }
+
+    /// <summary>A nation's passport emblem by its emblem's name (EmblemShapes: "WingedSun" gives Forms/emblem_wingedsun; the travel documents spec, TD5): white or one ink on clear, tinted by the cover's colour like the code-drawn stand-in.</summary>
+    public static string Emblem(string emblem) => "Forms/emblem_" + Key(emblem);
 
     /// <summary>A family member's portrait for their condition: family_&lt;member&gt;_&lt;band&gt; (FamilyBand, the member's name as a key: "Partner" gives partner).</summary>
     public static string FamilyPortrait(string memberName, int condition, int maxCondition) =>

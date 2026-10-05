@@ -20,11 +20,17 @@ using UnityEngine.EventSystems;
 /// outline in its ink, SealArt, its legend printed over it) in the header's
 /// box, and the photo sits in its cell. Its form's look (the document design
 /// spec, D1) sizes the paper (its height a share of the desk's paper, its
-/// width by the look's aspect), tints it and colours its frame's bands. The
+/// width by the look's aspect; its print by its width, FormLayout.PrintUnit),
+/// tints it and colours its frame's bands. The
 /// paper wears its kind's face and the photo frame its art when those files
 /// exist (redesign phase 27, ArtSlots: the paper's placeholder and the grey
-/// frame otherwise), and after the verdict its ink mark lands in the stamp
-/// area (ShowVerdict; nothing without the art). Always
+/// frame otherwise). A booklet prints its holder's nation's emblem and a
+/// watermark its mark, faint under the boxes; a card's paper has rounded
+/// corners (the travel documents spec, TD1, TD3). A desk stamp's mark lands
+/// where Stamp puts it (StampSpots: the next place in its largest stamp
+/// area, a passport's visa page, or a pressed point; TD4), the verdict's
+/// (ShowVerdict) in its stamp area: the mark's art, else a code-drawn stamp
+/// (a framed APPROVED or DENIED in green or red ink). Always
 /// English: a paper never flips. A click raises Clicked with the button and
 /// the slot under the pointer (FormLayout.SlotAt; DeskController routes it
 /// through PaperClicks). While examined (held in the hand; PaperExaminer owns
@@ -38,8 +44,17 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>How far above the sheet each layer lies (metres toward the camera): the seal, the fills, the hover and pick quads, the lines, the photo, the texts, the verdict's ink.</summary>
     private const float SealLift = 0.0001f, FillLift = 0.0002f, HighlightLift = 0.0003f, LineLift = 0.0004f, PhotoLift = 0.0005f, TextLift = 0.0006f, InkLift = 0.0007f;
 
-    /// <summary>Where the ink mark lands on a form with no stamp area: this share of the page's width and height at its bottom right.</summary>
-    private const float InkFallbackShare = 0.3f;
+    /// <summary>A code-drawn stamp's width over its height, its frame texture's size in pixels, its word's size as a share of its height, its ink's alpha, and its tilt in degrees (alternating with each mark).</summary>
+    private const float StampAspect = 2.8f, StampWordShare = 0.5f, StampAlpha = 0.88f, StampTilt = 6f;
+
+    /// <summary>The code-drawn stamp frame's texture size in pixels (width, height).</summary>
+    private const int StampPixelsWide = 224, StampPixelsHigh = 80;
+
+    /// <summary>The code-drawn stamps' inks: the approval's green and the denial's red.</summary>
+    private static readonly Color ApprovedInk = new Color(0.12f, 0.47f, 0.23f), DeniedInk = new Color(0.7f, 0.15f, 0.12f);
+
+    /// <summary>The code-drawn stamp's frame (a double ring, white on clear), painted once.</summary>
+    private static Texture2D _stampFrame;
 
     /// <summary>The lying sheet: lifted by the stack, holding the paper, its collider and the printed form.</summary>
     [SerializeField] private Transform sheet;
@@ -120,6 +135,12 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     private readonly List<SlotView> _slots = new List<SlotView>();
     private DeskConfigSO _config;
     private PlacedForm _form;
+
+    /// <summary>The paper quad's own mesh (a unit quad), and the rounded one built for a card (destroyed with the paper).</summary>
+    private Mesh _quadMesh, _shapedMesh;
+
+    /// <summary>How many stamps the paper carries (each next one steps across its stamp area).</summary>
+    private int _stamps;
     private Material _ownPaperMaterial;
     private MaterialPropertyBlock _block;
     private int _hoveredSlot = -1;
@@ -178,6 +199,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         foreach (MeshFilter filter in new[] { fills, lines })
             if (filter != null && filter.sharedMesh != null)
                 Destroy(filter.sharedMesh);
+        if (_shapedMesh != null)
+            Destroy(_shapedMesh);
     }
 
     /// <summary>
@@ -202,9 +225,12 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         FormPalette palette = look.Palette(style.Palette());
         float height = config.paperSize.y * look.Scale;
         Resize(new Vector2(height * look.AspectOr(style.metrics.aspect), height));
-        ShowPaperArt(form.Data.FormNumber, string.IsNullOrEmpty(look.paper) ? (Color?)null : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f));
+        ShowPaperArt(form.Data.FormNumber, form.Data.Issuer, string.IsNullOrEmpty(look.paper) ? (Color?)null : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f));
 
+        _stamps = 0;
         _form = FormLayout.Layout(form.Spec, form.Data, Size.x, style.metrics, new TmpFormText(textTemplate));
+        ShapePaper(PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit));
+        Color cover = EmblemArt.Ink(form.Data.Cover, new Color(palette.Accent.R, palette.Accent.G, palette.Accent.B, 1f));
 
         foreach (FormItem item in _form.Items)
         {
@@ -218,6 +244,15 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                     break;
                 case FormItemKind.Photo:
                     PlacePhoto(item.Rect);
+                    break;
+                case FormItemKind.Emblem:
+                    PlaceMark("Emblem", item.Rect, EmblemArt.Texture(item.Text), cover, TextLift);
+                    break;
+                case FormItemKind.Watermark:
+                    bool isSeal = Seals.TryParse(item.Text, out Seal mark);
+                    Color ink = isSeal ? SealArt.Ink(mark.Ink) : cover;
+                    ink.a = EmblemArt.WatermarkAlpha;
+                    PlaceMark("Watermark", item.Rect, isSeal ? SealArt.Texture(mark.Shape) : EmblemArt.Texture(item.Text), ink, SealLift);
                     break;
             }
         }
@@ -366,35 +401,139 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         }
     }
 
+    /// <summary>The verdict's ink mark as the papers leave (redesign phase 27): Stamp at the next place of the form's stamp area.</summary>
+    public void ShowVerdict(bool accepted) => Stamp(accepted);
+
     /// <summary>
-    /// The verdict's ink mark (redesign phase 27): the tick for an accept, the
-    /// cross for a deny (ArtSlots.VerdictMark), printed over the form's stamp
-    /// area at the art's own aspect (the page's bottom right on a form with
-    /// none). Without the mark's art, or on a paper that prints no form,
-    /// nothing shows (today's look).
+    /// Presses a desk stamp on the paper (the travel documents spec, TD4; the
+    /// stamps are track B's to pick and ink): APPROVED for
+    /// <paramref name="approved"/>, else DENIED, centred at
+    /// <paramref name="formPoint"/> (form space: from the page's top-left, y
+    /// down, in the paper's metres; kept whole on the page) or, without one,
+    /// at the next place of its largest stamp area (StampSpots.Next: a
+    /// passport's visa page, a form's footer box). The mark is the art's
+    /// (ArtSlots.VerdictMark) at its own aspect, else a code-drawn stamp: a
+    /// double frame and the style's word (FormStyleSO.approvedStamp,
+    /// deniedStamp) in green or red ink, tilted a few degrees. Returns the
+    /// mark's place in form space (an empty one on a paper that prints no form).
     /// </summary>
-    public void ShowVerdict(bool accepted)
+    public FaceRect Stamp(bool approved, Vector2? formPoint = null)
     {
         if (inkMark == null || _form == null)
-            return;
-        Texture2D mark = SlotArt.Texture(new[] { ArtSlots.VerdictMark(accepted) });
-        if (mark == null)
-            return;
+            return new FaceRect(0f, 0f, 0f, 0f);
+        Texture2D art = SlotArt.Texture(new[] { ArtSlots.VerdictMark(approved) });
+        float aspect = art != null && art.height > 0 ? (float)art.width / art.height : StampAspect;
+        FaceRect place = formPoint.HasValue ? StampSpots.At(_form, formPoint.Value.x, formPoint.Value.y, aspect) : StampSpots.Next(_form, _stamps, aspect);
+        float tilt = art != null ? 0f : (_stamps % 2 == 0 ? -StampTilt : StampTilt * 0.6f);
+        _stamps++;
 
-        FaceRect area = new FaceRect(_form.Width * (1f - InkFallbackShare), _form.PageHeight * (1f - InkFallbackShare), _form.Width, _form.PageHeight);
-        foreach (FormItem item in _form.Items)
-            if (item.Kind == FormItemKind.StampArea)
-                area = item.Rect;
-        Rect r = Local(area);
-        float aspect = mark.height > 0 ? (float)mark.width / mark.height : 1f;
-        Vector2 size = r.width / r.height > aspect ? new Vector2(r.height * aspect, r.height) : new Vector2(r.width, r.width / aspect);
-        inkMark.transform.localPosition = new Vector3(r.center.x, r.center.y, -InkLift);
-        inkMark.transform.localScale = new Vector3(size.x, size.y, 1f);
+        Renderer mark = _stamps == 1 ? inkMark : Instantiate(inkMark, inkMark.transform.parent);
+        mark.name = $"Stamp_{_stamps}";
+        Rect r = Local(place);
+        mark.transform.localPosition = new Vector3(r.center.x, r.center.y, -InkLift);
+        mark.transform.localRotation = Quaternion.Euler(0f, 0f, tilt);
+        mark.transform.localScale = new Vector3(r.width, r.height, 1f);
+        Color ink = approved ? ApprovedInk : DeniedInk;
+        ink.a = StampAlpha;
         _block ??= new MaterialPropertyBlock();
-        inkMark.GetPropertyBlock(_block);
-        _block.SetTexture(BaseMapId, mark);
-        inkMark.SetPropertyBlock(_block);
-        inkMark.gameObject.SetActive(true);
+        mark.GetPropertyBlock(_block);
+        _block.SetTexture(BaseMapId, art != null ? art : StampFrame());
+        _block.SetColor(BaseColorId, art != null ? Color.white : ink);
+        mark.SetPropertyBlock(_block);
+        mark.gameObject.SetActive(true);
+
+        if (art == null && style != null)
+        {
+            TextMeshPro word = Instantiate(textTemplate, textTemplate.transform.parent);
+            word.name = mark.name + "_Word";
+            TmpFormText.Style(word, FormTextRole.Title, r.height * StampWordShare);
+            word.text = approved ? style.approvedStamp : style.deniedStamp;
+            word.color = ink;
+            word.alignment = TextAlignmentOptions.Center;
+            word.textWrappingMode = TextWrappingModes.NoWrap;
+            word.rectTransform.sizeDelta = new Vector2(r.width, r.height);
+            word.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -InkLift - 0.0001f);
+            word.rectTransform.localRotation = Quaternion.Euler(0f, 0f, tilt);
+            word.GetComponent<MeshRenderer>().enabled = true;
+        }
+        return place;
+    }
+
+    /// <summary>The code-drawn stamp's frame: a thick outer rectangle and a hairline inside it, white on clear (tinted by the ink), painted once.</summary>
+    private static Texture2D StampFrame()
+    {
+        if (_stampFrame != null)
+            return _stampFrame;
+        _stampFrame = new Texture2D(StampPixelsWide, StampPixelsHigh, TextureFormat.RGBA32, true) { name = "StampFrame", wrapMode = TextureWrapMode.Clamp };
+        var pixels = new Color32[StampPixelsWide * StampPixelsHigh];
+        for (int y = 0; y < StampPixelsHigh; y++)
+            for (int x = 0; x < StampPixelsWide; x++)
+            {
+                int edge = Mathf.Min(Mathf.Min(x, StampPixelsWide - 1 - x), Mathf.Min(y, StampPixelsHigh - 1 - y));
+                bool inked = edge < 7 || (edge >= 11 && edge < 13);
+                pixels[y * StampPixelsWide + x] = new Color32(255, 255, 255, (byte)(inked ? 255 : 0));
+            }
+        _stampFrame.SetPixels32(pixels);
+        _stampFrame.Apply(true, true);
+        return _stampFrame;
+    }
+
+    /// <summary>A mark of the form named <paramref name="name"/> (an emblem, a watermark): a clone of the seal's quad over <paramref name="rect"/> showing <paramref name="texture"/> in <paramref name="ink"/>, <paramref name="lift"/> over the sheet; nothing without a texture or a seal quad.</summary>
+    private void PlaceMark(string name, FaceRect rect, Texture2D texture, Color ink, float lift)
+    {
+        if (seal == null || texture == null)
+            return;
+        Renderer mark = Instantiate(seal, seal.transform.parent);
+        mark.name = name;
+        Rect r = Local(rect);
+        mark.transform.localPosition = new Vector3(r.center.x, r.center.y, -lift);
+        mark.transform.localScale = new Vector3(r.width, r.height, 1f);
+        _block ??= new MaterialPropertyBlock();
+        mark.GetPropertyBlock(_block);
+        _block.SetTexture(BaseMapId, texture);
+        _block.SetColor(BaseColorId, ink);
+        mark.SetPropertyBlock(_block);
+        mark.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// The paper's outline (the travel documents spec, TD1): a card's corners
+    /// rounded by <paramref name="corner"/> (metres) in a mesh of its own (a fan
+    /// round the centre, PaperSilhouette), every other paper the quad's own
+    /// unit square. The mesh is in the quad's unit space (the quad is scaled
+    /// to the paper's size), so its corners are round once scaled.
+    /// </summary>
+    private void ShapePaper(float corner)
+    {
+        if (paperQuad == null || !paperQuad.TryGetComponent(out MeshFilter filter))
+            return;
+        if (_quadMesh == null)
+            _quadMesh = filter.sharedMesh;
+        if (corner <= 0f || Size.x <= 0f || Size.y <= 0f)
+        {
+            filter.sharedMesh = _quadMesh;
+            return;
+        }
+        List<(float x, float y)> outline = PaperSilhouette.Outline(Size.x, Size.y, corner);
+        var vertices = new List<Vector3> { Vector3.zero };
+        var uvs = new List<Vector2> { new Vector2(0.5f, 0.5f) };
+        foreach ((float x, float y) in outline)
+        {
+            vertices.Add(new Vector3(x / Size.x, y / Size.y, 0f));
+            uvs.Add(new Vector2(x / Size.x + 0.5f, y / Size.y + 0.5f));
+        }
+        var triangles = new List<int>();
+        for (int i = 1; i <= outline.Count; i++)
+            triangles.AddRange(new[] { 0, i, i % outline.Count + 1 });
+        if (_shapedMesh == null)
+            _shapedMesh = new Mesh { name = "PaperShape" };
+        _shapedMesh.Clear();
+        _shapedMesh.SetVertices(vertices);
+        _shapedMesh.SetUVs(0, uvs);
+        _shapedMesh.SetTriangles(triangles, 0);
+        _shapedMesh.RecalculateNormals();
+        _shapedMesh.RecalculateBounds();
+        filter.sharedMesh = _shapedMesh;
     }
 
     /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres; ignored while the paper is held in the hand (the examiner owns the sheet).</summary>
@@ -443,7 +582,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         TextMeshPro text = Instantiate(textTemplate, textTemplate.transform.parent);
         text.name = item.Role.ToString();
         TmpFormText.Style(text, item.Role, item.Size);
-        text.text = item.Text;
+        text.text = TmpFormText.Printed(item.Role, item.Text);
         text.color = style.Ink(item.Role);
         text.alignment = item.Align == FormTextAlign.Right ? TextAlignmentOptions.TopRight
             : item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Top
@@ -466,17 +605,18 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
     /// <summary>
     /// The paper's art when delivered (redesign phase 27, ArtSlots): its kind's
-    /// face by <paramref name="formNumber"/>, else the agency's plain face, on
+    /// face by <paramref name="formNumber"/> (a passport's for its holder's
+    /// nation, <paramref name="issuer"/>, first), else the agency's plain face, on
     /// the paper quad (held or lying: the block outlives the examine material's
     /// swap); without a face, the look's paper <paramref name="tint"/> (the
     /// document design spec, D1) on a plain sheet; the photo frame's art over
     /// the photo; the agency seal's on the seal. A missing file keeps the
     /// placeholder paper, the grey frame and the code-drawn ring.
     /// </summary>
-    private void ShowPaperArt(string formNumber, Color? tint)
+    private void ShowPaperArt(string formNumber, string issuer, Color? tint)
     {
         _block ??= new MaterialPropertyBlock();
-        Texture2D face = paperQuad != null ? SlotArt.Texture(ArtSlots.PaperFaces(formNumber)) : null;
+        Texture2D face = paperQuad != null ? SlotArt.Texture(ArtSlots.PaperFaces(formNumber, issuer)) : null;
         if (face != null)
         {
             paperQuad.GetPropertyBlock(_block);

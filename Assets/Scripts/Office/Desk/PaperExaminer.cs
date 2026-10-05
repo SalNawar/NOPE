@@ -283,7 +283,7 @@ public sealed class PaperExaminer : MonoBehaviour
             : (entry.RestPosition, entry.RestRotation, entry.RestScale);
     }
 
-    /// <summary>A held paper's target: its box (the office slot, or its place beside the open frame) at a safe distance, facing the camera, in world space, and its local scale.</summary>
+    /// <summary>A held paper's target: its box (the office slot, or its place beside the open frame) at a safe distance, facing the camera, in world space, and its local scale: the box's height for a paper as narrow as the desk's or narrower (a long sheet reads a little smaller), the box's width for a wider one (a ticket, a card: the travel documents spec, TD2), whose print then reads at the desk paper's size.</summary>
     private (Vector3, Quaternion, Vector3) Target(Entry entry)
     {
         ScreenBox box = BoxOf(entry);
@@ -301,7 +301,8 @@ public sealed class PaperExaminer : MonoBehaviour
         Transform parent = entry.Paper.Sheet.parent;
         float parentScale = parent != null && parent.lossyScale.x > 0f ? parent.lossyScale.x : 1f;
         float paperHeight = entry.Paper.Size.y > 0f ? entry.Paper.Size.y : config.paperSize.y;
-        return (position, rotation, Vector3.one * (height / paperHeight / parentScale));
+        float paperWidth = entry.Paper.Size.x > 0f ? entry.Paper.Size.x : config.paperSize.x;
+        return (position, rotation, Vector3.one * (height / Mathf.Max(paperHeight, paperWidth / paperAspect) / parentScale));
     }
 
     /// <summary>A held paper's box on the screen: beside the open frame when the papers fit there, else its office slot (dipped under the wheel).</summary>

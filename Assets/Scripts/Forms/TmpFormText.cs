@@ -45,8 +45,15 @@ public sealed class TmpFormText : ITextMeasure
     {
         SetFont(_text, text);
         Style(_text, role, size);
-        return _text.GetPreferredValues(text, width, MeasureRoom).y;
+        return _text.GetPreferredValues(Printed(role, text), width, MeasureRoom).y;
     }
+
+    /// <summary>A machine-readable zone's character pitch, in ems (its lines are monospaced; the travel documents spec, TD3).</summary>
+    public const float MrzPitch = 0.62f;
+
+    /// <summary>What a text of <paramref name="role"/> is set as: a machine-readable zone's line monospaced at MrzPitch, its fillers ('&lt;') never read as tags; every other text as it is.</summary>
+    public static string Printed(FormTextRole role, string text) =>
+        role == FormTextRole.Mrz && !string.IsNullOrEmpty(text) ? $"<mspace={MrzPitch.ToString(System.Globalization.CultureInfo.InvariantCulture)}em><noparse>{text}</noparse></mspace>" : text;
 
     /// <summary>Puts <paramref name="target"/> in the font <paramref name="text"/> is printed in: ScriptOf's for it, else the measure's own font with its own material back (a pooled text that printed a foreign line gets the paper's ink again).</summary>
     public void SetFont(TMP_Text target, string text)
