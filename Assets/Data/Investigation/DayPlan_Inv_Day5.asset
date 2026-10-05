@@ -14,21 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 5
   visitorsCount: 13
-  bulletin: 'NEW: the scanner and Citizen Records. Scan a paper to read it on the
-    PC: its name, Citizen ID and date of birth must match the traveller''s record.'
+  bulletin: 'NEW: the scanner and the records. Scan a paper to read it on the PC:
+    it must match the traveller''s record (a citizen''s Citizen Account; for the
+    displaced, who now come home through your desk with a Displacement Certificate,
+    the Displacement Registry).'
   papers:
   - TC-101
   - TC-230
+  - TC-610
   introduces:
   - tool:scanner
   - pc:records
   - field:BirthDate
+  - field:Incident
   - app:citizen_account
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
     honest: 0
   - blueprint: {fileID: 11400000, guid: 008d4e5dfc4a491396679dcae81673aa, type: 2}
+    weight: 2
+    honest: 0
+  - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
     weight: 2
     honest: 0
   eraWeights:

@@ -33,7 +33,7 @@ MonoBehaviour:
   pulls:
   - factor: money
     outcome: commons
-    amount: 6
+    amount: 12
   - factor: future
     outcome: anarchy
-    amount: 3
+    amount: 6

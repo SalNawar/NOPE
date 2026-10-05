@@ -12,21 +12,21 @@ One new paper or rule a day. The bulletin (the briefing's first line) names it.
 | 2 | the Entry Ticket: its Citizen ID against the Passport's, its date today | + TC-230 | – | doctored identity (Citizen ID) | fields Citizen ID, Departure date; app Internet |
 | 3 | a second destination, on the Departure Board | – | – | – | the board; apps Portals, Orders |
 | 4 | issuing seals and the Seal Register | – | – | forged seal | field Seal, book Seal |
-| 5 | the scanner and Citizen Records | – | `Rule_LeisureDepartures` | (the doctored birth year shows) | scanner, Records, field Birth date, app Citizen Account |
+| 5 | the scanner and the records; with them the displaced and their Displacement Certificate | + TC-610 | `Rule_LeisureDepartures` (every traveller's record: Citizen Account or Displacement Registry) | (the doctored birth year shows) | scanner, Records, fields Birth date and Incident, app Citizen Account |
 | 6 | travel class | – | `Rule_TravelClass` | poor posing as rich | fields class, transponder, transponder class |
 | 7 | the Stranding Waiver | + TC-310 | `Rule_TouristWaiverSet` (replaces the class rule) | fake waiver | fields Signature, Waiver No. |
 | 8 | Debt Relief labourers, the Work Permit | + TC-520 | `Rule_LabourPaperSet` | forged contract | fields Employer, Term, Wage |
 | 9 | dress for the destination | – | `Rule_DressForDestination` | (costume errors) | the Look menu's garments, the Costume Guide |
 | 10 | debt standing | – | `Rule_DebtStanding` | debtor posing as a tourist | the record's Standing and Debt, field Debt |
 | 11 | the Driftbox 3 recall | – | `Rule_DriftboxRecall` | – | – |
-| 12 | the displaced go home | + TC-610 | `Rule_DisplacedReturns` | – | field Incident |
+| 12 | bans: a board route CLOSED (Weimar Berlin) | – | `Rule_NoModernGermany` (that day only) | – | – |
 | 13 | the Economy range limit | – | `Rule_NoEconomyAncient` | – | – |
 | 14 | the return home, the Intake Declaration | + TC-620 | `Rule_ReturnHome` | false origin, fake displaced | TC-620's Currency, Language, Technology; books Tongues, Capitals, Rulers; the Language, Capital and Ruler questions |
 | 15 | the Return Order | + TC-630 | – | – | – |
 
 Day 1 is the baseline (two rules at once: the open destination and the dates); `DayPacing` checks only its bulletin. The open destinations count with the closures, so a new day's open places are no new check.
 
-The story beats keep working (checked by the balance simulation, 50 of 50 perfect runs): Pell Quimby days 7 (unsigned waiver, the waiver's day), 11 (the recall, moved from day 10) and 15; Ines day 8; Rook day 11; Senenmut and Gutenberg day 12 (the displaced's first day; Gutenberg moved from day 9); Hollis day 13; the auditor, "Ada Lovelace" and "Socrates" day 14 (the return home's day; Ada and Socrates moved from day 12). The famous displaced are pooled from day 12.
+The story beats keep working (checked by the balance simulation, 50 of 50 perfect runs): Pell Quimby days 7 (unsigned waiver, the waiver's day), 11 (the recall, moved from day 10) and 15; Ines day 8; Gutenberg day 9; Rook day 11; Hollis day 13; the auditor, "Ada Lovelace" and "Socrates" day 14 (the return home's day; Ada and Socrates moved from day 12). Track E's famous travellers (displaced) keep their forced slots and pools from day 6.
 
 ## 2. Decisions made on Saleh's behalf
 
@@ -38,7 +38,7 @@ The story beats keep working (checked by the balance simulation, 50 of 50 perfec
 6. **Cut from the 15-day ramp**: the proofs of means (never issued; their voice lines removed), smuggling and the no-2150-goods rule, the Currency and Device questions (fromDay 16), the plain daily closures (the open destinations are the bans). The luggage fields (TC-230's Currency Carried and Declared Effects) never show.
 7. **Before the scanner (days 1-4)** a handed-over paper's copy reaches the PC at once, quietly, so the workbench (rules, calendar, click-and-match) can prove the day's faults until Track B's desk inspection lands. Track B removes this (`CaseDocumentsPresenter.SetDay`'s `copiesOnHandOver`). The copy's strip still reads "SCANNED" (Track B).
 8. **Steps and the Deviation Report are hidden, not deleted.** The steps run headless (the decision view, Ctrl+1…5, the audit play), until Track C's menu bar replaces them; the Report tab is unreachable from the findings column and gets no badge. Its search entries still exist (Track C).
-9. **The translation's foreign speech starts day 12**, with the displaced; Interview Protocols' question (date of birth) from day 5.
+9. **The displaced arrive on day 5 with the records** (merged after Track E landed: its famous travellers are displaced and appear from day 6). Their check is the same record check (`Rule_LeisureDepartures` now reads "every paper must match the traveller's record"; `Rule_DisplacedReturns` is no longer listed), so day 5 brings one paper (TC-610) and one rule. The ban (a plain closure) takes the displaced's old day 12. Foreign speech starts on day 8 (its notice in Orders' reach, day 6); Interview Protocols' question (date of birth) from day 5.
 10. **Day 1's mix**: rich 1 : poor 2 (honest), violation chance 0, so day 1 is about 3 deniable travellers in 8 (the closed destination, the expired passport, a swapped photo).
 
 ## 3. The registry: the API for tracks B and C

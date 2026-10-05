@@ -119,7 +119,7 @@ public static class TimelineService
     /// Runs the full nightly resolve. Call at sleep, BEFORE world.day increments.
     /// Order: dominance (news only for tomorrow's places) -> tier effects ->
     /// the timeline leader -> triggers (history rules latch here, and their
-    /// pulls land) -> the world's answers (WorldOutcomeService.Latch) -> carries ->
+    /// pulls land; a front-page rule's line leads the paper) -> the world's answers (WorldOutcomeService.Latch) -> carries ->
     /// today's panics -> today's strandings -> the returned travellers' desk
     /// lines (Returns.Lines; wave 5, lesson 9) -> the debt line -> expiry ->
     /// tomorrow package.
@@ -136,12 +136,13 @@ public static class TimelineService
 
         int tomorrow = world.day + 1;
         var news = new List<string>();
+        var front = new List<string>();
         var desk = new List<string>();
 
         RecomputeDominance(world, lib, config, news, TomorrowPlaces(world, lib));
         RebuildTierEffects(world, lib, tomorrow);
         int historyLines = HistoryService.LatchLeader(world, lib, config, tomorrow, news);
-        EvaluateTriggers(world, lib, tomorrow, news, desk);
+        EvaluateTriggers(world, lib, tomorrow, front, news, desk);
         historyLines += WorldOutcomeService.Latch(world, lib, config, tomorrow, news, historyLines);
         HistoryService.PromoteCarries(world, lib, config, tomorrow, news, historyLines);
         HistoryService.ReportPanics(world, lib, news);
@@ -149,7 +150,7 @@ public static class TimelineService
         desk.AddRange(Returns.Lines(world.returns, world.day, lib.News.returnedAccepted, lib.News.returnedDenied));
         AddDebtLine(world, lib, tomorrow, news);
         ExpireEffects(world, tomorrow);
-        BuildTomorrowPackage(world, lib, news, desk);
+        BuildTomorrowPackage(world, lib, History.FrontFirst(front, news), desk);
 
         Debug.Log($"[TimelineService] <<< Exiting NightlyResolve (activeEffects={world.timeline.activeEffects.Count}, dominant={world.timeline.dominantKeys.Count}, supporting={world.timeline.supportingKeys.Count}, briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count}).");
     }
@@ -299,10 +300,11 @@ public static class TimelineService
 
     /// <summary>
     /// Evaluates all triggers; fires those whose conditions all pass. A fired
-    /// trigger's line goes where its section says (days 7-15 Q9): the news,
-    /// the paper's <paramref name="desk"/> section, or nowhere (Return).
+    /// trigger's line goes where its section says (days 7-15 Q9, History.FileStory):
+    /// the <paramref name="front"/> page, the news, the paper's
+    /// <paramref name="desk"/> section, or nowhere (Return).
     /// </summary>
-    private static void EvaluateTriggers(WorldState world, ContentLibrarySO lib, int startDay, List<string> news, List<string> desk)
+    private static void EvaluateTriggers(WorldState world, ContentLibrarySO lib, int startDay, List<string> front, List<string> news, List<string> desk)
     {
         int total = lib.Triggers != null ? lib.Triggers.Count : 0;
         int fired = 0;
@@ -326,8 +328,7 @@ public static class TimelineService
             Debug.Log($"[Timeline] Trigger fired: {trigger.displayName}");
             fired++;
 
-            if (!string.IsNullOrEmpty(trigger.newsLineOnFire) && trigger.section != StorySection.Return)
-                (trigger.section == StorySection.Desk ? desk : news).Add(trigger.newsLineOnFire);
+            History.FileStory(trigger.section, trigger.newsLineOnFire, front, news, desk);
 
             foreach (TriggerOutcome outcome in trigger.outcomes)
             {
@@ -338,7 +339,7 @@ public static class TimelineService
                     ? outcome.durationDaysOverride
                     : outcome.effect.defaultDurationDays;
 
-                ActivateEffect(world, outcome.effect, $"Trigger: {trigger.displayName}", startDay, duration, applyInstantOps: true);
+                ActivateEffect(world, outcome.effect, History.TriggerSourcePrefix + trigger.displayName, startDay, duration, applyInstantOps: true);
             }
 
             if (trigger.oneShot)

@@ -184,6 +184,9 @@ public sealed class SiteWorld
     /// <summary>2150 today: each world factor's answer as this morning's paper last reported it (ContentLibrarySO.WorldLatched; the endings spec §5.1), in content order; Chronopedia's present shows it.</summary>
     public IReadOnlyList<OutcomeLine> WorldToday = Array.Empty<OutcomeLine>();
 
+    /// <summary>2150 today's traces by factor id (Traces.Lines over the latched answers; Track E): the line naming the last traveller whose verdict pulled the answer; a factor with none is missing.</summary>
+    public IReadOnlyDictionary<string, string> WorldTraces = new Dictionary<string, string>();
+
     /// <summary>A place by nation and era id, or null.</summary>
     public PlaceInfo Place(string nationId, string eraId) =>
         Places.FirstOrDefault(p => p != null && p.NationId == nationId && p.EraId == eraId);
@@ -226,7 +229,7 @@ public static class Sites
         "site.news.today", "site.news.archiveTitle", "site.news.archiveRow", "site.news.noBackIssues", "site.news.quiet",
         "site.history.intro", "site.history.present", "site.history.revisions", "site.history.country", "site.history.none", "site.history.subtitle",
         "site.history.presentNote", "site.history.revised", "site.history.people", "site.history.index", "site.history.presentNone",
-        "site.history.whyCarry", "site.history.whyRule", "site.history.whyPending", "site.history.noRevisions",
+        "site.history.whyCarry", "site.history.whyRule", "site.history.whyPending", "site.history.noRevisions", "site.history.changed", "site.history.changedRow",
         "site.history.col.day", "site.history.col.place", "site.history.col.fact", "site.history.col.before", "site.history.col.after", "site.history.col.why",
         "site.lineage.intro", "site.lineage.country", "site.lineage.era", "site.lineage.all", "site.lineage.count", "site.lineage.hits", "site.lineage.noHits",
         "site.lineage.col.name", "site.lineage.col.born", "site.lineage.col.place",

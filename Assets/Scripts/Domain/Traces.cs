@@ -74,6 +74,27 @@ public static class Traces
         return b != null && (a == null || b.day > a.day) ? b : a;
     }
 
+    /// <summary>
+    /// Each answered factor's trace line (Chronopedia's "2150 today", Track E):
+    /// per lead of <paramref name="leads"/> with a trace (<see cref="Of"/>),
+    /// <paramref name="template"/> filled with its name and day, keyed by the
+    /// factor's id; a lead with no trace, or a blank template, adds nothing.
+    /// </summary>
+    public static Dictionary<string, string> Lines(IReadOnlyList<PullTrace> traces, IEnumerable<FactorLead> leads, string template)
+    {
+        var lines = new Dictionary<string, string>();
+        foreach (FactorLead lead in leads ?? new FactorLead[0])
+        {
+            if (lead == null || string.IsNullOrEmpty(lead.factor) || lines.ContainsKey(lead.factor))
+                continue;
+            PullTrace trace = Of(traces, lead);
+            string line = trace != null ? Fill(template, trace.traveller, trace.day) : null;
+            if (line != null)
+                lines.Add(lead.factor, line);
+        }
+        return lines;
+    }
+
     /// <summary><paramref name="template"/> with {name} and {day} filled; null for a blank template or a blank name.</summary>
     public static string Fill(string template, string name, int day) =>
         string.IsNullOrWhiteSpace(template) || string.IsNullOrWhiteSpace(name) ? null

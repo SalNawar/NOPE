@@ -1182,6 +1182,14 @@ MonoBehaviour:
     text: WHY
     gloss: 0
     tier: 0
+  - key: site.history.changed
+    text: Changed at Desk 3
+    gloss: 0
+    tier: 0
+  - key: site.history.changedRow
+    text: 'Day {0}, {1}: {2} is now {3} ({4})'
+    gloss: 0
+    tier: 0
   - key: site.lineage.intro
     text: Records of citizens of the past. Search by name, or pick a country and
       an era.

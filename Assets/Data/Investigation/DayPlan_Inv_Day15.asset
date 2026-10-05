@@ -19,9 +19,9 @@ MonoBehaviour:
   papers:
   - TC-101
   - TC-230
+  - TC-610
   - TC-310
   - TC-520
-  - TC-610
   - TC-620
   - TC-630
   introduces: []
@@ -52,26 +52,27 @@ MonoBehaviour:
   allowedNations: []
   legendaryBaseChance: 0.05
   availableLegendaries:
-  - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
-  - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
-  - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
+  - {fileID: 11400000, guid: 0cfd772d9e4b4ce4c873a1fa73e58036, type: 2}
+  - {fileID: 11400000, guid: 3615642cea3cdb94b8d9ffbfa4791da4, type: 2}
+  - {fileID: 11400000, guid: 28a33f99f3083054289db1cae6fe58be, type: 2}
   - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
-  - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
-  - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
-  - {fileID: 11400000, guid: 99eaeeca4c1051241918113a32ab7256, type: 2}
-  - {fileID: 11400000, guid: 3493007bf4998db4e809fd90a977ab75, type: 2}
-  - {fileID: 11400000, guid: 7b3797395c6bf1c4ab2010fa7b858e5f, type: 2}
-  - {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
-  - {fileID: 11400000, guid: 1c8c6e552007f2e4e902697ca0e5131c, type: 2}
-  - {fileID: 11400000, guid: 994c774aeaa0ec84f9c7a9c1d29d742d, type: 2}
-  - {fileID: 11400000, guid: 518f2d7d697b9c346ac1b51f6188f07d, type: 2}
-  - {fileID: 11400000, guid: 2546e7e5d93f43a49a3f4c7476fe65c6, type: 2}
-  - {fileID: 11400000, guid: fe0258a60478d084284a6d18023a0ca4, type: 2}
-  - {fileID: 11400000, guid: 61ad2f31d886dba4dabfff1a76d7d87a, type: 2}
-  - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
-  - {fileID: 11400000, guid: 050c1e3bba096ac41adc70495a9874f4, type: 2}
-  - {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
+  - {fileID: 11400000, guid: d5d6d2c735f8edb478571c27e8ca1d3b, type: 2}
   - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
+  - {fileID: 11400000, guid: 8b4fc248d7749df468d3c557a12a0340, type: 2}
+  - {fileID: 11400000, guid: 6309579b953c3d0459f52208a2c85a2a, type: 2}
+  - {fileID: 11400000, guid: 011ce32acfd5da94db7890c006c2de7c, type: 2}
+  - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
+  - {fileID: 11400000, guid: 34da1b6f2ba1ada479d3174b62a4f942, type: 2}
+  - {fileID: 11400000, guid: 4ebf537d3e3bbcd44ba46babd98490ad, type: 2}
+  - {fileID: 11400000, guid: 4c6bd6ed062734645a8821fd59c1076c, type: 2}
+  - {fileID: 11400000, guid: 32091333cebd24d42a88a1db4d6e717e, type: 2}
+  - {fileID: 11400000, guid: fcb7d24e948523145beb44a3ad13002d, type: 2}
+  - {fileID: 11400000, guid: 102b1a1da431f264789642fcf5bdeddc, type: 2}
+  - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
+  - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
+  - {fileID: 11400000, guid: ea204f04a76efea4a892bee51f33e9a1, type: 2}
+  - {fileID: 11400000, guid: 9a402b021c35d844a983774f29a7e95f, type: 2}
+  - {fileID: 11400000, guid: d7dac8add03f81b4386aeac31d4655da, type: 2}
   tellCount: 1
   tellChannels: 000000000100000002000000
   costumeErrorChance: 0.05
@@ -88,11 +89,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
   - {fileID: 11400000, guid: ecff6c6a25ba0d648aa6289bee8e60ef, type: 2}
-  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
   - {fileID: 11400000, guid: 4f2fad0bf98cc0f48975ec34e2e9bb1d, type: 2}
   - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
+  - caseIndex1Based: 3
+    id: 
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
+    hasLie: 0
+    lie: 0
+    directive: 0
+    dialogId: 
+    introLine: 
+    conditions: []
   - caseIndex1Based: 7
     id: pell_3
     caseBlueprint: {fileID: 0}
@@ -131,6 +141,16 @@ MonoBehaviour:
       attribute: {fileID: 0}
       profile: {fileID: 0}
       nation: {fileID: 0}
+  - caseIndex1Based: 10
+    id: 
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: 4cd562c550115f54dbf63209b2c6089d, type: 2}
+    hasLie: 0
+    lie: 0
+    directive: 0
+    dialogId: 
+    introLine: 
+    conditions: []
   eventRules: []
   directorateRoutes:
   - portal: 1

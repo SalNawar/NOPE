@@ -15,10 +15,10 @@ MonoBehaviour:
   type: 11
   era: {fileID: 0}
   nation: {fileID: 0}
-  description: 'OPEN TODAY: Weimar Berlin and Bologna, Kingdom of Italy, as the Departure
+  description: 'OPEN TODAY: Bologna, Kingdom of Italy and Weimar Berlin, as the Departure
     Board shows. Refuse any other destination.'
   kinds: 000000000100000002000000
   transponder: 
   openPlaces:
-  - germany:modern
   - italy:industrial
+  - germany:modern
