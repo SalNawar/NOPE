@@ -311,13 +311,24 @@ public sealed class MenuBarView : MonoBehaviour
         Mark(_sideOf, _unread);
     }
 
-    /// <summary>Closes the open drop-down.</summary>
+    /// <summary>Closes the open drop-down (its rows go: they are drawn again when a menu opens).</summary>
     public void Close()
     {
         _open = null;
+        ClearRows();
         if (dropdown != null && dropdown.gameObject.activeSelf)
             dropdown.gameObject.SetActive(false);
         Mark(_sideOf, _unread);
+    }
+
+    /// <summary>The drop-down's rows and caption go.</summary>
+    private void ClearRows()
+    {
+        foreach (GameObject made in _rowsMade)
+            Discard(made);
+        _rowsMade.Clear();
+        _rows.Clear();
+        _rowItems.Clear();
     }
 
     /// <summary>True when <paramref name="pressed"/> is a title or inside the drop-down (a press elsewhere closes it).</summary>
@@ -337,11 +348,7 @@ public sealed class MenuBarView : MonoBehaviour
     /// <summary>The drop-down's rows for <paramref name="menu"/>: its documents, then (Papers) the caption and the papers not handed over.</summary>
     private void DrawRows(AppMenu menu)
     {
-        foreach (GameObject made in _rowsMade)
-            Discard(made);
-        _rowsMade.Clear();
-        _rows.Clear();
-        _rowItems.Clear();
+        ClearRows();
         if (dropdown == null || rowTemplate == null)
             return;
         bool caption = false;
