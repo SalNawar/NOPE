@@ -35,6 +35,6 @@ MonoBehaviour:
   - factor: government
     outcome: democracy
     amount: 12
-  - factor: money
-    outcome: commons
+  - factor: government
+    outcome: directorate
     amount: 6

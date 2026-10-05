@@ -37,5 +37,5 @@ MonoBehaviour:
     outcome: jubilee
     amount: 12
   - factor: government
-    outcome: theocracy
+    outcome: monarchy
     amount: 6

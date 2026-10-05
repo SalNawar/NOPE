@@ -36,5 +36,5 @@ MonoBehaviour:
     outcome: nuclear
     amount: 12
   - factor: money
-    outcome: company_towns
+    outcome: banking_houses
     amount: 6

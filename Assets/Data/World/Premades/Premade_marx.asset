@@ -36,5 +36,5 @@ MonoBehaviour:
     outcome: communism
     amount: 12
   - factor: money
-    outcome: commons
+    outcome: debt
     amount: 6

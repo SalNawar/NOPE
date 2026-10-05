@@ -36,6 +36,6 @@ MonoBehaviour:
   - factor: money
     outcome: jubilee
     amount: 12
-  - factor: future
-    outcome: space_age
+  - factor: government
+    outcome: monarchy
     amount: 6
