@@ -2,7 +2,7 @@
 /// The engine side of the Investigation app's smart links (the PC redesign
 /// LK1, LK2): a case's claim as SmartLinks reads it, and the ↗'s hover hint
 /// saying where a link goes ("Open the Reference: Currency, the claimed
-/// place"; "Open Records: 552-1804-33"; "Open the Rules"). The rows' links
+/// place"; "Open Records: MRV-552"; "Open the Rules"). The rows' links
 /// themselves are Domain SmartLinks'.
 /// </summary>
 public static class AppLinks

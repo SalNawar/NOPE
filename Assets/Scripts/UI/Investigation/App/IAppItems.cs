@@ -7,7 +7,7 @@
 /// </summary>
 public interface IAppItems
 {
-    /// <summary>The shown item's entry key ("doc:0", "bookof:Currency", "rec:552-1804-33"), or null when none is shown (or the view has no items).</summary>
+    /// <summary>The shown item's entry key ("doc:0", "bookof:Currency", "rec:MRV-552"), or null when none is shown (or the view has no items).</summary>
     string ItemKey { get; }
 
     /// <summary>The shown item's name for a pin or a recent item, or null.</summary>

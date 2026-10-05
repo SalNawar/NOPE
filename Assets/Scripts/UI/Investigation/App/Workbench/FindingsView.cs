@@ -55,7 +55,7 @@ public sealed class FindingsView : MonoBehaviour
     /// <summary>A finding's title ("Visa class matches", "Breaks the rule: …").</summary>
     public static string Title(Finding finding) => UiText.Format("finding.title." + finding.Kind, finding.Subject);
 
-    /// <summary>A finding's short line: the two values ("Premium against Standard"), one value found on both ("270-6927-03 on both"), or the value a rule or the date was held against with where it is ("14 Mar 2150 (Departure Manifest)"); a proof ends "· evidence".</summary>
+    /// <summary>A finding's short line: the two values ("Premium against Standard"), one value found on both ("BDX-270 on both"), or the value a rule or the date was held against with where it is ("14 Mar 2150 (Departure Manifest)"); a proof ends "· evidence".</summary>
     public static string Detail(Finding finding)
     {
         string line;

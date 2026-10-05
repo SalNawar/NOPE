@@ -27,7 +27,7 @@ MonoBehaviour:
   oncePerRun: 1
   kind: 2
   family: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
-  citizenId: 418-3302-56
+  citizenId: ADT-418
   debt: 212000
   employer: ruhr_colliery
   pulls: []

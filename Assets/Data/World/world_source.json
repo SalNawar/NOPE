@@ -1041,7 +1041,7 @@
       "validDaysMax": 365
     },
     "clerk": {
-      "citizenId": "773-2840-19",
+      "citizenId": "TMW-773",
       "name": "Theo Marlow",
       "born": "9 Feb 2121",
       "lineage": "Victorian Britain",
@@ -18672,7 +18672,7 @@
       "impacts": [],
       "kind": "PoorTourist",
       "family": "greece",
-      "citizenId": "512-6048-33"
+      "citizenId": "NHA-512"
     },
     {
       "id": "ines",
@@ -18689,7 +18689,7 @@
       "impacts": [],
       "kind": "Labourer",
       "family": "germany",
-      "citizenId": "773-1102-07",
+      "citizenId": "RKW-773",
       "debt": 88200,
       "employer": "tyburn"
     },
@@ -18708,7 +18708,7 @@
       "impacts": [],
       "kind": "Labourer",
       "family": "germany",
-      "citizenId": "309-7715-64",
+      "citizenId": "HLS-309",
       "employer": "tyburn"
     },
     {
@@ -18726,7 +18726,7 @@
       "impacts": [],
       "kind": "Labourer",
       "family": "britain",
-      "citizenId": "418-3302-56",
+      "citizenId": "ADT-418",
       "debt": 212000,
       "employer": "ruhr_colliery"
     },
@@ -18745,7 +18745,7 @@
       "impacts": [],
       "kind": "RichTourist",
       "family": "italy",
-      "citizenId": "100-0001-01"
+      "citizenId": "AAA-001"
     }
   ],
   "history": {

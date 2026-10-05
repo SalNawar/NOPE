@@ -2,9 +2,10 @@ using System;
 
 /// <summary>
 /// The blocks a form is made of (PC spec FO2). Serialized in every form
-/// asset as an int, so the values are fixed (16 is SealGrid; 17 to 20 the
-/// travel documents': Fold, Mrz, Visa, Watermark): 14 (Masthead) and 15 (Headline)
-/// are held for the Internet's sites.
+/// asset as an int, so the values are fixed (16 is SealGrid; 17, 19 and 20 the
+/// travel documents': Fold, Visa, Watermark): 14 (Masthead) and 15 (Headline)
+/// are held for the Internet's sites; 18 was the passport's machine-readable
+/// zone (retired 2026-10-06: Saleh found it confusing; never reuse it).
 /// </summary>
 public enum FormBlockKind
 {
@@ -55,9 +56,6 @@ public enum FormBlockKind
 
     /// <summary>A booklet's fold (the travel documents spec, TD3): the spine across the page at the block's place (shares[0], a share of the page's height; none: under the pen), the facing page's blocks below it.</summary>
     Fold = 17,
-
-    /// <summary>A passport's machine-readable zone (TD3): FormData.Mrz's lines in monospaced capitals across the content, shrunk to keep each on one line; nothing to pick (it repeats the page).</summary>
-    Mrz = 18,
 
     /// <summary>A visa page (TD3): a dashed stamp area across the content from the pen down to the page's bottom margin (at least 1.25 of the style's stamp height), the block's text its caption inside its top: where the APPROVED or DENIED stamp lands.</summary>
     Visa = 19,

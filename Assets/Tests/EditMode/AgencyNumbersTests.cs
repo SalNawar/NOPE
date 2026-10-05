@@ -8,13 +8,13 @@ public class AgencyNumbersTests
     private static readonly DateTime Today = new DateTime(2150, 3, 14);
 
     [Test]
-    public void DisplacementNumber_IsDP_FourDigits_TwoDigits_FromTwoDraws()
+    public void DisplacementNumber_IsDP_FourDigits_FromTwoDraws()
     {
-        var rng = new ScriptedRandom(ScriptStep.Range(4471), ScriptStep.Range(2));
-        Assert.AreEqual("DP-4471-02", AgencyNumbers.DisplacementNumber(rng));
+        var rng = new ScriptedRandom(ScriptStep.Range(44), ScriptStep.Range(71));
+        Assert.AreEqual("DP-4471", AgencyNumbers.DisplacementNumber(rng));
         Assert.IsTrue(rng.Done);
-        Assert.AreEqual("DP-0000-00", AgencyNumbers.DisplacementNumber(new ScriptedRandom(ScriptStep.Range(0), ScriptStep.Range(0))), "zero-padded");
-        Assert.AreEqual("DP-9999-99", AgencyNumbers.DisplacementNumber(new ScriptedRandom(ScriptStep.Range(9999), ScriptStep.Range(99))));
+        Assert.AreEqual("DP-0000", AgencyNumbers.DisplacementNumber(new ScriptedRandom(ScriptStep.Range(0), ScriptStep.Range(0))), "zero-padded");
+        Assert.AreEqual("DP-9999", AgencyNumbers.DisplacementNumber(new ScriptedRandom(ScriptStep.Range(99), ScriptStep.Range(99))));
     }
 
     [Test]
@@ -46,7 +46,7 @@ public class AgencyNumbersTests
     public void Displaced_DrawsInTheFixedOrder_NumberFoundIncidentValidUntil()
     {
         var rng = new ScriptedRandom(
-            ScriptStep.Range(4471), ScriptStep.Range(2),   // the number
+            ScriptStep.Range(44), ScriptStep.Range(71),   // the number
             ScriptStep.Range(2),                           // found 3 days ago: 11 Mar
             ScriptStep.Range(6),                           // the incident's serial
             ScriptStep.Range(10));                         // valid 13 days ahead
@@ -55,25 +55,25 @@ public class AgencyNumbersTests
         DisplacementFile file = AgencyNumbers.Displaced(Today, Ranges(), taken, rng);
 
         Assert.IsTrue(rng.Done, "five draws");
-        Assert.AreEqual("DP-4471-02", file.Number);
+        Assert.AreEqual("DP-4471", file.Number);
         Assert.AreEqual("11 Mar 2150", file.Found);
         Assert.AreEqual("R-0311-07", file.Incident, "the incident's date is the day they were found");
         Assert.AreEqual("27 Mar 2150", file.ValidUntil);
-        CollectionAssert.Contains(taken, "DP-4471-02", "the number is taken for the rest of the day");
+        CollectionAssert.Contains(taken, "DP-4471", "the number is taken for the rest of the day");
     }
 
     [Test]
     public void Displaced_ANumberTakenToday_IsDrawnAgain()
     {
-        var taken = new HashSet<string> { "DP-4471-02" };
+        var taken = new HashSet<string> { "DP-4471" };
         var rng = new ScriptedRandom(
-            ScriptStep.Range(4471), ScriptStep.Range(2),
-            ScriptStep.Range(4471), ScriptStep.Range(3),
+            ScriptStep.Range(44), ScriptStep.Range(71),
+            ScriptStep.Range(44), ScriptStep.Range(72),
             ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
 
         DisplacementFile file = AgencyNumbers.Displaced(Today, Ranges(), taken, rng);
 
-        Assert.AreEqual("DP-4471-03", file.Number);
+        Assert.AreEqual("DP-4472", file.Number);
         Assert.IsTrue(rng.Done);
         Assert.AreEqual(2, taken.Count);
     }
@@ -86,7 +86,7 @@ public class AgencyNumbersTests
         {
             var rng = new SeededRandom(Seeds.ForAccount(Seeds.ForCase(Seeds.Day(12345, 1), slot)));
             DisplacementFile file = AgencyNumbers.Displaced(Today, Ranges(), taken, rng);
-            StringAssert.IsMatch(@"^DP-\d{4}-\d{2}$", file.Number);
+            StringAssert.IsMatch(@"^DP-\d{4}$", file.Number);
             StringAssert.IsMatch(@"^R-\d{4}-\d{2}$", file.Incident);
             Assert.IsTrue(BirthDates.TryParse(file.Found, out int fd, out int fm, out int fy));
             Assert.IsTrue(BirthDates.TryParse(file.ValidUntil, out int vd, out int vm, out int vy));

@@ -77,7 +77,7 @@ public class AccountMakerTests
             ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52), // Citizen ID
             ScriptStep.Range(1000),                                             // debt: 40,000 + 10,000
             ScriptStep.Value(0f), ScriptStep.Range(7),                          // the Economy model, its serial
-            ScriptStep.Range(204817),                                           // the waiver's number (every Economy account registers one)
+            ScriptStep.Range(2048),                                           // the waiver's number (every Economy account registers one)
             ScriptStep.Range(1),                                                // the employer: the second
             ScriptStep.Range(3),                                                // the term: 90 + 3 months
             ScriptStep.Range(24),                                               // the wage: 180 + 240
@@ -88,7 +88,7 @@ public class AccountMakerTests
         Assert.IsTrue(rng.Done, "every draw in order");
         Assert.AreEqual(50000, account.Debt);
         Assert.AreEqual("Tick-Tock Basic · TT-00007", account.Transponder);
-        Assert.AreEqual("SW-204817", account.WaiverNo);
+        Assert.AreEqual("SW-2048", account.WaiverNo);
         Assert.IsTrue(account.HasContract);
         Assert.AreEqual("Ruhr Colliery Partners", account.Employer);
         Assert.AreEqual(180, account.TermDays);
@@ -101,21 +101,21 @@ public class AccountMakerTests
     [Test]
     public void Make_AnAuthoredCitizenIdIsReservedAndNeverRedrawn()
     {
-        var taken = new HashSet<string> { "512-6048-33" };
+        var taken = new HashSet<string> { "NHA-512" };
         AccountRequest request = Request(CitizenStatus.Standard);
-        request.CitizenId = "512-6048-33";
+        request.CitizenId = "NHA-512";
         var rng = new ScriptedRandom(
             ScriptStep.Range(1000),                   // debt (no Citizen ID draw)
             ScriptStep.Value(0f),                     // the proof
             ScriptStep.Range(2000),                   // its amount
             ScriptStep.Value(0f), ScriptStep.Range(7), // the Economy model, its serial
-            ScriptStep.Range(204817),                 // the waiver's number
+            ScriptStep.Range(2048),                 // the waiver's number
             ScriptStep.Range(0),                      // lineage
             ScriptStep.Range(0),                      // no past trips
             ScriptStep.Range(0));                     // the expiring form
         CitizenAccount account = AccountMaker.Make(request, Ranges(), Transponders(), Proofs(), Today, taken, rng);
         Assert.IsTrue(rng.Done, "no draw for the Citizen ID");
-        Assert.AreEqual("512-6048-33", account.CitizenId);
+        Assert.AreEqual("NHA-512", account.CitizenId);
         Assert.AreEqual(3, taken.Count, "the reserved ID, the serial and the waiver's number: nothing redrawn");
     }
 
@@ -142,7 +142,7 @@ public class AccountMakerTests
         request.Employer = "Tyburn Mills Consortium";
         var rng = new ScriptedRandom(
             ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52), ScriptStep.Range(1000), ScriptStep.Value(0f), ScriptStep.Range(7),
-            ScriptStep.Range(204817), ScriptStep.Range(1), ScriptStep.Range(3), ScriptStep.Range(24),
+            ScriptStep.Range(2048), ScriptStep.Range(1), ScriptStep.Range(3), ScriptStep.Range(24),
             ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
         CitizenAccount account = AccountMaker.Make(request, Ranges(), Transponders(), Proofs(), Today, new HashSet<string>(), rng);
         Assert.IsTrue(rng.Done);
@@ -167,7 +167,7 @@ public class AccountMakerTests
         var rng = new ScriptedRandom(
             ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52), ScriptStep.Range(1000),
             ScriptStep.Value(0.99f), ScriptStep.Range(7),                       // one Value draw picks among the models left
-            ScriptStep.Range(204817), ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
+            ScriptStep.Range(2048), ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
         Assert.AreEqual("Tick-Tock Basic · TT-00007", AccountMaker.Make(Request(CitizenStatus.Eligible), Ranges(), left, Proofs(), Today, new HashSet<string>(), rng).Transponder);
         Assert.IsTrue(rng.Done);
     }
@@ -227,13 +227,14 @@ public class AccountMakerTests
     }
 
     [Test]
-    public void CitizenId_IsThreeFourTwoDigits_FromThreeDraws()
+    public void CitizenId_IsThreeLettersThreeDigits_FromThreeDraws()
     {
         var rng = new ScriptedRandom(ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52));
-        Assert.AreEqual("418-0937-52", AccountMaker.CitizenId(rng));
+        Assert.AreEqual("TLZ-052", AccountMaker.CitizenId(rng));
         Assert.IsTrue(rng.Done);
-        Assert.AreEqual("000-0000-00", AccountMaker.CitizenId(new ScriptedRandom(ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0))));
-        Assert.AreEqual("999-9999-99", AccountMaker.CitizenId(new ScriptedRandom(ScriptStep.Range(999), ScriptStep.Range(9999), ScriptStep.Range(99))));
+        Assert.AreEqual("AAA-000", AccountMaker.CitizenId(new ScriptedRandom(ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0))));
+        Assert.AreEqual("ZZZ-999", AccountMaker.CitizenId(new ScriptedRandom(ScriptStep.Range(575), ScriptStep.Range(23), ScriptStep.Range(999))));
+        Assert.AreEqual("KTR-418", AccountMaker.CitizenId(new ScriptedRandom(ScriptStep.Range(9 * 24 + 17), ScriptStep.Range(15), ScriptStep.Range(418))), "no I and no O: K is the 10th letter, T the 18th, R the 16th");
     }
 
     [Test]
@@ -283,7 +284,7 @@ public class AccountMakerTests
         CitizenAccount account = AccountMaker.Make(Request(CitizenStatus.Premium), Ranges(), Transponders(), Proofs(), Today, taken, rng);
 
         Assert.IsTrue(rng.Done, "every draw in order");
-        Assert.AreEqual("418-0937-52", account.CitizenId);
+        Assert.AreEqual("TLZ-052", account.CitizenId);
         Assert.AreEqual(CitizenStatus.Premium, account.Status);
         Assert.AreEqual(0, account.Debt);
         Assert.AreEqual(TransponderClass.Premium, account.TransponderClass);
@@ -296,7 +297,7 @@ public class AccountMakerTests
         Assert.AreEqual("Republican Rome (Ancient)", account.Trips[1].Place);
         CollectionAssert.AreEqual(new[] { "27 Mar 2150" }, account.ValidUntil.ToArray());
         Assert.AreEqual("14 Mar 2150", account.Departure, "booked for today");
-        CollectionAssert.AreEquivalent(new[] { "418-0937-52", "AU-40718" }, taken.ToArray(), "the numbers are taken for the day");
+        CollectionAssert.AreEquivalent(new[] { "TLZ-052", "AU-40718" }, taken.ToArray(), "the numbers are taken for the day");
     }
 
     [Test]
@@ -316,7 +317,7 @@ public class AccountMakerTests
     [Test]
     public void Make_RedrawsANumberAlreadyTakenToday()
     {
-        var taken = new HashSet<string> { "418-0937-52", "HP-40718" };
+        var taken = new HashSet<string> { "TLZ-052", "HP-40718" };
         var rng = new ScriptedRandom(
             ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52),  // taken: drawn again
             ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(53),
@@ -325,7 +326,7 @@ public class AccountMakerTests
             ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
         CitizenAccount account = AccountMaker.Make(Request(CitizenStatus.Premium), Ranges(), Transponders(), Proofs(), Today, taken, rng);
         Assert.IsTrue(rng.Done);
-        Assert.AreEqual("418-0937-53", account.CitizenId);
+        Assert.AreEqual("TLZ-053", account.CitizenId);
         Assert.AreEqual("Hopper Mk II · HP-40719", account.Transponder);
     }
 
@@ -342,7 +343,7 @@ public class AccountMakerTests
             Assert.AreEqual(AccountMaker.ClassOf(status), a.TransponderClass);
             Assert.IsTrue(Transponders().Any(t => t.transponderClass == a.TransponderClass && a.Transponder.StartsWith(t.model + " · " + t.prefix + "-")), a.Transponder);
             Assert.That(a.Trips.Count, Is.InRange(0, Ranges().For(status).tripsMax));
-            Assert.IsTrue(Regex.IsMatch(a.CitizenId, @"^\d{3}-\d{4}-\d{2}$"), a.CitizenId);
+            Assert.IsTrue(Regex.IsMatch(a.CitizenId, @"^[A-HJ-NP-Z]{3}-\d{3}$"), a.CitizenId);
         }
     }
 
@@ -378,7 +379,7 @@ public class AccountMakerTests
         Assert.AreEqual(PinnedValidUntil, a.ValidUntil[0]);
     }
 
-    private const string PinnedId = "238-5108-55";
+    private const string PinnedId = "WYW-755";
     private const string PinnedTransponder = "Hopper Mk II · HP-18583";
     private const string PinnedLineage = "New Kingdom Egypt (Ancient)";
     private const int PinnedTrips = 2;
@@ -392,7 +393,7 @@ public class AccountMakerTests
             ScriptStep.Range(1), ScriptStep.Range(2), ScriptStep.Range(3),
             ScriptStep.Range(0),                  // debt
             ScriptStep.Value(0f), ScriptStep.Range(0), // the proof: the credit line, 4,000 cr
-            ScriptStep.Range(204817),             // the waiver number
+            ScriptStep.Range(2048),             // the waiver number
             ScriptStep.Range(0),                  // lineage
             ScriptStep.Range(0),                  // no trips
             ScriptStep.Range(0));                 // Valid Until
@@ -423,12 +424,12 @@ public class AccountMakerTests
     }
 
     [Test]
-    public void Numbered_IsThePrefixAndSixDigits_FromOneDraw()
+    public void Numbered_IsThePrefixAndFourDigits_FromOneDraw()
     {
-        var rng = new ScriptedRandom(ScriptStep.Range(204817));
-        Assert.AreEqual("SW-204817", AccountMaker.Numbered("SW", rng));
+        var rng = new ScriptedRandom(ScriptStep.Range(2048));
+        Assert.AreEqual("SW-2048", AccountMaker.Numbered("SW", rng));
         Assert.IsTrue(rng.Done);
-        Assert.AreEqual("TI-000007", AccountMaker.Numbered("TI", new ScriptedRandom(ScriptStep.Range(7))));
+        Assert.AreEqual("TI-0007", AccountMaker.Numbered("TI", new ScriptedRandom(ScriptStep.Range(7))));
     }
 
     [Test]
@@ -441,7 +442,7 @@ public class AccountMakerTests
             ScriptStep.Range(320),                                              // 3,000 + 3,200 = 6,200 cr
             ScriptStep.Value(0f),                                               // the Economy model
             ScriptStep.Range(11952),                                            // its serial
-            ScriptStep.Range(204817),                                           // the waiver number
+            ScriptStep.Range(2048),                                           // the waiver number
             ScriptStep.Range(0),                                                // lineage
             ScriptStep.Range(0),                                                // no trips
             ScriptStep.Range(10), ScriptStep.Range(20));                        // the visa's and the proof's Valid Until, in form order
@@ -457,26 +458,26 @@ public class AccountMakerTests
         Assert.AreEqual(6200, a.ProofAmount, "the amount a forged proof inflates (L10)");
         Assert.IsFalse(a.ProofForged);
         Assert.AreEqual("Tick-Tock Basic · TT-11952", a.Transponder);
-        Assert.AreEqual("SW-204817", a.WaiverNo);
+        Assert.AreEqual("SW-2048", a.WaiverNo);
         CollectionAssert.AreEqual(new[] { "27 Mar 2150", "6 Apr 2150" }, a.ValidUntil.ToArray(), "one date per carried form that expires: the visa and the held proof, never the two proofs left with the agency");
-        CollectionAssert.AreEquivalent(new[] { "418-0937-52", "TT-11952", "SW-204817" }, taken.ToArray(), "the numbers are taken for the day");
+        CollectionAssert.AreEquivalent(new[] { "TLZ-052", "TT-11952", "SW-2048" }, taken.ToArray(), "the numbers are taken for the day");
     }
 
     [Test]
     public void Make_APolicy_IsANumberNobodyHoldsToday()
     {
-        var taken = new HashSet<string> { "TI-551902" };
+        var taken = new HashSet<string> { "TI-5519" };
         var rng = new ScriptedRandom(
             ScriptStep.Range(1), ScriptStep.Range(2), ScriptStep.Range(3), ScriptStep.Range(0),
             ScriptStep.Value(0.9f),                                             // the policy
-            ScriptStep.Range(551902), ScriptStep.Range(551903),                 // taken: drawn again
+            ScriptStep.Range(5519), ScriptStep.Range(5520),                 // taken: drawn again
             ScriptStep.Value(0f), ScriptStep.Range(1), ScriptStep.Range(2), ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
         CitizenAccount a = AccountMaker.Make(PoorRequest(), Ranges(), Transponders(), Proofs(), Today, taken, rng);
         Assert.IsTrue(rng.Done);
         Assert.AreEqual("TC-417", a.ProofForm);
         Assert.AreEqual(ClueCategory.PolicyNo, a.ProofCategory);
-        Assert.AreEqual("TI-551903", a.ProofValue);
-        Assert.IsTrue(taken.Contains("TI-551903"));
+        Assert.AreEqual("TI-5520", a.ProofValue);
+        Assert.IsTrue(taken.Contains("TI-5520"));
     }
 
     [Test]
@@ -494,7 +495,7 @@ public class AccountMakerTests
     public void Make_AnEligibleAccount_RegistersAWaiver_ButHoldsNoProof()
     {
         CitizenAccount a = AccountMaker.Make(Request(CitizenStatus.Eligible), Ranges(), Transponders(), Proofs(), Today, new HashSet<string>(), new SeededRandom(7));
-        StringAssert.IsMatch(@"^SW-\d{6}$", a.WaiverNo);
+        StringAssert.IsMatch(@"^SW-\d{4}$", a.WaiverNo);
         Assert.IsNull(a.ProofForm);
     }
 
@@ -511,7 +512,7 @@ public class AccountMakerTests
             ScriptStep.Value(0f),                                               // the proof: the first of three (a credit line)
             ScriptStep.Range(540),                                              // 4,000 + 5,400 = 9,400 cr
             ScriptStep.Value(0f), ScriptStep.Range(11952),                      // the Economy model, its serial
-            ScriptStep.Range(204817),                                           // the waiver number
+            ScriptStep.Range(2048),                                           // the waiver number
             ScriptStep.Range(0), ScriptStep.Range(0),                           // lineage, no trips
             ScriptStep.Range(10), ScriptStep.Range(20));                        // the visa's and the carried proof's Valid Until
         CitizenAccount a = AccountMaker.Make(request, Ranges(), Transponders(), Proofs(), Today, new HashSet<string>(), rng);
@@ -553,8 +554,8 @@ public class AccountMakerTests
             if (AccountMaker.IsAmount(proof.category))
                 Assert.That(int.Parse(a.ProofValue.Replace(",", "").Replace(" cr", "")), Is.InRange(proof.amountMin, proof.amountMax), $"seed {seed}: {a.ProofValue}");
             else
-                StringAssert.IsMatch(@"^TI-\d{6}$", a.ProofValue, $"seed {seed}");
-            StringAssert.IsMatch(@"^SW-\d{6}$", a.WaiverNo, $"seed {seed}");
+                StringAssert.IsMatch(@"^TI-\d{4}$", a.ProofValue, $"seed {seed}");
+            StringAssert.IsMatch(@"^SW-\d{4}$", a.WaiverNo, $"seed {seed}");
             Assert.AreEqual(2, a.ValidUntil.Count, $"seed {seed}: the visa and the held proof expire");
         }
     }
@@ -668,7 +669,7 @@ public class AccountMakerTests
 
     private static CitizenAccount Account() => new CitizenAccount
     {
-        CitizenId = "418-0937-52",
+        CitizenId = "TLZ-052",
         Status = CitizenStatus.Premium,
         Debt = 0,
         Transponder = "Hopper Mk II · HP-40718",
@@ -696,7 +697,7 @@ public class AccountMakerTests
     {
         CitizenRecord rec = Record(Account());
         Assert.AreEqual("Omar", rec.FullName);
-        Assert.AreEqual("418-0937-52", rec.Number);
+        Assert.AreEqual("TLZ-052", rec.Number);
         CollectionAssert.AreEqual(new[] { "<records.group.account>", "<records.group.forms>", "<records.group.travel>", string.Empty },
                                   rec.Groups.Select(g => g.Title).ToArray());
     }
@@ -737,7 +738,7 @@ public class AccountMakerTests
         string[] Evidence(ClueCategory c) => rows.Where(r => r.IsEvidence && r.Category == c).Select(r => r.Value).ToArray();
 
         CollectionAssert.AreEqual(new[] { "Omar" }, Evidence(ClueCategory.Name));
-        CollectionAssert.AreEqual(new[] { "418-0937-52" }, Evidence(ClueCategory.CitizenId));
+        CollectionAssert.AreEqual(new[] { "TLZ-052" }, Evidence(ClueCategory.CitizenId));
         CollectionAssert.AreEqual(new[] { "3 May 2101" }, Evidence(ClueCategory.BirthDate));
         CollectionAssert.AreEqual(new[] { "Premium" }, Evidence(ClueCategory.AccountStatus));
         CollectionAssert.AreEqual(new[] { "0 cr" }, Evidence(ClueCategory.Debt));
@@ -771,15 +772,15 @@ public class AccountMakerTests
         CitizenAccount a = Account();
         a.Status = CitizenStatus.Standard;
         a.TransponderClass = TransponderClass.Economy;
-        a.WaiverNo = "SW-204817";
+        a.WaiverNo = "SW-2048";
         a.ProofForm = "TC-417";
         a.ProofCategory = ClueCategory.PolicyNo;
-        a.ProofValue = "TI-551902";
+        a.ProofValue = "TI-5519";
         var rows = Record(a).Groups.SelectMany(g => g.Rows).ToList();
         RecordRow waiver = rows.Single(r => r.Label == "<records.row.waiver>");
         RecordRow proof = rows.Single(r => r.Label == "<records.row.proof>");
-        Assert.IsTrue(waiver.IsEvidence && waiver.Category == ClueCategory.WaiverNo && waiver.Value == "SW-204817");
-        Assert.IsTrue(proof.IsEvidence && proof.Category == ClueCategory.PolicyNo && proof.Value == "TI-551902");
+        Assert.IsTrue(waiver.IsEvidence && waiver.Category == ClueCategory.WaiverNo && waiver.Value == "SW-2048");
+        Assert.IsTrue(proof.IsEvidence && proof.Category == ClueCategory.PolicyNo && proof.Value == "TI-5519");
         Assert.AreEqual(10, rows.Count(r => r.IsEvidence));
         Assert.AreEqual(1, rows.Count(r => r.Value == "<records.none>"), "only the contract is none on file");
     }
@@ -827,16 +828,16 @@ public class AccountMakerTests
         var rows = new[]
         {
             new AccountRow("RECORDS", "Name", "Theo Marlow"),
-            new AccountRow("RECORDS", "Citizen ID", "773-2840-19"),
+            new AccountRow("RECORDS", "Citizen ID", "TMW-773"),
             new AccountRow("RECORDS", "Debt", "–"),
             new AccountRow("FORMS ON FILE", "Employment", "Temporal Customs · Desk 3"),
             new AccountRow("TRAVEL", "Booked departure", "None"),
             new AccountRow(string.Empty, "Note", "No remarks on file.")
         };
-        CitizenRecord clerk = AccountRecords.Clerk(new ClerkContent { name = "Theo Marlow", citizenId = "773-2840-19" }, rows);
+        CitizenRecord clerk = AccountRecords.Clerk(new ClerkContent { name = "Theo Marlow", citizenId = "TMW-773" }, rows);
 
         Assert.AreEqual("Theo Marlow", clerk.FullName);
-        Assert.AreEqual("773-2840-19", clerk.Number);
+        Assert.AreEqual("TMW-773", clerk.Number);
         CollectionAssert.AreEqual(new[] { "RECORDS", "FORMS ON FILE", "TRAVEL", string.Empty }, clerk.Groups.Select(g => g.Title).ToArray(), "the Citizen Account app's groups, in order");
         CollectionAssert.AreEqual(rows.Select(r => r.Label + "=" + r.Value).ToArray(), clerk.Groups.SelectMany(g => g.Rows).Select(r => r.Label + "=" + r.Value).ToArray(), "the app's rows, one source");
         Assert.IsTrue(clerk.Groups.SelectMany(g => g.Rows).All(r => !r.IsEvidence), "the clerk is nobody's case: no row is a compare pick (§4.4)");
@@ -844,7 +845,7 @@ public class AccountMakerTests
         var registry = new CitizenRegistry();
         registry.Add(Record(Account()));
         registry.Add(clerk);
-        Assert.AreSame(clerk, Found(registry, "773-2840-19"));
+        Assert.AreSame(clerk, Found(registry, "TMW-773"));
         Assert.AreSame(clerk, Found(registry, "theo marlow"));
     }
 
@@ -860,9 +861,9 @@ public class AccountMakerTests
     {
         var registry = new CitizenRegistry();
         registry.Add(Record(Account()));
-        Assert.AreEqual("Omar", Found(registry, "418-0937-52")?.FullName);
+        Assert.AreEqual("Omar", Found(registry, "TLZ-052")?.FullName);
         Assert.AreEqual("Omar", Found(registry, " omar ")?.FullName);
-        Assert.AreEqual("Omar", Found(registry, "418-0937-5")?.FullName, "one matcher with search: each part starts a part of the number");
+        Assert.AreEqual("Omar", Found(registry, "TLZ-05")?.FullName, "one matcher with search: each part starts a part of the number");
         Assert.IsNull(Found(registry, "937"), "never the middle of a number");
     }
 }

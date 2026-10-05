@@ -13,7 +13,7 @@ using System.Text;
 /// </summary>
 public sealed class IndexEntry
 {
-    /// <summary>The item's key: PickKeys' for a pickable row ("field:0:2", "line:5", "book:Currency:greece:ancient", "record:552-1804-33:BirthDate"); else EntryKeys' ("doc:0", "rec:{record id}", "rule:0", "dev:Currency").</summary>
+    /// <summary>The item's key: PickKeys' for a pickable row ("field:0:2", "line:5", "book:Currency:greece:ancient", "record:MRV-552:BirthDate"); else EntryKeys' ("doc:0", "rec:{record id}", "rule:0", "dev:Currency").</summary>
     public string Key;
 
     /// <summary>The tab the item is in.</summary>

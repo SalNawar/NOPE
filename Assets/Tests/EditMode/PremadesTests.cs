@@ -281,7 +281,7 @@ public class PremadesTests
     private static PremadeCheck Ines() => new PremadeCheck
     {
         Id = "ines", Kind = TravellerKind.Labourer, PlaceEraId = "industrial", BirthYear = 2098, FamilyKnown = true,
-        CitizenId = "773-1102-07", Debt = 88200, Employer = "tyburn", EmployerEraId = "industrial"
+        CitizenId = "RKW-773", Debt = 88200, Employer = "tyburn", EmployerEraId = "industrial"
     };
 
     private static PremadeCheck Senenmut() => new PremadeCheck { Id = "senenmut", Kind = TravellerKind.Displaced, PlaceEraId = "ancient", BirthYear = -1505, FamilyKnown = true, Pooled = true };
@@ -290,7 +290,7 @@ public class PremadesTests
     {
         var errors = new List<string>();
         var warnings = new List<string>();
-        Premades.Problems(premades, 2080, 2132, "773-2840-19", Ranges(), errors, warnings);
+        Premades.Problems(premades, 2080, 2132, "TMW-773", Ranges(), errors, warnings);
         return (errors, warnings);
     }
 
@@ -306,7 +306,7 @@ public class PremadesTests
     public void Problems_AFamousPremadeHoldsNoAccount()
     {
         PremadeCheck famous = Senenmut();
-        famous.CitizenId = "100-0001-01";
+        famous.CitizenId = "AAA-001";
         famous.Debt = 5000;
         Assert.AreEqual(1, Problems(famous).errors.Count);
     }
@@ -332,8 +332,8 @@ public class PremadesTests
     }
 
     [TestCase("", "a story character's Citizen ID is what the player remembers: authored")]
-    [TestCase("7731102-07", "the format")]
-    [TestCase("773-2840-19", "the clerk's own")]
+    [TestCase("773-1102", "the format")]
+    [TestCase("TMW-773", "the clerk's own")]
     public void Problems_ACitizenIdMissingMalformedOrTheClerks(string id, string why)
     {
         PremadeCheck p = Ines();

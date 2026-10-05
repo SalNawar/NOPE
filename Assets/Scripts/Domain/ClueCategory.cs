@@ -26,7 +26,7 @@ public enum ClueCategory
     // types, F4). Invariant: an honest traveller has one value per compared
     // category, the same on every form, answer and record row.
 
-    /// <summary>The agency's number for the person: a Displacement No. ("DP-4471-02") for the displaced, a Citizen ID ("418-0937-52") for a 2150 citizen.</summary>
+    /// <summary>The agency's number for the person: a Displacement No. ("DP-4471") for the displaced, a Citizen ID ("KTR-418") for a 2150 citizen.</summary>
     CitizenId,
 
     /// <summary>Where the traveller is sent: the claimed place's label (a displaced person's origin).</summary>

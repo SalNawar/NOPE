@@ -282,7 +282,7 @@ public sealed class GameManager : MonoBehaviour
     /// The day's Citizen Records (traveller types R1): each traveller's record
     /// (CaseFactory.BuildRegistry), then the clerk's own account as the Citizen
     /// Account app shows it this morning (AccountRecords.Clerk over
-    /// ClerkAccountSource: no row is evidence), found by 773-2840-19.
+    /// ClerkAccountSource: no row is evidence), found by TMW-773.
     /// </summary>
     private CitizenRegistry BuildRegistry()
     {

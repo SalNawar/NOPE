@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// One nation's passport as world_source.json countries[].passport authors it
 /// (the travel documents spec, TD3): the cover's colour, the emblem
-/// (EmblemShapes) and the three-letter code its machine-readable zone prints.
+/// (EmblemShapes) and the three-letter code printed under the emblem.
 /// </summary>
 [Serializable]
 public sealed class PassportLook
@@ -15,7 +15,7 @@ public sealed class PassportLook
     /// <summary>The emblem's name (EmblemShapes.Names).</summary>
     public string emblem = string.Empty;
 
-    /// <summary>The nation's three-letter code ("EGY"), printed in the machine-readable zone.</summary>
+    /// <summary>The nation's three-letter code ("EGY"), printed under the passport's emblem (its issuing nation, as Papers, Please's passports print theirs).</summary>
     public string code = string.Empty;
 }
 

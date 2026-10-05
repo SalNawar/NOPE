@@ -59,7 +59,7 @@ public class FieldLengthsTests
     public void TheAgencysNumbersAndDates_AreTheirMakersWidths()
     {
         Assert.AreEqual(Math.Max(AgencyNumbers.DisplacementNumber(new Top()).Length, AccountMaker.CitizenId(new Top()).Length), FieldLengths.Longest(ClueCategory.CitizenId, 40), "a Displacement No. or a Citizen ID, the wider");
-        Assert.AreEqual("418-0937-52".Length, FieldLengths.Longest(ClueCategory.CitizenId, 40));
+        Assert.AreEqual("KTR-418".Length, FieldLengths.Longest(ClueCategory.CitizenId, 40));
         Assert.AreEqual(AgencyNumbers.IncidentNumber(new DateTime(2150, 12, 28), new Top()).Length, FieldLengths.Longest(ClueCategory.Incident, 40));
         Assert.AreEqual(AgencyCalendar.Write(new DateTime(2150, 9, 28)).Length, FieldLengths.Longest(ClueCategory.Expiry, 40));
         Assert.AreEqual(AgencyCalendar.Write(new DateTime(2150, 9, 28)).Length, FieldLengths.Longest(ClueCategory.DepartureDate, 40));

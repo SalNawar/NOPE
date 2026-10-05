@@ -853,8 +853,8 @@ public class DirectivesTests
     public void IsSigned_ABlankOrUnsignedSignatureBox_IsUnsigned_TheNumberIsNotRead()
     {
         DocumentField Box(ClueCategory category, string value) => new DocumentField { category = category, value = value };
-        Assert.IsTrue(Directives.IsSigned(new[] { Box(ClueCategory.WaiverNo, "SW-204817"), Box(ClueCategory.Signature, "Mara") }));
-        Assert.IsFalse(Directives.IsSigned(new[] { Box(ClueCategory.WaiverNo, "SW-204817"), Box(ClueCategory.Signature, Directives.UnsignedMark) }));
+        Assert.IsTrue(Directives.IsSigned(new[] { Box(ClueCategory.WaiverNo, "SW-2048"), Box(ClueCategory.Signature, "Mara") }));
+        Assert.IsFalse(Directives.IsSigned(new[] { Box(ClueCategory.WaiverNo, "SW-2048"), Box(ClueCategory.Signature, Directives.UnsignedMark) }));
         Assert.IsFalse(Directives.IsSigned(new[] { Box(ClueCategory.Signature, " unsigned ") }), "any case, trimmed");
         Assert.IsFalse(Directives.IsSigned(new[] { Box(ClueCategory.Signature, " ") }), "a blank box");
         Assert.IsTrue(Directives.IsSigned(new[] { Box(ClueCategory.WaiverNo, "SW-000001"), Box(ClueCategory.Signature, "Mara") }), "a number the account never registered is L3's forgery, read by the records");

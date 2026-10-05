@@ -6,7 +6,7 @@ using NUnit.Framework;
 /// The record lies (traveller types L1-L5, L10, §6.2-6.3): each maker, the
 /// variants and their draw order, that only the named fields are rewritten,
 /// and that every forged field differs from the account and is provable.
-/// The fixture is a Standard citizen ("418-0937-52", born 3 Jun 2101, on an
+/// The fixture is a Standard citizen ("TLZ-052", born 3 Jun 2101, on an
 /// Economy Tick-Tock Basic) drawn from the rich entry, with the rich set:
 /// TC-101 (Name, Citizen ID, Date of Birth, Destination, Visa Class, Valid
 /// Until) and TC-230 (Citizen ID, Transponder, Transponder Class, Currency
@@ -15,7 +15,7 @@ using NUnit.Framework;
 public class RecordLiesTests
 {
     private const string Traveller = "Mara";
-    private const string Id = "418-0937-52";
+    private const string Id = "TLZ-052";
     private const string Cover = "3 Jun 2101";
     private const int YearMin = 2080;
     private const int YearMax = 2132;
@@ -110,7 +110,7 @@ public class RecordLiesTests
         return RecordLies.Plan(kind, forms ?? Forms(account), account, Context(account, yearMin, yearMax, taken, transponders, posed), rng);
     }
 
-    /// <summary>An Eligible citizen ("418-0937-52", 212,000 cr in debt, on an Economy Tick-Tock Basic).</summary>
+    /// <summary>An Eligible citizen ("TLZ-052", 212,000 cr in debt, on an Economy Tick-Tock Basic).</summary>
     private static CitizenAccount Eligible()
     {
         CitizenAccount a = Standard();
@@ -147,7 +147,7 @@ public class RecordLiesTests
     };
 
     /// <summary>Today's numbers: the account's own ID and serial (AccountMaker adds them) and a neighbour's.</summary>
-    private static HashSet<string> Taken(CitizenAccount a) => new HashSet<string> { a.CitizenId, "TT-40718", "552-1804-33", "HP-00000" };
+    private static HashSet<string> Taken(CitizenAccount a) => new HashSet<string> { a.CitizenId, "TT-40718", "ZAZ-033", "HP-00000" };
 
     // -----------------------------
     // L1 poor posing as rich
@@ -195,10 +195,10 @@ public class RecordLiesTests
         Assert.AreEqual(4, plan.RecordTells.Count);
         RecordTell status = plan.RecordTells[0], id = plan.RecordTells[1], transponder = plan.RecordTells[2], grade = plan.RecordTells[3];
         Assert.AreEqual((0, ClueCategory.AccountStatus, "Premium"), (status.Document, status.Category, status.Value));
-        Assert.AreEqual((1, ClueCategory.CitizenId, "007-0070-07"), (id.Document, id.Category, id.Value), "a rich citizen's number, fresh today");
+        Assert.AreEqual((1, ClueCategory.CitizenId, "AHZ-007"), (id.Document, id.Category, id.Value), "a rich citizen's number, fresh today");
         Assert.AreEqual((1, ClueCategory.TransponderId, "Chronos Elite · CE-12345"), (transponder.Document, transponder.Category, transponder.Value), "0.9 of weights 3, 2, 1 falls on the third Premium model");
         Assert.AreEqual((1, ClueCategory.TransponderClass, "Premium"), (grade.Document, grade.Category, grade.Value));
-        CollectionAssert.Contains(taken, "007-0070-07", "the borrowed number is nobody's today");
+        CollectionAssert.Contains(taken, "AHZ-007", "the borrowed number is nobody's today");
         CollectionAssert.Contains(taken, "CE-12345");
     }
 
@@ -214,7 +214,7 @@ public class RecordLiesTests
         DocumentField manifestId = forms[1].Fields.Single(f => f.category == ClueCategory.CitizenId);
         Assert.AreEqual(Id, visaId.value);
         Assert.IsFalse(visaId.isAnachronism);
-        Assert.AreEqual("007-0070-07", manifestId.value);
+        Assert.AreEqual("AHZ-007", manifestId.value);
         Assert.IsTrue(manifestId.isAnachronism);
 
         List<PaperContradiction> cross = PaperChecks.Contradictions(Docs(forms));
@@ -258,11 +258,11 @@ public class RecordLiesTests
         List<RecordForm> forms = Forms(account);
         var rng = new ScriptedRandom(R(0), R(552), R(1804), R(33), R(9), R(99), R(9));
         LiePlan plan = Plan(LieKind.DoctoredIdentity, rng, account, forms);
-        Assert.IsTrue(rng.Done, "the variant; 552-1804-33 is taken today, so a second number is drawn");
-        CollectionAssert.AreEqual(new[] { (0, ClueCategory.CitizenId, "009-0099-09") }, plan.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray());
+        Assert.IsTrue(rng.Done, "the variant; ZAZ-033 is taken today, so a second number is drawn");
+        CollectionAssert.AreEqual(new[] { (0, ClueCategory.CitizenId, "AKZ-009") }, plan.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray());
 
         plan.ApplyTo(Docs(forms));
-        Assert.AreEqual("009-0099-09", forms[0].Fields.Single(f => f.category == ClueCategory.CitizenId).value);
+        Assert.AreEqual("AKZ-009", forms[0].Fields.Single(f => f.category == ClueCategory.CitizenId).value);
         Assert.AreEqual(Id, forms[1].Fields.Single(f => f.category == ClueCategory.CitizenId).value, "the manifest keeps the account's number");
         Assert.AreEqual(1, PaperChecks.Contradictions(Docs(forms)).Count, "so the visa and the manifest disagree");
     }
@@ -332,7 +332,7 @@ public class RecordLiesTests
     // The poor set (phase 8's waiver and proofs of means)
     // -----------------------------
 
-    private const string WaiverNo = "SW-204817";
+    private const string WaiverNo = "SW-2048";
 
     /// <summary>The agency's proofs of means: a credit line (TC-415), savings (TC-416) and a policy ("TI", TC-417).</summary>
     private static List<ProofOfMeans> Proofs() => new List<ProofOfMeans>
@@ -347,18 +347,18 @@ public class RecordLiesTests
     private static string ProofFormOf(ClueCategory proof) =>
         proof == ClueCategory.Credit ? RecordLies.CreditAgreement : proof == ClueCategory.Funds ? RecordLies.ProofOfFunds : RecordLies.Insurance;
 
-    /// <summary>Gives <paramref name="a"/> a proof of <paramref name="proof"/> (a credit line of 9,400 cr, savings of 6,200 cr or policy TI-551902); <paramref name="forged"/> when it is not on file (L4's).</summary>
+    /// <summary>Gives <paramref name="a"/> a proof of <paramref name="proof"/> (a credit line of 9,400 cr, savings of 6,200 cr or policy TI-5519); <paramref name="forged"/> when it is not on file (L4's).</summary>
     private static CitizenAccount WithProof(CitizenAccount a, ClueCategory proof, bool forged = false)
     {
         a.ProofCategory = proof;
         a.ProofForm = ProofFormOf(proof);
         a.ProofAmount = proof == ClueCategory.Credit ? 9_400 : proof == ClueCategory.Funds ? 6_200 : 0;
-        a.ProofValue = proof == ClueCategory.PolicyNo ? "TI-551902" : AccountMaker.Credits(a.ProofAmount);
+        a.ProofValue = proof == ClueCategory.PolicyNo ? "TI-5519" : AccountMaker.Credits(a.ProofAmount);
         a.ProofForged = forged;
         return a;
     }
 
-    /// <summary>A poor tourist's account: Standard, the waiver SW-204817 on file, and one proof of means.</summary>
+    /// <summary>A poor tourist's account: Standard, the waiver SW-2048 on file, and one proof of means.</summary>
     private static CitizenAccount Poor(ClueCategory proof = ClueCategory.Credit)
     {
         CitizenAccount a = Standard();
@@ -452,12 +452,12 @@ public class RecordLiesTests
         List<RecordForm> forms = PoorForms(account);
         HashSet<string> taken = Taken(account);
         taken.Add(WaiverNo);
-        taken.Add("SW-000001");
+        taken.Add("SW-0001");
         var rng = new ScriptedRandom(R(0), R(1), R(2));
         LiePlan plan = Plan(LieKind.FakeWaiver, rng, account, forms, taken: taken);
-        Assert.IsTrue(rng.Done, "the variant between two, then the number (SW-000001 is taken today, so it is redrawn)");
-        CollectionAssert.AreEqual(new[] { (2, ClueCategory.WaiverNo, "SW-000002") }, Tells(plan));
-        CollectionAssert.Contains(taken, "SW-000002");
+        Assert.IsTrue(rng.Done, "the variant between two, then the number (SW-0001 is taken today, so it is redrawn)");
+        CollectionAssert.AreEqual(new[] { (2, ClueCategory.WaiverNo, "SW-0002") }, Tells(plan));
+        CollectionAssert.Contains(taken, "SW-0002");
 
         plan.ApplyTo(Docs(forms));
         Assert.AreNotEqual(account.WaiverNo, forms[2].Fields.Single(f => f.category == ClueCategory.WaiverNo).value, "a number the account never registered");
@@ -499,7 +499,7 @@ public class RecordLiesTests
         var rng = new ScriptedRandom(R(0), R(7));
         LiePlan plan = Plan(LieKind.FakeWaiver, rng, labourer, LabourFormsWithWaiver(labourer));
         Assert.IsTrue(rng.Done);
-        CollectionAssert.AreEqual(new[] { (2, ClueCategory.WaiverNo, "SW-000007") }, Tells(plan));
+        CollectionAssert.AreEqual(new[] { (2, ClueCategory.WaiverNo, "SW-0007") }, Tells(plan));
     }
 
     private static RecordLieContext NoTransponders(CitizenAccount account)
@@ -531,11 +531,11 @@ public class RecordLiesTests
     {
         CitizenAccount account = Poor(ClueCategory.PolicyNo);
         HashSet<string> taken = Taken(account);
-        taken.Add("TI-551902");
-        var rng = new ScriptedRandom(R(551902), R(88));
+        taken.Add("TI-5519");
+        var rng = new ScriptedRandom(R(5519), R(88));
         LiePlan plan = Plan(LieKind.ForgedProof, rng, account, PoorForms(account), taken: taken);
         Assert.IsTrue(rng.Done, "the policy on file is taken today, so the number is redrawn");
-        CollectionAssert.AreEqual(new[] { (3, ClueCategory.PolicyNo, "TI-000088") }, Tells(plan));
+        CollectionAssert.AreEqual(new[] { (3, ClueCategory.PolicyNo, "TI-0088") }, Tells(plan));
     }
 
     [Test]
@@ -790,11 +790,11 @@ public class RecordLiesTests
     [Test]
     public void FreshCitizenId_IsNobodysToday_AndJoinsTheDaysNumbers()
     {
-        var taken = new HashSet<string> { "001-0001-01" };
+        var taken = new HashSet<string> { "ABB-001" };
         var rng = new ScriptedRandom(R(1), R(1), R(1), R(2), R(2), R(2));
-        Assert.AreEqual("002-0002-02", RecordLies.FreshCitizenId(taken, rng));
+        Assert.AreEqual("ACC-002", RecordLies.FreshCitizenId(taken, rng));
         Assert.IsTrue(rng.Done, "the taken number is redrawn");
-        CollectionAssert.Contains(taken, "002-0002-02");
+        CollectionAssert.Contains(taken, "ACC-002");
     }
 
     [Test]

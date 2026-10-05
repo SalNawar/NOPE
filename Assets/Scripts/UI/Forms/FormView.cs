@@ -555,7 +555,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         text.name = item.Role.ToString();
         _measure.SetFont(text, item.Text);
         TmpFormText.Style(text, item.Role, item.Size);
-        text.text = TmpFormText.Printed(item.Role, item.Text);
+        text.text = item.Text;
         FitWords(text, item);
         text.color = style.Ink(item.Role);
         text.alignment = item.Align == FormTextAlign.Right ? TextAlignmentOptions.TopRight

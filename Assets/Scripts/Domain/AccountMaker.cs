@@ -397,7 +397,7 @@ public readonly struct FormEntry
 /// </summary>
 public sealed class CitizenAccount
 {
-    /// <summary>The Citizen ID ("418-0937-52"), unique within the day: the category CitizenId.</summary>
+    /// <summary>The Citizen ID ("KTR-418"), unique within the day: the category CitizenId.</summary>
     public string CitizenId;
 
     /// <summary>The account's status (the category AccountStatus prints its name).</summary>
@@ -634,12 +634,21 @@ public static class AccountMaker
         return account;
     }
 
-    /// <summary>An agency number with a prefix, "{prefix}-nnnnnn": one draw, 000000-999999 (a Stranding Waiver "SW-204817", a policy "TI-551902").</summary>
-    public static string Numbered(string prefix, IRandomSource rng) => $"{prefix}-{rng.Range(0, 1000000):D6}";
+    /// <summary>An agency number with a prefix, "{prefix}-nnnn": one draw, 0000-9999 (a Stranding Waiver "SW-2048", a policy "TI-5519"; short, as Papers, Please's numbers are: Saleh 2026-10-06).</summary>
+    public static string Numbered(string prefix, IRandomSource rng) => $"{prefix}-{rng.Range(0, 10000):D4}";
 
-    /// <summary>A Citizen ID, "nnn-nnnn-nn": three draws, 000-999, 0000-9999 then 00-99.</summary>
-    public static string CitizenId(IRandomSource rng) =>
-        $"{rng.Range(0, 1000):D3}-{rng.Range(0, 10000):D4}-{rng.Range(0, 100):D2}";
+    /// <summary>The letters a Citizen ID is written in: the capitals without I and O (never read as 1 and 0).</summary>
+    public const string CitizenIdLetters = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+
+    /// <summary>A Citizen ID, "LLL-nnn" (Saleh 2026-10-06: "there is a long number on the passport ... let's simplify"; Papers, Please's short numbers): three draws, the first two letters (one draw over every pair), the third letter, then 000-999.</summary>
+    public static string CitizenId(IRandomSource rng)
+    {
+        int letters = CitizenIdLetters.Length;
+        int pair = rng.Range(0, letters * letters);
+        int third = rng.Range(0, letters);
+        int digits = rng.Range(0, 1000);
+        return $"{CitizenIdLetters[pair / letters]}{CitizenIdLetters[pair % letters]}{CitizenIdLetters[third]}-{digits:D3}";
+    }
 
     /// <summary>A transponder serial, "{prefix}-nnnnn": one draw, 00000-99999.</summary>
     public static string Serial(string prefix, IRandomSource rng) => $"{prefix}-{rng.Range(0, 100000):D5}";
@@ -764,7 +773,7 @@ public static class AccountRecords
     /// The clerk's own account as a record (traveller types R1, D1, §4.4):
     /// the rows the Citizen Account app shows (Account.ExtractRows over the
     /// clerk's IClerkAccountSource, one source), grouped as there, found by
-    /// the clerk's Citizen ID (773-2840-19) or name. No row carries a
+    /// the clerk's Citizen ID (TMW-773) or name. No row carries a
     /// category: the clerk is nobody's case, so nothing on it is a compare
     /// pick. Null when no name is authored.
     /// </summary>

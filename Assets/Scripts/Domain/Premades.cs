@@ -236,7 +236,7 @@ public static class Premades
             if (id.Length == 0)
                 errors.Add($"{owner} is a 2150 story character with no Citizen ID; author one (\"citizenId\"), the same at every appearance.");
             else if (!IsCitizenId(id))
-                errors.Add($"{owner} has the Citizen ID '{id}'; the agency's format is 000-0000-00.");
+                errors.Add($"{owner} has the Citizen ID '{id}'; the agency's format is AAA-000 (three capitals but I and O, three digits).");
             else if (!string.IsNullOrWhiteSpace(clerkCitizenId) && id == clerkCitizenId.Trim())
                 errors.Add($"{owner} has the clerk's own Citizen ID '{id}'.");
             else if (ids.TryGetValue(id, out string other))
@@ -264,9 +264,9 @@ public static class Premades
         }
     }
 
-    /// <summary>True for a Citizen ID in the agency's format, "000-0000-00" (AccountMaker.CitizenId's).</summary>
+    /// <summary>True for a Citizen ID in the agency's format, "AAA-000" (AccountMaker.CitizenId's: three of its letters, a hyphen, three digits).</summary>
     public static bool IsCitizenId(string id) =>
-        id != null && id.Length == 11 && id[3] == '-' && id[8] == '-' && id.Where((c, i) => i != 3 && i != 8).All(c => c >= '0' && c <= '9');
+        id != null && id.Length == 7 && id[3] == '-' && id.Take(3).All(c => AccountMaker.CitizenIdLetters.IndexOf(c) >= 0) && id.Skip(4).All(c => c >= '0' && c <= '9');
 
     /// <summary>
     /// What Generate World refuses (<paramref name="errors"/>) and warns about

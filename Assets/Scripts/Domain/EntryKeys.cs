@@ -58,7 +58,7 @@ public static class EntryKeys
     /// <summary>A reference book, as an item ("bookof:Currency").</summary>
     public static string Book(ClueCategory category) => BookPrefix + category;
 
-    /// <summary>A citizen record, as an item ("rec:552-1804-33"; the record's id: its number, else its name).</summary>
+    /// <summary>A citizen record, as an item ("rec:MRV-552"; the record's id: its number, else its name).</summary>
     public static string RecordCard(string recordId) => RecordCardPrefix + recordId;
 
     /// <summary>Rule <paramref name="index"/> of the day's directives ("rule:1"; a search result's key).</summary>

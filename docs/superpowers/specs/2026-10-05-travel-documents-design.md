@@ -1,5 +1,7 @@
 # Travel documents (desk-first track D, items 3 and 13)
 
+> **Superseded in part (2026-10-06):** the passport's machine-readable zone (TD3, decision 3) is gone and every compared agency number is short (Saleh: "there is a long number on the passport and many <<<<. ... let's simplify"); the nation's three-letter code prints under the emblem instead. See `2026-10-06-controls-design.md` §4.2.
+
 Saleh, 2026-10-05: "papers should have distinct colors & shape" and "documents need to start
 looking like actual travel documents: passports, travel permits, entry tickets, waivers etc".
 Built on the document design (`2026-09-30-document-design.md`: FormLook, FormLayout's fixed

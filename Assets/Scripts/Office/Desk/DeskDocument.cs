@@ -708,7 +708,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         text.name = item.Role.ToString();
         float fit = TmpFormText.WordFit(textTemplate, item.Text, item.Role, item.Size, item.Rect.Width);
         TmpFormText.Style(text, item.Role, item.Size * _scale * fit);
-        text.text = TmpFormText.Printed(item.Role, item.Text);
+        text.text = item.Text;
         text.color = style.Ink(item.Role);
         text.alignment = item.Align == FormTextAlign.Right ? TextAlignmentOptions.TopRight
             : item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Top

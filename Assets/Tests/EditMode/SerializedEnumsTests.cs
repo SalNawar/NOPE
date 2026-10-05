@@ -389,7 +389,7 @@ public class SerializedEnumsTests
         Assert.AreEqual(9, System.Enum.GetValues(typeof(FormFrame)).Length, "a new member is appended here too");
     }
 
-    /// <summary>FormBlockKind: stored in every form asset; 14 and 15 are held for the Internet's sites, 16 is the Seal Register's grid (the document design spec, D4), 17 to 20 the travel documents' (the travel documents spec, TD1, TD3).</summary>
+    /// <summary>FormBlockKind: stored in every form asset; 14 and 15 are held for the Internet's sites, 16 is the Seal Register's grid (the document design spec, D4), 17, 19 and 20 the travel documents' (the travel documents spec, TD1, TD3; 18, the machine-readable zone, retired).</summary>
     [Test]
     public void FormBlockKind_KeepsItsSerializedInts()
     {
@@ -397,7 +397,7 @@ public class SerializedEnumsTests
         Assert.AreEqual(13, (int)FormBlockKind.PageBreak);
         Assert.AreEqual(16, (int)FormBlockKind.SealGrid);
         Assert.AreEqual(17, (int)FormBlockKind.Fold);
-        Assert.AreEqual(18, (int)FormBlockKind.Mrz);
+        Assert.IsFalse(System.Enum.IsDefined(typeof(FormBlockKind), 18), "18 was the machine-readable zone (retired 2026-10-06): never reused");
         Assert.AreEqual(19, (int)FormBlockKind.Visa);
         Assert.AreEqual(20, (int)FormBlockKind.Watermark);
     }

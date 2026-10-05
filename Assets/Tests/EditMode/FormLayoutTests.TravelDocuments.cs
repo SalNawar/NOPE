@@ -6,13 +6,13 @@ using NUnit.Framework;
 /// The travel documents (the travel documents spec, 2026-10-05, TD1-TD4): a
 /// wide page prints at the size of every other paper (its print unit is its
 /// width over the style's aspect), a booklet has its holder's cover round its
-/// pages, its emblem at the header's left, its spine at its fold, its
-/// machine-readable zone and its visa page; a card its chip; a folded card its
+/// pages, its emblem with its nation's code at the header's left, its spine
+/// at its fold and its visa page (no machine-readable zone: Saleh 2026-10-06); a card its chip; a folded card its
 /// crease; a letterhead its seal's watermark; and the stamps' places.
 /// </summary>
 public partial class FormLayoutTests
 {
-    /// <summary>The passport as TC-101 prints it: the data page (the name beside the photo, the Citizen ID, the birth date and the expiry), the zone, the fold at 0.62, the visa page (destination and class, the visa stamp area), the emblem's watermark.</summary>
+    /// <summary>The passport as TC-101 prints it: the data page (the name beside the photo, the Citizen ID, the birth date and the expiry), the fold at 0.62, the visa page (destination and class, the visa stamp area), the emblem's watermark.</summary>
     private static FormSpec Booklet() => new FormSpec
     {
         look = new FormLook { frame = FormFrame.Booklet, accent = "#23305E", paper = "#F4EFE2", aspect = 0.7f, scale = 0.62f },
@@ -22,7 +22,6 @@ public partial class FormLayoutTests
             Row(Field(0, 8), new FormCell { slot = FormSlots.Photo, field = 7, span = 4, rows = 2 }),
             Row(Field(1, 8)),
             Row(Field(2, 7), Field(5, 5)),
-            Block(FormBlockKind.Mrz),
             new FormBlock { kind = FormBlockKind.Fold, shares = new[] { 0.62f } },
             Block(FormBlockKind.Watermark),
             Row(Field(3, 8), Field(4, 4)),
@@ -43,9 +42,9 @@ public partial class FormLayoutTests
         HasPhoto = true,
         Cover = cover,
         Emblem = emblem,
-        Mrz = MachineZone.Lines("EGY", "Omar", "C-4471-0213", "3 May 2101", "9 Jun 2150"),
+        NationCode = "EGY",
         FieldLabels = new[] { "Full Name", "Citizen ID", "Date of Birth", "Destination", "Visa Class", "Valid Until", "Issuing Seal", "Photo" },
-        FieldValues = new[] { "Omar", "C-4471-0213", "3 May 2101", "Periclean Athens (Ancient)", "Standard", "9 Jun 2150", "Blue hexagon · VO", "m/skin3/face-a/black" }
+        FieldValues = new[] { "Omar", "KTR-418", "3 May 2101", "Periclean Athens (Ancient)", "Standard", "9 Jun 2150", "Blue hexagon · VO", "m/skin3/face-a/black" }
     };
 
     /// <summary>A card 1.586 wide: the chip beside the Citizen ID, the class and the unit under them.</summary>
@@ -117,8 +116,8 @@ public partial class FormLayoutTests
         PlacedForm f = FormLayout.Layout(Booklet(), BookletData(), M.aspect, M, new FakeMeasure());
         FormItem emblem = Of(f, FormItemKind.Emblem).Single();
         Assert.AreEqual("WingedSun", emblem.Text);
-        Assert.AreEqual(M.marginX, emblem.Rect.XMin, Eps, "at the content's left");
-        Assert.AreEqual(M.sealSize, emblem.Rect.Width, Eps, "the seal's side");
+        Assert.AreEqual(M.marginX + M.sealSize / 2f, (emblem.Rect.XMin + emblem.Rect.XMax) / 2f, Eps, "centred in the seal's column at the content's left");
+        Assert.LessOrEqual(emblem.Rect.Width, M.sealSize + Eps, "within the seal's side (its nation's code under it)");
         foreach (FormTextRole role in new[] { FormTextRole.Agency, FormTextRole.Title })
             Assert.IsFalse(Overlaps(TextOf(f, role).Rect, emblem.Rect), $"the {role} stays clear of the emblem");
 
@@ -148,21 +147,21 @@ public partial class FormLayoutTests
     }
 
     [Test]
-    public void TheMachineReadableZone_PrintsItsLinesAtOneSize_AndKeepsItsRoomWhenBlank()
+    public void TheNationsCode_PrintsUnderTheEmblem_InTheEmblemsRoom_AndMovesNothing()
     {
         PlacedForm f = FormLayout.Layout(Booklet(), BookletData(), M.aspect, M, new FakeMeasure());
-        List<FormItem> zone = f.Items.Where(i => i.Kind == FormItemKind.Text && i.Role == FormTextRole.Mrz).ToList();
-        Assert.AreEqual(2, zone.Count);
-        Assert.AreEqual(zone[0].Size, zone[1].Size, Eps, "one size");
-        Assert.LessOrEqual(zone[0].Size, M.mrzSize + Eps);
-        Assert.GreaterOrEqual(zone[0].Size, M.mrzFloor - Eps);
-        Assert.Greater(zone[1].Rect.YMin, zone[0].Rect.YMin, "line 2 under line 1");
-        Assert.IsTrue(zone.All(z => z.Slot < 0), "the zone is never picked");
+        FormItem emblem = Of(f, FormItemKind.Emblem).Single();
+        FormItem code = f.Items.Single(i => i.Kind == FormItemKind.Text && i.Text == "EGY");
+        Assert.AreEqual(FormTextAlign.Centre, code.Align);
+        Assert.GreaterOrEqual(code.Rect.YMin, emblem.Rect.YMax - Eps, "under the emblem");
+        Assert.LessOrEqual(code.Rect.YMax, f.Slots.Where(s => s.Field == 0).Min(s => s.Hit.YMin) + Eps, "in the header, above the data page");
+        Assert.Less(code.Slot, 0, "the code is never picked");
 
         FormData blank = BookletData();
-        blank.Mrz = new string[0];
+        blank.NationCode = string.Empty;
         PlacedForm none = FormLayout.Layout(Booklet(), blank, M.aspect, M, new FakeMeasure());
-        Assert.IsFalse(none.Items.Any(i => i.Role == FormTextRole.Mrz && i.Kind == FormItemKind.Text));
+        Assert.IsFalse(none.Items.Any(i => i.Kind == FormItemKind.Text && i.Text == "EGY"));
+        Assert.Greater(Of(none, FormItemKind.Emblem).Single().Rect.Width, emblem.Rect.Width, "without a code the emblem takes the whole room");
         for (int i = 0; i < f.Slots.Count; i++)
             Assert.AreEqual(f.Slots[i].Hit.YMin, none.Slots[i].Hit.YMin, Eps, $"slot {i}");
     }

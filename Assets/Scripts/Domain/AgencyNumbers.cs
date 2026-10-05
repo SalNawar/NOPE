@@ -24,7 +24,7 @@ public sealed class DisplacementRanges
 /// </summary>
 public sealed class DisplacementFile
 {
-    /// <summary>The Displacement No. ("DP-4471-02"), unique within the day: the category CitizenId.</summary>
+    /// <summary>The Displacement No. ("DP-4471"), unique within the day: the category CitizenId.</summary>
     public string Number;
 
     /// <summary>The rift that took them ("R-0311-07": its month and day, then a serial): the category Incident.</summary>
@@ -69,9 +69,9 @@ public static class AgencyNumbers
         return new DisplacementFile { Number = number, Incident = incident, Found = AgencyCalendar.Write(found), ValidUntil = AgencyCalendar.Write(validUntil) };
     }
 
-    /// <summary>A Displacement No., "DP-nnnn-nn": two draws, 0000-9999 then 00-99.</summary>
+    /// <summary>A Displacement No., "DP-nnnn" (short, as Papers, Please's numbers are: Saleh 2026-10-06): two draws, 00-99 then 00-99.</summary>
     public static string DisplacementNumber(IRandomSource rng) =>
-        $"DP-{rng.Range(0, 10000):D4}-{rng.Range(0, 100):D2}";
+        $"DP-{rng.Range(0, 100):D2}{rng.Range(0, 100):D2}";
 
     /// <summary>An incident number, "R-mmdd-nn": the incident's month and day, then a serial 01-99 (one draw).</summary>
     public static string IncidentNumber(DateTime incidentDay, IRandomSource rng) =>

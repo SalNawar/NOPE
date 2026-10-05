@@ -48,7 +48,7 @@ public sealed class AccountDay
 [Serializable]
 public sealed class ClerkContent
 {
-    /// <summary>The clerk's Citizen ID ("773-2840-19").</summary>
+    /// <summary>The clerk's Citizen ID ("TMW-773").</summary>
     public string citizenId = string.Empty;
 
     /// <summary>The clerk's name.</summary>

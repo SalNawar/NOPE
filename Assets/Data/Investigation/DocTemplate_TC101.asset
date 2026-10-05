@@ -96,14 +96,6 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
-    - kind: 18
-      text: 
-      cells: []
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
     - kind: 17
       text: 
       cells: []

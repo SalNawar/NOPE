@@ -27,7 +27,7 @@ MonoBehaviour:
   oncePerRun: 1
   kind: 0
   family: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
-  citizenId: 100-0001-01
+  citizenId: AAA-001
   debt: 0
   employer: 
   pulls: []

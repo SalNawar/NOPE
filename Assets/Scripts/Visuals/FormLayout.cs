@@ -65,8 +65,8 @@ public sealed class FormData
     /// <summary>The holder's nation's emblem (an EmblemShapes name; TD3), at a booklet header's left and in an emblem watermark; blank: none.</summary>
     public string Emblem = string.Empty;
 
-    /// <summary>A passport's machine-readable zone, one string per line (MachineZone.Lines; TD3); empty: the zone keeps its room, blank.</summary>
-    public IReadOnlyList<string> Mrz = Array.Empty<string>();
+    /// <summary>The holder's nation's three-letter code ("EGY"; countries[].passport.code), printed under a booklet's emblem (Papers, Please's issuing nation; Saleh 2026-10-06 replaced the machine-readable zone with plain fields); blank: none.</summary>
+    public string NationCode = string.Empty;
 
     /// <summary>A page kind's text slots (a Paragraph's slot, a named cell's slot).</summary>
     public IReadOnlyDictionary<string, string> Text = new Dictionary<string, string>();
@@ -193,12 +193,6 @@ public sealed class FormMetrics
     /// <summary>Fine print's size.</summary>
     public float finePrintSize = 0.020f;
 
-    /// <summary>A machine-readable zone's size (the travel documents spec, TD3): monospaced capitals, shrunk to the floor to keep a line on one line.</summary>
-    public float mrzSize = 0.032f;
-
-    /// <summary>The smallest size a machine-readable zone's line shrinks to.</summary>
-    public float mrzFloor = 0.022f;
-
     /// <summary>The seal's side: faint behind the header, or the issuing office's seal at the header's right (the document design spec, D4) and each seal of the Seal Register.</summary>
     public float sealSize = 0.085f;
 
@@ -317,10 +311,7 @@ public enum FormTextRole
     Caption,
 
     /// <summary>Fine print.</summary>
-    FinePrint,
-
-    /// <summary>A machine-readable zone's line (monospaced capitals; the travel documents spec, TD3).</summary>
-    Mrz
+    FinePrint
 }
 
 /// <summary>How a text sits in its rectangle.</summary>
@@ -752,7 +743,6 @@ public static class FormLayout
                     case FormBlockKind.Footer: Footer(b); break;
                     case FormBlockKind.PageBreak: PageBreak(); break;
                     case FormBlockKind.Fold: Fold(b); break;
-                    case FormBlockKind.Mrz: Mrz(); break;
                     case FormBlockKind.Visa: Visa(b); break;
                     case FormBlockKind.Watermark: Watermark(b); break;
                 }
@@ -947,7 +937,9 @@ public static class FormLayout
         /// the header's right, a pickable slot the header's words stay clear of.
         /// A booklet (the travel documents spec, TD3) keeps the seal's side at
         /// the header's left for the holder's nation's emblem (FormData.Emblem;
-        /// the room is kept without one, so nothing moves) and prints no faint seal.
+        /// the room is kept without one, so nothing moves) with the nation's
+        /// code under it (FormData.NationCode, centred in the agency line's
+        /// style; the emblem shrinks to leave it the room), and prints no faint seal.
         /// </summary>
         private void Header(FormBlock b)
         {
@@ -967,8 +959,9 @@ public static class FormLayout
             {
                 Add(FormItemKind.Seal, FaceRect.FromTop(_left, top, side, side));
             }
+            float code = emblem && !string.IsNullOrEmpty(_data.NationCode) ? Line(FormTextRole.Agency, G(_m.agencySize)) : 0f;
             if (emblem && !string.IsNullOrEmpty(_data.Emblem))
-                Add(FormItemKind.Emblem, FaceRect.FromTop(_left, top, side, side), -1, _data.Emblem);
+                Add(FormItemKind.Emblem, FaceRect.FromTop(_left + code / 2f, top, side - code, side - code), -1, _data.Emblem);
             float agencyWidth = width * 0.55f;
             string agencyLine = (_data.Agency ?? string.Empty).ToUpperInvariant();
             float agencySize = office ? OneLine(agencyLine, FormTextRole.Agency, _m.agencySize, _m.agencySize * OfficeLineFloor, agencyWidth) : G(_m.agencySize);
@@ -983,6 +976,8 @@ public static class FormLayout
             float numberSize = string.IsNullOrEmpty(_data.FormNumber) ? G(_m.formNumberSize) : OneLine(_data.FormNumber, FormTextRole.FormNumber, _m.formNumberSize, _m.formNumberSize * NumberFloor, width - titleWidth);
             float number = string.IsNullOrEmpty(_data.FormNumber) ? 0f : Line(FormTextRole.FormNumber, numberSize);
             Text(FormTextRole.FormNumber, _data.FormNumber, left + titleWidth, titleTop + Math.Max(0f, titleHeight - number), width - titleWidth, numberSize, -1, FormTextAlign.Right);
+            if (code > 0f)
+                Text(FormTextRole.Agency, _data.NationCode, _left, top + side - code, side, G(_m.agencySize), -1, FormTextAlign.Centre);
             _y = Math.Max(titleTop + Math.Max(titleHeight, number), office || emblem ? top + side : top) + G(_m.blockGap);
         }
 
@@ -1514,30 +1509,6 @@ public static class FormLayout
             Add(FormItemKind.Spine, FaceRect.FromTop(0f, top, _width, spine));
             _y = top + spine + G(_m.marginTop);
             _lastRowBottom = _y;
-        }
-
-        /// <summary>The lines a machine-readable zone keeps room for, and the characters of each (MachineZone's two lines of 36).</summary>
-        private const int MrzLines = 2, MrzLength = 36;
-
-        /// <summary>
-        /// A passport's machine-readable zone (TD3): FormData.Mrz's lines (at
-        /// least MrzLines lines' room, so the zone never moves what follows),
-        /// each across the content at one size: the largest from the zone's
-        /// size down to its floor at which a full line keeps one line.
-        /// </summary>
-        private void Mrz()
-        {
-            IReadOnlyList<string> lines = _data.Mrz ?? Array.Empty<string>();
-            float size = OneLine(new string('<', MrzLength), FormTextRole.Mrz, _m.mrzSize, _m.mrzFloor, _content);
-            float line = Line(FormTextRole.Mrz, size);
-            for (int i = 0; i < Math.Max(MrzLines, lines.Count); i++)
-            {
-                if (i < lines.Count)
-                    Text(FormTextRole.Mrz, lines[i], _left, _y, _content, size);
-                _y += line;
-            }
-            _lastRowBottom = _y;
-            _y += G(_m.blockGap);
         }
 
         /// <summary>A visa page's least height, in the style's stamp heights.</summary>
