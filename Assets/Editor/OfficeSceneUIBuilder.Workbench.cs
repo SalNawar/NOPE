@@ -251,8 +251,8 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// A menu's title: a clear button WbSize.MenuTitle tall whose row holds
-    /// its unread dot, its name (Body, ink) and its
-    /// side's plate ("L", "R"); behind it the open menu's plate (warm grey
+    /// its unread dot, its side's plate and its name (Body, ink; the
+    /// side before the word, "L Papers") ("L", "R"); behind it the open menu's plate (warm grey
     /// with a bar of the primary colour along its foot, the step pills'
     /// look), shown while its menu is open.
     /// </summary>
@@ -260,7 +260,7 @@ public static partial class OfficeSceneUIBuilder
     {
         Button title = MakeButton(parent, name, null, Vector2.zero, Vector2.one, new Color(1f, 1f, 1f, 0f), ThemeRoleId.ClickCatcher);
         HorizontalLayoutGroup content = GetOrAdd<HorizontalLayoutGroup>(title.gameObject);
-        content.padding = new RectOffset(14, 12, 0, 0);
+        content.padding = new RectOffset(14, 18, 0, 0);
         content.spacing = 8f;
         content.childAlignment = TextAnchor.MiddleLeft;
         content.childControlWidth = true;
@@ -291,6 +291,8 @@ public static partial class OfficeSceneUIBuilder
         label.transform.SetAsLastSibling();
 
         SidePlate(title.transform);
+        // The side before the word ("L Papers"): a word drawn a little wider than measured never runs into it.
+        title.transform.Find("Side").SetSiblingIndex(label.transform.GetSiblingIndex());
         return title;
     }
 

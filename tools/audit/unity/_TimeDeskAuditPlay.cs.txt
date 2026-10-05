@@ -924,8 +924,8 @@ public static class _TimeDeskAuditPlay
         Check(scanner == null || scanner.gameObject.activeSelf == scannerIn, $"d{day} slot {slot}: the scanner is on the desk only from day {intro.FirstDay(Feature.Scanner)} (shown {scanner?.gameObject.activeSelf})");
         var papers = (CasePapers)Field(Field(o.Ui, "_documents"), "_papers");
         if (!scannerIn)
-            Check(Enumerable.Range(0, c.documents.Count).All(i => papers.State(i) != PaperState.OnDesk),
-                  $"d{day} slot {slot}: before the scanner, every handed-over paper's copy is on the PC");
+            Check(Enumerable.Range(0, c.documents.Count).All(i => papers.State(i) != PaperState.Scanned),
+                  $"d{day} slot {slot}: before the scanner, no paper's copy reaches the PC (track B: the papers are read at the desk)");
 
         DepartureBoardView board = Office.One<DepartureBoardView>();
         var boardRows = board != null ? (TextMeshPro)Field(board, "rows") : null;

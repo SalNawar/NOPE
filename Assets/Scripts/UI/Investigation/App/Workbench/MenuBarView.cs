@@ -246,8 +246,6 @@ public sealed class MenuBarView : MonoBehaviour
         else if (MenuOpen)
             DrawRows(_open.Value);
         Mark(_sideOf, _unread);
-        if (row != null)
-            LayoutRebuilder.MarkLayoutForRebuild(row);
     }
 
     /// <summary>
@@ -283,7 +281,13 @@ public sealed class MenuBarView : MonoBehaviour
             ShelfItem item = _items[_rowItems[i]];
             Tag(_rows[i].transform, item.Action == ShelfAction.Open && sideOf != null ? sideOf(item) : null, item.Action == ShelfAction.Open && unread != null && unread(item));
         }
+        // Laid out now, with the words as the culture's font draws them (a side plate never sits on a title's last letter).
+        if (row != null && row.gameObject.activeInHierarchy)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(row);
     }
+
+    /// <summary>The bar shows (the app opened, a theme applied while it was down): the titles are laid out again.</summary>
+    private void OnEnable() => Mark(_sideOf, _unread);
 
     /// <summary>Opens <paramref name="menu"/>'s drop-down under its title, or closes it when it is the open one.</summary>
     public void Toggle(AppMenu menu)
