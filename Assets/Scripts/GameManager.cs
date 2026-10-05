@@ -240,7 +240,7 @@ public sealed class GameManager : MonoBehaviour
         if (booth != null)
             booth.BeginDay(_worldState.day, scanners);
         if (investigationUI != null)
-            investigationUI.SetIntroductions(contentLibrary.Introductions, _worldState.day, scanners);
+            investigationUI.SetIntroductions(contentLibrary.Introductions, _worldState.day);
 
         Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.00}, cases={_dayCases.Count}, places={_today.Places.Count}, leader='{_worldState.history.leaderId}'.");
 

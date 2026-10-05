@@ -367,9 +367,15 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         return -1;
     }
 
-    /// <summary>The centre of box <paramref name="slot"/> in world space (where a match line meets it), or the sheet's centre for no box.</summary>
-    public Vector3 SlotCentre(int slot) =>
-        slot >= 0 && slot < _slots.Count && _slots[slot].Highlight != null ? _slots[slot].Highlight.transform.position : (sheet != null ? sheet.position : transform.position);
+    /// <summary>Box <paramref name="slot"/>'s world bounds (where a match line meets it); false for no such box.</summary>
+    public bool TryBoundsOf(int slot, out Bounds bounds)
+    {
+        bounds = default;
+        if (slot < 0 || slot >= _slots.Count || _slots[slot].Highlight == null)
+            return false;
+        bounds = _slots[slot].Highlight.bounds;
+        return true;
+    }
 
     /// <summary>Marks box <paramref name="slot"/> as a clear mistake found (its tint stays for the case, under a pick or hover tint), or clears it with a clear colour.</summary>
     public void SetMarked(int slot, Color colour)

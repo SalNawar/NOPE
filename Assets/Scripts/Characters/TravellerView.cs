@@ -26,6 +26,21 @@ public sealed class TravellerView : MonoBehaviour
     /// <summary>Where the wheel and the bubble centre.</summary>
     public Transform Anchor => anchor;
 
+    /// <summary>The head in world space, from the shoulders to the top of the head (a match line meets the face there; the desk-first redesign, item 11).</summary>
+    public Bounds Face
+    {
+        get
+        {
+            if (figure == null)
+                return new Bounds(transform.position, Vector3.zero);
+            Transform body = figure.transform;
+            Vector3 shoulders = body.TransformPoint(0f, LookCanvas.LocalY(LookCanvas.Shoulders), 0f);
+            Vector3 top = body.TransformPoint(0f, LookCanvas.LocalY(LookCanvas.HeadTop), 0f);
+            float size = Vector3.Distance(shoulders, top);
+            return new Bounds((shoulders + top) / 2f, new Vector3(size * 0.8f, size, size * 0.1f));
+        }
+    }
+
     private void Awake() => Clear();
 
     /// <summary>

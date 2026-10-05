@@ -352,6 +352,9 @@ public static partial class OfficeSceneUIBuilder
         Wire(soInvest, "desk", officeView.transform.Find("Desk").GetComponent<DeskController>());
         Wire(soInvest, "hud", caseHud);
         Wire(soInvest, "stampTray", stampTray);
+        DeskInspect deskInspect = officeView.transform.Find("DeskInspect").GetComponent<DeskInspect>();
+        Wire(soInvest, "deskInspect", deskInspect);
+        BuildDeskLines(officeCanvas.transform, deskInspect, app.Board, compare);
         Wire(soInvest, "wheel", wheel);
         Wire(soInvest, "idleScreen", idleScreen);
         soInvest.ApplyModifiedProperties();

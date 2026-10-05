@@ -67,6 +67,12 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>Poses the papers held in the hand in front of the office camera (piece 10; optional).</summary>
     [SerializeField] private PaperExaminer examiner;
 
+    /// <summary>Inspection at the desk (the desk-first redesign, item 11; optional): the values' places are seen through the office camera, and the rulebook lies on the desk.</summary>
+    [SerializeField] private DeskInspect deskInspect;
+
+    /// <summary>The rulebook on the desk (optional): laid beside the mat in the office view's frame (DeskConfigSO.rulebookAt).</summary>
+    [SerializeField] private DeskRulebook rulebook;
+
     /// <summary>The physical stamps (the desk-first redesign, item 12; optional): the tray placed on the desk in the office view's frame, the pointer projected through the office camera.</summary>
     [SerializeField] private DeskStampTray stampTray;
 
@@ -176,6 +182,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The art office camera's priority; the desk view sits one above it (DeskView; audit R5-015).</summary>
     private const int OfficeCameraPriority = 100;
 
+    /// <summary>How far above the desk top the rulebook card lies (metres), clear of the desk's own surface.</summary>
+    private const float RulebookLift = 0.001f;
+
     /// <summary>How far above the art scanner's top its bed lies (metres), so a scanning paper clears the glass.</summary>
     private const float ScannerBedLift = 0.002f;
 
@@ -232,6 +241,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
         _office = office;
         ReadyCamera(office);
+        if (deskInspect != null)
+            deskInspect.SetCamera(office);
         if (wheel != null)
             wheel.SetCamera(office);
         foreach (OverlayCallout callout in callouts ?? Array.Empty<OverlayCallout>())
@@ -437,6 +448,13 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             Vector3 right = Vector3.Cross(Vector3.up, level);
             Vector3 outPoint = new Vector3(deskCentre.x, top, deskCentre.z) + right * config.stampTrayOut.x + level * config.stampTrayOut.y;
             stampTray.Bind(_office, outPoint, level);
+        }
+        if (rulebook != null && config != null && _office != null)
+        {
+            Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
+            Vector3 right = Vector3.Cross(Vector3.up, level);
+            Vector3 at = new Vector3(deskCentre.x, top + RulebookLift, deskCentre.z) + right * config.rulebookAt.x + level * config.rulebookAt.y;
+            rulebook.transform.SetPositionAndRotation(at, Quaternion.LookRotation(level, Vector3.up));
         }
 
         if (handOver != null)

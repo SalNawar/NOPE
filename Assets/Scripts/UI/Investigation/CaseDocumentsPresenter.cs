@@ -186,24 +186,17 @@ public sealed class CaseDocumentsPresenter
     /// <summary>
     /// The day's introductions (the desk-first redesign, item 3): which
     /// fields the papers print (<paramref name="shows"/>: a form number and a
-    /// category, Introductions.ShowsField; null: every field), and whether a
-    /// paper's copy reaches the PC as it is handed over
-    /// (<paramref name="copiesOnHandOver"/>: before the scanner is introduced,
-    /// ScannerDay.Hidden, until the desk's own inspection replaces the PC's).
+    /// category, Introductions.ShowsField; null: every field). A paper's copy
+    /// reaches the PC only when it is scanned (items 5 and 11: the papers are
+    /// checked at the desk; a scan, from the scanner's day, unlocks the PC's
+    /// lookups for it).
     /// </summary>
-    public void SetDay(Func<string, ClueCategory, bool> shows, bool copiesOnHandOver)
-    {
-        _shows = shows;
-        _copiesOnHandOver = copiesOnHandOver;
-    }
+    public void SetDay(Func<string, ClueCategory, bool> shows) => _shows = shows;
 
     /// <summary>Which fields today's papers print (SetDay; null: every field).</summary>
     private Func<string, ClueCategory, bool> _shows;
 
-    /// <summary>True while a handed-over paper's copy reaches the PC at once (SetDay: no scanner yet).</summary>
-    private bool _copiesOnHandOver;
-
-    /// <summary>A paper handed over: onto the desk (its scan comes later; its copy at once before the scanner is introduced), or scanned at once where no desk is reachable.</summary>
+    /// <summary>A paper handed over: onto the desk (its copy reaches the PC when it is scanned), or scanned at once where no desk is reachable.</summary>
     private void Receive(int index)
     {
         if (_desk == null)
@@ -213,11 +206,6 @@ public sealed class CaseDocumentsPresenter
         }
         if (!_papers.HandOver(index))
             return;
-        if (_copiesOnHandOver)
-        {
-            Copy(index);
-            return;
-        }
         foreach (DocumentsView view in _views)
             if (view != null)
                 view.Refresh();
@@ -262,15 +250,8 @@ public sealed class CaseDocumentsPresenter
     /// <summary>A paper's copy reaches the PC (the desk's ScanFinished, or a hand-over where no desk is wired): once per paper; its strip reads the time, and it joins search.</summary>
     private void Scan(int index)
     {
-        if (Copy(index))
-            Scanned?.Invoke(index);
-    }
-
-    /// <summary>A paper's copy reaches the PC quietly (no scan toast: before the scanner is introduced, SetDay); true when it was not there yet.</summary>
-    private bool Copy(int index)
-    {
         if (!_papers.Scan(index))
-            return false;
+            return;
         IndexPaper(index);
         foreach (DocumentsView view in _views)
             if (view != null)
@@ -279,7 +260,7 @@ public sealed class CaseDocumentsPresenter
                 view.Refresh();
             }
         PapersChanged?.Invoke();
-        return true;
+        Scanned?.Invoke(index);
     }
 
     /// <summary>Paper <paramref name="index"/> and its fields into search's case layer ("paper · label", every value as filled: always English).</summary>

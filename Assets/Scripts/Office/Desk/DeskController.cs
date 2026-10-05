@@ -354,18 +354,12 @@ public sealed class DeskController : MonoBehaviour
                 paper.SetRowsOnDesk(live);
     }
 
-    /// <summary>Where the box of document <paramref name="document"/>'s row <paramref name="rowIndex"/> is on its paper in world space (a match line meets it there); false when the paper is not on the desk or prints no such box.</summary>
-    public bool TryFieldPoint(int document, int rowIndex, out Vector3 world)
+    /// <summary>Where the box of document <paramref name="document"/>'s row <paramref name="rowIndex"/> is on its paper, as world bounds (a match line meets it there); false when the paper is not on the desk or prints no such box.</summary>
+    public bool TryFieldBounds(int document, int rowIndex, out Bounds bounds)
     {
-        world = default;
+        bounds = default;
         DeskDocument paper = document >= 0 && document < _papers.Count ? _papers[document] : null;
-        if (paper == null)
-            return false;
-        int slot = paper.SlotOfRow(rowIndex);
-        if (slot < 0)
-            return false;
-        world = paper.SlotCentre(slot);
-        return true;
+        return paper != null && paper.TryBoundsOf(paper.SlotOfRow(rowIndex), out bounds);
     }
 
     /// <summary>Marks the box of document <paramref name="document"/>'s row <paramref name="rowIndex"/> as a clear mistake found, in <paramref name="colour"/>, for the rest of the case (the desk-first redesign, item 11: "highlight clear mistakes"); nothing when the paper is not on the desk.</summary>

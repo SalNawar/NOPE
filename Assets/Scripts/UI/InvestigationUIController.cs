@@ -86,6 +86,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The physical stamps (the desk-first redesign, item 12; optional): the papers handed back with the passport's verdict decide the case like the PC's buttons.</summary>
     [SerializeField] private DeskStampTray stampTray;
 
+    /// <summary>Inspection at the desk (the desk-first redesign, item 11; optional): told the day, the rules and the case.</summary>
+    [SerializeField] private DeskInspect deskInspect;
+
     /// <summary>The traveller wheel: closed after a hand-over; it gives the ring its icons and says the traveller's lines (the claim on arrival, then each reply).</summary>
     [SerializeField] private TravellerWheel wheel;
 
@@ -296,6 +299,8 @@ public sealed class InvestigationUIController : MonoBehaviour
     public void SetCitizenRegistry(CitizenRegistry registry, AgencyContent agency, int day)
     {
         _reference.SetCitizenRegistry(registry, agency, day);
+        if (deskInspect != null)
+            deskInspect.SetDay(agency, day);
         if (app != null)
             app.BeginDay();
     }
@@ -303,16 +308,17 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>
     /// The day's introductions (the desk-first redesign, items 3 and 9): the
     /// fields the papers print (Introductions.ShowsField), the shelf's agency
-    /// documents and the desktop's apps; before the scanner is introduced
-    /// (<paramref name="scanners"/>.Hidden) a handed-over paper's copy reaches
-    /// the PC at once.
+    /// documents and the desktop's apps. A paper's copy reaches the PC only
+    /// when scanned (the papers are checked at the desk: track B).
     /// </summary>
-    public void SetIntroductions(Introductions introductions, int day, ScannerDay scanners)
+    public void SetIntroductions(Introductions introductions, int day)
     {
         Introductions known = introductions ?? Introductions.None;
-        _documents.SetDay((form, category) => known.ShowsField(day, form, category), scanners.Hidden);
+        _documents.SetDay((form, category) => known.ShowsField(day, form, category));
         if (app != null)
             app.SetIntroductions(known, day);
+        if (deskInspect != null)
+            deskInspect.SetIntroductions(known, day);
     }
 
     /// <summary>Injects today's facts (the Reference tab's registers render these rows).</summary>
@@ -331,8 +337,13 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Injects the day-start translation (which tongues are foreign and translated today) and the library's translation settings (their key-word rule included).</summary>
     public void SetTranslation(TranslationDay day, TranslationSettings settings) => _interview.SetTranslation(day, settings);
 
-    /// <summary>Sets the day's travel directives (the Rules tab).</summary>
-    public void SetDirectives(IReadOnlyList<TravelRuleSO> rules) => _reference.SetDirectives(rules);
+    /// <summary>Sets the day's travel directives (the Rules tab and the rulebook on the desk).</summary>
+    public void SetDirectives(IReadOnlyList<TravelRuleSO> rules)
+    {
+        _reference.SetDirectives(rules);
+        if (deskInspect != null)
+            deskInspect.SetRules(rules);
+    }
 
     /// <summary>Presents a case and waits for the player's Accept/Deny (nothing shows when the app is not wired: Awake logged why).</summary>
     public void ShowCase(CaseInstance inst, ContentLibrarySO lib, Action<bool> onDecision)
@@ -341,6 +352,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         _currentCase = inst;
         _agency = lib != null ? lib.Agency : _agency;
         _evidence.BeginCase();
+        if (deskInspect != null)
+            deskInspect.BeginCase(inst);
 
         if (Wiring.Wired)
             ShowRich(inst, lib);
@@ -560,6 +573,8 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         _directiveEvidenceDecided = DirectiveEvidence;
         _documents.EndCase(accepted);
+        if (deskInspect != null)
+            deskInspect.EndCase();
         _currentCase = null;
         Hide();
         OneShot.Fire(ref _onDecision, accepted);

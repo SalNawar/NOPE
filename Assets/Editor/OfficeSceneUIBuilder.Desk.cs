@@ -633,7 +633,10 @@ public static partial class OfficeSceneUIBuilder
 
         // The traveller and the wheel's openers (the traveller and the desk intercom).
         TravellerView traveller = BuildTraveller(office, out Clickable travellerZone);
-        WirePersistentVoid(travellerZone, "onClick", wheel, nameof(TravellerWheel.Open));
+        // Inspection at the desk (the desk-first redesign, item 11): a click on the traveller holds their face against a held value, else opens the wheel.
+        DeskInspect inspect = GetOrAdd<DeskInspect>(EnsureChild(office, "DeskInspect").gameObject);
+        DeskRulebook rulebook = BuildRulebook(office);
+        WirePersistentVoid(travellerZone, "onClick", inspect, nameof(DeskInspect.TravellerClicked));
         var soWheel = new SerializedObject(wheel);
         SetRef(soWheel, "traveller", traveller);
         soWheel.ApplyModifiedProperties();
@@ -666,6 +669,16 @@ public static partial class OfficeSceneUIBuilder
         Prop("PenPot", OfficeAnchorId.PenPot, EnsureDeskReaction("Reaction_PenPot", ReactionKind.Wobble, ""), null, "pen_pot");
         Prop("Stapler", OfficeAnchorId.Stapler, EnsureDeskReaction("Reaction_Stapler", ReactionKind.Squash, ""), null, "stapler");
         WirePersistentVoid(propsRoot.Find("Intercom").GetComponent<Clickable>(), "onClick", wheel, nameof(TravellerWheel.Open));
+        WirePersistentVoid(propsRoot.Find("Calendar").GetComponent<Clickable>(), "onClick", inspect, nameof(DeskInspect.CalendarClicked));
+        clicks.AddRange(rulebook.Rows);
+        var soInspect = new SerializedObject(inspect);
+        SetRef(soInspect, "desk", desk);
+        SetRef(soInspect, "wheel", wheel);
+        SetRef(soInspect, "traveller", traveller);
+        SetRef(soInspect, "calendar", propsRoot.Find("Calendar"));
+        SetRef(soInspect, "rulebook", rulebook);
+        SetRef(soInspect, "view", view);
+        soInspect.ApplyModifiedProperties();
         WirePersistentVoid(propsRoot.Find("Stamp").GetComponent<Clickable>(), "onClick", stampTray, nameof(DeskStampTray.ToggleTray));
         var soStamps = new SerializedObject(stampTray);
         SetRef(soStamps, "surface", desk.GetComponent<DeskSurface>());
@@ -724,6 +737,8 @@ public static partial class OfficeSceneUIBuilder
         SerializedArrays.Set(soBinder, "callouts", callouts);
         SetRef(soBinder, "examiner", desk.transform.Find("Examiner").GetComponent<PaperExaminer>());
         SetRef(soBinder, "stampTray", stampTray);
+        SetRef(soBinder, "deskInspect", inspect);
+        SetRef(soBinder, "rulebook", rulebook);
         SetRef(soBinder, "deskCatcher", desk.transform.Find("Catcher").GetComponent<BoxCollider>());
         SetRef(soBinder, "matCatcher", desk.transform.Find("ViewCatcher").GetComponent<BoxCollider>());
         SetRef(soBinder, "deskView", deskView);
@@ -1246,6 +1261,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The band at the overlay's top the speech bubble and the wheel's ring keep clear (reference px): the office case HUD's strips, the desk view's Back control and gaps (the desk view clamps both to the top).</summary>
     private static readonly float OverlayTopClearance = CaseHudClearance + DeskViewBackSize.y + 8f;
 
+    /// <summary>The desk's rulebook card (metres, width by depth), its rows and their pitch (metres).</summary>
+    private static readonly Vector2 RulebookSize = new Vector2(0.26f, 0.21f);
+    private const int RulebookRows = 4;
+    private const float RulebookRowPitch = 0.036f;
+
     /// <summary>A "Hand the papers back" button (reference px), bottom centre.</summary>
     private static readonly Vector2 HandBackSize = new Vector2(520f, 60f);
 
@@ -1420,6 +1440,97 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "hint", hint);
         so.ApplyModifiedProperties();
         return stamps;
+    }
+
+    /// <summary>
+    /// The rulebook on the desk (the desk-first redesign, item 11), rebuilt
+    /// each run: Office/Rulebook (the DeskRulebook; the office binder lays it
+    /// beside the mat): a cream card lying face up, its title, four rows (each
+    /// a click box on the Interactable layer over its text, two lines at
+    /// most) and the line for a day with no directive. Returns it.
+    /// </summary>
+    private static DeskRulebook BuildRulebook(Transform office)
+    {
+        DestroyChildIfPresent(office, "Rulebook");
+        Transform book = EnsureChild(office, "Rulebook");
+        GameObject card = PrimitivePart(book, "Card", PrimitiveType.Quad, Vector3.zero, new Vector3(RulebookSize.x, RulebookSize.y, 1f), LitMaterial("Rulebook_Card", new Color(0.93f, 0.9f, 0.8f), 0.15f));
+        card.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+        Color ink = new Color(0.13f, 0.12f, 0.15f);
+        TextMeshPro title = FlatText(book, "Title", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.022f), new Vector2(RulebookSize.x - 0.02f, 0.03f), 0.2f, ink, FontStyles.Bold);
+        var rows = new List<Clickable>();
+        for (int i = 0; i < RulebookRows; i++)
+        {
+            float z = RulebookSize.y / 2f - 0.058f - i * RulebookRowPitch;
+            Clickable row = EnsureClickBox(book, "Row" + (i + 1));
+            row.transform.localPosition = new Vector3(0f, 0.0006f, z);
+            var box = row.GetComponent<BoxCollider>();
+            box.center = Vector3.zero;
+            box.size = new Vector3(RulebookSize.x - 0.016f, 0.004f, RulebookRowPitch - 0.004f);
+            TextMeshPro text = FlatText(row.transform, "Text", Vector3.zero, new Vector2(RulebookSize.x - 0.024f, RulebookRowPitch - 0.006f), 0.13f, ink, FontStyles.Normal);
+            text.textWrappingMode = TextWrappingModes.Normal;
+            text.alignment = TextAlignmentOptions.MidlineLeft;
+            rows.Add(row);
+        }
+        TextMeshPro none = FlatText(book, "None", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.058f), new Vector2(RulebookSize.x - 0.024f, 0.03f), 0.13f, ink, FontStyles.Italic);
+        DeskRulebook rulebook = GetOrAdd<DeskRulebook>(book.gameObject);
+        var so = new SerializedObject(rulebook);
+        SetRef(so, "title", title);
+        SerializedArrays.Set(so, "rows", rows);
+        SetRef(so, "none", none);
+        so.ApplyModifiedProperties();
+        return rulebook;
+    }
+
+    /// <summary>A world-space text lying face up (top edge away from the chair) under <paramref name="parent"/>, auto-sized up to <paramref name="maxSize"/>.</summary>
+    private static TextMeshPro FlatText(Transform parent, string name, Vector3 position, Vector2 box, float maxSize, Color ink, FontStyles style)
+    {
+        var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshPro));
+        go.transform.SetParent(parent, false);
+        go.transform.localPosition = position;
+        go.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+        ((RectTransform)go.transform).sizeDelta = box;
+        TextMeshPro tmp = go.GetComponent<TextMeshPro>();
+        tmp.text = string.Empty;
+        tmp.enableAutoSizing = true;
+        tmp.fontSizeMax = maxSize;
+        tmp.fontSizeMin = maxSize * 0.4f;
+        tmp.textWrappingMode = TextWrappingModes.NoWrap;
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.fontStyle = style;
+        tmp.color = ink;
+        tmp.sortingLayerID = GameplaySortingLayerId();
+        return tmp;
+    }
+
+    /// <summary>
+    /// The workbench's line over the office (the desk-first redesign, item
+    /// 11), rebuilt each run: a full-screen host on the office overlay with
+    /// the line layer (MatchLines, as the PC's, no gutter) and the line's two
+    /// ends (proxies DeskInspect places over the values on the screen,
+    /// inactive). Wires them into <paramref name="inspect"/> with the
+    /// workbench, the compare and the office view.
+    /// </summary>
+    private static void BuildDeskLines(Transform overlay, DeskInspect inspect, MatchBoard board, CompareController compare)
+    {
+        DestroyChildIfPresent(overlay, "DeskMatchLines");
+        Transform host = Panel(overlay, "DeskMatchLines", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        RectTransform End(string name)
+        {
+            Transform end = Panel(host, name, Center, Center, Vector2.zero, new Vector2(40f, 20f), null);
+            ((RectTransform)end).pivot = Center;
+            end.gameObject.SetActive(false);
+            return (RectTransform)end;
+        }
+        RectTransform a = End("EndA"), b = End("EndB");
+        MatchLines lines = BuildMatchLines(host, null);
+        host.SetSiblingIndex(0);
+        var so = new SerializedObject(inspect);
+        SetRef(so, "board", board);
+        SetRef(so, "compare", compare);
+        SetRef(so, "lines", lines);
+        SetRef(so, "endA", a);
+        SetRef(so, "endB", b);
+        so.ApplyModifiedProperties();
     }
 
     /// <summary>A label printed flat on the stamp tray's base (a world-space text facing up, its words a keyed UI string baked in).</summary>
