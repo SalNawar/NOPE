@@ -16,8 +16,8 @@ MonoBehaviour:
   displayName: The audit finds the two hundred
   description: Generated from world_source.json history.rules.
   oneShot: 1
-  newsLineOnFire: 'AUDIT: a forged Labour Contract passed Desk 3 on day 11, with
-    200 cr beside it. It goes on file.'
+  newsLineOnFire: 'AUDIT: a forged Work Permit passed Desk 3 on day 11, with 200
+    cr beside it. It goes on file.'
   section: 0
   conditions:
   - type: 1

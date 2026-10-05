@@ -16,8 +16,8 @@ MonoBehaviour:
   visitorsCount: 13
   bulletin: 'NEW: the scanner and the records. Scan a paper to read it on the PC:
     it must match the traveller''s record (a citizen''s Citizen Account; for the
-    displaced, who now come home through your desk with a Displacement Certificate,
-    the Displacement Registry).'
+    displaced, who now come home through your desk with a Travel Permit, the Displacement
+    Registry).'
   papers:
   - TC-101
   - TC-230

@@ -35,6 +35,7 @@ MonoBehaviour:
     formNumber: 
     title: 
     fixedPage: 1
+    landscape: 0
     blocks:
     - kind: 0
       text: 
@@ -43,14 +44,6 @@ MonoBehaviour:
       shares: []
       options: []
       field: 6
-      slot: 
-    - kind: 1
-      text: 1  CITIZEN
-      cells: []
-      columns: []
-      shares: []
-      options: []
-      field: -1
       slot: 
     - kind: 2
       text: 
@@ -70,35 +63,19 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
-    - kind: 1
-      text: 2  TRANSPONDER
-      cells: []
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
     - kind: 2
       text: 
       cells:
       - field: 1
         slot: 
         caption: 
-        span: 8
+        span: 7
         rows: 1
       - field: 2
         slot: 
         caption: 
-        span: 4
+        span: 5
         rows: 1
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
-    - kind: 1
-      text: 3  DECLARED EFFECTS
-      cells: []
       columns: []
       shares: []
       options: []
@@ -122,8 +99,8 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
-    - kind: 12
-      text: Temporal Customs Act of 2139. Any alteration voids this document.
+    - kind: 9
+      text: 
       cells: []
       columns: []
       shares: []
@@ -133,6 +110,6 @@ MonoBehaviour:
     look:
       frame: 4
       accent: '#1D5A36'
-      paper: '#EEF4EC'
-      aspect: 0
-      scale: 0.95
+      paper: '#E4F0E2'
+      aspect: 1.15
+      scale: 0.5

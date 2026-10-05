@@ -16,7 +16,7 @@ MonoBehaviour:
   era: {fileID: 0}
   nation: {fileID: 0}
   description: 'Travel class: a Premium passport travels on a Premium transponder,
-    a Standard passport on an Economy one (the transponder on the Entry Ticket).'
+    a Standard passport on an Economy one (the Transponder Card).'
   kinds: 0000000001000000
   transponder: 
   openPlaces: []

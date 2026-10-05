@@ -1361,7 +1361,8 @@
         "legend": "PH",
         "forgedLegend": "PR",
         "forms": [
-          "TC-230"
+          "TC-230",
+          "TC-240"
         ]
       },
       {
@@ -2053,6 +2054,11 @@
     {
       "id": "egypt",
       "displayName": "Egypt",
+      "passport": {
+        "cover": "#1F4A2E",
+        "emblem": "WingedSun",
+        "code": "EGY"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -2217,6 +2223,11 @@
     {
       "id": "iraq",
       "displayName": "Iraq",
+      "passport": {
+        "cover": "#1E1E22",
+        "emblem": "Octastar",
+        "code": "IRQ"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -2381,6 +2392,11 @@
     {
       "id": "greece",
       "displayName": "Greece",
+      "passport": {
+        "cover": "#1E2F5C",
+        "emblem": "Laurel",
+        "code": "GRC"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -2524,6 +2540,11 @@
     {
       "id": "italy",
       "displayName": "Italy",
+      "passport": {
+        "cover": "#6B1F2A",
+        "emblem": "Star",
+        "code": "ITA"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -2686,6 +2707,11 @@
     {
       "id": "china",
       "displayName": "China",
+      "passport": {
+        "cover": "#8A1C1C",
+        "emblem": "FiveStars",
+        "code": "CHN"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -2846,6 +2872,11 @@
     {
       "id": "japan",
       "displayName": "Japan",
+      "passport": {
+        "cover": "#4B2C5E",
+        "emblem": "Chrysanthemum",
+        "code": "JPN"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -3006,6 +3037,11 @@
     {
       "id": "britain",
       "displayName": "Britain",
+      "passport": {
+        "cover": "#1B4B54",
+        "emblem": "Crown",
+        "code": "GBR"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -3160,6 +3196,11 @@
     {
       "id": "germany",
       "displayName": "Germany",
+      "passport": {
+        "cover": "#5A3A1E",
+        "emblem": "Eagle",
+        "code": "DEU"
+      },
       "baselines": [
         {
           "attribute": "democracy",
@@ -8081,7 +8122,7 @@
     {
       "asset": "Rule_TravelClass",
       "type": "PaperSet",
-      "description": "Travel class: a Premium passport travels on a Premium transponder, a Standard passport on an Economy one (the transponder on the Entry Ticket).",
+      "description": "Travel class: a Premium passport travels on a Premium transponder, a Standard passport on an Economy one (the Transponder Card).",
       "kinds": [
         "RichTourist",
         "PoorTourist"
@@ -8637,7 +8678,7 @@
       "asset": "DayPlan_Inv_Day5",
       "day": 5,
       "queue": 13,
-      "bulletin": "NEW: the scanner and the records. Scan a paper to read it on the PC: it must match the traveller's record (a citizen's Citizen Account; for the displaced, who now come home through your desk with a Displacement Certificate, the Displacement Registry).",
+      "bulletin": "NEW: the scanner and the records. Scan a paper to read it on the PC: it must match the traveller's record (a citizen's Citizen Account; for the displaced, who now come home through your desk with a Travel Permit, the Displacement Registry).",
       "papers": [
         "TC-101",
         "TC-230",
@@ -8735,11 +8776,12 @@
       "asset": "DayPlan_Inv_Day6",
       "day": 6,
       "queue": 14,
-      "bulletin": "NEW: travel class. A Premium passport travels on a Premium transponder, a Standard passport on an Economy one: hold the Passport's class against the Entry Ticket's transponder.",
+      "bulletin": "NEW: the Transponder Card and travel class. A Premium passport travels on a Premium transponder, a Standard passport on an Economy one: hold the Passport's class against the card's.",
       "papers": [
         "TC-101",
         "TC-230",
-        "TC-610"
+        "TC-610",
+        "TC-240"
       ],
       "introduces": [
         "field:AccountStatus",
@@ -8876,6 +8918,7 @@
         "TC-101",
         "TC-230",
         "TC-610",
+        "TC-240",
         "TC-310"
       ],
       "introduces": [
@@ -9020,6 +9063,7 @@
         "TC-101",
         "TC-230",
         "TC-610",
+        "TC-240",
         "TC-310",
         "TC-520"
       ],
@@ -9170,6 +9214,7 @@
         "TC-101",
         "TC-230",
         "TC-610",
+        "TC-240",
         "TC-310",
         "TC-520"
       ],
@@ -9322,6 +9367,7 @@
         "TC-101",
         "TC-230",
         "TC-610",
+        "TC-240",
         "TC-310",
         "TC-520"
       ],
@@ -9466,6 +9512,7 @@
         "TC-101",
         "TC-230",
         "TC-610",
+        "TC-240",
         "TC-310",
         "TC-520"
       ],
@@ -9649,6 +9696,7 @@
         "TC-101",
         "TC-230",
         "TC-610",
+        "TC-240",
         "TC-310",
         "TC-520"
       ],
@@ -9790,6 +9838,7 @@
         "TC-101",
         "TC-230",
         "TC-610",
+        "TC-240",
         "TC-310",
         "TC-520"
       ],
@@ -9939,6 +9988,7 @@
         "TC-101",
         "TC-230",
         "TC-610",
+        "TC-240",
         "TC-310",
         "TC-520",
         "TC-620"
@@ -10128,6 +10178,7 @@
         "TC-101",
         "TC-230",
         "TC-610",
+        "TC-240",
         "TC-310",
         "TC-520",
         "TC-620",
@@ -17253,7 +17304,7 @@
       {
         "id": "audit_rook",
         "name": "The audit finds the two hundred",
-        "news": "AUDIT: a forged Labour Contract passed Desk 3 on day 11, with 200 cr beside it. It goes on file.",
+        "news": "AUDIT: a forged Work Permit passed Desk 3 on day 11, with 200 cr beside it. It goes on file.",
         "conditions": [
           {
             "type": "FlagSet",

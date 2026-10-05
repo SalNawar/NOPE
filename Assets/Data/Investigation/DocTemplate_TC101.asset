@@ -37,6 +37,7 @@ MonoBehaviour:
     formNumber: 
     title: 
     fixedPage: 1
+    landscape: 0
     blocks:
     - kind: 0
       text: 
@@ -45,14 +46,6 @@ MonoBehaviour:
       shares: []
       options: []
       field: 6
-      slot: 
-    - kind: 1
-      text: 1  TRAVELLER
-      cells: []
-      columns: []
-      shares: []
-      options: []
-      field: -1
       slot: 
     - kind: 2
       text: 
@@ -91,20 +84,37 @@ MonoBehaviour:
       - field: 2
         slot: 
         caption: 
-        span: 6
+        span: 7
         rows: 1
       - field: 5
         slot: 
         caption: 
-        span: 6
+        span: 5
         rows: 1
       columns: []
       shares: []
       options: []
       field: -1
       slot: 
-    - kind: 1
-      text: 2  DEPARTURE
+    - kind: 18
+      text: 
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 17
+      text: 
+      cells: []
+      columns: []
+      shares:
+      - 0.57
+      options: []
+      field: -1
+      slot: 
+    - kind: 20
+      text: 
       cells: []
       columns: []
       shares: []
@@ -130,15 +140,15 @@ MonoBehaviour:
       - field: 4
         slot: 
         caption: 
-        span: 6
+        span: 4
         rows: 1
       columns: []
       shares: []
       options: []
       field: -1
       slot: 
-    - kind: 12
-      text: Temporal Customs Act of 2139. Any alteration voids this document.
+    - kind: 19
+      text: VISAS AND ENTRY STAMPS
       cells: []
       columns: []
       shares: []
@@ -146,8 +156,8 @@ MonoBehaviour:
       field: -1
       slot: 
     look:
-      frame: 1
-      accent: '#1C3A78'
-      paper: '#EDF1F6'
-      aspect: 0
-      scale: 0.86
+      frame: 6
+      accent: '#23305E'
+      paper: '#F3EEDF'
+      aspect: 0.66
+      scale: 0.64

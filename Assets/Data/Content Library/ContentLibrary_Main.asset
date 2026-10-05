@@ -15602,6 +15602,7 @@ MonoBehaviour:
       forgedLegend: PR
       forms:
       - TC-230
+      - TC-240
     - id: relief
       name: Debt Relief Directorate
       shape: Shield

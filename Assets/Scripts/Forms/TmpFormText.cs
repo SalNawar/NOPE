@@ -45,8 +45,41 @@ public sealed class TmpFormText : ITextMeasure
     {
         SetFont(_text, text);
         Style(_text, role, size);
-        return _text.GetPreferredValues(text, width, MeasureRoom).y;
+        return _text.GetPreferredValues(Printed(role, text), width, MeasureRoom).y;
     }
+
+    /// <summary>The least share of its size a printed text shrinks to so that its widest word fits its box (wave 5 A3: "TRANSPON / DER CLASS" never breaks mid-word).</summary>
+    public const float WordFitFloor = 0.6f;
+
+    /// <summary>Where a printed text's words part (a space, a line break).</summary>
+    private static readonly char[] WordBreaks = { ' ', '\n' };
+
+    /// <summary>
+    /// The share of its size <paramref name="text"/> in <paramref name="role"/>'s
+    /// style at <paramref name="size"/> is printed at so that its widest word
+    /// fits <paramref name="width"/> (1 when it fits; never under
+    /// WordFitFloor): a word wraps whole and never breaks in the middle, and
+    /// the box keeps the layout's place and size (the document design spec,
+    /// D2). Measured on <paramref name="measure"/> (styled by this call; in the
+    /// units of <paramref name="size"/> and <paramref name="width"/>).
+    /// </summary>
+    public static float WordFit(TMP_Text measure, string text, FormTextRole role, float size, float width)
+    {
+        if (measure == null || string.IsNullOrEmpty(text) || width <= 0f || role == FormTextRole.Mrz)
+            return 1f;
+        Style(measure, role, size);
+        float widest = 0f;
+        foreach (string word in text.Split(WordBreaks, StringSplitOptions.RemoveEmptyEntries))
+            widest = Mathf.Max(widest, measure.GetPreferredValues(word, float.PositiveInfinity, float.PositiveInfinity).x);
+        return widest > width ? Mathf.Max(WordFitFloor, width / widest * 0.98f) : 1f;
+    }
+
+    /// <summary>A machine-readable zone's character pitch, in ems (its lines are monospaced; the travel documents spec, TD3).</summary>
+    public const float MrzPitch = 0.62f;
+
+    /// <summary>What a text of <paramref name="role"/> is set as: a machine-readable zone's line monospaced at MrzPitch, its fillers ('&lt;') never read as tags; every other text as it is.</summary>
+    public static string Printed(FormTextRole role, string text) =>
+        role == FormTextRole.Mrz && !string.IsNullOrEmpty(text) ? $"<mspace={MrzPitch.ToString(System.Globalization.CultureInfo.InvariantCulture)}em><noparse>{text}</noparse></mspace>" : text;
 
     /// <summary>Puts <paramref name="target"/> in the font <paramref name="text"/> is printed in: ScriptOf's for it, else the measure's own font with its own material back (a pooled text that printed a foreign line gets the paper's ink again).</summary>
     public void SetFont(TMP_Text target, string text)

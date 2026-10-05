@@ -17,4 +17,7 @@ public sealed class NationSO : ScriptableObject
 
     /// <summary>Effect active while this nation leads the timeline (its UI cue culture:{id} is the present culture). Written by Generate World.</summary>
     public EffectSO leaderEffect;
+
+    /// <summary>Its passport's cover colour, emblem and code (world_source.json countries[].passport; the travel documents spec, TD3). Written by Generate World.</summary>
+    public PassportLook passport = new PassportLook();
 }

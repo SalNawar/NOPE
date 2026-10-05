@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 6
   visitorsCount: 14
-  bulletin: 'NEW: travel class. A Premium passport travels on a Premium transponder,
-    a Standard passport on an Economy one: hold the Passport''s class against the
-    Entry Ticket''s transponder.'
+  bulletin: 'NEW: the Transponder Card and travel class. A Premium passport travels
+    on a Premium transponder, a Standard passport on an Economy one: hold the Passport''s
+    class against the card''s.'
   papers:
   - TC-101
   - TC-230
   - TC-610
+  - TC-240
   introduces:
   - field:AccountStatus
   - field:TransponderId
