@@ -18,3 +18,4 @@ MonoBehaviour:
   description: 'Border closed: no travel to Weimar Berlin today.'
   kinds: 
   transponder: 
+  openPlaces: []

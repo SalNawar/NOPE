@@ -26,11 +26,14 @@ public sealed class InterviewDay
     /// (LegendarySO.dialogId): each is offered only while its premade is at the desk.
     /// <paramref name="forms"/> are the day's papers menu (every on-request
     /// form of the days so far, FormRequests.MetSoFar), offered to every traveller.
+    /// <paramref name="clothes"/> is false before the Look menu's garments are
+    /// introduced (the desk-first ramp: with the dress rule, Feature.Clothes).
     /// </summary>
     public InterviewDay(InterviewLines lines, IReadOnlyList<Gated<InterviewQuestion>> questions,
                         IReadOnlyList<Gated<AuthoredDialog>> dialogs, GateSnapshot snapshot, ShiftLedger ledger,
-                        IEnumerable<string> premadeDialogIds, IReadOnlyList<AskableForm> forms = null)
+                        IEnumerable<string> premadeDialogIds, IReadOnlyList<AskableForm> forms = null, bool clothes = true)
     {
+        Clothes = clothes;
         Lines = lines ?? new InterviewLines();
         _ledger = ledger ?? new ShiftLedger();
         _forms = forms ?? new AskableForm[0];
@@ -73,6 +76,9 @@ public sealed class InterviewDay
 
     /// <summary>The interview's fixed wording and layout limits.</summary>
     public InterviewLines Lines { get; }
+
+    /// <summary>True once the Look menu lists the traveller's garments (the desk-first ramp, Feature.Clothes); their face shows from day 1.</summary>
+    public bool Clothes { get; }
 
     /// <summary>The day's papers menu (the personalities spec's W4): the forms the desk may ask every traveller of the day for, in first-appearance order.</summary>
     public IReadOnlyList<AskableForm> AskableForms => _forms;

@@ -677,8 +677,10 @@ public static class AccountMaker
 /// category) when the account holds them (a forged proof, carried but not
 /// on file, shows none), and a labourer's registered
 /// contract (three rows: Employer, Term and Wage); the rest (standing, Good
-/// or Frozen with its date, lineage, the
-/// forms not on file, the departure date, past trips, the note) is shown only. Labels and fixed
+/// or Frozen with its date, the forms not on file, past trips, the note) is
+/// shown only. The desk-first redesign (item 3) cut the rows no rule asks
+/// about (the lineage, the departure time), and the standing and the debt
+/// show only from the debt standing's day (Feature.Standing). Labels and fixed
 /// words come through <c>text</c> (UI string keys), values from the account.
 /// The Forms on file rows follow the day's papers (Papers Please lesson D7,
 /// see Day pacing): a form's row shows only once the form is issued (the
@@ -694,10 +696,11 @@ public static class AccountRecords
     /// its Note row reads <paramref name="note"/> (a story character's, days
     /// 7-15 B3), none when blank; its Forms on file rows only for the forms
     /// <paramref name="issued"/> (the day's papers, DayPapers.Issued: null or
-    /// empty, every form).
+    /// empty, every form); its Standing and Debt rows only with
+    /// <paramref name="standing"/> (the debt standing introduced).
     /// </summary>
     public static CitizenRecord Record(string name, string born, string destination, CitizenAccount account, Func<string, string> text, string note = null,
-                                       IReadOnlyCollection<string> issued = null)
+                                       IReadOnlyCollection<string> issued = null, bool standing = true)
     {
         account = account ?? new CitizenAccount();
         string none = text("records.none");
@@ -707,13 +710,15 @@ public static class AccountRecords
             new RecordRow(text("records.row.name"), name, ClueCategory.Name),
             new RecordRow(text("records.row.citizenId"), account.CitizenId, ClueCategory.CitizenId),
             new RecordRow(text("records.row.born"), born, ClueCategory.BirthDate),
-            new RecordRow(text("records.row.status"), account.Status.ToString(), ClueCategory.AccountStatus),
-            new RecordRow(text("records.row.standing"), account.Standing == AccountStanding.Frozen
-                ? string.Format(CultureInfo.InvariantCulture, text("records.standing.frozen"), account.FrozenSince)
-                : text("records.standing.good")),
-            new RecordRow(text("records.row.debt"), AccountMaker.Credits(account.Debt), ClueCategory.Debt),
-            new RecordRow(text("records.row.lineage"), account.Lineage ?? none)
+            new RecordRow(text("records.row.status"), account.Status.ToString(), ClueCategory.AccountStatus)
         };
+        if (standing)
+        {
+            records.Add(new RecordRow(text("records.row.standing"), account.Standing == AccountStanding.Frozen
+                ? string.Format(CultureInfo.InvariantCulture, text("records.standing.frozen"), account.FrozenSince)
+                : text("records.standing.good")));
+            records.Add(new RecordRow(text("records.row.debt"), AccountMaker.Credits(account.Debt), ClueCategory.Debt));
+        }
 
         var forms = new List<RecordRow>();
         if (DayPapers.Issued(issued, Directives.Manifest))
@@ -739,8 +744,7 @@ public static class AccountRecords
 
         var travel = new List<RecordRow>
         {
-            new RecordRow(text("records.row.departure"), destination, ClueCategory.Destination),
-            new RecordRow(text("records.row.departureDate"), account.Departure)
+            new RecordRow(text("records.row.departure"), destination, ClueCategory.Destination)
         };
         IReadOnlyList<PastTrip> trips = account.Trips ?? Array.Empty<PastTrip>();
         if (trips.Count == 0)

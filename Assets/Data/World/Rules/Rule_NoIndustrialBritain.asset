@@ -18,3 +18,4 @@ MonoBehaviour:
   description: 'Cholera quarantine: no travel to Victorian Britain today.'
   kinds: 
   transponder: 
+  openPlaces: []

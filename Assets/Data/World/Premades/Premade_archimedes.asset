@@ -36,5 +36,5 @@ MonoBehaviour:
     outcome: nuclear
     amount: 12
   - factor: money
-    outcome: banking_houses
+    outcome: jubilee
     amount: 6

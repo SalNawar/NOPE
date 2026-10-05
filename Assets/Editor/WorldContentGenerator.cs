@@ -294,9 +294,12 @@ public static partial class WorldContentGenerator
             foreach (string kind in r.kinds ?? Array.Empty<string>())
                 if (!ParseEnum(kind, out TravellerKind _))
                     errors.Add($"Rule '{r.asset}' lists '{kind}', which is not a traveller kind ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}).");
+            foreach (string place in r.places ?? Array.Empty<string>())
+                if (!src.places.Any(p => Directives.PlaceKey(p.country, p.era) == place))
+                    errors.Add($"Rule '{r.asset}' opens '{place}', which is no place (\"country:era\", e.g. \"greece:ancient\").");
             if (ParseEnum(r.type, out type))
                 errors.AddRange(Directives.RuleProblems(r.asset, type, RuleKinds(r), !string.IsNullOrEmpty(r.country) || !string.IsNullOrEmpty(r.era), !string.IsNullOrWhiteSpace(r.description),
-                                                        r.transponder, src.agency != null ? BuildAgency(src.agency).transponders : null));
+                                                        r.transponder, src.agency != null ? BuildAgency(src.agency).transponders : null, r.places));
         }
 
         var futureIds = new HashSet<string>(src.eras.Where(e => e.future).Select(e => e.id));
@@ -1603,6 +1606,7 @@ public static partial class WorldContentGenerator
         rule.description = r.description;
         rule.kinds = RuleKinds(r).ToArray();
         rule.transponder = r.transponder ?? string.Empty;
+        rule.openPlaces = r.places ?? Array.Empty<string>();
         EditorUtility.SetDirty(rule);
         return rule;
     }
@@ -1648,7 +1652,7 @@ public static partial class WorldContentGenerator
         List<Directive> rules = (d.rules ?? Array.Empty<string>())
             .Where(name => byAsset.ContainsKey(name ?? string.Empty) && ParseEnum(byAsset[name].type, out TravelRuleType _))
             .Select(name => byAsset[name])
-            .Select(r => new Directive((TravelRuleType)Enum.Parse(typeof(TravelRuleType), r.type), RuleKinds(r), NullIfBlank(r.country), NullIfBlank(r.era)))
+            .Select(RuleDirective)
             .ToList();
 
         var forced = new List<ForcedCheck>();
@@ -1788,6 +1792,11 @@ public static partial class WorldContentGenerator
         papers.arraySize = dayPapers.Length;
         for (int i = 0; i < dayPapers.Length; i++)
             papers.GetArrayElementAtIndex(i).stringValue = dayPapers[i];
+        string[] dayIntroduces = d.introduces ?? Array.Empty<string>();
+        SerializedProperty introduces = so.FindProperty("introduces");
+        introduces.arraySize = dayIntroduces.Length;
+        for (int i = 0; i < dayIntroduces.Length; i++)
+            introduces.GetArrayElementAtIndex(i).stringValue = dayIntroduces[i];
         so.FindProperty("tellCount").intValue = d.tells;
         string[] channels = d.channels ?? Array.Empty<string>();
         SerializedProperty tellChannels = so.FindProperty("tellChannels");
@@ -1942,7 +1951,8 @@ public static partial class WorldContentGenerator
     /// TimelineService.AgencyForms builds it from the plans), and each kind in
     /// play that day with that menu and its blueprints' carried forms
     /// (FormRequests.ReplyProblems' input). <paramref name="forms"/> is every
-    /// wired or forced blueprint's form, each once.
+    /// form some day issues, each once (as the validator reads the plans: a
+    /// form no day issues, the cut proofs of means, is in no menu).
     /// </summary>
     private static List<KindForms> KindForms(WorldSource src, Authored authored, out List<AskableForm> forms)
     {
@@ -1954,7 +1964,6 @@ public static partial class WorldContentGenerator
             return form;
         }
 
-        forms = DocumentTemplates(authored).Select(FormOf).Distinct().ToList();
         DayData[] sorted = (src.days ?? Array.Empty<DayData>()).Where(d => d != null).OrderBy(d => d.day).ToArray();
         int lastDay = sorted.Select(d => d.day).DefaultIfEmpty(0).Max();
         var dayForms = new List<IReadOnlyList<AskableForm>>();
@@ -1972,6 +1981,7 @@ public static partial class WorldContentGenerator
             dayBlueprints.Add(blueprints);
             dayForms.Add(blueprints.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null && DayPapers.Issued(d?.papers, t.formNumber)).Select(FormOf).Distinct().ToList());
         }
+        forms = dayForms.SelectMany(f => f).Distinct().ToList();
 
         var kinds = new List<KindForms>();
         for (int n = 1; n <= lastDay; n++)
@@ -2415,7 +2425,11 @@ public static partial class WorldContentGenerator
     }
 
     /// <summary>One travel rule as authored ("rules"): a closure names its country and/or era; a standing procedure its line and, for a paper set, debt standing or recall, the kinds it is read for; a recall the model it grounds ("transponder", an agency.transponders id; days 7-15).</summary>
-    [Serializable] private sealed class RuleData { public string asset; public string type; public string country; public string era; public string description; public string[] kinds; public string transponder; }
+    [Serializable] private sealed class RuleData { public string asset; public string type; public string country; public string era; public string description; public string[] kinds; public string transponder; public string[] places; }
+
+    /// <summary>A rule as the Domain predicates see it: its type, kinds, a closure's place, a recall's model and the open destinations' places (by "country:era" keys).</summary>
+    private static Directive RuleDirective(RuleData r) =>
+        new Directive((TravelRuleType)Enum.Parse(typeof(TravelRuleType), r.type), RuleKinds(r), NullIfBlank(r.country), NullIfBlank(r.era), NullIfBlank(r.transponder), r.places);
 
     [Serializable] private sealed class EraWeightData { public string era; public float weight; }
 
@@ -2428,6 +2442,8 @@ public static partial class WorldContentGenerator
         public string bulletin;
         /// <summary>The form numbers in circulation this day (empty: every form; DayPapers, lesson D7).</summary>
         public string[] papers;
+        /// <summary>What else the day introduces: Introductions keys of desk tools, wheel entries, PC apps, books and document fields (the desk-first ramp; Introductions.Problems).</summary>
+        public string[] introduces;
         /// <summary>Tells each liar leaks this day (at least 1).</summary>
         public int tells;
         /// <summary>Where this day's tells may show ("Papers", "Answer").</summary>

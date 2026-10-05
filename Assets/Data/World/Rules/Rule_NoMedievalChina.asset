@@ -18,3 +18,4 @@ MonoBehaviour:
   description: 'Quarantine: no travel to Northern Song Kaifeng today.'
   kinds: 
   transponder: 
+  openPlaces: []

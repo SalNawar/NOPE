@@ -18,3 +18,4 @@ MonoBehaviour:
   description: 'Embargo: no travel to New Kingdom Egypt today.'
   kinds: 
   transponder: 
+  openPlaces: []

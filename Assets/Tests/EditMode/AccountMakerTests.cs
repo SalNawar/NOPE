@@ -747,11 +747,21 @@ public class AccountMakerTests
         Assert.AreEqual(8, rows.Count(r => r.IsEvidence), "one row per compared category, nothing else");
 
         Assert.IsTrue(rows.Any(r => !r.IsEvidence && r.Label == "<records.row.standing>" && r.Value == "<records.standing.good>"));
-        Assert.IsTrue(rows.Any(r => !r.IsEvidence && r.Label == "<records.row.lineage>" && r.Value == "Mamluk Cairo (Medieval)"));
-        Assert.IsTrue(rows.Any(r => !r.IsEvidence && r.Label == "<records.row.departureDate>" && r.Value == "14 Mar 2150"), "the date beside the booking is never compared");
+        Assert.IsFalse(rows.Any(r => r.Label == "<records.row.lineage>" || r.Label == "<records.row.departureDate>"),
+                       "the desk-first redesign cut the rows no rule asks about: the lineage, the departure time");
         Assert.IsTrue(rows.Any(r => !r.IsEvidence && r.Label == "<records.row.trip>" && r.Value == "4 Mar 2150, Periclean Athens (Ancient), <records.trip.returned>"));
         Assert.AreEqual(3, rows.Count(r => r.Value == "<records.none>"), "waiver, proof of means and contract: none on file for a Premium account");
         Assert.AreEqual("<records.note.none>", rec.Groups[3].Rows.Single().Value);
+    }
+
+    /// <summary>The desk-first ramp: the standing and the debt show from the debt standing's day only (Feature.Standing).</summary>
+    [Test]
+    public void Record_TheStandingAndTheDebt_OnlyOnceTheStandingIsIntroduced()
+    {
+        List<RecordRow> before = AccountRecords.Record("Omar", "3 May 2101", "Periclean Athens (Ancient)", Account(), key => key, null, null, false).Groups.SelectMany(g => g.Rows).ToList();
+        Assert.IsFalse(before.Any(r => r.Label == "records.row.standing" || r.Label == "records.row.debt"));
+        List<RecordRow> after = AccountRecords.Record("Omar", "3 May 2101", "Periclean Athens (Ancient)", Account(), key => key).Groups.SelectMany(g => g.Rows).ToList();
+        Assert.IsTrue(after.Any(r => r.Label == "records.row.standing") && after.Any(r => r.Label == "records.row.debt"));
     }
 
     /// <summary>Phase 8: a Standard account's waiver and proof of means are evidence rows under their categories (the proof under its own: Credit, Funds or PolicyNo).</summary>

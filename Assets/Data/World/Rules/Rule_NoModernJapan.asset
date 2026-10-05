@@ -18,3 +18,4 @@ MonoBehaviour:
   description: 'Typhoon warning: no travel to Showa Tokyo today.'
   kinds: 
   transponder: 
+  openPlaces: []

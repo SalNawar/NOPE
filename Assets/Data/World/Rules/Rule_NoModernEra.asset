@@ -19,3 +19,4 @@ MonoBehaviour:
     inspects its archives.'
   kinds: 
   transponder: 
+  openPlaces: []

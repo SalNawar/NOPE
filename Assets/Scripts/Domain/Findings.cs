@@ -221,6 +221,16 @@ public static class FindingRules
     /// <summary>True for a difference: what Deny can cite.</summary>
     public static bool IsDifference(FindingKind kind) => Look(kind) == FindingLook.Differ;
 
+    /// <summary>
+    /// True for a directive fault's evidence (Saleh, 2026-10-05: a denial with
+    /// no logged evidence earns a citation, a directive fault's too): a rule
+    /// held against the value it breaks, the calendar against a departure
+    /// dated another day or a Valid Until that has passed. A deviation's
+    /// evidence is its proof (DiscrepancyLog), never counted here.
+    /// </summary>
+    public static bool IsDirectiveEvidence(FindingKind kind) =>
+        kind == FindingKind.RuleBroken || kind == FindingKind.NotToday || kind == FindingKind.Expired;
+
     /// <summary>The ui string key of the line's label ("finding.link.Match").</summary>
     public static string LinkKey(FindingKind kind) => "finding.link." + kind;
 
@@ -369,6 +379,9 @@ public sealed class FindingLog
 
     /// <summary>How many logged findings are differences.</summary>
     public int Differences => _items.FindAll(f => FindingRules.IsDifference(f.Kind)).Count;
+
+    /// <summary>How many logged findings are a directive fault's evidence (FindingRules.IsDirectiveEvidence): what a denial counts beside the deviations proven.</summary>
+    public int DirectiveEvidence => _items.FindAll(f => FindingRules.IsDirectiveEvidence(f.Kind)).Count;
 
     /// <summary>Empties the log (a new case).</summary>
     public void Clear() => _items.Clear();

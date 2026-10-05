@@ -14,16 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 1
   visitorsCount: 8
-  bulletin: 'NEW: the Leisure Visa. Its name, Citizen ID, date of birth and class
-    must match the traveller''s Citizen Account.'
+  bulletin: 'NEW: your desk. Each traveller hands you a Passport. Approve only the
+    destination open today (the Directive Memo names it), a Passport still valid
+    (its Valid Until against the calendar) and a photo of the person at the desk.'
   papers:
   - TC-101
+  introduces:
+  - tool:calendar
+  - tool:rulebook
+  - app:investigation
+  - app:mail
+  - app:notes
+  - app:settings
+  - field:Name
+  - field:Destination
+  - field:Expiry
+  - field:Photo
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 1
     honest: 0
   - blueprint: {fileID: 11400000, guid: 008d4e5dfc4a491396679dcae81673aa, type: 2}
-    weight: 1
+    weight: 2
     honest: 1
   eraWeights:
   - era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
@@ -40,10 +52,11 @@ MonoBehaviour:
   costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 0
-  lieKinds: 0100000002000000
+  lieKinds: 0a000000
   violationChance: 0
   activeTravelRules:
-  - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
+  - {fileID: 11400000, guid: 1befc7facef61cc4e8b080e11d7fd399, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   guaranteeRuleViolators: 1
   forcedCases: []
   eventRules: []

@@ -96,14 +96,17 @@ public sealed class DepartureBoardView : MonoBehaviour
     /// <summary>The run's content library (the places' era and place names), or none outside a run.</summary>
     private static ContentLibrarySO Library => RunManager.HasInstance ? RunManager.Instance.Library : null;
 
-    /// <summary>The rows from <paramref name="day"/>, rewritten into the reused buffer; the tooltip is rebuilt when next shown.</summary>
+    /// <summary>The rows from <paramref name="day"/>, rewritten into the reused buffer (none, and no click box, before the board is introduced: GameManager.BoardIntroduced); the tooltip is rebuilt when next shown.</summary>
     private void Write(PortalDay day)
     {
         _shown = day;
         _tooltip = null;
         string state = ColorUtility.ToHtmlStringRGBA(config.hallBoardStateInk);
         _text.Clear();
-        foreach (BoardRow row in PortalText.BoardRows(day, _eraName, _placeName, UiText.Get))
+        bool shown = game == null || game.BoardIntroduced;
+        if (box != null)
+            box.enabled = shown;
+        foreach (BoardRow row in PortalText.BoardRows(shown ? day : PortalDay.None, _eraName, _placeName, UiText.Get))
         {
             if (_text.Length > 0)
                 _text.Append('\n');

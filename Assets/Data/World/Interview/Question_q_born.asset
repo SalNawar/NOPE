@@ -24,6 +24,12 @@ MonoBehaviour:
       text: I was born on {value}.
     overrides: []
   conditions:
+  - type: 8
+    key: 
+    threshold: 5
+    attribute: {fileID: 0}
+    profile: {fileID: 0}
+    nation: {fileID: 0}
   - type: 10
     key: interview_protocols
     threshold: 0

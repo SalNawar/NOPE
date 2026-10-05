@@ -89,5 +89,16 @@ public enum TravelRuleType
     /// recalled unit is guaranteed in the first half of the queue, and on any
     /// day it stands the violation roll may make one.
     /// </summary>
-    TransponderRecall
+    TransponderRecall,
+    /// <summary>
+    /// The open destinations (the desk-first ramp, Saleh 2026-10-05: "day 1
+    /// one destination accepted", the second on day 3, on the Departure
+    /// Board): a closure of every destination but the places it lists
+    /// (TravelRuleSO.openPlaces, "country:era" keys). A traveller bound for
+    /// any other place has a closed destination; the board shows a route it
+    /// does not list CLOSED, and the honest draw sends a traveller it applies
+    /// to only to an open place (CaseFactory), so only its planned violator
+    /// wants another.
+    /// </summary>
+    OpenDestinations
 }

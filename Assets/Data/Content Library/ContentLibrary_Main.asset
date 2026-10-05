@@ -422,9 +422,7 @@ MonoBehaviour:
     honorificUnknown: traveller
     requestLabel: Request {document}
     papersLabel: Request papers >
-    askGroups:
-    - id: proof
-      label: Proof of means
+    askGroups: []
     missingFormReplies:
     - kind: 0
       request: TC-310
@@ -432,29 +430,11 @@ MonoBehaviour:
       line:
         id: interview.missingFormReplies.RichTourist.TC-310.Honest
         text: It's a Premium unit, I don't need one.
-    - kind: 0
-      request: proof
-      variant: 0
-      line:
-        id: interview.missingFormReplies.RichTourist.proof.Honest
-        text: I pay my own way.
-    - kind: 2
-      request: proof
-      variant: 0
-      line:
-        id: interview.missingFormReplies.Labourer.proof.Honest
-        text: Debt Relief pays my way.
     - kind: 1
       request: TC-310
       variant: 1
       line:
         id: interview.missingFormReplies.PoorTourist.TC-310.Missing
-        text: I... didn't get round to that one.
-    - kind: 1
-      request: proof
-      variant: 1
-      line:
-        id: interview.missingFormReplies.PoorTourist.proof.Missing
         text: I... didn't get round to that one.
     - kind: 2
       request: TC-310
@@ -467,19 +447,13 @@ MonoBehaviour:
       variant: 0
       line:
         id: interview.missingFormReplies.Displaced.TC-230.Honest
-        text: A manifest? I was pulled out of my own time. I didn't pack.
+        text: A ticket? I was pulled out of my own time. I didn't pack.
     - kind: 3
       request: TC-310
       variant: 0
       line:
         id: interview.missingFormReplies.Displaced.TC-310.Honest
         text: A waiver? Nobody asked me anything before the sky opened.
-    - kind: 3
-      request: proof
-      variant: 0
-      line:
-        id: interview.missingFormReplies.Displaced.proof.Honest
-        text: Means? I have what was in my pockets when the sky opened.
     - kind: 0
       request: TC-620
       variant: 0
@@ -2430,23 +2404,6 @@ MonoBehaviour:
         then:
           id: 
           text: 
-      - personality: sunny
-        premade: 
-        kinds: 03000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.sunny.1
-          text: Proof of means? I have a smile and a leaflet! Attendance required!
-        then:
-          id: 
-          text: 
       - personality: grand
         premade: 
         kinds: 00000000
@@ -2484,42 +2441,6 @@ MonoBehaviour:
           text: 
       - personality: chatty
         premade: 
-        kinds: 00000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.chatty.2
-          text: Proof of means? Look at my shoes. They're on a payment plan, but
-            look at them.
-        then:
-          id: 
-          text: 
-      - personality: chatty
-        premade: 
-        kinds: 02000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.chatty.3
-          text: Means? Debt Relief is paying! That's the whole point, isn't it? Isn't
-            it?
-        then:
-          id: 
-          text: 
-      - personality: chatty
-        premade: 
         kinds: 03000000
         era: 
         key: TC-230
@@ -2530,8 +2451,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.chatty.4
-          text: A manifest? I had a basket once. The goat ate it.
+          id: interview.voices.missingForms.chatty.2
+          text: A ticket? I had a basket once. The goat ate it.
         then:
           id: 
           text: 
@@ -2547,25 +2468,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.chatty.5
+          id: interview.voices.missingForms.chatty.3
           text: A waiver? Nobody waived anything. The sky just opened. Rude, honestly.
-        then:
-          id: 
-          text: 
-      - personality: chatty
-        premade: 
-        kinds: 03000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.chatty.6
-          text: Means? I have a goat. Well, I had a goat. Back home. Long story!
         then:
           id: 
           text: 
@@ -2581,25 +2485,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.chatty.7
+          id: interview.voices.missingForms.chatty.4
           text: Oh, the waiver! I meant to, then my sister rang, and then...
-        then:
-          id: 
-          text: 
-      - personality: chatty
-        premade: 
-        kinds: 01000000
-        era: 
-        key: proof
-        variant: 1
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.chatty.8
-          text: Proof? I had it this morning. Then I had breakfast. Different pocket?
         then:
           id: 
           text: 
@@ -2615,7 +2502,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.chatty.9
+          id: interview.voices.missingForms.chatty.5
           text: Intake? No, no, I'm going. Out. Away. Big difference!
         then:
           id: 
@@ -2632,7 +2519,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.chatty.10
+          id: interview.voices.missingForms.chatty.6
           text: A return order? I've got a return booking! Is that one of those?
             It's pink.
         then:
@@ -2657,40 +2544,6 @@ MonoBehaviour:
           text: 
       - personality: curt
         premade: 
-        kinds: 00000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.curt.2
-          text: I pay. Proof enough.
-        then:
-          id: 
-          text: 
-      - personality: curt
-        premade: 
-        kinds: 02000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.curt.3
-          text: Relief pays. Next.
-        then:
-          id: 
-          text: 
-      - personality: curt
-        premade: 
         kinds: 03000000
         era: 
         key: TC-230
@@ -2701,8 +2554,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.curt.4
-          text: Manifest. Didn't pack. Sky opened.
+          id: interview.voices.missingForms.curt.2
+          text: Ticket. Didn't pack. Sky opened.
         then:
           id: 
           text: 
@@ -2718,25 +2571,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.curt.5
+          id: interview.voices.missingForms.curt.3
           text: Waiver. Never signed one. Never asked.
-        then:
-          id: 
-          text: 
-      - personality: curt
-        premade: 
-        kinds: 03000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.curt.6
-          text: Means. Pockets. That's it.
         then:
           id: 
           text: 
@@ -2752,25 +2588,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.curt.7
+          id: interview.voices.missingForms.curt.4
           text: Forgot it. Next question.
-        then:
-          id: 
-          text: 
-      - personality: curt
-        premade: 
-        kinds: 01000000
-        era: 
-        key: proof
-        variant: 1
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.curt.8
-          text: Left it at home. Move on.
         then:
           id: 
           text: 
@@ -2786,7 +2605,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.curt.9
+          id: interview.voices.missingForms.curt.5
           text: Leaving. Not arriving.
         then:
           id: 
@@ -2803,43 +2622,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.curt.10
+          id: interview.voices.missingForms.curt.6
           text: Got a return booking. Same thing.
-        then:
-          id: 
-          text: 
-      - personality: anxious
-        premade: 
-        kinds: 00000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.anxious.2
-          text: Proof of means? Do Premiums need one? Nobody told me. Did they tell
-            you?
-        then:
-          id: 
-          text: 
-      - personality: anxious
-        premade: 
-        kinds: 02000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.anxious.3
-          text: Means? Debt Relief pays. They said. Did they say? I'm sure they said.
         then:
           id: 
           text: 
@@ -2855,8 +2639,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.anxious.4
-          text: A manifest? Was I meant to pack? Nobody said the sky packs you.
+          id: interview.voices.missingForms.anxious.2
+          text: A ticket? Was I meant to pack? Nobody said the sky packs you.
         then:
           id: 
           text: 
@@ -2872,26 +2656,9 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.anxious.5
+          id: interview.voices.missingForms.anxious.3
           text: A waiver? Did I sign something? I don't remember signing. Is that
             bad?
-        then:
-          id: 
-          text: 
-      - personality: anxious
-        premade: 
-        kinds: 03000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.anxious.6
-          text: Means? I have a spoon. It was in my pocket. Is a spoon enough?
         then:
           id: 
           text: 
@@ -2907,25 +2674,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.anxious.7
+          id: interview.voices.missingForms.anxious.4
           text: The waiver. Oh no. Oh no. It's on the kitchen table. Isn't it.
-        then:
-          id: 
-          text: 
-      - personality: anxious
-        premade: 
-        kinds: 01000000
-        era: 
-        key: proof
-        variant: 1
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.anxious.8
-          text: Proof? I had it. I had it! Did I have it?
         then:
           id: 
           text: 
@@ -2941,7 +2691,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.anxious.9
+          id: interview.voices.missingForms.anxious.5
           text: An intake declaration? Am I arriving? I thought I was leaving. Am
             I?
         then:
@@ -2959,7 +2709,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.anxious.10
+          id: interview.voices.missingForms.anxious.6
           text: A return order? I have a return booking. Is that worse? Is it better?
         then:
           id: 
@@ -2976,42 +2726,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.sunny.2
+          id: interview.voices.missingForms.sunny.1
           text: 'A waiver? Oh, it''s Premium! Like the advert: travel without a care!'
-        then:
-          id: 
-          text: 
-      - personality: sunny
-        premade: 
-        kinds: 00000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.sunny.3
-          text: Proof of means? I have the means to be happy! And a card!
-        then:
-          id: 
-          text: 
-      - personality: sunny
-        premade: 
-        kinds: 02000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.sunny.4
-          text: Means? Debt Relief pays! That's the fresh start part!
         then:
           id: 
           text: 
@@ -3027,8 +2743,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.sunny.5
-          text: A manifest? I came with nothing! Travelling light! Very modern!
+          id: interview.voices.missingForms.sunny.2
+          text: A ticket? I came with nothing! Travelling light! Very modern!
         then:
           id: 
           text: 
@@ -3044,7 +2760,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.sunny.6
+          id: interview.voices.missingForms.sunny.3
           text: A waiver? I never waive anything! I say yes to everything!
         then:
           id: 
@@ -3061,25 +2777,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.sunny.7
+          id: interview.voices.missingForms.sunny.4
           text: Oops! Left it at home! Home's lovely, though!
-        then:
-          id: 
-          text: 
-      - personality: sunny
-        premade: 
-        kinds: 01000000
-        era: 
-        key: proof
-        variant: 1
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.sunny.8
-          text: Oh! I must have left it! Silly me! Silly, happy me!
         then:
           id: 
           text: 
@@ -3095,7 +2794,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.sunny.9
+          id: interview.voices.missingForms.sunny.5
           text: An intake declaration? I'm going out, not in! Out is the fun way!
         then:
           id: 
@@ -3112,42 +2811,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.sunny.10
+          id: interview.voices.missingForms.sunny.6
           text: A return order? I've got a return booking! Round trip! The best kind!
-        then:
-          id: 
-          text: 
-      - personality: grand
-        premade: 
-        kinds: 00000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.grand.2
-          text: Proof of means? My means have means.
-        then:
-          id: 
-          text: 
-      - personality: grand
-        premade: 
-        kinds: 02000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.grand.3
-          text: Means? The Relief is paying. I allowed it.
         then:
           id: 
           text: 
@@ -3163,8 +2828,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.grand.4
-          text: A manifest? I travel with staff. The staff did not come.
+          id: interview.voices.missingForms.grand.2
+          text: A ticket? I travel with staff. The staff did not come.
         then:
           id: 
           text: 
@@ -3180,25 +2845,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.grand.5
+          id: interview.voices.missingForms.grand.3
           text: A waiver? I waive nothing. I am waved through.
-        then:
-          id: 
-          text: 
-      - personality: grand
-        premade: 
-        kinds: 03000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.grand.6
-          text: Means? At home I have a house with two doors. Two.
         then:
           id: 
           text: 
@@ -3214,25 +2862,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.grand.7
+          id: interview.voices.missingForms.grand.4
           text: A waiver? My secretary handles those. I am between secretaries.
-        then:
-          id: 
-          text: 
-      - personality: grand
-        premade: 
-        kinds: 01000000
-        era: 
-        key: proof
-        variant: 1
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.grand.8
-          text: Proof? I left it with my other coat.
         then:
           id: 
           text: 
@@ -3248,7 +2879,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.grand.9
+          id: interview.voices.missingForms.grand.5
           text: An intake declaration? I don't arrive. I make an entrance, and this
             is an exit.
         then:
@@ -3266,44 +2897,9 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.grand.10
+          id: interview.voices.missingForms.grand.6
           text: A return order? I shall return when I choose. I have a booking for
             that.
-        then:
-          id: 
-          text: 
-      - personality: stickler
-        premade: 
-        kinds: 00000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.stickler.2
-          text: Premium units are exempt from proof of means. Page four, footnote
-            two.
-        then:
-          id: 
-          text: 
-      - personality: stickler
-        premade: 
-        kinds: 02000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.stickler.3
-          text: A labourer's means are the Relief's, not mine. It's in the leaflet.
         then:
           id: 
           text: 
@@ -3319,8 +2915,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.stickler.4
-          text: The displaced are not required to carry a manifest. I checked. Twice.
+          id: interview.voices.missingForms.stickler.2
+          text: The displaced are not required to carry a ticket. I checked. Twice.
         then:
           id: 
           text: 
@@ -3336,26 +2932,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.stickler.5
+          id: interview.voices.missingForms.stickler.3
           text: 'No waiver: none was offered at the time of displacement. Note that.'
-        then:
-          id: 
-          text: 
-      - personality: stickler
-        premade: 
-        kinds: 03000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.stickler.6
-          text: Proof of means is waived for the displaced. The sign behind you says
-            so.
         then:
           id: 
           text: 
@@ -3371,25 +2949,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.stickler.7
+          id: interview.voices.missingForms.stickler.4
           text: I don't have it. I know. I've already filed a complaint about myself.
-        then:
-          id: 
-          text: 
-      - personality: stickler
-        premade: 
-        kinds: 01000000
-        era: 
-        key: proof
-        variant: 1
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.stickler.8
-          text: Absent. An oversight. I'll be writing to myself about it.
         then:
           id: 
           text: 
@@ -3405,7 +2966,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.stickler.9
+          id: interview.voices.missingForms.stickler.5
           text: Intake declarations are for arrivals. I am a departure. Section one.
         then:
           id: 
@@ -3422,7 +2983,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.stickler.10
+          id: interview.voices.missingForms.stickler.6
           text: A return order is issued on return. I have not yet returned.
         then:
           id: 
@@ -3446,40 +3007,6 @@ MonoBehaviour:
           text: 
       - personality: glum
         premade: 
-        kinds: 00000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.glum.2
-          text: Proof of means? Means are mostly a feeling.
-        then:
-          id: 
-          text: 
-      - personality: glum
-        premade: 
-        kinds: 02000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.glum.3
-          text: Means? That's why I'm going.
-        then:
-          id: 
-          text: 
-      - personality: glum
-        premade: 
         kinds: 03000000
         era: 
         key: TC-230
@@ -3490,8 +3017,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.glum.4
-          text: A manifest? The sky didn't give me time to pack. Nothing does.
+          id: interview.voices.missingForms.glum.2
+          text: A ticket? The sky didn't give me time to pack. Nothing does.
         then:
           id: 
           text: 
@@ -3507,25 +3034,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.glum.5
+          id: interview.voices.missingForms.glum.3
           text: No waiver. Nobody asked. Nobody ever asks.
-        then:
-          id: 
-          text: 
-      - personality: glum
-        premade: 
-        kinds: 03000000
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.glum.6
-          text: Means. I had some once. Different life.
         then:
           id: 
           text: 
@@ -3541,25 +3051,8 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.glum.7
+          id: interview.voices.missingForms.glum.4
           text: Didn't bring it. Of course I didn't.
-        then:
-          id: 
-          text: 
-      - personality: glum
-        premade: 
-        kinds: 01000000
-        era: 
-        key: proof
-        variant: 1
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.glum.8
-          text: Left it somewhere. Along with my hopes.
         then:
           id: 
           text: 
@@ -3575,7 +3068,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.glum.9
+          id: interview.voices.missingForms.glum.5
           text: Intake? I'm leaving. Leaving's the one thing I'm good at.
         then:
           id: 
@@ -3592,7 +3085,7 @@ MonoBehaviour:
         lie: 
         outcome: 0
         line:
-          id: interview.voices.missingForms.glum.10
+          id: interview.voices.missingForms.glum.6
           text: A return order? I've got a return booking. We'll see.
         then:
           id: 
@@ -3610,7 +3103,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.socrates.1
-          text: A manifest lists what one carries. I carry only questions.
+          text: A ticket lists what one carries. I carry only questions.
         then:
           id: 
           text: 
@@ -3632,23 +3125,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: socrates
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.socrates.3
-          text: Means? I own nothing, and I am rich in it.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: khwarizmi
         kinds: 
         era: 
@@ -3661,7 +3137,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.khwarizmi.1
-          text: A manifest? What I carry is on no list. It is a method.
+          text: A ticket? What I carry is on no list. It is a method.
         then:
           id: 
           text: 
@@ -3683,23 +3159,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: khwarizmi
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.khwarizmi.3
-          text: Means? Mostly ink. And a very good idea about nothing at all.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: gutenberg
         kinds: 
         era: 
@@ -3712,7 +3171,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.gutenberg.1
-          text: A manifest? I had tools. Did I have tools? I had tools.
+          text: A ticket? I had tools. Did I have tools? I had tools.
         then:
           id: 
           text: 
@@ -3734,23 +3193,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: gutenberg
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.gutenberg.3
-          text: Means? My means are invested. In an idea. Please don't ask which.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: leonardo
         kinds: 
         era: 
@@ -3763,7 +3205,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.leonardo.1
-          text: A manifest? I carry notebooks. They were in my other coat.
+          text: A ticket? I carry notebooks. They were in my other coat.
         then:
           id: 
           text: 
@@ -3785,23 +3227,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: leonardo
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.leonardo.3
-          text: Means? My means are commissions. Most of them unfinished.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: kulthum
         kinds: 
         era: 
@@ -3814,8 +3239,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.kulthum.1
-          text: A manifest? My orchestra carries everything. My orchestra is not
-            here.
+          text: A ticket? My orchestra carries everything. My orchestra is not here.
         then:
           id: 
           text: 
@@ -3837,23 +3261,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: kulthum
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.kulthum.3
-          text: Means? A voice. It fills halls. It will fill this form, if you like.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: turing
         kinds: 
         era: 
@@ -3866,7 +3273,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.turing.1
-          text: A manifest? I carried a pencil and a problem. Both are gone.
+          text: A ticket? I carried a pencil and a problem. Both are gone.
         then:
           id: 
           text: 
@@ -3888,23 +3295,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: turing
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.turing.3
-          text: Means? A university post and a bicycle. The bicycle is at home.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: ada
         kinds: 
         era: 
@@ -3917,7 +3307,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.ada.1
-          text: A manifest? Heavens, no. I came as I was. As one does.
+          text: A ticket? Heavens, no. I came as I was. As one does.
         then:
           id: 
           text: 
@@ -3939,23 +3329,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: ada
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.ada.3
-          text: Means? My mother handles all that. She's very strict.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: ramesses
         kinds: 
         era: 
@@ -3968,7 +3341,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.ramesses.1
-          text: A manifest? Two hundred chariots and a very large statue of me.
+          text: A ticket? Two hundred chariots and a very large statue of me.
         then:
           id: 
           text: 
@@ -3990,23 +3363,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: ramesses
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.ramesses.3
-          text: Means? Egypt. And Nubia. And most of the Levant, on a good day.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: cleopatra
         kinds: 
         era: 
@@ -4019,7 +3375,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.cleopatra.1
-          text: A manifest? A carpet. Do not ask what was in it.
+          text: A ticket? A carpet. Do not ask what was in it.
         then:
           id: 
           text: 
@@ -4041,23 +3397,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: cleopatra
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.cleopatra.3
-          text: Means? The grain of the Nile. Rome eats it daily.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: saladin
         kinds: 
         era: 
@@ -4070,7 +3409,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.saladin.1
-          text: A manifest? A horse, a sword and a book of poetry.
+          text: A ticket? A horse, a sword and a book of poetry.
         then:
           id: 
           text: 
@@ -4092,23 +3431,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: saladin
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.saladin.3
-          text: Means? Very little. I gave the treasury away again.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: alexander
         kinds: 
         era: 
@@ -4121,7 +3443,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.alexander.1
-          text: A manifest? One horse. His name is Bucephalus. He is outside.
+          text: A ticket? One horse. His name is Bucephalus. He is outside.
         then:
           id: 
           text: 
@@ -4143,23 +3465,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: alexander
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.alexander.3
-          text: Means? Macedon today. Persia by next spring.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: aristotle
         kinds: 
         era: 
@@ -4172,7 +3477,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.aristotle.1
-          text: A manifest? Notes on animals, plants, stars and your desk.
+          text: A ticket? Notes on animals, plants, stars and your desk.
         then:
           id: 
           text: 
@@ -4194,23 +3499,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: aristotle
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.aristotle.3
-          text: Means? A royal salary. My pupil's father is generous.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: confucius
         kinds: 
         era: 
@@ -4223,7 +3511,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.confucius.1
-          text: A manifest? Books of songs and rites. And my students' homework.
+          text: A ticket? Books of songs and rites. And my students' homework.
         then:
           id: 
           text: 
@@ -4245,23 +3533,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: confucius
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.confucius.3
-          text: Means? My students bring dried meat. It is enough.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: suntzu
         kinds: 
         era: 
@@ -4274,7 +3545,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.suntzu.1
-          text: A manifest? Thirteen chapters on bamboo. Nothing else is needed.
+          text: A ticket? Thirteen chapters on bamboo. Nothing else is needed.
         then:
           id: 
           text: 
@@ -4296,23 +3567,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: suntzu
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.suntzu.3
-          text: Means? Every battle is won before it is fought. Funding too.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: qinshihuang
         kinds: 
         era: 
@@ -4325,7 +3579,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.qinshihuang.1
-          text: A manifest? Eight thousand clay soldiers. They are being made.
+          text: A ticket? Eight thousand clay soldiers. They are being made.
         then:
           id: 
           text: 
@@ -4347,23 +3601,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: qinshihuang
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.qinshihuang.3
-          text: Means? All under heaven. I counted it myself.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: caesar
         kinds: 
         era: 
@@ -4376,7 +3613,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.caesar.1
-          text: A manifest? Eight legions. They are waiting at the Rubicon.
+          text: A ticket? Eight legions. They are waiting at the Rubicon.
         then:
           id: 
           text: 
@@ -4398,23 +3635,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: caesar
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.caesar.3
-          text: Means? Debts, mostly. Very large debts. To very nervous men.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: archimedes
         kinds: 
         era: 
@@ -4427,7 +3647,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.archimedes.1
-          text: A manifest? A compass, a lever and a crown I must weigh.
+          text: A ticket? A compass, a lever and a crown I must weigh.
         then:
           id: 
           text: 
@@ -4449,23 +3669,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: archimedes
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.archimedes.3
-          text: Means? The king pays me to keep the Romans away.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: marcopolo
         kinds: 
         era: 
@@ -4478,7 +3681,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.marcopolo.1
-          text: A manifest? Silk, spices and a gold tablet from the Khan.
+          text: A ticket? Silk, spices and a gold tablet from the Khan.
         then:
           id: 
           text: 
@@ -4500,23 +3703,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: marcopolo
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.marcopolo.3
-          text: Means? Jewels sewn into my coat. Please do not check the lining.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: genghis
         kinds: 
         era: 
@@ -4529,7 +3715,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.genghis.1
-          text: A manifest? A horse, a bow and an empire.
+          text: A ticket? A horse, a bow and an empire.
         then:
           id: 
           text: 
@@ -4551,23 +3737,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: genghis
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.genghis.3
-          text: Means? The whole steppe. And whatever is east of it.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: galileo
         kinds: 
         era: 
@@ -4580,7 +3749,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.galileo.1
-          text: A manifest? One telescope and my notes on the moons of Jupiter.
+          text: A ticket? One telescope and my notes on the moons of Jupiter.
         then:
           id: 
           text: 
@@ -4602,23 +3771,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: galileo
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.galileo.3
-          text: Means? A professor's salary. And a spyglass I sold the Senate.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: nobunaga
         kinds: 
         era: 
@@ -4631,7 +3783,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.nobunaga.1
-          text: A manifest? Three thousand muskets. I fire them in rows.
+          text: A ticket? Three thousand muskets. I fire them in rows.
         then:
           id: 
           text: 
@@ -4653,23 +3805,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: nobunaga
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.nobunaga.3
-          text: Means? Every market from Owari to Kyoto. They pay gladly.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: hokusai
         kinds: 
         era: 
@@ -4682,7 +3817,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.hokusai.1
-          text: A manifest? Brushes, blocks and thirty-six views of a mountain.
+          text: A ticket? Brushes, blocks and thirty-six views of a mountain.
         then:
           id: 
           text: 
@@ -4704,23 +3839,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: hokusai
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.hokusai.3
-          text: Means? Prints. They sell for the price of a bowl of noodles.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: elizabeth
         kinds: 
         era: 
@@ -4733,7 +3851,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.elizabeth.1
-          text: A manifest? Our wardrobe. Three thousand gowns. Do not count them.
+          text: A ticket? Our wardrobe. Three thousand gowns. Do not count them.
         then:
           id: 
           text: 
@@ -4755,23 +3873,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: elizabeth
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.elizabeth.3
-          text: Means? England. And a company that sails to the Indies.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: newton
         kinds: 
         era: 
@@ -4784,7 +3885,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.newton.1
-          text: A manifest? Principia, three books. A prism. One apple, eaten.
+          text: A ticket? Principia, three books. A prism. One apple, eaten.
         then:
           id: 
           text: 
@@ -4806,23 +3907,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: newton
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.newton.3
-          text: Means? A professor's chair. Soon, I hope, the Mint.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: luther
         kinds: 
         era: 
@@ -4835,7 +3919,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.luther.1
-          text: A manifest? A Bible, in German, for everyone. And a hammer.
+          text: A ticket? A Bible, in German, for everyone. And a hammer.
         then:
           id: 
           text: 
@@ -4857,23 +3941,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: luther
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.luther.3
-          text: Means? None. A monk owns nothing. My wife disagrees.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: beethoven
         kinds: 
         era: 
@@ -4886,7 +3953,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.beethoven.1
-          text: A manifest? Sketchbooks. Many sketchbooks. One unfinished symphony.
+          text: A ticket? Sketchbooks. Many sketchbooks. One unfinished symphony.
         then:
           id: 
           text: 
@@ -4908,23 +3975,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: beethoven
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.beethoven.3
-          text: Means? Court wages. And lessons to rich young ladies.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: marx
         kinds: 
         era: 
@@ -4937,7 +3987,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.marx.1
-          text: A manifest? A manifesto. A short one. It is selling well.
+          text: A ticket? A manifesto. A short one. It is selling well.
         then:
           id: 
           text: 
@@ -4959,23 +4009,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: marx
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.marx.3
-          text: Means? Very few. My friend Friedrich sends money.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: hammurabi
         kinds: 
         era: 
@@ -4988,7 +4021,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.hammurabi.1
-          text: A manifest? A stone with 282 laws on it. It is heavy.
+          text: A ticket? A stone with 282 laws on it. It is heavy.
         then:
           id: 
           text: 
@@ -5011,23 +4044,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: hammurabi
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.hammurabi.3
-          text: Means? A kingdom, two rivers and a very large stone.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: michelangelo
         kinds: 
         era: 
@@ -5040,7 +4056,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.michelangelo.1
-          text: A manifest? A chisel, a mallet and a bad temper.
+          text: A ticket? A chisel, a mallet and a bad temper.
         then:
           id: 
           text: 
@@ -5062,23 +4078,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: michelangelo
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.michelangelo.3
-          text: Means? A pope will owe me money. Several, in time.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: kurosawa
         kinds: 
         era: 
@@ -5091,7 +4090,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.kurosawa.1
-          text: A manifest? A camera, a script and three hundred extras.
+          text: A ticket? A camera, a script and three hundred extras.
         then:
           id: 
           text: 
@@ -5113,23 +4112,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: kurosawa
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.kurosawa.3
-          text: Means? A studio's money. Mostly spent on horses.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: shakespeare
         kinds: 
         era: 
@@ -5142,7 +4124,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.shakespeare.1
-          text: A manifest? A quill, some foolscap and three borrowed plots.
+          text: A ticket? A quill, some foolscap and three borrowed plots.
         then:
           id: 
           text: 
@@ -5164,23 +4146,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: shakespeare
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.shakespeare.3
-          text: Means? A share in a theatre. And a second-best bed.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: darwin
         kinds: 
         era: 
@@ -5193,7 +4158,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.darwin.1
-          text: A manifest? Finches, beetles and eight volumes of notes.
+          text: A ticket? Finches, beetles and eight volumes of notes.
         then:
           id: 
           text: 
@@ -5215,23 +4180,6 @@ MonoBehaviour:
           id: 
           text: 
       - personality: 
-        premade: darwin
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.darwin.3
-          text: Means? My father's allowance. He despairs of me.
-        then:
-          id: 
-          text: 
-      - personality: 
         premade: einstein
         kinds: 
         era: 
@@ -5244,7 +4192,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.missingForms.einstein.1
-          text: A manifest? A violin, a pipe and a blackboard of sums.
+          text: A ticket? A violin, a pipe and a blackboard of sums.
         then:
           id: 
           text: 
@@ -5262,23 +4210,6 @@ MonoBehaviour:
         line:
           id: interview.voices.missingForms.einstein.2
           text: A waiver? I waive only my socks. I never wear them.
-        then:
-          id: 
-          text: 
-      - personality: 
-        premade: einstein
-        kinds: 
-        era: 
-        key: proof
-        variant: 0
-        verdict: 0
-        intent: 0
-        reason: 
-        lie: 
-        outcome: 0
-        line:
-          id: interview.voices.missingForms.einstein.3
-          text: Means? A professor's salary. And a patent for a refrigerator.
         then:
           id: 
           text: 
@@ -7151,7 +6082,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.answers.curt.6
-          text: '{value}. It''s on the visa.'
+          text: '{value}. It''s on the passport.'
         then:
           id: 
           text: 
@@ -14503,7 +13434,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.slips.anxious.2
-          text: My birthday? It's... the one on the visa. Obviously.
+          text: My birthday? It's... the one on the passport. Obviously.
         then:
           id: 
           text: 
@@ -14588,7 +13519,7 @@ MonoBehaviour:
         outcome: 0
         line:
           id: interview.voices.slips.stickler.1
-          text: Every detail on that visa is correct. I corrected them myself.
+          text: Every detail on that passport is correct. I corrected them myself.
         then:
           id: 
           text: 
@@ -15736,7 +14667,8 @@ MonoBehaviour:
       outcome: 0
       line:
         id: interview.slips.4
-        text: My details? It's all on the visa. That visa. The one you're holding.
+        text: My details? It's all on the passport. That passport. The one you're
+          holding.
       then:
         id: 
         text: 
@@ -17798,7 +16730,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7e9502c7ac4b26848bf53f9db563cc89, type: 2}
   translation:
     rules:
-      fromDay: 6
+      fromDay: 8
       tongues:
       - id: english
         displayName: English
@@ -18208,7 +17140,7 @@ MonoBehaviour:
     - number: 2
       name: Rear left
       role: 0
-      fromDay: 0
+      fromDay: 3
       repair: repair_portal_02
     - number: 3
       name: Rear right
@@ -18227,7 +17159,7 @@ MonoBehaviour:
       repair: repair_portal_05
     offices:
     - id: visa
-      name: Visa Office
+      name: Passport Office
       shape: Hexagon
       ink: Blue
       legend: VO
@@ -18242,6 +17174,7 @@ MonoBehaviour:
       forgedLegend: PR
       forms:
       - TC-230
+      - TC-240
     - id: relief
       name: Debt Relief Directorate
       shape: Shield
@@ -18301,7 +17234,7 @@ MonoBehaviour:
       variant: richForged
       optional: 0
       against: "Citizen Account \xB7 Status"
-      note: The visa's class reads above the account's status.
+      note: The passport's class reads above the account's status.
     - id: richManifestClass
       form: TC-230
       field: TransponderClass
@@ -18310,7 +17243,7 @@ MonoBehaviour:
       variant: richForged
       optional: 1
       against: "Citizen Account \xB7 Transponder class"
-      note: The manifest's class reads Premium on an Economy account.
+      note: The ticket's class reads Premium on an Economy account.
     - id: borrowedVisaClass
       form: TC-101
       field: AccountStatus
@@ -18319,7 +17252,7 @@ MonoBehaviour:
       variant: richBorrowed
       optional: 0
       against: "Citizen Account \xB7 Status"
-      note: The visa's class reads above the account's status.
+      note: The passport's class reads above the account's status.
     - id: borrowedManifestId
       form: TC-230
       field: CitizenId
@@ -18327,8 +17260,8 @@ MonoBehaviour:
       directive: 
       variant: richBorrowed
       optional: 0
-      against: "Citizen Account \xB7 Citizen ID; the visa"
-      note: 'A rich citizen''s manifest: their Citizen ID.'
+      against: "Citizen Account \xB7 Citizen ID; the passport"
+      note: 'A rich citizen''s ticket: their Citizen ID.'
     - id: borrowedManifestUnit
       form: TC-230
       field: TransponderId
@@ -18337,7 +17270,7 @@ MonoBehaviour:
       variant: richBorrowed
       optional: 0
       against: "Citizen Account \xB7 Transponder"
-      note: 'A rich citizen''s manifest: their transponder.'
+      note: 'A rich citizen''s ticket: their transponder.'
     - id: borrowedManifestClass
       form: TC-230
       field: TransponderClass
@@ -18346,7 +17279,7 @@ MonoBehaviour:
       variant: richBorrowed
       optional: 0
       against: "Citizen Account \xB7 Transponder class"
-      note: 'A rich citizen''s manifest: their Premium class.'
+      note: 'A rich citizen''s ticket: their Premium class.'
     - id: doctoredVisaId
       form: TC-101
       field: CitizenId
@@ -18354,8 +17287,8 @@ MonoBehaviour:
       directive: 
       variant: doctoredId
       optional: 0
-      against: "Citizen Account \xB7 Citizen ID; the manifest"
-      note: The visa carries another Citizen ID.
+      against: "Citizen Account \xB7 Citizen ID; the ticket"
+      note: The passport carries another Citizen ID.
     - id: doctoredVisaYear
       form: TC-101
       field: BirthDate
@@ -18364,7 +17297,7 @@ MonoBehaviour:
       variant: doctoredYear
       optional: 0
       against: "Citizen Account \xB7 Born"
-      note: The visa's birth date has another year.
+      note: The passport's birth date has another year.
     - id: debtorRichVisaClass
       form: TC-101
       field: AccountStatus
@@ -18373,7 +17306,7 @@ MonoBehaviour:
       variant: debtorAsRich
       optional: 0
       against: "Citizen Account \xB7 Status"
-      note: A debtor's visa reads a tourist's class.
+      note: A debtor's passport reads a tourist's class.
     - id: debtorRichManifestClass
       form: TC-230
       field: TransponderClass
@@ -18382,7 +17315,7 @@ MonoBehaviour:
       variant: debtorAsRich
       optional: 0
       against: "Citizen Account \xB7 Transponder class"
-      note: A debtor's manifest reads a tourist's class.
+      note: A debtor's ticket reads a tourist's class.
     - id: debtorPoorVisaClass
       form: TC-101
       field: AccountStatus
@@ -18391,7 +17324,7 @@ MonoBehaviour:
       variant: debtorAsPoor
       optional: 0
       against: "Citizen Account \xB7 Status"
-      note: A debtor's visa reads Standard.
+      note: A debtor's passport reads Standard.
     - id: debtorWaiverDebt
       form: TC-310
       field: Debt
@@ -18471,7 +17404,7 @@ MonoBehaviour:
       directive: 
       variant: transponder
       optional: 0
-      against: "Citizen Account \xB7 Transponder; the manifest"
+      against: "Citizen Account \xB7 Transponder; the ticket"
       note: Made out for another unit of the account's class.
     - id: proofCredit
       form: TC-415
@@ -18535,7 +17468,7 @@ MonoBehaviour:
       variant: photo
       optional: 1
       against: the traveller at the desk
-      note: The visa's photo shows someone else.
+      note: The passport's photo shows someone else.
     - id: photoContract
       form: TC-520
       field: Photo
@@ -18778,7 +17711,7 @@ MonoBehaviour:
       variant: economy
       optional: 0
       against: "Today's rules \xB7 paper set"
-      note: A Premium citizen's manifest books an Economy unit.
+      note: A Premium citizen's ticket books an Economy unit.
     - id: recalledUnit
       form: TC-230
       field: TransponderId
@@ -18787,7 +17720,7 @@ MonoBehaviour:
       variant: recall
       optional: 0
       against: "Today's rules \xB7 recalls"
-      note: The manifest books a recalled model.
+      note: The ticket books a recalled model.
   home:
     radioUpgrade: house_radio
     radio:

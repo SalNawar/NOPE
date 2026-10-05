@@ -14,18 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 12
   visitorsCount: 17
-  bulletin: 'NEW: the Intake Declaration. A displaced person''s coin, tongue and
-    effects must be their origin''s: they return only to their own time.'
+  bulletin: 'NEW: bans. The Directorate can close a route on the board: today Weimar
+    Berlin is CLOSED.'
   papers:
   - TC-101
   - TC-230
-  - TC-310
-  - TC-415
-  - TC-416
-  - TC-417
-  - TC-520
   - TC-610
-  - TC-620
+  - TC-240
+  - TC-310
+  - TC-520
+  introduces: []
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
@@ -34,7 +32,7 @@ MonoBehaviour:
     weight: 2
     honest: 0
   - blueprint: {fileID: 11400000, guid: baa4a99b576b463cb6e604fe113a409c, type: 2}
-    weight: 4
+    weight: 3
     honest: 0
   - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
     weight: 3
@@ -53,7 +51,6 @@ MonoBehaviour:
   allowedNations: []
   legendaryBaseChance: 0.05
   availableLegendaries:
-  - {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
   - {fileID: 11400000, guid: 28a33f99f3083054289db1cae6fe58be, type: 2}
   - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
   - {fileID: 11400000, guid: 5462a20958d55a54c9aacbe8fe90559f, type: 2}
@@ -66,25 +63,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
   - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
   - {fileID: 11400000, guid: a93b21ce48a40c940b31991a0450911c, type: 2}
-  - {fileID: 11400000, guid: d7dac8add03f81b4386aeac31d4655da, type: 2}
   tellCount: 1
-  tellChannels: 000000000100000002000000
+  tellChannels: 0000000002000000
   costumeErrorChance: 0.05
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 0100000002000000070000000500000006000000080000000000000003000000040000000a00000009000000
+  lieKinds: 01000000020000000500000006000000070000000a00000009000000
   violationChance: 0.06
   activeTravelRules:
-  - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}
-  - {fileID: 11400000, guid: a23d6b403075707429acad1c0d651b50, type: 2}
-  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: ebd4586febfb51340ac0377f4bd7b954, type: 2}
+  - {fileID: 11400000, guid: 5bb4a0a94cee20740a3b154dcbe5f43d, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
-  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
+  - {fileID: 11400000, guid: e09af0da9ce92184a87ab3dc9bca91b3, type: 2}
   - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
+  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
-  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
-  - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
-  - {fileID: 11400000, guid: 790f58e093f5e4842a8a706ca0d1cf69, type: 2}
   - {fileID: 11400000, guid: ecff6c6a25ba0d648aa6289bee8e60ef, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
@@ -94,16 +88,6 @@ MonoBehaviour:
     legendary: {fileID: 11400000, guid: ac8ed5f30f4a9ae4a9d1468b2f7a4d9e, type: 2}
     hasLie: 0
     lie: 0
-    directive: 0
-    dialogId: 
-    introLine: 
-    conditions: []
-  - caseIndex1Based: 5
-    id: ada
-    caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 8c56a684575357745b28c301ddceb3e0, type: 2}
-    hasLie: 1
-    lie: 3
     directive: 0
     dialogId: 
     introLine: 
@@ -118,20 +102,10 @@ MonoBehaviour:
     dialogId: 
     introLine: 
     conditions: []
-  - caseIndex1Based: 11
-    id: 
-    caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
-    hasLie: 0
-    lie: 0
-    directive: 0
-    dialogId: 
-    introLine: 
-    conditions: []
   - caseIndex1Based: 12
     id: 
     caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 8e80828596cb1fa4a8c67058f21fc3ac, type: 2}
+    legendary: {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
     hasLie: 0
     lie: 0
     directive: 0
@@ -141,9 +115,9 @@ MonoBehaviour:
   eventRules: []
   directorateRoutes:
   - portal: 1
-    place: {fileID: 11400000, guid: 497aafc3a0eb9f449abc80a30bbb44c0, type: 2}
-  - portal: 2
     place: {fileID: 11400000, guid: c3a68fa353acd9b4faa9c6b1bcf7f7ff, type: 2}
+  - portal: 2
+    place: {fileID: 11400000, guid: 497aafc3a0eb9f449abc80a30bbb44c0, type: 2}
   - portal: 4
     place: {fileID: 11400000, guid: 9383f580936f3af4fb17af0d5c75ca48, type: 2}
   - portal: 5

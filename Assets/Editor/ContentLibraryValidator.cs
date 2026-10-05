@@ -327,15 +327,17 @@ public static partial class ContentLibraryValidator
     }
 
     /// <summary>
-    /// The most papers one traveller carries among these blueprints: a
-    /// blueprint's templates outside a request group, plus one per group (a
+    /// The most papers one traveller carries among these blueprints on the
+    /// day of <paramref name="plan"/>: a blueprint's templates the day issues
+    /// (DayPlanSO.TemplatesOf; a form no day issues, the cut proofs of means,
+    /// is never carried) outside a request group, plus one per group (a
     /// traveller carries one form of a group, FormRequests.CarriedCount; null
-    /// blueprints and templates are skipped); 0 for no blueprints. The office
-    /// builder checks the desk's paper spawn slots against it.
+    /// blueprints and templates are skipped); 0 for no blueprints. The desk's
+    /// paper spawn slots are checked against the most of any day.
     /// </summary>
-    public static int MaxDocuments(IEnumerable<CaseBlueprintSO> blueprints) =>
+    public static int MaxDocuments(IEnumerable<CaseBlueprintSO> blueprints, DayPlanSO plan) =>
         blueprints.Where(b => b != null && b.DocumentTemplates != null)
-                  .Select(b => FormRequests.CarriedCount(b.DocumentTemplates.Where(t => t != null).Select(t => t.askGroup).ToList()))
+                  .Select(b => FormRequests.CarriedCount(plan.TemplatesOf(b).Where(t => t != null).Select(t => t.askGroup).ToList()))
                   .DefaultIfEmpty(0)
                   .Max();
 
@@ -1096,7 +1098,7 @@ public static partial class ContentLibraryValidator
             // rolled procedures and guarantees against the kinds of the day (Directives.RuleProblems, DayProblems).
             foreach (TravelRuleSO rule in plan.ActiveTravelRules.Where(r => r != null).Distinct())
                 foreach (string problem in Directives.RuleProblems(rule.name, rule.type, rule.kinds, rule.nation != null || rule.era != null, !string.IsNullOrWhiteSpace(rule.description),
-                                                                   rule.transponder, lib.Agency.transponders))
+                                                                   rule.transponder, lib.Agency.transponders, rule.openPlaces))
                 {
                     Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", rule);
                     issues++;

@@ -19,12 +19,13 @@ MonoBehaviour:
   papers:
   - TC-101
   - TC-230
-  - TC-310
-  - TC-415
-  - TC-416
-  - TC-417
-  - TC-520
   - TC-610
+  - TC-240
+  - TC-310
+  - TC-520
+  introduces:
+  - pc:standing
+  - field:Debt
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
@@ -36,7 +37,7 @@ MonoBehaviour:
     weight: 3
     honest: 0
   - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
-    weight: 3
+    weight: 2
     honest: 0
   eraWeights:
   - era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
@@ -53,6 +54,7 @@ MonoBehaviour:
   legendaryBaseChance: 0.05
   availableLegendaries:
   - {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
+  - {fileID: 11400000, guid: 28a33f99f3083054289db1cae6fe58be, type: 2}
   - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
   - {fileID: 11400000, guid: 5462a20958d55a54c9aacbe8fe90559f, type: 2}
   - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
@@ -68,17 +70,16 @@ MonoBehaviour:
   costumeErrorChance: 0.05
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 0100000002000000070000000500000006000000080000000a00000009000000
+  lieKinds: 01000000020000000500000006000000070000000a00000009000000
   violationChance: 0.06
   activeTravelRules:
-  - {fileID: 11400000, guid: 80defb191509b134eb3f107b36ecfbf9, type: 2}
-  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: d30744fc12f5efa4eadbebebfa5745ad, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
-  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
+  - {fileID: 11400000, guid: e09af0da9ce92184a87ab3dc9bca91b3, type: 2}
   - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
+  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
-  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
-  - {fileID: 11400000, guid: ecff6c6a25ba0d648aa6289bee8e60ef, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 3
@@ -91,44 +92,6 @@ MonoBehaviour:
     dialogId: 
     introLine: 
     conditions: []
-  - caseIndex1Based: 5
-    id: pell_2
-    caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 6aeaf57f8061d8b498aaefb6f30413e8, type: 2}
-    hasLie: 0
-    lie: 0
-    directive: 8
-    dialogId: dlg_pell_2
-    introLine: Next! Oh. Step forward, Ms Quimby.
-    conditions:
-    - type: 1
-      key: trig:history_pell_turned_away:fired
-      threshold: 0
-      attribute: {fileID: 0}
-      profile: {fileID: 0}
-      nation: {fileID: 0}
-    - type: 2
-      key: premade:pell:accepted
-      threshold: 0
-      attribute: {fileID: 0}
-      profile: {fileID: 0}
-      nation: {fileID: 0}
-  - caseIndex1Based: 5
-    id: pell_2_first
-    caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 6aeaf57f8061d8b498aaefb6f30413e8, type: 2}
-    hasLie: 0
-    lie: 0
-    directive: 8
-    dialogId: dlg_pell_1
-    introLine: 
-    conditions:
-    - type: 2
-      key: premade:pell:accepted
-      threshold: 0
-      attribute: {fileID: 0}
-      profile: {fileID: 0}
-      nation: {fileID: 0}
   - caseIndex1Based: 9
     id: 
     caseBlueprint: {fileID: 0}
@@ -154,8 +117,8 @@ MonoBehaviour:
   - portal: 1
     place: {fileID: 11400000, guid: 417d7ffdedfb58c4f9ac1576309b7d8f, type: 2}
   - portal: 2
-    place: {fileID: 11400000, guid: 6e8a9876a0223c64e8d90c33c5898bff, type: 2}
+    place: {fileID: 11400000, guid: 9383f580936f3af4fb17af0d5c75ca48, type: 2}
   - portal: 4
     place: {fileID: 11400000, guid: d0a42dcb62ff2374a960973f76427f5b, type: 2}
   - portal: 5
-    place: {fileID: 11400000, guid: 9383f580936f3af4fb17af0d5c75ca48, type: 2}
+    place: {fileID: 11400000, guid: 6e8a9876a0223c64e8d90c33c5898bff, type: 2}

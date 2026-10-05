@@ -27,8 +27,8 @@ public static class DayPacing
     /// <summary>A paper's pacing key: its request id (a group's id: the proofs of means are one paper).</summary>
     public static string PaperKey(string askGroup, string formNumber) => FormRequests.IdOf(askGroup, formNumber);
 
-    /// <summary>A directive's pacing key: <see cref="Closures"/> for a closure of every kind, else its asset (a procedure, or a closure listing kinds).</summary>
-    public static string RuleKey(string asset, bool closure, bool listsKinds) => closure && !listsKinds ? Closures : asset;
+    /// <summary>A directive's pacing key: <see cref="Closures"/> for a closure of every kind and for the open destinations (whatever kinds they list: the day's open places change, the check does not), else its asset (a procedure, or a closure listing kinds).</summary>
+    public static string RuleKey(string asset, bool closure, bool listsKinds, bool openDestinations = false) => openDestinations || (closure && !listsKinds) ? Closures : asset;
 
     /// <summary>
     /// The new keys of each day, in day order: item i holds the keys of
@@ -54,13 +54,22 @@ public static class DayPacing
     /// One message per pacing problem of a day: more than <see cref="MaxNewPerDay"/>
     /// new papers, more than <see cref="MaxNewPerDay"/> new directives, and
     /// something new with a blank <paramref name="bulletin"/>. A bulletin on
-    /// a day with nothing new is allowed (a notice).
+    /// a day with nothing new is allowed (a notice). The run's
+    /// <paramref name="firstDay"/> sets the baseline (the desk-first ramp:
+    /// the passport, the one open destination and its dates), so only its
+    /// bulletin is checked.
     /// </summary>
-    public static List<string> Problems(string asset, IReadOnlyCollection<string> newPapers, IReadOnlyCollection<string> newRules, string bulletin)
+    public static List<string> Problems(string asset, IReadOnlyCollection<string> newPapers, IReadOnlyCollection<string> newRules, string bulletin, bool firstDay = false)
     {
         var problems = new List<string>();
         newPapers = newPapers ?? new string[0];
         newRules = newRules ?? new string[0];
+        if (firstDay)
+        {
+            if ((newPapers.Count > 0 || newRules.Count > 0) && string.IsNullOrWhiteSpace(bulletin))
+                problems.Add($"Day '{asset}' is the first day but has no \"bulletin\": the morning briefing names what the desk checks.");
+            return problems;
+        }
         if (newPapers.Count > MaxNewPerDay)
             problems.Add($"Day '{asset}' brings {newPapers.Count} new papers ({string.Join(", ", newPapers)}); a day brings at most {MaxNewPerDay} (stage them over days in days[].papers).");
         if (newRules.Count > MaxNewPerDay)

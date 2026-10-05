@@ -19,3 +19,4 @@ MonoBehaviour:
     a panic: check the Costume Guide.'
   kinds: 
   transponder: 
+  openPlaces: []

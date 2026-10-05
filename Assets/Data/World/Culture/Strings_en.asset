@@ -881,7 +881,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: steps.class
-    text: Visa class against the account
+    text: Passport class against the account
     gloss: 0
     tier: 0
   - key: steps.transponder
@@ -901,7 +901,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: steps.waiver
-    text: Waiver against manifest and account
+    text: Waiver against ticket and account
     gloss: 0
     tier: 0
   - key: steps.means
@@ -2175,7 +2175,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: records.row.contract
-    text: Labour Contract
+    text: Work Permit
     gloss: 0
     tier: 0
   - key: records.row.departure
@@ -2223,8 +2223,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.unproven
-    text: Deviation denied without documented evidence. Log a deviation from the
-      papers, the traveller's answers or their dress before denying.
+    text: 'Denied without logged evidence. Log what is wrong before denying: a difference
+      in the papers, a rule they break or a date that fails.'
     gloss: 0
     tier: 0
   - key: citation.acceptedWrong
@@ -2512,11 +2512,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.rule.paperSet.economyManifest
-    text: A Premium visa travels on a Premium transponder.
+    text: A Premium passport travels on a Premium transponder.
     gloss: 0
     tier: 0
   - key: citation.rule.paperSet.premiumManifest
-    text: A Standard visa travels on an Economy transponder.
+    text: A Standard passport travels on an Economy transponder.
     gloss: 0
     tier: 0
   - key: citation.rule.paperSet.waiverMissing
@@ -2528,11 +2528,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.rule.paperSet.proofMissing
-    text: A Standard visa needs a proof of means.
+    text: A Standard passport needs a proof of means.
     gloss: 0
     tier: 0
   - key: citation.rule.paperSet.contractMissing
-    text: A Debt Relief departure needs a registered Labour Contract.
+    text: A Debt Relief departure needs a registered Work Permit.
     gloss: 0
     tier: 0
   - key: citation.rule.frozen
@@ -2552,7 +2552,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.rule.evidence
-    text: A denial needs a logged deviation.
+    text: A denial needs logged evidence.
     gloss: 0
     tier: 0
   - key: citation.label.destination
@@ -2592,7 +2592,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.label.logged
-    text: Deviations logged
+    text: Evidence logged
     gloss: 0
     tier: 0
   - key: citation.label.missing.waiverMissing
@@ -2604,7 +2604,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.label.missing.contractMissing
-    text: Labour Contract
+    text: Work Permit
     gloss: 0
     tier: 0
   - key: citation.value.notHandedOver

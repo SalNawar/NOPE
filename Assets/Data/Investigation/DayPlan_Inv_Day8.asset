@@ -14,17 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 8
   visitorsCount: 14
-  bulletin: 'NEW: Debt Relief labourers. A registered Labour Contract, an Economy
-    transponder and a signed Stranding Waiver.'
+  bulletin: 'NEW: Debt Relief labourers. They carry a registered Work Permit, an
+    Economy transponder and a signed Stranding Waiver.'
   papers:
   - TC-101
   - TC-230
-  - TC-310
-  - TC-415
-  - TC-416
-  - TC-417
-  - TC-520
   - TC-610
+  - TC-240
+  - TC-310
+  - TC-520
+  introduces:
+  - field:Employer
+  - field:Term
+  - field:Wage
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
@@ -58,26 +60,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5462a20958d55a54c9aacbe8fe90559f, type: 2}
   - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
   - {fileID: 11400000, guid: 34da1b6f2ba1ada479d3174b62a4f942, type: 2}
+  - {fileID: 11400000, guid: b7390dfdc90a76c4b826895a32a572de, type: 2}
   - {fileID: 11400000, guid: f6dafd30f2d3ff94094352f0d9777481, type: 2}
   - {fileID: 11400000, guid: 102b1a1da431f264789642fcf5bdeddc, type: 2}
   - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
   - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
   - {fileID: 11400000, guid: a93b21ce48a40c940b31991a0450911c, type: 2}
+  - {fileID: 11400000, guid: d7dac8add03f81b4386aeac31d4655da, type: 2}
   tellCount: 1
-  tellChannels: 0000000002000000
-  costumeErrorChance: 0.05
+  tellChannels: 00000000
+  costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 01000000020000000700000006000000080000000a00000009000000
+  lieKinds: 010000000200000006000000070000000a00000009000000
   violationChance: 0.05
   activeTravelRules:
-  - {fileID: 11400000, guid: c6838f36d34d76a4ab89183d7ddc67b7, type: 2}
-  - {fileID: 11400000, guid: 5bb4a0a94cee20740a3b154dcbe5f43d, type: 2}
-  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: c3666c51d7e278c4ba3b8753516c1a39, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
-  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
+  - {fileID: 11400000, guid: e09af0da9ce92184a87ab3dc9bca91b3, type: 2}
   - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
-  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 3
@@ -104,16 +106,6 @@ MonoBehaviour:
     id: 
     caseBlueprint: {fileID: 0}
     legendary: {fileID: 11400000, guid: 109ef1b03139e1f4c950e732b1c6d37e, type: 2}
-    hasLie: 0
-    lie: 0
-    directive: 0
-    dialogId: 
-    introLine: 
-    conditions: []
-  - caseIndex1Based: 9
-    id: 
-    caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: b7390dfdc90a76c4b826895a32a572de, type: 2}
     hasLie: 0
     lie: 0
     directive: 0

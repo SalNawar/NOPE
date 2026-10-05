@@ -36,5 +36,5 @@ MonoBehaviour:
     outcome: democracy
     amount: 12
   - factor: government
-    outcome: directorate
+    outcome: corporate_board
     amount: 6

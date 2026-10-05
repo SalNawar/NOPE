@@ -33,12 +33,15 @@ public sealed class TravelRuleSO : ScriptableObject
     /// <summary>The model a transponder recall grounds (rules[].transponder, an agency.transponders id; days 7-15 §6); blank for every other rule.</summary>
     public string transponder;
 
+    /// <summary>The places an open-destinations rule leaves open ("country:era" keys, Directives.PlaceKey; rules[].places; the desk-first ramp); empty for every other rule.</summary>
+    public string[] openPlaces;
+
     /// <summary>True for a closure: it forbids destinations, and each active one gets a planned violator (CaseFactory.PlanViolators).</summary>
     public bool IsClosure => Directives.IsClosure(type);
 
     /// <summary>The rule as the Domain predicates see it: its type, kinds and a closure's place by ids.</summary>
     public Directive Directive => new Directive(type, kinds ?? System.Array.Empty<TravellerKind>(), nation != null ? nation.id : null, era != null ? era.id : null,
-                                                string.IsNullOrWhiteSpace(transponder) ? null : transponder);
+                                                string.IsNullOrWhiteSpace(transponder) ? null : transponder, openPlaces);
 
     /// <summary>True when the rule is read for a traveller of <paramref name="kind"/> (Directive.AppliesTo).</summary>
     public bool AppliesTo(TravellerKind kind) => Directive.AppliesTo(kind);

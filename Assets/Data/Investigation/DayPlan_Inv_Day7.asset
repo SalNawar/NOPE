@@ -14,16 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 7
   visitorsCount: 14
-  bulletin: 'NEW: dress for the destination. A garment from another time or place
-    causes a panic: check the Costume Guide.'
+  bulletin: 'NEW: the Stranding Waiver. A Standard passport on an Economy transponder
+    also needs a signed waiver: ask for it.'
   papers:
   - TC-101
   - TC-230
-  - TC-310
-  - TC-415
-  - TC-416
-  - TC-417
   - TC-610
+  - TC-240
+  - TC-310
+  introduces:
+  - field:Signature
+  - field:WaiverNo
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2
@@ -54,6 +55,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5462a20958d55a54c9aacbe8fe90559f, type: 2}
   - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
   - {fileID: 11400000, guid: 34da1b6f2ba1ada479d3174b62a4f942, type: 2}
+  - {fileID: 11400000, guid: b7390dfdc90a76c4b826895a32a572de, type: 2}
   - {fileID: 11400000, guid: f6dafd30f2d3ff94094352f0d9777481, type: 2}
   - {fileID: 11400000, guid: 102b1a1da431f264789642fcf5bdeddc, type: 2}
   - {fileID: 11400000, guid: 109ef1b03139e1f4c950e732b1c6d37e, type: 2}
@@ -62,19 +64,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a93b21ce48a40c940b31991a0450911c, type: 2}
   - {fileID: 11400000, guid: d7dac8add03f81b4386aeac31d4655da, type: 2}
   tellCount: 1
-  tellChannels: 0000000002000000
-  costumeErrorChance: 0.05
+  tellChannels: 00000000
+  costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 010000000200000007000000080000000a00000009000000
+  lieKinds: 0100000002000000070000000a00000009000000
   violationChance: 0.05
   activeTravelRules:
-  - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}
-  - {fileID: 11400000, guid: a450618c1ab42a64f9962c60774c598c, type: 2}
-  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: 61a6e8ebe7f718a4d8c4a134c284aae3, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
-  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
-  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
+  - {fileID: 11400000, guid: e09af0da9ce92184a87ab3dc9bca91b3, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 3

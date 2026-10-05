@@ -57,6 +57,15 @@ public sealed class DayPlanSO : ScriptableObject
     /// </summary>
     [SerializeField] private string[] papers;
 
+    /// <summary>
+    /// What else the day introduces (the desk-first redesign, items 2, 9, 10):
+    /// the Introductions keys of the desk tools, wheel entries, PC apps and
+    /// menus, reference books and document fields that arrive today (Feature;
+    /// the papers, rules, lies and questions are read from their own lists).
+    /// Written by Generate World from world_source.json days[].introduces.
+    /// </summary>
+    [SerializeField] private string[] introduces;
+
     // -----------------------------
     // Procedural generation
     // -----------------------------
@@ -166,6 +175,9 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>True when the form numbered <paramref name="formNumber"/> is issued today (DayPapers.Issued).</summary>
     public bool Issues(string formNumber) => DayPapers.Issued(Papers, formNumber);
 
+    /// <summary>The Introductions keys the day lists in days[].introduces (tools, wheel entries, apps, books, fields).</summary>
+    public IReadOnlyList<string> Introduces => introduces ?? Array.Empty<string>();
+
     /// <summary>The templates of <paramref name="blueprint"/> issued today, in paper order (null templates skipped; none for a null blueprint): what a traveller of its kind may carry today.</summary>
     public IEnumerable<DocumentTemplateSO> TemplatesOf(CaseBlueprintSO blueprint)
     {
@@ -258,6 +270,10 @@ public sealed class DayPlanSO : ScriptableObject
         return false;
     }
 
+    /// <summary>True when an open-destinations rule stands today for a traveller of <paramref name="kind"/> (the desk-first ramp): their destination is drawn among the open places only (CaseFactory), so only a planned violator wants another.</summary>
+    public bool OpensOnly(TravellerKind kind) =>
+        activeTravelRules != null && System.Linq.Enumerable.Any(activeTravelRules, r => r != null && r.type == TravelRuleType.OpenDestinations && r.AppliesTo(kind));
+
     /// <summary>
     /// Returns true if every active rule read for a traveller of
     /// <paramref name="kind"/> permits travel to the claimed nation+era (a
@@ -294,12 +310,14 @@ public sealed class DayPlanSO : ScriptableObject
     /// in <paramref name="era"/> for every traveller (a portal's route it
     /// forbids shows CLOSED; the portals spec v3 RT2), or null when none does.
     /// A closure listing kinds (the Economy range limit) closes no portal: it
-    /// only turns some travellers away.
+    /// only turns some travellers away; the open destinations close every
+    /// route they do not list, whatever kinds they read (the routes are the
+    /// 2150 citizens').
     /// </summary>
     public string ClosureOf(NationSO nation, EraSO era)
     {
         foreach (TravelRuleSO rule in ActiveTravelRules)
-            if (rule != null && rule.IsClosure && (rule.kinds == null || rule.kinds.Length == 0) && !rule.Allows(nation, era))
+            if (rule != null && rule.IsClosure && (rule.kinds == null || rule.kinds.Length == 0 || rule.type == TravelRuleType.OpenDestinations) && !rule.Allows(nation, era))
                 return rule.Summary();
         return null;
     }

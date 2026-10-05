@@ -14,12 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 2
   visitorsCount: 10
-  bulletin: 'NEW: the Departure Manifest. Its Citizen ID, transponder and class must
-    match the Citizen Account. The visa''s photo must be the person at the desk (Look
-    > Their face).'
+  bulletin: 'NEW: the Entry Ticket. Ask for it: its Citizen ID must match the Passport''s,
+    and its departure date must be today.'
   papers:
   - TC-101
   - TC-230
+  introduces:
+  - field:CitizenId
+  - field:DepartureDate
+  - app:internet
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 3
@@ -46,10 +49,11 @@ MonoBehaviour:
   costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 01000000020000000a000000
-  violationChance: 0
+  lieKinds: 020000000a000000
+  violationChance: 0.05
   activeTravelRules:
-  - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
+  - {fileID: 11400000, guid: 527256415c2f63843ba5ad109367133b, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   guaranteeRuleViolators: 1
   forcedCases: []
   eventRules: []

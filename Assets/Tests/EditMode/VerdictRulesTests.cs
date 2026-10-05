@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-/// <summary>The verdict table (traveller types §5.2): the two fault kinds, and the evidence gate on deviation faults only.</summary>
+/// <summary>The verdict table (traveller types §5.2): the two fault kinds, and the evidence gate on every right denial (Saleh, 2026-10-05).</summary>
 public class VerdictRulesTests
 {
     [TestCase(false, false, true, Description = "no fault: accept")]
@@ -19,9 +19,10 @@ public class VerdictRulesTests
     [TestCase(true, 1, false, true, false, false, Description = "a deviation logged")]
     [TestCase(true, 0, true, true, false, false, Description = "accepted")]
     [TestCase(true, 0, false, false, false, false, Description = "no fault: a wrong denial, not an unproven one")]
-    [TestCase(true, 0, false, true, true, false, Description = "a directive fault needs no evidence")]
-    [TestCase(true, 0, false, false, true, false, Description = "a directive denial needs no evidence")]
-    public void IsUnprovenDenial_OnlyAnUnevidencedDenialOfADeviationFault(bool requireEvidence, int evidenceCount, bool accepted, bool deviation, bool directive, bool expected)
+    [TestCase(true, 0, false, true, true, true, Description = "both kinds of fault, nothing logged")]
+    [TestCase(true, 0, false, false, true, true, Description = "a directive denial needs evidence too (Saleh, 2026-10-05)")]
+    [TestCase(true, 1, false, false, true, false, Description = "a directive fault logged (a rule broken, a date that fails)")]
+    public void IsUnprovenDenial_AnUnevidencedDenialOfAnyFault(bool requireEvidence, int evidenceCount, bool accepted, bool deviation, bool directive, bool expected)
     {
         Assert.AreEqual(expected, VerdictRules.IsUnprovenDenial(requireEvidence, evidenceCount, accepted, deviation, directive));
     }

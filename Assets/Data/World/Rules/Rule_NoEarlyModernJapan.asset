@@ -18,3 +18,4 @@ MonoBehaviour:
   description: 'Sakoku seal: no travel to Tokugawa Edo today.'
   kinds: 
   transponder: 
+  openPlaces: []

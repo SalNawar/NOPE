@@ -1319,6 +1319,7 @@
         "number": 2,
         "name": "Rear left",
         "role": "Departures",
+        "fromDay": 3,
         "repair": "repair_portal_02"
       },
       {
@@ -1343,7 +1344,7 @@
     "offices": [
       {
         "id": "visa",
-        "name": "Visa Office",
+        "name": "Passport Office",
         "shape": "Hexagon",
         "ink": "Blue",
         "legend": "VO",
@@ -1360,7 +1361,8 @@
         "legend": "PH",
         "forgedLegend": "PR",
         "forms": [
-          "TC-230"
+          "TC-230",
+          "TC-240"
         ]
       },
       {
@@ -1441,7 +1443,7 @@
         "directive": "",
         "variant": "richForged",
         "against": "Citizen Account · Status",
-        "note": "The visa's class reads above the account's status."
+        "note": "The passport's class reads above the account's status."
       },
       {
         "id": "richManifestClass",
@@ -1452,7 +1454,7 @@
         "variant": "richForged",
         "optional": true,
         "against": "Citizen Account · Transponder class",
-        "note": "The manifest's class reads Premium on an Economy account."
+        "note": "The ticket's class reads Premium on an Economy account."
       },
       {
         "id": "borrowedVisaClass",
@@ -1462,7 +1464,7 @@
         "directive": "",
         "variant": "richBorrowed",
         "against": "Citizen Account · Status",
-        "note": "The visa's class reads above the account's status."
+        "note": "The passport's class reads above the account's status."
       },
       {
         "id": "borrowedManifestId",
@@ -1471,8 +1473,8 @@
         "lie": "PoorPosingAsRich",
         "directive": "",
         "variant": "richBorrowed",
-        "against": "Citizen Account · Citizen ID; the visa",
-        "note": "A rich citizen's manifest: their Citizen ID."
+        "against": "Citizen Account · Citizen ID; the passport",
+        "note": "A rich citizen's ticket: their Citizen ID."
       },
       {
         "id": "borrowedManifestUnit",
@@ -1482,7 +1484,7 @@
         "directive": "",
         "variant": "richBorrowed",
         "against": "Citizen Account · Transponder",
-        "note": "A rich citizen's manifest: their transponder."
+        "note": "A rich citizen's ticket: their transponder."
       },
       {
         "id": "borrowedManifestClass",
@@ -1492,7 +1494,7 @@
         "directive": "",
         "variant": "richBorrowed",
         "against": "Citizen Account · Transponder class",
-        "note": "A rich citizen's manifest: their Premium class."
+        "note": "A rich citizen's ticket: their Premium class."
       },
       {
         "id": "doctoredVisaId",
@@ -1501,8 +1503,8 @@
         "lie": "DoctoredIdentity",
         "directive": "",
         "variant": "doctoredId",
-        "against": "Citizen Account · Citizen ID; the manifest",
-        "note": "The visa carries another Citizen ID."
+        "against": "Citizen Account · Citizen ID; the ticket",
+        "note": "The passport carries another Citizen ID."
       },
       {
         "id": "doctoredVisaYear",
@@ -1512,7 +1514,7 @@
         "directive": "",
         "variant": "doctoredYear",
         "against": "Citizen Account · Born",
-        "note": "The visa's birth date has another year."
+        "note": "The passport's birth date has another year."
       },
       {
         "id": "debtorRichVisaClass",
@@ -1522,7 +1524,7 @@
         "directive": "",
         "variant": "debtorAsRich",
         "against": "Citizen Account · Status",
-        "note": "A debtor's visa reads a tourist's class."
+        "note": "A debtor's passport reads a tourist's class."
       },
       {
         "id": "debtorRichManifestClass",
@@ -1532,7 +1534,7 @@
         "directive": "",
         "variant": "debtorAsRich",
         "against": "Citizen Account · Transponder class",
-        "note": "A debtor's manifest reads a tourist's class."
+        "note": "A debtor's ticket reads a tourist's class."
       },
       {
         "id": "debtorPoorVisaClass",
@@ -1542,7 +1544,7 @@
         "directive": "",
         "variant": "debtorAsPoor",
         "against": "Citizen Account · Status",
-        "note": "A debtor's visa reads Standard."
+        "note": "A debtor's passport reads Standard."
       },
       {
         "id": "debtorWaiverDebt",
@@ -1633,7 +1635,7 @@
         "lie": "FakeWaiver",
         "directive": "",
         "variant": "transponder",
-        "against": "Citizen Account · Transponder; the manifest",
+        "against": "Citizen Account · Transponder; the ticket",
         "note": "Made out for another unit of the account's class."
       },
       {
@@ -1705,7 +1707,7 @@
         "variant": "photo",
         "optional": true,
         "against": "the traveller at the desk",
-        "note": "The visa's photo shows someone else."
+        "note": "The passport's photo shows someone else."
       },
       {
         "id": "photoContract",
@@ -1977,7 +1979,7 @@
         "directive": "IncompletePapers",
         "variant": "economy",
         "against": "Today's rules · paper set",
-        "note": "A Premium citizen's manifest books an Economy unit."
+        "note": "A Premium citizen's ticket books an Economy unit."
       },
       {
         "id": "recalledUnit",
@@ -1987,7 +1989,7 @@
         "directive": "RecalledTransponder",
         "variant": "recall",
         "against": "Today's rules · recalls",
-        "note": "The manifest books a recalled model."
+        "note": "The ticket books a recalled model."
       }
     ]
   },
@@ -9567,7 +9569,7 @@
     {
       "asset": "Rule_LeisureDepartures",
       "type": "Procedure",
-      "description": "Leisure departures: every paper a tourist hands over must match their Citizen Account."
+      "description": "Records: every paper must match the traveller's record, a citizen's Citizen Account or a displaced person's Displacement Registry entry."
     },
     {
       "asset": "Rule_DisplacedReturns",
@@ -9592,7 +9594,7 @@
     {
       "asset": "Rule_TouristWaiverSet",
       "type": "PaperSet",
-      "description": "A Premium visa travels on a Premium transponder. A Standard visa needs an Economy transponder and a signed Stranding Waiver.",
+      "description": "A Premium passport travels on a Premium transponder. A Standard passport needs an Economy transponder and a signed Stranding Waiver.",
       "kinds": [
         "RichTourist",
         "PoorTourist"
@@ -9601,7 +9603,7 @@
     {
       "asset": "Rule_TouristPaperSet",
       "type": "PaperSet",
-      "description": "A Premium visa travels on a Premium transponder. A Standard visa needs an Economy transponder, a signed Stranding Waiver and a proof of means: a Holiday Credit Agreement, a Proof of Funds or Travel Insurance.",
+      "description": "A Premium passport travels on a Premium transponder. A Standard passport needs an Economy transponder, a signed Stranding Waiver and a proof of means: a Holiday Credit Agreement, a Proof of Funds or Travel Insurance.",
       "kinds": [
         "RichTourist",
         "PoorTourist"
@@ -9610,7 +9612,7 @@
     {
       "asset": "Rule_LabourPaperSet",
       "type": "PaperSet",
-      "description": "Debt Relief departures: a registered Labour Contract, an Economy transponder and a signed Stranding Waiver.",
+      "description": "Debt Relief departures: a registered Work Permit, an Economy transponder and a signed Stranding Waiver.",
       "kinds": [
         "Labourer"
       ]
@@ -9634,6 +9636,223 @@
         "Labourer"
       ],
       "transponder": "driftbox3"
+    },
+    {
+      "asset": "Rule_TravelClass",
+      "type": "PaperSet",
+      "description": "Travel class: a Premium passport travels on a Premium transponder, a Standard passport on an Economy one (the Transponder Card).",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D01",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Periclean Athens only. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "greece:ancient"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D02",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Periclean Athens only. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "greece:ancient"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D03",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Periclean Athens and Republican Rome, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "greece:ancient",
+        "italy:ancient"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D04",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Republican Rome and New Kingdom Egypt, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "italy:ancient",
+        "egypt:ancient"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D05",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Periclean Athens and Abbasid Baghdad, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "greece:ancient",
+        "iraq:medieval"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D06",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: New Kingdom Egypt and Victorian Britain, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "egypt:ancient",
+        "britain:industrial"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D07",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Periclean Athens and Victorian Britain, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "greece:ancient",
+        "britain:industrial"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D08",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Victorian Britain and Wilhelmine Germany, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "britain:industrial",
+        "germany:industrial"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D09",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Khedivate of Egypt and Republican Rome, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "egypt:industrial",
+        "italy:ancient"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D10",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Periclean Athens and Qing Shanghai, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "greece:ancient",
+        "china:industrial"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D11",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Periclean Athens and Victorian Britain, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "greece:ancient",
+        "britain:industrial"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D12",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Bologna, Kingdom of Italy and Weimar Berlin, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "italy:industrial",
+        "germany:modern"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D13",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Wilhelmine Germany and Periclean Athens, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "germany:industrial",
+        "greece:ancient"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D14",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Republican Rome and Victorian Britain, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "italy:ancient",
+        "britain:industrial"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D15",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Periclean Athens and Victorian Britain, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "greece:ancient",
+        "britain:industrial"
+      ]
     }
   ],
   "days": [
@@ -9641,17 +9860,28 @@
       "asset": "DayPlan_Inv_Day1",
       "day": 1,
       "queue": 8,
-      "bulletin": "NEW: the Leisure Visa. Its name, Citizen ID, date of birth and class must match the traveller's Citizen Account.",
+      "bulletin": "NEW: your desk. Each traveller hands you a Passport. Approve only the destination open today (the Directive Memo names it), a Passport still valid (its Valid Until against the calendar) and a photo of the person at the desk.",
       "papers": [
         "TC-101"
+      ],
+      "introduces": [
+        "tool:calendar",
+        "tool:rulebook",
+        "app:investigation",
+        "app:mail",
+        "app:notes",
+        "app:settings",
+        "field:Name",
+        "field:Destination",
+        "field:Expiry",
+        "field:Photo"
       ],
       "tells": 1,
       "channels": [
         "Papers"
       ],
       "lies": [
-        "PoorPosingAsRich",
-        "DoctoredIdentity"
+        "SwappedPhoto"
       ],
       "kinds": [
         {
@@ -9660,7 +9890,7 @@
         },
         {
           "kind": "PoorTourist",
-          "weight": 1,
+          "weight": 2,
           "honest": true
         }
       ],
@@ -9677,7 +9907,8 @@
         "italy"
       ],
       "rules": [
-        "Rule_LeisureDepartures"
+        "Rule_Open_D01",
+        "Rule_PaperDates"
       ],
       "premades": [],
       "forced": [],
@@ -9712,17 +9943,21 @@
       "asset": "DayPlan_Inv_Day2",
       "day": 2,
       "queue": 10,
-      "bulletin": "NEW: the Departure Manifest. Its Citizen ID, transponder and class must match the Citizen Account. The visa's photo must be the person at the desk (Look > Their face).",
+      "bulletin": "NEW: the Entry Ticket. Ask for it: its Citizen ID must match the Passport's, and its departure date must be today.",
       "papers": [
         "TC-101",
         "TC-230"
+      ],
+      "introduces": [
+        "field:CitizenId",
+        "field:DepartureDate",
+        "app:internet"
       ],
       "tells": 1,
       "channels": [
         "Papers"
       ],
       "lies": [
-        "PoorPosingAsRich",
         "DoctoredIdentity",
         "SwappedPhoto"
       ],
@@ -9756,14 +9991,15 @@
         "britain"
       ],
       "rules": [
-        "Rule_LeisureDepartures"
+        "Rule_Open_D02",
+        "Rule_PaperDates"
       ],
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.0,
       "slipChance": 0.15,
-      "violationChance": 0.0,
+      "violationChance": 0.05,
       "returns": 1,
       "portals": [
         {
@@ -9792,20 +10028,23 @@
       "asset": "DayPlan_Inv_Day3",
       "day": 3,
       "queue": 12,
-      "bulletin": "NEW: closed destinations. Refuse anyone bound for a place today's Directive Memo closes. Every paper's seal must match its office's in the Seal Register, now on your shelf.",
+      "bulletin": "NEW: the Departure Board. A second destination opens: a traveller may leave only for a route the board shows.",
       "papers": [
         "TC-101",
         "TC-230"
+      ],
+      "introduces": [
+        "tool:board",
+        "app:portals",
+        "app:orders"
       ],
       "tells": 1,
       "channels": [
         "Papers"
       ],
       "lies": [
-        "PoorPosingAsRich",
         "DoctoredIdentity",
-        "SwappedPhoto",
-        "ForgedSeal"
+        "SwappedPhoto"
       ],
       "kinds": [
         {
@@ -9834,26 +10073,26 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoAncientEgypt",
-        "Rule_LeisureDepartures"
+        "Rule_Open_D03",
+        "Rule_PaperDates"
       ],
       "premades": [],
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.0,
       "slipChance": 0.15,
-      "violationChance": 0.0,
+      "violationChance": 0.05,
       "returns": 1,
       "portals": [
         {
           "portal": 1,
-          "country": "britain",
-          "era": "earlymodern"
+          "country": "greece",
+          "era": "ancient"
         },
         {
           "portal": 2,
-          "country": "china",
-          "era": "medieval"
+          "country": "italy",
+          "era": "ancient"
         },
         {
           "portal": 4,
@@ -9871,31 +10110,33 @@
       "asset": "DayPlan_Inv_Day4",
       "day": 4,
       "queue": 12,
-      "bulletin": "NEW: the Stranding Waiver. A Standard visa rides an Economy transponder with a signed waiver; a Premium visa rides a Premium one.",
+      "bulletin": "NEW: issuing seals. Every paper's seal must match its office's in the Seal Register, now on your shelf.",
       "papers": [
         "TC-101",
-        "TC-230",
-        "TC-310"
+        "TC-230"
+      ],
+      "introduces": [
+        "field:Seal",
+        "book:Seal"
       ],
       "tells": 1,
       "channels": [
         "Papers"
       ],
       "lies": [
-        "PoorPosingAsRich",
         "DoctoredIdentity",
-        "FakeWaiver",
         "SwappedPhoto",
         "ForgedSeal"
       ],
       "kinds": [
         {
           "kind": "RichTourist",
-          "weight": 2
+          "weight": 3
         },
         {
           "kind": "PoorTourist",
-          "weight": 2
+          "weight": 2,
+          "honest": true
         }
       ],
       "eras": [
@@ -9918,9 +10159,8 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoIndustrialBritain",
-        "Rule_LeisureDepartures",
-        "Rule_TouristWaiverSet"
+        "Rule_Open_D04",
+        "Rule_PaperDates"
       ],
       "premades": [],
       "forced": [],
@@ -9932,13 +10172,13 @@
       "portals": [
         {
           "portal": 1,
-          "country": "germany",
-          "era": "industrial"
+          "country": "italy",
+          "era": "ancient"
         },
         {
           "portal": 2,
-          "country": "britain",
-          "era": "industrial"
+          "country": "egypt",
+          "era": "ancient"
         },
         {
           "portal": 4,
@@ -9956,119 +10196,25 @@
       "asset": "DayPlan_Inv_Day5",
       "day": 5,
       "queue": 13,
-      "bulletin": "NEW: the proof of means. A Standard visa also needs a Holiday Credit Agreement, a Proof of Funds or Travel Insurance.",
+      "bulletin": "NEW: the scanner and the records. Scan a paper to read it on the PC: it must match the traveller's record (a citizen's Citizen Account; for the displaced, who now come home through your desk with a Travel Permit, the Displacement Registry).",
       "papers": [
         "TC-101",
         "TC-230",
-        "TC-310",
-        "TC-415",
-        "TC-416",
-        "TC-417"
-      ],
-      "tells": 1,
-      "channels": [
-        "Papers"
-      ],
-      "lies": [
-        "PoorPosingAsRich",
-        "DoctoredIdentity",
-        "FakeWaiver",
-        "ForgedProof",
-        "SwappedPhoto",
-        "ForgedSeal"
-      ],
-      "kinds": [
-        {
-          "kind": "RichTourist",
-          "weight": 2
-        },
-        {
-          "kind": "PoorTourist",
-          "weight": 2
-        }
-      ],
-      "eras": [
-        {
-          "era": "ancient",
-          "weight": 1
-        },
-        {
-          "era": "medieval",
-          "weight": 1
-        },
-        {
-          "era": "earlymodern",
-          "weight": 1
-        },
-        {
-          "era": "industrial",
-          "weight": 1
-        },
-        {
-          "era": "modern",
-          "weight": 1
-        }
-      ],
-      "countries": [],
-      "rules": [
-        "Rule_NoModernGermany",
-        "Rule_NoAncientEgypt",
-        "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet"
-      ],
-      "premades": [],
-      "forced": [],
-      "premadeChance": 0.0,
-      "costumeErrorChance": 0.0,
-      "slipChance": 0.15,
-      "violationChance": 0.05,
-      "returns": 1,
-      "portals": [
-        {
-          "portal": 1,
-          "country": "britain",
-          "era": "modern"
-        },
-        {
-          "portal": 2,
-          "country": "china",
-          "era": "industrial"
-        },
-        {
-          "portal": 4,
-          "country": "germany",
-          "era": "modern"
-        },
-        {
-          "portal": 5,
-          "country": "iraq",
-          "era": "ancient"
-        }
-      ]
-    },
-    {
-      "asset": "DayPlan_Inv_Day6",
-      "day": 6,
-      "queue": 14,
-      "bulletin": "NEW: the displaced. Their Displacement Certificate must match the Displacement Registry before they go home.",
-      "papers": [
-        "TC-101",
-        "TC-230",
-        "TC-310",
-        "TC-415",
-        "TC-416",
-        "TC-417",
         "TC-610"
       ],
+      "introduces": [
+        "tool:scanner",
+        "pc:records",
+        "field:BirthDate",
+        "field:Incident",
+        "app:citizen_account"
+      ],
       "tells": 1,
       "channels": [
         "Papers"
       ],
       "lies": [
-        "PoorPosingAsRich",
         "DoctoredIdentity",
-        "FakeWaiver",
-        "ForgedProof",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -10110,10 +10256,108 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoModernJapan",
+        "Rule_Open_D05",
+        "Rule_PaperDates",
+        "Rule_LeisureDepartures"
+      ],
+      "premades": [],
+      "forced": [],
+      "premadeChance": 0.0,
+      "costumeErrorChance": 0.0,
+      "slipChance": 0.15,
+      "violationChance": 0.05,
+      "returns": 1,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "greece",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
+          "country": "iraq",
+          "era": "medieval"
+        },
+        {
+          "portal": 4,
+          "country": "germany",
+          "era": "modern"
+        },
+        {
+          "portal": 5,
+          "country": "china",
+          "era": "industrial"
+        }
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day6",
+      "day": 6,
+      "queue": 14,
+      "bulletin": "NEW: the Transponder Card and travel class. A Premium passport travels on a Premium transponder, a Standard passport on an Economy one: hold the Passport's class against the card's.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-610",
+        "TC-240"
+      ],
+      "introduces": [
+        "field:AccountStatus",
+        "field:TransponderId",
+        "field:TransponderClass"
+      ],
+      "tells": 1,
+      "channels": [
+        "Papers"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "SwappedPhoto",
+        "ForgedSeal"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Displaced",
+          "weight": 2
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 1
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_Open_D06",
+        "Rule_PaperDates",
         "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
-        "Rule_DisplacedReturns"
+        "Rule_TravelClass"
       ],
       "premades": [
         "kulthum",
@@ -10141,6 +10385,11 @@
           "blueprint": ""
         },
         {
+          "slot": 9,
+          "premade": "kurosawa",
+          "blueprint": ""
+        },
+        {
           "slot": 10,
           "premade": "saladin",
           "blueprint": ""
@@ -10154,7 +10403,7 @@
       "portals": [
         {
           "portal": 1,
-          "country": "greece",
+          "country": "egypt",
           "era": "ancient"
         },
         {
@@ -10178,26 +10427,26 @@
       "asset": "DayPlan_Inv_Day7",
       "day": 7,
       "queue": 14,
-      "bulletin": "NEW: dress for the destination. A garment from another time or place causes a panic: check the Costume Guide.",
+      "bulletin": "NEW: the Stranding Waiver. A Standard passport on an Economy transponder also needs a signed waiver: ask for it.",
       "papers": [
         "TC-101",
         "TC-230",
-        "TC-310",
-        "TC-415",
-        "TC-416",
-        "TC-417",
-        "TC-610"
+        "TC-610",
+        "TC-240",
+        "TC-310"
+      ],
+      "introduces": [
+        "field:Signature",
+        "field:WaiverNo"
       ],
       "tells": 1,
       "channels": [
-        "Papers",
-        "Appearance"
+        "Papers"
       ],
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
         "FakeWaiver",
-        "ForgedProof",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -10239,12 +10488,10 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoAncientEgypt",
-        "Rule_NoModernJapan",
-        "Rule_DressForDestination",
+        "Rule_Open_D07",
+        "Rule_PaperDates",
         "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
-        "Rule_DisplacedReturns"
+        "Rule_TouristWaiverSet"
       ],
       "premades": [
         "kulthum",
@@ -10253,6 +10500,7 @@
         "caesar",
         "leonardo",
         "michelangelo",
+        "kurosawa",
         "elizabeth",
         "shakespeare",
         "darwin",
@@ -10287,7 +10535,7 @@
         }
       ],
       "premadeChance": 0.05,
-      "costumeErrorChance": 0.05,
+      "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
       "returns": 1,
@@ -10318,28 +10566,29 @@
       "asset": "DayPlan_Inv_Day8",
       "day": 8,
       "queue": 14,
-      "bulletin": "NEW: Debt Relief labourers. A registered Labour Contract, an Economy transponder and a signed Stranding Waiver.",
+      "bulletin": "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver.",
       "papers": [
         "TC-101",
         "TC-230",
+        "TC-610",
+        "TC-240",
         "TC-310",
-        "TC-415",
-        "TC-416",
-        "TC-417",
-        "TC-520",
-        "TC-610"
+        "TC-520"
+      ],
+      "introduces": [
+        "field:Employer",
+        "field:Term",
+        "field:Wage"
       ],
       "tells": 1,
       "channels": [
-        "Papers",
-        "Appearance"
+        "Papers"
       ],
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
-        "FakeWaiver",
         "ForgedContract",
-        "ForgedProof",
+        "FakeWaiver",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -10385,13 +10634,11 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoMedievalChina",
-        "Rule_NoModernGermany",
-        "Rule_DressForDestination",
+        "Rule_Open_D08",
+        "Rule_PaperDates",
         "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
-        "Rule_LabourPaperSet",
-        "Rule_DisplacedReturns"
+        "Rule_TouristWaiverSet",
+        "Rule_LabourPaperSet"
       ],
       "premades": [
         "kulthum",
@@ -10400,11 +10647,13 @@
         "caesar",
         "leonardo",
         "michelangelo",
+        "kurosawa",
         "elizabeth",
         "shakespeare",
         "turing",
         "gutenberg",
-        "luther"
+        "luther",
+        "einstein"
       ],
       "forced": [
         {
@@ -10424,18 +10673,13 @@
           "blueprint": ""
         },
         {
-          "slot": 9,
-          "premade": "kurosawa",
-          "blueprint": ""
-        },
-        {
           "slot": 10,
           "premade": "suntzu",
           "blueprint": ""
         }
       ],
       "premadeChance": 0.05,
-      "costumeErrorChance": 0.05,
+      "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
       "returns": 1,
@@ -10470,12 +10714,14 @@
       "papers": [
         "TC-101",
         "TC-230",
+        "TC-610",
+        "TC-240",
         "TC-310",
-        "TC-415",
-        "TC-416",
-        "TC-417",
-        "TC-520",
-        "TC-610"
+        "TC-520"
+      ],
+      "introduces": [
+        "wheel:clothes",
+        "book:Culture"
       ],
       "tells": 1,
       "channels": [
@@ -10485,10 +10731,8 @@
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
-        "FakeWaiver",
-        "DebtorPosingAsTourist",
         "ForgedContract",
-        "ForgedProof",
+        "FakeWaiver",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -10507,7 +10751,7 @@
         },
         {
           "kind": "Displaced",
-          "weight": 4
+          "weight": 2
         }
       ],
       "eras": [
@@ -10534,14 +10778,12 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoMedievalGreece",
-        "Rule_NoEarlyModernJapan",
-        "Rule_DressForDestination",
+        "Rule_Open_D09",
+        "Rule_PaperDates",
         "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
+        "Rule_TouristWaiverSet",
         "Rule_LabourPaperSet",
-        "Rule_DebtStanding",
-        "Rule_DisplacedReturns"
+        "Rule_DressForDestination"
       ],
       "premades": [
         "kulthum",
@@ -10593,8 +10835,8 @@
         },
         {
           "portal": 2,
-          "country": "greece",
-          "era": "medieval"
+          "country": "italy",
+          "era": "ancient"
         },
         {
           "portal": 4,
@@ -10603,8 +10845,8 @@
         },
         {
           "portal": 5,
-          "country": "italy",
-          "era": "ancient"
+          "country": "greece",
+          "era": "medieval"
         }
       ]
     },
@@ -10616,12 +10858,14 @@
       "papers": [
         "TC-101",
         "TC-230",
+        "TC-610",
+        "TC-240",
         "TC-310",
-        "TC-415",
-        "TC-416",
-        "TC-417",
-        "TC-520",
-        "TC-610"
+        "TC-520"
+      ],
+      "introduces": [
+        "pc:standing",
+        "field:Debt"
       ],
       "tells": 1,
       "channels": [
@@ -10631,10 +10875,9 @@
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
-        "FakeWaiver",
         "DebtorPosingAsTourist",
         "ForgedContract",
-        "ForgedProof",
+        "FakeWaiver",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -10653,7 +10896,7 @@
         },
         {
           "kind": "Displaced",
-          "weight": 3
+          "weight": 2
         }
       ],
       "eras": [
@@ -10680,17 +10923,17 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoBabylonia",
-        "Rule_DressForDestination",
+        "Rule_Open_D10",
+        "Rule_PaperDates",
         "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
+        "Rule_TouristWaiverSet",
         "Rule_LabourPaperSet",
-        "Rule_DebtStanding",
-        "Rule_DisplacedReturns",
-        "Rule_DriftboxRecall"
+        "Rule_DressForDestination",
+        "Rule_DebtStanding"
       ],
       "premades": [
         "kulthum",
+        "hammurabi",
         "khwarizmi",
         "caesar",
         "leonardo",
@@ -10706,6 +10949,145 @@
         {
           "slot": 3,
           "premade": "newton",
+          "blueprint": ""
+        },
+        {
+          "slot": 9,
+          "premade": "michelangelo",
+          "blueprint": ""
+        },
+        {
+          "slot": 11,
+          "premade": "turing",
+          "blueprint": ""
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
+      "violationChance": 0.06,
+      "returns": 1,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "greece",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
+          "country": "china",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "japan",
+          "era": "modern"
+        },
+        {
+          "portal": 5,
+          "country": "iraq",
+          "era": "ancient"
+        }
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day11",
+      "day": 11,
+      "queue": 16,
+      "bulletin": "NEW: no 2150 goods. Ask what they will pay with and what they carry: nothing from 2150 leaves 2150.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-610",
+        "TC-240",
+        "TC-310",
+        "TC-520"
+      ],
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "FakeWaiver",
+        "SwappedPhoto",
+        "ForgedSeal"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 3
+        },
+        {
+          "kind": "Displaced",
+          "weight": 2
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 2
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_Open_D11",
+        "Rule_PaperDates",
+        "Rule_LeisureDepartures",
+        "Rule_TouristWaiverSet",
+        "Rule_LabourPaperSet",
+        "Rule_DressForDestination",
+        "Rule_DebtStanding",
+        "Rule_DriftboxRecall"
+      ],
+      "premades": [
+        "kulthum",
+        "hammurabi",
+        "khwarizmi",
+        "caesar",
+        "leonardo",
+        "michelangelo",
+        "kurosawa",
+        "elizabeth",
+        "shakespeare",
+        "darwin",
+        "turing",
+        "gutenberg",
+        "luther",
+        "einstein"
+      ],
+      "forced": [
+        {
+          "slot": 3,
+          "premade": "confucius",
           "blueprint": ""
         },
         {
@@ -10745,13 +11127,20 @@
           ]
         },
         {
+          "slot": 7,
+          "premade": "rook",
+          "blueprint": "",
+          "id": "rook",
+          "lie": "ForgedContract"
+        },
+        {
           "slot": 9,
-          "premade": "michelangelo",
+          "premade": "aristotle",
           "blueprint": ""
         },
         {
           "slot": 11,
-          "premade": "turing",
+          "premade": "hokusai",
           "blueprint": ""
         }
       ],
@@ -10768,158 +11157,8 @@
         },
         {
           "portal": 2,
-          "country": "iraq",
-          "era": "ancient"
-        },
-        {
-          "portal": 4,
-          "country": "japan",
-          "era": "modern"
-        },
-        {
-          "portal": 5,
-          "country": "china",
-          "era": "industrial"
-        }
-      ]
-    },
-    {
-      "asset": "DayPlan_Inv_Day11",
-      "day": 11,
-      "queue": 16,
-      "bulletin": "NEW: no 2150 goods. Ask what they will pay with and what they carry: nothing from 2150 leaves 2150.",
-      "papers": [
-        "TC-101",
-        "TC-230",
-        "TC-310",
-        "TC-415",
-        "TC-416",
-        "TC-417",
-        "TC-520",
-        "TC-610"
-      ],
-      "tells": 1,
-      "channels": [
-        "Papers",
-        "Answer",
-        "Appearance"
-      ],
-      "lies": [
-        "PoorPosingAsRich",
-        "DoctoredIdentity",
-        "FakeWaiver",
-        "DebtorPosingAsTourist",
-        "ForgedContract",
-        "ForgedProof",
-        "Smuggling",
-        "SwappedPhoto",
-        "ForgedSeal"
-      ],
-      "kinds": [
-        {
-          "kind": "RichTourist",
-          "weight": 2
-        },
-        {
-          "kind": "PoorTourist",
-          "weight": 2
-        },
-        {
-          "kind": "Labourer",
-          "weight": 3
-        },
-        {
-          "kind": "Displaced",
-          "weight": 3
-        }
-      ],
-      "eras": [
-        {
-          "era": "ancient",
-          "weight": 1
-        },
-        {
-          "era": "medieval",
-          "weight": 1
-        },
-        {
-          "era": "earlymodern",
-          "weight": 1
-        },
-        {
-          "era": "industrial",
-          "weight": 2
-        },
-        {
-          "era": "modern",
-          "weight": 2
-        }
-      ],
-      "countries": [],
-      "rules": [
-        "Rule_NoJapan",
-        "Rule_DressForDestination",
-        "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
-        "Rule_LabourPaperSet",
-        "Rule_DebtStanding",
-        "Rule_DisplacedReturns",
-        "Rule_NoPresentGoods",
-        "Rule_DriftboxRecall"
-      ],
-      "premades": [
-        "hammurabi",
-        "khwarizmi",
-        "caesar",
-        "leonardo",
-        "michelangelo",
-        "elizabeth",
-        "shakespeare",
-        "darwin",
-        "turing",
-        "gutenberg",
-        "luther",
-        "einstein"
-      ],
-      "forced": [
-        {
-          "slot": 3,
-          "premade": "confucius",
-          "blueprint": ""
-        },
-        {
-          "slot": 7,
-          "premade": "rook",
-          "blueprint": "",
-          "id": "rook",
-          "lie": "ForgedContract"
-        },
-        {
-          "slot": 9,
-          "premade": "aristotle",
-          "blueprint": ""
-        },
-        {
-          "slot": 11,
-          "premade": "kulthum",
-          "blueprint": ""
-        }
-      ],
-      "premadeChance": 0.05,
-      "costumeErrorChance": 0.05,
-      "slipChance": 0.15,
-      "violationChance": 0.06,
-      "returns": 1,
-      "portals": [
-        {
-          "portal": 1,
           "country": "britain",
           "era": "industrial"
-        },
-        {
-          "portal": 2,
-          "country": "britain",
-          "era": "modern"
         },
         {
           "portal": 4,
@@ -10937,34 +11176,26 @@
       "asset": "DayPlan_Inv_Day12",
       "day": 12,
       "queue": 17,
-      "bulletin": "NEW: the Intake Declaration. A displaced person's coin, tongue and effects must be their origin's: they return only to their own time.",
+      "bulletin": "NEW: bans. The Directorate can close a route on the board: today Weimar Berlin is CLOSED.",
       "papers": [
         "TC-101",
         "TC-230",
-        "TC-310",
-        "TC-415",
-        "TC-416",
-        "TC-417",
-        "TC-520",
         "TC-610",
-        "TC-620"
+        "TC-240",
+        "TC-310",
+        "TC-520"
       ],
       "tells": 1,
       "channels": [
         "Papers",
-        "Answer",
         "Appearance"
       ],
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
-        "FakeWaiver",
         "DebtorPosingAsTourist",
         "ForgedContract",
-        "ForgedProof",
-        "FalseOrigin",
-        "FakeDisplaced",
-        "Smuggling",
+        "FakeWaiver",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -10979,7 +11210,7 @@
         },
         {
           "kind": "Labourer",
-          "weight": 4
+          "weight": 3
         },
         {
           "kind": "Displaced",
@@ -11010,20 +11241,17 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoAncientEgypt",
-        "Rule_NoEarlyModernJapan",
-        "Rule_DressForDestination",
+        "Rule_Open_D12",
+        "Rule_NoModernGermany",
+        "Rule_PaperDates",
         "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
+        "Rule_TouristWaiverSet",
         "Rule_LabourPaperSet",
+        "Rule_DressForDestination",
         "Rule_DebtStanding",
-        "Rule_DisplacedReturns",
-        "Rule_ReturnHome",
-        "Rule_NoPresentGoods",
         "Rule_DriftboxRecall"
       ],
       "premades": [
-        "kulthum",
         "hammurabi",
         "khwarizmi",
         "caesar",
@@ -11035,8 +11263,7 @@
         "darwin",
         "turing",
         "gutenberg",
-        "luther",
-        "einstein"
+        "luther"
       ],
       "forced": [
         {
@@ -11045,25 +11272,13 @@
           "blueprint": ""
         },
         {
-          "slot": 5,
-          "premade": "ada",
-          "blueprint": "",
-          "id": "ada",
-          "lie": "FakeDisplaced"
-        },
-        {
           "slot": 10,
           "premade": "qinshihuang",
           "blueprint": ""
         },
         {
-          "slot": 11,
-          "premade": "socrates",
-          "blueprint": ""
-        },
-        {
           "slot": 12,
-          "premade": "hokusai",
+          "premade": "kulthum",
           "blueprint": ""
         }
       ],
@@ -11075,13 +11290,13 @@
       "portals": [
         {
           "portal": 1,
-          "country": "germany",
-          "era": "modern"
+          "country": "italy",
+          "era": "industrial"
         },
         {
           "portal": 2,
-          "country": "italy",
-          "era": "industrial"
+          "country": "germany",
+          "era": "modern"
         },
         {
           "portal": 4,
@@ -11103,30 +11318,22 @@
       "papers": [
         "TC-101",
         "TC-230",
-        "TC-310",
-        "TC-415",
-        "TC-416",
-        "TC-417",
-        "TC-520",
         "TC-610",
-        "TC-620"
+        "TC-240",
+        "TC-310",
+        "TC-520"
       ],
       "tells": 1,
       "channels": [
         "Papers",
-        "Answer",
         "Appearance"
       ],
       "lies": [
         "PoorPosingAsRich",
         "DoctoredIdentity",
-        "FakeWaiver",
         "DebtorPosingAsTourist",
         "ForgedContract",
-        "ForgedProof",
-        "FalseOrigin",
-        "FakeDisplaced",
-        "Smuggling",
+        "FakeWaiver",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -11172,23 +11379,19 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoModernGermany",
-        "Rule_NoMedievalChina",
-        "Rule_NoEconomyAncient",
-        "Rule_DressForDestination",
+        "Rule_Open_D13",
+        "Rule_PaperDates",
         "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
+        "Rule_TouristWaiverSet",
         "Rule_LabourPaperSet",
+        "Rule_DressForDestination",
         "Rule_DebtStanding",
-        "Rule_DisplacedReturns",
-        "Rule_ReturnHome",
-        "Rule_NoPresentGoods",
-        "Rule_DriftboxRecall"
+        "Rule_DriftboxRecall",
+        "Rule_NoEconomyAncient"
       ],
       "premades": [
         "kulthum",
         "hammurabi",
-        "socrates",
         "caesar",
         "michelangelo",
         "kurosawa",
@@ -11196,7 +11399,8 @@
         "darwin",
         "turing",
         "gutenberg",
-        "luther"
+        "luther",
+        "einstein"
       ],
       "forced": [
         {
@@ -11235,13 +11439,13 @@
         },
         {
           "portal": 2,
-          "country": "britain",
-          "era": "modern"
+          "country": "greece",
+          "era": "ancient"
         },
         {
           "portal": 4,
-          "country": "greece",
-          "era": "industrial"
+          "country": "britain",
+          "era": "modern"
         },
         {
           "portal": 5,
@@ -11258,13 +11462,19 @@
       "papers": [
         "TC-101",
         "TC-230",
-        "TC-310",
-        "TC-415",
-        "TC-416",
-        "TC-417",
-        "TC-520",
         "TC-610",
+        "TC-240",
+        "TC-310",
+        "TC-520",
         "TC-620"
+      ],
+      "introduces": [
+        "field:TC-620/Currency",
+        "field:TC-620/Language",
+        "field:TC-620/Technology",
+        "book:Language",
+        "book:Geography",
+        "book:Politics"
       ],
       "tells": 1,
       "channels": [
@@ -11273,15 +11483,13 @@
         "Appearance"
       ],
       "lies": [
+        "FalseOrigin",
         "PoorPosingAsRich",
         "DoctoredIdentity",
-        "FakeWaiver",
+        "FakeDisplaced",
         "DebtorPosingAsTourist",
         "ForgedContract",
-        "ForgedProof",
-        "FalseOrigin",
-        "FakeDisplaced",
-        "Smuggling",
+        "FakeWaiver",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -11327,29 +11535,31 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoModernEra",
-        "Rule_NoEconomyAncient",
-        "Rule_DressForDestination",
-        "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
-        "Rule_LabourPaperSet",
-        "Rule_DebtStanding",
-        "Rule_DisplacedReturns",
-        "Rule_ReturnHome",
-        "Rule_NoPresentGoods",
+        "Rule_Open_D14",
         "Rule_PaperDates",
-        "Rule_DriftboxRecall"
+        "Rule_LeisureDepartures",
+        "Rule_TouristWaiverSet",
+        "Rule_LabourPaperSet",
+        "Rule_DressForDestination",
+        "Rule_DebtStanding",
+        "Rule_DriftboxRecall",
+        "Rule_NoEconomyAncient",
+        "Rule_ReturnHome"
       ],
       "premades": [
+        "kulthum",
+        "hammurabi",
         "khwarizmi",
-        "socrates",
         "caesar",
         "leonardo",
         "michelangelo",
+        "kurosawa",
         "elizabeth",
         "darwin",
+        "turing",
         "gutenberg",
-        "luther"
+        "luther",
+        "einstein"
       ],
       "forced": [
         {
@@ -11385,13 +11595,20 @@
           "lie": "DoctoredIdentity"
         },
         {
+          "slot": 5,
+          "premade": "ada",
+          "blueprint": "",
+          "id": "ada",
+          "lie": "FakeDisplaced"
+        },
+        {
           "slot": 10,
           "premade": "marcopolo",
           "blueprint": ""
         },
         {
-          "slot": 12,
-          "premade": "hammurabi",
+          "slot": 11,
+          "premade": "socrates",
           "blueprint": ""
         }
       ],
@@ -11431,12 +11648,10 @@
       "papers": [
         "TC-101",
         "TC-230",
-        "TC-310",
-        "TC-415",
-        "TC-416",
-        "TC-417",
-        "TC-520",
         "TC-610",
+        "TC-240",
+        "TC-310",
+        "TC-520",
         "TC-620",
         "TC-630"
       ],
@@ -11447,15 +11662,13 @@
         "Appearance"
       ],
       "lies": [
+        "FalseOrigin",
         "PoorPosingAsRich",
         "DoctoredIdentity",
-        "FakeWaiver",
+        "FakeDisplaced",
         "DebtorPosingAsTourist",
         "ForgedContract",
-        "ForgedProof",
-        "FalseOrigin",
-        "FakeDisplaced",
-        "Smuggling",
+        "FakeWaiver",
         "SwappedPhoto",
         "ForgedSeal"
       ],
@@ -11501,30 +11714,28 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoIndustrialBritain",
-        "Rule_NoModernJapan",
-        "Rule_NoEconomyAncient",
-        "Rule_DressForDestination",
-        "Rule_LeisureDepartures",
-        "Rule_TouristPaperSet",
-        "Rule_LabourPaperSet",
-        "Rule_DebtStanding",
-        "Rule_DisplacedReturns",
-        "Rule_ReturnHome",
-        "Rule_NoPresentGoods",
+        "Rule_Open_D15",
         "Rule_PaperDates",
-        "Rule_DriftboxRecall"
+        "Rule_LeisureDepartures",
+        "Rule_TouristWaiverSet",
+        "Rule_LabourPaperSet",
+        "Rule_DressForDestination",
+        "Rule_DebtStanding",
+        "Rule_DriftboxRecall",
+        "Rule_NoEconomyAncient",
+        "Rule_ReturnHome"
       ],
       "premades": [
         "kulthum",
-        "hammurabi",
         "khwarizmi",
         "socrates",
         "caesar",
         "leonardo",
         "michelangelo",
+        "kurosawa",
         "elizabeth",
         "shakespeare",
+        "darwin",
         "turing",
         "gutenberg",
         "luther",
@@ -11574,6 +11785,11 @@
           "slot": 10,
           "premade": "archimedes",
           "blueprint": ""
+        },
+        {
+          "slot": 12,
+          "premade": "hammurabi",
+          "blueprint": ""
         }
       ],
       "premadeChance": 0.05,
@@ -11589,13 +11805,13 @@
         },
         {
           "portal": 2,
-          "country": "italy",
-          "era": "ancient"
+          "country": "britain",
+          "era": "industrial"
         },
         {
           "portal": 4,
-          "country": "britain",
-          "era": "industrial"
+          "country": "italy",
+          "era": "ancient"
         },
         {
           "portal": 5,
@@ -11695,12 +11911,7 @@
     "honorificUnknown": "traveller",
     "requestLabel": "Request {document}",
     "papersLabel": "Request papers >",
-    "askGroups": [
-      {
-        "id": "proof",
-        "label": "Proof of means"
-      }
-    ],
+    "askGroups": [],
     "requestPrompt": "Your {document}, please.",
     "requestReply": "Here you are.",
     "askLabel": "Ask about the trip >",
@@ -11729,26 +11940,8 @@
         "text": "It's a Premium unit, I don't need one."
       },
       {
-        "kind": "RichTourist",
-        "request": "proof",
-        "variant": "Honest",
-        "text": "I pay my own way."
-      },
-      {
-        "kind": "Labourer",
-        "request": "proof",
-        "variant": "Honest",
-        "text": "Debt Relief pays my way."
-      },
-      {
         "kind": "PoorTourist",
         "request": "TC-310",
-        "variant": "Missing",
-        "text": "I... didn't get round to that one."
-      },
-      {
-        "kind": "PoorTourist",
-        "request": "proof",
         "variant": "Missing",
         "text": "I... didn't get round to that one."
       },
@@ -11762,19 +11955,13 @@
         "kind": "Displaced",
         "request": "TC-230",
         "variant": "Honest",
-        "text": "A manifest? I was pulled out of my own time. I didn't pack."
+        "text": "A ticket? I was pulled out of my own time. I didn't pack."
       },
       {
         "kind": "Displaced",
         "request": "TC-310",
         "variant": "Honest",
         "text": "A waiver? Nobody asked me anything before the sky opened."
-      },
-      {
-        "kind": "Displaced",
-        "request": "proof",
-        "variant": "Honest",
-        "text": "Means? I have what was in my pockets when the sky opened."
       },
       {
         "kind": "RichTourist",
@@ -12359,15 +12546,6 @@
           "text": "A waiver? Do I need one? It's Premium. Premium never fails. Does it?"
         },
         {
-          "personality": "sunny",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Displaced"
-          ],
-          "text": "Proof of means? I have a smile and a leaflet! Attendance required!"
-        },
-        {
           "personality": "grand",
           "request": "TC-310",
           "variant": "Honest",
@@ -12387,30 +12565,12 @@
         },
         {
           "personality": "chatty",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "RichTourist"
-          ],
-          "text": "Proof of means? Look at my shoes. They're on a payment plan, but look at them."
-        },
-        {
-          "personality": "chatty",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Labourer"
-          ],
-          "text": "Means? Debt Relief is paying! That's the whole point, isn't it? Isn't it?"
-        },
-        {
-          "personality": "chatty",
           "request": "TC-230",
           "variant": "Honest",
           "kinds": [
             "Displaced"
           ],
-          "text": "A manifest? I had a basket once. The goat ate it."
+          "text": "A ticket? I had a basket once. The goat ate it."
         },
         {
           "personality": "chatty",
@@ -12423,15 +12583,6 @@
         },
         {
           "personality": "chatty",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Displaced"
-          ],
-          "text": "Means? I have a goat. Well, I had a goat. Back home. Long story!"
-        },
-        {
-          "personality": "chatty",
           "request": "TC-310",
           "variant": "Missing",
           "kinds": [
@@ -12439,15 +12590,6 @@
             "Labourer"
           ],
           "text": "Oh, the waiver! I meant to, then my sister rang, and then..."
-        },
-        {
-          "personality": "chatty",
-          "request": "proof",
-          "variant": "Missing",
-          "kinds": [
-            "PoorTourist"
-          ],
-          "text": "Proof? I had it this morning. Then I had breakfast. Different pocket?"
         },
         {
           "personality": "chatty",
@@ -12482,30 +12624,12 @@
         },
         {
           "personality": "curt",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "RichTourist"
-          ],
-          "text": "I pay. Proof enough."
-        },
-        {
-          "personality": "curt",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Labourer"
-          ],
-          "text": "Relief pays. Next."
-        },
-        {
-          "personality": "curt",
           "request": "TC-230",
           "variant": "Honest",
           "kinds": [
             "Displaced"
           ],
-          "text": "Manifest. Didn't pack. Sky opened."
+          "text": "Ticket. Didn't pack. Sky opened."
         },
         {
           "personality": "curt",
@@ -12518,15 +12642,6 @@
         },
         {
           "personality": "curt",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Displaced"
-          ],
-          "text": "Means. Pockets. That's it."
-        },
-        {
-          "personality": "curt",
           "request": "TC-310",
           "variant": "Missing",
           "kinds": [
@@ -12534,15 +12649,6 @@
             "Labourer"
           ],
           "text": "Forgot it. Next question."
-        },
-        {
-          "personality": "curt",
-          "request": "proof",
-          "variant": "Missing",
-          "kinds": [
-            "PoorTourist"
-          ],
-          "text": "Left it at home. Move on."
         },
         {
           "personality": "curt",
@@ -12568,30 +12674,12 @@
         },
         {
           "personality": "anxious",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "RichTourist"
-          ],
-          "text": "Proof of means? Do Premiums need one? Nobody told me. Did they tell you?"
-        },
-        {
-          "personality": "anxious",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Labourer"
-          ],
-          "text": "Means? Debt Relief pays. They said. Did they say? I'm sure they said."
-        },
-        {
-          "personality": "anxious",
           "request": "TC-230",
           "variant": "Honest",
           "kinds": [
             "Displaced"
           ],
-          "text": "A manifest? Was I meant to pack? Nobody said the sky packs you."
+          "text": "A ticket? Was I meant to pack? Nobody said the sky packs you."
         },
         {
           "personality": "anxious",
@@ -12604,15 +12692,6 @@
         },
         {
           "personality": "anxious",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Displaced"
-          ],
-          "text": "Means? I have a spoon. It was in my pocket. Is a spoon enough?"
-        },
-        {
-          "personality": "anxious",
           "request": "TC-310",
           "variant": "Missing",
           "kinds": [
@@ -12620,15 +12699,6 @@
             "Labourer"
           ],
           "text": "The waiver. Oh no. Oh no. It's on the kitchen table. Isn't it."
-        },
-        {
-          "personality": "anxious",
-          "request": "proof",
-          "variant": "Missing",
-          "kinds": [
-            "PoorTourist"
-          ],
-          "text": "Proof? I had it. I had it! Did I have it?"
         },
         {
           "personality": "anxious",
@@ -12663,30 +12733,12 @@
         },
         {
           "personality": "sunny",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "RichTourist"
-          ],
-          "text": "Proof of means? I have the means to be happy! And a card!"
-        },
-        {
-          "personality": "sunny",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Labourer"
-          ],
-          "text": "Means? Debt Relief pays! That's the fresh start part!"
-        },
-        {
-          "personality": "sunny",
           "request": "TC-230",
           "variant": "Honest",
           "kinds": [
             "Displaced"
           ],
-          "text": "A manifest? I came with nothing! Travelling light! Very modern!"
+          "text": "A ticket? I came with nothing! Travelling light! Very modern!"
         },
         {
           "personality": "sunny",
@@ -12706,15 +12758,6 @@
             "Labourer"
           ],
           "text": "Oops! Left it at home! Home's lovely, though!"
-        },
-        {
-          "personality": "sunny",
-          "request": "proof",
-          "variant": "Missing",
-          "kinds": [
-            "PoorTourist"
-          ],
-          "text": "Oh! I must have left it! Silly me! Silly, happy me!"
         },
         {
           "personality": "sunny",
@@ -12740,30 +12783,12 @@
         },
         {
           "personality": "grand",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "RichTourist"
-          ],
-          "text": "Proof of means? My means have means."
-        },
-        {
-          "personality": "grand",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Labourer"
-          ],
-          "text": "Means? The Relief is paying. I allowed it."
-        },
-        {
-          "personality": "grand",
           "request": "TC-230",
           "variant": "Honest",
           "kinds": [
             "Displaced"
           ],
-          "text": "A manifest? I travel with staff. The staff did not come."
+          "text": "A ticket? I travel with staff. The staff did not come."
         },
         {
           "personality": "grand",
@@ -12776,15 +12801,6 @@
         },
         {
           "personality": "grand",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Displaced"
-          ],
-          "text": "Means? At home I have a house with two doors. Two."
-        },
-        {
-          "personality": "grand",
           "request": "TC-310",
           "variant": "Missing",
           "kinds": [
@@ -12792,15 +12808,6 @@
             "Labourer"
           ],
           "text": "A waiver? My secretary handles those. I am between secretaries."
-        },
-        {
-          "personality": "grand",
-          "request": "proof",
-          "variant": "Missing",
-          "kinds": [
-            "PoorTourist"
-          ],
-          "text": "Proof? I left it with my other coat."
         },
         {
           "personality": "grand",
@@ -12826,30 +12833,12 @@
         },
         {
           "personality": "stickler",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "RichTourist"
-          ],
-          "text": "Premium units are exempt from proof of means. Page four, footnote two."
-        },
-        {
-          "personality": "stickler",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Labourer"
-          ],
-          "text": "A labourer's means are the Relief's, not mine. It's in the leaflet."
-        },
-        {
-          "personality": "stickler",
           "request": "TC-230",
           "variant": "Honest",
           "kinds": [
             "Displaced"
           ],
-          "text": "The displaced are not required to carry a manifest. I checked. Twice."
+          "text": "The displaced are not required to carry a ticket. I checked. Twice."
         },
         {
           "personality": "stickler",
@@ -12862,15 +12851,6 @@
         },
         {
           "personality": "stickler",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Displaced"
-          ],
-          "text": "Proof of means is waived for the displaced. The sign behind you says so."
-        },
-        {
-          "personality": "stickler",
           "request": "TC-310",
           "variant": "Missing",
           "kinds": [
@@ -12878,15 +12858,6 @@
             "Labourer"
           ],
           "text": "I don't have it. I know. I've already filed a complaint about myself."
-        },
-        {
-          "personality": "stickler",
-          "request": "proof",
-          "variant": "Missing",
-          "kinds": [
-            "PoorTourist"
-          ],
-          "text": "Absent. An oversight. I'll be writing to myself about it."
         },
         {
           "personality": "stickler",
@@ -12921,30 +12892,12 @@
         },
         {
           "personality": "glum",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "RichTourist"
-          ],
-          "text": "Proof of means? Means are mostly a feeling."
-        },
-        {
-          "personality": "glum",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Labourer"
-          ],
-          "text": "Means? That's why I'm going."
-        },
-        {
-          "personality": "glum",
           "request": "TC-230",
           "variant": "Honest",
           "kinds": [
             "Displaced"
           ],
-          "text": "A manifest? The sky didn't give me time to pack. Nothing does."
+          "text": "A ticket? The sky didn't give me time to pack. Nothing does."
         },
         {
           "personality": "glum",
@@ -12957,15 +12910,6 @@
         },
         {
           "personality": "glum",
-          "request": "proof",
-          "variant": "Honest",
-          "kinds": [
-            "Displaced"
-          ],
-          "text": "Means. I had some once. Different life."
-        },
-        {
-          "personality": "glum",
           "request": "TC-310",
           "variant": "Missing",
           "kinds": [
@@ -12973,15 +12917,6 @@
             "Labourer"
           ],
           "text": "Didn't bring it. Of course I didn't."
-        },
-        {
-          "personality": "glum",
-          "request": "proof",
-          "variant": "Missing",
-          "kinds": [
-            "PoorTourist"
-          ],
-          "text": "Left it somewhere. Along with my hopes."
         },
         {
           "personality": "glum",
@@ -13009,7 +12944,7 @@
           "premade": "socrates",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest lists what one carries. I carry only questions."
+          "text": "A ticket lists what one carries. I carry only questions."
         },
         {
           "premade": "socrates",
@@ -13018,16 +12953,10 @@
           "text": "A waiver? Can one waive what one never had?"
         },
         {
-          "premade": "socrates",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? I own nothing, and I am rich in it."
-        },
-        {
           "premade": "khwarizmi",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? What I carry is on no list. It is a method."
+          "text": "A ticket? What I carry is on no list. It is a method."
         },
         {
           "premade": "khwarizmi",
@@ -13036,16 +12965,10 @@
           "text": "A waiver? One cannot waive a quantity one never had."
         },
         {
-          "premade": "khwarizmi",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Mostly ink. And a very good idea about nothing at all."
-        },
-        {
           "premade": "gutenberg",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? I had tools. Did I have tools? I had tools."
+          "text": "A ticket? I had tools. Did I have tools? I had tools."
         },
         {
           "premade": "gutenberg",
@@ -13054,16 +12977,10 @@
           "text": "A waiver? I signed nothing. I sign nothing. Lawyers everywhere."
         },
         {
-          "premade": "gutenberg",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? My means are invested. In an idea. Please don't ask which."
-        },
-        {
           "premade": "leonardo",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? I carry notebooks. They were in my other coat."
+          "text": "A ticket? I carry notebooks. They were in my other coat."
         },
         {
           "premade": "leonardo",
@@ -13072,16 +12989,10 @@
           "text": "A waiver? I have sketched many machines. None for signing things."
         },
         {
-          "premade": "leonardo",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? My means are commissions. Most of them unfinished."
-        },
-        {
           "premade": "kulthum",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? My orchestra carries everything. My orchestra is not here."
+          "text": "A ticket? My orchestra carries everything. My orchestra is not here."
         },
         {
           "premade": "kulthum",
@@ -13090,16 +13001,10 @@
           "text": "A waiver? I waive nothing. Ask any concert promoter."
         },
         {
-          "premade": "kulthum",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A voice. It fills halls. It will fill this form, if you like."
-        },
-        {
           "premade": "turing",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? I carried a pencil and a problem. Both are gone."
+          "text": "A ticket? I carried a pencil and a problem. Both are gone."
         },
         {
           "premade": "turing",
@@ -13108,16 +13013,10 @@
           "text": "A waiver? Logically, I never agreed to anything."
         },
         {
-          "premade": "turing",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A university post and a bicycle. The bicycle is at home."
-        },
-        {
           "premade": "ada",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Heavens, no. I came as I was. As one does."
+          "text": "A ticket? Heavens, no. I came as I was. As one does."
         },
         {
           "premade": "ada",
@@ -13126,16 +13025,10 @@
           "text": "A waiver? No one asked me to sign anything. How rude of the sky."
         },
         {
-          "premade": "ada",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? My mother handles all that. She's very strict."
-        },
-        {
           "premade": "ramesses",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Two hundred chariots and a very large statue of me."
+          "text": "A ticket? Two hundred chariots and a very large statue of me."
         },
         {
           "premade": "ramesses",
@@ -13144,16 +13037,10 @@
           "text": "A waiver? I wrote the first peace treaty. I do not sign other people's."
         },
         {
-          "premade": "ramesses",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Egypt. And Nubia. And most of the Levant, on a good day."
-        },
-        {
           "premade": "cleopatra",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? A carpet. Do not ask what was in it."
+          "text": "A ticket? A carpet. Do not ask what was in it."
         },
         {
           "premade": "cleopatra",
@@ -13162,16 +13049,10 @@
           "text": "A waiver? I am a queen. I waive, I do not sign."
         },
         {
-          "premade": "cleopatra",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? The grain of the Nile. Rome eats it daily."
-        },
-        {
           "premade": "saladin",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? A horse, a sword and a book of poetry."
+          "text": "A ticket? A horse, a sword and a book of poetry."
         },
         {
           "premade": "saladin",
@@ -13180,16 +13061,10 @@
           "text": "A waiver? I keep my word without one. It has been enough so far."
         },
         {
-          "premade": "saladin",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Very little. I gave the treasury away again."
-        },
-        {
           "premade": "alexander",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? One horse. His name is Bucephalus. He is outside."
+          "text": "A ticket? One horse. His name is Bucephalus. He is outside."
         },
         {
           "premade": "alexander",
@@ -13198,16 +13073,10 @@
           "text": "A waiver? I cut through knots. I do not sign them."
         },
         {
-          "premade": "alexander",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Macedon today. Persia by next spring."
-        },
-        {
           "premade": "aristotle",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Notes on animals, plants, stars and your desk."
+          "text": "A ticket? Notes on animals, plants, stars and your desk."
         },
         {
           "premade": "aristotle",
@@ -13216,16 +13085,10 @@
           "text": "A waiver? First define the waiver. Then we may discuss it."
         },
         {
-          "premade": "aristotle",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A royal salary. My pupil's father is generous."
-        },
-        {
           "premade": "confucius",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Books of songs and rites. And my students' homework."
+          "text": "A ticket? Books of songs and rites. And my students' homework."
         },
         {
           "premade": "confucius",
@@ -13234,16 +13097,10 @@
           "text": "A waiver? Is it proper to waive one's duty? Let us think on it."
         },
         {
-          "premade": "confucius",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? My students bring dried meat. It is enough."
-        },
-        {
           "premade": "suntzu",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Thirteen chapters on bamboo. Nothing else is needed."
+          "text": "A ticket? Thirteen chapters on bamboo. Nothing else is needed."
         },
         {
           "premade": "suntzu",
@@ -13252,16 +13109,10 @@
           "text": "A waiver? The best victory is the one that needs no signature."
         },
         {
-          "premade": "suntzu",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Every battle is won before it is fought. Funding too."
-        },
-        {
           "premade": "qinshihuang",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Eight thousand clay soldiers. They are being made."
+          "text": "A ticket? Eight thousand clay soldiers. They are being made."
         },
         {
           "premade": "qinshihuang",
@@ -13270,16 +13121,10 @@
           "text": "A waiver? I am searching for an elixir of life. Waivers are for others."
         },
         {
-          "premade": "qinshihuang",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? All under heaven. I counted it myself."
-        },
-        {
           "premade": "caesar",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Eight legions. They are waiting at the Rubicon."
+          "text": "A ticket? Eight legions. They are waiting at the Rubicon."
         },
         {
           "premade": "caesar",
@@ -13288,16 +13133,10 @@
           "text": "A waiver? The die is cast. I do not sign after the die."
         },
         {
-          "premade": "caesar",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Debts, mostly. Very large debts. To very nervous men."
-        },
-        {
           "premade": "archimedes",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? A compass, a lever and a crown I must weigh."
+          "text": "A ticket? A compass, a lever and a crown I must weigh."
         },
         {
           "premade": "archimedes",
@@ -13306,16 +13145,10 @@
           "text": "A waiver? Is it heavier than water? Let me check."
         },
         {
-          "premade": "archimedes",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? The king pays me to keep the Romans away."
-        },
-        {
           "premade": "marcopolo",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Silk, spices and a gold tablet from the Khan."
+          "text": "A ticket? Silk, spices and a gold tablet from the Khan."
         },
         {
           "premade": "marcopolo",
@@ -13324,16 +13157,10 @@
           "text": "A waiver? At the Khan's court, a gold tablet was enough."
         },
         {
-          "premade": "marcopolo",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Jewels sewn into my coat. Please do not check the lining."
-        },
-        {
           "premade": "genghis",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? A horse, a bow and an empire."
+          "text": "A ticket? A horse, a bow and an empire."
         },
         {
           "premade": "genghis",
@@ -13342,16 +13169,10 @@
           "text": "A waiver? My law is the Yassa. It has no waivers."
         },
         {
-          "premade": "genghis",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? The whole steppe. And whatever is east of it."
-        },
-        {
           "premade": "galileo",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? One telescope and my notes on the moons of Jupiter."
+          "text": "A ticket? One telescope and my notes on the moons of Jupiter."
         },
         {
           "premade": "galileo",
@@ -13360,16 +13181,10 @@
           "text": "A waiver? I have had enough trouble signing things."
         },
         {
-          "premade": "galileo",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A professor's salary. And a spyglass I sold the Senate."
-        },
-        {
           "premade": "nobunaga",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Three thousand muskets. I fire them in rows."
+          "text": "A ticket? Three thousand muskets. I fire them in rows."
         },
         {
           "premade": "nobunaga",
@@ -13378,16 +13193,10 @@
           "text": "A waiver? I tore up the guild rules. I can tear up yours."
         },
         {
-          "premade": "nobunaga",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Every market from Owari to Kyoto. They pay gladly."
-        },
-        {
           "premade": "hokusai",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Brushes, blocks and thirty-six views of a mountain."
+          "text": "A ticket? Brushes, blocks and thirty-six views of a mountain."
         },
         {
           "premade": "hokusai",
@@ -13396,16 +13205,10 @@
           "text": "A waiver? I would rather draw one. Sign it? No."
         },
         {
-          "premade": "hokusai",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Prints. They sell for the price of a bowl of noodles."
-        },
-        {
           "premade": "elizabeth",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Our wardrobe. Three thousand gowns. Do not count them."
+          "text": "A ticket? Our wardrobe. Three thousand gowns. Do not count them."
         },
         {
           "premade": "elizabeth",
@@ -13414,16 +13217,10 @@
           "text": "A waiver? We sign charters, not waivers."
         },
         {
-          "premade": "elizabeth",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? England. And a company that sails to the Indies."
-        },
-        {
           "premade": "newton",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Principia, three books. A prism. One apple, eaten."
+          "text": "A ticket? Principia, three books. A prism. One apple, eaten."
         },
         {
           "premade": "newton",
@@ -13432,16 +13229,10 @@
           "text": "A waiver? Every waiver has an equal and opposite clause."
         },
         {
-          "premade": "newton",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A professor's chair. Soon, I hope, the Mint."
-        },
-        {
           "premade": "luther",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? A Bible, in German, for everyone. And a hammer."
+          "text": "A ticket? A Bible, in German, for everyone. And a hammer."
         },
         {
           "premade": "luther",
@@ -13450,16 +13241,10 @@
           "text": "A waiver? I read the small print. I wrote ninety-five objections."
         },
         {
-          "premade": "luther",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? None. A monk owns nothing. My wife disagrees."
-        },
-        {
           "premade": "beethoven",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Sketchbooks. Many sketchbooks. One unfinished symphony."
+          "text": "A ticket? Sketchbooks. Many sketchbooks. One unfinished symphony."
         },
         {
           "premade": "beethoven",
@@ -13468,16 +13253,10 @@
           "text": "A waiver? Rules do not apply to music. Or to me."
         },
         {
-          "premade": "beethoven",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Court wages. And lessons to rich young ladies."
-        },
-        {
           "premade": "marx",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? A manifesto. A short one. It is selling well."
+          "text": "A ticket? A manifesto. A short one. It is selling well."
         },
         {
           "premade": "marx",
@@ -13486,16 +13265,10 @@
           "text": "A waiver? A worker waives nothing but his chains."
         },
         {
-          "premade": "marx",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? Very few. My friend Friedrich sends money."
-        },
-        {
           "premade": "hammurabi",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? A stone with 282 laws on it. It is heavy."
+          "text": "A ticket? A stone with 282 laws on it. It is heavy."
         },
         {
           "premade": "hammurabi",
@@ -13504,16 +13277,10 @@
           "text": "A waiver? My laws waive a farmer's debt after a flood. Is this a flood?"
         },
         {
-          "premade": "hammurabi",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A kingdom, two rivers and a very large stone."
-        },
-        {
           "premade": "michelangelo",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? A chisel, a mallet and a bad temper."
+          "text": "A ticket? A chisel, a mallet and a bad temper."
         },
         {
           "premade": "michelangelo",
@@ -13522,16 +13289,10 @@
           "text": "A waiver? I sign statues. Not papers."
         },
         {
-          "premade": "michelangelo",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A pope will owe me money. Several, in time."
-        },
-        {
           "premade": "kurosawa",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? A camera, a script and three hundred extras."
+          "text": "A ticket? A camera, a script and three hundred extras."
         },
         {
           "premade": "kurosawa",
@@ -13540,16 +13301,10 @@
           "text": "A waiver? My actors sign those. Before the arrows."
         },
         {
-          "premade": "kurosawa",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A studio's money. Mostly spent on horses."
-        },
-        {
           "premade": "shakespeare",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? A quill, some foolscap and three borrowed plots."
+          "text": "A ticket? A quill, some foolscap and three borrowed plots."
         },
         {
           "premade": "shakespeare",
@@ -13558,16 +13313,10 @@
           "text": "A waiver? To sign, or not to sign. I shall not."
         },
         {
-          "premade": "shakespeare",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A share in a theatre. And a second-best bed."
-        },
-        {
           "premade": "darwin",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? Finches, beetles and eight volumes of notes."
+          "text": "A ticket? Finches, beetles and eight volumes of notes."
         },
         {
           "premade": "darwin",
@@ -13576,28 +13325,16 @@
           "text": "A waiver? I adapt. I shall manage without one."
         },
         {
-          "premade": "darwin",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? My father's allowance. He despairs of me."
-        },
-        {
           "premade": "einstein",
           "request": "TC-230",
           "variant": "Honest",
-          "text": "A manifest? A violin, a pipe and a blackboard of sums."
+          "text": "A ticket? A violin, a pipe and a blackboard of sums."
         },
         {
           "premade": "einstein",
           "request": "TC-310",
           "variant": "Honest",
           "text": "A waiver? I waive only my socks. I never wear them."
-        },
-        {
-          "premade": "einstein",
-          "request": "proof",
-          "variant": "Honest",
-          "text": "Means? A professor's salary. And a patent for a refrigerator."
         }
       ],
       "spoken": [
@@ -14167,7 +13904,7 @@
         {
           "personality": "curt",
           "question": "q_born",
-          "text": "{value}. It's on the visa."
+          "text": "{value}. It's on the passport."
         },
         {
           "personality": "anxious",
@@ -16588,7 +16325,7 @@
         {
           "personality": "anxious",
           "lie": "DoctoredIdentity",
-          "text": "My birthday? It's... the one on the visa. Obviously."
+          "text": "My birthday? It's... the one on the passport. Obviously."
         },
         {
           "personality": "sunny",
@@ -16611,7 +16348,7 @@
         {
           "personality": "stickler",
           "lie": "DoctoredIdentity",
-          "text": "Every detail on that visa is correct. I corrected them myself."
+          "text": "Every detail on that passport is correct. I corrected them myself."
         },
         {
           "personality": "stickler",
@@ -16967,7 +16704,7 @@
       },
       {
         "lie": "DoctoredIdentity",
-        "text": "My details? It's all on the visa. That visa. The one you're holding."
+        "text": "My details? It's all on the passport. That passport. The one you're holding."
       },
       {
         "lie": "FalseOrigin",
@@ -17226,7 +16963,7 @@
       "label": "Currency",
       "prompt": "What will you pay with in {place}?",
       "answer": "I've changed my money into {value}.",
-      "fromDay": 11,
+      "fromDay": 16,
       "announce": "BUREAU NOTICE: from today, desk officers ask every traveller what they will pay with. Check answers against the Currency Ledger: nothing from 2150 leaves 2150.",
       "conditions": [],
       "overrides": [
@@ -17251,7 +16988,7 @@
       "label": "Language",
       "prompt": "What language will you speak in {place}?",
       "answer": "I've been practising my {value}.",
-      "fromDay": 12,
+      "fromDay": 14,
       "announce": "BUREAU NOTICE: desk officers may now ask every traveller what language they will speak. Check answers against Tongues & Scripts.",
       "conditions": [],
       "overrides": [
@@ -17269,7 +17006,7 @@
       "label": "Device",
       "prompt": "What are you taking with you?",
       "answer": "Just the approved kit: {value}.",
-      "fromDay": 11,
+      "fromDay": 16,
       "announce": "BUREAU NOTICE: from today, desk officers ask every traveller what they are taking with them. Check answers against the Index of Devices: nothing from 2150 leaves 2150.",
       "conditions": [],
       "overrides": [
@@ -17287,7 +17024,7 @@
       "label": "Capital",
       "prompt": "Which city in {place} are you headed for?",
       "answer": "{value}, like the brochure says.",
-      "fromDay": 12,
+      "fromDay": 14,
       "announce": "BUREAU NOTICE: desk officers may now ask every traveller which city they are headed for. Check answers against the Capitals Gazetteer.",
       "conditions": [],
       "overrides": [
@@ -17305,7 +17042,7 @@
       "label": "Ruler",
       "prompt": "Who rules {place} these days?",
       "answer": "{value}, I'm told.",
-      "fromDay": 12,
+      "fromDay": 14,
       "announce": "BUREAU NOTICE: desk officers may now ask every traveller who rules where they are going. Check answers against Rulers & Regents.",
       "conditions": [],
       "overrides": [
@@ -17323,7 +17060,7 @@
       "label": "Date of birth",
       "prompt": "When were you born?",
       "answer": "I was born on {value}.",
-      "fromDay": 1,
+      "fromDay": 5,
       "announce": "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
       "conditions": [
         {
@@ -18318,7 +18055,7 @@
         },
         {
           "factor": "money",
-          "outcome": "banking_houses",
+          "outcome": "jubilee",
           "amount": 6
         }
       ]
@@ -18838,7 +18575,7 @@
         },
         {
           "factor": "government",
-          "outcome": "directorate",
+          "outcome": "corporate_board",
           "amount": 6
         }
       ]
@@ -19660,7 +19397,7 @@
       {
         "id": "audit_rook",
         "name": "The audit finds the two hundred",
-        "news": "AUDIT: a forged Labour Contract passed Desk 3 on day 11, with 200 cr beside it. It goes on file.",
+        "news": "AUDIT: a forged Work Permit passed Desk 3 on day 11, with 200 cr beside it. It goes on file.",
         "conditions": [
           {
             "type": "FlagSet",
@@ -23278,7 +23015,7 @@
       },
       {
         "key": "steps.class",
-        "text": "Visa class against the account",
+        "text": "Passport class against the account",
         "gloss": "None",
         "tier": "Full"
       },
@@ -23308,7 +23045,7 @@
       },
       {
         "key": "steps.waiver",
-        "text": "Waiver against manifest and account",
+        "text": "Waiver against ticket and account",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25192,7 +24929,7 @@
       },
       {
         "key": "records.row.contract",
-        "text": "Labour Contract",
+        "text": "Work Permit",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25264,7 +25001,7 @@
       },
       {
         "key": "citation.unproven",
-        "text": "Deviation denied without documented evidence. Log a deviation from the papers, the traveller's answers or their dress before denying.",
+        "text": "Denied without logged evidence. Log what is wrong before denying: a difference in the papers, a rule they break or a date that fails.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25678,13 +25415,13 @@
       },
       {
         "key": "citation.rule.paperSet.economyManifest",
-        "text": "A Premium visa travels on a Premium transponder.",
+        "text": "A Premium passport travels on a Premium transponder.",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "citation.rule.paperSet.premiumManifest",
-        "text": "A Standard visa travels on an Economy transponder.",
+        "text": "A Standard passport travels on an Economy transponder.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25702,13 +25439,13 @@
       },
       {
         "key": "citation.rule.paperSet.proofMissing",
-        "text": "A Standard visa needs a proof of means.",
+        "text": "A Standard passport needs a proof of means.",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "citation.rule.paperSet.contractMissing",
-        "text": "A Debt Relief departure needs a registered Labour Contract.",
+        "text": "A Debt Relief departure needs a registered Work Permit.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25738,7 +25475,7 @@
       },
       {
         "key": "citation.rule.evidence",
-        "text": "A denial needs a logged deviation.",
+        "text": "A denial needs logged evidence.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25798,7 +25535,7 @@
       },
       {
         "key": "citation.label.logged",
-        "text": "Deviations logged",
+        "text": "Evidence logged",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25816,7 +25553,7 @@
       },
       {
         "key": "citation.label.missing.contractMissing",
-        "text": "Labour Contract",
+        "text": "Work Permit",
         "gloss": "None",
         "tier": "Full"
       },
@@ -27001,7 +26738,7 @@
     ]
   },
   "translation": {
-    "fromDay": 6,
+    "fromDay": 8,
     "announce": "Budget cuts close the interpreter pool. From the day after tomorrow, the displaced reach the desk speaking their own tongues, untranslated but for their key words. Order Interview Protocols today and a Speech translator tomorrow in Orders: each arrives the morning after it is ordered. Papers are still filled in English.",
     "flip": {
       "startDelay": 0.3,

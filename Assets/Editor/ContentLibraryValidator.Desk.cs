@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -24,7 +25,9 @@ public static partial class ContentLibraryValidator
         if (library == null || desk == null)
             return problems;
 
-        int maxPapers = MaxDocuments(TravellerBlueprints(library));
+        int maxPapers = library.DayPlans.Where(p => p != null)
+                               .Select(p => MaxDocuments(p.PossibleBlueprints.Concat(p.ForcedBlueprints).Where(b => b != null), p))
+                               .DefaultIfEmpty(0).Max();
         int slots = desk.paperSpawnSlots != null ? desk.paperSpawnSlots.Length : 0;
         if (slots < maxPapers)
             problems.Add($"The desk has {slots} paper spawn slots but a traveller can carry {maxPapers} papers; add slots in Desk_Default.");

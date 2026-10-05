@@ -313,6 +313,26 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Public read-only access to day plans.</summary>
     public IReadOnlyList<DayPlanSO> DayPlans => dayPlans ?? System.Array.Empty<DayPlanSO>();
 
+    [NonSerialized] private Introductions _introductions;
+
+    /// <summary>
+    /// The one introduction registry (the desk-first redesign, items 2, 9,
+    /// 10): what each day introduces, from the day plans (their papers, rules,
+    /// lies and introduces lists) and the questions (each on the day its
+    /// DayAtLeast gate opens, day 1 without one). Built once per load; every
+    /// part of the desk, the wheel and the PC asks it whether a feature is
+    /// introduced (Introductions.Has, ShowsField).
+    /// </summary>
+    public Introductions Introductions => _introductions ??= new Introductions(
+        DayPlans.Where(p => p != null).Select(p => (p.DayNumber, Introductions.DayKeys(
+            p.Papers, p.ActiveTravelRules.Where(r => r != null).Select(r => r.name), p.EnabledLies,
+            Questions.Where(q => q != null && QuestionDay(q) == p.DayNumber).Select(q => q.question != null ? q.question.id : null),
+            p.Introduces))));
+
+    /// <summary>The day a question's DayAtLeast gate opens (its fromDay; 1 without one).</summary>
+    private static int QuestionDay(QuestionSO q) =>
+        (q.conditions ?? new List<TriggerCondition>()).Where(c => c != null && c.type == TriggerConditionType.DayAtLeast).Select(c => (int)c.threshold).DefaultIfEmpty(1).Max();
+
     /// <summary>The first day a rule stands on (Directives.FirstDay over the plans listing it; a standing procedure's guaranteed traveller comes that day), 0 when no plan lists it.</summary>
     public int FirstDayOf(TravelRuleSO rule) =>
         Directives.FirstDay(DayPlans.Where(p => p != null && p.ActiveTravelRules.Contains(rule)).Select(p => p.DayNumber));

@@ -19,3 +19,4 @@ MonoBehaviour:
     may not depart.
   kinds: 000000000100000002000000
   transponder: 
+  openPlaces: []
