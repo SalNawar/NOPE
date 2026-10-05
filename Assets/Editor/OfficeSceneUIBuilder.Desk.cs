@@ -1504,6 +1504,7 @@ public static partial class OfficeSceneUIBuilder
         ((RectTransform)go.transform).sizeDelta = box;
         TextMeshPro tmp = go.GetComponent<TextMeshPro>();
         tmp.text = string.Empty;
+        tmp.fontSize = maxSize;
         tmp.enableAutoSizing = true;
         tmp.fontSizeMax = maxSize;
         tmp.fontSizeMin = maxSize * 0.4f;
@@ -1556,6 +1557,7 @@ public static partial class OfficeSceneUIBuilder
         ((RectTransform)go.transform).sizeDelta = new Vector2(0.1f, 0.026f);
         TextMeshPro tmp = go.GetComponent<TextMeshPro>();
         tmp.text = UiText.Get(key);
+        tmp.fontSize = 0.16f;
         tmp.enableAutoSizing = true;
         tmp.fontSizeMax = 0.16f;
         tmp.fontSizeMin = 0.04f;
