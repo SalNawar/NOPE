@@ -276,6 +276,8 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         for (int s = 0; s < _form.Slots.Count; s++)
         {
             FormSlot slot = _form.Slots[s];
+            if (slot.Hidden)
+                continue;
             if (pickable == null || pickable(slot))
                 Arm(parts++, s);
             string hint = linkHint != null ? linkHint(slot) : null;

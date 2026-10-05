@@ -32,12 +32,21 @@ public readonly struct ScannerDay
     /// <summary>The Analysis Scanner's upgrade id (Upgrade_AdvancedScanner.asset: the old Advanced Scanner's id is kept, so a save that owns it keeps it).</summary>
     public const string AnalysisUpgradeId = "adv_scanner";
 
-    /// <summary>A day with the given upgrades.</summary>
-    public ScannerDay(bool autoFeed, bool analysis)
+    /// <summary>A day with the given upgrades (none and no scanner at all when <paramref name="hidden"/>).</summary>
+    public ScannerDay(bool autoFeed, bool analysis, bool hidden = false)
     {
-        AutoFeed = autoFeed;
-        Analysis = analysis;
+        Hidden = hidden;
+        AutoFeed = autoFeed && !hidden;
+        Analysis = analysis && !hidden;
     }
+
+    /// <summary>
+    /// True before the scanner is introduced (the desk-first ramp: the scanner
+    /// and the citizen records arrive on day 5, Feature.Scanner): the desk
+    /// shows no scanner and no upgrade of it works; a paper's copy reaches the
+    /// PC when it is handed over, until the desk's own inspection replaces that.
+    /// </summary>
+    public bool Hidden { get; }
 
     /// <summary>True when handed-over papers scan themselves, in hand-over order (SC3).</summary>
     public bool AutoFeed { get; }
@@ -55,8 +64,8 @@ public readonly struct ScannerDay
     public ScanPass PassFor(bool byHand, bool analysedBefore) =>
         !byHand || !Analysis ? ScanPass.Plain : analysedBefore ? ScanPass.AlreadyAnalysed : ScanPass.Analysis;
 
-    /// <summary>The scanners among the upgrades in force at the day's start (<paramref name="inForce"/>: owned upgrade ids, never the retired 'upgrade:x' flag); none without them.</summary>
-    public static ScannerDay From(IEnumerable<string> inForce)
+    /// <summary>The scanners among the upgrades in force at the day's start (<paramref name="inForce"/>: owned upgrade ids, never the retired 'upgrade:x' flag); none without them, and no scanner before it is <paramref name="introduced"/>.</summary>
+    public static ScannerDay From(IEnumerable<string> inForce, bool introduced = true)
     {
         bool autoFeed = false, analysis = false;
         foreach (string id in inForce ?? System.Array.Empty<string>())
@@ -64,6 +73,6 @@ public readonly struct ScannerDay
             autoFeed |= id == AutoFeedUpgradeId;
             analysis |= id == AnalysisUpgradeId;
         }
-        return new ScannerDay(autoFeed, analysis);
+        return new ScannerDay(autoFeed, analysis, !introduced);
     }
 }

@@ -94,6 +94,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Today's portals (TodaysWorld.Portals, the portals spec v3 RT3), fixed at the day's start; none before it: the board, the rings and the Portals app read it.</summary>
     public PortalDay Portals => _today != null ? _today.Portals : PortalDay.None;
 
+    /// <summary>True once the Departure Board is introduced (the desk-first ramp: the second destination, day 3; Feature.Board): before it, the board prints nothing and the rulebook alone names the open destination.</summary>
+    public bool BoardIntroduced => contentLibrary != null && _worldState != null && contentLibrary.Introductions.Has(_worldState.day, Feature.Board);
+
     /// <summary>Raised when an accepted traveller leaves, with the portal they leave through (PortalDay.DepartureFor; the hall's rings pulse it, VX4).</summary>
     public event System.Action<int> Departed;
 
@@ -231,9 +234,13 @@ public sealed class GameManager : MonoBehaviour
             readySign.onClick.AddListener(ToggleAvailable);
         }
 
-        // The booth's day (its day-1 notes; the scanner upgrades fixed at day start, like the translation) and phase: the briefing comes first.
+        // The booth's day (its day-1 notes; the scanner upgrades fixed at day start, like the translation, and the scanner itself
+        // only once it is introduced) and phase: the briefing comes first. The PC shows what the day has introduced.
+        ScannerDay scanners = TimelineService.BuildScannerDay(_worldState, contentLibrary);
         if (booth != null)
-            booth.BeginDay(_worldState.day, TimelineService.BuildScannerDay(_worldState, contentLibrary));
+            booth.BeginDay(_worldState.day, scanners);
+        if (investigationUI != null)
+            investigationUI.SetIntroductions(contentLibrary.Introductions, _worldState.day, scanners);
 
         Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.00}, cases={_dayCases.Count}, places={_today.Places.Count}, leader='{_worldState.history.leaderId}'.");
 
@@ -279,7 +286,7 @@ public sealed class GameManager : MonoBehaviour
     /// </summary>
     private CitizenRegistry BuildRegistry()
     {
-        CitizenRegistry registry = CaseFactory.BuildRegistry(_dayCases);
+        CitizenRegistry registry = CaseFactory.BuildRegistry(_dayCases, contentLibrary.Introductions.Has(_worldState.day, Feature.Standing));
         var clerk = new ClerkAccountSource(_worldState, contentLibrary);
         registry.Add(AccountRecords.Clerk(clerk.Profile, Account.ExtractRows(clerk, UiText.Get, AccountMaker.Credits)));
         return registry;

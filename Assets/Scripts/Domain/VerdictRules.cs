@@ -28,11 +28,15 @@ public static class VerdictRules
     /// True when a denial is right but unproven: the evidence gate is on, the
     /// evidence system is active and logged nothing (<paramref name="evidenceCount"/>
     /// is -1 when the system is inactive), and the denied traveller has a
-    /// deviation fault and no directive fault (a directive denial never needs
-    /// evidence: the Directives are public).
+    /// fault of either kind. Saleh, 2026-10-05 (the desk-first redesign): "the
+    /// player may deny freely, but a denial with no logged evidence earns a
+    /// citation", a directive fault's too (a rule held against the value it
+    /// breaks, or the calendar against a date, logs it); a denial of a
+    /// traveller with no fault is a wrong denial instead. Either way it is the
+    /// one penalty (<see cref="WrongDecisionPenalty"/>).
     /// </summary>
     public static bool IsUnprovenDenial(bool requireEvidence, int evidenceCount, bool accepted, bool hasDeviationFault, bool hasDirectiveFault) =>
-        requireEvidence && evidenceCount == 0 && !accepted && hasDeviationFault && !hasDirectiveFault;
+        requireEvidence && evidenceCount == 0 && !accepted && (hasDeviationFault || hasDirectiveFault);
 
     /// <summary>
     /// True while the day's free warnings last: the day's

@@ -26,8 +26,8 @@ public sealed class DocumentForm
     /// <summary>What it shows.</summary>
     public FormData Data { get; }
 
-    /// <summary>The form <paramref name="doc"/> prints, with <paramref name="agency"/>'s name and its office's (the programme's without one), each box keeping the room of its category's longest value (an origin at <paramref name="longestOrigin"/> characters: ContentLibrarySO.LongestOriginLabel); null without a template.</summary>
-    public static DocumentForm For(DocumentInstance doc, AgencyContent agency, int longestOrigin)
+    /// <summary>The form <paramref name="doc"/> prints, with <paramref name="agency"/>'s name and its office's (the programme's without one), each box keeping the room of its category's longest value (an origin at <paramref name="longestOrigin"/> characters: ContentLibrarySO.LongestOriginLabel), hiding each field <paramref name="shows"/> refuses (its form number and category: Introductions.ShowsField; null shows every field); null without a template.</summary>
+    public static DocumentForm For(DocumentInstance doc, AgencyContent agency, int longestOrigin, System.Func<string, ClueCategory, bool> shows = null)
     {
         if (doc == null || doc.template == null)
             return null;
@@ -42,6 +42,8 @@ public sealed class DocumentForm
         data.Serial = doc.serial ?? string.Empty;
         data.FieldLabels = labels;
         data.FieldValues = values;
+        if (shows != null)
+            data.FieldHidden = doc.fields.ConvertAll(f => f != null && !shows(doc.template.formNumber, f.category));
         FieldSpecsOf(doc.template, longestOrigin, out _, out List<int> longest);
         data.FieldReserve = FormLayout.Reserve(values, longest);
         return new DocumentForm(doc.template.form, data);

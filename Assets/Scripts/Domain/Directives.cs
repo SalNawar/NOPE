@@ -105,21 +105,27 @@ public readonly struct Directive
     /// <summary>The model a recall grounds (an agency.transponders id; TransponderRecall); null otherwise.</summary>
     public readonly string Transponder;
 
+    /// <summary>The places an open-destinations rule leaves open (<see cref="Directives.PlaceKey"/> keys, "country:era"); empty otherwise.</summary>
+    public readonly IReadOnlyList<string> Open;
+
     /// <summary>Creates a directive.</summary>
-    public Directive(TravelRuleType type, IReadOnlyList<TravellerKind> kinds, string nationId = null, string eraId = null, string transponder = null)
+    public Directive(TravelRuleType type, IReadOnlyList<TravellerKind> kinds, string nationId = null, string eraId = null, string transponder = null,
+                     IReadOnlyList<string> open = null)
     {
         Type = type;
         Kinds = kinds ?? new TravellerKind[0];
         NationId = nationId;
         EraId = eraId;
         Transponder = transponder;
+        Open = open ?? new string[0];
     }
 
     /// <summary>True when the rule applies to a traveller of <paramref name="kind"/>: listed, or no kind is listed.</summary>
     public bool AppliesTo(TravellerKind kind) => Kinds.Count == 0 || Kinds.Contains(kind);
 
     /// <summary>True when the rule is a closure that forbids the destination <paramref name="nationId"/> in <paramref name="eraId"/> (Directives.Closes).</summary>
-    public bool Closes(string nationId, string eraId) => Directives.Closes(Type, NationId, EraId, nationId, eraId);
+    public bool Closes(string nationId, string eraId) =>
+        Type == TravelRuleType.OpenDestinations ? !Open.Contains(Directives.PlaceKey(nationId, eraId)) : Directives.Closes(Type, NationId, EraId, nationId, eraId);
 }
 
 /// <summary>
@@ -261,9 +267,13 @@ public static class Directives
     /// <summary>How many days ago, at most, a falsified Valid Until passed (1 to 30 days before today, §5.4).</summary>
     public const int ExpiredMaxDays = 30;
 
-    /// <summary>True for the closure types (a forbidden era, nation or place), which forbid destinations; false for a standing procedure.</summary>
+    /// <summary>True for the closure types (a forbidden era, nation or place, or the open destinations, which forbid every other place), which forbid destinations; false for a standing procedure.</summary>
     public static bool IsClosure(TravelRuleType type) =>
-        type == TravelRuleType.EraForbidden || type == TravelRuleType.NationForbidden || type == TravelRuleType.NationEraForbidden;
+        type == TravelRuleType.EraForbidden || type == TravelRuleType.NationForbidden || type == TravelRuleType.NationEraForbidden
+        || type == TravelRuleType.OpenDestinations;
+
+    /// <summary>A place's key, "country:era" (an open-destinations rule's places, world_source.json rules[].places); blank ids give a key no place has.</summary>
+    public static string PlaceKey(string nationId, string eraId) => (nationId ?? string.Empty) + ":" + (eraId ?? string.Empty);
 
     /// <summary>
     /// The closure predicate, by ids (one home for TravelRuleSO.Allows and
@@ -625,12 +635,23 @@ public static class Directives
     /// <paramref name="transponder"/>. Empty when sound.
     /// </summary>
     public static List<string> RuleProblems(string asset, TravelRuleType type, IReadOnlyList<TravellerKind> kinds, bool hasPlace, bool hasLine,
-                                            string transponder = null, IReadOnlyList<TransponderModel> transponders = null)
+                                            string transponder = null, IReadOnlyList<TransponderModel> transponders = null, IReadOnlyList<string> openPlaces = null)
     {
         var problems = new List<string>();
         kinds = kinds ?? new TravellerKind[0];
         if (type != TravelRuleType.TransponderRecall && !string.IsNullOrWhiteSpace(transponder))
             problems.Add($"Rule '{asset}' ({type}) names the transponder '{transponder}'; only a recall (TransponderRecall) names one.");
+        if (type == TravelRuleType.OpenDestinations)
+        {
+            if (hasPlace)
+                problems.Add($"Rule '{asset}' lists the open destinations (OpenDestinations): it names its places in \"places\", not a country or era.");
+            if (openPlaces == null || openPlaces.Count == 0)
+                problems.Add($"Rule '{asset}' (OpenDestinations) lists no places: it would close every destination.");
+            if (!hasLine)
+                problems.Add($"Rule '{asset}' (OpenDestinations) needs its directive line (\"description\"), naming the open destinations.");
+        }
+        else if (openPlaces != null && openPlaces.Count > 0)
+            problems.Add($"Rule '{asset}' ({type}) lists places; only the open destinations (OpenDestinations) do.");
         if (IsClosure(type))
             return problems;
 

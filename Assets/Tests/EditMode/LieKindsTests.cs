@@ -90,22 +90,6 @@ public class LieKindsTests
     }
 
     [Test]
-    public void FirstDay_IsTheEarliestDayEnablingTheLie_OrNone()
-    {
-        var days = new (int day, IEnumerable<LieKind> lies)[]
-        {
-            (4, new[] { LieKind.ForgedSeal }),
-            (1, new[] { LieKind.PoorPosingAsRich }),
-            (3, new[] { LieKind.SwappedPhoto, LieKind.ForgedSeal }),
-            (2, null)
-        };
-        Assert.AreEqual(3, LieKinds.FirstDay(LieKind.ForgedSeal, days), "the seal check's day: the Seal Register joins the shelf");
-        Assert.AreEqual(3, LieKinds.FirstDay(LieKind.SwappedPhoto, days));
-        Assert.AreEqual(0, LieKinds.FirstDay(LieKind.Smuggling, days), "no day enables it");
-        Assert.AreEqual(0, LieKinds.FirstDay(LieKind.ForgedSeal, null));
-    }
-
-    [Test]
     public void TheVisualLies_FitEveryKind_AndAreForgedPapers()
     {
         foreach (TravellerKind kind in (TravellerKind[])System.Enum.GetValues(typeof(TravellerKind)))

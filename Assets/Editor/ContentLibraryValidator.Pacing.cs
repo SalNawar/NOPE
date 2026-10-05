@@ -12,7 +12,7 @@ using UnityEngine;
 /// </summary>
 public static partial class ContentLibraryValidator
 {
-    /// <summary>Reports every day plan's papers and pacing problems (DayPapers.Problems, DayPacing.Problems over DayPacing.NewByDay), in day order.</summary>
+    /// <summary>Reports every day plan's introductions, papers and pacing problems (Introductions.Problems, DayPapers.Problems, DayPacing.Problems over DayPacing.NewByDay), in day order.</summary>
     private static int CheckPacing(ContentLibrarySO lib)
     {
         int issues = 0;
@@ -24,6 +24,11 @@ public static partial class ContentLibraryValidator
         var directives = new List<IEnumerable<string>>();
         foreach (DayPlanSO plan in plans)
         {
+            foreach (string problem in Introductions.Problems(plan.name, plan.Introduces))
+            {
+                Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", plan);
+                issues++;
+            }
             foreach (string problem in DayPapers.Problems(plan.name, plan.Papers, known, issuedBefore.ToList()))
             {
                 Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", plan);
@@ -35,12 +40,12 @@ public static partial class ContentLibraryValidator
                 .Concat((plan.AvailableLegendaries ?? new LegendarySO[0]).Concat(plan.ForcedCases.Where(f => f != null).Select(f => f.legendary))
                         .Where(l => l != null).Select(l => plan.Kinds.Where(k => k != null && k.blueprint != null && k.blueprint.Kind == l.kind).Select(k => k.blueprint).FirstOrDefault()));
             papers.Add(blueprints.Where(b => b != null).SelectMany(plan.TemplatesOf).Select(t => DayPacing.PaperKey(t.askGroup, t.formNumber)).ToList());
-            directives.Add(plan.ActiveTravelRules.Where(r => r != null).Select(r => DayPacing.RuleKey(r.name, r.IsClosure, r.kinds != null && r.kinds.Length > 0)).ToList());
+            directives.Add(plan.ActiveTravelRules.Where(r => r != null).Select(r => DayPacing.RuleKey(r.name, r.IsClosure, r.kinds != null && r.kinds.Length > 0, r.type == TravelRuleType.OpenDestinations)).ToList());
         }
 
         List<List<string>> newPapers = DayPacing.NewByDay(papers), newRules = DayPacing.NewByDay(directives);
         for (int i = 0; i < plans.Count; i++)
-            foreach (string problem in DayPacing.Problems(plans[i].name, newPapers[i], newRules[i], plans[i].Bulletin))
+            foreach (string problem in DayPacing.Problems(plans[i].name, newPapers[i], newRules[i], plans[i].Bulletin, i == 0))
             {
                 Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", plans[i]);
                 issues++;

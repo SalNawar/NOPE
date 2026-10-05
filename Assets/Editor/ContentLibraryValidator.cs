@@ -1091,7 +1091,7 @@ public static partial class ContentLibraryValidator
             // rolled procedures and guarantees against the kinds of the day (Directives.RuleProblems, DayProblems).
             foreach (TravelRuleSO rule in plan.ActiveTravelRules.Where(r => r != null).Distinct())
                 foreach (string problem in Directives.RuleProblems(rule.name, rule.type, rule.kinds, rule.nation != null || rule.era != null, !string.IsNullOrWhiteSpace(rule.description),
-                                                                   rule.transponder, lib.Agency.transponders))
+                                                                   rule.transponder, lib.Agency.transponders, rule.openPlaces))
                 {
                     Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", rule);
                     issues++;

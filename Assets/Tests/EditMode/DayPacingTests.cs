@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
@@ -84,5 +85,22 @@ public class DayPacingTests
         List<string> silent = DayPacing.Problems("d3", new string[0], new[] { "closures" }, " ");
         Assert.AreEqual(1, silent.Count);
         StringAssert.Contains("bulletin", silent[0]);
+    }
+
+    [Test]
+    public void RuleKey_TheOpenDestinations_AreTheClosuresCheck_WhateverTheirKinds()
+    {
+        Assert.AreEqual(DayPacing.Closures, DayPacing.RuleKey("Rule_OpenD3", true, true, true));
+        Assert.AreEqual("Rule_NoEconomyAncient", DayPacing.RuleKey("Rule_NoEconomyAncient", true, true));
+        Assert.AreEqual(DayPacing.Closures, DayPacing.RuleKey("Rule_NoJapan", true, false));
+    }
+
+    /// <summary>The desk-first ramp: day 1 sets the baseline (the passport, the open destination and its dates), named in its bulletin.</summary>
+    [Test]
+    public void Problems_TheFirstDay_SetsTheBaseline_ButNeedsItsBulletin()
+    {
+        CollectionAssert.IsEmpty(DayPacing.Problems("d1", new[] { "TC-101" }, new[] { "closures", "Rule_PaperDates" }, "NEW: your desk.", true));
+        StringAssert.Contains("first day", DayPacing.Problems("d1", new[] { "TC-101" }, new[] { "closures", "Rule_PaperDates" }, "", true).Single());
+        Assert.AreEqual(1, DayPacing.Problems("d2", new[] { "TC-101" }, new[] { "closures", "Rule_PaperDates" }, "NEW: two.").Count, "only the first day");
     }
 }
