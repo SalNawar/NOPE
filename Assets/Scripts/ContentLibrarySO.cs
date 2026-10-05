@@ -132,8 +132,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>
     /// Today's places, the destinations: profiles whose era the plan includes
-    /// and whose nation it allows, never a Future place (History.IsDestination,
-    /// traveller types H2: the Future is the present, BuildPresent). Ordered by
+    /// and whose nation it allows, and the places of the premades it forces or
+    /// pools (EraGroups.InTodaysWorld, Track E2), never a Future place
+    /// (traveller types H2: the Future is the present, BuildPresent). Ordered by
     /// country (library nation order) then era (chronological). Places missing
     /// a nation/era (or their ids) are skipped with a warning (the validator
     /// reports them as errors).
@@ -144,6 +145,16 @@ public sealed class ContentLibrarySO : ScriptableObject
 
         if (nationEraProfiles == null || plan == null)
             return result;
+
+        // An authored case brings its place (EraGroups.InTodaysWorld): every premade the day forces or pools, and a liar premade's true home.
+        var premadePlaces = new HashSet<NationEraProfileSO>();
+        foreach (LegendarySO l in plan.ForcedCases.Where(f => f != null).Select(f => f.legendary).Concat(plan.AvailableLegendaries).Where(l => l != null))
+        {
+            if (GetProfile(l.nation, l.trueEra) is NationEraProfileSO home)
+                premadePlaces.Add(home);
+            if (l.truePlace != null)
+                premadePlaces.Add(l.truePlace);
+        }
 
         foreach (NationEraProfileSO p in nationEraProfiles)
         {
@@ -156,7 +167,7 @@ public sealed class ContentLibrarySO : ScriptableObject
                 continue;
             }
 
-            if (!plan.IncludesEra(p.era) || !plan.AllowsNation(p.nation) || !History.IsDestination(p.era.isFuture))
+            if (!EraGroups.InTodaysWorld(p.era.isFuture, plan.IncludesEra(p.era), plan.AllowsNation(p.nation), premadePlaces.Contains(p)))
                 continue;
 
             result.Add(p);

@@ -1,0 +1,176 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_egypt_ancient2
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: egypt_ancient2
+  displayName: Ramesside Egypt
+  nation: {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
+  era: {fileID: 11400000, guid: e086ccc3608ad51408596a220a17662a, type: 2}
+  year: -1250
+  moment: Pi-Ramesses in the Nile Delta under Ramesses II, c. 1250 BCE (the new capital
+    of chariot workshops, the temples of Abu Simbel and the first written peace treaty,
+    with the Hittites)
+  tongue: egyptian
+  birthYearMin: -1320
+  birthYearMax: -1268
+  facts:
+  - category: 4
+    value: Silver deben and kite
+  - category: 0
+    value: Late Egyptian, hieratic
+  - category: 3
+    value: Bronze chariot workshop
+  - category: 5
+    value: Pi-Ramesses (Delta)
+  - category: 2
+    value: Pharaoh Ramesses II
+  - category: 6
+    value: khepresh cap / lotus studs
+  maleNames:
+  - Paser
+  - Panehsy
+  - Huy
+  - Nakhtmin
+  - Amenemope
+  - Hori
+  - Penre
+  - Meryre
+  femaleNames:
+  - Mutnofret
+  - Henut
+  - Takhat
+  - Iuy
+  - Baketmut
+  - Sheritre
+  - Wiay
+  - Tamit
+  smallTalk:
+  - id: egypt_ancient2.smalltalk.1
+    text: The new capital in the Delta smells of fresh paint and horses.
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: pleated sash kilt
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: striped short wig
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: khepresh cap
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+    female:
+      signature: 4
+      outfit:
+        label: fringed pleated robe
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: long braided wig
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: lotus studs
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+  looks:
+    skin:
+    - 0
+    - 1
+    - 3
+    - 4
+    - 2
+    hair:
+    - colour: black
+      weight: 8
+    - colour: brown
+      weight: 2
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 4
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: theocracy
+  - factor: future
+    outcome: space_age
+  - factor: money
+    outcome: company_towns

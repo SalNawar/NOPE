@@ -7,8 +7,9 @@ public sealed class PlaceInfo
 {
     /// <summary>A place's facts for its page.</summary>
     public PlaceInfo(string id, string nationId, string nationName, string eraId, string eraName, int eraOrder, bool isFuture,
-                     string displayName, int year, string moment, IReadOnlyList<(ClueCategory Category, string Value)> facts)
+                     string displayName, int year, string moment, IReadOnlyList<(ClueCategory Category, string Value)> facts, string eraGroupId = null)
     {
+        EraGroupId = string.IsNullOrWhiteSpace(eraGroupId) ? eraId : eraGroupId;
         Id = id;
         NationId = nationId;
         NationName = nationName;
@@ -36,6 +37,9 @@ public sealed class PlaceInfo
 
     /// <summary>Its era's name ("Ancient").</summary>
     public string EraName { get; }
+
+    /// <summary>Its era's group (EraGroups: the main era a second moment belongs to; its own era otherwise).</summary>
+    public string EraGroupId { get; }
 
     /// <summary>Its era's chronological position (0 = oldest).</summary>
     public int EraOrder { get; }
@@ -114,9 +118,11 @@ public static class HistoryPages
     public static string ArticleAddress(SiteSpec site, string nationId, string eraId) => Sites.Address(site.domain, nationId + "/" + eraId);
 
     /// <summary>
-    /// The index: a row per country (in content order), a column per era (in
-    /// order), each cell the place's article, or a dash for a Future place not
-    /// in the world; with the links to the present and the Revisions.
+    /// The index: a row per country (in content order), a column per era group
+    /// (in order; EraGroups), each cell the place's article, or a dash for a
+    /// Future place not in the world; a country with a second moment of an
+    /// era gets a second row for it (no country name), its other cells empty;
+    /// with the links to the present and the Revisions.
     /// </summary>
     public static SitePage Index(SiteWorld world, SiteSpec site)
     {
@@ -128,21 +134,28 @@ public static class HistoryPages
         page.Blocks.Add(PageBlock.LinkTo(w.Get("site.history.revisions"), Sites.Address(site.domain, RevisionsPath)));
 
         List<PlaceInfo> places = world.Places.Where(p => p != null).ToList();
-        var eras = places.GroupBy(p => p.EraId).Select(g => g.First()).OrderBy(p => p.EraOrder).ToList();
+        var groups = places.Where(p => p.EraGroupId == p.EraId).GroupBy(p => p.EraId).Select(g => g.First()).OrderBy(p => p.EraOrder).ToList();
         var table = new PageBlock { Kind = PageBlockKind.Table };
         table.Columns.Add(w.Get("site.history.country"));
-        table.Columns.AddRange(eras.Select(e => e.EraName));
+        table.Columns.AddRange(groups.Select(e => e.EraName));
         foreach (string nation in places.Select(p => p.NationId).Distinct())
         {
-            var row = new List<PageCell> { new PageCell { Text = places.First(p => p.NationId == nation).NationName } };
-            foreach (PlaceInfo era in eras)
+            // The group's places of this nation, the main era's first, then its second moments in content order.
+            List<List<PlaceInfo>> cells = groups.Select(g => places.Where(p => p.NationId == nation && p.EraGroupId == g.EraId)
+                                                                   .OrderBy(p => p.EraId == g.EraId ? 0 : 1).ToList()).ToList();
+            int rows = Math.Max(1, cells.Max(c => c.Count));
+            for (int r = 0; r < rows; r++)
             {
-                PlaceInfo p = world.Place(nation, era.EraId);
-                row.Add(p != null && InWorld(world, p)
-                    ? new PageCell { Text = p.DisplayName, Address = ArticleAddress(site, p.NationId, p.EraId) }
-                    : new PageCell { Text = w.Get("site.history.none") });
+                var row = new List<PageCell> { new PageCell { Text = r == 0 ? places.First(p => p.NationId == nation).NationName : string.Empty } };
+                foreach (List<PlaceInfo> cell in cells)
+                {
+                    PlaceInfo p = r < cell.Count ? cell[r] : null;
+                    row.Add(p != null && InWorld(world, p)
+                        ? new PageCell { Text = p.DisplayName, Address = ArticleAddress(site, p.NationId, p.EraId) }
+                        : new PageCell { Text = r == 0 ? w.Get("site.history.none") : string.Empty });
+                }
+                table.Rows.Add(row);
             }
-            table.Rows.Add(row);
         }
         page.Blocks.Add(table);
         return page;

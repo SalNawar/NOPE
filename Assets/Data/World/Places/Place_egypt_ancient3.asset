@@ -1,0 +1,175 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_egypt_ancient3
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: egypt_ancient3
+  displayName: Ptolemaic Alexandria
+  nation: {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
+  era: {fileID: 11400000, guid: a4375210e1cb34d40a8c367dd4eb3e7a, type: 2}
+  year: -45
+  moment: Alexandria under Cleopatra VII, c. 45 BCE (the Library and the Museum,
+    the Pharos lighthouse and a harbour full of Roman grain ships)
+  tongue: greek
+  birthYearMin: -115
+  birthYearMax: -63
+  facts:
+  - category: 4
+    value: Ptolemaic bronze obol
+  - category: 0
+    value: Koine Greek and Demotic
+  - category: 3
+    value: Pharos lighthouse fire
+  - category: 5
+    value: Alexandria (Pharos)
+  - category: 2
+    value: Queen Cleopatra VII
+  - category: 6
+    value: wreath of ivy / diadem band
+  maleNames:
+  - Apollonios
+  - Ptolemaios
+  - Herakleides
+  - Sarapion
+  - Didymos
+  - Ammonios
+  - Theon
+  - Horion
+  femaleNames:
+  - Berenike
+  - Arsinoe
+  - Isidora
+  - Tryphaina
+  - Thermouthis
+  - Apollonia
+  - Didyme
+  - Ptolema
+  smallTalk:
+  - id: egypt_ancient3.smalltalk.1
+    text: The Library lent me a scroll. I am told I must return it this century.
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: bordered Greek chiton
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: short oiled curls
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: trimmed short beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: wreath of ivy
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+    female:
+      signature: 3
+      outfit:
+        label: chiton and mantle
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: melon-rib bun
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: diadem band
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+  looks:
+    skin:
+    - 0
+    - 1
+    - 3
+    - 4
+    - 2
+    hair:
+    - colour: black
+      weight: 8
+    - colour: brown
+      weight: 2
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 4
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: monarchy
+  - factor: future
+    outcome: space_age
+  - factor: money
+    outcome: banking_houses

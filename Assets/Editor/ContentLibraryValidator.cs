@@ -76,6 +76,11 @@ public static partial class ContentLibraryValidator
 
         // --- Duplicate / missing IDs ---
         issues += CheckDuplicateIds(Ids(lib.Eras, e => e.id), "Eras", lib);
+        foreach (string problem in EraGroups.Problems(lib.Eras.Where(e => e != null).Select(e => new EraEntry(e.id, e.group != null ? e.group.id : null, e.isFuture)).ToList()))
+        {
+            Debug.LogError($"[ContentLibraryValidator] {problem} ('{lib.name}')", lib);
+            issues++;
+        }
         issues += CheckDuplicateIds(Ids(lib.Upgrades, u => u.id), "Upgrades", lib);
         issues += CheckDuplicateIds(Ids(lib.Endings, e => e.id), "Endings", lib);
         issues += CheckDuplicateIds(Ids(lib.Attributes, a => a.id), "Attributes", lib);
@@ -1108,24 +1113,8 @@ public static partial class ContentLibraryValidator
                 issues++;
             }
 
+            // A listed premade brings its place and true home into the day's world (EraGroups.InTodaysWorld): nothing to check here.
             var forced = plan.ForcedCases.Where(f => f != null && f.legendary != null).ToList();
-            foreach (LegendarySO legend in (plan.AvailableLegendaries ?? Array.Empty<LegendarySO>()).Concat(forced.Select(f => f.legendary)))
-            {
-                if (legend == null || legend.nation == null || legend.trueEra == null)
-                    continue;
-
-                if (!today.Any(p => p.nation == legend.nation && p.era == legend.trueEra))
-                {
-                    Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' lists premade '{legend.displayName}' whose place ({legend.nation.id}, {legend.trueEra.id}) is not in the day's world; their papers would print placeholders.", plan);
-                    issues++;
-                }
-
-                if (legend.truePlace != null && !today.Contains(legend.truePlace))
-                {
-                    Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' lists premade '{legend.displayName}', authored as a liar from '{legend.truePlace.name}', which is not in the day's world; they would stay honest.", plan);
-                    issues++;
-                }
-            }
 
             foreach (ForcedCaseSlot slot in forced)
             {

@@ -36,5 +36,5 @@ MonoBehaviour:
     outcome: company_towns
     amount: 12
   - factor: government
-    outcome: democracy
+    outcome: corporate_board
     amount: 6

@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: 2150
   order: 5
   isFuture: 1
+  group: {fileID: 0}
   smallTalk:
   - id: future.smalltalk.1
     text: The maglev was late again. Some things never change.
