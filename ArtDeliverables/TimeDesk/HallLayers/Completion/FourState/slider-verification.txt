@@ -1,0 +1,4 @@
+10:00 morning/noon 50/50 verified.
+18:00 evening/night 50/50 verified.
+Game clock resumes; temporary preview restored.
+Slider window left open. Clock before 12.00, after 12.00.

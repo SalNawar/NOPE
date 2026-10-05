@@ -17,3 +17,6 @@ Validation: HallBakedCycleTests 7/7 passed, covering key states, held night, con
 Rebake in edit mode: Tools > Terminal Art > Lighting > Bake Four States.
 Live capture: Tools > Terminal Art > Lighting > Capture Four States.
 The Game view is open in the managed worktree at C:/Users/Saleh/.codex/worktrees/hall-art-completion/NOPE.
+
+Time-slider preview: Tools > Terminal Art > Lighting > Time Slider. Drag 00:00–24:00 or use Morning/Noon/Evening/Night presets. The window displays the four blend weights. Use game clock releases the lighting override; closing the window restores the previous preview setting. It changes lighting only, not shift progress. The midpoint checks verify 10:00 morning/noon 50/50, 18:00 evening/night 50/50, and restoration.
+
