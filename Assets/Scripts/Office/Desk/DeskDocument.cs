@@ -48,6 +48,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>A code-drawn stamp's width over its height, its frame texture's size in pixels, its word's size as a share of its height, its ink's alpha, and its tilt in degrees (alternating with each mark).</summary>
     private const float StampAspect = 2.8f, StampWordShare = 0.5f, StampAlpha = 0.88f, StampTilt = 6f;
 
+    /// <summary>A dry stamp's mark: its ink's alpha (the desk-first redesign, item 12: an un-inked stamp leaves a faint mark and counts for nothing).</summary>
+    private const float FaintStampAlpha = 0.16f;
+
     /// <summary>The code-drawn stamp frame's texture size in pixels (width, height).</summary>
     private const int StampPixelsWide = 224, StampPixelsHigh = 80;
 
@@ -109,6 +112,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         public Renderer Highlight;
         public bool Picked;
         public Color PickColour;
+
+        /// <summary>A clear mistake the player found here (a logged difference): its box stays tinted in this colour for the case (alpha 0: not marked).</summary>
+        public Color MarkColour;
     }
 
     /// <summary>A box of this paper as a compare highlight: tints its quad while picked (over the hover tint); null-safe once the paper is gone.</summary>
@@ -324,18 +330,64 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             SetHovered(-1);
     }
 
-    /// <summary>A click while the paper takes input: Clicked with the button and, while held, the box under the pointer.</summary>
+    /// <summary>True while the boxes of the paper lying on the desk are pickable where it lies (the desk view; the desk-first redesign, item 11: matching at the desk after the 80 degree tilt).</summary>
+    public bool RowsOnDesk { get; private set; }
+
+    /// <summary>Where the last click on the paper hit it, in world space (a stamp is pressed there).</summary>
+    public Vector3 LastPressPoint { get; private set; }
+
+    /// <summary>Lets the boxes of the paper lying on the desk be hovered and picked where it lies, or not (DeskController: in the desk view).</summary>
+    public void SetRowsOnDesk(bool live)
+    {
+        RowsOnDesk = live;
+        if (!live && !IsExamined)
+            SetHovered(-1);
+    }
+
+    /// <summary>A click while the paper takes input: Clicked with the button and, while held or while its rows are live on the desk, the box under the pointer; the hit is kept (LastPressPoint).</summary>
     public void OnPointerClick(PointerEventData eventData)
     {
         if (click == null || !click.Interactable || eventData.button == PointerEventData.InputButton.Middle)
             return;
 
-        int slot = IsExamined ? SlotUnder(eventData) : -1;
+        LastPressPoint = eventData.pointerPressRaycast.worldPosition;
+        int slot = IsExamined || RowsOnDesk ? SlotUnder(eventData) : -1;
         Clicked?.Invoke(this, eventData.button == PointerEventData.InputButton.Right, slot);
     }
 
-    /// <summary>While held, the box under the pointer tints.</summary>
-    public void OnPointerMove(PointerEventData eventData) => SetHovered(IsExamined && click != null && click.Interactable ? SlotUnder(eventData) : -1);
+    /// <summary>While held, or lying with its rows live, the box under the pointer tints.</summary>
+    public void OnPointerMove(PointerEventData eventData) => SetHovered((IsExamined || RowsOnDesk) && click != null && click.Interactable ? SlotUnder(eventData) : -1);
+
+    /// <summary>The box showing the document's row <paramref name="rowIndex"/> (DocumentRow.Index), or -1.</summary>
+    public int SlotOfRow(int rowIndex)
+    {
+        for (int i = 0; i < _slots.Count; i++)
+            if (_slots[i].Row.Index == rowIndex)
+                return i;
+        return -1;
+    }
+
+    /// <summary>The centre of box <paramref name="slot"/> in world space (where a match line meets it), or the sheet's centre for no box.</summary>
+    public Vector3 SlotCentre(int slot) =>
+        slot >= 0 && slot < _slots.Count && _slots[slot].Highlight != null ? _slots[slot].Highlight.transform.position : (sheet != null ? sheet.position : transform.position);
+
+    /// <summary>Marks box <paramref name="slot"/> as a clear mistake found (its tint stays for the case, under a pick or hover tint), or clears it with a clear colour.</summary>
+    public void SetMarked(int slot, Color colour)
+    {
+        if (slot < 0 || slot >= _slots.Count)
+            return;
+        _slots[slot].MarkColour = colour;
+        ApplySlotTint(slot);
+    }
+
+    /// <summary>A world point on the paper as a point on its page: from the page's top-left, y down, in the paper's metres (what Stamp takes).</summary>
+    public Vector2 PagePoint(Vector3 world)
+    {
+        if (_form == null || sheet == null)
+            return Vector2.zero;
+        Vector3 local = sheet.InverseTransformPoint(world);
+        return new Vector2(local.x + _form.Width * _scale / 2f, _form.PageHeight * _scale / 2f - local.y);
+    }
 
     /// <summary>The pointer left the paper: no box tints.</summary>
     public void OnPointerExit(PointerEventData eventData) => SetHovered(-1);
@@ -393,6 +445,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         SlotView view = _slots[slot];
         Color colour = view.Picked ? view.PickColour
             : slot == _hoveredSlot && style != null ? style.hoverTint
+            : view.MarkColour.a > 0f ? view.MarkColour
             : Color.clear;
         _block ??= new MaterialPropertyBlock();
         view.Highlight.GetPropertyBlock(_block);
@@ -425,11 +478,13 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// passport's visa page, a form's footer box). The mark is the art's
     /// (ArtSlots.VerdictMark) at its own aspect, else a code-drawn stamp: a
     /// double frame and the style's word (FormStyleSO.approvedStamp,
-    /// deniedStamp) in green or red ink, tilted a few degrees. Returns the
+    /// deniedStamp) in green or red ink, tilted a few degrees; a
+    /// <paramref name="faint"/> one (a dry stamp pressed: the desk-first
+    /// redesign, item 12) in a ghost of its ink. Returns the
     /// mark's place, from the page's top-left in the paper's metres (an empty
     /// one on a paper that prints no form).
     /// </summary>
-    public FaceRect Stamp(bool approved, Vector2? formPoint = null)
+    public FaceRect Stamp(bool approved, Vector2? formPoint = null, bool faint = false)
     {
         if (inkMark == null || _form == null)
             return new FaceRect(0f, 0f, 0f, 0f);
@@ -446,11 +501,11 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         mark.transform.localRotation = Quaternion.Euler(0f, 0f, tilt);
         mark.transform.localScale = new Vector3(r.width, r.height, 1f);
         Color ink = approved ? ApprovedInk : DeniedInk;
-        ink.a = StampAlpha;
+        ink.a = faint ? FaintStampAlpha : StampAlpha;
         _block ??= new MaterialPropertyBlock();
         mark.GetPropertyBlock(_block);
         _block.SetTexture(BaseMapId, art != null ? art : StampFrame());
-        _block.SetColor(BaseColorId, art != null ? Color.white : ink);
+        _block.SetColor(BaseColorId, art != null ? new Color(1f, 1f, 1f, ink.a / StampAlpha) : ink);
         mark.SetPropertyBlock(_block);
         mark.gameObject.SetActive(true);
 

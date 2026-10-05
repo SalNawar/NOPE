@@ -67,8 +67,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>Poses the papers held in the hand in front of the office camera (piece 10; optional).</summary>
     [SerializeField] private PaperExaminer examiner;
 
-    /// <summary>The stamp tray (piece 10; optional), placed over the stamp's click box through the office camera.</summary>
-    [SerializeField] private StampTray stampTray;
+    /// <summary>The physical stamps (the desk-first redesign, item 12; optional): the tray placed on the desk in the office view's frame, the pointer projected through the office camera.</summary>
+    [SerializeField] private DeskStampTray stampTray;
 
     [Header("PC")]
     /// <summary>The desktop's clone on the PC's glass.</summary>
@@ -191,6 +191,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
     private Dictionary<OfficeAnchorId, ResolvedAnchor> _anchors;
 
+    /// <summary>The art office's camera, once bound.</summary>
+    private Camera _office;
+
     /// <summary>The art's office Cinemachine camera when the office camera has a brain to blend it (the desk view needs both), else null.</summary>
     private CinemachineCamera _officeVcam;
 
@@ -227,6 +230,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             return;
         }
 
+        _office = office;
         ReadyCamera(office);
         if (wheel != null)
             wheel.SetCamera(office);
@@ -235,8 +239,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 callout.SetCamera(office);
         if (examiner != null)
             examiner.SetCamera(office);
-        if (stampTray != null)
-            stampTray.SetCamera(office);
         if (frame != null)
             frame.DrawAfter(office);
 
@@ -428,6 +430,15 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 Debug.LogWarning("[OfficeSceneBinder] The art office has no Cinemachine camera with a brain on the office camera (Anchor_OfficeVCam): the desk view stays off. See docs/SCENE_CONTRACT_GAMEPLAY.md.", this);
         }
 
+        // The stamp tray lies out right of and nearer than the mat's centre in the office view's frame (the desk-first redesign, item 12).
+        if (stampTray != null && config != null && _office != null)
+        {
+            Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
+            Vector3 right = Vector3.Cross(Vector3.up, level);
+            Vector3 outPoint = new Vector3(deskCentre.x, top, deskCentre.z) + right * config.stampTrayOut.x + level * config.stampTrayOut.y;
+            stampTray.Bind(_office, outPoint, level);
+        }
+
         if (handOver != null)
         {
             Vector3 from = At(OfficeAnchorId.HandOver).Position;
@@ -491,8 +502,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             }
 
             PlaceBox(prop.click, anchor, Vector3.zero);
-            if (prop.anchor == OfficeAnchorId.Stamp && stampTray != null)
-                stampTray.SetFollow(prop.click.transform);
             if (prop.click.TryGetComponent(out DeskReaction reaction))
             {
                 reaction.SetTarget(anchor.Transform);

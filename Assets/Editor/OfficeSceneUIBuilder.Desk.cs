@@ -595,7 +595,7 @@ public static partial class OfficeSceneUIBuilder
     private static BoothCoordinator BuildOffice(OfficeViewController view, MonitorScreen screen, Button framePower, DeskConfigSO config,
                                                 OfficeSceneContractSO contract, TravellerWheel wheel, OverlayCallout[] callouts,
                                                 OverlayCallout tooltip, OverlayCallout boardTooltip, GameManager game, TMP_Text trayClockText, ShiftClockDriver clock,
-                                                ContentLibrarySO library, FallbackHud hud, PcFrame pcFrame, StampTray stampTray,
+                                                ContentLibrarySO library, FallbackHud hud, PcFrame pcFrame, DeskStampTray stampTray,
                                                 OfficeCaseHud caseHud, Button deskViewBack, out Clickable readySign)
     {
         Transform office = view.transform;
@@ -666,7 +666,14 @@ public static partial class OfficeSceneUIBuilder
         Prop("PenPot", OfficeAnchorId.PenPot, EnsureDeskReaction("Reaction_PenPot", ReactionKind.Wobble, ""), null, "pen_pot");
         Prop("Stapler", OfficeAnchorId.Stapler, EnsureDeskReaction("Reaction_Stapler", ReactionKind.Squash, ""), null, "stapler");
         WirePersistentVoid(propsRoot.Find("Intercom").GetComponent<Clickable>(), "onClick", wheel, nameof(TravellerWheel.Open));
-        WirePersistentVoid(propsRoot.Find("Stamp").GetComponent<Clickable>(), "onClick", stampTray, nameof(StampTray.Open));
+        WirePersistentVoid(propsRoot.Find("Stamp").GetComponent<Clickable>(), "onClick", stampTray, nameof(DeskStampTray.ToggleTray));
+        var soStamps = new SerializedObject(stampTray);
+        SetRef(soStamps, "surface", desk.GetComponent<DeskSurface>());
+        SetRef(soStamps, "deskView", deskView);
+        soStamps.ApplyModifiedProperties();
+        var soDeskStamps = new SerializedObject(desk);
+        SetRef(soDeskStamps, "stamps", stampTray);
+        soDeskStamps.ApplyModifiedProperties();
 
         // The hall's Departure Board and portal rings (the portals spec v3; OfficeSceneUIBuilder.Portals.cs).
         DepartureBoardView board = BuildDepartureBoard(office, config, boardTooltip, game);
@@ -1239,8 +1246,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The band at the overlay's top the speech bubble and the wheel's ring keep clear (reference px): the office case HUD's strips, the desk view's Back control and gaps (the desk view clamps both to the top).</summary>
     private static readonly float OverlayTopClearance = CaseHudClearance + DeskViewBackSize.y + 8f;
 
-    /// <summary>The stamp tray's panel (reference px).</summary>
-    private static readonly Vector2 StampTraySize = new Vector2(420f, 96f);
+    /// <summary>A "Hand the papers back" button (reference px), bottom centre.</summary>
+    private static readonly Vector2 HandBackSize = new Vector2(520f, 60f);
+
+    /// <summary>The stamps' hint plate (reference px), above the hand-back buttons.</summary>
+    private static readonly Vector2 StampHintSize = new Vector2(520f, 44f);
 
     /// <summary>A strip at the top centre of the overlay, <paramref name="top"/> px down, with its text (auto-sized, no raycasts).</summary>
     private static TMP_Text TopStrip(Transform parent, string name, Vector2 size, float top, Color background, ThemeRoleId role, int fontSize, Color ink, out Transform strip)
@@ -1321,39 +1331,115 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The stamp tray (piece 10) under the office overlay canvas, rebuilt each
-    /// run, the wheel's host pattern: an always-active full-screen host
-    /// (StampTray, no graphic); its Catcher, a full-screen transparent
-    /// click-to-close area, inactive; the Panel under it (anchors and pivot
-    /// (0.5, 0.5), placed over the stamp by projection) with Accept (left,
-    /// tick) and Deny (right, cross) in piece 6's decision roles and labels.
+    /// The physical stamps (the desk-first redesign, item 12), rebuilt each
+    /// run: Office/StampTray (the DeskStampTray) holding its Tray (inactive
+    /// until slid out; the office binder places it): a wooden base, the
+    /// APPROVED stamp (green) and the DENIED stamp (red), each a click box
+    /// (Interactable layer, its pivot at its foot) with a block, a handle, a
+    /// knob and an ink band shown while inked, and the ink pad (a case and its
+    /// felt), each labelled on the base (keyed UI strings, printed flat); and
+    /// on the office overlay the two "Hand the papers back" buttons (bottom
+    /// centre, in the decision roles with their tick and cross, inactive) and
+    /// the step's hint on a plate above them (inactive).
     /// </summary>
-    private static StampTray BuildStampTray(Transform overlay, DeskConfigSO config)
+    private static DeskStampTray BuildStampTray(Transform overlay, Transform office, DeskConfigSO config)
     {
-        DestroyChildIfPresent(overlay, "StampTray");
-        Transform host = Panel(overlay, "StampTray", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        Transform catcher = Panel(host, "Catcher", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, 0f), ThemeRoleId.ClickCatcher);
-        Transform panel = Panel(catcher, "Panel", Center, Center, Vector2.zero, StampTraySize, PanelNavy, ThemeRoleId.Panel);
-        ((RectTransform)panel).pivot = Center;
+        DestroyChildIfPresent(office, "StampTray");
+        Transform host = EnsureChild(office, "StampTray");
+        Transform tray = EnsureChild(host, "Tray");
+        PrimitivePart(tray, "Base", PrimitiveType.Cube, new Vector3(0f, 0.006f, 0f), new Vector3(0.36f, 0.012f, 0.17f), LitMaterial("Stamp_TrayWood", new Color(0.36f, 0.23f, 0.14f), 0.25f));
 
-        Button accept = MakeButton(panel, "AcceptButton", null, new Vector2(0.03f, 0.12f), new Vector2(0.485f, 0.88f), new Color(0.2f, 0.5f, 0.24f, 1f),
-                                   ThemeRoleId.AcceptButton, "accept");
-        Button deny = MakeButton(panel, "DenyButton", null, new Vector2(0.515f, 0.12f), new Vector2(0.97f, 0.88f), new Color(0.72f, 0.2f, 0.18f, 1f),
-                                 ThemeRoleId.DenyButton, "deny");
-        BuildDecisionGlyph(accept, ThemeRoleId.AcceptButton, true);
-        BuildDecisionGlyph(deny, ThemeRoleId.DenyButton, false);
+        (Clickable stamp, GameObject inked) Stamp(string name, float x, Color body, Color inkColour, string labelKey)
+        {
+            Clickable click = EnsureClickBox(tray, name);
+            click.transform.localPosition = new Vector3(x, 0.012f, 0.015f);
+            var box = click.GetComponent<BoxCollider>();
+            box.center = new Vector3(0f, 0.06f, 0f);
+            box.size = new Vector3(0.085f, 0.12f, 0.065f);
+            Material bodyMaterial = LitMaterial("Stamp_" + name, body, 0.4f);
+            PrimitivePart(click.transform, "Block", PrimitiveType.Cube, new Vector3(0f, 0.016f, 0f), new Vector3(0.078f, 0.026f, 0.052f), bodyMaterial);
+            PrimitivePart(click.transform, "Handle", PrimitiveType.Cylinder, new Vector3(0f, 0.064f, 0f), new Vector3(0.026f, 0.035f, 0.026f),
+                          LitMaterial("Stamp_Handle", new Color(0.55f, 0.36f, 0.2f), 0.35f));
+            PrimitivePart(click.transform, "Knob", PrimitiveType.Sphere, new Vector3(0f, 0.104f, 0f), new Vector3(0.046f, 0.046f, 0.046f), bodyMaterial);
+            GameObject band = PrimitivePart(click.transform, "Ink", PrimitiveType.Cube, new Vector3(0f, 0.0025f, 0f), new Vector3(0.084f, 0.005f, 0.058f),
+                                            LitMaterial("Stamp_Ink" + name, inkColour, 0.6f));
+            band.SetActive(false);
+            click.SetOutline(click.GetComponentsInChildren<Renderer>(true));
+            TrayLabel(tray, name + "Label", new Vector3(x, 0.0125f, -0.06f), labelKey, inkColour);
+            return (click, band);
+        }
 
-        StampTray tray = host.gameObject.AddComponent<StampTray>();
-        var so = new SerializedObject(tray);
-        SetRef(so, "catcher", catcher.gameObject);
-        SetRef(so, "panel", panel);
-        SetRef(so, "acceptButton", accept);
-        SetRef(so, "denyButton", deny);
+        (Clickable approved, GameObject approvedInk) = Stamp("Approved", -0.115f, new Color(0.2f, 0.46f, 0.27f), new Color(0.1f, 0.42f, 0.2f), "stamp.label.approved");
+        (Clickable denied, GameObject deniedInk) = Stamp("Denied", 0f, new Color(0.62f, 0.18f, 0.15f), new Color(0.66f, 0.12f, 0.1f), "stamp.label.denied");
+
+        Clickable pad = EnsureClickBox(tray, "InkPad");
+        pad.transform.localPosition = new Vector3(0.115f, 0.012f, 0.015f);
+        var padBox = pad.GetComponent<BoxCollider>();
+        padBox.center = new Vector3(0f, 0.012f, 0f);
+        padBox.size = new Vector3(0.095f, 0.024f, 0.07f);
+        PrimitivePart(pad.transform, "Case", PrimitiveType.Cube, new Vector3(0f, 0.008f, 0f), new Vector3(0.092f, 0.016f, 0.068f), LitMaterial("Stamp_PadCase", new Color(0.16f, 0.17f, 0.19f), 0.5f));
+        PrimitivePart(pad.transform, "Felt", PrimitiveType.Cube, new Vector3(0f, 0.0165f, 0f), new Vector3(0.078f, 0.002f, 0.054f), LitMaterial("Stamp_PadFelt", new Color(0.09f, 0.1f, 0.2f), 0.1f));
+        pad.SetOutline(pad.GetComponentsInChildren<Renderer>(true));
+        TrayLabel(tray, "InkPadLabel", new Vector3(0.115f, 0.0125f, -0.06f), "stamp.label.ink", new Color(0.92f, 0.88f, 0.8f));
+        tray.gameObject.SetActive(false);
+
+        // The overlay: the two hand-back buttons at the bottom centre and the step's hint above them.
+        DestroyChildIfPresent(overlay, "StampHandBack");
+        Transform hand = Panel(overlay, "StampHandBack", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        Button Back(string name, ThemeRoleId role, Color colour, string key, bool tick)
+        {
+            Button b = MakeButton(hand, name, null, Vector2.zero, Vector2.one, colour, role, key);
+            var rt = (RectTransform)b.transform;
+            rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0f);
+            rt.pivot = Center;
+            rt.anchoredPosition = new Vector2(0f, HandBackSize.y / 2f + 24f);
+            rt.sizeDelta = HandBackSize;
+            BuildDecisionGlyph(b, role, tick);
+            b.gameObject.SetActive(false);
+            return b;
+        }
+        Button backApproved = Back("HandBackApproved", ThemeRoleId.AcceptButton, new Color(0.2f, 0.5f, 0.24f, 1f), "stamp.handBack.approved", true);
+        Button backDenied = Back("HandBackDenied", ThemeRoleId.DenyButton, new Color(0.72f, 0.2f, 0.18f, 1f), "stamp.handBack.denied", false);
+        Transform plate = Panel(hand, "Hint", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, HandBackSize.y + 48f + StampHintSize.y / 2f), StampHintSize, Tooltip, ThemeRoleId.Tooltip);
+        ((RectTransform)plate).pivot = Center;
+        plate.GetComponent<Image>().raycastTarget = false;
+        TMP_Text hint = Text(plate, "Label", "", 22, TextAlignmentOptions.Center, new Vector2(0.03f, 0.06f), new Vector2(0.97f, 0.94f), Ink, ThemeRoleId.Tooltip, fit: true);
+        hint.raycastTarget = false;
+        plate.gameObject.SetActive(false);
+
+        DeskStampTray stamps = GetOrAdd<DeskStampTray>(host.gameObject);
+        var so = new SerializedObject(stamps);
         SetRef(so, "config", config);
+        SetRef(so, "tray", tray);
+        SetRef(so, "approvedStamp", approved);
+        SetRef(so, "deniedStamp", denied);
+        SetRef(so, "inkPad", pad);
+        SerializedArrays.Set(so, "inkedFaces", new Object[] { approvedInk, deniedInk });
+        SetRef(so, "handBackApproved", backApproved);
+        SetRef(so, "handBackDenied", backDenied);
+        SetRef(so, "hint", hint);
         so.ApplyModifiedProperties();
+        return stamps;
+    }
 
-        catcher.gameObject.SetActive(false);
-        return tray;
+    /// <summary>A label printed flat on the stamp tray's base (a world-space text facing up, its words a keyed UI string baked in).</summary>
+    private static void TrayLabel(Transform tray, string name, Vector3 position, string key, Color colour)
+    {
+        var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshPro));
+        go.transform.SetParent(tray, false);
+        go.transform.localPosition = position;
+        go.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+        ((RectTransform)go.transform).sizeDelta = new Vector2(0.1f, 0.026f);
+        TextMeshPro tmp = go.GetComponent<TextMeshPro>();
+        tmp.text = UiText.Get(key);
+        tmp.enableAutoSizing = true;
+        tmp.fontSizeMax = 0.16f;
+        tmp.fontSizeMin = 0.04f;
+        tmp.textWrappingMode = TextWrappingModes.NoWrap;
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.color = colour;
+        tmp.sortingLayerID = GameplaySortingLayerId();
     }
 
     /// <summary>

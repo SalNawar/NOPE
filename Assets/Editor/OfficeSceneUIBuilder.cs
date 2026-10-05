@@ -38,7 +38,7 @@ using UnityEngine.UI;
 ///   claim tag), the desk view's "▲ Back" control and the stamp tray
 ///   (Accept and Deny at the desk) on the office overlay canvas
 ///   [TravellerWheel, OverlayCallout, SpeechBubbleInput, OfficeCaseHud,
-///   HoverHint, StampTray]
+///   HoverHint, the stamps' hand-back buttons]
 /// - The Office root: click boxes for the art's props, the physical desk
 ///   (papers, the scanner, the mat's click), the desk view's camera, the
 ///   traveller, the AVAILABLE sign, the readouts and the office's input rules,
@@ -201,7 +201,7 @@ public static partial class OfficeSceneUIBuilder
         InteractionPanelController interaction = wheel.transform.Find("Catcher/Ring").GetComponent<InteractionPanelController>();
         OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip, false);
         OverlayCallout boardTooltip = BuildOverlayCallout(officeCanvas.transform, "BoardTooltip", BoardTooltipSize, Tooltip, ThemeRoleId.Tooltip, false, true);
-        StampTray stampTray = BuildStampTray(officeCanvas.transform, deskConfig);
+        DeskStampTray stampTray = BuildStampTray(officeCanvas.transform, officeView.transform, deskConfig);
 
         // Verdict line (result text) on a strip that shows only while the line has text (piece 6 R18): top centre, the case HUD's compare strip's place (they never show together).
         DestroyChildIfPresent(officeCanvas.transform, "VerdictStrip");

@@ -140,6 +140,9 @@ public sealed class DeskView : MonoBehaviour
             Set(true);
     }
 
+    /// <summary>Tilts into the desk view whatever the mat's toggle says (no-op if it is on or unbound): a stamp picked up from the tray, to be pressed on the papers lying on the desk (the desk-first redesign, item 12).</summary>
+    public void TiltInNow() => Set(true);
+
     /// <summary>Returns to the normal view (no-op if it is on): Escape, the right-click, the next traveller, a newsletter.</summary>
     public void Return() => Set(false);
 

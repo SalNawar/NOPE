@@ -127,8 +127,30 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The photo's tint while its paper is held (evenly lit, unlike travellerTint on the desk).</summary>
     public Color examineTint = Color.white;
 
-    /// <summary>Where the stamp tray's centre sits from the stamp (overlay reference px): above it.</summary>
-    public Vector2 stampTrayOffset = new Vector2(0f, 140f);
+    [Header("Stamps (the desk-first redesign, item 12)")]
+    /// <summary>How many presses one inking lasts (Saleh 2026-10-05: "the player picks stamps, inks them, then stamps on the document"; 1: ink before every stamp).</summary>
+    [Min(1)] public int stampPressesPerInking = 1;
+
+    /// <summary>Where the stamp tray lies out on the desk: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame).</summary>
+    public Vector2 stampTrayOut = new Vector2(0.5f, -0.2f);
+
+    /// <summary>How far the tray slides in toward the chair from where it lies out, in metres.</summary>
+    [Min(0f)] public float stampTraySlide = 0.22f;
+
+    /// <summary>How far below the desk top the tray rests while in, in metres (under the desk's near edge).</summary>
+    [Min(0f)] public float stampTrayDrop = 0.06f;
+
+    /// <summary>Seconds the tray takes to slide out or in (a cut under Reduced Motion).</summary>
+    [Min(0f)] public float stampTraySeconds = 0.3f;
+
+    /// <summary>How high a held stamp floats above the desk under the pointer, in metres.</summary>
+    [Min(0f)] public float stampLift = 0.06f;
+
+    /// <summary>Seconds a press takes, down and up (on a paper or the ink pad).</summary>
+    [Min(0f)] public float stampPressSeconds = 0.18f;
+
+    /// <summary>The traveller's side of the desk where the stamped passport, dropped, hands the papers back: the strip this deep (metres) at the desk's far edge along the office view.</summary>
+    [Min(0f)] public float handBackDepth = 0.14f;
 
     [Header("Desk view (piece 10)")]
     /// <summary>The camera tilted forward over the desk (a click on the mat): how far it moves from the art office's view (forward and up, metres), how much further it pitches than aiming at the mat's centre (degrees), and the blend's seconds (a cut under Reduced Motion).</summary>

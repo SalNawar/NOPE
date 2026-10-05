@@ -9,8 +9,8 @@ using NUnit.Framework;
 /// per output, each over every row; the wheel, stamp and citation details; the
 /// default context. Expected outputs are written in this order: Desktop, CRT,
 /// Power, pRops, pApers, Wheel allowed, Traveller live, then (piece 10) Held
-/// papers live, desk catcher (K), Escape puts papers back, Stamp tray
-/// allowed, case hUd visible, then (the desk view, spec 11) the Mat toggles
+/// papers live, desk catcher (K), Escape puts papers back, Stamps live
+/// (the desk-first redesign: the physical stamps), case hUd visible, then (the desk view, spec 11) the Mat toggles
 /// the desk view, Escape and the right-click return from it (X), the desk
 /// View allowed, then (the readability fix) the "▲ Back" control and the wheel
 /// rolled up (B), the wheel rolled down over the mat (I), then (audit R5-001)
@@ -28,14 +28,14 @@ public class BoothRulesTests
         public string Expected;
     }
 
-    private static Row R(string name, bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool stampOpen, bool papersHeld, string expected) =>
-        R(name, focused, screenOn, phase, wheelOpen, stampOpen, papersHeld, false, expected);
+    private static Row R(string name, bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool stampHeld, bool papersHeld, string expected) =>
+        R(name, focused, screenOn, phase, wheelOpen, stampHeld, papersHeld, false, expected);
 
-    private static Row R(string name, bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool stampOpen, bool papersHeld, bool deskView, string expected) =>
-        R(name, focused, screenOn, phase, wheelOpen, stampOpen, papersHeld, deskView, true, expected);
+    private static Row R(string name, bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool stampHeld, bool papersHeld, bool deskView, string expected) =>
+        R(name, focused, screenOn, phase, wheelOpen, stampHeld, papersHeld, deskView, true, expected);
 
-    private static Row R(string name, bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool stampOpen, bool papersHeld, bool deskView, bool bound, string expected) =>
-        new Row { Name = name, Context = new BoothContext(focused, screenOn, phase, wheelOpen, false, stampOpen, papersHeld, deskView, bound), Expected = expected.Replace(" ", "") };
+    private static Row R(string name, bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool stampHeld, bool papersHeld, bool deskView, bool bound, string expected) =>
+        new Row { Name = name, Context = new BoothContext(focused, screenOn, phase, wheelOpen, false, stampHeld, papersHeld, deskView, bound), Expected = expected.Replace(" ", "") };
 
     /// <summary>The rows of the input table (the citation row is tested separately).</summary>
     private static readonly Row[] Rows =
@@ -45,22 +45,22 @@ public class BoothRulesTests
         R("newsletter, frame open",                 true,   true,  BoothPhase.Newsletter,      false, false, false,        "0000000 00000 000 00 0"),
         R("office, no traveller",                   false,  true,  BoothPhase.NoTraveller,     false, false, false,        "0111000 00000 101 01 0"),
         R("office, traveller at the desk",          false,  true,  BoothPhase.TravellerAtDesk, false, false, false,        "0111011 10011 101 01 0"),
-        R("wheel open",                             false,  true,  BoothPhase.TravellerAtDesk, true,  false, false,        "0000010 00011 000 00 0"),
+        R("wheel open",                             false,  true,  BoothPhase.TravellerAtDesk, true,  false, false,        "0000010 00001 000 00 0"),
         R("frame open, screen on",                  true,   true,  BoothPhase.TravellerAtDesk, false, false, false,        "1010000 10000 000 00 0"),
         R("frame open, screen off",                 true,   false, BoothPhase.TravellerAtDesk, false, false, false,        "0010000 10000 000 00 0"),
         R("frame open, no traveller",               true,   true,  BoothPhase.NoTraveller,     false, false, false,        "1010000 00000 000 00 0"),
         R("office, papers held",                    false,  true,  BoothPhase.TravellerAtDesk, false, false, true,         "0111011 11111 001 00 0"),
-        R("stamp tray open",                        false,  true,  BoothPhase.TravellerAtDesk, false, true,  false,        "0000010 00011 001 00 0"),
-        R("stamp tray open, papers held",           false,  true,  BoothPhase.TravellerAtDesk, false, true,  true,         "0000010 00011 001 00 0"),
-        R("wheel open, papers held",                false,  true,  BoothPhase.TravellerAtDesk, true,  false, true,         "0000010 00011 000 00 0"),
+        R("stamp held",                             false,  true,  BoothPhase.TravellerAtDesk, false, true,  false,        "0010010 10011 001 00 0"),
+        R("stamp held, papers held",                false,  true,  BoothPhase.TravellerAtDesk, false, true,  true,         "0010010 10011 001 00 0"),
+        R("wheel open, papers held",                false,  true,  BoothPhase.TravellerAtDesk, true,  false, true,         "0000010 00001 000 00 0"),
         R("frame open, papers held",                true,   true,  BoothPhase.TravellerAtDesk, false, false, true,         "1010000 10000 000 00 0"),
         R("office, no traveller, papers held",      false,  true,  BoothPhase.NoTraveller,     false, false, true,         "0111000 00000 001 00 0"),
         //                                          focused screen phase                      wheel  stamp  held   desk   DCPRAWT HKESU MXV BI O
         R("desk view, traveller at the desk",       false,  true,  BoothPhase.TravellerAtDesk, false, false, false, true,  "0111111 10011 111 10 1"),
         R("desk view, no traveller",                false,  true,  BoothPhase.NoTraveller,     false, false, false, true,  "0111000 00000 111 10 0"),
         R("desk view, papers held",                 false,  true,  BoothPhase.TravellerAtDesk, false, false, true,  true,  "0111111 11111 001 10 1"),
-        R("desk view, wheel open",                  false,  true,  BoothPhase.TravellerAtDesk, true,  false, false, true,  "0000010 00011 000 00 0"),
-        R("desk view, stamp tray open",             false,  true,  BoothPhase.TravellerAtDesk, false, true,  false, true,  "0000010 00011 001 00 0"),
+        R("desk view, wheel open",                  false,  true,  BoothPhase.TravellerAtDesk, true,  false, false, true,  "0000010 00001 000 00 0"),
+        R("desk view, stamp held",                  false,  true,  BoothPhase.TravellerAtDesk, false, true,  false, true,  "0010110 10011 001 00 1"),
         R("desk view, frame open",                  true,   true,  BoothPhase.TravellerAtDesk, false, false, false, true,  "1010000 10000 000 00 0"),
         R("desk view, newsletter",                  false,  true,  BoothPhase.Newsletter,      false, false, false, true,  "0000000 00000 000 00 0"),
         //                                          focused screen phase                      wheel  stamp  held   desk   bound  DCPRAWT HKESU MXV BI O
@@ -73,7 +73,7 @@ public class BoothRulesTests
     {
         o.DesktopInteractive, o.CrtFocusable, o.PowerButtonLive,
         o.PropsLive, o.PapersLive, o.WheelAllowed, o.TravellerLive,
-        o.HeldPapersLive, o.DeskCatcherLive, o.ExamineEscapeLive, o.StampTrayAllowed, o.CaseHudVisible,
+        o.HeldPapersLive, o.DeskCatcherLive, o.ExamineEscapeLive, o.StampsLive, o.CaseHudVisible,
         o.DeskViewToggleLive, o.DeskViewReturnLive, o.DeskViewAllowed,
         o.DeskViewBackLive, o.DeskViewScrollInLive,
         o.HeldDragOutLive
@@ -114,9 +114,12 @@ public class BoothRulesTests
         foreach (BoothContext c in AllContexts())
         {
             BoothInput o = BoothRules.Evaluate(c);
-            string name = $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}, bound {c.DeskViewBound}";
+            string name = $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampHeld}, held {c.PapersHeld}, desk view {c.DeskView}, bound {c.DeskViewBound}";
             bool reach = c.DeskView || !c.DeskViewBound;
-            Assert.AreEqual(o.PropsLive && c.Phase == BoothPhase.TravellerAtDesk && reach, o.PapersLive, name);
+            bool desk = !c.Focused && c.Phase != BoothPhase.Newsletter && !c.WheelOpen;
+            Assert.AreEqual(desk && c.Phase == BoothPhase.TravellerAtDesk && reach, o.PapersLive, name);
+            if (!c.StampHeld)
+                Assert.AreEqual(o.PropsLive && c.Phase == BoothPhase.TravellerAtDesk && reach, o.PapersLive, name);
             if (!reach)
                 Assert.IsFalse(o.PapersLive || o.HeldDragOutLive, $"nothing moves on the desk in the normal view: {name}");
         }
@@ -130,7 +133,7 @@ public class BoothRulesTests
         {
             BoothInput o = BoothRules.Evaluate(c);
             Assert.AreEqual(c.Phase != BoothPhase.Newsletter && !c.WheelOpen && !c.Focused, o.DeskViewAllowed,
-                $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}");
+                $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampHeld}, held {c.PapersHeld}, desk view {c.DeskView}");
         }
     }
 
@@ -140,20 +143,21 @@ public class BoothRulesTests
     [Test]
     public void TravellerLive_WhenTheWheelIsAllowedButClosed() => CheckColumn(6, "TravellerLive");
 
+    /// <summary>The desk-first redesign, item 12: a stamp in the hand is a tool, not a modal tray: the papers on the desk stay live (it presses on them) while the PC, the props, the traveller and the mat wait until it is put down; the stamps stay live, so picking one up never puts it down.</summary>
     [Test]
-    public void StampOpen_MakesCrtPowerPropsPapersTravellerInert()
+    public void AStampInTheHand_PressesOnThePapers_TheRestWaits()
     {
         foreach (bool held in new[] { false, true })
         {
-            BoothInput open = BoothRules.Evaluate(new BoothContext(false, true, BoothPhase.TravellerAtDesk, false, false, true, held, true, true));
-            Assert.IsFalse(open.CrtFocusable, "the PC");
-            Assert.IsFalse(open.PowerButtonLive, "the power buttons");
-            Assert.IsFalse(open.PropsLive, "the props");
-            Assert.IsFalse(open.PapersLive, "the papers on the desk");
-            Assert.IsFalse(open.HeldPapersLive, "the papers in the hand");
-            Assert.IsFalse(open.TravellerLive, "the traveller");
-            Assert.IsFalse(open.DeskViewToggleLive, "the mat");
-            Assert.IsTrue(open.StampTrayAllowed, "an open tray stays allowed, so opening it never closes it");
+            BoothInput stamp = BoothRules.Evaluate(new BoothContext(false, true, BoothPhase.TravellerAtDesk, false, false, true, held, true, true));
+            Assert.IsFalse(stamp.CrtFocusable, "the PC");
+            Assert.IsFalse(stamp.PropsLive, "the props");
+            Assert.IsTrue(stamp.PapersLive, "the papers on the desk take the press");
+            Assert.IsTrue(stamp.HeldPapersLive, "the papers in the hand");
+            Assert.IsFalse(stamp.TravellerLive, "the traveller");
+            Assert.IsFalse(stamp.DeskViewToggleLive, "the mat");
+            Assert.IsFalse(stamp.DeskViewReturnLive, "Escape puts the stamp down first");
+            Assert.IsTrue(stamp.StampsLive, "the stamps stay live while one is held");
         }
     }
 
@@ -179,7 +183,7 @@ public class BoothRulesTests
         foreach (BoothContext c in AllContexts())
         {
             BoothInput o = BoothRules.Evaluate(c);
-            string name = $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}";
+            string name = $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampHeld}, held {c.PapersHeld}, desk view {c.DeskView}";
             Assert.AreEqual(o.HeldPapersLive && o.PapersLive, o.HeldDragOutLive, name);
             if (c.Focused)
                 Assert.IsFalse(o.HeldDragOutLive, $"beside the open frame: {name}");
@@ -194,14 +198,14 @@ public class BoothRulesTests
         foreach (BoothContext c in AllContexts())
         {
             BoothInput o = BoothRules.Evaluate(c);
-            string name = $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}, bound {c.DeskViewBound}";
+            string name = $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampHeld}, held {c.PapersHeld}, desk view {c.DeskView}, bound {c.DeskViewBound}";
             Assert.AreEqual(o.PropsLive && c.Phase == BoothPhase.TravellerAtDesk && c.PapersHeld, o.DeskCatcherLive, name);
             Assert.AreEqual(o.DeskCatcherLive, o.ExamineEscapeLive, name);
         }
     }
 
     [Test]
-    public void StampTrayAllowed_OfficeViewTravellerAtDesk() => CheckColumn(10, "StampTrayAllowed");
+    public void StampsLive_OfficeViewTravellerAtDesk_WheelClosed() => CheckColumn(10, "StampsLive");
 
     [Test]
     public void CaseHudVisible_NotWhileFocused() => CheckColumn(11, "CaseHudVisible");
@@ -239,7 +243,7 @@ public class BoothRulesTests
         foreach (BoothContext c in AllContexts())
         {
             BoothInput o = BoothRules.Evaluate(c);
-            Assert.AreEqual(c.DeskView && o.PropsLive, o.DeskViewBackLive, $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}");
+            Assert.AreEqual(c.DeskView && o.PropsLive, o.DeskViewBackLive, $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampHeld}, held {c.PapersHeld}, desk view {c.DeskView}");
         }
     }
 
@@ -251,7 +255,7 @@ public class BoothRulesTests
         foreach (BoothContext c in AllContexts())
         {
             BoothInput o = BoothRules.Evaluate(c);
-            Assert.AreEqual(!c.DeskView && o.DeskViewToggleLive, o.DeskViewScrollInLive, $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}");
+            Assert.AreEqual(!c.DeskView && o.DeskViewToggleLive, o.DeskViewScrollInLive, $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampHeld}, held {c.PapersHeld}, desk view {c.DeskView}");
             Assert.IsFalse(o.DeskViewBackLive && o.DeskViewScrollInLive, "the wheel never both tilts in and back");
         }
     }
@@ -273,11 +277,11 @@ public class BoothRulesTests
     {
         foreach (BoothContext c in AllContexts())
         {
-            bool[] a = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, c.CitationPending, c.StampOpen, c.PapersHeld, false, c.DeskViewBound)));
-            bool[] b = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, c.CitationPending, c.StampOpen, c.PapersHeld, true, c.DeskViewBound)));
+            bool[] a = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, c.CitationPending, c.StampHeld, c.PapersHeld, false, c.DeskViewBound)));
+            bool[] b = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, c.CitationPending, c.StampHeld, c.PapersHeld, true, c.DeskViewBound)));
             for (int i = 0; i < a.Length; i++)
                 if (i != 13 && i != 15 && i != 16 && (!c.DeskViewBound || (i != 4 && i != 17)))
-                    Assert.AreEqual(a[i], b[i], $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, bound {c.DeskViewBound}: output {i} must not depend on the desk view");
+                    Assert.AreEqual(a[i], b[i], $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampHeld}, held {c.PapersHeld}, bound {c.DeskViewBound}: output {i} must not depend on the desk view");
         }
     }
 
@@ -304,7 +308,7 @@ public class BoothRulesTests
         {
             BoothContext c = row.Context;
             BoothInput plain = BoothRules.Evaluate(c);
-            BoothInput held = BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, true, c.StampOpen, c.PapersHeld, c.DeskView, c.DeskViewBound));
+            BoothInput held = BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, true, c.StampHeld, c.PapersHeld, c.DeskView, c.DeskViewBound));
 
             Assert.IsFalse(held.PowerButtonLive, row.Name);
             bool[] a = Outputs(plain), b = Outputs(held);
@@ -333,10 +337,10 @@ public class BoothRulesTests
                 continue;
             BoothInput o = BoothRules.Evaluate(c);
             if (o.CrtFocusable || o.PropsLive || o.PapersLive || o.WheelAllowed || o.TravellerLive ||
-                o.DeskCatcherLive || o.ExamineEscapeLive || o.StampTrayAllowed || o.CaseHudVisible ||
+                o.DeskCatcherLive || o.ExamineEscapeLive || o.StampsLive || o.CaseHudVisible ||
                 o.DeskViewToggleLive || o.DeskViewReturnLive || o.DeskViewBackLive || o.DeskViewScrollInLive ||
                 o.HeldDragOutLive)
-                wrong.Add($"{c.Phase}, screen {c.ScreenOn}, wheel {c.WheelOpen}, citation {c.CitationPending}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}");
+                wrong.Add($"{c.Phase}, screen {c.ScreenOn}, wheel {c.WheelOpen}, citation {c.CitationPending}, stamp {c.StampHeld}, held {c.PapersHeld}, desk view {c.DeskView}");
         }
 
         Assert.IsEmpty(wrong, $"Something behind the open frame takes input: {string.Join("; ", wrong)}");

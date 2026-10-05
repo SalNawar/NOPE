@@ -464,8 +464,11 @@ public enum PaperClickAction
     /// <summary>Puts a held paper back where it lay.</summary>
     PutBack,
 
-    /// <summary>Picks the clicked row of a held paper for comparison.</summary>
-    Pick
+    /// <summary>Picks the clicked row of a held paper, or of a paper lying on the desk in the desk view, for comparison.</summary>
+    Pick,
+
+    /// <summary>Presses the stamp in the hand on a paper lying on the desk (the desk-first redesign, item 12).</summary>
+    Press
 }
 
 /// <summary>How a click on a paper routes (piece 10).</summary>
@@ -473,14 +476,24 @@ public static class PaperClicks
 {
     /// <summary>
     /// On a paper on the desk, a left click examines it and a right click does
-    /// nothing; on a held paper, a left click on a row picks the row, a left
-    /// click off every row (the title, the photo, a margin) puts it back, and
-    /// a right click puts it back.
+    /// nothing; in the desk view (<paramref name="pickLying"/>: the desk-first
+    /// redesign, items 5 and 11) a left click on a row of a paper lying on the
+    /// desk picks the row where it lies; with a stamp in the hand
+    /// (<paramref name="stampHeld"/>, item 12) a left click on a paper lying on
+    /// the desk presses the stamp on it; on a held paper, a left click on a row
+    /// picks the row, a left click off every row (the title, the photo, a
+    /// margin) puts it back, and a right click puts it back.
     /// </summary>
-    public static PaperClickAction Decide(bool held, bool secondary, bool onRow)
+    public static PaperClickAction Decide(bool held, bool secondary, bool onRow, bool pickLying = false, bool stampHeld = false)
     {
         if (!held)
-            return secondary ? PaperClickAction.None : PaperClickAction.Examine;
+        {
+            if (secondary)
+                return PaperClickAction.None;
+            if (stampHeld)
+                return PaperClickAction.Press;
+            return onRow && pickLying ? PaperClickAction.Pick : PaperClickAction.Examine;
+        }
         if (secondary)
             return PaperClickAction.PutBack;
         return onRow ? PaperClickAction.Pick : PaperClickAction.PutBack;

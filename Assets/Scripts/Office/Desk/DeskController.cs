@@ -69,6 +69,9 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The desk catcher (piece 10; optional): a click on the desk puts every held paper back; active only while BoothCoordinator allows it.</summary>
     [SerializeField] private ClickCatcher deskCatcher;
 
+    /// <summary>The physical stamps (the desk-first redesign, item 12; optional): a click on a paper with a stamp in the hand presses it, and the stamped passport dropped on the traveller's side hands the papers back.</summary>
+    [SerializeField] private DeskStampTray stamps;
+
     /// <summary>The office overlay's parts a handed-over paper must not land under (the case HUD's strips, the speech bubble, the wheel's ring; optional): each counts while shown, as the screen rectangle of its visible graphics.</summary>
     [SerializeField] private RectTransform[] landingCovers;
 
@@ -85,6 +88,9 @@ public sealed class DeskController : MonoBehaviour
     private bool _heldLive;
     private bool _heldDragOutLive;
     private bool _escapeLive;
+
+    /// <summary>True while the boxes of the papers lying on the desk pick where they lie (the desk view; SetRowsOnDesk).</summary>
+    private bool _rowsOnDesk;
 
     /// <summary>The frame Escape became able to put papers back (an Escape that closed the frame, the wheel or the tray in the same frame is not taken again).</summary>
     private int _escapeLiveSince;
@@ -231,8 +237,15 @@ public sealed class DeskController : MonoBehaviour
         _handedOver = 0;
         _dragged = -1;
 
+        int passport = -1;
         foreach (int i in _state.ArrivalIndices)
+        {
+            if (passport < 0)
+                passport = i;
             HandOver(i);
+        }
+        if (stamps != null)
+            stamps.BeginCase(passport);
         RefreshHint();
         HoldsChanged?.Invoke();
     }
@@ -265,6 +278,7 @@ public sealed class DeskController : MonoBehaviour
         paper.Clicked += HandlePaperClicked;
 
         _papers[i] = paper;
+        paper.SetRowsOnDesk(_rowsOnDesk);
         _stack.Add(i);
         ApplyStack();
 
@@ -274,11 +288,14 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
-    /// <summary>The decision (<paramref name="accepted"/>): held papers drop back at once, then every paper goes back (a running scan is cancelled) wearing the verdict's ink mark (DeskDocument.ShowVerdict), slides inert and out of the raycast to the traveller's side and is destroyed.</summary>
+    /// <summary>The decision (<paramref name="accepted"/>): held papers drop back at once, then every paper goes back (a running scan is cancelled) wearing the verdict's ink mark (DeskDocument.ShowVerdict; not when the player stamped the passport: their marks are the verdict's), slides inert and out of the raycast to the traveller's side and is destroyed.</summary>
     public void EndCase(bool accepted)
     {
         if (_state == null)
             return;
+        bool stamped = stamps != null && stamps.HasVerdict;
+        if (stamps != null)
+            stamps.EndCase();
 
         foreach (int i in _state.PutBackAll())
             Release(_papers[i], true);
@@ -294,7 +311,8 @@ public sealed class DeskController : MonoBehaviour
             DeskDocument leaving = paper;
             leaving.SetExamined(false);
             leaving.SetLive(false, false, false);
-            leaving.ShowVerdict(accepted);
+            if (!stamped)
+                leaving.ShowVerdict(accepted);
             leaving.SlideTo(handOverPoint.position, config.paperSlideSeconds, () => Destroy(leaving.gameObject));
         }
 
@@ -327,6 +345,37 @@ public sealed class DeskController : MonoBehaviour
             deskCatcher.gameObject.SetActive(live);
     }
 
+    /// <summary>Lets the boxes of the papers lying on the desk be hovered and picked where they lie, or not (BoothCoordinator: in the desk view while the papers take input; the desk-first redesign, item 11).</summary>
+    public void SetRowsOnDesk(bool live)
+    {
+        _rowsOnDesk = live;
+        foreach (DeskDocument paper in _papers)
+            if (paper != null)
+                paper.SetRowsOnDesk(live);
+    }
+
+    /// <summary>Where the box of document <paramref name="document"/>'s row <paramref name="rowIndex"/> is on its paper in world space (a match line meets it there); false when the paper is not on the desk or prints no such box.</summary>
+    public bool TryFieldPoint(int document, int rowIndex, out Vector3 world)
+    {
+        world = default;
+        DeskDocument paper = document >= 0 && document < _papers.Count ? _papers[document] : null;
+        if (paper == null)
+            return false;
+        int slot = paper.SlotOfRow(rowIndex);
+        if (slot < 0)
+            return false;
+        world = paper.SlotCentre(slot);
+        return true;
+    }
+
+    /// <summary>Marks the box of document <paramref name="document"/>'s row <paramref name="rowIndex"/> as a clear mistake found, in <paramref name="colour"/>, for the rest of the case (the desk-first redesign, item 11: "highlight clear mistakes"); nothing when the paper is not on the desk.</summary>
+    public void MarkField(int document, int rowIndex, Color colour)
+    {
+        DeskDocument paper = document >= 0 && document < _papers.Count ? _papers[document] : null;
+        if (paper != null)
+            paper.SetMarked(paper.SlotOfRow(rowIndex), colour);
+    }
+
     /// <summary>Lets Escape put every held paper back, from the next frame on (BoothCoordinator: BoothRules.ExamineEscapeLive).</summary>
     public void SetExamineEscapeLive(bool live)
     {
@@ -341,10 +390,13 @@ public sealed class DeskController : MonoBehaviour
         if (_state == null)
             return;
 
-        switch (PaperClicks.Decide(_state.IsHeld(paper.Index), secondary, slot >= 0 && slot < paper.SlotCount))
+        switch (PaperClicks.Decide(_state.IsHeld(paper.Index), secondary, slot >= 0 && slot < paper.SlotCount, _rowsOnDesk, stamps != null && stamps.IsHolding))
         {
             case PaperClickAction.Examine:
                 Examine(paper);
+                break;
+            case PaperClickAction.Press:
+                stamps.Press(paper, paper.LastPressPoint);
                 break;
             case PaperClickAction.Pick:
                 FieldPicked?.Invoke(paper.Index, paper.FieldAt(slot), paper.SlotHighlight(slot));
@@ -554,6 +606,11 @@ public sealed class DeskController : MonoBehaviour
                 Slide(paper, ClearOfScanner(paper, drag.PickUpPosition));
                 break;
             default:
+                if (stamps != null && stamps.CanHandBack(paper.Index) && OnTravellersSide(released))
+                {
+                    stamps.HandBack();
+                    return;
+                }
                 Vector3 clear = ClearOfScanner(paper, paper.transform.position);
                 if ((clear - paper.transform.position).sqrMagnitude > 1e-8f)
                     Slide(paper, clear);
@@ -581,6 +638,18 @@ public sealed class DeskController : MonoBehaviour
         Slide(paper, ClearOfScanner(paper, drag.PickUpPosition));
         _stack.BringToFront(paper.Index);
         ApplyStack();
+    }
+
+    /// <summary>True when <paramref name="point"/> lies in the strip of the desk's clamp area at its far edge along the office view (DeskConfigSO.handBackDepth): the traveller's side, where the stamped passport hands the papers back.</summary>
+    private bool OnTravellersSide(Vector3 point)
+    {
+        if (surface == null || config == null)
+            return false;
+        Vector3 origin = surface.transform.position;
+        float far = float.MinValue;
+        foreach (Vector3 corner in surface.Corners())
+            far = Mathf.Max(far, Vector3.Dot(corner - origin, _viewForward));
+        return Vector3.Dot(point - origin, _viewForward) >= far - config.handBackDepth;
     }
 
     /// <summary>

@@ -13,7 +13,8 @@ using UnityEngine.UI;
 /// two panes; every source has one view per pane and the presenters fill
 /// them all) and offers the binary Accept/Deny (the app's decision step, whose
 /// Deny waits for a logged difference or broken rule, MatchBoard's findings;
-/// and the desk's stamp tray, ungated; wired once); the work is its
+/// and the desk's physical stamps, the papers handed back with the passport's
+/// verdict, ungated; wired once); the work is its
 /// presenters': CaseDocumentsPresenter (the papers,
 /// the hand-over and the scan: the Documents tab), InterviewPresenter (the
 /// dialog runner on the traveller wheel, the Transcript tab, the bubble),
@@ -41,7 +42,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The Investigation app: its window, header, counters, badges, toast and pane.</summary>
     [SerializeField] private InvestigationApp app;
 
-    /// <summary>The decision step's Accept (the stamp tray's decides too).</summary>
+    /// <summary>The decision step's Accept (the desk's stamps decide too).</summary>
     [SerializeField] private Button acceptButton;
 
     /// <summary>The decision step's Deny (interactable once a difference or a broken rule is logged).</summary>
@@ -82,8 +83,8 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The office case HUD (piece 10; optional): the office compare strip's host (it prints no claim).</summary>
     [SerializeField] private OfficeCaseHud hud;
 
-    /// <summary>The stamp tray (piece 10; optional): its Accept and Deny decide the case like the PC's buttons.</summary>
-    [SerializeField] private StampTray stampTray;
+    /// <summary>The physical stamps (the desk-first redesign, item 12; optional): the papers handed back with the passport's verdict decide the case like the PC's buttons.</summary>
+    [SerializeField] private DeskStampTray stampTray;
 
     /// <summary>The traveller wheel: closed after a hand-over; it gives the ring its icons and says the traveller's lines (the claim on arrival, then each reply).</summary>
     [SerializeField] private TravellerWheel wheel;
@@ -112,8 +113,8 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The current case's evidence and the Report tab.</summary>
     private EvidencePresenter _evidence;
 
-    /// <summary>The stamp tray whose decisions this listens to (null while detached; audit R4-003).</summary>
-    private StampTray _stampTrayListening;
+    /// <summary>The stamps whose decisions this listens to (null while detached; audit R4-003).</summary>
+    private DeskStampTray _stampTrayListening;
 
     /// <summary>The character art the traveller's face is drawn with.</summary>
     private CharacterArt _art;
