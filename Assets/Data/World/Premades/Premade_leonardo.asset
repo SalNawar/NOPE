@@ -32,8 +32,8 @@ MonoBehaviour:
   employer: 
   pulls:
   - factor: future
-    outcome: cybernetic
-    amount: 5
-  - factor: future
     outcome: space_age
-    amount: 3
+    amount: 12
+  - factor: government
+    outcome: technocracy
+    amount: 6

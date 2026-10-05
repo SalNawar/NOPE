@@ -94,4 +94,27 @@ public class TracesTests
         CollectionAssert.AreEqual(new[] { "PANIC in Athens (Ancient): someone in wrist comm.", "PANIC in Athens (Ancient): someone in sneakers." },
                                   History.PanicLines("PANIC in {place}: someone in {value}.", panics), "no traced template: the old line");
     }
+
+    [Test]
+    public void Lines_ATraceLinePerAnsweredFactor_ForChronopediasToday()
+    {
+        var traces = new List<PullTrace>
+        {
+            new PullTrace { factor = "government", outcome = "monarchy", traveller = "Cleopatra", day = 6 },
+            new PullTrace { factor = "future", outcome = "nuclear", traveller = "Albert Einstein", day = 7 }
+        };
+        var leads = new[]
+        {
+            new FactorLead { factor = "government", outcome = "monarchy" },
+            new FactorLead { factor = "future", outcome = "space", split = "nuclear" },
+            new FactorLead { factor = "money", outcome = "debt" },
+            null
+        };
+        Dictionary<string, string> lines = Traces.Lines(traces, leads, "Traced to Desk 3: {name}, day {day}.");
+        CollectionAssert.AreEquivalent(new[] { "government", "future" }, lines.Keys, "an untraced answer has no line");
+        Assert.AreEqual("Traced to Desk 3: Cleopatra, day 6.", lines["government"]);
+        Assert.AreEqual("Traced to Desk 3: Albert Einstein, day 7.", lines["future"], "a split: its later half's traveller");
+        CollectionAssert.IsEmpty(Traces.Lines(traces, leads, " "), "no template: no lines");
+        CollectionAssert.IsEmpty(Traces.Lines(null, null, "{name}"));
+    }
 }

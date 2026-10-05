@@ -537,7 +537,7 @@ public static class ContentSheetMap
                     Text("category"),
                     Text("value")),
                 Num("stability").Omit().Note("a change of stability the night the rule fires, a percent of where it stands (-3 takes 3%); blank: none"),
-                Text("section").Omit().OneOf("News", "Desk", "Return").Note("where the line goes: the paper's news (blank), the paper's desk section, or nowhere until the character returns (its fired flag, trig:history_{id}:fired)"),
+                Text("section").Omit().OneOf("News", "Desk", "Return", "Front").Note("where the line goes: the paper's news (blank), the paper's desk section, nowhere until the character returns (its fired flag, trig:history_{id}:fired), or the front page, leading the news (a famous traveller's homecoming)"),
                 Rows("historyPulls", "pulls",
                     Text("factor").Ref("worldFactors"),
                     Text("outcome").Note("an outcome id of the factor (worldOutcomes)"),

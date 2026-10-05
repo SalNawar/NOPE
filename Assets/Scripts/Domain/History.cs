@@ -19,7 +19,10 @@ public enum StorySection
     Desk,
 
     /// <summary>Never printed: the consequence waits for the character's return (FlagKeys.HistoryRuleFired).</summary>
-    Return
+    Return,
+
+    /// <summary>The morning paper's front page: the line leads the news, ahead of every other line (a famous traveller's homecoming, Track E 2026-10-05).</summary>
+    Front
 }
 
 /// <summary>Why a fact changed. Serialized as ints in saves: append only.</summary>
@@ -208,6 +211,40 @@ public static class History
 
     /// <summary>True for the categories history may change.</summary>
     public static bool IsEditable(ClueCategory category) => Array.IndexOf(EditableCategories, category) >= 0;
+
+    /// <summary>The source label a fired story rule's effects carry ("Trigger: {rule name}"; TimelineService.EvaluateTriggers writes it, a rule's fact edit keeps it as its source).</summary>
+    public const string TriggerSourcePrefix = "Trigger: ";
+
+    /// <summary>The rule's name in a fact edit's source (<see cref="TriggerSourcePrefix"/> taken off); the source itself when it has no prefix; empty for none.</summary>
+    public static string RuleName(string source) =>
+        string.IsNullOrEmpty(source) ? string.Empty
+        : source.StartsWith(TriggerSourcePrefix, StringComparison.Ordinal) ? source.Substring(TriggerSourcePrefix.Length)
+        : source;
+
+    /// <summary>
+    /// Files a fired story rule's line where its section prints it (days 7-15
+    /// Q9, Track E): the front page (<paramref name="front"/>), the news, the
+    /// desk's section, or nowhere (Return). A blank line is never filed. True
+    /// when filed.
+    /// </summary>
+    public static bool FileStory(StorySection section, string line, List<string> front, List<string> news, List<string> desk)
+    {
+        if (string.IsNullOrEmpty(line))
+            return false;
+        List<string> into = section == StorySection.Front ? front : section == StorySection.Desk ? desk : section == StorySection.Return ? null : news;
+        if (into == null)
+            return false;
+        into.Add(line);
+        return true;
+    }
+
+    /// <summary>The paper's news as printed: the front-page lines first (in the order they fired, so the first leads), then the rest in order.</summary>
+    public static List<string> FrontFirst(IEnumerable<string> front, IEnumerable<string> news)
+    {
+        var lines = new List<string>(front ?? Array.Empty<string>());
+        lines.AddRange(news ?? Array.Empty<string>());
+        return lines;
+    }
 
     /// <summary>Whose Future place is in the world: the leader's; none (null) without a leader.</summary>
     public static string FutureNation(HistoryState history) =>
