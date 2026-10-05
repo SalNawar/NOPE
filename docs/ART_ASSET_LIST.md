@@ -130,6 +130,19 @@ A traveller hands over Temporal Customs forms (the TC forms of the redesign). Ea
 | Verdict ink marks | on every paper as it leaves after the verdict, in its stamp area (fitted at its own aspect) | `Assets/Art/UI/Resources/Forms/stamp_accept.png`, `stamp_deny.png` | none | 400 × 200, transparent, a text-free tick mark and cross mark in their own ink colours | 1 | missing |
 
 - **The stamp itself** is the Blender prop (section 1). The PC's Accept and Deny buttons are code-drawn, and so is piece 10's stamp tray.
+
+### Travel documents (desk-first, 2026-10-05; `docs/superpowers/specs/2026-10-05-travel-documents-design.md`)
+
+The papers now look like real travel documents, each its own shape (the aspect is width over height; the faces above are re-sized to it): the **passport** TC-101 (an open booklet, 0.66: the data page above the spine, the visa page below), the **entry ticket** TC-230 (a landscape stub, 1.15), the **waiver** TC-310 (a long legal sheet, 0.56), the **work permit** TC-520 (a letterhead, 0.765), the **travel permit** TC-610 (a folded square card, 1.0) and the **transponder card** TC-240 (a plastic ID-1 card, 1.586, new). Until the art lands the code draws every stand-in: the cover's edge in the nation's colour, the spine, the crease, the chip, the rounded corners, the emblems and the stamps. Every face stays text-free and box-free (the code prints them).
+
+| Item | Where it shows | File | Now | Deliver | Tier | Status |
+|---|---|---|---|---|---|---|
+| Passport emblems × 8 | at the passport header's left (about 50 px at 1080p held) and as the visa page's large faint watermark, tinted by the nation's cover colour | `Assets/Art/UI/Resources/Forms/emblem_<emblem>.png`: `emblem_wingedsun` (Egypt), `emblem_octastar` (Iraq), `emblem_laurel` (Greece), `emblem_star` (Italy), `emblem_fivestars` (China), `emblem_chrysanthemum` (Japan), `emblem_crown` (Britain), `emblem_eagle` (Germany) | code-drawn geometric stand-ins (`EmblemShapes`) | 512 × 512, **white on transparent** (one ink; the game tints it), a 2150 national emblem built on the motif named, no letters | 1 | code-drawn |
+| Passport page per nation × 8 | the passport's paper (data page and visa page) for a holder of that nation; tried before `paper_tc101` | `Assets/Art/UI/Resources/Forms/paper_tc101_<nation>.png`: `egypt`, `iraq`, `greece`, `italy`, `china`, `japan`, `britain`, `germany` | the ivory tint | 1024 × 1552 (0.66): security paper with a fine guilloche in the nation's tint, the emblem as a faint repeat pattern; **no cover edge and no spine** (the code draws them in the cover colour), no boxes | 1 | missing |
+| Transponder card face | the transponder card TC-240 | `Assets/Art/UI/Resources/Forms/paper_tc240.png` | the pearl tint, rounded corners and a sheen band drawn by code | 1024 × 646 (1.586), pale pearl plastic with a holographic sheen down the left, corners rounded at 3.5 % of the width and transparent outside them; no chip (the code draws it) | 1 | missing |
+| The six documents' faces at their new shapes | replaces the per-kind face sizes above for `paper_tc101` (1024 × 1552), `paper_tc230` (1024 × 890, ticket card stock, a torn-off stub edge at the left), `paper_tc310` (1024 × 1829, long legal paper), `paper_tc520` (1024 × 1339, letterhead stock with an engraved band at the head and foot), `paper_tc610` (1024 × 1024, card stock with a soft fold down the middle) | as the per-kind faces | as the per-kind faces | as listed; the code keeps drawing the bands, the crease and the perforation over them | 1 | missing |
+| APPROVED and DENIED stamps | the stamp's mark: on the passport's visa page (and each other paper's stamp area) where the stamp is pressed | `Assets/Art/UI/Resources/Forms/stamp_accept.png`, `stamp_deny.png` (the same files as the verdict ink marks above, now the stamps' impressions) | code-drawn: a double frame and the word APPROVED (green) or DENIED (red), tilted | 560 × 200, transparent, a rubber-stamp impression with the word APPROVED (green ink) or DENIED (red ink) in a double frame, slightly worn | 1 | code-drawn |
+| Closed passport covers × 8 | (a later step: the closed booklet before it is opened; not drawn yet) | `Assets/Art/UI/Resources/Forms/passport_cover_<nation>.png` | none | 704 × 1000, the closed booklet in the nation's cover colour (`world_source.json` `countries[].passport.cover`), the emblem in gold foil, PASSPORT in English and the nation's script | 2 | future |
 - **Drawn by code, no art:** the reference book pages, Citizen Records, the Deviation Report, the Directives sticky note and the transcript. All are windows, so they take the UI kit.
 
 ## 5. The day flow
@@ -290,12 +303,12 @@ New 2D files (the Blender scanner and the characters are counted apart):
 | 1. The office (Blender) | – | – | the scanner model (Tier 3) |
 | 2. 2D layers over the office | 7 | 0 | 7 |
 | 3. PC desktop | 34 | 11 | 45 |
-| 4. Documents | 22 | 0 | 22 |
+| 4. Documents | 39 | 8 | 47 |
 | 5. Day flow | 3 | 0 | 3 |
 | 6. Home | 11 | 7 | 18 |
 | 7. Title and endings | 10 | 1 | 11 |
 | 8. Icons | 6 | 0 | 6 |
-| **Total** | **93** | **19** | **112** |
+| **Total** | **110** | **27** | **137** |
 
 - Every decision was answered yes, so all are wanted. The Orders app (2026-09-29) added the Orders icon, four branch glyphs and four portal-repair icons, and moved the eight upgrade icons from Home to it (109); the portals (the portals spec v3) added the Portals icon, the portal glow and the Return Gate's spiral (112). The count moved from 107 to 100 with the redesign: six desktop icons instead of seventeen, one Title face (normal and hover) instead of four baked buttons, eight upgrade icons, and ten per-kind faces, the plain agency face and the seal instead of the passport and permit faces.
 - Tier 2 now: the UI kit (9) and the grab cursors (2), the slot and sleep panels and the ending panel (their white text needs a dark panel), the slot outcome symbols (5); the scanned copy waits on plan phase 5 and reuses the faces.
