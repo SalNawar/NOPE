@@ -9,14 +9,16 @@ using UnityEngine.UI;
 /// spec, docs/superpowers/specs/2026-09-30-pc-workbench-design.md, §2, §3,
 /// §5): one desktop window on the window layer ("Investigation"; the
 /// restored size from DesktopConfigSO, maximised on its first open). Under
-/// its title bar: the header (the traveller's face, name and counters; the
-/// five guided steps' pills: GuideBar), the shelf (the documents' groups
-/// and chips wrapping in a FlowLayoutGroup, the Search button: ShelfView),
-/// the work area (the main column with the step's lead, the status line,
-/// the two panes with the line layer over them (AppPane, MatchLines) and the
-/// decision step in their place when it shows (DecisionView); the findings
-/// column at its right: FindingsView), the foot (Back, the progress line,
-/// Next) and the search drawer (OfficeSceneUIBuilder.Search). The panes'
+/// its title bar (just "Investigation": the header names the traveller): the
+/// header (the traveller's face, name and one short line; the guided steps'
+/// segmented control: GuideBar), the shelf (the documents' chips on one row
+/// and the Books menu: ShelfView), the work area (the main column with the
+/// status line and Search, the two panes with the gutter and the line layer
+/// over them (AppPane, MatchLines) and the decision step in their place when
+/// it shows (DecisionView); the findings column at its right, a rail while
+/// empty: FindingsView), the foot (Back, the progress line, Next) and the
+/// search drawer (OfficeSceneUIBuilder.Search); the Books menu is built last
+/// so it draws over the work (wave 5 A3). The panes'
 /// views are forms (OfficeSceneUIBuilder.AppViews, PcForms) behind IAppView;
 /// the scan toast goes on the investigation host above the window layer.
 /// The workbench's parts are OfficeSceneUIBuilder.Workbench's. Rebuilt fresh
@@ -27,7 +29,7 @@ using UnityEngine.UI;
 public static partial class OfficeSceneUIBuilder
 {
     /// <summary>The scan toast's size, and its gap above the taskbar.</summary>
-    private static readonly Vector2 AppToastSize = new Vector2(620f, 60f);
+    private static readonly Vector2 AppToastSize = new Vector2(540f, 56f);
 
     /// <summary>The app's parts the rest of Build wires (the façade, the desktop's registry, Mail): each source's views, one per pane, the left pane's first; the steps and the workbench.</summary>
     private struct AppParts
@@ -84,17 +86,16 @@ public static partial class OfficeSceneUIBuilder
         Transform body = Panel(win, "AppBody", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(body, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -top));
 
-        // The header, the shelf, the foot, then the work area between them (the shelf's height moves its top at runtime).
+        // The header, the shelf, the foot, then the work area between them.
         AppHeader header = BuildAppHeader(body);
-        ShelfView shelf = BuildShelf(body);
+        ShelfView shelf = BuildShelf(body, out RectTransform booksMenu);
         AppFoot foot = BuildAppFoot(body);
         Transform work = Panel(body, "Work", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(work, Vector2.zero, Vector2.one, new Vector2(0f, WbSize.Foot), new Vector2(0f, -(WbSize.Header + WbSize.ShelfStart)));
+        PlaceRect(work, Vector2.zero, Vector2.one, new Vector2(0f, WbSize.Foot), new Vector2(0f, -(WbSize.Header + WbSize.Shelf)));
 
         FindingsView findings = BuildFindingsColumn(work, out RectTransform findingsColumn);
         Transform main = Panel(work, "Main", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(main, Vector2.zero, Vector2.one, new Vector2(WbSize.Pad, WbSize.Gap), new Vector2(-(WbSize.Findings + WbSize.Gap), -WbSize.Gap));
-        AppLead lead = BuildLead(main);
+        PlaceRect(main, Vector2.zero, Vector2.one, new Vector2(WbSize.Pad, 12f), new Vector2(-(WbSize.Findings + WbSize.Gap), -12f));
         AppStatus status = BuildStatusLine(main);
 
         Transform panes = Panel(main, "Panes", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -103,7 +104,7 @@ public static partial class OfficeSceneUIBuilder
         AppPane right = BuildAppPane(panes, "PaneRight", AppTab.Reference, compare, config, false, out PaneViews rightViews);
         PlaceRect(right.transform, new Vector2(0.5f, 0f), Vector2.one, new Vector2(config.paneGap / 2f, 0f), Vector2.zero);
         right.gameObject.SetActive(false);
-        MatchLines lines = BuildMatchLines(panes);
+        MatchLines lines = BuildMatchLines(panes, right.gameObject);
 
         DecisionView decision = BuildDecision(main, out parts.Accept, out parts.Deny);
 
@@ -122,7 +123,6 @@ public static partial class OfficeSceneUIBuilder
 
         var soGuide = new SerializedObject(parts.Guide);
         SerializedArrays.Set(soGuide, "pills", header.Pills);
-        Wire(soGuide, "leadTitle", lead.Title);
         Wire(soGuide, "backButton", foot.Back);
         Wire(soGuide, "nextButton", foot.Next);
         Wire(soGuide, "nextLabel", foot.NextLabel);
@@ -159,6 +159,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "rightPane", right);
         Wire(so, "work", work);
         Wire(so, "findingsColumn", findingsColumn);
+        so.FindProperty("findingsRail").floatValue = WbSize.Rail;
         Wire(so, "mainColumn", main);
         Wire(so, "face", header.Face);
         Wire(so, "nameText", header.Name);
@@ -172,7 +173,8 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "toast", toast);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
-        BuildAppSearch(parts.App, body, lead.Search, config);
+        BuildAppSearch(parts.App, body, status.Search, config);
+        booksMenu.SetAsLastSibling();
         return parts;
     }
 
@@ -238,12 +240,14 @@ public static partial class OfficeSceneUIBuilder
         return toggle;
     }
 
-    /// <summary>The scan toast (WN5, C10) on the investigation host, above the window layer: centred over the app's foot (never over the documents), its line at Body size and Open, hidden.</summary>
+    /// <summary>The scan toast (WN5, C10) on the investigation host, above the window layer: at the desktop's lower right, just above the app's foot (never over the foot's words; wave 5 A3), its line at Body size and Open, hidden.</summary>
     private static AppToast BuildAppToast(Transform investHost, DesktopConfigSO config)
     {
         DestroyChildIfPresent(investHost, "AppToast");
-        Transform strip = Panel(investHost, "AppToast", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-40f, config.MaximisedBottom + WbSize.Foot / 2f),
-                                AppToastSize, PanelNavy, ThemeRoleId.Toast);
+        Transform strip = Panel(investHost, "AppToast", new Vector2(1f, 0f), new Vector2(1f, 0f), Vector2.zero, AppToastSize, PanelNavy, ThemeRoleId.Toast);
+        var place = (RectTransform)strip;
+        place.pivot = new Vector2(1f, 0f);
+        place.anchoredPosition = new Vector2(-WbSize.Pad, config.MaximisedBottom + WbSize.Foot + 12f);
         TMP_Text line = Text(strip, "Text", string.Empty, PcType.Body, TextAlignmentOptions.MidlineLeft, new Vector2(0f, 0f), new Vector2(0.76f, 1f), Color.white,
                              ThemeRoleId.Toast, fit: true);
         ((RectTransform)line.transform).offsetMin = new Vector2(PcSize.L + 4f, 0f);

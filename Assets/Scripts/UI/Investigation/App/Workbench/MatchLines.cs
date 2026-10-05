@@ -8,7 +8,10 @@ using UnityEngine.UI;
 /// prototype's labelled line, Papers, Please style), drawn over the two
 /// panes: a curve from the side of each value's box facing the other one,
 /// dots at both ends, the two boxes outlined, all in the result's colour,
-/// and its label on a plate at the curve's middle. While a value is held the
+/// and its label on a plate in the result's colour: in the gutter between
+/// the two panes while both show (where the line crosses it, so it never sits
+/// on a document's field labels; wave 5 A3), else at the curve's middle.
+/// While a value is held the
 /// line runs dashed, in the holding colour, from the held box to the
 /// pointer. It follows the boxes every frame (a page scrolled, a pane
 /// resized) and hides while either box is out of its pane's view. Draws
@@ -23,6 +26,12 @@ public sealed class MatchLines : MaskableGraphic
 
     /// <summary>The label's text (white on the plate).</summary>
     [SerializeField] private TMP_Text labelText;
+
+    /// <summary>The right pane: while it shows, the label sits in the gutter between the panes (the line layer's middle).</summary>
+    [SerializeField] private GameObject gutterPane;
+
+    /// <summary>The label plate's width in the gutter (its words wrap onto two or three lines; never narrower than its widest word).</summary>
+    [SerializeField, Min(1f)] private float gutterLabelWidth = 112f;
 
     [Header("Look (the theme's: ApplyTheme)")]
     /// <summary>A match, a rule met, a date that holds.</summary>
@@ -128,7 +137,39 @@ public sealed class MatchLines : MaskableGraphic
         Rect ra = Local(_a), rb = Local(_b);
         Curve(Anchor(ra, rb.center.x), Anchor(rb, ra.center.x));
         var plate = (RectTransform)labelPlate.transform;
-        plate.anchoredPosition = _points[Samples / 2];
+        bool gutter = gutterPane != null && gutterPane.activeInHierarchy;
+        if (plate.TryGetComponent(out ContentSizeFitter fit))
+            fit.horizontalFit = gutter ? ContentSizeFitter.FitMode.Unconstrained : ContentSizeFitter.FitMode.PreferredSize;
+        if (gutter)
+            plate.sizeDelta = new Vector2(Mathf.Max(gutterLabelWidth, WidestWord() + 14f), plate.sizeDelta.y);
+        plate.anchoredPosition = gutter ? GutterPoint(rectTransform.rect, plate.rect.height) : _points[Samples / 2];
+    }
+
+    /// <summary>The label's widest word at its size (the gutter's plate is never narrower, so a word wraps whole).</summary>
+    private float WidestWord()
+    {
+        float widest = 0f;
+        if (labelText != null && !string.IsNullOrEmpty(labelText.text))
+            foreach (string word in labelText.text.Split(' '))
+                widest = Mathf.Max(widest, labelText.GetPreferredValues(word, float.PositiveInfinity, float.PositiveInfinity).x);
+        return widest;
+    }
+
+    /// <summary>Where the label sits in the gutter: on the gutter's middle, at the height the curve crosses it (the curve's middle when it does not), kept inside the panes.</summary>
+    private Vector2 GutterPoint(Rect area, float plateHeight)
+    {
+        float x = area.center.x, y = _points[Samples / 2].y, best = float.MaxValue;
+        for (int i = 0; i <= Samples; i++)
+        {
+            float dx = Mathf.Abs(_points[i].x - x);
+            if (dx < best && dx < 24f)
+            {
+                best = dx;
+                y = _points[i].y;
+            }
+        }
+        float half = plateHeight / 2f + 4f;
+        return new Vector2(x, Mathf.Clamp(y, area.yMin + half, area.yMax - half));
     }
 
     /// <summary>The line, its dots and the outlined boxes (or the held box and the dashed line to the pointer).</summary>

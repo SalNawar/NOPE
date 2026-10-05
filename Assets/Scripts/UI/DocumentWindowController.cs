@@ -6,8 +6,8 @@ using UnityEngine.UI;
 /// <summary>
 /// A paper's scanned copy on the PC (redesign phase 5, PC spec §2.4, FO1):
 /// the Investigation app's Documents tab clones this page per paper
-/// (DocumentsView). On the scanner's dark backing it shows the document's
-/// name, the strip ("SCANNED 10:42 · DESK SCANNER 1", the shift clock's time
+/// (DocumentsView). On the scanner's dark backing it shows (under the pane's
+/// header, which names the document) the strip ("SCANNED 10:42 · DESK SCANNER 1", the shift clock's time
 /// when the copy arrived; after an analysis pass "ANALYSED 10:44 · 1
 /// CONTRADICTION MARKED", or "ANALYSED 10:44 ·" and the MATCH tag (the
 /// compare's plate, ink and word) when the scanned papers agree; after a
@@ -28,9 +28,6 @@ using UnityEngine.UI;
 /// </summary>
 public sealed class DocumentWindowController : MonoBehaviour
 {
-    /// <summary>The document's name over the copy.</summary>
-    [SerializeField] private TMP_Text titleText;
-
     /// <summary>The strip on the backing above the copy.</summary>
     [SerializeField] private TMP_Text scanStrip;
 
@@ -87,9 +84,6 @@ public sealed class DocumentWindowController : MonoBehaviour
         _index = index;
         _compare = compare;
         _claim = claim;
-
-        if (titleText != null)
-            titleText.text = doc != null ? doc.DisplayName : UiText.Get("document.untitled");
 
         if (Form != null && paper != null)
         {

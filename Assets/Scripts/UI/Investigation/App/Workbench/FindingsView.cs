@@ -5,15 +5,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// The findings column (the PC workbench spec IA8, §4.4; lesson 2: only what
-/// the player compares is logged): its heading, a scrolling list with a
-/// plate per logged finding, newest first, so a new one is always in view (a match on the match plate, a
-/// difference on the difference plate with its title in bold and "Logged as
-/// evidence" under a proof), the line shown while nothing is logged, and
-/// "Open the report" (the Deviation Report on the target side). A plate
-/// clicked shows its finding again (MatchBoard). The texts are built here
-/// from the finding's kind and sides (ui strings "finding.title.*",
-/// "finding.detail*").
+/// The findings column (the PC workbench spec IA8, §4.4, polished in wave 5
+/// A3; lesson 2: only what the player compares is logged): while nothing is
+/// logged, a slim rail reading "No findings yet" up its side (the app gives
+/// the documents the width); then its heading, a scrolling list with a plate
+/// per logged finding, newest first, so a new one is always in view (a match
+/// on the match plate, a difference on the difference plate, its headline in
+/// bold), each one headline and one short line (the two values; a proof ends
+/// "· evidence"), both cut rather than wrapped, and "Open the report" (the
+/// Deviation Report on the target side). A plate clicked shows its finding
+/// again (MatchBoard), both documents opened at the values. The texts are
+/// built here from the finding's kind and sides (ui strings
+/// "finding.title.*", "finding.detail*").
 /// </summary>
 public sealed class FindingsView : MonoBehaviour
 {
@@ -23,8 +26,11 @@ public sealed class FindingsView : MonoBehaviour
     /// <summary>A finding's plate (inactive), cloned per finding: a button holding a "Match" and a "Differ" plate, each with its Title and Detail texts.</summary>
     [SerializeField] private Button rowTemplate;
 
-    /// <summary>The line shown while nothing is logged.</summary>
-    [SerializeField] private GameObject emptyText;
+    /// <summary>The column's parts while something is logged: the heading, the list and Open the report.</summary>
+    [SerializeField] private GameObject full;
+
+    /// <summary>The slim rail shown while nothing is logged ("No findings yet" up its side).</summary>
+    [SerializeField] private GameObject rail;
 
     /// <summary>Opens the Deviation Report on the target side.</summary>
     [SerializeField] private Button reportButton;
@@ -55,14 +61,17 @@ public sealed class FindingsView : MonoBehaviour
     /// <summary>A finding's title ("Visa class matches", "Breaks the rule: …").</summary>
     public static string Title(Finding finding) => UiText.Format("finding.title." + finding.Kind, finding.Subject);
 
-    /// <summary>A finding's detail: the two values and where each is ("Premium (Leisure Departure Visa) against Economy (Records)"); a rule's or the date's finding names the value alone.</summary>
+    /// <summary>A finding's short line: the two values ("Premium against Standard"), one value found on both ("270-6927-03 on both"), or the value a rule or the date was held against with where it is ("14 Mar 2150 (Departure Manifest)"); a proof ends "· evidence".</summary>
     public static string Detail(Finding finding)
     {
-        if (finding.KeyA == EntryKeys.CalendarToday)
-            return UiText.Format("finding.detail.today", finding.ValueB, Where(finding.TitleB), finding.ValueA);
-        return EntryKeys.TryRule(finding.KeyA, out _)
-            ? UiText.Format("finding.detail.rule", finding.ValueB, Where(finding.TitleB))
-            : UiText.Format("finding.detail", finding.ValueA, Where(finding.TitleA), finding.ValueB, Where(finding.TitleB));
+        string line;
+        if (finding.KeyA == EntryKeys.CalendarToday || EntryKeys.TryRule(finding.KeyA, out _))
+            line = UiText.Format("finding.detail.rule", finding.ValueB, Where(finding.TitleB));
+        else if (string.Equals(finding.ValueA, finding.ValueB, StringComparison.OrdinalIgnoreCase))
+            line = UiText.Format("finding.detail.same", finding.ValueA);
+        else
+            line = UiText.Format("finding.detail", finding.ValueA, finding.ValueB);
+        return finding.Proof ? UiText.Format("finding.evidence", line) : line;
     }
 
     /// <summary>The detail a pick's label names: the part after its last " · " ("Leisure Departure Visa · Citizen ID": "Citizen ID"), else the label.</summary>
@@ -93,7 +102,16 @@ public sealed class FindingsView : MonoBehaviour
             reportButton.onClick.AddListener(() => app.OpenOnTarget(LinkTarget.ToTab(AppTab.Report)));
     }
 
-    /// <summary>Draws <paramref name="log"/>'s findings, newest first (the plates of the last draw reused), and the empty line when there is none.</summary>
+    /// <summary>The rail while nothing is logged, else the column (the app sets the column's width).</summary>
+    public void SetRail(bool on)
+    {
+        if (rail != null && rail.activeSelf != on)
+            rail.SetActive(on);
+        if (full != null && full.activeSelf == on)
+            full.SetActive(!on);
+    }
+
+    /// <summary>Draws <paramref name="log"/>'s findings, newest first (the plates of the last draw reused).</summary>
     public void Show(FindingLog log)
     {
         Wire();
@@ -121,11 +139,9 @@ public sealed class FindingsView : MonoBehaviour
             if (on)
                 Draw(_rows[i], _shown[i]);
         }
-        if (emptyText != null && emptyText.activeSelf != (_shown.Count == 0))
-            emptyText.SetActive(_shown.Count == 0);
     }
 
-    /// <summary>One plate: the match or the difference plate on, its title (bold for a difference) and detail, and "Logged as evidence" under a proof.</summary>
+    /// <summary>One plate: the match or the difference plate on, its headline (bold for a difference) and its short line.</summary>
     private static void Draw(Button row, Finding finding)
     {
         bool differ = FindingRules.IsDifference(finding.Kind);
@@ -141,6 +157,6 @@ public sealed class FindingsView : MonoBehaviour
         if (title != null)
             title.GetComponent<TMP_Text>().text = differ ? "<b>" + Title(finding) + "</b>" : Title(finding);
         if (detail != null)
-            detail.GetComponent<TMP_Text>().text = finding.Proof ? Detail(finding) + "\n" + UiText.Get("finding.evidence") : Detail(finding);
+            detail.GetComponent<TMP_Text>().text = Detail(finding);
     }
 }

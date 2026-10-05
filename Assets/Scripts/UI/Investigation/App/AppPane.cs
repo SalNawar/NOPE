@@ -39,13 +39,13 @@ public sealed partial class AppPane : MonoBehaviour
     /// <summary>The no-case state over the content (a case source between travellers).</summary>
     [SerializeField] private GameObject noCase;
 
-    /// <summary>The header's parts shown while this side is the target (the filled side tag, "Shelf opens here", the strong frame).</summary>
+    /// <summary>The header's parts shown while this side is the target (the filled side tag, "Opens here", the strong frame).</summary>
     [SerializeField] private GameObject[] targetParts = new GameObject[0];
 
     /// <summary>The header's parts shown while it is not (the quiet side tag, the hairline frame).</summary>
     [SerializeField] private GameObject[] otherParts = new GameObject[0];
 
-    /// <summary>The title's right inset while this side is the target (room for "Shelf opens here"), and while it is not.</summary>
+    /// <summary>The title's right inset while this side is the target (room for "Opens here"), and while it is not.</summary>
     [SerializeField] private Vector2 titleRightInsets = new Vector2(-216f, -16f);
 
     /// <summary>The source the pane shows first.</summary>

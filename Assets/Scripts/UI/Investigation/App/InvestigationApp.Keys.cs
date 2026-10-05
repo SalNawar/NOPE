@@ -80,7 +80,9 @@ public sealed partial class InvestigationApp
     private bool _ringOn;
     private bool _caseOn;
     private bool _findingsShown = true;
-    private float _mainInset;
+    private bool _railShown;
+    private float _findingsWidth;
+    private float _findingsGap;
     private int _zoom = AppZoom.Normal;
     private string _clipTraveller = string.Empty;
 
@@ -123,8 +125,11 @@ public sealed partial class InvestigationApp
     {
         _pins = new PinBoard(config != null ? config.pinsMax : 1);
         _recent = new RecentList(config != null ? config.recentItems : 1);
-        if (mainColumn != null)
-            _mainInset = mainColumn.offsetMax.x;
+        if (findingsColumn != null && mainColumn != null)
+        {
+            _findingsWidth = -findingsColumn.offsetMin.x;
+            _findingsGap = -mainColumn.offsetMax.x - _findingsWidth;
+        }
         foreach (AppPane pane in Panes())
             foreach (AppTab tab in TabOrder.Default)
             {
@@ -575,7 +580,7 @@ public sealed partial class InvestigationApp
                 break;
             case AppRegion.Shelf:
                 if (shelf != null)
-                    foreach (Button chip in shelf.Chips)
+                    foreach (Button chip in shelf.Buttons)
                         Add(chip);
                 break;
             case AppRegion.PaneContent:
@@ -681,14 +686,22 @@ public sealed partial class InvestigationApp
         return null;
     }
 
-    /// <summary>Shows or hides the findings column; the main column takes its width while it is hidden.</summary>
+    /// <summary>Shows or hides the findings column (a slim rail while nothing is logged); the main column takes the width it leaves.</summary>
     private void ApplyFindings(bool shown)
     {
         _findingsShown = shown;
-        if (findingsColumn != null && findingsColumn.gameObject.activeSelf != shown)
-            findingsColumn.gameObject.SetActive(shown);
+        _railShown = FindingsRail;
+        float width = !shown ? 0f : _railShown ? findingsRail : _findingsWidth;
+        if (findingsColumn != null)
+        {
+            if (findingsColumn.gameObject.activeSelf != shown)
+                findingsColumn.gameObject.SetActive(shown);
+            findingsColumn.offsetMin = new Vector2(-width, findingsColumn.offsetMin.y);
+        }
+        if (board != null && board.Findings != null)
+            board.Findings.SetRail(_railShown);
         if (mainColumn != null)
-            mainColumn.offsetMax = new Vector2(shown ? _mainInset : 0f, mainColumn.offsetMax.y);
+            mainColumn.offsetMax = new Vector2(shown ? -(width + _findingsGap) : 0f, mainColumn.offsetMax.y);
         Layout();
         if (!shown && _region == AppRegion.Findings)
             SetRegion(AppFocus.Home(FocusState), 0, _ringOn);

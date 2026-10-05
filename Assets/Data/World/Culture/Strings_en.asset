@@ -308,10 +308,6 @@ MonoBehaviour:
     text: Investigation
     gloss: 0
     tier: 0
-  - key: app.titleCase
-    text: "Investigation \xB7 {0}"
-    gloss: 0
-    tier: 0
   - key: app.counters
     text: "Papers received: {0} of {1} \xB7 scanned: {2}"
     gloss: 0
@@ -353,7 +349,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.pane.shelfHere
-    text: Shelf opens here
+    text: Opens here
     gloss: 0
     tier: 0
   - key: app.search.open
@@ -364,16 +360,20 @@ MonoBehaviour:
     text: "Today's rules \xB7 rule {0}"
     gloss: 0
     tier: 0
-  - key: shelf.traveller
-    text: Traveller
-    gloss: 0
-    tier: 0
-  - key: shelf.agency
-    text: Agency
-    gloss: 0
-    tier: 0
   - key: shelf.books
     text: Books
+    gloss: 0
+    tier: 0
+  - key: shelf.booksOpen
+    text: "Books \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: shelf.side.left
+    text: L
+    gloss: 0
+    tier: 0
+  - key: shelf.side.right
+    text: R
     gloss: 0
     tier: 0
   - key: guide.papers.name
@@ -445,6 +445,14 @@ MonoBehaviour:
     text: The steps start when the next traveller steps up to the desk.
     gloss: 0
     tier: 0
+  - key: guide.hint
+    text: <b>{0}.</b> {1}
+    gloss: 0
+    tier: 0
+  - key: guide.hintTitle
+    text: <b>{0}</b>
+    gloss: 0
+    tier: 0
   - key: guide.next
     text: 'Next: {0}'
     gloss: 0
@@ -457,12 +465,16 @@ MonoBehaviour:
     text: Step {0} of {1}
     gloss: 0
     tier: 0
-  - key: guide.progressChecks
-    text: "Step {0} of {1} \xB7 To check: {2}"
-    gloss: 0
-    tier: 0
   - key: guide.progressDone
     text: "Step {0} of {1} \xB7 All checks here done"
+    gloss: 0
+    tier: 0
+  - key: guide.progressNext
+    text: "Step {0} of {1} \xB7 Next: {2}"
+    gloss: 0
+    tier: 0
+  - key: guide.progressMore
+    text: '{0} (+{1} more)'
     gloss: 0
     tier: 0
   - key: status.holding
@@ -652,19 +664,19 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: finding.detail
-    text: '{0} ({1}) against {2} ({3})'
+    text: '{0} against {1}'
+    gloss: 0
+    tier: 0
+  - key: finding.detail.same
+    text: '{0} on both'
     gloss: 0
     tier: 0
   - key: finding.detail.rule
     text: '{0} ({1})'
     gloss: 0
     tier: 0
-  - key: finding.detail.today
-    text: '{0} ({1}) on {2}'
-    gloss: 0
-    tier: 0
   - key: finding.evidence
-    text: Logged as evidence
+    text: "{0} \xB7 evidence"
     gloss: 0
     tier: 0
   - key: finding.what.today
@@ -684,8 +696,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: findings.empty
-    text: Nothing yet. Click a value, then the value to hold it against. Matches
-      and differences collect here.
+    text: No findings yet
     gloss: 0
     tier: 0
   - key: decision.summary

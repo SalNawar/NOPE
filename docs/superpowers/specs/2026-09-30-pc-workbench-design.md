@@ -168,11 +168,30 @@ The Domain compare and evidence model (`ComparePick`, `ComparePair`, `CompareEvi
 8. **Pins and Recent live in the search drawer**; the pane headers carry no buttons.
 9. **Neutral title bars are white**; the cultures keep their deep title bars (their identity).
 10. **No new font** (no download; every culture's font must fit).
-11. **The shelf wraps to three rows** in the neutral font at 1440 u (two papers, the transcript, three agency documents, six books). Kept over a scrolling strip or a Books menu: every document stays one click away and visible. Reverse: fold the books into one chip that opens the Reference view.
-12. **The step's sentence lives on the status line** while nothing is held (the prototype's lead line and status line merged: one line to read, not two); Ctrl+Shift+S or Settings hides it.
+11. ~~**The shelf wraps to three rows**~~ Reversed by the polish pass (§11): one row, the books behind a Books menu.
+12. **The step's sentence lives on the status line** (the polish pass folds the step's title in too, §11) while nothing is held (the prototype's lead line and status line merged: one line to read, not two); Ctrl+Shift+S or Settings hides it.
 13. **A new case puts its first pair up without opening the app** (nothing steals the view); the scan toast still opens a closed app, as before.
-14. **The scan toast sits over the foot** for its 4 s (above the windows, as before); it can cover the progress line meanwhile.
+14. ~~**The scan toast sits over the foot**~~ Reversed by the polish pass (§11): it sits at the lower right just above the foot.
 
 ## 10. Verification
 
 compile_check 0 errors · the offline runner 0 failures · EditMode (TimeDeskEditMode) · Generate World twice (the second run changes nothing) and the validator · Build Office UI twice (equal by semantic dump) with the readability check · the audit play days 1-3 driving the new app · the tour at 1080p and 720p in the neutral and one Arabic or Japanese theme: each step, a match line, a difference line, the drawer, the decision (`SCRATCH/wave5/A/tour`).
+
+## 11. The polish pass (wave 5 A3, 2026-10-05)
+
+Saleh's screenshot of day 1 ("Shiyu (Merchant)") and the tour showed: a shelf wrapping to three rows of chips, documents cut off in small panes (the visa stopped at Date of birth, "TRANSPON / DER CLASS" broken mid-word), a run-on checklist in the foot, the scan toast over the foot, the line's label sitting on field labels, an empty findings column taking 280 u, a title repeating the header, and the Arabic "Back to desk" spilling out of its button. The redesign-existing-projects and minimalist-ui skills' principles again: slim chrome, whitespace for the documents, colour for state only. What changed (the code wins):
+
+| Part | Now |
+|---|---|
+| Window title | "Investigation" alone; the header names the traveller |
+| Header | 84 u: face 52 u, name 30 u over one short line (the counters); the steps as one segmented control (a hairline frame, a hairline between two steps, the current one on a warm plate with a primary-colour bar and number) |
+| Shelf | one 56 u row that never wraps: the papers and the transcript, a hairline, Citizen records, Today's rules, Calendar, a hairline, one Books chip (a chevron) opening the Books menu (a row per book, the Seal Register among them from its day); only the papers' chips give way when short of room; sides as "L"/"R"; dots only for the traveller's unopened documents and sources with something new |
+| Lead | folded into the status line ("**Read the papers.** Click a value, …"); the status line is 64 u with Search at its right |
+| Panes | a 44 u header (one line); a 120 u gutter between the panes; a scanned copy scales to its pane's width (`FitToWidth`, its fields never reflow) and scrolls from the top only when taller; the copy's own name row is gone (the pane header names it); a printed word too wide for its box shrinks to fit whole (`FormView.FitWords`) |
+| Line label | in the gutter where the line crosses it, sentence case, wrapping whole words (`MatchLines`); at the line's middle with one pane |
+| Findings | a 56 u rail ("No findings yet", up its side) while empty; 280 u once something is logged; each entry one headline and one short line ("Premium against Standard · evidence", "270-6927-03 on both") |
+| Foot | 60 u; "Step 2 of 4 · Next: <the first check left> (+n more)", one line, never wrapping |
+| Toast | the lower right, just above the foot |
+| Taskbar | the desk button's culture words and their English gloss drawn close and centred; the tray widened to 760 u and its readouts shrinking together rather than overlapping (a culture's long currency word) |
+
+Decisions taken for Saleh (each reversible): the books behind a menu, not a scrolling strip; the papers' chips are the ones that give way (their names are the longest and the pane headers repeat them); "L"/"R" on the shelf (the pane headers keep "Left"/"Right"); the step's title joins the status line rather than keeping its own row; the gutter costs 120 u of width so a label never sits on a document; the findings rail rather than hiding the column (it still says the column is there); the copy scales between 0.75 and 1.5 rather than reflowing.

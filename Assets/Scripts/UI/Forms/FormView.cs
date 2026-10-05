@@ -24,7 +24,8 @@ using UnityEngine.UI;
 /// every outline, rule, barcode bar, tick and the stamp area's dash over them
 /// (FormPaint's quads, which the desk paper prints too, one FormStrokes graphic
 /// per layer), a TextMeshPro per text cloned from one template and styled by
-/// its role (TmpFormText), and the traveller's photo in its cell (under the
+/// its role (TmpFormText; shrunk just enough that its widest word fits its
+/// box, so a label never breaks mid-word), and the traveller's photo in its cell (under the
 /// photo frame's art when it exists, as on the desk paper; the agency seal's
 /// art likewise). The layout
 /// measures with a hidden text of the template's font that the view makes
@@ -466,11 +467,33 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         _measure.SetFont(text, item.Text);
         TmpFormText.Style(text, item.Role, item.Size);
         text.text = item.Text;
+        FitWords(text, item);
         text.color = style.Ink(item.Role);
         text.alignment = item.Align == FormTextAlign.Right ? TextAlignmentOptions.TopRight
             : item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Top
             : TextAlignmentOptions.TopLeft;
         Place(text.rectTransform, item.Rect);
+    }
+
+    /// <summary>The least share of its size a printed text shrinks to so that its widest word fits its box (wave 5 A3: "TRANSPON / DER CLASS" never breaks mid-word).</summary>
+    private const float WordFitFloor = 0.6f;
+
+    /// <summary>Where a printed text's words part (a space, a line break).</summary>
+    private static readonly char[] WordBreaks = { ' ', '\n' };
+
+    /// <summary>Shrinks printed <paramref name="text"/> (already styled as <paramref name="item"/>) just enough that its widest word fits the item's box, so a word wraps whole and never breaks in the middle; the box's place and size stay the layout's (the document design spec D2). Measured on the hidden measure text (a form is often filled while inactive).</summary>
+    private void FitWords(TMP_Text text, FormItem item)
+    {
+        float width = item.Rect.Width;
+        if (string.IsNullOrEmpty(item.Text) || width <= 0f || _measureText == null)
+            return;
+        _measure.SetFont(_measureText, item.Text);
+        TmpFormText.Style(_measureText, item.Role, item.Size);
+        float widest = 0f;
+        foreach (string word in item.Text.Split(WordBreaks, StringSplitOptions.RemoveEmptyEntries))
+            widest = Mathf.Max(widest, _measureText.GetPreferredValues(word, float.PositiveInfinity, float.PositiveInfinity).x);
+        if (widest > width)
+            text.fontSize *= Mathf.Max(WordFitFloor, width / widest * 0.98f);
     }
 
     /// <summary>Arms pooled button <paramref name="index"/> over slot <paramref name="slot"/>'s box, clear and unpicked.</summary>

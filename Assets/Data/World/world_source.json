@@ -18730,12 +18730,6 @@
         "tier": "Full"
       },
       {
-        "key": "app.titleCase",
-        "text": "Investigation · {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "app.counters",
         "text": "Papers received: {0} of {1} · scanned: {2}",
         "gloss": "None",
@@ -18797,7 +18791,7 @@
       },
       {
         "key": "app.pane.shelfHere",
-        "text": "Shelf opens here",
+        "text": "Opens here",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18814,20 +18808,26 @@
         "tier": "Full"
       },
       {
-        "key": "shelf.traveller",
-        "text": "Traveller",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "shelf.agency",
-        "text": "Agency",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "shelf.books",
         "text": "Books",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "shelf.booksOpen",
+        "text": "Books · {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "shelf.side.left",
+        "text": "L",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "shelf.side.right",
+        "text": "R",
         "gloss": "None",
         "tier": "Full"
       },
@@ -18928,6 +18928,18 @@
         "tier": "Full"
       },
       {
+        "key": "guide.hint",
+        "text": "<b>{0}.</b> {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.hintTitle",
+        "text": "<b>{0}</b>",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "guide.next",
         "text": "Next: {0}",
         "gloss": "None",
@@ -18946,14 +18958,20 @@
         "tier": "Full"
       },
       {
-        "key": "guide.progressChecks",
-        "text": "Step {0} of {1} · To check: {2}",
+        "key": "guide.progressDone",
+        "text": "Step {0} of {1} · All checks here done",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "guide.progressDone",
-        "text": "Step {0} of {1} · All checks here done",
+        "key": "guide.progressNext",
+        "text": "Step {0} of {1} · Next: {2}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "guide.progressMore",
+        "text": "{0} (+{1} more)",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19235,7 +19253,13 @@
       },
       {
         "key": "finding.detail",
-        "text": "{0} ({1}) against {2} ({3})",
+        "text": "{0} against {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "finding.detail.same",
+        "text": "{0} on both",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19246,14 +19270,8 @@
         "tier": "Full"
       },
       {
-        "key": "finding.detail.today",
-        "text": "{0} ({1}) on {2}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "finding.evidence",
-        "text": "Logged as evidence",
+        "text": "{0} · evidence",
         "gloss": "None",
         "tier": "Full"
       },
@@ -19283,7 +19301,7 @@
       },
       {
         "key": "findings.empty",
-        "text": "Nothing yet. Click a value, then the value to hold it against. Matches and differences collect here.",
+        "text": "No findings yet",
         "gloss": "None",
         "tier": "Full"
       },

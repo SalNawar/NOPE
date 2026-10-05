@@ -1287,7 +1287,7 @@ public static class _TimeDeskAuditPlay
         ReferenceBookSO seals = RunManager.Instance.Library.ReferenceBooks.FirstOrDefault(b => b != null && b.category == ClueCategory.Seal);
         int book = -1;
         for (int i = 0; seals != null && i < shelf.Items.Count && book < 0; i++)
-            if (shelf.Items[i].GroupKey == "shelf.books" && shelf.Items[i].Label == seals.displayName)
+            if (shelf.Items[i].Group == ShelfGroup.Books && shelf.Items[i].Label == seals.displayName)
                 book = i;
         int today = RunManager.Instance.World.day, sealDay = CheckDay(LieKind.ForgedSeal);
         if (sealDay == 0 || today < sealDay)

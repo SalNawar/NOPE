@@ -5,12 +5,9 @@ using UnityEngine.UI;
 /// <summary>
 /// A layout group that places its children left to right at their preferred
 /// sizes and wraps onto a new row when the next one would pass the right
-/// edge (the shelf's labels and chips, the search drawer's source chips: the
-/// PC workbench spec IA4, IA9); a child marked FlowKeepWithNext wraps
-/// together with the child after it, so a group's label never ends a row
-/// alone. Each row is as tall as its tallest child, children centred in it;
-/// its preferred height is the rows' (a shelf grows to show every document,
-/// never scrolling sideways).
+/// edge (the search drawer's source chips: the PC workbench spec IA9). Each
+/// row is as tall as its tallest child, children centred in it; its
+/// preferred height is the rows' (it grows rather than scrolling sideways).
 /// </summary>
 public sealed class FlowLayoutGroup : LayoutGroup
 {
@@ -48,16 +45,8 @@ public sealed class FlowLayoutGroup : LayoutGroup
     /// <summary>Child <paramref name="i"/>'s width, clamped to the row's.</summary>
     private float Width(int i, float row) => Mathf.Min(LayoutUtility.GetPreferredWidth(rectChildren[i]), row);
 
-    /// <summary>True when child <paramref name="i"/> starts a new row at <paramref name="x"/>: it (and the child it keeps with) would pass the right edge.</summary>
-    private bool Wraps(int i, float x, float row)
-    {
-        if (x <= 0f)
-            return false;
-        float need = Width(i, row);
-        if (rectChildren[i].GetComponent<FlowKeepWithNext>() != null && i + 1 < rectChildren.Count)
-            need += spacingX + Width(i + 1, row);
-        return x + need > row;
-    }
+    /// <summary>True when child <paramref name="i"/> starts a new row at <paramref name="x"/>: it would pass the right edge.</summary>
+    private bool Wraps(int i, float x, float row) => x > 0f && x + Width(i, row) > row;
 
     /// <summary>Walks the children into rows (placing them when <paramref name="place"/>) and returns the height they take with the padding.</summary>
     private float Arrange(bool place)

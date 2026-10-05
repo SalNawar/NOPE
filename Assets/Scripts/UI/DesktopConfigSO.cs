@@ -125,11 +125,11 @@ public sealed class DesktopConfigSO : ScriptableObject
     [Min(0.5f)] public float toastSeconds = 4f;
 
     [Header("The Investigation app's panes (redesign phase 18)")]
-    /// <summary>A pane's narrowest readable width: two panes show only while the main column (beside the findings) holds two of these (AP3; the PC workbench spec IA5).</summary>
-    [Min(1f)] public float paneMinWidth = 520f;
+    /// <summary>A pane's narrowest readable width: two panes show only while the main column (beside the findings) holds two of these and the gutter (AP3; the PC workbench spec IA5; a scanned copy scales to its pane, FitToWidth).</summary>
+    [Min(1f)] public float paneMinWidth = 480f;
 
-    /// <summary>The divider between the two panes.</summary>
-    [Min(0f)] public float paneGap = 14f;
+    /// <summary>The gutter between the two panes, where a compare line's label sits (wave 5 A3: never on a document's field labels).</summary>
+    [Min(0f)] public float paneGap = 120f;
 
     /// <summary>The places a pane's Back can return through (AP9).</summary>
     [Min(1)] public int paneHistory = 30;

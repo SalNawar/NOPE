@@ -6,11 +6,12 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The Investigation app's guided steps (the PC workbench spec IA2, IA3; W1:
-/// one step at a time; steps suggest, they never lock): the step pills
-/// in the header (Papers, Records, Books, Rules, Decision: the current one
-/// filled with the primary colour, a finished one ticked), the lead over the
-/// work (the step's title; its one sentence is the status line's hint while
-/// nothing is held), and the foot (Back, the progress line, Next). A step is finished when the day's checklist items
+/// one step at a time; steps suggest, they never lock; polished in wave 5
+/// A3): the steps as one segmented control in the header (Papers, Records,
+/// Books, Rules, Decision: the current one filled with the primary colour, a
+/// finished one ticked), the step's title and its one sentence on the status
+/// line while nothing is held, and the foot (Back, one short progress line:
+/// the step's next check and how many more, Next). A step is finished when the day's checklist items
 /// that belong to it are done (CaseGuide over CaseSteps.Evaluate: the
 /// default set until a paper handed over on arrival is read, then the
 /// kind's; progress by id, fed by the façade with the case's events and here
@@ -30,10 +31,6 @@ public sealed class GuideBar : MonoBehaviour
     /// <summary>The pills: each holds its plates (Current; circles Circle, CircleCurrent, CircleDone) and labels (Label, LabelCurrent).</summary>
     [SerializeField] private Button[] pills = new Button[0];
 
-    [Header("The lead")]
-    /// <summary>The step's title (its sentence is the status line's hint, MatchBoard.SetIdleHint).</summary>
-    [SerializeField] private TMP_Text leadTitle;
-
     [Header("The foot")]
     /// <summary>The previous step (hidden on the first).</summary>
     [SerializeField] private Button backButton;
@@ -44,7 +41,7 @@ public sealed class GuideBar : MonoBehaviour
     /// <summary>Next's label.</summary>
     [SerializeField] private TMP_Text nextLabel;
 
-    /// <summary>"Step 2 of 5 · 1 of 3 checks done".</summary>
+    /// <summary>"Step 2 of 4 · Next: Visa class against the account (+1 more)" (one line).</summary>
     [SerializeField] private TMP_Text progressText;
 
     [Header("The app")]
@@ -255,7 +252,7 @@ public sealed class GuideBar : MonoBehaviour
         _steps = CaseSteps.Resolve(_sets, name, _day);
     }
 
-    /// <summary>The pills (current, finished), the lead, the foot and the status line's hint from the guide and the checklist's states.</summary>
+    /// <summary>The pills (current, finished), the foot and the status line's hint (the step's title, and its sentence while the hints show) from the guide and the checklist's states.</summary>
     private void Redraw()
     {
         if (_progress != null)
@@ -277,10 +274,10 @@ public sealed class GuideBar : MonoBehaviour
         }
 
         string key = "guide." + _guide.Current.ToString().ToLowerInvariant();
-        if (leadTitle != null)
-            leadTitle.text = caseOn ? UiText.Get(key + ".title") : UiText.Get("idle.waiting");
+        string title = caseOn ? UiText.Get(key + ".title") : UiText.Get("idle.waiting");
+        string sentence = caseOn ? UiText.Get(key + ".text") : UiText.Get("guide.idle.text");
         if (board != null)
-            board.SetIdleHint(!hints ? string.Empty : caseOn ? UiText.Get(key + ".text") : UiText.Get("guide.idle.text"));
+            board.SetIdleHint(hints ? UiText.Format("guide.hint", title, sentence) : UiText.Format("guide.hintTitle", title));
 
         if (backButton != null)
             backButton.gameObject.SetActive(caseOn && !_guide.IsFirst);
@@ -292,7 +289,7 @@ public sealed class GuideBar : MonoBehaviour
             progressText.text = caseOn ? Progress() : string.Empty;
     }
 
-    /// <summary>"Step 2 of 4 · To check: Class, Transponder" (numbered over the steps shown) (the current step's checklist items not done yet, by their labels), "… · All checks here done", or the step alone when it owns none.</summary>
+    /// <summary>"Step 2 of 4 · Next: Class (+1 more)" (numbered over the steps shown; the current step's first checklist item not done yet, by its label, and how many more wait), "… · All checks here done", or the step alone when it owns none. One line: the foot never wraps.</summary>
     private string Progress()
     {
         var left = new List<string>();
@@ -312,9 +309,10 @@ public sealed class GuideBar : MonoBehaviour
         }
         if (total == 0)
             return UiText.Format("guide.progress", _guide.Number, _guide.Count);
-        return left.Count == 0
-            ? UiText.Format("guide.progressDone", _guide.Number, _guide.Count)
-            : UiText.Format("guide.progressChecks", _guide.Number, _guide.Count, string.Join(", ", left));
+        if (left.Count == 0)
+            return UiText.Format("guide.progressDone", _guide.Number, _guide.Count);
+        string next = left.Count > 1 ? UiText.Format("guide.progressMore", left[0], left.Count - 1) : left[0];
+        return UiText.Format("guide.progressNext", _guide.Number, _guide.Count, next);
     }
 
     /// <summary>One pill: hidden when its step is not shown today (<paramref name="number"/> 0), else numbered among those shown, its plate while current, its circle (the number, the current number, the tick), its label (muted unless current); inert between travellers.</summary>

@@ -12,8 +12,9 @@ using UnityEngine.UI;
 /// DiegeticForm so no theme touches it; the hints and the outline are chrome)
 /// the FormPage that scrolls it (a page kind fitting its viewport, a copy at
 /// its own width), and the scanned-copy page of the Investigation app's
-/// Papers view built on it: the scanner's dark backing, the document's
-/// name, the scan strip and the form in a scroll, a document page at the PC
+/// Papers view built on it: the scanner's dark backing, the scan strip and
+/// the form in a scroll, scaled to the pane's width (FitToWidth; the pane's
+/// header names the document; wave 5 A3), a document page at the PC
 /// width (520 u, so H = 679 u: a split pane holds the page whole). Part of <see cref="OfficeSceneUIBuilder"/>.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
@@ -21,8 +22,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A form page's width on the PC: the 580 u pane less its padding and scrollbar (PC spec §6.3).</summary>
     private const float PcPageWidth = 520f;
 
-    /// <summary>The scanned-copy page's margin, its gaps, the scrollbar's width, the name's and the scan strip's heights and text sizes (u).</summary>
-    private const float DocMargin = 10f, DocGap = 4f, DocScrollbar = 14f, DocTitle = 36f, DocTitleText = 26f, DocStrip = 30f, DocStripText = 24f, DocTagGap = 8f;
+    /// <summary>The scanned-copy page's margin, its gaps, the scrollbar's width, the scan strip's height and text size (u).</summary>
+    private const float DocMargin = 10f, DocGap = 4f, DocScrollbar = 14f, DocStrip = 30f, DocStripText = 24f, DocTagGap = 8f;
 
     /// <summary>The MATCH tag's plate padding either side of its word.</summary>
     private const int DocTagPadding = 8;
@@ -122,8 +123,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The scanned-copy page template of the Investigation app's Documents tab
     /// (PC spec §2.4), cloned per paper by DocumentsView: on the scanner's dark
-    /// backing (the form style's, DiegeticBacking), the document's name, the
-    /// scan strip in the backing's ink with the MATCH tag after it (the compare
+    /// backing (the form style's, DiegeticBacking), scaled to the pane's width
+    /// (FitToWidth), the scan strip in the backing's ink with the MATCH tag after it (the compare
     /// bar's plate with its MATCH ink and word, as the compare shows a match:
     /// its pairing reads 5.4:1 or better in every theme, where the MATCH ink
     /// straight on the dark backing would read under 3:1; hidden until an
@@ -136,16 +137,15 @@ public static partial class OfficeSceneUIBuilder
         FormStyleSO style = EnsureFormStyle();
         DestroyChildIfPresent(parent, "PageTemplate");
         float width = DocMargin + PcPageWidth + DocGap + DocScrollbar + DocMargin;
-        Transform page = Panel(parent, "PageTemplate", new Vector2(0.5f, 0f), new Vector2(0.5f, 1f), Vector2.zero, new Vector2(width, 0f), style.backing, ThemeRoleId.DiegeticBacking);
+        var page = (RectTransform)Panel(parent, "PageTemplate", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), Vector2.zero, new Vector2(width, 600f), style.backing,
+                                        ThemeRoleId.DiegeticBacking);
+        page.pivot = new Vector2(0.5f, 1f);
+        FitToWidth fit = page.gameObject.AddComponent<FitToWidth>();
+        var soFit = new SerializedObject(fit);
+        soFit.FindProperty("designWidth").floatValue = width;
+        soFit.ApplyModifiedProperties();
 
-        TMP_Text title = Text(page, "TitleText", UiText.Get("document.untitled"), Mathf.RoundToInt(DocTitleText), TextAlignmentOptions.MidlineLeft,
-                              new Vector2(0f, 1f), Vector2.one, style.backingInk, ThemeRoleId.DiegeticBacking, style: FontStyles.Bold);
-        PlaceRect(title.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(DocMargin, -(DocGap + DocTitle)), new Vector2(-DocMargin, -DocGap));
-        title.raycastTarget = false;
-        title.textWrappingMode = TextWrappingModes.NoWrap;
-        title.overflowMode = TextOverflowModes.Ellipsis;
-
-        float stripTop = DocGap + DocTitle;
+        float stripTop = DocGap;
         Transform stripRow = Panel(page, "StripRow", new Vector2(0f, 1f), Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(stripRow, new Vector2(0f, 1f), Vector2.one, new Vector2(DocMargin, -(stripTop + DocStrip)), new Vector2(-DocMargin, -stripTop));
         HorizontalLayoutGroup line = GetOrAdd<HorizontalLayoutGroup>(stripRow.gameObject);
@@ -182,7 +182,6 @@ public static partial class OfficeSceneUIBuilder
 
         DocumentWindowController c = page.gameObject.AddComponent<DocumentWindowController>();
         var so = new SerializedObject(c);
-        Wire(so, "titleText", title);
         Wire(so, "scanStrip", strip);
         Wire(so, "matchTag", matchTag.gameObject);
         Wire(so, "page", copy);

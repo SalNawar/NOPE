@@ -9,8 +9,8 @@ using UnityEngine.UI;
 /// (AppPane) framed by a hairline (the target's, a stronger one), its header
 /// (a button: a click makes the side the target; the side's tag, filled with
 /// the primary colour on the target, quiet on the other; the document's name,
-/// bold, wrapping to a second line rather than being cut; "Shelf opens here"
-/// on the target; a hairline under it), its content with a view per source
+/// bold, on one line (wave 5 A3: a slim header, the room to the document);
+/// "Opens here" on the target; a hairline under it), its content with a view per source
 /// and the no-case state (its words wrapping and shrinking to fit); the ↗ (a
 /// drawn glyph in the link ink, 28 u, with its hover hint) and the found
 /// outline, which the forms' FormView clones; and the hover hints of the
@@ -31,10 +31,10 @@ public static partial class OfficeSceneUIBuilder
     private const float LinkSize = 28f;
 
     /// <summary>The side tag's size in a pane's header.</summary>
-    private static readonly Vector2 PaneTagSize = new Vector2(72f, 30f);
+    private static readonly Vector2 PaneTagSize = new Vector2(72f, 28f);
 
     /// <summary>The target hint's width at a pane header's right.</summary>
-    private const float PaneHintWidth = 200f;
+    private const float PaneHintWidth = 130f;
 
     /// <summary>The accent (the found mark, the Orders' selection): the focus ring's built colour.</summary>
     private static readonly Color AccentInk = new Color(0.95f, 0.55f, 0.1f, 1f);
@@ -76,10 +76,10 @@ public static partial class OfficeSceneUIBuilder
         string sideKey = left ? "app.side.left" : "app.side.right";
         Transform tagTarget = PaneTag(header.transform, "TagTarget", sideKey, WbAction, ThemeRoleId.PrimaryAction);
         Transform tag = PaneTag(header.transform, "Tag", sideKey, WbInfoBg, ThemeRoleId.Info);
-        TMP_Text title = WbText(header.transform, "TitleText", AppTabTitleKey(start), null, PcType.Body, ThemeRoleId.Surface, TextAlignmentOptions.MidlineLeft,
-                                FontStyles.Bold, true);
-        PlaceRect(title.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.L + PaneTagSize.x + PcSize.M, 2f), new Vector2(-(PaneHintWidth + PcSize.L), -2f));
-        title.lineSpacing = -10f;
+        // The title is the pane's to write (the document shown), never a theme's keyed label (a theme applied again would reset it).
+        TMP_Text title = WbText(header.transform, "TitleText", null, UiText.Get(AppTabTitleKey(start)), PcType.Body, ThemeRoleId.Surface, TextAlignmentOptions.MidlineLeft,
+                                FontStyles.Bold);
+        PlaceRect(title.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.L + PaneTagSize.x + PcSize.M, 0f), new Vector2(-(PaneHintWidth + PcSize.L), 0f));
         title.enableAutoSizing = true;
         title.fontSizeMax = PcType.Body;
         title.fontSizeMin = PcType.Caption;

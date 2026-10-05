@@ -902,7 +902,7 @@ public static partial class OfficeSceneUIBuilder
     private const float MenuButtonWidth = 148f, DeskButtonWidth = 272f;
 
     /// <summary>The tray's width at the taskbar's right end (Day, Credits, Stability, the clock at Caption size).</summary>
-    private const float TrayWidth = 600f;
+    private const float TrayWidth = 760f;
 
     /// <summary>
     /// The taskbar (the PC UX redesign C7), rebuilt fresh: a flat bar in the
@@ -946,12 +946,15 @@ public static partial class OfficeSceneUIBuilder
         bar.SetAsLastSibling();
     }
 
-    /// <summary>A tray readout: one line at Caption size in the tray's ink, as wide as its text.</summary>
+    /// <summary>A tray readout: one line at Caption size in the tray's ink, as wide as its text; when the tray is short of room (a culture's long currency word beside its own script) the readouts give way together and shrink to fit rather than overlap (wave 5 A3).</summary>
     private static TMP_Text TrayText(Transform tray, string name, string sample)
     {
         TMP_Text text = Text(tray, name, sample, PcType.Caption, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white, ThemeRoleId.Tray);
         Chrome(text, PcType.Caption);
         text.raycastTarget = false;
+        text.enableAutoSizing = true;
+        text.fontSizeMax = PcType.Caption;
+        text.fontSizeMin = 16f;
         return text;
     }
 
@@ -1273,7 +1276,12 @@ public static partial class OfficeSceneUIBuilder
                                        ThemeRoleId.DeskButton, "taskbar.desk");
         PlaceRect(deskButton.transform, Vector2.zero, new Vector2(0f, 1f), new Vector2(PcSize.S + MenuButtonWidth + PcSize.S, 3f),
                   new Vector2(PcSize.S + MenuButtonWidth + PcSize.S + DeskButtonWidth, -3f));
-        ButtonLabel(deskButton, PcType.Body).lineSpacing = -10f; // a culture's words over their English gloss keep their size in the bar
+        // A culture's words over their English gloss keep their size in the bar: the two lines drawn close (a script's tall line box, Tahoma's,
+        // left the gloss on the button's edge: wave 5 A3), the block centred with a margin above and below, shrinking rather than spilling.
+        TMP_Text deskLabel = ButtonLabel(deskButton, PcType.Body);
+        deskLabel.lineSpacing = -16f;
+        deskLabel.margin = new Vector4(deskLabel.margin.x, 4f, deskLabel.margin.z, 6f);
+        deskLabel.alignment = TextAlignmentOptions.Center;
         WirePersistentVoid(deskButton, "m_OnClick", view, nameof(OfficeViewController.FocusDesk));
 
         Button startBtn = null;

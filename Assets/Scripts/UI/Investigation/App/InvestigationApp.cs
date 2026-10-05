@@ -6,26 +6,30 @@ using UnityEngine.UI;
 /// <summary>
 /// The Investigation app as a workbench (the PC workbench spec,
 /// docs/superpowers/specs/2026-09-30-pc-workbench-design.md; lessons 1, 2,
-/// D5, D6, D10): one desktop window, "Investigation" (· the traveller's name
-/// while one is at the desk), that fills the desktop the first time it opens.
-/// Its header says who is at the desk (their face: the person, drawn from
-/// their look, never the paper's photo; their name; the papers' counters; no
-/// claim, which the traveller only says) beside the five guided steps
+/// D5, D6, D10; polished in wave 5 A3): one desktop window, "Investigation"
+/// (the header names the traveller, so the title does not repeat it), that
+/// fills the desktop the first time it opens. Its header says who is at the
+/// desk (their face: the person, drawn from their look, never the paper's
+/// photo; their name; one short line of counters; no claim, which the
+/// traveller only says) beside the guided steps as one segmented control
 /// (GuideBar: a step says what to do and puts a pair of documents up; it
-/// never locks). Under it the shelf (ShelfView) holds every document of the
-/// case and the day in three groups (the traveller's papers and transcript;
-/// the agency's Citizen records, rules and calendar; the books); a chip opens its document on
-/// the target side, and a document already open on the other side swaps
-/// (OpenOnTarget). The work area holds the step's lead, the status line and
-/// two panes (AppPane: the left and the right; a click on a header makes it
-/// the target, F6 too; the target is where the keys act and the history
-/// walks), over which the workbench (MatchBoard) draws the line between two
-/// compared values; at the decision step the panes give way to the decision
-/// (DecisionView). The findings column sits at the work area's right
-/// (Ctrl+B hides it; remembered per player). Two panes show while the body
-/// holds them at their least width beside the findings (AppPanes.CanSplit;
-/// Ctrl+\ joins or splits them, remembered per player): the restored window
-/// has one, always the target. The keys, the focus ring, copy and paste,
+/// never locks). Under it the shelf (ShelfView) holds the case's and the
+/// day's documents on one row (the traveller's papers and transcript; the
+/// agency's Citizen records, rules and calendar; the books behind one Books
+/// menu); a chip opens its document on the target side, and a document
+/// already open on the other side swaps (OpenOnTarget). The work area holds
+/// the status line (the step's title and sentence, or what is held, or the
+/// last result) and two panes (AppPane: the left and the right, a gutter
+/// between them where a line's label sits; a click on a header makes it the
+/// target, F6 too; the target is where the keys act and the history walks),
+/// over which the workbench (MatchBoard) draws the line between two compared
+/// values; at the decision step the panes give way to the decision
+/// (DecisionView). The findings column sits at the work area's right: a slim
+/// rail while nothing is logged, so the documents take the width (Ctrl+B
+/// hides it; remembered per player). Two panes show while the body holds
+/// them at their least width and the gutter (AppPanes.CanSplit; Ctrl+\ joins
+/// or splits them, remembered per player): the restored window has one,
+/// always the target. The keys, the focus ring, copy and paste,
 /// pins, recent items and zoom are in InvestigationApp.Keys; the search
 /// drawer in InvestigationApp.Search. Nothing steals the view: something new
 /// for a source dots its chip until it is seen (AppBadges; a document not
@@ -48,11 +52,14 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>The right pane (shown while two fit).</summary>
     [SerializeField] private AppPane rightPane;
 
-    /// <summary>The work area under the shelf (its top follows the shelf's height; its width decides whether two panes fit).</summary>
+    /// <summary>The work area under the shelf (its width decides whether two panes fit).</summary>
     [SerializeField] private RectTransform work;
 
     /// <summary>The findings column at the work area's right (its width counts against the panes; Ctrl+B hides it).</summary>
     [SerializeField] private RectTransform findingsColumn;
+
+    /// <summary>The findings column's width while nothing is logged (a slim rail; the documents take the rest).</summary>
+    [SerializeField, Min(0f)] private float findingsRail = 56f;
 
     /// <summary>The main column (the lead, the status line, the panes or the decision), left of the findings.</summary>
     [SerializeField] private RectTransform mainColumn;
@@ -178,7 +185,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     }
 
     /// <summary>
-    /// A traveller is presented: the title and the header (their face from
+    /// A traveller is presented: the header (their face from
     /// <paramref name="look"/> and <paramref name="art"/>, their name; who
     /// stands at the desk, never what they ask for), the histories without the
     /// last traveller, the dots and the icon's dot cleared, the toast gone,
@@ -191,8 +198,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
         Init();
         ResetSearchCase();
         _traveller = travellerName ?? string.Empty;
-        if (window != null)
-            window.SetTitle(UiText.Format("app.titleCase", _traveller));
         if (nameText != null)
             nameText.text = _traveller;
         if (face != null)
@@ -219,8 +224,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
         _papers = null;
         _traveller = null;
         ResetSearchCase();
-        if (window != null)
-            window.SetTitle(UiText.Get("app.title"));
         if (nameText != null)
             nameText.text = UiText.Get("app.title");
         if (countersText != null)
@@ -364,10 +367,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
             }
         }
         if (shelf != null)
-        {
             shelf.Opened += item => OpenOnTarget(item.Target);
-            shelf.HeightChanged += ShelfHeight;
-        }
         if (guide != null)
             guide.StageShown += StageShown;
         if (board != null)
@@ -399,7 +399,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     {
         if (leftPane == null || mainColumn == null)
             return;
-        bool fits = rightPane != null && config != null && AppPanes.CanSplit(mainColumn.rect.width, 0f, config.paneMinWidth);
+        bool fits = rightPane != null && config != null && AppPanes.CanSplit(mainColumn.rect.width, config.paneGap, config.paneMinWidth);
         _split = _splitWanted && fits;
 
         float gap = config != null ? config.paneGap / 2f : 7f;
@@ -418,18 +418,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
             _target = _split ? rightPane : leftPane;
         Targets();
         MarkShelf();
-    }
-
-    /// <summary>The shelf's rows changed: the work area starts under it.</summary>
-    private void ShelfHeight(float height)
-    {
-        if (work == null || shelf == null)
-            return;
-        var shelfRect = (RectTransform)shelf.transform;
-        shelfRect.sizeDelta = new Vector2(shelfRect.sizeDelta.x, height);
-        float top = -shelfRect.anchoredPosition.y + height;
-        work.offsetMax = new Vector2(work.offsetMax.x, -top);
-        Layout();
     }
 
     /// <summary>A step was gone to: its pair of documents put up, the right side the target; the decision shows in place of the panes.</summary>
@@ -478,15 +466,21 @@ public sealed partial class InvestigationApp : MonoBehaviour
         }
         if (on && board != null)
             board.Release();
+        MarkShelf();
         Refocus();
     }
 
-    /// <summary>The findings or what is held changed: the decision redraws.</summary>
+    /// <summary>The findings or what is held changed: the decision redraws, and the findings column opens from its rail at the first finding (or folds back at a new case).</summary>
     private void BoardChanged()
     {
         if (_deciding && decision != null)
             decision.Show(board != null ? board.Log : null, _traveller);
+        if (FindingsRail != _railShown)
+            ApplyFindings(_findingsShown);
     }
+
+    /// <summary>True while nothing is logged: the findings column is a slim rail.</summary>
+    private bool FindingsRail => board == null || board.Log.Items.Count == 0;
 
     /// <summary>Both panes (the right one keeps its case state and views current while it is hidden, for the next split).</summary>
     private IEnumerable<AppPane> Panes()
@@ -548,8 +542,23 @@ public sealed partial class InvestigationApp : MonoBehaviour
             rightPane.SetTarget(_split && TargetPane == rightPane);
     }
 
-    /// <summary>A press on the desktop (DesktopWindowManager.Pressed): outside the search drawer's panel, the drawer closes.</summary>
-    private void Pressed(GameObject top) => PressedForSearch(top);
+    /// <summary>A press on the desktop (DesktopWindowManager.Pressed): outside the search drawer's panel, the drawer closes; outside the Books menu (and its chip), the menu closes.</summary>
+    private void Pressed(GameObject top)
+    {
+        PressedForSearch(top);
+        if (shelf != null && shelf.BooksOpen && !shelf.IsPart(top))
+            shelf.ShowBooks(false);
+    }
+
+    /// <summary>True while the shelf's Books menu is open (Escape closes it first, as a menu).</summary>
+    public bool BooksMenuOpen => shelf != null && shelf.BooksOpen;
+
+    /// <summary>Escape's CloseMenu for the Books menu.</summary>
+    public void CloseBooksMenu()
+    {
+        if (shelf != null)
+            shelf.ShowBooks(false);
+    }
 
     /// <summary>A pane showed a source: it is seen when the pane shows.</summary>
     private void PaneShown(AppPane pane, AppTab tab)
@@ -581,11 +590,11 @@ public sealed partial class InvestigationApp : MonoBehaviour
 
     /// <summary>
     /// The shelf's documents from the left pane's views, in three groups:
-    /// the traveller's (each paper by its chip's name, not readable yet:
-    /// dimmed; the transcript), the agency's (Citizen records, today's rules,
-    /// the calendar) and the books (each by its name; the Seal Register from
-    /// the day the seal check arrives, ReferenceView.OnShelf); drawn again only
-    /// when they change.
+    /// the traveller's (each paper the day issues by its chip's name, not
+    /// readable yet: dimmed; the transcript), the agency's (Citizen records,
+    /// today's rules, the calendar) and the books (each by its name, in the
+    /// Books menu; the Seal Register from the day the seal check arrives,
+    /// ReferenceView.OnShelf); drawn again only when they change.
     /// </summary>
     private void RefreshShelf()
     {
@@ -595,19 +604,19 @@ public sealed partial class InvestigationApp : MonoBehaviour
         IAppView documents = leftPane.View(AppTab.Documents);
         if (documents != null && _traveller != null)
             for (int i = 0; i < documents.Chips.Count; i++)
-                items.Add(new ShelfItem("shelf.traveller", documents.Chips[i].Label, LinkTarget.ToTab(AppTab.Documents, i), documents.Chips[i].Available));
+                items.Add(new ShelfItem(ShelfGroup.Traveller, documents.Chips[i].Label, LinkTarget.ToTab(AppTab.Documents, i), documents.Chips[i].Available));
         if (_traveller != null && Hosts(AppTab.Transcript))
-            items.Add(new ShelfItem("shelf.traveller", UiText.Get("app.tab.transcript"), LinkTarget.ToTab(AppTab.Transcript), true));
+            items.Add(new ShelfItem(ShelfGroup.Traveller, UiText.Get("app.tab.transcript"), LinkTarget.ToTab(AppTab.Transcript), true));
         if (Hosts(AppTab.Records))
-            items.Add(new ShelfItem("shelf.agency", UiText.Get("app.tab.records"), LinkTarget.ToTab(AppTab.Records), true));
+            items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Get("app.tab.records"), LinkTarget.ToTab(AppTab.Records), true));
         if (Hosts(AppTab.Rules))
-            items.Add(new ShelfItem("shelf.agency", UiText.Get("app.tab.rules"), LinkTarget.ToTab(AppTab.Rules), true));
+            items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Get("app.tab.rules"), LinkTarget.ToTab(AppTab.Rules), true));
         if (Hosts(AppTab.Calendar))
-            items.Add(new ShelfItem("shelf.agency", UiText.Get("app.tab.calendar"), LinkTarget.ToTab(AppTab.Calendar), true));
+            items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Get("app.tab.calendar"), LinkTarget.ToTab(AppTab.Calendar), true));
         IAppView books = leftPane.View(AppTab.Reference);
         for (int i = 0; books != null && i < books.Chips.Count; i++)
             if (!(books is ReferenceView reference) || reference.OnShelf(i))
-                items.Add(new ShelfItem("shelf.books", books.Chips[i].Label, LinkTarget.ToTab(AppTab.Reference, i), books.Chips[i].Available));
+                items.Add(new ShelfItem(ShelfGroup.Books, books.Chips[i].Label, LinkTarget.ToTab(AppTab.Reference, i), books.Chips[i].Available));
 
         if (!SameItems(items))
         {
@@ -625,37 +634,42 @@ public sealed partial class InvestigationApp : MonoBehaviour
             return false;
         for (int i = 0; i < items.Count; i++)
             if (items[i].Label != _items[i].Label || !items[i].Target.Equals(_items[i].Target) || items[i].Available != _items[i].Available ||
-                items[i].GroupKey != _items[i].GroupKey)
+                items[i].Group != _items[i].Group)
                 return false;
         return true;
     }
 
-    /// <summary>The chips' side tags (where each document is open) and dots (not opened yet this case, or something new in it).</summary>
+    /// <summary>The chips' side tags (where each document is open), their dots (a paper or the transcript not opened yet this case, or something new in a source) and the Books chip's words.</summary>
     private void MarkShelf()
     {
         if (shelf == null || leftPane == null)
             return;
-        shelf.Mark(SideOf, Unread);
+        shelf.Mark(SideOf, Unread, BooksLabel);
     }
 
-    /// <summary>"Left" or "Right" for the side a shelf document is open on, else null.</summary>
+    /// <summary>The Books chip's words: "Books", or "Books · Costume Guide" while that book is open on a side.</summary>
+    private static string BooksLabel(string openBook) => openBook == null ? UiText.Get("shelf.books") : UiText.Format("shelf.booksOpen", openBook);
+
+    /// <summary>"L" or "R" (the pane headers' "Left" and "Right", short so the shelf keeps one row) for the side a shelf document is open on, else null.</summary>
     private string SideOf(ShelfItem item)
     {
         if (_deciding)
             return null;
         if (SameDocument(leftPane, item.Target) && !leftPane.Blocked)
-            return UiText.Get("app.side.left");
+            return UiText.Get("shelf.side.left");
         if (_split && rightPane != null && SameDocument(rightPane, item.Target) && !rightPane.Blocked)
-            return UiText.Get("app.side.right");
+            return UiText.Get("shelf.side.right");
         return null;
     }
 
-    /// <summary>True for a readable document not opened yet this case, or one whose source has something new.</summary>
+    /// <summary>True for the traveller's readable document not opened yet this case, or a source with something new (the agency's documents and the books are reference: no dot for being unopened).</summary>
     private bool Unread(ShelfItem item)
     {
         if (!item.Available || _traveller == null)
             return false;
-        return !_opened.Contains(DocKey(item.Target.Tab, item.Target.Item)) || (item.Target.Item < 0 && _badges.IsBadged(item.Target.Tab));
+        if (item.Target.Item < 0 && _badges.IsBadged(item.Target.Tab))
+            return true;
+        return item.Group == ShelfGroup.Traveller && !_opened.Contains(DocKey(item.Target.Tab, item.Target.Item));
     }
 
     /// <summary>A document's key for the opened set ("Documents:1", "Records:-1").</summary>
