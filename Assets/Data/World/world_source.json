@@ -23927,19 +23927,19 @@
       {
         "bill": "Food",
         "name": "Food",
-        "price": 10,
+        "price": 12,
         "line": "A night's bowl of Directorate-grade kibble."
       },
       {
         "bill": "Heating",
         "name": "Heating",
-        "price": 8,
+        "price": 9,
         "line": "The radiator's meter takes credits only."
       },
       {
         "bill": "Electricity",
         "name": "Electricity",
-        "price": 6,
+        "price": 7,
         "line": "The lights, the radiator's pump and the TV."
       },
       {

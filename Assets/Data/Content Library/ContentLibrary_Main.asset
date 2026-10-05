@@ -124,6 +124,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 35d5522d8ec44ac4799fa6dace94a01d, type: 2}
   - {fileID: 11400000, guid: bb269c4cf1a32604ab47774dbd05d4fe, type: 2}
   - {fileID: 11400000, guid: beff12f0f8935c145a4bc01d116fa012, type: 2}
+  - {fileID: 11400000, guid: c297605e25c0fcf4da78f9d8b18f3783, type: 2}
+  - {fileID: 11400000, guid: 6dd7439177a48b44c9e17a5e25538710, type: 2}
+  - {fileID: 11400000, guid: 57c4638cc999a534ca4f75a3534d0824, type: 2}
+  - {fileID: 11400000, guid: f91ccc8821c29bb429c7ac74032e849a, type: 2}
   upgrades:
   - {fileID: 11400000, guid: 00c95d5dbdd51e945a9157454c034cb6, type: 2}
   - {fileID: 11400000, guid: 4310a94e0a8291a4380d458bff90205e, type: 2}
@@ -155,6 +159,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e92d52127d6f43047829f4c9c82689de, type: 2}
   - {fileID: 11400000, guid: 97e25b2ca1ae9a046bff89d9669decb4, type: 2}
   - {fileID: 11400000, guid: e7a8f5bc18defc049a659710785bee62, type: 2}
+  - {fileID: 11400000, guid: 08c2547306edfbf4ba680a77d0928abe, type: 2}
+  - {fileID: 11400000, guid: bcaac65e9a283f442ae1ad1ec8a85de1, type: 2}
+  - {fileID: 11400000, guid: 100bc7780e4108a418fecd8eb0c7b58e, type: 2}
+  - {fileID: 11400000, guid: 3bfc977a220c1ab4681d9737e601c3ce, type: 2}
   attributes:
   - {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
   - {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
@@ -15391,6 +15399,82 @@ MonoBehaviour:
     - 'Lost and found: one sense of purpose, answers to ''Hope''.'
     - The number you have called is under maintenance. Please hold until 2151.
     - Goodnight from the Directorate. Your account never sleeps; you should.
+    bills:
+    - bill: 0
+      name: Food
+      price: 12
+      line: A night's bowl of Directorate-grade kibble.
+    - bill: 1
+      name: Heating
+      price: 9
+      line: The radiator's meter takes credits only.
+    - bill: 2
+      name: Electricity
+      price: 7
+      line: The lights, the radiator's pump and the TV.
+    - bill: 3
+      name: TV
+      price: 4
+      line: The Directorate's channel. Company, of a kind.
+    - bill: 4
+      name: Medicine
+      price: 12
+      line: From the pharmacy on the corner, which is also a bank.
+    pet:
+      nameMaxLength: 16
+      kinds:
+      - kind: 0
+        word: dog
+        suggestedName: Biscuit
+        reactions:
+        - '{name} leans into your hand and sighs.'
+        - '{name}''s tail thumps the floor twice.'
+        - '{name} rolls over for a belly rub.'
+        - '{name} licks your wrist, then looks embarrassed about it.'
+        toyLines:
+        - '{name} carries the {toy} round the flat like a trophy.'
+        - '{name} drops the {toy} at your feet. Again. And again.'
+        - '{name} guards the {toy} from an invisible rival.'
+      - kind: 1
+        word: cat
+        suggestedName: Miso
+        reactions:
+        - '{name} allows it. Briefly.'
+        - '{name} purrs like a small engine.'
+        - '{name} headbutts your chin.'
+        - '{name} pretends not to notice, then follows you to the kitchen.'
+        toyLines:
+        - '{name} ambushes the {toy} from under the sofa.'
+        - '{name} bats the {toy} under the radiator and stares at you.'
+        - '{name} decides the {toy} is beneath them, then pounces anyway.'
+      hunger:
+      - '{name} is fed.'
+      - '{name} is hungry.'
+      - '{name} is very hungry.'
+      - '{name} is starving.'
+      cold:
+      - '{name} is warm.'
+      - '{name} is chilly.'
+      - '{name} is cold.'
+      - '{name} is shivering.'
+      boredom:
+      - '{name} is playful.'
+      - '{name} is restless.'
+      - '{name} is bored.'
+      - '{name} is listless.'
+      sickness:
+      - '{name} is healthy.'
+      - '{name} is a little unwell.'
+      - '{name} is sick.'
+      - '{name} is very sick.'
+      worse: '{name} caught something while you were at work.'
+      better: '{name} seems brighter this evening.'
+      welfareNotice: 'A notice from the Animal Welfare Office is taped to your door:
+        an inspector will look in on {name} tomorrow night.'
+      paperAdopted: 'SHELTER NEWS: {name} the {kind} has gone home with a clerk of
+        Temporal Customs, Desk 3.'
+      paperWelfare: 'ANIMAL WELFARE: inspectors are asking after a {kind} called
+        {name} in Block C.'
   world:
     factors:
     - id: government

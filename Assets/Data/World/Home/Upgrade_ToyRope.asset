@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 633ce1469e2ac064aa273d138f70aebc, type: 3}
-  m_Name: Upgrade_HouseCornerFlat
+  m_Name: Upgrade_ToyRope
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
-  id: house_corner_flat
-  displayName: Corner Flat
-  description: Two windows. A sunny sill for the pet. The landlord calls it 'aspirational'.
-  cost: 320
-  unlockEffect: {fileID: 11400000, guid: 845f813da76d14d40a5895627d32f0e5, type: 2}
-  venue: 1
-  branch: 5
-  requires:
-  - house_floor_up
+  id: toy_rope
+  displayName: Rope of Regulation Length
+  description: Certified tug-worthy by the Bureau of Standards. Chewing voids the
+    warranty.
+  cost: 25
+  unlockEffect: {fileID: 11400000, guid: 6dd7439177a48b44c9e17a5e25538710, type: 2}
+  venue: 0
+  branch: 9
+  requires: []
   installSlot: 
