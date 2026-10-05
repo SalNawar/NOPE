@@ -594,28 +594,55 @@ public static class _TimeDeskAuditPlay
             Check(o.App.Board.Log.HasDifference, $"d{day} slot {slot}: a right denial ({FaultKey(c)}) rests on a logged difference ({o.App.Board.Log.Differences} logged)");
         if (o.Stamps != null)
         {
-            // Track B: the physical stamps: the tray out, the stamp picked up, a dry press (faint, no verdict), inked on the pad, pressed on the passport, the papers handed back.
-            var flow = (StampFlow)Field(o.Stamps, "_flow");
-            if (flow == null || !flow.TrayOut)
-                o.Stamps.ToggleTray();
-            yield return Frames(2);
-            ((Clickable)Field(o.Stamps, accept ? "approvedStamp" : "deniedStamp")).onClick.Invoke();
-            yield return Frames(2);
+            // Papers, Please's controls (2026-10-06): TAB slides the stamp bar out, the passport goes to the desk and its ENTRY VISA box under
+            // the stamp, a click on the stamp stamps it (the other stamp is then refused), and the stamped passport dropped on the counter hands the papers back.
+            if (!o.Stamps.BarOut)
+                o.Controls.Press(ControlKey.Stamps);
+            yield return Seconds(0.4f);
+            Check(o.Stamps.BarOut, $"d{day} slot {slot}: TAB slides the stamp bar out");
             DeskDocument passport = o.Paper((int)Field(o.Stamps, "_passport"));
-            Check(o.Stamps.IsHolding && passport != null, $"d{day} slot {slot}: a stamp is picked up from the tray and the passport lies on the desk");
+            Check(passport != null, $"d{day} slot {slot}: the passport lies on the desk");
             if (passport != null)
             {
-                o.Stamps.Press(passport, passport.Sheet.position);
-                Check(!o.Stamps.HasVerdict, $"d{day} slot {slot}: a dry press sets no verdict");
-                ((Clickable)Field(o.Stamps, "inkPad")).onClick.Invoke();
-                o.Stamps.Press(passport, passport.Sheet.position);
-                Check(o.Stamps.HasVerdict, $"d{day} slot {slot}: the inked press on the passport is the verdict");
+                yield return Until(() => !passport.IsSliding, 6f, "the passport at rest");
+                if (passport.Zone != DeskZone.Desk)
+                    Call(o.Desk, "HandlePaperClicked", passport, -1);
+                // The reading view's blend (0.5 s) ends before the passport is laid under the stamp the camera looks through.
+                yield return Seconds(0.9f);
+                Check(passport.Zone == DeskZone.Desk, $"d{day} slot {slot}: a click on the passport on the counter brings it to the desk, full size");
+                // Once: another paper under a stamp refuses it (other documents never take a verdict stamp).
+                DeskDocument other = o.Papers().FirstOrDefault(p => p != passport && !p.IsSliding);
+                if (other != null && First("not the passport"))
+                {
+                    Call(o.Desk, "HandlePaperClicked", other, -1);
+                    yield return Seconds(0.5f);
+                    yield return UnderStamp(o, other, !accept);
+                    ((Button)Field(o.Stamps, accept ? "deniedStamp" : "approvedStamp")).onClick.Invoke();
+                    yield return Frames(2);
+                    Check(o.Stamps.LastPress == StampPress.NotPassport && !o.Stamps.HasVerdict,
+                          $"d{day} slot {slot}: paper {other.Index} (not the passport) under the stamp refuses it: only the passport takes a verdict ({o.Stamps.LastPress})");
+                    if (ShotsOn)
+                        yield return Shots("stamp_refused_not_passport");
+                    other.transform.position = ((DeskCounter)Field(o.Desk, "counter")).Spot(1);
+                    Call(o.Desk, "HandleDragEnded", other.Drag, other.transform.position);
+                    yield return Frames(2);
+                }
+                yield return UnderStamp(o, passport, accept);
+                ((Button)Field(o.Stamps, accept ? "approvedStamp" : "deniedStamp")).onClick.Invoke();
+                yield return Frames(2);
+                Check(o.Stamps.LastPress == StampPress.Stamped && o.Stamps.HasVerdict, $"d{day} slot {slot}: the stamp on the ENTRY VISA box is the verdict ({o.Stamps.LastPress})");
+                yield return UnderStamp(o, passport, !accept);
+                ((Button)Field(o.Stamps, accept ? "deniedStamp" : "approvedStamp")).onClick.Invoke();
+                yield return Frames(2);
+                Check(o.Stamps.LastPress == StampPress.AlreadyStamped, $"d{day} slot {slot}: the other stamp is refused: approve and deny together is impossible ({o.Stamps.LastPress})");
+                if (ShotsOn && First("stamp bar"))
+                    yield return Shots("stamp_bar_visa");
+                // Hand back: the stamped passport dropped on the counter.
+                var counter = (DeskCounter)Field(o.Desk, "counter");
+                Vector3 onCounter = counter.Spot(0);
+                passport.transform.position = onCounter;
+                Call(o.Desk, "HandleDragEnded", passport.Drag, onCounter);
             }
-            ((Clickable)Field(o.Stamps, accept ? "approvedStamp" : "deniedStamp")).onClick.Invoke();
-            yield return Frames(2);
-            Button back = (Button)Field(o.Stamps, accept ? "handBackApproved" : "handBackDenied");
-            Check(back.gameObject.activeInHierarchy, $"d{day} slot {slot}: \"Hand the papers back\" shows with the verdict");
-            back.onClick.Invoke();
             Line($"   decided with the stamps: {(accept ? "APPROVED" : "DENIED")}");
         }
         Check(o.Game.Ledger.verdicts.Count == before + 1, $"d{day} slot {slot}: the decision recorded one verdict");
@@ -655,6 +682,33 @@ public static class _TimeDeskAuditPlay
     }
 
     private static bool Once(string key) => MistakesMade.Add(key);
+
+    /// <summary>
+    /// Lays <paramref name="paper"/> on the desk with its ENTRY VISA box (its
+    /// largest stamp area) under the APPROVED (<paramref name="approved"/>) or
+    /// the DENIED stamp's die, as the clerk drags it there: the die's centre
+    /// through the office camera onto the desk plane, the visa box's centre
+    /// moved onto it.
+    /// </summary>
+    private static IEnumerator UnderStamp(Office o, DeskDocument paper, bool approved)
+    {
+        var die = (RectTransform)Field(o.Stamps, approved ? "approvedDie" : "deniedDie");
+        var cam = (Camera)Field(o.Stamps, "_camera");
+        var surface = (DeskSurface)Field(o.Desk, "surface");
+        Vector2 screen = RectTransformUtility.WorldToScreenPoint(null, die.TransformPoint(die.rect.center));
+        if (cam == null || !surface.TryProject(cam, screen, out Vector3 target))
+            yield break;
+        var form = (PlacedForm)Field(paper, "_form");
+        float scale = (float)Field(paper, "_scale");
+        FaceRect visa = StampSpots.Area(form);
+        float px = (visa.XMin + visa.XMax) / 2f * scale, py = (visa.YMin + visa.YMax) / 2f * scale;
+        Vector3 visaWorld = paper.Sheet.TransformPoint(new Vector3(px - form.Width * scale / 2f, form.PageHeight * scale / 2f - py, 0f));
+        Vector3 shift = target - visaWorld;
+        shift.y = 0f;
+        paper.transform.position += shift;
+        Physics.SyncTransforms();
+        yield return Frames(2);
+    }
 
     /// <summary>A visual lie (the document design spec, D4, D8): a forged seal or someone else's photo.</summary>
     private static bool Visual(CaseInstance c) => c.lie.HasValue && LieKinds.IsVisualLie(c.lie.Value);
@@ -797,8 +851,9 @@ public static class _TimeDeskAuditPlay
             FormRequest r = open[i];
             if (i == 0 && book != null && book.gameObject.activeInHierarchy)
             {
+                ((Clickable[])Field(book, "tabs"))[1].onClick.Invoke();
                 var row = ((Clickable[])Field(book, "paperRows"))[0];
-                Check(row.gameObject.activeSelf, $"d{day} {c.visitorGivenName}: the rulebook lists {r.Label} as not handed over");
+                Check(row.gameObject.activeInHierarchy, $"d{day} {c.visitorGivenName}: the rulebook's PAPERS tab lists {r.Label} as not handed over");
                 row.onClick.Invoke();
                 Check(missing.State(r.Id) == MissingPaperState.Flagged && runner.IsUnlocked(InterviewUnlocks.Missing(r.Id)), $"d{day} {c.visitorGivenName}: {r.Label} flagged missing on the rulebook unlocks its request");
                 continue;
@@ -1309,11 +1364,9 @@ public static class _TimeDeskAuditPlay
                 continue;
             }
             yield return Until(() => !paper.IsSliding, 6f, $"paper {i} at rest");
-            Call(o.Desk, "Examine", paper);
+            Call(o.Desk, "HandlePaperClicked", paper, -1);
             yield return Seconds(0.6f);
             yield return Shots($"form_{c.documents[i].template.formNumber}_held_{kind}");
-            Call(o.Desk, "PutBackAll", true);
-            yield return Frames(3);
         }
 
         // Every paper scanned (the documents presenter's scan, as the desk scanner reports it), then the app.
@@ -1421,11 +1474,9 @@ public static class _TimeDeskAuditPlay
         DeskDocument paper = visual >= 0 ? o.Paper(visual) : null;
         if (paper != null)
         {
-            Call(o.Desk, "Examine", paper);
+            Call(o.Desk, "HandlePaperClicked", paper, -1);
             yield return Seconds(0.6f);
             yield return Shots($"caught_{key}_held");
-            Call(o.Desk, "PutBackAll", true);
-            yield return Frames(3);
         }
         if (visual >= 0 && c.lie == LieKind.ForgedSeal)
         {
@@ -2055,6 +2106,7 @@ public static class _TimeDeskAuditPlay
         /// <summary>A click on the AVAILABLE sign, as the EventSystem delivers it.</summary>
         public void ClickSign() => ExecuteEvents.Execute(Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
         public DeskStampTray Stamps => (DeskStampTray)Field(Coordinator, "stampTray");
+        public OfficeControls Controls => (OfficeControls)Field(Coordinator, "controls");
         public DeskRulebook Rulebook => (DeskRulebook)Field(One<DeskInspect>(), "rulebook");
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");

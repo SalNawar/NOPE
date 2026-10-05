@@ -1,5 +1,7 @@
 # The desk: inspect, stamps, scanner, city view (desk-first track B, 2026-10-05)
 
+> **Superseded in part (2026-10-06):** Papers, Please's controls (`2026-10-06-controls-design.md`) replaced DB3's and DB6's physical stamps, ink pad and hand-back buttons with the stamp bar, the papers in the hand (DB6's reading lift) with the counter and the desk zones, and made inspection a mode (the red button, SPACE). DB1, DB2's evidence model, DB4 and DB5 stand.
+
 Saleh's items (2026-10-05): (4) "scanner: sometimes things get stuck behind it"; (5) "the tilt on the desk zooms more and the tilt is 80 degrees; players can match there after they scan"; (6) "player can look left for a view at the city"; (11) "the player should be able to check documents at the desk, highlight clear mistakes and approve; scanning allows using additional features"; (12) "approve or reject are actual physical seals: the player picks stamps, inks them, then stamps on the document". Saleh was asleep: every decision below is the default, his to overturn. The behaviour contract is `docs/FEATURES.md` (Desk: Physical stamps, Inspection at the desk, The city view, Desk view, Desk scanner).
 
 ## DB1 The desk view (item 5)
