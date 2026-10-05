@@ -36,6 +36,6 @@ MonoBehaviour:
   - factor: government
     outcome: monarchy
     amount: 12
-  - factor: future
-    outcome: naturalism
+  - factor: money
+    outcome: jubilee
     amount: 6

@@ -16080,8 +16080,8 @@
           "amount": 12
         },
         {
-          "factor": "future",
-          "outcome": "naturalism",
+          "factor": "money",
+          "outcome": "jubilee",
           "amount": 6
         }
       ]
@@ -16133,7 +16133,7 @@
         },
         {
           "factor": "money",
-          "outcome": "banking_houses",
+          "outcome": "debt",
           "amount": 6
         }
       ]
@@ -16418,8 +16418,8 @@
           "amount": 12
         },
         {
-          "factor": "government",
-          "outcome": "corporate_board",
+          "factor": "future",
+          "outcome": "cybernetic",
           "amount": 6
         }
       ]
