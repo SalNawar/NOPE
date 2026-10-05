@@ -21,7 +21,9 @@ using UnityEngine;
 /// comparison (FieldPicked) and nothing else does. A right-click or Esc
 /// mid-drag cancels the drag (CancelDrag, ControlRules: the paper slides back
 /// to where it was picked up). Papers stack by height (each place in the
-/// stack lifts a sheet one step, a dragged paper above them all). A document
+/// stack lifts a sheet one step, a dragged paper above them all; the
+/// rulebook takes a place in the stack too, so nothing lies at the desk's
+/// own height and nothing prints through what lies on it). A document
 /// takes input only while BoothCoordinator allows the papers, DeskPapers lets
 /// it be dragged and it is not sliding; papers not allowed take no raycasts
 /// at all (spec R38). The day's scanner upgrades (ScannerDay, from the
@@ -66,6 +68,15 @@ public sealed class DeskController : MonoBehaviour
 
     /// <summary>The stamps (optional): the passport's verdict, and the hand-back when the stamped passport is dropped on the counter.</summary>
     [SerializeField] private DeskStampTray stamps;
+
+    /// <summary>The rulebook (optional): it lies in the papers' stack, over or under each paper as they were last touched, a dragged one above them all (Saleh 2026-10-06: "documents on desk like the folder with the rules are clipping with the desk").</summary>
+    [SerializeField] private DeskRulebook rulebook;
+
+    /// <summary>The rulebook's place in the stack (papers are 0 and up).</summary>
+    private const int RulebookId = -1;
+
+    /// <summary>True while the rulebook is dragged (it lifts above the stack).</summary>
+    private bool _rulebookDragged;
 
     /// <summary>The case's papers by index (null until handed over).</summary>
     private readonly List<DeskDocument> _papers = new List<DeskDocument>();
@@ -127,6 +138,15 @@ public sealed class DeskController : MonoBehaviour
             scanHint.text = UiText.Get(config.scanHintKey);
         if (stamps != null)
             stamps.Changed += ShowCounter;
+        if (rulebook != null && rulebook.Drag != null)
+        {
+            rulebook.Drag.DragBegan += RulebookLifted;
+            rulebook.Drag.DragEnded += RulebookDropped;
+            rulebook.Drag.DragCancelled += RulebookLifted;
+        }
+        ResetStack();
+        if (config != null)
+            ApplyStack();
         RefreshHint();
     }
 
@@ -134,7 +154,32 @@ public sealed class DeskController : MonoBehaviour
     {
         if (stamps != null)
             stamps.Changed -= ShowCounter;
+        if (rulebook != null && rulebook.Drag != null)
+        {
+            rulebook.Drag.DragBegan -= RulebookLifted;
+            rulebook.Drag.DragEnded -= RulebookDropped;
+            rulebook.Drag.DragCancelled -= RulebookLifted;
+        }
     }
+
+    /// <summary>The stack with no paper: the rulebook alone, at the bottom.</summary>
+    private void ResetStack()
+    {
+        _stack.Clear();
+        _stack.Add(RulebookId);
+    }
+
+    /// <summary>The rulebook's drag begins (lifted above the stack) or is cut short (back on top of it).</summary>
+    private void RulebookLifted(DeskDraggable drag)
+    {
+        _rulebookDragged = drag.IsDragging;
+        _stack.BringToFront(RulebookId);
+        if (config != null)
+            ApplyStack();
+    }
+
+    /// <summary>The rulebook dropped: it lies on top of the stack.</summary>
+    private void RulebookDropped(DeskDraggable drag, Vector3 released) => RulebookLifted(drag);
 
     /// <summary>Advances a running scan (a finished paper slides back to where it was picked up) or feeds the idle scanner its next queued paper (the Auto-Feed Scanner).</summary>
     private void Update()
@@ -220,7 +265,7 @@ public sealed class DeskController : MonoBehaviour
         _papers.Clear();
         for (int i = 0; i < _state.Count; i++)
             _papers.Add(null);
-        _stack.Clear();
+        ResetStack();
         _handedOver = 0;
         _dragged = -1;
 
@@ -298,7 +343,7 @@ public sealed class DeskController : MonoBehaviour
         }
 
         _papers.Clear();
-        _stack.Clear();
+        ResetStack();
         _dragged = -1;
         ShowCounter();
         RefreshHint();
@@ -547,13 +592,15 @@ public sealed class DeskController : MonoBehaviour
         paper.SetLive(live, live, _live);
     }
 
-    /// <summary>Stack heights: one step per place from the desk (the bottom paper one step up); the dragged paper lifted above the whole stack.</summary>
+    /// <summary>Stack heights: one step per place from the desk (the bottom one, a paper or the rulebook, one step up); the dragged paper or rulebook lifted above the whole stack.</summary>
     private void ApplyStack()
     {
-        float top = _papers.Count * config.paperStackStep;
+        float top = (_papers.Count + 1) * config.paperStackStep;
         foreach (DeskDocument paper in _papers)
             if (paper != null)
                 paper.SetLift(paper.Index == _dragged ? top + config.dragLift : (_stack.IndexOf(paper.Index) + 1) * config.paperStackStep);
+        if (rulebook != null)
+            rulebook.SetLift(_rulebookDragged ? top + config.dragLift : (_stack.IndexOf(RulebookId) + 1) * config.paperStackStep);
     }
 
     /// <summary>True when <paramref name="point"/> lies on the scanner's bed and the scanner is on the desk today (ScannerDay.Hidden: not before it is introduced).</summary>

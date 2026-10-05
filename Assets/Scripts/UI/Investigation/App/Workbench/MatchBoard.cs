@@ -93,6 +93,17 @@ public sealed class MatchBoard : MonoBehaviour
     /// <summary>The key of what is held (a value, a rule or the date), or null: the desk draws its line from it to the pointer too (DeskInspect).</summary>
     public string HoldKey => _holdKey;
 
+    /// <summary>Counts every change of the line shown (a new result, or the line taken away): the desk tells a click that made a result from one that moved on (DeskInspect).</summary>
+    public int LineVersion { get; private set; }
+
+    /// <summary>Takes the result's line away, the findings kept (the desk's inspect mode left, or the player moved on: Saleh 2026-10-06, "inspect mode thing stays after the result is made").</summary>
+    public void ClearLine()
+    {
+        Wire();
+        if (_linkA != null)
+            ClearLink();
+    }
+
     /// <summary>The two keys of the line shown (null when none), its look and its label: the desk draws the same line between them where they lie (DeskInspect; the desk-first redesign, item 11).</summary>
     public (string a, string b, FindingLook look, string label) Line => (_linkA, _linkB, _linkLook, _linkLabel);
 
@@ -365,6 +376,7 @@ public sealed class MatchBoard : MonoBehaviour
         _linkB = keyB;
         _linkLook = look;
         _linkLabel = label;
+        LineVersion++;
         DrawLine();
     }
 
@@ -372,6 +384,7 @@ public sealed class MatchBoard : MonoBehaviour
     private void ClearLink()
     {
         _linkA = _linkB = null;
+        LineVersion++;
         if (lines != null)
             lines.Clear();
     }

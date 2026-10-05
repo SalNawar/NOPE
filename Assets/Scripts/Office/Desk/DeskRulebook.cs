@@ -10,7 +10,11 @@ using UnityEngine;
 /// it is comparable in inspect mode"). It lies beside the mat (the office
 /// binder places it: Place) and moves by left-drag like a document
 /// (DeskDraggable; dropped on the counter it slides back: it is the
-/// office's, not the traveller's). Two tabs on its top edge turn its pages
+/// office's, not the traveller's). It lies in the papers' stack
+/// (DeskController: SetLift lifts its Booklet a stack step at a time, so it
+/// lies over or under each paper as they were last touched and never at the
+/// blotter's own height; Saleh 2026-10-06: "documents on desk like the folder
+/// with the rules are clipping with the desk"). Two tabs on its top edge turn its pages
 /// (ShowPage): RULES prints today's directives (the day's Directive Memo,
 /// the PC's Rules), one row each; PAPERS lists the papers the traveller has
 /// not handed over (Track C's MissingPapers: the day's papers menu, the same
@@ -29,6 +33,9 @@ using UnityEngine;
 /// </summary>
 public sealed class DeskRulebook : MonoBehaviour
 {
+    /// <summary>The booklet's visible part and its click boxes, lifted off the desk plane by the stack (SetLift); the root stays on the plane, where the drag moves it.</summary>
+    [SerializeField] private Transform booklet;
+
     /// <summary>The rules page's title ("TODAY'S RULES").</summary>
     [SerializeField] private TMP_Text title;
 
@@ -94,6 +101,9 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>Every click of the booklet (the rows, the papers' rows, the tabs, the booklet itself): the booth makes them live with the props.</summary>
     public IReadOnlyList<Clickable> Clicks => rows.Concat(paperRows).Concat(tabs).Append(card).Where(c => c != null).ToArray();
 
+    /// <summary>The booklet's drag (DeskController lifts it above the stack while it runs).</summary>
+    public DeskDraggable Drag => drag;
+
     /// <summary>The page shown: 0 RULES, 1 PAPERS.</summary>
     public int Page { get; private set; }
 
@@ -140,8 +150,15 @@ public sealed class DeskRulebook : MonoBehaviour
             drag.DragEnded -= Dropped;
     }
 
-    /// <summary>Lays the booklet on the desk at <paramref name="at"/>, turned to <paramref name="rotation"/> (the office binder).</summary>
+    /// <summary>Lays the booklet on the desk at <paramref name="at"/> (on the desk plane), turned to <paramref name="rotation"/> (the office binder).</summary>
     public void Place(Vector3 at, Quaternion rotation) => transform.SetPositionAndRotation(at, rotation);
+
+    /// <summary>Lifts the booklet <paramref name="height"/> metres off the desk plane (its place in the papers' stack, or the drag's lift: DeskController).</summary>
+    public void SetLift(float height)
+    {
+        if (booklet != null)
+            booklet.localPosition = new Vector3(0f, height, 0f);
+    }
 
     /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS): its rows show, the other's hide; its tab looks open.</summary>
     public void ShowPage(int page)

@@ -630,6 +630,9 @@ public static partial class OfficeSceneUIBuilder
         DeskInspect inspect = EnsureChild(office, "DeskInspect").gameObject.AddComponent<DeskInspect>();
         BuildInspectButton(deskViewBack.transform.parent, inspect);
         DeskRulebook rulebook = BuildRulebook(office, desk.GetComponent<DeskSurface>(), counter);
+        var soDeskBook = new SerializedObject(desk);
+        SetRef(soDeskBook, "rulebook", rulebook);
+        soDeskBook.ApplyModifiedProperties();
         WirePersistentVoid(travellerZone, "onClick", inspect, nameof(DeskInspect.TravellerClicked));
         var soWheel = new SerializedObject(wheel);
         SetRef(soWheel, "traveller", traveller);
@@ -677,6 +680,7 @@ public static partial class OfficeSceneUIBuilder
         WirePersistentVoid(propsRoot.Find("Stamp").GetComponent<Clickable>(), "onClick", stampTray, nameof(DeskStampTray.ToggleBar));
         var soStamps = new SerializedObject(stampTray);
         SetRef(soStamps, "deskView", deskView);
+        SetRef(soStamps, "surface", desk.GetComponent<DeskSurface>());
         soStamps.ApplyModifiedProperties();
 
         // The hall's Departure Board and portal rings (the portals spec v3; OfficeSceneUIBuilder.Portals.cs).
@@ -913,7 +917,7 @@ public static partial class OfficeSceneUIBuilder
         sheet.gameObject.layer = OfficeLayers.InteractableLayer;
         Vector2 size = config.paperSize;
         BoxCollider box = sheet.gameObject.AddComponent<BoxCollider>();
-        box.size = new Vector3(size.x, size.y, 0.004f);
+        box.size = new Vector3(size.x, size.y, PaperBoxThickness);
 
         Sprite paperSprite = EnsureOfficeSprite("paper", EnsureFormStyle().paper, 150, 200);
         Material paperMaterial = EnsureMaterial("Paper", "Universal Render Pipeline/Lit", m =>
@@ -1258,17 +1262,27 @@ public static partial class OfficeSceneUIBuilder
     private const float RulebookPaperPitch = 0.04f;
     private static readonly Vector2 RulebookTabSize = new Vector2(0.09f, 0.03f);
 
-    /// <summary>The stamp bar (reference px): the bar's size (its width is how far it slides out), the rail's width along the edge, the grey tab, a stamp's head (its plate's height, the die's frame) and where the heads start from the bar's left.</summary>
-    private static readonly Vector2 StampBarSize = new Vector2(400f, 640f);
-    private const float StampRailWidth = 70f;
-    private static readonly Vector2 StampTabSize = new Vector2(76f, 150f);
-    private static readonly Vector2 StampHeadSize = new Vector2(280f, 250f);
-    private const float StampHeadLeft = 10f;
-    private const float StampPlateHeight = 54f;
-    private const float StampDieFrame = 8f;
+    /// <summary>A paper's and a rulebook part's click box thickness (metres, before a paper's zone scale): thin, so the papers' stack (DeskConfigSO.paperStackStep a place) alone decides which of two overlapping papers, or a paper and the rulebook, a click or a stamp meets (Saleh 2026-10-06: documents clipping).</summary>
+    private const float PaperBoxThickness = 0.0004f;
 
-    /// <summary>The grey of the stamp bar's rail and tab and the PC's tab (Papers, Please's grey tabs), and the stamps' arms.</summary>
-    private static readonly Color StampGrey = new Color(0.36f, 0.37f, 0.39f, 1f), StampGreyDark = new Color(0.22f, 0.23f, 0.25f, 1f);
+    /// <summary>The stamp bar's grey tab on the overlay's right edge (reference px).</summary>
+    private static readonly Vector2 StampTabSize = new Vector2(92f, 170f);
+
+    /// <summary>The 3D stamp bar (metres, in the rack's space: x along the office view's right, z away from the chair, y up from the stamps' feet): the two stamps' distance apart (DENIED left, APPROVED right), the rail's reach past each, its height, how far in front of the stamps it runs (toward the chair: under them on the screen, so it never covers the passport whose visa box is under a stamp) and its section (deep, tall).</summary>
+    private const float StampSpacing = 0.14f;
+    private const float StampRailOverhang = 0.07f;
+    private const float StampRailHeight = 0.07f;
+    private const float StampRailFront = 0.05f;
+    private static readonly Vector2 StampRailSection = new Vector2(0.032f, 0.016f);
+
+    /// <summary>The art's desk folder (DeskClean): the stamps are its desk stamp model in its NOPE/Desk Anime materials (the desk polish: the stamps match the desk).</summary>
+    private const string DeskCleanFolder = "Assets/Art/Office/DeskClean";
+
+    /// <summary>The art's desk stamp model's scale on the bar (the art's is a desk-sized prop: half of it is a hand stamp, about 8 by 5 cm, 8 cm tall).</summary>
+    private const float StampModelScale = 0.5f;
+
+    /// <summary>The grey of the stamp bar's tab and the PC's tab (Papers, Please's grey tabs).</summary>
+    private static readonly Color StampGrey = new Color(0.36f, 0.37f, 0.39f, 1f);
 
     /// <summary>The red inspect button (reference px), its margin from the bottom right corner, and its hint beside it.</summary>
     private static readonly Vector2 InspectButtonSize = new Vector2(112f, 112f);
@@ -1367,93 +1381,50 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The stamp bar, Papers, Please's (Saleh 2026-10-06), rebuilt each run on
-    /// the office overlay: StampBar (the DeskStampTray, an always-active
-    /// full-screen host) holding the Bar, anchored to the right edge's middle
-    /// just off the screen (it slides out by barTravel): its grey Rail along the
-    /// edge, the grey Tab on its left ("STAMPS" over the key, TAB: always on the
-    /// screen's edge while in), and the APPROVED and DENIED stamps hanging left
-    /// of the rail, each a Button over a see-through catcher: its arm to the
-    /// rail, its coloured plate with the word, and under it its Die, a window
-    /// framed in the stamp's colour the paper under it shows through (where it
-    /// presses). Also the hint's plate at the top right under the case HUD's
-    /// strip (inactive) and an AudioSource for the thump and the thunk. The old
-    /// 3D tray and the overlay's hand-back buttons are destroyed. Every part is
-    /// in the DiegeticDevice role (its own colours, never themed) but the hint
-    /// (the tooltip's).
+    /// The stamp bar, Papers, Please's with the art's 3D stamps (Saleh
+    /// 2026-10-06: "I want the 3D stamp; there should be a label on the screen
+    /// to bring out the stamp stuff, and the Tab shortcut"), rebuilt each run.
+    /// On the office overlay: StampBar (the DeskStampTray, an always-active
+    /// full-screen host) with the grey Tab at the right edge's middle
+    /// ("STAMPS" over the key, TAB; inactive until the booth shows it), the
+    /// hint's plate at the top right under the case HUD's strip (inactive)
+    /// and an AudioSource for the thump and the thunk. In the office:
+    /// StampRack (inactive until slid out; the office binder lays it, its
+    /// origin at the stamps' feet): a rail in the art's DeskClean green-dark
+    /// with wooden end caps, brass arms down to the two stamps, and the
+    /// DENIED stamp (left) and the APPROVED stamp (right), each a click box
+    /// on the Interactable layer (its pivot at its foot) holding the art's
+    /// desk stamp (DeskClean's Clean_Stamp at half size: a turned wooden
+    /// handle with a brass ferrule on a wooden block over a dark rubber die,
+    /// in the desk's NOPE/Desk Anime materials), a green or red cap on its
+    /// knob, the word on the block's front and in reverse on the rubber, and
+    /// its Die (an empty at the die's centre: where it presses); the word
+    /// printed again on the rail's top over each stamp, readable from the
+    /// reading view. Without the art's model the stamps are primitives in the
+    /// same materials. The old overlay bar, the 3D tray of the desk-first
+    /// redesign and the overlay's hand-back buttons are destroyed.
     /// </summary>
     private static DeskStampTray BuildStampTray(Transform overlay, Transform office, DeskConfigSO config)
     {
-        // The 3D stamp tray (the desk-first redesign) and the overlay's hand-back buttons retired with it.
         DestroyChildIfPresent(overlay, "StampTray");
         DestroyChildIfPresent(office, "StampTray");
         DestroyChildIfPresent(overlay, "StampHandBack");
         DestroyChildIfPresent(overlay, "StampBar");
+        DestroyChildIfPresent(office, "StampRack");
         Transform host = Panel(overlay, "StampBar", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
 
-        Transform bar = Panel(host, "Bar", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), Vector2.zero, StampBarSize, null);
-        ((RectTransform)bar).pivot = new Vector2(0f, 0.5f);
-        Transform rail = Panel(bar, "Rail", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), Vector2.zero, new Vector2(StampRailWidth, StampBarSize.y), StampGrey, ThemeRoleId.DiegeticDevice);
-        ((RectTransform)rail).pivot = new Vector2(1f, 0.5f);
-        rail.GetComponent<Image>().raycastTarget = true;
-
-        Button tab = MakeButton(bar, "Tab", null, Vector2.zero, Vector2.one, StampGrey, ThemeRoleId.DiegeticDevice);
+        Button tab = MakeButton(host, "Tab", null, Vector2.zero, Vector2.one, StampGrey, ThemeRoleId.DiegeticDevice);
         var tabRect = (RectTransform)tab.transform;
-        tabRect.anchorMin = tabRect.anchorMax = new Vector2(0f, 0.5f);
+        tabRect.anchorMin = tabRect.anchorMax = new Vector2(1f, 0.5f);
         tabRect.pivot = new Vector2(1f, 0.5f);
-        tabRect.anchoredPosition = new Vector2(StampBarSize.x - StampRailWidth, 0f);
+        tabRect.anchoredPosition = Vector2.zero;
         tabRect.sizeDelta = StampTabSize;
         TMP_Text tabLabel = tab.transform.Find("Label").GetComponent<TMP_Text>();
-        tabLabel.text = $"<size=60%>{UiText.Get("controls.stampsTab")}</size>\n<b>{ControlRules.StampsKey}</b>";
+        tabLabel.text = $"<size=72%>{UiText.Get("controls.stampsTab")}</size>\n<b>{ControlRules.StampsKey}</b>";
         tabLabel.color = Color.white;
         tabLabel.enableAutoSizing = false;
-        tabLabel.fontSize = 22f;
-
-        (Button stamp, RectTransform die) Stamp(string name, float y, Color colour, string key)
-        {
-            Button b = MakeButton(bar, name, null, Vector2.zero, Vector2.one, new Color(0f, 0f, 0f, 0f), ThemeRoleId.DiegeticDevice);
-            var rt = (RectTransform)b.transform;
-            rt.anchorMin = rt.anchorMax = new Vector2(0f, 0.5f);
-            rt.pivot = new Vector2(0f, 0.5f);
-            rt.anchoredPosition = new Vector2(StampHeadLeft, y);
-            rt.sizeDelta = StampHeadSize;
-            Object.DestroyImmediate(b.transform.Find("Label").gameObject);
-            b.transition = Selectable.Transition.None;
-
-            Transform arm = Panel(b.transform, "Arm", new Vector2(1f, 1f), new Vector2(1f, 1f), Vector2.zero,
-                                  new Vector2(StampBarSize.x - StampRailWidth - StampHeadLeft - StampHeadSize.x, StampPlateHeight * 0.6f), StampGreyDark, ThemeRoleId.DiegeticDevice);
-            ((RectTransform)arm).pivot = new Vector2(0f, 1f);
-            ((RectTransform)arm).anchoredPosition = new Vector2(0f, -StampPlateHeight * 0.2f);
-            arm.GetComponent<Image>().raycastTarget = false;
-
-            Transform plate = Panel(b.transform, "Plate", new Vector2(0f, 1f), new Vector2(1f, 1f), Vector2.zero, new Vector2(0f, StampPlateHeight), colour, ThemeRoleId.DiegeticDevice);
-            ((RectTransform)plate).pivot = new Vector2(0.5f, 1f);
-            plate.GetComponent<Image>().raycastTarget = false;
-            TMP_Text word = Text(plate, "Word", null, 30, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white, ThemeRoleId.DiegeticDevice, key, FontStyles.Bold, ThemeTextKind.Button, true);
-            word.raycastTarget = false;
-
-            Transform window = Panel(b.transform, "Die", new Vector2(0f, 0f), new Vector2(1f, 0f), Vector2.zero, new Vector2(0f, StampHeadSize.y - StampPlateHeight - 6f), null);
-            var windowRect = (RectTransform)window;
-            windowRect.pivot = new Vector2(0.5f, 0f);
-            void Edge(string edge, Vector2 aMin, Vector2 aMax, Vector2 size)
-            {
-                Transform e = Panel(window, edge, aMin, aMax, Vector2.zero, size, colour, ThemeRoleId.DiegeticDevice);
-                ((RectTransform)e).pivot = new Vector2((aMin.x + aMax.x) / 2f, (aMin.y + aMax.y) / 2f);
-                e.GetComponent<Image>().raycastTarget = false;
-            }
-            Edge("Top", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, StampDieFrame));
-            Edge("Bottom", new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, StampDieFrame));
-            Edge("Left", new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(StampDieFrame, 0f));
-            Edge("Right", new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(StampDieFrame, 0f));
-
-            // The whole stamp takes the click through a see-through catcher (the paper shows through the die's window).
-            Image catcher = b.GetComponent<Image>();
-            catcher.color = new Color(0f, 0f, 0f, 0f);
-            SceneUiKit.Tag(catcher, ThemeRoleId.ClickCatcher, ThemePart.Fill);
-            return (b, windowRect);
-        }
-        (Button approved, RectTransform approvedDie) = Stamp("Approved", StampHeadSize.y / 2f + 24f, new Color(0.12f, 0.45f, 0.22f, 1f), "stamp.label.approved");
-        (Button denied, RectTransform deniedDie) = Stamp("Denied", -StampHeadSize.y / 2f - 24f, new Color(0.66f, 0.14f, 0.11f, 1f), "stamp.label.denied");
+        tabLabel.fontSize = 26f;
+        tab.gameObject.SetActive(false);
 
         Transform plateHint = Panel(host, "Hint", new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-16f, -StampPlateTop), StampHintSize, Tooltip, ThemeRoleId.Tooltip);
         ((RectTransform)plateHint).pivot = new Vector2(1f, 1f);
@@ -1465,10 +1436,58 @@ public static partial class OfficeSceneUIBuilder
         AudioSource sound = GetOrAdd<AudioSource>(host.gameObject);
         sound.playOnAwake = false;
 
+        // The rack in the office: x along the office view's right, z away from the chair, y up from the stamps' feet.
+        Transform rack = EnsureChild(office, "StampRack");
+        Material rail = DeskMaterial("GreenDark", new Color(0.204f, 0.294f, 0.275f));
+        Material wood = DeskMaterial("Wood", new Color(0.537f, 0.392f, 0.282f));
+        Material brass = DeskMaterial("Brass", new Color(0.72f, 0.58f, 0.3f));
+        float railLength = 2f * (StampSpacing / 2f + StampRailOverhang);
+        PrimitivePart(rack, "Rail", PrimitiveType.Cube, new Vector3(0f, StampRailHeight, -StampRailFront), new Vector3(railLength, StampRailSection.y, StampRailSection.x), rail);
+        PrimitivePart(rack, "CapLeft", PrimitiveType.Cube, new Vector3(-railLength / 2f, StampRailHeight, -StampRailFront), new Vector3(0.012f, StampRailSection.y + 0.006f, StampRailSection.x + 0.006f), wood);
+        PrimitivePart(rack, "CapRight", PrimitiveType.Cube, new Vector3(railLength / 2f, StampRailHeight, -StampRailFront), new Vector3(0.012f, StampRailSection.y + 0.006f, StampRailSection.x + 0.006f), wood);
+        Color labelInk = new Color(0.95f, 0.93f, 0.86f);
+
+        (Clickable stamp, Transform die) Stamp(string name, float x, Color cap, Color ink, string labelKey)
+        {
+            Clickable click = EnsureClickBox(rack, name);
+            click.transform.localPosition = new Vector3(x, 0f, 0f);
+            StampShape shape = StampBody(click.transform, cap);
+            var box = click.GetComponent<BoxCollider>();
+            box.center = new Vector3(0f, shape.Top / 2f, 0f);
+            box.size = new Vector3(shape.HalfWidth * 2f + 0.006f, shape.Top, shape.HalfDepth * 2f + 0.006f);
+            string word = UiText.Get(labelKey);
+
+            // The word on the block's front (the office view reads it) and in reverse on the rubber (it prints the right way round).
+            TextMeshPro front = StampText(click.transform, "Front", new Vector3(0f, (shape.BlockBottom + shape.BlockTop) / 2f, -shape.HalfDepth - 0.0006f),
+                                          Quaternion.identity, new Vector2(shape.HalfWidth * 1.8f, shape.BlockTop - shape.BlockBottom), ink);
+            front.text = word;
+            TextMeshPro rubber = StampText(click.transform, "Rubber", new Vector3(0f, -0.0004f, 0f), Quaternion.Euler(90f, 0f, 0f),
+                                           new Vector2(shape.HalfWidth * 1.8f, shape.HalfDepth * 1.4f), new Color(0.42f, 0.44f, 0.43f));
+            rubber.text = word;
+            Transform die = EnsureChild(click.transform, "Die");
+            die.localPosition = Vector3.zero;
+
+            // The arm from the rail down to the handle, and the word on the rail's top over the stamp.
+            PrimitivePart(rack, name + "Arm", PrimitiveType.Cube, new Vector3(x, StampRailHeight - 0.004f, -StampRailFront / 2f), new Vector3(0.012f, 0.008f, StampRailFront), brass);
+            TextMeshPro label = FlatText(rack, name + "Label", new Vector3(x, StampRailHeight + StampRailSection.y / 2f + 0.0006f, -StampRailFront),
+                                         new Vector2(StampSpacing - 0.012f, StampRailSection.x - 0.004f), 0.2f, labelInk, FontStyles.Bold);
+            label.text = word;
+
+            click.SetOutline(click.GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponent<TextMeshPro>() == null).ToArray());
+            return (click, die);
+        }
+
+        (Clickable denied, Transform deniedDie) = Stamp("Denied", -StampSpacing / 2f, new Color(0.7f, 0.2f, 0.17f), new Color(0.66f, 0.12f, 0.1f), "stamp.label.denied");
+        (Clickable approved, Transform approvedDie) = Stamp("Approved", StampSpacing / 2f, new Color(0.2f, 0.5f, 0.28f), new Color(0.1f, 0.42f, 0.2f), "stamp.label.approved");
+        // No shadows: hanging over the desk under the hall's low light they cast long dark shapes across the papers (Papers, Please's bar casts none).
+        foreach (MeshRenderer part in rack.GetComponentsInChildren<MeshRenderer>(true))
+            part.shadowCastingMode = ShadowCastingMode.Off;
+        rack.gameObject.SetActive(false);
+
         DeskStampTray stamps = GetOrAdd<DeskStampTray>(host.gameObject);
         var so = new SerializedObject(stamps);
         SetRef(so, "config", config);
-        SetRef(so, "bar", bar);
+        SetRef(so, "rack", rack);
         SetRef(so, "tab", tab);
         SetRef(so, "approvedStamp", approved);
         SetRef(so, "deniedStamp", denied);
@@ -1476,16 +1495,128 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "deniedDie", deniedDie);
         SetRef(so, "hint", hint);
         SetRef(so, "sound", sound);
-        so.FindProperty("barTravel").floatValue = StampBarSize.x;
         so.FindProperty("paperLayers").intValue = 1 << OfficeLayers.InteractableLayer;
         so.ApplyModifiedProperties();
         return stamps;
     }
 
+    /// <summary>A stamp body's measures (metres, in the stamp's space, its foot at the origin): the block's half width and half depth, its bottom (the die's top) and top, and the stamp's top (the knob's).</summary>
+    private readonly struct StampShape
+    {
+        public StampShape(float halfWidth, float halfDepth, float blockBottom, float blockTop, float top)
+        {
+            HalfWidth = halfWidth;
+            HalfDepth = halfDepth;
+            BlockBottom = blockBottom;
+            BlockTop = blockTop;
+            Top = top;
+        }
+
+        /// <summary>The block's half width (along the rail).</summary>
+        public float HalfWidth { get; }
+
+        /// <summary>The block's half depth.</summary>
+        public float HalfDepth { get; }
+
+        /// <summary>The block's bottom: the rubber die's top.</summary>
+        public float BlockBottom { get; }
+
+        /// <summary>The block's top: the handle rises from it.</summary>
+        public float BlockTop { get; }
+
+        /// <summary>The stamp's top: its knob's cap.</summary>
+        public float Top { get; }
+    }
+
+    /// <summary>
+    /// A rubber stamp's body under <paramref name="parent"/> (its foot at the
+    /// origin): the art's desk stamp (DeskClean's Clean_Stamp at
+    /// StampModelScale: wood, brass, the dark rubber die) with a cap on its
+    /// knob in <paramref name="cap"/>; without the model, a stand-in of
+    /// primitives in the same materials (a die, a block, a handle, a knob and
+    /// its cap). Returns the body's measures (the words go on the block).
+    /// </summary>
+    private static StampShape StampBody(Transform parent, Color cap)
+    {
+        Material capMaterial = AnimeMaterial(cap.g > cap.r ? "StampAnime_CapApproved" : "StampAnime_CapDenied", cap);
+        if (ModelParts(parent, "Clean_Stamp", StampModelScale, out Dictionary<string, Bounds> parts) &&
+            parts.TryGetValue("Wood", out Bounds wood) && parts.TryGetValue("Dark", out Bounds die))
+        {
+            // The model's foot is its die's bottom: the parts move up so the foot sits at the origin.
+            Vector3 lift = new Vector3(0f, -die.min.y, 0f);
+            foreach (Transform part in parent)
+                if (parts.ContainsKey(part.name))
+                    part.localPosition += lift;
+            // The knob's top: the wood's highest point; the cap is a disc sunk into it, a third of the block's depth across.
+            float diameter = wood.size.z / 3f;
+            float top = wood.max.y + lift.y;
+            PrimitivePart(parent, "Cap", PrimitiveType.Cylinder, new Vector3(0f, top - 0.0015f, 0f), new Vector3(diameter, 0.002f, diameter), capMaterial);
+            float dieTop = die.max.y + lift.y;
+            return new StampShape(wood.extents.x, wood.extents.z, dieTop, dieTop + wood.size.y * 0.18f, top + 0.0005f);
+        }
+
+        Material wooden = DeskMaterial("Wood", new Color(0.537f, 0.392f, 0.282f));
+        PrimitivePart(parent, "Die", PrimitiveType.Cube, new Vector3(0f, 0.004f, 0f), new Vector3(0.078f, 0.008f, 0.05f), DeskMaterial("Rubber", new Color(0.176f, 0.2f, 0.188f)));
+        PrimitivePart(parent, "Block", PrimitiveType.Cube, new Vector3(0f, 0.0165f, 0f), new Vector3(0.08f, 0.017f, 0.052f), wooden);
+        PrimitivePart(parent, "Handle", PrimitiveType.Cylinder, new Vector3(0f, 0.05f, 0f), new Vector3(0.022f, 0.025f, 0.022f), wooden);
+        PrimitivePart(parent, "Knob", PrimitiveType.Sphere, new Vector3(0f, 0.08f, 0f), new Vector3(0.036f, 0.026f, 0.036f), wooden);
+        PrimitivePart(parent, "Cap", PrimitiveType.Cylinder, new Vector3(0f, 0.0925f, 0f), new Vector3(0.018f, 0.002f, 0.018f), capMaterial);
+        return new StampShape(0.04f, 0.026f, 0.008f, 0.025f, 0.094f);
+    }
+
+    /// <summary>
+    /// The art's DeskClean model <paramref name="model"/> rebuilt under
+    /// <paramref name="parent"/> at <paramref name="scale"/>: one child per mesh,
+    /// named by its material ("Clean_Stamp__DeskClean_Wood" gives "Wood"), in
+    /// the art's DeskClean material of that name; the parts' bounds in the
+    /// parent's space by name. False (nothing made) when the model is missing.
+    /// </summary>
+    private static bool ModelParts(Transform parent, string model, float scale, out Dictionary<string, Bounds> parts)
+    {
+        parts = new Dictionary<string, Bounds>();
+        var source = AssetDatabase.LoadAssetAtPath<GameObject>($"{DeskCleanFolder}/Models/{model}.fbx");
+        if (source == null)
+            return false;
+        foreach (MeshFilter filter in source.GetComponentsInChildren<MeshFilter>(true))
+        {
+            if (filter.sharedMesh == null)
+                continue;
+            string name = filter.name.Contains("__DeskClean_") ? filter.name.Substring(filter.name.IndexOf("__DeskClean_") + "__DeskClean_".Length) : filter.name;
+            var part = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
+            part.transform.SetParent(parent, false);
+            part.transform.localScale = Vector3.one * scale;
+            part.GetComponent<MeshFilter>().sharedMesh = filter.sharedMesh;
+            part.GetComponent<MeshRenderer>().sharedMaterial = DeskMaterial(name, new Color(0.5f, 0.5f, 0.5f));
+            Bounds b = filter.sharedMesh.bounds;
+            parts[name] = new Bounds(b.center * scale, b.size * scale);
+        }
+        return parts.Count > 0;
+    }
+
+    /// <summary>The art's DeskClean material <paramref name="name"/> (NOPE/Desk Anime: the desk's own look); without it, a stand-in of that colour.</summary>
+    private static Material DeskMaterial(string name, Color colour) =>
+        AssetDatabase.LoadAssetAtPath<Material>($"{DeskCleanFolder}/Materials/DeskClean_{name}.mat") ?? AnimeMaterial("StampAnime_" + name, colour);
+
+    /// <summary>A gameplay material of <paramref name="colour"/> in the desk's NOPE/Desk Anime shader (its tone bands match the art's props); URP Lit where that shader is missing.</summary>
+    private static Material AnimeMaterial(string name, Color colour) =>
+        Shader.Find("NOPE/Desk Anime") != null
+            ? EnsureMaterial(name, "NOPE/Desk Anime", m => m.SetColor("_BaseColor", colour))
+            : LitMaterial(name, colour, 0.3f);
+
+    /// <summary>A word on a stamp (a world-space bold text, auto-sized to <paramref name="box"/>), turned by <paramref name="rotation"/> (identity: facing the chair; 90 degrees about x: facing up, so the rubber's word, seen from below, reads in reverse).</summary>
+    private static TextMeshPro StampText(Transform parent, string name, Vector3 position, Quaternion rotation, Vector2 box, Color colour)
+    {
+        TextMeshPro tmp = FlatText(parent, name, position, box, 0.12f, colour, FontStyles.Bold);
+        tmp.transform.localRotation = rotation;
+        tmp.fontSizeMin = 0.01f;
+        return tmp;
+    }
+
     /// <summary>
     /// The rulebook on the desk, Papers, Please's booklet (Saleh 2026-10-06),
     /// rebuilt each run: Office/Rulebook (the DeskRulebook and its DeskDraggable;
-    /// the office binder lays it beside the mat): a cream card lying face up,
+    /// the office binder lays it beside the mat on the desk plane) and its
+    /// Booklet (lifted by the papers' stack: DeskRulebook.SetLift): a cream card lying face up,
     /// its click box (CardClick: its outline and the drag's proxy), two tabs on
     /// its top edge (RULES, PAPERS: a plate, a word and a click box each), the
     /// RULES page (its title, five rows, each a click box on the Interactable
@@ -1498,7 +1629,8 @@ public static partial class OfficeSceneUIBuilder
     {
         DestroyChildIfPresent(office, "Rulebook");
         Transform book = EnsureChild(office, "Rulebook");
-        GameObject card = PrimitivePart(book, "Card", PrimitiveType.Quad, Vector3.zero, new Vector3(RulebookSize.x, RulebookSize.y, 1f), LitMaterial("Rulebook_Card", new Color(0.93f, 0.9f, 0.8f), 0.15f));
+        Transform booklet = EnsureChild(book, "Booklet"); // lifted by the papers' stack (DeskController), the root on the desk plane
+        GameObject card = PrimitivePart(booklet, "Card", PrimitiveType.Quad, Vector3.zero, new Vector3(RulebookSize.x, RulebookSize.y, 1f), LitMaterial("Rulebook_Card", new Color(0.93f, 0.9f, 0.8f), 0.15f));
         card.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
         Color ink = new Color(0.13f, 0.12f, 0.15f);
 
@@ -1510,15 +1642,15 @@ public static partial class OfficeSceneUIBuilder
         {
             float x = -RulebookSize.x / 2f + RulebookTabSize.x / 2f + 0.01f + i * (RulebookTabSize.x + 0.006f);
             Vector3 at = new Vector3(x, 0.0002f, RulebookSize.y / 2f + RulebookTabSize.y / 2f);
-            GameObject plate = PrimitivePart(book, "TabPlate" + (i + 1), PrimitiveType.Quad, at, new Vector3(RulebookTabSize.x, RulebookTabSize.y, 1f),
+            GameObject plate = PrimitivePart(booklet, "TabPlate" + (i + 1), PrimitiveType.Quad, at, new Vector3(RulebookTabSize.x, RulebookTabSize.y, 1f),
                                              LitMaterial("Rulebook_Tab", new Color(0.93f, 0.9f, 0.8f), 0.15f));
             plate.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
             plates.Add(plate.GetComponent<Renderer>());
-            Clickable tab = EnsureClickBox(book, "Tab" + (i + 1));
+            Clickable tab = EnsureClickBox(booklet, "Tab" + (i + 1));
             tab.transform.localPosition = at + new Vector3(0f, 0.0004f, 0f);
             var box = tab.GetComponent<BoxCollider>();
             box.center = Vector3.zero;
-            box.size = new Vector3(RulebookTabSize.x, 0.004f, RulebookTabSize.y);
+            box.size = new Vector3(RulebookTabSize.x, PaperBoxThickness, RulebookTabSize.y);
             tab.SetOutline(new[] { plate.GetComponent<Renderer>() });
             TextMeshPro word = FlatText(tab.transform, "Text", Vector3.zero, RulebookTabSize - new Vector2(0.008f, 0.006f), 0.11f, ink, FontStyles.Bold);
             word.text = UiText.Get(tabKeys[i]);
@@ -1526,7 +1658,7 @@ public static partial class OfficeSceneUIBuilder
         }
 
         // The RULES page.
-        Transform rulesPage = EnsureChild(book, "RulesPage");
+        Transform rulesPage = EnsureChild(booklet, "RulesPage");
         TextMeshPro title = FlatText(rulesPage, "Title", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.022f), new Vector2(RulebookSize.x - 0.02f, 0.03f), 0.2f, ink, FontStyles.Bold);
         var rows = new List<Clickable>();
         for (int i = 0; i < RulebookRows; i++)
@@ -1536,7 +1668,7 @@ public static partial class OfficeSceneUIBuilder
             row.transform.localPosition = new Vector3(0f, 0.0006f, z);
             var box = row.GetComponent<BoxCollider>();
             box.center = Vector3.zero;
-            box.size = new Vector3(RulebookSize.x - 0.016f, 0.004f, RulebookRowPitch - 0.004f);
+            box.size = new Vector3(RulebookSize.x - 0.016f, PaperBoxThickness, RulebookRowPitch - 0.004f);
             TextMeshPro text = FlatText(row.transform, "Text", Vector3.zero, new Vector2(RulebookSize.x - 0.024f, RulebookRowPitch - 0.006f), 0.13f, ink, FontStyles.Normal);
             text.textWrappingMode = TextWrappingModes.Normal;
             text.alignment = TextAlignmentOptions.MidlineLeft;
@@ -1545,7 +1677,7 @@ public static partial class OfficeSceneUIBuilder
         TextMeshPro none = FlatText(rulesPage, "None", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.058f), new Vector2(RulebookSize.x - 0.024f, 0.03f), 0.13f, ink, FontStyles.Italic);
 
         // The PAPERS page: its heading and a row per paper not handed over (a click flags it missing).
-        Transform papersPage = EnsureChild(book, "PapersPage");
+        Transform papersPage = EnsureChild(booklet, "PapersPage");
         TextMeshPro papersTitle = FlatText(papersPage, "PapersTitle", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.022f), new Vector2(RulebookSize.x - 0.02f, 0.03f), 0.16f, ink, FontStyles.Bold);
         var paperRows = new List<Clickable>();
         for (int i = 0; i < RulebookPaperRows; i++)
@@ -1554,7 +1686,7 @@ public static partial class OfficeSceneUIBuilder
             row.transform.localPosition = new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.058f - i * RulebookPaperPitch);
             var box = row.GetComponent<BoxCollider>();
             box.center = Vector3.zero;
-            box.size = new Vector3(RulebookSize.x - 0.016f, 0.004f, RulebookPaperPitch - 0.004f);
+            box.size = new Vector3(RulebookSize.x - 0.016f, PaperBoxThickness, RulebookPaperPitch - 0.004f);
             TextMeshPro text = FlatText(row.transform, "Text", Vector3.zero, new Vector2(RulebookSize.x - 0.024f, RulebookPaperPitch - 0.006f), 0.12f, ink, FontStyles.Normal);
             text.textWrappingMode = TextWrappingModes.Normal;
             text.alignment = TextAlignmentOptions.MidlineLeft;
@@ -1563,7 +1695,7 @@ public static partial class OfficeSceneUIBuilder
         TextMeshPro papersNone = FlatText(papersPage, "None", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.058f), new Vector2(RulebookSize.x - 0.024f, 0.03f), 0.13f, ink, FontStyles.Italic);
         papersPage.gameObject.SetActive(false);
 
-        Clickable cardClick = EnsureClickBox(book, "CardClick");
+        Clickable cardClick = EnsureClickBox(booklet, "CardClick");
         var cardBox = cardClick.GetComponent<BoxCollider>();
         cardBox.center = new Vector3(0f, -0.0002f, 0f);
         cardBox.size = new Vector3(RulebookSize.x, 0.0004f, RulebookSize.y);
@@ -1576,6 +1708,7 @@ public static partial class OfficeSceneUIBuilder
 
         DeskRulebook rulebook = GetOrAdd<DeskRulebook>(book.gameObject);
         var so = new SerializedObject(rulebook);
+        SetRef(so, "booklet", booklet);
         SetRef(so, "card", cardClick);
         SetRef(so, "title", title);
         SerializedArrays.Set(so, "rows", rows);
@@ -1634,8 +1767,10 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// Papers, Please's red inspect button (Saleh 2026-10-06), rebuilt each run
-    /// on the office overlay at the bottom right: a red Button with a large "!"
-    /// over the key (SPACE, ControlRules.InspectKey), and its On state
+    /// on the office overlay at the bottom right: a red Button with a white
+    /// magnifying glass drawn in code (MagnifierGlyph; Saleh: "the inspect mode
+    /// should be a magnify glass icon") over the key (SPACE,
+    /// ControlRules.InspectKey), and its On state
     /// (inactive: DeskInspect shows it while inspect mode is on): a yellow ring
     /// round the button and the hint beside it on the tooltip's plate. Wired
     /// into <paramref name="inspect"/>; the button is inactive until the booth
@@ -1651,11 +1786,25 @@ public static partial class OfficeSceneUIBuilder
         rt.anchoredPosition = new Vector2(-InspectMargin, InspectMargin);
         rt.sizeDelta = InspectButtonSize;
         TMP_Text label = button.transform.Find("Label").GetComponent<TMP_Text>();
-        label.text = $"<size=200%><b>!</b></size>\n<size=80%>{ControlRules.InspectKey}</size>";
+        label.text = ControlRules.InspectKey;
         label.color = Color.white;
         label.enableAutoSizing = false;
-        label.fontSize = 22f;
-        label.lineSpacing = -20f;
+        label.fontSize = 19f;
+        label.fontStyle = FontStyles.Bold;
+        var labelRect = (RectTransform)label.transform;
+        labelRect.anchorMin = new Vector2(0f, 0.04f);
+        labelRect.anchorMax = new Vector2(1f, 0.3f);
+        labelRect.offsetMin = labelRect.offsetMax = Vector2.zero;
+        var icon = new GameObject("Magnifier", typeof(RectTransform), typeof(CanvasRenderer), typeof(MagnifierGlyph));
+        icon.transform.SetParent(button.transform, false);
+        var iconRect = (RectTransform)icon.transform;
+        iconRect.anchorMin = new Vector2(0.2f, 0.3f);
+        iconRect.anchorMax = new Vector2(0.8f, 0.94f);
+        iconRect.offsetMin = iconRect.offsetMax = Vector2.zero;
+        MagnifierGlyph glyph = icon.GetComponent<MagnifierGlyph>();
+        glyph.color = Color.white;
+        glyph.raycastTarget = false;
+        SceneUiKit.Tag(glyph, ThemeRoleId.DiegeticDevice, ThemePart.Ink);
 
         Transform on = Panel(button.transform, "On", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         void Ring(string side, Vector2 aMin, Vector2 aMax, Vector2 pos, Vector2 size)
@@ -1778,6 +1927,9 @@ public static partial class OfficeSceneUIBuilder
         }
         RectTransform a = End("EndA", out RectTransform arrowA), b = End("EndB", out RectTransform arrowB);
         MatchLines lines = BuildMatchLines(host, null);
+        var soLines = new SerializedObject(lines);
+        soLines.FindProperty("dashNotes").boolValue = false; // over the office a dashed line only ever means a value held (Saleh 2026-10-06)
+        soLines.ApplyModifiedProperties();
         host.SetSiblingIndex(0);
         var so = new SerializedObject(inspect);
         SetRef(so, "board", board);

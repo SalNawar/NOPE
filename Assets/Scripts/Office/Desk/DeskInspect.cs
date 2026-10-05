@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 /// <summary>
@@ -29,7 +30,14 @@ using UnityEngine.UI;
 /// value to the pointer; it shows while the PC frame is closed and both
 /// values are in the office (an end off the screen, the calendar or the face
 /// seen from the desk view, waits at the screen's edge toward it with an arrow
-/// pointing the way; a value only on the PC draws nothing here). While the line
+/// pointing the way; a value only on the PC draws nothing here). The line is
+/// inspect mode's (Saleh 2026-10-06: "inspect mode thing stays after the
+/// result is made, the dash line"): the dashed line follows the pointer only
+/// while a value is held; a result draws its solid line and label instead,
+/// which go as the player moves on (the next left-press that makes no new
+/// result, or a new value held) and with inspect mode (leaving it clears the
+/// line and lets go of a held value); outside inspect mode nothing is drawn
+/// over the office. While the line
 /// labels a pair, the office compare strip does not repeat it
 /// (CompareController.SetStripCovered; the desk-first polish). A logged
 /// difference marks its papers' boxes (FindingMarks) for the rest of the
@@ -104,6 +112,7 @@ public sealed class DeskInspect : MonoBehaviour
     private RectTransform _canvas;
     private readonly Vector3[] _corners = new Vector3[8];
     private string _drawnA, _drawnB, _drawnHold;
+    private int _seenLine;
     private bool _wired;
     private bool _live;
 
@@ -152,8 +161,12 @@ public sealed class DeskInspect : MonoBehaviour
         if (on == IsOn)
             return;
         IsOn = on;
-        if (!on && board != null && board.IsHolding)
-            board.Release();
+        if (!on && board != null)
+        {
+            if (board.IsHolding)
+                board.Release();
+            board.ClearLine();
+        }
         if (onState != null)
             onState.SetActive(on);
         Changed?.Invoke();
@@ -274,12 +287,13 @@ public sealed class DeskInspect : MonoBehaviour
             desk.MarkField(document, field, mistakeMark);
     }
 
-    /// <summary>The workbench's line over the office, each frame: from the held value to the pointer, or between the two values compared, while the frame is closed and the values lie on the desk.</summary>
+    /// <summary>The workbench's line over the office, each frame, in inspect mode: from the held value to the pointer, or between the two values compared, while the frame is closed and the values lie on the desk; a left-press this frame that made no new result moves on (the result's line goes).</summary>
     private void LateUpdate()
     {
         if (board == null || lines == null)
             return;
-        bool office = (view == null || view.Current == OfficeView.OfficeFocus) && (city == null || !city.IsOn);
+        MoveOn();
+        bool office = IsOn && (view == null || view.Current == OfficeView.OfficeFocus) && (city == null || !city.IsOn);
         string hold = office ? board.HoldKey : null;
         (string a, string b, FindingLook look, string label) = board.Line;
         if (!office)
@@ -317,6 +331,15 @@ public sealed class DeskInspect : MonoBehaviour
             endB.gameObject.SetActive(false);
             _drawnA = _drawnB = null;
         }
+    }
+
+    /// <summary>The player moved on (Papers, Please's: the line stays until the next click): a left-press this frame, in inspect mode, with nothing held, that drew no new line (a result logged this frame changes the board's LineVersion) takes the shown result's line away.</summary>
+    private void MoveOn()
+    {
+        bool pressed = Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
+        if (pressed && IsOn && !board.IsHolding && board.LineVersion == _seenLine && board.Line.a != null)
+            board.ClearLine();
+        _seenLine = board.LineVersion;
     }
 
     /// <summary>Tells the office compare strip whether the line over the office labels the pair now.</summary>

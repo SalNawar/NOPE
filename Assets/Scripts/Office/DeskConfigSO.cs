@@ -170,7 +170,16 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Where the rulebook card lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat).</summary>
     public Vector2 rulebookAt = new Vector2(-0.3f, -0.05f);
 
-    [Header("Stamps (Papers, Please's stamp bar, Saleh 2026-10-06)")]
+    [Header("Stamps (Papers, Please's stamp bar, Saleh 2026-10-06: the art's 3D stamps)")]
+    /// <summary>How high above the desk the stamps' dies hang while the bar is out (metres): a paper slides under them (above a dragged paper's lift), and a press dips them down onto it.</summary>
+    [Min(0.005f)] public float stampHover = 0.03f;
+
+    /// <summary>Where the stamp bar's middle (between its two stamps) hangs out over the desk: the point of the desk the reading view shows there (viewport x, y; low on the right, so a passport whose visa box is under a stamp stands in the view above it).</summary>
+    public Vector2 stampBarView = new Vector2(0.72f, 0.36f);
+
+    /// <summary>How far the stamp bar slides out from the desk's right (metres along the office view's right): in, it waits that far right of where it hangs out, out of the reading view.</summary>
+    [Min(0.1f)] public float stampBarTravel = 0.6f;
+
     /// <summary>Seconds the stamp bar takes to slide out or back (a cut under Reduced Motion).</summary>
     [FormerlySerializedAs("stampTraySeconds"), Min(0f)] public float stampBarSeconds = 0.3f;
 

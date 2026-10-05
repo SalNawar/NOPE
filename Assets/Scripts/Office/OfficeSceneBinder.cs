@@ -15,7 +15,7 @@ using UnityEngine.SceneManagement;
 /// props' renderers to their outlines and reactions, puts the desktop's clone
 /// on the PC's glass, sizes the desk, the mat and the scanner, poses the desk
 /// view from the art's Cinemachine camera and the mat, lays the counter and
-/// the rulebook, hands the stamp bar the camera, stands the traveller,
+/// the rulebook and the 3D stamp bar's rack, stands the traveller,
 /// binds the readouts to the art's texts (or shows the fallback HUD), has the
 /// AVAILABLE sign's caption follow the desk's availability (AvailableSignLink), points
 /// the anime hall's presentation at the shift clock (AnimeHallShiftLink) and
@@ -73,7 +73,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The rulebook on the desk (optional): laid beside the mat in the office view's frame (DeskConfigSO.rulebookAt).</summary>
     [SerializeField] private DeskRulebook rulebook;
 
-    /// <summary>The stamp bar (Papers, Please's, Saleh 2026-10-06; optional): a stamp's ray is cast through the office camera.</summary>
+    /// <summary>The stamp bar (Papers, Please's with the art's 3D stamps, Saleh 2026-10-06; optional): its rack is laid where the reading view shows the desk's right.</summary>
     [SerializeField] private DeskStampTray stampTray;
 
     /// <summary>The counter (optional): laid along the desk's far edge in the office view's frame, once the desk view is posed.</summary>
@@ -182,9 +182,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The art office camera's priority; the desk view sits one above it (DeskView; audit R5-015).</summary>
     private const int OfficeCameraPriority = 100;
 
-    /// <summary>How far above the desk top the rulebook card lies (metres), clear of the desk's own surface.</summary>
-    private const float RulebookLift = 0.001f;
-
     /// <summary>How far above the art scanner's top its bed lies (metres), so a scanning paper clears the glass.</summary>
     private const float ScannerBedLift = 0.002f;
 
@@ -248,8 +245,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         foreach (OverlayCallout callout in callouts ?? Array.Empty<OverlayCallout>())
             if (callout != null)
                 callout.SetCamera(office);
-        if (stampTray != null)
-            stampTray.Bind(office);
         if (frame != null)
             frame.DrawAfter(office);
 
@@ -444,11 +439,14 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         // The counter lies along the desk's far edge in the office view's frame, ending where the desk view shows the desk (Papers, Please's zones).
         if (counter != null && _office != null)
             counter.Bind(_office.transform.forward);
+        // The 3D stamp bar hangs where the reading view shows the desk's right (Saleh 2026-10-06: "I want the 3D stamp").
+        if (stampTray != null && _office != null)
+            stampTray.Lay(_office.transform.forward);
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
             Vector3 right = Vector3.Cross(Vector3.up, level);
-            Vector3 at = new Vector3(deskCentre.x, top + RulebookLift, deskCentre.z) + right * config.rulebookAt.x + level * config.rulebookAt.y;
+            Vector3 at = new Vector3(deskCentre.x, top, deskCentre.z) + right * config.rulebookAt.x + level * config.rulebookAt.y; // on the desk plane: the stack lifts it (DeskController)
             rulebook.Place(at, Quaternion.LookRotation(level, Vector3.up));
         }
 

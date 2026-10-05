@@ -46,6 +46,9 @@ public sealed class MatchLines : MaskableGraphic
     /// <summary>The held value and the dashed line to the pointer.</summary>
     [SerializeField] private Color holdColour = new Color(0.122f, 0.424f, 0.624f, 1f);
 
+    /// <summary>True: a note's line (nothing logged) is dashed, as the PC draws it; false (the desk's line over the office, Saleh 2026-10-06): every result's line is solid, so a dashed line only ever means a value held, following the pointer.</summary>
+    [SerializeField] private bool dashNotes = true;
+
     [Header("Geometry (desktop units)")]
     /// <summary>The line's width.</summary>
     [SerializeField, Min(1f)] private float width = 3f;
@@ -201,7 +204,7 @@ public sealed class MatchLines : MaskableGraphic
         Color colour = Colour(_look);
         Vector2 p = Anchor(ra, rb.center.x), q = Anchor(rb, ra.center.x);
         Curve(p, q);
-        Stroke(vh, colour, _look == FindingLook.Info);
+        Stroke(vh, colour, dashNotes && _look == FindingLook.Info);
         Box(vh, ra, colour);
         Box(vh, rb, colour);
         Dot(vh, p, colour);
