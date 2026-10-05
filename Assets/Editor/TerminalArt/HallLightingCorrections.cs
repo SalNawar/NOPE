@@ -45,7 +45,7 @@ public static class HallLightingCorrections
             var child=art.transform.Find(name);
             if(child==null){var g=new GameObject(name);g.transform.SetParent(art.transform,false);child=g.transform;}
             child.gameObject.layer=reference.gameObject.layer;
-            child.localRotation=reference.transform.localRotation;child.localScale=reference.transform.localScale;
+            child.localRotation=reference.transform.localRotation*Quaternion.Euler(0,0,90);child.localScale=reference.transform.localScale;
             var p=positions[i];
             child.position=reference.transform.TransformPoint(new Vector3((p.x-reference.sprite.pivot.x)/100,(724-p.y-reference.sprite.pivot.y)/100,-.003f));
             var renderer=child.GetComponent<SpriteRenderer>();if(renderer==null)renderer=child.gameObject.AddComponent<SpriteRenderer>();
@@ -62,5 +62,6 @@ public static class HallLightingCorrections
         HallFourStateBaker.Bake();
     }
 }
+
 
 

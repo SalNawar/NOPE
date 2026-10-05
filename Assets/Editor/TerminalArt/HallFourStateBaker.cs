@@ -46,7 +46,8 @@ public static class HallFourStateBaker
         for(int i=0;i<lamps.Length;i++)
         {
             var uv=UV(lamps[i].transform.position);bool fixture=lamps[i].kind==HallLightKind.Fixture;isFixture[i]=fixture;
-            points[i]=new Vector4(uv.x,uv.y,fixture?.075f:.035f,fixture?.17f:.08f);
+            bool mounted=lamps[i].GetComponent<HallMountedFixture>()!=null;
+            points[i]=new Vector4(uv.x,uv.y,mounted?.045f:fixture?.075f:.035f,mounted?.20f:fixture?.17f:.08f);
             var light=lamps[i].GetComponent<Light2D>();
             colors[i]=fixture?new Color(1,.79f,.54f):light!=null?light.color:new Color(.45f,.75f,1);
             sources+=$"{lamps[i].name}: {lamps[i].kind}, UV {uv}, colour {colors[i]}\n";
@@ -204,6 +205,7 @@ public static class HallFourStateBaker
         EditorApplication.update+=Tick;
     }
 }
+
 
 
 

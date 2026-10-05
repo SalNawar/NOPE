@@ -23,3 +23,4 @@ Time-slider preview: Tools > Terminal Art > Lighting > Time Slider. Drag 00:00â€
 
 Lighting correction pass, 05 October: removed the invented detention-door pier cast and three unanchored contact patches. Contact shadows now multiply the receiver instead of blending grey, so they cannot brighten a night floor. Added three visible metal-housed warm gallery fixtures, with floor pools explicitly registered to the upper gallery rather than the concourse. The real desk directional light now changes azimuth and elevation with the same four-state weights. Native morning/noon/evening captures show changing desk-object shadow positions and lengths; the desk lamp remains fixed to its physical source.
 
+The three gallery fixtures were turned vertical on 05 October, with narrower, taller wall glows. Live captures show the current orientation; the earlier desk-transition proofs document shadow movement.
