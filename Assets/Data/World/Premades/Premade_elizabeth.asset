@@ -36,5 +36,5 @@ MonoBehaviour:
     outcome: corporate_board
     amount: 12
   - factor: money
-    outcome: company_towns
+    outcome: banking_houses
     amount: 6

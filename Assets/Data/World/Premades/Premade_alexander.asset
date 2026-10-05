@@ -33,9 +33,9 @@ MonoBehaviour:
   debt: 0
   employer: 
   pulls:
-  - factor: money
-    outcome: jubilee
+  - factor: government
+    outcome: fascism
     amount: 12
   - factor: government
-    outcome: monarchy
+    outcome: technocracy
     amount: 6

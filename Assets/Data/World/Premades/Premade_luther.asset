@@ -33,7 +33,7 @@ MonoBehaviour:
   employer: 
   pulls:
   - factor: government
-    outcome: democracy
+    outcome: theocracy
     amount: 12
   - factor: government
     outcome: corporate_board

@@ -17873,7 +17873,7 @@
         },
         {
           "factor": "government",
-          "outcome": "monarchy",
+          "outcome": "communism",
           "amount": 6
         }
       ]
@@ -17971,13 +17971,13 @@
       "impacts": [],
       "pulls": [
         {
-          "factor": "money",
-          "outcome": "jubilee",
+          "factor": "government",
+          "outcome": "fascism",
           "amount": 12
         },
         {
           "factor": "government",
-          "outcome": "monarchy",
+          "outcome": "technocracy",
           "amount": 6
         }
       ]
@@ -18055,7 +18055,7 @@
         },
         {
           "factor": "money",
-          "outcome": "jubilee",
+          "outcome": "debt",
           "amount": 6
         }
       ]
@@ -18284,12 +18284,12 @@
       "pulls": [
         {
           "factor": "future",
-          "outcome": "cybernetic",
+          "outcome": "credit_age",
           "amount": 12
         },
         {
-          "factor": "government",
-          "outcome": "technocracy",
+          "factor": "future",
+          "outcome": "cybernetic",
           "amount": 6
         }
       ]
@@ -18393,7 +18393,7 @@
         },
         {
           "factor": "money",
-          "outcome": "company_towns",
+          "outcome": "banking_houses",
           "amount": 6
         }
       ]
@@ -18419,7 +18419,7 @@
         },
         {
           "factor": "future",
-          "outcome": "space_age",
+          "outcome": "naturalism",
           "amount": 6
         }
       ]
@@ -18445,7 +18445,7 @@
         },
         {
           "factor": "government",
-          "outcome": "democracy",
+          "outcome": "corporate_board",
           "amount": 6
         }
       ]
@@ -18570,7 +18570,7 @@
       "pulls": [
         {
           "factor": "government",
-          "outcome": "democracy",
+          "outcome": "theocracy",
           "amount": 12
         },
         {
@@ -19595,8 +19595,8 @@
       },
       {
         "id": "alexander_home",
-        "name": "Alexander pays every debt",
-        "news": "ALL DEBTS PAID: Alexander the Great, stamped home at Desk 3, pays his whole army's debts with 2150's credit. Macedon owes nothing.",
+        "name": "Alexander, son of Zeus",
+        "news": "SON OF ZEUS: Alexander the Great, stamped home at Desk 3, rules Macedon by 2150's order. One empire, one law, every city named after him.",
         "conditions": [
           {
             "type": "FlagSet",
@@ -19606,8 +19606,8 @@
         "edits": [
           {
             "place": "greece_ancient2",
-            "category": "Currency",
-            "value": "Alexander's debt-free stater"
+            "category": "Politics",
+            "value": "Alexander, son of Zeus"
           }
         ],
         "section": "Front"

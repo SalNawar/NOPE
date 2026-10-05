@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Trigger_History_alexander_home
   m_EditorClassIdentifier: Assembly-CSharp::TimelineTriggerSO
   id: history_alexander_home
-  displayName: Alexander pays every debt
+  displayName: Alexander, son of Zeus
   description: Generated from world_source.json history.rules.
   oneShot: 1
-  newsLineOnFire: 'ALL DEBTS PAID: Alexander the Great, stamped home at Desk 3, pays
-    his whole army''s debts with 2150''s credit. Macedon owes nothing.'
+  newsLineOnFire: 'SON OF ZEUS: Alexander the Great, stamped home at Desk 3, rules
+    Macedon by 2150''s order. One empire, one law, every city named after him.'
   section: 3
   conditions:
   - type: 1

@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c0cc60a29baede43870d511f5fc52e4, type: 3}
   m_Name: Effect_History_alexander_home
   m_EditorClassIdentifier: Assembly-CSharp::EffectSO
-  displayName: Alexander pays every debt
+  displayName: Alexander, son of Zeus
   channel: 0
   defaultDurationDays: 1
   ops:
   - type: 17
-    stringParam: Alexander's debt-free stater
+    stringParam: Alexander, son of Zeus
     floatParam: 0
     attribute: {fileID: 0}
     nation: {fileID: 0}
     profile: {fileID: 11400000, guid: 367c7c3a6b4dd614c8b6868116e3b225, type: 2}
-    category: 4
+    category: 2

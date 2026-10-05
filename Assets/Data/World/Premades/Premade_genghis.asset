@@ -34,8 +34,8 @@ MonoBehaviour:
   employer: 
   pulls:
   - factor: future
-    outcome: cybernetic
+    outcome: credit_age
     amount: 12
-  - factor: government
-    outcome: technocracy
+  - factor: future
+    outcome: cybernetic
     amount: 6
