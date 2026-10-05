@@ -30,7 +30,27 @@ public enum DialogAction
     SignWaiver,
 
     /// <summary>The player looks at the traveller's face (the document design spec, D8): who they are goes into the compare bar, to hold a paper's photo against.</summary>
-    InspectFace
+    InspectFace,
+
+    /// <summary>The desk asked for a paper (DialogChoice.Request) the traveller does not carry: they say so, and the workbench logs the paper as missing (FindingKind.PaperMissing; the desk-first redesign, item 7).</summary>
+    NotCarried
+}
+
+/// <summary>
+/// The keys that unlock the traveller wheel's locked choices (the desk-first
+/// redesign, Saleh 2026-10-05, item 7: "you must find an issue to unlock a
+/// question; even asking for a document must be highlighted by flagging
+/// missing on the app"): a paper flagged missing unlocks its request, a
+/// logged finding about a detail unlocks the question about that detail.
+/// The same keys for every traveller (rule 3). Pure.
+/// </summary>
+public static class InterviewUnlocks
+{
+    /// <summary>The key a paper flagged missing gives: "missing:" and the request's id (FormRequest.Id: the form number, or the request group's id).</summary>
+    public static string Missing(string requestId) => "missing:" + requestId;
+
+    /// <summary>The key a logged finding about <paramref name="category"/> gives: "about:" and the category's name.</summary>
+    public static string About(ClueCategory category) => "about:" + category;
 }
 
 /// <summary>
@@ -202,6 +222,16 @@ public sealed class DialogChoice
 
     /// <summary>CompleteDialog: the EffectSO asset name to apply at the end of the shift (empty = none).</summary>
     public string EffectName;
+
+    /// <summary>
+    /// The key that unlocks the choice (InterviewUnlocks): null offers it from
+    /// the start; set, the choice is offered only once its runner was unlocked
+    /// with the key (DialogRunner.Unlock; the desk-first redesign, item 7).
+    /// </summary>
+    public string Unlock;
+
+    /// <summary>A document request's request (the paper it asks for, FormRequests.Build), or null for any other choice.</summary>
+    public FormRequest Request;
 }
 
 /// <summary>One node of the runtime graph.</summary>
@@ -257,6 +287,7 @@ public sealed class DialogRunner
     private readonly DialogGraph _graph;
     private readonly List<DialogLine> _transcript = new List<DialogLine>();
     private readonly HashSet<string> _used = new HashSet<string>();
+    private readonly HashSet<string> _unlocked = new HashSet<string>();
     private DialogNode _current;
 
     /// <summary>Starts with the opening lines, then enters the start node (appending its lines).</summary>
@@ -284,7 +315,7 @@ public sealed class DialogRunner
                 _transcript.Add(line);
     }
 
-    /// <summary>The current node's choices minus the used one-shot ones and any spent sub-menu entry (DialogChoice.HideWhenSpent), as a fresh list.</summary>
+    /// <summary>The current node's choices minus the locked ones (DialogChoice.Unlock not yet given), the used one-shot ones and any spent sub-menu entry (DialogChoice.HideWhenSpent), as a fresh list.</summary>
     public IReadOnlyList<DialogChoice> Choices
     {
         get
@@ -292,20 +323,33 @@ public sealed class DialogRunner
             var choices = new List<DialogChoice>();
             if (_current != null)
                 foreach (DialogChoice c in _current.Choices)
-                    if (c != null && !(c.OneShot && _used.Contains(c.Id)) && !(c.HideWhenSpent && !Offers(c.Next)))
+                    if (c != null && Open(c) && !(c.HideWhenSpent && !Offers(c.Next)))
                         choices.Add(c);
             return choices;
         }
     }
 
-    /// <summary>True when node <paramref name="nodeId"/> offers a choice besides Back (its one-shot choices not yet used).</summary>
+    /// <summary>
+    /// Unlocks every choice whose DialogChoice.Unlock is <paramref name="key"/>
+    /// (InterviewUnlocks; kept for the rest of the interview). True when the
+    /// key is new; false for a blank key or one given already.
+    /// </summary>
+    public bool Unlock(string key) => !string.IsNullOrEmpty(key) && _unlocked.Add(key);
+
+    /// <summary>True once <paramref name="key"/> was given (Unlock).</summary>
+    public bool IsUnlocked(string key) => key != null && _unlocked.Contains(key);
+
+    /// <summary>True when a choice can be offered: unlocked (or never locked) and not a used one-shot.</summary>
+    private bool Open(DialogChoice c) => (c.Unlock == null || _unlocked.Contains(c.Unlock)) && !(c.OneShot && _used.Contains(c.Id));
+
+    /// <summary>True when node <paramref name="nodeId"/> offers a choice besides Back (unlocked, its one-shot choices not yet used).</summary>
     private bool Offers(string nodeId)
     {
         DialogNode node = _graph != null ? _graph.Node(nodeId) : null;
         if (node == null)
             return false;
         foreach (DialogChoice c in node.Choices)
-            if (c != null && c.Kind != DialogChoiceKind.Back && !(c.OneShot && _used.Contains(c.Id)))
+            if (c != null && c.Kind != DialogChoiceKind.Back && Open(c))
                 return true;
         return false;
     }
