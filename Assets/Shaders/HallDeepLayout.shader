@@ -30,13 +30,9 @@ Shader "NOPE/Hall Deep Layout"
   float2 p=float2(v.uv.x*2172,(1-v.uv.y)*724);
   if(_Region>.5) {
    float left=_Region<1.5?1:0;
-   // Registered exterior regions preserve the approved perspective. Reject
-   // displaced samples outside the same pane, so painted frames never move.
+   // Clean exterior artwork moves beneath stationary hall apertures.
    float shift=_CityPan*(left>.5?1:.4);
-   float2 displaced=saturate(v.uv+float2(shift,0));
-   half4 shiftedMask=SAMPLE_TEXTURE2D(_Masks,sampler_Masks,displaced);
-   float pane=left>.5?shiftedMask.r:shiftedMask.g;
-   float2 cityUV=lerp(v.uv,displaced,smoothstep(.95,1,pane));
+   float2 cityUV=saturate(v.uv+float2(shift,0));
    float2 side=cityUV,front=cityUV;
    half3 rgb=left>.5?SAMPLE_TEXTURE2D(_CityLeft,sampler_CityLeft,saturate(side)).rgb:
     SAMPLE_TEXTURE2D(_CityFront,sampler_CityFront,saturate(front)).rgb;

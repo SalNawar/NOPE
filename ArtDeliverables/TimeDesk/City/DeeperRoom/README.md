@@ -2,7 +2,7 @@
 
 Saleh approved deeper-left-room-preview.png. Installed in AnimeHall via Tools > Terminal Art > City > Install Approved Deeper Room.
 
-The approved painting supplies the revised pier, bridge landing, stairs, lockers, rails, ceiling and floor. Architecture and left/front exterior are three independently drawn native sprite renderers. Exterior regions sample the approved composition at its registered coordinates, preserving the accepted high-floor framing rather than fitting the old panorama again. Native aperture data gates parallax and eight independent flying-vehicle sprites. Displaced city samples outside their original pane are rejected, keeping frame pixels stationary.
+The approved painting supplies the revised pier, bridge landing, stairs, lockers, rails, ceiling and floor. Architecture and left/front exterior are three independently drawn native sprite renderers. Exterior regions now sample CityCleanBacking.png, an exterior-only reconstruction at the registered canvas coordinates. The prior source contained window frames, producing doubled edges during parallax. Glazing masks were retraced around the actual mullions, diagonal ceiling beams and above the handrail. Frames remain in the stationary hall plate. Native textures retain their 2172x724 dimensions without power-of-two rescaling. Eight independent flying-vehicle sprites remain clipped to the openings. The city below the diagonal handrail remains in the static hall plate; full extraction there remains future work.
 
 Assets: Assets/Art/Office/AnimeHallLayers/Completion/DeepRoom.
 Shader: NOPE/Hall Deep Layout.

@@ -30,7 +30,7 @@ public static class HallDeepRoomAuthoring
         i.spriteImportMode=SpriteImportMode.Single;i.spritePixelsPerUnit=100;
         i.sRGBTexture=!linear;i.mipmapEnabled=false;i.wrapMode=TextureWrapMode.Clamp;
         i.filterMode=FilterMode.Bilinear;i.alphaIsTransparency=sprite&&!linear;
-        i.textureCompression=TextureImporterCompression.Uncompressed;i.maxTextureSize=4096;
+        i.textureCompression=TextureImporterCompression.Uncompressed;i.maxTextureSize=4096;i.npotScale=TextureImporterNPOTScale.None;
         if(sprite){var settings=new TextureImporterSettings();i.ReadTextureSettings(settings);settings.spriteMeshType=SpriteMeshType.FullRect;i.SetTextureSettings(settings);}
         i.SaveAndReimport();return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
     }
@@ -90,7 +90,7 @@ public static class HallDeepRoomAuthoring
             var vehicle=city.lanes[0].vehicle;
             city.Apply(0);var a=vehicle.transform.localPosition;city.Apply(2);
             float moved=Vector3.Distance(a,vehicle.transform.localPosition);
-            File.WriteAllText(report+"/validation.txt","Native player-camera capture: both pans at 08,12,16.5,22 hours. Eight independent vehicles retained; first vehicle travelled "+moved.ToString("F4")+" local units over two simulated seconds. Reduced motion: "+MotionPreference.Reduced+". Left/front aperture layers reference the approved registered composition so the accepted framing is unchanged. Original58 sprites and earlier palettes are preserved disabled, not overwritten. Morning exterior only; smoke/cloud/ship/ground traffic remain pending.");
+            File.WriteAllText(report+"/validation.txt","Native player-camera capture: both pans at 08,12,16.5,22 hours. Eight independent vehicles retained; first vehicle travelled "+moved.ToString("F4")+" local units over two simulated seconds. Reduced motion: "+MotionPreference.Reduced+". Left/front apertures sample the clean exterior backing; stationary framing stays in HallDeepMorning. Clean exterior has no frame pixels to duplicate during parallax. Original58 sprites and earlier palettes are preserved disabled, not overwritten. Morning exterior only; smoke/cloud/ship/ground traffic remain pending.");
         }
         finally
         {
@@ -98,6 +98,18 @@ public static class HallDeepRoomAuthoring
             typeof(HallLightingRig).GetMethod("LateUpdate",flags).Invoke(rig,null);
             UnityEngine.Object.FindFirstObjectByType<HallBakedLighting>().Apply();city.Apply(0);
         }
+    }
+    [MenuItem("Tools/Terminal Art/City/Preview Repaired Windows")]
+    public static void PreviewWindows()
+    {
+        var art=UnityEngine.Object.FindFirstObjectByType<AnimeHallPresentation>();
+        var rig=UnityEngine.Object.FindFirstObjectByType<HallLightingRig>();
+        rig.Settings.previewHourOn=true;rig.Settings.previewHour=8;
+        art.SetPan(1);
+        typeof(HallLightingRig).GetMethod("LateUpdate",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).Invoke(rig,null);
+        UnityEngine.Object.FindFirstObjectByType<HallBakedLighting>().Apply();
+        UnityEngine.Object.FindFirstObjectByType<HallCityExterior>().Apply(0);
+        EditorApplication.ExecuteMenuItem("Window/General/Game");
     }
     [MenuItem("Tools/Terminal Art/City/Install Approved Deeper Room")]
     public static void Install()
@@ -108,31 +120,31 @@ public static class HallDeepRoomAuthoring
             throw new InvalidOperationException("Open AnimeHall.");
         Directory.CreateDirectory(Folder);
         var drawing=Import(Folder+"/HallDeepMorning.png",true);
+        var exterior=Import(Folder+"/CityCleanBacking.png",false);
         if(drawing.width!=W || drawing.height!=H)throw new InvalidOperationException("Layout registration changed.");
         // Insets preserve the painted mullions, sills and rails.
+        // Trace actual glazing above the handrail. Painted frames remain static.
         var left=new[]{
-            Poly(0,0,89,0,89,513,0,539),
-            Poly(116,0,306,0,306,444,116,507),
-            Poly(327,38,435,65,435,405,327,442),
-            Poly(454,71,545,97,545,369,454,403),
-            Poly(565,109,625,126,625,343,565,366),
-            Poly(644,133,677,147,677,326,644,339)
+            Poly(0,0,92,0,92,474,0,493),
+            Poly(121,0,260,0,300,19,300,430,121,470),
+            Poly(325,27,420,63,420,405,325,425),
+            Poly(443,71,501,93,501,387,443,401),
+            Poly(519,102,583,125,583,369,519,383),
+            Poly(600,132,636,145,636,356,600,365),
+            Poly(653,151,680,161,680,347,653,353)
         };
         var front=new[]{
-            Poly(958,220,999,220,999,244,958,244),
-            Poly(1009,220,1052,220,1052,244,1009,244),
-            Poly(1062,220,1103,220,1103,244,1062,244),
-            Poly(1113,220,1158,220,1158,244,1113,244),
-            Poly(1168,220,1208,220,1208,244,1168,244),
-            Poly(839,310,873,310,873,331,839,331),
-            Poly(885,310,923,310,923,331,885,331),
-            Poly(935,310,973,310,973,331,935,331),
-            Poly(985,310,1023,310,1023,331,985,331),
-            Poly(1035,310,1073,310,1073,331,1035,331),
-            Poly(1085,310,1123,310,1123,331,1085,331),
-            Poly(1135,310,1173,310,1173,331,1135,331),
-            Poly(1185,310,1223,310,1223,331,1185,331),
-            Poly(1235,310,1265,310,1265,331,1235,331)
+            Poly(978,213,1014,213,1014,244,978,244),
+            Poly(1026,213,1058,213,1058,244,1026,244),
+            Poly(1071,213,1096,213,1096,244,1071,244),
+            Poly(1110,213,1135,213,1135,244,1110,244),
+            Poly(1148,213,1175,213,1175,244,1148,244),
+            Poly(1188,213,1205,213,1205,244,1188,244),
+            Poly(1028,309,1057,309,1057,334,1028,334),
+            Poly(1071,309,1100,309,1100,334,1071,334),
+            Poly(1117,309,1146,309,1146,334,1117,334),
+            Poly(1161,309,1189,309,1189,334,1161,334),
+            Poly(1204,309,1229,309,1229,334,1204,334)
         };
         var floor=Poly(0,578,635,400,790,350,1340,340,2172,684,2172,724,0,724);
         var exclusions=new[]{
@@ -205,8 +217,8 @@ public static class HallDeepRoomAuthoring
             string path=Folder+"/"+name+".mat";var mat=AssetDatabase.LoadAssetAtPath<Material>(path);
             if(mat==null){mat=new Material(Shader.Find("NOPE/Hall Deep Layout"));AssetDatabase.CreateAsset(mat,path);}
             mat.SetTexture("_Masks",mask);
-            mat.SetTexture("_CityLeft",drawing);
-            mat.SetTexture("_CityFront",drawing);
+            mat.SetTexture("_CityLeft",exterior);
+            mat.SetTexture("_CityFront",exterior);
             mat.SetTexture("_MorningShadow",morning);mat.SetTexture("_NoonShadow",noon);mat.SetTexture("_EveningShadow",evening);
             mat.SetFloat("_Region",region);EditorUtility.SetDirty(mat);return mat;
         }
