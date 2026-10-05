@@ -1,0 +1,650 @@
+fileFormatVersion: 2
+guid: 86a0e0ea10c85274384d563b735a6c8b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5569710271455669943
+    second: DeepRoomMasks_0
+  - first:
+      213: 4094146769849893535
+    second: DeepRoomMasks_1
+  - first:
+      213: 6353908989198304456
+    second: DeepRoomMasks_2
+  - first:
+      213: 2223160838880565516
+    second: DeepRoomMasks_3
+  - first:
+      213: -7433717185622183309
+    second: DeepRoomMasks_4
+  - first:
+      213: 3393764059360818441
+    second: DeepRoomMasks_5
+  - first:
+      213: 6954240419926108687
+    second: DeepRoomMasks_6
+  - first:
+      213: 3019194962192463938
+    second: DeepRoomMasks_7
+  - first:
+      213: 6822662275662385634
+    second: DeepRoomMasks_8
+  - first:
+      213: -3491541969705587558
+    second: DeepRoomMasks_9
+  - first:
+      213: -9062160204203452253
+    second: DeepRoomMasks_10
+  - first:
+      213: 2951991365528497321
+    second: DeepRoomMasks_11
+  - first:
+      213: 122829952690827011
+    second: DeepRoomMasks_12
+  - first:
+      213: -8063263365941963152
+    second: DeepRoomMasks_13
+  - first:
+      213: 5087021897070331479
+    second: DeepRoomMasks_14
+  - first:
+      213: 4689123311835415943
+    second: DeepRoomMasks_15
+  - first:
+      213: -7867213962955573065
+    second: DeepRoomMasks_16
+  - first:
+      213: -2329979286203596480
+    second: DeepRoomMasks_17
+  - first:
+      213: -3272506301485943905
+    second: DeepRoomMasks_18
+  - first:
+      213: 8412896596649923062
+    second: DeepRoomMasks_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 0
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: DeepRoomMasks_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 184
+        width: 90
+        height: 540
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bea5f77bf59b4d40800000000000000
+      internalID: 5569710271455669943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_1
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 216
+        width: 192
+        height: 508
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f924733abc451d830800000000000000
+      internalID: 4094146769849893535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_2
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 281
+        width: 110
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c4835caf8e9d2850800000000000000
+      internalID: 6353908989198304456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_3
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 320
+        width: 93
+        height: 334
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c09190011014ade10800000000000000
+      internalID: 2223160838880565516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_4
+      rect:
+        serializedVersion: 2
+        x: 564
+        y: 357
+        width: 62
+        height: 259
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 372f54eea9126d890800000000000000
+      internalID: -7433717185622183309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_5
+      rect:
+        serializedVersion: 2
+        x: 643
+        y: 384
+        width: 35
+        height: 208
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90570b95e62191f20800000000000000
+      internalID: 3393764059360818441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_6
+      rect:
+        serializedVersion: 2
+        x: 957
+        y: 479
+        width: 43
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0aeb5811dc628060800000000000000
+      internalID: 6954240419926108687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_7
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 479
+        width: 45
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 248712d52d556e920800000000000000
+      internalID: 3019194962192463938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_8
+      rect:
+        serializedVersion: 2
+        x: 1061
+        y: 479
+        width: 43
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e190531137feae50800000000000000
+      internalID: 6822662275662385634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_9
+      rect:
+        serializedVersion: 2
+        x: 1112
+        y: 479
+        width: 47
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9ca459d31d8b8fc0800000000000000
+      internalID: -3491541969705587558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_10
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 479
+        width: 42
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a895c2ce4dbc3280800000000000000
+      internalID: -9062160204203452253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_11
+      rect:
+        serializedVersion: 2
+        x: 838
+        y: 392
+        width: 36
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9aca852b18497f820800000000000000
+      internalID: 2951991365528497321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_12
+      rect:
+        serializedVersion: 2
+        x: 884
+        y: 392
+        width: 40
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30f2ae1f03164b100800000000000000
+      internalID: 122829952690827011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_13
+      rect:
+        serializedVersion: 2
+        x: 934
+        y: 392
+        width: 40
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 076db9e80b8891090800000000000000
+      internalID: -8063263365941963152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_14
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 392
+        width: 40
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 756c283967bb89640800000000000000
+      internalID: 5087021897070331479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_15
+      rect:
+        serializedVersion: 2
+        x: 1034
+        y: 392
+        width: 40
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78504fddecc131140800000000000000
+      internalID: 4689123311835415943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_16
+      rect:
+        serializedVersion: 2
+        x: 1084
+        y: 392
+        width: 40
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b83a0e359a02d290800000000000000
+      internalID: -7867213962955573065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_17
+      rect:
+        serializedVersion: 2
+        x: 1134
+        y: 392
+        width: 40
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04101d71f204aafd0800000000000000
+      internalID: -2329979286203596480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_18
+      rect:
+        serializedVersion: 2
+        x: 1184
+        y: 392
+        width: 40
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f93f3b67bd8b592d0800000000000000
+      internalID: -3272506301485943905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeepRoomMasks_19
+      rect:
+        serializedVersion: 2
+        x: 1234
+        y: 392
+        width: 32
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f1596791ec90c470800000000000000
+      internalID: 8412896596649923062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      DeepRoomMasks_0: 5569710271455669943
+      DeepRoomMasks_1: 4094146769849893535
+      DeepRoomMasks_10: -9062160204203452253
+      DeepRoomMasks_11: 2951991365528497321
+      DeepRoomMasks_12: 122829952690827011
+      DeepRoomMasks_13: -8063263365941963152
+      DeepRoomMasks_14: 5087021897070331479
+      DeepRoomMasks_15: 4689123311835415943
+      DeepRoomMasks_16: -7867213962955573065
+      DeepRoomMasks_17: -2329979286203596480
+      DeepRoomMasks_18: -3272506301485943905
+      DeepRoomMasks_19: 8412896596649923062
+      DeepRoomMasks_2: 6353908989198304456
+      DeepRoomMasks_3: 2223160838880565516
+      DeepRoomMasks_4: -7433717185622183309
+      DeepRoomMasks_5: 3393764059360818441
+      DeepRoomMasks_6: 6954240419926108687
+      DeepRoomMasks_7: 3019194962192463938
+      DeepRoomMasks_8: 6822662275662385634
+      DeepRoomMasks_9: -3491541969705587558
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

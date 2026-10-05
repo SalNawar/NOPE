@@ -1,17 +1,19 @@
-Deeper-room layout review — 2026-10-05
+# Approved deeper hall — installed 2026-10-05
 
-Latest user direction: the entire city panorama belongs on the LEFT wall, with connected extensions in the FRONT windows. The large left pier is the main obstruction; deepen the left structural bay to create a wider window opening.
+Saleh approved deeper-left-room-preview.png. Installed in AnimeHall via Tools > Terminal Art > City > Install Approved Deeper Room.
 
-Generated front extension: Assets/Art/Office/AnimeHallLayers/Completion/City/CityMorningFrontExtension.png.
-Layout preview: deeper-left-room-preview.png (when generation completes).
-Both created with the built-in image generation tool. This is a layout preview, not an installed replacement for the separately registered scene layers.
+The approved painting supplies the revised pier, bridge landing, stairs, lockers, rails, ceiling and floor. Architecture and left/front exterior are three independently drawn native sprite renderers. Exterior regions sample the approved composition at its registered coordinates, preserving the accepted high-floor framing rather than fitting the old panorama again. Native aperture data gates parallax and eight independent flying-vehicle sprites. Displaced city samples outside their original pane are rejected, keeping frame pixels stationary.
 
-Intended changes:
-- Shift the left elevator pier deeper, from x550..694 toward an approximately80px-wide pier centered near x800.
-- Increase the left glazed opening from about550 to760px.
-- Redraw the corresponding bridge landing, stairs, window frames, ceiling, rails, lockers and floor perspective together.
-- Preserve the right wall, portals, foreground rail and camera position.
-- Show all districts of CityMorningConnected across the left opening; front windows receive a newly generated harbour continuation.
-- Preserve petrol walls, graphite floor, ochre accents and the almost-black pier/bridge.
+Assets: Assets/Art/Office/AnimeHallLayers/Completion/DeepRoom.
+Shader: NOPE/Hall Deep Layout.
+Installer/capture: Assets/Editor/TerminalArt/HallDeepRoomAuthoring.cs.
 
-The current Unity scene remains the previous verified arrangement pending the structural redraw. Do not describe this concept as a completed native layer installation.
+Original58 registered sprite sources, original palettes and city paintings remain preserved; original hall renderers are disabled in this scene. Existing public ring hooks remain as invisible bounds proxies repositioned for gameplay portal effects. Departure-board RectTransform follows the approved display. Foreground continuation samples the revised source and current lit backdrop.
+
+Native morning/noon/evening shadow masks are rebuilt for the revised pier/portal/seating footprints; night omits directional floor casts. Existing time weights drive hall tint, these shadow masks, ceiling emission and desk/character daylight. This is an authored2D layout, not a deeper physical3D room. Exterior art is morning only: evening/night use temporary cycle tint; separate matching exterior paintings remain pending.
+
+Verification: eight native1920x1080 player-camera captures covering both pans at08,12,16.5,22 hours; independent flying-vehicle movement recorded in validation.txt; Unity compilation/console checks. Capture forces gameplay board/effect following after each pan because all images render within one editor frame.
+
+Limitations: one depth per window wall; moving smoke/cloud/sun/distant ships/ground traffic/building details remain pending. Further independent furniture/portal structural edits require resplitting those surfaces from the approved painting. The old foreground grout-ray configuration is retained and should be retraced if a later downward-camera review exposes changed joints.
+
+Gameplay integration: the departure-board marker follows the revised display. Portal proxies were corrected against the live player camera; HallDeepPortalRegistration assigns NOPE/Hall Deep Portal Glow. Its inner-opening clip confines effects to the registered ring proxies and keeps their lower fence clear. PortalOpenings.png is retained as technical reference data.

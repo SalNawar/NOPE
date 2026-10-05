@@ -39,7 +39,7 @@ public sealed class HallCityExterior : MonoBehaviour
         {
             var renderer=layer.renderer;
             if(renderer==null || renderer.sharedMaterial==null ||
-                renderer.sharedMaterial.shader.name!="NOPE/Hall Waiting Bay Repair")continue;
+                (renderer.sharedMaterial.shader.name!="NOPE/Hall Waiting Bay Repair" && renderer.sharedMaterial.shader.name!="NOPE/Hall Deep Layout"))continue;
             renderer.GetPropertyBlock(properties);properties.SetFloat("_CityPan",pan);renderer.SetPropertyBlock(properties);
         }
         foreach(var lane in lanes)

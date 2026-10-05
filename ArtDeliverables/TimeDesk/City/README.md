@@ -12,3 +12,6 @@ Primary visual reference: https://www.cyberpunk.net/en/news/50122/your-trip-to-n
 Generation prompt: connected-city-prompt.txt. Prior candidates and prompts remain for comparison.
 
 Tools > Terminal Art > City > Install Morning City installs the three images in Edit mode. Capture Morning And Traffic in Play mode records forward/left views and a two-second traffic movement check. Palette > Capture Selected Palette renders four native lighting-state proofs without modifying gameplay progress.
+
+## Superseding approved deeper-room installation
+Saleh approved the deeper left-bay concept. Current AnimeHall uses Completion/DeepRoom/HallDeepMorning.png with separate masked architecture and registered left/front exterior draws. The original three-panel panorama setup above is preserved as a previous prototype, not the current material registration. See DeeperRoom/README.md for installation, capture, original-layer preservation, gameplay hooks and remaining animation/time-of-day limitations.

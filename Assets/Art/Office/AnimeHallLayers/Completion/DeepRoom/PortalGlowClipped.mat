@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ForegroundFloor
-  m_Shader: {fileID: 4800000, guid: 4a957a030fe8b564399bd61df10cb652, type: 3}
+  m_Name: PortalGlowClipped
+  m_Shader: {fileID: 4800000, guid: 257e0c20426c5d947b0819a5fb857cef, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -23,17 +23,17 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 034c7d69c9b6ed7499d7f0374fb025c8, type: 3}
+    - _MainTex:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _PaintedReference:
-        m_Texture: {fileID: 2800000, guid: 647f2d9bba121974da71ec0666eb776f, type: 3}
+    - _PortalMask:
+        m_Texture: {fileID: 2800000, guid: 1f39e91c5161fab4690dfd2656490cf2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
-    m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    m_Floats:
+    - _Boost: 1.5
+    m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
