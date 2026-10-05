@@ -76,6 +76,11 @@ public static partial class ContentLibraryValidator
 
         // --- Duplicate / missing IDs ---
         issues += CheckDuplicateIds(Ids(lib.Eras, e => e.id), "Eras", lib);
+        foreach (string problem in EraGroups.Problems(lib.Eras.Where(e => e != null).Select(e => new EraEntry(e.id, e.group != null ? e.group.id : null, e.isFuture)).ToList()))
+        {
+            Debug.LogError($"[ContentLibraryValidator] {problem} ('{lib.name}')", lib);
+            issues++;
+        }
         issues += CheckDuplicateIds(Ids(lib.Upgrades, u => u.id), "Upgrades", lib);
         issues += CheckDuplicateIds(Ids(lib.Endings, e => e.id), "Endings", lib);
         issues += CheckDuplicateIds(Ids(lib.Attributes, a => a.id), "Attributes", lib);

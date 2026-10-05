@@ -160,8 +160,9 @@ public static class AncestryPages
     /// The cards whose name <paramref name="name"/> finds (search's matcher,
     /// TextMatch: each word starts a word of the name, "quoted phrases" as
     /// written, any case and accent; blank = every name) and whose place is of
-    /// the country and era given (blank = any; a card whose place is unknown
-    /// only matches no filter), sorted by name.
+    /// the country and era given (blank = any; an era matches its second
+    /// moments too, EraGroups; a card whose place is unknown only matches no
+    /// filter), sorted by name.
     /// </summary>
     public static List<PersonCard> Search(IEnumerable<PersonCard> cards, string name, string nationId, string eraId, Func<string, PlaceInfo> placeById)
     {
@@ -173,7 +174,7 @@ public static class AncestryPages
                    if (string.IsNullOrWhiteSpace(nationId) && string.IsNullOrWhiteSpace(eraId))
                        return true;
                    PlaceInfo p = placeById(c.PlaceId);
-                   return p != null && (string.IsNullOrWhiteSpace(nationId) || p.NationId == nationId) && (string.IsNullOrWhiteSpace(eraId) || p.EraId == eraId);
+                   return p != null && (string.IsNullOrWhiteSpace(nationId) || p.NationId == nationId) && (string.IsNullOrWhiteSpace(eraId) || p.EraId == eraId || p.EraGroupId == eraId);
                })
                .OrderBy(c => c.Name ?? string.Empty, StringComparer.OrdinalIgnoreCase)
                .ToList();
@@ -222,7 +223,7 @@ public static class AncestryPages
 
         var eras = new PageBlock { Kind = PageBlockKind.Chips, Text = w.Get("site.lineage.era") };
         eras.Links.Add(Chip(w.Get("site.lineage.all"), SearchAddress(site, name, nationId, null), string.IsNullOrWhiteSpace(eraId)));
-        foreach (PlaceInfo p in places.GroupBy(p => p.EraId).Select(g => g.First()).OrderBy(p => p.EraOrder))
+        foreach (PlaceInfo p in places.Where(p => p.EraGroupId == p.EraId).GroupBy(p => p.EraId).Select(g => g.First()).OrderBy(p => p.EraOrder))
             eras.Links.Add(Chip(p.EraName, SearchAddress(site, name, nationId, p.EraId), p.EraId == eraId));
         page.Blocks.Add(eras);
 

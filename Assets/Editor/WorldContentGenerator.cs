@@ -102,6 +102,11 @@ public static partial class WorldContentGenerator
 
         // --- Eras, leader effects and nations ---
         var eras = src.eras.ToDictionary(e => e.id, e => MakeEra(e, written));
+        foreach (EraData e in src.eras)
+        {
+            eras[e.id].group = !string.IsNullOrWhiteSpace(e.group) && eras.TryGetValue(e.group, out EraSO main) ? main : null;
+            EditorUtility.SetDirty(eras[e.id]);
+        }
         EffectSO[] leaderEffects = src.countries.Select(c => MakeLeaderEffect(c, written)).ToArray();
         var nations = src.countries.Select((c, i) => (c, i)).ToDictionary(x => x.c.id, x => MakeNation(x.c, leaderEffects[x.i], written));
 
@@ -250,6 +255,7 @@ public static partial class WorldContentGenerator
 
         if (eraIds.Count != src.eras.Length || eraIds.Any(string.IsNullOrWhiteSpace))
             errors.Add("Era ids must be unique and non-blank.");
+        errors.AddRange(EraGroups.Problems(src.eras.Select(e => new EraEntry(e.id, e.group, e.future)).ToList()));
         if (countryIds.Count != src.countries.Length || countryIds.Any(string.IsNullOrWhiteSpace))
             errors.Add("Country ids must be unique and non-blank.");
         if (ruleIds.Count != src.rules.Length || ruleIds.Any(string.IsNullOrWhiteSpace))
@@ -2375,7 +2381,17 @@ public static partial class WorldContentGenerator
     [Serializable] private sealed class AttributeData { public string id; public string asset; }
 
     /// <summary>An era; "future" marks the office's own time (at most one).</summary>
-    [Serializable] private sealed class EraData { public string id; public string displayName; public int order; public bool future; public string[] smallTalk; }
+    [Serializable] private sealed class EraData
+    {
+        public string id;
+        public string displayName;
+        public int order;
+        public bool future;
+        public string[] smallTalk;
+
+        /// <summary>The main era it is a second moment of (blank: none; EraGroups).</summary>
+        public string group;
+    }
 
     [Serializable] private sealed class CountryData { public string id; public string displayName; public BaselineData[] baselines; public LooksWeightData looks; public CultureData culture; }
 

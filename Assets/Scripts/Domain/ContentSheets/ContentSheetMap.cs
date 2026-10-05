@@ -123,6 +123,7 @@ public static class ContentSheetMap
                 Text("displayName"),
                 Int("order"),
                 Bool("future").Omit().Note("the office's own time (at most one era)"),
+                Text("group").Omit().Ref("eras").Note("the main era this one is a second moment of (blank: a main era): a nation's second place of that era, shown under the main era's name"),
                 Values("eraSmallTalk", "smallTalk", Text("text")).Note("small talk any traveller of the era may say")),
             Countries(),
             Places(),
