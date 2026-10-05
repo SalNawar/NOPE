@@ -127,6 +127,18 @@ public class ConfrontationsTests
     }
 
     [Test]
+    public void Askable_EveryKind_NotAPhotoAgainstTheFace_NotNull()
+    {
+        foreach ((DiscrepancyProof proof, EvidenceKind source) in Confrontations.Kinds)
+            Assert.IsTrue(Confrontations.Askable(new Discrepancy { category = ClueCategory.Currency, provedBy = proof, source = source }), $"{proof} · {source}");
+        Assert.IsTrue(Confrontations.Askable(new Discrepancy { category = ClueCategory.TransponderClass, provedBy = DiscrepancyProof.CrossMismatch, source = EvidenceKind.Answer }),
+                      "a cross proof is two papers whatever its source says");
+        Assert.IsFalse(Confrontations.Askable(new Discrepancy { category = ClueCategory.Photo, provedBy = DiscrepancyProof.PersonMismatch, source = EvidenceKind.DocumentField }),
+                       "a photo against the face has no question (D8)");
+        Assert.IsFalse(Confrontations.Askable(null));
+    }
+
+    [Test]
     public void Problems_ASoundWording_None_AndEachRuleNamed()
     {
         CollectionAssert.IsEmpty(Confrontations.Problems(ConfrontFixture.Wording()));

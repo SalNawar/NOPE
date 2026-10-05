@@ -387,12 +387,13 @@ public sealed class InterviewPresenter
     /// honest explain, a liar cracks by their personality's chance or doubles
     /// down, once cracked always). Asking it costs the shift the time the
     /// exchange takes, as every question does. Nothing without a traveller at
-    /// the desk or a readable interview.
+    /// the desk or a readable interview, or for a difference no question is
+    /// about (Confrontations.Askable: a photo held against the face).
     /// </summary>
     public void Confront(Discrepancy difference)
     {
         CaseInstance inst = _currentCase();
-        if (difference == null || inst == null || _runner == null || _graph == null || _day == null || !_interviewReachable)
+        if (!Confrontations.Askable(difference) || inst == null || _runner == null || _graph == null || _day == null || !_interviewReachable)
             return;
 
         ReactionIntent intent = ReactionIntents.Of(inst.IsLiar, inst.IsForger);

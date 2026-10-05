@@ -142,7 +142,7 @@ public static class Confrontations
     {
         if (prompts == null || difference == null)
             return null;
-        EvidenceKind source = difference.provedBy == DiscrepancyProof.CrossMismatch ? EvidenceKind.DocumentField : difference.source;
+        EvidenceKind source = Statement(difference);
         ConfrontPrompt best = null;
         int bestScore = -1;
         foreach (ConfrontPrompt p in prompts)
@@ -158,6 +158,20 @@ public static class Confrontations
         }
         return best;
     }
+
+    /// <summary>
+    /// True when the wheel can ask about <paramref name="difference"/>: its
+    /// proof and statement kind are one of <see cref="Kinds"/>. A photo held
+    /// against the face (PersonMismatch, the document design spec's D8) is
+    /// not: who a photo shows is no value to put into words, so it stays
+    /// evidence without a question. False for null.
+    /// </summary>
+    public static bool Askable(Discrepancy difference) =>
+        difference != null && Array.IndexOf(Kinds, (difference.provedBy, Statement(difference))) >= 0;
+
+    /// <summary>The statement kind a difference's question is about: its source, papers for a cross proof (always two papers).</summary>
+    private static EvidenceKind Statement(Discrepancy difference) =>
+        difference.provedBy == DiscrepancyProof.CrossMismatch ? EvidenceKind.DocumentField : difference.source;
 
     /// <summary>
     /// The fills of a question and its answer: {value} the stated value,
