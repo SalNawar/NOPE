@@ -47,6 +47,9 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds a scan by hand takes with the Analysis Scanner (the analysis pass, the PC redesign SC4); a scan the Auto-Feed Scanner feeds itself keeps scanSeconds.</summary>
     [Min(0.1f)] public float analysisScanSeconds = 3f;
 
+    /// <summary>The deepest shadow behind the scanner, in metres, where its body hides a paper from the office camera (ScannerClearance: a paper left there moves out to the left, right or front; the desk-first redesign, item 4).</summary>
+    [Min(0f)] public float scannerShadowMax = 0.35f;
+
     /// <summary>The day-1 note above the scanner: a UI string key (world_source.json ui.strings; empty = no note).</summary>
     public string scanHintKey = "desk.scanHint";
 

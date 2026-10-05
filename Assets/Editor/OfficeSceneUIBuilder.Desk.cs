@@ -724,6 +724,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "frame", pcFrame);
         SetRef(soBinder, "pc", pc);
         SetRef(soBinder, "pcPower", pcPower);
+        SetRef(soBinder, "desk", desk);
         SetRef(soBinder, "surface", desk.GetComponent<DeskSurface>());
         SetRef(soBinder, "scanner", scanner);
         SetRef(soBinder, "scannerPlaceholder", scannerPlaceholder);
