@@ -287,7 +287,7 @@ public class UpgradeTreeTests
     [Test]
     public void BranchesOf_EachVenueItsOwn_EveryBranchInOne()
     {
-        CollectionAssert.AreEqual(new[] { UpgradeBranch.Desk, UpgradeBranch.Interview, UpgradeBranch.Portals, UpgradeBranch.Contacts }, UpgradeTree.BranchesOf(UpgradeVenue.Orders));
+        CollectionAssert.AreEqual(new[] { UpgradeBranch.Desk, UpgradeBranch.Interview, UpgradeBranch.Portals, UpgradeBranch.Contacts, UpgradeBranch.Toys }, UpgradeTree.BranchesOf(UpgradeVenue.Orders));
         CollectionAssert.AreEqual(new[] { UpgradeBranch.Food, UpgradeBranch.Housing, UpgradeBranch.Security, UpgradeBranch.Health, UpgradeBranch.Comfort }, UpgradeTree.BranchesOf(UpgradeVenue.Home));
         CollectionAssert.AreEquivalent((UpgradeBranch[])System.Enum.GetValues(typeof(UpgradeBranch)),
                                        UpgradeTree.BranchesOf(UpgradeVenue.Orders).Concat(UpgradeTree.BranchesOf(UpgradeVenue.Home)).ToArray());

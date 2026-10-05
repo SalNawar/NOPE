@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 /// <summary>
-/// Owns the Home phase panels (Phase 4): daily expenses + family condition,
-/// the House (Home's upgrade tree: the office's upgrades are the PC's Orders
-/// app's), slot machine, and the sleep prompt that hands off to the
-/// next day. All references are optional; unwired panels are skipped so the
-/// flow degrades gracefully (HomeManager just calls straight through).
-/// Dynamic rows (family members) are spawned at runtime in their panel's own
-/// ink (its body text's colour, as the scene draws the panel), so they read
-/// on whatever the panel is; the House (the old shop panel) draws Home's
-/// upgrade tree as cards on opaque plates with connectors and a detail strip
-/// (the Home upgrades spec §6). A row or card shows its art when the file
-/// exists (redesign phase 27): a family member's portrait for their
-/// condition, an upgrade's icon.
+/// Owns the Home phase panels (Phase 4; the Home pet spec): the bills (the
+/// fixed costs paid, the pet's needs in words, and the night's optional
+/// bills, each a row to pay or skip), the pet's corner (the pet drawn by
+/// PetStandIn, petted, played with a toy), the House (Home's upgrade tree:
+/// the office's upgrades are the PC's Orders app's), slot machine, and the
+/// sleep prompt that hands off to the next day. All references are
+/// optional; unwired panels are skipped so the flow degrades gracefully
+/// (HomeManager just calls straight through). Dynamic rows (the bills, the
+/// toys) are spawned at runtime in their panel's own ink (its body text's
+/// colour, as the scene draws the panel), so they read on whatever the panel
+/// is; the House (the old shop panel) draws Home's upgrade tree as cards on
+/// opaque plates with connectors and a detail strip (the Home upgrades spec
+/// §6). A card shows its art when the file exists (redesign phase 27): an
+/// upgrade's icon; the pet its picture (ArtSlots.PetSprite).
 /// </summary>
 public sealed class HomeUIController : MonoBehaviour
 {
@@ -38,14 +41,40 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>Expenses title ("Day 3 — Home").</summary>
     [SerializeField] private TMP_Text expensesTitleText;
 
-    /// <summary>Expenses breakdown (rent, family upkeep, medical drain).</summary>
+    /// <summary>The fixed costs paid, the pet's needs in words, and the night's bills' total.</summary>
     [SerializeField] private TMP_Text expensesBodyText;
 
-    /// <summary>Container for one row per family member (Treat buttons).</summary>
-    [SerializeField] private Transform familyRowsRoot;
+    /// <summary>Container for one row per night's bill (Pay or Skip).</summary>
+    [FormerlySerializedAs("familyRowsRoot")]
+    [SerializeField] private Transform billRowsRoot;
 
-    /// <summary>Continues to the shop.</summary>
+    /// <summary>Pays the chosen bills and goes on to the pet's corner.</summary>
     [SerializeField] private Button expensesContinueButton;
+
+    [Header("Pet corner (the Home pet spec PS7)")]
+    /// <summary>Root of the pet's corner.</summary>
+    [SerializeField] private GameObject petPanel;
+
+    /// <summary>The corner's title ("Biscuit's corner").</summary>
+    [SerializeField] private TMP_Text petTitleText;
+
+    /// <summary>The pet's needs after tonight's care, in words.</summary>
+    [SerializeField] private TMP_Text petBodyText;
+
+    /// <summary>The pet itself (its art, else the code-drawn stand-in).</summary>
+    [SerializeField] private PetStandIn petView;
+
+    /// <summary>What the pet just did (a pat's or a toy's line).</summary>
+    [SerializeField] private TMP_Text petReactionText;
+
+    /// <summary>Pets the pet (a reaction, as often as the player likes).</summary>
+    [SerializeField] private Button petPatButton;
+
+    /// <summary>Container for one row per owned toy (Play, once a night).</summary>
+    [SerializeField] private Transform toyRowsRoot;
+
+    /// <summary>Continues to the House (or the slot machine).</summary>
+    [SerializeField] private Button petContinueButton;
 
     [Header("House Panel (the old shop panel)")]
     /// <summary>Root of the House panel (the scene's ShopPanel, its art panel_shop.png).</summary>
@@ -98,8 +127,17 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>Ends the day and advances to tomorrow.</summary>
     [SerializeField] private Button sleepButton;
 
-    /// <summary>Spawned family member rows (cleared/rebuilt on refresh).</summary>
-    private readonly List<GameObject> _familyRows = new();
+    /// <summary>Spawned bill rows (cleared/rebuilt on refresh).</summary>
+    private readonly List<GameObject> _billRows = new();
+
+    /// <summary>Spawned toy rows (cleared/rebuilt on refresh).</summary>
+    private readonly List<GameObject> _toyRows = new();
+
+    /// <summary>Pending callback for the pet corner's continue button.</summary>
+    private Action _onPetContinue;
+
+    /// <summary>The pat callback (returns the reaction's line).</summary>
+    private Func<string> _onPat;
 
     /// <summary>Everything the House spawned (heads, connectors, cards; cleared and rebuilt on refresh).</summary>
     private readonly List<GameObject> _houseItems = new();
@@ -134,6 +172,9 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>True if the expenses panel and its continue button are wired, so it can be shown and left (audit R4-014: a panel without its button would strand the flow).</summary>
     public bool HasExpensesPanel => expensesPanel != null && expensesContinueButton != null;
 
+    /// <summary>True if the pet's corner and its continue button are wired, so it can be shown and left.</summary>
+    public bool HasPetPanel => petPanel != null && petContinueButton != null;
+
     /// <summary>True if the shop panel and its continue button are wired, so it can be shown and left.</summary>
     public bool HasShopPanel => shopPanel != null && shopContinueButton != null;
 
@@ -150,12 +191,19 @@ public sealed class HomeUIController : MonoBehaviour
         UiText.FitLabel(moneyText);
 
         if (expensesPanel != null) expensesPanel.SetActive(false);
+        if (petPanel != null) petPanel.SetActive(false);
         if (shopPanel != null) shopPanel.SetActive(false);
         if (slotPanel != null) slotPanel.SetActive(false);
         if (sleepPanel != null) sleepPanel.SetActive(false);
 
         if (expensesContinueButton != null)
             expensesContinueButton.onClick.AddListener(HandleExpensesContinueClicked);
+
+        if (petContinueButton != null)
+            petContinueButton.onClick.AddListener(HandlePetContinueClicked);
+
+        if (petPatButton != null)
+            petPatButton.onClick.AddListener(HandlePatClicked);
 
         if (shopContinueButton != null)
             shopContinueButton.onClick.AddListener(HandleShopContinueClicked);
@@ -190,115 +238,190 @@ public sealed class HomeUIController : MonoBehaviour
     // Expenses panel
     // =========================================================
 
-    /// <summary>
-    /// Shows tonight's evening: a break-in first when there was one, the
-    /// expense breakdown (rent and utilities, family upkeep, medical drain,
-    /// the house's upkeep), the household's mood in words (HouseEffects.MoodLine, never a number),
-    /// who got worse or better overnight, and one row per family member with
-    /// a Treat button at <paramref name="careCost"/> (calls onTreat with the
-    /// member's index). Invokes onContinue when the player moves on to the
-    /// House, or the slot machine when <paramref name="shopNext"/> is false (or immediately if unwired); the continue button names the next step.
-    /// </summary>
-    public void ShowExpenses(WorldState world, HomeEconomy.Evening evening, GameConfigSO config, int careCost, Action<int> onTreat, Action onContinue, bool shopNext)
+    /// <summary>One of the night's bills as its row shows it: the bill, its label (name, price, line), its button's label, and whether the button takes clicks.</summary>
+    public readonly struct BillView
     {
-        if (!HasExpensesPanel || world == null)
+        /// <summary>The bill.</summary>
+        public readonly HomeBill Bill;
+
+        /// <summary>The row's label.</summary>
+        public readonly string Label;
+
+        /// <summary>The button's label ("Paying" or "Skip").</summary>
+        public readonly string Button;
+
+        /// <summary>Whether the button takes clicks.</summary>
+        public readonly bool Enabled;
+
+        /// <summary>A row.</summary>
+        public BillView(HomeBill bill, string label, string button, bool enabled)
         {
-            onContinue?.Invoke();
+            Bill = bill;
+            Label = label;
+            Button = button;
+            Enabled = enabled;
+        }
+    }
+
+    /// <summary>
+    /// Shows the bills step (the Home pet spec PS2): <paramref name="title"/>,
+    /// <paramref name="body"/> (the break-in, the fixed costs paid, the pet's
+    /// needs in words, the night's bills' total), one row per bill in
+    /// <paramref name="rows"/> (its button calls <paramref name="onToggle"/>
+    /// with the bill), and the continue button, labelled
+    /// <paramref name="payLabel"/>, taking clicks only while
+    /// <paramref name="canPay"/>, calling <paramref name="onPay"/> (or
+    /// immediately if unwired). HomeManager shows it again after each toggle.
+    /// </summary>
+    public void ShowExpenses(string title, string body, IReadOnlyList<BillView> rows, string payLabel, bool canPay, Action<HomeBill> onToggle, Action onPay)
+    {
+        if (!HasExpensesPanel)
+        {
+            onPay?.Invoke();
             return;
         }
 
-        _onExpensesContinue = onContinue;
+        _onExpensesContinue = onPay;
         TMP_Text continueLabel = expensesContinueButton.GetComponentInChildren<TMP_Text>(true);
         if (continueLabel != null)
-            continueLabel.text = shopNext ? "Continue to the House" : "Continue to Slots";
+            continueLabel.text = payLabel;
+        expensesContinueButton.interactable = canPay;
 
         if (expensesTitleText != null)
-            expensesTitleText.text = $"Day {world.day} — Home";
+            expensesTitleText.text = title;
 
         if (expensesBodyText != null)
-            expensesBodyText.text = ExpensesText(world, evening ?? new HomeEconomy.Evening());
+            expensesBodyText.text = body;
 
-        BuildFamilyRows(world, config, careCost, onTreat);
+        if (billRowsRoot != null)
+        {
+            ClearRows(_billRows);
+            foreach (BillView row in rows ?? Array.Empty<BillView>())
+            {
+                HomeBill bill = row.Bill;
+                _billRows.Add(CreateRow(billRowsRoot, row.Label, row.Button, row.Enabled && onToggle != null, () => onToggle?.Invoke(bill), PanelInk(expensesBodyText)));
+            }
+        }
 
         expensesPanel.SetActive(true);
     }
 
-    /// <summary>The expenses panel's body: the break-in, the bill's lines and total, the mood, and tonight's changes in the family.</summary>
-    private static string ExpensesText(WorldState world, HomeEconomy.Evening evening)
-    {
-        HomeEconomy.ExpenseReport report = evening.bill;
-        var sb = new StringBuilder();
-        if (report.breakInLoss > 0)
-            sb.AppendLine($"Someone broke in while you were at work: -{report.breakInLoss}");
-
-        sb.AppendLine("Tonight's expenses:");
-        sb.AppendLine($"  Rent & utilities: -{report.baseAmount}");
-
-        if (report.memberCount > 0)
-            sb.AppendLine($"  Family upkeep ({report.memberCount}): -{report.memberAmount}");
-
-        if (report.conditionAmount > 0)
-            sb.AppendLine($"  Medical drain: -{report.conditionAmount}");
-
-        if (report.upkeepAmount > 0)
-            sb.AppendLine($"  House upkeep: -{report.upkeepAmount}");
-
-        sb.AppendLine($"Total: -{report.total} {UiText.Currency(UiText.WalletForm.Inline)}   (Balance: {world.money})");
-
-        string mood = HouseEffects.MoodLine(evening.mood);
-        if (mood.Length > 0)
-            sb.AppendLine(mood);
-
-        if (evening.worse.Count > 0)
-            sb.AppendLine($"Worse tonight: {string.Join(", ", evening.worse)}.");
-
-        if (evening.better.Count > 0)
-            sb.AppendLine($"Feeling better: {string.Join(", ", evening.better)}.");
-
-        if (world.money < 0)
-            sb.AppendLine("You are in debt. Find a way to make ends meet.");
-
-        return sb.ToString();
-    }
-
-    /// <summary>Rebuilds the family member rows (the member's portrait for their condition when its art exists, ArtSlots.FamilyPortrait; name, condition, Treat button at <paramref name="careCost"/>).</summary>
-    private void BuildFamilyRows(WorldState world, GameConfigSO config, int careCost, Action<int> onTreat)
-    {
-        if (familyRowsRoot == null)
-            return;
-
-        ClearRows(_familyRows);
-
-        for (int i = 0; i < world.family.members.Count; i++)
-        {
-            FamilyMemberData member = world.family.members[i];
-
-            if (member == null)
-                continue;
-
-            int capturedIndex = i;
-            string label = $"{member.name} — condition {member.condition}";
-            string buttonLabel = $"Treat (-{careCost})";
-            bool interactable = member.condition > 0 && world.money >= careCost && onTreat != null;
-
-            Sprite portrait = SlotArt.Sprite(ArtSlots.FamilyPortrait(member.name, member.condition, config != null ? config.maxFamilyCondition : 0));
-            GameObject row = CreateRow(familyRowsRoot, label, buttonLabel, interactable,
-                () => onTreat?.Invoke(capturedIndex), PanelInk(expensesBodyText), portrait);
-
-            _familyRows.Add(row);
-        }
-
-        if (world.family.members.Count == 0)
-            _familyRows.Add(CreateLabelRow(familyRowsRoot, "No family members on record.", PanelInk(expensesBodyText)));
-    }
-
-    /// <summary>Expenses continue clicked: close and move to the shop.</summary>
+    /// <summary>Expenses continue clicked: close and move on (HomeManager pays the bills first).</summary>
     private void HandleExpensesContinueClicked()
     {
         if (expensesPanel != null)
             expensesPanel.SetActive(false);
 
         OneShot.Fire(ref _onExpensesContinue);
+    }
+
+    // =========================================================
+    // Pet corner (the Home pet spec PS7)
+    // =========================================================
+
+    /// <summary>One owned toy as its row shows it: its label, its button's label, whether it takes clicks, and what playing does.</summary>
+    public readonly struct ToyView
+    {
+        /// <summary>The row's label (the toy's name).</summary>
+        public readonly string Label;
+
+        /// <summary>The button's label ("Play" or "Played tonight").</summary>
+        public readonly string Button;
+
+        /// <summary>Whether the button takes clicks (once a night).</summary>
+        public readonly bool Enabled;
+
+        /// <summary>Plays with it (HomeManager shows the corner again with the pet's line).</summary>
+        public readonly Action OnPlay;
+
+        /// <summary>A row.</summary>
+        public ToyView(string label, string button, bool enabled, Action onPlay)
+        {
+            Label = label;
+            Button = button;
+            Enabled = enabled;
+            OnPlay = onPlay;
+        }
+    }
+
+    /// <summary>
+    /// Shows the pet's corner: <paramref name="title"/>, the pet's needs after
+    /// tonight's care in words (<paramref name="body"/>), the pet
+    /// (<paramref name="kind"/> looking <paramref name="look"/>, the room
+    /// dark unless <paramref name="lit"/>), <paramref name="reaction"/> (what
+    /// it just did), the pat button (<paramref name="patLabel"/>: a hop and
+    /// a heart, and <paramref name="onPat"/>'s line), one row per owned toy
+    /// (<paramref name="toys"/>; <paramref name="noToys"/> without one), and
+    /// the continue button, labelled <paramref name="continueLabel"/>, calling
+    /// <paramref name="onContinue"/> (or immediately if unwired). Shown again
+    /// after a toy (<paramref name="played"/>), the pet spins.
+    /// </summary>
+    public void ShowPet(string title, string body, PetKind kind, PetLook look, bool lit, string reaction, string patLabel, Func<string> onPat,
+                        IReadOnlyList<ToyView> toys, string noToys, string continueLabel, Action onContinue, bool played = false)
+    {
+        if (!HasPetPanel)
+        {
+            onContinue?.Invoke();
+            return;
+        }
+
+        _onPetContinue = onContinue;
+        _onPat = onPat;
+        TMP_Text next = petContinueButton.GetComponentInChildren<TMP_Text>(true);
+        if (next != null)
+            next.text = continueLabel;
+        if (petTitleText != null)
+            petTitleText.text = title;
+        if (petBodyText != null)
+            petBodyText.text = body;
+        if (petReactionText != null)
+            petReactionText.text = reaction ?? string.Empty;
+        if (petPatButton != null)
+        {
+            TMP_Text pat = petPatButton.GetComponentInChildren<TMP_Text>(true);
+            if (pat != null)
+                pat.text = patLabel;
+        }
+
+        if (toyRowsRoot != null)
+        {
+            ClearRows(_toyRows);
+            Color ink = PanelInk(petBodyText);
+            if (toys == null || toys.Count == 0)
+                _toyRows.Add(CreateLabelRow(toyRowsRoot, noToys, ink));
+            else
+                foreach (ToyView toy in toys)
+                    _toyRows.Add(CreateRow(toyRowsRoot, toy.Label, toy.Button, toy.Enabled && toy.OnPlay != null, toy.OnPlay, ink));
+        }
+
+        bool opening = !petPanel.activeSelf;
+        petPanel.SetActive(true);
+        if (petView != null)
+        {
+            if (opening || played)
+                petView.Show(kind, look, lit);
+            if (played)
+                petView.Play();
+        }
+    }
+
+    /// <summary>Pat clicked: the pet hops with a heart and its reaction line shows.</summary>
+    private void HandlePatClicked()
+    {
+        if (petView != null)
+            petView.Pat();
+        string line = _onPat != null ? _onPat.Invoke() : null;
+        if (petReactionText != null && !string.IsNullOrEmpty(line))
+            petReactionText.text = line;
+    }
+
+    /// <summary>The pet corner's continue clicked: close and move on.</summary>
+    private void HandlePetContinueClicked()
+    {
+        if (petPanel != null)
+            petPanel.SetActive(false);
+
+        OneShot.Fire(ref _onPetContinue);
     }
 
     // =========================================================
@@ -686,7 +809,7 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>A panel's own ink: its body text's colour (the scene's choice for that panel), white without a body text.</summary>
     private static Color PanelInk(TMP_Text body) => body != null ? body.color : Color.white;
 
-    // The runtime rows' layout (the family, shop and empty-state rows; audit R4-015).
+    // The runtime rows' layout (the bills, toys and empty-state rows; audit R4-015).
     private const float LabelRowHeight = 36f;
     private const float RowHeight = 44f;
     private const float RowSpacing = 12f;

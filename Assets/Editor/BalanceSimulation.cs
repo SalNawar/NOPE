@@ -20,8 +20,11 @@ using UnityEngine;
 /// where it is edited, the endings, the money, the world the runs leave
 /// (the outcomes under END OF DEMO, a distribution, never a target), the queue's faults by day and kind, and the
 /// authored travellers (forced slots, premades, dialogs) apart from the random draws;
-/// and the House's shoppers (the cheapest-first buyer and the climber, each
-/// refusing and taking the bribes; Saleh's Q6 of the Home upgrades spec).
+/// the pet (every run pays its bills as a careful carer, PetPolicy: what it
+/// costs, how often it is sick, the Welfare Office's notices and the pets
+/// taken; the Home pet spec PS9); and the House's shoppers (the
+/// cheapest-first buyer and the climber, each refusing and taking the
+/// bribes; Saleh's Q6 of the Home upgrades spec).
 /// </summary>
 public static class BalanceSimulation
 {
@@ -46,8 +49,8 @@ public static class BalanceSimulation
     /// <summary>The pace this run plays at (BalanceSimSettingsSO.travellersPerShift, read at Run; <see cref="ShiftPace"/> without the asset).</summary>
     private static int _pace = ShiftPace;
 
-    /// <summary>The House buyer's reserve and care threshold, and the price from which a house upgrade is top tier (BalanceSimSettingsSO, read at Run; the asset's defaults without it).</summary>
-    private static int _houseReserve = 60, _careThreshold = 3, _topTierPrice = 150;
+    /// <summary>The House buyer's and the pet's TV reserve, and the price from which a house upgrade is top tier (BalanceSimSettingsSO, read at Run; the asset's defaults without it).</summary>
+    private static int _houseReserve = 60, _topTierPrice = 150;
 
     /// <summary>Who shops at Home in a run: nobody (the plain runs), the cheapest-first buyer (HousePolicy.Purchase) or the climber (HousePolicy.Climb).</summary>
     private enum Shopper
@@ -107,7 +110,6 @@ public static class BalanceSimulation
         var settings = AssetDatabase.LoadAssetAtPath<BalanceSimSettingsSO>(BalanceSimSettingsSO.AssetPath);
         _pace = settings != null ? settings.travellersPerShift : ShiftPace;
         _houseReserve = settings != null ? settings.houseReserve : 60;
-        _careThreshold = settings != null ? settings.careThreshold : 3;
         _topTierPrice = settings != null ? settings.topTierPrice : 150;
 
         string dir = Path.IsPathRooted(folder) ? folder : Path.Combine(Directory.GetCurrentDirectory(), folder);
@@ -251,8 +253,11 @@ public static class BalanceSimulation
         /// <summary>The stranding fines the failure reports charged (the endings and strandings spec §7; Saleh's Q10 = D), in cr.</summary>
         public int StrandingFines;
 
-        /// <summary>Home's figures (the Home upgrades spec §9): the house's upkeep paid, the break-ins and what they took, the care paid and the house upgrades' prices paid.</summary>
-        public int Upkeep, BreakIns, BreakInLoss, Care, HousePurchases;
+        /// <summary>Home's figures (the Home upgrades spec §9): the house's upkeep paid, the break-ins and what they took, the pet's bills paid and the house upgrades' prices paid.</summary>
+        public int Upkeep, BreakIns, BreakInLoss, PetBills, HousePurchases;
+
+        /// <summary>The pet's figures (the Home pet spec PS9): nights it ended sick, nights it went unfed, and nights it ended under the Welfare Office's notice.</summary>
+        public int SickNights, UnfedNights, WelfareNights;
 
         /// <summary>The house upgrades the buyer bought, with the day of each.</summary>
         public readonly List<(int day, string id)> Bought = new List<(int, string)>();
@@ -352,16 +357,24 @@ public static class BalanceSimulation
                 break;
             }
 
-            // Home: the break-in, the bill and the family's night; the shopper then treats and buys (the plain runs
-            // treat no one and buy nothing); no run spins the slot machine or orders at the PC.
-            HomeEconomy.ExpenseReport bill = DayCycle.OpenHome(world, lib, config, Seeds.Day(seed, day)).bill;
-            (int care, int bought) = shopper != Shopper.None ? ShopperNight(world, lib, config, r, day, shopper) : (0, 0);
-            ClerkAccountSource.RecordHome(world, bill.total + care, bought, lib, config);
-            r.Household += bill.total + care;
+            // Home, as HomeManager plays it: the break-in and the fixed bill; the pet's bills as a careful carer (PetPolicy,
+            // every run); the shopper buys (the plain runs buy nothing); the pet's night at Sleep. No run spins the slot
+            // machine, orders at the PC (so no toy) or pets the pet.
+            int nightSeed = Seeds.Day(seed, day);
+            HomeEconomy.ExpenseReport bill = DayCycle.OpenHome(world, lib, config, nightSeed);
+            PetCare care = PetPolicy.Care(world.pet.Needs, world.money, b => HomeEconomy.BillPrice(world, lib, b), _houseReserve, HomeEconomy.OwnedToys(world, lib).Count > 0);
+            int bills = Math.Max(0, HomeEconomy.PayBills(world, lib, care));
+            int bought = shopper != Shopper.None ? ShopperNight(world, lib, r, day, shopper) : 0;
+            HomeEconomy.PetNight(world, lib, config, nightSeed, care);
+            ClerkAccountSource.RecordHome(world, bill.total + bills, bought, lib, config);
+            r.Household += bill.total + bills;
             r.Upkeep += bill.upkeepAmount;
             r.BreakInLoss += bill.breakInLoss;
             r.BreakIns += bill.breakInLoss > 0 ? 1 : 0;
-            r.Care += care;
+            r.PetBills += bills;
+            r.SickNights += world.pet.sickness > 0 ? 1 : 0;
+            r.UnfedNights += care.Food ? 0 : 1;
+            r.WelfareNights += world.pet.welfareNights > 0 ? 1 : 0;
             r.HousePurchases += bought;
             r.MoneyAtNight.Add(world.money);
             r.MinMoney = Math.Min(r.MinMoney, world.money);
@@ -370,7 +383,7 @@ public static class BalanceSimulation
             if (sleep != null)
             {
                 DayCycle.EndRun(world, sleep, lib, config);
-                r.Dump.AppendLine($"night {day}: household {bill.total} money {world.money} ENDING {sleep.id}");
+                r.Dump.AppendLine($"night {day}: household {bill.total} + pet's bills {bills} money {world.money} pet {Pet(world.pet)} ENDING {sleep.id}");
                 End(r, sleep.id, day);
                 observer?.NightTurned?.Invoke(day, world);
                 observer?.Ended?.Invoke(day, sleep.id);
@@ -378,7 +391,7 @@ public static class BalanceSimulation
             }
             DayCycle.AdvanceNight(world, lib, config);
             observer?.NightTurned?.Invoke(day, world);
-            r.Dump.AppendLine($"night {day}: household {bill.total} money {world.money} leader '{world.history.leaderId}'");
+            r.Dump.AppendLine($"night {day}: household {bill.total} + pet's bills {bills} money {world.money} pet {Pet(world.pet)} leader '{world.history.leaderId}'");
         }
 
         r.TechnologyChanged = world.history.factEdits.Where(e => e != null && e.cause == EditCause.Carry && e.category == ClueCategory.Technology && e.eraId != "future")
@@ -386,6 +399,10 @@ public static class BalanceSimulation
         r.Fingerprint = JsonUtility.ToJson(world.history) + JsonUtility.ToJson(world.timeline) + world.money.ToString(Inv) + r.Ending;
         return r;
     }
+
+    /// <summary>The pet's needs for the dumps (the simulation's own numbers; the player only ever reads words).</summary>
+    private static string Pet(PetState pet) =>
+        pet == null ? "none" : $"hunger {pet.hunger} cold {pet.cold} boredom {pet.boredom} sickness {pet.sickness} welfare {pet.welfareNights}{(pet.taken ? " TAKEN" : "")}";
 
     /// <summary>What a dialog effect pays the clerk: its AddMoney ops summed (0 for an unknown effect).</summary>
     private static float Pays(ContentLibrarySO lib, string effect)
@@ -396,26 +413,14 @@ public static class BalanceSimulation
 
     /// <summary>
     /// A shopper's night (Domain HousePolicy through the game's own purchase
-    /// paths): care first, a point at a time for the sickest member at the
-    /// care threshold while the wallet keeps the reserve
-    /// (HomeEconomy.TreatFamilyMember); then the buyer buys at most one house
+    /// path), after the pet's bills: the buyer buys at most one house
     /// upgrade, the cheapest buyable one that keeps the reserve, and the
     /// climber buys every step of the cheapest top-tier path once the wallet
     /// covers it all and keeps the reserve (HomeEconomy.BuyHouseUpgrade).
-    /// Returns the care and the purchases paid.
+    /// Returns the purchases paid.
     /// </summary>
-    private static (int care, int bought) ShopperNight(WorldState world, ContentLibrarySO lib, GameConfigSO config, RunResult r, int day, Shopper shopper)
+    private static int ShopperNight(WorldState world, ContentLibrarySO lib, RunResult r, int day, Shopper shopper)
     {
-        int care = 0;
-        while (true)
-        {
-            int cost = HomeEconomy.GetCareCost(world, lib, config);
-            int member = HousePolicy.Care(world.family.members.Select(m => m != null ? m.condition : 0).ToList(), world.money, cost, _houseReserve, _careThreshold);
-            if (member < 0 || !HomeEconomy.TreatFamilyMember(world, lib, config, member))
-                break;
-            care += cost;
-        }
-
         List<UpgradeSO> house = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
         int spent = 0;
         while (true)
@@ -435,7 +440,7 @@ public static class BalanceSimulation
             if (shopper == Shopper.Buyer)
                 break;
         }
-        return (care, spent);
+        return spent;
     }
 
     private static void End(RunResult r, string ending, int day)
@@ -501,7 +506,7 @@ public static class BalanceSimulation
                               Dictionary<(PlayStyle, int, int), List<RunResult>> shoppers, List<string> errors)
     {
         sb.AppendLine($"BALANCE SIMULATION  {DateTime.Now:yyyy-MM-dd HH:mm}  ({Runs} runs x {Days} days per play style and pace; Tools > TimeDesk > Balance > Run 50-Run Simulation)");
-        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no orders, no slot machine, no dialog choices (but the bribes in the House's bribe-taking variants), and no care or house upgrade except in the House's variants (their own section below); once on the whole queue and once at the shift clock's pace ({_pace} travellers a shift, {BalanceSimSettingsSO.AssetPath} travellersPerShift: the rest go home when the clock closes, PlayPolicy.Reaches).");
+        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no orders, no slot machine, no dialog choices (but the bribes in the House's bribe-taking variants), the pet's bills paid as a careful carer every night (PetPolicy: food, the heating with its electricity, medicine when unwell, the TV when bored and the reserve holds), and no house upgrade except in the House's variants (their own section below); once on the whole queue and once at the shift clock's pace ({_pace} travellers a shift, {BalanceSimSettingsSO.AssetPath} travellersPerShift: the rest go home when the clock closes, PlayPolicy.Reaches).");
         sb.AppendLine("Perfect: every call right. Imperfect: one wrong call a day (odd days the first faulty traveller let through, even days the first deviation denial left unproven). Careless: both every day.");
         sb.AppendLine();
         Knobs(sb, run, lib, config);
@@ -532,11 +537,12 @@ public static class BalanceSimulation
         sb.AppendLine("In the Inspector (assets Generate World never writes):");
         sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)}: basePayPerCorrect {config.basePayPerCorrect}, legendaryBonusPay {config.legendaryBonusPay}, wrongDecisionPenalty {config.wrongDecisionPenalty}, freeWarningsPerDay {config.freeWarningsPerDay}, " +
                       $"stabilityChangeRate {config.stabilityChangeRate.ToString("0.####", Inv)}, stabilityLossPerWrong {F(config.stabilityLossPerWrong)}, extraStabilityLossLegendary {F(config.extraStabilityLossLegendary)}, stabilityGainPerCorrect {F(config.stabilityGainPerCorrect)}, firedAtStability {F(config.firedAtStability)}, stabilityWarningMargin {F(config.stabilityWarningMargin)}, stabilityCriticalMargin {F(config.stabilityCriticalMargin)}, bankruptcyMoneyThreshold {config.bankruptcyMoneyThreshold}, " +
-                      $"baseDailyExpense {config.baseDailyExpense}, expensePerFamilyMember {config.expensePerFamilyMember}, expensePerConditionPoint {config.expensePerConditionPoint}, conditionWorsenChance {F(config.conditionWorsenChance)}");
-        sb.AppendLine($"  {AssetDatabase.GetAssetPath(run)}: startingMoney {run.startingMoney}, startingStability {F(run.startingStability)}, startingFamilyMembers {run.startingFamilyMembers?.Count ?? 0}");
-        sb.AppendLine($"  {BalanceSimSettingsSO.AssetPath}: travellersPerShift {_pace} (the simulation's cap, days 7-15 X3), houseReserve {_houseReserve}, careThreshold {_careThreshold} (the House's shoppers), topTierPrice {_topTierPrice} (the climber's target and the top tier counted below)");
-        sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)} (Home): conditionCareCost {config.conditionCareCost}, maxFamilyCondition {config.maxFamilyCondition}, recoveryPerMood {F(config.recoveryPerMood)}, maxRecoveryChance {F(config.maxRecoveryChance)}, sicknessPerMood {F(config.sicknessPerMood)}, maxMoodSicknessCut {F(config.maxMoodSicknessCut)}, " +
+                      $"baseDailyExpense {config.baseDailyExpense}, expensePerConditionPoint {config.expensePerConditionPoint}");
+        sb.AppendLine($"  {AssetDatabase.GetAssetPath(run)}: startingMoney {run.startingMoney}, startingStability {F(run.startingStability)}, startingPetKind {run.startingPetKind}");
+        sb.AppendLine($"  {BalanceSimSettingsSO.AssetPath}: travellersPerShift {_pace} (the simulation's cap, days 7-15 X3), houseReserve {_houseReserve} (the House's shoppers, and the pet's TV), topTierPrice {_topTierPrice} (the climber's target and the top tier counted below)");
+        sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)} (Home, the pet): petNeedMax {config.petNeedMax}, conditionWorsenChance {F(config.conditionWorsenChance)}, sicknessPerNeed {F(config.sicknessPerNeed)}, welfareNights {config.welfareNights}, recoveryPerMood {F(config.recoveryPerMood)}, maxRecoveryChance {F(config.maxRecoveryChance)}, sicknessPerMood {F(config.sicknessPerMood)}, maxMoodSicknessCut {F(config.maxMoodSicknessCut)}, " +
                       $"breakInFromDay {config.breakInFromDay}, breakInChance {F(config.breakInChance)}, breakInShare {F(config.breakInShare)}, breakInMaxLoss {config.breakInMaxLoss}");
+        sb.AppendLine($"  world_source.json home.bills (the content spreadsheet): {string.Join(", ", lib.Home.bills.Where(b => b != null).Select(b => $"{b.bill} {b.price}"))} cr a night");
         sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)} (strandings): strandingFine {config.strandingFine} (Saleh's Q10 = D), strandingFateTilt {F(config.strandingFateTilt)}, waiverSignMinutes {F(config.waiverSignMinutes)} (the simulation never uses the pad)");
         EffectSO bribe = lib.GetEffectByAssetName(BribeEffect);
         if (bribe != null)
@@ -574,7 +580,8 @@ public static class BalanceSimulation
         List<RunResult> early = runs.Where(r => r.EndingDay < Days).ToList();
         sb.AppendLine($"runs ending before day {Days}'s night: {early.Count}{(early.Count > 0 ? $" ({string.Join(", ", early.GroupBy(r => r.Ending).Select(g => $"{g.Key} on days {string.Join(",", g.Select(r => r.EndingDay).OrderBy(d => d))}"))})" : "")}");
         sb.AppendLine($"per run: travellers {M(runs, r => r.Cases)}, faulty {M(runs, r => r.Faulty)}, accepted {M(runs, r => r.Accepted)}, wrong calls {M(runs, r => r.Wrong)} (unproven denials {M(runs, r => r.Unproven)}), strandings {M(runs, r => r.Stranded)}, carries {M(runs, r => r.Carries)}");
-        sb.AppendLine($"per run, cr: pay {M(runs, r => r.Pay)}, wrong-decision penalties {M(runs, r => r.Penalties)}, stranding fines {M(runs, r => r.StrandingFines)}, Debt Relief instalments {M(runs, r => r.Instalments)}, household {M(runs, r => r.Household)}");
+        sb.AppendLine($"per run, cr: pay {M(runs, r => r.Pay)}, wrong-decision penalties {M(runs, r => r.Penalties)}, stranding fines {M(runs, r => r.StrandingFines)}, Debt Relief instalments {M(runs, r => r.Instalments)}, household {M(runs, r => r.Household)} (the pet's bills {M(runs, r => r.PetBills)})");
+        sb.AppendLine($"the pet (a careful carer, PetPolicy): nights it ended sick {M(runs, r => r.SickNights)}, nights unfed {M(runs, r => r.UnfedNights)}, nights under the Welfare Office's notice {M(runs, r => r.WelfareNights)}; taken in {runs.Count(r => r.World.pet != null && r.World.pet.taken)} of {runs.Count} runs");
         Fates(sb, runs);
         sb.AppendLine($"wallet: lowest in a run mean {F(BalanceStats.Mean(runs.Select(r => (float)r.MinMoney)))}, min {runs.Min(r => r.MinMoney)}; runs ever below 0: {runs.Count(r => r.MinMoney < 0)}; at or below the bankruptcy line ({config.bankruptcyMoneyThreshold}): {runs.Count(r => r.MinMoney <= config.bankruptcyMoneyThreshold)}");
         sb.AppendLine("wallet after each shift, mean/min over the runs still going: " + Curve(runs, r => r.MoneyAfterShift, "d"));
@@ -728,10 +735,10 @@ public static class BalanceSimulation
 
     /// <summary>
     /// The House (the Home upgrades spec §9, §12): per pace and style, the
-    /// plain runs (no care, no purchase) against the House's variants (the
+    /// plain runs (no purchase) against the House's variants (the
     /// cheapest-first buyer and the climber, each refusing and taking the
     /// bribes): the endings, the wallet, the household, upkeep, break-ins,
-    /// care, the bribes, what the house upgrades cost and which were bought
+    /// the pet's bills, the bribes, what the house upgrades cost and which were bought
     /// when, and the top tier reached; then Saleh's Q6 in one table (the top
     /// tier by day 15, careful against bribe-taking); and the tree's prices
     /// from the content spreadsheet.
@@ -740,7 +747,7 @@ public static class BalanceSimulation
     {
         List<UpgradeSO> house = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
         sb.AppendLine();
-        sb.AppendLine($"== The House: the plain runs against its shoppers (reserve {_houseReserve} cr, care at condition {_careThreshold}; the top tier from {_topTierPrice} cr) ==");
+        sb.AppendLine($"== The House: the plain runs against its shoppers (reserve {_houseReserve} cr; the top tier from {_topTierPrice} cr) ==");
         sb.AppendLine($"the tree (content spreadsheet, homeUpgrades): {house.Count} upgrades, {house.Sum(u => u.cost)} cr in all: {string.Join(", ", house.OrderBy(u => u.cost).Select(u => $"{u.id} {u.cost}"))}");
         sb.AppendLine($"the top tier: {string.Join(", ", house.Where(u => u.cost >= _topTierPrice).OrderBy(u => u.cost).Select(u => $"{u.id} {u.cost}"))}");
         sb.AppendLine("the buyer buys the cheapest upgrade it may each night; the climber buys nothing but the cheapest top-tier path, all of it on the night the wallet covers it and keeps the reserve (HousePolicy); a bribe-taking clerk takes every bribe offered at the desk (BribePolicy).");
@@ -754,7 +761,7 @@ public static class BalanceSimulation
                 {
                     sb.AppendLine($"  {label}: endings {string.Join(", ", runs.GroupBy(r => r.Ending).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}; " +
                                   $"wallet lowest mean {F(BalanceStats.Mean(runs.Select(r => (float)r.MinMoney)))} min {runs.Min(r => r.MinMoney)}, at the end mean {F(BalanceStats.Mean(runs.Select(r => (float)r.World.money)))} min {runs.Min(r => r.World.money)} max {runs.Max(r => r.World.money)}; " +
-                                  $"per run cr: household {M(runs, r => r.Household)} (upkeep {M(runs, r => r.Upkeep)}, break-ins {M(runs, r => r.BreakIns)} taking {M(runs, r => r.BreakInLoss)}, care {M(runs, r => r.Care)}), bribes {M(runs, r => r.BribeMoney)} ({M(runs, r => r.BribesTaken)} taken), " +
+                                  $"per run cr: household {M(runs, r => r.Household)} (upkeep {M(runs, r => r.Upkeep)}, break-ins {M(runs, r => r.BreakIns)} taking {M(runs, r => r.BreakInLoss)}, the pet's bills {M(runs, r => r.PetBills)}), bribes {M(runs, r => r.BribeMoney)} ({M(runs, r => r.BribesTaken)} taken), " +
                                   $"house upgrades {M(runs, r => r.HousePurchases)} ({M(runs, r => r.Bought.Count)} bought); {TopTier(runs)}");
                     if (label != "plain")
                         sb.AppendLine("    bought (runs, mean day): " + string.Join(", ", runs.SelectMany(r => r.Bought).GroupBy(b => b.id).OrderBy(g => g.Average(b => b.day))

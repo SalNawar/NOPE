@@ -26,7 +26,8 @@ public static class EndingService
 
         var now = new EndingCheck(world.timelineStability, world.money, world.day,
             config != null ? config.firedAtStability : 0f,
-            config != null ? config.bankruptcyMoneyThreshold : -100);
+            config != null ? config.bankruptcyMoneyThreshold : -100,
+            world.pet != null && world.pet.taken);
 
         var endings = new List<EndingSO>();
         var candidates = new List<EndingCandidate>();

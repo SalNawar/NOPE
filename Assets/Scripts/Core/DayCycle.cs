@@ -13,9 +13,11 @@ using UnityEngine;
 public static class DayCycle
 {
     /// <summary>
-    /// A new run's world: <paramref name="run"/>'s starting day, money,
-    /// stability and family, <paramref name="runSeed"/>, and the places'
-    /// baselines ranked, so the first night reports only what day 1 changed.
+    /// A new run's world: <paramref name="run"/>'s starting day, money and
+    /// stability, its default pet (RunConfigSO.startingPetKind with the
+    /// content's suggested name; the Title's adoption replaces it, Adopt),
+    /// <paramref name="runSeed"/>, and the places' baselines ranked, so the
+    /// first night reports only what day 1 changed.
     /// </summary>
     public static WorldState NewWorld(RunConfigSO run, ContentLibrarySO lib, int runSeed)
     {
@@ -27,19 +29,27 @@ public static class DayCycle
             runSeed = runSeed
         };
 
-        if (run.startingFamilyMembers != null)
-        {
-            foreach (string name in run.startingFamilyMembers)
-            {
-                if (string.IsNullOrWhiteSpace(name))
-                    continue;
-
-                world.family.members.Add(new FamilyMemberData { name = name, condition = 0 });
-            }
-        }
-
+        Adopt(world, lib, run.startingPetKind, null);
         TimelineService.SeedDominance(world, lib, run.gameConfig);
         return world;
+    }
+
+    /// <summary>
+    /// The run's pet (the Home pet spec PS1): a fresh <paramref name="kind"/>
+    /// with every need met, called <paramref name="name"/> (PetNames.Clean),
+    /// or the content's suggested name for the kind when the name is blank or
+    /// refused (PetNames.Check at home.pet.nameMaxLength: the Title checks
+    /// before it adopts, so only a run started elsewhere gets the suggestion).
+    /// </summary>
+    public static void Adopt(WorldState world, ContentLibrarySO lib, PetKind kind, string name)
+    {
+        if (world == null)
+            return;
+        PetContent words = lib != null ? lib.Home.pet : new PetContent();
+        PetKindContent k = words.Kind(kind);
+        string chosen = PetNames.Check(name, words.nameMaxLength) == PetNameProblem.None ? PetNames.Clean(name) : k != null ? PetNames.Clean(k.suggestedName) : kind.ToString();
+        world.pet = new PetState { kind = kind, name = chosen, adoptedDay = world.day };
+        Debug.Log($"[DayCycle] Adopted a {kind} called '{chosen}'.");
     }
 
     /// <summary>
@@ -166,20 +176,19 @@ public static class DayCycle
     }
 
     /// <summary>
-    /// Home's arrival (the Home upgrades spec §5), in this order on
-    /// <paramref name="daySeed"/> so a reload replays it: tonight's break-in
-    /// (it happened while the clerk was at work), the day's living costs and
-    /// the house's upkeep (HomeEconomy, with the house upgrades' effects), then
-    /// the family's night (drift and recovery). Returns the evening: the bill,
-    /// the break-in included, who got worse or better, and the mood.
+    /// Home's arrival (the Home upgrades spec §5, the Home pet spec PS2), in
+    /// this order on <paramref name="daySeed"/> so a reload replays it:
+    /// tonight's break-in (it happened while the clerk was at work), then the
+    /// fixed bill (rent and utilities, the sick pet's extra care, the house's
+    /// upkeep; HomeEconomy, with the house upgrades' effects). The night's
+    /// optional bills follow at the bills step (HomeEconomy.PayBills) and the
+    /// pet's night at Sleep (HomeEconomy.PetNight). Returns the bill, the
+    /// break-in included.
     /// </summary>
-    public static HomeEconomy.Evening OpenHome(WorldState world, ContentLibrarySO lib, GameConfigSO config, int daySeed)
+    public static HomeEconomy.ExpenseReport OpenHome(WorldState world, ContentLibrarySO lib, GameConfigSO config, int daySeed)
     {
-        var evening = new HomeEconomy.Evening();
         int breakIn = HomeEconomy.RollBreakIn(world, lib, config, daySeed);
-        evening.bill = HomeEconomy.ApplyDailyExpenses(world, lib, config, breakIn);
-        HomeEconomy.AdvanceFamilyConditions(world, lib, config, daySeed, evening);
-        return evening;
+        return HomeEconomy.ApplyDailyExpenses(world, lib, config, breakIn);
     }
 
     /// <summary>

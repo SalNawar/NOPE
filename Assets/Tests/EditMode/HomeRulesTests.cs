@@ -16,18 +16,6 @@ public class HomeRulesTests
         Assert.AreEqual(expected, HomeRules.DrainPoints(condition));
     }
 
-    [TestCase(2, 50, 20, true)]
-    [TestCase(2, 20, 20, true, Description = "exactly the cost")]
-    [TestCase(2, 19, 20, false, Description = "short of the cost")]
-    [TestCase(0, 50, 20, false, Description = "nothing to treat")]
-    [TestCase(-1, 50, 20, false)]
-    [TestCase(1, -5, 0, false, Description = "free care still needs money >= 0")]
-    [TestCase(1, 0, 0, true)]
-    public void CanTreat(int condition, int money, int careCost, bool expected)
-    {
-        Assert.AreEqual(expected, HomeRules.CanTreat(condition, money, careCost));
-    }
-
     [TestCase(3, 2)]
     [TestCase(1, 0)]
     [TestCase(0, 0, Description = "never below 0")]

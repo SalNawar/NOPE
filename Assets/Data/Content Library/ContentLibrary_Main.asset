@@ -277,6 +277,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e9bfefb53bf2f01458c64477e06012ea, type: 2}
   - {fileID: 11400000, guid: 08663b4e21d516c4f8feefb45a561e45, type: 2}
   - {fileID: 11400000, guid: 183b80e98b093704daf36b815af0abf3, type: 2}
+  - {fileID: 11400000, guid: 4a979e73be7f41a3a26591e422c5c0cc, type: 2}
   referenceBooks:
   - {fileID: 11400000, guid: 3438e9ab0eb7f3b46a1831faa3e18ff7, type: 2}
   - {fileID: 11400000, guid: 328addec7472ed04f9815f8dff341e86, type: 2}

@@ -13,8 +13,12 @@ using UnityEngine.UI;
 /// world panel (the endings spec E0) lists the world's outcomes over the END
 /// OF DEMO card: on the run's last day instead of the ending panel, and after
 /// a failure behind the ending panel's "The world you leave behind" button.
-/// The panels are optional; if unwired, TitleSceneController degrades to
-/// loading the office scene directly so the run stays playable.
+/// The adoption panel (the Home pet spec PS1) comes between New Run and the
+/// office: a dog or a cat, each drawn by a PetStandIn, and a name typed and
+/// checked (PetNames.Check: refused names say why, ui.strings
+/// "adopt.problem.*"). The panels are optional; if unwired,
+/// TitleSceneController degrades to loading the office scene directly so the
+/// run stays playable.
 /// </summary>
 public sealed class TitleUIController : MonoBehaviour
 {
@@ -33,6 +37,37 @@ public sealed class TitleUIController : MonoBehaviour
 
     /// <summary>Starts a brand-new run.</summary>
     [SerializeField] private Button newRunButton;
+
+    [Header("Adoption Panel (the Home pet spec PS1)")]
+    /// <summary>Root of the adoption panel, shown after New Run.</summary>
+    [SerializeField] private GameObject adoptPanel;
+
+    /// <summary>The panel's title.</summary>
+    [SerializeField] private TMP_Text adoptTitleText;
+
+    /// <summary>The panel's line under the title.</summary>
+    [SerializeField] private TMP_Text adoptBodyText;
+
+    /// <summary>Chooses the dog.</summary>
+    [SerializeField] private Button adoptDogButton;
+
+    /// <summary>Chooses the cat.</summary>
+    [SerializeField] private Button adoptCatButton;
+
+    /// <summary>The chosen pet, drawn (its art, else the code-drawn stand-in).</summary>
+    [SerializeField] private PetStandIn adoptPreview;
+
+    /// <summary>The name the player types.</summary>
+    [SerializeField] private TMP_InputField adoptNameInput;
+
+    /// <summary>Why the name is refused ("" while it is fine).</summary>
+    [SerializeField] private TMP_Text adoptProblemText;
+
+    /// <summary>Adopts and starts the run.</summary>
+    [SerializeField] private Button adoptButton;
+
+    /// <summary>Goes back to the title.</summary>
+    [SerializeField] private Button adoptBackButton;
 
     [Header("Ending Panel")]
     /// <summary>Root panel shown when WorldState.endingId is set.</summary>
@@ -88,6 +123,12 @@ public sealed class TitleUIController : MonoBehaviour
     /// <summary>True if the world panel is wired.</summary>
     public bool HasWorldPanel => worldPanel != null;
 
+    /// <summary>True if the adoption panel, its name field and its adopt button are wired.</summary>
+    public bool HasAdoptPanel => adoptPanel != null && adoptNameInput != null && adoptButton != null;
+
+    /// <summary>The kind the adoption panel has chosen.</summary>
+    private PetKind _adoptKind;
+
     /// <summary>
     /// Hides both panels until a Show* call activates one. The panels are
     /// optional, so each is tested with Unity's == (audit R4-010): an
@@ -99,7 +140,83 @@ public sealed class TitleUIController : MonoBehaviour
         if (titlePanel != null) titlePanel.SetActive(false);
         if (endingPanel != null) endingPanel.SetActive(false);
         if (worldPanel != null) worldPanel.SetActive(false);
+        if (adoptPanel != null) adoptPanel.SetActive(false);
         if (endingPicture != null) endingPicture.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Shows the adoption panel over the others (the Home pet spec PS1): the
+    /// dog chosen first, with its suggested name in the field
+    /// (<paramref name="words"/>); choosing a kind draws it and swaps a
+    /// suggested name for the other's; Adopt checks the name (PetNames.Check
+    /// at home.pet.nameMaxLength: a refusal says why and adopts nothing) and
+    /// calls <paramref name="onAdopt"/> with the kind and the cleaned name;
+    /// Back calls <paramref name="onBack"/>.
+    /// </summary>
+    public void ShowAdopt(PetContent words, Action<PetKind, string> onAdopt, Action onBack)
+    {
+        if (!HasAdoptPanel)
+            return;
+
+        words ??= new PetContent();
+        if (titlePanel != null) titlePanel.SetActive(false);
+        if (endingPanel != null) endingPanel.SetActive(false);
+        if (worldPanel != null) worldPanel.SetActive(false);
+        if (endingPicture != null) endingPicture.gameObject.SetActive(false);
+        adoptPanel.SetActive(true);
+
+        if (adoptTitleText != null)
+            adoptTitleText.text = UiText.Get("adopt.title");
+        if (adoptBodyText != null)
+            adoptBodyText.text = UiText.Get("adopt.body");
+        SetLabel(adoptDogButton, UiText.Get("adopt.dog"));
+        SetLabel(adoptCatButton, UiText.Get("adopt.cat"));
+        SetLabel(adoptButton, UiText.Get("adopt.go"));
+        SetLabel(adoptBackButton, UiText.Get("adopt.back"));
+        if (adoptNameInput.placeholder is TMP_Text placeholder)
+            placeholder.text = UiText.Get("adopt.placeholder");
+        adoptNameInput.characterLimit = Math.Max(1, words.nameMaxLength) + 8;
+        adoptNameInput.text = string.Empty;
+        if (adoptProblemText != null)
+            adoptProblemText.text = string.Empty;
+
+        void Choose(PetKind kind)
+        {
+            string before = words.Kind(_adoptKind)?.suggestedName ?? string.Empty;
+            _adoptKind = kind;
+            if (string.IsNullOrWhiteSpace(adoptNameInput.text) || adoptNameInput.text == before)
+                adoptNameInput.text = words.Kind(kind)?.suggestedName ?? string.Empty;
+            if (adoptDogButton != null) adoptDogButton.interactable = kind != PetKind.Dog;
+            if (adoptCatButton != null) adoptCatButton.interactable = kind != PetKind.Cat;
+            if (adoptPreview != null) adoptPreview.Show(kind, PetLook.Happy, true);
+        }
+
+        _adoptKind = PetKind.Dog;
+        adoptNameInput.text = words.Kind(PetKind.Dog)?.suggestedName ?? string.Empty;
+        Choose(PetKind.Dog);
+        Wire(adoptDogButton, () => Choose(PetKind.Dog));
+        Wire(adoptCatButton, () => Choose(PetKind.Cat));
+        Wire(adoptBackButton, onBack);
+        Wire(adoptButton, () =>
+        {
+            PetNameProblem problem = PetNames.Check(adoptNameInput.text, words.nameMaxLength);
+            if (problem != PetNameProblem.None)
+            {
+                if (adoptProblemText != null)
+                    adoptProblemText.text = UiText.Format("adopt.problem." + problem, words.nameMaxLength);
+                return;
+            }
+            adoptPanel.SetActive(false);
+            onAdopt?.Invoke(_adoptKind, PetNames.Clean(adoptNameInput.text));
+        });
+    }
+
+    /// <summary>Sets a button's label, when it has one.</summary>
+    private static void SetLabel(Button button, string text)
+    {
+        TMP_Text label = button != null ? button.GetComponentInChildren<TMP_Text>(true) : null;
+        if (label != null)
+            label.text = text;
     }
 
     /// <summary>
@@ -111,6 +228,7 @@ public sealed class TitleUIController : MonoBehaviour
         if (titlePanel == null)
             return;
 
+        if (adoptPanel != null) adoptPanel.SetActive(false);
         if (endingPanel != null) endingPanel.SetActive(false);
         if (worldPanel != null) worldPanel.SetActive(false);
         titlePanel.SetActive(true);
@@ -139,13 +257,16 @@ public sealed class TitleUIController : MonoBehaviour
     /// has no matching content yet — falls back to a generic message): its
     /// title, its body and, set apart under it, its closing card when it has
     /// one; its world button, labelled <paramref name="worldLabel"/>, runs
-    /// <paramref name="onWorld"/> (hidden when null: "The world you leave behind").
+    /// <paramref name="onWorld"/> (hidden when null: "The world you leave behind");
+    /// <paramref name="fill"/> puts the run's words into the body (the pet's
+    /// name and kind into the Welfare Office's ending; PetContent.Fill).
     /// </summary>
-    public void ShowEnding(EndingSO ending, Action onNewRun, string worldLabel = null, Action onWorld = null)
+    public void ShowEnding(EndingSO ending, Action onNewRun, string worldLabel = null, Action onWorld = null, Func<string, string> fill = null)
     {
         if (endingPanel == null)
             return;
 
+        if (adoptPanel != null) adoptPanel.SetActive(false);
         if (titlePanel != null) titlePanel.SetActive(false);
         if (worldPanel != null) worldPanel.SetActive(false);
         endingPanel.SetActive(true);
@@ -156,9 +277,12 @@ public sealed class TitleUIController : MonoBehaviour
                 : "The End";
 
         if (endingBodyText != null)
-            endingBodyText.text = ending == null ? string.Empty
+        {
+            string body = ending == null ? string.Empty
                 : string.IsNullOrWhiteSpace(ending.closingCard) ? ending.bodyText
                 : $"{ending.bodyText}\n\n{ending.closingCard}";
+            endingBodyText.text = fill != null ? fill(body) : body;
+        }
 
         if (endingPicture != null)
         {

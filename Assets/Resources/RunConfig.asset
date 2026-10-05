@@ -24,6 +24,4 @@ MonoBehaviour:
   homeSceneName: HomeScene
   titleSceneName: TitleScene
   fixedRunSeed: 0
-  startingFamilyMembers:
-  - Partner
-  - Kid
+  startingPetKind: 0

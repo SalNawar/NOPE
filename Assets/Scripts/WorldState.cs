@@ -105,8 +105,8 @@ public sealed class WorldState
     /// <summary>Timeline variation scores + active effects (Phase 2).</summary>
     public TimelineStateData timeline = new();
 
-    /// <summary>Family / household state (Phase 4).</summary>
-    public FamilyStateData family = new();
+    /// <summary>The run's pet (the Home pet spec: a dog or a cat, adopted at New Run, replacing the family): its name, needs and the Welfare Office's count. Additive: an older save loads it unadopted and RunManager adopts the run config's default pet.</summary>
+    public PetState pet = new();
 
     /// <summary>Resolved "tomorrow package" computed at sleep (briefing, news, modifiers).</summary>
     public TomorrowPackage tomorrow = new();
@@ -324,25 +324,6 @@ public sealed class ActiveEffectEntry
 
     /// <summary>True once the effect's last day is behind the given day (EffectWindow; one that has not started yet has not ended).</summary>
     public bool HasEndedBy(int dayNumber) => EffectWindow.HasEnded(startDay, durationDays, dayNumber);
-}
-
-/// <summary>Household state (expenses pressure). Fleshed out in Phase 4.</summary>
-[Serializable]
-public sealed class FamilyStateData
-{
-    /// <summary>Family members and their condition.</summary>
-    public List<FamilyMemberData> members = new();
-}
-
-/// <summary>One family member.</summary>
-[Serializable]
-public sealed class FamilyMemberData
-{
-    /// <summary>Display name.</summary>
-    public string name;
-
-    /// <summary>0 = healthy, higher = worse. Interpreted by Phase 4 systems.</summary>
-    public int condition;
 }
 
 /// <summary>

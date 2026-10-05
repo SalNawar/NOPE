@@ -1,10 +1,19 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 
-/// <summary>Home's content block (the Home upgrades spec §5, HU3): the radio's line of the night and what Generate World refuses.</summary>
+/// <summary>Home's content block (the Home upgrades spec §5, HU3; the Home pet spec): the radio's line of the night and what Generate World refuses.</summary>
 public class HomeContentTests
 {
-    private static HomeContent Radio(params string[] lines) => new HomeContent { radioUpgrade = "house_radio", radio = new List<string>(lines) };
+    private static HomeContent Radio(params string[] lines) => new HomeContent { radioUpgrade = "house_radio", radio = new List<string>(lines), bills = Bills(), pet = PetContentTests.Sound() };
+
+    /// <summary>The five bills, each once, named and priced.</summary>
+    internal static List<BillRow> Bills()
+    {
+        var bills = new List<BillRow>();
+        foreach (HomeBill bill in (HomeBill[])System.Enum.GetValues(typeof(HomeBill)))
+            bills.Add(new BillRow { bill = bill, name = bill.ToString(), price = 5 });
+        return bills;
+    }
 
     [TestCase(1, "a")]
     [TestCase(2, "b")]
@@ -29,6 +38,6 @@ public class HomeContentTests
         CollectionAssert.IsEmpty(Radio("a").Problems(new[] { "house_radio" }));
         Assert.AreEqual(1, Radio("a", " ").Problems(new[] { "house_radio" }).Count, "a blank line");
         Assert.AreEqual(1, Radio("a").Problems(new[] { "house_plant" }).Count, "the radio is no house upgrade");
-        CollectionAssert.IsEmpty(new HomeContent { radioUpgrade = "", radio = new List<string>() }.Problems(new string[0]), "no radio at all is fine");
+        CollectionAssert.IsEmpty(new HomeContent { radioUpgrade = "", radio = new List<string>(), bills = Bills(), pet = PetContentTests.Sound() }.Problems(new string[0]), "no radio at all is fine");
     }
 }

@@ -61,8 +61,6 @@ public static class ArtSlots
     /// <summary>The Title button face under the pointer.</summary>
     public const string TitleButtonHover = "Title/title_button_hover";
 
-    /// <summary>The names of the family portraits' three condition bands, best first.</summary>
-    public static readonly IReadOnlyList<string> FamilyBands = new[] { "well", "ill", "grave" };
 
     /// <summary>A desktop icon's glyph by its app id (DesktopAppIds).</summary>
     public static string DesktopIcon(string appId) => "Desktop/icon_" + Key(appId);
@@ -93,21 +91,14 @@ public static class ArtSlots
         return key.Length == 0 ? new[] { AgencyFace } : new[] { "Forms/paper_" + key, AgencyFace };
     }
 
-    /// <summary>A family member's portrait for their condition: family_&lt;member&gt;_&lt;band&gt; (FamilyBand, the member's name as a key: "Partner" gives partner).</summary>
-    public static string FamilyPortrait(string memberName, int condition, int maxCondition) =>
-        "Home/family_" + Key(memberName) + "_" + FamilyBands[FamilyBand(condition, maxCondition)];
+    /// <summary>The pet's picture in its corner for how it looks (the Home pet spec PS7, the art request's four states): Home/pet_&lt;kind&gt;_&lt;look&gt; ("Home/pet_dog_happy"); without it the corner draws the code-drawn stand-in.</summary>
+    public static string PetSprite(PetKind kind, PetLook look) => "Home/pet_" + Key(kind.ToString()) + "_" + Key(look.ToString());
 
-    /// <summary>
-    /// A condition's band (0 best, 2 worst): the range 0 to
-    /// <paramref name="maxCondition"/> in three equal thirds (at 10: 0 to 3,
-    /// 4 to 7, 8 to 10). Below 0 is the best band, above the cap the worst.
-    /// </summary>
-    public static int FamilyBand(int condition, int maxCondition)
-    {
-        int max = Math.Max(1, maxCondition);
-        int clamped = Math.Max(0, Math.Min(max, condition));
-        return Math.Min(FamilyBands.Count - 1, clamped * FamilyBands.Count / (max + 1));
-    }
+    /// <summary>The pet corner's backdrop (the corner of the flat where the pet sleeps); without it the corner is a plain plate.</summary>
+    public const string PetCorner = "Home/pet_corner";
+
+    /// <summary>A toy's picture in the pet corner, by the toy's upgrade id (its Orders icon is <see cref="OrderIcon"/>).</summary>
+    public static string PetToy(string toyId) => "Home/toy_" + Key(toyId);
 
     /// <summary>
     /// The lookup rule: the first of <paramref name="candidates"/> that

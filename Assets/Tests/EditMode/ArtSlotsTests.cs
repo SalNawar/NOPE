@@ -110,33 +110,13 @@ public class ArtSlotsTests
         Assert.AreEqual("Forms/stamp_deny", ArtSlots.VerdictMark(false));
     }
 
-    [TestCase(0, 0)]
-    [TestCase(3, 0)]
-    [TestCase(4, 1)]
-    [TestCase(7, 1)]
-    [TestCase(8, 2)]
-    [TestCase(10, 2)]
-    [TestCase(-3, 0, Description = "below 0 is the best band")]
-    [TestCase(15, 2, Description = "above the cap is the worst band")]
-    public void FamilyBand_ThirdsOfTheCap(int condition, int band)
-    {
-        Assert.AreEqual(band, ArtSlots.FamilyBand(condition, 10));
-    }
-
     [Test]
-    public void FamilyBand_ACapBelowOneCountsAsOne()
+    public void PetSprite_KindAndLook_AndTheCorner()
     {
-        Assert.AreEqual(0, ArtSlots.FamilyBand(0, 0));
-        Assert.AreEqual(1, ArtSlots.FamilyBand(1, 0));
-        Assert.AreEqual(1, ArtSlots.FamilyBand(5, -2));
-    }
-
-    [Test]
-    public void FamilyPortrait_MemberAndBand()
-    {
-        Assert.AreEqual("Home/family_partner_well", ArtSlots.FamilyPortrait("Partner", 0, 10));
-        Assert.AreEqual("Home/family_kid_ill", ArtSlots.FamilyPortrait("Kid", 5, 10));
-        Assert.AreEqual("Home/family_kid_grave", ArtSlots.FamilyPortrait("Kid", 10, 10));
+        Assert.AreEqual("Home/pet_dog_idle", ArtSlots.PetSprite(PetKind.Dog, PetLook.Idle));
+        Assert.AreEqual("Home/pet_cat_sick", ArtSlots.PetSprite(PetKind.Cat, PetLook.Sick));
+        Assert.AreEqual("Home/pet_corner", ArtSlots.PetCorner);
+        Assert.AreEqual("Home/toy_toy_ball", ArtSlots.PetToy("toy_ball"));
     }
 
     [TestCase("TC-610", "tc610")]

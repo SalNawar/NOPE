@@ -148,6 +148,7 @@ public static class TimelineService
         HistoryService.ReportStrandings(world, news);
         desk.AddRange(Returns.Lines(world.returns, world.day, lib.News.returnedAccepted, lib.News.returnedDenied));
         AddDebtLine(world, lib, tomorrow, news);
+        AddPetLine(world, lib, tomorrow, news);
         ExpireEffects(world, tomorrow);
         BuildTomorrowPackage(world, lib, news, desk);
 
@@ -633,6 +634,14 @@ public static class TimelineService
         string count = DebtNews.YesterdayLine(lib.News.debtReliefCount, world.debtReliefYesterday);
         if (!string.IsNullOrEmpty(count))
             news.Add(count);
+    }
+
+    /// <summary>The morning paper's pet line (the Home pet spec PS1, PS6): the adoption the morning after it, the Animal Welfare Office's after a night the pet was left at the worst (PetContent.PaperLine; none otherwise).</summary>
+    private static void AddPetLine(WorldState world, ContentLibrarySO lib, int tomorrow, List<string> news)
+    {
+        string line = lib.Home.pet.PaperLine(world.pet, tomorrow);
+        if (!string.IsNullOrEmpty(line))
+            news.Add(line);
     }
 
     /// <summary>Removes the effects that have ended by the given day (one that starts later is kept).</summary>
