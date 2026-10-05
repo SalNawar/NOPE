@@ -28,7 +28,7 @@ public static class HallCityAuthoring
             importer.SaveAndReimport();
             return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
         }
-        var morning=Import("CityMorning",false);Import("FlyingTaxi",true);Import("FlyingServiceVan",true);
+        var morning=Import("CityMorningHighFloor",false);Import("FlyingTaxi",true);Import("FlyingServiceVan",true);
         Material Mat(string name,string shader)
         {
             string path=Folder+"/"+name+".mat";
@@ -119,5 +119,6 @@ Original window alpha and all 58 hall layers retained. Eight separate vehicles, 
         EditorApplication.update+=Tick;
     }
 }
+
 
 

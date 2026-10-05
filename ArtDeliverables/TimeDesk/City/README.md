@@ -18,3 +18,11 @@ Generation prompts:
 - [Flying service van](flying-service-van-prompt.txt)
 
 Validation: zero Unity errors after installation and compilation; eight separate vehicle renderers; original 2172x724 aperture, pivot and registration preserved. A subsequent four-state hall rebake retains the city material. The live traffic movement measurement and paired captures are stored beside this document.
+
+## High-floor perspective revision
+
+The active morning material now uses CityMorningHighFloor.png, a separate replacement candidate generated with the built-in image tool. It shows roof planes from above and separates dense residential (left), corporate/civic (center), and industrial (right) districts. Arbitrary bridges were removed. The previous CityMorning.png is retained for comparison. The current forward/left captures are refreshed for this candidate.
+
+The camera perspective is under visual review in the actual hall; this installation does not claim it is approved. Layered parallax remains pending while the view is checked. No rejected foreground layer is installed.
+
+Prompts: [district composition](high-floor-districts-prompt.txt), [selected backplate](high-floor-backplate-prompt.txt).

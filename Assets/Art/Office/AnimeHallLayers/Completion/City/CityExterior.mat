@@ -24,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _EveningCity:
-        m_Texture: {fileID: 2800000, guid: 094d5af90e512a04291e9fc7b3050bc9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5b40b8b34ab7323418eb4d05c2a59968, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -32,15 +32,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MorningCity:
-        m_Texture: {fileID: 2800000, guid: 094d5af90e512a04291e9fc7b3050bc9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5b40b8b34ab7323418eb4d05c2a59968, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NightCity:
-        m_Texture: {fileID: 2800000, guid: 094d5af90e512a04291e9fc7b3050bc9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5b40b8b34ab7323418eb4d05c2a59968, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoonCity:
-        m_Texture: {fileID: 2800000, guid: 094d5af90e512a04291e9fc7b3050bc9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5b40b8b34ab7323418eb4d05c2a59968, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
