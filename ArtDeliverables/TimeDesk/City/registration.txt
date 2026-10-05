@@ -1,0 +1,2 @@
+City: 2172x724; aperture sprite: (x:0.00, y:0.00, width:2172.00, height:724.00); pivot: (1086.00, 362.00); ppu: 100.
+Original window alpha and all 58 hall layers retained. Eight separate vehicles, two generated sprite types, receiver-mask clipping in both URP renderers. Morning art only; future time slots currently reference Morning explicitly.

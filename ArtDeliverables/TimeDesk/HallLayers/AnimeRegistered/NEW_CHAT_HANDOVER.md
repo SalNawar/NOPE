@@ -49,3 +49,11 @@ Detached animated hands were rejected and removed. Two full connected character 
 ## Four lighting states, 2026-10-05
 User authorized a morning/noon/evening/night 2D art bake blended by time. Installed HallBakedLighting + HallBakedCycle + NOPE/Hall Four State with eight source-aligned illumination/emission textures. 58 sprites remain separate. Existing clock feeds weights and character/desk colour. Native CPU bake rasterizes floor receivers, 39 ground casts and 14 lamp/screen/sign pools. Ground cast runtime object is disabled to prevent double darkening. Emission uses bright approved painting pixels near fixtures, not the coarse diffuser mask. Seven cycle tests pass; zero Unity errors; 45 camera/pan/lighting-off checks captured. See Completion/FourState/README.md and comparison.html. This is an authored 2D trial, not a physical 3D bake; inspect in Unity before claiming approved.
 
+
+## Morning city trial, 05 October 2026
+
+On codex/hall-art-completion, the exterior aperture now shows Assets/Art/Office/AnimeHallLayers/Completion/City/CityMorning.png through NOPE/Hall City Exterior. Original source-window sprite and alpha are preserved; the generated painting is not flattened into the hall. Source panorama and hall registration are both 2172x724. Eight separate flying vehicles use generated taxi and service-van sprites, moving through aperture-clipped lanes with reduced-motion support.
+
+Only MORNING city art is authored. Noon/evening/night city material slots currently reference Morning and must be replaced by matching versions of this same composition later. Existing hall/desk lighting retains its four-state blend. HallFourStateBaker preserves the installed city material.
+
+ArtDeliverables/TimeDesk/City contains exact prompts, perspective notes, live forward/left captures and a two-second vehicle movement measurement. Tools > Terminal Art > City > Install Morning City rebuilds the exterior material/traffic without rebuilding the hall or desk. Capture Morning And Traffic runs during a shift. Character-layer corrections remain pending; this pass changes only the exterior art and traffic.

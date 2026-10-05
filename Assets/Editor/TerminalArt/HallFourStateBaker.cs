@@ -159,7 +159,8 @@ public static class HallFourStateBaker
             material.SetTexture("_"+Names[i]+"Glow",AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/"+Names[i]+"Glow.png"));
         }
         material.SetVector("_StateWeights",new Vector4(0,1,0,0));material.SetFloat("_LightingAmount",1);
-        foreach(var layer in art.layers) if(layer.renderer!=null)layer.renderer.sharedMaterial=material;
+        foreach(var layer in art.layers)
+            if(layer.renderer!=null && layer.renderer.GetComponent<HallCityExterior>()==null)layer.renderer.sharedMaterial=material;
         if(shadow!=null)shadow.gameObject.SetActive(false); // Casts are now in the maps, never double-darkened.
         var controller=rig.GetComponent<HallBakedLighting>();if(controller==null)controller=rig.gameObject.AddComponent<HallBakedLighting>();
         controller.Configure(rig,art,material);
@@ -205,6 +206,7 @@ public static class HallFourStateBaker
         EditorApplication.update+=Tick;
     }
 }
+
 
 
 
