@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HallFourState
-  m_Shader: {fileID: 4800000, guid: 6ed08f720887b194b9499bd813136879, type: 3}
+  m_Name: Cleared rear waiting area
+  m_Shader: {fileID: 4800000, guid: 7c421db3cee80904eaa24209fa656e5c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -67,8 +67,18 @@ Material:
         m_Texture: {fileID: 2800000, guid: 79e8f660b929a3541b3b8491c63e3186, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _RemovedMask:
+        m_Texture: {fileID: 2800000, guid: 974692758e9528f41973fa5b9c132330, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaitingGuide:
+        m_Texture: {fileID: 2800000, guid: 0cff9cfc69f21174094ff5e261fcf839, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
-    m_Colors: []
+    m_Floats:
+    - _RestoreRemovedOnly: 1
+    m_Colors:
+    - _RepairRect: {r: 1920, g: 475, b: 2172, a: 724}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

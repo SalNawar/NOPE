@@ -1,28 +1,14 @@
-# Morning city outside AnimeHall
+# Three connected morning city panels — review prototype
 
-Generated with the built-in image tool. Exact prompts are saved beside this document. Native source assets are in Assets/Art/Office/AnimeHallLayers/Completion/City: CityMorning.png, FlyingTaxi.png and FlyingServiceVan.png.
+Active source: Assets/Art/Office/AnimeHallLayers/Completion/City/CityMorningConnected.png (2172x724). Native Unity slicing creates three adjacent 724x724 images: City_Left_Housing, City_Center_Civic, City_Right_Harbour. They share one source texture so edge pixels are continuous. Three aperture-clipped renderers use consecutive panel ranges [0,1/3], [1/3,2/3], [2/3,1]. No window repeats the complete skyline. Scale and vertical offset are identical across the panels.
 
-Perspective: a 2172x724 panorama matching the hall's existing full-canvas registration. An elevated occupied-floor view looks slightly down across nearer rooftops, while distant megatowers rise above an approximately 38%-height horizon. The prominent Deco tower and worn residential blocks are deliberately in the left third, where the tall side windows expose the city. The statue, domed civic landmark and industrial waterfront extend across the panorama, portions visible in the smaller far windows. The current hall architecture naturally occludes much of this wide city; the exterior never replaces the interior.
+Whole-exterior parallax relative to hall frames is present. Eight flying vehicles remain separately animated and clipped to the original aperture. This is a lightweight perspective/layout prototype; no building-depth reconstruction, smoke, moving clouds, sun animation, ships, ground traffic or building-detail animation is finished. Morning only; other city slots explicitly remain morning placeholders.
 
-Human near-future retro Deco city, 1980s anime linework, golden morning sunlight, vibrant teal/coral/cream surfaces. Working-class residential roofs, ornate civic infrastructure, wealthy corporate megatowers, and a dirty industrial waterfront have different silhouettes and construction histories. Grime, laundry, repairs and service infrastructure remain visible.
+The selected hall palette and revised waiting bay are described in ../Palette/README.md. Rear seating/dispenser and their obsolete contact patch are disabled, with a separate restoration layer. The furniture service additions use the solid right wall; windows remain clear.
 
-The original exterior sprite and its alpha are retained as the window aperture. A separate material samples the city painting through that aperture, preserving window frames, wall holes, railing and hall layers. Hall lighting rebakes preserve this exterior material. Morning is the only authored city lighting state; all four material slots temporarily reference Morning until matching noon/evening/night paintings are supplied. Do not call those three placeholders completed lighting variants.
+Reference direction: Cyberpunk 2077 megabuildings and sharply differentiated districts; Hong Kong density/harbour, New York skyline silhouettes, Tokyo infrastructure and signs, and industrial port fabric. Original human-only grounded retro anime / Art Deco city, vibrant colors, clear wealth contrasts, visible rooftop surfaces from an occupied high floor. The user is still reviewing scale, city identity and perspective.
 
-Eight separate flying-car sprites use two vehicle designs and different lanes, sizes, speeds and phases. Smaller traffic receives atmospheric tint. Window-mask clipping prevents the sprites drawing across the hall; reduced-motion preference freezes them. Aircraft are not baked into the skyline. This is moving 2D traffic over one city painting, with no reconstructed exterior building depth or roof occlusion.
+Primary visual reference: https://www.cyberpunk.net/en/news/50122/your-trip-to-night-city-best-routes-to-take-your-ride-for-a-spin
+Generation prompt: connected-city-prompt.txt. Prior candidates and prompts remain for comparison.
 
-Unity: Tools > Terminal Art > City > Install Morning City (Edit mode). In Play mode, Capture Morning And Traffic writes forward/left screenshots and a two-second movement check. The morning lighting preview uses the existing slider and leaves shift progress alone.
-
-Generation prompts:
-- [Morning panorama](morning-city-prompt.txt)
-- [Flying taxi](flying-taxi-prompt.txt)
-- [Flying service van](flying-service-van-prompt.txt)
-
-Validation: zero Unity errors after installation and compilation; eight separate vehicle renderers; original 2172x724 aperture, pivot and registration preserved. A subsequent four-state hall rebake retains the city material. The live traffic movement measurement and paired captures are stored beside this document.
-
-## High-floor perspective revision
-
-The active morning material now uses CityMorningHighFloor.png, a separate replacement candidate generated with the built-in image tool. It shows roof planes from above and separates dense residential (left), corporate/civic (center), and industrial (right) districts. Arbitrary bridges were removed. The previous CityMorning.png is retained for comparison. The current forward/left captures are refreshed for this candidate.
-
-The camera perspective is under visual review in the actual hall; this installation does not claim it is approved. Layered parallax remains pending while the view is checked. No rejected foreground layer is installed.
-
-Prompts: [district composition](high-floor-districts-prompt.txt), [selected backplate](high-floor-backplate-prompt.txt).
+Tools > Terminal Art > City > Install Morning City installs the three images in Edit mode. Capture Morning And Traffic in Play mode records forward/left views and a two-second traffic movement check. Palette > Capture Selected Palette renders four native lighting-state proofs without modifying gameplay progress.

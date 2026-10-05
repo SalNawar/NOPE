@@ -26,6 +26,7 @@ public sealed class HallBakedLighting : MonoBehaviour
             properties.SetVector("_StateWeights",new Vector4(weights.x,weights.y,weights.z,weights.w));
             properties.SetFloat("_LightingAmount",rig.Settings!=null && rig.Settings.lightingOn?art.lightingAmount:0);
             properties.SetFloat("_CloudMotion",MotionPreference.Reduced?0:1);
+            properties.SetFloat("_PaletteAmount",1);
             layer.renderer.SetPropertyBlock(properties);
         }
         if(art.daylight!=null)

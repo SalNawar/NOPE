@@ -11,7 +11,10 @@ public sealed class HallCityExterior : MonoBehaviour
     }
     public SpriteRenderer window;
     public Lane[] lanes;
+    public Sprite[] connectedPanels;
+    public SpriteRenderer[] panelRenderers;
     MaterialPropertyBlock properties;
+    AnimeHallPresentation presentation;
     void LateUpdate()=>Apply(Application.isPlaying?Time.time:0);
     public void Apply(float seconds)
     {
@@ -20,6 +23,18 @@ public sealed class HallCityExterior : MonoBehaviour
         var sprite=window.sprite;
         float ppu=sprite.pixelsPerUnit;
         bool reduced=MotionPreference.Reduced;
+        if(presentation==null)presentation=GetComponentInParent<AnimeHallPresentation>();
+        window.GetPropertyBlock(properties);
+        // Exterior movement relative to its fixed window frames. Traffic retains
+        // its own independent movement and aperture mask.
+        float pan=presentation!=null?(presentation.lookLeft-.5f)*(.05f/3f):0;
+        properties.SetFloat("_CityPan",pan);
+        window.SetPropertyBlock(properties);
+        if(panelRenderers!=null)foreach(var panel in panelRenderers)
+        {
+            if(panel==null)continue;
+            panel.GetPropertyBlock(properties);properties.SetFloat("_CityPan",pan);panel.SetPropertyBlock(properties);
+        }
         foreach(var lane in lanes)
         {
             if(lane.vehicle==null || lane.vehicle.sprite==null)continue;

@@ -44,6 +44,8 @@ Shader "NOPE/Hall Foreground Floor"
     // canvas edge. Both sides share the same transform during pan and tilt.
     float sampleX=_HallFloorCanvas.z+(canvas.x-_HallFloorCanvas.z)*seamDepth/depth;
     half3 colour=SAMPLE_TEXTURE2D(_PaintedReference,sampler_PaintedReference,float2(saturate(sampleX/_HallFloorCanvas.x),2/_HallFloorCanvas.y)).rgb*_HallFloorShade.rgb;
+
+
     if(_HallFloorHasBackdrop>0.5)
     {
      float3 local=float3((sampleX-_HallFloorRegistration.y)/_HallFloorRegistration.x,(2-_HallFloorRegistration.z)/_HallFloorRegistration.x,0);

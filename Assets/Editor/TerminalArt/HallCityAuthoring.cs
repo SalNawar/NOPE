@@ -28,7 +28,7 @@ public static class HallCityAuthoring
             importer.SaveAndReimport();
             return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
         }
-        var morning=Import("CityMorningHighFloor",false);Import("FlyingTaxi",true);Import("FlyingServiceVan",true);
+        var morning=Import("CityMorningConnected",false);Import("FlyingTaxi",true);Import("FlyingServiceVan",true);
         Material Mat(string name,string shader)
         {
             string path=Folder+"/"+name+".mat";
@@ -64,6 +64,7 @@ public static class HallCityAuthoring
                 xStart=left?i<4?570:1250:-60,xEnd=left?-60:i<4?570:1250,
                 yPixels=heights[i],widthPixels=widths[i],speed=i<4?17+i*2:10+i,phase=phases[i]};
         }
+        InstallPanels(art,window,controller,city,morning);
         controller.Apply(0);EditorUtility.SetDirty(controller);
         EditorSceneManager.MarkSceneDirty(window.gameObject.scene);AssetDatabase.SaveAssets();EditorSceneManager.SaveScene(window.gameObject.scene);
         Directory.CreateDirectory(Report);
@@ -118,7 +119,33 @@ Original window alpha and all 58 hall layers retained. Eight separate vehicles, 
         }
         EditorApplication.update+=Tick;
     }
+    static void InstallPanels(AnimeHallPresentation art,SpriteRenderer window,HallCityExterior controller,Material first,Texture2D image)
+    {
+        var importer=(TextureImporter)AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(image));
+        importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Multiple;
+        var slices=new SpriteMetaData[3];
+        for(int i=0;i<3;i++)slices[i]=new SpriteMetaData{name=new[]{"City_Left_Housing","City_Center_Civic","City_Right_Harbour"}[i],
+            rect=new Rect(image.width*i/3f,0,image.width/3f,image.height),alignment=(int)SpriteAlignment.Center,pivot=new Vector2(.5f,.5f)};
+        importer.spritesheet=slices;var textureSettings=new TextureImporterSettings();importer.ReadTextureSettings(textureSettings);textureSettings.spriteMeshType=SpriteMeshType.FullRect;importer.SetTextureSettings(textureSettings);importer.SaveAndReimport();
+        controller.connectedPanels=AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(image)).OfType<Sprite>().OrderBy(s=>s.rect.x).ToArray();
+        if(controller.connectedPanels.Length!=3)throw new InvalidOperationException("Expected three connected city images.");
+        controller.panelRenderers=new SpriteRenderer[3];controller.panelRenderers[0]=window;
+        first.SetVector("_PanelRange",new Vector4(0,1f/3,0,0));EditorUtility.SetDirty(first);
+        for(int i=1;i<3;i++)
+        {
+            string name="Connected city panel "+i;var child=window.transform.Find(name);
+            if(child==null){var go=new GameObject(name);go.transform.SetParent(window.transform,false);child=go.transform;}
+            child.localPosition=Vector3.zero;child.localRotation=Quaternion.identity;child.localScale=Vector3.one;
+            child.gameObject.layer=window.gameObject.layer;
+            var r=child.GetComponent<SpriteRenderer>();if(r==null)r=child.gameObject.AddComponent<SpriteRenderer>();
+            string path=Folder+"/CityPanel"+i+".mat";var mat=AssetDatabase.LoadAssetAtPath<Material>(path);
+            if(mat==null){mat=new Material(first);AssetDatabase.CreateAsset(mat,path);}else mat.CopyPropertiesFromMaterial(first);
+            mat.SetVector("_PanelRange",new Vector4(i/3f,(i+1)/3f,0,0));EditorUtility.SetDirty(mat);
+            r.sprite=window.sprite;r.sharedMaterial=mat;r.sortingLayerID=window.sortingLayerID;r.sortingOrder=window.sortingOrder;
+            controller.panelRenderers[i]=r;
+            string id=(59+i)+" Connected city panel "+i;
+            if(!art.layers.Any(l=>l.id==id))art.layers=art.layers.Concat(new[]{new AnimeHallPresentation.Layer{id=id,renderer=r}}).ToArray();
+        }
+        EditorUtility.SetDirty(art);
+    }
 }
-
-
-
