@@ -15,3 +15,7 @@ MonoBehaviour:
   id: egypt
   displayName: Egypt
   leaderEffect: {fileID: 11400000, guid: 1edb0ebb45e7ac845b7ac23a97dcd87c, type: 2}
+  passport:
+    cover: '#1F4A2E'
+    emblem: WingedSun
+    code: EGY

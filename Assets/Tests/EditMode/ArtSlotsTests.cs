@@ -51,6 +51,20 @@ public class ArtSlotsTests
         CollectionAssert.AreEqual(new[] { ArtSlots.AgencyFace }, ArtSlots.PaperFaces(null));
     }
 
+    [Test]
+    public void PaperFaces_OfAPassport_TryItsHoldersNationsPageFirst()
+    {
+        CollectionAssert.AreEqual(new[] { "Forms/paper_tc101_egypt", "Forms/paper_tc101", ArtSlots.AgencyFace }, ArtSlots.PaperFaces("TC-101", "egypt"));
+        CollectionAssert.AreEqual(new[] { "Forms/paper_tc101", ArtSlots.AgencyFace }, ArtSlots.PaperFaces("TC-101", ""), "no nation: the kind's face");
+    }
+
+    [Test]
+    public void Emblem_IsNamedByTheEmblemsKey()
+    {
+        Assert.AreEqual("Forms/emblem_wingedsun", ArtSlots.Emblem("WingedSun"));
+        Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.Emblem("Crown")), "drawn on the desk papers: imported with mipmaps");
+    }
+
     [TestCase("investigation", "Desktop/icon_investigation")]
     [TestCase("citizen_account", "Desktop/icon_citizen_account")]
     public void DesktopIcon(string appId, string expected)

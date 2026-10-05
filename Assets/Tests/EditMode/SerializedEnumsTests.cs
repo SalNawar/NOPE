@@ -382,16 +382,23 @@ public class SerializedEnumsTests
         Assert.AreEqual(3, (int)FormFrame.Framed);
         Assert.AreEqual(4, (int)FormFrame.Ticket);
         Assert.AreEqual(5, (int)FormFrame.BottomBand);
-        Assert.AreEqual(6, System.Enum.GetValues(typeof(FormFrame)).Length, "a new member is appended here too");
+        Assert.AreEqual(6, (int)FormFrame.Booklet);
+        Assert.AreEqual(7, (int)FormFrame.Card);
+        Assert.AreEqual(8, (int)FormFrame.Folded);
+        Assert.AreEqual(9, System.Enum.GetValues(typeof(FormFrame)).Length, "a new member is appended here too");
     }
 
-    /// <summary>FormBlockKind: stored in every form asset; 14 and 15 are held for the Internet's sites, 16 is the Seal Register's grid (the document design spec, D4).</summary>
+    /// <summary>FormBlockKind: stored in every form asset; 14 and 15 are held for the Internet's sites, 16 is the Seal Register's grid (the document design spec, D4), 17 to 20 the travel documents' (the travel documents spec, TD1, TD3).</summary>
     [Test]
     public void FormBlockKind_KeepsItsSerializedInts()
     {
         Assert.AreEqual(0, (int)FormBlockKind.Header);
         Assert.AreEqual(13, (int)FormBlockKind.PageBreak);
         Assert.AreEqual(16, (int)FormBlockKind.SealGrid);
+        Assert.AreEqual(17, (int)FormBlockKind.Fold);
+        Assert.AreEqual(18, (int)FormBlockKind.Mrz);
+        Assert.AreEqual(19, (int)FormBlockKind.Visa);
+        Assert.AreEqual(20, (int)FormBlockKind.Watermark);
     }
 
     /// <summary>ConfrontOutcome: stored in the voice rows (world_source.json interview.confront.replies and interview.voices.confront; wave 5, lesson 3).</summary>

@@ -7,7 +7,9 @@ using System.Collections.Generic;
 /// (agency.offices; the document design spec, D4), the template's form number
 /// and name, the paper's serial, the photo, and each field's label and value,
 /// always in English (forms are diegetic), each box keeping the room its
-/// longest value needs (FieldReserve; D2). The desk paper prints it, and the
+/// longest value needs (FieldReserve; D2); a passport also its holder's
+/// nation's cover and emblem and its machine-readable zone (the travel
+/// documents spec, TD3). The desk paper prints it, and the
 /// PC's scanned copy draws it (phase 5). Probe and Problems are the one form
 /// check Build Office UI and the content validator run on every template (FO10).
 /// </summary>
@@ -26,8 +28,8 @@ public sealed class DocumentForm
     /// <summary>What it shows.</summary>
     public FormData Data { get; }
 
-    /// <summary>The form <paramref name="doc"/> prints, with <paramref name="agency"/>'s name and its office's (the programme's without one), each box keeping the room of its category's longest value (an origin at <paramref name="longestOrigin"/> characters: ContentLibrarySO.LongestOriginLabel); null without a template.</summary>
-    public static DocumentForm For(DocumentInstance doc, AgencyContent agency, int longestOrigin)
+    /// <summary>The form <paramref name="doc"/> prints, with <paramref name="agency"/>'s name and its office's (the programme's without one), each box keeping the room of its category's longest value (an origin at <paramref name="longestOrigin"/> characters: ContentLibrarySO.LongestOriginLabel); a booklet in the cover and emblem of <paramref name="passportNation"/> (CaseInstance.passportNation; none: the form's own cover), and a form with a machine-readable zone the zone of its printed values (MachineZone, the nation's code); null without a template.</summary>
+    public static DocumentForm For(DocumentInstance doc, AgencyContent agency, int longestOrigin, NationSO passportNation = null)
     {
         if (doc == null || doc.template == null)
             return null;
@@ -44,7 +46,35 @@ public sealed class DocumentForm
         data.FieldValues = values;
         FieldSpecsOf(doc.template, longestOrigin, out _, out List<int> longest);
         data.FieldReserve = FormLayout.Reserve(values, longest);
+        PassportLook passport = passportNation != null ? passportNation.passport : null;
+        if (passport != null)
+        {
+            data.Cover = passport.cover ?? string.Empty;
+            data.Emblem = passport.emblem ?? string.Empty;
+            data.Issuer = passportNation.id ?? string.Empty;
+        }
+        if (HasZone(doc.template.form))
+            data.Mrz = MachineZone.Lines(passport != null ? passport.code : string.Empty, ValueOf(doc, ClueCategory.Name), ValueOf(doc, ClueCategory.CitizenId),
+                                         ValueOf(doc, ClueCategory.BirthDate), ValueOf(doc, ClueCategory.Expiry));
         return new DocumentForm(doc.template.form, data);
+    }
+
+    /// <summary>True when <paramref name="spec"/> prints a machine-readable zone (an Mrz block).</summary>
+    private static bool HasZone(FormSpec spec)
+    {
+        foreach (FormBlock b in spec != null && spec.blocks != null ? spec.blocks : new FormBlock[0])
+            if (b != null && b.kind == FormBlockKind.Mrz)
+                return true;
+        return false;
+    }
+
+    /// <summary>The value of <paramref name="doc"/>'s first field of <paramref name="category"/>, or blank.</summary>
+    private static string ValueOf(DocumentInstance doc, ClueCategory category)
+    {
+        foreach (DocumentField f in doc.fields)
+            if (f != null && f.category == category)
+                return f.value ?? string.Empty;
+        return string.Empty;
     }
 
     /// <summary>
@@ -89,6 +119,8 @@ public sealed class DocumentForm
         probe.FieldValues = labels.ConvertAll(_ => string.Empty);
         FormData full = FormLayout.Probe(probe, longest);
         full.FieldReserve = full.FieldValues;
+        if (HasZone(spec))
+            full.Mrz = MachineZone.Lines("XXX", full.FieldValues.Count > 0 ? full.FieldValues[0] : string.Empty, string.Empty, string.Empty, string.Empty);
         foreach (string p in FormLayout.Check(spec, full, metrics, measure))
             problems.Add(p);
         return problems;

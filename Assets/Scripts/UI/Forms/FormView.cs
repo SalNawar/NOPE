@@ -13,9 +13,10 @@ using UnityEngine.UI;
 /// follows it (FormLayout.Layout): a document copy takes 520 u, a page H =
 /// 679 u tall (the PC UX redesign: a split pane holds it whole); a page kind in the Investigation app's pane takes the pane's
 /// width, so its table cells reach 13 px at 720p (from about 564 u); a flow
-/// page grows with its rows. A document whose look is narrower (the document
-/// design spec, D1: FormLook.aspect) is drawn that much narrower at the same
-/// page height, so its print keeps its size. The view draws that placed form:
+/// page grows with its rows. Every document is drawn as wide and prints at
+/// one size (FormLayout.PrintUnit; the travel documents spec, TD2): a look
+/// narrower than the style's (FormLook.aspect) is a longer page, a wider one
+/// (a ticket, a card) a shorter one. The view draws that placed form:
 /// the paper (its kind's face on a document when the art exists,
 /// ArtSlots.PaperFaces, else the look's tint), the seal faint behind the
 /// header, or each named seal (the issuing office's in a document's header,
@@ -121,7 +122,19 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// <summary>The named seals' pooled images (clones of the seal) and their legends.</summary>
     private readonly List<(Image mark, TextMeshProUGUI legend)> _seals = new List<(Image, TextMeshProUGUI)>();
 
-    /// <summary>A document's width at the style's aspect (the width of the first document shown), which a narrower look scales down.</summary>
+    /// <summary>The emblems' pooled images (clones of the seal among the texts; the travel documents spec, TD3).</summary>
+    private readonly List<Image> _emblems = new List<Image>();
+
+    /// <summary>The watermarks' pooled images (clones of the seal just over the fills, under the slots' tints, the lines and the texts; TD1).</summary>
+    private readonly List<Image> _watermarks = new List<Image>();
+
+    /// <summary>A card's rounded paper (a 9-sliced sprite painted once; TD1).</summary>
+    private static Sprite _cardPaper;
+
+    /// <summary>The card paper sprite's side and its corner's radius, in pixels.</summary>
+    private const int CardPaperSize = 64, CardPaperCorner = 24;
+
+    /// <summary>Every document's width (the width of the first document shown): a later Show without a width draws at it.</summary>
     private float _documentWidth;
     private readonly List<SlotPart> _parts = new List<SlotPart>();
     private readonly List<LinkPart> _links = new List<LinkPart>();
@@ -216,7 +229,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         {
             if (_documentWidth <= 0f)
                 _documentWidth = width > 0f ? width : rt.rect.width;
-            width = (width > 0f ? width : _documentWidth) * look.AspectOr(style.metrics.aspect) / style.metrics.aspect;
+            width = width > 0f ? width : _documentWidth;
         }
         if (width > 0f)
             rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
@@ -225,15 +238,21 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         _form = FormLayout.Layout(spec, data, rt.rect.width, style.metrics, _measure, linkHint != null ? linkSize : 0f);
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _form.Height);
         FormPalette palette = look.Palette(style.Palette());
-        ShowArt(spec != null && spec.fixedPage && data != null ? data.FormNumber : null,
-                string.IsNullOrEmpty(look.paper) ? style.paper : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f));
+        ShowArt(spec != null && spec.fixedPage && data != null ? data.FormNumber : null, data != null ? data.Issuer : null,
+                string.IsNullOrEmpty(look.paper) ? style.paper : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f),
+                PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit));
 
-        int texts = 0, seals = 0;
+        int texts = 0, seals = 0, emblems = 0, watermarks = 0;
         bool sealShown = false, photoShown = false;
+        Color cover = EmblemArt.Ink(data != null ? data.Cover : null, new Color(palette.Accent.R, palette.Accent.G, palette.Accent.B, 1f));
         foreach (FormItem item in _form.Items)
         {
             if (item.Kind == FormItemKind.Text)
                 Print(texts++, item);
+            else if (item.Kind == FormItemKind.Emblem && seal != null)
+                ShowMark(_emblems, emblems++, textsRoot, item.Rect, EmblemArt.Sprite(item.Text), cover);
+            else if (item.Kind == FormItemKind.Watermark && seal != null)
+                ShowWatermark(watermarks++, item, cover);
             else if (item.Kind == FormItemKind.Seal && seal != null && Seals.TryParse(item.Text, out Seal mark))
                 ShowSeal(seals++, item.Rect, mark);
             else if (item.Kind == FormItemKind.Seal && seal != null)
@@ -252,6 +271,10 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
             _texts[i].gameObject.SetActive(false);
         for (int i = seals; i < _seals.Count; i++)
             _seals[i].mark.gameObject.SetActive(false);
+        for (int i = emblems; i < _emblems.Count; i++)
+            _emblems[i].gameObject.SetActive(false);
+        for (int i = watermarks; i < _watermarks.Count; i++)
+            _watermarks[i].gameObject.SetActive(false);
         if (seal != null)
             seal.gameObject.SetActive(sealShown);
         if (photoFrame != null)
@@ -317,18 +340,24 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
 
     /// <summary>
     /// The form's art when delivered (redesign phase 27, ArtSlots): a
-    /// document's face by <paramref name="formNumber"/> (its kind's, else the
-    /// agency's plain face) on the paper, the agency seal's on the seal, the
+    /// document's face by <paramref name="formNumber"/> (a passport's for its
+    /// holder's nation, <paramref name="issuer"/>, first; then its kind's, else
+    /// the agency's plain face) on the paper, the agency seal's on the seal, the
     /// photo frame's over the photo. A missing file keeps a plain paper in
-    /// <paramref name="tint"/> (the look's, else the style's), the code-drawn
-    /// ring and no frame; a page kind (no number) keeps the plain paper.
+    /// <paramref name="tint"/> (the look's, else the style's), its corners
+    /// rounded by <paramref name="corner"/> (a card's; the travel documents
+    /// spec, TD1), the code-drawn ring and no frame; a page kind (no number)
+    /// keeps the plain paper.
     /// </summary>
-    private void ShowArt(string formNumber, Color tint)
+    private void ShowArt(string formNumber, string issuer, Color tint, float corner)
     {
         if (paper != null)
         {
-            Sprite face = formNumber != null ? SlotArt.Sprite(ArtSlots.PaperFaces(formNumber).ToArray()) : null;
-            paper.sprite = face;
+            Sprite face = formNumber != null ? SlotArt.Sprite(ArtSlots.PaperFaces(formNumber, issuer).ToArray()) : null;
+            bool rounded = face == null && corner > 0f;
+            paper.sprite = face != null ? face : rounded ? CardPaper() : null;
+            paper.type = rounded ? Image.Type.Sliced : Image.Type.Simple;
+            paper.pixelsPerUnitMultiplier = rounded ? CardPaperCorner / corner : 1f;
             paper.color = face != null ? Color.white : tint;
         }
         if (seal != null)
@@ -396,6 +425,64 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         text.color = SealArt.Ink(mark.Ink);
         text.alignment = TextAlignmentOptions.Center;
         Place(text.rectTransform, rect);
+    }
+
+    /// <summary>Pooled image <paramref name="index"/> of <paramref name="pool"/> (a clone of the seal under <paramref name="parent"/>) showing <paramref name="sprite"/> in <paramref name="ink"/> over <paramref name="rect"/>; hidden without a sprite.</summary>
+    private Image ShowMark(List<Image> pool, int index, Transform parent, FaceRect rect, Sprite sprite, Color ink)
+    {
+        if (index >= pool.Count)
+        {
+            Image clone = Instantiate(seal, parent != null ? parent : seal.transform.parent);
+            clone.name = pool == _emblems ? "Emblem" : "Watermark";
+            clone.raycastTarget = false;
+            pool.Add(clone);
+        }
+        Image image = pool[index];
+        image.gameObject.SetActive(sprite != null);
+        image.sprite = sprite;
+        image.preserveAspect = true;
+        image.color = ink;
+        Place(image.rectTransform, rect);
+        return image;
+    }
+
+    /// <summary>
+    /// Watermark <paramref name="index"/> (the travel documents spec, TD1):
+    /// a seal's outline in its ink, or an emblem in <paramref name="cover"/>,
+    /// faint (EmblemArt.WatermarkAlpha), just over the fills (so the boxes
+    /// never hide it) and under the slots' tints, the lines and the texts.
+    /// </summary>
+    private void ShowWatermark(int index, FormItem item, Color cover)
+    {
+        bool isSeal = Seals.TryParse(item.Text, out Seal mark);
+        Sprite sprite = isSeal ? SealArt.Sprite(mark.Shape) : EmblemArt.Sprite(item.Text);
+        Color ink = isSeal ? SealArt.Ink(mark.Ink) : cover;
+        ink.a = EmblemArt.WatermarkAlpha;
+        Image image = ShowMark(_watermarks, index, seal.transform.parent, item.Rect, sprite, ink);
+        image.transform.SetSiblingIndex((fills != null ? fills.transform : seal.transform).GetSiblingIndex() + 1);
+    }
+
+    /// <summary>A card's paper: a white rounded square, 9-sliced at its corners, painted once.</summary>
+    private static Sprite CardPaper()
+    {
+        if (_cardPaper != null)
+            return _cardPaper;
+        var texture = new Texture2D(CardPaperSize, CardPaperSize, TextureFormat.RGBA32, false) { name = "CardPaper", wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Bilinear };
+        var pixels = new Color32[CardPaperSize * CardPaperSize];
+        float r = CardPaperCorner;
+        for (int y = 0; y < CardPaperSize; y++)
+            for (int x = 0; x < CardPaperSize; x++)
+            {
+                float cx = Mathf.Clamp(x + 0.5f, r, CardPaperSize - r), cy = Mathf.Clamp(y + 0.5f, r, CardPaperSize - r);
+                float d = Mathf.Sqrt((x + 0.5f - cx) * (x + 0.5f - cx) + (y + 0.5f - cy) * (y + 0.5f - cy));
+                pixels[y * CardPaperSize + x] = new Color32(255, 255, 255, (byte)(255f * Mathf.Clamp01(r + 0.5f - d)));
+            }
+        texture.SetPixels32(pixels);
+        texture.Apply(false, true);
+        _cardPaper = UnityEngine.Sprite.Create(texture, new Rect(0f, 0f, CardPaperSize, CardPaperSize), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect,
+                                               new Vector4(CardPaperCorner, CardPaperCorner, CardPaperCorner, CardPaperCorner));
+        _cardPaper.name = "CardPaper";
+        return _cardPaper;
     }
 
     /// <summary>Shows the traveller's photo in the photo cell (a null look empties it).</summary>
@@ -466,7 +553,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         text.name = item.Role.ToString();
         _measure.SetFont(text, item.Text);
         TmpFormText.Style(text, item.Role, item.Size);
-        text.text = item.Text;
+        text.text = TmpFormText.Printed(item.Role, item.Text);
         FitWords(text, item);
         text.color = style.Ink(item.Role);
         text.alignment = item.Align == FormTextAlign.Right ? TextAlignmentOptions.TopRight
@@ -475,25 +562,13 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         Place(text.rectTransform, item.Rect);
     }
 
-    /// <summary>The least share of its size a printed text shrinks to so that its widest word fits its box (wave 5 A3: "TRANSPON / DER CLASS" never breaks mid-word).</summary>
-    private const float WordFitFloor = 0.6f;
-
-    /// <summary>Where a printed text's words part (a space, a line break).</summary>
-    private static readonly char[] WordBreaks = { ' ', '\n' };
-
     /// <summary>Shrinks printed <paramref name="text"/> (already styled as <paramref name="item"/>) just enough that its widest word fits the item's box, so a word wraps whole and never breaks in the middle; the box's place and size stay the layout's (the document design spec D2). Measured on the hidden measure text (a form is often filled while inactive).</summary>
     private void FitWords(TMP_Text text, FormItem item)
     {
-        float width = item.Rect.Width;
-        if (string.IsNullOrEmpty(item.Text) || width <= 0f || _measureText == null)
+        if (_measureText == null)
             return;
         _measure.SetFont(_measureText, item.Text);
-        TmpFormText.Style(_measureText, item.Role, item.Size);
-        float widest = 0f;
-        foreach (string word in item.Text.Split(WordBreaks, StringSplitOptions.RemoveEmptyEntries))
-            widest = Mathf.Max(widest, _measureText.GetPreferredValues(word, float.PositiveInfinity, float.PositiveInfinity).x);
-        if (widest > width)
-            text.fontSize *= Mathf.Max(WordFitFloor, width / widest * 0.98f);
+        text.fontSize *= TmpFormText.WordFit(_measureText, item.Text, item.Role, item.Size, item.Rect.Width);
     }
 
     /// <summary>Arms pooled button <paramref name="index"/> over slot <paramref name="slot"/>'s box, clear and unpicked.</summary>

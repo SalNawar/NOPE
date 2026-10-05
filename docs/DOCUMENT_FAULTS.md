@@ -14,7 +14,10 @@ fields its rows name (`CaseFactory.CanonFields`). Generate World and Validate
 Content Library refuse a canon that names a field its form does not print, a lie
 or directive that does not exist, or that leaves out a field a maker could
 write (`DocumentContentChecks`). The tables below are generated from the
-templates and the canon; edit the content, not this page.
+templates and the canon; edit the content, not this page. The travel documents
+(2026-10-05) renamed four forms (TC-101 Passport, TC-230 Entry Ticket, TC-520
+Work Permit, TC-610 Travel Permit) and added TC-240 Transponder Card, which no
+traveller carries yet, so the canon names none of its fields.
 
 **How to read a fault.** One wrong decision is one fine, whatever the fault
 (Saleh's rule 1). Every fault is proven the same way: pick the value on the
@@ -37,21 +40,21 @@ tell (`Forgery`).
 
 | Form | Field | Category | Checked against | Faults the canon can print there | Status |
 |---|---|---|---|---|---|
-| TC-101 Leisure Departure Visa | Full Name | Name | the record lookup (Citizen Records by ID, else name) | none | lookup key (never a tell: Forgery) |
-| TC-101 Leisure Departure Visa | Citizen ID | CitizenId | Citizen Account / Displacement Registry; the other papers | DoctoredIdentity/doctoredId | checked |
-| TC-101 Leisure Departure Visa | Date of Birth | BirthDate | Citizen Account / Registry · Born | DoctoredIdentity/doctoredYear | checked |
-| TC-101 Leisure Departure Visa | Destination | Destination | the spoken claim; Citizen Account · Forms on file (a contract's worksite); Registry · origin | none | deliberate decoy (checkable, never faulted) |
-| TC-101 Leisure Departure Visa | Visa Class | AccountStatus | Citizen Account · Status | DebtorPosingAsTourist/debtorAsPoor, DebtorPosingAsTourist/debtorAsRich, PoorPosingAsRich/richBorrowed, PoorPosingAsRich/richForged | checked |
-| TC-101 Leisure Departure Visa | Valid Until | Expiry | the desk calendar (today's rules: paper dates) | ExpiredPaper | checked |
-| TC-101 Leisure Departure Visa | Issuing Seal | Seal | Seal Register (the issuing office's seal) | ForgedSeal/ink, ForgedSeal/legend, ForgedSeal/shape | checked |
-| TC-101 Leisure Departure Visa | Photo | Photo | the traveller at the desk (Look > Their face) | SwappedPhoto/photo | checked |
-| TC-230 Departure Manifest | Citizen ID | CitizenId | Citizen Account / Displacement Registry; the other papers | PoorPosingAsRich/richBorrowed | checked |
-| TC-230 Departure Manifest | Transponder | TransponderId | Citizen Account · Transponder; the other papers; today's recalls | PoorPosingAsRich/richBorrowed, RecalledTransponder | checked |
-| TC-230 Departure Manifest | Transponder Class | TransponderClass | Citizen Account · Transponder class; today's rules (paper set) | DebtorPosingAsTourist/debtorAsRich, IncompletePapers, PoorPosingAsRich/richBorrowed, PoorPosingAsRich/richForged | checked |
-| TC-230 Departure Manifest | Currency Carried | Currency | Currency Ledger (the claimed place's row) | Smuggling/tell | checked |
-| TC-230 Departure Manifest | Declared Effects | Technology | Index of Devices (the claimed place's row) | Smuggling/tell | checked |
-| TC-230 Departure Manifest | Departure | DepartureDate | the desk calendar (today's rules: paper dates) | WrongDepartureDate | checked |
-| TC-230 Departure Manifest | Issuing Seal | Seal | Seal Register (the issuing office's seal) | ForgedSeal/ink, ForgedSeal/legend, ForgedSeal/shape | checked |
+| TC-101 Passport | Full Name | Name | the record lookup (Citizen Records by ID, else name) | none | lookup key (never a tell: Forgery) |
+| TC-101 Passport | Citizen ID | CitizenId | Citizen Account / Displacement Registry; the other papers | DoctoredIdentity/doctoredId | checked |
+| TC-101 Passport | Date of Birth | BirthDate | Citizen Account / Registry · Born | DoctoredIdentity/doctoredYear | checked |
+| TC-101 Passport | Destination | Destination | the spoken claim; Citizen Account · Forms on file (a contract's worksite); Registry · origin | none | deliberate decoy (checkable, never faulted) |
+| TC-101 Passport | Visa Class | AccountStatus | Citizen Account · Status | DebtorPosingAsTourist/debtorAsPoor, DebtorPosingAsTourist/debtorAsRich, PoorPosingAsRich/richBorrowed, PoorPosingAsRich/richForged | checked |
+| TC-101 Passport | Valid Until | Expiry | the desk calendar (today's rules: paper dates) | ExpiredPaper | checked |
+| TC-101 Passport | Issuing Seal | Seal | Seal Register (the issuing office's seal) | ForgedSeal/ink, ForgedSeal/legend, ForgedSeal/shape | checked |
+| TC-101 Passport | Photo | Photo | the traveller at the desk (Look > Their face) | SwappedPhoto/photo | checked |
+| TC-230 Entry Ticket | Citizen ID | CitizenId | Citizen Account / Displacement Registry; the other papers | PoorPosingAsRich/richBorrowed | checked |
+| TC-230 Entry Ticket | Transponder | TransponderId | Citizen Account · Transponder; the other papers; today's recalls | PoorPosingAsRich/richBorrowed, RecalledTransponder | checked |
+| TC-230 Entry Ticket | Transponder Class | TransponderClass | Citizen Account · Transponder class; today's rules (paper set) | DebtorPosingAsTourist/debtorAsRich, IncompletePapers, PoorPosingAsRich/richBorrowed, PoorPosingAsRich/richForged | checked |
+| TC-230 Entry Ticket | Currency Carried | Currency | Currency Ledger (the claimed place's row) | Smuggling/tell | checked |
+| TC-230 Entry Ticket | Declared Effects | Technology | Index of Devices (the claimed place's row) | Smuggling/tell | checked |
+| TC-230 Entry Ticket | Departure | DepartureDate | the desk calendar (today's rules: paper dates) | WrongDepartureDate | checked |
+| TC-230 Entry Ticket | Issuing Seal | Seal | Seal Register (the issuing office's seal) | ForgedSeal/ink, ForgedSeal/legend, ForgedSeal/shape | checked |
 | TC-310 Stranding Waiver | Signatory | Name | the record lookup (Citizen Records by ID, else name) | none | lookup key (never a tell: Forgery) |
 | TC-310 Stranding Waiver | Citizen ID | CitizenId | Citizen Account / Displacement Registry; the other papers | none | deliberate decoy (checkable, never faulted) |
 | TC-310 Stranding Waiver | Transponder | TransponderId | Citizen Account · Transponder; the other papers; today's recalls | FakeWaiver/transponder | checked |
@@ -78,22 +81,22 @@ tell (`Forgery`).
 | TC-417 Travel Insurance Certificate | Policy No. | PolicyNo | Citizen Account · Forms on file | ForgedProof/policy | checked |
 | TC-417 Travel Insurance Certificate | Valid Until | Expiry | the desk calendar (today's rules: paper dates) | ExpiredPaper | checked |
 | TC-417 Travel Insurance Certificate | Issuing Seal | Seal | Seal Register (the issuing office's seal) | ForgedSeal/ink, ForgedSeal/legend, ForgedSeal/shape | checked |
-| TC-520 Labour Contract | Worker | Name | the record lookup (Citizen Records by ID, else name) | none | lookup key (never a tell: Forgery) |
-| TC-520 Labour Contract | Citizen ID | CitizenId | Citizen Account / Displacement Registry; the other papers | none | deliberate decoy (checkable, never faulted) |
-| TC-520 Labour Contract | Employer | Employer | Citizen Account · Forms on file (the contract) | ForgedContract/employer | checked |
-| TC-520 Labour Contract | Worksite | Destination | the spoken claim; Citizen Account · Forms on file (a contract's worksite); Registry · origin | ForgedContract/worksite | checked |
-| TC-520 Labour Contract | Term | Term | Citizen Account · Forms on file (the contract) | ForgedContract/term | checked |
-| TC-520 Labour Contract | Day Wage | Wage | Citizen Account · Forms on file (the contract) | ForgedContract/wage | checked |
-| TC-520 Labour Contract | Issuing Seal | Seal | Seal Register (the issuing office's seal) | ForgedSeal/ink, ForgedSeal/legend, ForgedSeal/shape | checked |
-| TC-520 Labour Contract | Photo | Photo | the traveller at the desk (Look > Their face) | SwappedPhoto/photo | checked |
-| TC-610 Displacement Certificate | Full Name | Name | the record lookup (Citizen Records by ID, else name) | none | lookup key (never a tell: Forgery) |
-| TC-610 Displacement Certificate | Displacement No. | CitizenId | Citizen Account / Displacement Registry; the other papers | none | deliberate decoy (checkable, never faulted) |
-| TC-610 Displacement Certificate | Date of Birth | BirthDate | Citizen Account / Registry · Born | FakeDisplaced/tell, FalseOrigin/tell | checked |
-| TC-610 Displacement Certificate | Origin | Destination | the spoken claim; Citizen Account · Forms on file (a contract's worksite); Registry · origin | none | deliberate decoy (checkable, never faulted) |
-| TC-610 Displacement Certificate | Incident | Incident | Displacement Registry · Incident | none | deliberate decoy (checkable, never faulted) |
-| TC-610 Displacement Certificate | Valid Until | Expiry | the desk calendar (today's rules: paper dates) | ExpiredPaper | checked |
-| TC-610 Displacement Certificate | Issuing Seal | Seal | Seal Register (the issuing office's seal) | ForgedSeal/ink, ForgedSeal/legend, ForgedSeal/shape | checked |
-| TC-610 Displacement Certificate | Photo | Photo | the traveller at the desk (Look > Their face) | SwappedPhoto/photo | checked |
+| TC-520 Work Permit | Worker | Name | the record lookup (Citizen Records by ID, else name) | none | lookup key (never a tell: Forgery) |
+| TC-520 Work Permit | Citizen ID | CitizenId | Citizen Account / Displacement Registry; the other papers | none | deliberate decoy (checkable, never faulted) |
+| TC-520 Work Permit | Employer | Employer | Citizen Account · Forms on file (the contract) | ForgedContract/employer | checked |
+| TC-520 Work Permit | Worksite | Destination | the spoken claim; Citizen Account · Forms on file (a contract's worksite); Registry · origin | ForgedContract/worksite | checked |
+| TC-520 Work Permit | Term | Term | Citizen Account · Forms on file (the contract) | ForgedContract/term | checked |
+| TC-520 Work Permit | Day Wage | Wage | Citizen Account · Forms on file (the contract) | ForgedContract/wage | checked |
+| TC-520 Work Permit | Issuing Seal | Seal | Seal Register (the issuing office's seal) | ForgedSeal/ink, ForgedSeal/legend, ForgedSeal/shape | checked |
+| TC-520 Work Permit | Photo | Photo | the traveller at the desk (Look > Their face) | SwappedPhoto/photo | checked |
+| TC-610 Travel Permit | Full Name | Name | the record lookup (Citizen Records by ID, else name) | none | lookup key (never a tell: Forgery) |
+| TC-610 Travel Permit | Displacement No. | CitizenId | Citizen Account / Displacement Registry; the other papers | none | deliberate decoy (checkable, never faulted) |
+| TC-610 Travel Permit | Date of Birth | BirthDate | Citizen Account / Registry · Born | FakeDisplaced/tell, FalseOrigin/tell | checked |
+| TC-610 Travel Permit | Origin | Destination | the spoken claim; Citizen Account · Forms on file (a contract's worksite); Registry · origin | none | deliberate decoy (checkable, never faulted) |
+| TC-610 Travel Permit | Incident | Incident | Displacement Registry · Incident | none | deliberate decoy (checkable, never faulted) |
+| TC-610 Travel Permit | Valid Until | Expiry | the desk calendar (today's rules: paper dates) | ExpiredPaper | checked |
+| TC-610 Travel Permit | Issuing Seal | Seal | Seal Register (the issuing office's seal) | ForgedSeal/ink, ForgedSeal/legend, ForgedSeal/shape | checked |
+| TC-610 Travel Permit | Photo | Photo | the traveller at the desk (Look > Their face) | SwappedPhoto/photo | checked |
 | TC-620 Intake Declaration | Declarant | Name | the record lookup (Citizen Records by ID, else name) | none | lookup key (never a tell: Forgery) |
 | TC-620 Intake Declaration | Displacement No. | CitizenId | Citizen Account / Displacement Registry; the other papers | none | deliberate decoy (checkable, never faulted) |
 | TC-620 Intake Declaration | Coin of Home | Currency | Currency Ledger (the claimed place's row) | FakeDisplaced/tell, FalseOrigin/tell, Smuggling/tell | checked |

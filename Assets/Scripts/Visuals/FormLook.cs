@@ -24,7 +24,16 @@ public enum FormFrame
     Ticket,
 
     /// <summary>A thick band across the bottom edge and a thin one across the top (a letterhead).</summary>
-    BottomBand
+    BottomBand,
+
+    /// <summary>An open passport booklet (the travel documents spec, TD1): the cover's edge around the pages in the holder's nation's colour (FormData.Cover, else the accent) and the nation's emblem at the header's left; a Fold block draws the spine between the data page and the visa page.</summary>
+    Booklet,
+
+    /// <summary>A plastic card (TD1): rounded corners, a sheen band down the left edge in the accent, and a chip where a cell names the chip slot.</summary>
+    Card,
+
+    /// <summary>A folded card (TD1): a band across the top in the accent and the crease down the middle of the page, a faint shade over the boxes.</summary>
+    Folded
 }
 
 /// <summary>
@@ -46,11 +55,17 @@ public sealed class FormLook
     /// <summary>The paper's tint ("#RRGGBB"). Blank: the style's paper.</summary>
     public string paper = string.Empty;
 
-    /// <summary>The page's width over its height; 0: the style's (FormMetrics.aspect). At most the style's: a narrower page is drawn narrower on the PC at the same print size.</summary>
+    /// <summary>The page's width over its height; 0: the style's (FormMetrics.aspect). Every paper's print is sized by its width (FormLayout.PrintUnit; the travel documents spec, TD2): on the PC each is drawn as wide as the style's page, a narrower one (a long legal sheet) taller, a wider one (a ticket, a card) less tall.</summary>
     public float aspect;
 
     /// <summary>The paper's height on the desk relative to the desk's paper (Desk_Default.paperSize); 1: the same.</summary>
     public float scale = 1f;
+
+    /// <summary>The least and the greatest aspect a look may set (a long legal sheet to a card).</summary>
+    public const float MinAspect = 0.5f, MaxAspect = 2f;
+
+    /// <summary>The least and the greatest scale a look may set (a card or a ticket stub to a large sheet).</summary>
+    public const float MinScale = 0.3f, MaxScale = 1.3f;
 
     /// <summary>The page's aspect: its own, else <paramref name="styleAspect"/>.</summary>
     public float AspectOr(float styleAspect) => aspect > 0f ? aspect : styleAspect;
@@ -85,7 +100,7 @@ public sealed class FormLook
         return p;
     }
 
-    /// <summary>What Build Office UI and the validator refuse in a look: a colour that is not "#RRGGBB", a frame with bands but no accent, an aspect above <paramref name="styleAspect"/> or below 0.5, a scale outside 0.7 to 1.3. Empty when sound.</summary>
+    /// <summary>What Build Office UI and the validator refuse in a look: a colour that is not "#RRGGBB", a frame with bands but no accent, an aspect outside MinAspect to MaxAspect, a scale outside MinScale to MaxScale. Empty when sound. (<paramref name="styleAspect"/> is kept for the callers' messages: a look may be narrower or wider than the style's page.)</summary>
     public List<string> Problems(float styleAspect)
     {
         var problems = new List<string>();
@@ -95,10 +110,10 @@ public sealed class FormLook
             problems.Add($"its look's accent '{accent}' is not #RRGGBB");
         if (frame != FormFrame.Plain && string.IsNullOrEmpty(accent))
             problems.Add($"its look's {frame} frame has no accent colour");
-        if (aspect > 0f && (aspect > styleAspect + 1e-4f || aspect < 0.5f))
-            problems.Add($"its look's aspect {aspect:0.000} is outside 0.5 to the style's {styleAspect:0.000}");
-        if (scale < 0.7f || scale > 1.3f)
-            problems.Add($"its look's scale {scale:0.00} is outside 0.7 to 1.3");
+        if (aspect > 0f && (aspect > MaxAspect + 1e-4f || aspect < MinAspect - 1e-4f))
+            problems.Add($"its look's aspect {aspect:0.000} is outside {MinAspect:0.0} to {MaxAspect:0.0} (the style's page is {styleAspect:0.000})");
+        if (scale < MinScale - 1e-4f || scale > MaxScale + 1e-4f)
+            problems.Add($"its look's scale {scale:0.00} is outside {MinScale:0.0} to {MaxScale:0.0}");
         return problems;
     }
 }

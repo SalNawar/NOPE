@@ -474,6 +474,7 @@ public sealed class CaseFactory
         {
             caseIndex = index0Based,
             claimedNation = nation,
+            passportNation = family != null && family.nation != null ? family.nation : nation,
             claimedEra = claimedEra,
             isLegendary = legendary != null,
             legendarySource = legendary,

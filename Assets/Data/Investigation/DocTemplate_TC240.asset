@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 411096b30c5d9bb4f9142a8207326fb1, type: 3}
-  m_Name: DocTemplate_TC230
+  m_Name: DocTemplate_TC240
   m_EditorClassIdentifier: Assembly-CSharp::DocumentTemplateSO
-  displayName: Entry Ticket
-  formNumber: TC-230
+  displayName: Transponder Card
+  formNumber: TC-240
   fieldSpecs:
   - category: 9
     label: Citizen ID
@@ -21,16 +21,11 @@ MonoBehaviour:
     label: Transponder
   - category: 16
     label: Transponder Class
-  - category: 4
-    label: Currency Carried
-  - category: 3
-    label: Declared Effects
-  - category: 12
-    label: Departure
   - category: 26
     label: Issuing Seal
   handOver: 0
   showsPhoto: 0
+  askGroup: 
   form:
     formNumber: 
     title: 
@@ -43,7 +38,25 @@ MonoBehaviour:
       columns: []
       shares: []
       options: []
-      field: 6
+      field: 3
+      slot: 
+    - kind: 2
+      text: 
+      cells:
+      - field: -1
+        slot: chip
+        caption: 
+        span: 3
+        rows: 1
+      - field: 1
+        slot: 
+        caption: 
+        span: 9
+        rows: 1
+      columns: []
+      shares: []
+      options: []
+      field: -1
       slot: 
     - kind: 2
       text: 
@@ -53,63 +66,19 @@ MonoBehaviour:
         caption: 
         span: 6
         rows: 1
-      - field: 5
-        slot: 
-        caption: 
-        span: 6
-        rows: 1
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
-    - kind: 2
-      text: 
-      cells:
-      - field: 1
-        slot: 
-        caption: 
-        span: 7
-        rows: 1
       - field: 2
         slot: 
         caption: 
-        span: 5
-        rows: 1
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
-    - kind: 2
-      text: 
-      cells:
-      - field: 3
-        slot: 
-        caption: 
         span: 6
         rows: 1
-      - field: 4
-        slot: 
-        caption: 
-        span: 6
-        rows: 1
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
-    - kind: 9
-      text: 
-      cells: []
       columns: []
       shares: []
       options: []
       field: -1
       slot: 
     look:
-      frame: 4
-      accent: '#1D5A36'
-      paper: '#E4F0E2'
-      aspect: 1.15
-      scale: 0.5
+      frame: 7
+      accent: '#0F6E7A'
+      paper: '#E6EEF2'
+      aspect: 1.586
+      scale: 0.36
