@@ -120,7 +120,7 @@ public static class HallDeepRoomAuthoring
             throw new InvalidOperationException("Open AnimeHall.");
         Directory.CreateDirectory(Folder);
         var drawing=Import(Folder+"/HallDeepMorning.png",true);
-        var exterior=Import(Folder+"/CityCleanBacking.png",false);
+        var exterior=Import(Folder+"/CityDenseMorning.png",false);
         if(drawing.width!=W || drawing.height!=H)throw new InvalidOperationException("Layout registration changed.");
         // Insets preserve the painted mullions, sills and rails.
         // Trace actual glazing above the handrail. Painted frames remain static.

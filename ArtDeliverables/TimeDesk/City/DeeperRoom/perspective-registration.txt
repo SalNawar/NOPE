@@ -1,0 +1,2 @@
+Authored vanishing point: (1090.00, 300.00). Desk camera horizon (bottom-up viewport): 0.5672. Hall before: 0.7099; after: 0.5672. Hall vertical offset: -2.9659. Camera and desk unchanged. Matching horizon does not repair any inconsistencies inside the painted architecture.
+TEST ONLY: vertical translation was undone; original framing restored. At 1080p the estimated horizon mismatch is about 154 pixels. Alignment requires ceiling coverage and a coherent camera projection, not a simple vertical offset.
