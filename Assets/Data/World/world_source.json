@@ -21729,6 +21729,18 @@
     },
     "strings": [
       {
+        "key": "accept",
+        "text": "ACCEPT",
+        "gloss": "Below",
+        "tier": "Flavour"
+      },
+      {
+        "key": "deny",
+        "text": "DENY",
+        "gloss": "Below",
+        "tier": "Flavour"
+      },
+      {
         "key": "taskbar.start",
         "text": "Menu",
         "gloss": "None",
@@ -25977,6 +25989,14 @@
         "rtl": true,
         "entries": [
           {
+            "key": "accept",
+            "text": "قبول"
+          },
+          {
+            "key": "deny",
+            "text": "رفض"
+          },
+          {
             "key": "taskbar.start",
             "text": "القائمة"
           },
@@ -26094,6 +26114,14 @@
         "language": "el",
         "rtl": false,
         "entries": [
+          {
+            "key": "accept",
+            "text": "ΕΓΚΡΙΣΗ"
+          },
+          {
+            "key": "deny",
+            "text": "ΑΠΟΡΡΙΨΗ"
+          },
           {
             "key": "taskbar.start",
             "text": "Μενού"
@@ -26213,6 +26241,14 @@
         "rtl": false,
         "entries": [
           {
+            "key": "accept",
+            "text": "ACCETTA"
+          },
+          {
+            "key": "deny",
+            "text": "RIFIUTA"
+          },
+          {
             "key": "taskbar.start",
             "text": "Menu"
           },
@@ -26330,6 +26366,14 @@
         "language": "de",
         "rtl": false,
         "entries": [
+          {
+            "key": "accept",
+            "text": "ANNEHMEN"
+          },
+          {
+            "key": "deny",
+            "text": "ABLEHNEN"
+          },
           {
             "key": "taskbar.start",
             "text": "Menü"
@@ -26449,6 +26493,14 @@
         "rtl": false,
         "entries": [
           {
+            "key": "accept",
+            "text": "批准"
+          },
+          {
+            "key": "deny",
+            "text": "拒绝"
+          },
+          {
             "key": "taskbar.start",
             "text": "菜单"
           },
@@ -26566,6 +26618,14 @@
         "language": "ja",
         "rtl": false,
         "entries": [
+          {
+            "key": "accept",
+            "text": "承認"
+          },
+          {
+            "key": "deny",
+            "text": "却下"
+          },
           {
             "key": "taskbar.start",
             "text": "メニュー"

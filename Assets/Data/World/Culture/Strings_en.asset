@@ -324,6 +324,14 @@ MonoBehaviour:
     text: "Papers received: {0} of {1} \xB7 scanned: {2}"
     gloss: 0
     tier: 0
+  - key: app.atDesk
+    text: "<b>{0}</b>   \xB7   {1}"
+    gloss: 0
+    tier: 0
+  - key: app.atDesk.name
+    text: <b>{0}</b>
+    gloss: 0
+    tier: 0
   - key: app.tab.documents
     text: Papers
     gloss: 0
@@ -612,27 +620,6 @@ MonoBehaviour:
     tier: 0
   - key: findings.empty
     text: No findings yet
-    gloss: 0
-    tier: 0
-  - key: decision.summary
-    text: 'Findings logged: {0}. To cite if you deny: {1}.'
-    gloss: 0
-    tier: 0
-  - key: decision.summaryNone
-    text: 'Findings logged: {0}. None is a difference or a broken rule, so Deny has
-      nothing to cite yet.'
-    gloss: 0
-    tier: 0
-  - key: decision.accept
-    text: Stamp the papers. {0} goes through.
-    gloss: 0
-    tier: 0
-  - key: decision.denyCites
-    text: 'Cites: {0}'
-    gloss: 0
-    tier: 0
-  - key: decision.denyWaits
-    text: Log a difference or a broken rule first.
     gloss: 0
     tier: 0
   - key: calendar.title
@@ -1317,19 +1304,16 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.step
-    text: 'Investigation: go to step 1 to 5 (Papers, Records, Books, Rules, Decision)'
+    text: 'Investigation: put up step 1 to 4''s documents (Papers, Records, Books,
+      Rules)'
     gloss: 0
     tier: 0
   - key: keys.nextStep
-    text: "The next or previous step (\u2190 \u2192 on the steps)"
+    text: 'Investigation: put up the next or previous step''s documents'
     gloss: 0
     tier: 0
   - key: keys.findings
     text: Show or hide the findings column
-    gloss: 0
-    tier: 0
-  - key: keys.hints
-    text: Show or hide the steps' hints
     gloss: 0
     tier: 0
   - key: keys.otherPane
@@ -1345,8 +1329,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.regions
-    text: 'The next or previous part of the app: steps, shelf, panes, findings, Cancel,
-      Accept and Deny'
+    text: 'The next or previous part of the app: the menu bar, the panes, the findings,
+      Cancel'
     gloss: 0
     tier: 0
   - key: keys.rows
@@ -1445,14 +1429,6 @@ MonoBehaviour:
     tier: 0
   - key: settings.investigation
     text: Investigation
-    gloss: 0
-    tier: 0
-  - key: settings.stepsShown
-    text: Step hints shown
-    gloss: 0
-    tier: 0
-  - key: settings.stepsHidden
-    text: Step hints hidden
     gloss: 0
     tier: 0
   - key: settings.textSize
