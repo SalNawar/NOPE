@@ -1,2 +1,1 @@
-Authored vanishing point: (1090.00, 300.00). Desk camera horizon (bottom-up viewport): 0.5672. Hall before: 0.7099; after: 0.5672. Hall vertical offset: -2.9659. Camera and desk unchanged. Matching horizon does not repair any inconsistencies inside the painted architecture.
-TEST ONLY: vertical translation was undone; original framing restored. At 1080p the estimated horizon mismatch is about 154 pixels. Alignment requires ceiling coverage and a coherent camera projection, not a simple vertical offset.
+Camera-guided redraw 1778x885; reference camera55deg, pitch4deg. Full field registered to player camera; root scale retained (1.00, 1.00, 1.00). Horizontal margin 102.333 source pixels. Front portal retained within upper570sourcepixels. Old uniform zoom test removed.

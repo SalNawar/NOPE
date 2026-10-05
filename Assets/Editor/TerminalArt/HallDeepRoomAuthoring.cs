@@ -8,7 +8,7 @@ using UnityEditor.SceneManagement;
 public static class HallDeepRoomAuthoring
 {
     const string Folder="Assets/Art/Office/AnimeHallLayers/Completion/DeepRoom";
-    const int W=2172,H=724;
+    const int W=1778,H=885;
     static Vector2[] Poly(params float[] p)
     {
         var result=new Vector2[p.Length/2];
@@ -90,7 +90,7 @@ public static class HallDeepRoomAuthoring
             var vehicle=city.lanes[0].vehicle;
             city.Apply(0);var a=vehicle.transform.localPosition;city.Apply(2);
             float moved=Vector3.Distance(a,vehicle.transform.localPosition);
-            File.WriteAllText(report+"/validation.txt","Native player-camera capture: both pans at 08,12,16.5,22 hours. Eight independent vehicles retained; first vehicle travelled "+moved.ToString("F4")+" local units over two simulated seconds. Reduced motion: "+MotionPreference.Reduced+". Left/front apertures sample the clean exterior backing; stationary framing stays in HallDeepMorning. Clean exterior has no frame pixels to duplicate during parallax. Original58 sprites and earlier palettes are preserved disabled, not overwritten. Morning exterior only; smoke/cloud/ship/ground traffic remain pending.");
+            File.WriteAllText(report+"/validation.txt","Native player-camera capture: both pans at 08,12,16.5,22 hours. Eight independent vehicles retained; first vehicle travelled "+moved.ToString("F4")+" local units over two simulated seconds. Reduced motion: "+MotionPreference.Reduced+". Left/front apertures sample the clean exterior backing; stationary framing stays in HallDeepMorning. Clean exterior has no frame pixels to duplicate during parallax. Original58 sprites and earlier palettes are preserved disabled, not overwritten. Camera-guided redraw installed at full camera field; desk and camera unchanged. Morning exterior only; smoke/cloud/ship/ground traffic remain pending.");
         }
         finally
         {
@@ -111,7 +111,7 @@ public static class HallDeepRoomAuthoring
         UnityEngine.Object.FindFirstObjectByType<HallCityExterior>().Apply(0);
         EditorApplication.ExecuteMenuItem("Window/General/Game");
     }
-    [MenuItem("Tools/Terminal Art/City/Install Approved Deeper Room")]
+    [MenuItem("Tools/Terminal Art/City/Install Desk Camera Hall")]
     public static void Install()
     {
         if(EditorApplication.isPlaying)throw new InvalidOperationException("Stop Play first.");
@@ -119,39 +119,34 @@ public static class HallDeepRoomAuthoring
         if(art==null || art.gameObject.scene.path!="Assets/Art/Office/AnimeHallLayers/AnimeHall.unity")
             throw new InvalidOperationException("Open AnimeHall.");
         Directory.CreateDirectory(Folder);
-        var drawing=Import(Folder+"/HallDeepMorning.png",true);
-        var exterior=Import(Folder+"/CityDenseMorning.png",false);
+        var drawing=Import(Folder+"/HallDeskCameraMorning.png",true);
+        var exterior=Import(Folder+"/CityDeskCameraMorning.png",false);
         if(drawing.width!=W || drawing.height!=H)throw new InvalidOperationException("Layout registration changed.");
         // Insets preserve the painted mullions, sills and rails.
         // Trace actual glazing above the handrail. Painted frames remain static.
         var left=new[]{
-            Poly(0,0,92,0,92,474,0,493),
-            Poly(121,0,260,0,300,19,300,430,121,470),
-            Poly(325,27,420,63,420,405,325,425),
-            Poly(443,71,501,93,501,387,443,401),
-            Poly(519,102,583,125,583,369,519,383),
-            Poly(600,132,636,145,636,356,600,365),
-            Poly(653,151,680,161,680,347,653,353)
+            Poly(12,0,85,0,85,470,12,485),
+            Poly(112,24,175,61,175,450,112,465),
+            Poly(196,83,240,108,240,437,196,447),
+            Poly(257,142,317,174,317,410,257,431),
+            Poly(343,183,370,199,370,380,343,397),
+            Poly(387,213,411,225,411,355,387,371)
         };
         var front=new[]{
-            Poly(978,213,1014,213,1014,244,978,244),
-            Poly(1026,213,1058,213,1058,244,1026,244),
-            Poly(1071,213,1096,213,1096,244,1071,244),
-            Poly(1110,213,1135,213,1135,244,1110,244),
-            Poly(1148,213,1175,213,1175,244,1148,244),
-            Poly(1188,213,1205,213,1205,244,1188,244),
-            Poly(1028,309,1057,309,1057,334,1028,334),
-            Poly(1071,309,1100,309,1100,334,1071,334),
-            Poly(1117,309,1146,309,1146,334,1117,334),
-            Poly(1161,309,1189,309,1189,334,1161,334),
-            Poly(1204,309,1229,309,1229,334,1204,334)
+            Poly(724,329,750,329,750,362,724,362),
+            Poly(762,329,789,329,789,362,762,362),
+            Poly(803,329,831,329,831,362,803,362),
+            Poly(846,329,869,329,869,362,846,362),
+            Poly(885,329,911,329,911,362,885,362),
+            Poly(925,329,946,329,946,362,925,362),
+            Poly(960,329,974,329,974,350,960,350)
         };
-        var floor=Poly(0,578,635,400,790,350,1340,340,2172,684,2172,724,0,724);
+        var floor=Poly(0,755,610,443,1115,443,1778,676,1778,885,0,885);
         var exclusions=new[]{
-            Poly(575,370,825,350,825,493,575,547),
-            Poly(807,352,1035,352,1035,438,807,438),
-            Poly(1140,352,1380,352,1380,438,1140,438),
-            Poly(920,445,1390,445,1390,639,920,639)
+            Poly(170,332,612,332,612,565,170,643),
+            Poly(660,365,803,365,803,477,660,477),
+            Poly(962,365,1101,365,1101,477,962,477),
+            Poly(717,437,1055,437,1055,573,717,573)
         };
         var masks=new Color32[W*H];
         for(int y=0;y<H;y++)for(int x=0;x<W;x++)
@@ -161,14 +156,14 @@ public static class HallDeepRoomAuthoring
             bool ground=Inside(x+.5f,y+.5f,floor)&&!exclusions.Any(p=>Inside(x+.5f,y+.5f,p));
             masks[(H-1-y)*W+x]=new Color32(a?(byte)255:(byte)0,b?(byte)255:(byte)0,ground?(byte)255:(byte)0,a||b?(byte)255:(byte)0);
         }
-        var mask=SaveData("DeepRoomMasks",masks,true);
+        var mask=SaveData("DeskRoomMasks",masks,true);
         // New geometry receives new shadows; never reuse the old pier's casts.
         var casters=new[]{
-            new Vector4(748,433,85,.75f),
-            new Vector4(1148,640,250,.7f),
-            new Vector4(967,437,150,.65f),
-            new Vector4(1260,437,150,.65f),
-            new Vector4(2060,680,165,.55f)
+            new Vector4(550,562,90,.75f),
+            new Vector4(890,570,210,.7f),
+            new Vector4(744,474,145,.65f),
+            new Vector4(1031,474,145,.65f),
+            new Vector4(1660,674,160,.55f)
         };
         Texture2D Shadow(string name,float dx,float dy,float strength)
         {
@@ -187,9 +182,9 @@ public static class HallDeepRoomAuthoring
                         shade=Mathf.Max(shade,edge*fade*c.w*strength);
                     }
                     // Platform rail posts at the new registered foot line.
-                    for(float foot=30;foot<1660;foot+=156)
+                    for(float foot=30;foot<1778;foot+=365)
                     {
-                        float t=(y-692)/(dy*.5f);
+                        float t=(y-806)/(dy*.5f);
                         if(t<0 || t>1)continue;
                         float dist=Mathf.Abs(x-foot-t*dx*.5f);
                         shade=Mathf.Max(shade,(1-Mathf.SmoothStep(2,6,dist))*(1-t)*strength*.6f);
@@ -200,10 +195,29 @@ public static class HallDeepRoomAuthoring
             }
             return SaveData(name,data);
         }
-        var morning=Shadow("MorningShadow",155,70,.32f);
-        var noon=Shadow("NoonShadow",65,28,.23f);
-        var evening=Shadow("EveningShadow",205,88,.35f);
+        var morning=Shadow("DeskMorningShadow",115,60,.32f);
+        var noon=Shadow("DeskNoonShadow",45,24,.23f);
+        var evening=Shadow("DeskEveningShadow",165,74,.35f);
         var original=art.layers.First(l=>l.id.StartsWith("03 ")).renderer;
+        // This painting includes the full camera field, with foreground floor
+        // reserved for desk occlusion. Register its lens; do not zoom old art.
+        var camera=UnityEngine.Object.FindObjectsByType<Camera>(FindObjectsSortMode.None).First(c=>c.name=="Anime hall player preview");
+        art.SetPan(0);
+        float depth=camera.WorldToViewportPoint(original.transform.position).z;
+        float fieldHeight=2*depth*Mathf.Tan(camera.fieldOfView*.5f*Mathf.Deg2Rad);
+        float fieldScale=fieldHeight/(H/100f);
+        original.transform.localScale=Vector3.one*(fieldScale/art.transform.lossyScale.x);
+        Vector3 desired=camera.transform.position+camera.transform.forward*depth;
+        Vector3 delta=desired-original.transform.position;
+        if(art.transform.parent!=null)delta=art.transform.parent.InverseTransformVector(delta);
+        art.forwardLocalPosition+=delta;
+        float margin=Mathf.Max(0,(W-H*16f/9)*.5f);
+        Vector3 panDelta=camera.transform.right*(margin*fieldHeight/H);
+        if(art.transform.parent!=null)panDelta=art.transform.parent.InverseTransformVector(panDelta);
+        art.leftLocalPosition=art.forwardLocalPosition+panDelta;
+        art.Apply();
+        File.WriteAllText("ArtDeliverables/TimeDesk/City/DeeperRoom/perspective-registration.txt",
+            $"Camera-guided redraw {W}x{H}; reference camera55deg, pitch4deg. Full field registered to player camera; root scale retained {art.transform.localScale}. Horizontal margin {margin:F3} source pixels. Front portal retained within upper570sourcepixels. Old uniform zoom test removed.");
         var cityController=original.GetComponent<HallCityExterior>();
         // Original registered art is preserved as the fallback, not overwritten.
         foreach(var layer in art.layers)if(layer.renderer!=null)layer.renderer.enabled=false;
@@ -216,7 +230,7 @@ public static class HallDeepRoomAuthoring
         {
             string path=Folder+"/"+name+".mat";var mat=AssetDatabase.LoadAssetAtPath<Material>(path);
             if(mat==null){mat=new Material(Shader.Find("NOPE/Hall Deep Layout"));AssetDatabase.CreateAsset(mat,path);}
-            mat.SetTexture("_Masks",mask);
+            mat.SetTexture("_Masks",mask);mat.SetVector("_CanvasSize",new Vector4(W,H,0,0));mat.SetFloat("_CeilingCutoff",300);
             mat.SetTexture("_CityLeft",exterior);
             mat.SetTexture("_CityFront",exterior);
             mat.SetTexture("_MorningShadow",morning);mat.SetTexture("_NoonShadow",noon);mat.SetTexture("_EveningShadow",evening);
@@ -234,10 +248,10 @@ public static class HallDeepRoomAuthoring
             return r;
         }
         var architecture=Renderer("Approved deeper architecture","62 Approved deeper architecture",
-            AssetDatabase.LoadAssetAtPath<Sprite>(Folder+"/HallDeepMorning.png"),Mat("DeepArchitecture",0),58);
-        original.sprite=AssetDatabase.LoadAssetAtPath<Sprite>(Folder+"/DeepRoomMasks.png");
-        original.sharedMaterial=Mat("DeepLeftCity",1);original.enabled=true;
-        var frontRenderer=Renderer("Deep front city extension","63 Deep front city extension",original.sprite,Mat("DeepFrontCity",2),3);
+            AssetDatabase.LoadAssetAtPath<Sprite>(Folder+"/HallDeskCameraMorning.png"),Mat("DeskArchitecture",0),58);
+        original.sprite=AssetDatabase.LoadAssetAtPath<Sprite>(Folder+"/DeskRoomMasks.png");
+        original.sharedMaterial=Mat("DeskLeftCity",1);original.enabled=true;
+        var frontRenderer=Renderer("Deep front city extension","63 Deep front city extension",original.sprite,Mat("DeskFrontCity",2),3);
         cityController.panelRenderers=new[]{original,frontRenderer};
         var traffic=AssetDatabase.LoadAssetAtPath<Material>("Assets/Art/Office/AnimeHallLayers/Completion/City/CityTraffic.mat");
         traffic.SetTexture("_WindowMask",mask);EditorUtility.SetDirty(traffic);
@@ -245,18 +259,23 @@ public static class HallDeepRoomAuthoring
         {
             var lane=cityController.lanes[i];if(lane.vehicle==null)continue;
             lane.vehicle.enabled=true;bool reverse=lane.xEnd<lane.xStart;
-            lane.xStart=reverse?(i<4?680:1300):-60;lane.xEnd=reverse?-60:(i<4?680:1300);
+            lane.xStart=reverse?(i<4?420:1050):-60;lane.xEnd=reverse?-60:(i<4?420:1050);
+            lane.yPixels=new[]{180f,240f,310f,365f,340f,345f,350f,355f}[i];
         }
         var floorMat=AssetDatabase.LoadAssetAtPath<Material>("Assets/Art/Office/AnimeHallLayers/Completion/ForegroundFloor.mat");
         floorMat.SetTexture("_PaintedReference",drawing);EditorUtility.SetDirty(floorMat);
         var rig=UnityEngine.Object.FindFirstObjectByType<HallLightingRig>();
-        UnityEngine.Object.FindFirstObjectByType<HallForegroundFloor>().Configure(art,rig,architecture);
+        var foreground=UnityEngine.Object.FindFirstObjectByType<HallForegroundFloor>();
+        var floorSettings=new SerializedObject(foreground);
+        floorSettings.FindProperty("paintedVanishingPoint").vector2Value=new Vector2(W*.5f,H*(.5f-Mathf.Tan(4*Mathf.Deg2Rad)/(2*Mathf.Tan(55*.5f*Mathf.Deg2Rad))));
+        floorSettings.ApplyModifiedPropertiesWithoutUndo();
+        foreground.Configure(art,rig,architecture);
         // Keep gameplay's public art hooks registered to the revised drawing.
         // Hidden old ring renderers serve only as bounds proxies for portal effects.
         var targets=new[]{
-            new Vector4(1092,479,145,112),new Vector4(917,373,83,79),
-            new Vector4(1197,373,83,79),new Vector4(1710,221,107,111),
-            new Vector4(1960,215,145,136)
+            new Vector4(887,452,167,165),new Vector4(744,413,95,93),
+            new Vector4(1027,411,95,93),new Vector4(1361,224,101,116),
+            new Vector4(1580,205,155,156)
         };
         for(int i=0;i<targets.Length;i++)
         {
@@ -285,7 +304,7 @@ public static class HallDeepRoomAuthoring
             }
             portalPixels[(H-1-y)*W+x]=new Color32(255,255,255,(byte)Mathf.RoundToInt(alpha*255));
         }
-        var portalMask=SaveData("PortalOpenings",portalPixels);
+        var portalMask=SaveData("DeskPortalOpenings",portalPixels);
         var portalMat=AssetDatabase.LoadAssetAtPath<Material>(Folder+"/PortalGlowClipped.mat");
         if(portalMat==null){portalMat=new Material(Shader.Find("NOPE/Hall Deep Portal Glow"));AssetDatabase.CreateAsset(portalMat,Folder+"/PortalGlowClipped.mat");}
         portalMat.SetTexture("_PortalMask",portalMask);portalMat.SetFloat("_Boost",1.5f);EditorUtility.SetDirty(portalMat);
@@ -301,9 +320,9 @@ public static class HallDeepRoomAuthoring
         if(anchor is RectTransform rectangle)
         {
             rectangle.SetParent(architecture.transform,false);
-            rectangle.localPosition=new Vector3((1015-W*.5f)/100,(H*.5f-126)/100,-.002f);
+            rectangle.localPosition=new Vector3((889-W*.5f)/100,(H*.5f-121)/100,-.002f);
             rectangle.localRotation=Quaternion.identity;rectangle.localScale=Vector3.one;
-            rectangle.sizeDelta=new Vector2(300f/100,90f/100);
+            rectangle.sizeDelta=new Vector2(340f/100,95f/100);
             rectangle.gameObject.SetActive(true);
         }
         EditorUtility.SetDirty(art);EditorUtility.SetDirty(cityController);

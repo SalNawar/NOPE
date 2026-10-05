@@ -6,6 +6,8 @@ Shader "NOPE/Hall Deep Layout"
  _CityLeft("Complete left panorama",2D)="white"{}
  _CityFront("Connected front extension",2D)="white"{}
  _Region("0 architecture, 1 left city, 2 front city",Float)=0
+ _CanvasSize("Canvas pixels",Vector)=(2172,724,0,0)
+ _CeilingCutoff("Ceiling emission region",Float)=180
  _MorningShadow("Morning shadow",2D)="black"{}
  _NoonShadow("Noon shadow",2D)="black"{}
  _EveningShadow("Evening shadow",2D)="black"{}
@@ -21,13 +23,13 @@ Shader "NOPE/Hall Deep Layout"
  TEXTURE2D(_CityFront);SAMPLER(sampler_CityFront);
  TEXTURE2D(_MorningShadow);SAMPLER(sampler_MorningShadow);
  TEXTURE2D(_NoonShadow);TEXTURE2D(_EveningShadow);
- float4 _StateWeights;float _LightingAmount,_CloudMotion,_Region,_CityPan;
+ float4 _StateWeights,_CanvasSize;float _LightingAmount,_CloudMotion,_Region,_CityPan,_CeilingCutoff;
  struct A {float4 position:POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
  struct V {float4 position:SV_POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
  V vert(A v){V o;o.position=TransformObjectToHClip(v.position.xyz);o.uv=v.uv;o.color=v.color;return o;}
  half4 frag(V v):SV_Target {
   half4 mask=SAMPLE_TEXTURE2D(_Masks,sampler_Masks,v.uv);
-  float2 p=float2(v.uv.x*2172,(1-v.uv.y)*724);
+  float2 p=float2(v.uv.x*_CanvasSize.x,(1-v.uv.y)*_CanvasSize.y);
   if(_Region>.5) {
    float left=_Region<1.5?1:0;
    // Clean exterior artwork moves beneath stationary hall apertures.
@@ -52,7 +54,7 @@ Shader "NOPE/Hall Deep Layout"
    SAMPLE_TEXTURE2D(_EveningShadow,sampler_MorningShadow,v.uv).r*_StateWeights.z;
   // Only bright neutral ceiling diffusers emit; no detached glow columns.
   half neutral=min(source.r,min(source.g,source.b));
-  half emission=smoothstep(.76,.94,neutral)*step(p.y,180)*step(780,p.x)*(1-max(mask.r,mask.g));
+  half emission=smoothstep(.76,.94,neutral)*step(p.y,_CeilingCutoff)*step(_CanvasSize.x*.36,p.x)*(1-max(mask.r,mask.g));
   half3 lit=source.rgb*tint*(1-shadow*mask.b)+emission*half3(1,.78,.5)*(.18*_StateWeights.z+.45*_StateWeights.w);
   source.rgb=lerp(source.rgb,lit,saturate(_LightingAmount));
   return source;

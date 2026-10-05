@@ -1,22 +1,18 @@
-# Approved deeper hall — installed 2026-10-05
+# Desk-camera hall redraw — installed 2026-10-05
 
-Saleh approved deeper-left-room-preview.png. Installed in AnimeHall via Tools > Terminal Art > City > Install Approved Deeper Room.
+The current hall replaces the older wide painting with a new camera-guided drawing. A native 3D reference uses the desk camera position, 55-degree vertical field of view and 4-degree downward pitch. The generated hall follows that reference, with a level floor, a visible front portal and stationary window frames. The rejected uniform-zoom trial was undone and its helper removed.
 
-The approved painting supplies the revised pier, bridge landing, stairs, lockers, rails, ceiling and floor. Architecture and left/front exterior are three independently drawn native sprite renderers. Exterior regions now sample CityDenseMorning.png, an exterior-only reconstruction at the registered canvas coordinates. The prior source contained window frames, producing doubled edges during parallax. Glazing masks were retraced around the actual mullions, diagonal ceiling beams and above the handrail. Frames remain in the stationary hall plate. Native textures retain their 2172x724 dimensions without power-of-two rescaling. Eight independent flying-vehicle sprites remain clipped to the openings. The city below the diagonal handrail remains in the static hall plate; full extraction there remains future work.
+Current sources in Assets/Art/Office/AnimeHallLayers/Completion/DeepRoom:
+- HallDeskCameraMorning.png: 1778x885 hall painting.
+- CityDeskCameraMorning.png: 1777x885 exterior-only backing with dense megatowers and little water.
+- DeskRoomMasks.png: left/front glazing, floor receiver and traffic clipping data.
+- DeskMorningShadow.png, DeskNoonShadow.png, DeskEveningShadow.png: authored floor shadows.
+- DeskArchitecture.mat, DeskLeftCity.mat, DeskFrontCity.mat: separate rendering regions.
 
-Assets: Assets/Art/Office/AnimeHallLayers/Completion/DeepRoom.
-Shader: NOPE/Hall Deep Layout.
-Installer/capture: Assets/Editor/TerminalArt/HallDeepRoomAuthoring.cs.
+Install with Tools > Terminal Art > City > Install Desk Camera Hall. HallDeepRoomAuthoring registers the full vertical camera field, retaining root scale 1. Horizontal pan uses the 102.33-source-pixel margin outside the 16:9 view. HallDeepLayout reads each material's canvas dimensions. Original sprites, earlier paintings and palettes remain preserved; their renderers are disabled in this scene.
 
-Original58 registered sprite sources, original palettes and city paintings remain preserved; original hall renderers are disabled in this scene. Existing public ring hooks remain as invisible bounds proxies repositioned for gameplay portal effects. Departure-board RectTransform follows the approved display. Foreground continuation samples the revised source and current lit backdrop.
+Existing gameplay ring hooks use invisible bounds proxies aligned to the new portals. Live portal emission stays inside the front ring; the departure-board marker follows the new display. The foreground continuation samples the current hall painting. Desk geometry and gameplay camera are unchanged.
 
-Native morning/noon/evening shadow masks are rebuilt for the revised pier/portal/seating footprints; night omits directional floor casts. Existing time weights drive hall tint, these shadow masks, ceiling emission and desk/character daylight. This is an authored2D layout, not a deeper physical3D room. Exterior art is morning only: evening/night use temporary cycle tint; separate matching exterior paintings remain pending.
+Verification: eight native 1920x1080 captures cover front/left views at morning, noon, evening and night. Live portal glow and departure text were checked after starting the shift. The actual downward desk-camera transition was inspected; desk-camera-noon.png records its endpoint. Eight flying-vehicle sprites remain independent, with measured movement. Unity console count is zero and Hall Deep Layout has no shader errors.
 
-Verification: eight native1920x1080 player-camera captures covering both pans at08,12,16.5,22 hours; independent flying-vehicle movement recorded in validation.txt; Unity compilation/console checks. Capture forces gameplay board/effect following after each pan because all images render within one editor frame.
-
-Limitations: one depth per window wall; moving smoke/cloud/sun/distant ships/ground traffic/building details remain pending. Further independent furniture/portal structural edits require resplitting those surfaces from the approved painting. The old foreground grout-ray configuration is retained and should be retraced if a later downward-camera review exposes changed joints.
-
-Gameplay integration: the departure-board marker follows the revised display. Portal proxies were corrected against the live player camera; HallDeepPortalRegistration assigns NOPE/Hall Deep Portal Glow. Its inner-opening clip confines effects to the registered ring proxies and keeps their lower fence clear. PortalOpenings.png is retained as technical reference data.
-
-2026-10-05 less-water revision: CityDenseMorning.png replaces the broad bay with dense corporate megatowers, stacked housing and an industrial district; a small canal remains at the right. CityCleanBacking.png is preserved as the earlier waterfront variant. The left landmarks retain their registered composition.
-Perspective diagnosis: estimated hall vanishing point (1090,300) projects to viewport y=0.7099, while the desk camera level horizon is y=0.5672. Translating the hall down aligns these but exposes ~154 pixels of missing ceiling at 1080p. That trial was undone. A proper camera-matched hall redraw/reprojection and ceiling coverage remain unresolved; the denser city alone does not fix this mismatch.
+Limits: this is a camera-guided 2D drawing, not a rebuilt 3D hall. Painting geometry approximates the reference. City glazing currently uses one depth per wall, with only safe upper apertures extracted; lower portions remain in the stationary painting. The city is morning art with temporary evening/night tint. Separate time-of-day city paintings, animated smoke/clouds/sun/ships/ground traffic/building details remain pending. Foreground grout parameters retain the earlier setup and need retracing if later camera changes expose mismatched joints.
