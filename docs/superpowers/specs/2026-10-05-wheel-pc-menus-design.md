@@ -53,6 +53,7 @@ The tray (widened from 760 to 1000 units so a culture's long currency word, the 
 - The Deviation Report's search entries are gone (`IndexEntries.Deviation` removed; the report's form stays for the code that still documents deviations).
 - The steps' pills and foot are no longer built; `GuideBar` keeps only the headless logic (a new case's first pair, Ctrl+1…5, the decision view) and the checklist engine; the `guide.*` strings are removed from the content.
 - Left for later (not track C's to decide alone): the Settings pair and Ctrl+Shift+S still toggle the step hints, which show nothing now.
+- **The PC's decision step stays, headless** (decided after track B landed its physical stamps): no menu, button or foot reaches it; only Ctrl+5 / Ctrl+Tab do, and the audit play still exercises its evidence gate on even slots. The verdict is the stamp on the passport. Removing it (`DecisionView`, the façade's Accept/Deny wiring, `GuideStage.Decision`, the keys' decision region, the audit play's PC path: 13 files) is the recommended follow-up so the PC only investigates; it was not done at the end of this night to keep the merge safe.
 
 ## 6. Verification
 
