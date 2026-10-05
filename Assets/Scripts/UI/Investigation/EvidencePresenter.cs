@@ -23,7 +23,6 @@ public sealed class EvidencePresenter
     private readonly Func<CaseInstance> _currentCase;
     private readonly Func<AgencyContent> _agency;
     private readonly Func<int> _day;
-    private readonly CaseIndex _index;
 
     /// <summary>Documented contradictions for the current case.</summary>
     private readonly DiscrepancyLog _discrepancies = new DiscrepancyLog();
@@ -34,11 +33,10 @@ public sealed class EvidencePresenter
     /// <summary>The compare whose pairs this listens to (null while detached).</summary>
     private CompareController _listening;
 
-    /// <summary>The compare and the Deviation Report's views (one per pane; either may be missing), what a new deviation tells (the app's Report tab), the façade's current case (null between cases), search's index (null: nothing indexed), and the agency block and day the report is headed and signed with.</summary>
-    public EvidencePresenter(CompareController compare, IReadOnlyList<ReportView> reports, Action logged, Func<CaseInstance> currentCase, CaseIndex index,
+    /// <summary>The compare and the Deviation Report's views (one per pane; either may be missing), what a new deviation tells (the app's Report tab), the façade's current case (null between cases), and the agency block and day the report is headed and signed with.</summary>
+    public EvidencePresenter(CompareController compare, IReadOnlyList<ReportView> reports, Action logged, Func<CaseInstance> currentCase,
                              Func<AgencyContent> agency, Func<int> day)
     {
-        _index = index;
         _compare = compare;
         _reports = reports ?? Array.Empty<ReportView>();
         _logged = logged ?? throw new ArgumentNullException(nameof(logged));
@@ -107,12 +105,6 @@ public sealed class EvidencePresenter
 
         _entries.Add(ReportEntry.From(proof, _compare.SideA, _compare.SideB));
         RefreshReport();
-        if (_index != null)
-        {
-            string category = UiText.Category(proof.category);
-            _index.Add(IndexEntries.Deviation(_discrepancies.Count - 1, proof.category, UiText.Format("search.title.deviation", category), category,
-                                              UiText.Deviation(proof)));
-        }
 
         if (_compare != null)
             _compare.ShowDeviation(UiText.Deviation(proof));

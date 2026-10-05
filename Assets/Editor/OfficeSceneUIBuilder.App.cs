@@ -9,16 +9,16 @@ using UnityEngine.UI;
 /// spec, docs/superpowers/specs/2026-09-30-pc-workbench-design.md, §2, §3,
 /// §5): one desktop window on the window layer ("Investigation"; the
 /// restored size from DesktopConfigSO, maximised on its first open). Under
-/// its title bar (just "Investigation": the header names the traveller): the
-/// header (the traveller's face, name and one short line; the guided steps'
-/// segmented control: GuideBar), the shelf (the documents' chips on one row
-/// and the Books menu: ShelfView), the work area (the main column with the
-/// status line and Search, the two panes with the gutter and the line layer
-/// over them (AppPane, MatchLines) and the decision step in their place when
-/// it shows (DecisionView); the findings column at its right, a rail while
-/// empty: FindingsView), the foot (Back, the progress line, Next) and the
-/// search drawer (OfficeSceneUIBuilder.Search); the Books menu is built last
-/// so it draws over the work (wave 5 A3). The panes'
+/// its title bar (just "Investigation"): the menu bar (the desk-first
+/// redesign, item 8: the documents' menus and their drop-down, MenuBarView;
+/// who is at the desk; Search), then the work area down to the window's
+/// foot (the main column with the status line, the two panes with the
+/// gutter and the line layer over them (AppPane, MatchLines) and the
+/// decision step in their place when it shows (DecisionView); the findings
+/// column at its right, a rail while empty: FindingsView) and the search
+/// drawer (OfficeSceneUIBuilder.Search); the drop-down is built last so it
+/// draws over the work. The guided steps (GuideBar) run headless on the
+/// body (no pills, no foot: the desk leads since the desk-first redesign). The panes'
 /// views are forms (OfficeSceneUIBuilder.AppViews, PcForms) behind IAppView;
 /// the scan toast goes on the investigation host above the window layer.
 /// The workbench's parts are OfficeSceneUIBuilder.Workbench's. Rebuilt fresh
@@ -86,12 +86,10 @@ public static partial class OfficeSceneUIBuilder
         Transform body = Panel(win, "AppBody", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(body, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -top));
 
-        // The header, the shelf, the foot, then the work area between them.
-        AppHeader header = BuildAppHeader(body);
-        ShelfView shelf = BuildShelf(body, out RectTransform booksMenu);
-        AppFoot foot = BuildAppFoot(body);
+        // The menu bar, then the work area under it, down to the window's foot.
+        AppMenuBar bar = BuildMenuBar(body);
         Transform work = Panel(body, "Work", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(work, Vector2.zero, Vector2.one, new Vector2(0f, WbSize.Foot), new Vector2(0f, -(WbSize.Header + WbSize.Shelf)));
+        PlaceRect(work, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -WbSize.MenuBar));
 
         FindingsView findings = BuildFindingsColumn(work, out RectTransform findingsColumn);
         Transform main = Panel(work, "Main", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -118,15 +116,10 @@ public static partial class OfficeSceneUIBuilder
 
         AppToast toast = BuildAppToast(investHost, config);
         parts.App = win.gameObject.AddComponent<InvestigationApp>();
-        parts.Guide = header.Root.gameObject.AddComponent<GuideBar>();
+        parts.Guide = body.gameObject.AddComponent<GuideBar>();
         parts.Board = work.gameObject.AddComponent<MatchBoard>();
 
         var soGuide = new SerializedObject(parts.Guide);
-        SerializedArrays.Set(soGuide, "pills", header.Pills);
-        Wire(soGuide, "backButton", foot.Back);
-        Wire(soGuide, "nextButton", foot.Next);
-        Wire(soGuide, "nextLabel", foot.NextLabel);
-        Wire(soGuide, "progressText", foot.Progress);
         Wire(soGuide, "app", parts.App);
         Wire(soGuide, "board", parts.Board);
         soGuide.ApplyModifiedProperties();
@@ -144,10 +137,6 @@ public static partial class OfficeSceneUIBuilder
         Wire(soBoard, "infoText", status.Info);
         soBoard.ApplyModifiedProperties();
 
-        var soFindings = new SerializedObject(findings);
-        Wire(soFindings, "app", parts.App);
-        soFindings.ApplyModifiedProperties();
-
         foreach (RulesView rules in parts.Rules)
             WireBoard(rules, parts.Board);
         foreach (CalendarView calendar in parts.Calendar)
@@ -161,11 +150,10 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "findingsColumn", findingsColumn);
         so.FindProperty("findingsRail").floatValue = WbSize.Rail;
         Wire(so, "mainColumn", main);
-        Wire(so, "face", header.Face);
-        Wire(so, "nameText", header.Name);
-        Wire(so, "countersText", header.Counters);
+        Wire(so, "nameText", bar.Name);
+        Wire(so, "countersText", bar.Counters);
         Wire(so, "guide", parts.Guide);
-        Wire(so, "shelf", shelf);
+        Wire(so, "menus", bar.View);
         Wire(so, "board", parts.Board);
         Wire(so, "decision", decision);
         Wire(so, "panesArea", panes.gameObject);
@@ -173,8 +161,8 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "toast", toast);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
-        BuildAppSearch(parts.App, body, status.Search, config);
-        booksMenu.SetAsLastSibling();
+        BuildAppSearch(parts.App, body, bar.Search, config);
+        bar.Dropdown.SetAsLastSibling();
         return parts;
     }
 
@@ -240,14 +228,14 @@ public static partial class OfficeSceneUIBuilder
         return toggle;
     }
 
-    /// <summary>The scan toast (WN5, C10) on the investigation host, above the window layer: at the desktop's lower right, just above the app's foot (never over the foot's words; wave 5 A3), its line at Body size and Open, hidden.</summary>
+    /// <summary>The scan toast (WN5, C10) on the investigation host, above the window layer: at the desktop's lower right, just above the taskbar, its line at Body size and Open, hidden.</summary>
     private static AppToast BuildAppToast(Transform investHost, DesktopConfigSO config)
     {
         DestroyChildIfPresent(investHost, "AppToast");
         Transform strip = Panel(investHost, "AppToast", new Vector2(1f, 0f), new Vector2(1f, 0f), Vector2.zero, AppToastSize, PanelNavy, ThemeRoleId.Toast);
         var place = (RectTransform)strip;
         place.pivot = new Vector2(1f, 0f);
-        place.anchoredPosition = new Vector2(-WbSize.Pad, config.MaximisedBottom + WbSize.Foot + 12f);
+        place.anchoredPosition = new Vector2(-WbSize.Pad, config.MaximisedBottom + 12f);
         TMP_Text line = Text(strip, "Text", string.Empty, PcType.Body, TextAlignmentOptions.MidlineLeft, new Vector2(0f, 0f), new Vector2(0.76f, 1f), Color.white,
                              ThemeRoleId.Toast, fit: true);
         ((RectTransform)line.transform).offsetMin = new Vector2(PcSize.L + 4f, 0f);

@@ -236,7 +236,7 @@ public sealed class MenuBarView : MonoBehaviour
             Button title = Instantiate(titleTemplate, row);
             title.gameObject.name = "Menu_" + menu;
             Made(title.gameObject);
-            title.transform.Find("Label").GetComponent<TMP_Text>().text = UiText.Get("menu." + menu.ToString().ToLowerInvariant());
+            title.transform.Find("Label").GetComponent<TMP_Text>().text = UiText.Get("menubar." + menu.ToString().ToLowerInvariant());
             AppMenu which = menu;
             title.onClick.AddListener(() => Toggle(which));
             _titles[menu] = title;
@@ -356,7 +356,7 @@ public sealed class MenuBarView : MonoBehaviour
                 {
                     caption = true;
                     TMP_Text title = Instantiate(captionTemplate, dropdown);
-                    title.text = UiText.Get("menu.notHandedOver");
+                    title.text = UiText.Get("menubar.notHandedOver");
                     _rowsMade.Add(title.gameObject);
                     title.gameObject.SetActive(true);
                 }
@@ -393,14 +393,14 @@ public sealed class MenuBarView : MonoBehaviour
     private static string NoteFor(ShelfItem item)
     {
         if (item.Action == ShelfAction.HoldToday)
-            return UiText.Get("menu.today.note");
+            return UiText.Get("menubar.today.note");
         if (item.Action != ShelfAction.FlagMissing)
             return null;
         switch (item.Missing)
         {
-            case MissingPaperState.Flagged: return UiText.Get("menu.missing.flagged");
-            case MissingPaperState.NotCarried: return UiText.Get("menu.missing.notCarried");
-            default: return UiText.Get("menu.missing.flag");
+            case MissingPaperState.Flagged: return UiText.Get("menubar.missing.flagged");
+            case MissingPaperState.NotCarried: return UiText.Get("menubar.missing.notCarried");
+            default: return UiText.Get("menubar.missing.flag");
         }
     }
 

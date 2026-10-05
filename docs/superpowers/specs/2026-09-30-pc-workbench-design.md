@@ -195,3 +195,7 @@ Saleh's screenshot of day 1 ("Shiyu (Merchant)") and the tour showed: a shelf wr
 | Taskbar | the desk button's culture words and their English gloss drawn close and centred; the tray widened to 760 u and its readouts shrinking together rather than overlapping (a culture's long currency word) |
 
 Decisions taken for Saleh (each reversible): the books behind a menu, not a scrolling strip; the papers' chips are the ones that give way (their names are the longest and the pane headers repeat them); "L"/"R" on the shelf (the pane headers keep "Left"/"Right"); the step's title joins the status line rather than keeping its own row; the gutter costs 120 u of width so a label never sits on a document; the findings rail rather than hiding the column (it still says the column is there); the copy scales between 0.75 and 1.5 rather than reflowing.
+
+## 12. The menu bar (the desk-first redesign, 2026-10-05)
+
+The header (§2 IA1, IA2), the shelf (IA4, §11) and the foot are replaced by one menu bar with drop-down menus (Papers, Records, Rules, Books, Calendar) and Search at its right; the steps run headless. See `2026-10-05-wheel-pc-menus-design.md` §3.

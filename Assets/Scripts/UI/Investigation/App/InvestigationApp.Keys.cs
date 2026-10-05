@@ -574,13 +574,10 @@ public sealed partial class InvestigationApp
                 }
                 break;
             case AppRegion.Steps:
-                if (guide != null)
-                    foreach (Button pill in guide.Pills)
-                        Add(pill);
                 break;
             case AppRegion.Shelf:
-                if (shelf != null)
-                    foreach (Button chip in shelf.Buttons)
+                if (menus != null)
+                    foreach (Button chip in menus.Buttons)
                         Add(chip);
                 break;
             case AppRegion.PaneContent:
