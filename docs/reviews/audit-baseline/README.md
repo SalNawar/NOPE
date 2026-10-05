@@ -276,7 +276,9 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
     the case dump and 11 times in the play, and would have printed "Seal:<era>"). A photo held against the face raises
     no wheel question and no warning (`e80c5e2`, `Confrontations.Askable`: 16 warnings in the play). The play's
     Papers-menu check counts the papers handed over, not the menu's rows that flag the day's other papers missing
-    (`7b0220e`: 100 false failures from day 5).
+    (`7b0220e`: 100 false failures from day 5). `Build Office UI` removes the overlay's retired 2D stamp tray
+    (`8e475d7`): the physical stamps deleted its script but left the object, so every player start logged a missing
+    script on 'StampTray' (found by the player probe; 123 dump lines go).
   - `cases.txt` (11,983 lines, was 11,785; the same 6,540 travellers' lines): the desk-first ramp's papers per day
     (day 1 the passport alone, the entry ticket from day 2, the issuing seals from day 4, the scanner and the records
     from day 5, the waiver, the transponder card, the work permit), the travel documents (the passport booklet with its
@@ -292,9 +294,9 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
     pet's evening with the night's bills. 215 travellers, 211 right and the four planned mistakes; the day-15 end is
     the world page (`world_report`) with Britain leading, 125 cr and stability 86.81 (round 4: Iraq, 88 cr, 87.68).
   - `play_warnings.txt`: empty.
-  - `scene_OfficeGameplay.txt` (18,449 lines, was 16,651: the workbench, the desk inspection's line and marks, the stamp
+  - `scene_OfficeGameplay.txt` (18,326 lines, was 16,651: the workbench, the desk inspection's line and marks, the stamp
     tray and the hand-back strip, the rulebook, the city view, the menu bar and the taskbar's date, without the decision
-    view and the step hints), `scene_HomeScene.txt` (266 lines, was 214: the bills and the pet's corner) and
+    view, the step hints and the overlay's old stamp tray), `scene_HomeScene.txt` (266 lines, was 214: the bills and the pet's corner) and
     `scene_TitleScene.txt` (276, was 189: the adoption panel): each rebuild equals its committed scene in both runs;
     `scenes_summary.txt` their file hashes; both art offices stay byte-unchanged by the builders.
   - `world_generate.txt`, `data_hashes.txt`: `Assets/Data` 743 -> 991 files (the documents, the travel documents, the
@@ -303,7 +305,7 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
     character keys have art (was 954 keys: the famous travellers' and the new places' looks).
   - `profile_A.txt`, `profile_B.txt`: re-measured (two measurements each, the same within 6%), accepted with `--allow profile`
     for one load: title -> office takes 1465 / 1388 ms (round 4: 1106 / 1153 ms, so +32% / +25% over the 25% limit).
-    The office it loads is heavier: OfficeGameplay grew from 16,651 to 18,449 dump lines (the workbench, the desk
+    The office it loads is heavier: OfficeGameplay grew from 16,651 to 18,326 dump lines (the workbench, the desk
     inspection with its line and marks, the stamp tray and the hand-back strip, the rulebook, the city view, the
     menu bar) and the content library it loads from 743 to 991 assets (the documents, the travel documents, the famous
     travellers and their places), and the load is now timed from the adoption panel's Adopt, which also creates the
