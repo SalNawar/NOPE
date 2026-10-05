@@ -60,7 +60,7 @@ public static class SiteWorldBuilder
                   .ThenBy(p => p.era.order)
                   .Select(p => new PlaceInfo(p.id, p.nation.id, p.nation.displayName, p.era.id, p.era.displayName, p.era.order, p.era.isFuture,
                                              p.displayName, p.year, p.moment,
-                                             (p.facts ?? new List<ProfileFact>()).Where(f => f != null).Select(f => (f.category, f.value)).ToList()))
+                                             (p.facts ?? new List<ProfileFact>()).Where(f => f != null).Select(f => (f.category, f.value)).ToList(), p.era.GroupId))
                   .ToList();
     }
 }

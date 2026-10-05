@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3468ee994c214946889c560775574ff, type: 3}
+  m_Name: Premade_alexander
+  m_EditorClassIdentifier: Assembly-CSharp::LegendarySO
+  id: alexander
+  displayName: Alexander the Great
+  birthDate: 20 Jul 356 BCE
+  gender: 1
+  trueEra: {fileID: 11400000, guid: e086ccc3608ad51408596a220a17662a, type: 2}
+  archetype: {fileID: 11400000, guid: 49896eb7768f7d7478adbfbaf25102e7, type: 2}
+  nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
+  authoredImpacts: []
+  truePlace: {fileID: 0}
+  introLine: 'Priority arrival: Alexander the Great, King of Macedon. He is twenty
+    and in a hurry.'
+  recordNote: King of Macedon, twenty. Taught by Aristotle. Intends to march to the
+    end of the world, possibly by Tuesday.
+  dialogId: 
+  oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 
+  pulls:
+  - factor: government
+    outcome: fascism
+    amount: 12
+  - factor: government
+    outcome: technocracy
+    amount: 6

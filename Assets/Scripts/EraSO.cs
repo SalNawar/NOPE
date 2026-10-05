@@ -25,6 +25,12 @@ public sealed class EraSO : ScriptableObject
     /// </summary>
     public bool isFuture;
 
+    /// <summary>The main era this one is a second moment of (eras[].group; null: a main era): a nation's second place of that era (EraGroups; Track E2).</summary>
+    public EraSO group;
+
+    /// <summary>The era's group id: its group's, or its own (EraGroups.GroupOf).</summary>
+    public string GroupId => EraGroups.GroupOf(id, group != null ? group.id : null);
+
     /// <summary>Small-talk lines of travellers claiming this era (used when their place has none).</summary>
     public List<LineText> smallTalk = new();
 }

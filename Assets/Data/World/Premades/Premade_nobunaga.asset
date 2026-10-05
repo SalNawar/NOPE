@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3468ee994c214946889c560775574ff, type: 3}
+  m_Name: Premade_nobunaga
+  m_EditorClassIdentifier: Assembly-CSharp::LegendarySO
+  id: nobunaga
+  displayName: Oda Nobunaga
+  birthDate: 23 Jun 1534
+  gender: 1
+  trueEra: {fileID: 11400000, guid: c2b96992e8798b445a2e93efb9c92fe0, type: 2}
+  archetype: {fileID: 11400000, guid: 49896eb7768f7d7478adbfbaf25102e7, type: 2}
+  nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
+  authoredImpacts: []
+  truePlace: {fileID: 0}
+  introLine: 'Priority arrival: Oda Nobunaga, lord of Azuchi. He is building the
+    biggest castle in Japan.'
+  recordNote: Warlord of Owari and Azuchi. Unifying Japan by force. Freed the markets.
+    Wears a European cape on special days.
+  dialogId: 
+  oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 
+  pulls:
+  - factor: money
+    outcome: company_towns
+    amount: 12
+  - factor: government
+    outcome: fascism
+    amount: 6

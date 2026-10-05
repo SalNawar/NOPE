@@ -105,6 +105,11 @@ public static partial class WorldContentGenerator
 
         // --- Eras, leader effects and nations ---
         var eras = src.eras.ToDictionary(e => e.id, e => MakeEra(e, written));
+        foreach (EraData e in src.eras)
+        {
+            eras[e.id].group = !string.IsNullOrWhiteSpace(e.group) && eras.TryGetValue(e.group, out EraSO main) ? main : null;
+            EditorUtility.SetDirty(eras[e.id]);
+        }
         EffectSO[] leaderEffects = src.countries.Select(c => MakeLeaderEffect(c, written)).ToArray();
         var nations = src.countries.Select((c, i) => (c, i)).ToDictionary(x => x.c.id, x => MakeNation(x.c, leaderEffects[x.i], written));
 
@@ -253,6 +258,7 @@ public static partial class WorldContentGenerator
 
         if (eraIds.Count != src.eras.Length || eraIds.Any(string.IsNullOrWhiteSpace))
             errors.Add("Era ids must be unique and non-blank.");
+        errors.AddRange(EraGroups.Problems(src.eras.Select(e => new EraEntry(e.id, e.group, e.future)).ToList()));
         if (countryIds.Count != src.countries.Length || countryIds.Any(string.IsNullOrWhiteSpace))
             errors.Add("Country ids must be unique and non-blank.");
         if (ruleIds.Count != src.rules.Length || ruleIds.Any(string.IsNullOrWhiteSpace))
@@ -1150,22 +1156,12 @@ public static partial class WorldContentGenerator
         foreach (DayData d in src.days)
         {
             string owner = $"Day '{d.asset}'";
-            var world = new HashSet<string>(src.places
-                .Where(p => (d.eras ?? Array.Empty<EraWeightData>()).Any(w => w.era == p.era && w.weight > 0f) &&
-                            (d.countries == null || d.countries.Length == 0 || d.countries.Contains(p.country)))
-                .Select(PlaceId));
 
+            // A premade the day forces or pools brings its claimed place and true home into the day's world (EraGroups.InTodaysWorld), so it only has to exist.
             void InWorld(string premadeId, string how)
             {
-                if (!premadesById.TryGetValue(premadeId ?? string.Empty, out PremadeData m))
-                {
+                if (!premadesById.ContainsKey(premadeId ?? string.Empty))
                     errors.Add($"{owner} {how} unknown premade '{premadeId}'.");
-                    return;
-                }
-                if (!world.Contains(m.place))
-                    errors.Add($"{owner} {how} premade '{m.id}', whose claim '{m.place}' is not in the day's world.");
-                if (!string.IsNullOrEmpty(m.truePlace) && !world.Contains(m.truePlace))
-                    errors.Add($"{owner} {how} premade '{m.id}', whose true place '{m.truePlace}' is not in the day's world.");
             }
 
             string[] pool = d.premades ?? Array.Empty<string>();
@@ -2391,7 +2387,17 @@ public static partial class WorldContentGenerator
     [Serializable] private sealed class AttributeData { public string id; public string asset; }
 
     /// <summary>An era; "future" marks the office's own time (at most one).</summary>
-    [Serializable] private sealed class EraData { public string id; public string displayName; public int order; public bool future; public string[] smallTalk; }
+    [Serializable] private sealed class EraData
+    {
+        public string id;
+        public string displayName;
+        public int order;
+        public bool future;
+        public string[] smallTalk;
+
+        /// <summary>The main era it is a second moment of (blank: none; EraGroups).</summary>
+        public string group;
+    }
 
     [Serializable] private sealed class CountryData { public string id; public string displayName; public PassportLook passport; public BaselineData[] baselines; public LooksWeightData looks; public CultureData culture; }
 

@@ -1,0 +1,178 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_italy_earlymodern2
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: italy_earlymodern2
+  displayName: Galileo's Padua
+  nation: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
+  era: {fileID: 11400000, guid: c2b96992e8798b445a2e93efb9c92fe0, type: 2}
+  year: 1610
+  moment: Padua and Venice in 1610, when Galileo turns his telescope on the sky,
+    finds four moons around Jupiter and publishes the Starry Messenger
+  tongue: italian
+  birthYearMin: 1540
+  birthYearMax: 1592
+  facts:
+  - category: 4
+    value: Venetian silver ducat
+  - category: 0
+    value: Paduan Italian
+  - category: 3
+    value: Galilean telescope
+  - category: 5
+    value: Padua (Venetian)
+  - category: 2
+    value: Doge Leonardo Dona
+  - category: 6
+    value: black biretta / lace collar
+  maleNames:
+  - Cesare
+  - Vincenzo
+  - Paolo
+  - Giovanfrancesco
+  - Benedetto
+  - Bonaventura
+  - Evangelista
+  - Girolamo
+  femaleNames:
+  - Virginia
+  - Livia
+  - Marina
+  - Giulia
+  - Isabella
+  - Lucrezia
+  - Cassandra
+  - Ottavia
+  smallTalk:
+  - id: italy_earlymodern2.smalltalk.1
+    text: The professor sold the Senate a spyglass. Now everyone looks up instead
+      of down.
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: black scholar's gown
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: receding short hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: broad red beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: black biretta
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+    female:
+      signature: 4
+      outfit:
+        label: stiff-bodiced gown
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: raised curled hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: lace collar
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+  looks:
+    skin:
+    - 1
+    - 4
+    - 4
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 4
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 1
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 5
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: technocracy
+  - factor: future
+    outcome: space_age
+  - factor: money
+    outcome: commons

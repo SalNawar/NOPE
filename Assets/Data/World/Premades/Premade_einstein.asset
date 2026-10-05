@@ -36,5 +36,5 @@ MonoBehaviour:
     outcome: nuclear
     amount: 12
   - factor: future
-    outcome: space_age
+    outcome: anarchy
     amount: 6

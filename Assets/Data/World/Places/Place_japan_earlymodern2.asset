@@ -1,0 +1,173 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_japan_earlymodern2
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: japan_earlymodern2
+  displayName: Sengoku Azuchi
+  nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
+  era: {fileID: 11400000, guid: c2b96992e8798b445a2e93efb9c92fe0, type: 2}
+  year: 1576
+  moment: Azuchi on Lake Biwa, c. 1576, where Oda Nobunaga raises the first great
+    castle keep and frees the markets in the middle of a hundred years of war
+  tongue: japanese
+  birthYearMin: 1506
+  birthYearMax: 1558
+  facts:
+  - category: 4
+    value: Eiraku tsuho coin
+  - category: 0
+    value: Late Middle Japanese
+  - category: 3
+    value: Tenshu castle keep
+  - category: 5
+    value: Azuchi (Lake Biwa)
+  - category: 2
+    value: Lord Oda Nobunaga
+  - category: 6
+    value: eboshi / katsuki veil
+  maleNames:
+  - Mitsuhide
+  - Hideyoshi
+  - Katsuie
+  - Nagahide
+  - Kazumasu
+  - Toshiie
+  - Yasuke
+  - Ranmaru
+  femaleNames:
+  - Nohime
+  - Oichi
+  - Nene
+  - Matsu
+  - Gotoku
+  - Kitsuno
+  - Chacha
+  - Hatsu
+  smallTalk:
+  - id: japan_earlymodern2.smalltalk.1
+    text: The lord has opened the markets to anyone. Even the monks are selling.
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: kamishimo and hakama
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: shaved-pate topknot
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: thin wispy moustache
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: eboshi
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+    female:
+      signature: 3
+      outfit:
+        label: uchikake over kosode
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      hair:
+        label: long loose hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      headwear:
+        label: katsuki veil
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: 
+  looks:
+    skin:
+    - 1
+    - 5
+    - 3
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 10
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 4.2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 4
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: monarchy
+  - factor: future
+    outcome: anarchy
+  - factor: money
+    outcome: company_towns

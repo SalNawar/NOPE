@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Trigger_History_cleopatra_home
   m_EditorClassIdentifier: Assembly-CSharp::TimelineTriggerSO
   id: history_cleopatra_home
-  displayName: Cleopatra's Rome
+  displayName: Cleopatra's Alexandria
   description: Generated from world_source.json history.rules.
   oneShot: 1
-  newsLineOnFire: 'THE QUEEN IN ROME: Cleopatra, stamped through at Desk 3, tells
-    Caesar about 2150. Rome mints coins with her face.'
+  newsLineOnFire: 'THE QUEEN COMES HOME: Cleopatra, stamped home at Desk 3, opens
+    2150''s library in Alexandria. Rome asks for a card.'
   section: 3
   conditions:
   - type: 1
