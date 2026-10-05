@@ -31,8 +31,9 @@ public static class HallWaitingBayAuthoring
             if(mat==null){mat=new Material(baseline);AssetDatabase.CreateAsset(mat,matPath);}
             mat.shader=Shader.Find("NOPE/Hall Waiting Bay Repair");
             mat.SetTexture("_WaitingGuide",guide);mat.SetTexture("_RemovedMask",water.sprite.texture);
+            mat.SetTexture("_CityMorning",AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/Office/AnimeHallLayers/Completion/City/CityMorningConnected.png"));
             mat.SetFloat("_RestoreRemovedOnly",restoration?1:0);
-            mat.SetVector("_RepairRect",new Vector4(1920,475,2172,724));EditorUtility.SetDirty(mat);
+            mat.SetVector("_RepairRect",restoration?new Vector4(935,345,1080,398):new Vector4(1920,475,2172,724));EditorUtility.SetDirty(mat);
             var existing=art.transform.Find(name);
             var go=existing!=null?existing.gameObject:new GameObject(name);
             go.transform.SetParent(seat.transform.parent,false);

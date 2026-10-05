@@ -13,3 +13,9 @@ Latest user notes: the city reads stretched, has too few megabuildings, and need
 Next animated asset layers: sky; drifting clouds; sun/glare; distant skyline; district buildings at several depths; anchored rising smoke columns; distant ships; flying traffic; tiny ground traffic on coherent visible routes; restrained building signage/vents/cranes/navigation lights. Prepare clean backgrounds behind every moving layer. Preserve high-floor hall perspective, rooftop visibility, human-only grounded near future, vivid retro anime/Art Deco design, strong class distinctions, and four eventual lighting variants.
 
 Validation captures live in ArtDeliverables/TimeDesk/Palette and ArtDeliverables/TimeDesk/City. Use Tools > Terminal Art > Palette > Capture Selected Palette for native render captures; tools are art-only and do not control the gameplay clock.
+
+2026-10-05 rear waiting area repair:
+- Restore the cleared floor footprint, including old colour-transfer remnants outside the removed sprite silhouettes.
+- Restore the connected live city at removed furniture/window overlaps instead of the guide's flat blue pixels; repair follows exterior parallax.
+- Skip the disabled rear bench's registered caster when baking all four lighting states.
+- Native four-state captures refreshed; cleared-rear-closeup.png verifies the reported area. Unity compile and console checks returned zero errors.

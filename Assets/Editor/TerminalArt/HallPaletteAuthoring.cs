@@ -65,6 +65,13 @@ public static class HallPaletteAuthoring
                     if(backdrop.Active) ((Camera)typeof(HallBackdrop).GetField("_camera",flags).GetValue(backdrop)).Render();
                     camera.Render();RenderTexture.active=target;
                     pixels.ReadPixels(new Rect(0,0,1920,1080),0,0);pixels.Apply();
+                    if(hour==12)
+                    {
+                        var rear=new Texture2D(300,150,TextureFormat.RGB24,false);
+                        rear.ReadPixels(new Rect(600,650,300,150),0,0);rear.Apply();
+                        File.WriteAllBytes(report+"/cleared-rear-closeup.png",rear.EncodeToPNG());
+                        UnityEngine.Object.DestroyImmediate(rear);
+                    }
                     File.WriteAllBytes(report+"/petrol-graphite-"+hour.ToString("00",System.Globalization.CultureInfo.InvariantCulture)+".png",pixels.EncodeToPNG());
                 }
                 finally

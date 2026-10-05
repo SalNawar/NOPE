@@ -23,6 +23,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _CityMorning:
+        m_Texture: {fileID: 2800000, guid: 0e14fa6efdea9fd4cac82826d148eb10, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Evening:
         m_Texture: {fileID: 2800000, guid: af4f0baf25b76d349a13090874f958e3, type: 3}
         m_Scale: {x: 1, y: 1}

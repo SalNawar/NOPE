@@ -83,7 +83,13 @@ public static class HallFourStateBaker
             // Rasterize each registered parallelogram only inside its receiver bounds.
             if(strength[state]>0)for(int n=0;n<count;n++)
             {
-                var foot=feet[n];var delta=ends[n]*length[state];if(delta.y>=0)continue;
+                var foot=feet[n];
+                // The rear bench has been removed; its registered caster must
+                // disappear from every baked time state as well.
+                var rearBench=art.layers.FirstOrDefault(l=>l.id.StartsWith("27 "))?.renderer;
+                if(rearBench!=null && !rearBench.gameObject.activeInHierarchy &&
+                    Mathf.Abs(foot.x*width-999)<2 && Mathf.Abs((1-foot.y)*height-361)<2)continue;
+                var delta=ends[n]*length[state];if(delta.y>=0)continue;
                 int y0=Mathf.Max(0,Mathf.FloorToInt((foot.y+delta.y)*height)),y1=Mathf.Min(height-1,Mathf.CeilToInt(foot.y*height));
                 for(int y=y0;y<=y1;y++)
                 {

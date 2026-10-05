@@ -5,6 +5,7 @@ Shader "NOPE/Hall Waiting Bay Repair"
   [PerRendererData] _MainTex("Sprite",2D)="white"{}
   _WaitingGuide("Waiting bay illustration",2D)="white"{}
   _RemovedMask("Removed dispenser mask",2D)="black"{}
+  _CityMorning("Connected city panorama",2D)="white"{}
   _RestoreRemovedOnly("Restore removed objects",Float)=1
   _RepairRect("Right wall service region pixels",Vector)=(1920,475,2172,724)
   _PaletteGuide("Selected palette guide",2D)="white"{}
@@ -31,6 +32,7 @@ Shader "NOPE/Hall Waiting Bay Repair"
   TEXTURE2D(_WaitingGuide);SAMPLER(sampler_WaitingGuide);
   TEXTURE2D(_RemovedMask);SAMPLER(sampler_RemovedMask);
   float _RestoreRemovedOnly;float4 _RepairRect;
+  TEXTURE2D(_CityMorning);SAMPLER(sampler_CityMorning);float _CityPan;
   struct A {float4 position:POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
   struct V {float4 position:SV_POSITION;float2 uv:TEXCOORD0;float4 color:COLOR;};
   V vert(A v){V o;o.position=TransformObjectToHClip(v.position.xyz);o.uv=v.uv;o.color=v.color;return o;}
@@ -41,8 +43,15 @@ Shader "NOPE/Hall Waiting Bay Repair"
    half4 source=SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,v.uv)*v.color;
    float2 pixel=float2(v.uv.x*2172,(1-v.uv.y)*724);
    float inRect=step(_RepairRect.x,pixel.x)*step(pixel.x,_RepairRect.z)*step(_RepairRect.y,pixel.y)*step(pixel.y,_RepairRect.w);
-   source.a=_RestoreRemovedOnly>.5?max(source.a,SAMPLE_TEXTURE2D(_RemovedMask,sampler_RemovedMask,v.uv).a):inRect;
+   source.a=_RestoreRemovedOnly>.5?max(inRect,max(source.a,SAMPLE_TEXTURE2D(_RemovedMask,sampler_RemovedMask,v.uv).a)):inRect;
    source.rgb=SAMPLE_TEXTURE2D(_WaitingGuide,sampler_WaitingGuide,v.uv).rgb*v.color.rgb;
+   // Removed furniture previously occluded the window aperture. Restore the
+   // same panorama coordinates and parallax instead of the guide's blue placeholder.
+   if(_RestoreRemovedOnly>.5 && pixel.y<340 && source.b>.65 && source.b>source.r*1.18 && source.g>.4)
+   {
+    source.rgb=SAMPLE_TEXTURE2D(_CityMorning,sampler_CityMorning,saturate(v.uv+float2(_CityPan,.12))).rgb;
+    return source;
+   }
    half4 light=SAMPLE_TEXTURE2D(_Morning,sampler_Morning,v.uv)*_StateWeights.x
     +SAMPLE_TEXTURE2D(_Noon,sampler_Morning,v.uv)*_StateWeights.y
     +SAMPLE_TEXTURE2D(_Evening,sampler_Morning,v.uv)*_StateWeights.z
