@@ -240,6 +240,14 @@ MonoBehaviour:
     text: Day {0}
     gloss: 0
     tier: 1
+  - key: tray.date
+    text: "{0} \xB7 Day {1}"
+    gloss: 0
+    tier: 0
+  - key: tray.date.hint
+    text: Compare today's date
+    gloss: 0
+    tier: 0
   - key: tray.stability
     text: 'Stability: {0}'
     gloss: 0
@@ -364,14 +372,6 @@ MonoBehaviour:
     text: "Today's rules \xB7 rule {0}"
     gloss: 0
     tier: 0
-  - key: shelf.books
-    text: Books
-    gloss: 0
-    tier: 0
-  - key: shelf.booksOpen
-    text: "Books \xB7 {0}"
-    gloss: 0
-    tier: 0
   - key: shelf.side.left
     text: L
     gloss: 0
@@ -380,105 +380,8 @@ MonoBehaviour:
     text: R
     gloss: 0
     tier: 0
-  - key: guide.papers.name
+  - key: menubar.papers
     text: Papers
-    gloss: 0
-    tier: 0
-  - key: guide.papers.title
-    text: Read the papers
-    gloss: 0
-    tier: 0
-  - key: guide.papers.text
-    text: 'Click a value, then another to compare them: the papers against each other
-      and against what the traveller said.'
-    gloss: 0
-    tier: 0
-  - key: guide.records.name
-    text: Records
-    gloss: 0
-    tier: 0
-  - key: guide.records.title
-    text: Check the papers against the records
-    gloss: 0
-    tier: 0
-  - key: guide.records.text
-    text: 'The traveller''s citizen record is on the right. Match the details that
-      matter: name, number, class, transponder, account.'
-    gloss: 0
-    tier: 0
-  - key: guide.books.name
-    text: Books
-    gloss: 0
-    tier: 0
-  - key: guide.books.title
-    text: Check the papers against the books
-    gloss: 0
-    tier: 0
-  - key: guide.books.text
-    text: Hold a paper's detail against the book row for the place the traveller
-      claims. A value from another place is a lie.
-    gloss: 0
-    tier: 0
-  - key: guide.rules.name
-    text: Rules
-    gloss: 0
-    tier: 0
-  - key: guide.rules.title
-    text: Check today's rules
-    gloss: 0
-    tier: 0
-  - key: guide.rules.text
-    text: Click a rule, then the value it is about. The calendar on the shelf holds
-      today's date for departures and expiry dates.
-    gloss: 0
-    tier: 0
-  - key: guide.decision.name
-    text: Decision
-    gloss: 0
-    tier: 0
-  - key: guide.decision.title
-    text: Decide
-    gloss: 0
-    tier: 0
-  - key: guide.decision.text
-    text: Accept sends the traveller through. Deny cites the first difference or
-      broken rule you logged.
-    gloss: 0
-    tier: 0
-  - key: guide.idle.text
-    text: The steps start when the next traveller steps up to the desk.
-    gloss: 0
-    tier: 0
-  - key: guide.hint
-    text: <b>{0}.</b> {1}
-    gloss: 0
-    tier: 0
-  - key: guide.hintTitle
-    text: <b>{0}</b>
-    gloss: 0
-    tier: 0
-  - key: guide.next
-    text: 'Next: {0}'
-    gloss: 0
-    tier: 0
-  - key: guide.back
-    text: Back
-    gloss: 0
-    tier: 0
-  - key: guide.progress
-    text: Step {0} of {1}
-    gloss: 0
-    tier: 0
-  - key: guide.progressDone
-    text: "Step {0} of {1} \xB7 All checks here done"
-    gloss: 0
-    tier: 0
-  - key: guide.progressNext
-    text: "Step {0} of {1} \xB7 Next: {2}"
-    gloss: 0
-    tier: 0
-  - key: guide.progressMore
-    text: '{0} (+{1} more)'
     gloss: 0
     tier: 0
   - key: status.holding
@@ -589,6 +492,10 @@ MonoBehaviour:
     text: Another office
     gloss: 0
     tier: 0
+  - key: finding.link.PaperMissing
+    text: Not carried
+    gloss: 0
+    tier: 0
   - key: finding.note.DifferentDetails
     text: '{0} and {1} are different details. Nothing logged.'
     gloss: 0
@@ -667,6 +574,10 @@ MonoBehaviour:
     text: Seal incorrect
     gloss: 0
     tier: 0
+  - key: finding.title.PaperMissing
+    text: '{0} missing'
+    gloss: 0
+    tier: 0
   - key: finding.detail
     text: '{0} against {1}'
     gloss: 0
@@ -677,6 +588,10 @@ MonoBehaviour:
     tier: 0
   - key: finding.detail.rule
     text: '{0} ({1})'
+    gloss: 0
+    tier: 0
+  - key: finding.detail.missing
+    text: Asked for, not carried
     gloss: 0
     tier: 0
   - key: finding.evidence
@@ -693,10 +608,6 @@ MonoBehaviour:
     tier: 0
   - key: findings.title
     text: Your findings
-    gloss: 0
-    tier: 0
-  - key: findings.report
-    text: Open the report
     gloss: 0
     tier: 0
   - key: findings.empty
@@ -830,10 +741,6 @@ MonoBehaviour:
     tier: 0
   - key: search.title.rule
     text: Rule {0}
-    gloss: 0
-    tier: 0
-  - key: search.title.deviation
-    text: "Deviation \xB7 {0}"
     gloss: 0
     tier: 0
   - key: search.revised
@@ -2887,5 +2794,45 @@ MonoBehaviour:
     tier: 0
   - key: adopt.problem.BadCharacters
     text: Letters, spaces, hyphens and apostrophes only.
+    gloss: 0
+    tier: 0
+  - key: menubar.records
+    text: Records
+    gloss: 0
+    tier: 0
+  - key: menubar.rules
+    text: Rules
+    gloss: 0
+    tier: 0
+  - key: menubar.books
+    text: Books
+    gloss: 0
+    tier: 0
+  - key: menubar.calendar
+    text: Calendar
+    gloss: 0
+    tier: 0
+  - key: menubar.notHandedOver
+    text: Not handed over
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.flag
+    text: Flag missing
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.flagged
+    text: 'Flagged: ask for it'
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.notCarried
+    text: Not carried
+    gloss: 0
+    tier: 0
+  - key: menubar.today
+    text: 'Today: {0}'
+    gloss: 0
+    tier: 0
+  - key: menubar.today.note
+    text: Hold to compare
     gloss: 0
     tier: 0
