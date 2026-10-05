@@ -1,8 +1,10 @@
 /// <summary>
 /// What the investigation desk can do with the parts the office builder wired
 /// (audit R4-022; the PC redesign RF1). A case shows only when the
-/// Investigation app is wired (its Documents tab's page, the app, Accept and
-/// Deny; there is no text fallback any more). A traveller's answers can be
+/// Investigation app is wired (its Documents tab's page and the app) and the
+/// desk's stamps can decide it (the PC only investigates since the clean-up
+/// of 2026-10-05: the verdict is the stamp on the passport; there is no text
+/// fallback any more). A traveller's answers can be
 /// read only with the wheel's ring, the transcript and the app's Transcript
 /// tab; garments can be compared only with the ring (its "Look >" menu) and
 /// the compare; the evidence system needs the app and the compare; papers go
@@ -16,14 +18,14 @@
 public readonly struct InvestigationWiring
 {
     /// <summary>
-    /// Evaluates the wired parts: the Documents tab's page, the app, Accept,
-    /// Deny, the compare, the wheel's ring, the transcript, the app's
+    /// Evaluates the wired parts: the Documents tab's page, the app, the
+    /// desk's stamps, the compare, the wheel's ring, the transcript, the app's
     /// Transcript tab, the desk with all its parts, and the Records tab.
     /// </summary>
-    public InvestigationWiring(bool documents, bool app, bool accept, bool deny, bool compare,
+    public InvestigationWiring(bool documents, bool app, bool stamps, bool compare,
                                bool ring, bool transcript, bool transcriptTab, bool desk, bool records)
     {
-        Wired = documents && app && accept && deny;
+        Wired = documents && app && stamps;
         EvidenceSystemActive = Wired && compare;
         InterviewReachable = ring && transcript && transcriptTab;
         AppearanceReachable = ring && compare;
@@ -31,7 +33,7 @@ public readonly struct InvestigationWiring
         RecordsMissing = EvidenceSystemActive && !records;
     }
 
-    /// <summary>The app a case needs is wired (otherwise no case can be shown).</summary>
+    /// <summary>The app a case needs and the stamps that decide it are wired (otherwise no case can be shown).</summary>
     public bool Wired { get; }
 
     /// <summary>The evidence loop is playable (the app and the compare), so scoring may gate denials on documented evidence.</summary>

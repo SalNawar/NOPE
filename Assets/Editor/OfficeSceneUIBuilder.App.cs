@@ -11,16 +11,16 @@ using UnityEngine.UI;
 /// restored size from DesktopConfigSO, maximised on its first open). Under
 /// its title bar (just "Investigation"): the menu bar (the desk-first
 /// redesign, item 8: the documents' menus and their drop-down, MenuBarView;
-/// who is at the desk; Search), then the work area down to the window's
-/// foot (the main column with the status line, the two panes with the
-/// gutter and the line layer over them (AppPane, MatchLines) and the
-/// decision step in their place when it shows (DecisionView); the findings
+/// Search), then the work area down to the window's foot (the main column
+/// with the status line, which says who is at the desk while idle and holds
+/// the notice (the scan toast) at its right end, and the two panes with the
+/// gutter and the line layer over them (AppPane, MatchLines); the findings
 /// column at its right, a rail while empty: FindingsView) and the search
 /// drawer (OfficeSceneUIBuilder.Search); the drop-down is built last so it
 /// draws over the work. The guided steps (GuideBar) run headless on the
-/// body (no pills, no foot: the desk leads since the desk-first redesign). The panes'
-/// views are forms (OfficeSceneUIBuilder.AppViews, PcForms) behind IAppView;
-/// the scan toast goes on the investigation host above the window layer.
+/// body (no pills, no foot: the desk leads since the desk-first redesign;
+/// no decision: the stamps decide since the PC clean-up). The panes'
+/// views are forms (OfficeSceneUIBuilder.AppViews, PcForms) behind IAppView.
 /// The workbench's parts are OfficeSceneUIBuilder.Workbench's. Rebuilt fresh
 /// on each run (the one convergence policy of this partial, audit R6-008);
 /// every reference it wires is checked (Wire, audit R6-004). Part of
@@ -28,16 +28,14 @@ using UnityEngine.UI;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The scan toast's size, and its gap above the taskbar.</summary>
-    private static readonly Vector2 AppToastSize = new Vector2(540f, 56f);
+    /// <summary>The notice's width at the status line's right end.</summary>
+    private const float AppToastWidth = 520f;
 
     /// <summary>The app's parts the rest of Build wires (the façade, the desktop's registry, Mail): each source's views, one per pane, the left pane's first; the steps and the workbench.</summary>
     private struct AppParts
     {
         public InvestigationApp App;
         public DesktopWindow Window;
-        public Button Accept;
-        public Button Deny;
         public DocumentsView[] Documents;
         public RecordsView[] Records;
         public ReferenceView[] Reference;
@@ -62,10 +60,10 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// Builds the Investigation app on <paramref name="windowLayer"/> and its
-    /// scan toast on <paramref name="investHost"/> (above the layer); its rows
+    /// Builds the Investigation app on <paramref name="windowLayer"/>; its rows
     /// pick into <paramref name="compare"/>. The retired per-source windows,
-    /// phase 17's case-tile window and the compare dock go.
+    /// phase 17's case-tile window, the compare dock and the desktop's scan
+    /// toast (on <paramref name="investHost"/>, now in the status line) go.
     /// </summary>
     private static AppParts BuildInvestigationApp(Transform windowLayer, Transform investHost, CompareController compare)
     {
@@ -73,6 +71,7 @@ public static partial class OfficeSceneUIBuilder
                                            "DocumentWindowTemplate", "BookWindowTemplate", "InvestigationApp" })
             DestroyChildIfPresent(windowLayer, retired);
         DestroyChildIfPresent(investHost, "CompareDock");
+        DestroyChildIfPresent(investHost, "AppToast");
 
         DesktopConfigSO config = EnsureDesktopConfig();
         DesktopWindow window = BuildOSWindow(windowLayer, "InvestigationApp", null, null, string.Empty, config.investigationWindowSize);
@@ -104,8 +103,6 @@ public static partial class OfficeSceneUIBuilder
         right.gameObject.SetActive(false);
         MatchLines lines = BuildMatchLines(panes, right.gameObject);
 
-        DecisionView decision = BuildDecision(main, out parts.Accept, out parts.Deny);
-
         parts.Documents = new[] { leftViews.Documents, rightViews.Documents };
         parts.Records = new[] { leftViews.Records, rightViews.Records };
         parts.Reference = new[] { leftViews.Reference, rightViews.Reference };
@@ -114,15 +111,10 @@ public static partial class OfficeSceneUIBuilder
         parts.Rules = new[] { leftViews.Rules, rightViews.Rules };
         parts.Calendar = new[] { leftViews.Calendar, rightViews.Calendar };
 
-        AppToast toast = BuildAppToast(investHost, config);
+        AppToast toast = BuildAppToast(status.Root);
         parts.App = win.gameObject.AddComponent<InvestigationApp>();
         parts.Guide = body.gameObject.AddComponent<GuideBar>();
         parts.Board = work.gameObject.AddComponent<MatchBoard>();
-
-        var soGuide = new SerializedObject(parts.Guide);
-        Wire(soGuide, "app", parts.App);
-        Wire(soGuide, "board", parts.Board);
-        soGuide.ApplyModifiedProperties();
 
         var soBoard = new SerializedObject(parts.Board);
         Wire(soBoard, "compare", compare);
@@ -150,14 +142,9 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "findingsColumn", findingsColumn);
         so.FindProperty("findingsRail").floatValue = WbSize.Rail;
         Wire(so, "mainColumn", main);
-        Wire(so, "nameText", bar.Name);
-        Wire(so, "countersText", bar.Counters);
         Wire(so, "guide", parts.Guide);
         Wire(so, "menus", bar.View);
         Wire(so, "board", parts.Board);
-        Wire(so, "decision", decision);
-        Wire(so, "panesArea", panes.gameObject);
-        Wire(so, "statusLine", status.Root.gameObject);
         Wire(so, "toast", toast);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
@@ -228,14 +215,19 @@ public static partial class OfficeSceneUIBuilder
         return toggle;
     }
 
-    /// <summary>The scan toast (WN5, C10) on the investigation host, above the window layer: at the desktop's lower right, just above the taskbar, its line at Body size and Open, hidden.</summary>
-    private static AppToast BuildAppToast(Transform investHost, DesktopConfigSO config)
+    /// <summary>
+    /// The notice (WN5, C10; the scan toast, a copy, a pin) at the status
+    /// line's right end (the PC clean-up of 2026-10-05: over the panes it hid
+    /// the right pane's foot): the line's layout gives it AppToastWidth while
+    /// it shows and the plates the rest, so it covers nothing; its line at
+    /// Body size and Open, hidden.
+    /// </summary>
+    private static AppToast BuildAppToast(Transform statusLine)
     {
-        DestroyChildIfPresent(investHost, "AppToast");
-        Transform strip = Panel(investHost, "AppToast", new Vector2(1f, 0f), new Vector2(1f, 0f), Vector2.zero, AppToastSize, PanelNavy, ThemeRoleId.Toast);
-        var place = (RectTransform)strip;
-        place.pivot = new Vector2(1f, 0f);
-        place.anchoredPosition = new Vector2(-WbSize.Pad, config.MaximisedBottom + 12f);
+        Transform strip = Panel(statusLine, "AppToast", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, PanelNavy, ThemeRoleId.Toast);
+        LayoutElement size = GetOrAdd<LayoutElement>(strip.gameObject);
+        size.minWidth = size.preferredWidth = AppToastWidth;
+        size.flexibleWidth = 0f;
         TMP_Text line = Text(strip, "Text", string.Empty, PcType.Body, TextAlignmentOptions.MidlineLeft, new Vector2(0f, 0f), new Vector2(0.76f, 1f), Color.white,
                              ThemeRoleId.Toast, fit: true);
         ((RectTransform)line.transform).offsetMin = new Vector2(PcSize.L + 4f, 0f);

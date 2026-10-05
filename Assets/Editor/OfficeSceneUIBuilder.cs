@@ -24,10 +24,11 @@ using UnityEngine.UI;
 ///   the verdict line on the office overlay (piece 10)  [OfficeUIController]
 /// - Morning briefing + shift report panels  [DayFlowUIController]
 /// - Investigation desk: the Investigation app (OfficeSceneUIBuilder.App.cs:
-///   one window with the counters, Accept/Deny and six tabs (no claim): the
-///   scanned documents, Citizen Records, the reference books, the interview
-///   transcript, the Deviation Report and the directives), the compare dock
-///   and the scan toast, laid out for the 4:3 desktop  [InvestigationUIController,
+///   one window with the menu bar, the status line (who is at the desk, the
+///   counters, the scan toast) and two panes over the scanned documents,
+///   Citizen Records, the reference books, the interview transcript and the
+///   directives; no claim, and no Accept or Deny: the stamps decide), laid
+///   out for the 4:3 desktop  [InvestigationUIController,
 ///   InvestigationApp, AppPane, the views, CompareController]
 /// - The desktop's six icons, their context menu, the Start menu and the one
 ///   OpenApp(id) entry point (OfficeSceneUIBuilder.Desktop.cs)
@@ -36,7 +37,7 @@ using UnityEngine.UI;
 ///   speech bubble (its answer pickable, above the wheel), the desk tooltip,
 ///   the fallback HUD, the office case HUD (the office compare strip; no
 ///   claim tag), the desk view's "▲ Back" control and the stamp tray
-///   (Accept and Deny at the desk) on the office overlay canvas
+///   (the verdict, at the desk) on the office overlay canvas
 ///   [TravellerWheel, OverlayCallout, SpeechBubbleInput, OfficeCaseHud,
 ///   HoverHint, the stamps' hand-back buttons]
 /// - The Office root: click boxes for the art's props, the physical desk
@@ -240,8 +241,8 @@ public static partial class OfficeSceneUIBuilder
 
         // --- Investigation desk ---
         // Persistent host (never toggled) holds the controllers; on it the window layer (every window, the icon area
-        // exactly; it shows with or without a case) and the scan toast above it. The case overlay and the compare dock
-        // retired: Accept/Deny are the Investigation app's decision step (its claim is only spoken now), the compare is its workbench's.
+        // exactly; it shows with or without a case). The case overlay, the compare dock and the PC's Accept/Deny retired: the stamps
+        // decide (the PC clean-up of 2026-10-05), the claim is only spoken, the compare is the workbench's, the scan toast is in the app's status line.
         Transform investHost = Panel(root, "InvestigationUI", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         InvestigationUIController invest = GetOrAdd<InvestigationUIController>(investHost.gameObject);
         CompareController compare = GetOrAdd<CompareController>(investHost.gameObject);
@@ -340,8 +341,6 @@ public static partial class OfficeSceneUIBuilder
 
         var soInvest = new SerializedObject(invest);
         Wire(soInvest, "app", app.App);
-        Wire(soInvest, "acceptButton", app.Accept);
-        Wire(soInvest, "denyButton", app.Deny);
         Wire(soInvest, "compareController", compare);
         SerializedArrays.Set(soInvest, "documentsViews", app.Documents);
         SerializedArrays.Set(soInvest, "recordsViews", app.Records);
@@ -360,7 +359,6 @@ public static partial class OfficeSceneUIBuilder
         Wire(soInvest, "wheel", wheel);
         Wire(soInvest, "idleScreen", idleScreen);
         soInvest.ApplyModifiedProperties();
-        WireGuideToOffice(app.Guide, monitorScreen);
 
         var soOrch = new SerializedObject(orchestrator);
         SetRef(soOrch, "eventDirector", eventDirector);
@@ -391,7 +389,7 @@ public static partial class OfficeSceneUIBuilder
         EditorSceneManager.SaveScene(scene, GameplayScenePath);
         EnsureBuildSettings();
         AssetDatabase.SaveAssets();
-        Debug.Log($"[TimeDesk] {GameplayScenePath} built, wired and saved (every UI graphic theme-tagged, the PC frame and the desktop's clone on the office PC with screen power, the desk with papers (their whole face, the passport photo; examined in the hand), scanner and reacting props, the layered traveller + wheel + speech bubble (answers pickable), the office case HUD and the stamp tray, the office's input rules, the binder and its scene contract, HUD, citation and verdict line over the office, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare (the PC dock + office strip), the window manager and the taskbar's window buttons, the six desktop icons, their context menu and the Start menu, Accept/Deny, GameManager, DaySystem). It loads on {ArtScenePath}.");
+        Debug.Log($"[TimeDesk] {GameplayScenePath} built, wired and saved (every UI graphic theme-tagged, the PC frame and the desktop's clone on the office PC with screen power, the desk with papers (their whole face, the passport photo; examined in the hand), scanner and reacting props, the layered traveller + wheel + speech bubble (answers pickable), the office case HUD and the stamp tray, the office's input rules, the binder and its scene contract, HUD, citation and verdict line over the office, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare (the PC dock + office strip), the window manager and the taskbar's window buttons, the six desktop icons, their context menu and the Start menu, GameManager, DaySystem). It loads on {ArtScenePath}.");
     }
 
     // -----------------------------
@@ -1278,7 +1276,6 @@ public static partial class OfficeSceneUIBuilder
         };
         DesktopIcons icons = BuildDesktopIcons(canvas, windows, feed, out DesktopContextMenu contextMenu);
         WireIconSettings(windows[DesktopAppIds.Settings], icons);
-        WireStepsSettings(windows[DesktopAppIds.Settings], app.Guide);
 
         Transform startMenu = BuildStartMenu(root, apps, out TMP_Text mailEntry, out Button arrangeEntry, out Button screenOffEntry, out Button quitEntry);
         var soFeed = new SerializedObject(feed);

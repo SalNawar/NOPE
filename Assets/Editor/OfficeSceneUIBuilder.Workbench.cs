@@ -12,10 +12,11 @@ using UnityEngine.UI;
 /// sentence-case labels at the type scale, quiet buttons with a hairline, one
 /// primary button per view, slim chrome so the documents get the room. The
 /// menu bar (the desk-first redesign, item 8: the menus' titles and their
-/// drop-down, who is at the desk, Search; in place of the header, the shelf
-/// and the foot), the status line (one plate per state), the line layer over
-/// the panes, the decision step, the findings column (its rail) and the
-/// Calendar view. Neutral colours are
+/// drop-down, Search; in place of the header, the shelf and the foot), the
+/// status line (one plate per state; idle, who is at the desk; the notice at
+/// its right end), the line layer over the panes, the findings column (its
+/// rail) and the Calendar view (no decision step since the PC clean-up of
+/// 2026-10-05: the stamps decide). Neutral colours are
 /// baked (the theme recolours every tagged graphic at load). Part of
 /// <see cref="OfficeSceneUIBuilder"/>; BuildInvestigationApp calls it.
 /// </summary>
@@ -30,7 +31,7 @@ public static partial class OfficeSceneUIBuilder
         /// <summary>The gap between the main column and the findings, and above and below the work.</summary>
         public const float Gap = 16f;
 
-        /// <summary>The menu bar's height (the titles, who is at the desk, Search).</summary>
+        /// <summary>The menu bar's height (the titles and Search).</summary>
         public const float MenuBar = 56f;
 
         /// <summary>A menu title's height (and Search's).</summary>
@@ -38,9 +39,6 @@ public static partial class OfficeSceneUIBuilder
 
         /// <summary>The drop-down's least width.</summary>
         public const float Menu = 420f;
-
-        /// <summary>The room for who is at the desk (the name and the counters) left of Search.</summary>
-        public const float Who = 560f;
 
         /// <summary>The Search button's width (at the menu bar's right).</summary>
         public const float Search = 200f;
@@ -51,7 +49,7 @@ public static partial class OfficeSceneUIBuilder
         /// <summary>The findings column's width while nothing is logged (the rail).</summary>
         public const float Rail = 56f;
 
-        /// <summary>The status line's height (two lines at Caption size, in the tallest culture font).</summary>
+        /// <summary>The status line's height (two lines at Caption size, in the tallest culture font; the notice fills it at its right end).</summary>
         public const float Status = 64f;
 
         /// <summary>The panes' top under the main column's top: the status line and a gap.</summary>
@@ -59,9 +57,6 @@ public static partial class OfficeSceneUIBuilder
 
         /// <summary>A pane's header (one line: the side, the document's name, the target hint).</summary>
         public const float PaneHead = 44f;
-
-        /// <summary>The decision's words' size.</summary>
-        public const int Name = 30;
 
         /// <summary>The gutter between the two panes, where a line's label sits.</summary>
         public const float Gutter = 120f;
@@ -76,13 +71,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>An opaque colour from 0xRRGGBB.</summary>
     private static Color Hex(int rgb) => new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f, 1f);
 
-    /// <summary>The menu bar's parts the app takes: the view, its drop-down (drawn last, over the work), who is at the desk and Search.</summary>
+    /// <summary>The menu bar's parts the app takes: the view, its drop-down (drawn last, over the work) and Search.</summary>
     private struct AppMenuBar
     {
         public MenuBarView View;
         public RectTransform Dropdown;
-        public TMP_Text Name;
-        public TMP_Text Counters;
         public Button Search;
     }
 
@@ -170,9 +163,9 @@ public static partial class OfficeSceneUIBuilder
     /// at the top with drop-downs, in place of the header and the shelf, so
     /// the documents get the height): a surface WbSize.MenuBar units tall with
     /// a hairline under it; at its left the menu titles' row (MenuTitle,
-    /// cloned per menu by MenuBarView); at its right Search (Ctrl K) and, left
-    /// of it, one line naming who is at the desk (the name, bold, then the
-    /// counters, muted); on <paramref name="body"/>, above the work, the
+    /// cloned per menu by MenuBarView), which reaches Search (Ctrl K) at its
+    /// right (who is at the desk moved to the status line, the PC clean-up of
+    /// 2026-10-05: here it was cut at 720p); on <paramref name="body"/>, above the work, the
     /// drop-down: a white list framed by a strong hairline holding a row's
     /// template (MenuRow) and a caption's template ("Not handed over").
     /// </summary>
@@ -183,7 +176,7 @@ public static partial class OfficeSceneUIBuilder
         HairlineEdge(root, "Rule", 1);
 
         var row = (RectTransform)Panel(root, "Row", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(row, Vector2.zero, Vector2.one, new Vector2(WbSize.Pad - 8f, 0f), new Vector2(-(WbSize.Pad + WbSize.Search + WbSize.Who + 2f * PcSize.L), 0f));
+        PlaceRect(row, Vector2.zero, Vector2.one, new Vector2(WbSize.Pad - 8f, 0f), new Vector2(-(WbSize.Pad + WbSize.Search + PcSize.L), 0f));
         HorizontalLayoutGroup line = GetOrAdd<HorizontalLayoutGroup>(row.gameObject);
         line.spacing = 4f;
         line.childAlignment = TextAnchor.MiddleLeft;
@@ -197,21 +190,6 @@ public static partial class OfficeSceneUIBuilder
         Button search = QuietButton(root, "SearchButton", "app.search.open");
         PlaceRect(search.transform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(WbSize.Pad + WbSize.Search), -WbSize.MenuTitle / 2f),
                   new Vector2(-WbSize.Pad, WbSize.MenuTitle / 2f));
-
-        var who = (RectTransform)Panel(root, "Who", new Vector2(1f, 0f), Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(who, new Vector2(1f, 0f), Vector2.one, new Vector2(-(WbSize.Pad + WbSize.Search + PcSize.L + WbSize.Who), 0f),
-                  new Vector2(-(WbSize.Pad + WbSize.Search + PcSize.L), 0f));
-        HorizontalLayoutGroup whoRow = GetOrAdd<HorizontalLayoutGroup>(who.gameObject);
-        whoRow.spacing = PcSize.M;
-        whoRow.childAlignment = TextAnchor.MiddleRight;
-        whoRow.childControlWidth = true;
-        whoRow.childControlHeight = true;
-        whoRow.childForceExpandWidth = false;
-        whoRow.childForceExpandHeight = false;
-        TMP_Text name = WbText(who, "Name", null, string.Empty, PcType.Caption, ThemeRoleId.Surface, TextAlignmentOptions.MidlineRight, FontStyles.Bold);
-        TMP_Text counters = WbText(who, "Counters", null, UiText.Get("idle.waiting"), PcType.Caption, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.MidlineRight);
-        GetOrAdd<LayoutElement>(name.gameObject).flexibleWidth = 0f;
-        GetOrAdd<LayoutElement>(counters.gameObject).flexibleWidth = 0f;
 
         var dropdown = (RectTransform)Panel(body, "MenuDropdown", new Vector2(0f, 1f), new Vector2(0f, 1f), Vector2.zero, new Vector2(WbSize.Menu, 200f), WbSurface,
                                             ThemeRoleId.Surface);
@@ -246,7 +224,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "rowTemplate", rowTemplate);
         Wire(so, "captionTemplate", caption);
         so.ApplyModifiedProperties();
-        return new AppMenuBar { View = view, Dropdown = dropdown, Name = name, Counters = counters, Search = search };
+        return new AppMenuBar { View = view, Dropdown = dropdown, Search = search };
     }
 
     /// <summary>
@@ -367,15 +345,26 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The status line (§4.1; wave 5 A3: the lead folded into it): one plate
     /// per state, each in its role's colours with its line (Caption, two lines
-    /// at most, then cut): the step's title and sentence (Info), what is held
-    /// with Cancel (Holding), a match (FindingMatch), a difference
-    /// (FindingDiffer) and a note (Info); the board shows one. Search (Ctrl+K;
-    /// the drawer) at its right.
+    /// at most, then cut): idle, who is at the desk with the counters, or that
+    /// the desk waits (Info); what is held with Cancel (Holding), a match
+    /// (FindingMatch), a difference (FindingDiffer) and a note (Info); the
+    /// board shows one. The plates sit in a row with the notice
+    /// (BuildAppToast), which takes the line's right end while it shows.
     /// </summary>
     private static AppStatus BuildStatusLine(Transform main)
     {
         Transform root = Panel(main, "Status", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -WbSize.Status / 2f), new Vector2(0f, WbSize.Status), null);
+        // A row: the plates take the width the notice (BuildAppToast, built after) leaves while it shows.
+        HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(root.gameObject);
+        row.spacing = PcSize.S;
+        row.childControlWidth = true;
+        row.childControlHeight = true;
+        row.childForceExpandWidth = false;
+        row.childForceExpandHeight = true;
         Transform plates = Panel(root, "Plates", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        LayoutElement platesSize = GetOrAdd<LayoutElement>(plates.gameObject);
+        platesSize.minWidth = 0f;
+        platesSize.flexibleWidth = 1f;
         var status = new AppStatus
         {
             Root = root,
@@ -445,61 +434,6 @@ public static partial class OfficeSceneUIBuilder
         so.ApplyModifiedProperties();
         go.transform.SetAsLastSibling();
         return lines;
-    }
-
-    /// <summary>
-    /// The decision step (IA10, W5), in place of the status line and the
-    /// panes: what was logged (Body), then Accept and Deny as large plates in
-    /// their roles' colours (their keyed words with the fixed glyphs, and a
-    /// second line of explanation), hidden until the step shows.
-    /// </summary>
-    private static DecisionView BuildDecision(Transform main, out Button accept, out Button deny)
-    {
-        Transform root = Panel(main, "Decision", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        TMP_Text summary = WbText(root, "Summary", null, string.Empty, PcType.Body, ThemeRoleId.WindowBody, TextAlignmentOptions.TopLeft, FontStyles.Normal, true);
-        PlaceRect(summary.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -64f), new Vector2(0f, -4f));
-
-        accept = DecisionCard(root, "AcceptButton", "accept", ThemeRoleId.AcceptButton, new Color(0.16f, 0.42f, 0.22f, 1f), 0f, true, out TMP_Text acceptDetail);
-        deny = DecisionCard(root, "DenyButton", "deny", ThemeRoleId.DenyButton, new Color(0.46f, 0.16f, 0.16f, 1f), 460f + PcSize.L, false, out TMP_Text denyDetail);
-
-        DecisionView view = GetOrAdd<DecisionView>(root.gameObject);
-        var so = new SerializedObject(view);
-        Wire(so, "summaryText", summary);
-        Wire(so, "acceptDetail", acceptDetail);
-        Wire(so, "denyDetail", denyDetail);
-        so.ApplyModifiedProperties();
-        root.gameObject.SetActive(false);
-        return view;
-    }
-
-    /// <summary>One decision plate, 460 × 160 units at <paramref name="x"/> under the summary: its keyed word (bold, 30 u) after its fixed glyph, its detail under it.</summary>
-    private static Button DecisionCard(Transform root, string name, string key, ThemeRoleId role, Color fill, float x, bool tick, out TMP_Text detail)
-    {
-        Button card = MakeButton(root, name, null, Vector2.zero, Vector2.one, fill, role, key);
-        PlaceRect(card.transform, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(x, -(72f + 160f)), new Vector2(x + 460f, -72f));
-        TMP_Text word = card.transform.Find("Label").GetComponent<TMP_Text>();
-        Chrome(word, WbSize.Name);
-        word.fontStyle = FontStyles.Bold;
-        word.alignment = TextAlignmentOptions.MidlineLeft;
-        word.lineSpacing = -6f;
-        word.raycastTarget = false;
-        PlaceRect(word.transform, new Vector2(0f, 0.5f), Vector2.one, new Vector2(56f, 0f), new Vector2(-PcSize.L, -8f));
-        SceneUiKit.Tag(word, role, ThemePart.Ink, key, FontStyles.Bold, ThemeTextKind.Button, true);
-        Transform glyph = Panel(card.transform, "Glyph", new Vector2(0f, 0.75f), new Vector2(0f, 0.75f), new Vector2(30f, 0f), new Vector2(32f, 32f), null);
-        ((RectTransform)glyph).pivot = Center;
-        if (tick)
-        {
-            GlyphBar(glyph, "Stroke1", new Vector2(-6.95f, -4.05f), new Vector2(6f, 14f), 45f, role);
-            GlyphBar(glyph, "Stroke2", new Vector2(7.19f, 0.19f), new Vector2(6f, 26f), -45f, role);
-        }
-        else
-        {
-            GlyphBar(glyph, "Stroke1", Vector2.zero, new Vector2(6f, 30f), 45f, role);
-            GlyphBar(glyph, "Stroke2", Vector2.zero, new Vector2(6f, 30f), -45f, role);
-        }
-        detail = WbText(card.transform, "Detail", null, string.Empty, PcType.Caption, role, TextAlignmentOptions.TopLeft, FontStyles.Normal, true);
-        PlaceRect(detail.transform, Vector2.zero, new Vector2(1f, 0.5f), new Vector2(PcSize.L + 4f, 10f), new Vector2(-PcSize.L, -4f));
-        return card;
     }
 
     /// <summary>
@@ -651,22 +585,4 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A card's text from <paramref name="top"/> to <paramref name="bottom"/> units under its top, 24 units in from its sides.</summary>
     private static void CardRow(TMP_Text text, float top, float bottom) =>
         PlaceRect(text.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(24f, -bottom), new Vector2(-24f, -top));
-
-    // ----------------------------- wiring to the office -----------------------------
-
-    /// <summary>The PC's screen (whether the player looks at the desktop) for the steps.</summary>
-    private static void WireGuideToOffice(GuideBar guide, MonitorScreen screen)
-    {
-        var so = new SerializedObject(guide);
-        Wire(so, "screen", screen);
-        so.ApplyModifiedProperties();
-    }
-
-    /// <summary>Gives the Settings window the app's guided steps (its pair shows or hides their hints).</summary>
-    private static void WireStepsSettings(DesktopWindow settings, GuideBar steps)
-    {
-        var so = new SerializedObject(settings.GetComponent<SettingsWindowController>());
-        SetRef(so, "steps", steps);
-        so.ApplyModifiedProperties();
-    }
 }

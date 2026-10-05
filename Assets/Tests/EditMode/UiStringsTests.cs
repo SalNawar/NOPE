@@ -177,12 +177,12 @@ public class UiStringsTests
     [Test]
     public void TodaysFlavourLabels_AreThePcRedesignsOrdersAndPortals()
     {
-        // The PC redesign's 28, the Orders icon's (Saleh 2026-09-29) and the Portals icon's (the portals spec v3).
+        // The PC redesign's 28, the Orders icon's (Saleh 2026-09-29) and the Portals icon's (the portals spec v3), less Accept and Deny (the PC clean-up of 2026-10-05: the stamps decide).
         List<string> flavour = FlavourKeys(TodaysUi());
-        Assert.AreEqual(30, flavour.Count, string.Join(", ", flavour));
+        Assert.AreEqual(28, flavour.Count, string.Join(", ", flavour));
         foreach (string added in new[] { "icon.investigation", "icon.mail", "icon.account", "icon.settings", "icon.orders", "icon.portals" })
             CollectionAssert.Contains(flavour, added);
-        foreach (string gone in new[] { "icon.directives", "icon.scanner", "icon.records", "icon.lexicon", "icon.dialect", "icon.material", "icon.clueLog", "window.directives", "window.scanner", "records.title" })
+        foreach (string gone in new[] { "icon.directives", "icon.scanner", "icon.records", "icon.lexicon", "icon.dialect", "icon.material", "icon.clueLog", "window.directives", "window.scanner", "records.title", "accept", "deny" })
             CollectionAssert.DoesNotContain(flavour, gone);
     }
 

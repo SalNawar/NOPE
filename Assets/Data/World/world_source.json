@@ -21729,18 +21729,6 @@
     },
     "strings": [
       {
-        "key": "accept",
-        "text": "ACCEPT",
-        "gloss": "Below",
-        "tier": "Flavour"
-      },
-      {
-        "key": "deny",
-        "text": "DENY",
-        "gloss": "Below",
-        "tier": "Flavour"
-      },
-      {
         "key": "taskbar.start",
         "text": "Menu",
         "gloss": "None",
@@ -22191,6 +22179,18 @@
         "tier": "Full"
       },
       {
+        "key": "app.atDesk",
+        "text": "<b>{0}</b>   ·   {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.atDesk.name",
+        "text": "<b>{0}</b>",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "app.tab.documents",
         "text": "Papers",
         "gloss": "None",
@@ -22619,36 +22619,6 @@
       {
         "key": "findings.empty",
         "text": "No findings yet",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "decision.summary",
-        "text": "Findings logged: {0}. To cite if you deny: {1}.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "decision.summaryNone",
-        "text": "Findings logged: {0}. None is a difference or a broken rule, so Deny has nothing to cite yet.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "decision.accept",
-        "text": "Stamp the papers. {0} goes through.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "decision.denyCites",
-        "text": "Cites: {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "decision.denyWaits",
-        "text": "Log a difference or a broken rule first.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -23662,25 +23632,19 @@
       },
       {
         "key": "keys.step",
-        "text": "Investigation: go to step 1 to 5 (Papers, Records, Books, Rules, Decision)",
+        "text": "Investigation: put up step 1 to 4's documents (Papers, Records, Books, Rules)",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.nextStep",
-        "text": "The next or previous step (← → on the steps)",
+        "text": "Investigation: put up the next or previous step's documents",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "keys.findings",
         "text": "Show or hide the findings column",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "keys.hints",
-        "text": "Show or hide the steps' hints",
         "gloss": "None",
         "tier": "Full"
       },
@@ -23704,7 +23668,7 @@
       },
       {
         "key": "keys.regions",
-        "text": "The next or previous part of the app: steps, shelf, panes, findings, Cancel, Accept and Deny",
+        "text": "The next or previous part of the app: the menu bar, the panes, the findings, Cancel",
         "gloss": "None",
         "tier": "Full"
       },
@@ -23849,18 +23813,6 @@
       {
         "key": "settings.investigation",
         "text": "Investigation",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "settings.stepsShown",
-        "text": "Step hints shown",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "settings.stepsHidden",
-        "text": "Step hints hidden",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25989,14 +25941,6 @@
         "rtl": true,
         "entries": [
           {
-            "key": "accept",
-            "text": "قبول"
-          },
-          {
-            "key": "deny",
-            "text": "رفض"
-          },
-          {
             "key": "taskbar.start",
             "text": "القائمة"
           },
@@ -26114,14 +26058,6 @@
         "language": "el",
         "rtl": false,
         "entries": [
-          {
-            "key": "accept",
-            "text": "ΕΓΚΡΙΣΗ"
-          },
-          {
-            "key": "deny",
-            "text": "ΑΠΟΡΡΙΨΗ"
-          },
           {
             "key": "taskbar.start",
             "text": "Μενού"
@@ -26241,14 +26177,6 @@
         "rtl": false,
         "entries": [
           {
-            "key": "accept",
-            "text": "ACCETTA"
-          },
-          {
-            "key": "deny",
-            "text": "RIFIUTA"
-          },
-          {
             "key": "taskbar.start",
             "text": "Menu"
           },
@@ -26366,14 +26294,6 @@
         "language": "de",
         "rtl": false,
         "entries": [
-          {
-            "key": "accept",
-            "text": "ANNEHMEN"
-          },
-          {
-            "key": "deny",
-            "text": "ABLEHNEN"
-          },
           {
             "key": "taskbar.start",
             "text": "Menü"
@@ -26493,14 +26413,6 @@
         "rtl": false,
         "entries": [
           {
-            "key": "accept",
-            "text": "批准"
-          },
-          {
-            "key": "deny",
-            "text": "拒绝"
-          },
-          {
             "key": "taskbar.start",
             "text": "菜单"
           },
@@ -26618,14 +26530,6 @@
         "language": "ja",
         "rtl": false,
         "entries": [
-          {
-            "key": "accept",
-            "text": "承認"
-          },
-          {
-            "key": "deny",
-            "text": "却下"
-          },
           {
             "key": "taskbar.start",
             "text": "メニュー"

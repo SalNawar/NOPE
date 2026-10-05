@@ -10,22 +10,21 @@ using UnityEngine.UI;
 /// and zoom (redesign phase 20; the PC redesign KB1-KB5, CP1-CP3, PR1-PR2;
 /// the PC workbench spec section 7). The desktop's keyboard poller
 /// (DesktopKeyboard) runs the app's commands here. Ctrl+K and Ctrl+F open or
-/// restore the app and open its search drawer, the field focused; Ctrl+1…5
-/// go to a guided step, Ctrl+Tab and Ctrl+Shift+Tab (and the arrows on the
-/// steps) the next or previous one; F6 makes the other side the target;
-/// Ctrl+\ joins or splits the panes; Ctrl+B hides or shows the findings
-/// column (the panes take its width; saved per player); Ctrl+Shift+S the
-/// steps' hints; Alt+← and Alt+→ walk the target pane's history. Tab and
-/// Shift+Tab walk the regions (AppFocus: with the drawer open its field and
-/// its hits (or its pins and recent items before anything is typed);
-/// otherwise the steps, the shelf, the target pane's values, the other
-/// pane's, the findings, the held value's Cancel, Accept and Deny at the
-/// decision) with the focus ring, which scrolls a list to what it is on; ↓ in
+/// restore the app and open its search drawer, the field focused; Ctrl+1…4
+/// put a guided step's pair of documents up, Ctrl+Tab and Ctrl+Shift+Tab the
+/// next or previous one; F6 makes the other side the target; Ctrl+\ joins or
+/// splits the panes; Ctrl+B hides or shows the findings column (the panes
+/// take its width; saved per player); Alt+← and Alt+→ walk the target pane's
+/// history. Tab and Shift+Tab walk the regions (AppFocus: with the drawer
+/// open its field and its hits (or its pins and recent items before anything
+/// is typed); otherwise the menu bar, the target pane's values, the other
+/// pane's, the findings and the held value's Cancel) with the focus ring,
+/// which scrolls a list to what it is on; ↓ in
 /// the field takes it to the first hit, ↑ on the first hit back to the field;
 /// inside a region the arrows, Home, End, PgUp and PgDn move the ring over its
 /// items (the values in reading order, turning the page at a page's end),
-/// Enter presses the focused item (a step, a chip, a finding, Cancel, a hit,
-/// a pin, Accept or Deny) or follows the focused value's smart link in its
+/// Enter presses the focused item (a menu title or row, a finding, Cancel, a
+/// hit, a pin) or follows the focused value's smart link in its
 /// own pane (Ctrl+Enter: the other one), Space picks the focused value (as a
 /// click does: held, then matched), Ctrl+C copies its value as shown and
 /// Ctrl+Shift+C "Label: value" (the one clipboard, AppClipboard, and the
@@ -60,12 +59,6 @@ public sealed partial class InvestigationApp
     /// <summary>Each pane's zoom.</summary>
     [SerializeField] private PaneZoom[] zooms = new PaneZoom[0];
 
-    /// <summary>The decision's Accept (the Decision region).</summary>
-    [SerializeField] private Button acceptButton;
-
-    /// <summary>The decision's Deny (the Decision region).</summary>
-    [SerializeField] private Button denyButton;
-
     /// <summary>The desktop's context menu (a row's Copy value, Copy row, Pin, Pick for compare).</summary>
     [SerializeField] private DesktopContextMenu rowMenu;
 
@@ -78,7 +71,6 @@ public sealed partial class InvestigationApp
     private AppRegion _region = AppRegion.PaneContent;
     private int _item;
     private bool _ringOn;
-    private bool _caseOn;
     private bool _findingsShown = true;
     private bool _railShown;
     private float _findingsWidth;
@@ -89,11 +81,8 @@ public sealed partial class InvestigationApp
     /// <summary>The desktop's one clipboard (Notes and the search field read its clip).</summary>
     public AppClipboard Clipboard => _clipboard;
 
-    /// <summary>True while the focus ring is on a list's item (every region but the search field and the steps).</summary>
-    public bool ListFocused => _ringOn && _region != AppRegion.Search && _region != AppRegion.Steps;
-
-    /// <summary>True while the focus ring is on the guided steps (the arrows walk them).</summary>
-    public bool StepsFocused => _ringOn && _region == AppRegion.Steps;
+    /// <summary>True while the focus ring is on a list's item (every region but the search field).</summary>
+    public bool ListFocused => _ringOn && _region != AppRegion.Search;
 
     /// <summary>True when the search field holds text or a pasted chip (Escape clears it before closing the drawer).</summary>
     public bool SearchHasText => searchField != null && (searchField.text.Length > 0 || (searchChip != null && searchChip.Chip != null));
@@ -118,7 +107,7 @@ public sealed partial class InvestigationApp
     private int DefaultZoom => AppZoom.Parse(DesktopPreferences.DefaultZoom, Levels);
 
     /// <summary>What the regions read of the app now.</summary>
-    private AppFocusState FocusState => new AppFocusState(SearchOpen, ResultsListed || QuickRowsListed, _split, _findingsShown, _caseOn, Holding, _deciding);
+    private AppFocusState FocusState => new AppFocusState(SearchOpen, ResultsListed || QuickRowsListed, _split, _findingsShown, Holding);
 
     /// <summary>The pins and recent items with their knobs, the views' items followed, the findings column and the zoom as the player left them (once, from Init).</summary>
     private void InitKeys()
@@ -156,17 +145,15 @@ public sealed partial class InvestigationApp
     private void KeysBeginCase(string travellerName)
     {
         _clipTraveller = travellerName ?? string.Empty;
-        _caseOn = true;
         DropCaseItems();
     }
 
-    /// <summary>The decision: the case's pins and recent items go; Cancel and the decision leave the regions.</summary>
+    /// <summary>The traveller was decided: the case's pins and recent items go; Cancel leaves the regions.</summary>
     private void KeysEndCase()
     {
         _clipTraveller = string.Empty;
-        _caseOn = false;
         DropCaseItems();
-        if (_region == AppRegion.Holding || _region == AppRegion.Decision)
+        if (_region == AppRegion.Holding)
             SetRegion(AppFocus.Home(FocusState), 0, _ringOn);
     }
 
@@ -196,7 +183,6 @@ public sealed partial class InvestigationApp
             case AppCommand.Step2:
             case AppCommand.Step3:
             case AppCommand.Step4:
-            case AppCommand.Step5:
                 if (guide != null)
                     guide.GoTo(ShortcutMap.StepPosition(command));
                 Refocus();
@@ -210,10 +196,6 @@ public sealed partial class InvestigationApp
             case AppCommand.ToggleFindings:
                 ApplyFindings(!_findingsShown);
                 DesktopPreferences.SidebarShown = _findingsShown;
-                break;
-            case AppCommand.ToggleHints:
-                if (guide != null)
-                    guide.Toggle();
                 break;
             case AppCommand.NextRegion:
                 MoveRegion(1);
@@ -401,7 +383,7 @@ public sealed partial class InvestigationApp
 
     /// <summary>
     /// Puts the focus in <paramref name="region"/> on item <paramref name="item"/>
-    /// (-1: the region's own: the current step, else the first); the search
+    /// (-1: the first); the search
     /// field takes the keyboard in its region and gives it up outside it.
     /// </summary>
     private void SetRegion(AppRegion region, int item, bool ringOn)
@@ -415,7 +397,7 @@ public sealed partial class InvestigationApp
         _region = region;
         _ringOn = ringOn;
         Collect();
-        _item = item >= 0 ? item : RegionItem(region);
+        _item = item >= 0 ? item : 0;
         _item = Mathf.Clamp(_item, 0, Mathf.Max(0, _targets.Count - 1));
         if (region == AppRegion.Search && searchField != null && searchField.gameObject.activeInHierarchy)
         {
@@ -425,19 +407,13 @@ public sealed partial class InvestigationApp
         ShowRing();
     }
 
-    /// <summary>The item a region starts on: the current step on the steps, else the first.</summary>
-    private int RegionItem(AppRegion region) => region == AppRegion.Steps && guide != null ? (int)guide.Current : 0;
-
-    /// <summary>The ring re-collected after the view changed under it (a step, a split): the steps follow the current one, a list keeps its place; a region gone sends it home.</summary>
+    /// <summary>The ring re-collected after the view changed under it (a step's pair, a split): a region gone sends it home, else it starts the region again.</summary>
     private void Refocus()
     {
         if (!_ringOn)
             return;
         AppFocusState state = FocusState;
-        if (!AppFocus.Available(_region, state))
-            SetRegion(AppFocus.Home(state), 0, true);
-        else
-            SetRegion(_region, _region == AppRegion.Steps ? -1 : 0, true);
+        SetRegion(AppFocus.Available(_region, state) ? _region : AppFocus.Home(state), 0, true);
     }
 
     /// <summary>The ring moves by <paramref name="delta"/> items (the rows scroll into view as it goes); ↑ on the first hit goes back to the search field.</summary>
@@ -474,7 +450,7 @@ public sealed partial class InvestigationApp
         return false;
     }
 
-    /// <summary>Enter: presses the focused item (a step, a chip, a finding, Cancel, a pin or recent item, Accept or Deny), opens the focused search hit, or follows the focused value's smart link, in its own pane (<paramref name="samePane"/>) or the other one (Ctrl+Enter).</summary>
+    /// <summary>Enter: presses the focused item (a menu title or row, a finding, Cancel, a pin or recent item), opens the focused search hit, or follows the focused value's smart link, in its own pane (<paramref name="samePane"/>) or the other one (Ctrl+Enter).</summary>
     private void PressFocused(bool samePane)
     {
         Collect();
@@ -573,8 +549,6 @@ public sealed partial class InvestigationApp
                     AddRows(recentList);
                 }
                 break;
-            case AppRegion.Steps:
-                break;
             case AppRegion.Shelf:
                 if (menus != null)
                     foreach (Button chip in menus.Buttons)
@@ -598,10 +572,6 @@ public sealed partial class InvestigationApp
             case AppRegion.Holding:
                 if (board != null)
                     Add(board.CancelButton);
-                break;
-            case AppRegion.Decision:
-                Add(acceptButton);
-                Add(denyButton);
                 break;
         }
     }

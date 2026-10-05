@@ -22,7 +22,7 @@ public sealed class GameManager : MonoBehaviour
     [SerializeField] private OfficeUIController officeUI;
 
     /// <summary>
-    /// Investigation UI (documents/books/compare + Accept/Deny): the one case
+    /// Investigation UI (documents/books/compare + the stamps' verdict): the one case
     /// loop (audit R3-011: the legacy era-pick loop is gone). Without it the
     /// office logs an error and shows no case (audit R4-002).
     /// </summary>

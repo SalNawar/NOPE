@@ -39,7 +39,7 @@ public sealed class MatchBoard : MonoBehaviour
     [SerializeField] private FindingsView findings;
 
     [Header("The status line: one plate per state, each in its role's colours")]
-    /// <summary>Nothing held, nothing just compared: the teaching hint.</summary>
+    /// <summary>Nothing held, nothing just compared: who is at the desk, or that the desk waits (the app's line).</summary>
     [SerializeField] private TMP_Text idleText;
 
     /// <summary>A value, a rule or the date held.</summary>
@@ -78,7 +78,7 @@ public sealed class MatchBoard : MonoBehaviour
     private string _hint = string.Empty;
     private bool _wired;
 
-    /// <summary>Raised when the findings or what is held change (the decision's Deny, the keys' regions).</summary>
+    /// <summary>Raised when the findings or what is held change (the findings column's width, the keys' regions).</summary>
     public event Action Changed;
 
     /// <summary>Raised with each finding newly logged in the findings column, before Changed (a logged difference's question on the traveller wheel; wave 5, lesson 3).</summary>
@@ -138,7 +138,7 @@ public sealed class MatchBoard : MonoBehaviour
         Reset();
     }
 
-    /// <summary>The decision: the same, until the next traveller.</summary>
+    /// <summary>The traveller was decided at the desk: the same, until the next traveller.</summary>
     public void EndCase()
     {
         Wire();
@@ -146,7 +146,7 @@ public sealed class MatchBoard : MonoBehaviour
         Reset();
     }
 
-    /// <summary>The idle status line's hint: the current step's sentence (GuideBar; empty while the player hides the hints).</summary>
+    /// <summary>The idle status line's words: who is at the desk with the counters, or that the desk waits (InvestigationApp).</summary>
     public void SetIdleHint(string hint)
     {
         _hint = hint ?? string.Empty;
@@ -427,7 +427,7 @@ public sealed class MatchBoard : MonoBehaviour
         }
     }
 
-    /// <summary>The status line: the plate of <paramref name="look"/> with <paramref name="line"/> (null: the teaching hint), or the holding plate.</summary>
+    /// <summary>The status line: the plate of <paramref name="look"/> with <paramref name="line"/> (null: the idle words), or the holding plate.</summary>
     private void ShowStatus(FindingLook look, string line, bool holding = false)
     {
         bool idle = line == null && !holding;

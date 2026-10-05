@@ -172,8 +172,6 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "recentList", recent);
         Wire(so, "focusRing", ring);
         SerializedArrays.Set(so, "zooms", zooms);
-        Wire(so, "acceptButton", app.Accept);
-        Wire(so, "denyButton", app.Deny);
         Wire(so, "rowMenu", menu);
         so.ApplyModifiedProperties();
     }

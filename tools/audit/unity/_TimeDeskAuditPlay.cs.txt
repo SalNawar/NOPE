@@ -583,23 +583,16 @@ public static class _TimeDeskAuditPlay
         if (gatherEvidence)
             Check(o.Ui.EvidenceCount > 0, $"d{day} slot {slot}: a deviation fault ({FaultKey(c)}) is proven before its denial ({o.Ui.EvidenceCount} logged)");
 
-        // A directive fault's rule held against its value on the workbench (the PC workbench spec §4.3), so the PC's Deny can cite it.
+        // A directive fault's rule held against its value on the workbench (the PC workbench spec §4.3), so the denial rests on a logged broken rule.
         if (!accept && c.HasDirectiveFault)
             yield return CiteRule(o, c, day, slot);
 
-        // Odd slots decide at the stamp tray, even ones on the PC: at the workbench's decision step, where Deny waits for a logged
-        // difference or broken rule (an unproven denial, a planned mistake, then goes to the ungated stamp tray).
+        // Every traveller is decided with the stamps (the PC clean-up of 2026-10-05: the PC only investigates, it has no decision step);
+        // a right denial rests on a logged difference or broken rule in the findings (an unproven denial is a planned mistake).
         int before = o.Game.Ledger.verdicts.Count;
-        o.App.Guide.Go(GuideStage.Decision);
-        yield return Frames(1);
-        Button pcDeny = (Button)Field(o.Ui, "denyButton");
-        if (slot % 2 == 0 && !accept)
-        {
-            Check(pcDeny.interactable == o.App.Board.Log.HasDifference, $"d{day} slot {slot}: the PC's Deny waits for a logged difference ({o.App.Board.Log.Differences} logged, interactable {pcDeny.interactable})");
-            if (c.HasDeviationFault && gatherEvidence || c.HasDirectiveFault)
-                Check(pcDeny.interactable, $"d{day} slot {slot}: a right denial ({FaultKey(c)}) can be cited on the PC");
-        }
-        if ((slot % 2 == 1 || (!accept && !pcDeny.interactable)) && o.Stamps != null)
+        if (!accept && (c.HasDeviationFault && gatherEvidence || c.HasDirectiveFault))
+            Check(o.App.Board.Log.HasDifference, $"d{day} slot {slot}: a right denial ({FaultKey(c)}) rests on a logged difference ({o.App.Board.Log.Differences} logged)");
+        if (o.Stamps != null)
         {
             // Track B: the physical stamps: the tray out, the stamp picked up, a dry press (faint, no verdict), inked on the pad, pressed on the passport, the papers handed back.
             var flow = (StampFlow)Field(o.Stamps, "_flow");
@@ -624,11 +617,6 @@ public static class _TimeDeskAuditPlay
             Check(back.gameObject.activeInHierarchy, $"d{day} slot {slot}: \"Hand the papers back\" shows with the verdict");
             back.onClick.Invoke();
             Line($"   decided with the stamps: {(accept ? "APPROVED" : "DENIED")}");
-        }
-        else
-        {
-            ((Button)Field(o.Ui, accept ? "acceptButton" : "denyButton")).onClick.Invoke();
-            Line($"   decided on the PC: {(accept ? "ACCEPT" : "DENY")}");
         }
         Check(o.Game.Ledger.verdicts.Count == before + 1, $"d{day} slot {slot}: the decision recorded one verdict");
         Decided.Add(c.visitorDisplayName);

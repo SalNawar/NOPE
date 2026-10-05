@@ -2,26 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// The office investigation's façade (the PC redesign RF1, audit R4-001): the
 /// one component GameManager talks to, with the scene's references. It
 /// presents each case in the Investigation app (InvestigationApp, the PC
-/// workbench: the traveller's face, name and counters in its header, never
-/// the claim, which the traveller only says; the guided steps; the shelf;
-/// two panes; every source has one view per pane and the presenters fill
-/// them all) and offers the binary Accept/Deny (the app's decision step, whose
-/// Deny waits for a logged difference or broken rule, MatchBoard's findings;
-/// and the desk's physical stamps, the papers handed back with the passport's
-/// verdict, ungated; wired once); the work is its
+/// workbench: who is at the desk and the counters on its status line, never
+/// the claim, which the traveller only says; the menu bar; two panes; every
+/// source has one view per pane and the presenters fill them all) and takes
+/// the verdict from the desk's physical stamps (the papers handed back with
+/// the passport's verdict, ungated; wired once: the PC only investigates since
+/// the clean-up of 2026-10-05, it has no Accept or Deny); the work is its
 /// presenters': CaseDocumentsPresenter (the papers,
 /// the hand-over and the scan: the Documents tab), InterviewPresenter (the
 /// dialog runner on the traveller wheel, the Transcript tab, the bubble),
 /// EvidencePresenter (the discrepancy log, the Report tab, the compare's
 /// DEVIATION LOGGED) and DayReference (the Rules, the Reference books' facts,
 /// the Records tab's registry, the Calendar); it feeds the guided steps
-/// (GuideBar) the case and its events (papers handed over, asked for and
+/// (GuideBar, headless: the keys' pairs) the case and its events (papers handed over, asked for and
 /// read at the desk, pairs compared, answers heard, garments looked at).
 /// Nothing opens or closes a window by itself
 /// but a scan (the app's ScanArrival): new lines and deviations badge their
@@ -31,22 +29,17 @@ using UnityEngine.UI;
 /// place's tongue (piece 9). A held paper's row picked at the desk goes into
 /// the same compare as the PC's rows. What the day can generate follows what
 /// is wired (InvestigationWiring: InterviewReachable, AppearanceReachable,
-/// EvidenceSystemActive). It needs the app the office builder wires (Tools
-/// &gt; TimeDesk &gt; Build Office UI: the Documents tab's page, the app,
-/// Accept and Deny); without it, it logs one error and shows no case (the
-/// text-mode fallback no scene could reach was deleted: audit R4-002).
+/// EvidenceSystemActive). It needs the app and the stamps the office builder
+/// wires (Tools &gt; TimeDesk &gt; Build Office UI: the Documents tab's page,
+/// the app, the stamp tray); without them, it logs one error and shows no
+/// case (the text-mode fallback no scene could reach was deleted: audit
+/// R4-002).
 /// </summary>
 public sealed class InvestigationUIController : MonoBehaviour
 {
     [Header("The app")]
-    /// <summary>The Investigation app: its window, header, counters, badges, toast and pane.</summary>
+    /// <summary>The Investigation app: its window, menu bar, status line, badges, toast and panes.</summary>
     [SerializeField] private InvestigationApp app;
-
-    /// <summary>The decision step's Accept (the desk's stamps decide too).</summary>
-    [SerializeField] private Button acceptButton;
-
-    /// <summary>The decision step's Deny (interactable once a difference or a broken rule is logged).</summary>
-    [SerializeField] private Button denyButton;
 
     /// <summary>The one compare: every pickable row on the PC, on a held paper, in the bubble and through the Look menu.</summary>
     [SerializeField] private CompareController compareController;
@@ -83,7 +76,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The office case HUD (piece 10; optional): the office compare strip's host (it prints no claim).</summary>
     [SerializeField] private OfficeCaseHud hud;
 
-    /// <summary>The physical stamps (the desk-first redesign, item 12; optional): the papers handed back with the passport's verdict decide the case like the PC's buttons.</summary>
+    /// <summary>The physical stamps (the desk-first redesign, item 12): the papers handed back with the passport's verdict decide the case (the only verdict since the PC clean-up).</summary>
     [SerializeField] private DeskStampTray stampTray;
 
     /// <summary>Inspection at the desk (the desk-first redesign, item 11; optional): told the day, the rules and the case.</summary>
@@ -161,7 +154,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// (audit R4-022), so a partly wired desk fails the build, not the day.
     /// </summary>
     public InvestigationWiring Wiring => new InvestigationWiring(
-        First(documentsViews) != null && First(documentsViews).Ready, app != null, acceptButton != null, denyButton != null, compareController != null,
+        First(documentsViews) != null && First(documentsViews).Ready, app != null, stampTray != null, compareController != null,
         interactionPanel != null, First(transcriptViews) != null, app != null && app.Hosts(AppTab.Transcript), desk != null && desk.IsReachable,
         First(recordsViews) != null);
 
@@ -204,24 +197,15 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (compareController != null)
             compareController.PairCompared += StepsCompared;
         if (Board != null)
-        {
-            Board.Changed += RefreshDecision;
             Board.Logged += Confront;
-        }
         if (app != null)
             app.MissingFlagged += FlagMissingFromApp;
 
+        // The stamps are listened to once (audit R4-004); the decision reads the case's callback.
         if (stampTray != null)
         {
             _stampTrayListening = stampTray;
             _stampTrayListening.Decided += Decide;
-        }
-
-        // The PC's Accept and Deny are wired once (audit R4-004); the decision reads the case's callback.
-        if (wiring.Wired)
-        {
-            acceptButton.onClick.AddListener(Accept);
-            denyButton.onClick.AddListener(Deny);
         }
 
         ShowCaseLayers(false);
@@ -248,7 +232,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     {
         // Without the app no case can be shown (there is no text fallback any more).
         if (!wiring.Wired)
-            Debug.LogError("[InvestigationUIController] The Investigation app is not wired (the app, its Documents tab's page, acceptButton or denyButton): no case can be shown. Run Tools > TimeDesk > Build Office UI.", this);
+            Debug.LogError("[InvestigationUIController] The Investigation app or the stamps are not wired (the app, its Documents tab's page or stampTray): no case can be shown. Run Tools > TimeDesk > Build Office UI.", this);
 
         // Birth-date tells are proven only against Citizen Records (RecordMismatch).
         if (wiring.RecordsMissing)
@@ -289,10 +273,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (compareController != null)
             compareController.PairCompared -= StepsCompared;
         if (Board != null)
-        {
-            Board.Changed -= RefreshDecision;
             Board.Logged -= Confront;
-        }
         if (app != null)
             app.MissingFlagged -= FlagMissingFromApp;
         if (_stampTrayListening != null)
@@ -348,7 +329,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             deskInspect.SetRules(rules);
     }
 
-    /// <summary>Presents a case and waits for the player's Accept/Deny (nothing shows when the app is not wired: Awake logged why).</summary>
+    /// <summary>Presents a case and waits for the stamps' verdict (nothing shows when the app is not wired: Awake logged why).</summary>
     public void ShowCase(CaseInstance inst, ContentLibrarySO lib, Action<bool> onDecision)
     {
         _onDecision = onDecision;
@@ -372,25 +353,10 @@ public sealed class InvestigationUIController : MonoBehaviour
             Steps.EndCase();
     }
 
-    /// <summary>Accept and Deny on (a traveller is at the desk; Deny once something can be cited) or off with the desktop's idle line shown.</summary>
+    /// <summary>The desktop's idle line off (a traveller is at the desk) or on.</summary>
     private void ShowCaseLayers(bool on)
     {
         if (idleScreen != null) idleScreen.SetActive(!on);
-        RefreshDecision();
-    }
-
-    /// <summary>
-    /// The decision step's buttons (the PC workbench spec IA10; Saleh's
-    /// prototype: "Deny needs a logged difference or a broken rule to cite"):
-    /// Accept while a traveller is at the desk, Deny once the findings hold a
-    /// difference (FindingLog.HasDifference). The desk's stamp tray is not
-    /// gated (a moral choice can still deny anyone).
-    /// </summary>
-    private void RefreshDecision()
-    {
-        bool on = _currentCase != null;
-        if (acceptButton != null) acceptButton.interactable = on;
-        if (denyButton != null) denyButton.interactable = on && Board != null && Board.Log.HasDifference;
     }
 
     /// <summary>
@@ -435,7 +401,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The Papers menu flagged a paper missing.</summary>
     private void FlagMissingFromApp(string requestId) => FlagMissing(requestId);
 
-    /// <summary>The traveller does not carry a paper they were asked for: the workbench logs it as missing (a difference Deny can cite).</summary>
+    /// <summary>The traveller does not carry a paper they were asked for: the workbench logs it as missing (a difference a denial can rest on).</summary>
     private void LogNotCarried(FormRequest request)
     {
         if (Board != null)
@@ -478,7 +444,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             compareController.Clear();
         if (Steps != null && inst != null)
         {
-            Steps.BeginCase(lib != null ? lib.Pc.steps : null, inst.kind, _reference.Day, StepPapers(inst), _interview.QuestionCategories,
+            Steps.BeginCase(lib != null ? lib.Pc.steps : null, _reference.Day, StepPapers(inst), _interview.QuestionCategories,
                             lib != null ? lib.ReferenceBooks.Where(b => b != null).Select(b => b.category) : null);
             StepsReceived();
         }
@@ -575,7 +541,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             app.Scanned(paper, documents[paper].name);
     }
 
-    /// <summary>The app header's counters: papers received and scanned.</summary>
+    /// <summary>The app's status line: who is at the desk, papers received and scanned.</summary>
     private void ShowCounters()
     {
         if (app != null && _currentCase != null)
@@ -608,13 +574,9 @@ public sealed class InvestigationUIController : MonoBehaviour
             wheel.EndReaction();
     }
 
-    private void Accept() => Decide(true);
-
-    private void Deny() => Decide(false);
-
     /// <summary>
-    /// The decision (the app header's buttons or the stamp tray; nothing
-    /// without a case on the desk): the desk's papers leave, the case tabs show
+    /// The decision (the stamp tray's papers handed back; nothing without a
+    /// case on the desk): the desk's papers leave, the case tabs show
     /// the no-case state, and no case is on the desk from here: cleared before
     /// the callback, which may present the next traveller at once (no READY
     /// sign wired).

@@ -12,18 +12,21 @@ using UnityEngine.UI;
 /// documents in drop-down menus (Papers: the traveller's papers, the
 /// transcript and the papers not handed over, to flag missing; Records;
 /// Rules; Books; Calendar, with today's date to hold), each shown from the
-/// day it is introduced, and at its right who is at the desk (their name,
-/// one short line of counters; no claim, which the traveller only says) and
-/// Search; a row opens its document on the target side, and a document
-/// already open on the other side swaps (OpenOnTarget). The guided steps
-/// run headless (GuideBar: a new case and the keys put a pair of documents
-/// up). The work area, the window's whole height under the bar, holds the
-/// status line (what is held, or the last result) and two panes (AppPane: the left and the right, a gutter
+/// day it is introduced, and at its right Search; a row opens its document
+/// on the target side, and a document already open on the other side swaps
+/// (OpenOnTarget). The guided steps run headless (GuideBar: a new case and
+/// the keys put a pair of documents up); the PC only investigates (the PC
+/// clean-up of 2026-10-05: the verdict is the stamp on the passport at the
+/// desk). The work area, the window's whole height under the bar, holds the
+/// status line and two panes (AppPane: the left and the right, a gutter
 /// between them where a line's label sits; a click on a header makes it the
 /// target, F6 too; the target is where the keys act and the history walks),
 /// over which the workbench (MatchBoard) draws the line between two compared
-/// values; at the decision step the panes give way to the decision
-/// (DecisionView). The findings column sits at the work area's right: a slim
+/// values. The status line says what is held or the last result, else who
+/// is at the desk ("<b>Yichen (Soldier)</b> · Papers: 1 of 2 received, 0
+/// scanned"; no claim, which the traveller only says) or that the desk waits;
+/// a notice (the toast: a paper scanned with Open, a copy, a pin) takes its
+/// right end while it shows, so it covers nothing. The findings column sits at the work area's right: a slim
 /// rail while nothing is logged, so the documents take the width (Ctrl+B
 /// hides it; remembered per player). Two panes show while the body holds
 /// them at their least width and the gutter (AppPanes.CanSplit; Ctrl+\ joins
@@ -37,8 +40,8 @@ using UnityEngine.UI;
 /// app only when it is closed, shows the paper only in a Papers view showing
 /// none, and toasts ("… scanned", Open shows it). A new case goes to the
 /// first step (its pair up), drops the last traveller's places from both
-/// histories and clears the dots; at the decision the case sources show the
-/// no-case state. InvestigationUIController drives it.
+/// histories and clears the dots; once the traveller is decided at the desk
+/// the case sources show the no-case state. InvestigationUIController drives it.
 /// </summary>
 public sealed partial class InvestigationApp : MonoBehaviour
 {
@@ -60,38 +63,23 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>The findings column's width while nothing is logged (a slim rail; the documents take the rest).</summary>
     [SerializeField, Min(0f)] private float findingsRail = 56f;
 
-    /// <summary>The main column (the lead, the status line, the panes or the decision), left of the findings.</summary>
+    /// <summary>The main column (the status line and the panes), left of the findings.</summary>
     [SerializeField] private RectTransform mainColumn;
 
-    [Header("Menu bar")]
-    /// <summary>The traveller's name (at the menu bar's right).</summary>
-    [SerializeField] private TMP_Text nameText;
-
-    /// <summary>The counters beside the name: papers received and scanned; between travellers the idle line.</summary>
-    [SerializeField] private TMP_Text countersText;
-
     [Header("The workbench")]
-    /// <summary>The guided steps (headless since the desk-first redesign: the decision view and the keys).</summary>
+    /// <summary>The guided steps (headless since the desk-first redesign: the keys' pairs of documents).</summary>
     [SerializeField] private GuideBar guide;
 
     /// <summary>The menu bar: the documents' menus (the desk-first redesign, item 8).</summary>
     [SerializeField] private MenuBarView menus;
 
-    /// <summary>The click-and-match and the findings.</summary>
+    /// <summary>The click-and-match, the findings and the status line (its idle plate says who is at the desk).</summary>
     [SerializeField] private MatchBoard board;
 
-    /// <summary>The decision step (shown in place of the panes and the status line).</summary>
-    [SerializeField] private DecisionView decision;
-
-    /// <summary>The two panes' area (hidden at the decision).</summary>
-    [SerializeField] private GameObject panesArea;
-
-    /// <summary>The status line (hidden at the decision).</summary>
-    [SerializeField] private GameObject statusLine;
+    /// <summary>The notice (a paper scanned, a copy, a pin) at the status line's right end: it shows while the app does.</summary>
+    [SerializeField] private AppToast toast;
 
     [Header("Desktop")]
-    /// <summary>The scan toast (on the desktop, above the windows: it shows while the app is down too).</summary>
-    [SerializeField] private AppToast toast;
 
     /// <summary>The desktop's knobs (the toast's time, the panes' widths).</summary>
     [SerializeField] private DesktopConfigSO config;
@@ -108,9 +96,9 @@ public sealed partial class InvestigationApp : MonoBehaviour
     private CasePapers _papers;
     private DesktopWindowManager _manager;
     private string _traveller;
+    private string _counters;
     private bool _splitWanted = true;
     private bool _split;
-    private bool _deciding;
     private bool _ready;
 
     /// <summary>True while the app shows (open and not minimised).</summary>
@@ -119,31 +107,11 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>True when the panes host a view for the source.</summary>
     public bool Hosts(AppTab tab) => leftPane != null && leftPane.Hosts(tab);
 
-    /// <summary>The workbench (the façade gates Deny on its findings).</summary>
+    /// <summary>The workbench (the façade reads its findings: the evidence a denial rests on).</summary>
     public MatchBoard Board => board;
 
     /// <summary>The guided steps (the façade feeds them the case's events).</summary>
     public GuideBar Guide => guide;
-
-    /// <summary>True when a showing pane shows the source (the steps: the Rules read while the player looks at the PC).</summary>
-    public bool Sees(AppTab tab)
-    {
-        foreach (AppTab shown in ShownTabs())
-            if (shown == tab)
-                return true;
-        return false;
-    }
-
-    /// <summary>Fills <paramref name="into"/> with the papers whose scanned copies the showing panes show on Papers (the steps: a paper read on the PC).</summary>
-    public void CopiesSeen(List<int> into)
-    {
-        into.Clear();
-        if (!IsShowing || _deciding)
-            return;
-        foreach (AppPane pane in ShowingPanes())
-            if (pane.ActiveTab == AppTab.Documents && pane.View(AppTab.Documents) is DocumentsView documents && documents.ShowsCopy)
-                into.Add(documents.Selected);
-    }
 
     /// <summary>The app's window (the keyboard poller's "app focused").</summary>
     public DesktopWindow Window => window;
@@ -181,7 +149,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     }
 
     /// <summary>
-    /// A traveller is presented: the menu bar names who stands at the desk
+    /// A traveller is presented: the status line names who stands at the desk
     /// (never what they ask for), the histories without the
     /// last traveller, the dots and the icon's dot cleared, the toast gone,
     /// search's case layer empty; the façade then starts the workbench
@@ -193,8 +161,8 @@ public sealed partial class InvestigationApp : MonoBehaviour
         Init();
         ResetSearchCase();
         _traveller = travellerName ?? string.Empty;
-        if (nameText != null)
-            nameText.text = _traveller;
+        _counters = null;
+        ShowWho();
         _badges.Clear();
         _opened.Clear();
         foreach (AppPane pane in Panes())
@@ -210,17 +178,14 @@ public sealed partial class InvestigationApp : MonoBehaviour
         KeysBeginCase(travellerName);
     }
 
-    /// <summary>The decision: the case sources show the no-case state; the header waits for the next traveller; search forgets the case; the workbench empties.</summary>
+    /// <summary>The traveller was decided at the desk: the case sources show the no-case state; the status line waits for the next traveller; search forgets the case; the workbench empties.</summary>
     public void EndCase()
     {
         Init();
         _papers = null;
         _traveller = null;
+        _counters = null;
         ResetSearchCase();
-        if (nameText != null)
-            nameText.text = string.Empty;
-        if (countersText != null)
-            countersText.text = UiText.Get("idle.waiting");
         _missing = MissingPapers.None;
         _missingPapers = null;
         foreach (AppPane pane in Panes())
@@ -229,7 +194,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
             toast.Hide();
         if (board != null)
             board.EndCase();
-        ShowDecision(false);
+        ShowWho();
         RefreshShelf();
         KeysEndCase();
     }
@@ -238,8 +203,19 @@ public sealed partial class InvestigationApp : MonoBehaviour
     public void SetCounters(CasePapers papers)
     {
         _papers = papers;
-        if (countersText != null && papers != null)
-            countersText.text = UiText.Format("app.counters", papers.Received, papers.Count, papers.Scanned);
+        if (papers != null)
+            _counters = UiText.Format("app.counters", papers.Received, papers.Count, papers.Scanned);
+        ShowWho();
+    }
+
+    /// <summary>The status line's idle plate: who is at the desk with the counters ("<b>Yichen (Soldier)</b> · Papers: 1 of 2 received, 0 scanned"), else "Waiting for the next traveller".</summary>
+    private void ShowWho()
+    {
+        if (board == null)
+            return;
+        board.SetIdleHint(_traveller == null ? UiText.Get("idle.waiting")
+                        : _counters == null ? UiText.Format("app.atDesk.name", _traveller)
+                        : UiText.Format("app.atDesk", _traveller, _counters));
     }
 
     /// <summary>Something new for the source (a transcript line, a logged deviation): its chip dotted unless a showing pane shows it; the icon dotted while the app is down.</summary>
@@ -292,8 +268,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
             return false;
         if (window != null)
             window.Open();
-        if (_deciding && guide != null)
-            guide.Step(-1);
         AppPane to = TargetPane, other = _split ? Other(to) : null;
         if (other != null && SameDocument(other, target))
             other.Go(to.Current);
@@ -304,7 +278,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
     public void OpenPair(LinkTarget left, LinkTarget right)
     {
         Init();
-        ShowDecision(false);
         if (_split)
         {
             if (!left.IsNone)
@@ -323,7 +296,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>The box of the row with <paramref name="key"/> in a showing pane's view (the workbench's line), or null; <paramref name="scratch"/> is reused.</summary>
     public RectTransform FindRow(string key, List<AppRow> scratch)
     {
-        if (string.IsNullOrEmpty(key) || !IsShowing || _deciding)
+        if (string.IsNullOrEmpty(key) || !IsShowing)
             return null;
         foreach (AppPane pane in ShowingPanes())
         {
@@ -377,6 +350,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
         InitSearch();
         Layout();
         RefreshShelf();
+        ShowWho();
     }
 
     /// <summary>Ctrl+\: two panes or one, saved per player.</summary>
@@ -417,14 +391,9 @@ public sealed partial class InvestigationApp : MonoBehaviour
         MarkShelf();
     }
 
-    /// <summary>A step was gone to: its pair of documents put up, the right side the target; the decision shows in place of the panes.</summary>
+    /// <summary>A step was gone to: its pair of documents put up, the right side the target.</summary>
     private void StageShown(GuideStage stage)
     {
-        if (stage == GuideStage.Decision)
-        {
-            ShowDecision(true);
-            return;
-        }
         LinkTarget firstPaper = LinkTarget.ToTab(AppTab.Documents, 0);
         switch (stage)
         {
@@ -446,32 +415,9 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>The papers of the case (the left pane's Papers view's).</summary>
     private int PaperCount => leftPane != null && leftPane.View(AppTab.Documents) != null ? leftPane.View(AppTab.Documents).Chips.Count : 0;
 
-    /// <summary>The decision step shows (in place of the panes and the status line) or goes.</summary>
-    private void ShowDecision(bool on)
-    {
-        _deciding = on;
-        if (panesArea != null && panesArea.activeSelf == on)
-            panesArea.SetActive(!on);
-        if (statusLine != null && statusLine.activeSelf == on)
-            statusLine.SetActive(!on);
-        if (decision != null)
-        {
-            if (decision.gameObject.activeSelf != on)
-                decision.gameObject.SetActive(on);
-            if (on)
-                decision.Show(board != null ? board.Log : null, _traveller);
-        }
-        if (on && board != null)
-            board.Release();
-        MarkShelf();
-        Refocus();
-    }
-
-    /// <summary>The findings or what is held changed: the decision redraws, and the findings column opens from its rail at the first finding (or folds back at a new case).</summary>
+    /// <summary>The findings or what is held changed: the findings column opens from its rail at the first finding (or folds back at a new case).</summary>
     private void BoardChanged()
     {
-        if (_deciding && decision != null)
-            decision.Show(board != null ? board.Log : null, _traveller);
         if (FindingsRail != _railShown)
             ApplyFindings(_findingsShown);
     }
@@ -497,11 +443,11 @@ public sealed partial class InvestigationApp : MonoBehaviour
             yield return rightPane;
     }
 
-    /// <summary>The sources the player sees: the showing panes' (none while the app is down or the decision shows).</summary>
+    /// <summary>The sources the player sees: the showing panes' (none while the app is down).</summary>
     private IReadOnlyList<AppTab> ShownTabs()
     {
         _shown.Clear();
-        if (IsShowing && !_deciding)
+        if (IsShowing)
             foreach (AppPane pane in ShowingPanes())
                 _shown.Add(pane.ActiveTab);
         return _shown;
@@ -588,8 +534,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
             return;
         if (window != null)
             window.Open();
-        if (_deciding && guide != null)
-            guide.Step(-1);
         board.PickToday(today);
     }
 
@@ -733,8 +677,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>"L" or "R" (the pane headers' "Left" and "Right", short so the shelf keeps one row) for the side a shelf document is open on, else null.</summary>
     private string SideOf(ShelfItem item)
     {
-        if (_deciding)
-            return null;
         if (SameDocument(leftPane, item.Target) && !leftPane.Blocked)
             return UiText.Get("shelf.side.left");
         if (_split && rightPane != null && SameDocument(rightPane, item.Target) && !rightPane.Blocked)

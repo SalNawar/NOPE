@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 /// <summary>
 /// The Investigation app's guided steps (the PC workbench spec IA2, IA3), in
-/// order. Runtime only (not serialized): Ctrl+1…5 follow this order.
+/// order. Runtime only (not serialized): Ctrl+1…4 follow this order. The PC
+/// only investigates (the PC clean-up of 2026-10-05): the verdict is the
+/// stamp on the passport at the desk, so no step decides.
 /// </summary>
 public enum GuideStage
 {
@@ -17,52 +19,29 @@ public enum GuideStage
     Books,
 
     /// <summary>Today's rules against the papers.</summary>
-    Rules,
-
-    /// <summary>Accept or deny.</summary>
-    Decision
-}
-
-/// <summary>A guided step's checks this case: those done of those listed (the day's steps checklist's items that belong to it).</summary>
-public readonly struct StageChecks
-{
-    /// <summary>Checks.</summary>
-    public StageChecks(int done, int total)
-    {
-        Done = done;
-        Total = total;
-    }
-
-    /// <summary>The checks done.</summary>
-    public int Done { get; }
-
-    /// <summary>The checks listed.</summary>
-    public int Total { get; }
+    Rules
 }
 
 /// <summary>
 /// Where the clerk is in a case's guided steps (the PC workbench spec IA2,
-/// IA3; W1: steps suggest, they never lock): the current step, the steps
-/// left behind, and when a step is finished. A step owns the checks of the
-/// day's steps checklist that belong to it (StageOf: papers received, read
-/// and asked for, the answers heard, the look and paper-against-paper
-/// compares belong to Papers; a record looked up and compares against a
-/// record to Records; compares against a book to Books; the rules read to
-/// Rules; compares against anything, to Papers); a step with checks is
-/// finished when all of them are done, one without once it was left. The
-/// decision is never finished. The steps follow the day's ramp (Papers
+/// IA3; W1: steps suggest, they never lock; headless since the desk-first
+/// redesign: a step only puts a pair of documents up): the current step. A
+/// step owns the items of the day's steps checklist that belong to it
+/// (StageOf: papers received, read and asked for, the answers heard, the
+/// look and paper-against-paper compares belong to Papers; a record looked
+/// up and compares against a record to Records; compares against a book to
+/// Books; the rules read to Rules). The steps follow the day's ramp (Papers
 /// Please lessons 4 and D7, see Day pacing): a step owning no checklist item
 /// on the day (StagesOn: no set lists one yet, so the Books step waits for
 /// the dress of day 7) is not shown, and the numbers, Next and Back run over
-/// the steps shown; Papers and the decision always show. Pure; the app's
-/// GuideBar owns one per case.
+/// the steps shown; Papers always shows. Pure; the app's GuideBar owns one
+/// per case.
 /// </summary>
 public sealed class CaseGuide
 {
     /// <summary>The steps in order.</summary>
     public static readonly IReadOnlyList<GuideStage> Stages = (GuideStage[])Enum.GetValues(typeof(GuideStage));
 
-    private readonly HashSet<GuideStage> _left = new HashSet<GuideStage>();
     private readonly List<GuideStage> _shown = new List<GuideStage>(Stages);
 
     /// <summary>The step the clerk is on.</summary>
@@ -80,43 +59,40 @@ public sealed class CaseGuide
     /// <summary>True on the first step (Back has nowhere to go).</summary>
     public bool IsFirst => Current == _shown[0];
 
-    /// <summary>True on the last step, the decision (Next has nowhere to go).</summary>
+    /// <summary>True on the last step shown (Next has nowhere to go).</summary>
     public bool IsLast => Current == _shown[_shown.Count - 1];
 
-    /// <summary>A new case: the first step, none left behind; the steps shown are <paramref name="shown"/> (null: every step; Papers and the decision always), in order.</summary>
+    /// <summary>A new case: the first step; the steps shown are <paramref name="shown"/> (null: every step; Papers always), in order.</summary>
     public void Reset(IEnumerable<GuideStage> shown = null)
     {
-        var keep = new HashSet<GuideStage>(shown ?? Stages) { GuideStage.Papers, GuideStage.Decision };
+        var keep = new HashSet<GuideStage>(shown ?? Stages) { GuideStage.Papers };
         _shown.Clear();
         foreach (GuideStage stage in Stages)
             if (keep.Contains(stage))
                 _shown.Add(stage);
         Current = _shown[0];
-        _left.Clear();
     }
 
     /// <summary>True when <paramref name="stage"/> is shown this case.</summary>
     public bool IsShown(GuideStage stage) => _shown.Contains(stage);
 
-    /// <summary>Goes to <paramref name="stage"/> (any step shown, at any time); the step left is remembered. False when it is the current one or not shown.</summary>
+    /// <summary>Goes to <paramref name="stage"/> (any step shown, at any time). False when it is the current one or not shown.</summary>
     public bool Go(GuideStage stage)
     {
         if (stage == Current || !IsShown(stage))
             return false;
-        _left.Add(Current);
         Current = stage;
         return true;
     }
 
-    /// <summary>The next step shown (false on the decision).</summary>
+    /// <summary>The next step shown (false on the last).</summary>
     public bool Next() => !IsLast && Go(_shown[Number]);
 
     /// <summary>The previous step shown (false on the first).</summary>
     public bool Back() => !IsFirst && Go(_shown[Number - 2]);
 
     /// <summary>
-    /// The steps shown on <paramref name="day"/>: Papers and the decision, and
-    /// each other step some set of <paramref name="sets"/> (not a data-only
+    /// The steps shown on <paramref name="day"/>: Papers, and each other step some set of <paramref name="sets"/> (not a data-only
     /// one) lists a checklist item of on that day (CaseSteps.Resolve,
     /// StageOf), in order; every step
     /// when there are no sets. The same for every traveller of the day, so
@@ -126,7 +102,7 @@ public sealed class CaseGuide
     {
         if (sets == null || sets.sets == null || sets.sets.Count == 0)
             return new List<GuideStage>(Stages);
-        var owned = new HashSet<GuideStage> { GuideStage.Papers, GuideStage.Decision };
+        var owned = new HashSet<GuideStage> { GuideStage.Papers };
         foreach (StepSet set in sets.sets)
             if (set != null && !set.dataOnly)
                 foreach (StepSpec step in CaseSteps.Resolve(sets, set.type, day))
@@ -137,13 +113,6 @@ public sealed class CaseGuide
                 shown.Add(stage);
         return shown;
     }
-
-    /// <summary>True once the clerk has left <paramref name="stage"/> (visited it and gone on).</summary>
-    public bool WasLeft(GuideStage stage) => _left.Contains(stage);
-
-    /// <summary>True when <paramref name="stage"/> is finished: its checks all done when it has some, else left behind; never the decision.</summary>
-    public bool IsDone(GuideStage stage, StageChecks checks) =>
-        stage != GuideStage.Decision && (checks.Total > 0 ? checks.Done >= checks.Total : WasLeft(stage));
 
     /// <summary>The step a checklist item belongs to (see the class summary).</summary>
     public static GuideStage StageOf(StepSpec step)
@@ -161,37 +130,5 @@ public sealed class CaseGuide
             default:
                 return GuideStage.Papers;
         }
-    }
-
-    /// <summary>
-    /// The checks of <paramref name="stage"/> this case: of the listed items'
-    /// states (<paramref name="states"/>, CaseSteps.Evaluate over
-    /// <paramref name="steps"/>: an item with no parts this case is not
-    /// listed), those that belong to it, and how many are done.
-    /// </summary>
-    public static StageChecks Checks(GuideStage stage, IReadOnlyList<StepSpec> steps, IReadOnlyList<StepState> states)
-    {
-        int done = 0, total = 0;
-        if (steps == null || states == null)
-            return new StageChecks(0, 0);
-        foreach (StepState state in states)
-        {
-            StepSpec spec = Find(steps, state.Id);
-            if (spec == null || StageOf(spec) != stage)
-                continue;
-            total++;
-            if (state.Done)
-                done++;
-        }
-        return new StageChecks(done, total);
-    }
-
-    /// <summary>The spec of a listed item by its id, or null.</summary>
-    private static StepSpec Find(IReadOnlyList<StepSpec> steps, string id)
-    {
-        foreach (StepSpec spec in steps)
-            if (spec != null && spec.id == id)
-                return spec;
-        return null;
     }
 }

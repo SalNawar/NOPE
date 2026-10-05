@@ -13,11 +13,9 @@ public enum AppCommand
     Step3,
     /// <summary>Ctrl+4: the guided step 4 (Rules).</summary>
     Step4,
-    /// <summary>Ctrl+5: the guided step 5 (Decision).</summary>
-    Step5,
-    /// <summary>Ctrl+Tab (and → or ↓ on the steps): the next step.</summary>
+    /// <summary>Ctrl+Tab: the next step.</summary>
     NextStep,
-    /// <summary>Ctrl+Shift+Tab (and ← or ↑ on the steps): the previous step.</summary>
+    /// <summary>Ctrl+Shift+Tab: the previous step.</summary>
     PrevStep,
     /// <summary>F6, Shift+F6: the other side becomes the target.</summary>
     OtherPane,
@@ -25,8 +23,6 @@ public enum AppCommand
     ToggleSplit,
     /// <summary>Ctrl+B: the findings column on or off.</summary>
     ToggleFindings,
-    /// <summary>Ctrl+Shift+S: the steps' hints on or off.</summary>
-    ToggleHints,
     /// <summary>Alt+←: back in the active pane.</summary>
     Back,
     /// <summary>Alt+→: forward in the active pane.</summary>
@@ -220,11 +216,8 @@ public readonly struct ShortcutContext
     /// <summary>A context menu or the Start menu is open: only Escape passes.</summary>
     public readonly bool MenuOpen;
 
-    /// <summary>The app's focus ring is on an item of a list (a row, a chip, a pin, the decision's buttons).</summary>
+    /// <summary>The app's focus ring is on an item of a list (a row, a menu title, a pin, a finding).</summary>
     public readonly bool ListFocused;
-
-    /// <summary>The app's focus ring is on the guided steps (the Steps region).</summary>
-    public readonly bool StepsFocused;
 
     /// <summary>The search results panel lists hits (↓ in the search field goes into them).</summary>
     public readonly bool ResultsShown;
@@ -232,7 +225,7 @@ public readonly struct ShortcutContext
     /// <summary>A context.</summary>
     public ShortcutContext(bool frameOpen = false, bool desktopFocused = false, bool iconSelected = false, bool appFocused = false, bool notesFocused = false,
                            bool textFieldFocused = false, bool searchFocused = false, bool menuOpen = false, bool listFocused = false,
-                           bool stepsFocused = false, bool resultsShown = false, bool ordersFocused = false)
+                           bool resultsShown = false, bool ordersFocused = false)
     {
         FrameOpen = frameOpen;
         DesktopFocused = desktopFocused;
@@ -243,7 +236,6 @@ public readonly struct ShortcutContext
         SearchFocused = searchFocused;
         MenuOpen = menuOpen;
         ListFocused = listFocused;
-        StepsFocused = stepsFocused;
         ResultsShown = resultsShown;
         OrdersFocused = ordersFocused;
     }
@@ -260,7 +252,7 @@ public sealed class ShortcutCardRow
         Commands = commands;
     }
 
-    /// <summary>The keys as printed on the card ("Ctrl+1 … Ctrl+5").</summary>
+    /// <summary>The keys as printed on the card ("Ctrl+1 … Ctrl+4").</summary>
     public string Keys { get; }
 
     /// <summary>The ui string key of what they do ("keys.step").</summary>
@@ -276,13 +268,13 @@ public sealed class ShortcutCardRow
 /// components). Resolve turns a chord in a context into a command: nothing
 /// while the frame is closed; only Escape while a menu is open; while a text
 /// field has the keyboard only the chords that cannot be typing pass (Ctrl+K,
-/// Ctrl+F, Ctrl+1…5, F6, Ctrl+\, Ctrl+B, Esc, F1; the field keeps its own
+/// Ctrl+F, Ctrl+1…4, F6, Ctrl+\, Ctrl+B, Esc, F1; the field keeps its own
 /// Ctrl+C/V/X/A, arrows and Enter), and in the app's search field Tab and
 /// Shift+Tab (the next region: KB4's order starts there) and, while the
 /// results list hits, ↓ into them (the ring then walks the hits: Enter opens
 /// one, Ctrl+Enter in the other pane). The icons take the arrows and Enter
 /// while no window has the focus; the app's chords need the app focused, its
-/// row keys a focused list, the arrows the focused guided steps; Ctrl+V adds a
+/// row keys a focused list; Ctrl+V adds a
 /// clipping with Notes focused; with Orders focused the arrows walk its
 /// tree, Enter acts, and the zoom chords (Ctrl+=, Ctrl+-, Ctrl+0) zoom the
 /// tree instead of the panes. Card is the F1 card: every command once.
@@ -301,12 +293,11 @@ public static class ShortcutMap
         new ShortcutCardRow("← → ↑ ↓", "keys.icons", AppCommand.IconLeft, AppCommand.IconRight, AppCommand.IconUp, AppCommand.IconDown),
         new ShortcutCardRow("← → ↑ ↓", "keys.orders", AppCommand.NodeLeft, AppCommand.NodeRight, AppCommand.NodeUp, AppCommand.NodeDown),
         new ShortcutCardRow("Enter", "keys.ordersAct", AppCommand.NodeAct),
-        new ShortcutCardRow("Ctrl+1 … Ctrl+5", "keys.step", AppCommand.Step1, AppCommand.Step2, AppCommand.Step3, AppCommand.Step4, AppCommand.Step5),
+        new ShortcutCardRow("Ctrl+1 … Ctrl+4", "keys.step", AppCommand.Step1, AppCommand.Step2, AppCommand.Step3, AppCommand.Step4),
         new ShortcutCardRow("Ctrl+Tab, Ctrl+Shift+Tab", "keys.nextStep", AppCommand.NextStep, AppCommand.PrevStep),
         new ShortcutCardRow("F6, Shift+F6", "keys.otherPane", AppCommand.OtherPane),
         new ShortcutCardRow("Ctrl+\\", "keys.split", AppCommand.ToggleSplit),
         new ShortcutCardRow("Ctrl+B", "keys.findings", AppCommand.ToggleFindings),
-        new ShortcutCardRow("Ctrl+Shift+S", "keys.hints", AppCommand.ToggleHints),
         new ShortcutCardRow("Alt+←, Alt+→", "keys.history", AppCommand.Back, AppCommand.Forward),
         new ShortcutCardRow("Tab, Shift+Tab", "keys.regions", AppCommand.NextRegion, AppCommand.PrevRegion),
         new ShortcutCardRow("↑ ↓ Home End PgUp PgDn", "keys.rows", AppCommand.RowUp, AppCommand.RowDown, AppCommand.RowFirst, AppCommand.RowLast,
@@ -320,9 +311,9 @@ public static class ShortcutMap
         new ShortcutCardRow("Ctrl+=, Ctrl+-, Ctrl+0", "keys.zoom", AppCommand.ZoomIn, AppCommand.ZoomOut, AppCommand.ZoomReset),
     };
 
-    /// <summary>The guided step (1-5) a Step1…Step5 command goes to, else 0.</summary>
+    /// <summary>The guided step (1-4) a Step1…Step4 command goes to, else 0.</summary>
     public static int StepPosition(AppCommand command) =>
-        command >= AppCommand.Step1 && command <= AppCommand.Step5 ? command - AppCommand.Step1 + 1 : 0;
+        command >= AppCommand.Step1 && command <= AppCommand.Step4 ? command - AppCommand.Step1 + 1 : 0;
 
     /// <summary>The command <paramref name="chord"/> gives in <paramref name="context"/>; false when it gives none.</summary>
     public static bool Resolve(KeyChord chord, ShortcutContext context, out AppCommand command)
@@ -383,8 +374,6 @@ public static class ShortcutMap
             return Is(AppCommand.Forward, out command);
         if (k.Key == ShortcutKey.Tab && !k.Ctrl && !k.Alt)
             return Is(k.Shift ? AppCommand.PrevRegion : AppCommand.NextRegion, out command);
-        if (c.StepsFocused && plain && (k.Key == ShortcutKey.Left || k.Key == ShortcutKey.Right || k.Key == ShortcutKey.Up || k.Key == ShortcutKey.Down))
-            return Is(k.Key == ShortcutKey.Left || k.Key == ShortcutKey.Up ? AppCommand.PrevStep : AppCommand.NextStep, out command);
         if (c.ListFocused)
             return List(k, plain, ctrl, ctrlShift, out command);
         return None(out command);
@@ -427,7 +416,6 @@ public static class ShortcutMap
             case ShortcutKey.Digit2: return Is(AppCommand.Step2, out command);
             case ShortcutKey.Digit3: return Is(AppCommand.Step3, out command);
             case ShortcutKey.Digit4: return Is(AppCommand.Step4, out command);
-            case ShortcutKey.Digit5: return Is(AppCommand.Step5, out command);
             case ShortcutKey.Tab: return Is(AppCommand.NextStep, out command);
             case ShortcutKey.Backslash: return Is(AppCommand.ToggleSplit, out command);
             case ShortcutKey.B: return Is(AppCommand.ToggleFindings, out command);
@@ -454,7 +442,6 @@ public static class ShortcutMap
         switch (key)
         {
             case ShortcutKey.Tab: return Is(AppCommand.PrevStep, out command);
-            case ShortcutKey.S: return Is(AppCommand.ToggleHints, out command);
             default: return None(out command);
         }
     }

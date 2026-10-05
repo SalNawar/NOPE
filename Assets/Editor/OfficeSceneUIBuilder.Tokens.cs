@@ -51,10 +51,7 @@ public static partial class OfficeSceneUIBuilder
         /// <summary>A control's height inside a toolbar row.</summary>
         public const float Control = 44f;
 
-        /// <summary>Accept's and Deny's height in the toolbar row: room for a culture's word over its English gloss.</summary>
-        public const float Decision = 58f;
-
-        /// <summary>The navigator's width.</summary>
+            /// <summary>The navigator's width.</summary>
         public const float Nav = 308f;
 
         /// <summary>The navigator's case summary block.</summary>

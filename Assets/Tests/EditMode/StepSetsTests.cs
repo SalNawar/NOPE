@@ -236,7 +236,7 @@ public class StepSetsTests
                                   "a rich tourist's day-1 steps: the visa against the account (the manifest's step from day 2, the others with their directives)");
         CollectionAssert.AreEqual(new[] { "rules", "papers", "read", "identity", "class", "transponder" }, CaseSteps.Resolve(data, "RichTourist", 2).Select(s => s.id));
         for (int day = 1; day <= 6; day++)
-            CollectionAssert.AreEqual(new[] { GuideStage.Papers, GuideStage.Records, GuideStage.Rules, GuideStage.Decision }, CaseGuide.StagesOn(data, day),
+            CollectionAssert.AreEqual(new[] { GuideStage.Papers, GuideStage.Records, GuideStage.Rules }, CaseGuide.StagesOn(data, day),
                                       $"day {day}: no check against the books yet, so the guided steps leave the Books out (the ramp)");
         CollectionAssert.AreEqual(CaseGuide.Stages, CaseGuide.StagesOn(data, 7), "the dress of day 7 brings the Books step");
         Assert.AreEqual("RichTourist", data.sets.Single(s => s.type == "PoorTourist").inherit);

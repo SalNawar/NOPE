@@ -8,10 +8,10 @@ using NUnit.Framework;
 public class InvestigationWiringTests
 {
     /// <summary>Everything wired (the built office), with single parts switched off by name.</summary>
-    private static InvestigationWiring Wired(bool documents = true, bool app = true, bool accept = true, bool deny = true,
+    private static InvestigationWiring Wired(bool documents = true, bool app = true, bool stamps = true,
                                              bool compare = true, bool ring = true, bool transcript = true, bool transcriptTab = true,
                                              bool desk = true, bool records = true) =>
-        new InvestigationWiring(documents, app, accept, deny, compare, ring, transcript, transcriptTab, desk, records);
+        new InvestigationWiring(documents, app, stamps, compare, ring, transcript, transcriptTab, desk, records);
 
     [Test]
     public void TheBuiltOffice_ReachesEverything_AndWarnsOfNothing()
@@ -28,13 +28,12 @@ public class InvestigationWiringTests
         Assert.IsFalse(w.DeskMissing);
     }
 
-    [TestCase(false, true, true, true)]
-    [TestCase(true, false, true, true)]
-    [TestCase(true, true, false, true)]
-    [TestCase(true, true, true, false)]
-    public void WithoutAnyPartOfTheApp_NoCaseShows_NoEvidenceNorDesk_AndOnlyTheErrorIsDue(bool documents, bool app, bool accept, bool deny)
+    [TestCase(false, true, true)]
+    [TestCase(true, false, true)]
+    [TestCase(true, true, false)]
+    public void WithoutAnyPartOfTheAppOrTheStamps_NoCaseShows_NoEvidenceNorDesk_AndOnlyTheErrorIsDue(bool documents, bool app, bool stamps)
     {
-        InvestigationWiring w = Wired(documents, app, accept, deny);
+        InvestigationWiring w = Wired(documents, app, stamps);
         Assert.IsFalse(w.Wired);
         Assert.IsFalse(w.EvidenceSystemActive);
         Assert.IsFalse(w.DeskReachable);
@@ -66,7 +65,7 @@ public class InvestigationWiringTests
     public void TheEvidenceSystem_NeedsTheAppAndTheCompare()
     {
         Assert.IsFalse(Wired(compare: false).EvidenceSystemActive);
-        Assert.IsFalse(Wired(deny: false).EvidenceSystemActive);
+        Assert.IsFalse(Wired(stamps: false).EvidenceSystemActive);
         Assert.IsTrue(Wired(ring: false, transcript: false, desk: false, records: false).EvidenceSystemActive);
     }
 
@@ -83,7 +82,7 @@ public class InvestigationWiringTests
     {
         Assert.IsFalse(Wired(desk: false).DeskReachable);
         Assert.IsTrue(Wired(desk: false).DeskMissing, "documents then open on the PC at the hand-over");
-        Assert.IsFalse(Wired(accept: false).DeskReachable);
-        Assert.IsFalse(Wired(accept: false).DeskMissing);
+        Assert.IsFalse(Wired(stamps: false).DeskReachable);
+        Assert.IsFalse(Wired(stamps: false).DeskMissing);
     }
 }

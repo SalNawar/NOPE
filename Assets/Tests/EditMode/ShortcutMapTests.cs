@@ -17,7 +17,6 @@ public class ShortcutMapTests
     private static readonly ShortcutContext AppList = new ShortcutContext(frameOpen: true, appFocused: true, listFocused: true);
 
     /// <summary>The app's focus ring is on its guided steps.</summary>
-    private static readonly ShortcutContext AppSteps = new ShortcutContext(frameOpen: true, appFocused: true, stepsFocused: true);
 
     /// <summary>The app's search field has the keyboard and its results panel lists hits.</summary>
     private static readonly ShortcutContext SearchWithResults =
@@ -69,8 +68,8 @@ public class ShortcutMapTests
     [Test]
     public void CtrlDigits_GoToThatGuidedStep()
     {
-        ShortcutKey[] digits = { ShortcutKey.Digit1, ShortcutKey.Digit2, ShortcutKey.Digit3, ShortcutKey.Digit4, ShortcutKey.Digit5 };
-        AppCommand[] steps = { AppCommand.Step1, AppCommand.Step2, AppCommand.Step3, AppCommand.Step4, AppCommand.Step5 };
+        ShortcutKey[] digits = { ShortcutKey.Digit1, ShortcutKey.Digit2, ShortcutKey.Digit3, ShortcutKey.Digit4 };
+        AppCommand[] steps = { AppCommand.Step1, AppCommand.Step2, AppCommand.Step3, AppCommand.Step4 };
         for (int i = 0; i < digits.Length; i++)
         {
             Assert.AreEqual(steps[i], Resolve(K(digits[i], ctrl: true), App));
@@ -78,7 +77,7 @@ public class ShortcutMapTests
         }
         Assert.AreEqual(CaseGuide.Stages.Count, steps.Length, "one chord per guided step");
         Assert.AreEqual(0, ShortcutMap.StepPosition(AppCommand.Pin));
-        Assert.IsNull(Resolve(K(ShortcutKey.Digit6, ctrl: true), App), "no sixth step");
+        Assert.IsNull(Resolve(K(ShortcutKey.Digit5, ctrl: true), App), "no fifth step: the PC does not decide (the stamps do)");
     }
 
     [Test]
@@ -91,7 +90,7 @@ public class ShortcutMapTests
         Assert.AreEqual(AppCommand.OtherPane, Resolve(K(ShortcutKey.F6, shift: true), App));
         Assert.AreEqual(AppCommand.ToggleSplit, Resolve(K(ShortcutKey.Backslash, ctrl: true), App));
         Assert.AreEqual(AppCommand.ToggleFindings, Resolve(K(ShortcutKey.B, ctrl: true), App));
-        Assert.AreEqual(AppCommand.ToggleHints, Resolve(K(ShortcutKey.S, ctrl: true, shift: true), App));
+        Assert.IsNull(Resolve(K(ShortcutKey.S, ctrl: true, shift: true), App), "the step hints' chord is retired");
         Assert.AreEqual(AppCommand.Back, Resolve(K(ShortcutKey.Left, alt: true), App));
         Assert.AreEqual(AppCommand.Forward, Resolve(K(ShortcutKey.Right, alt: true), App));
         Assert.AreEqual(AppCommand.NextRegion, Resolve(K(ShortcutKey.Tab), App));
@@ -132,16 +131,6 @@ public class ShortcutMapTests
     {
         foreach (KeyChord chord in new[] { K(ShortcutKey.Up), K(ShortcutKey.Home), K(ShortcutKey.Space), K(ShortcutKey.Enter), K(ShortcutKey.C, ctrl: true) })
             Assert.IsNull(Resolve(chord, App), chord.ToString());
-    }
-
-    [Test]
-    public void TheStepsFocused_TheArrowsWalkTheSteps()
-    {
-        Assert.AreEqual(AppCommand.PrevStep, Resolve(K(ShortcutKey.Left), AppSteps));
-        Assert.AreEqual(AppCommand.NextStep, Resolve(K(ShortcutKey.Right), AppSteps));
-        Assert.AreEqual(AppCommand.PrevStep, Resolve(K(ShortcutKey.Up), AppSteps));
-        Assert.AreEqual(AppCommand.NextStep, Resolve(K(ShortcutKey.Down), AppSteps));
-        Assert.IsNull(Resolve(K(ShortcutKey.Space), AppSteps));
     }
 
     [Test]
@@ -290,7 +279,7 @@ public class ShortcutMapTests
     {
         ShortcutContext[] contexts =
         {
-            App, AppList, AppSteps, Icons, SearchWithResults, new ShortcutContext(frameOpen: true, notesFocused: true),
+            App, AppList, Icons, SearchWithResults, new ShortcutContext(frameOpen: true, notesFocused: true),
             new ShortcutContext(frameOpen: true, ordersFocused: true)
         };
         var reached = new HashSet<AppCommand>();

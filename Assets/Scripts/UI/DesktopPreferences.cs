@@ -38,13 +38,10 @@ public static class DesktopPreferences
     /// <summary>The stored value for one pane.</summary>
     private const string Off = "off";
 
-    /// <summary>The step hints' key (the PC workbench spec §7; the PC redesign ST1's checklist key kept, so a player's choice carries over).</summary>
-    private const string StepsKey = "TimeDesk.StepsShown";
-
-    /// <summary>The stored value for a hidden sidebar or hidden steps ("shown" or absent = shown).</summary>
+    /// <summary>The stored value for a hidden sidebar ("shown" or absent = shown).</summary>
     private const string Hidden = "hidden";
 
-    /// <summary>The stored value for a shown sidebar or shown steps.</summary>
+    /// <summary>The stored value for a shown sidebar.</summary>
     private const string Shown = "shown";
 
     /// <summary>The saved icon layout, or "" when the player never moved an icon (the default arrangement).</summary>
@@ -98,17 +95,6 @@ public static class DesktopPreferences
         set
         {
             PlayerPrefs.SetString(SidebarKey, value ? Shown : Hidden);
-            PlayerPrefs.Save();
-        }
-    }
-
-    /// <summary>True (the default) when the Investigation app shows its step hints (the lead's sentence, the status line's teaching hint); false when the player hid them (Settings, Ctrl+Shift+S).</summary>
-    public static bool StepsShown
-    {
-        get => PlayerPrefs.GetString(StepsKey, Shown) != Hidden;
-        set
-        {
-            PlayerPrefs.SetString(StepsKey, value ? Shown : Hidden);
             PlayerPrefs.Save();
         }
     }

@@ -145,7 +145,6 @@ public sealed class DesktopKeyboard : MonoBehaviour
             searchFocused: app != null && app.IsSearchField(field),
             menuOpen: (contextMenu != null && contextMenu.IsOpen) || (shell != null && shell.StartMenuOpen),
             listFocused: appFocused && app.ListFocused,
-            stepsFocused: appFocused && app.StepsFocused,
             resultsShown: appFocused && app.ResultsListed,
             ordersFocused: orders != null && focused != null && focused == orders.Window);
         if (ShortcutMap.Resolve(chord, context, out AppCommand command))

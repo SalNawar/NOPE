@@ -312,8 +312,9 @@ public class RuleChecksTests
 public class CaseGuideTests
 {
     [Test]
-    public void TheSteps_ArePapersRecordsBooksRulesDecision() =>
-        CollectionAssert.AreEqual(new[] { GuideStage.Papers, GuideStage.Records, GuideStage.Books, GuideStage.Rules, GuideStage.Decision }, CaseGuide.Stages);
+    public void TheSteps_ArePapersRecordsBooksRules_NoDecision() =>
+        CollectionAssert.AreEqual(new[] { GuideStage.Papers, GuideStage.Records, GuideStage.Books, GuideStage.Rules }, CaseGuide.Stages,
+                                  "the PC only investigates: the verdict is the stamp on the passport");
 
     [Test]
     public void NextAndBack_StopAtTheEnds_AndAnyStepCanBeGoneTo()
@@ -325,15 +326,12 @@ public class CaseGuideTests
         Assert.IsTrue(guide.Next());
         Assert.AreEqual(GuideStage.Records, guide.Current);
         Assert.AreEqual(2, guide.Number);
-        Assert.IsTrue(guide.Go(GuideStage.Decision));
+        Assert.IsTrue(guide.Go(GuideStage.Rules));
         Assert.IsTrue(guide.IsLast);
         Assert.IsFalse(guide.Next());
-        Assert.IsFalse(guide.Go(GuideStage.Decision), "already there");
-        Assert.IsTrue(guide.WasLeft(GuideStage.Papers) && guide.WasLeft(GuideStage.Records));
-        Assert.IsFalse(guide.WasLeft(GuideStage.Books), "never visited");
+        Assert.IsFalse(guide.Go(GuideStage.Rules), "already there");
         guide.Reset();
         Assert.AreEqual(GuideStage.Papers, guide.Current);
-        Assert.IsFalse(guide.WasLeft(GuideStage.Papers));
     }
 
     private static StepSpec Spec(string id, StepWhen when, TruthKind truth = TruthKind.Any) => new StepSpec { id = id, when = when, truth = truth };
@@ -343,8 +341,8 @@ public class CaseGuideTests
     {
         var guide = new CaseGuide();
         guide.Reset(new[] { GuideStage.Records, GuideStage.Rules });
-        CollectionAssert.AreEqual(new[] { GuideStage.Papers, GuideStage.Records, GuideStage.Rules, GuideStage.Decision }, guide.Shown, "Papers and the decision always show");
-        Assert.AreEqual(4, guide.Count);
+        CollectionAssert.AreEqual(new[] { GuideStage.Papers, GuideStage.Records, GuideStage.Rules }, guide.Shown, "Papers always shows");
+        Assert.AreEqual(3, guide.Count);
         Assert.IsTrue(guide.Next());
         Assert.IsTrue(guide.Next());
         Assert.AreEqual(GuideStage.Rules, guide.Current, "Next skips the Books");
@@ -353,7 +351,7 @@ public class CaseGuideTests
         Assert.IsTrue(guide.Back());
         Assert.AreEqual(GuideStage.Records, guide.Current);
         guide.Reset();
-        Assert.AreEqual(5, guide.Count, "no list: every step");
+        Assert.AreEqual(4, guide.Count, "no list: every step");
     }
 
     [Test]
@@ -371,7 +369,7 @@ public class CaseGuideTests
         future.steps.Add(Spec("facts", StepWhen.Compared, TruthKind.Reference));
         sets.sets.Add(future);
 
-        CollectionAssert.AreEqual(new[] { GuideStage.Papers, GuideStage.Records, GuideStage.Rules, GuideStage.Decision }, CaseGuide.StagesOn(sets, 1),
+        CollectionAssert.AreEqual(new[] { GuideStage.Papers, GuideStage.Records, GuideStage.Rules }, CaseGuide.StagesOn(sets, 1),
                                   "no book check before day 7 (a data-only set counts for nothing)");
         CollectionAssert.AreEqual(CaseGuide.Stages, CaseGuide.StagesOn(sets, 7), "the dress brings the Books");
         CollectionAssert.AreEqual(CaseGuide.Stages, CaseGuide.StagesOn(null, 1), "no sets: every step");
@@ -391,37 +389,10 @@ public class CaseGuideTests
     }
 
     [Test]
-    public void AStep_IsDone_WhenItsChecksAre_OrOnceLeftWithoutChecks()
-    {
-        var steps = new[] { Spec("papers", StepWhen.PapersReceived), Spec("identity", StepWhen.Compared, TruthKind.Record), Spec("read", StepWhen.PaperRead) };
-        var states = new[] { new StepState("papers", true, 2, 2, false), new StepState("identity", false, 0, 1, false), new StepState("read", true, 2, 2, false) };
-        StageChecks papers = CaseGuide.Checks(GuideStage.Papers, steps, states);
-        Assert.AreEqual(2, papers.Total);
-        Assert.AreEqual(2, papers.Done);
-        StageChecks records = CaseGuide.Checks(GuideStage.Records, steps, states);
-        Assert.AreEqual(1, records.Total);
-        Assert.AreEqual(0, records.Done);
-
-        var guide = new CaseGuide();
-        guide.Reset();
-        Assert.IsTrue(guide.IsDone(GuideStage.Papers, papers));
-        Assert.IsFalse(guide.IsDone(GuideStage.Records, records));
-        StageChecks books = CaseGuide.Checks(GuideStage.Books, steps, states);
-        Assert.AreEqual(0, books.Total);
-        Assert.IsFalse(guide.IsDone(GuideStage.Books, books), "not visited yet");
-        guide.Go(GuideStage.Books);
-        guide.Go(GuideStage.Rules);
-        Assert.IsTrue(guide.IsDone(GuideStage.Books, books), "left with no checks of its own");
-        guide.Go(GuideStage.Decision);
-        guide.Go(GuideStage.Papers);
-        Assert.IsFalse(guide.IsDone(GuideStage.Decision, new StageChecks(0, 0)), "the decision is never done");
-    }
-
-    [Test]
     public void APaperMissing_IsALoggedDifference_AboutNoDetail()
     {
         Assert.AreEqual(FindingLook.Differ, FindingRules.Look(FindingKind.PaperMissing));
-        Assert.IsTrue(FindingRules.IsDifference(FindingKind.PaperMissing), "Deny can cite it");
+        Assert.IsTrue(FindingRules.IsDifference(FindingKind.PaperMissing), "a denial can rest on it");
         Assert.IsTrue(FindingRules.IsDirectiveEvidence(FindingKind.PaperMissing), "a paper set's fault: a denial on it is proven");
         var finding = new Finding(FindingKind.PaperMissing, "missing:TC-230", string.Empty, "Entry Ticket", string.Empty, string.Empty, string.Empty, "Entry Ticket", null);
         Assert.IsNull(finding.Category);

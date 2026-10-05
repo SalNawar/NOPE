@@ -268,7 +268,7 @@ public static partial class OfficeSceneUIBuilder
     /// Motion (Full / Reduced), Desktop icons open with (Double click /
     /// Single click) and Reset icon positions (its icons wired by
     /// WireIconSettings), Investigation's Text size (a choice per zoom level,
-    /// redesign phase 20) and its Checklist (shown / hidden, phase 21),
+    /// redesign phase 20; the step hints' pair is gone with the hints),
     /// Keyboard (Show shortcuts, which opens the F1 card: BuildShortcutCard),
     /// then the note at Caption size.
     /// </summary>
@@ -317,9 +317,6 @@ public static partial class OfficeSceneUIBuilder
             SceneUiKit.Tag(sizeLabel, ThemeRoleId.Button, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button);
             textSizes.Add(size);
         }
-        Transform checklist = SettingsRow(column, "ChecklistRow");
-        Button stepsShown = SettingsChoice(checklist, "StepsShownButton", "settings.stepsShown");
-        Button stepsHidden = SettingsChoice(checklist, "StepsHiddenButton", "settings.stepsHidden");
 
         SettingsHeading(column, "KeyboardLabel", "settings.keyboard");
         Button shortcuts = SettingsChoice(SettingsRow(column, "ShortcutsRow"), "ShowShortcutsButton", "settings.showShortcuts");
@@ -344,8 +341,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "resetIconsButton", resetIcons);
         SerializedArrays.Set(so, "textSizeButtons", textSizes);
         SetRef(so, "config", config);
-        SetRef(so, "stepsShownButton", stepsShown);
-        SetRef(so, "stepsHiddenButton", stepsHidden);
         SetRef(so, "showShortcutsButton", shortcuts);
         SetRef(so, "shortcutsWindow", card);
         so.ApplyModifiedProperties();
