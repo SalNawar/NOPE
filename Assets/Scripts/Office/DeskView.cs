@@ -68,6 +68,9 @@ public sealed class DeskView : MonoBehaviour
     /// <summary>Raised after the view turns on or off.</summary>
     public event Action Changed;
 
+    /// <summary>Raised after the player tilts the view in to read (the mat, the mouse wheel, the PC's "&lt; Desk"; not a stamp picked up): the desk brings the paper being read up to reading size (the desk-first polish, 2026-10-05).</summary>
+    public event Action ReadingTilt;
+
     private void Awake()
     {
         _blend = Blend;
@@ -126,18 +129,39 @@ public sealed class DeskView : MonoBehaviour
         deskCamera.gameObject.SetActive(true);
     }
 
+    /// <summary>Where the desk view's ray through <paramref name="viewport"/> (0..1 each, from the bottom left) meets the level plane at <paramref name="height"/>: what of the desk the view shows there (false while unbound, or for a ray that never comes down to it).</summary>
+    public bool TryViewPoint(Vector2 viewport, float height, out Vector3 point)
+    {
+        point = default;
+        if (_office == null || deskCamera == null)
+            return false;
+        Transform t = deskCamera.transform;
+        float tan = Mathf.Tan(deskCamera.Lens.FieldOfView * 0.5f * Mathf.Deg2Rad);
+        float aspect = Screen.height > 0 ? (float)Screen.width / Screen.height : 16f / 9f;
+        Vector3 ray = t.forward + t.up * ((viewport.y * 2f - 1f) * tan) + t.right * ((viewport.x * 2f - 1f) * tan * aspect);
+        if (ray.y > -1e-5f)
+            return false;
+        float along = (height - t.position.y) / ray.y;
+        point = t.position + ray * along;
+        return along > 0f;
+    }
+
     /// <summary>The mat's click: tilts into the desk view, or back (only while the toggle is live).</summary>
     public void Toggle()
     {
-        if (_toggleLive)
-            Set(!IsOn);
+        if (!_toggleLive)
+            return;
+        if (IsOn)
+            Set(false);
+        else
+            TiltToRead();
     }
 
     /// <summary>Tilts into the desk view (no-op if it is on, or while the mat's toggle is not live): the PC's "&lt; Desk" button, once its frame has closed.</summary>
     public void TiltIn()
     {
         if (_toggleLive)
-            Set(true);
+            TiltToRead();
     }
 
     /// <summary>Tilts into the desk view whatever the mat's toggle says (no-op if it is on or unbound): a stamp picked up from the tray, to be pressed on the papers lying on the desk (the desk-first redesign, item 12).</summary>
@@ -203,8 +227,17 @@ public sealed class DeskView : MonoBehaviour
         }
         else if (_scrollInLive && _scrollInLiveSince < Time.frameCount && scroll < 0f && mouse != null && OnMat(mouse.position.ReadValue()))
         {
-            Set(true);
+            TiltToRead();
         }
+    }
+
+    /// <summary>The player's tilt in (not a stamp's): the view turns on, then ReadingTilt.</summary>
+    private void TiltToRead()
+    {
+        if (IsOn || _office == null)
+            return;
+        Set(true);
+        ReadingTilt?.Invoke();
     }
 
     /// <summary>The Back control's click (only while it is live).</summary>

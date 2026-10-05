@@ -461,7 +461,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
             Vector3 right = Vector3.Cross(Vector3.up, level);
             Vector3 at = new Vector3(deskCentre.x, top + RulebookLift, deskCentre.z) + right * config.rulebookAt.x + level * config.rulebookAt.y;
-            rulebook.transform.SetPositionAndRotation(at, Quaternion.LookRotation(level, Vector3.up));
+            rulebook.Place(at, Quaternion.LookRotation(level, Vector3.up));
         }
 
         if (handOver != null)

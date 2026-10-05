@@ -18,13 +18,18 @@ using UnityEngine.UI;
 /// (DeskDocument.Stamp), and on the passport (the traveller's first paper)
 /// that is the verdict; a dry press leaves a faint mark and counts for
 /// nothing. A click on the held stamp's place on the tray, Escape or a
-/// right-click puts it down. Once the passport carries a verdict, "Hand the
-/// papers back" shows over the office (and dropping the passport on the
-/// traveller's side of the desk does the same): it decides the case
-/// (Decided), as the PC's Accept and Deny do. The rules are StampFlow's; the
-/// stamps take clicks while BoothRules.StampsLive (false puts a held stamp
-/// down). The office binder places the tray; Build Office UI builds its
-/// stand-in parts and the overlay's button and hint.
+/// right-click puts it down. Once the passport carries a verdict, the papers
+/// are handed back the physical way (the desk-first polish, 2026-10-05): the
+/// stamped passport slid onto the traveller's side of the desk, where a strip
+/// marked "HAND BACK" shows while it can (OnTravellersSide; DeskController
+/// routes the drop), with "Hand the papers back" over the office as the
+/// secondary way; either decides the case (Decided), as the PC's Accept and
+/// Deny do. The tray, out, takes the room it lies on: DeskController moves
+/// the papers off its footprint (TryFootprint). The rules are StampFlow's;
+/// the stamps take clicks while BoothRules.StampsLive (false puts a held
+/// stamp down). The office binder places the tray; Build Office UI builds its
+/// parts (the art's desk stamp and ink pad models, ART_ASSET_LIST "The
+/// desk"), the hand-back strip and the overlay's button and hint.
 /// </summary>
 public sealed class DeskStampTray : MonoBehaviour
 {
@@ -58,8 +63,23 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>"Hand the papers back" with DENIED on the passport (its cross).</summary>
     [SerializeField] private Button handBackDenied;
 
-    /// <summary>The step's hint over the office (pick a stamp, ink it, stamp the passport); optional.</summary>
+    /// <summary>The step's hint over the office (pick a stamp, ink it, stamp the passport, slide it back); optional.</summary>
     [SerializeField] private TMP_Text hint;
+
+    /// <summary>The strip on the traveller's side of the desk, shown while the stamped passport can be slid there to hand the papers back (laid at Bind; optional).</summary>
+    [SerializeField] private GameObject handBackZone;
+
+    /// <summary>The strip's quad (sized at Bind to the traveller's side: the desk's width by DeskConfigSO.handBackDepth).</summary>
+    [SerializeField] private Transform handBackStrip;
+
+    /// <summary>The tray's footprint on the desk while out (metres: across, deep), kept clear of papers.</summary>
+    [SerializeField] private Vector2 footprint = new Vector2(0.36f, 0.17f);
+
+    /// <summary>How far above the desk the hand-back strip lies (metres), over the desk's own top and under the papers.</summary>
+    private const float ZoneLift = 0.0004f;
+
+    /// <summary>The highest the traveller's side reaches on the screen in the desk view (a share of its height from the bottom): a passport can be slid there, under the overlay's top controls.</summary>
+    private const float ViewTop = 0.9f;
 
     private StampFlow _flow;
     private Camera _camera;
@@ -74,6 +94,8 @@ public sealed class DeskStampTray : MonoBehaviour
     private int _changedFrame;
     private float _pressElapsed = -1f;
     private Vector3 _pressAt;
+    private Vector3 _forward = Vector3.forward;
+    private Vector3 _right = Vector3.right;
 
     /// <summary>True while a stamp is in the hand (BoothRules.StampHeld).</summary>
     public bool IsHolding => Flow.Held != DeskStamp.None;
@@ -83,6 +105,9 @@ public sealed class DeskStampTray : MonoBehaviour
 
     /// <summary>The frame a held stamp was last put down or picked up (one Escape or right-click does one thing).</summary>
     public int ChangedFrame => _changedFrame;
+
+    /// <summary>True while the tray is out on the desk (or sliding out).</summary>
+    public bool TrayOut => Flow.TrayOut;
 
     /// <summary>Raised when the tray, the hand or the verdict changes (the booth re-applies its rules).</summary>
     public event Action Changed;
@@ -120,17 +145,20 @@ public sealed class DeskStampTray : MonoBehaviour
     /// on the desk, facing along <paramref name="levelForward"/> (the office
     /// view's), and in under the desk's near edge (DeskConfigSO.stampTraySlide
     /// toward the chair and below the top); the office camera projects the
-    /// pointer.
+    /// pointer; the hand-back strip lies on the traveller's side of the desk.
     /// </summary>
     public void Bind(Camera office, Vector3 outPoint, Vector3 levelForward)
     {
         _camera = office;
-        if (tray == null || config == null)
-            return;
         Vector3 forward = Vector3.ProjectOnPlane(levelForward, Vector3.up);
         if (forward.sqrMagnitude < 1e-6f)
             forward = Vector3.forward;
         forward.Normalize();
+        _forward = forward;
+        _right = Vector3.Cross(Vector3.up, forward);
+        PlaceHandBackZone();
+        if (tray == null || config == null)
+            return;
         _trayOut = outPoint;
         _trayIn = outPoint - forward * config.stampTraySlide - Vector3.up * config.stampTrayDrop;
         tray.SetPositionAndRotation(Vector3.Lerp(_trayIn, _trayOut, _slide), Quaternion.LookRotation(forward, Vector3.up));
@@ -183,6 +211,21 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>True when paper <paramref name="index"/> is the passport and it carries a verdict (dropped on the traveller's side, the papers go back).</summary>
     public bool CanHandBack(int index) => index == _passport && Flow.CanHandBack;
 
+    /// <summary>True when <paramref name="point"/> lies in the strip of the desk's clamp area at its far edge along the office view (DeskConfigSO.handBackDepth): the traveller's side, where the stamped passport hands the papers back.</summary>
+    public bool OnTravellersSide(Vector3 point) =>
+        TravellersSide(out float far, out _, out _, out _) && Vector3.Dot(point - surface.transform.position, _forward) >= far - config.handBackDepth;
+
+    /// <summary>The tray's footprint on the desk where it lies out (its four corners), while it is out; false while in.</summary>
+    public bool TryFootprint(out Vector3[] corners)
+    {
+        corners = null;
+        if (!Flow.TrayOut || tray == null)
+            return false;
+        Vector3 x = _right * footprint.x / 2f, z = _forward * footprint.y / 2f;
+        corners = new[] { _trayOut - x - z, _trayOut + x - z, _trayOut - x + z, _trayOut + x + z };
+        return true;
+    }
+
     /// <summary>
     /// Presses the held stamp on <paramref name="paper"/> at <paramref name="world"/>
     /// (DeskController, a click on a paper lying on the desk): the mark the
@@ -204,7 +247,7 @@ public sealed class DeskStampTray : MonoBehaviour
         Raise();
     }
 
-    /// <summary>The papers handed back with the passport's verdict: Decided (nothing without a verdict).</summary>
+    /// <summary>The papers handed back with the passport's verdict (the button, or the passport slid onto the traveller's side): Decided (nothing without a verdict).</summary>
     public void HandBack()
     {
         if (!Flow.CanHandBack)
@@ -331,6 +374,42 @@ public sealed class DeskStampTray : MonoBehaviour
             box.enabled = true;
     }
 
+    /// <summary>The far edge of the traveller's side along the office view (the desk's clamp area's far edge, or nearer: as far as the desk view shows, ViewTop, so the passport can be slid there in it), the desk's left and right ends and the strip's middle across (the desk view's centre line, else the desk's), in metres from the desk's centre; false without a desk.</summary>
+    private bool TravellersSide(out float far, out float left, out float right, out float middle)
+    {
+        far = right = float.MinValue;
+        left = float.MaxValue;
+        middle = 0f;
+        if (surface == null || config == null)
+            return false;
+        Vector3 origin = surface.transform.position;
+        foreach (Vector3 corner in surface.Corners())
+        {
+            far = Mathf.Max(far, Vector3.Dot(corner - origin, _forward));
+            left = Mathf.Min(left, Vector3.Dot(corner - origin, _right));
+            right = Mathf.Max(right, Vector3.Dot(corner - origin, _right));
+        }
+        middle = (left + right) / 2f;
+        if (deskView != null && deskView.TryViewPoint(new Vector2(0.5f, ViewTop), origin.y, out Vector3 shown))
+        {
+            far = Mathf.Min(far, Vector3.Dot(shown - origin, _forward));
+            middle = Mathf.Clamp(Vector3.Dot(shown - origin, _right), left, right);
+        }
+        return true;
+    }
+
+    /// <summary>Lays the hand-back strip over the traveller's side (handBackDepth deep at its far edge, centred on the desk view's centre line so its label shows there, as wide as the desk allows either side of it), facing the chair.</summary>
+    private void PlaceHandBackZone()
+    {
+        if (handBackZone == null || !TravellersSide(out float far, out float left, out float right, out float middle))
+            return;
+        float depth = config.handBackDepth;
+        Vector3 centre = surface.transform.position + _right * middle + _forward * (far - depth / 2f) + Vector3.up * ZoneLift;
+        handBackZone.transform.SetPositionAndRotation(centre, Quaternion.LookRotation(_forward, Vector3.up));
+        if (handBackStrip != null)
+            handBackStrip.localScale = new Vector3(2f * Mathf.Min(middle - left, right - middle), depth, 1f);
+    }
+
     /// <summary>The held stamp's object, or null.</summary>
     private Transform HeldStamp() =>
         Flow.Held == DeskStamp.Approved && approvedStamp != null ? approvedStamp.transform
@@ -362,10 +441,14 @@ public sealed class DeskStampTray : MonoBehaviour
         bool back = _live && Flow.CanHandBack && !IsHolding;
         Show(handBackApproved, back && Flow.Verdict == DeskStamp.Approved);
         Show(handBackDenied, back && Flow.Verdict == DeskStamp.Denied);
+        if (handBackZone != null && handBackZone.activeSelf != back)
+            handBackZone.SetActive(back);
 
         if (hint == null)
             return;
-        string key = !_live || !Flow.TrayOut || _passport < 0 ? null
+        string key = !_live || _passport < 0 ? null
+            : back ? "stamp.hint.handBack"
+            : !Flow.TrayOut ? null
             : !IsHolding ? (Flow.CanHandBack ? null : "stamp.hint.pick")
             : _faintPressed ? "stamp.hint.dry"
             : !Flow.HeldInked ? "stamp.hint.ink"

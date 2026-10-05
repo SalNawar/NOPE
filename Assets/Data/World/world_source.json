@@ -24514,7 +24514,7 @@
       },
       {
         "key": "compare.pair",
-        "text": "{0}    {1}:  {2}    vs    {3}:  {4}",
+        "text": "{0}  ·  {2}  vs  {4}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25017,6 +25017,18 @@
         "tier": "Full"
       },
       {
+        "key": "stamp.hint.handBack",
+        "text": "Slide the stamped passport onto HAND BACK, by the traveller.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.zone.handBack",
+        "text": "▲  HAND BACK  ▲",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "city.look",
         "text": "< City (A)",
         "gloss": "None",
@@ -25037,6 +25049,30 @@
       {
         "key": "desk.rulebook.none",
         "text": "No rules today.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.papers",
+        "text": "PAPERS NOT HANDED OVER",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.paperFlag",
+        "text": "{0}: missing? Click to flag it.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.paperFlagged",
+        "text": "{0}: flagged. Ask for it.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.paperNotCarried",
+        "text": "{0}: not carried.",
         "gloss": "None",
         "tier": "Full"
       },

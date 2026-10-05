@@ -121,6 +121,42 @@ public class ExamineLayoutTests
     }
 
     [Test]
+    public void DeskSlot_OneCentred_ReadingSize()
+    {
+        ScreenBox b = ExamineLayout.DeskSlot(0, 1, PaperAspect, 16f / 9f, T);
+        Assert.AreEqual(0f, b.CentreX, Eps, "centred across the screen");
+        Assert.AreEqual(T.deskCentreY, b.CentreY, Eps);
+        Assert.AreEqual(T.deskHeight, b.Height, Eps, "capped at deskHeight");
+        Assert.Greater(b.Height, T.officeHeight * 1.5f, "far larger than a paper held in the office");
+        Assert.LessOrEqual(Top(b), 1f - T.margin);
+        Assert.GreaterOrEqual(Bottom(b), T.margin);
+    }
+
+    [Test]
+    public void DeskSlot_TwoSideBySide_GapApart_InsideTheScreen()
+    {
+        foreach (float aspect in new[] { 16f / 9f, 21f / 9f, 4f / 3f })
+        {
+            ScreenBox a = ExamineLayout.DeskSlot(0, 2, PaperAspect, aspect, T);
+            ScreenBox b = ExamineLayout.DeskSlot(1, 2, PaperAspect, aspect, T);
+            Assert.AreEqual(a.CentreY, b.CentreY, Eps, "side by side");
+            Assert.AreEqual(-a.CentreX, b.CentreX, Eps, "symmetric about the centre");
+            Assert.AreEqual(T.gap, Left(b) - Right(a), Eps);
+            Assert.GreaterOrEqual(Left(a), -aspect / 2f + T.margin - Eps, $"inside the left edge at {aspect}");
+            Assert.LessOrEqual(Right(b), aspect / 2f - T.margin + Eps, $"inside the right edge at {aspect}");
+            Assert.LessOrEqual(a.Height, T.deskHeight + Eps);
+        }
+    }
+
+    [Test]
+    public void DeskSlot_NarrowScreen_ShrinksToTheWidth()
+    {
+        const float aspect = 0.6f;
+        ScreenBox b = ExamineLayout.DeskSlot(0, 1, PaperAspect, aspect, T);
+        Assert.AreEqual((aspect - 2f * T.margin) / PaperAspect, b.Height, Eps);
+    }
+
+    [Test]
     public void InRegion_TooSmall_DoesNotFit()
     {
         ExamineLayout.InRegion(0, 1, 0.5f, 0.7f, PaperAspect, T, out bool fits);

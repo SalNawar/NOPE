@@ -200,6 +200,8 @@ public sealed class InvestigationUIController : MonoBehaviour
             Board.Logged += Confront;
         if (app != null)
             app.MissingFlagged += FlagMissingFromApp;
+        if (deskInspect != null)
+            deskInspect.MissingFlagged += FlagMissingFromApp;
 
         // The stamps are listened to once (audit R4-004); the decision reads the case's callback.
         if (stampTray != null)
@@ -276,6 +278,8 @@ public sealed class InvestigationUIController : MonoBehaviour
             Board.Logged -= Confront;
         if (app != null)
             app.MissingFlagged -= FlagMissingFromApp;
+        if (deskInspect != null)
+            deskInspect.MissingFlagged -= FlagMissingFromApp;
         if (_stampTrayListening != null)
         {
             _stampTrayListening.Decided -= Decide;
@@ -385,9 +389,6 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Where each of the current traveller's papers is (not handed over, on the desk, scanned).</summary>
     public CasePapers Papers => _documents != null ? _documents.Papers : null;
 
-    /// <summary>Raised when a paper was flagged missing or its state changed (the desk's rulebook can redraw its flags).</summary>
-    public event Action MissingChanged;
-
     /// <summary>
     /// Flags the current traveller's paper <paramref name="requestId"/>
     /// (a FormRequest.Id of <see cref="MissingPapers"/>) missing: the wheel
@@ -398,7 +399,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// </summary>
     public bool FlagMissing(string requestId) => _currentCase != null && _interview.FlagMissing(requestId);
 
-    /// <summary>The Papers menu flagged a paper missing.</summary>
+    /// <summary>The Papers menu (or the desk's rulebook) flagged a paper missing.</summary>
     private void FlagMissingFromApp(string requestId) => FlagMissing(requestId);
 
     /// <summary>The traveller does not carry a paper they were asked for: the workbench logs it as missing (a difference a denial can rest on).</summary>
@@ -411,9 +412,11 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The missing papers' list or a paper's place changed: the PC's Papers menu redraws its flags, and the desk hears of it.</summary>
     private void ShowMissing()
     {
+        MissingPapers missing = _currentCase != null ? _interview.Missing : MissingPapers.None;
         if (app != null)
-            app.SetMissing(_currentCase != null ? _interview.Missing : MissingPapers.None, _documents.Papers);
-        MissingChanged?.Invoke();
+            app.SetMissing(missing, _documents.Papers);
+        if (deskInspect != null)
+            deskInspect.SetMissing(missing, _documents.Papers);
     }
 
     /// <summary>

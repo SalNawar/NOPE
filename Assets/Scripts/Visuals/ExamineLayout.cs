@@ -33,6 +33,12 @@ public sealed class ExamineTuning
     /// <summary>The gap between two papers, in screen heights.</summary>
     public float gap = 0.03f;
 
+    /// <summary>A held paper's largest height in the desk view, in screen heights (the desk-first polish, 2026-10-05: the paper read at the desk fills most of the screen, so its print reads at 1280x720).</summary>
+    public float deskHeight = 0.74f;
+
+    /// <summary>The centre of the papers held in the desk view above the screen's bottom, in screen heights (below the middle: the Back control and the stamps' hint keep the top).</summary>
+    public float deskCentreY = 0.46f;
+
     /// <summary>A held paper's distance from the camera, in metres (before SafeDistance).</summary>
     public float distance = 0.6f;
 
@@ -152,6 +158,25 @@ public static class ExamineLayout
         fits = stacked >= t.frameMinHeight;
         float step = (stacked + t.gap) / 2f;
         return new ScreenBox(centreX, i == 0 ? centreY + step : centreY - step, stacked);
+    }
+
+    /// <summary>
+    /// The <paramref name="index"/>-th of <paramref name="count"/> (1 or 2)
+    /// papers held in the desk view (the desk-first polish: the paper read at
+    /// the desk comes up to reading size): centred across the screen at
+    /// deskCentreY, as tall as deskHeight allows (and the screen's height and
+    /// width, margin inside them); two side by side, gap apart.
+    /// </summary>
+    public static ScreenBox DeskSlot(int index, int count, float paperAspect, float screenAspect, ExamineTuning t)
+    {
+        float width = screenAspect - 2f * t.margin;
+        float height = Math.Min(t.deskHeight, 2f * Math.Min(t.deskCentreY, 1f - t.deskCentreY) - 2f * t.margin);
+        if (count < 2)
+            return new ScreenBox(0f, t.deskCentreY, Math.Max(0f, Math.Min(height, width / paperAspect)));
+
+        float side = Math.Max(0f, Math.Min(height, (width - t.gap) / (2f * paperAspect)));
+        float step = (side * paperAspect + t.gap) / 2f;
+        return new ScreenBox(index < 1 ? -step : step, t.deskCentreY, side);
     }
 
     /// <summary>

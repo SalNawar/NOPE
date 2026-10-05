@@ -18,7 +18,9 @@ using UnityEngine;
 /// the bubble light through the ICompareHighlight they pass. On the PC the
 /// workbench (MatchBoard) draws the pair: the held value, the line between
 /// the two and the finding (the PC workbench spec §4); at the office the
-/// strip shows the pair as one line (optional).
+/// strip shows the pair as one short, quiet line (optional; the verdict and
+/// the two values), and steps aside while the desk's line labels the pair
+/// itself (SetStripCovered; the desk-first polish, 2026-10-05).
 /// </summary>
 public sealed class CompareController : MonoBehaviour
 {
@@ -46,6 +48,12 @@ public sealed class CompareController : MonoBehaviour
     /// <summary>Where each side lit up by its own object (a desk row, the bubble; null: nowhere, or a PC row lit by its key).</summary>
     private ICompareHighlight _highlightA;
     private ICompareHighlight _highlightB;
+
+    /// <summary>True while the desk's line over the office labels the pair (DeskInspect): the office strip then does not repeat it.</summary>
+    private bool _stripCovered;
+
+    /// <summary>True while the strip shows a note that replaced the pair's line (a deviation logged, already documented): the desk's line does not hide it.</summary>
+    private bool _stripNote;
 
     /// <summary>
     /// Raised when the second side is picked, with both sides' typed evidence.
@@ -119,6 +127,15 @@ public sealed class CompareController : MonoBehaviour
             PairCompared?.Invoke(_pair.A.Evidence, _pair.B.Evidence);
     }
 
+    /// <summary>The desk's line over the office labels the pair (<paramref name="covered"/>) or no longer does (DeskInspect): the office strip steps aside while it does, unless it carries a note (a deviation logged).</summary>
+    public void SetStripCovered(bool covered)
+    {
+        if (covered == _stripCovered)
+            return;
+        _stripCovered = covered;
+        ShowStrip();
+    }
+
     /// <summary>The present culture's compare colours (CultureThemeService at scene load; piece 6).</summary>
     public void ApplyTheme(Color match, Color mismatch, Color neutral, Color highlight)
     {
@@ -133,13 +150,13 @@ public sealed class CompareController : MonoBehaviour
     /// never reads as a friendly green MATCH: the office strip names the
     /// deviation.
     /// </summary>
-    public void ShowDeviation(string summary) => WriteVerdict(UiText.Format("compare.deviationLogged", summary), mismatchColor);
+    public void ShowDeviation(string summary) => WriteNote(UiText.Format("compare.deviationLogged", summary), mismatchColor);
 
     /// <summary>
     /// Replaces the verdict when a pair proves a category that is already in
     /// the Deviation Report, so a second proof visibly adds nothing.
     /// </summary>
-    public void ShowAlreadyDocumented(string categoryLabel) => WriteVerdict(UiText.Format("compare.alreadyDocumented", categoryLabel), neutralColor);
+    public void ShowAlreadyDocumented(string categoryLabel) => WriteNote(UiText.Format("compare.alreadyDocumented", categoryLabel), neutralColor);
 
     /// <summary>Clears the picks, their highlights and the bars.</summary>
     public void Clear()
@@ -159,12 +176,12 @@ public sealed class CompareController : MonoBehaviour
         _highlightB = null;
     }
 
-    /// <summary>Shows the office strip while a value is picked: the pair with MATCH or MISMATCH, the first pick waiting, or nothing.</summary>
+    /// <summary>Shows the office strip while a value is picked (the pair with MATCH or MISMATCH and the two values, the first pick waiting), unless the desk's line labels the pair; else nothing.</summary>
     private void Draw()
     {
         bool active = _pair.HasA;
-        if (officeBar != null)
-            officeBar.SetActive(active);
+        _stripNote = false;
+        ShowStrip();
 
         if (_pair.IsPaired)
         {
@@ -180,6 +197,24 @@ public sealed class CompareController : MonoBehaviour
         {
             WriteVerdict(string.Empty, neutralColor);
         }
+    }
+
+    /// <summary>A note in place of the pair's line (shown even while the desk's line labels the pair).</summary>
+    private void WriteNote(string officeLine, Color colour)
+    {
+        WriteVerdict(officeLine, colour);
+        _stripNote = true;
+        ShowStrip();
+    }
+
+    /// <summary>The office strip shows while a value is picked, except a plain pair the desk's line already labels.</summary>
+    private void ShowStrip()
+    {
+        if (officeBar == null)
+            return;
+        bool on = _pair.HasA && (_stripNote || !(_stripCovered && _pair.IsPaired));
+        if (officeBar.activeSelf != on)
+            officeBar.SetActive(on);
     }
 
     /// <summary>Writes the office strip's line in one colour.</summary>
