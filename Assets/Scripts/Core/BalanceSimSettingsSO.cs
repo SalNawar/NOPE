@@ -23,14 +23,12 @@ public sealed class BalanceSimSettingsSO : ScriptableObject
 
     /// <summary>
     /// The House buyer's reserve (the Home upgrades spec HU10, §9): the buyer
-    /// runs treat and buy at Home only while the wallet keeps this many credits
-    /// after paying (60: about a night's household), so upkeep never walks it
-    /// into bankruptcy on purpose.
+    /// runs buy at Home only while the wallet keeps this many credits after
+    /// paying (60: about a night's household), so upkeep never walks it into
+    /// bankruptcy on purpose; the careful carer pays the pet's TV only while it
+    /// keeps it too (PetPolicy; the Home pet spec PS9).
     /// </summary>
     [Min(0)] public int houseReserve = 60;
-
-    /// <summary>The condition at which the House buyer treats a family member (one point a treatment, the sickest first, while the reserve holds).</summary>
-    [Min(1)] public int careThreshold = 3;
 
     /// <summary>
     /// The price from which a house upgrade counts as top tier (Saleh's Q6 of

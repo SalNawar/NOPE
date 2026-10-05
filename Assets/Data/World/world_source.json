@@ -19744,6 +19744,12 @@
         "tier": "Full"
       },
       {
+        "key": "app.orders.branch.toys",
+        "text": "Toys",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "mail.from.supply",
         "text": "Temporal Customs Supply",
         "gloss": "None",
@@ -23516,6 +23522,204 @@
         "text": "Routes are set by the Directorate. Until the Return Gate is repaired, the displaced leave through Portal {0}.",
         "gloss": "None",
         "tier": "Full"
+      },
+      {
+        "key": "home.title",
+        "text": "Day {0} — Home",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.breakIn",
+        "text": "Someone broke in while you were at work: -{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.fixed",
+        "text": "Tonight's fixed costs:",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.rent",
+        "text": "  Rent & utilities: -{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.drain",
+        "text": "  {0}'s extra care while sick: -{1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.upkeep",
+        "text": "  House upkeep: -{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.fixedTotal",
+        "text": "Paid: -{0} {1}   (Balance: {2})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.debt",
+        "text": "You are in debt. Find a way to make ends meet.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.bills.total",
+        "text": "Tonight's bills: {0} {1}   (Balance after: {2})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.bills.short",
+        "text": "Tonight's bills: {0} {1}, more than your {2}: skip something.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.bill.paying",
+        "text": "Paying",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.bill.skip",
+        "text": "Skip",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.bill.needsPower",
+        "text": "needs electricity",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.bill.notNeeded",
+        "text": "not needed: {0} is well",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.pay",
+        "text": "Pay and see {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.pet.title",
+        "text": "{0}'s corner",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.pet.pat",
+        "text": "Pet {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.pet.play",
+        "text": "Play",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.pet.played",
+        "text": "Played tonight",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.pet.noToys",
+        "text": "No toys yet. The Orders app on your PC sells them.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.pet.dark",
+        "text": "The lights are off tonight.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.next.house",
+        "text": "Continue to the House",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "home.next.slots",
+        "text": "Continue to Slots",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.title",
+        "text": "Adopt a companion",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.body",
+        "text": "The Directorate's shelter has a dog and a cat waiting. One of them goes home with you tonight. Choose, and give them a name.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.dog",
+        "text": "Dog",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.cat",
+        "text": "Cat",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.placeholder",
+        "text": "Type a name",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.go",
+        "text": "Adopt and start",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.back",
+        "text": "Back",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.problem.Empty",
+        "text": "Give your companion a name.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.problem.TooLong",
+        "text": "A shorter name, please: at most {0} letters.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "adopt.problem.BadCharacters",
+        "text": "Letters, spaces, hyphens and apostrophes only.",
+        "gloss": "None",
+        "tier": "Full"
       }
     ],
     "languages": [
@@ -24614,7 +24818,7 @@
         "mood": 1,
         "breakInChance": 0,
         "breakInShare": 0,
-        "blurb": "Tier B paste comes in two colours. The kid prefers the green."
+        "blurb": "Tier B paste comes in two colours. The pet prefers the green."
       },
       {
         "id": "house_veg_box",
@@ -24720,7 +24924,7 @@
         "mood": 3,
         "breakInChance": 0,
         "breakInShare": 0,
-        "blurb": "Two windows. A door for the kid's room. The landlord calls it 'aspirational'."
+        "blurb": "Two windows. A sunny sill for the pet. The landlord calls it 'aspirational'."
       },
       {
         "id": "house_second_lock",
@@ -24911,6 +25115,134 @@
         "breakInChance": 0,
         "breakInShare": 0,
         "blurb": "The family at the seaside in 2139, before the sea was privatised."
+      }
+    ],
+    "bills": [
+      {
+        "bill": "Food",
+        "name": "Food",
+        "price": 12,
+        "line": "A night's bowl of Directorate-grade kibble."
+      },
+      {
+        "bill": "Heating",
+        "name": "Heating",
+        "price": 9,
+        "line": "The radiator's meter takes credits only."
+      },
+      {
+        "bill": "Electricity",
+        "name": "Electricity",
+        "price": 7,
+        "line": "The lights, the radiator's pump and the TV."
+      },
+      {
+        "bill": "Tv",
+        "name": "TV",
+        "price": 4,
+        "line": "The Directorate's channel. Company, of a kind."
+      },
+      {
+        "bill": "Medicine",
+        "name": "Medicine",
+        "price": 12,
+        "line": "From the pharmacy on the corner, which is also a bank."
+      }
+    ],
+    "pet": {
+      "nameMaxLength": 16,
+      "kinds": [
+        {
+          "kind": "Dog",
+          "word": "dog",
+          "suggestedName": "Biscuit",
+          "reactions": [
+            "{name} leans into your hand and sighs.",
+            "{name}'s tail thumps the floor twice.",
+            "{name} rolls over for a belly rub.",
+            "{name} licks your wrist, then looks embarrassed about it."
+          ],
+          "toyLines": [
+            "{name} carries the {toy} round the flat like a trophy.",
+            "{name} drops the {toy} at your feet. Again. And again.",
+            "{name} guards the {toy} from an invisible rival."
+          ]
+        },
+        {
+          "kind": "Cat",
+          "word": "cat",
+          "suggestedName": "Miso",
+          "reactions": [
+            "{name} allows it. Briefly.",
+            "{name} purrs like a small engine.",
+            "{name} headbutts your chin.",
+            "{name} pretends not to notice, then follows you to the kitchen."
+          ],
+          "toyLines": [
+            "{name} ambushes the {toy} from under the sofa.",
+            "{name} bats the {toy} under the radiator and stares at you.",
+            "{name} decides the {toy} is beneath them, then pounces anyway."
+          ]
+        }
+      ],
+      "hunger": [
+        "{name} is fed.",
+        "{name} is hungry.",
+        "{name} is very hungry.",
+        "{name} is starving."
+      ],
+      "cold": [
+        "{name} is warm.",
+        "{name} is chilly.",
+        "{name} is cold.",
+        "{name} is shivering."
+      ],
+      "boredom": [
+        "{name} is playful.",
+        "{name} is restless.",
+        "{name} is bored.",
+        "{name} is listless."
+      ],
+      "sickness": [
+        "{name} is healthy.",
+        "{name} is a little unwell.",
+        "{name} is sick.",
+        "{name} is very sick."
+      ],
+      "worse": "{name} caught something while you were at work.",
+      "better": "{name} seems brighter this evening.",
+      "welfareNotice": "A notice from the Animal Welfare Office is taped to your door: an inspector will look in on {name} tomorrow night.",
+      "paperAdopted": "SHELTER NEWS: {name} the {kind} has gone home with a clerk of Temporal Customs, Desk 3.",
+      "paperWelfare": "ANIMAL WELFARE: inspectors are asking after a {kind} called {name} in Block C."
+    },
+    "toys": [
+      {
+        "id": "toy_ball",
+        "name": "Pre-owned Tennis Ball",
+        "cost": 20,
+        "mood": 1,
+        "blurb": "Slightly bald. It bounces in 2150 the way it bounced in 2026."
+      },
+      {
+        "id": "toy_rope",
+        "name": "Rope of Regulation Length",
+        "cost": 25,
+        "mood": 1,
+        "blurb": "Certified tug-worthy by the Bureau of Standards. Chewing voids the warranty."
+      },
+      {
+        "id": "toy_feather",
+        "name": "Feather Wand",
+        "cost": 30,
+        "mood": 1,
+        "blurb": "A real feather, from a bird of no fixed nationality."
+      },
+      {
+        "id": "toy_squeaky",
+        "name": "Squeaky Auditor",
+        "cost": 45,
+        "mood": 2,
+        "blurb": "A rubber auditor. It squeaks when squeezed, unlike the real ones."
       }
     ]
   },

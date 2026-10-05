@@ -7,7 +7,9 @@ using static SceneUiKit;
 
 /// <summary>
 /// One-click builder for the Home scene UI added in Alpha Phase 4: HUD
-/// (day/money/stability), expenses + family condition panel, the House
+/// (day/money/stability), the bills panel (the fixed costs, the pet's needs,
+/// one row per night's bill; the Home pet spec), the pet's corner (the pet
+/// drawn by PetStandIn, Pet, the toys' rows), the House
 /// (Home's upgrade tree in the old shop panel; the Home upgrades spec §6),
 /// slot machine, and the sleep prompt. Unlike OfficeSceneUIBuilder, this
 /// script creates the Canvas, EventSystem, HomeManager and HomeUIController
@@ -16,10 +18,11 @@ using static SceneUiKit;
 /// through the shared SceneUiKit),
 /// except the HUD's backing strip, which it keeps as it builds it (the
 /// readability fix: the HUD's white texts read over the room's art on it),
-/// and the expenses and House panels' layout, which it re-applies on every
-/// build (the House grew into a tree; the evening's lines outgrew the old
-/// expenses body); it then checks every text's contrast on what it is drawn
-/// on (UiContrastCheck).
+/// and the expenses, pet corner and House panels' layout, which it re-applies
+/// on every build (the House grew into a tree; the evening's lines outgrew the
+/// old expenses body; the family's rows became the bills' and the old
+/// FamilyRows container is renamed BillRows); it then checks every text's
+/// contrast on what it is drawn on (UiContrastCheck).
 /// </summary>
 public static class HomeSceneBuilder
 {
@@ -62,11 +65,33 @@ public static class HomeSceneBuilder
             TextAlignmentOptions.Center, new Vector2(0.05f, 0.875f), new Vector2(0.95f, 0.955f));
         TMP_Text expensesBody = FindOrCreateText(expenses, "BodyText", "...", 22,
             TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.44f), new Vector2(0.94f, 0.86f));
-        Transform familyRows = FindOrCreateRowsContainer(expenses, "FamilyRows",
-            new Vector2(0.06f, 0.14f), new Vector2(0.94f, 0.42f));
-        Button expensesContinue = FindOrCreateButton(expenses, "ContinueButton", "Continue to the House",
-            new Vector2(0.33f, 0.03f), new Vector2(0.67f, 0.11f));
-        LayOutExpenses(expenses, expensesTitle, expensesBody, familyRows, expensesContinue);
+        RenameChild(expenses, "FamilyRows", "BillRows");
+        Transform billRows = FindOrCreateRowsContainer(expenses, "BillRows",
+            new Vector2(0.06f, 0.12f), new Vector2(0.94f, 0.44f));
+        Button expensesContinue = FindOrCreateButton(expenses, "ContinueButton", "Pay and see your pet",
+            new Vector2(0.33f, 0.03f), new Vector2(0.67f, 0.1f));
+        LayOutExpenses(expenses, expensesTitle, expensesBody, billRows, expensesContinue);
+
+        // --- The pet's corner (the Home pet spec PS7) ---
+        Transform pet = FindOrCreatePanel(uiRoot, "PetPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, PetPanelSize, withBackground: true, bgColor: new Color(0.1f, 0.12f, 0.2f, 0.97f));
+        TMP_Text petTitle = FindOrCreateText(pet, "TitleText", "Your pet's corner", 34,
+            TextAlignmentOptions.Center, new Vector2(0.05f, 0.89f), new Vector2(0.95f, 0.97f));
+        RectTransform petViewArea = FindOrCreateArea(pet, "PetView");
+        PetStandIn petView = petViewArea.GetComponent<PetStandIn>();
+        if (petView == null)
+            petView = Undo.AddComponent<PetStandIn>(petViewArea.gameObject);
+        TMP_Text petBody = FindOrCreateText(pet, "BodyText", "...", 24,
+            TextAlignmentOptions.TopLeft, new Vector2(0.55f, 0.6f), new Vector2(0.96f, 0.86f));
+        TMP_Text petReaction = FindOrCreateText(pet, "ReactionText", "", 22,
+            TextAlignmentOptions.TopLeft, new Vector2(0.55f, 0.47f), new Vector2(0.96f, 0.59f));
+        Button petPat = FindOrCreateButton(pet, "PatButton", "Pet",
+            new Vector2(0.55f, 0.38f), new Vector2(0.8f, 0.46f));
+        Transform toyRows = FindOrCreateRowsContainer(pet, "ToyRows",
+            new Vector2(0.55f, 0.13f), new Vector2(0.96f, 0.36f));
+        Button petContinue = FindOrCreateButton(pet, "ContinueButton", "Continue to the House",
+            new Vector2(0.35f, 0.03f), new Vector2(0.65f, 0.1f));
+        LayOutPet(pet, petTitle, petViewArea, petBody, petReaction, petPat, toyRows, petContinue);
 
         // --- House panel (the old shop panel, its hand-wired art kept) ---
         Transform shop = FindOrCreatePanel(uiRoot, "ShopPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -119,8 +144,17 @@ public static class HomeSceneBuilder
         soUi.FindProperty("expensesPanel").objectReferenceValue = expenses.gameObject;
         soUi.FindProperty("expensesTitleText").objectReferenceValue = expensesTitle;
         soUi.FindProperty("expensesBodyText").objectReferenceValue = expensesBody;
-        soUi.FindProperty("familyRowsRoot").objectReferenceValue = familyRows;
+        soUi.FindProperty("billRowsRoot").objectReferenceValue = billRows;
         soUi.FindProperty("expensesContinueButton").objectReferenceValue = expensesContinue;
+
+        soUi.FindProperty("petPanel").objectReferenceValue = pet.gameObject;
+        soUi.FindProperty("petTitleText").objectReferenceValue = petTitle;
+        soUi.FindProperty("petBodyText").objectReferenceValue = petBody;
+        soUi.FindProperty("petView").objectReferenceValue = petView;
+        soUi.FindProperty("petReactionText").objectReferenceValue = petReaction;
+        soUi.FindProperty("petPatButton").objectReferenceValue = petPat;
+        soUi.FindProperty("toyRowsRoot").objectReferenceValue = toyRows;
+        soUi.FindProperty("petContinueButton").objectReferenceValue = petContinue;
 
         soUi.FindProperty("shopPanel").objectReferenceValue = shop.gameObject;
         soUi.FindProperty("shopTitleText").objectReferenceValue = shopTitle;
@@ -154,6 +188,7 @@ public static class HomeSceneBuilder
 
         // Panels start hidden (HomeUIController.Awake also enforces this).
         expenses.gameObject.SetActive(false);
+        pet.gameObject.SetActive(false);
         shop.gameObject.SetActive(false);
         slot.gameObject.SetActive(false);
         sleep.gameObject.SetActive(false);
@@ -163,8 +198,11 @@ public static class HomeSceneBuilder
         Debug.Log("[TimeDesk] Home UI built and wired. Save the scene.");
     }
 
-    /// <summary>The expenses panel's size (reference px): tall enough for the evening's lines (the break-in, the bill, the mood, tonight's changes) over the family rows.</summary>
-    private static readonly Vector2 ExpensesPanelSize = new Vector2(900f, 780f);
+    /// <summary>The bills panel's size (reference px): tall enough for the evening's lines (the break-in, the fixed costs, the pet's needs, the bills' total) over the five bills' rows.</summary>
+    private static readonly Vector2 ExpensesPanelSize = new Vector2(1000f, 880f);
+
+    /// <summary>The pet's corner's size (reference px): the pet on the left, its needs, reaction, Pet and the toys on the right.</summary>
+    private static readonly Vector2 PetPanelSize = new Vector2(1180f, 800f);
 
     /// <summary>The House panel's size (reference px): five category columns of cards, four rows deep, over the detail strip.</summary>
     private static readonly Vector2 HousePanelSize = new Vector2(1840f, 920f);
@@ -190,14 +228,44 @@ public static class HomeSceneBuilder
         scaler.matchWidthOrHeight = 0f;
     }
 
-    /// <summary>Re-applies the expenses panel's layout (its size and its parts' anchors) on every build.</summary>
+    /// <summary>Re-applies the bills panel's layout (its size and its parts' anchors; the body shrinking to fit, 22 down to 17 reference px) on every build.</summary>
     private static void LayOutExpenses(Transform panel, TMP_Text title, TMP_Text body, Transform rows, Button next)
     {
         ((RectTransform)panel).sizeDelta = ExpensesPanelSize;
-        Stretch(title.rectTransform, new Vector2(0.05f, 0.875f), new Vector2(0.95f, 0.955f));
-        Stretch(body.rectTransform, new Vector2(0.06f, 0.44f), new Vector2(0.94f, 0.86f));
-        Stretch((RectTransform)rows, new Vector2(0.06f, 0.14f), new Vector2(0.94f, 0.42f));
-        Stretch((RectTransform)next.transform, new Vector2(0.33f, 0.03f), new Vector2(0.67f, 0.11f));
+        Stretch(title.rectTransform, new Vector2(0.05f, 0.9f), new Vector2(0.95f, 0.97f));
+        Stretch(body.rectTransform, new Vector2(0.05f, 0.46f), new Vector2(0.95f, 0.89f));
+        body.enableAutoSizing = true;
+        body.fontSizeMin = 17f;
+        body.fontSizeMax = 22f;
+        body.textWrappingMode = TextWrappingModes.Normal;
+        Stretch((RectTransform)rows, new Vector2(0.05f, 0.12f), new Vector2(0.95f, 0.44f));
+        Stretch((RectTransform)next.transform, new Vector2(0.3f, 0.025f), new Vector2(0.7f, 0.095f));
+    }
+
+    /// <summary>Re-applies the pet's corner's layout on every build: the pet's area on the left, its needs (wrapping), its reaction, Pet, the toys and Continue.</summary>
+    private static void LayOutPet(Transform panel, TMP_Text title, RectTransform view, TMP_Text body, TMP_Text reaction, Button pat, Transform toys, Button next)
+    {
+        ((RectTransform)panel).sizeDelta = PetPanelSize;
+        Stretch(title.rectTransform, new Vector2(0.05f, 0.89f), new Vector2(0.95f, 0.97f));
+        Stretch(view, new Vector2(0.04f, 0.14f), new Vector2(0.51f, 0.86f));
+        Stretch(body.rectTransform, new Vector2(0.55f, 0.6f), new Vector2(0.96f, 0.86f));
+        body.textWrappingMode = TextWrappingModes.Normal;
+        Stretch(reaction.rectTransform, new Vector2(0.55f, 0.47f), new Vector2(0.96f, 0.59f));
+        reaction.textWrappingMode = TextWrappingModes.Normal;
+        reaction.fontStyle = FontStyles.Italic;
+        Stretch((RectTransform)pat.transform, new Vector2(0.55f, 0.38f), new Vector2(0.8f, 0.46f));
+        Stretch((RectTransform)toys, new Vector2(0.55f, 0.13f), new Vector2(0.96f, 0.36f));
+        Stretch((RectTransform)next.transform, new Vector2(0.35f, 0.03f), new Vector2(0.65f, 0.1f));
+    }
+
+    /// <summary>Renames <paramref name="from"/> under <paramref name="parent"/> to <paramref name="to"/> when only the old name exists (a scene built before the rename keeps its object).</summary>
+    private static void RenameChild(Transform parent, string from, string to)
+    {
+        Transform old = parent.Find(from);
+        if (old == null || parent.Find(to) != null)
+            return;
+        Undo.RecordObject(old.gameObject, $"Rename {from}");
+        old.name = to;
     }
 
     /// <summary>
@@ -309,7 +377,7 @@ public static class HomeSceneBuilder
     /// <summary>
     /// Finds a child rows container by name or creates one with a
     /// VerticalLayoutGroup, ready for runtime-spawned rows
-    /// (HomeUIController.CreateRow/CreateLabelRow: the family's).
+    /// (HomeUIController.CreateRow/CreateLabelRow: the bills' and the toys').
     /// </summary>
     private static Transform FindOrCreateRowsContainer(
         Transform parent, string name, Vector2 anchorMin, Vector2 anchorMax)

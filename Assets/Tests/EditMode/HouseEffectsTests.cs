@@ -11,13 +11,13 @@ public class HouseEffectsTests
     [TestCase(EffectOpType.SicknessChance, -0.04f, "Fewer sick nights")]
     [TestCase(EffectOpType.SicknessChance, -0.05f, "Far fewer sick nights")]
     [TestCase(EffectOpType.SicknessChance, 0.03f, "More sick nights")]
-    [TestCase(EffectOpType.CareCost, -3f, "Treatment -3 cr")]
+    [TestCase(EffectOpType.CareCost, -3f, "Medicine -3 cr")]
     [TestCase(EffectOpType.Upkeep, 4f, "Upkeep 4 cr a night")]
-    [TestCase(EffectOpType.MedicalDrain, -1f, "Medical drain -1 cr a point")]
-    [TestCase(EffectOpType.Mood, 1f, "The family feels a little better")]
-    [TestCase(EffectOpType.Mood, 2f, "The family feels better")]
-    [TestCase(EffectOpType.Mood, 3f, "The family feels much better")]
-    [TestCase(EffectOpType.Mood, -1f, "The family feels worse")]
+    [TestCase(EffectOpType.MedicalDrain, -1f, "Sick pet's extra care -1 cr a step")]
+    [TestCase(EffectOpType.Mood, 1f, "A little cheerier at home")]
+    [TestCase(EffectOpType.Mood, 2f, "Cheerier at home")]
+    [TestCase(EffectOpType.Mood, 3f, "Much cheerier at home")]
+    [TestCase(EffectOpType.Mood, -1f, "Gloomier at home")]
     [TestCase(EffectOpType.BreakInChance, -0.03f, "Fewer break-ins")]
     [TestCase(EffectOpType.BreakInShare, -0.15f, "A break-in takes less")]
     public void Describe_EachOpInWords(EffectOpType op, float value, string expected)
@@ -35,7 +35,7 @@ public class HouseEffectsTests
     [Test]
     public void Line_JoinsTheOpsInOrder_SkippingTheRest()
     {
-        Assert.AreEqual("Fewer sick nights · The family feels a little better", HouseEffects.Line(new[] { (EffectOpType.SicknessChance, -0.04f), (EffectOpType.PayRateBonus, 1f), (EffectOpType.Mood, 1f) }));
+        Assert.AreEqual("Fewer sick nights · A little cheerier at home", HouseEffects.Line(new[] { (EffectOpType.SicknessChance, -0.04f), (EffectOpType.PayRateBonus, 1f), (EffectOpType.Mood, 1f) }));
         Assert.AreEqual(string.Empty, HouseEffects.Line(null));
     }
 
@@ -48,17 +48,5 @@ public class HouseEffectsTests
                 string words = HouseEffects.Describe(op, v);
                 StringAssert.DoesNotMatch("[0-9%]", words, $"{op} {v}");
             }
-    }
-
-    [Test]
-    public void MoodLine_WordsOnly_AndNothingWithoutAGoodMood()
-    {
-        Assert.AreEqual(string.Empty, HouseEffects.MoodLine(0f));
-        Assert.AreEqual(string.Empty, HouseEffects.MoodLine(-2f));
-        Assert.AreEqual("The family feels a little better at home.", HouseEffects.MoodLine(1f));
-        Assert.AreEqual("The family is in good spirits.", HouseEffects.MoodLine(4f));
-        Assert.AreEqual("The family is happy at home.", HouseEffects.MoodLine(14f));
-        for (float mood = 0f; mood <= 30f; mood += 0.5f)
-            StringAssert.DoesNotMatch("[0-9%]", HouseEffects.MoodLine(mood), $"mood {mood}");
     }
 }

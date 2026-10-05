@@ -22,13 +22,16 @@ public enum EndingConditionType
     AttrTotalAtLeast,
 
     /// <summary>Current day is >= threshold. Uses threshold.</summary>
-    DayAtLeast
+    DayAtLeast,
+
+    /// <summary>The Animal Welfare Office took the pet (PetState.taken; the Home pet spec PS6): the failure that replaces the family's.</summary>
+    PetTaken
 }
 
 /// <summary>What an ending is to the run.</summary>
 public enum EndingKind
 {
-    /// <summary>The run fails (fired, bankrupt): checked at every moment.</summary>
+    /// <summary>The run fails (fired, bankrupt, the pet taken): checked at every moment.</summary>
     Failure,
 
     /// <summary>The run reaches its last day (the neutral "world you made" ending, which shows the world summary): checked only at the day boundary.</summary>
@@ -84,14 +87,18 @@ public readonly struct EndingCheck
     /// <summary>The bankruptcy line: money at or below it is Bankrupt (GameConfigSO.bankruptcyMoneyThreshold).</summary>
     public readonly int BankruptAtMoney;
 
+    /// <summary>The Welfare Office has taken the pet (PetState.taken).</summary>
+    public readonly bool PetTaken;
+
     /// <summary>Creates a check's numbers.</summary>
-    public EndingCheck(float stability, int money, int day, float firedAtStability, int bankruptAtMoney)
+    public EndingCheck(float stability, int money, int day, float firedAtStability, int bankruptAtMoney, bool petTaken = false)
     {
         Stability = stability;
         Money = money;
         Day = day;
         FiredAtStability = firedAtStability;
         BankruptAtMoney = bankruptAtMoney;
+        PetTaken = petTaken;
     }
 }
 
@@ -113,8 +120,9 @@ public static class EndingRules
     /// <summary>
     /// Whether an ending's condition holds now (audit R2-007, R2-021): Fired
     /// at or below the firing line; Bankrupt at or below the bankruptcy line;
-    /// DayAtLeast from day <paramref name="threshold"/>; a retired type
-    /// (AttrTotalAtLeast) and any other type never.
+    /// DayAtLeast from day <paramref name="threshold"/>; PetTaken once the
+    /// Welfare Office took the pet; a retired type (AttrTotalAtLeast) and any
+    /// other type never.
     /// </summary>
     public static bool Met(EndingConditionType type, float threshold, EndingCheck now)
     {
@@ -123,6 +131,7 @@ public static class EndingRules
             case EndingConditionType.Fired: return IsFired(now.Stability, now.FiredAtStability);
             case EndingConditionType.Bankrupt: return now.Money <= now.BankruptAtMoney;
             case EndingConditionType.DayAtLeast: return now.Day >= threshold;
+            case EndingConditionType.PetTaken: return now.PetTaken;
             default: return false;
         }
     }

@@ -17,6 +17,10 @@ using UnityEngine;
 ///   it resumes where the save was made: Home after the end-of-shift save,
 ///   otherwise the Office) and New Run.
 ///
+/// New Run (from the title or an ending) goes through the adoption panel
+/// (the Home pet spec PS1: a dog or a cat, named), then the office; without
+/// the panel the run keeps the run config's default pet.
+///
 /// If TitleUIController has no panels wired, degrades straight to the office
 /// scene so the loop stays playable before the title UI is built.
 /// </summary>
@@ -51,7 +55,9 @@ public sealed class TitleSceneController : MonoBehaviour
                 return;
 
             string leftBehind = UiText.Get(WorldFactors.LeftBehindKey);
-            titleUI.ShowEnding(ending, HandleNewRun, leftBehind, titleUI.HasWorldPanel && run.Library != null ? () => ShowWorld(run, leftBehind) : (System.Action)null);
+            PetContent words = run.Library != null ? run.Library.Home.pet : new PetContent();
+            titleUI.ShowEnding(ending, HandleNewRun, leftBehind, titleUI.HasWorldPanel && run.Library != null ? () => ShowWorld(run, leftBehind) : (System.Action)null,
+                               text => words.Fill(text, world.pet));
             ShowClerkPapers(run, ending);
             return;
         }
@@ -129,7 +135,7 @@ public sealed class TitleSceneController : MonoBehaviour
             Debug.LogWarning("[TitleSceneController] Continue with no RunManager instance: nothing to resume.");
     }
 
-    /// <summary>Clears the save, starts a fresh run, and heads to the office.</summary>
+    /// <summary>New Run: the adoption panel when it is wired (Back returns to what the Title showed), else a fresh run with the default pet; then the office.</summary>
     private void HandleNewRun()
     {
         if (!RunManager.HasInstance)
@@ -138,7 +144,21 @@ public sealed class TitleSceneController : MonoBehaviour
             return;
         }
 
-        RunManager.Instance.NewRun();
+        RunManager run = RunManager.Instance;
+        if (titleUI != null && titleUI.HasAdoptPanel)
+        {
+            titleUI.ShowAdopt(run.Library != null ? run.Library.Home.pet : null, HandleAdopt, Start);
+            return;
+        }
+
+        run.NewRun();
+        run.LoadOfficeScene();
+    }
+
+    /// <summary>Adopt clicked with a sound name: clears the save, starts a fresh run with that pet, and heads to the office.</summary>
+    private void HandleAdopt(PetKind kind, string petName)
+    {
+        RunManager.Instance.NewRun(kind, petName);
         RunManager.Instance.LoadOfficeScene();
     }
 }

@@ -196,6 +196,10 @@ MonoBehaviour:
     text: Contacts
     gloss: 0
     tier: 0
+  - key: app.orders.branch.toys
+    text: Toys
+    gloss: 0
+    tier: 0
   - key: mail.from.supply
     text: Temporal Customs Supply
     gloss: 0
@@ -2750,5 +2754,138 @@ MonoBehaviour:
   - key: portals.footer
     text: Routes are set by the Directorate. Until the Return Gate is repaired, the
       displaced leave through Portal {0}.
+    gloss: 0
+    tier: 0
+  - key: home.title
+    text: "Day {0} \u2014 Home"
+    gloss: 0
+    tier: 0
+  - key: home.breakIn
+    text: 'Someone broke in while you were at work: -{0}'
+    gloss: 0
+    tier: 0
+  - key: home.fixed
+    text: 'Tonight''s fixed costs:'
+    gloss: 0
+    tier: 0
+  - key: home.rent
+    text: '  Rent & utilities: -{0}'
+    gloss: 0
+    tier: 0
+  - key: home.drain
+    text: '  {0}''s extra care while sick: -{1}'
+    gloss: 0
+    tier: 0
+  - key: home.upkeep
+    text: '  House upkeep: -{0}'
+    gloss: 0
+    tier: 0
+  - key: home.fixedTotal
+    text: 'Paid: -{0} {1}   (Balance: {2})'
+    gloss: 0
+    tier: 0
+  - key: home.debt
+    text: You are in debt. Find a way to make ends meet.
+    gloss: 0
+    tier: 0
+  - key: home.bills.total
+    text: 'Tonight''s bills: {0} {1}   (Balance after: {2})'
+    gloss: 0
+    tier: 0
+  - key: home.bills.short
+    text: 'Tonight''s bills: {0} {1}, more than your {2}: skip something.'
+    gloss: 0
+    tier: 0
+  - key: home.bill.paying
+    text: Paying
+    gloss: 0
+    tier: 0
+  - key: home.bill.skip
+    text: Skip
+    gloss: 0
+    tier: 0
+  - key: home.bill.needsPower
+    text: needs electricity
+    gloss: 0
+    tier: 0
+  - key: home.bill.notNeeded
+    text: 'not needed: {0} is well'
+    gloss: 0
+    tier: 0
+  - key: home.pay
+    text: Pay and see {0}
+    gloss: 0
+    tier: 0
+  - key: home.pet.title
+    text: '{0}''s corner'
+    gloss: 0
+    tier: 0
+  - key: home.pet.pat
+    text: Pet {0}
+    gloss: 0
+    tier: 0
+  - key: home.pet.play
+    text: Play
+    gloss: 0
+    tier: 0
+  - key: home.pet.played
+    text: Played tonight
+    gloss: 0
+    tier: 0
+  - key: home.pet.noToys
+    text: No toys yet. The Orders app on your PC sells them.
+    gloss: 0
+    tier: 0
+  - key: home.pet.dark
+    text: The lights are off tonight.
+    gloss: 0
+    tier: 0
+  - key: home.next.house
+    text: Continue to the House
+    gloss: 0
+    tier: 0
+  - key: home.next.slots
+    text: Continue to Slots
+    gloss: 0
+    tier: 0
+  - key: adopt.title
+    text: Adopt a companion
+    gloss: 0
+    tier: 0
+  - key: adopt.body
+    text: The Directorate's shelter has a dog and a cat waiting. One of them goes
+      home with you tonight. Choose, and give them a name.
+    gloss: 0
+    tier: 0
+  - key: adopt.dog
+    text: Dog
+    gloss: 0
+    tier: 0
+  - key: adopt.cat
+    text: Cat
+    gloss: 0
+    tier: 0
+  - key: adopt.placeholder
+    text: Type a name
+    gloss: 0
+    tier: 0
+  - key: adopt.go
+    text: Adopt and start
+    gloss: 0
+    tier: 0
+  - key: adopt.back
+    text: Back
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.Empty
+    text: Give your companion a name.
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.TooLong
+    text: 'A shorter name, please: at most {0} letters.'
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.BadCharacters
+    text: Letters, spaces, hyphens and apostrophes only.
     gloss: 0
     tier: 0

@@ -108,14 +108,14 @@ public static class Seeds
     /// </summary>
     public static int ForSlot(int daySeed) => Mix(daySeed, SlotSalt);
 
-    /// <summary>Salt for the night's family drift at Home ("FMLY").</summary>
+    /// <summary>Salt for the night's household drift at Home ("FMLY": named when the household was a family; the pet's since the Home pet spec).</summary>
     public const int FamilySalt = 0x464D4C59;
 
     /// <summary>
-    /// Seed for the night's family drift at Home (HomeRules.Worsens: one seed
-    /// per member, mixed from this one), apart from the slot's stream and the
-    /// day's raw stream (audit R2-008: the drift drew from its own hash of the
-    /// day seed over System.Random).
+    /// Seed for the night's household drift at Home (HomeRules.Worsens, mixed
+    /// with the member's place: the pet is place 0; the Home pet spec PS5),
+    /// apart from the slot's stream and the day's raw stream (audit R2-008:
+    /// the drift drew from its own hash of the day seed over System.Random).
     /// </summary>
     public static int ForFamily(int daySeed) => Mix(daySeed, FamilySalt);
 

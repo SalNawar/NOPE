@@ -258,7 +258,23 @@ public class SerializedEnumsTests
         Assert.AreEqual(6, (int)UpgradeBranch.Security);
         Assert.AreEqual(7, (int)UpgradeBranch.Health);
         Assert.AreEqual(8, (int)UpgradeBranch.Comfort);
-        Assert.AreEqual(9, System.Enum.GetValues(typeof(UpgradeBranch)).Length, "a new member is appended here too");
+        Assert.AreEqual(9, (int)UpgradeBranch.Toys);
+        Assert.AreEqual(10, System.Enum.GetValues(typeof(UpgradeBranch)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>PetKind: stored in the save (WorldState.pet) and the content (home.pet.kinds); HomeBill: named by the content (home.bills; the Home pet spec).</summary>
+    [Test]
+    public void PetKind_AndHomeBill_KeepTheirSerializedInts()
+    {
+        Assert.AreEqual(0, (int)PetKind.Dog);
+        Assert.AreEqual(1, (int)PetKind.Cat);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(PetKind)).Length, "a new member is appended here too");
+        Assert.AreEqual(0, (int)HomeBill.Food);
+        Assert.AreEqual(1, (int)HomeBill.Heating);
+        Assert.AreEqual(2, (int)HomeBill.Electricity);
+        Assert.AreEqual(3, (int)HomeBill.Tv);
+        Assert.AreEqual(4, (int)HomeBill.Medicine);
+        Assert.AreEqual(5, System.Enum.GetValues(typeof(HomeBill)).Length, "a new member is appended here too");
     }
 
     /// <summary>DialogSpeaker: stored in ScriptLine.speaker.</summary>

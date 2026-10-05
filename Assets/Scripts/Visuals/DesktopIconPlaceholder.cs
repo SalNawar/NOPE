@@ -23,10 +23,10 @@ public static class DesktopIconPlaceholder
     /// <summary>The glyph's side in pixels (a placeholder resolution, not a gameplay knob).</summary>
     public const int Size = 64;
 
-    /// <summary>The Orders tree's glyph keys: the four bands' (the art slot's file name, "branch_" and the branch) and the three state badges.</summary>
+    /// <summary>The Orders tree's glyph keys: the five bands' (the art slot's file name, "branch_" and the branch; the pet's toys the fifth, the Home pet spec) and the three state badges.</summary>
     public static readonly IReadOnlyList<string> OrdersGlyphs = new[]
     {
-        "branch_desk", "branch_interview", "branch_portals", "branch_contacts", "padlock", "clock", "tick"
+        "branch_desk", "branch_interview", "branch_portals", "branch_contacts", "branch_toys", "padlock", "clock", "tick"
     };
 
     /// <summary>The notes glyph's sheet with its folded corner (pixels, y up), built once: In runs for every pixel.</summary>
@@ -74,6 +74,7 @@ public static class DesktopIconPlaceholder
             case "branch_interview":
             case "branch_portals":
             case "branch_contacts":
+            case "branch_toys":
             case "padlock":
             case "clock":
             case "tick":
@@ -136,6 +137,13 @@ public static class DesktopIconPlaceholder
             case "branch_contacts":
                 // Two linked rings.
                 return Ring(23f, 32f, 16f, 11f, px, py) || Ring(41f, 32f, 16f, 11f, px, py);
+
+            case "branch_toys":
+            {
+                // A ball: its outline and a curved seam across it.
+                bool ball = PixelShapes.InEllipse(32f, 32f, 24f, 24f, px, py);
+                return Ring(32f, 32f, 24f, 19f, px, py) || (ball && Math.Abs(EllipseRadius(58f, 32f, 30f, 30f, px, py) - 1f) < 0.09f);
+            }
 
             case "padlock":
                 // A shackle over a body.

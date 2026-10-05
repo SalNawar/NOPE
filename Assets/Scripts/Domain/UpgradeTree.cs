@@ -35,7 +35,7 @@ public enum UpgradeBranch
     /// <summary>The clerk's contacts.</summary>
     Contacts,
 
-    /// <summary>Home: the family's diet (the Home upgrades spec HU1: fewer sick nights, a better mood, a nightly upkeep).</summary>
+    /// <summary>Home: the household's diet (the Home upgrades spec HU1: fewer sick nights for the pet, a better mood, a nightly upkeep).</summary>
     Food,
 
     /// <summary>Home: the flat itself (rent and utilities, insulation, a better flat).</summary>
@@ -48,7 +48,10 @@ public enum UpgradeBranch
     Health,
 
     /// <summary>Home: small comforts (the household's mood).</summary>
-    Comfort
+    Comfort,
+
+    /// <summary>The Orders app: the pet's toys (the Home pet spec PS7: a Mood op each, and one to play with each night).</summary>
+    Toys
 }
 
 /// <summary>One upgrade as the tree reads it: its id, venue, branch, listed cost and the ids it requires.</summary>
@@ -338,10 +341,10 @@ public static class UpgradeTree
         return missing;
     }
 
-    /// <summary>The branches <paramref name="venue"/> draws, in band order: the Orders app's Desk, Interview, Portals and Contacts; Home's Food, Housing, Security, Health and Comfort (an explicit list, so a branch appended later is placed on purpose).</summary>
+    /// <summary>The branches <paramref name="venue"/> draws, in band order: the Orders app's Desk, Interview, Portals, Contacts and Toys (the pet's); Home's Food, Housing, Security, Health and Comfort (an explicit list, so a branch appended later is placed on purpose).</summary>
     public static UpgradeBranch[] BranchesOf(UpgradeVenue venue) => venue == UpgradeVenue.Home
         ? new[] { UpgradeBranch.Food, UpgradeBranch.Housing, UpgradeBranch.Security, UpgradeBranch.Health, UpgradeBranch.Comfort }
-        : new[] { UpgradeBranch.Desk, UpgradeBranch.Interview, UpgradeBranch.Portals, UpgradeBranch.Contacts };
+        : new[] { UpgradeBranch.Desk, UpgradeBranch.Interview, UpgradeBranch.Portals, UpgradeBranch.Contacts, UpgradeBranch.Toys };
 
     /// <summary>
     /// What Generate World and the validator refuse in the catalogue (every

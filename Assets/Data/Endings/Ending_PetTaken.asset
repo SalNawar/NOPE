@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a706d7e07e9a2b449b2f33d3766ff7f, type: 3}
+  m_Name: Ending_PetTaken
+  m_EditorClassIdentifier: Assembly-CSharp::EndingSO
+  id: pet_taken
+  displayName: The Welfare Office
+  bodyText: 'While you were at the desk, an inspector from the Animal Welfare Office
+    let himself in with a master key. {name} the {kind} has been rehomed with a family
+    on the solvent floors, where the heating never goes off. He left a receipt and
+    a pamphlet: Pets Are A Privilege.'
+  picture: {fileID: 0}
+  conditionType: 4
+  threshold: 0
+  priority: 80

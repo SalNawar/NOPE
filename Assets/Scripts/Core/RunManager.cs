@@ -110,6 +110,13 @@ public sealed class RunManager : MonoBehaviour
         NotifyEffectsChanged();
     }
 
+    /// <summary>Starts a brand-new run (NewRun) with the pet the Title's adoption chose (DayCycle.Adopt: a refused name falls back to the kind's suggested one).</summary>
+    public void NewRun(PetKind kind, string petName)
+    {
+        NewRun();
+        DayCycle.Adopt(World, Library, kind, petName);
+    }
+
     /// <summary>
     /// Loads the saved run if one exists. Returns true on success.
     /// </summary>
@@ -127,6 +134,10 @@ public sealed class RunManager : MonoBehaviour
 
         World = loaded;
         DevToolsState.ResetAll();
+
+        // A save from before the pet (the Home pet spec) adopts the run config's default.
+        if (World.pet == null || !World.pet.Adopted)
+            DayCycle.Adopt(World, Library, Config.startingPetKind, null);
 
         // The present culture's cue from the saved history, idempotently (an
         // older save may lack it; piece 6 Z5).

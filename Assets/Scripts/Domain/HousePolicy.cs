@@ -32,10 +32,10 @@ public readonly struct HouseOffer
 
 /// <summary>
 /// The balance simulation's buyer at Home (the Home upgrades spec HU10, §9;
-/// Tools > TimeDesk > Balance): each night, care first for the sickest member
-/// at the threshold, then the cheapest house upgrade it may buy, each only
-/// while the wallet keeps a reserve (a night's household), so upkeep never
-/// walks it into bankruptcy on purpose. A second buyer, the climber (Saleh's
+/// Tools > TimeDesk > Balance): each night, after the pet's bills
+/// (PetPolicy), the cheapest house upgrade it may buy, only while the wallet
+/// keeps a reserve (a night's household), so upkeep never walks it into
+/// bankruptcy on purpose. A second buyer, the climber (Saleh's
 /// Q6: "balance so you can buy one or two if you take bribes"), saves for
 /// the top tier instead. Pure, so the picks are tested headless.
 /// </summary>
@@ -122,18 +122,5 @@ public static class HousePolicy
                     open.Push(n);
         }
         return path;
-    }
-
-    /// <summary>The index of the sickest member whose condition is at least <paramref name="threshold"/> (a tie goes to the first) when treating them at <paramref name="careCost"/> leaves at least <paramref name="reserve"/> of <paramref name="money"/>; -1 otherwise.</summary>
-    public static int Care(IReadOnlyList<int> conditions, int money, int careCost, int reserve, int threshold)
-    {
-        if (conditions == null || money - careCost < reserve)
-            return -1;
-
-        int best = -1;
-        for (int i = 0; i < conditions.Count; i++)
-            if (conditions[i] >= threshold && (best < 0 || conditions[i] > conditions[best]))
-                best = i;
-        return best;
     }
 }

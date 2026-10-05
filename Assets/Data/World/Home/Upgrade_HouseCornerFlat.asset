@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
   id: house_corner_flat
   displayName: Corner Flat
-  description: Two windows. A door for the kid's room. The landlord calls it 'aspirational'.
+  description: Two windows. A sunny sill for the pet. The landlord calls it 'aspirational'.
   cost: 320
   unlockEffect: {fileID: 11400000, guid: 845f813da76d14d40a5895627d32f0e5, type: 2}
   venue: 1

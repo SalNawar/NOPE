@@ -3,25 +3,26 @@ using UnityEngine;
 
 /// <summary>
 /// Household economy for the Home phase (Phase 4; the house upgrades, the
-/// Home upgrades spec): the night's break-in, daily living expenses and the
-/// upkeep of what the house owns, family member condition drift and
-/// recovery, and treating conditions for credits. Stateless static helpers
-/// applying the Domain's HomeRules to WorldState + GameConfigSO, with the
-/// house upgrades' household effect ops (TimelineEffects.SumFloat over the
-/// content library) added to each knob through HomeRules.Adjusted and Cost.
+/// Home upgrades spec; the pet, the Home pet spec): the night's break-in, the
+/// fixed bill (rent and utilities, the sick pet's extra care, the house's
+/// upkeep), the night's optional bills for the pet (food, heating,
+/// electricity, TV, medicine; priced in world_source.json home.bills), and the
+/// pet's night (its needs settled by tonight's care, the sickness and
+/// recovery rolls, the Animal Welfare Office). Stateless static helpers
+/// applying the Domain's HomeRules and PetRules to WorldState + GameConfigSO,
+/// with the house upgrades' and the toys' effect ops (TimelineEffects.SumFloat
+/// over the content library) added to each knob through HomeRules.Adjusted
+/// and Cost.
 /// </summary>
 public static class HomeEconomy
 {
-    /// <summary>Breakdown of one night's household costs, for display in HomeUIController and the statement.</summary>
+    /// <summary>Breakdown of one night's fixed household costs, for display in HomeUIController and the statement.</summary>
     public readonly struct ExpenseReport
     {
         /// <summary>Rent and utilities: the base daily expense with the house's HouseholdExpense ops.</summary>
         public readonly int baseAmount;
 
-        /// <summary>Per-family-member upkeep total.</summary>
-        public readonly int memberAmount;
-
-        /// <summary>Medical drain from family member conditions (per point with the house's MedicalDrain ops).</summary>
+        /// <summary>The sick pet's extra care (per step of sickness with the house's MedicalDrain ops).</summary>
         public readonly int conditionAmount;
 
         /// <summary>The upkeep of what the house owns (its Upkeep ops: food plans, subscriptions).</summary>
@@ -33,41 +34,23 @@ public static class HomeEconomy
         /// <summary>Sum of all of the above; what left the wallet when Home opened.</summary>
         public readonly int total;
 
-        /// <summary>Number of family members at the time of billing.</summary>
-        public readonly int memberCount;
-
-        /// <summary>Creates a report; the total is the sum of the five amounts.</summary>
-        public ExpenseReport(int baseAmount, int memberAmount, int conditionAmount, int upkeepAmount, int breakInLoss, int memberCount)
+        /// <summary>Creates a report; the total is the sum of the four amounts.</summary>
+        public ExpenseReport(int baseAmount, int conditionAmount, int upkeepAmount, int breakInLoss)
         {
             this.baseAmount = baseAmount;
-            this.memberAmount = memberAmount;
             this.conditionAmount = conditionAmount;
             this.upkeepAmount = upkeepAmount;
             this.breakInLoss = breakInLoss;
-            this.memberCount = memberCount;
-            total = baseAmount + memberAmount + conditionAmount + upkeepAmount + breakInLoss;
+            total = baseAmount + conditionAmount + upkeepAmount + breakInLoss;
         }
     }
 
-    /// <summary>What happened when Home opened (DayCycle.OpenHome): the bill (the break-in included), who got worse or better overnight, and the household's mood.</summary>
-    public sealed class Evening
-    {
-        /// <summary>Tonight's bill.</summary>
-        public ExpenseReport bill;
-
-        /// <summary>The members who got one point worse tonight, in family order.</summary>
-        public readonly List<string> worse = new List<string>();
-
-        /// <summary>The members who got one point better tonight, in family order.</summary>
-        public readonly List<string> better = new List<string>();
-
-        /// <summary>The household's mood (the house's Mood ops); the player sees it only in words (HouseEffects.MoodLine).</summary>
-        public float mood;
-    }
-
-    /// <summary>The house upgrades' summed <paramref name="op"/> in force (TimelineEffects.SumFloat); 0 without a library.</summary>
+    /// <summary>The house upgrades' and toys' summed <paramref name="op"/> in force (TimelineEffects.SumFloat); 0 without a library.</summary>
     public static float HouseSum(WorldState world, ContentLibrarySO lib, EffectOpType op) =>
         world != null && lib != null ? TimelineEffects.SumFloat(world, lib, op) : 0f;
+
+    /// <summary>The worst level of the pet's needs (GameConfigSO.petNeedMax; 3 without a config).</summary>
+    public static int NeedMax(GameConfigSO config) => config != null ? Mathf.Max(1, config.petNeedMax) : 3;
 
     /// <summary>
     /// Rolls tonight's break-in (HomeRules.BreakIn on the night's own stream,
@@ -93,7 +76,7 @@ public static class HomeEconomy
     }
 
     /// <summary>
-    /// Computes and deducts today's living expenses from world.money
+    /// Computes and deducts tonight's fixed household costs from world.money
     /// (<see cref="DailyExpenses"/>); <paramref name="breakInLoss"/>, already
     /// taken, joins the report. Safe to call with a null config (falls back
     /// to zero expenses).
@@ -112,98 +95,106 @@ public static class HomeEconomy
     }
 
     /// <summary>
-    /// Tonight's living expenses, without paying them: rent and utilities
-    /// (the base expense with the HouseholdExpense ops), the upkeep per
-    /// family member, the medical drain per condition point
-    /// (HomeRules.DrainPoints; the per-point cost with the MedicalDrain ops)
-    /// and the house's upkeep (its Upkeep ops), each through HomeRules.Cost,
-    /// never below 0, with <paramref name="breakInLoss"/> in the report.
-    /// The shift report shows the bill due tonight from it (lesson 5) and Home
-    /// pays the same bill (ApplyDailyExpenses). Zero without a world or a config.
+    /// Tonight's fixed household costs, without paying them: rent and
+    /// utilities (the base expense with the HouseholdExpense ops), the sick
+    /// pet's extra care per step of its sickness (the per-step cost with the
+    /// MedicalDrain ops) and the house's upkeep (its Upkeep ops), each through
+    /// HomeRules.Cost, never below 0, with <paramref name="breakInLoss"/> in
+    /// the report. Home pays it when it opens (ApplyDailyExpenses); the
+    /// night's optional bills come after (PayBills). Zero without a world or a
+    /// config.
     /// </summary>
     public static ExpenseReport DailyExpenses(WorldState world, ContentLibrarySO lib, GameConfigSO config, int breakInLoss)
     {
         if (world == null)
             return default;
 
-        int memberCount = world.family.members.Count;
-
         int baseAmount = HomeRules.Cost(config != null ? config.baseDailyExpense : 0, HouseSum(world, lib, EffectOpType.HouseholdExpense));
-        int memberAmount = (config != null ? config.expensePerFamilyMember : 0) * memberCount;
-
-        int conditionTotal = 0;
-        foreach (FamilyMemberData m in world.family.members)
-            if (m != null)
-                conditionTotal += HomeRules.DrainPoints(m.condition);
-
-        int perPoint = HomeRules.Cost(config != null ? config.expensePerConditionPoint : 0, HouseSum(world, lib, EffectOpType.MedicalDrain));
+        int perStep = HomeRules.Cost(config != null ? config.expensePerConditionPoint : 0, HouseSum(world, lib, EffectOpType.MedicalDrain));
+        int sickness = world.pet != null ? HomeRules.DrainPoints(world.pet.sickness) : 0;
         int upkeep = HomeRules.Cost(0, HouseSum(world, lib, EffectOpType.Upkeep));
 
-        return new ExpenseReport(baseAmount, memberAmount, perPoint * conditionTotal, upkeep, breakInLoss, memberCount);
+        return new ExpenseReport(baseAmount, perStep * sickness, upkeep, breakInLoss);
     }
 
-    /// <summary>Credits cost to treat one point of condition off a family member: the config's care cost with the house's CareCost ops (HomeRules.Cost).</summary>
-    public static int GetCareCost(WorldState world, ContentLibrarySO lib, GameConfigSO config) =>
-        HomeRules.Cost(config != null ? config.conditionCareCost : 0, HouseSum(world, lib, EffectOpType.CareCost));
+    /// <summary>A night's bill's price in cr: its row's (home.bills; 0 without one), the Medicine's with the house's CareCost ops (HomeRules.Cost).</summary>
+    public static int BillPrice(WorldState world, ContentLibrarySO lib, HomeBill bill)
+    {
+        BillRow row = lib != null ? lib.Home.Bill(bill) : null;
+        int price = row != null ? row.price : 0;
+        return bill == HomeBill.Medicine ? HomeRules.Cost(price, HouseSum(world, lib, EffectOpType.CareCost)) : Mathf.Max(0, price);
+    }
+
+    /// <summary>What <paramref name="care"/>'s bills cost tonight (PetRules.Total at <see cref="BillPrice"/>).</summary>
+    public static int BillsTotal(WorldState world, ContentLibrarySO lib, PetCare care) =>
+        PetRules.Total(care, bill => BillPrice(world, lib, bill));
+
+    /// <summary>The pet's essentials tonight (food, heating and electricity): what the shift report adds to the fixed bill (lesson 5).</summary>
+    public static int EssentialsPrice(WorldState world, ContentLibrarySO lib) =>
+        BillsTotal(world, lib, new PetCare(true, true, true, false, false));
 
     /// <summary>
-    /// Spends credits to reduce a family member's condition by 1.
-    /// Returns true if the treatment was applied (HomeRules.CanTreat: a
-    /// condition to treat and enough money for GetCareCost).
+    /// Pays tonight's bills for <paramref name="care"/> (the bills step's Pay):
+    /// their total leaves the wallet when it covers them (nothing is bought on
+    /// credit; paying nothing is always allowed). Returns the total paid, or
+    /// -1 when refused.
     /// </summary>
-    public static bool TreatFamilyMember(WorldState world, ContentLibrarySO lib, GameConfigSO config, int memberIndex)
+    public static int PayBills(WorldState world, ContentLibrarySO lib, PetCare care)
     {
-        if (world == null || memberIndex < 0 || memberIndex >= world.family.members.Count)
-            return false;
+        if (world == null)
+            return -1;
+        int total = BillsTotal(world, lib, care);
+        if (total > 0 && world.money < total)
+            return -1;
+        world.money -= total;
+        return total;
+    }
 
-        FamilyMemberData member = world.family.members[memberIndex];
-        int cost = GetCareCost(world, lib, config);
-
-        if (member == null || !HomeRules.CanTreat(member.condition, world.money, cost))
-            return false;
-
-        world.money -= cost;
-        member.condition = HomeRules.Treated(member.condition);
-        return true;
+    /// <summary>The toys the clerk owns (Orders upgrades in the Toys band, delivered), in the library's order.</summary>
+    public static List<UpgradeSO> OwnedToys(WorldState world, ContentLibrarySO lib)
+    {
+        var toys = new List<UpgradeSO>();
+        if (world == null || lib == null)
+            return toys;
+        foreach (UpgradeSO u in lib.Upgrades)
+            if (u != null && u.branch == UpgradeBranch.Toys && world.HasUpgrade(u.id))
+                toys.Add(u);
+        return toys;
     }
 
     /// <summary>
-    /// The night for each family member (HomeRules.Night): worse by 1, capped
-    /// at config.maxFamilyCondition, when their drift roll (HomeRules.Worsens)
-    /// falls below HomeRules.WorsenChance (conditionWorsenChance with the
-    /// house's SicknessChance ops, less the mood's share at sicknessPerMood,
-    /// up to maxMoodSicknessCut); else better by 1 when they are sick and
-    /// their recovery roll (HomeRules.Recovers) falls below the mood's share
-    /// at recoveryPerMood, up to maxRecoveryChance (HomeRules.MoodShare).
-    /// Records the changes and the mood in <paramref name="evening"/> (when
-    /// given). Nothing changes without a config.
+    /// The pet's night at Sleep (the Home pet spec PS5, PS6), on
+    /// <paramref name="seed"/> (the day's) so a replay is the same: its needs
+    /// settled by tonight's <paramref name="care"/> (PetRules.Settle); its
+    /// sickness rolled on the household's stream (HomeRules.Worsens, place 0)
+    /// against PetRules.SicknessChance (conditionWorsenChance, sicknessPerNeed
+    /// a step of hunger and cold, the house's SicknessChance ops, the mood's
+    /// share) and, when sick, its recovery on its own stream
+    /// (HomeRules.Recovers) against PetRules.RecoveryChance; the change kept
+    /// for the next Home; then the Welfare Office's count (PetRules.Neglected,
+    /// WelfareNights) and, at config.welfareNights, the pet taken (the
+    /// failure ending). Nothing without an adopted pet or a config.
     /// </summary>
-    public static void AdvanceFamilyConditions(WorldState world, ContentLibrarySO lib, GameConfigSO config, int seed, Evening evening)
+    public static void PetNight(WorldState world, ContentLibrarySO lib, GameConfigSO config, int seed, PetCare care)
     {
-        if (world == null || config == null)
+        PetState pet = world != null ? world.pet : null;
+        if (pet == null || !pet.Adopted || config == null)
             return;
 
+        int max = NeedMax(config);
+        PetNeeds settled = PetRules.Settle(pet.Needs, care, max);
         float mood = HouseSum(world, lib, EffectOpType.Mood);
-        float worsen = HomeRules.WorsenChance(config.conditionWorsenChance, HouseSum(world, lib, EffectOpType.SicknessChance), mood, config.sicknessPerMood, config.maxMoodSicknessCut);
-        float recover = HomeRules.MoodShare(mood, config.recoveryPerMood, config.maxRecoveryChance);
-        if (evening != null)
-            evening.mood = mood;
+        float worsen = PetRules.SicknessChance(config.conditionWorsenChance, settled, config.sicknessPerNeed, HouseSum(world, lib, EffectOpType.SicknessChance),
+                                               mood, config.sicknessPerMood, config.maxMoodSicknessCut);
+        float recover = PetRules.RecoveryChance(settled, mood, config.recoveryPerMood, config.maxRecoveryChance);
+        int sickness = PetRules.Sickness(settled.Sickness, care.Medicine, HomeRules.Worsens(seed, 0, worsen), HomeRules.Recovers(seed, 0, recover), max);
 
-        for (int i = 0; i < world.family.members.Count; i++)
-        {
-            FamilyMemberData member = world.family.members[i];
-            if (member == null)
-                continue;
-
-            int before = member.condition;
-            member.condition = HomeRules.Night(before, HomeRules.Worsens(seed, i, worsen), HomeRules.Recovers(seed, i, recover), config.maxFamilyCondition);
-            if (evening == null)
-                continue;
-            if (member.condition > before)
-                evening.worse.Add(member.name);
-            else if (member.condition < before)
-                evening.better.Add(member.name);
-        }
+        pet.lastChange = sickness > pet.sickness ? 1 : sickness < pet.sickness ? -1 : 0;
+        var after = new PetNeeds(settled.Hunger, settled.Cold, settled.Boredom, sickness);
+        pet.SetNeeds(after);
+        pet.welfareNights = PetRules.WelfareNights(pet.welfareNights, PetRules.Neglected(after, max));
+        pet.taken = pet.taken || PetRules.Taken(pet.welfareNights, config.welfareNights);
+        Debug.Log($"[HomeEconomy] PetNight (day {world.day}): '{pet.name}' hunger={after.Hunger} cold={after.Cold} boredom={after.Boredom} sickness={after.Sickness} (worsen {worsen:0.###}, recover {recover:0.###}), welfareNights={pet.welfareNights}, taken={pet.taken}.");
     }
 
     /// <summary>
@@ -211,10 +202,11 @@ public static class HomeEconomy
     /// whose state is buyable (OrderBook.StateOf: not owned, every
     /// prerequisite owned, the wallet covering its price). The price leaves
     /// the wallet, the upgrade is owned at once and its unlock effect starts
-    /// today (TimelineService.ActivateEffect), so tonight's bill, settled when
-    /// Home opened, is untouched and the next night reads it. Returns the
-    /// price paid, or -1 when refused. The House and the balance simulation's
-    /// buyer both buy through here.
+    /// today (TimelineService.ActivateEffect), so tonight's fixed bill,
+    /// settled when Home opened, is untouched, and tonight's pet night at
+    /// Sleep and the next evening read it. Returns the price paid, or -1 when
+    /// refused. The House and the balance simulation's buyer both buy through
+    /// here.
     /// </summary>
     public static int BuyHouseUpgrade(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade)
     {
