@@ -615,6 +615,7 @@ public static partial class OfficeSceneUIBuilder
         // The desk, the scanner and the notes.
         DeskController desk = BuildDesk(office, config, pcFrame, out DeskScanner scanner, out GameObject scannerPlaceholder, out TextMeshPro scanHint);
         DeskView deskView = BuildDeskView(office, config, desk.transform.Find("ViewCatcher").GetComponent<ClickCatcher>(), deskViewBack);
+        CityView cityView = BuildCityView(office, deskViewBack.transform.parent, config);
         var soView = new SerializedObject(view);
         SetRef(soView, "deskView", deskView);
         soView.ApplyModifiedProperties();
@@ -726,6 +727,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "stampTray", stampTray);
         SetRef(so, "hud", caseHud);
         SetRef(so, "deskView", deskView);
+        SetRef(so, "cityView", cityView);
         so.ApplyModifiedProperties();
 
         // The binder puts all of it on the art office at load.
@@ -742,6 +744,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "deskCatcher", desk.transform.Find("Catcher").GetComponent<BoxCollider>());
         SetRef(soBinder, "matCatcher", desk.transform.Find("ViewCatcher").GetComponent<BoxCollider>());
         SetRef(soBinder, "deskView", deskView);
+        SetRef(soBinder, "cityView", cityView);
         SetRef(soBinder, "screenClone", screen.GetComponent<PcScreenClone>());
         SetRef(soBinder, "frame", pcFrame);
         SetRef(soBinder, "pc", pc);
@@ -1261,6 +1264,9 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The band at the overlay's top the speech bubble and the wheel's ring keep clear (reference px): the office case HUD's strips, the desk view's Back control and gaps (the desk view clamps both to the top).</summary>
     private static readonly float OverlayTopClearance = CaseHudClearance + DeskViewBackSize.y + 8f;
 
+    /// <summary>The city view's edge buttons (reference px).</summary>
+    private static readonly Vector2 CityButtonSize = new Vector2(170f, 44f);
+
     /// <summary>The desk's rulebook card (metres, width by depth), its rows and their pitch (metres).</summary>
     private static readonly Vector2 RulebookSize = new Vector2(0.26f, 0.21f);
     private const int RulebookRows = 4;
@@ -1605,6 +1611,56 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "backButton", back);
         so.ApplyModifiedProperties();
         return deskView;
+    }
+
+    /// <summary>
+    /// The city view (the desk-first redesign, item 6), rebuilt each run:
+    /// Office/CityView (the CityView) with its Cinemachine camera (inactive,
+    /// priority 0; the binder poses it) and the Skyline root its stand-in city
+    /// is made under at bind, the layers' unlit transparent material, and on
+    /// the office overlay "◀ City (A)" at the left edge and "Desk (D) ▶" at the
+    /// right edge, in the "&lt; Desk" button's role (inactive: the view shows
+    /// them). Returns it.
+    /// </summary>
+    private static CityView BuildCityView(Transform office, Transform overlay, DeskConfigSO config)
+    {
+        DestroyChildIfPresent(office, "CityView");
+        Transform host = EnsureChild(office, "CityView");
+        Transform cameraHost = EnsureChild(host, "Camera");
+        CinemachineCamera cityCamera = cameraHost.gameObject.AddComponent<CinemachineCamera>();
+        cityCamera.Priority = 0;
+        cameraHost.gameObject.SetActive(false);
+        Transform skyline = EnsureChild(host, "Skyline");
+        Material layers = EnsureMaterial("CitySkyline_Layer", "Universal Render Pipeline/Unlit", m =>
+        {
+            m.SetFloat("_Surface", 1f);
+            m.SetFloat("_Blend", 0f);
+            BaseShaderGUI.SetMaterialKeywords(m);
+        });
+
+        Button Edge(string name, string key, bool left)
+        {
+            DestroyChildIfPresent(overlay, name);
+            Button b = MakeButton(overlay, name, null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.DeskButton, key);
+            var rt = (RectTransform)b.transform;
+            rt.anchorMin = rt.anchorMax = new Vector2(left ? 0f : 1f, 0.5f);
+            rt.pivot = new Vector2(left ? 0f : 1f, 0.5f);
+            rt.anchoredPosition = new Vector2(left ? 12f : -12f, 0f);
+            rt.sizeDelta = CityButtonSize;
+            b.gameObject.SetActive(false);
+            return b;
+        }
+
+        CityView view = host.gameObject.AddComponent<CityView>();
+        var so = new SerializedObject(view);
+        SetRef(so, "config", config);
+        SetRef(so, "cityCamera", cityCamera);
+        SetRef(so, "skyline", skyline);
+        SetRef(so, "layerMaterial", layers);
+        SetRef(so, "lookButton", Edge("CityLook", "city.look", true));
+        SetRef(so, "backButton", Edge("CityBack", "city.back", false));
+        so.ApplyModifiedProperties();
+        return view;
     }
 
     /// <summary>

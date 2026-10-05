@@ -67,6 +67,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>Poses the papers held in the hand in front of the office camera (piece 10; optional).</summary>
     [SerializeField] private PaperExaminer examiner;
 
+    /// <summary>The city view (the desk-first redesign, item 6; optional): posed from the art's Cinemachine camera, turned left.</summary>
+    [SerializeField] private CityView cityView;
+
     /// <summary>Inspection at the desk (the desk-first redesign, item 11; optional): the values' places are seen through the office camera, and the rulebook lies on the desk.</summary>
     [SerializeField] private DeskInspect deskInspect;
 
@@ -436,7 +439,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (deskView != null)
         {
             if (_officeVcam != null)
+            {
                 deskView.Bind(_officeVcam, deskCentre);
+                if (cityView != null)
+                    cityView.Bind(_officeVcam);
+            }
             else
                 Debug.LogWarning("[OfficeSceneBinder] The art office has no Cinemachine camera with a brain on the office camera (Anchor_OfficeVCam): the desk view stays off. See docs/SCENE_CONTRACT_GAMEPLAY.md.", this);
         }

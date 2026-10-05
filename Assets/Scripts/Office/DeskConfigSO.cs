@@ -127,6 +127,40 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The photo's tint while its paper is held (evenly lit, unlike travellerTint on the desk).</summary>
     public Color examineTint = Color.white;
 
+    [Header("The city view (the desk-first redesign, item 6)")]
+    /// <summary>Degrees the city view turns left of the office view (toward the hall's window wall).</summary>
+    [Range(0f, 180f)] public float cityYaw = 75f;
+
+    /// <summary>Degrees the city view looks below the horizon (negative: up, over the skyline).</summary>
+    [Range(-45f, 45f)] public float cityPitch = -6f;
+
+    /// <summary>Metres from the eye to the stand-in city's nearest towers (the further layers and the sky stand at multiples of it).</summary>
+    [Min(1f)] public float cityDistance = 24f;
+
+    /// <summary>Seconds of the turn to the city and back (a cut under Reduced Motion).</summary>
+    [Min(0f)] public float citySeconds = 0.6f;
+
+    /// <summary>The stand-in's sky by day (the hall's pale morning).</summary>
+    public Color citySkyDay = new Color(0.78f, 0.87f, 0.94f, 1f);
+
+    /// <summary>The stand-in's sky at full evening (the hall's dusk).</summary>
+    public Color citySkyEvening = new Color(0.86f, 0.52f, 0.42f, 1f);
+
+    /// <summary>The furthest towers by day (hazy).</summary>
+    public Color cityFarDay = new Color(0.64f, 0.71f, 0.8f, 1f);
+
+    /// <summary>The nearest towers by day (the hall's teal-grey).</summary>
+    public Color cityNearDay = new Color(0.33f, 0.42f, 0.5f, 1f);
+
+    /// <summary>The furthest towers at full evening.</summary>
+    public Color cityFarEvening = new Color(0.42f, 0.33f, 0.47f, 1f);
+
+    /// <summary>The nearest towers at full evening (the hall's dark navy).</summary>
+    public Color cityNearEvening = new Color(0.13f, 0.13f, 0.22f, 1f);
+
+    /// <summary>The towers' lit windows (the hall's warm ivory; faint by day, full at evening).</summary>
+    public Color cityWindowLight = new Color(1f, 0.85f, 0.55f, 1f);
+
     [Header("Inspection at the desk (the desk-first redesign, item 11)")]
     /// <summary>Where the rulebook card lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat).</summary>
     public Vector2 rulebookAt = new Vector2(-0.52f, -0.16f);

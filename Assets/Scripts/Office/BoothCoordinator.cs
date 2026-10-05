@@ -68,6 +68,9 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>The desk view (piece 10; optional): the camera tilted forward over the desk.</summary>
     [SerializeField] private DeskView deskView;
 
+    /// <summary>The city view (the desk-first redesign, item 6; optional): the camera turned left to the city.</summary>
+    [SerializeField] private CityView cityView;
+
     private BoothPhase _phase = BoothPhase.NoTraveller;
     private int _day;
     private bool _citationPending;
@@ -96,6 +99,8 @@ public sealed class BoothCoordinator : MonoBehaviour
         }
         if (deskView != null)
             deskView.Changed += Apply;
+        if (cityView != null)
+            cityView.Changed += Apply;
     }
 
     private void OnDisable()
@@ -115,6 +120,8 @@ public sealed class BoothCoordinator : MonoBehaviour
         }
         if (deskView != null)
             deskView.Changed -= Apply;
+        if (cityView != null)
+            cityView.Changed -= Apply;
     }
 
     /// <summary>The first application, once every component has woken (Awake runs before any Start).</summary>
@@ -130,6 +137,8 @@ public sealed class BoothCoordinator : MonoBehaviour
                 screen.Wake(WakeReason.TravellerPresented);
             if (deskView != null)
                 deskView.Return();
+            if (cityView != null)
+                cityView.Return();
         }
         Apply();
     }
@@ -191,6 +200,9 @@ public sealed class BoothCoordinator : MonoBehaviour
             stampTray.SetLive(BoothRules.Evaluate(Context()).StampsLive);
         if (deskView != null && !BoothRules.Evaluate(Context()).DeskViewAllowed)
             deskView.Return();
+        // The city view turns while the mat's toggle would be live in the normal view (the office view, nothing held, no newsletter, wheel or stamp); anything else returns it.
+        if (cityView != null)
+            cityView.SetLive(BoothRules.Evaluate(Context()).DeskViewToggleLive && (deskView == null || !deskView.IsOn));
 
         BoothInput input = BoothRules.Evaluate(Context());
         if (screen != null)
