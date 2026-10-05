@@ -1,50 +1,62 @@
 using System;
 
 /// <summary>
-/// The knobs of the desk view (piece 10 section 11, T2), held by
-/// DeskConfigSO.deskView: how far the camera moves from the art office's view
-/// (along its level forward, and up), how much further it pitches than aiming
-/// at the mat's centre, and the blend's seconds.
+/// The knobs of the desk view (piece 10 section 11, T2; the desk-first
+/// redesign, Saleh 2026-10-05, item 5: "the tilt on the desk zooms more and
+/// the tilt is 80 degrees"), held by DeskConfigSO.deskView: the view looks
+/// down at a fixed pitch onto an aim point near the mat's centre from a
+/// distance, with its own field of view, and blends in and out over its
+/// seconds.
 /// </summary>
 [Serializable]
 public sealed class DeskViewTuning
 {
-    /// <summary>Metres the desk view moves along the normal view's level forward.</summary>
-    public float forward = 0.6f;
+    /// <summary>Degrees the desk view looks below the horizon (80: nearly straight down onto the papers; kept between level and DeskViewPose.MaxPitch).</summary>
+    public float pitch = 80f;
 
-    /// <summary>Metres the desk view rises above the normal view (negative lowers it).</summary>
-    public float rise = 0.3f;
+    /// <summary>Metres from the aim point back to the camera along its view (smaller zooms closer).</summary>
+    public float distance = 0.62f;
 
-    /// <summary>Degrees the desk view pitches past aiming at the mat's centre (positive looks further down; the default -4 keeps the floor under the desk's front edge out of the view's bottom).</summary>
-    public float pitch = -4f;
+    /// <summary>Metres the aim point lies right of the mat's centre, along the office view's level right (toward the scanner and the stamps).</summary>
+    public float aimRight = 0f;
+
+    /// <summary>Metres the aim point lies ahead of the mat's centre, along the office view's level forward (negative: toward the chair).</summary>
+    public float aimForward = 0.06f;
+
+    /// <summary>The desk view's vertical field of view in degrees (0 or less keeps the office camera's lens).</summary>
+    public float fieldOfView = 50f;
 
     /// <summary>Seconds of the blend into the desk view and back (0 or less cuts).</summary>
-    public float seconds = 0.35f;
+    public float seconds = 0.5f;
 }
 
 /// <summary>
-/// The desk view's pose (piece 10 section 11, T2): from the normal view moved
-/// by the knobs, the pitch that aims at the mat's centre plus the pitch knob,
-/// kept between level and straight down; the blend's seconds, a cut under
-/// Reduced Motion. Engine-free, so it is tested headless; DeskView applies it.
+/// The desk view's pose (piece 10 section 11, T2; the desk-first redesign,
+/// item 5): the camera sits <see cref="DeskViewTuning.distance"/> back from
+/// the aim point along a view pitched <see cref="DeskViewTuning.pitch"/>
+/// below the horizon, keeping the office view's yaw; the blend's seconds, a
+/// cut under Reduced Motion. Engine-free, so it is tested headless; DeskView
+/// applies it.
 /// </summary>
 public static class DeskViewPose
 {
     /// <summary>The steepest pitch, in degrees below the horizon (straight down would lose the view's yaw).</summary>
     public const float MaxPitch = 89f;
 
+    /// <summary>The knob's pitch kept within 0..MaxPitch.</summary>
+    public static float Pitch(DeskViewTuning tuning) => Math.Max(0f, Math.Min(MaxPitch, tuning.pitch));
+
     /// <summary>
-    /// The desk view's pitch in degrees below the horizon, from the normal
-    /// view's height above the mat's centre and the mat's centre's distance
-    /// ahead along the view's level forward (metres), once the view has moved
-    /// by the knobs; kept within 0..MaxPitch.
+    /// Where the camera sits from the aim point, in metres: <c>back</c> along
+    /// the office view's level forward (positive: toward the chair) and
+    /// <c>up</c> above it, so the view along the pitch passes through the aim
+    /// point at the knob's distance (never negative).
     /// </summary>
-    public static float Pitch(float heightAboveMat, float depthToMat, DeskViewTuning tuning)
+    public static (float back, float up) Offset(DeskViewTuning tuning)
     {
-        float height = heightAboveMat + tuning.rise;
-        float depth = depthToMat - tuning.forward;
-        float aim = (float)(Math.Atan2(height, depth) * 180.0 / Math.PI);
-        return Math.Max(0f, Math.Min(MaxPitch, aim + tuning.pitch));
+        double radians = Pitch(tuning) * Math.PI / 180.0;
+        float distance = Math.Max(0f, tuning.distance);
+        return ((float)(distance * Math.Cos(radians)), (float)(distance * Math.Sin(radians)));
     }
 
     /// <summary>The blend's seconds: the knob's, or 0 (a cut) under Reduced Motion or a knob of 0 or less.</summary>

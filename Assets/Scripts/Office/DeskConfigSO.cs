@@ -47,6 +47,9 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds a scan by hand takes with the Analysis Scanner (the analysis pass, the PC redesign SC4); a scan the Auto-Feed Scanner feeds itself keeps scanSeconds.</summary>
     [Min(0.1f)] public float analysisScanSeconds = 3f;
 
+    /// <summary>The deepest shadow behind the scanner, in metres, where its body hides a paper from the office camera (ScannerClearance: a paper left there moves out to the left, right or front; the desk-first redesign, item 4).</summary>
+    [Min(0f)] public float scannerShadowMax = 0.35f;
+
     /// <summary>The day-1 note above the scanner: a UI string key (world_source.json ui.strings; empty = no note).</summary>
     public string scanHintKey = "desk.scanHint";
 
@@ -124,8 +127,68 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The photo's tint while its paper is held (evenly lit, unlike travellerTint on the desk).</summary>
     public Color examineTint = Color.white;
 
-    /// <summary>Where the stamp tray's centre sits from the stamp (overlay reference px): above it.</summary>
-    public Vector2 stampTrayOffset = new Vector2(0f, 140f);
+    [Header("The city view (the desk-first redesign, item 6)")]
+    /// <summary>Degrees the city view turns left of the office view (toward the hall's window wall).</summary>
+    [Range(0f, 180f)] public float cityYaw = 75f;
+
+    /// <summary>Degrees the city view looks below the horizon (negative: up, over the skyline).</summary>
+    [Range(-45f, 45f)] public float cityPitch = -6f;
+
+    /// <summary>Metres from the eye to the stand-in city's nearest towers (the further layers and the sky stand at multiples of it).</summary>
+    [Min(1f)] public float cityDistance = 24f;
+
+    /// <summary>Seconds of the turn to the city and back (a cut under Reduced Motion).</summary>
+    [Min(0f)] public float citySeconds = 0.6f;
+
+    /// <summary>The stand-in's sky by day (the hall's pale morning).</summary>
+    public Color citySkyDay = new Color(0.78f, 0.87f, 0.94f, 1f);
+
+    /// <summary>The stand-in's sky at full evening (the hall's dusk).</summary>
+    public Color citySkyEvening = new Color(0.86f, 0.52f, 0.42f, 1f);
+
+    /// <summary>The furthest towers by day (hazy).</summary>
+    public Color cityFarDay = new Color(0.64f, 0.71f, 0.8f, 1f);
+
+    /// <summary>The nearest towers by day (the hall's teal-grey).</summary>
+    public Color cityNearDay = new Color(0.33f, 0.42f, 0.5f, 1f);
+
+    /// <summary>The furthest towers at full evening.</summary>
+    public Color cityFarEvening = new Color(0.42f, 0.33f, 0.47f, 1f);
+
+    /// <summary>The nearest towers at full evening (the hall's dark navy).</summary>
+    public Color cityNearEvening = new Color(0.13f, 0.13f, 0.22f, 1f);
+
+    /// <summary>The towers' lit windows (the hall's warm ivory; faint by day, full at evening).</summary>
+    public Color cityWindowLight = new Color(1f, 0.85f, 0.55f, 1f);
+
+    [Header("Inspection at the desk (the desk-first redesign, item 11)")]
+    /// <summary>Where the rulebook card lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat).</summary>
+    public Vector2 rulebookAt = new Vector2(-0.3f, -0.1f);
+
+    [Header("Stamps (the desk-first redesign, item 12)")]
+    /// <summary>How many presses one inking lasts (Saleh 2026-10-05: "the player picks stamps, inks them, then stamps on the document"; 1: ink before every stamp).</summary>
+    [Min(1)] public int stampPressesPerInking = 1;
+
+    /// <summary>Where the stamp tray lies out on the desk: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame).</summary>
+    public Vector2 stampTrayOut = new Vector2(0.27f, -0.13f);
+
+    /// <summary>How far the tray slides in toward the chair from where it lies out, in metres.</summary>
+    [Min(0f)] public float stampTraySlide = 0.22f;
+
+    /// <summary>How far below the desk top the tray rests while in, in metres (under the desk's near edge).</summary>
+    [Min(0f)] public float stampTrayDrop = 0.06f;
+
+    /// <summary>Seconds the tray takes to slide out or in (a cut under Reduced Motion).</summary>
+    [Min(0f)] public float stampTraySeconds = 0.3f;
+
+    /// <summary>How high a held stamp floats above the desk under the pointer, in metres.</summary>
+    [Min(0f)] public float stampLift = 0.06f;
+
+    /// <summary>Seconds a press takes, down and up (on a paper or the ink pad).</summary>
+    [Min(0f)] public float stampPressSeconds = 0.18f;
+
+    /// <summary>The traveller's side of the desk where the stamped passport, dropped, hands the papers back: the strip this deep (metres) at the desk's far edge along the office view.</summary>
+    [Min(0f)] public float handBackDepth = 0.14f;
 
     [Header("Desk view (piece 10)")]
     /// <summary>The camera tilted forward over the desk (a click on the mat): how far it moves from the art office's view (forward and up, metres), how much further it pitches than aiming at the mat's centre (degrees), and the blend's seconds (a cut under Reduced Motion).</summary>

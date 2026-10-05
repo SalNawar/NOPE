@@ -67,8 +67,17 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>Poses the papers held in the hand in front of the office camera (piece 10; optional).</summary>
     [SerializeField] private PaperExaminer examiner;
 
-    /// <summary>The stamp tray (piece 10; optional), placed over the stamp's click box through the office camera.</summary>
-    [SerializeField] private StampTray stampTray;
+    /// <summary>The city view (the desk-first redesign, item 6; optional): posed from the art's Cinemachine camera, turned left.</summary>
+    [SerializeField] private CityView cityView;
+
+    /// <summary>Inspection at the desk (the desk-first redesign, item 11; optional): the values' places are seen through the office camera, and the rulebook lies on the desk.</summary>
+    [SerializeField] private DeskInspect deskInspect;
+
+    /// <summary>The rulebook on the desk (optional): laid beside the mat in the office view's frame (DeskConfigSO.rulebookAt).</summary>
+    [SerializeField] private DeskRulebook rulebook;
+
+    /// <summary>The physical stamps (the desk-first redesign, item 12; optional): the tray placed on the desk in the office view's frame, the pointer projected through the office camera.</summary>
+    [SerializeField] private DeskStampTray stampTray;
 
     [Header("PC")]
     /// <summary>The desktop's clone on the PC's glass.</summary>
@@ -84,6 +93,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     [SerializeField] private Clickable pcPower;
 
     [Header("Desk")]
+    /// <summary>The papers' desk (optional): told which way the office camera looks over the scanner, so no paper is left where the scanner hides it.</summary>
+    [SerializeField] private DeskController desk;
+
     /// <summary>The desk plane papers lie on.</summary>
     [SerializeField] private DeskSurface surface;
 
@@ -173,6 +185,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The art office camera's priority; the desk view sits one above it (DeskView; audit R5-015).</summary>
     private const int OfficeCameraPriority = 100;
 
+    /// <summary>How far above the desk top the rulebook card lies (metres), clear of the desk's own surface.</summary>
+    private const float RulebookLift = 0.001f;
+
     /// <summary>How far above the art scanner's top its bed lies (metres), so a scanning paper clears the glass.</summary>
     private const float ScannerBedLift = 0.002f;
 
@@ -187,6 +202,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     private const int RaycastHits = 16;
 
     private Dictionary<OfficeAnchorId, ResolvedAnchor> _anchors;
+
+    /// <summary>The art office's camera, once bound.</summary>
+    private Camera _office;
 
     /// <summary>The art's office Cinemachine camera when the office camera has a brain to blend it (the desk view needs both), else null.</summary>
     private CinemachineCamera _officeVcam;
@@ -224,7 +242,10 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             return;
         }
 
+        _office = office;
         ReadyCamera(office);
+        if (deskInspect != null)
+            deskInspect.SetCamera(office);
         if (wheel != null)
             wheel.SetCamera(office);
         foreach (OverlayCallout callout in callouts ?? Array.Empty<OverlayCallout>())
@@ -232,8 +253,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 callout.SetCamera(office);
         if (examiner != null)
             examiner.SetCamera(office);
-        if (stampTray != null)
-            stampTray.SetCamera(office);
         if (frame != null)
             frame.DrawAfter(office);
 
@@ -391,6 +410,15 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
             if (scanHint != null)
                 FaceCamera(scanHint, scanner.BedPoint + Vector3.up * HintHeight, viewer);
+
+            // The shadow behind the scanner its body hides from the office camera (the desk-first redesign, item 4).
+            if (this.desk != null && config != null)
+            {
+                float body = artScanner ? spot.Bounds.size.y : DeskScanner.PlaceholderHeight;
+                Vector3 toScanner = s.position + Vector3.up * body - viewer;
+                float elevation = Mathf.Atan2(-toScanner.y, new Vector2(toScanner.x, toScanner.z).magnitude) * Mathf.Rad2Deg;
+                this.desk.SetScannerView(toScanner, ScannerClearance.Shadow(body, elevation, config.scannerShadowMax));
+            }
         }
 
         if (surface != null)
@@ -411,9 +439,29 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (deskView != null)
         {
             if (_officeVcam != null)
+            {
                 deskView.Bind(_officeVcam, deskCentre);
+                if (cityView != null)
+                    cityView.Bind(_officeVcam);
+            }
             else
                 Debug.LogWarning("[OfficeSceneBinder] The art office has no Cinemachine camera with a brain on the office camera (Anchor_OfficeVCam): the desk view stays off. See docs/SCENE_CONTRACT_GAMEPLAY.md.", this);
+        }
+
+        // The stamp tray lies out right of and nearer than the mat's centre in the office view's frame (the desk-first redesign, item 12).
+        if (stampTray != null && config != null && _office != null)
+        {
+            Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
+            Vector3 right = Vector3.Cross(Vector3.up, level);
+            Vector3 outPoint = new Vector3(deskCentre.x, top, deskCentre.z) + right * config.stampTrayOut.x + level * config.stampTrayOut.y;
+            stampTray.Bind(_office, outPoint, level);
+        }
+        if (rulebook != null && config != null && _office != null)
+        {
+            Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
+            Vector3 right = Vector3.Cross(Vector3.up, level);
+            Vector3 at = new Vector3(deskCentre.x, top + RulebookLift, deskCentre.z) + right * config.rulebookAt.x + level * config.rulebookAt.y;
+            rulebook.transform.SetPositionAndRotation(at, Quaternion.LookRotation(level, Vector3.up));
         }
 
         if (handOver != null)
@@ -479,8 +527,6 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             }
 
             PlaceBox(prop.click, anchor, Vector3.zero);
-            if (prop.anchor == OfficeAnchorId.Stamp && stampTray != null)
-                stampTray.SetFollow(prop.click.transform);
             if (prop.click.TryGetComponent(out DeskReaction reaction))
             {
                 reaction.SetTarget(anchor.Transform);

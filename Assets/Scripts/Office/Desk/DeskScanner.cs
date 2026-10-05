@@ -15,6 +15,9 @@ public sealed class DeskScanner : MonoBehaviour
     /// <summary>The click box's height over the scanner's foot (metres): the binder sizes the box and the default bed sits halfway up it (audit R5-015).</summary>
     public const float BoxHeight = 0.12f;
 
+    /// <summary>The stand-in flatbed's height over the desk (metres, its hinge's top): what its body hides behind it (ScannerClearance.Shadow) where the art has no scanner.</summary>
+    public const float PlaceholderHeight = 0.075f;
+
     /// <summary>The drop area, in local XZ, centred on the transform.</summary>
     [SerializeField] private Vector2 dropSize = new Vector2(0.4f, 0.32f);
 
@@ -45,6 +48,17 @@ public sealed class DeskScanner : MonoBehaviour
     {
         Vector3 local = transform.InverseTransformPoint(world);
         return new DeskRect(0f, 0f, dropSize.x, dropSize.y).Contains(local.x, local.z);
+    }
+
+    /// <summary>The drop area's four corners in world space (the scanner's footprint on the desk: ScannerClearance keeps papers out of it).</summary>
+    public Vector3[] Corners()
+    {
+        Vector2 half = dropSize / 2f;
+        return new[]
+        {
+            transform.TransformPoint(new Vector3(-half.x, 0f, -half.y)), transform.TransformPoint(new Vector3(half.x, 0f, -half.y)),
+            transform.TransformPoint(new Vector3(-half.x, 0f, half.y)), transform.TransformPoint(new Vector3(half.x, 0f, half.y)),
+        };
     }
 
     /// <summary>The bed's centre in world space.</summary>

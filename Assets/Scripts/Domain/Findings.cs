@@ -413,3 +413,26 @@ public sealed class FindingLog
         return true;
     }
 }
+
+/// <summary>
+/// The clear mistakes a finding marks on the desk's papers (the desk-first
+/// redesign, Saleh 2026-10-05, item 11: "check documents at the desk,
+/// highlight clear mistakes"): a logged difference (a value against another,
+/// a rule it breaks, a date that fails) marks each of its sides that is a
+/// paper's field, so the box stays highlighted for the case; a match or a
+/// note marks nothing. Pure; DeskInspect paints the marks.
+/// </summary>
+public static class FindingMarks
+{
+    /// <summary>The papers' fields (document, field) <paramref name="finding"/> marks: none unless it is a difference.</summary>
+    public static List<(int document, int field)> Fields(Finding finding)
+    {
+        var fields = new List<(int, int)>();
+        if (finding == null || !FindingRules.IsDifference(finding.Kind))
+            return fields;
+        foreach (string key in new[] { finding.KeyA, finding.KeyB })
+            if (PickKeys.TryField(key, out int document, out int field) && !fields.Contains((document, field)))
+                fields.Add((document, field));
+        return fields;
+    }
+}

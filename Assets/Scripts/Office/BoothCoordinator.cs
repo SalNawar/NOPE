@@ -5,11 +5,12 @@ using UnityEngine.UI;
 /// <summary>
 /// Applies BoothRules and the wake rules to the office: from the view (the PC
 /// frame open or not), the screen's power, the shift's phase (set by
-/// GameManager), the wheel, a pending citation slip, the stamp tray, the
+/// GameManager), the wheel, a pending citation slip, a stamp in the hand, the
 /// papers held in the hand and the desk view, it decides which of the desktop,
 /// the PC, the power buttons, the desk props, the papers (on the desk and in
-/// the hand), the desk catcher, Escape's put-back, the traveller, the wheel,
-/// the stamp tray, the mat, the desk view's return, its "▲ Back" control and
+/// the hand; in the desk view their boxes pick where they lie), the desk
+/// catcher, Escape's put-back, the traveller, the wheel, the stamps, the mat,
+/// the desk view's return, its "▲ Back" control and
 /// the mouse wheel take input, whether the office case HUD shows, and where
 /// held papers sit (beside the open frame,
 /// dipped under the open wheel: PaperExaminer); it returns the desk view when
@@ -58,14 +59,17 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>Poses the papers held in the hand (piece 10; optional): beside the open frame, dipped under the open wheel.</summary>
     [SerializeField] private PaperExaminer examiner;
 
-    /// <summary>The stamp tray (piece 10; optional): Accept and Deny at the desk.</summary>
-    [SerializeField] private StampTray stampTray;
+    /// <summary>The physical stamps (the desk-first redesign, item 12; optional): the verdict at the desk.</summary>
+    [SerializeField] private DeskStampTray stampTray;
 
     /// <summary>The office case HUD (piece 10; optional): the claim tag and the office compare strip.</summary>
     [SerializeField] private OfficeCaseHud hud;
 
     /// <summary>The desk view (piece 10; optional): the camera tilted forward over the desk.</summary>
     [SerializeField] private DeskView deskView;
+
+    /// <summary>The city view (the desk-first redesign, item 6; optional): the camera turned left to the city.</summary>
+    [SerializeField] private CityView cityView;
 
     private BoothPhase _phase = BoothPhase.NoTraveller;
     private int _day;
@@ -87,7 +91,7 @@ public sealed class BoothCoordinator : MonoBehaviour
         if (wheel != null)
             wheel.OpenChanged += HandleWheel;
         if (stampTray != null)
-            stampTray.OpenChanged += Apply;
+            stampTray.Changed += Apply;
         if (desk != null)
         {
             desk.ScanFinished += HandleScanFinished;
@@ -95,6 +99,8 @@ public sealed class BoothCoordinator : MonoBehaviour
         }
         if (deskView != null)
             deskView.Changed += Apply;
+        if (cityView != null)
+            cityView.Changed += Apply;
     }
 
     private void OnDisable()
@@ -106,7 +112,7 @@ public sealed class BoothCoordinator : MonoBehaviour
         if (wheel != null)
             wheel.OpenChanged -= HandleWheel;
         if (stampTray != null)
-            stampTray.OpenChanged -= Apply;
+            stampTray.Changed -= Apply;
         if (desk != null)
         {
             desk.ScanFinished -= HandleScanFinished;
@@ -114,6 +120,8 @@ public sealed class BoothCoordinator : MonoBehaviour
         }
         if (deskView != null)
             deskView.Changed -= Apply;
+        if (cityView != null)
+            cityView.Changed -= Apply;
     }
 
     /// <summary>The first application, once every component has woken (Awake runs before any Start).</summary>
@@ -129,6 +137,8 @@ public sealed class BoothCoordinator : MonoBehaviour
                 screen.Wake(WakeReason.TravellerPresented);
             if (deskView != null)
                 deskView.Return();
+            if (cityView != null)
+                cityView.Return();
         }
         Apply();
     }
@@ -176,20 +186,23 @@ public sealed class BoothCoordinator : MonoBehaviour
         phase: _phase,
         wheelOpen: wheel != null && wheel.IsOpen,
         citationPending: _citationPending,
-        stampOpen: stampTray != null && stampTray.IsOpen,
+        stampHeld: stampTray != null && stampTray.IsHolding,
         papersHeld: desk != null && desk.HeldCount > 0,
         deskView: deskView != null && deskView.IsOn,
         deskViewBound: deskView != null && deskView.IsBound);
 
-    /// <summary>Applies the rules. The wheel, the stamp tray and the desk view first: closing or returning either changes the context the rest reads (their events re-apply too, harmlessly).</summary>
+    /// <summary>Applies the rules. The wheel, the stamps and the desk view first: closing, putting down or returning changes the context the rest reads (their events re-apply too, harmlessly).</summary>
     private void Apply()
     {
         if (wheel != null)
             wheel.SetCanOpen(BoothRules.Evaluate(Context()).WheelAllowed);
         if (stampTray != null)
-            stampTray.SetCanOpen(BoothRules.Evaluate(Context()).StampTrayAllowed);
+            stampTray.SetLive(BoothRules.Evaluate(Context()).StampsLive);
         if (deskView != null && !BoothRules.Evaluate(Context()).DeskViewAllowed)
             deskView.Return();
+        // The city view turns while the mat's toggle would be live in the normal view (the office view, nothing held, no newsletter, wheel or stamp); anything else returns it.
+        if (cityView != null)
+            cityView.SetLive(BoothRules.Evaluate(Context()).DeskViewToggleLive && (deskView == null || !deskView.IsOn));
 
         BoothInput input = BoothRules.Evaluate(Context());
         if (screen != null)
@@ -210,6 +223,7 @@ public sealed class BoothCoordinator : MonoBehaviour
             desk.SetHeldLive(input.HeldPapersLive, input.HeldDragOutLive);
             desk.SetDeskCatcherLive(input.DeskCatcherLive);
             desk.SetExamineEscapeLive(input.ExamineEscapeLive);
+            desk.SetRowsOnDesk(input.PapersLive && deskView != null && deskView.IsOn);
         }
         if (hud != null)
             hud.SetVisible(input.CaseHudVisible);

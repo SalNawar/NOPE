@@ -90,6 +90,12 @@ public sealed class MatchBoard : MonoBehaviour
     /// <summary>True while a value, a rule or the date is held (Esc lets go; the Holding region).</summary>
     public bool IsHolding => _special != null || (compare != null && compare.Holding);
 
+    /// <summary>The key of what is held (a value, a rule or the date), or null: the desk draws its line from it to the pointer too (DeskInspect).</summary>
+    public string HoldKey => _holdKey;
+
+    /// <summary>The two keys of the line shown (null when none), its look and its label: the desk draws the same line between them where they lie (DeskInspect; the desk-first redesign, item 11).</summary>
+    public (string a, string b, FindingLook look, string label) Line => (_linkA, _linkB, _linkLook, _linkLabel);
+
     /// <summary>The status line's Cancel (the keys' Holding region).</summary>
     public Button CancelButton => cancelButton;
 

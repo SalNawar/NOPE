@@ -93,9 +93,11 @@ public sealed class DeskView : MonoBehaviour
     /// <summary>
     /// Poses the desk camera from the art office's camera <paramref name="office"/>
     /// and the mat's centre (the office binder, once the art office is bound):
-    /// moved along the view's level forward and up by the knobs, its yaw kept,
-    /// pitched by DeskViewPose; the lens copied. The camera then waits at
-    /// priority 0.
+    /// looking down at the knob's pitch (80 degrees; Saleh 2026-10-05) onto
+    /// the aim point (the mat's centre moved by the knobs along the view's
+    /// level right and forward) from the knob's distance, its yaw kept
+    /// (DeskViewPose); the lens copied, with the knob's field of view. The
+    /// camera then waits at priority 0.
     /// </summary>
     public void Bind(CinemachineCamera office, Vector3 matCentre)
     {
@@ -110,10 +112,15 @@ public sealed class DeskView : MonoBehaviour
         level.Normalize();
 
         DeskViewTuning tuning = config.deskView;
-        float pitch = DeskViewPose.Pitch(art.position.y - matCentre.y, Vector3.Dot(matCentre - art.position, level), tuning);
-        deskCamera.transform.SetPositionAndRotation(art.position + level * tuning.forward + Vector3.up * tuning.rise,
-                                                    Quaternion.LookRotation(level, Vector3.up) * Quaternion.Euler(pitch, 0f, 0f));
-        deskCamera.Lens = office.Lens;
+        Vector3 right = Vector3.Cross(Vector3.up, level);
+        Vector3 aim = matCentre + right * tuning.aimRight + level * tuning.aimForward;
+        (float back, float up) = DeskViewPose.Offset(tuning);
+        deskCamera.transform.SetPositionAndRotation(aim - level * back + Vector3.up * up,
+                                                    Quaternion.LookRotation(level, Vector3.up) * Quaternion.Euler(DeskViewPose.Pitch(tuning), 0f, 0f));
+        LensSettings lens = office.Lens;
+        if (tuning.fieldOfView > 0f)
+            lens.FieldOfView = tuning.fieldOfView;
+        deskCamera.Lens = lens;
         _onPriority = office.Priority.Value + PriorityAboveOffice;
         deskCamera.Priority = IsOn ? _onPriority : IdlePriority;
         deskCamera.gameObject.SetActive(true);
@@ -132,6 +139,9 @@ public sealed class DeskView : MonoBehaviour
         if (_toggleLive)
             Set(true);
     }
+
+    /// <summary>Tilts into the desk view whatever the mat's toggle says (no-op if it is on or unbound): a stamp picked up from the tray, to be pressed on the papers lying on the desk (the desk-first redesign, item 12).</summary>
+    public void TiltInNow() => Set(true);
 
     /// <summary>Returns to the normal view (no-op if it is on): Escape, the right-click, the next traveller, a newsletter.</summary>
     public void Return() => Set(false);

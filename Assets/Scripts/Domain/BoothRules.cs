@@ -29,8 +29,8 @@ public readonly struct BoothContext
     /// <summary>A citation slip waits for Acknowledge (the traveller has left; the slip holds the clock and the screen).</summary>
     public readonly bool CitationPending;
 
-    /// <summary>The stamp tray (Accept and Deny at the desk, piece 10) is open.</summary>
-    public readonly bool StampOpen;
+    /// <summary>A desk stamp is in the hand (the desk-first redesign, item 12: the APPROVED or DENIED stamp picked up from the stamp tray).</summary>
+    public readonly bool StampHeld;
 
     /// <summary>At least one paper is held in the hand (piece 10).</summary>
     public readonly bool PapersHeld;
@@ -42,14 +42,14 @@ public readonly struct BoothContext
     public readonly bool DeskViewBound;
 
     /// <summary>Creates a context.</summary>
-    public BoothContext(bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool citationPending, bool stampOpen, bool papersHeld, bool deskView, bool deskViewBound)
+    public BoothContext(bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool citationPending, bool stampHeld, bool papersHeld, bool deskView, bool deskViewBound)
     {
         Focused = focused;
         ScreenOn = screenOn;
         Phase = phase;
         WheelOpen = wheelOpen;
         CitationPending = citationPending;
-        StampOpen = stampOpen;
+        StampHeld = stampHeld;
         PapersHeld = papersHeld;
         DeskView = deskView;
         DeskViewBound = deskViewBound;
@@ -62,35 +62,35 @@ public readonly struct BoothInput
     /// <summary>The desktop takes clicks: the frame open, the screen on, no newsletter.</summary>
     public readonly bool DesktopInteractive;
 
-    /// <summary>Clicking the PC opens its frame: in the office view, no newsletter, the wheel and the stamp tray closed.</summary>
+    /// <summary>Clicking the PC opens its frame: in the office view, no newsletter, the wheel closed, no stamp in the hand.</summary>
     public readonly bool CrtFocusable;
 
-    /// <summary>The power buttons (the frame's and the PC's knob) toggle the screen: no newsletter, the wheel and the stamp tray closed, no pending citation slip.</summary>
+    /// <summary>The power buttons (the frame's and the PC's knob) toggle the screen: no newsletter, the wheel closed, no pending citation slip.</summary>
     public readonly bool PowerButtonLive;
 
-    /// <summary>The desk props react to clicks: the office view, no newsletter, the wheel and the stamp tray closed.</summary>
+    /// <summary>The desk props react to clicks: the office view, no newsletter, the wheel closed, no stamp in the hand.</summary>
     public readonly bool PropsLive;
 
-    /// <summary>The papers on the desk can be dragged and clicked: as the props, while a traveller is at the desk and the camera is tilted over the desk (Saleh 2026-09-30: "moving papers should only be possible when camera is tilted"; a click on a paper in the normal view reaches the mat under it and tilts in); in the normal view only when there is no desk view.</summary>
+    /// <summary>The papers on the desk can be dragged and clicked: the office view, no newsletter, the wheel closed (a stamp in the hand presses on them), while a traveller is at the desk and the camera is tilted over the desk (Saleh 2026-09-30: "moving papers should only be possible when camera is tilted"; a click on a paper in the normal view reaches the mat under it and tilts in); in the normal view only when there is no desk view.</summary>
     public readonly bool PapersLive;
 
     /// <summary>The wheel may be open: the office view while a traveller is at the desk (false closes an open wheel).</summary>
     public readonly bool WheelAllowed;
 
-    /// <summary>The traveller hit zone opens the wheel: the wheel is allowed and closed, the stamp tray closed.</summary>
+    /// <summary>The traveller hit zone opens the wheel: the wheel is allowed and closed, no stamp in the hand.</summary>
     public readonly bool TravellerLive;
 
-    /// <summary>Papers held in the hand take clicks (their rows, a put-back): a traveller at the desk, in either view (beside the open frame too), no newsletter, the wheel and the stamp tray closed.</summary>
+    /// <summary>Papers held in the hand take clicks (their rows, a put-back): a traveller at the desk, in either view (beside the open frame too), no newsletter, the wheel closed.</summary>
     public readonly bool HeldPapersLive;
 
     /// <summary>A click on the desk puts every held paper back: as the props, while a traveller is at the desk and a paper is held (in either view).</summary>
     public readonly bool DeskCatcherLive;
 
-    /// <summary>Escape puts every held paper back: as the desk catcher (Escape closes the frame, the wheel or the stamp tray first).</summary>
+    /// <summary>Escape puts every held paper back: as the desk catcher (Escape closes the frame or the wheel first, and puts a held stamp down).</summary>
     public readonly bool ExamineEscapeLive;
 
-    /// <summary>The stamp tray may be open: the office view while a traveller is at the desk (false closes an open tray).</summary>
-    public readonly bool StampTrayAllowed;
+    /// <summary>The stamp tray's stamps and ink pad take clicks: the office view while a traveller is at the desk and the wheel is closed (false puts a held stamp down; the tray itself may stay out).</summary>
+    public readonly bool StampsLive;
 
     /// <summary>The office case HUD (the claim tag and the office compare strip) shows: the office view while a traveller is at the desk.</summary>
     public readonly bool CaseHudVisible;
@@ -98,13 +98,13 @@ public readonly struct BoothInput
     /// <summary>A click on the mat tilts the camera into the desk view and back: the props are live and no paper is held (with papers held the desk catcher takes the click).</summary>
     public readonly bool DeskViewToggleLive;
 
-    /// <summary>Escape and a right-click on empty space return from the desk view: the desk view is on and the mat's toggle is live (Escape closes the frame, the wheel or the stamp tray and puts held papers back first).</summary>
+    /// <summary>Escape and a right-click on empty space return from the desk view: the desk view is on and the mat's toggle is live (Escape closes the frame or the wheel, puts a held stamp down and puts held papers back first).</summary>
     public readonly bool DeskViewReturnLive;
 
     /// <summary>The desk view may stay: no newsletter, the wheel closed and the PC frame closed (false returns to the normal view: a click on the intercom, the traveller or the PC from the tilted view blends straight up to the wheel or the frame; Saleh 2026-09-30).</summary>
     public readonly bool DeskViewAllowed;
 
-    /// <summary>The "▲ Back" control shows at the top of the office overlay and the mouse wheel rolled up returns from the desk view: the desk view is on and the props are live (no frame, newsletter, wheel or stamp tray), papers held or not.</summary>
+    /// <summary>The "▲ Back" control shows at the top of the office overlay and the mouse wheel rolled up returns from the desk view: the desk view is on and the props are live (no frame, newsletter, wheel or stamp in the hand), papers held or not.</summary>
     public readonly bool DeskViewBackLive;
 
     /// <summary>The mouse wheel rolled down over the empty mat tilts into the desk view: the view is normal and the mat's toggle is live (the pointer must be on the mat, not on UI: DeskView checks it).</summary>
@@ -122,7 +122,7 @@ public readonly struct BoothInput
     public BoothInput(bool desktopInteractive, bool crtFocusable, bool powerButtonLive,
                       bool propsLive, bool papersLive, bool wheelAllowed, bool travellerLive,
                       bool heldPapersLive, bool deskCatcherLive, bool examineEscapeLive,
-                      bool stampTrayAllowed, bool caseHudVisible,
+                      bool stampsLive, bool caseHudVisible,
                       bool deskViewToggleLive, bool deskViewReturnLive, bool deskViewAllowed,
                       bool deskViewBackLive, bool deskViewScrollInLive, bool heldDragOutLive)
     {
@@ -136,7 +136,7 @@ public readonly struct BoothInput
         HeldPapersLive = heldPapersLive;
         DeskCatcherLive = deskCatcherLive;
         ExamineEscapeLive = examineEscapeLive;
-        StampTrayAllowed = stampTrayAllowed;
+        StampsLive = stampsLive;
         CaseHudVisible = caseHudVisible;
         DeskViewToggleLive = deskViewToggleLive;
         DeskViewReturnLive = deskViewReturnLive;
@@ -150,12 +150,14 @@ public readonly struct BoothInput
 /// <summary>
 /// The booth's input table (the physical-desk spec section 1.9 as the office
 /// move changed it: the PC opens a frame over the office at once, with no
-/// camera blend; piece 10 adds the stamp tray, papers held in the hand and the
-/// desk view): from the frame, the screen's power, the shift's phase, the
-/// wheel, a pending citation slip, the stamp tray, held papers, the desk
-/// view and whether there is one, which of the desktop, the PC, the power buttons, the props, the
-/// papers (on the desk and in the hand), the desk catcher, Escape, the wheel,
-/// the stamp tray, the traveller, the case HUD, the mat, the desk view's
+/// camera blend; piece 10 adds papers held in the hand and the desk view; the
+/// desk-first redesign makes the stamps physical: a stamp in the hand is a
+/// tool, not a modal tray): from the frame, the screen's power, the shift's
+/// phase, the wheel, a pending citation slip, a stamp in the hand, held
+/// papers, the desk view and whether there is one, which of the desktop, the
+/// PC, the power buttons, the props, the papers (on the desk and in the
+/// hand), the desk catcher, Escape, the wheel, the stamps, the traveller, the
+/// case HUD, the mat, the desk view's
 /// return, its "▲ Back" control, the mouse wheel and a held paper's drag out
 /// of the hand take input or show. Pure,
 /// so every row is tested headless;
@@ -168,10 +170,11 @@ public static class BoothRules
     {
         bool newsletter = c.Phase == BoothPhase.Newsletter;
         bool atDesk = c.Phase == BoothPhase.TravellerAtDesk;
-        bool modal = c.WheelOpen || c.StampOpen;
-        bool props = !c.Focused && !newsletter && !modal;
+        bool modal = c.WheelOpen;
+        bool desk = !c.Focused && !newsletter && !modal;
+        bool props = desk && !c.StampHeld;
         bool office = !c.Focused && atDesk;
-        bool papers = props && atDesk && (c.DeskView || !c.DeskViewBound);
+        bool papers = desk && atDesk && (c.DeskView || !c.DeskViewBound);
         bool catcher = props && atDesk && c.PapersHeld;
         bool mat = props && !c.PapersHeld;
         bool held = atDesk && !modal;
@@ -182,11 +185,11 @@ public static class BoothRules
             propsLive: props,
             papersLive: papers,
             wheelAllowed: office,
-            travellerLive: office && !modal,
+            travellerLive: office && !modal && !c.StampHeld,
             heldPapersLive: held,
             deskCatcherLive: catcher,
             examineEscapeLive: catcher,
-            stampTrayAllowed: office,
+            stampsLive: office && !modal,
             caseHudVisible: office,
             deskViewToggleLive: mat,
             deskViewReturnLive: c.DeskView && mat,

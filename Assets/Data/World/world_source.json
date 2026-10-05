@@ -25011,6 +25011,84 @@
         "tier": "Full"
       },
       {
+        "key": "stamp.label.approved",
+        "text": "APPROVED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.label.denied",
+        "text": "DENIED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.label.ink",
+        "text": "INK",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.handBack.approved",
+        "text": "Hand the papers back: APPROVED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.handBack.denied",
+        "text": "Hand the papers back: DENIED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.hint.pick",
+        "text": "Pick up the APPROVED or the DENIED stamp.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.hint.ink",
+        "text": "Press the stamp on the ink pad.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.hint.press",
+        "text": "Stamp the passport.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.hint.dry",
+        "text": "No ink: press the stamp on the ink pad first.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "city.look",
+        "text": "< City (A)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "city.back",
+        "text": "Desk (D) >",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.title",
+        "text": "TODAY'S RULES",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.rulebook.none",
+        "text": "No rules today.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "tooltip.credits",
         "text": "{1}: {0}",
         "gloss": "None",

@@ -411,6 +411,18 @@ public class DeskPapersTests
     public void PaperClicks_DecisionTable(bool held, bool secondary, bool onRow, PaperClickAction expected) =>
         Assert.AreEqual(expected, PaperClicks.Decide(held, secondary, onRow));
 
+    // The desk-first redesign: rows of a paper lying on the desk pick in the desk view (item 11); a stamp in the hand presses on a lying paper (item 12).
+    [TestCase(false, false, true, true, false, PaperClickAction.Pick)]
+    [TestCase(false, false, false, true, false, PaperClickAction.Examine)]
+    [TestCase(false, true, true, true, false, PaperClickAction.None)]
+    [TestCase(false, false, true, true, true, PaperClickAction.Press)]
+    [TestCase(false, false, false, false, true, PaperClickAction.Press)]
+    [TestCase(false, true, false, false, true, PaperClickAction.None)]
+    [TestCase(true, false, true, true, true, PaperClickAction.Pick)]
+    [TestCase(true, false, false, true, true, PaperClickAction.PutBack)]
+    public void PaperClicks_OnTheDesk_PickAndPress(bool held, bool secondary, bool onRow, bool pickLying, bool stampHeld, PaperClickAction expected) =>
+        Assert.AreEqual(expected, PaperClicks.Decide(held, secondary, onRow, pickLying, stampHeld));
+
     // A held paper never hides the papers still on the desk when it can help it.
 
     [TestCase(true, 0, 0, true)]

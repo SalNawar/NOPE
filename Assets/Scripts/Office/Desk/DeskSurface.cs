@@ -52,6 +52,17 @@ public sealed class DeskSurface : MonoBehaviour
         return transform.TransformPoint(new Vector3(x, 0f, z));
     }
 
+    /// <summary>The clamp area's four corners on the plane, in world space (the frame ScannerClearance keeps a moved paper inside).</summary>
+    public Vector3[] Corners()
+    {
+        Vector2 half = size / 2f;
+        return new[]
+        {
+            transform.TransformPoint(new Vector3(-half.x, 0f, -half.y)), transform.TransformPoint(new Vector3(half.x, 0f, -half.y)),
+            transform.TransformPoint(new Vector3(-half.x, 0f, half.y)), transform.TransformPoint(new Vector3(half.x, 0f, half.y)),
+        };
+    }
+
     /// <summary>The point at (u, v) across the landing area (0..1 each; (0, 0) is its near left corner), on the plane.</summary>
     public Vector3 PointAt(Vector2 uv)
     {
