@@ -90,10 +90,12 @@ rules that still say "visa", "Departure Manifest", "Labour Contract" or "Displac
 are A's to rewrite with the bulletins. When A cuts fields, the forms here keep each remaining
 field's cell; re-point the cells after the cut.
 
-## Open questions for Saleh
+## Decisions (recorded as the defaults, 2026-10-05; Saleh's to overturn)
 
-1. The visa is now the passport's visa page (TC-101). OK, or a separate visa sticker document?
-2. The travel permit is the displaced's paper (TC-610). Should tourists carry a travel permit too?
-3. Should the machine-readable zone become a forgery check (a doctored page whose zone still
-   reads the true number or birth date)?
-4. The nations' cover colours and stand-in emblems: keep, or ask the art side for real-looking ones?
+1. The visa stays the passport's visa page (TC-101); there is no separate visa sticker.
+2. Tourists carry no travel permit: the Travel Permit (TC-610) is the displaced's paper.
+3. The machine-readable zone is not a forgery check (streamlining): it only repeats the page.
+4. The code-drawn covers and emblems stay as stand-ins; the art request (docs/ART_ASSET_LIST.md,
+   "Travel documents") stands.
+
+Track B (the desk stamps) presses its marks with `DeskDocument.Stamp` and `StampSpots` (TD4).
