@@ -1404,6 +1404,9 @@ public static partial class OfficeSceneUIBuilder
     /// </summary>
     private static DeskStampTray BuildStampTray(Transform overlay, Transform office, DeskConfigSO config)
     {
+        // The overlay's 2D stamp tray retired with its script when the stamps became physical: a scene built before
+        // still holds it, its script missing (a player logs "The referenced script ... is missing").
+        DestroyChildIfPresent(overlay, "StampTray");
         DestroyChildIfPresent(office, "StampTray");
         Transform host = EnsureChild(office, "StampTray");
         Transform tray = EnsureChild(host, "Tray");
