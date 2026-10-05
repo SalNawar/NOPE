@@ -888,7 +888,8 @@ public static class _TimeDeskAuditPlay
     /// <summary>The traveller's record in today's registry (by the registered name).</summary>
     /// <summary>
     /// The PC follows the day's ramp (lesson D7): the Papers menu lists the
-    /// traveller's papers handed over and no other, their Citizen Account
+    /// traveller's papers handed over and no other document (beside the rows
+    /// that flag the day's other papers missing), their Citizen Account
     /// lists a form on file only once the form is issued. The desk-first ramp
     /// (Introductions): the menu bar replaces the header, the shelf and the
     /// guided steps' foot; the scanner, the Departure Board's rows, the
@@ -901,7 +902,8 @@ public static class _TimeDeskAuditPlay
         MenuBarView shelf = Menus(o);
         var handed = (CasePapers)Field(Field(o.Ui, "_documents"), "_papers");
         int given = Enumerable.Range(0, c.documents.Count).Count(i => handed.State(i) != PaperState.NotHandedOver);
-        List<string> chips = shelf.Items.Where(x => x.Target.Tab == AppTab.Documents).Select(x => x.Label).ToList();
+        // The papers handed over; the rows to flag a paper missing (the day's papers not handed over, ShelfItem.MissingPaper) are not documents.
+        List<string> chips = shelf.Items.Where(x => x.Target.Tab == AppTab.Documents && x.MissingId == null).Select(x => x.Label).ToList();
         Check(chips.Count == given, $"d{day} slot {slot}: the Papers menu lists the traveller's {given} paper(s) handed over and no other [{string.Join(" | ", chips)}]");
         CheckShelfLayout(o, $"d{day} slot {slot}");
 
