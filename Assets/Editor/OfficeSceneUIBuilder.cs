@@ -957,9 +957,10 @@ public static partial class OfficeSceneUIBuilder
         dayText.fontStyle = FontStyles.Underline;
         BuildHoverHint(dateButton, "tray.date.hint", null, new Vector2(0.5f, 1f), new Vector2(0.5f, 0f));
         clockText = TrayText(tray, "ClockText", "09:00");
-        // Lay the row out now, so the saved scene holds the rects the layout group drives
-        // (as a scene opened in the editor does) and a rebuild compares equal to it.
-        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)tray);
+        // The row is NOT laid out here: the layout groups lay it out when the scene loads, as every
+        // other layout group this builder makes. Laying it out before the save (round 4 did) marks the
+        // readouts' rects as driven, and Unity writes driven rect values as zero: the saved scene then
+        // differed from the rebuild held in memory (the final pass, round 5).
 
         bar.SetAsLastSibling();
     }

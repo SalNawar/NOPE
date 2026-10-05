@@ -23,8 +23,8 @@ using UnityEngine.UI;
 /// stamped passport slid onto the traveller's side of the desk, where a strip
 /// marked "HAND BACK" shows while it can (OnTravellersSide; DeskController
 /// routes the drop), with "Hand the papers back" over the office as the
-/// secondary way; either decides the case (Decided), as the PC's Accept and
-/// Deny do. The tray, out, takes the room it lies on: DeskController moves
+/// secondary way; either decides the case (Decided), the only way a case is
+/// decided (the PC only investigates). The tray, out, takes the room it lies on: DeskController moves
 /// the papers off its footprint (TryFootprint). The rules are StampFlow's;
 /// the stamps take clicks while BoothRules.StampsLive (false puts a held
 /// stamp down). The office binder places the tray; Build Office UI builds its
