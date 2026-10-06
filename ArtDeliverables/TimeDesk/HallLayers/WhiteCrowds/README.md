@@ -1,0 +1,11 @@
+# Approved white crowd additions
+
+Uses the original six ReStory-style crowd meshes and alpha atlas without changing them. Adds nine complementary alpha compositions: singles, conversation trios, tall/short pairs, loose waiting groups, and asymmetric clusters. The new atlas RGB is ignored; all groups render as white silhouettes tinted by the hall clock.
+
+Fifteen fixed placements: ten main-floor/five balcony. Registered to the existing illustration and pan, with size proportional to distance from the painted floor horizon. Main groups peak at 42% opacity for original compositions and 46% for new ones; distant groups at 32%, balcony at 38%. Four-second ease-in/ease-out cycles are staggered independently. Reduced-motion mode keeps a stable population. Ground contacts share each group's fade. Neither positions nor poses animate.
+
+Verified with native camera captures at 08:00, 10:00, 12:00, 14:00, 16:30, 18:00, 22:00; six population samples; left and middle pan views; and live Play captures. A ten-minute sampled timeline checks opacity, visibility and fixed transforms. See validation.txt and CHECKLIST.md.
+
+Built-in image generation: complementary 3x3 alpha atlas, faceless solid silhouettes only, no costumes, faces or inner detail; singles, pairs, conversation triangles, staggered waiting groups, irregular clusters. Solid blue source fill ensures a usable alpha mask; the runtime shader ignores RGB and renders the approved white/pale-to-dark palette. Rejected noisy intermediate exports stay outside the project and are not referenced.
+
+Tools > Terminal Art > Crowds > Install Approved White Crowds reinstalls only these additions. Verify Approved White Crowds captures technical evidence. The original OfficeHallCrowdPalette and original HallCrowds assets stay unchanged.
