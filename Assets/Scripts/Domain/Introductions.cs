@@ -53,6 +53,9 @@ public static class Feature
     /// <summary>The rulebook: today's Directive Memo (the open destinations, from day 1).</summary>
     public const string Rulebook = "tool:rulebook";
 
+    /// <summary>The Translation Lens (Saleh 2026-10-06): on its first day the office's language stops being a choice (TranslationLens.LanguageLocked) and the Bureau issues the lens's first level.</summary>
+    public const string Lens = "tool:lens";
+
     // ---- Wheel entries (the requests follow the papers, the questions their own keys) ----
 
     /// <summary>The Look menu's garments (their clothes, against the Costume Guide; with the dress rule). Their face shows from day 1.</summary>
@@ -184,7 +187,7 @@ public sealed class Introductions
     /// <summary>The fixed named keys (tools, wheel entries, PC).</summary>
     private static readonly HashSet<string> Named = new HashSet<string>(StringComparer.Ordinal)
     {
-        Feature.Scanner, Feature.Board, Feature.Calendar, Feature.Rulebook, Feature.Clothes, Feature.Records, Feature.Standing
+        Feature.Scanner, Feature.Board, Feature.Calendar, Feature.Rulebook, Feature.Lens, Feature.Clothes, Feature.Records, Feature.Standing
     };
 
     /// <summary>One message per key of a day's introduces list that is not a named key (<see cref="IsNamedKey"/>) or is listed twice.</summary>

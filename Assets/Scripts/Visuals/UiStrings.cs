@@ -51,7 +51,10 @@ public sealed class UiStringEntry
 /// culture (R17) and strings are inserted verbatim, so canonical values stay
 /// exactly as generated. A right-to-left culture's text is shaped
 /// (ArabicShaper) after its arguments are filled; a culture label whose
-/// reading entry has a gloss shows the English word with it.
+/// reading entry has a gloss shows the English word with it. Every culture
+/// label it returns is remembered as a LensPhrase (its text as drawn, its
+/// English, its words), so the Translation Lens can find and translate it
+/// wherever it is shown.
 /// </summary>
 public sealed class UiStrings
 {
@@ -61,18 +64,30 @@ public sealed class UiStrings
     private readonly int _glossPercent;
     private readonly List<string> _missing = new List<string>();
     private readonly HashSet<string> _missingSet = new HashSet<string>(StringComparer.Ordinal);
+    private readonly Dictionary<string, string> _glossary;
+    private readonly Dictionary<string, LensPhrase> _phrases = new Dictionary<string, LensPhrase>(StringComparer.Ordinal);
+    private readonly List<LensPhrase> _phraseList = new List<LensPhrase>();
 
-    /// <summary>A lookup over the reading table and, when <paramref name="culture"/> is not null, a culture table (first entry per key wins).</summary>
-    public UiStrings(IReadOnlyList<UiStringEntry> reading, IReadOnlyList<UiStringEntry> culture, bool cultureRightToLeft, int glossPercent)
+    /// <summary>
+    /// A lookup over the reading table and, when <paramref name="culture"/> is
+    /// not null, a culture table (first entry per key wins), whose words'
+    /// English the lens reads from <paramref name="glossary"/> (null: none).
+    /// </summary>
+    public UiStrings(IReadOnlyList<UiStringEntry> reading, IReadOnlyList<UiStringEntry> culture, bool cultureRightToLeft, int glossPercent,
+                     IReadOnlyList<LensWord> glossary = null)
     {
         Fill(_reading, reading);
         Fill(_culture, culture);
         _rightToLeft = cultureRightToLeft;
         _glossPercent = glossPercent;
+        _glossary = LensWords.Glossary(glossary);
     }
 
     /// <summary>The keys looked up and found in no table, distinct, in first-miss order.</summary>
     public IReadOnlyCollection<string> MissingKeys => _missing;
+
+    /// <summary>Every culture label returned so far, as the lens reads it, in first-shown order (none when no culture table applies).</summary>
+    public IReadOnlyList<LensPhrase> Phrases => _phraseList;
 
     /// <summary>The string for a key (a template's placeholders unfilled).</summary>
     public string Get(string key) => Format(key);
@@ -91,12 +106,18 @@ public sealed class UiStrings
         _reading.TryGetValue(key, out UiStringEntry reading);
         if (_culture.TryGetValue(key, out UiStringEntry culture) && !string.IsNullOrEmpty(culture.text))
         {
-            string native = Fill(culture.text, args);
-            if (_rightToLeft)
-                native = ArabicShaper.ToVisual(native);
-            if (reading == null || string.IsNullOrEmpty(reading.text))
+            string logical = Fill(culture.text, args);
+            string native = _rightToLeft ? ArabicShaper.ToVisual(logical) : logical;
+            bool hasEnglish = reading != null && !string.IsNullOrEmpty(reading.text);
+            string english = hasEnglish ? Fill(reading.text, args) : null;
+            if (!_phrases.ContainsKey(native))
+            {
+                var phrase = new LensPhrase(logical, english, _rightToLeft, _glossary);
+                _phrases.Add(native, phrase);
+                _phraseList.Add(phrase);
+            }
+            if (!hasEnglish)
                 return native;
-            string english = Fill(reading.text, args);
             switch (reading.gloss)
             {
                 case GlossStyle.Below:
