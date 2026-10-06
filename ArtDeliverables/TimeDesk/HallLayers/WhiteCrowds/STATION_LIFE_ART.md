@@ -12,6 +12,6 @@ Shared prompt constraints: separate equal cells with transparent margins; human-
 
 ## Scene
 
-37 placements: 22 main floor, including five distant placements; 15 bridge placements. All 32 new activity types are represented, alongside five retained original/simple compositions. Distant groups use independently phased 84-second cycles with 56-second holds to keep the rear hall populated. Bridge groups hold longer than foreground groups. Fades remain four seconds and all transforms remain stationary.
+45 placements: 24 behind the rear portal bays, 15 on the bridge, four middle-floor activities and two near-floor groups. All 32 new activity types are represented, alongside retained original/simple compositions. Rear-floor groups use independently phased 84-second cycles with 56-second holds to keep the rear hall populated. Bridge groups hold longer than foreground groups. Fades remain four seconds and all transforms remain stationary.
 
-Review evidence: StationLifeReview-2026-10-07-Final.
+Review evidence: RearPortalPopulationReview-2026-10-07.

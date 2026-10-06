@@ -10,6 +10,7 @@ public sealed class HallWhiteCrowds : MonoBehaviour
         public MeshRenderer silhouette;
         public MeshRenderer contact;
         public bool balcony;
+        public float sourceFootY;
         public float cycle=80, phase, hold=38;
         [Range(0,1)] public float opacity=.52f;
     }
@@ -55,6 +56,7 @@ public sealed class HallWhiteCrowds : MonoBehaviour
                 var sprite=architecture.sprite;
                 properties.SetMatrix("_ArtToLocal",architecture.transform.worldToLocalMatrix);
                 properties.SetVector("_Canvas",new Vector4(sprite.pixelsPerUnit,sprite.pivot.x,sprite.pivot.y,group.balcony?1:0));
+                properties.SetFloat("_FootPixelY",group.sourceFootY);
             }
             group.silhouette.SetPropertyBlock(properties);
             if(group.contact!=null)

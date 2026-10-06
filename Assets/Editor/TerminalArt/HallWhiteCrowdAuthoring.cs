@@ -11,7 +11,7 @@ using UnityEngine.Rendering;
 public static class HallWhiteCrowdAuthoring
 {
     const string Folder="Assets/Art/Office/AnimeHallLayers/Completion/WhiteCrowds";
-    const string Report="ArtDeliverables/TimeDesk/HallLayers/WhiteCrowds/StationLifeReview-2026-10-07-Final";
+    const string Report="ArtDeliverables/TimeDesk/HallLayers/WhiteCrowds/RearPortalPopulationReview-2026-10-07";
     // Source-pixel foot anchors, explicitly separated from composition indices.
     // Main-floor placements stay inside the walking lanes, away from wall/door bases.
     readonly struct Placement
@@ -21,13 +21,17 @@ public static class HallWhiteCrowdAuthoring
         {feet=new Vector2(x,y);this.composition=composition;this.balcony=balcony;}
     }
     static readonly Placement[] Placements={
-        new(815,448,15),new(836,479,0),new(758,519,18),
-        new(1090,351,31),new(600,555,39),new(1490,605,40),
-        new(1328,451,20),new(1350,480,19),new(1400,525,21),
-        new(1400,566,17),new(822,396,35),new(1308,445,27),
-        new(520,590,28),new(1335,504,24),new(1080,344,11),
-        new(708,535,25),new(832,433,29),new(1090,376,22),
-        new(1066,347,34),new(1115,344,16),new(1318,470,30),new(780,553,23),
+        // Sparse near / middle hall: two foreground groups and four individual activities.
+        new(520,590,28),new(1400,566,17),new(815,448,15),
+        new(822,396,35),new(1308,445,27),new(1350,480,19),
+        // Station population behind the two rear bays, in three staggered depth rows.
+        new(910,349,16),new(900,346,18),new(950,345,31),new(1000,347,39),
+        new(1050,346,34),new(1100,347,40),new(1150,346,20),new(1200,347,21),
+        new(1250,347,24),new(1270,346,25),
+        new(910,363,29),new(925,364,22),new(975,361,23),new(1025,363,30),
+        new(1075,364,0),new(1125,365,11),new(1175,362,45),new(1225,364,37),
+        new(1275,363,46),new(1270,375,18),
+        new(890,379,31),new(1010,380,34),new(1090,384,21),new(1260,379,32),
         new(800,277,26,true),new(890,277,32,true),new(980,277,33,true),
         new(1070,277,36,true),new(1160,277,37,true),new(1250,277,38,true),
         new(1340,277,41,true),new(1430,277,42,true),new(1520,277,43,true),
@@ -118,7 +122,7 @@ public static class HallWhiteCrowdAuthoring
                 foot.transform.localScale=new Vector3(mesh.bounds.size.x*scale*.88f,thickness,1);foot.transform.localPosition=anchor+new Vector3(0,-thickness/2,.002f);
                 foot.AddComponent<MeshFilter>().sharedMesh=contactMesh;contact=foot.AddComponent<MeshRenderer>();contact.sharedMaterial=contactMaterial;contact.sortingLayerID=renderer.sortingLayerID;contact.sortingOrder=renderer.sortingOrder-1;contact.shadowCastingMode=ShadowCastingMode.Off;contact.receiveShadows=false;
             }
-            groups[n]=new HallWhiteCrowds.Group{silhouette=renderer,contact=contact,balcony=balcony,cycle=height<45?84:cycles[n%cycles.Length]+n/15*7,phase=height<45?n*19%84:phases[n%phases.Length]+n/15*13,hold=height<45?56:balcony?48+n%3*4:36+n%4*4,opacity=height<35?.32f:balcony?.38f:composition<6?.42f:.46f};
+            groups[n]=new HallWhiteCrowds.Group{silhouette=renderer,contact=contact,balcony=balcony,sourceFootY=placement.feet.y,cycle=!balcony&&height<105?84:cycles[n%cycles.Length]+n/15*7,phase=!balcony&&height<105?n*19%84:phases[n%phases.Length]+n/15*13,hold=!balcony&&height<105?56:balcony?48+n%3*4:36+n%4*4,opacity=height<35?.32f:balcony?.38f:composition<6?.42f:.46f};
         }
         var crowds=root.AddComponent<HallWhiteCrowds>();crowds.Configure(UnityEngine.Object.FindFirstObjectByType<HallLightingRig>(),drawing,groups);
         Undo.RegisterCreatedObjectUndo(root,"Add approved white crowd variations");EditorUtility.SetDirty(crowds);AssetDatabase.SaveAssets();EditorSceneManager.MarkSceneDirty(art.gameObject.scene);EditorSceneManager.SaveScene(art.gameObject.scene);
@@ -126,7 +130,7 @@ public static class HallWhiteCrowdAuthoring
     }
     static void Capture(string name)
     {
-        HallFocusAlignmentAuthoring.Capture("white-crowds-station-life-"+name,false);File.Copy("ArtDeliverables/TimeDesk/City/FocusAlignment/white-crowds-station-life-"+name+".png",Report+"/"+name+".png",true);
+        HallFocusAlignmentAuthoring.Capture("white-crowds-rear-density-"+name,false);File.Copy("ArtDeliverables/TimeDesk/City/FocusAlignment/white-crowds-rear-density-"+name+".png",Report+"/"+name+".png",true);
     }
     [MenuItem("Tools/Terminal Art/Crowds/Verify Approved White Crowds")]
     public static void Verify()

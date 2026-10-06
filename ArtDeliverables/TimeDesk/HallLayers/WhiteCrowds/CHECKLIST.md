@@ -43,3 +43,19 @@ Live Play frame 25s inspected: crowd feet remain on floor, rail occlusion works,
 Station-life review: all-group front and left screenshots inspected; seven lighting-hour frames and population samples captured. Minor adjacent-cell atlas fragment found and excluded by native component UV bounds. Distant groups receive longer staggered holds, keeping the rear populated. Scene saved with synchronized normal-view light plane; zero Unity errors before Play.
 
 Live Play at 31 seconds inspected: new roles, background and bridge populations are visible; native errors zero. Final sampled population 14–33 groups, alpha 0–0.46, unchanged transforms. All 32 new composition indices are represented in the 37 placements.
+
+## Rear density follow-up — October 7
+
+- [x] Add thirteen extra rear-floor compositions: center lane, space below bridge, and clear lanes immediately in front of rear bays.
+- [x] Longer staggered rear holds; 50 total placements, 35 floor / 15 bridge.
+- [x] Inspect feet, wall clearance and portal clearance with every new placement visible.
+- [x] Verify actual live rear density, independent fades and lighting.
+- [x] Save and show current view.
+
+User refinement: fewer in front, more behind. Removed three broad near groups and moved five foreground compositions toward the rear bays. Only two floor placements remain beyond source foot Y=500; retained all 32 new station-life types. Current total: 47 placements, 32 floor / 15 bridge. Review not closed until updated captures inspected.
+
+Latest image clarification: concentrate behind the two rear portals, reduce the front-portal area. Revised to 45 placements: 24 behind the rear bays, 15 bridge, four middle-floor activities, two near-floor groups. Rear hoops occlude far crowd rims; rear glass attenuates figures behind it. Revised distribution awaits native visual inspection.
+
+Final distribution inspected in all-group normal/left-pan frames and night capture: 24 rear-bay groups, 15 bridge, four middle floor, two near-floor. Source-registered hoop occlusion and glass attenuation preserve the rear portals in front of the crowd. 601 sampled seconds show 25–37 active groups, alpha 0–0.46 and unchanged transforms.
+
+Live 30-second Play capture inspected: crowd concentration is behind the rear bays; near/front portal walking lanes are sparse. Zero Unity errors. Saved main camera and lighting plane remain unchanged. All 32 station-life types still referenced.

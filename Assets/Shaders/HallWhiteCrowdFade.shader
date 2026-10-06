@@ -8,7 +8,7 @@ Shader "NOPE/Hall White Crowd Fade"
   HLSLINCLUDE
   #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
   TEXTURE2D(_BaseMap);SAMPLER(sampler_BaseMap);
-  half4 _Tint;float4x4 _ArtToLocal;float4 _Canvas;
+  half4 _Tint;float _FootPixelY;float4x4 _ArtToLocal;float4 _Canvas;
   struct A {float4 p:POSITION;float2 uv:TEXCOORD0;};
   struct V {float4 p:SV_POSITION;float2 uv:TEXCOORD0;float2 pixel:TEXCOORD1;};
   V vert(A v)
@@ -32,8 +32,19 @@ Shader "NOPE/Hall White Crowd Fade"
     float posts[13]={43,175,300,429,553,680,824,943,1088,1216,1364,1496,1643};
     for(int n=0;n<13;n++)if(abs(v.pixel.x-posts[n])<5 && v.pixel.y<695)clip(-1);
    }
+   if(_Canvas.w<.5 && _FootPixelY<416)
+   {
+    // Far crowds are behind the rear portal hoops, rather than painted over their rims.
+    float2 left=(v.pixel-float2(963,365))/float2(45,38);
+    float2 right=(v.pixel-float2(1215,365))/float2(45,38);
+    if(abs(length(left)-1)<.16 || abs(length(right)-1)<.16)clip(-1);
+    if(v.pixel.y>397&&v.pixel.y<421&&((v.pixel.x>918&&v.pixel.x<1008)||(v.pixel.x>1170&&v.pixel.x<1260)))clip(-1);
+   }
    half a=SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap,v.uv).a;
-   return half4(_Tint.rgb,_Tint.a*smoothstep(.48,.54,a));
+   half glass=1;
+   if(_Canvas.w<.5 && _FootPixelY<416 && v.pixel.y>367 && v.pixel.y<432 &&
+      ((v.pixel.x>866&&v.pixel.x<1049)||(v.pixel.x>1135&&v.pixel.x<1305)))glass=.42;
+   return half4(_Tint.rgb,_Tint.a*glass*smoothstep(.48,.54,a));
   }
   ENDHLSL
   Pass {Tags {"LightMode"="Universal2D"} HLSLPROGRAM
