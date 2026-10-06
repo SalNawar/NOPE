@@ -658,7 +658,7 @@ public static partial class OfficeSceneUIBuilder
 
         Prop("Stamp", OfficeAnchorId.Stamp, EnsureDeskReaction("Reaction_Stamp", ReactionKind.Squash, ""), null, "stamp");
         Prop("Intercom", OfficeAnchorId.Intercom, EnsureDeskReaction("Reaction_Intercom", ReactionKind.Squash, ""), null, null);
-        Prop("Till", OfficeAnchorId.Till, EnsureDeskReaction("Reaction_Till", ReactionKind.Nudge, "tooltip.credits", 0.02f), OfficeAnchorId.ReadoutCredits, null);
+        Prop("Till", OfficeAnchorId.Till, EnsureDeskReaction("Reaction_Till", ReactionKind.Pulse, "tooltip.credits", 0.08f), OfficeAnchorId.ReadoutCredits, null);
         Prop("StabilityMonitor", OfficeAnchorId.StabilityMonitor, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "tooltip.stability"), OfficeAnchorId.ReadoutStability, null);
         Prop("Calendar", OfficeAnchorId.Calendar, EnsureDeskReaction("Reaction_Calendar", ReactionKind.None, "tooltip.day"), OfficeAnchorId.ReadoutDay, null);
         Prop("Clock", OfficeAnchorId.Clock, EnsureDeskReaction("Reaction_Clock", ReactionKind.None, "tooltip.value"), OfficeAnchorId.ReadoutClock, null);

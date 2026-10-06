@@ -14,3 +14,5 @@ White silhouette crowd task (2026-10-06): approved original style reused; nine c
 2026-10-07 — Station-life follow-up: generated two 4×4 silhouette sheets (32 activity compositions), broader station population than the user examples alone. Installed 37 fixed groups, 15 on bridge and five in the distant hall, with stronger staggered background occupancy. Reviewed all placements simultaneously; corrected neighboring atlas-cell artifact. Evidence: WhiteCrowds/StationLifeReview-2026-10-07-Final.
 
 2026-10-07 — Density clarification: user meant specifically behind the two rear portals, with reduced density around the front portal. Redistributed to 24 rear groups / 15 bridge / 4 middle / 2 near. Added source-registered rear-hoop and glass occlusion. All-group front/left and night inspection recorded in RearPortalPopulationReview-2026-10-07.
+
+2026-10-07 â€” Cashier animation: reverted broad assembly change after user rejection. Corrected cashier only to uniform growth then shrink, anchored at its base. Verified two live click cycles, no downward movement, exact return, and inspected native captures. See [checklist](CashierPulse/CHECKLIST.md).

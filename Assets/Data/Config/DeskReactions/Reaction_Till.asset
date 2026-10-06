@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8638e7f868364e19b4451d36b49ea110, type: 3}
   m_Name: Reaction_Till
   m_EditorClassIdentifier: Assembly-CSharp::DeskReactionSO
-  kind: 3
+  kind: 4
   seconds: 0.35
-  amplitude: 0.02
+  amplitude: 0.08
   clip: {fileID: 0}
   tooltipKey: tooltip.credits
   tooltipSeconds: 2.5
