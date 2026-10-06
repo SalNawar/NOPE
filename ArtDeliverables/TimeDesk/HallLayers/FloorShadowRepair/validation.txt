@@ -1,0 +1,1 @@
+2172x724 source registration. Glazing R/G/A unchanged pixel-for-pixel. Receiver excludes all five traced object silhouettes. Casts sweep traced ground footprints, remain connected at origins, soften and fade at distance. Morning/noon/evening retain existing time blend; night directional share remains zero. No scene/camera/desk/traveller edits.

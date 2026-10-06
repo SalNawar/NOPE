@@ -146,63 +146,18 @@ public static class HallDeepRoomAuthoring
             Poly(1161,309,1189,309,1189,334,1161,334),
             Poly(1204,309,1229,309,1229,334,1204,334)
         };
-        var floor=Poly(0,578,635,400,790,350,1340,340,2172,684,2172,724,0,724);
-        var exclusions=new[]{
-            Poly(575,370,825,350,825,493,575,547),
-            Poly(807,352,1035,352,1035,438,807,438),
-            Poly(1140,352,1380,352,1380,438,1140,438),
-            Poly(920,445,1390,445,1390,639,920,639)
-        };
         var masks=new Color32[W*H];
         for(int y=0;y<H;y++)for(int x=0;x<W;x++)
         {
             bool a=left.Any(p=>Inside(x+.5f,y+.5f,p));
             bool b=front.Any(p=>Inside(x+.5f,y+.5f,p));
-            bool ground=Inside(x+.5f,y+.5f,floor)&&!exclusions.Any(p=>Inside(x+.5f,y+.5f,p));
-            masks[(H-1-y)*W+x]=new Color32(a?(byte)255:(byte)0,b?(byte)255:(byte)0,ground?(byte)255:(byte)0,a||b?(byte)255:(byte)0);
+            masks[(H-1-y)*W+x]=new Color32(a?(byte)255:(byte)0,b?(byte)255:(byte)0,0,a||b?(byte)255:(byte)0);
         }
+        HallFloorShadowAuthoring.Receiver(masks);
         var mask=SaveData("DeepRoomMasks",masks,true);
-        // New geometry receives new shadows; never reuse the old pier's casts.
-        var casters=new[]{
-            new Vector4(748,433,85,.75f),
-            new Vector4(1148,640,250,.7f),
-            new Vector4(967,437,150,.65f),
-            new Vector4(1260,437,150,.65f),
-            new Vector4(2060,680,165,.55f)
-        };
-        Texture2D Shadow(string name,float dx,float dy,float strength)
-        {
-            var data=new Color32[W*H];
-            for(int y=0;y<H;y++)for(int x=0;x<W;x++)
-            {
-                float shade=0;
-                if(masks[(H-1-y)*W+x].b>0)
-                {
-                    foreach(var c in casters)
-                    {
-                        float t=(y-c.y)/dy;
-                        if(t<0 || t>1)continue;
-                        float edge=1-Mathf.SmoothStep(0,1,Mathf.InverseLerp(c.z*.5f,c.z*.5f+5,Mathf.Abs(x-c.x-t*dx)));
-                        float fade=Mathf.SmoothStep(0,1,Mathf.InverseLerp(0,.08f,t))*(1-Mathf.SmoothStep(0,1,Mathf.InverseLerp(.8f,1,t)));
-                        shade=Mathf.Max(shade,edge*fade*c.w*strength);
-                    }
-                    // Platform rail posts at the new registered foot line.
-                    for(float foot=30;foot<1660;foot+=156)
-                    {
-                        float t=(y-692)/(dy*.5f);
-                        if(t<0 || t>1)continue;
-                        float dist=Mathf.Abs(x-foot-t*dx*.5f);
-                        shade=Mathf.Max(shade,(1-Mathf.SmoothStep(2,6,dist))*(1-t)*strength*.6f);
-                    }
-                }
-                byte value=(byte)Mathf.RoundToInt(shade*255);
-                data[(H-1-y)*W+x]=new Color32(value,value,value,255);
-            }
-            return SaveData(name,data);
-        }
-        var morning=Shadow("MorningShadow",155,70,.32f);
-        var noon=Shadow("NoonShadow",65,28,.23f);
-        var evening=Shadow("EveningShadow",205,88,.35f);
+        var morning=SaveData("MorningShadow",HallFloorShadowAuthoring.Bake(masks,new Vector2(100,42),1));
+        var noon=SaveData("NoonShadow",HallFloorShadowAuthoring.Bake(masks,new Vector2(35,15),.65f));
+        var evening=SaveData("EveningShadow",HallFloorShadowAuthoring.Bake(masks,new Vector2(135,52),1.1f));
         var original=art.layers.First(l=>l.id.StartsWith("03 ")).renderer;
         var cityController=original.GetComponent<HallCityExterior>();
         // Original registered art is preserved as the fallback, not overwritten.
