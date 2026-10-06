@@ -9,7 +9,8 @@ using UnityEditor;
 /// feature, the day-1 steps, the last guided day) is checked against the
 /// source's own ramp (GuideContent.Problems over the days' introductions: a
 /// page whose feature no day introduces, a day with no page, an unknown
-/// target, action or detail) and written verbatim into the library's guide
+/// target, action or detail; GuideContent.BulletinProblems: a day's bulletin
+/// that does not name its new pages) and written verbatim into the library's guide
 /// content, which the rulebook's GUIDE and the guide director read.
 /// </summary>
 public static partial class WorldContentGenerator
@@ -31,6 +32,7 @@ public static partial class WorldContentGenerator
         public string id;
         public string feature;
         public string title;
+        public string named;
         public string check;
         public string against;
         public string fault;
@@ -72,7 +74,9 @@ public static partial class WorldContentGenerator
         var known = new Introductions(days.Select(d => (d.day, Introductions.DayKeys(d.papers, d.rules,
             (d.lies ?? Array.Empty<string>()).Select(l => ParseEnum(l, out LieKind lie) ? (LieKind?)lie : null).Where(l => l.HasValue).Select(l => l.Value),
             null, d.introduces))));
-        errors.AddRange(BuildGuide(g).Problems(known, days.Length == 0 ? 0 : days.Max(d => d.day)));
+        GuideContent guide = BuildGuide(g);
+        errors.AddRange(guide.Problems(known, days.Length == 0 ? 0 : days.Max(d => d.day)));
+        errors.AddRange(guide.BulletinProblems(known, days.Select(d => (d.day, d.bulletin))));
     }
 
     /// <summary>The library's guide content from the source, verbatim (an unknown action reads as None and a bad detail is dropped; CheckGuide refuses both).</summary>
@@ -86,6 +90,7 @@ public static partial class WorldContentGenerator
             id = p.id ?? string.Empty,
             feature = p.feature ?? string.Empty,
             title = p.title ?? string.Empty,
+            named = p.named ?? string.Empty,
             check = p.check ?? string.Empty,
             against = p.against ?? string.Empty,
             fault = p.fault ?? string.Empty,

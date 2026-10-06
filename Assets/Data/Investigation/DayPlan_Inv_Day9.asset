@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 9
   visitorsCount: 16
-  bulletin: 'NEW: debt standing. Citizens in debt depart only on Debt Relief, and
-    a Frozen account may not depart at all.'
+  bulletin: 'NEW: dress for the destination. Look at their clothes (the wheel''s
+    Look menu): an item from another time or place causes a panic. Check it against
+    the Costume Guide on your shelf.'
   papers:
   - TC-101
   - TC-230

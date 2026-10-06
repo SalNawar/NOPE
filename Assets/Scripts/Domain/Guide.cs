@@ -127,6 +127,9 @@ public sealed class GuidePage
     /// <summary>The page's heading.</summary>
     public string title = string.Empty;
 
+    /// <summary>The words the morning bulletin of the page's day names it by ("Entry Ticket"; any case): GuideContent.BulletinProblems holds each day's bulletin to its new pages, so the briefing always names what the ramp introduces.</summary>
+    public string named = string.Empty;
+
     /// <summary>What to check.</summary>
     public string check = string.Empty;
 
@@ -223,6 +226,34 @@ public sealed class GuideContent
         for (int day = 2; day <= lastDay; day++)
             if (!(pages ?? new List<GuidePage>()).Any(p => p != null && known.FirstDay(p.feature) == day))
                 problems.Add($"Day {day} has no guide page (guide.pages: a page whose feature the day introduces).");
+        return problems;
+    }
+
+    /// <summary>
+    /// The bulletins against the ramp: every page's words (GuidePage.named)
+    /// appear, in any case, in the bulletin of the day its feature is
+    /// introduced (<paramref name="bulletins"/>: each day's number and
+    /// bulletin), so each morning's briefing names that day's new things
+    /// (Introductions.NewOn, through their pages); a page naming nothing is a
+    /// problem too. Empty when sound.
+    /// </summary>
+    public List<string> BulletinProblems(Introductions known, IEnumerable<(int day, string bulletin)> bulletins)
+    {
+        var problems = new List<string>();
+        known ??= Introductions.None;
+        var byDay = new Dictionary<int, string>();
+        foreach ((int day, string bulletin) in bulletins ?? Enumerable.Empty<(int, string)>())
+            byDay[day] = bulletin ?? string.Empty;
+        foreach (GuidePage page in pages ?? new List<GuidePage>())
+        {
+            if (page == null)
+                continue;
+            int day = known.FirstDay(page.feature);
+            if (string.IsNullOrWhiteSpace(page.named))
+                problems.Add($"guide.pages '{page.id}': \"named\" is blank (the words day {day}'s bulletin names it by).");
+            else if (day > 0 && (!byDay.TryGetValue(day, out string bulletin) || bulletin.IndexOf(page.named.Trim(), StringComparison.OrdinalIgnoreCase) < 0))
+                problems.Add($"Day {day}'s bulletin does not name '{page.named}' (its new guide page '{page.id}', {page.feature}): the morning briefing names each day's new thing.");
+        }
         return problems;
     }
 

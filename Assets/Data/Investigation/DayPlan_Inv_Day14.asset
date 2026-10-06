@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 14
   visitorsCount: 18
-  bulletin: 'NEW: paper dates. Depart only on the date printed on the travel papers,
-    and never on an expired paper.'
+  bulletin: 'NEW: the return home. The displaced now declare their home on an Intake
+    Declaration: its currency, language and technology must match the books (Tongues,
+    Capitals, Rulers) for the home they claim.'
   papers:
   - TC-101
   - TC-230

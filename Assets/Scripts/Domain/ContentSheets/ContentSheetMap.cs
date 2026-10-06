@@ -693,6 +693,7 @@ public static class ContentSheetMap
                 Text("id").Required().Note("the page's id (saved as read and practised)"),
                 Text("feature").Required().Note("the introduction key that adds the page on its first day: paper:TC-230, tool:board, book:Seal, rule:Rule_DebtStanding"),
                 Text("title").Note("the page's heading"),
+                Text("named").Note("the words the bulletin of the page's day names it by (any case; Generate World refuses a bulletin without them)"),
                 Text("check").Note("what to check"),
                 Text("against").Note("what to check it against"),
                 Text("fault").Note("an example of a fault"),

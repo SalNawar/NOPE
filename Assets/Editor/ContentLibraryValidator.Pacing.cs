@@ -12,11 +12,12 @@ using UnityEngine;
 /// </summary>
 public static partial class ContentLibraryValidator
 {
-    /// <summary>Reports the guide's problems over the library's ramp (GuideContent.Problems: a page whose feature no day introduces, a day after the first with no page, an unknown target, a step that waits for nothing), in the words Generate World checks its source with.</summary>
+    /// <summary>Reports the guide's problems over the library's ramp (GuideContent.Problems: a page whose feature no day introduces, a day after the first with no page, an unknown target, a step that waits for nothing; GuideContent.BulletinProblems: a day's bulletin that does not name its new pages), in the words Generate World checks its source with.</summary>
     private static int CheckGuide(ContentLibrarySO lib)
     {
         int lastDay = lib.DayPlans.Where(p => p != null).Select(p => p.DayNumber).DefaultIfEmpty(0).Max();
         List<string> problems = lib.Guide.Content.Problems(lib.Introductions, lastDay);
+        problems.AddRange(lib.Guide.Content.BulletinProblems(lib.Introductions, lib.DayPlans.Where(p => p != null).Select(p => (p.DayNumber, p.Bulletin))));
         foreach (string problem in problems)
             Debug.LogError($"[ContentLibraryValidator] {problem} (world_source.json guide; run Tools > TimeDesk > Generate World)", lib);
         return problems.Count;

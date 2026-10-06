@@ -177,6 +177,24 @@ public class GuideTests
     }
 
     [Test]
+    public void BulletinProblems_EachDaysBulletinNamesItsNewPages_AnyCase()
+    {
+        GuideContent content = Content();
+        foreach (GuidePage page in content.pages)
+            page.named = page.id == "board" ? "Departure Board" : page.title;
+        var good = new[] { (1, "NEW: your desk. THE PASSPORT and DATES."), (2, "NEW: the entry ticket."), (3, "NEW: the Departure Board."), (8, "NEW: the permit.") };
+        CollectionAssert.IsEmpty(content.BulletinProblems(Ramp(), good));
+
+        var stale = new[] { (1, "the passport and dates"), (2, "NEW: debt standing."), (3, "NEW: the Departure Board."), (8, "NEW: the permit.") };
+        List<string> problems = content.BulletinProblems(Ramp(), stale);
+        Assert.AreEqual(1, problems.Count, string.Join(" | ", problems));
+        StringAssert.StartsWith("Day 2's bulletin does not name 'TICKET'", problems[0]);
+
+        content.pages[0].named = " ";
+        Assert.IsTrue(content.BulletinProblems(Ramp(), good).Any(p => p.Contains("'ticket'") && p.Contains("blank")), "a page naming nothing");
+    }
+
+    [Test]
     public void Targets_NamedPapersAndFields()
     {
         Assert.IsTrue(GuideTargets.IsKnown("sign"));

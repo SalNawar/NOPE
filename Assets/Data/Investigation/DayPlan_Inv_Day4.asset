@@ -15,7 +15,7 @@ MonoBehaviour:
   dayNumber: 4
   visitorsCount: 12
   bulletin: 'NEW: issuing seals. Every paper''s seal must match its office''s in
-    the Seal Register, now on your shelf.'
+    the Seal Register, now in your rulebook (the SEALS tab).'
   papers:
   - TC-101
   - TC-230

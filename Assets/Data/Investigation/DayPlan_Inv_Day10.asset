@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 10
   visitorsCount: 16
-  bulletin: 'NEW: transponder recall. Every Driftbox 3 unit is grounded: refuse any
-    departure on one.'
+  bulletin: 'NEW: debt standing. Citizens in debt depart only on Debt Relief, and
+    a Frozen account may not depart at all.'
   papers:
   - TC-101
   - TC-230

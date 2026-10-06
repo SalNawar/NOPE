@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 11
   visitorsCount: 16
-  bulletin: 'NEW: no 2150 goods. Ask what they will pay with and what they carry:
-    nothing from 2150 leaves 2150.'
+  bulletin: 'NEW: the Driftbox 3 recall. Every Driftbox 3 transponder is grounded:
+    refuse any departure on one.'
   papers:
   - TC-101
   - TC-230
