@@ -100,6 +100,8 @@ public static partial class WorldContentGenerator
             List<UiStringEntry> entries = (l.entries ?? Array.Empty<EntryData>()).Select(e => new UiStringEntry { key = e?.key, text = e?.text }).ToList();
             foreach (string p in UiStrings.TableProblems(plan.reading, entries, l.rtl))
                 errors.Add($"ui.languages '{l.language}': {p}");
+            foreach (string p in LensWords.TableProblems(plan.reading, entries, l.words))
+                errors.Add($"ui.languages '{l.language}': {p}");
             plan.languages.Add((l, entries));
         }
 
@@ -170,21 +172,22 @@ public static partial class WorldContentGenerator
     /// <summary>Writes the string tables, the themes and any missing wallpaper; returns the neutral theme, the culture themes (country order) and the tables.</summary>
     private static (ThemeSO neutral, ThemeSO[] themes, UiStringTableSO[] tables) WriteCulture(CulturePlan plan, HashSet<string> written)
     {
-        var tables = new List<UiStringTableSO> { MakeStringTable(plan.ui.readingLanguage, false, plan.reading, written) };
-        tables.AddRange(plan.languages.Select(l => MakeStringTable(l.data.language, l.data.rtl, l.entries, written)));
+        var tables = new List<UiStringTableSO> { MakeStringTable(plan.ui.readingLanguage, false, plan.reading, null, written) };
+        tables.AddRange(plan.languages.Select(l => MakeStringTable(l.data.language, l.data.rtl, l.entries, l.data.words, written)));
 
         ThemeSO neutral = MakeTheme(plan.neutral, written);
         ThemeSO[] themes = plan.themes.Select(t => MakeTheme(t, written)).ToArray();
         return (neutral, themes, tables.ToArray());
     }
 
-    /// <summary>Creates or updates Culture/Strings_{language}.</summary>
-    private static UiStringTableSO MakeStringTable(string language, bool rightToLeft, List<UiStringEntry> entries, HashSet<string> written)
+    /// <summary>Creates or updates Culture/Strings_{language} (with its lens glossary: a culture language's words; none for the reading language).</summary>
+    private static UiStringTableSO MakeStringTable(string language, bool rightToLeft, List<UiStringEntry> entries, LensWord[] words, HashSet<string> written)
     {
         UiStringTableSO table = LoadOrCreate<UiStringTableSO>($"{CultureFolder}/Strings_{language}.asset", written);
         table.language = language;
         table.rightToLeft = rightToLeft;
         table.entries = entries.Select(e => new UiStringEntry { key = e.key, text = e.text, gloss = e.gloss, tier = e.tier }).ToList();
+        table.words = (words ?? Array.Empty<LensWord>()).Where(w => w != null).Select(w => new LensWord { native = w.native, english = w.english }).ToList();
         EditorUtility.SetDirty(table);
         return table;
     }
@@ -360,8 +363,8 @@ public static partial class WorldContentGenerator
     /// <summary>One reading-table string (gloss and tier as names).</summary>
     [Serializable] private sealed class StringData { public string key; public string text; public string gloss; public string tier; }
 
-    /// <summary>One culture language's table.</summary>
-    [Serializable] private sealed class LanguageData { public string language; public bool rtl; public EntryData[] entries; }
+    /// <summary>One culture language's table and its lens glossary (the Translation Lens: each word of its labels and the word's English).</summary>
+    [Serializable] private sealed class LanguageData { public string language; public bool rtl; public EntryData[] entries; public LensWord[] words; }
 
     /// <summary>One translated string.</summary>
     [Serializable] private sealed class EntryData { public string key; public string text; }

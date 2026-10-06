@@ -176,11 +176,21 @@ public sealed class TranslationLensPresenter : MonoBehaviour
         Hover(position, now);
     }
 
-    /// <summary>The theme's strings changed (a new scene's culture): every state is dropped, the held sizes given back; the texts already carry the new labels.</summary>
+    /// <summary>
+    /// The theme's strings changed (a new scene's culture): every state is
+    /// dropped and its size given back; a text still showing the lens's frame
+    /// gets the game's text back (a themed label already carries the new one).
+    /// </summary>
     private void Forget(UiStrings strings)
     {
         foreach (TextState state in _active)
+        {
+            if (state.Text == null)
+                continue;
+            if (state.Written != null && ReferenceEquals(state.Text.text, state.Written))
+                state.Text.text = state.Source;
             RestoreSize(state);
+        }
         _active.Clear();
         _states.Clear();
         _strings = strings;

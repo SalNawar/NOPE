@@ -149,9 +149,10 @@ public static partial class WorldContentGenerator
         // --- Culture: string tables, themes, placeholder wallpapers ---
         (ThemeSO neutralTheme, ThemeSO[] themes, UiStringTableSO[] stringTables) = WriteCulture(culture, written);
 
-        // --- Translation: a Speech translator per pack (papers are always English), the notice ---
+        // --- Translation: a Speech translator per pack (papers are always English), the lens's sold levels, the notice ---
         UpgradeSO[] translators = (src.translation.packs ?? Array.Empty<PackData>())
             .Select(p => MakeTranslator(p, src.translation, written))
+            .Concat(MakeLensUpgrades(src.translation, written))
             .ToArray();
         TimelineTriggerSO[] notices = MakeTranslationNotice(src.translation, TranslatorOrders(CatalogueNodes(authored, src.translation), src.translation), written);
 

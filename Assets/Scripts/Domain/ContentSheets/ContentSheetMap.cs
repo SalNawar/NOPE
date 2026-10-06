@@ -632,7 +632,10 @@ public static class ContentSheetMap
                 Bool("rtl"),
                 Rows("uiLanguageEntries", "entries",
                     Text("key").Ref("uiStrings"),
-                    Text("text"))));
+                    Text("text")),
+                Rows("uiLanguageWords", "words",
+                    Text("native").Required().Note("a word of this language's labels, as written in them"),
+                    Text("english").Note("its English as the Translation Lens flips it (a capital label's is upper-cased)")).Note("the Translation Lens's glossary: every word of this language's labels")));
 
     /// <summary>Home's house upgrades (the Home upgrades spec HU3): the tree's rows, generated into upgrade and effect assets, and the radio's lines.</summary>
     private static SheetSpec Home() =>
@@ -739,7 +742,20 @@ public static class ContentSheetMap
                 Text("displayName"),
                 Text("script").Ref("scripts"),
                 Text("pack").Ref("packs"),
-                Text("glyphs")));
+                Text("glyphs")),
+            Single("translationLens", "lens",
+                Rows("lensLevels", "levels", Key("id"),
+                    Text("id").Required().Note("the level's upgrade id (saved as owned); the first is issued by the Bureau on the lens's day (tool:lens), the others are sold in Orders"),
+                    Text("displayName").Note("its name in Orders (sold levels)"),
+                    Text("description").Note("its line in Orders (sold levels)"),
+                    Int("cost").Note("its price in cr in Orders (sold levels)"),
+                    List("requires").Omit().Note("the upgrade ids its Orders node needs owned first; blank: none")).Note("Word, Sentence, Object: in this order"),
+                Float("flip.startDelay").Note("seconds from the hover to the first letter flipping"),
+                Float("flip.letterInterval").Note("seconds between two letters starting"),
+                Float("flip.letterSeconds").Note("seconds a letter takes to land"),
+                Int("flip.scrambleSteps").Note("letters a letter passes through on the way"),
+                Float("cascadeSeconds").Note("seconds between two labels of an object starting (level 3)"),
+                Float("resizeSeconds").Note("seconds a label takes to shrink to fit its English")).Note("the Translation Lens (Saleh 2026-10-06)"));
 
     // ---- shared shapes ----
 

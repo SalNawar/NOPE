@@ -10566,7 +10566,7 @@
       "asset": "DayPlan_Inv_Day8",
       "day": 8,
       "queue": 14,
-      "bulletin": "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver.",
+      "bulletin": "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver. And from today the office reads the world's language: the Bureau issues you a Translation Lens. Hover a word to read it.",
       "papers": [
         "TC-101",
         "TC-230",
@@ -10578,7 +10578,8 @@
       "introduces": [
         "field:Employer",
         "field:Term",
-        "field:Wage"
+        "field:Wage",
+        "tool:lens"
       ],
       "tells": 1,
       "channels": [
@@ -23475,6 +23476,12 @@
         "tier": "Full"
       },
       {
+        "key": "settings.languageLocked",
+        "text": "Locked from day {0}: the office reads the world's language now. Hover a word to translate it (the Translation Lens).",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "settings.motion",
         "text": "Motion",
         "gloss": "None",
@@ -26300,6 +26307,136 @@
             "key": "icon.portals",
             "text": "البوابات"
           }
+        ],
+        "words": [
+          {
+            "native": "إطفاء",
+            "english": "Turn off"
+          },
+          {
+            "native": "الشاشة",
+            "english": "screen"
+          },
+          {
+            "native": "إنهاء",
+            "english": "Quit"
+          },
+          {
+            "native": "اللعبة",
+            "english": "game"
+          },
+          {
+            "native": "صحيفة",
+            "english": "newspaper"
+          },
+          {
+            "native": "الزمن",
+            "english": "of time"
+          },
+          {
+            "native": "ابدأ",
+            "english": "Start"
+          },
+          {
+            "native": "المناوبة",
+            "english": "shift"
+          },
+          {
+            "native": "سجل",
+            "english": "ledger"
+          },
+          {
+            "native": "الطبعة",
+            "english": "edition"
+          },
+          {
+            "native": "المسائية",
+            "english": "evening"
+          },
+          {
+            "native": "إلى",
+            "english": "to"
+          },
+          {
+            "native": "البيت",
+            "english": "home"
+          },
+          {
+            "native": "عدم",
+            "english": "no"
+          },
+          {
+            "native": "تطابق",
+            "english": "match"
+          },
+          {
+            "native": "إشعار",
+            "english": "notice"
+          },
+          {
+            "native": "انحراف",
+            "english": "deviation"
+          },
+          {
+            "native": "زمني",
+            "english": "timeline"
+          },
+          {
+            "native": "تم",
+            "english": "done"
+          },
+          {
+            "native": "الاطلاع",
+            "english": "reading"
+          },
+          {
+            "native": "حساب",
+            "english": "Account"
+          },
+          {
+            "native": "المواطن",
+            "english": "citizen"
+          },
+          {
+            "native": "اليوم",
+            "english": "Day"
+          },
+          {
+            "native": "الاستقرار",
+            "english": "Stability"
+          },
+          {
+            "native": "العودة",
+            "english": "Back"
+          },
+          {
+            "native": "المكتب",
+            "english": "desk"
+          },
+          {
+            "native": "الإحاطة",
+            "english": "Briefing"
+          },
+          {
+            "native": "الصباحية",
+            "english": "morning"
+          },
+          {
+            "native": "تقرير",
+            "english": "Report"
+          },
+          {
+            "native": "أخبار",
+            "english": "news"
+          },
+          {
+            "native": "الخط",
+            "english": "line"
+          },
+          {
+            "native": "الزمني",
+            "english": "time"
+          }
         ]
       },
       {
@@ -26425,6 +26562,132 @@
           {
             "key": "icon.portals",
             "text": "Πύλες"
+          }
+        ],
+        "words": [
+          {
+            "native": "σβήσιμο",
+            "english": "Turn off"
+          },
+          {
+            "native": "οθόνης",
+            "english": "screen"
+          },
+          {
+            "native": "έξοδος",
+            "english": "Quit"
+          },
+          {
+            "native": "από",
+            "english": "from"
+          },
+          {
+            "native": "το",
+            "english": "the"
+          },
+          {
+            "native": "παιχνίδι",
+            "english": "game"
+          },
+          {
+            "native": "η",
+            "english": "the"
+          },
+          {
+            "native": "χρονική",
+            "english": "temporal"
+          },
+          {
+            "native": "εφημερίδα",
+            "english": "newspaper"
+          },
+          {
+            "native": "έναρξη",
+            "english": "start"
+          },
+          {
+            "native": "βάρδιας",
+            "english": "shift"
+          },
+          {
+            "native": "ημερολόγιο",
+            "english": "log"
+          },
+          {
+            "native": "απογευματινή",
+            "english": "evening"
+          },
+          {
+            "native": "έκδοση",
+            "english": "edition"
+          },
+          {
+            "native": "δεν",
+            "english": "no"
+          },
+          {
+            "native": "ταιριάζει",
+            "english": "match"
+          },
+          {
+            "native": "ειδοποίηση",
+            "english": "notice"
+          },
+          {
+            "native": "χρονικής",
+            "english": "timeline"
+          },
+          {
+            "native": "απόκλισης",
+            "english": "deviation"
+          },
+          {
+            "native": "λογαριασμός",
+            "english": "Account"
+          },
+          {
+            "native": "πολίτη",
+            "english": "citizen"
+          },
+          {
+            "native": "ημέρα",
+            "english": "Day"
+          },
+          {
+            "native": "σταθερότητα",
+            "english": "Stability"
+          },
+          {
+            "native": "πίσω",
+            "english": "Back"
+          },
+          {
+            "native": "στο",
+            "english": "to the"
+          },
+          {
+            "native": "γραφείο",
+            "english": "desk"
+          },
+          {
+            "native": "πρωινή",
+            "english": "Morning"
+          },
+          {
+            "native": "ενημέρωση",
+            "english": "Briefing"
+          },
+          {
+            "native": "αναφορά",
+            "english": "Report"
+          },
+          {
+            "native": "ειδήσεις",
+            "english": "news"
+          },
+          {
+            "native": "χρονογραμμής",
+            "english": "timeline"
           }
         ]
       },
@@ -26552,6 +26815,160 @@
             "key": "icon.portals",
             "text": "Portali"
           }
+        ],
+        "words": [
+          {
+            "native": "spegni",
+            "english": "Turn off"
+          },
+          {
+            "native": "lo",
+            "english": "the"
+          },
+          {
+            "native": "schermo",
+            "english": "screen"
+          },
+          {
+            "native": "esci",
+            "english": "Quit"
+          },
+          {
+            "native": "dal",
+            "english": "from the"
+          },
+          {
+            "native": "gioco",
+            "english": "game"
+          },
+          {
+            "native": "il",
+            "english": "the"
+          },
+          {
+            "native": "corriere",
+            "english": "courier"
+          },
+          {
+            "native": "del",
+            "english": "of the"
+          },
+          {
+            "native": "tempo",
+            "english": "time"
+          },
+          {
+            "native": "inizia",
+            "english": "start"
+          },
+          {
+            "native": "turno",
+            "english": "shift"
+          },
+          {
+            "native": "registro",
+            "english": "ledger"
+          },
+          {
+            "native": "edizione",
+            "english": "edition"
+          },
+          {
+            "native": "della",
+            "english": "of the"
+          },
+          {
+            "native": "sera",
+            "english": "evening"
+          },
+          {
+            "native": "a",
+            "english": "to"
+          },
+          {
+            "native": "casa",
+            "english": "home"
+          },
+          {
+            "native": "non",
+            "english": "no"
+          },
+          {
+            "native": "corrisponde",
+            "english": "match"
+          },
+          {
+            "native": "avviso",
+            "english": "notice"
+          },
+          {
+            "native": "di",
+            "english": "of"
+          },
+          {
+            "native": "deviazione",
+            "english": "deviation"
+          },
+          {
+            "native": "temporale",
+            "english": "temporal"
+          },
+          {
+            "native": "preso",
+            "english": "taken"
+          },
+          {
+            "native": "atto",
+            "english": "note"
+          },
+          {
+            "native": "conto",
+            "english": "Account"
+          },
+          {
+            "native": "cittadino",
+            "english": "citizen"
+          },
+          {
+            "native": "giorno",
+            "english": "Day"
+          },
+          {
+            "native": "stabilità",
+            "english": "Stability"
+          },
+          {
+            "native": "torna",
+            "english": "Back"
+          },
+          {
+            "native": "alla",
+            "english": "to the"
+          },
+          {
+            "native": "scrivania",
+            "english": "desk"
+          },
+          {
+            "native": "briefing",
+            "english": "Briefing"
+          },
+          {
+            "native": "mattino",
+            "english": "morning"
+          },
+          {
+            "native": "rapporto",
+            "english": "Report"
+          },
+          {
+            "native": "notizie",
+            "english": "news"
+          },
+          {
+            "native": "linea",
+            "english": "line"
+          }
         ]
       },
       {
@@ -26677,6 +27094,112 @@
           {
             "key": "icon.portals",
             "text": "Portale"
+          }
+        ],
+        "words": [
+          {
+            "native": "bildschirm",
+            "english": "Screen"
+          },
+          {
+            "native": "aus",
+            "english": "off"
+          },
+          {
+            "native": "spiel",
+            "english": "game"
+          },
+          {
+            "native": "beenden",
+            "english": "Quit"
+          },
+          {
+            "native": "der",
+            "english": "the"
+          },
+          {
+            "native": "zeitbote",
+            "english": "time messenger"
+          },
+          {
+            "native": "schicht",
+            "english": "shift"
+          },
+          {
+            "native": "beginnen",
+            "english": "start"
+          },
+          {
+            "native": "schichtbuch",
+            "english": "shift ledger"
+          },
+          {
+            "native": "abendausgabe",
+            "english": "evening edition"
+          },
+          {
+            "native": "nach",
+            "english": "go"
+          },
+          {
+            "native": "hause",
+            "english": "home"
+          },
+          {
+            "native": "meldung",
+            "english": "report"
+          },
+          {
+            "native": "einer",
+            "english": "of a"
+          },
+          {
+            "native": "zeitabweichung",
+            "english": "time deviation"
+          },
+          {
+            "native": "zur",
+            "english": "for"
+          },
+          {
+            "native": "kenntnis",
+            "english": "notice"
+          },
+          {
+            "native": "tag",
+            "english": "Day"
+          },
+          {
+            "native": "stabilität",
+            "english": "Stability"
+          },
+          {
+            "native": "zurück",
+            "english": "Back"
+          },
+          {
+            "native": "zum",
+            "english": "to the"
+          },
+          {
+            "native": "schreibtisch",
+            "english": "desk"
+          },
+          {
+            "native": "morgenbesprechung",
+            "english": "Morning Briefing"
+          },
+          {
+            "native": "schichtbericht",
+            "english": "Shift Report"
+          },
+          {
+            "native": "zeitlinien",
+            "english": "timeline"
+          },
+          {
+            "native": "nachrichten",
+            "english": "news"
           }
         ]
       },
@@ -26804,6 +27327,108 @@
             "key": "icon.portals",
             "text": "传送门"
           }
+        ],
+        "words": [
+          {
+            "native": "关闭",
+            "english": "Turn off"
+          },
+          {
+            "native": "屏幕",
+            "english": "screen"
+          },
+          {
+            "native": "退出",
+            "english": "Quit"
+          },
+          {
+            "native": "游戏",
+            "english": "game"
+          },
+          {
+            "native": "时间",
+            "english": "time"
+          },
+          {
+            "native": "时报",
+            "english": "times"
+          },
+          {
+            "native": "开始",
+            "english": "start"
+          },
+          {
+            "native": "值班",
+            "english": "shift"
+          },
+          {
+            "native": "日志",
+            "english": "log"
+          },
+          {
+            "native": "晚间",
+            "english": "evening"
+          },
+          {
+            "native": "版",
+            "english": "edition"
+          },
+          {
+            "native": "时间线",
+            "english": "timeline"
+          },
+          {
+            "native": "偏差",
+            "english": "deviation"
+          },
+          {
+            "native": "通知",
+            "english": "notice"
+          },
+          {
+            "native": "公民",
+            "english": "Citizen"
+          },
+          {
+            "native": "账户",
+            "english": "Account"
+          },
+          {
+            "native": "第",
+            "english": "No."
+          },
+          {
+            "native": "天",
+            "english": "day"
+          },
+          {
+            "native": "稳定度",
+            "english": "Stability"
+          },
+          {
+            "native": "返回",
+            "english": "Back"
+          },
+          {
+            "native": "办公桌",
+            "english": "desk"
+          },
+          {
+            "native": "晨间",
+            "english": "morning"
+          },
+          {
+            "native": "简报",
+            "english": "briefing"
+          },
+          {
+            "native": "报告",
+            "english": "report"
+          },
+          {
+            "native": "新闻",
+            "english": "news"
+          }
         ]
       },
       {
@@ -26929,6 +27554,112 @@
           {
             "key": "icon.portals",
             "text": "ポータル"
+          }
+        ],
+        "words": [
+          {
+            "native": "画面",
+            "english": "Screen"
+          },
+          {
+            "native": "オフ",
+            "english": "off"
+          },
+          {
+            "native": "ゲーム",
+            "english": "Game"
+          },
+          {
+            "native": "終了",
+            "english": "quit"
+          },
+          {
+            "native": "時空",
+            "english": "time-space"
+          },
+          {
+            "native": "新報",
+            "english": "news"
+          },
+          {
+            "native": "勤務",
+            "english": "shift"
+          },
+          {
+            "native": "開始",
+            "english": "start"
+          },
+          {
+            "native": "台帳",
+            "english": "ledger"
+          },
+          {
+            "native": "夕刊",
+            "english": "evening edition"
+          },
+          {
+            "native": "不",
+            "english": "no"
+          },
+          {
+            "native": "一致",
+            "english": "match"
+          },
+          {
+            "native": "時間線",
+            "english": "timeline"
+          },
+          {
+            "native": "逸脱",
+            "english": "deviation"
+          },
+          {
+            "native": "通知",
+            "english": "notice"
+          },
+          {
+            "native": "市民",
+            "english": "citizen"
+          },
+          {
+            "native": "口座",
+            "english": "account"
+          },
+          {
+            "native": "日目",
+            "english": "day"
+          },
+          {
+            "native": "安定度",
+            "english": "Stability"
+          },
+          {
+            "native": "デスク",
+            "english": "desk"
+          },
+          {
+            "native": "に",
+            "english": "to"
+          },
+          {
+            "native": "戻る",
+            "english": "back"
+          },
+          {
+            "native": "朝の",
+            "english": "morning"
+          },
+          {
+            "native": "ブリーフィング",
+            "english": "briefing"
+          },
+          {
+            "native": "報告",
+            "english": "report"
+          },
+          {
+            "native": "ニュース",
+            "english": "news"
           }
         ]
       }
@@ -27242,7 +27973,40 @@
         "pack": "north_europe",
         "glyphs": "eklminpqörßtvwuxzbcdüfghäj"
       }
-    ]
+    ],
+    "lens": {
+      "levels": [
+        {
+          "id": "lens_word",
+          "displayName": "Translation Lens",
+          "description": "Issued by the Bureau when the office's language starts following the world (day 8): hover any word printed in the world's language and it flips into English.",
+          "cost": 0
+        },
+        {
+          "id": "lens_sentence",
+          "displayName": "Translation Lens: Sentences",
+          "description": "The lens reads a whole line: hover a word and its whole sentence flips into English. Works with the lens the Bureau issues on day 8.",
+          "cost": 60
+        },
+        {
+          "id": "lens_object",
+          "displayName": "Translation Lens: Objects",
+          "description": "The lens reads a whole window, page or paper: hover it and everything on it flips into English.",
+          "cost": 120,
+          "requires": [
+            "lens_sentence"
+          ]
+        }
+      ],
+      "flip": {
+        "startDelay": 0.0,
+        "letterInterval": 0.03,
+        "letterSeconds": 0.09,
+        "scrambleSteps": 2
+      },
+      "cascadeSeconds": 0.08,
+      "resizeSeconds": 0.15
+    }
   },
   "home": {
     "radioUpgrade": "house_radio",
@@ -27913,6 +28677,24 @@
         "against": "The labour rule on the RULES tab; its employer, term and wage against the record.",
         "fault": "A contract the record does not list: forged.",
         "point": "paper:TC-520",
+        "practice": {
+          "id": "",
+          "action": "",
+          "categories": [],
+          "form": "",
+          "target": "",
+          "text": ""
+        }
+      },
+      {
+        "id": "lens",
+        "feature": "tool:lens",
+        "title": "THE TRANSLATION LENS",
+        "named": "Translation Lens",
+        "check": "Any word the office prints in the world's language: on the PC, the morning paper, a notice. Hover it and it flips into English.",
+        "against": "From today the language follows history: Settings no longer switches it. Orders sells the lens's Sentences and Objects.",
+        "fault": "Clicking a button you cannot read: hover it first.",
+        "point": "pc",
         "practice": {
           "id": "",
           "action": "",

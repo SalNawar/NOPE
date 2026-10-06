@@ -904,6 +904,18 @@ public static partial class ContentLibraryValidator
 
         if (translation.rules.fromDay > 1 && !lib.Triggers.Any(t => t != null && t.id == WorldContentGenerator.TranslationNoticeId))
             Error($"foreign speech starts on day {translation.rules.fromDay} but no '{WorldContentGenerator.TranslationNoticeId}' trigger announces it");
+
+        // The Translation Lens: its knobs, its sold levels among the upgrades, and every culture label's words in its language's glossary.
+        TranslationLensSettings lens = translation.lens ?? new TranslationLensSettings();
+        foreach (string problem in lens.Problems())
+            Error(problem);
+        foreach (string id in lens.rules.levelIds.Skip(1).Where(id => !string.IsNullOrWhiteSpace(id)))
+            if (lib.GetUpgradeById(id) == null)
+                Error($"the lens level '{id}' has no upgrade (translation.lens.levels)");
+        UiStringTableSO reading = lib.GetStringTable(lib.CultureUi.readingLanguage);
+        foreach (UiStringTableSO table in lib.StringTables.Where(t => t != null && t != reading))
+            foreach (string problem in LensWords.TableProblems(reading != null ? reading.entries : null, table.entries, table.words))
+                Error($"ui.languages '{table.language}': {problem}");
         return issues;
     }
 

@@ -12,8 +12,10 @@ using UnityEngine;
 /// from the pack's "requires": Saleh 2026-09-29) and the one-shot notice
 /// trigger (as many days ahead as the translator's chain of orders) into the
 /// owned Assets/Data/World/Translation (piece 9's Papers translators are no
-/// longer listed, so the folder's pruning moves them to the trash), and the
-/// library's TranslationSettings.
+/// longer listed, so the folder's pruning moves them to the trash), the
+/// Translation Lens's Orders upgrades (translation.lens.levels after the
+/// first, which the Bureau issues: Saleh 2026-10-06), and the library's
+/// TranslationSettings.
 /// </summary>
 public static partial class WorldContentGenerator
 {
@@ -53,7 +55,14 @@ public static partial class WorldContentGenerator
             if (pack != null && pack.spokenCost < 0)
                 errors.Add($"translation.packs: pack '{pack.id}' has a cost below 0.");
 
+        TranslationLensSettings lens = BuildLens(t.lens);
+        errors.AddRange(lens.Problems());
+        foreach (LensLevelData level in SoldLensLevels(t))
+            if (string.IsNullOrWhiteSpace(level.displayName) || string.IsNullOrWhiteSpace(level.description))
+                errors.Add($"translation.lens.levels '{level.id}': an Orders upgrade needs a displayName and a description.");
+
         var generated = new HashSet<string>((t.packs ?? Array.Empty<PackData>()).Where(p => p != null).Select(p => Translation.UpgradeId(p.id)));
+        generated.UnionWith(lens.rules.levelIds.Where(id => !string.IsNullOrWhiteSpace(id)));
         if (authored.library != null)
             foreach (UpgradeSO u in HandAuthored(new SerializedObject(authored.library), "upgrades").OfType<UpgradeSO>())
                 if (generated.Contains(u.id))
@@ -61,7 +70,10 @@ public static partial class WorldContentGenerator
 
         List<TreeNode> catalogue = CatalogueNodes(authored, t);
         foreach (string problem in UpgradeTree.Problems(catalogue))
-            errors.Add("The Orders tree with the translation.packs translators: " + problem);
+            errors.Add("The Orders tree with the translation.packs translators and the lens: " + problem);
+        string issued = lens.rules.levelIds.FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(issued) && catalogue.Any(n => n.Id == issued))
+            errors.Add($"translation.lens.levels: the first level's id '{issued}' (issued by the Bureau, never sold) is also an upgrade's.");
         string timing = Translation.NoticeProblem(t.fromDay, TranslatorOrders(catalogue, t));
         if (timing != null)
             errors.Add(timing);
@@ -93,8 +105,53 @@ public static partial class WorldContentGenerator
                 .ToList()
         }).ToList(),
         flip = t.flip ?? new FlipTiming(),
-        fallbackGlyphs = t.fallbackGlyphs
+        fallbackGlyphs = t.fallbackGlyphs,
+        lens = BuildLens(t.lens)
     };
+
+    /// <summary>The library's lens knobs from translation.lens (the levels' ids in order; defaults for a missing section, which Problems then refuses).</summary>
+    private static TranslationLensSettings BuildLens(LensData lens)
+    {
+        var settings = new TranslationLensSettings();
+        if (lens == null)
+            return settings;
+        settings.rules = new LensRules { levelIds = (lens.levels ?? Array.Empty<LensLevelData>()).Select(l => l?.id).ToList() };
+        if (lens.flip != null)
+            settings.flip = lens.flip;
+        settings.cascadeSeconds = lens.cascadeSeconds;
+        settings.resizeSeconds = lens.resizeSeconds;
+        return settings;
+    }
+
+    /// <summary>The lens levels sold in Orders: every level after the first (the first is issued on the lens's day).</summary>
+    private static IEnumerable<LensLevelData> SoldLensLevels(TranslationData t) =>
+        (t.lens?.levels ?? Array.Empty<LensLevelData>()).Skip(1).Where(l => l != null && !string.IsNullOrWhiteSpace(l.id));
+
+    /// <summary>
+    /// Writes Translation/Upgrade_Lens_{Level}.asset for each sold lens level:
+    /// an Orders node in the Interview band (the interview and translation),
+    /// its name, description, cost and requires as authored, no unlock
+    /// effect and no install slot (the lens reads the owned id:
+    /// TranslationLens.Reach).
+    /// </summary>
+    private static IEnumerable<UpgradeSO> MakeLensUpgrades(TranslationData t, HashSet<string> written)
+    {
+        foreach (LensLevelData level in SoldLensLevels(t))
+        {
+            UpgradeSO so = LoadOrCreate<UpgradeSO>($"{TranslationFolder}/Upgrade_Lens_{Pascal(level.id)}.asset", written);
+            so.id = level.id;
+            so.displayName = level.displayName;
+            so.description = level.description;
+            so.cost = level.cost;
+            so.unlockEffect = null;
+            so.venue = UpgradeVenue.Orders;
+            so.branch = UpgradeBranch.Interview;
+            so.requires = level.requires ?? Array.Empty<string>();
+            so.installSlot = string.Empty;
+            EditorUtility.SetDirty(so);
+            yield return so;
+        }
+    }
 
     /// <summary>
     /// Writes Translation/Upgrade_Tr_{Pack}_Speech.asset: the pack's Speech
@@ -130,6 +187,8 @@ public static partial class WorldContentGenerator
         foreach (PackData p in t.packs ?? Array.Empty<PackData>())
             if (p != null)
                 nodes.Add(new TreeNode(Translation.UpgradeId(p.id), UpgradeVenue.Orders, UpgradeBranch.Interview, p.spokenCost, p.requires));
+        foreach (LensLevelData l in SoldLensLevels(t))
+            nodes.Add(new TreeNode(l.id, UpgradeVenue.Orders, UpgradeBranch.Interview, l.cost, l.requires));
         return nodes;
     }
 
@@ -187,7 +246,14 @@ public static partial class WorldContentGenerator
         public ScriptData[] scripts;
         public PackData[] packs;
         public Tongue[] tongues;
+        public LensData lens;
     }
+
+    /// <summary>translation.lens (Saleh 2026-10-06): the levels, Word first, the hover flip's timing, the object cascade and the resize time.</summary>
+    [Serializable] private sealed class LensData { public LensLevelData[] levels; public FlipTiming flip; public float cascadeSeconds; public float resizeSeconds; }
+
+    /// <summary>A lens level: its upgrade id; for a sold level (all but the first) its Orders name, description, cost and prerequisites.</summary>
+    [Serializable] private sealed class LensLevelData { public string id; public string displayName; public string description; public int cost; public string[] requires; }
 
     /// <summary>A script: its direction and font candidates (piece 6's font shape).</summary>
     [Serializable] private sealed class ScriptData { public string id; public bool rightToLeft; public FontData[] fonts; }
