@@ -10,3 +10,5 @@ White silhouette crowd task (2026-10-06): approved original style reused; nine c
 
 
 2026-10-07 — Crowd placement review reopened after user reported wall-standing groups. Expanded from 15 to 25 placements, moved door-side groups into clear floor lanes, preserved stationary fades and light tint, added foreground rail occlusion. Reviewed all groups together in front/left views instead of relying on fading samples. Evidence and status: HallLayers/WhiteCrowds/CHECKLIST.md.
+
+2026-10-07 — Station-life follow-up: generated two 4×4 silhouette sheets (32 activity compositions), broader station population than the user examples alone. Installed 37 fixed groups, 15 on bridge and five in the distant hall, with stronger staggered background occupancy. Reviewed all placements simultaneously; corrected neighboring atlas-cell artifact. Evidence: WhiteCrowds/StationLifeReview-2026-10-07-Final.

@@ -30,3 +30,16 @@ User rejected the previous wall-side anchors. Previous visual sign-off was insuf
 Placement review evidence: PlacementReview-2026-10-07-Final/all-groups.png and all-groups-left.png show every anchor simultaneously. Corrected a remaining broad wall-side group and a portal overlap found during inspection. 25 placements, 16 main-floor / 9 balcony. Sampled population 8–22 groups; alpha 0–0.46; fixed transforms. Night and normal population captures inspected; Unity error count zero after final install and save.
 
 Live Play frame 25s inspected: crowd feet remain on floor, rail occlusion works, and the central traveler area stays clear.
+
+## Station-life silhouettes — October 7
+
+- [x] Generate 32 different human activity / station-life compositions; preserve simple alpha-only white style.
+- [x] Cover cleaners, luggage, police, monks, families, students, commuters, railway staff, couriers, tourists, accessibility, workers and solo waiting poses.
+- [x] Expand placement to 37 groups, including 15 bridge groups and extra distant floor figures.
+- [x] Inspect new shapes and every foot placement in native front and left captures.
+- [x] Verify fades, light palette, stationary transforms and clean Unity compilation.
+- [x] Save and inspect live Play before completion.
+
+Station-life review: all-group front and left screenshots inspected; seven lighting-hour frames and population samples captured. Minor adjacent-cell atlas fragment found and excluded by native component UV bounds. Distant groups receive longer staggered holds, keeping the rear populated. Scene saved with synchronized normal-view light plane; zero Unity errors before Play.
+
+Live Play at 31 seconds inspected: new roles, background and bridge populations are visible; native errors zero. Final sampled population 14–33 groups, alpha 0–0.46, unchanged transforms. All 32 new composition indices are represented in the 37 placements.
