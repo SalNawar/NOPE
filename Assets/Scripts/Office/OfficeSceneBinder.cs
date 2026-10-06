@@ -70,6 +70,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>Inspection at the desk (the desk-first redesign, item 11; optional): the values' places are seen through the office camera, and the rulebook lies on the desk.</summary>
     [SerializeField] private DeskInspect deskInspect;
 
+    /// <summary>The desk's guide (optional): its arrows are placed through the office camera.</summary>
+    [SerializeField] private GuideDirector guide;
+
     /// <summary>The rulebook on the desk (optional): laid beside the mat in the office view's frame (DeskConfigSO.rulebookAt).</summary>
     [SerializeField] private DeskRulebook rulebook;
 
@@ -240,6 +243,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         ReadyCamera(office);
         if (deskInspect != null)
             deskInspect.SetCamera(office);
+        if (guide != null)
+            guide.SetCamera(office);
         if (wheel != null)
             wheel.SetCamera(office);
         foreach (OverlayCallout callout in callouts ?? Array.Empty<OverlayCallout>())

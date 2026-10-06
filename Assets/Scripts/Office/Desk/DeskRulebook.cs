@@ -26,6 +26,12 @@ using UnityEngine;
 /// inspect mode (SetInspecting tints the rows as comparable) DeskInspect holds
 /// it on the workbench (MatchBoard.PickRule), so it is judged against a value
 /// like the PC's memo row; outside inspect mode a row is only read.
+/// The third tab, GUIDE, is the help guide (Saleh 2026-10-06: "a help guide
+/// that gets expanded every day like Papers, Please"): BASICS, then one
+/// sheet per introduced rule or paper (SetGuide, from the guide director:
+/// Guide.PagesOn), turned with PREV and NEXT, today's new ones marked NEW;
+/// the tab wears a NEW badge while a page added today is unread
+/// (SetGuideBadge), and each sheet shown is reported read (GuideRead).
 /// Each new day opens on RULES. It shows from the day the rulebook is
 /// introduced (Feature.Rulebook). Build Office UI builds the booklet, its
 /// tabs, pages and rows (a fixed number: more directives than rows print
@@ -63,7 +69,31 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The PAPERS page (its heading, rows and none line).</summary>
     [SerializeField] private GameObject papersPage;
 
-    /// <summary>The tabs on the top edge, RULES first: a click turns to its page.</summary>
+    /// <summary>The GUIDE page (its sheet's title, body, number, NEW mark and PREV / NEXT).</summary>
+    [SerializeField] private GameObject guidePage;
+
+    /// <summary>The guide sheet's heading.</summary>
+    [SerializeField] private TMP_Text guideTitle;
+
+    /// <summary>The guide sheet's text (BASICS' lines, or a page's check, against and fault).</summary>
+    [SerializeField] private TMP_Text guideBody;
+
+    /// <summary>The sheet's number of the sheets ("2 / 6").</summary>
+    [SerializeField] private TMP_Text guideNumber;
+
+    /// <summary>The NEW mark on a sheet added today.</summary>
+    [SerializeField] private GameObject guideNew;
+
+    /// <summary>Turns to the previous guide sheet.</summary>
+    [SerializeField] private Clickable guidePrev;
+
+    /// <summary>Turns to the next guide sheet.</summary>
+    [SerializeField] private Clickable guideNext;
+
+    /// <summary>The NEW badge on the GUIDE tab (a page added today is unread).</summary>
+    [SerializeField] private GameObject guideBadge;
+
+    /// <summary>The tabs on the top edge, RULES, PAPERS, GUIDE: a click turns to its page.</summary>
     [SerializeField] private Clickable[] tabs = Array.Empty<Clickable>();
 
     /// <summary>The tabs' plates, as tabs (the open page's plate is the paper's, the other's darker).</summary>
@@ -91,6 +121,23 @@ public sealed class DeskRulebook : MonoBehaviour
     private readonly List<string> _paperIds = new List<string>();
     private MaterialPropertyBlock _block;
     private bool _inspecting;
+    private IReadOnlyList<GuideSheet> _sheets = Array.Empty<GuideSheet>();
+    private int _sheet;
+
+    /// <summary>The GUIDE page's number.</summary>
+    public const int GuidePageIndex = 2;
+
+    /// <summary>Raised when a guide sheet shows on the open GUIDE page: its id (GuideSheet.Id; BASICS' is empty).</summary>
+    public event Action<string> GuideRead;
+
+    /// <summary>The guide sheet shown (its index in SetGuide's list).</summary>
+    public int GuideSheetIndex => _sheet;
+
+    /// <summary>The guide sheets (SetGuide).</summary>
+    public IReadOnlyList<GuideSheet> GuideSheets => _sheets;
+
+    /// <summary>True while the GUIDE tab wears its NEW badge.</summary>
+    public bool GuideBadge => guideBadge != null && guideBadge.activeSelf;
 
     /// <summary>Raised when a rules row is clicked in inspect mode: the directive's index in the day's list and the rule.</summary>
     public event Action<int, TravelRuleSO> RowClicked;
@@ -99,7 +146,7 @@ public sealed class DeskRulebook : MonoBehaviour
     public event Action<string> PaperFlagged;
 
     /// <summary>Every click of the booklet (the rows, the papers' rows, the tabs, the booklet itself): the booth makes them live with the props.</summary>
-    public IReadOnlyList<Clickable> Clicks => rows.Concat(paperRows).Concat(tabs).Append(card).Where(c => c != null).ToArray();
+    public IReadOnlyList<Clickable> Clicks => rows.Concat(paperRows).Concat(tabs).Append(guidePrev).Append(guideNext).Append(card).Where(c => c != null).ToArray();
 
     /// <summary>The booklet's drag (DeskController lifts it above the stack while it runs).</summary>
     public DeskDraggable Drag => drag;
@@ -135,6 +182,10 @@ public sealed class DeskRulebook : MonoBehaviour
             if (tabs[i] != null)
                 tabs[i].onClick.AddListener(() => ShowPage(page));
         }
+        if (guidePrev != null)
+            guidePrev.onClick.AddListener(() => OpenGuide(_sheet - 1));
+        if (guideNext != null)
+            guideNext.onClick.AddListener(() => OpenGuide(_sheet + 1));
         if (drag != null)
         {
             drag.Init(surface);
@@ -160,14 +211,18 @@ public sealed class DeskRulebook : MonoBehaviour
             booklet.localPosition = new Vector3(0f, height, 0f);
     }
 
-    /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS): its rows show, the other's hide; its tab looks open.</summary>
+    /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS, 2 GUIDE): its rows show, the others' hide; its tab looks open. The GUIDE shows its sheet (read).</summary>
     public void ShowPage(int page)
     {
-        Page = Mathf.Clamp(page, 0, 1);
+        Page = Mathf.Clamp(page, 0, GuidePageIndex);
         if (rulesPage != null)
             rulesPage.SetActive(Page == 0);
         if (papersPage != null)
             papersPage.SetActive(Page == 1);
+        if (guidePage != null)
+            guidePage.SetActive(Page == GuidePageIndex);
+        if (Page == GuidePageIndex)
+            ShowSheet();
         _block ??= new MaterialPropertyBlock();
         for (int i = 0; i < tabPlates.Length; i++)
         {
@@ -238,6 +293,65 @@ public sealed class DeskRulebook : MonoBehaviour
         ShowPage(0);
     }
 
+    /// <summary>The GUIDE's sheets (BASICS first, then the day's pages: the guide director); the sheet open stays open (by id; the first when gone).</summary>
+    public void SetGuide(IReadOnlyList<GuideSheet> sheets)
+    {
+        string open = _sheet < _sheets.Count ? _sheets[_sheet].Id : null;
+        _sheets = sheets ?? Array.Empty<GuideSheet>();
+        int keep = -1;
+        for (int i = 0; i < _sheets.Count && keep < 0; i++)
+            if (_sheets[i].Id == open)
+                keep = i;
+        _sheet = Mathf.Max(0, keep);
+        if (Page == GuidePageIndex)
+            ShowSheet();
+    }
+
+    /// <summary>Turns to the GUIDE at sheet <paramref name="index"/> (clamped to the sheets).</summary>
+    public void OpenGuide(int index)
+    {
+        _sheet = Mathf.Clamp(index, 0, Mathf.Max(0, _sheets.Count - 1));
+        ShowPage(GuidePageIndex);
+    }
+
+    /// <summary>Turns to the GUIDE at the sheet <paramref name="id"/> (the first when none has it).</summary>
+    public void OpenGuide(string id)
+    {
+        int index = 0;
+        for (int i = 0; i < _sheets.Count; i++)
+            if (_sheets[i].Id == id)
+                index = i;
+        OpenGuide(index);
+    }
+
+    /// <summary>The GUIDE tab's NEW badge on or off.</summary>
+    public void SetGuideBadge(bool on)
+    {
+        if (guideBadge != null)
+            guideBadge.SetActive(on);
+    }
+
+    /// <summary>Prints the open guide sheet, its number, its NEW mark and whether PREV and NEXT turn, and reports it read.</summary>
+    private void ShowSheet()
+    {
+        bool any = _sheets.Count > 0;
+        GuideSheet sheet = any ? _sheets[Mathf.Clamp(_sheet, 0, _sheets.Count - 1)] : default;
+        if (guideTitle != null)
+            guideTitle.text = sheet.Title ?? string.Empty;
+        if (guideBody != null)
+            guideBody.text = sheet.Body ?? string.Empty;
+        if (guideNumber != null)
+            guideNumber.text = any ? UiText.Format("desk.guide.page", _sheet + 1, _sheets.Count) : string.Empty;
+        if (guideNew != null)
+            guideNew.SetActive(any && sheet.IsNew);
+        if (guidePrev != null)
+            guidePrev.gameObject.SetActive(_sheet > 0);
+        if (guideNext != null)
+            guideNext.gameObject.SetActive(_sheet < _sheets.Count - 1);
+        if (any)
+            GuideRead?.Invoke(sheet.Id);
+    }
+
     /// <summary>The world bounds of the row printing directive <paramref name="ruleIndex"/> (a match line meets it there); false when it prints no row, its page is closed or the booklet is hidden.</summary>
     public bool TryRowBounds(int ruleIndex, out Bounds bounds)
     {
@@ -269,4 +383,29 @@ public sealed class DeskRulebook : MonoBehaviour
         if (row < _indices.Count)
             RowClicked?.Invoke(_indices[row], _rules[_indices[row]]);
     }
+}
+
+/// <summary>One sheet of the rulebook's GUIDE: its id (a GuidePage's; BASICS' is empty), heading, text and whether it was added today.</summary>
+public readonly struct GuideSheet
+{
+    /// <summary>A sheet.</summary>
+    public GuideSheet(string id, string title, string body, bool isNew)
+    {
+        Id = id ?? string.Empty;
+        Title = title;
+        Body = body;
+        IsNew = isNew;
+    }
+
+    /// <summary>The page's id (empty for BASICS).</summary>
+    public string Id { get; }
+
+    /// <summary>The heading.</summary>
+    public string Title { get; }
+
+    /// <summary>The text.</summary>
+    public string Body { get; }
+
+    /// <summary>True when added today (its NEW mark).</summary>
+    public bool IsNew { get; }
 }

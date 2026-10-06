@@ -37,7 +37,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The F1 card (KB1, §3.4): a desktop window of DesktopConfigSO's card size
     /// whose body is a scrolling list of rows (the keys, bold, then what they
-    /// do), filled at runtime from the one shortcut table. Rebuilt fresh.
+    /// do), filled at runtime from the one shortcut table, and under it the
+    /// "Replay the desk tutorial" button (the guide's). Rebuilt fresh.
     /// </summary>
     private static DesktopWindow BuildShortcutCard(Transform windowLayer)
     {
@@ -48,7 +49,11 @@ public static partial class OfficeSceneUIBuilder
         Object.DestroyImmediate(win.Find("Body").gameObject);
 
         float top = 1f - (config.titleBarHeight + 8f) / config.shortcutCardSize.y;
-        RectTransform rows = BuildScrollList(win, "Rows", new Vector2(0.03f, 0.02f), new Vector2(0.97f, top), 2f);
+        float buttonTop = (8f + PcSize.Row) / config.shortcutCardSize.y;
+        RectTransform rows = BuildScrollList(win, "Rows", new Vector2(0.03f, buttonTop + 0.01f), new Vector2(0.97f, top), 2f);
+        Button replay = MakeButton(win, GuideReplayButton, null, new Vector2(0.03f, 8f / config.shortcutCardSize.y), new Vector2(0.5f, buttonTop), null, ThemeRoleId.Button,
+                                   "keys.replayTutorial"); // wired to the desk's guide by BuildGuide
+        ButtonLabel(replay, PcType.Body, TextAlignmentOptions.Center, 8f);
         var row = (RectTransform)Panel(rows, "RowTemplate", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         HorizontalLayoutGroup line = GetOrAdd<HorizontalLayoutGroup>(row.gameObject);
         line.padding = new RectOffset(6, 6, 5, 5);

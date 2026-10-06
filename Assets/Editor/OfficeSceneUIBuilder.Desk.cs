@@ -781,6 +781,10 @@ public static partial class OfficeSceneUIBuilder
         SerializedArrays.Set(soBinder, "portalEffects", portalEffects);
         soBinder.ApplyModifiedProperties();
 
+        // The desk's guide: the FTUE's prompt and arrow, the director and the tutorial's replay buttons (OfficeSceneUIBuilder.Guide.cs).
+        BuildGuide(deskViewBack.transform.parent, view, deskView, desk, inspect, stampTray, rulebook, controls, readySign, propsRoot.Find("Calendar"), board, scanner, counter,
+                   travellerZone, binder, game);
+
         // Checks (the validator runs the same, audit R6-021): every paper a traveller carries has a counter spot, every document's rows fit its paper's face, the wheel shows the menu capacity.
         foreach (string problem in ContentLibraryValidator.DeskFitProblems(library, config))
             Debug.LogError($"[TimeDesk] {problem}");
@@ -1260,7 +1264,14 @@ public static partial class OfficeSceneUIBuilder
     private const float RulebookRowPitch = 0.044f;
     private const int RulebookPaperRows = 4;
     private const float RulebookPaperPitch = 0.04f;
-    private static readonly Vector2 RulebookTabSize = new Vector2(0.09f, 0.03f);
+    private static readonly Vector2 RulebookTabSize = new Vector2(0.075f, 0.03f);
+
+    /// <summary>The rulebook's GUIDE sheet text box (metres) and its PREV / NEXT buttons (metres).</summary>
+    private static readonly Vector2 RulebookGuideBody = new Vector2(0.236f, 0.205f);
+    private static readonly Vector2 RulebookGuideButton = new Vector2(0.07f, 0.024f);
+
+    /// <summary>The red of the rulebook's NEW marks.</summary>
+    private static readonly Color RulebookNewInk = new Color(0.72f, 0.1f, 0.08f);
 
     /// <summary>A paper's and a rulebook part's click box thickness (metres, before a paper's zone scale): thin, so the papers' stack (DeskConfigSO.paperStackStep a place) alone decides which of two overlapping papers, or a paper and the rulebook, a click or a stamp meets (Saleh 2026-10-06: documents clipping).</summary>
     private const float PaperBoxThickness = 0.0004f;
@@ -1617,13 +1628,16 @@ public static partial class OfficeSceneUIBuilder
     /// rebuilt each run: Office/Rulebook (the DeskRulebook and its DeskDraggable;
     /// the office binder lays it beside the mat on the desk plane) and its
     /// Booklet (lifted by the papers' stack: DeskRulebook.SetLift): a cream card lying face up,
-    /// its click box (CardClick: its outline and the drag's proxy), two tabs on
-    /// its top edge (RULES, PAPERS: a plate, a word and a click box each), the
+    /// its click box (CardClick: its outline and the drag's proxy), three tabs on
+    /// its top edge (RULES, PAPERS, GUIDE: a plate, a word and a click box each;
+    /// GUIDE's NEW badge above it), the
     /// RULES page (its title, five rows, each a click box on the Interactable
     /// layer over its text, two lines at most, and the line for a day with no
     /// directive) and the PAPERS page (its heading, four rows, click boxes over
     /// their texts: the papers not handed over, to flag missing, and the line
-    /// when none is left). Returns it.
+    /// when none is left) and the GUIDE page (the help guide: a sheet's title,
+    /// its NEW mark, its text, PREV and NEXT click boxes and its number).
+    /// Returns it.
     /// </summary>
     private static DeskRulebook BuildRulebook(Transform office, DeskSurface surface, DeskCounter counter)
     {
@@ -1637,7 +1651,7 @@ public static partial class OfficeSceneUIBuilder
         // The tabs on the top edge.
         var tabs = new List<Clickable>();
         var plates = new List<Renderer>();
-        string[] tabKeys = { "desk.rulebook.tabRules", "desk.rulebook.tabPapers" };
+        string[] tabKeys = { "desk.rulebook.tabRules", "desk.rulebook.tabPapers", "desk.rulebook.tabGuide" };
         for (int i = 0; i < tabKeys.Length; i++)
         {
             float x = -RulebookSize.x / 2f + RulebookTabSize.x / 2f + 0.01f + i * (RulebookTabSize.x + 0.006f);
@@ -1695,6 +1709,36 @@ public static partial class OfficeSceneUIBuilder
         TextMeshPro papersNone = FlatText(papersPage, "None", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.058f), new Vector2(RulebookSize.x - 0.024f, 0.03f), 0.13f, ink, FontStyles.Italic);
         papersPage.gameObject.SetActive(false);
 
+        // The GUIDE page: the help guide's sheet (DeskRulebook.SetGuide), and the tab's NEW badge.
+        Transform guidePage = EnsureChild(booklet, "GuidePage");
+        TextMeshPro guideTitle = FlatText(guidePage, "Title", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.022f), new Vector2(RulebookSize.x - 0.02f, 0.03f), 0.15f, ink, FontStyles.Bold);
+        TextMeshPro guideNew = FlatText(guidePage, "New", new Vector3(RulebookSize.x / 2f - 0.035f, 0.0006f, RulebookSize.y / 2f - 0.046f), new Vector2(0.05f, 0.018f), 0.09f, RulebookNewInk, FontStyles.Bold);
+        guideNew.text = UiText.Get("desk.guide.new");
+        TextMeshPro guideBody = FlatText(guidePage, "Body", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.058f - RulebookGuideBody.y / 2f), RulebookGuideBody, 0.14f, ink, FontStyles.Normal);
+        guideBody.textWrappingMode = TextWrappingModes.Normal;
+        guideBody.alignment = TextAlignmentOptions.TopLeft;
+        guideBody.richText = true;
+        float footer = -RulebookSize.y / 2f + 0.018f;
+        Clickable GuideButton(string name, float x, string key)
+        {
+            Clickable button = EnsureClickBox(guidePage, name);
+            button.transform.localPosition = new Vector3(x, 0.0006f, footer);
+            var box = button.GetComponent<BoxCollider>();
+            box.center = Vector3.zero;
+            box.size = new Vector3(RulebookGuideButton.x, PaperBoxThickness, RulebookGuideButton.y);
+            TextMeshPro word = FlatText(button.transform, "Text", Vector3.zero, RulebookGuideButton, 0.1f, ink, FontStyles.Bold);
+            word.text = UiText.Get(key);
+            return button;
+        }
+        Clickable guidePrev = GuideButton("Prev", -RulebookSize.x / 2f + 0.012f + RulebookGuideButton.x / 2f, "desk.guide.prev");
+        Clickable guideNext = GuideButton("Next", RulebookSize.x / 2f - 0.012f - RulebookGuideButton.x / 2f, "desk.guide.next");
+        TextMeshPro guideNumber = FlatText(guidePage, "Number", new Vector3(0f, 0.0006f, footer), new Vector2(0.07f, 0.02f), 0.09f, ink, FontStyles.Normal);
+        guidePage.gameObject.SetActive(false);
+        Transform guideTab = tabs[tabKeys.Length - 1].transform;
+        TextMeshPro guideBadge = FlatText(booklet, "GuideBadge", guideTab.localPosition + new Vector3(0f, 0f, RulebookTabSize.y / 2f + 0.011f), new Vector2(0.05f, 0.018f), 0.09f, RulebookNewInk, FontStyles.Bold);
+        guideBadge.text = UiText.Get("desk.guide.new");
+        guideBadge.gameObject.SetActive(false);
+
         Clickable cardClick = EnsureClickBox(booklet, "CardClick");
         var cardBox = cardClick.GetComponent<BoxCollider>();
         cardBox.center = new Vector3(0f, -0.0002f, 0f);
@@ -1718,6 +1762,14 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "papersNone", papersNone);
         SetRef(so, "rulesPage", rulesPage.gameObject);
         SetRef(so, "papersPage", papersPage.gameObject);
+        SetRef(so, "guidePage", guidePage.gameObject);
+        SetRef(so, "guideTitle", guideTitle);
+        SetRef(so, "guideBody", guideBody);
+        SetRef(so, "guideNumber", guideNumber);
+        SetRef(so, "guideNew", guideNew.gameObject);
+        SetRef(so, "guidePrev", guidePrev);
+        SetRef(so, "guideNext", guideNext);
+        SetRef(so, "guideBadge", guideBadge.gameObject);
         SerializedArrays.Set(so, "tabs", tabs);
         SerializedArrays.Set(so, "tabPlates", plates);
         SetRef(so, "drag", drag);

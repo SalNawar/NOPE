@@ -46,6 +46,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Optional: the booth's input and wake rules.</summary>
     [SerializeField] private BoothCoordinator booth;
 
+    /// <summary>Optional: the desk's guide (day 1's FTUE, the guided days' new rule, the rulebook's GUIDE pages).</summary>
+    [SerializeField] private GuideDirector guide;
+
     /// <summary>The desktop's knobs: how many morning papers the News site keeps (the builder wires it).</summary>
     [SerializeField] private DesktopConfigSO desktopConfig;
 
@@ -345,8 +348,10 @@ public sealed class GameManager : MonoBehaviour
     {
         Debug.Log($"[GameManager] >>> Entering HandleDayCompleted (day {_worldState.day}).");
 
-        // The booth is shut: freeze the clock (the queue may have run out before closing) and close the desk.
+        // The booth is shut: freeze the clock (the queue may have run out before closing) and close the desk; an FTUE still open is over (saved below).
         _travellerAtDesk = false;
+        if (guide != null)
+            guide.EndShift();
         CloseDesk();
 
         // The last traveller's reaction ends as the booth shuts: the figure leaves and their bubble hides, so it never sits over the shift report.
@@ -514,6 +519,10 @@ public sealed class GameManager : MonoBehaviour
 
         if (shiftClock != null)
             shiftClock.StartShift();
+
+        // The desk's guide: day 1's FTUE, a guided day's new page opened in the rulebook, the GUIDE's pages so far.
+        if (guide != null)
+            guide.BeginShift(_worldState.day, _worldState.guide, contentLibrary);
     }
 
     /// <summary>
@@ -607,6 +616,8 @@ public sealed class GameManager : MonoBehaviour
         }
 
         investigationUI.ShowCase(inst, contentLibrary, HandleDecision);
+        if (guide != null)
+            guide.CaseShown(inst);
     }
 
     /// <summary>
@@ -626,8 +637,10 @@ public sealed class GameManager : MonoBehaviour
     private void HandleDecision(bool accepted)
     {
         Debug.Log($"[GameManager] >>> Entering HandleDecision (slot {_activeCaseIndex1Based}, accepted={accepted}).");
-        // The booth has no traveller from here (the wheel cannot open); the figure stays for their reaction (R4).
+        // The booth has no traveller from here (the wheel cannot open); the figure stays for their reaction (R4). The papers are handed back: the guide hears it.
         SetTravellerAtDesk(false, keepFigure: true);
+        if (guide != null)
+            guide.CaseDecided();
 
         int idx = _activeCaseIndex1Based - 1;
 

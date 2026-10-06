@@ -319,7 +319,9 @@ public static partial class OfficeSceneUIBuilder
         }
 
         SettingsHeading(column, "KeyboardLabel", "settings.keyboard");
-        Button shortcuts = SettingsChoice(SettingsRow(column, "ShortcutsRow"), "ShowShortcutsButton", "settings.showShortcuts");
+        Transform shortcutsRow = SettingsRow(column, "ShortcutsRow");
+        Button shortcuts = SettingsChoice(shortcutsRow, "ShowShortcutsButton", "settings.showShortcuts");
+        SettingsChoice(shortcutsRow, GuideReplayButton, "settings.replayTutorial"); // wired to the desk's guide by BuildGuide
 
         TMP_Text note = Text(column, "NoteText", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink,
                              ThemeRoleId.WindowBody, "settings.note");
