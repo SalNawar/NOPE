@@ -406,6 +406,8 @@ public static class _TimeDeskAuditPlay
                 Check(!o.Guide.Prompt.IsShown && RunManager.Instance.World.guide.ftueSkipped, "day 1: Skip ends the tutorial (the run keeps it skipped)");
             }
             practiceSeen |= o.Guide.ShowingNow == "practice";
+            if (day == 4 && o.Guide.ShowingNow == "practice")
+                yield return SealAtTheDesk(o);
 
             // Day 1: pause while the second traveller is at the desk; they are finished normally.
             if (day == 1 && presented == 2)
@@ -495,6 +497,45 @@ public static class _TimeDeskAuditPlay
                   $"day {day}: the rulebook opens itself on the new page '{moment.id}' and the prompt names it");
         else
             Check(o.Guide.ShowingNow.Length == 0 && book.GuideBadge == guide.NewOn(day).Count > 0, $"day {day}: no moment; the GUIDE tab's badge marks a new page");
+    }
+
+    /// <summary>
+    /// Day 4's practice at the desk (the Seal Register is the rulebook's SEALS tab, Saleh's follow-up): in inspect mode the passport's
+    /// seal held against its office's row of the rulebook's register logs a seal finding through the one compare, and the practice is done.
+    /// </summary>
+    private static IEnumerator SealAtTheDesk(Office o)
+    {
+        yield return Seconds(1.5f);
+        DeskRulebook book = o.Rulebook;
+        DeskDocument passport = o.Paper(0);
+        int slot = -1;
+        for (int i = 0; passport != null && i < passport.SlotCount && slot < 0; i++)
+            if (passport.FieldAt(i).Field.category == ClueCategory.Seal)
+                slot = i;
+        Check(slot >= 0 && ((Clickable[])Field(book, "tabs"))[DeskRulebook.SealsPageIndex].gameObject.activeInHierarchy,
+              "day 4: the passport prints its seal and the rulebook shows its SEALS tab");
+        if (slot < 0)
+            yield break;
+        string issuer = passport.FieldAt(slot).Field.issuer;
+        List<AgencyOffice> offices = RunManager.Instance.Library.Agency.offices.Where(x => x != null && x.TryGetSeal(out _)).ToList();
+        int row = offices.FindIndex(x => x.id == issuer);
+        o.Controls.Press(ControlKey.Inspect);
+        yield return Frames(2);
+        Call(o.Desk, "HandlePaperClicked", passport, slot);
+        yield return Frames(2);
+        book.ShowPage(DeskRulebook.SealsPageIndex);
+        yield return Frames(2);
+        ((Clickable[])Field(book, "sealRows"))[Math.Max(0, row)].onClick.Invoke();
+        yield return Frames(3);
+        Finding last = o.App.Board.Log.Items.LastOrDefault();
+        Check(row >= 0 && last != null && last.Category == ClueCategory.Seal && (last.Kind == FindingKind.Match || last.Kind == FindingKind.SealIncorrect),
+              $"day 4: the passport's seal held against the rulebook's Seal Register logs a seal finding at the desk ({last?.Kind}, office '{issuer}')");
+        Check(o.Guide.ShowingNow.Length == 0 && RunManager.Instance.World.guide.practiced.Contains("seals"), "day 4: the seal practice is done at the desk, without the PC");
+        if (ShotsOn)
+            yield return Shots("d4_seals_at_the_desk");
+        o.Controls.Press(ControlKey.Inspect);
+        book.ShowPage(0);
+        yield return Frames(2);
     }
 
     /// <summary>The day's order, if any: the first of the plan's upgrades that can be ordered now with 20 cr to spare (one a day), through the Orders app's rule.</summary>
@@ -703,7 +744,8 @@ public static class _TimeDeskAuditPlay
                 Renderer mark = passport.GetComponentsInChildren<Renderer>(true).FirstOrDefault(r => r.name == "Stamp_1" && r.gameObject.activeSelf);
                 Check(o.Stamps.LastPress == StampPress.Stamped && o.Stamps.HasVerdict && mark != null && passport.InVisaBox(mark.bounds.center),
                       $"d{day} slot {slot}: the stamp dragged onto the passport (outside its visa box) is the verdict, its mark in the ENTRY VISA box ({o.Stamps.LastPress})");
-                yield return Seconds(0.6f);
+                // The stamp's return is a tween in game time (stampReturnSeconds): wait for it to finish (an unfocused editor's frames may be few), not a fixed real time.
+                yield return Settle(() => !o.Stamps.IsCarrying && StampHome(o, accept), 5f);
                 Check(!o.Stamps.IsCarrying && StampHome(o, accept),
                       $"d{day} slot {slot}: the stamp goes back to its place in the rack");
                 yield return DragStamp(o, !accept, anywhere);
@@ -792,6 +834,14 @@ public static class _TimeDeskAuditPlay
     }
 
     /// <summary>The office camera's 3D raycaster (on the art scene's camera; a Physics2DRaycaster derives from it, so the exact type).</summary>
+    /// <summary>Waits until <paramref name="done"/> holds or <paramref name="seconds"/> of real time pass (never throws: the caller's check reports what it finds).</summary>
+    private static IEnumerator Settle(Func<bool> done, float seconds)
+    {
+        float end = Time.realtimeSinceStartup + seconds;
+        while (!done() && Time.realtimeSinceStartup < end)
+            yield return null;
+    }
+
     private static PhysicsRaycaster OfficeRaycaster() =>
         Object.FindObjectsByType<PhysicsRaycaster>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).First(r => r.GetType() == typeof(PhysicsRaycaster));
 
