@@ -9,44 +9,52 @@ using UnityEngine.UI;
 /// 2026-10-06: "always have some shortcuts to pull the stamp like Papers,
 /// Please, they have this grey button ... it should be clear which document
 /// to approve", then "I want the 3D stamp; there should be a label on the
-/// screen to bring out the stamp stuff, and the Tab shortcut"). A grey tab on
-/// the right edge of the office overlay ("STAMPS" over "TAB"), the TAB key
-/// (OfficeControls) and the desk's stamp prop slide the bar out over the desk
-/// and back (ToggleBar); out, it brings the reading view. The bar is a rack
-/// in the desk's own materials holding the DENIED stamp (left) and the
-/// APPROVED stamp (right), the art's desk stamp model (a wooden handle, a
-/// green or red cap, the word on the block), each hanging DeskConfigSO.stampHover
-/// above the desk with its word printed on the rail over it; it slides in
-/// from the desk's right (stampBarTravel) to the point the reading view shows
-/// at stampBarView, and is hidden while in. There is no ink: Papers, Please's
-/// stamps have none, so a stamp is only clicked. A left-click on a stamp
-/// presses it on whatever lies under its die (a ray straight down from the
-/// die's centre: the first document or the rulebook it meets): only the
-/// passport's ENTRY VISA box takes it (DeskDocument.InVisaBox), and only once
-/// (StampFlow: the second stamp, another paper or the rulebook, the passport
-/// outside its visa box are refused with a thunk, a shake and a short note;
-/// no mark). The accepted press dips the stamp onto the paper, prints the
-/// mark where it landed (DeskDocument.Stamp) and is the passport's verdict;
-/// the strip on the counter then reads "▲ HAND BACK ▲", and the stamped
-/// passport dragged onto the counter hands the papers back (DeskController
-/// calls HandBack: Decided), the only way a case is decided (the PC only
-/// investigates). A right-click or Esc slides the bar back
+/// screen to bring out the stamp stuff, and the Tab shortcut", then "the
+/// stamp should be two stamps that I physically move, not move the document
+/// under like Papers, Please ... I should be able to stamp anywhere on the
+/// document"). A grey tab on the right edge of the office overlay ("STAMPS"
+/// over "TAB"), the TAB key (OfficeControls) and the desk's stamp prop slide
+/// the bar out over the desk and back (ToggleBar); out, it brings the reading
+/// view. The bar is a rack in the desk's own materials holding the DENIED
+/// stamp (left) and the APPROVED stamp (right), the art's desk stamp model (a
+/// wooden handle, a green or red cap, the word on the block), each hanging
+/// DeskConfigSO.stampHover above the desk with its word printed on the rail
+/// over it; it slides in from the desk's right (stampBarTravel) to the point
+/// the reading view shows at stampBarView, and is hidden while in. A stamp is
+/// moved, not the paper: left-press and drag a stamp (its DeskDraggable, the
+/// papers' one input model) and it follows the pointer over the desk, still
+/// stampHover up, over the papers; letting go presses it there and it goes
+/// back to its place in the rack (stampReturnSeconds); a left-click on a
+/// stamp presses it where it hangs. A press stamps whatever lies under its
+/// die (a ray straight down from the die's centre: the first document or the
+/// rulebook it meets): only the passport takes it, anywhere on it (the mark
+/// prints in its ENTRY VISA box, as near the pressed point as the box allows:
+/// DeskDocument.Stamp, StampSpots.AtInArea), and only once (StampFlow: the
+/// second stamp, another paper or the rulebook are refused with a thunk, a
+/// shake and a short note; no mark); pressed on the bare desk the stamp just
+/// goes back. The accepted press dips the stamp onto the paper and is the
+/// passport's verdict; the counter then reads "▲ HAND BACK ▲", and a paper
+/// dropped on the counter hands the papers back (DeskController calls
+/// HandBack: Decided), the only way a case is decided (the PC only
+/// investigates). There is no ink: Papers, Please has none. A right-click or
+/// Esc drops a carried stamp back into the rack, else slides the bar back
 /// (ControlRules.BackOut). The bar takes input while BoothRules.StampsLive
 /// (false slides it back) and shows its tab while the desk takes input
-/// (BoothRules.PropsLive). The hint at the top right says the next step. The
+/// (BoothRules.PropsLive). The hint at the top right says the next step, or
+/// a note (a refusal's, the counter's "Stamp the passport first": Note). The
 /// thump and the thunk are made in code (no sound asset yet). Build Office UI
 /// builds the tab, the hint and the audio source on the overlay and the rack
 /// and its stamps in the office; the office binder lays the rack (Lay).
 /// </summary>
 public sealed class DeskStampTray : MonoBehaviour
 {
-    /// <summary>The desk tuning (the stamps' hover, the bar's place, travel and slide, a press's time, a note's time).</summary>
+    /// <summary>The desk tuning (the stamps' hover, the bar's place, travel and slide, a press's and a return's time, a note's time).</summary>
     [SerializeField] private DeskConfigSO config;
 
     /// <summary>The reading view (optional): the bar slid out brings it, and the bar hangs where it shows the desk at DeskConfigSO.stampBarView.</summary>
     [SerializeField] private DeskView deskView;
 
-    /// <summary>The desk plane (the bar's height and, without the reading view, its place).</summary>
+    /// <summary>The desk plane (the bar's height and, without the reading view, its place; the stamps are dragged over it).</summary>
     [SerializeField] private DeskSurface surface;
 
     /// <summary>The rack in the office (the rail, the arms, the two stamps): hidden while in.</summary>
@@ -55,7 +63,7 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>The grey tab (with "TAB" printed on it): a click slides the bar out or back.</summary>
     [SerializeField] private Button tab;
 
-    /// <summary>The APPROVED stamp's click box (its object is the stamp: it dips on a press).</summary>
+    /// <summary>The APPROVED stamp's click box (its object is the stamp, with its DeskDraggable: it is dragged, and dips on a press).</summary>
     [SerializeField] private Clickable approvedStamp;
 
     /// <summary>The DENIED stamp's click box.</summary>
@@ -67,7 +75,7 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>The DENIED stamp's die.</summary>
     [SerializeField] private Transform deniedDie;
 
-    /// <summary>The hint at the top right (the next step, or why a press was refused); its parent is its plate.</summary>
+    /// <summary>The hint at the top right (the next step, or a note); its parent is its plate.</summary>
     [SerializeField] private TMP_Text hint;
 
     /// <summary>Plays the press's thump and a refusal's thunk (optional).</summary>
@@ -85,27 +93,62 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>The longest ray a stamp casts down (metres).</summary>
     private const float RayLength = 0.5f;
 
+    /// <summary>One stamp of the rack: what it stamps, its parts, its place in the rack and its motion (a press's dip or shake, then the way back to its place).</summary>
+    private sealed class Handle
+    {
+        /// <summary>The stamp it prints (APPROVED or DENIED).</summary>
+        public DeskStamp Kind;
+
+        /// <summary>Its click box (the stamp's object).</summary>
+        public Clickable Click;
+
+        /// <summary>Its die's centre (where it presses).</summary>
+        public Transform Die;
+
+        /// <summary>Its drag over the desk (null: it is only clicked).</summary>
+        public DeskDraggable Drag;
+
+        /// <summary>Its place in the rack (local).</summary>
+        public Vector3 Home;
+
+        /// <summary>Seconds into its press (-1: no press runs).</summary>
+        public float Pressing = -1f;
+
+        /// <summary>True when the running press was refused (a shake, not a dip).</summary>
+        public bool Refused;
+
+        /// <summary>Where the running press started (local): it dips from there.</summary>
+        public Vector3 PressedAt;
+
+        /// <summary>Seconds into its way back to the rack (-1: not going back).</summary>
+        public float Returning = -1f;
+
+        /// <summary>Where its way back started (local).</summary>
+        public Vector3 ReturnFrom;
+    }
+
     private readonly StampFlow _flow = new StampFlow();
     /// <summary>The ray's hits (room for every click box under a stamp: the rulebook's rows and tabs, the papers, the mat).</summary>
     private readonly RaycastHit[] _hits = new RaycastHit[64];
+    private Handle[] _handles = Array.Empty<Handle>();
+    private Handle _carried;
     private int _passport = -1;
     private bool _live;
     private float _slide;
     private Vector3 _out, _in;
     private bool _laid;
-    private Transform _pressed;
-    private Vector3 _pressedHome;
-    private float _pressElapsed = -1f;
-    private bool _pressRefused;
     private string _noteKey;
     private float _noteUntil;
     private AudioClip _thump, _thunk;
 
-    /// <summary>True while the passport carries a verdict (the decision skips the leaving papers' own verdict ink: the player's is on them).</summary>
+    /// <summary>True while the passport carries a verdict (the decision skips the leaving papers' own verdict ink: the player's is on them; a paper dropped on the counter hands the papers back).</summary>
     public bool HasVerdict => _flow.CanHandBack;
 
     /// <summary>True while the bar is out.</summary>
     public bool BarOut => _flow.BarOut;
+
+    /// <summary>True while a stamp is dragged over the desk (a right-click or Esc drops it back into the rack: CancelCarry).</summary>
+    public bool IsCarrying => _carried != null;
 
     /// <summary>What the last press did (the probes read it).</summary>
     public StampPress LastPress { get; private set; }
@@ -120,15 +163,31 @@ public sealed class DeskStampTray : MonoBehaviour
     {
         if (tab != null)
             tab.onClick.AddListener(ToggleBar);
-        if (approvedStamp != null)
-            approvedStamp.onClick.AddListener(() => Press(DeskStamp.Approved));
-        if (deniedStamp != null)
-            deniedStamp.onClick.AddListener(() => Press(DeskStamp.Denied));
+        _handles = new[] { MakeHandle(DeskStamp.Approved, approvedStamp, approvedDie), MakeHandle(DeskStamp.Denied, deniedStamp, deniedDie) };
         if (rack != null)
             rack.gameObject.SetActive(false);
         _thump = Tone("StampThump", 140f, 0.09f, 0.9f);
         _thunk = Tone("StampThunk", 70f, 0.16f, 0.7f);
         Show();
+    }
+
+    /// <summary>A stamp of the rack: a click presses it where it hangs, a drag carries it stampHover over the desk and the release presses it there.</summary>
+    private Handle MakeHandle(DeskStamp kind, Clickable click, Transform die)
+    {
+        var handle = new Handle { Kind = kind, Click = click, Die = die };
+        if (click == null)
+            return handle;
+        handle.Home = click.transform.localPosition;
+        click.onClick.AddListener(() => Press(handle));
+        handle.Drag = click.GetComponent<DeskDraggable>();
+        if (handle.Drag != null)
+        {
+            handle.Drag.Init(surface, config != null ? config.stampHover : 0f);
+            handle.Drag.DragBegan += _ => PickUp(handle);
+            handle.Drag.DragEnded += (_, _) => LetGo(handle);
+            handle.Drag.DragCancelled += _ => PutBack(handle);
+        }
+        return handle;
     }
 
     private void OnDestroy()
@@ -170,17 +229,28 @@ public sealed class DeskStampTray : MonoBehaviour
         Deselect();
         if (!_live)
             return;
+        CancelCarry();
         if (_flow.ToggleBar() && deskView != null)
             deskView.TiltIn();
         Raise();
     }
 
-    /// <summary>Slides the bar back (a right-click or Esc: ControlRules.BackOut); false when it is in already.</summary>
+    /// <summary>Slides the bar back (a right-click or Esc: ControlRules.BackOut), a carried stamp dropped back into the rack first; false when it is in already.</summary>
     public bool Stow()
     {
+        CancelCarry();
         if (!_flow.StowBar())
             return false;
         Raise();
+        return true;
+    }
+
+    /// <summary>Drops a carried stamp back into the rack without a press (a right-click or Esc mid-drag: ControlRules.BackOut's CancelDrag); false when no stamp is carried.</summary>
+    public bool CancelCarry()
+    {
+        if (_carried == null)
+            return false;
+        _carried.Drag.Cancel();
         return true;
     }
 
@@ -199,7 +269,7 @@ public sealed class DeskStampTray : MonoBehaviour
         Show();
     }
 
-    /// <summary>A new traveller (DeskController): <paramref name="passport"/> is the paper whose ENTRY VISA box takes the verdict (the first paper handed over; -1: none). No verdict yet.</summary>
+    /// <summary>A new traveller (DeskController): <paramref name="passport"/> is the paper that takes the verdict (the first paper handed over; -1: none). No verdict yet.</summary>
     public void BeginCase(int passport)
     {
         _passport = passport;
@@ -211,51 +281,89 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>The decision (DeskController): no passport, no verdict.</summary>
     public void EndCase() => BeginCase(-1);
 
-    /// <summary>True when paper <paramref name="index"/> is the passport and it carries a verdict (dropped on the counter, the papers go back).</summary>
-    public bool CanHandBack(int index) => index >= 0 && index == _passport && _flow.CanHandBack;
-
-    /// <summary>The papers handed back with the passport's verdict (the stamped passport dropped on the counter: DeskController): Decided (nothing without a verdict).</summary>
+    /// <summary>The papers handed back with the passport's verdict (a paper dropped on the counter once the passport is stamped: DeskController): Decided (nothing without a verdict).</summary>
     public void HandBack()
     {
         if (!_flow.CanHandBack)
             return;
+        CancelCarry();
         _flow.StowBar();
         Decided?.Invoke(_flow.Verdict == DeskStamp.Approved);
     }
 
+    /// <summary>Shows the note <paramref name="key"/> (a UI string) on the hint's plate for DeskConfigSO.stampNoteSeconds (DeskController: a paper bounced off the counter, "Stamp the passport first").</summary>
+    public void Note(string key)
+    {
+        _noteKey = key;
+        _noteUntil = Time.unscaledTime + (config != null ? config.stampNoteSeconds : 2.5f);
+        Show();
+    }
+
     /// <summary>
-    /// A stamp clicked: it presses on what lies under its die (a ray straight
-    /// down from the die's centre meets a document or the rulebook first, or
-    /// nothing): StampFlow decides; an accepted press prints the mark where it
-    /// landed in the visa box and thumps; a refused one thunks, shakes the
-    /// stamp and says why; a press on the bare desk thumps and says where to
-    /// put the passport.
+    /// Presses <paramref name="handle"/> on what lies under its die (a ray
+    /// straight down from the die's centre meets a document or the rulebook
+    /// first, or nothing): StampFlow decides; an accepted press prints the
+    /// mark in the passport's ENTRY VISA box as near the pressed point as the
+    /// box allows, dips and thumps; a refused one thunks, shakes the stamp and
+    /// says why; pressed on the bare desk the stamp just goes back. A stamp
+    /// carried away from the rack goes back to it after the press (a click on
+    /// a stamp presses it where it hangs).
     /// </summary>
-    public void Press(DeskStamp stamp)
+    private void Press(Handle handle)
     {
         Deselect();
-        if (!_live || !_flow.BarOut)
+        if (!_live || !_flow.BarOut || handle.Click == null)
+        {
+            Return(handle);
             return;
-        Transform die = stamp == DeskStamp.Approved ? approvedDie : deniedDie;
-        Component under = ThingUnder(die, out Vector3 point);
+        }
+        Component under = ThingUnder(handle.Die, out Vector3 point);
         var paper = under as DeskDocument;
-        bool onPassport = paper != null && paper.Index == _passport;
-        LastPress = _flow.Press(stamp, under != null, onPassport, onPassport && paper.InVisaBox(point));
+        LastPress = _flow.Press(handle.Kind, under != null, paper != null && paper.Index == _passport);
+        if (LastPress == StampPress.Nothing)
+        {
+            Return(handle);
+            Raise();
+            return;
+        }
         if (LastPress == StampPress.Stamped)
-            paper.Stamp(stamp == DeskStamp.Approved, paper.PagePoint(point));
-        _noteKey = LastPress switch
+            paper.Stamp(handle.Kind == DeskStamp.Approved, paper.PagePoint(point));
+        string note = LastPress switch
         {
             StampPress.NotPassport => "stamp.refused.notPassport",
-            StampPress.OutsideVisa => "stamp.refused.outsideVisa",
             StampPress.AlreadyStamped => "stamp.refused.already",
-            StampPress.Nothing => "stamp.refused.nothing",
             _ => null
         };
-        _noteUntil = Time.unscaledTime + (config != null ? config.stampNoteSeconds : 2.5f);
-        bool refused = LastPress != StampPress.Stamped && LastPress != StampPress.Nothing;
+        if (note != null)
+            Note(note);
+        bool refused = LastPress != StampPress.Stamped;
         Play(refused ? _thunk : _thump);
-        Dip(stamp == DeskStamp.Approved ? approvedStamp : deniedStamp, refused);
+        Dip(handle, refused);
         Raise();
+    }
+
+    /// <summary>A stamp's drag begins: it is carried (its motion stops where it is).</summary>
+    private void PickUp(Handle handle)
+    {
+        Deselect();
+        handle.Pressing = handle.Returning = -1f;
+        _carried = handle;
+    }
+
+    /// <summary>A carried stamp let go: it presses there (Press), then goes back to the rack.</summary>
+    private void LetGo(Handle handle)
+    {
+        if (_carried == handle)
+            _carried = null;
+        Press(handle);
+    }
+
+    /// <summary>A carried stamp's drag cut short (a right-click or Esc, the bar stowed, the stamps' input taken away): it goes back to the rack without a press.</summary>
+    private void PutBack(Handle handle)
+    {
+        if (_carried == handle)
+            _carried = null;
+        Return(handle);
     }
 
     /// <summary>The first document or the rulebook straight under <paramref name="die"/> (the top of a pile), and where the ray met it; null when it meets neither.</summary>
@@ -264,7 +372,7 @@ public sealed class DeskStampTray : MonoBehaviour
         point = default;
         if (die == null)
             return null;
-        Physics.SyncTransforms(); // a document dragged this frame is where the ray looks for it
+        Physics.SyncTransforms(); // a document or a stamp moved this frame is where the ray looks for it
         int n = Physics.RaycastNonAlloc(new Ray(die.position + Vector3.up * 0.001f, Vector3.down), _hits, RayLength, paperLayers, QueryTriggerInteraction.Collide);
         Component best = null;
         float nearest = float.MaxValue;
@@ -282,31 +390,62 @@ public sealed class DeskStampTray : MonoBehaviour
         return best;
     }
 
-    /// <summary>Slides the bar, dips (or shakes) the pressed stamp, and lets a refusal's note go once its time is up.</summary>
+    /// <summary>Slides the bar, moves each stamp (a press's dip or shake, then its way back to the rack) and lets a note go once its time is up.</summary>
     private void Update()
     {
         SlideBar();
-        if (_pressElapsed >= 0f && _pressed != null)
-        {
-            float seconds = config != null && !MotionPreference.Reduced ? config.stampPressSeconds : 0f;
-            _pressElapsed += Time.unscaledDeltaTime;
-            float t = seconds > 0f ? Mathf.Clamp01(_pressElapsed / seconds) : 1f;
-            float wave = Mathf.Sin(t * Mathf.PI);
-            float depth = config != null ? Mathf.Max(0f, config.stampHover - PressFloor) : 0f;
-            _pressed.localPosition = _pressedHome + (_pressRefused
-                ? new Vector3(Mathf.Sin(t * Mathf.PI * 4f) * Shake * (1f - t), 0f, 0f)
-                : Vector3.down * depth * wave);
-            if (t >= 1f)
-            {
-                _pressed.localPosition = _pressedHome;
-                _pressElapsed = -1f;
-            }
-        }
+        foreach (Handle handle in _handles)
+            Move(handle);
         if (_noteKey != null && Time.unscaledTime >= _noteUntil)
         {
             _noteKey = null;
             Show();
         }
+    }
+
+    /// <summary>One stamp's motion this frame: the press (down onto the paper and up, or a shake), then, away from the rack, the way back to its place (cuts under Reduced Motion).</summary>
+    private void Move(Handle handle)
+    {
+        if (handle.Click == null)
+            return;
+        Transform stamp = handle.Click.transform;
+        if (handle.Pressing >= 0f)
+        {
+            float seconds = config != null && !MotionPreference.Reduced ? config.stampPressSeconds : 0f;
+            handle.Pressing += Time.unscaledDeltaTime;
+            float t = seconds > 0f ? Mathf.Clamp01(handle.Pressing / seconds) : 1f;
+            float depth = config != null ? Mathf.Max(0f, config.stampHover - PressFloor) : 0f;
+            stamp.localPosition = handle.PressedAt + (handle.Refused
+                ? new Vector3(Mathf.Sin(t * Mathf.PI * 4f) * Shake * (1f - t), 0f, 0f)
+                : Vector3.down * depth * Mathf.Sin(t * Mathf.PI));
+            if (t < 1f)
+                return;
+            stamp.localPosition = handle.PressedAt;
+            handle.Pressing = -1f;
+            Return(handle);
+        }
+        if (handle.Returning >= 0f)
+        {
+            float seconds = config != null && !MotionPreference.Reduced ? config.stampReturnSeconds : 0f;
+            handle.Returning += Time.unscaledDeltaTime;
+            float t = seconds > 0f ? Mathf.Clamp01(handle.Returning / seconds) : 1f;
+            stamp.localPosition = Vector3.Lerp(handle.ReturnFrom, handle.Home, DeskZones.Ease(t));
+            if (t >= 1f)
+                handle.Returning = -1f;
+        }
+    }
+
+    /// <summary>Sends a stamp away from the rack back to its place (nothing when it is there, or carried).</summary>
+    private void Return(Handle handle)
+    {
+        if (handle.Click == null || handle == _carried)
+            return;
+        Vector3 at = handle.Click.transform.localPosition;
+        if ((at - handle.Home).sqrMagnitude < 1e-10f)
+            return;
+        handle.Pressing = -1f;
+        handle.ReturnFrom = at;
+        handle.Returning = 0f;
     }
 
     /// <summary>Eases the bar toward out or in (a cut under Reduced Motion); the rack shows while it is not all the way in.</summary>
@@ -326,17 +465,15 @@ public sealed class DeskStampTray : MonoBehaviour
             rack.gameObject.SetActive(shown);
     }
 
-    /// <summary>Starts a stamp's dip onto the paper (or its shake, <paramref name="refused"/>).</summary>
-    private void Dip(Clickable stamp, bool refused)
+    /// <summary>Starts a stamp's dip onto the paper where it is (or its shake, <paramref name="refused"/>).</summary>
+    private static void Dip(Handle handle, bool refused)
     {
-        if (stamp == null)
-            return;
-        if (_pressed != null && _pressElapsed >= 0f)
-            _pressed.localPosition = _pressedHome;
-        _pressed = stamp.transform;
-        _pressedHome = _pressed.localPosition;
-        _pressRefused = refused;
-        _pressElapsed = 0f;
+        handle.Returning = -1f;
+        if (handle.Pressing >= 0f)
+            handle.Click.transform.localPosition = handle.PressedAt; // a press while one runs starts from where that one did
+        handle.PressedAt = handle.Click.transform.localPosition;
+        handle.Refused = refused;
+        handle.Pressing = 0f;
     }
 
     private void Play(AudioClip clip)
@@ -359,12 +496,17 @@ public sealed class DeskStampTray : MonoBehaviour
         Changed?.Invoke();
     }
 
-    /// <summary>The stamps' interactivity and the hint: a refusal's note while it lasts; else, out, where to put the passport, or (stamped) to hand it back on the counter; the hand-back also with the bar in.</summary>
+    /// <summary>The stamps' input (clicked and dragged while the bar is out) and the hint: a note while it lasts; else, out, to drag a stamp onto the passport, or (stamped) to hand the papers back on the counter; the hand-back also with the bar in.</summary>
     private void Show()
     {
-        foreach (Clickable stamp in new[] { approvedStamp, deniedStamp })
-            if (stamp != null)
-                stamp.Interactable = _live && _flow.BarOut;
+        bool usable = _live && _flow.BarOut;
+        foreach (Handle handle in _handles)
+        {
+            if (handle.Click != null)
+                handle.Click.Interactable = usable;
+            if (handle.Drag != null && handle.Drag.enabled != usable)
+                handle.Drag.enabled = usable;
+        }
         if (hint == null)
             return;
         string key = !_live || _passport < 0 ? null

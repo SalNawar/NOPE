@@ -4,16 +4,23 @@ using UnityEngine;
 /// <summary>
 /// The counter (Papers, Please's, Saleh 2026-10-06: "the counter
 /// (traveller's side) shows documents small; the desk shows them full size;
-/// dragging a document back onto the counter hands it back"): the strip of
-/// the desk's clamp area at its far edge along the office view
+/// dragging a document back onto the counter hands it back"; then "this top
+/// line is super annoying, it keeps shrinking the documents as I try to
+/// stamp ... reduce the size of the top counter line"): a slim strip of the
+/// desk's clamp area at its far edge along the office view
 /// (DeskConfigSO.counterDepth deep), ending where the reading view shows the
 /// desk at ViewTop of the screen's height, so it is always reachable while
-/// reading. Papers handed over land on it in a row (Spot); a document over it
-/// is small (DeskController sizes it by Contains). It is drawn as an ivory
-/// see-through strip with its name ("COUNTER"), and with "▲ HAND BACK ▲",
-/// brighter, once the passport carries its verdict (Show). The office binder
-/// binds it once the desk and the reading view are placed; Build Office UI
-/// builds its strip and label. The geometry is DeskZones'.
+/// reading. Papers handed over land small in a row along it
+/// (Spot, DeskConfigSO.counterSpotInset from its far edge); a paper dropped
+/// with the pointer on it (Contains) hands the papers back once the passport
+/// carries its verdict and bounces back to the desk before that
+/// (DeskPapers.Drop). It is drawn as an ivory see-through strip with its name
+/// ("COUNTER"), with "▲ HAND BACK ▲", brighter, once the passport carries its
+/// verdict, and lit while a dragged paper's pointer is over it (Show's
+/// hover: the only cue, a dragged paper keeps its size there) with "STAMP
+/// THE PASSPORT FIRST" before the verdict. The office binder binds it once
+/// the desk and the reading view are placed; Build Office UI builds its
+/// strip and label. The geometry is DeskZones'.
 /// </summary>
 public sealed class DeskCounter : MonoBehaviour
 {
@@ -32,11 +39,14 @@ public sealed class DeskCounter : MonoBehaviour
     /// <summary>The strip's quad (sized at Bind to the counter: as wide as the desk allows either side of the view's centre line, counterDepth deep).</summary>
     [SerializeField] private Renderer strip;
 
-    /// <summary>The strip's label: the counter's name, or "▲ HAND BACK ▲" once the passport carries its verdict.</summary>
+    /// <summary>The strip's label: the counter's name, "▲ HAND BACK ▲" once the passport carries its verdict, or "STAMP THE PASSPORT FIRST" while a paper is dragged over it before that.</summary>
     [SerializeField] private TMP_Text label;
 
     /// <summary>The strip's tint while it is only the counter, and while the stamped passport can be handed back there.</summary>
     [SerializeField] private Color plainTint = new Color(1f, 0.96f, 0.84f, 0.14f), handBackTint = new Color(1f, 0.96f, 0.84f, 0.34f);
+
+    /// <summary>The strip's tint while a dragged paper's pointer is over it: with the verdict (a drop hands the papers back), and before it (a drop bounces back).</summary>
+    [SerializeField] private Color hoverHandBackTint = new Color(1f, 0.96f, 0.84f, 0.6f), hoverRefusedTint = new Color(0.95f, 0.55f, 0.45f, 0.45f);
 
     /// <summary>How far above the desk the strip lies (metres), over the desk's own top and under the papers.</summary>
     private const float ZoneLift = 0.0004f;
@@ -53,6 +63,7 @@ public sealed class DeskCounter : MonoBehaviour
     private Vector3 _right = Vector3.right;
     private MaterialPropertyBlock _block;
     private bool _handBack;
+    private bool _hover;
 
     /// <summary>Lays the counter along the office view's level <paramref name="levelForward"/> (the office binder, once the desk and the reading view are placed).</summary>
     public void Bind(Vector3 levelForward)
@@ -75,30 +86,31 @@ public sealed class DeskCounter : MonoBehaviour
     public bool Contains(Vector3 point) =>
         Edges(out float far, out _, out _, out _) && DeskZones.OnCounter(Vector3.Dot(point - surface.transform.position, _forward), far, config.counterDepth);
 
-    /// <summary>Where paper <paramref name="k"/> of the counter's spots lands, on the desk plane (DeskZones.CounterSpot: a row along the counter's middle line round the view's centre line); the desk's centre without a desk.</summary>
+    /// <summary>Where paper <paramref name="k"/> of the counter's spots lands, on the desk plane (DeskZones.CounterSpot: a row along the counter, counterSpotInset from its far edge, round the view's centre line); the desk's centre without a desk.</summary>
     public Vector3 Spot(int k)
     {
         if (!Edges(out float far, out float left, out float right, out float middle))
             return surface != null ? surface.transform.position : transform.position;
-        (float x, float y) = DeskZones.CounterSpot(k, config.counterSpots, middle, left + EndMargin, right - EndMargin, far, config.counterDepth, config.counterSpacing);
+        (float x, float y) = DeskZones.CounterSpot(k, config.counterSpots, middle, left + EndMargin, right - EndMargin, far, config.counterSpotInset, config.counterSpacing);
         return surface.transform.position + _right * x + _forward * y;
     }
 
-    /// <summary>Shows the strip (<paramref name="shown"/>: a traveller is at the desk) with the counter's name, or "▲ HAND BACK ▲" brighter (<paramref name="handBack"/>: the passport carries its verdict).</summary>
-    public void Show(bool shown, bool handBack)
+    /// <summary>Shows the strip (<paramref name="shown"/>: a traveller is at the desk) with the counter's name, or "▲ HAND BACK ▲" brighter (<paramref name="handBack"/>: the passport carries its verdict); lit while a dragged paper's pointer is over it (<paramref name="hover"/>), reading "STAMP THE PASSPORT FIRST" before the verdict.</summary>
+    public void Show(bool shown, bool handBack, bool hover = false)
     {
         if (zone != null && zone.activeSelf != shown)
             zone.SetActive(shown);
-        if (handBack == _handBack && label != null && !string.IsNullOrEmpty(label.text))
+        if (handBack == _handBack && hover == _hover && label != null && !string.IsNullOrEmpty(label.text))
             return;
         _handBack = handBack;
+        _hover = hover;
         if (label != null)
-            label.text = UiText.Get(handBack ? "stamp.zone.handBack" : "desk.counter");
+            label.text = UiText.Get(handBack ? "stamp.zone.handBack" : hover ? "stamp.zone.stampFirst" : "desk.counter");
         if (strip != null)
         {
             _block ??= new MaterialPropertyBlock();
             strip.GetPropertyBlock(_block);
-            _block.SetColor(BaseColorId, handBack ? handBackTint : plainTint);
+            _block.SetColor(BaseColorId, hover ? (handBack ? hoverHandBackTint : hoverRefusedTint) : handBack ? handBackTint : plainTint);
             strip.SetPropertyBlock(_block);
         }
     }

@@ -24,6 +24,7 @@ MonoBehaviour:
   - TC-610
   introduces:
   - tool:scanner
+  - app:investigation
   - pc:records
   - field:BirthDate
   - field:Incident

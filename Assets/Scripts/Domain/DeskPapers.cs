@@ -58,7 +58,7 @@ public static class CaseDocuments
     }
 }
 
-//// <summary>What happens to a document released on the desk: it stays where it was dropped, it starts scanning, it goes back to where it was picked up, or (the stamped passport dropped on the counter) the papers are handed back.</summary>
+/// <summary>What happens to a document released on the desk: it stays where it was dropped, it starts scanning, it goes back to where it was picked up, the papers are handed back (a paper dropped on the counter once the passport carries its verdict), or it bounces back to the desk (dropped on the counter before that). Not serialized.</summary>
 public enum DropOutcome
 {
     /// <summary>It stays where it was dropped (not over the scanner), in the zone it was dropped in.</summary>
@@ -70,8 +70,11 @@ public enum DropOutcome
     /// <summary>It goes back to where it was picked up (the scanner is busy, or the paper could not be dropped).</summary>
     Refused,
 
-    /// <summary>The stamped passport was dropped on the counter: the papers go back to the traveller with its verdict (Papers, Please's hand-back).</summary>
-    HandsBack
+    /// <summary>A paper was dropped on the counter once the passport carries its verdict: the papers go back to the traveller with it (Papers, Please's hand-back).</summary>
+    HandsBack,
+
+    /// <summary>A paper from the desk was dropped on the counter before the passport carries a verdict: it goes back to where it was picked up, on the desk, with the note "Stamp the passport first" (Saleh 2026-10-06: "documents can only be returned after stamping").</summary>
+    NotStamped
 }
 
 /// <summary>The desk's two zones (Papers, Please's, Saleh 2026-10-06): where a document lies decides its size.</summary>
@@ -90,8 +93,11 @@ public enum DeskZone
 /// on the scanner, one scan at a time, for a fixed duration; at the decision
 /// every paper goes back and a running scan is cancelled. Each paper lies in
 /// a zone (Papers, Please's counter and desk, Saleh 2026-10-06): it arrives on
-/// the counter and takes the zone it is dropped in; the stamped passport
-/// dropped on the counter hands the papers back (HandsBack). With the
+/// the counter and takes the zone it is dropped in, except that a paper from
+/// the desk goes back onto the counter only to hand the papers back: once the
+/// passport carries its verdict any paper dropped there hands them back
+/// (HandsBack); before that it bounces back to the desk (NotStamped:
+/// "documents can only be returned after stamping", Saleh 2026-10-06). With the
 /// Auto-Feed Scanner (the PC redesign SC3) handed-over papers join a queue
 /// and scan themselves in hand-over order, one at a time (FeedNext), an
 /// unready paper skipped until it lies still; a scan by hand (a drop) takes
@@ -196,6 +202,16 @@ public sealed class DeskPapers
         }
     }
 
+    /// <summary>
+    /// What size a dragged document shows while the pointer is over
+    /// <paramref name="under"/>, having shown <paramref name="shown"/>: over
+    /// the desk it grows to full size at once; over the counter it keeps the
+    /// size it has (Saleh 2026-10-06: "it keeps shrinking the documents as I
+    /// try to stamp"), so a document from the desk shrinks only once it is
+    /// handed back.
+    /// </summary>
+    public static DeskZone ShownWhileDragged(DeskZone shown, DeskZone under) => under == DeskZone.Desk ? DeskZone.Desk : shown;
+
     /// <summary>The zone paper <paramref name="i"/> lies in (the counter until it is dropped on the desk; the counter out of range).</summary>
     public DeskZone ZoneOf(int i) => InRange(i) ? _zones[i] : DeskZone.Counter;
 
@@ -255,13 +271,15 @@ public sealed class DeskPapers
     /// Decides a released paper: a paper that is not on the desk (or an index
     /// out of range) is Refused and nothing changes; over the scanner it
     /// starts scanning by hand while the scanner is idle (a queued paper
-    /// leaves the queue) and is Refused while it is busy; elsewhere it lies in
-    /// <paramref name="zone"/> (Stays), unless it is the passport carrying its
-    /// verdict (<paramref name="stampedPassport"/>) dropped on the counter,
-    /// which hands the papers back (HandsBack: the controller then ends the
-    /// case). A scanned paper may be scanned again; a scan keeps its zone.
+    /// leaves the queue) and is Refused while it is busy; on the counter, once
+    /// the passport carries its verdict (<paramref name="verdict"/>), any
+    /// paper hands the papers back (HandsBack: the controller then ends the
+    /// case), and before that a paper from the desk bounces back to it
+    /// (NotStamped: its zone unchanged) while one still on the counter stays
+    /// there; elsewhere it lies in <paramref name="zone"/> (Stays). A scanned
+    /// paper may be scanned again; a scan keeps its zone.
     /// </summary>
-    public DropOutcome Drop(int i, bool overScanner, DeskZone zone = DeskZone.Desk, bool stampedPassport = false)
+    public DropOutcome Drop(int i, bool overScanner, DeskZone zone = DeskZone.Desk, bool verdict = false)
     {
         if (!InRange(i) || StateOf(i) != PaperState.OnDesk)
             return DropOutcome.Refused;
@@ -272,8 +290,15 @@ public sealed class DeskPapers
             BeginScan(i, true);
             return DropOutcome.Scanning;
         }
+        if (zone == DeskZone.Counter)
+        {
+            if (verdict)
+                return DropOutcome.HandsBack;
+            if (_zones[i] == DeskZone.Desk)
+                return DropOutcome.NotStamped;
+        }
         _zones[i] = zone;
-        return zone == DeskZone.Counter && stampedPassport ? DropOutcome.HandsBack : DropOutcome.Stays;
+        return DropOutcome.Stays;
     }
 
     /// <summary>

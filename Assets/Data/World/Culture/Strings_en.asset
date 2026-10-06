@@ -1381,8 +1381,9 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.drag
-    text: 'Move a document: on the counter it is small, on the desk full size; the
-      stamped passport dropped on the counter hands the papers back'
+    text: 'Move a document or a stamp: on the counter a document is small, on the
+      desk full size; once the passport is stamped, a paper dropped on the counter
+      hands the papers back'
     gloss: 0
     tier: 0
   - key: keys.desk.inspect
@@ -1390,8 +1391,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.stamps
-    text: 'The stamp bar (the grey tab on the right): a stamp stamps the ENTRY VISA
-      box under it'
+    text: 'The stamp bar (the grey tab on the right): drag a stamp onto the passport
+      and let go'
     gloss: 0
     tier: 0
   - key: keys.desk.pc
@@ -2259,27 +2260,23 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: stamp.hint.handBack
-    text: Drag the stamped passport onto the COUNTER to hand it back.
+    text: Drag the stamped passport onto the COUNTER to hand the papers back.
     gloss: 0
     tier: 0
   - key: stamp.hint.place
-    text: Put the passport's ENTRY VISA box under a stamp, then click the stamp.
+    text: Drag a stamp onto the passport and let go.
     gloss: 0
     tier: 0
   - key: stamp.refused.notPassport
     text: Only the passport takes a verdict stamp.
     gloss: 0
     tier: 0
-  - key: stamp.refused.outsideVisa
-    text: Only the passport's ENTRY VISA box takes the stamp.
-    gloss: 0
-    tier: 0
   - key: stamp.refused.already
     text: This passport already carries a verdict.
     gloss: 0
     tier: 0
-  - key: stamp.refused.nothing
-    text: 'Nothing under the stamp: put the passport''s ENTRY VISA box under it.'
+  - key: stamp.refused.handBackFirst
+    text: Stamp the passport first.
     gloss: 0
     tier: 0
   - key: desk.counter
@@ -2308,6 +2305,10 @@ MonoBehaviour:
     tier: 0
   - key: stamp.zone.handBack
     text: "\u25B2  HAND BACK  \u25B2"
+    gloss: 0
+    tier: 0
+  - key: stamp.zone.stampFirst
+    text: STAMP THE PASSPORT FIRST
     gloss: 0
     tier: 0
   - key: city.look

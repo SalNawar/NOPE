@@ -19,13 +19,14 @@ public static class DeskZones
 
     /// <summary>
     /// Where paper <paramref name="k"/> of <paramref name="count"/> handed over
-    /// lands on the counter: on its middle line (<paramref name="far"/> less
-    /// half the <paramref name="depth"/>), spaced <paramref name="spacing"/>
-    /// apart round <paramref name="middle"/>, the row kept inside
-    /// [<paramref name="left"/>, <paramref name="right"/>] (narrower when it
-    /// does not fit).
+    /// lands by the counter: on the line <paramref name="inset"/> nearer than
+    /// the far edge <paramref name="far"/> (the counter strip is slimmer than
+    /// a small paper, so the row lies along it rather than in it), spaced
+    /// <paramref name="spacing"/> apart round <paramref name="middle"/>, the
+    /// row kept inside [<paramref name="left"/>, <paramref name="right"/>]
+    /// (narrower when it does not fit).
     /// </summary>
-    public static (float x, float y) CounterSpot(int k, int count, float middle, float left, float right, float far, float depth, float spacing)
+    public static (float x, float y) CounterSpot(int k, int count, float middle, float left, float right, float far, float inset, float spacing)
     {
         count = Math.Max(1, count);
         float width = Math.Max(0f, right - left);
@@ -33,7 +34,7 @@ public static class DeskZones
         float first = middle - step * (count - 1) / 2f;
         first = Math.Max(left, Math.Min(right - step * (count - 1), first));
         int i = ((k % count) + count) % count;
-        return (first + step * i, far - depth / 2f);
+        return (first + step * i, far - inset);
     }
 
     /// <summary>A document's scale on the desk (full size): its height brought to <paramref name="readingHeight"/>, or for a paper wider than the desk paper's <paramref name="deskAspect"/> its width to that height's width; 1 for a paper of no size.</summary>

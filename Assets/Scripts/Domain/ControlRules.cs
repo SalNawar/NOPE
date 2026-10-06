@@ -30,7 +30,7 @@ public readonly struct ControlState
     /// <summary>The view is tilted over the desk (the reading view).</summary>
     public readonly bool DeskView;
 
-    /// <summary>A document is being dragged.</summary>
+    /// <summary>A document or a stamp is being dragged.</summary>
     public readonly bool Dragging;
 
     /// <summary>A text field on the PC has the keyboard (the PC key is typed there).</summary>
@@ -111,7 +111,7 @@ public enum BackOutStep
     /// <summary>Nothing to back out of.</summary>
     None,
 
-    /// <summary>A document being dragged goes back to where it was picked up.</summary>
+    /// <summary>A document being dragged goes back to where it was picked up; a stamp being dragged goes back to the rack unpressed.</summary>
     CancelDrag,
 
     /// <summary>The traveller wheel closes.</summary>
@@ -140,7 +140,7 @@ public enum BackOutStep
 /// The one input model of the office (Saleh 2026-10-06: "copy the controls of
 /// Papers, Please 1:1 ... the controls are inconsistent: I should hold to
 /// pick and sometimes right click to cancel but not all actions like
-/// matching"). Left-click always acts (drag a document, click a stamp, a tab,
+/// matching"). Left-click always acts (drag a document or a stamp, a tab,
 /// a button, a value in inspect mode); right-click and Esc always back out of
 /// the innermost mode, one per press, in one order everywhere (BackOut): a
 /// drag, the wheel, the PC (after its own chain: a menu, the card, the

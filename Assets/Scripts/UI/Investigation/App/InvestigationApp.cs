@@ -242,8 +242,8 @@ public sealed partial class InvestigationApp : MonoBehaviour
             if (arrival.ShowPaper && documents != null)
                 documents.Select(paper);
         }
-        if (arrival.OpenApp && window != null)
-            window.Open();
+        if (arrival.OpenApp)
+            OpenWindow();
         if (arrival.BadgeDocuments)
             Arrived(AppTab.Documents);
         if (arrival.Toast && toast != null)
@@ -266,8 +266,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
         Init();
         if (target.IsNone)
             return false;
-        if (window != null)
-            window.Open();
+        OpenWindow();
         AppPane to = TargetPane, other = _split ? Other(to) : null;
         if (other != null && SameDocument(other, target))
             other.Go(to.Current);
@@ -524,16 +523,17 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// Holds today's date on the workbench (the Calendar menu's date, the
     /// taskbar's date; the desk-first redesign: "the date should be on the
     /// PC"), to match with an expiry or a ticket's date; the app opens. Nothing
-    /// when the agency's calendar has no readable date.
+    /// when the agency's calendar has no readable date, or while the app is
+    /// not on the PC yet (OnPc: the desk's calendar is compared in inspect
+    /// mode instead).
     /// </summary>
     public void HoldToday()
     {
         Init();
         string today = Today;
-        if (today == null || board == null)
+        if (today == null || board == null || !OnPc)
             return;
-        if (window != null)
-            window.Open();
+        OpenWindow();
         board.PickToday(today);
     }
 
@@ -572,7 +572,8 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// The day's introductions (the desk-first redesign, items 3 and 9): the
     /// shelf lists only the agency documents introduced (Citizen records,
     /// today's rules, the calendar: Feature.Records, Rulebook, Calendar) and
-    /// the desktop shows only the apps introduced (Feature.App); a pane on
+    /// the desktop shows only the apps introduced (Feature.App), this app
+    /// itself opening only once it is (OnPc); a pane on
     /// the books before any is introduced turns to today's rules; set at the
     /// day's start.
     /// </summary>
@@ -580,6 +581,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     {
         _introductions = introductions ?? Introductions.None;
         _day = day;
+        OnPc = _introductions.Has(_day, Feature.App(DesktopAppIds.Investigation));
         if (icons != null)
             icons.ShowApps(id => _introductions.Has(_day, Feature.App(id)));
         RefreshShelf();
@@ -591,6 +593,24 @@ public sealed partial class InvestigationApp : MonoBehaviour
 
     /// <summary>What the day has introduced (SetIntroductions).</summary>
     private Introductions _introductions = Introductions.None;
+
+    /// <summary>
+    /// True while the app is on the PC: from the day its key is introduced
+    /// (Feature.App(DesktopAppIds.Investigation), day 5 with the scanner:
+    /// Saleh 2026-10-06, "hide the application if it is not used and unlock
+    /// it when the scanner is available or it is needed"); true until a day
+    /// says (SetIntroductions). While false nothing opens the app: no icon
+    /// (DesktopIcons.ShowApps), no link (Mail's Rules link hides), no shelf
+    /// or search jump, no hold of today's date from the taskbar.
+    /// </summary>
+    public bool OnPc { get; private set; } = true;
+
+    /// <summary>Opens the window (a minimised one restores), only while the app is on the PC (OnPc).</summary>
+    private void OpenWindow()
+    {
+        if (window != null && OnPc)
+            window.Open();
+    }
 
     /// <summary>Today's day number (SetIntroductions).</summary>
     private int _day;

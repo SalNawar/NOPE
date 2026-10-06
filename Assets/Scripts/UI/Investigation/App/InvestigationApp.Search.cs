@@ -105,8 +105,7 @@ public sealed partial class InvestigationApp
     private void Jump(SearchHit hit, bool otherPane)
     {
         IndexEntry e = hit.Entry;
-        if (window != null)
-            window.Open();
+        OpenWindow();
         LinkTarget target = SmartLinks.ForEntry(e.Key, _papers);
         if (target.IsNone)
             target = LinkTarget.ToTab(e.Source);

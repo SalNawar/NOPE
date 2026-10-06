@@ -12,9 +12,9 @@ Saleh, verbatim: "we need to create an FTUE and a help guide that gets expanded 
 | 2-7 | The rulebook opens itself on the day's new page in the reading view; the prompt "NEW TODAY" names it and points where to check it (Got it) | The first traveller who carries it gets the page's one-step practice ("PRACTICE") | + the day's page(s), NEW |
 | 8-15 | Nothing | Nothing | + the day's page(s), NEW; a red NEW badge over the GUIDE tab until opened |
 
-The FTUE's eight steps (`world_source.json` guide.ftue): call a traveller (Call), drag the Passport onto the desk (OnDesk), inspect with SPACE or the magnifier (Inspect), the Passport's Destination against today's rule (Compare: Destination), its Valid Until against the calendar (Compare: Expiry), the stamps out with TAB or the grey tab (StampsOut), the stamp on the ENTRY VISA box (Stamp), the stamped Passport handed back on the counter (HandBack).
+The FTUE's eight steps (`world_source.json` guide.ftue): call a traveller (Call), drag the Passport onto the desk (OnDesk), inspect with SPACE or the magnifier (Inspect), the Passport's Destination against today's rule (Compare: Destination), its Valid Until against the calendar (Compare: Expiry), the stamps out with TAB or the grey tab (StampsOut), a stamp dragged onto the Passport (Stamp; main's moved stamps, 22462fd), the stamped Passport dropped on the counter (HandBack: the counter hands back only after the stamp). No step uses the PC: the Investigation app arrives on day 5.
 
-The practices (guide.pages[].practice): day 2 the Entry Ticket's Citizen ID against the Passport's (Compare: CitizenId); day 3 a Destination against today's rule, the board showing the same two routes (Compare: Destination); day 4 a seal against the Seal Register on the PC (Compare: Seal); day 5 a scan (Scan); day 6 a class against today's class rule (Compare: AccountStatus or TransponderClass); day 7 the waiver's signature against today's waiver rule (Compare: Signature or WaiverNo).
+The practices (guide.pages[].practice): day 2 the Entry Ticket's Citizen ID against the Passport's (Compare: CitizenId); day 3 a Destination against today's rule, the board showing the same two routes (Compare: Destination); day 4 none (see §4: the Seal Register is on the PC's shelf, which the app only brings on day 5); day 5 a scan, its copy read in the Investigation app, new that day (Scan: the scanner's page is "THE SCANNER AND THE INVESTIGATION APP", so day 5's moment introduces the app); day 6 a class against today's class rule (Compare: AccountStatus or TransponderClass); day 7 the waiver's signature against today's waiver rule (Compare: Signature or WaiverNo).
 
 ## 2. The parts
 
@@ -34,11 +34,12 @@ The practices (guide.pages[].practice): day 2 the Entry Ticket's Citizen ID agai
 8. **The last guided day is content** (`guide.guidedThroughDay` 7), not a ScriptableObject knob: it sits with the pages in the content sheet Saleh edits (design rule 4).
 9. **Replay** is in Settings (Keyboard row, beside Show shortcuts) and on the F1 card (under the list); it closes the PC and runs the steps from 1 on any day (a traveller already at the desk counts as called); its Skip ends it again.
 10. **The audit play** (`tools/audit/unity/_TimeDeskAuditPlay.cs.txt`) checks the FTUE starts at step 1 and the call completes it, then skips it (its own clicks need not follow the steps: deterministic), and on each day checks the GUIDE's sheets, the moment (then Got it) and that the practice showed.
-11. **The stamps track** (draggable 3D stamps, the counter strip, the hand-back guard, the PC app until day 5) is untouched: the guide only listens to `DeskStampTray.Changed` and GameManager's decision.
+11. **The stamps track** (main 22462fd: draggable 3D stamps, the slim counter, the hand-back guard, the Investigation app from day 5) is untouched: the guide only listens to `DeskStampTray.Changed` (`BarOut`, `HasVerdict`) and GameManager's decision; its steps' words follow it (drag a stamp onto the Passport; hand back after the stamp; no PC before day 5).
 
 ## 4. Open points for Saleh
 
 - **The bulletins of days 9-14 do not match the ramp**: day 9's says "debt standing" (the day introduces dress), day 10's the recall (debt standing), day 11's "no 2150 goods" (cut; the day introduces the recall), day 14's "paper dates" (the return home). The guide's pages follow the ramp (`Introductions`); the bulletins are content to fix.
+- **Day 4's seals have no reachable Seal Register**: the book is on the Investigation app's shelf, and the app now arrives on day 5 (main 22462fd). The day-4 page says what to check and points at the Passport's seal; it has no practice. Either the app (or just the shelf) comes on day 4, or the seals move to day 5 or later.
 - The other languages' string tables have no guide strings yet (English shows).
 - Sound: no cue on a step done (no sound asset).
 

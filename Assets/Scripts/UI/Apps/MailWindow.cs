@@ -23,7 +23,7 @@ public sealed class MailWindow : MonoBehaviour
     /// <summary>The Internet app's browser (the News link goes to the message's issue on the News site).</summary>
     [SerializeField] private BrowserWindow browser;
 
-    /// <summary>The Investigation app: the Rules link opens it on its Rules tab.</summary>
+    /// <summary>The Investigation app: the Rules link opens it on its Rules tab (the link shows only while the app is on the PC: InvestigationApp.OnPc).</summary>
     [SerializeField] private InvestigationApp investigation;
 
     /// <summary>The inbox list's content (rows are cloned into it).</summary>
@@ -146,7 +146,7 @@ public sealed class MailWindow : MonoBehaviour
         if (selectText != null)
             selectText.gameObject.SetActive(m == null);
         if (linkButton != null)
-            linkButton.gameObject.SetActive(m != null && m.Link != MailLink.None);
+            linkButton.gameObject.SetActive(m != null && m.Link != MailLink.None && (m.Link != MailLink.Rules || investigation == null || investigation.OnPc));
         if (m == null)
             return;
 

@@ -9867,7 +9867,6 @@
       "introduces": [
         "tool:calendar",
         "tool:rulebook",
-        "app:investigation",
         "app:mail",
         "app:notes",
         "app:settings",
@@ -10204,6 +10203,7 @@
       ],
       "introduces": [
         "tool:scanner",
+        "app:investigation",
         "pc:records",
         "field:BirthDate",
         "field:Incident",
@@ -23752,7 +23752,7 @@
       },
       {
         "key": "keys.desk.drag",
-        "text": "Move a document: on the counter it is small, on the desk full size; the stamped passport dropped on the counter hands the papers back",
+        "text": "Move a document or a stamp: on the counter a document is small, on the desk full size; once the passport is stamped, a paper dropped on the counter hands the papers back",
         "gloss": "None",
         "tier": "Full"
       },
@@ -23764,7 +23764,7 @@
       },
       {
         "key": "keys.desk.stamps",
-        "text": "The stamp bar (the grey tab on the right): a stamp stamps the ENTRY VISA box under it",
+        "text": "The stamp bar (the grey tab on the right): drag a stamp onto the passport and let go",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25042,13 +25042,13 @@
       },
       {
         "key": "stamp.hint.handBack",
-        "text": "Drag the stamped passport onto the COUNTER to hand it back.",
+        "text": "Drag the stamped passport onto the COUNTER to hand the papers back.",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "stamp.hint.place",
-        "text": "Put the passport's ENTRY VISA box under a stamp, then click the stamp.",
+        "text": "Drag a stamp onto the passport and let go.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25059,20 +25059,14 @@
         "tier": "Full"
       },
       {
-        "key": "stamp.refused.outsideVisa",
-        "text": "Only the passport's ENTRY VISA box takes the stamp.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "stamp.refused.already",
         "text": "This passport already carries a verdict.",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "stamp.refused.nothing",
-        "text": "Nothing under the stamp: put the passport's ENTRY VISA box under it.",
+        "key": "stamp.refused.handBackFirst",
+        "text": "Stamp the passport first.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25109,6 +25103,12 @@
       {
         "key": "stamp.zone.handBack",
         "text": "▲  HAND BACK  ▲",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.zone.stampFirst",
+        "text": "STAMP THE PASSPORT FIRST",
         "gloss": "None",
         "tier": "Full"
       },
@@ -27693,9 +27693,9 @@
     "basics": [
       "Left-drag moves a paper: small on the counter, full size on the desk.",
       "{inspect} or the red magnifier: inspect. Click one value, then another, to compare them.",
-      "{stamps} or the grey STAMPS tab: the stamps. Only the Passport's ENTRY VISA box takes one.",
-      "Drop the stamped Passport on the counter: the papers go back and the case is decided.",
-      "{pc} or the grey PC tab: your PC (records, books, mail).",
+      "{stamps} or the grey STAMPS tab: the stamps. Drag one onto the Passport and let go: one verdict per Passport.",
+      "Once the Passport is stamped, drop a paper on the counter: the papers go back and the case is decided.",
+      "{pc} or the grey PC tab: your PC (mail; from day 5 the Investigation app, the records and the books).",
       "{back}: back out of what you are doing.",
       "F1 lists every key. A new page joins this GUIDE with each new rule: check it every morning."
     ],
@@ -27794,26 +27794,24 @@
         "feature": "book:Seal",
         "title": "SEALS",
         "check": "The issuing seal on every paper.",
-        "against": "Its office's seal in the Seal Register, on the PC's shelf ({pc}).",
+        "against": "Its issuing office's seal in the Seal Register.",
         "fault": "A seal with the wrong emblem or ring: forged.",
-        "point": "pc",
+        "point": "paper:TC-101",
         "practice": {
-          "id": "seals_practice",
-          "action": "Compare",
-          "categories": [
-            "Seal"
-          ],
+          "id": "",
+          "action": "",
+          "categories": [],
           "form": "",
-          "target": "pc",
-          "text": "Practice: on the PC ({pc}), hold a paper's seal against its office in the Seal Register."
+          "target": "",
+          "text": ""
         }
       },
       {
         "id": "scanner",
         "feature": "tool:scanner",
-        "title": "THE SCANNER AND THE RECORDS",
-        "check": "Every paper's details: drop a paper on the scanner to read its copy on the PC.",
-        "against": "The traveller's record on the PC: the Citizen Account, or the Displacement Registry for the displaced.",
+        "title": "THE SCANNER AND THE INVESTIGATION APP",
+        "check": "Every paper's details: drop a paper on the scanner and its copy opens in the Investigation app, new on your PC today ({pc}).",
+        "against": "The traveller's record in the app: the Citizen Account, or the Displacement Registry for the displaced.",
         "fault": "A birth date on the Passport that the record does not have.",
         "point": "scanner",
         "practice": {
@@ -27822,7 +27820,7 @@
           "categories": [],
           "form": "",
           "target": "scanner",
-          "text": "Practice: drag a paper onto the scanner, then read its copy on the PC ({pc})."
+          "text": "Practice: drag a paper onto the scanner, then read its copy in the Investigation app ({pc})."
         }
       },
       {
@@ -28078,7 +28076,7 @@
         "categories": [],
         "form": "",
         "target": "paper:TC-101",
-        "text": "Slide the Passport's ENTRY VISA box under a stamp and click the stamp: APPROVED or DENIED."
+        "text": "Drag a stamp onto the Passport and let go: APPROVED or DENIED."
       },
       {
         "id": "handback",
@@ -28086,7 +28084,7 @@
         "categories": [],
         "form": "",
         "target": "counter",
-        "text": "Drag the stamped Passport back onto the counter to hand it back."
+        "text": "Drag the stamped Passport onto the counter to hand the papers back."
       }
     ],
     "ftueDone": "That is the job. The rulebook's GUIDE tab explains every rule, and new rules add new pages. F1 lists the keys."

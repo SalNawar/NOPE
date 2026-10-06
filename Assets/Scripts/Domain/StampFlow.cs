@@ -17,14 +17,11 @@ public enum StampPress
     /// <summary>Nothing lay under the stamp (it thumps on the bare desk; no mark).</summary>
     Nothing,
 
-    /// <summary>The passport's ENTRY VISA box lay under the stamp: the mark prints and is the passport's verdict.</summary>
+    /// <summary>The passport lay under the stamp (anywhere on it: Saleh 2026-10-06, "I should be able to stamp anywhere on the document"): the mark prints in its ENTRY VISA box and is the passport's verdict.</summary>
     Stamped,
 
     /// <summary>A paper that is not the passport lay under the stamp: refused (no mark; other documents never take a verdict stamp).</summary>
     NotPassport,
-
-    /// <summary>The passport lay under the stamp, but not its ENTRY VISA box: refused (no mark).</summary>
-    OutsideVisa,
 
     /// <summary>The passport already carries a verdict: refused (no mark; one verdict per passport, so approve and deny together is impossible).</summary>
     AlreadyStamped
@@ -34,13 +31,15 @@ public enum StampPress
 /// The stamps, Papers, Please's way (Saleh 2026-10-06, "copy the controls of
 /// Papers, Please 1:1"; it replaces the desk-first redesign's pick-up and ink
 /// pad): the stamp bar slides out at the desk's right edge (its grey tab, or
-/// TAB) and back; it holds the APPROVED and the DENIED stamp. A click on a
-/// stamp presses it on whatever lies under it: only the passport's ENTRY VISA
-/// box takes it, and only once. The first press there is the passport's
-/// verdict; any later press on the passport, of either stamp, is refused
-/// (Saleh: "there is a bug that you can both approve and decline a paper"),
-/// and so is a press on any other paper or on the passport outside its visa
-/// box. The papers handed back (the stamped passport dropped on the counter)
+/// TAB) and back; it holds the APPROVED and the DENIED stamp. A stamp pressed
+/// (dragged over a paper and let go, or clicked where it hangs: Saleh
+/// 2026-10-06, "the stamp should be two stamps that I physically move ... I
+/// should be able to stamp anywhere on the document") stamps whatever lies
+/// under it: only the passport takes it, anywhere on it (the mark prints in
+/// its ENTRY VISA box), and only once. The first press there is the
+/// passport's verdict; any later press on the passport, of either stamp, is
+/// refused (Saleh: "there is a bug that you can both approve and decline a
+/// paper"), and so is a press on any other paper. The papers handed back (the stamped passport dropped on the counter)
 /// decide the case with that verdict (deny is free; a denial with no logged
 /// evidence earns the one citation: VerdictRules). A new case starts with no
 /// verdict, the bar as it was. Pure; tested headless; DeskStampTray applies it.
@@ -76,12 +75,11 @@ public sealed class StampFlow
     /// Presses <paramref name="stamp"/> on what lies under it: nothing
     /// (<paramref name="onPaper"/> false) is Nothing; a paper that is not the
     /// passport is NotPassport; the passport with a verdict already is
-    /// AlreadyStamped; the passport outside its visa box
-    /// (<paramref name="inVisaBox"/>) is OutsideVisa; else the press is
-    /// Stamped and sets the verdict. A press while the bar is in, or of no
-    /// stamp, is Nothing.
+    /// AlreadyStamped; else (<paramref name="onPassport"/>, anywhere on it)
+    /// the press is Stamped and sets the verdict. A press while the bar is
+    /// in, or of no stamp, is Nothing.
     /// </summary>
-    public StampPress Press(DeskStamp stamp, bool onPaper, bool onPassport, bool inVisaBox)
+    public StampPress Press(DeskStamp stamp, bool onPaper, bool onPassport)
     {
         if (!BarOut || stamp == DeskStamp.None || !onPaper)
             return StampPress.Nothing;
@@ -89,8 +87,6 @@ public sealed class StampFlow
             return StampPress.NotPassport;
         if (Verdict != DeskStamp.None)
             return StampPress.AlreadyStamped;
-        if (!inVisaBox)
-            return StampPress.OutsideVisa;
         Verdict = stamp;
         return StampPress.Stamped;
     }

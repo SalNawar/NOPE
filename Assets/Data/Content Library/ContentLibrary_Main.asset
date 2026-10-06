@@ -17815,11 +17815,12 @@ MonoBehaviour:
     - 'Left-drag moves a paper: small on the counter, full size on the desk.'
     - '{inspect} or the red magnifier: inspect. Click one value, then another, to
       compare them.'
-    - '{stamps} or the grey STAMPS tab: the stamps. Only the Passport''s ENTRY VISA
-      box takes one.'
-    - 'Drop the stamped Passport on the counter: the papers go back and the case
-      is decided.'
-    - '{pc} or the grey PC tab: your PC (records, books, mail).'
+    - '{stamps} or the grey STAMPS tab: the stamps. Drag one onto the Passport and
+      let go: one verdict per Passport.'
+    - 'Once the Passport is stamped, drop a paper on the counter: the papers go back
+      and the case is decided.'
+    - '{pc} or the grey PC tab: your PC (mail; from day 5 the Investigation app,
+      the records and the books).'
     - '{back}: back out of what you are doing.'
     - 'F1 lists every key. A new page joins this GUIDE with each new rule: check
       it every morning.'
@@ -17903,23 +17904,22 @@ MonoBehaviour:
       feature: book:Seal
       title: SEALS
       check: The issuing seal on every paper.
-      against: Its office's seal in the Seal Register, on the PC's shelf ({pc}).
+      against: Its issuing office's seal in the Seal Register.
       fault: 'A seal with the wrong emblem or ring: forged.'
-      point: pc
+      point: paper:TC-101
       practice:
-        id: seals_practice
-        action: 4
-        categories: 1a000000
+        id: 
+        action: 0
+        categories: 
         form: 
-        target: pc
-        text: 'Practice: on the PC ({pc}), hold a paper''s seal against its office
-          in the Seal Register.'
+        target: 
+        text: 
     - id: scanner
       feature: tool:scanner
-      title: THE SCANNER AND THE RECORDS
-      check: 'Every paper''s details: drop a paper on the scanner to read its copy
-        on the PC.'
-      against: 'The traveller''s record on the PC: the Citizen Account, or the Displacement
+      title: THE SCANNER AND THE INVESTIGATION APP
+      check: 'Every paper''s details: drop a paper on the scanner and its copy opens
+        in the Investigation app, new on your PC today ({pc}).'
+      against: 'The traveller''s record in the app: the Citizen Account, or the Displacement
         Registry for the displaced.'
       fault: A birth date on the Passport that the record does not have.
       point: scanner
@@ -17929,8 +17929,8 @@ MonoBehaviour:
         categories: 
         form: 
         target: scanner
-        text: 'Practice: drag a paper onto the scanner, then read its copy on the
-          PC ({pc}).'
+        text: 'Practice: drag a paper onto the scanner, then read its copy in the
+          Investigation app ({pc}).'
     - id: permit
       feature: paper:TC-610
       title: THE TRAVEL PERMIT
@@ -18137,14 +18137,13 @@ MonoBehaviour:
       categories: 
       form: 
       target: paper:TC-101
-      text: 'Slide the Passport''s ENTRY VISA box under a stamp and click the stamp:
-        APPROVED or DENIED.'
+      text: 'Drag a stamp onto the Passport and let go: APPROVED or DENIED.'
     - id: handback
       action: 7
       categories: 
       form: 
       target: counter
-      text: Drag the stamped Passport back onto the counter to hand it back.
+      text: Drag the stamped Passport onto the counter to hand the papers back.
     ftueDone: That is the job. The rulebook's GUIDE tab explains every rule, and
       new rules add new pages. F1 lists the keys.
   world:

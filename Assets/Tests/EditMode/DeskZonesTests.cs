@@ -15,29 +15,29 @@ public class DeskZonesTests
     }
 
     [Test]
-    public void PapersHandedOver_LineUpAlongTheCountersMiddleLine()
+    public void PapersHandedOver_LineUpAlongTheCounter_InsetFromItsFarEdge()
     {
-        (float x0, float y0) = DeskZones.CounterSpot(0, 3, 0f, -0.5f, 0.5f, 0.3f, 0.14f, 0.16f);
-        (float x1, float y1) = DeskZones.CounterSpot(1, 3, 0f, -0.5f, 0.5f, 0.3f, 0.14f, 0.16f);
-        (float x2, _) = DeskZones.CounterSpot(2, 3, 0f, -0.5f, 0.5f, 0.3f, 0.14f, 0.16f);
-        Assert.AreEqual(0.23f, y0, Eps, "the strip's middle line");
+        (float x0, float y0) = DeskZones.CounterSpot(0, 3, 0f, -0.5f, 0.5f, 0.3f, 0.07f, 0.16f);
+        (float x1, float y1) = DeskZones.CounterSpot(1, 3, 0f, -0.5f, 0.5f, 0.3f, 0.07f, 0.16f);
+        (float x2, _) = DeskZones.CounterSpot(2, 3, 0f, -0.5f, 0.5f, 0.3f, 0.07f, 0.16f);
+        Assert.AreEqual(0.23f, y0, Eps, "the arrival line, inset from the far edge");
         Assert.AreEqual(y0, y1, Eps);
         Assert.AreEqual(-0.16f, x0, Eps);
         Assert.AreEqual(0f, x1, Eps, "centred on the middle");
         Assert.AreEqual(0.16f, x2, Eps);
-        Assert.AreEqual(x0, DeskZones.CounterSpot(3, 3, 0f, -0.5f, 0.5f, 0.3f, 0.14f, 0.16f).x, Eps, "the spots are reused in turn");
-        Assert.AreEqual(0f, DeskZones.CounterSpot(0, 1, 0f, -0.5f, 0.5f, 0.3f, 0.14f, 0.16f).x, Eps, "one paper: the middle");
+        Assert.AreEqual(x0, DeskZones.CounterSpot(3, 3, 0f, -0.5f, 0.5f, 0.3f, 0.07f, 0.16f).x, Eps, "the spots are reused in turn");
+        Assert.AreEqual(0f, DeskZones.CounterSpot(0, 1, 0f, -0.5f, 0.5f, 0.3f, 0.07f, 0.16f).x, Eps, "one paper: the middle");
     }
 
     [Test]
     public void TheRow_StaysOnTheCounter_NarrowerWhenItMust()
     {
-        (float x0, _) = DeskZones.CounterSpot(0, 3, 0.45f, -0.5f, 0.5f, 0.3f, 0.14f, 0.16f);
-        (float x2, _) = DeskZones.CounterSpot(2, 3, 0.45f, -0.5f, 0.5f, 0.3f, 0.14f, 0.16f);
+        (float x0, _) = DeskZones.CounterSpot(0, 3, 0.45f, -0.5f, 0.5f, 0.3f, 0.07f, 0.16f);
+        (float x2, _) = DeskZones.CounterSpot(2, 3, 0.45f, -0.5f, 0.5f, 0.3f, 0.07f, 0.16f);
         Assert.AreEqual(0.5f, x2, Eps, "moved back inside");
         Assert.AreEqual(0.18f, x0, Eps);
-        (float n0, _) = DeskZones.CounterSpot(0, 5, 0f, -0.1f, 0.1f, 0.3f, 0.14f, 0.16f);
-        (float n4, _) = DeskZones.CounterSpot(4, 5, 0f, -0.1f, 0.1f, 0.3f, 0.14f, 0.16f);
+        (float n0, _) = DeskZones.CounterSpot(0, 5, 0f, -0.1f, 0.1f, 0.3f, 0.07f, 0.16f);
+        (float n4, _) = DeskZones.CounterSpot(4, 5, 0f, -0.1f, 0.1f, 0.3f, 0.07f, 0.16f);
         Assert.AreEqual(-0.1f, n0, Eps, "squeezed");
         Assert.AreEqual(0.1f, n4, Eps);
     }

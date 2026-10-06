@@ -370,8 +370,7 @@ public sealed partial class InvestigationApp
     /// <summary>Ctrl+K, Ctrl+F: the app opened or restored, the search drawer open, its field focused (its text selected).</summary>
     private void FocusSearch()
     {
-        if (window != null)
-            window.Open();
+        OpenWindow();
         OpenSearch();
         SetRegion(AppRegion.Search, 0, true);
     }

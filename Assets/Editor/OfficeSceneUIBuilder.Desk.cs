@@ -1404,7 +1404,8 @@ public static partial class OfficeSceneUIBuilder
     /// origin at the stamps' feet): a rail in the art's DeskClean green-dark
     /// with wooden end caps, brass arms down to the two stamps, and the
     /// DENIED stamp (left) and the APPROVED stamp (right), each a click box
-    /// on the Interactable layer (its pivot at its foot) holding the art's
+    /// on the Interactable layer (its pivot at its foot) with a DeskDraggable
+    /// (the click box its proxy: the stamp is dragged onto the paper) holding the art's
     /// desk stamp (DeskClean's Clean_Stamp at half size: a turned wooden
     /// handle with a brass ferrule on a wooden block over a dark rubber die,
     /// in the desk's NOPE/Desk Anime materials), a green or red cap on its
@@ -1485,6 +1486,11 @@ public static partial class OfficeSceneUIBuilder
             label.text = word;
 
             click.SetOutline(click.GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponent<TextMeshPro>() == null).ToArray());
+            // The stamp is moved, not the paper (Saleh 2026-10-06): left-drag carries it over the desk; its click box is the drag's proxy.
+            DeskDraggable drag = GetOrAdd<DeskDraggable>(click.gameObject);
+            var soDrag = new SerializedObject(drag);
+            SetRef(soDrag, "proxy", box);
+            soDrag.ApplyModifiedProperties();
             return (click, die);
         }
 
@@ -1784,7 +1790,8 @@ public static partial class OfficeSceneUIBuilder
     /// Office/Desk/Counter (the DeskCounter; the office binder lays it along the
     /// desk's far edge) holding its Zone (inactive until a traveller's papers
     /// are on the desk): an ivory see-through Strip (an unlit quad the counter
-    /// tints) and its Label printed flat ("COUNTER", "▲ HAND BACK ▲").
+    /// tints) and its Label printed flat ("COUNTER", "▲ HAND BACK ▲", "STAMP THE
+    /// PASSPORT FIRST"), as deep as the slim strip allows.
     /// </summary>
     private static DeskCounter BuildCounter(Transform desk, DeskConfigSO config, DeskSurface surface, DeskView deskView)
     {
@@ -1801,7 +1808,8 @@ public static partial class OfficeSceneUIBuilder
         GameObject strip = PrimitivePart(zone, "Strip", PrimitiveType.Quad, Vector3.zero, Vector3.one, stripMaterial);
         strip.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
         strip.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
-        TextMeshPro label = FlatText(zone, "Label", new Vector3(0f, 0.0004f, 0f), new Vector2(0.42f, 0.06f), 0.32f, new Color(0.13f, 0.12f, 0.15f), FontStyles.Bold);
+        // The label fills the slim strip's depth (DeskConfigSO.counterDepth: Saleh 2026-10-06, "reduce the size of the top counter line").
+        TextMeshPro label = FlatText(zone, "Label", new Vector3(0f, 0.0004f, 0f), new Vector2(0.6f, config.counterDepth * 0.75f), 0.32f, new Color(0.13f, 0.12f, 0.15f), FontStyles.Bold);
         label.text = UiText.Get("desk.counter");
         zone.gameObject.SetActive(false);
 
