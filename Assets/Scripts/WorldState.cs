@@ -108,6 +108,9 @@ public sealed class WorldState
     /// <summary>The run's pet (the Home pet spec: a dog or a cat, adopted at New Run, replacing the family): its name, needs and the Welfare Office's count. Additive: an older save loads it unadopted and RunManager adopts the run config's default pet.</summary>
     public PetState pet = new();
 
+    /// <summary>The desk's guide in this run (the FTUE's steps, finished or skipped, the guide pages opened and practised; Guide). Additive: an older save loads it empty.</summary>
+    public GuideState guide = new();
+
     /// <summary>Resolved "tomorrow package" computed at sleep (briefing, news, modifiers).</summary>
     public TomorrowPackage tomorrow = new();
 
