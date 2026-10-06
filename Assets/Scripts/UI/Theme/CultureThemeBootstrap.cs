@@ -4,8 +4,9 @@ using UnityEngine;
 /// Creates the one persistent CultureThemeService at startup (the
 /// InteractionFeedbackBootstrap pattern: configured before it first enables),
 /// from RunConfig's content library, and themes the first scene at once (its
-/// sceneLoaded has already fired). Without generated themes it warns and the
-/// UI keeps its built look.
+/// sceneLoaded has already fired), with the Translation Lens beside it
+/// (TranslationLensPresenter reads the labels the service shows). Without
+/// generated themes it warns and the UI keeps its built look.
 /// </summary>
 public static class CultureThemeBootstrap
 {
@@ -30,6 +31,7 @@ public static class CultureThemeBootstrap
         var host = new GameObject(HostName);
         host.SetActive(false);
         host.AddComponent<CultureThemeService>().Configure(library);
+        host.AddComponent<TranslationLensPresenter>();
         Object.DontDestroyOnLoad(host);
         host.SetActive(true);
         CultureThemeService.RefreshActive();

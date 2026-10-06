@@ -6,7 +6,10 @@ using UnityEngine.UI;
 /// The Settings window's per-player choices: the UI language (piece 6 U12),
 /// "Follow history" or "Always English" (UiLanguagePreference; labels change
 /// at the next scene load, colours, fonts and the wallpaper follow history
-/// either way), and motion (piece 9 R17), "Full" or "Reduced"
+/// either way), a free choice until the Translation Lens's day (day 8): from
+/// then on both buttons are disabled, "Follow history" shows as chosen and a
+/// line under them says why (CultureThemeService.LanguageLocked; the stored
+/// choice comes back with a new run), and motion (piece 9 R17), "Full" or "Reduced"
 /// (MotionPreference; reduced shows translations at once, from the next
 /// traveller); and the desktop's icons (the PC redesign DK5, DK6): open
 /// with a "Double click" (the default) or a "Single click"
@@ -26,6 +29,9 @@ public sealed class SettingsWindowController : MonoBehaviour
 
     /// <summary>Chooses "Always English".</summary>
     [SerializeField] private Button alwaysEnglishButton;
+
+    /// <summary>The line under the language pair, shown while the language is locked (settings.languageLocked).</summary>
+    [SerializeField] private TMP_Text languageLockText;
 
     /// <summary>Chooses Full motion (translations flip letter by letter).</summary>
     [SerializeField] private Button fullMotionButton;
@@ -88,9 +94,11 @@ public sealed class SettingsWindowController : MonoBehaviour
 
     private void OnEnable() => ShowSelection();
 
-    /// <summary>Stores the choice and shows it.</summary>
+    /// <summary>Stores the choice and shows it (never while the language is locked).</summary>
     private void Choose(bool alwaysEnglish)
     {
+        if (CultureThemeService.LanguageLocked)
+            return;
         UiLanguagePreference.AlwaysEnglish = alwaysEnglish;
         ShowSelection();
     }
@@ -133,9 +141,20 @@ public sealed class SettingsWindowController : MonoBehaviour
     {
         CultureThemeService service = CultureThemeService.Instance;
         ThemeSO theme = service != null ? service.ActiveTheme : null;
-        bool english = UiLanguagePreference.AlwaysEnglish;
+        bool locked = CultureThemeService.LanguageLocked;
+        bool english = UiLanguagePreference.AlwaysEnglish && !locked;
         Paint(followHistoryButton, !english, theme);
         Paint(alwaysEnglishButton, english, theme);
+        if (followHistoryButton != null)
+            followHistoryButton.interactable = !locked;
+        if (alwaysEnglishButton != null)
+            alwaysEnglishButton.interactable = !locked;
+        if (languageLockText != null)
+        {
+            languageLockText.gameObject.SetActive(locked);
+            if (locked)
+                languageLockText.text = UiText.Format("settings.languageLocked", TranslationLens.LockDay(RunManager.Instance.Library.Introductions));
+        }
         bool reduced = MotionPreference.Reduced;
         Paint(fullMotionButton, !reduced, theme);
         Paint(reducedMotionButton, reduced, theme);

@@ -14,6 +14,9 @@ using UnityEngine.UI;
 /// labels (or English, by setting or when no installed font draws them), the
 /// wallpaper, the compare colours; diegetic roles are skipped. It also holds
 /// the string lookup UiText reads and the Future currency the wallet shows.
+/// From the Translation Lens's day (TranslationLens.LanguageLocked) the
+/// player's "Always English" no longer applies: the labels follow history and
+/// the lens (TranslationLensPresenter, on the same host) reads them.
 /// Every decision is a tested rule (CultureCue.Pick, CultureChoice, UiStrings,
 /// ThemeRoles); this class only reads engine objects and sets them.
 /// </summary>
@@ -71,6 +74,23 @@ public sealed class CultureThemeService : TimelineCueReceiver
         Strings = new UiStrings(ReadingTable()?.entries, null, false, library.CultureUi.glossPercent);
     }
 
+    /// <summary>
+    /// True from the Translation Lens's day of the run in progress
+    /// (TranslationLens.LanguageLocked: the day the ramp introduces the lens,
+    /// day 8): the office's language follows history whatever Settings holds.
+    /// False with no run (the title) or no content.
+    /// </summary>
+    public static bool LanguageLocked
+    {
+        get
+        {
+            if (!RunManager.HasInstance || RunManager.Instance.World == null)
+                return false;
+            ContentLibrarySO library = RunManager.Instance.Library;
+            return library != null && TranslationLens.LanguageLocked(RunManager.Instance.World.day, library.Introductions);
+        }
+    }
+
     /// <summary>Re-applies the present culture to every loaded scene (the bootstrap, and GameManager.Start once the run exists); null-safe.</summary>
     public static void RefreshActive()
     {
@@ -117,14 +137,15 @@ public sealed class CultureThemeService : TimelineCueReceiver
         UiStringTableSO cultureTable = ActiveTheme.language != ui.readingLanguage ? Library.GetStringTable(ActiveTheme.language) : null;
 
         RuntimeFonts.Result font = _fonts.Resolve(ActiveTheme, () => Sample(reading, cultureTable, ui.glossPercent));
-        Language = CultureChoice.Language(ActiveTheme.language, ui.readingLanguage, cultureTable != null, UiLanguagePreference.AlwaysEnglish, font.Covers);
+        Language = CultureChoice.Language(ActiveTheme.language, ui.readingLanguage, cultureTable != null, UiLanguagePreference.AlwaysEnglish && !LanguageLocked, font.Covers);
         if (Language == LabelLanguage.EnglishNoFont)
             WarnOnce("font:" + ActiveTheme.cultureId, $"[CultureThemeService] No installed font draws the '{ActiveTheme.cultureId}' labels (missing {font.Missing}; tried {font.Tried}); the desk shows English labels in its colours.");
         _font = Language == LabelLanguage.EnglishNoFont ? null : font.Asset;
         FontName = _font != null ? font.Name : "default";
 
         bool cultureLabels = Language == LabelLanguage.Culture;
-        Strings = new UiStrings(reading?.entries, cultureLabels ? cultureTable.entries : null, cultureLabels && cultureTable.rightToLeft, ui.glossPercent);
+        Strings = new UiStrings(reading?.entries, cultureLabels ? cultureTable.entries : null, cultureLabels && cultureTable.rightToLeft, ui.glossPercent,
+                                cultureLabels ? cultureTable.words : null);
 
         FutureCurrency = ResolveFutureCurrency(id);
 

@@ -17,6 +17,38 @@ public sealed class TranslationScript
 }
 
 /// <summary>
+/// The Translation Lens's knobs (Saleh 2026-10-06), written by Generate World
+/// from world_source.json translation.lens: the levels' upgrade ids, the
+/// hover flip's timing, the cascade of an object's phrases and how long a
+/// label takes to resize to its English.
+/// </summary>
+[Serializable]
+public sealed class TranslationLensSettings
+{
+    /// <summary>The levels' upgrade ids, Word first (TranslationLens reads them).</summary>
+    public LensRules rules = new LensRules();
+
+    /// <summary>The hover flip's letter timing (LensFlip; reduced motion skips it).</summary>
+    public FlipTiming flip = new FlipTiming { startDelay = 0f, letterInterval = 0.03f, letterSeconds = 0.09f, scrambleSteps = 2 };
+
+    /// <summary>Seconds between two phrases of an object starting to flip (level 3's cascade).</summary>
+    public float cascadeSeconds = 0.06f;
+
+    /// <summary>Seconds a label takes to shrink to fit its English, or to grow back (0 = at once).</summary>
+    public float resizeSeconds = 0.15f;
+
+    /// <summary>The knobs' problems: the levels (TranslationLens.Problems) and negative timings.</summary>
+    public List<string> Problems()
+    {
+        List<string> problems = TranslationLens.Problems(rules);
+        FlipTiming f = flip ?? new FlipTiming();
+        if (f.startDelay < 0f || f.letterInterval < 0f || f.letterSeconds < 0f || f.scrambleSteps < 0 || cascadeSeconds < 0f || resizeSeconds < 0f)
+            problems.Add("translation.lens: every timing knob must be at least 0.");
+        return problems;
+    }
+}
+
+/// <summary>
 /// Everything translation needs at runtime (piece 9), written by Tools &gt;
 /// TimeDesk &gt; Generate World from world_source.json "translation" into the
 /// content library: the rules the day reads, the scripts, the flip's knobs and
@@ -36,6 +68,9 @@ public sealed class TranslationSettings
 
     /// <summary>26 distinct lower-case ASCII letters: the table of a tongue whose script no installed font draws.</summary>
     public string fallbackGlyphs;
+
+    /// <summary>The Translation Lens's knobs (the office's written language; speech keeps the Speech translators).</summary>
+    public TranslationLensSettings lens = new TranslationLensSettings();
 
     /// <summary>True when Generate World has written tongues.</summary>
     public bool HasData => rules?.tongues != null && rules.tongues.Count > 0;

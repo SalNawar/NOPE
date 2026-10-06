@@ -18,4 +18,7 @@ public sealed class UiStringTableSO : ScriptableObject
 
     /// <summary>The entries, in authored order.</summary>
     public List<UiStringEntry> entries = new List<UiStringEntry>();
+
+    /// <summary>The Translation Lens's glossary: each word of this language's labels and its English (a culture table only; LensWords).</summary>
+    public List<LensWord> words = new List<LensWord>();
 }

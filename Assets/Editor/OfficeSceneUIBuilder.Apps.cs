@@ -264,7 +264,8 @@ public static partial class OfficeSceneUIBuilder
     /// the PC UX redesign §7: System Settings' grouped rows), rebuilt fresh: a
     /// column of titled groups, each heading at Title size over a row of
     /// choices that share the row (the chosen one in the accent colours:
-    /// SettingsWindowController): Language (Follow history / Always English),
+    /// SettingsWindowController): Language (Follow history / Always English,
+    /// and the lock's line under them, hidden until the Translation Lens's day),
     /// Motion (Full / Reduced), Desktop icons open with (Double click /
     /// Single click) and Reset icon positions (its icons wired by
     /// WireIconSettings), Investigation's Text size (a choice per zoom level,
@@ -294,6 +295,11 @@ public static partial class OfficeSceneUIBuilder
         Transform language = SettingsRow(column, "LanguageRow");
         Button follow = SettingsChoice(language, "FollowHistoryButton", "settings.followHistory");
         Button english = SettingsChoice(language, "AlwaysEnglishButton", "settings.alwaysEnglish");
+        TMP_Text languageLock = Text(column, "LanguageLockText", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink,
+                                     ThemeRoleId.WindowBody, null);
+        Chrome(languageLock, PcType.Caption, true);
+        languageLock.raycastTarget = false;
+        languageLock.gameObject.SetActive(false); // shown from the Translation Lens's day (SettingsWindowController)
 
         SettingsHeading(column, "MotionLabel", "settings.motion");
         Transform motion = SettingsRow(column, "MotionRow");
@@ -336,6 +342,7 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(controller);
         SetRef(so, "followHistoryButton", follow);
         SetRef(so, "alwaysEnglishButton", english);
+        SetRef(so, "languageLockText", languageLock);
         SetRef(so, "fullMotionButton", full);
         SetRef(so, "reducedMotionButton", reduced);
         SetRef(so, "iconDoubleClickButton", iconDouble);
