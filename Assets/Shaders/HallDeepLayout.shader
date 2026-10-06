@@ -3,6 +3,8 @@ Shader "NOPE/Hall Deep Layout"
  Properties {
  [PerRendererData] _MainTex("Approved deeper room",2D)="white"{}
  _Masks("Left/front windows and floor receiver",2D)="black"{}
+ _FixtureReference("Original fixture luminance",2D)="black"{}
+ _UseFixtureReference("Use original fixture luminance",Float)=0
  _CityLeft("Complete left panorama",2D)="white"{}
  _CityFront("Connected front extension",2D)="white"{}
  _Region("0 architecture, 1 left city, 2 front city",Float)=0
@@ -20,6 +22,8 @@ Shader "NOPE/Hall Deep Layout"
  #include "HallFloorShadowGeometry.hlsl"
  TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
  TEXTURE2D(_Masks);SAMPLER(sampler_Masks);
+ TEXTURE2D(_FixtureReference);SAMPLER(sampler_FixtureReference);
+ float _UseFixtureReference;
  TEXTURE2D(_CityLeft);SAMPLER(sampler_CityLeft);
  TEXTURE2D(_CityFront);SAMPLER(sampler_CityFront);
  TEXTURE2D(_MorningShadow);SAMPLER(sampler_MorningShadow);
@@ -52,7 +56,10 @@ Shader "NOPE/Hall Deep Layout"
    half3(.81,.59,.46)*_StateWeights.z+half3(.24,.32,.49)*_StateWeights.w;
   half shadow=mask.b>.001?HallGeometricShadow(p,_StateWeights):0;
   // Only bright neutral ceiling diffusers emit; no detached glow columns.
-  half neutral=min(source.r,min(source.g,source.b));
+  // Pale stone must not become a new emitter. Use the registered original
+  // painting to retain only the pre-existing bright ceiling fixtures.
+  half3 fixture=lerp(source.rgb,SAMPLE_TEXTURE2D(_FixtureReference,sampler_FixtureReference,v.uv).rgb,saturate(_UseFixtureReference));
+  half neutral=min(fixture.r,min(fixture.g,fixture.b));
   half emission=smoothstep(.76,.94,neutral)*step(p.y,_CeilingCutoff)*step(_CanvasSize.x*.36,p.x)*(1-max(mask.r,mask.g));
   half3 lit=source.rgb*tint*(1-shadow*mask.b)+emission*half3(1,.78,.5)*(.18*_StateWeights.z+.45*_StateWeights.w);
   source.rgb=lerp(source.rgb,lit,saturate(_LightingAmount));

@@ -16,3 +16,5 @@ White silhouette crowd task (2026-10-06): approved original style reused; nine c
 2026-10-07 � Density clarification: user meant specifically behind the two rear portals, with reduced density around the front portal. Redistributed to 24 rear groups / 15 bridge / 4 middle / 2 near. Added source-registered rear-hoop and glass occlusion. All-group front/left and night inspection recorded in RearPortalPopulationReview-2026-10-07.
 
 2026-10-07 — Cashier animation: reverted broad assembly change after user rejection. Corrected cashier only to uniform growth then shrink, anchored at its base. Verified two live click cycles, no downward movement, exact return, and inspected native captures. See [checklist](CashierPulse/CHECKLIST.md).
+
+2026-10-07 — Warm stone hall: restored reference-inspired ivory walls and polished floor reflections through a new registered background asset. Existing scene layout retained; checked all four lighting states, left pan and live Play. [Verification](WarmStone/CHECKLIST.md).
