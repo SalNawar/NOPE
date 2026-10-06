@@ -78,18 +78,24 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// True from the Translation Lens's day of the run in progress
     /// (TranslationLens.LanguageLocked: the day the ramp introduces the lens,
     /// day 8): the office's language follows history whatever Settings holds.
-    /// False with no run (the title) or no content.
+    /// False with no run (the title) or no content. The cheat menu's
+    /// <see cref="LockOverride"/> wins while it is set.
     /// </summary>
     public static bool LanguageLocked
     {
         get
         {
+            if (LockOverride.HasValue)
+                return LockOverride.Value;
             if (!RunManager.HasInstance || RunManager.Instance.World == null)
                 return false;
             ContentLibrarySO library = RunManager.Instance.Library;
             return library != null && TranslationLens.LanguageLocked(RunManager.Instance.World.day, library.Introductions);
         }
     }
+
+    /// <summary>The cheat menu's language lock for this session (TranslationLensCheats: lock now, unlock), or null to follow the ramp.</summary>
+    public static bool? LockOverride { get; set; }
 
     /// <summary>Re-applies the present culture to every loaded scene (the bootstrap, and GameManager.Start once the run exists); null-safe.</summary>
     public static void RefreshActive()

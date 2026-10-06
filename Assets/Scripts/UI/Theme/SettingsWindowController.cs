@@ -153,7 +153,8 @@ public sealed class SettingsWindowController : MonoBehaviour
         {
             languageLockText.gameObject.SetActive(locked);
             if (locked)
-                languageLockText.text = UiText.Format("settings.languageLocked", TranslationLens.LockDay(RunManager.Instance.Library.Introductions));
+                languageLockText.text = UiText.Format("settings.languageLocked",
+                    RunManager.HasInstance && RunManager.Instance.Library != null ? TranslationLens.LockDay(RunManager.Instance.Library.Introductions) : 0);
         }
         bool reduced = MotionPreference.Reduced;
         Paint(fullMotionButton, !reduced, theme);

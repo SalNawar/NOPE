@@ -34,7 +34,7 @@ The menu is clicked with the mouse. Its tabs: **Play** (the cheats below), **Mor
 | **Skip tutorial / Replay tutorial** | Ends the desk tutorial, or starts it from step 1. |
 | **Time: Clock / Morning / Dusk / Night** | The hall's light at 09:00, 18:30 or 22:00 instead of the shift clock's hour (the clock itself runs on). |
 | **First traveller of the shift** (a name or `D7 …`) | That premade (famous traveller or story character) or that day's story beat stands first: on its own day (a premade today when today's plan lists them, else on the first day a plan does), so the run jumps there, or today's shift restarts. |
-| **More (other tracks)** | Cheats other systems add (the translation lens's abilities). |
+| **More (other tracks)** | Cheats other systems add. The Translation Lens's (`TranslationLensCheats`): **Lens: Word / Sentence / Object** owns the lens up to that level (`TranslationLens.Grant`; the lens reads it at the next pointer move, even in week 1), **Lens: remove** takes the owned levels away (from day 8 the Bureau's Word lens still reads), **Language: lock now / unlock / follow the ramp** locks or frees Settings' language for the session (`CultureThemeService.LockOverride`) and re-applies the labels. "Unlock everything" introduces the lens too, so it locks the language and issues the Word lens. |
 
 The last cheat's line shows under the day, money and stability line.
 
