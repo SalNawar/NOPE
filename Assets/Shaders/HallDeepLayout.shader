@@ -17,6 +17,7 @@ Shader "NOPE/Hall Deep Layout"
  Cull Off ZWrite Off Blend SrcAlpha OneMinusSrcAlpha
  HLSLINCLUDE
  #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+ #include "HallFloorShadowGeometry.hlsl"
  TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
  TEXTURE2D(_Masks);SAMPLER(sampler_Masks);
  TEXTURE2D(_CityLeft);SAMPLER(sampler_CityLeft);
@@ -49,9 +50,7 @@ Shader "NOPE/Hall Deep Layout"
   source.a*=1-max(mask.r,mask.g);
   half3 tint=half3(1,.94,.86)*_StateWeights.x+half3(1,1,1)*_StateWeights.y+
    half3(.81,.59,.46)*_StateWeights.z+half3(.24,.32,.49)*_StateWeights.w;
-  half shadow=SAMPLE_TEXTURE2D(_MorningShadow,sampler_MorningShadow,v.uv).r*_StateWeights.x+
-   SAMPLE_TEXTURE2D(_NoonShadow,sampler_MorningShadow,v.uv).r*_StateWeights.y+
-   SAMPLE_TEXTURE2D(_EveningShadow,sampler_MorningShadow,v.uv).r*_StateWeights.z;
+  half shadow=mask.b>.001?HallGeometricShadow(p,_StateWeights):0;
   // Only bright neutral ceiling diffusers emit; no detached glow columns.
   half neutral=min(source.r,min(source.g,source.b));
   half emission=smoothstep(.76,.94,neutral)*step(p.y,_CeilingCutoff)*step(_CanvasSize.x*.36,p.x)*(1-max(mask.r,mask.g));
@@ -61,10 +60,12 @@ Shader "NOPE/Hall Deep Layout"
  }
  ENDHLSL
  Pass {Tags {"LightMode"="Universal2D"} HLSLPROGRAM
+ #pragma target 3.5
  #pragma vertex vert
  #pragma fragment frag
  ENDHLSL}
  Pass {Tags {"LightMode"="UniversalForward"} HLSLPROGRAM
+ #pragma target 3.5
  #pragma vertex vert
  #pragma fragment frag
  ENDHLSL}

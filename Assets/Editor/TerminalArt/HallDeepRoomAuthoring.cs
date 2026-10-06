@@ -154,10 +154,11 @@ public static class HallDeepRoomAuthoring
             masks[(H-1-y)*W+x]=new Color32(a?(byte)255:(byte)0,b?(byte)255:(byte)0,0,a||b?(byte)255:(byte)0);
         }
         HallFloorShadowAuthoring.Receiver(masks);
+        HallFloorShadowGeometry.WriteShader();
         var mask=SaveData("DeepRoomMasks",masks,true);
-        var morning=SaveData("MorningShadow",HallFloorShadowAuthoring.Bake(masks,new Vector2(100,42),1));
-        var noon=SaveData("NoonShadow",HallFloorShadowAuthoring.Bake(masks,new Vector2(35,15),.65f));
-        var evening=SaveData("EveningShadow",HallFloorShadowAuthoring.Bake(masks,new Vector2(135,52),1.1f));
+        var morning=SaveData("MorningShadow",HallFloorShadowAuthoring.Bake(masks,HallFloorShadowGeometry.Morning,1));
+        var noon=SaveData("NoonShadow",HallFloorShadowAuthoring.Bake(masks,HallFloorShadowGeometry.Noon,1));
+        var evening=SaveData("EveningShadow",HallFloorShadowAuthoring.Bake(masks,HallFloorShadowGeometry.Evening,1));
         var original=art.layers.First(l=>l.id.StartsWith("03 ")).renderer;
         var cityController=original.GetComponent<HallCityExterior>();
         // Original registered art is preserved as the fallback, not overwritten.
