@@ -1,9 +1,0 @@
-Till: 7 mesh parts, 1 readouts; all world poses retained.
-Intercom: 4 mesh parts, 0 readouts; all world poses retained.
-Stamp: 3 mesh parts, 0 readouts; all world poses retained.
-Calculator: 8 mesh parts, 0 readouts; all world poses retained.
-PenPot: 6 mesh parts, 0 readouts; all world poses retained.
-Stapler: 4 mesh parts, 0 readouts; all world poses retained.
-Clock: 5 mesh parts, 1 readouts; all world poses retained.
-Calendar: 5 mesh parts, 1 readouts; all world poses retained.
-StabilityMonitor: 7 mesh parts, 1 readouts; all world poses retained.
