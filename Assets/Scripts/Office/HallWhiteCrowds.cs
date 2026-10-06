@@ -17,6 +17,7 @@ public sealed class HallWhiteCrowds : MonoBehaviour
     [SerializeField] HallLightingRig lighting;
     [SerializeField] SpriteRenderer architecture;
     [SerializeField] Group[] groups=Array.Empty<Group>();
+    [Range(0,1)] public float crowdOpacity=.65f;
     MaterialPropertyBlock properties;
     public Group[] Groups=>groups;
     public Color Palette
@@ -24,7 +25,9 @@ public sealed class HallWhiteCrowds : MonoBehaviour
         get
         {
             var w=HallBakedCycle.Weights(lighting!=null?lighting.Hour:12);
-            return new Color(1,.92f,.82f)*w.x+new Color(.96f,.98f,1)*w.y+new Color(.82f,.66f,.55f)*w.z+new Color(.35f,.43f,.60f)*w.w;
+            // Neutral white/grey silhouettes: daylight changes brightness without
+            // introducing a cream or orange cast against the warm stone.
+            return Color.white*(.92f*w.x+.98f*w.y+.72f*w.z+.43f*w.w);
         }
     }
     public void Configure(HallLightingRig rig,SpriteRenderer hall,Group[] entries)
@@ -47,7 +50,11 @@ public sealed class HallWhiteCrowds : MonoBehaviour
         {
             if(group.silhouette==null)continue;
             float fade=MotionPreference.Reduced?1:Fade(group,seconds);
-            float alpha=fade*group.opacity;
+            // Preserve authored group variation at 40%; slider endpoints are fully
+            // hidden and fully opaque (independent arrival/departure fades remain).
+            float strength=Mathf.Clamp01(crowdOpacity);
+            float opacity=strength<=.4f?group.opacity*strength/.4f:Mathf.Lerp(group.opacity,1,(strength-.4f)/.6f);
+            float alpha=fade*opacity;
             group.silhouette.enabled=alpha>.001f;
             group.silhouette.GetPropertyBlock(properties);
             var tint=color;tint.a=alpha;properties.SetColor("_Tint",tint);
