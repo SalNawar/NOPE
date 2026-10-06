@@ -154,6 +154,7 @@ public static class ContentSheetMap
             Ui(),
             Translation(),
             Home(),
+            Guide(),
             Rows("worldFactors", "world.factors", Key("id"),
                 Text("id").Required().Note("the factor's id (the outcomes, leanings and pulls name their factor by it)"),
                 Text("question").Note("the question the end of the demo answers about 2150"),
@@ -681,6 +682,35 @@ public static class ContentSheetMap
                 Int("cost").Note("the price in cr at the Orders app"),
                 Num("mood").Note("mood points while owned (fewer sick nights, quicker recovery)"),
                 Text("blurb").Note("the Orders app's line"))).Note("Home's house upgrades, the radio, the night's bills, the pet and its toys");
+
+    /// <summary>The desk's guide (Saleh 2026-10-06: the FTUE and a rulebook page per new rule): the BASICS page, the pages, the day-1 steps.</summary>
+    private static SheetSpec Guide() =>
+        Single("guide", "guide",
+            Int("guidedThroughDay").Note("the last day the rulebook opens itself on the day's new page with a practice prompt; later days only badge the GUIDE tab"),
+            Text("basicsTitle").Note("the BASICS page's heading"),
+            Values("guideBasics", "basics", Text("text")).Note("the BASICS page's lines, in order: {inspect}, {stamps}, {pc}, {back} print the keys"),
+            Rows("guidePages", "pages", Key("id"),
+                Text("id").Required().Note("the page's id (saved as read and practised)"),
+                Text("feature").Required().Note("the introduction key that adds the page on its first day: paper:TC-230, tool:board, book:Seal, rule:Rule_DebtStanding"),
+                Text("title").Note("the page's heading"),
+                Text("check").Note("what to check"),
+                Text("against").Note("what to check it against"),
+                Text("fault").Note("an example of a fault"),
+                Text("point").Note("where the new rule's moment points: sign, inspect, stamps, pc, rulebook, calendar, board, scanner, counter, traveller, paper:<form>, field:<form>/<detail>"),
+                Text("practice.id").Note("the practice's id (blank: no practice)"),
+                Text("practice.action").OneOf("", "Call", "OnDesk", "Inspect", "Compare", "StampsOut", "Stamp", "HandBack", "Scan").Note("what completes the practice on the first traveller who carries the page's feature (blank: no practice)"),
+                List("practice.categories").Note("for Compare: the details the comparison must be about, any of them (blank: any)"),
+                Text("practice.form").Note("for OnDesk: the paper's form (blank: any)"),
+                Text("practice.target").Note("where the practice's arrow points (as point)"),
+                Text("practice.text").Note("the practice prompt's line: {inspect}, {stamps}, {pc}, {back} print the keys")).Note("one page per introduced paper, rule or tool, added the day its feature is introduced (Introductions)"),
+            Rows("guideFtue", "ftue", Key("id"),
+                Text("id").Required().Note("the step's id (saved as done)"),
+                Text("action").Required().OneOf("Call", "OnDesk", "Inspect", "Compare", "StampsOut", "Stamp", "HandBack", "Scan").Note("what the player does to complete it"),
+                List("categories").Note("for Compare: the details the comparison must be about, any of them (blank: any)"),
+                Text("form").Note("for OnDesk: the paper's form (blank: any)"),
+                Text("target").Note("where the arrow points (as guidePages.point)"),
+                Text("text").Note("the prompt's one line: {inspect}, {stamps}, {pc}, {back} print the keys")).Note("day 1's steps, in order: each completes when the player does its action"),
+            Text("ftueDone").Note("the line once the last step is done")).Note("the FTUE and the rulebook's GUIDE pages");
 
     private static SheetSpec Translation() =>
         Single("translation", "translation",

@@ -17808,6 +17808,345 @@ MonoBehaviour:
         Temporal Customs, Desk 3.'
       paperWelfare: 'ANIMAL WELFARE: inspectors are asking after a {kind} called
         {name} in Block C.'
+  guide:
+    guidedThroughDay: 7
+    basicsTitle: BASICS
+    basics:
+    - 'Left-drag moves a paper: small on the counter, full size on the desk.'
+    - '{inspect} or the red magnifier: inspect. Click one value, then another, to
+      compare them.'
+    - '{stamps} or the grey STAMPS tab: the stamps. Only the Passport''s ENTRY VISA
+      box takes one.'
+    - 'Drop the stamped Passport on the counter: the papers go back and the case
+      is decided.'
+    - '{pc} or the grey PC tab: your PC (records, books, mail).'
+    - '{back}: back out of what you are doing.'
+    - 'F1 lists every key. A new page joins this GUIDE with each new rule: check
+      it every morning.'
+    pages:
+    - id: passport
+      feature: paper:TC-101
+      title: THE PASSPORT
+      check: Its photo and its name.
+      against: 'The traveller at the desk: is it their face?'
+      fault: 'Someone else''s photo: deny.'
+      point: paper:TC-101
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: destination
+      feature: tool:rulebook
+      title: TODAY'S DESTINATION
+      check: The Passport's Destination.
+      against: Today's rule on the RULES tab (from day 3 the Departure Board shows
+        it too).
+      fault: Republican Rome on a day only Periclean Athens is open.
+      point: rulebook
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: dates
+      feature: tool:calendar
+      title: VALID UNTIL
+      check: The Passport's Valid Until (from day 2 the ticket's departure date too).
+      against: 'The calendar on the desk: today''s date.'
+      fault: 'Valid Until yesterday: the Passport has expired.'
+      point: calendar
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: ticket
+      feature: paper:TC-230
+      title: THE ENTRY TICKET
+      check: 'Its Citizen ID and its departure date. Ask for it: flag it on the PAPERS
+        tab, then ask on the wheel.'
+      against: The Passport's Citizen ID; the calendar for the date.
+      fault: 'KTR-418 on the Passport, KTR-481 on the ticket: doctored.'
+      point: field:TC-230/CitizenId
+      practice:
+        id: ticket_practice
+        action: 4
+        categories: 09000000
+        form: 
+        target: field:TC-230/CitizenId
+        text: 'Practice: get this traveller''s Entry Ticket, press {inspect}, click
+          its Citizen ID, then the Passport''s.'
+    - id: board
+      feature: tool:board
+      title: THE DEPARTURE BOARD
+      check: The Passport's Destination.
+      against: The routes the Departure Board shows open today, the same as today's
+        rule.
+      fault: A destination no open route on the board serves.
+      point: board
+      practice:
+        id: board_practice
+        action: 4
+        categories: 0a000000
+        form: 
+        target: board
+        text: 'Practice: two routes are open today (the board). Press {inspect},
+          click the Destination, then today''s rule.'
+    - id: seals
+      feature: book:Seal
+      title: SEALS
+      check: The issuing seal on every paper.
+      against: Its office's seal in the Seal Register, on the PC's shelf ({pc}).
+      fault: 'A seal with the wrong emblem or ring: forged.'
+      point: pc
+      practice:
+        id: seals_practice
+        action: 4
+        categories: 1a000000
+        form: 
+        target: pc
+        text: 'Practice: on the PC ({pc}), hold a paper''s seal against its office
+          in the Seal Register.'
+    - id: scanner
+      feature: tool:scanner
+      title: THE SCANNER AND THE RECORDS
+      check: 'Every paper''s details: drop a paper on the scanner to read its copy
+        on the PC.'
+      against: 'The traveller''s record on the PC: the Citizen Account, or the Displacement
+        Registry for the displaced.'
+      fault: A birth date on the Passport that the record does not have.
+      point: scanner
+      practice:
+        id: scanner_practice
+        action: 8
+        categories: 
+        form: 
+        target: scanner
+        text: 'Practice: drag a paper onto the scanner, then read its copy on the
+          PC ({pc}).'
+    - id: permit
+      feature: paper:TC-610
+      title: THE TRAVEL PERMIT
+      check: 'The displaced come home with a Travel Permit: its Displacement No.
+        and incident.'
+      against: Their entry in the Displacement Registry on the PC.
+      fault: An incident the registry does not list.
+      point: paper:TC-610
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: class
+      feature: paper:TC-240
+      title: THE TRANSPONDER CARD AND CLASS
+      check: The Passport's Travel Class.
+      against: 'The Transponder Card''s class: Premium with Premium, Standard with
+        Economy.'
+      fault: 'A Premium passport on an Economy card: a poor traveller posing as rich.'
+      point: paper:TC-240
+      practice:
+        id: class_practice
+        action: 4
+        categories: 0e00000010000000
+        form: 
+        target: field:TC-240/TransponderClass
+        text: 'Practice: press {inspect}, click the card''s class (or the Passport''s),
+          then today''s class rule.'
+    - id: waiver
+      feature: paper:TC-310
+      title: THE STRANDING WAIVER
+      check: 'A Standard passport on an Economy card also needs a signed waiver:
+        ask for it.'
+      against: Its signature and Waiver No.; today's waiver rule on the RULES tab.
+      fault: An unsigned waiver, or none at all.
+      point: paper:TC-310
+      practice:
+        id: waiver_practice
+        action: 4
+        categories: 1600000012000000
+        form: 
+        target: field:TC-310/Signature
+        text: 'Practice: on a Standard passport, ask for the waiver, then hold today''s
+          waiver rule against its signature.'
+    - id: workpermit
+      feature: paper:TC-520
+      title: THE WORK PERMIT
+      check: 'Debt Relief labourers: a registered Work Permit, an Economy card and
+        a signed waiver.'
+      against: The labour rule on the RULES tab; its employer, term and wage against
+        the record.
+      fault: 'A contract the record does not list: forged.'
+      point: paper:TC-520
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: dress
+      feature: rule:Rule_DressForDestination
+      title: DRESS FOR THE DESTINATION
+      check: 'Their clothes: the wheel''s Look menu.'
+      against: The Costume Guide on the PC's shelf.
+      fault: 'A wristwatch on the way to Periclean Athens: it causes a panic.'
+      point: traveller
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: debt
+      feature: rule:Rule_DebtStanding
+      title: DEBT STANDING
+      check: The Citizen Account's Standing and Debt.
+      against: 'The debt rule: in debt (Eligible), only on Debt Relief; a Frozen
+        account never departs.'
+      fault: 'A tourist whose account is Eligible: a debtor posing as a tourist.'
+      point: pc
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: recall
+      feature: rule:Rule_DriftboxRecall
+      title: THE DRIFTBOX 3 RECALL
+      check: The transponder model on the Transponder Card.
+      against: 'The recall rule: every Driftbox 3 is grounded.'
+      fault: Any departure on a Driftbox 3.
+      point: paper:TC-240
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: ban
+      feature: rule:Rule_NoModernGermany
+      title: BANS
+      check: The Passport's Destination.
+      against: A route the board shows CLOSED, and today's rules.
+      fault: A trip to Weimar Berlin while its route is CLOSED.
+      point: board
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: range
+      feature: rule:Rule_NoEconomyAncient
+      title: THE RANGE LIMIT
+      check: An Economy traveller's destination.
+      against: 'The range rule: Economy units no longer reach the Ancient era.'
+      fault: A poor tourist bound for Republican Rome.
+      point: rulebook
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: returnhome
+      feature: rule:Rule_ReturnHome
+      title: THE RETURN HOME
+      check: 'The displaced''s Intake Declaration: its currency, language and technology.'
+      against: The books on the PC's shelf (Tongues, Capitals, Rulers) for the home
+        they claim.
+      fault: 'A currency from another time: a false origin.'
+      point: paper:TC-620
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: returnorder
+      feature: paper:TC-630
+      title: THE RETURN ORDER
+      check: The displaced's Return Order and its date.
+      against: 'The calendar: they depart only on that date.'
+      fault: A Return Order dated tomorrow.
+      point: paper:TC-630
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    ftue:
+    - id: call
+      action: 1
+      categories: 
+      form: 
+      target: sign
+      text: Click the AVAILABLE sign to call the first traveller.
+    - id: desk
+      action: 2
+      categories: 
+      form: 
+      target: paper:TC-101
+      text: Drag the Passport from the counter onto the desk to read it.
+    - id: inspect
+      action: 3
+      categories: 
+      form: 
+      target: inspect
+      text: Press {inspect} (or the red magnifier) to inspect.
+    - id: destination
+      action: 4
+      categories: 0a000000
+      form: 
+      target: rulebook
+      text: 'Click the Passport''s Destination, then today''s rule in the rulebook:
+        is it open today?'
+    - id: expiry
+      action: 4
+      categories: 0d000000
+      form: 
+      target: calendar
+      text: 'Click the Passport''s Valid Until, then the calendar: is it still valid?'
+    - id: stamps
+      action: 5
+      categories: 
+      form: 
+      target: stamps
+      text: Press {stamps} (or the grey STAMPS tab) to bring out the stamps.
+    - id: stamp
+      action: 6
+      categories: 
+      form: 
+      target: paper:TC-101
+      text: 'Slide the Passport''s ENTRY VISA box under a stamp and click the stamp:
+        APPROVED or DENIED.'
+    - id: handback
+      action: 7
+      categories: 
+      form: 
+      target: counter
+      text: Drag the stamped Passport back onto the counter to hand it back.
+    ftueDone: That is the job. The rulebook's GUIDE tab explains every rule, and
+      new rules add new pages. F1 lists the keys.
   world:
     factors:
     - id: government

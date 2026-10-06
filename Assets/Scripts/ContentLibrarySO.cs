@@ -111,6 +111,9 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Home's radio: which house upgrade plays it and its lines (written by Generate World from world_source.json "home"; the house upgrades are in the upgrades list).</summary>
     [SerializeField] private HomeContent home = new();
 
+    /// <summary>The desk's guide (world_source.json "guide", via Generate World): the BASICS page, a rulebook page per introduced feature, the day-1 steps (Guide).</summary>
+    [SerializeField] private GuideContent guide = new();
+
     [Header("The world's outcomes (the endings spec E0)")]
     /// <summary>The questions the end of the demo answers about 2150 and how each is answered today (written by Generate World from world_source.json "world").</summary>
     [SerializeField] private WorldContent world = new();
@@ -417,6 +420,11 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>Home's radio block (never null).</summary>
     public HomeContent Home => home ?? new HomeContent();
+
+    /// <summary>The guide over the ramp (its pages by day, the day's moment, the FTUE's steps), built once per load from the guide content and the introductions.</summary>
+    public Guide Guide => _guide ??= new Guide(guide ?? new GuideContent(), Introductions);
+
+    [NonSerialized] private Guide _guide;
 
     /// <summary>The world block: the factors the end of the demo answers (never null).</summary>
     public WorldContent World => world ?? new WorldContent();

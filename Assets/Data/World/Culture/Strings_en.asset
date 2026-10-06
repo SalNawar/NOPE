@@ -2354,6 +2354,73 @@ MonoBehaviour:
     text: PAPERS
     gloss: 0
     tier: 0
+  - key: desk.rulebook.tabGuide
+    text: GUIDE
+    gloss: 0
+    tier: 0
+  - key: desk.guide.body
+    text: '<b>CHECK</b>  {0}
+
+
+      <b>AGAINST</b>  {1}
+
+
+      <b>A FAULT</b> 
+      {2}'
+    gloss: 0
+    tier: 0
+  - key: desk.guide.page
+    text: '{0} / {1}'
+    gloss: 0
+    tier: 0
+  - key: desk.guide.new
+    text: NEW
+    gloss: 0
+    tier: 0
+  - key: desk.guide.prev
+    text: < PREV
+    gloss: 0
+    tier: 0
+  - key: desk.guide.next
+    text: NEXT >
+    gloss: 0
+    tier: 0
+  - key: guide.step
+    text: TUTORIAL {0}/{1}
+    gloss: 0
+    tier: 0
+  - key: guide.skip
+    text: Skip tutorial
+    gloss: 0
+    tier: 0
+  - key: guide.done
+    text: TUTORIAL DONE
+    gloss: 0
+    tier: 0
+  - key: guide.newToday
+    text: NEW TODAY
+    gloss: 0
+    tier: 0
+  - key: guide.moment
+    text: <b>{0}</b>  {1} Its page is open in the rulebook's GUIDE tab.
+    gloss: 0
+    tier: 0
+  - key: guide.practice
+    text: PRACTICE
+    gloss: 0
+    tier: 0
+  - key: guide.gotIt
+    text: Got it
+    gloss: 0
+    tier: 0
+  - key: settings.replayTutorial
+    text: Replay the desk tutorial
+    gloss: 0
+    tier: 0
+  - key: keys.replayTutorial
+    text: Replay the desk tutorial
+    gloss: 0
+    tier: 0
   - key: tooltip.credits
     text: '{1}: {0}'
     gloss: 0

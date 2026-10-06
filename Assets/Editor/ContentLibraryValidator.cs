@@ -99,6 +99,7 @@ public static partial class ContentLibraryValidator
         issues += CheckForcedEntries(lib);
         issues += CheckPremadeRows(lib);
         issues += CheckPacing(lib);
+        issues += CheckGuide(lib);
 
         // --- Cross references ---
         issues += CheckLegendaryReferences(lib);

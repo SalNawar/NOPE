@@ -153,6 +153,7 @@ public static class NarrativeWorkbook
         AddStrandings(b, sheet, context);
         AddMail(b, sheet);
         AddPaper(b, sheet);
+        AddGuide(b, sheet);
 
         foreach (int r in b.Rows("historyRules"))
         {
@@ -304,6 +305,33 @@ public static class NarrativeWorkbook
         n = 0;
         foreach (int r in b.Rows("homeRadio"))
             sheet.Field(b, id, who, "one a night at home, in order, once the radio is owned", "radio", "homeRadio", r, "text", string.Empty, string.Empty, $"night {++n}");
+    }
+
+    /// <summary>The desk's guide (Saleh 2026-10-06): day 1's tutorial steps, the rulebook's BASICS page and each GUIDE page with its practice prompt.</summary>
+    private static void AddGuide(Book b, SheetWriter sheet)
+    {
+        const string id = "guide", who = "The desk's guide";
+        sheet.Section(id, who, "day 1's tutorial, and the rulebook's GUIDE: BASICS and one page per new rule, added the day it is introduced",
+                      "{inspect}, {stamps}, {pc}, {back} print the keys");
+        int n = 0;
+        foreach (int r in b.Rows("guideFtue"))
+            sheet.Field(b, id, who, "day 1 (or replayed from Settings or F1), one step at a time", "tutorial", "guideFtue", r, "text", string.Empty, "step " + b.Get("guideFtue", r, "id"), $"step {++n}");
+        foreach (int r in b.Rows("guide"))
+        {
+            sheet.Field(b, id, who, "after the tutorial's last step", "tutorial", "guide", r, "ftueDone", string.Empty, string.Empty);
+            sheet.Field(b, id, who, "the rulebook's GUIDE, every day", "basics", "guide", r, "basicsTitle", string.Empty, string.Empty);
+        }
+        n = 0;
+        foreach (int r in b.Rows("guideBasics"))
+            sheet.Field(b, id, who, "the rulebook's GUIDE, every day", "basics", "guideBasics", r, "text", string.Empty, string.Empty, $"line {++n}");
+        foreach (int r in b.Rows("guidePages"))
+        {
+            string part = "page " + b.Get("guidePages", r, "id"), when = "from the day " + b.Get("guidePages", r, "feature") + " is introduced";
+            foreach (string field in new[] { "title", "check", "against", "fault" })
+                sheet.Field(b, id, who, when, part, "guidePages", r, field, string.Empty, string.Empty);
+            if (b.Get("guidePages", r, "practice.text").Length > 0)
+                sheet.Field(b, id, who, when + ", on the first traveller who carries it (days 2-7)", part, "guidePages", r, "practice.text", string.Empty, string.Empty, "practice");
+        }
     }
 
     private static void AddAppearance(Book b, SheetWriter sheet, string narrative, string who, int r)
