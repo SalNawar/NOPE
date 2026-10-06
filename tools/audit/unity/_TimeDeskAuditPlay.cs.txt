@@ -594,9 +594,11 @@ public static class _TimeDeskAuditPlay
             Check(o.App.Board.Log.HasDifference, $"d{day} slot {slot}: a right denial ({FaultKey(c)}) rests on a logged difference ({o.App.Board.Log.Differences} logged)");
         if (o.Stamps != null)
         {
-            // Papers, Please's controls (2026-10-06) with the art's 3D stamps (Saleh, same day): TAB slides the 3D stamp bar out over the desk, the
-            // passport goes to the desk and its ENTRY VISA box under a stamp, a click on the stamp stamps it (the other stamp is then refused), and
-            // the stamped passport dropped on the counter hands the papers back.
+            // Papers, Please's controls (2026-10-06) with the art's 3D stamps (Saleh, same day), moved by the clerk (Saleh, later that day: "the
+            // stamp should be two stamps that I physically move ... I should be able to stamp anywhere on the document"): TAB slides the 3D stamp
+            // bar out over the desk, the passport goes to the desk, a stamp is dragged onto it anywhere and let go (the mark lands in its ENTRY
+            // VISA box; the other stamp is then refused), and the stamped passport dropped on the slim counter hands the papers back. Before
+            // the stamp, a paper dropped on the counter bounces back to the desk ("documents can only be returned after stamping").
             if (!o.Stamps.BarOut)
                 o.Controls.Press(ControlKey.Stamps);
             yield return Seconds(0.4f);
@@ -611,36 +613,54 @@ public static class _TimeDeskAuditPlay
                 // The reading view's blend (0.5 s) ends before the passport is laid under the stamp the camera looks through.
                 yield return Seconds(0.9f);
                 Check(passport.Zone == DeskZone.Desk, $"d{day} slot {slot}: a click on the passport on the counter brings it to the desk, full size");
-                // Once: another paper under a stamp refuses it (other documents never take a verdict stamp).
+                // Once: a stamp dragged onto another paper is refused (other documents never take a verdict stamp).
                 DeskDocument other = o.Papers().FirstOrDefault(p => p != passport && !p.IsSliding);
                 if (other != null && First("not the passport"))
                 {
                     Call(o.Desk, "HandlePaperClicked", other, -1);
                     yield return Seconds(0.5f);
-                    yield return UnderStamp(o, other, !accept);
-                    PressStamp(o, !accept);
-                    yield return Frames(2);
+                    yield return DragStamp(o, !accept, other.Sheet.position);
                     Check(o.Stamps.LastPress == StampPress.NotPassport && !o.Stamps.HasVerdict,
-                          $"d{day} slot {slot}: paper {other.Index} (not the passport) under the stamp refuses it: only the passport takes a verdict ({o.Stamps.LastPress})");
+                          $"d{day} slot {slot}: a stamp dragged onto paper {other.Index} (not the passport) is refused: only the passport takes a verdict ({o.Stamps.LastPress})");
                     if (ShotsOn)
                         yield return Shots("stamp_refused_not_passport");
-                    other.transform.position = ((DeskCounter)Field(o.Desk, "counter")).Spot(1);
-                    Call(o.Desk, "HandleDragEnded", other.Drag, other.transform.position);
-                    yield return Frames(2);
                 }
-                yield return UnderStamp(o, passport, accept);
-                PressStamp(o, accept);
+                // Once: the passport dropped on the counter before its verdict bounces back to the desk, full size, with a note; nothing is decided.
+                if (First("counter before the stamp"))
+                {
+                    Vector3 onStrip = CounterPoint(o), pickedAt = passport.transform.position;
+                    passport.Drag.RememberPosition(); // the drag's pick-up point (the controller is driven directly, not through the EventSystem)
+                    Call(o.Desk, "HandleDragBegan", passport.Drag);
+                    Call(o.Desk, "HandleDragged", passport.Drag, onStrip);
+                    yield return Frames(2);
+                    Check(passport.Zone == DeskZone.Desk && (bool)Field(o.Desk, "_overCounter"),
+                          $"d{day} slot {slot}: dragged over the counter the passport keeps its size and the counter lights (zone {passport.Zone})");
+                    passport.transform.position = onStrip;
+                    Call(o.Desk, "HandleDragEnded", passport.Drag, onStrip);
+                    yield return Frames(2);
+                    Check(o.Game.Ledger.verdicts.Count == before && passport.Zone == DeskZone.Desk && (string)Field(o.Stamps, "_noteKey") == "stamp.refused.handBackFirst",
+                          $"d{day} slot {slot}: the unstamped passport dropped on the counter bounces back to the desk: \"{UiText.Get("stamp.refused.handBackFirst")}\" (zone {passport.Zone}, note {Field(o.Stamps, "_noteKey")})");
+                    yield return Until(() => !passport.IsSliding, 6f, "the passport back on the desk");
+                    Check(Vector3.Distance(passport.transform.position, pickedAt) < 0.02f, $"d{day} slot {slot}: it lies where it was picked up ({Vector3.Distance(passport.transform.position, pickedAt):0.000} m off)");
+                }
+                // The passport on top, then a stamp dragged onto it away from its ENTRY VISA box: anywhere on the passport is the verdict.
+                Call(o.Desk, "HandlePaperClicked", passport, -1);
                 yield return Frames(2);
-                Check(o.Stamps.LastPress == StampPress.Stamped && o.Stamps.HasVerdict, $"d{day} slot {slot}: the stamp on the ENTRY VISA box is the verdict ({o.Stamps.LastPress})");
-                yield return UnderStamp(o, passport, !accept);
-                PressStamp(o, !accept);
-                yield return Frames(2);
+                Vector3 anywhere = passport.Sheet.TransformPoint(new Vector3(0f, passport.Size.y * 0.2f, 0f));
+                Check(!passport.InVisaBox(anywhere), $"d{day} slot {slot}: the stamp's target lies outside the ENTRY VISA box");
+                yield return DragStamp(o, accept, anywhere);
+                Renderer mark = passport.GetComponentsInChildren<Renderer>(true).FirstOrDefault(r => r.name == "Stamp_1" && r.gameObject.activeSelf);
+                Check(o.Stamps.LastPress == StampPress.Stamped && o.Stamps.HasVerdict && mark != null && passport.InVisaBox(mark.bounds.center),
+                      $"d{day} slot {slot}: the stamp dragged onto the passport (outside its visa box) is the verdict, its mark in the ENTRY VISA box ({o.Stamps.LastPress})");
+                yield return Seconds(0.6f);
+                Check(!o.Stamps.IsCarrying && StampHome(o, accept),
+                      $"d{day} slot {slot}: the stamp goes back to its place in the rack");
+                yield return DragStamp(o, !accept, anywhere);
                 Check(o.Stamps.LastPress == StampPress.AlreadyStamped, $"d{day} slot {slot}: the other stamp is refused: approve and deny together is impossible ({o.Stamps.LastPress})");
                 if (ShotsOn && First("stamp bar"))
                     yield return Shots("stamp_bar_visa");
-                // Hand back: the stamped passport dropped on the counter.
-                var counter = (DeskCounter)Field(o.Desk, "counter");
-                Vector3 onCounter = counter.Spot(0);
+                // Hand back: the stamped passport dropped on the counter's slim strip.
+                Vector3 onCounter = CounterPoint(o);
                 passport.transform.position = onCounter;
                 Call(o.Desk, "HandleDragEnded", passport.Drag, onCounter);
             }
@@ -684,30 +704,61 @@ public static class _TimeDeskAuditPlay
 
     private static bool Once(string key) => MistakesMade.Add(key);
 
-    /// <summary>Clicks the APPROVED (<paramref name="approved"/>) or the DENIED 3D stamp as the clerk does: a left click on its click box.</summary>
-    private static void PressStamp(Office o, bool approved) =>
-        ExecuteEvents.Execute(((Clickable)Field(o.Stamps, approved ? "approvedStamp" : "deniedStamp")).gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
-
     /// <summary>
-    /// Lays <paramref name="paper"/> on the desk with its ENTRY VISA box (its
-    /// largest stamp area) under the APPROVED (<paramref name="approved"/>) or
-    /// the DENIED 3D stamp's die, as the clerk drags it there: the visa box's
-    /// centre moved straight under the die's centre.
+    /// Drags the APPROVED (<paramref name="approved"/>) or the DENIED 3D
+    /// stamp from the rack onto <paramref name="target"/> and lets go, as the
+    /// clerk does (Saleh 2026-10-06: the stamps are moved, not the paper): a
+    /// left-press on the stamp (the pointer on the desk straight under its
+    /// die), a few drag steps through the office camera's raycaster to the
+    /// point of the desk under the target, the release (the stamp presses
+    /// there and goes back to the rack).
     /// </summary>
-    private static IEnumerator UnderStamp(Office o, DeskDocument paper, bool approved)
+    private static IEnumerator DragStamp(Office o, bool approved, Vector3 target)
     {
+        var click = (Clickable)Field(o.Stamps, approved ? "approvedStamp" : "deniedStamp");
         var die = (Transform)Field(o.Stamps, approved ? "approvedDie" : "deniedDie");
-        Vector3 target = die.position;
-        var form = (PlacedForm)Field(paper, "_form");
-        float scale = (float)Field(paper, "_scale");
-        FaceRect visa = StampSpots.Area(form);
-        float px = (visa.XMin + visa.XMax) / 2f * scale, py = (visa.YMin + visa.YMax) / 2f * scale;
-        Vector3 visaWorld = paper.Sheet.TransformPoint(new Vector3(px - form.Width * scale / 2f, form.PageHeight * scale / 2f - py, 0f));
-        Vector3 shift = target - visaWorld;
-        shift.y = 0f;
-        paper.transform.position += shift;
-        Physics.SyncTransforms();
+        var surface = (DeskSurface)Field(o.Desk, "surface");
+        PhysicsRaycaster raycaster = OfficeRaycaster();
+        Camera cam = raycaster.eventCamera;
+        float plane = surface.transform.position.y;
+        Vector3 from = new Vector3(die.position.x, plane, die.position.z), to = new Vector3(target.x, plane, target.z);
+        var data = new PointerEventData(EventSystem.current)
+        {
+            button = PointerEventData.InputButton.Left,
+            position = cam.WorldToScreenPoint(from),
+            pointerPressRaycast = new RaycastResult { module = raycaster, gameObject = click.gameObject }
+        };
+        ExecuteEvents.Execute(click.gameObject, data, ExecuteEvents.beginDragHandler);
+        const int Steps = 6;
+        for (int i = 1; i <= Steps; i++)
+        {
+            data.position = cam.WorldToScreenPoint(Vector3.Lerp(from, to, (float)i / Steps));
+            ExecuteEvents.Execute(click.gameObject, data, ExecuteEvents.dragHandler);
+            yield return Frames(1);
+        }
+        ExecuteEvents.Execute(click.gameObject, data, ExecuteEvents.endDragHandler);
         yield return Frames(2);
+    }
+
+    /// <summary>The office camera's 3D raycaster (on the art scene's camera; a Physics2DRaycaster derives from it, so the exact type).</summary>
+    private static PhysicsRaycaster OfficeRaycaster() =>
+        Object.FindObjectsByType<PhysicsRaycaster>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).First(r => r.GetType() == typeof(PhysicsRaycaster));
+
+    /// <summary>True when the APPROVED (<paramref name="approved"/>) or the DENIED stamp is back at its place in the rack.</summary>
+    private static bool StampHome(Office o, bool approved)
+    {
+        var click = (Clickable)Field(o.Stamps, approved ? "approvedStamp" : "deniedStamp");
+        object[] handles = ((Array)Field(o.Stamps, "_handles")).Cast<object>().ToArray();
+        object handle = handles.First(h => (Clickable)Field(h, "Click") == click);
+        return (click.transform.localPosition - (Vector3)Field(handle, "Home")).sqrMagnitude < 1e-8f;
+    }
+
+    /// <summary>The middle of the counter's slim strip on the desk (where a paper is dropped to hand the papers back).</summary>
+    private static Vector3 CounterPoint(Office o)
+    {
+        var counter = (DeskCounter)Field(o.Desk, "counter");
+        Vector3 at = ((GameObject)Field(counter, "zone")).transform.position;
+        return new Vector3(at.x, ((DeskSurface)Field(o.Desk, "surface")).transform.position.y, at.z);
     }
 
     /// <summary>A visual lie (the document design spec, D4, D8): a forged seal or someone else's photo.</summary>
@@ -994,6 +1045,10 @@ public static class _TimeDeskAuditPlay
         Check(recordsChip == intro.Has(day, Feature.Records) && shelf.Items.Any(x => x.Target.Tab == AppTab.Calendar) && shelf.Items.Any(x => x.Target.Tab == AppTab.Rules),
               $"d{day} slot {slot}: the menus hold the calendar and the rules from day 1, Citizen records only from day {intro.FirstDay(Feature.Records)} ({recordsChip})");
 
+        // The Investigation app is on the PC only from the day it is introduced (day 5, with the scanner: Saleh 2026-10-06, "hide the
+        // application if it is not used"); before that the harness opens it itself to prove through the PC, as it scans before the scanner.
+        bool appIn = intro.Has(day, Feature.App(DesktopAppIds.Investigation));
+        Check(o.App.OnPc == appIn, $"d{day} slot {slot}: the Investigation app is on the PC only from day {intro.FirstDay(Feature.App(DesktopAppIds.Investigation))} (on the PC {o.App.OnPc})");
         DesktopIcons icons = Office.One<DesktopIcons>();
         if (icons != null)
         {
