@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Build Office UI's guide part (the FTUE and the daily guide, Saleh
 /// 2026-10-06): the prompt on the office overlay (GuidePrompt: a plate at the
-/// bottom centre with its header, line, Skip and Got it, and the arrow) and
+/// top left with its header, line, Skip and Got it, and the arrow) and
 /// the guide director (GuideDirector, Office/Guide), wired to the desk, inspect
 /// mode, the stamp bar, the workbench, the rulebook, the office view and the
 /// things its arrows point at, to GameManager and the office binder; and the
@@ -19,9 +19,9 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The name of the "Replay the desk tutorial" buttons (Settings, the F1 card) BuildGuide wires to the director.</summary>
     private const string GuideReplayButton = "ReplayTutorialButton";
 
-    /// <summary>The prompt's plate (reference px) and its place from the bottom centre (left of the inspect button's hint); the arrow's size.</summary>
-    private static readonly Vector2 GuidePlateSize = new Vector2(860f, 104f);
-    private static readonly Vector2 GuidePlateAt = new Vector2(-140f, 22f);
+    /// <summary>The prompt's plate (reference px) and its place from the overlay's top left corner (Saleh's follow-up: it never covers the papers or the rulebook in the reading view: the counter's papers lie round the centre line, the rulebook and the papers lower down, the stamp hint mirrors it at the top right); the arrow's size.</summary>
+    private static readonly Vector2 GuidePlateSize = new Vector2(640f, 124f);
+    private static readonly Vector2 GuidePlateAt = new Vector2(16f, -16f);
     private static readonly Vector2 GuideArrowSize = new Vector2(56f, 56f);
 
     /// <summary>
@@ -81,27 +81,27 @@ public static partial class OfficeSceneUIBuilder
         return value is Component c ? c.transform as RectTransform : null;
     }
 
-    /// <summary>The prompt: a full-screen host (no graphic) with the Plate (the tooltip's yellow, bottom centre: Header, Line, Skip, Ok; only the buttons take clicks) and the Arrow (a tooltip plate with "▼"), both inactive until shown; last on the overlay.</summary>
+    /// <summary>The prompt: a full-screen host (no graphic) with the Plate (the tooltip's yellow, top left: Header, Line, Skip, Ok; only the buttons take clicks) and the Arrow (a tooltip plate with "▼"), both inactive until shown; last on the overlay.</summary>
     private static GuidePrompt BuildGuidePrompt(Transform overlay)
     {
         DestroyChildIfPresent(overlay, "GuidePrompt");
         Transform host = Panel(overlay, "GuidePrompt", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
 
-        var plate = (RectTransform)Panel(host, "Plate", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), GuidePlateAt, GuidePlateSize, Tooltip, ThemeRoleId.Tooltip);
-        plate.pivot = new Vector2(0.5f, 0f);
+        var plate = (RectTransform)Panel(host, "Plate", new Vector2(0f, 1f), new Vector2(0f, 1f), GuidePlateAt, GuidePlateSize, Tooltip, ThemeRoleId.Tooltip);
+        plate.pivot = new Vector2(0f, 1f);
         plate.GetComponent<Image>().raycastTarget = false;
-        TMP_Text header = Text(plate, "Header", "", 18, TextAlignmentOptions.TopLeft, new Vector2(0.02f, 0.66f), new Vector2(0.77f, 0.94f), Ink, ThemeRoleId.Tooltip,
+        TMP_Text header = Text(plate, "Header", "", 18, TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.72f), new Vector2(0.72f, 0.95f), Ink, ThemeRoleId.Tooltip,
                                null, FontStyles.Bold, ThemeTextKind.Heading);
         header.raycastTarget = false;
-        TMP_Text line = Text(plate, "Line", "", 22, TextAlignmentOptions.MidlineLeft, new Vector2(0.02f, 0.06f), new Vector2(0.77f, 0.68f), Ink, ThemeRoleId.Tooltip);
+        TMP_Text line = Text(plate, "Line", "", 22, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.05f), new Vector2(0.72f, 0.74f), Ink, ThemeRoleId.Tooltip);
         line.raycastTarget = false;
         line.textWrappingMode = TextWrappingModes.Normal;
         line.enableAutoSizing = true;
         line.fontSizeMin = 14f;
         line.fontSizeMax = 22f;
         Color buttonFill = new Color(0.2f, 0.3f, 0.5f, 0.95f);
-        Button skip = MakeButton(plate, "Skip", null, new Vector2(0.79f, 0.22f), new Vector2(0.985f, 0.78f), buttonFill, ThemeRoleId.DeskButton, "guide.skip");
-        Button ok = MakeButton(plate, "Ok", null, new Vector2(0.79f, 0.22f), new Vector2(0.985f, 0.78f), buttonFill, ThemeRoleId.DeskButton, "guide.gotIt");
+        Button skip = MakeButton(plate, "Skip", null, new Vector2(0.74f, 0.3f), new Vector2(0.98f, 0.7f), buttonFill, ThemeRoleId.DeskButton, "guide.skip");
+        Button ok = MakeButton(plate, "Ok", null, new Vector2(0.74f, 0.3f), new Vector2(0.98f, 0.7f), buttonFill, ThemeRoleId.DeskButton, "guide.gotIt");
 
         var arrow = (RectTransform)Panel(host, "Arrow", Center, Center, Vector2.zero, GuideArrowSize, Tooltip, ThemeRoleId.Tooltip);
         arrow.pivot = Center;

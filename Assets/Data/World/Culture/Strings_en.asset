@@ -2355,6 +2355,14 @@ MonoBehaviour:
     text: PAPERS
     gloss: 0
     tier: 0
+  - key: desk.rulebook.tabSeals
+    text: SEALS
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.seals
+    text: SEAL REGISTER
+    gloss: 0
+    tier: 0
   - key: desk.rulebook.tabGuide
     text: GUIDE
     gloss: 0

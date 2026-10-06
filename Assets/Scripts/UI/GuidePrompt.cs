@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// The guide's prompt on the office overlay (Saleh 2026-10-06: "short,
 /// skippable, step-by-step prompts that point at the real thing on screen"):
-/// a plate at the bottom centre (a header, one line, and its Skip or Got it
+/// a plate at the top left (a header, one line, and its Skip or Got it
 /// button) and an arrow that points at the real thing, placed by the guide
 /// director every frame over a world point (through the office camera:
 /// OverlayProjection; none while the point is off the screen) or over an

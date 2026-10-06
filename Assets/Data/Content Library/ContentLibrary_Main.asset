@@ -17828,6 +17828,7 @@ MonoBehaviour:
     - id: passport
       feature: paper:TC-101
       title: THE PASSPORT
+      named: Passport
       check: Its photo and its name.
       against: 'The traveller at the desk: is it their face?'
       fault: 'Someone else''s photo: deny.'
@@ -17842,6 +17843,7 @@ MonoBehaviour:
     - id: destination
       feature: tool:rulebook
       title: TODAY'S DESTINATION
+      named: destination
       check: The Passport's Destination.
       against: Today's rule on the RULES tab (from day 3 the Departure Board shows
         it too).
@@ -17857,6 +17859,7 @@ MonoBehaviour:
     - id: dates
       feature: tool:calendar
       title: VALID UNTIL
+      named: Valid Until
       check: The Passport's Valid Until (from day 2 the ticket's departure date too).
       against: 'The calendar on the desk: today''s date.'
       fault: 'Valid Until yesterday: the Passport has expired.'
@@ -17871,6 +17874,7 @@ MonoBehaviour:
     - id: ticket
       feature: paper:TC-230
       title: THE ENTRY TICKET
+      named: Entry Ticket
       check: 'Its Citizen ID and its departure date. Ask for it: flag it on the PAPERS
         tab, then ask on the wheel.'
       against: The Passport's Citizen ID; the calendar for the date.
@@ -17887,6 +17891,7 @@ MonoBehaviour:
     - id: board
       feature: tool:board
       title: THE DEPARTURE BOARD
+      named: Departure Board
       check: The Passport's Destination.
       against: The routes the Departure Board shows open today, the same as today's
         rule.
@@ -17903,20 +17908,24 @@ MonoBehaviour:
     - id: seals
       feature: book:Seal
       title: SEALS
+      named: seal
       check: The issuing seal on every paper.
-      against: Its issuing office's seal in the Seal Register.
+      against: 'Its issuing office''s seal in the Seal Register: the rulebook''s
+        SEALS tab (and, from day 5, the PC''s shelf).'
       fault: 'A seal with the wrong emblem or ring: forged.'
-      point: paper:TC-101
+      point: rulebook
       practice:
-        id: 
-        action: 0
-        categories: 
+        id: seals_practice
+        action: 4
+        categories: 1a000000
         form: 
-        target: 
-        text: 
+        target: field:TC-101/Seal
+        text: 'Practice: press {inspect}, click the Passport''s seal, then its office
+          in the rulebook''s SEALS tab.'
     - id: scanner
       feature: tool:scanner
       title: THE SCANNER AND THE INVESTIGATION APP
+      named: scanner
       check: 'Every paper''s details: drop a paper on the scanner and its copy opens
         in the Investigation app, new on your PC today ({pc}).'
       against: 'The traveller''s record in the app: the Citizen Account, or the Displacement
@@ -17934,6 +17943,7 @@ MonoBehaviour:
     - id: permit
       feature: paper:TC-610
       title: THE TRAVEL PERMIT
+      named: Travel Permit
       check: 'The displaced come home with a Travel Permit: its Displacement No.
         and incident.'
       against: Their entry in the Displacement Registry on the PC.
@@ -17949,6 +17959,7 @@ MonoBehaviour:
     - id: class
       feature: paper:TC-240
       title: THE TRANSPONDER CARD AND CLASS
+      named: Transponder Card
       check: The Passport's Travel Class.
       against: 'The Transponder Card''s class: Premium with Premium, Standard with
         Economy.'
@@ -17965,6 +17976,7 @@ MonoBehaviour:
     - id: waiver
       feature: paper:TC-310
       title: THE STRANDING WAIVER
+      named: Stranding Waiver
       check: 'A Standard passport on an Economy card also needs a signed waiver:
         ask for it.'
       against: Its signature and Waiver No.; today's waiver rule on the RULES tab.
@@ -17981,6 +17993,7 @@ MonoBehaviour:
     - id: workpermit
       feature: paper:TC-520
       title: THE WORK PERMIT
+      named: Work Permit
       check: 'Debt Relief labourers: a registered Work Permit, an Economy card and
         a signed waiver.'
       against: The labour rule on the RULES tab; its employer, term and wage against
@@ -17997,6 +18010,7 @@ MonoBehaviour:
     - id: dress
       feature: rule:Rule_DressForDestination
       title: DRESS FOR THE DESTINATION
+      named: dress
       check: 'Their clothes: the wheel''s Look menu.'
       against: The Costume Guide on the PC's shelf.
       fault: 'A wristwatch on the way to Periclean Athens: it causes a panic.'
@@ -18011,6 +18025,7 @@ MonoBehaviour:
     - id: debt
       feature: rule:Rule_DebtStanding
       title: DEBT STANDING
+      named: debt standing
       check: The Citizen Account's Standing and Debt.
       against: 'The debt rule: in debt (Eligible), only on Debt Relief; a Frozen
         account never departs.'
@@ -18026,6 +18041,7 @@ MonoBehaviour:
     - id: recall
       feature: rule:Rule_DriftboxRecall
       title: THE DRIFTBOX 3 RECALL
+      named: Driftbox 3
       check: The transponder model on the Transponder Card.
       against: 'The recall rule: every Driftbox 3 is grounded.'
       fault: Any departure on a Driftbox 3.
@@ -18040,6 +18056,7 @@ MonoBehaviour:
     - id: ban
       feature: rule:Rule_NoModernGermany
       title: BANS
+      named: bans
       check: The Passport's Destination.
       against: A route the board shows CLOSED, and today's rules.
       fault: A trip to Weimar Berlin while its route is CLOSED.
@@ -18054,6 +18071,7 @@ MonoBehaviour:
     - id: range
       feature: rule:Rule_NoEconomyAncient
       title: THE RANGE LIMIT
+      named: range limit
       check: An Economy traveller's destination.
       against: 'The range rule: Economy units no longer reach the Ancient era.'
       fault: A poor tourist bound for Republican Rome.
@@ -18068,6 +18086,7 @@ MonoBehaviour:
     - id: returnhome
       feature: rule:Rule_ReturnHome
       title: THE RETURN HOME
+      named: Intake Declaration
       check: 'The displaced''s Intake Declaration: its currency, language and technology.'
       against: The books on the PC's shelf (Tongues, Capitals, Rulers) for the home
         they claim.
@@ -18083,6 +18102,7 @@ MonoBehaviour:
     - id: returnorder
       feature: paper:TC-630
       title: THE RETURN ORDER
+      named: Return Order
       check: The displaced's Return Order and its date.
       against: 'The calendar: they depart only on that date.'
       fault: A Return Order dated tomorrow.

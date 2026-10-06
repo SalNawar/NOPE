@@ -50,8 +50,11 @@ public sealed class DeskInspect : MonoBehaviour
     /// <summary>The one workbench (the PC's: its findings are the case's evidence).</summary>
     [SerializeField] private MatchBoard board;
 
-    /// <summary>The one compare (the traveller's face goes into it).</summary>
+    /// <summary>The one compare (the traveller's face and the rulebook's seals go into it).</summary>
     [SerializeField] private CompareController compare;
+
+    /// <summary>The Seal Register (the reference book whose rows the rulebook's SEALS tab shows at the desk: a seal picked there is this book's row, as on the PC).</summary>
+    [SerializeField] private ReferenceBookSO sealRegister;
 
     /// <summary>The papers on the desk (their boxes' places, the marks).</summary>
     [SerializeField] private DeskController desk;
@@ -196,6 +199,7 @@ public sealed class DeskInspect : MonoBehaviour
         {
             rulebook.RowClicked -= PickRule;
             rulebook.PaperFlagged -= FlagPaper;
+            rulebook.SealClicked -= PickSeal;
         }
     }
 
@@ -210,6 +214,7 @@ public sealed class DeskInspect : MonoBehaviour
         {
             rulebook.RowClicked += PickRule;
             rulebook.PaperFlagged += FlagPaper;
+            rulebook.SealClicked += PickSeal;
         }
     }
 
@@ -232,11 +237,37 @@ public sealed class DeskInspect : MonoBehaviour
         _known = known ?? Introductions.None;
         _day = day;
         if (rulebook != null)
+        {
             rulebook.gameObject.SetActive(_known.Has(day, Feature.Rulebook));
+            rulebook.SetSealsIntroduced(_known.Has(day, Feature.Book(ClueCategory.Seal)));
+        }
     }
 
     /// <summary>Today in the agency's calendar (<paramref name="agency"/>, shift day <paramref name="day"/>), as the papers print dates: what the desk's calendar holds.</summary>
-    public void SetDay(AgencyContent agency, int day) => _today = agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null;
+    public void SetDay(AgencyContent agency, int day)
+    {
+        _today = agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null;
+        _seals.Clear();
+        var shown = new List<(string, Seal)>();
+        foreach (AgencyOffice office in agency != null ? agency.offices : new List<AgencyOffice>())
+            if (office != null && office.TryGetSeal(out Seal seal))
+            {
+                _seals.Add((office, Seals.Describe(seal)));
+                shown.Add((office.name, seal));
+            }
+        if (rulebook != null)
+            rulebook.ShowSeals(shown);
+    }
+
+    /// <summary>The agency's offices with a valid seal and their seals' words (the Seal Register's rows, as the PC lists them), in content order.</summary>
+    private readonly List<(AgencyOffice office, string seal)> _seals = new List<(AgencyOffice, string)>();
+
+    /// <summary>A seal row of the rulebook clicked: in inspect mode, once the register is introduced, the office's true seal is held on the workbench (or judged against the value held: a paper's seal against it is "Seal incorrect" or a match, as on the PC).</summary>
+    private void PickSeal(int index)
+    {
+        if (IsOn && compare != null && index >= 0 && index < _seals.Count && _known.Has(_day, Feature.Book(ClueCategory.Seal)))
+            compare.Select(EvidencePicks.ForSeal(sealRegister, _seals[index].office, _seals[index].seal), null);
+    }
 
     /// <summary>Today's directives, printed in the rulebook.</summary>
     public void SetRules(IReadOnlyList<TravelRuleSO> rules)
@@ -376,7 +407,7 @@ public sealed class DeskInspect : MonoBehaviour
         return true;
     }
 
-    /// <summary>Where a value lies in the office: a paper's box, the traveller's face, the calendar, a rulebook row; false for a value only on the PC.</summary>
+    /// <summary>Where a value lies in the office: a paper's box, the traveller's face, the calendar, a rulebook row or seal; false for a value only on the PC.</summary>
     private bool TryBounds(string key, out Bounds bounds)
     {
         bounds = default;
@@ -398,6 +429,8 @@ public sealed class DeskInspect : MonoBehaviour
             bounds = box.bounds;
             return true;
         }
+        if (PickKeys.TrySeal(key, out string officeId))
+            return rulebook != null && rulebook.TrySealBounds(_seals.FindIndex(s => s.office.id == officeId), out bounds);
         return EntryKeys.TryRule(key, out int rule) && rulebook != null && rulebook.TryRowBounds(rule, out bounds);
     }
 

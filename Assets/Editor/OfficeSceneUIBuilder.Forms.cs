@@ -51,6 +51,21 @@ public static partial class OfficeSceneUIBuilder
         return style;
     }
 
+    /// <summary>The seal's material (an unlit see-through quad the seal's outline texture and ink are set on per renderer): the papers' seal and the rulebook's Seal Register rows.</summary>
+    private static Material FormSealMaterial()
+    {
+        Sprite ring = EnsureOfficeShape("form_seal", SealPixels, SealPixels, new Vector2(0.5f, 0.5f), SealRing);
+        return EnsureMaterial("Form_Seal", "Universal Render Pipeline/Unlit", m =>
+        {
+            m.SetTexture("_BaseMap", ring.texture);
+            m.SetColor("_BaseColor", Color.white);
+            m.SetFloat("_Surface", 1f);
+            m.SetFloat("_Blend", 0f);
+            m.SetFloat("_QueueOffset", SealQueue - (int)RenderQueue.Transparent);
+            UnityEditor.BaseShaderGUI.SetMaterialKeywords(m);
+        });
+    }
+
     /// <summary>
     /// The paper's printing parts under the sheet: the text template (its
     /// renderer off; the paper clones it per word and measures with it), the
@@ -70,17 +85,7 @@ public static partial class OfficeSceneUIBuilder
         print.Fills = PrintMesh(sheet, "Fills", FormMaterial("Form_Fill", FillQueue));
         print.Lines = PrintMesh(sheet, "Lines", FormMaterial("Form_Lines", LineQueue));
 
-        Sprite ring = EnsureOfficeShape("form_seal", SealPixels, SealPixels, new Vector2(0.5f, 0.5f), SealRing);
-        Material sealMaterial = EnsureMaterial("Form_Seal", "Universal Render Pipeline/Unlit", m =>
-        {
-            m.SetTexture("_BaseMap", ring.texture);
-            m.SetColor("_BaseColor", Color.white);
-            m.SetFloat("_Surface", 1f);
-            m.SetFloat("_Blend", 0f);
-            m.SetFloat("_QueueOffset", SealQueue - (int)RenderQueue.Transparent);
-            UnityEditor.BaseShaderGUI.SetMaterialKeywords(m);
-        });
-        PrimitivePart(sheet, "Seal", PrimitiveType.Quad, Vector3.zero, Vector3.one, sealMaterial);
+        PrimitivePart(sheet, "Seal", PrimitiveType.Quad, Vector3.zero, Vector3.one, FormSealMaterial());
         print.Seal = sheet.Find("Seal").GetComponent<MeshRenderer>();
         ((MeshRenderer)print.Seal).shadowCastingMode = ShadowCastingMode.Off;
         print.Seal.gameObject.SetActive(false);

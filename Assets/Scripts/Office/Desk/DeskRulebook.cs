@@ -32,6 +32,11 @@ using UnityEngine;
 /// Guide.PagesOn), turned with PREV and NEXT, today's new ones marked NEW;
 /// the tab wears a NEW badge while a page added today is unread
 /// (SetGuideBadge), and each sheet shown is reported read (GuideRead).
+/// The fourth tab, SEALS, is the Seal Register at the desk (from the day the
+/// register is introduced, Feature.Book(Seal): day 4): each issuing office's
+/// seal (its outline in its ink, its legend) and name, one row each
+/// (ShowSeals); in inspect mode a row is comparable (SealClicked: DeskInspect
+/// holds the office's true seal on the workbench, as the PC's register does).
 /// Each new day opens on RULES. It shows from the day the rulebook is
 /// introduced (Feature.Rulebook). Build Office UI builds the booklet, its
 /// tabs, pages and rows (a fixed number: more directives than rows print
@@ -93,7 +98,22 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The NEW badge on the GUIDE tab (a page added today is unread).</summary>
     [SerializeField] private GameObject guideBadge;
 
-    /// <summary>The tabs on the top edge, RULES, PAPERS, GUIDE: a click turns to its page.</summary>
+    /// <summary>The SEALS page (the Seal Register: its title and a row per office).</summary>
+    [SerializeField] private GameObject sealsPage;
+
+    /// <summary>The seal rows, top first: each a click box with its mark, legend and office name as children.</summary>
+    [SerializeField] private Clickable[] sealRows = Array.Empty<Clickable>();
+
+    /// <summary>The seal rows' marks (a quad drawn with the seal's outline in its ink), as sealRows.</summary>
+    [SerializeField] private Renderer[] sealMarks = Array.Empty<Renderer>();
+
+    /// <summary>The seal rows' legends (printed inside the mark, in its ink), as sealRows.</summary>
+    [SerializeField] private TMP_Text[] sealLegends = Array.Empty<TMP_Text>();
+
+    /// <summary>The seal rows' office names, as sealRows.</summary>
+    [SerializeField] private TMP_Text[] sealNames = Array.Empty<TMP_Text>();
+
+    /// <summary>The tabs on the top edge, RULES, PAPERS, GUIDE, SEALS: a click turns to its page (SEALS only once introduced).</summary>
     [SerializeField] private Clickable[] tabs = Array.Empty<Clickable>();
 
     /// <summary>The tabs' plates, as tabs (the open page's plate is the paper's, the other's darker).</summary>
@@ -115,6 +135,7 @@ public sealed class DeskRulebook : MonoBehaviour
     [SerializeField] private Color openTab = new Color(0.93f, 0.9f, 0.8f), closedTab = new Color(0.66f, 0.62f, 0.52f);
 
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+    private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
 
     private readonly List<int> _indices = new List<int>();
     private IReadOnlyList<TravelRuleSO> _rules = Array.Empty<TravelRuleSO>();
@@ -126,6 +147,15 @@ public sealed class DeskRulebook : MonoBehaviour
 
     /// <summary>The GUIDE page's number.</summary>
     public const int GuidePageIndex = 2;
+
+    /// <summary>The SEALS page's number.</summary>
+    public const int SealsPageIndex = 3;
+
+    private bool _sealsIntroduced;
+    private int _sealCount;
+
+    /// <summary>Raised when a seal row is clicked: its index in ShowSeals' list (DeskInspect picks it in inspect mode).</summary>
+    public event Action<int> SealClicked;
 
     /// <summary>Raised when a guide sheet shows on the open GUIDE page: its id (GuideSheet.Id; BASICS' is empty).</summary>
     public event Action<string> GuideRead;
@@ -146,12 +176,12 @@ public sealed class DeskRulebook : MonoBehaviour
     public event Action<string> PaperFlagged;
 
     /// <summary>Every click of the booklet (the rows, the papers' rows, the tabs, the booklet itself): the booth makes them live with the props.</summary>
-    public IReadOnlyList<Clickable> Clicks => rows.Concat(paperRows).Concat(tabs).Append(guidePrev).Append(guideNext).Append(card).Where(c => c != null).ToArray();
+    public IReadOnlyList<Clickable> Clicks => rows.Concat(paperRows).Concat(sealRows).Concat(tabs).Append(guidePrev).Append(guideNext).Append(card).Where(c => c != null).ToArray();
 
     /// <summary>The booklet's drag (DeskController lifts it above the stack while it runs).</summary>
     public DeskDraggable Drag => drag;
 
-    /// <summary>The page shown: 0 RULES, 1 PAPERS.</summary>
+    /// <summary>The page shown: 0 RULES, 1 PAPERS, 2 GUIDE, 3 SEALS.</summary>
     public int Page { get; private set; }
 
     private void Awake()
@@ -182,6 +212,17 @@ public sealed class DeskRulebook : MonoBehaviour
             if (tabs[i] != null)
                 tabs[i].onClick.AddListener(() => ShowPage(page));
         }
+        for (int i = 0; i < sealRows.Length; i++)
+        {
+            int row = i;
+            if (sealRows[i] != null)
+                sealRows[i].onClick.AddListener(() =>
+                {
+                    if (row < _sealCount)
+                        SealClicked?.Invoke(row);
+                });
+        }
+        SetSealsIntroduced(false);
         if (guidePrev != null)
             guidePrev.onClick.AddListener(() => OpenGuide(_sheet - 1));
         if (guideNext != null)
@@ -211,10 +252,12 @@ public sealed class DeskRulebook : MonoBehaviour
             booklet.localPosition = new Vector3(0f, height, 0f);
     }
 
-    /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS, 2 GUIDE): its rows show, the others' hide; its tab looks open. The GUIDE shows its sheet (read).</summary>
+    /// <summary>Turns to page <paramref name="page"/> (0 RULES, 1 PAPERS, 2 GUIDE, 3 SEALS once introduced): its rows show, the others' hide; its tab looks open. The GUIDE shows its sheet (read).</summary>
     public void ShowPage(int page)
     {
-        Page = Mathf.Clamp(page, 0, GuidePageIndex);
+        Page = Mathf.Clamp(page, 0, _sealsIntroduced ? SealsPageIndex : GuidePageIndex);
+        if (sealsPage != null)
+            sealsPage.SetActive(Page == SealsPageIndex);
         if (rulesPage != null)
             rulesPage.SetActive(Page == 0);
         if (papersPage != null)
@@ -234,13 +277,70 @@ public sealed class DeskRulebook : MonoBehaviour
         }
     }
 
-    /// <summary>Inspect mode on or off (BoothCoordinator): the rules' rows print in the comparable ink, and a click on one compares.</summary>
+    /// <summary>Inspect mode on or off (BoothCoordinator): the rules' rows and the seals' names print in the comparable ink, and a click on one compares.</summary>
     public void SetInspecting(bool inspecting)
     {
         _inspecting = inspecting;
         foreach (Clickable row in rows)
             if (row != null && row.GetComponentInChildren<TMP_Text>(true) is TMP_Text text)
                 text.color = inspecting ? inspectInk : rowInk;
+        foreach (TMP_Text name in sealNames)
+            if (name != null)
+                name.color = inspecting ? inspectInk : rowInk;
+    }
+
+    /// <summary>The SEALS tab shows (and its page can open) from the day the Seal Register is introduced (DeskInspect: Feature.Book(Seal)); before it the tab is hidden.</summary>
+    public void SetSealsIntroduced(bool introduced)
+    {
+        _sealsIntroduced = introduced;
+        if (tabs.Length > SealsPageIndex && tabs[SealsPageIndex] != null)
+            tabs[SealsPageIndex].gameObject.SetActive(introduced);
+        if (tabPlates.Length > SealsPageIndex && tabPlates[SealsPageIndex] != null)
+            tabPlates[SealsPageIndex].gameObject.SetActive(introduced);
+        if (!introduced && Page == SealsPageIndex)
+            ShowPage(0);
+    }
+
+    /// <summary>Prints the Seal Register: each office's seal (its outline texture and ink, its legend) and name, one row each (more offices than rows print only the first).</summary>
+    public void ShowSeals(IReadOnlyList<(string name, Seal seal)> offices)
+    {
+        offices ??= Array.Empty<(string, Seal)>();
+        _sealCount = Mathf.Min(offices.Count, sealRows.Length);
+        _block ??= new MaterialPropertyBlock();
+        for (int r = 0; r < sealRows.Length; r++)
+        {
+            bool on = r < _sealCount;
+            if (sealRows[r] != null)
+                sealRows[r].gameObject.SetActive(on);
+            if (!on)
+                continue;
+            Color ink = SealArt.Ink(offices[r].seal.Ink);
+            if (r < sealMarks.Length && sealMarks[r] != null)
+            {
+                sealMarks[r].GetPropertyBlock(_block);
+                _block.SetTexture(BaseMapId, SealArt.Texture(offices[r].seal.Shape));
+                _block.SetColor(BaseColorId, ink);
+                sealMarks[r].SetPropertyBlock(_block);
+            }
+            if (r < sealLegends.Length && sealLegends[r] != null)
+            {
+                sealLegends[r].text = offices[r].seal.Legend;
+                sealLegends[r].color = ink;
+            }
+            if (r < sealNames.Length && sealNames[r] != null)
+                sealNames[r].text = offices[r].name;
+        }
+    }
+
+    /// <summary>The world bounds of seal row <paramref name="index"/> (a match line meets it there); false when it prints no row, its page is closed or the booklet is hidden.</summary>
+    public bool TrySealBounds(int index, out Bounds bounds)
+    {
+        bounds = default;
+        if (!isActiveAndEnabled || index < 0 || index >= _sealCount || index >= sealRows.Length || sealRows[index] == null ||
+            !sealRows[index].gameObject.activeInHierarchy || !sealRows[index].TryGetComponent(out Collider box))
+            return false;
+        bounds = box.bounds;
+        return true;
     }
 
     /// <summary>Lists the traveller's papers not handed over (<paramref name="missing"/>'s open requests over <paramref name="papers"/>), one per row, each with where it stands: to flag, flagged (ask for it on the wheel) or not carried; nothing between travellers.</summary>

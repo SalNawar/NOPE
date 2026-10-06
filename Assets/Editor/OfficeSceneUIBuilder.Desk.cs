@@ -674,6 +674,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInspect, "traveller", traveller);
         SetRef(soInspect, "calendar", propsRoot.Find("Calendar"));
         SetRef(soInspect, "rulebook", rulebook);
+        SetRef(soInspect, "sealRegister", library != null ? library.ReferenceBooks.FirstOrDefault(b => b != null && b.category == ClueCategory.Seal) : null);
         SetRef(soInspect, "view", view);
         SetRef(soInspect, "city", cityView);
         soInspect.ApplyModifiedProperties();
@@ -1264,7 +1265,11 @@ public static partial class OfficeSceneUIBuilder
     private const float RulebookRowPitch = 0.044f;
     private const int RulebookPaperRows = 4;
     private const float RulebookPaperPitch = 0.04f;
-    private static readonly Vector2 RulebookTabSize = new Vector2(0.075f, 0.03f);
+    private static readonly Vector2 RulebookTabSize = new Vector2(0.058f, 0.03f);
+
+    /// <summary>The rulebook's SEALS page: its rows (one per office) and their pitch (metres).</summary>
+    private const int RulebookSealRows = 8;
+    private const float RulebookSealPitch = 0.029f;
 
     /// <summary>The rulebook's GUIDE sheet text box (metres) and its PREV / NEXT buttons (metres).</summary>
     private static readonly Vector2 RulebookGuideBody = new Vector2(0.236f, 0.205f);
@@ -1657,10 +1662,10 @@ public static partial class OfficeSceneUIBuilder
         // The tabs on the top edge.
         var tabs = new List<Clickable>();
         var plates = new List<Renderer>();
-        string[] tabKeys = { "desk.rulebook.tabRules", "desk.rulebook.tabPapers", "desk.rulebook.tabGuide" };
+        string[] tabKeys = { "desk.rulebook.tabRules", "desk.rulebook.tabPapers", "desk.rulebook.tabGuide", "desk.rulebook.tabSeals" };
         for (int i = 0; i < tabKeys.Length; i++)
         {
-            float x = -RulebookSize.x / 2f + RulebookTabSize.x / 2f + 0.01f + i * (RulebookTabSize.x + 0.006f);
+            float x = -RulebookSize.x / 2f + RulebookTabSize.x / 2f + 0.01f + i * (RulebookTabSize.x + 0.004f);
             Vector3 at = new Vector3(x, 0.0002f, RulebookSize.y / 2f + RulebookTabSize.y / 2f);
             GameObject plate = PrimitivePart(booklet, "TabPlate" + (i + 1), PrimitiveType.Quad, at, new Vector3(RulebookTabSize.x, RulebookTabSize.y, 1f),
                                              LitMaterial("Rulebook_Tab", new Color(0.93f, 0.9f, 0.8f), 0.15f));
@@ -1740,10 +1745,44 @@ public static partial class OfficeSceneUIBuilder
         Clickable guideNext = GuideButton("Next", RulebookSize.x / 2f - 0.012f - RulebookGuideButton.x / 2f, "desk.guide.next");
         TextMeshPro guideNumber = FlatText(guidePage, "Number", new Vector3(0f, 0.0006f, footer), new Vector2(0.07f, 0.02f), 0.09f, ink, FontStyles.Normal);
         guidePage.gameObject.SetActive(false);
-        Transform guideTab = tabs[tabKeys.Length - 1].transform;
+        Transform guideTab = tabs[DeskRulebook.GuidePageIndex].transform;
         TextMeshPro guideBadge = FlatText(booklet, "GuideBadge", guideTab.localPosition + new Vector3(0f, 0f, RulebookTabSize.y / 2f + 0.011f), new Vector2(0.05f, 0.018f), 0.09f, RulebookNewInk, FontStyles.Bold);
         guideBadge.text = UiText.Get("desk.guide.new");
         guideBadge.gameObject.SetActive(false);
+
+        // The SEALS page: the Seal Register at the desk (DeskRulebook.ShowSeals), a row per office: its seal's mark and legend, its name.
+        Transform sealsPage = EnsureChild(booklet, "SealsPage");
+        TextMeshPro sealsTitle = FlatText(sealsPage, "Title", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.022f), new Vector2(RulebookSize.x - 0.02f, 0.03f), 0.15f, ink, FontStyles.Bold);
+        sealsTitle.text = UiText.Get("desk.rulebook.seals");
+        Material sealMaterial = FormSealMaterial();
+        var sealRows = new List<Clickable>();
+        var sealMarks = new List<Renderer>();
+        var sealLegends = new List<TextMeshPro>();
+        var sealNames = new List<TextMeshPro>();
+        float markSize = RulebookSealPitch - 0.005f;
+        for (int i = 0; i < RulebookSealRows; i++)
+        {
+            Clickable row = EnsureClickBox(sealsPage, "Seal" + (i + 1));
+            row.transform.localPosition = new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.052f - i * RulebookSealPitch);
+            var box = row.GetComponent<BoxCollider>();
+            box.center = Vector3.zero;
+            box.size = new Vector3(RulebookSize.x - 0.016f, PaperBoxThickness, RulebookSealPitch - 0.003f);
+            float markX = -RulebookSize.x / 2f + 0.016f + markSize / 2f;
+            GameObject mark = PrimitivePart(row.transform, "Mark", PrimitiveType.Quad, new Vector3(markX, 0.0002f, 0f), new Vector3(markSize, markSize, 1f), sealMaterial);
+            mark.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+            mark.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
+            Object.DestroyImmediate(mark.GetComponent<Collider>());
+            TextMeshPro legend = FlatText(row.transform, "Legend", new Vector3(markX, 0.0004f, 0f), new Vector2(markSize * 0.62f, markSize * 0.4f), 0.06f, ink, FontStyles.Bold);
+            float nameX = markX + markSize / 2f + 0.008f;
+            float nameWidth = RulebookSize.x / 2f - 0.012f - nameX;
+            TextMeshPro name = FlatText(row.transform, "Text", new Vector3(nameX + nameWidth / 2f, 0f, 0f), new Vector2(nameWidth, RulebookSealPitch - 0.006f), 0.12f, ink, FontStyles.Normal);
+            name.alignment = TextAlignmentOptions.MidlineLeft;
+            sealRows.Add(row);
+            sealMarks.Add(mark.GetComponent<Renderer>());
+            sealLegends.Add(legend);
+            sealNames.Add(name);
+        }
+        sealsPage.gameObject.SetActive(false);
 
         Clickable cardClick = EnsureClickBox(booklet, "CardClick");
         var cardBox = cardClick.GetComponent<BoxCollider>();
@@ -1776,6 +1815,11 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "guidePrev", guidePrev);
         SetRef(so, "guideNext", guideNext);
         SetRef(so, "guideBadge", guideBadge.gameObject);
+        SetRef(so, "sealsPage", sealsPage.gameObject);
+        SerializedArrays.Set(so, "sealRows", sealRows);
+        SerializedArrays.Set(so, "sealMarks", sealMarks);
+        SerializedArrays.Set(so, "sealLegends", sealLegends);
+        SerializedArrays.Set(so, "sealNames", sealNames);
         SerializedArrays.Set(so, "tabs", tabs);
         SerializedArrays.Set(so, "tabPlates", plates);
         SetRef(so, "drag", drag);
