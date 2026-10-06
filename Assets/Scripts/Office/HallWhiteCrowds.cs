@@ -24,10 +24,7 @@ public sealed class HallWhiteCrowds : MonoBehaviour
     {
         get
         {
-            var w=HallBakedCycle.Weights(lighting!=null?lighting.Hour:12);
-            // Neutral white/grey silhouettes: daylight changes brightness without
-            // introducing a cream or orange cast against the warm stone.
-            return Color.white*(.92f*w.x+.98f*w.y+.72f*w.z+.43f*w.w);
+            return Color.black;
         }
     }
     public void Configure(HallLightingRig rig,SpriteRenderer hall,Group[] entries)
