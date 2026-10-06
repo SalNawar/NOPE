@@ -1,0 +1,62 @@
+Till: moved 8/8, expectsMotion=True, restored=True, PASS=True
+  Clean_Till__DeskClean_Dark: max pose delta=0.020000
+  Clean_Till__DeskClean_Glass: max pose delta=0.020000
+  Clean_Till__DeskClean_Green: max pose delta=0.020000
+  Clean_Till__DeskClean_GreenDark: max pose delta=0.020000
+  Clean_Till__DeskClean_Manila: max pose delta=0.020000
+  Clean_Till__DeskClean_Metal: max pose delta=0.020000
+  Clean_Till__DeskClean_Rubber: max pose delta=0.020000
+  CreditsNumber: max pose delta=0.020000
+Intercom: moved 4/4, expectsMotion=True, restored=True, PASS=True
+  Clean_Phone__DeskClean_Metal: max pose delta=0.384515
+  Clean_Phone__DeskClean_PhoneBody: max pose delta=0.384515
+  Clean_Phone__DeskClean_PhoneDial: max pose delta=0.384515
+  Clean_Phone__DeskClean_Rubber: max pose delta=0.384515
+Stamp: moved 3/3, expectsMotion=True, restored=True, PASS=True
+  Clean_Stamp__DeskClean_Brass: max pose delta=0.176668
+  Clean_Stamp__DeskClean_Dark: max pose delta=0.176668
+  Clean_Stamp__DeskClean_Wood: max pose delta=0.176668
+Calculator: moved 8/8, expectsMotion=True, restored=True, PASS=True
+  Clean_Calculator__DeskClean_ABS: max pose delta=0.332553
+  Clean_Calculator__DeskClean_Case: max pose delta=0.332553
+  Clean_Calculator__DeskClean_Dark: max pose delta=0.332553
+  Clean_Calculator__DeskClean_GreenDark: max pose delta=0.332553
+  Clean_Calculator__DeskClean_Ink: max pose delta=0.332553
+  Clean_Calculator__DeskClean_Orange: max pose delta=0.332553
+  Clean_Calculator__DeskClean_Paper: max pose delta=0.332553
+  Clean_Calculator__DeskClean_Teal: max pose delta=0.332553
+PenPot: moved 6/6, expectsMotion=True, restored=True, PASS=True
+  Clean_PenPot__DeskClean_ABS: max pose delta=0.030236
+  Clean_PenPot__DeskClean_Green: max pose delta=0.030236
+  Clean_PenPot__DeskClean_Metal: max pose delta=0.030236
+  Clean_PenPot__DeskClean_Orange: max pose delta=0.030236
+  Clean_PenPot__DeskClean_Teal: max pose delta=0.030236
+  Clean_PenPot__DeskClean_Wood: max pose delta=0.030236
+Stapler: moved 4/4, expectsMotion=True, restored=True, PASS=True
+  Clean_Stapler__DeskClean_ABS: max pose delta=0.259807
+  Clean_Stapler__DeskClean_Case: max pose delta=0.259807
+  Clean_Stapler__DeskClean_Metal: max pose delta=0.259807
+  Clean_Stapler__DeskClean_Rubber: max pose delta=0.259807
+Clock: moved 0/6, expectsMotion=False, restored=True, PASS=True
+  Office_Clock__CRT_Glass: max pose delta=0.000000
+  Office_Clock__Office_Teal: max pose delta=0.000000
+  Office_Clock__Plastic_DeepGrey: max pose delta=0.000000
+  Office_Clock__Plastic_Ivory: max pose delta=0.000000
+  Office_Clock__Plastic_WarmGrey: max pose delta=0.000000
+  ShiftClockDisplay: max pose delta=0.000000
+Calendar: moved 0/6, expectsMotion=False, restored=True, PASS=True
+  Office_Calendar__Office_Brass: max pose delta=0.000000
+  Office_Calendar__Office_Paper: max pose delta=0.000000
+  Office_Calendar__Office_TealDark: max pose delta=0.000000
+  Office_Calendar__Office_Trim: max pose delta=0.000000
+  Office_Calendar__Paper_Label: max pose delta=0.000000
+  DayNumber: max pose delta=0.000000
+StabilityMonitor: moved 0/8, expectsMotion=False, restored=True, PASS=True
+  Office_Stability__CRT_Glass: max pose delta=0.000000
+  Office_Stability__Indicator_Green: max pose delta=0.000000
+  Office_Stability__Paper_Label: max pose delta=0.000000
+  Office_Stability__Plastic_DeepGrey: max pose delta=0.000000
+  Office_Stability__Plastic_Ivory: max pose delta=0.000000
+  Office_Stability__Plastic_WarmGrey: max pose delta=0.000000
+  Office_Stability__Power_Amber: max pose delta=0.000000
+  StabilityPercent: max pose delta=0.000000
