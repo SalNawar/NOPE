@@ -371,6 +371,15 @@ public static class _TimeDeskAuditPlay
             yield return Shots($"d{day}_briefing");
         o.StartShift.onClick.Invoke();
         yield return Frames(2);
+        GuideMorning(o, day);
+        if (ShotsOn && o.Guide.ShowingNow.Length > 0)
+            yield return Shots($"d{day}_guide_{o.Guide.ShowingNow}");
+        if (o.Guide.ShowingNow == "moment")
+        {
+            ((Button)Field(o.Guide.Prompt, "okButton")).onClick.Invoke();
+            Check(!o.Guide.Prompt.IsShown && o.Guide.ShowingNow.Length == 0, $"day {day}: Got it dismisses the new rule's moment");
+        }
+        bool practiceSeen = false;
 
         // The AVAILABLE sign (Saleh 2026-09-30): the desk starts paused; one click and the travellers come one after another.
         Check(!o.Game.Desk.IsAvailable && o.Ready.Interactable, $"day {day}: the desk starts paused and the AVAILABLE sign takes clicks");
@@ -387,6 +396,16 @@ public static class _TimeDeskAuditPlay
                 break;
             presented++;
             yield return Seconds(0.4f);
+
+            // The desk's guide: day 1's call completes the FTUE's first step, then Skip ends it (deterministic: the audit's own clicks
+            // need not follow the steps); a guided day's practice shows on a traveller who carries its feature.
+            if (day == 1 && presented == 1)
+            {
+                Check(o.Guide.StepShown == "desk", $"day 1: calling the traveller completes the tutorial's first step ('{o.Guide.StepShown}' shown: '{o.Guide.Prompt.Line}')");
+                ((Button)Field(o.Guide.Prompt, "skipButton")).onClick.Invoke();
+                Check(!o.Guide.Prompt.IsShown && RunManager.Instance.World.guide.ftueSkipped, "day 1: Skip ends the tutorial (the run keeps it skipped)");
+            }
+            practiceSeen |= o.Guide.ShowingNow == "practice";
 
             // Day 1: pause while the second traveller is at the desk; they are finished normally.
             if (day == 1 && presented == 2)
@@ -417,6 +436,9 @@ public static class _TimeDeskAuditPlay
 
         if (_ended)
             yield break;
+        GuidePage practice = RunManager.Instance.Library.Guide.Practice(day, new GuideState());
+        if (practice != null)
+            Check(practiceSeen, $"day {day}: the new page's practice ('{practice.id}') showed on a traveller who carries it");
         yield return Frames(3);
         Line($"-- day {day} shift report ({presented} presented)");
         Line("   " + ((TMP_Text)Field(o.DayFlow(), "resultsTitleText")).text);
@@ -444,6 +466,35 @@ public static class _TimeDeskAuditPlay
         if (ShotsOn)
             yield return Shots($"d{day}_shift_report");
         o.GoHome.onClick.Invoke();
+    }
+
+    /// <summary>
+    /// The desk's guide at the shift's start: the rulebook's GUIDE holds BASICS and every page introduced so far (today's marked NEW);
+    /// day 1 starts the tutorial at its first step; a guided day opens the rulebook on its new page with the moment's prompt; a later
+    /// day with a new page only badges the GUIDE tab.
+    /// </summary>
+    private static void GuideMorning(Office o, int day)
+    {
+        Guide guide = RunManager.Instance.Library.Guide;
+        DeskRulebook book = o.Rulebook;
+        List<GuidePage> pages = guide.PagesOn(day);
+        Line($"   guide: {o.Guide.ShowingNow} '{o.Guide.Prompt.Header}' '{o.Guide.Prompt.Line}'; GUIDE sheets [{string.Join(", ", book.GuideSheets.Select(s => s.Id.Length > 0 ? s.Id : "basics"))}], badge {book.GuideBadge}");
+        Check(book.GuideSheets.Count == pages.Count + 1 && book.GuideSheets[0].Id.Length == 0 && pages.Select(g => g.id).SequenceEqual(book.GuideSheets.Skip(1).Select(s => s.Id)),
+              $"day {day}: the rulebook's GUIDE holds BASICS and the {pages.Count} page(s) introduced by day {day}");
+        Check(book.GuideSheets.Where(s => s.IsNew).Select(s => s.Id).SequenceEqual(guide.NewOn(day).Select(g => g.id)), $"day {day}: the GUIDE marks today's new pages NEW");
+        if (day == 1)
+        {
+            Check(o.Guide.StepShown == "call" && o.Guide.Prompt.IsShown && o.Guide.Prompt.Header == UiText.Format("guide.step", 1, guide.Content.ftue.Count),
+                  $"day 1: the tutorial starts at its first step ('{o.Guide.StepShown}', '{o.Guide.Prompt.Header}')");
+            return;
+        }
+        GuidePage moment = guide.MomentPage(day);
+        if (moment != null)
+            Check(o.Guide.ShowingNow == "moment" && book.Page == DeskRulebook.GuidePageIndex && book.GuideSheets[book.GuideSheetIndex].Id == moment.id &&
+                  o.Guide.Prompt.Line.Contains(moment.title) && !book.GuideBadge,
+                  $"day {day}: the rulebook opens itself on the new page '{moment.id}' and the prompt names it");
+        else
+            Check(o.Guide.ShowingNow.Length == 0 && book.GuideBadge == guide.NewOn(day).Count > 0, $"day {day}: no moment; the GUIDE tab's badge marks a new page");
     }
 
     /// <summary>The day's order, if any: the first of the plan's upgrades that can be ordered now with 20 cr to spare (one a day), through the Orders app's rule.</summary>
@@ -2108,6 +2159,7 @@ public static class _TimeDeskAuditPlay
         public DeskStampTray Stamps => (DeskStampTray)Field(Coordinator, "stampTray");
         public OfficeControls Controls => (OfficeControls)Field(Coordinator, "controls");
         public DeskRulebook Rulebook => (DeskRulebook)Field(One<DeskInspect>(), "rulebook");
+        public GuideDirector Guide => One<GuideDirector>();
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
