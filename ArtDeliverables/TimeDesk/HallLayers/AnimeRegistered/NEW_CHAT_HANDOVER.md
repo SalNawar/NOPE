@@ -92,3 +92,6 @@ Saved scene and verified actual runtime traveller via shift-start ActionButton t
 
 ## 2026-10-06 Hall floor shadows after focus alignment
 Rebuilt only DeepRoomMasks blue floor receiver channel and Morning/Noon/EveningShadow maps. Source-space footprint casts replace offset rectangular strips and synthetic post spacing. Glazing R/G/A unchanged pixel-for-pixel; scene/camera/desk/traveller untouched. HallFloorShadowAuthoring provides repair and capture menus and is reused by HallDeepRoomAuthoring install. Eight captures and notes: ArtDeliverables/TimeDesk/HallLayers/FloorShadowRepair. Play and preview controls remain available.
+
+## Review discipline — floor shadows reopened
+User rejected the floor-shadow completion claim. Treat floor shadows as unresolved; clean console and captures are technical evidence only. Maintain ArtDeliverables/TimeDesk/SCENE_REVIEW_CHECKLIST.md and check current Unity view, close details, continuous lighting blends and camera movement before making completion claims.

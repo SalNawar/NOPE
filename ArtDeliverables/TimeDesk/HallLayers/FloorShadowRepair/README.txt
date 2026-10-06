@@ -1,6 +1,8 @@
+STATUS: UNRESOLVED — user rejected the completion claim. See ../../SCENE_REVIEW_CHECKLIST.md. Technical checks below do not establish visual correctness.
+
 Hall floor shadow repair — 2026-10-06
 
-Installed technical masks for the existing 2172x724 HallDeepMorning illustration. Replaced the offset rectangular cast strips with swept ground footprints registered to the pier, three floor bays, bench and individual foreground brass posts. Floor receiver now excludes traced bay silhouettes, stair/pier and bench furniture. Removed the fade-in at shadow origins; casts have full contact and soften/fade at distance.
+Installed technical masks for the existing 2172x724 HallDeepMorning illustration. Replaced the offset rectangular cast strips with swept ground footprints registered to the pier, three floor bays, bench and individual foreground brass posts. Floor receiver now excludes traced bay silhouettes, stair/pier and bench furniture. Removed the fade-in at shadow origins; the algorithm removes origin fade-in and adds distance softening/fade. Visual contact correctness remains unverified.
 
 Morning, noon and evening continue to blend using the existing lighting controller. Night has no added directional daylight cast. Glazing mask red/green/alpha channels verified unchanged pixel-for-pixel; receiver blue channel only was rebuilt. Camera, hall transform, desk alignment, traveller and source illustration unchanged. Future complete hall installation uses the same corrected authoring routine.
 
