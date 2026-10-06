@@ -10,9 +10,12 @@ using UnityEngine;
 /// <summary>
 /// The standalone Windows demo build (Saleh 2026-09-30: play the demo as a
 /// Windows exe). Builds StandaloneWindows64, a release player (no development
-/// build, so the dev overlay and its cheats are compiled out: RunManager adds
-/// DebugPanelController only under UNITY_EDITOR or DEVELOPMENT_BUILD), from
-/// the enabled scenes of the build settings in their order. It refuses before
+/// build), from the enabled scenes of the build settings in their order. The
+/// cheat menu ships in it while <see cref="DemoCheats"/> is on (Saleh
+/// 2026-10-06: "a cheat menu available in the Windows demo build too"): the
+/// build defines <see cref="CheatsDefine"/>, under which RunManager adds
+/// DebugPanelController (F9 or ~ opens it; docs/CHEATS.md); off, the overlay
+/// and its cheats are compiled out as in any release build. It refuses before
 /// building when the first scene is not RunConfig's title scene, when a scene
 /// the game loads by name (RunConfig's title, art office, gameplay layer and
 /// Home) is not enabled, or when the output would land inside Assets. The
@@ -30,6 +33,17 @@ public static class DemoBuild
 
     /// <summary>The command-line switch whose next argument overrides <see cref="DefaultExePath"/>.</summary>
     public const string PathArgument = "-demoBuildPath";
+
+    /// <summary>
+    /// True: the demo carries the cheat menu (F9 or ~; a cheated run shows
+    /// "CHEATS ON" and is marked so in its save). On for the demo while the
+    /// game is tested (Saleh 2026-10-06); set it false for a build players
+    /// should get without cheats.
+    /// </summary>
+    public const bool DemoCheats = true;
+
+    /// <summary>The scripting define the player is built with while <see cref="DemoCheats"/> is on (RunManager adds the cheat menu under it).</summary>
+    public const string CheatsDefine = "DEMO_CHEATS";
 
     /// <summary>Builds the demo to <see cref="DefaultExePath"/>.</summary>
     [MenuItem("Time Sorter/Build Windows Demo")]
@@ -76,6 +90,7 @@ public static class DemoBuild
             target = BuildTarget.StandaloneWindows64,
             targetGroup = BuildTargetGroup.Standalone,
             options = BuildOptions.None,
+            extraScriptingDefines = DemoCheats ? new[] { CheatsDefine } : Array.Empty<string>(),
         };
 
         Debug.Log($"[DemoBuild] Building {PlayerSettings.productName} {PlayerSettings.bundleVersion} to {exePath}.");
@@ -137,6 +152,7 @@ public static class DemoBuild
         sb.AppendLine($"Result:   {(report == null ? "Refused" : report.summary.result.ToString())}");
         sb.AppendLine($"Output:   {exePath}");
         sb.AppendLine("Target:   StandaloneWindows64, release (not a development build)");
+        sb.AppendLine(DemoCheats ? $"Cheats:   on ({CheatsDefine}: F9 or ~ opens the cheat menu; DemoBuild.DemoCheats)" : "Cheats:   off (DemoBuild.DemoCheats)");
         sb.AppendLine($"Product:  {PlayerSettings.productName}   Company: {PlayerSettings.companyName}   Version: {PlayerSettings.bundleVersion}   Unity: {Application.unityVersion}");
         sb.AppendLine("Scenes:");
         for (int i = 0; i < scenes.Length; i++)

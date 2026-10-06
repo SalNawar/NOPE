@@ -63,6 +63,15 @@ public sealed class WorldState
     /// </summary>
     public string endingId = string.Empty;
 
+    /// <summary>
+    /// True once any cheat of the cheat menu ran in this run (DevCheats; Saleh
+    /// 2026-10-06: "cheats must not break saves (mark the run as cheated in
+    /// the save)"): kept in the save from then on (a new run starts clean), and
+    /// the overlay shows "CHEATS ON" while it is set. Additive: an older save
+    /// loads false.
+    /// </summary>
+    public bool cheated;
+
     // -----------------------------
     // Tomorrow modifiers (slot machine / effects write these)
     // -----------------------------

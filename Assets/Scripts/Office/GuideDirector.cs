@@ -249,10 +249,10 @@ public sealed class GuideDirector : MonoBehaviour
         ShowStep();
     }
 
-    /// <summary>The prompt's Skip: the FTUE is over (it can be replayed).</summary>
-    private void Skip()
+    /// <summary>The prompt's Skip and the cheat menu's "Skip tutorial": an open FTUE is over (it can be replayed); the prompt goes.</summary>
+    public void Skip()
     {
-        if (_showing == Showing.Step)
+        if (Guide.FtueOpen(_state))
             Guide.Skip(_state);
         Hide();
         if (_case != null)

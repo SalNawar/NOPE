@@ -577,14 +577,22 @@ public sealed class InvestigationUIController : MonoBehaviour
             wheel.EndReaction();
     }
 
+    /// <summary>The cheat menu's "reveal faults": the desk marks <paramref name="fields"/> (paper, box: FaultFields.Of) as it marks a found difference.</summary>
+    public void RevealFaults(IEnumerable<(int document, int field)> fields)
+    {
+        if (deskInspect != null)
+            deskInspect.Reveal(fields);
+    }
+
     /// <summary>
-    /// The decision (the stamp tray's papers handed back; nothing without a
-    /// case on the desk): the desk's papers leave, the case tabs show
+    /// The decision (the stamp tray's papers handed back, or the cheat menu's
+    /// "decide correctly" through GameManager; nothing without a case on the
+    /// desk): the desk's papers leave, the case tabs show
     /// the no-case state, and no case is on the desk from here: cleared before
     /// the callback, which may present the next traveller at once (no READY
     /// sign wired).
     /// </summary>
-    private void Decide(bool accepted)
+    public void Decide(bool accepted)
     {
         if (_currentCase == null)
             return;

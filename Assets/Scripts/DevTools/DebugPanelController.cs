@@ -1,23 +1,34 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Phase 6 developer overlay: cheat panel + live timeline inspector.
-/// Toggle with the backtick/tilde key. RunManager.GetOrCreate() attaches this
-/// to its persistent GameObject in the editor and development builds only, so
-/// it's available from any scene with no scene wiring and absent from release
-/// builds. The component is enabled only while the overlay is open: a closed
-/// overlay runs no OnGUI, so IMGUI costs nothing per frame (audit R2-012,
-/// R3-030); the key is an input action, heard while the component is off. A
-/// cheat clicked in a GUI pass is queued and runs after the pass (audit
-/// R2-003; DevCheats runs and logs it). An open overlay allocates nothing per
-/// frame for what did not change: each line is rebuilt only when what it
-/// shows changes, the layout options and the costume errors' names are made
-/// once, and the scene's GameManager is found when a scene loads, not per
-/// pass. The Timeline Inspector tab and the state dump are DebugInspector.
+/// Phase 6 developer overlay, the cheat menu (Saleh 2026-10-06: "I want
+/// cheats to test easy ... a key (e.g. F9 or backquote) opens a compact
+/// panel"): the Play tab (jump to a day's shift, restart or end the shift,
+/// decide the traveller correctly or every traveller, reveal their faults,
+/// money, stability, unlock everything, give every item, skip or replay the
+/// tutorial, the hall's time of day, force a premade or a story beat first,
+/// the other tracks' cheats), the More tab (the phase 6 cheats) and the live
+/// timeline inspector. F9 or the backtick/tilde key toggles it.
+/// RunManager.GetOrCreate() attaches this to its persistent GameObject in the
+/// editor, development builds and the Windows demo built with
+/// DemoBuild.DemoCheats (the DEMO_CHEATS define), so it's available from any
+/// scene with no scene wiring and absent from any other release build. A run
+/// any cheat touched (WorldState.cheated) shows a small "CHEATS ON" at the
+/// screen's bottom left, the overlay closed or open. The component is enabled
+/// only while the overlay is open or that badge shows: otherwise it runs no
+/// OnGUI, so IMGUI costs nothing per frame (audit R2-012, R3-030); the key is
+/// an input action, heard while the component is off. A cheat clicked in a
+/// GUI pass is queued and runs after the pass (audit R2-003; DevCheats runs
+/// and logs it). An open overlay allocates nothing per frame for what did not
+/// change: each line is rebuilt only when what it shows changes, the layout
+/// options, the buttons' names and the costume errors' names are made once,
+/// and the shift is GameManager.Current. The Timeline Inspector tab and the
+/// state dump are DebugInspector.
 /// </summary>
 public sealed class DebugPanelController : MonoBehaviour
 {
@@ -26,7 +37,19 @@ public sealed class DebugPanelController : MonoBehaviour
     private const float PanelHeight = 480f;
 
     /// <summary>Tab labels for the toolbar.</summary>
-    private static readonly string[] TabLabels = { "Cheats", "Timeline Inspector" };
+    private static readonly string[] TabLabels = { "Play", "More cheats", "Timeline Inspector" };
+
+    /// <summary>The panel's plate colour (near-black, nearly opaque).</summary>
+    private static readonly Color PlateColour = new Color(0.06f, 0.06f, 0.07f, 0.92f);
+
+    /// <summary>The badge a cheated run shows (WorldState.cheated).</summary>
+    private const string BadgeText = "CHEATS ON";
+
+    /// <summary>The day buttons' names ("1" to "15"), made once (index: the day).</summary>
+    private static readonly string[] DayNames = Enumerable.Range(0, 31).Select(i => i.ToString()).ToArray();
+
+    /// <summary>The time-of-day toggle's names, one per DevCheats.TimesOfDay choice, made once.</summary>
+    private static readonly string[] TimeNames = Array.ConvertAll(DevCheats.TimesOfDay, t => "Time: " + t.name);
 
     /// <summary>The costume error cheat's buttons, None first (one per variant).</summary>
     private static readonly CostumeError[] CostumeErrorChoices = (CostumeError[])Enum.GetValues(typeof(CostumeError));
@@ -41,7 +64,7 @@ public sealed class DebugPanelController : MonoBehaviour
     private static readonly string[] FateNames = Array.ConvertAll(FateChoices, f => f.HasValue ? f.Value.ToString() : "Drawn");
 
     /// <summary>The layout options the panel uses, made once (GUILayout.Width and Height make a new option per call).</summary>
-    private static readonly GUILayoutOption ScrollHeight = GUILayout.Height(PanelHeight - 90f), Width50 = GUILayout.Width(50f), Width60 = GUILayout.Width(60f),
+    private static readonly GUILayoutOption ScrollHeight = GUILayout.Height(PanelHeight - 90f), Width40 = GUILayout.Width(40f), Width50 = GUILayout.Width(50f), Width60 = GUILayout.Width(60f),
                                             Width100 = GUILayout.Width(100f), Width120 = GUILayout.Width(120f), Width240 = GUILayout.Width(240f),
                                             Width260 = GUILayout.Width(260f), Width330 = GUILayout.Width(330f);
 
@@ -99,7 +122,19 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>The library the personality buttons were listed from.</summary>
     private ContentLibrarySO _choicesFor;
 
-    /// <summary>Currently selected tab (0 = Cheats, 1 = Timeline Inspector).</summary>
+    /// <summary>The Play tab's forced appearances (DevCheats.AppearanceChoices) for <see cref="_appearancesFor"/>.</summary>
+    private List<(string key, string label)> _appearances = new List<(string, string)>();
+
+    /// <summary>The library the forced appearances were listed from.</summary>
+    private ContentLibrarySO _appearancesFor;
+
+    /// <summary>True while the overlay is open (the component may also run for the badge alone).</summary>
+    private bool _open;
+
+    /// <summary>The badge's style (made in the first GUI pass: GUI.skin exists only there).</summary>
+    private GUIStyle _badgeStyle;
+
+    /// <summary>Currently selected tab (0 = Play, 1 = More cheats, 2 = Timeline Inspector).</summary>
     private int _tab;
 
     /// <summary>Scroll position for the active tab's content.</summary>
@@ -108,11 +143,8 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>Text field contents for the flag set/clear cheat.</summary>
     private string _flagInput = string.Empty;
 
-    /// <summary>The toggle key (backtick/tilde), heard while the component is disabled.</summary>
+    /// <summary>The toggle keys (F9, backtick/tilde), heard while the component is disabled.</summary>
     private InputAction _toggle;
-
-    /// <summary>The scene's GameManager (the active traveller), found when the overlay opens and when a scene loads.</summary>
-    private GameManager _game;
 
     /// <summary>
     /// What a click in this GUI pass changes (a cheat and its argument, or
@@ -127,15 +159,16 @@ public sealed class DebugPanelController : MonoBehaviour
     private string _cheatText;
     private int _pendingTab = -1;
 
-    /// <summary>Listens for the toggle key and for scene loads, and starts closed (disabled: no OnGUI).</summary>
+    /// <summary>Listens for the toggle keys and for scene loads, and starts closed (disabled: no OnGUI).</summary>
     private void Awake()
     {
-        _toggle = new InputAction("DevOverlay", InputActionType.Button, "<Keyboard>/backquote");
+        _toggle = new InputAction("DevOverlay", InputActionType.Button, "<Keyboard>/f9");
+        _toggle.AddBinding("<Keyboard>/backquote");
         _toggle.performed += OnToggle;
         _toggle.Enable();
         SceneManager.sceneLoaded += OnSceneLoaded;
         enabled = false;
-        Debug.Log("[DebugPanelController] Attached to persistent RunManager object (press ~ to toggle the dev overlay).");
+        Debug.Log("[DebugPanelController] Attached to persistent RunManager object (press F9 or ~ to toggle the cheat menu).");
     }
 
     /// <summary>Stops listening for the toggle key and scene loads.</summary>
@@ -149,28 +182,33 @@ public sealed class DebugPanelController : MonoBehaviour
         _toggle = null;
     }
 
-    /// <summary>The overlay opens: finds the scene's GameManager.</summary>
-    private void OnEnable() => _game = FindAnyObjectByType<GameManager>();
+    /// <summary>A scene loaded (the office, Home, the title): the badge shows when the run is cheated (a continued or a new run).</summary>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) => enabled = _open || Cheated;
 
-    /// <summary>A scene loaded (the office, Home): its GameManager, if any, is the one the overlay reads.</summary>
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) => _game = FindAnyObjectByType<GameManager>();
+    /// <summary>True when the current run was touched by a cheat (WorldState.cheated).</summary>
+    private static bool Cheated => RunManager.HasInstance && RunManager.Instance.World != null && RunManager.Instance.World.cheated;
 
-    /// <summary>Opens or closes the overlay (editor / development builds only).</summary>
+    /// <summary>Opens or closes the overlay (F9 or ~).</summary>
     private void OnToggle(InputAction.CallbackContext _)
     {
-        if (!Application.isEditor && !Debug.isDebugBuild)
-            return;
-
-        enabled = !enabled;
+        _open = !_open;
+        enabled = _open || Cheated;
         _scroll = Vector2.zero;
         _cheat = DevCheat.None;
         _pendingTab = -1;
-        Debug.Log($"[DebugPanelController] Overlay {(enabled ? "opened" : "closed")} (~ pressed).");
+        Debug.Log($"[DebugPanelController] Overlay {(_open ? "opened" : "closed")} (F9 or ~ pressed).");
     }
 
-    /// <summary>Draws the open overlay, then applies what a click in this pass changed.</summary>
+    /// <summary>Draws the badge and the open overlay, then applies what a click in this pass changed (the badge stays from the first cheat on).</summary>
     private void OnGUI()
     {
+        if (Cheated)
+            DrawBadge();
+        if (!_open)
+        {
+            enabled = Cheated;
+            return;
+        }
         Draw();
 
         if (_pendingTab >= 0)
@@ -180,6 +218,13 @@ public sealed class DebugPanelController : MonoBehaviour
         _cheat = DevCheat.None;
         if (cheat != DevCheat.None && RunManager.HasInstance)
             DevCheats.Run(cheat, RunManager.Instance, _cheatNumber, _cheatAmount, _cheatText);
+    }
+
+    /// <summary>The small "CHEATS ON" at the screen's bottom left (grey, out of the way).</summary>
+    private void DrawBadge()
+    {
+        _badgeStyle ??= new GUIStyle(GUI.skin.label) { fontSize = 12, fontStyle = FontStyle.Bold, normal = { textColor = new Color(1f, 1f, 1f, 0.55f) } };
+        GUI.Label(new Rect(8f, Screen.height - 22f, 120f, 20f), BadgeText, _badgeStyle);
     }
 
     /// <summary>Queues a cheat to run after this GUI pass (a pass carries one click).</summary>
@@ -199,9 +244,14 @@ public sealed class DebugPanelController : MonoBehaviour
         ContentLibrarySO lib = run != null ? run.Library : null;
 
         var rect = new Rect(10f, 10f, PanelWidth, PanelHeight);
+        // An opaque plate under the panel: the office's busy art shows through IMGUI's translucent box otherwise.
+        Color tint = GUI.color;
+        GUI.color = PlateColour;
+        GUI.DrawTexture(rect, Texture2D.whiteTexture);
+        GUI.color = tint;
         GUILayout.BeginArea(rect, GUI.skin.box);
 
-        GUILayout.Label("NOPE Dev Tools (~ to toggle)");
+        GUILayout.Label("NOPE cheats (F9 or ~ to close; a cheated run shows CHEATS ON)");
 
         if (run == null || world == null)
         {
@@ -211,6 +261,8 @@ public sealed class DebugPanelController : MonoBehaviour
         }
 
         GUILayout.Label(_runLine.Get((world.day, world.money, world.timelineStability, world.endingId), RunText));
+        if (!string.IsNullOrEmpty(DevCheats.LastResult))
+            GUILayout.Label(DevCheats.LastResult);
 
         int tab = GUILayout.Toolbar(_tab, TabLabels);
         if (tab != _tab)
@@ -220,6 +272,8 @@ public sealed class DebugPanelController : MonoBehaviour
         _scroll = GUILayout.BeginScrollView(_scroll, ScrollHeight);
 
         if (_tab == 0)
+            DrawPlayTab(world, lib);
+        else if (_tab == 1)
             DrawCheatsTab(world, lib);
         else
             DebugInspector.Draw(world, lib);
@@ -237,7 +291,7 @@ public sealed class DebugPanelController : MonoBehaviour
     /// </summary>
     private void DrawPersonality(ContentLibrarySO lib)
     {
-        CaseInstance active = _game != null ? _game.ActiveCase : null;
+        CaseInstance active = GameManager.Current != null ? GameManager.Current.ActiveCase : null;
         GUILayout.Label(_travellerLine.Get((active, active != null ? active.personality : null), TravellerText));
         GUILayout.Label(_personalityLine.Get(DevToolsState.ForcedPersonality, ForcedPersonalityText));
 
@@ -264,7 +318,95 @@ public sealed class DebugPanelController : MonoBehaviour
         }
     }
 
-    /// <summary>Cheats tab: day skip, history (force leader), money/stability adjust, flags, force legendary, the voice, upgrades.</summary>
+    /// <summary>
+    /// The Play tab, the compact cheat menu (Saleh 2026-10-06): the start of a
+    /// day's shift (1 to the run's last day); restart the shift, end it
+    /// (closing time), sleep through the day; decide the traveller correctly,
+    /// reveal their faults, decide everyone ("Auto-decide"); money and
+    /// stability; unlock everything and give every Orders and House item
+    /// (both restart a running shift); skip or replay the desk tutorial; the
+    /// hall's time of day; a premade or a story beat first in the shift
+    /// (restarts a running one); the other tracks' cheats (DevCheats.Register).
+    /// </summary>
+    private void DrawPlayTab(WorldState world, ContentLibrarySO lib)
+    {
+        GUILayout.Label("Jump to the start of day");
+        int last = Mathf.Clamp(lib != null && lib.LastDay > 0 ? lib.LastDay : 15, 1, DayNames.Length - 1);
+        for (int first = 1; first <= last; first += 8)
+        {
+            GUILayout.BeginHorizontal();
+            for (int day = first; day < first + 8 && day <= last; day++)
+                if (GUILayout.Button(DayNames[day], Width40))
+                    Queue(DevCheat.JumpToDay, day);
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Restart shift")) Queue(DevCheat.RestartShift);
+        if (GUILayout.Button("End shift")) Queue(DevCheat.EndShift);
+        if (GUILayout.Button("Skip day (sleep)")) Queue(DevCheat.SkipDay);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Decide correctly")) Queue(DevCheat.DecideCorrectly);
+        if (GUILayout.Button("Reveal faults")) Queue(DevCheat.RevealFaults);
+        if (GUILayout.Button(DevToolsState.AutoDecide ? "Auto-decide: ON" : "Auto-decide: off")) Queue(DevCheat.AutoDecide, DevToolsState.AutoDecide ? 0 : 1);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Money", Width50);
+        if (GUILayout.Button("+100")) Queue(DevCheat.AddMoney, 100);
+        if (GUILayout.Button("+1000")) Queue(DevCheat.AddMoney, 1000);
+        GUILayout.Label("Stab.", Width40);
+        if (GUILayout.Button("0")) Queue(DevCheat.SetStability, amount: 0f);
+        if (GUILayout.Button("70")) Queue(DevCheat.SetStability, amount: 70f);
+        if (GUILayout.Button("100")) Queue(DevCheat.SetStability, amount: 100f);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button(DevToolsState.UnlockEverything ? "Unlock everything: ON" : "Unlock everything: off")) Queue(DevCheat.UnlockEverything, DevToolsState.UnlockEverything ? 0 : 1);
+        if (GUILayout.Button("Give all items")) Queue(DevCheat.GiveAllItems);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Skip tutorial")) Queue(DevCheat.Tutorial, 0);
+        if (GUILayout.Button("Replay tutorial")) Queue(DevCheat.Tutorial, 1);
+        int time = Math.Max(0, Array.FindIndex(DevCheats.TimesOfDay, t => Nullable.Equals(t.hour, DevToolsState.ForcedHour)));
+        if (GUILayout.Button(TimeNames[time])) Queue(DevCheat.TimeOfDay);
+        GUILayout.EndHorizontal();
+
+        if (lib != _appearancesFor)
+        {
+            _appearancesFor = lib;
+            _appearances = DevCheats.AppearanceChoices(lib);
+        }
+        if (_appearances.Count > 0)
+        {
+            GUILayout.Label("First traveller of the shift (restarts a running shift)");
+            for (int i = 0; i < _appearances.Count; i += 2)
+            {
+                GUILayout.BeginHorizontal();
+                for (int j = i; j < i + 2 && j < _appearances.Count; j++)
+                    if (GUILayout.Button(_appearances[j].label))
+                        Queue(DevCheat.ForceAppearance, text: _appearances[j].key);
+                GUILayout.EndHorizontal();
+            }
+        }
+
+        bool heading = false;
+        foreach (string label in DevCheats.ExtraLabels)
+        {
+            if (!heading)
+            {
+                GUILayout.Label("More (other tracks)");
+                heading = true;
+            }
+            if (GUILayout.Button(label))
+                Queue(DevCheat.Extra, text: label);
+        }
+    }
+
+    /// <summary>More cheats tab: day skip, history (force leader), money/stability adjust, flags, force legendary, the voice, upgrades.</summary>
     private void DrawCheatsTab(WorldState world, ContentLibrarySO lib)
     {
         GUILayout.Label("Day flow");

@@ -1892,7 +1892,7 @@ public sealed class CaseFactory
     private LegendarySO ResolvePremade(DayPlanSO plan, WorldState state, int caseIndex1Based, ForcedCaseSlot appearance, out bool forced)
     {
         forced = false;
-        bool forcedHere = plan.ForcedAt(caseIndex1Based).Any(f => f.legendary != null);
+        bool forcedHere = (appearance != null && appearance.legendary != null) || plan.ForcedAt(caseIndex1Based).Any(f => f.legendary != null);
         LegendarySO standing = appearance != null ? appearance.legendary : null;
 
         switch (Premades.SlotSource(forcedHere, standing != null, _violators.ContainsKey(caseIndex1Based) || _plannedLiars.ContainsKey(caseIndex1Based) || _plannedRules.ContainsKey(caseIndex1Based)))
@@ -1961,7 +1961,10 @@ public sealed class CaseFactory
     /// day's start, TimelineService.ConditionsPass, and its premade is not a
     /// once-per-run premade already met) wins (Premades.Appearance). A slot
     /// where none stands is left out, with a log line (a failed condition is
-    /// the story's choice, never a warning).
+    /// the story's choice, never a warning). The cheat menu's forced
+    /// appearance (DevToolsState.ForcedAppearance: a famous traveller or
+    /// another day's story beat) takes slot 1 whatever its conditions, and is
+    /// used up.
     /// </summary>
     private static Dictionary<int, ForcedCaseSlot> Appearances(DayPlanSO plan, WorldState state)
     {
@@ -1976,6 +1979,17 @@ public sealed class CaseFactory
                 appearances[slot] = entries[pick];
             else
                 Debug.Log($"[CaseFactory] Day {plan.DayNumber} slot {slot}: none of its forced entries stands today ([{string.Join(", ", entries.Select(Describe))}]: met this run, or their conditions failed); an ordinary traveller stands there.");
+        }
+
+        ForcedCaseSlot cheat = DevToolsState.ForcedAppearance;
+        if (cheat != null)
+        {
+            // It stands once: the same premade or story beat leaves the slot the day gave it.
+            foreach (int slot in appearances.Where(a => (cheat.legendary != null && a.Value.legendary == cheat.legendary) || (!string.IsNullOrWhiteSpace(cheat.id) && a.Value.id == cheat.id)).Select(a => a.Key).ToList())
+                appearances.Remove(slot);
+            Debug.Log($"[CaseFactory] Cheat: '{Describe(cheat)}' stands in slot 1 of day {plan.DayNumber} (the cheat menu's forced appearance, used up).");
+            appearances[1] = cheat;
+            DevToolsState.ForcedAppearance = null;
         }
 
         return appearances;

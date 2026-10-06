@@ -309,6 +309,15 @@ public sealed class DeskInspect : MonoBehaviour
             board.PickRule(index, rule);
     }
 
+    /// <summary>The cheat menu's "reveal faults": marks <paramref name="fields"/> (paper, box: FaultFields.Of) as a found difference is marked, for the rest of the case (only papers handed over show it).</summary>
+    public void Reveal(IEnumerable<(int document, int field)> fields)
+    {
+        if (desk == null || fields == null)
+            return;
+        foreach ((int document, int field) in fields)
+            desk.MarkField(document, field, mistakeMark);
+    }
+
     /// <summary>A finding logged: a difference marks its papers' boxes for the case (FindingMarks).</summary>
     private void Mark(Finding finding)
     {

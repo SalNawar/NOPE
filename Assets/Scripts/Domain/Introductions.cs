@@ -85,6 +85,9 @@ public sealed class Introductions
 
     private readonly Dictionary<string, int> _first = new Dictionary<string, int>(StringComparer.Ordinal);
 
+    /// <summary>True for the cheat menu's "unlock everything" copy (<see cref="WithEverything"/>): every known key counts as introduced on any day.</summary>
+    private readonly bool _everything;
+
     /// <summary>The registry over <paramref name="days"/>: each day's number and every key it lists (null days and keys count as none).</summary>
     public Introductions(IEnumerable<(int day, IEnumerable<string> keys)> days)
     {
@@ -94,6 +97,26 @@ public sealed class Introductions
                     _first[key] = day;
     }
 
+    /// <summary>A copy of <paramref name="source"/>'s keys and first days, every one of them introduced on any day when <paramref name="everything"/> (WithEverything).</summary>
+    private Introductions(Introductions source, bool everything)
+    {
+        foreach (KeyValuePair<string, int> pair in source._first)
+            _first[pair.Key] = pair.Value;
+        _everything = everything;
+    }
+
+    /// <summary>
+    /// The cheat menu's "unlock everything" (Saleh 2026-10-06: "unlock
+    /// everything for today (all Introductions, apps, scanner, books)"): the
+    /// same registry, where every key some day lists counts as introduced on
+    /// any day (<see cref="Has"/>, <see cref="ShowsField"/>), while
+    /// <see cref="FirstDay"/>, <see cref="IsNew"/> and <see cref="NewOn"/> keep
+    /// the ramp's days (the guide's pages and the bulletins stay the day's own).
+    /// A key no day lists stays hidden. ContentLibrarySO hands it out while
+    /// DevToolsState.UnlockEverything is on.
+    /// </summary>
+    public Introductions WithEverything() => new Introductions(this, true);
+
     /// <summary>The day <paramref name="feature"/> is introduced; 0 when no day introduces it.</summary>
     public int FirstDay(string feature) => feature != null && _first.TryGetValue(feature, out int day) ? day : 0;
 
@@ -101,7 +124,7 @@ public sealed class Introductions
     public bool Has(int day, string feature)
     {
         int first = FirstDay(feature);
-        return first > 0 && day >= first;
+        return first > 0 && (_everything || day >= first);
     }
 
     /// <summary>True when <paramref name="feature"/> is introduced exactly on <paramref name="day"/> (today's new things).</summary>

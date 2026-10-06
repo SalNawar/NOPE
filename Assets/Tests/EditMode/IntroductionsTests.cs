@@ -94,4 +94,20 @@ public class IntroductionsTests
         StringAssert.Contains("twice", problems[1]);
         CollectionAssert.IsEmpty(Introductions.Problems("D", null));
     }
+
+    /// <summary>The cheat menu's "unlock everything": every listed key is introduced on any day, the ramp's days stay (the guide and the bulletins read them), an unlisted key stays hidden.</summary>
+    [Test]
+    public void WithEverything_HasEveryListedKeyOnAnyDay_KeepsTheRampsDays()
+    {
+        Introductions r = Ramp();
+        Introductions all = r.WithEverything();
+        Assert.IsTrue(all.Has(1, Feature.Paper("TC-230")), "day 2's paper on day 1");
+        Assert.IsTrue(all.Has(1, Feature.Scanner), "day 4's tool on day 1");
+        Assert.IsTrue(all.Has(1, Feature.Records), "day 5's PC key on day 1");
+        Assert.IsFalse(all.Has(15, Feature.Board), "a feature no day lists stays hidden");
+        Assert.AreEqual(4, all.FirstDay(Feature.Scanner), "the ramp's first day is kept");
+        Assert.IsFalse(all.IsNew(1, Feature.Scanner), "nothing becomes today's new thing");
+        CollectionAssert.AreEqual(r.NewOn(2), all.NewOn(2));
+        Assert.IsFalse(r.Has(1, Feature.Scanner), "the source registry is unchanged");
+    }
 }

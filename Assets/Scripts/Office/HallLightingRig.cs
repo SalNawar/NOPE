@@ -55,8 +55,9 @@ public sealed class HallLightingRig : MonoBehaviour
     /// <summary>The knobs (null when unassigned).</summary>
     public HallLightingSO Settings => settings;
 
-    /// <summary>The hour the hall shows now: the preview hour, else the shift clock's, else the edit-mode hour.</summary>
+    /// <summary>The hour the hall shows now: the cheat menu's forced hour (DevToolsState.ForcedHour), else the preview hour, else the shift clock's, else the edit-mode hour.</summary>
     public float Hour => settings == null ? 12f
+        : DevToolsState.ForcedHour.HasValue ? DevToolsState.ForcedHour.Value
         : settings.previewHourOn ? settings.previewHour
         : _hasClock ? HallDayCycle.Hour(_clockMinute)
         : settings.editModeHour;
