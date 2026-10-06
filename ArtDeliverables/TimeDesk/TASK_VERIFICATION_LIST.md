@@ -8,3 +8,5 @@ Current task: hall-floor shadow geometry. Implemented upright volume/ring ray ca
 
 White silhouette crowd task (2026-10-06): approved original style reused; nine complementary compositions, scattered fixed placements, lower opacity, independent fades and shared hall-hour palette. Scene captures and live Play inspected; detailed requirements/checks in [crowd checklist](HallLayers/WhiteCrowds/CHECKLIST.md).
 
+
+2026-10-07 — Crowd placement review reopened after user reported wall-standing groups. Expanded from 15 to 25 placements, moved door-side groups into clear floor lanes, preserved stationary fades and light tint, added foreground rail occlusion. Reviewed all groups together in front/left views instead of relying on fading samples. Evidence and status: HallLayers/WhiteCrowds/CHECKLIST.md.

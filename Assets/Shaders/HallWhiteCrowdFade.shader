@@ -25,6 +25,13 @@ Shader "NOPE/Hall White Crowd Fade"
     if(v.pixel.y>282||(v.pixel.y>245&&v.pixel.y<252)||(v.pixel.y>264&&v.pixel.y<270))clip(-1);
     if(v.pixel.y>245){float posts[7]={1467,1564,1652,1781,1860,1955,2090};for(int n=0;n<7;n++)if(abs(v.pixel.x-posts[n])<4)clip(-1);}
    }
+   else if(v.pixel.x<1703 && v.pixel.y>547)
+   {
+    // Ground crowds remain behind the foreground brass railing.
+    if((v.pixel.y>547&&v.pixel.y<561)||(v.pixel.y>636&&v.pixel.y<646))clip(-1);
+    float posts[13]={43,175,300,429,553,680,824,943,1088,1216,1364,1496,1643};
+    for(int n=0;n<13;n++)if(abs(v.pixel.x-posts[n])<5 && v.pixel.y<695)clip(-1);
+   }
    half a=SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap,v.uv).a;
    return half4(_Tint.rgb,_Tint.a*smoothstep(.48,.54,a));
   }
