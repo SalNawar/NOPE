@@ -280,26 +280,35 @@ public partial class FormLayoutTests
         Assert.Greater(places, 1, "the visa page holds more than one mark before the rows start over");
     }
 
-    /// <summary>Papers, Please's stamps (Saleh 2026-10-06): a stamp takes only the passport's ENTRY VISA box, and its mark lands where it was pressed, kept whole in that box.</summary>
+    /// <summary>Papers, Please's stamps (Saleh 2026-10-06, "the stamp mark must land exactly where the stamp is pressed"): a mark pressed anywhere on the passport is centred on the pressed point, over the boxes too, outside the ENTRY VISA box too, and only moved to stay whole on the page.</summary>
     [Test]
-    public void AStampPressedInTheVisaBox_IsCentredThere_AndKeptInTheBox()
+    public void AStampPressedAnywhereOnThePassport_IsCentredWherePressed_AndKeptOnThePage()
     {
         PlacedForm f = FormLayout.Layout(Booklet(), BookletData(), M.aspect, M, new FakeMeasure());
         FormItem visaItem = Of(f, FormItemKind.StampArea).Single();
-        Assert.AreEqual(FormLayout.VisaBox, visaItem.Text, "the passport's visa box is marked as such");
+        Assert.AreEqual(FormLayout.VisaBox, visaItem.Text, "the passport's visa box is marked as such (the guide)");
         FaceRect visa = visaItem.Rect;
-        float cx = (visa.XMin + visa.XMax) / 2f, cy = (visa.YMin + visa.YMax) / 2f;
-        Assert.IsTrue(StampSpots.InArea(f, cx, cy));
-        Assert.IsFalse(StampSpots.InArea(f, cx, visa.YMin - 0.01f), "above the visa box");
-        FaceRect at = StampSpots.AtInArea(f, cx, cy, 2f);
-        Assert.AreEqual(cx, at.CentreX, Eps);
-        Assert.AreEqual(cy, at.CentreY, Eps);
-        FaceRect edge = StampSpots.AtInArea(f, visa.XMax - 0.001f, visa.YMax - 0.001f, 2f);
-        Assert.IsTrue(Inside(edge, visa), "kept whole in the visa box");
+        (float w, float h) = StampSpots.MarkSize(f, visa, 2f);
+        var page = new FaceRect(0f, 0f, f.Width, f.PageHeight);
+        foreach ((float x, float y, string where) in new[]
+                 {
+                     ((visa.XMin + visa.XMax) / 2f, (visa.YMin + visa.YMax) / 2f, "in the visa box"),
+                     (f.Width * 0.3f, f.PageHeight * 0.25f, "over the boxes above the visa box"),
+                     (f.Width * 0.7f, f.PageHeight * 0.5f, "in the page's middle"),
+                 })
+        {
+            FaceRect at = StampSpots.AtPoint(f, x, y, 2f);
+            Assert.AreEqual(x, at.CentreX, Eps, where);
+            Assert.AreEqual(y, at.CentreY, Eps, where);
+            Assert.AreEqual(w, at.Width, Eps, $"{where}: the form's mark size");
+            Assert.AreEqual(h, at.Height, Eps, $"{where}: the form's mark size");
+        }
+        FaceRect corner = StampSpots.AtPoint(f, 0.001f, f.PageHeight - 0.001f, 2f);
+        Assert.IsTrue(Inside(corner, page), "a press by the page's corner is kept whole on the page");
+        Assert.AreEqual(w / 2f, corner.CentreX, Eps, "moved just enough");
+        Assert.AreEqual(0f, StampSpots.AtPoint(null, 0.5f, 0.5f, 2f).Width, Eps, "no form: no mark");
         var plain = new PlacedForm(1f, 1f, 1f, new FormItem[0], new FormSlot[0], new[] { 0f });
         Assert.AreEqual(1f - StampSpots.FallbackShare, StampSpots.Area(plain).XMin, Eps, "no stamp area: the bottom right");
-        Assert.IsFalse(StampSpots.InArea(plain, 0.9f, 0.9f), "a paper with no stamp area takes no stamp");
-        Assert.IsFalse(StampSpots.InArea(null, 0f, 0f));
     }
 
     [Test]

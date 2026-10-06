@@ -324,9 +324,18 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// lies and introduces lists) and the questions (each on the day its
     /// DayAtLeast gate opens, day 1 without one). Built once per load; every
     /// part of the desk, the wheel and the PC asks it whether a feature is
-    /// introduced (Introductions.Has, ShowsField).
+    /// introduced (Introductions.Has, ShowsField). While the cheat menu's
+    /// "unlock everything" is on (DevToolsState.UnlockEverything) it is the
+    /// same registry with every listed feature introduced on any day
+    /// (Introductions.WithEverything).
     /// </summary>
-    public Introductions Introductions => _introductions ??= new Introductions(
+    public Introductions Introductions => DevToolsState.UnlockEverything ? _unlockedIntroductions ??= Ramp.WithEverything() : Ramp;
+
+    /// <summary>The cheat menu's "unlock everything" copy of the ramp (built the first time it is asked for).</summary>
+    [NonSerialized] private Introductions _unlockedIntroductions;
+
+    /// <summary>The ramp's registry as the day plans and the questions write it (built once per load).</summary>
+    private Introductions Ramp => _introductions ??= new Introductions(
         DayPlans.Where(p => p != null).Select(p => (p.DayNumber, Introductions.DayKeys(
             p.Papers, p.ActiveTravelRules.Where(r => r != null).Select(r => r.name), p.EnabledLies,
             Questions.Where(q => q != null && QuestionDay(q) == p.DayNumber).Select(q => q.question != null ? q.question.id : null),

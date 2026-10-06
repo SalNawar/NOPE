@@ -688,8 +688,9 @@ public static class _TimeDeskAuditPlay
         {
             // Papers, Please's controls (2026-10-06) with the art's 3D stamps (Saleh, same day), moved by the clerk (Saleh, later that day: "the
             // stamp should be two stamps that I physically move ... I should be able to stamp anywhere on the document"): TAB slides the 3D stamp
-            // bar out over the desk, the passport goes to the desk, a stamp is dragged onto it anywhere and let go (the mark lands in its ENTRY
-            // VISA box; the other stamp is then refused), and the stamped passport dropped on the slim counter hands the papers back. Before
+            // bar out over the desk, the passport goes to the desk, a stamp is dragged by its handle onto it anywhere and let go (the mark lands
+            // where it was pressed, "when I stamp it doesn't stamp where I'm pressing"; the other stamp is then refused), and the stamped passport
+            // dropped on the slim counter hands the papers back. Before
             // the stamp, a paper dropped on the counter bounces back to the desk ("documents can only be returned after stamping").
             if (!o.Stamps.BarOut)
                 o.Controls.Press(ControlKey.Stamps);
@@ -735,15 +736,16 @@ public static class _TimeDeskAuditPlay
                     yield return Until(() => !passport.IsSliding, 6f, "the passport back on the desk");
                     Check(Vector3.Distance(passport.transform.position, pickedAt) < 0.02f, $"d{day} slot {slot}: it lies where it was picked up ({Vector3.Distance(passport.transform.position, pickedAt):0.000} m off)");
                 }
-                // The passport on top, then a stamp dragged onto it away from its ENTRY VISA box: anywhere on the passport is the verdict.
+                // The passport on top, then a stamp dragged onto it over its boxes, away from its ENTRY VISA box: anywhere on the passport is the
+                // verdict, and the mark prints where the stamp was pressed.
                 Call(o.Desk, "HandlePaperClicked", passport, -1);
                 yield return Frames(2);
                 Vector3 anywhere = passport.Sheet.TransformPoint(new Vector3(0f, passport.Size.y * 0.2f, 0f));
-                Check(!passport.InVisaBox(anywhere), $"d{day} slot {slot}: the stamp's target lies outside the ENTRY VISA box");
                 yield return DragStamp(o, accept, anywhere);
                 Renderer mark = passport.GetComponentsInChildren<Renderer>(true).FirstOrDefault(r => r.name == "Stamp_1" && r.gameObject.activeSelf);
-                Check(o.Stamps.LastPress == StampPress.Stamped && o.Stamps.HasVerdict && mark != null && passport.InVisaBox(mark.bounds.center),
-                      $"d{day} slot {slot}: the stamp dragged onto the passport (outside its visa box) is the verdict, its mark in the ENTRY VISA box ({o.Stamps.LastPress})");
+                float markOff = mark != null ? new Vector2(mark.bounds.center.x - anywhere.x, mark.bounds.center.z - anywhere.z).magnitude : -1f;
+                Check(o.Stamps.LastPress == StampPress.Stamped && o.Stamps.HasVerdict && mark != null && markOff >= 0f && markOff < 0.003f,
+                      $"d{day} slot {slot}: the stamp dragged onto the passport (over its boxes) is the verdict, its mark where it was pressed ({markOff * 1000f:0.0} mm off; {o.Stamps.LastPress})");
                 // The stamp's return is a tween in game time (stampReturnSeconds): wait for it to finish (an unfocused editor's frames may be few), not a fixed real time.
                 yield return Settle(() => !o.Stamps.IsCarrying && StampHome(o, accept), 5f);
                 Check(!o.Stamps.IsCarrying && StampHome(o, accept),
@@ -801,31 +803,30 @@ public static class _TimeDeskAuditPlay
     /// Drags the APPROVED (<paramref name="approved"/>) or the DENIED 3D
     /// stamp from the rack onto <paramref name="target"/> and lets go, as the
     /// clerk does (Saleh 2026-10-06: the stamps are moved, not the paper): a
-    /// left-press on the stamp (the pointer on the desk straight under its
-    /// die), a few drag steps through the office camera's raycaster to the
-    /// point of the desk under the target, the release (the stamp presses
-    /// there and goes back to the rack).
+    /// left-press on the stamp's handle (high over its die, where a player
+    /// grabs it), a few drag steps through the office camera's raycaster to
+    /// where the target shows on the screen, the release (the stamp presses
+    /// there, its die carried straight above the spot pointed at, and goes
+    /// back to the rack).
     /// </summary>
     private static IEnumerator DragStamp(Office o, bool approved, Vector3 target)
     {
+        // As a player drags it: the pointer presses on the stamp's handle (high over its die), then points at the target on the paper.
         var click = (Clickable)Field(o.Stamps, approved ? "approvedStamp" : "deniedStamp");
-        var die = (Transform)Field(o.Stamps, approved ? "approvedDie" : "deniedDie");
-        var surface = (DeskSurface)Field(o.Desk, "surface");
         PhysicsRaycaster raycaster = OfficeRaycaster();
         Camera cam = raycaster.eventCamera;
-        float plane = surface.transform.position.y;
-        Vector3 from = new Vector3(die.position.x, plane, die.position.z), to = new Vector3(target.x, plane, target.z);
+        Vector3 from = cam.WorldToScreenPoint(click.transform.TransformPoint(((BoxCollider)click.GetComponent<Collider>()).center * 1.8f)), to = cam.WorldToScreenPoint(target);
         var data = new PointerEventData(EventSystem.current)
         {
             button = PointerEventData.InputButton.Left,
-            position = cam.WorldToScreenPoint(from),
+            position = from,
             pointerPressRaycast = new RaycastResult { module = raycaster, gameObject = click.gameObject }
         };
         ExecuteEvents.Execute(click.gameObject, data, ExecuteEvents.beginDragHandler);
         const int Steps = 6;
         for (int i = 1; i <= Steps; i++)
         {
-            data.position = cam.WorldToScreenPoint(Vector3.Lerp(from, to, (float)i / Steps));
+            data.position = Vector3.Lerp(from, to, (float)i / Steps);
             ExecuteEvents.Execute(click.gameObject, data, ExecuteEvents.dragHandler);
             yield return Frames(1);
         }

@@ -109,25 +109,40 @@ public static class OrderBook
         Installs.Turn(world.installs);
         foreach (OrderEntry entry in Orders.Due(world.orders, world.day))
         {
-            bool had = world.HasUpgrade(entry.upgradeId);
-            world.UnlockUpgrade(entry.upgradeId);
             entry.deliveredDay = world.day;
 
             UpgradeSO upgrade = lib != null ? lib.GetUpgradeById(entry.upgradeId) : null;
             if (upgrade == null)
             {
+                world.UnlockUpgrade(entry.upgradeId);
                 Debug.LogWarning($"[OrderBook] Delivered '{entry.upgradeId}', which the content library does not list: owned, with no effect.");
                 continue;
             }
 
-            if (!had && upgrade.unlockEffect != null)
-                TimelineService.ActivateEffect(world, upgrade.unlockEffect, $"Upgrade: {upgrade.displayName}", world.day,
-                                               upgrade.unlockEffect.defaultDurationDays, applyInstantOps: true);
-            Installs.Arrive(world.installs, upgrade.installSlot, upgrade.id);
+            Grant(world, upgrade);
             delivered.Add(upgrade);
             Debug.Log($"[OrderBook] Day {world.day}: '{upgrade.id}' delivered.");
         }
         return delivered;
+    }
+
+    /// <summary>
+    /// <paramref name="upgrade"/> arrives (a delivery, Deliver; the cheat
+    /// menu's "give all items", either venue): owned, its unlock effect
+    /// activated from today with its instant ops (only when it was not owned
+    /// already), installed when it has a slot. True when it was not owned.
+    /// </summary>
+    public static bool Grant(WorldState world, UpgradeSO upgrade)
+    {
+        if (world == null || upgrade == null)
+            return false;
+        bool had = world.HasUpgrade(upgrade.id);
+        world.UnlockUpgrade(upgrade.id);
+        if (!had && upgrade.unlockEffect != null)
+            TimelineService.ActivateEffect(world, upgrade.unlockEffect, $"Upgrade: {upgrade.displayName}", world.day,
+                                           upgrade.unlockEffect.defaultDurationDays, applyInstantOps: true);
+        Installs.Arrive(world.installs, upgrade.installSlot, upgrade.id);
+        return !had;
     }
 
     /// <summary>Every library upgrade as the tree reads it (both venues, so the checks see Home's too).</summary>

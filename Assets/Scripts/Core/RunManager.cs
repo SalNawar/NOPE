@@ -52,10 +52,12 @@ public sealed class RunManager : MonoBehaviour
         mgr.Config = config;
         Instance = mgr;
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        // Phase 6: dev overlay (cheats + timeline inspector), toggled with '~'.
-        // Editor and development builds only (audit R2-012, R3-030): a release
-        // build never carries it.
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || DEMO_CHEATS
+        // Phase 6: dev overlay (the cheat menu + timeline inspector), toggled
+        // with F9 or '~'. Editor and development builds, and the Windows demo
+        // while DemoBuild.DemoCheats defines DEMO_CHEATS (Saleh 2026-10-06:
+        // "a cheat menu available in the Windows demo build too"); any other
+        // release build never carries it (audit R2-012, R3-030).
         go.AddComponent<DebugPanelController>();
 #endif
 
@@ -243,6 +245,61 @@ public sealed class RunManager : MonoBehaviour
         Debug.Log($"[RunManager] <<< Exiting AdvanceToNextDay (now day {World.day}, money={World.money}, stability={World.timelineStability:0.00}; saving and loading Office).");
 
         SaveNow();
+        LoadOfficeScene();
+    }
+
+    /// <summary>
+    /// The cheat menu's "Jump to day N" (Saleh 2026-10-06): the run at the
+    /// start of day <paramref name="day"/>'s shift (1 to the run's last day,
+    /// ContentLibrarySO.LastDay). Forward, each night between runs as Sleep's
+    /// does (DayCycle.AdvanceNight: the nightly resolve, the deliveries), with
+    /// no shift played; back (or day 1), the run starts over from a new
+    /// world with the same seed and pet, then moves forward the same way; the
+    /// current day restarts its shift (RestartShift). The run is marked
+    /// cheated, saved and the office opens at the briefing.
+    /// </summary>
+    public void JumpToDay(int day)
+    {
+        if (World == null)
+            return;
+        int last = Library != null && Library.LastDay > 0 ? Library.LastDay : day;
+        day = Mathf.Clamp(day, 1, Mathf.Max(1, last));
+        if (day == World.day)
+        {
+            RestartShift();
+            return;
+        }
+
+        Debug.Log($"[RunManager] Cheat: jump from day {World.day} to day {day}.");
+        if (day < World.day)
+        {
+            PetState pet = World.pet;
+            World = DayCycle.NewWorld(Config, Library, World.runSeed);
+            if (pet != null)
+                World.pet = pet;
+        }
+        while (World.day < day)
+            DayCycle.AdvanceNight(World, Library, Config != null ? Config.gameConfig : null);
+        RestartShift();
+    }
+
+    /// <summary>
+    /// The cheat menu's "Restart shift" (and its unlock-everything, give-all
+    /// and force switches, which apply from a shift's start): today's shift
+    /// from its briefing, with the world as it stands (what today's decided
+    /// travellers did is kept, an ending reached is lifted so the shift can be
+    /// played); the run is marked cheated and saved as a day-start save, so
+    /// Continue resumes here.
+    /// </summary>
+    public void RestartShift()
+    {
+        if (World == null)
+            return;
+        World.phase = RunPhase.Office;
+        World.endingId = string.Empty;
+        World.cheated = true;
+        SaveNow();
+        NotifyEffectsChanged();
         LoadOfficeScene();
     }
 

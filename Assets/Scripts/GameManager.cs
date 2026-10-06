@@ -5,9 +5,10 @@ using UnityEngine;
 /// <summary>
 /// Connects DayOrchestrator -> CaseFactory -> the investigation UI.
 /// Generates cases at day start, displays the active case on UI,
-/// resolves the player's Accept/Deny decision, then advances the day.
+/// resolves the player's Accept/Deny decision, then advances the day. The
+/// cheat menu's entry points are in GameManager.Cheats.cs.
 /// </summary>
-public sealed class GameManager : MonoBehaviour
+public sealed partial class GameManager : MonoBehaviour
 {
     /// <summary>Controls day timeline (case slots + scheduled events).</summary>
     [SerializeField] private DayOrchestrator orchestrator;
@@ -126,6 +127,7 @@ public sealed class GameManager : MonoBehaviour
             Debug.LogError("GameManager missing references (orchestrator/contentLibrary/officeUI).");
             return;
         }
+        Current = this;
 
         // Acquire the run (creates RunManager + loads save/new run on first scene).
         RunManager run = RunManager.GetOrCreate();
@@ -322,6 +324,8 @@ public sealed class GameManager : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
+        if (Current == this)
+            Current = null;
         if (shiftClock != null)
             shiftClock.Closed -= HandleShiftClosed;
         if (investigationUI != null)
@@ -350,6 +354,7 @@ public sealed class GameManager : MonoBehaviour
 
         // The booth is shut: freeze the clock (the queue may have run out before closing) and close the desk; an FTUE still open is over (saved below).
         _travellerAtDesk = false;
+        _shiftRunning = false;
         if (guide != null)
             guide.EndShift();
         CloseDesk();
@@ -523,6 +528,10 @@ public sealed class GameManager : MonoBehaviour
         // The desk's guide: day 1's FTUE, a guided day's new page opened in the rulebook, the GUIDE's pages so far.
         if (guide != null)
             guide.BeginShift(_worldState.day, _worldState.guide, contentLibrary);
+
+        // The cheat menu's "Auto-decide" keeps the queue coming from the shift's start.
+        _shiftRunning = true;
+        StartAutoDecide();
     }
 
     /// <summary>
@@ -618,6 +627,7 @@ public sealed class GameManager : MonoBehaviour
         investigationUI.ShowCase(inst, contentLibrary, HandleDecision);
         if (guide != null)
             guide.CaseShown(inst);
+        DecideOnArrivalIfCheated();
     }
 
     /// <summary>
@@ -675,6 +685,8 @@ public sealed class GameManager : MonoBehaviour
         int evidenceCount = investigationUI != null && investigationUI.EvidenceSystemActive
             ? investigationUI.EvidenceCount
             : -1;
+        if (_cheatEvidence && evidenceCount == 0)
+            evidenceCount = 1; // the cheat menu's "decide correctly" denies with the evidence a denial needs
 
         // The verdict onto the ledger; the traveler is only dispatched (and the
         // timeline moved) when accepted: an accepted liar also carries their true
