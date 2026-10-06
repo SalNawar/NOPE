@@ -23,13 +23,15 @@ using UnityEngine.UI;
 /// the reading view shows at stampBarView, and is hidden while in. A stamp is
 /// moved, not the paper: left-press and drag a stamp (its DeskDraggable, the
 /// papers' one input model) and it follows the pointer over the desk, still
-/// stampHover up, over the papers; letting go presses it there and it goes
+/// stampHover up, over the papers, its die straight above the pointer's point
+/// wherever the stamp was grabbed (the drag's anchor); letting go presses it there and it goes
 /// back to its place in the rack (stampReturnSeconds); a left-click on a
 /// stamp presses it where it hangs. A press stamps whatever lies under its
 /// die (a ray straight down from the die's centre: the first document or the
-/// rulebook it meets): only the passport takes it, anywhere on it (the mark
-/// prints in its ENTRY VISA box, as near the pressed point as the box allows:
-/// DeskDocument.Stamp, StampSpots.AtInArea), and only once (StampFlow: the
+/// rulebook it meets): only the passport takes it, anywhere on it, and the
+/// mark prints exactly there, over the boxes too (Saleh 2026-10-06: "when I
+/// stamp it doesn't stamp where I'm pressing"; the ENTRY VISA box is a guide:
+/// DeskDocument.Stamp, StampSpots.AtPoint), and only once (StampFlow: the
 /// second stamp, another paper or the rulebook are refused with a thunk, a
 /// shake and a short note; no mark); pressed on the bare desk the stamp just
 /// goes back. The accepted press dips the stamp onto the paper and is the
@@ -93,6 +95,9 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>The longest ray a stamp casts down (metres).</summary>
     private const float RayLength = 0.5f;
 
+    /// <summary>The longest pointer ray a carried stamp aims along (metres: the camera to the desk).</summary>
+    private const float AimLength = 10f;
+
     /// <summary>One stamp of the rack: what it stamps, its parts, its place in the rack and its motion (a press's dip or shake, then the way back to its place).</summary>
     private sealed class Handle
     {
@@ -153,6 +158,9 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>What the last press did (the probes read it).</summary>
     public StampPress LastPress { get; private set; }
 
+    /// <summary>Where the last press met a paper or the rulebook (straight under the stamp's die; the probes read it).</summary>
+    public Vector3 LastPressPoint { get; private set; }
+
     /// <summary>Raised when the bar or the verdict changes (the counter's label, the booth's rules).</summary>
     public event Action Changed;
 
@@ -171,7 +179,7 @@ public sealed class DeskStampTray : MonoBehaviour
         Show();
     }
 
-    /// <summary>A stamp of the rack: a click presses it where it hangs, a drag carries it stampHover over the desk and the release presses it there.</summary>
+    /// <summary>A stamp of the rack: a click presses it where it hangs, a drag carries it stampHover over the desk, its die over the pointer (the drag's anchor), and the release presses it there.</summary>
     private Handle MakeHandle(DeskStamp kind, Clickable click, Transform die)
     {
         var handle = new Handle { Kind = kind, Click = click, Die = die };
@@ -182,7 +190,7 @@ public sealed class DeskStampTray : MonoBehaviour
         handle.Drag = click.GetComponent<DeskDraggable>();
         if (handle.Drag != null)
         {
-            handle.Drag.Init(surface, config != null ? config.stampHover : 0f);
+            handle.Drag.Init(surface, config != null ? config.stampHover : 0f, die, Aim);
             handle.Drag.DragBegan += _ => PickUp(handle);
             handle.Drag.DragEnded += (_, _) => LetGo(handle);
             handle.Drag.DragCancelled += _ => PutBack(handle);
@@ -303,8 +311,8 @@ public sealed class DeskStampTray : MonoBehaviour
     /// Presses <paramref name="handle"/> on what lies under its die (a ray
     /// straight down from the die's centre meets a document or the rulebook
     /// first, or nothing): StampFlow decides; an accepted press prints the
-    /// mark in the passport's ENTRY VISA box as near the pressed point as the
-    /// box allows, dips and thumps; a refused one thunks, shakes the stamp and
+    /// mark centred where the ray met the passport (anywhere on it), dips and
+    /// thumps; a refused one thunks, shakes the stamp and
     /// says why; pressed on the bare desk the stamp just goes back. A stamp
     /// carried away from the rack goes back to it after the press (a click on
     /// a stamp presses it where it hangs).
@@ -319,6 +327,7 @@ public sealed class DeskStampTray : MonoBehaviour
         }
         Component under = ThingUnder(handle.Die, out Vector3 point);
         var paper = under as DeskDocument;
+        LastPressPoint = point;
         LastPress = _flow.Press(handle.Kind, under != null, paper != null && paper.Index == _passport);
         if (LastPress == StampPress.Nothing)
         {
@@ -373,7 +382,17 @@ public sealed class DeskStampTray : MonoBehaviour
         if (die == null)
             return null;
         Physics.SyncTransforms(); // a document or a stamp moved this frame is where the ray looks for it
-        int n = Physics.RaycastNonAlloc(new Ray(die.position + Vector3.up * 0.001f, Vector3.down), _hits, RayLength, paperLayers, QueryTriggerInteraction.Collide);
+        return FirstAlong(new Ray(die.position + Vector3.up * 0.001f, Vector3.down), RayLength, out point);
+    }
+
+    /// <summary>A carried stamp's aim (its drag's): where the pointer's <paramref name="ray"/> meets the first document or the rulebook, so the die goes straight above the spot the pointer shows on the paper; null over the bare desk (the drag uses the desk plane).</summary>
+    private Vector3? Aim(Ray ray) => FirstAlong(ray, AimLength, out Vector3 point) != null ? point : (Vector3?)null;
+
+    /// <summary>The first document or the rulebook along <paramref name="ray"/> within <paramref name="length"/> (stamps and the rest of the office are passed through), and where it was met; null when it meets neither.</summary>
+    private Component FirstAlong(Ray ray, float length, out Vector3 point)
+    {
+        point = default;
+        int n = Physics.RaycastNonAlloc(ray, _hits, length, paperLayers, QueryTriggerInteraction.Collide);
         Component best = null;
         float nearest = float.MaxValue;
         for (int i = 0; i < n; i++)

@@ -7,11 +7,14 @@ using System;
 /// into its largest stamp area (a passport's visa page, a form's footer box),
 /// in rows from its top left, each mark beside the last with a gap, so a second
 /// stamp never hides the first (the rows start over when the area is full); a
-/// mark pressed in the area (a passport's ENTRY VISA box, the only box a
-/// verdict stamp takes: InArea; Papers, Please's stamps, Saleh 2026-10-06) is
-/// centred there and kept whole in it (AtInArea). A form with no stamp area takes its marks
-/// at the page's bottom right. Pure, so it is tested headless; the desk paper
-/// prints the mark (DeskDocument.Stamp).
+/// mark pressed on the paper (a desk stamp let go over the passport: Papers,
+/// Please's stamps, Saleh 2026-10-06, "the stamp mark must land exactly where
+/// the stamp is pressed") is centred on the pressed point, wherever it is on
+/// the page (over the boxes too), and only moved to stay whole on the page
+/// (AtPoint); the ENTRY VISA box is a guide, no longer where a pressed mark is
+/// put. A form with no stamp area takes its marks at the page's bottom right.
+/// Pure, so it is tested headless; the desk paper prints the mark
+/// (DeskDocument.Stamp).
 /// </summary>
 public static class StampSpots
 {
@@ -70,27 +73,20 @@ public static class StampSpots
         return FaceRect.FromTop(Math.Max(area.XMin, x), Math.Max(area.YMin, y), w, h);
     }
 
-    /// <summary>True when (<paramref name="x"/>, <paramref name="y"/>) in form space lies in <paramref name="form"/>'s largest stamp area (a passport's ENTRY VISA box: Papers, Please's stamps press only there); false without a form or a stamp area.</summary>
-    public static bool InArea(PlacedForm form, float x, float y)
-    {
-        if (form == null)
-            return false;
-        bool any = false;
-        foreach (FormItem item in form.Items)
-            any |= item.Kind == FormItemKind.StampArea;
-        FaceRect area = Area(form);
-        return any && x >= area.XMin && x <= area.XMax && y >= area.YMin && y <= area.YMax;
-    }
-
-    /// <summary>A mark of <paramref name="aspect"/> pressed at (<paramref name="x"/>, <paramref name="y"/>) in form space inside the largest stamp area (the visa box the stamp landed on): centred there, moved just enough to lie whole in the area.</summary>
-    public static FaceRect AtInArea(PlacedForm form, float x, float y, float aspect)
+    /// <summary>
+    /// A mark of <paramref name="aspect"/> pressed at (<paramref name="x"/>,
+    /// <paramref name="y"/>) in form space: the size the form's marks have
+    /// (MarkSize in its largest stamp area), centred on the pressed point,
+    /// moved only as far as it takes to lie whole on the page (a press by the
+    /// paper's edge); anywhere else it may cover the boxes, as a stamp does.
+    /// </summary>
+    public static FaceRect AtPoint(PlacedForm form, float x, float y, float aspect)
     {
         if (form == null)
             return new FaceRect(0f, 0f, 0f, 0f);
-        FaceRect area = Area(form);
-        (float w, float h) = MarkSize(form, area, aspect);
-        float left = Math.Max(area.XMin, Math.Min(area.XMax - w, x - w / 2f));
-        float top = Math.Max(area.YMin, Math.Min(area.YMax - h, y - h / 2f));
+        (float w, float h) = MarkSize(form, Area(form), aspect);
+        float left = Math.Max(0f, Math.Min(form.Width - w, x - w / 2f));
+        float top = Math.Max(0f, Math.Min(form.PageHeight - h, y - h / 2f));
         return FaceRect.FromTop(left, top, w, h);
     }
 }

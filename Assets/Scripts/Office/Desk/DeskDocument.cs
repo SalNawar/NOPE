@@ -28,8 +28,9 @@ using UnityEngine.EventSystems;
 /// frame otherwise). A booklet prints its holder's nation's emblem and a
 /// watermark its mark, faint over the boxes' fills; a card's paper has rounded
 /// corners (the travel documents spec, TD1, TD3). A desk stamp's mark lands
-/// where Stamp puts it (StampSpots: the next place in its largest stamp
-/// area, a passport's visa page, or a pressed point; TD4), the verdict's
+/// where Stamp puts it (StampSpots: centred where a desk stamp pressed it,
+/// anywhere on the page, or the next place in its largest stamp area, a
+/// passport's visa page; TD4), the verdict's
 /// (ShowVerdict) in its stamp area: the mark's art, else a code-drawn stamp
 /// (a framed APPROVED or DENIED in green or red ink). Always
 /// English: a paper never flips. Papers, Please's controls (Saleh
@@ -40,8 +41,8 @@ using UnityEngine.EventSystems;
 /// lit on the desk, its unlit reading material and the photo in the reading
 /// tint; DeskZones), easing between the two; in inspect mode every box is
 /// tinted as comparable and the one under the pointer stronger; a picked
-/// box lights up (SlotHighlight). Only the passport's ENTRY VISA box takes a
-/// stamp (InVisaBox; DeskStampTray presses). Slides and resizes are moves
+/// box lights up (SlotHighlight). A desk stamp prints where its die pressed
+/// the passport (PagePoint, Stamp; DeskStampTray presses). Slides and resizes are moves
 /// in Update, only while one runs.
 /// </summary>
 public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointerMoveHandler, IPointerExitHandler
@@ -416,15 +417,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         ApplySlotTint(slot);
     }
 
-    /// <summary>True when <paramref name="world"/> (a point on the paper) lies in its ENTRY VISA box (the largest stamp area, StampSpots.InArea): where a verdict stamp lands on the passport.</summary>
-    public bool InVisaBox(Vector3 world)
-    {
-        if (_form == null)
-            return false;
-        Vector2 page = PagePoint(world);
-        return StampSpots.InArea(_form, page.x / _scale, page.y / _scale);
-    }
-
     /// <summary>A world point on the paper as a point on its page: from the page's top-left, y down, in the paper's metres (what Stamp takes).</summary>
     public Vector2 PagePoint(Vector3 world)
     {
@@ -518,9 +510,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// Presses a desk stamp on the paper (the travel documents spec, TD4;
     /// Papers, Please's stamps): APPROVED for <paramref name="approved"/>,
     /// else DENIED, centred at <paramref name="formPoint"/> (from the page's
-    /// top-left, y down, in the paper's metres) and kept whole in the ENTRY
-    /// VISA box it was pressed on (StampSpots.AtInArea) or, without one (the
-    /// verdict's ink as the papers leave), at the next place of its largest
+    /// top-left, y down, in the paper's metres: where the stamp's die pressed,
+    /// over the boxes too) and kept whole on the page (StampSpots.AtPoint) or,
+    /// without one (the verdict's ink as the papers leave), at the next place of its largest
     /// stamp area (StampSpots.Next: a passport's visa page, a form's footer
     /// box). The mark is the art's (ArtSlots.VerdictMark) at its own aspect,
     /// else a code-drawn stamp: a double frame and the style's word
@@ -534,7 +526,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             return new FaceRect(0f, 0f, 0f, 0f);
         Texture2D art = SlotArt.Texture(new[] { ArtSlots.VerdictMark(approved) });
         float aspect = art != null && art.height > 0 ? (float)art.width / art.height : StampAspect;
-        FaceRect place = formPoint.HasValue ? StampSpots.AtInArea(_form, formPoint.Value.x / _scale, formPoint.Value.y / _scale, aspect) : StampSpots.Next(_form, _stamps, aspect);
+        FaceRect place = formPoint.HasValue ? StampSpots.AtPoint(_form, formPoint.Value.x / _scale, formPoint.Value.y / _scale, aspect) : StampSpots.Next(_form, _stamps, aspect);
         float tilt = art != null ? 0f : (_stamps % 2 == 0 ? -StampTilt : StampTilt * 0.6f);
         _stamps++;
 
