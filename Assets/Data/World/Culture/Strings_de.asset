@@ -135,3 +135,56 @@ MonoBehaviour:
     text: Portale
     gloss: 0
     tier: 0
+  words:
+  - native: bildschirm
+    english: Screen
+  - native: aus
+    english: off
+  - native: spiel
+    english: game
+  - native: beenden
+    english: Quit
+  - native: der
+    english: the
+  - native: zeitbote
+    english: time messenger
+  - native: schicht
+    english: shift
+  - native: beginnen
+    english: start
+  - native: schichtbuch
+    english: shift ledger
+  - native: abendausgabe
+    english: evening edition
+  - native: nach
+    english: go
+  - native: hause
+    english: home
+  - native: meldung
+    english: report
+  - native: einer
+    english: of a
+  - native: zeitabweichung
+    english: time deviation
+  - native: zur
+    english: for
+  - native: kenntnis
+    english: notice
+  - native: tag
+    english: Day
+  - native: "stabilit\xE4t"
+    english: Stability
+  - native: "zur\xFCck"
+    english: Back
+  - native: zum
+    english: to the
+  - native: schreibtisch
+    english: desk
+  - native: morgenbesprechung
+    english: Morning Briefing
+  - native: schichtbericht
+    english: Shift Report
+  - native: zeitlinien
+    english: timeline
+  - native: nachrichten
+    english: news

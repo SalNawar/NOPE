@@ -15,7 +15,9 @@ MonoBehaviour:
   dayNumber: 8
   visitorsCount: 14
   bulletin: 'NEW: Debt Relief labourers. They carry a registered Work Permit, an
-    Economy transponder and a signed Stranding Waiver.'
+    Economy transponder and a signed Stranding Waiver. And from today the office
+    reads the world''s language: the Bureau issues you a Translation Lens. Hover
+    a word to read it.'
   papers:
   - TC-101
   - TC-230
@@ -27,6 +29,7 @@ MonoBehaviour:
   - field:Employer
   - field:Term
   - field:Wage
+  - tool:lens
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 2

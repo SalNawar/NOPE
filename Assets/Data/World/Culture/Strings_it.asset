@@ -135,3 +135,80 @@ MonoBehaviour:
     text: Portali
     gloss: 0
     tier: 0
+  words:
+  - native: spegni
+    english: Turn off
+  - native: lo
+    english: the
+  - native: schermo
+    english: screen
+  - native: esci
+    english: Quit
+  - native: dal
+    english: from the
+  - native: gioco
+    english: game
+  - native: il
+    english: the
+  - native: corriere
+    english: courier
+  - native: del
+    english: of the
+  - native: tempo
+    english: time
+  - native: inizia
+    english: start
+  - native: turno
+    english: shift
+  - native: registro
+    english: ledger
+  - native: edizione
+    english: edition
+  - native: della
+    english: of the
+  - native: sera
+    english: evening
+  - native: a
+    english: to
+  - native: casa
+    english: home
+  - native: non
+    english: no
+  - native: corrisponde
+    english: match
+  - native: avviso
+    english: notice
+  - native: di
+    english: of
+  - native: deviazione
+    english: deviation
+  - native: temporale
+    english: temporal
+  - native: preso
+    english: taken
+  - native: atto
+    english: note
+  - native: conto
+    english: Account
+  - native: cittadino
+    english: citizen
+  - native: giorno
+    english: Day
+  - native: "stabilit\xE0"
+    english: Stability
+  - native: torna
+    english: Back
+  - native: alla
+    english: to the
+  - native: scrivania
+    english: desk
+  - native: briefing
+    english: Briefing
+  - native: mattino
+    english: morning
+  - native: rapporto
+    english: Report
+  - native: notizie
+    english: news
+  - native: linea
+    english: line

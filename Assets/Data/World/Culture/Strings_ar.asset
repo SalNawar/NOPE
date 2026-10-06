@@ -139,3 +139,68 @@ MonoBehaviour:
     text: "\u0627\u0644\u0628\u0648\u0627\u0628\u0627\u062A"
     gloss: 0
     tier: 0
+  words:
+  - native: "\u0625\u0637\u0641\u0627\u0621"
+    english: Turn off
+  - native: "\u0627\u0644\u0634\u0627\u0634\u0629"
+    english: screen
+  - native: "\u0625\u0646\u0647\u0627\u0621"
+    english: Quit
+  - native: "\u0627\u0644\u0644\u0639\u0628\u0629"
+    english: game
+  - native: "\u0635\u062D\u064A\u0641\u0629"
+    english: newspaper
+  - native: "\u0627\u0644\u0632\u0645\u0646"
+    english: of time
+  - native: "\u0627\u0628\u062F\u0623"
+    english: Start
+  - native: "\u0627\u0644\u0645\u0646\u0627\u0648\u0628\u0629"
+    english: shift
+  - native: "\u0633\u062C\u0644"
+    english: ledger
+  - native: "\u0627\u0644\u0637\u0628\u0639\u0629"
+    english: edition
+  - native: "\u0627\u0644\u0645\u0633\u0627\u0626\u064A\u0629"
+    english: evening
+  - native: "\u0625\u0644\u0649"
+    english: to
+  - native: "\u0627\u0644\u0628\u064A\u062A"
+    english: home
+  - native: "\u0639\u062F\u0645"
+    english: no
+  - native: "\u062A\u0637\u0627\u0628\u0642"
+    english: match
+  - native: "\u0625\u0634\u0639\u0627\u0631"
+    english: notice
+  - native: "\u0627\u0646\u062D\u0631\u0627\u0641"
+    english: deviation
+  - native: "\u0632\u0645\u0646\u064A"
+    english: timeline
+  - native: "\u062A\u0645"
+    english: done
+  - native: "\u0627\u0644\u0627\u0637\u0644\u0627\u0639"
+    english: reading
+  - native: "\u062D\u0633\u0627\u0628"
+    english: Account
+  - native: "\u0627\u0644\u0645\u0648\u0627\u0637\u0646"
+    english: citizen
+  - native: "\u0627\u0644\u064A\u0648\u0645"
+    english: Day
+  - native: "\u0627\u0644\u0627\u0633\u062A\u0642\u0631\u0627\u0631"
+    english: Stability
+  - native: "\u0627\u0644\u0639\u0648\u062F\u0629"
+    english: Back
+  - native: "\u0627\u0644\u0645\u0643\u062A\u0628"
+    english: desk
+  - native: "\u0627\u0644\u0625\u062D\u0627\u0637\u0629"
+    english: Briefing
+  - native: "\u0627\u0644\u0635\u0628\u0627\u062D\u064A\u0629"
+    english: morning
+  - native: "\u062A\u0642\u0631\u064A\u0631"
+    english: Report
+  - native: "\u0623\u062E\u0628\u0627\u0631"
+    english: news
+  - native: "\u0627\u0644\u062E\u0637"
+    english: line
+  - native: "\u0627\u0644\u0632\u0645\u0646\u064A"
+    english: time

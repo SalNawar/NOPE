@@ -128,7 +128,7 @@ public static partial class WorldContentGenerator
         (t.lens?.levels ?? Array.Empty<LensLevelData>()).Skip(1).Where(l => l != null && !string.IsNullOrWhiteSpace(l.id));
 
     /// <summary>
-    /// Writes Translation/Upgrade_Lens_{Level}.asset for each sold lens level:
+    /// Writes Translation/Upgrade_{Id}.asset (Upgrade_LensSentence) for each sold lens level:
     /// an Orders node in the Interview band (the interview and translation),
     /// its name, description, cost and requires as authored, no unlock
     /// effect and no install slot (the lens reads the owned id:
@@ -138,7 +138,7 @@ public static partial class WorldContentGenerator
     {
         foreach (LensLevelData level in SoldLensLevels(t))
         {
-            UpgradeSO so = LoadOrCreate<UpgradeSO>($"{TranslationFolder}/Upgrade_Lens_{Pascal(level.id)}.asset", written);
+            UpgradeSO so = LoadOrCreate<UpgradeSO>($"{TranslationFolder}/Upgrade_{Pascal(level.id)}.asset", written);
             so.id = level.id;
             so.displayName = level.displayName;
             so.description = level.description;

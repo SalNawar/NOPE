@@ -190,6 +190,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4d8e82e5d30485748834bd8ec3ea126c, type: 2}
   - {fileID: 11400000, guid: 3c2b2e7640f956248bbdcd0a5072ae91, type: 2}
   - {fileID: 11400000, guid: 0a6982e0eb5e73c43884da142bd88222, type: 2}
+  - {fileID: 11400000, guid: a56df4b404136554fbe820ee69a3d6d3, type: 2}
+  - {fileID: 11400000, guid: 52d168b1e757c8f47976bc88b25c1aa5, type: 2}
   - {fileID: 11400000, guid: 545b9562178c1cc45b744673568b7235, type: 2}
   - {fileID: 11400000, guid: e1cae31e0483ce049927b1968fa03e89, type: 2}
   - {fileID: 11400000, guid: cb1ce12a82715c64c94f5a87865ffff3, type: 2}
@@ -16921,6 +16923,19 @@ MonoBehaviour:
       letterSeconds: 0.12
       scrambleSteps: 2
     fallbackGlyphs: olmnupqrystvwxazbcdfeghjik
+    lens:
+      rules:
+        levelIds:
+        - lens_word
+        - lens_sentence
+        - lens_object
+      flip:
+        startDelay: 0
+        letterInterval: 0.03
+        letterSeconds: 0.09
+        scrambleSteps: 2
+      cascadeSeconds: 0.08
+      resizeSeconds: 0.15
   agency:
     name: TEMPORAL CUSTOMS
     programme: Debt Relief Departures
@@ -18000,6 +18015,23 @@ MonoBehaviour:
         the record.
       fault: 'A contract the record does not list: forged.'
       point: paper:TC-520
+      practice:
+        id: 
+        action: 0
+        categories: 
+        form: 
+        target: 
+        text: 
+    - id: lens
+      feature: tool:lens
+      title: THE TRANSLATION LENS
+      named: Translation Lens
+      check: 'Any word the office prints in the world''s language: on the PC, the
+        morning paper, a notice. Hover it and it flips into English.'
+      against: 'From today the language follows history: Settings no longer switches
+        it. Orders sells the lens''s Sentences and Objects.'
+      fault: 'Clicking a button you cannot read: hover it first.'
+      point: pc
       practice:
         id: 
         action: 0

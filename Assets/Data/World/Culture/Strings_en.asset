@@ -1185,6 +1185,11 @@ MonoBehaviour:
     text: Always English
     gloss: 0
     tier: 0
+  - key: settings.languageLocked
+    text: 'Locked from day {0}: the office reads the world''s language now. Hover
+      a word to translate it (the Translation Lens).'
+    gloss: 0
+    tier: 0
   - key: settings.motion
     text: Motion
     gloss: 0
@@ -3032,3 +3037,4 @@ MonoBehaviour:
     text: Hold to compare
     gloss: 0
     tier: 0
+  words: []

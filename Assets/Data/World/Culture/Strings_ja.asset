@@ -135,3 +135,56 @@ MonoBehaviour:
     text: "\u30DD\u30FC\u30BF\u30EB"
     gloss: 0
     tier: 0
+  words:
+  - native: "\u753B\u9762"
+    english: Screen
+  - native: "\u30AA\u30D5"
+    english: off
+  - native: "\u30B2\u30FC\u30E0"
+    english: Game
+  - native: "\u7D42\u4E86"
+    english: quit
+  - native: "\u6642\u7A7A"
+    english: time-space
+  - native: "\u65B0\u5831"
+    english: news
+  - native: "\u52E4\u52D9"
+    english: shift
+  - native: "\u958B\u59CB"
+    english: start
+  - native: "\u53F0\u5E33"
+    english: ledger
+  - native: "\u5915\u520A"
+    english: evening edition
+  - native: "\u4E0D"
+    english: no
+  - native: "\u4E00\u81F4"
+    english: match
+  - native: "\u6642\u9593\u7DDA"
+    english: timeline
+  - native: "\u9038\u8131"
+    english: deviation
+  - native: "\u901A\u77E5"
+    english: notice
+  - native: "\u5E02\u6C11"
+    english: citizen
+  - native: "\u53E3\u5EA7"
+    english: account
+  - native: "\u65E5\u76EE"
+    english: day
+  - native: "\u5B89\u5B9A\u5EA6"
+    english: Stability
+  - native: "\u30C7\u30B9\u30AF"
+    english: desk
+  - native: "\u306B"
+    english: to
+  - native: "\u623B\u308B"
+    english: back
+  - native: "\u671D\u306E"
+    english: morning
+  - native: "\u30D6\u30EA\u30FC\u30D5\u30A3\u30F3\u30B0"
+    english: briefing
+  - native: "\u5831\u544A"
+    english: report
+  - native: "\u30CB\u30E5\u30FC\u30B9"
+    english: news
