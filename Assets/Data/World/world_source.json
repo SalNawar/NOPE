@@ -9867,7 +9867,6 @@
       "introduces": [
         "tool:calendar",
         "tool:rulebook",
-        "app:investigation",
         "app:mail",
         "app:notes",
         "app:settings",
@@ -10204,6 +10203,7 @@
       ],
       "introduces": [
         "tool:scanner",
+        "app:investigation",
         "pc:records",
         "field:BirthDate",
         "field:Incident",
@@ -23752,7 +23752,7 @@
       },
       {
         "key": "keys.desk.drag",
-        "text": "Move a document: on the counter it is small, on the desk full size; the stamped passport dropped on the counter hands the papers back",
+        "text": "Move a document or a stamp: on the counter a document is small, on the desk full size; once the passport is stamped, a paper dropped on the counter hands the papers back",
         "gloss": "None",
         "tier": "Full"
       },
@@ -23764,7 +23764,7 @@
       },
       {
         "key": "keys.desk.stamps",
-        "text": "The stamp bar (the grey tab on the right): a stamp stamps the ENTRY VISA box under it",
+        "text": "The stamp bar (the grey tab on the right): drag a stamp onto the passport and let go",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25042,13 +25042,13 @@
       },
       {
         "key": "stamp.hint.handBack",
-        "text": "Drag the stamped passport onto the COUNTER to hand it back.",
+        "text": "Drag the stamped passport onto the COUNTER to hand the papers back.",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "stamp.hint.place",
-        "text": "Put the passport's ENTRY VISA box under a stamp, then click the stamp.",
+        "text": "Drag a stamp onto the passport and let go.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25059,20 +25059,14 @@
         "tier": "Full"
       },
       {
-        "key": "stamp.refused.outsideVisa",
-        "text": "Only the passport's ENTRY VISA box takes the stamp.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "stamp.refused.already",
         "text": "This passport already carries a verdict.",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "stamp.refused.nothing",
-        "text": "Nothing under the stamp: put the passport's ENTRY VISA box under it.",
+        "key": "stamp.refused.handBackFirst",
+        "text": "Stamp the passport first.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25109,6 +25103,12 @@
       {
         "key": "stamp.zone.handBack",
         "text": "▲  HAND BACK  ▲",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "stamp.zone.stampFirst",
+        "text": "STAMP THE PASSPORT FIRST",
         "gloss": "None",
         "tier": "Full"
       },

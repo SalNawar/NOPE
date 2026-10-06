@@ -78,8 +78,11 @@ public sealed class DeskConfigSO : ScriptableObject
     [FormerlySerializedAs("heldPaperLift"), Min(0f)] public float dragLift = 0.02f;
 
     [Header("The counter and the desk (Papers, Please's zones, Saleh 2026-10-06)")]
-    /// <summary>The counter: the strip this deep (metres) at the desk's far edge along the office view, on the traveller's side; papers arrive there, and the stamped passport dropped there hands the papers back.</summary>
-    [FormerlySerializedAs("handBackDepth"), Min(0.02f)] public float counterDepth = 0.14f;
+    /// <summary>The counter: the slim strip this deep (metres) at the desk's far edge along the office view, on the traveller's side (Saleh 2026-10-06: "reduce the size of the top counter line"; it was 0.14); a paper dropped there once the passport carries its verdict hands the papers back, before that it bounces back to the desk.</summary>
+    [FormerlySerializedAs("handBackDepth"), Min(0.02f)] public float counterDepth = 0.05f;
+
+    /// <summary>How far nearer than the counter's far edge the papers handed over land (metres: their centres' row, DeskZones.CounterSpot); small papers there reach over the slim strip onto the desk.</summary>
+    [Min(0f)] public float counterSpotInset = 0.07f;
 
     /// <summary>A document's scale on the counter (small: a share of its own size).</summary>
     [Range(0.2f, 1f)] public float counterScale = 0.6f;
@@ -186,7 +189,10 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds a press takes, down and up.</summary>
     [Min(0f)] public float stampPressSeconds = 0.18f;
 
-    /// <summary>Seconds a refused press's note stays up ("Only the passport's ENTRY VISA box takes a stamp.").</summary>
+    /// <summary>Seconds a stamp dragged out over the desk takes to go back to its place in the rack once pressed or let go (a cut under Reduced Motion).</summary>
+    [Min(0f)] public float stampReturnSeconds = 0.2f;
+
+    /// <summary>Seconds a refused press's note, or the counter's "Stamp the passport first", stays up.</summary>
     [Min(0.5f)] public float stampNoteSeconds = 2.5f;
 
     [Header("Desk view (piece 10)")]

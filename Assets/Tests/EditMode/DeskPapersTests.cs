@@ -249,22 +249,40 @@ public class DeskPapersTests
         DeskPapers p = AllOnDesk();
         for (int i = 0; i < p.Count; i++)
             Assert.AreEqual(DeskZone.Counter, p.ZoneOf(i), "papers arrive on the counter, small");
+        Assert.AreEqual(DropOutcome.Stays, p.Drop(1, false, DeskZone.Counter), "a paper still on the counter may move along it");
+        Assert.AreEqual(DeskZone.Counter, p.ZoneOf(1));
         Assert.AreEqual(DropOutcome.Stays, p.Drop(0, false, DeskZone.Desk));
         Assert.AreEqual(DeskZone.Desk, p.ZoneOf(0), "on the desk it is full size");
-        Assert.AreEqual(DropOutcome.Stays, p.Drop(0, false, DeskZone.Counter));
-        Assert.AreEqual(DeskZone.Counter, p.ZoneOf(0), "back on the counter, small again");
         Assert.AreEqual(DeskZone.Counter, p.ZoneOf(-1), "out of range");
     }
 
     [Test]
-    public void TheStampedPassport_DroppedOnTheCounter_HandsThePapersBack()
+    public void ADraggedPaper_GrowsOverTheDesk_AndNeverShrinksBeforeItIsHandedBack()
+    {
+        Assert.AreEqual(DeskZone.Desk, DeskPapers.ShownWhileDragged(DeskZone.Counter, DeskZone.Desk), "off the counter it grows at once");
+        Assert.AreEqual(DeskZone.Counter, DeskPapers.ShownWhileDragged(DeskZone.Counter, DeskZone.Counter), "still over the counter: small");
+        Assert.AreEqual(DeskZone.Desk, DeskPapers.ShownWhileDragged(DeskZone.Desk, DeskZone.Counter), "over the counter it keeps its size (Saleh: no shrinking as I stamp)");
+    }
+
+    [Test]
+    public void APaperFromTheDesk_DroppedOnTheCounter_BeforeTheVerdict_BouncesBack()
     {
         DeskPapers p = AllOnDesk();
         p.Drop(0, false, DeskZone.Desk);
-        Assert.AreEqual(DropOutcome.Stays, p.Drop(0, false, DeskZone.Counter, stampedPassport: false), "an unstamped passport just lies on the counter");
-        Assert.AreEqual(DropOutcome.Stays, p.Drop(0, false, DeskZone.Desk, stampedPassport: true), "the stamped passport on the desk stays");
-        Assert.AreEqual(DropOutcome.HandsBack, p.Drop(0, false, DeskZone.Counter, stampedPassport: true));
-        Assert.AreEqual(DropOutcome.Scanning, p.Drop(2, true, DeskZone.Counter, stampedPassport: true), "the scanner wins over the counter");
+        Assert.AreEqual(DropOutcome.NotStamped, p.Drop(0, false, DeskZone.Counter), "documents can only be returned after stamping");
+        Assert.AreEqual(DeskZone.Desk, p.ZoneOf(0), "it stays a desk paper, full size");
+        Assert.IsTrue(p.CanDrag(0), "it is still on the desk");
+    }
+
+    [Test]
+    public void OnceThePassportCarriesItsVerdict_AnyPaperDroppedOnTheCounter_HandsThePapersBack()
+    {
+        DeskPapers p = AllOnDesk();
+        p.Drop(0, false, DeskZone.Desk);
+        Assert.AreEqual(DropOutcome.Stays, p.Drop(0, false, DeskZone.Desk, verdict: true), "the stamped passport on the desk stays");
+        Assert.AreEqual(DropOutcome.HandsBack, p.Drop(0, false, DeskZone.Counter, verdict: true));
+        Assert.AreEqual(DropOutcome.HandsBack, p.Drop(1, false, DeskZone.Counter, verdict: true), "another paper hands them back too");
+        Assert.AreEqual(DropOutcome.Scanning, p.Drop(2, true, DeskZone.Counter, verdict: true), "the scanner wins over the counter");
     }
 
     [Test]

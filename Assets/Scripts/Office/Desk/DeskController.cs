@@ -8,13 +8,20 @@ using UnityEngine;
 /// "copy the controls of Papers, Please 1:1"): papers handed over slide from
 /// the traveller's side onto the counter (DeskCounter: a row of spots), small;
 /// left-press and drag moves a document (DeskDraggable), the only way to move
-/// it, in either view; over the counter it is small, over the desk full size
-/// (DeskDocument.SetZone, live while dragged: DeskZones), and a document
-/// dropped on the desk brings the reading view by itself (DeskView.TiltIn).
-/// Each drop is decided through DeskPapers: it stays in the zone it was
-/// dropped in, it scans on the scanner, it slides back to where it was picked
-/// up (a busy scanner), or (the stamped passport dropped on the counter) the
-/// papers are handed back (DeskStampTray.HandBack: the case is decided). A
+/// it, in either view; on the counter it is small, on the desk full size
+/// (DeskDocument.SetZone): dragged off the counter it grows at once, and it
+/// never shrinks while dragged (DeskPapers.ShownWhileDragged; Saleh
+/// 2026-10-06: "it keeps shrinking the documents as I try to stamp"): the
+/// slim counter only lights while the pointer is over it (DeskCounter.Show's
+/// hover). A document dropped on the desk brings the reading view by itself
+/// (DeskView.TiltIn). Each drop is decided through DeskPapers: it stays in
+/// the zone it was dropped in, it scans on the scanner, it slides back to
+/// where it was picked up (a busy scanner; or a paper from the desk dropped
+/// on the counter before the passport carries its verdict, with the note
+/// "Stamp the passport first": documents can only be returned after
+/// stamping), or (any paper dropped on the counter once the passport carries
+/// its verdict) the papers are handed back (DeskStampTray.HandBack: the case
+/// is decided). A
 /// left-click on a document routes through PaperClicks: on the counter it
 /// goes to the desk to be read (as if dragged there), on the desk it comes to
 /// the top; in inspect mode (SetInspecting) a click on a value picks it for
@@ -102,6 +109,9 @@ public sealed class DeskController : MonoBehaviour
 
     /// <summary>The paper being dragged, or -1.</summary>
     private int _dragged = -1;
+
+    /// <summary>True while the dragged paper's pointer is over the counter (its strip lights).</summary>
+    private bool _overCounter;
 
     /// <summary>The office view's level right and forward on the desk (SetScannerView): the frame ScannerClearance works in.</summary>
     private Vector3 _viewRight = Vector3.right, _viewForward = Vector3.forward;
@@ -450,24 +460,32 @@ public sealed class DeskController : MonoBehaviour
         ApplyStack();
     }
 
-    /// <summary>The dragged paper follows the pointer: it takes the size of the zone under the pointer (small over the counter, full size over the desk).</summary>
+    /// <summary>The dragged paper follows the pointer: over the desk it grows to full size, over the counter it keeps its size (DeskPapers.ShownWhileDragged) and the counter's strip lights.</summary>
     private void HandleDragged(DeskDraggable drag, Vector3 point)
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
-        DeskZone zone = ZoneAt(point);
-        if (paper.Zone != zone)
-            paper.SetZone(zone, false);
+        DeskZone under = ZoneAt(point);
+        DeskZone shown = DeskPapers.ShownWhileDragged(paper.Zone, under);
+        if (paper.Zone != shown)
+            paper.SetZone(shown, false);
+        if (_overCounter != (under == DeskZone.Counter))
+        {
+            _overCounter = under == DeskZone.Counter;
+            ShowCounter();
+        }
     }
 
-    /// <summary>DeskPapers decides the drop: the paper slides to the bed (scanning) or back to its pick-up point (refused) in the zone it lay in, the papers are handed back (the stamped passport on the counter), or it stays in the zone it was dropped in (the desk: it is read and the reading view comes); it goes on top either way.</summary>
+    /// <summary>DeskPapers decides the drop: the paper slides to the bed (scanning) or back to its pick-up point in the zone it lay in (refused; or bounced off the counter before the verdict, with the note "Stamp the passport first"), the papers are handed back (any paper on the counter once the passport carries its verdict), or it stays in the zone it was dropped in (the desk: it is read and the reading view comes); it goes on top either way.</summary>
     private void HandleDragEnded(DeskDraggable drag, Vector3 released)
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         _dragged = -1;
+        _overCounter = false;
+        ShowCounter();
         DeskZone zone = ZoneAt(released);
-        bool stamped = stamps != null && stamps.CanHandBack(paper.Index);
+        bool verdict = stamps != null && stamps.HasVerdict;
 
-        switch (_state.Drop(paper.Index, OnScanner(released), zone, stamped))
+        switch (_state.Drop(paper.Index, OnScanner(released), zone, verdict))
         {
             case DropOutcome.HandsBack:
                 stamps.HandBack();
@@ -476,11 +494,18 @@ public sealed class DeskController : MonoBehaviour
                 paper.SetZone(_state.ZoneOf(paper.Index), false);
                 Slide(paper, scanner.BedPoint);
                 break;
+            case DropOutcome.NotStamped:
+                if (stamps != null)
+                    stamps.Note("stamp.refused.handBackFirst");
+                paper.SetZone(_state.ZoneOf(paper.Index), false);
+                Slide(paper, ClearOfBlockers(paper, drag.PickUpPosition));
+                break;
             case DropOutcome.Refused:
                 paper.SetZone(_state.ZoneOf(paper.Index), false);
                 Slide(paper, ClearOfBlockers(paper, drag.PickUpPosition));
                 break;
             default:
+                zone = _state.ZoneOf(paper.Index);
                 paper.SetZone(zone, false);
                 Vector3 clear = ClearOfBlockers(paper, paper.transform.position);
                 if ((clear - paper.transform.position).sqrMagnitude > 1e-8f)
@@ -506,6 +531,11 @@ public sealed class DeskController : MonoBehaviour
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         _dragged = -1;
+        if (_overCounter)
+        {
+            _overCounter = false;
+            ShowCounter();
+        }
         if (paper == null || _state == null || !_state.CanDrag(paper.Index))
             return;
 
@@ -518,11 +548,11 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The zone a point on the desk lies in: the counter's strip, else the desk.</summary>
     private DeskZone ZoneAt(Vector3 point) => counter != null && counter.Contains(point) ? DeskZone.Counter : DeskZone.Desk;
 
-    /// <summary>The counter shows while a traveller's papers are on the desk, "▲ HAND BACK ▲" once the passport carries its verdict.</summary>
+    /// <summary>The counter shows while a traveller's papers are on the desk, "▲ HAND BACK ▲" once the passport carries its verdict, lit while a dragged paper's pointer is over it.</summary>
     private void ShowCounter()
     {
         if (counter != null)
-            counter.Show(_papers.Count > 0, stamps != null && stamps.HasVerdict);
+            counter.Show(_papers.Count > 0, stamps != null && stamps.HasVerdict, _overCounter);
     }
 
     /// <summary>The corners of a paper lying with its root at <paramref name="at"/> (every paper lies as the template does: the new paper's sheet gives the offsets; its size is its look's at its zone's scale).</summary>

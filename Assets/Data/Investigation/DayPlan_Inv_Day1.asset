@@ -22,7 +22,6 @@ MonoBehaviour:
   introduces:
   - tool:calendar
   - tool:rulebook
-  - app:investigation
   - app:mail
   - app:notes
   - app:settings

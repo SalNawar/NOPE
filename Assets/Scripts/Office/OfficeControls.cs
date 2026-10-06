@@ -52,7 +52,7 @@ public sealed class OfficeControls : MonoBehaviour
     /// <summary>The city view.</summary>
     [SerializeField] private CityView cityView;
 
-    /// <summary>The documents (a drag a back-out cancels).</summary>
+    /// <summary>The documents (a drag a back-out cancels; a carried stamp is the stamp bar's).</summary>
     [SerializeField] private DeskController desk;
 
     /// <summary>The PC's grey tab (on the overlay's left edge): a click switches to the PC and back.</summary>
@@ -85,7 +85,7 @@ public sealed class OfficeControls : MonoBehaviour
         stampsOut: stamps != null && stamps.BarOut,
         cityView: cityView != null && cityView.IsOn,
         deskView: deskView != null && deskView.IsOn,
-        dragging: desk != null && desk.IsDragging,
+        dragging: (desk != null && desk.IsDragging) || (stamps != null && stamps.IsCarrying),
         textFieldFocused: keyboard != null && keyboard.TextFieldFocused);
 
     /// <summary>Polls the back-out (Esc, the right mouse button) and the office's keys, once per press.</summary>
@@ -122,7 +122,8 @@ public sealed class OfficeControls : MonoBehaviour
         switch (LastBackOut)
         {
             case BackOutStep.CancelDrag:
-                desk.CancelDrag();
+                if (desk == null || !desk.CancelDrag())
+                    stamps.CancelCarry();
                 break;
             case BackOutStep.CloseWheel:
                 wheel.Close();

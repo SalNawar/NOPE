@@ -8,11 +8,11 @@ One new paper or rule a day. The bulletin (the briefing's first line) names it.
 
 | Day | New | Papers | Rules (beside `Rule_Open_Dnn` and `Rule_PaperDates`) | New lies | Introduced (`days[].introduces`) |
 |---|---|---|---|---|---|
-| 1 | the Passport, one open destination (Periclean Athens), its Valid Until, its photo | TC-101 | – | someone else's photo | calendar, rulebook, apps Investigation, Mail, Notes, Settings; fields Name, Destination, Expiry, Photo |
+| 1 | the Passport, one open destination (Periclean Athens), its Valid Until, its photo | TC-101 | – | someone else's photo | calendar, rulebook, apps Mail, Notes, Settings; fields Name, Destination, Expiry, Photo |
 | 2 | the Entry Ticket: its Citizen ID against the Passport's, its date today | + TC-230 | – | doctored identity (Citizen ID) | fields Citizen ID, Departure date; app Internet |
 | 3 | a second destination, on the Departure Board | – | – | – | the board; apps Portals, Orders |
 | 4 | issuing seals and the Seal Register | – | – | forged seal | field Seal, book Seal |
-| 5 | the scanner and the records; with them the displaced and their Travel Permit | + TC-610 | `Rule_LeisureDepartures` (every traveller's record: Citizen Account or Displacement Registry) | (the doctored birth year shows) | scanner, Records, fields Birth date and Incident, app Citizen Account |
+| 5 | the scanner and the records; with them the displaced and their Travel Permit | + TC-610 | `Rule_LeisureDepartures` (every traveller's record: Citizen Account or Displacement Registry) | (the doctored birth year shows) | scanner, Records, fields Birth date and Incident, apps Investigation (2026-10-06: hidden until it is needed) and Citizen Account |
 | 6 | the Transponder Card and travel class | + TC-240 | `Rule_TravelClass` | poor posing as rich | fields class, transponder, transponder class |
 | 7 | the Stranding Waiver | + TC-310 | `Rule_TouristWaiverSet` (replaces the class rule) | fake waiver | fields Signature, Waiver No. |
 | 8 | Debt Relief labourers, the Work Permit | + TC-520 | `Rule_LabourPaperSet` | forged contract | fields Employer, Term, Wage |

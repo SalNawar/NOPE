@@ -17,7 +17,9 @@ using UnityEngine.EventSystems;
 /// under it. Only the left button drags (Papers, Please's one mouse button:
 /// left-press and drag moves a document; a right-click backs out, and
 /// mid-drag it cancels the drag: Cancel, ControlRules). Generic: the papers
-/// and the rulebook use it.
+/// and the rulebook use it on the desk plane, the stamps carried a height
+/// above it (Init's height: Saleh 2026-10-06, "the stamp should be two stamps
+/// that I physically move").
 /// </summary>
 public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -25,6 +27,7 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     [SerializeField] private Collider proxy;
 
     private DeskSurface _surface;
+    private float _height;
     private Vector3 _grabOffset;
     private bool _dragging;
     private bool _raycastable = true;
@@ -50,8 +53,12 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// <summary>Takes note of where the object lies now as its pick-up point: the scanner feeding itself a paper (the Auto-Feed Scanner) sends it back here after the scan, as a dragged paper goes back to where it was picked up.</summary>
     public void RememberPosition() => PickUpPosition = transform.position;
 
-    /// <summary>Sets the desk this object moves on.</summary>
-    public void Init(DeskSurface surface) => _surface = surface;
+    /// <summary>Sets the desk this object moves on, and how far above its plane the object's origin is carried (<paramref name="height"/>, metres: 0 for a paper or the rulebook, which lie on it; a stamp's foot hangs over the papers).</summary>
+    public void Init(DeskSurface surface, float height = 0f)
+    {
+        _surface = surface;
+        _height = height;
+    }
 
     /// <summary>
     /// Puts the object in the raycast or takes it out (DeskDocument: a paper
@@ -75,20 +82,20 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         PickUpPosition = transform.position;
         _grabOffset = Vector3.zero;
         if (_surface != null && _surface.TryProject(eventData.pressEventCamera, eventData.position, out Vector3 point))
-            _grabOffset = transform.position - point;
+            _grabOffset = Vector3.ProjectOnPlane(transform.position - point, _surface.transform.up);
         if (proxy != null)
             proxy.enabled = false;
         DragBegan?.Invoke(this);
     }
 
-    /// <summary>Follows the projected pointer, the centre clamped to the desk (nothing once the drag was cut short).</summary>
+    /// <summary>Follows the projected pointer, the centre clamped to the desk and carried at its height above it (nothing once the drag was cut short).</summary>
     public void OnDrag(PointerEventData eventData)
     {
         if (!_dragging)
             return;
         if (_surface != null && _surface.TryProject(eventData.pressEventCamera, eventData.position, out Vector3 point))
         {
-            transform.position = _surface.Clamp(point + _grabOffset);
+            transform.position = _surface.Clamp(point + _grabOffset) + _surface.transform.up * _height;
             Dragged?.Invoke(this, point);
         }
     }
