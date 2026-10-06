@@ -9,3 +9,5 @@ Morning, noon and evening continue to blend using the existing lighting controll
 Verified in Unity: zero compile/runtime errors. Eight player-camera captures cover both pans at 08:00, 12:00, 16:30 and 22:00; all captures differ. Captures made with the existing live guest; the desk clock shows gameplay time independently from the lighting preview hour. Preview hour and pan restored after review.
 
 These remain art-directed 2D casts, approximating the illustration's ground footprints rather than a 3D geometric shadow simulation.
+
+Follow-up to user's stair/column close-up: previous pier cast footprint was visibly displaced below the painted base. Replaced it with a thin footprint traced along the observed (701,481)-(784,445) ground edge; reduced length/opacity, retraced receiver around stair/pier, excluded adjacent bin. Native source close-up plus same-view before/after retained. Reviewed intermediate-hour close-ups and full front/left views. Overall shadow review remains open; this is a targeted column correction.

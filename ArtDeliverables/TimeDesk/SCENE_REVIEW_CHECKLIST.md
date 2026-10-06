@@ -16,7 +16,7 @@ Status: floor shadow repair is UNRESOLVED. Saleh rejected the completion claim a
 
 ## Current priority: hall floor shadows
 
-- [ ] Identify the remaining visible fault in the current scene; compare with the rejected repair.
+- [x] Identify the reported stair/column fault: cast footprint was below the painted column foot; compare the same player view before/after.
 - [ ] Shadows contact the correct portal base and railing/column feet; no detached shapes.
 - [ ] Shadow shapes and direction agree with actual light sources and the painted floor perspective.
 - [ ] No strips, blobs, hard rectangular cutouts or duplicate shadows across tiles.
@@ -42,3 +42,5 @@ Technical evidence from cbab4f3: Unity reported zero errors at the final check; 
 ## Review log
 
 2026-10-06: cbab4f3 changed hall floor masks and casts. Assistant claimed the issue was fixed; user rejected that claim. Visual status reopened. Next step is diagnosis against the current player view, with this checklist kept updated.
+
+2026-10-06 follow-up: traced actual column foot from native source detail (701,481)-(784,445), corrected stair/pier receiver silhouette and added bin exclusion. Inspected same-view column-before.png / column-after.png; close-up checks at 08,10,12,14,16.5,19,22; whole-scene front/noon and left/evening reviewed. The displaced patch is reduced and cast starts at the observed base. Continuous movement and broader shadow correctness remain open; do not mark the whole task complete. Unity errors=0; no scene or lighting-config file diff.

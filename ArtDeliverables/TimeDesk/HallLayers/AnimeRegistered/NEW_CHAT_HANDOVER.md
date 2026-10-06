@@ -95,3 +95,5 @@ Rebuilt only DeepRoomMasks blue floor receiver channel and Morning/Noon/EveningS
 
 ## Review discipline — floor shadows reopened
 User rejected the floor-shadow completion claim. Treat floor shadows as unresolved; clean console and captures are technical evidence only. Maintain ArtDeliverables/TimeDesk/SCENE_REVIEW_CHECKLIST.md and check current Unity view, close details, continuous lighting blends and camera movement before making completion claims.
+
+Column follow-up: user supplied close-up shows the pier's diagonal cast patch. Native detail proved previous footprint below true base. HallFloorShadowAuthoring now traces actual base (701,481)-(784,445), stair/pier mask and adjacent bin. Same-view before/after and intermediate-hour detail captures in FloorShadowRepair. General task list remains open; report only checks actually performed.
