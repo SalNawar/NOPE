@@ -19,11 +19,90 @@ MonoBehaviour:
   bodyBoldFont: {fileID: 11400000, guid: c490a7d6804c814438423899b9b22d60, type: 2}
   inkOnDark: {r: 0.933, g: 0.898, b: 0.816, a: 1}
   inkOnLight: {r: 0.169, g: 0.11, b: 0.141, a: 1}
-  phosphorInk: {r: 0.8, g: 1, b: 0.82, a: 1}
+  inkAlert: {r: 0.541, g: 0.184, b: 0.231, a: 1}
   signalRed: {r: 0.761, g: 0.227, b: 0.18, a: 1}
+  phosphorInk: {r: 0.8, g: 1, b: 0.82, a: 1}
   spritePad: 28
   overlayScale: 2
   desktopScale: 1.6
+  typeScale:
+  - kind: 0
+    share: 0.42
+    min: 16
+    max: 34
+  - kind: 1
+    share: 0.46
+    min: 14
+    max: 26
+  - kind: 2
+    share: 0.24
+    min: 16
+    max: 28
+  - kind: 3
+    share: 0.5
+    min: 12
+    max: 20
+  - kind: 4
+    share: 0.62
+    min: 14
+    max: 24
+  - kind: 5
+    share: 0.26
+    min: 14
+    max: 28
+  - kind: 6
+    share: 0.2
+    min: 12
+    max: 20
+  - kind: 7
+    share: 0.66
+    min: 24
+    max: 44
+  - kind: 8
+    share: 0.46
+    min: 14
+    max: 26
+  - kind: 9
+    share: 0.5
+    min: 14
+    max: 26
+  - kind: 10
+    share: 0.42
+    min: 14
+    max: 22
+  - kind: 11
+    share: 0.42
+    min: 16
+    max: 32
+  - kind: 12
+    share: 0.5
+    min: 14
+    max: 26
+  - kind: 13
+    share: 0.62
+    min: 12
+    max: 22
+  - kind: 14
+    share: 0
+    min: 16
+    max: 22
+  - kind: 15
+    share: 0
+    min: 12
+    max: 18
+  - kind: 16
+    share: 0
+    min: 18
+    max: 28
+  - kind: 17
+    share: 0.8
+    min: 40
+    max: 96
+  - kind: 18
+    share: 0.3
+    min: 30
+    max: 64
+  labelTracking: 3
   sprites:
   - name: badge_brass
     sprite: {fileID: 21300000, guid: 645ccc06b8094965bf52c2c5148ff2a5, type: 3}
@@ -109,6 +188,14 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 08059b41cae3420a8cb1546e7857097a, type: 3}
   - name: iconkey_pressed
     sprite: {fileID: 21300000, guid: 11ccd8c522a24fd899f6ad14ee9a094a, type: 3}
+  - name: iconkey_red_hover
+    sprite: {fileID: 21300000, guid: 2e051fd8408a4b279fd9f2cf1681cab5, type: 3}
+  - name: iconkey_red_locked
+    sprite: {fileID: 21300000, guid: 773062340a744cf286c8c762243ca49e, type: 3}
+  - name: iconkey_red_pressed
+    sprite: {fileID: 21300000, guid: d13f11494dba4ec485edcaa220360778, type: 3}
+  - name: iconkey_red_rest
+    sprite: {fileID: 21300000, guid: c3c1892b4022468abe69e241c0e46d33, type: 3}
   - name: iconkey_rest
     sprite: {fileID: 21300000, guid: 299449023a224a31ac8dc326846e4712, type: 3}
   - name: inspect_hover

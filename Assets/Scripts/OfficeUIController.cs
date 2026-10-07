@@ -16,6 +16,12 @@ public sealed class OfficeUIController : MonoBehaviour
     /// <summary>The verdict line's strip; shown only while the line has text (piece 6 R18).</summary>
     [SerializeField] private GameObject resultBackdrop;
 
+    /// <summary>The verdict ribbon's face (the UI kit's: green for a right call, red for a wrong one, brass for a free warning or a notice); optional.</summary>
+    [SerializeField] private Image resultRibbon;
+
+    /// <summary>The UI kit the ribbon's faces come from; optional.</summary>
+    [SerializeField] private UiKitSO kit;
+
     [Header("HUD (optional — null-safe)")]
     /// <summary>Shows current money.</summary>
     [SerializeField] private TMP_Text moneyText;
@@ -30,15 +36,21 @@ public sealed class OfficeUIController : MonoBehaviour
     [SerializeField] private InvestigationApp app;
 
     /// <summary>
-    /// Updates the result label (call from GameManager after validation).
+    /// Updates the result label (call from GameManager after validation), on the notice ribbon.
     /// </summary>
-    public void SetResultText(string text) => SetResult(text);
+    public void SetResultText(string text) => SetResult(text, UiKitNames.VerdictRibbon(null, false));
 
-    /// <summary>Writes the verdict line and shows its strip only while it has text.</summary>
-    private void SetResult(string text)
+    /// <summary>Writes the verdict line on <paramref name="ribbon"/> (a UI kit sprite) and shows its strip only while it has text.</summary>
+    private void SetResult(string text, string ribbon)
     {
         if (resultText != null)
             resultText.text = text;
+        if (kit != null)
+        {
+            kit.Show(resultRibbon, ribbon);
+            if (resultText != null)
+                resultText.color = kit.InkOn(ribbon);
+        }
         if (resultBackdrop != null)
             resultBackdrop.SetActive(!string.IsNullOrEmpty(text));
     }
@@ -85,6 +97,7 @@ public sealed class OfficeUIController : MonoBehaviour
             ? UiText.Format("verdict.correct", verdict.payAwarded, credits)
             : verdict.moneyPenalty > 0
                 ? UiText.Format("verdict.wrongPenalty", verdict.moneyPenalty, credits)
-                : UiText.Get("verdict.wrong"));
+                : UiText.Get("verdict.wrong"),
+            UiKitNames.VerdictRibbon(verdict.correct, verdict.wasFreeWarning));
     }
 }

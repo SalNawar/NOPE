@@ -48,6 +48,9 @@ public sealed class CitationTicket
 
     /// <summary>True for the day's free warning (no deduction).</summary>
     public bool Warning;
+
+    /// <summary>The total's words (the verdict's consequence: "Warning 1/1 — no pay deduction.", "Penalty: -25 credits."); blank: the penalty's own words (CitationTickets.PenaltyText).</summary>
+    public string Total = string.Empty;
 }
 
 /// <summary>
@@ -189,7 +192,7 @@ public static class CitationTickets
         if (ticket == null)
             return sheets;
         int count = Math.Max(1, (ticket.Rows.Count + RowsPerSheet - 1) / RowsPerSheet);
-        string total = PenaltyText(ticket, warning);
+        string total = string.IsNullOrWhiteSpace(ticket.Total) ? PenaltyText(ticket, warning) : ticket.Total;
         for (int s = 0; s < count; s++)
         {
             var v = new string[FieldCount];

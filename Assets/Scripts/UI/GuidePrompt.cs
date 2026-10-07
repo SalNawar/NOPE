@@ -22,6 +22,12 @@ public sealed class GuidePrompt : MonoBehaviour
     /// <summary>The plate's header ("TUTORIAL 2/8", "NEW TODAY", "PRACTICE").</summary>
     [SerializeField] private TMP_Text header;
 
+    /// <summary>The header's pill (the UI kit's: red over a tutorial step, green over a moment or a practice; optional).</summary>
+    [SerializeField] private Image headerPill;
+
+    /// <summary>The UI kit the pill's faces come from (optional).</summary>
+    [SerializeField] private UiKitSO kit;
+
     /// <summary>The plate's line.</summary>
     [SerializeField] private TMP_Text line;
 
@@ -77,6 +83,8 @@ public sealed class GuidePrompt : MonoBehaviour
             return;
         if (header != null)
             header.text = headerText ?? string.Empty;
+        if (kit != null)
+            kit.Show(headerPill, UiKitNames.GuidePill(skip));
         if (line != null)
             line.text = lineText ?? string.Empty;
         if (skipButton != null)

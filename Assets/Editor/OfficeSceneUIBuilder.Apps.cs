@@ -348,6 +348,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "iconDoubleClickButton", iconDouble);
         SetRef(so, "iconSingleClickButton", iconSingle);
         SetRef(so, "resetIconsButton", resetIcons);
+        SetRef(so, "kit", _kit);
         SerializedArrays.Set(so, "textSizeButtons", textSizes);
         SetRef(so, "config", config);
         SetRef(so, "showShortcutsButton", shortcuts);
@@ -458,6 +459,14 @@ public static partial class OfficeSceneUIBuilder
         so.FindProperty("m_Size").floatValue = 1f;
         so.FindProperty("m_Value").floatValue = 0f;
         so.ApplyModifiedProperties();
+        if (_kit != null)
+        {
+            // Sheet 02: the kit's sunk track and its bone thumb; the scrollbar keeps the thumb as its graphic.
+            KitSkin(bar, "scroll_track", _kit.desktopScale);
+            Image thumb = KitSkin(grip, "scroll_thumb", _kit.desktopScale);
+            scrollbar.targetGraphic = thumb;
+            scrollbar.transition = Selectable.Transition.None;
+        }
         return scrollbar;
     }
 
@@ -484,6 +493,13 @@ public static partial class OfficeSceneUIBuilder
         label.margin = new Vector4(PcSize.M, 2f, PcSize.S, 2f);
         label.lineSpacing = -6f;
         label.richText = true;
+        if (_kit != null)
+        {
+            // Sheet 02: a list row is the kit's card row; the open one its selected row.
+            KitSkin(row, "listrow", _kit.desktopScale);
+            KitSkin(plate, "listrow_selected", _kit.desktopScale);
+            KitType(label, KitText.ListTitle, row, _kit.inkOnLight);
+        }
         return row;
     }
 

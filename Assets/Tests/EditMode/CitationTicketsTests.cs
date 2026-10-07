@@ -88,6 +88,15 @@ public class CitationTicketsTests
     }
 
     [Test]
+    public void TheTotal_IsTheVerdictsConsequence_WhenItHasOne()
+    {
+        CitationTicket t = Ticket(2);
+        t.Total = "Penalty: -120 credits.";
+        Assert.AreEqual("Penalty: -120 credits.", CitationTickets.Sheets(t, "WARNING", "SEE NEXT SHEET")[0][(int)CitationTickets.Field.Total]);
+        Assert.AreEqual("120 CR", CitationTickets.Sheets(t, "WARNING", "SEE NEXT SHEET")[0][CitationTickets.IndexOf(0, CitationTickets.RowField.Penalty)], "the row keeps its short penalty");
+    }
+
+    [Test]
     public void TheNumber_IsTheDayAndTheRunsCount()
     {
         Assert.AreEqual("C-03-0012", CitationTickets.Number(3, 12));

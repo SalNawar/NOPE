@@ -8,10 +8,9 @@ using UnityEngine.UI;
 /// The office builder's art slots (redesign phase 27, ArtSlots): each
 /// Tier-2 image of the gameplay layer gets its slot, which shows the slot's
 /// file from Assets/Art/UI/Resources/ when it exists and keeps today's
-/// code-drawn look when it does not. The speech bubble's body (tinted cream,
-/// 9-slice) and its tail (hidden without art); the briefing's and the
-/// ledger's sheets and the citation slip (tinted by their roles, as the flat
-/// panels are); a reference book's cover at the top of its register page in
+/// code-drawn look when it does not (the speech bubble, the briefing's and
+/// the ledger's sheets are the UI kit's since run 7:
+/// OfficeSceneUIBuilder.Kit): a reference book's cover at the top of its register page in
 /// the Investigation app's Reference tab (inactive until the cover is found
 /// at runtime; the tab's book chips can show it through SlotArt.CoverFor);
 /// and the
@@ -23,9 +22,6 @@ using UnityEngine.UI;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The speech bubble tail's size (reference px) under the bubble's bottom centre.</summary>
-    private static readonly Vector2 BubbleTailSize = new Vector2(32f, 24f);
-
     /// <summary>The book cover's box on the register page (units): its width, as tall as the title band, its right edge this far left of the title band's end.</summary>
     private const float BookCoverWidth = 40f, BookCoverGap = 8f;
 
@@ -37,43 +33,14 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// Gives the gameplay layer's Tier-2 images their art slots (rebuilt with
-    /// their hosts each run): the bubble, the two newsletters' sheets, each
-    /// pane's Reference tab's book cover, and the desk
-    /// paper template's photo frame and ink mark.
+    /// their hosts each run): each pane's Reference tab's book cover, and the
+    /// desk paper template's photo frame and ink mark.
     /// </summary>
-    private static void BuildArtSlots(Transform overlay, OverlayCallout bubble, IEnumerable<ReferenceView> references, OfficeViewController officeView)
+    private static void BuildArtSlots(IEnumerable<ReferenceView> references, OfficeViewController officeView)
     {
-        BuildBubbleArt(bubble);
-        SlotOn(overlay.Find("BriefingPanel/Paper"), ArtSlots.BriefingPaper);
-        SlotOn(overlay.Find("ResultsPanel/Paper"), ArtSlots.LedgerPaper);
         foreach (ReferenceView reference in references)
             BuildBookCover(reference);
         BuildPaperArt(officeView.transform.Find("Desk/PaperTemplate"));
-    }
-
-    /// <summary>A light art slot on an existing image (its colour stays the art's tint).</summary>
-    private static void SlotOn(Transform host, string slot)
-    {
-        if (host == null)
-            return;
-        GetOrAdd<ArtSlotImage>(host.gameObject).Configure(slot, null, false, false);
-    }
-
-    /// <summary>The bubble's body slot and its tail: a cream image under the bubble's bottom centre, pointing down, hidden until its art is found.</summary>
-    private static void BuildBubbleArt(OverlayCallout bubble)
-    {
-        Transform panel = bubble != null ? bubble.transform.Find("Panel") : null;
-        if (panel == null)
-            return;
-        SlotOn(panel, ArtSlots.SpeechBubble);
-
-        Image body = panel.GetComponent<Image>();
-        Transform tail = Panel(panel, "Tail", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 1f), BubbleTailSize, body.color, ThemeRoleId.DiegeticBubble);
-        ((RectTransform)tail).pivot = new Vector2(0.5f, 1f);
-        Image tailImage = tail.GetComponent<Image>();
-        tailImage.raycastTarget = false;
-        tailImage.preserveAspect = true;
-        GetOrAdd<ArtSlotImage>(tail.gameObject).Configure(ArtSlots.SpeechBubbleTail, null, false, true);
     }
 
     /// <summary>

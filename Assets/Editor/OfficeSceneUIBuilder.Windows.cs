@@ -12,6 +12,9 @@ using UnityEngine.UI;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
+    /// <summary>The least a taskbar window button shrinks to (desktop units) when many windows are open: eight fit beside the tray.</summary>
+    private const float TaskbarButtonLeast = 30f;
+
     /// <summary>The desktop's knobs, created by the builder when missing (a designer's edits are kept).</summary>
     private const string DesktopConfigPath = "Assets/Data/Config/Desktop_Default.asset";
 
@@ -71,6 +74,7 @@ public static partial class OfficeSceneUIBuilder
         float from = PcSize.S + MenuButtonWidth + PcSize.S + DeskButtonWidth + PcSize.L;
         Transform strip = Panel(taskbar, "WindowButtons", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(strip, Vector2.zero, Vector2.one, new Vector2(from, 4f), new Vector2(-(PcSize.S + TrayWidth + PcSize.L), -4f));
+        GetOrAdd<RectMask2D>(strip.gameObject); // many windows: the buttons shrink to their least, and never draw over the tray
         HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(strip.gameObject);
         row.spacing = 4f;
         row.childAlignment = TextAnchor.MiddleLeft;
@@ -82,7 +86,7 @@ public static partial class OfficeSceneUIBuilder
         // A window's button (the PC UX redesign IA12, C7): the app's glyph on a Tab plate, the title only when the window has no glyph, an accent bar under the focused one, the title in a hover hint above it.
         Button template = MakeButton(strip, "WindowButtonTemplate", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.Tab);
         LayoutElement size = GetOrAdd<LayoutElement>(template.gameObject);
-        size.minWidth = config.taskbarButtonWidth;
+        size.minWidth = TaskbarButtonLeast;
         size.preferredWidth = config.taskbarButtonWidth;
         size.flexibleWidth = 0f;
         TMP_Text label = template.transform.Find("Label").GetComponent<TMP_Text>();

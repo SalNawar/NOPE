@@ -43,9 +43,47 @@ public class UiKitNamesTests
     }
 
     [Test]
+    public void VerdictRibbon_RightWrongWarningNotice()
+    {
+        Assert.AreEqual("ribbon_green", UiKitNames.VerdictRibbon(true, false));
+        Assert.AreEqual("ribbon_red", UiKitNames.VerdictRibbon(false, false));
+        Assert.AreEqual("ribbon_brass", UiKitNames.VerdictRibbon(false, true));
+        Assert.AreEqual("ribbon_brass", UiKitNames.VerdictRibbon(null, false));
+    }
+
+    [Test]
+    public void WheelTile_ByChoiceKind()
+    {
+        Assert.AreEqual("tile_eye", UiKitNames.WheelTile(DialogChoiceKind.Look));
+        Assert.AreEqual("tile_idcard", UiKitNames.WheelTile(DialogChoiceKind.Request));
+        Assert.AreEqual("tile_speech", UiKitNames.WheelTile(DialogChoiceKind.Question));
+        Assert.AreEqual("tile_speech", UiKitNames.WheelTile(DialogChoiceKind.Dialog));
+        Assert.AreEqual("tile_person", UiKitNames.WheelTile(DialogChoiceKind.Normal));
+    }
+
+    [Test]
+    public void UpgradeTile_BranchTileLockedWhileLocked()
+    {
+        Assert.AreEqual("tile_lamp_rest", UiKitNames.UpgradeTile(UpgradeBranch.Desk, OrderState.Orderable));
+        Assert.AreEqual("tile_speech_locked", UiKitNames.UpgradeTile(UpgradeBranch.Interview, OrderState.Locked));
+        Assert.AreEqual("tile_portal_rest", UiKitNames.UpgradeTile(UpgradeBranch.Portals, OrderState.Owned));
+        Assert.AreEqual("tile_ball_rest", UiKitNames.UpgradeTile(UpgradeBranch.Toys, OrderState.TooDear));
+        Assert.AreEqual("tile_house", UiKitNames.BranchTile(UpgradeBranch.Housing));
+        Assert.AreEqual("tile_food", UiKitNames.BranchTile(UpgradeBranch.Food));
+    }
+
+    [Test]
+    public void GuidePill_RedTutorialGreenMoment()
+    {
+        Assert.AreEqual("pill_red", UiKitNames.GuidePill(true));
+        Assert.AreEqual("pill_green", UiKitNames.GuidePill(false));
+    }
+
+    [Test]
     public void DarkFace_LightFacesPrintInInk()
     {
         Assert.IsFalse(UiKitNames.DarkFace("card"));
+        Assert.IsFalse(UiKitNames.DarkFace("ribbon_brass"));
         Assert.IsFalse(UiKitNames.DarkFace("plate_bone"));
         Assert.IsFalse(UiKitNames.DarkFace("miniplate_bone"));
         Assert.IsFalse(UiKitNames.DarkFace("panel_bone"));

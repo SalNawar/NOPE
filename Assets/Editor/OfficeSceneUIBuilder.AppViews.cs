@@ -102,15 +102,18 @@ public static partial class OfficeSceneUIBuilder
         return view;
     }
 
+    /// <summary>The Transcript tab's "Answers only" toggle's width (desktop units).</summary>
+    private const float TranscriptToggleWidth = 196f;
+
     /// <summary>The Transcript tab (§2.7): "Answers only" (off) at its top right and the "New line" pill (hidden) beside it, over the Interview Record.</summary>
     private static TranscriptView BuildTranscriptView(Transform content)
     {
         Transform root = ViewRoot(content, "TranscriptView", Paper, ThemeRoleId.WindowBody);
         Toggle answersOnly = BuildToggle(root, "AnswersOnly", "app.transcript.answersOnly", Vector2.zero, Vector2.one);
-        InStrip(answersOnly.transform, -240f, PcSize.L);
+        InStrip(answersOnly.transform, -(PcSize.L + TranscriptToggleWidth), PcSize.L);
         answersOnly.isOn = false;
         Button newLine = MakeButton(root, "NewLineButton", null, Vector2.zero, Vector2.one, null, ThemeRoleId.Button, "app.transcript.newLine");
-        InStrip(newLine.transform, PcSize.L, PcSize.L + 240f + PcSize.S);
+        InStrip(newLine.transform, PcSize.L, PcSize.L + TranscriptToggleWidth + PcSize.S); // the rest of the strip: "New line below" at the kit's mini plate size
         ButtonLabel(newLine, PcType.Body);
         newLine.gameObject.SetActive(false);
         FormPage page = BuildPageKind(root, "Record", AppViewPageTop);

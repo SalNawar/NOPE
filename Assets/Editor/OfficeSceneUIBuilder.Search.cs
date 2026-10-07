@@ -128,6 +128,13 @@ public static partial class OfficeSceneUIBuilder
         TMP_Text chipLabel = chip.transform.Find("Label").GetComponent<TMP_Text>();
         Chrome(chipLabel, PcType.Caption);
         chipLabel.raycastTarget = false;
+        if (_kit != null)
+        {
+            // Sheet 02 C3: a search chip is the kit's pill chip (SearchResultsView shows the chosen one slate).
+            DestroyChildIfPresent(chip.transform, "Frame");
+            KitSkin(chip, "chip_rest", _kit.desktopScale);
+            KitType(chipLabel, KitText.Pill, chip, _kit.InkOn("chip_rest"));
+        }
         chip.gameObject.SetActive(false);
 
         RectTransform list = BuildScrollList(panel, "List", Vector2.zero, Vector2.one, 2f, WbSurface, ThemeRoleId.Surface);
@@ -186,6 +193,7 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(view);
         Wire(so, "chipRow", chips);
         Wire(so, "chipTemplate", chip);
+        Wire(so, "kit", _kit);
         Wire(so, "scroll", box.GetComponent<ScrollRect>());
         Wire(so, "headingTemplate", heading);
         Wire(so, "hitTemplate", hit);

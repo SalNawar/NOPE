@@ -40,7 +40,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: briefing.masthead
-    text: THE TEMPORAL TIMES
+    text: The Temporal Times
     gloss: 0
     tier: 1
   - key: briefing.start
@@ -270,6 +270,14 @@ MonoBehaviour:
     tier: 1
   - key: briefing.deskHeader
     text: FROM DESK 3
+    gloss: 0
+    tier: 0
+  - key: paper.edition
+    text: MORNING EDITION
+    gloss: 0
+    tier: 0
+  - key: paper.price
+    text: ONE CREDIT
     gloss: 0
     tier: 0
   - key: wallet.credits
@@ -2293,15 +2301,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: controls.pcTab
-    text: 'PC
-
-      {0}'
+    text: PC
     gloss: 0
     tier: 0
   - key: controls.deskTab
-    text: 'DESK
-
-      {0}'
+    text: DESK
     gloss: 0
     tier: 0
   - key: controls.stampsTab
@@ -2321,11 +2325,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: city.look
-    text: < City (A)
+    text: CITY
     gloss: 0
     tier: 0
   - key: city.back
-    text: Desk (D) >
+    text: DESK
     gloss: 0
     tier: 0
   - key: desk.rulebook.title

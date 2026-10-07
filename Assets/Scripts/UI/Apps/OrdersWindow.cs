@@ -82,6 +82,9 @@ public sealed class OrdersWindow : MonoBehaviour
     /// <summary>The selected node's action: Order, Cancel order, Install tomorrow, Cancel install or Keep installed (hidden when there is none).</summary>
     [SerializeField] private Button actionButton;
 
+    /// <summary>The UI kit (run 7): a node's card and state badge come from it (UiKitNames.UpgradeCard and UpgradeBadge, one card for Orders and the House); without it the template's card stays and the badges are code-drawn.</summary>
+    [SerializeField] private UiKitSO kit;
+
     /// <summary>A locked node's card alpha.</summary>
     [SerializeField, Range(0.2f, 1f)] private float lockedAlpha = 0.55f;
 
@@ -92,6 +95,9 @@ public sealed class OrdersWindow : MonoBehaviour
     private sealed class NodeView
     {
         public RectTransform Card;
+        public Image Face;
+        public Image Glyph;
+        public UpgradeBranch Branch;
         public TMP_Text State;
         public Image Badge;
         public CanvasGroup Group;
@@ -104,7 +110,6 @@ public sealed class OrdersWindow : MonoBehaviour
     private readonly Dictionary<string, Sprite> _glyphs = new Dictionary<string, Sprite>();
     private readonly List<Texture2D> _glyphTextures = new List<Texture2D>();
     private readonly Dictionary<string, string> _detailText = new Dictionary<string, string>();
-    private Sprite _padlock, _clock, _tick;
     private TMP_Text _actionLabel;
     private TreeLayout _layout;
     private string _selected;
@@ -253,6 +258,16 @@ public sealed class OrdersWindow : MonoBehaviour
         }
     }
 
+    /// <summary>The action's plate in the UI kit (sheet 03 D3): Order oxblood, Install slate, Keep installed green, a cancel bone.</summary>
+    private static string ActionPlate(NodeAction action) =>
+        action switch
+        {
+            NodeAction.Order => "miniplate_ox",
+            NodeAction.Install => "miniplate_slate",
+            NodeAction.Keep => "plate_green",
+            _ => "miniplate_bone"
+        };
+
     /// <summary>The action button's label key.</summary>
     private static string ActionKey(NodeAction action) =>
         action switch
@@ -278,9 +293,6 @@ public sealed class OrdersWindow : MonoBehaviour
         if (lib == null || config == null || treeContent == null)
             return;
 
-        _padlock = Glyph("padlock");
-        _clock = Glyph("clock");
-        _tick = Glyph("tick");
         _layout = OrderBook.Layout(lib);
         Vector2 cell = config.ordersCellSize, node = config.ordersNodeSize;
         float margin = (cell.x - node.x) / 2f, head = config.ordersBandHead;
@@ -333,6 +345,9 @@ public sealed class OrdersWindow : MonoBehaviour
             _nodes[id] = new NodeView
             {
                 Card = (RectTransform)card.transform,
+                Face = Child<Image>(card.transform, UiKitSO.FaceName),
+                Glyph = Child<Image>(card.transform, "Glyph"),
+                Branch = c.Branch,
                 State = Child<TMP_Text>(card.transform, "State"),
                 Badge = Child<Image>(card.transform, "Badge"),
                 Group = card.GetComponent<CanvasGroup>(),
@@ -396,7 +411,19 @@ public sealed class OrdersWindow : MonoBehaviour
             NodeView node = pair.Value;
             if (node.State != null)
                 node.State.text = OrderLines.State(world, lib, upgrade, state, false);
-            Sprite badge = state == OrderState.Locked ? _padlock : state == OrderState.InTransit ? _clock : state == OrderState.Owned ? _tick : null;
+            if (kit != null)
+            {
+                kit.Show(node.Face, UiKitNames.UpgradeCard(state));
+                // Sheet 03: the card's pictogram tile is its band's, the locked tile while locked.
+                Sprite tile = kit.Get(UiKitNames.UpgradeTile(node.Branch, state));
+                if (node.Glyph != null && tile != null)
+                {
+                    node.Glyph.sprite = tile;
+                    node.Glyph.color = Color.white;
+                }
+            }
+            string badgeName = UiKitNames.UpgradeBadge(state);
+            Sprite badge = badgeName == null ? null : kit != null && kit.Get(badgeName) != null ? kit.Get(badgeName) : Glyph(badgeName.Substring(BadgePrefix.Length));
             if (node.Badge != null)
             {
                 node.Badge.sprite = badge;
@@ -437,6 +464,13 @@ public sealed class OrdersWindow : MonoBehaviour
             actionButton.interactable = enabled;
             if (_actionLabel != null && action != NodeAction.None)
                 _actionLabel.text = UiText.Get(ActionKey(action));
+            if (kit != null && action != NodeAction.None && actionButton.targetGraphic is Image face)
+            {
+                string plate = ActionPlate(action);
+                kit.Show(face, plate, actionButton);
+                if (_actionLabel != null)
+                    _actionLabel.color = kit.InkOn(plate);
+            }
         }
         if (upgrade == null || detail == null || detailForm == null)
             return;
@@ -499,6 +533,9 @@ public sealed class OrdersWindow : MonoBehaviour
             h = h * 31 + (e != null ? (e.installed ?? string.Empty).GetHashCode() * 7 + (e.next ?? string.Empty).GetHashCode() : 0);
         return h;
     }
+
+    /// <summary>The kit's state badges' prefix: without the kit a badge is the code-drawn glyph of the rest of its name (tick, clock, padlock).</summary>
+    private const string BadgePrefix = "roundbadge_";
 
     /// <summary>A code-drawn glyph (DesktopIconPlaceholder) as a sprite, made once per key.</summary>
     private Sprite Glyph(string key)

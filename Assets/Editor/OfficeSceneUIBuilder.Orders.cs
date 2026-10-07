@@ -32,6 +32,9 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The zoom bar's height, its buttons' width and its level's width (desktop units).</summary>
     private const float OrdersZoomHeight = 48f, OrdersZoomButton = 44f, OrdersZoomLevel = 96f;
 
+    /// <summary>A lit link's brass (the kit's #D4A055).</summary>
+    private static readonly Color OrdersLinkBrass = new Color(0.831f, 0.627f, 0.333f, 1f);
+
     /// <summary>The Orders window (see the class summary).</summary>
     private static DesktopWindow BuildOrdersWindow(Transform windowLayer, DesktopConfigSO config)
     {
@@ -74,6 +77,14 @@ public static partial class OfficeSceneUIBuilder
         Image lit = Panel(content, "LinkLitTemplate", Vector2.zero, Vector2.zero, Vector2.zero, new Vector2(10f, 3f), new Color(0.2f, 0.6f, 0.25f, 1f), ThemeRoleId.AcceptButton)
             .GetComponent<Image>();
         lit.raycastTarget = false;
+        if (_kit != null)
+        {
+            // Sheet 03 D2: a link lights brass once the card before is owned, and stays a faint ink line while it is not.
+            link.color = new Color(_kit.inkOnLight.r, _kit.inkOnLight.g, _kit.inkOnLight.b, 0.35f);
+            lit.color = OrdersLinkBrass;
+            SceneUiKit.Tag(link, ThemeRoleId.Tab, ThemePart.Kit);
+            SceneUiKit.Tag(lit, ThemeRoleId.AcceptButton, ThemePart.Kit);
+        }
 
         // The detail card: the requisition form on its paper, the hint, and the action under it.
         Transform page = Panel(win, "DetailPage", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, FormPaper, ThemeRoleId.DiegeticPaper);
@@ -109,6 +120,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "detailForm", AssetDatabase.LoadAssetAtPath<FormSpecSO>(RequisitionFormPath));
         Wire(so, "selectText", select);
         Wire(so, "actionButton", action);
+        Wire(so, "kit", _kit);
         so.ApplyModifiedProperties();
 
         band.gameObject.SetActive(false);
@@ -157,6 +169,14 @@ public static partial class OfficeSceneUIBuilder
         Chrome(label, PcType.Body);
         PlaceRect(label.transform, Vector2.zero, Vector2.one, new Vector2(height + 12f, 0f), new Vector2(-8f, 0f));
         label.raycastTarget = false;
+        if (_kit != null)
+        {
+            // Sheet 03: a band's head is a slate title plate, its glyph and name in bone.
+            KitSkin(band, "titlebar_slate", _kit.desktopScale);
+            KitType(label, KitText.PanelHeading, band, _kit.inkOnDark);
+            glyph.color = _kit.inkOnDark;
+            SceneUiKit.Tag(glyph, ThemeRoleId.Sidebar, ThemePart.Kit);
+        }
         return band;
     }
 
@@ -197,6 +217,21 @@ public static partial class OfficeSceneUIBuilder
 
         Transform selected = BuildFrame(node.transform, "Selected", 3f, AccentInk, ThemeRoleId.FocusRing);
         selected.gameObject.SetActive(false);
+        if (_kit != null)
+        {
+            // Sheet 03 D1: the upgrade card (OrdersWindow shows its state's card and badge); its name in condensed capitals.
+            KitSkin(node, UiKitNames.UpgradeCard(OrderState.Orderable), _kit.desktopScale);
+            KitType(name, KitText.CardTitle, node, _kit.inkOnLight);
+            KitType(state, KitText.CardSub, node, _kit.inkOnLight);
+            // The band's pictogram tile (OrdersWindow shows it, locked while locked), drawn the glyph's 48 units inside its pad.
+            glyph.color = Color.white;
+            glyph.sprite = _kit.Get(UiKitNames.UpgradeTile(UpgradeBranch.Desk, OrderState.Orderable));
+            SceneUiKit.Tag(glyph, ThemeRoleId.InputField, ThemePart.Kit);
+            PlaceRect(glyph.transform, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, -72f), new Vector2(68f, -4f));
+            badge.color = Color.white;
+            SceneUiKit.Tag(badge, ThemeRoleId.InputField, ThemePart.Kit);
+            PlaceRect(badge.transform, Vector2.one, Vector2.one, new Vector2(-34f, -34f), new Vector2(4f, 4f));
+        }
         return node;
     }
 }
