@@ -78,6 +78,19 @@ public sealed class IconGrid
         RowStep = rowStep;
     }
 
+    /// <summary>
+    /// The grid of the icon band (Saleh 2026-10-07, "arrange icons not
+    /// working"): the icon area's left <paramref name="columns"/> columns,
+    /// its width the origin's margin on both sides of those columns (never
+    /// wider than <paramref name="areaWidth"/>), so the icons keep to the
+    /// band and the desktop's banners (the waiting strip) use the rest.
+    /// </summary>
+    public static IconGrid InColumns(int columns, float areaWidth, float areaHeight, float cellWidth, float cellHeight, float originX, float originY, float columnStep, float rowStep)
+    {
+        float band = 2f * originX + Math.Max(0, columns - 1) * columnStep + cellWidth;
+        return new IconGrid(Math.Min(areaWidth, band), areaHeight, cellWidth, cellHeight, originX, originY, columnStep, rowStep);
+    }
+
     /// <summary>The arrange spots in a column (at least one).</summary>
     public int Rows => Math.Max(1, (int)Math.Floor((AreaHeight - OriginY - CellHeight) / RowStep) + 1);
 
@@ -90,12 +103,16 @@ public sealed class IconGrid
 
 /// <summary>
 /// Where the desktop's icons sit (the PC redesign DK3-DK6, section 4.1):
-/// Arrange lays them out column-first from the origin in the default order;
+/// Arrange lays out the icons it is given (the shown ones: an app not yet
+/// introduced takes no spot, so the shown ones leave no gaps) column-first
+/// from the origin in the default order;
 /// a drop is clamped into the icon area and, when it covers more than a
 /// share of another icon's cell, moves to the nearest free arrange spot
 /// (else it stays exactly where it was dropped); the player's layout is
 /// saved as "id:x,y;..." in invariant numbers and restored with unknown ids
-/// dropped, new ones in the first free spots and every place clamped; the
+/// dropped, every place clamped, a saved place that then covers an icon
+/// placed before it (a place pulled back from outside the area) and every
+/// id without one in the first free spots; the
 /// arrow keys move the selection to the nearest icon that way. A free spot
 /// overlaps no other icon at all. Pure.
 /// </summary>
@@ -158,10 +175,10 @@ public static class DesktopLayout
 
     /// <summary>
     /// The saved layout for the icons of <paramref name="order"/>: each saved
-    /// place of a known id (the first one per id, clamped), and every id
-    /// without one in the first free arrange spots; unknown ids and malformed
-    /// entries are dropped. Nothing saved is the arrangement. In
-    /// <paramref name="order"/>'s order.
+    /// place of a known id (the first one per id, clamped) that covers no icon
+    /// placed before it, and every other id in the first free arrange spots;
+    /// unknown ids and malformed entries are dropped. Nothing saved is the
+    /// arrangement. In <paramref name="order"/>'s order.
     /// </summary>
     public static IReadOnlyList<IconPlace> Restore(string saved, IReadOnlyList<string> order, IconGrid grid)
     {
@@ -181,7 +198,9 @@ public static class DesktopLayout
                 !float.TryParse(xy[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) ||
                 !float.TryParse(xy[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y))
                 continue;
-            placed.Add(id, Clamp(new IconPlace(id, x, y), grid));
+            IconPlace at = Clamp(new IconPlace(id, x, y), grid);
+            if (Free(id, at.X, at.Y, placed.Values, grid))
+                placed.Add(id, at);
         }
 
         var taken = new List<IconPlace>(placed.Values);
@@ -269,7 +288,7 @@ public static class DesktopLayout
                       Math.Max(0f, Math.Min(place.Y, grid.AreaHeight - grid.CellHeight)));
 
     /// <summary>True when a cell at (x, y) overlaps no icon but <paramref name="id"/> itself.</summary>
-    private static bool Free(string id, float x, float y, IReadOnlyList<IconPlace> others, IconGrid grid)
+    private static bool Free(string id, float x, float y, IEnumerable<IconPlace> others, IconGrid grid)
     {
         foreach (IconPlace other in others)
             if (other.Id != id && OverlapShare(x, y, other.X, other.Y, grid) > 0f)

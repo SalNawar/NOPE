@@ -57,6 +57,9 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>From one arrange row to the next.</summary>
     [Min(1f)] public float iconRowStep = 164f;
 
+    /// <summary>The icon band's columns (Saleh 2026-10-07, "arrange icons not working"): the icons keep to the icon area's left columns (a drop is clamped into them), and the waiting strip sits right of them, so no icon is ever under it (IconBand).</summary>
+    [Min(1)] public int iconColumns = 2;
+
     /// <summary>The icons' default order (DesktopAppIds): Arrange lays them out column-first in it, and the Start menu lists the apps in it.</summary>
     public string[] iconOrder = System.Linq.Enumerable.ToArray(DesktopAppIds.DefaultOrder);
 
@@ -166,6 +169,10 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     /// <summary>The hits a source's group shows before "Show all n".</summary>
     [Min(1)] public int searchPerGroup = 5;
+
+    /// <summary>The icon band's grid in an icon area of <paramref name="width"/> x <paramref name="height"/> desktop units (IconGrid.InColumns with the icon knobs): DesktopIcons lays the icons out in it and the builder puts the waiting strip right of it.</summary>
+    public IconGrid IconBand(float width, float height) =>
+        IconGrid.InColumns(iconColumns, width, height, iconCellSize.x, iconCellSize.y, iconOrigin.x, iconOrigin.y, iconColumnStep, iconRowStep);
 
     /// <summary>A maximised window's bottom edge above the desktop's bottom: the taskbar (the icon area starts there; the compare dock retired with the PC workbench).</summary>
     public float MaximisedBottom => taskbarHeight;

@@ -781,8 +781,12 @@ public static partial class OfficeSceneUIBuilder
         desk.SetAsFirstSibling();
 
         // Between travellers the desktop reads this, large enough for the office PC's
-        // clone, on a strip so it never reads off the wallpaper (piece 6 R18).
-        Transform strip = Panel(root, "IdleScreen", new Vector2(0.05f, 0.38f), new Vector2(0.95f, 0.62f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ScreenStrip);
+        // clone, on a strip so it never reads off the wallpaper (piece 6 R18); right of the
+        // icon band, so no icon is ever under it (Saleh 2026-10-07: "arrange icons not working").
+        DesktopConfigSO desktop = EnsureDesktopConfig();
+        float band = desktop.IconBand(DesktopSize.x, DesktopSize.y - desktop.MaximisedBottom).AreaWidth;
+        Transform strip = Panel(root, "IdleScreen", new Vector2((band + desktop.iconOrigin.x) / DesktopSize.x, 0.38f), new Vector2(0.97f, 0.62f), Vector2.zero, Vector2.zero,
+                                ScreenStripColor, ThemeRoleId.ScreenStrip);
         strip.GetComponent<Image>().raycastTarget = false;
         TMP_Text idle = Text(strip, "IdleText", null, 80, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white,
                              ThemeRoleId.ScreenStrip, "idle.waiting", FontStyles.Bold, ThemeTextKind.Heading, true);
