@@ -10,6 +10,9 @@ with a .meta whose GUID is fixed (derived from the file's name), so a regenerate
 importer's settings on import (ArtSlotImporter); the committed metas are the ones Unity wrote. The coats' ids must match
 world_source.json home.pet.kinds[].coats.
 
+The recolour keeps the eyes' highlights as drawn and the line art dark on dark coats (v2, Saleh 2026-10-08: the first
+recolour changed "even the eyes"). Needs numpy, Pillow and scipy.
+
 Usage: python tools/art/pets/make_pets.py [--sheet <contact sheet .jpg>]
 """
 import hashlib
@@ -25,26 +28,29 @@ REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 OUT = os.path.join(REPO, "Assets", "Art", "UI", "Resources", "Home")
 MOODS = ["idle", "happy", "sad", "sick"]
 
+MAX_HIGHLIGHT_PIXELS = 500  # at 1024x1024: eye highlights are under 300 px (a far leg's fur is ~2,600)
+HIGHLIGHT_RING_LUM = 0.36  # an eye highlight's ring (iris, pupil) is darker than this; a fur speck's is lighter
+
 # Coat: (light, shadow) in sRGB. The first coat of each kind is the art's own white.
 COATS = {
     "dog": {"cream": None, "tan": ((222, 176, 118), (168, 116, 68)), "chocolate": ((128, 82, 54), (82, 50, 34)),
-            "charcoal": ((92, 88, 96), (52, 48, 58)), "grey": ((168, 176, 188), (112, 120, 136))},
+            "charcoal": ((112, 108, 118), (70, 66, 78)), "grey": ((168, 176, 188), (112, 120, 136))},
     "cat": {"white": None, "ginger": ((236, 156, 82), (182, 98, 44)), "slate": ((140, 146, 160), (90, 94, 110)),
-            "black": ((70, 66, 76), (40, 36, 46)), "cream": ((236, 214, 178), (190, 160, 122))},
+            "black": ((88, 84, 96), (54, 50, 62)), "cream": ((236, 214, 178), (190, 160, 122))},
 }
 
 
 def key(rgb: np.ndarray) -> np.ndarray:
-    """Alpha from the distance to the flat magenta background, the edge pulled in by a pixel (no pink fringe)."""
+    """Alpha from the distance to the flat magenta background, plus a despill of the pink fringe."""
     r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
     magenta = (r - g) + (b - g)  # high for magenta
     alpha = np.clip((380 - magenta) / 140, 0, 1)
+    # Pull the edge in by a pixel so no magenta-tinted fringe survives on dark coats.
     eroded = np.asarray(Image.fromarray((alpha * 255).astype(np.uint8)).filter(ImageFilter.MinFilter(3))).astype(np.float32) / 255
     return eroded
 
 
 def despill(rgb: np.ndarray, alpha: np.ndarray) -> np.ndarray:
-    """Takes the magenta spill out of the edge pixels."""
     out = rgb.copy()
     edge = alpha > 0
     spill = np.minimum(out[..., 0], out[..., 2]) - out[..., 1]
@@ -54,27 +60,56 @@ def despill(rgb: np.ndarray, alpha: np.ndarray) -> np.ndarray:
     return np.clip(out, 0, 255)
 
 
-def coat_mask(rgb: np.ndarray):
-    """The coat: pale, unsaturated pixels (the white fur and its cool shading), soft-edged; and the luminance."""
+def coat_mask(rgb: np.ndarray) -> np.ndarray:
+    """The coat: pale, unsaturated pixels (the white fur and its cool shading), soft-edged."""
     f = rgb / 255.0
     mx, mn = f.max(axis=2), f.min(axis=2)
     lum = f @ np.array([0.299, 0.587, 0.114])
     sat = (mx - mn) / (mx + 1e-6)
     pale = np.clip((lum - 0.42) / 0.18, 0, 1)
     grey = np.clip((0.30 - sat) / 0.12, 0, 1)
-    # The sick pose's blanket is a pale blue: keep anything bluish out of the coat.
-    not_blue = np.clip((0.035 - (f[..., 2] - f[..., 0])) / 0.03, 0, 1)
+    # The sick pose's blanket is a pale blue (blue over red by 0.18 and more): keep it out of the coat. The fur's
+    # lavender shading sits near 0 to 0.06, so it stays coat (a tighter gate left it in blotches on dark coats).
+    not_blue = np.clip((0.12 - (f[..., 2] - f[..., 0])) / 0.05, 0, 1)
     return pale * grey * not_blue, lum
 
 
+def fur_only(mask: np.ndarray, lum: np.ndarray) -> np.ndarray:
+    """Keeps the eye highlights as drawn (Saleh 2026-10-08: recolouring changed "even the eyes"). A highlight is a
+    small pale island ringed by dark iris or pupil; a small island ringed by fur and hatching is a fur speck and is
+    recoloured with the coat (else it would sparkle white on a dark coat)."""
+    from scipy import ndimage
+    lab, n = ndimage.label(mask > 0.5)
+    if n == 0:
+        return mask
+    sizes = ndimage.sum(np.ones_like(lab), lab, range(1, n + 1))
+    keep = np.ones(mask.shape, bool)
+    for i in np.flatnonzero(sizes < MAX_HIGHLIGHT_PIXELS):
+        island = lab == i + 1
+        ring = ndimage.binary_dilation(island, iterations=3) & ~island & (mask < 0.5)
+        if ring.any() and lum[ring].mean() < HIGHLIGHT_RING_LUM:
+            keep &= ~ndimage.binary_dilation(island, iterations=2)  # the island and its soft rim
+    return mask * keep
+
+
 def recolour(rgb: np.ndarray, light, shadow) -> np.ndarray:
-    """The coat's pixels mapped from shadow to light by their luminance; everything else kept."""
     mask, lum = coat_mask(rgb)
+    mask = fur_only(mask, lum)
     t = np.clip((lum - 0.55) / 0.40, 0, 1)[..., None]
     light = np.array(light, dtype=np.float32)
     shadow = np.array(shadow, dtype=np.float32)
     coat = shadow * (1 - t) + light * t
-    return rgb * (1 - mask[..., None]) + coat * mask[..., None]
+    out = rgb * (1 - mask[..., None]) + coat * mask[..., None]
+    # On a dark coat the ink lines would sink into the fur: darken the line art (dark, unsaturated, off the fur) so it
+    # stays darker than the coat's shadow. Eyes, nose and mouth keep their colours.
+    shadow_lum = float(shadow @ np.array([0.299, 0.587, 0.114])) / 255
+    k = float(np.clip(shadow_lum / 0.45, 0.4, 1.0))
+    if k < 1.0:
+        f = rgb / 255.0
+        sat = (f.max(axis=2) - f.min(axis=2)) / (f.max(axis=2) + 1e-6)
+        line = np.clip((0.40 - lum) / 0.15, 0, 1) * np.clip((0.35 - sat) / 0.15, 0, 1) * (1 - mask)
+        out = out * (1 - line[..., None] * (1 - k))
+    return out
 
 
 def fixed_guid(name: str) -> str:
