@@ -6,7 +6,8 @@ using System;
 /// how far each control state moves (hover, press, release, click, a
 /// disabled click's "no"), how panels, pills and popups come and go, and the
 /// desk's physical layer (papers, stamps). Lengths on the UI are reference
-/// pixels (the 1920×1080 canvas), on the desk metres. Every motion goes
+/// pixels (the 1920×1080 canvas), on the desk metres (a dragged paper's
+/// lift is the desk's own knob, DeskConfigSO.dragLift). Every motion goes
 /// through a Spring with one of the feels; the player's Motion intensity and
 /// Reduced Motion scale it (MotionAmount).
 /// </summary>
@@ -59,6 +60,9 @@ public sealed class MotionKnobs
     /// <summary>The seconds between one pill of the dialogue wheel and the next as they pop out (the stagger).</summary>
     public float staggerSeconds = 0.035f;
 
+    /// <summary>How many lines a second a printed slip (the citation) shows as it prints.</summary>
+    public float printLinesPerSecond = 10f;
+
     /// <summary>The feel of a popup opening, a slide coming in and a sliding selection pill.</summary>
     public MotionFeel appearFeel = MotionFeel.Balanced, slideFeel = MotionFeel.Elastic, pillFeel = MotionFeel.Balanced;
 
@@ -67,9 +71,6 @@ public sealed class MotionKnobs
 
     /// <summary>The seconds a fade takes in place of a motion under Reduced Motion.</summary>
     public float reducedFadeSeconds = 0.12f;
-
-    /// <summary>How high a dragged paper lifts off the desk.</summary>
-    public float paperLift = 0.012f;
 
     /// <summary>A dragged paper's most tilt toward its travel (degrees) and the tilt per metre per second of speed.</summary>
     public float paperTiltMax = 7f, paperTiltPerSpeed = 14f;
@@ -86,14 +87,32 @@ public sealed class MotionKnobs
     /// <summary>How much the stamp squashes on impact.</summary>
     public float stampSquash = 0.16f;
 
-    /// <summary>How far the desk (the office camera) shakes on a slam.</summary>
-    public float stampShake = 0.0035f;
-
     /// <summary>Seconds the ink mark takes to bloom in after a slam.</summary>
     public float inkBloomSeconds = 0.08f;
 
-    /// <summary>The feel of a paper's lift and drop, a stamp's rebound and the shake.</summary>
-    public MotionFeel paperFeel = MotionFeel.Paper, stampFeel = MotionFeel.Elastic, shakeFeel = MotionFeel.Elastic;
+    /// <summary>The feel of a paper's lift (DeskConfigSO.dragLift high), tilt and drop, and a stamp's rebound.</summary>
+    public MotionFeel paperFeel = MotionFeel.Paper, stampFeel = MotionFeel.Balanced;
+
+    /// <summary>The curve of the desk's timed moves (a paper's slide and change of size, a stamp's way back to the rack, the stamp bar): their seconds stay the desk's knobs, their shape this feel's (SpringCurve).</summary>
+    public MotionFeel deskMoveFeel = MotionFeel.Balanced;
+
+    /// <summary>The curve of the desk camera's blend (the reading view, the PC zoom): a heavy settle with a slight overshoot.</summary>
+    public MotionFeel cameraFeel = MotionFeel.Heavy;
+
+    /// <summary>The hit-stop (FeelDirector: a stamp landing, a citation issued, a famous traveller let through): the time scale gameplay drops to, and for how many real seconds (the UI and the springs run on unscaled time).</summary>
+    public float hitStopScale = 0.05f, hitStopSeconds = 0.075f;
+
+    /// <summary>The desk cameras' idle breathing (Cinemachine noise: MotionTuningSO.breathingNoise): its amplitude and frequency gains at full Motion intensity.</summary>
+    public float breathingAmplitude = 0.35f, breathingFrequency = 0.25f;
+
+    /// <summary>How many degrees the desk camera's field of view narrows while a paper is read (the soft push-in), on the Heavy feel.</summary>
+    public float readingPushIn = 2.5f;
+
+    /// <summary>The camera impulses' strength (Cinemachine impulse force, scaled by the Motion intensity): a stamp's slam, a citation landing, the Helix River breaching.</summary>
+    public float shakeStamp = 0.04f, shakeCitation = 0.1f, shakeBreach = 0.28f;
+
+    /// <summary>The camera impulses' seconds: a slam's bump, a citation's, a breach's rumble.</summary>
+    public float shakeStampSeconds = 0.18f, shakeCitationSeconds = 0.3f, shakeBreachSeconds = 0.9f;
 
     /// <summary>How far a dater's body sinks over its frame once the frame stands on the paper (metres): the self-inker's stroke.</summary>
     public float daterCompress = 0.012f;
@@ -104,8 +123,8 @@ public sealed class MotionKnobs
     /// <summary>The seconds between two ratchet clicks of the date wheels' morning roll.</summary>
     public float daterWheelClick = 0.07f;
 
-    /// <summary>How hard a dater's impression hits (FeelDirector.Hit's strength) and how hard the lever's thunk home does.</summary>
-    public float daterHit = 1f, leverHit = 0.7f;
+    /// <summary>How hard the lever's thunk home hits (FeelDirector.Hit's strength, 0 to 1; a dater's impression is the stamp's own punch, FeelHit.Stamp).</summary>
+    public float leverHit = 0.3f;
 
     /// <summary>The feel of a dater's stroke down, of its release springing up (an overshoot) and of a date wheel's click.</summary>
     public MotionFeel daterFeel = MotionFeel.Dater, daterReleaseFeel = MotionFeel.Elastic, wheelFeel = MotionFeel.Firm;
@@ -116,8 +135,6 @@ public sealed class MotionKnobs
     /// <summary>The feel of the lever's arm (following the pull and springing back) and of its "no" wobble.</summary>
     public MotionFeel leverFeel = MotionFeel.Lever, leverRefuseFeel = MotionFeel.Elastic;
 
-    /// <summary>A hit's freeze (FeelDirector.Hit: the game's time stops this long at strength 1; seconds).</summary>
-    public float hitStopSeconds = 0.05f;
 
     /// <summary>A spring settles (stops and leaves the motion driver) within this of its target and slower than settleSpeed.</summary>
     public float settleValue = 0.0005f, settleSpeed = 0.005f;

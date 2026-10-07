@@ -927,6 +927,94 @@
    ]
   },
   {
+   "name": "iconkey_red_hover",
+   "file": "iconkey_red_hover.png",
+   "size": [
+    168,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "red icon key (window close X)",
+   "sliced": true,
+   "border": [
+    60,
+    64,
+    60,
+    56
+   ]
+  },
+  {
+   "name": "iconkey_red_locked",
+   "file": "iconkey_red_locked.png",
+   "size": [
+    168,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "red icon key (window close X)",
+   "sliced": true,
+   "border": [
+    60,
+    64,
+    60,
+    56
+   ]
+  },
+  {
+   "name": "iconkey_red_pressed",
+   "file": "iconkey_red_pressed.png",
+   "size": [
+    168,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "red icon key (window close X)",
+   "sliced": true,
+   "border": [
+    60,
+    64,
+    60,
+    56
+   ]
+  },
+  {
+   "name": "iconkey_red_rest",
+   "file": "iconkey_red_rest.png",
+   "size": [
+    168,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "red icon key (window close X)",
+   "sliced": true,
+   "border": [
+    60,
+    64,
+    60,
+    56
+   ]
+  },
+  {
    "name": "iconkey_rest",
    "file": "iconkey_rest.png",
    "size": [

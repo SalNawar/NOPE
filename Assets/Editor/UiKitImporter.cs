@@ -6,7 +6,7 @@ using UnityEngine;
 
 /// <summary>
 /// Imports the cel UI kit (Assets/Art/UI/Kit): every PNG there becomes a
-/// single, full-rect Sprite with no mipmaps, and its 9-slice border and pixels
+/// single, full-rect, mipmapped Sprite (it is drawn smaller than its 2x pixels), and its 9-slice border and pixels
 /// per unit come from the kit's <c>kit_manifest.json</c> (written by the kit
 /// exporter), so the sprites are ready for Image.Type.Sliced without hand setup.
 /// </summary>
@@ -61,7 +61,9 @@ public sealed class UiKitImporter : AssetPostprocessor
         importer.textureType = TextureImporterType.Sprite;
         importer.textureShape = TextureImporterShape.Texture2D; // a minimal meta defaults the shape to a cube map, which loads no sprite
         importer.spriteImportMode = SpriteImportMode.Single;
-        importer.mipmapEnabled = false;
+        // Mipmapped: the 2x sprites are drawn smaller than their pixels (half at 1080p, a third at 720p), and without mips they shimmer and blur.
+        importer.mipmapEnabled = true;
+        importer.mipmapFilter = TextureImporterMipFilter.KaiserFilter;
         importer.alphaIsTransparency = true;
         importer.wrapMode = TextureWrapMode.Clamp;
         importer.filterMode = FilterMode.Bilinear;

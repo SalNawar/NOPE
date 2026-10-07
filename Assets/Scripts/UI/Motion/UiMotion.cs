@@ -22,33 +22,67 @@ public sealed class UiMotion : MonoBehaviour
     /// <summary>The driver (made on the first Run in play mode).</summary>
     private static UiMotion _driver;
 
-    /// <summary>The tuning once read.</summary>
+    /// <summary>The tuning asset and its knobs once read.</summary>
+    private static MotionTuningSO _tuning;
     private static MotionKnobs _knobs;
 
     /// <summary>The motions that move.</summary>
     private readonly List<IMotionTick> _running = new List<IMotionTick>(64);
 
-    /// <summary>The motion's tuning (RunConfig.motionTuning; the defaults, with a warning, when it is not wired).</summary>
+    /// <summary>The motion's tuning asset (RunConfig.motionTuning), or null (a warning once: the defaults play).</summary>
+    public static MotionTuningSO Tuning
+    {
+        get
+        {
+            if (_knobs == null)
+                Load();
+            return _tuning;
+        }
+    }
+
+    /// <summary>The motion's knobs (the tuning asset's; the defaults when it is not wired).</summary>
     public static MotionKnobs Knobs
     {
         get
         {
-            if (_knobs != null)
-                return _knobs;
-            var config = Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath);
-            if (config != null && config.motionTuning != null)
-                _knobs = config.motionTuning.knobs;
-            else
-            {
-                Debug.LogWarning("[UiMotion] RunConfig has no MotionTuningSO, so the game feel uses the default springs. Run Tools > TimeDesk > Build Office UI (it creates and assigns MotionTuning_Default).");
-                _knobs = new MotionKnobs();
-            }
+            if (_knobs == null)
+                Load();
             return _knobs;
+        }
+    }
+
+    /// <summary>Reads the tuning from RunConfig once.</summary>
+    private static void Load()
+    {
+        var config = Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath);
+        _tuning = config != null ? config.motionTuning : null;
+        if (_tuning != null)
+            _knobs = _tuning.knobs;
+        else
+        {
+            Debug.LogWarning("[UiMotion] RunConfig has no MotionTuningSO, so the game feel uses the default springs. Run Tools > TimeDesk > Build Office UI (it creates and assigns MotionTuning_Default).");
+            _knobs = new MotionKnobs();
         }
     }
 
     /// <summary>How much of each motion plays now (the player's Motion intensity and Reduced Motion).</summary>
     public static MotionAmount Amount => new MotionAmount(MotionPreference.Intensity, MotionPreference.Reduced);
+
+    /// <summary>
+    /// The shape of a motion of fixed length (<paramref name="seconds"/>; a
+    /// paper's slide, the stamp bar, the desk camera's blend) at
+    /// <paramref name="t"/> (0..1): <paramref name="feel"/>'s spring curve
+    /// (SpringCurve), toward the critically damped one (no overshoot) as the
+    /// Motion intensity falls, that one under Reduced Motion. 0 at the start,
+    /// exactly 1 at the end, so the length a rule counts on stays.
+    /// </summary>
+    public static float Ease(float t, MotionFeel feel, float seconds)
+    {
+        SpringTuning tuning = Knobs.Get(feel);
+        float calm = SpringCurve.Ease(t, SpringTuning.Critical(tuning.stiffness, tuning.mass), seconds);
+        float share = Amount.Share;
+        return share <= 0f ? calm : calm + (SpringCurve.Ease(t, tuning, seconds) - calm) * share;
+    }
 
     /// <summary>Steps <paramref name="motion"/> every frame until it settles (nothing outside play mode; a motion already running is not added twice).</summary>
     public static void Run(IMotionTick motion)
@@ -65,6 +99,17 @@ public sealed class UiMotion : MonoBehaviour
             _driver._running.Add(motion);
     }
 
+    /// <summary>
+    /// The game feel's frame time from a real-time frame <paramref name="dt"/>:
+    /// <paramref name="dt"/> itself, or the capture's frame while frames are
+    /// captured at a fixed rate (Time.captureDeltaTime, which Unity's unscaled
+    /// time ignores), so a recording of the motion plays at its true speed.
+    /// </summary>
+    public static float Delta(float dt) => Time.captureDeltaTime > 0f ? Time.captureDeltaTime : dt;
+
+    /// <summary>The game feel's clock (seconds): real time, or the game's while frames are captured at a fixed rate (Delta).</summary>
+    public static float Now => Time.captureDeltaTime > 0f ? Time.time : Time.unscaledTime;
+
     /// <summary>True while <paramref name="motion"/> is being stepped (the probes wait for it).</summary>
     public static bool IsRunning(IMotionTick motion) => _driver != null && motion != null && _driver._running.Contains(motion);
 
@@ -74,7 +119,7 @@ public sealed class UiMotion : MonoBehaviour
     /// <summary>Steps every moving motion; drops those that settled or were destroyed (swapped down in place).</summary>
     private void Update()
     {
-        float dt = FeelDirector.StepDelta(Time.unscaledDeltaTime); // frozen by a hit-stop; a fixed-rate capture's frame (FeelDirector)
+        float dt = Delta(Time.unscaledDeltaTime);
         for (int i = _running.Count - 1; i >= 0; i--)
         {
             IMotionTick motion = _running[i];
@@ -98,6 +143,7 @@ public sealed class UiMotion : MonoBehaviour
     private static void ResetStatics()
     {
         _knobs = null;
+        _tuning = null;
         _driver = null;
     }
 }

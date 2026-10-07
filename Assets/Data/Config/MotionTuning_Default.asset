@@ -33,14 +33,6 @@ MonoBehaviour:
       stiffness: 380
       damping: 41.918015
       mass: 1.6
-    dater:
-      stiffness: 2600
-      damping: 96.88137
-      mass: 1
-    lever:
-      stiffness: 220
-      damping: 15.2593565
-      mass: 1.5
     hoverScale: 1.03
     pressScaleX: 1.06
     pressScaleY: 0.92
@@ -60,7 +52,6 @@ MonoBehaviour:
     stretchPerSpeed: 0.00035
     maxStretch: 0.3
     reducedFadeSeconds: 0.12
-    paperLift: 0.012
     paperTiltMax: 7
     paperTiltPerSpeed: 14
     paperDropSquash: 0.06
@@ -68,28 +59,22 @@ MonoBehaviour:
     stampRiseSeconds: 0.07
     stampSlamSeconds: 0.05
     stampSquash: 0.16
-    stampShake: 0.0035
     inkBloomSeconds: 0.08
     paperFeel: 3
-    stampFeel: 2
-    shakeFeel: 2
-    daterCompress: 0.012
-    daterHoldDelay: 0.12
-    daterQuickHold: 0.07
-    daterWheelClick: 0.07
-    daterHit: 1
-    leverHit: 0.7
-    daterFeel: 5
-    daterReleaseFeel: 2
-    wheelFeel: 0
-    leverTravel: 60
-    leverNotch: 15
-    leverResistance: 0.6
-    leverPullPerPixel: 0.22
-    leverRefuse: 5
-    leverHomeSeconds: 0.6
-    leverFeel: 6
-    leverRefuseFeel: 2
-    hitStopSeconds: 0.05
+    stampFeel: 1
+    deskMoveFeel: 1
+    cameraFeel: 4
+    hitStopScale: 0.05
+    hitStopSeconds: 0.075
+    breathingAmplitude: 0.35
+    breathingFrequency: 0.25
+    readingPushIn: 2.5
+    shakeStamp: 0.04
+    shakeCitation: 0.1
+    shakeBreach: 0.28
+    shakeStampSeconds: 0.18
+    shakeCitationSeconds: 0.3
+    shakeBreachSeconds: 0.9
     settleValue: 0.0005
     settleSpeed: 0.005
+  breathingNoise: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}

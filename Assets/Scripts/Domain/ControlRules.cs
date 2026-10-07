@@ -163,6 +163,12 @@ public static class ControlRules
     /// <summary>The PC's key as printed on its grey tab and the card.</summary>
     public const string PcKey = "Q";
 
+    /// <summary>The city view's key as printed on its pull tab's keycap.</summary>
+    public const string CityKey = "A";
+
+    /// <summary>The way back from the city view as printed on its pull tab's keycap.</summary>
+    public const string CityBackKey = "D";
+
     /// <summary>The back-out as printed on the card and the hints.</summary>
     public const string BackKeys = "Right-click, Esc";
 
@@ -174,7 +180,7 @@ public static class ControlRules
         new ShortcutCardRow(StampsKey, "keys.desk.stamps"),
         new ShortcutCardRow(PcKey, "keys.desk.pc"),
         new ShortcutCardRow(BackKeys, "keys.desk.back"),
-        new ShortcutCardRow("A, D", "keys.desk.city"),
+        new ShortcutCardRow(CityKey + ", " + CityBackKey, "keys.desk.city"),
     };
 
     /// <summary>What <paramref name="key"/> does in <paramref name="s"/>: nothing under a newsletter; on the PC only Q (back to the desk, unless a text field types it); at the desk SPACE and TAB with a traveller there, Q to the PC, A/D the city, F1 the keys.</summary>

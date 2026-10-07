@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 /// <summary>
@@ -14,4 +15,7 @@ public sealed class MotionTuningSO : ScriptableObject
 {
     /// <summary>The motion's knobs (MotionKnobs; UI lengths in reference px, desk lengths in metres).</summary>
     public MotionKnobs knobs = new MotionKnobs();
+
+    /// <summary>The desk cameras' idle breathing noise profile (Cinemachine's mild handheld one when the builders made the asset; none: no breathing).</summary>
+    public NoiseSettings breathingNoise;
 }

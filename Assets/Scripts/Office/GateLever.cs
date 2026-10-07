@@ -134,7 +134,7 @@ public sealed class GateLever : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         MotionAmount amount = UiMotion.Amount;
         if (!amount.Still)
             _wobble.Kick(knobs.Get(knobs.leverRefuseFeel).KickFor(knobs.leverRefuse * amount.Share));
-        CueSounds.Play(UiSoundCue.Error, sound);
+        CueSounds.Play(SoundCues.UiError, sound);
         if (stamps != null)
             stamps.Note("hardware.refused.lever");
     }
@@ -142,7 +142,7 @@ public sealed class GateLever : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     private void Update()
     {
         if (_pulling || _home || !_angle.AtRest || !_wobble.AtRest)
-            Step(FeelDirector.StepDelta(Time.unscaledDeltaTime));
+            Step(UiMotion.Delta(Time.unscaledDeltaTime));
     }
 
     /// <summary>Steps the arm and the wobble on their springs (snaps under Reduced Motion), clicks the ratchet, thunks home and commits, and springs back after the rest home.</summary>
@@ -157,11 +157,11 @@ public sealed class GateLever : MonoBehaviour, IPointerDownHandler, IBeginDragHa
         _wobble.Step(dt, knobs.Get(knobs.leverRefuseFeel), 0.01f, 0.1f);
 
         if (_pulling && LeverTravel.Crossed(before, _angle.Value, knobs.leverNotch) > 0)
-            CueSounds.Play(UiSoundCue.LeverRatchet, sound, 1f + 0.02f * LeverTravel.Notch(_angle.Value, knobs.leverNotch));
+            CueSounds.Play(CueSounds.LeverRatchet, sound, 1f + 0.02f * LeverTravel.Notch(_angle.Value, knobs.leverNotch));
 
         if (_pulling && !_home && LeverTravel.Home(_angle.Value, knobs.leverTravel))
             Thunk(knobs);
-        if (_home && !_pulling && FeelDirector.Now >= _homeUntil)
+        if (_home && !_pulling && UiMotion.Now >= _homeUntil)
         {
             _home = false;
             _angle.Target = 0f;
@@ -175,12 +175,12 @@ public sealed class GateLever : MonoBehaviour, IPointerDownHandler, IBeginDragHa
     private void Thunk(MotionKnobs knobs)
     {
         _home = true;
-        _homeUntil = FeelDirector.Now + knobs.leverHomeSeconds;
+        _homeUntil = UiMotion.Now + knobs.leverHomeSeconds;
         _angle.Snap(knobs.leverTravel);
-        CueSounds.Play(UiSoundCue.LeverHome, sound);
+        CueSounds.Play(CueSounds.LeverHome, sound);
         FeelDirector.Hit(knobs.leverHit);
         if (stamps != null && stamps.Commit(DeskStamp.Approved))
-            CueSounds.Play(UiSoundCue.PortalThrough, sound);
+            CueSounds.Play(SoundCues.PortalThrough, sound);
         _pulling = false;
     }
 }

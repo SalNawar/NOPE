@@ -60,10 +60,10 @@ public sealed class VerdictButtons : MonoBehaviour
     {
         if (stamps != null && stamps.Commit(DeskStamp.Denied))
         {
-            CueSounds.Play(UiSoundCue.Return, sound);
+            CueSounds.Play(CueSounds.Return, sound);
             return;
         }
-        CueSounds.Play(UiSoundCue.Error, sound);
+        CueSounds.Play(SoundCues.UiError, sound);
         if (stamps != null)
             stamps.Note("hardware.refused.return");
     }
@@ -73,7 +73,7 @@ public sealed class VerdictButtons : MonoBehaviour
     {
         if (stamps == null || !stamps.Commit(DeskStamp.Detained))
             return;
-        CueSounds.Play(UiSoundCue.Detain, sound);
+        CueSounds.Play(CueSounds.Detain, sound);
         _flash.Snap(1f);
         _flash.Target = 0f;
     }
@@ -96,7 +96,7 @@ public sealed class VerdictButtons : MonoBehaviour
         if (flash == null || _flash.AtRest)
             return;
         MotionKnobs knobs = UiMotion.Knobs;
-        _flash.Step(FeelDirector.StepDelta(Time.unscaledDeltaTime), knobs.Get(knobs.paperFeel), 0.002f, 0.01f);
+        _flash.Step(UiMotion.Delta(Time.unscaledDeltaTime), knobs.Get(knobs.paperFeel), 0.002f, 0.01f);
         Color c = flash.color;
         c.a = Mathf.Clamp01(_flash.Value) * FlashAlpha;
         flash.color = c;

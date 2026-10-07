@@ -2,24 +2,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// The desk hardware's sound cues with their placeholders (the desk machine
-/// spec; docs SOUND_LIST: a file not delivered yet "plays a generated
-/// placeholder"): Play(cue, source) plays the cue's clip from UiSoundSO when
-/// it has one (UiSounds.Play), else a short sound made in code once per cue
-/// through <paramref name="source"/> (a click, a thunk, a whoosh, a buzz, a
-/// chirp). Tone and Noise make the placeholders, also for the stamps' own
-/// refusal thunk.
+/// The desk machine's hardware sounds with their placeholders (the desk
+/// machine spec; SOUND_LIST: a file not delivered yet "plays a generated
+/// placeholder"): Play(id, source) plays the cue through the game's sound
+/// bank when it has a clip (Sounds.Play: the list's portal_through, detain,
+/// ui_error), else a short sound made in code once per id through the
+/// source (a click, a thunk, a whoosh, a buzz, a chirp). The ids the list
+/// lacks yet (the lever's ratchet and thunk, the date wheels' click, the
+/// re-ink squish, RETURN's buzzer) play only their placeholder until the
+/// list names them. Tone and Noise make the placeholders, also for the
+/// stamps' own refusal thunk.
 /// </summary>
 public static class CueSounds
 {
+    /// <summary>The hardware's ids beside the list's (SoundCues): the date wheels' ratchet click, the re-ink squish, the lever's ratchet and its thunk home, RETURN's clunk and buzzer, DETAIN's chirp.</summary>
+    public const string WheelClick = "dater_wheel_click", Reink = "dater_reink", LeverRatchet = "lever_ratchet", LeverHome = "lever_home", Return = "return_buzz", Detain = "detain";
+
     private const int Rate = 22050;
 
-    private static readonly Dictionary<UiSoundCue, AudioClip> Placeholders = new Dictionary<UiSoundCue, AudioClip>();
+    private static readonly Dictionary<string, AudioClip> Placeholders = new Dictionary<string, AudioClip>();
 
-    /// <summary>Plays <paramref name="cue"/>: its delivered clip, else its placeholder through <paramref name="source"/> at <paramref name="pitch"/> (nothing without a source).</summary>
-    public static void Play(UiSoundCue cue, AudioSource source, float pitch = 1f)
+    /// <summary>Plays <paramref name="cue"/>: its clip in the sound bank, else its placeholder through <paramref name="source"/> at <paramref name="pitch"/> (nothing without a source).</summary>
+    public static void Play(string cue, AudioSource source, float pitch = 1f)
     {
-        if (UiSounds.Play(cue) || source == null)
+        if (Sounds.Play(cue) || source == null)
             return;
         if (!Placeholders.TryGetValue(cue, out AudioClip clip) || clip == null)
             Placeholders[cue] = clip = Make(cue);
@@ -30,18 +36,18 @@ public static class CueSounds
     }
 
     /// <summary>The placeholder of <paramref name="cue"/> (null for a cue that has none).</summary>
-    private static AudioClip Make(UiSoundCue cue)
+    private static AudioClip Make(string cue)
     {
         switch (cue)
         {
-            case UiSoundCue.WheelClick: return Noise("WheelClick", 0.025f, 0.35f, 2600f);
-            case UiSoundCue.Reink: return Noise("Reink", 0.18f, 0.35f, 500f);
-            case UiSoundCue.LeverRatchet: return Noise("LeverRatchet", 0.04f, 0.6f, 1800f);
-            case UiSoundCue.LeverHome: return Tone("LeverHome", 62f, 0.28f, 0.9f);
-            case UiSoundCue.PortalThrough: return Sweep("PortalThrough", 180f, 900f, 1.2f, 0.4f);
-            case UiSoundCue.Return: return Sweep("Return", 130f, 110f, 0.45f, 0.5f);
-            case UiSoundCue.Detain: return Sweep("Detain", 1400f, 900f, 0.5f, 0.35f);
-            case UiSoundCue.Error: return Tone("Error", 70f, 0.16f, 0.7f);
+            case WheelClick: return Noise("WheelClick", 0.025f, 0.35f, 2600f);
+            case Reink: return Noise("Reink", 0.18f, 0.35f, 500f);
+            case LeverRatchet: return Noise("LeverRatchet", 0.04f, 0.6f, 1800f);
+            case LeverHome: return Tone("LeverHome", 62f, 0.28f, 0.9f);
+            case SoundCues.PortalThrough: return Sweep("PortalThrough", 180f, 900f, 1.2f, 0.4f);
+            case Return: return Sweep("Return", 130f, 110f, 0.45f, 0.5f);
+            case Detain: return Sweep("Detain", 1400f, 900f, 0.5f, 0.35f);
+            case SoundCues.UiError: return Tone("Error", 70f, 0.16f, 0.7f);
             default: return null;
         }
     }

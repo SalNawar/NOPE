@@ -18,13 +18,13 @@ public class ArtSlotsTests
     [Test]
     public void First_MissingFallsBack()
     {
-        Assert.IsNull(ArtSlots.First(new[] { ArtSlots.SpeechBubble }, Present()));
+        Assert.IsNull(ArtSlots.First(new[] { ArtSlots.PetCorner }, Present()));
     }
 
     [Test]
     public void First_PresentIsUsed()
     {
-        Assert.AreEqual(ArtSlots.SpeechBubble, ArtSlots.First(new[] { ArtSlots.SpeechBubble }, Present(ArtSlots.SpeechBubble)));
+        Assert.AreEqual(ArtSlots.PetCorner, ArtSlots.First(new[] { ArtSlots.PetCorner }, Present(ArtSlots.PetCorner)));
     }
 
     [Test]
@@ -152,15 +152,7 @@ public class ArtSlotsTests
         Assert.AreEqual("Hall/Slots/13-flag-left-cloth/egypt_2", ArtSlots.HallSlot("13-flag-left-cloth", "egypt_2"));
         Assert.AreEqual("Hall/Slots/new-anomalies/breaching", ArtSlots.SlotOf(ArtSlots.AssetRoot + "Hall/Slots/new-anomalies/breaching.png"));
         Assert.AreEqual(4096, ArtSlots.MaxSide(ArtSlots.HallSlot("x", "y")), "the hall's 2172 px canvas is not downscaled");
-        Assert.AreEqual(2048, ArtSlots.MaxSide(ArtSlots.SpeechBubble));
-    }
-
-    [Test]
-    public void SliceShare_OnlyTheBubbleIsSliced()
-    {
-        Assert.AreEqual(0.25f, ArtSlots.SliceShare(ArtSlots.SpeechBubble));
-        Assert.AreEqual(0f, ArtSlots.SliceShare(ArtSlots.SpeechBubbleTail));
-        Assert.AreEqual(0f, ArtSlots.SliceShare(ArtSlots.BriefingPaper));
+        Assert.AreEqual(2048, ArtSlots.MaxSide(ArtSlots.PetCorner));
     }
 
     [Test]
@@ -169,7 +161,7 @@ public class ArtSlotsTests
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.PhotoFrame));
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.AgencySeal));
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.PaperFaces("TC-620")[0]));
-        Assert.IsFalse(ArtSlots.OnDeskPaper(ArtSlots.SpeechBubble));
+        Assert.IsFalse(ArtSlots.OnDeskPaper(ArtSlots.PetCorner));
         Assert.IsFalse(ArtSlots.OnDeskPaper(null));
     }
 }

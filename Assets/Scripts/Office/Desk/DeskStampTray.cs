@@ -334,7 +334,7 @@ public sealed class DeskStampTray : MonoBehaviour
         _out = new Vector3(at.x, desk + config.stampHover, at.z);
         _in = _out + right * config.stampBarTravel;
         _laid = true;
-        rack.SetPositionAndRotation(Vector3.Lerp(_in, _out, DeskZones.Ease(_slide)), Quaternion.LookRotation(forward, Vector3.up));
+        rack.SetPositionAndRotation(Vector3.LerpUnclamped(_in, _out, BarCurve(config.stampBarSeconds)), Quaternion.LookRotation(forward, Vector3.up));
     }
 
     /// <summary>
@@ -379,7 +379,9 @@ public sealed class DeskStampTray : MonoBehaviour
         if (!_live)
             return;
         CancelCarry();
-        if (_flow.ToggleBar() && deskView != null)
+        bool slidOut = _flow.ToggleBar();
+        Sounds.Play(slidOut ? SoundCues.StampBarOut : SoundCues.StampBarIn);
+        if (slidOut && deskView != null)
             deskView.TiltIn();
         Raise();
     }
@@ -390,6 +392,7 @@ public sealed class DeskStampTray : MonoBehaviour
         CancelCarry();
         if (!_flow.StowBar())
             return false;
+        Sounds.Play(SoundCues.StampBarIn);
         Raise();
         return true;
     }
@@ -436,7 +439,9 @@ public sealed class DeskStampTray : MonoBehaviour
         if (!_flow.HandBack())
             return false;
         CancelCarry();
-        _flow.StowBar();
+        if (_flow.StowBar())
+            Sounds.Play(SoundCues.StampBarIn);
+        Sounds.Play(SoundCues.PaperSlide);
         if (deskView != null)
             deskView.Return();
         Raise();
@@ -458,7 +463,7 @@ public sealed class DeskStampTray : MonoBehaviour
     public void Note(string key)
     {
         _noteKey = key;
-        _noteUntil = FeelDirector.Now + (config != null ? config.stampNoteSeconds : 2.5f);
+        _noteUntil = UiMotion.Now + (config != null ? config.stampNoteSeconds : 2.5f);
         Show();
     }
 
@@ -499,7 +504,8 @@ public sealed class DeskStampTray : MonoBehaviour
         else
         {
             Note(LastPress == StampPress.NotPassport ? "stamp.refused.notPassport" : "stamp.refused.already");
-            Play(_thunk, 1f);
+            if (!Sounds.Play(SoundCues.UiError))
+                Play(_thunk, 1f);
             MotionKnobs knobs = UiMotion.Knobs;
             MotionAmount amount = UiMotion.Amount;
             if (!amount.Still)
@@ -532,7 +538,7 @@ public sealed class DeskStampTray : MonoBehaviour
     private void Bottom(Handle handle)
     {
         handle.Contact = true;
-        handle.ContactAt = FeelDirector.Now;
+        handle.ContactAt = UiMotion.Now;
         if (handle.PrintOn != null)
         {
             float density = config != null ? DaterInk.Print(handle.Prints, _day * 31 + (int)handle.Kind, config.daterInkFade, config.daterInkFloor, config.daterInkSpread) : 1f;
@@ -542,7 +548,7 @@ public sealed class DeskStampTray : MonoBehaviour
             handle.Prints++;
             handle.PrintOn = null;
         }
-        FeelDirector.Hit(UiMotion.Knobs.daterHit);
+        FeelDirector.Punch(FeelHit.Stamp);
     }
 
     /// <summary>The stroke comes back up: the release clack and the body springing past its rest (a cut under Reduced Motion).</summary>
@@ -565,7 +571,7 @@ public sealed class DeskStampTray : MonoBehaviour
             return;
         Roll(handle);
         handle.Gripped = true;
-        handle.GripAt = FeelDirector.Now;
+        handle.GripAt = UiMotion.Now;
     }
 
     /// <summary>The button came back up: a held stroke releases (at once, or as soon as it bottoms out); a click that neither dragged nor held yet strokes down and straight up.</summary>
@@ -618,7 +624,7 @@ public sealed class DeskStampTray : MonoBehaviour
         if (!_live)
             return;
         handle.Prints = 0;
-        CueSounds.Play(UiSoundCue.Reink, sound);
+        CueSounds.Play(CueSounds.Reink, sound);
     }
 
     /// <summary>The day's first touch of a dater: its wheels roll from yesterday to today, one queued click per notch (day, then month, then year).</summary>
@@ -634,7 +640,7 @@ public sealed class DeskStampTray : MonoBehaviour
             handle.Clicks.Enqueue(1);
         for (int i = 0; i < steps.Year; i++)
             handle.Clicks.Enqueue(2);
-        handle.NextClick = FeelDirector.Now;
+        handle.NextClick = UiMotion.Now;
     }
 
     /// <summary>Turns wheel <paramref name="wheel"/> of <paramref name="handle"/> at once to notch <paramref name="notch"/> of <paramref name="notches"/>.</summary>
@@ -733,10 +739,10 @@ public sealed class DeskStampTray : MonoBehaviour
     private void Update()
     {
         SlideBar();
-        float dt = FeelDirector.StepDelta(Time.unscaledDeltaTime);
+        float dt = UiMotion.Delta(Time.unscaledDeltaTime);
         foreach (Handle handle in _handles)
             Move(handle, dt);
-        if (_noteKey != null && FeelDirector.Now >= _noteUntil)
+        if (_noteKey != null && UiMotion.Now >= _noteUntil)
         {
             _noteKey = null;
             Show();
@@ -750,7 +756,7 @@ public sealed class DeskStampTray : MonoBehaviour
             return;
         MotionKnobs knobs = UiMotion.Knobs;
         if (handle.Gripped && handle.Stroke == Stroke.None && (handle.Drag == null || !handle.Drag.IsDragging)
-            && FeelDirector.Now - handle.GripAt >= knobs.daterHoldDelay)
+            && UiMotion.Now - handle.GripAt >= knobs.daterHoldDelay)
         {
             handle.Gripped = false;
             Press(handle, true);
@@ -771,7 +777,7 @@ public sealed class DeskStampTray : MonoBehaviour
             {
                 if (!handle.Contact && depth >= drop + knobs.daterCompress * 0.8f)
                     Bottom(handle);
-                if (handle.Contact && !handle.Holding && FeelDirector.Now - handle.ContactAt >= knobs.daterQuickHold)
+                if (handle.Contact && !handle.Holding && UiMotion.Now - handle.ContactAt >= knobs.daterQuickHold)
                     Release(handle);
             }
             else if (!moving)
@@ -806,14 +812,14 @@ public sealed class DeskStampTray : MonoBehaviour
             handle.SwayShown = sway;
         }
 
-        if (handle.Clicks.Count > 0 && FeelDirector.Now >= handle.NextClick)
+        if (handle.Clicks.Count > 0 && UiMotion.Now >= handle.NextClick)
         {
             int wheel = handle.Clicks.Dequeue();
             int notches = wheel == 0 ? DaterWheels.DayNotches : wheel == 1 ? DaterWheels.MonthNotches : DaterWheels.YearNotches;
             if (wheel < handle.WheelAngle.Length)
                 handle.WheelAngle[wheel].Target += 360f / notches;
-            CueSounds.Play(UiSoundCue.WheelClick, sound, Pitch());
-            handle.NextClick = FeelDirector.Now + knobs.daterWheelClick;
+            CueSounds.Play(CueSounds.WheelClick, sound, Pitch());
+            handle.NextClick = UiMotion.Now + knobs.daterWheelClick;
         }
         for (int w = 0; w < handle.WheelAngle.Length; w++)
             if (!handle.WheelAngle[w].AtRest)
@@ -863,12 +869,19 @@ public sealed class DeskStampTray : MonoBehaviour
         if (Mathf.Approximately(_slide, target))
             return;
         float seconds = config != null && !MotionPreference.Reduced ? config.stampBarSeconds : 0f;
-        _slide = seconds > 0f ? Mathf.MoveTowards(_slide, target, FeelDirector.StepDelta(Time.unscaledDeltaTime) / seconds) : target;
+        _slide = seconds > 0f ? Mathf.MoveTowards(_slide, target, UiMotion.Delta(Time.unscaledDeltaTime) / seconds) : target;
         if (_laid)
-            rack.position = Vector3.Lerp(_in, _out, DeskZones.Ease(_slide));
+            rack.position = Vector3.LerpUnclamped(_in, _out, BarCurve(seconds));
         bool shown = _slide > 0f;
         if (rack.gameObject.activeSelf != shown)
             rack.gameObject.SetActive(shown);
+    }
+
+    /// <summary>Where the bar is along its travel (0 in, 1 out) on the desk's spring curve: past out as it arrives, past in as it goes back (UiMotion.Ease over <paramref name="seconds"/>).</summary>
+    private float BarCurve(float seconds)
+    {
+        MotionFeel feel = UiMotion.Knobs.deskMoveFeel;
+        return _flow.BarOut ? UiMotion.Ease(_slide, feel, seconds) : 1f - UiMotion.Ease(1f - _slide, feel, seconds);
     }
 
     private void Play(AudioClip clip, float pitch)

@@ -22,9 +22,10 @@ using UnityEngine;
 /// (HallSlotsDev), and when the state changes picks each slot's variant
 /// (HallSlotPick) and crossfades to its art, Resources
 /// Hall/Slots/&lt;slot&gt;/&lt;file&gt; (ArtSlots.HallSlot; Reduced Motion cuts). A
-/// picked variant without art keeps the painting as it is; for a new overlay
-/// (and for every slot while HallSlotsDev.ShowAllStandIns is on) the editor
-/// and development builds draw a stand-in instead: a flat two-tone cel plate
+/// picked variant without art keeps the painting as it is; only while the
+/// cheat turns HallSlotsDev.ShowAllStandIns on do the editor and development
+/// builds draw a stand-in instead (off by default: Saleh saw the plates cover
+/// the hall in play): a flat two-tone cel plate
 /// on the slot's region with the slot and variant named on it; release builds
 /// draw nothing. The art scene is never edited: the renderers live only in
 /// play.
@@ -255,7 +256,7 @@ public sealed class HallSlotsLink : MonoBehaviour
             if (!redraw && file == s.Front.File && s.Fade >= 1f)
                 continue;
             Sprite art = file != null ? SlotArt.Sprite(ArtSlots.HallSlot(s.Def.id, file)) : null;
-            bool standIn = art == null && file != null && Debug.isDebugBuild && (s.Def.IsNewOverlay || HallSlotsDev.ShowAllStandIns);
+            bool standIn = art == null && file != null && Debug.isDebugBuild && HallSlotsDev.ShowAllStandIns;
             log.Append("; ").Append(s.Def.id).Append(" -> ").Append(file ?? "painting").Append(art != null ? " (art)" : standIn ? " (stand-in)" : file != null ? " (no art: painting)" : "");
             if (s.Fade < 1f)
             {

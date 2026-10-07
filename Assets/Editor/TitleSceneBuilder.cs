@@ -208,7 +208,7 @@ public static class TitleSceneBuilder
         plate.pivot = new Vector2(0f, 0.5f);
         plate.anchoredPosition = TitleBlock.Position;
         KitScreens.Panel(block, kit, "panel_night");
-        Transform face = block.Find(SceneUiKit.KitFaceName);
+        Transform face = block.Find(UiKitSO.FaceName);
         if (face != null)
             Ensure<LayoutElement>(face).ignoreLayout = true;
         KitScreens.Remove(block, "TitleText");
@@ -267,7 +267,7 @@ public static class TitleSceneBuilder
     private const float Inset = 36f;
 
     /// <summary>A panel's heading: its box's height and size range.</summary>
-    private const float HeadingHeight = 60f, HeadingMax = 44f, HeadingMin = 26f;
+    private const float HeadingHeight = 60f;
 
     /// <summary>
     /// The ending panel, re-applied on every build (sheet 04's endings): the
@@ -280,16 +280,16 @@ public static class TitleSceneBuilder
         KitScreens.Size(panel, EndingPanelSize, Vector2.zero);
         KitScreens.Panel(panel, kit, "panel_night");
         KitScreens.Across(title.rectTransform, Inset, Inset, 28f, HeadingHeight);
-        KitScreens.Label(title, kit, kit.inkOnDark, HeadingMax, HeadingMin);
+        KitScreens.Label(title, kit, kit.inkOnDark, KitText.PanelHeading);
         title.alignment = TextAlignmentOptions.Center;
         float plates = 30f + 2f * EndingPlateSize.y + 16f;
         KitScreens.Across(body.rectTransform, Inset + 8f, Inset + 8f, 100f, EndingPanelSize.y - 100f - plates - 20f);
-        KitScreens.Body(body, kit.inkOnDark, 24f, 17f);
+        KitScreens.Body(body, kit, kit.inkOnDark, KitText.Body);
         float left = (EndingPanelSize.x - EndingPlateSize.x) / 2f;
         KitScreens.PlaceBottomLeft((RectTransform)newRun.transform, left, 30f, EndingPlateSize);
         KitScreens.Plate(newRun, kit, "plate_ox");
         KitScreens.PlaceBottomLeft((RectTransform)world.transform, left, 30f + EndingPlateSize.y + 16f, EndingPlateSize);
-        KitScreens.Plate(world, kit, "plate_slate", 26f);
+        KitScreens.Plate(world, kit, "plate_slate");
     }
 
     /// <summary>The world page's size on the 1920×1080 canvas (wide enough for a split answer on one line at 25 px or more).</summary>
@@ -311,12 +311,12 @@ public static class TitleSceneBuilder
         KitScreens.Size(world, WorldPageSize, Vector2.zero);
         KitScreens.Panel(world, kit, "panel_night");
         KitScreens.Across(title.rectTransform, Inset, Inset, 28f, HeadingHeight);
-        KitScreens.Label(title, kit, kit.inkOnDark, HeadingMax, HeadingMin);
+        KitScreens.Label(title, kit, kit.inkOnDark, KitText.PanelHeading);
         title.alignment = TextAlignmentOptions.Center;
         KitScreens.Across(outcomes.rectTransform, WorldPageSize.x * 0.05f, WorldPageSize.x * 0.05f, 104f, 420f);
-        KitScreens.Body(outcomes, kit.inkOnDark, 28f, 20f, TextAlignmentOptions.Top);
+        KitScreens.Body(outcomes, kit, kit.inkOnDark, KitText.BodyLarge, TextAlignmentOptions.Top);
         KitScreens.Across(card.rectTransform, Inset, Inset, 540f, 80f);
-        KitScreens.Label(card, kit, CardInk, 40f, 22f);
+        KitScreens.Label(card, kit, CardInk, KitText.Headline);
         card.alignment = TextAlignmentOptions.Center;
         KitScreens.PlaceBottomLeft((RectTransform)newRun.transform, (WorldPageSize.x - EndingPlateSize.x) / 2f, 34f, EndingPlateSize);
         KitScreens.Plate(newRun, kit, "plate_ox");
@@ -327,8 +327,8 @@ public static class TitleSceneBuilder
     {
         KitScreens.Panel(contract, kit, "panel_card");
         KitScreens.Panel(account, kit, "panel_card");
-        KitScreens.Body(contractText, kit.inkOnLight, 18f, 13f);
-        KitScreens.Body(accountText, kit.inkOnLight, 16f, 12f);
+        KitScreens.Body(contractText, kit, kit.inkOnLight, KitText.BodySmall);
+        KitScreens.Body(accountText, kit, kit.inkOnLight, KitText.BodySmall);
     }
 
     /// <summary>The adoption panel's size (reference px).</summary>
@@ -359,10 +359,10 @@ public static class TitleSceneBuilder
         KitScreens.Panel(panel, kit, "panel_bone");
         KitScreens.Remove(panel, "Preview");
         KitScreens.Across(title.rectTransform, Inset, Inset, 26f, HeadingHeight);
-        KitScreens.Label(title, kit, kit.inkOnLight, HeadingMax, HeadingMin);
+        KitScreens.Label(title, kit, kit.inkOnLight, KitText.PanelHeading);
         title.alignment = TextAlignmentOptions.MidlineLeft;
         KitScreens.Across(body.rectTransform, Inset, Inset, 92f, 70f);
-        KitScreens.Body(body, kit.inkOnLight, 22f, 17f);
+        KitScreens.Body(body, kit, kit.inkOnLight, KitText.Body);
 
         ChoiceCard(dog, kit, "tile_dog_rest", Inset, 186f);
         ChoiceCard(cat, kit, "tile_cat_rest", Inset + ChoiceCardSize.x + 24f, 186f);
@@ -386,7 +386,7 @@ public static class TitleSceneBuilder
         EditorUtility.SetDirty(name);
 
         KitScreens.Place(problem.rectTransform, fieldLeft + 4f, 282f, new Vector2(fieldWidth - 8f, 60f));
-        KitScreens.Body(problem, kit.signalRed, 20f, 16f);
+        KitScreens.Body(problem, kit, kit.signalRed, KitText.Body);
         problem.fontStyle = FontStyles.Bold;
 
         KitScreens.PlaceBottomRight((RectTransform)go.transform, Inset, 32f, new Vector2(380f, 72f));
@@ -402,7 +402,7 @@ public static class TitleSceneBuilder
     private static void ChoiceCard(Button card, UiKitSO kit, string tile, float left, float top)
     {
         KitScreens.Place((RectTransform)card.transform, left, top, ChoiceCardSize);
-        KitScreens.Plate(card, kit, "choicecard", 36f);
+        KitScreens.Plate(card, kit, "choicecard");
         Undo.RecordObject(card, "Lay out the adoption");
         SpriteState states = card.spriteState;
         states.pressedSprite = kit.Get("choicecard_hover");

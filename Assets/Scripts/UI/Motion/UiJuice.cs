@@ -12,8 +12,8 @@ using UnityEngine.UI;
 /// shorter while its face swaps to the pressed one, let go it springs back
 /// past its rest and wobbles in, a confirmed click (or Submit) pops it, and a
 /// click on a disabled control shakes it sideways, a short "no", with the
-/// error cue. Each moment plays its UiSound cue (silent until a clip is
-/// assigned). The motion is ControlMotion's springs, stepped by UiMotion only
+/// error cue. Each moment plays its cue (ui_hover, ui_press, ui_release,
+/// ui_toggle, ui_error: Sounds; silent until the bank has a clip). The motion is ControlMotion's springs, stepped by UiMotion only
 /// while they move; the control's hit area stays its rest rect whatever its
 /// scale (the graphic's raycast padding cancels it), so a squash never loses
 /// the click. Reduced Motion keeps it still; the Motion intensity scales it.
@@ -51,7 +51,7 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         juice.Begin();
         juice._motion.Confirm(UiMotion.Knobs, UiMotion.Amount);
-        UiSounds.Play(UiSoundCue.Toggle);
+        Sounds.Play(SoundCues.UiToggle);
     }
 
     /// <summary>True while the control takes clicks (no Selectable: always).</summary>
@@ -81,7 +81,7 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         Begin();
         _motion.Hover(true, UiMotion.Knobs, UiMotion.Amount);
-        UiSounds.Play(UiSoundCue.Hover);
+        Sounds.Play(SoundCues.UiHover);
     }
 
     /// <summary>The pointer left: it comes back down (or stays squashed while held).</summary>
@@ -98,7 +98,7 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         Begin();
         _motion.Press(UiMotion.Knobs, UiMotion.Amount);
-        UiSounds.Play(UiSoundCue.Press);
+        Sounds.Play(SoundCues.UiPress);
     }
 
     /// <summary>Let go: the spring back and the release cue.</summary>
@@ -108,7 +108,7 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         Begin();
         _motion.Release(UiMotion.Knobs, UiMotion.Amount);
-        UiSounds.Play(UiSoundCue.Release);
+        Sounds.Play(SoundCues.UiRelease);
     }
 
     /// <summary>A left click: the pop (a toggle's cue on a toggle), or on a disabled control the "no" shake and the error cue.</summary>
@@ -147,12 +147,12 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             _motion.Confirm(UiMotion.Knobs, UiMotion.Amount);
             if (_control is Toggle)
-                UiSounds.Play(UiSoundCue.Toggle);
+                Sounds.Play(SoundCues.UiToggle);
         }
         else if (!_chosen)
         {
             _motion.Refuse(UiMotion.Knobs, UiMotion.Amount);
-            UiSounds.Play(UiSoundCue.Error);
+            Sounds.Play(SoundCues.UiError);
         }
     }
 
@@ -169,7 +169,7 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         UiMotion.Run(this);
     }
 
-    /// <summary>Draws the springs: the scale over the rest scale, the shake as a sideways offset (only its change is applied, so a layout keeps the place), the hit area held at the rest rect; once at rest, the rest pose exactly.</summary>
+    /// <summary>Draws the springs: the scale over the rest scale, the shake as a sideways offset (only its change is applied, so a layout keeps the place), the hit area held at the rest rect; once back at rest, the rest pose exactly (a pose it settles on, the hover lift or a held press, stays).</summary>
     private void Apply()
     {
         float sx = _motion.ScaleX, sy = _motion.ScaleY, offset = _motion.OffsetX;
@@ -188,8 +188,8 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             float py = sy > 0.01f ? size.y * (1f - 1f / sy) * 0.5f : 0f;
             _hit.raycastPadding = _restPadding + new Vector4(px, py, px, py);
         }
-        if (_motion.Moving)
-            return;
+        if (_motion.Moving || sx != 1f || sy != 1f || offset != 0f)
+            return; // still moving, or settled on a pose (the hover lift, a held press): kept as drawn
         transform.localScale = _restScale;
         if (_hit != null)
             _hit.raycastPadding = _restPadding;

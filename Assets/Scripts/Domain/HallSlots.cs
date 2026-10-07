@@ -256,7 +256,7 @@ public sealed class HallSlotDef
     /// <summary>The variant that shows when none's condition holds (an id of <see cref="variants"/>); empty: the painting as it is (nothing drawn).</summary>
     public string fallback;
 
-    /// <summary>True for a new overlay (no registered layer): a missing file draws the stand-in in the editor and development builds.</summary>
+    /// <summary>True for a new overlay (no registered layer): it adds an object the painting lacks rather than repainting one.</summary>
     public bool IsNewOverlay => string.IsNullOrEmpty(layer);
 }
 

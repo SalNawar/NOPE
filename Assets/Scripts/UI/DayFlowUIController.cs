@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Owns the two day-flow panels in the office:
-/// - Morning briefing (day number, the day's bulletin naming its one new
-///   paper or check first, lesson 4, then the TomorrowPackage lines) before the shift
+/// - Morning briefing, "The Temporal Times" (the UI kit's front page,
+///   MorningPaper: the day's bulletin naming its one new paper or check as the
+///   key story, lesson 4, the other TomorrowPackage lines as the small story,
+///   under the dateline with the day and today's date) before the shift
 /// - End-of-day results (the ShiftReport's money ledger at a glance, lesson 5) after the last case
 /// All references are optional; unwired panels are skipped gracefully.
 /// </summary>
@@ -16,11 +18,29 @@ public sealed class DayFlowUIController : MonoBehaviour
     /// <summary>Root of the briefing panel.</summary>
     [SerializeField] private GameObject briefingPanel;
 
-    /// <summary>Briefing title ("Day 3 — Morning Briefing").</summary>
+    /// <summary>Briefing title ("Day 3 — Morning Briefing"), the dateline's left.</summary>
     [SerializeField] private TMP_Text briefingTitleText;
 
-    /// <summary>Briefing body (rules + news lines).</summary>
-    [SerializeField] private TMP_Text briefingBodyText;
+    /// <summary>Today's date in the agency's calendar, the dateline's centre (optional).</summary>
+    [SerializeField] private TMP_Text briefingDateText;
+
+    /// <summary>The kicker over the key story ("BULLETIN · NEW TODAY"), shown when the day's bulletin leads (optional).</summary>
+    [SerializeField] private TMP_Text briefingKickerText;
+
+    /// <summary>The key story's headline (MorningPaper.Headline).</summary>
+    [SerializeField] private TMP_Text briefingHeadlineText;
+
+    /// <summary>The key story's deck (optional).</summary>
+    [SerializeField] private TMP_Text briefingDeckText;
+
+    /// <summary>The small story's title (optional).</summary>
+    [SerializeField] private TMP_Text briefingStoryTitleText;
+
+    /// <summary>The small story's lines (optional).</summary>
+    [SerializeField] private TMP_Text briefingStoryText;
+
+    /// <summary>Dummy type shown in the small story's place on a day without one (optional).</summary>
+    [SerializeField] private GameObject briefingStoryFiller;
 
     /// <summary>Starts the shift.</summary>
     [SerializeField] private Button startShiftButton;
@@ -64,9 +84,11 @@ public sealed class DayFlowUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Shows the morning briefing: the day's <paramref name="bulletin"/> first
-    /// under its header when the day brings something new (Papers Please
-    /// lesson 4, DayPlanSO.Bulletin), then the world's tomorrow package.
+    /// Shows the morning briefing as the paper's front page (MorningPaper):
+    /// the day's <paramref name="bulletin"/> as the key story under its kicker
+    /// when the day brings something new (Papers Please lesson 4,
+    /// DayPlanSO.Bulletin), else the first timeline headline; the world's other
+    /// tomorrow package lines as the small story.
     /// Invokes onStartShift when the player clicks Start (or immediately if unwired).
     /// </summary>
     public void ShowBriefing(WorldState world, string bulletin, Action onStartShift)
@@ -82,51 +104,36 @@ public sealed class DayFlowUIController : MonoBehaviour
         if (briefingTitleText != null)
             briefingTitleText.text = UiText.Format("briefing.title", world.day);
 
-        if (briefingBodyText != null)
+        // The front page: the key story (the bulletin, else the first headline), then every other line in the small story
+        // (the desk's own stories, days 7-15, Q9, among them).
+        MorningPaper page = MorningPaper.Compose(bulletin, world.tomorrow.briefingLines, world.tomorrow.newsLines, world.tomorrow.deskLines);
+        if (briefingDateText != null)
+        {
+            ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
+            string today = library != null ? AgencyCalendar.Today(library.Agency.firstDate, world.day) : null;
+            briefingDateText.text = today != null ? today.ToUpperInvariant() : string.Empty;
+        }
+        if (briefingKickerText != null)
+            briefingKickerText.gameObject.SetActive(page.LeadIsBulletin);
+        if (briefingHeadlineText != null)
+            briefingHeadlineText.text = page.Headline.Length > 0 ? page.Headline : UiText.Get("briefing.empty");
+        if (briefingDeckText != null)
+            briefingDeckText.text = page.Deck;
+        if (briefingStoryTitleText != null)
+            briefingStoryTitleText.text = page.StoryTitleKey != null ? UiText.Get(page.StoryTitleKey) : string.Empty;
+        if (briefingStoryText != null)
         {
             var sb = new System.Text.StringBuilder();
-            bool hasBulletin = !string.IsNullOrWhiteSpace(bulletin);
-            if (hasBulletin)
-            {
-                sb.AppendLine(UiText.Get("briefing.bulletinHeader"));
-                sb.AppendLine(UiText.Format("briefing.bulletin", bulletin.Trim()));
-                sb.AppendLine();
-            }
-
-            if (world.tomorrow.briefingLines.Count == 0 && world.tomorrow.newsLines.Count == 0 && world.tomorrow.deskLines.Count == 0)
-            {
-                if (!hasBulletin)
-                    sb.AppendLine(UiText.Get("briefing.empty"));
-            }
-            else
-            {
-                foreach (string line in world.tomorrow.briefingLines)
-                    sb.AppendLine(UiText.Format("list.bullet", line));
-
-                if (world.tomorrow.newsLines.Count > 0)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine(UiText.Get("briefing.newsHeader"));
-
-                    foreach (string line in world.tomorrow.newsLines)
-                        sb.AppendLine(UiText.Format("list.bullet", line));
-                }
-
-                // The desk's own stories (days 7-15, Q9), after the news.
-                if (world.tomorrow.deskLines.Count > 0)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine(UiText.Get("briefing.deskHeader"));
-
-                    foreach (string line in world.tomorrow.deskLines)
-                        sb.AppendLine(UiText.Format("list.bullet", line));
-                }
-            }
-
-            briefingBodyText.text = sb.ToString();
+            foreach (string line in page.StoryLines)
+                sb.AppendLine(UiText.Format("list.bullet", line));
+            briefingStoryText.text = sb.ToString();
         }
+        if (briefingStoryFiller != null)
+            briefingStoryFiller.SetActive(page.StoryLines.Count == 0);
 
         briefingPanel.SetActive(true);
+        UiAppear.Of(briefingPanel, AppearStyle.Drop).Open(); // the morning paper drops in and settles like paper (the game feel)
+        Sounds.Play(SoundCues.DayStart);
     }
 
     /// <summary>

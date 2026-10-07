@@ -11,7 +11,10 @@ using UnityEngine.UI;
 /// line under them says why (CultureThemeService.LanguageLocked; the stored
 /// choice comes back with a new run), and motion (piece 9 R17), "Full" or "Reduced"
 /// (MotionPreference; reduced shows translations at once, from the next
-/// traveller); and the desktop's icons (the PC redesign DK5, DK6): open
+/// traveller, and cuts the game feel's motion), with the Motion intensity
+/// slider under it (0-100 %, MotionPreference.Intensity: how far the game
+/// feel's springs, shakes and the camera move; off while Reduced is chosen);
+/// and the desktop's icons (the PC redesign DK5, DK6): open
 /// with a "Double click" (the default) or a "Single click"
 /// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange)
 /// (the step hints' pair is gone with the hints: the PC clean-up of
@@ -39,6 +42,12 @@ public sealed class SettingsWindowController : MonoBehaviour
     /// <summary>Chooses Reduced motion (translations show at once).</summary>
     [SerializeField] private Button reducedMotionButton;
 
+    /// <summary>The Motion intensity slider (0 to 100).</summary>
+    [SerializeField] private Slider motionIntensitySlider;
+
+    /// <summary>The intensity's value beside the slider ("80 %").</summary>
+    [SerializeField] private TMP_Text motionIntensityText;
+
     /// <summary>Desktop icons open with a double click.</summary>
     [SerializeField] private Button iconDoubleClickButton;
 
@@ -53,6 +62,9 @@ public sealed class SettingsWindowController : MonoBehaviour
 
     /// <summary>The Investigation section's Text size buttons, one per zoom level (DesktopConfigSO.zoomLevels, in order).</summary>
     [SerializeField] private Button[] textSizeButtons = new Button[0];
+
+    /// <summary>The UI kit (run 7): a chosen option is its oxblood plate, the others bone (sheet 02's segmented pairs); without it the theme's colours mark the choice.</summary>
+    [SerializeField] private UiKitSO kit;
 
     /// <summary>The zoom levels.</summary>
     [SerializeField] private DesktopConfigSO config;
@@ -76,6 +88,8 @@ public sealed class SettingsWindowController : MonoBehaviour
             fullMotionButton.onClick.AddListener(() => ChooseMotion(false));
         if (reducedMotionButton != null)
             reducedMotionButton.onClick.AddListener(() => ChooseMotion(true));
+        if (motionIntensitySlider != null)
+            motionIntensitySlider.onValueChanged.AddListener(ChooseIntensity);
         if (iconDoubleClickButton != null)
             iconDoubleClickButton.onClick.AddListener(() => ChooseIconOpen(false));
         if (iconSingleClickButton != null)
@@ -107,6 +121,13 @@ public sealed class SettingsWindowController : MonoBehaviour
     private void ChooseMotion(bool reduced)
     {
         MotionPreference.Reduced = reduced;
+        ShowSelection();
+    }
+
+    /// <summary>Stores the Motion intensity (the slider's 0-100 as 0-1) and shows it.</summary>
+    private void ChooseIntensity(float percent)
+    {
+        MotionPreference.Intensity = percent / 100f;
         ShowSelection();
     }
 
@@ -159,6 +180,14 @@ public sealed class SettingsWindowController : MonoBehaviour
         bool reduced = MotionPreference.Reduced;
         Paint(fullMotionButton, !reduced, theme);
         Paint(reducedMotionButton, reduced, theme);
+        int percent = Mathf.RoundToInt(MotionPreference.Intensity * 100f);
+        if (motionIntensitySlider != null)
+        {
+            motionIntensitySlider.SetValueWithoutNotify(percent);
+            motionIntensitySlider.interactable = !reduced;
+        }
+        if (motionIntensityText != null)
+            motionIntensityText.text = UiText.Format("settings.motionIntensityValue", percent);
         bool single = DesktopPreferences.OpenIconsWithSingleClick;
         Paint(iconDoubleClickButton, !single, theme);
         Paint(iconSingleClickButton, single, theme);
@@ -167,10 +196,24 @@ public sealed class SettingsWindowController : MonoBehaviour
             Paint(textSizeButtons[i], Level(i) == zoom, theme);
     }
 
-    /// <summary>One button's colours from the theme.</summary>
-    private static void Paint(Button button, bool selected, ThemeSO theme)
+    /// <summary>The kit pieces of a chosen option and of the others.</summary>
+    private const string ChosenPlate = "miniplate_ox", PlainPlate = "miniplate_bone";
+
+    /// <summary>One option's look: the kit's chosen or plain plate and its ink, else its colours from the theme.</summary>
+    private void Paint(Button button, bool selected, ThemeSO theme)
     {
-        if (button == null || theme == null)
+        if (button == null)
+            return;
+        if (kit != null && button.targetGraphic is Image face)
+        {
+            string piece = selected ? ChosenPlate : PlainPlate;
+            kit.Show(face, piece, button);
+            TMP_Text text = button.GetComponentInChildren<TMP_Text>(true);
+            if (text != null)
+                text.color = kit.InkOn(piece);
+            return;
+        }
+        if (theme == null)
             return;
 
         PaletteEntry entry = theme.Get(selected ? ThemeRoleId.Badge : ThemeRoleId.Button);

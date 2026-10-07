@@ -19,26 +19,11 @@ public static class ArtSlots
     /// <summary>The folder every by-name slot lives under (a Resources folder; the slot is the path below it).</summary>
     public const string AssetRoot = "Assets/Art/UI/Resources/";
 
-    /// <summary>The speech bubble's body: a light 9-slice panel the game tints cream.</summary>
-    public const string SpeechBubble = "Office/speech_bubble";
-
-    /// <summary>The speech bubble's tail, under the bubble's bottom centre (none without art).</summary>
-    public const string SpeechBubbleTail = "Office/speech_bubble_tail";
-
     /// <summary>The glow inside an open departure portal's ring (greyscale; the game tints it and draws it as an unlit glow; PortalGlowPlaceholder's until it lands).</summary>
     public const string PortalGlow = "Office/portal_glow";
 
     /// <summary>The Return Gate's spiral inside its ring (greyscale; tinted amber, an unlit glow; PortalGlowPlaceholder's until it lands).</summary>
     public const string ReturnGateGlow = "Office/portal_return_glow";
-
-    /// <summary>The morning briefing's newsprint sheet ("The Temporal Times").</summary>
-    public const string BriefingPaper = "DayFlow/temporal_times_paper";
-
-    /// <summary>The end of shift's ledger sheet.</summary>
-    public const string LedgerPaper = "DayFlow/shift_ledger_paper";
-
-    /// <summary>The citation slip after a wrong verdict.</summary>
-    public const string CitationSlip = "DayFlow/citation_slip";
 
     /// <summary>The photo frame on a desk paper's photo cell (the frame's grey stand-in without art).</summary>
     public const string PhotoFrame = "Forms/photo_frame";
@@ -133,14 +118,6 @@ public static class ArtSlots
         int slash = rest.LastIndexOf('/');
         return dot > slash ? rest.Substring(0, dot) : rest;
     }
-
-    /// <summary>
-    /// The 9-slice border of a slot's art as a share of its shorter side (the
-    /// bubble's rounded corners sit inside the outer 32 px of its 128 px
-    /// master); 0 for art that is not sliced.
-    /// </summary>
-    public static float SliceShare(string slot) =>
-        slot == SpeechBubble ? 0.25f : 0f;
 
     /// <summary>Whether a slot's art is drawn on the desk's 3D papers (a paper face, the photo frame, an ink mark), so it is imported with mipmaps; UI art is not.</summary>
     public static bool OnDeskPaper(string slot) => slot != null && slot.StartsWith("Forms/", StringComparison.Ordinal);

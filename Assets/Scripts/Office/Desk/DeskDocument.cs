@@ -160,6 +160,18 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>The sheet's scale now, the scale it eases toward (the zone's) and where the ease started.</summary>
     private float _sizeNow = 1f, _sizeTarget = 1f, _sizeFrom = 1f, _sizeElapsed;
 
+    /// <summary>The paper's feel (the game feel's desk layer): its lift off the desk (a spring toward SetLift's height), its tilt toward a drag's travel (degrees about the sheet's x and z) and a drop's squash (wider by the value).</summary>
+    private Spring _lift, _tiltX, _tiltZ, _squash;
+
+    /// <summary>True once the lift has a place (the first SetLift puts it there at once), and the drag's state last frame (a pick-up or a drop plays its cue and its squash).</summary>
+    private bool _liftPlaced, _wasDragged;
+
+    /// <summary>Where the paper was last frame (a drag's speed tilts it).</summary>
+    private Vector3 _lastPosition;
+
+    /// <summary>The sheet's own rotation (lying flat, its face up: the builder's), which the tilt turns in the paper's space.</summary>
+    private Quaternion? _sheetRest;
+
     private Vector3 _slideFrom;
     private Vector3 _slideTo;
     private float _slideSeconds;
@@ -196,21 +208,21 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>Only while one runs: eases the sheet toward its zone's size, and moves along the slide (its done callback on landing).</summary>
     private void Update()
     {
+        Feel(Time.unscaledDeltaTime);
         if (!Mathf.Approximately(_sizeNow, _sizeTarget))
         {
             _sizeElapsed += Time.deltaTime;
             float seconds = MotionPreference.Reduced ? 0f : resizeSeconds;
             float eased = seconds > 0f ? Mathf.Clamp01(_sizeElapsed / seconds) : 1f;
-            _sizeNow = eased >= 1f ? _sizeTarget : Mathf.Lerp(_sizeFrom, _sizeTarget, DeskZones.Ease(eased));
-            if (sheet != null)
-                sheet.localScale = Vector3.one * _sizeNow;
+            _sizeNow = eased >= 1f ? _sizeTarget : Mathf.LerpUnclamped(_sizeFrom, _sizeTarget, UiMotion.Ease(eased, UiMotion.Knobs.deskMoveFeel, seconds));
+            ShowSheetScale();
         }
         if (!IsSliding)
             return;
 
         _slideElapsed += Time.deltaTime;
         float t = _slideSeconds > 0f ? Mathf.Clamp01(_slideElapsed / _slideSeconds) : 1f;
-        transform.position = Vector3.Lerp(_slideFrom, _slideTo, t);
+        transform.position = Vector3.LerpUnclamped(_slideFrom, _slideTo, UiMotion.Ease(t, UiMotion.Knobs.deskMoveFeel, _slideSeconds));
         if (t < 1f)
             return;
 
@@ -343,8 +355,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         if (instant)
         {
             _sizeNow = target;
-            if (sheet != null)
-                sheet.localScale = Vector3.one * target;
+            ShowSheetScale();
         }
 
         bool reading = zone == DeskZone.Desk;
@@ -614,11 +625,85 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         filter.sharedMesh = _shapedMesh;
     }
 
-    /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres.</summary>
+    /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres: the first place at once, then on the paper's spring (a picked-up paper rises, a dropped one settles; a cut without motion).</summary>
     public void SetLift(float height)
     {
-        if (sheet != null)
-            sheet.localPosition = new Vector3(0f, height, 0f);
+        if (sheet == null)
+            return;
+        if (!_liftPlaced || UiMotion.Amount.Still)
+        {
+            _liftPlaced = true;
+            _lift.Snap(height);
+            ShowFeel();
+            return;
+        }
+        _lift.Target = height;
+    }
+
+    /// <summary>
+    /// The paper's feel (Saleh 2026-10-07: every touch reads as physical): a
+    /// pick-up and a drop play their cues; while dragged the sheet tilts
+    /// toward its travel by its speed (MotionKnobs.paperTiltPerSpeed, at most
+    /// paperTiltMax), its leading edge dipping; dropped, it squashes softly
+    /// wider (paperDropSquash) and flutters back flat; its lift follows SetLift
+    /// on the same spring (paperFeel). Scaled by the Motion intensity; still
+    /// under Reduced Motion. Nothing runs while it rests.
+    /// </summary>
+    private void Feel(float dt)
+    {
+        if (sheet == null || drag == null)
+            return;
+        bool dragged = drag.IsDragging;
+        Vector3 position = transform.position;
+        MotionKnobs knobs = UiMotion.Knobs;
+        MotionAmount amount = UiMotion.Amount;
+        if (dragged != _wasDragged)
+        {
+            _wasDragged = dragged;
+            Sounds.Play(dragged ? SoundCues.PaperPickup : SoundCues.PaperDrop);
+            if (!dragged && !amount.Still)
+            {
+                SpringTuning paper = knobs.Get(knobs.paperFeel);
+                _squash.Kick(paper.KickFor(knobs.paperDropSquash * amount.Share));
+                _tiltX.Kick(paper.KickFor(knobs.paperTiltMax * 0.25f * amount.Share)); // the flutter as it lands
+            }
+        }
+        if (dragged && dt > 0f && !amount.Still)
+        {
+            Vector3 travel = transform.InverseTransformDirection(position - _lastPosition) / dt;
+            float most = knobs.paperTiltMax * amount.Share;
+            _tiltX.Target = Mathf.Clamp(travel.z * knobs.paperTiltPerSpeed * amount.Share, -most, most);
+            _tiltZ.Target = Mathf.Clamp(-travel.x * knobs.paperTiltPerSpeed * amount.Share, -most, most);
+        }
+        else
+            _tiltX.Target = _tiltZ.Target = 0f;
+        _lastPosition = position;
+        if (_lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && _squash.AtRest)
+            return;
+        SpringTuning tuning = knobs.Get(knobs.paperFeel);
+        _lift.Step(dt, tuning, knobs.settleValue * 0.01f, knobs.settleSpeed * 0.01f); // metres
+        _tiltX.Step(dt, tuning, knobs.settleValue * 10f, knobs.settleSpeed * 10f); // degrees
+        _tiltZ.Step(dt, tuning, knobs.settleValue * 10f, knobs.settleSpeed * 10f);
+        _squash.Step(dt, tuning, knobs.settleValue, knobs.settleSpeed);
+        ShowFeel();
+    }
+
+    /// <summary>Draws the lift and the tilt on the sheet, and its scale.</summary>
+    private void ShowFeel()
+    {
+        sheet.localPosition = new Vector3(0f, _lift.Value, 0f);
+        _sheetRest ??= sheet.localRotation;
+        sheet.localRotation = _tiltX.Value == 0f && _tiltZ.Value == 0f ? _sheetRest.Value : Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
+        ShowSheetScale();
+    }
+
+    /// <summary>The sheet's scale: its zone's size, wider in its own plane (its x and y: it lies on its back) by a drop's squash.</summary>
+    private void ShowSheetScale()
+    {
+        if (sheet == null)
+            return;
+        float wide = 1f + _squash.Value;
+        sheet.localScale = new Vector3(_sizeNow * wide, _sizeNow * wide, _sizeNow);
     }
 
     /// <summary>
@@ -640,7 +725,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             click.Interactable = clickable;
     }
 
-    /// <summary>Slides the paper to a world point in <paramref name="seconds"/> (a linear move), then calls <paramref name="done"/>.</summary>
+    /// <summary>Slides the paper to a world point in <paramref name="seconds"/> (on the desk's spring curve, MotionKnobs.deskMoveFeel: it lands with a little overshoot, exactly there at the end), then calls <paramref name="done"/>.</summary>
     public void SlideTo(Vector3 target, float seconds, Action done)
     {
         _slideFrom = transform.position;

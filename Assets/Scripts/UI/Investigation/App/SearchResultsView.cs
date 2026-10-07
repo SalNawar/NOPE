@@ -47,6 +47,9 @@ public sealed class SearchResultsView : MonoBehaviour
     /// <summary>The chosen chip's tint (pressed).</summary>
     [SerializeField] private Color chosenTint = new Color(0.72f, 0.72f, 0.72f, 1f);
 
+    /// <summary>The UI kit (run 7): the chosen chip is its slate chip, the others bone (sheet 02 C3); without it the chosen chip takes <see cref="chosenTint"/>.</summary>
+    [SerializeField] private UiKitSO kit;
+
     private readonly List<GameObject> _rows = new List<GameObject>();
     private readonly List<Button> _hitRows = new List<Button>();
     private readonly List<SearchHit> _hits = new List<SearchHit>();
@@ -155,6 +158,9 @@ public sealed class SearchResultsView : MonoBehaviour
         _hits.Clear();
     }
 
+    /// <summary>The kit's chosen and plain chips.</summary>
+    private const string ChosenChip = "chip_active", PlainChip = "chip_rest";
+
     /// <summary>A header chip reading <paramref name="label"/>, pressed when <paramref name="chosen"/>; a click filters to <paramref name="source"/>.</summary>
     private void Chip(string label, bool chosen, AppTab? source)
     {
@@ -163,11 +169,21 @@ public sealed class SearchResultsView : MonoBehaviour
         Button chip = Instantiate(chipTemplate, chipRow);
         chip.gameObject.SetActive(true);
         _rows.Add(chip.gameObject);
-        chip.GetComponentInChildren<TMP_Text>(true).text = label;
-        ColorBlock colours = chip.colors;
-        colours.normalColor = chosen ? chosenTint : Color.white;
-        colours.selectedColor = colours.normalColor;
-        chip.colors = colours;
+        TMP_Text text = chip.GetComponentInChildren<TMP_Text>(true);
+        text.text = label;
+        if (kit != null && chip.targetGraphic is Image face)
+        {
+            string piece = chosen ? ChosenChip : PlainChip;
+            kit.Show(face, piece);
+            text.color = kit.InkOn(piece);
+        }
+        else
+        {
+            ColorBlock colours = chip.colors;
+            colours.normalColor = chosen ? chosenTint : Color.white;
+            colours.selectedColor = colours.normalColor;
+            chip.colors = colours;
+        }
         chip.onClick.AddListener(() => Filtered?.Invoke(source));
     }
 

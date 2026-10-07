@@ -17,6 +17,12 @@ public sealed class OfficeUIController : MonoBehaviour
     /// <summary>The verdict line's strip; shown only while the line has text (piece 6 R18).</summary>
     [SerializeField] private GameObject resultBackdrop;
 
+    /// <summary>The verdict ribbon's face (the UI kit's: green for a right call, red for a wrong one, brass for a free warning or a notice); optional.</summary>
+    [SerializeField] private Image resultRibbon;
+
+    /// <summary>The UI kit the ribbon's faces come from; optional.</summary>
+    [SerializeField] private UiKitSO kit;
+
     [Header("HUD (optional — null-safe)")]
     /// <summary>Shows current money.</summary>
     [SerializeField] private TMP_Text moneyText;
@@ -34,8 +40,14 @@ public sealed class OfficeUIController : MonoBehaviour
     /// <summary>Panel shown when a citation is issued.</summary>
     [SerializeField] private GameObject citationPanel;
 
-    /// <summary>Citation slip body text.</summary>
-    [SerializeField] private TMP_Text citationText;
+    /// <summary>The slip's reason line (CaseVerdict.citationReason).</summary>
+    [SerializeField] private TMP_Text citationReasonText;
+
+    /// <summary>The slip's rule and values (CaseVerdict.citationDetail).</summary>
+    [SerializeField] private TMP_Text citationDetailText;
+
+    /// <summary>The slip's warning or penalty (CaseVerdict.citationConsequence).</summary>
+    [SerializeField] private TMP_Text citationConsequenceText;
 
     /// <summary>Button that dismisses the citation and continues the day.</summary>
     [SerializeField] private Button citationContinueButton;
@@ -44,17 +56,27 @@ public sealed class OfficeUIController : MonoBehaviour
     private Action _onCitationDismissed;
 
     /// <summary>
-    /// Updates the result label (call from GameManager after validation).
+    /// Updates the result label (call from GameManager after validation), on the notice ribbon.
     /// </summary>
-    public void SetResultText(string text) => SetResult(text);
+    public void SetResultText(string text) => SetResult(text, UiKitNames.VerdictRibbon(null, false));
 
-    /// <summary>Writes the verdict line and shows its strip only while it has text.</summary>
-    private void SetResult(string text)
+    /// <summary>Writes the verdict line on <paramref name="ribbon"/> (a UI kit sprite) and shows its strip only while it has text.</summary>
+    private void SetResult(string text, string ribbon)
     {
+        bool changed = resultText != null && resultText.text != text;
         if (resultText != null)
             resultText.text = text;
-        if (resultBackdrop != null)
-            resultBackdrop.SetActive(!string.IsNullOrEmpty(text));
+        if (kit != null)
+        {
+            kit.Show(resultRibbon, ribbon);
+            if (resultText != null)
+                resultText.color = kit.InkOn(ribbon);
+        }
+        if (resultBackdrop == null)
+            return;
+        resultBackdrop.SetActive(!string.IsNullOrEmpty(text));
+        if (changed && !string.IsNullOrEmpty(text))
+            UiAppear.Of(resultBackdrop, AppearStyle.Whip).Open(); // the verdict ribbon whips in (the game feel)
     }
 
     /// <summary>
@@ -106,9 +128,10 @@ public sealed class OfficeUIController : MonoBehaviour
             ? UiText.Format("verdict.correct", verdict.payAwarded, credits)
             : verdict.moneyPenalty > 0
                 ? UiText.Format("verdict.wrongPenalty", verdict.moneyPenalty, credits)
-                : UiText.Get("verdict.wrong"));
+                : UiText.Get("verdict.wrong"),
+            UiKitNames.VerdictRibbon(verdict.correct, verdict.wasFreeWarning));
 
-        bool canShowSlip = verdict.citationIssued && citationPanel != null && citationText != null;
+        bool canShowSlip = verdict.citationIssued && citationPanel != null;
 
         if (!canShowSlip)
         {
@@ -116,10 +139,17 @@ public sealed class OfficeUIController : MonoBehaviour
             return;
         }
 
-        // Open the slip and hold the day until dismissed.
+        // Open the slip and hold the day until dismissed: it drops in and prints line by line (the game feel; the text is whole at once).
         _onCitationDismissed = onContinue;
-        citationText.text = verdict.citationText;
+        if (citationReasonText != null)
+            citationReasonText.text = verdict.citationReason;
+        if (citationDetailText != null)
+            citationDetailText.text = verdict.citationDetail;
+        if (citationConsequenceText != null)
+            citationConsequenceText.text = verdict.citationConsequence;
         citationPanel.SetActive(true);
+        UiAppear.Of(citationPanel, AppearStyle.Drop).Open();
+        UiPrint.Print(citationDetailText, SoundCues.CitationPrint, SoundCues.CitationLand);
 
         if (citationContinueButton != null)
         {

@@ -74,9 +74,10 @@ public sealed class DeskScanner : MonoBehaviour
             analysisLamp.SetActive(day.Analysis);
     }
 
-    /// <summary>Plays the scanner's reaction (a finished scan).</summary>
+    /// <summary>Plays the scanner's reaction and its done beep (a finished scan).</summary>
     public void Pulse()
     {
+        Sounds.Play(SoundCues.ScannerDone);
         if (reaction != null)
             reaction.Play();
     }

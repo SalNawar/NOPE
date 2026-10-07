@@ -41,6 +41,16 @@ public sealed class TravellerView : MonoBehaviour
         }
     }
 
+    /// <summary>The top of the head in world space (the speech bubble sits just above it: BubbleLayout).</summary>
+    public Vector3 HeadTop => Landmark(LookCanvas.HeadTop);
+
+    /// <summary>The mouth in world space (the speech bubble's tail points at it).</summary>
+    public Vector3 Mouth => Landmark(LookCanvas.Mouth);
+
+    /// <summary>A landmark of the look's canvas (pixels from its top) on the figure's centre line, in world space (the anchor without a figure).</summary>
+    private Vector3 Landmark(int canvasY) =>
+        figure != null ? figure.transform.TransformPoint(0f, LookCanvas.LocalY(canvasY), 0f) : anchor != null ? anchor.position : transform.position;
+
     private void Awake() => Clear();
 
     /// <summary>
