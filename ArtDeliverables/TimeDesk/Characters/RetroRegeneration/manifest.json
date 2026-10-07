@@ -1,0 +1,1700 @@
+{
+  "scope": "All regular traveller source layers and current 33 uniques, textured regeneration",
+  "complete": false,
+  "items": [
+    {
+      "name": "base_m_skin1_facea",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5bf9334d-e104-4a7a-82e3-cd187b5e991a.png",
+      "prompt": "Production BASE FIGURE for modular historical travellers. Reference 1 is the exact figure registration guide, use its landmark geometry and remove all guide lines/text. Reference 2 is the desired textured retro-anime RENDERING ONLY, not costume or identity. One ordinary adult man in his late twenties, bald smooth scalp, ears visible, no facial hair. Skin tone1 #F1D3C0 with natural form shadows. Everyday average slightly soft body, untrained arms and soft abdomen, no six-pack or hero physique, not a fashion model. Broad ordinary nose, softly rounded cheeks, slightly uneven brows, modest eyes, small subtle under-eye creases; dignified natural person, not caricature. Neutral expression, straight front view eyes to viewer. Arms relaxed slightly away from body with natural open empty hands. Bare feet. Only plain fully opaque light-grey fitted shorts to mid-thigh. Finely inked late-1980s anime character, subtle painted pigment texture inside skin and shorts, rich restrained cel-form shading, neutral even frontal white light, no directional illumination, no ground shadow. No hair clothes accessories text scenery. EXACTLY1024x1536 full canvas: bald scalp top y260, chin y424, shoulders y500, waist y760, hips y900, knees y1170, soles y1490; center x512. Follow guide locations, not reference2's larger head. Keep substantial green headroom. Background perfectly uniform pure green #00FF00 without grain. Safe x120..904. Whole body with toes visible. Deliver a single raw base_m_skin1_facea PNG source.",
+      "family": "base",
+      "pose": "neutral",
+      "path": "Raw/base_m_skin1_facea.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8acc80e2f37b36e5a6b65ab7733584890b7256f8e15bebb515f8a3130d48544c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin1_facea",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0792d141-d7c2-40d0-b936-e625a8aa9b15.png",
+      "prompt": "Production BASE FIGURE for modular historical traveller art. Reference1 is registration guide ONLY: preserve its coordinates, remove all lines labels. Reference2 is textured hand-drawn retro anime rendering reference ONLY, do not copy man or costume. One ordinary adult woman in her late twenties, bald smooth scalp, visible ears, neutral expression looking straight at viewer. Skin tone1 #F1D3C0. Average soft everyday physique with naturally full waist and thighs and modest shoulders, no tiny waist, no fashion-model proportions, no pinup curves or sexualized pose. Round cheeks, broad short nose, small expressive eyes, slightly asymmetrical eyebrows, ordinary pleasant but unglamorized face, no makeup. Clothing ONLY fully opaque plain light-grey strapless bandeau and plain light-grey fitted shorts ending mid-thigh, bare feet; this is a neutral production fitting figure. Front-facing, arms down relaxed slightly away from body, natural open empty hands, equal weight. Fine confident dark brown outlines, hand-painted late-1980s anime style, subtle skin/pigment texture, restrained rich cel-form shadows, no glossy skin. Neutral even front light, no cast shadow. EXACT1024x1536, centre512, bald skull top260, chin424, shoulders500, waist760, hips900, knees1170, soles1490. Leave guide's large top margin and all toes visible. No hair beard jewellery accessories text scenery. Uniform flat #00FF00 background. No grain outside figure. Single full-body base_f_skin1_facea.",
+      "family": "base",
+      "pose": "neutral",
+      "path": "Raw/base_f_skin1_facea.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6fae38ae768a380f00f8dae1352f8bb7e861afc57dd882c58baa60228c92f25d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_m_neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2ec70133-51c4-4421-9c50-69f0c102754f.png",
+      "prompt": "Create a technical magenta fitting mannequin from attached adult base figure. Preserve entire1024x1536 canvas, exact body outline, pose, head ears hands feet and their locations. Replace ALL skin AND underwear AND all internal shading with flat fully opaque solid magenta #FF00FF, making one continuous clothed-silhouette style fitting shape without anatomy detail. Remove underwear seams, chest details and other body rendering; no skin or grey remains. Keep only thin dark-magenta silhouette outline and simple tiny dark-magenta eye nose mouth chin registration marks. Background and limb gaps remain perfectly flat pure green #00FF00. No shading, grain, lighting, text or gradients anywhere. This is a production color-key template, NOT a finished person. Front facing same neutral arms down pose. No zoom or crop.",
+      "folder": "References",
+      "family": "mannequin",
+      "pose": "neutral",
+      "path": "References/mannequin_m_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2682f5735daab76a8982b092b96e056695209ec9493eaff9b16a63e9b9eff3dc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_f_neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e13ef367-f323-423a-839a-988f40345b05.png",
+      "prompt": "Create a technical magenta fitting mannequin from attached adult base figure. Preserve entire1024x1536 canvas, exact body outline, pose, head ears hands feet and their locations. Replace ALL skin AND underwear AND all internal shading with flat fully opaque solid magenta #FF00FF, making one continuous clothed-silhouette style fitting shape without anatomy detail. Remove underwear seams, chest details and other body rendering; no skin or grey remains. Keep only thin dark-magenta silhouette outline and simple tiny dark-magenta eye nose mouth chin registration marks. Background and limb gaps remain perfectly flat pure green #00FF00. No shading, grain, lighting, text or gradients anywhere. This is a production color-key template, NOT a finished person. Front facing same neutral arms down pose. No zoom or crop.",
+      "folder": "References",
+      "family": "mannequin",
+      "pose": "neutral",
+      "path": "References/mannequin_f_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "32adc4bf252e38f5aef93cc5fe83831becdf781faa5376c02bf14f0326957131",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin1_faceb",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 1,
+      "face": "b",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-baf831bc-92d2-4389-bc73-560c7df2d716.png",
+      "prompt": "Edit the attached production fitting figure. Keep the ENTIRE 1024x1536 canvas, full body pose, outer bald head contour, chin position, ears, grey underwear, hands, feet and exact framing. Change facial features to this ORIGINAL EVERYDAY PERSON: Different young adult around30: narrow cheeks, long noticeably crooked nose bridge, straight thick uneven brows, slightly close-set narrow eyes, subtly uneven mouth corners. Not handsome hero face, no caricature. Man, no facial hair. Skin base #F1D3C0, preserve this actual swatch not a lighter beauty treatment, matching neck body and hands. Bald scalp, no hair or accessories. Preserve finely inked textured retro-anime finish, subtle painted grain on skin and clothing only, neutral balanced frontal white lighting, local form shades. The purpose is interchangeable heads: no changes to head size or body geometry. No modern outfit, no theatrical light, no text. Solid pure #00FF00 green background, untextured. Full body not headshot; whole feet visible. head_m_skin1_faceb.",
+      "path": "Raw/head_m_skin1_faceb.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0da5ed127e2493579d311cb49a13c42f78cb59dbccc8384908fcc9c1cc374f26",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin1_facec",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 1,
+      "face": "c",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a992ab41-1f4f-443f-bb25-74693002e94d.png",
+      "prompt": "Edit the attached production fitting figure. Keep the ENTIRE 1024x1536 canvas, full body pose, outer bald head contour, chin position, ears, grey underwear, hands, feet and exact framing. Change facial features to this ORIGINAL EVERYDAY PERSON: Middle-aged50: full cheeks, broad bulbous nose, soft jaw with slight jowls, heavy low brows, small tired eyes, forehead and smile lines, ordinary unglamorized person. Man, no facial hair. Skin base #F1D3C0, preserve this actual swatch not a lighter beauty treatment, matching neck body and hands. Bald scalp, no hair or accessories. Preserve finely inked textured retro-anime finish, subtle painted grain on skin and clothing only, neutral balanced frontal white lighting, local form shades. The purpose is interchangeable heads: no changes to head size or body geometry. No modern outfit, no theatrical light, no text. Solid pure #00FF00 green background, untextured. Full body not headshot; whole feet visible. head_m_skin1_facec.",
+      "path": "Raw/head_m_skin1_facec.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "768addb6fcad0f2ca0e4d9bb7e80fb087924d12f17e38dc1f6eae10413582a2b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin1_faced",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 1,
+      "face": "d",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c08b405b-e973-4462-897d-6d56632bdff3.png",
+      "prompt": "Edit the attached production fitting figure. Keep the ENTIRE 1024x1536 canvas, full body pose, outer bald head contour, chin position, ears, grey underwear, hands, feet and exact framing. Change facial features to this ORIGINAL EVERYDAY PERSON: Elderly72: hollow temples and cheeks, soft sagging jaw, long broad-tipped nose, thin brows, small eyes with heavy wrinkled lids, visible forehead and cheek wrinkles. Dignified ordinary elder, not hero. Man, no facial hair. Skin base #F1D3C0, preserve this actual swatch not a lighter beauty treatment, matching neck body and hands. Bald scalp, no hair or accessories. Preserve finely inked textured retro-anime finish, subtle painted grain on skin and clothing only, neutral balanced frontal white lighting, local form shades. The purpose is interchangeable heads: no changes to head size or body geometry. No modern outfit, no theatrical light, no text. Solid pure #00FF00 green background, untextured. Full body not headshot; whole feet visible. head_m_skin1_faced.",
+      "path": "Raw/head_m_skin1_faced.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "54230d05557571cb5d3d5aebc31b39d0ef93e84ec0abce243cca77c9057f1bca",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin2_facea",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 2,
+      "face": "a",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-022c0b42-25bd-422d-b3ea-9297d1a6b836.png",
+      "prompt": "Edit the attached production fitting figure. Keep the ENTIRE 1024x1536 canvas, full body pose, outer bald head contour, chin position, ears, grey underwear, hands, feet and exact framing. Change facial features to this ORIGINAL EVERYDAY PERSON: Young adult around25: softly rounded cheeks, broad short nose, slightly uneven curved eyebrows, modest round eyes, ordinary rather than glamorous. Man, no facial hair. Skin base #E0B394, preserve this actual swatch not a lighter beauty treatment, matching neck body and hands. Bald scalp, no hair or accessories. Preserve finely inked textured retro-anime finish, subtle painted grain on skin and clothing only, neutral balanced frontal white lighting, local form shades. The purpose is interchangeable heads: no changes to head size or body geometry. No modern outfit, no theatrical light, no text. Solid pure #00FF00 green background, untextured. Full body not headshot; whole feet visible. base_m_skin2_facea.",
+      "path": "Raw/base_m_skin2_facea.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "926c62103316d77f08a3cc03211579ac7827c03f90af8f4481cb358e5d9f6027",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin2_faceb",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 2,
+      "face": "b",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cb8d9a66-c0d8-4fb7-8e4f-ca5a35300b60.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, grey underwear, pose, hands, feet and all framing. Change ONLY skin tone and internal facial features. ORIGINAL everyday man; Young adult30: narrow cheeks, long crooked nose bridge, straight thick uneven brows, closer-set narrow eyes, uneven mouth corners, understated facial asymmetry. Skin base #E0B394, matching head neck hands legs. No skin lightening. No hair beard makeup jewellery or real costume. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin2_faceb.",
+      "path": "Raw/head_m_skin2_faceb.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "12643fd796da1ae9fb5785c500c38f9ef6a077387ae197f6127230d33ca84fdf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin2_facec",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 2,
+      "face": "c",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4d2a24ad-8ac9-4e88-9bac-a348558b1883.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, grey underwear, pose, hands, feet and all framing. Change ONLY skin tone and internal facial features. ORIGINAL everyday man; Middle-aged50: fuller cheeks, broad bulbous nose, slight jowls, heavy low brows, small tired eyes, forehead lines and deep smile lines. No glamour. Skin base #E0B394, matching head neck hands legs. No skin lightening. No hair beard makeup jewellery or real costume. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin2_facec.",
+      "path": "Raw/head_m_skin2_facec.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "00fb74b02da6c04479f690de531f305ed88730dbc0c89b57ce72ecc41c62058f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin2_faced",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 2,
+      "face": "d",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d2be77f4-1a32-428e-ad62-f65ec6281f3a.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, grey underwear, pose, hands, feet and all framing. Change ONLY skin tone and internal facial features. ORIGINAL everyday man; Elderly72: hollow temples and cheeks, sagging jaw, long broad-tipped nose, thin brows, small heavily hooded eyes, age wrinkles. Dignified, no caricature. Skin base #E0B394, matching head neck hands legs. No skin lightening. No hair beard makeup jewellery or real costume. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin2_faced.",
+      "path": "Raw/head_m_skin2_faced.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f03e8fb607fef30ae0ec9310d983d5da2814f9d406400a01df10752c4c52b3bd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin3_facea",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 3,
+      "face": "a",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b6e7913f-0a71-493c-8180-5eed4cee5387.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, grey underwear, pose, hands, feet and all framing. Change ONLY skin tone and internal facial features. ORIGINAL everyday man; Young adult25: soft round cheeks, broad short nose, uneven curved brows, modest round eyes; ordinary person, no idealized beauty. Skin base #C39A6B, matching head neck hands legs. No skin lightening. No hair beard makeup jewellery or real costume. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename base_m_skin3_facea.",
+      "path": "Raw/base_m_skin3_facea.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "949fee7f0c53eb0455af2bac580c253a29d4034b9334d61b09d669fcece9c262",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin3_faceb",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 3,
+      "face": "b",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7035dcba-1a9d-4489-869a-4fb12da48eb3.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday man; Young adult30: narrow cheeks, long crooked nose bridge, straight thick uneven brows, closer-set narrow eyes, uneven mouth corners, understated facial asymmetry. Skin base #C39A6B, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin3_faceb.",
+      "path": "Raw/head_m_skin3_faceb.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1f8ae07d0361194b83770a1b000e9fb5842d5fa77a0ce01881ebc394dc30f469",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin3_facec",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 3,
+      "face": "c",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-da474fd0-6dbf-43d3-90f2-4e1629e71828.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday man; Middle-aged50: fuller cheeks, broad bulbous nose, slight jowls, heavy low brows, small tired eyes, forehead lines and deep smile lines. No glamour. Skin base #C39A6B, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin3_facec.",
+      "path": "Raw/head_m_skin3_facec.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d72eb710a91f45bd9253a619052f97e6dcd79c274e3e04cb0f639793bd410869",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin3_faced",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 3,
+      "face": "d",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f86310e8-4a3f-404f-b128-dc60ea84efdb.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday man; Elderly72: hollow temples and cheeks, sagging jaw, long broad-tipped nose, thin brows, small heavily hooded eyes, age wrinkles. Dignified, no caricature. Skin base #C39A6B, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin3_faced.",
+      "path": "Raw/head_m_skin3_faced.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6aeea086b3d7326ca53a9e8785880eabaf9f3e5a97ccb568dde0479bd8299b2c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin4_facea",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 4,
+      "face": "a",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a1c3712f-1e75-4cc0-86e4-2746a1b66a4d.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday man; Young adult25: soft round cheeks, broad short nose, uneven curved brows, modest round eyes; ordinary person, no idealized beauty. Skin base #94653F, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename base_m_skin4_facea.",
+      "path": "Raw/base_m_skin4_facea.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c3a70d89aa23140f3bf4ffd5fbb0d21ffb08941fbc36f4f2527211e2d6c9aa94",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin4_faceb",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 4,
+      "face": "b",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-84f88ca0-eb97-41f7-9af5-7262db0c2971.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday man; Young adult30: narrow cheeks, long crooked nose bridge, straight thick uneven brows, closer-set narrow eyes, uneven mouth corners, understated facial asymmetry. Skin base #94653F, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin4_faceb.",
+      "path": "Raw/head_m_skin4_faceb.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "68276674feb2940fdf0c128b3699d034e90b2ec849396d19ded8db095d06c7bc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin4_facec",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 4,
+      "face": "c",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d1017a96-75ee-4673-ae4a-4c699e358073.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday man; Middle-aged50: fuller cheeks, broad bulbous nose, slight jowls, heavy low brows, small tired eyes, forehead lines and deep smile lines. No glamour. Skin base #94653F, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin4_facec.",
+      "path": "Raw/head_m_skin4_facec.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3f2f455cd69a8916f78b535c42680b2808e542795a1c97d80c8a6a281ed1dfc1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin4_faced",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 4,
+      "face": "d",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fd224f7c-caa4-4d2b-8ee5-28dd5d2afe43.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday man; Elderly72: hollow temples and cheeks, sagging jaw, long broad-tipped nose, thin brows, small heavily hooded eyes, age wrinkles. Dignified, no caricature. Skin base #94653F, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin4_faced.",
+      "path": "Raw/head_m_skin4_faced.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d79e38030a92b05358fe3fe6bdd7fcc90dab55662f57db3c22beeb17650c8d1c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_m_skin5_facea",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 5,
+      "face": "a",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3c171ab4-aa48-4f3c-a77f-0f3916026837.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday man; Young adult25: soft round cheeks, broad short nose, uneven curved brows, modest round eyes; ordinary person, no idealized beauty. Skin base #5C3A24, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename base_m_skin5_facea.",
+      "path": "Raw/base_m_skin5_facea.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2d65bb4faad1123a95d5bab9a526ccf458f36e52295fc4e55914ad5f13f503d4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin5_faceb",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 5,
+      "face": "b",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-497be336-9358-43b4-b4c3-9546c3a3abca.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday man; Young adult30: narrow cheeks, long crooked nose bridge, straight thick uneven brows, closer-set narrow eyes, uneven mouth corners, understated facial asymmetry. Skin base #5C3A24, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin5_faceb.",
+      "path": "Raw/head_m_skin5_faceb.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "eddf725e2edd56fab147b283da3f799784d567a42ec68d72f999d9141065958d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin5_facec",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 5,
+      "face": "c",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-96456471-499e-4d0d-8762-8b8f176f5e60.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday man; Middle-aged50: fuller cheeks, broad bulbous nose, slight jowls, heavy low brows, small tired eyes, forehead lines and deep smile lines. No glamour. Skin base #5C3A24, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin5_facec.",
+      "path": "Raw/head_m_skin5_facec.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b086365bbedb210a1ce96b7f90d0f1e918c3226bbb5f30df4fd4d1543eba3ba7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_m_skin5_faced",
+      "family": "base",
+      "status": "pending",
+      "gender": "m",
+      "skin": 5,
+      "face": "d",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a7d755ec-cae9-4e2d-879d-68d8628d89e9.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday man; Elderly72: hollow temples and cheeks, sagging jaw, long broad-tipped nose, thin brows, small heavily hooded eyes, age wrinkles. Dignified, no caricature. Skin base #5C3A24, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_m_skin5_faced.",
+      "path": "Raw/head_m_skin5_faced.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b854b65556c69bc42fadd72a3b69539c0b84a83b6a71c7e680599c6bc068a68f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin1_faceb",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "b",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0fba18cf-45d6-4aeb-a628-3d324f45a434.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Young adult30: narrow cheeks, long crooked nose bridge, straight thick uneven brows, closer-set narrow eyes, uneven mouth corners, understated facial asymmetry. Skin base #F1D3C0, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin1_faceb.",
+      "path": "Raw/head_f_skin1_faceb.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5a81c7fa97d92c578702d0f2c57cbbc5e1617a598a60b6a3d2af0e108c6116fd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin1_facec",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "c",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1d28a4bd-ada8-44b5-bf0f-58fa64395493.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Middle-aged50: fuller cheeks, broad bulbous nose, slight jowls, heavy low brows, small tired eyes, forehead lines and deep smile lines. No glamour. Skin base #F1D3C0, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin1_facec.",
+      "path": "Raw/head_f_skin1_facec.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c338d93996a7a9433d8dca2f0133eb6ea71b957cfa0d18020fe113dc41a707f7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin1_faced",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 1,
+      "face": "d",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bf3cb4df-127f-4d09-9abc-62f32181e8e5.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Elderly72: hollow temples and cheeks, sagging jaw, long broad-tipped nose, thin brows, small heavily hooded eyes, age wrinkles. Dignified, no caricature. Skin base #F1D3C0, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin1_faced.",
+      "path": "Raw/head_f_skin1_faced.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3f10a82fda546d4c7563f66ade5804dab6a5f6876efa3fdfff76d04b8fa30f11",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin2_facea",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 2,
+      "face": "a",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-584da954-54f4-4521-af40-b2283ac6d798.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Young adult25: soft round cheeks, broad short nose, uneven curved brows, modest round eyes; ordinary person, no idealized beauty. Skin base #E0B394, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename base_f_skin2_facea.",
+      "path": "Raw/base_f_skin2_facea.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ada606f44cdec967243072a95f3e230917060e3cec20da0e340eb700c2efca15",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin2_faceb",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 2,
+      "face": "b",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-18f76853-e9c1-4a18-bbae-d6c52c87c013.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Young adult30: narrow cheeks, long crooked nose bridge, straight thick uneven brows, closer-set narrow eyes, uneven mouth corners, understated facial asymmetry. Skin base #E0B394, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin2_faceb.",
+      "path": "Raw/head_f_skin2_faceb.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c370a56a28397d8aafab24bc78a1095b6370e1a99c9e158777d5a84b15eac706",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin2_facec",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 2,
+      "face": "c",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0fb729ee-03cd-462a-87d3-078385da4925.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Middle-aged50: fuller cheeks, broad bulbous nose, slight jowls, heavy low brows, small tired eyes, forehead lines and deep smile lines. No glamour. Skin base #E0B394, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin2_facec.",
+      "path": "Raw/head_f_skin2_facec.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "17c1824421f0044a274bd3dcd4598990d8f3eaa3846df5de7ad82e361c849c5d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin2_faced",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 2,
+      "face": "d",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0b7f2985-6aba-490f-bb23-a884b7942f0d.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Elderly72: hollow temples and cheeks, sagging jaw, long broad-tipped nose, thin brows, small heavily hooded eyes, age wrinkles. Dignified, no caricature. Skin base #E0B394, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin2_faced.",
+      "path": "Raw/head_f_skin2_faced.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c7db907eb2799fe705b8564ab22761bbb160ed6e18d5b3ef58d53f47a7d76c17",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin3_facea",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 3,
+      "face": "a",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5e1c2725-86c4-4498-a93d-ea1d42c47e4b.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Young adult25: soft round cheeks, broad short nose, uneven curved brows, modest round eyes; ordinary person, no idealized beauty. Skin base #C39A6B, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename base_f_skin3_facea.",
+      "path": "Raw/base_f_skin3_facea.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fbbf524a6578e9fce0586003875469e57492953a365370309cc76d57a60acf3e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin3_faceb",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 3,
+      "face": "b",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-cea90778-b539-47fd-921d-7d446c6304ce.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Young adult30: narrow cheeks, long crooked nose bridge, straight thick uneven brows, closer-set narrow eyes, uneven mouth corners, understated facial asymmetry. Skin base #C39A6B, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin3_faceb.",
+      "path": "Raw/head_f_skin3_faceb.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3f64a7f9929d95e6f16fa487a738245fd57c1d985d15fe082f225433a5b212f7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin3_facec",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 3,
+      "face": "c",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bdf997b3-d51b-418d-8964-118a0d1826f9.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Middle-aged50: fuller cheeks, broad bulbous nose, slight jowls, heavy low brows, small tired eyes, forehead lines and deep smile lines. No glamour. Skin base #C39A6B, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin3_facec.",
+      "path": "Raw/head_f_skin3_facec.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5ed1d2f2ba30acf2ead02f31cf9db4e3570c2153dd1d1da10adae648b74b4fe4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin3_faced",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 3,
+      "face": "d",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8141f422-8fde-49a1-ab9c-9011d0e64454.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Elderly72: hollow temples and cheeks, sagging jaw, long broad-tipped nose, thin brows, small heavily hooded eyes, age wrinkles. Dignified, no caricature. Skin base #C39A6B, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin3_faced.",
+      "path": "Raw/head_f_skin3_faced.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "156af7886b1f89b9f88fb1acefaef1f1bf112576b2baf7674b0cef7b4c68d7ca",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin4_facea",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 4,
+      "face": "a",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2b3c8cb0-4cee-422f-a98c-c64b0f3d2739.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Young adult25: soft round cheeks, broad short nose, uneven curved brows, modest round eyes; ordinary person, no idealized beauty. Skin base #94653F, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename base_f_skin4_facea.",
+      "path": "Raw/base_f_skin4_facea.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2af7161464cb3533ab7d3965eddefcf3234619007d280158357bb52cd220c06c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin4_faceb",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 4,
+      "face": "b",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-481169b1-a770-421c-ab9e-90ba80c5a55a.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Young adult30: narrow cheeks, long crooked nose bridge, straight thick uneven brows, closer-set narrow eyes, uneven mouth corners, understated facial asymmetry. Skin base #94653F, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin4_faceb.",
+      "path": "Raw/head_f_skin4_faceb.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "65ea6c206aa586654f7b3dc2c85e6015e881121cf8eb681895f6ca2ab52ddd7f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin4_facec",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 4,
+      "face": "c",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6cbfeec8-69b5-4d11-873a-96599144fc3e.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Middle-aged50: fuller cheeks, broad bulbous nose, slight jowls, heavy low brows, small tired eyes, forehead lines and deep smile lines. No glamour. Skin base #94653F, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin4_facec.",
+      "path": "Raw/head_f_skin4_facec.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ed99fde638e2f403818501c9923e57950f8df5e6fd3df19cd71412f45b5af2ce",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin4_faced",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 4,
+      "face": "d",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-99bd5e04-df72-4b04-bd49-28d4587e4190.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Elderly72: hollow temples and cheeks, sagging jaw, long broad-tipped nose, thin brows, small heavily hooded eyes, age wrinkles. Dignified, no caricature. Skin base #94653F, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin4_faced.",
+      "path": "Raw/head_f_skin4_faced.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7af45e941f5e8b5dd961239ccf4aa74b6cbf17ccd9548e8bb8105ae1ed013cbf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "base_f_skin5_facea",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 5,
+      "face": "a",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-19bd900f-ebd9-44eb-aab4-d5ff291ed976.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Young adult25: soft round cheeks, broad short nose, uneven curved brows, modest round eyes; ordinary person, no idealized beauty. Skin base #5C3A24, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename base_f_skin5_facea.",
+      "path": "Raw/base_f_skin5_facea.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e1519be11a8a32a11a884c075f5d4dfe7ee69ac557d36167ab92fae60ceb48e5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin5_faceb",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 5,
+      "face": "b",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4224dbfa-8b34-434d-a7dd-dba8436a5e77.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Young adult30: narrow cheeks, long crooked nose bridge, straight thick uneven brows, closer-set narrow eyes, uneven mouth corners, understated facial asymmetry. Skin base #5C3A24, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin5_faceb.",
+      "path": "Raw/head_f_skin5_faceb.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3c2c89f5ff1a4c974cb49b5d1d9774f21716dcb8b5b1656898a41443dabfafce",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin5_facec",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 5,
+      "face": "c",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-45380e35-3a2e-432d-8b6a-195fbc01a5a1.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Middle-aged50: fuller cheeks, broad bulbous nose, slight jowls, heavy low brows, small tired eyes, forehead lines and deep smile lines. No glamour. Skin base #5C3A24, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin5_facec.",
+      "path": "Raw/head_f_skin5_facec.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "aff5ec3f9504d7afda349ecc507fa4b3291d06f394e27e0675b0a2abd076abd3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "head_f_skin5_faced",
+      "family": "base",
+      "status": "pending",
+      "gender": "f",
+      "skin": 5,
+      "face": "d",
+      "pose": "neutral",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-47adddde-a547-4d52-a026-846b167b7fd9.png",
+      "prompt": "Edit the attached production fitting figure. Preserve ENTIRE1024x1536 full-body canvas, bald head outer contour and feature locations, ears, chin, body shape, pose, hands, feet and all framing. Cover the body with a plain opaque light-grey long-sleeved crew-neck fitting shirt and plain opaque grey ankle-length trousers. The production deliverable extracted from this image is ONLY THE HEAD; its body is discarded. Change skin tone and internal facial features. ORIGINAL everyday woman; Elderly72: hollow temples and cheeks, sagging jaw, long broad-tipped nose, thin brows, small heavily hooded eyes, age wrinkles. Dignified, no caricature. Skin base #5C3A24, matching head neck hands legs. No skin lightening. No hair beard makeup or jewellery. The simple grey shirt and trousers are neutral calibration clothing, not historical wardrobe. Preserve textured hand-painted retro anime rendering, fine pigment grain only inside figure, neutral even front light and local form shadows. Do not idealize or beautify face. No text, background shadow or scenery; perfectly uniform #00FF00 green. Whole figure remains visible, no portrait crop. Filename head_f_skin5_faced.",
+      "path": "Raw/head_f_skin5_faced.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6fd58f223c58f61a713a72c9d19b73c9478a5b698c6849bbeb887ffebc562e22",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_m_explaining_a",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "m",
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-93d1ed20-1b4e-4df6-a696-30b8f94cc26f.png",
+      "prompt": "Edit this technical fitting mannequin into pose explaining_a: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_m_explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1d66b1ae6dbdd42fe4ffb29db6875f3e040ce4a7be261ffeacb28bf66ae5719c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_m_explaining_b",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "m",
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2f3ab9e5-9402-471b-9ebf-f0742c6ced4f.png",
+      "prompt": "Edit this technical fitting mannequin into pose explaining_b: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_m_explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "aea4e500da0762e482dd1405b6363fb1e5cfc10621e6da89e38a9ba78ec1194c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_m_explaining_c",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "m",
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e2b387da-83de-416c-aba4-ae009727f56e.png",
+      "prompt": "Edit this technical fitting mannequin into pose explaining_c: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_m_explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cb5cbca902247d8d514b40c6250ecb2909839fbf44e7df6b5a4ad8d46828c306",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_m_thinking_a",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "m",
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-452b1943-49f6-4dbe-a6fd-81862dda989a.png",
+      "prompt": "Edit this technical fitting mannequin into pose thinking_a: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_m_thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "d942adbf72b9de6987177969a3874f02386737ece18ec672a54bbf06252bf9f5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_m_thinking_b",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "m",
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6580334c-abe1-45b9-849e-8db977280e74.png",
+      "prompt": "Edit this technical fitting mannequin into pose thinking_b: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_m_thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c324bd3aa8ef47531861d07dfa1abd98d8ecdbce14f26cd40e987b04a6f14712",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_m_thinking_c",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "m",
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-049ac5c3-af92-4798-9b0c-f2468a70e172.png",
+      "prompt": "Edit this technical fitting mannequin into pose thinking_c: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_m_thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "115a161ab310eed4c8da86a784a4618ae78c08feb92059b61b1b5ea53c9d0154",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_m_objecting_a",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "m",
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-17f6aa0c-88e3-464b-b32e-b66ee2866586.png",
+      "prompt": "Edit this technical fitting mannequin into pose objecting_a: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_m_objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b3555f2e7634462e220933cf12dd40524b758854ae171e2b4a99e89b3e1cc40a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_m_objecting_b",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "m",
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-315892e8-9d12-4efa-b4c6-24fb457e7498.png",
+      "prompt": "Edit this technical fitting mannequin into pose objecting_b: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_m_objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dcca9d73f9c0f072fc3590e0a8d2901264dd6251d4d275a695a3a0bd2366e0d3",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_m_objecting_c",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "m",
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-40b21836-24c9-47ca-a42f-d43b43d0bb6e.png",
+      "prompt": "Edit this technical fitting mannequin into pose objecting_c: RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_m_objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9335b2ba633fa00d3d220d7b2daac4581302bbb0f6ceed71f5db9dea00654dd9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_f_explaining_a",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "f",
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-54e1b3e3-a187-46c4-8dc6-dce3887e0110.png",
+      "prompt": "Edit this technical fitting mannequin into pose explaining_a: RIGHT elbow open, right palm up at lower chest, left arm relaxed. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_f_explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0939654df73b8940314ec8ebc92f83efe0cc020af359a78f5aee4c9bce16d47a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_f_explaining_b",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "f",
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7dc8333e-3b9b-46e4-b5c5-748b73c80a50.png",
+      "prompt": "Edit this technical fitting mannequin into pose explaining_b: BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_f_explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a74c9c1f8345a7bd16086e0edf28576f3d0c3e8990db987caf3ea5a986e74e5a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_f_explaining_c",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "f",
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-dd36241f-8e43-4d2f-bb3a-302bcfa7fef6.png",
+      "prompt": "Edit this technical fitting mannequin into pose explaining_c: LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_f_explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7fafc8e400649a488c1ea4e94319608f2c1e0976722baf56f4a66ddf726173d2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_f_thinking_a",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "f",
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-84272ade-b525-48cf-8619-5ca3a051fdc9.png",
+      "prompt": "Edit this technical fitting mannequin into pose thinking_a: RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_f_thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9a8d49edac29919c9eea5f64724a238d95c94c79bd9bc60f78dafd0587aabf77",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_f_thinking_b",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "f",
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b48dd541-64d8-4b03-8a8d-cd183d9d3f44.png",
+      "prompt": "Edit this technical fitting mannequin into pose thinking_b: LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_f_thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "67e1515f27da858a5a3e3074d92d98a24c87ba079e8c24a133be5bc96a4d065b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_f_thinking_c",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "f",
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0d301226-1d4d-48ec-9804-040bf6275093.png",
+      "prompt": "Edit this technical fitting mannequin into pose thinking_c: hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_f_thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "482666a7da08c492d8c68d6ed5d21de35d82a52814238c2e3a7afb381eaded42",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_f_objecting_a",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "f",
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9442894a-167e-48bb-bbeb-c99d1a7343ba.png",
+      "prompt": "Edit this technical fitting mannequin into pose objecting_a: RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_f_objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8f6bf7d374475418ce7523ed937f9f0df5daa3e9d457c4024994b6b732270303",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_f_objecting_b",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "f",
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6c68bf5e-e2d7-47ed-a2d6-f30f2b5790f0.png",
+      "prompt": "Edit this technical fitting mannequin into pose objecting_b: BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Anatomical RIGHT is viewer LEFT. Keep the same head center, head contour, torso, hips, legs and foot positions, full 1024x1536 canvas. Only change arms and hands. Natural clear five-finger hands and coherent shoulders elbows wrists. Keep all shapes fully opaque flat magenta #FF00FF with very thin dark magenta outlines and tiny face registration marks; no human skin or clothing detail. Uniform green #00FF00 outside and between limbs. No gradient shadow texture text or props. This is a production pose registration template. Do not crop or zoom.",
+      "path": "Raw/mannequin_f_objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6c0994ea0465e15b39215b2fc78c5d41a8f2d2496b21537cf84eb3b51b12e3ba",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "pleated linen kilt",
+      "details": "Subject: man of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Calf-length wrap-around kilt of fine bleached white linen, knotted at the waist, with the overlapping front edge falling in a slanting, finely pleated panel. Bare torso; plain papyrus or leather sandals. Everything is white or ecru linen.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_m_egypt_ancient.",
+      "flags": {
+        "label": "pleated linen kilt"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-fbf78b9d-dc29-4630-ae70-13626725ee3a.png",
+      "prompt": "Production modular historical clothing asset outfit_m_egypt_ancient. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Calf-length wrap-around kilt of fine bleached white linen, knotted at the waist, with the overlapping front edge falling in a slanting, finely pleated panel. Bare torso; plain papyrus or leather sandals. Everything is white or ecru linen.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_m_egypt_ancient. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/outfit_m_egypt_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "017c5807f2f00f6131b9f37d810ac979442b82eebe49c5c245d8238357747d8e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "pleated linen kilt",
+      "details": "Subject: man of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Calf-length wrap-around kilt of fine bleached white linen, knotted at the waist, with the overlapping front edge falling in a slanting, finely pleated panel. Bare torso; plain papyrus or leather sandals. Everything is white or ecru linen.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_m_egypt_ancient.",
+      "flags": {
+        "label": "pleated linen kilt"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-eca8a0ce-7d7e-46ca-bff8-1ebac825824b.png",
+      "prompt": "Edit reference1, the finished Egyptian linen kilt outfit, into the arm pose shown in reference2. Preserve the EXACT kilt knot centered at waist, same slanted overlapping panel, hem, linen texture and identical broad-strap sandals from reference1. Since only arms move, do not change a single clothing design detail, leg or foot position. Use reference2 only for arm pose: right palm upward, left arm down. Remove ALL anatomical internal lines from magenta torso: no chest, abdomen or navel marks. All exposed mannequin shape is flat opaque #FF00FF except thin silhouette/hand outlines and tiny face alignment marks. Background uniform green #00FF00. Same full1024x1536 canvas. No crop, new accessories or lighting change.",
+      "path": "Raw/outfit_m_egypt_ancient__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a0bc2d65feb66f747e43b1b5ae221fba0ad2dc94dcd19fc54d2281c56f1594eb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "pleated linen kilt",
+      "details": "Subject: man of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Calf-length wrap-around kilt of fine bleached white linen, knotted at the waist, with the overlapping front edge falling in a slanting, finely pleated panel. Bare torso; plain papyrus or leather sandals. Everything is white or ecru linen.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_m_egypt_ancient.",
+      "flags": {
+        "label": "pleated linen kilt"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-93f207bf-288f-420f-aa9d-4b168b041c8e.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_ancient__thinking_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Calf-length wrap-around kilt of fine bleached white linen, knotted at the waist, with the overlapping front edge falling in a slanting, finely pleated panel. Bare torso; plain papyrus or leather sandals. Everything is white or ecru linen.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_m_egypt_ancient. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_ancient__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9234f14d8c8330fa772288d6b4c2e342bb63519084fae0ea2cd18fbd9d982f55",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_ancient__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "pleated linen kilt",
+      "details": "Subject: man of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Calf-length wrap-around kilt of fine bleached white linen, knotted at the waist, with the overlapping front edge falling in a slanting, finely pleated panel. Bare torso; plain papyrus or leather sandals. Everything is white or ecru linen.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_m_egypt_ancient.",
+      "flags": {
+        "label": "pleated linen kilt"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-053f40c2-40a7-4629-a2cb-add46ba81393.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_ancient__objecting_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Calf-length wrap-around kilt of fine bleached white linen, knotted at the waist, with the overlapping front edge falling in a slanting, finely pleated panel. Bare torso; plain papyrus or leather sandals. Everything is white or ecru linen.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_m_egypt_ancient. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_ancient__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "c713dbd7c955133a71ac6e2c99355c09306000b1fa34ac945b0f5393089899ac",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_egypt_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "bobbed wig",
+      "details": "Subject: man of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Official's bobbed wig: straight black wig cut bluntly at shoulder length with a short straight fringe, falling over the ears or tucked behind them (head shaved underneath)\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw hair_m_egypt_ancient.",
+      "flags": {
+        "label": "bobbed wig",
+        "wig": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f04819f6-728d-4209-b85e-308aa5d26a9e.png",
+      "prompt": "Production modular historical clothing asset hair_m_egypt_ancient. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Official's bobbed wig: straight black wig cut bluntly at shoulder length with a short straight fringe, falling over the ears or tucked behind them (head shaved underneath)\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw hair_m_egypt_ancient. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/hair_m_egypt_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b0de6f0792d3422037748d8d87e17292ba904632f8c6dd5f06e7497105eacc73",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_egypt_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "wesekh collar",
+      "details": "Subject: man of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Wesekh broad collar: a flat semicircular collar of many rows of faience beads (blue-leaning turquoise, lapis blue, carnelian red, gold) with a row of teardrop pendants on the outer edge, covering the upper chest and shoulders\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw accessory_m_egypt_ancient.",
+      "flags": {
+        "label": "wesekh collar",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-8ba6b794-3d61-49f5-b59c-b6aeaf933cab.png",
+      "prompt": "Production modular historical clothing asset accessory_m_egypt_ancient. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested accessory on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Wesekh broad collar: a flat semicircular collar of many rows of faience beads (blue-leaning turquoise, lapis blue, carnelian red, gold) with a row of teardrop pendants on the outer edge, covering the upper chest and shoulders\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw accessory_m_egypt_ancient. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/accessory_m_egypt_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "354607e41683cd0f57761920b87a96009775e87e3e7091b265c634523d12855f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "linen sheath dress",
+      "details": "Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Ankle-length, close-fitting sheath dress of fine white linen that covers the bust and is held up by two broad shoulder straps; papyrus sandals or barefoot. No overgarment.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_f_egypt_ancient.",
+      "flags": {
+        "label": "linen sheath dress"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f100f2f7-2429-4dd3-90ec-5c326a417f57.png",
+      "prompt": "Production modular historical clothing asset outfit_f_egypt_ancient. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Ankle-length, close-fitting sheath dress of fine white linen that covers the bust and is held up by two broad shoulder straps; papyrus sandals or barefoot. No overgarment.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_f_egypt_ancient. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/outfit_f_egypt_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7402bd43e2e1cf32becbae981cc86b3da16d14197bcba20e1641c830a946cbbc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "linen sheath dress",
+      "details": "Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Ankle-length, close-fitting sheath dress of fine white linen that covers the bust and is held up by two broad shoulder straps; papyrus sandals or barefoot. No overgarment.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_f_egypt_ancient.",
+      "flags": {
+        "label": "linen sheath dress"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-19934145-710b-4179-a080-ac26ddb71736.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_ancient__explaining_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Ankle-length, close-fitting sheath dress of fine white linen that covers the bust and is held up by two broad shoulder straps; papyrus sandals or barefoot. No overgarment.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_f_egypt_ancient. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_ancient__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0fea8b4827468f5603662aab672b627e7cefb358ba32c16608fe1588e5c03a5c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "linen sheath dress",
+      "details": "Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Ankle-length, close-fitting sheath dress of fine white linen that covers the bust and is held up by two broad shoulder straps; papyrus sandals or barefoot. No overgarment.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_f_egypt_ancient.",
+      "flags": {
+        "label": "linen sheath dress"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bea17c18-cd83-44e7-83e5-722f7993b16b.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_ancient__thinking_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Ankle-length, close-fitting sheath dress of fine white linen that covers the bust and is held up by two broad shoulder straps; papyrus sandals or barefoot. No overgarment.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_f_egypt_ancient. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_ancient__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "948782b2acb9f7a18fb79bcd03ce13b8a7cb2f351f49ee11aa5a177ddd307de1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_ancient__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "linen sheath dress",
+      "details": "Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Ankle-length, close-fitting sheath dress of fine white linen that covers the bust and is held up by two broad shoulder straps; papyrus sandals or barefoot. No overgarment.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_f_egypt_ancient.",
+      "flags": {
+        "label": "linen sheath dress"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_f_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-438b247d-3a2e-4e7b-9db8-9e385f67c05c.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_ancient__objecting_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Ankle-length, close-fitting sheath dress of fine white linen that covers the bust and is held up by two broad shoulder straps; papyrus sandals or barefoot. No overgarment.\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw outfit_f_egypt_ancient. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_ancient__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2167008652fe3257630e22c75699297da903b2a70cdba408e696b89d05c20c63",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_egypt_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "tripartite wig",
+      "details": "",
+      "flags": {
+        "label": "tripartite wig",
+        "wig": true,
+        "back": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d7f7e0c7-d7c1-4e2c-a333-7b37014ee250.png",
+      "prompt": "Production modular historical clothing asset hair_f_egypt_ancient. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized.  Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/hair_f_egypt_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e3e00351f8c895bb3fd22eec142aabc1c38bba057a9c0bed43fa3ebe2ff502f4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_egypt_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "lotus fillet",
+      "details": "Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Thin floral fillet: a narrow band of blue-lotus petals tied round the wig, with a single lotus bud over the forehead\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw headwear_f_egypt_ancient.",
+      "flags": {
+        "label": "lotus fillet"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a8b1f40e-3b43-4596-b348-70a941cac1ba.png",
+      "prompt": "Production modular historical clothing asset headwear_f_egypt_ancient. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested headwear on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Thin floral fillet: a narrow band of blue-lotus petals tied round the wig, with a single lotus bud over the forehead\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw headwear_f_egypt_ancient. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/headwear_f_egypt_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9a80b89161e0e9ff87cb48789f3b8d2c0eb0158dd6139053dd45d51eb1369df4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_egypt_ancient",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "country": "egypt",
+      "era": "ancient",
+      "label": "wesekh collar",
+      "details": "Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Wesekh broad collar of rows of blue-leaning turquoise, lapis, carnelian and gold faience beads with teardrop pendants\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw accessory_f_egypt_ancient.",
+      "flags": {
+        "label": "wesekh collar",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_egypt_ancient",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7090fe23-8f48-443a-8ce5-29fb5fb79baf.png",
+      "prompt": "Production modular historical clothing asset accessory_f_egypt_ancient. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested accessory on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: woman of New Kingdom Egypt; Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood).\nDraw: Wesekh broad collar of rows of blue-leaning turquoise, lapis, carnelian and gold faience beads with teardrop pendants\nAvoid: nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine); false beard, crook and flail; Hollywood 'Cleopatra' styling or gold lame; sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion); perfume/wax cones on the head (banquet-only, and they read as a hat); Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed); coloured or fringed wool wraps and long beards (read as Mesopotamia); ankh or god emblems as ornaments; mummy wrappings, pyramids or sphinx props\nOutput one full-canvas raw accessory_f_egypt_ancient. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/accessory_f_egypt_ancient.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e735305ea382f7b49bea3d1d867f14542150c02f39f709685963d2c78eec78a5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "qamis and farajiyya",
+      "details": "Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Ankle-length pale linen qamis under an open, front-opening farajiyya, the long outer robe of Mamluk scholars, judges and scribes. The farajiyya is bottle green, brown or dark blue wool (never black), with very wide, long sleeves that fall well past the fingertips because ample sleeves marked civilian status. No embroidered armbands. Soft leather boots.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw outfit_m_egypt_medieval.",
+      "flags": {
+        "label": "qamis and farajiyya"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-27e94704-5dae-4f89-9124-b26d8628c2e9.png",
+      "prompt": "Production modular historical clothing asset outfit_m_egypt_medieval. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Ankle-length pale linen qamis under an open, front-opening farajiyya, the long outer robe of Mamluk scholars, judges and scribes. The farajiyya is bottle green, brown or dark blue wool (never black), with very wide, long sleeves that fall well past the fingertips because ample sleeves marked civilian status. No embroidered armbands. Soft leather boots.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw outfit_m_egypt_medieval. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/outfit_m_egypt_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "30ff550efba6544e7858e299cb59aae993227533d8baeff3033aa732eff76b80",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_medieval__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "qamis and farajiyya",
+      "details": "Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Ankle-length pale linen qamis under an open, front-opening farajiyya, the long outer robe of Mamluk scholars, judges and scribes. The farajiyya is bottle green, brown or dark blue wool (never black), with very wide, long sleeves that fall well past the fingertips because ample sleeves marked civilian status. No embroidered armbands. Soft leather boots.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw outfit_m_egypt_medieval.",
+      "flags": {
+        "label": "qamis and farajiyya"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_m_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6c1adb79-11f5-4193-a47d-b4ec2400085c.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_medieval__explaining_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Ankle-length pale linen qamis under an open, front-opening farajiyya, the long outer robe of Mamluk scholars, judges and scribes. The farajiyya is bottle green, brown or dark blue wool (never black), with very wide, long sleeves that fall well past the fingertips because ample sleeves marked civilian status. No embroidered armbands. Soft leather boots.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw outfit_m_egypt_medieval. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_medieval__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3f4b7551eeb78d1f679a4fd13648a2a2ef6174d6e83eeec40fc7d43cacbf1772",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_medieval__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "qamis and farajiyya",
+      "details": "Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Ankle-length pale linen qamis under an open, front-opening farajiyya, the long outer robe of Mamluk scholars, judges and scribes. The farajiyya is bottle green, brown or dark blue wool (never black), with very wide, long sleeves that fall well past the fingertips because ample sleeves marked civilian status. No embroidered armbands. Soft leather boots.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw outfit_m_egypt_medieval.",
+      "flags": {
+        "label": "qamis and farajiyya"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_m_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e904715f-2c54-4a52-8c59-382e813e8734.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_medieval__thinking_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Ankle-length pale linen qamis under an open, front-opening farajiyya, the long outer robe of Mamluk scholars, judges and scribes. The farajiyya is bottle green, brown or dark blue wool (never black), with very wide, long sleeves that fall well past the fingertips because ample sleeves marked civilian status. No embroidered armbands. Soft leather boots.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw outfit_m_egypt_medieval. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_medieval__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3af7bee0e34cb83010acf9b566f018c16316d5ce4d9886f0ceb34576e1f63e2b",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_medieval__objecting_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "qamis and farajiyya",
+      "details": "Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Ankle-length pale linen qamis under an open, front-opening farajiyya, the long outer robe of Mamluk scholars, judges and scribes. The farajiyya is bottle green, brown or dark blue wool (never black), with very wide, long sleeves that fall well past the fingertips because ample sleeves marked civilian status. No embroidered armbands. Soft leather boots.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw outfit_m_egypt_medieval.",
+      "flags": {
+        "label": "qamis and farajiyya"
+      },
+      "pose": "objecting_a",
+      "gesture": "RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture",
+      "base_key": "outfit_m_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-f36eb932-3b88-49dd-bf15-204cfb17a0c2.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_medieval__objecting_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT open palm forward near shoulder, fingers up, calm please-wait gesture. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Ankle-length pale linen qamis under an open, front-opening farajiyya, the long outer robe of Mamluk scholars, judges and scribes. The farajiyya is bottle green, brown or dark blue wool (never black), with very wide, long sleeves that fall well past the fingertips because ample sleeves marked civilian status. No embroidered armbands. Soft leather boots.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw outfit_m_egypt_medieval. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_medieval__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ae7341bd1f9d372ad3e698770aa8001305b5be2a36f3fa8078163ee909df4571",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_egypt_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "short crop",
+      "details": "Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Short-cropped\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw hair_m_egypt_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short crop"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-daa3cc53-4824-45aa-b3a0-4f746b09d1f3.png",
+      "prompt": "Production modular historical clothing asset hair_m_egypt_medieval. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Short-cropped\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw hair_m_egypt_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/hair_m_egypt_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "536f8897d4de5cb9371d77cd446c74261a79ccf053288d9cfa80c0aadc86a303",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    }
+  ]
+}
