@@ -395,6 +395,10 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
     stored gzipped): SL's machine with J's serialized pull; `scene_TitleScene`: J's serialized pull. Each rebuild equals the
     committed scene. `data_hashes.txt`, `world_generate.txt` (`Assets/Data` 1012 -> 1014 files: DOC's
     `CitationForm_TC900` and its meta): the merged strings, documents, kit, knobs, sound bank and content.
+  - Re-taken after the orchestrator's review (the passport's visa page slides under the daters as the rack slides out; the
+    daters' top window light grey; the audit's not-the-passport press aims at a part of the other paper that shows): the
+    transcript and all 30 saves are byte-equal to the pack above; only `scenes_summary.txt`'s committed OfficeGameplay file
+    hash changes (the rebuilt scene; its semantic dump is unchanged).
   - Profiles not re-taken (round 6's kept).
 
 ## Baseline results (ff3a6e0)

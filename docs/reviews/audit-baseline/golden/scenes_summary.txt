@@ -8,6 +8,6 @@ build errors: office 0, home 0, title 0
 build warnings: office 0, home 0, title 0
 art office Assets/Art/Office/AnimeHallLayers/AnimeHall.unity byte-unchanged by the builders: True
 art office Assets/Scenes/OfficeScene.unity byte-unchanged by the builders: True
-committed scene file hashes: fe6601a2c6abec005ec98c2f6c3b4a6968dab405 Assets/Scenes/OfficeGameplay.unity; 7cecb29e4195db607295f2bb6eab82d475e9043a Assets/Scenes/HomeScene.unity; c05cbb46313ae5094d99d848884a561a47ffeb8e Assets/Scenes/TitleScene.unity; 37ea0417be4fd6d99ed2ef3bfc0181c1a3b7d298 Assets/Art/Office/AnimeHallLayers/AnimeHall.unity; 953385d3ca698dd02a5744cbe0d23073861e428e Assets/Scenes/OfficeScene.unity
+committed scene file hashes: b317127ce8fde10aeb3200d1736083e39e98ede4 Assets/Scenes/OfficeGameplay.unity; 7cecb29e4195db607295f2bb6eab82d475e9043a Assets/Scenes/HomeScene.unity; c05cbb46313ae5094d99d848884a561a47ffeb8e Assets/Scenes/TitleScene.unity; 37ea0417be4fd6d99ed2ef3bfc0181c1a3b7d298 Assets/Art/Office/AnimeHallLayers/AnimeHall.unity; 953385d3ca698dd02a5744cbe0d23073861e428e Assets/Scenes/OfficeScene.unity
 build settings: Assets/Scenes/TitleScene.unity, Assets/Art/Office/AnimeHallLayers/AnimeHall.unity, Assets/Scenes/OfficeGameplay.unity, Assets/Scenes/HomeScene.unity, Assets/Scenes/OfficeScene.unity(off), Assets/Scenes/Test_DayLoop.unity(off)
 contract report on Assets/Art/Office/AnimeHallLayers/AnimeHall.unity written; art dirty after it: False; art still byte-unchanged: True
