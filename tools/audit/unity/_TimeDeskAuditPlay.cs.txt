@@ -412,12 +412,12 @@ public static class _TimeDeskAuditPlay
             if (day == 1 && presented == 1)
             {
                 Check(o.Guide.StepShown == "desk", $"day 1: calling the traveller completes the tutorial's first step ('{o.Guide.StepShown}' shown: '{o.Guide.Prompt.Line}')");
-                GuideArrowAllocationFree(o, "day 1 tutorial step 2");
+                yield return GuideArrowAllocationFree(o, "day 1 tutorial step 2");
                 ((Button)Field(o.Guide.Prompt, "skipButton")).onClick.Invoke();
                 Check(!o.Guide.Prompt.IsShown && RunManager.Instance.World.guide.ftueSkipped, "day 1: Skip ends the tutorial (the run keeps it skipped)");
             }
             if (day == 2 && !practiceSeen && o.Guide.ShowingNow == "practice")
-                GuideArrowAllocationFree(o, "day 2 practice");
+                yield return GuideArrowAllocationFree(o, "day 2 practice");
             practiceSeen |= o.Guide.ShowingNow == "practice";
             if (day == 4 && o.Guide.ShowingNow == "practice")
                 yield return SealAtTheDesk(o);
@@ -484,25 +484,59 @@ public static class _TimeDeskAuditPlay
     }
 
     /// <summary>
-    /// The guide's arrow costs nothing per frame (the profile found 68 B a frame in GuideTargets.TryForm's Substring, run 7): its
-    /// LateUpdate run 120 times allocates 0 B on this thread, while the same target parsed 120 times (the control) does allocate.
+    /// The guide's arrow costs nothing per frame (the profile found 68 B a frame in GuideTargets.TryForm's Substring, run 7). Mono
+    /// keeps no per-thread allocation count, so the frames' "GC Allocated In Frame" is read: three frames that each run the arrow's
+    /// LateUpdate <see cref="ArrowTicks"/> times stay at the frame's usual allocations (any allocation a call, 16 B or more, would add
+    /// 800 KB or more), while three frames that parse the same target as often (the control) allocate far more.
     /// </summary>
-    private static void GuideArrowAllocationFree(Office o, string when)
+    private static IEnumerator GuideArrowAllocationFree(Office o, string when)
     {
         var tick = (Action)Delegate.CreateDelegate(typeof(Action), o.Guide, typeof(GuideDirector).GetMethod("LateUpdate", BindingFlags.Instance | BindingFlags.NonPublic));
         string target = (string)Field(o.Guide, "_target") ?? string.Empty;
         tick();
-        long before = GC.GetAllocatedBytesForCurrentThread();
-        for (int i = 0; i < 120; i++)
-            tick();
-        long director = GC.GetAllocatedBytesForCurrentThread() - before;
-        before = GC.GetAllocatedBytesForCurrentThread();
-        for (int i = 0; i < 120; i++)
-            GuideTargets.TryForm(target, out _);
-        long control = GC.GetAllocatedBytesForCurrentThread() - before;
-        Check(director == 0 && control > 0,
-              $"{when}: the guide's arrow at '{target}' is placed without allocating ({director} B over 120 frames; the control, the target parsed each frame: {control} B)");
+        bool profiler = UnityEditorInternal.ProfilerDriver.enabled;
+        UnityEditorInternal.ProfilerDriver.enabled = true;
+        long director = 0, control = 0;
+        try
+        {
+            for (int pass = 0; pass < 2; pass++)
+            {
+                var gc = Unity.Profiling.ProfilerRecorder.StartNew(Unity.Profiling.ProfilerCategory.Memory, "GC Allocated In Frame", 32);
+                for (int frame = 0; frame < 3; frame++)
+                {
+                    for (int i = 0; i < ArrowTicks; i++)
+                    {
+                        if (pass == 0)
+                            tick();
+                        else
+                            GuideTargets.TryForm(target, out _);
+                    }
+                    yield return Frames(1);
+                }
+                yield return Frames(3);
+                var samples = new List<Unity.Profiling.ProfilerRecorderSample>();
+                gc.CopyTo(samples);
+                gc.Dispose();
+                long most = samples.Count > 0 ? samples.Max(s => s.Value) : -1;
+                if (pass == 0)
+                    director = most;
+                else
+                    control = most;
+            }
+        }
+        finally
+        {
+            UnityEditorInternal.ProfilerDriver.enabled = profiler;
+        }
+        Check(director >= 0 && director < ArrowQuietFrame && control > 2 * ArrowQuietFrame,
+              $"{when}: the guide's arrow at '{target}' is placed without allocating (the most a frame of {ArrowTicks} placements allocated: {director} B, under {ArrowQuietFrame} B; the control, the target parsed as often: {control} B)");
     }
+
+    /// <summary>How many times a frame the allocation probe places the guide's arrow (and parses its target, the control).</summary>
+    private const int ArrowTicks = 50000;
+
+    /// <summary>The most a frame of the probe may allocate when the arrow allocates nothing (the editor's frame alone is about 13 KB; one allocation a placement adds at least 800 KB).</summary>
+    private const long ArrowQuietFrame = 256 * 1024;
 
     /// <summary>
     /// The desk's guide at the shift's start: the rulebook's GUIDE holds BASICS and every page introduced so far (today's marked NEW);
