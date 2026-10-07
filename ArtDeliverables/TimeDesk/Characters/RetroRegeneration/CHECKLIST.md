@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 290. Full regeneration is NOT complete.
+Saved: 314. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -294,3 +294,27 @@ Saved: 290. Full regeneration is NOT complete.
 | premade_elizabeth__thinking_c | visually reviewed; registration pending |
 | premade_elizabeth__objecting_c | visually reviewed; registration pending |
 | premade_elizabeth_photo | visually reviewed; registration pending |
+| premade_khwarizmi_neutral | visually reviewed; registration pending |
+| premade_khwarizmi_happy | visually reviewed; registration pending |
+| premade_khwarizmi_angry | visually reviewed; registration pending |
+| premade_khwarizmi_worried | visually reviewed; registration pending |
+| premade_khwarizmi__explaining_a | visually reviewed; registration pending |
+| premade_khwarizmi__thinking_a | visually reviewed; registration pending |
+| premade_khwarizmi__objecting_a | visually reviewed; registration pending |
+| premade_khwarizmi_photo | visually reviewed; registration pending |
+| premade_shakespeare_neutral | visually reviewed; registration pending |
+| premade_shakespeare_happy | visually reviewed; registration pending |
+| premade_shakespeare_angry | visually reviewed; registration pending |
+| premade_shakespeare_worried | visually reviewed; registration pending |
+| premade_shakespeare__explaining_b | visually reviewed; registration pending |
+| premade_shakespeare__thinking_b | visually reviewed; registration pending |
+| premade_shakespeare__objecting_b | visually reviewed; registration pending |
+| premade_shakespeare_photo | visually reviewed; registration pending |
+| premade_marcopolo_neutral | visually reviewed; registration pending |
+| premade_marcopolo_happy | visually reviewed; registration pending |
+| premade_marcopolo_angry | visually reviewed; registration pending |
+| premade_marcopolo_worried | visually reviewed; registration pending |
+| premade_marcopolo__explaining_c | visually reviewed; registration pending |
+| premade_marcopolo__thinking_c | visually reviewed; registration pending |
+| premade_marcopolo__objecting_c | visually reviewed; registration pending |
+| premade_marcopolo_photo | visually reviewed; registration pending |
