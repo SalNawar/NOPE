@@ -52,13 +52,14 @@ public static partial class OfficeSceneUIBuilder
         public ReportView Report;
         public RulesView Rules;
         public CalendarView Calendar;
+        public CaseBoardView Board;
     }
 
     /// <summary>
     /// A pane named <paramref name="name"/> filling <paramref name="area"/>
     /// (the app lays the two out at runtime): its hairline frames, its header
     /// (the side's tags, "Left" when <paramref name="left"/> else "Right", the
-    /// title, the target hint), the content with the seven views and the
+    /// title, the target hint), the content with the eight views and the
     /// no-case state; it shows <paramref name="start"/> first and its rows
     /// pick into <paramref name="compare"/>. Its views come back in
     /// <paramref name="views"/>.
@@ -100,6 +101,7 @@ public static partial class OfficeSceneUIBuilder
             Report = BuildReportView(content),
             Rules = BuildRulesView(content),
             Calendar = BuildCalendarView(content),
+            Board = BuildCaseBoardView(content, compare),
         };
 
         Transform noCase = Panel(content, "NoCase", new Vector2(0.06f, 0.4f), new Vector2(0.94f, 0.6f), Vector2.zero, Vector2.zero, WbInfoBg, ThemeRoleId.Info);
@@ -119,7 +121,7 @@ public static partial class OfficeSceneUIBuilder
         strong.gameObject.SetActive(false);
 
         var so = new SerializedObject(pane);
-        SerializedArrays.Set(so, "views", new Object[] { documents, views.Records, views.Reference, views.Transcript, views.Report, views.Rules, views.Calendar });
+        SerializedArrays.Set(so, "views", new Object[] { documents, views.Records, views.Reference, views.Transcript, views.Report, views.Rules, views.Calendar, views.Board });
         Wire(so, "titleText", title);
         Wire(so, "headerButton", header);
         Wire(so, "noCase", noCase.gameObject);

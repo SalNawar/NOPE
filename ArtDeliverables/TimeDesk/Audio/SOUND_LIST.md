@@ -77,6 +77,7 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 45 | `pc_error` | invalid action | 0.3 s | low two-note error | ×1 | P1 |
 | 46 | `pc_notify` | new message / order arrives | 0.5 s | three-note chime | ×1 | P2 |
 | 47 | `purchase` | an upgrade/order bought | 0.6 s | register "ka-ching", digital | ×1 | P2 |
+| 77 | `evidence_pin` | a finding pinned on the PC's case board (the scanner app) | 0.3 s | a pin pushed into a corkboard, a soft thunk | ×2 | P2 |
 
 ## 4. Interface (menus, buttons)
 
@@ -132,4 +133,4 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 75 | `mus_desk_calm` | early shift, low and sparse (synth plus tape warble) | P3 |
 | 76 | `mus_desk_tense` | last hour / low stability layer | P3 |
 
-**Total:** 76 entries; about 150 files counting the variants. **P1 alone:** 39 entries.
+**Total:** 77 entries; about 150 files counting the variants. **P1 alone:** 39 entries.

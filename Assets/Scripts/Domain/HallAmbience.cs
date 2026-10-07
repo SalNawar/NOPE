@@ -86,7 +86,10 @@ public static class SoundCues
     public const string PaperPickup = "paper_pickup", PaperDrop = "paper_drop", PaperSlide = "paper_slide";
 
     /// <summary>The citation and the scanner.</summary>
-    public const string CitationPrint = "citation_print", CitationLand = "citation_land", ScannerStart = "scanner_start", ScannerDone = "scanner_done";
+    public const string CitationPrint = "citation_print", CitationLand = "citation_land", ScannerStart = "scanner_start", ScannerDone = "scanner_done", ScannerFlag = "scanner_flag";
+
+    /// <summary>The scanner's PC app (the scanner app spec's "Feel"): a glow's soft tick (a cell that differs, a paper flagged) and a finding pinned to the board (evidence_pin: added to the list by Track SA).</summary>
+    public const string InspectLink = "inspect_link", EvidencePin = "evidence_pin";
 
     /// <summary>The booth.</summary>
     public const string CallNext = "call_next", PortalThrough = "portal_through", DialogueBlip = "dialogue_blip";

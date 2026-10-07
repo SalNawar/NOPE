@@ -864,11 +864,18 @@ public static partial class OfficeSceneUIBuilder
         GameObject tray = UpgradePart(machine, "FeederTray", new Vector3(0f, 0.09f, 0.19f), new Vector3(0.3f, 0.006f, 0.12f), Quaternion.Euler(-35f, 0f, 0f), LitMaterial("Placeholder_ScannerTrim", new Color(0.84f, 0.78f, 0.65f), 0.3f));
         GameObject lamp = UpgradePart(machine, "AnalysisLamp", new Vector3(0f, 0.11f, -0.1f), new Vector3(0.3f, 0.014f, 0.024f), Quaternion.identity, LitMaterial("Placeholder_ScannerLamp", new Color(0.78f, 0.72f, 0.98f), 0.7f));
         scannerPlaceholder = machine.gameObject;
+        // Drop and go (the scanner app spec §1): the glowing bar that crosses the glass while a scan runs, over the scanning paper; hidden while idle (DeskScanner.Sweep).
+        DestroyChildIfPresent(scannerClick.transform, "SweepBar");
+        GameObject sweep = PrimitivePart(scannerClick.transform, "SweepBar", PrimitiveType.Cube, new Vector3(0f, 0.062f, -0.115f), new Vector3(0.36f, 0.004f, 0.012f),
+                                         EnsureMaterial("Placeholder_ScannerSweep", "Universal Render Pipeline/Unlit", m => m.SetColor("_BaseColor", new Color(0.45f, 1f, 0.55f))));
+        sweep.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        sweep.SetActive(false);
         var soScanner = new SerializedObject(scanner);
         soScanner.FindProperty("dropSize").vector2Value = new Vector2(0.4f, 0.32f);
         soScanner.FindProperty("bedCentre").vector3Value = new Vector3(0f, 0.056f, 0.01f);
         SetRef(soScanner, "feederTray", tray);
         SetRef(soScanner, "analysisLamp", lamp);
+        SetRef(soScanner, "sweepBar", sweep.transform);
         soScanner.ApplyModifiedProperties();
 
         scanHint = FloatingNote(office, "ScanHint", true);

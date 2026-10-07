@@ -31,6 +31,12 @@ public sealed class DayReference
     private ContentLibrarySO _library;
     private AgencyContent _agency;
 
+    /// <summary>The day's citizen registry (null before the day's is set): the case board's lookup.</summary>
+    public CitizenRegistry Registry => _registry;
+
+    /// <summary>Today's travel directives (empty before the day's are set): the case board's rules check.</summary>
+    public IReadOnlyList<TravelRuleSO> Rules => _rules ?? System.Array.Empty<TravelRuleSO>();
+
     /// <summary>Today's day number (set with the day's registry; the steps checklist lists a step from its first day).</summary>
     public int Day { get; private set; } = 1;
 

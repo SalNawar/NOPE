@@ -11,9 +11,9 @@ using NUnit.Framework;
 public class TabOrderTests
 {
     [Test]
-    public void Default_IsDocumentsRecordsReferenceTranscriptReportRulesCalendar()
+    public void Default_IsDocumentsRecordsReferenceTranscriptReportRulesCalendarBoard()
     {
-        CollectionAssert.AreEqual(new[] { AppTab.Documents, AppTab.Records, AppTab.Reference, AppTab.Transcript, AppTab.Report, AppTab.Rules, AppTab.Calendar },
+        CollectionAssert.AreEqual(new[] { AppTab.Documents, AppTab.Records, AppTab.Reference, AppTab.Transcript, AppTab.Report, AppTab.Rules, AppTab.Calendar, AppTab.Board },
                                   TabOrder.Default.ToArray());
     }
 
@@ -34,12 +34,14 @@ public class TabOrderTests
         Assert.AreEqual(4, (int)AppTab.Report);
         Assert.AreEqual(5, (int)AppTab.Rules);
         Assert.AreEqual(6, (int)AppTab.Calendar);
-        Assert.AreEqual(7, Enum.GetValues(typeof(AppTab)).Length, "a new tab is appended here too");
+        Assert.AreEqual(7, (int)AppTab.Board);
+        Assert.AreEqual(8, Enum.GetValues(typeof(AppTab)).Length, "a new tab is appended here too");
     }
 
     [TestCase(AppTab.Documents, true)]
     [TestCase(AppTab.Transcript, true)]
     [TestCase(AppTab.Report, true)]
+    [TestCase(AppTab.Board, true)]
     [TestCase(AppTab.Records, false)]
     [TestCase(AppTab.Reference, false)]
     [TestCase(AppTab.Rules, false)]

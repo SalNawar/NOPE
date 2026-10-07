@@ -368,6 +368,10 @@ MonoBehaviour:
     text: Calendar
     gloss: 0
     tier: 0
+  - key: app.tab.board
+    text: Case board
+    gloss: 0
+    tier: 0
   - key: app.side.left
     text: Left
     gloss: 0
@@ -512,6 +516,10 @@ MonoBehaviour:
     text: Not carried
     gloss: 0
     tier: 0
+  - key: finding.link.NoRecord
+    text: No record
+    gloss: 0
+    tier: 0
   - key: finding.note.DifferentDetails
     text: '{0} and {1} are different details. Nothing logged.'
     gloss: 0
@@ -594,6 +602,10 @@ MonoBehaviour:
     text: '{0} missing'
     gloss: 0
     tier: 0
+  - key: finding.title.NoRecord
+    text: '{0}: no record on file'
+    gloss: 0
+    tier: 0
   - key: finding.detail
     text: '{0} against {1}'
     gloss: 0
@@ -608,6 +620,10 @@ MonoBehaviour:
     tier: 0
   - key: finding.detail.missing
     text: Asked for, not carried
+    gloss: 0
+    tier: 0
+  - key: finding.detail.noRecord
+    text: 'Looked up {0}: nothing on file'
     gloss: 0
     tier: 0
   - key: finding.evidence
@@ -2061,6 +2077,222 @@ MonoBehaviour:
     tier: 0
   - key: records.note.sealed
     text: Priority subject. Records sealed above your clearance.
+    gloss: 0
+    tier: 0
+  - key: records.group.file
+    text: FILE
+    gloss: 0
+    tier: 0
+  - key: records.row.file
+    text: Note
+    gloss: 0
+    tier: 0
+  - key: records.group.seen
+    text: "SEEN BEFORE \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: visit.flag.days
+    text: '{0} {1} DAYS AGO'
+    gloss: 0
+    tier: 0
+  - key: visit.flag.yesterday
+    text: '{0} YESTERDAY'
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Accepted
+    text: Accepted
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Denied
+    text: Denied
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Detained
+    text: Detained
+    gloss: 0
+    tier: 0
+  - key: visit.row
+    text: "{0} \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: visit.citation
+    text: "\xB7 Citation: {0}"
+    gloss: 0
+    tier: 0
+  - key: board.noScan
+    text: 'Scan a paper to fill the case board: drop it on the scanner.'
+    gloss: 0
+    tier: 0
+  - key: board.record.found
+    text: "RECORD ON FILE \xB7 {0} \xB7 {1} \xB7 OPEN"
+    gloss: 0
+    tier: 0
+  - key: board.record.noNumber
+    text: no number
+    gloss: 0
+    tier: 0
+  - key: board.record.none
+    text: "NO RECORD ON FILE \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: board.record.nothing
+    text: No scanned paper names an ID or a name yet.
+    gloss: 0
+    tier: 0
+  - key: board.section.rules
+    text: RULES CHECK
+    gloss: 0
+    tier: 0
+  - key: board.rules.none
+    text: Nothing of today's rules to check yet.
+    gloss: 0
+    tier: 0
+  - key: board.rule.destination
+    text: Destination
+    gloss: 0
+    tier: 0
+  - key: board.rule.paper
+    text: Required paper
+    gloss: 0
+    tier: 0
+  - key: board.rule.date
+    text: '{0} ({1})'
+    gloss: 0
+    tier: 0
+  - key: board.chip.Valid
+    text: VALID
+    gloss: 0
+    tier: 0
+  - key: board.chip.Expired
+    text: EXPIRED
+    gloss: 0
+    tier: 0
+  - key: board.chip.Closed
+    text: CLOSED
+    gloss: 0
+    tier: 0
+  - key: board.chip.Missing
+    text: MISSING
+    gloss: 0
+    tier: 0
+  - key: board.chip.WrongDate
+    text: WRONG DATE
+    gloss: 0
+    tier: 0
+  - key: board.section.cross
+    text: CROSS-CHECK
+    gloss: 0
+    tier: 0
+  - key: board.cross.none
+    text: Scan two papers (or one with a record on file) to compare them here.
+    gloss: 0
+    tier: 0
+  - key: board.cross.detail
+    text: Detail
+    gloss: 0
+    tier: 0
+  - key: board.cross.record
+    text: Record
+    gloss: 0
+    tier: 0
+  - key: board.cross.blank
+    text: '-'
+    gloss: 0
+    tier: 0
+  - key: board.cross.agree
+    text: "{0} \xB7 {1} agree"
+    gloss: 0
+    tier: 0
+  - key: board.cross.cell
+    text: '{0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: board.overlay.sources
+    text: Sources
+    gloss: 0
+    tier: 0
+  - key: board.section.overlay
+    text: OVERLAY
+    gloss: 0
+    tier: 0
+  - key: board.overlay.hint
+    text: Drag one source onto another (or click two) to lay them over each other.
+    gloss: 0
+    tier: 0
+  - key: board.overlay.over
+    text: '{0} over {1}: slide to fade. Only real differences shimmer.'
+    gloss: 0
+    tier: 0
+  - key: board.overlay.nothing
+    text: These two state nothing in common.
+    gloss: 0
+    tier: 0
+  - key: board.overlay.photo
+    text: the photo
+    gloss: 0
+    tier: 0
+  - key: board.overlay.face
+    text: Their face
+    gloss: 0
+    tier: 0
+  - key: board.overlay.faceLabel
+    text: Face
+    gloss: 0
+    tier: 0
+  - key: board.overlay.register
+    text: Seal Register
+    gloss: 0
+    tier: 0
+  - key: layers.tab.print
+    text: PRINT
+    gloss: 0
+    tier: 0
+  - key: layers.tab.uv
+    text: UV
+    gloss: 0
+    tier: 0
+  - key: layers.tab.chip
+    text: CHIP
+    gloss: 0
+    tier: 0
+  - key: layers.uv.title
+    text: "UV LIGHT \xB7 HIDDEN LAYER"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.none
+    text: Nothing shows under UV light.
+    gloss: 0
+    tier: 0
+  - key: layers.uv.wholePaper
+    text: the whole paper
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Watermark
+    text: 'Watermark ({0}): {1}'
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Ghost
+    text: 'Ghost under {0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Microprint
+    text: 'Microprint ({0}): {1}'
+    gloss: 0
+    tier: 0
+  - key: layers.chip.title
+    text: CHIP RECORD
+    gloss: 0
+    tier: 0
+  - key: layers.chip.none
+    text: This paper carries no chip.
+    gloss: 0
+    tier: 0
+  - key: layers.chip.line
+    text: <b>{0}</b>  {1}
+    gloss: 0
+    tier: 0
+  - key: board.file.line
+    text: <b>{0}</b>  {1}
     gloss: 0
     tier: 0
   - key: records.row.number

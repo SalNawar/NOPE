@@ -138,6 +138,9 @@ public sealed class WorldState
     /// <summary>The denied travellers who may come back, in denial order (Returns; wave 5, lesson 9), with how their second visit went. Additive: an older save loads none.</summary>
     public List<ReturningTraveller> returns = new();
 
+    /// <summary>Every verdict at the desk this run, in verdict order (Visits.Record in DayCycle.Decide; the scanner app spec §2.6: a record's SEEN BEFORE section, a recurring face's flag, the citizen file's threads). Additive: an older save loads none.</summary>
+    public List<VisitEntry> visits = new();
+
     /// <summary>The morning papers as printed, one issue per day in day order (the News site's back issues: recorded at the briefing, at most DesktopConfigSO.newsArchiveIssues; an old save loads it empty).</summary>
     public List<NewsIssue> newsArchive = new();
 

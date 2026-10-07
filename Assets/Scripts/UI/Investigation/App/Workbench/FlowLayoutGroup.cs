@@ -26,7 +26,8 @@ public sealed class FlowLayoutGroup : LayoutGroup
         float widest = 0f;
         foreach (RectTransform child in rectChildren)
             widest = Mathf.Max(widest, LayoutUtility.GetPreferredWidth(child));
-        SetLayoutInputForAxis(padding.horizontal + widest, padding.horizontal + widest, -1f, 0);
+        // The least width is the padding alone: a child wider than the row is clamped to it (its text wraps), never pushing the row past its parent.
+        SetLayoutInputForAxis(padding.horizontal, padding.horizontal + widest, -1f, 0);
     }
 
     /// <inheritdoc />

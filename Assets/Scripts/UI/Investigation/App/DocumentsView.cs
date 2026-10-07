@@ -28,6 +28,12 @@ public sealed class DocumentsView : AppView, IAppItems
     /// <summary>The line shown instead of a copy: nothing chosen, or a paper not scanned yet.</summary>
     [SerializeField] private TMP_Text hintText;
 
+    /// <summary>The copy's layer switch, PRINT, UV and CHIP (the scanner app spec §2.4; optional).</summary>
+    [SerializeField] private ScanLayerSwitch layers;
+
+    /// <summary>Each paper's printed fields (the layers read them).</summary>
+    private readonly List<IReadOnlyList<DocumentField>> _fields = new List<IReadOnlyList<DocumentField>>();
+
     private readonly List<DocumentWindowController> _pages = new List<DocumentWindowController>();
     private readonly List<string> _names = new List<string>();
 
@@ -82,9 +88,17 @@ public sealed class DocumentsView : AppView, IAppItems
                 _pages.Add(page);
                 string name = documents[i] != null ? documents[i].DisplayName : UiText.Get("document.untitled");
                 _names.Add(name);
+                _fields.Add(documents[i] != null ? documents[i].fields : null);
                 _requestNames.Add(requestNames != null && i < requestNames.Count && !string.IsNullOrEmpty(requestNames[i]) ? requestNames[i] : name);
             }
         Refresh();
+    }
+
+    /// <summary>Where the copies' UV and CHIP layers come from (the document track's data, or the stub).</summary>
+    public void SetLayers(IScanLayers provider)
+    {
+        if (layers != null)
+            layers.SetProvider(provider);
     }
 
     /// <summary>Paper <paramref name="index"/>'s copy arrived (its scan finished): its strip reads the time.</summary>
@@ -142,6 +156,7 @@ public sealed class DocumentsView : AppView, IAppItems
                 Destroy(page.gameObject);
         _pages.Clear();
         _names.Clear();
+        _fields.Clear();
         _requestNames.Clear();
         _chips.Clear();
         _papers = new CasePapers(0);
@@ -194,6 +209,8 @@ public sealed class DocumentsView : AppView, IAppItems
         for (int i = 0; i < _pages.Count; i++)
             if (_pages[i] != null && _pages[i].gameObject.activeSelf != (showCopy && i == _selected))
                 _pages[i].gameObject.SetActive(showCopy && i == _selected);
+        if (layers != null)
+            layers.Show(showCopy ? _selected : -1, showCopy && _selected < _fields.Count ? _fields[_selected] : null);
 
         if (hintText == null)
             return;

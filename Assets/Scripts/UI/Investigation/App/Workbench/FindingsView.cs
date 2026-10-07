@@ -61,6 +61,8 @@ public sealed class FindingsView : MonoBehaviour
         string line;
         if (finding.Kind == FindingKind.PaperMissing)
             return UiText.Get("finding.detail.missing");
+        if (finding.Kind == FindingKind.NoRecord)
+            return UiText.Format("finding.detail.noRecord", finding.ValueA);
         if (finding.KeyA == EntryKeys.CalendarToday || EntryKeys.TryRule(finding.KeyA, out _))
             line = UiText.Format("finding.detail.rule", finding.ValueB, Where(finding.TitleB));
         else if (string.Equals(finding.ValueA, finding.ValueB, StringComparison.OrdinalIgnoreCase))

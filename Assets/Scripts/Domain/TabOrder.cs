@@ -26,7 +26,10 @@ public enum AppTab
     Rules = 5,
 
     /// <summary>The agency calendar: today's date as a value to click and match (the PC workbench spec IA6; lesson D10).</summary>
-    Calendar = 6
+    Calendar = 6,
+
+    /// <summary>The case board (the scanner app spec §2): the traveller's scanned papers against their record and today's rules (the record found, the rules check, the cross-check table, the overlay, their file and history).</summary>
+    Board = 7
 }
 
 /// <summary>
@@ -37,18 +40,18 @@ public enum AppTab
 /// </summary>
 public static class TabOrder
 {
-    /// <summary>The order: Documents, Records, Reference, Transcript, Report, Rules, Calendar.</summary>
+    /// <summary>The order: Documents, Records, Reference, Transcript, Report, Rules, Calendar, Board.</summary>
     public static readonly IReadOnlyList<AppTab> Default = new[]
     {
-        AppTab.Documents, AppTab.Records, AppTab.Reference, AppTab.Transcript, AppTab.Report, AppTab.Rules, AppTab.Calendar
+        AppTab.Documents, AppTab.Records, AppTab.Reference, AppTab.Transcript, AppTab.Report, AppTab.Rules, AppTab.Calendar, AppTab.Board
     };
 
     /// <summary>
-    /// True for a case source (Documents, Transcript, Report): between
+    /// True for a case source (Documents, Transcript, Report, the case board): between
     /// travellers its view shows the no-case state (AP8), and a new case drops
     /// its places from the panes' histories. Records, Reference, Rules and the
     /// Calendar are the day's and still work between travellers.
     /// </summary>
     public static bool IsCaseSource(AppTab tab) =>
-        tab == AppTab.Documents || tab == AppTab.Transcript || tab == AppTab.Report;
+        tab == AppTab.Documents || tab == AppTab.Transcript || tab == AppTab.Report || tab == AppTab.Board;
 }

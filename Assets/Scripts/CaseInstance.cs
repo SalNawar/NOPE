@@ -68,6 +68,18 @@ public sealed class CaseInstance
     /// <summary>A returning traveller's record (WorldState.returns: who they were, when they were denied, what they come back with); null on a first visit (wave 5, lesson 9).</summary>
     public ReturningTraveller returning;
 
+    /// <summary>The citizen file's lines (CitizenFile.Lines at generation; the scanner app spec §3): their record's FILE section, a premade's authored lines or a random traveller's drawn ones, and a line per earlier visit.</summary>
+    public List<string> file = new();
+
+    /// <summary>Their earlier visits this run, oldest first (Visits.Before at generation, from WorldState.visits; the scanner app spec §2.6): their record's SEEN BEFORE section and its flag.</summary>
+    public List<VisitEntry> seenBefore = new();
+
+    /// <summary>The papers their kind needs today, as request ids (FormRequests.IdOf: a form's number, or its request group's id), from their blueprint's forms handed over on request and issued today (set at generation): the case board's required papers (the scanner app spec §2.2).</summary>
+    public List<string> requiredForms = new();
+
+    /// <summary>Their record's identity in the visit log (Visits.Key: the Citizen ID or the Displacement No., else the registered name), as CitizenRecord.Id reads it.</summary>
+    public string RecordKey => Visits.Key(account != null ? account.CitizenId : displacement != null ? displacement.Number : null, visitorGivenName);
+
     /// <summary>The registered given name (a liar's cover name; citizen-records lookup key): from the claimed place's names, or for a 2150 citizen the Future places' lists together (traveller types K4).</summary>
     public string visitorGivenName;
 

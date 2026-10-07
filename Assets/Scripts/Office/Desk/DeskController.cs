@@ -122,6 +122,9 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The Auto-Feed's readiness rule, made once (no delegate per frame).</summary>
     private Func<int, bool> _landed;
 
+    /// <summary>The papers dropped on the busy scanner, waiting by the glass (drop and go): once scanned they go back to where they were picked up, not to where they waited.</summary>
+    private readonly System.Collections.Generic.HashSet<int> _waiting = new System.Collections.Generic.HashSet<int>();
+
     /// <summary>The paper being dragged, or -1.</summary>
     private int _dragged = -1;
 
@@ -215,12 +218,14 @@ public sealed class DeskController : MonoBehaviour
             return;
         if (!_state.ScannerBusy)
         {
+            scanner.Sweep(-1f);
             FeedScanner();
             return;
         }
 
         ScanPass pass = _state.Pass;
         int done = _state.Tick(Time.deltaTime);
+        scanner.Sweep(_state.ScannerBusy ? _state.Progress : -1f);
         if (done < 0)
             return;
 
@@ -232,19 +237,23 @@ public sealed class DeskController : MonoBehaviour
         ScanFinished?.Invoke(done, pass);
     }
 
-    /// <summary>The Auto-Feed Scanner (SC3): while the scanner is idle, the next queued paper that lies still on the desk slides onto the bed and scans (DeskPapers.FeedNext: hand-over order, one at a time), then back to where it lay.</summary>
+    /// <summary>
+    /// The feed: while the scanner is idle, the next queued paper that lies
+    /// still on the desk slides onto the bed and scans (DeskPapers.FeedNext:
+    /// queue order, one at a time): a paper the Auto-Feed Scanner (SC3) took
+    /// in goes back to where it lay, one dropped on the busy scanner (drop and
+    /// go, the scanner app spec §1) back to where it was picked up.
+    /// </summary>
     private void FeedScanner()
     {
-        if (!_scanners.AutoFeed)
-            return;
-
         int next = _state.FeedNext(_landed);
         if (next < 0)
             return;
 
-        // It goes back to where it lay once scanned, as a dragged paper goes back to where it was picked up.
-        _papers[next].Drag.RememberPosition();
-        Slide(_papers[next], scanner.BedPoint);
+        // An Auto-Fed paper goes back to where it lay once scanned, as a dragged paper goes back to where it was picked up.
+        if (!_waiting.Remove(next))
+            _papers[next].Drag.RememberPosition();
+        StartScan(_papers[next]);
         _stack.BringToFront(next);
         ApplyStack();
     }
@@ -359,6 +368,9 @@ public sealed class DeskController : MonoBehaviour
             stamps.EndCase();
 
         _state.ReturnAll();
+        _waiting.Clear();
+        if (scanner != null)
+            scanner.Sweep(-1f);
         foreach (DeskDocument paper in _papers)
         {
             if (paper == null)
@@ -636,15 +648,23 @@ public sealed class DeskController : MonoBehaviour
         DeskZone zone = ZoneAt(released);
         bool verdict = stamps != null && stamps.HasVerdict;
 
-        switch (_state.Drop(paper.Index, OnScanner(released), zone, verdict))
+        DropOutcome outcome = _state.Drop(paper.Index, OnScanner(released), zone, verdict);
+        if (outcome != DropOutcome.Queued)
+            _waiting.Remove(paper.Index);
+        switch (outcome)
         {
             case DropOutcome.HandsBack:
                 stamps.HandBack();
                 return;
             case DropOutcome.Scanning:
-                Sounds.Play(SoundCues.ScannerStart);
                 paper.SetZone(_state.ZoneOf(paper.Index), false);
-                Slide(paper, scanner.BedPoint);
+                StartScan(paper);
+                break;
+            case DropOutcome.Queued:
+                // Drop and go: it waits by the glass, clear of the scanner's body, and feeds through at its turn.
+                _waiting.Add(paper.Index);
+                paper.SetZone(_state.ZoneOf(paper.Index), false);
+                Slide(paper, ClearOfBlockers(paper, scanner.BedPoint));
                 break;
             case DropOutcome.NotStamped:
                 if (stamps != null)
@@ -937,6 +957,13 @@ public sealed class DeskController : MonoBehaviour
     {
         _stack.BringToFront(citation.Index);
         ApplyStack();
+    }
+
+    /// <summary>A paper slides onto the bed and its scan starts: the relay click (scanner_start), the glowing bar crossing the glass as the scan runs (DeskScanner.Sweep); the done beep is DeskScanner.Pulse's.</summary>
+    private void StartScan(DeskDocument paper)
+    {
+        Slide(paper, scanner.BedPoint);
+        Sounds.Play(SoundCues.ScannerStart);
     }
 
     /// <summary>True when <paramref name="point"/> lies on the scanner's bed and the scanner is on the desk today (ScannerDay.Hidden: not before it is introduced).</summary>
