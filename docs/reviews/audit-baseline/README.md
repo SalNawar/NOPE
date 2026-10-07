@@ -315,6 +315,35 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
   - Unchanged: `contract.txt` (the static job builds the hall's text meshes before the report, so the readouts' bounds
     read as in round 4 whatever ran before; a first run without that step read them as zero).
 
+- **Round 6, the hall-art merge** (`merge/hall-art-completion`: main `dd2bb64` with ChatGPT's `codex/hall-art-completion`
+  `d2f65d5`, plus track M's fixes). Re-packed from runs A and B, which were identical (41 deterministic files; static A and
+  B identical too); each play report passes 6,270 checks and fails 1 (below), and logs no warning. Every difference from
+  round 5 has one of these causes:
+  - Main's commits since round 5 that were never packed: short agency numbers and the plain passport (`1dc34c8`: every
+    Citizen ID, waiver and policy number in `cases.txt`, the passport rows in the transcript), the desk's guide and FTUE
+    (`a3e52b8`, `788a37e`: the transcript's `guide:` lines, the saves' guide state), the bulletins naming each day's new
+    thing (`4b452b4`), the Translation Lens (`48c6d53`, `bd7e19e`: `Assets/Data` and the validator), the controls and the
+    moved stamps (`152b22d`, `4315bce`).
+  - The art merge: the character library's whole premade pictures, so `CaseFactory.ComposeLook` draws twelve premades whole
+    (`look=premade <id>`, `Photo=premade:<id>`, garments "Period dress": 328 `cases.txt` lines, pell, ines, gutenberg,
+    turing, leonardo, rook, kulthum, hollis, khwarizmi, auditor, ada, socrates; their own look stream, so no other draw
+    moves); `contract.txt` (the hall's preserved desk realigned: the mat, the NEXT sign and the hand-over anchor at x 0;
+    the till readout inside `Anchor_Till`); `Desk_Default.travellerHeight` 1.9 and the hall lighting knobs in
+    `data_hashes.txt`. Verdicts are unchanged: 215 travellers, 211 right and the four planned mistakes, the same ending.
+  - Track M: `OfficeGameplay` (the city view's full-screen panorama instead of the stand-in camera and skyline,
+    `DeskViewBack` under the tutorial's prompt, `GuideDirector.city`; 18,991 dump lines), the office contract asset.
+  - The one failing check, a main issue left open: "day 5: the rulebook opens itself on the new page 'scanner' and the
+    prompt names it" fails because day 5 introduces two pages (scanner, permit) and the GUIDE tab keeps its NEW badge for
+    the unread second one; the play itself is unaffected.
+  - Profiles (`profile_A.txt`, `profile_B.txt`), accepted: title -> office 1815 / 1746 ms (round 5: 1465 / 1388 ms,
+    +24% / +26%): the hall-art merge's office (about 3,700 art files, the living city, crowds and baked lighting). Office ->
+    Home 338 / 326 ms and Home -> office 962 / 905 ms stay within 25%. Allocations: every office window 436 B per frame (round
+    5's), Title and Home 0 B, after `a4eb97c` (the merged hall scripts allocated 13 KB per frame). Known and open: 68 B per
+    frame in `GuideDirector.LateUpdate` while its target is a paper or field (`GuideTargets.TryForm`'s `Substring`, main
+    `a3e52b8`), the windows with a traveller at the desk at 504 B.
+  - The profile job decides travellers with the cheat menu's `CheatDecideCorrectly` (the controller's `Decide` it called
+    is gone since `4315bce`).
+
 ## Baseline results (ff3a6e0)
 
 - **Tests:** compile 0 errors; offline EditMode 1067 passed, 0 failed.

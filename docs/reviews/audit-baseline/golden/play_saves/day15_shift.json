@@ -10,6 +10,7 @@
         "clerkDebtPaid": 648,
         "debtReliefYesterday": 0,
         "endingId": "",
+        "cheated": false,
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
         "payRateMultiplier": 1.0,
@@ -738,6 +739,26 @@
             "taken": false,
             "lastChange": 0
         },
+        "guide": {
+            "ftueDone": false,
+            "ftueSkipped": true,
+            "ftueSteps": [
+                "call"
+            ],
+            "pagesRead": [
+                "ticket",
+                "board",
+                "seals",
+                "scanner",
+                "class",
+                "waiver"
+            ],
+            "practiced": [
+                "board",
+                "seals",
+                "class"
+            ]
+        },
         "tomorrow": {
             "briefingLines": [],
             "newsLines": [
@@ -1160,9 +1181,9 @@
                     "fate": 3,
                     "waivered": false,
                     "fine": 0,
-                    "citizenId": "913-1565-06",
+                    "citizenId": "ZTP-206",
                     "transponder": "Tick-Tock Basic · TT-97927",
-                    "waiverNo": "SW-316721",
+                    "waiverNo": "SW-6721",
                     "debt": 9840,
                     "line": "Clocks near Periclean Athens (Ancient) ran eleven minutes backward last night. The Directorate calls this normal."
                 },
@@ -1173,9 +1194,9 @@
                     "fate": 3,
                     "waivered": true,
                     "fine": 0,
-                    "citizenId": "676-4308-27",
+                    "citizenId": "WWN-127",
                     "transponder": "Tick-Tock Basic · TT-19610",
-                    "waiverNo": "SW-286783",
+                    "waiverNo": "SW-6783",
                     "debt": 210440,
                     "line": "TIMELINE TREMOR near Khedivate of Egypt (Industrial). The Directorate says it is nothing."
                 },
@@ -1186,9 +1207,9 @@
                     "fate": 0,
                     "waivered": true,
                     "fine": 0,
-                    "citizenId": "177-5127-86",
+                    "citizenId": "LTH-586",
                     "transponder": "Tick-Tock Basic · TT-82461",
-                    "waiverNo": "SW-710155",
+                    "waiverNo": "SW-0155",
                     "debt": 4260,
                     "line": ""
                 },
@@ -1199,9 +1220,9 @@
                     "fate": 3,
                     "waivered": true,
                     "fine": 0,
-                    "citizenId": "251-1216-94",
+                    "citizenId": "BMJ-594",
                     "transponder": "Tick-Tock Basic · TT-80679",
-                    "waiverNo": "SW-722555",
+                    "waiverNo": "SW-2555",
                     "debt": 186050,
                     "line": "TIMELINE TREMOR near Victorian Britain (Industrial). The Directorate says it is nothing."
                 },
@@ -1212,9 +1233,9 @@
                     "fate": 3,
                     "waivered": true,
                     "fine": 0,
-                    "citizenId": "008-3693-03",
+                    "citizenId": "KSP-503",
                     "transponder": "Skip Lite · SL-23554",
-                    "waiverNo": "SW-953394",
+                    "waiverNo": "SW-3394",
                     "debt": 5560,
                     "line": "TIMELINE TREMOR near Victorian Britain (Industrial). The Directorate says it is nothing."
                 }
@@ -1464,7 +1485,7 @@
                 "gender": 2,
                 "birthDate": "8 Feb 2114",
                 "personality": "curt",
-                "citizenId": "238-5108-55",
+                "citizenId": "WYW-755",
                 "caseSeed": 507799003,
                 "deniedDay": 1,
                 "fromDay": 2,
@@ -1485,7 +1506,7 @@
                 "gender": 1,
                 "birthDate": "21 Dec 2114",
                 "personality": "glum",
-                "citizenId": "431-2698-34",
+                "citizenId": "EHL-134",
                 "caseSeed": -423013292,
                 "deniedDay": 1,
                 "fromDay": 2,
@@ -1506,7 +1527,7 @@
                 "gender": 1,
                 "birthDate": "27 Jun 2131",
                 "personality": "glum",
-                "citizenId": "909-9421-12",
+                "citizenId": "DXP-512",
                 "caseSeed": -1658936215,
                 "deniedDay": 3,
                 "fromDay": 4,
@@ -1527,7 +1548,7 @@
                 "gender": 2,
                 "birthDate": "19 Jul 2105",
                 "personality": "grand",
-                "citizenId": "471-3504-74",
+                "citizenId": "AHJ-074",
                 "caseSeed": -2986303,
                 "deniedDay": 4,
                 "fromDay": 5,
@@ -1548,7 +1569,7 @@
                 "gender": 2,
                 "birthDate": "4 Mar 2106",
                 "personality": "sunny",
-                "citizenId": "458-8072-70",
+                "citizenId": "DUS-570",
                 "caseSeed": 209419503,
                 "deniedDay": 4,
                 "fromDay": 5,
@@ -1569,7 +1590,7 @@
                 "gender": 2,
                 "birthDate": "28 Dec 2128",
                 "personality": "anxious",
-                "citizenId": "387-8420-33",
+                "citizenId": "FMN-433",
                 "caseSeed": -543902538,
                 "deniedDay": 4,
                 "fromDay": 5,
@@ -1590,7 +1611,7 @@
                 "gender": 1,
                 "birthDate": "2 Jan 2128",
                 "personality": "chatty",
-                "citizenId": "061-8037-80",
+                "citizenId": "QPX-880",
                 "caseSeed": 791922722,
                 "deniedDay": 5,
                 "fromDay": 6,
@@ -1611,7 +1632,7 @@
                 "gender": 1,
                 "birthDate": "26 Jun 2107",
                 "personality": "curt",
-                "citizenId": "344-1403-14",
+                "citizenId": "QAV-614",
                 "caseSeed": -993241463,
                 "deniedDay": 5,
                 "fromDay": 6,
@@ -1632,7 +1653,7 @@
                 "gender": 1,
                 "birthDate": "7 May 2109",
                 "personality": "chatty",
-                "citizenId": "718-8821-62",
+                "citizenId": "WQP-562",
                 "caseSeed": -271960394,
                 "deniedDay": 6,
                 "fromDay": 7,
@@ -1653,7 +1674,7 @@
                 "gender": 1,
                 "birthDate": "24 Feb 2089",
                 "personality": "anxious",
-                "citizenId": "748-0553-37",
+                "citizenId": "EET-537",
                 "caseSeed": 195873199,
                 "deniedDay": 7,
                 "fromDay": 8,
@@ -1674,7 +1695,7 @@
                 "gender": 1,
                 "birthDate": "26 Jul 2131",
                 "personality": "stickler",
-                "citizenId": "950-0672-13",
+                "citizenId": "DQS-613",
                 "caseSeed": 2074506704,
                 "deniedDay": 9,
                 "fromDay": 10,
@@ -1695,7 +1716,7 @@
                 "gender": 2,
                 "birthDate": "16 Oct 2119",
                 "personality": "sunny",
-                "citizenId": "247-1362-49",
+                "citizenId": "LZU-849",
                 "caseSeed": 786309112,
                 "deniedDay": 10,
                 "fromDay": 11,
@@ -1716,7 +1737,7 @@
                 "gender": 2,
                 "birthDate": "20 Aug 2086",
                 "personality": "sunny",
-                "citizenId": "994-7566-15",
+                "citizenId": "LCY-015",
                 "caseSeed": -1547818097,
                 "deniedDay": 10,
                 "fromDay": 11,
@@ -1737,7 +1758,7 @@
                 "gender": 1,
                 "birthDate": "22 Jan 2132",
                 "personality": "stickler",
-                "citizenId": "862-8060-27",
+                "citizenId": "RYW-527",
                 "caseSeed": -1328951958,
                 "deniedDay": 10,
                 "fromDay": 11,
@@ -1758,7 +1779,7 @@
                 "gender": 1,
                 "birthDate": "10 Nov 2097",
                 "personality": "stickler",
-                "citizenId": "100-1562-24",
+                "citizenId": "UEC-024",
                 "caseSeed": 1753269141,
                 "deniedDay": 11,
                 "fromDay": 12,
@@ -1800,7 +1821,7 @@
                 "gender": 2,
                 "birthDate": "24 May 2098",
                 "personality": "anxious",
-                "citizenId": "742-7264-32",
+                "citizenId": "EQJ-732",
                 "caseSeed": 1938084399,
                 "deniedDay": 12,
                 "fromDay": 13,
@@ -1821,7 +1842,7 @@
                 "gender": 1,
                 "birthDate": "6 Sep 2100",
                 "personality": "glum",
-                "citizenId": "194-0735-59",
+                "citizenId": "ALZ-659",
                 "caseSeed": 1212552827,
                 "deniedDay": 13,
                 "fromDay": 14,
@@ -1842,7 +1863,7 @@
                 "gender": 1,
                 "birthDate": "27 Feb 2094",
                 "personality": "anxious",
-                "citizenId": "198-6701-84",
+                "citizenId": "TGP-484",
                 "caseSeed": -1392842365,
                 "deniedDay": 14,
                 "fromDay": 15,
@@ -1863,7 +1884,7 @@
                 "gender": 1,
                 "birthDate": "11 Feb 2086",
                 "personality": "sunny",
-                "citizenId": "093-4869-60",
+                "citizenId": "NFX-260",
                 "caseSeed": -161150672,
                 "deniedDay": 14,
                 "fromDay": 15,
@@ -1884,7 +1905,7 @@
                 "gender": 2,
                 "birthDate": "7 Dec 2084",
                 "personality": "grand",
-                "citizenId": "676-6177-96",
+                "citizenId": "UEK-196",
                 "caseSeed": 669378720,
                 "deniedDay": 14,
                 "fromDay": 15,
@@ -1905,7 +1926,7 @@
                 "gender": 1,
                 "birthDate": "19 Apr 2109",
                 "personality": "stickler",
-                "citizenId": "928-8650-21",
+                "citizenId": "ZAU-321",
                 "caseSeed": 550026223,
                 "deniedDay": 15,
                 "fromDay": 16,
@@ -1926,7 +1947,7 @@
                 "gender": 1,
                 "birthDate": "6 Jun 2118",
                 "personality": "anxious",
-                "citizenId": "086-7013-48",
+                "citizenId": "GYP-448",
                 "caseSeed": 1160194127,
                 "deniedDay": 15,
                 "fromDay": 16,
@@ -1947,7 +1968,7 @@
                 "gender": 1,
                 "birthDate": "10 Jul 2085",
                 "personality": "sunny",
-                "citizenId": "328-7359-65",
+                "citizenId": "TSZ-765",
                 "caseSeed": 1480689323,
                 "deniedDay": 15,
                 "fromDay": 16,
@@ -1968,7 +1989,7 @@
                 "gender": 1,
                 "birthDate": "6 Dec 2114",
                 "personality": "curt",
-                "citizenId": "736-0370-02",
+                "citizenId": "RJC-102",
                 "caseSeed": 361058035,
                 "deniedDay": 15,
                 "fromDay": 16,
@@ -2020,7 +2041,7 @@
             {
                 "day": 4,
                 "briefing": [
-                    "NEW: issuing seals. Every paper's seal must match its office's in the Seal Register, now on your shelf."
+                    "NEW: issuing seals. Every paper's seal must match its office's in the Seal Register, now in your rulebook (the SEALS tab)."
                 ],
                 "news": [
                     "Reports indicate democratic institutions are crumbling across the timeline.",
@@ -2035,7 +2056,7 @@
             {
                 "day": 5,
                 "briefing": [
-                    "NEW: the scanner and the records. Scan a paper to read it on the PC: it must match the traveller's record (a citizen's Citizen Account; for the displaced, who now come home through your desk with a Travel Permit, the Displacement Registry)."
+                    "NEW: the scanner and the records. Scan a paper to read it in the Investigation app, now on your PC: it must match the traveller's record (a citizen's Citizen Account; for the displaced, who now come home through your desk with a Travel Permit, the Displacement Registry)."
                 ],
                 "news": [
                     "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
@@ -2084,7 +2105,7 @@
             {
                 "day": 8,
                 "briefing": [
-                    "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver."
+                    "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver. And from today the office reads the world's language: the Bureau issues you a Translation Lens. Hover a word to read it."
                 ],
                 "news": [
                     "THURSDAY NIGHT: Umm Kulthum, stamped home at Desk 3, sings Cairo a song about 2150. The streets empty to listen.",
@@ -2104,7 +2125,7 @@
             {
                 "day": 9,
                 "briefing": [
-                    "NEW: debt standing. Citizens in debt depart only on Debt Relief, and a Frozen account may not depart at all."
+                    "NEW: dress for the destination. Look at their clothes (the wheel's Look menu): an item from another time or place causes a panic. Check it against the Costume Guide on your shelf."
                 ],
                 "news": [
                     "SON OF ZEUS: Alexander the Great, stamped home at Desk 3, rules Macedon by 2150's order. One empire, one law, every city named after him.",
@@ -2126,7 +2147,7 @@
             {
                 "day": 10,
                 "briefing": [
-                    "NEW: transponder recall. Every Driftbox 3 unit is grounded: refuse any departure on one."
+                    "NEW: debt standing. Citizens in debt depart only on Debt Relief, and a Frozen account may not depart at all."
                 ],
                 "news": [
                     "THE PRESS ROLLS: Johannes Gutenberg, stamped home at Desk 3, prints with movable metal type in Mainz. Every Rhine city reads.",
@@ -2144,7 +2165,7 @@
             {
                 "day": 11,
                 "briefing": [
-                    "NEW: no 2150 goods. Ask what they will pay with and what they carry: nothing from 2150 leaves 2150."
+                    "NEW: the Driftbox 3 recall. Every Driftbox 3 transponder is grounded: refuse any departure on one."
                 ],
                 "news": [
                     "THINKING MACHINES: Alan Turing, stamped home at Desk 3, builds 2150's computer in Manchester. It answers back.",
@@ -2201,7 +2222,7 @@
             {
                 "day": 14,
                 "briefing": [
-                    "NEW: paper dates. Depart only on the date printed on the travel papers, and never on an expired paper."
+                    "NEW: the return home. The displaced now declare their home on an Intake Declaration: its currency, language and technology must match the books (Tongues, Capitals, Rulers) for the home they claim."
                 ],
                 "news": [
                     "IT FLIES: Leonardo da Vinci, stamped home at Desk 3, finishes his flying machine from 2150's sketches. Milan takes off.",

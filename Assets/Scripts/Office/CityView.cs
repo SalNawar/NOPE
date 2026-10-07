@@ -173,7 +173,7 @@ public sealed class CityView : MonoBehaviour
             float pan = CityLookTimeline.Pan(clock, config.citySeconds);
             if (clock <= 0f)
                 pan = 0f;
-            if (!Mathf.Approximately(pan, _pan))
+            if (pan != _pan) // exact: the ends (0 and 1) must land exactly
             {
                 _pan = pan;
                 _hall.SetPan(pan);
