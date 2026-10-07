@@ -237,7 +237,7 @@ a270db3f9e27b80a0d5ab7fe15e67cb13bcaa966 Assets/Data/World/Culture/Strings_de.as
 6d042dc1d33bbc90f89bec69fa1f725d72e66a98 Assets/Data/World/Culture/Strings_de.asset.meta
 2ce0dd339e7d16981a74814c3edeb89b730f85ef Assets/Data/World/Culture/Strings_el.asset
 53bfbfc9fe7ffe9322595108cafd64b4f0953c31 Assets/Data/World/Culture/Strings_el.asset.meta
-35cf982373b52ed553af6fc0dcab15145f203990 Assets/Data/World/Culture/Strings_en.asset
+c10b6d36ecd6d2c62e27e373a8e18bbcb4044c86 Assets/Data/World/Culture/Strings_en.asset
 3e2cbd374098112cf67ce9275067d402b501d20b Assets/Data/World/Culture/Strings_en.asset.meta
 69abf0b6f0028eb0daff45e5fc8c2f950860d9a3 Assets/Data/World/Culture/Strings_it.asset
 e1e85763b49f083d4138b1ca0b6aacc2ebf10a55 Assets/Data/World/Culture/Strings_it.asset.meta
@@ -1008,5 +1008,5 @@ db1311b91583a9f3f2883e4428c2ce00d6d5ff06 Assets/Data/World/Translation/Upgrade_T
 1492b876cf051430504d3cf2b27b25567608d8b5 Assets/Data/World/Translation/Upgrade_Tr_NearEast_Speech.asset.meta
 42616163f51d6485b480de1dbd36ef54426ddeab Assets/Data/World/Translation/Upgrade_Tr_NorthEurope_Speech.asset
 cdb2a96d66d63f1c2c4c5bc7f877ad81195ca16f Assets/Data/World/Translation/Upgrade_Tr_NorthEurope_Speech.asset.meta
-8bb5212f6e2fbc930a63bc39b09e48bb2e9aad80 Assets/Data/World/world_source.json
+3681f8cd61533fad0ff08e44d70c2d32f9d9499f Assets/Data/World/world_source.json
 4721accbdf54eff89475babc296f1dc1c8840dfe Assets/Data/World/world_source.json.meta
