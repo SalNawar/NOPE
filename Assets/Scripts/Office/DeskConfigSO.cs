@@ -208,8 +208,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How high above the desk the stamps' dies hang while the bar is out (metres): a paper slides under them (above a dragged paper's lift), and a press dips them down onto it.</summary>
     [Min(0.005f)] public float stampHover = 0.03f;
 
-    /// <summary>Where the stamp bar's middle (between its two stamps) hangs out over the desk: the point of the desk the reading view shows there (viewport x, y; low on the right, so a passport whose visa box is under a stamp stands in the view above it).</summary>
-    public Vector2 stampBarView = new Vector2(0.72f, 0.36f);
+    /// <summary>Where the stamp bar's middle (between its two daters' dies) hangs out over the desk: the point of the desk the reading view shows there (viewport x, y). High on the right (run 7's integration): the passport slides so its visa page lies under the daters (DeskController.PassportUnderDaters), its data page whole and clear below the rack in the view.</summary>
+    public Vector2 stampBarView = new Vector2(0.66f, 0.62f);
 
     /// <summary>How far the stamp bar slides out from the desk's right (metres along the office view's right): in, it waits that far right of where it hangs out, out of the reading view.</summary>
     [Min(0.1f)] public float stampBarTravel = 0.6f;

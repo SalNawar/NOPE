@@ -165,7 +165,10 @@ public sealed class DeskController : MonoBehaviour
         if (scanHint != null && config != null)
             scanHint.text = UiText.Get(config.scanHintKey);
         if (stamps != null)
+        {
             stamps.Changed += ShowCounter;
+            stamps.Changed += PassportUnderDaters;
+        }
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan += RulebookLifted;
@@ -181,7 +184,10 @@ public sealed class DeskController : MonoBehaviour
     private void OnDestroy()
     {
         if (stamps != null)
+        {
             stamps.Changed -= ShowCounter;
+            stamps.Changed -= PassportUnderDaters;
+        }
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan -= RulebookLifted;
@@ -483,13 +489,59 @@ public sealed class DeskController : MonoBehaviour
         if (deskView != null && deskView.TryViewPoint(new Vector2(ReadingSpots[onDesk % ReadingSpots.Length], ReadingSpotY), surface.transform.position.y, out Vector3 shown))
             spot = surface.Clamp(shown);
         spot = Spread(paper, spot);
-        _restAt[paper.Index] = spot;
         _stack.BringToFront(paper.Index);
         ApplyStack();
         paper.SetZone(DeskZone.Desk, false);
-        Slide(paper, ClearOfBlockers(paper, spot));
+        // The passport brought to the desk while the dater rack is out lands with its visa page under the daters (PassportUnderDaters).
+        Vector3 under = default;
+        bool underDaters = stamps != null && stamps.BarOut && paper.Index == stamps.Passport && TryUnderDaters(paper, out under);
+        spot = underDaters ? under : ClearOfBlockers(paper, spot);
+        _restAt[paper.Index] = spot;
+        Slide(paper, spot);
         Read(paper);
     }
+
+    /// <summary>
+    /// The passport's visa page under the daters (run 7's integration, the
+    /// orchestrator's call from the QA sweep: the rack hung over the data
+    /// page's photo and fields in the reading view, and a dater pressed where it
+    /// hangs printed over them). When the bar slides out, the passport lying on
+    /// the desk (not held, not sliding) slides so the middle of its stamp area
+    /// (DeskDocument.TryStampAreaCentre) lies straight under the middle of the
+    /// daters' dies (DeskStampTray.TryDiesPoint), and comes to the top; the
+    /// rack hangs high in the reading view (DeskConfigSO.stampBarView), so the
+    /// data page below it stays clear (Papers, Please: the visa page goes under
+    /// the stamp bar).
+    /// </summary>
+    private void PassportUnderDaters()
+    {
+        bool barOut = stamps != null && stamps.BarOut;
+        bool slidOut = barOut && !_barWasOut;
+        _barWasOut = barOut;
+        if (!slidOut || _state == null)
+            return;
+        int index = stamps.Passport;
+        DeskDocument passport = index >= 0 && index < _papers.Count ? _papers[index] : null;
+        if (passport == null || _dragged == index || passport.IsSliding || _state.ZoneOf(index) != DeskZone.Desk || !TryUnderDaters(passport, out Vector3 target))
+            return;
+        _restAt[index] = target;
+        _stack.BringToFront(index);
+        ApplyStack();
+        Slide(passport, target);
+    }
+
+    /// <summary>Where <paramref name="paper"/> lies (its position on the desk) with the middle of its stamp area straight under the middle of the daters' dies, kept on the desk; false without a stamp area or a laid rack.</summary>
+    private bool TryUnderDaters(DeskDocument paper, out Vector3 target)
+    {
+        target = default;
+        if (stamps == null || surface == null || !stamps.TryDiesPoint(out Vector3 dies) || !paper.TryStampAreaOffset(out Vector3 area))
+            return false;
+        target = surface.Clamp(new Vector3(dies.x - area.x, dies.y, dies.z - area.z));
+        return true;
+    }
+
+    /// <summary>Whether the dater rack was out at the last change (PassportUnderDaters acts as it slides out).</summary>
+    private bool _barWasOut;
 
     /// <summary>Where each paper sent to the desk by a click was laid (its spread's spot), while it slides there.</summary>
     private readonly Dictionary<int, Vector3> _restAt = new Dictionary<int, Vector3>();

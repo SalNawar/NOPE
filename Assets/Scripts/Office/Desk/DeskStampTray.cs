@@ -424,6 +424,16 @@ public sealed class DeskStampTray : MonoBehaviour
     }
 
     /// <summary>A new traveller (DeskController): <paramref name="passport"/> is the paper that takes the verdict (the first paper handed over; -1: none, nobody here). No verdict yet.</summary>
+    /// <summary>The paper that takes the verdict (-1: none, nobody here).</summary>
+    public int Passport => _passport;
+
+    /// <summary>The point on the desk straight under the middle of the daters' dies while the bar is out (where the passport's visa page goes, DeskController); false before the rack is laid.</summary>
+    public bool TryDiesPoint(out Vector3 point)
+    {
+        point = _laid && surface != null ? new Vector3(_out.x, surface.transform.position.y, _out.z) : default;
+        return _laid && surface != null;
+    }
+
     public void BeginCase(int passport)
     {
         _passport = passport;
