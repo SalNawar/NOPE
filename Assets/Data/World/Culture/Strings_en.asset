@@ -1210,6 +1210,14 @@ MonoBehaviour:
     text: Reduced
     gloss: 0
     tier: 0
+  - key: settings.motionIntensity
+    text: Intensity
+    gloss: 0
+    tier: 0
+  - key: settings.motionIntensityValue
+    text: '{0} %'
+    gloss: 0
+    tier: 0
   - key: settings.desktop
     text: Desktop icons open with
     gloss: 0
