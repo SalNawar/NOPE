@@ -413,6 +413,12 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 drop.Encapsulate(s.TransformPoint(corner));
             area = DeskRect.Union(deskRect, new DeskRect(drop.center.x, drop.center.z, drop.size.x, drop.size.z));
 
+            // The scanner's whole footprint on the desk (its drop area and its body's renderers, art or stand-in), for the props that must stand clear of it.
+            _scannerFootprint = drop;
+            foreach (Renderer r in artScanner ? spot.Transform.GetComponentsInChildren<Renderer>(false) : RenderersOf(scannerPlaceholder))
+                _scannerFootprint.Encapsulate(r.bounds);
+            _hasScannerFootprint = true;
+
             if (scanHint != null)
                 FaceCamera(scanHint, scanner.BedPoint + Vector3.up * HintHeight, viewer);
 
@@ -452,8 +458,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (stampTray != null && _office != null)
             stampTray.Lay(_office.transform.forward);
         // The DETAIN button stands on the desk where the office view shows DeskConfigSO.detainView (the desk machine spec §2).
-        if (detainButton != null && config != null && _officeVcam != null)
-            detainButton.Lay(_officeVcam, _office != null ? _office.aspect : 16f / 9f, top, config.detainView);
+        if (detainButton != null && config != null && _officeVcam != null && detainButton.Lay(_officeVcam, _office != null ? _office.aspect : 16f / 9f, top, config.detainView))
+            ClearOfScanner(detainButton.transform, deskRect);
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
@@ -697,6 +703,52 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
     private static Camera CameraOf(ResolvedAnchor anchor) =>
         anchor.Transform != null ? anchor.Transform.GetComponent<Camera>() : null;
+
+    /// <summary>The scanner's footprint (BindDesk: its drop area and its body's bounds), and whether there is one.</summary>
+    private Bounds _scannerFootprint;
+    private bool _hasScannerFootprint;
+
+    /// <summary>
+    /// Moves <paramref name="prop"/> (a prop laid by the office view's
+    /// viewport, the DETAIN button) out of the scanner's footprint, the
+    /// shortest way left, right or forward with a gap (ScannerClearance.ClearProp,
+    /// in the office view's level frame), kept over the desk: a viewport place
+    /// lands elsewhere at every aspect (16:9, 16:10, 21:9, 4:3), so it is
+    /// cleared after it is laid (Saleh's 1007d playtest: its base stood on the scanner).
+    /// </summary>
+    private void ClearOfScanner(Transform prop, DeskRect desk)
+    {
+        if (!_hasScannerFootprint || _office == null)
+            return;
+        Renderer[] parts = prop.GetComponentsInChildren<Renderer>(false);
+        if (parts.Length == 0)
+            return;
+        Bounds b = parts[0].bounds;
+        foreach (Renderer r in parts)
+            b.Encapsulate(r.bounds);
+        Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up);
+        if (level.sqrMagnitude < 1e-6f)
+            level = Vector3.forward;
+        level.Normalize();
+        Vector3 right = Vector3.Cross(Vector3.up, level);
+        DeskRect own = InFrame(b, right, level), scannerRect = InFrame(_scannerFootprint, right, level);
+        DeskRect deskInFrame = InFrame(new Bounds(new Vector3(desk.CentreX, 0f, desk.CentreY), new Vector3(desk.Width, 0f, desk.Height)), right, level);
+        (float x, float y) = ScannerClearance.ClearProp(own, scannerRect, deskInFrame);
+        prop.position += right * (x - own.CentreX) + level * (y - own.CentreY);
+    }
+
+    /// <summary>A world box's footprint on the desk in a level frame (x along <paramref name="right"/>, y along <paramref name="level"/>).</summary>
+    private static DeskRect InFrame(Bounds b, Vector3 right, Vector3 level)
+    {
+        float x0 = float.MaxValue, x1 = float.MinValue, y0 = float.MaxValue, y1 = float.MinValue;
+        for (int i = 0; i < 4; i++)
+        {
+            Vector3 c = new Vector3((i & 1) == 0 ? b.min.x : b.max.x, 0f, (i & 2) == 0 ? b.min.z : b.max.z);
+            float x = Vector3.Dot(c, right), y = Vector3.Dot(c, level);
+            x0 = Mathf.Min(x0, x); x1 = Mathf.Max(x1, x); y0 = Mathf.Min(y0, y); y1 = Mathf.Max(y1, y);
+        }
+        return new DeskRect((x0 + x1) / 2f, (y0 + y1) / 2f, x1 - x0, y1 - y0);
+    }
 
     private static Renderer[] RenderersOf(GameObject go) =>
         go != null ? go.GetComponentsInChildren<Renderer>(false) : Array.Empty<Renderer>();

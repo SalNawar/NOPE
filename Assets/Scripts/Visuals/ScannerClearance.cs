@@ -81,6 +81,18 @@ public static class ScannerClearance
     }
 
     /// <summary>
+    /// Where a prop standing on the desk (<paramref name="prop"/>, the DETAIN
+    /// button: Saleh's 1007d playtest, its base stood on the scanner) stands
+    /// instead: its own place when it is clear of <paramref name="scanner"/>'s
+    /// whole footprint (its body and its drop area, measured at run time, so a
+    /// new scanner model keeps it clear), else the nearest clear place to the
+    /// left, the right or the front with <see cref="Gap"/>, its centre kept in
+    /// <paramref name="area"/>; never under the scanner (Clear with no shadow:
+    /// the prop is not hidden behind it, it only must not stand in it).
+    /// </summary>
+    public static (float x, float y) ClearProp(DeskRect prop, DeskRect scanner, DeskRect area) => Clear(prop, scanner, 0f, area);
+
+    /// <summary>
     /// The eject spot for a paper of <paramref name="width"/> by
     /// <paramref name="depth"/>: just in front of the scanner (toward the
     /// camera), centred on its width; where the desk ends before that (the
