@@ -78,6 +78,22 @@ public static class RectClamp
             return hi - max;
         return 0f;
     }
+
+    /// <summary>
+    /// The offset that puts a desktop window inside its layer (the screen
+    /// above the taskbar), both axes: 0 when it already is inside; a window
+    /// taller than the layer keeps its top, the title bar, inside and one
+    /// wider keeps its left edge, so the title bar can always be dragged. A
+    /// window that ended off the screen comes back the shortest way.
+    /// </summary>
+    public static (float dx, float dy) Window(DeskRect window, DeskRect layer)
+    {
+        float halfW = window.Width / 2f, halfH = window.Height / 2f;
+        float layerHalfW = layer.Width / 2f, layerHalfH = layer.Height / 2f;
+        float dx = Shift(window.CentreX - halfW, window.CentreX + halfW, layer.CentreX - layerHalfW, layer.CentreX + layerHalfW, false);
+        float dy = Shift(window.CentreY - halfH, window.CentreY + halfH, layer.CentreY - layerHalfH, layer.CentreY + layerHalfH, true);
+        return (dx, dy);
+    }
 }
 
 /// <summary>

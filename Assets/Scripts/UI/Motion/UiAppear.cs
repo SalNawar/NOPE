@@ -61,6 +61,28 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
     /// <summary>True when <paramref name="target"/> is on its way out (Close ran and it is still showing).</summary>
     public static bool IsClosing(GameObject target) => target != null && target.TryGetComponent(out UiAppear appear) && appear._closing;
 
+    /// <summary>
+    /// Sets <paramref name="target"/>'s place outright while it may be moving
+    /// (a window's maximise and restore, its drag, its pull back on screen):
+    /// <paramref name="place"/> runs on the rest place, the motion's offset
+    /// taken out first and put back after, so the motion goes on from the new
+    /// place and settles exactly there. (A place set over the offset, then
+    /// settled, ended off by the offset: the playtest's Investigation window,
+    /// maximised on its first frame, came to rest pushed up off the screen.)
+    /// </summary>
+    public static void Place(GameObject target, System.Action place)
+    {
+        if (target == null || !target.TryGetComponent(out UiAppear appear) || !appear._posed)
+        {
+            place();
+            return;
+        }
+        Transform t = appear.transform;
+        t.localPosition -= appear._applied;
+        place();
+        t.localPosition += appear._applied;
+    }
+
     /// <summary>Plays it in from its style's start, after <paramref name="delay"/> seconds (the object should be on).</summary>
     public void Open(float delay = 0f) => OpenFrom(StyleStart(), delay);
 

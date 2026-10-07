@@ -103,6 +103,35 @@ public class DeskGeometryTests
         Assert.AreEqual(-20f, RectClamp.Shift(10f, 40f, -10f, 10f, false));
     }
 
+    /// <summary>The PC's window layer: 1440 x 1020 units above the taskbar, centred on the origin.</summary>
+    private static readonly DeskRect Layer = new DeskRect(0f, 0f, 1440f, 1020f);
+
+    [Test]
+    public void Window_InsideTheLayer_StaysPut()
+    {
+        Assert.AreEqual((0f, 0f), RectClamp.Window(new DeskRect(0f, 0f, 1120f, 820f), Layer), "centred");
+        Assert.AreEqual((0f, 0f), RectClamp.Window(Layer, Layer), "maximised");
+    }
+
+    [Test]
+    public void Window_MaximisedButPushedUpAndRight_ComesBackOntoTheLayer()
+    {
+        // The playtest's Investigation window (2026-10-07): maximised, pushed
+        // up and right by its open motion's offset, its title bar off screen.
+        Assert.AreEqual((-312f, -540f), RectClamp.Window(new DeskRect(312f, 540f, 1440f, 1020f), Layer));
+    }
+
+    [Test]
+    public void Window_PastAnyEdge_ComesBackJustInside_AndAnOversizedOneKeepsItsTitleBar()
+    {
+        var layer = new DeskRect(0f, 0f, 800f, 600f);
+        Assert.AreEqual((-40f, 0f), RectClamp.Window(new DeskRect(240f, 0f, 400f, 300f), layer), "past the right edge");
+        Assert.AreEqual((0f, -100f), RectClamp.Window(new DeskRect(0f, 250f, 400f, 300f), layer), "title bar past the top");
+        Assert.AreEqual((0f, 50f), RectClamp.Window(new DeskRect(0f, -200f, 400f, 300f), layer), "past the taskbar");
+        Assert.AreEqual((0f, -400f), RectClamp.Window(new DeskRect(0f, 200f, 400f, 1000f), layer), "taller: its top, the title bar, on the layer's top");
+        Assert.AreEqual((100f, 0f), RectClamp.Window(new DeskRect(0f, 0f, 1000f, 300f), layer), "wider: its left edge on the layer's");
+    }
+
     // -----------------------------
     // PaperStack
     // -----------------------------

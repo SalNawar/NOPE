@@ -202,7 +202,8 @@ public sealed class DesktopWindowManager : MonoBehaviour
     /// <summary>
     /// Applies the stack: which windows show, their order, the taskbar's
     /// buttons. A window that shows grows out of its taskbar button with a
-    /// spring and window_open; one that goes (closed or minimised) shrinks
+    /// spring and window_open (pulled inside the layer first, so it shows on
+    /// the screen: DesktopWindow.KeepInside); one that goes (closed or minimised) shrinks
     /// into the taskbar with window_close, taking no clicks while it goes, then
     /// switches off (UiAppear, the game feel; the stack, not the object, says
     /// what is open).
@@ -223,6 +224,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
             if (visible)
             {
                 go.SetActive(true);
+                pair.Value.KeepInside();
                 _opened.Add(pair.Key);
             }
             else
