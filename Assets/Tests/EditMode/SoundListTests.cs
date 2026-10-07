@@ -78,6 +78,12 @@ public class SoundListTests
         Assert.IsFalse(SoundList.TryMatchFile("paper_drop_v0", ids, out _, out _), "variants count from 1");
         Assert.IsFalse(SoundList.TryMatchFile("stamp_thud", ids, out _, out _), "a file the list does not name");
         Assert.IsFalse(SoundList.TryMatchFile("", ids, out _, out _));
+        var stamps = new HashSet<string> { "stamp_approve", "stamp_deny" };
+        Assert.IsTrue(SoundList.TryMatchFile("stamp_real_cha_ka", stamps, out id, out v), "Saleh's GPT stamp is the approve stamp");
+        Assert.AreEqual(("stamp_approve", 1), (id, v));
+        Assert.IsTrue(SoundList.TryMatchFile("stamp_real_cha_ka_deep", stamps, out id, out v), "its deep take the deny stamp");
+        Assert.AreEqual(("stamp_deny", 1), (id, v));
+        Assert.IsFalse(SoundList.TryMatchFile("stamp_real_cha_ka", ids, out _, out _), "an alias needs its cue in the list");
     }
 
     [Test]

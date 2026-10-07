@@ -177,9 +177,22 @@ public static class SoundList
     }
 
     /// <summary>
+    /// Files that stand for a cue under another name (Saleh 2026-10-07: the
+    /// GPT stamp, a real two-click press, is the reference for the list's
+    /// stamps): stamp_real_cha_ka.wav is stamp_approve, its _deep take
+    /// (lower, harder) stamp_deny. A listed name of its own still wins.
+    /// </summary>
+    public static readonly IReadOnlyDictionary<string, string> FileAliases = new Dictionary<string, string>(StringComparer.Ordinal)
+    {
+        ["stamp_real_cha_ka"] = "stamp_approve",
+        ["stamp_real_cha_ka_deep"] = "stamp_deny"
+    };
+
+    /// <summary>
     /// The cue and the variant a file name (without its extension) stands
     /// for: "paper_drop_v2" is paper_drop's variant 2, "pc_on" is pc_on's
-    /// variant 1; false when <paramref name="ids"/> holds neither.
+    /// variant 1, an alias (FileAliases) its cue's variant 1; false when
+    /// <paramref name="ids"/> holds none of them.
     /// </summary>
     public static bool TryMatchFile(string fileName, ICollection<string> ids, out string id, out int variant)
     {
@@ -187,6 +200,12 @@ public static class SoundList
         variant = 0;
         if (string.IsNullOrEmpty(fileName) || ids == null)
             return false;
+        if (!ids.Contains(fileName) && FileAliases.TryGetValue(fileName, out string alias) && ids.Contains(alias))
+        {
+            id = alias;
+            variant = 1;
+            return true;
+        }
         Match v = VariantFile.Match(fileName);
         if (v.Success && ids.Contains(v.Groups[1].Value))
         {
