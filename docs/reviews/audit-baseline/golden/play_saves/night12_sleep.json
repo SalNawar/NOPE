@@ -6,6 +6,7 @@
         "money": 162,
         "stabilityHundredths": 8858,
         "totalCitations": 4,
+        "totalDetained": 24,
         "citationsToday": 0,
         "clerkDebtPaid": 486,
         "debtReliefYesterday": 5,
@@ -74,6 +75,7 @@
             "premade:beethoven:accepted",
             "premade:nobunaga:met",
             "premade:nobunaga:accepted",
+            "trig:history_hours_extended:fired",
             "trig:history_pell_turned_away:fired",
             "trig:history_kulthum_home:fired",
             "trig:history_cleopatra_home:fired",
@@ -129,6 +131,7 @@
             "premade:aristotle:accepted",
             "premade:hokusai:met",
             "premade:hokusai:accepted",
+            "trig:history_night_shifts:fired",
             "trig:history_aristotle_home:fired",
             "trig:history_confucius_home:fired",
             "trig:history_hokusai_home:fired",
@@ -1785,9 +1788,10 @@
             {
                 "day": 8,
                 "briefing": [
-                    "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver. And from today the office reads the world's language: the Bureau issues you a Translation Lens. Hover a word to read it."
+                    "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver. And from today the office reads the world's language: the Bureau issues you a Translation Lens. Hover a word to read it. New hours from today: the desk opens at 13:00 and closes at 21:00."
                 ],
                 "news": [
+                    "BUREAU EXTENDS HOURS AS DEBT QUEUES GROW: from today the desks open after lunch and close after dark. The Drive cannot wait for morning.",
                     "THURSDAY NIGHT: Umm Kulthum, stamped home at Desk 3, sings Cairo a song about 2150. The streets empty to listen.",
                     "THE QUEEN COMES HOME: Cleopatra, stamped home at Desk 3, opens 2150's library in Alexandria. Rome asks for a card.",
                     "FREE MARKETS, FREE GUILDS: Oda Nobunaga, stamped home at Desk 3, opens Azuchi to 2150's trade. Every castle town booms.",
@@ -1864,9 +1868,10 @@
             {
                 "day": 12,
                 "briefing": [
-                    "NEW: bans. The Directorate can close a route on the board: today Weimar Berlin is CLOSED."
+                    "NEW: bans. The Directorate can close a route on the board: today Weimar Berlin is CLOSED. New hours from today: the desk opens at 16:00 and closes at 00:00."
                 ],
                 "news": [
+                    "NIGHT SHIFTS BEGIN AT THE GATES: from today the desks work until midnight. The Directorate thanks every clerk for their sacrifice.",
                     "EVERYTHING HAS A CATEGORY: Aristotle, stamped home at Desk 3, files 2150 under Logic. Every scholar in Greece adopts the system.",
                     "THE PROPER FORM: Confucius, stamped home at Desk 3, brings 2150's paperwork to Lu. Every official must now pass an exam.",
                     "THE GREAT WAVE OF 2150: Katsushika Hokusai, stamped home at Desk 3, prints 2150 rising behind Mount Fuji. Every house in Edo buys one.",

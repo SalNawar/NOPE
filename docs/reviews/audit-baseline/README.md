@@ -344,6 +344,28 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
   - The profile job decides travellers with the cheat menu's `CheatDecideCorrectly` (the controller's `Decide` it called
     is gone since `4315bce`).
 
+- **Round 7, the desk machine prototype** (`feat/desk-machine`, with main `50831a4` merged: Track J's game feel, the sound
+  bank, the office kit). Re-packed from runs A and B, which were identical (41 deterministic files; the transcript and all 30
+  saves byte-equal); each play report passes 6,552 checks and fails 1 (round 6's open day-5 GUIDE check), and logs no
+  warning. Round 6's pack was never re-taken after main's night shifts, Helix River, morning paper, citation slip and kit
+  rounds, so most differences from it are those tracks'; this round's own changes are:
+  - The audit drives the hardware: every traveller is stamped with a dater, handed back (nothing is decided), then committed by
+    the gate lever (130 APPROVED), RETURN (51 DENIED) or DETAIN (34: every law-breaker the plan denies with its evidence who
+    would not have come back after a denial, `Returns.Plan` on their own stream, so no later day changes). Each
+    `decided with the stamps: X` line gains `, committed by the lever / RETURN button / DETAIN button`; the verdict JSON gains
+    `"detained"`; 14 shift reports gain `Detained: N`; every save gains `world.totalDetained`. Checked once: the lever refuses
+    before the hand-back, RETURN refuses an APPROVED passport, the lever a DENIED one. Day 1's planned mistake stays a
+    denial (that honest traveller would come back); a wrong detention is checked by the desk machine probe and the domain tests.
+  - Read timing only: the lever's verdict line is read as the verdict is committed (the next slot clears it while the arm
+    springs back); a day's last `world:` line is read after closing (the lever settles past it), so it already shows the
+    Debt Relief instalment. Verdicts, pay, fines, stability, outcomes and the ending are unchanged; a save compared with a
+    peer track's run of the same main differs only in `totalDetained`.
+  - `scene_OfficeGameplay`: the two daters (Frame, Die, Wheels, Body with its window, model name and side button, green and
+    red), the GateLever (Base, Arm, Knob) and VerdictButtons (RETURN, DETAIN, Flash); each rebuild equals the committed scene.
+    `data_hashes.txt`: the strings (`citation.detainedWrong`, `citation.detainedUnproven`, `results.detained`, the hardware's
+    hints and labels, `stamp.dater.by`) and the dater materials.
+  - Profiles not re-taken (round 6's kept).
+
 ## Baseline results (ff3a6e0)
 
 - **Tests:** compile 0 errors; offline EditMode 1067 passed, 0 failed.

@@ -6,6 +6,7 @@
         "money": 112,
         "stabilityHundredths": 8947,
         "totalCitations": 4,
+        "totalDetained": 13,
         "citationsToday": 0,
         "clerkDebtPaid": 229,
         "debtReliefYesterday": 0,
@@ -69,6 +70,7 @@
             "premade:beethoven:accepted",
             "premade:nobunaga:met",
             "premade:nobunaga:accepted",
+            "trig:history_hours_extended:fired",
             "trig:history_pell_turned_away:fired",
             "trig:history_kulthum_home:fired",
             "trig:history_cleopatra_home:fired",
@@ -487,6 +489,7 @@
         "tomorrow": {
             "briefingLines": [],
             "newsLines": [
+                "BUREAU EXTENDS HOURS AS DEBT QUEUES GROW: from today the desks open after lunch and close after dark. The Drive cannot wait for morning.",
                 "THURSDAY NIGHT: Umm Kulthum, stamped home at Desk 3, sings Cairo a song about 2150. The streets empty to listen.",
                 "THE QUEEN COMES HOME: Cleopatra, stamped home at Desk 3, opens 2150's library in Alexandria. Rome asks for a card.",
                 "FREE MARKETS, FREE GUILDS: Oda Nobunaga, stamped home at Desk 3, opens Azuchi to 2150's trade. Every castle town booms.",
