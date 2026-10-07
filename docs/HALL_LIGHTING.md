@@ -219,7 +219,8 @@ and 8.4 at night with the evening ink).
 
 ## Reinstalling the hall's art
 
-`AnimeHallLayerInstaller` rebuilds the scene without the hooks: run Add Anime
-Hall Hooks again (its lighting step recreates the lights where the inventory
+A rebuild of the hall from scratch (its first installer, `AnimeHallLayerInstaller`,
+was retired on 2026-10-07; the art side edits the hall in place through
+`Tools > Terminal Art`) would lose the hooks: run Add Anime Hall Hooks again (its lighting step recreates the lights where the inventory
 put them; a renamed or renumbered painted layer is an edit of
 `AnimeHallLightingHooks`' layer ids and pixel positions).

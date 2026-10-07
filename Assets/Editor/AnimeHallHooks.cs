@@ -32,15 +32,16 @@ using UnityEngine.SceneManagement;
 /// alone, so a second run changes nothing. The scene is marked dirty, not
 /// saved. Run by the gameplay side once with Saleh's OK (2026-09-29); the art
 /// side owns the hall and may move or restyle what it adds (the camera then
-/// follows OfficeVCam). Reinstalling the hall's art (AnimeHallLayerInstaller)
-/// rebuilds the scene without them: run it again.
+/// follows OfficeVCam). A rebuild of the hall from scratch (its first installer
+/// was retired on 2026-10-07; the art side now edits it in place through Tools >
+/// Terminal Art) would lose them: run it again then.
 /// </summary>
 public static class AnimeHallHooks
 {
     /// <summary>The anime hall's scene; the readouts' poses below are measured on its boards.</summary>
     public const string HallPath = "Assets/Art/Office/AnimeHallLayers/AnimeHall.unity";
 
-    /// <summary>The prefix of the static preview texts the art's TerminalProduction.Label puts on the boards ("Preview display — 09:00").</summary>
+    /// <summary>The prefix of the static preview texts the art's first (retired) hall builder put on the boards ("Preview display — 09:00").</summary>
     private const string PreviewPrefix = "Preview display — ";
 
     /// <summary>The tool's undo step.</summary>
