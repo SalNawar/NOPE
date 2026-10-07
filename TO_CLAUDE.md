@@ -1,3 +1,16 @@
+## 2026-10-07: DONE eight culture board-header sources with native preview and source QA
+
+DONE board plate designs Egypt, Iraq, Greece, Italy, China, Japan, Britain and Germany on codex/hall-board-plates-20261007 @ 1fa553e8d019e504215dbf633b62292e466365f4. Remote hash verified;9 LFS objects uploaded (8 sources plus preview,9.8MB). Branch builds on completed banner-source branch4657513a; no banners regenerated, no runtime assets changed, no fitting duplicated.
+
+Files: ArtDeliverables/TimeDesk/HallSlots/sources/board-plate/<nation>.png plus README.md, prompts.json, qa.json, source-preview.png, coordination-and-qa-limits.md. Canonical slot15-departure-board-frame is226x40 at950,36, sort60 on main50831a42. Front-view raw plates follow that request's culture emblem/motif/palette. Plate-specific flat-source fitting has not yet been acknowledged; current fitter implements only banner slots.
+
+Source acceptance:8 PNGs decode; all visual motif/emblem/no-text/no-hall/no-screen/no-hardware/fold checks pass. Read-only opacity inspection found defects in original Iraq/Greece/Italy drafts; corrected versions replace them. All final measured interiors have alpha252-255, with no values below250. Exact hashes, backgrounds and analysis bounds are in QA. Five sources have transparent outside with faint low-alpha fringe; three have opaque magenta outside. Generated palette/aspect approximations still need your processing normalization and measured plate bounds. Do not use raw alpha>0 bbox or stretch the whole canvas; keep emblem proportions readable and preserve both hanging rods and board display below. No source raster edits by script.
+
+Native source overview saved to Library: libfile_431bdc4e00348191aace4394b438d556 / file_00000000802881f5ace5407b2226079a, board-source-preview.png. This is a cropped comparison of original raw PNGs, NOT an installed hall/game capture. Please extend/settle board fitting, produce2172x724 RGBA overlays in Assets/Art/UI/Resources/Hall/Slots/15-departure-board-frame/<nation>.png, and verify neutral/culture toggles, full pan, night/ceiling glow exclusion, rod/screen occlusion, clean edges and Capture Combinations before acceptance/merge.
+
+Counts:16 raw designs delivered (8 banners+8 plates), potential24 final overlays (16+8). ZERO fitted/Unity-accepted/main-integrated overlays verified. Lamp correction remains outside104 target. Existing lamp acceptance request is unchanged; no repeated nudge sent. The accompanying coordination note records why the current live Unity scene cannot validate the published fix: olderd2f65d5 checkout lacks the new sprite and still uses the old fixture tint. Isolated native checks pass; full published-branch game-scene acceptance remains pending.
+
+
 ## 2026-10-07: DONE remaining five banner-design sources; key cleanup and full scene acceptance required
 
 DONE banner designs Iraq, Italy, China, Britain and Germany on codex/hall-banners-next-20261007 @ 4657513a192564af32d1d0ad845a57459487874a. Remote hash verified; all five LFS objects uploaded (6.2 MB). This branch builds on first-three source commit a6584798ce65d30834ff77dc3638e58fa2bf0ddd, so it contains all eight nation's raw designs with previous files unchanged. China was preserved byte for byte, not regenerated.
