@@ -25,6 +25,32 @@ public static class VerdictRules
     public static bool IsCorrect(bool accepted, bool shouldAccept, bool curedAtDesk) => accepted == shouldAccept || (!accepted && curedAtDesk);
 
     /// <summary>
+    /// The three verdicts (the desk machine spec §2; Saleh 2026-10-07:
+    /// "detain only if the traveller breaks the law"): a detention is right
+    /// only for a traveller who <paramref name="breaksLaw"/> (Law.Breaks);
+    /// denying a law-breaker stays right (detain is the stronger, never
+    /// required option); APPROVED and DENIED follow the two-verdict table
+    /// (approving a law-breaker is wrong, as they have a fault).
+    /// </summary>
+    public static bool IsCorrect(DeskStamp verdict, bool shouldAccept, bool curedAtDesk, bool breaksLaw) =>
+        verdict == DeskStamp.Detained ? breaksLaw : IsCorrect(verdict == DeskStamp.Approved, shouldAccept, curedAtDesk);
+
+    /// <summary>True when <paramref name="verdict"/> detains a traveller who broke no law (<paramref name="breaksLaw"/> false): wrong, the one citation ("Detained a traveller who broke no law").</summary>
+    public static bool IsWrongDetention(DeskStamp verdict, bool breaksLaw) => verdict == DeskStamp.Detained && !breaksLaw;
+
+    /// <summary>
+    /// True when a right denial or a right detention is unproven: the
+    /// evidence rule of a denial (<see cref="IsUnprovenDenial"/>) holds for
+    /// a detention too (the spec: "Detain with zero logged evidence follows
+    /// today's evidence rule for denials"); a detention of a traveller who
+    /// broke no law is a wrong detention instead, never unproven
+    /// (<see cref="IsWrongDetention"/>).
+    /// </summary>
+    public static bool IsUnproven(bool requireEvidence, int evidenceCount, DeskStamp verdict, bool hasDeviationFault, bool hasDirectiveFault, bool breaksLaw) =>
+        !IsWrongDetention(verdict, breaksLaw)
+        && IsUnprovenDenial(requireEvidence, evidenceCount, verdict == DeskStamp.Approved, hasDeviationFault, hasDirectiveFault);
+
+    /// <summary>
     /// True when a denial is right but unproven: the evidence gate is on, the
     /// evidence system is active and logged nothing (<paramref name="evidenceCount"/>
     /// is -1 when the system is inactive), and the denied traveller has a

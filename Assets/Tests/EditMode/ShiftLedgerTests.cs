@@ -68,6 +68,23 @@ public class ShiftLedgerTests
     }
 
     [Test]
+    public void MistakeKey_OfAWrongDetention_SaysTheTravellerBrokeNoLaw()
+    {
+        Assert.AreEqual("citation.detainedWrong", new CaseVerdict { detained = true, faultReason = "disguised" }.MistakeKey);
+        Assert.AreEqual("citation.unproven", new CaseVerdict { detained = true, unprovenDenial = true, faultReason = "forged" }.MistakeKey, "a law-breaker detained with nothing logged");
+    }
+
+    [Test]
+    public void DetainedCount_CountsTheDetentions()
+    {
+        var ledger = new ShiftLedger();
+        ledger.verdicts.Add(new CaseVerdict { detained = true, correct = true });
+        ledger.verdicts.Add(new CaseVerdict { detained = false });
+        ledger.verdicts.Add(new CaseVerdict { detained = true });
+        Assert.AreEqual(2, ledger.DetainedCount);
+    }
+
+    [Test]
     public void EmptyLedger_IsAllZeroes()
     {
         var ledger = new ShiftLedger();

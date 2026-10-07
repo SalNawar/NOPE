@@ -64,4 +64,79 @@ public class VerdictRulesTests
     {
         Assert.AreEqual(expected, VerdictRules.IsFreeWarning(citationNumberToday, freeWarnings));
     }
+
+    // The three verdicts (the desk machine spec §2; Saleh: "detain only if the traveller breaks the law").
+
+    [Test]
+    public void AnHonestTravellerDetained_IsWrong_OneCitation()
+    {
+        Assert.IsFalse(VerdictRules.IsCorrect(DeskStamp.Detained, true, false, false));
+        Assert.IsTrue(VerdictRules.IsWrongDetention(DeskStamp.Detained, false));
+    }
+
+    [Test]
+    public void ALawBreakerDetained_IsCorrect()
+    {
+        Assert.IsTrue(VerdictRules.IsCorrect(DeskStamp.Detained, false, false, true));
+        Assert.IsFalse(VerdictRules.IsWrongDetention(DeskStamp.Detained, true));
+    }
+
+    [Test]
+    public void ALawBreakerDenied_IsCorrect_DetainIsNeverRequired()
+    {
+        Assert.IsTrue(VerdictRules.IsCorrect(DeskStamp.Denied, false, false, true));
+    }
+
+    [Test]
+    public void ALawBreakerApproved_IsWrong()
+    {
+        Assert.IsFalse(VerdictRules.IsCorrect(DeskStamp.Approved, false, false, true));
+    }
+
+    [Test]
+    public void ALiarWhoBrokeNoLaw_Detained_IsAWrongDetention_DeniedIsRight()
+    {
+        Assert.IsFalse(VerdictRules.IsCorrect(DeskStamp.Detained, false, false, false));
+        Assert.IsTrue(VerdictRules.IsWrongDetention(DeskStamp.Detained, false));
+        Assert.IsTrue(VerdictRules.IsCorrect(DeskStamp.Denied, false, false, false));
+    }
+
+    [TestCase(DeskStamp.Approved, true, true, false, true)]
+    [TestCase(DeskStamp.Approved, false, false, false, false)]
+    [TestCase(DeskStamp.Denied, false, false, false, true)]
+    [TestCase(DeskStamp.Denied, true, false, false, false)]
+    [TestCase(DeskStamp.Denied, true, true, false, true, Description = "a cured waiver fault: denying stays right")]
+    public void ApproveAndDeny_KeepTheTwoVerdictTable(DeskStamp verdict, bool shouldAccept, bool cured, bool breaksLaw, bool expected)
+    {
+        Assert.AreEqual(expected, VerdictRules.IsCorrect(verdict, shouldAccept, cured, breaksLaw));
+    }
+
+    [TestCase(DeskStamp.Approved)]
+    [TestCase(DeskStamp.Denied)]
+    public void OnlyADetention_CanBeAWrongDetention(DeskStamp verdict)
+    {
+        Assert.IsFalse(VerdictRules.IsWrongDetention(verdict, false));
+    }
+
+    [Test]
+    public void ALawBreakerDetained_WithNothingLogged_IsUnproven_AsADenialIs()
+    {
+        Assert.IsTrue(VerdictRules.IsUnproven(true, 0, DeskStamp.Detained, true, false, true));
+        Assert.IsFalse(VerdictRules.IsUnproven(true, 1, DeskStamp.Detained, true, false, true), "evidence logged");
+        Assert.IsFalse(VerdictRules.IsUnproven(false, 0, DeskStamp.Detained, true, false, true), "the gate is off");
+    }
+
+    [Test]
+    public void AWrongDetention_IsNeverUnproven_ItIsWrong()
+    {
+        Assert.IsFalse(VerdictRules.IsUnproven(true, 0, DeskStamp.Detained, true, false, false), "a liar who broke no law");
+        Assert.IsFalse(VerdictRules.IsUnproven(true, 0, DeskStamp.Detained, false, false, false), "an honest traveller");
+    }
+
+    [TestCase(DeskStamp.Denied, true)]
+    [TestCase(DeskStamp.Approved, false)]
+    public void IsUnproven_ForApproveAndDeny_IsTheDenialRule(DeskStamp verdict, bool expected)
+    {
+        Assert.AreEqual(expected, VerdictRules.IsUnproven(true, 0, verdict, true, false, false));
+    }
 }

@@ -282,7 +282,7 @@ public sealed class DeskStampTray : MonoBehaviour
     {
         _passport = passport;
         _noteKey = null;
-        _flow.BeginCase();
+        _flow.BeginCase(passport >= 0);
         Raise();
     }
 

@@ -124,6 +124,17 @@ public sealed class ShiftLedger
         }
     }
 
+    /// <summary>The travellers detained this shift (the third verdict; the day's results count them).</summary>
+    public int DetainedCount
+    {
+        get
+        {
+            int n = 0;
+            foreach (CaseVerdict v in verdicts) if (v.detained) n++;
+            return n;
+        }
+    }
+
     /// <summary>Total stability change across the shift (signed): the verdicts' and the strandings'.</summary>
     public float TotalStabilityDelta
     {
@@ -196,8 +207,11 @@ public sealed class CaseVerdict
     // Investigation (accept/deny)
     // -----------------------------
 
-    /// <summary>True if the player accepted (approved travel); false = denied.</summary>
+    /// <summary>True if the player accepted (approved travel); false = denied or detained.</summary>
     public bool accepted;
+
+    /// <summary>True if the player detained the traveller (the third verdict, the DETAIN hardware; <see cref="accepted"/> is false).</summary>
+    public bool detained;
 
     /// <summary>The traveller's kind (the ledger's departure lines count leisure and Debt Relief departures by it; traveller types §10).</summary>
     public TravellerKind kind;
@@ -227,12 +241,14 @@ public sealed class CaseVerdict
 
     /// <summary>
     /// The UI string key of a wrong decision's mistake: "citation.unproven"
-    /// for an unproven denial, "citation.deniedWrong" for another denial,
+    /// for an unproven denial or detention, "citation.detainedWrong" for a
+    /// detention of a traveller who broke no law, "citation.deniedWrong" for another denial,
     /// "citation.acceptedWrong" plus "." and the fault reason (when there is
     /// one) for an accept ({0} = the destination).
     /// </summary>
     public string MistakeKey =>
         unprovenDenial ? "citation.unproven"
+        : detained ? "citation.detainedWrong"
         : !accepted ? "citation.deniedWrong"
         : string.IsNullOrEmpty(faultReason) ? "citation.acceptedWrong"
         : "citation.acceptedWrong." + faultReason;
