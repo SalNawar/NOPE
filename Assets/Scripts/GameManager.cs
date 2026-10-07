@@ -172,7 +172,7 @@ public sealed partial class GameManager : MonoBehaviour
         // Shift clock (Papers, Please-style closing time).
         if (shiftClock != null)
         {
-            shiftClock.Configure(_gameConfig);
+            shiftClock.Configure(_gameConfig, dayPlan);
             shiftClock.Closed += HandleShiftClosed;
         }
 
@@ -249,9 +249,12 @@ public sealed partial class GameManager : MonoBehaviour
 
         Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.00}, cases={_dayCases.Count}, places={_today.Places.Count}, leader='{_worldState.history.leaderId}'.");
 
+        // The day's bulletin, with the new desk hours when they changed overnight (night shifts: the hours grow).
+        string bulletin = TodaysBulletin();
+
         // The morning paper is printed: its lines go to the News site's back issues (the night rebuilds them, so they are kept now).
         if (desktopConfig != null)
-            NewsArchive.Record(_worldState.newsArchive, _worldState.day, Briefing(dayPlan.Bulletin, _worldState.tomorrow.briefingLines), _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
+            NewsArchive.Record(_worldState.newsArchive, _worldState.day, Briefing(bulletin, _worldState.tomorrow.briefingLines), _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
                                _worldState.tomorrow.deskLines);
         else
             Debug.LogWarning("[GameManager] No DesktopConfigSO wired: today's paper is not kept for the News site. Run Tools > TimeDesk > Build Office UI.");
@@ -264,13 +267,29 @@ public sealed partial class GameManager : MonoBehaviour
             Debug.Log("[GameManager] <<< Exiting Start (showing morning briefing before day loop).");
             if (booth != null)
                 booth.SetPhase(BoothPhase.Newsletter);
-            dayFlowUI.ShowBriefing(_worldState, dayPlan.Bulletin, () => BeginShift(planToRun, seedToUse));
+            dayFlowUI.ShowBriefing(_worldState, bulletin, () => BeginShift(planToRun, seedToUse));
         }
         else
         {
             Debug.Log("[GameManager] <<< Exiting Start (starting day loop directly).");
             BeginShift(dayPlan, seed);
         }
+    }
+
+    /// <summary>
+    /// Today's bulletin: the plan's line, then, when today's desk hours differ
+    /// from yesterday's (ShiftHours.Announces; the night shifts' days 8 and 12),
+    /// the line naming the new hours (UI string briefing.newHours).
+    /// </summary>
+    private string TodaysBulletin()
+    {
+        string bulletin = dayPlan.Bulletin.Trim();
+        ShiftHours today = dayPlan.Shift(_gameConfig);
+        DayPlanSO yesterdayPlan = _worldState.day > 1 ? contentLibrary.GetDayPlan(_worldState.day - 1) : null;
+        if (!ShiftHours.Announces(yesterdayPlan != null ? yesterdayPlan.Shift(_gameConfig) : (ShiftHours?)null, today))
+            return bulletin;
+        string hours = UiText.Format("briefing.newHours", today.Open, today.Close);
+        return string.IsNullOrEmpty(bulletin) ? hours : bulletin + " " + hours;
     }
 
     /// <summary>The morning paper's briefing as the News site keeps it: the day's bulletin first (lesson 4; none when blank), then the tomorrow package's briefing lines.</summary>
@@ -440,7 +459,8 @@ public sealed partial class GameManager : MonoBehaviour
             // The report's money at a glance (lesson 5): tonight's bills are Home's own fixed bill (HomeEconomy.DailyExpenses; a break-in is
             // never foretold) and the pet's essentials (food, heating, electricity: HomeEconomy.EssentialsPrice; the Home pet spec PS9).
             int bills = HomeEconomy.DailyExpenses(_worldState, contentLibrary, _gameConfig, 0).total + HomeEconomy.EssentialsPrice(_worldState, contentLibrary);
-            dayFlowUI.ShowResults(_worldState, _ledger, ShiftReport.From(_ledger, _dayCases != null ? _dayCases.Count : 0, _worldState.money, bills), next);
+            dayFlowUI.ShowResults(_worldState, _ledger, ShiftReport.From(_ledger, _dayCases != null ? _dayCases.Count : 0, _worldState.money, bills),
+                                  shiftClock != null ? shiftClock.Hours : dayPlan.Shift(_gameConfig), next);
         }
         else
         {

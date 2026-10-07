@@ -279,6 +279,8 @@ public static class ContentSheetMap
             Text("asset").Required(),
             Int("day").Required(),
             Int("queue"),
+            Text("shiftStart").Omit().Note("the time the desk opens that day, 24-hour \"13:00\" (blank: Game Config's standard day, 09:00 to 17:00; night shifts: the clock, the hall's light and the city follow it)"),
+            Text("shiftEnd").Omit().Note("the time the desk closes that day, up to \"24:00\" (midnight, shown 00:00; blank with shiftStart); the shift lasts Game Config's real seconds whatever its span"),
             Text("bulletin").Note("the morning briefing's first line: the one paper or check the day brings for the first time (blank: nothing new; lesson 4)"),
             List("papers").Note("the form numbers in circulation this day (TC-101 ...): travellers carry only these, never one an earlier day issued left out; empty: every form (lesson D7)"),
             List("introduces").Omit().Note("what else arrives this day, hidden until then (the desk-first ramp): tool:scanner, tool:board, tool:calendar, tool:rulebook, wheel:clothes, pc:records, pc:standing, app:<desktop app>, book:<category>, field:<category> or field:<form>/<category>"),

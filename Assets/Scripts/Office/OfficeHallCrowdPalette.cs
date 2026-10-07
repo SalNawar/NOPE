@@ -8,7 +8,9 @@ using UnityEngine;
 /// renderer gets a property-block _Tint lerped between its morning and evening
 /// materials' _Tint, so the materials themselves never change. In Automatic mode
 /// the blend follows the gameplay layer's shift clock through its read-only hook
-/// (<see cref="ShiftClockDriver.Live"/>) along <see cref="CrowdPaletteBlend"/>;
+/// (<see cref="ShiftClockDriver.Live"/>) along <see cref="CrowdPaletteBlend"/>, on
+/// the clock's hour as it stands on the standard day (the real hour, so a late
+/// shift opens in the evening);
 /// without a gameplay layer (the art office on its own, edit mode) the crowds keep
 /// their morning colours. Morning and Evening force one end for previews
 /// (Tools > Terminal Art > Office Scene > Hall Crowds).
@@ -49,10 +51,10 @@ public sealed class OfficeHallCrowdPalette : MonoBehaviour
     /// <summary>Automatic for play; Morning or Evening to preview one palette.</summary>
     [SerializeField] private PreviewMode preview;
 
-    /// <summary>Shift progress (0 opening, 1 closing) at which the crowds start to darken.</summary>
+    /// <summary>The standard day's progress (0 its opening, 1 its closing; IShiftProgress.StandardProgress01) at which the crowds start to darken.</summary>
     [SerializeField, Range(0, 1)] private float eveningStartsAt = .50f;
 
-    /// <summary>Shift progress at which the crowds wear their full evening colours.</summary>
+    /// <summary>The standard day's progress at which the crowds wear their full evening colours.</summary>
     [SerializeField, Range(0, 1)] private float eveningFullAt = .90f;
 
     private static readonly int Tint = Shader.PropertyToID("_Tint");
@@ -104,7 +106,7 @@ public sealed class OfficeHallCrowdPalette : MonoBehaviour
         // The gameplay layer publishes its shift clock while it is loaded; the art scene
         // on its own (or edit mode) has none, and the crowds stay in the morning.
         IShiftProgress shift = ShiftClockDriver.Live;
-        return shift != null ? CrowdPaletteBlend.Evening(shift.Progress01, eveningStartsAt, eveningFullAt) : 0f;
+        return shift != null ? CrowdPaletteBlend.Evening(shift.StandardProgress01, eveningStartsAt, eveningFullAt) : 0f;
     }
 
     /// <summary>Writes the blended tint to every group, only when the blend changed.</summary>

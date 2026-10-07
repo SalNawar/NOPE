@@ -224,8 +224,9 @@ public sealed class HallSlotsLink : MonoBehaviour
         if (config != null)
             state.Tier = HelixRiver.Tier(world.timelineStability, config.firedAtStability, config.stabilityWarningMargin, config.stabilityCriticalMargin,
                                          _settings.river != null ? _settings.river.knobs : null);
-        state.Phase = HallStates.PhaseOf(world.day, _settings.extendedFromDay, _settings.nightsFromDay);
         ContentLibrarySO lib = run.Library;
+        DayPlanSO plan = lib != null ? lib.GetDayPlan(world.day) : null;
+        state.Phase = HallStates.PhaseOf(plan != null ? plan.Shift(config) : GameConfigSO.Standard(config), GameConfigSO.Standard(config));
         if (lib != null)
             state.Event = HallStates.EventOf(RuleTypes(lib.GetDayPlan(world.day)), world.day > 1 ? RuleTypes(lib.GetDayPlan(world.day - 1)) : null);
         state.Exhibits = HallStates.ExhibitsOf(world.flags, id => _nationOfPremade.TryGetValue(id, out string n) ? n : null, out state.RecentExhibit, out state.StrongestExhibit);

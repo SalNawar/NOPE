@@ -362,6 +362,15 @@ public static class _TimeDeskAuditPlay
         RecordPortals(o);
         DayPlanSO paced = RunManager.Instance.GetCurrentDayPlan();
         DayFlowUIController flow = Office.One<DayFlowUIController>();
+        // The front page's every line (the bulletin, with the new hours on the days they change, leads as headline and deck).
+        string brief = string.Join(" ", new[] { "briefingHeadlineText", "briefingDeckText", "briefingStoryTitleText", "briefingStoryText" }
+            .Select(f => Field(flow, f) as TMP_Text).Where(t => t != null).Select(t => t.text));
+        // Night shifts (the hours grow): the clock runs the day's own hours, and the briefing names new hours only on the days they change.
+        ShiftHours hours = paced.Shift(RunManager.Instance.Config.gameConfig);
+        Check(o.Clock.Hours.Equals(hours) && Mathf.Approximately(o.Clock.MinuteOfDay, hours.StartMinute),
+              $"day {day}: the shift clock runs the day's hours {hours} and opens at {hours.Open} (clock {o.Clock.Hours}, at {ShiftClock.Format(o.Clock.MinuteOfDay)})");
+        Check((day == 8 || day == 12) == brief.Contains(UiText.Format("briefing.newHours", hours.Open, hours.Close)),
+              $"day {day}: the briefing names the new hours only on the days they change (8 and 12)");
         Check(day > 5 || !string.IsNullOrWhiteSpace(paced.Bulletin), $"day {day}: days 1-5 each announce their one new paper or check in a bulletin ('{paced.Bulletin}')");
         Check(string.IsNullOrWhiteSpace(paced.Bulletin) || (((TMP_Text)Field(flow, "briefingKickerText")).gameObject.activeSelf
                   && ((TMP_Text)Field(flow, "briefingHeadlineText")).text == MorningPaper.Compose(paced.Bulletin, null, null, null).Headline),
@@ -2134,7 +2143,7 @@ public static class _TimeDeskAuditPlay
         WorldState w = RunManager.Instance.World;
         Line($"   world: day={w.day} runSeed={w.runSeed} daySeed={RunManager.Instance.GetDaySeed()} money={w.money} stability={F(w.timelineStability)} leader='{w.history.leaderId}' upgrades=[{string.Join(",", w.unlockedUpgradeIds)}] phase={w.phase}");
         Line($"   world answers (latched): {string.Join(" | ", w.leads.Select(l => $"{l.factor}={l.outcome}{(l.IsSplit ? "/" + l.split : "")} since {l.sinceDay}"))}; pulls: {string.Join(", ", w.pulls.Select(p => $"{p.factor}/{p.outcome} {F(p.amount)}"))}");
-        Line($"   plan: {RunManager.Instance.GetCurrentDayPlan().name} visitors={RunManager.Instance.GetCurrentDayPlan().VisitorsCount}");
+        Line($"   plan: {RunManager.Instance.GetCurrentDayPlan().name} visitors={RunManager.Instance.GetCurrentDayPlan().VisitorsCount} hours={RunManager.Instance.GetCurrentDayPlan().Shift(RunManager.Instance.Config.gameConfig)}");
         Line($"   rules: {string.Join(" | ", RunManager.Instance.GetCurrentDayPlan().ActiveTravelRules.Where(r => r != null).Select(r => r.Summary()))}");
     }
 

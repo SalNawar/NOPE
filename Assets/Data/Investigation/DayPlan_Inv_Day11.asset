@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 11
   visitorsCount: 16
+  shiftStartMinute: 780
+  shiftEndMinute: 1260
   bulletin: 'NEW: the Driftbox 3 recall. Every Driftbox 3 transponder is grounded:
     refuse any departure on one.'
   papers:

@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// Generate World's day-pacing part (Papers Please lessons 4 and D7, wave 5
 /// track C): each day's papers in circulation (days[].papers, DayPapers: known
 /// form numbers, none withdrawn later) and what each day brings for the first
 /// time, a paper or a directive, at most one of each and named in the day's
-/// bulletin (days[].bulletin, DayPacing), checked before anything is written.
-/// The validator runs the same Domain rules over the day plans.
+/// bulletin (days[].bulletin, DayPacing), and each day's desk hours
+/// (days[].shiftStart / shiftEnd, ShiftHours; night shifts), checked before
+/// anything is written. The validator runs the same Domain rules over the day plans.
 /// </summary>
 public static partial class WorldContentGenerator
 {
@@ -28,6 +30,8 @@ public static partial class WorldContentGenerator
         var rules = (src.rules ?? Array.Empty<RuleData>()).Where(r => r != null && r.asset != null).GroupBy(r => r.asset).ToDictionary(g => g.Key, g => g.First());
         var premades = (src.premades ?? Array.Empty<PremadeData>()).Where(m => m != null && m.id != null).GroupBy(m => m.id).ToDictionary(g => g.Key, g => g.First());
         DayData[] days = (src.days ?? Array.Empty<DayData>()).Where(d => d != null).OrderBy(d => d.day).ToArray();
+
+        CheckShifts(days, errors);
 
         var issuedBefore = new HashSet<string>();
         var papers = new List<IEnumerable<string>>();
@@ -66,5 +70,41 @@ public static partial class WorldContentGenerator
             if (!string.IsNullOrEmpty(days[i].bulletin) && !IsAscii(days[i].bulletin))
                 errors.Add($"Day '{days[i].asset}' has a non-ASCII \"bulletin\" (the briefing's fonts print ASCII).");
         }
+    }
+
+    /// <summary>
+    /// Checks each day's desk hours (night shifts): each time "HH:MM" up to
+    /// "24:00" (ShiftHours.TryParse), then ShiftHours.Problems (both or
+    /// neither, opening before closing, 24:00 at the latest, a length within
+    /// the run's GameConfigSO shiftMinHours to shiftMaxHours).
+    /// </summary>
+    private static void CheckShifts(IEnumerable<DayData> days, List<string> errors)
+    {
+        GameConfigSO config = RunGameConfig();
+        foreach (DayData d in days)
+        {
+            string owner = $"Day '{d.asset}'";
+            int start = ShiftMinute(d.shiftStart), end = ShiftMinute(d.shiftEnd);
+            if (start == UnreadableTime)
+                errors.Add($"{owner} has \"shiftStart\" '{d.shiftStart}'; write a 24-hour time, \"13:00\" (blank: the standard day).");
+            if (end == UnreadableTime)
+                errors.Add($"{owner} has \"shiftEnd\" '{d.shiftEnd}'; write a 24-hour time up to \"24:00\" (blank: the standard day).");
+            if (start != UnreadableTime && end != UnreadableTime)
+                errors.AddRange(ShiftHours.Problems(owner, start, end, config.shiftMinHours, config.shiftMaxHours));
+        }
+    }
+
+    /// <summary>What <see cref="ShiftMinute"/> returns for a time it cannot read.</summary>
+    private const int UnreadableTime = -2;
+
+    /// <summary>An authored desk time as a minute of the day (ShiftHours.TryParse); -1 for blank (the standard day), <see cref="UnreadableTime"/> for anything unreadable.</summary>
+    private static int ShiftMinute(string text) =>
+        string.IsNullOrWhiteSpace(text) ? -1 : ShiftHours.TryParse(text, out int minute) ? minute : UnreadableTime;
+
+    /// <summary>The run's GameConfigSO (Resources/RunConfig, as the game reads it), else a fresh one holding the defaults: the shift length knobs Generate World and the validator check the day plans' hours against.</summary>
+    internal static GameConfigSO RunGameConfig()
+    {
+        RunConfigSO run = Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath);
+        return run != null && run.gameConfig != null ? run.gameConfig : ScriptableObject.CreateInstance<GameConfigSO>();
     }
 }

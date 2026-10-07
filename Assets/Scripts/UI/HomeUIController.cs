@@ -29,6 +29,10 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>The cel UI kit (Assets/Data/UI/UiKit_Default.asset): the sprites and fonts the spawned rows, cards and reels are drawn with.</summary>
     [SerializeField] private UiKitSO kit;
 
+    [Header("The flat (optional — null-safe)")]
+    /// <summary>The flat's painted backdrop (the art's ArtBackground): tinted toward deep night after a late shift (<see cref="SetLateness"/>).</summary>
+    [SerializeField] private Image backdrop;
+
     [Header("HUD (optional — null-safe)")]
     /// <summary>Shows current money (on the HUD's phosphor readout).</summary>
     [SerializeField] private TMP_Text moneyText;
@@ -227,6 +231,18 @@ public sealed class HomeUIController : MonoBehaviour
 
         if (sleepButton != null)
             sleepButton.onClick.AddListener(HandleSleepClicked);
+    }
+
+    /// <summary>
+    /// Shows the flat as late as the shift ended: the backdrop's colour from
+    /// white (<paramref name="lateness"/> 0: home at the standard closing) to
+    /// <paramref name="deepNight"/> (1: home at midnight; ShiftHours.Lateness,
+    /// GameConfigSO.homeDeepNightTint).
+    /// </summary>
+    public void SetLateness(float lateness, Color deepNight)
+    {
+        if (backdrop != null)
+            backdrop.color = Color.Lerp(Color.white, deepNight, Mathf.Clamp01(lateness));
     }
 
     /// <summary>Refreshes the money and day readouts from world state (the timeline's stability is never a number: the Helix River shows it).</summary>

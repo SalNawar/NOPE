@@ -10566,6 +10566,8 @@
       "asset": "DayPlan_Inv_Day8",
       "day": 8,
       "queue": 14,
+      "shiftStart": "13:00",
+      "shiftEnd": "21:00",
       "bulletin": "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver. And from today the office reads the world's language: the Bureau issues you a Translation Lens. Hover a word to read it.",
       "papers": [
         "TC-101",
@@ -10711,6 +10713,8 @@
       "asset": "DayPlan_Inv_Day9",
       "day": 9,
       "queue": 16,
+      "shiftStart": "13:00",
+      "shiftEnd": "21:00",
       "bulletin": "NEW: dress for the destination. Look at their clothes (the wheel's Look menu): an item from another time or place causes a panic. Check it against the Costume Guide on your shelf.",
       "papers": [
         "TC-101",
@@ -10855,6 +10859,8 @@
       "asset": "DayPlan_Inv_Day10",
       "day": 10,
       "queue": 16,
+      "shiftStart": "13:00",
+      "shiftEnd": "21:00",
       "bulletin": "NEW: debt standing. Citizens in debt depart only on Debt Relief, and a Frozen account may not depart at all.",
       "papers": [
         "TC-101",
@@ -10995,6 +11001,8 @@
       "asset": "DayPlan_Inv_Day11",
       "day": 11,
       "queue": 16,
+      "shiftStart": "13:00",
+      "shiftEnd": "21:00",
       "bulletin": "NEW: the Driftbox 3 recall. Every Driftbox 3 transponder is grounded: refuse any departure on one.",
       "papers": [
         "TC-101",
@@ -11177,6 +11185,8 @@
       "asset": "DayPlan_Inv_Day12",
       "day": 12,
       "queue": 17,
+      "shiftStart": "16:00",
+      "shiftEnd": "24:00",
       "bulletin": "NEW: bans. The Directorate can close a route on the board: today Weimar Berlin is CLOSED.",
       "papers": [
         "TC-101",
@@ -11315,6 +11325,8 @@
       "asset": "DayPlan_Inv_Day13",
       "day": 13,
       "queue": 17,
+      "shiftStart": "16:00",
+      "shiftEnd": "24:00",
       "bulletin": "NEW: range limit. Economy units no longer reach the Ancient era: refuse poor tourists and labourers bound for it.",
       "papers": [
         "TC-101",
@@ -11459,6 +11471,8 @@
       "asset": "DayPlan_Inv_Day14",
       "day": 14,
       "queue": 18,
+      "shiftStart": "16:00",
+      "shiftEnd": "24:00",
       "bulletin": "NEW: the return home. The displaced now declare their home on an Intake Declaration: its currency, language and technology must match the books (Tongues, Capitals, Rulers) for the home they claim.",
       "papers": [
         "TC-101",
@@ -11645,6 +11659,8 @@
       "asset": "DayPlan_Inv_Day15",
       "day": 15,
       "queue": 18,
+      "shiftStart": "16:00",
+      "shiftEnd": "24:00",
       "bulletin": "NEW: the Return Order. The displaced now carry one, and depart only on its date.",
       "papers": [
         "TC-101",
@@ -19059,6 +19075,32 @@
         ]
       },
       {
+        "id": "hours_extended",
+        "name": "The hours grow",
+        "news": "BUREAU EXTENDS HOURS AS DEBT QUEUES GROW: from today the desks open after lunch and close after dark. The Drive cannot wait for morning.",
+        "conditions": [
+          {
+            "type": "DayAtLeast",
+            "threshold": 7
+          }
+        ],
+        "edits": [],
+        "section": "Front"
+      },
+      {
+        "id": "night_shifts",
+        "name": "Night shifts",
+        "news": "NIGHT SHIFTS BEGIN AT THE GATES: from today the desks work until midnight. The Directorate thanks every clerk for their sacrifice.",
+        "conditions": [
+          {
+            "type": "DayAtLeast",
+            "threshold": 11
+          }
+        ],
+        "edits": [],
+        "section": "Front"
+      },
+      {
         "id": "pell_departed",
         "name": "Pell's honeymoon",
         "news": "Pell Quimby has left for Periclean Athens. Her honeymoon is on.",
@@ -24322,6 +24364,12 @@
         "tier": "Full"
       },
       {
+        "key": "briefing.newHours",
+        "text": "New hours from today: the desk opens at {0} and closes at {1}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "list.bullet",
         "text": "• {0}",
         "gloss": "None",
@@ -24366,6 +24414,12 @@
       {
         "key": "results.processedOf",
         "text": "Travellers processed: {0} of {1} ({2} still waiting at closing, unpaid)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.hours",
+        "text": "Desk hours: {0} to {1}",
         "gloss": "None",
         "tier": "Full"
       },

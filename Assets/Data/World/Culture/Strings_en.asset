@@ -1766,6 +1766,10 @@ MonoBehaviour:
     text: <b>{0}</b>
     gloss: 0
     tier: 0
+  - key: briefing.newHours
+    text: 'New hours from today: the desk opens at {0} and closes at {1}.'
+    gloss: 0
+    tier: 0
   - key: list.bullet
     text: "\u2022 {0}"
     gloss: 0
@@ -1796,6 +1800,10 @@ MonoBehaviour:
     tier: 0
   - key: results.processedOf
     text: 'Travellers processed: {0} of {1} ({2} still waiting at closing, unpaid)'
+    gloss: 0
+    tier: 0
+  - key: results.hours
+    text: 'Desk hours: {0} to {1}'
     gloss: 0
     tier: 0
   - key: results.moneyHeader
