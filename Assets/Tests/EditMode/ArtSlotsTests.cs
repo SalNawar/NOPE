@@ -118,10 +118,12 @@ public class ArtSlotsTests
     }
 
     [Test]
-    public void PetSprite_KindAndLook_AndTheCorner()
+    public void PetSprite_CoatThenKind_AndTheCorner()
     {
-        Assert.AreEqual("Home/pet_dog_idle", ArtSlots.PetSprite(PetKind.Dog, PetLook.Idle));
-        Assert.AreEqual("Home/pet_cat_sick", ArtSlots.PetSprite(PetKind.Cat, PetLook.Sick));
+        CollectionAssert.AreEqual(new[] { "Home/pet_dog_cream_idle", "Home/pet_dog_idle" }, ArtSlots.PetSprite(PetKind.Dog, "cream", PetLook.Idle), "the coat's art, then the kind's");
+        CollectionAssert.AreEqual(new[] { "Home/pet_cat_ginger_sick", "Home/pet_cat_sick" }, ArtSlots.PetSprite(PetKind.Cat, "Ginger", PetLook.Sick));
+        CollectionAssert.AreEqual(new[] { "Home/pet_cat_sick" }, ArtSlots.PetSprite(PetKind.Cat, "", PetLook.Sick), "no coat: the kind's art only");
+        CollectionAssert.AreEqual(new[] { "Home/pet_dog_happy" }, ArtSlots.PetSprite(PetKind.Dog, null, PetLook.Happy));
         Assert.AreEqual("Home/pet_corner", ArtSlots.PetCorner);
         Assert.AreEqual("Home/toy_toy_ball", ArtSlots.PetToy("toy_ball"));
     }

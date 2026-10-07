@@ -17785,6 +17785,17 @@ MonoBehaviour:
         - '{name} carries the {toy} round the flat like a trophy.'
         - '{name} drops the {toy} at your feet. Again. And again.'
         - '{name} guards the {toy} from an invisible rival.'
+        coats:
+        - id: cream
+          nameKey: adopt.coat.cream
+        - id: tan
+          nameKey: adopt.coat.tan
+        - id: chocolate
+          nameKey: adopt.coat.chocolate
+        - id: charcoal
+          nameKey: adopt.coat.charcoal
+        - id: grey
+          nameKey: adopt.coat.grey
       - kind: 1
         word: cat
         suggestedName: Miso
@@ -17797,6 +17808,17 @@ MonoBehaviour:
         - '{name} ambushes the {toy} from under the sofa.'
         - '{name} bats the {toy} under the radiator and stares at you.'
         - '{name} decides the {toy} is beneath them, then pounces anyway.'
+        coats:
+        - id: white
+          nameKey: adopt.coat.white
+        - id: ginger
+          nameKey: adopt.coat.ginger
+        - id: slate
+          nameKey: adopt.coat.slate
+        - id: black
+          nameKey: adopt.coat.black
+        - id: cream
+          nameKey: adopt.coat.cream
       hunger:
       - '{name} is fed.'
       - '{name} is hungry.'

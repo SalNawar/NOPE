@@ -15,7 +15,9 @@ using UnityEngine.UI;
 /// a failure behind the ending panel's "The world you leave behind" button.
 /// The adoption panel (the Home pet spec PS1) comes between New Run and the
 /// office: a dog or a cat, each a choice card of the UI kit (the chosen one
-/// framed), and a name typed and checked (PetNames.Check: refused names say
+/// framed), its coat (a row of the kind's coats, each a small choice card
+/// showing the pet in that coat, PS11), a big preview of the pet in the
+/// chosen coat, and a name typed and checked (PetNames.Check: refused names say
 /// why, ui.strings "adopt.problem.*", and the field turns to the kit's error
 /// field until the name is edited). The title block shows the kit's logo
 /// (the one picture with its words baked in). The panels are optional; if unwired,
@@ -53,6 +55,15 @@ public sealed class TitleUIController : MonoBehaviour
 
     /// <summary>Chooses the cat (a kit choice card, as the dog's).</summary>
     [SerializeField] private Button adoptCatButton;
+
+    /// <summary>The big preview: the chosen kind in the chosen coat, idle (the Home pet spec PS11).</summary>
+    [SerializeField] private PetStandIn adoptPreview;
+
+    /// <summary>The row the kind's coats are laid out in, left to right (one swatch each, made from <see cref="adoptCoatSwatch"/>).</summary>
+    [SerializeField] private RectTransform adoptCoatRow;
+
+    /// <summary>The coat swatch every coat is copied from (a kit choice card: the pet's picture over the coat's name; inactive itself; the chosen swatch takes no clicks and shows the card's selected face).</summary>
+    [SerializeField] private Button adoptCoatSwatch;
 
     /// <summary>The name the player types.</summary>
     [SerializeField] private TMP_InputField adoptNameInput;
@@ -126,6 +137,18 @@ public sealed class TitleUIController : MonoBehaviour
     /// <summary>The kind the adoption panel has chosen.</summary>
     private PetKind _adoptKind;
 
+    /// <summary>The coat the adoption panel has chosen (an id of the kind's coats).</summary>
+    private string _adoptCoat = string.Empty;
+
+    /// <summary>The swatches of the chosen kind's coats, in the content's order, with their coat ids.</summary>
+    private readonly List<(Button button, string coat)> _coatSwatches = new List<(Button, string)>();
+
+    /// <summary>The gap between two coat swatches (reference px).</summary>
+    private const float CoatGap = 14f;
+
+    /// <summary>The widest a coat swatch grows (reference px), however few coats the kind has.</summary>
+    private const float CoatSwatchMaxWidth = 140f;
+
     /// <summary>
     /// Hides both panels until a Show* call activates one. The panels are
     /// optional, so each is tested with Unity's == (audit R4-010): an
@@ -142,15 +165,18 @@ public sealed class TitleUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Shows the adoption panel over the others (the Home pet spec PS1): the
-    /// dog chosen first, with its suggested name in the field
-    /// (<paramref name="words"/>); choosing a kind draws it and swaps a
-    /// suggested name for the other's; Adopt checks the name (PetNames.Check
-    /// at home.pet.nameMaxLength: a refusal says why and adopts nothing) and
-    /// calls <paramref name="onAdopt"/> with the kind and the cleaned name;
-    /// Back calls <paramref name="onBack"/>.
+    /// Shows the adoption panel over the others (the Home pet spec PS1,
+    /// PS11): the dog chosen first in its first coat, with its suggested name
+    /// in the field (<paramref name="words"/>); choosing a kind lays out its
+    /// coats (keeping the coat when the kind has it, else its first) and
+    /// swaps a suggested name for the other's; choosing a coat shows the pet
+    /// in it in the preview, which hops; Adopt checks the name
+    /// (PetNames.Check at home.pet.nameMaxLength: a refusal says why and
+    /// adopts nothing) and calls <paramref name="onAdopt"/> with the kind, the
+    /// cleaned name and the coat; Back calls <paramref name="onBack"/>. The
+    /// coat cannot be changed after the adoption.
     /// </summary>
-    public void ShowAdopt(PetContent words, Action<PetKind, string> onAdopt, Action onBack)
+    public void ShowAdopt(PetContent words, Action<PetKind, string, string> onAdopt, Action onBack)
     {
         if (!HasAdoptPanel)
             return;
@@ -190,9 +216,12 @@ public sealed class TitleUIController : MonoBehaviour
             if (adoptCatButton != null) adoptCatButton.interactable = kind != PetKind.Cat;
             UiJuice.Choose(adoptDogButton, kind == PetKind.Dog); // the chosen card bounces, and a click on it is no refusal
             UiJuice.Choose(adoptCatButton, kind == PetKind.Cat);
+            LayOutCoats(words, kind);
+            ChooseCoat(words.CoatOf(kind, _adoptCoat), false);
         }
 
         _adoptKind = PetKind.Dog;
+        _adoptCoat = string.Empty;
         adoptNameInput.text = words.Kind(PetKind.Dog)?.suggestedName ?? string.Empty;
         Choose(PetKind.Dog);
         Wire(adoptDogButton, () => Choose(PetKind.Dog));
@@ -209,8 +238,74 @@ public sealed class TitleUIController : MonoBehaviour
                 return;
             }
             adoptPanel.SetActive(false);
-            onAdopt?.Invoke(_adoptKind, PetNames.Clean(adoptNameInput.text));
+            onAdopt?.Invoke(_adoptKind, PetNames.Clean(adoptNameInput.text), _adoptCoat);
         });
+    }
+
+    /// <summary>
+    /// The coat row for <paramref name="kind"/>: one swatch per coat of its
+    /// content, in order, copied from the template, side by side across the
+    /// row (no wider than <see cref="CoatSwatchMaxWidth"/>), each showing the
+    /// pet idle in that coat (ArtSlots.PetSprite; the kind's kit tile without
+    /// art) over the coat's name (its UI string); a click chooses it. The
+    /// previous kind's swatches are removed.
+    /// </summary>
+    private void LayOutCoats(PetContent words, PetKind kind)
+    {
+        foreach ((Button button, string _) in _coatSwatches)
+            if (button != null)
+                Destroy(button.gameObject);
+        _coatSwatches.Clear();
+        if (adoptCoatRow == null || adoptCoatSwatch == null)
+            return;
+
+        var coats = new List<PetCoatContent>();
+        foreach (PetCoatContent c in words.Kind(kind)?.coats ?? new List<PetCoatContent>())
+            if (c != null && !string.IsNullOrWhiteSpace(c.id))
+                coats.Add(c);
+        if (coats.Count == 0)
+            return;
+        Rect row = adoptCoatRow.rect;
+        float width = Mathf.Min(CoatSwatchMaxWidth, (row.width - CoatGap * (coats.Count - 1)) / coats.Count);
+        float x = 0f;
+        foreach (PetCoatContent coat in coats)
+        {
+            Button swatch = Instantiate(adoptCoatSwatch, adoptCoatRow);
+            swatch.name = "Coat_" + coat.id;
+            var rt = (RectTransform)swatch.transform;
+            rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0f, 1f);
+            rt.anchoredPosition = new Vector2(x, 0f);
+            rt.sizeDelta = new Vector2(width, row.height);
+            x += width + CoatGap;
+
+            Transform picture = swatch.transform.Find("Swatch");
+            if (picture != null && picture.TryGetComponent(out Image image))
+                image.sprite = SlotArt.Sprite(ArtSlots.PetSprite(kind, coat.id, PetLook.Idle))
+                               ?? (kit != null ? kit.Get(kind == PetKind.Dog ? "tile_dog_rest" : "tile_cat_rest") : null);
+            SetLabel(swatch, UiText.Get(coat.nameKey));
+            string id = coat.id;
+            Wire(swatch, () => ChooseCoat(id, true));
+            swatch.gameObject.SetActive(true);
+            _coatSwatches.Add((swatch, id));
+        }
+    }
+
+    /// <summary>Chooses <paramref name="coat"/>: its swatch framed and taking no clicks (it pops, UiJuice.Choose), the others live; the preview shows the kind in it, idle, and hops when the player chose it (<paramref name="hop"/>).</summary>
+    private void ChooseCoat(string coat, bool hop)
+    {
+        _adoptCoat = coat ?? string.Empty;
+        foreach ((Button button, string id) in _coatSwatches)
+        {
+            if (button == null)
+                continue;
+            button.interactable = id != _adoptCoat;
+            UiJuice.Choose(button, id == _adoptCoat);
+        }
+        if (adoptPreview == null)
+            return;
+        adoptPreview.Show(_adoptKind, _adoptCoat, PetLook.Idle, true);
+        if (hop)
+            adoptPreview.Pat();
     }
 
     /// <summary>The name field's face: the kit's error field while a refused name stands (<paramref name="refused"/>), else its rest face with the focus face while typing; its reason clears with the error.</summary>

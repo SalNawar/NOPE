@@ -56,7 +56,7 @@ public static partial class WorldContentGenerator
         public string paperWelfare;
     }
 
-    /// <summary>One kind's words (home.pet.kinds): which (a PetKind name), its word, suggested name, reactions and toy lines.</summary>
+    /// <summary>One kind's words (home.pet.kinds): which (a PetKind name), its word, suggested name, reactions, toy lines and coats.</summary>
     [Serializable] private sealed class PetKindData
     {
         public string kind;
@@ -64,6 +64,14 @@ public static partial class WorldContentGenerator
         public string suggestedName;
         public string[] reactions;
         public string[] toyLines;
+        public PetCoatData[] coats;
+    }
+
+    /// <summary>One coat of a kind (home.pet.kinds[].coats): its id (saved, and its art's name) and its name's UI string key.</summary>
+    [Serializable] private sealed class PetCoatData
+    {
+        public string id;
+        public string nameKey;
     }
 
     /// <summary>One toy (home.toys): sold at the PC's Orders app in the Toys band, its Mood op owned for good.</summary>
@@ -183,7 +191,9 @@ public static partial class WorldContentGenerator
                     word = k.word ?? string.Empty,
                     suggestedName = k.suggestedName ?? string.Empty,
                     reactions = (k.reactions ?? Array.Empty<string>()).ToList(),
-                    toyLines = (k.toyLines ?? Array.Empty<string>()).ToList()
+                    toyLines = (k.toyLines ?? Array.Empty<string>()).ToList(),
+                    coats = (k.coats ?? Array.Empty<PetCoatData>()).Where(c => c != null)
+                        .Select(c => new PetCoatContent { id = c.id ?? string.Empty, nameKey = c.nameKey ?? string.Empty }).ToList()
                 }).ToList(),
                 hunger = (p.hunger ?? Array.Empty<string>()).ToList(),
                 cold = (p.cold ?? Array.Empty<string>()).ToList(),

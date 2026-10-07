@@ -113,6 +113,20 @@ public sealed class PetKindContent
 
     /// <summary>What it does with a toy ({name}, {toy}): in turn by the day.</summary>
     public List<string> toyLines = new();
+
+    /// <summary>The coats the adoption offers, in the panel's order (the first is the default: a run started outside the Title, a save from before the coats; the Home pet spec PS11).</summary>
+    public List<PetCoatContent> coats = new();
+}
+
+/// <summary>One coat a kind of pet can have (world_source.json home.pet.kinds[].coats): its id names its art (ArtSlots.PetSprite) and is saved (PetState.coat); its name is a UI string.</summary>
+[Serializable]
+public sealed class PetCoatContent
+{
+    /// <summary>The coat's id ("ginger"): saved, and the art's name (Home/pet_cat_ginger_idle).</summary>
+    public string id = string.Empty;
+
+    /// <summary>The key of its name in ui.strings ("adopt.coat.ginger"), so the Translation Lens and the reading language reach it.</summary>
+    public string nameKey = string.Empty;
 }
 
 /// <summary>
@@ -176,6 +190,26 @@ public sealed class PetContent
         return null;
     }
 
+    /// <summary>
+    /// The coat a <paramref name="kind"/> wears for <paramref name="coat"/>:
+    /// that coat when the kind lists it, else the kind's first coat (a blank
+    /// coat from a save made before the coats, an id the content dropped);
+    /// "" when the kind lists none.
+    /// </summary>
+    public string CoatOf(PetKind kind, string coat)
+    {
+        List<PetCoatContent> listed = Kind(kind)?.coats;
+        if (listed == null)
+            return string.Empty;
+        foreach (PetCoatContent c in listed)
+            if (c != null && !string.IsNullOrEmpty(coat) && c.id == coat)
+                return c.id;
+        foreach (PetCoatContent c in listed)
+            if (c != null && !string.IsNullOrWhiteSpace(c.id))
+                return c.id;
+        return string.Empty;
+    }
+
     /// <summary>A need's line for <paramref name="pet"/> at <paramref name="needs"/>: the need's words picked by its level (PetRules.Band up to <paramref name="max"/>), filled (<see cref="Fill"/>); "" without words.</summary>
     public string Need(PetNeed need, PetState pet, PetNeeds needs, int max)
     {
@@ -224,7 +258,7 @@ public sealed class PetContent
         return pet.welfareNights > 0 ? Fill(paperWelfare, pet) : string.Empty;
     }
 
-    /// <summary>What Generate World and the validator refuse in home.pet: a name limit below 1, a kind missing or listed twice, a blank kind word, a suggested name the adoption would refuse, a kind without reactions or toy lines, a need with fewer than two words, and a blank line or one that misses {name}. Empty when sound.</summary>
+    /// <summary>What Generate World and the validator refuse in home.pet: a name limit below 1, a kind missing or listed twice, a blank kind word, a suggested name the adoption would refuse, a kind without reactions or toy lines, a kind without coats, a coat with a blank or repeated id or a blank name key, a need with fewer than two words, and a blank line or one that misses {name}. Empty when sound.</summary>
     public List<string> Problems()
     {
         var problems = new List<string>();
@@ -245,6 +279,7 @@ public sealed class PetContent
                 problems.Add($"home.pet.kinds {k.kind}: the suggested name '{k.suggestedName}' would be refused ({name}).");
             Lines(problems, $"home.pet.kinds {k.kind} reactions", k.reactions, 1);
             Lines(problems, $"home.pet.kinds {k.kind} toyLines", k.toyLines, 1);
+            Coats(problems, k);
         }
         foreach (PetKind kind in (PetKind[])Enum.GetValues(typeof(PetKind)))
             if (!seen.Contains(kind))
@@ -258,6 +293,27 @@ public sealed class PetContent
             if (string.IsNullOrWhiteSpace(line) || !line.Contains(NameToken))
                 problems.Add($"home.pet.{path} is blank or misses {NameToken}.");
         return problems;
+    }
+
+    /// <summary>Adds a problem for a kind without coats, and for a coat whose id is blank or repeated within the kind or whose name key is blank.</summary>
+    private static void Coats(List<string> problems, PetKindContent k)
+    {
+        if (k.coats == null || k.coats.Count == 0)
+        {
+            problems.Add($"home.pet.kinds {k.kind} has no coats: the adoption offers at least one.");
+            return;
+        }
+        var ids = new HashSet<string>();
+        for (int i = 0; i < k.coats.Count; i++)
+        {
+            PetCoatContent c = k.coats[i];
+            if (c == null || string.IsNullOrWhiteSpace(c.id))
+                problems.Add($"home.pet.kinds {k.kind} coats[{i}] has no id.");
+            else if (!ids.Add(c.id))
+                problems.Add($"home.pet.kinds {k.kind} lists the coat '{c.id}' twice.");
+            if (c != null && string.IsNullOrWhiteSpace(c.nameKey))
+                problems.Add($"home.pet.kinds {k.kind} coats[{i}] has no nameKey (its name in ui.strings).");
+        }
     }
 
     /// <summary>Adds a problem for fewer than <paramref name="least"/> lines, and for a blank line or one that misses {name}.</summary>

@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The pet as the player sees it (the Home pet spec PS7): its picture for how
-/// it looks when the art exists (ArtSlots.PetSprite, Home/pet_&lt;kind&gt;_&lt;look&gt;),
+/// it looks in its coat when the art exists (ArtSlots.PetSprite: Home/pet_&lt;kind&gt;_&lt;coat&gt;_&lt;look&gt;,
+/// else the kind's Home/pet_&lt;kind&gt;_&lt;look&gt;),
 /// else a stand-in drawn in code from a few shapes (a body, a head, ears, eyes,
 /// a nose and a tail; a dog's ears droop, a cat's stand; a sick pet under a
 /// blanket), on the corner's backdrop (ArtSlots.PetCorner, else a plain
@@ -20,6 +21,9 @@ public sealed class PetStandIn : MonoBehaviour
 
     /// <summary>The kind drawn.</summary>
     private PetKind _kind;
+
+    /// <summary>Its coat's id (the art's name; the code-drawn stand-in has one coat).</summary>
+    private string _coat;
 
     /// <summary>How it looks.</summary>
     private PetLook _look;
@@ -48,10 +52,11 @@ public sealed class PetStandIn : MonoBehaviour
     /// <summary>The figure's design box (reference px): the shapes are placed in it and it is scaled to the host's rect.</summary>
     private const float Box = 400f;
 
-    /// <summary>Shows <paramref name="kind"/> looking <paramref name="look"/>, the room lit or dark (<paramref name="lit"/>).</summary>
-    public void Show(PetKind kind, PetLook look, bool lit)
+    /// <summary>Shows <paramref name="kind"/> in its <paramref name="coat"/> looking <paramref name="look"/>, the room lit or dark (<paramref name="lit"/>).</summary>
+    public void Show(PetKind kind, string coat, PetLook look, bool lit)
     {
         _kind = kind;
+        _coat = coat;
         _look = look;
         _lit = lit;
         Build();
@@ -133,7 +138,7 @@ public sealed class PetStandIn : MonoBehaviour
         _figure.anchorMin = _figure.anchorMax = _figure.pivot = new Vector2(0.5f, 0.5f);
         _figure.sizeDelta = new Vector2(Box, Box);
 
-        Sprite art = SlotArt.Sprite(ArtSlots.PetSprite(_kind, _look));
+        Sprite art = SlotArt.Sprite(ArtSlots.PetSprite(_kind, _coat, _look));
         if (art != null)
         {
             Image picture = Part(_figure, "Picture", Vector2.zero, new Vector2(Box, Box), art, _lit ? Color.white : new Color(0.55f, 0.55f, 0.6f, 1f));

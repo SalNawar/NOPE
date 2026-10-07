@@ -156,9 +156,9 @@ public sealed class TitleSceneController : MonoBehaviour
     }
 
     /// <summary>Adopt clicked with a sound name: clears the save, starts a fresh run with that pet, and heads to the office.</summary>
-    private void HandleAdopt(PetKind kind, string petName)
+    private void HandleAdopt(PetKind kind, string petName, string coat)
     {
-        RunManager.Instance.NewRun(kind, petName);
+        RunManager.Instance.NewRun(kind, petName, coat);
         RunManager.Instance.LoadOfficeScene();
     }
 }

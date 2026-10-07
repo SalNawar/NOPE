@@ -112,11 +112,11 @@ public sealed class RunManager : MonoBehaviour
         NotifyEffectsChanged();
     }
 
-    /// <summary>Starts a brand-new run (NewRun) with the pet the Title's adoption chose (DayCycle.Adopt: a refused name falls back to the kind's suggested one).</summary>
-    public void NewRun(PetKind kind, string petName)
+    /// <summary>Starts a brand-new run (NewRun) with the pet the Title's adoption chose, its kind, name and coat (DayCycle.Adopt: a refused name falls back to the kind's suggested one, an unlisted coat to the kind's first).</summary>
+    public void NewRun(PetKind kind, string petName, string coat)
     {
         NewRun();
-        DayCycle.Adopt(World, Library, kind, petName);
+        DayCycle.Adopt(World, Library, kind, petName, coat);
     }
 
     /// <summary>
@@ -137,9 +137,12 @@ public sealed class RunManager : MonoBehaviour
         World = loaded;
         DevToolsState.ResetAll();
 
-        // A save from before the pet (the Home pet spec) adopts the run config's default.
+        // A save from before the pet (the Home pet spec) adopts the run config's default;
+        // one from before the coats (PS11) gives its pet the kind's first coat.
         if (World.pet == null || !World.pet.Adopted)
-            DayCycle.Adopt(World, Library, Config.startingPetKind, null);
+            DayCycle.Adopt(World, Library, Config.startingPetKind, null, null);
+        else if (Library != null)
+            World.pet.coat = Library.Home.pet.CoatOf(World.pet.kind, World.pet.coat);
 
         // The present culture's cue from the saved history, idempotently (an
         // older save may lack it; piece 6 Z5).

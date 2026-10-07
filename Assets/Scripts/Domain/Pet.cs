@@ -111,6 +111,9 @@ public sealed class PetState
     /// <summary>The name the player gave it (PetNames.Clean; "" until adopted).</summary>
     public string name = string.Empty;
 
+    /// <summary>Its coat's id (home.pet.kinds' coats: "cream", "ginger"), chosen at the adoption and never changed after (the Home pet spec PS11). Additive: a save from before the coats loads it blank and the run gives it the kind's first coat (PetContent.CoatOf).</summary>
+    public string coat = string.Empty;
+
     /// <summary>The day it was adopted (the run's first, or the day an older save adopted the default): the next morning's paper announces it.</summary>
     public int adoptedDay;
 
