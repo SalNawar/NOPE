@@ -75,7 +75,7 @@ public static partial class OfficeSceneUIBuilder
         DestroyChildIfPresent(investHost, "AppToast");
 
         DesktopConfigSO config = EnsureDesktopConfig();
-        DesktopWindow window = BuildOSWindow(windowLayer, "InvestigationApp", null, null, string.Empty, config.investigationWindowSize);
+        DesktopWindow window = BuildOSWindow(windowLayer, "InvestigationApp", "app.title", null, string.Empty, config.investigationWindowSize);
         Transform win = window.transform;
         DestroyChildIfPresent(win, "Body");
         TMP_Text title = win.Find("Header/TitleText").GetComponent<TMP_Text>();

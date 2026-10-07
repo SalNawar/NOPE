@@ -286,7 +286,7 @@ public sealed class CaseDocumentsPresenter
         foreach (DocumentField field in doc.fields ?? new List<DocumentField>())
         {
             bool shown = field != null && (hidden == null || fields.Count >= hidden.Count || !hidden[fields.Count]);
-            fields.Add(shown ? (field.label, field.category == ClueCategory.Photo ? UiText.Get("compare.photoShown") : field.value) : (null, null));
+            fields.Add(shown ? (UiText.DocumentWord(field.label), field.category == ClueCategory.Photo ? UiText.Get("compare.photoShown") : field.value) : (null, null));
         }
         foreach (IndexEntry entry in IndexEntries.Paper(index, doc.name, fields, UiText.Get("search.title.row")))
             _index.Add(entry);

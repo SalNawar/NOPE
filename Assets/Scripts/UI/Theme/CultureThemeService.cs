@@ -343,14 +343,20 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// <summary>
     /// One tag: an image's colour (the wallpaper for the Desktop role), or a
     /// text's ink, font, style, fit and label. A diegetic tag keeps its look
-    /// and only takes the shrink-to-fit layout (a book row's "[revised]").
+    /// and only takes the shrink-to-fit layout (a book row's "[revised]") and
+    /// its label in the reading language (Mail's "Select a message").
     /// </summary>
     private void ApplyTag(ThemeTag tag)
     {
         if (ThemeRoles.IsDiegetic(tag.Role))
         {
-            if (tag.ShrinkToFit && tag.TryGetComponent(out TMP_Text evidence))
-                Fit(tag, evidence);
+            if (tag.TryGetComponent(out TMP_Text evidence))
+            {
+                if (tag.ShrinkToFit)
+                    Fit(tag, evidence);
+                if (!string.IsNullOrEmpty(tag.LabelKey))
+                    evidence.text = UiText.Get(tag.LabelKey);
+            }
             return;
         }
 

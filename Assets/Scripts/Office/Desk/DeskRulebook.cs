@@ -381,7 +381,7 @@ public sealed class DeskRulebook : MonoBehaviour
                 sealLegends[r].color = ink;
             }
             if (r < sealNames.Length && sealNames[r] != null)
-                sealNames[r].text = offices[r].name;
+                sealNames[r].text = UiText.DocumentWord(offices[r].name);
         }
     }
 
@@ -417,7 +417,7 @@ public sealed class DeskRulebook : MonoBehaviour
                 _ => "desk.rulebook.paperFlag"
             };
             if (paperRows[r].GetComponentInChildren<TMP_Text>(true) is TMP_Text text)
-                text.text = UiText.Format(key, open[r].Label);
+                text.text = UiText.Format(key, UiText.DocumentWord(open[r].Label));
         }
         if (papersNone != null)
             papersNone.gameObject.SetActive(_paperIds.Count == 0);

@@ -89,7 +89,7 @@ public sealed class DocumentsView : AppView, IAppItems
                 string name = documents[i] != null ? documents[i].DisplayName : UiText.Get("document.untitled");
                 _names.Add(name);
                 _fields.Add(documents[i] != null ? documents[i].fields : null);
-                _requestNames.Add(requestNames != null && i < requestNames.Count && !string.IsNullOrEmpty(requestNames[i]) ? requestNames[i] : name);
+                _requestNames.Add(requestNames != null && i < requestNames.Count && !string.IsNullOrEmpty(requestNames[i]) ? UiText.DocumentWord(requestNames[i]) : name);
             }
         Refresh();
     }

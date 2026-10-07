@@ -28501,6 +28501,96 @@
         "text": "Clerk's Rulebook · Desk 3",
         "gloss": "None",
         "tier": "Flavour"
+      },
+      {
+        "key": "doc.citizen_travel_passport",
+        "text": "Citizen Travel Passport",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.work_permit",
+        "text": "Work Permit",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.coin_of_home",
+        "text": "Coin of Home",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.day_wage",
+        "text": "Day Wage",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.declarant",
+        "text": "Declarant",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.departure",
+        "text": "Departure",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.displacement_no",
+        "text": "Displacement No.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.effects_carried",
+        "text": "Effects Carried",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.full_name",
+        "text": "Full Name",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.native_tongue",
+        "text": "Native Tongue",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.origin",
+        "text": "Origin",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.photo",
+        "text": "Photo",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.returnee",
+        "text": "Returnee",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.signatory",
+        "text": "Signatory",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.worksite",
+        "text": "Worksite",
+        "gloss": "None",
+        "tier": "Flavour"
       }
     ],
     "languages": [
@@ -32227,6 +32317,66 @@
           {
             "key": "doc.clerk_s_rulebook_desk_3",
             "text": "دليل قواعد الموظف · DESK 3"
+          },
+          {
+            "key": "doc.citizen_travel_passport",
+            "text": "جواز سفر المواطن"
+          },
+          {
+            "key": "doc.work_permit",
+            "text": "تصريح عمل"
+          },
+          {
+            "key": "doc.coin_of_home",
+            "text": "عملة الموطن"
+          },
+          {
+            "key": "doc.day_wage",
+            "text": "الأجر اليومي"
+          },
+          {
+            "key": "doc.declarant",
+            "text": "المصرح"
+          },
+          {
+            "key": "doc.departure",
+            "text": "المغادرة"
+          },
+          {
+            "key": "doc.displacement_no",
+            "text": "رقم النزوح"
+          },
+          {
+            "key": "doc.effects_carried",
+            "text": "الأمتعة المحمولة"
+          },
+          {
+            "key": "doc.full_name",
+            "text": "الاسم الكامل"
+          },
+          {
+            "key": "doc.native_tongue",
+            "text": "اللغة الأم"
+          },
+          {
+            "key": "doc.origin",
+            "text": "الأصل"
+          },
+          {
+            "key": "doc.photo",
+            "text": "الصورة"
+          },
+          {
+            "key": "doc.returnee",
+            "text": "العائد"
+          },
+          {
+            "key": "doc.signatory",
+            "text": "الموقع"
+          },
+          {
+            "key": "doc.worksite",
+            "text": "موقع العمل"
           }
         ],
         "words": [
@@ -33617,10 +33767,6 @@
           {
             "native": "المواطنين",
             "english": "citizens"
-          },
-          {
-            "native": "الموقع",
-            "english": "site"
           },
           {
             "native": "الميلاد",
@@ -36565,6 +36711,22 @@
           {
             "native": "يوثق",
             "english": "is documented"
+          },
+          {
+            "native": "الموطن",
+            "english": "home"
+          },
+          {
+            "native": "الأم",
+            "english": "mother (native)"
+          },
+          {
+            "native": "العائد",
+            "english": "returnee"
+          },
+          {
+            "native": "الموقع",
+            "english": "signatory; site"
           },
           {
             "native": "الموظف",
@@ -40295,6 +40457,66 @@
           {
             "key": "doc.clerk_s_rulebook_desk_3",
             "text": "Κανονισμός Υπαλλήλου · DESK 3"
+          },
+          {
+            "key": "doc.citizen_travel_passport",
+            "text": "Ταξιδιωτικό διαβατήριο πολίτη"
+          },
+          {
+            "key": "doc.work_permit",
+            "text": "Άδεια εργασίας"
+          },
+          {
+            "key": "doc.coin_of_home",
+            "text": "Νόμισμα πατρίδας"
+          },
+          {
+            "key": "doc.day_wage",
+            "text": "Ημερομίσθιο"
+          },
+          {
+            "key": "doc.declarant",
+            "text": "Δηλών"
+          },
+          {
+            "key": "doc.departure",
+            "text": "Αναχώρηση"
+          },
+          {
+            "key": "doc.displacement_no",
+            "text": "Αρ. εκτοπισμού"
+          },
+          {
+            "key": "doc.effects_carried",
+            "text": "Αντικείμενα που μεταφέρει"
+          },
+          {
+            "key": "doc.full_name",
+            "text": "Ονοματεπώνυμο"
+          },
+          {
+            "key": "doc.native_tongue",
+            "text": "Μητρική γλώσσα"
+          },
+          {
+            "key": "doc.origin",
+            "text": "Προέλευση"
+          },
+          {
+            "key": "doc.photo",
+            "text": "Φωτογραφία"
+          },
+          {
+            "key": "doc.returnee",
+            "text": "Επαναπατριζόμενος"
+          },
+          {
+            "key": "doc.signatory",
+            "text": "Υπογράφων"
+          },
+          {
+            "key": "doc.worksite",
+            "text": "Τόπος εργασίας"
           }
         ],
         "words": [
@@ -44121,6 +44343,34 @@
           {
             "native": "Υπαλλήλου",
             "english": "clerk's"
+          },
+          {
+            "native": "πατρίδας",
+            "english": "home(land)"
+          },
+          {
+            "native": "ημερομίσθιο",
+            "english": "day wage"
+          },
+          {
+            "native": "δηλών",
+            "english": "declarant"
+          },
+          {
+            "native": "ονοματεπώνυμο",
+            "english": "full name"
+          },
+          {
+            "native": "μητρική",
+            "english": "native"
+          },
+          {
+            "native": "επαναπατριζόμενος",
+            "english": "returnee"
+          },
+          {
+            "native": "υπογράφων",
+            "english": "signatory"
           }
         ]
       },
@@ -47847,6 +48097,66 @@
           {
             "key": "doc.clerk_s_rulebook_desk_3",
             "text": "Regolamento dell'impiegato · DESK 3"
+          },
+          {
+            "key": "doc.citizen_travel_passport",
+            "text": "Passaporto di viaggio del cittadino"
+          },
+          {
+            "key": "doc.work_permit",
+            "text": "Permesso di lavoro"
+          },
+          {
+            "key": "doc.coin_of_home",
+            "text": "Valuta di casa"
+          },
+          {
+            "key": "doc.day_wage",
+            "text": "Paga giornaliera"
+          },
+          {
+            "key": "doc.declarant",
+            "text": "Dichiarante"
+          },
+          {
+            "key": "doc.departure",
+            "text": "Partenza"
+          },
+          {
+            "key": "doc.displacement_no",
+            "text": "N. di sfollamento"
+          },
+          {
+            "key": "doc.effects_carried",
+            "text": "Effetti trasportati"
+          },
+          {
+            "key": "doc.full_name",
+            "text": "Nome completo"
+          },
+          {
+            "key": "doc.native_tongue",
+            "text": "Lingua madre"
+          },
+          {
+            "key": "doc.origin",
+            "text": "Origine"
+          },
+          {
+            "key": "doc.photo",
+            "text": "Foto"
+          },
+          {
+            "key": "doc.returnee",
+            "text": "Rimpatriato"
+          },
+          {
+            "key": "doc.signatory",
+            "text": "Firmatario"
+          },
+          {
+            "key": "doc.worksite",
+            "text": "Luogo di lavoro"
           }
         ],
         "words": [
@@ -48463,7 +48773,7 @@
             "english": "complete"
           },
           {
-            "native": "Completo",
+            "native": "completo",
             "english": "full"
           },
           {
@@ -51343,7 +51653,7 @@
             "english": "December"
           },
           {
-            "native": "dichiarante",
+            "native": "Dichiarante",
             "english": "declarant"
           },
           {
@@ -51775,8 +52085,32 @@
             "english": "travel (French)"
           },
           {
+            "native": "dell'impiegato",
+            "english": "of the clerk"
+          },
+          {
             "native": "all'inizio",
-            "english": "to the home (start)"
+            "english": "at the start"
+          },
+          {
+            "native": "d'atto",
+            "english": "of acknowledgment (presa d'atto)"
+          },
+          {
+            "native": "madre",
+            "english": "mother (lingua madre = native tongue)"
+          },
+          {
+            "native": "trasportati",
+            "english": "carried"
+          },
+          {
+            "native": "Rimpatriato",
+            "english": "returnee"
+          },
+          {
+            "native": "Firmatario",
+            "english": "signatory"
           },
           {
             "native": "dell'ufficio",
@@ -51795,10 +52129,6 @@
             "english": "of the icon"
           },
           {
-            "native": "d'atto",
-            "english": "of note"
-          },
-          {
             "native": "d'ufficio",
             "english": "of office"
           },
@@ -51809,10 +52139,6 @@
           {
             "native": "all'ordine",
             "english": "to the order"
-          },
-          {
-            "native": "dell'impiegato",
-            "english": "of the clerk"
           }
         ]
       },
@@ -55539,6 +55865,66 @@
           {
             "key": "doc.clerk_s_rulebook_desk_3",
             "text": "Regelbuch des Sachbearbeiters · DESK 3"
+          },
+          {
+            "key": "doc.citizen_travel_passport",
+            "text": "Bürger-Reisepass"
+          },
+          {
+            "key": "doc.work_permit",
+            "text": "Arbeitserlaubnis"
+          },
+          {
+            "key": "doc.coin_of_home",
+            "text": "Heimatwährung"
+          },
+          {
+            "key": "doc.day_wage",
+            "text": "Tageslohn"
+          },
+          {
+            "key": "doc.declarant",
+            "text": "Anmelder"
+          },
+          {
+            "key": "doc.departure",
+            "text": "Abreise"
+          },
+          {
+            "key": "doc.displacement_no",
+            "text": "Vertriebenen-Nr."
+          },
+          {
+            "key": "doc.effects_carried",
+            "text": "Mitgeführte Habe"
+          },
+          {
+            "key": "doc.full_name",
+            "text": "Vollständiger Name"
+          },
+          {
+            "key": "doc.native_tongue",
+            "text": "Muttersprache"
+          },
+          {
+            "key": "doc.origin",
+            "text": "Herkunft"
+          },
+          {
+            "key": "doc.photo",
+            "text": "Foto"
+          },
+          {
+            "key": "doc.returnee",
+            "text": "Rückkehrer"
+          },
+          {
+            "key": "doc.signatory",
+            "text": "Unterzeichner"
+          },
+          {
+            "key": "doc.worksite",
+            "text": "Arbeitsort"
           }
         ],
         "words": [
@@ -59749,6 +60135,30 @@
           {
             "native": "DESK",
             "english": "DESK"
+          },
+          {
+            "native": "Heimatwährung",
+            "english": "coin of home"
+          },
+          {
+            "native": "Anmelder",
+            "english": "declarant"
+          },
+          {
+            "native": "Vollständiger",
+            "english": "full"
+          },
+          {
+            "native": "Muttersprache",
+            "english": "native tongue"
+          },
+          {
+            "native": "Rückkehrer",
+            "english": "returnee"
+          },
+          {
+            "native": "Unterzeichner",
+            "english": "signatory"
           }
         ]
       },
@@ -63475,6 +63885,66 @@
           {
             "key": "doc.clerk_s_rulebook_desk_3",
             "text": "办事员规则手册 · DESK 3"
+          },
+          {
+            "key": "doc.citizen_travel_passport",
+            "text": "公民旅行护照"
+          },
+          {
+            "key": "doc.work_permit",
+            "text": "工作许可"
+          },
+          {
+            "key": "doc.coin_of_home",
+            "text": "本土货币"
+          },
+          {
+            "key": "doc.day_wage",
+            "text": "日薪"
+          },
+          {
+            "key": "doc.declarant",
+            "text": "申报人"
+          },
+          {
+            "key": "doc.departure",
+            "text": "出发"
+          },
+          {
+            "key": "doc.displacement_no",
+            "text": "流离编号"
+          },
+          {
+            "key": "doc.effects_carried",
+            "text": "携带物品"
+          },
+          {
+            "key": "doc.full_name",
+            "text": "全名"
+          },
+          {
+            "key": "doc.native_tongue",
+            "text": "母语"
+          },
+          {
+            "key": "doc.origin",
+            "text": "原籍"
+          },
+          {
+            "key": "doc.photo",
+            "text": "照片"
+          },
+          {
+            "key": "doc.returnee",
+            "text": "返程者"
+          },
+          {
+            "key": "doc.signatory",
+            "text": "签署人"
+          },
+          {
+            "key": "doc.worksite",
+            "text": "工地"
           }
         ],
         "words": [
@@ -67003,12 +67473,28 @@
             "english": "December"
           },
           {
-            "native": "N",
-            "english": "N (number format)"
-          },
-          {
             "native": "办事员",
             "english": "clerk"
+          },
+          {
+            "native": "本土",
+            "english": "home"
+          },
+          {
+            "native": "全名",
+            "english": "full name"
+          },
+          {
+            "native": "返程者",
+            "english": "returnee"
+          },
+          {
+            "native": "签署人",
+            "english": "signatory"
+          },
+          {
+            "native": "N",
+            "english": "N (number format)"
           }
         ]
       },
@@ -70735,6 +71221,66 @@
           {
             "key": "doc.clerk_s_rulebook_desk_3",
             "text": "係員規則集 · DESK 3"
+          },
+          {
+            "key": "doc.citizen_travel_passport",
+            "text": "市民渡航パスポート"
+          },
+          {
+            "key": "doc.work_permit",
+            "text": "就労許可証"
+          },
+          {
+            "key": "doc.coin_of_home",
+            "text": "故郷の通貨"
+          },
+          {
+            "key": "doc.day_wage",
+            "text": "日給"
+          },
+          {
+            "key": "doc.declarant",
+            "text": "申告者"
+          },
+          {
+            "key": "doc.departure",
+            "text": "出発"
+          },
+          {
+            "key": "doc.displacement_no",
+            "text": "漂流番号"
+          },
+          {
+            "key": "doc.effects_carried",
+            "text": "所持品"
+          },
+          {
+            "key": "doc.full_name",
+            "text": "氏名"
+          },
+          {
+            "key": "doc.native_tongue",
+            "text": "母語"
+          },
+          {
+            "key": "doc.origin",
+            "text": "出身"
+          },
+          {
+            "key": "doc.photo",
+            "text": "写真"
+          },
+          {
+            "key": "doc.returnee",
+            "text": "帰還者"
+          },
+          {
+            "key": "doc.signatory",
+            "text": "署名者"
+          },
+          {
+            "key": "doc.worksite",
+            "text": "作業現場"
           }
         ],
         "words": [
@@ -73547,6 +74093,26 @@
             "english": "N"
           },
           {
+            "native": "係員",
+            "english": "clerk"
+          },
+          {
+            "native": "集",
+            "english": "collection"
+          },
+          {
+            "native": "故郷",
+            "english": "home"
+          },
+          {
+            "native": "帰還者",
+            "english": "returnee"
+          },
+          {
+            "native": "署名者",
+            "english": "signatory"
+          },
+          {
             "native": "こと",
             "english": "(nominalizer, must) / per (ごと)"
           },
@@ -74321,14 +74887,6 @@
           {
             "native": "ない",
             "english": "not"
-          },
-          {
-            "native": "係員",
-            "english": "clerk"
-          },
-          {
-            "native": "集",
-            "english": "collection"
           }
         ]
       }

@@ -928,7 +928,7 @@ public sealed class CaseFactory
             DocumentField box = d.fields.FirstOrDefault(f => f != null && field(f));
             if (box == null)
                 continue;
-            c.Values.Add(new CitationValue(UiText.Format("citation.label.onPaper", box.label, d.DisplayName), box.value));
+            c.Values.Add(new CitationValue(UiText.Format("citation.label.onPaper", UiText.DocumentWord(box.label), d.DisplayName), box.value));
             return;
         }
     }

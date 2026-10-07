@@ -14,7 +14,7 @@ public static class EvidencePicks
     {
         DocumentField f = row.Field;
         return new ComparePick(PickKeys.Field(document, row.Index),
-            UiText.Format("document.compareLabel", documentName, f.label),
+            UiText.Format("document.compareLabel", documentName, UiText.DocumentWord(f.label)),
             f.category == ClueCategory.Photo ? UiText.Get("compare.photoShown") : f.value,
             CompareEvidence.FromDocumentField(f, document));
     }

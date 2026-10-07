@@ -322,7 +322,7 @@ public sealed class CaseBoardView : AppView
             default:
                 BoardPaper paper = _model.Scanned.Find(p => p.Document == row.Document);
                 string label = paper != null && row.Field >= 0 && row.Field < paper.Fields.Count ? paper.Fields[row.Field].label : UiText.Category(row.Category);
-                return UiText.Format("board.rule.date", label, row.Paper);
+                return UiText.Format("board.rule.date", UiText.DocumentWord(label), row.Paper);
         }
     }
 
@@ -455,7 +455,7 @@ public sealed class CaseBoardView : AppView
         foreach (OverlayRow row in rows)
         {
             RectTransform line = Row();
-            Cell(line, cellHeadTemplate, row.Label);
+            Cell(line, cellHeadTemplate, UiText.DocumentWord(row.Label));
             GameObject cell = Cell(line, row.Differs ? overlayShimmerTemplate : overlayCellTemplate, Shown(row.Category, row.A));
             if (cell == null)
                 continue;
@@ -508,12 +508,12 @@ public sealed class CaseBoardView : AppView
         Sounds.Play(SoundCues.InspectLink);
     }
 
-    /// <summary>A row's detail: the first source's word for it ("Date of Birth").</summary>
+    /// <summary>A row's detail: the first source's word for it ("Date of Birth"), in the reading language (UiText.DocumentWord).</summary>
     private static string Detail(CrossRow row)
     {
         foreach (CrossCell cell in row.Cells)
             if (cell.Value.HasValue && !string.IsNullOrWhiteSpace(cell.Value.Value.Label))
-                return cell.Value.Value.Label;
+                return UiText.DocumentWord(cell.Value.Value.Label);
         return UiText.Category(row.Category);
     }
 

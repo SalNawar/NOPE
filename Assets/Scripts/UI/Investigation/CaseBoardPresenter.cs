@@ -103,7 +103,7 @@ public sealed class CaseBoardPresenter
 
         foreach (BoardPaper paper in model.Scanned)
             model.Columns.Add(new CrossColumn(paper.Name, false, paper.Document,
-                paper.Fields.Select((f, i) => f != null ? new CrossValue(f.category, i, f.label, f.value) : (CrossValue?)null).Where(v => v.HasValue).Select(v => v.Value)));
+                paper.Fields.Select((f, i) => f != null ? new CrossValue(f.category, i, UiText.DocumentWord(f.label), f.value) : (CrossValue?)null).Where(v => v.HasValue).Select(v => v.Value)));
         if (model.Record != null)
             model.Columns.Add(new CrossColumn(UiText.Get("board.cross.record"), true, -1, RecordLookup.RecordValues(model.Record)));
         model.Cross = CrossCheck.Rows(model.Columns);
@@ -126,7 +126,7 @@ public sealed class CaseBoardPresenter
         var offices = new List<string>();
         foreach (BoardPaper paper in model.Scanned)
         {
-            sources.Add(new OverlaySource(paper.Name, paper.Fields.Where(f => f != null).Select(f => new OverlayValue(f.category, f.label, f.value, f.issuer))));
+            sources.Add(new OverlaySource(paper.Name, paper.Fields.Where(f => f != null).Select(f => new OverlayValue(f.category, UiText.DocumentWord(f.label), f.value, f.issuer))));
             foreach (DocumentField seal in paper.Fields.Where(f => f != null && f.category == ClueCategory.Seal && !string.IsNullOrEmpty(f.issuer)))
                 if (!offices.Contains(seal.issuer))
                     offices.Add(seal.issuer);

@@ -104,6 +104,9 @@ public sealed class DeskCounter : MonoBehaviour
         Show(zone == null || zone.activeSelf, _handBack, _hover);
     }
 
+    /// <summary>Prints the strip's words in the reading language as the scene starts (the builder's are English).</summary>
+    private void Start() => Reprint();
+
     /// <summary>Follows a change of the labels' language.</summary>
     private void OnEnable() => CultureThemeService.LabelsChanged += Reprint;
 

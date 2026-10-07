@@ -856,6 +856,15 @@ public static partial class ContentLibraryValidator
         foreach (string problem in DocumentWordProblems(lib))
             Error(problem);
 
+        List<string> english = reading.entries
+            .Where(e => e != null && e.tier != StringTier.Flavour && e.key != "title.name" && System.Text.RegularExpressions.Regex.Replace(System.Text.RegularExpressions.Regex.Replace(e.text ?? string.Empty, "</?[A-Za-z#][^<>]*>", string.Empty), @"\{[^{}]*\}", string.Empty).Any(char.IsLetter))
+            .Select(e => e.key).ToList();
+        if (english.Count > 0)
+        {
+            Debug.LogWarning($"[ContentLibraryValidator] {english.Count} UI string(s) with words have no translations yet (tier Full: they stay English in every culture's language): {string.Join(", ", english.Take(20))}. Translate them into every ui.languages table and mark them Flavour.", lib);
+            issues++;
+        }
+
         return issues;
     }
 

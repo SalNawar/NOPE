@@ -318,8 +318,8 @@ public sealed class DocumentInstance
     /// <summary>Structured, checkable fields (investigation feature).</summary>
     public readonly List<DocumentField> fields = new();
 
-    /// <summary>The document's name as every view shows it: its template's display name, else the untitled line (audit R4-006: one source).</summary>
-    public string DisplayName => template != null && !string.IsNullOrEmpty(template.displayName) ? template.displayName : UiText.Get("document.untitled");
+    /// <summary>The document's name as every view shows it: its template's display name in the reading language (UiText.DocumentWord), else the untitled line (audit R4-006: one source).</summary>
+    public string DisplayName => template != null && !string.IsNullOrEmpty(template.displayName) ? UiText.DocumentWord(template.displayName) : UiText.Get("document.untitled");
 
     /// <summary>The paper's serial, printed with its barcode ("TC-610/583021"; FormSerials, set by CaseFactory).</summary>
     public string serial = string.Empty;

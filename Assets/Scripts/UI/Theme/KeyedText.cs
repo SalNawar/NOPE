@@ -30,8 +30,12 @@ public sealed class KeyedText : MonoBehaviour
     /// <summary>Reads the string in the reading language as the scene starts.</summary>
     private void Start() => Refresh();
 
-    /// <summary>Follows a change of the labels' language (CultureThemeService.LabelsChanged).</summary>
-    private void OnEnable() => CultureThemeService.LabelsChanged += Refresh;
+    /// <summary>Follows a change of the labels' language (CultureThemeService.LabelsChanged), and reads the string again whenever it shows (a change while it was hidden).</summary>
+    private void OnEnable()
+    {
+        CultureThemeService.LabelsChanged += Refresh;
+        Refresh();
+    }
 
     /// <summary>Stops following it.</summary>
     private void OnDisable() => CultureThemeService.LabelsChanged -= Refresh;

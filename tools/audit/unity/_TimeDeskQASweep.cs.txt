@@ -240,13 +240,13 @@ public static class _TimeDeskQASweep
     private static IEnumerator SwitchLanguage()
     {
         string other = Culture == "japan" ? "egypt" : "japan";
-        TMP_Text[] keyed = Object.FindObjectsByType<KeyedText>(FindObjectsInactive.Include, FindObjectsSortMode.None).Select(k => k.GetComponent<TMP_Text>()).ToArray();
+        TMP_Text[] keyed = Object.FindObjectsByType<KeyedText>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).Select(k => k.GetComponent<TMP_Text>()).ToArray();
         string[] before = keyed.Select(t => t.text).ToArray();
         HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, other);
         CultureThemeService.RefreshActive();
         yield return Frames(5);
         int changed = keyed.Where((t, i) => t.text != before[i]).Count();
-        Check(keyed.Length > 0 && changed == keyed.Length, $"language switch to {other}'s mid-run: {changed} of {keyed.Length} builder-printed words print again in it");
+        Check(keyed.Length > 0 && changed == keyed.Length, $"language switch to {other}'s mid-run: {changed} of {keyed.Length} shown builder-printed words print again in it (hidden ones on showing)");
         yield return Shot("office", "switched_to_" + other);
         HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, Culture);
         CultureThemeService.RefreshActive();

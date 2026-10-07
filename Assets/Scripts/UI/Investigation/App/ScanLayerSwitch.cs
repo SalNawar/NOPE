@@ -140,7 +140,7 @@ public sealed class ScanLayerSwitch : MonoBehaviour
         }
         foreach (UvMark mark in marks)
         {
-            string where = mark.Field >= 0 && _fields != null && mark.Field < _fields.Count && _fields[mark.Field] != null ? _fields[mark.Field].label : UiText.Get("layers.uv.wholePaper");
+            string where = mark.Field >= 0 && _fields != null && mark.Field < _fields.Count && _fields[mark.Field] != null ? UiText.DocumentWord(_fields[mark.Field].label) : UiText.Get("layers.uv.wholePaper");
             Line(UiText.Format("layers.uv." + mark.Kind, where, mark.Text), mark.Fault);
         }
     }
@@ -159,7 +159,7 @@ public sealed class ScanLayerSwitch : MonoBehaviour
         List<int> differ = ScanLayers.ChipDifferences(_fields, chip);
         for (int i = 0; i < chip.Count; i++)
             if (chip[i] != null && chip[i].category != ClueCategory.Photo && chip[i].category != ClueCategory.Seal)
-                Line(UiText.Format("layers.chip.line", chip[i].label, chip[i].value), differ.Contains(i));
+                Line(UiText.Format("layers.chip.line", UiText.DocumentWord(chip[i].label), chip[i].value), differ.Contains(i));
     }
 
     private void Line(string text, bool glows)
