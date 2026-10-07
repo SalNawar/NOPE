@@ -15,7 +15,6 @@ Shader "NOPE/Hall Deep Portal Glow"
     {
         [PerRendererData] _MainTex ("Effect", 2D) = "white" {}
         _Boost ("Brightness over the tint", Float) = 1.5
-        _PortalMask ("Approved portal openings",2D)="white"{}
     }
 
     SubShader
@@ -27,8 +26,6 @@ Shader "NOPE/Hall Deep Portal Glow"
 
         TEXTURE2D(_MainTex);
         SAMPLER(sampler_MainTex);
-        TEXTURE2D(_PortalMask);SAMPLER(sampler_PortalMask);
-        float4x4 _ArtToLocal;float4 _CanvasMetrics,_CanvasSize;
 
         CBUFFER_START(UnityPerMaterial)
             float _Boost;
@@ -46,7 +43,6 @@ Shader "NOPE/Hall Deep Portal Glow"
             float4 positionCS : SV_POSITION;
             float2 uv : TEXCOORD0;
             half4 color : COLOR;
-            float2 aperture : TEXCOORD1;
         };
 
         Varyings Vert(Attributes input)
@@ -54,9 +50,6 @@ Shader "NOPE/Hall Deep Portal Glow"
             Varyings output;
             output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
             output.uv = input.uv;
-            float3 world=TransformObjectToWorld(input.positionOS.xyz);
-            float2 local=mul(_ArtToLocal,float4(world,1)).xy;
-            output.aperture=(local*_CanvasMetrics.x+_CanvasMetrics.yz)/_CanvasSize.xy;
             // The renderer's colour: in the vertices, or per draw (unity_SpriteColor) under the SRP batcher, as URP's own sprite shaders read it.
             output.color = input.color * unity_SpriteColor;
             return output;

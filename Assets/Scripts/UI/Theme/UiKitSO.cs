@@ -56,6 +56,9 @@ public sealed class UiKitSO : ScriptableObject
     /// <summary>An alerting line's ink on a light face (Quit game; oxblood #8A2F3B).</summary>
     public Color inkAlert = new Color(0.541f, 0.184f, 0.231f, 1f);
 
+    /// <summary>Signal red (#C23A2E): a large error or warning word on a light face (the Title's).</summary>
+    public Color signalRed = new Color(0.761f, 0.227f, 0.18f, 1f);
+
     /// <summary>The phosphor readouts' ink (#CCFFD1).</summary>
     public Color phosphorInk = new Color(0.8f, 1f, 0.82f, 1f);
 

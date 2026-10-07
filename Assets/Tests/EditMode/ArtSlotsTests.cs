@@ -154,14 +154,6 @@ public class ArtSlotsTests
     }
 
     [Test]
-    public void SliceShare_OnlyTheTitleFacesAreSliced()
-    {
-        Assert.AreEqual(0.25f, ArtSlots.SliceShare(ArtSlots.TitleButton));
-        Assert.AreEqual(0.25f, ArtSlots.SliceShare(ArtSlots.TitleButtonHover));
-        Assert.AreEqual(0f, ArtSlots.SliceShare(ArtSlots.PetCorner));
-    }
-
-    [Test]
     public void OnDeskPaper_TheFormsFolder()
     {
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.PhotoFrame));

@@ -122,22 +122,23 @@ public sealed class HomeManager : MonoBehaviour
         foreach (HomeBill bill in (HomeBill[])System.Enum.GetValues(typeof(HomeBill)))
             rows.Add(BillRow(bill));
 
-        homeUI.ShowExpenses(UiText.Format("home.title", _world.day), BillsText(total), rows, UiText.Format("home.pay", Pet.name), canPay, HandleToggleBill, HandlePay);
+        homeUI.ShowExpenses(UiText.Format("home.title", _world.day), BillsText(total), rows, UiText.Get("home.bill.paying"), UiText.Get("home.bill.skip"),
+                            UiText.Format("home.pay", Pet.name), canPay, HandleToggleBill, HandlePay);
     }
 
-    /// <summary>A bill's row: its name, price and line (and "needs electricity" for the heating and the TV); Paying or Skip; the medicine offered only while the pet is unwell.</summary>
+    /// <summary>A bill's row: its name, its price and line (and "needs electricity" for the heating and the TV), whether tonight's care pays it (the Paying / Skip pair); the medicine offered only while the pet is unwell.</summary>
     private HomeUIController.BillView BillRow(HomeBill bill)
     {
         BillRow row = _lib != null ? _lib.Home.Bill(bill) : null;
         string name = row != null ? row.name : bill.ToString();
-        string label = $"{name}  {HomeEconomy.BillPrice(_world, _lib, bill)} {UiText.Currency(UiText.WalletForm.Short)}";
+        string detail = $"-{HomeEconomy.BillPrice(_world, _lib, bill)} {UiText.Currency(UiText.WalletForm.Short)}";
         bool needless = bill == HomeBill.Medicine && Pet.sickness <= 0;
         string note = needless ? UiText.Format("home.bill.notNeeded", Pet.name)
             : bill == HomeBill.Heating || bill == HomeBill.Tv ? UiText.Get("home.bill.needsPower")
             : row != null ? row.line : string.Empty;
         if (!string.IsNullOrEmpty(note))
-            label += "  ·  " + note;
-        return new HomeUIController.BillView(bill, label, UiText.Get(_care.Pays(bill) ? "home.bill.paying" : "home.bill.skip"), !needless);
+            detail += "  ·  " + note;
+        return new HomeUIController.BillView(bill, name, detail, _care.Pays(bill), !needless);
     }
 
     /// <summary>The bills panel's body: the break-in, the fixed costs paid and the wallet, the pet's needs now in words, last night's change and the Welfare Office's notice, then the night's bills' total.</summary>
@@ -241,7 +242,7 @@ public sealed class HomeManager : MonoBehaviour
         foreach (UpgradeSO toy in HomeEconomy.OwnedToys(_world, _lib))
         {
             UpgradeSO chosen = toy;
-            toys.Add(new HomeUIController.ToyView(toy.displayName, UiText.Get(_care.Played ? "home.pet.played" : "home.pet.play"), !_care.Played, () => HandlePlay(chosen)));
+            toys.Add(new HomeUIController.ToyView(toy.id, toy.displayName, UiText.Get(_care.Played ? "home.pet.played" : "home.pet.play"), !_care.Played, () => HandlePlay(chosen)));
         }
         string body = NeedsText(tonight, "\n") + (_care.Electricity ? string.Empty : "\n" + UiText.Get("home.pet.dark"));
         homeUI.ShowPet(UiText.Format("home.pet.title", Pet.name), body, Pet.kind, PetRules.Look(tonight), _care.Electricity, reaction,
@@ -348,9 +349,11 @@ public sealed class HomeManager : MonoBehaviour
     /// <summary>
     /// Spends the spin cost (if affordable), picks a weighted SlotOutcomeSO
     /// from tonight's seeded stream, and applies its money/modifier/effect
-    /// results. Returns the line shown to the player.
+    /// results. Returns the line shown to the player and, for a spin that
+    /// happened, the outcome's place in the library and whether it won money
+    /// (the reels' faces, SlotReels).
     /// </summary>
-    private string HandleSpin()
+    private HomeUIController.SpinView HandleSpin()
     {
         Debug.Log($"[HomeManager] >>> Entering HandleSpin (money={_world.money}).");
 
@@ -359,7 +362,7 @@ public sealed class HomeManager : MonoBehaviour
         if (_world.money < spinCost)
         {
             Debug.Log($"[HomeManager] <<< Exiting HandleSpin — not enough credits ({_world.money} < {spinCost}).");
-            return $"Not enough {UiText.Currency(UiText.WalletForm.Inline)} to spin.";
+            return new HomeUIController.SpinView($"Not enough {UiText.Currency(UiText.WalletForm.Inline)} to spin.");
         }
 
         IReadOnlyList<SlotOutcomeSO> outcomes = _lib != null ? _lib.SlotOutcomes : System.Array.Empty<SlotOutcomeSO>();
@@ -367,7 +370,7 @@ public sealed class HomeManager : MonoBehaviour
         if (outcomes.Count == 0)
         {
             Debug.Log("[HomeManager] <<< Exiting HandleSpin — no slot outcomes configured.");
-            return "The slot machine is out of order.";
+            return new HomeUIController.SpinView("The slot machine is out of order.");
         }
 
         _world.money -= spinCost;
@@ -380,7 +383,7 @@ public sealed class HomeManager : MonoBehaviour
             RefreshHud();
             RecordStatement();
             Debug.Log("[HomeManager] <<< Exiting HandleSpin — no outcome picked (nothing happens).");
-            return "...nothing happens.";
+            return new HomeUIController.SpinView("...nothing happens.");
         }
 
         _world.money += outcome.moneyDelta;
@@ -406,9 +409,14 @@ public sealed class HomeManager : MonoBehaviour
 
         Debug.Log($"[HomeManager] <<< Exiting HandleSpin (outcome='{outcome.displayName}', spinCost={spinCost}, moneyDelta={outcome.moneyDelta}, money={_world.money}).");
 
-        return outcome.moneyDelta != 0
+        string shown = outcome.moneyDelta != 0
             ? $"{line} ({outcome.moneyDelta:+0;-0} {UiText.Currency(UiText.WalletForm.Inline)})"
             : line;
+        int index = 0;
+        for (int i = 0; i < outcomes.Count; i++)
+            if (outcomes[i] == outcome)
+                index = i;
+        return new HomeUIController.SpinView(shown, index, outcome.moneyDelta > 0);
     }
 
     /// <summary>Writes tonight's household costs, purchases and the wallet into the day's row of the clerk's statement (redesign phase 25; saved when Sleep saves).</summary>

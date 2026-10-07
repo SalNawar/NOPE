@@ -158,7 +158,7 @@ public static class UiContrastCheck
             return false; // a picture: what shows is unknown, the black and white bounds decide
         if (sprite != null && AssetDatabase.GetAssetPath(sprite) != "Resources/unity_builtin_extra")
         {
-            if (!(Mean(sprite, g.rectTransform, rect, g as Image) is Color mean))
+            if (!(Mean(sprite, g as Image, g.rectTransform, rect) is Color mean))
                 return false;
             colour *= mean;
         }
@@ -170,8 +170,8 @@ public static class UiContrastCheck
         return a + (1f - a) * colour.a >= 0.995f;
     }
 
-    /// <summary>A sprite's mean colour under a world rect (read from its file; a sliced image's corners and edges mapped as they are drawn), or null when the file cannot be read.</summary>
-    private static Color? Mean(Sprite sprite, RectTransform image, Rect world, Image drawn)
+    /// <summary>A sprite's mean colour under a world rect (read from its file; a sliced image's corners and edges mapped as it draws them), or null when the file cannot be read.</summary>
+    private static Color? Mean(Sprite sprite, Image drawn, RectTransform image, Rect world)
     {
         string path = AssetDatabase.GetAssetPath(sprite.texture);
         if (string.IsNullOrEmpty(path) || !File.Exists(path))
@@ -191,12 +191,18 @@ public static class UiContrastCheck
         Rect local = image.rect;
         Vector2 min = image.InverseTransformPoint(new Vector3(world.xMin, world.yMin, 0f));
         Vector2 max = image.InverseTransformPoint(new Vector3(world.xMax, world.yMax, 0f));
+        float u0 = Mathf.Clamp01((Mathf.Min(min.x, max.x) - local.xMin) / local.width), u1 = Mathf.Clamp01((Mathf.Max(min.x, max.x) - local.xMin) / local.width);
+        float v0 = Mathf.Clamp01((Mathf.Min(min.y, max.y) - local.yMin) / local.height), v1 = Mathf.Clamp01((Mathf.Max(min.y, max.y) - local.yMin) / local.height);
         Rect px = sprite.textureRect;
-        bool sliced = drawn != null && drawn.type == Image.Type.Sliced && sprite.border != Vector4.zero;
-        float u0 = Share(Mathf.Min(min.x, max.x) - local.xMin, local.width, px.width, sprite.border.x, sprite.border.z, sliced ? drawn.pixelsPerUnit : 0f);
-        float u1 = Share(Mathf.Max(min.x, max.x) - local.xMin, local.width, px.width, sprite.border.x, sprite.border.z, sliced ? drawn.pixelsPerUnit : 0f);
-        float v0 = Share(Mathf.Min(min.y, max.y) - local.yMin, local.height, px.height, sprite.border.y, sprite.border.w, sliced ? drawn.pixelsPerUnit : 0f);
-        float v1 = Share(Mathf.Max(min.y, max.y) - local.yMin, local.height, px.height, sprite.border.y, sprite.border.w, sliced ? drawn.pixelsPerUnit : 0f);
+        if (drawn != null && drawn.type == Image.Type.Sliced && sprite.border != Vector4.zero && drawn.pixelsPerUnit * drawn.pixelsPerUnitMultiplier > 0f)
+        {
+            // A 9-slice keeps its borders at their drawn size: map each side's share through its border, the rest through the stretched centre.
+            float unit = drawn.pixelsPerUnit * drawn.pixelsPerUnitMultiplier;
+            u0 = Slice(u0, local.width, sprite.border.x, sprite.border.z, px.width, unit);
+            u1 = Slice(u1, local.width, sprite.border.x, sprite.border.z, px.width, unit);
+            v0 = Slice(v0, local.height, sprite.border.y, sprite.border.w, px.height, unit);
+            v1 = Slice(v1, local.height, sprite.border.y, sprite.border.w, px.height, unit);
+        }
         float sx = (float)tex.width / sprite.texture.width, sy = (float)tex.height / sprite.texture.height;
         int x0 = Mathf.FloorToInt((px.xMin + u0 * px.width) * sx), x1 = Mathf.CeilToInt((px.xMin + u1 * px.width) * sx);
         int y0 = Mathf.FloorToInt((px.yMin + v0 * px.height) * sy), y1 = Mathf.CeilToInt((px.yMin + v1 * px.height) * sy);
@@ -220,33 +226,17 @@ public static class UiContrastCheck
         return n == 0 || a <= 0f ? new Color(0f, 0f, 0f, 0f) : new Color(r / a, g / a, b / a, a / n);
     }
 
-    /// <summary>
-    /// Where a point <paramref name="at"/> units into a rect <paramref name="size"/>
-    /// long falls on its sprite, as a share of the sprite's <paramref name="pixels"/>:
-    /// linear when not sliced (<paramref name="ppu"/> 0); for a 9-slice drawn at
-    /// <paramref name="ppu"/> pixels per unit, the low and high borders keep their
-    /// pixels (shrunk together when the rect is shorter than both) and the middle
-    /// stretches.
-    /// </summary>
-    private static float Share(float at, float size, float pixels, float low, float high, float ppu)
+    /// <summary>A share <paramref name="t"/> along a sliced image's side of <paramref name="length"/> units as a share of its sprite's <paramref name="pixels"/>: inside a border (of <paramref name="lowPx"/> / <paramref name="highPx"/> sprite pixels, drawn at <paramref name="unit"/> pixels a unit) one to one, between them the stretched centre.</summary>
+    private static float Slice(float t, float length, float lowPx, float highPx, float pixels, float unit)
     {
-        if (size <= 0f)
-            return 0f;
-        at = Mathf.Clamp(at, 0f, size);
-        if (ppu <= 0f)
-            return at / size;
-        float lowUnits = low / ppu, highUnits = high / ppu;
-        float fit = lowUnits + highUnits > size ? size / (lowUnits + highUnits) : 1f;
-        lowUnits *= fit;
-        highUnits *= fit;
-        float p;
-        if (at <= lowUnits)
-            p = lowUnits > 0f ? at / lowUnits * low : 0f;
-        else if (at >= size - highUnits)
-            p = pixels - (highUnits > 0f ? (size - at) / highUnits * high : 0f);
-        else
-            p = low + (at - lowUnits) / Mathf.Max(0.0001f, size - lowUnits - highUnits) * (pixels - low - high);
-        return Mathf.Clamp01(p / pixels);
+        float low = lowPx / unit, high = highPx / unit, at = t * length;
+        if (length <= low + high)
+            return t;
+        if (at <= low)
+            return at * unit / pixels;
+        if (at >= length - high)
+            return (pixels - (length - at) * unit) / pixels;
+        return (lowPx + (at - low) / (length - low - high) * (pixels - lowPx - highPx)) / pixels;
     }
 
     /// <summary>A rect transform's world-space bounds (the canvases here are axis-aligned).</summary>

@@ -80,9 +80,9 @@ the hall's, below).
 the hall lacked for the game to be whole (the list at the end of the next
 section), leaves alone whatever it already has (a second run changes nothing)
 and marks the scene dirty for saving. The gameplay side ran it once, with
-Saleh's OK (2026-09-29). Reinstalling the hall's art
-(`AnimeHallLayerInstaller`) rebuilds the scene without these hooks: run it again
-afterwards.
+Saleh's OK (2026-09-29). A rebuild of the hall from scratch (its first
+installer, `AnimeHallLayerInstaller`, was retired on 2026-10-07) would lose these
+hooks: run it again afterwards.
 
 ## The anime hall (`AnimeHall.unity`, art c75e1fe)
 
