@@ -374,7 +374,8 @@ public static class InterviewScript
     /// traveller answers in their voice for <paramref name="outcome"/>
     /// (Voices.Confront by the case's fault <paramref name="reason"/> and
     /// <paramref name="lie"/> kind; {value}, {other}, {place} filled, their
-    /// key-word spans kept). Null when no prompt matches.
+    /// key-word spans kept), objecting to the challenge (TravellerPose.Objecting).
+    /// Null when no prompt matches.
     /// </summary>
     public static DialogChoice Confront(InterviewLines lines, InterviewCase c, Discrepancy difference, string categoryWord, ConfrontOutcome outcome, string reason, LieKind? lie)
     {
@@ -405,7 +406,7 @@ public static class InterviewScript
                 { Interview.PlaceToken, fills[Interview.PlaceToken] }
             };
             choice.Lines.Add(new DialogLine(reply.id, DialogSpeaker.Traveller, Confrontations.Fill(reply.text, said), null,
-                                            KeyWords.Spans(reply.text, said, c != null ? c.keyWords : null)));
+                                            KeyWords.Spans(reply.text, said, c != null ? c.keyWords : null)).WithGesture(TravellerPose.Objecting));
         }
         return choice;
     }
@@ -522,8 +523,9 @@ public static class InterviewScript
     /// one or two traveller lines in their voice (Voices.Reaction by
     /// <paramref name="verdict"/>, <paramref name="intent"/> and the case's
     /// fault <paramref name="reason"/>: the row's line, then its then line when
-    /// it has one), {place} filled, with their key-word spans. Empty when no
-    /// row matches.
+    /// it has one), {place} filled, with their key-word spans; for any
+    /// verdict but acceptance they object (TravellerPose.Objecting). Empty
+    /// when no row matches.
     /// </summary>
     public static IReadOnlyList<DialogLine> Reaction(InterviewLines lines, InterviewCase c, ReactionVerdict verdict, ReactionIntent intent, string reason)
     {
@@ -531,9 +533,11 @@ public static class InterviewScript
         VoiceLine row = Voices.Reaction(lines, c?.voice, Context(c), verdict, intent, reason);
         if (row == null || row.line == null || string.IsNullOrWhiteSpace(row.line.text))
             return said;
-        said.Add(Say(row.line, c, null));
+        // Saleh 2026-10-07: a traveller objects to a denial (and to a detention, any verdict but acceptance).
+        string gesture = verdict == ReactionVerdict.Accepted ? null : TravellerPose.Objecting;
+        said.Add(Say(row.line, c, null).WithGesture(gesture));
         if (row.then != null && !string.IsNullOrWhiteSpace(row.then.text))
-            said.Add(Say(row.then, c, null));
+            said.Add(Say(row.then, c, null).WithGesture(gesture));
         return said;
     }
 

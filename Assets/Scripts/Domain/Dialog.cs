@@ -130,13 +130,14 @@ public sealed class DialogLine
 {
     /// <summary>A spoken line, optionally with the expression a premade shows while saying it and its key-word spans (KeyWords.Spans; null for none).</summary>
     public DialogLine(string id, DialogSpeaker speaker, string text, string expression = null, IReadOnlyList<(int start, int length)> english = null)
-        : this(id, speaker, text, false, default, null, false, expression, english)
+        : this(id, speaker, text, false, default, null, false, expression, english, null)
     {
     }
 
     private DialogLine(string id, DialogSpeaker speaker, string text, bool isAnswer, ClueCategory category, string value, bool isTell, string expression,
-                       IReadOnlyList<(int start, int length)> english)
+                       IReadOnlyList<(int start, int length)> english, string gesture)
     {
+        Gesture = gesture;
         Id = id;
         Speaker = speaker;
         Text = text;
@@ -150,7 +151,11 @@ public sealed class DialogLine
 
     /// <summary>A traveller's answer line: its sentence and key-word spans (null for none), plus the answer's category, canonical value and tell flag (no expression).</summary>
     public static DialogLine Answer(string id, string text, InterviewAnswer a, IReadOnlyList<(int start, int length)> english = null) =>
-        new DialogLine(id, DialogSpeaker.Traveller, text, true, a != null ? a.category : default, a != null ? a.value : null, a != null && a.isTell, null, english);
+        new DialogLine(id, DialogSpeaker.Traveller, text, true, a != null ? a.category : default, a != null ? a.value : null, a != null && a.isTell, null, english, null);
+
+    /// <summary>This line with the pose category the traveller takes while saying it (TravellerPose: a challenge's reply or a reaction to a denial is "objecting").</summary>
+    public DialogLine WithGesture(string gesture) =>
+        new DialogLine(Id, Speaker, Text, IsAnswer, Category, Value, IsTell, Expression, English, gesture);
 
     /// <summary>Stable id (the transcript names its row Line_{Id}).</summary>
     public string Id { get; }
@@ -175,6 +180,9 @@ public sealed class DialogLine
 
     /// <summary>The expression a premade shows while saying the line (a LookKeys.Expressions token), or null.</summary>
     public string Expression { get; }
+
+    /// <summary>The pose category the traveller takes while saying the line (a TravellerPose category), or null for its default (TravellerPose.ForLine: an answer explains, any other line is neutral).</summary>
+    public string Gesture { get; }
 
     /// <summary>
     /// The spans of <see cref="Text"/> that stay English when the line shows

@@ -33,7 +33,10 @@ public enum LookLayer
     Accessory,
 
     /// <summary>A premade's whole picture.</summary>
-    Whole
+    Whole,
+
+    /// <summary>The hands of a pose that crosses the face (thinking_a, thinking_b), drawn over everything (TravellerPose).</summary>
+    Hands
 }
 
 /// <summary>One layer's art key: its file name and the parts it is named from (LookArtFallback builds its stand-ins from them). Built only by LookKeys.</summary>
@@ -72,10 +75,14 @@ public readonly struct LookKey
     /// <summary>A premade's expression (Whole only).</summary>
     public readonly string Expression;
 
+    /// <summary>The pose frame the key is drawn in (a TravellerPose id, "explaining_a"; LookKeys.Posed), or null for the neutral frame.</summary>
+    public readonly string Pose;
+
     /// <summary>Creates a key (LookKeys only).</summary>
     internal LookKey(string name, LookLayer layer, TravellerGender gender, string nationId, string eraId, int skinTone, string face,
-                     string hairColour, string variant, string premadeId, string expression)
+                     string hairColour, string variant, string premadeId, string expression, string pose = null)
     {
+        Pose = pose;
         Name = name;
         Layer = layer;
         Gender = gender;

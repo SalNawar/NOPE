@@ -633,7 +633,8 @@ public sealed partial class GameManager : MonoBehaviour
 
     /// <summary>
     /// Presents a case via the investigation UI: keeps only this traveller's
-    /// art, shows them in the booth, and marks a once-per-run premade as met
+    /// art and picks its set (CharacterArt.PresentTraveller: 80s or classic, never a
+    /// mix), shows them in the booth, and marks a once-per-run premade as met
     /// (DayCycle.Present: they never come back this run). Without the
     /// investigation UI no case can be shown: an error, and the slot resolves.
     /// </summary>
@@ -643,7 +644,7 @@ public sealed partial class GameManager : MonoBehaviour
         if (travellerView != null)
             travellerView.EndLinger();
         EndReaction();
-        _characterArt?.Retain(inst.look != null ? inst.look.Keys : null);
+        _characterArt?.PresentTraveller(inst.look);
         SetTravellerAtDesk(true, inst.look);
 
         DayCycle.Present(_worldState, inst);
