@@ -34,8 +34,9 @@ public readonly struct FaceEdges
 /// go it springs back past its rest and wobbles in (Elastic, settling over
 /// about 400 ms in two or three decaying wobbles); a confirmed click pops its
 /// top up (popLift) and wobbles; a click on a disabled control shakes it
-/// sideways, a short "no". A screen-edge pull tab (SetPull) also slides out
-/// under the pointer and on a click, stretched along its travel by its speed
+/// sideways, a short "no". A screen-edge pull tab (SetPull) is also pulled
+/// out of its edge under the pointer and on a click (the edge it hangs from
+/// stays), stretched along its travel by its speed
 /// and squashed by its acceleration (SquashStretch.FromMotion). Every edge's
 /// reach outward is capped by the control's room (SetRoom: the kit's border
 /// inset, never into a neighbour's rest rect: ControlRoom), so no animated
@@ -176,8 +177,9 @@ public sealed class ControlMotion
     /// <summary>
     /// The face of a <paramref name="width"/> x <paramref name="height"/>
     /// control now: its top down by the sink (its bottom fixed), wider or
-    /// narrower by the area's rule; a pull tab's slide, stretched along its
-    /// travel; the shake; then each edge's outward reach capped by its room.
+    /// narrower by the area's rule; a pull tab reaching out of its edge by its
+    /// pull (the edge it hangs from fixed), stretched along its travel; the
+    /// shake; then each edge's outward reach capped by its room.
     /// </summary>
     public FaceEdges Edges(float width, float height, MotionKnobs knobs)
     {
@@ -200,9 +202,10 @@ public sealed class ControlMotion
                 h *= st.Along;
             }
         }
-        float dx = _shake.Value + _pull.Value * _pullX, dy = _pull.Value * _pullY;
-        float left = (w - width) / 2f - dx, right = (w - width) / 2f + dx;
-        float bottom = -(midY - h / 2f) - dy, top = midY + h / 2f - height + dy;
+        // A pull tab is pulled out of its screen edge: the edge it hangs from stays put and the face reaches out by the pull (it never leaves a gap at the edge).
+        float px = _pull.Value * _pullX, py = _pull.Value * _pullY;
+        float left = (w - width) / 2f - _shake.Value + Math.Max(0f, -px), right = (w - width) / 2f + _shake.Value + Math.Max(0f, px);
+        float bottom = -(midY - h / 2f) + Math.Max(0f, -py), top = midY + h / 2f - height + Math.Max(0f, py);
         return new FaceEdges(Math.Min(left, _roomLeft), Math.Min(right, _roomRight), Math.Min(bottom, _roomBottom), Math.Min(top, _roomTop),
                              _darken.Value < 0f ? 0f : _darken.Value);
     }

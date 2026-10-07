@@ -284,6 +284,7 @@ public class MotionTests
         var f = Play(m, 1f, 128f, 136f);
         Assert.AreEqual(Knobs.pullHover, f[f.Count - 1].e.Right, 1f, "out by the hover's slide (less the lifted face's narrowing)");
         Assert.LessOrEqual(f.Max(x => x.e.Left), 0f, "never past the screen's edge");
+        Assert.GreaterOrEqual(f.Min(x => x.e.Left), -2f, "nor away from it: it is pulled out, its edge stays (only the lift's narrowing)");
         bool stretched = f.Exists(x => x.e.Right + x.e.Left > 4f && x.e.Top + x.e.Bottom < -4f);
         Assert.IsTrue(stretched, "on the way: longer along its travel, thinner across");
     }

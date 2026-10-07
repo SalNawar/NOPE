@@ -18,6 +18,9 @@ public sealed class UiPill : MonoBehaviour, IMotionTick
 
     /// <summary>True when the slide runs up or down (its stretch is along y), else across.</summary>
     private bool _alongY;
+
+    /// <summary>Where the slide started along its travel (px from the rest place).</summary>
+    private float _start;
     private bool _posed;
 
     /// <summary>Slides <paramref name="pill"/> to its place from <paramref name="fromWorld"/> (where the selection was) with the toggle cue.</summary>
@@ -47,6 +50,7 @@ public sealed class UiPill : MonoBehaviour, IMotionTick
         _x = new Spring { Value = from.x * amount.Share, Target = 0f };
         _y = new Spring { Value = from.y * amount.Share, Target = 0f };
         _alongY = Mathf.Abs(from.y) > Mathf.Abs(from.x);
+        _start = _alongY ? _y.Value : _x.Value;
         Apply(0f, 0f);
         UiMotion.Run(this);
     }
@@ -77,12 +81,21 @@ public sealed class UiPill : MonoBehaviour, IMotionTick
     {
         if (!_posed)
             return;
-        var offset = new Vector3(_x.Value, _y.Value, 0f);
-        transform.localPosition += offset - _applied;
-        _applied = offset;
         MotionKnobs knobs = UiMotion.Knobs;
         Stretch s = SquashStretch.FromMotion(speed, acceleration, knobs.stretchPerSpeed, knobs.squashPerAccel, knobs.maxStretch);
-        transform.localScale = new Vector3(_restScale.x * (_alongY ? s.Across : s.Along), _restScale.y * (_alongY ? s.Along : s.Across), _restScale.z);
+        // The pill stays on its track (Saleh 2026-10-07, round 2: nothing goes out of its borders): its edges along the travel
+        // never pass the span between where it started and where it rests by more than the kit's border inset.
+        float along = _alongY ? _y.Value : _x.Value, cross = _alongY ? _x.Value : _y.Value;
+        Rect rect = ((RectTransform)transform).rect;
+        float half = (_alongY ? rect.height * _restScale.y : rect.width * _restScale.x) / 2f;
+        float lo = Mathf.Min(0f, _start) - half - knobs.faceRoom, hi = Mathf.Max(0f, _start) + half + knobs.faceRoom;
+        float reach = Mathf.Min(half * s.Along, (hi - lo) / 2f);
+        along = Mathf.Clamp(along, lo + reach, hi - reach);
+        float stretch = half > 0f ? reach / half : 1f;
+        var offset = _alongY ? new Vector3(cross, along, 0f) : new Vector3(along, cross, 0f);
+        transform.localPosition += offset - _applied;
+        _applied = offset;
+        transform.localScale = new Vector3(_restScale.x * (_alongY ? 1f / stretch : stretch), _restScale.y * (_alongY ? stretch : 1f / stretch), _restScale.z);
         if (speed != 0f || acceleration != 0f || !_x.AtRest || !_y.AtRest)
             return;
         transform.localScale = _restScale;
