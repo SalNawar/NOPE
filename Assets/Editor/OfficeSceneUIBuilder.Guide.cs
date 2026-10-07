@@ -49,6 +49,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "sign", readySign.transform);
         SetRef(so, "calendar", calendar);
         SetRef(so, "deskView", deskView);
+        SetRef(so, "city", new SerializedObject(controls).FindProperty("cityView").objectReferenceValue);
         SetRef(so, "departureBoard", board.transform.Find("ClickBox"));
         SetRef(so, "scanner", scanner.transform);
         SetRef(so, "counter", counter.transform);

@@ -78,12 +78,6 @@ public sealed class DeskView : MonoBehaviour
         }
         if (backButton != null)
         {
-            // Keep the return control off the traveller's face in the closer
-            // counter framing, including scenes built before this art pass.
-            var rect=(RectTransform)backButton.transform;
-            rect.anchorMin=rect.anchorMax=new Vector2(0,1);
-            rect.pivot=new Vector2(0,1);
-            rect.anchoredPosition=new Vector2(24,-80);
             backButton.onClick.AddListener(Back);
             backButton.gameObject.SetActive(false);
         }

@@ -1249,8 +1249,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>Where the desk view's "▲ Back" control starts (reference px from the top): under the office case HUD's compare strip and a gap.</summary>
     private static readonly float CaseHudClearance = TopStripTop + CompareStripSize.y + 8f;
 
-    /// <summary>The desk view's "▲ Back" control (reference px), top centre under the case HUD.</summary>
+    /// <summary>The desk view's "▲ Back" control (reference px), top left under the case HUD and the tutorial's prompt plate.</summary>
     private static readonly Vector2 DeskViewBackSize = new Vector2(200f, 44f);
+
+    /// <summary>The gap (reference px) between the tutorial's prompt plate and the desk view's "▲ Back" control under it.</summary>
+    private const float DeskViewBackGap = 12f;
 
     /// <summary>The band at the overlay's top the speech bubble and the wheel's ring keep clear (reference px): the office case HUD's strips, the desk view's Back control and gaps (the desk view clamps both to the top).</summary>
     private static readonly float OverlayTopClearance = CaseHudClearance + DeskViewBackSize.y + 8f;
@@ -1360,7 +1363,10 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The desk view's "▲ Back" control (the readability fix: a visible way
     /// out of the desk view) under the office overlay canvas, rebuilt each run:
-    /// a small button at the top centre, under the case HUD's strips, in the
+    /// a small button at the top left (the art pass, 2026-10-07: off the
+    /// traveller's face in the closer counter framing), under the case HUD's
+    /// strips and under the tutorial's prompt plate (GuidePlateAt,
+    /// GuidePlateSize: both show in the reading view on day 1), in the
     /// "&lt; Desk" button's role, its label keyed (deskView.back); a hover hint
     /// beside it, on its right (deskView.backHint: the other ways back), in the
     /// tooltip's role, shown by HoverHint (beside, not under: the speech bubble
@@ -1376,7 +1382,7 @@ public static partial class OfficeSceneUIBuilder
         rt.anchorMin = new Vector2(0f, 1f);
         rt.anchorMax = new Vector2(0f, 1f);
         rt.pivot = new Vector2(0f, 1f);
-        rt.anchoredPosition = new Vector2(24f, -CaseHudClearance);
+        rt.anchoredPosition = new Vector2(24f, Mathf.Min(-CaseHudClearance, GuidePlateAt.y - GuidePlateSize.y - DeskViewBackGap));
         rt.sizeDelta = DeskViewBackSize;
 
         Transform hint = Panel(back.transform, "Hint", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(8f, 0f), new Vector2(DeskViewBackSize.x, 34f), Tooltip, ThemeRoleId.Tooltip);
@@ -2101,29 +2107,38 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The city view (the desk-first redesign, item 6), rebuilt each run:
-    /// Office/CityView (the CityView) with its Cinemachine camera (inactive,
-    /// priority 0; the binder poses it) and the Skyline root its stand-in city
-    /// is made under at bind, the layers' unlit transparent material, and on
-    /// the office overlay "◀ City (A)" at the left edge and "Desk (D) ▶" at the
-    /// right edge, in the "&lt; Desk" button's role (inactive: the view shows
-    /// them). Returns it.
+    /// The city view (the desk-first redesign, item 6; Saleh 2026-10-07),
+    /// rebuilt each run: Office/CityView (the CityView; the binder binds it to
+    /// the hall's living city), and on the office overlay, first so the rest
+    /// of the overlay draws over it, CityScreen (full screen, inactive until
+    /// the fade: its CanvasGroup the fade, its Image the matte in
+    /// DeskConfigSO.cityMatte; both in the diegetic DiegeticDevice role, so no
+    /// theme recolours the art's view) holding Panorama (a RawImage fitted whole
+    /// inside the screen by an AspectRatioFitter; the view gives it the living
+    /// city's material at bind); then the CITY pull tab at the left edge and
+    /// the DESK one at the right edge (the UI kit's, OfficeSceneUIBuilder.Kit:
+    /// the word over its key's keycap; inactive: the view shows them). Returns it.
     /// </summary>
     private static CityView BuildCityView(Transform office, Transform overlay, DeskConfigSO config)
     {
         DestroyChildIfPresent(office, "CityView");
         Transform host = EnsureChild(office, "CityView");
-        Transform cameraHost = EnsureChild(host, "Camera");
-        CinemachineCamera cityCamera = cameraHost.gameObject.AddComponent<CinemachineCamera>();
-        cityCamera.Priority = 0;
-        cameraHost.gameObject.SetActive(false);
-        Transform skyline = EnsureChild(host, "Skyline");
-        Material layers = EnsureMaterial("CitySkyline_Layer", "Universal Render Pipeline/Unlit", m =>
-        {
-            m.SetFloat("_Surface", 1f);
-            m.SetFloat("_Blend", 0f);
-            BaseShaderGUI.SetMaterialKeywords(m);
-        });
+
+        DestroyChildIfPresent(overlay, "CityScreen");
+        // The art's view of the city, never themed (a diegetic role keeps its look).
+        Transform screen = Panel(overlay, "CityScreen", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, config.cityMatte, ThemeRoleId.DiegeticDevice);
+        screen.SetAsFirstSibling();
+        CanvasGroup group = screen.gameObject.AddComponent<CanvasGroup>();
+        group.alpha = 0f;
+        group.blocksRaycasts = false;
+        Transform picture = Panel(screen, "Panorama", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        RawImage panorama = picture.gameObject.AddComponent<RawImage>();
+        panorama.raycastTarget = false;
+        SceneUiKit.Tag(panorama, ThemeRoleId.DiegeticDevice, ThemePart.Fill);
+        AspectRatioFitter fitter = picture.gameObject.AddComponent<AspectRatioFitter>();
+        fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+        fitter.aspectRatio = 3f;
+        screen.gameObject.SetActive(false);
 
         Button Edge(string name, string key, bool left)
         {
@@ -2141,9 +2156,10 @@ public static partial class OfficeSceneUIBuilder
         CityView view = host.gameObject.AddComponent<CityView>();
         var so = new SerializedObject(view);
         SetRef(so, "config", config);
-        SetRef(so, "cityCamera", cityCamera);
-        SetRef(so, "skyline", skyline);
-        SetRef(so, "layerMaterial", layers);
+        SetRef(so, "screen", group);
+        SetRef(so, "matte", screen.GetComponent<Image>());
+        SetRef(so, "panorama", panorama);
+        SetRef(so, "fitter", fitter);
         SetRef(so, "lookButton", Edge("CityLook", "city.look", true));
         SetRef(so, "backButton", Edge("CityBack", "city.back", false));
         so.ApplyModifiedProperties();

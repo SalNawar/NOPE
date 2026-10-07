@@ -115,6 +115,8 @@ MonoBehaviour:
     defaultYaw: 0
   - id: 15
     fallbacks:
+    - "Anime terminal - registered art and preserved desk/Approved 3D desk \u2014
+      preserved art/Anchor_Till/CreditsNumber"
     - GameplayAnchors/CreditsNumber
     - CreditsNumber
     hasDefault: 0

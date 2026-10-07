@@ -39,18 +39,10 @@ public static class HallCityCrowdVariationsAuthoring
             mat.SetTexture("_Atmosphere",AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/CityAtmosphereAtlas.png"));
             EditorUtility.SetDirty(mat);renderer.sharedMaterial=mat;EditorUtility.SetDirty(renderer);
         }
-        if(art.GetComponent<HallCityLookView>()==null)Undo.AddComponent<HallCityLookView>(art.gameObject);
         city.rain=0;city.depthStrength=.7f;city.animateCity=true;EditorUtility.SetDirty(city);
         city.Apply(0);UnityEngine.Object.FindFirstObjectByType<HallBakedLighting>().Apply();
         AssetDatabase.SaveAssets();EditorSceneManager.MarkSceneDirty(art.gameObject.scene);
         HallWhiteCrowdAuthoring.Install();HallWhiteCrowdAuthoring.Save();
-    }
-    [MenuItem("Tools/Terminal Art/City Variations/Enable Left View")]
-    public static void EnableLeftView()
-    {
-        var art=UnityEngine.Object.FindFirstObjectByType<AnimeHallPresentation>();
-        if(art.GetComponent<HallCityLookView>()==null)Undo.AddComponent<HallCityLookView>(art.gameObject);
-        HallWhiteCrowdAuthoring.Save();
     }
     static void Capture(string name)
     {
@@ -112,12 +104,10 @@ public static class HallCityCrowdVariationsAuthoring
                 Capture("city-"+hour.ToString("0.0",System.Globalization.CultureInfo.InvariantCulture)+"-rain-"+rain);
             }
             settings.previewHour=12;city.rain=.5f;art.SetPan(.5f);Capture("city-mid-pan-rain-blend");
-            var look=art.GetComponent<HallCityLookView>();if(look==null)throw new InvalidOperationException("Left-view control missing.");
-            art.SetPan(0);look.LookLeft();for(int i=0;i<180;i++)look.Step(1f/60);
-            if(art.lookLeft<.99f)throw new InvalidOperationException("Left view did not reach target.");
-            look.Return();for(int i=0;i<180;i++)look.Step(1f/60);
-            if(art.lookLeft>.01f)throw new InvalidOperationException("Return did not reach desk view.");
-            report.AppendLine("PASS: left-view and return reach configured endpoints smoothly.");
+            // The left view itself is gameplay's CityView (A / Left: this pan as the lead-in, then the whole panorama faded in).
+            art.SetPan(1);if(art.lookLeft<.99f)throw new InvalidOperationException("Left pan endpoint not reached.");
+            art.SetPan(0);if(art.lookLeft>.01f)throw new InvalidOperationException("Forward pan endpoint not reached.");
+            report.AppendLine("PASS: the left pan reaches both configured endpoints.");
             report.AppendLine("PASS: eight saved 2172x724 state textures, matching depth map, generated atmosphere atlas, existing aperture masks retained.");
             foreach(string file in Directory.GetFiles(Folder,"City*.png"))
             {
