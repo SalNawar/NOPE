@@ -271,7 +271,10 @@ public enum FormItemKind
     Watermark,
 
     /// <summary>A folded card's crease down the page (FormPaint shades it faintly over the boxes).</summary>
-    Crease
+    Crease,
+
+    /// <summary>A form drawn on its art (ArtLayout): the blank face's piece over its rectangle (ArtSlots.PaperBlank), hiding a baked label whose field is not introduced yet.</summary>
+    Patch
 }
 
 /// <summary>A text's role: its style and colour class. Bold, capitals and small capitals follow it (FormTextStyles).</summary>
@@ -311,7 +314,10 @@ public enum FormTextRole
     Caption,
 
     /// <summary>Fine print.</summary>
-    FinePrint
+    FinePrint,
+
+    /// <summary>A signatory's hand on a form drawn on its art (ArtLayout): a signature, the authorising office (italic, in the value's ink).</summary>
+    Hand
 }
 
 /// <summary>How a text sits in its rectangle.</summary>
@@ -332,6 +338,9 @@ public static class FormTextStyles
 {
     /// <summary>True for the bold roles: the agency line, the title, the section heads and the box labels (small capitals at 12 px on a paper held at 720p need the weight to read, as drawn).</summary>
     public static bool IsBold(FormTextRole role) => role == FormTextRole.Agency || role == FormTextRole.Title || role == FormTextRole.Section || role == FormTextRole.Label;
+
+    /// <summary>True for a hand (a signature on the art), drawn in italics.</summary>
+    public static bool IsItalic(FormTextRole role) => role == FormTextRole.Hand;
 
     /// <summary>True for the labels, drawn in small capitals.</summary>
     public static bool IsSmallCaps(FormTextRole role) => role == FormTextRole.Label;
@@ -503,7 +512,7 @@ public static class FormLayout
     /// over it; 0 (a document, the desk paper) keeps every column whole.
     /// </summary>
     public static PlacedForm Layout(FormSpec spec, FormData data, float width, FormMetrics m, ITextMeasure measure, float rowLinkRoom = 0f) =>
-        Hide(new Placer(spec, data, width, m, measure, null, rowLinkRoom).Run(), data);
+        Hide(ArtLayout.IsArt(spec) ? ArtLayout.Place(spec, data, width, m) : new Placer(spec, data, width, m, measure, null, rowLinkRoom).Run(), data);
 
     /// <summary>
     /// <paramref name="form"/> without the fields <paramref name="data"/> hides
@@ -519,7 +528,7 @@ public static class FormLayout
         bool Hidden(int slot) => slot >= 0 && slot < form.Slots.Count && form.Slots[slot].Field >= 0 && form.Slots[slot].Field < hidden.Count && hidden[form.Slots[slot].Field];
         var items = form.Items.Where(i => !Hidden(i.Slot)).ToList();
         var slots = form.Slots.Select(s => !Hidden(s.Index) ? s : new FormSlot(s.Index, s.Field, s.Row, s.Source, new FaceRect(s.Hit.XMin, s.Hit.YMin, s.Hit.XMin - 1f, s.Hit.YMin - 1f), s.Page, true)).ToList();
-        return new PlacedForm(form.Width, form.Height, form.PageHeight, items, slots, form.PageTops);
+        return new PlacedForm(form.Width, form.Height, form.PageHeight, items, slots, form.PageTops, form.Unit);
     }
 
     /// <summary>
@@ -617,6 +626,11 @@ public static class FormLayout
             problems.Add("a photo cell on a form whose template shows no photo");
         if (!photoCell && probe.HasPhoto)
             problems.Add("the template shows a photo but its form has no photo cell");
+        if (ArtLayout.IsArt(spec))
+        {
+            problems.AddRange(ArtLayout.Problems(spec, probe, measure));
+            return problems;
+        }
 
         float aspect = (spec.look ?? new FormLook()).AspectOr(m.aspect);
         PlacedForm full = new Placer(spec, probe, aspect, m, measure, problems).Run();

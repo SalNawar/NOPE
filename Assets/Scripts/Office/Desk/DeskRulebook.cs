@@ -14,7 +14,10 @@ using UnityEngine;
 /// (DeskController: SetLift lifts its Booklet a stack step at a time, so it
 /// lies over or under each paper as they were last touched and never at the
 /// blotter's own height; Saleh 2026-10-06: "documents on desk like the folder
-/// with the rules are clipping with the desk"). Two tabs on its top edge turn its pages
+/// with the rules are clipping with the desk"). Since run 7 it is Saleh's Canva
+/// folder (ArtSlots.RulebookFolder: open, its page the right sheet, each tab
+/// its own cut-out, ArtSlots.RulebookTab, shown only while its page is
+/// available). The tabs on its top edge turn its pages
 /// (ShowPage): RULES prints today's directives (the day's Directive Memo,
 /// the PC's Rules), one row each; PAPERS lists the papers the traveller has
 /// not handed over (Track C's MissingPapers: the day's papers menu, the same
@@ -38,8 +41,8 @@ using UnityEngine;
 /// (ShowSeals); in inspect mode a row is comparable (SealClicked: DeskInspect
 /// holds the office's true seal on the workbench, as the PC's register does).
 /// Each new day opens on RULES. It shows from the day the rulebook is
-/// introduced (Feature.Rulebook). Build Office UI builds the booklet, its
-/// tabs, pages and rows (a fixed number: more directives than rows print
+/// introduced (Feature.Rulebook). Build Office UI builds the folder, its
+/// tabs, pages and rows (placed on the art's measured sheet and lines) (a fixed number: more directives than rows print
 /// only the first ones).
 /// </summary>
 public sealed class DeskRulebook : MonoBehaviour

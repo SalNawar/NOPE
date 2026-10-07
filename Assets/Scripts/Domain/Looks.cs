@@ -204,13 +204,15 @@ public sealed class TravellerLook
     /// <summary>Every part's key, bottom first.</summary>
     public IEnumerable<LookKey> Keys => Parts.Select(p => p.Key);
 
-    /// <summary>A premade's whole image for an expression (blank or unknown = neutral).</summary>
+    /// <summary>A premade's whole image for an expression (blank or unknown = neutral); a premade's ID photo (Looks.PhotoLook) is always its photo.</summary>
     /// <exception cref="System.InvalidOperationException">The look is not a premade's.</exception>
     public LookKey WholeKey(string expression)
     {
         LookPart? whole = PartOn(LookLayer.Whole);
         if (PremadeId == null || whole == null)
             throw new System.InvalidOperationException("Only a premade has a whole image.");
+        if (whole.Value.Key.Expression == LookKeys.PhotoExpression)
+            return whole.Value.Key;
 
         string e = expression != null && LookKeys.Expressions.Contains(expression) ? expression : LookKeys.NeutralExpression;
         return LookKeys.Premade(PremadeId, e);
@@ -545,6 +547,63 @@ public static class Looks
             return "premade:" + look.PremadeId;
         string g = look.Gender == TravellerGender.Unknown ? "?" : LookKeys.GenderToken(look.Gender);
         return $"{g}/skin{look.SkinTone}/face-{look.Face}/{look.HairColour}";
+    }
+
+    /// <summary>
+    /// The papers' photo of <paramref name="look"/> (Saleh 2026-10-07: "if
+    /// someone is in disguise, their passport pic shouldn't have them in old
+    /// costumes"): an ID photo is taken in 2150, so it keeps the body, the head
+    /// (skin and face) and the facial hair, swaps in the 2150 civilian outfit
+    /// in <paramref name="variant"/> (LookKeys.CivilOutfit; CivilVariant) and
+    /// the civilian hair in the look's own colour (CivilHair), and drops the
+    /// headwear, the accessory and the hair's back. A premade's whole picture
+    /// becomes their photo (LookKeys.PremadePhoto). The identity (IdentityKey)
+    /// is the look's, so the photo-against-face check is unchanged and a
+    /// stranger's photo is still a stranger, in 2150 dress too. Until the
+    /// civilian art lands its keys fall back to today's plainest 2150 outfit
+    /// and hair, and a premade's photo to their neutral picture
+    /// (CharacterArtFallbackSO: LookArtFallbackStep.CivilDress,
+    /// NeutralExpression). The photo has no garments to look at.
+    /// Deterministic: no draw. Null for null.
+    /// </summary>
+    public static TravellerLook PhotoLook(TravellerLook look, string variant)
+    {
+        if (look == null)
+            return null;
+        if (look.PremadeId != null)
+            return new TravellerLook(new[] { new LookPart(LookLayer.Whole, LookKeys.PremadePhoto(look.PremadeId), -1) }, new Garment[0], look.PremadeId,
+                                     look.Gender, look.SkinTone, look.Face, look.HairColour);
+
+        TravellerGender g = look.Gender == TravellerGender.Unknown ? TravellerGender.Male : look.Gender;
+        var parts = new List<LookPart>();
+        foreach (LookPart part in look.Parts)
+        {
+            switch (part.Layer)
+            {
+                case LookLayer.Body:
+                    parts.Add(new LookPart(part.Layer, part.Key, -1));
+                    parts.Add(new LookPart(LookLayer.Outfit, LookKeys.CivilOutfit(g, variant), -1));
+                    break;
+                case LookLayer.Head:
+                case LookLayer.FacialHair:
+                    parts.Add(new LookPart(part.Layer, part.Key, -1));
+                    break;
+            }
+        }
+        int after = parts.FindLastIndex(p => p.Layer == LookLayer.Head || p.Layer == LookLayer.FacialHair);
+        parts.Insert(after + 1, new LookPart(LookLayer.Hair, LookKeys.CivilHair(g, look.HairColour ?? LookKeys.Brown), -1));
+        return new TravellerLook(parts, new Garment[0], null, look.Gender, look.SkinTone, look.Face, look.HairColour);
+    }
+
+    /// <summary>The 2150 civilian outfit's variant for a traveller kind (Saleh's GPT request, 2026-10-07): v1 tidy for a tourist, v2 for a labourer, v3 worn for the displaced.</summary>
+    public static string CivilVariant(TravellerKind kind)
+    {
+        switch (kind)
+        {
+            case TravellerKind.Labourer: return "v2";
+            case TravellerKind.Displaced: return "v3";
+            default: return "v1";
+        }
     }
 
     /// <summary>The least distance between a traveller's skin tone and a stranger's on their papers' photo (Stranger): a whole step reads as the same person under the room's light, two do not.</summary>

@@ -189,17 +189,20 @@ public sealed class CaseVerdict
     /// <summary>True if this verdict dropped stability to/below the firing threshold.</summary>
     public bool firedNow;
 
-    /// <summary>Citation slip text shown to the player (empty if none): the whole slip in one text (Mail's copy of it).</summary>
+    /// <summary>The citation's whole text in one (Mail's copy of it; empty if none).</summary>
     public string citationText = string.Empty;
 
-    /// <summary>The slip's reason line: the mistake ("Approved an expired paper."; empty if none).</summary>
+    /// <summary>The citation's violation: the mistake ("Approved an expired paper."; empty if none): each row of the Citation prints it.</summary>
     public string citationReason = string.Empty;
 
-    /// <summary>The slip's detail: the rule broken and the exact values involved (lesson 6; empty if none).</summary>
+    /// <summary>The citation's detail: the rule broken, then the exact values involved (lesson 6; empty if none): the Citation prints its first line, the rule, under each violation.</summary>
     public string citationDetail = string.Empty;
 
-    /// <summary>The slip's consequence: the free warning or the penalty (empty if none).</summary>
+    /// <summary>The citation's consequence: the free warning or the penalty (empty if none): the Citation's TOTAL PENALTY.</summary>
     public string citationConsequence = string.Empty;
+
+    /// <summary>The citation as the desk prints it (CitationTickets; null without one). Runtime only: never saved.</summary>
+    [NonSerialized] public CitationTicket ticket;
 
     // -----------------------------
     // Investigation (accept/deny)

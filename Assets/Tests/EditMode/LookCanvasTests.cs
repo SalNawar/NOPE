@@ -38,4 +38,17 @@ public class LookCanvasTests
         Assert.AreEqual(0f, LookCanvas.LocalX(LookCanvas.CenterX), 1e-6f);
         Assert.AreEqual(-232f / 1536f, LookCanvas.LocalX(LookCanvas.CenterX - LookCanvas.ArmReach), 1e-6f);
     }
+
+    [Test]
+    public void AWholePicturesPhoto_IsTighter_HeadAndNeck_AtTheSameAspect()
+    {
+        (float x, float y, float w, float h) = LookCanvas.PhotoRectFor(true);
+        Assert.AreEqual(LookCanvas.PhotoAspect, w * LookCanvas.Width / (h * LookCanvas.Height), 1e-4f);
+        Assert.AreEqual(0.5f, x + w / 2f, 1e-4f, "centred on the centre line");
+        float top = LookCanvas.Height - (y + h) * LookCanvas.Height, bottom = LookCanvas.Height - y * LookCanvas.Height;
+        Assert.LessOrEqual(top, LookCanvas.HeadTop, "the whole head");
+        Assert.Greater(bottom, LookCanvas.Chin, "and the neck");
+        Assert.Less(bottom, LookCanvas.PhotoBottom, "tighter than a layered look's photo");
+        Assert.AreEqual(LookCanvas.PhotoRect, LookCanvas.PhotoRectFor(false));
+    }
 }

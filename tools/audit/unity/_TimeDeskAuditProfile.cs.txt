@@ -231,8 +231,6 @@ public static class _TimeDeskAuditProfile
                 // The cheat menu's "Decide correctly" (InvestigationUIController.Decide is gone since the moved stamps, 4315bce).
                 o.Game.CheatDecideCorrectly();
                 yield return Frames(2);
-                if (o.CitationPanel.activeInHierarchy)
-                    ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
             }
             // The desk stays available: the next traveller comes once the last has left.
             yield return Until(() => o.AtDesk || o.Results.activeInHierarchy, 20f, "the next traveller or the report");
@@ -427,7 +425,6 @@ public static class _TimeDeskAuditProfile
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
-        public GameObject CitationPanel => (GameObject)Field(OfficeUi, "citationPanel");
     }
 
     // =====================================================================

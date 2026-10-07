@@ -47,8 +47,32 @@ using UnityEngine.EventSystems;
 /// </summary>
 public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointerMoveHandler, IPointerExitHandler
 {
-    /// <summary>How far above the sheet each layer lies (metres toward the camera): the seal, the fills, the hover and pick quads, the lines, the photo, the texts, the verdict's ink.</summary>
-    private const float SealLift = 0.0001f, FillLift = 0.0002f, HighlightLift = 0.0003f, LineLift = 0.0004f, PhotoLift = 0.0005f, TextLift = 0.0006f, InkLift = 0.0007f;
+    /// <summary>How far above the sheet each layer lies (metres toward the camera, never scaled with the paper: PaperLayers, the one stacking rule): the seal, the fills, the hover and pick quads, the lines, the photo, the texts, the verdict's ink.</summary>
+    private const float SealLift = PaperLayers.Seal, FillLift = PaperLayers.Fill, HighlightLift = PaperLayers.Highlight, LineLift = PaperLayers.Line, PhotoLift = PaperLayers.Photo, TextLift = PaperLayers.Text, InkLift = PaperLayers.Ink;
+
+    /// <summary>The share of its zone's size the paper was last shown at (SetZone).</summary>
+    private float _zoneShare = 1f;
+
+    /// <summary>The sheet's scale in <paramref name="zone"/>: the reading size on the desk (at the art's reading share), the counter's share on the counter; times the paper's own share (a citation's).</summary>
+    private float ZoneScale(DeskZone zone) => _zoneShare * (_config == null ? 1f
+        : zone == DeskZone.Desk ? _reading * DeskZones.ReadingScale(Size.x, Size.y, _config.readingHeight, _config.paperSize.x / _config.paperSize.y)
+        : _config.counterScale);
+
+    /// <summary>A paper's header band as a share of its height from its top: the part the desk's spread keeps in view (PaperSpread).</summary>
+    private const float HeaderShare = 0.2f;
+
+    private readonly List<Rect> _keys = new List<Rect>();
+
+    /// <summary>
+    /// The parts of the paper the desk's spread keeps in view when papers land
+    /// (PaperSpread; Saleh's playtest 2026-10-07: headers and photos visible at
+    /// once): its header band, its photo and its visa box, as shares of the paper (x from its
+    /// left, y from its top, both 0 to 1).
+    /// </summary>
+    public IReadOnlyList<Rect> KeyShares => _keys;
+
+    /// <summary>The paper's size in metres once it lies in <paramref name="zone"/> (its sheet's scale there, as SetZone gives it).</summary>
+    public Vector2 SizeIn(DeskZone zone) => Size * ZoneScale(zone);
 
     /// <summary>A code-drawn stamp's width over its height, its frame texture's size in pixels, its word's size as a share of its height, its ink's alpha, and its tilt in degrees (alternating with each mark).</summary>
     private const float StampAspect = 2.8f, StampWordShare = 0.5f, StampAlpha = 0.88f, StampTilt = 6f;
@@ -149,10 +173,14 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
     private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
+    private static readonly int BaseMapStId = Shader.PropertyToID("_BaseMap_ST");
 
     private readonly List<SlotView> _slots = new List<SlotView>();
     private DeskConfigSO _config;
     private PlacedForm _form;
+
+    /// <summary>The paper's size on the desk as a share of the desk's reading size (FormArt.reading; 1 off the art).</summary>
+    private float _reading = 1f;
 
     /// <summary>The paper's metres per unit of its placed form: the form is laid out with its print unit 1 (as FormLayout.Check checks it: TextMeshPro measures a world-space text in metres taller than its glyphs once its size falls to a few millimetres, so a small paper laid out in metres would run past its page) and drawn this much smaller.</summary>
     private float _scale = 1f;
@@ -277,35 +305,46 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         _config = config;
         _slots.Clear();
         _form = null;
+        _keys.Clear();
+        _keys.Add(new Rect(0f, 0f, 1f, HeaderShare));
         if (config != null)
             Size = config.paperSize;
         if (config == null || doc == null || form == null || style == null || textTemplate == null)
             return;
 
         FormLook look = form.Spec.look ?? new FormLook();
+        FormArt art = ArtLayout.IsArt(form.Spec) ? look.art : null;
+        _reading = art != null && art.reading > 0f ? art.reading : 1f;
         FormPalette palette = look.Palette(style.Palette());
         float height = config.paperSize.y * look.Scale;
         Resize(new Vector2(height * look.AspectOr(style.metrics.aspect), height));
-        ShowPaperArt(form.Data.FormNumber, form.Data.Issuer, string.IsNullOrEmpty(look.paper) ? (Color?)null : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f));
+        ShowPaperArt(form.Data.FormNumber, form.Data.Issuer, string.IsNullOrEmpty(look.paper) ? (Color?)null : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f), art != null);
 
         _stamps = 0;
         _scale = FormLayout.PrintUnit(form.Spec, Size.x, style.metrics);
         _form = FormLayout.Layout(form.Spec, form.Data, Size.x / _scale, style.metrics, new TmpFormText(textTemplate));
-        ShapePaper(PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit) * _scale);
+        ShapePaper(art != null ? art.corner * Size.x : PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit) * _scale);
         Color cover = EmblemArt.Ink(form.Data.Cover, new Color(palette.Accent.R, palette.Accent.G, palette.Accent.B, 1f));
+        Texture2D blank = art != null ? SlotArt.Texture(new[] { ArtSlots.PaperBlank(form.Data.FormNumber) }) : null;
 
         foreach (FormItem item in _form.Items)
         {
             switch (item.Kind)
             {
                 case FormItemKind.Text:
-                    Print(item);
+                    Print(item, art);
+                    break;
+                case FormItemKind.Patch:
+                    PlacePatch(item.Rect, blank);
                     break;
                 case FormItemKind.Seal:
                     PlaceSeal(item);
                     break;
                 case FormItemKind.Photo:
                     PlacePhoto(item.Rect);
+                    break;
+                case FormItemKind.StampArea:
+                    _keys.Add(Share(Local(item.Rect))); // the visa box: the spread keeps it clear for the stamp
                     break;
                 case FormItemKind.Emblem:
                     PlaceMark("Emblem", item.Rect, EmblemArt.Texture(item.Text), cover, TextLift);
@@ -358,14 +397,16 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// by the room; on the desk full size (DeskZones.ReadingScale to
     /// DeskConfigSO.readingHeight) and evenly lit (the reading material; the
     /// photo in the reading tint instead of the room's). The size eases there,
-    /// or is set at once (<paramref name="instant"/>).
+    /// or is set at once (<paramref name="instant"/>); a paper on its art reads
+    /// at its art's share of that (FormArt.reading); a paper shown smaller
+    /// than its zone's size (a citation: DeskConfigSO.citationScale) takes
+    /// <paramref name="share"/> of it.
     /// </summary>
-    public void SetZone(DeskZone zone, bool instant)
+    public void SetZone(DeskZone zone, bool instant, float share = 1f)
     {
+        _zoneShare = share;
         Zone = zone;
-        float target = _config == null ? 1f
-            : zone == DeskZone.Desk ? DeskZones.ReadingScale(Size.x, Size.y, _config.readingHeight, _config.paperSize.x / _config.paperSize.y)
-            : _config.counterScale;
+        float target = ZoneScale(zone);
         _sizeFrom = _sizeNow;
         _sizeTarget = target;
         _sizeElapsed = 0f;
@@ -584,7 +625,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             word.fontSizeMax = word.fontSize;
             word.fontSizeMin = word.fontSize * StampWordMinShare;
             word.rectTransform.sizeDelta = new Vector2(r.width * (1f - 2f * StampWordInset / StampPixelsWide), r.height * (1f - 2f * StampWordInset / StampPixelsHigh));
-            word.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -InkLift - 0.0001f);
+            word.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -PaperLayers.InkWord);
             word.rectTransform.localRotation = Quaternion.Euler(0f, 0f, tilt);
             word.GetComponent<MeshRenderer>().enabled = true;
             _lastWord = word;
@@ -855,7 +896,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         if (sheet == null)
             return;
         float wide = 1f + _squash.Value;
-        sheet.localScale = new Vector3(_sizeNow * wide, _sizeNow * wide, _sizeNow);
+        // The depth stays 1: the parts' heights over the sheet are metres (PaperLayers), so a paper read large never lifts its photo through the paper over it.
+        sheet.localScale = new Vector3(_sizeNow * wide, _sizeNow * wide, 1f);
     }
 
     /// <summary>
@@ -890,12 +932,12 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
     // ---------------- Printing ----------------
 
-    /// <summary>Prints one text item: a clone of the template in its role's style and ink, over its rectangle, shrunk just enough that its widest word fits its box (TmpFormText.WordFit, measured at the layout's scale), as on the PC.</summary>
-    private void Print(FormItem item)
+    /// <summary>Prints one text item: a clone of the template in its role's style and ink, over its rectangle, shrunk just enough that its widest word fits its box (TmpFormText.WordFit, measured at the layout's scale), as on the PC; on a document drawn on its <paramref name="art"/>, in the art's fonts and inks, centred down its place and shrunk to fit it (TmpFormText.OnArt).</summary>
+    private void Print(FormItem item, FormArt art)
     {
         TextMeshPro text = Instantiate(textTemplate, textTemplate.transform.parent);
         text.name = item.Role.ToString();
-        float fit = TmpFormText.WordFit(textTemplate, item.Text, item.Role, item.Size, item.Rect.Width);
+        float fit = art != null ? 1f : TmpFormText.WordFit(textTemplate, item.Text, item.Role, item.Size, item.Rect.Width);
         TmpFormText.Style(text, item.Role, item.Size * _scale * fit);
         text.text = item.Text;
         text.color = style.Ink(item.Role);
@@ -903,6 +945,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             : item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Top
             : TextAlignmentOptions.TopLeft;
         Rect r = Local(item.Rect);
+        if (art != null)
+            TmpFormText.OnArt(text, item, style, art, textTemplate);
         text.rectTransform.sizeDelta = new Vector2(r.width, r.height);
         text.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -TextLift);
         text.GetComponent<MeshRenderer>().enabled = true;
@@ -928,7 +972,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// the photo; the agency seal's on the seal. A missing file keeps the
     /// placeholder paper, the grey frame and the code-drawn ring.
     /// </summary>
-    private void ShowPaperArt(string formNumber, string issuer, Color? tint)
+    private void ShowPaperArt(string formNumber, string issuer, Color? tint, bool onArt)
     {
         _block ??= new MaterialPropertyBlock();
         Texture2D face = paperQuad != null ? SlotArt.Texture(ArtSlots.PaperFaces(formNumber, issuer)) : null;
@@ -936,6 +980,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         {
             paperQuad.GetPropertyBlock(_block);
             _block.SetTexture(BaseMapId, face);
+            _block.SetColor(BaseColorId, Color.white);
             paperQuad.SetPropertyBlock(_block);
         }
         else if (paperQuad != null && tint != null)
@@ -946,7 +991,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             paperQuad.SetPropertyBlock(_block);
         }
 
-        Texture2D frame = photoFrame != null ? SlotArt.Texture(new[] { ArtSlots.PhotoFrame }) : null;
+        Texture2D frame = photoFrame != null ? SlotArt.Texture(new[] { onArt ? ArtSlots.PhotoHolo : ArtSlots.PhotoFrame }) : null;
         if (frame != null)
         {
             photoFrame.GetPropertyBlock(_block);
@@ -962,6 +1007,32 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             _block.SetTexture(BaseMapId, mark);
             seal.SetPropertyBlock(_block);
         }
+    }
+
+    /// <summary>
+    /// A patch of the blank face (FormItemKind.Patch; ArtSlots.PaperBlank)
+    /// over <paramref name="rect"/>: a clone of the seal's quad just over the
+    /// paper showing that piece of <paramref name="blank"/> (its texture's
+    /// scale and offset), so a field not introduced yet shows no label on its
+    /// art. Nothing without the blank face.
+    /// </summary>
+    private void PlacePatch(FaceRect rect, Texture2D blank)
+    {
+        if (seal == null || blank == null)
+            return;
+        Renderer patch = Instantiate(seal, seal.transform.parent);
+        patch.name = "Patch";
+        Rect r = Local(rect);
+        patch.transform.localPosition = new Vector3(r.center.x, r.center.y, -SealLift);
+        patch.transform.localScale = new Vector3(r.width, r.height, 1f);
+        float w = rect.Width / _form.Width, h = rect.Height / _form.PageHeight;
+        _block ??= new MaterialPropertyBlock();
+        patch.GetPropertyBlock(_block);
+        _block.SetTexture(BaseMapId, blank);
+        _block.SetVector(BaseMapStId, new Vector4(w, h, rect.XMin / _form.Width, 1f - rect.YMax / _form.PageHeight));
+        _block.SetColor(BaseColorId, Color.white);
+        patch.SetPropertyBlock(_block);
+        patch.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -1017,6 +1088,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         Rect r = Local(rect);
         photoSlot.transform.localPosition = new Vector3(r.center.x, r.center.y, -PhotoLift);
         photoSlot.transform.localScale = new Vector3(r.height, r.height, 1f);
+        _keys.Add(Share(r));
     }
 
     /// <summary>True when the placed form prints a photo.</summary>
@@ -1027,6 +1099,10 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                 return true;
         return false;
     }
+
+    /// <summary>A sheet-local rectangle (metres, centre origin, y up) as a share of the paper (x from its left, y from its top).</summary>
+    private Rect Share(Rect local) =>
+        new Rect((local.xMin + Size.x / 2f) / Size.x, (Size.y / 2f - local.yMax) / Size.y, local.width / Size.x, local.height / Size.y);
 
     /// <summary>A form-space rectangle (the placed form's units from the page's top-left, y down) in the sheet's local space (metres, centre origin, y up).</summary>
     private Rect Local(FaceRect f) =>

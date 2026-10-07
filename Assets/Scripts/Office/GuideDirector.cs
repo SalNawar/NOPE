@@ -99,6 +99,9 @@ public sealed class GuideDirector : MonoBehaviour
     private string _targetForm;
     private bool _targetField;
     private ClueCategory _targetCategory;
+
+    /// <summary>TryPaper's reused list of one paper's field boxes (no allocation per frame).</summary>
+    private readonly List<Bounds> _boxes = new List<Bounds>();
     private CaseInstance _case;
     private GuidePage _practice;
     private bool _inspecting, _barOut, _stamped;
@@ -465,8 +468,14 @@ public sealed class GuideDirector : MonoBehaviour
             return true;
         }
         if (target == "rulebook" || _targetForm != null)
-            if (TryPaper(out world) || TryRulebook(out world))
+        {
+            if (TryPaper(out world, out bool covered))
                 return true;
+            if (covered)
+                return false; // on the desk but under other papers: no arrow over them (Saleh's playtest 2026-10-07)
+            if (TryRulebook(out world))
+                return true;
+        }
         if (target == "traveller" && traveller != null)
         {
             world = traveller.bounds.center;
@@ -482,13 +491,22 @@ public sealed class GuideDirector : MonoBehaviour
         return rulebook != null;
     }
 
-    /// <summary>Where the rulebook's tabs are in its own space (metres: its top edge; Build Office UI's booklet).</summary>
-    private static readonly Vector3 RulebookTabs = new Vector3(0f, 0f, 0.165f);
+    /// <summary>Where the rulebook's tabs are in its own space (metres: the folder's PAPERS tab on its top edge; Build Office UI's folder, RulebookTabPlaces).</summary>
+    private static readonly Vector3 RulebookTabs = new Vector3(-0.019f, 0f, 0.119f);
 
-    /// <summary>Where the traveller's paper the "paper:" or "field:" target names lies on the desk: one field's box ("field:") or the middle of all its fields' boxes; false when it is not on the desk.</summary>
-    private bool TryPaper(out Vector3 world)
+    /// <summary>
+    /// Where the traveller's paper the "paper:" or "field:" target names lies on
+    /// the desk: one field's box ("field:") or the middle of all its fields'
+    /// boxes, where it shows (DeskController.Shows: no other paper over it); else
+    /// the first of those boxes that shows; false when it is not on the desk, or
+    /// (<paramref name="covered"/>) when every box lies under other papers: the
+    /// arrow never floats over a paper to point under it. Allocates nothing: the
+    /// target is parsed once when it changes and the boxes list is reused.
+    /// </summary>
+    private bool TryPaper(out Vector3 world, out bool covered)
     {
         world = default;
+        covered = false;
         string form = _targetForm;
         if (_case == null || desk == null || form == null)
             return false;
@@ -501,6 +519,8 @@ public sealed class GuideDirector : MonoBehaviour
                 continue;
             bool any = false;
             Bounds all = default;
+            List<Bounds> boxes = _boxes;
+            boxes.Clear();
             for (int f = 0; f < doc.fields.Count; f++)
             {
                 if (field && doc.fields[f].category != category)
@@ -511,12 +531,23 @@ public sealed class GuideDirector : MonoBehaviour
                     all = box;
                 else
                     all.Encapsulate(box);
+                boxes.Add(box);
                 any = true;
             }
             if (any)
             {
-                world = all.center;
-                return true;
+                if (desk.Shows(d, all.center, _camera))
+                {
+                    world = all.center;
+                    return true;
+                }
+                foreach (Bounds box in boxes)
+                    if (desk.Shows(d, box.center, _camera))
+                    {
+                        world = box.center;
+                        return true;
+                    }
+                covered = true;
             }
         }
         return false;

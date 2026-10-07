@@ -206,10 +206,10 @@ public static partial class OfficeSceneUIBuilder
         OverlayCallout boardTooltip = BuildOverlayCallout(officeCanvas.transform, "BoardTooltip", BoardTooltipSize, Tooltip, ThemeRoleId.Tooltip, false, true);
         DeskStampTray stampTray = BuildStampTray(officeCanvas.transform, officeView.transform, deskConfig);
 
-        // The verdict ribbon and the citation slip over the office (OfficeSceneUIBuilder.Kit, the UI kit's).
+        // The verdict ribbon over the office (OfficeSceneUIBuilder.Kit, the UI kit's). The citation slip is retired (2026-10-07: a citation is a
+        // paper on the desk, DeskController.Cite): it goes from scenes built before.
         Transform verdictStrip = BuildVerdictRibbon(officeCanvas.transform, out Image verdictRibbon, out TMP_Text verdictText);
-        Transform citation = BuildCitationSlip(officeCanvas.transform, out TMP_Text citationReason, out TMP_Text citationDetail, out TMP_Text citationConsequence,
-                                               out Button citationContinue);
+        DestroyChildIfPresent(officeCanvas.transform, "CitationPanel");
 
         var soView = new SerializedObject(officeView);
         SetRef(soView, "frame", pcFrame);
@@ -303,11 +303,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soOffice, "resultBackdrop", verdictStrip.gameObject);
         SetRef(soOffice, "resultRibbon", verdictRibbon);
         SetRef(soOffice, "kit", _kit);
-        SetRef(soOffice, "citationPanel", citation.gameObject);
-        SetRef(soOffice, "citationReasonText", citationReason);
-        SetRef(soOffice, "citationDetailText", citationDetail);
-        SetRef(soOffice, "citationConsequenceText", citationConsequence);
-        SetRef(soOffice, "citationContinueButton", citationContinue);
         soOffice.ApplyModifiedProperties();
 
         var soFlow = new SerializedObject(dayFlow);

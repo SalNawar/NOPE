@@ -28,8 +28,17 @@ public static class ArtSlots
     /// <summary>The photo frame on a desk paper's photo cell (the frame's grey stand-in without art).</summary>
     public const string PhotoFrame = "Forms/photo_frame";
 
+    /// <summary>The holographic laminate over the photo on a document drawn on its art (FormArt; the photo frame's art on the others).</summary>
+    public const string PhotoHolo = "Forms/photo_holo";
+
     /// <summary>Temporal Customs' seal, printed faintly behind a form's header (the builder's code-drawn ring without art).</summary>
     public const string AgencySeal = "Forms/agency_seal";
+
+    /// <summary>The desk rulebook's open folder (Saleh's Canva art, run 7: its tabs, its heading and its line numbers painted out, the game prints them; clear outside its outline).</summary>
+    public const string RulebookFolder = "Forms/rulebook_folder";
+
+    /// <summary>One of the rulebook folder's tabs by its art name ("rules", "papers", "guide", "seals" gives Forms/rulebook_tab_seals): cut from the art, its word painted out.</summary>
+    public static string RulebookTab(string tab) => "Forms/rulebook_tab_" + Key(tab);
 
     /// <summary>The plain agency paper: a desk paper whose kind has no face of its own, and the PC's pages.</summary>
     public const string AgencyFace = "Forms/paper_agency";
@@ -67,6 +76,13 @@ public static class ArtSlots
         if (key.Length == 0)
             return new[] { AgencyFace };
         return nation.Length == 0 ? new[] { "Forms/paper_" + key, AgencyFace } : new[] { "Forms/paper_" + key + "_" + nation, "Forms/paper_" + key, AgencyFace };
+    }
+
+    /// <summary>A document's blank face by its form number ("TC-230" gives Forms/blank_tc230): its art with every field's label painted out, from which a paper drawn on its art patches the label of a field not introduced yet (FormItemKind.Patch); none for a paper with no form number.</summary>
+    public static string PaperBlank(string formNumber)
+    {
+        string key = Key(formNumber);
+        return key.Length == 0 ? null : "Forms/blank_" + key;
     }
 
     /// <summary>A nation's passport emblem by its emblem's name (EmblemShapes: "WingedSun" gives Forms/emblem_wingedsun; the travel documents spec, TD5): white or one ink on clear, tinted by the cover's colour like the code-drawn stand-in.</summary>

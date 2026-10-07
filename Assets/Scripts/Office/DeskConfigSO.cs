@@ -87,11 +87,42 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>A document's scale on the counter (small: a share of its own size).</summary>
     [Range(0.2f, 1f)] public float counterScale = 0.6f;
 
+    /// <summary>How much nearer each next row of the counter's spots lies once a traveller's papers outnumber them (metres; the row also shifts half a spot across: a staggered fan, each paper's header in view; DeskZones.CounterSpot).</summary>
+    [Min(0f)] public float counterRowDepth = 0.05f;
+
+    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the STAMPS tab and the inspect button): the spread lays them inside it (PaperSpread).</summary>
+    public Rect readingArea = new Rect(0.02f, 0.03f, 0.88f, 0.8f);
+
     /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): it reads in the reading view at 1280x720.</summary>
     [Min(0.05f)] public float readingHeight = 0.34f;
 
     /// <summary>The photo's tint while its paper lies on the desk, full size (evenly lit, unlike travellerTint on the counter).</summary>
     [FormerlySerializedAs("examineTint")] public Color readingTint = Color.white;
+
+    [Header("Citations (the Citation lands on the desk, Saleh 2026-10-07)")]
+    /// <summary>Where the day's first citation lands, in metres from the desk's centre in the office view's frame (x right, y away from the camera): the mat's far half right of centre, clear of the rulebook folder, so it lies wholly on the screen in the office view and the reading view (the reading view shows it right of the folder's page).</summary>
+    public Vector2 citationSpot = new Vector2(0f, 0.14f);
+
+    /// <summary>How far each next citation of the day lands from the last (metres, the same frame): they stack with an offset; a continuation sheet lands a third of it from its first.</summary>
+    public Vector2 citationStep = new Vector2(0.025f, -0.02f);
+
+    /// <summary>A citation's height on the desk relative to its form's (DeskZones' reading height at its form's scale): smaller, so a pile of them does not cover the case's papers and the day's stack fits the reading view's height.</summary>
+    [Range(0.3f, 1f)] public float citationScale = 0.75f;
+
+    /// <summary>Where a citation flies in from: a point of the camera's view (viewport coordinates: off the screen's right, near its top) <see cref="citationFromDepth"/> metres in front of the camera, so it starts large, close to the eye, and flies down onto the desk.</summary>
+    public Vector2 citationFrom = new Vector2(1.08f, 0.9f);
+
+    /// <summary>How far in front of the camera a citation starts its flight (metres).</summary>
+    [Min(0.05f)] public float citationFromDepth = 0.45f;
+
+    /// <summary>A citation's flight: the arc's top over the straight way (metres), the twist about the vertical and the tumble about its long axis at the start (degrees).</summary>
+    [Min(0f)] public float citationArc = 0.12f;
+
+    /// <summary>A citation's twist about the vertical and its tumble about its long axis as it starts its flight (degrees).</summary>
+    public float citationTwist = 28f, citationTumble = 32f;
+
+    /// <summary>A citation's punch as it lands (FeelDirector.Hit's strength, 0 to 1: its hit-stop and camera bump; 0 none), with the sound cue citation_land.</summary>
+    [Range(0f, 1f)] public float citationLandHit = 0.25f;
 
     [Header("Traveller")]
     /// <summary>The traveller figure's height in metres (feet at the traveller anchor).</summary>
@@ -167,8 +198,8 @@ public sealed class DeskConfigSO : ScriptableObject
     [Min(0.1f)] public float cityTrafficScale = 1.8f;
 
     [Header("Inspection at the desk (the desk-first redesign, item 11)")]
-    /// <summary>Where the rulebook card lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat).</summary>
-    public Vector2 rulebookAt = new Vector2(-0.3f, -0.05f);
+    /// <summary>Where the rulebook folder lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat); its open folder fills the reading view's left, its page (the right sheet) left of where the papers land (DeskController's reading spots).</summary>
+    public Vector2 rulebookAt = new Vector2(-0.25f, -0.06f);
 
     [Header("Stamps (Papers, Please's stamp bar, Saleh 2026-10-06: the art's 3D stamps)")]
     /// <summary>How high above the desk the stamps' dies hang while the bar is out (metres): a paper slides under them (above a dragged paper's lift), and a press dips them down onto it.</summary>
