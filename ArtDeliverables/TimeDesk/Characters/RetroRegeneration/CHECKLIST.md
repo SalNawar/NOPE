@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 362. Full regeneration is NOT complete.
+Saved: 386. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -366,3 +366,27 @@ Saved: 362. Full regeneration is NOT complete.
 | premade_gutenberg__thinking_c | visually reviewed; registration pending |
 | premade_gutenberg__objecting_c | visually reviewed; registration pending |
 | premade_gutenberg_photo | visually reviewed; registration pending |
+| outfit_m_egypt_earlymodern__objecting_b | visually reviewed; registration pending |
+| hair_m_egypt_earlymodern | visually reviewed; registration pending |
+| facialhair_m_egypt_earlymodern | visually reviewed; registration pending |
+| headwear_m_egypt_earlymodern | visually reviewed; registration pending |
+| accessory_m_egypt_earlymodern | visually reviewed; registration pending |
+| outfit_f_egypt_earlymodern | visually reviewed; registration pending |
+| outfit_f_egypt_earlymodern__explaining_a | visually reviewed; registration pending |
+| outfit_f_egypt_earlymodern__thinking_b | visually reviewed; registration pending |
+| mannequin_f_objecting_c | visually reviewed; registration pending |
+| outfit_f_egypt_earlymodern__objecting_c | visually reviewed; registration pending |
+| hair_f_egypt_earlymodern | visually reviewed; registration pending |
+| headwear_f_egypt_earlymodern | visually reviewed; registration pending |
+| accessory_f_egypt_earlymodern | visually reviewed; registration pending |
+| outfit_m_egypt_industrial | visually reviewed; registration pending |
+| outfit_m_egypt_industrial__explaining_a | visually reviewed; registration pending |
+| outfit_m_egypt_industrial__thinking_b | visually reviewed; registration pending |
+| outfit_m_egypt_industrial__objecting_c | visually reviewed; registration pending |
+| hair_m_egypt_industrial | visually reviewed; registration pending |
+| facialhair_m_egypt_industrial | visually reviewed; registration pending |
+| headwear_m_egypt_industrial | visually reviewed; registration pending |
+| accessory_m_egypt_industrial | visually reviewed; registration pending |
+| outfit_f_egypt_industrial | visually reviewed; registration pending |
+| outfit_f_egypt_industrial__explaining_b | visually reviewed; registration pending |
+| outfit_f_egypt_industrial__thinking_c | visually reviewed; registration pending |

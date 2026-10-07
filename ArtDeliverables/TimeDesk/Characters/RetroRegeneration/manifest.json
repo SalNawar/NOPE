@@ -7221,6 +7221,722 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_earlymodern__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "quftan and gibba",
+      "details": "Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Ankle-length quftan (kaftan) of saffron or dusty-coral silk with small woven stripes or motifs, crossed over the chest. Over it a long, wide-sleeved gibba coat of plain dark broadcloth (bottle green or deep blue), open at the front. Wide trousers and pointed red leather slippers.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_m_egypt_earlymodern.",
+      "flags": {
+        "label": "quftan and gibba"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_m_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e6571643-5588-4d9f-806b-7c4f12448d44.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_earlymodern__objecting_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: quftan and gibba. Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Ankle-length quftan (kaftan) of saffron or dusty-coral silk with small woven stripes or motifs, crossed over the chest. Over it a long, wide-sleeved gibba coat of plain dark broadcloth (bottle green or deep blue), open at the front. Wide trousers and pointed red leather slippers.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_m_egypt_earlymodern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_earlymodern__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "949e00500fa8a5209fdd7268971ddbd5fa5ccddd677051ab055cd9822a5fc851",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_egypt_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "short crop",
+      "details": "Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Short-cropped\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw hair_m_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short crop"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7dfe8303-d653-4ca7-98e8-cfb30b4519d7.png",
+      "prompt": "Production modular historical clothing asset hair_m_egypt_earlymodern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: short crop. Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Short-cropped\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw hair_m_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/hair_m_egypt_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "dd172e53bacd5d768f3a8b0c7512a96d62d5e9f1991fc79f2cf79e59dafcd9c5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_egypt_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "short rounded beard",
+      "details": "Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Full beard, trimmed short and rounded, with a moustache\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw facialhair_m_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short rounded beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-700f7b9f-9e59-41a7-bc87-855507c365ce.png",
+      "prompt": "Production modular historical clothing asset facialhair_m_egypt_earlymodern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested facialhair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: short rounded beard. Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Full beard, trimmed short and rounded, with a moustache\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw facialhair_m_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/facialhair_m_egypt_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "05c7decd649f236d6641ba3766d4fdf6ba9eadac61501b36a988c7ec02ee8b86",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_egypt_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "red-crown turban",
+      "details": "Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Crisp white muslin turban wound in smooth, rounded folds around a red felt cap, with the domed red crown of the cap rising clearly above the top of the turban so it shows from the front. The turban cloth is pure white.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw headwear_m_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "red-crown turban",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c6ae2b5b-448c-4828-97fe-3d17cb0ec7e6.png",
+      "prompt": "Production modular historical clothing asset headwear_m_egypt_earlymodern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested headwear on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: red-crown turban. Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Crisp white muslin turban wound in smooth, rounded folds around a red felt cap, with the domed red crown of the cap rising clearly above the top of the turban so it shows from the front. The turban cloth is pure white.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw headwear_m_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/headwear_m_egypt_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "daa2d8316d86c132dcd55b73c198cefb556e6f96adbbe66f739d23770d262eaf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_egypt_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "shawl sash",
+      "details": "Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Patterned Kashmir or Indian wool shawl wound as a broad sash (hizam) at the waist\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw accessory_m_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "shawl sash"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9f684770-3e09-4e5f-9f65-9c050b3cebb3.png",
+      "prompt": "Production modular historical clothing asset accessory_m_egypt_earlymodern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested accessory on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: shawl sash. Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Patterned Kashmir or Indian wool shawl wound as a broad sash (hizam) at the waist\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw accessory_m_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/accessory_m_egypt_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f34ab5d33f6f900a680f630a090ccbf4552e1b6dfe4cb327b65e54edafa247af",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "brocade entari",
+      "details": "Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Floor-length entari robe of brocaded silk (for example gold on deep coral). Its long sleeves are slit from the elbow to hang open. It is worn over a thin, opaque white chemise and wide shintiyan trousers and belted at the hips with a jewelled belt.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_f_egypt_earlymodern.",
+      "flags": {
+        "label": "brocade entari"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3a8708d7-bf1a-4b13-8cad-08f283f4f058.png",
+      "prompt": "Production modular historical clothing asset outfit_f_egypt_earlymodern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: brocade entari. Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Floor-length entari robe of brocaded silk (for example gold on deep coral). Its long sleeves are slit from the elbow to hang open. It is worn over a thin, opaque white chemise and wide shintiyan trousers and belted at the hips with a jewelled belt.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_f_egypt_earlymodern. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/outfit_f_egypt_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b3dc217c32d9be498f6458a1e3794c18725ff645aa8edcbbbe9ae9c451f6d273",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_earlymodern__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "brocade entari",
+      "details": "Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Floor-length entari robe of brocaded silk (for example gold on deep coral). Its long sleeves are slit from the elbow to hang open. It is worn over a thin, opaque white chemise and wide shintiyan trousers and belted at the hips with a jewelled belt.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_f_egypt_earlymodern.",
+      "flags": {
+        "label": "brocade entari"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_f_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-acbae6e4-add8-4c49-8ff3-a96afbffa43b.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_earlymodern__explaining_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT elbow open, right palm up at lower chest, left arm relaxed. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: brocade entari. Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Floor-length entari robe of brocaded silk (for example gold on deep coral). Its long sleeves are slit from the elbow to hang open. It is worn over a thin, opaque white chemise and wide shintiyan trousers and belted at the hips with a jewelled belt.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_f_egypt_earlymodern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_earlymodern__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "90fd7e9a6fb1a0cd475d2b65eb7d37c520564d6d62d1a6f9f4157077315409f5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_earlymodern__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "brocade entari",
+      "details": "Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Floor-length entari robe of brocaded silk (for example gold on deep coral). Its long sleeves are slit from the elbow to hang open. It is worn over a thin, opaque white chemise and wide shintiyan trousers and belted at the hips with a jewelled belt.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_f_egypt_earlymodern.",
+      "flags": {
+        "label": "brocade entari"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_f_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2ff86b55-149d-45c6-a916-b48db9322a9e.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_earlymodern__thinking_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: brocade entari. Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Floor-length entari robe of brocaded silk (for example gold on deep coral). Its long sleeves are slit from the elbow to hang open. It is worn over a thin, opaque white chemise and wide shintiyan trousers and belted at the hips with a jewelled belt.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_f_egypt_earlymodern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_earlymodern__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9a13c859f8f4cf45b314fd6db2d47e596624be2a8318893732453bf004cc6bdf",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "mannequin_f_objecting_c",
+      "family": "mannequin",
+      "status": "pending",
+      "gender": "f",
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a3c99084-cedf-44ce-b411-1749d48a081b.png",
+      "prompt": "Create a FULLY CLOTHED technical pose guide from this reference. Adult woman wearing plain opaque magenta long-sleeved crewneck loose shirt, full-length loose magenta trousers and closed magenta shoes. Bald simple magenta face. Remove all historical costume, jewelry, patterns and robe. Retain same head center, body height and feet placement on exact 1024x1536 canvas. Pose: her anatomical RIGHT hand (viewer LEFT arm) rests flat on upper chest, her LEFT forearm extends low to the side with palm up in restrained personal objection. Coherent elbows and five-finger hands. Thin dark magenta outlines, flat magenta #FF00FF clothes and face. No anatomy markings, no nudity. Solid green #00FF00 background, no shadows, no text.",
+      "path": "Raw/mannequin_f_objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "3e2a3996f049a4240e056337c98314dc5900941e97e1b127dd8ed0ebdb265034",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_earlymodern__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "brocade entari",
+      "details": "Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Floor-length entari robe of brocaded silk (for example gold on deep coral). Its long sleeves are slit from the elbow to hang open. It is worn over a thin, opaque white chemise and wide shintiyan trousers and belted at the hips with a jewelled belt.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_f_egypt_earlymodern.",
+      "flags": {
+        "label": "brocade entari"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_f_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3bd57630-6dc7-4bb9-870e-da70a6540e02.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_earlymodern__objecting_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: brocade entari. Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Floor-length entari robe of brocaded silk (for example gold on deep coral). Its long sleeves are slit from the elbow to hang open. It is worn over a thin, opaque white chemise and wide shintiyan trousers and belted at the hips with a jewelled belt.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_f_egypt_earlymodern. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_earlymodern__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "e97760edb730d9005e15d4a6f8ab02c5cd84e5dc54b221890587e93d4c122c62",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_egypt_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "curtain of thin plaits",
+      "details": "Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Long hair in many thin plaits falling behind the shoulders, spread wide so they show on both sides of the neck\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw hair_f_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "curtain of thin plaits",
+        "back": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9fd38ec6-c51b-4e48-933c-403f56a6773f.png",
+      "prompt": "Production modular historical clothing asset hair_f_egypt_earlymodern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: curtain of thin plaits. Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Long hair in many thin plaits falling behind the shoulders, spread wide so they show on both sides of the neck\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw hair_f_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/hair_f_egypt_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ad31ac6e38bdeae8ff056162b714bdaf354539b9c42b659a229706d3f5ffcb24",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_egypt_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "headwear",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "tartur",
+      "details": "Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Tartur: a tall headdress that is wider at the top than at the base, wrapped in black or brown cloth woven with gold stripes. The face is fully uncovered.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw headwear_f_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "tartur",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_f_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-1f6d42b7-d99f-45c1-a67f-bf3f4311a75e.png",
+      "prompt": "Production modular historical clothing asset headwear_f_egypt_earlymodern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested headwear on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: tartur. Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Tartur: a tall headdress that is wider at the top than at the base, wrapped in black or brown cloth woven with gold stripes. The face is fully uncovered.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw headwear_f_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/headwear_f_egypt_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "15b6a14ad84f1220fbf94d0472246d299808f4f0faa9fd4f92e7c721d811a9ec",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_egypt_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "disc-drop earrings",
+      "details": "Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Long gold earrings, each ending in a cluster of plain gold discs with raised rims (no face, letters or marks)\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw accessory_f_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "disc-drop earrings"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-79a14d9e-a058-4bcc-a894-92033fe1acda.png",
+      "prompt": "Production modular historical clothing asset accessory_f_egypt_earlymodern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested accessory on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: disc-drop earrings. Subject: woman of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Long gold earrings, each ending in a cluster of plain gold discs with raised rims (no face, letters or marks)\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw accessory_f_egypt_earlymodern.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/accessory_f_egypt_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "80f51af7f6c1d9957854c69dce76d4eaa1eb1a91532560515f25e604be860779",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "black stambouline",
+      "details": "Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Stambouline (istanbuli): a black or dark-navy knee-length frock coat, single-breasted and buttoned right up to a small standing collar, with matching narrow trousers and polished black shoes. A white shirt collar just shows at the neck.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_m_egypt_industrial.",
+      "flags": {
+        "label": "black stambouline"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-c3957827-e6f9-49d7-b403-7bc61a285a5b.png",
+      "prompt": "Production modular historical clothing asset outfit_m_egypt_industrial. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: black stambouline. Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Stambouline (istanbuli): a black or dark-navy knee-length frock coat, single-breasted and buttoned right up to a small standing collar, with matching narrow trousers and polished black shoes. A white shirt collar just shows at the neck.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_m_egypt_industrial. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/outfit_m_egypt_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "79837dfaf630d5deb390fa7420fae4f1182d1f654ceb4d5b1487f21727347fbc",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_industrial__explaining_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "black stambouline",
+      "details": "Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Stambouline (istanbuli): a black or dark-navy knee-length frock coat, single-breasted and buttoned right up to a small standing collar, with matching narrow trousers and polished black shoes. A white shirt collar just shows at the neck.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_m_egypt_industrial.",
+      "flags": {
+        "label": "black stambouline"
+      },
+      "pose": "explaining_a",
+      "gesture": "RIGHT elbow open, right palm up at lower chest, left arm relaxed",
+      "base_key": "outfit_m_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b6d39c79-0e38-4927-8323-d4e2f3925ab3.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_industrial__explaining_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT elbow open, right palm up at lower chest, left arm relaxed. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: black stambouline. Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Stambouline (istanbuli): a black or dark-navy knee-length frock coat, single-breasted and buttoned right up to a small standing collar, with matching narrow trousers and polished black shoes. A white shirt collar just shows at the neck.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_m_egypt_industrial. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_industrial__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "439521d1fc5aa6c9fbc59c83002b1368d9a1534d401c55823a546265d60133aa",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_industrial__thinking_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "black stambouline",
+      "details": "Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Stambouline (istanbuli): a black or dark-navy knee-length frock coat, single-breasted and buttoned right up to a small standing collar, with matching narrow trousers and polished black shoes. A white shirt collar just shows at the neck.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_m_egypt_industrial.",
+      "flags": {
+        "label": "black stambouline"
+      },
+      "pose": "thinking_b",
+      "gesture": "LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible",
+      "base_key": "outfit_m_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a714e117-2836-426f-9e6f-020fe7fafcb6.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_industrial__thinking_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and LEFT fingertips lightly at cheek, right forearm supports left elbow; face stays fully visible. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: black stambouline. Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Stambouline (istanbuli): a black or dark-navy knee-length frock coat, single-breasted and buttoned right up to a small standing collar, with matching narrow trousers and polished black shoes. A white shirt collar just shows at the neck.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_m_egypt_industrial. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_industrial__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "cf5ce27e9762bec00116c956454753037ca80d4fa515896fe99a33a325e94c17",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_industrial__objecting_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "black stambouline",
+      "details": "Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Stambouline (istanbuli): a black or dark-navy knee-length frock coat, single-breasted and buttoned right up to a small standing collar, with matching narrow trousers and polished black shoes. A white shirt collar just shows at the neck.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_m_egypt_industrial.",
+      "flags": {
+        "label": "black stambouline"
+      },
+      "pose": "objecting_c",
+      "gesture": "RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection",
+      "base_key": "outfit_m_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2ec485ab-86d4-4905-aee0-2e6eb4a6f8d3.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_m_egypt_industrial__objecting_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT hand rests on upper chest, LEFT palm extends low to side, restrained personal objection. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: black stambouline. Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Stambouline (istanbuli): a black or dark-navy knee-length frock coat, single-breasted and buttoned right up to a small standing collar, with matching narrow trousers and polished black shoes. A white shirt collar just shows at the neck.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_m_egypt_industrial. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_m_egypt_industrial__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a2185e980f0145da9a8bae654dae97aa200a9aae9687a358d3eaeae38cb9fe56",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_m_egypt_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "hair",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "short trimmed hair",
+      "details": "Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Short and neatly trimmed\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw hair_m_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "short trimmed hair"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_m_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-e6a5b56d-66ac-4020-b891-00b45f2b6716.png",
+      "prompt": "Production modular historical clothing asset hair_m_egypt_industrial. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: short trimmed hair. Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Short and neatly trimmed\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw hair_m_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/hair_m_egypt_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "984dd79bdbf0bbdd8229c4c5e680627808f7e75be4b8027d3fe8e48a2c3a8bc7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_egypt_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "groomed moustache",
+      "details": "Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Full, neatly groomed moustache with a clean-shaven chin\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw facialhair_m_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "groomed moustache"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-9d7c4a69-3d43-4ab1-9a40-216fb72065e8.png",
+      "prompt": "Production modular historical clothing asset facialhair_m_egypt_industrial. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested facialhair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: groomed moustache. Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Full, neatly groomed moustache with a clean-shaven chin\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw facialhair_m_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/facialhair_m_egypt_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "03f52a134e85bbe9e412c41e837599ec502a91e10fab73cabe2649e0dfee0dd9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_egypt_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "tarboush",
+      "details": "Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Tarboush: a stiff, upright, flat-topped cap of deep-crimson felt, shaped like a truncated cone and set straight and level on the head. A short black silk tassel falls from the centre of the crown toward the back. It is never floppy or tilted.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw headwear_m_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "tarboush",
+        "leakable": true
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-2abb9682-a1a9-4397-bd8b-0bdc91c3fa94.png",
+      "prompt": "Production modular historical clothing asset headwear_m_egypt_industrial. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested headwear on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: tarboush. Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Tarboush: a stiff, upright, flat-topped cap of deep-crimson felt, shaped like a truncated cone and set straight and level on the head. A short black silk tassel falls from the centre of the crown toward the back. It is never floppy or tilted.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw headwear_m_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/headwear_m_egypt_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "00af46e6089cedd0f381c08353a7dfe545c7b4908b6ce69186debe3a1b4bd5eb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_egypt_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "gold watch chain",
+      "details": "Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Gold watch-chain hanging in a clear loop across the front of the chest\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw accessory_m_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "gold watch chain"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-d1cd9041-c8c3-4964-a817-fdc21e0d9577.png",
+      "prompt": "Production modular historical clothing asset accessory_m_egypt_industrial. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested accessory on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: gold watch chain. Subject: man of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Gold watch-chain hanging in a clear loop across the front of the chest\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw accessory_m_egypt_industrial.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/accessory_m_egypt_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "863fd7e74e77af58a117d92530fc521002f791fcac0ef5fc62a0c245f72f9908",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_industrial",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "striped yelek robe",
+      "details": "Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Yelek: an ankle-length, fitted, long-sleeved robe of striped silk (cream with dusty-coral and gold stripes), buttoned from bust to hips and slit open at the sides below. It is worn over an opaque white chemise closed at the neck and full shintiyan trousers gathered at the ankle, and girdled at the hips with a folded Kashmir shawl.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_f_egypt_industrial.",
+      "flags": {
+        "label": "striped yelek robe"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3da586b2-9e52-4884-8513-0334e92e6b61.png",
+      "prompt": "Production modular historical clothing asset outfit_f_egypt_industrial. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: striped yelek robe. Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Yelek: an ankle-length, fitted, long-sleeved robe of striped silk (cream with dusty-coral and gold stripes), buttoned from bust to hips and slit open at the sides below. It is worn over an opaque white chemise closed at the neck and full shintiyan trousers gathered at the ankle, and girdled at the hips with a folded Kashmir shawl.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_f_egypt_industrial. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/outfit_f_egypt_industrial.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b877c1fac9de0e2b7e933a8b3f38aa7ce0a91343d949ffeb88ed09e6f72e14bd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_industrial__explaining_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "striped yelek robe",
+      "details": "Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Yelek: an ankle-length, fitted, long-sleeved robe of striped silk (cream with dusty-coral and gold stripes), buttoned from bust to hips and slit open at the sides below. It is worn over an opaque white chemise closed at the neck and full shintiyan trousers gathered at the ankle, and girdled at the hips with a folded Kashmir shawl.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_f_egypt_industrial.",
+      "flags": {
+        "label": "striped yelek robe"
+      },
+      "pose": "explaining_b",
+      "gesture": "BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation",
+      "base_key": "outfit_f_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-0595df5a-d588-4ea1-ba24-fc653b6f2211.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_industrial__explaining_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and BOTH elbows bent, both palms open low with asymmetrical heights, modest outward explanation. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: striped yelek robe. Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Yelek: an ankle-length, fitted, long-sleeved robe of striped silk (cream with dusty-coral and gold stripes), buttoned from bust to hips and slit open at the sides below. It is worn over an opaque white chemise closed at the neck and full shintiyan trousers gathered at the ankle, and girdled at the hips with a folded Kashmir shawl.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_f_egypt_industrial. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_industrial__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "52d7c950aa03fa8492cd5c1c91b16020e7106dab88a7038090f253f3555d9667",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_industrial__thinking_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "country": "egypt",
+      "era": "industrial",
+      "label": "striped yelek robe",
+      "details": "Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Yelek: an ankle-length, fitted, long-sleeved robe of striped silk (cream with dusty-coral and gold stripes), buttoned from bust to hips and slit open at the sides below. It is worn over an opaque white chemise closed at the neck and full shintiyan trousers gathered at the ankle, and girdled at the hips with a folded Kashmir shawl.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_f_egypt_industrial.",
+      "flags": {
+        "label": "striped yelek robe"
+      },
+      "pose": "thinking_c",
+      "gesture": "hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance",
+      "base_key": "outfit_f_egypt_industrial",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b60660c8-2fbf-442c-b7f4-782ffde6d669.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_industrial__thinking_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and hands loosely linked at waist, fingers relaxed and empty, reflective reserved stance. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Khedivate of Egypt. Historical context: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network. Requested item: striped yelek robe. Subject: woman of Khedivate of Egypt; Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network.\nDraw: Yelek: an ankle-length, fitted, long-sleeved robe of striped silk (cream with dusty-coral and gold stripes), buttoned from bust to hips and slit open at the sides below. It is worn over an opaque white chemise closed at the neck and full shintiyan trousers gathered at the ankle, and girdled at the hips with a folded Kashmir shawl.\nAvoid: Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes; European top hats; a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial); a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial); keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial); the black habara wrap with burqu' face veil (hides the face); pyramid or sphinx props; Orientalist harem imagery\nOutput one full-canvas raw outfit_f_egypt_industrial. Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_industrial__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7af52d106c4864e84e7012cf8b60556eb65f13256c76509143d8f6ba8de61b5e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
