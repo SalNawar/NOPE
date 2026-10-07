@@ -1,0 +1,5110 @@
+{
+ "scale": 2,
+ "note": "Label-free cel UI kit, exported at 2x design size. border = 9-slice L,B,R,T in pixels. Labels/glyphs are live TMP or glyph_* sprites.",
+ "sprites": [
+  {
+   "name": "badge_brass",
+   "file": "badge_brass.png",
+   "size": [
+    100,
+    100
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "round count / unread badge (number live)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "badge_ox",
+   "file": "badge_ox.png",
+   "size": [
+    100,
+    100
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "round count / unread badge (number live)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "badge_red",
+   "file": "badge_red.png",
+   "size": [
+    100,
+    100
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "round count / unread badge (number live)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "card_hover",
+   "file": "card_hover.png",
+   "size": [
+    456,
+    160
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "quiet printed button (REPLAY, minor choices); label ink, pressed label cream",
+   "sliced": true,
+   "border": [
+    56,
+    56,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "card_locked",
+   "file": "card_locked.png",
+   "size": [
+    456,
+    160
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "quiet printed button (REPLAY, minor choices); label ink, pressed label cream",
+   "sliced": true,
+   "border": [
+    56,
+    56,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "card_pressed",
+   "file": "card_pressed.png",
+   "size": [
+    456,
+    160
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "quiet printed button (REPLAY, minor choices); label ink, pressed label cream",
+   "sliced": true,
+   "border": [
+    56,
+    56,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "card_rest",
+   "file": "card_rest.png",
+   "size": [
+    456,
+    160
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "quiet printed button (REPLAY, minor choices); label ink, pressed label cream",
+   "sliced": true,
+   "border": [
+    56,
+    56,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "checkbox_off",
+   "file": "checkbox_off.png",
+   "size": [
+    104,
+    104
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "checkbox",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "checkbox_on",
+   "file": "checkbox_on.png",
+   "size": [
+    104,
+    104
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "checkbox",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "chip_active",
+   "file": "chip_active.png",
+   "size": [
+    236,
+    108
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "search chip",
+   "sliced": true,
+   "border": [
+    56,
+    48,
+    56,
+    48
+   ]
+  },
+  {
+   "name": "chip_rest",
+   "file": "chip_rest.png",
+   "size": [
+    236,
+    108
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "search chip",
+   "sliced": true,
+   "border": [
+    56,
+    48,
+    56,
+    48
+   ]
+  },
+  {
+   "name": "choicecard_hover",
+   "file": "choicecard_hover.png",
+   "size": [
+    456,
+    516
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "large choice card (pet adoption): big tile + label live",
+   "sliced": true,
+   "border": [
+    76,
+    76,
+    76,
+    76
+   ]
+  },
+  {
+   "name": "choicecard_rest",
+   "file": "choicecard_rest.png",
+   "size": [
+    456,
+    516
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "large choice card (pet adoption): big tile + label live",
+   "sliced": true,
+   "border": [
+    76,
+    76,
+    76,
+    76
+   ]
+  },
+  {
+   "name": "choicecard_selected",
+   "file": "choicecard_selected.png",
+   "size": [
+    456,
+    516
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "large choice card (pet adoption): big tile + label live",
+   "sliced": true,
+   "border": [
+    76,
+    76,
+    76,
+    76
+   ]
+  },
+  {
+   "name": "citation_slip",
+   "file": "citation_slip.png",
+   "size": [
+    736,
+    856
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "citation slip paper with the red header band (header text, reason, penalty live)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "content_inset",
+   "file": "content_inset.png",
+   "size": [
+    376,
+    256
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "window content well",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    52
+   ]
+  },
+  {
+   "name": "dome_red_pressed",
+   "file": "dome_red_pressed.png",
+   "size": [
+    332,
+    332
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "big round dome button (SPIN; label live)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "dome_red_rest",
+   "file": "dome_red_rest.png",
+   "size": [
+    332,
+    332
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "big round dome button (SPIN; label live)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "dropdown",
+   "file": "dropdown.png",
+   "size": [
+    296,
+    296
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "menu drop-down / context menu / start menu body",
+   "sliced": true,
+   "border": [
+    56,
+    56,
+    56,
+    56
+   ]
+  },
+  {
+   "name": "field_error",
+   "file": "field_error.png",
+   "size": [
+    456,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "text input (placeholder/text/caret live)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    52
+   ]
+  },
+  {
+   "name": "field_focus",
+   "file": "field_focus.png",
+   "size": [
+    456,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "text input (placeholder/text/caret live)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    52
+   ]
+  },
+  {
+   "name": "field_rest",
+   "file": "field_rest.png",
+   "size": [
+    456,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "text input (placeholder/text/caret live)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    52
+   ]
+  },
+  {
+   "name": "folder_body",
+   "file": "folder_body.png",
+   "size": [
+    616,
+    148
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "rulebook folder body / manila panel strip",
+   "sliced": true,
+   "border": [
+    56,
+    56,
+    56,
+    56
+   ]
+  },
+  {
+   "name": "foldertab_hover",
+   "file": "foldertab_hover.png",
+   "size": [
+    356,
+    156
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "rulebook folder tab (label live); selected = joins the folder body; new = with NEW tag (TMP \"NEW\" on the tag)",
+   "sliced": true,
+   "border": [
+    56,
+    52,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "foldertab_new",
+   "file": "foldertab_new.png",
+   "size": [
+    356,
+    156
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "rulebook folder tab (label live); selected = joins the folder body; new = with NEW tag (TMP \"NEW\" on the tag)",
+   "sliced": true,
+   "border": [
+    56,
+    52,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "foldertab_rest",
+   "file": "foldertab_rest.png",
+   "size": [
+    356,
+    156
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "rulebook folder tab (label live); selected = joins the folder body; new = with NEW tag (TMP \"NEW\" on the tag)",
+   "sliced": true,
+   "border": [
+    56,
+    52,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "foldertab_selected",
+   "file": "foldertab_selected.png",
+   "size": [
+    356,
+    156
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "rulebook folder tab (label live); selected = joins the folder body; new = with NEW tag (TMP \"NEW\" on the tag)",
+   "sliced": true,
+   "border": [
+    56,
+    52,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "glyph_back",
+   "file": "glyph_back.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "glyph_clock",
+   "file": "glyph_clock.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "glyph_cross",
+   "file": "glyph_cross.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "glyph_down",
+   "file": "glyph_down.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "glyph_max",
+   "file": "glyph_max.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "glyph_menu",
+   "file": "glyph_menu.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "glyph_min",
+   "file": "glyph_min.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "glyph_padlock",
+   "file": "glyph_padlock.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "glyph_plus",
+   "file": "glyph_plus.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "glyph_search",
+   "file": "glyph_search.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "glyph_tick",
+   "file": "glyph_tick.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "glyph_up",
+   "file": "glyph_up.png",
+   "size": [
+    136,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "cream glyph with ink keyline for icon keys / window controls",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "iconkey_hover",
+   "file": "iconkey_hover.png",
+   "size": [
+    168,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "square icon button; put a glyph_* sprite on top",
+   "sliced": true,
+   "border": [
+    60,
+    64,
+    60,
+    56
+   ]
+  },
+  {
+   "name": "iconkey_locked",
+   "file": "iconkey_locked.png",
+   "size": [
+    168,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "square icon button; put a glyph_* sprite on top",
+   "sliced": true,
+   "border": [
+    60,
+    64,
+    60,
+    56
+   ]
+  },
+  {
+   "name": "iconkey_pressed",
+   "file": "iconkey_pressed.png",
+   "size": [
+    168,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "square icon button; put a glyph_* sprite on top",
+   "sliced": true,
+   "border": [
+    60,
+    64,
+    60,
+    56
+   ]
+  },
+  {
+   "name": "iconkey_rest",
+   "file": "iconkey_rest.png",
+   "size": [
+    168,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "square icon button; put a glyph_* sprite on top",
+   "sliced": true,
+   "border": [
+    60,
+    64,
+    60,
+    56
+   ]
+  },
+  {
+   "name": "inspect_hover",
+   "file": "inspect_hover.png",
+   "size": [
+    304,
+    304
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "inspect button (magnifier); SPACE keycap (keycap_lav_*) drawn separately under it",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "inspect_locked",
+   "file": "inspect_locked.png",
+   "size": [
+    304,
+    304
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "inspect button (magnifier); SPACE keycap (keycap_lav_*) drawn separately under it",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "inspect_pressed",
+   "file": "inspect_pressed.png",
+   "size": [
+    304,
+    304
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "inspect button (magnifier); SPACE keycap (keycap_lav_*) drawn separately under it",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "inspect_rest",
+   "file": "inspect_rest.png",
+   "size": [
+    304,
+    304
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "inspect button (magnifier); SPACE keycap (keycap_lav_*) drawn separately under it",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "keycap_bone_locked",
+   "file": "keycap_bone_locked.png",
+   "size": [
+    176,
+    116
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "shortcut keycap behind a key label (TAB, Q, A, SPACE)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    48
+   ]
+  },
+  {
+   "name": "keycap_bone_pressed",
+   "file": "keycap_bone_pressed.png",
+   "size": [
+    176,
+    116
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "shortcut keycap behind a key label (TAB, Q, A, SPACE)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    48
+   ]
+  },
+  {
+   "name": "keycap_bone_rest",
+   "file": "keycap_bone_rest.png",
+   "size": [
+    176,
+    116
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "shortcut keycap behind a key label (TAB, Q, A, SPACE)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    48
+   ]
+  },
+  {
+   "name": "keycap_lav_locked",
+   "file": "keycap_lav_locked.png",
+   "size": [
+    176,
+    116
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "shortcut keycap behind a key label (TAB, Q, A, SPACE)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    48
+   ]
+  },
+  {
+   "name": "keycap_lav_pressed",
+   "file": "keycap_lav_pressed.png",
+   "size": [
+    176,
+    116
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "shortcut keycap behind a key label (TAB, Q, A, SPACE)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    48
+   ]
+  },
+  {
+   "name": "keycap_lav_rest",
+   "file": "keycap_lav_rest.png",
+   "size": [
+    176,
+    116
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "shortcut keycap behind a key label (TAB, Q, A, SPACE)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    48
+   ]
+  },
+  {
+   "name": "lcd_glass",
+   "file": "lcd_glass.png",
+   "size": [
+    336,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "phosphor readout glass (text: GeistMono Bold, #CCFFD1 with a green glow)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    52
+   ]
+  },
+  {
+   "name": "listrow_hover",
+   "file": "listrow_hover.png",
+   "size": [
+    576,
+    160
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "list row (mail, notes, search hits)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    52
+   ]
+  },
+  {
+   "name": "listrow_rest",
+   "file": "listrow_rest.png",
+   "size": [
+    576,
+    160
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "list row (mail, notes, search hits)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    52
+   ]
+  },
+  {
+   "name": "listrow_selected",
+   "file": "listrow_selected.png",
+   "size": [
+    576,
+    160
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "list row (mail, notes, search hits)",
+   "sliced": true,
+   "border": [
+    52,
+    52,
+    52,
+    52
+   ]
+  },
+  {
+   "name": "logo_time_sorter",
+   "file": "logo_time_sorter.png",
+   "size": [
+    1176,
+    576
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "title logo (baked)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "miniplate_bone_hover",
+   "file": "miniplate_bone_hover.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "miniplate_bone_locked",
+   "file": "miniplate_bone_locked.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "miniplate_bone_pressed",
+   "file": "miniplate_bone_pressed.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "miniplate_bone_rest",
+   "file": "miniplate_bone_rest.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "miniplate_ox_hover",
+   "file": "miniplate_ox_hover.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "miniplate_ox_locked",
+   "file": "miniplate_ox_locked.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "miniplate_ox_pressed",
+   "file": "miniplate_ox_pressed.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "miniplate_ox_rest",
+   "file": "miniplate_ox_rest.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "miniplate_slate_hover",
+   "file": "miniplate_slate_hover.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "miniplate_slate_locked",
+   "file": "miniplate_slate_locked.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "miniplate_slate_pressed",
+   "file": "miniplate_slate_pressed.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "miniplate_slate_rest",
+   "file": "miniplate_slate_rest.png",
+   "size": [
+    276,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "compact button / tag",
+   "sliced": true,
+   "border": [
+    56,
+    60,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "panel_bone",
+   "file": "panel_bone.png",
+   "size": [
+    376,
+    296
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "window / sheet / dialog body",
+   "sliced": true,
+   "border": [
+    72,
+    80,
+    72,
+    72
+   ]
+  },
+  {
+   "name": "panel_card",
+   "file": "panel_card.png",
+   "size": [
+    376,
+    296
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "window / sheet / dialog body",
+   "sliced": true,
+   "border": [
+    72,
+    80,
+    72,
+    72
+   ]
+  },
+  {
+   "name": "panel_dark",
+   "file": "panel_dark.png",
+   "size": [
+    376,
+    296
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "window / sheet / dialog body",
+   "sliced": true,
+   "border": [
+    72,
+    80,
+    72,
+    72
+   ]
+  },
+  {
+   "name": "panel_manila",
+   "file": "panel_manila.png",
+   "size": [
+    376,
+    296
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "window / sheet / dialog body",
+   "sliced": true,
+   "border": [
+    72,
+    80,
+    72,
+    72
+   ]
+  },
+  {
+   "name": "panel_night",
+   "file": "panel_night.png",
+   "size": [
+    376,
+    296
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "window / sheet / dialog body",
+   "sliced": true,
+   "border": [
+    72,
+    80,
+    72,
+    72
+   ]
+  },
+  {
+   "name": "panel_slate",
+   "file": "panel_slate.png",
+   "size": [
+    376,
+    296
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "window / sheet / dialog body",
+   "sliced": true,
+   "border": [
+    72,
+    80,
+    72,
+    72
+   ]
+  },
+  {
+   "name": "pill_brass",
+   "file": "pill_brass.png",
+   "size": [
+    248,
+    112
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "status pill / compare tag / chip (IDLE slate, HOLD brass, MATCH green, DIFFER red, NOTE lav)",
+   "sliced": true,
+   "border": [
+    60,
+    48,
+    60,
+    48
+   ]
+  },
+  {
+   "name": "pill_green",
+   "file": "pill_green.png",
+   "size": [
+    248,
+    112
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "status pill / compare tag / chip (IDLE slate, HOLD brass, MATCH green, DIFFER red, NOTE lav)",
+   "sliced": true,
+   "border": [
+    60,
+    48,
+    60,
+    48
+   ]
+  },
+  {
+   "name": "pill_lav",
+   "file": "pill_lav.png",
+   "size": [
+    248,
+    112
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "status pill / compare tag / chip (IDLE slate, HOLD brass, MATCH green, DIFFER red, NOTE lav)",
+   "sliced": true,
+   "border": [
+    60,
+    48,
+    60,
+    48
+   ]
+  },
+  {
+   "name": "pill_red",
+   "file": "pill_red.png",
+   "size": [
+    248,
+    112
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "status pill / compare tag / chip (IDLE slate, HOLD brass, MATCH green, DIFFER red, NOTE lav)",
+   "sliced": true,
+   "border": [
+    60,
+    48,
+    60,
+    48
+   ]
+  },
+  {
+   "name": "pill_slate",
+   "file": "pill_slate.png",
+   "size": [
+    248,
+    112
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "status pill / compare tag / chip (IDLE slate, HOLD brass, MATCH green, DIFFER red, NOTE lav)",
+   "sliced": true,
+   "border": [
+    60,
+    48,
+    60,
+    48
+   ]
+  },
+  {
+   "name": "plate_bone_hover",
+   "file": "plate_bone_hover.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "neutral key-like button (CANCEL, SEARCH, CONTINUE on dark)",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_bone_locked",
+   "file": "plate_bone_locked.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "neutral key-like button (CANCEL, SEARCH, CONTINUE on dark)",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_bone_pressed",
+   "file": "plate_bone_pressed.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "neutral key-like button (CANCEL, SEARCH, CONTINUE on dark)",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_bone_rest",
+   "file": "plate_bone_rest.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "neutral key-like button (CANCEL, SEARCH, CONTINUE on dark)",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_brass_hover",
+   "file": "plate_brass_hover.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "hold / warning",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_brass_locked",
+   "file": "plate_brass_locked.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "hold / warning",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_brass_pressed",
+   "file": "plate_brass_pressed.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "hold / warning",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_brass_rest",
+   "file": "plate_brass_rest.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "hold / warning",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_green_hover",
+   "file": "plate_green_hover.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "confirm / hand back / keep installed",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_green_locked",
+   "file": "plate_green_locked.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "confirm / hand back / keep installed",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_green_pressed",
+   "file": "plate_green_pressed.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "confirm / hand back / keep installed",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_green_rest",
+   "file": "plate_green_rest.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "confirm / hand back / keep installed",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_lav_hover",
+   "file": "plate_lav_hover.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "accent",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_lav_locked",
+   "file": "plate_lav_locked.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "accent",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_lav_pressed",
+   "file": "plate_lav_pressed.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "accent",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_lav_rest",
+   "file": "plate_lav_rest.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "accent",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_ox_hover",
+   "file": "plate_ox_hover.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "primary action (START SHIFT, GO HOME, SLEEP, ADOPT)",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    64
+   ]
+  },
+  {
+   "name": "plate_ox_locked",
+   "file": "plate_ox_locked.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "primary action (START SHIFT, GO HOME, SLEEP, ADOPT)",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    64
+   ]
+  },
+  {
+   "name": "plate_ox_pressed",
+   "file": "plate_ox_pressed.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "primary action (START SHIFT, GO HOME, SLEEP, ADOPT)",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    64
+   ]
+  },
+  {
+   "name": "plate_ox_rest",
+   "file": "plate_ox_rest.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "primary action (START SHIFT, GO HOME, SLEEP, ADOPT)",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    64
+   ]
+  },
+  {
+   "name": "plate_red_hover",
+   "file": "plate_red_hover.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "danger / refuse",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_red_locked",
+   "file": "plate_red_locked.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "danger / refuse",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_red_pressed",
+   "file": "plate_red_pressed.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "danger / refuse",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_red_rest",
+   "file": "plate_red_rest.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "danger / refuse",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_slate_hover",
+   "file": "plate_slate_hover.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "secondary action (BACK, SKIP TUTORIAL)",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_slate_locked",
+   "file": "plate_slate_locked.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "secondary action (BACK, SKIP TUTORIAL)",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_slate_pressed",
+   "file": "plate_slate_pressed.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "secondary action (BACK, SKIP TUTORIAL)",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "plate_slate_rest",
+   "file": "plate_slate_rest.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "secondary action (BACK, SKIP TUTORIAL)",
+   "sliced": true,
+   "border": [
+    68,
+    76,
+    68,
+    64
+   ]
+  },
+  {
+   "name": "pulltab_left_hover",
+   "file": "pulltab_left_hover.png",
+   "size": [
+    356,
+    368
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    76
+   ]
+  },
+  {
+   "name": "pulltab_left_locked",
+   "file": "pulltab_left_locked.png",
+   "size": [
+    356,
+    368
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    76
+   ]
+  },
+  {
+   "name": "pulltab_left_pressed",
+   "file": "pulltab_left_pressed.png",
+   "size": [
+    356,
+    368
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    76
+   ]
+  },
+  {
+   "name": "pulltab_left_rest",
+   "file": "pulltab_left_rest.png",
+   "size": [
+    356,
+    368
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "screen-edge pull tab (left edge); label + keycap on top; anchor flush to the left edge",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    76
+   ]
+  },
+  {
+   "name": "pulltab_right_hover",
+   "file": "pulltab_right_hover.png",
+   "size": [
+    356,
+    368
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    76
+   ]
+  },
+  {
+   "name": "pulltab_right_locked",
+   "file": "pulltab_right_locked.png",
+   "size": [
+    356,
+    368
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    76
+   ]
+  },
+  {
+   "name": "pulltab_right_pressed",
+   "file": "pulltab_right_pressed.png",
+   "size": [
+    356,
+    368
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    76
+   ]
+  },
+  {
+   "name": "pulltab_right_rest",
+   "file": "pulltab_right_rest.png",
+   "size": [
+    356,
+    368
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "screen-edge pull tab (right edge); label + keycap on top; anchor flush to the right edge",
+   "sliced": true,
+   "border": [
+    88,
+    76,
+    88,
+    76
+   ]
+  },
+  {
+   "name": "ribbon_brass",
+   "file": "ribbon_brass.png",
+   "size": [
+    656,
+    160
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "verdict ribbon (CORRECT green / WRONG CALL red / FREE WARNING brass)",
+   "sliced": true,
+   "border": [
+    88,
+    56,
+    88,
+    56
+   ]
+  },
+  {
+   "name": "ribbon_green",
+   "file": "ribbon_green.png",
+   "size": [
+    656,
+    160
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "verdict ribbon (CORRECT green / WRONG CALL red / FREE WARNING brass)",
+   "sliced": true,
+   "border": [
+    88,
+    56,
+    88,
+    56
+   ]
+  },
+  {
+   "name": "ribbon_red",
+   "file": "ribbon_red.png",
+   "size": [
+    656,
+    160
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "verdict ribbon (CORRECT green / WRONG CALL red / FREE WARNING brass)",
+   "sliced": true,
+   "border": [
+    88,
+    56,
+    88,
+    56
+   ]
+  },
+  {
+   "name": "roundbadge_clock",
+   "file": "roundbadge_clock.png",
+   "size": [
+    120,
+    120
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "upgrade card state badge (owned tick / too dear clock / locked padlock)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "roundbadge_padlock",
+   "file": "roundbadge_padlock.png",
+   "size": [
+    120,
+    120
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "upgrade card state badge (owned tick / too dear clock / locked padlock)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "roundbadge_tick",
+   "file": "roundbadge_tick.png",
+   "size": [
+    120,
+    120
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "upgrade card state badge (owned tick / too dear clock / locked padlock)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "row_highlight",
+   "file": "row_highlight.png",
+   "size": [
+    296,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "hovered menu row",
+   "sliced": true,
+   "border": [
+    48,
+    48,
+    48,
+    48
+   ]
+  },
+  {
+   "name": "scroll_thumb",
+   "file": "scroll_thumb.png",
+   "size": [
+    82,
+    136
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "scrollbar thumb",
+   "sliced": true,
+   "border": [
+    38,
+    48,
+    38,
+    48
+   ]
+  },
+  {
+   "name": "scroll_track",
+   "file": "scroll_track.png",
+   "size": [
+    92,
+    296
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "scrollbar track",
+   "sliced": true,
+   "border": [
+    40,
+    48,
+    40,
+    48
+   ]
+  },
+  {
+   "name": "segment_off",
+   "file": "segment_off.png",
+   "size": [
+    256,
+    116
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "choice inside the track (on: oxblood pressed, label cream; off: bone, label ink)",
+   "sliced": true,
+   "border": [
+    48,
+    48,
+    48,
+    48
+   ]
+  },
+  {
+   "name": "segment_on",
+   "file": "segment_on.png",
+   "size": [
+    256,
+    116
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "choice inside the track (on: oxblood pressed, label cream; off: bone, label ink)",
+   "sliced": true,
+   "border": [
+    48,
+    48,
+    48,
+    48
+   ]
+  },
+  {
+   "name": "segmented_track",
+   "file": "segmented_track.png",
+   "size": [
+    376,
+    132
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "choice-pair container",
+   "sliced": true,
+   "border": [
+    56,
+    52,
+    56,
+    52
+   ]
+  },
+  {
+   "name": "slot_lever",
+   "file": "slot_lever.png",
+   "size": [
+    136,
+    416
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.0
+   ],
+   "use": "slot lever (rotate around the bottom to pull)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_reel",
+   "file": "slot_reel.png",
+   "size": [
+    280,
+    356
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "slot reel window (symbol tile inside)",
+   "sliced": true,
+   "border": [
+    60,
+    60,
+    60,
+    60
+   ]
+  },
+  {
+   "name": "speech_bubble",
+   "file": "speech_bubble.png",
+   "size": [
+    496,
+    236
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "speech bubble body (text Outfit Regular ink)",
+   "sliced": true,
+   "border": [
+    76,
+    76,
+    76,
+    76
+   ]
+  },
+  {
+   "name": "speech_tail",
+   "file": "speech_tail.png",
+   "size": [
+    112,
+    104
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.2,
+    1.0
+   ],
+   "use": "speech bubble tail",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "stamp_cited",
+   "file": "stamp_cited.png",
+   "size": [
+    496,
+    236
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "CITED rubber stamp (rotate ~14 deg on the slip)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "strip_green",
+   "file": "strip_green.png",
+   "size": [
+    656,
+    144
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "counter strip (COUNTER slate / HAND BACK green / STAMP FIRST red)",
+   "sliced": true,
+   "border": [
+    64,
+    56,
+    64,
+    56
+   ]
+  },
+  {
+   "name": "strip_red",
+   "file": "strip_red.png",
+   "size": [
+    656,
+    144
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "counter strip (COUNTER slate / HAND BACK green / STAMP FIRST red)",
+   "sliced": true,
+   "border": [
+    64,
+    56,
+    64,
+    56
+   ]
+  },
+  {
+   "name": "strip_slate",
+   "file": "strip_slate.png",
+   "size": [
+    656,
+    144
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "counter strip (COUNTER slate / HAND BACK green / STAMP FIRST red)",
+   "sliced": true,
+   "border": [
+    64,
+    56,
+    64,
+    56
+   ]
+  },
+  {
+   "name": "taskbar",
+   "file": "taskbar.png",
+   "size": [
+    376,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "PC taskbar",
+   "sliced": true,
+   "border": [
+    60,
+    60,
+    60,
+    60
+   ]
+  },
+  {
+   "name": "tile_ball_hover",
+   "file": "tile_ball_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_ball_locked",
+   "file": "tile_ball_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_ball_rest",
+   "file": "tile_ball_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_bolt_hover",
+   "file": "tile_bolt_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_bolt_locked",
+   "file": "tile_bolt_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_bolt_rest",
+   "file": "tile_bolt_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_cat_hover",
+   "file": "tile_cat_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_cat_locked",
+   "file": "tile_cat_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_cat_rest",
+   "file": "tile_cat_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_clock_hover",
+   "file": "tile_clock_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_clock_locked",
+   "file": "tile_clock_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_clock_rest",
+   "file": "tile_clock_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_crate_hover",
+   "file": "tile_crate_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_crate_locked",
+   "file": "tile_crate_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_crate_rest",
+   "file": "tile_crate_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_dog_hover",
+   "file": "tile_dog_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_dog_locked",
+   "file": "tile_dog_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_dog_rest",
+   "file": "tile_dog_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_eye_hover",
+   "file": "tile_eye_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_eye_locked",
+   "file": "tile_eye_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_eye_rest",
+   "file": "tile_eye_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_flame_hover",
+   "file": "tile_flame_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_flame_locked",
+   "file": "tile_flame_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_flame_rest",
+   "file": "tile_flame_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_food_hover",
+   "file": "tile_food_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_food_locked",
+   "file": "tile_food_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_food_rest",
+   "file": "tile_food_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_gear_hover",
+   "file": "tile_gear_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_gear_locked",
+   "file": "tile_gear_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_gear_rest",
+   "file": "tile_gear_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_globe_hover",
+   "file": "tile_globe_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_globe_locked",
+   "file": "tile_globe_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_globe_rest",
+   "file": "tile_globe_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_house_hover",
+   "file": "tile_house_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_house_locked",
+   "file": "tile_house_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_house_rest",
+   "file": "tile_house_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_idcard_hover",
+   "file": "tile_idcard_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_idcard_locked",
+   "file": "tile_idcard_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_idcard_rest",
+   "file": "tile_idcard_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_lamp_hover",
+   "file": "tile_lamp_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_lamp_locked",
+   "file": "tile_lamp_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_lamp_rest",
+   "file": "tile_lamp_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_magnifier_hover",
+   "file": "tile_magnifier_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_magnifier_locked",
+   "file": "tile_magnifier_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_magnifier_rest",
+   "file": "tile_magnifier_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_mail_hover",
+   "file": "tile_mail_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_mail_locked",
+   "file": "tile_mail_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_mail_rest",
+   "file": "tile_mail_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_medicine_hover",
+   "file": "tile_medicine_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_medicine_locked",
+   "file": "tile_medicine_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_medicine_rest",
+   "file": "tile_medicine_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_moon_hover",
+   "file": "tile_moon_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_moon_locked",
+   "file": "tile_moon_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_moon_rest",
+   "file": "tile_moon_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_notes_hover",
+   "file": "tile_notes_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_notes_locked",
+   "file": "tile_notes_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_notes_rest",
+   "file": "tile_notes_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_padlock_hover",
+   "file": "tile_padlock_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_padlock_locked",
+   "file": "tile_padlock_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_padlock_rest",
+   "file": "tile_padlock_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_paw_hover",
+   "file": "tile_paw_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_paw_locked",
+   "file": "tile_paw_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_paw_rest",
+   "file": "tile_paw_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_person_hover",
+   "file": "tile_person_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_person_locked",
+   "file": "tile_person_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_person_rest",
+   "file": "tile_person_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_portal_hover",
+   "file": "tile_portal_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_portal_locked",
+   "file": "tile_portal_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_portal_rest",
+   "file": "tile_portal_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_shield_hover",
+   "file": "tile_shield_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_shield_locked",
+   "file": "tile_shield_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_shield_rest",
+   "file": "tile_shield_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_sofa_hover",
+   "file": "tile_sofa_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_sofa_locked",
+   "file": "tile_sofa_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_sofa_rest",
+   "file": "tile_sofa_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_speech_hover",
+   "file": "tile_speech_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_speech_locked",
+   "file": "tile_speech_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_speech_rest",
+   "file": "tile_speech_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_star_hover",
+   "file": "tile_star_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_star_locked",
+   "file": "tile_star_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_star_rest",
+   "file": "tile_star_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_tv_hover",
+   "file": "tile_tv_hover.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_tv_locked",
+   "file": "tile_tv_locked.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "tile_tv_rest",
+   "file": "tile_tv_rest.png",
+   "size": [
+    184,
+    184
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "pictogram tile (desktop icons, start menu, bills, bands, upgrade cards, pets)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "titlebar_slate",
+   "file": "titlebar_slate.png",
+   "size": [
+    376,
+    124
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "window title bar / band head (label + glyph live)",
+   "sliced": true,
+   "border": [
+    60,
+    56,
+    60,
+    56
+   ]
+  },
+  {
+   "name": "tooltip",
+   "file": "tooltip.png",
+   "size": [
+    456,
+    148
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "tooltip / hint plate body",
+   "sliced": true,
+   "border": [
+    56,
+    56,
+    56,
+    56
+   ]
+  },
+  {
+   "name": "tooltip_tail",
+   "file": "tooltip_tail.png",
+   "size": [
+    88,
+    84
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.2,
+    1.0
+   ],
+   "use": "tooltip pointer (place under the body, overlapping its bottom border)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "upgradecard_buyable",
+   "file": "upgradecard_buyable.png",
+   "size": [
+    516,
+    228
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Orders / House upgrade card (tile + name + state text live); badge_* round badge top-right",
+   "sliced": true,
+   "border": [
+    64,
+    64,
+    64,
+    64
+   ]
+  },
+  {
+   "name": "upgradecard_dear",
+   "file": "upgradecard_dear.png",
+   "size": [
+    516,
+    228
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Orders / House upgrade card (tile + name + state text live); badge_* round badge top-right",
+   "sliced": true,
+   "border": [
+    64,
+    64,
+    64,
+    64
+   ]
+  },
+  {
+   "name": "upgradecard_locked",
+   "file": "upgradecard_locked.png",
+   "size": [
+    516,
+    228
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Orders / House upgrade card (tile + name + state text live); badge_* round badge top-right",
+   "sliced": true,
+   "border": [
+    64,
+    64,
+    64,
+    64
+   ]
+  },
+  {
+   "name": "upgradecard_owned",
+   "file": "upgradecard_owned.png",
+   "size": [
+    516,
+    228
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Orders / House upgrade card (tile + name + state text live); badge_* round badge top-right",
+   "sliced": true,
+   "border": [
+    64,
+    64,
+    64,
+    64
+   ]
+  },
+  {
+   "name": "wheel_back",
+   "file": "wheel_back.png",
+   "size": [
+    232,
+    232
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "dialogue wheel centre back button (label BACK live under the arrow)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "wheelpill_hover",
+   "file": "wheelpill_hover.png",
+   "size": [
+    496,
+    152
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "dialogue wheel entry (icon tile left, label live)",
+   "sliced": true,
+   "border": [
+    84,
+    60,
+    84,
+    56
+   ]
+  },
+  {
+   "name": "wheelpill_rest",
+   "file": "wheelpill_rest.png",
+   "size": [
+    496,
+    152
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "dialogue wheel entry (icon tile left, label live)",
+   "sliced": true,
+   "border": [
+    84,
+    60,
+    84,
+    56
+   ]
+  }
+ ]
+}
