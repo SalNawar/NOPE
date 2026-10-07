@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 13
   visitorsCount: 17
+  shiftStartMinute: 960
+  shiftEndMinute: 1440
   bulletin: 'NEW: range limit. Economy units no longer reach the Ancient era: refuse
     poor tourists and labourers bound for it.'
   papers:

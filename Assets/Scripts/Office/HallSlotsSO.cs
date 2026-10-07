@@ -28,9 +28,6 @@ public sealed class HallSlotsSO : ScriptableObject
     /// <summary>The painting's source canvas in pixels (the registered layers' and the composite's: 2172 x 724); slot regions are in it.</summary>
     public int canvasWidth = 2172, canvasHeight = 724;
 
-    /// <summary>The first day of the extended hours (HallPhase.Extended) and of the night shifts (HallPhase.Nights).</summary>
-    public int extendedFromDay = 8, nightsFromDay = 12;
-
     /// <summary>How long a slot takes to fade from one variant to the next (seconds; Reduced Motion cuts).</summary>
     [Min(0f)] public float crossfadeSeconds = 0.6f;
 

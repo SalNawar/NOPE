@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 2
   visitorsCount: 10
+  shiftStartMinute: -1
+  shiftEndMinute: -1
   bulletin: 'NEW: the Entry Ticket. Ask for it: its Citizen ID must match the Passport''s,
     and its departure date must be today.'
   papers:

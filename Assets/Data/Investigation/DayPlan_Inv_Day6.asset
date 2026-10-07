@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 6
   visitorsCount: 14
+  shiftStartMinute: -1
+  shiftEndMinute: -1
   bulletin: 'NEW: the Transponder Card and travel class. A Premium passport travels
     on a Premium transponder, a Standard passport on an Economy one: hold the Passport''s
     class against the card''s.'

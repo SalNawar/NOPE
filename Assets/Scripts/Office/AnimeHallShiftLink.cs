@@ -12,7 +12,9 @@ using UnityEngine;
 /// cycle's shade over DeskConfigSO.travellerTint. Without them (or with them
 /// switched off) the evening follows the old office's crowd curve
 /// (<see cref="CrowdPaletteBlend"/>: morning until DeskConfigSO's hall start,
-/// full evening from its full point, eased between).
+/// full evening from its full point, eased between) on the clock's hour as it
+/// stands on the standard day (<see cref="IShiftProgress.StandardProgress01"/>),
+/// so a late shift opens in the evening.
 /// The calendar's date is printed on the art's paper, which the evening dims to
 /// nearly black, so its ink follows the same blend: the config's day ink, then
 /// its evening ink from the config's point (CrowdPaletteBlend.LightInk), and it
@@ -64,7 +66,7 @@ public sealed class AnimeHallShiftLink : MonoBehaviour
         bool lit = _lights != null && _lights.isActiveAndEnabled && _lights.Settings != null && _lights.Settings.lightingOn;
         if (lit)
             _lights.SetClock(shift.MinuteOfDay);
-        float blend = lit ? _lights.Evening : CrowdPaletteBlend.Evening(shift.Progress01, _config.hallEveningStartsAt, _config.hallEveningFullAt);
+        float blend = lit ? _lights.Evening : CrowdPaletteBlend.Evening(shift.StandardProgress01, _config.hallEveningStartsAt, _config.hallEveningFullAt);
         Color shade = lit ? _lights.TravellerShade : Color.white;
 
         if (_traveller != null && shade != _shade)

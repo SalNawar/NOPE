@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 12
   visitorsCount: 17
+  shiftStartMinute: 960
+  shiftEndMinute: 1440
   bulletin: 'NEW: bans. The Directorate can close a route on the board: today Weimar
     Berlin is CLOSED.'
   papers:
