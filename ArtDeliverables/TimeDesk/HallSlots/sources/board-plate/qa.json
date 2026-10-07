@@ -1,0 +1,510 @@
+{
+  "observedAtUtc": "2026-10-07T11:37:20.706Z",
+  "method": "Read-only decode and SHA256; alpha bounds, interior opacity and center-row samples. No raster editing.",
+  "sources": [
+    {
+      "nation": "egypt",
+      "width": 2098,
+      "height": 749,
+      "backgroundType": "transparent",
+      "sha256": "468d0e8bdbe72c95463647e7f185e4151645bf8b9fa74c6ef2d48ff2c08debbf",
+      "alphaNonzeroBounds": [
+        51,
+        107,
+        2048,
+        666
+      ],
+      "analysisPlateBounds": [
+        57,
+        221,
+        2043,
+        524
+      ],
+      "analysisPlateAspect": 6.554455445544554,
+      "transparentPixelShare": 0.6091636640401374,
+      "interiorMinAlpha": 253,
+      "interiorNonopaqueShare": 0,
+      "centerRowSamples": [
+        [
+          218,
+          155,
+          32,
+          254
+        ],
+        [
+          12,
+          71,
+          114,
+          254
+        ],
+        [
+          215,
+          152,
+          37,
+          253
+        ],
+        [
+          213,
+          152,
+          40,
+          254
+        ],
+        [
+          10,
+          75,
+          117,
+          253
+        ],
+        [
+          223,
+          158,
+          33,
+          254
+        ]
+      ],
+      "sourceOpacityCheckPassed": true,
+      "requiresProcessing": "Palette normalization, faint outer-edge cleanup/keying, measured print bounds and plate-specific fitting. No native registered overlay produced."
+    },
+    {
+      "nation": "iraq",
+      "width": 2172,
+      "height": 724,
+      "backgroundType": "magenta",
+      "sha256": "d83618939e26a3ac9df2b145ab02b57bc6c3b3c94543cf299ae10e5a2c0886ef",
+      "alphaNonzeroBounds": [
+        0,
+        0,
+        2172,
+        724
+      ],
+      "analysisPlateBounds": [
+        57,
+        148,
+        2115,
+        551
+      ],
+      "analysisPlateAspect": 5.106699751861042,
+      "transparentPixelShare": 0,
+      "interiorMinAlpha": 255,
+      "interiorNonopaqueShare": 0,
+      "centerRowSamples": [
+        [
+          19,
+          81,
+          121,
+          255
+        ],
+        [
+          19,
+          81,
+          121,
+          255
+        ],
+        [
+          230,
+          170,
+          10,
+          255
+        ],
+        [
+          229,
+          170,
+          10,
+          255
+        ],
+        [
+          19,
+          79,
+          120,
+          255
+        ],
+        [
+          18,
+          80,
+          121,
+          255
+        ]
+      ],
+      "sourceOpacityCheckPassed": true,
+      "requiresProcessing": "Palette normalization, faint outer-edge cleanup/keying, measured print bounds and plate-specific fitting. No native registered overlay produced."
+    },
+    {
+      "nation": "greece",
+      "width": 2106,
+      "height": 747,
+      "backgroundType": "magenta",
+      "sha256": "10adc3d588c032b60eff475fac9d87256d8383057c183e428051e78f0df43863",
+      "alphaNonzeroBounds": [
+        0,
+        0,
+        2106,
+        747
+      ],
+      "analysisPlateBounds": [
+        61,
+        158,
+        2045,
+        573
+      ],
+      "analysisPlateAspect": 4.780722891566265,
+      "transparentPixelShare": 0,
+      "interiorMinAlpha": 255,
+      "interiorNonopaqueShare": 0,
+      "centerRowSamples": [
+        [
+          3,
+          100,
+          190,
+          255
+        ],
+        [
+          2,
+          99,
+          189,
+          255
+        ],
+        [
+          2,
+          99,
+          189,
+          255
+        ],
+        [
+          3,
+          100,
+          190,
+          255
+        ],
+        [
+          2,
+          99,
+          191,
+          255
+        ],
+        [
+          3,
+          100,
+          190,
+          255
+        ]
+      ],
+      "sourceOpacityCheckPassed": true,
+      "requiresProcessing": "Palette normalization, faint outer-edge cleanup/keying, measured print bounds and plate-specific fitting. No native registered overlay produced."
+    },
+    {
+      "nation": "italy",
+      "width": 2033,
+      "height": 773,
+      "backgroundType": "magenta",
+      "sha256": "3b8bbf7abf815697e6bb89a8850a5d1e937e4859ecc2e5b80face26129f4d8f9",
+      "alphaNonzeroBounds": [
+        0,
+        0,
+        2033,
+        773
+      ],
+      "analysisPlateBounds": [
+        52,
+        222,
+        1983,
+        551
+      ],
+      "analysisPlateAspect": 5.869300911854103,
+      "transparentPixelShare": 0,
+      "interiorMinAlpha": 255,
+      "interiorNonopaqueShare": 0,
+      "centerRowSamples": [
+        [
+          39,
+          119,
+          65,
+          255
+        ],
+        [
+          129,
+          51,
+          32,
+          255
+        ],
+        [
+          128,
+          51,
+          32,
+          255
+        ],
+        [
+          127,
+          51,
+          31,
+          255
+        ],
+        [
+          125,
+          49,
+          30,
+          255
+        ],
+        [
+          39,
+          118,
+          64,
+          255
+        ]
+      ],
+      "sourceOpacityCheckPassed": true,
+      "requiresProcessing": "Palette normalization, faint outer-edge cleanup/keying, measured print bounds and plate-specific fitting. No native registered overlay produced."
+    },
+    {
+      "nation": "china",
+      "width": 2172,
+      "height": 724,
+      "backgroundType": "transparent",
+      "sha256": "59722b7d745da49aad84a149d385da036b19fdbe2982d128f460102baa0eaccb",
+      "alphaNonzeroBounds": [
+        47,
+        77,
+        2123,
+        698
+      ],
+      "analysisPlateBounds": [
+        55,
+        207,
+        2118,
+        509
+      ],
+      "analysisPlateAspect": 6.83112582781457,
+      "transparentPixelShare": 0.5917993193125973,
+      "interiorMinAlpha": 253,
+      "interiorNonopaqueShare": 0,
+      "centerRowSamples": [
+        [
+          158,
+          32,
+          28,
+          254
+        ],
+        [
+          158,
+          31,
+          28,
+          254
+        ],
+        [
+          160,
+          32,
+          29,
+          254
+        ],
+        [
+          159,
+          31,
+          28,
+          254
+        ],
+        [
+          160,
+          31,
+          28,
+          254
+        ],
+        [
+          158,
+          32,
+          27,
+          254
+        ]
+      ],
+      "sourceOpacityCheckPassed": true,
+      "requiresProcessing": "Palette normalization, faint outer-edge cleanup/keying, measured print bounds and plate-specific fitting. No native registered overlay produced."
+    },
+    {
+      "nation": "japan",
+      "width": 2005,
+      "height": 784,
+      "backgroundType": "transparent",
+      "sha256": "e6cf728d9af0ab8d978d5c067ad49d18b6f599cd4a57eecfc13bca7bd5532c6d",
+      "alphaNonzeroBounds": [
+        59,
+        55,
+        1945,
+        730
+      ],
+      "analysisPlateBounds": [
+        64,
+        221,
+        1942,
+        563
+      ],
+      "analysisPlateAspect": 5.491228070175438,
+      "transparentPixelShare": 0.5840634383429182,
+      "interiorMinAlpha": 252,
+      "interiorNonopaqueShare": 0,
+      "centerRowSamples": [
+        [
+          30,
+          54,
+          84,
+          254
+        ],
+        [
+          32,
+          55,
+          84,
+          254
+        ],
+        [
+          31,
+          52,
+          83,
+          254
+        ],
+        [
+          31,
+          53,
+          83,
+          254
+        ],
+        [
+          31,
+          53,
+          84,
+          254
+        ],
+        [
+          31,
+          54,
+          85,
+          254
+        ]
+      ],
+      "sourceOpacityCheckPassed": true,
+      "requiresProcessing": "Palette normalization, faint outer-edge cleanup/keying, measured print bounds and plate-specific fitting. No native registered overlay produced."
+    },
+    {
+      "nation": "britain",
+      "width": 2112,
+      "height": 745,
+      "backgroundType": "transparent",
+      "sha256": "266293e6f317e1239caca436586fde7b615faf2e8bc6fee1e3799e97f75a61c1",
+      "alphaNonzeroBounds": [
+        46,
+        4,
+        2067,
+        705
+      ],
+      "analysisPlateBounds": [
+        49,
+        180,
+        2063,
+        523
+      ],
+      "analysisPlateAspect": 5.871720116618076,
+      "transparentPixelShare": 0.5510696308724832,
+      "interiorMinAlpha": 252,
+      "interiorNonopaqueShare": 0,
+      "centerRowSamples": [
+        [
+          33,
+          43,
+          64,
+          254
+        ],
+        [
+          32,
+          42,
+          63,
+          254
+        ],
+        [
+          32,
+          42,
+          64,
+          254
+        ],
+        [
+          32,
+          41,
+          63,
+          254
+        ],
+        [
+          32,
+          42,
+          64,
+          254
+        ],
+        [
+          33,
+          43,
+          65,
+          254
+        ]
+      ],
+      "sourceOpacityCheckPassed": true,
+      "requiresProcessing": "Palette normalization, faint outer-edge cleanup/keying, measured print bounds and plate-specific fitting. No native registered overlay produced."
+    },
+    {
+      "nation": "germany",
+      "width": 2146,
+      "height": 733,
+      "backgroundType": "transparent",
+      "sha256": "17d133720cd928f0d59a3ec4da7cc0701b8aa644fd8d16f94307023ad7dcfb1a",
+      "alphaNonzeroBounds": [
+        71,
+        99,
+        2082,
+        578
+      ],
+      "analysisPlateBounds": [
+        74,
+        210,
+        2072,
+        509
+      ],
+      "analysisPlateAspect": 6.682274247491639,
+      "transparentPixelShare": 0.6093617491980384,
+      "interiorMinAlpha": 253,
+      "interiorNonopaqueShare": 0,
+      "centerRowSamples": [
+        [
+          47,
+          47,
+          47,
+          254
+        ],
+        [
+          47,
+          47,
+          47,
+          254
+        ],
+        [
+          48,
+          48,
+          48,
+          254
+        ],
+        [
+          48,
+          48,
+          47,
+          254
+        ],
+        [
+          48,
+          47,
+          47,
+          254
+        ],
+        [
+          47,
+          48,
+          47,
+          254
+        ]
+      ],
+      "sourceOpacityCheckPassed": true,
+      "requiresProcessing": "Palette normalization, faint outer-edge cleanup/keying, measured print bounds and plate-specific fitting. No native registered overlay produced."
+    }
+  ]
+}
