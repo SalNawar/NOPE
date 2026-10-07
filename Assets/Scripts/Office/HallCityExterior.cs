@@ -10,6 +10,9 @@ public sealed class HallCityExterior : MonoBehaviour
         public float xStart,xEnd,yPixels,widthPixels,speed,phase;
     }
     public SpriteRenderer window;
+    [Range(0,1)] public float rain;
+    [Range(0,1)] public float depthStrength=.7f;
+    public bool animateCity=true;
     public Lane[] lanes;
     public Sprite[] connectedPanels;
     public SpriteRenderer[] panelRenderers;
@@ -29,18 +32,30 @@ public sealed class HallCityExterior : MonoBehaviour
         // its own independent movement and aperture mask.
         float pan=presentation!=null?(presentation.lookLeft-.5f)*(.05f/3f):0;
         properties.SetFloat("_CityPan",pan);
+        properties.SetFloat("_CityRain",rain);
+        properties.SetFloat("_CityDepthStrength",depthStrength);
+        properties.SetFloat("_CitySeconds",seconds);
+        properties.SetFloat("_CityMotion",!reduced && animateCity?1:0);
         window.SetPropertyBlock(properties);
         if(panelRenderers!=null)foreach(var panel in panelRenderers)
         {
             if(panel==null)continue;
-            panel.GetPropertyBlock(properties);properties.SetFloat("_CityPan",pan);panel.SetPropertyBlock(properties);
+            panel.GetPropertyBlock(properties);properties.SetFloat("_CityPan",pan);
+        properties.SetFloat("_CityRain",rain);
+        properties.SetFloat("_CityDepthStrength",depthStrength);
+        properties.SetFloat("_CitySeconds",seconds);
+        properties.SetFloat("_CityMotion",!reduced && animateCity?1:0);panel.SetPropertyBlock(properties);
         }
         if(presentation!=null)foreach(var layer in presentation.layers)
         {
             var renderer=layer.renderer;
             if(renderer==null || renderer.sharedMaterial==null ||
                 (renderer.sharedMaterial.shader.name!="NOPE/Hall Waiting Bay Repair" && renderer.sharedMaterial.shader.name!="NOPE/Hall Deep Layout"))continue;
-            renderer.GetPropertyBlock(properties);properties.SetFloat("_CityPan",pan);renderer.SetPropertyBlock(properties);
+            renderer.GetPropertyBlock(properties);properties.SetFloat("_CityPan",pan);
+        properties.SetFloat("_CityRain",rain);
+        properties.SetFloat("_CityDepthStrength",depthStrength);
+        properties.SetFloat("_CitySeconds",seconds);
+        properties.SetFloat("_CityMotion",!reduced && animateCity?1:0);renderer.SetPropertyBlock(properties);
         }
         foreach(var lane in lanes)
         {

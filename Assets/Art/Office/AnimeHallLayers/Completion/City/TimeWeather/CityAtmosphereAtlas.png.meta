@@ -1,0 +1,3042 @@
+fileFormatVersion: 2
+guid: a8fa09856c3408141a18680508c5f109
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8815953246065479976
+    second: CityAtmosphereAtlas_0
+  - first:
+      213: 716288135849329046
+    second: CityAtmosphereAtlas_1
+  - first:
+      213: 7470960977421548875
+    second: CityAtmosphereAtlas_2
+  - first:
+      213: -3394605818471126817
+    second: CityAtmosphereAtlas_3
+  - first:
+      213: -3535790920592886808
+    second: CityAtmosphereAtlas_4
+  - first:
+      213: -2570694141945888403
+    second: CityAtmosphereAtlas_5
+  - first:
+      213: 6507642243087839216
+    second: CityAtmosphereAtlas_6
+  - first:
+      213: -5289007118287105876
+    second: CityAtmosphereAtlas_7
+  - first:
+      213: 7905886033785364770
+    second: CityAtmosphereAtlas_8
+  - first:
+      213: -4985121142292239949
+    second: CityAtmosphereAtlas_9
+  - first:
+      213: 6608359210584068800
+    second: CityAtmosphereAtlas_10
+  - first:
+      213: 4600621535793305371
+    second: CityAtmosphereAtlas_11
+  - first:
+      213: 917479522330336490
+    second: CityAtmosphereAtlas_12
+  - first:
+      213: -5874131459795809036
+    second: CityAtmosphereAtlas_13
+  - first:
+      213: -2872567582020250349
+    second: CityAtmosphereAtlas_14
+  - first:
+      213: 5988006161510020257
+    second: CityAtmosphereAtlas_15
+  - first:
+      213: -657610155702209479
+    second: CityAtmosphereAtlas_16
+  - first:
+      213: 7410126038741923920
+    second: CityAtmosphereAtlas_17
+  - first:
+      213: -5814504016920475641
+    second: CityAtmosphereAtlas_18
+  - first:
+      213: -7522975382347101496
+    second: CityAtmosphereAtlas_19
+  - first:
+      213: -340203021428942237
+    second: CityAtmosphereAtlas_20
+  - first:
+      213: 5654420303742362746
+    second: CityAtmosphereAtlas_21
+  - first:
+      213: -6404428408320081598
+    second: CityAtmosphereAtlas_22
+  - first:
+      213: -927060910244639766
+    second: CityAtmosphereAtlas_23
+  - first:
+      213: -5736316116247592249
+    second: CityAtmosphereAtlas_24
+  - first:
+      213: 3968486737014398913
+    second: CityAtmosphereAtlas_25
+  - first:
+      213: -6768534244519009326
+    second: CityAtmosphereAtlas_26
+  - first:
+      213: 7923678052579977166
+    second: CityAtmosphereAtlas_27
+  - first:
+      213: -8158323060369874425
+    second: CityAtmosphereAtlas_28
+  - first:
+      213: -679593922300807730
+    second: CityAtmosphereAtlas_29
+  - first:
+      213: -4916923200755845799
+    second: CityAtmosphereAtlas_30
+  - first:
+      213: 6140242418634858687
+    second: CityAtmosphereAtlas_31
+  - first:
+      213: -5081616603637667701
+    second: CityAtmosphereAtlas_32
+  - first:
+      213: -9079976558114323631
+    second: CityAtmosphereAtlas_33
+  - first:
+      213: -3140550444297386932
+    second: CityAtmosphereAtlas_34
+  - first:
+      213: -2523921753504102858
+    second: CityAtmosphereAtlas_35
+  - first:
+      213: -4942267933019899383
+    second: CityAtmosphereAtlas_36
+  - first:
+      213: -8932402280566740067
+    second: CityAtmosphereAtlas_37
+  - first:
+      213: -4671168146764999806
+    second: CityAtmosphereAtlas_38
+  - first:
+      213: 979091167899650634
+    second: CityAtmosphereAtlas_39
+  - first:
+      213: -2633161213658619905
+    second: CityAtmosphereAtlas_40
+  - first:
+      213: 839700630830514767
+    second: CityAtmosphereAtlas_41
+  - first:
+      213: 9200073544948248862
+    second: CityAtmosphereAtlas_42
+  - first:
+      213: -2150591107944836232
+    second: CityAtmosphereAtlas_43
+  - first:
+      213: -1604452561693707820
+    second: CityAtmosphereAtlas_44
+  - first:
+      213: 5411741995082602148
+    second: CityAtmosphereAtlas_45
+  - first:
+      213: 2361673085476116050
+    second: CityAtmosphereAtlas_46
+  - first:
+      213: -6268953208320627885
+    second: CityAtmosphereAtlas_47
+  - first:
+      213: -6536479752635268675
+    second: CityAtmosphereAtlas_48
+  - first:
+      213: 8099579895011930458
+    second: CityAtmosphereAtlas_49
+  - first:
+      213: 1370753364846863292
+    second: CityAtmosphereAtlas_50
+  - first:
+      213: 6269084308228010736
+    second: CityAtmosphereAtlas_51
+  - first:
+      213: -8033936366060160777
+    second: CityAtmosphereAtlas_52
+  - first:
+      213: -5074999316590686542
+    second: CityAtmosphereAtlas_53
+  - first:
+      213: 7600035335293615816
+    second: CityAtmosphereAtlas_54
+  - first:
+      213: -3552545558332506712
+    second: CityAtmosphereAtlas_55
+  - first:
+      213: -192370473068177395
+    second: CityAtmosphereAtlas_56
+  - first:
+      213: 5187766480717975148
+    second: CityAtmosphereAtlas_57
+  - first:
+      213: 328224324093437641
+    second: CityAtmosphereAtlas_58
+  - first:
+      213: -8615935394723454816
+    second: CityAtmosphereAtlas_59
+  - first:
+      213: 6070262374530999721
+    second: CityAtmosphereAtlas_60
+  - first:
+      213: 2016112229522020464
+    second: CityAtmosphereAtlas_61
+  - first:
+      213: -7785381645878383889
+    second: CityAtmosphereAtlas_62
+  - first:
+      213: -7781706255890440046
+    second: CityAtmosphereAtlas_63
+  - first:
+      213: 351816908711610566
+    second: CityAtmosphereAtlas_64
+  - first:
+      213: -5903240449875332578
+    second: CityAtmosphereAtlas_65
+  - first:
+      213: 6461975812957300839
+    second: CityAtmosphereAtlas_66
+  - first:
+      213: 8192490484243985064
+    second: CityAtmosphereAtlas_67
+  - first:
+      213: 8750975115315391472
+    second: CityAtmosphereAtlas_68
+  - first:
+      213: -1273152588119816500
+    second: CityAtmosphereAtlas_69
+  - first:
+      213: 7007102438498341570
+    second: CityAtmosphereAtlas_70
+  - first:
+      213: -3372861769020675841
+    second: CityAtmosphereAtlas_71
+  - first:
+      213: 8281123698578496049
+    second: CityAtmosphereAtlas_72
+  - first:
+      213: -7486245937401508843
+    second: CityAtmosphereAtlas_73
+  - first:
+      213: 4638032899784452268
+    second: CityAtmosphereAtlas_74
+  - first:
+      213: 379406345757012593
+    second: CityAtmosphereAtlas_75
+  - first:
+      213: -904664654481771913
+    second: CityAtmosphereAtlas_76
+  - first:
+      213: -1792747592798778751
+    second: CityAtmosphereAtlas_77
+  - first:
+      213: 5566070000482896329
+    second: CityAtmosphereAtlas_78
+  - first:
+      213: 6050733769981081703
+    second: CityAtmosphereAtlas_79
+  - first:
+      213: -4236350395860685654
+    second: CityAtmosphereAtlas_80
+  - first:
+      213: -5158776695076942139
+    second: CityAtmosphereAtlas_81
+  - first:
+      213: -1069741479283835286
+    second: CityAtmosphereAtlas_82
+  - first:
+      213: -3584303210998652770
+    second: CityAtmosphereAtlas_83
+  - first:
+      213: 2159576453975939630
+    second: CityAtmosphereAtlas_84
+  - first:
+      213: -8621634347058906697
+    second: CityAtmosphereAtlas_85
+  - first:
+      213: 6237714949768555963
+    second: CityAtmosphereAtlas_86
+  - first:
+      213: 651832184140445364
+    second: CityAtmosphereAtlas_87
+  - first:
+      213: -3005121018651710624
+    second: CityAtmosphereAtlas_88
+  - first:
+      213: 7524499772749321019
+    second: CityAtmosphereAtlas_89
+  - first:
+      213: -8050407200121849992
+    second: CityAtmosphereAtlas_90
+  - first:
+      213: 6271996116893903768
+    second: CityAtmosphereAtlas_91
+  - first:
+      213: -8583442239533834841
+    second: CityAtmosphereAtlas_92
+  - first:
+      213: -3039588957030701203
+    second: CityAtmosphereAtlas_93
+  - first:
+      213: -3717135571492414007
+    second: CityAtmosphereAtlas_94
+  - first:
+      213: 7869516599803103063
+    second: CityAtmosphereAtlas_95
+  - first:
+      213: -66270842788938319
+    second: CityAtmosphereAtlas_96
+  - first:
+      213: 3540065701131367268
+    second: CityAtmosphereAtlas_97
+  - first:
+      213: 5388891549009555216
+    second: CityAtmosphereAtlas_98
+  - first:
+      213: -3307959581714589374
+    second: CityAtmosphereAtlas_99
+  - first:
+      213: 3999417599208114612
+    second: CityAtmosphereAtlas_100
+  - first:
+      213: -5470310123312051931
+    second: CityAtmosphereAtlas_101
+  - first:
+      213: -3208480114170645112
+    second: CityAtmosphereAtlas_102
+  - first:
+      213: 6733520688448349597
+    second: CityAtmosphereAtlas_103
+  - first:
+      213: -1156452470725962666
+    second: CityAtmosphereAtlas_104
+  - first:
+      213: -2424009167098993106
+    second: CityAtmosphereAtlas_105
+  - first:
+      213: 7211649023875134925
+    second: CityAtmosphereAtlas_106
+  - first:
+      213: -1496426968472205819
+    second: CityAtmosphereAtlas_107
+  - first:
+      213: -3399581992250368170
+    second: CityAtmosphereAtlas_108
+  - first:
+      213: 5700168546603463119
+    second: CityAtmosphereAtlas_109
+  - first:
+      213: -8894794520185067403
+    second: CityAtmosphereAtlas_110
+  - first:
+      213: 6461351601263358014
+    second: CityAtmosphereAtlas_111
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 419
+        width: 723
+        height: 813
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8dea0db4b3177a580800000000000000
+      internalID: -8815953246065479976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_1
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 1052
+        width: 28
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6914026b344c0f900800000000000000
+      internalID: 716288135849329046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_2
+      rect:
+        serializedVersion: 2
+        x: 754
+        y: 423
+        width: 492
+        height: 777
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4d34061d6f2ea760800000000000000
+      internalID: 7470960977421548875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_3
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 1002
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd8ed855effe3e0d0800000000000000
+      internalID: -3394605818471126817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_4
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 986
+        width: 24
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e3720224e85eeec0800000000000000
+      internalID: -3535790920592886808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_5
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 987
+        width: 15
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d61432b4c4f035cd0800000000000000
+      internalID: -2570694141945888403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_6
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1017
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ffa390242acf4a50800000000000000
+      internalID: 6507642243087839216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_7
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 1014
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca01cfb5c0ca996b0800000000000000
+      internalID: -5289007118287105876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_8
+      rect:
+        serializedVersion: 2
+        x: 727
+        y: 964
+        width: 38
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 221af76e57957bd60800000000000000
+      internalID: 7905886033785364770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_9
+      rect:
+        serializedVersion: 2
+        x: 643
+        y: 948
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b9a16fbbba41dab0800000000000000
+      internalID: -4985121142292239949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_10
+      rect:
+        serializedVersion: 2
+        x: 649
+        y: 946
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c25b0f70bb95bb50800000000000000
+      internalID: 6608359210584068800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_11
+      rect:
+        serializedVersion: 2
+        x: 649
+        y: 835
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b17d8f269e0b8df30800000000000000
+      internalID: 4600621535793305371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_12
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 814
+        width: 20
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aecd139b3ca8bbc00800000000000000
+      internalID: 917479522330336490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_13
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 819
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fc8cee4f84ea7ea0800000000000000
+      internalID: -5874131459795809036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_14
+      rect:
+        serializedVersion: 2
+        x: 699
+        y: 795
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3155160f0079228d0800000000000000
+      internalID: -2872567582020250349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_15
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 546
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a4b7a9c0eba91350800000000000000
+      internalID: 5988006161510020257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_16
+      rect:
+        serializedVersion: 2
+        x: 713
+        y: 514
+        width: 44
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9343eac2c03bfd6f0800000000000000
+      internalID: -657610155702209479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_17
+      rect:
+        serializedVersion: 2
+        x: 812
+        y: 521
+        width: 7
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 058b5182f5e06d660800000000000000
+      internalID: 7410126038741923920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_18
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 507
+        width: 13
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7088f56376bbe4fa0800000000000000
+      internalID: -5814504016920475641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_19
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 511
+        width: 9
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ca41398fb5099790800000000000000
+      internalID: -7522975382347101496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_20
+      rect:
+        serializedVersion: 2
+        x: 954
+        y: 529
+        width: 10
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36a963c872b574bf0800000000000000
+      internalID: -340203021428942237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_21
+      rect:
+        serializedVersion: 2
+        x: 1043
+        y: 487
+        width: 57
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a74e15fce49887e40800000000000000
+      internalID: 5654420303742362746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_22
+      rect:
+        serializedVersion: 2
+        x: 587
+        y: 514
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24149a47b46ee17a0800000000000000
+      internalID: -6404428408320081598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_23
+      rect:
+        serializedVersion: 2
+        x: 715
+        y: 513
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aebc7bf830b6223f0800000000000000
+      internalID: -927060910244639766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_24
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 513
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c2c6b372e28460b0800000000000000
+      internalID: -5736316116247592249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_25
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 515
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cf979f49a5e21730800000000000000
+      internalID: 3968486737014398913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_26
+      rect:
+        serializedVersion: 2
+        x: 945
+        y: 513
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d3a06147f55112a0800000000000000
+      internalID: -6768534244519009326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_27
+      rect:
+        serializedVersion: 2
+        x: 954
+        y: 512
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec7a696153f86fd60800000000000000
+      internalID: 7923678052579977166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_28
+      rect:
+        serializedVersion: 2
+        x: 1137
+        y: 519
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 702a6c7b660d7ce80800000000000000
+      internalID: -8158323060369874425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_29
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 455
+        width: 19
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec5feb5ade89196f0800000000000000
+      internalID: -679593922300807730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_30
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 489
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 955321f566493cbb0800000000000000
+      internalID: -4916923200755845799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_31
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 497
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb0248582f5863550800000000000000
+      internalID: 6140242418634858687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_32
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 485
+        width: 7
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b88237f5f987a79b0800000000000000
+      internalID: -5081616603637667701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_33
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 489
+        width: 16
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 153c8bc9d617df180800000000000000
+      internalID: -9079976558114323631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_34
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 489
+        width: 24
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c448570a2068a64d0800000000000000
+      internalID: -3140550444297386932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_35
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 492
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 636c189998a39fcd0800000000000000
+      internalID: -2523921753504102858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_36
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 473
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90a7b8b0089896bb0800000000000000
+      internalID: -4942267933019899383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_37
+      rect:
+        serializedVersion: 2
+        x: 1150
+        y: 501
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9b2ee3a37bb90480800000000000000
+      internalID: -8932402280566740067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_38
+      rect:
+        serializedVersion: 2
+        x: 1163
+        y: 481
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 283d3f5c15dac2fb0800000000000000
+      internalID: -4671168146764999806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_39
+      rect:
+        serializedVersion: 2
+        x: 1212
+        y: 495
+        width: 15
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4a8161da3e669d00800000000000000
+      internalID: 979091167899650634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_40
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 463
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fff9a87c3d1257bd0800000000000000
+      internalID: -2633161213658619905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_41
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 473
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f42035a564737ab00800000000000000
+      internalID: 839700630830514767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_42
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 457
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e11fb12252a3daf70800000000000000
+      internalID: 9200073544948248862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_43
+      rect:
+        serializedVersion: 2
+        x: 649
+        y: 441
+        width: 9
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87395d918c09722e0800000000000000
+      internalID: -2150591107944836232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_44
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 447
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d1f74955e6dbb9e0800000000000000
+      internalID: -1604452561693707820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_45
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 433
+        width: 7
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a656f00cae5a1b40800000000000000
+      internalID: 5411741995082602148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_46
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 433
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2569767982956c020800000000000000
+      internalID: 2361673085476116050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_47
+      rect:
+        serializedVersion: 2
+        x: 476
+        y: 437
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35be08875443009a0800000000000000
+      internalID: -6268953208320627885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_48
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 419
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db144a6fb42c945a0800000000000000
+      internalID: -6536479752635268675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_49
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 422
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a51f418400d776070800000000000000
+      internalID: 8099579895011930458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_50
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 33
+        width: 628
+        height: 385
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb36e5a3ce4e50310800000000000000
+      internalID: 1370753364846863292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_51
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 211
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f2f7ea96f2400750800000000000000
+      internalID: 6269084308228010736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_52
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 128
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f834e0d079b18090800000000000000
+      internalID: -8033936366060160777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_53
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 194
+        width: 21
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2be0343920bf199b0800000000000000
+      internalID: -5074999316590686542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_54
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 190
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ceb798eedfb87960800000000000000
+      internalID: 7600035335293615816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_55
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 160
+        width: 30
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8adf23b03a2d2bec0800000000000000
+      internalID: -3552545558332506712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_56
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 95
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d085f7fe210945df0800000000000000
+      internalID: -192370473068177395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_57
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 55
+        width: 31
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6e8fd4d026aef740800000000000000
+      internalID: 5187766480717975148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_58
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 101
+        width: 13
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c66b34a8461e8400800000000000000
+      internalID: 328224324093437641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_59
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 119
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a02bcd586c0e6880800000000000000
+      internalID: -8615935394723454816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_60
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 111
+        width: 13
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a5e65fc777ed3450800000000000000
+      internalID: 6070262374530999721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_61
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 122
+        width: 69
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0781bf3146baafb10800000000000000
+      internalID: 2016112229522020464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_62
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 200
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: feaa29c44a4c4f390800000000000000
+      internalID: -7785381645878383889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_63
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 119
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2902737b363d10490800000000000000
+      internalID: -7781706255890440046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_64
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 97
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c84bbd4d97e1e400800000000000000
+      internalID: 351816908711610566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_65
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 127
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e12b679661a731ea0800000000000000
+      internalID: -5903240449875332578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_66
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 134
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7686c7ec3cc8da950800000000000000
+      internalID: 6461975812957300839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_67
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 144
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a2712390b291b170800000000000000
+      internalID: 8192490484243985064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_68
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 162
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fb28a2b085b17970800000000000000
+      internalID: 8750975115315391472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_69
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 122
+        width: 24
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc6cf30777ad45ee0800000000000000
+      internalID: -1273152588119816500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_70
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 128
+        width: 51
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c29777ea8a3e3160800000000000000
+      internalID: 7007102438498341570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_71
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 101
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff8e60d57103131d0800000000000000
+      internalID: -3372861769020675841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_72
+      rect:
+        serializedVersion: 2
+        x: 378
+        y: 171
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13a17dae0267ce270800000000000000
+      internalID: 8281123698578496049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_73
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 107
+        width: 19
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51cc8f7dbf28b1890800000000000000
+      internalID: -7486245937401508843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_74
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 39
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca82a38595a9d5040800000000000000
+      internalID: 4638032899784452268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_75
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 103
+        width: 37
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1723060bf0ce34500800000000000000
+      internalID: 379406345757012593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_76
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 212
+        width: 15
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77233c43a4cf173f0800000000000000
+      internalID: -904664654481771913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_77
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 202
+        width: 33
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18aca4f0091ee17e0800000000000000
+      internalID: -1792747592798778751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_78
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 166
+        width: 28
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c9cdb5dc27ae3d40800000000000000
+      internalID: 5566070000482896329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_79
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 108
+        width: 48
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 768be2e3e4688f350800000000000000
+      internalID: 6050733769981081703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_80
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 142
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aac63a692c57535c0800000000000000
+      internalID: -4236350395860685654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_81
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 200
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ce006e9de75868b0800000000000000
+      internalID: -5158776695076942139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_82
+      rect:
+        serializedVersion: 2
+        x: 547
+        y: 96
+        width: 15
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6e39c5dac38721f0800000000000000
+      internalID: -1069741479283835286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_83
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 118
+        width: 9
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e902225583ff14ec0800000000000000
+      internalID: -3584303210998652770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_84
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 168
+        width: 43
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2a988cc75b58fd10800000000000000
+      internalID: 2159576453975939630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_85
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 175
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b93f30ad3dc95880800000000000000
+      internalID: -8621634347058906697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_86
+      rect:
+        serializedVersion: 2
+        x: 627
+        y: 0
+        width: 610
+        height: 410
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbd291fa2b0d09650800000000000000
+      internalID: 6237714949768555963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_87
+      rect:
+        serializedVersion: 2
+        x: 667
+        y: 176
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b6bbdcfae5cb0900800000000000000
+      internalID: 651832184140445364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_88
+      rect:
+        serializedVersion: 2
+        x: 673
+        y: 176
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06b6438fa5aab46d0800000000000000
+      internalID: -3005121018651710624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_89
+      rect:
+        serializedVersion: 2
+        x: 681
+        y: 176
+        width: 9
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b331b334da46c6860800000000000000
+      internalID: 7524499772749321019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_90
+      rect:
+        serializedVersion: 2
+        x: 713
+        y: 144
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8777d7bed45374090800000000000000
+      internalID: -8050407200121849992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_91
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 101
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89b2714ec3b9a0750800000000000000
+      internalID: 6271996116893903768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_92
+      rect:
+        serializedVersion: 2
+        x: 858
+        y: 126
+        width: 29
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ad908a92cc71e880800000000000000
+      internalID: -8583442239533834841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_93
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 143
+        width: 29
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d672cf0b2f531d5d0800000000000000
+      internalID: -3039588957030701203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_94
+      rect:
+        serializedVersion: 2
+        x: 902
+        y: 112
+        width: 32
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cdd93754e41a6cc0800000000000000
+      internalID: -3717135571492414007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_95
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 138
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 757cd4d27a3263d60800000000000000
+      internalID: 7869516599803103063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_96
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 160
+        width: 16
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bd7994050f841ff0800000000000000
+      internalID: -66270842788938319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_97
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 176
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 463ba75cff6d02130800000000000000
+      internalID: 3540065701131367268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_98
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 117
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01fa1dfef4039ca40800000000000000
+      internalID: 5388891549009555216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_99
+      rect:
+        serializedVersion: 2
+        x: 932
+        y: 128
+        width: 58
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2495d886944c712d0800000000000000
+      internalID: -3307959581714589374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_100
+      rect:
+        serializedVersion: 2
+        x: 981
+        y: 158
+        width: 23
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b9ce3ddd19c08730800000000000000
+      internalID: 3999417599208114612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_101
+      rect:
+        serializedVersion: 2
+        x: 987
+        y: 128
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52903c00ded8514b0800000000000000
+      internalID: -5470310123312051931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_102
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 136
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88534fdd5503973d0800000000000000
+      internalID: -3208480114170645112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_103
+      rect:
+        serializedVersion: 2
+        x: 1011
+        y: 110
+        width: 57
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9525b2f365427d50800000000000000
+      internalID: 6733520688448349597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_104
+      rect:
+        serializedVersion: 2
+        x: 1059
+        y: 99
+        width: 29
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65491c2ea9473ffe0800000000000000
+      internalID: -1156452470725962666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_105
+      rect:
+        serializedVersion: 2
+        x: 1071
+        y: 148
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2626c661803c5ed0800000000000000
+      internalID: -2424009167098993106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_106
+      rect:
+        serializedVersion: 2
+        x: 1079
+        y: 81
+        width: 15
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc5bed8049ce41460800000000000000
+      internalID: 7211649023875134925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_107
+      rect:
+        serializedVersion: 2
+        x: 1093
+        y: 109
+        width: 31
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50646efb99f9b3be0800000000000000
+      internalID: -1496426968472205819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_108
+      rect:
+        serializedVersion: 2
+        x: 1095
+        y: 91
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65f1a17903242d0d0800000000000000
+      internalID: -3399581992250368170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_109
+      rect:
+        serializedVersion: 2
+        x: 1099
+        y: 95
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc17724a7111b1f40800000000000000
+      internalID: 5700168546603463119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_110
+      rect:
+        serializedVersion: 2
+        x: 1133
+        y: 200
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5782742b2875f8480800000000000000
+      internalID: -8894794520185067403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CityAtmosphereAtlas_111
+      rect:
+        serializedVersion: 2
+        x: 1206
+        y: 165
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3034323c055ba950800000000000000
+      internalID: 6461351601263358014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      CityAtmosphereAtlas_0: -8815953246065479976
+      CityAtmosphereAtlas_1: 716288135849329046
+      CityAtmosphereAtlas_10: 6608359210584068800
+      CityAtmosphereAtlas_100: 3999417599208114612
+      CityAtmosphereAtlas_101: -5470310123312051931
+      CityAtmosphereAtlas_102: -3208480114170645112
+      CityAtmosphereAtlas_103: 6733520688448349597
+      CityAtmosphereAtlas_104: -1156452470725962666
+      CityAtmosphereAtlas_105: -2424009167098993106
+      CityAtmosphereAtlas_106: 7211649023875134925
+      CityAtmosphereAtlas_107: -1496426968472205819
+      CityAtmosphereAtlas_108: -3399581992250368170
+      CityAtmosphereAtlas_109: 5700168546603463119
+      CityAtmosphereAtlas_11: 4600621535793305371
+      CityAtmosphereAtlas_110: -8894794520185067403
+      CityAtmosphereAtlas_111: 6461351601263358014
+      CityAtmosphereAtlas_12: 917479522330336490
+      CityAtmosphereAtlas_13: -5874131459795809036
+      CityAtmosphereAtlas_14: -2872567582020250349
+      CityAtmosphereAtlas_15: 5988006161510020257
+      CityAtmosphereAtlas_16: -657610155702209479
+      CityAtmosphereAtlas_17: 7410126038741923920
+      CityAtmosphereAtlas_18: -5814504016920475641
+      CityAtmosphereAtlas_19: -7522975382347101496
+      CityAtmosphereAtlas_2: 7470960977421548875
+      CityAtmosphereAtlas_20: -340203021428942237
+      CityAtmosphereAtlas_21: 5654420303742362746
+      CityAtmosphereAtlas_22: -6404428408320081598
+      CityAtmosphereAtlas_23: -927060910244639766
+      CityAtmosphereAtlas_24: -5736316116247592249
+      CityAtmosphereAtlas_25: 3968486737014398913
+      CityAtmosphereAtlas_26: -6768534244519009326
+      CityAtmosphereAtlas_27: 7923678052579977166
+      CityAtmosphereAtlas_28: -8158323060369874425
+      CityAtmosphereAtlas_29: -679593922300807730
+      CityAtmosphereAtlas_3: -3394605818471126817
+      CityAtmosphereAtlas_30: -4916923200755845799
+      CityAtmosphereAtlas_31: 6140242418634858687
+      CityAtmosphereAtlas_32: -5081616603637667701
+      CityAtmosphereAtlas_33: -9079976558114323631
+      CityAtmosphereAtlas_34: -3140550444297386932
+      CityAtmosphereAtlas_35: -2523921753504102858
+      CityAtmosphereAtlas_36: -4942267933019899383
+      CityAtmosphereAtlas_37: -8932402280566740067
+      CityAtmosphereAtlas_38: -4671168146764999806
+      CityAtmosphereAtlas_39: 979091167899650634
+      CityAtmosphereAtlas_4: -3535790920592886808
+      CityAtmosphereAtlas_40: -2633161213658619905
+      CityAtmosphereAtlas_41: 839700630830514767
+      CityAtmosphereAtlas_42: 9200073544948248862
+      CityAtmosphereAtlas_43: -2150591107944836232
+      CityAtmosphereAtlas_44: -1604452561693707820
+      CityAtmosphereAtlas_45: 5411741995082602148
+      CityAtmosphereAtlas_46: 2361673085476116050
+      CityAtmosphereAtlas_47: -6268953208320627885
+      CityAtmosphereAtlas_48: -6536479752635268675
+      CityAtmosphereAtlas_49: 8099579895011930458
+      CityAtmosphereAtlas_5: -2570694141945888403
+      CityAtmosphereAtlas_50: 1370753364846863292
+      CityAtmosphereAtlas_51: 6269084308228010736
+      CityAtmosphereAtlas_52: -8033936366060160777
+      CityAtmosphereAtlas_53: -5074999316590686542
+      CityAtmosphereAtlas_54: 7600035335293615816
+      CityAtmosphereAtlas_55: -3552545558332506712
+      CityAtmosphereAtlas_56: -192370473068177395
+      CityAtmosphereAtlas_57: 5187766480717975148
+      CityAtmosphereAtlas_58: 328224324093437641
+      CityAtmosphereAtlas_59: -8615935394723454816
+      CityAtmosphereAtlas_6: 6507642243087839216
+      CityAtmosphereAtlas_60: 6070262374530999721
+      CityAtmosphereAtlas_61: 2016112229522020464
+      CityAtmosphereAtlas_62: -7785381645878383889
+      CityAtmosphereAtlas_63: -7781706255890440046
+      CityAtmosphereAtlas_64: 351816908711610566
+      CityAtmosphereAtlas_65: -5903240449875332578
+      CityAtmosphereAtlas_66: 6461975812957300839
+      CityAtmosphereAtlas_67: 8192490484243985064
+      CityAtmosphereAtlas_68: 8750975115315391472
+      CityAtmosphereAtlas_69: -1273152588119816500
+      CityAtmosphereAtlas_7: -5289007118287105876
+      CityAtmosphereAtlas_70: 7007102438498341570
+      CityAtmosphereAtlas_71: -3372861769020675841
+      CityAtmosphereAtlas_72: 8281123698578496049
+      CityAtmosphereAtlas_73: -7486245937401508843
+      CityAtmosphereAtlas_74: 4638032899784452268
+      CityAtmosphereAtlas_75: 379406345757012593
+      CityAtmosphereAtlas_76: -904664654481771913
+      CityAtmosphereAtlas_77: -1792747592798778751
+      CityAtmosphereAtlas_78: 5566070000482896329
+      CityAtmosphereAtlas_79: 6050733769981081703
+      CityAtmosphereAtlas_8: 7905886033785364770
+      CityAtmosphereAtlas_80: -4236350395860685654
+      CityAtmosphereAtlas_81: -5158776695076942139
+      CityAtmosphereAtlas_82: -1069741479283835286
+      CityAtmosphereAtlas_83: -3584303210998652770
+      CityAtmosphereAtlas_84: 2159576453975939630
+      CityAtmosphereAtlas_85: -8621634347058906697
+      CityAtmosphereAtlas_86: 6237714949768555963
+      CityAtmosphereAtlas_87: 651832184140445364
+      CityAtmosphereAtlas_88: -3005121018651710624
+      CityAtmosphereAtlas_89: 7524499772749321019
+      CityAtmosphereAtlas_9: -4985121142292239949
+      CityAtmosphereAtlas_90: -8050407200121849992
+      CityAtmosphereAtlas_91: 6271996116893903768
+      CityAtmosphereAtlas_92: -8583442239533834841
+      CityAtmosphereAtlas_93: -3039588957030701203
+      CityAtmosphereAtlas_94: -3717135571492414007
+      CityAtmosphereAtlas_95: 7869516599803103063
+      CityAtmosphereAtlas_96: -66270842788938319
+      CityAtmosphereAtlas_97: 3540065701131367268
+      CityAtmosphereAtlas_98: 5388891549009555216
+      CityAtmosphereAtlas_99: -3307959581714589374
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

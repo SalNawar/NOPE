@@ -21,8 +21,8 @@ public static class HallWhiteCrowdAuthoring
         {feet=new Vector2(x,y);this.composition=composition;this.balcony=balcony;}
     }
     static readonly Placement[] Placements={
-        // Sparse near / middle hall: two foreground groups and four individual activities.
-        new(520,590,28),new(1400,566,17),new(815,448,15),
+        // Foreground remains open; extra left-lane groups occupy floor clear of stair treads.
+        new(520,590,28),new(650,570,49),new(745,510,47),new(795,550,50),new(1400,566,17),new(815,448,15),
         new(822,396,35),new(1308,445,27),new(1350,480,19),
         // Station population behind the two rear bays, in three staggered depth rows.
         new(910,349,16),new(900,346,18),new(950,345,31),new(1000,347,39),
@@ -94,6 +94,7 @@ public static class HallWhiteCrowdAuthoring
     {
         if(EditorApplication.isPlaying)throw new InvalidOperationException("Install outside Play mode.");
         var art=UnityEngine.Object.FindFirstObjectByType<AnimeHallPresentation>();var drawing=art.layers.First(l=>l.id.StartsWith("62 ")).renderer;
+        float previousOpacity=UnityEngine.Object.FindFirstObjectByType<HallWhiteCrowds>()?.crowdOpacity ?? .65f;
         var previous=drawing.transform.Find("White silhouette crowds");if(previous!=null)Undo.DestroyObjectImmediate(previous.gameObject);
         var variations=VariationMeshes();var originals=Enumerable.Range(1,6).Select(i=>AssetDatabase.LoadAssetAtPath<Mesh>("Assets/Art/Office/HallCrowds/Meshes/CrowdGroup_"+i.ToString("00")+".asset")).ToArray();
         if(originals.Any(m=>m==null))throw new InvalidOperationException("Approved original crowd mesh missing.");
@@ -103,7 +104,21 @@ public static class HallWhiteCrowdAuthoring
         var stationLife=VariationMeshes("WhiteCrowdStationLife","Station",4,16);
         var activityMaterial=Material("White silhouette activities","NOPE/Hall White Crowd Fade",AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/WhiteCrowdActivities.png"));
         var stationMaterial=Material("White silhouette station life","NOPE/Hall White Crowd Fade",AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/WhiteCrowdStationLife.png"));
-        var meshes=originals.Concat(variations).Concat(activities).Concat(stationLife).ToArray();
+        var alternatives=VariationMeshes("StationAlternatives","Alternative",4,16);
+        var alternativesMaterial=Material("Station alternatives","NOPE/Hall White Crowd Fade",AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/StationAlternatives.png"));
+        var meshes=originals.Concat(variations).Concat(activities).Concat(stationLife).Concat(alternatives).ToArray();
+        // Normalize every composition around its feet, preserving authored proportions.
+        // Swapping geometry never changes the location or scale of its scene object.
+        for(int i=0;i<meshes.Length;i++)
+        {
+            var source=meshes[i];string path=Folder+"/StationNormalized_"+i.ToString("00")+".asset";
+            var normalized=AssetDatabase.LoadAssetAtPath<Mesh>(path);
+            if(normalized==null){normalized=new Mesh();AssetDatabase.CreateAsset(normalized,path);}
+            normalized.Clear();var b=source.bounds;
+            normalized.vertices=source.vertices.Select(v=>(v-new Vector3(b.center.x,b.min.y,0))/b.size.y).ToArray();
+            normalized.uv=source.uv;normalized.triangles=source.triangles;normalized.RecalculateBounds();EditorUtility.SetDirty(normalized);meshes[i]=normalized;
+        }
+        Material CompositionMaterial(int c)=>c<6?originalMaterial:c<15?variantMaterial:c<31?activityMaterial:c<47?stationMaterial:alternativesMaterial;
         var contactMaterial=Material("Faint ground contacts","NOPE/Hall White Crowd Contact");var contactMesh=Quad("ContactQuad",1,new Rect(0,0,1,1));
         var root=new GameObject("White silhouette crowds");root.layer=drawing.gameObject.layer;root.transform.SetParent(drawing.transform,false);
         var groups=new HallWhiteCrowds.Group[Placements.Length];float[] cycles={71,83,67,97,79,89,73,101,61,87,109,77,103,81,93};float[] phases={8,35,17,53,29,71,45,9,61,39,19,55,84,47,23};
@@ -114,7 +129,7 @@ public static class HallWhiteCrowdAuthoring
             var child=new GameObject((composition<6?"Original group ":"New composition ")+n.ToString("00"));child.layer=root.layer;child.transform.SetParent(root.transform,false);
             float scale=height/ppu/mesh.bounds.size.y;child.transform.localScale=new Vector3(n%2==0?scale:-scale,scale,scale);
             child.transform.localPosition=anchor-Vector3.Scale(new Vector3(mesh.bounds.center.x,mesh.bounds.min.y,0),child.transform.localScale);
-            child.AddComponent<MeshFilter>().sharedMesh=mesh;var renderer=child.AddComponent<MeshRenderer>();renderer.sharedMaterial=composition<6?originalMaterial:composition<15?variantMaterial:composition<31?activityMaterial:stationMaterial;renderer.sortingLayerID=drawing.sortingLayerID;renderer.sortingOrder=drawing.sortingOrder+4;renderer.shadowCastingMode=ShadowCastingMode.Off;renderer.receiveShadows=false;
+            var filter=child.AddComponent<MeshFilter>();filter.sharedMesh=mesh;var renderer=child.AddComponent<MeshRenderer>();renderer.sharedMaterial=CompositionMaterial(composition);renderer.sortingLayerID=drawing.sortingLayerID;renderer.sortingOrder=drawing.sortingOrder+4;renderer.shadowCastingMode=ShadowCastingMode.Off;renderer.receiveShadows=false;
             MeshRenderer contact=null;
             if(!balcony)
             {
@@ -122,11 +137,13 @@ public static class HallWhiteCrowdAuthoring
                 foot.transform.localScale=new Vector3(mesh.bounds.size.x*scale*.88f,thickness,1);foot.transform.localPosition=anchor+new Vector3(0,-thickness/2,.002f);
                 foot.AddComponent<MeshFilter>().sharedMesh=contactMesh;contact=foot.AddComponent<MeshRenderer>();contact.sharedMaterial=contactMaterial;contact.sortingLayerID=renderer.sortingLayerID;contact.sortingOrder=renderer.sortingOrder-1;contact.shadowCastingMode=ShadowCastingMode.Off;contact.receiveShadows=false;
             }
-            groups[n]=new HallWhiteCrowds.Group{silhouette=renderer,contact=contact,balcony=balcony,sourceFootY=placement.feet.y,cycle=!balcony&&height<105?84:cycles[n%cycles.Length]+n/15*7,phase=!balcony&&height<105?n*19%84:phases[n%phases.Length]+n/15*13,hold=!balcony&&height<105?56:balcony?48+n%3*4:36+n%4*4,opacity=height<35?.32f:balcony?.38f:composition<6?.42f:.46f};
+            int second=47+n%16;if(second==composition)second=47+(n+1)%16;
+            int third=15+(n*7)%32;if(third==composition)third=15+(n*7+1)%32;
+            groups[n]=new HallWhiteCrowds.Group{meshFilter=filter,alternatives=new[]{mesh,meshes[second],meshes[third]},alternativeMaterials=new[]{CompositionMaterial(composition),CompositionMaterial(second),CompositionMaterial(third)},silhouette=renderer,contact=contact,balcony=balcony,sourceFootY=placement.feet.y,cycle=!balcony&&height<105?84:cycles[n%cycles.Length]+n/15*7,phase=!balcony&&height<105?n*19%84:phases[n%phases.Length]+n/15*13,hold=!balcony&&height<105?56:balcony?48+n%3*4:36+n%4*4,opacity=height<35?.32f:balcony?.38f:composition<6?.42f:.46f};
         }
-        var crowds=root.AddComponent<HallWhiteCrowds>();crowds.Configure(UnityEngine.Object.FindFirstObjectByType<HallLightingRig>(),drawing,groups);
+        var crowds=root.AddComponent<HallWhiteCrowds>();crowds.crowdOpacity=previousOpacity;crowds.Configure(UnityEngine.Object.FindFirstObjectByType<HallLightingRig>(),drawing,groups);
         Undo.RegisterCreatedObjectUndo(root,"Add approved white crowd variations");EditorUtility.SetDirty(crowds);AssetDatabase.SaveAssets();EditorSceneManager.MarkSceneDirty(art.gameObject.scene);EditorSceneManager.SaveScene(art.gameObject.scene);
-        Debug.Log($"Installed {groups.Length} stationary crowd placements using 32 new station-life compositions.");
+        Debug.Log($"Installed {groups.Length} stationary crowd placements with three alternating compositions at every location.");
     }
     static void Capture(string name)
     {

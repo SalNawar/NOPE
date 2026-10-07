@@ -18,8 +18,8 @@ public sealed class HallLightingPreviewWindow : EditorWindow
     {
         var window=GetWindow<HallLightingPreviewWindow>();
         window.titleContent=new GUIContent("Hall lighting");
-        window.minSize=new Vector2(520,210);
-        window.maxSize=new Vector2(900,250);
+        window.minSize=new Vector2(520,250);
+        window.maxSize=new Vector2(900,320);
         window.FindRig();
         if(window.settings!=null && !window.ownsPreview)window.hour=window.rig.Hour;
         window.ShowUtility();
@@ -126,6 +126,18 @@ public sealed class HallLightingPreviewWindow : EditorWindow
             EditorGUI.BeginChangeCheck();
             float opacity=EditorGUILayout.Slider("Crowd opacity (%)",crowds.crowdOpacity*100,0,100);
             if(EditorGUI.EndChangeCheck())SetCrowdOpacity(opacity/100);
+        }
+        var city=UnityEngine.Object.FindFirstObjectByType<HallCityExterior>();
+        if(city!=null)
+        {
+            EditorGUI.BeginChangeCheck();
+            float rain=EditorGUILayout.Slider("City rain (%)",city.rain*100,0,100);
+            if(EditorGUI.EndChangeCheck())
+            {
+                if(!Application.isPlaying)Undo.RecordObject(city,"City weather");
+                city.rain=rain/100;city.Apply(Application.isPlaying?Time.time:0);
+                if(!Application.isPlaying)UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(city.gameObject.scene);
+            }
         }
         var weights=HallBakedCycle.Weights(ownsPreview?hour:rig.Hour);
         EditorGUILayout.LabelField($"Morning {weights.x:P0}     Noon {weights.y:P0}     Evening {weights.z:P0}     Night {weights.w:P0}",EditorStyles.centeredGreyMiniLabel);

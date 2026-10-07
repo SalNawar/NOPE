@@ -9,6 +9,10 @@ public sealed class HallWhiteCrowds : MonoBehaviour
     {
         public MeshRenderer silhouette;
         public MeshRenderer contact;
+        public MeshFilter meshFilter;
+        public Mesh[] alternatives=Array.Empty<Mesh>();
+        public Material[] alternativeMaterials=Array.Empty<Material>();
+        [NonSerialized] public int activeAlternative=-1;
         public bool balcony;
         public float sourceFootY;
         public float cycle=80, phase, hold=38;
@@ -38,6 +42,12 @@ public sealed class HallWhiteCrowds : MonoBehaviour
         if(t<duration*2+group.hold)return 1-Mathf.SmoothStep(0,1,(t-duration-group.hold)/duration);
         return 0;
     }
+    public static int AlternativeAt(Group group,float seconds)
+    {
+        if(group.alternatives==null || group.alternatives.Length==0 || MotionPreference.Reduced)return 0;
+        int cycle=Mathf.FloorToInt((seconds+group.phase)/Mathf.Max(1,group.cycle));
+        return (cycle%group.alternatives.Length+group.alternatives.Length)%group.alternatives.Length;
+    }
     void LateUpdate()=>Apply(Application.isPlaying?Time.timeSinceLevelLoad:0);
     public void Apply(float seconds)
     {
@@ -46,6 +56,13 @@ public sealed class HallWhiteCrowds : MonoBehaviour
         foreach(var group in groups)
         {
             if(group.silhouette==null)continue;
+            int alternative=AlternativeAt(group,seconds);
+            if(group.meshFilter!=null && group.alternatives.Length>0 && group.activeAlternative!=alternative)
+            {
+                group.meshFilter.sharedMesh=group.alternatives[alternative];
+                group.silhouette.sharedMaterial=group.alternativeMaterials[alternative];
+                group.activeAlternative=alternative;
+            }
             float fade=MotionPreference.Reduced?1:Fade(group,seconds);
             // Preserve authored group variation at 40%; slider endpoints are fully
             // hidden and fully opaque (independent arrival/departure fades remain).
