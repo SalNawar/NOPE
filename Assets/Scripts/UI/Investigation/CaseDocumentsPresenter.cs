@@ -249,7 +249,7 @@ public sealed class CaseDocumentsPresenter
         if (mark.HasValue && !_marks.Contains(mark.Value))
             _marks.Add(mark.Value);
         if (mark.HasValue)
-            UiCue.Play(UiCue.ScanFlag);
+            Sounds.Play(SoundCues.ScannerFlag);
         foreach (DocumentsView view in _views)
             if (view != null)
             {

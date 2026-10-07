@@ -69,7 +69,7 @@ public sealed class CaseBoardModel
 /// decides: the board only points (the orchestrator's Decision: scanning
 /// stays optional, everything here can be found by hand). The board slides
 /// in, its cells pop as they fill, each glow ticks and a logged finding
-/// thunks (UiMotion, UiCue: Track J's springs and sound bank take them over).
+/// thunks (BoardMotion on Track J's motion core; Sounds: inspect_link, evidence_pin).
 /// Each pane has one; the façade fills them all (CaseBoardPresenter).
 /// </summary>
 public sealed class CaseBoardView : AppView
@@ -173,7 +173,7 @@ public sealed class CaseBoardView : AppView
         _scansShown = _model.Scanned.Count;
         Draw(newScan && isActiveAndEnabled);
         if (newScan && isActiveAndEnabled && content != null)
-            StartCoroutine(UiMotion.SlideIn(content, new Vector2(slideDistance, 0f), slideSeconds));
+            StartCoroutine(BoardMotion.SlideIn(content, new Vector2(slideDistance, 0f), slideSeconds));
     }
 
     /// <summary>The case ended: the board forgets its scans and its overlay.</summary>
@@ -340,7 +340,7 @@ public sealed class CaseBoardView : AppView
         if (row.Kind == RuleCheckKind.Paper)
         {
             FlagRequested?.Invoke(row.RequestId);
-            UiCue.Play(UiCue.Tick);
+            Sounds.Play(SoundCues.InspectLink);
             return;
         }
         if (!row.Loggable || board == null || compare == null || row.Rule >= _model.RuleAssets.Count)
@@ -354,7 +354,7 @@ public sealed class CaseBoardView : AppView
         board.PickRule(row.Rule, rule);
         compare.Select(EvidencePicks.ForField(row.Document, new DocumentRow(row.Field, paper.Fields[row.Field]), paper.Name), null);
         if (board.Log.Count > logged)
-            UiCue.Play(UiCue.Pin);
+            Sounds.Play(SoundCues.EvidencePin);
     }
 
     /// <summary>
@@ -384,7 +384,7 @@ public sealed class CaseBoardView : AppView
                 {
                     agree.GetComponent<Button>().interactable = false;
                     if (pop)
-                        StartCoroutine(UiMotion.Pop(agree.transform, 0.03f * popped++, slideSeconds));
+                        StartCoroutine(BoardMotion.Pop(agree.transform, 0.03f * popped++, slideSeconds));
                 }
                 continue;
             }
@@ -402,9 +402,9 @@ public sealed class CaseBoardView : AppView
                 int rr = r, cc = c;
                 button.onClick.AddListener(() => CellClicked(rr, cc));
                 if (pop && cell.Value.HasValue)
-                    StartCoroutine(UiMotion.Pop(go.transform, 0.03f * popped++, slideSeconds));
+                    StartCoroutine(BoardMotion.Pop(go.transform, 0.03f * popped++, slideSeconds));
                 if (pop && cell.Glows)
-                    UiCue.Play(UiCue.Tick);
+                    Sounds.Play(SoundCues.InspectLink);
             }
         }
     }
@@ -467,7 +467,7 @@ public sealed class CaseBoardView : AppView
             _faded.Add((textA, textB));
             Transform shimmer = cell.transform.Find("Shimmer");
             if (row.Differs && shimmer != null && shimmer.TryGetComponent(out Graphic glint))
-                StartCoroutine(UiMotion.Shimmer(glint));
+                StartCoroutine(BoardMotion.Shimmer(glint));
         }
         Fade(_fade);
     }
@@ -505,7 +505,7 @@ public sealed class CaseBoardView : AppView
         }
         else
             Overlay(_overlayA, source);
-        UiCue.Play(UiCue.Tick);
+        Sounds.Play(SoundCues.InspectLink);
     }
 
     /// <summary>A row's detail: the first source's word for it ("Date of Birth").</summary>
@@ -536,7 +536,7 @@ public sealed class CaseBoardView : AppView
         compare.Select(a.Value, null);
         compare.Select(b.Value, null);
         if (board != null && board.Log.Count > logged)
-            UiCue.Play(UiCue.Pin);
+            Sounds.Play(SoundCues.EvidencePin);
     }
 
     /// <summary>The compare pick of a cell's value: a scanned paper's field, or the record's row.</summary>
@@ -603,11 +603,12 @@ public sealed class CaseBoardView : AppView
 }
 
 /// <summary>
-/// The small motions the scanner app plays (the scanner app spec's "Feel":
-/// the board slides in, cells pop), behind two calls so Track J's spring
-/// core can take them over: unscaled time, eased.
+/// The case board's motions (the scanner app spec's "Feel": the board slides
+/// in, its cells pop, a real difference shimmers) on Track J's motion core:
+/// unscaled time, each shape UiMotion.Ease's spring curve (calmer as the
+/// player's Motion intensity falls, critically damped under Reduced Motion).
 /// </summary>
-public static class UiMotion
+public static class BoardMotion
 {
     /// <summary>Slides <paramref name="target"/> in from <paramref name="offset"/> to where it is, over <paramref name="seconds"/>.</summary>
     public static IEnumerator SlideIn(RectTransform target, Vector2 offset, float seconds)
@@ -617,7 +618,7 @@ public static class UiMotion
         Vector2 home = target.anchoredPosition;
         for (float t = 0f; t < seconds && target != null; t += Time.unscaledDeltaTime)
         {
-            target.anchoredPosition = home + offset * (1f - Ease(t / seconds));
+            target.anchoredPosition = home + offset * (1f - UiMotion.Ease(t / seconds, MotionFeel.Heavy, seconds));
             yield return null;
         }
         if (target != null)
@@ -646,20 +647,13 @@ public static class UiMotion
             yield return null;
         for (float t = 0f; t < seconds && target != null; t += Time.unscaledDeltaTime)
         {
-            target.localScale = Vector3.one * Mathf.LerpUnclamped(0.8f, 1f, Ease(t / seconds));
+            target.localScale = Vector3.one * Mathf.LerpUnclamped(0.8f, 1f, UiMotion.Ease(t / seconds, MotionFeel.Elastic, seconds));
             yield return null;
         }
         if (target != null)
             target.localScale = Vector3.one;
     }
 
-    /// <summary>A smooth ease-out with a touch of overshoot (a cel "pop").</summary>
-    private static float Ease(float x)
-    {
-        x = Mathf.Clamp01(x);
-        const float c = 1.70158f;
-        return 1f + (c + 1f) * Mathf.Pow(x - 1f, 3f) + c * Mathf.Pow(x - 1f, 2f);
-    }
 }
 
 /// <summary>
@@ -698,36 +692,4 @@ public sealed class OverlayChip : MonoBehaviour, IBeginDragHandler, IDragHandler
         if (dragged != null && dragged != this && _board != null)
             _board.Overlay(dragged._source, _source);
     }
-}
-
-/// <summary>
-/// The scanner app's sound cues by name (ArtDeliverables/TimeDesk/Audio/SOUND_LIST.md's
-/// file names): raised for whoever plays them (Track J's sound bank listens
-/// to <see cref="Played"/>); nothing plays while nothing listens.
-/// </summary>
-public static class UiCue
-{
-    /// <summary>A soft tick: a cell glows, a paper is flagged (SOUND_LIST #24, inspect_link).</summary>
-    public const string Tick = "inspect_link";
-
-    /// <summary>A finding pinned to the board (new in the list: evidence_pin, a pin-to-corkboard thunk).</summary>
-    public const string Pin = "evidence_pin";
-
-    /// <summary>A scan starts (SOUND_LIST #19).</summary>
-    public const string ScanStart = "scanner_start";
-
-    /// <summary>The sweep (SOUND_LIST #20).</summary>
-    public const string ScanSweep = "scanner_sweep";
-
-    /// <summary>A scan finished: the done beep (SOUND_LIST #21).</summary>
-    public const string ScanDone = "scanner_done";
-
-    /// <summary>The Analysis Scanner flagged a fault (SOUND_LIST #22).</summary>
-    public const string ScanFlag = "scanner_flag";
-
-    /// <summary>Raised with a cue's name each time one plays.</summary>
-    public static event Action<string> Played;
-
-    /// <summary>Plays the cue <paramref name="id"/>.</summary>
-    public static void Play(string id) => Played?.Invoke(id);
 }

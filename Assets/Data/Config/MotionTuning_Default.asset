@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9f5d6220f7148e29f3148a6f01a763a, type: 3}
+  m_Name: MotionTuning_Default
+  m_EditorClassIdentifier: Assembly-CSharp::MotionTuningSO
+  knobs:
+    firm:
+      stiffness: 700
+      damping: 42.332024
+      mass: 1
+    balanced:
+      stiffness: 480
+      damping: 24.099794
+      mass: 1
+    elastic:
+      stiffness: 420
+      damping: 12.296342
+      mass: 1
+    paper:
+      stiffness: 160
+      damping: 15.684897
+      mass: 1
+    heavy:
+      stiffness: 380
+      damping: 41.918015
+      mass: 1.6
+    hoverScale: 1.03
+    pressScaleX: 1.06
+    pressScaleY: 0.92
+    popAmount: 0.08
+    refuseShake: 7
+    pressFeel: 0
+    releaseFeel: 2
+    hoverFeel: 1
+    popFeel: 1
+    refuseFeel: 2
+    appearFromScale: 0.6
+    slideDistance: 80
+    staggerSeconds: 0.035
+    appearFeel: 1
+    slideFeel: 2
+    pillFeel: 1
+    stretchPerSpeed: 0.00035
+    maxStretch: 0.3
+    reducedFadeSeconds: 0.12
+    paperTiltMax: 7
+    paperTiltPerSpeed: 14
+    paperDropSquash: 0.06
+    stampLift: 0.025
+    stampRiseSeconds: 0.07
+    stampSlamSeconds: 0.05
+    stampSquash: 0.16
+    inkBloomSeconds: 0.08
+    paperFeel: 3
+    stampFeel: 1
+    deskMoveFeel: 1
+    cameraFeel: 4
+    hitStopScale: 0.05
+    hitStopSeconds: 0.075
+    breathingAmplitude: 0.35
+    breathingFrequency: 0.25
+    readingPushIn: 2.5
+    shakeStamp: 0.04
+    shakeCitation: 0.1
+    shakeBreach: 0.28
+    shakeStampSeconds: 0.18
+    shakeCitationSeconds: 0.3
+    shakeBreachSeconds: 0.9
+    settleValue: 0.0005
+    settleSpeed: 0.005
+  breathingNoise: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}

@@ -215,7 +215,6 @@ public sealed class DeskController : MonoBehaviour
         DeskDocument paper = _papers[done];
         Slide(paper, ClearOfBlockers(paper, paper.Drag.PickUpPosition));
         scanner.Pulse();
-        UiCue.Play(UiCue.ScanDone);
         _scansToday++;
         RefreshHint();
         ScanFinished?.Invoke(done, pass);
@@ -277,6 +276,7 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>Starts a case's papers, each printing its form (<paramref name="forms"/>, by paper; a photo document shows <paramref name="look"/>); the documents handed over on arrival slide onto the counter; the first of them is the passport (the stamps' verdict is its).</summary>
     public void BeginCase(IReadOnlyList<CaseDocument> docs, IReadOnlyList<DocumentForm> forms, TravellerLook look, CharacterArt art)
     {
+        Sounds.Play(SoundCues.CallNext);
         _documents = docs ?? Array.Empty<CaseDocument>();
         _forms = forms ?? Array.Empty<DocumentForm>();
         _look = look;
@@ -655,12 +655,11 @@ public sealed class DeskController : MonoBehaviour
             rulebook.SetLift(_rulebookDragged ? top + config.dragLift : (_stack.IndexOf(RulebookId) + 1) * config.paperStackStep);
     }
 
-    /// <summary>A paper slides onto the bed and its scan starts: the relay click and the sweep's whirr (UiCue), the glowing bar crossing the glass as the scan runs (DeskScanner.Sweep).</summary>
+    /// <summary>A paper slides onto the bed and its scan starts: the relay click (scanner_start), the glowing bar crossing the glass as the scan runs (DeskScanner.Sweep); the done beep is DeskScanner.Pulse's.</summary>
     private void StartScan(DeskDocument paper)
     {
         Slide(paper, scanner.BedPoint);
-        UiCue.Play(UiCue.ScanStart);
-        UiCue.Play(UiCue.ScanSweep);
+        Sounds.Play(SoundCues.ScannerStart);
     }
 
     /// <summary>True when <paramref name="point"/> lies on the scanner's bed and the scanner is on the desk today (ScannerDay.Hidden: not before it is introduced).</summary>

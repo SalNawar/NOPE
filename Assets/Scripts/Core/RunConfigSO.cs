@@ -23,6 +23,12 @@ public sealed class RunConfigSO : ScriptableObject
     /// <summary>Game cursor + hover outline look, used in every scene (see InteractionFeedbackBootstrap).</summary>
     public InteractionFeedbackSO interactionFeedback;
 
+    /// <summary>The game feel's springs and amplitudes, used in every scene (UiMotion; the builders create and assign MotionTuning_Default).</summary>
+    public MotionTuningSO motionTuning;
+
+    /// <summary>The game's sound bank, used in every scene (Sounds; Tools > Audio > Import Sound List creates, fills and assigns SoundBank_Default; a cue without a clip is silent).</summary>
+    public SoundBankSO soundBank;
+
     [Header("Starting values")]
     /// <summary>Money the player starts a new run with.</summary>
     public int startingMoney = 50;

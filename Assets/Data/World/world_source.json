@@ -24346,6 +24346,18 @@
         "tier": "Full"
       },
       {
+        "key": "settings.motionIntensity",
+        "text": "Intensity",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.motionIntensityValue",
+        "text": "{0} %",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "settings.desktop",
         "text": "Desktop icons open with",
         "gloss": "None",

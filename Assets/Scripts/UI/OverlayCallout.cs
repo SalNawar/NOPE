@@ -34,6 +34,21 @@ public sealed class OverlayCallout : MonoBehaviour
 
     /// <summary>The callout's text, for a caller that animates it (the wheel's translation flip).</summary>
     public TMP_Text Label => label;
+
+    /// <summary>The shown box (the speech bubble's owner places it and turns its tail).</summary>
+    public RectTransform Panel => panel;
+
+    /// <summary>The band at the overlay's top the box never covers (canvas reference px).</summary>
+    public float TopInset => topInset;
+
+    /// <summary>The overlay canvas's rect (resolved at Awake).</summary>
+    public RectTransform CanvasRect => _canvasRect;
+
+    /// <summary>The office camera the box is placed through.</summary>
+    public Camera Camera => _camera;
+
+    /// <summary>True while the box's owner places it every frame (the speech bubble: TravellerWheel, BubbleLayout) instead of the projection plus the offset; it still hides when its time is up or its object goes.</summary>
+    public bool PlacedByOwner { get; set; }
     private Transform _follow;
     private Vector2 _offset;
     private float _remaining;
@@ -69,10 +84,13 @@ public sealed class OverlayCallout : MonoBehaviour
         _follow = follow;
         _offset = offset;
         _remaining = seconds;
+        bool popping = !panel.gameObject.activeSelf;
         panel.gameObject.SetActive(true);
+        if (popping)
+            UiAppear.Of(panel.gameObject, AppearStyle.Pop).Open(); // the tooltip pops in with a slight overshoot (the game feel)
         if (grows)
             UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(panel);
-        if (!OverlayProjection.TryPlace(panel, _canvasRect, _camera, follow.position, offset, keepOnScreen, topInset))
+        if (!PlacedByOwner && !OverlayProjection.TryPlace(panel, _canvasRect, _camera, follow.position, offset, keepOnScreen, topInset))
             Hide();
     }
 
@@ -91,7 +109,7 @@ public sealed class OverlayCallout : MonoBehaviour
             return;
 
         _remaining -= Time.deltaTime;
-        if (_remaining <= 0f || _follow == null || !OverlayProjection.TryPlace(panel, _canvasRect, _camera, _follow.position, _offset, keepOnScreen, topInset))
+        if (_remaining <= 0f || _follow == null || (!PlacedByOwner && !OverlayProjection.TryPlace(panel, _canvasRect, _camera, _follow.position, _offset, keepOnScreen, topInset)))
             Hide();
     }
 }

@@ -104,7 +104,7 @@ public sealed class ScanLayerSwitch : MonoBehaviour
         if (_document < 0)
             return;
         Apply(layer, layer != Layer && isActiveAndEnabled);
-        UiCue.Play(UiCue.Tick);
+        Sounds.Play(SoundCues.UiTab);
     }
 
     private void Apply(ScanLayer layer, bool animate)

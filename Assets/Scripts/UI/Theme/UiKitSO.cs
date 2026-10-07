@@ -162,7 +162,9 @@ public sealed class UiKitSO : ScriptableObject
     /// Shows <paramref name="piece"/> on <paramref name="face"/>: a stateful
     /// piece at rest with its other states on <paramref name="control"/>'s
     /// sprite swap (when given), else the sprite of that name. Null-safe; a
-    /// piece the kit lacks leaves the face as it is.
+    /// piece the kit lacks leaves the face as it is. The control gets its game
+    /// feel (UiJuice.On): every kit control, whether a builder skins it
+    /// (SceneUiKit.Skin) or a view builds it at run time, comes through here.
     /// </summary>
     public void Show(Image face, string piece, Selectable control = null)
     {
@@ -182,6 +184,7 @@ public sealed class UiKitSO : ScriptableObject
             pressedSprite = Get(piece, KitState.Pressed) ?? hover,
             disabledSprite = Get(piece, KitState.Locked)
         };
+        UiJuice.On(control);
     }
 
     /// <summary>Drops the cached lookup (the builders refresh the sprite list from the manifest).</summary>

@@ -719,6 +719,7 @@ GameObject:
   - component: {fileID: 130961047}
   - component: {fileID: 130961046}
   - component: {fileID: 130961045}
+  - component: {fileID: 130961049}
   m_Layer: 0
   m_Name: ContinueButton
   m_TagString: Untagged
@@ -829,6 +830,18 @@ RectTransform:
   m_AnchoredPosition: {x: -36, y: 30}
   m_SizeDelta: {x: 556, y: 66}
   m_Pivot: {x: 1, y: 0}
+--- !u!114 &130961049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 130961044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &157379712
 GameObject:
   m_ObjectHideFlags: 0
@@ -841,6 +854,7 @@ GameObject:
   - component: {fileID: 157379715}
   - component: {fileID: 157379714}
   - component: {fileID: 157379713}
+  - component: {fileID: 157379717}
   m_Layer: 0
   m_Name: ContinueButton
   m_TagString: Untagged
@@ -951,6 +965,18 @@ RectTransform:
   m_AnchoredPosition: {x: 260, y: 30}
   m_SizeDelta: {x: 480, y: 66}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &157379717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157379712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &165304355
 GameObject:
   m_ObjectHideFlags: 0
@@ -1564,6 +1590,7 @@ GameObject:
   - component: {fileID: 248097163}
   - component: {fileID: 248097162}
   - component: {fileID: 248097161}
+  - component: {fileID: 248097165}
   m_Layer: 0
   m_Name: ContinueButton
   m_TagString: Untagged
@@ -1674,6 +1701,18 @@ RectTransform:
   m_AnchoredPosition: {x: 28, y: 28}
   m_SizeDelta: {x: 344, y: 66}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &248097165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248097160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &274254733
 GameObject:
   m_ObjectHideFlags: 0
@@ -4809,6 +4848,7 @@ GameObject:
   - component: {fileID: 1136958500}
   - component: {fileID: 1136958499}
   - component: {fileID: 1136958498}
+  - component: {fileID: 1136958502}
   m_Layer: 0
   m_Name: SleepButton
   m_TagString: Untagged
@@ -4919,6 +4959,18 @@ RectTransform:
   m_AnchoredPosition: {x: -36, y: 30}
   m_SizeDelta: {x: 300, y: 66}
   m_Pivot: {x: 1, y: 0}
+--- !u!114 &1136958502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136958497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &1208962432
 GameObject:
   m_ObjectHideFlags: 0
@@ -6524,6 +6576,7 @@ GameObject:
   - component: {fileID: 1606654765}
   - component: {fileID: 1606654764}
   - component: {fileID: 1606654766}
+  - component: {fileID: 1606654767}
   m_Layer: 0
   m_Name: BuyButton
   m_TagString: Untagged
@@ -6634,6 +6687,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1606654767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606654762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &1628510450
 GameObject:
   m_ObjectHideFlags: 0
@@ -6646,6 +6711,7 @@ GameObject:
   - component: {fileID: 1628510453}
   - component: {fileID: 1628510452}
   - component: {fileID: 1628510451}
+  - component: {fileID: 1628510455}
   m_Layer: 0
   m_Name: ContinueButton
   m_TagString: Untagged
@@ -6756,6 +6822,18 @@ RectTransform:
   m_AnchoredPosition: {x: -36, y: 28}
   m_SizeDelta: {x: 280, y: 60}
   m_Pivot: {x: 1, y: 0}
+--- !u!114 &1628510455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628510450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &1632779582
 GameObject:
   m_ObjectHideFlags: 0
@@ -8462,6 +8540,7 @@ GameObject:
   - component: {fileID: 2008969136}
   - component: {fileID: 2008969135}
   - component: {fileID: 2008969137}
+  - component: {fileID: 2008969138}
   m_Layer: 0
   m_Name: PatButton
   m_TagString: Untagged
@@ -8572,6 +8651,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2008969138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2008969133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &2034621119
 GameObject:
   m_ObjectHideFlags: 0
