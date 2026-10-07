@@ -163,7 +163,7 @@ Saleh designed the eight traveller documents in Canva (exported at 2000-2400 px,
 | Return Order TC-630 (0.77) | the order | `Forms/paper_tc630.png`, `blank_tc630.png` | done (CURRENT ERA relabelled Return To, RETURN GATE relabelled Incident; ORDER No. prints the serial) |
 | Photo laminate | over the photo on these papers | `Forms/photo_holo.png` | code-generated, done |
 
-**ID photos (2150 dress).** A paper's photo shows the holder in 2150 clothes (`Looks.PhotoLook`): the passport nation's Future outfit (`outfit_{m,f}_{nation}_future`, all 16 drawn) and the present's hair (`hair_{m,f}_neutral_future_*`, drawn). Missing for the GPT request: the neutral present's own outfit `outfit_{m,f}_neutral_future` (used only without a passport nation: a stand-in shows), and dedicated ID-photo busts of the premades (their whole pictures are cropped to the head and neck, so their costume's collar still shows).
+**ID photos (2150 dress).** A paper's photo shows the holder in 2150 civilian dress (`Looks.PhotoLook`). Requested from GPT (the character remake), no files yet: `Characters/outfit_{m|f}_civil_2150_v1` (tidy: tourists), `_v2` (labourer), `_v3` (worn: the displaced); `Characters/hair_{m|f}_civil_2150_{colour}` (each hair colour); `Characters/premade_{id}_photo` (a premade's ID photo on the character canvas). Until they land `CharacterArtFallback` draws today's plainest 2150 outfit and the neutral 2150 hair, and a premade's neutral picture cropped to the head and neck; the delivered files take over with no code change.
 
 The proofs of means (TC-415 to 417) keep the code-drawn forms; the rows above for `paper_tc101` ... `paper_tc610` and the transponder card face are superseded.
 
