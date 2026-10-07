@@ -26,20 +26,16 @@ public readonly struct BoothContext
     /// <summary>The traveller wheel is open.</summary>
     public readonly bool WheelOpen;
 
-    /// <summary>A citation slip waits for Acknowledge (the traveller has left; the slip holds the clock and the screen).</summary>
-    public readonly bool CitationPending;
-
     /// <summary>The camera is tilted forward over the desk (the reading view, piece 10 section 11).</summary>
     public readonly bool DeskView;
 
     /// <summary>Creates a context.</summary>
-    public BoothContext(bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool citationPending, bool deskView)
+    public BoothContext(bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool deskView)
     {
         Focused = focused;
         ScreenOn = screenOn;
         Phase = phase;
         WheelOpen = wheelOpen;
-        CitationPending = citationPending;
         DeskView = deskView;
     }
 }
@@ -53,7 +49,7 @@ public readonly struct BoothInput
     /// <summary>Clicking the PC opens its frame: the frame closed, no newsletter, the wheel closed.</summary>
     public readonly bool CrtFocusable;
 
-    /// <summary>The power buttons (the frame's and the PC's knob) toggle the screen: no newsletter, the wheel closed, no pending citation slip.</summary>
+    /// <summary>The power buttons (the frame's and the PC's knob) toggle the screen: no newsletter, the wheel closed.</summary>
     public readonly bool PowerButtonLive;
 
     /// <summary>The desk props react to clicks: the frame closed, no newsletter, the wheel closed.</summary>
@@ -117,8 +113,8 @@ public readonly struct BoothInput
 /// camera blend; piece 10 added the reading view; Papers, Please's controls,
 /// Saleh 2026-10-06, made the documents one left-drag in either view, the
 /// stamps a bar and inspect a mode, and took the hand and its catcher away):
-/// from the frame, the screen's power, the shift's phase, the wheel, a pending
-/// citation slip and the reading view, which of the desktop, the PC, the
+/// from the frame, the screen's power, the shift's phase, the wheel and the
+/// reading view, which of the desktop, the PC, the
 /// power buttons, the props, the documents, the wheel, the traveller, the
 /// stamp bar, inspect mode, the case HUD, the reading view, its "▲ Back"
 /// control, the normal view's own ways and the PC switch take input or show.
@@ -138,7 +134,7 @@ public static class BoothRules
         return new BoothInput(
             desktopInteractive: c.Focused && c.ScreenOn && !newsletter,
             crtFocusable: desk,
-            powerButtonLive: !newsletter && !c.WheelOpen && !c.CitationPending,
+            powerButtonLive: !newsletter && !c.WheelOpen,
             propsLive: desk,
             papersLive: papers,
             wheelAllowed: office,

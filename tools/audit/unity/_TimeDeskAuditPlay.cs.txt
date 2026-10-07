@@ -42,7 +42,7 @@
 // scanner before day 5, the Departure Board before day 3, the Citizen records
 // chip before day 5, the PC apps, every document field; the guided steps and
 // their foot never show), every
-// citation slip names its rule and a value, and every shift report shows
+// citation names its rule and a value, and every shift report shows
 // tonight's bills and the wallet after them. New Run goes through the
 // adoption panel (the Home pet spec: a dog named "Biscuit"; a refused name is
 // tried first and must say why). Home: the bills step with its default care
@@ -781,18 +781,18 @@ public static class _TimeDeskAuditPlay
             _ended = true;
             yield break;
         }
-        if (o.CitationPanel.activeInHierarchy)
+        if (v.citationIssued)
         {
-            string slip = ((TMP_Text)Field(o.OfficeUi, "citationText")).text;
+            // The Citation (2026-10-07) lands on the desk; its text is Mail's notice, as the slip's was.
+            string slip = v.citationText;
             Line($"   citation slip: {slip.Replace("\n", " / ")}");
             string rule = v.unprovenDenial ? UiText.Get("citation.rule.evidence") : Citations.RuleLine(c.citation, UiText.Get, UiText.Get("citation.rule.numbered"));
             string value = v.unprovenDenial ? "0" : c.citation?.Values.Select(x => x.Value).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
             Check(!string.IsNullOrEmpty(rule) && slip.Contains(rule) && !string.IsNullOrEmpty(value) && slip.Contains(value),
                   $"d{day} slot {slot}: the citation slip names the exact rule ('{rule}') and value ('{value}')");
+            yield return Until(() => !o.CitationFlying, 10f, "the citation on the desk");
             if (ShotsOn && First($"citation {v.faultReason}/{v.unprovenDenial}/{v.accepted}"))
                 yield return Shots($"citation_{(v.accepted ? "accepted" : "denied")}_{(string.IsNullOrEmpty(v.faultReason) ? "honest" : v.faultReason)}{(v.unprovenDenial ? "_unproven" : "")}");
-            ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
-            yield return Frames(2);
         }
         Line($"   verdict line: {((TMP_Text)Field(o.OfficeUi, "resultText")).text.Replace("\n", " / ")}");
     }
@@ -2269,7 +2269,7 @@ public static class _TimeDeskAuditPlay
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
-        public GameObject CitationPanel => (GameObject)Field(OfficeUi, "citationPanel");
+        public bool CitationFlying => ((List<DeskDocument>)Field(Desk, "_citations")).Any(p => p.TryGetComponent(out PaperArrival a) && a.Flying);
         public InvestigationApp App => (InvestigationApp)Field(Ui, "app");
         public AppPane LeftPane => (AppPane)Field(App, "leftPane");
         public AppPane RightPane => (AppPane)Field(App, "rightPane");

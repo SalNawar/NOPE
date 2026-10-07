@@ -164,6 +164,23 @@ public partial class FormLayoutTests
     }
 
     [Test]
+    public void Art_APhotoWindowOnAPaperWithoutAPhotoField_ShowsTheHolder_NeverPicked()
+    {
+        FormSpec spec = ArtPassport();
+        spec.blocks = spec.blocks.Select(b => b.kind == FormBlockKind.FieldRow ? new FormBlock { kind = b.kind, cells = b.cells.Where(c => !c.IsPhoto).ToArray() } : b).ToArray();
+        spec.look.art.fields = spec.look.art.fields.Where(f => f.field != 7).ToArray();
+        spec.look.art.photo = Box(0.1f, 0.6f, 0.4f, 0.8f);
+        FormData data = BookletData();
+        data.HasPhoto = false;
+        PlacedForm form = OnArt(spec, data);
+        FormItem photo = form.Items.Single(i => i.Kind == FormItemKind.Photo);
+        Assert.AreEqual(-1, photo.Slot);
+        Assert.AreEqual(LookCanvas.PhotoAspect, photo.Rect.Width / photo.Rect.Height, 1e-3f);
+        Assert.IsTrue(ArtLayout.ShowsPhoto(spec, data));
+        Assert.IsFalse(ArtLayout.ShowsPhoto(Booklet(), data), "a paper off its art with no photo shows none");
+    }
+
+    [Test]
     public void Art_TheCheck_FindsAFieldWithoutAPlace_APlaceOffTheFace_AndAValueTooLong()
     {
         FormData probe = BookletData();

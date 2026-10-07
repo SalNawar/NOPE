@@ -10,8 +10,8 @@ using UnityEngine.UI;
 /// on the desk's stability monitor, <see cref="Cover"/>). Each frame it reads
 /// the run's stability, today's change (the shift ledger) and the firing and
 /// warning lines (GameConfigSO), steps the river by unscaled time and sets
-/// the material's parameters; a citation (GameManager.CitationAcknowledged,
-/// when the slip is dismissed and the office shows again) sends its red
+/// the material's parameters; a citation (GameManager.CitationLanded, when
+/// the Citation lands on the desk) sends its red
 /// pulse; Reduced Motion (MotionPreference) slows it. Its material is its
 /// own, made once at load; the frame allocates nothing.
 /// </summary>
@@ -92,14 +92,14 @@ public sealed class HelixRiverMonitor : MonoBehaviour
         _reduced = MotionPreference.Reduced;
         MotionPreference.Changed += HandleMotionChanged;
         if (game != null)
-            game.CitationAcknowledged += HandleCitation;
+            game.CitationLanded += HandleCitation;
     }
 
     private void OnDisable()
     {
         MotionPreference.Changed -= HandleMotionChanged;
         if (game != null)
-            game.CitationAcknowledged -= HandleCitation;
+            game.CitationLanded -= HandleCitation;
     }
 
     private void HandleMotionChanged() => _reduced = MotionPreference.Reduced;

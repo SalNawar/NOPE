@@ -67,6 +67,9 @@ public sealed class ArtField
 
     /// <summary>True when the art's baked label is not the field's (it is painted out of the face): the game prints the template's label there, in the art's label ink.</summary>
     public bool relabel;
+
+    /// <summary>True when the value is centred across its place (a row's number, a tick in a box); else it starts at the place's left.</summary>
+    public bool centre;
 }
 
 /// <summary>A print on the art that is no field (ArtPrintKind): never picked.</summary>
@@ -114,6 +117,12 @@ public sealed class FormArt
 
     /// <summary>A printed label's type size as a share of its place's height.</summary>
     public float labelShare = 0.6f;
+
+    /// <summary>The paper's size on the desk, full size, as a share of the desk's reading size (DeskConfigSO.readingHeight; 1: the same): a small or wide paper drawn with small print reads larger (the passport's booklet, the ticket, the card).</summary>
+    public float reading = 1f;
+
+    /// <summary>A photo window on a paper whose template shows no photo (the transponder card): the holder's photo fitted at 4:5, never picked (none: no such window).</summary>
+    public ArtBox photo;
 
     /// <summary>Each field's places.</summary>
     public ArtField[] fields = new ArtField[0];

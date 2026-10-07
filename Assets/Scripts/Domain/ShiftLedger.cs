@@ -189,8 +189,11 @@ public sealed class CaseVerdict
     /// <summary>True if this verdict dropped stability to/below the firing threshold.</summary>
     public bool firedNow;
 
-    /// <summary>Citation slip text shown to the player (empty if none).</summary>
+    /// <summary>The citation's text (Mail's copy of it; empty if none).</summary>
     public string citationText = string.Empty;
+
+    /// <summary>The citation as the desk prints it (CitationTickets; null without one). Runtime only: never saved.</summary>
+    [NonSerialized] public CitationTicket ticket;
 
     // -----------------------------
     // Investigation (accept/deny)

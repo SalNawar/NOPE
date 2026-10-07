@@ -216,14 +216,8 @@ public static partial class OfficeSceneUIBuilder
         verdictText.raycastTarget = false;
         verdictStrip.gameObject.SetActive(false);
 
-        // Citation slip (over the office and the frame; it still holds the day until Acknowledge). Sized for the rule and the exact
-        // values it names (lesson 6: title, mistake, the rule with its memo row, the values, the warning or penalty with stability).
+        // The citation slip is retired (2026-10-07: a citation is a paper on the desk, DeskController.Cite): it goes from scenes built before.
         DestroyChildIfPresent(officeCanvas.transform, "CitationPanel");
-        Transform citation = Panel(officeCanvas.transform, "CitationPanel", Center, Center, Vector2.zero, new Vector2(720f, 420f), new Color(0.85f, 0.2f, 0.15f, 0.96f), ThemeRoleId.Alert);
-        TMP_Text citationText = Text(citation, "CitationText", UiText.Get("citation.title"), 24, TextAlignmentOptions.Center, new Vector2(0.05f, 0.24f), new Vector2(0.95f, 0.95f), Color.white,
-                                     ThemeRoleId.Alert);
-        Button citationContinue = MakeButton(citation, "ContinueButton", null, new Vector2(0.34f, 0.05f), new Vector2(0.66f, 0.19f), null, ThemeRoleId.Button, "citation.acknowledge");
-        citation.gameObject.SetActive(false);
 
         var soView = new SerializedObject(officeView);
         SetRef(soView, "frame", pcFrame);
@@ -315,9 +309,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soOffice, "app", app.App);
         SetRef(soOffice, "resultText", verdictText);
         SetRef(soOffice, "resultBackdrop", verdictStrip.gameObject);
-        SetRef(soOffice, "citationPanel", citation.gameObject);
-        SetRef(soOffice, "citationText", citationText);
-        SetRef(soOffice, "citationContinueButton", citationContinue);
         soOffice.ApplyModifiedProperties();
 
         var soFlow = new SerializedObject(dayFlow);

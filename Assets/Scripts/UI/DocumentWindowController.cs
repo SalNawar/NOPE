@@ -89,7 +89,7 @@ public sealed class DocumentWindowController : MonoBehaviour
         {
             Form.Bind(compare, slot => Field(slot) != null ? PickKeys.Field(_index, slot.Field) : null);
             page.Show(paper.Spec, paper.Data, slot => Field(slot) != null, LinkHint);
-            Form.ShowPhoto(paper.Data.HasPhoto ? look : null, art);
+            Form.ShowPhoto(ArtLayout.ShowsPhoto(paper.Spec, paper.Data) ? look : null, art);
             MarkBoxes();
         }
     }

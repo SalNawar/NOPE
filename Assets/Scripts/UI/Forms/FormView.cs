@@ -610,7 +610,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
             : item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Top
             : TextAlignmentOptions.TopLeft;
         if (art != null)
-            TmpFormText.OnArt(text, item, style, art);
+            TmpFormText.OnArt(text, item, style, art, _measureText);
         Place(text.rectTransform, item.Rect);
     }
 

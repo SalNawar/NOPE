@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -64,7 +66,7 @@ public static class ShiftScoring
         if (verdict.correct)
             ApplyCorrect(verdict, world, config, lib);
         else
-            ApplyWrongDecision(verdict, world, config, verdict.unprovenDenial ? Unproven(verdict.evidenceCount) : inst?.citation);
+            ApplyWrongDecision(verdict, world, config, verdict.unprovenDenial ? Unproven(verdict.evidenceCount) : inst?.citation, inst, lib);
 
         verdict.firedNow = EndingRules.IsFired(world.timelineStability, config.firedAtStability);
 
@@ -80,9 +82,10 @@ public static class ShiftScoring
     /// 6: the traveller's fault for a wrong accept, the open destination for a
     /// wrong denial, the logged deviations for an unproven one); the money is
     /// the one penalty for any mistake (VerdictRules.WrongDecisionPenalty),
-    /// the day's first mistakes free warnings (GameConfigSO.freeWarningsPerDay).
+    /// the day's first mistakes free warnings (GameConfigSO.freeWarningsPerDay);
+    /// and the Citation the desk prints (Ticket).
     /// </summary>
-    private static void ApplyWrongDecision(CaseVerdict v, WorldState world, GameConfigSO config, CitationFacts facts)
+    private static void ApplyWrongDecision(CaseVerdict v, WorldState world, GameConfigSO config, CitationFacts facts, CaseInstance inst, ContentLibrarySO lib)
     {
         world.citationsToday++;
         world.totalCitations++;
@@ -107,6 +110,7 @@ public static class ShiftScoring
             world.money -= v.moneyPenalty;
             v.citationText = Citation(mistake, facts, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)));
         }
+        v.ticket = Ticket(v, mistake, facts, inst, world, lib);
 
         Debug.Log($"[ShiftScoring] ApplyWrongDecision: accepted={v.accepted}, mistake='{v.MistakeKey}', citationsToday={world.citationsToday}, penalty={v.moneyPenalty}, stabilityDelta={StabilityRules.FormatChange(v.stabilityDelta)}, money={world.money}.");
     }
@@ -137,6 +141,40 @@ public static class ShiftScoring
         float before = StabilityRules.Round(world.timelineStability);
         world.timelineStability = StabilityRules.Apply(before, points, config.stabilityChangeRate);
         v.stabilityDelta = world.timelineStability - before;
+    }
+
+    /// <summary>
+    /// The Citation of a wrong decision (TC-900, Saleh 2026-10-07; CitationTickets):
+    /// its number (the day and the run's count), today's date, the desk, the
+    /// clerk's Citizen ID, the decision's one penalty, and a row per box of
+    /// the traveller's papers that shows what was wrong (FaultFields: for a
+    /// wrong accept the forger's boxes too; for a denial the boxes holding the
+    /// values the citation names), each the mistake and the rule it broke.
+    /// </summary>
+    private static CitationTicket Ticket(CaseVerdict v, string mistake, CitationFacts facts, CaseInstance inst, WorldState world, ContentLibrarySO lib)
+    {
+        var ticket = new CitationTicket
+        {
+            Number = CitationTickets.Number(world.day, world.totalCitations),
+            Date = (lib != null ? AgencyCalendar.Today(lib.Agency.firstDate, world.day) : null)?.ToUpperInvariant() ?? string.Empty,
+            Desk = CitationTickets.Desk,
+            Clerk = lib != null && lib.Agency.clerk != null ? lib.Agency.clerk.citizenId ?? string.Empty : string.Empty,
+            Penalty = v.moneyPenalty,
+            Warning = v.wasFreeWarning
+        };
+        var papers = new List<IReadOnlyList<DocumentField>>();
+        var forms = new List<string>();
+        var labels = new List<IReadOnlyList<string>>();
+        foreach (DocumentInstance doc in inst != null ? inst.documents : new List<DocumentInstance>())
+        {
+            papers.Add(doc != null ? doc.fields : null);
+            forms.Add(doc != null && doc.template != null ? doc.template.formNumber : string.Empty);
+            labels.Add(doc != null ? doc.fields.Select(f => f != null ? f.label : string.Empty).ToList() : new List<string>());
+        }
+        List<(int, int)> boxes = FaultFields.Of(papers, v.accepted && inst != null ? inst.recordTells : null, facts?.Values);
+        string rule = Citations.RuleLine(facts, UiText.Get, UiText.Get("citation.rule.numbered"));
+        ticket.Rows.AddRange(CitationTickets.Rows(mistake, rule, boxes, forms, labels, CitationTickets.PenaltyText(ticket, CitationTickets.WarningWords), CitationTickets.IncludedWords));
+        return ticket;
     }
 
     /// <summary>What an unproven denial's slip names: the evidence rule and the deviations logged (lesson 6).</summary>

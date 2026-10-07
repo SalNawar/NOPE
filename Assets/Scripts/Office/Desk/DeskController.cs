@@ -79,8 +79,23 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The rulebook (optional): it lies in the papers' stack, over or under each paper as they were last touched, a dragged one above them all (Saleh 2026-10-06: "documents on desk like the folder with the rules are clipping with the desk").</summary>
     [SerializeField] private DeskRulebook rulebook;
 
+    /// <summary>The Citation's form (optional: without it no citation is printed, Cite says so).</summary>
+    [SerializeField] private CitationFormSO citationForm;
+
     /// <summary>The rulebook's place in the stack (papers are 0 and up).</summary>
     private const int RulebookId = -1;
+
+    /// <summary>The first citation sheet's place in the stack and paper index; each next one a step further down (-3, -4, ...).</summary>
+    private const int FirstCitationId = -2;
+
+    /// <summary>The day's citation sheets on the desk, in the order they came.</summary>
+    private readonly List<DeskDocument> _citations = new List<DeskDocument>();
+
+    /// <summary>How many citations (not sheets) came today: each next one lands a step further (DeskConfigSO.citationStep).</summary>
+    private int _citationsToday;
+
+    /// <summary>The citation sheet being dragged, or null.</summary>
+    private DeskDocument _draggedCitation;
 
     /// <summary>True while the rulebook is dragged (it lifts above the stack).</summary>
     private bool _rulebookDragged;
@@ -129,8 +144,8 @@ public sealed class DeskController : MonoBehaviour
     public bool IsReachable =>
         surface != null && scanner != null && paperTemplate != null && paperRoot != null && handOverPoint != null && config != null;
 
-    /// <summary>True while a document is being dragged (a right-click or Esc cancels the drag first: ControlRules).</summary>
-    public bool IsDragging => _dragged >= 0;
+    /// <summary>True while a document or a citation is being dragged (a right-click or Esc cancels the drag first: ControlRules).</summary>
+    public bool IsDragging => _dragged >= 0 || _draggedCitation != null;
 
     /// <summary>Raised when a scan finishes, with the paper's index and its pass (ScanPass: the analysis pass for a first scan by hand with the Analysis Scanner): its scanned copy reaches the PC (the Investigation app's Documents tab), which marks the papers after an analysis.</summary>
     public event Action<int, ScanPass> ScanFinished;
@@ -172,11 +187,13 @@ public sealed class DeskController : MonoBehaviour
         }
     }
 
-    /// <summary>The stack with no paper: the rulebook alone, at the bottom.</summary>
+    /// <summary>The stack with no case paper: the rulebook at the bottom, the day's citations over it.</summary>
     private void ResetStack()
     {
         _stack.Clear();
         _stack.Add(RulebookId);
+        foreach (DeskDocument citation in _citations)
+            _stack.Add(citation.Index);
     }
 
     /// <summary>The rulebook's drag begins (lifted above the stack) or is cut short (back on top of it).</summary>
@@ -255,6 +272,7 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>Starts a day with its scanner upgrades (<paramref name="scanners"/>: the day-start snapshot's, so a scanner bought tonight works tomorrow): nothing read or scanned yet (the scan note may show again on its days); the placeholder scanner shows the owned upgrades' parts.</summary>
     public void BeginDay(int day, ScannerDay scanners)
     {
+        ClearCitations();
         _day = day;
         _scanners = scanners;
         _scansToday = 0;
@@ -306,7 +324,9 @@ public sealed class DeskController : MonoBehaviour
         paper.transform.position = handOverPoint.position;
         paper.gameObject.SetActive(true);
         paper.Bind(i, _documents[i], i < _forms.Count ? _forms[i] : null, config);
-        paper.ShowPhoto(_documents[i] != null && _documents[i].showsPhoto ? _look : null, _art, config.travellerTint);
+        DocumentForm form = i < _forms.Count ? _forms[i] : null;
+        bool photo = _documents[i] != null && (_documents[i].showsPhoto || (form != null && ArtLayout.ShowsPhoto(form.Spec, form.Data)));
+        paper.ShowPhoto(photo ? _look : null, _art, config.travellerTint);
         paper.SetZone(DeskZone.Counter, true);
         paper.SetInspecting(_inspecting);
 
@@ -366,6 +386,8 @@ public sealed class DeskController : MonoBehaviour
         foreach (DeskDocument paper in _papers)
             if (paper != null)
                 ApplyLive(paper);
+        foreach (DeskDocument citation in _citations)
+            ApplyLive(citation);
     }
 
     /// <summary>Inspect mode on or off (BoothCoordinator, from DeskInspect): every value on the papers tints as comparable and a left-click picks one; off, a click never compares.</summary>
@@ -375,11 +397,18 @@ public sealed class DeskController : MonoBehaviour
         foreach (DeskDocument paper in _papers)
             if (paper != null)
                 paper.SetInspecting(inspecting);
+        foreach (DeskDocument citation in _citations)
+            citation.SetInspecting(inspecting);
     }
 
     /// <summary>A right-click or Esc mid-drag (ControlRules.BackOut): the drag is cancelled and the paper slides back to where it was picked up; false when nothing is dragged.</summary>
     public bool CancelDrag()
     {
+        if (_draggedCitation != null)
+        {
+            _draggedCitation.Drag.Cancel();
+            return true;
+        }
         if (_dragged < 0 || _dragged >= _papers.Count || _papers[_dragged] == null)
             return false;
         _papers[_dragged].Drag.Cancel();
@@ -615,22 +644,145 @@ public sealed class DeskController : MonoBehaviour
         ApplyLive(paper);
     }
 
-    /// <summary>A paper on the desk takes input while the papers are allowed, DeskPapers lets it be dragged and it is not sliding, and is in the raycast while the papers are allowed.</summary>
+    /// <summary>A paper on the desk takes input while the papers are allowed, DeskPapers lets it be dragged (a citation: always) and it is not sliding or flying in, and is in the raycast while the papers are allowed.</summary>
     private void ApplyLive(DeskDocument paper)
     {
-        bool live = _live && _state != null && _state.CanDrag(paper.Index) && !paper.IsSliding;
+        bool citation = paper.Index <= FirstCitationId;
+        bool live = _live && !paper.IsSliding && (citation ? !Flying(paper) : _state != null && _state.CanDrag(paper.Index));
         paper.SetLive(live, live, _live);
     }
 
-    /// <summary>Stack heights: one step per place from the desk (the bottom one, a paper or the rulebook, one step up); the dragged paper or rulebook lifted above the whole stack.</summary>
+    /// <summary>True while a citation sheet is still flying onto the desk (PaperArrival).</summary>
+    private static bool Flying(DeskDocument paper) => paper.TryGetComponent(out PaperArrival arrival) && arrival.Flying;
+
+    /// <summary>Stack heights: one step per place from the desk (the bottom one, a paper, a citation or the rulebook, one step up); the dragged paper, citation or rulebook lifted above the whole stack.</summary>
     private void ApplyStack()
     {
-        float top = (_papers.Count + 1) * config.paperStackStep;
+        float top = (_papers.Count + _citations.Count + 1) * config.paperStackStep;
         foreach (DeskDocument paper in _papers)
             if (paper != null)
                 paper.SetLift(paper.Index == _dragged ? top + config.dragLift : (_stack.IndexOf(paper.Index) + 1) * config.paperStackStep);
+        foreach (DeskDocument citation in _citations)
+            citation.SetLift(citation == _draggedCitation ? top + config.dragLift : (_stack.IndexOf(citation.Index) + 1) * config.paperStackStep);
         if (rulebook != null)
             rulebook.SetLift(_rulebookDragged ? top + config.dragLift : (_stack.IndexOf(RulebookId) + 1) * config.paperStackStep);
+    }
+
+    // ---------------- Citations ----------------
+
+    /// <summary>
+    /// A citation (the Citation, TC-900, Saleh 2026-10-07: it replaces the
+    /// slip; Papers, Please's way, nothing waits for it): each of its sheets
+    /// (CitationTickets.Sheets: four violations to a sheet, a continuation
+    /// sheet for more) is printed on the Citation's art (citationForm) and
+    /// flies in from the screen's top right (PaperArrival: a slide and a twist,
+    /// a springy settle, a thud) to the day's next citation spot on the desk's
+    /// left (DeskConfigSO.citationSpot, each next citation a step further, a
+    /// continuation sheet a little off its first, like a stapled set), on top
+    /// of the stack, shown at citationScale of a desk paper's size; then it
+    /// is a desk paper: dragged anywhere on the desk (never handed back),
+    /// brought to the top by a click, compared with nothing.
+    /// <paramref name="landed"/> once every sheet lies still. False (and
+    /// nothing printed) without the form, a ticket or the desk.
+    /// </summary>
+    public bool Cite(CitationTicket ticket, Action landed)
+    {
+        if (citationForm == null || ticket == null || !IsReachable)
+            return false;
+        List<string[]> sheets = CitationTickets.Sheets(ticket, CitationTickets.WarningWords, CitationTickets.SeeNextWords);
+        Camera view = Camera.main;
+        Vector3 spot = DeskPoint(config.citationSpot + config.citationStep * _citationsToday);
+        _citationsToday++;
+        int flying = sheets.Count;
+        for (int s = 0; s < sheets.Count; s++)
+        {
+            DeskDocument sheet = Instantiate(paperTemplate, paperRoot);
+            int id = FirstCitationId - _citations.Count;
+            sheet.name = $"Citation_{_citations.Count + 1}";
+            sheet.gameObject.SetActive(true);
+            sheet.Bind(id, new CaseDocument { name = citationForm.title, formNumber = citationForm.formNumber }, citationForm.Sheet(sheets[s]), config);
+            sheet.ShowPhoto(null, null, Color.white);
+            sheet.SetZone(DeskZone.Desk, true, config.citationScale);
+            sheet.SetInspecting(_inspecting);
+            DeskDraggable drag = sheet.Drag;
+            drag.Init(surface);
+            drag.DragBegan += CitationLifted;
+            drag.DragEnded += CitationDropped;
+            drag.DragCancelled += CitationCancelled;
+            sheet.Clicked += CitationClicked;
+            _citations.Add(sheet);
+            _stack.Add(id);
+
+            Vector3 at = spot + (_viewRight * config.citationStep.x + _viewForward * config.citationStep.y) * (s / 3f);
+            Vector3 from = view != null
+                ? view.ViewportToWorldPoint(new Vector3(config.citationFrom.x, config.citationFrom.y, config.citationFromDepth))
+                : at + Vector3.up * config.citationArc;
+            sheet.transform.position = from;
+            PaperArrival arrival = sheet.gameObject.AddComponent<PaperArrival>();
+            DeskDocument flown = sheet;
+            arrival.Fly(from, at, sheet.Size * sheet.Sheet.localScale.x, config.citationTwist, config.citationTumble, config.citationArc, s * 0.08f, () =>
+            {
+                ApplyLive(flown);
+                if (--flying == 0)
+                    landed?.Invoke();
+            });
+            ApplyLive(sheet);
+        }
+        ApplyStack();
+        return true;
+    }
+
+    /// <summary>A point on the desk <paramref name="offset"/> metres from its centre in the office view's frame (x right, y away from the camera), kept on the desk.</summary>
+    private Vector3 DeskPoint(Vector2 offset) =>
+        surface.Clamp(surface.transform.position + _viewRight * offset.x + _viewForward * offset.y);
+
+    /// <summary>The day's citations go (a new day starts with none).</summary>
+    private void ClearCitations()
+    {
+        foreach (DeskDocument citation in _citations)
+            if (citation != null)
+                Destroy(citation.gameObject);
+        _citations.Clear();
+        _citationsToday = 0;
+        _draggedCitation = null;
+        ResetStack();
+        if (config != null)
+            ApplyStack();
+    }
+
+    /// <summary>A citation's drag begins: it lifts above the stack.</summary>
+    private void CitationLifted(DeskDraggable drag)
+    {
+        _draggedCitation = drag.GetComponent<DeskDocument>();
+        ApplyStack();
+    }
+
+    /// <summary>A citation let go: it lies where it was dropped, on top (the desk keeps it whatever lies under it; it is never handed back).</summary>
+    private void CitationDropped(DeskDraggable drag, Vector3 released)
+    {
+        DeskDocument citation = drag.GetComponent<DeskDocument>();
+        _draggedCitation = null;
+        _stack.BringToFront(citation.Index);
+        ApplyStack();
+    }
+
+    /// <summary>A citation's drag cut short: it slides back to where it was picked up, on top.</summary>
+    private void CitationCancelled(DeskDraggable drag)
+    {
+        DeskDocument citation = drag.GetComponent<DeskDocument>();
+        _draggedCitation = null;
+        if (citation == null)
+            return;
+        Slide(citation, drag.PickUpPosition);
+        _stack.BringToFront(citation.Index);
+        ApplyStack();
+    }
+
+    /// <summary>A citation clicked: it comes to the top (it has no values to pick).</summary>
+    private void CitationClicked(DeskDocument citation, int slot)
+    {
+        _stack.BringToFront(citation.Index);
+        ApplyStack();
     }
 
     /// <summary>True when <paramref name="point"/> lies on the scanner's bed and the scanner is on the desk today (ScannerDay.Hidden: not before it is introduced).</summary>

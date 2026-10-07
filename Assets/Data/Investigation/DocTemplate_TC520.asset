@@ -156,8 +156,9 @@ MonoBehaviour:
         corner: 0
         ink: '#0B1C2F'
         labelInk: '#0B1C2F'
-        valueShare: 0.42
+        valueShare: 0.52
         labelShare: 0.6
+        reading: 1
         fields:
         - field: 0
           value:
@@ -171,6 +172,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.41577
           relabel: 0
+          centre: 0
         - field: 1
           value:
             x0: 0.3375
@@ -183,6 +185,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.47798
           relabel: 0
+          centre: 0
         - field: 2
           value:
             x0: 0.3375
@@ -195,6 +198,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.53903
           relabel: 0
+          centre: 0
         - field: 3
           value:
             x0: 0.374
@@ -207,6 +211,7 @@ MonoBehaviour:
             x1: 0.37
             y1: 0.59969
           relabel: 0
+          centre: 0
         - field: 4
           value:
             x0: 0.3375
@@ -219,6 +224,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.65881
           relabel: 0
+          centre: 0
         - field: 5
           value:
             x0: 0.3375
@@ -231,6 +237,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.71368
           relabel: 0
+          centre: 0
         - field: 6
           value:
             x0: 0.1695
@@ -243,6 +250,7 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          centre: 0
         - field: 7
           value:
             x0: 0.7555
@@ -255,6 +263,7 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          centre: 0
         prints:
         - kind: 4
           field: -1
@@ -264,6 +273,11 @@ MonoBehaviour:
             y0: 0.87558
             x1: 0.6855
             y1: 0.91267
+        photo:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
         stamp:
           x0: 0
           y0: 0

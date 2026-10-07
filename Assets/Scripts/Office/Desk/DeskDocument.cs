@@ -152,6 +152,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     private DeskConfigSO _config;
     private PlacedForm _form;
 
+    /// <summary>The paper's size on the desk as a share of the desk's reading size (FormArt.reading; 1 off the art).</summary>
+    private float _reading = 1f;
+
     /// <summary>The paper's metres per unit of its placed form: the form is laid out with its print unit 1 (as FormLayout.Check checks it: TextMeshPro measures a world-space text in metres taller than its glyphs once its size falls to a few millimetres, so a small paper laid out in metres would run past its page) and drawn this much smaller.</summary>
     private float _scale = 1f;
 
@@ -262,6 +265,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
         FormLook look = form.Spec.look ?? new FormLook();
         FormArt art = ArtLayout.IsArt(form.Spec) ? look.art : null;
+        _reading = art != null && art.reading > 0f ? art.reading : 1f;
         FormPalette palette = look.Palette(style.Palette());
         float height = config.paperSize.y * look.Scale;
         Resize(new Vector2(height * look.AspectOr(style.metrics.aspect), height));
@@ -341,14 +345,17 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// by the room; on the desk full size (DeskZones.ReadingScale to
     /// DeskConfigSO.readingHeight) and evenly lit (the reading material; the
     /// photo in the reading tint instead of the room's). The size eases there,
-    /// or is set at once (<paramref name="instant"/>).
+    /// or is set at once (<paramref name="instant"/>); a paper on its art reads
+    /// at its art's share of that (FormArt.reading); a paper shown smaller
+    /// than its zone's size (a citation: DeskConfigSO.citationScale) takes
+    /// <paramref name="share"/> of it.
     /// </summary>
-    public void SetZone(DeskZone zone, bool instant)
+    public void SetZone(DeskZone zone, bool instant, float share = 1f)
     {
         Zone = zone;
-        float target = _config == null ? 1f
-            : zone == DeskZone.Desk ? DeskZones.ReadingScale(Size.x, Size.y, _config.readingHeight, _config.paperSize.x / _config.paperSize.y)
-            : _config.counterScale;
+        float target = share * (_config == null ? 1f
+            : zone == DeskZone.Desk ? _reading * DeskZones.ReadingScale(Size.x, Size.y, _config.readingHeight, _config.paperSize.x / _config.paperSize.y)
+            : _config.counterScale);
         _sizeFrom = _sizeNow;
         _sizeTarget = target;
         _sizeElapsed = 0f;
@@ -711,9 +718,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         text.alignment = item.Align == FormTextAlign.Right ? TextAlignmentOptions.TopRight
             : item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Top
             : TextAlignmentOptions.TopLeft;
-        if (art != null)
-            TmpFormText.OnArt(text, item, style, art);
         Rect r = Local(item.Rect);
+        if (art != null)
+            TmpFormText.OnArt(text, item, style, art, textTemplate);
         text.rectTransform.sizeDelta = new Vector2(r.width, r.height);
         text.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -TextLift);
         text.GetComponent<MeshRenderer>().enabled = true;

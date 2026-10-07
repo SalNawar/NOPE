@@ -14,7 +14,8 @@ using System.Linq;
 /// (a Signature block's field in a hand, UNSIGNED when blank), a relabelled
 /// field's own label, the issuing seal at its spot and the photo fitted
 /// into its window, each field a slot whose box is its value's place (so
-/// inspect mode's line lands on the value); then the prints that are no field.
+/// inspect mode's line lands on the value); then a photo window on a paper
+/// with no Photo field (never picked) and the prints that are no field.
 /// The template's blocks still say which field is the seal (the header's) and
 /// which the photo (the photo cell's) and which are signed. Every slot keeps
 /// the field's place whatever its value (the document design spec, D2): a long
@@ -37,6 +38,9 @@ public static class ArtLayout
 
     /// <summary>True when <paramref name="spec"/> is drawn on its art (its look's FormArt is set).</summary>
     public static bool IsArt(FormSpec spec) => spec != null && spec.look != null && spec.look.art != null && spec.look.art.IsSet;
+
+    /// <summary>True when a paper of <paramref name="spec"/> showing <paramref name="data"/> prints the traveller's photo: its template's (FormData.HasPhoto), or its art's window on a paper with no Photo field (FormArt.photo).</summary>
+    public static bool ShowsPhoto(FormSpec spec, FormData data) => (data != null && data.HasPhoto) || (IsArt(spec) && spec.look.art.photo.IsSet);
 
     /// <summary>
     /// <paramref name="spec"/>'s art placed <paramref name="width"/> wide
@@ -103,7 +107,7 @@ public static class ArtLayout
                 if (hand && string.IsNullOrWhiteSpace(value))
                     items.Add(new FormItem(FormItemKind.Text, FormTextRole.Caption, place, slot, FormLayout.Unsigned, UnsignedShare * art.valueShare * place.Height, FormTextAlign.Left));
                 else if (!string.IsNullOrEmpty(value))
-                    items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, slot, value, art.valueShare * place.Height, FormTextAlign.Left));
+                    items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, slot, value, art.valueShare * place.Height, f.centre ? FormTextAlign.Centre : FormTextAlign.Left));
                 if (f.relabel && f.label.IsSet)
                 {
                     FaceRect label = On(f.label);
@@ -114,6 +118,8 @@ public static class ArtLayout
             slots.Add(new FormSlot(slot, f.field, -1, string.Empty, place, 0));
         }
 
+        if (art.photo.IsSet && !data.HasPhoto)
+            items.Add(Item(FormItemKind.Photo, Photo(On(art.photo))));
         foreach (ArtPrint p in art.prints ?? new ArtPrint[0])
         {
             if (p == null || !p.rect.IsSet || (p.field >= 0 && Hidden(data, p.field)))

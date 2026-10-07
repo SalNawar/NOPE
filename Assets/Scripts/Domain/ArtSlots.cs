@@ -37,8 +37,6 @@ public static class ArtSlots
     /// <summary>The end of shift's ledger sheet.</summary>
     public const string LedgerPaper = "DayFlow/shift_ledger_paper";
 
-    /// <summary>The citation slip after a wrong verdict.</summary>
-    public const string CitationSlip = "DayFlow/citation_slip";
 
     /// <summary>The photo frame on a desk paper's photo cell (the frame's grey stand-in without art).</summary>
     public const string PhotoFrame = "Forms/photo_frame";

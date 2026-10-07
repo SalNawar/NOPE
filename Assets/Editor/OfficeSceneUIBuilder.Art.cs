@@ -37,8 +37,8 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// Gives the gameplay layer's Tier-2 images their art slots (rebuilt with
-    /// their hosts each run): the bubble, the two newsletters' sheets, the
-    /// citation slip, each pane's Reference tab's book cover, and the desk
+    /// their hosts each run): the bubble, the two newsletters' sheets, each
+    /// pane's Reference tab's book cover, and the desk
     /// paper template's photo frame and ink mark.
     /// </summary>
     private static void BuildArtSlots(Transform overlay, OverlayCallout bubble, IEnumerable<ReferenceView> references, OfficeViewController officeView)
@@ -46,7 +46,6 @@ public static partial class OfficeSceneUIBuilder
         BuildBubbleArt(bubble);
         SlotOn(overlay.Find("BriefingPanel/Paper"), ArtSlots.BriefingPaper);
         SlotOn(overlay.Find("ResultsPanel/Paper"), ArtSlots.LedgerPaper);
-        SlotOn(overlay.Find("CitationPanel"), ArtSlots.CitationSlip);
         foreach (ReferenceView reference in references)
             BuildBookCover(reference);
         BuildPaperArt(officeView.transform.Find("Desk/PaperTemplate"));
