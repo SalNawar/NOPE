@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Lever_Knob
+  m_Name: Detain_Red
   m_Shader: {fileID: 4800000, guid: e8076203e88f7ba4192c6f5ad08b0c96, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -35,7 +35,7 @@ Material:
     - _Cutoff: 0.4
     - _EdgeStrength: 0.1
     - _HighlightSize: 0.12
-    - _HighlightStrength: 0.4
+    - _HighlightStrength: 0.45
     - _LightThreshold: 0.58
     - _Metallic: 0
     - _MidValue: 0.76
@@ -46,7 +46,7 @@ Material:
     - _Surface: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.76, g: 0.2, b: 0.16, a: 1}
+    - _BaseColor: {r: 0.78, g: 0.12, b: 0.1, a: 1}
     - _LightTint: {r: 1.06, g: 1.015, b: 0.92, a: 0}
     - _ShadowTint: {r: 0.72, g: 0.81, b: 0.94, a: 0}
   m_BuildTextureStacks: []

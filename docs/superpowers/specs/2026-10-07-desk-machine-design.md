@@ -51,23 +51,20 @@ Every motion here uses those springs. There are no linear lerps and no DOTween.
 
 ## 2. Decision hardware: three verdicts
 
-**Saleh: three actions.** Approve = the gate lever, Deny = RETURN, Detain = a covered button, *only when the traveller breaks the law*.
+**Saleh: three actions.** Approve, Deny, and Detain = a covered button, *only when the traveller breaks the law*.
 
-- **The flow:**
-  - Stamp the passport as today, then hand it back.
-  - The decision is **committed** with the hardware: lever for APPROVED, RETURN for DENIED.
-  - A handed-back passport whose stamp doesn't match the hardware the player uses does nothing; the lever simply won't move, with a "no" wobble.
-  - **Decision:** stamping stays the act of *judging*, and the hardware is the act of *executing*, so a decision cannot be committed by accident.
-- **Gate lever (Approve):**
-  - A heavy floor-mounted lever by the desk. You drag it down and it resists along its travel.
-  - It ratchets with clicks every 15° and needs a full pull; release it early and it springs back.
-  - At the bottom it thunks home, the portal spins up (a light ramp in the hall and a portal sound) and the traveller walks in.
-- **RETURN (Deny):**
-  - A big square push button, amber, labelled RETURN.
-  - It squashes in, a turnstile clunk and a buzzer sound, and the traveller turns and leaves the way they came.
+**Saleh, 2026-10-07 (on the prototype's lever and plain RETURN / DETAIN buttons):** "I don't like that return and detain are UI buttons. It breaks what I'm trying to build, where everything belongs in the game. And the lever for the portal is goofy and far away. It doesn't fit; it just feels like an extra step." His rules:
+- **Everything diegetic.** No screen-space UI buttons for verdicts.
+- **No lever. No extra commit step.**
+
+- **The flow (Papers, Please's):**
+  - Stamp the passport with a dater, then hand it back. That is the whole decision.
+  - Handing back an APPROVED passport commits approval: the portal spins up (the portal sound, a hit, the hall's ring flares) and the traveller walks through.
+  - Handing back a DENIED passport commits the denial: the traveller turns and leaves the way they came.
+  - The gate lever and the RETURN button of the prototype are gone.
 - **DETAIN (law-breakers):**
-  - A red mushroom button under a hinged clear safety cover. Click the cover to flip it up (a spring hinge), then press the button.
-  - An alarm chirp, the hall light flashes red once, guards take the traveller.
+  - A red mushroom button under a hinged clear safety cover, an object on the desk within easy reach, near the daters on the counter side, built in-engine under a prop contract (`Base`, `Cover`, `Button`). Click the cover to flip it up (a spring hinge; it closes again by itself after a few seconds unused), then press the button (a deep press).
+  - An alarm chirp, a red flash over the hall, a hit, guards take the traveller.
   - It works with or without a stamp, at any point after the traveller arrives.
 - **Detain rules.**
   - **Saleh's rule:** detain only if the traveller breaks the law.
@@ -141,11 +138,11 @@ Photo overlay, fingerprints, the glyph decoder and transponder tuning are new **
 
 ## Build order (C)
 
-1. **Prototype:** the two dater stamps and the gate lever, with the three-verdict domain and the RETURN and DETAIN hardware stubbed as plain buttons.
+1. **Prototype:** the two dater stamps, with the three-verdict domain; after Saleh's look at it, the hand-back commits approve and deny and DETAIN is the button on the desk (the lever and the plain buttons are gone).
    - Capture a short frame sequence and a video of: stamp press and release, the date roll, the lever pull with ratchet and thunk, and the portal spin-up.
    - Saleh judges the feel.
 2. **After his OK, two tracks in parallel:**
-   - **(a)** the RETURN and DETAIN hardware and the intercom/shutter (through AVAILABLE; the time card is dropped);
+   - **(a)** the intercom/shutter (through AVAILABLE; the time card is dropped; the DETAIN button already stands on the desk);
    - **(b)** paper physics, the scanner, and movable objects.
    - They share the desk code: (a) owns the counter and booth side, (b) owns the desk plane and scanner, and they merge through main.
 
@@ -158,7 +155,7 @@ Photo overlay, fingerprints, the glyph decoder and transponder tuning are new **
   - ink fade;
   - the date-wheel target.
 - Idempotent rebuilds.
-- The audit play, days 1-15, A/B identical. The audit drives the new hardware: AVAILABLE, stamp, then lever, RETURN or DETAIN.
+- The audit play, days 1-15, A/B identical. The audit drives the new hardware: AVAILABLE, stamp, then the hand-back or the DETAIN button.
 - The transcripts change only where the new verdict and rituals add lines.
 - Golden notes list every difference.
 - Zero per-frame allocations in idle.

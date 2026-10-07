@@ -587,8 +587,8 @@ public sealed class InvestigationUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// The decision, one of the three verdicts (the desk's hardware commits
-    /// it: the lever, RETURN or DETAIN; or the cheat menu's
+    /// The decision, one of the three verdicts (the stamp tray commits it:
+    /// the papers handed back or the DETAIN button; or the cheat menu's
     /// "decide correctly" through GameManager; nothing without a case on the
     /// desk): the desk's papers leave, the case tabs show
     /// the no-case state, and no case is on the desk from here: cleared before

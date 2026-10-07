@@ -672,8 +672,8 @@ public sealed partial class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Resolves the player's decision, one of the three verdicts committed by
-    /// the desk's hardware (the one decision handler, audit R3-017; the desk
+    /// Resolves the player's decision, one of the three verdicts committed at
+    /// the desk (the hand-back, the DETAIN button; the one decision handler, audit R3-017; the desk
     /// machine spec §2): scores it, dispatches timeline impacts only on
     /// accept, checks for an ending, then shows the verdict and advances the day.
     /// </summary>

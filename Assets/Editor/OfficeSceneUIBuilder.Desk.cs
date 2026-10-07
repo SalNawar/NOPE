@@ -740,7 +740,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "wheel", wheel);
         SerializedArrays.Set(soBinder, "callouts", callouts);
         SetRef(soBinder, "stampTray", stampTray);
-        SetRef(soBinder, "gateLever", BuildGateLever(office, stampTray));
+        SetRef(soBinder, "detainButton", BuildDetainButton(office, stampTray));
         SetRef(soBinder, "counter", counter);
         SetRef(soBinder, "deskInspect", inspect);
         SetRef(soBinder, "rulebook", rulebook);

@@ -219,7 +219,7 @@ public sealed class CaseVerdict
     /// <summary>True if the player accepted (approved travel); false = denied or detained.</summary>
     public bool accepted;
 
-    /// <summary>True if the player detained the traveller (the third verdict, the DETAIN hardware; <see cref="accepted"/> is false).</summary>
+    /// <summary>True if the player detained the traveller (the third verdict, the desk's DETAIN button; <see cref="accepted"/> is false).</summary>
     public bool detained;
 
     /// <summary>The traveller's kind (the ledger's departure lines count leisure and Debt Relief departures by it; traveller types §10).</summary>

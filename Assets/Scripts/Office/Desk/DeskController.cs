@@ -340,13 +340,6 @@ public sealed class DeskController : MonoBehaviour
         SendBack(stamped || decision == DeskStamp.Detained ? DeskStamp.None : decision);
     }
 
-    /// <summary>The stamped papers handed back (DeskStampTray.HandBack, before the hardware commits the verdict: the desk machine spec §2): every paper goes back to the traveller now, the passport wearing the player's mark.</summary>
-    private void HandBackPapers()
-    {
-        if (_state != null)
-            SendBack(DeskStamp.None);
-    }
-
     /// <summary>Every paper on the desk goes back to the traveller (the state's papers all returned), inked with <paramref name="ink"/> (None: no ink), inert, sliding to the hand-over point, then destroyed.</summary>
     private void SendBack(DeskStamp ink)
     {
@@ -501,8 +494,7 @@ public sealed class DeskController : MonoBehaviour
         switch (_state.Drop(paper.Index, OnScanner(released), zone, verdict))
         {
             case DropOutcome.HandsBack:
-                if (stamps.HandBack())
-                    HandBackPapers();
+                stamps.HandBack();
                 return;
             case DropOutcome.Scanning:
                 Sounds.Play(SoundCues.ScannerStart);

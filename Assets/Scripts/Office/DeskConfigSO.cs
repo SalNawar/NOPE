@@ -171,8 +171,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How much one print's density may vary around the pad's.</summary>
     [Range(0f, 0.3f)] public float daterInkSpread = 0.08f;
 
-    /// <summary>Where the gate lever's hinge stands (the desk machine spec §2: floor-mounted beside the desk): the point of the desk's plane the office view shows there (viewport x, y; low on the right, beside the desk).</summary>
-    public Vector2 leverView = new Vector2(0.93f, 0.2f);
+    /// <summary>Where the DETAIN button stands on the desk (the desk machine spec §2: within easy reach, near the daters on the counter side): the point of the desk's plane the office view shows there (viewport x, y).</summary>
+    public Vector2 detainView = new Vector2(0.7f, 0.09f);
 
     /// <summary>Seconds a refused press's note, or the counter's "Stamp the passport first", stays up.</summary>
     [Min(0.5f)] public float stampNoteSeconds = 2.5f;

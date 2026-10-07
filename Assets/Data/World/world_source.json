@@ -25168,38 +25168,8 @@
         "tier": "Full"
       },
       {
-        "key": "stamp.hint.lever",
-        "text": "Pull the LEVER down to send them through the portal.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "stamp.hint.return",
-        "text": "Press RETURN to send them back the way they came.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "hardware.return",
-        "text": "RETURN",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "hardware.detain",
         "text": "DETAIN",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "hardware.refused.lever",
-        "text": "The lever only moves for an APPROVED passport handed back.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "hardware.refused.return",
-        "text": "RETURN only works for a DENIED passport handed back.",
         "gloss": "None",
         "tier": "Full"
       },

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// The left button going down on an office object and coming back up (the
 /// desk machine spec §1: a dater "holding the button holds the stamp down";
-/// the gate lever): Down and Up, through the office camera's
+/// a held press): Down and Up, through the office camera's
 /// PhysicsRaycaster like Clickable's click. Up comes to the object the press
 /// went down on, wherever the pointer is then. Only the left button
 /// (Papers, Please's one button; a right-click backs out).

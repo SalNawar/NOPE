@@ -205,7 +205,7 @@ public static partial class OfficeSceneUIBuilder
         OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip, false);
         OverlayCallout boardTooltip = BuildOverlayCallout(officeCanvas.transform, "BoardTooltip", BoardTooltipSize, Tooltip, ThemeRoleId.Tooltip, false, true);
         DeskStampTray stampTray = BuildStampTray(officeCanvas.transform, officeView.transform, deskConfig);
-        BuildVerdictButtons(officeCanvas.transform, stampTray);
+        DestroyChildIfPresent(officeCanvas.transform, "VerdictButtons"); // the prototype's RETURN and DETAIN plates (Saleh 2026-10-07: everything diegetic)
 
         // The verdict ribbon and the citation slip over the office (OfficeSceneUIBuilder.Kit, the UI kit's).
         Transform verdictStrip = BuildVerdictRibbon(officeCanvas.transform, out Image verdictRibbon, out TMP_Text verdictText);
