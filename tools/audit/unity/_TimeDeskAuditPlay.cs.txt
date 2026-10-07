@@ -119,8 +119,10 @@ public static class _TimeDeskAuditPlay
     private const string DesktopPrefsKey = "AuditPlay.DesktopPrefs";
     private const string ViewWidthKey = "AuditPlay.ViewWidth";
     private const string ViewHeightKey = "AuditPlay.ViewHeight";
-    private const string UiLanguagePref = "TimeDesk.UiLanguage";
-    private const string MotionPref = "TimeDesk.ReducedMotion";
+    private static string UiLanguagePref => PlayerPrefKeys.For("TimeDesk.UiLanguage");
+    private static string MotionPref => PlayerPrefKeys.For("TimeDesk.ReducedMotion");
+    private const string IntensityKey = "AuditPlay.MotionIntensity";
+    private static string IntensityPref => PlayerPrefKeys.For("TimeDesk.MotionIntensity");
 
     private const int Playing = 1;
     private const int Finishing = 2;
@@ -189,6 +191,8 @@ public static class _TimeDeskAuditPlay
         SessionState.SetString(MotionKey, PlayerPrefs.HasKey(MotionPref) ? PlayerPrefs.GetString(MotionPref) : "<absent>");
         PlayerPrefs.DeleteKey(UiLanguagePref);
         PlayerPrefs.DeleteKey(MotionPref);
+        SessionState.SetString(IntensityKey, PlayerPrefs.HasKey(IntensityPref) ? PlayerPrefs.GetFloat(IntensityPref).ToString("R", System.Globalization.CultureInfo.InvariantCulture) : "<absent>");
+        PlayerPrefs.DeleteKey(IntensityPref);
 
         // The desktop's per-player preferences (icons, split, tab order, zoom, sidebar, steps) start at their defaults and are restored at the end.
         var desktop = new List<string>();
@@ -221,7 +225,8 @@ public static class _TimeDeskAuditPlay
         typeof(DesktopPreferences).GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
             .Where(f => f.IsLiteral && f.FieldType == typeof(string))
             .Select(f => (string)f.GetRawConstantValue())
-            .Where(v => v.StartsWith("TimeDesk."));
+            .Where(v => v.StartsWith("TimeDesk."))
+            .Select(PlayerPrefKeys.For);
 
     private static void Tick()
     {
@@ -420,9 +425,12 @@ public static class _TimeDeskAuditPlay
             if (day == 1 && presented == 1)
             {
                 Check(o.Guide.StepShown == "desk", $"day 1: calling the traveller completes the tutorial's first step ('{o.Guide.StepShown}' shown: '{o.Guide.Prompt.Line}')");
+                yield return GuideArrowAllocationFree(o, "day 1 tutorial step 2");
                 ((Button)Field(o.Guide.Prompt, "skipButton")).onClick.Invoke();
                 Check(!o.Guide.Prompt.IsShown && RunManager.Instance.World.guide.ftueSkipped, "day 1: Skip ends the tutorial (the run keeps it skipped)");
             }
+            if (day == 2 && !practiceSeen && o.Guide.ShowingNow == "practice")
+                yield return GuideArrowAllocationFree(o, "day 2 practice");
             practiceSeen |= o.Guide.ShowingNow == "practice";
             if (day == 4 && o.Guide.ShowingNow == "practice")
                 yield return SealAtTheDesk(o);
@@ -489,6 +497,61 @@ public static class _TimeDeskAuditPlay
     }
 
     /// <summary>
+    /// The guide's arrow costs nothing per frame (the profile found 68 B a frame in GuideTargets.TryForm's Substring, run 7). Mono
+    /// keeps no per-thread allocation count, so the frames' "GC Allocated In Frame" is read: three frames that each run the arrow's
+    /// LateUpdate <see cref="ArrowTicks"/> times stay at the frame's usual allocations (any allocation a call, 16 B or more, would add
+    /// 800 KB or more), while three frames that parse the same target as often (the control) allocate far more.
+    /// </summary>
+    private static IEnumerator GuideArrowAllocationFree(Office o, string when)
+    {
+        var tick = (Action)Delegate.CreateDelegate(typeof(Action), o.Guide, typeof(GuideDirector).GetMethod("LateUpdate", BindingFlags.Instance | BindingFlags.NonPublic));
+        string target = (string)Field(o.Guide, "_target") ?? string.Empty;
+        tick();
+        bool profiler = UnityEditorInternal.ProfilerDriver.enabled;
+        UnityEditorInternal.ProfilerDriver.enabled = true;
+        long director = 0, control = 0;
+        try
+        {
+            for (int pass = 0; pass < 2; pass++)
+            {
+                var gc = Unity.Profiling.ProfilerRecorder.StartNew(Unity.Profiling.ProfilerCategory.Memory, "GC Allocated In Frame", 32);
+                for (int frame = 0; frame < 3; frame++)
+                {
+                    for (int i = 0; i < ArrowTicks; i++)
+                    {
+                        if (pass == 0)
+                            tick();
+                        else
+                            GuideTargets.TryForm(target, out _);
+                    }
+                    yield return Frames(1);
+                }
+                yield return Frames(3);
+                var samples = new List<Unity.Profiling.ProfilerRecorderSample>();
+                gc.CopyTo(samples);
+                gc.Dispose();
+                long most = samples.Count > 0 ? samples.Max(s => s.Value) : -1;
+                if (pass == 0)
+                    director = most;
+                else
+                    control = most;
+            }
+        }
+        finally
+        {
+            UnityEditorInternal.ProfilerDriver.enabled = profiler;
+        }
+        Check(director >= 0 && director < ArrowQuietFrame && control > 2 * ArrowQuietFrame,
+              $"{when}: the guide's arrow at '{target}' is placed without allocating (the most a frame of {ArrowTicks} placements allocated: {director} B, under {ArrowQuietFrame} B; the control, the target parsed as often: {control} B)");
+    }
+
+    /// <summary>How many times a frame the allocation probe places the guide's arrow (and parses its target, the control).</summary>
+    private const int ArrowTicks = 50000;
+
+    /// <summary>The most a frame of the probe may allocate when the arrow allocates nothing (the editor's frame alone is about 13 KB; one allocation a placement adds at least 800 KB).</summary>
+    private const long ArrowQuietFrame = 256 * 1024;
+
+    /// <summary>
     /// The desk's guide at the shift's start: the rulebook's GUIDE holds BASICS and every page introduced so far (today's marked NEW);
     /// day 1 starts the tutorial at its first step; a guided day opens the rulebook on its new page with the moment's prompt; a later
     /// day with a new page only badges the GUIDE tab.
@@ -510,9 +573,16 @@ public static class _TimeDeskAuditPlay
         }
         GuidePage moment = guide.MomentPage(day);
         if (moment != null)
-            Check(o.Guide.ShowingNow == "moment" && book.Page == DeskRulebook.GuidePageIndex && book.GuideSheets[book.GuideSheetIndex].Id == moment.id &&
-                  o.Guide.Prompt.Line.Contains(moment.title) && !book.GuideBadge,
-                  $"day {day}: the rulebook opens itself on the new page '{moment.id}' and the prompt names it");
+        {
+            string open = book.GuideSheetIndex < book.GuideSheets.Count ? book.GuideSheets[book.GuideSheetIndex].Id : "?";
+            Check(o.Guide.ShowingNow == "moment" && book.Page == DeskRulebook.GuidePageIndex && open == moment.id && o.Guide.Prompt.Line.Contains(moment.title),
+                  $"day {day}: the rulebook opens itself on the new page '{moment.id}' and the prompt names it (page {book.Page}, sheet '{open}')");
+            // The badge marks a page added today until it is opened (the guide spec 2026-10-06 section 7): the moment opens the day's first
+            // new page, so it goes out, unless the day adds another (day 5: the scanner's page is opened, the Travel Permit's still waits).
+            List<string> unread = guide.NewOn(day).Where(g => g.id != moment.id).Select(g => g.id).ToList();
+            Check(book.GuideBadge == unread.Count > 0,
+                  $"day {day}: the GUIDE tab's badge stays exactly while another of today's pages is unread ([{string.Join(", ", unread)}], badge {book.GuideBadge})");
+        }
         else
             Check(o.Guide.ShowingNow.Length == 0 && book.GuideBadge == guide.NewOn(day).Count > 0, $"day {day}: no moment; the GUIDE tab's badge marks a new page");
     }
@@ -2367,6 +2437,11 @@ public static class _TimeDeskAuditPlay
             else
                 PlayerPrefs.SetString(pref, value);
         }
+        string intensity = SessionState.GetString(IntensityKey, "<absent>");
+        if (intensity == "<absent>")
+            PlayerPrefs.DeleteKey(IntensityPref);
+        else
+            PlayerPrefs.SetFloat(IntensityPref, float.Parse(intensity, System.Globalization.CultureInfo.InvariantCulture));
         foreach (string entry in SessionState.GetString(DesktopPrefsKey, string.Empty).Split('\u0002').Where(e => e.Length > 0))
         {
             string[] kv = entry.Split('\u0001');

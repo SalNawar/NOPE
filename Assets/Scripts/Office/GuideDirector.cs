@@ -96,6 +96,9 @@ public sealed class GuideDirector : MonoBehaviour
     private bool _replayed;
     private Showing _showing;
     private string _target;
+    private string _targetForm;
+    private bool _targetField;
+    private ClueCategory _targetCategory;
     private CaseInstance _case;
     private GuidePage _practice;
     private bool _inspecting, _barOut, _stamped;
@@ -379,7 +382,7 @@ public sealed class GuideDirector : MonoBehaviour
     private void Show(Showing what, string header, string line, bool skip, string target)
     {
         _showing = what;
-        _target = target;
+        SetTarget(target);
         if (prompt != null)
             prompt.Show(header, line, skip);
     }
@@ -387,9 +390,17 @@ public sealed class GuideDirector : MonoBehaviour
     private void Hide()
     {
         _showing = Showing.None;
-        _target = null;
+        SetTarget(null);
         if (prompt != null)
             prompt.Hide();
+    }
+
+    /// <summary>Where the arrow points from now on: a "paper:" or "field:" target is read once here (GuideTargets), so placing the arrow every frame allocates nothing.</summary>
+    private void SetTarget(string target)
+    {
+        _target = target;
+        _targetField = GuideTargets.TryField(target, out _, out _targetCategory);
+        GuideTargets.TryForm(target, out _targetForm);
     }
 
     // ---- The arrow ----
@@ -453,8 +464,8 @@ public sealed class GuideDirector : MonoBehaviour
             world = t.position;
             return true;
         }
-        if (target == "rulebook" || GuideTargets.TryForm(target, out _))
-            if (TryPaper(target, out world) || TryRulebook(out world))
+        if (target == "rulebook" || _targetForm != null)
+            if (TryPaper(out world) || TryRulebook(out world))
                 return true;
         if (target == "traveller" && traveller != null)
         {
@@ -474,13 +485,15 @@ public sealed class GuideDirector : MonoBehaviour
     /// <summary>Where the rulebook's tabs are in its own space (metres: its top edge; Build Office UI's booklet).</summary>
     private static readonly Vector3 RulebookTabs = new Vector3(0f, 0f, 0.165f);
 
-    /// <summary>Where the traveller's paper a "paper:" or "field:" <paramref name="target"/> names lies on the desk: one field's box ("field:") or the middle of all its fields' boxes; false when it is not on the desk.</summary>
-    private bool TryPaper(string target, out Vector3 world)
+    /// <summary>Where the traveller's paper the "paper:" or "field:" target names lies on the desk: one field's box ("field:") or the middle of all its fields' boxes; false when it is not on the desk.</summary>
+    private bool TryPaper(out Vector3 world)
     {
         world = default;
-        if (_case == null || desk == null || !GuideTargets.TryForm(target, out string form))
+        string form = _targetForm;
+        if (_case == null || desk == null || form == null)
             return false;
-        bool field = GuideTargets.TryField(target, out _, out ClueCategory category);
+        bool field = _targetField;
+        ClueCategory category = _targetCategory;
         for (int d = 0; d < _case.documents.Count; d++)
         {
             DocumentInstance doc = _case.documents[d];

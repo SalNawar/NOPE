@@ -21,10 +21,10 @@ public static class UiLanguagePreference
     /// <summary>True when the player chose "Always English".</summary>
     public static bool AlwaysEnglish
     {
-        get => PlayerPrefs.GetString(Key, FollowHistory) == English;
+        get => PlayerPrefs.GetString(PlayerPrefKeys.For(Key), FollowHistory) == English;
         set
         {
-            PlayerPrefs.SetString(Key, value ? English : FollowHistory);
+            PlayerPrefs.SetString(PlayerPrefKeys.For(Key), value ? English : FollowHistory);
             PlayerPrefs.Save();
         }
     }

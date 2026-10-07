@@ -289,14 +289,13 @@ public static partial class OfficeSceneUIBuilder
     /// on an icon key, <paramref name="share"/> of the key's side (its pad
     /// included), taking no clicks; rebuilt each build.
     /// </summary>
-    private static void KitGlyph(Component key, string glyph, float share = 0.9f, float turn = 0f)
+    private static void KitGlyph(Component key, string glyph, float share = 0.9f)
     {
         DestroyChildIfPresent(key.transform, "KitGlyph");
         float h = share / 2f;
         Transform g = Panel(key.transform, "KitGlyph", new Vector2(0.5f - h, 0.5f - h), new Vector2(0.5f + h, 0.5f + h), Vector2.zero, Vector2.zero, Color.white,
                             key.TryGetComponent(out ThemeTag tag) ? tag.Role : ThemeRoleId.DiegeticDevice);
         SetAnchors(g, new Vector2(0.5f - h, 0.5f - h), new Vector2(0.5f + h, 0.5f + h));
-        g.localRotation = Quaternion.Euler(0f, 0f, turn);
         Image image = g.GetComponent<Image>();
         image.sprite = _kit.Get(glyph);
         image.preserveAspect = true;
@@ -314,7 +313,7 @@ public static partial class OfficeSceneUIBuilder
             return;
         KitSkin(arrow, "iconkey", _kit.overlayScale);
         DestroyChildIfPresent(arrow, "Glyph");
-        KitGlyph(arrow, "glyph_back", 0.9f, 90f); // the kit's back arrow turned to point down (its glyph_down is drawn empty)
+        KitGlyph(arrow, "glyph_down");
     }
 
     /// <summary>
