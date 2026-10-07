@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 122. Full regeneration is NOT complete.
+Saved: 146. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -126,3 +126,27 @@ Saved: 122. Full regeneration is NOT complete.
 | premade_kurosawa__explaining_c | visually reviewed; registration pending |
 | premade_kurosawa__thinking_c | visually reviewed; registration pending |
 | premade_kurosawa__objecting_c | visually reviewed; registration pending |
+| premade_saladin_neutral | visually reviewed; registration pending |
+| premade_saladin_happy | visually reviewed; registration pending |
+| premade_saladin_angry | visually reviewed; registration pending |
+| premade_saladin_worried | visually reviewed; registration pending |
+| premade_saladin_photo | visually reviewed; registration pending |
+| premade_saladin__explaining_a | visually reviewed; registration pending |
+| premade_saladin__thinking_a | visually reviewed; registration pending |
+| premade_saladin__objecting_a | visually reviewed; registration pending |
+| premade_cleopatra_neutral | visually reviewed; registration pending |
+| premade_cleopatra_happy | visually reviewed; registration pending |
+| premade_cleopatra_angry | visually reviewed; registration pending |
+| premade_cleopatra_worried | visually reviewed; registration pending |
+| premade_cleopatra_photo | visually reviewed; registration pending |
+| premade_cleopatra__explaining_b | visually reviewed; registration pending |
+| premade_cleopatra__thinking_b | visually reviewed; registration pending |
+| premade_cleopatra__objecting_b | visually reviewed; registration pending |
+| premade_beethoven_neutral | visually reviewed; registration pending |
+| premade_beethoven_happy | visually reviewed; registration pending |
+| premade_beethoven_angry | visually reviewed; registration pending |
+| premade_beethoven_worried | visually reviewed; registration pending |
+| premade_beethoven_photo | visually reviewed; registration pending |
+| premade_beethoven__explaining_c | visually reviewed; registration pending |
+| premade_beethoven__thinking_c | visually reviewed; registration pending |
+| premade_beethoven__objecting_c | visually reviewed; registration pending |
