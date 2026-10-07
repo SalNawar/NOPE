@@ -123,4 +123,10 @@ public sealed class PaperStack
 
     /// <summary>The paper's place from the bottom (0), or -1 when it is not stacked.</summary>
     public int IndexOf(int id) => _order.IndexOf(id);
+
+    /// <summary>How many are stacked.</summary>
+    public int Count => _order.Count;
+
+    /// <summary>The id at <paramref name="index"/> from the bottom.</summary>
+    public int this[int index] => _order[index];
 }

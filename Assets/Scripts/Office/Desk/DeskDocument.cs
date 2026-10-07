@@ -107,6 +107,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>The paper quad (its material swaps to the reading material while on the desk).</summary>
     [SerializeField] private Renderer paperQuad;
 
+    /// <summary>The paper's edge under its face (a child of the paper quad, in its unit space; a vertex-coloured material): its thickness seen from the side (PaperEdge; Saleh's 1007d playtest: "too flat when you see them from the side").</summary>
+    [SerializeField] private MeshFilter edge;
+
     /// <summary>The paper's unlit material while it lies on the desk, full size (the paper's texture, evenly lit); optional.</summary>
     [SerializeField] private Material examineMaterial;
 
@@ -265,6 +268,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                 Destroy(filter.sharedMesh);
         if (_shapedMesh != null)
             Destroy(_shapedMesh);
+        if (_edgeMesh != null)
+            Destroy(_edgeMesh);
         if (_ownMarkMaterial != null)
             Destroy(_ownMarkMaterial);
         foreach (Texture2D impression in _impressions)
@@ -303,8 +308,11 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         _stamps = 0;
         _scale = FormLayout.PrintUnit(form.Spec, Size.x, style.metrics);
         _form = FormLayout.Layout(form.Spec, form.Data, Size.x / _scale, style.metrics, new TmpFormText(textTemplate));
-        ShapePaper(art != null ? art.corner * Size.x : PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit) * _scale);
+        List<(float x, float y)> outline = ShapePaper(art != null ? art.corner * Size.x : PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit) * _scale);
         Color cover = EmblemArt.Ink(form.Data.Cover, new Color(palette.Accent.R, palette.Accent.G, palette.Accent.B, 1f));
+        PaperKind kind = PaperEdge.KindOf(look.frame);
+        Thickness = kind == PaperKind.Booklet ? config.bookletThickness : kind == PaperKind.Card ? config.cardThickness : config.paperThickness;
+        BuildEdge(outline, kind, string.IsNullOrEmpty(look.paper) ? config.paperEdgeTint : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f), cover);
         Texture2D blank = art != null ? SlotArt.Texture(new[] { ArtSlots.PaperBlank(form.Data.FormNumber) }) : null;
 
         foreach (FormItem item in _form.Items)
@@ -635,16 +643,18 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// unit square. The mesh is in the quad's unit space (the quad is scaled
     /// to the paper's size), so its corners are round once scaled.
     /// </summary>
-    private void ShapePaper(float corner)
+    /// <returns>The outline in the quad's unit space (the edge follows it).</returns>
+    private List<(float x, float y)> ShapePaper(float corner)
     {
+        List<(float x, float y)> square = PaperEdge.Rectangle(1f, 1f);
         if (paperQuad == null || !paperQuad.TryGetComponent(out MeshFilter filter))
-            return;
+            return square;
         if (_quadMesh == null)
             _quadMesh = filter.sharedMesh;
         if (corner <= 0f || Size.x <= 0f || Size.y <= 0f)
         {
             filter.sharedMesh = _quadMesh;
-            return;
+            return square;
         }
         List<(float x, float y)> outline = PaperSilhouette.Outline(Size.x, Size.y, corner);
         var vertices = new List<Vector3> { Vector3.zero };
@@ -671,7 +681,43 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         _shapedMesh.SetTriangles(triangles, 0);
         _shapedMesh.RecalculateBounds();
         filter.sharedMesh = _shapedMesh;
+        return outline.ConvertAll(p => (p.x / Size.x, p.y / Size.y));
     }
+
+    /// <summary>The paper's thickness on the desk (metres; DeskConfigSO's for its kind: a sheet, a booklet, a card): its edge's depth, and its room in the stack (DeskController, PaperLayers.Lifts).</summary>
+    public float Thickness { get; private set; } = 0.0007f;
+
+    /// <summary>
+    /// Builds the paper's edge (PaperEdge): the side walls of its outline
+    /// (<paramref name="outline"/>, in the quad's unit space) down its
+    /// thickness in its kind's bands, coloured from its face's tint
+    /// <paramref name="paper"/> (a shade darker; a booklet's pages cream and
+    /// grey) and a booklet's <paramref name="cover"/>.
+    /// </summary>
+    private void BuildEdge(List<(float x, float y)> outline, PaperKind kind, Color paper, Color cover)
+    {
+        if (edge == null)
+            return;
+        var vertices = new List<(float x, float y, float z)>();
+        var tones = new List<EdgeTone>();
+        var triangles = new List<int>();
+        PaperEdge.Walls(outline, PaperEdge.Bands(kind, Thickness), vertices, tones, triangles);
+        _edgeMesh ??= new Mesh { name = "PaperEdge" };
+        _edgeMesh.Clear();
+        _edgeMesh.SetVertices(vertices.ConvertAll(v => new Vector3(v.x, v.y, v.z)));
+        Color edgeTone = paper * EdgeShade, light = Color.Lerp(paper, PageCream, 0.6f), dark = light * EdgeShade, coverTone = cover * EdgeShade;
+        edgeTone.a = light.a = dark.a = coverTone.a = 1f;
+        _edgeMesh.SetColors(tones.ConvertAll(t => t == EdgeTone.Cover ? coverTone : t == EdgeTone.PageLight ? light : t == EdgeTone.PageDark ? dark : edgeTone));
+        _edgeMesh.SetTriangles(triangles, 0);
+        _edgeMesh.RecalculateBounds();
+        edge.sharedMesh = _edgeMesh;
+    }
+
+    /// <summary>The edge's shade of its face's colour, and a page's cream.</summary>
+    private const float EdgeShade = 0.82f;
+    private static readonly Color PageCream = new Color(0.96f, 0.93f, 0.85f, 1f);
+
+    private Mesh _edgeMesh;
 
     /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres: the first place at once, then on the paper's spring (a picked-up paper rises, a dropped one settles; a cut without motion).</summary>
     public void SetLift(float height)
@@ -682,9 +728,11 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         {
             _liftPlaced = true;
             _lift.Snap(height);
+            _settling = false;
             ShowFeel();
             return;
         }
+        _settling = height < _lift.Target; // set down: its spring never sinks it below its place (the paper under it, the desk)
         _lift.Target = height;
     }
 
@@ -736,10 +784,23 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         ShowFeel();
     }
 
-    /// <summary>Draws the lift and the tilt on the sheet, and its scale.</summary>
+    /// <summary>True while the paper is being set down (its lift's target lowered): its spring's bounce stays above its place.</summary>
+    private bool _settling;
+
+    /// <summary>
+    /// Draws the lift and the tilt on the sheet, and its scale. The height is
+    /// its lift (while set down, never below its place: the spring's
+    /// undershoot sank it into the desk or the paper under it) raised by how
+    /// far its tilt dips its lowest corner (PaperLayers.TiltDrop: a drag's lean
+    /// or a drop's flutter), so no part of it ever goes through what lies under
+    /// it (Saleh's 1007d playtest: "sometimes they clip or render with the table").
+    /// </summary>
     private void ShowFeel()
     {
-        sheet.localPosition = new Vector3(0f, _lift.Value, 0f);
+        float lift = _settling ? Mathf.Max(_lift.Value, _lift.Target) : _lift.Value;
+        float half = _sizeNow * (1f + _squash.Value) / 2f;
+        lift += PaperLayers.TiltDrop(Size.x * half, Size.y * half, _tiltX.Value, _tiltZ.Value);
+        sheet.localPosition = new Vector3(0f, lift, 0f);
         _sheetRest ??= sheet.localRotation;
         sheet.localRotation = _tiltX.Value == 0f && _tiltZ.Value == 0f ? _sheetRest.Value : Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
         ShowSheetScale();

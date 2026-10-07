@@ -154,6 +154,8 @@ public sealed class DeskController : MonoBehaviour
             stamps.Changed += ShowCounter;
             stamps.Changed += PassportUnderDaters;
         }
+        if (rulebook != null && config != null)
+            rulebook.ShowEdge(config.folderThickness);
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan += RulebookLifted;
@@ -822,17 +824,43 @@ public sealed class DeskController : MonoBehaviour
         paper.SetLive(live, live, _live);
     }
 
-    /// <summary>Stack heights: one step per place from the desk (the bottom one, a paper or the rulebook, one step up); the dragged paper or rulebook lifted above the whole stack.</summary>
+    /// <summary>
+    /// Stack heights (PaperLayers.Lifts): each paper and the rulebook lifted
+    /// by its place in the stack and the thickness of all under it, the
+    /// lowest clear of the desk top (Saleh's 1007d playtest: papers clipped
+    /// into the table); the dragged paper or rulebook lifted above the whole stack.
+    /// </summary>
     private void ApplyStack()
     {
-        // One stacking rule (PaperLayers): the step is more than any paper's parts lie over it, so the paper on top hides all of each paper under it.
-        float step = PaperLayers.StackStep(config.paperStackStep);
-        float top = (_papers.Count + 1) * step;
+        // One stacking rule (PaperLayers): each one's bottom lies over every part of the one under it, so the paper on top hides all of each paper under it.
+        _stackThickness.Clear();
+        for (int i = 0; i < _stack.Count; i++)
+            _stackThickness.Add(Thickness(_stack[i]));
+        float[] lifts = PaperLayers.Lifts(_stackThickness, config.paperStackStep);
+        float top = lifts.Length > 0 ? lifts[lifts.Length - 1] + PaperLayers.PartsDepth : PaperLayers.StackStep(config.paperStackStep);
         foreach (DeskDocument paper in _papers)
             if (paper != null)
-                paper.SetLift(paper.Index == _dragged ? top + config.dragLift : (_stack.IndexOf(paper.Index) + 1) * step);
+                paper.SetLift(paper.Index == _dragged ? top + paper.Thickness + config.dragLift : LiftOf(paper.Index, lifts));
         if (rulebook != null)
-            rulebook.SetLift(_rulebookDragged ? top + config.dragLift : (_stack.IndexOf(RulebookId) + 1) * step);
+            rulebook.SetLift(_rulebookDragged ? top + rulebook.Thickness + config.dragLift : LiftOf(RulebookId, lifts));
+    }
+
+    /// <summary>The thicknesses of the stack, bottom first (reused).</summary>
+    private readonly List<float> _stackThickness = new List<float>();
+
+    /// <summary>The thickness of stack id <paramref name="id"/>: the rulebook's, or a paper's.</summary>
+    private float Thickness(int id)
+    {
+        if (id == RulebookId)
+            return rulebook != null ? rulebook.Thickness : 0f;
+        return id >= 0 && id < _papers.Count && _papers[id] != null ? _papers[id].Thickness : config.paperThickness;
+    }
+
+    /// <summary>Stack id <paramref name="id"/>'s lift from <paramref name="lifts"/> (a paper not in the stack lies at the first place).</summary>
+    private float LiftOf(int id, float[] lifts)
+    {
+        int at = _stack.IndexOf(id);
+        return at >= 0 && at < lifts.Length ? lifts[at] : PaperLayers.Lifts(new[] { Thickness(id) }, config.paperStackStep)[0];
     }
 
     /// <summary>

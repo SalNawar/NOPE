@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// The one stacking rule of the desk's papers (Saleh's playtest 2026-10-07:
@@ -29,6 +30,35 @@ public static class PaperLayers
 
     /// <summary>The height between two stacked papers: <paramref name="configured"/> (DeskConfigSO.paperStackStep), never less than the parts' depth and the gap.</summary>
     public static float StackStep(float configured) => Math.Max(configured, PartsDepth + StackGap);
+
+    /// <summary>The least room between the desk top and the bottom of whatever lies lowest on it (metres): no paper meets the desk's surface for the depth buffer (Saleh's 1007d playtest: "sometimes they clip or render with the table").</summary>
+    public const float DeskClearance = 0.0005f;
+
+    /// <summary>
+    /// Each stacked thing's face height over the desk, bottom first, from its
+    /// <paramref name="thickness"/> (PaperEdge: a sheet, a booklet, a card, the
+    /// folder): the lowest at least <see cref="DeskClearance"/> over the desk with
+    /// its whole thickness under its face, and each next one's bottom at least
+    /// <see cref="StackGap"/> over every part of the one below (its face plus
+    /// <see cref="PartsDepth"/>); never closer than <see cref="StackStep"/>
+    /// of <paramref name="configured"/> apart. So no paper meets the desk or
+    /// the paper under it, at any thickness.
+    /// </summary>
+    public static float[] Lifts(IReadOnlyList<float> thickness, float configured)
+    {
+        var lifts = new float[thickness != null ? thickness.Count : 0];
+        float step = StackStep(configured);
+        for (int i = 0; i < lifts.Length; i++)
+        {
+            float t = Math.Max(0f, thickness[i]);
+            lifts[i] = i == 0 ? Math.Max(step, DeskClearance + t) : lifts[i - 1] + Math.Max(step, PartsDepth + StackGap + t);
+        }
+        return lifts;
+    }
+
+    /// <summary>How far a paper tilted <paramref name="tiltXDegrees"/> about its width and <paramref name="tiltZDegrees"/> about its length dips at its lowest corner (metres; <paramref name="halfWidth"/> and <paramref name="halfDepth"/> its half sizes on the desk): a drag's lean or a drop's flutter lifts it by that much, so its edge never sinks into the desk or the paper under it.</summary>
+    public static float TiltDrop(float halfWidth, float halfDepth, float tiltXDegrees, float tiltZDegrees) =>
+        (float)(Math.Abs(halfDepth * Math.Sin(tiltXDegrees * Math.PI / 180.0)) + Math.Abs(halfWidth * Math.Sin(tiltZDegrees * Math.PI / 180.0)));
 
     /// <summary>The parts' heights in stacking order, bottom first (the tests check each is under PartsDepth and in order).</summary>
     public static readonly float[] Order = { Seal, Fill, Highlight, Line, Photo, Photo + PhotoInset, Text, Ink };

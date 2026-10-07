@@ -944,6 +944,7 @@ public static partial class OfficeSceneUIBuilder
         PrimitivePart(sheet, "Paper", PrimitiveType.Quad, Vector3.zero, new Vector3(size.x, size.y, 1f), paperMaterial);
         MeshRenderer paper = sheet.Find("Paper").GetComponent<MeshRenderer>();
         paper.shadowCastingMode = ShadowCastingMode.Off;
+        MeshFilter paperEdge = EdgeMesh(paper.transform);
         Material examineMaterial = EnsureMaterial("Paper_Examine", "Universal Render Pipeline/Unlit", m =>
         {
             m.SetTexture("_BaseMap", paperSprite.texture);
@@ -984,6 +985,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "highlightTemplate", print.Slot);
         SetRef(so, "style", EnsureFormStyle());
         SetRef(so, "paperQuad", paper);
+        SetRef(so, "edge", paperEdge);
         SetRef(so, "examineMaterial", examineMaterial);
         SetRef(so, "click", click);
         SetRef(so, "drag", drag);
@@ -1619,6 +1621,32 @@ public static partial class OfficeSceneUIBuilder
             ? EnsureMaterial(name, "NOPE/Desk Anime", m => m.SetColor("_BaseColor", colour))
             : LitMaterial(name, colour, 0.3f);
 
+    /// <summary>The render queue of the papers' and the folder's edges: before the printed layers (the seal at 2975), after the opaque desk.</summary>
+    private const int EdgeQueue = 2970;
+
+    /// <summary>
+    /// An empty edge mesh under <paramref name="face"/> (a paper's quad or the
+    /// folder's card; in its unit space), in a vertex-coloured unlit material
+    /// (the desk paper and the folder build its walls: PaperEdge), casting and
+    /// taking no shadow. Its mesh is runtime-built, so the scene keeps none.
+    /// </summary>
+    private static MeshFilter EdgeMesh(Transform face)
+    {
+        var go = new GameObject("Edge", typeof(MeshFilter), typeof(MeshRenderer));
+        go.transform.SetParent(face, false);
+        var renderer = go.GetComponent<MeshRenderer>();
+        Material m = EnsureMaterial("Paper_Edge", "Sprites/Default", mat => mat.SetColor("_Color", Color.white));
+        if (m != null && m.renderQueue != EdgeQueue)
+        {
+            m.renderQueue = EdgeQueue;
+            EditorUtility.SetDirty(m);
+        }
+        renderer.sharedMaterial = m;
+        renderer.shadowCastingMode = ShadowCastingMode.Off;
+        renderer.receiveShadows = false;
+        return go.GetComponent<MeshFilter>();
+    }
+
     /// <summary>
     /// The rulebook on the desk, Papers, Please's booklet (Saleh 2026-10-06),
     /// as Saleh's Canva folder (run 7: "folder too"), rebuilt each run:
@@ -1647,6 +1675,7 @@ public static partial class OfficeSceneUIBuilder
         GameObject card = PrimitivePart(booklet, "Card", PrimitiveType.Quad, Vector3.zero, new Vector3(RulebookFolderSize.x, RulebookFolderSize.y, 1f),
                                         SlotArtMaterial("Rulebook_Folder", ArtSlots.RulebookFolder));
         card.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+        MeshFilter folderEdge = EdgeMesh(card.transform);
         Color ink = new Color(0.13f, 0.12f, 0.15f);
 
         // The tabs on the folder's top edge, at the art's places, each its own art (shown only while its page is there: DeskRulebook).
@@ -1793,6 +1822,7 @@ public static partial class OfficeSceneUIBuilder
         DeskRulebook rulebook = GetOrAdd<DeskRulebook>(book.gameObject);
         var so = new SerializedObject(rulebook);
         SetRef(so, "booklet", booklet);
+        SetRef(so, "edge", folderEdge);
         SetRef(so, "card", cardClick);
         SetRef(so, "title", title);
         SerializedArrays.Set(so, "rows", rows);

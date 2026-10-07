@@ -96,6 +96,12 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): it reads in the reading view at 1280x720.</summary>
     [Min(0.05f)] public float readingHeight = 0.34f;
 
+    /// <summary>How thick each thing lying on the desk is (metres; Saleh's 1007d playtest: "too flat when you see them from the side"): a sheet of paper, a plastic card, a passport booklet (its cover and pages), the rulebook's folder (its pages over its board). Their edges show it (PaperEdge) and the stack makes room for it (PaperLayers.Lifts).</summary>
+    [Min(0.0001f)] public float paperThickness = 0.0007f, cardThickness = 0.0009f, bookletThickness = 0.003f, folderThickness = 0.0025f;
+
+    /// <summary>A plain sheet's edge colour before its shade (a paper whose look names no tint: the agency's cream).</summary>
+    public Color paperEdgeTint = new Color(0.95f, 0.93f, 0.87f, 1f);
+
     /// <summary>The photo's tint while its paper lies on the desk, full size (evenly lit, unlike travellerTint on the counter).</summary>
     [FormerlySerializedAs("examineTint")] public Color readingTint = Color.white;
 
