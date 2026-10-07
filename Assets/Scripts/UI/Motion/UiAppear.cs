@@ -75,6 +75,7 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
     /// settled, ended off by the offset: the playtest's Investigation window,
     /// maximised on its first frame, came to rest pushed up off the screen.)
     /// </summary>
+    /// <remarks>A layout group that drives a moving piece's place (the wheel's ring, RadialLayoutGroup) uses PlaceAnchored.</remarks>
     public static void Place(GameObject target, System.Action place)
     {
         if (target == null || !target.TryGetComponent(out UiAppear appear) || !appear._posed)
@@ -86,6 +87,27 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
         t.localPosition -= appear._applied;
         place();
         t.localPosition += appear._applied;
+    }
+
+    /// <summary>
+    /// Sets <paramref name="target"/>'s anchored position to <paramref name="at"/>
+    /// as Place does, without allocating: for a layout group that drives the
+    /// place of a piece that may be flying in (run 7's QA sweep: the wheel's
+    /// ring re-laid its pills while they flew out from its centre, and they came
+    /// to rest twice their radius out, the bottom one off the screen).
+    /// </summary>
+    public static void PlaceAnchored(RectTransform target, Vector2 at)
+    {
+        if (target == null)
+            return;
+        if (!target.TryGetComponent(out UiAppear appear) || !appear._posed)
+        {
+            target.anchoredPosition = at;
+            return;
+        }
+        target.localPosition -= appear._applied;
+        target.anchoredPosition = at;
+        target.localPosition += appear._applied;
     }
 
     /// <summary>Plays it in from its style's start, after <paramref name="delay"/> seconds (the object should be on).</summary>
