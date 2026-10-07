@@ -54,6 +54,9 @@ public sealed class MotionKnobs
     /// <summary>The seconds between one pill of the dialogue wheel and the next as they pop out (the stagger).</summary>
     public float staggerSeconds = 0.035f;
 
+    /// <summary>How many lines a second a printed slip (the citation) shows as it prints.</summary>
+    public float printLinesPerSecond = 10f;
+
     /// <summary>The feel of a popup opening, a slide coming in and a sliding selection pill.</summary>
     public MotionFeel appearFeel = MotionFeel.Balanced, slideFeel = MotionFeel.Elastic, pillFeel = MotionFeel.Balanced;
 

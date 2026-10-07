@@ -92,7 +92,7 @@ public static class SoundCues
     public const string CallNext = "call_next", PortalThrough = "portal_through", DialogueBlip = "dialogue_blip";
 
     /// <summary>The PC.</summary>
-    public const string PcOn = "pc_on", PcOff = "pc_off", KeyTap = "key_tap", WindowOpen = "window_open", WindowClose = "window_close", PcError = "pc_error", PcNotify = "pc_notify";
+    public const string PcOn = "pc_on", PcOff = "pc_off", KeyTap = "key_tap", MouseClick = "mouse_click", WindowOpen = "window_open", WindowClose = "window_close", PcError = "pc_error", PcNotify = "pc_notify";
 
     /// <summary>The interface.</summary>
     public const string UiHover = "ui_hover", UiPress = "ui_press", UiRelease = "ui_release", UiToggle = "ui_toggle", UiTab = "ui_tab", UiError = "ui_error", UiPopup = "ui_popup", WheelOpen = "wheel_open";

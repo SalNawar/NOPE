@@ -319,6 +319,7 @@ public sealed class DeskStampTray : MonoBehaviour
             return;
         CancelCarry();
         _flow.StowBar();
+        Sounds.Play(SoundCues.PaperSlide);
         Decided?.Invoke(_flow.Verdict == DeskStamp.Approved);
     }
 

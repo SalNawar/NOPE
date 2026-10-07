@@ -69,7 +69,10 @@ public sealed class OverlayCallout : MonoBehaviour
         _follow = follow;
         _offset = offset;
         _remaining = seconds;
+        bool popping = !panel.gameObject.activeSelf;
         panel.gameObject.SetActive(true);
+        if (popping)
+            UiAppear.Of(panel.gameObject, AppearStyle.Pop).Open(); // the tooltip pops in with a slight overshoot (the game feel)
         if (grows)
             UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(panel);
         if (!OverlayProjection.TryPlace(panel, _canvasRect, _camera, follow.position, offset, keepOnScreen, topInset))

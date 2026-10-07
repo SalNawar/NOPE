@@ -51,10 +51,14 @@ public sealed class OfficeUIController : MonoBehaviour
     /// <summary>Writes the verdict line and shows its strip only while it has text.</summary>
     private void SetResult(string text)
     {
+        bool changed = resultText != null && resultText.text != text;
         if (resultText != null)
             resultText.text = text;
-        if (resultBackdrop != null)
-            resultBackdrop.SetActive(!string.IsNullOrEmpty(text));
+        if (resultBackdrop == null)
+            return;
+        resultBackdrop.SetActive(!string.IsNullOrEmpty(text));
+        if (changed && !string.IsNullOrEmpty(text))
+            UiAppear.Of(resultBackdrop, AppearStyle.Whip).Open(); // the verdict ribbon whips in (the game feel)
     }
 
     /// <summary>
@@ -116,10 +120,12 @@ public sealed class OfficeUIController : MonoBehaviour
             return;
         }
 
-        // Open the slip and hold the day until dismissed.
+        // Open the slip and hold the day until dismissed: it drops in and prints line by line (the game feel; the text is whole at once).
         _onCitationDismissed = onContinue;
         citationText.text = verdict.citationText;
         citationPanel.SetActive(true);
+        UiAppear.Of(citationPanel, AppearStyle.Drop).Open();
+        UiPrint.Print(citationText, SoundCues.CitationPrint, SoundCues.CitationLand);
 
         if (citationContinueButton != null)
         {

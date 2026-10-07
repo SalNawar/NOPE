@@ -204,7 +204,25 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
             _speech.EndReveal();
         catcher.SetActive(true);
         Place();
+        PopPills();
         OpenChanged?.Invoke();
+    }
+
+    /// <summary>The game feel's opening: the ring's pills pop out one after another (MotionKnobs.staggerSeconds apart, UiAppear) with the wheel_open cue; the ring lays them out, so they grow in place.</summary>
+    private void PopPills()
+    {
+        Sounds.Play(SoundCues.WheelOpen);
+        Transform pills = layout != null ? layout.transform : ring;
+        if (pills == null)
+            return;
+        float stagger = UiMotion.Knobs.staggerSeconds;
+        int shown = 0;
+        for (int i = 0; i < pills.childCount; i++)
+        {
+            GameObject pill = pills.GetChild(i).gameObject;
+            if (pill.activeSelf)
+                UiAppear.Of(pill, AppearStyle.Pop).Open(stagger * shown++);
+        }
     }
 
     /// <summary>Closes the ring (the speech bubble plays on).</summary>
