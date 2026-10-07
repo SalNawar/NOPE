@@ -355,50 +355,6 @@
    ]
   },
   {
-   "name": "dome_red_pressed",
-   "file": "dome_red_pressed.png",
-   "size": [
-    332,
-    332
-   ],
-   "pad": 28,
-   "pixelsPerUnit": 100,
-   "pivot": [
-    0.5,
-    0.5
-   ],
-   "use": "big round dome button (SPIN; label live)",
-   "sliced": false,
-   "border": [
-    0,
-    0,
-    0,
-    0
-   ]
-  },
-  {
-   "name": "dome_red_rest",
-   "file": "dome_red_rest.png",
-   "size": [
-    332,
-    332
-   ],
-   "pad": 28,
-   "pixelsPerUnit": 100,
-   "pivot": [
-    0.5,
-    0.5
-   ],
-   "use": "big round dome button (SPIN; label live)",
-   "sliced": false,
-   "border": [
-    0,
-    0,
-    0,
-    0
-   ]
-  },
-  {
    "name": "dropdown",
    "file": "dropdown.png",
    "size": [
@@ -2929,19 +2885,19 @@
    ]
   },
   {
-   "name": "slot_lever",
-   "file": "slot_lever.png",
+   "name": "slot_bulb_off",
+   "file": "slot_bulb_off.png",
    "size": [
-    136,
-    416
+    96,
+    96
    ],
    "pad": 28,
    "pixelsPerUnit": 100,
    "pivot": [
     0.5,
-    0.0
+    0.5
    ],
-   "use": "slot lever (rotate around the bottom to pull)",
+   "use": "Night Slots: a marquee bulb, dark",
    "sliced": false,
    "border": [
     0,
@@ -2951,11 +2907,11 @@
    ]
   },
   {
-   "name": "slot_reel",
-   "file": "slot_reel.png",
+   "name": "slot_bulb_on",
+   "file": "slot_bulb_on.png",
    "size": [
-    280,
-    356
+    96,
+    96
    ],
    "pad": 28,
    "pixelsPerUnit": 100,
@@ -2963,13 +2919,849 @@
     0.5,
     0.5
    ],
-   "use": "slot reel window (symbol tile inside)",
+   "use": "Night Slots: a marquee bulb, lit",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_cabinet",
+   "file": "slot_cabinet.png",
+   "size": [
+    456,
+    536
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the cabinet body (oxblood, brass pinstripe)",
    "sliced": true,
    "border": [
-    60,
-    60,
-    60,
-    60
+    96,
+    96,
+    96,
+    96
+   ]
+  },
+  {
+   "name": "slot_chain",
+   "file": "slot_chain.png",
+   "size": [
+    316,
+    224
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the chain over the locked lever",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_chute",
+   "file": "slot_chute.png",
+   "size": [
+    224,
+    108
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the coin chute above the tray",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_coin",
+   "file": "slot_coin.png",
+   "size": [
+    108,
+    108
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: a payout coin",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_coinslot",
+   "file": "slot_coinslot.png",
+   "size": [
+    196,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the coin slot",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_crown",
+   "file": "slot_crown.png",
+   "size": [
+    1336,
+    456
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the arched top behind the marquee",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_deck",
+   "file": "slot_deck.png",
+   "size": [
+    456,
+    316
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the deck ledge (coin slot, credits, SPIN)",
+   "sliced": true,
+   "border": [
+    72,
+    64,
+    72,
+    76
+   ]
+  },
+  {
+   "name": "slot_glass",
+   "file": "slot_glass.png",
+   "size": [
+    1088,
+    528
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the glass glare over the reels",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_glow",
+   "file": "slot_glow.png",
+   "size": [
+    256,
+    256
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the glow behind a winning symbol",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_grille",
+   "file": "slot_grille.png",
+   "size": [
+    256,
+    280
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: a speaker grille beside the tray",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_lever_arm",
+   "file": "slot_lever_arm.png",
+   "size": [
+    112,
+    516
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.05426356589147287
+   ],
+   "use": "Night Slots: the lever rod (pivot at the hub)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_lever_ball",
+   "file": "slot_lever_ball.png",
+   "size": [
+    204,
+    204
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the lever ball",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_lever_hub",
+   "file": "slot_lever_hub.png",
+   "size": [
+    200,
+    272
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the lever hub on the cabinet side",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_lower",
+   "file": "slot_lower.png",
+   "size": [
+    456,
+    376
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the lower panel",
+   "sliced": true,
+   "border": [
+    68,
+    68,
+    68,
+    68
+   ]
+  },
+  {
+   "name": "slot_marquee",
+   "file": "slot_marquee.png",
+   "size": [
+    456,
+    256
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the lit marquee plate (title live)",
+   "sliced": true,
+   "border": [
+    72,
+    72,
+    72,
+    72
+   ]
+  },
+  {
+   "name": "slot_padlock",
+   "file": "slot_padlock.png",
+   "size": [
+    136,
+    156
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the padlock on the chain",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_payline",
+   "file": "slot_payline.png",
+   "size": [
+    456,
+    68
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the payline across the reels",
+   "sliced": true,
+   "border": [
+    40,
+    32,
+    40,
+    32
+   ]
+  },
+  {
+   "name": "slot_payline_arrow",
+   "file": "slot_payline_arrow.png",
+   "size": [
+    96,
+    108
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the payline marker (mirror for the right)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_priceplate",
+   "file": "slot_priceplate.png",
+   "size": [
+    296,
+    124
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the spin price plate (text live)",
+   "sliced": true,
+   "border": [
+    52,
+    48,
+    52,
+    48
+   ]
+  },
+  {
+   "name": "slot_priceplate_alert",
+   "file": "slot_priceplate_alert.png",
+   "size": [
+    296,
+    124
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the price plate lit red (INSERT CREDITS)",
+   "sliced": true,
+   "border": [
+    52,
+    48,
+    52,
+    48
+   ]
+  },
+  {
+   "name": "slot_reel",
+   "file": "slot_reel.png",
+   "size": [
+    376,
+    528
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: one reel drum (symbols ride over it)",
+   "sliced": true,
+   "border": [
+    44,
+    44,
+    44,
+    44
+   ]
+  },
+  {
+   "name": "slot_reel_shade",
+   "file": "slot_reel_shade.png",
+   "size": [
+    376,
+    528
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the cylinder shading over a reel",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_reelbed",
+   "file": "slot_reelbed.png",
+   "size": [
+    296,
+    296
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the dark well behind the reels",
+   "sliced": true,
+   "border": [
+    48,
+    48,
+    48,
+    48
+   ]
+  },
+  {
+   "name": "slot_sym_busted_machine",
+   "file": "slot_sym_busted_machine.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the reel symbol for the busted_machine outcome",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_sym_busted_machine_blur",
+   "file": "slot_sym_busted_machine_blur.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the busted_machine symbol smeared for the fast spin",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_sym_default",
+   "file": "slot_sym_default.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the reel symbol for the default outcome",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_sym_default_blur",
+   "file": "slot_sym_default_blur.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the default symbol smeared for the fast spin",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_sym_forgery_warning",
+   "file": "slot_sym_forgery_warning.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the reel symbol for the forgery_warning outcome",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_sym_forgery_warning_blur",
+   "file": "slot_sym_forgery_warning_blur.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the forgery_warning symbol smeared for the fast spin",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_sym_jackpot_cash",
+   "file": "slot_sym_jackpot_cash.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the reel symbol for the jackpot_cash outcome",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_sym_jackpot_cash_blur",
+   "file": "slot_sym_jackpot_cash_blur.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the jackpot_cash symbol smeared for the fast spin",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_sym_legendary_omen",
+   "file": "slot_sym_legendary_omen.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the reel symbol for the legendary_omen outcome",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_sym_legendary_omen_blur",
+   "file": "slot_sym_legendary_omen_blur.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the legendary_omen symbol smeared for the fast spin",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_sym_small_win",
+   "file": "slot_sym_small_win.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the reel symbol for the small_win outcome",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_sym_small_win_blur",
+   "file": "slot_sym_small_win_blur.png",
+   "size": [
+    248,
+    248
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the small_win symbol smeared for the fast spin",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_tray_back",
+   "file": "slot_tray_back.png",
+   "size": [
+    656,
+    196
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the payout tray inside",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_tray_lip",
+   "file": "slot_tray_lip.png",
+   "size": [
+    696,
+    168
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the payout tray front lip (over the coins)",
+   "sliced": false,
+   "border": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "slot_window",
+   "file": "slot_window.png",
+   "size": [
+    456,
+    336
+   ],
+   "pad": 28,
+   "pixelsPerUnit": 100,
+   "pivot": [
+    0.5,
+    0.5
+   ],
+   "use": "Night Slots: the reel window bezel (open middle)",
+   "sliced": true,
+   "border": [
+    88,
+    88,
+    88,
+    88
    ]
   },
   {
