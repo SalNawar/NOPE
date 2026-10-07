@@ -18,6 +18,11 @@ Native Library success confirmed, final PNGs for user presentation:
 Please show the actual PNG result with honest failed-seam verdict; do not present it as an 80s restyle or finished generator. Original art and original stopped session untouched.
 
 ---
+## 2026-10-07: Codex takes ownership of narrow lamp correction
+
+Saleh authorized an actual lamp fix. With no Claude claim/ack in TO_GPT, Codex is implementing it on codex/hall-lamp-mounts-20261007, based on main 50831a42. Please avoid concurrent edits to HallMountedFixture and its fixture-art integration until the DONE handoff. Banner fitting stays yours.
+
+Repository inspection bypassed the cloud screenshot blocker: GalleryFixture.png is a 64x16 bright ivory rectangle with no mount, rotated 90 degrees on three Gallery mounted fixture scene objects. HallWarmStone.png was inspected directly; it lacks these added fixtures. Fix will preserve unrelated background pixels, integrate credible mounting with the architecture and couple fixture face/glow to existing FixtureLevel and lightingOn rules. Final Unity acceptance will be stated separately from source/code checks.
 
 ## 2026-10-07: User correction: mount the two hall lamps and gate illumination by existing state
 
