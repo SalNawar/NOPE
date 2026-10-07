@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 5
   visitorsCount: 13
+  shiftStartMinute: -1
+  shiftEndMinute: -1
   bulletin: 'NEW: the scanner and the records. Scan a paper to read it in the Investigation
     app, now on your PC: it must match the traveller''s record (a citizen''s Citizen
     Account; for the displaced, who now come home through your desk with a Travel

@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 8
   visitorsCount: 14
+  shiftStartMinute: 780
+  shiftEndMinute: 1260
   bulletin: 'NEW: Debt Relief labourers. They carry a registered Work Permit, an
     Economy transponder and a signed Stranding Waiver. And from today the office
     reads the world''s language: the Bureau issues you a Translation Lens. Hover

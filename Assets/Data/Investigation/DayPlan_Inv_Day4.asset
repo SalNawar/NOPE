@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 4
   visitorsCount: 12
+  shiftStartMinute: -1
+  shiftEndMinute: -1
   bulletin: 'NEW: issuing seals. Every paper''s seal must match its office''s in
     the Seal Register, now in your rulebook (the SEALS tab).'
   papers:
