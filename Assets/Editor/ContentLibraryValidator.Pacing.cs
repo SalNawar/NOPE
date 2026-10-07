@@ -7,8 +7,8 @@ using UnityEngine;
 /// D7, wave 5 track C): each day plan's papers in circulation (DayPapers:
 /// known forms, none an earlier day issued left out) and what each day
 /// brings for the first time, a paper or a directive, at most one of each and
-/// named in its bulletin (DayPacing), in the words Generate World checks its
-/// source with.
+/// named in its bulletin (DayPacing), and each day's desk hours (ShiftHours;
+/// night shifts), in the words Generate World checks its source with.
 /// </summary>
 public static partial class ContentLibraryValidator
 {
@@ -59,6 +59,15 @@ public static partial class ContentLibraryValidator
             foreach (string problem in DayPacing.Problems(plans[i].name, newPapers[i], newRules[i], plans[i].Bulletin, i == 0))
             {
                 Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", plans[i]);
+                issues++;
+            }
+
+        // Each day's desk hours (night shifts), against the run's shift length knobs.
+        GameConfigSO config = WorldContentGenerator.RunGameConfig();
+        foreach (DayPlanSO plan in plans)
+            foreach (string problem in ShiftHours.Problems($"Day '{plan.name}'", plan.ShiftStartMinute, plan.ShiftEndMinute, config.shiftMinHours, config.shiftMaxHours))
+            {
+                Debug.LogError($"[ContentLibraryValidator] {problem} (world_source.json days[].shiftStart / shiftEnd; run Tools > TimeDesk > Generate World)", plan);
                 issues++;
             }
         return issues;

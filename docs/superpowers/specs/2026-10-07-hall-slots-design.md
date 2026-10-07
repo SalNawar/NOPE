@@ -12,7 +12,7 @@ floor, glass and floor clutter follow the run.
 |---|---|---|
 | culture | neutral or a nation id | `CultureThemeService.ActiveCultureId`: the timeline leader's culture, the one the PC theme and the Translation Lens follow |
 | tier | steady < strained < breaching < collapsing | `HelixRiver.Tier`: Collapsing in the critical band (the river flickers), Breaching from the warning line (its glitch starts), Strained when the calm falls under `HelixRiverKnobs.oxbowsFrom` (its oxbows pinch off: stability 90 by default), else Steady. One rule in the river's file, on the river's knobs and `GameConfigSO`'s margins, so the hall and the river always agree |
-| phase | normal < extended < nights | `HallStates.PhaseOf(day, extendedFromDay 8, nightsFromDay 12)` (the shift hours' ramp of Track N; when its per-day shift hours land, this one function can read the day's start hour instead) |
+| phase | normal < extended < nights | `HallStates.PhaseOf(today's hours, the standard day)` from the day's desk hours (Track N's night shifts, `days[].shiftStart` / `shiftEnd`): normal when the day closes at the standard hour, nights at midnight, extended between |
 | event | none, recall, ban, return | `HallStates.EventOf(today's rule types, yesterday's)`: return with a ReturnHome rule (days 14-15), else ban with a NationForbidden or NationEraForbidden rule (day 12), else recall on the first day of a TransponderRecall rule (day 11), else none. Read from the day plans, not from day numbers |
 | exhibits | the famous travellers let through, by nation; the strongest, the latest | `HallStates.ExhibitsOf` over the run's flags in order (`premade:{id}:accepted`, the latest verdict wins), each premade counted for `LegendarySO.nation`; strongest first, a tie by the latest acceptance |
 

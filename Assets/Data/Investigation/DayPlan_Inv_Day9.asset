@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 9
   visitorsCount: 16
+  shiftStartMinute: 780
+  shiftEndMinute: 1260
   bulletin: 'NEW: dress for the destination. Look at their clothes (the wheel''s
     Look menu): an item from another time or place causes a panic. Check it against
     the Costume Guide on your shelf.'
