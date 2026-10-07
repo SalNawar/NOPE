@@ -480,6 +480,9 @@ public sealed class HomeUIController : MonoBehaviour
         }
 
         _onShopContinue = onContinue;
+        TMP_Text continueLabel = shopContinueButton.GetComponentInChildren<TMP_Text>(true);
+        if (continueLabel != null)
+            continueLabel.text = UiText.Get("home.next.slots");
         _houseWorld = world;
         _houseLib = lib;
         _houseUpgrades = upgrades ?? Array.Empty<UpgradeSO>();

@@ -242,7 +242,7 @@ public sealed class SiteRenderer : MonoBehaviour
         Button b = Instantiate(linkTemplate, parent);
         b.gameObject.SetActive(true);
         TMP_Text label = Label(b);
-        label.text = text ?? string.Empty;
+        label.text = UiText.DocumentWord(text ?? string.Empty);
         label.fontSize = size;
         label.textWrappingMode = TextWrappingModes.Normal;
         bool live = !string.IsNullOrWhiteSpace(address);

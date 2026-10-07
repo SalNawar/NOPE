@@ -296,7 +296,7 @@ public sealed class InterviewPresenter
             string id = choice.Id;
             actions.Add(new InteractionAction
             {
-                label = choice.Label,
+                label = choice.Kind == DialogChoiceKind.Look ? UiText.DocumentWord(choice.Label) : choice.Label,
                 centre = choice.Kind == DialogChoiceKind.Back,
                 icon = _wheel != null ? _wheel.IconFor(choice.Kind) : null,
                 execute = () => Choose(id)

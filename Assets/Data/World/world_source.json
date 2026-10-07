@@ -28591,6 +28591,72 @@
         "text": "Worksite",
         "gloss": "None",
         "tier": "Flavour"
+      },
+      {
+        "key": "doc.their_face",
+        "text": "Their face",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.look",
+        "text": "Look >",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.passport_office",
+        "text": "Passport Office",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.portal_hall_dispatch",
+        "text": "Portal Hall Dispatch",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.debt_relief_directorate",
+        "text": "Debt Relief Directorate",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.labour_placement_bureau",
+        "text": "Labour Placement Bureau",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.displacement_registry",
+        "text": "Displacement Registry",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.returns_office",
+        "text": "Returns Office",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.the_temporal_times",
+        "text": "The Temporal Times",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.chronopedia",
+        "text": "Chronopedia",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "doc.lineage_archive",
+        "text": "Lineage Archive",
+        "gloss": "None",
+        "tier": "Flavour"
       }
     ],
     "languages": [
@@ -32377,6 +32443,50 @@
           {
             "key": "doc.worksite",
             "text": "موقع العمل"
+          },
+          {
+            "key": "doc.their_face",
+            "text": "وجهه"
+          },
+          {
+            "key": "doc.look",
+            "text": "انظر >"
+          },
+          {
+            "key": "doc.passport_office",
+            "text": "مكتب الجوازات"
+          },
+          {
+            "key": "doc.portal_hall_dispatch",
+            "text": "إرسال قاعة البوابات"
+          },
+          {
+            "key": "doc.debt_relief_directorate",
+            "text": "مديرية تسوية الديون"
+          },
+          {
+            "key": "doc.labour_placement_bureau",
+            "text": "مكتب توظيف العمالة"
+          },
+          {
+            "key": "doc.displacement_registry",
+            "text": "سجل النازحين"
+          },
+          {
+            "key": "doc.returns_office",
+            "text": "مكتب العودة"
+          },
+          {
+            "key": "doc.the_temporal_times",
+            "text": "صحيفة الزمن"
+          },
+          {
+            "key": "doc.chronopedia",
+            "text": "موسوعة الزمن"
+          },
+          {
+            "key": "doc.lineage_archive",
+            "text": "أرشيف الأنساب"
           }
         ],
         "words": [
@@ -36729,6 +36839,22 @@
             "english": "signatory; site"
           },
           {
+            "native": "الجوازات",
+            "english": "passports"
+          },
+          {
+            "native": "توظيف",
+            "english": "placement"
+          },
+          {
+            "native": "موسوعة",
+            "english": "encyclopedia"
+          },
+          {
+            "native": "العمالة",
+            "english": "labour"
+          },
+          {
             "native": "الموظف",
             "english": "the clerk"
           },
@@ -40525,6 +40651,50 @@
           {
             "key": "doc.worksite",
             "text": "Τόπος εργασίας"
+          },
+          {
+            "key": "doc.their_face",
+            "text": "Το πρόσωπό του"
+          },
+          {
+            "key": "doc.look",
+            "text": "Κοίτα >"
+          },
+          {
+            "key": "doc.passport_office",
+            "text": "Γραφείο Διαβατηρίων"
+          },
+          {
+            "key": "doc.portal_hall_dispatch",
+            "text": "Αποστολή Αίθουσας Πυλών"
+          },
+          {
+            "key": "doc.debt_relief_directorate",
+            "text": "Διεύθυνση Ελάφρυνσης Χρέους"
+          },
+          {
+            "key": "doc.labour_placement_bureau",
+            "text": "Υπηρεσία Τοποθέτησης Εργασίας"
+          },
+          {
+            "key": "doc.displacement_registry",
+            "text": "Μητρώο Εκτοπισμένων"
+          },
+          {
+            "key": "doc.returns_office",
+            "text": "Γραφείο Επιστροφών"
+          },
+          {
+            "key": "doc.the_temporal_times",
+            "text": "Η Χρονική Εφημερίδα"
+          },
+          {
+            "key": "doc.chronopedia",
+            "text": "Χρονοπαίδεια"
+          },
+          {
+            "key": "doc.lineage_archive",
+            "text": "Αρχείο Καταγωγής"
           }
         ],
         "words": [
@@ -44383,6 +44553,18 @@
           {
             "native": "κουλοχέρη",
             "english": "slot machine"
+          },
+          {
+            "native": "διαβατηρίων",
+            "english": "passports"
+          },
+          {
+            "native": "τοποθέτησης",
+            "english": "placement"
+          },
+          {
+            "native": "χρονοπαίδεια",
+            "english": "Chronopedia"
           }
         ]
       },
@@ -48169,6 +48351,50 @@
           {
             "key": "doc.worksite",
             "text": "Luogo di lavoro"
+          },
+          {
+            "key": "doc.their_face",
+            "text": "Il suo volto"
+          },
+          {
+            "key": "doc.look",
+            "text": "Guarda >"
+          },
+          {
+            "key": "doc.passport_office",
+            "text": "Ufficio Passaporti"
+          },
+          {
+            "key": "doc.portal_hall_dispatch",
+            "text": "Spedizioni Sala dei Portali"
+          },
+          {
+            "key": "doc.debt_relief_directorate",
+            "text": "Direzione Sgravio del debito"
+          },
+          {
+            "key": "doc.labour_placement_bureau",
+            "text": "Ufficio Collocamento Lavoro"
+          },
+          {
+            "key": "doc.displacement_registry",
+            "text": "Registro degli sfollati"
+          },
+          {
+            "key": "doc.returns_office",
+            "text": "Ufficio Rientri"
+          },
+          {
+            "key": "doc.the_temporal_times",
+            "text": "Il Corriere del Tempo"
+          },
+          {
+            "key": "doc.chronopedia",
+            "text": "Cronopedia"
+          },
+          {
+            "key": "doc.lineage_archive",
+            "text": "Archivio delle stirpi"
           }
         ],
         "words": [
@@ -52125,6 +52351,18 @@
             "english": "signatory"
           },
           {
+            "native": "Passaporti",
+            "english": "passports"
+          },
+          {
+            "native": "Collocamento",
+            "english": "placement"
+          },
+          {
+            "native": "Cronopedia",
+            "english": "Chronopedia"
+          },
+          {
             "native": "dell'ufficio",
             "english": "of the office"
           },
@@ -55937,6 +56175,50 @@
           {
             "key": "doc.worksite",
             "text": "Arbeitsort"
+          },
+          {
+            "key": "doc.their_face",
+            "text": "Ihr Gesicht"
+          },
+          {
+            "key": "doc.look",
+            "text": "Ansehen >"
+          },
+          {
+            "key": "doc.passport_office",
+            "text": "Passamt"
+          },
+          {
+            "key": "doc.portal_hall_dispatch",
+            "text": "Abfertigung Portalhalle"
+          },
+          {
+            "key": "doc.debt_relief_directorate",
+            "text": "Direktion für Schuldenerlass"
+          },
+          {
+            "key": "doc.labour_placement_bureau",
+            "text": "Amt für Arbeitsvermittlung"
+          },
+          {
+            "key": "doc.displacement_registry",
+            "text": "Vertriebenenregister"
+          },
+          {
+            "key": "doc.returns_office",
+            "text": "Amt für Rückführungen"
+          },
+          {
+            "key": "doc.the_temporal_times",
+            "text": "Der Zeitbote"
+          },
+          {
+            "key": "doc.chronopedia",
+            "text": "Chronopädie"
+          },
+          {
+            "key": "doc.lineage_archive",
+            "text": "Abstammungsarchiv"
           }
         ],
         "words": [
@@ -56258,7 +56540,7 @@
           },
           {
             "native": "Ansehen",
-            "english": "standing"
+            "english": "standing / look"
           },
           {
             "native": "Antwort",
@@ -60171,6 +60453,18 @@
           {
             "native": "Unterzeichner",
             "english": "signatory"
+          },
+          {
+            "native": "Passamt",
+            "english": "passport office"
+          },
+          {
+            "native": "Arbeitsvermittlung",
+            "english": "labour placement"
+          },
+          {
+            "native": "Chronopädie",
+            "english": "Chronopedia"
           }
         ]
       },
@@ -63957,6 +64251,50 @@
           {
             "key": "doc.worksite",
             "text": "工地"
+          },
+          {
+            "key": "doc.their_face",
+            "text": "其面容"
+          },
+          {
+            "key": "doc.look",
+            "text": "查看 >"
+          },
+          {
+            "key": "doc.passport_office",
+            "text": "护照办公室"
+          },
+          {
+            "key": "doc.portal_hall_dispatch",
+            "text": "传送门大厅调度"
+          },
+          {
+            "key": "doc.debt_relief_directorate",
+            "text": "债务减免总署"
+          },
+          {
+            "key": "doc.labour_placement_bureau",
+            "text": "劳务派遣局"
+          },
+          {
+            "key": "doc.displacement_registry",
+            "text": "流离者登记处"
+          },
+          {
+            "key": "doc.returns_office",
+            "text": "返程办公室"
+          },
+          {
+            "key": "doc.the_temporal_times",
+            "text": "时间时报"
+          },
+          {
+            "key": "doc.chronopedia",
+            "text": "时间百科"
+          },
+          {
+            "key": "doc.lineage_archive",
+            "text": "世系档案馆"
           }
         ],
         "words": [
@@ -67503,6 +67841,18 @@
           {
             "native": "签署人",
             "english": "signatory"
+          },
+          {
+            "native": "劳务",
+            "english": "labour"
+          },
+          {
+            "native": "派遣",
+            "english": "placement"
+          },
+          {
+            "native": "百科",
+            "english": "encyclopedia"
           },
           {
             "native": "N",
@@ -71293,6 +71643,50 @@
           {
             "key": "doc.worksite",
             "text": "作業現場"
+          },
+          {
+            "key": "doc.their_face",
+            "text": "本人の顔"
+          },
+          {
+            "key": "doc.look",
+            "text": "見る >"
+          },
+          {
+            "key": "doc.passport_office",
+            "text": "旅券局"
+          },
+          {
+            "key": "doc.portal_hall_dispatch",
+            "text": "ポータルホール発送係"
+          },
+          {
+            "key": "doc.debt_relief_directorate",
+            "text": "債務救済総局"
+          },
+          {
+            "key": "doc.labour_placement_bureau",
+            "text": "労働斡旋局"
+          },
+          {
+            "key": "doc.displacement_registry",
+            "text": "漂流者登録簿"
+          },
+          {
+            "key": "doc.returns_office",
+            "text": "帰還局"
+          },
+          {
+            "key": "doc.the_temporal_times",
+            "text": "時空新報"
+          },
+          {
+            "key": "doc.chronopedia",
+            "text": "クロノペディア"
+          },
+          {
+            "key": "doc.lineage_archive",
+            "text": "系譜文書館"
           }
         ],
         "words": [
@@ -74103,6 +74497,14 @@
           {
             "native": "N",
             "english": "N"
+          },
+          {
+            "native": "斡旋",
+            "english": "placement"
+          },
+          {
+            "native": "クロノペディア",
+            "english": "Chronopedia"
           },
           {
             "native": "係員",
