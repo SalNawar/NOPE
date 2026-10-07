@@ -842,6 +842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &157379712
 GameObject:
   m_ObjectHideFlags: 0
@@ -977,6 +978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &165304355
 GameObject:
   m_ObjectHideFlags: 0
@@ -1713,6 +1715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &274254733
 GameObject:
   m_ObjectHideFlags: 0
@@ -4971,6 +4974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &1208962432
 GameObject:
   m_ObjectHideFlags: 0
@@ -6699,6 +6703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &1628510450
 GameObject:
   m_ObjectHideFlags: 0
@@ -6834,6 +6839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &1632779582
 GameObject:
   m_ObjectHideFlags: 0
@@ -8663,6 +8669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &2034621119
 GameObject:
   m_ObjectHideFlags: 0

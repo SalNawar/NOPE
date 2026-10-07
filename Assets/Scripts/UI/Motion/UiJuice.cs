@@ -32,6 +32,9 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     /// <summary>The siblings' rest rects while a room is measured (reused: no allocation).</summary>
     private static readonly List<FaceRect> Neighbours = new List<FaceRect>(16);
 
+    /// <summary>A screen-edge pull tab's slide direction (the left edge's tab (1, 0), the right edge's (-1, 0); none (0, 0)): set by On from the kit piece at build time.</summary>
+    [SerializeField] private Vector2Int pull;
+
     private readonly ControlMotion _motion = new ControlMotion();
     private readonly List<Transform> _parts = new List<Transform>(4);
     private readonly List<Vector3> _appliedMove = new List<Vector3>(4);
@@ -82,14 +85,18 @@ public sealed class UiJuice : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         if (!control.TryGetComponent(out UiJuice juice))
             juice = control.gameObject.AddComponent<UiJuice>();
-        if (piece != null && piece.StartsWith(UiKitNames.PullTab, System.StringComparison.Ordinal))
-            juice._motion.SetPull(piece.StartsWith(UiKitNames.PullTabLeft, System.StringComparison.Ordinal) ? 1 : -1, 0);
+        if (piece == null)
+            return;
+        juice.pull = !piece.StartsWith(UiKitNames.PullTab, System.StringComparison.Ordinal) ? Vector2Int.zero
+            : new Vector2Int(piece.StartsWith(UiKitNames.PullTabLeft, System.StringComparison.Ordinal) ? 1 : -1, 0);
+        juice._motion.SetPull(juice.pull.x, juice.pull.y);
     }
 
     private void Awake()
     {
         _control = GetComponent<Selectable>();
         _rect = transform as RectTransform;
+        _motion.SetPull(pull.x, pull.y);
         Transform face = transform.Find(UiKitSO.FaceName);
         _face = face != null ? face.GetComponent<Graphic>() : null;
     }
