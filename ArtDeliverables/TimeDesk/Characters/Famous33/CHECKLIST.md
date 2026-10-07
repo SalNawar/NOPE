@@ -29,11 +29,11 @@ Fresh main-based branch codex/famous-travellers-33. Sources: Production/FAMOUS_P
 | Leonardo da Vinci | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
 | Elizabeth I | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
 | Muhammad al-Khwarizmi | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
-| William Shakespeare | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Marco Polo | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Galileo Galilei | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Archimedes | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Hammurabi | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Socrates | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Ada Lovelace | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Johannes Gutenberg | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| William Shakespeare | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Marco Polo | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Galileo Galilei | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Archimedes | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Hammurabi | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Socrates | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Ada Lovelace | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Johannes Gutenberg | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |

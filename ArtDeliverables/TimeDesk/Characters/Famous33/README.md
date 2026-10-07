@@ -4,7 +4,7 @@ Branch: `codex/famous-travellers-33`, created from `origin/main` at `dd2bb64`.
 
 ## Scope and status
 
-This delivery targets the current 33-person roster in `../Production/FAMOUS_PREMADES_REQUEST.md`: four expressions per traveller, plus three coherent full-body gesture poses requested by Saleh. The target is 231 original PNGs. See `CHECKLIST.md` and `manifest.json` for the actual saved and reviewed coverage; do not infer completion from this target.
+This delivery targets the current 33-person roster in `../Production/FAMOUS_PREMADES_REQUEST.md`: four expressions per traveller, plus three coherent full-body gesture poses requested by Saleh. All 231 original PNGs are saved and visually reviewed: 33 neutral, 99 additional expressions, and 99 full-body gesture poses. The complete file audit passed on 7 October 2026. See `CHECKLIST.md`, `manifest.json`, and `VERIFICATION.md` for coverage and verification limits.
 
 Open `REVIEW.html` locally and select a character to compare their available images. `Raw/{id}/` contains the source images and an exact `.prompt.md` beside each image. `roster.json` preserves names, ages, places, and identifying features.
 
@@ -25,3 +25,5 @@ The first Ramesses, Kurosawa, and Saladin sets have higher head placement than t
 ## Verification records
 
 `manifest.json` records each source, exact prompt, output path, dimensions, SHA-256, and visual review state. `reviewed; registration pending` means visual inspection occurred and technical alignment is still pending; it does not mean tested in Unity. The save helper at `tools/characters/save_famous33.py` checks PNG headers and dimensions, copies the original bytes, and updates the checklist and gallery.
+
+Reproduce the delivery audit from the repository root with `python tools/characters/audit_famous33.py`.
