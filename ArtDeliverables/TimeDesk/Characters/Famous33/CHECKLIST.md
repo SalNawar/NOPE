@@ -9,14 +9,14 @@ Fresh main-based branch codex/famous-travellers-33. Sources: Production/FAMOUS_P
 | Akira Kurosawa | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
 | Saladin | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
 | Cleopatra | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
-| Ludwig van Beethoven | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Oda Nobunaga | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Alexander the Great | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Charles Darwin | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Sun Tzu | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Albert Einstein | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Karl Marx | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Martin Luther | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Ludwig van Beethoven | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Oda Nobunaga | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Alexander the Great | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Charles Darwin | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Sun Tzu | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Albert Einstein | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Karl Marx | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Martin Luther | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
 | Isaac Newton | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
 | Michelangelo Buonarroti | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
 | Alan Turing | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
