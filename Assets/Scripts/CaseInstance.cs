@@ -173,6 +173,9 @@ public sealed class CaseInstance
     /// <summary>True when the traveller's papers forge record fields (a record lie: poor posing as rich, a doctored identity).</summary>
     public bool IsForger => recordTells.Count > 0;
 
+    /// <summary>True when the traveller breaks the law (Law.Breaks: their lie is a forgery, a false identity or contraband): only then is detaining them right (the desk machine spec §2).</summary>
+    public bool BreaksLaw => Law.Breaks(lie);
+
     /// <summary>True when the traveller has a deviation fault (traveller types P1): a lie about their home, a record lie or a costume error. Denying one needs a logged deviation.</summary>
     public bool HasDeviationFault => IsLiar || IsForger || costumeFault != CostumeError.None;
 

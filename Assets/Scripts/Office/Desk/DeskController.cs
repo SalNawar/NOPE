@@ -358,15 +358,27 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
-    /// <summary>The decision (<paramref name="accepted"/>): a drag is cancelled, then every paper goes back (a running scan is cancelled) wearing the verdict's ink mark (DeskDocument.ShowVerdict; not when the player stamped the passport: their mark is the verdict's), slides inert and out of the raycast to the traveller's side and is destroyed.</summary>
-    public void EndCase(bool accepted)
+    /// <summary>The decision (<paramref name="decision"/>): a drag is cancelled, then every paper still on the desk goes back (a running scan is cancelled) wearing the verdict's ink mark (DeskDocument.ShowVerdict, APPROVED or DENIED; not when the player stamped the passport: their mark is the verdict's; none for a detention), slides inert and out of the raycast to the traveller's side and is destroyed.</summary>
+    public void EndCase(DeskStamp decision)
     {
         if (_state == null)
             return;
         bool stamped = stamps != null && stamps.HasVerdict;
         if (stamps != null)
             stamps.EndCase();
+        SendBack(stamped || decision == DeskStamp.Detained ? DeskStamp.None : decision);
+    }
 
+    /// <summary>The stamped papers handed back (DeskStampTray.HandBack, before the hardware commits the verdict: the desk machine spec §2): every paper goes back to the traveller now, the passport wearing the player's mark.</summary>
+    private void HandBackPapers()
+    {
+        if (_state != null)
+            SendBack(DeskStamp.None);
+    }
+
+    /// <summary>Every paper on the desk goes back to the traveller (the state's papers all returned), inked with <paramref name="ink"/> (None: no ink), inert, sliding to the hand-over point, then destroyed.</summary>
+    private void SendBack(DeskStamp ink)
+    {
         _state.ReturnAll();
         _waiting.Clear();
         if (scanner != null)
@@ -380,8 +392,8 @@ public sealed class DeskController : MonoBehaviour
             leaving.Clicked -= HandlePaperClicked;
             leaving.SetLive(false, false, false);
             leaving.SetZone(DeskZone.Counter, false);
-            if (!stamped)
-                leaving.ShowVerdict(accepted);
+            if (ink != DeskStamp.None && stamps != null)
+                leaving.ShowVerdict(stamps.Impression(ink == DeskStamp.Approved));
             leaving.SlideTo(handOverPoint.position, config.paperSlideSeconds, () => Destroy(leaving.gameObject));
         }
 
@@ -654,7 +666,8 @@ public sealed class DeskController : MonoBehaviour
         switch (outcome)
         {
             case DropOutcome.HandsBack:
-                stamps.HandBack();
+                if (stamps.HandBack())
+                    HandBackPapers();
                 return;
             case DropOutcome.Scanning:
                 paper.SetZone(_state.ZoneOf(paper.Index), false);

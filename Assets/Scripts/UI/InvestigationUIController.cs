@@ -92,7 +92,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private GameObject idleScreen;
 
     /// <summary>The decision's callback for the case on the desk (fired once: OneShot).</summary>
-    private Action<bool> _onDecision;
+    private Action<DeskStamp> _onDecision;
 
     /// <summary>The case currently on the desk (null between cases).</summary>
     private CaseInstance _currentCase;
@@ -306,12 +306,14 @@ public sealed class InvestigationUIController : MonoBehaviour
         }
     }
 
-    /// <summary>Injects the day's citizen registry into the Records tab, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints; a new day's registry drops the app's pins and recent items (PR2).</summary>
+    /// <summary>Injects the day's citizen registry into the Records tab, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints (and the daters theirs, with the clerk's id); a new day's registry drops the app's pins and recent items (PR2).</summary>
     public void SetCitizenRegistry(CitizenRegistry registry, AgencyContent agency, int day)
     {
         _reference.SetCitizenRegistry(registry, agency, day);
         if (deskInspect != null)
             deskInspect.SetDay(agency, day);
+        if (stampTray != null)
+            stampTray.SetDay(agency, day);
         if (app != null)
             app.BeginDay();
     }
@@ -353,7 +355,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     }
 
     /// <summary>Presents a case and waits for the stamps' verdict (nothing shows when the app is not wired: Awake logged why).</summary>
-    public void ShowCase(CaseInstance inst, ContentLibrarySO lib, Action<bool> onDecision)
+    public void ShowCase(CaseInstance inst, ContentLibrarySO lib, Action<DeskStamp> onDecision)
     {
         _onDecision = onDecision;
         _currentCase = inst;
@@ -621,24 +623,25 @@ public sealed class InvestigationUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// The decision (the stamp tray's papers handed back, or the cheat menu's
+    /// The decision, one of the three verdicts (the desk's hardware commits
+    /// it: the lever, RETURN or DETAIN; or the cheat menu's
     /// "decide correctly" through GameManager; nothing without a case on the
     /// desk): the desk's papers leave, the case tabs show
     /// the no-case state, and no case is on the desk from here: cleared before
     /// the callback, which may present the next traveller at once (no READY
     /// sign wired).
     /// </summary>
-    public void Decide(bool accepted)
+    public void Decide(DeskStamp decision)
     {
         if (_currentCase == null)
             return;
 
         _directiveEvidenceDecided = DirectiveEvidence;
-        _documents.EndCase(accepted);
+        _documents.EndCase(decision);
         if (deskInspect != null)
             deskInspect.EndCase();
         _currentCase = null;
         Hide();
-        OneShot.Fire(ref _onDecision, accepted);
+        OneShot.Fire(ref _onDecision, decision);
     }
 }

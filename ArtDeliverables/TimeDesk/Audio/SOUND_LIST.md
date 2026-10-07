@@ -49,6 +49,8 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 27 | `coins` | credits paid into the till | 0.6 s | coins dropping into a tray | ×3 | P2 |
 | 28 | `mug_set` | coffee mug put down | 0.2 s | ceramic on wood | ×2 | P3 |
 | 29 | `prop_click` | other desk props clicked (plant, photo) | 0.2 s | small thud | ×3 | P3 |
+| 78 | `dater_wheel_click` | a dater's date wheel turned one notch | 0.03 s | small metal ratchet click, like a date stamp's band | ×3 | P2 |
+| 79 | `dater_reink` | a dater pressed on its ink pad | 0.2 s | soft wet squish of a rubber die on a felt pad | ×2 | P2 |
 
 ## 2. The booth and travellers
 
@@ -62,6 +64,9 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 35 | `booth_shutter_close` | shift ends, shutter down | 1.2 s | metal roller shutter down, final clang | ×1 | P1 |
 | 36 | `portal_through` | an approved traveller goes through the portal | 1.5 s | rising warp whoosh, tonal | ×2 | P2 |
 | 37 | `detain` | a traveller is detained | 1.0 s | alarm chirp plus guard boots | ×1 | P2 |
+| 80 | `lever_ratchet` | the gate lever pulled through each notch | 0.05 s | heavy iron ratchet tooth | ×3 | P2 |
+| 81 | `lever_home` | the gate lever springs back home | 0.3 s | deep metal thunk with a little ring | ×1 | P2 |
+| 82 | `return_buzz` | RETURN sends a denied traveller back | 0.5 s | button clunk plus a short low buzzer | ×1 | P2 |
 | 38 | `dialogue_blip` | each line of dialogue appears | 0.05 s | tiny voice-like blip (Papers, Please murmur) | ×4 | P2 |
 
 ## 3. The PC (terminal)
@@ -133,4 +138,4 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 75 | `mus_desk_calm` | early shift, low and sparse (synth plus tape warble) | P3 |
 | 76 | `mus_desk_tense` | last hour / low stability layer | P3 |
 
-**Total:** 77 entries; about 150 files counting the variants. **P1 alone:** 39 entries.
+**Total:** 82 entries; about 150 files counting the variants. **P1 alone:** 39 entries.

@@ -1121,6 +1121,12 @@ public sealed class CaseFactory
             return null;
 
         bool hasPapers = blueprint.DocumentTemplates != null && blueprint.DocumentTemplates.Any(t => t != null && t.fieldSpecs != null && t.fieldSpecs.Length > 0);
+        if (DevToolsState.ForcedLie is LieKind forced && legendary == null && !inst.HasDirectiveFault && hasPapers && LieKinds.AppliesTo(forced, inst.kind))
+        {
+            DevToolsState.ForcedLie = null;
+            Debug.Log($"[CaseFactory] ForcedLie '{forced}' consumed by case {caseIndex1Based} ({inst.kind}).");
+            return forced;
+        }
         if (authoredLie != null)
             return Lies.MayLie(false, !inst.HasDirectiveFault, hasPapers) ? Lies.Roll(1f, new[] { authoredLie.Value }, _lieRng) : null;
         if (legendary != null)

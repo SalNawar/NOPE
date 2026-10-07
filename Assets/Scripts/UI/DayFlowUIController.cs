@@ -212,6 +212,9 @@ public sealed class DayFlowUIController : MonoBehaviour
             if (ledger.UnprovenDenialCount > 0)
                 sb.AppendLine(UiText.Format("results.unproven", ledger.UnprovenDenialCount));
 
+            if (ledger.DetainedCount > 0)
+                sb.AppendLine(UiText.Format("results.detained", ledger.DetainedCount));
+
             sb.AppendLine(UiText.Format("results.leisureDepartures", ledger.LeisureDepartures));
             sb.AppendLine(UiText.Format("results.debtReliefDepartures", ledger.DebtReliefDepartures, ledger.DebtPutToWork, cr));
 

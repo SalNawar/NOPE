@@ -744,6 +744,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "wheel", wheel);
         SerializedArrays.Set(soBinder, "callouts", callouts);
         SetRef(soBinder, "stampTray", stampTray);
+        SetRef(soBinder, "gateLever", BuildGateLever(office, stampTray));
         SetRef(soBinder, "counter", counter);
         SetRef(soBinder, "deskInspect", inspect);
         SetRef(soBinder, "rulebook", rulebook);
@@ -1360,11 +1361,8 @@ public static partial class OfficeSceneUIBuilder
     private const float StampRailFront = 0.05f;
     private static readonly Vector2 StampRailSection = new Vector2(0.032f, 0.016f);
 
-    /// <summary>The art's desk folder (DeskClean): the stamps are its desk stamp model in its NOPE/Desk Anime materials (the desk polish: the stamps match the desk).</summary>
+    /// <summary>The art's desk folder (DeskClean): the stamp rack is in its NOPE/Desk Anime materials (the desk polish: the rack matches the desk).</summary>
     private const string DeskCleanFolder = "Assets/Art/Office/DeskClean";
-
-    /// <summary>The art's desk stamp model's scale on the bar (the art's is a desk-sized prop: half of it is a hand stamp, about 8 by 5 cm, 8 cm tall).</summary>
-    private const float StampModelScale = 0.5f;
 
     /// <summary>The grey of the stamp bar's tab and the PC's tab (Papers, Please's grey tabs).</summary>
     private static readonly Color StampGrey = new Color(0.36f, 0.37f, 0.39f, 1f);
@@ -1469,29 +1467,26 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The stamp bar, Papers, Please's with the art's 3D stamps (Saleh
-    /// 2026-10-06: "I want the 3D stamp; there should be a label on the screen
-    /// to bring out the stamp stuff, and the Tab shortcut"), rebuilt each run.
-    /// On the office overlay: StampBar (the DeskStampTray, an always-active
-    /// full-screen host) with the grey Tab at the right edge's middle
-    /// ("STAMPS" over the key, TAB; inactive until the booth shows it), the
-    /// hint's plate at the top right under the case HUD's strip (inactive)
-    /// and an AudioSource for the thump and the thunk. In the office:
-    /// StampRack (inactive until slid out; the office binder lays it, its
-    /// origin at the stamps' feet): a rail in the art's DeskClean green-dark
-    /// with wooden end caps, brass arms down to the two stamps, and the
-    /// DENIED stamp (left) and the APPROVED stamp (right), each a click box
+    /// The stamp bar, Papers, Please's with 3D stamps (Saleh 2026-10-06: "I
+    /// want the 3D stamp; there should be a label on the screen to bring out
+    /// the stamp stuff, and the Tab shortcut"), its stamps the two daters (the
+    /// desk machine spec §1), rebuilt each run. On the office overlay:
+    /// StampBar (the DeskStampTray, an always-active full-screen host) with
+    /// the grey Tab at the right edge's middle ("STAMPS" over the key, TAB;
+    /// inactive until the booth shows it), the hint's plate at the top right
+    /// under the case HUD's strip (inactive) and an AudioSource for the clacks.
+    /// In the office: StampRack (inactive until slid out; the office binder
+    /// lays it, its origin at the daters' feet): a rail in the art's DeskClean
+    /// green-dark with wooden end caps, brass arms down to the two daters, and
+    /// the DENIED dater (left) and the APPROVED dater (right), each a click box
     /// on the Interactable layer (its pivot at its foot) with a DeskDraggable
-    /// (the click box its proxy: the stamp is dragged onto the paper) holding the art's
-    /// desk stamp (DeskClean's Clean_Stamp at half size: a turned wooden
-    /// handle with a brass ferrule on a wooden block over a dark rubber die,
-    /// in the desk's NOPE/Desk Anime materials), a green or red cap on its
-    /// knob, the word on the block's front and in reverse on the rubber, and
-    /// its Die (an empty at the die's centre: where it presses); the word
-    /// printed again on the rail's top over each stamp, readable from the
-    /// reading view. Without the art's model the stamps are primitives in the
-    /// same materials. The old overlay bar, the 3D tray of the desk-first
-    /// redesign and the overlay's hand-back buttons are destroyed.
+    /// (the click box its proxy: the dater is dragged onto the paper) and a
+    /// PointerHold (a held press), holding its body (DaterBody: the prop
+    /// contract's Body, Frame, Die and Wheels; green on APPROVED, red on DENIED);
+    /// the word printed on the rail's top over each dater, readable from the
+    /// reading view. The tray gets the papers' style, the date's face and
+    /// Saleh's dater sounds (WireDaters). The old overlay bar, the 3D tray of
+    /// the desk-first redesign and the overlay's hand-back buttons are destroyed.
     /// </summary>
     private static DeskStampTray BuildStampTray(Transform overlay, Transform office, DeskConfigSO config)
     {
@@ -1536,25 +1531,16 @@ public static partial class OfficeSceneUIBuilder
         PrimitivePart(rack, "CapRight", PrimitiveType.Cube, new Vector3(railLength / 2f, StampRailHeight, -StampRailFront), new Vector3(0.012f, StampRailSection.y + 0.006f, StampRailSection.x + 0.006f), wood);
         Color labelInk = new Color(0.95f, 0.93f, 0.86f);
 
-        (Clickable stamp, Transform die) Stamp(string name, float x, Color cap, Color ink, string labelKey)
+        (Clickable stamp, Transform die) Stamp(string name, float x, bool approved, string labelKey)
         {
             Clickable click = EnsureClickBox(rack, name);
             click.transform.localPosition = new Vector3(x, 0f, 0f);
-            StampShape shape = StampBody(click.transform, cap);
+            StampShape shape = DaterBody(click.transform, approved);
             var box = click.GetComponent<BoxCollider>();
             box.center = new Vector3(0f, shape.Top / 2f, 0f);
             box.size = new Vector3(shape.HalfWidth * 2f + 0.006f, shape.Top, shape.HalfDepth * 2f + 0.006f);
             string word = UiText.Get(labelKey);
-
-            // The word on the block's front (the office view reads it) and in reverse on the rubber (it prints the right way round).
-            TextMeshPro front = StampText(click.transform, "Front", new Vector3(0f, (shape.BlockBottom + shape.BlockTop) / 2f, -shape.HalfDepth - 0.0006f),
-                                          Quaternion.identity, new Vector2(shape.HalfWidth * 1.8f, shape.BlockTop - shape.BlockBottom), ink);
-            front.text = word;
-            TextMeshPro rubber = StampText(click.transform, "Rubber", new Vector3(0f, -0.0004f, 0f), Quaternion.Euler(90f, 0f, 0f),
-                                           new Vector2(shape.HalfWidth * 1.8f, shape.HalfDepth * 1.4f), new Color(0.42f, 0.44f, 0.43f));
-            rubber.text = word;
-            Transform die = EnsureChild(click.transform, "Die");
-            die.localPosition = Vector3.zero;
+            Transform die = click.transform.Find("Die");
 
             // The arm from the rail down to the handle, and the word on the rail's top over the stamp.
             PrimitivePart(rack, name + "Arm", PrimitiveType.Cube, new Vector3(x, StampRailHeight - 0.004f, -StampRailFront / 2f), new Vector3(0.012f, 0.008f, StampRailFront), brass);
@@ -1562,8 +1548,10 @@ public static partial class OfficeSceneUIBuilder
                                          new Vector2(StampSpacing - 0.012f, StampRailSection.x - 0.004f), 0.2f, labelInk, FontStyles.Bold);
             label.text = word;
 
-            click.SetOutline(click.GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponent<TextMeshPro>() == null).ToArray());
-            // The stamp is moved, not the paper (Saleh 2026-10-06): left-drag carries it over the desk; its click box is the drag's proxy.
+            click.SetOutline(click.GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponent<TextMeshPro>() == null && r.name != "Window").ToArray());
+            // The dater is moved, not the paper (Saleh 2026-10-06): left-drag carries it over the desk; its click box is the drag's proxy.
+            // A left-press held on it strokes it where it hangs (the desk machine spec §1: "holding the button holds the stamp down").
+            GetOrAdd<PointerHold>(click.gameObject);
             DeskDraggable drag = GetOrAdd<DeskDraggable>(click.gameObject);
             var soDrag = new SerializedObject(drag);
             SetRef(soDrag, "proxy", box);
@@ -1571,8 +1559,8 @@ public static partial class OfficeSceneUIBuilder
             return (click, die);
         }
 
-        (Clickable denied, Transform deniedDie) = Stamp("Denied", -StampSpacing / 2f, new Color(0.7f, 0.2f, 0.17f), new Color(0.66f, 0.12f, 0.1f), "stamp.label.denied");
-        (Clickable approved, Transform approvedDie) = Stamp("Approved", StampSpacing / 2f, new Color(0.2f, 0.5f, 0.28f), new Color(0.1f, 0.42f, 0.2f), "stamp.label.approved");
+        (Clickable denied, Transform deniedDie) = Stamp("Denied", -StampSpacing / 2f, false, "stamp.label.denied");
+        (Clickable approved, Transform approvedDie) = Stamp("Approved", StampSpacing / 2f, true, "stamp.label.approved");
         // No shadows: hanging over the desk under the hall's low light they cast long dark shapes across the papers (Papers, Please's bar casts none).
         foreach (MeshRenderer part in rack.GetComponentsInChildren<MeshRenderer>(true))
             part.shadowCastingMode = ShadowCastingMode.Off;
@@ -1590,6 +1578,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "hint", hint);
         SetRef(so, "sound", sound);
         so.FindProperty("paperLayers").intValue = 1 << OfficeLayers.InteractableLayer;
+        WireDaters(so);
         so.ApplyModifiedProperties();
         return stamps;
     }
@@ -1622,71 +1611,6 @@ public static partial class OfficeSceneUIBuilder
         public float Top { get; }
     }
 
-    /// <summary>
-    /// A rubber stamp's body under <paramref name="parent"/> (its foot at the
-    /// origin): the art's desk stamp (DeskClean's Clean_Stamp at
-    /// StampModelScale: wood, brass, the dark rubber die) with a cap on its
-    /// knob in <paramref name="cap"/>; without the model, a stand-in of
-    /// primitives in the same materials (a die, a block, a handle, a knob and
-    /// its cap). Returns the body's measures (the words go on the block).
-    /// </summary>
-    private static StampShape StampBody(Transform parent, Color cap)
-    {
-        Material capMaterial = AnimeMaterial(cap.g > cap.r ? "StampAnime_CapApproved" : "StampAnime_CapDenied", cap);
-        if (ModelParts(parent, "Clean_Stamp", StampModelScale, out Dictionary<string, Bounds> parts) &&
-            parts.TryGetValue("Wood", out Bounds wood) && parts.TryGetValue("Dark", out Bounds die))
-        {
-            // The model's foot is its die's bottom: the parts move up so the foot sits at the origin.
-            Vector3 lift = new Vector3(0f, -die.min.y, 0f);
-            foreach (Transform part in parent)
-                if (parts.ContainsKey(part.name))
-                    part.localPosition += lift;
-            // The knob's top: the wood's highest point; the cap is a disc sunk into it, a third of the block's depth across.
-            float diameter = wood.size.z / 3f;
-            float top = wood.max.y + lift.y;
-            PrimitivePart(parent, "Cap", PrimitiveType.Cylinder, new Vector3(0f, top - 0.0015f, 0f), new Vector3(diameter, 0.002f, diameter), capMaterial);
-            float dieTop = die.max.y + lift.y;
-            return new StampShape(wood.extents.x, wood.extents.z, dieTop, dieTop + wood.size.y * 0.18f, top + 0.0005f);
-        }
-
-        Material wooden = DeskMaterial("Wood", new Color(0.537f, 0.392f, 0.282f));
-        PrimitivePart(parent, "Die", PrimitiveType.Cube, new Vector3(0f, 0.004f, 0f), new Vector3(0.078f, 0.008f, 0.05f), DeskMaterial("Rubber", new Color(0.176f, 0.2f, 0.188f)));
-        PrimitivePart(parent, "Block", PrimitiveType.Cube, new Vector3(0f, 0.0165f, 0f), new Vector3(0.08f, 0.017f, 0.052f), wooden);
-        PrimitivePart(parent, "Handle", PrimitiveType.Cylinder, new Vector3(0f, 0.05f, 0f), new Vector3(0.022f, 0.025f, 0.022f), wooden);
-        PrimitivePart(parent, "Knob", PrimitiveType.Sphere, new Vector3(0f, 0.08f, 0f), new Vector3(0.036f, 0.026f, 0.036f), wooden);
-        PrimitivePart(parent, "Cap", PrimitiveType.Cylinder, new Vector3(0f, 0.0925f, 0f), new Vector3(0.018f, 0.002f, 0.018f), capMaterial);
-        return new StampShape(0.04f, 0.026f, 0.008f, 0.025f, 0.094f);
-    }
-
-    /// <summary>
-    /// The art's DeskClean model <paramref name="model"/> rebuilt under
-    /// <paramref name="parent"/> at <paramref name="scale"/>: one child per mesh,
-    /// named by its material ("Clean_Stamp__DeskClean_Wood" gives "Wood"), in
-    /// the art's DeskClean material of that name; the parts' bounds in the
-    /// parent's space by name. False (nothing made) when the model is missing.
-    /// </summary>
-    private static bool ModelParts(Transform parent, string model, float scale, out Dictionary<string, Bounds> parts)
-    {
-        parts = new Dictionary<string, Bounds>();
-        var source = AssetDatabase.LoadAssetAtPath<GameObject>($"{DeskCleanFolder}/Models/{model}.fbx");
-        if (source == null)
-            return false;
-        foreach (MeshFilter filter in source.GetComponentsInChildren<MeshFilter>(true))
-        {
-            if (filter.sharedMesh == null)
-                continue;
-            string name = filter.name.Contains("__DeskClean_") ? filter.name.Substring(filter.name.IndexOf("__DeskClean_") + "__DeskClean_".Length) : filter.name;
-            var part = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
-            part.transform.SetParent(parent, false);
-            part.transform.localScale = Vector3.one * scale;
-            part.GetComponent<MeshFilter>().sharedMesh = filter.sharedMesh;
-            part.GetComponent<MeshRenderer>().sharedMaterial = DeskMaterial(name, new Color(0.5f, 0.5f, 0.5f));
-            Bounds b = filter.sharedMesh.bounds;
-            parts[name] = new Bounds(b.center * scale, b.size * scale);
-        }
-        return parts.Count > 0;
-    }
-
     /// <summary>The art's DeskClean material <paramref name="name"/> (NOPE/Desk Anime: the desk's own look); without it, a stand-in of that colour.</summary>
     private static Material DeskMaterial(string name, Color colour) =>
         AssetDatabase.LoadAssetAtPath<Material>($"{DeskCleanFolder}/Materials/DeskClean_{name}.mat") ?? AnimeMaterial("StampAnime_" + name, colour);
@@ -1696,15 +1620,6 @@ public static partial class OfficeSceneUIBuilder
         Shader.Find("NOPE/Desk Anime") != null
             ? EnsureMaterial(name, "NOPE/Desk Anime", m => m.SetColor("_BaseColor", colour))
             : LitMaterial(name, colour, 0.3f);
-
-    /// <summary>A word on a stamp (a world-space bold text, auto-sized to <paramref name="box"/>), turned by <paramref name="rotation"/> (identity: facing the chair; 90 degrees about x: facing up, so the rubber's word, seen from below, reads in reverse).</summary>
-    private static TextMeshPro StampText(Transform parent, string name, Vector3 position, Quaternion rotation, Vector2 box, Color colour)
-    {
-        TextMeshPro tmp = FlatText(parent, name, position, box, 0.12f, colour, FontStyles.Bold);
-        tmp.transform.localRotation = rotation;
-        tmp.fontSizeMin = 0.01f;
-        return tmp;
-    }
 
     /// <summary>
     /// The rulebook on the desk, Papers, Please's booklet (Saleh 2026-10-06),

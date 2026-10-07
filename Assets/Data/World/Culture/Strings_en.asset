@@ -1818,6 +1818,10 @@ MonoBehaviour:
     text: 'Undocumented denials: {0} (log a deviation before denying)'
     gloss: 0
     tier: 0
+  - key: results.detained
+    text: 'Detained: {0}'
+    gloss: 0
+    tier: 0
   - key: results.processedAll
     text: 'Travellers processed: {0}, the whole queue'
     gloss: 0
@@ -2448,6 +2452,15 @@ MonoBehaviour:
     text: Denied a legitimate, permitted traveler.
     gloss: 0
     tier: 0
+  - key: citation.detainedWrong
+    text: Detained a traveller who broke no law.
+    gloss: 0
+    tier: 0
+  - key: citation.detainedUnproven
+    text: 'Detained without logged evidence. Log what they broke before detaining:
+      a forged paper, a false identity or contraband.'
+    gloss: 0
+    tier: 0
   - key: citation.warning
     text: "Warning {0}/{1} \u2014 no pay deduction."
     gloss: 0
@@ -2534,6 +2547,34 @@ MonoBehaviour:
     tier: 0
   - key: stamp.refused.handBackFirst
     text: Stamp the passport first.
+    gloss: 0
+    tier: 0
+  - key: stamp.hint.lever
+    text: Pull the LEVER down to send them through the portal.
+    gloss: 0
+    tier: 0
+  - key: stamp.hint.return
+    text: Press RETURN to send them back the way they came.
+    gloss: 0
+    tier: 0
+  - key: hardware.return
+    text: RETURN
+    gloss: 0
+    tier: 0
+  - key: hardware.detain
+    text: DETAIN
+    gloss: 0
+    tier: 0
+  - key: hardware.refused.lever
+    text: The lever only moves for an APPROVED passport handed back.
+    gloss: 0
+    tier: 0
+  - key: hardware.refused.return
+    text: RETURN only works for a DENIED passport handed back.
+    gloss: 0
+    tier: 0
+  - key: stamp.dater.by
+    text: 'BY: {0}'
     gloss: 0
     tier: 0
   - key: desk.counter

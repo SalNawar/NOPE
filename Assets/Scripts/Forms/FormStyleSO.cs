@@ -72,11 +72,11 @@ public sealed class FormStyleSO : ScriptableObject
     /// <summary>The strip after a scan by hand of a paper the Analysis Scanner has analysed already (the pass works once per document): {0} is the shift clock's time.</summary>
     public string alreadyAnalysedStrip = "SCANNED {0} · ALREADY ANALYSED";
 
-    /// <summary>The code-drawn approval stamp's printed word (English, like every form's; the travel documents spec, TD4): the desk paper prints it framed in green until the stamp's art lands (ArtSlots.VerdictMark).</summary>
+    /// <summary>The APPROVED dater's printed word (English, like every form's; the travel documents spec, TD4; the desk machine spec §1): its impression's outline word.</summary>
     [Header("Stamps")]
     public string approvedStamp = "APPROVED";
 
-    /// <summary>The code-drawn denial stamp's printed word, framed in red.</summary>
+    /// <summary>The DENIED dater's printed word: its impression's outline word.</summary>
     public string deniedStamp = "DENIED";
 
     /// <summary>How much heavier the printed words are than the font (TextMeshPro's face dilate on the paper's text material): a held paper's small print needs the weight to read at 720p as drawn. Build Office UI writes it into the material.</summary>

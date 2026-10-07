@@ -43,6 +43,9 @@ public sealed class WorldState
     /// <summary>Total citations issued across the run.</summary>
     public int totalCitations;
 
+    /// <summary>The travellers detained across the run (the third verdict, the desk machine spec §2). Additive: an older save loads 0.</summary>
+    public int totalDetained;
+
     /// <summary>Citations issued during the current day (resets each morning).</summary>
     public int citationsToday;
 

@@ -676,13 +676,15 @@ public sealed partial class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Resolves the player's Accept/Deny decision (the one decision handler,
-    /// audit R3-017): scores it, dispatches timeline impacts only on accept,
-    /// checks for an ending, then shows the verdict and advances the day.
+    /// Resolves the player's decision, one of the three verdicts committed by
+    /// the desk's hardware (the one decision handler, audit R3-017; the desk
+    /// machine spec §2): scores it, dispatches timeline impacts only on
+    /// accept, checks for an ending, then shows the verdict and advances the day.
     /// </summary>
-    private void HandleDecision(bool accepted)
+    private void HandleDecision(DeskStamp decision)
     {
-        Debug.Log($"[GameManager] >>> Entering HandleDecision (slot {_activeCaseIndex1Based}, accepted={accepted}).");
+        bool accepted = decision == DeskStamp.Approved;
+        Debug.Log($"[GameManager] >>> Entering HandleDecision (slot {_activeCaseIndex1Based}, verdict={decision}).");
         // The booth has no traveller from here (the wheel cannot open); the figure stays for their reaction (R4). The papers are handed back: the guide hears it.
         SetTravellerAtDesk(false, keepFigure: true);
         if (guide != null)
@@ -729,14 +731,14 @@ public sealed partial class GameManager : MonoBehaviour
         // home's fact into the claim, and an accepted costume error causes a
         // panic there (tomorrow's news). DayCycle holds the step, so the balance
         // simulation plays the same one.
-        CaseVerdict verdict = DayCycle.Decide(inst, accepted, _activeCaseIndex1Based, evidenceCount, _worldState, _today, _ledger, contentLibrary, _gameConfig);
+        CaseVerdict verdict = DayCycle.Decide(inst, decision, _activeCaseIndex1Based, evidenceCount, _worldState, _today, _ledger, contentLibrary, _gameConfig);
         if (accepted)
             AnnounceDeparture(inst);
 
         if (officeUI != null)
             officeUI.UpdateHud(_worldState);
 
-        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: accepted={accepted}, shouldAccept={inst.ShouldAccept}, fault='{inst.FaultReason}', home='{inst.HomeLabel}', directive={inst.directiveFault}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.00}->{_worldState.timelineStability:0.00}, firedNow={verdict.firedNow}.");
+        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: verdict={decision}, shouldAccept={inst.ShouldAccept}, fault='{inst.FaultReason}', home='{inst.HomeLabel}', directive={inst.directiveFault}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.00}->{_worldState.timelineStability:0.00}, firedNow={verdict.firedNow}.");
 
         // The reaction (the personalities spec's R1-R5): presentation only, after the scoring, never changing it.
         React(inst, accepted);

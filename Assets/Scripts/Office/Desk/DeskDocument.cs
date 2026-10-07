@@ -27,12 +27,12 @@ using UnityEngine.EventSystems;
 /// exist (redesign phase 27, ArtSlots: the paper's placeholder and the grey
 /// frame otherwise). A booklet prints its holder's nation's emblem and a
 /// watermark its mark, faint over the boxes' fills; a card's paper has rounded
-/// corners (the travel documents spec, TD1, TD3). A desk stamp's mark lands
-/// where Stamp puts it (StampSpots: centred where a desk stamp pressed it,
-/// anywhere on the page, or the next place in its largest stamp area, a
-/// passport's visa page; TD4), the verdict's
-/// (ShowVerdict) in its stamp area: the mark's art, else a code-drawn stamp
-/// (a framed APPROVED or DENIED in green or red ink). Always
+/// corners (the travel documents spec, TD1, TD3). A dater's impression
+/// (the desk machine spec §1: its outline word, red date and BY line,
+/// painted at runtime) lands where Stamp puts it (StampSpots: centred where
+/// the dater pressed it, anywhere on the page, or the next place in its
+/// largest stamp area, a passport's visa page; TD4), the verdict's ink of
+/// papers leaving unstamped (ShowVerdict) in its stamp area. Always
 /// English: a paper never flips. Papers, Please's controls (Saleh
 /// 2026-10-06): a left-click raises Clicked with the box under the pointer in
 /// inspect mode (FormLayout.SlotAt; DeskController routes it through
@@ -73,21 +73,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
     /// <summary>The paper's size in metres once it lies in <paramref name="zone"/> (its sheet's scale there, as SetZone gives it).</summary>
     public Vector2 SizeIn(DeskZone zone) => Size * ZoneScale(zone);
-
-    /// <summary>A code-drawn stamp's width over its height, its frame texture's size in pixels, its word's size as a share of its height, its ink's alpha, and its tilt in degrees (alternating with each mark).</summary>
-    private const float StampAspect = 2.8f, StampWordShare = 0.5f, StampAlpha = 0.88f, StampTilt = 6f;
-
-    /// <summary>The code-drawn stamp frame's texture size in pixels (width, height).</summary>
-    private const int StampPixelsWide = 224, StampPixelsHigh = 80;
-
-    /// <summary>The code-drawn stamp's word: its inset from the frame's edge (frame pixels, just inside the hairline at 13) and the least share of its full size it may shrink to.</summary>
-    private const float StampWordInset = 17f, StampWordMinShare = 0.3f;
-
-    /// <summary>The code-drawn stamps' inks: the approval's green and the denial's red.</summary>
-    private static readonly Color ApprovedInk = new Color(0.12f, 0.47f, 0.23f), DeniedInk = new Color(0.7f, 0.15f, 0.12f);
-
-    /// <summary>The code-drawn stamp's frame (a double ring, white on clear), painted once.</summary>
-    private static Texture2D _stampFrame;
 
     /// <summary>The lying sheet: lifted by the stack, holding the paper, its collider and the printed form.</summary>
     [SerializeField] private Transform sheet;
@@ -194,13 +179,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>How many stamps the paper carries (each next one steps across its stamp area).</summary>
     private int _stamps;
 
-    /// <summary>The last stamp's mark, its word (a code-drawn stamp's) and its ink as printed (BloomLastStamp blooms it in).</summary>
-    private Renderer _lastMark;
-    private TextMeshPro _lastWord;
-    private Color _lastInk;
-
-    /// <summary>The ink's bloom (made on the first bloom).</summary>
-    private InkBloom _bloom;
+    /// <summary>The daters' prints on the paper (it owns them: destroyed with it).</summary>
+    private readonly List<Texture2D> _impressions = new List<Texture2D>();
     private Material _ownPaperMaterial;
     private MaterialPropertyBlock _block;
     private int _hoveredSlot = -1;
@@ -290,6 +270,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             Destroy(_shapedMesh);
         if (_ownMarkMaterial != null)
             Destroy(_ownMarkMaterial);
+        foreach (Texture2D impression in _impressions)
+            if (impression != null)
+                Destroy(impression);
     }
 
     /// <summary>
@@ -566,31 +549,30 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         }
     }
 
-    /// <summary>The verdict's ink mark as the papers leave (redesign phase 27): Stamp at the next place of the form's stamp area.</summary>
-    public void ShowVerdict(bool accepted) => Stamp(accepted);
+    /// <summary>The verdict's ink as the papers leave unstamped (redesign phase 27; the cheat menu's decision): <paramref name="impression"/> (a dater's print, DeskStampTray.Impression) at the next place of the form's stamp area.</summary>
+    public void ShowVerdict(Texture2D impression) => Stamp(impression);
 
     /// <summary>
-    /// Presses a desk stamp on the paper (the travel documents spec, TD4;
-    /// Papers, Please's stamps): APPROVED for <paramref name="approved"/>,
-    /// else DENIED, centred at <paramref name="formPoint"/> (from the page's
-    /// top-left, y down, in the paper's metres: where the stamp's die pressed,
-    /// over the boxes too) and kept whole on the page (StampSpots.AtPoint) or,
-    /// without one (the verdict's ink as the papers leave), at the next place of its largest
+    /// Prints a dater's <paramref name="impression"/> on the paper (the desk
+    /// machine spec §1: the dater's print, DaterImpressionArt; the paper owns
+    /// it from here and destroys it with itself), at the impression's own
+    /// aspect, turned <paramref name="tilt"/> degrees, centred at
+    /// <paramref name="formPoint"/> (from the page's top-left, y down, in the
+    /// paper's metres: where the dater's die pressed, over the boxes too) and
+    /// kept whole on the page (StampSpots.AtPoint) or, without one (the
+    /// verdict's ink as the papers leave), at the next place of its largest
     /// stamp area (StampSpots.Next: a passport's visa page, a form's footer
-    /// box). The mark is the art's (ArtSlots.VerdictMark) at its own aspect,
-    /// else a code-drawn stamp: a double frame and the style's word
-    /// (FormStyleSO.approvedStamp, deniedStamp) in green or red ink, tilted a
-    /// few degrees. Returns the mark's place, from the page's top-left in the
-    /// paper's metres (an empty one on a paper that prints no form).
+    /// box). Returns the mark's place, from the page's top-left in the
+    /// paper's metres (an empty one on a paper that prints no form, or for
+    /// no impression).
     /// </summary>
-    public FaceRect Stamp(bool approved, Vector2? formPoint = null)
+    public FaceRect Stamp(Texture2D impression, Vector2? formPoint = null, float tilt = 0f)
     {
-        if (inkMark == null || _form == null)
+        if (inkMark == null || _form == null || impression == null)
             return new FaceRect(0f, 0f, 0f, 0f);
-        Texture2D art = SlotArt.Texture(new[] { ArtSlots.VerdictMark(approved) });
-        float aspect = art != null && art.height > 0 ? (float)art.width / art.height : StampAspect;
+        _impressions.Add(impression);
+        float aspect = impression.height > 0 ? (float)impression.width / impression.height : 1f;
         FaceRect place = formPoint.HasValue ? StampSpots.AtPoint(_form, formPoint.Value.x / _scale, formPoint.Value.y / _scale, aspect) : StampSpots.Next(_form, _stamps, aspect);
-        float tilt = art != null ? 0f : (_stamps % 2 == 0 ? -StampTilt : StampTilt * 0.6f);
         _stamps++;
 
         Renderer mark = _stamps == 1 ? inkMark : Instantiate(inkMark, inkMark.transform.parent);
@@ -599,151 +581,17 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         mark.transform.localPosition = new Vector3(r.center.x, r.center.y, -InkLift);
         mark.transform.localRotation = Quaternion.Euler(0f, 0f, tilt);
         mark.transform.localScale = new Vector3(r.width, r.height, 1f);
-        Color ink = approved ? ApprovedInk : DeniedInk;
-        ink.a = StampAlpha;
         _block ??= new MaterialPropertyBlock();
         mark.GetPropertyBlock(_block);
-        _block.SetTexture(BaseMapId, art != null ? art : StampFrame());
-        _block.SetColor(BaseColorId, art != null ? new Color(1f, 1f, 1f, ink.a / StampAlpha) : ink);
+        _block.SetTexture(BaseMapId, impression);
+        _block.SetColor(BaseColorId, Color.white);
         mark.SetPropertyBlock(_block);
         mark.gameObject.SetActive(true);
-        _lastMark = mark;
-        _lastWord = null;
-        _lastInk = art != null ? new Color(1f, 1f, 1f, ink.a / StampAlpha) : ink;
-
-        if (art == null && style != null)
-        {
-            TextMeshPro word = Instantiate(textTemplate, textTemplate.transform.parent);
-            word.name = mark.name + "_Word";
-            TmpFormText.Style(word, FormTextRole.Title, r.height * StampWordShare);
-            word.text = approved ? style.approvedStamp : style.deniedStamp;
-            word.color = ink;
-            word.alignment = TextAlignmentOptions.Center;
-            word.textWrappingMode = TextWrappingModes.NoWrap;
-            // The word fits inside the frame's inner line (a long word like APPROVED shrinks rather than crossing the frame).
-            word.enableAutoSizing = true;
-            word.fontSizeMax = word.fontSize;
-            word.fontSizeMin = word.fontSize * StampWordMinShare;
-            word.rectTransform.sizeDelta = new Vector2(r.width * (1f - 2f * StampWordInset / StampPixelsWide), r.height * (1f - 2f * StampWordInset / StampPixelsHigh));
-            word.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -PaperLayers.InkWord);
-            word.rectTransform.localRotation = Quaternion.Euler(0f, 0f, tilt);
-            word.GetComponent<MeshRenderer>().enabled = true;
-            _lastWord = word;
-        }
         return new FaceRect(place.XMin * _scale, place.YMin * _scale, place.XMax * _scale, place.YMax * _scale);
     }
 
-    /// <summary>
-    /// The last stamp's ink blooms in (the game feel's slam, Saleh 2026-10-07:
-    /// "the ink mark blooming in over 80 ms"): hidden for <paramref name="delay"/>
-    /// seconds (the stamp's way down), then over MotionKnobs.inkBloomSeconds
-    /// its ink comes up from nothing as the mark shrinks from a little larger
-    /// to its printed size. The mark is printed (and counts) at once; only its
-    /// look waits. A fade with no delay under Reduced Motion; none when still.
-    /// </summary>
-    public void BloomLastStamp(float delay)
-    {
-        MotionAmount amount = UiMotion.Amount;
-        if (_lastMark == null || amount.Still && !amount.Reduced)
-            return;
-        _bloom ??= new InkBloom(this);
-        _bloom.Start(_lastMark, _lastWord, _lastInk, amount.Reduced ? 0f : delay, UiMotion.Knobs.inkBloomSeconds, amount.Share);
-        UiMotion.Run(_bloom);
-    }
-
-    /// <summary>One mark's bloom (BloomLastStamp), stepped by UiMotion while it runs.</summary>
-    private sealed class InkBloom : IMotionTick
-    {
-        /// <summary>How much larger the mark starts than it prints (a share of its size, at full motion).</summary>
-        private const float Spread = 0.3f;
-
-        private readonly DeskDocument _paper;
-        private Renderer _mark;
-        private TextMeshPro _word;
-        private Color _ink, _wordInk;
-        private Vector3 _scale, _wordScale;
-        private float _wait, _seconds, _elapsed, _share;
-
-        public InkBloom(DeskDocument paper) => _paper = paper;
-
-        /// <summary>Starts on <paramref name="mark"/> (a bloom still running on another mark ends at once).</summary>
-        public void Start(Renderer mark, TextMeshPro word, Color ink, float delay, float seconds, float share)
-        {
-            if (_mark != null && _mark != mark)
-                Show(1f);
-            _mark = mark;
-            _word = word;
-            _ink = ink;
-            _wordInk = word != null ? word.color : default;
-            _scale = mark.transform.localScale;
-            _wordScale = word != null ? word.transform.localScale : Vector3.one;
-            _wait = delay;
-            _seconds = seconds;
-            _share = share;
-            _elapsed = 0f;
-            Show(0f);
-        }
-
-        /// <summary>Waits out the delay, then blooms; false once the mark shows as printed.</summary>
-        public bool TickMotion(float dt)
-        {
-            if (_paper == null || _mark == null)
-                return false;
-            if (_wait > 0f)
-            {
-                _wait -= dt;
-                if (_wait > 0f)
-                    return true;
-                dt = -_wait;
-            }
-            _elapsed += dt;
-            float p = _seconds > 0f ? Mathf.Clamp01(_elapsed / _seconds) : 1f;
-            Show(p);
-            if (p < 1f)
-                return true;
-            _mark = null;
-            return false;
-        }
-
-        /// <summary>Draws the mark at <paramref name="p"/> of its bloom (1: as printed).</summary>
-        private void Show(float p)
-        {
-            float eased = 1f - (1f - p) * (1f - p);
-            float grow = 1f + Spread * _share * (1f - eased);
-            MaterialPropertyBlock block = _paper._block;
-            _mark.GetPropertyBlock(block);
-            Color ink = _ink;
-            ink.a *= eased;
-            block.SetColor(BaseColorId, ink);
-            _mark.SetPropertyBlock(block);
-            _mark.transform.localScale = new Vector3(_scale.x * grow, _scale.y * grow, _scale.z);
-            if (_word == null)
-                return;
-            Color word = _wordInk;
-            word.a *= eased;
-            _word.color = word;
-            _word.transform.localScale = _wordScale * grow;
-        }
-    }
-
-    /// <summary>The code-drawn stamp's frame: a thick outer rectangle and a hairline inside it, white on clear (tinted by the ink), painted once.</summary>
-    private static Texture2D StampFrame()
-    {
-        if (_stampFrame != null)
-            return _stampFrame;
-        _stampFrame = new Texture2D(StampPixelsWide, StampPixelsHigh, TextureFormat.RGBA32, true) { name = "StampFrame", wrapMode = TextureWrapMode.Clamp };
-        var pixels = new Color32[StampPixelsWide * StampPixelsHigh];
-        for (int y = 0; y < StampPixelsHigh; y++)
-            for (int x = 0; x < StampPixelsWide; x++)
-            {
-                int edge = Mathf.Min(Mathf.Min(x, StampPixelsWide - 1 - x), Mathf.Min(y, StampPixelsHigh - 1 - y));
-                bool inked = edge < 7 || (edge >= 11 && edge < 13);
-                pixels[y * StampPixelsWide + x] = new Color32(255, 255, 255, (byte)(inked ? 255 : 0));
-            }
-        _stampFrame.SetPixels32(pixels);
-        _stampFrame.Apply(true, true);
-        return _stampFrame;
-    }
+    /// <summary>The verdict word a dater prints on this paper's form (FormStyleSO.approvedStamp, deniedStamp: English, like every form's).</summary>
+    public string StampWord(bool approved) => style == null ? (approved ? "APPROVED" : "DENIED") : approved ? style.approvedStamp : style.deniedStamp;
 
     /// <summary>A mark of the form named <paramref name="name"/> (an emblem, a watermark): a clone of the seal's quad over <paramref name="rect"/> showing <paramref name="texture"/> in <paramref name="ink"/>, <paramref name="lift"/> over the sheet; nothing without a texture or a seal quad.</summary>
     private Renderer PlaceMark(string name, FaceRect rect, Texture2D texture, Color ink, float lift)

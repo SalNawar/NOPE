@@ -29,6 +29,12 @@ public sealed class MotionKnobs
     /// <summary>Weighty (ratio 0.85, heavier mass): a window, a panel, the camera's last bit of travel.</summary>
     public SpringTuning heavy = SpringTuning.WithRatio(380f, 0.85f, 1.6f);
 
+    /// <summary>A dater's stroke going down (ratio 0.95, stiff): about 60 ms to the paper, slowing into it.</summary>
+    public SpringTuning dater = SpringTuning.WithRatio(2600f, 0.95f);
+
+    /// <summary>The gate lever's arm (ratio 0.42, a heavy mass): a slow swing back with a visible overshoot.</summary>
+    public SpringTuning lever = SpringTuning.WithRatio(220f, 0.42f, 1.5f);
+
     /// <summary>How far a control's face lifts under the pointer (px; Saleh 2026-10-07, round 2: a 1-2 px lift and the glint, no growth).</summary>
     public float hoverLift = 1.5f;
 
@@ -131,6 +137,28 @@ public sealed class MotionKnobs
     /// <summary>The camera impulses' seconds: a slam's bump, a citation's, a breach's rumble.</summary>
     public float shakeStampSeconds = 0.18f, shakeCitationSeconds = 0.3f, shakeBreachSeconds = 0.9f;
 
+    /// <summary>How far a dater's body sinks over its frame once the frame stands on the paper (metres): the self-inker's stroke.</summary>
+    public float daterCompress = 0.012f;
+
+    /// <summary>A dater held down: how long a click on a hanging dater waits before its stroke goes down and holds (seconds; a drag starting sooner carries it instead), and the least time a quick stroke stays down.</summary>
+    public float daterHoldDelay = 0.12f, daterQuickHold = 0.07f;
+
+    /// <summary>The seconds between two ratchet clicks of the date wheels' morning roll.</summary>
+    public float daterWheelClick = 0.07f;
+
+    /// <summary>How hard the lever's thunk home hits (FeelDirector.Hit's strength, 0 to 1; a dater's impression is the stamp's own punch, FeelHit.Stamp).</summary>
+    public float leverHit = 0.3f;
+
+    /// <summary>The feel of a dater's stroke down, of its release springing up (an overshoot) and of a date wheel's click.</summary>
+    public MotionFeel daterFeel = MotionFeel.Dater, daterReleaseFeel = MotionFeel.Elastic, wheelFeel = MotionFeel.Firm;
+
+    /// <summary>The gate lever: its full travel and a ratchet notch (degrees), how much it resists (the pull past the travel a full pull needs, LeverTravel.Resisted), how many degrees a pixel of pointer travel pulls, the "no" wobble's swing (degrees) and how long it rests home before it springs back up (seconds).</summary>
+    public float leverTravel = 60f, leverNotch = 15f, leverResistance = 0.6f, leverPullPerPixel = 0.22f, leverRefuse = 5f, leverHomeSeconds = 0.6f;
+
+    /// <summary>The feel of the lever's arm (following the pull and springing back) and of its "no" wobble.</summary>
+    public MotionFeel leverFeel = MotionFeel.Lever, leverRefuseFeel = MotionFeel.Elastic;
+
+
     /// <summary>A spring settles (stops and leaves the motion driver) within this of its target and slower than settleSpeed.</summary>
     public float settleValue = 0.0005f, settleSpeed = 0.005f;
 
@@ -147,6 +175,10 @@ public sealed class MotionKnobs
                 return paper;
             case MotionFeel.Heavy:
                 return heavy;
+            case MotionFeel.Dater:
+                return dater;
+            case MotionFeel.Lever:
+                return lever;
             default:
                 return balanced;
         }

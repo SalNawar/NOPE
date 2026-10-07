@@ -326,7 +326,7 @@ public static class BalanceSimulation
                         }
                 PlayDecision decision = policy.Decide(inst.ShouldAccept, inst.HasDeviationFault);
                 int carries = world.history.pendingCarries.Count;
-                CaseVerdict verdict = DayCycle.Decide(inst, decision.Accept, i + 1, decision.Documented ? 1 : 0, world, today, ledger, lib, config);
+                CaseVerdict verdict = DayCycle.Decide(inst, decision.Accept ? DeskStamp.Approved : DeskStamp.Denied, i + 1, decision.Documented ? 1 : 0, world, today, ledger, lib, config);
                 r.Carries += world.history.pendingCarries.Count - carries;
                 r.Records.Add(Record(plan, day, i + 1, inst, decision.Accept, verdict));
                 Count(r, inst, decision.Accept, verdict);

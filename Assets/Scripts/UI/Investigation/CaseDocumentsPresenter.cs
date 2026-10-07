@@ -175,11 +175,11 @@ public sealed class CaseDocumentsPresenter
         Receive(index);
     }
 
-    /// <summary>The decision (<paramref name="accepted"/>): the desk's papers leave with the traveller, inked with the verdict, and the Documents view empties.</summary>
-    public void EndCase(bool accepted)
+    /// <summary>The decision (<paramref name="decision"/>): the desk's papers leave with the traveller (inked with the verdict when nobody stamped them), and the Documents view empties.</summary>
+    public void EndCase(DeskStamp decision)
     {
         if (_desk != null)
-            _desk.EndCase(accepted);
+            _desk.EndCase(decision);
         _caseDocuments.Clear();
         _caseForms.Clear();
         _marks.Clear();

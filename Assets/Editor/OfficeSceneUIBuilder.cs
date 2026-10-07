@@ -205,6 +205,7 @@ public static partial class OfficeSceneUIBuilder
         OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip, false);
         OverlayCallout boardTooltip = BuildOverlayCallout(officeCanvas.transform, "BoardTooltip", BoardTooltipSize, Tooltip, ThemeRoleId.Tooltip, false, true);
         DeskStampTray stampTray = BuildStampTray(officeCanvas.transform, officeView.transform, deskConfig);
+        BuildVerdictButtons(officeCanvas.transform, stampTray);
 
         // The verdict ribbon over the office (OfficeSceneUIBuilder.Kit, the UI kit's). The citation slip is retired (2026-10-07: a citation is a
         // paper on the desk, DeskController.Cite): it goes from scenes built before.

@@ -11,16 +11,19 @@ using UnityEngine;
 public static class ShiftScoring
 {
     /// <summary>
-    /// Resolves a binary ACCEPT/DENY decision (investigation feature) into a
-    /// CaseVerdict and applies its consequences. Correct = the player's choice
-    /// matches CaseInstance.ShouldAccept (accept a traveller with no fault;
-    /// deny a deviation fault or a directive fault, traveller types P1), or
-    /// denies a traveller whose waiver fault the desk's pad cured
-    /// (VerdictRules.IsCorrect; the endings and strandings spec §7.3).
+    /// Resolves a decision, one of the three verdicts (APPROVED, DENIED,
+    /// DETAINED: the desk machine spec §2), into a CaseVerdict and applies its
+    /// consequences. Correct = the player's choice matches
+    /// CaseInstance.ShouldAccept (accept a traveller with no fault; deny a
+    /// deviation fault or a directive fault, traveller types P1), or denies a
+    /// traveller whose waiver fault the desk's pad cured (the endings and
+    /// strandings spec §7.3); a detention is correct only for a traveller who
+    /// breaks the law (CaseInstance.BreaksLaw), else it is the one citation
+    /// (VerdictRules.IsCorrect, IsWrongDetention).
     /// </summary>
     public static CaseVerdict ResolveDecision(
         CaseInstance inst,
-        bool accepted,
+        DeskStamp decision,
         int caseIndex1Based,
         WorldState world,
         GameConfigSO config,
@@ -28,8 +31,10 @@ public static class ShiftScoring
         int evidenceCount = -1)
     {
         bool shouldAccept = inst != null && inst.ShouldAccept;
+        bool accepted = decision == DeskStamp.Approved;
+        bool breaksLaw = inst != null && inst.BreaksLaw;
 
-        Debug.Log($"[ShiftScoring] >>> Entering ResolveDecision (case {caseIndex1Based}, accepted={accepted}, shouldAccept={shouldAccept}, fault='{inst?.FaultReason}', directive={inst?.directiveFault}, evidence={evidenceCount}).");
+        Debug.Log($"[ShiftScoring] >>> Entering ResolveDecision (case {caseIndex1Based}, verdict={decision}, shouldAccept={shouldAccept}, fault='{inst?.FaultReason}', directive={inst?.directiveFault}, evidence={evidenceCount}).");
 
         var verdict = new CaseVerdict
         {
@@ -37,13 +42,14 @@ public static class ShiftScoring
             visitorName = inst != null ? inst.visitorDisplayName : "Unknown",
             wasLegendary = inst != null && inst.IsFamous,
             accepted = accepted,
+            detained = decision == DeskStamp.Detained,
             kind = inst != null ? inst.kind : default,
             debt = inst?.account != null ? inst.account.Debt : 0,
             shouldAccept = shouldAccept,
             faultReason = inst != null ? inst.FaultReason : string.Empty,
             destinationLabel = inst != null ? inst.originLabel ?? string.Empty : string.Empty,
             evidenceCount = Mathf.Max(0, evidenceCount),
-            correct = inst != null && VerdictRules.IsCorrect(accepted, shouldAccept, inst.curedAtDesk != DirectiveFault.None)
+            correct = inst != null && VerdictRules.IsCorrect(decision, shouldAccept, inst.curedAtDesk != DirectiveFault.None, breaksLaw)
         };
 
         if (world == null || config == null)
@@ -52,11 +58,12 @@ public static class ShiftScoring
             return verdict;
         }
 
-        // Evidence gate (Saleh, 2026-10-05): any right denial must be backed
-        // by logged evidence, a deviation's proof or a directive fault's
-        // finding; evidenceCount < 0 means the evidence system is not active
-        // in this scene (fallback UI) so the gate is skipped.
-        if (inst != null && VerdictRules.IsUnprovenDenial(config.requireEvidenceToDeny, evidenceCount, accepted, inst.HasDeviationFault, inst.HasDirectiveFault))
+        // Evidence gate (Saleh, 2026-10-05): any right denial (or detention)
+        // must be backed by logged evidence, a deviation's proof or a
+        // directive fault's finding; evidenceCount < 0 means the evidence
+        // system is not active in this scene (fallback UI) so the gate is
+        // skipped. A detention of a traveller who broke no law is wrong instead.
+        if (inst != null && VerdictRules.IsUnproven(config.requireEvidenceToDeny, evidenceCount, decision, inst.HasDeviationFault, inst.HasDirectiveFault, breaksLaw))
         {
             verdict.correct = false;
             verdict.unprovenDenial = true;

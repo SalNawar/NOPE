@@ -8,7 +8,15 @@ public enum DeskStamp
     Approved,
 
     /// <summary>The DENIED stamp (red): the traveller is turned back.</summary>
-    Denied
+    Denied,
+
+    /// <summary>
+    /// The third verdict, DETAINED (the desk machine spec §2): no stamp
+    /// prints it; the DETAIN hardware commits it at any time after the
+    /// traveller arrives, stamp or not, and guards take the traveller.
+    /// Right only for a traveller who breaks the law (Law.Breaks).
+    /// </summary>
+    Detained
 }
 
 /// <summary>What a stamp's press did (StampFlow.Press). Not serialized.</summary>
@@ -39,10 +47,14 @@ public enum StampPress
 /// its ENTRY VISA box), and only once. The first press there is the
 /// passport's verdict; any later press on the passport, of either stamp, is
 /// refused (Saleh: "there is a bug that you can both approve and decline a
-/// paper"), and so is a press on any other paper. The papers handed back (the stamped passport dropped on the counter)
-/// decide the case with that verdict (deny is free; a denial with no logged
-/// evidence earns the one citation: VerdictRules). A new case starts with no
-/// verdict, the bar as it was. Pure; tested headless; DeskStampTray applies it.
+/// paper"), and so is a press on any other paper. The papers handed back (the
+/// stamped passport dropped on the counter) lock that verdict, and the
+/// hardware commits it (the desk machine spec §2, Saleh 2026-10-07: "three
+/// actions"): the gate lever an APPROVED passport, RETURN a DENIED one, DETAIN
+/// any traveller at any time (Commit; deny is free; a denial or a detention
+/// with no logged evidence earns the one citation, and so does a detention of
+/// a traveller who broke no law: VerdictRules). A new case starts with no
+/// verdict, nothing handed back, the bar as it was. Pure; tested headless; DeskStampTray applies it.
 /// </summary>
 public sealed class StampFlow
 {
@@ -52,8 +64,17 @@ public sealed class StampFlow
     /// <summary>The passport's verdict: the stamp of its one accepted press (None: not stamped yet).</summary>
     public DeskStamp Verdict { get; private set; }
 
-    /// <summary>True when the papers can be handed back: the passport carries a verdict.</summary>
-    public bool CanHandBack => Verdict != DeskStamp.None;
+    /// <summary>True when the papers can be handed back: the passport carries a verdict and is still on the desk.</summary>
+    public bool CanHandBack => Verdict != DeskStamp.None && !HandedBack;
+
+    /// <summary>True once the stamped papers went back to the traveller (the verdict is locked; the hardware commits it).</summary>
+    public bool HandedBack { get; private set; }
+
+    /// <summary>True once the hardware committed the case's verdict (one commit a case).</summary>
+    public bool Committed { get; private set; }
+
+    /// <summary>True while a traveller stands at the desk with their case (BeginCase(true)): DETAIN can take them.</summary>
+    public bool TravellerHere { get; private set; }
 
     /// <summary>Slides the bar out, or back in (TAB, the grey tab); returns whether it is out now.</summary>
     public bool ToggleBar()
@@ -91,6 +112,43 @@ public sealed class StampFlow
         return StampPress.Stamped;
     }
 
-    /// <summary>A new traveller: no verdict (the bar stays as it is).</summary>
-    public void BeginCase() => Verdict = DeskStamp.None;
+    /// <summary>
+    /// The stamped papers go back to the traveller (the desk machine spec
+    /// §2: stamp, then hand back, then commit with the hardware): false
+    /// (nothing changes) without a verdict or when they went back already.
+    /// </summary>
+    public bool HandBack()
+    {
+        if (!CanHandBack)
+            return false;
+        HandedBack = true;
+        return true;
+    }
+
+    /// <summary>
+    /// The hardware commits <paramref name="verdict"/> (the desk machine spec
+    /// §2; stamping judges, the hardware executes, so a decision is never
+    /// committed by accident): the lever commits APPROVED and RETURN commits
+    /// DENIED, each only once the passport went back bearing that stamp;
+    /// DETAIN commits DETAINED at any time a traveller is here, stamped or
+    /// not. False (the hardware does nothing: the lever's "no" wobble) for
+    /// anything else, and after the case's one commit.
+    /// </summary>
+    public bool Commit(DeskStamp verdict)
+    {
+        if (Committed || !TravellerHere)
+            return false;
+        bool allowed = verdict == DeskStamp.Detained || (verdict != DeskStamp.None && HandedBack && Verdict == verdict);
+        if (allowed)
+            Committed = true;
+        return allowed;
+    }
+
+    /// <summary>A new traveller (<paramref name="travellerHere"/>), or none: no verdict, nothing handed back or committed (the bar stays as it is).</summary>
+    public void BeginCase(bool travellerHere)
+    {
+        Verdict = DeskStamp.None;
+        HandedBack = Committed = false;
+        TravellerHere = travellerHere;
+    }
 }

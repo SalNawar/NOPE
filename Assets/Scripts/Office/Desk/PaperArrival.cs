@@ -101,7 +101,7 @@ public sealed class PaperArrival : MonoBehaviour
             _thudded = true;
             if (string.IsNullOrEmpty(_landCue) || !Sounds.Play(_landCue))
             {
-                _thud ??= CodeTones.Tone("PaperThud", 95f, 0.12f, 0.35f);
+                _thud ??= CueSounds.Tone("PaperThud", 95f, 0.12f, 0.35f);
                 AudioSource.PlayClipAtPoint(_thud, _to, 0.6f);
             }
             FeelDirector.Hit(_landHit);

@@ -81,6 +81,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The stamp bar (Papers, Please's with the art's 3D stamps, Saleh 2026-10-06; optional): its rack is laid where the reading view shows the desk's right.</summary>
     [SerializeField] private DeskStampTray stampTray;
 
+    /// <summary>The gate lever (optional; the desk machine spec §2): laid beside the desk where the office view shows DeskConfigSO.leverView.</summary>
+    [SerializeField] private GateLever gateLever;
+
     /// <summary>The counter (optional): laid along the desk's far edge in the office view's frame, once the desk view is posed.</summary>
     [SerializeField] private DeskCounter counter;
 
@@ -448,6 +451,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         // The 3D stamp bar hangs where the reading view shows the desk's right (Saleh 2026-10-06: "I want the 3D stamp").
         if (stampTray != null && _office != null)
             stampTray.Lay(_office.transform.forward);
+        // The gate lever stands beside the desk where the office view shows DeskConfigSO.leverView (the desk machine spec §2).
+        if (gateLever != null && config != null && _officeVcam != null)
+            gateLever.Lay(_officeVcam, _office != null ? _office.aspect : 16f / 9f, top, config.leverView);
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
