@@ -409,8 +409,8 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     {
         bool started = _speech.LineNumber != _drawnLine;
         _drawnLine = _speech.LineNumber;
-        if (started && traveller != null && _speech.Expression != null)
-            traveller.SetExpression(_speech.Expression);
+        if (started && traveller != null)
+            traveller.SetExpression(_speech.Expression ?? LookKeys.NeutralExpression);
 
         if (bubble == null)
             return;

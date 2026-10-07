@@ -1,4 +1,10 @@
-# Character art production status — 2026-09-26
+# Character art production status — 2026-10-04
+
+Current branch: `codex/hall-art-completion`, based on latest main `5c7c281` with Claude's pilot and scene integration. Production is complete: 470 source deliverables (455 new, 15 pilot) and all 944 current required game keys are installed, including 26 named characters with four expressions each. Native Unity import and runtime Resources validation pass for all 944 sprites with zero errors.
+
+The processing stage now includes green/magenta extraction, registered transparent layers, skin/hair palettes and variants, rear hair, expression alignment, full accessories and visually reviewed game stacks. The 42 approved pilot keys and metadata are retained. Eight interim recoloured heads were replaced with generated faces, with originals archived and GUIDs retained. All raw sources remain unchanged. See `../Completion/README.md`, validation reports and `ProcessedQA` for evidence and `tools/characters/README.md` for the maintained pipeline. The two neutral future outfit raw sheets are reference-only in coverage.
+
+## Historical pilot status — 2026-09-26
 
 Branch: art. Production follows the v2.2 brief snapshot. Coverage requires 406 raw images producing 880 processed game keys; these counts are different.
 

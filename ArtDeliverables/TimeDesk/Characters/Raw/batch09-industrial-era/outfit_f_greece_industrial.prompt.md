@@ -1,0 +1,13 @@
+# outfit_f_greece_industrial
+
+Built-in image generation. Raw source candidate; pending registration and stack QA.
+
+Use case: precise-object-edit. Production raw sheet for a layered character in Time Sorter. Preserve the entire 1024x1536 portrait canvas, the reference silhouette, pose, head outline and head location. Never zoom or crop. Centre x512, head top y260, chin about y424, shoulders y500, waist y760, soles y1490. Arms relaxed slightly away, empty open hands. Outside the figure is fully opaque flat green #00FF00, including every gap between limbs. Every uncovered mannequin pixel is fully opaque flat magenta #FF00FF with sparse face registration marks. NO shades, highlights or shadows on magenta. Only the requested piece, all other pieces absent. Soft rounded 2D anime customer art matching the approved pilot, adults with adult proportions, not chibi. Expressive simple anime eyes, thin consistent 2-3px dark-brown #3B2A20 contours, restrained flat cel colours with exactly ONE hard-edged shadow tone, neutral even white front light. No gradient, airbrush, texture noise, lettering, logos, military or royal regalia, flags, religious symbols, weapons or manga emotion symbols. Avoid lime green, magenta, pink, purple on the piece; olive and bottle green are permitted. Reference 1 is the exact registration mannequin. Reference 2 is STYLE ONLY; never copy its Greek clothes. ONLY clothing and footwear. No hair, beard, headwear, jewellery or accessory. Keep the head bald and magenta; clothes remain below the chin.
+Subject: woman of Athens, Kingdom of Greece; Athens, new capital of the independent Greek kingdom, c. 1860.
+Draw: Amalia dress: a floor-length full skirt of pale ivory or dusty-coral silk, a white long-sleeved blouse with a lace chemisette front, and a short, fitted, open bolero jacket (kontogouni) of deep-burgundy velvet heavily embroidered with gold braid.
+Avoid: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)
+Output one full-canvas raw outfit_f_greece_industrial.
+
+References:
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\References\mannequin_f.png
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\Raw\batch01-pilot\outfit_f_greece_ancient.png

@@ -1,0 +1,1 @@
+First vehicle moved 0.3405 local units over approximately two seconds. Reduced motion: False. Separate sprites remain window-mask clipped.

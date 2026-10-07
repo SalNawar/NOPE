@@ -1,0 +1,27 @@
+{
+  "accessory_f_china_industrial": {"outputRegions": [[312,772,386,830]], "reason": "Keep the reviewed jade wrist bangle; remove disconnected calibration seams and face marks."},
+  "accessory_f_iraq_industrial": {"outputRegions": [[314,730,397,835],[629,720,711,835]], "reason": "Keep both reviewed gold wrist stacks; remove calibration seams and folds."},
+  "accessory_f_egypt_modern": {"outputRegions": [[313,757,388,838],[637,757,712,838]], "reason": "Keep both reviewed gold wrist stacks on the complete accessory canvas."},
+  "accessory_m_china_modern": {"outputRegions": [[363,440,622,871]], "reason": "Keep the complete reviewed shoulder strap and bag; remove fitting face marks."},
+  "accessory_f_china_modern": {"outputRegions": [[429,444,673,823]], "reason": "Keep the complete reviewed shoulder strap and bag; remove fitting marks."},
+  "accessory_f_iraq_modern": {"outputRegions": [[462,430,568,543]], "reason": "Keep the reviewed pendant and chain; remove calibration face and garment seams."},
+  "accessory_f_greece_medieval": {"outputRegions": [[365,234,661,523]], "reason": "Keep the reviewed veil accessory and earrings; remove detached calibration shoulder patches."},
+  "hair_m_iraq_medieval": {"itemBottom": 418, "reason": "Reviewed short sideburns end above the calibration robe collar."},
+  "hair_f_germany_medieval": {"itemBottom": 410, "reason": "Reviewed braids end above the separate calibration bodice."},
+  "hair_m_iraq_earlymodern": {"itemBottom": 410, "reason": "Reviewed short crop; remove calibration robe."},
+  "facialhair_m_britain_industrial": {"itemBottom": 400, "reason": "Reviewed mutton chops end above the calibration shirt collar."},
+  "hair_m_germany_industrial": {"itemBottom": 410, "reason": "Reviewed short crop; remove calibration suit."},
+  "hair_m_britain_modern": {"itemBottom": 410, "reason": "Reviewed short swept hair; remove calibration suit."},
+  "hair_f_neutral_future": {
+    "reason": "The left fringe touches the upper eyelash. Review the visible pupil/face marks directly rather than fitting the connected hair contour as an eye.",
+    "face": {
+      "eye_l": [480.5, 339.5],
+      "eye_r": [543.5, 339.5],
+      "nose": [512, 367],
+      "mouth": [512, 393.5],
+      "chin": [512, 416.5],
+      "centre_x": 512,
+      "scalp": 258
+    }
+  }
+}

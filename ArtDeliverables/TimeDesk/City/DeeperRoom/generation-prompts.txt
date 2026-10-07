@@ -1,0 +1,7 @@
+Built-in image-generation prompts.
+
+FRONT CITY EXTENSION:
+Create a connected RIGHTWARD EXTENSION of CityMorningConnected.png for the FRONT windows of a high-floor terminal hall. One3:1 panorama; same horizon, morning sun from upper left, grounded hand-painted1980s anime style. Extend beyond the existing industrial harbour rather than repeating the civic statue/towers. Include distinct massive industrial arcologies, stepped corporate towers, dense worker housing and retro Art Deco communications landmark. Visible rooftops and deep city layers; vibrant cyan, ochre, rust, navy. Dirty lived-in grounded human-only future. No hall frames, borders or panels; minimize signage.
+
+DEEPER LEFT HALL:
+Edit WaitingBayClearWindows.png, with CityMorningConnected.png and CityMorningFrontExtension.png as city insert references. Keep same3:1 canvas, camera and vanishing point. Move almost-black left elevator pier farther back toward x800, reduce its width to about80px, foot at y390. Expand left glazing to about760px. Rebuild bridge landing, stair access, ceiling, window frames, lockers, piping, tiles and side rail coherently. Preserve right half, portals, foreground rails and petrol/graphite/ochre palette. Full horizontal original city panorama belongs across left glazing; front windows receive connected extension. No zoom/stretch, explanatory text, arrows, labels or borders. Polished architectural layout review.

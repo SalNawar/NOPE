@@ -1,0 +1,16 @@
+PASS: 48 locations, three unique compositions each; all 144 alternatives validated; fixed feet and stationary transforms; swaps occur while invisible.
+Opacity 0: black tint, alpha 0.
+Opacity 0.4: black tint, alpha 0.46.
+Opacity 0.65: black tint, alpha 0.6849999.
+Opacity 1: black tint, alpha 0.9999999.
+PASS: eight saved 2172x724 state textures, matching depth map, generated atmosphere atlas, existing aperture masks retained.
+Asset CityAtmosphereAtlas.png: 1254x1254
+Asset CityDepth.png: 2172x724
+Asset CityEveningClear.png: 2172x724
+Asset CityEveningRain.png: 2172x724
+Asset CityMorningClear.png: 2172x724
+Asset CityMorningRain.png: 2172x724
+Asset CityNightClear.png: 2172x724
+Asset CityNightRain.png: 2172x724
+Asset CityNoonClear.png: 2172x724
+Asset CityNoonRain.png: 2172x724

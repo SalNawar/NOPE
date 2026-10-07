@@ -1,0 +1,3224 @@
+fileFormatVersion: 2
+guid: f33e34933d90fcf42a70db27930a7db0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4512114463253025890
+    second: WhiteCrowdVariations_0
+  - first:
+      213: -2826159277343106886
+    second: WhiteCrowdVariations_1
+  - first:
+      213: -315001065824407979
+    second: WhiteCrowdVariations_2
+  - first:
+      213: 8910660762710381973
+    second: WhiteCrowdVariations_3
+  - first:
+      213: 5110664008220445670
+    second: WhiteCrowdVariations_4
+  - first:
+      213: 2493428266781651669
+    second: WhiteCrowdVariations_5
+  - first:
+      213: -9199549910931460796
+    second: WhiteCrowdVariations_6
+  - first:
+      213: -5484664277844230094
+    second: WhiteCrowdVariations_7
+  - first:
+      213: -4462709782231577689
+    second: WhiteCrowdVariations_8
+  - first:
+      213: 5130004057216542686
+    second: WhiteCrowdVariations_9
+  - first:
+      213: -1155494584574815679
+    second: WhiteCrowdVariations_10
+  - first:
+      213: 5265220942526169176
+    second: WhiteCrowdVariations_11
+  - first:
+      213: -8000673901984368369
+    second: WhiteCrowdVariations_12
+  - first:
+      213: -2425746349575820413
+    second: WhiteCrowdVariations_13
+  - first:
+      213: -8620190444313201913
+    second: WhiteCrowdVariations_14
+  - first:
+      213: 1613494137822791134
+    second: WhiteCrowdVariations_15
+  - first:
+      213: -8048546803971534736
+    second: WhiteCrowdVariations_16
+  - first:
+      213: -6472676064585086824
+    second: WhiteCrowdVariations_17
+  - first:
+      213: 598693677351969110
+    second: WhiteCrowdVariations_18
+  - first:
+      213: 7620991467105161068
+    second: WhiteCrowdVariations_19
+  - first:
+      213: 289581448384555256
+    second: WhiteCrowdVariations_20
+  - first:
+      213: -9163151400159090239
+    second: WhiteCrowdVariations_21
+  - first:
+      213: 3296075839153704031
+    second: WhiteCrowdVariations_22
+  - first:
+      213: -4769351492520984020
+    second: WhiteCrowdVariations_23
+  - first:
+      213: -4541701297691089774
+    second: WhiteCrowdVariations_24
+  - first:
+      213: -972833884306564050
+    second: WhiteCrowdVariations_25
+  - first:
+      213: -4165124350074626046
+    second: WhiteCrowdVariations_26
+  - first:
+      213: 5723910727429037890
+    second: WhiteCrowdVariations_27
+  - first:
+      213: 4765803701980617074
+    second: WhiteCrowdVariations_28
+  - first:
+      213: 5554182562164680465
+    second: WhiteCrowdVariations_29
+  - first:
+      213: 3218642735260902704
+    second: WhiteCrowdVariations_30
+  - first:
+      213: 8234464592410986375
+    second: WhiteCrowdVariations_31
+  - first:
+      213: 5618750608680332564
+    second: WhiteCrowdVariations_32
+  - first:
+      213: 8217922923608929019
+    second: WhiteCrowdVariations_33
+  - first:
+      213: -8789955657121761204
+    second: WhiteCrowdVariations_34
+  - first:
+      213: 7491752998520896076
+    second: WhiteCrowdVariations_35
+  - first:
+      213: 7127184947092073070
+    second: WhiteCrowdVariations_36
+  - first:
+      213: -8221056582466601897
+    second: WhiteCrowdVariations_37
+  - first:
+      213: 6961182375099182243
+    second: WhiteCrowdVariations_38
+  - first:
+      213: 6430261535841858926
+    second: WhiteCrowdVariations_39
+  - first:
+      213: -9206926686118255046
+    second: WhiteCrowdVariations_40
+  - first:
+      213: 7980421482464959972
+    second: WhiteCrowdVariations_41
+  - first:
+      213: 315442555961316769
+    second: WhiteCrowdVariations_42
+  - first:
+      213: -5056528775830851378
+    second: WhiteCrowdVariations_43
+  - first:
+      213: 3679553672928378486
+    second: WhiteCrowdVariations_44
+  - first:
+      213: -2671648739748667299
+    second: WhiteCrowdVariations_45
+  - first:
+      213: 4175051653185886370
+    second: WhiteCrowdVariations_46
+  - first:
+      213: -3835656732024644116
+    second: WhiteCrowdVariations_47
+  - first:
+      213: -194670136851672256
+    second: WhiteCrowdVariations_48
+  - first:
+      213: 4778930197151553943
+    second: WhiteCrowdVariations_49
+  - first:
+      213: 2851230811864822079
+    second: WhiteCrowdVariations_50
+  - first:
+      213: -9185781315892548586
+    second: WhiteCrowdVariations_51
+  - first:
+      213: -8019780246297433773
+    second: WhiteCrowdVariations_52
+  - first:
+      213: 1697345967510177493
+    second: WhiteCrowdVariations_53
+  - first:
+      213: 1771616653981649942
+    second: WhiteCrowdVariations_54
+  - first:
+      213: 2320056174241508486
+    second: WhiteCrowdVariations_55
+  - first:
+      213: 6204896549440932305
+    second: WhiteCrowdVariations_56
+  - first:
+      213: -8180405425107596468
+    second: WhiteCrowdVariations_57
+  - first:
+      213: 8046224670873778456
+    second: WhiteCrowdVariations_58
+  - first:
+      213: 8327680701463775137
+    second: WhiteCrowdVariations_59
+  - first:
+      213: -1135776580796856031
+    second: WhiteCrowdVariations_60
+  - first:
+      213: 5993722607024891334
+    second: WhiteCrowdVariations_61
+  - first:
+      213: -6049920632709586803
+    second: WhiteCrowdVariations_62
+  - first:
+      213: -3804942268923551067
+    second: WhiteCrowdVariations_63
+  - first:
+      213: 6483433959469928159
+    second: WhiteCrowdVariations_64
+  - first:
+      213: 5907064671239928363
+    second: WhiteCrowdVariations_65
+  - first:
+      213: 5804523205085968411
+    second: WhiteCrowdVariations_66
+  - first:
+      213: -591429096720398120
+    second: WhiteCrowdVariations_67
+  - first:
+      213: 4015108218590253616
+    second: WhiteCrowdVariations_68
+  - first:
+      213: 3522702328541749462
+    second: WhiteCrowdVariations_69
+  - first:
+      213: 1624066150431190020
+    second: WhiteCrowdVariations_70
+  - first:
+      213: -6565230144520589292
+    second: WhiteCrowdVariations_71
+  - first:
+      213: -4885147045295665201
+    second: WhiteCrowdVariations_72
+  - first:
+      213: -822220780770948796
+    second: WhiteCrowdVariations_73
+  - first:
+      213: 7531034384603193693
+    second: WhiteCrowdVariations_74
+  - first:
+      213: 6081991347747557464
+    second: WhiteCrowdVariations_75
+  - first:
+      213: -6386108587084829001
+    second: WhiteCrowdVariations_76
+  - first:
+      213: 1757909977070691653
+    second: WhiteCrowdVariations_77
+  - first:
+      213: 4520081346399406832
+    second: WhiteCrowdVariations_78
+  - first:
+      213: -7743076609864020046
+    second: WhiteCrowdVariations_79
+  - first:
+      213: 2585807004111257716
+    second: WhiteCrowdVariations_80
+  - first:
+      213: -357534730307821816
+    second: WhiteCrowdVariations_81
+  - first:
+      213: -3134914126456735764
+    second: WhiteCrowdVariations_82
+  - first:
+      213: -1571308008604031233
+    second: WhiteCrowdVariations_83
+  - first:
+      213: 8725624743416488347
+    second: WhiteCrowdVariations_84
+  - first:
+      213: -8761332516461428012
+    second: WhiteCrowdVariations_85
+  - first:
+      213: -7094799576230191092
+    second: WhiteCrowdVariations_86
+  - first:
+      213: -5509028061563680760
+    second: WhiteCrowdVariations_87
+  - first:
+      213: -4933900343209863723
+    second: WhiteCrowdVariations_88
+  - first:
+      213: 5376079481420485507
+    second: WhiteCrowdVariations_89
+  - first:
+      213: -2895504076676384082
+    second: WhiteCrowdVariations_90
+  - first:
+      213: -1080085437251499317
+    second: WhiteCrowdVariations_91
+  - first:
+      213: 4794077234190866301
+    second: WhiteCrowdVariations_92
+  - first:
+      213: 4223085713774029400
+    second: WhiteCrowdVariations_93
+  - first:
+      213: 3779301653302930382
+    second: WhiteCrowdVariations_94
+  - first:
+      213: -4382834890112172030
+    second: WhiteCrowdVariations_95
+  - first:
+      213: -1876215471152577269
+    second: WhiteCrowdVariations_96
+  - first:
+      213: 2887041258210427654
+    second: WhiteCrowdVariations_97
+  - first:
+      213: -807178919831738527
+    second: WhiteCrowdVariations_98
+  - first:
+      213: 348619836237437902
+    second: WhiteCrowdVariations_99
+  - first:
+      213: 4639144960625245372
+    second: WhiteCrowdVariations_100
+  - first:
+      213: 5119797796050198846
+    second: WhiteCrowdVariations_101
+  - first:
+      213: -368274957071068366
+    second: WhiteCrowdVariations_102
+  - first:
+      213: 5036226023034230768
+    second: WhiteCrowdVariations_103
+  - first:
+      213: -8017091363545322201
+    second: WhiteCrowdVariations_104
+  - first:
+      213: 8576167007798268466
+    second: WhiteCrowdVariations_105
+  - first:
+      213: -3633895780155615177
+    second: WhiteCrowdVariations_106
+  - first:
+      213: 7645074087841716439
+    second: WhiteCrowdVariations_107
+  - first:
+      213: 5081927634827142322
+    second: WhiteCrowdVariations_108
+  - first:
+      213: 4269375726625945395
+    second: WhiteCrowdVariations_109
+  - first:
+      213: -258801069174614232
+    second: WhiteCrowdVariations_110
+  - first:
+      213: -1226370379760931059
+    second: WhiteCrowdVariations_111
+  - first:
+      213: -191972748724866994
+    second: WhiteCrowdVariations_112
+  - first:
+      213: -4533969941387715109
+    second: WhiteCrowdVariations_113
+  - first:
+      213: 1877976467403432688
+    second: WhiteCrowdVariations_114
+  - first:
+      213: 6405760392399970587
+    second: WhiteCrowdVariations_115
+  - first:
+      213: -5215562391128117134
+    second: WhiteCrowdVariations_116
+  - first:
+      213: 3070594212782680731
+    second: WhiteCrowdVariations_117
+  - first:
+      213: -6729179596643951134
+    second: WhiteCrowdVariations_118
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_0
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 807
+        width: 377
+        height: 423
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9ba6e74dcfb161c0800000000000000
+      internalID: -4512114463253025890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 1213
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab81a436c1777c8d0800000000000000
+      internalID: -2826159277343106886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_2
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 1211
+        width: 69
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55eaaa71334e0abf0800000000000000
+      internalID: -315001065824407979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_3
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 1156
+        width: 100
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5951d53c0c609ab70800000000000000
+      internalID: 8910660762710381973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_4
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 757
+        width: 443
+        height: 475
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6eb8a5886d9bce640800000000000000
+      internalID: 5110664008220445670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_5
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 1110
+        width: 69
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d230724ccf6a9220800000000000000
+      internalID: 2493428266781651669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_6
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 1154
+        width: 39
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44d2479e812a45080800000000000000
+      internalID: -9199549910931460796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_7
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 1130
+        width: 50
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23002d6f5ee82e3b0800000000000000
+      internalID: -5484664277844230094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_8
+      rect:
+        serializedVersion: 2
+        x: 543
+        y: 797
+        width: 154
+        height: 388
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ab0d66f8154112c0800000000000000
+      internalID: -4462709782231577689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_9
+      rect:
+        serializedVersion: 2
+        x: 659
+        y: 1195
+        width: 19
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed764b6928f613740800000000000000
+      internalID: 5130004057216542686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_10
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 1181
+        width: 34
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 142d7822ccbd6ffe0800000000000000
+      internalID: -1155494584574815679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_11
+      rect:
+        serializedVersion: 2
+        x: 842
+        y: 1172
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85048370d82d11940800000000000000
+      internalID: 5265220942526169176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_12
+      rect:
+        serializedVersion: 2
+        x: 462
+        y: 1154
+        width: 23
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f09bb7cb975e7f090800000000000000
+      internalID: -8000673901984368369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_13
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 1132
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38b25561c84065ed0800000000000000
+      internalID: -2425746349575820413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_14
+      rect:
+        serializedVersion: 2
+        x: 733
+        y: 966
+        width: 80
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 703be7e667eee5880800000000000000
+      internalID: -8620190444313201913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_15
+      rect:
+        serializedVersion: 2
+        x: 788
+        y: 1106
+        width: 33
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed54a14ae58446610800000000000000
+      internalID: 1613494137822791134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_16
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 1112
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 070db272351dd4090800000000000000
+      internalID: -8048546803971534736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_17
+      rect:
+        serializedVersion: 2
+        x: 1210
+        y: 1077
+        width: 29
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8988b38b96f6c26a0800000000000000
+      internalID: -6472676064585086824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_18
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 1078
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65126df3abcfe4800800000000000000
+      internalID: 598693677351969110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_19
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 972
+        width: 114
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6f06119c5333c960800000000000000
+      internalID: 7620991467105161068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_20
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 825
+        width: 39
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f821840bccc40400800000000000000
+      internalID: 289581448384555256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_21
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 835
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c9e46a9952f5d080800000000000000
+      internalID: -9163151400159090239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_22
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 809
+        width: 34
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5c018923830ebd20800000000000000
+      internalID: 3296075839153704031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_23
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 813
+        width: 25
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c22ce4f261cdfcdb0800000000000000
+      internalID: -4769351492520984020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_24
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 837
+        width: 32
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29421339bb2a8f0c0800000000000000
+      internalID: -4541701297691089774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_25
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 819
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2c917c8cbccf72f0800000000000000
+      internalID: -972833884306564050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_26
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 793
+        width: 29
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 200e87ca8718236c0800000000000000
+      internalID: -4165124350074626046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_27
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 802
+        width: 52
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24f9472ea7a6f6f40800000000000000
+      internalID: 5723910727429037890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_28
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 803
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 279dbc57739832240800000000000000
+      internalID: 4765803701980617074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_29
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 819
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 117ae7bec9b641d40800000000000000
+      internalID: 5554182562164680465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 749
+        width: 53
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0352e1eb38aeaac20800000000000000
+      internalID: 3218642735260902704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_31
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 445
+        width: 321
+        height: 347
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78740323be1b64270800000000000000
+      internalID: 8234464592410986375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_32
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 388
+        width: 283
+        height: 408
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41da6efb8efc9fd40800000000000000
+      internalID: 5618750608680332564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_33
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 794
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf2ff3dcb5deb0270800000000000000
+      internalID: 8217922923608929019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_34
+      rect:
+        serializedVersion: 2
+        x: 651
+        y: 770
+        width: 27
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4872d9a6edc30680800000000000000
+      internalID: -8789955657121761204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_35
+      rect:
+        serializedVersion: 2
+        x: 687
+        y: 775
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4a3ecdb8ad08f760800000000000000
+      internalID: 7491752998520896076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_36
+      rect:
+        serializedVersion: 2
+        x: 691
+        y: 791
+        width: 54
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6a2feba2f8d8e260800000000000000
+      internalID: 7127184947092073070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_37
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 784
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75cf0b36890f8ed80800000000000000
+      internalID: -8221056582466601897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_38
+      rect:
+        serializedVersion: 2
+        x: 739
+        y: 787
+        width: 48
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ac2f7cfc761b9060800000000000000
+      internalID: 6961182375099182243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_39
+      rect:
+        serializedVersion: 2
+        x: 1029
+        y: 771
+        width: 17
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6536b04cc0ec3950800000000000000
+      internalID: 6430261535841858926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_40
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 767
+        width: 22
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a366bd895fc6a3080800000000000000
+      internalID: -9206926686118255046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_41
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 694
+        width: 90
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ed58346e0720ce60800000000000000
+      internalID: 7980421482464959972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_42
+      rect:
+        serializedVersion: 2
+        x: 1172
+        y: 761
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a59d17555da06400800000000000000
+      internalID: 315442555961316769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_43
+      rect:
+        serializedVersion: 2
+        x: 1188
+        y: 761
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec0bf087ed993d9b0800000000000000
+      internalID: -5056528775830851378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_44
+      rect:
+        serializedVersion: 2
+        x: 1202
+        y: 726
+        width: 37
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67e31e60296601330800000000000000
+      internalID: 3679553672928378486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_45
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 754
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5029ae40a56cead0800000000000000
+      internalID: -2671648739748667299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_46
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 728
+        width: 23
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a85d03bb53c0f930800000000000000
+      internalID: 4175051653185886370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_47
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 533
+        width: 109
+        height: 229
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cedd55f368205cac0800000000000000
+      internalID: -3835656732024644116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_48
+      rect:
+        serializedVersion: 2
+        x: 1122
+        y: 394
+        width: 103
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 043549cba846c4df0800000000000000
+      internalID: -194670136851672256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_49
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 743
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7991b97c1bb225240800000000000000
+      internalID: 4778930197151553943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_50
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 714
+        width: 35
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f31f9d1215b919720800000000000000
+      internalID: 2851230811864822079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_51
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 363
+        width: 350
+        height: 387
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61cedc1cf8c858080800000000000000
+      internalID: -9185781315892548586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_52
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 734
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3592fba4b5404b090800000000000000
+      internalID: -8019780246297433773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_53
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 726
+        width: 18
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d6c26e1a2f2e8710800000000000000
+      internalID: 1697345967510177493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_54
+      rect:
+        serializedVersion: 2
+        x: 1210
+        y: 676
+        width: 29
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61c0ebad5fb069810800000000000000
+      internalID: 1771616653981649942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_55
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 634
+        width: 42
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68ced9c5cce723020800000000000000
+      internalID: 2320056174241508486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_56
+      rect:
+        serializedVersion: 2
+        x: 804
+        y: 658
+        width: 17
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d9497969883c1650800000000000000
+      internalID: 6204896549440932305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_57
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 511
+        width: 13
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4b88c58b9c597e80800000000000000
+      internalID: -8180405425107596468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_58
+      rect:
+        serializedVersion: 2
+        x: 790
+        y: 516
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8197a6a15bee9af60800000000000000
+      internalID: 8046224670873778456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_59
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 481
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a7cf9dd97dd19370800000000000000
+      internalID: 8327680701463775137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_60
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 487
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1294565a739ec30f0800000000000000
+      internalID: -1135776580796856031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_61
+      rect:
+        serializedVersion: 2
+        x: 766
+        y: 483
+        width: 23
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c562f974fafd2350800000000000000
+      internalID: 5993722607024891334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_62
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 355
+        width: 61
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d80e9080d3d5a0ca0800000000000000
+      internalID: -6049920632709586803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_63
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 469
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a261f57a21223bc0800000000000000
+      internalID: -3804942268923551067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_64
+      rect:
+        serializedVersion: 2
+        x: 804
+        y: 443
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdec8eed5d8c9f950800000000000000
+      internalID: 6483433959469928159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_65
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 457
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2af382850c1af150800000000000000
+      internalID: 5907064671239928363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_66
+      rect:
+        serializedVersion: 2
+        x: 916
+        y: 449
+        width: 23
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1839a1f91fcd8050800000000000000
+      internalID: 5804523205085968411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_67
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 449
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d8862cbe52dac7f0800000000000000
+      internalID: -591429096720398120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_68
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 375
+        width: 32
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 032d2dfd6a788b730800000000000000
+      internalID: 4015108218590253616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_69
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 405
+        width: 41
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d02c2e8a1723e030800000000000000
+      internalID: 3522702328541749462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_70
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 396
+        width: 52
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40cef242f87d98610800000000000000
+      internalID: 1624066150431190020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_71
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 433
+        width: 21
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 410f927b7fd93e4a0800000000000000
+      internalID: -6565230144520589292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_72
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 404
+        width: 17
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fcf4a9915a8743cb0800000000000000
+      internalID: -4885147045295665201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_73
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 412
+        width: 27
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44904336e82e694f0800000000000000
+      internalID: -822220780770948796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_74
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 424
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d51a6852fdb938860800000000000000
+      internalID: 7531034384603193693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_75
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 421
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8501e7138e2976450800000000000000
+      internalID: 6081991347747557464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_76
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 404
+        width: 21
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7beacb9331cff57a0800000000000000
+      internalID: -6386108587084829001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_77
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 419
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 545e9627fc9556810800000000000000
+      internalID: 1757909977070691653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_78
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 390
+        width: 46
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fa8100490e8abe30800000000000000
+      internalID: 4520081346399406832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_79
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 403
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bf4b6019d01b8490800000000000000
+      internalID: -7743076609864020046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_80
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 403
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 470c4c125c1a2e320800000000000000
+      internalID: 2585807004111257716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_81
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 408
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80f132d9e08c90bf0800000000000000
+      internalID: -357534730307821816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_82
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 406
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce73133263c8e74d0800000000000000
+      internalID: -3134914126456735764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_83
+      rect:
+        serializedVersion: 2
+        x: 1059
+        y: 407
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff62e6af0b7913ae0800000000000000
+      internalID: -1571308008604031233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_84
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 399
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b91e2ba4975a71970800000000000000
+      internalID: 8725624743416488347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_85
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 393
+        width: 20
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d2cc3dee7e796680800000000000000
+      internalID: -8761332516461428012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_86
+      rect:
+        serializedVersion: 2
+        x: 601
+        y: 388
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c00253210653a8d90800000000000000
+      internalID: -7094799576230191092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_87
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 393
+        width: 19
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80886d48a200c83b0800000000000000
+      internalID: -5509028061563680760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_88
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 375
+        width: 22
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d55ccd57c3478bb0800000000000000
+      internalID: -4933900343209863723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_89
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 0
+        width: 175
+        height: 396
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 383955efdcbab9a40800000000000000
+      internalID: 5376079481420485507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_90
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 373
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eaa3200226a11d7d0800000000000000
+      internalID: -2895504076676384082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_91
+      rect:
+        serializedVersion: 2
+        x: 936
+        y: 385
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bca4d817404c201f0800000000000000
+      internalID: -1080085437251499317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_92
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 371
+        width: 19
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d77dbb928dbf78240800000000000000
+      internalID: 4794077234190866301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_93
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 365
+        width: 28
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85a2781f41a6b9a30800000000000000
+      internalID: 4223085713774029400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_94
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 353
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ecbea2084d6c27430800000000000000
+      internalID: 3779301653302930382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_95
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 0
+        width: 340
+        height: 383
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2000da183ea0d23c0800000000000000
+      internalID: -4382834890112172030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_96
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 246
+        width: 112
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b05cbd738f756f5e0800000000000000
+      internalID: -1876215471152577269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_97
+      rect:
+        serializedVersion: 2
+        x: 811
+        y: 18
+        width: 430
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60387876ab4d01820800000000000000
+      internalID: 2887041258210427654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_98
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 345
+        width: 19
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 167ee3d8c035cc4f0800000000000000
+      internalID: -807178919831738527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_99
+      rect:
+        serializedVersion: 2
+        x: 1061
+        y: 369
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ecb569cd4eb86d400800000000000000
+      internalID: 348619836237437902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_100
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 310
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbc7c9f23cd816040800000000000000
+      internalID: 4639144960625245372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_101
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 328
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e31666b38fc2d0740800000000000000
+      internalID: 5119797796050198846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_102
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 304
+        width: 21
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2335b14b0ef93eaf0800000000000000
+      internalID: -368274957071068366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_103
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 256
+        width: 19
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f7988782e444e540800000000000000
+      internalID: 5036226023034230768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_104
+      rect:
+        serializedVersion: 2
+        x: 739
+        y: 275
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72d670891e19db090800000000000000
+      internalID: -8017091363545322201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_105
+      rect:
+        serializedVersion: 2
+        x: 739
+        y: 234
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2329d32847aa40770800000000000000
+      internalID: 8576167007798268466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_106
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 124
+        height: 104
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73898098a0fc19dc0800000000000000
+      internalID: -3633895780155615177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_107
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 75
+        width: 18
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d85957a062c81a60800000000000000
+      internalID: 7645074087841716439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_108
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 107
+        width: 34
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b4ec183242a68640800000000000000
+      internalID: 5081927634827142322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_109
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 65
+        width: 34
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 337f63e6a9edf3b30800000000000000
+      internalID: 4269375726625945395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_110
+      rect:
+        serializedVersion: 2
+        x: 764
+        y: 102
+        width: 57
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8271b5c7ccd886cf0800000000000000
+      internalID: -258801069174614232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_111
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 79
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0fe94f13ae0bfee0800000000000000
+      internalID: -1226370379760931059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_112
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 63
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e40f2b95dc9f55df0800000000000000
+      internalID: -191972748724866994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_113
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 43
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdd594d3c5a1411c0800000000000000
+      internalID: -4533969941387715109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_114
+      rect:
+        serializedVersion: 2
+        x: 671
+        y: 29
+        width: 44
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f2ef1ca5a9ef0a10800000000000000
+      internalID: 1877976467403432688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_115
+      rect:
+        serializedVersion: 2
+        x: 713
+        y: 35
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1164414325d5e850800000000000000
+      internalID: 6405760392399970587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_116
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 29
+        width: 11
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 270fbe473a99e97b0800000000000000
+      internalID: -5215562391128117134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_117
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 29
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9a2846fa21fc9a20800000000000000
+      internalID: 3070594212782680731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiteCrowdVariations_118
+      rect:
+        serializedVersion: 2
+        x: 804
+        y: 15
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ed1b304fc62d92a0800000000000000
+      internalID: -6729179596643951134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      WhiteCrowdVariations_0: -4512114463253025890
+      WhiteCrowdVariations_1: -2826159277343106886
+      WhiteCrowdVariations_10: -1155494584574815679
+      WhiteCrowdVariations_100: 4639144960625245372
+      WhiteCrowdVariations_101: 5119797796050198846
+      WhiteCrowdVariations_102: -368274957071068366
+      WhiteCrowdVariations_103: 5036226023034230768
+      WhiteCrowdVariations_104: -8017091363545322201
+      WhiteCrowdVariations_105: 8576167007798268466
+      WhiteCrowdVariations_106: -3633895780155615177
+      WhiteCrowdVariations_107: 7645074087841716439
+      WhiteCrowdVariations_108: 5081927634827142322
+      WhiteCrowdVariations_109: 4269375726625945395
+      WhiteCrowdVariations_11: 5265220942526169176
+      WhiteCrowdVariations_110: -258801069174614232
+      WhiteCrowdVariations_111: -1226370379760931059
+      WhiteCrowdVariations_112: -191972748724866994
+      WhiteCrowdVariations_113: -4533969941387715109
+      WhiteCrowdVariations_114: 1877976467403432688
+      WhiteCrowdVariations_115: 6405760392399970587
+      WhiteCrowdVariations_116: -5215562391128117134
+      WhiteCrowdVariations_117: 3070594212782680731
+      WhiteCrowdVariations_118: -6729179596643951134
+      WhiteCrowdVariations_12: -8000673901984368369
+      WhiteCrowdVariations_13: -2425746349575820413
+      WhiteCrowdVariations_14: -8620190444313201913
+      WhiteCrowdVariations_15: 1613494137822791134
+      WhiteCrowdVariations_16: -8048546803971534736
+      WhiteCrowdVariations_17: -6472676064585086824
+      WhiteCrowdVariations_18: 598693677351969110
+      WhiteCrowdVariations_19: 7620991467105161068
+      WhiteCrowdVariations_2: -315001065824407979
+      WhiteCrowdVariations_20: 289581448384555256
+      WhiteCrowdVariations_21: -9163151400159090239
+      WhiteCrowdVariations_22: 3296075839153704031
+      WhiteCrowdVariations_23: -4769351492520984020
+      WhiteCrowdVariations_24: -4541701297691089774
+      WhiteCrowdVariations_25: -972833884306564050
+      WhiteCrowdVariations_26: -4165124350074626046
+      WhiteCrowdVariations_27: 5723910727429037890
+      WhiteCrowdVariations_28: 4765803701980617074
+      WhiteCrowdVariations_29: 5554182562164680465
+      WhiteCrowdVariations_3: 8910660762710381973
+      WhiteCrowdVariations_30: 3218642735260902704
+      WhiteCrowdVariations_31: 8234464592410986375
+      WhiteCrowdVariations_32: 5618750608680332564
+      WhiteCrowdVariations_33: 8217922923608929019
+      WhiteCrowdVariations_34: -8789955657121761204
+      WhiteCrowdVariations_35: 7491752998520896076
+      WhiteCrowdVariations_36: 7127184947092073070
+      WhiteCrowdVariations_37: -8221056582466601897
+      WhiteCrowdVariations_38: 6961182375099182243
+      WhiteCrowdVariations_39: 6430261535841858926
+      WhiteCrowdVariations_4: 5110664008220445670
+      WhiteCrowdVariations_40: -9206926686118255046
+      WhiteCrowdVariations_41: 7980421482464959972
+      WhiteCrowdVariations_42: 315442555961316769
+      WhiteCrowdVariations_43: -5056528775830851378
+      WhiteCrowdVariations_44: 3679553672928378486
+      WhiteCrowdVariations_45: -2671648739748667299
+      WhiteCrowdVariations_46: 4175051653185886370
+      WhiteCrowdVariations_47: -3835656732024644116
+      WhiteCrowdVariations_48: -194670136851672256
+      WhiteCrowdVariations_49: 4778930197151553943
+      WhiteCrowdVariations_5: 2493428266781651669
+      WhiteCrowdVariations_50: 2851230811864822079
+      WhiteCrowdVariations_51: -9185781315892548586
+      WhiteCrowdVariations_52: -8019780246297433773
+      WhiteCrowdVariations_53: 1697345967510177493
+      WhiteCrowdVariations_54: 1771616653981649942
+      WhiteCrowdVariations_55: 2320056174241508486
+      WhiteCrowdVariations_56: 6204896549440932305
+      WhiteCrowdVariations_57: -8180405425107596468
+      WhiteCrowdVariations_58: 8046224670873778456
+      WhiteCrowdVariations_59: 8327680701463775137
+      WhiteCrowdVariations_6: -9199549910931460796
+      WhiteCrowdVariations_60: -1135776580796856031
+      WhiteCrowdVariations_61: 5993722607024891334
+      WhiteCrowdVariations_62: -6049920632709586803
+      WhiteCrowdVariations_63: -3804942268923551067
+      WhiteCrowdVariations_64: 6483433959469928159
+      WhiteCrowdVariations_65: 5907064671239928363
+      WhiteCrowdVariations_66: 5804523205085968411
+      WhiteCrowdVariations_67: -591429096720398120
+      WhiteCrowdVariations_68: 4015108218590253616
+      WhiteCrowdVariations_69: 3522702328541749462
+      WhiteCrowdVariations_7: -5484664277844230094
+      WhiteCrowdVariations_70: 1624066150431190020
+      WhiteCrowdVariations_71: -6565230144520589292
+      WhiteCrowdVariations_72: -4885147045295665201
+      WhiteCrowdVariations_73: -822220780770948796
+      WhiteCrowdVariations_74: 7531034384603193693
+      WhiteCrowdVariations_75: 6081991347747557464
+      WhiteCrowdVariations_76: -6386108587084829001
+      WhiteCrowdVariations_77: 1757909977070691653
+      WhiteCrowdVariations_78: 4520081346399406832
+      WhiteCrowdVariations_79: -7743076609864020046
+      WhiteCrowdVariations_8: -4462709782231577689
+      WhiteCrowdVariations_80: 2585807004111257716
+      WhiteCrowdVariations_81: -357534730307821816
+      WhiteCrowdVariations_82: -3134914126456735764
+      WhiteCrowdVariations_83: -1571308008604031233
+      WhiteCrowdVariations_84: 8725624743416488347
+      WhiteCrowdVariations_85: -8761332516461428012
+      WhiteCrowdVariations_86: -7094799576230191092
+      WhiteCrowdVariations_87: -5509028061563680760
+      WhiteCrowdVariations_88: -4933900343209863723
+      WhiteCrowdVariations_89: 5376079481420485507
+      WhiteCrowdVariations_9: 5130004057216542686
+      WhiteCrowdVariations_90: -2895504076676384082
+      WhiteCrowdVariations_91: -1080085437251499317
+      WhiteCrowdVariations_92: 4794077234190866301
+      WhiteCrowdVariations_93: 4223085713774029400
+      WhiteCrowdVariations_94: 3779301653302930382
+      WhiteCrowdVariations_95: -4382834890112172030
+      WhiteCrowdVariations_96: -1876215471152577269
+      WhiteCrowdVariations_97: 2887041258210427654
+      WhiteCrowdVariations_98: -807178919831738527
+      WhiteCrowdVariations_99: 348619836237437902
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

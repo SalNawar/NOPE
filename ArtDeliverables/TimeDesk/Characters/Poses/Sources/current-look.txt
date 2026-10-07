@@ -1,0 +1,8 @@
+m skin2 face-c black
+body_m_skin2
+outfit_m_greece_ancient
+head_m_skin2_facec
+facialhair_m_greece_ancient_black
+hair_m_greece_ancient_black
+headwear_m_greece_ancient
+accessory_m_greece_ancient

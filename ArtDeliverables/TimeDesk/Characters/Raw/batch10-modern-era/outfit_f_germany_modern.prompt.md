@@ -1,0 +1,13 @@
+# outfit_f_germany_modern
+
+Built-in image generation. Raw source candidate; pending registration and stack QA.
+
+Use case: precise-object-edit. Production raw sheet for a layered character in Time Sorter. Preserve the entire 1024x1536 portrait canvas, the reference silhouette, pose, head outline and head location. Never zoom or crop. Centre x512, head top y260, chin about y424, shoulders y500, waist y760, soles y1490. Arms relaxed slightly away, empty open hands. Outside the figure is fully opaque flat green #00FF00, including every gap between limbs. Every uncovered mannequin pixel is fully opaque flat magenta #FF00FF with sparse face registration marks. NO shades, highlights or shadows on magenta. Only the requested piece, all other pieces absent. Soft rounded 2D anime customer art matching the approved pilot, adults with adult proportions, not chibi. Expressive simple anime eyes, thin consistent 2-3px dark-brown #3B2A20 contours, restrained flat cel colours with exactly ONE hard-edged shadow tone, neutral even white front light. No gradient, airbrush, texture noise, lettering, logos, military or royal regalia, flags, religious symbols, weapons or manga emotion symbols. Avoid lime green, magenta, pink, purple on the piece; olive and bottle green are permitted. Reference 1 is the exact registration mannequin. Reference 2 is STYLE ONLY; never copy its Greek clothes. ONLY clothing and footwear. No hair, beard, headwear, jewellery or accessory. Keep the head bald and magenta; clothes remain below the chin.
+Subject: woman of Weimar Berlin; Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau.
+Draw: Straight, loose, knee-length drop-waist dress with a Bauhaus-style geometric pattern of colour blocks (red, ochre, blue and black squares, bars and circles), worn with flat bar-strap shoes.
+Avoid: ANY uniform, armband, swastika or other regime or military insignia; brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype); Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen, dirndl or beer-hall caricature; 'Cabaret' decadence caricature (fishnets, lingerie); a likeness of Einstein (no wild white hair, no famous-portrait pose); tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)
+Output one full-canvas raw outfit_f_germany_modern.
+
+References:
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\References\mannequin_f.png
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\Raw\batch01-pilot\outfit_f_greece_ancient.png

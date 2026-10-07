@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a856514741648b145bd3108c5c82a18e, type: 3}
+  m_Name: CharacterPoseLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterPoseLibrary
+  entries:
+  - signature: accessory_f_egypt_ancient|body_f_skin3|hair_f_egypt_ancient|hairback_f_egypt_ancient|head_f_skin3_faceb|headwear_f_egypt_ancient|outfit_f_egypt_ancient
+    explaining:
+      sprite: {fileID: 21300000, guid: ee2a9bc8af7bad64382ea8115f8da798, type: 3}
+      scale: 0.99519616
+      footOffset: 0.0025979117
+    guarded:
+      sprite: {fileID: 21300000, guid: 31af9876846140e45806c9a7cb497afa, type: 3}
+      scale: 0.97874016
+      footOffset: -0.015265133
+  - signature: accessory_m_greece_ancient|body_m_skin2|facialhair_m_greece_ancient_black|hair_m_greece_ancient_black|head_m_skin2_facec|headwear_m_greece_ancient|outfit_m_greece_ancient
+    explaining:
+      sprite: {fileID: 21300000, guid: 5e3eda99eab0c4342b9942c1b0914826, type: 3}
+      scale: 0.9019886
+      footOffset: -0.018855238
+    guarded:
+      sprite: {fileID: 21300000, guid: 0cc1c3ba9f1053d48a18186fee530fc3, type: 3}
+      scale: 0.96651447
+      footOffset: -0.018269796

@@ -1,0 +1,13 @@
+# outfit_m_britain_earlymodern
+
+Built-in image generation. Raw source candidate; pending registration and stack QA.
+
+Use case: precise-object-edit. Production raw sheet for a layered character in Time Sorter. Preserve the entire 1024x1536 portrait canvas, the reference silhouette, pose, head outline and head location. Never zoom or crop. Centre x512, head top y260, chin about y424, shoulders y500, waist y760, soles y1490. Arms relaxed slightly away, empty open hands. Outside the figure is fully opaque flat green #00FF00, including every gap between limbs. Every uncovered mannequin pixel is fully opaque flat magenta #FF00FF with sparse face registration marks. NO shades, highlights or shadows on magenta. Only the requested piece, all other pieces absent. Soft rounded 2D anime customer art matching the approved pilot, adults with adult proportions, not chibi. Expressive simple anime eyes, thin consistent 2-3px dark-brown #3B2A20 contours, restrained flat cel colours with exactly ONE hard-edged shadow tone, neutral even white front light. No gradient, airbrush, texture noise, lettering, logos, military or royal regalia, flags, religious symbols, weapons or manga emotion symbols. Avoid lime green, magenta, pink, purple on the piece; olive and bottle green are permitted. Reference 1 is the exact registration mannequin. Reference 2 is STYLE ONLY; never copy its Greek clothes. ONLY clothing and footwear. No hair, beard, headwear, jewellery or accessory. Keep the head bald and magenta; clothes remain below the chin.
+Subject: man of Elizabethan England; The Royal Exchange in London, c. 1600, the year the East India Company received its charter.
+Draw: Close-fitting black doublet with small shoulder wings, a short tabbed skirt and a long row of small buttons. It is worn with padded knee breeches (Venetians), dark stockings and flat shoes, and a short black cloak slung over one shoulder. At the neck is a large starched white cartwheel ruff.
+Avoid: royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales; Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525); slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern); rapiers, swords, armour; buckle-hat 'Puritan' caricature (buckled hats are a later myth); Tudor rose badges or royal livery
+Output one full-canvas raw outfit_m_britain_earlymodern.
+
+References:
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\References\mannequin_m.png
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\Raw\batch01-pilot\outfit_m_greece_ancient.png

@@ -42,6 +42,7 @@ public sealed class HallLightingRig : MonoBehaviour
     /// <summary>The highest portal number the rig keeps a state for.</summary>
     private const int MaxPortal = 8;
 
+    private HallBakedLighting _baked;
     private HallLight[] _lights = System.Array.Empty<HallLight>();
     private readonly bool[] _portalOpen = new bool[MaxPortal + 1];
     private readonly bool[] _portalReturns = new bool[MaxPortal + 1];
@@ -66,7 +67,7 @@ public sealed class HallLightingRig : MonoBehaviour
     public float Evening => settings != null ? HallDayCycle.Evening(Hour, settings.Cycle) : 0f;
 
     /// <summary>What the traveller's tint is multiplied by at <see cref="Hour"/> (white without knobs).</summary>
-    public Color TravellerShade => settings != null ? settings.travellerShade.Evaluate(HallDayCycle.SolarPosition(Hour, settings.Cycle)) : Color.white;
+    public Color TravellerShade => (_baked ??= GetComponent<HallBakedLighting>()) != null && _baked.isActiveAndEnabled ? _baked.TravellerShade : settings != null ? settings.travellerShade.Evaluate(HallDayCycle.SolarPosition(Hour, settings.Cycle)) : Color.white;
 
     /// <summary>The layer a gameplay drawing among the painted layers must be on to draw with them (the portal rings' effects); -1 when the 2D pass is off (they draw with the office camera).</summary>
     public int ArtLayer => backdrop != null && backdrop.Active ? backdrop.Layer : -1;
@@ -296,3 +297,5 @@ public sealed class HallLightingRig : MonoBehaviour
             l.Bind();
     }
 }
+
+

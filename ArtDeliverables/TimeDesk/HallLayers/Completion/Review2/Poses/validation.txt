@@ -1,0 +1,1 @@
+26 named characters x four expressions: 104 native Unity pose renders. Passport sprites retain the unposed material.

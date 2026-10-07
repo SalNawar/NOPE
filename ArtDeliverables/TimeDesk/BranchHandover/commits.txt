@@ -1,0 +1,38 @@
+d9016ed Add city time and weather assets, parallax effects and rotating crowd variations
+e5afa8a Change crowd silhouettes to black
+f837f50 Add crowd opacity slider and neutral white crowd palette
+c8fc29f Restore warm stone hall walls and polished floor reflections
+624425a Make cashier pulse in size with its base fixed to the desk
+0747570 Revert "Restore complete desk prop assemblies for click reactions"
+1dd2b4e Restore complete desk prop assemblies for click reactions
+525034c Concentrate crowds behind rear portals and clear the foreground
+bd9a37a Add varied station-life silhouettes and populate distant hall and bridge
+94d8af7 Expand white crowd groups and keep placements clear of hall walls
+2f75a2e Add translucent white crowd variations with stationary fades and hall lighting
+4aa24d7 Replace hall floor shadow blobs with projected upright geometry
+b6b16e9 Trace column shadow to painted base and retain close-up evidence
+f731576 Track scene visual checks and reopen floor shadow issue
+cbab4f3 Repair hall floor shadow origins and receiver footprints
+2bf90a5 Align traveller focus, desk sign and hall composition
+04d82d8 Preview original hall calibrated to desk horizon without repainting architecture
+a8edf9c Restore detailed hall after camera redraw lost architecture
+134c85f Redraw hall around desk camera and register scene effects
+22bf7e3 Replace broad harbor with dense city districts and record perspective mismatch
+f1b4f22 Keep deeper hall window frames static over clean moving city
+fb14620 Install approved deeper hall with registered city and gameplay effects
+4184ee9 Preview deeper left hall and front city continuation
+73d559c Remove rear bench shadow and restore city through cleared windows
+07428ce Apply petrol hall palette and connected city review panels
+22a73c7 Install high-floor city candidate for in-hall perspective review
+c5e5962 Add morning retro city panorama and window-clipped flying traffic
+b4e6858 Turn gallery fixtures vertical and align their wall glows
+1a3a215 Anchor gallery lights and correct hall and moving desk shadows
+94a3627 Add a temporary hall lighting time slider with presets
+8aee498 Bake four hall lighting states and replace detached hands with complete poses
+d2aaf31 Correct hall floor continuity, shadows and traveller presentation
+96c097b Process and install the complete character art library
+f467936 Complete the full character source library and art handover
+32f012f Complete all 26 named character expression sets
+3e2316b Generate character bases, historical wardrobe and initial cast expressions
+9973d70 Match foreground tiles and lighting to the painted hall perspective
+f660424 Fill the hall-to-desk camera gap with a terracotta foreground floor

@@ -1,0 +1,1 @@
+Camera-guided redraw 1778x885; reference camera55deg, pitch4deg. Full field registered to player camera; root scale retained (1.00, 1.00, 1.00). Horizontal margin 102.333 source pixels. Front portal retained within upper570sourcepixels. Old uniform zoom test removed.

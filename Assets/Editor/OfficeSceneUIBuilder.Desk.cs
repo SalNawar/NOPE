@@ -658,7 +658,7 @@ public static partial class OfficeSceneUIBuilder
 
         Prop("Stamp", OfficeAnchorId.Stamp, EnsureDeskReaction("Reaction_Stamp", ReactionKind.Squash, ""), null, "stamp");
         Prop("Intercom", OfficeAnchorId.Intercom, EnsureDeskReaction("Reaction_Intercom", ReactionKind.Squash, ""), null, null);
-        Prop("Till", OfficeAnchorId.Till, EnsureDeskReaction("Reaction_Till", ReactionKind.Nudge, "tooltip.credits", 0.02f), OfficeAnchorId.ReadoutCredits, null);
+        Prop("Till", OfficeAnchorId.Till, EnsureDeskReaction("Reaction_Till", ReactionKind.Pulse, "tooltip.credits", 0.08f), OfficeAnchorId.ReadoutCredits, null);
         Prop("StabilityMonitor", OfficeAnchorId.StabilityMonitor, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "tooltip.stability"), OfficeAnchorId.ReadoutStability, null);
         Prop("Calendar", OfficeAnchorId.Calendar, EnsureDeskReaction("Reaction_Calendar", ReactionKind.None, "tooltip.day"), OfficeAnchorId.ReadoutDay, null);
         Prop("Clock", OfficeAnchorId.Clock, EnsureDeskReaction("Reaction_Clock", ReactionKind.None, "tooltip.value"), OfficeAnchorId.ReadoutClock, null);
@@ -1373,10 +1373,10 @@ public static partial class OfficeSceneUIBuilder
         DestroyChildIfPresent(overlay, "DeskViewBack");
         Button back = MakeButton(overlay, "DeskViewBack", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.DeskButton, "deskView.back");
         var rt = (RectTransform)back.transform;
-        rt.anchorMin = new Vector2(0.5f, 1f);
-        rt.anchorMax = new Vector2(0.5f, 1f);
-        rt.pivot = new Vector2(0.5f, 1f);
-        rt.anchoredPosition = new Vector2(0f, -CaseHudClearance);
+        rt.anchorMin = new Vector2(0f, 1f);
+        rt.anchorMax = new Vector2(0f, 1f);
+        rt.pivot = new Vector2(0f, 1f);
+        rt.anchoredPosition = new Vector2(24f, -CaseHudClearance);
         rt.sizeDelta = DeskViewBackSize;
 
         Transform hint = Panel(back.transform, "Hint", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(8f, 0f), new Vector2(DeskViewBackSize.x, 34f), Tooltip, ThemeRoleId.Tooltip);

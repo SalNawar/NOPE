@@ -1,0 +1,6 @@
+PASS=True
+Two click cycles. Peak uniform scale ratio=1.080001
+Lowest base displacement=0.00000000m
+Root translation=0
+Exact rest scale and bounds restored.
+Seven meshes and CreditsNumber share the animated root.

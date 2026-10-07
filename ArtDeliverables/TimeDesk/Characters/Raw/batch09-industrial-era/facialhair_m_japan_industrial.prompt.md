@@ -1,0 +1,14 @@
+# facialhair_m_japan_industrial
+
+Built-in image generation. Raw source candidate; pending registration and stack QA.
+
+Use case: precise-object-edit. Production raw sheet for a layered character in Time Sorter. Preserve the entire 1024x1536 portrait canvas, the reference silhouette, pose, head outline and head location. Never zoom or crop. Centre x512, head top y260, chin about y424, shoulders y500, waist y760, soles y1490. Arms relaxed slightly away, empty open hands. Outside the figure is fully opaque flat green #00FF00, including every gap between limbs. Every uncovered mannequin pixel is fully opaque flat magenta #FF00FF with sparse face registration marks. NO shades, highlights or shadows on magenta. Only the requested piece, all other pieces absent. Soft rounded 2D anime customer art matching the approved pilot, adults with adult proportions, not chibi. Expressive simple anime eyes, thin consistent 2-3px dark-brown #3B2A20 contours, restrained flat cel colours with exactly ONE hard-edged shadow tone, neutral even white front light. No gradient, airbrush, texture noise, lettering, logos, military or royal regalia, flags, religious symbols, weapons or manga emotion symbols. Avoid lime green, magenta, pink, purple on the piece; olive and bottle green are permitted. Reference 1 is the exact registration mannequin. Reference 2 is STYLE ONLY; never copy its Greek clothes. ONLY beard/moustache in brown #78513A. No scalp hair, hat or garment. Full mannequin canvas unchanged.
+Subject: man of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.
+Draw: Neat, trimmed moustache, straight and not waxed to points
+Avoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)
+Output one full-canvas raw facialhair_m_japan_industrial.
+Support figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.
+
+References:
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\References\mannequin_m.png
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\Raw\batch01-pilot\outfit_m_greece_ancient.png

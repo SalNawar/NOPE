@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: LivingLeft
+  m_Shader: {fileID: 4800000, guid: 06c55ec24578d1a47bf18455edd0b170, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Atmosphere:
+        m_Texture: {fileID: 2800000, guid: a8fa09856c3408141a18680508c5f109, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CityDepth:
+        m_Texture: {fileID: 2800000, guid: 49e3f4023533ef04f9e3fa531a270b3a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EveningClear:
+        m_Texture: {fileID: 2800000, guid: 21108cda53d05d04e941870508d806db, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EveningRain:
+        m_Texture: {fileID: 2800000, guid: 2dd78a99614eeb243a62c35fe1d28d41, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Masks:
+        m_Texture: {fileID: 2800000, guid: 86a0e0ea10c85274384d563b735a6c8b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MorningClear:
+        m_Texture: {fileID: 2800000, guid: 8677035df6d89f647a469b2ba702cbc6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MorningRain:
+        m_Texture: {fileID: 2800000, guid: 0b3b479fd071b5944a138122dc5b1408, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NightClear:
+        m_Texture: {fileID: 2800000, guid: 565edaa61599ff0408c8c54863c0ad05, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NightRain:
+        m_Texture: {fileID: 2800000, guid: dafc7ba37a47f5840a308ba507685303, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoonClear:
+        m_Texture: {fileID: 2800000, guid: fa65274fe3421084f87be11e28f9f61a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoonRain:
+        m_Texture: {fileID: 2800000, guid: 40222f90eeef91d4180c461ad663e771, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Region: 1
+    m_Colors: []
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

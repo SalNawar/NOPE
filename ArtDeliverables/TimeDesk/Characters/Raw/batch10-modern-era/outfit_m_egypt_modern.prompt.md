@@ -1,0 +1,13 @@
+# outfit_m_egypt_modern
+
+Built-in image generation. Raw source candidate; pending registration and stack QA.
+
+Use case: precise-object-edit. Production raw sheet for a layered character in Time Sorter. Preserve the entire 1024x1536 portrait canvas, the reference silhouette, pose, head outline and head location. Never zoom or crop. Centre x512, head top y260, chin about y424, shoulders y500, waist y760, soles y1490. Arms relaxed slightly away, empty open hands. Outside the figure is fully opaque flat green #00FF00, including every gap between limbs. Every uncovered mannequin pixel is fully opaque flat magenta #FF00FF with sparse face registration marks. NO shades, highlights or shadows on magenta. Only the requested piece, all other pieces absent. Soft rounded 2D anime customer art matching the approved pilot, adults with adult proportions, not chibi. Expressive simple anime eyes, thin consistent 2-3px dark-brown #3B2A20 contours, restrained flat cel colours with exactly ONE hard-edged shadow tone, neutral even white front light. No gradient, airbrush, texture noise, lettering, logos, military or royal regalia, flags, religious symbols, weapons or manga emotion symbols. Avoid lime green, magenta, pink, purple on the piece; olive and bottle green are permitted. Reference 1 is the exact registration mannequin. Reference 2 is STYLE ONLY; never copy its Greek clothes. ONLY clothing and footwear. No hair, beard, headwear, jewellery or accessory. Keep the head bald and magenta; clothes remain below the chin.
+Subject: man of Nasser's Egypt; Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956).
+Draw: Ankle-length galabiya of fine pale-grey or finely striped cotton (loose and collarless, with a deep slit neckline and wide sleeves), worn with a tailored dark Western suit jacket open over it; leather shoes.
+Avoid: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; a likeness of Nasser or Umm Kulthum; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume, coin hip-scarves or any 'harem' caricature; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume
+Output one full-canvas raw outfit_m_egypt_modern.
+
+References:
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\References\mannequin_m.png
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\Raw\batch01-pilot\outfit_m_greece_ancient.png

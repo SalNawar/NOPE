@@ -1,0 +1,624 @@
+fileFormatVersion: 2
+guid: 5cb40884235d0e342ab82bae47201dc9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5160061903495236484
+    second: StationAlternatives_0
+  - first:
+      213: 6840235180072372604
+    second: StationAlternatives_1
+  - first:
+      213: 4542132054234473692
+    second: StationAlternatives_2
+  - first:
+      213: -6096341125251407997
+    second: StationAlternatives_3
+  - first:
+      213: 7838266987810174995
+    second: StationAlternatives_4
+  - first:
+      213: 4706297464798409143
+    second: StationAlternatives_5
+  - first:
+      213: -4440513341771887133
+    second: StationAlternatives_6
+  - first:
+      213: 7307783372591010782
+    second: StationAlternatives_7
+  - first:
+      213: -9052459189312444438
+    second: StationAlternatives_8
+  - first:
+      213: 2609792593333986182
+    second: StationAlternatives_9
+  - first:
+      213: 4633719705858671699
+    second: StationAlternatives_10
+  - first:
+      213: 1574906910344728104
+    second: StationAlternatives_11
+  - first:
+      213: -3946684516239645814
+    second: StationAlternatives_12
+  - first:
+      213: 6549067016562118088
+    second: StationAlternatives_13
+  - first:
+      213: -9076231848178846653
+    second: StationAlternatives_14
+  - first:
+      213: -5479878759217657840
+    second: StationAlternatives_15
+  - first:
+      213: -7689959703074853076
+    second: StationAlternatives_16
+  - first:
+      213: -5130548324687035170
+    second: StationAlternatives_17
+  - first:
+      213: 1564612104995708088
+    second: StationAlternatives_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: StationAlternatives_0
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 937
+        width: 233
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c74f327b907c368b0800000000000000
+      internalID: -5160061903495236484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_1
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 935
+        width: 212
+        height: 274
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c790858b7a56dee50800000000000000
+      internalID: 6840235180072372604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_2
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 935
+        width: 144
+        height: 274
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd4af8fb905e80f30800000000000000
+      internalID: 4542132054234473692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_3
+      rect:
+        serializedVersion: 2
+        x: 969
+        y: 936
+        width: 110
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38fd8cfdb02756ba0800000000000000
+      internalID: -6096341125251407997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_4
+      rect:
+        serializedVersion: 2
+        x: 1087
+        y: 936
+        width: 132
+        height: 244
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 318b817eb4e17cc60800000000000000
+      internalID: 7838266987810174995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_5
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 623
+        width: 208
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b171a4fb90205140800000000000000
+      internalID: 4706297464798409143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_6
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 624
+        width: 109
+        height: 269
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3edcd4b74a02062c0800000000000000
+      internalID: -4440513341771887133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_7
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 624
+        width: 135
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed31bc252467a6560800000000000000
+      internalID: 7307783372591010782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_8
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 622
+        width: 206
+        height: 187
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae7af4d44543f5280800000000000000
+      internalID: -9052459189312444438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_9
+      rect:
+        serializedVersion: 2
+        x: 1012
+        y: 623
+        width: 153
+        height: 275
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6832e1f4988d73420800000000000000
+      internalID: 2609792593333986182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_10
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 333
+        width: 233
+        height: 241
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3540f60a5874e4040800000000000000
+      internalID: 4633719705858671699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_11
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 334
+        width: 254
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82ec761ad713bd510800000000000000
+      internalID: 1574906910344728104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_12
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 313
+        width: 207
+        height: 274
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a836009c75f8a39c0800000000000000
+      internalID: -3946684516239645814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_13
+      rect:
+        serializedVersion: 2
+        x: 987
+        y: 335
+        width: 214
+        height: 236
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cd896cc0c5f2ea50800000000000000
+      internalID: 6549067016562118088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_14
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 34
+        width: 106
+        height: 247
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3447636d83fba0280800000000000000
+      internalID: -9076231848178846653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_15
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 25
+        width: 187
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0188f985d4f83f3b0800000000000000
+      internalID: -5479878759217657840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_16
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 34
+        width: 157
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2fa729a466c74590800000000000000
+      internalID: -7689959703074853076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_17
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 34
+        width: 115
+        height: 259
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed4cd044b71acc8b0800000000000000
+      internalID: -5130548324687035170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StationAlternatives_18
+      rect:
+        serializedVersion: 2
+        x: 1004
+        y: 33
+        width: 176
+        height: 273
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bc9b897b6e96b510800000000000000
+      internalID: 1564612104995708088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      StationAlternatives_0: -5160061903495236484
+      StationAlternatives_1: 6840235180072372604
+      StationAlternatives_10: 4633719705858671699
+      StationAlternatives_11: 1574906910344728104
+      StationAlternatives_12: -3946684516239645814
+      StationAlternatives_13: 6549067016562118088
+      StationAlternatives_14: -9076231848178846653
+      StationAlternatives_15: -5479878759217657840
+      StationAlternatives_16: -7689959703074853076
+      StationAlternatives_17: -5130548324687035170
+      StationAlternatives_18: 1564612104995708088
+      StationAlternatives_2: 4542132054234473692
+      StationAlternatives_3: -6096341125251407997
+      StationAlternatives_4: 7838266987810174995
+      StationAlternatives_5: 4706297464798409143
+      StationAlternatives_6: -4440513341771887133
+      StationAlternatives_7: 7307783372591010782
+      StationAlternatives_8: -9052459189312444438
+      StationAlternatives_9: 2609792593333986182
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

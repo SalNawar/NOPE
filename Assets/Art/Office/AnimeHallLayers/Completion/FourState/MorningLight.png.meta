@@ -1,0 +1,702 @@
+fileFormatVersion: 2
+guid: 3bf69e843500710499647614c4e9bb7d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2752641299568552367
+    second: MorningLight_0
+  - first:
+      213: 611903174883967975
+    second: MorningLight_1
+  - first:
+      213: -1606786115913999627
+    second: MorningLight_2
+  - first:
+      213: -8147850771016470751
+    second: MorningLight_3
+  - first:
+      213: 7281093839346938619
+    second: MorningLight_4
+  - first:
+      213: 4771638179253329270
+    second: MorningLight_5
+  - first:
+      213: 8184864577762512532
+    second: MorningLight_6
+  - first:
+      213: 7773459647466037061
+    second: MorningLight_7
+  - first:
+      213: -3126392122092972673
+    second: MorningLight_8
+  - first:
+      213: -7278141286551330763
+    second: MorningLight_9
+  - first:
+      213: 3298669337440195958
+    second: MorningLight_10
+  - first:
+      213: 2524442495638703612
+    second: MorningLight_11
+  - first:
+      213: -1774282288062847493
+    second: MorningLight_12
+  - first:
+      213: 776325338568065142
+    second: MorningLight_13
+  - first:
+      213: -2160424202472287957
+    second: MorningLight_14
+  - first:
+      213: -3958777348679747759
+    second: MorningLight_15
+  - first:
+      213: 4911235218824558492
+    second: MorningLight_16
+  - first:
+      213: -1073215218515207105
+    second: MorningLight_17
+  - first:
+      213: 6860583280245039613
+    second: MorningLight_18
+  - first:
+      213: -5301774756609216392
+    second: MorningLight_19
+  - first:
+      213: -7897949760015117608
+    second: MorningLight_20
+  - first:
+      213: 4601626057730086382
+    second: MorningLight_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 0
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MorningLight_0
+      rect:
+        serializedVersion: 2
+        x: 1474
+        y: 423
+        width: 698
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15695297257acc9d0800000000000000
+      internalID: -2752641299568552367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_1
+      rect:
+        serializedVersion: 2
+        x: 1474
+        y: 451
+        width: 68
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e384ef02baed7800800000000000000
+      internalID: 611903174883967975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_2
+      rect:
+        serializedVersion: 2
+        x: 1546
+        y: 451
+        width: 84
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fa9aea6a8c83b9e0800000000000000
+      internalID: -1606786115913999627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_3
+      rect:
+        serializedVersion: 2
+        x: 1634
+        y: 451
+        width: 85
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12faba694e40dee80800000000000000
+      internalID: -8147850771016470751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_4
+      rect:
+        serializedVersion: 2
+        x: 1723
+        y: 451
+        width: 84
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf23f8e1544ab0560800000000000000
+      internalID: 7281093839346938619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_5
+      rect:
+        serializedVersion: 2
+        x: 1811
+        y: 452
+        width: 90
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67d161f84a3483240800000000000000
+      internalID: 4771638179253329270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_6
+      rect:
+        serializedVersion: 2
+        x: 2001
+        y: 452
+        width: 90
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49e463cd7fa769170800000000000000
+      internalID: 8184864577762512532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_7
+      rect:
+        serializedVersion: 2
+        x: 2095
+        y: 452
+        width: 68
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54fdb032d50e0eb60800000000000000
+      internalID: 7773459647466037061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_8
+      rect:
+        serializedVersion: 2
+        x: 2167
+        y: 452
+        width: 5
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f759116ede2dc94d0800000000000000
+      internalID: -3126392122092972673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_9
+      rect:
+        serializedVersion: 2
+        x: 656
+        y: 172
+        width: 866
+        height: 217
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 530e006af09defa90800000000000000
+      internalID: -7278141286551330763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_10
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 84
+        width: 103
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6759899094a37cd20800000000000000
+      internalID: 3298669337440195958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_11
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 84
+        width: 106
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfd0270231f980320800000000000000
+      internalID: 2524442495638703612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_12
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 84
+        width: 102
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf52fb8d8ab7067e0800000000000000
+      internalID: -1774282288062847493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_13
+      rect:
+        serializedVersion: 2
+        x: 894
+        y: 136
+        width: 17
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6700c7348cf06ca00800000000000000
+      internalID: 776325338568065142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_14
+      rect:
+        serializedVersion: 2
+        x: 1134
+        y: 155
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b219b7f52a1a402e0800000000000000
+      internalID: -2160424202472287957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_15
+      rect:
+        serializedVersion: 2
+        x: 1172
+        y: 84
+        width: 115
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 157b413d9f89f09c0800000000000000
+      internalID: -3958777348679747759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_16
+      rect:
+        serializedVersion: 2
+        x: 1297
+        y: 84
+        width: 128
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c97fc622966382440800000000000000
+      internalID: 4911235218824558492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_17
+      rect:
+        serializedVersion: 2
+        x: 1435
+        y: 84
+        width: 107
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3c9bd4e17c2b11f0800000000000000
+      internalID: -1073215218515207105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_18
+      rect:
+        serializedVersion: 2
+        x: 1529
+        y: 125
+        width: 32
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df16dfaf420b53f50800000000000000
+      internalID: 6860583280245039613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_19
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 2111
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 870bc29e2ff4c66b0800000000000000
+      internalID: -5301774756609216392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_20
+      rect:
+        serializedVersion: 2
+        x: 1530
+        y: 84
+        width: 45
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d2da64d988d46290800000000000000
+      internalID: -7897949760015117608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MorningLight_21
+      rect:
+        serializedVersion: 2
+        x: 2121
+        y: 0
+        width: 49
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee5de20e4824cdf30800000000000000
+      internalID: 4601626057730086382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      MorningLight_0: -2752641299568552367
+      MorningLight_1: 611903174883967975
+      MorningLight_10: 3298669337440195958
+      MorningLight_11: 2524442495638703612
+      MorningLight_12: -1774282288062847493
+      MorningLight_13: 776325338568065142
+      MorningLight_14: -2160424202472287957
+      MorningLight_15: -3958777348679747759
+      MorningLight_16: 4911235218824558492
+      MorningLight_17: -1073215218515207105
+      MorningLight_18: 6860583280245039613
+      MorningLight_19: -5301774756609216392
+      MorningLight_2: -1606786115913999627
+      MorningLight_20: -7897949760015117608
+      MorningLight_21: 4601626057730086382
+      MorningLight_3: -8147850771016470751
+      MorningLight_4: 7281093839346938619
+      MorningLight_5: 4771638179253329270
+      MorningLight_6: 8184864577762512532
+      MorningLight_7: 7773459647466037061
+      MorningLight_8: -3126392122092972673
+      MorningLight_9: -7278141286551330763
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,15 @@
+Approved original meshes/atlas unchanged. 37 fixed placements, 22 main floor / 15 balcony. 601 timeline samples: active groups 14-33, alpha 0.00-0.46. Position, rotation, scale unchanged.
+Hour 8: tint RGBA(1.000, 0.920, 0.820, 1.000).
+Hour 10: tint RGBA(0.980, 0.950, 0.910, 1.000).
+Hour 12: tint RGBA(0.960, 0.980, 1.000, 1.000).
+Hour 14: tint RGBA(0.902, 0.847, 0.812, 1.000).
+Hour 16.5: tint RGBA(0.820, 0.660, 0.550, 1.000).
+Hour 18: tint RGBA(0.585, 0.545, 0.575, 1.000).
+Hour 22: tint RGBA(0.350, 0.430, 0.600, 1.000).
+Population time 0: 23 groups.
+Population time 12: 18 groups.
+Population time 29: 24 groups.
+Population time 47: 23 groups.
+Population time 71: 26 groups.
+Population time 104: 19 groups.
+Live Play frame 31.02s: 24 visible groups.

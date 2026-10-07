@@ -1,0 +1,13 @@
+# outfit_f_japan_industrial
+
+Built-in image generation. Raw source candidate; pending registration and stack QA.
+
+Use case: precise-object-edit. Production raw sheet for a layered character in Time Sorter. Preserve the entire 1024x1536 portrait canvas, the reference silhouette, pose, head outline and head location. Never zoom or crop. Centre x512, head top y260, chin about y424, shoulders y500, waist y760, soles y1490. Arms relaxed slightly away, empty open hands. Outside the figure is fully opaque flat green #00FF00, including every gap between limbs. Every uncovered mannequin pixel is fully opaque flat magenta #FF00FF with sparse face registration marks. NO shades, highlights or shadows on magenta. Only the requested piece, all other pieces absent. Soft rounded 2D anime customer art matching the approved pilot, adults with adult proportions, not chibi. Expressive simple anime eyes, thin consistent 2-3px dark-brown #3B2A20 contours, restrained flat cel colours with exactly ONE hard-edged shadow tone, neutral even white front light. No gradient, airbrush, texture noise, lettering, logos, military or royal regalia, flags, religious symbols, weapons or manga emotion symbols. Avoid lime green, magenta, pink, purple on the piece; olive and bottle green are permitted. Reference 1 is the exact registration mannequin. Reference 2 is STYLE ONLY; never copy its Greek clothes. ONLY clothing and footwear. No hair, beard, headwear, jewellery or accessory. Keep the head bald and magenta; clothes remain below the chin.
+Subject: woman of Meiji Nagoya; Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation.
+Draw: Jogakusei (girl student) look: a small-patterned kimono, e.g. with indigo-and-white yagasuri arrow-feather stripes, under a maroon (ebicha) pleated hakama tied high above the waist. Tabi with zori or low boots. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').
+Avoid: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)
+Output one full-canvas raw outfit_f_japan_industrial.
+
+References:
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\References\mannequin_f.png
+C:\Users\Saleh\.codex\worktrees\hall-art-completion\NOPE\ArtDeliverables\TimeDesk\Characters\Raw\batch01-pilot\outfit_f_greece_ancient.png

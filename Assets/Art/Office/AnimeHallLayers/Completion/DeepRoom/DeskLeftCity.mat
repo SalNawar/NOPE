@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DeskLeftCity
+  m_Shader: {fileID: 4800000, guid: 0fd526bdcd7eeb74cadd4a7768c86930, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _CityFront:
+        m_Texture: {fileID: 2800000, guid: 44ce195e3aaaac6478e4dbb468dabd30, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CityLeft:
+        m_Texture: {fileID: 2800000, guid: 44ce195e3aaaac6478e4dbb468dabd30, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EveningShadow:
+        m_Texture: {fileID: 2800000, guid: 767d88fc62dcd154c94fe4de6486d6c5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Masks:
+        m_Texture: {fileID: 2800000, guid: c18d7fbb5fcd8514a85c649bc445cf08, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MorningShadow:
+        m_Texture: {fileID: 2800000, guid: c2066d10cf4299f48a22c7ee1d92fe0f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoonShadow:
+        m_Texture: {fileID: 2800000, guid: 5c62a76de68126648ae17163fe92b41d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _CeilingCutoff: 300
+    - _Region: 1
+    m_Colors:
+    - _CanvasSize: {r: 1778, g: 885, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

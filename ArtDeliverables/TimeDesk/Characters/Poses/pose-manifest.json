@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "id": "egypt-current",
+      "keys": [
+        "hairback_f_egypt_ancient",
+        "body_f_skin3",
+        "outfit_f_egypt_ancient",
+        "head_f_skin3_faceb",
+        "hair_f_egypt_ancient",
+        "headwear_f_egypt_ancient",
+        "accessory_f_egypt_ancient"
+      ],
+      "neutral": "ArtDeliverables/TimeDesk/Characters/Poses/Sources/egypt-current.png",
+      "explaining": "Assets/Art/Characters/Resources/CharacterPoses/egypt-current-explaining.png",
+      "guarded": "Assets/Art/Characters/Resources/CharacterPoses/egypt-current-guarded.png"
+    },
+    {
+      "id": "greece-current",
+      "keys": [
+        "body_m_skin2",
+        "outfit_m_greece_ancient",
+        "head_m_skin2_facec",
+        "facialhair_m_greece_ancient_black",
+        "hair_m_greece_ancient_black",
+        "headwear_m_greece_ancient",
+        "accessory_m_greece_ancient"
+      ],
+      "neutral": "ArtDeliverables/TimeDesk/Characters/Poses/Sources/greece-current.png",
+      "explaining": "Assets/Art/Characters/Resources/CharacterPoses/greece-current-explaining.png",
+      "guarded": "Assets/Art/Characters/Resources/CharacterPoses/greece-current-guarded.png"
+    }
+  ]
+}

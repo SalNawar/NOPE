@@ -1,0 +1,468 @@
+fileFormatVersion: 2
+guid: c18d7fbb5fcd8514a85c649bc445cf08
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 72283030681139128
+    second: DeskRoomMasks_0
+  - first:
+      213: -7680450566755838707
+    second: DeskRoomMasks_1
+  - first:
+      213: 2693063229910721698
+    second: DeskRoomMasks_2
+  - first:
+      213: 6357979897631379003
+    second: DeskRoomMasks_3
+  - first:
+      213: 5948836257567787523
+    second: DeskRoomMasks_4
+  - first:
+      213: 2714367514193139339
+    second: DeskRoomMasks_5
+  - first:
+      213: -7326176923419786571
+    second: DeskRoomMasks_6
+  - first:
+      213: -1142946044304016980
+    second: DeskRoomMasks_7
+  - first:
+      213: -391211313997487047
+    second: DeskRoomMasks_8
+  - first:
+      213: -7190583259756145133
+    second: DeskRoomMasks_9
+  - first:
+      213: -4506160728848707303
+    second: DeskRoomMasks_10
+  - first:
+      213: 2142321085503643383
+    second: DeskRoomMasks_11
+  - first:
+      213: 6162197870448828648
+    second: DeskRoomMasks_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 0
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: DeskRoomMasks_0
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 399
+        width: 75
+        height: 486
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b7b90f880dc00100800000000000000
+      internalID: 72283030681139128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_1
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 419
+        width: 65
+        height: 443
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d05129df6ee896590800000000000000
+      internalID: -7680450566755838707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_2
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 437
+        width: 46
+        height: 366
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a4ae783dbeaf5520800000000000000
+      internalID: 2693063229910721698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_3
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 453
+        width: 62
+        height: 291
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3e8467e7051c3850800000000000000
+      internalID: 6357979897631379003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_4
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 487
+        width: 29
+        height: 216
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30aca47de038e8250800000000000000
+      internalID: 5948836257567787523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_5
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 513
+        width: 26
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8697517fde5ba520800000000000000
+      internalID: 2714367514193139339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_6
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 522
+        width: 28
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b246e567e0345a90800000000000000
+      internalID: -7326176923419786571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_7
+      rect:
+        serializedVersion: 2
+        x: 761
+        y: 522
+        width: 29
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca932d7d0a07320f0800000000000000
+      internalID: -1142946044304016980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_8
+      rect:
+        serializedVersion: 2
+        x: 802
+        y: 522
+        width: 30
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 934e015f163229af0800000000000000
+      internalID: -391211313997487047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_9
+      rect:
+        serializedVersion: 2
+        x: 845
+        y: 522
+        width: 25
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3165d526f9ae53c90800000000000000
+      internalID: -7190583259756145133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_10
+      rect:
+        serializedVersion: 2
+        x: 884
+        y: 522
+        width: 28
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 911582811b6e671c0800000000000000
+      internalID: -4506160728848707303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_11
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 522
+        width: 23
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fe16404dad0bbd10800000000000000
+      internalID: 2142321085503643383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeskRoomMasks_12
+      rect:
+        serializedVersion: 2
+        x: 959
+        y: 534
+        width: 16
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e065cf7056848550800000000000000
+      internalID: 6162197870448828648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      DeskRoomMasks_0: 72283030681139128
+      DeskRoomMasks_1: -7680450566755838707
+      DeskRoomMasks_10: -4506160728848707303
+      DeskRoomMasks_11: 2142321085503643383
+      DeskRoomMasks_12: 6162197870448828648
+      DeskRoomMasks_2: 2693063229910721698
+      DeskRoomMasks_3: 6357979897631379003
+      DeskRoomMasks_4: 5948836257567787523
+      DeskRoomMasks_5: 2714367514193139339
+      DeskRoomMasks_6: -7326176923419786571
+      DeskRoomMasks_7: -1142946044304016980
+      DeskRoomMasks_8: -391211313997487047
+      DeskRoomMasks_9: -7190583259756145133
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
