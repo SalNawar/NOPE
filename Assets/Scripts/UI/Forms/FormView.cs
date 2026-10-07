@@ -240,7 +240,9 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         if (width > 0f)
             rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         _measure ??= new TmpFormText(MeasureText());
-        _measure.ScriptOf = scriptOf;
+        data = UiText.InReadingLanguage(data);
+        TMP_FontAsset culture = data != null && data.Translated && CultureThemeService.Instance != null ? CultureThemeService.Instance.CultureFont : null;
+        _measure.ScriptOf = culture == null ? scriptOf : text => (scriptOf != null ? scriptOf(text) : null) ?? culture;
         _form = FormLayout.Layout(spec, data, rt.rect.width, style.metrics, _measure, linkHint != null ? linkSize : 0f);
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _form.Height);
         FormPalette palette = look.Palette(style.Palette());
@@ -248,7 +250,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         string formNumber = spec != null && spec.fixedPage && data != null ? data.FormNumber : null;
         ShowArt(formNumber, data != null ? data.Issuer : null,
                 string.IsNullOrEmpty(look.paper) ? style.paper : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f),
-                PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit), art != null);
+                PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit), art != null, art != null && art.Worded(data));
         Texture2D blank = art != null ? SlotArt.Texture(new[] { ArtSlots.PaperBlank(formNumber) }) : null;
 
         int texts = 0, seals = 0, emblems = 0, watermarks = 0, patches = 0;
@@ -364,11 +366,11 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// spec, TD1), the code-drawn ring and no frame; a page kind (no number)
     /// keeps the plain paper.
     /// </summary>
-    private void ShowArt(string formNumber, string issuer, Color tint, float corner, bool onArt)
+    private void ShowArt(string formNumber, string issuer, Color tint, float corner, bool onArt, bool clean)
     {
         if (paper != null)
         {
-            Sprite face = formNumber != null ? SlotArt.Sprite(ArtSlots.PaperFaces(formNumber, issuer).ToArray()) : null;
+            Sprite face = formNumber != null ? SlotArt.Sprite(ArtSlots.PaperFaces(formNumber, issuer, clean).ToArray()) : null;
             bool rounded = face == null && corner > 0f;
             paper.sprite = face != null ? face : rounded ? CardPaper() : null;
             paper.type = rounded ? Image.Type.Sliced : Image.Type.Simple;

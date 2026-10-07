@@ -771,7 +771,9 @@ public static partial class ContentLibraryValidator
     /// passes the contrast check with its stored palette and rings (the same
     /// pairs as Generate World); a theme whose labels need an OS font names one;
     /// a missing wallpaper is a warning, and so is a world outcome (other
-    /// than the one the run found) with no wallpaper in the neutral theme.
+    /// than the one the run found) with no wallpaper in the neutral theme;
+    /// every fixed word a paper or a PC page prints has its doc.* string
+    /// (DocumentWordProblems).
     /// </summary>
     private static int CheckCulture(ContentLibrarySO lib)
     {
@@ -850,6 +852,9 @@ public static partial class ContentLibraryValidator
                 issues++;
             }
         }
+
+        foreach (string problem in DocumentWordProblems(lib))
+            Error(problem);
 
         return issues;
     }

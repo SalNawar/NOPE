@@ -7,8 +7,11 @@ using System.Text;
 /// <summary>
 /// What one form shows (PC spec §6.1), built by the caller: the header's
 /// words, the serial, whether there is a photo, each template field's label
-/// and shown value, and a page kind's slot contents. Forms are diegetic: every
-/// word is printed English and never follows the UI language.
+/// and shown value, and a page kind's slot contents. The form's fixed words
+/// (labels, titles, captions, section heads, column heads, fine print) print
+/// in the reading language through <see cref="Words"/> (Saleh 2026-10-07: "I
+/// want the language to change on all documents and the apps"); the values,
+/// the serial and the form number always print as they are.
 /// </summary>
 public sealed class FormData
 {
@@ -76,6 +79,19 @@ public sealed class FormData
 
     /// <summary>A record's groups, for a RecordGroups block (the traveller-types spec's R1: a record's shape is data).</summary>
     public IReadOnlyList<FormGroup> Groups = Array.Empty<FormGroup>();
+
+    /// <summary>
+    /// The reading language's words for an English fixed word of the form
+    /// (UiText.FormWords: its doc.* string), or null to print the English as
+    /// it is (English is read, or no culture's labels apply).
+    /// </summary>
+    public Func<string, string> Words;
+
+    /// <summary>True when the form's fixed words print in a culture's language (<see cref="Words"/> is set).</summary>
+    public bool Translated => Words != null;
+
+    /// <summary><paramref name="english"/> in the reading language (<see cref="Words"/>), else as it is.</summary>
+    public string Word(string english) => Words == null || string.IsNullOrEmpty(english) ? english : Words(english) ?? english;
 
     /// <summary>A copy (its lists shared).</summary>
     public FormData Copy() => (FormData)MemberwiseClone();
@@ -353,8 +369,8 @@ public static class FormTextStyles
 /// <summary>One placed part of a form, in form space (top-left origin, y down, the caller's units).</summary>
 public readonly struct FormItem
 {
-    /// <summary>An item from its parts.</summary>
-    public FormItem(FormItemKind kind, FormTextRole role, FaceRect rect, int slot, string text, float size, FormTextAlign align)
+    /// <summary>An item from its parts (<paramref name="ink"/>: a text's own ink, "#RRGGBB", or null for its role's).</summary>
+    public FormItem(FormItemKind kind, FormTextRole role, FaceRect rect, int slot, string text, float size, FormTextAlign align, string ink = null)
     {
         Kind = kind;
         Role = role;
@@ -363,7 +379,11 @@ public readonly struct FormItem
         Text = text;
         Size = size;
         Align = align;
+        Ink = ink;
     }
+
+    /// <summary>A text's own ink ("#RRGGBB": an art caption's, ArtCaption.ink), or null: its role's.</summary>
+    public string Ink { get; }
 
     /// <summary>What it is.</summary>
     public FormItemKind Kind { get; }
@@ -511,8 +531,102 @@ public static class FormLayout
     /// right edge (its padding counted), so the ↗ sits after the text, never
     /// over it; 0 (a document, the desk paper) keeps every column whole.
     /// </summary>
-    public static PlacedForm Layout(FormSpec spec, FormData data, float width, FormMetrics m, ITextMeasure measure, float rowLinkRoom = 0f) =>
-        Hide(ArtLayout.IsArt(spec) ? ArtLayout.Place(spec, data, width, m) : new Placer(spec, data, width, m, measure, null, rowLinkRoom).Run(), data);
+    /// A form whose fixed words print in a culture's language
+    /// (FormData.Translated) is laid out from its words in that language
+    /// (<see cref="Translate"/>), so it is measured as it prints.
+    public static PlacedForm Layout(FormSpec spec, FormData data, float width, FormMetrics m, ITextMeasure measure, float rowLinkRoom = 0f)
+    {
+        if (ArtLayout.IsArt(spec))
+            return Hide(ArtLayout.Place(spec, data, width, m), data);
+        if (data != null && data.Translated)
+            (spec, data) = Translate(spec, data);
+        return Hide(new Placer(spec, data, width, m, measure, null, rowLinkRoom).Run(), data);
+    }
+
+    /// <summary>
+    /// <paramref name="spec"/> and <paramref name="data"/> with every fixed
+    /// word in the reading language (FormData.Word): the title, the agency and
+    /// programme lines, the field labels, and the blocks' words (a section
+    /// head, a paragraph's or fine print's own text, a signature's or the
+    /// visa's caption, the issuing line, a table's column heads, a cell's
+    /// caption); copies, the originals untouched. Values, slot texts, a
+    /// record's groups and a checkbox's options (matched against a value) stay
+    /// as they are.
+    /// </summary>
+    public static (FormSpec spec, FormData data) Translate(FormSpec spec, FormData data)
+    {
+        spec ??= new FormSpec();
+        FormData d = data.Copy();
+        d.Title = data.Word(data.Title);
+        d.Agency = data.Word(data.Agency);
+        d.Programme = data.Word(data.Programme);
+        d.FieldLabels = (data.FieldLabels ?? Array.Empty<string>()).Select(data.Word).ToList();
+
+        var s = new FormSpec
+        {
+            formNumber = spec.formNumber,
+            title = data.Word(spec.title),
+            fixedPage = spec.fixedPage,
+            landscape = spec.landscape,
+            look = spec.look,
+            blocks = (spec.blocks ?? new FormBlock[0]).Select(b => b == null ? null : new FormBlock
+            {
+                kind = b.kind,
+                text = TranslatesText(b.kind) ? data.Word(b.text) : b.text,
+                cells = (b.cells ?? new FormCell[0]).Select(c => c == null ? null : new FormCell { field = c.field, slot = c.slot, caption = data.Word(c.caption), span = c.span, rows = c.rows }).ToArray(),
+                columns = (b.columns ?? new string[0]).Select(data.Word).ToArray(),
+                shares = b.shares,
+                options = b.options,
+                field = b.field,
+                slot = b.slot
+            }).ToArray()
+        };
+        return (s, d);
+    }
+
+    /// <summary>
+    /// Every fixed English word <paramref name="spec"/> prints showing
+    /// <paramref name="data"/> (each field shown, its values as given), in
+    /// first-printed order, once each: what a culture's language translates
+    /// (FormData.Words), so the content validator can require a doc.* string
+    /// for each (an art paper's when it has a clean face).
+    /// </summary>
+    public static List<string> PrintedWords(FormSpec spec, FormData data)
+    {
+        var words = new List<string>();
+        FormData d = (data ?? new FormData()).Copy();
+        d.FieldHidden = Array.Empty<bool>();
+        d.Words = w =>
+        {
+            if (!string.IsNullOrWhiteSpace(w) && !words.Contains(w))
+                words.Add(w);
+            return w;
+        };
+        spec ??= new FormSpec();
+        if (ArtLayout.IsArt(spec))
+        {
+            ArtLayout.Place(spec, d, 1f, null);
+            return words;
+        }
+        Translate(spec, d);
+        foreach (FormBlock b in spec.blocks ?? new FormBlock[0])
+        {
+            if (b == null)
+                continue;
+            if (b.kind == FormBlockKind.Signature)
+                d.Word(Unsigned);
+            if (b.kind == FormBlockKind.StampArea || b.kind == FormBlockKind.Footer)
+                d.Word(StampCaption);
+            if ((b.kind == FormBlockKind.Issued && string.IsNullOrEmpty(b.text)) || b.kind == FormBlockKind.Footer)
+                d.Word(IssuedBy);
+        }
+        return words;
+    }
+
+    /// <summary>True for a block kind whose text is a fixed word printed on the form (FormBlockKind's docs).</summary>
+    private static bool TranslatesText(FormBlockKind kind) =>
+        kind == FormBlockKind.Section || kind == FormBlockKind.Paragraph || kind == FormBlockKind.Signature || kind == FormBlockKind.Issued ||
+        kind == FormBlockKind.FinePrint || kind == FormBlockKind.Footer || kind == FormBlockKind.Visa;
 
     /// <summary>
     /// <paramref name="form"/> without the fields <paramref name="data"/> hides
@@ -658,9 +772,12 @@ public static class FormLayout
         return sb.ToString(0, Math.Max(0, length)).TrimEnd().PadRight(Math.Max(0, length), 'e');
     }
 
-    /// <summary>"Issued by" and the agency's name in title case (the issuing facsimile).</summary>
-    private static string IssuedLine(string agency) =>
-        "Issued by " + CultureInfo.InvariantCulture.TextInfo.ToTitleCase((agency ?? string.Empty).ToLowerInvariant());
+    /// <summary>The issuing facsimile's words: "Issued by" and the agency's name ({0}; FormData.Word translates the template).</summary>
+    public const string IssuedBy = "Issued by {0}";
+
+    /// <summary>"Issued by" and the agency's name in title case (the issuing facsimile), in the reading language of <paramref name="data"/>.</summary>
+    private static string IssuedLine(FormData data) =>
+        data.Word(IssuedBy).Replace("{0}", data.Translated ? data.Agency ?? string.Empty : CultureInfo.InvariantCulture.TextInfo.ToTitleCase((data.Agency ?? string.Empty).ToLowerInvariant()));
 
     /// <summary>One layout run: the state of the pen as it goes down the blocks.</summary>
     private sealed class Placer
@@ -750,7 +867,7 @@ public static class FormLayout
                     case FormBlockKind.Table: Table(b); break;
                     case FormBlockKind.Paragraph: Words(FormTextRole.Paragraph, !string.IsNullOrEmpty(b.text) ? b.text : SlotText(b.slot), _m.paragraphSize); break;
                     case FormBlockKind.FinePrint: Words(FormTextRole.FinePrint, b.text, _m.finePrintSize); break;
-                    case FormBlockKind.Issued: Words(FormTextRole.Caption, !string.IsNullOrEmpty(b.text) ? b.text : IssuedLine(_data.Agency), _m.captionSize); break;
+                    case FormBlockKind.Issued: Words(FormTextRole.Caption, !string.IsNullOrEmpty(b.text) ? b.text : IssuedLine(_data), _m.captionSize); break;
                     case FormBlockKind.Barcode: _y += DrawBarcode(_left, _y, G(_m.barcodeWidth), _content) + G(_m.blockGap); break;
                     case FormBlockKind.StampArea: _y += DrawStamp(_y, G(_m.stampHeight)) + G(_m.blockGap); break;
                     case FormBlockKind.Signature: Signature(b); break;
@@ -977,14 +1094,14 @@ public static class FormLayout
             if (emblem && !string.IsNullOrEmpty(_data.Emblem))
                 Add(FormItemKind.Emblem, FaceRect.FromTop(_left + code / 2f, top, side - code, side - code), -1, _data.Emblem);
             float agencyWidth = width * 0.55f;
-            string agencyLine = (_data.Agency ?? string.Empty).ToUpperInvariant();
+            string agencyLine = ArtLayout.Capitals(_data.Agency ?? string.Empty);
             float agencySize = office ? OneLine(agencyLine, FormTextRole.Agency, _m.agencySize, _m.agencySize * OfficeLineFloor, agencyWidth) : G(_m.agencySize);
             float programmeSize = office ? OneLine(_data.Programme ?? string.Empty, FormTextRole.Programme, _m.programmeSize, _m.programmeSize * OfficeLineFloor, width - agencyWidth) : G(_m.programmeSize);
             float agency = Text(FormTextRole.Agency, agencyLine, left, top, agencyWidth, agencySize);
             float programme = Text(FormTextRole.Programme, _data.Programme, left + agencyWidth, top, width - agencyWidth, programmeSize, -1, FormTextAlign.Right);
             float titleTop = top + Math.Max(agency, programme) + G(_m.rowGap);
             float titleWidth = width * 0.84f;
-            string title = (_data.Title ?? string.Empty).ToUpperInvariant();
+            string title = ArtLayout.Capitals(_data.Title ?? string.Empty);
             float size = OneLine(title, FormTextRole.Title, _m.titleSize, office ? _m.titleFloor * OfficeLineFloor : _m.titleFloor, titleWidth);
             float titleHeight = Text(FormTextRole.Title, title, left, titleTop, titleWidth, size);
             float numberSize = string.IsNullOrEmpty(_data.FormNumber) ? G(_m.formNumberSize) : OneLine(_data.FormNumber, FormTextRole.FormNumber, _m.formNumberSize, _m.formNumberSize * NumberFloor, width - titleWidth);
@@ -1448,7 +1565,7 @@ public static class FormLayout
             string value = b.field >= 0 ? FieldValue(b.field) : SlotText(b.slot);
             bool blank = string.IsNullOrWhiteSpace(value);
             int slot = _slots.Count;
-            float hand = Text(FormTextRole.Value, blank ? Unsigned : value, _left + pad, top, width - 2f * pad, blank ? G(_m.captionSize) : G(_m.valueSize), slot);
+            float hand = Text(FormTextRole.Value, blank ? _data.Word(Unsigned) : value, _left + pad, top, width - 2f * pad, blank ? G(_m.captionSize) : G(_m.valueSize), slot);
             string reserve = FieldReserve(b.field);
             if (reserve != null)
                 hand = Math.Max(Measure(reserve, FormTextRole.Value, G(_m.valueSize), width - 2f * pad), Line(FormTextRole.Value, G(_m.valueSize)));
@@ -1481,11 +1598,11 @@ public static class FormLayout
         {
             float pad = G(_m.boxPadding), width = G(_m.stampWidth);
             float captionWidth = width - 2f * pad;
-            float caption = Measure(StampCaption, FormTextRole.Caption, G(_m.captionSize), captionWidth);
+            float caption = Measure(_data.Word(StampCaption), FormTextRole.Caption, G(_m.captionSize), captionWidth);
             height = Math.Max(height, caption + 2f * pad);
             var rect = FaceRect.FromTop(_left + _content - width, top, width, height);
             Add(FormItemKind.StampArea, rect);
-            Text(FormTextRole.Caption, StampCaption, rect.XMin + pad, top + pad, captionWidth, G(_m.captionSize), -1, FormTextAlign.Centre);
+            Text(FormTextRole.Caption, _data.Word(StampCaption), rect.XMin + pad, top + pad, captionWidth, G(_m.captionSize), -1, FormTextAlign.Centre);
             return height;
         }
 
@@ -1496,7 +1613,7 @@ public static class FormLayout
             Add(FormItemKind.Rule, FaceRect.FromTop(_left, _y, _content, G(_m.ruleWidth)));
             float top = _y + G(_m.ruleWidth) + gap;
             float leftWidth = _content - G(_m.stampWidth) - G(_m.gutter);
-            float issued = Text(FormTextRole.Caption, IssuedLine(_data.Agency), _left, top, leftWidth, G(_m.captionSize));
+            float issued = Text(FormTextRole.Caption, IssuedLine(_data), _left, top, leftWidth, G(_m.captionSize));
             float code = DrawBarcode(_left, top + issued + gap, Math.Min(G(_m.barcodeWidth), leftWidth / 2f), leftWidth);
             float stamp = DrawStamp(top, Math.Max(G(_m.stampHeight), issued + gap + code));
             _y = top + stamp + gap;

@@ -301,11 +301,12 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         FormPalette palette = look.Palette(style.Palette());
         float height = config.paperSize.y * look.Scale;
         Resize(new Vector2(height * look.AspectOr(style.metrics.aspect), height));
-        ShowPaperArt(form.Data.FormNumber, form.Data.Issuer, string.IsNullOrEmpty(look.paper) ? (Color?)null : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f), art != null);
+        FormData shown = UiText.InReadingLanguage(form.Data);
+        ShowPaperArt(form.Data.FormNumber, form.Data.Issuer, string.IsNullOrEmpty(look.paper) ? (Color?)null : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f), art != null, art != null && art.Worded(shown));
 
         _stamps = 0;
         _scale = FormLayout.PrintUnit(form.Spec, Size.x, style.metrics);
-        _form = FormLayout.Layout(form.Spec, form.Data, Size.x / _scale, style.metrics, new TmpFormText(textTemplate));
+        _form = FormLayout.Layout(form.Spec, shown, Size.x / _scale, style.metrics, new TmpFormText(textTemplate) { ScriptOf = shown.Translated ? _ => CultureThemeService.Instance != null ? CultureThemeService.Instance.CultureFont : null : (Func<string, TMP_FontAsset>)null });
         ShapePaper(art != null ? art.corner * Size.x : PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit) * _scale);
         Color cover = EmblemArt.Ink(form.Data.Cover, new Color(palette.Accent.R, palette.Accent.G, palette.Accent.B, 1f));
         Texture2D blank = art != null ? SlotArt.Texture(new[] { ArtSlots.PaperBlank(form.Data.FormNumber) }) : null;
@@ -603,8 +604,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         return true;
     }
 
-    /// <summary>The verdict word a dater prints on this paper's form (FormStyleSO.approvedStamp, deniedStamp: English, like every form's).</summary>
-    public string StampWord(bool approved) => style == null ? (approved ? "APPROVED" : "DENIED") : approved ? style.approvedStamp : style.deniedStamp;
+    /// <summary>The verdict word a dater prints on this paper's form (FormStyleSO.approvedStamp, deniedStamp), in the reading language (UiText.DocumentWord).</summary>
+    public string StampWord(bool approved) => UiText.DocumentWord(style == null ? (approved ? "APPROVED" : "DENIED") : approved ? style.approvedStamp : style.deniedStamp);
 
     /// <summary>A mark of the form named <paramref name="name"/> (an emblem, a watermark): a clone of the seal's quad over <paramref name="rect"/> showing <paramref name="texture"/> in <paramref name="ink"/>, <paramref name="lift"/> over the sheet; nothing without a texture or a seal quad.</summary>
     private Renderer PlaceMark(string name, FaceRect rect, Texture2D texture, Color ink, float lift)
@@ -833,10 +834,10 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// the photo; the agency seal's on the seal. A missing file keeps the
     /// placeholder paper, the grey frame and the code-drawn ring.
     /// </summary>
-    private void ShowPaperArt(string formNumber, string issuer, Color? tint, bool onArt)
+    private void ShowPaperArt(string formNumber, string issuer, Color? tint, bool onArt, bool clean)
     {
         _block ??= new MaterialPropertyBlock();
-        Texture2D face = paperQuad != null ? SlotArt.Texture(ArtSlots.PaperFaces(formNumber, issuer)) : null;
+        Texture2D face = paperQuad != null ? SlotArt.Texture(ArtSlots.PaperFaces(formNumber, issuer, clean)) : null;
         if (face != null)
         {
             paperQuad.GetPropertyBlock(_block);

@@ -92,6 +92,9 @@ public sealed class UiStrings
     /// <summary>The string for a key (a template's placeholders unfilled).</summary>
     public string Get(string key) => Format(key);
 
+    /// <summary>True when the reading table has <paramref name="key"/> (a document word with no doc.* string prints its English: UiText.FormWords).</summary>
+    public bool Has(string key) => key != null && _reading.ContainsKey(key);
+
     /// <summary>
     /// The string for a key with its placeholders filled: an IFormattable
     /// argument through its placeholder's format and the invariant culture, a

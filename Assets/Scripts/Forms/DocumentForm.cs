@@ -108,6 +108,18 @@ public sealed class DocumentForm
         return problems;
     }
 
+    /// <summary>Every fixed English word <paramref name="template"/>'s paper prints (FormLayout.PrintedWords: its title, the agency's and office's names, its labels, its art's captions), for the doc.* strings a culture's language needs.</summary>
+    public static List<string> PrintedWords(DocumentTemplateSO template, AgencyContent agency)
+    {
+        if (template == null)
+            return new List<string>();
+        FieldSpecsOf(template, 0, out List<string> labels, out _);
+        FormData probe = Heading(template, agency);
+        probe.FieldLabels = labels;
+        probe.FieldValues = labels.ConvertAll(_ => string.Empty);
+        return FormLayout.PrintedWords(template.form, probe);
+    }
+
     /// <summary>The seal's and the photo's places (the document design spec, D4, D8): exactly one Seal field, the one the header prints; with a photo, exactly one Photo field, the one the photo cell names; without, none.</summary>
     private static IEnumerable<string> VisualFieldProblems(DocumentTemplateSO template, FormSpec spec)
     {

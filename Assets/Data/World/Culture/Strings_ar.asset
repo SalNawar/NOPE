@@ -3461,6 +3461,758 @@ MonoBehaviour:
     text: "\u0627\u0645\u0633\u0643 \u0644\u0644\u0645\u0642\u0627\u0631\u0646\u0629"
     gloss: 0
     tier: 0
+  - key: doc.entry_visa_visas_d_entr_e
+    text: "\u062A\u0623\u0634\u064A\u0631\u0629 \u062F\u062E\u0648\u0644 \xB7 \u0625\u0630\u0646
+      \u0627\u0644\u062F\u062E\u0648\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.surname_given_names
+    text: "\u0627\u0633\u0645 \u0627\u0644\u0639\u0627\u0626\u0644\u0629 / \u0627\u0644\u0627\u0633\u0645
+      \u0627\u0644\u0623\u0648\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.citizen_id
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0645\u0648\u0627\u0637\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.date_of_birth
+    text: "\u062A\u0627\u0631\u064A\u062E \u0627\u0644\u0645\u064A\u0644\u0627\u062F"
+    gloss: 0
+    tier: 0
+  - key: doc.destination_era
+    text: "\u0627\u0644\u0648\u062C\u0647\u0629 (\u0627\u0644\u062D\u0642\u0628\u0629)"
+    gloss: 0
+    tier: 0
+  - key: doc.travel_class
+    text: "\u0641\u0626\u0629 \u0627\u0644\u0633\u0641\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.valid_until
+    text: "\u0635\u0627\u0644\u062D \u062D\u062A\u0649"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau
+    text: "\u0645\u0643\u062A\u0628 \u0627\u0644\u062C\u0645\u0627\u0631\u0643 \u0627\u0644\u0632\u0645\u0646\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.citizen_travel_passport_passeport_de_voyage_temporel
+    text: "\u062C\u0648\u0627\u0632 \u0633\u0641\u0631 \u0627\u0644\u0645\u0648\u0627\u0637\u0646
+      / \u062C\u0648\u0627\u0632 \u0627\u0644\u0633\u0641\u0631 \u0627\u0644\u0632\u0645\u0646\u064A"
+    gloss: 0
+    tier: 0
+  - key: doc.nationality
+    text: "\u0627\u0644\u062C\u0646\u0633\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.signature
+    text: "\u0627\u0644\u062A\u0648\u0642\u064A\u0639"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder
+    text: "\u0627\u0644\u0645\u0631\u0633\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.currency_carried
+    text: "\u0627\u0644\u0639\u0645\u0644\u0629 \u0627\u0644\u0645\u062D\u0645\u0648\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.declared_effects
+    text: "\u0627\u0644\u0623\u0645\u062A\u0639\u0629 \u0627\u0644\u0645\u0635\u0631\u062D
+      \u0628\u0647\u0627"
+    gloss: 0
+    tier: 0
+  - key: doc.departure_date
+    text: "\u062A\u0627\u0631\u064A\u062E \u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_class
+    text: "\u0641\u0626\u0629 \u0627\u0644\u0645\u0631\u0633\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.entry_ticket
+    text: "\u062A\u0630\u0643\u0631\u0629 \u062F\u062E\u0648\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_portal_hall_dispatch
+    text: "\u0645\u0643\u062A\u0628 \u0627\u0644\u062C\u0645\u0627\u0631\u0643 \u0627\u0644\u0632\u0645\u0646\u064A\u0629
+      \xB7 \u0625\u0631\u0633\u0627\u0644 \u0642\u0627\u0639\u0629 \u0627\u0644\u0628\u0648\u0627\u0628\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: doc.gate
+    text: "\u0627\u0644\u0628\u0648\u0627\u0628\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.date
+    text: "\u0627\u0644\u062A\u0627\u0631\u064A\u062E"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_model
+    text: "\u0637\u0631\u0627\u0632 \u0627\u0644\u0645\u0631\u0633\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.portal_hall_dispatch_temporal_customs_bureau
+    text: "\u0625\u0631\u0633\u0627\u0644 \u0642\u0627\u0639\u0629 \u0627\u0644\u0628\u0648\u0627\u0628\u0627\u062A
+      \u2022 \u0645\u0643\u062A\u0628 \u0627\u0644\u062C\u0645\u0627\u0631\u0643
+      \u0627\u0644\u0632\u0645\u0646\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_card
+    text: "\u0628\u0637\u0627\u0642\u0629 \u0627\u0644\u0645\u0631\u0633\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.traveller
+    text: "\u0627\u0644\u0645\u0633\u0627\u0641\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_passed_to_kin
+    text: "\u0627\u0644\u062F\u064A\u0646 \u0627\u0644\u0645\u062D\u0627\u0644 \u0625\u0644\u0649
+      \u0627\u0644\u0623\u0642\u0627\u0631\u0628"
+    gloss: 0
+    tier: 0
+  - key: doc.unsigned
+    text: "\u063A\u064A\u0631 \u0645\u0648\u0642\u0639"
+    gloss: 0
+    tier: 0
+  - key: doc.office_of_interval_compliance
+    text: "\u0645\u0643\u062A\u0628 \u0627\u0644\u0627\u0645\u062A\u062B\u0627\u0644
+      \u0627\u0644\u0632\u0645\u0646\u064A"
+    gloss: 0
+    tier: 0
+  - key: doc.stranding_waiver
+    text: "\u0625\u0642\u0631\u0627\u0631 \u0627\u0644\u0627\u0646\u0642\u0637\u0627\u0639"
+    gloss: 0
+    tier: 0
+  - key: doc.waiver_no
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0625\u0642\u0631\u0627\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.by_acknowledgment_of_this_instrument_the_traveller_accepts_a
+    text: "\u0628\u0627\u0644\u0625\u0642\u0631\u0627\u0631 \u0628\u0647\u0630\u0647
+      \u0627\u0644\u0648\u062B\u064A\u0642\u0629, \u064A\u0642\u0628\u0644 \u0627\u0644\u0645\u0633\u0627\u0641\u0631
+      \u0643\u0644 \u0627\u0644\u0645\u062E\u0627\u0644\u0641\u0627\u062A \u0627\u0644\u0632\u0645\u0646\u064A\u0629
+      \u0648\u0627\u0644\u0623\u0639\u0631\u0627\u0641 \u0627\u0644\u0645\u062D\u0644\u064A\u0629
+      \u0648\u0627\u0644\u0625\u0632\u0627\u062D\u0629 \u0627\u0644\u0632\u0645\u0646\u064A\u0629
+      \u0627\u0644\u0646\u0627\u062A\u062C\u0629 \u0639\u0646 \u0627\u0644\u0639\u0628\u0648\u0631
+      \u0627\u0644\u0637\u0648\u0639\u064A \u0625\u0644\u0649 \u0645\u0627 \u0648\u0631\u0627\u0621
+      \u0627\u0644\u062D\u0627\u0636\u0631 \u0627\u0644\u0645\u0635\u0631\u062D \u0628\u0647.
+      \u0644\u0627 \u062A\u0636\u0645\u0646 \u0623\u064A \u0641\u062A\u0631\u0629
+      \u0644\u0644\u0639\u0648\u062F\u0629."
+    gloss: 0
+    tier: 0
+  - key: doc.the_traveller_assumes_responsibility_for_identity_drift_cale
+    text: "\u064A\u062A\u062D\u0645\u0644 \u0627\u0644\u0645\u0633\u0627\u0641\u0631
+      \u0645\u0633\u0624\u0648\u0644\u064A\u0629 \u0627\u0646\u062C\u0631\u0627\u0641
+      \u0627\u0644\u0647\u0648\u064A\u0629 \u0648\u0627\u062E\u062A\u0644\u0627\u0641
+      \u0627\u0644\u062A\u0642\u0648\u064A\u0645 \u0648\u0627\u0636\u0637\u0631\u0627\u0628
+      \u0627\u0644\u0630\u0627\u0643\u0631\u0629 \u0648\u0643\u0644 \u0627\u0644\u0639\u0648\u0627\u0642\u0628
+      \u0627\u0644\u0645\u0639\u062A\u0627\u062F\u0629 \u0644\u0644\u0628\u0642\u0627\u0621
+      \u0641\u064A \u062D\u0642\u0628\u0629 \u0633\u0627\u0628\u0642\u0629. \u0644\u0627
+      \u062A\u0648\u0642\u0641 \u0627\u0644\u0645\u0637\u0627\u0644\u0628\u0627\u062A
+      \u0636\u062F \u0627\u0644\u0645\u0643\u062A\u0628 \u0627\u0644\u0642\u0631\u0646
+      \u0627\u0644\u0645\u0639\u0645\u0648\u0644 \u0628\u0647."
+    gloss: 0
+    tier: 0
+  - key: doc.acceptance_confirms_that_the_traveller_has_received_notice_o
+    text: "\u064A\u0624\u0643\u062F \u0627\u0644\u0642\u0628\u0648\u0644 \u0623\u0646
+      \u0627\u0644\u0645\u0633\u0627\u0641\u0631 \u062A\u0644\u0642\u0649 \u0625\u0634\u0639\u0627\u0631\u0627
+      \u0628\u0634\u0631\u0648\u0637 \u0627\u0644\u0627\u0646\u0642\u0637\u0627\u0639
+      \u0648\u064A\u0648\u0627\u0641\u0642 \u0639\u0644\u0649 \u0627\u0644\u0645\u0636\u064A
+      \u062F\u0648\u0646 \u0627\u0646\u062A\u0638\u0627\u0631 \u0625\u0646\u0642\u0627\u0630
+      \u0623\u0648 \u062A\u0635\u062D\u064A\u062D \u0623\u0648 \u0627\u0633\u062A\u0639\u0627\u062F\u0629.
+      \u064A\u0628\u0642\u0649 \u0647\u0630\u0627 \u0627\u0644\u0625\u0642\u0631\u0627\u0631
+      \u0633\u0627\u0631\u064A\u0627 \u0641\u064A \u0643\u0644 \u0627\u0644\u0627\u0633\u062A\u0645\u0631\u0627\u0631\u064A\u0627\u062A
+      \u0627\u0644\u0645\u0639\u062A\u0631\u0641 \u0628\u0647\u0627."
+    gloss: 0
+    tier: 0
+  - key: doc.holiday_credit_agreement
+    text: "\u0627\u062A\u0641\u0627\u0642\u064A\u0629 \u0642\u0631\u0636 \u0627\u0644\u0639\u0637\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs
+    text: "\u0627\u0644\u062C\u0645\u0627\u0631\u0643 \u0627\u0644\u0632\u0645\u0646\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.leisure_credit_bureau
+    text: "\u0645\u0643\u062A\u0628 \u0642\u0631\u0648\u0636 \u0627\u0644\u062A\u0631\u0641\u064A\u0647"
+    gloss: 0
+    tier: 0
+  - key: doc.borrower
+    text: "\u0627\u0644\u0645\u0642\u062A\u0631\u0636"
+    gloss: 0
+    tier: 0
+  - key: doc.destination
+    text: "\u0627\u0644\u0648\u062C\u0647\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.account_class
+    text: "\u0641\u0626\u0629 \u0627\u0644\u062D\u0633\u0627\u0628"
+    gloss: 0
+    tier: 0
+  - key: doc.credit_line
+    text: "\u062D\u062F \u0627\u0644\u0642\u0631\u0636"
+    gloss: 0
+    tier: 0
+  - key: doc.issuing_seal
+    text: "\u062F\u0645\u063A\u0629 \u0627\u0644\u0625\u0635\u062F\u0627\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.1_borrower
+    text: "1  \u0627\u0644\u0645\u0642\u062A\u0631\u0636"
+    gloss: 0
+    tier: 0
+  - key: doc.2_agreement
+    text: "2  \u0627\u0644\u0627\u062A\u0641\u0627\u0642\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_act_of_2139_any_alteration_voids_this_docum
+    text: "\u0642\u0627\u0646\u0648\u0646 \u0627\u0644\u062C\u0645\u0627\u0631\u0643
+      \u0627\u0644\u0632\u0645\u0646\u064A\u0629 \u0644\u0639\u0627\u0645 2139. \u0623\u064A
+      \u062A\u0639\u062F\u064A\u0644 \u064A\u0628\u0637\u0644 \u0647\u0630\u0647
+      \u0627\u0644\u0648\u062B\u064A\u0642\u0629."
+    gloss: 0
+    tier: 0
+  - key: doc.for_official_use_desk_stamp
+    text: "\u0644\u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645 \u0627\u0644\u0631\u0633\u0645\u064A
+      \xB7 \u062E\u062A\u0645 \u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: doc.issued_by_0
+    text: "\u0635\u0627\u062F\u0631\u0629 \u0639\u0646 {0}"
+    gloss: 0
+    tier: 0
+  - key: doc.proof_of_funds
+    text: "\u0625\u062B\u0628\u0627\u062A \u0627\u0644\u0623\u0645\u0648\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.account_holder
+    text: "\u0635\u0627\u062D\u0628 \u0627\u0644\u062D\u0633\u0627\u0628"
+    gloss: 0
+    tier: 0
+  - key: doc.funds_held
+    text: "\u0627\u0644\u0623\u0645\u0648\u0627\u0644 \u0627\u0644\u0645\u0648\u062F\u0639\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.1_account_holder
+    text: "1  \u0635\u0627\u062D\u0628 \u0627\u0644\u062D\u0633\u0627\u0628"
+    gloss: 0
+    tier: 0
+  - key: doc.2_funds
+    text: "2  \u0627\u0644\u0623\u0645\u0648\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.travel_insurance_certificate
+    text: "\u0634\u0647\u0627\u062F\u0629 \u062A\u0623\u0645\u064A\u0646 \u0627\u0644\u0633\u0641\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.transit_insurance_desk
+    text: "\u0645\u0643\u062A\u0628 \u062A\u0623\u0645\u064A\u0646 \u0627\u0644\u0639\u0628\u0648\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.insured
+    text: "\u0627\u0644\u0645\u0624\u0645\u0646 \u0639\u0644\u064A\u0647"
+    gloss: 0
+    tier: 0
+  - key: doc.policy_no
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0628\u0648\u0644\u064A\u0635\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.1_insured
+    text: "1  \u0627\u0644\u0645\u0624\u0645\u0646 \u0639\u0644\u064A\u0647"
+    gloss: 0
+    tier: 0
+  - key: doc.2_policy
+    text: "2  \u0627\u0644\u0628\u0648\u0644\u064A\u0635\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.worker
+    text: "\u0627\u0644\u0639\u0627\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.employer
+    text: "\u0635\u0627\u062D\u0628 \u0627\u0644\u0639\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.place_of_work_era
+    text: "\u0645\u0643\u0627\u0646 \u0627\u0644\u0639\u0645\u0644 (\u0627\u0644\u062D\u0642\u0628\u0629)"
+    gloss: 0
+    tier: 0
+  - key: doc.term
+    text: "\u0627\u0644\u0645\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.wage
+    text: "\u0627\u0644\u0623\u062C\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.ministry_of_recovery_debt_relief_office
+    text: "\u0648\u0632\u0627\u0631\u0629 \u0627\u0644\u062A\u0639\u0627\u0641\u064A
+      \xB7 \u0645\u0643\u062A\u0628 \u062A\u0633\u0648\u064A\u0629 \u0627\u0644\u062F\u064A\u0648\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.work_permit_debt_relief_labour
+    text: "\u062A\u0635\u0631\u064A\u062D \u0639\u0645\u0644 \u2013 \u0639\u0645\u0627\u0644\u0629
+      \u062A\u0633\u0648\u064A\u0629 \u0627\u0644\u062F\u064A\u0648\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.authorised_by
+    text: "\u0628\u062A\u0641\u0648\u064A\u0636 \u0645\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.holder
+    text: "\u0627\u0644\u062D\u0627\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.registry_id
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0642\u064A\u062F"
+    gloss: 0
+    tier: 0
+  - key: doc.origin_era
+    text: "\u0627\u0644\u0623\u0635\u0644 (\u0627\u0644\u062D\u0642\u0628\u0629)"
+    gloss: 0
+    tier: 0
+  - key: doc.incident
+    text: "\u0627\u0644\u062D\u0627\u062F\u062B\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_registry_temporal_customs_bureau
+    text: "\u0633\u062C\u0644 \u0627\u0644\u0646\u0627\u0632\u062D\u064A\u0646 \xB7
+      \u0645\u0643\u062A\u0628 \u0627\u0644\u062C\u0645\u0627\u0631\u0643 \u0627\u0644\u0632\u0645\u0646\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.travel_permit
+    text: "\u062A\u0635\u0631\u064A\u062D \u0633\u0641\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.language_spoken
+    text: "\u0627\u0644\u0644\u063A\u0629 \u0627\u0644\u0645\u062D\u0643\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.technology_carried
+    text: "\u0627\u0644\u062A\u0642\u0646\u064A\u0629 \u0627\u0644\u0645\u062D\u0645\u0648\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_return_intake
+    text: "\u0645\u0643\u062A\u0628 \u0627\u0644\u062C\u0645\u0627\u0631\u0643 \u0627\u0644\u0632\u0645\u0646\u064A\u0629
+      \xB7 \u0627\u0633\u062A\u0642\u0628\u0627\u0644 \u0627\u0644\u0639\u0627\u0626\u062F\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.intake_declaration
+    text: "\u0625\u0642\u0631\u0627\u0631 \u0627\u0644\u0627\u0633\u062A\u0642\u0628\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.nothing_to_declare
+    text: "\u0644\u0627 \u0634\u064A\u0621 \u0644\u0644\u062A\u0635\u0631\u064A\u062D"
+    gloss: 0
+    tier: 0
+  - key: doc.goods
+    text: "\u0627\u0644\u0628\u0636\u0627\u0626\u0639"
+    gloss: 0
+    tier: 0
+  - key: doc.persons
+    text: "\u0627\u0644\u0623\u0634\u062E\u0627\u0635"
+    gloss: 0
+    tier: 0
+  - key: doc.knowledge
+    text: "\u0627\u0644\u0645\u0639\u0631\u0641\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.declarant_signature
+    text: "\u062A\u0648\u0642\u064A\u0639 \u0627\u0644\u0645\u0635\u0631\u062D"
+    gloss: 0
+    tier: 0
+  - key: doc.recalled_traveller
+    text: "\u0645\u0633\u0627\u0641\u0631 \u0645\u0633\u062A\u062F\u0639\u0649"
+    gloss: 0
+    tier: 0
+  - key: doc.return_to
+    text: "\u0627\u0644\u0639\u0648\u062F\u0629 \u0625\u0644\u0649"
+    gloss: 0
+    tier: 0
+  - key: doc.return_by_date
+    text: "\u0627\u0644\u0639\u0648\u062F\u0629 \u0642\u0628\u0644 (\u0627\u0644\u062A\u0627\u0631\u064A\u062E)"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_directorate_of_returns
+    text: "\xB7 \u0645\u0643\u062A\u0628 \u0627\u0644\u062C\u0645\u0627\u0631\u0643
+      \u0627\u0644\u0632\u0645\u0646\u064A\u0629 \xB7 \u0645\u062F\u064A\u0631\u064A\u0629
+      \u0627\u0644\u0639\u0648\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.return_order
+    text: "\u0623\u0645\u0631 \u0627\u0644\u0639\u0648\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.order_no
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0623\u0645\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.authorized_by
+    text: "\u0628\u062A\u0641\u0648\u064A\u0636 \u0645\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.deviation_report
+    text: "\u062A\u0642\u0631\u064A\u0631 \u0627\u0644\u0627\u0646\u062D\u0631\u0627\u0641"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief_departures
+    text: "\u0645\u063A\u0627\u062F\u0631\u0627\u062A \u062A\u0633\u0648\u064A\u0629
+      \u0627\u0644\u062F\u064A\u0648\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.statement
+    text: "\u0627\u0644\u0625\u0641\u0627\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.contradicted_by
+    text: "\u064A\u0646\u0627\u0642\u0636\u0647"
+    gloss: 0
+    tier: 0
+  - key: doc.desk_officer
+    text: "\u0645\u0648\u0638\u0641 \u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: doc.a_deviation_is_documented_once_per_category_denial_on_docume
+    text: "\u064A\u0648\u062B\u0642 \u0627\u0644\u0627\u0646\u062D\u0631\u0627\u0641
+      \u0645\u0631\u0629 \u0648\u0627\u062D\u062F\u0629 \u0644\u0643\u0644 \u0641\u0626\u0629.
+      \u0627\u0644\u0631\u0641\u0636 \u0628\u0646\u0627\u0621 \u0639\u0644\u0649
+      \u0627\u0646\u062D\u0631\u0627\u0641\u0627\u062A \u0645\u0648\u062B\u0642\u0629
+      \u0645\u0628\u0631\u0631 \u0628\u0645\u0648\u062C\u0628 \u0642\u0627\u0646\u0648\u0646
+      \u0627\u0644\u062C\u0645\u0627\u0631\u0643 \u0627\u0644\u0632\u0645\u0646\u064A\u0629
+      \u0644\u0639\u0627\u0645 2139."
+    gloss: 0
+    tier: 0
+  - key: doc.directive_memo
+    text: "\u0645\u0630\u0643\u0631\u0629 \u062A\u0648\u062C\u064A\u0647"
+    gloss: 0
+    tier: 0
+  - key: doc.to
+    text: "\u0625\u0644\u0649"
+    gloss: 0
+    tier: 0
+  - key: doc.from
+    text: "\u0645\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.ref
+    text: "\u0627\u0644\u0645\u0631\u062C\u0639"
+    gloss: 0
+    tier: 0
+  - key: doc.no
+    text: "\u0631\u0642\u0645"
+    gloss: 0
+    tier: 0
+  - key: doc.directive
+    text: "\u0627\u0644\u062A\u0648\u062C\u064A\u0647"
+    gloss: 0
+    tier: 0
+  - key: doc.issued_by_the_customs_directorate
+    text: "\u0635\u0627\u062F\u0631 \u0639\u0646 \u0645\u062F\u064A\u0631\u064A\u0629
+      \u0627\u0644\u062C\u0645\u0627\u0631\u0643"
+    gloss: 0
+    tier: 0
+  - key: doc.interview_record
+    text: "\u0645\u062D\u0636\u0631 \u0627\u0644\u0645\u0642\u0627\u0628\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.speaker
+    text: "\u0627\u0644\u0645\u062A\u062D\u062F\u062B"
+    gloss: 0
+    tier: 0
+  - key: doc.taken_down_in_english_by_the_desk_officer_a_statement_in_the
+    text: "\u062F\u0648\u0646\u0647 \u0645\u0648\u0638\u0641 \u0627\u0644\u0645\u0643\u062A\u0628
+      \u0628\u0627\u0644\u0625\u0646\u062C\u0644\u064A\u0632\u064A\u0629. \u0627\u0644\u0625\u0641\u0627\u062F\u0629
+      \u0628\u0644\u063A\u0629 \u0627\u0644\u0645\u0633\u0627\u0641\u0631 \u062A\u0633\u062C\u0644
+      \u0643\u0645\u0627 \u0642\u064A\u0644\u062A. \u0625\u062C\u0627\u0628\u0627\u062A
+      \u0627\u0644\u0645\u0633\u0627\u0641\u0631 \u0648\u062D\u062F\u0647\u0627 \u062F\u0644\u064A\u0644."
+    gloss: 0
+    tier: 0
+  - key: doc.internal_memorandum
+    text: "\u0645\u0630\u0643\u0631\u0629 \u062F\u0627\u062E\u0644\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.subject
+    text: "\u0627\u0644\u0645\u0648\u0636\u0648\u0639"
+    gloss: 0
+    tier: 0
+  - key: doc.signed_for_the_sender
+    text: "\u0645\u0648\u0642\u0639 \u0639\u0646 \u0627\u0644\u0645\u0631\u0633\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.portal_schedule
+    text: "\u062C\u062F\u0648\u0644 \u0627\u0644\u0628\u0648\u0627\u0628\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: doc.ring
+    text: "\u0627\u0644\u062D\u0644\u0642\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.era
+    text: "\u0627\u0644\u062D\u0642\u0628\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.place
+    text: "\u0627\u0644\u0645\u0643\u0627\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.state
+    text: "\u0627\u0644\u062D\u0627\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.record_extract
+    text: "\u0645\u0633\u062A\u062E\u0631\u062C \u0627\u0644\u0633\u062C\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.an_extract_of_the_records_of_temporal_customs_true_on_the_da
+    text: "\u0645\u0633\u062A\u062E\u0631\u062C \u0645\u0646 \u0633\u062C\u0644\u0627\u062A
+      \u0627\u0644\u062C\u0645\u0627\u0631\u0643 \u0627\u0644\u0632\u0645\u0646\u064A\u0629,
+      \u0635\u062D\u064A\u062D \u0641\u064A \u064A\u0648\u0645 \u0627\u0644\u0625\u0635\u062F\u0627\u0631."
+    gloss: 0
+    tier: 0
+  - key: doc.register
+    text: "\u0627\u0644\u0633\u062C\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.value
+    text: "\u0627\u0644\u0642\u064A\u0645\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.note
+    text: "\u0645\u0644\u0627\u062D\u0638\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.compiled_by_temporal_customs_from_the_day_s_historical_recor
+    text: "\u062C\u0645\u0639\u062A\u0647 \u0627\u0644\u062C\u0645\u0627\u0631\u0643
+      \u0627\u0644\u0632\u0645\u0646\u064A\u0629 \u0645\u0646 \u0627\u0644\u0633\u062C\u0644
+      \u0627\u0644\u062A\u0627\u0631\u064A\u062E\u064A \u0644\u0644\u064A\u0648\u0645.
+      \u0627\u0644\u0645\u062F\u0627\u062E\u0644 \u0627\u0644\u0645\u0639\u062F\u0644\u0629
+      \u0645\u0639\u0644\u0645\u0629."
+    gloss: 0
+    tier: 0
+  - key: doc.supply_requisition
+    text: "\u0637\u0644\u0628 \u0625\u0645\u062F\u0627\u062F\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: doc.item
+    text: "\u0627\u0644\u0639\u0646\u0635\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.section
+    text: "\u0627\u0644\u0642\u0633\u0645"
+    gloss: 0
+    tier: 0
+  - key: doc.price
+    text: "\u0627\u0644\u0633\u0639\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.status
+    text: "\u0627\u0644\u062D\u0627\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: doc.requires
+    text: "\u064A\u062A\u0637\u0644\u0628"
+    gloss: 0
+    tier: 0
+  - key: doc.paid_on_order_delivered_at_the_start_of_the_next_shift_an_or
+    text: "\u064A\u062F\u0641\u0639 \u0639\u0646\u062F \u0627\u0644\u0637\u0644\u0628.
+      \u064A\u0633\u0644\u0645 \u0641\u064A \u0628\u062F\u0627\u064A\u0629 \u0627\u0644\u0645\u0646\u0627\u0648\u0628\u0629
+      \u0627\u0644\u062A\u0627\u0644\u064A\u0629. \u0644\u0627 \u064A\u0644\u063A\u0649
+      \u0627\u0644\u0637\u0644\u0628 \u0648\u064A\u0633\u062A\u0631\u062F \u062B\u0645\u0646\u0647
+      \u0625\u0644\u0627 \u0641\u064A \u064A\u0648\u0645 \u062A\u0642\u062F\u064A\u0645\u0647."
+    gloss: 0
+    tier: 0
+  - key: doc.seal_register
+    text: "\u0633\u062C\u0644 \u0627\u0644\u062F\u0645\u063A\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: doc.every_paper_carries_the_seal_of_the_office_that_issues_it_ho
+    text: "\u0643\u0644 \u0648\u0631\u0642\u0629 \u062A\u062D\u0645\u0644 \u062F\u0645\u063A\u0629
+      \u0627\u0644\u0645\u0643\u062A\u0628 \u0627\u0644\u0630\u064A \u064A\u0635\u062F\u0631\u0647\u0627.
+      \u0642\u0627\u0631\u0646 \u062F\u0645\u063A\u0629 \u0627\u0644\u0648\u0631\u0642\u0629
+      \u0628\u062F\u0645\u063A\u0629 \u0645\u0643\u062A\u0628\u0647\u0627 \u0647\u0646\u0627:
+      \u0623\u064A \u0627\u062E\u062A\u0644\u0627\u0641 \u0641\u064A \u0627\u0644\u0634\u0643\u0644
+      \u0623\u0648 \u0627\u0644\u062D\u0628\u0631 \u0623\u0648 \u0627\u0644\u0646\u0635
+      \u064A\u0639\u0646\u064A \u0627\u0644\u062A\u0632\u0648\u064A\u0631."
+    gloss: 0
+    tier: 0
+  - key: doc.compiled_by_temporal_customs_from_the_offices_seal_books_a_s
+    text: "\u062C\u0645\u0639\u062A\u0647 \u0627\u0644\u062C\u0645\u0627\u0631\u0643
+      \u0627\u0644\u0632\u0645\u0646\u064A\u0629 \u0645\u0646 \u062F\u0641\u0627\u062A\u0631
+      \u062F\u0645\u063A\u0627\u062A \u0627\u0644\u0645\u0643\u0627\u062A\u0628.
+      \u0627\u0644\u062F\u0645\u063A\u0629 \u062A\u0637\u0628\u0639 \u0648\u0644\u0627
+      \u062A\u062E\u062A\u0645 \u0628\u0627\u0644\u064A\u062F \u0623\u0628\u062F\u0627."
+    gloss: 0
+    tier: 0
+  - key: doc.day
+    text: "\u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: doc.wages
+    text: "\u0627\u0644\u0623\u062C\u0648\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.fines
+    text: "\u0627\u0644\u063A\u0631\u0627\u0645\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief
+    text: "\u062A\u0633\u0648\u064A\u0629 \u0627\u0644\u062F\u064A\u0648\u0646"
+    gloss: 0
+    tier: 0
+  - key: doc.household
+    text: "\u0627\u0644\u0645\u0646\u0632\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.purchases
+    text: "\u0627\u0644\u0645\u0634\u062A\u0631\u064A\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: doc.balance
+    text: "\u0627\u0644\u0631\u0635\u064A\u062F"
+    gloss: 0
+    tier: 0
+  - key: doc.owed
+    text: "\u0627\u0644\u0645\u0633\u062A\u062D\u0642"
+    gloss: 0
+    tier: 0
+  - key: doc.departures_are_voluntary
+    text: "\u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0627\u062A \u0637\u0648\u0639\u064A\u0629."
+    gloss: 0
+    tier: 0
+  - key: doc.scanned_0_desk_scanner_1
+    text: "\u0645\u0633\u062D {0} \xB7 \u0645\u0627\u0633\u062D \u0627\u0644\u0645\u0643\u062A\u0628
+      1"
+    gloss: 0
+    tier: 0
+  - key: doc.analysed_0_1_contradiction_marked
+    text: "\u062D\u0644\u0644 {0} \xB7 \u062A\u0646\u0627\u0642\u0636 \u0648\u0627\u062D\u062F
+      \u0645\u0639\u0644\u0645"
+    gloss: 0
+    tier: 0
+  - key: doc.analysed_0
+    text: "\u062D\u0644\u0644 {0} \xB7"
+    gloss: 0
+    tier: 0
+  - key: doc.scanned_0_already_analysed
+    text: "\u0645\u0633\u062D {0} \xB7 \u062D\u0644\u0644 \u0645\u0633\u0628\u0642\u0627"
+    gloss: 0
+    tier: 0
+  - key: doc.approved
+    text: "\u0645\u0642\u0628\u0648\u0644"
+    gloss: 0
+    tier: 0
+  - key: doc.denied
+    text: "\u0645\u0631\u0641\u0648\u0636"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.0
+    text: "\u0627\u0644\u0623\u062D\u062F"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.0
+    text: "\u0623\u062D\u062F"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.1
+    text: "\u0627\u0644\u0627\u062B\u0646\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.1
+    text: "\u0627\u062B\u0646\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.2
+    text: "\u0627\u0644\u062B\u0644\u0627\u062B\u0627\u0621"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.2
+    text: "\u062B\u0644\u0627\u062B\u0627\u0621"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.3
+    text: "\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.3
+    text: "\u0623\u0631\u0628\u0639\u0627\u0621"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.4
+    text: "\u0627\u0644\u062E\u0645\u064A\u0633"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.4
+    text: "\u062E\u0645\u064A\u0633"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.5
+    text: "\u0627\u0644\u062C\u0645\u0639\u0629"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.5
+    text: "\u062C\u0645\u0639\u0629"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.6
+    text: "\u0627\u0644\u0633\u0628\u062A"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.6
+    text: "\u0633\u0628\u062A"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.1
+    text: "\u064A\u0646\u0627\u064A\u0631"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.2
+    text: "\u0641\u0628\u0631\u0627\u064A\u0631"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.3
+    text: "\u0645\u0627\u0631\u0633"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.4
+    text: "\u0623\u0628\u0631\u064A\u0644"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.5
+    text: "\u0645\u0627\u064A\u0648"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.6
+    text: "\u064A\u0648\u0646\u064A\u0648"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.7
+    text: "\u064A\u0648\u0644\u064A\u0648"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.8
+    text: "\u0623\u063A\u0633\u0637\u0633"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.9
+    text: "\u0633\u0628\u062A\u0645\u0628\u0631"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.10
+    text: "\u0623\u0643\u062A\u0648\u0628\u0631"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.11
+    text: "\u0646\u0648\u0641\u0645\u0628\u0631"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.12
+    text: "\u062F\u064A\u0633\u0645\u0628\u0631"
+    gloss: 0
+    tier: 0
+  - key: doc.clerk_s_rulebook_desk_3
+    text: "\u062F\u0644\u064A\u0644 \u0642\u0648\u0627\u0639\u062F \u0627\u0644\u0645\u0648\u0638\u0641
+      \xB7 DESK 3"
+    gloss: 0
+    tier: 0
   words:
   - native: "\u0625\u0637\u0641\u0627\u0621"
     english: Turn off
@@ -5326,3 +6078,309 @@ MonoBehaviour:
     english: there is
   - native: "\u064A\u0648\u0645"
     english: day
+  - native: "\u0625\u062C\u0627\u0628\u0627\u062A"
+    english: answers
+  - native: "\u0625\u0630\u0646"
+    english: permit
+  - native: "\u0625\u0631\u0633\u0627\u0644"
+    english: dispatch
+  - native: "\u0625\u0634\u0639\u0627\u0631\u0627"
+    english: notice
+  - native: "\u0625\u0644\u0627"
+    english: except
+  - native: "\u0625\u0646\u0642\u0627\u0630"
+    english: rescue
+  - native: "\u0627\u062A\u0641\u0627\u0642\u064A\u0629"
+    english: agreement
+  - native: "\u0627\u062E\u062A\u0644\u0627\u0641"
+    english: variance
+  - native: "\u0627\u0633\u062A\u0639\u0627\u062F\u0629"
+    english: restoration
+  - native: "\u0627\u0633\u062A\u0642\u0628\u0627\u0644"
+    english: intake
+  - native: "\u0627\u0644\u0623\u0635\u0644"
+    english: origin
+  - native: "\u0627\u0644\u0623\u0642\u0627\u0631\u0628"
+    english: kin
+  - native: "\u0627\u0644\u0623\u0645\u062A\u0639\u0629"
+    english: effects
+  - native: "\u0627\u0644\u0623\u0645\u0631"
+    english: order
+  - native: "\u0627\u0644\u0623\u0645\u0648\u0627\u0644"
+    english: funds
+  - native: "\u0627\u0644\u0623\u0648\u0644"
+    english: given
+  - native: "\u0627\u0644\u0625\u0635\u062F\u0627\u0631"
+    english: issue
+  - native: "\u0627\u0644\u0625\u0641\u0627\u062F\u0629"
+    english: statement
+  - native: "\u0627\u0644\u0627\u062A\u0641\u0627\u0642\u064A\u0629"
+    english: agreement
+  - native: "\u0627\u0644\u0627\u0633\u062A\u0642\u0628\u0627\u0644"
+    english: intake
+  - native: "\u0627\u0644\u0627\u0633\u062A\u0645\u0631\u0627\u0631\u064A\u0627\u062A"
+    english: continuities
+  - native: "\u0627\u0644\u0627\u0645\u062A\u062B\u0627\u0644"
+    english: compliance
+  - native: "\u0627\u0644\u0628\u0648\u0627\u0628\u0627\u062A"
+    english: portals
+  - native: "\u0627\u0644\u062A\u0627\u0631\u064A\u062E\u064A"
+    english: historical
+  - native: "\u0627\u0644\u062A\u0631\u0641\u064A\u0647"
+    english: leisure
+  - native: "\u0627\u0644\u062A\u0632\u0648\u064A\u0631"
+    english: forgery
+  - native: "\u0627\u0644\u062A\u0639\u0627\u0641\u064A"
+    english: recovery
+  - native: "\u0627\u0644\u062A\u0642\u0646\u064A\u0629"
+    english: technology
+  - native: "\u0627\u0644\u062D\u0628\u0631"
+    english: ink
+  - native: "\u0627\u0644\u062D\u0642\u0628\u0629"
+    english: era
+  - native: "\u0627\u0644\u062F\u062E\u0648\u0644"
+    english: entry
+  - native: "\u0627\u0644\u062F\u0645\u063A\u0629"
+    english: seal
+  - native: "\u0627\u0644\u0630\u0627\u0643\u0631\u0629"
+    english: memory
+  - native: "\u0627\u0644\u0631\u0633\u0645\u064A"
+    english: official
+  - native: "\u0627\u0644\u0634\u0643\u0644"
+    english: outline
+  - native: "\u0627\u0644\u0637\u0648\u0639\u064A"
+    english: voluntary
+  - native: "\u0627\u0644\u0639\u0627\u0626\u062F\u064A\u0646"
+    english: returns
+  - native: "\u0627\u0644\u0639\u0627\u0626\u0644\u0629"
+    english: family
+  - native: "\u0627\u0644\u0639\u0628\u0648\u0631"
+    english: passage
+  - native: "\u0627\u0644\u0639\u0637\u0644\u0629"
+    english: holiday
+  - native: "\u0627\u0644\u0639\u0645\u0644\u0629"
+    english: currency
+  - native: "\u0627\u0644\u0639\u0648\u0627\u0642\u0628"
+    english: consequences
+  - native: "\u0627\u0644\u0642\u0628\u0648\u0644"
+    english: acceptance
+  - native: "\u0627\u0644\u0642\u0631\u0636"
+    english: credit
+  - native: "\u0627\u0644\u0642\u0631\u0646"
+    english: century
+  - native: "\u0627\u0644\u0642\u064A\u062F"
+    english: registry
+  - native: "\u0627\u0644\u0645\u0624\u0645\u0646"
+    english: insured
+  - native: "\u0627\u0644\u0645\u062D\u0627\u0644"
+    english: passed
+  - native: "\u0627\u0644\u0645\u062D\u0643\u064A\u0629"
+    english: spoken
+  - native: "\u0627\u0644\u0645\u062D\u0644\u064A\u0629"
+    english: local
+  - native: "\u0627\u0644\u0645\u062D\u0645\u0648\u0644\u0629"
+    english: carried
+  - native: "\u0627\u0644\u0645\u062E\u0627\u0644\u0641\u0627\u062A"
+    english: irregularities
+  - native: "\u0627\u0644\u0645\u062F\u0627\u062E\u0644"
+    english: entries
+  - native: "\u0627\u0644\u0645\u0631\u0633\u0644"
+    english: sender
+  - native: "\u0627\u0644\u0645\u0635\u0631\u062D"
+    english: authorized; declarant
+  - native: "\u0627\u0644\u0645\u0636\u064A"
+    english: proceed
+  - native: "\u0627\u0644\u0645\u0637\u0627\u0644\u0628\u0627\u062A"
+    english: claims
+  - native: "\u0627\u0644\u0645\u0639\u062A\u0627\u062F\u0629"
+    english: ordinary
+  - native: "\u0627\u0644\u0645\u0639\u062A\u0631\u0641"
+    english: recognized
+  - native: "\u0627\u0644\u0645\u0639\u0645\u0648\u0644"
+    english: applicable
+  - native: "\u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0627\u062A"
+    english: departures
+  - native: "\u0627\u0644\u0645\u0642\u0627\u0628\u0644\u0629"
+    english: interview
+  - native: "\u0627\u0644\u0645\u0642\u062A\u0631\u0636"
+    english: borrower
+  - native: "\u0627\u0644\u0645\u0648\u062F\u0639\u0629"
+    english: held
+  - native: "\u0627\u0644\u0646\u0627\u062A\u062C\u0629"
+    english: arising
+  - native: "\u0627\u0644\u0647\u0648\u064A\u0629"
+    english: identity
+  - native: "\u0627\u0644\u0648\u062C\u0647\u0629"
+    english: destination
+  - native: "\u0627\u0646\u062A\u0638\u0627\u0631"
+    english: expectation
+  - native: "\u0627\u0646\u062C\u0631\u0627\u0641"
+    english: drift
+  - native: "\u0628\u0627\u0644\u0625\u0642\u0631\u0627\u0631"
+    english: by acknowledgment
+  - native: "\u0628\u0627\u0644\u0625\u0646\u062C\u0644\u064A\u0632\u064A\u0629"
+    english: in English
+  - native: "\u0628\u0627\u0644\u064A\u062F"
+    english: by hand
+  - native: "\u0628\u062A\u0641\u0648\u064A\u0636"
+    english: authorised
+  - native: "\u0628\u0634\u0631\u0648\u0637"
+    english: of the conditions
+  - native: "\u0628\u0637\u0627\u0642\u0629"
+    english: card
+  - native: "\u0628\u0644\u063A\u0629"
+    english: in the tongue of
+  - native: "\u0628\u0645\u0648\u062C\u0628"
+    english: under
+  - native: "\u0628\u0646\u0627\u0621"
+    english: based
+  - native: "\u0628\u0647"
+    english: by it
+  - native: "\u0628\u0647\u0627"
+    english: declared
+  - native: "\u0628\u0647\u0630\u0647"
+    english: of this
+  - native: "\u062A\u0623\u0634\u064A\u0631\u0629"
+    english: visa
+  - native: "\u062A\u0623\u0645\u064A\u0646"
+    english: insurance
+  - native: "\u062A\u062E\u062A\u0645"
+    english: stamped
+  - native: "\u062A\u0630\u0643\u0631\u0629"
+    english: ticket
+  - native: "\u062A\u0633\u062C\u0644"
+    english: is recorded
+  - native: "\u062A\u0635\u062D\u064A\u062D"
+    english: correction
+  - native: "\u062A\u0636\u0645\u0646"
+    english: guaranteed
+  - native: "\u062A\u0637\u0628\u0639"
+    english: is printed
+  - native: "\u062A\u0639\u062F\u064A\u0644"
+    english: alteration
+  - native: "\u062A\u0642\u062F\u064A\u0645\u0647"
+    english: it is placed
+  - native: "\u062A\u0644\u0642\u0649"
+    english: received
+  - native: "\u062A\u0646\u0627\u0642\u0636"
+    english: contradiction
+  - native: "\u062A\u0648\u0642\u0641"
+    english: suspend
+  - native: "\u062A\u0648\u0642\u064A\u0639"
+    english: signature
+  - native: "\u062C\u062F\u0648\u0644"
+    english: schedule
+  - native: "\u062C\u0645\u0639\u062A\u0647"
+    english: compiled it
+  - native: "\u062C\u0648\u0627\u0632"
+    english: passport
+  - native: "\u062D\u062F"
+    english: line
+  - native: "\u062D\u0644\u0644"
+    english: analysed
+  - native: "\u062F\u0627\u062E\u0644\u064A\u0629"
+    english: internal
+  - native: "\u062F\u062E\u0648\u0644"
+    english: entry
+  - native: "\u062F\u0641\u0627\u062A\u0631"
+    english: books
+  - native: "\u062F\u0645\u063A\u0627\u062A"
+    english: seals
+  - native: "\u062F\u0648\u0646"
+    english: without
+  - native: "\u062F\u0648\u0646\u0647"
+    english: took it down
+  - native: "\u0633\u0627\u0631\u064A\u0627"
+    english: in force
+  - native: "\u0634\u0647\u0627\u062F\u0629"
+    english: certificate
+  - native: "\u0635\u0627\u062F\u0631"
+    english: issued
+  - native: "\u0635\u0627\u062F\u0631\u0629"
+    english: issued
+  - native: "\u0636\u062F"
+    english: against
+  - native: "\u0637\u0631\u0627\u0632"
+    english: model
+  - native: "\u0637\u0644\u0628"
+    english: requisition
+  - native: "\u0637\u0648\u0639\u064A\u0629"
+    english: voluntary
+  - native: "\u0639\u0644\u064A\u0647"
+    english: on
+  - native: "\u0639\u0645\u0627\u0644\u0629"
+    english: labour
+  - native: "\u0641\u062A\u0631\u0629"
+    english: interval
+  - native: "\u0642\u0627\u0639\u0629"
+    english: hall
+  - native: "\u0642\u0631\u0636"
+    english: credit
+  - native: "\u0642\u0631\u0648\u0636"
+    english: credit
+  - native: "\u0642\u064A\u0644\u062A"
+    english: spoken
+  - native: "\u0644\u0639\u0627\u0645"
+    english: of the year
+  - native: "\u0644\u0643\u0644"
+    english: per
+  - native: "\u0644\u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645"
+    english: for use
+  - native: "\u0644\u0644\u0628\u0642\u0627\u0621"
+    english: of remaining
+  - native: "\u0644\u0644\u062A\u0635\u0631\u064A\u062D"
+    english: to declare
+  - native: "\u0644\u0644\u0639\u0648\u062F\u0629"
+    english: for return
+  - native: "\u0644\u0644\u064A\u0648\u0645"
+    english: of the day
+  - native: "\u0645\u0627\u0633\u062D"
+    english: scanner
+  - native: "\u0645\u062D\u0636\u0631"
+    english: record
+  - native: "\u0645\u0631\u0629"
+    english: once
+  - native: "\u0645\u0633\u062A\u062F\u0639\u0649"
+    english: recalled
+  - native: "\u0648\u0627\u062E\u062A\u0644\u0627\u0641"
+    english: and variance
+  - native: "\u0648\u0627\u0636\u0637\u0631\u0627\u0628"
+    english: and desynchronization
+  - native: "\u0648\u0627\u0644\u0623\u0639\u0631\u0627\u0641"
+    english: and customs
+  - native: "\u0648\u0627\u0644\u0625\u0632\u0627\u062D\u0629"
+    english: and displacement
+  - native: "\u0648\u0631\u0627\u0621"
+    english: beyond
+  - native: "\u0648\u0632\u0627\u0631\u0629"
+    english: ministry
+  - native: "\u0648\u0643\u0644"
+    english: and all
+  - native: "\u0648\u064A\u0633\u062A\u0631\u062F"
+    english: and refunded
+  - native: "\u0648\u064A\u0648\u0627\u0641\u0642"
+    english: and agrees
+  - native: "\u064A\u0624\u0643\u062F"
+    english: confirms
+  - native: "\u064A\u0628\u0637\u0644"
+    english: voids
+  - native: "\u064A\u0628\u0642\u0649"
+    english: remains
+  - native: "\u064A\u062A\u062D\u0645\u0644"
+    english: assumes
+  - native: "\u064A\u062F\u0641\u0639"
+    english: paid
+  - native: "\u064A\u0633\u0644\u0645"
+    english: delivered
+  - native: "\u064A\u0635\u062F\u0631\u0647\u0627"
+    english: issues it
+  - native: "\u064A\u0639\u0646\u064A"
+    english: means
+  - native: "\u064A\u0642\u0628\u0644"
+    english: accepts
+  - native: "\u064A\u0644\u063A\u0649"
+    english: is cancelled
+  - native: "\u064A\u0648\u062B\u0642"
+    english: is documented
+  - native: "\u0627\u0644\u0645\u0648\u0638\u0641"
+    english: the clerk

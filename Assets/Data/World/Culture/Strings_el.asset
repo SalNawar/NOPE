@@ -3729,6 +3729,800 @@ MonoBehaviour:
     text: "\u039A\u03C1\u03AC\u03C4\u03B1 \u03B3\u03B9\u03B1 \u03C3\u03CD\u03B3\u03BA\u03C1\u03B9\u03C3\u03B7"
     gloss: 0
     tier: 0
+  - key: doc.entry_visa_visas_d_entr_e
+    text: "\u0398\u03B5\u03CE\u03C1\u03B7\u03C3\u03B7 \u03B5\u03B9\u03C3\u03CC\u03B4\u03BF\u03C5
+      \xB7 Visas d'entr\xE9e"
+    gloss: 0
+    tier: 0
+  - key: doc.surname_given_names
+    text: "\u0395\u03C0\u03CE\u03BD\u03C5\u03BC\u03BF / \u038C\u03BD\u03BF\u03BC\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.citizen_id
+    text: "\u03A4\u03B1\u03C5\u03C4\u03CC\u03C4\u03B7\u03C4\u03B1 \u03C0\u03BF\u03BB\u03AF\u03C4\u03B7"
+    gloss: 0
+    tier: 0
+  - key: doc.date_of_birth
+    text: "\u0397\u03BC\u03B5\u03C1\u03BF\u03BC\u03B7\u03BD\u03AF\u03B1 \u03B3\u03AD\u03BD\u03BD\u03B7\u03C3\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.destination_era
+    text: "\u03A0\u03C1\u03BF\u03BF\u03C1\u03B9\u03C3\u03BC\u03CC\u03C2 (\u03B5\u03C0\u03BF\u03C7\u03AE)"
+    gloss: 0
+    tier: 0
+  - key: doc.travel_class
+    text: "\u03A4\u03B1\u03BE\u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03AE \u03BA\u03B1\u03C4\u03B7\u03B3\u03BF\u03C1\u03AF\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.valid_until
+    text: "\u0399\u03C3\u03C7\u03CD\u03B5\u03B9 \u03AD\u03C9\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau
+    text: "\u03A5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1 \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03BF\u03CD
+      \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF\u03C5"
+    gloss: 0
+    tier: 0
+  - key: doc.citizen_travel_passport_passeport_de_voyage_temporel
+    text: "\u03A4\u03B1\u03BE\u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03CC \u03B4\u03B9\u03B1\u03B2\u03B1\u03C4\u03AE\u03C1\u03B9\u03BF
+      \u03C0\u03BF\u03BB\u03AF\u03C4\u03B7 / Passeport de voyage temporel"
+    gloss: 0
+    tier: 0
+  - key: doc.nationality
+    text: "\u03A5\u03C0\u03B7\u03BA\u03BF\u03CC\u03C4\u03B7\u03C4\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.signature
+    text: "\u03A5\u03C0\u03BF\u03B3\u03C1\u03B1\u03C6\u03AE"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder
+    text: "\u0391\u03BD\u03B1\u03BC\u03B5\u03C4\u03B1\u03B4\u03CC\u03C4\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.currency_carried
+    text: "\u039D\u03CC\u03BC\u03B9\u03C3\u03BC\u03B1 \u03C0\u03BF\u03C5 \u03BC\u03B5\u03C4\u03B1\u03C6\u03AD\u03C1\u03B5\u03B9"
+    gloss: 0
+    tier: 0
+  - key: doc.declared_effects
+    text: "\u0394\u03B7\u03BB\u03C9\u03BC\u03AD\u03BD\u03B1 \u03B1\u03BD\u03C4\u03B9\u03BA\u03B5\u03AF\u03BC\u03B5\u03BD\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.departure_date
+    text: "\u0397\u03BC\u03B5\u03C1\u03BF\u03BC\u03B7\u03BD\u03AF\u03B1 \u03B1\u03BD\u03B1\u03C7\u03CE\u03C1\u03B7\u03C3\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_class
+    text: "\u039A\u03B1\u03C4\u03B7\u03B3\u03BF\u03C1\u03AF\u03B1 \u03B1\u03BD\u03B1\u03BC\u03B5\u03C4\u03B1\u03B4\u03CC\u03C4\u03B7"
+    gloss: 0
+    tier: 0
+  - key: doc.entry_ticket
+    text: "\u0395\u03B9\u03C3\u03B9\u03C4\u03AE\u03C1\u03B9\u03BF \u03B5\u03B9\u03C3\u03CC\u03B4\u03BF\u03C5"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_portal_hall_dispatch
+    text: "\u03A5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1 \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03BF\u03CD
+      \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF\u03C5 \xB7 \u0391\u03C0\u03BF\u03C3\u03C4\u03BF\u03BB\u03AE
+      \u0391\u03AF\u03B8\u03BF\u03C5\u03C3\u03B1\u03C2 \u03A0\u03C5\u03BB\u03CE\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.gate
+    text: "\u03A0\u03CD\u03BB\u03B7"
+    gloss: 0
+    tier: 0
+  - key: doc.date
+    text: "\u0397\u03BC\u03B5\u03C1\u03BF\u03BC\u03B7\u03BD\u03AF\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_model
+    text: "\u039C\u03BF\u03BD\u03C4\u03AD\u03BB\u03BF \u03B1\u03BD\u03B1\u03BC\u03B5\u03C4\u03B1\u03B4\u03CC\u03C4\u03B7"
+    gloss: 0
+    tier: 0
+  - key: doc.portal_hall_dispatch_temporal_customs_bureau
+    text: "\u0391\u03C0\u03BF\u03C3\u03C4\u03BF\u03BB\u03AE \u0391\u03AF\u03B8\u03BF\u03C5\u03C3\u03B1\u03C2
+      \u03A0\u03C5\u03BB\u03CE\u03BD \u2022 \u03A5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1
+      \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03BF\u03CD \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF\u03C5"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_card
+    text: "\u039A\u03AC\u03C1\u03C4\u03B1 \u03B1\u03BD\u03B1\u03BC\u03B5\u03C4\u03B1\u03B4\u03CC\u03C4\u03B7"
+    gloss: 0
+    tier: 0
+  - key: doc.traveller
+    text: "\u03A4\u03B1\u03BE\u03B9\u03B4\u03B9\u03CE\u03C4\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_passed_to_kin
+    text: "\u03A7\u03C1\u03AD\u03BF\u03C2 \u03C0\u03BF\u03C5 \u03C0\u03B5\u03C1\u03BD\u03AC
+      \u03C3\u03C4\u03BF\u03C5\u03C2 \u03C3\u03C5\u03B3\u03B3\u03B5\u03BD\u03B5\u03AF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.unsigned
+    text: "\u03A7\u03C9\u03C1\u03AF\u03C2 \u03C5\u03C0\u03BF\u03B3\u03C1\u03B1\u03C6\u03AE"
+    gloss: 0
+    tier: 0
+  - key: doc.office_of_interval_compliance
+    text: "\u0393\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF \u03A3\u03C5\u03BC\u03BC\u03CC\u03C1\u03C6\u03C9\u03C3\u03B7\u03C2
+      \u0394\u03B9\u03B1\u03C3\u03C4\u03B7\u03BC\u03AC\u03C4\u03C9\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.stranding_waiver
+    text: "\u0394\u03AE\u03BB\u03C9\u03C3\u03B7 \u03C0\u03B1\u03C1\u03B1\u03AF\u03C4\u03B7\u03C3\u03B7\u03C2
+      \u03B5\u03B3\u03BA\u03BB\u03C9\u03B2\u03B9\u03C3\u03BC\u03BF\u03CD"
+    gloss: 0
+    tier: 0
+  - key: doc.waiver_no
+    text: "\u0391\u03C1. \u03B4\u03AE\u03BB\u03C9\u03C3\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.by_acknowledgment_of_this_instrument_the_traveller_accepts_a
+    text: "\u039C\u03B5 \u03C4\u03B7\u03BD \u03B1\u03C0\u03BF\u03B4\u03BF\u03C7\u03AE
+      \u03C4\u03BF\u03C5 \u03C0\u03B1\u03C1\u03CC\u03BD\u03C4\u03BF\u03C2 \u03B5\u03B3\u03B3\u03C1\u03AC\u03C6\u03BF\u03C5,
+      \u03BF \u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03CE\u03C4\u03B7\u03C2 \u03B1\u03C0\u03BF\u03B4\u03AD\u03C7\u03B5\u03C4\u03B1\u03B9
+      \u03BA\u03AC\u03B8\u03B5 \u03C7\u03C1\u03BF\u03BD\u03B9\u03BA\u03AE \u03B1\u03BD\u03C9\u03BC\u03B1\u03BB\u03AF\u03B1,
+      \u03C4\u03B1 \u03C4\u03BF\u03C0\u03B9\u03BA\u03AC \u03AD\u03B8\u03B9\u03BC\u03B1
+      \u03BA\u03B1\u03B9 \u03C4\u03B7 \u03BC\u03B5\u03C4\u03B1\u03C4\u03CC\u03C0\u03B9\u03C3\u03B7
+      \u03B4\u03B9\u03B1\u03C3\u03C4\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2 \u03C0\u03BF\u03C5
+      \u03C0\u03C1\u03BF\u03BA\u03CD\u03C0\u03C4\u03BF\u03C5\u03BD \u03B1\u03C0\u03CC
+      \u03C4\u03B7\u03BD \u03B5\u03BA\u03BF\u03CD\u03C3\u03B9\u03B1 \u03B4\u03B9\u03AD\u03BB\u03B5\u03C5\u03C3\u03B7
+      \u03C0\u03AD\u03C1\u03B1 \u03B1\u03C0\u03CC \u03C4\u03BF \u03B5\u03B3\u03BA\u03B5\u03BA\u03C1\u03B9\u03BC\u03AD\u03BD\u03BF
+      \u03C0\u03B1\u03C1\u03CC\u03BD. \u039A\u03B1\u03BD\u03AD\u03BD\u03B1 \u03B4\u03B9\u03AC\u03C3\u03C4\u03B7\u03BC\u03B1
+      \u03B5\u03C0\u03B9\u03C3\u03C4\u03C1\u03BF\u03C6\u03AE\u03C2 \u03B4\u03B5\u03BD
+      \u03B5\u03AF\u03BD\u03B1\u03B9 \u03B5\u03B3\u03B3\u03C5\u03B7\u03BC\u03AD\u03BD\u03BF."
+    gloss: 0
+    tier: 0
+  - key: doc.the_traveller_assumes_responsibility_for_identity_drift_cale
+    text: "\u039F \u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03CE\u03C4\u03B7\u03C2 \u03B1\u03BD\u03B1\u03BB\u03B1\u03BC\u03B2\u03AC\u03BD\u03B5\u03B9
+      \u03C4\u03B7\u03BD \u03B5\u03C5\u03B8\u03CD\u03BD\u03B7 \u03B3\u03B9\u03B1
+      \u03BF\u03BB\u03AF\u03C3\u03B8\u03B7\u03C3\u03B7 \u03C4\u03B1\u03C5\u03C4\u03CC\u03C4\u03B7\u03C4\u03B1\u03C2,
+      \u03B7\u03BC\u03B5\u03C1\u03BF\u03BB\u03BF\u03B3\u03B9\u03B1\u03BA\u03AE \u03B1\u03C0\u03CC\u03BA\u03BB\u03B9\u03C3\u03B7,
+      \u03B1\u03C0\u03BF\u03C3\u03C5\u03B3\u03C7\u03C1\u03BF\u03BD\u03B9\u03C3\u03BC\u03CC
+      \u03BC\u03BD\u03AE\u03BC\u03B7\u03C2 \u03BA\u03B1\u03B9 \u03CC\u03BB\u03B5\u03C2
+      \u03C4\u03B9\u03C2 \u03C3\u03C5\u03BD\u03AE\u03B8\u03B5\u03B9\u03C2 \u03C3\u03C5\u03BD\u03AD\u03C0\u03B5\u03B9\u03B5\u03C2
+      \u03C4\u03B7\u03C2 \u03C0\u03B1\u03C1\u03B1\u03BC\u03BF\u03BD\u03AE\u03C2 \u03C3\u03B5
+      \u03C0\u03C1\u03BF\u03B7\u03B3\u03BF\u03CD\u03BC\u03B5\u03BD\u03B7 \u03B5\u03C0\u03BF\u03C7\u03AE.
+      \u039F\u03B9 \u03B1\u03BE\u03B9\u03CE\u03C3\u03B5\u03B9\u03C2 \u03BA\u03B1\u03C4\u03AC
+      \u03C4\u03B7\u03C2 \u03A5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1\u03C2 \u03B4\u03B5\u03BD
+      \u03B1\u03BD\u03B1\u03C3\u03C4\u03AD\u03BB\u03BB\u03BF\u03C5\u03BD \u03C4\u03BF\u03BD
+      \u03B9\u03C3\u03C7\u03CD\u03BF\u03BD\u03C4\u03B1 \u03B1\u03B9\u03CE\u03BD\u03B1."
+    gloss: 0
+    tier: 0
+  - key: doc.acceptance_confirms_that_the_traveller_has_received_notice_o
+    text: "\u0397 \u03B1\u03C0\u03BF\u03B4\u03BF\u03C7\u03AE \u03B5\u03C0\u03B9\u03B2\u03B5\u03B2\u03B1\u03B9\u03CE\u03BD\u03B5\u03B9
+      \u03CC\u03C4\u03B9 \u03BF \u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03CE\u03C4\u03B7\u03C2
+      \u03AD\u03BB\u03B1\u03B2\u03B5 \u03B3\u03BD\u03CE\u03C3\u03B7 \u03C4\u03C9\u03BD
+      \u03CC\u03C1\u03C9\u03BD \u03C4\u03BF\u03C5 \u03B5\u03B3\u03BA\u03BB\u03C9\u03B2\u03B9\u03C3\u03BC\u03BF\u03CD
+      \u03BA\u03B1\u03B9 \u03C3\u03C5\u03BC\u03C6\u03C9\u03BD\u03B5\u03AF \u03BD\u03B1
+      \u03C0\u03C1\u03BF\u03C7\u03C9\u03C1\u03AE\u03C3\u03B5\u03B9 \u03C7\u03C9\u03C1\u03AF\u03C2
+      \u03C0\u03C1\u03BF\u03C3\u03B4\u03BF\u03BA\u03AF\u03B1 \u03B4\u03B9\u03AC\u03C3\u03C9\u03C3\u03B7\u03C2,
+      \u03B4\u03B9\u03CC\u03C1\u03B8\u03C9\u03C3\u03B7\u03C2 \u03AE \u03B1\u03C0\u03BF\u03BA\u03B1\u03C4\u03AC\u03C3\u03C4\u03B1\u03C3\u03B7\u03C2.
+      \u0397 \u03C0\u03B1\u03C1\u03BF\u03CD\u03C3\u03B1 \u03B4\u03AE\u03BB\u03C9\u03C3\u03B7
+      \u03B9\u03C3\u03C7\u03CD\u03B5\u03B9 \u03C3\u03B5 \u03CC\u03BB\u03B5\u03C2
+      \u03C4\u03B9\u03C2 \u03B1\u03BD\u03B1\u03B3\u03BD\u03C9\u03C1\u03B9\u03C3\u03BC\u03AD\u03BD\u03B5\u03C2
+      \u03C3\u03C5\u03BD\u03AD\u03C7\u03B5\u03B9\u03B5\u03C2."
+    gloss: 0
+    tier: 0
+  - key: doc.holiday_credit_agreement
+    text: "\u03A3\u03CD\u03BC\u03B2\u03B1\u03C3\u03B7 \u03C0\u03AF\u03C3\u03C4\u03C9\u03C3\u03B7\u03C2
+      \u03B4\u03B9\u03B1\u03BA\u03BF\u03C0\u03CE\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs
+    text: "\u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03CC \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF"
+    gloss: 0
+    tier: 0
+  - key: doc.leisure_credit_bureau
+    text: "\u03A5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1 \u03A0\u03AF\u03C3\u03C4\u03C9\u03C3\u03B7\u03C2
+      \u0391\u03BD\u03B1\u03C8\u03C5\u03C7\u03AE\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.borrower
+    text: "\u0394\u03B1\u03BD\u03B5\u03B9\u03BF\u03BB\u03AE\u03C0\u03C4\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.destination
+    text: "\u03A0\u03C1\u03BF\u03BF\u03C1\u03B9\u03C3\u03BC\u03CC\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.account_class
+    text: "\u039A\u03B1\u03C4\u03B7\u03B3\u03BF\u03C1\u03AF\u03B1 \u03BB\u03BF\u03B3\u03B1\u03C1\u03B9\u03B1\u03C3\u03BC\u03BF\u03CD"
+    gloss: 0
+    tier: 0
+  - key: doc.credit_line
+    text: "\u038C\u03C1\u03B9\u03BF \u03C0\u03AF\u03C3\u03C4\u03C9\u03C3\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.issuing_seal
+    text: "\u03A3\u03C6\u03C1\u03B1\u03B3\u03AF\u03B4\u03B1 \u03AD\u03BA\u03B4\u03BF\u03C3\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.1_borrower
+    text: "1  \u0394\u03B1\u03BD\u03B5\u03B9\u03BF\u03BB\u03AE\u03C0\u03C4\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.2_agreement
+    text: "2  \u03A3\u03CD\u03BC\u03B2\u03B1\u03C3\u03B7"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_act_of_2139_any_alteration_voids_this_docum
+    text: "\u039D\u03CC\u03BC\u03BF\u03C2 \u03C0\u03B5\u03C1\u03AF \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03BF\u03CD
+      \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF\u03C5 \u03C4\u03BF\u03C5 2139.
+      \u039A\u03AC\u03B8\u03B5 \u03B1\u03BB\u03BB\u03BF\u03AF\u03C9\u03C3\u03B7 \u03B1\u03BA\u03C5\u03C1\u03CE\u03BD\u03B5\u03B9
+      \u03C4\u03BF \u03C0\u03B1\u03C1\u03CC\u03BD \u03AD\u03B3\u03B3\u03C1\u03B1\u03C6\u03BF."
+    gloss: 0
+    tier: 0
+  - key: doc.for_official_use_desk_stamp
+    text: "\u0393\u03B9\u03B1 \u03C5\u03C0\u03B7\u03C1\u03B5\u03C3\u03B9\u03B1\u03BA\u03AE
+      \u03C7\u03C1\u03AE\u03C3\u03B7 \xB7 \u03A3\u03C4\u03AC\u03BC\u03C0\u03B1 \u03B3\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF\u03C5"
+    gloss: 0
+    tier: 0
+  - key: doc.issued_by_0
+    text: "\u0395\u03BA\u03B4\u03CC\u03B8\u03B7\u03BA\u03B5 \u03B1\u03C0\u03CC {0}"
+    gloss: 0
+    tier: 0
+  - key: doc.proof_of_funds
+    text: "\u0391\u03C0\u03BF\u03B4\u03B5\u03B9\u03BA\u03C4\u03B9\u03BA\u03CC \u03BA\u03B5\u03C6\u03B1\u03BB\u03B1\u03AF\u03C9\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.account_holder
+    text: "\u0394\u03B9\u03BA\u03B1\u03B9\u03BF\u03CD\u03C7\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.funds_held
+    text: "\u0394\u03B9\u03B1\u03B8\u03AD\u03C3\u03B9\u03BC\u03B1 \u03BA\u03B5\u03C6\u03AC\u03BB\u03B1\u03B9\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.1_account_holder
+    text: "1  \u0394\u03B9\u03BA\u03B1\u03B9\u03BF\u03CD\u03C7\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.2_funds
+    text: "2  \u039A\u03B5\u03C6\u03AC\u03BB\u03B1\u03B9\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.travel_insurance_certificate
+    text: "\u03A0\u03B9\u03C3\u03C4\u03BF\u03C0\u03BF\u03B9\u03B7\u03C4\u03B9\u03BA\u03CC
+      \u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03AE\u03C2 \u03B1\u03C3\u03C6\u03AC\u03BB\u03B9\u03C3\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.transit_insurance_desk
+    text: "\u0393\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF \u0391\u03C3\u03C6\u03AC\u03BB\u03B9\u03C3\u03B7\u03C2
+      \u0394\u03B9\u03AD\u03BB\u03B5\u03C5\u03C3\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.insured
+    text: "\u0391\u03C3\u03C6\u03B1\u03BB\u03B9\u03C3\u03BC\u03AD\u03BD\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.policy_no
+    text: "\u0391\u03C1. \u03B1\u03C3\u03C6\u03B1\u03BB\u03B9\u03C3\u03C4\u03B7\u03C1\u03AF\u03BF\u03C5"
+    gloss: 0
+    tier: 0
+  - key: doc.1_insured
+    text: "1  \u0391\u03C3\u03C6\u03B1\u03BB\u03B9\u03C3\u03BC\u03AD\u03BD\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.2_policy
+    text: "2  \u0391\u03C3\u03C6\u03B1\u03BB\u03B9\u03C3\u03C4\u03AE\u03C1\u03B9\u03BF"
+    gloss: 0
+    tier: 0
+  - key: doc.worker
+    text: "\u0395\u03C1\u03B3\u03B1\u03B6\u03CC\u03BC\u03B5\u03BD\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.employer
+    text: "\u0395\u03C1\u03B3\u03BF\u03B4\u03CC\u03C4\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.place_of_work_era
+    text: "\u03A4\u03CC\u03C0\u03BF\u03C2 \u03B5\u03C1\u03B3\u03B1\u03C3\u03AF\u03B1\u03C2
+      (\u03B5\u03C0\u03BF\u03C7\u03AE)"
+    gloss: 0
+    tier: 0
+  - key: doc.term
+    text: "\u0394\u03B9\u03AC\u03C1\u03BA\u03B5\u03B9\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.wage
+    text: "\u039C\u03B9\u03C3\u03B8\u03CC\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.ministry_of_recovery_debt_relief_office
+    text: "\u03A5\u03C0\u03BF\u03C5\u03C1\u03B3\u03B5\u03AF\u03BF \u0391\u03BD\u03AC\u03BA\u03B1\u03BC\u03C8\u03B7\u03C2
+      \xB7 \u0393\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF \u0395\u03BB\u03AC\u03C6\u03C1\u03C5\u03BD\u03C3\u03B7\u03C2
+      \u03A7\u03C1\u03AD\u03BF\u03C5\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.work_permit_debt_relief_labour
+    text: "\u0386\u03B4\u03B5\u03B9\u03B1 \u03B5\u03C1\u03B3\u03B1\u03C3\u03AF\u03B1\u03C2
+      \u2013 \u0395\u03C1\u03B3\u03B1\u03C3\u03AF\u03B1 \u0395\u03BB\u03AC\u03C6\u03C1\u03C5\u03BD\u03C3\u03B7\u03C2
+      \u03A7\u03C1\u03AD\u03BF\u03C5\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.authorised_by
+    text: "\u0395\u03B3\u03BA\u03C1\u03AF\u03B8\u03B7\u03BA\u03B5 \u03B1\u03C0\u03CC"
+    gloss: 0
+    tier: 0
+  - key: doc.holder
+    text: "\u039A\u03AC\u03C4\u03BF\u03C7\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.registry_id
+    text: "\u0391\u03C1. \u03BC\u03B7\u03C4\u03C1\u03CE\u03BF\u03C5"
+    gloss: 0
+    tier: 0
+  - key: doc.origin_era
+    text: "\u03A0\u03C1\u03BF\u03AD\u03BB\u03B5\u03C5\u03C3\u03B7 (\u03B5\u03C0\u03BF\u03C7\u03AE)"
+    gloss: 0
+    tier: 0
+  - key: doc.incident
+    text: "\u03A3\u03C5\u03BC\u03B2\u03AC\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_registry_temporal_customs_bureau
+    text: "\u039C\u03B7\u03C4\u03C1\u03CE\u03BF \u0395\u03BA\u03C4\u03BF\u03C0\u03B9\u03C3\u03BC\u03AD\u03BD\u03C9\u03BD
+      \xB7 \u03A5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1 \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03BF\u03CD
+      \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF\u03C5"
+    gloss: 0
+    tier: 0
+  - key: doc.travel_permit
+    text: "\u0386\u03B4\u03B5\u03B9\u03B1 \u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03BF\u03CD"
+    gloss: 0
+    tier: 0
+  - key: doc.language_spoken
+    text: "\u039F\u03BC\u03B9\u03BB\u03BF\u03CD\u03BC\u03B5\u03BD\u03B7 \u03B3\u03BB\u03CE\u03C3\u03C3\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.technology_carried
+    text: "\u03A4\u03B5\u03C7\u03BD\u03BF\u03BB\u03BF\u03B3\u03AF\u03B1 \u03C0\u03BF\u03C5
+      \u03BC\u03B5\u03C4\u03B1\u03C6\u03AD\u03C1\u03B5\u03B9"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_return_intake
+    text: "\u03A5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1 \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03BF\u03CD
+      \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF\u03C5 \xB7 \u03A5\u03C0\u03BF\u03B4\u03BF\u03C7\u03AE
+      \u0395\u03C0\u03B9\u03C3\u03C4\u03C1\u03BF\u03C6\u03CE\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.intake_declaration
+    text: "\u0394\u03AE\u03BB\u03C9\u03C3\u03B7 \u03C5\u03C0\u03BF\u03B4\u03BF\u03C7\u03AE\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.nothing_to_declare
+    text: "\u03A4\u03AF\u03C0\u03BF\u03C4\u03B1 \u03C0\u03C1\u03BF\u03C2 \u03B4\u03AE\u03BB\u03C9\u03C3\u03B7"
+    gloss: 0
+    tier: 0
+  - key: doc.goods
+    text: "\u0391\u03B3\u03B1\u03B8\u03AC"
+    gloss: 0
+    tier: 0
+  - key: doc.persons
+    text: "\u03A0\u03C1\u03CC\u03C3\u03C9\u03C0\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.knowledge
+    text: "\u0393\u03BD\u03CE\u03C3\u03B5\u03B9\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.declarant_signature
+    text: "\u03A5\u03C0\u03BF\u03B3\u03C1\u03B1\u03C6\u03AE \u03B4\u03B7\u03BB\u03BF\u03CD\u03BD\u03C4\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.recalled_traveller
+    text: "\u0391\u03BD\u03B1\u03BA\u03BB\u03B7\u03B8\u03B5\u03AF\u03C2 \u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03CE\u03C4\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.return_to
+    text: "\u0395\u03C0\u03B9\u03C3\u03C4\u03C1\u03BF\u03C6\u03AE \u03C3\u03B5"
+    gloss: 0
+    tier: 0
+  - key: doc.return_by_date
+    text: "\u0395\u03C0\u03B9\u03C3\u03C4\u03C1\u03BF\u03C6\u03AE \u03AD\u03C9\u03C2
+      (\u03B7\u03BC\u03B5\u03C1\u03BF\u03BC\u03B7\u03BD\u03AF\u03B1)"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_directorate_of_returns
+    text: "\xB7 \u03A5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1 \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03BF\u03CD
+      \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF\u03C5 \xB7 \u0394\u03B9\u03B5\u03CD\u03B8\u03C5\u03BD\u03C3\u03B7
+      \u0395\u03C0\u03B9\u03C3\u03C4\u03C1\u03BF\u03C6\u03CE\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.return_order
+    text: "\u0395\u03BD\u03C4\u03BF\u03BB\u03AE \u03B5\u03C0\u03B9\u03C3\u03C4\u03C1\u03BF\u03C6\u03AE\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.order_no
+    text: "\u0391\u03C1. \u03B5\u03BD\u03C4\u03BF\u03BB\u03AE\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.authorized_by
+    text: "\u0395\u03B3\u03BA\u03C1\u03AF\u03B8\u03B7\u03BA\u03B5 \u03B1\u03C0\u03CC"
+    gloss: 0
+    tier: 0
+  - key: doc.deviation_report
+    text: "\u0391\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03B1\u03C0\u03BF\u03BA\u03BB\u03AF\u03C3\u03B5\u03C9\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief_departures
+    text: "\u0391\u03BD\u03B1\u03C7\u03C9\u03C1\u03AE\u03C3\u03B5\u03B9\u03C2 \u0395\u03BB\u03AC\u03C6\u03C1\u03C5\u03BD\u03C3\u03B7\u03C2
+      \u03A7\u03C1\u03AD\u03BF\u03C5\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.statement
+    text: "\u0394\u03AE\u03BB\u03C9\u03C3\u03B7"
+    gloss: 0
+    tier: 0
+  - key: doc.contradicted_by
+    text: "\u0394\u03B9\u03B1\u03C8\u03B5\u03CD\u03B4\u03B5\u03C4\u03B1\u03B9 \u03B1\u03C0\u03CC"
+    gloss: 0
+    tier: 0
+  - key: doc.desk_officer
+    text: "\u03A5\u03C0\u03AC\u03BB\u03BB\u03B7\u03BB\u03BF\u03C2 \u03B3\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF\u03C5"
+    gloss: 0
+    tier: 0
+  - key: doc.a_deviation_is_documented_once_per_category_denial_on_docume
+    text: "\u039A\u03AC\u03B8\u03B5 \u03B1\u03C0\u03CC\u03BA\u03BB\u03B9\u03C3\u03B7
+      \u03C4\u03B5\u03BA\u03BC\u03B7\u03C1\u03B9\u03CE\u03BD\u03B5\u03C4\u03B1\u03B9
+      \u03BC\u03AF\u03B1 \u03C6\u03BF\u03C1\u03AC \u03B1\u03BD\u03AC \u03BA\u03B1\u03C4\u03B7\u03B3\u03BF\u03C1\u03AF\u03B1.
+      \u0397 \u03B1\u03C0\u03CC\u03C1\u03C1\u03B9\u03C8\u03B7 \u03B2\u03AC\u03C3\u03B5\u03B9
+      \u03C4\u03B5\u03BA\u03BC\u03B7\u03C1\u03B9\u03C9\u03BC\u03AD\u03BD\u03C9\u03BD
+      \u03B1\u03C0\u03BF\u03BA\u03BB\u03AF\u03C3\u03B5\u03C9\u03BD \u03B4\u03B9\u03BA\u03B1\u03B9\u03BF\u03BB\u03BF\u03B3\u03B5\u03AF\u03C4\u03B1\u03B9
+      \u03B1\u03C0\u03CC \u03C4\u03BF\u03BD \u039D\u03CC\u03BC\u03BF \u03C0\u03B5\u03C1\u03AF
+      \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03BF\u03CD \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF\u03C5
+      \u03C4\u03BF\u03C5 2139."
+    gloss: 0
+    tier: 0
+  - key: doc.directive_memo
+    text: "\u03A3\u03B7\u03BC\u03B5\u03AF\u03C9\u03BC\u03B1 \u03BF\u03B4\u03B7\u03B3\u03B9\u03CE\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.to
+    text: "\u03A0\u03C1\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.from
+    text: "\u0391\u03C0\u03CC"
+    gloss: 0
+    tier: 0
+  - key: doc.ref
+    text: "\u03A3\u03C7\u03B5\u03C4."
+    gloss: 0
+    tier: 0
+  - key: doc.no
+    text: "\u0391\u03C1."
+    gloss: 0
+    tier: 0
+  - key: doc.directive
+    text: "\u039F\u03B4\u03B7\u03B3\u03AF\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.issued_by_the_customs_directorate
+    text: "\u0395\u03BA\u03B4\u03CC\u03B8\u03B7\u03BA\u03B5 \u03B1\u03C0\u03CC \u03C4\u03B7
+      \u0394\u03B9\u03B5\u03CD\u03B8\u03C5\u03BD\u03C3\u03B7 \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF\u03C5"
+    gloss: 0
+    tier: 0
+  - key: doc.interview_record
+    text: "\u03A0\u03C1\u03B1\u03BA\u03C4\u03B9\u03BA\u03AC \u03C3\u03C5\u03BD\u03AD\u03BD\u03C4\u03B5\u03C5\u03BE\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.speaker
+    text: "\u039F\u03BC\u03B9\u03BB\u03B7\u03C4\u03AE\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.taken_down_in_english_by_the_desk_officer_a_statement_in_the
+    text: "\u039A\u03B1\u03C4\u03B1\u03B3\u03C1\u03AC\u03C6\u03B7\u03BA\u03B5 \u03C3\u03C4\u03B1
+      \u03B1\u03B3\u03B3\u03BB\u03B9\u03BA\u03AC \u03B1\u03C0\u03CC \u03C4\u03BF\u03BD
+      \u03C5\u03C0\u03AC\u03BB\u03BB\u03B7\u03BB\u03BF \u03B3\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF\u03C5.
+      \u039C\u03B9\u03B1 \u03B4\u03AE\u03BB\u03C9\u03C3\u03B7 \u03C3\u03C4\u03B7
+      \u03B3\u03BB\u03CE\u03C3\u03C3\u03B1 \u03C4\u03BF\u03C5 \u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03CE\u03C4\u03B7
+      \u03BA\u03B1\u03C4\u03B1\u03B3\u03C1\u03AC\u03C6\u03B5\u03C4\u03B1\u03B9 \u03CC\u03C0\u03C9\u03C2
+      \u03B5\u03B9\u03C0\u03CE\u03B8\u03B7\u03BA\u03B5. \u039C\u03CC\u03BD\u03BF
+      \u03BF\u03B9 \u03B1\u03C0\u03B1\u03BD\u03C4\u03AE\u03C3\u03B5\u03B9\u03C2 \u03C4\u03BF\u03C5
+      \u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03CE\u03C4\u03B7 \u03B1\u03C0\u03BF\u03C4\u03B5\u03BB\u03BF\u03CD\u03BD
+      \u03B1\u03C0\u03BF\u03B4\u03B5\u03B9\u03BA\u03C4\u03B9\u03BA\u03AC."
+    gloss: 0
+    tier: 0
+  - key: doc.internal_memorandum
+    text: "\u0395\u03C3\u03C9\u03C4\u03B5\u03C1\u03B9\u03BA\u03CC \u03C3\u03B7\u03BC\u03B5\u03AF\u03C9\u03BC\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.subject
+    text: "\u0398\u03AD\u03BC\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.signed_for_the_sender
+    text: "\u03A5\u03C0\u03BF\u03B3\u03C1\u03B1\u03C6\u03AE \u03B3\u03B9\u03B1 \u03C4\u03BF\u03BD
+      \u03B1\u03C0\u03BF\u03C3\u03C4\u03BF\u03BB\u03AD\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.portal_schedule
+    text: "\u03A0\u03C1\u03CC\u03B3\u03C1\u03B1\u03BC\u03BC\u03B1 \u03C0\u03C5\u03BB\u03CE\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.ring
+    text: "\u0394\u03B1\u03BA\u03C4\u03CD\u03BB\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.era
+    text: "\u0395\u03C0\u03BF\u03C7\u03AE"
+    gloss: 0
+    tier: 0
+  - key: doc.place
+    text: "\u03A4\u03CC\u03C0\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.state
+    text: "\u039A\u03B1\u03C4\u03AC\u03C3\u03C4\u03B1\u03C3\u03B7"
+    gloss: 0
+    tier: 0
+  - key: doc.record_extract
+    text: "\u0391\u03C0\u03CC\u03C3\u03C0\u03B1\u03C3\u03BC\u03B1 \u03B1\u03C1\u03C7\u03B5\u03AF\u03BF\u03C5"
+    gloss: 0
+    tier: 0
+  - key: doc.an_extract_of_the_records_of_temporal_customs_true_on_the_da
+    text: "\u0391\u03C0\u03CC\u03C3\u03C0\u03B1\u03C3\u03BC\u03B1 \u03B1\u03C0\u03CC
+      \u03C4\u03B1 \u03B1\u03C1\u03C7\u03B5\u03AF\u03B1 \u03C4\u03BF\u03C5 \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03BF\u03CD
+      \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF\u03C5, \u03B1\u03BA\u03C1\u03B9\u03B2\u03AD\u03C2
+      \u03C4\u03B7\u03BD \u03B7\u03BC\u03AD\u03C1\u03B1 \u03AD\u03BA\u03B4\u03BF\u03C3\u03B7\u03C2."
+    gloss: 0
+    tier: 0
+  - key: doc.register
+    text: "\u039C\u03B7\u03C4\u03C1\u03CE\u03BF"
+    gloss: 0
+    tier: 0
+  - key: doc.value
+    text: "\u03A4\u03B9\u03BC\u03AE"
+    gloss: 0
+    tier: 0
+  - key: doc.note
+    text: "\u03A3\u03B7\u03BC\u03B5\u03AF\u03C9\u03C3\u03B7"
+    gloss: 0
+    tier: 0
+  - key: doc.compiled_by_temporal_customs_from_the_day_s_historical_recor
+    text: "\u03A3\u03C5\u03BD\u03C4\u03AC\u03C7\u03B8\u03B7\u03BA\u03B5 \u03B1\u03C0\u03CC
+      \u03C4\u03BF \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03CC \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF
+      \u03BC\u03B5 \u03B2\u03AC\u03C3\u03B7 \u03C4\u03BF \u03B9\u03C3\u03C4\u03BF\u03C1\u03B9\u03BA\u03CC
+      \u03B1\u03C1\u03C7\u03B5\u03AF\u03BF \u03C4\u03B7\u03C2 \u03B7\u03BC\u03AD\u03C1\u03B1\u03C2.
+      \u039F\u03B9 \u03B1\u03BD\u03B1\u03B8\u03B5\u03C9\u03C1\u03B7\u03BC\u03AD\u03BD\u03B5\u03C2
+      \u03B5\u03B3\u03B3\u03C1\u03B1\u03C6\u03AD\u03C2 \u03B5\u03C0\u03B9\u03C3\u03B7\u03BC\u03B1\u03AF\u03BD\u03BF\u03BD\u03C4\u03B1\u03B9."
+    gloss: 0
+    tier: 0
+  - key: doc.supply_requisition
+    text: "\u0391\u03AF\u03C4\u03B7\u03C3\u03B7 \u03C0\u03C1\u03BF\u03BC\u03AE\u03B8\u03B5\u03B9\u03B1\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.item
+    text: "\u0391\u03BD\u03C4\u03B9\u03BA\u03B5\u03AF\u03BC\u03B5\u03BD\u03BF"
+    gloss: 0
+    tier: 0
+  - key: doc.section
+    text: "\u03A4\u03BC\u03AE\u03BC\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.price
+    text: "\u03A4\u03B9\u03BC\u03AE"
+    gloss: 0
+    tier: 0
+  - key: doc.status
+    text: "\u039A\u03B1\u03C4\u03AC\u03C3\u03C4\u03B1\u03C3\u03B7"
+    gloss: 0
+    tier: 0
+  - key: doc.requires
+    text: "\u0391\u03C0\u03B1\u03B9\u03C4\u03B5\u03AF"
+    gloss: 0
+    tier: 0
+  - key: doc.paid_on_order_delivered_at_the_start_of_the_next_shift_an_or
+    text: "\u03A0\u03BB\u03B7\u03C1\u03CE\u03BD\u03B5\u03C4\u03B1\u03B9 \u03BC\u03B5
+      \u03C4\u03B7\u03BD \u03C0\u03B1\u03C1\u03B1\u03B3\u03B3\u03B5\u03BB\u03AF\u03B1.
+      \u03A0\u03B1\u03C1\u03B1\u03B4\u03AF\u03B4\u03B5\u03C4\u03B1\u03B9 \u03C3\u03C4\u03B7\u03BD
+      \u03B1\u03C1\u03C7\u03AE \u03C4\u03B7\u03C2 \u03B5\u03C0\u03CC\u03BC\u03B5\u03BD\u03B7\u03C2
+      \u03B2\u03AC\u03C1\u03B4\u03B9\u03B1\u03C2. \u039C\u03B9\u03B1 \u03C0\u03B1\u03C1\u03B1\u03B3\u03B3\u03B5\u03BB\u03AF\u03B1
+      \u03B1\u03BA\u03C5\u03C1\u03CE\u03BD\u03B5\u03C4\u03B1\u03B9 \u03BA\u03B1\u03B9
+      \u03B5\u03C0\u03B9\u03C3\u03C4\u03C1\u03AD\u03C6\u03BF\u03BD\u03C4\u03B1\u03B9
+      \u03C4\u03B1 \u03C7\u03C1\u03AE\u03BC\u03B1\u03C4\u03B1 \u03BC\u03CC\u03BD\u03BF
+      \u03C4\u03B7\u03BD \u03B7\u03BC\u03AD\u03C1\u03B1 \u03C0\u03BF\u03C5 \u03B3\u03AF\u03BD\u03B5\u03C4\u03B1\u03B9."
+    gloss: 0
+    tier: 0
+  - key: doc.seal_register
+    text: "\u039C\u03B7\u03C4\u03C1\u03CE\u03BF \u03C3\u03C6\u03C1\u03B1\u03B3\u03AF\u03B4\u03C9\u03BD"
+    gloss: 0
+    tier: 0
+  - key: doc.every_paper_carries_the_seal_of_the_office_that_issues_it_ho
+    text: "\u039A\u03AC\u03B8\u03B5 \u03AD\u03B3\u03B3\u03C1\u03B1\u03C6\u03BF \u03C6\u03AD\u03C1\u03B5\u03B9
+      \u03C4\u03B7 \u03C3\u03C6\u03C1\u03B1\u03B3\u03AF\u03B4\u03B1 \u03C4\u03B7\u03C2
+      \u03C5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1\u03C2 \u03C0\u03BF\u03C5 \u03C4\u03BF
+      \u03B5\u03BA\u03B4\u03AF\u03B4\u03B5\u03B9. \u03A3\u03CD\u03B3\u03BA\u03C1\u03B9\u03BD\u03B5
+      \u03B5\u03B4\u03CE \u03C4\u03B7 \u03C3\u03C6\u03C1\u03B1\u03B3\u03AF\u03B4\u03B1
+      \u03B5\u03BD\u03CC\u03C2 \u03B5\u03B3\u03B3\u03C1\u03AC\u03C6\u03BF\u03C5 \u03BC\u03B5
+      \u03B5\u03BA\u03B5\u03AF\u03BD\u03B7 \u03C4\u03B7\u03C2 \u03C5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1\u03C2
+      \u03C4\u03BF\u03C5: \u03AC\u03BB\u03BB\u03BF \u03C0\u03B5\u03C1\u03AF\u03B3\u03C1\u03B1\u03BC\u03BC\u03B1,
+      \u03BC\u03B5\u03BB\u03AC\u03BD\u03B9 \u03AE \u03B5\u03C0\u03B9\u03B3\u03C1\u03B1\u03C6\u03AE
+      \u03C3\u03B7\u03BC\u03B1\u03AF\u03BD\u03B5\u03B9 \u03C0\u03BB\u03B1\u03C3\u03C4\u03BF\u03B3\u03C1\u03B1\u03C6\u03AF\u03B1."
+    gloss: 0
+    tier: 0
+  - key: doc.compiled_by_temporal_customs_from_the_offices_seal_books_a_s
+    text: "\u03A3\u03C5\u03BD\u03C4\u03AC\u03C7\u03B8\u03B7\u03BA\u03B5 \u03B1\u03C0\u03CC
+      \u03C4\u03BF \u03A7\u03C1\u03BF\u03BD\u03B9\u03BA\u03CC \u03A4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF
+      \u03BC\u03B5 \u03B2\u03AC\u03C3\u03B7 \u03C4\u03B1 \u03B2\u03B9\u03B2\u03BB\u03AF\u03B1
+      \u03C3\u03C6\u03C1\u03B1\u03B3\u03AF\u03B4\u03C9\u03BD \u03C4\u03C9\u03BD \u03C5\u03C0\u03B7\u03C1\u03B5\u03C3\u03B9\u03CE\u03BD.
+      \u0397 \u03C3\u03C6\u03C1\u03B1\u03B3\u03AF\u03B4\u03B1 \u03C4\u03C5\u03C0\u03CE\u03BD\u03B5\u03C4\u03B1\u03B9,
+      \u03C0\u03BF\u03C4\u03AD \u03B4\u03B5\u03BD \u03BC\u03C0\u03B1\u03AF\u03BD\u03B5\u03B9
+      \u03BC\u03B5 \u03C4\u03BF \u03C7\u03AD\u03C1\u03B9."
+    gloss: 0
+    tier: 0
+  - key: doc.day
+    text: "\u0397\u03BC\u03AD\u03C1\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.wages
+    text: "\u039C\u03B9\u03C3\u03B8\u03BF\u03AF"
+    gloss: 0
+    tier: 0
+  - key: doc.fines
+    text: "\u03A0\u03C1\u03CC\u03C3\u03C4\u03B9\u03BC\u03B1"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief
+    text: "\u0395\u03BB\u03AC\u03C6\u03C1\u03C5\u03BD\u03C3\u03B7 \u03C7\u03C1\u03AD\u03BF\u03C5\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.household
+    text: "\u039D\u03BF\u03B9\u03BA\u03BF\u03BA\u03C5\u03C1\u03B9\u03CC"
+    gloss: 0
+    tier: 0
+  - key: doc.purchases
+    text: "\u0391\u03B3\u03BF\u03C1\u03AD\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.balance
+    text: "\u03A5\u03C0\u03CC\u03BB\u03BF\u03B9\u03C0\u03BF"
+    gloss: 0
+    tier: 0
+  - key: doc.owed
+    text: "\u039F\u03C6\u03B5\u03B9\u03BB\u03AE"
+    gloss: 0
+    tier: 0
+  - key: doc.departures_are_voluntary
+    text: "\u039F\u03B9 \u03B1\u03BD\u03B1\u03C7\u03C9\u03C1\u03AE\u03C3\u03B5\u03B9\u03C2
+      \u03B5\u03AF\u03BD\u03B1\u03B9 \u03B5\u03B8\u03B5\u03BB\u03BF\u03BD\u03C4\u03B9\u03BA\u03AD\u03C2."
+    gloss: 0
+    tier: 0
+  - key: doc.scanned_0_desk_scanner_1
+    text: "\u03A3\u03B1\u03C1\u03CE\u03B8\u03B7\u03BA\u03B5 {0} \xB7 \u03A3\u03B1\u03C1\u03C9\u03C4\u03AE\u03C2
+      \u03B3\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF\u03C5 1"
+    gloss: 0
+    tier: 0
+  - key: doc.analysed_0_1_contradiction_marked
+    text: "\u0391\u03BD\u03B1\u03BB\u03CD\u03B8\u03B7\u03BA\u03B5 {0} \xB7 1 \u03B1\u03BD\u03C4\u03AF\u03C6\u03B1\u03C3\u03B7
+      \u03C3\u03B7\u03BC\u03B5\u03B9\u03CE\u03B8\u03B7\u03BA\u03B5"
+    gloss: 0
+    tier: 0
+  - key: doc.analysed_0
+    text: "\u0391\u03BD\u03B1\u03BB\u03CD\u03B8\u03B7\u03BA\u03B5 {0} \xB7"
+    gloss: 0
+    tier: 0
+  - key: doc.scanned_0_already_analysed
+    text: "\u03A3\u03B1\u03C1\u03CE\u03B8\u03B7\u03BA\u03B5 {0} \xB7 \u0388\u03C7\u03B5\u03B9
+      \u03AE\u03B4\u03B7 \u03B1\u03BD\u03B1\u03BB\u03C5\u03B8\u03B5\u03AF"
+    gloss: 0
+    tier: 0
+  - key: doc.approved
+    text: "\u0395\u03B3\u03BA\u03C1\u03AF\u03B8\u03B7\u03BA\u03B5"
+    gloss: 0
+    tier: 0
+  - key: doc.denied
+    text: "\u0391\u03C0\u03BF\u03C1\u03C1\u03AF\u03C6\u03B8\u03B7\u03BA\u03B5"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.0
+    text: "\u039A\u03C5\u03C1\u03B9\u03B1\u03BA\u03AE"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.0
+    text: "\u039A\u03C5\u03C1"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.1
+    text: "\u0394\u03B5\u03C5\u03C4\u03AD\u03C1\u03B1"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.1
+    text: "\u0394\u03B5\u03C5"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.2
+    text: "\u03A4\u03C1\u03AF\u03C4\u03B7"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.2
+    text: "\u03A4\u03C1\u03AF"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.3
+    text: "\u03A4\u03B5\u03C4\u03AC\u03C1\u03C4\u03B7"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.3
+    text: "\u03A4\u03B5\u03C4"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.4
+    text: "\u03A0\u03AD\u03BC\u03C0\u03C4\u03B7"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.4
+    text: "\u03A0\u03AD\u03BC"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.5
+    text: "\u03A0\u03B1\u03C1\u03B1\u03C3\u03BA\u03B5\u03C5\u03AE"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.5
+    text: "\u03A0\u03B1\u03C1"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.6
+    text: "\u03A3\u03AC\u03B2\u03B2\u03B1\u03C4\u03BF"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.6
+    text: "\u03A3\u03AC\u03B2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.1
+    text: "\u0399\u03B1\u03BD\u03BF\u03C5\u03AC\u03C1\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.2
+    text: "\u03A6\u03B5\u03B2\u03C1\u03BF\u03C5\u03AC\u03C1\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.3
+    text: "\u039C\u03AC\u03C1\u03C4\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.4
+    text: "\u0391\u03C0\u03C1\u03AF\u03BB\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.5
+    text: "\u039C\u03AC\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.6
+    text: "\u0399\u03BF\u03CD\u03BD\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.7
+    text: "\u0399\u03BF\u03CD\u03BB\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.8
+    text: "\u0391\u03CD\u03B3\u03BF\u03C5\u03C3\u03C4\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.9
+    text: "\u03A3\u03B5\u03C0\u03C4\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.10
+    text: "\u039F\u03BA\u03C4\u03CE\u03B2\u03C1\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.11
+    text: "\u039D\u03BF\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.12
+    text: "\u0394\u03B5\u03BA\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: doc.clerk_s_rulebook_desk_3
+    text: "\u039A\u03B1\u03BD\u03BF\u03BD\u03B9\u03C3\u03BC\u03CC\u03C2 \u03A5\u03C0\u03B1\u03BB\u03BB\u03AE\u03BB\u03BF\u03C5
+      \xB7 DESK 3"
+    gloss: 0
+    tier: 0
   words:
   - native: "\u03C3\u03B2\u03AE\u03C3\u03B9\u03BC\u03BF"
     english: Turn off
@@ -5344,3 +6138,301 @@ MonoBehaviour:
     english: storage
   - native: "\u03C0\u03BB\u03B1\u03B9\u03C3\u03AF\u03C9\u03BD"
     english: panes
+  - native: Passeport
+    english: passport (French)
+  - native: Visas
+    english: visas (French)
+  - native: "d'entr\xE9e"
+    english: of entry (French)
+  - native: de
+    english: of (French)
+  - native: temporel
+    english: temporal (French)
+  - native: voyage
+    english: travel (French)
+  - native: "\u03CC\u03C1\u03B9\u03BF"
+    english: limit
+  - native: "\u03B1\u03AF\u03B8\u03BF\u03C5\u03C3\u03B1\u03C2"
+    english: hall
+  - native: "\u03B1\u03AF\u03C4\u03B7\u03C3\u03B7"
+    english: requisition
+  - native: "\u03B1\u03BD\u03AC\u03BA\u03B1\u03BC\u03C8\u03B7\u03C2"
+    english: recovery
+  - native: "\u03B1\u03BD\u03B1\u03BA\u03BB\u03B7\u03B8\u03B5\u03AF\u03C2"
+    english: recalled
+  - native: "\u03B1\u03BD\u03B1\u03BB\u03CD\u03B8\u03B7\u03BA\u03B5"
+    english: analysed
+  - native: "\u03B1\u03C0\u03BF\u03C3\u03C4\u03BF\u03BB\u03AE"
+    english: dispatch
+  - native: "\u03B1\u03C3\u03C6\u03B1\u03BB\u03B9\u03C3\u03BC\u03AD\u03BD\u03BF\u03C2"
+    english: insured
+  - native: "\u03B1\u03C3\u03C6\u03B1\u03BB\u03B9\u03C3\u03C4\u03AE\u03C1\u03B9\u03BF"
+    english: policy
+  - native: "\u03B4\u03B1\u03BD\u03B5\u03B9\u03BF\u03BB\u03AE\u03C0\u03C4\u03B7\u03C2"
+    english: borrower
+  - native: "\u03B4\u03B7\u03BB\u03C9\u03BC\u03AD\u03BD\u03B1"
+    english: declared
+  - native: "\u03B4\u03B9\u03AD\u03BB\u03B5\u03C5\u03C3\u03B7\u03C2"
+    english: transit
+  - native: "\u03B4\u03B9\u03B1\u03B8\u03AD\u03C3\u03B9\u03BC\u03B1"
+    english: held
+  - native: "\u03B4\u03B9\u03B1\u03C3\u03C4\u03B7\u03BC\u03AC\u03C4\u03C9\u03BD"
+    english: intervals
+  - native: "\u03B4\u03B9\u03B1\u03C8\u03B5\u03CD\u03B4\u03B5\u03C4\u03B1\u03B9"
+    english: is contradicted
+  - native: "\u03B5\u03B3\u03BA\u03C1\u03AF\u03B8\u03B7\u03BA\u03B5"
+    english: approved
+  - native: "\u03B5\u03B9\u03C3\u03B9\u03C4\u03AE\u03C1\u03B9\u03BF"
+    english: ticket
+  - native: "\u03B5\u03BA\u03B4\u03CC\u03B8\u03B7\u03BA\u03B5"
+    english: issued
+  - native: "\u03B5\u03C0\u03B9\u03C3\u03C4\u03C1\u03BF\u03C6\u03CE\u03BD"
+    english: returns
+  - native: "\u03B5\u03C0\u03CE\u03BD\u03C5\u03BC\u03BF"
+    english: surname
+  - native: "\u03B5\u03C3\u03C9\u03C4\u03B5\u03C1\u03B9\u03BA\u03CC"
+    english: internal
+  - native: "\u03B8\u03B5\u03CE\u03C1\u03B7\u03C3\u03B7"
+    english: visa
+  - native: "\u03BA\u03B5\u03C6\u03AC\u03BB\u03B1\u03B9\u03B1"
+    english: funds
+  - native: "\u03BC\u03BF\u03BD\u03C4\u03AD\u03BB\u03BF"
+    english: model
+  - native: "\u03BD\u03CC\u03BC\u03BF\u03C2"
+    english: act
+  - native: "\u03BF\u03BC\u03B9\u03BB\u03BF\u03CD\u03BC\u03B5\u03BD\u03B7"
+    english: spoken
+  - native: "\u03C0\u03AF\u03C3\u03C4\u03C9\u03C3\u03B7\u03C2"
+    english: credit
+  - native: "\u03C0\u03B1\u03C1\u03B1\u03B4\u03AF\u03B4\u03B5\u03C4\u03B1\u03B9"
+    english: is delivered
+  - native: "\u03C0\u03B9\u03C3\u03C4\u03BF\u03C0\u03BF\u03B9\u03B7\u03C4\u03B9\u03BA\u03CC"
+    english: certificate
+  - native: "\u03C0\u03BB\u03B7\u03C1\u03CE\u03BD\u03B5\u03C4\u03B1\u03B9"
+    english: is paid
+  - native: "\u03C0\u03C1\u03B1\u03BA\u03C4\u03B9\u03BA\u03AC"
+    english: record
+  - native: "\u03C0\u03C1\u03BF\u03BF\u03C1\u03B9\u03C3\u03BC\u03CC\u03C2"
+    english: destination
+  - native: "\u03C0\u03C1\u03CC\u03B3\u03C1\u03B1\u03BC\u03BC\u03B1"
+    english: schedule
+  - native: "\u03C0\u03C5\u03BB\u03CE\u03BD"
+    english: portals
+  - native: "\u03C3\u03B1\u03C1\u03C9\u03C4\u03AE\u03C2"
+    english: scanner
+  - native: "\u03C3\u03C5\u03BC\u03BC\u03CC\u03C1\u03C6\u03C9\u03C3\u03B7\u03C2"
+    english: compliance
+  - native: "\u03C3\u03C5\u03BD\u03C4\u03AC\u03C7\u03B8\u03B7\u03BA\u03B5"
+    english: compiled
+  - native: "\u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03CC"
+    english: travel
+  - native: "\u03C4\u03B5\u03BB\u03C9\u03BD\u03B5\u03AF\u03BF"
+    english: customs
+  - native: "\u03C5\u03C0\u03BF\u03B3\u03C1\u03B1\u03C6\u03AE"
+    english: signature
+  - native: "\u03C5\u03C0\u03BF\u03B4\u03BF\u03C7\u03AE"
+    english: intake
+  - native: "\u03C5\u03C0\u03BF\u03C5\u03C1\u03B3\u03B5\u03AF\u03BF"
+    english: ministry
+  - native: "\u03C7\u03C1\u03AD\u03BF\u03C2"
+    english: debt
+  - native: "\u03C7\u03C1\u03BF\u03BD\u03B9\u03BA\u03CC"
+    english: temporal
+  - native: "\u03AD\u03B8\u03B9\u03BC\u03B1"
+    english: customs
+  - native: "\u03AD\u03BA\u03B4\u03BF\u03C3\u03B7\u03C2"
+    english: issue
+  - native: "\u03AD\u03BB\u03B1\u03B2\u03B5"
+    english: received
+  - native: "\u03B1\u03B9\u03CE\u03BD\u03B1"
+    english: century
+  - native: "\u03B1\u03BA\u03C1\u03B9\u03B2\u03AD\u03C2"
+    english: true
+  - native: "\u03B1\u03BA\u03C5\u03C1\u03CE\u03BD\u03B5\u03C4\u03B1\u03B9"
+    english: is cancelled
+  - native: "\u03B1\u03BB\u03BB\u03BF\u03AF\u03C9\u03C3\u03B7"
+    english: alteration
+  - native: "\u03B1\u03BD\u03AC"
+    english: per
+  - native: "\u03B1\u03BD\u03B1\u03B3\u03BD\u03C9\u03C1\u03B9\u03C3\u03BC\u03AD\u03BD\u03B5\u03C2"
+    english: recognized
+  - native: "\u03B1\u03BD\u03B1\u03B8\u03B5\u03C9\u03C1\u03B7\u03BC\u03AD\u03BD\u03B5\u03C2"
+    english: revised
+  - native: "\u03B1\u03BD\u03B1\u03BB\u03B1\u03BC\u03B2\u03AC\u03BD\u03B5\u03B9"
+    english: assumes
+  - native: "\u03B1\u03BD\u03B1\u03BB\u03C5\u03B8\u03B5\u03AF"
+    english: analysed
+  - native: "\u03B1\u03BD\u03B1\u03C3\u03C4\u03AD\u03BB\u03BB\u03BF\u03C5\u03BD"
+    english: suspend
+  - native: "\u03B1\u03BD\u03C4\u03AF\u03C6\u03B1\u03C3\u03B7"
+    english: contradiction
+  - native: "\u03B1\u03BD\u03C4\u03B9\u03BA\u03B5\u03AF\u03BC\u03B5\u03BD\u03B1"
+    english: effects
+  - native: "\u03B1\u03BD\u03C9\u03BC\u03B1\u03BB\u03AF\u03B1"
+    english: irregularity
+  - native: "\u03B1\u03BE\u03B9\u03CE\u03C3\u03B5\u03B9\u03C2"
+    english: claims
+  - native: "\u03B1\u03C0\u03BF\u03B4\u03AD\u03C7\u03B5\u03C4\u03B1\u03B9"
+    english: accepts
+  - native: "\u03B1\u03C0\u03BF\u03B4\u03BF\u03C7\u03AE"
+    english: acceptance
+  - native: "\u03B1\u03C0\u03BF\u03BA\u03B1\u03C4\u03AC\u03C3\u03C4\u03B1\u03C3\u03B7\u03C2"
+    english: restoration
+  - native: "\u03B1\u03C0\u03BF\u03C3\u03C4\u03BF\u03BB\u03AD\u03B1"
+    english: sender
+  - native: "\u03B1\u03C0\u03BF\u03C3\u03C5\u03B3\u03C7\u03C1\u03BF\u03BD\u03B9\u03C3\u03BC\u03CC"
+    english: desynchronization
+  - native: "\u03B1\u03C0\u03BF\u03C4\u03B5\u03BB\u03BF\u03CD\u03BD"
+    english: are
+  - native: "\u03B1\u03C1\u03C7\u03B5\u03AF\u03BF\u03C5"
+    english: record
+  - native: "\u03B1\u03C3\u03C6\u03B1\u03BB\u03B9\u03C3\u03C4\u03B7\u03C1\u03AF\u03BF\u03C5"
+    english: policy
+  - native: "\u03B2\u03AC\u03C3\u03B5\u03B9"
+    english: based on
+  - native: "\u03B2\u03AC\u03C3\u03B7"
+    english: basis
+  - native: "\u03B3\u03BD\u03CE\u03C3\u03B7"
+    english: notice
+  - native: "\u03B4\u03B7\u03BB\u03BF\u03CD\u03BD\u03C4\u03BF\u03C2"
+    english: declarant
+  - native: "\u03B4\u03B9\u03AC\u03C3\u03C4\u03B7\u03BC\u03B1"
+    english: interval
+  - native: "\u03B4\u03B9\u03AC\u03C3\u03C9\u03C3\u03B7\u03C2"
+    english: rescue
+  - native: "\u03B4\u03B9\u03AD\u03BB\u03B5\u03C5\u03C3\u03B7"
+    english: passage
+  - native: "\u03B4\u03B9\u03B1\u03BA\u03BF\u03C0\u03CE\u03BD"
+    english: holiday
+  - native: "\u03B4\u03B9\u03B1\u03C3\u03C4\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2"
+    english: interval
+  - native: "\u03B4\u03B9\u03CC\u03C1\u03B8\u03C9\u03C3\u03B7\u03C2"
+    english: correction
+  - native: "\u03B5\u03B3\u03B3\u03C5\u03B7\u03BC\u03AD\u03BD\u03BF"
+    english: guaranteed
+  - native: "\u03B5\u03B3\u03BA\u03B5\u03BA\u03C1\u03B9\u03BC\u03AD\u03BD\u03BF"
+    english: authorized
+  - native: "\u03B5\u03B8\u03B5\u03BB\u03BF\u03BD\u03C4\u03B9\u03BA\u03AD\u03C2"
+    english: voluntary
+  - native: "\u03B5\u03B9\u03C0\u03CE\u03B8\u03B7\u03BA\u03B5"
+    english: was spoken
+  - native: "\u03B5\u03B9\u03C3\u03CC\u03B4\u03BF\u03C5"
+    english: entry
+  - native: "\u03B5\u03BA\u03B4\u03AF\u03B4\u03B5\u03B9"
+    english: issues
+  - native: "\u03B5\u03BA\u03B5\u03AF\u03BD\u03B7"
+    english: that one
+  - native: "\u03B5\u03BA\u03BF\u03CD\u03C3\u03B9\u03B1"
+    english: voluntary
+  - native: "\u03B5\u03BD\u03C4\u03BF\u03BB\u03AE\u03C2"
+    english: order
+  - native: "\u03B5\u03C0\u03B9\u03B2\u03B5\u03B2\u03B1\u03B9\u03CE\u03BD\u03B5\u03B9"
+    english: confirms
+  - native: "\u03B5\u03C0\u03B9\u03B3\u03C1\u03B1\u03C6\u03AE"
+    english: legend
+  - native: "\u03B5\u03C0\u03B9\u03C3\u03B7\u03BC\u03B1\u03AF\u03BD\u03BF\u03BD\u03C4\u03B1\u03B9"
+    english: are marked
+  - native: "\u03B5\u03C0\u03B9\u03C3\u03C4\u03C1\u03AD\u03C6\u03BF\u03BD\u03C4\u03B1\u03B9"
+    english: are refunded
+  - native: "\u03B5\u03C0\u03CC\u03BC\u03B5\u03BD\u03B7\u03C2"
+    english: next
+  - native: "\u03B5\u03C5\u03B8\u03CD\u03BD\u03B7"
+    english: responsibility
+  - native: "\u03B7\u03BC\u03B5\u03C1\u03BF\u03BB\u03BF\u03B3\u03B9\u03B1\u03BA\u03AE"
+    english: calendar
+  - native: "\u03B9\u03C3\u03C4\u03BF\u03C1\u03B9\u03BA\u03CC"
+    english: historical
+  - native: "\u03B9\u03C3\u03C7\u03CD\u03BF\u03BD\u03C4\u03B1"
+    english: applicable
+  - native: "\u03BA\u03B1\u03C4\u03AC"
+    english: against
+  - native: "\u03BA\u03B5\u03C6\u03B1\u03BB\u03B1\u03AF\u03C9\u03BD"
+    english: funds
+  - native: "\u03BC\u03B5\u03BB\u03AC\u03BD\u03B9"
+    english: ink
+  - native: "\u03BC\u03B5\u03C4\u03B1\u03C4\u03CC\u03C0\u03B9\u03C3\u03B7"
+    english: displacement
+  - native: "\u03BC\u03B5\u03C4\u03B1\u03C6\u03AD\u03C1\u03B5\u03B9"
+    english: carried
+  - native: "\u03BC\u03BD\u03AE\u03BC\u03B7\u03C2"
+    english: memory
+  - native: "\u03BC\u03C0\u03B1\u03AF\u03BD\u03B5\u03B9"
+    english: is put
+  - native: "\u03BF\u03B4\u03B7\u03B3\u03B9\u03CE\u03BD"
+    english: directives
+  - native: "\u03BF\u03BB\u03AF\u03C3\u03B8\u03B7\u03C3\u03B7"
+    english: drift
+  - native: "\u03C0\u03B1\u03C1\u03B1\u03BC\u03BF\u03BD\u03AE\u03C2"
+    english: remaining
+  - native: "\u03C0\u03B1\u03C1\u03BF\u03CD\u03C3\u03B1"
+    english: this
+  - native: "\u03C0\u03B1\u03C1\u03CC\u03BD\u03C4\u03BF\u03C2"
+    english: this
+  - native: "\u03C0\u03B5\u03C1\u03AF"
+    english: on
+  - native: "\u03C0\u03B5\u03C1\u03AF\u03B3\u03C1\u03B1\u03BC\u03BC\u03B1"
+    english: outline
+  - native: "\u03C0\u03B5\u03C1\u03BD\u03AC"
+    english: passes
+  - native: "\u03C0\u03BB\u03B1\u03C3\u03C4\u03BF\u03B3\u03C1\u03B1\u03C6\u03AF\u03B1"
+    english: forgery
+  - native: "\u03C0\u03C1\u03BF\u03B7\u03B3\u03BF\u03CD\u03BC\u03B5\u03BD\u03B7"
+    english: prior
+  - native: "\u03C0\u03C1\u03BF\u03BA\u03CD\u03C0\u03C4\u03BF\u03C5\u03BD"
+    english: arise
+  - native: "\u03C0\u03C1\u03BF\u03BC\u03AE\u03B8\u03B5\u03B9\u03B1\u03C2"
+    english: supply
+  - native: "\u03C0\u03C1\u03BF\u03C3\u03B4\u03BF\u03BA\u03AF\u03B1"
+    english: expectation
+  - native: "\u03C0\u03C1\u03BF\u03C7\u03C9\u03C1\u03AE\u03C3\u03B5\u03B9"
+    english: proceed
+  - native: "\u03C3\u03B7\u03BC\u03B1\u03AF\u03BD\u03B5\u03B9"
+    english: means
+  - native: "\u03C3\u03C4\u03BF\u03C5\u03C2"
+    english: to the
+  - native: "\u03C3\u03C5\u03B3\u03B3\u03B5\u03BD\u03B5\u03AF\u03C2"
+    english: kin
+  - native: "\u03C3\u03C5\u03BC\u03C6\u03C9\u03BD\u03B5\u03AF"
+    english: agrees
+  - native: "\u03C3\u03C5\u03BD\u03AD\u03BD\u03C4\u03B5\u03C5\u03BE\u03B7\u03C2"
+    english: interview
+  - native: "\u03C3\u03C5\u03BD\u03AD\u03C0\u03B5\u03B9\u03B5\u03C2"
+    english: consequences
+  - native: "\u03C3\u03C5\u03BD\u03AD\u03C7\u03B5\u03B9\u03B5\u03C2"
+    english: continuities
+  - native: "\u03C3\u03C5\u03BD\u03AE\u03B8\u03B5\u03B9\u03C2"
+    english: ordinary
+  - native: "\u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03BF\u03CD"
+    english: travel
+  - native: "\u03C4\u03B1\u03BE\u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03AE\u03C2"
+    english: travel
+  - native: "\u03C4\u03B1\u03C5\u03C4\u03CC\u03C4\u03B7\u03C4\u03B1\u03C2"
+    english: identity
+  - native: "\u03C4\u03B5\u03BA\u03BC\u03B7\u03C1\u03B9\u03C9\u03BC\u03AD\u03BD\u03C9\u03BD"
+    english: documented
+  - native: "\u03C4\u03B5\u03BA\u03BC\u03B7\u03C1\u03B9\u03CE\u03BD\u03B5\u03C4\u03B1\u03B9"
+    english: is documented
+  - native: "\u03C4\u03BF\u03C0\u03B9\u03BA\u03AC"
+    english: local
+  - native: "\u03C4\u03C5\u03C0\u03CE\u03BD\u03B5\u03C4\u03B1\u03B9"
+    english: is printed
+  - native: "\u03C5\u03C0\u03AC\u03BB\u03BB\u03B7\u03BB\u03BF"
+    english: officer
+  - native: "\u03C5\u03C0\u03B7\u03C1\u03B5\u03C3\u03B9\u03B1\u03BA\u03AE"
+    english: official
+  - native: "\u03C5\u03C0\u03BF\u03B4\u03BF\u03C7\u03AE\u03C2"
+    english: intake
+  - native: "\u03C7\u03AD\u03C1\u03B9"
+    english: hand
+  - native: "\u03C7\u03C1\u03AE\u03C3\u03B7"
+    english: use
+  - native: "\u03CC\u03BB\u03B5\u03C2"
+    english: all
+  - native: "\u03CC\u03C1\u03C9\u03BD"
+    english: conditions
+  - native: "\u03CC\u03C4\u03B9"
+    english: that
+  - native: "\u039A\u03B1\u03BD\u03BF\u03BD\u03B9\u03C3\u03BC\u03CC\u03C2"
+    english: rulebook
+  - native: "\u03A5\u03C0\u03B1\u03BB\u03BB\u03AE\u03BB\u03BF\u03C5"
+    english: clerk's

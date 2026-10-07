@@ -33,6 +33,7 @@ MonoBehaviour:
     label: Photo
   handOver: 1
   showsPhoto: 1
+  askGroup: 
   form:
     formNumber: 
     title: 
@@ -159,6 +160,11 @@ MonoBehaviour:
         valueShare: 0.52
         labelShare: 0.6
         reading: 1
+        photo:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
         fields:
         - field: 0
           value:
@@ -172,6 +178,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.41577
           relabel: 0
+          labelText: WORKER
           centre: 0
         - field: 1
           value:
@@ -185,6 +192,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.47798
           relabel: 0
+          labelText: CITIZEN ID
           centre: 0
         - field: 2
           value:
@@ -198,6 +206,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.53903
           relabel: 0
+          labelText: EMPLOYER
           centre: 0
         - field: 3
           value:
@@ -211,6 +220,7 @@ MonoBehaviour:
             x1: 0.37
             y1: 0.59969
           relabel: 0
+          labelText: PLACE OF WORK (ERA)
           centre: 0
         - field: 4
           value:
@@ -224,6 +234,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.65881
           relabel: 0
+          labelText: TERM
           centre: 0
         - field: 5
           value:
@@ -237,6 +248,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.71368
           relabel: 0
+          labelText: WAGE
           centre: 0
         - field: 6
           value:
@@ -250,6 +262,7 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         - field: 7
           value:
@@ -263,6 +276,7 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         prints:
         - kind: 4
@@ -273,11 +287,6 @@ MonoBehaviour:
             y0: 0.87558
             x1: 0.6855
             y1: 0.91267
-        photo:
-          x0: 0
-          y0: 0
-          x1: 0
-          y1: 0
         stamp:
           x0: 0
           y0: 0
@@ -291,3 +300,35 @@ MonoBehaviour:
           y0: 0
           x1: 0
           y1: 0
+        captions:
+        - text: "MINISTRY OF RECOVERY \xB7 DEBT RELIEF OFFICE"
+          kind: 0
+          rect:
+            x0: 0.2445
+            y0: 0.0317
+            x1: 0.7644
+            y1: 0.0537
+          share: 1
+          ink: '#07182B'
+          centre: 1
+        - text: "WORK PERMIT \u2013 DEBT RELIEF LABOUR"
+          kind: 1
+          rect:
+            x0: 0.0998
+            y0: 0.2139
+            x1: 0.9046
+            y1: 0.2808
+          share: 1
+          ink: '#0B1C2F'
+          centre: 1
+        - text: AUTHORISED BY
+          kind: 0
+          rect:
+            x0: 0.3778
+            y0: 0.8418
+            x1: 0.5597
+            y1: 0.8608
+          share: 0.997
+          ink: '#041529'
+          centre: 0
+        clean: 1

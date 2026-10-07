@@ -3115,6 +3115,697 @@ MonoBehaviour:
     text: Tieni per confrontare
     gloss: 0
     tier: 0
+  - key: doc.entry_visa_visas_d_entr_e
+    text: "Visto d'ingresso \xB7 Visas d'entr\xE9e"
+    gloss: 0
+    tier: 0
+  - key: doc.surname_given_names
+    text: Cognome / Nomi
+    gloss: 0
+    tier: 0
+  - key: doc.citizen_id
+    text: ID cittadino
+    gloss: 0
+    tier: 0
+  - key: doc.date_of_birth
+    text: Data di nascita
+    gloss: 0
+    tier: 0
+  - key: doc.destination_era
+    text: Destinazione (epoca)
+    gloss: 0
+    tier: 0
+  - key: doc.travel_class
+    text: Classe di viaggio
+    gloss: 0
+    tier: 0
+  - key: doc.valid_until
+    text: Valido fino al
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau
+    text: Ufficio della Dogana Temporale
+    gloss: 0
+    tier: 0
+  - key: doc.citizen_travel_passport_passeport_de_voyage_temporel
+    text: Passaporto di viaggio del cittadino / Passeport de voyage temporel
+    gloss: 0
+    tier: 0
+  - key: doc.nationality
+    text: "Nazionalit\xE0"
+    gloss: 0
+    tier: 0
+  - key: doc.signature
+    text: Firma
+    gloss: 0
+    tier: 0
+  - key: doc.transponder
+    text: Transponder
+    gloss: 0
+    tier: 0
+  - key: doc.currency_carried
+    text: Valuta trasportata
+    gloss: 0
+    tier: 0
+  - key: doc.declared_effects
+    text: Effetti dichiarati
+    gloss: 0
+    tier: 0
+  - key: doc.departure_date
+    text: Data di partenza
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_class
+    text: Classe transponder
+    gloss: 0
+    tier: 0
+  - key: doc.entry_ticket
+    text: Biglietto d'ingresso
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_portal_hall_dispatch
+    text: "Ufficio della Dogana Temporale \xB7 Spedizioni Sala dei Portali"
+    gloss: 0
+    tier: 0
+  - key: doc.gate
+    text: Varco
+    gloss: 0
+    tier: 0
+  - key: doc.date
+    text: Data
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_model
+    text: Modello transponder
+    gloss: 0
+    tier: 0
+  - key: doc.portal_hall_dispatch_temporal_customs_bureau
+    text: "Spedizioni Sala dei Portali \u2022 Ufficio della Dogana Temporale"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_card
+    text: Tessera transponder
+    gloss: 0
+    tier: 0
+  - key: doc.traveller
+    text: Viaggiatore
+    gloss: 0
+    tier: 0
+  - key: doc.debt_passed_to_kin
+    text: Debito trasmesso ai parenti
+    gloss: 0
+    tier: 0
+  - key: doc.unsigned
+    text: Non firmato
+    gloss: 0
+    tier: 0
+  - key: doc.office_of_interval_compliance
+    text: "Ufficio di Conformit\xE0 degli Intervalli"
+    gloss: 0
+    tier: 0
+  - key: doc.stranding_waiver
+    text: Liberatoria di blocco
+    gloss: 0
+    tier: 0
+  - key: doc.waiver_no
+    text: N. liberatoria
+    gloss: 0
+    tier: 0
+  - key: doc.by_acknowledgment_of_this_instrument_the_traveller_accepts_a
+    text: "Con la presa d'atto del presente atto, il viaggiatore accetta tutte le
+      irregolarit\xE0 temporali, le usanze locali e lo spostamento d'intervallo derivanti
+      dal passaggio volontario oltre il presente autorizzato. Nessun intervallo di
+      ritorno \xE8 garantito."
+    gloss: 0
+    tier: 0
+  - key: doc.the_traveller_assumes_responsibility_for_identity_drift_cale
+    text: "Il viaggiatore si assume la responsabilit\xE0 della deriva d'identit\xE0,
+      delle discrepanze di calendario, della desincronizzazione della memoria e di
+      tutte le normali conseguenze della permanenza in un'epoca precedente. I reclami
+      contro l'Ufficio non sospendono il secolo applicabile."
+    gloss: 0
+    tier: 0
+  - key: doc.acceptance_confirms_that_the_traveller_has_received_notice_o
+    text: "L'accettazione conferma che il viaggiatore \xE8 stato informato delle
+      condizioni di blocco e accetta di procedere senza attendersi soccorso, correzione
+      o ripristino. La presente liberatoria resta in vigore in tutte le continuit\xE0
+      riconosciute."
+    gloss: 0
+    tier: 0
+  - key: doc.holiday_credit_agreement
+    text: Contratto di credito vacanze
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs
+    text: Dogana Temporale
+    gloss: 0
+    tier: 0
+  - key: doc.leisure_credit_bureau
+    text: Ufficio Credito Svago
+    gloss: 0
+    tier: 0
+  - key: doc.borrower
+    text: Mutuatario
+    gloss: 0
+    tier: 0
+  - key: doc.destination
+    text: Destinazione
+    gloss: 0
+    tier: 0
+  - key: doc.account_class
+    text: Classe del conto
+    gloss: 0
+    tier: 0
+  - key: doc.credit_line
+    text: Linea di credito
+    gloss: 0
+    tier: 0
+  - key: doc.issuing_seal
+    text: Sigillo di emissione
+    gloss: 0
+    tier: 0
+  - key: doc.1_borrower
+    text: 1  Mutuatario
+    gloss: 0
+    tier: 0
+  - key: doc.2_agreement
+    text: 2  Contratto
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_act_of_2139_any_alteration_voids_this_docum
+    text: Legge sulla Dogana Temporale del 2139. Qualsiasi alterazione annulla il
+      presente documento.
+    gloss: 0
+    tier: 0
+  - key: doc.for_official_use_desk_stamp
+    text: "Ad uso d'ufficio \xB7 Timbro dello sportello"
+    gloss: 0
+    tier: 0
+  - key: doc.issued_by_0
+    text: Emesso da {0}
+    gloss: 0
+    tier: 0
+  - key: doc.proof_of_funds
+    text: Prova di fondi
+    gloss: 0
+    tier: 0
+  - key: doc.account_holder
+    text: Titolare del conto
+    gloss: 0
+    tier: 0
+  - key: doc.funds_held
+    text: Fondi detenuti
+    gloss: 0
+    tier: 0
+  - key: doc.1_account_holder
+    text: 1  Titolare del conto
+    gloss: 0
+    tier: 0
+  - key: doc.2_funds
+    text: 2  Fondi
+    gloss: 0
+    tier: 0
+  - key: doc.travel_insurance_certificate
+    text: Certificato di assicurazione di viaggio
+    gloss: 0
+    tier: 0
+  - key: doc.transit_insurance_desk
+    text: Sportello Assicurazioni di Transito
+    gloss: 0
+    tier: 0
+  - key: doc.insured
+    text: Assicurato
+    gloss: 0
+    tier: 0
+  - key: doc.policy_no
+    text: N. polizza
+    gloss: 0
+    tier: 0
+  - key: doc.1_insured
+    text: 1  Assicurato
+    gloss: 0
+    tier: 0
+  - key: doc.2_policy
+    text: 2  Polizza
+    gloss: 0
+    tier: 0
+  - key: doc.worker
+    text: Lavoratore
+    gloss: 0
+    tier: 0
+  - key: doc.employer
+    text: Datore di lavoro
+    gloss: 0
+    tier: 0
+  - key: doc.place_of_work_era
+    text: Luogo di lavoro (epoca)
+    gloss: 0
+    tier: 0
+  - key: doc.term
+    text: Durata
+    gloss: 0
+    tier: 0
+  - key: doc.wage
+    text: Paga
+    gloss: 0
+    tier: 0
+  - key: doc.ministry_of_recovery_debt_relief_office
+    text: "Ministero della Ripresa \xB7 Ufficio Sgravio del debito"
+    gloss: 0
+    tier: 0
+  - key: doc.work_permit_debt_relief_labour
+    text: "Permesso di lavoro \u2013 Lavoro per lo Sgravio del debito"
+    gloss: 0
+    tier: 0
+  - key: doc.authorised_by
+    text: Autorizzato da
+    gloss: 0
+    tier: 0
+  - key: doc.holder
+    text: Titolare
+    gloss: 0
+    tier: 0
+  - key: doc.registry_id
+    text: ID di registro
+    gloss: 0
+    tier: 0
+  - key: doc.origin_era
+    text: Origine (epoca)
+    gloss: 0
+    tier: 0
+  - key: doc.incident
+    text: Incidente
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_registry_temporal_customs_bureau
+    text: "Registro degli sfollati \xB7 Ufficio della Dogana Temporale"
+    gloss: 0
+    tier: 0
+  - key: doc.travel_permit
+    text: Permesso di viaggio
+    gloss: 0
+    tier: 0
+  - key: doc.language_spoken
+    text: Lingua parlata
+    gloss: 0
+    tier: 0
+  - key: doc.technology_carried
+    text: Tecnologia trasportata
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_return_intake
+    text: "Ufficio della Dogana Temporale \xB7 Accoglienza rientri"
+    gloss: 0
+    tier: 0
+  - key: doc.intake_declaration
+    text: Dichiarazione d'ingresso
+    gloss: 0
+    tier: 0
+  - key: doc.nothing_to_declare
+    text: Niente da dichiarare
+    gloss: 0
+    tier: 0
+  - key: doc.goods
+    text: Merci
+    gloss: 0
+    tier: 0
+  - key: doc.persons
+    text: Persone
+    gloss: 0
+    tier: 0
+  - key: doc.knowledge
+    text: Conoscenze
+    gloss: 0
+    tier: 0
+  - key: doc.declarant_signature
+    text: Firma del dichiarante
+    gloss: 0
+    tier: 0
+  - key: doc.recalled_traveller
+    text: Viaggiatore richiamato
+    gloss: 0
+    tier: 0
+  - key: doc.return_to
+    text: Ritorno a
+    gloss: 0
+    tier: 0
+  - key: doc.return_by_date
+    text: Ritorno entro (data)
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_directorate_of_returns
+    text: "\xB7 Ufficio della Dogana Temporale \xB7 Direzione dei Rientri"
+    gloss: 0
+    tier: 0
+  - key: doc.return_order
+    text: Ordine di ritorno
+    gloss: 0
+    tier: 0
+  - key: doc.order_no
+    text: N. ordine
+    gloss: 0
+    tier: 0
+  - key: doc.authorized_by
+    text: Autorizzato da
+    gloss: 0
+    tier: 0
+  - key: doc.deviation_report
+    text: Rapporto di deviazione
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief_departures
+    text: Partenze Sgravio del debito
+    gloss: 0
+    tier: 0
+  - key: doc.statement
+    text: Dichiarazione
+    gloss: 0
+    tier: 0
+  - key: doc.contradicted_by
+    text: Contraddetto da
+    gloss: 0
+    tier: 0
+  - key: doc.desk_officer
+    text: Agente di sportello
+    gloss: 0
+    tier: 0
+  - key: doc.a_deviation_is_documented_once_per_category_denial_on_docume
+    text: "Una deviazione si documenta una volta per categoria. Il rifiuto per deviazioni
+      documentate \xE8 giustificato dalla Legge sulla Dogana Temporale del 2139."
+    gloss: 0
+    tier: 0
+  - key: doc.directive_memo
+    text: Promemoria di direttiva
+    gloss: 0
+    tier: 0
+  - key: doc.to
+    text: A
+    gloss: 0
+    tier: 0
+  - key: doc.from
+    text: Da
+    gloss: 0
+    tier: 0
+  - key: doc.ref
+    text: Rif.
+    gloss: 0
+    tier: 0
+  - key: doc.no
+    text: N.
+    gloss: 0
+    tier: 0
+  - key: doc.directive
+    text: Direttiva
+    gloss: 0
+    tier: 0
+  - key: doc.issued_by_the_customs_directorate
+    text: Emesso dalla Direzione delle Dogane
+    gloss: 0
+    tier: 0
+  - key: doc.interview_record
+    text: Verbale del colloquio
+    gloss: 0
+    tier: 0
+  - key: doc.speaker
+    text: Parlante
+    gloss: 0
+    tier: 0
+  - key: doc.taken_down_in_english_by_the_desk_officer_a_statement_in_the
+    text: "Trascritto in inglese dall'agente di sportello. Una dichiarazione nella
+      lingua del viaggiatore \xE8 registrata cos\xEC come \xE8 stata detta. Solo
+      le risposte del viaggiatore sono prove."
+    gloss: 0
+    tier: 0
+  - key: doc.internal_memorandum
+    text: Promemoria interno
+    gloss: 0
+    tier: 0
+  - key: doc.subject
+    text: Oggetto
+    gloss: 0
+    tier: 0
+  - key: doc.signed_for_the_sender
+    text: Firmato per il mittente
+    gloss: 0
+    tier: 0
+  - key: doc.portal_schedule
+    text: Orario dei portali
+    gloss: 0
+    tier: 0
+  - key: doc.ring
+    text: Anello
+    gloss: 0
+    tier: 0
+  - key: doc.era
+    text: Epoca
+    gloss: 0
+    tier: 0
+  - key: doc.place
+    text: Luogo
+    gloss: 0
+    tier: 0
+  - key: doc.state
+    text: Stato
+    gloss: 0
+    tier: 0
+  - key: doc.record_extract
+    text: Estratto della scheda
+    gloss: 0
+    tier: 0
+  - key: doc.an_extract_of_the_records_of_temporal_customs_true_on_the_da
+    text: Un estratto dei registri della Dogana Temporale, conforme alla data di
+      emissione.
+    gloss: 0
+    tier: 0
+  - key: doc.register
+    text: Registro
+    gloss: 0
+    tier: 0
+  - key: doc.value
+    text: Valore
+    gloss: 0
+    tier: 0
+  - key: doc.note
+    text: Nota
+    gloss: 0
+    tier: 0
+  - key: doc.compiled_by_temporal_customs_from_the_day_s_historical_recor
+    text: Compilato dalla Dogana Temporale dal registro storico del giorno. Le voci
+      rivedute sono segnate.
+    gloss: 0
+    tier: 0
+  - key: doc.supply_requisition
+    text: Richiesta di forniture
+    gloss: 0
+    tier: 0
+  - key: doc.item
+    text: Articolo
+    gloss: 0
+    tier: 0
+  - key: doc.section
+    text: Sezione
+    gloss: 0
+    tier: 0
+  - key: doc.price
+    text: Prezzo
+    gloss: 0
+    tier: 0
+  - key: doc.status
+    text: Stato
+    gloss: 0
+    tier: 0
+  - key: doc.requires
+    text: Richiede
+    gloss: 0
+    tier: 0
+  - key: doc.paid_on_order_delivered_at_the_start_of_the_next_shift_an_or
+    text: "Pagato all'ordine. Consegnato all'inizio del turno successivo. Un ordine
+      si annulla e si rimborsa solo nel giorno in cui \xE8 effettuato."
+    gloss: 0
+    tier: 0
+  - key: doc.seal_register
+    text: Registro dei sigilli
+    gloss: 0
+    tier: 0
+  - key: doc.every_paper_carries_the_seal_of_the_office_that_issues_it_ho
+    text: 'Ogni documento porta il sigillo dell''ufficio che lo emette. Confronta
+      qui il sigillo di un documento con quello del suo ufficio: un contorno, un
+      inchiostro o una legenda diversi indicano un falso.'
+    gloss: 0
+    tier: 0
+  - key: doc.compiled_by_temporal_customs_from_the_offices_seal_books_a_s
+    text: "Compilato dalla Dogana Temporale dai libri dei sigilli degli uffici. Un
+      sigillo \xE8 stampato, mai timbrato a mano."
+    gloss: 0
+    tier: 0
+  - key: doc.day
+    text: Giorno
+    gloss: 0
+    tier: 0
+  - key: doc.wages
+    text: Paghe
+    gloss: 0
+    tier: 0
+  - key: doc.fines
+    text: Multe
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief
+    text: Sgravio del debito
+    gloss: 0
+    tier: 0
+  - key: doc.household
+    text: Casa
+    gloss: 0
+    tier: 0
+  - key: doc.purchases
+    text: Acquisti
+    gloss: 0
+    tier: 0
+  - key: doc.balance
+    text: Saldo
+    gloss: 0
+    tier: 0
+  - key: doc.owed
+    text: Dovuto
+    gloss: 0
+    tier: 0
+  - key: doc.departures_are_voluntary
+    text: Le partenze sono volontarie.
+    gloss: 0
+    tier: 0
+  - key: doc.scanned_0_desk_scanner_1
+    text: "Scansionato {0} \xB7 Scanner dello sportello 1"
+    gloss: 0
+    tier: 0
+  - key: doc.analysed_0_1_contradiction_marked
+    text: "Analizzato {0} \xB7 1 contraddizione segnata"
+    gloss: 0
+    tier: 0
+  - key: doc.analysed_0
+    text: "Analizzato {0} \xB7"
+    gloss: 0
+    tier: 0
+  - key: doc.scanned_0_already_analysed
+    text: "Scansionato {0} \xB7 Gi\xE0 analizzato"
+    gloss: 0
+    tier: 0
+  - key: doc.approved
+    text: Approvato
+    gloss: 0
+    tier: 0
+  - key: doc.denied
+    text: Respinto
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.0
+    text: Domenica
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.0
+    text: Dom
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.1
+    text: "Luned\xEC"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.1
+    text: Lun
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.2
+    text: "Marted\xEC"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.2
+    text: Mar
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.3
+    text: "Mercoled\xEC"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.3
+    text: Mer
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.4
+    text: "Gioved\xEC"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.4
+    text: Gio
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.5
+    text: "Venerd\xEC"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.5
+    text: Ven
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.6
+    text: Sabato
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.6
+    text: Sab
+    gloss: 0
+    tier: 0
+  - key: calendar.month.1
+    text: Gennaio
+    gloss: 0
+    tier: 0
+  - key: calendar.month.2
+    text: Febbraio
+    gloss: 0
+    tier: 0
+  - key: calendar.month.3
+    text: Marzo
+    gloss: 0
+    tier: 0
+  - key: calendar.month.4
+    text: Aprile
+    gloss: 0
+    tier: 0
+  - key: calendar.month.5
+    text: Maggio
+    gloss: 0
+    tier: 0
+  - key: calendar.month.6
+    text: Giugno
+    gloss: 0
+    tier: 0
+  - key: calendar.month.7
+    text: Luglio
+    gloss: 0
+    tier: 0
+  - key: calendar.month.8
+    text: Agosto
+    gloss: 0
+    tier: 0
+  - key: calendar.month.9
+    text: Settembre
+    gloss: 0
+    tier: 0
+  - key: calendar.month.10
+    text: Ottobre
+    gloss: 0
+    tier: 0
+  - key: calendar.month.11
+    text: Novembre
+    gloss: 0
+    tier: 0
+  - key: calendar.month.12
+    text: Dicembre
+    gloss: 0
+    tier: 0
+  - key: doc.clerk_s_rulebook_desk_3
+    text: "Regolamento dell'impiegato \xB7 DESK 3"
+    gloss: 0
+    tier: 0
   words:
   - native: spegni
     english: Turn off
@@ -4780,6 +5471,304 @@ MonoBehaviour:
     english: of the address
   - native: nell'albero
     english: in the tree
+  - native: Accoglienza
+    english: intake
+  - native: Acquisti
+    english: purchases
+  - native: Ad
+    english: for (ad uso = for use)
+  - native: Agosto
+    english: August
+  - native: alterazione
+    english: alteration
+  - native: Analizzato
+    english: analysed
+  - native: Anello
+    english: ring
+  - native: applicabile
+    english: applicable
+  - native: Aprile
+    english: April
+  - native: Articolo
+    english: item
+  - native: Assicurato
+    english: insured
+  - native: assicurazione
+    english: insurance
+  - native: Assicurazioni
+    english: insurance
+  - native: assume
+    english: assumes
+  - native: attendersi
+    english: expecting
+  - native: categoria
+    english: category
+  - native: Cognome
+    english: surname
+  - native: Compilato
+    english: compiled
+  - native: condizioni
+    english: conditions
+  - native: conferma
+    english: confirms
+  - native: conforme
+    english: true (conforming)
+  - native: "Conformit\xE0"
+    english: compliance
+  - native: Conoscenze
+    english: knowledge
+  - native: conseguenze
+    english: consequences
+  - native: "continuit\xE0"
+    english: continuities
+  - native: contorno
+    english: outline
+  - native: Contraddetto
+    english: contradicted
+  - native: contraddizione
+    english: contradiction
+  - native: correzione
+    english: correction
+  - native: "cos\xEC"
+    english: as / so
+  - native: "d'entr\xE9e"
+    english: of entry (French)
+  - native: "d'identit\xE0"
+    english: of identity
+  - native: d'ingresso
+    english: of entry
+  - native: d'intervallo
+    english: of interval
+  - native: de
+    english: of (French)
+  - native: deriva
+    english: drift
+  - native: derivanti
+    english: arising
+  - native: desincronizzazione
+    english: desynchronization
+  - native: detenuti
+    english: held
+  - native: detta
+    english: spoken (said)
+  - native: Dicembre
+    english: December
+  - native: dichiarante
+    english: declarant
+  - native: dichiarare
+    english: declare
+  - native: dichiarati
+    english: declared
+  - native: Dichiarazione
+    english: declaration / statement
+  - native: discrepanze
+    english: variance
+  - native: documenta
+    english: is documented
+  - native: Dom
+    english: Sun
+  - native: Domenica
+    english: Sunday
+  - native: Dovuto
+    english: owed
+  - native: Effetti
+    english: effects
+  - native: effettuato
+    english: placed
+  - native: Emesso
+    english: issued
+  - native: emette
+    english: issues
+  - native: emissione
+    english: issue
+  - native: entro
+    english: by
+  - native: Febbraio
+    english: February
+  - native: firmato
+    english: signed
+  - native: garantito
+    english: guaranteed
+  - native: Gennaio
+    english: January
+  - native: Gio
+    english: Thu
+  - native: "Gioved\xEC"
+    english: Thursday
+  - native: Giugno
+    english: June
+  - native: inchiostro
+    english: ink
+  - native: indicano
+    english: indicate
+  - native: informato
+    english: informed
+  - native: interno
+    english: internal
+  - native: Intervalli
+    english: intervals
+  - native: intervallo
+    english: interval
+  - native: "irregolarit\xE0"
+    english: irregularities
+  - native: L'accettazione
+    english: the acceptance
+  - native: legenda
+    english: legend
+  - native: libri
+    english: books
+  - native: locali
+    english: local
+  - native: Luglio
+    english: July
+  - native: Lun
+    english: Mon
+  - native: "Luned\xEC"
+    english: Monday
+  - native: Maggio
+    english: May
+  - native: mano
+    english: hand
+  - native: Mar
+    english: Tue
+  - native: "Marted\xEC"
+    english: Tuesday
+  - native: Marzo
+    english: March
+  - native: memoria
+    english: memory
+  - native: Mer
+    english: Wed
+  - native: Merci
+    english: goods
+  - native: "Mercoled\xEC"
+    english: Wednesday
+  - native: Ministero
+    english: ministry
+  - native: mittente
+    english: sender
+  - native: Modello
+    english: model
+  - native: Multe
+    english: fines
+  - native: Mutuatario
+    english: borrower
+  - native: "Nazionalit\xE0"
+    english: nationality
+  - native: normali
+    english: ordinary
+  - native: Novembre
+    english: November
+  - native: Ottobre
+    english: October
+  - native: Paghe
+    english: wages
+  - native: parenti
+    english: kin
+  - native: Parlante
+    english: speaker
+  - native: parlata
+    english: spoken
+  - native: passaggio
+    english: passage
+  - native: Passeport
+    english: passport (French)
+  - native: permanenza
+    english: remaining
+  - native: porta
+    english: carries
+  - native: presa
+    english: taking
+  - native: Prezzo
+    english: price
+  - native: procedere
+    english: proceed
+  - native: Qualsiasi
+    english: any
+  - native: reclami
+    english: claims
+  - native: Richiesta
+    english: requisition
+  - native: riconosciute
+    english: recognized
+  - native: rientri
+    english: returns
+  - native: Rif
+    english: Ref
+  - native: rimborsa
+    english: is refunded
+  - native: Ripresa
+    english: recovery
+  - native: ripristino
+    english: restoration
+  - native: rivedute
+    english: revised
+  - native: Sab
+    english: Sat
+  - native: Sabato
+    english: Saturday
+  - native: Sala
+    english: hall
+  - native: secolo
+    english: century
+  - native: segnata
+    english: marked
+  - native: segnate
+    english: marked
+  - native: Settembre
+    english: September
+  - native: Sezione
+    english: section
+  - native: soccorso
+    english: rescue
+  - native: sospendono
+    english: suspend
+  - native: Spedizioni
+    english: dispatch
+  - native: spostamento
+    english: displacement
+  - native: stampato
+    english: printed
+  - native: stata
+    english: been
+  - native: storico
+    english: historical
+  - native: Svago
+    english: leisure
+  - native: temporali
+    english: temporal
+  - native: temporel
+    english: temporal (French)
+  - native: Tessera
+    english: card
+  - native: Trascritto
+    english: taken down
+  - native: trasmesso
+    english: passed
+  - native: trasportata
+    english: carried
+  - native: usanze
+    english: customs
+  - native: uso
+    english: use
+  - native: vacanze
+    english: holiday
+  - native: Ven
+    english: Fri
+  - native: "Venerd\xEC"
+    english: Friday
+  - native: Verbale
+    english: record
+  - native: Visas
+    english: visas (French)
+  - native: voci
+    english: entries
+  - native: volontarie
+    english: voluntary
+  - native: volontario
+    english: voluntary
+  - native: voyage
+    english: travel (French)
   - native: all'inizio
     english: to the home (start)
   - native: dell'ufficio
@@ -4790,3 +5779,13 @@ MonoBehaviour:
     english: of the other
   - native: dell'icona
     english: of the icon
+  - native: d'atto
+    english: of note
+  - native: d'ufficio
+    english: of office
+  - native: dall'agente
+    english: from the officer
+  - native: all'ordine
+    english: to the order
+  - native: dell'impiegato
+    english: of the clerk

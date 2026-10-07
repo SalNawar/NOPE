@@ -27,6 +27,10 @@
 //   the rules check, the cross-check, the overlay), Arrange icons (the grid, no icon under the waiting strip), the
 //   Orders tree, a mail opened, Settings' every row;
 // - title again: Continue shown with the save, and it resumes the run.
+// In a culture's language (track LANG, Saleh 2026-10-07: "I want the language to change on all documents and the apps"):
+// a nation id in Library/AuditBaseline/qa_culture.txt ("greece", "china", "egypt"...) makes that nation lead from the
+// adoption on (HistoryService.ForceLeader, Settings on Follow history), the folder is named <time>_<nation>, and every shot
+// also asserts that no text on the screen still shows the English of a label the culture's table translates.
 // Everywhere a screen is shot the overlay's kit controls are checked: none off the screen, no two of them overlapping at
 // rest; on the desk no paper is drawn over one lying above it.
 // Assertions that fail on main are the known bugs other tracks own: the sweep lists them, it fixes nothing.
@@ -60,6 +64,10 @@ public static class _TimeDeskQASweep
     private const string PrefsKey = "QASweep.Prefs";
     private const string ViewWidthKey = "QASweep.ViewWidth";
     private const string ViewHeightKey = "QASweep.ViewHeight";
+    private const string CultureKey = "QASweep.Culture";
+
+    /// <summary>The nation whose culture leads the sweep (Library/AuditBaseline/qa_culture.txt), or "" for the run as found.</summary>
+    private static string Culture => SessionState.GetString(CultureKey, string.Empty);
     private const int Playing = 1;
     private const int Finishing = 2;
 
@@ -98,7 +106,9 @@ public static class _TimeDeskQASweep
     /// <summary>The job: one sweep into a new folder.</summary>
     public static void Run()
     {
-        SessionState.SetString(DirKey, Path.Combine(Root, "qa", DateTime.Now.ToString("yyyyMMdd_HHmmss")));
+        string cultureFile = Path.Combine(Directory.GetCurrentDirectory(), "Library", "AuditBaseline", "qa_culture.txt");
+        SessionState.SetString(CultureKey, File.Exists(cultureFile) ? File.ReadAllText(cultureFile).Trim() : string.Empty);
+        SessionState.SetString(DirKey, Path.Combine(Root, "qa", DateTime.Now.ToString("yyyyMMdd_HHmmss") + (Culture.Length > 0 ? "_" + Culture : string.Empty)));
         Directory.CreateDirectory(Path.Combine(Dir, "shots"));
         File.WriteAllText(ReportPath, $"start {DateTime.Now:s} seed {Seed}\n");
         File.WriteAllText(WarningsPath, string.Empty);
@@ -195,14 +205,39 @@ public static class _TimeDeskQASweep
         RunManager.Instance.Config.fixedRunSeed = Seed;
         yield return Frames(5);
         yield return Title();
+        if (Culture.Length > 0)
+        {
+            UiLanguagePreference.AlwaysEnglish = false;
+            HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, Culture);
+            Note($"culture: {Culture} leads from day 1 (HistoryService.ForceLeader), Settings on Follow history");
+        }
         yield return OfficeDay1();
         yield return HomeNight();
         yield return Until(() => Office.Loaded() && RunManager.Instance.World.day == 2, 90f, "day 2's office");
         yield return Frames(5);
         Note("RunManager.JumpToDay(5): the scanner, the Investigation app and every PC app are in from day 5");
         RunManager.Instance.JumpToDay(5);
+        WorldChange();
         yield return OfficeDay5();
         yield return TitleContinue();
+    }
+
+    /// <summary>
+    /// A world change for the desktop's wallpaper (DesktopWallpaper): a
+    /// "factor/outcome" line in Library/AuditBaseline/qa_wallpaper.txt
+    /// ("government/democracy") latches that outcome as of yesterday before
+    /// day 5's office loads, so its PC shows that change's wallpaper.
+    /// </summary>
+    private static void WorldChange()
+    {
+        string file = Path.Combine(Directory.GetCurrentDirectory(), "Library", "AuditBaseline", "qa_wallpaper.txt");
+        string[] parts = File.Exists(file) ? File.ReadAllText(file).Trim().Split('/') : new string[0];
+        if (parts.Length != 2)
+            return;
+        WorldState w = RunManager.Instance.World;
+        w.leads.RemoveAll(l => l != null && l.factor == parts[0]);
+        w.leads.Add(new FactorLead { factor = parts[0], outcome = parts[1], split = string.Empty, sinceDay = w.day - 1 });
+        Note($"world change: {parts[0]} is {parts[1]} since day {w.day - 1} (the desktop shows its wallpaper)");
     }
 
     // ---- Title ----
@@ -1657,6 +1692,7 @@ public static class _TimeDeskQASweep
 
     private static IEnumerator Shot(string area, string name)
     {
+        EnglishLeft(area + "/" + name);
         Directory.CreateDirectory(System.IO.Path.Combine(Dir, "shots", area));
         yield return Capture(area, $"{name}_1080.png");
         yield return Resolution(1280, 720);
@@ -1710,6 +1746,39 @@ public static class _TimeDeskQASweep
         Object.Destroy(tex);
         RenderTexture.ReleaseTemporary(rt);
         File.AppendAllText(ShotsList, $"pc\t{name} (desktop)\tshots/pc/{name}_desktop.png\n");
+    }
+
+    /// <summary>
+    /// In a culture's language, every text on the screen that still reads
+    /// the English of a label its table translates (a flavour key's English,
+    /// no placeholders) is a label set as literal English or never refreshed:
+    /// one FAIL listing them, else a PASS.
+    /// </summary>
+    private static void EnglishLeft(string where)
+    {
+        CultureThemeService service = CultureThemeService.Instance;
+        if (Culture.Length == 0 || service == null || service.Language != LabelLanguage.Culture)
+            return;
+        UiStringTableSO reading = service.Library.GetStringTable(service.Library.CultureUi.readingLanguage);
+        var english = new Dictionary<string, string>();
+        foreach (UiStringEntry e in reading.entries)
+        {
+            if (e == null || e.tier != StringTier.Flavour || string.IsNullOrWhiteSpace(e.text) || e.text.Contains("{") || e.text.Trim().Length < 3)
+                continue;
+            string native = service.Strings.Get(e.key);
+            if (native != e.text && !english.ContainsKey(e.text.Trim()))
+                english.Add(e.text.Trim(), e.key);
+        }
+        var left = new List<string>();
+        foreach (TMP_Text text in Object.FindObjectsByType<TMP_Text>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        {
+            if (!text.isActiveAndEnabled || string.IsNullOrWhiteSpace(text.text))
+                continue;
+            string shown = System.Text.RegularExpressions.Regex.Replace(text.text, "<[^<>]*>", string.Empty).Trim();
+            if (english.TryGetValue(shown, out string key) && !left.Contains(key))
+                left.Add($"{key} ('{shown}' at {text.transform.parent?.name}/{text.name})");
+        }
+        Check(left.Count == 0, $"{where}: no label shows English in {Culture}'s language" + (left.Count > 0 ? ": " + string.Join("; ", left.Take(12)) : string.Empty));
     }
 
     private static IEnumerator Resolution(int width, int height)

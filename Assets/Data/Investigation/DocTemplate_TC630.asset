@@ -29,10 +29,12 @@ MonoBehaviour:
     label: Issuing Seal
   handOver: 0
   showsPhoto: 0
+  askGroup: 
   form:
     formNumber: 
     title: 
     fixedPage: 1
+    landscape: 0
     blocks:
     - kind: 0
       text: 
@@ -137,6 +139,11 @@ MonoBehaviour:
         valueShare: 0.55
         labelShare: 0.66
         reading: 1
+        photo:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
         fields:
         - field: 0
           value:
@@ -150,6 +157,7 @@ MonoBehaviour:
             x1: 0.3495
             y1: 0.47604
           relabel: 0
+          labelText: RECALLED TRAVELLER
           centre: 0
         - field: 1
           value:
@@ -163,6 +171,7 @@ MonoBehaviour:
             x1: 0.3495
             y1: 0.52589
           relabel: 0
+          labelText: CITIZEN ID
           centre: 0
         - field: 2
           value:
@@ -176,6 +185,7 @@ MonoBehaviour:
             x1: 0.3495
             y1: 0.57573
           relabel: 1
+          labelText: 
           centre: 0
         - field: 3
           value:
@@ -189,6 +199,7 @@ MonoBehaviour:
             x1: 0.3495
             y1: 0.62481
           relabel: 1
+          labelText: 
           centre: 0
         - field: 4
           value:
@@ -202,6 +213,7 @@ MonoBehaviour:
             x1: 0.3495
             y1: 0.67465
           relabel: 0
+          labelText: RETURN BY (DATE)
           centre: 0
         - field: 5
           value:
@@ -215,6 +227,7 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         prints:
         - kind: 3
@@ -233,11 +246,6 @@ MonoBehaviour:
             y0: 0.88563
             x1: 0.687
             y1: 0.92079
-        photo:
-          x0: 0
-          y0: 0
-          x1: 0
-          y1: 0
         stamp:
           x0: 0
           y0: 0
@@ -251,3 +259,45 @@ MonoBehaviour:
           y0: 0
           x1: 0
           y1: 0
+        captions:
+        - text: "\xB7 TEMPORAL CUSTOMS BUREAU \xB7 DIRECTORATE OF RETURNS"
+          kind: 0
+          rect:
+            x0: 0.1876
+            y0: 0.0449
+            x1: 0.7947
+            y1: 0.0659
+          share: 0.969
+          ink: '#43474F'
+          centre: 1
+        - text: RETURN ORDER
+          kind: 1
+          rect:
+            x0: 0.1699
+            y0: 0.2676
+            x1: 0.8155
+            y1: 0.4258
+          share: 1
+          ink: '#861614'
+          centre: 1
+        - text: ORDER NO.
+          kind: 0
+          rect:
+            x0: 0.1346
+            y0: 0.7017
+            x1: 0.2994
+            y1: 0.7227
+          share: 0.904
+          ink: '#151616'
+          centre: 0
+        - text: AUTHORIZED BY
+          kind: 0
+          rect:
+            x0: 0.4075
+            y0: 0.8569
+            x1: 0.5995
+            y1: 0.8789
+          share: 0.833
+          ink: '#151616'
+          centre: 0
+        clean: 1

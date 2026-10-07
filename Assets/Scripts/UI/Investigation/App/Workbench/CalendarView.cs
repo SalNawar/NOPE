@@ -69,9 +69,9 @@ public sealed class CalendarView : AppView
         bool known = agency != null && AgencyCalendar.TryToday(agency.firstDate, day, out date);
         _today = known ? AgencyCalendar.Write(date) : null;
         CultureInfo en = CultureInfo.InvariantCulture;
-        Write(weekdayText, known ? date.ToString("dddd", en) : string.Empty);
+        Write(weekdayText, known ? UiText.Get("calendar.weekday." + (int)date.DayOfWeek) : string.Empty);
         Write(dayText, known ? date.Day.ToString(en) : "?");
-        Write(monthText, known ? date.ToString("MMMM yyyy", en) : UiText.Get("calendar.unknown"));
+        Write(monthText, known ? UiText.Format("calendar.monthYear", UiText.Get("calendar.month." + date.Month), date.Year) : UiText.Get("calendar.unknown"));
         Write(shiftText, UiText.Format("calendar.shiftDay", day));
         Write(todayText, _today ?? UiText.Get("calendar.unknown"));
         if (todayButton != null)
@@ -86,7 +86,8 @@ public sealed class CalendarView : AppView
         {
             if (weekTexts[i] == null)
                 continue;
-            weekTexts[i].text = known ? date.AddDays(i - monday).ToString("ddd", en) + "\n" + date.AddDays(i - monday).Day.ToString(en) : string.Empty;
+            DateTime shown = date.AddDays(i - monday);
+            weekTexts[i].text = known ? UiText.Get("calendar.weekdayShort." + (int)shown.DayOfWeek) + "\n" + shown.Day.ToString(en) : string.Empty;
             weekTexts[i].fontStyle = i == monday ? FontStyles.Bold : FontStyles.Normal;
         }
         if (todayMark != null)

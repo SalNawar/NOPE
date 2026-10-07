@@ -33,6 +33,7 @@ MonoBehaviour:
     label: Photo
   handOver: 1
   showsPhoto: 1
+  askGroup: 
   form:
     formNumber: 
     title: 
@@ -127,6 +128,11 @@ MonoBehaviour:
         valueShare: 0.6
         labelShare: 0.74
         reading: 1.25
+        photo:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
         fields:
         - field: 0
           value:
@@ -140,6 +146,7 @@ MonoBehaviour:
             x1: 0.6161
             y1: 0.4997
           relabel: 0
+          labelText: HOLDER
           centre: 0
         - field: 1
           value:
@@ -153,6 +160,7 @@ MonoBehaviour:
             x1: 0.65717
             y1: 0.55786
           relabel: 0
+          labelText: REGISTRY ID
           centre: 0
         - field: 2
           value:
@@ -166,6 +174,7 @@ MonoBehaviour:
             x1: 0.69551
             y1: 0.76677
           relabel: 1
+          labelText: 
           centre: 0
         - field: 3
           value:
@@ -179,6 +188,7 @@ MonoBehaviour:
             x1: 0.66265
             y1: 0.62671
           relabel: 0
+          labelText: ORIGIN (ERA)
           centre: 0
         - field: 4
           value:
@@ -192,6 +202,7 @@ MonoBehaviour:
             x1: 0.62979
             y1: 0.69792
           relabel: 0
+          labelText: INCIDENT
           centre: 0
         - field: 5
           value:
@@ -205,6 +216,7 @@ MonoBehaviour:
             x1: 0.65717
             y1: 0.84273
           relabel: 0
+          labelText: VALID UNTIL
           centre: 0
         - field: 6
           value:
@@ -218,6 +230,7 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         - field: 7
           value:
@@ -231,13 +244,9 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         prints: []
-        photo:
-          x0: 0
-          y0: 0
-          x1: 0
-          y1: 0
         stamp:
           x0: 0
           y0: 0
@@ -251,3 +260,25 @@ MonoBehaviour:
           y0: 0
           x1: 0
           y1: 0
+        captions:
+        - text: "DISPLACEMENT REGISTRY \xB7 TEMPORAL CUSTOMS BUREAU"
+          kind: 0
+          rect:
+            x0: 0.1977
+            y0: 0.0338
+            x1: 0.8045
+            y1: 0.0688
+          share: 1
+          ink: '#EDE6D6'
+          centre: 1
+        - text: TRAVEL PERMIT
+          kind: 1
+          rect:
+            x0: 0.155
+            y0: 0.0997
+            x1: 0.8319
+            y1: 0.2095
+          share: 1
+          ink: '#263F54'
+          centre: 1
+        clean: 1

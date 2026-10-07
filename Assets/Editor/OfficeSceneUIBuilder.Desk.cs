@@ -1305,6 +1305,13 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The desk's rulebook folder (Saleh's Canva art, run 7: "folder too"; ArtSlots.RulebookFolder and its tabs, ArtSlots.RulebookTab), metres (width by depth, at the art's 16:9).</summary>
     private static readonly Vector2 RulebookFolderSize = new Vector2(0.46f, 0.25875f);
 
+    /// <summary>The folder cover's printed words (English, their doc.* strings translate them), each its place on the art (shares x0, y0, x1, y1), its ink and its largest size: painted out of the clean face (ArtSlots.RulebookFolderClean, track LANG's art step).</summary>
+    private static readonly (string english, Vector4 place, Color ink, float size)[] RulebookCoverWords =
+    {
+        ("TEMPORAL CUSTOMS BUREAU", new Vector4(0.1699f, 0.4922f, 0.3945f, 0.6944f), new Color(0.184f, 0.208f, 0.251f), 0.3f),
+        ("CLERK'S RULEBOOK · DESK 3", new Vector4(0.1597f, 0.7318f, 0.3999f, 0.77f), new Color(0.486f, 0.224f, 0.18f), 0.12f),
+    };
+
     /// <summary>Places on the folder art as shares of it from its top-left (x0, y0, x1, y1), measured on the art: the right sheet the pages print on, the RULES page's heading between its two printed rules, and its six ruled rows (the art's lines; each row's text above its line).</summary>
     private static readonly Vector4 RulebookSheet = new Vector4(0.54167f, 0.17778f, 0.93333f, 0.95926f), RulebookHeading = new Vector4(0.57083f, 0.22074f, 0.90417f, 0.26963f);
 
@@ -1549,6 +1556,7 @@ public static partial class OfficeSceneUIBuilder
             TextMeshPro label = FlatText(rack, name + "Label", new Vector3(x, StampRailSection.y + 0.0006f, lipZ),
                                          new Vector2(StampSpacing - 0.012f, StampRailSection.x - 0.004f), 0.2f, labelInk, FontStyles.Bold);
             label.text = word;
+            Keyed(label, labelKey);
 
             click.SetOutline(click.GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponent<TextMeshPro>() == null && r.name != "Window").ToArray());
             // The dater is moved, not the paper (Saleh 2026-10-06): left-drag carries it over the desk; its click box is the drag's proxy.
@@ -1653,6 +1661,18 @@ public static partial class OfficeSceneUIBuilder
         card.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
         Color ink = new Color(0.13f, 0.12f, 0.15f);
 
+        // The folder cover's words, printed over its clean face only while a culture's language is read (DeskRulebook.ShowCover).
+        var cover = new List<TMP_Text>();
+        for (int i = 0; i < RulebookCoverWords.Length; i++)
+        {
+            (string english, Vector4 place, Color coverInk, float size) = RulebookCoverWords[i];
+            TextMeshPro word = FlatText(booklet, "Cover" + (i + 1), FolderPoint(place) + new Vector3(0f, 0.0003f, 0f), FolderSize(place), size, coverInk, FontStyles.Bold);
+            word.text = english;
+            word.textWrappingMode = TextWrappingModes.Normal;
+            word.gameObject.SetActive(false);
+            cover.Add(word);
+        }
+
         // The tabs on the folder's top edge, at the art's places, each its own art (shown only while its page is there: DeskRulebook).
         var tabs = new List<Clickable>();
         var plates = new List<Renderer>();
@@ -1673,6 +1693,7 @@ public static partial class OfficeSceneUIBuilder
             tab.SetOutline(new[] { plate.GetComponent<Renderer>() });
             TextMeshPro word = FlatText(tab.transform, "Text", FolderPoint(RulebookTabWords[i]) - at + new Vector3(0f, 0.0004f, 0f), FolderSize(RulebookTabWords[i]), 0.2f, ink, FontStyles.Bold);
             word.text = UiText.Get(tabKeys[i]);
+            Keyed(word, tabKeys[i]);
             tabs.Add(tab);
         }
 
@@ -1723,6 +1744,7 @@ public static partial class OfficeSceneUIBuilder
         TextMeshPro guideTitle = FlatText(guidePage, "Title", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.022f), new Vector2(RulebookSize.x - 0.02f, 0.03f), 0.15f, ink, FontStyles.Bold);
         TextMeshPro guideNew = FlatText(guidePage, "New", new Vector3(RulebookSize.x / 2f - 0.035f, 0.0006f, RulebookSize.y / 2f - 0.046f), new Vector2(0.05f, 0.018f), 0.09f, RulebookNewInk, FontStyles.Bold);
         guideNew.text = UiText.Get("desk.guide.new");
+        Keyed(guideNew, "desk.guide.new");
         TextMeshPro guideBody = FlatText(guidePage, "Body", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.048f - RulebookGuideBody.y / 2f), RulebookGuideBody, 0.15f, ink, FontStyles.Normal);
         guideBody.textWrappingMode = TextWrappingModes.Normal;
         guideBody.alignment = TextAlignmentOptions.TopLeft;
@@ -1737,6 +1759,7 @@ public static partial class OfficeSceneUIBuilder
             box.size = new Vector3(RulebookGuideButton.x, PaperBoxThickness, RulebookGuideButton.y);
             TextMeshPro word = FlatText(button.transform, "Text", Vector3.zero, RulebookGuideButton, 0.1f, ink, FontStyles.Bold);
             word.text = UiText.Get(key);
+            Keyed(word, key);
             return button;
         }
         Clickable guidePrev = GuideButton("Prev", -RulebookSize.x / 2f + 0.012f + RulebookGuideButton.x / 2f, "desk.guide.prev");
@@ -1747,12 +1770,14 @@ public static partial class OfficeSceneUIBuilder
         TextMeshPro guideBadge = FlatText(booklet, "GuideBadge", guideTab.localPosition + new Vector3(0f, 0f, FolderSize(RulebookTabPlaces[DeskRulebook.GuidePageIndex]).y / 2f + 0.011f),
                                           new Vector2(0.05f, 0.018f), 0.09f, RulebookNewInk, FontStyles.Bold);
         guideBadge.text = UiText.Get("desk.guide.new");
+        Keyed(guideBadge, "desk.guide.new");
         guideBadge.gameObject.SetActive(false);
 
         // The SEALS page: the Seal Register at the desk (DeskRulebook.ShowSeals), a row per office: its seal's mark and legend, its name.
         Transform sealsPage = EnsureChild(page, "SealsPage");
         TextMeshPro sealsTitle = FlatText(sealsPage, "Title", new Vector3(0f, 0.0006f, RulebookSize.y / 2f - 0.022f), new Vector2(RulebookSize.x - 0.02f, 0.03f), 0.15f, ink, FontStyles.Bold);
         sealsTitle.text = UiText.Get("desk.rulebook.seals");
+        Keyed(sealsTitle, "desk.rulebook.seals");
         Material sealMaterial = FormSealMaterial();
         var sealRows = new List<Clickable>();
         var sealMarks = new List<Renderer>();
@@ -1798,6 +1823,8 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(rulebook);
         SetRef(so, "booklet", booklet);
         SetRef(so, "card", cardClick);
+        SetRef(so, "folderFace", card.GetComponent<Renderer>());
+        SerializedArrays.Set(so, "coverWords", cover);
         SetRef(so, "title", title);
         SerializedArrays.Set(so, "rows", rows);
         SetRef(so, "none", none);
@@ -2008,6 +2035,15 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>A world-space text lying face up (top edge away from the chair) under <paramref name="parent"/>, auto-sized up to <paramref name="maxSize"/>.</summary>
+    /// <summary>Makes <paramref name="text"/> read its UI string <paramref name="key"/> again as the scene starts (KeyedText; <paramref name="template"/> around it), so a builder-printed word follows the reading language.</summary>
+    private static void Keyed(TMP_Text text, string key, string template = "{0}")
+    {
+        if (text == null)
+            return;
+        GetOrAdd<KeyedText>(text.gameObject).Configure(key, template);
+        EditorUtility.SetDirty(text.gameObject);
+    }
+
     private static TextMeshPro FlatText(Transform parent, string name, Vector3 position, Vector2 box, float maxSize, Color ink, FontStyles style)
     {
         var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshPro));

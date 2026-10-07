@@ -33,6 +33,7 @@ MonoBehaviour:
     label: Photo
   handOver: 1
   showsPhoto: 1
+  askGroup: 
   form:
     formNumber: 
     title: 
@@ -160,6 +161,11 @@ MonoBehaviour:
         valueShare: 0.56
         labelShare: 0.6
         reading: 1.3
+        photo:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
         fields:
         - field: 0
           value:
@@ -173,6 +179,7 @@ MonoBehaviour:
             x1: 0.675
             y1: 0.63113
           relabel: 0
+          labelText: SURNAME / GIVEN NAMES
           centre: 0
         - field: 1
           value:
@@ -186,6 +193,7 @@ MonoBehaviour:
             x1: 0.57258
             y1: 0.68417
           relabel: 0
+          labelText: CITIZEN ID
           centre: 0
         - field: 2
           value:
@@ -199,6 +207,7 @@ MonoBehaviour:
             x1: 0.77984
             y1: 0.68417
           relabel: 0
+          labelText: DATE OF BIRTH
           centre: 0
         - field: 3
           value:
@@ -212,6 +221,7 @@ MonoBehaviour:
             x1: 0.80887
             y1: 0.73747
           relabel: 0
+          labelText: DESTINATION (ERA)
           centre: 0
         - field: 4
           value:
@@ -225,6 +235,7 @@ MonoBehaviour:
             x1: 0.60081
             y1: 0.78997
           relabel: 0
+          labelText: TRAVEL CLASS
           centre: 0
         - field: 5
           value:
@@ -238,6 +249,7 @@ MonoBehaviour:
             x1: 0.7629
             y1: 0.78997
           relabel: 0
+          labelText: VALID UNTIL
           centre: 0
         - field: 6
           value:
@@ -251,6 +263,7 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         - field: 7
           value:
@@ -264,6 +277,7 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         prints:
         - kind: 2
@@ -282,18 +296,13 @@ MonoBehaviour:
             y0: 0.84828
             x1: 0.73226
             y1: 0.90264
-        photo:
-          x0: 0
-          y0: 0
-          x1: 0
-          y1: 0
         stamp:
           x0: 0.08871
           y0: 0.12823
           x1: 0.91129
           y1: 0.41847
         stampInk: '#8A2F3B'
-        stampCaption: "ENTRY VISA \u00B7 VISAS D'ENTR\u00C9E"
+        stampCaption: "ENTRY VISA \xB7 VISAS D'ENTR\xC9E"
         covers:
         - x0: 0
           y0: 0
@@ -316,3 +325,65 @@ MonoBehaviour:
           y0: 0.49736
           x1: 0.98387
           y1: 0.50264
+        captions:
+        - text: TEMPORAL CUSTOMS BUREAU
+          kind: 1
+          rect:
+            x0: 0.2396
+            y0: 0.0396
+            x1: 0.8
+            y1: 0.0786
+          share: 0.868
+          ink: '#62171A'
+          centre: 0
+        - text: CITIZEN TRAVEL PASSPORT / PASSEPORT DE VOYAGE TEMPOREL
+          kind: 0
+          rect:
+            x0: 0.2396
+            y0: 0.0815
+            x1: 0.9
+            y1: 0.0996
+          share: 0.826
+          ink: '#193A5F'
+          centre: 0
+        - text: TEMPORAL CUSTOMS BUREAU
+          kind: 1
+          rect:
+            x0: 0.2396
+            y0: 0.5298
+            x1: 0.8
+            y1: 0.5679
+          share: 0.89
+          ink: '#62171A'
+          centre: 0
+        - text: CITIZEN TRAVEL PASSPORT / PASSEPORT DE VOYAGE TEMPOREL
+          kind: 0
+          rect:
+            x0: 0.2396
+            y0: 0.5708
+            x1: 0.9
+            y1: 0.5889
+          share: 0.826
+          ink: '#193A5F'
+          centre: 0
+        - text: NATIONALITY
+          kind: 0
+          rect:
+            x0: 0.4933
+            y0: 0.7217
+            x1: 0.6396
+            y1: 0.7378
+          share: 0.631
+          ink: '#12355B'
+          centre: 0
+        - text: SIGNATURE
+          kind: 0
+          rect:
+            x0: 0.4933
+            y0: 0.8315
+            x1: 0.6396
+            y1: 0.8477
+          share: 0.631
+          ink: '#17395E'
+          centre: 0
+        clean: 1

@@ -35,10 +35,17 @@ public sealed class AvailableSignLink : MonoBehaviour
             return;
 
         _lit = _caption.color;
-        if (!string.IsNullOrWhiteSpace(_config.readyCaptionKey))
-            _caption.text = UiText.Get(_config.readyCaptionKey);
+        PrintCaption();
+        CultureThemeService.LabelsChanged += PrintCaption;
         _desk.Changed += Apply;
         Apply();
+    }
+
+    /// <summary>The caption's words in the reading language (again whenever the labels' language changes).</summary>
+    private void PrintCaption()
+    {
+        if (_caption != null && _config != null && !string.IsNullOrWhiteSpace(_config.readyCaptionKey))
+            _caption.text = UiText.Get(_config.readyCaptionKey);
     }
 
     /// <summary>The invitation's pulse: the caption breathes between the paused and the lit ink until the shift opens or the desk closes.</summary>
@@ -61,6 +68,7 @@ public sealed class AvailableSignLink : MonoBehaviour
 
     private void Unhook()
     {
+        CultureThemeService.LabelsChanged -= PrintCaption;
         if (_desk != null)
             _desk.Changed -= Apply;
     }

@@ -720,7 +720,7 @@ public sealed class DeskStampTray : MonoBehaviour
     }
 
     /// <summary>The verdict word the daters print (the papers' style's).</summary>
-    private string Word(bool approved) => style == null ? (approved ? "APPROVED" : "DENIED") : approved ? style.approvedStamp : style.deniedStamp;
+    private string Word(bool approved) => UiText.DocumentWord(style == null ? (approved ? "APPROVED" : "DENIED") : approved ? style.approvedStamp : style.deniedStamp);
 
     /// <summary>The verdict word's ink: APPROVED green, DENIED red (Saleh 2026-10-07: easy to tell apart).</summary>
     private static Color32 Ink(bool approved) => approved ? DaterImpressionArt.ApprovedInk : DaterImpressionArt.DeniedInk;

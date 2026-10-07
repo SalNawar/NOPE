@@ -36,6 +36,42 @@ public static class ArtLayout
     /// <summary>The share of its place's height UNSIGNED takes (a caption's size in a hand's place).</summary>
     public const float UnsignedShare = 0.6f;
 
+    /// <summary>
+    /// <paramref name="text"/> in capitals as a printed form sets them: upper
+    /// case (invariant), a Greek capital without its accent (Greek writes
+    /// capitals bare: "Υπηρεσία" gives ΥΠΗΡΕΣΙΑ; the diaeresis stays).
+    /// </summary>
+    public static string Capitals(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return text ?? string.Empty;
+        bool greek = false;
+        foreach (char c in text)
+            greek |= c >= '\u0370' && c <= '\u03FF' || c >= '\u1F00' && c <= '\u1FFF';
+        if (!greek)
+            return text.ToUpperInvariant();
+        var sb = new System.Text.StringBuilder(text.Length);
+        foreach (char c in text.Normalize(System.Text.NormalizationForm.FormD).ToUpperInvariant())
+            if (c != '\u0301' && c != '\u0300' && c != '\u0342' && c != '\u0313' && c != '\u0314' && c != '\u0345')
+                sb.Append(c);
+        return sb.ToString().Normalize(System.Text.NormalizationForm.FormC);
+    }
+
+    /// <summary>True when <paramref name="text"/> has letters and none is lower case (an English word printed in capitals, so its translation is too).</summary>
+    public static bool IsCapitals(string text)
+    {
+        bool letters = false;
+        foreach (char c in text ?? string.Empty)
+        {
+            if (!char.IsLetter(c))
+                continue;
+            letters = true;
+            if (char.IsLower(c))
+                return false;
+        }
+        return letters;
+    }
+
     /// <summary>True when <paramref name="spec"/> is drawn on its art (its look's FormArt is set).</summary>
     public static bool IsArt(FormSpec spec) => spec != null && spec.look != null && spec.look.art != null && spec.look.art.IsSet;
 
@@ -52,6 +88,7 @@ public static class ArtLayout
     {
         data ??= new FormData();
         FormArt art = spec.look.art;
+        bool worded = art.Worded(data);
         float aspect = spec.look.AspectOr((m ?? new FormMetrics()).aspect);
         float height = width / aspect;
         var items = new List<FormItem>();
@@ -64,7 +101,7 @@ public static class ArtLayout
         if (art.spine.IsSet)
             items.Add(Item(FormItemKind.Spine, On(art.spine)));
         foreach (ArtField f in Ordered(art))
-            if (f.label.IsSet && Hidden(data, f.field))
+            if (f.label.IsSet && Hidden(data, f.field) && !worded)
                 items.Add(Item(FormItemKind.Patch, On(f.label)));
 
         if (art.stamp.IsSet)
@@ -79,7 +116,7 @@ public static class ArtLayout
             if (!string.IsNullOrEmpty(art.stampCaption))
             {
                 float size = CaptionShare * box.Height;
-                items.Add(new FormItem(FormItemKind.Text, FormTextRole.Caption, FaceRect.FromTop(box.XMin, box.YMin + size, box.Width, size * 1.4f), -1, art.stampCaption, size, FormTextAlign.Centre));
+                items.Add(new FormItem(FormItemKind.Text, FormTextRole.Caption, FaceRect.FromTop(box.XMin, box.YMin + size, box.Width, size * 1.4f), -1, data.Word(art.stampCaption), size, FormTextAlign.Centre));
             }
         }
 
@@ -105,14 +142,14 @@ public static class ArtLayout
                 string value = Value(data, f.field);
                 bool hand = signed.Contains(f.field);
                 if (hand && string.IsNullOrWhiteSpace(value))
-                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Caption, place, slot, FormLayout.Unsigned, UnsignedShare * art.valueShare * place.Height, FormTextAlign.Left));
+                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Caption, place, slot, data.Word(FormLayout.Unsigned), UnsignedShare * art.valueShare * place.Height, FormTextAlign.Left));
                 else if (!string.IsNullOrEmpty(value))
                     items.Add(new FormItem(FormItemKind.Text, hand ? FormTextRole.Hand : FormTextRole.Value, place, slot, value, art.valueShare * place.Height, f.centre ? FormTextAlign.Centre : FormTextAlign.Left));
-                if (f.relabel && f.label.IsSet)
+                if ((f.relabel || worded) && f.label.IsSet && !Hidden(data, f.field))
                 {
                     FaceRect label = On(f.label);
-                    string words = f.field < data.FieldLabels.Count ? (data.FieldLabels[f.field] ?? string.Empty).ToUpperInvariant() : string.Empty;
-                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Label, label, slot, words, art.labelShare * label.Height, FormTextAlign.Left));
+                    string english = !f.relabel && !string.IsNullOrEmpty(f.labelText) ? f.labelText : f.field < data.FieldLabels.Count ? data.FieldLabels[f.field] ?? string.Empty : string.Empty;
+                    items.Add(new FormItem(FormItemKind.Text, FormTextRole.Label, label, slot, Capitals(data.Word(english)), art.labelShare * label.Height, FormTextAlign.Left));
                 }
             }
             slots.Add(new FormSlot(slot, f.field, -1, string.Empty, place, 0));
@@ -120,6 +157,10 @@ public static class ArtLayout
 
         if (art.photo.IsSet && !data.HasPhoto)
             items.Add(Item(FormItemKind.Photo, Photo(On(art.photo))));
+        if (worded)
+            foreach (ArtCaption c in art.captions ?? new ArtCaption[0])
+                if (c != null && c.rect.IsSet && !string.IsNullOrWhiteSpace(c.text))
+                    items.Add(Caption(c, On(c.rect), data));
         foreach (ArtPrint p in art.prints ?? new ArtPrint[0])
         {
             if (p == null || !p.rect.IsSet || (p.field >= 0 && Hidden(data, p.field)))
@@ -199,6 +240,16 @@ public static class ArtLayout
             }
         }
         return problems;
+    }
+
+    /// <summary>An art caption printed in the reading language at its place (a label or title in capitals, a paragraph as written), never picked.</summary>
+    private static FormItem Caption(ArtCaption c, FaceRect place, FormData data)
+    {
+        string words = data.Word(c.text) ?? string.Empty;
+        bool paragraph = c.kind == ArtCaptionKind.Paragraph;
+        FormTextRole role = c.kind == ArtCaptionKind.Title ? FormTextRole.Title : paragraph ? FormTextRole.Paragraph : FormTextRole.Label;
+        return new FormItem(FormItemKind.Text, role, place, -1, paragraph ? words : Capitals(words), c.share * place.Height,
+                            c.centre ? FormTextAlign.Centre : FormTextAlign.Left, string.IsNullOrEmpty(c.ink) ? null : c.ink);
     }
 
     /// <summary>The art's fields in reading order (top to bottom, then left to right): the slots' order.</summary>

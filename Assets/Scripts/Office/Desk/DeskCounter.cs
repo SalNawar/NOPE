@@ -95,6 +95,21 @@ public sealed class DeskCounter : MonoBehaviour
         return surface.transform.position + _right * x + _forward * y;
     }
 
+    /// <summary>Prints the strip's words again in the labels' new language (CultureThemeService.LabelsChanged).</summary>
+    private void Reprint()
+    {
+        if (label == null)
+            return;
+        label.text = string.Empty;
+        Show(zone == null || zone.activeSelf, _handBack, _hover);
+    }
+
+    /// <summary>Follows a change of the labels' language.</summary>
+    private void OnEnable() => CultureThemeService.LabelsChanged += Reprint;
+
+    /// <summary>Stops following it.</summary>
+    private void OnDisable() => CultureThemeService.LabelsChanged -= Reprint;
+
     /// <summary>Shows the strip (<paramref name="shown"/>: a traveller is at the desk) with the counter's name, or "▲ HAND BACK ▲" brighter (<paramref name="handBack"/>: the passport carries its verdict); lit while a dragged paper's pointer is over it (<paramref name="hover"/>), reading "STAMP THE PASSPORT FIRST" before the verdict.</summary>
     public void Show(bool shown, bool handBack, bool hover = false)
     {

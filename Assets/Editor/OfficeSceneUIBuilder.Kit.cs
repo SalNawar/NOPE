@@ -58,7 +58,10 @@ public static partial class OfficeSceneUIBuilder
         KitPullTab(o.Find("StampBar/Tab"), false, ControlRules.StampsKey);
         TMP_Text stampsWord = o.Find("StampBar/Tab/Label")?.GetComponent<TMP_Text>();
         if (stampsWord != null)
+        {
             stampsWord.text = UiText.Get("controls.stampsTab");
+            Keyed(stampsWord, "controls.stampsTab");
+        }
         KitPullTab(o.Find("CityLook"), true, ControlRules.CityKey);
         KitPullTab(o.Find("CityBack"), false, ControlRules.CityBackKey);
         KitInspect(o.Find("InspectButton"));

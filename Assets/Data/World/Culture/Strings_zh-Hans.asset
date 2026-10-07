@@ -3075,6 +3075,678 @@ MonoBehaviour:
     text: "\u9009\u53D6\u4EE5\u6BD4\u5BF9"
     gloss: 0
     tier: 0
+  - key: doc.entry_visa_visas_d_entr_e
+    text: "\u5165\u5883\u7B7E\u8BC1"
+    gloss: 0
+    tier: 0
+  - key: doc.surname_given_names
+    text: "\u59D3 / \u540D"
+    gloss: 0
+    tier: 0
+  - key: doc.citizen_id
+    text: "\u516C\u6C11\u7F16\u53F7"
+    gloss: 0
+    tier: 0
+  - key: doc.date_of_birth
+    text: "\u51FA\u751F\u65E5\u671F"
+    gloss: 0
+    tier: 0
+  - key: doc.destination_era
+    text: "\u76EE\u7684\u5730\uFF08\u65F6\u4EE3\uFF09"
+    gloss: 0
+    tier: 0
+  - key: doc.travel_class
+    text: "\u65C5\u884C\u7B49\u7EA7"
+    gloss: 0
+    tier: 0
+  - key: doc.valid_until
+    text: "\u6709\u6548\u671F\u81F3"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau
+    text: "\u65F6\u95F4\u6D77\u5173\u5C40"
+    gloss: 0
+    tier: 0
+  - key: doc.citizen_travel_passport_passeport_de_voyage_temporel
+    text: "\u516C\u6C11\u65F6\u95F4\u65C5\u884C\u62A4\u7167"
+    gloss: 0
+    tier: 0
+  - key: doc.nationality
+    text: "\u56FD\u7C4D"
+    gloss: 0
+    tier: 0
+  - key: doc.signature
+    text: "\u7B7E\u540D"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder
+    text: "\u5E94\u7B54\u5668"
+    gloss: 0
+    tier: 0
+  - key: doc.currency_carried
+    text: "\u643A\u5E26\u8D27\u5E01"
+    gloss: 0
+    tier: 0
+  - key: doc.declared_effects
+    text: "\u7533\u62A5\u7269\u54C1"
+    gloss: 0
+    tier: 0
+  - key: doc.departure_date
+    text: "\u51FA\u53D1\u65E5\u671F"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_class
+    text: "\u5E94\u7B54\u5668\u7B49\u7EA7"
+    gloss: 0
+    tier: 0
+  - key: doc.entry_ticket
+    text: "\u5165\u573A\u5238"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_portal_hall_dispatch
+    text: "\u65F6\u95F4\u6D77\u5173\u5C40 \xB7 \u4F20\u9001\u95E8\u5927\u5385\u8C03\u5EA6"
+    gloss: 0
+    tier: 0
+  - key: doc.gate
+    text: "\u95F8\u53E3"
+    gloss: 0
+    tier: 0
+  - key: doc.date
+    text: "\u65E5\u671F"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_model
+    text: "\u5E94\u7B54\u5668\u578B\u53F7"
+    gloss: 0
+    tier: 0
+  - key: doc.portal_hall_dispatch_temporal_customs_bureau
+    text: "\u4F20\u9001\u95E8\u5927\u5385\u8C03\u5EA6 \u2022 \u65F6\u95F4\u6D77\u5173\u5C40"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_card
+    text: "\u5E94\u7B54\u5668\u5361"
+    gloss: 0
+    tier: 0
+  - key: doc.traveller
+    text: "\u65C5\u5BA2"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_passed_to_kin
+    text: "\u503A\u52A1\u8F6C\u5AC1\u4EB2\u5C5E"
+    gloss: 0
+    tier: 0
+  - key: doc.unsigned
+    text: "\u672A\u7B7E\u5B57"
+    gloss: 0
+    tier: 0
+  - key: doc.office_of_interval_compliance
+    text: "\u95F4\u9694\u5408\u89C4\u529E\u516C\u5BA4"
+    gloss: 0
+    tier: 0
+  - key: doc.stranding_waiver
+    text: "\u6EDE\u7559\u514D\u8D23\u4E66"
+    gloss: 0
+    tier: 0
+  - key: doc.waiver_no
+    text: "\u514D\u8D23\u4E66\u7F16\u53F7"
+    gloss: 0
+    tier: 0
+  - key: doc.by_acknowledgment_of_this_instrument_the_traveller_accepts_a
+    text: "\u786E\u8BA4\u672C\u6587\u4E66\u5373\u8868\u793A\u65C5\u5BA2\u63A5\u53D7\u56E0\u81EA\u613F\u8D8A\u8FC7\u6388\u6743\u5F53\u4E0B\u800C\u4EA7\u751F\u7684\u4E00\u5207\u65F6\u95F4\u5F02\u5E38\u3001\u5F53\u5730\u4E60\u4FD7\u53CA\u95F4\u9694\u9519\u4F4D\u3002\u4E0D\u4FDD\u8BC1\u4EFB\u4F55\u8FD4\u7A0B\u95F4\u9694\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.the_traveller_assumes_responsibility_for_identity_drift_cale
+    text: "\u65C5\u5BA2\u81EA\u884C\u627F\u62C5\u8EAB\u4EFD\u6F02\u79FB\u3001\u5386\u6CD5\u504F\u5DEE\u3001\u8BB0\u5FC6\u5931\u6B65\u4EE5\u53CA\u6EDE\u7559\u4E8E\u5148\u524D\u65F6\u4EE3\u7684\u4E00\u5207\u5BFB\u5E38\u540E\u679C\u3002\u5BF9\u672C\u5C40\u63D0\u51FA\u7684\u7D22\u8D54\u4E0D\u4E2D\u6B62\u6240\u9002\u7528\u7684\u4E16\u7EAA\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.acceptance_confirms_that_the_traveller_has_received_notice_o
+    text: "\u63A5\u53D7\u5373\u786E\u8BA4\u65C5\u5BA2\u5DF2\u6536\u5230\u6EDE\u7559\u6761\u4EF6\u7684\u901A\u77E5\uFF0C\u5E76\u540C\u610F\u5728\u4E0D\u671F\u5F85\u6551\u63F4\u3001\u7EA0\u6B63\u6216\u6062\u590D\u7684\u60C5\u51B5\u4E0B\u7EE7\u7EED\u524D\u884C\u3002\u672C\u514D\u8D23\u4E66\u5728\u6240\u6709\u516C\u8BA4\u7684\u8FDE\u7EED\u4F53\u4E2D\u59CB\u7EC8\u6709\u6548\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.holiday_credit_agreement
+    text: "\u5EA6\u5047\u4FE1\u8D37\u534F\u8BAE"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs
+    text: "\u65F6\u95F4\u6D77\u5173"
+    gloss: 0
+    tier: 0
+  - key: doc.leisure_credit_bureau
+    text: "\u4F11\u95F2\u4FE1\u8D37\u5C40"
+    gloss: 0
+    tier: 0
+  - key: doc.borrower
+    text: "\u501F\u6B3E\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.destination
+    text: "\u76EE\u7684\u5730"
+    gloss: 0
+    tier: 0
+  - key: doc.account_class
+    text: "\u8D26\u6237\u7B49\u7EA7"
+    gloss: 0
+    tier: 0
+  - key: doc.credit_line
+    text: "\u4FE1\u8D37\u989D\u5EA6"
+    gloss: 0
+    tier: 0
+  - key: doc.issuing_seal
+    text: "\u7B7E\u53D1\u5370\u9274"
+    gloss: 0
+    tier: 0
+  - key: doc.1_borrower
+    text: "1  \u501F\u6B3E\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.2_agreement
+    text: "2  \u534F\u8BAE"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_act_of_2139_any_alteration_voids_this_docum
+    text: "\u300A2139\u5E74\u65F6\u95F4\u6D77\u5173\u6CD5\u300B\u3002\u4EFB\u4F55\u6D82\u6539\u5747\u4F7F\u672C\u6587\u4EF6\u4F5C\u5E9F\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.for_official_use_desk_stamp
+    text: "\u516C\u52A1\u4E13\u7528 \xB7 \u67DC\u53F0\u76D6\u7AE0"
+    gloss: 0
+    tier: 0
+  - key: doc.issued_by_0
+    text: "\u7531{0}\u7B7E\u53D1"
+    gloss: 0
+    tier: 0
+  - key: doc.proof_of_funds
+    text: "\u8D44\u91D1\u8BC1\u660E"
+    gloss: 0
+    tier: 0
+  - key: doc.account_holder
+    text: "\u8D26\u6237\u6301\u6709\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.funds_held
+    text: "\u6301\u6709\u8D44\u91D1"
+    gloss: 0
+    tier: 0
+  - key: doc.1_account_holder
+    text: "1  \u8D26\u6237\u6301\u6709\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.2_funds
+    text: "2  \u8D44\u91D1"
+    gloss: 0
+    tier: 0
+  - key: doc.travel_insurance_certificate
+    text: "\u65C5\u884C\u4FDD\u9669\u8BC1\u660E\u4E66"
+    gloss: 0
+    tier: 0
+  - key: doc.transit_insurance_desk
+    text: "\u65C5\u9014\u4FDD\u9669\u7A97\u53E3"
+    gloss: 0
+    tier: 0
+  - key: doc.insured
+    text: "\u88AB\u4FDD\u9669\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.policy_no
+    text: "\u4FDD\u5355\u7F16\u53F7"
+    gloss: 0
+    tier: 0
+  - key: doc.1_insured
+    text: "1  \u88AB\u4FDD\u9669\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.2_policy
+    text: "2  \u4FDD\u5355"
+    gloss: 0
+    tier: 0
+  - key: doc.worker
+    text: "\u52B3\u5DE5"
+    gloss: 0
+    tier: 0
+  - key: doc.employer
+    text: "\u96C7\u4E3B"
+    gloss: 0
+    tier: 0
+  - key: doc.place_of_work_era
+    text: "\u5DE5\u4F5C\u5730\u70B9\uFF08\u65F6\u4EE3\uFF09"
+    gloss: 0
+    tier: 0
+  - key: doc.term
+    text: "\u671F\u9650"
+    gloss: 0
+    tier: 0
+  - key: doc.wage
+    text: "\u5DE5\u8D44"
+    gloss: 0
+    tier: 0
+  - key: doc.ministry_of_recovery_debt_relief_office
+    text: "\u590D\u5174\u90E8 \xB7 \u503A\u52A1\u51CF\u514D\u529E\u516C\u5BA4"
+    gloss: 0
+    tier: 0
+  - key: doc.work_permit_debt_relief_labour
+    text: "\u5DE5\u4F5C\u8BB8\u53EF \u2013 \u503A\u52A1\u51CF\u514D\u52B3\u52A8"
+    gloss: 0
+    tier: 0
+  - key: doc.authorised_by
+    text: "\u6388\u6743\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.holder
+    text: "\u6301\u6709\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.registry_id
+    text: "\u767B\u8BB0\u7F16\u53F7"
+    gloss: 0
+    tier: 0
+  - key: doc.origin_era
+    text: "\u539F\u7C4D\uFF08\u65F6\u4EE3\uFF09"
+    gloss: 0
+    tier: 0
+  - key: doc.incident
+    text: "\u4E8B\u4EF6"
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_registry_temporal_customs_bureau
+    text: "\u6D41\u79BB\u8005\u767B\u8BB0\u5904 \xB7 \u65F6\u95F4\u6D77\u5173\u5C40"
+    gloss: 0
+    tier: 0
+  - key: doc.travel_permit
+    text: "\u65C5\u884C\u8BB8\u53EF"
+    gloss: 0
+    tier: 0
+  - key: doc.language_spoken
+    text: "\u4F7F\u7528\u8BED\u8A00"
+    gloss: 0
+    tier: 0
+  - key: doc.technology_carried
+    text: "\u643A\u5E26\u79D1\u6280"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_return_intake
+    text: "\u65F6\u95F4\u6D77\u5173\u5C40 \xB7 \u8FD4\u7A0B\u63A5\u6536"
+    gloss: 0
+    tier: 0
+  - key: doc.intake_declaration
+    text: "\u63A5\u6536\u7533\u62A5\u5355"
+    gloss: 0
+    tier: 0
+  - key: doc.nothing_to_declare
+    text: "\u65E0\u7533\u62A5\u7269\u54C1"
+    gloss: 0
+    tier: 0
+  - key: doc.goods
+    text: "\u7269\u54C1"
+    gloss: 0
+    tier: 0
+  - key: doc.persons
+    text: "\u4EBA\u5458"
+    gloss: 0
+    tier: 0
+  - key: doc.knowledge
+    text: "\u77E5\u8BC6"
+    gloss: 0
+    tier: 0
+  - key: doc.declarant_signature
+    text: "\u7533\u62A5\u4EBA\u7B7E\u540D"
+    gloss: 0
+    tier: 0
+  - key: doc.recalled_traveller
+    text: "\u53EC\u56DE\u65C5\u5BA2"
+    gloss: 0
+    tier: 0
+  - key: doc.return_to
+    text: "\u8FD4\u56DE\u81F3"
+    gloss: 0
+    tier: 0
+  - key: doc.return_by_date
+    text: "\u8FD4\u56DE\u671F\u9650\uFF08\u65E5\u671F\uFF09"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_directorate_of_returns
+    text: "\xB7 \u65F6\u95F4\u6D77\u5173\u5C40 \xB7 \u8FD4\u7A0B\u603B\u7F72"
+    gloss: 0
+    tier: 0
+  - key: doc.return_order
+    text: "\u8FD4\u7A0B\u4EE4"
+    gloss: 0
+    tier: 0
+  - key: doc.order_no
+    text: "\u4EE4\u7F16\u53F7"
+    gloss: 0
+    tier: 0
+  - key: doc.authorized_by
+    text: "\u6388\u6743\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.deviation_report
+    text: "\u504F\u5DEE\u62A5\u544A"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief_departures
+    text: "\u503A\u52A1\u51CF\u514D\u51FA\u53D1"
+    gloss: 0
+    tier: 0
+  - key: doc.statement
+    text: "\u9648\u8FF0"
+    gloss: 0
+    tier: 0
+  - key: doc.contradicted_by
+    text: "\u53CD\u9A73\u4F9D\u636E"
+    gloss: 0
+    tier: 0
+  - key: doc.desk_officer
+    text: "\u67DC\u53F0\u804C\u5458"
+    gloss: 0
+    tier: 0
+  - key: doc.a_deviation_is_documented_once_per_category_denial_on_docume
+    text: "\u6BCF\u7C7B\u504F\u5DEE\u53EA\u8BB0\u5F55\u4E00\u6B21\u3002\u4F9D\u636E\u300A2139\u5E74\u65F6\u95F4\u6D77\u5173\u6CD5\u300B\uFF0C\u57FA\u4E8E\u5DF2\u8BB0\u5F55\u504F\u5DEE\u7684\u62D2\u7EDD\u5C5E\u6B63\u5F53\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.directive_memo
+    text: "\u6307\u4EE4\u5907\u5FD8\u5F55"
+    gloss: 0
+    tier: 0
+  - key: doc.to
+    text: "\u6536\u4EF6\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.from
+    text: "\u53D1\u4EF6\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.ref
+    text: "\u53C2\u8003\u53F7"
+    gloss: 0
+    tier: 0
+  - key: doc.no
+    text: "\u7F16\u53F7"
+    gloss: 0
+    tier: 0
+  - key: doc.directive
+    text: "\u6307\u4EE4"
+    gloss: 0
+    tier: 0
+  - key: doc.issued_by_the_customs_directorate
+    text: "\u7531\u6D77\u5173\u603B\u7F72\u7B7E\u53D1"
+    gloss: 0
+    tier: 0
+  - key: doc.interview_record
+    text: "\u95EE\u8BE2\u8BB0\u5F55"
+    gloss: 0
+    tier: 0
+  - key: doc.speaker
+    text: "\u53D1\u8A00\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: doc.taken_down_in_english_by_the_desk_officer_a_statement_in_the
+    text: "\u7531\u67DC\u53F0\u804C\u5458\u4EE5\u82F1\u8BED\u8BB0\u5F55\u3002\u65C5\u5BA2\u4EE5\u6BCD\u8BED\u6240\u4F5C\u7684\u9648\u8FF0\u6309\u539F\u8BDD\u8BB0\u5F55\u3002\u53EA\u6709\u65C5\u5BA2\u7684\u56DE\u7B54\u53EF\u4F5C\u4E3A\u8BC1\u636E\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.internal_memorandum
+    text: "\u5185\u90E8\u5907\u5FD8\u5F55"
+    gloss: 0
+    tier: 0
+  - key: doc.subject
+    text: "\u4E8B\u7531"
+    gloss: 0
+    tier: 0
+  - key: doc.signed_for_the_sender
+    text: "\u4EE3\u53D1\u4EF6\u4EBA\u7B7E\u7F72"
+    gloss: 0
+    tier: 0
+  - key: doc.portal_schedule
+    text: "\u4F20\u9001\u95E8\u65F6\u523B\u8868"
+    gloss: 0
+    tier: 0
+  - key: doc.ring
+    text: "\u73AF"
+    gloss: 0
+    tier: 0
+  - key: doc.era
+    text: "\u65F6\u4EE3"
+    gloss: 0
+    tier: 0
+  - key: doc.place
+    text: "\u5730\u70B9"
+    gloss: 0
+    tier: 0
+  - key: doc.state
+    text: "\u72B6\u6001"
+    gloss: 0
+    tier: 0
+  - key: doc.record_extract
+    text: "\u8BB0\u5F55\u6458\u5F55"
+    gloss: 0
+    tier: 0
+  - key: doc.an_extract_of_the_records_of_temporal_customs_true_on_the_da
+    text: "\u65F6\u95F4\u6D77\u5173\u8BB0\u5F55\u6458\u5F55\uFF0C\u4E8E\u7B7E\u53D1\u5F53\u65E5\u5C5E\u5B9E\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.register
+    text: "\u767B\u8BB0\u518C"
+    gloss: 0
+    tier: 0
+  - key: doc.value
+    text: "\u6570\u503C"
+    gloss: 0
+    tier: 0
+  - key: doc.note
+    text: "\u5907\u6CE8"
+    gloss: 0
+    tier: 0
+  - key: doc.compiled_by_temporal_customs_from_the_day_s_historical_recor
+    text: "\u7531\u65F6\u95F4\u6D77\u5173\u6839\u636E\u5F53\u65E5\u5386\u53F2\u8BB0\u5F55\u6C47\u7F16\u3002\u4FEE\u8BA2\u8FC7\u7684\u6761\u76EE\u5DF2\u6807\u6CE8\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.supply_requisition
+    text: "\u8865\u7ED9\u7533\u8BF7\u5355"
+    gloss: 0
+    tier: 0
+  - key: doc.item
+    text: "\u7269\u54C1"
+    gloss: 0
+    tier: 0
+  - key: doc.section
+    text: "\u7C7B\u522B"
+    gloss: 0
+    tier: 0
+  - key: doc.price
+    text: "\u4EF7\u683C"
+    gloss: 0
+    tier: 0
+  - key: doc.status
+    text: "\u72B6\u6001"
+    gloss: 0
+    tier: 0
+  - key: doc.requires
+    text: "\u524D\u7F6E\u6761\u4EF6"
+    gloss: 0
+    tier: 0
+  - key: doc.paid_on_order_delivered_at_the_start_of_the_next_shift_an_or
+    text: "\u4E0B\u5355\u5373\u4ED8\u6B3E\u3002\u4E8E\u4E0B\u4E00\u73ED\u6B21\u5F00\u59CB\u65F6\u9001\u8FBE\u3002\u8BA2\u5355\u4EC5\u53EF\u5728\u4E0B\u5355\u5F53\u65E5\u53D6\u6D88\u5E76\u9000\u6B3E\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.seal_register
+    text: "\u5370\u9274\u767B\u8BB0\u518C"
+    gloss: 0
+    tier: 0
+  - key: doc.every_paper_carries_the_seal_of_the_office_that_issues_it_ho
+    text: "\u6BCF\u4EFD\u8BC1\u4EF6\u90FD\u5E26\u6709\u7B7E\u53D1\u673A\u5173\u7684\u5370\u9274\u3002\u5728\u6B64\u5C06\u8BC1\u4EF6\u5370\u9274\u4E0E\u5176\u673A\u5173\u7684\u5370\u9274\u5BF9\u7167\uFF1A\u8F6E\u5ED3\u3001\u58A8\u8272\u6216\u94ED\u6587\u4E0D\u540C\u5373\u4E3A\u4F2A\u9020\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.compiled_by_temporal_customs_from_the_offices_seal_books_a_s
+    text: "\u7531\u65F6\u95F4\u6D77\u5173\u6839\u636E\u5404\u673A\u5173\u7684\u5370\u9274\u7C3F\u6C47\u7F16\u3002\u5370\u9274\u5747\u4E3A\u5370\u5237\uFF0C\u7EDD\u4E0D\u624B\u5DE5\u76D6\u5370\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.day
+    text: "\u65E5"
+    gloss: 0
+    tier: 0
+  - key: doc.wages
+    text: "\u5DE5\u8D44"
+    gloss: 0
+    tier: 0
+  - key: doc.fines
+    text: "\u7F5A\u6B3E"
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief
+    text: "\u503A\u52A1\u51CF\u514D"
+    gloss: 0
+    tier: 0
+  - key: doc.household
+    text: "\u5BB6\u7528"
+    gloss: 0
+    tier: 0
+  - key: doc.purchases
+    text: "\u8D2D\u7269"
+    gloss: 0
+    tier: 0
+  - key: doc.balance
+    text: "\u4F59\u989D"
+    gloss: 0
+    tier: 0
+  - key: doc.owed
+    text: "\u6B20\u6B3E"
+    gloss: 0
+    tier: 0
+  - key: doc.departures_are_voluntary
+    text: "\u51FA\u53D1\u5747\u5C5E\u81EA\u613F\u3002"
+    gloss: 0
+    tier: 0
+  - key: doc.scanned_0_desk_scanner_1
+    text: "\u5DF2\u626B\u63CF {0} \xB7 \u67DC\u53F0\u626B\u63CF\u4EEA 1"
+    gloss: 0
+    tier: 0
+  - key: doc.analysed_0_1_contradiction_marked
+    text: "\u5DF2\u5206\u6790 {0} \xB7 \u6807\u51FA 1 \u5904\u77DB\u76FE"
+    gloss: 0
+    tier: 0
+  - key: doc.analysed_0
+    text: "\u5DF2\u5206\u6790 {0} \xB7"
+    gloss: 0
+    tier: 0
+  - key: doc.scanned_0_already_analysed
+    text: "\u5DF2\u626B\u63CF {0} \xB7 \u5DF2\u5206\u6790"
+    gloss: 0
+    tier: 0
+  - key: doc.approved
+    text: "\u6279\u51C6"
+    gloss: 0
+    tier: 0
+  - key: doc.denied
+    text: "\u62D2\u7EDD"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.0
+    text: "\u661F\u671F\u65E5"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.0
+    text: "\u5468\u65E5"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.1
+    text: "\u661F\u671F\u4E00"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.1
+    text: "\u5468\u4E00"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.2
+    text: "\u661F\u671F\u4E8C"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.2
+    text: "\u5468\u4E8C"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.3
+    text: "\u661F\u671F\u4E09"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.3
+    text: "\u5468\u4E09"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.4
+    text: "\u661F\u671F\u56DB"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.4
+    text: "\u5468\u56DB"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.5
+    text: "\u661F\u671F\u4E94"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.5
+    text: "\u5468\u4E94"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.6
+    text: "\u661F\u671F\u516D"
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.6
+    text: "\u5468\u516D"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.1
+    text: "\u4E00\u6708"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.2
+    text: "\u4E8C\u6708"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.3
+    text: "\u4E09\u6708"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.4
+    text: "\u56DB\u6708"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.5
+    text: "\u4E94\u6708"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.6
+    text: "\u516D\u6708"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.7
+    text: "\u4E03\u6708"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.8
+    text: "\u516B\u6708"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.9
+    text: "\u4E5D\u6708"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.10
+    text: "\u5341\u6708"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.11
+    text: "\u5341\u4E00\u6708"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.12
+    text: "\u5341\u4E8C\u6708"
+    gloss: 0
+    tier: 0
+  - key: doc.clerk_s_rulebook_desk_3
+    text: "\u529E\u4E8B\u5458\u89C4\u5219\u624B\u518C \xB7 DESK 3"
+    gloss: 0
+    tier: 0
   words:
   - native: "\u5173\u95ED"
     english: Turn off
@@ -4534,5 +5206,311 @@ MonoBehaviour:
     english: hyphens
   - native: "\u6487\u53F7"
     english: apostrophes
+  - native: "\u5165\u5883"
+    english: entry
+  - native: "\u59D3"
+    english: surname
+  - native: "\u540D"
+    english: given names
+  - native: "\u56FD\u7C4D"
+    english: nationality
+  - native: "\u7533\u62A5"
+    english: declare / declaration
+  - native: "\u5165\u573A\u5238"
+    english: entry ticket
+  - native: "\u5927\u5385"
+    english: hall
+  - native: "\u8C03\u5EA6"
+    english: dispatch
+  - native: "\u95F8\u53E3"
+    english: gate
+  - native: "\u578B\u53F7"
+    english: model
+  - native: "\u5361"
+    english: card
+  - native: "\u8F6C\u5AC1"
+    english: passed to
+  - native: "\u4EB2\u5C5E"
+    english: kin
+  - native: "\u95F4\u9694"
+    english: interval
+  - native: "\u5408\u89C4"
+    english: compliance
+  - native: "\u786E\u8BA4"
+    english: acknowledge / confirm
+  - native: "\u6587\u4E66"
+    english: instrument
+  - native: "\u8868\u793A"
+    english: means
+  - native: "\u63A5\u53D7"
+    english: accept
+  - native: "\u56E0"
+    english: because of
+  - native: "\u81EA\u613F"
+    english: voluntary
+  - native: "\u8D8A\u8FC7"
+    english: pass beyond
+  - native: "\u6388\u6743"
+    english: authorized
+  - native: "\u800C"
+    english: and thus
+  - native: "\u4EA7\u751F"
+    english: arise
+  - native: "\u4E00\u5207"
+    english: all
+  - native: "\u5F02\u5E38"
+    english: irregularities
+  - native: "\u5F53\u5730"
+    english: local
+  - native: "\u4E60\u4FD7"
+    english: customs
+  - native: "\u9519\u4F4D"
+    english: displacement
+  - native: "\u4FDD\u8BC1"
+    english: guarantee
+  - native: "\u81EA\u884C"
+    english: personally
+  - native: "\u627F\u62C5"
+    english: assume
+  - native: "\u6F02\u79FB"
+    english: drift
+  - native: "\u5386\u6CD5"
+    english: calendar
+  - native: "\u8BB0\u5FC6"
+    english: memory
+  - native: "\u5931\u6B65"
+    english: desynchronization
+  - native: "\u4EE5\u53CA"
+    english: and
+  - native: "\u5148\u524D"
+    english: prior
+  - native: "\u5BFB\u5E38"
+    english: ordinary
+  - native: "\u540E\u679C"
+    english: consequences
+  - native: "\u5BF9"
+    english: against
+  - native: "\u672C\u5C40"
+    english: the Bureau
+  - native: "\u7D22\u8D54"
+    english: claims
+  - native: "\u4E2D\u6B62"
+    english: suspend
+  - native: "\u4E16\u7EAA"
+    english: century
+  - native: "\u6536\u5230"
+    english: received
+  - native: "\u6761\u4EF6"
+    english: conditions / requirement
+  - native: "\u540C\u610F"
+    english: agree
+  - native: "\u671F\u5F85"
+    english: expect
+  - native: "\u6551\u63F4"
+    english: rescue
+  - native: "\u7EA0\u6B63"
+    english: correction
+  - native: "\u60C5\u51B5"
+    english: situation
+  - native: "\u524D\u884C"
+    english: proceed
+  - native: "\u516C\u8BA4"
+    english: recognized
+  - native: "\u8FDE\u7EED\u4F53"
+    english: continuities
+  - native: "\u5EA6\u5047"
+    english: holiday
+  - native: "\u4FE1\u8D37"
+    english: credit
+  - native: "\u534F\u8BAE"
+    english: agreement
+  - native: "\u501F\u6B3E\u4EBA"
+    english: borrower
+  - native: "\u989D\u5EA6"
+    english: line / limit
+  - native: "\u5E74"
+    english: year
+  - native: "\u6CD5"
+    english: Act
+  - native: "\u6D82\u6539"
+    english: alteration
+  - native: "\u4F7F"
+    english: make
+  - native: "\u4F5C\u5E9F"
+    english: void
+  - native: "\u516C\u52A1"
+    english: official
+  - native: "\u4E13\u7528"
+    english: use only
+  - native: "\u6301\u6709"
+    english: held
+  - native: "\u4FDD\u9669"
+    english: insurance
+  - native: "\u65C5\u9014"
+    english: transit
+  - native: "\u7A97\u53E3"
+    english: desk
+  - native: "\u88AB\u4FDD\u9669\u4EBA"
+    english: insured
+  - native: "\u590D\u5174"
+    english: recovery
+  - native: "\u90E8"
+    english: ministry
+  - native: "\u6388\u6743\u4EBA"
+    english: authorised by
+  - native: "\u63A5\u6536"
+    english: intake
+  - native: "\u4EBA\u5458"
+    english: persons
+  - native: "\u77E5\u8BC6"
+    english: knowledge
+  - native: "\u7533\u62A5\u4EBA"
+    english: declarant
+  - native: "\u9648\u8FF0"
+    english: statement
+  - native: "\u53CD\u9A73"
+    english: contradicted
+  - native: "\u4F9D\u636E"
+    english: by / under
+  - native: "\u6BCF\u7C7B"
+    english: each category
+  - native: "\u53EA"
+    english: only
+  - native: "\u4E00\u6B21"
+    english: once
+  - native: "\u57FA\u4E8E"
+    english: based on
+  - native: "\u5C5E"
+    english: is
+  - native: "\u6B63\u5F53"
+    english: justified
+  - native: "\u6536\u4EF6\u4EBA"
+    english: to
+  - native: "\u53D1\u4EF6\u4EBA"
+    english: from / sender
+  - native: "\u53D1\u8A00\u4EBA"
+    english: speaker
+  - native: "\u6BCD\u8BED"
+    english: own tongue
+  - native: "\u6240\u4F5C"
+    english: made
+  - native: "\u539F\u8BDD"
+    english: as spoken
+  - native: "\u5185\u90E8"
+    english: internal
+  - native: "\u4E8B\u7531"
+    english: subject
+  - native: "\u4EE3"
+    english: on behalf of
+  - native: "\u7B7E\u7F72"
+    english: signed
+  - native: "\u73AF"
+    english: ring
+  - native: "\u5C5E\u5B9E"
+    english: true
+  - native: "\u6839\u636E"
+    english: from
+  - native: "\u6C47\u7F16"
+    english: compiled
+  - native: "\u6807\u6CE8"
+    english: marked
+  - native: "\u8865\u7ED9"
+    english: supply
+  - native: "\u7533\u8BF7"
+    english: requisition
+  - native: "\u7C7B\u522B"
+    english: section
+  - native: "\u4EF7\u683C"
+    english: price
+  - native: "\u4E0B\u5355"
+    english: order placed
+  - native: "\u4E0B\u4E00"
+    english: next
+  - native: "\u73ED\u6B21"
+    english: shift
+  - native: "\u6BCF\u4EFD"
+    english: every
+  - native: "\u5E26\u6709"
+    english: carries
+  - native: "\u8F6E\u5ED3"
+    english: outline
+  - native: "\u58A8\u8272"
+    english: ink
+  - native: "\u94ED\u6587"
+    english: legend
+  - native: "\u5373\u4E3A"
+    english: is
+  - native: "\u5404"
+    english: each
+  - native: "\u7C3F"
+    english: books
+  - native: "\u624B\u5DE5"
+    english: by hand
+  - native: "\u76D6\u5370"
+    english: stamp
+  - native: "\u5BB6\u7528"
+    english: household
+  - native: "\u8D2D\u7269"
+    english: purchases
+  - native: "\u6B20\u6B3E"
+    english: owed
+  - native: "\u5206\u6790"
+    english: analysed
+  - native: "\u6807\u51FA"
+    english: marked
+  - native: "\u661F\u671F\u65E5"
+    english: Sunday
+  - native: "\u5468\u65E5"
+    english: Sun
+  - native: "\u661F\u671F\u4E00"
+    english: Monday
+  - native: "\u5468\u4E00"
+    english: Mon
+  - native: "\u661F\u671F\u4E8C"
+    english: Tuesday
+  - native: "\u5468\u4E8C"
+    english: Tue
+  - native: "\u661F\u671F\u4E09"
+    english: Wednesday
+  - native: "\u5468\u4E09"
+    english: Wed
+  - native: "\u661F\u671F\u56DB"
+    english: Thursday
+  - native: "\u5468\u56DB"
+    english: Thu
+  - native: "\u661F\u671F\u4E94"
+    english: Friday
+  - native: "\u5468\u4E94"
+    english: Fri
+  - native: "\u661F\u671F\u516D"
+    english: Saturday
+  - native: "\u5468\u516D"
+    english: Sat
+  - native: "\u4E00\u6708"
+    english: January
+  - native: "\u4E8C\u6708"
+    english: February
+  - native: "\u4E09\u6708"
+    english: March
+  - native: "\u56DB\u6708"
+    english: April
+  - native: "\u4E94\u6708"
+    english: May
+  - native: "\u516D\u6708"
+    english: June
+  - native: "\u4E03\u6708"
+    english: July
+  - native: "\u516B\u6708"
+    english: August
+  - native: "\u4E5D\u6708"
+    english: September
+  - native: "\u5341\u6708"
+    english: October
+  - native: "\u5341\u4E00\u6708"
+    english: November
+  - native: "\u5341\u4E8C\u6708"
+    english: December
   - native: N
     english: N (number format)
+  - native: "\u529E\u4E8B\u5458"
+    english: clerk

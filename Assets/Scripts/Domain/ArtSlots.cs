@@ -37,6 +37,9 @@ public static class ArtSlots
     /// <summary>The desk rulebook's open folder (Saleh's Canva art, run 7: its tabs, its heading and its line numbers painted out, the game prints them; clear outside its outline).</summary>
     public const string RulebookFolder = "Forms/rulebook_folder";
 
+    /// <summary>The folder's clean face: its cover's words painted out (track LANG), printed by the game while a culture's language is read.</summary>
+    public const string RulebookFolderClean = "Forms/rulebook_folder_clean";
+
     /// <summary>One of the rulebook folder's tabs by its art name ("rules", "papers", "guide", "seals" gives Forms/rulebook_tab_seals): cut from the art, its word painted out.</summary>
     public static string RulebookTab(string tab) => "Forms/rulebook_tab_" + Key(tab);
 
@@ -67,12 +70,22 @@ public static class ArtSlots
     /// Forms/paper_tc610), then the plain agency face. A paper with no form
     /// number tries the agency face only.
     /// </summary>
-    public static IReadOnlyList<string> PaperFaces(string formNumber, string issuer = null)
+    /// With <paramref name="clean"/> (a culture's language is read), its clean
+    /// face ("TC-230" gives Forms/clean_tc230: every baked word painted out, the
+    /// game prints them in the reading language) comes first.
+    public static IReadOnlyList<string> PaperFaces(string formNumber, string issuer = null, bool clean = false)
     {
         string key = Key(formNumber), nation = Key(issuer);
         if (key.Length == 0)
             return new[] { AgencyFace };
-        return nation.Length == 0 ? new[] { "Forms/paper_" + key, AgencyFace } : new[] { "Forms/paper_" + key + "_" + nation, "Forms/paper_" + key, AgencyFace };
+        var faces = new List<string>();
+        if (clean)
+            faces.Add("Forms/clean_" + key);
+        if (nation.Length > 0)
+            faces.Add("Forms/paper_" + key + "_" + nation);
+        faces.Add("Forms/paper_" + key);
+        faces.Add(AgencyFace);
+        return faces;
     }
 
     /// <summary>A document's blank face by its form number ("TC-230" gives Forms/blank_tc230): its art with every field's label painted out, from which a paper drawn on its art patches the label of a field not introduced yet (FormItemKind.Patch); none for a paper with no form number.</summary>

@@ -213,6 +213,7 @@ public static partial class OfficeSceneUIBuilder
         ((RectTransform)label.transform).sizeDelta = new Vector2(DetainBase * 0.9f, DetainBaseHeight * 0.8f);
         TextMeshPro text = label.GetComponent<TextMeshPro>();
         text.text = UiText.Get("hardware.detain");
+        Keyed(text, "hardware.detain");
         text.enableAutoSizing = true;
         text.fontSizeMin = 0.005f;
         text.fontSizeMax = 0.1f;

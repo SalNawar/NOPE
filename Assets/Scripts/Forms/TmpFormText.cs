@@ -102,8 +102,9 @@ public sealed class TmpFormText : ITextMeasure
     /// </summary>
     public static void OnArt(TMP_Text text, FormItem item, FormStyleSO style, FormArt art, TMP_Text measure)
     {
-        bool label = item.Role == FormTextRole.Label || item.Role == FormTextRole.Caption;
-        TMP_FontAsset font = style == null ? null : label ? style.artLabelFont : style.artValueFont;
+        bool label = IsArtLabel(item.Role);
+        TMP_FontAsset culture = label && CultureThemeService.Instance != null ? CultureThemeService.Instance.CultureFont : null;
+        TMP_FontAsset font = culture != null ? culture : style == null ? null : label ? style.artLabelFont : style.artValueFont;
         if (font != null && text.font != font)
         {
             text.font = font;
@@ -112,8 +113,11 @@ public sealed class TmpFormText : ITextMeasure
         text.fontSize *= ArtFit(measure, item, font);
         text.enableAutoSizing = false;
         text.alignment = item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Center : TextAlignmentOptions.Left;
-        text.color = ArtInk(art, item.Role, style);
+        text.color = ArtInk(art, item, style);
     }
+
+    /// <summary>True for a role printed in the art's label face (a label, a caption, an art caption's title or paragraph); a value or a hand takes the value face.</summary>
+    private static bool IsArtLabel(FormTextRole role) => role != FormTextRole.Value && role != FormTextRole.Hand;
 
     /// <summary>The steps ArtFit tries between the floor and the full size.</summary>
     private const int FitSteps = 8;
@@ -150,11 +154,12 @@ public sealed class TmpFormText : ITextMeasure
         return fit;
     }
 
-    /// <summary>The ink a text of <paramref name="role"/> prints in on <paramref name="art"/>: a caption in its stamp ink (the visa box's), a label or a caption without one in its label ink, any other in its value ink, each the style's (FormStyleSO.Ink) when the art names none.</summary>
-    public static Color ArtInk(FormArt art, FormTextRole role, FormStyleSO style)
+    /// <summary>The ink <paramref name="item"/> prints in on <paramref name="art"/>: its own (an art caption's), else a caption in its stamp ink (the visa box's), a label or a caption without one in its label ink, any other in its value ink, each the style's (FormStyleSO.Ink) when the art names none.</summary>
+    public static Color ArtInk(FormArt art, FormItem item, FormStyleSO style)
     {
-        bool label = role == FormTextRole.Label || role == FormTextRole.Caption;
-        string hex = art == null ? null : role == FormTextRole.Caption && !string.IsNullOrEmpty(art.stampInk) ? art.stampInk : label ? art.labelInk : art.ink;
+        FormTextRole role = item.Role;
+        bool label = IsArtLabel(role);
+        string hex = !string.IsNullOrEmpty(item.Ink) ? item.Ink : art == null ? null : role == FormTextRole.Caption && !string.IsNullOrEmpty(art.stampInk) ? art.stampInk : label ? art.labelInk : art.ink;
         if (Rgba.TryParseHex(hex, out Rgba ink))
             return new Color(ink.R, ink.G, ink.B, 1f);
         return style != null ? style.Ink(role) : Color.black;

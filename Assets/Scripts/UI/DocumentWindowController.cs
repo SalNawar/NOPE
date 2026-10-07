@@ -121,7 +121,7 @@ public sealed class DocumentWindowController : MonoBehaviour
         if (scanStrip == null || template == null)
             return;
         string time = clock != null && clock.Clock != null ? ShiftClock.Format(clock.Clock.CurrentMinute) : "--:--";
-        scanStrip.text = string.Format(template, time);
+        scanStrip.text = string.Format(UiText.DocumentWord(template), time);
     }
 
     /// <summary>

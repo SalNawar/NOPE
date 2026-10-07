@@ -31,6 +31,7 @@ MonoBehaviour:
     label: Issuing Seal
   handOver: 0
   showsPhoto: 0
+  askGroup: 
   form:
     formNumber: 
     title: 
@@ -120,6 +121,11 @@ MonoBehaviour:
         valueShare: 0.56
         labelShare: 0.56
         reading: 1.35
+        photo:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
         fields:
         - field: 0
           value:
@@ -133,6 +139,7 @@ MonoBehaviour:
             x1: 0.2525
             y1: 0.6027
           relabel: 0
+          labelText: CITIZEN ID
           centre: 0
         - field: 1
           value:
@@ -146,6 +153,7 @@ MonoBehaviour:
             x1: 0.2525
             y1: 0.53315
           relabel: 1
+          labelText: 
           centre: 0
         - field: 2
           value:
@@ -159,6 +167,7 @@ MonoBehaviour:
             x1: 0.2525
             y1: 0.88518
           relabel: 1
+          labelText: 
           centre: 0
         - field: 3
           value:
@@ -172,6 +181,7 @@ MonoBehaviour:
             x1: 0.2525
             y1: 0.67278
           relabel: 1
+          labelText: 
           centre: 0
         - field: 4
           value:
@@ -185,6 +195,7 @@ MonoBehaviour:
             x1: 0.2525
             y1: 0.74394
           relabel: 1
+          labelText: 
           centre: 0
         - field: 5
           value:
@@ -198,6 +209,7 @@ MonoBehaviour:
             x1: 0.2525
             y1: 0.81402
           relabel: 0
+          labelText: DEPARTURE DATE
           centre: 0
         - field: 6
           value:
@@ -211,6 +223,7 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         prints:
         - kind: 5
@@ -229,11 +242,6 @@ MonoBehaviour:
             y0: 0.71159
             x1: 0.94
             y1: 0.7903
-        photo:
-          x0: 0
-          y0: 0
-          x1: 0
-          y1: 0
         stamp:
           x0: 0
           y0: 0
@@ -247,3 +255,45 @@ MonoBehaviour:
           y0: 0
           x1: 0
           y1: 0
+        captions:
+        - text: ENTRY TICKET
+          kind: 1
+          rect:
+            x0: 0.0547
+            y0: 0.0846
+            x1: 0.5195
+            y1: 0.2647
+          share: 1
+          ink: '#243D47'
+          centre: 0
+        - text: "TEMPORAL CUSTOMS BUREAU \xB7 PORTAL HALL DISPATCH"
+          kind: 0
+          rect:
+            x0: 0.0596
+            y0: 0.278
+            x1: 0.5596
+            y1: 0.3178
+          share: 0.838
+          ink: '#233C46'
+          centre: 0
+        - text: GATE
+          kind: 0
+          rect:
+            x0: 0.7778
+            y0: 0.5155
+            x1: 0.9497
+            y1: 0.5496
+          share: 0.926
+          ink: '#5F2419'
+          centre: 0
+        - text: DATE
+          kind: 0
+          rect:
+            x0: 0.7778
+            y0: 0.6639
+            x1: 0.9497
+            y1: 0.6987
+          share: 0.884
+          ink: '#5F2419'
+          centre: 0
+        clean: 1

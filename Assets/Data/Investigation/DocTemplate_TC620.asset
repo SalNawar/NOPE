@@ -29,10 +29,12 @@ MonoBehaviour:
     label: Issuing Seal
   handOver: 0
   showsPhoto: 0
+  askGroup: 
   form:
     formNumber: 
     title: 
     fixedPage: 1
+    landscape: 0
     blocks:
     - kind: 0
       text: 
@@ -137,6 +139,11 @@ MonoBehaviour:
         valueShare: 0.55
         labelShare: 0.6
         reading: 1
+        photo:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
         fields:
         - field: 0
           value:
@@ -150,6 +157,7 @@ MonoBehaviour:
             x1: 0.2865
             y1: 0.47282
           relabel: 0
+          labelText: TRAVELLER
           centre: 0
         - field: 1
           value:
@@ -163,6 +171,7 @@ MonoBehaviour:
             x1: 0.2735
             y1: 0.52081
           relabel: 0
+          labelText: CITIZEN ID
           centre: 0
         - field: 2
           value:
@@ -176,6 +185,7 @@ MonoBehaviour:
             x1: 0.3585
             y1: 0.61792
           relabel: 0
+          labelText: CURRENCY CARRIED
           centre: 0
         - field: 3
           value:
@@ -189,6 +199,7 @@ MonoBehaviour:
             x1: 0.3545
             y1: 0.66592
           relabel: 0
+          labelText: LANGUAGE SPOKEN
           centre: 0
         - field: 4
           value:
@@ -202,6 +213,7 @@ MonoBehaviour:
             x1: 0.38
             y1: 0.71204
           relabel: 0
+          labelText: TECHNOLOGY CARRIED
           centre: 0
         - field: 5
           value:
@@ -215,6 +227,7 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         prints:
         - kind: 1
@@ -225,11 +238,6 @@ MonoBehaviour:
             y0: 0.87889
             x1: 0.86
             y1: 0.91001
-        photo:
-          x0: 0
-          y0: 0
-          x1: 0
-          y1: 0
         stamp:
           x0: 0
           y0: 0
@@ -243,3 +251,75 @@ MonoBehaviour:
           y0: 0
           x1: 0
           y1: 0
+        captions:
+        - text: "TEMPORAL CUSTOMS BUREAU \xB7 RETURN INTAKE"
+          kind: 0
+          rect:
+            x0: 0.1875
+            y0: 0.0327
+            x1: 0.7949
+            y1: 0.0566
+          share: 0.85
+          ink: '#324862'
+          centre: 1
+        - text: INTAKE DECLARATION
+          kind: 1
+          rect:
+            x0: 0.1035
+            y0: 0.3257
+            x1: 0.8796
+            y1: 0.396
+          share: 1
+          ink: '#364B64'
+          centre: 1
+        - text: Nothing to declare
+          kind: 0
+          rect:
+            x0: 0.1738
+            y0: 0.7446
+            x1: 0.3997
+            y1: 0.7666
+          share: 0.895
+          ink: '#324862'
+          centre: 0
+        - text: Goods
+          kind: 0
+          rect:
+            x0: 0.1738
+            y0: 0.7729
+            x1: 0.3997
+            y1: 0.7959
+          share: 0.887
+          ink: '#334962'
+          centre: 0
+        - text: Persons
+          kind: 0
+          rect:
+            x0: 0.1738
+            y0: 0.8018
+            x1: 0.3997
+            y1: 0.8247
+          share: 0.887
+          ink: '#334962'
+          centre: 0
+        - text: Knowledge
+          kind: 0
+          rect:
+            x0: 0.1738
+            y0: 0.8306
+            x1: 0.3997
+            y1: 0.8535
+          share: 0.857
+          ink: '#324862'
+          centre: 0
+        - text: DECLARANT SIGNATURE
+          kind: 0
+          rect:
+            x0: 0.1146
+            y0: 0.896
+            x1: 0.3796
+            y1: 0.918
+          share: 0.926
+          ink: '#334963'
+          centre: 0
+        clean: 1

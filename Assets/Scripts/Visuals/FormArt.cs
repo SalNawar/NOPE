@@ -68,7 +68,53 @@ public sealed class ArtField
     /// <summary>True when the art's baked label is not the field's (it is painted out of the face): the game prints the template's label there, in the art's label ink.</summary>
     public bool relabel;
 
+    /// <summary>The words the art's own label prints, in English ("SURNAME / GIVEN NAMES"; blank: the field's label): printed in the reading language over the art's clean face (FormArt.captions) when a culture's language is read.</summary>
+    public string labelText = string.Empty;
+
     /// <summary>True when the value is centred across its place (a row's number, a tick in a box); else it starts at the place's left.</summary>
+    public bool centre;
+}
+
+/// <summary>How an art caption is set (ArtCaption.kind): append only (serialized).</summary>
+public enum ArtCaptionKind
+{
+    /// <summary>A label or a header line (the art's label face, bold condensed capitals).</summary>
+    Label = 0,
+
+    /// <summary>The paper's big title (the label face at a title's size).</summary>
+    Title = 1,
+
+    /// <summary>A paragraph of conditions (wrapping lines).</summary>
+    Paragraph = 2
+}
+
+/// <summary>
+/// A fixed word baked into the art that is no field's label (a title, the
+/// agency and office line, a print's label such as NATIONALITY, a checkbox's
+/// option, the waiver's conditions): painted out of the art's clean face
+/// (ArtSlots.PaperClean) and printed by the game in the reading language when
+/// a culture's language is read (Saleh 2026-10-07: "I want the language to
+/// change on all documents"); in English the art shows its own.
+/// </summary>
+[Serializable]
+public sealed class ArtCaption
+{
+    /// <summary>The English words as the art prints them (their doc.* key is DocumentWords.Key of them).</summary>
+    public string text = string.Empty;
+
+    /// <summary>How it is set.</summary>
+    public ArtCaptionKind kind;
+
+    /// <summary>Where the art prints it (the painted-out place).</summary>
+    public ArtBox rect;
+
+    /// <summary>Its type size as a share of its place's height (it shrinks to fit its place, wrapping first where the place allows two lines).</summary>
+    public float share = 0.8f;
+
+    /// <summary>Its ink ("#RRGGBB", the art's).</summary>
+    public string ink = string.Empty;
+
+    /// <summary>True when centred across its place; else from its left.</summary>
     public bool centre;
 }
 
@@ -144,6 +190,15 @@ public sealed class FormArt
 
     /// <summary>A booklet's spine between its pages (none: no spine).</summary>
     public ArtBox spine;
+
+    /// <summary>The art's fixed words that are no field's label (ArtCaption), printed over its clean face when a culture's language is read.</summary>
+    public ArtCaption[] captions = new ArtCaption[0];
+
+    /// <summary>True when the art has a clean face (ArtSlots.PaperFaces' Forms/clean_*: every baked word painted out): while a culture's language is read the paper is drawn on it, every field's label and caption printed in that language; false keeps the art's own English.</summary>
+    public bool clean;
+
+    /// <summary>True when a paper showing <paramref name="data"/> prints its words in a culture's language over the clean face.</summary>
+    public bool Worded(FormData data) => clean && data != null && data.Translated;
 
     /// <summary>True when the form is drawn on its art.</summary>
     public bool IsSet => fields != null && fields.Length > 0;

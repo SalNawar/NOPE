@@ -71,6 +71,12 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The booklet's own click box (its hover outline; the drag's proxy: a drag from anywhere on it moves it).</summary>
     [SerializeField] private Clickable card;
 
+    /// <summary>The folder's face (its art: ArtSlots.RulebookFolder; the clean face while a culture's language is read).</summary>
+    [SerializeField] private Renderer folderFace;
+
+    /// <summary>The cover's words over the clean face, each built with its English (shown only while a culture's language is read).</summary>
+    [SerializeField] private TMP_Text[] coverWords = Array.Empty<TMP_Text>();
+
     /// <summary>The RULES page (its title, rows and none line).</summary>
     [SerializeField] private GameObject rulesPage;
 
@@ -184,11 +190,13 @@ public sealed class DeskRulebook : MonoBehaviour
     /// <summary>The booklet's drag (DeskController lifts it above the stack while it runs).</summary>
     public DeskDraggable Drag => drag;
 
-    /// <summary>The page shown: 0 RULES, 1 PAPERS, 2 GUIDE, 3 SEALS.</summary>
-    public int Page { get; private set; }
+    /// <summary>The cover's words in English as built (ShowCover prints them in the reading language).</summary>
+    private string[] _coverEnglish = Array.Empty<string>();
 
-    private void Awake()
+    /// <summary>The folder's own words in the reading language: its cover, the RULES and PAPERS pages' heads and empty lines (again whenever the labels' language changes).</summary>
+    private void PrintLabels()
     {
+        ShowCover();
         if (title != null)
             title.text = UiText.Get("desk.rulebook.title");
         if (none != null)
@@ -197,6 +205,47 @@ public sealed class DeskRulebook : MonoBehaviour
             papersTitle.text = UiText.Get("desk.rulebook.papers");
         if (papersNone != null)
             papersNone.text = UiText.Get("desk.rulebook.papersNone");
+    }
+
+    /// <summary>
+    /// The folder's cover in the reading language (Saleh 2026-10-07: every
+    /// document in the game's language): while a culture's language is read
+    /// the folder takes its clean face and prints its cover's words in that
+    /// language (UiText.DocumentWord); in English the art keeps its own.
+    /// </summary>
+    private void ShowCover()
+    {
+        bool translated = UiText.FormWords() != null;
+        Texture2D clean = translated ? SlotArt.Texture(new[] { ArtSlots.RulebookFolderClean }) : null;
+        bool worded = clean != null && folderFace != null;
+        if (folderFace != null)
+        {
+            var block = new MaterialPropertyBlock();
+            folderFace.GetPropertyBlock(block);
+            if (worded)
+                block.SetTexture(BaseMapId, clean);
+            else
+                block.Clear();
+            folderFace.SetPropertyBlock(block);
+        }
+        for (int i = 0; i < coverWords.Length; i++)
+        {
+            if (coverWords[i] == null)
+                continue;
+            if (worded && i < _coverEnglish.Length)
+                coverWords[i].text = UiText.DocumentWord(_coverEnglish[i]);
+            coverWords[i].gameObject.SetActive(worded);
+        }
+    }
+
+    /// <summary>The page shown: 0 RULES, 1 PAPERS, 2 GUIDE, 3 SEALS.</summary>
+    public int Page { get; private set; }
+
+    private void Awake()
+    {
+        _coverEnglish = Array.ConvertAll(coverWords, w => w != null ? w.text : string.Empty);
+        PrintLabels();
+        CultureThemeService.LabelsChanged += PrintLabels;
         for (int i = 0; i < rows.Length; i++)
         {
             int row = i;
@@ -241,6 +290,7 @@ public sealed class DeskRulebook : MonoBehaviour
 
     private void OnDestroy()
     {
+        CultureThemeService.LabelsChanged -= PrintLabels;
         if (drag != null)
             drag.DragEnded -= Dropped;
     }

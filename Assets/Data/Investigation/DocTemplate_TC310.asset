@@ -112,7 +112,9 @@ MonoBehaviour:
       field: -1
       slot: 
     - kind: 10
-      text: I travel on an Economy unit at my own risk. If I am stranded, I will not reveal the future or alter history, and my debt passes to my next of kin.
+      text: I travel on an Economy unit at my own risk. If I am stranded, I will
+        not reveal the future or alter history, and my debt passes to my next of
+        kin.
       cells: []
       columns: []
       shares: []
@@ -120,7 +122,12 @@ MonoBehaviour:
       field: -1
       slot: 
     - kind: 10
-      text: 2.1 The agency answers for the unit only up to the gate. A unit that fails in transit is the traveller's loss. 2.2 A stranded traveller is recovered when a Premium unit next calls at the era, at the rescue rate in force on the day of recovery, billed to the account above. 2.3 Time spent stranded accrues interest at the agency's standing rate. 2.4 No claim lies against the agency for loss of era, loss of language, loss of kin or loss of self.
+      text: 2.1 The agency answers for the unit only up to the gate. A unit that
+        fails in transit is the traveller's loss. 2.2 A stranded traveller is recovered
+        when a Premium unit next calls at the era, at the rescue rate in force on
+        the day of recovery, billed to the account above. 2.3 Time spent stranded
+        accrues interest at the agency's standing rate. 2.4 No claim lies against
+        the agency for loss of era, loss of language, loss of kin or loss of self.
       cells: []
       columns: []
       shares: []
@@ -128,7 +135,10 @@ MonoBehaviour:
       field: -1
       slot: 
     - kind: 10
-      text: 3.1 The signatory confirms that no one has promised them a return date. 3.2 The signatory waives any right to be told what became of them. 3.3 This waiver survives the signatory. 3.4 A copy is held on the citizen account and is produced to the next of kin on demand.
+      text: 3.1 The signatory confirms that no one has promised them a return date.
+        3.2 The signatory waives any right to be told what became of them. 3.3 This
+        waiver survives the signatory. 3.4 A copy is held on the citizen account
+        and is produced to the next of kin on demand.
       cells: []
       columns: []
       shares: []
@@ -144,7 +154,9 @@ MonoBehaviour:
       field: 5
       slot: 
     - kind: 12
-      text: If the unit fails, the agency's liability ends at the gate. The signatory consents to removal by the Time Police where the timeline requires it; removal is final and is not a refund. Temporal Customs Act of 2139.
+      text: If the unit fails, the agency's liability ends at the gate. The signatory
+        consents to removal by the Time Police where the timeline requires it; removal
+        is final and is not a refund. Temporal Customs Act of 2139.
       cells: []
       columns: []
       shares: []
@@ -164,6 +176,11 @@ MonoBehaviour:
         valueShare: 0.62
         labelShare: 0.66
         reading: 1
+        photo:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
         fields:
         - field: 0
           value:
@@ -177,6 +194,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.69591
           relabel: 0
+          labelText: TRAVELLER
           centre: 0
         - field: 1
           value:
@@ -190,6 +208,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.73378
           relabel: 0
+          labelText: CITIZEN ID
           centre: 0
         - field: 2
           value:
@@ -203,6 +222,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.77203
           relabel: 1
+          labelText: 
           centre: 0
         - field: 3
           value:
@@ -216,6 +236,7 @@ MonoBehaviour:
             x1: 0.32
             y1: 0.8099
           relabel: 1
+          labelText: 
           centre: 0
         - field: 4
           value:
@@ -229,6 +250,7 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         - field: 5
           value:
@@ -242,6 +264,7 @@ MonoBehaviour:
             x1: 0.2015
             y1: 0.86202
           relabel: 0
+          labelText: SIGNATURE
           centre: 0
         - field: 6
           value:
@@ -255,13 +278,9 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         prints: []
-        photo:
-          x0: 0
-          y0: 0
-          x1: 0
-          y1: 0
         stamp:
           x0: 0
           y0: 0
@@ -275,3 +294,84 @@ MonoBehaviour:
           y0: 0
           x1: 0
           y1: 0
+        captions:
+        - text: TEMPORAL CUSTOMS BUREAU
+          kind: 0
+          rect:
+            x0: 0.2897
+            y0: 0.0269
+            x1: 0.6999
+            y1: 0.0479
+          share: 1
+          ink: '#686B80'
+          centre: 1
+        - text: OFFICE OF INTERVAL COMPLIANCE
+          kind: 0
+          rect:
+            x0: 0.3197
+            y0: 0.0479
+            x1: 0.6797
+            y1: 0.0576
+          share: 1
+          ink: '#A18D91'
+          centre: 1
+        - text: STRANDING WAIVER
+          kind: 1
+          rect:
+            x0: 0.14
+            y0: 0.3096
+            x1: 0.8594
+            y1: 0.4116
+          share: 1
+          ink: '#560404'
+          centre: 1
+        - text: WAIVER No.
+          kind: 0
+          rect:
+            x0: 0.3594
+            y0: 0.4458
+            x1: 0.5195
+            y1: 0.4688
+          share: 0.857
+          ink: '#3E3D4F'
+          centre: 0
+        - text: By acknowledgment of this instrument, the traveller accepts all temporal
+            irregularities, local customs, and interval displacement arising from
+            voluntary passage beyond the authorized present. No return interval is
+            guaranteed.
+          kind: 2
+          rect:
+            x0: 0.1615
+            y0: 0.4946
+            x1: 0.8594
+            y1: 0.5366
+          share: 0.22
+          ink: '#2E3346'
+          centre: 0
+        - text: The traveller assumes responsibility for identity drift, calendar
+            variance, memory desynchronization, and all ordinary consequences of
+            remaining within a prior era. Claims against the Bureau shall not suspend
+            the applicable century.
+          kind: 2
+          rect:
+            x0: 0.1615
+            y0: 0.5479
+            x1: 0.8594
+            y1: 0.5898
+          share: 0.226
+          ink: '#2E3346'
+          centre: 0
+        - text: Acceptance confirms that the traveller has received notice of the
+            conditions of stranding and agrees to proceed without expectation of
+            rescue, correction, or restoration. This waiver remains in force across
+            all recognized continuities.
+          kind: 2
+          rect:
+            x0: 0.1615
+            y0: 0.5977
+            x1: 0.8594
+            y1: 0.6406
+          share: 0.212
+          ink: '#2E3346'
+          centre: 0
+        clean: 1

@@ -61,6 +61,50 @@ public static class UiText
         return service != null ? CultureChoice.Wallet(service.ActiveCultureId, service.FutureCurrency, fallback) : fallback;
     }
 
+    /// <summary>
+    /// The reading language's words for a form's fixed English words
+    /// (FormData.Words; Saleh 2026-10-07: "I want the language to change on
+    /// all documents and the apps"): each word's doc.* string
+    /// (DocumentWords.Key) in the culture's language (in capitals,
+    /// ArtLayout.Capitals, where the English is), a word with no string
+    /// as it is; null while English is read (no theme service, "Always
+    /// English", or no installed font draws the culture's labels), so the
+    /// papers keep their own printed English.
+    /// </summary>
+    public static System.Func<string, string> FormWords()
+    {
+        CultureThemeService service = CultureThemeService.Instance;
+        if (service == null || service.Language != LabelLanguage.Culture || service.Strings == null)
+            return null;
+        UiStrings strings = service.Strings;
+        return english =>
+        {
+            string key = DocumentWords.Key(english);
+            if (key == null || !strings.Has(key))
+                return english;
+            string native = strings.Get(key);
+            return ArtLayout.IsCapitals(english) ? ArtLayout.Capitals(native) : native;
+        };
+    }
+
+    /// <summary>One fixed English word a document prints (a scan strip, a stamp's word) in the reading language (<see cref="FormWords"/>), else as it is.</summary>
+    public static string DocumentWord(string english)
+    {
+        System.Func<string, string> words = FormWords();
+        return words == null || string.IsNullOrEmpty(english) ? english : words(english);
+    }
+
+    /// <summary><paramref name="data"/> to print in the reading language: a copy with <see cref="FormWords"/> when a culture's language is read, else itself.</summary>
+    public static FormData InReadingLanguage(FormData data)
+    {
+        System.Func<string, string> words = FormWords();
+        if (data == null || words == null)
+            return data;
+        FormData shown = data.Copy();
+        shown.Words = words;
+        return shown;
+    }
+
     /// <summary>A category's report word (ClueLabels.Key).</summary>
     public static string Category(ClueCategory category) => Get(ClueLabels.Key(category));
 

@@ -3306,4 +3306,692 @@ MonoBehaviour:
     text: Hold to compare
     gloss: 0
     tier: 1
+  - key: doc.entry_visa_visas_d_entr_e
+    text: "ENTRY VISA \xB7 VISAS D'ENTR\xC9E"
+    gloss: 0
+    tier: 1
+  - key: doc.surname_given_names
+    text: SURNAME / GIVEN NAMES
+    gloss: 0
+    tier: 1
+  - key: doc.citizen_id
+    text: Citizen ID
+    gloss: 0
+    tier: 1
+  - key: doc.date_of_birth
+    text: Date of Birth
+    gloss: 0
+    tier: 1
+  - key: doc.destination_era
+    text: DESTINATION (ERA)
+    gloss: 0
+    tier: 1
+  - key: doc.travel_class
+    text: TRAVEL CLASS
+    gloss: 0
+    tier: 1
+  - key: doc.valid_until
+    text: Valid Until
+    gloss: 0
+    tier: 1
+  - key: doc.temporal_customs_bureau
+    text: TEMPORAL CUSTOMS BUREAU
+    gloss: 0
+    tier: 1
+  - key: doc.citizen_travel_passport_passeport_de_voyage_temporel
+    text: CITIZEN TRAVEL PASSPORT / PASSEPORT DE VOYAGE TEMPOREL
+    gloss: 0
+    tier: 1
+  - key: doc.nationality
+    text: NATIONALITY
+    gloss: 0
+    tier: 1
+  - key: doc.signature
+    text: SIGNATURE
+    gloss: 0
+    tier: 1
+  - key: doc.transponder
+    text: Transponder
+    gloss: 0
+    tier: 1
+  - key: doc.currency_carried
+    text: Currency Carried
+    gloss: 0
+    tier: 1
+  - key: doc.declared_effects
+    text: Declared Effects
+    gloss: 0
+    tier: 1
+  - key: doc.departure_date
+    text: DEPARTURE DATE
+    gloss: 0
+    tier: 1
+  - key: doc.transponder_class
+    text: Transponder Class
+    gloss: 0
+    tier: 1
+  - key: doc.entry_ticket
+    text: ENTRY TICKET
+    gloss: 0
+    tier: 1
+  - key: doc.temporal_customs_bureau_portal_hall_dispatch
+    text: "TEMPORAL CUSTOMS BUREAU \xB7 PORTAL HALL DISPATCH"
+    gloss: 0
+    tier: 1
+  - key: doc.gate
+    text: GATE
+    gloss: 0
+    tier: 1
+  - key: doc.date
+    text: Date
+    gloss: 0
+    tier: 1
+  - key: doc.transponder_model
+    text: TRANSPONDER MODEL
+    gloss: 0
+    tier: 1
+  - key: doc.portal_hall_dispatch_temporal_customs_bureau
+    text: "PORTAL HALL DISPATCH \u2022 TEMPORAL CUSTOMS BUREAU"
+    gloss: 0
+    tier: 1
+  - key: doc.transponder_card
+    text: TRANSPONDER CARD
+    gloss: 0
+    tier: 1
+  - key: doc.traveller
+    text: TRAVELLER
+    gloss: 0
+    tier: 1
+  - key: doc.debt_passed_to_kin
+    text: Debt Passed to Kin
+    gloss: 0
+    tier: 1
+  - key: doc.unsigned
+    text: UNSIGNED
+    gloss: 0
+    tier: 1
+  - key: doc.office_of_interval_compliance
+    text: OFFICE OF INTERVAL COMPLIANCE
+    gloss: 0
+    tier: 1
+  - key: doc.stranding_waiver
+    text: STRANDING WAIVER
+    gloss: 0
+    tier: 1
+  - key: doc.waiver_no
+    text: WAIVER No.
+    gloss: 0
+    tier: 1
+  - key: doc.by_acknowledgment_of_this_instrument_the_traveller_accepts_a
+    text: By acknowledgment of this instrument, the traveller accepts all temporal
+      irregularities, local customs, and interval displacement arising from voluntary
+      passage beyond the authorized present. No return interval is guaranteed.
+    gloss: 0
+    tier: 1
+  - key: doc.the_traveller_assumes_responsibility_for_identity_drift_cale
+    text: The traveller assumes responsibility for identity drift, calendar variance,
+      memory desynchronization, and all ordinary consequences of remaining within
+      a prior era. Claims against the Bureau shall not suspend the applicable century.
+    gloss: 0
+    tier: 1
+  - key: doc.acceptance_confirms_that_the_traveller_has_received_notice_o
+    text: Acceptance confirms that the traveller has received notice of the conditions
+      of stranding and agrees to proceed without expectation of rescue, correction,
+      or restoration. This waiver remains in force across all recognized continuities.
+    gloss: 0
+    tier: 1
+  - key: doc.holiday_credit_agreement
+    text: Holiday Credit Agreement
+    gloss: 0
+    tier: 1
+  - key: doc.temporal_customs
+    text: TEMPORAL CUSTOMS
+    gloss: 0
+    tier: 1
+  - key: doc.leisure_credit_bureau
+    text: Leisure Credit Bureau
+    gloss: 0
+    tier: 1
+  - key: doc.borrower
+    text: Borrower
+    gloss: 0
+    tier: 1
+  - key: doc.destination
+    text: Destination
+    gloss: 0
+    tier: 1
+  - key: doc.account_class
+    text: Account Class
+    gloss: 0
+    tier: 1
+  - key: doc.credit_line
+    text: Credit Line
+    gloss: 0
+    tier: 1
+  - key: doc.issuing_seal
+    text: Issuing Seal
+    gloss: 0
+    tier: 1
+  - key: doc.1_borrower
+    text: 1  BORROWER
+    gloss: 0
+    tier: 1
+  - key: doc.2_agreement
+    text: 2  AGREEMENT
+    gloss: 0
+    tier: 1
+  - key: doc.temporal_customs_act_of_2139_any_alteration_voids_this_docum
+    text: Temporal Customs Act of 2139. Any alteration voids this document.
+    gloss: 0
+    tier: 1
+  - key: doc.for_official_use_desk_stamp
+    text: "FOR OFFICIAL USE \xB7 DESK STAMP"
+    gloss: 0
+    tier: 1
+  - key: doc.issued_by_0
+    text: Issued by {0}
+    gloss: 0
+    tier: 1
+  - key: doc.proof_of_funds
+    text: Proof of Funds
+    gloss: 0
+    tier: 1
+  - key: doc.account_holder
+    text: Account Holder
+    gloss: 0
+    tier: 1
+  - key: doc.funds_held
+    text: Funds Held
+    gloss: 0
+    tier: 1
+  - key: doc.1_account_holder
+    text: 1  ACCOUNT HOLDER
+    gloss: 0
+    tier: 1
+  - key: doc.2_funds
+    text: 2  FUNDS
+    gloss: 0
+    tier: 1
+  - key: doc.travel_insurance_certificate
+    text: Travel Insurance Certificate
+    gloss: 0
+    tier: 1
+  - key: doc.transit_insurance_desk
+    text: Transit Insurance Desk
+    gloss: 0
+    tier: 1
+  - key: doc.insured
+    text: Insured
+    gloss: 0
+    tier: 1
+  - key: doc.policy_no
+    text: Policy No.
+    gloss: 0
+    tier: 1
+  - key: doc.1_insured
+    text: 1  INSURED
+    gloss: 0
+    tier: 1
+  - key: doc.2_policy
+    text: 2  POLICY
+    gloss: 0
+    tier: 1
+  - key: doc.worker
+    text: WORKER
+    gloss: 0
+    tier: 1
+  - key: doc.employer
+    text: EMPLOYER
+    gloss: 0
+    tier: 1
+  - key: doc.place_of_work_era
+    text: PLACE OF WORK (ERA)
+    gloss: 0
+    tier: 1
+  - key: doc.term
+    text: TERM
+    gloss: 0
+    tier: 1
+  - key: doc.wage
+    text: WAGE
+    gloss: 0
+    tier: 1
+  - key: doc.ministry_of_recovery_debt_relief_office
+    text: "MINISTRY OF RECOVERY \xB7 DEBT RELIEF OFFICE"
+    gloss: 0
+    tier: 1
+  - key: doc.work_permit_debt_relief_labour
+    text: "WORK PERMIT \u2013 DEBT RELIEF LABOUR"
+    gloss: 0
+    tier: 1
+  - key: doc.authorised_by
+    text: AUTHORISED BY
+    gloss: 0
+    tier: 1
+  - key: doc.holder
+    text: HOLDER
+    gloss: 0
+    tier: 1
+  - key: doc.registry_id
+    text: REGISTRY ID
+    gloss: 0
+    tier: 1
+  - key: doc.origin_era
+    text: ORIGIN (ERA)
+    gloss: 0
+    tier: 1
+  - key: doc.incident
+    text: Incident
+    gloss: 0
+    tier: 1
+  - key: doc.displacement_registry_temporal_customs_bureau
+    text: "DISPLACEMENT REGISTRY \xB7 TEMPORAL CUSTOMS BUREAU"
+    gloss: 0
+    tier: 1
+  - key: doc.travel_permit
+    text: TRAVEL PERMIT
+    gloss: 0
+    tier: 1
+  - key: doc.language_spoken
+    text: LANGUAGE SPOKEN
+    gloss: 0
+    tier: 1
+  - key: doc.technology_carried
+    text: TECHNOLOGY CARRIED
+    gloss: 0
+    tier: 1
+  - key: doc.temporal_customs_bureau_return_intake
+    text: "TEMPORAL CUSTOMS BUREAU \xB7 RETURN INTAKE"
+    gloss: 0
+    tier: 1
+  - key: doc.intake_declaration
+    text: INTAKE DECLARATION
+    gloss: 0
+    tier: 1
+  - key: doc.nothing_to_declare
+    text: Nothing to declare
+    gloss: 0
+    tier: 1
+  - key: doc.goods
+    text: Goods
+    gloss: 0
+    tier: 1
+  - key: doc.persons
+    text: Persons
+    gloss: 0
+    tier: 1
+  - key: doc.knowledge
+    text: Knowledge
+    gloss: 0
+    tier: 1
+  - key: doc.declarant_signature
+    text: DECLARANT SIGNATURE
+    gloss: 0
+    tier: 1
+  - key: doc.recalled_traveller
+    text: RECALLED TRAVELLER
+    gloss: 0
+    tier: 1
+  - key: doc.return_to
+    text: Return To
+    gloss: 0
+    tier: 1
+  - key: doc.return_by_date
+    text: RETURN BY (DATE)
+    gloss: 0
+    tier: 1
+  - key: doc.temporal_customs_bureau_directorate_of_returns
+    text: "\xB7 TEMPORAL CUSTOMS BUREAU \xB7 DIRECTORATE OF RETURNS"
+    gloss: 0
+    tier: 1
+  - key: doc.return_order
+    text: RETURN ORDER
+    gloss: 0
+    tier: 1
+  - key: doc.order_no
+    text: ORDER NO.
+    gloss: 0
+    tier: 1
+  - key: doc.authorized_by
+    text: AUTHORIZED BY
+    gloss: 0
+    tier: 1
+  - key: doc.deviation_report
+    text: Deviation Report
+    gloss: 0
+    tier: 1
+  - key: doc.debt_relief_departures
+    text: Debt Relief Departures
+    gloss: 0
+    tier: 1
+  - key: doc.statement
+    text: Statement
+    gloss: 0
+    tier: 1
+  - key: doc.contradicted_by
+    text: Contradicted by
+    gloss: 0
+    tier: 1
+  - key: doc.desk_officer
+    text: Desk officer
+    gloss: 0
+    tier: 1
+  - key: doc.a_deviation_is_documented_once_per_category_denial_on_docume
+    text: A deviation is documented once per category. Denial on documented deviations
+      is justified under the Temporal Customs Act of 2139.
+    gloss: 0
+    tier: 1
+  - key: doc.directive_memo
+    text: Directive Memo
+    gloss: 0
+    tier: 1
+  - key: doc.to
+    text: To
+    gloss: 0
+    tier: 1
+  - key: doc.from
+    text: From
+    gloss: 0
+    tier: 1
+  - key: doc.ref
+    text: Ref
+    gloss: 0
+    tier: 1
+  - key: doc.no
+    text: No.
+    gloss: 0
+    tier: 1
+  - key: doc.directive
+    text: Directive
+    gloss: 0
+    tier: 1
+  - key: doc.issued_by_the_customs_directorate
+    text: Issued by the Customs Directorate
+    gloss: 0
+    tier: 1
+  - key: doc.interview_record
+    text: Interview Record
+    gloss: 0
+    tier: 1
+  - key: doc.speaker
+    text: Speaker
+    gloss: 0
+    tier: 1
+  - key: doc.taken_down_in_english_by_the_desk_officer_a_statement_in_the
+    text: Taken down in English by the desk officer. A statement in the traveller's
+      own tongue is recorded as spoken. Only the traveller's answers are evidence.
+    gloss: 0
+    tier: 1
+  - key: doc.internal_memorandum
+    text: Internal Memorandum
+    gloss: 0
+    tier: 1
+  - key: doc.subject
+    text: Subject
+    gloss: 0
+    tier: 1
+  - key: doc.signed_for_the_sender
+    text: Signed for the sender
+    gloss: 0
+    tier: 1
+  - key: doc.portal_schedule
+    text: Portal Schedule
+    gloss: 0
+    tier: 1
+  - key: doc.ring
+    text: Ring
+    gloss: 0
+    tier: 1
+  - key: doc.era
+    text: Era
+    gloss: 0
+    tier: 1
+  - key: doc.place
+    text: Place
+    gloss: 0
+    tier: 1
+  - key: doc.state
+    text: State
+    gloss: 0
+    tier: 1
+  - key: doc.record_extract
+    text: Record Extract
+    gloss: 0
+    tier: 1
+  - key: doc.an_extract_of_the_records_of_temporal_customs_true_on_the_da
+    text: An extract of the records of Temporal Customs, true on the day of issue.
+    gloss: 0
+    tier: 1
+  - key: doc.register
+    text: Register
+    gloss: 0
+    tier: 1
+  - key: doc.value
+    text: Value
+    gloss: 0
+    tier: 1
+  - key: doc.note
+    text: Note
+    gloss: 0
+    tier: 1
+  - key: doc.compiled_by_temporal_customs_from_the_day_s_historical_recor
+    text: Compiled by Temporal Customs from the day's historical record. Revised
+      entries are marked.
+    gloss: 0
+    tier: 1
+  - key: doc.supply_requisition
+    text: Supply Requisition
+    gloss: 0
+    tier: 1
+  - key: doc.item
+    text: Item
+    gloss: 0
+    tier: 1
+  - key: doc.section
+    text: Section
+    gloss: 0
+    tier: 1
+  - key: doc.price
+    text: Price
+    gloss: 0
+    tier: 1
+  - key: doc.status
+    text: Status
+    gloss: 0
+    tier: 1
+  - key: doc.requires
+    text: Requires
+    gloss: 0
+    tier: 1
+  - key: doc.paid_on_order_delivered_at_the_start_of_the_next_shift_an_or
+    text: Paid on order. Delivered at the start of the next shift. An order is cancelled
+      and refunded on the day it is placed only.
+    gloss: 0
+    tier: 1
+  - key: doc.seal_register
+    text: Seal Register
+    gloss: 0
+    tier: 1
+  - key: doc.every_paper_carries_the_seal_of_the_office_that_issues_it_ho
+    text: 'Every paper carries the seal of the office that issues it. Hold a paper''s
+      seal against its office''s here: another outline, ink or legend is a forgery.'
+    gloss: 0
+    tier: 1
+  - key: doc.compiled_by_temporal_customs_from_the_offices_seal_books_a_s
+    text: Compiled by Temporal Customs from the offices' seal books. A seal is printed,
+      never stamped by hand.
+    gloss: 0
+    tier: 1
+  - key: doc.day
+    text: Day
+    gloss: 0
+    tier: 1
+  - key: doc.wages
+    text: Wages
+    gloss: 0
+    tier: 1
+  - key: doc.fines
+    text: Fines
+    gloss: 0
+    tier: 1
+  - key: doc.debt_relief
+    text: Debt relief
+    gloss: 0
+    tier: 1
+  - key: doc.household
+    text: Household
+    gloss: 0
+    tier: 1
+  - key: doc.purchases
+    text: Purchases
+    gloss: 0
+    tier: 1
+  - key: doc.balance
+    text: Balance
+    gloss: 0
+    tier: 1
+  - key: doc.owed
+    text: Owed
+    gloss: 0
+    tier: 1
+  - key: doc.departures_are_voluntary
+    text: Departures are voluntary.
+    gloss: 0
+    tier: 1
+  - key: doc.scanned_0_desk_scanner_1
+    text: "SCANNED {0} \xB7 DESK SCANNER 1"
+    gloss: 0
+    tier: 1
+  - key: doc.analysed_0_1_contradiction_marked
+    text: "ANALYSED {0} \xB7 1 CONTRADICTION MARKED"
+    gloss: 0
+    tier: 1
+  - key: doc.analysed_0
+    text: "ANALYSED {0} \xB7"
+    gloss: 0
+    tier: 1
+  - key: doc.scanned_0_already_analysed
+    text: "SCANNED {0} \xB7 ALREADY ANALYSED"
+    gloss: 0
+    tier: 1
+  - key: doc.approved
+    text: APPROVED
+    gloss: 0
+    tier: 1
+  - key: doc.denied
+    text: DENIED
+    gloss: 0
+    tier: 1
+  - key: calendar.weekday.0
+    text: Sunday
+    gloss: 0
+    tier: 1
+  - key: calendar.weekdayShort.0
+    text: Sun
+    gloss: 0
+    tier: 1
+  - key: calendar.weekday.1
+    text: Monday
+    gloss: 0
+    tier: 1
+  - key: calendar.weekdayShort.1
+    text: Mon
+    gloss: 0
+    tier: 1
+  - key: calendar.weekday.2
+    text: Tuesday
+    gloss: 0
+    tier: 1
+  - key: calendar.weekdayShort.2
+    text: Tue
+    gloss: 0
+    tier: 1
+  - key: calendar.weekday.3
+    text: Wednesday
+    gloss: 0
+    tier: 1
+  - key: calendar.weekdayShort.3
+    text: Wed
+    gloss: 0
+    tier: 1
+  - key: calendar.weekday.4
+    text: Thursday
+    gloss: 0
+    tier: 1
+  - key: calendar.weekdayShort.4
+    text: Thu
+    gloss: 0
+    tier: 1
+  - key: calendar.weekday.5
+    text: Friday
+    gloss: 0
+    tier: 1
+  - key: calendar.weekdayShort.5
+    text: Fri
+    gloss: 0
+    tier: 1
+  - key: calendar.weekday.6
+    text: Saturday
+    gloss: 0
+    tier: 1
+  - key: calendar.weekdayShort.6
+    text: Sat
+    gloss: 0
+    tier: 1
+  - key: calendar.month.1
+    text: January
+    gloss: 0
+    tier: 1
+  - key: calendar.month.2
+    text: February
+    gloss: 0
+    tier: 1
+  - key: calendar.month.3
+    text: March
+    gloss: 0
+    tier: 1
+  - key: calendar.month.4
+    text: April
+    gloss: 0
+    tier: 1
+  - key: calendar.month.5
+    text: May
+    gloss: 0
+    tier: 1
+  - key: calendar.month.6
+    text: June
+    gloss: 0
+    tier: 1
+  - key: calendar.month.7
+    text: July
+    gloss: 0
+    tier: 1
+  - key: calendar.month.8
+    text: August
+    gloss: 0
+    tier: 1
+  - key: calendar.month.9
+    text: September
+    gloss: 0
+    tier: 1
+  - key: calendar.month.10
+    text: October
+    gloss: 0
+    tier: 1
+  - key: calendar.month.11
+    text: November
+    gloss: 0
+    tier: 1
+  - key: calendar.month.12
+    text: December
+    gloss: 0
+    tier: 1
+  - key: calendar.monthYear
+    text: '{0} {1}'
+    gloss: 0
+    tier: 0
+  - key: doc.clerk_s_rulebook_desk_3
+    text: "Clerk's Rulebook \xB7 Desk 3"
+    gloss: 0
+    tier: 1
   words: []

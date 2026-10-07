@@ -84,6 +84,16 @@ public sealed class BoothCoordinator : MonoBehaviour
 
     private void Awake()
     {
+        PrintWheelHint();
+        CultureThemeService.LabelsChanged += PrintWheelHint;
+    }
+
+    /// <summary>Stops following the labels' language.</summary>
+    private void OnDestroy() => CultureThemeService.LabelsChanged -= PrintWheelHint;
+
+    /// <summary>The wheel hint's words in the reading language (again whenever the labels' language changes).</summary>
+    private void PrintWheelHint()
+    {
         if (wheelHint != null && config != null)
             wheelHint.text = UiText.Get(config.wheelHintKey);
     }

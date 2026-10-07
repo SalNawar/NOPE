@@ -89,6 +89,11 @@ MonoBehaviour:
         valueShare: 0.62
         labelShare: 0.82
         reading: 1.6
+        photo:
+          x0: 0.055
+          y0: 0.1488
+          x1: 0.30792
+          y1: 0.77899
         fields:
         - field: 0
           value:
@@ -102,6 +107,7 @@ MonoBehaviour:
             x1: 0.575
             y1: 0.48286
           relabel: 0
+          labelText: CITIZEN ID
           centre: 0
         - field: 1
           value:
@@ -115,6 +121,7 @@ MonoBehaviour:
             x1: 0.6725
             y1: 0.57622
           relabel: 0
+          labelText: TRANSPONDER MODEL
           centre: 0
         - field: 2
           value:
@@ -128,6 +135,7 @@ MonoBehaviour:
             x1: 0.6175
             y1: 0.66885
           relabel: 1
+          labelText: 
           centre: 0
         - field: 3
           value:
@@ -141,13 +149,9 @@ MonoBehaviour:
             x1: 0
             y1: 0
           relabel: 0
+          labelText: 
           centre: 0
         prints: []
-        photo:
-          x0: 0.055
-          y0: 0.1488
-          x1: 0.30792
-          y1: 0.77899
         stamp:
           x0: 0
           y0: 0
@@ -161,3 +165,25 @@ MonoBehaviour:
           y0: 0
           x1: 0
           y1: 0
+        captions:
+        - text: "PORTAL HALL DISPATCH \u2022 TEMPORAL CUSTOMS BUREAU"
+          kind: 0
+          rect:
+            x0: 0.2446
+            y0: 0.0547
+            x1: 0.7646
+            y1: 0.1017
+          share: 0.833
+          ink: '#25495C'
+          centre: 1
+        - text: TRANSPONDER CARD
+          kind: 1
+          rect:
+            x0: 0.335
+            y0: 0.1427
+            x1: 0.8247
+            y1: 0.2872
+          share: 1
+          ink: '#81631D'
+          centre: 1
+        clean: 1

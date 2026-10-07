@@ -47,6 +47,9 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// <summary>The resolved font, for the inspector ("default" for the project font).</summary>
     public string FontName { get; private set; } = "default";
 
+    /// <summary>The culture's font while its labels show (LabelLanguage.Culture), else null: the papers and the PC's forms print their translated words in it (TmpFormText).</summary>
+    public TMP_FontAsset CultureFont => Language == LabelLanguage.Culture ? _font : null;
+
     /// <summary>The session's runtime fonts, also used by translation for its script fonts (piece 9); null before Configure.</summary>
     public RuntimeFonts Fonts => _fonts;
 
@@ -97,6 +100,20 @@ public sealed class CultureThemeService : TimelineCueReceiver
             return library != null && TranslationLens.LanguageLocked(RunManager.Instance.World.day, library.Introductions);
         }
     }
+
+    /// <summary>
+    /// Raised after the labels' language changed (a culture's table now
+    /// applies, another culture's, or English again): a text a component
+    /// printed from a UI string earlier in the scene (KeyedText, the rulebook,
+    /// the counter's strip, the AVAILABLE caption, the wheel hint) prints it
+    /// again (Saleh 2026-10-07: "I want the language to change on all
+    /// documents and the apps"; open windows and papers re-read their strings
+    /// the next time they show).
+    /// </summary>
+    public static event System.Action LabelsChanged;
+
+    /// <summary>The language the labels were last applied in (the table's language, or the reading language), to raise <see cref="LabelsChanged"/> only on a change.</summary>
+    private string _labelsLanguage;
 
     /// <summary>The cheat menu's language lock for this session (TranslationLensCheats: lock now, unlock), or null to follow the ramp.</summary>
     public static bool? LockOverride { get; set; }
@@ -152,6 +169,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
             WarnOnce("font:" + ActiveTheme.cultureId, $"[CultureThemeService] No installed font draws the '{ActiveTheme.cultureId}' labels (missing {font.Missing}; tried {font.Tried}); the desk shows English labels in its colours.");
         _font = Language == LabelLanguage.EnglishNoFont ? null : font.Asset;
         FontName = _font != null ? font.Name : "default";
+        SetGlobalFallback(Language == LabelLanguage.Culture ? _font : null);
 
         bool cultureLabels = Language == LabelLanguage.Culture;
         Strings = new UiStrings(reading?.entries, cultureLabels ? cultureTable.entries : null, cultureLabels && cultureTable.rightToLeft, ui.glossPercent,
@@ -159,14 +177,17 @@ public sealed class CultureThemeService : TimelineCueReceiver
 
         FutureCurrency = ResolveFutureCurrency(id);
         _wallpaper = ResolveWallpaper(id);
+        string labelsLanguage = cultureLabels ? cultureTable.language : ui.readingLanguage;
+        bool changed = _labelsLanguage != null && _labelsLanguage != labelsLanguage;
+        _labelsLanguage = labelsLanguage;
 
         if (_target.HasValue)
-        {
             ApplyScene(_target.Value);
-            return;
-        }
-        for (int i = 0; i < SceneManager.sceneCount; i++)
-            ApplyScene(SceneManager.GetSceneAt(i));
+        else
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+                ApplyScene(SceneManager.GetSceneAt(i));
+        if (changed)
+            LabelsChanged?.Invoke();
     }
 
     private void Awake()
@@ -190,6 +211,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
 
     private void OnDestroy()
     {
+        SetGlobalFallback(null);
         _fonts?.Dispose();
         if (Instance == this)
             Instance = null;
@@ -207,6 +229,31 @@ public sealed class CultureThemeService : TimelineCueReceiver
         {
             _target = null;
         }
+    }
+
+    /// <summary>The culture font this service put first in TMP's global fallback list, or null.</summary>
+    private TMP_FontAsset _globalFallback;
+
+    /// <summary>
+    /// Puts <paramref name="font"/> (the culture's, while its labels show)
+    /// first in TMP's global fallback list, in place of the one put there
+    /// before (null: none): a text whose own font lacks a culture label's
+    /// glyphs (a diegetic row, a 3D desk label printed in a kit face) draws
+    /// them from the culture's font instead of empty boxes (Saleh 2026-10-07:
+    /// every document and app in the game's language). Only the session's list
+    /// changes (the runtime font is never saved), and it is taken out again
+    /// when the service goes.
+    /// </summary>
+    private void SetGlobalFallback(TMP_FontAsset font)
+    {
+        List<TMP_FontAsset> list = TMP_Settings.fallbackFontAssets;
+        if (list == null || _globalFallback == font)
+            return;
+        if (_globalFallback != null)
+            list.Remove(_globalFallback);
+        _globalFallback = font;
+        if (font != null && !list.Contains(font))
+            list.Insert(0, font);
     }
 
     /// <summary>The reading language's table (null with a one-time warning).</summary>

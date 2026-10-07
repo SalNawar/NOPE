@@ -3111,6 +3111,694 @@ MonoBehaviour:
     text: Halten zum Vergleichen
     gloss: 0
     tier: 0
+  - key: doc.entry_visa_visas_d_entr_e
+    text: "Einreisevisum \xB7 Visas d'entr\xE9e"
+    gloss: 0
+    tier: 0
+  - key: doc.surname_given_names
+    text: Nachname / Vornamen
+    gloss: 0
+    tier: 0
+  - key: doc.citizen_id
+    text: "B\xFCrger-ID"
+    gloss: 0
+    tier: 0
+  - key: doc.date_of_birth
+    text: Geburtsdatum
+    gloss: 0
+    tier: 0
+  - key: doc.destination_era
+    text: Reiseziel (Epoche)
+    gloss: 0
+    tier: 0
+  - key: doc.travel_class
+    text: Reiseklasse
+    gloss: 0
+    tier: 0
+  - key: doc.valid_until
+    text: "G\xFCltig bis"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau
+    text: "Amt f\xFCr Zeitzoll"
+    gloss: 0
+    tier: 0
+  - key: doc.citizen_travel_passport_passeport_de_voyage_temporel
+    text: "B\xFCrger-Reisepass / Passeport de voyage temporel"
+    gloss: 0
+    tier: 0
+  - key: doc.nationality
+    text: "Staatsangeh\xF6rigkeit"
+    gloss: 0
+    tier: 0
+  - key: doc.signature
+    text: Unterschrift
+    gloss: 0
+    tier: 0
+  - key: doc.transponder
+    text: Transponder
+    gloss: 0
+    tier: 0
+  - key: doc.currency_carried
+    text: "Mitgef\xFChrte W\xE4hrung"
+    gloss: 0
+    tier: 0
+  - key: doc.declared_effects
+    text: Angemeldete Habe
+    gloss: 0
+    tier: 0
+  - key: doc.departure_date
+    text: Abreisedatum
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_class
+    text: Transponderklasse
+    gloss: 0
+    tier: 0
+  - key: doc.entry_ticket
+    text: Einreiseticket
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_portal_hall_dispatch
+    text: "Amt f\xFCr Zeitzoll \xB7 Abfertigung Portalhalle"
+    gloss: 0
+    tier: 0
+  - key: doc.gate
+    text: Tor
+    gloss: 0
+    tier: 0
+  - key: doc.date
+    text: Datum
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_model
+    text: Transpondermodell
+    gloss: 0
+    tier: 0
+  - key: doc.portal_hall_dispatch_temporal_customs_bureau
+    text: "Abfertigung Portalhalle \u2022 Amt f\xFCr Zeitzoll"
+    gloss: 0
+    tier: 0
+  - key: doc.transponder_card
+    text: Transponderkarte
+    gloss: 0
+    tier: 0
+  - key: doc.traveller
+    text: Reisender
+    gloss: 0
+    tier: 0
+  - key: doc.debt_passed_to_kin
+    text: "Schulden gehen an Angeh\xF6rige"
+    gloss: 0
+    tier: 0
+  - key: doc.unsigned
+    text: Nicht unterschrieben
+    gloss: 0
+    tier: 0
+  - key: doc.office_of_interval_compliance
+    text: "Amt f\xFCr Intervall-Konformit\xE4t"
+    gloss: 0
+    tier: 0
+  - key: doc.stranding_waiver
+    text: Strandungsverzicht
+    gloss: 0
+    tier: 0
+  - key: doc.waiver_no
+    text: Verzicht Nr.
+    gloss: 0
+    tier: 0
+  - key: doc.by_acknowledgment_of_this_instrument_the_traveller_accepts_a
+    text: "Mit Anerkennung dieser Urkunde akzeptiert der Reisende alle zeitlichen
+      Unregelm\xE4\xDFigkeiten, \xF6rtlichen Sitten und Intervallverschiebungen,
+      die aus der freiwilligen Reise \xFCber die zugelassene Gegenwart hinaus entstehen.
+      Ein R\xFCckkehrintervall wird nicht garantiert."
+    gloss: 0
+    tier: 0
+  - key: doc.the_traveller_assumes_responsibility_for_identity_drift_cale
+    text: "Der Reisende \xFCbernimmt die Verantwortung f\xFCr Identit\xE4tsdrift,
+      Kalenderabweichung, Ged\xE4chtnisdesynchronisation und alle gew\xF6hnlichen
+      Folgen des Verbleibs in einer fr\xFCheren Epoche. Anspr\xFCche gegen das Amt
+      setzen das geltende Jahrhundert nicht aus."
+    gloss: 0
+    tier: 0
+  - key: doc.acceptance_confirms_that_the_traveller_has_received_notice_o
+    text: "Die Annahme best\xE4tigt, dass der Reisende \xFCber die Bedingungen der
+      Strandung belehrt wurde und ohne Erwartung von Rettung, Korrektur oder Wiederherstellung
+      fortf\xE4hrt. Dieser Verzicht gilt in allen anerkannten Kontinuit\xE4ten."
+    gloss: 0
+    tier: 0
+  - key: doc.holiday_credit_agreement
+    text: Urlaubskreditvertrag
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs
+    text: Zeitzoll
+    gloss: 0
+    tier: 0
+  - key: doc.leisure_credit_bureau
+    text: "Amt f\xFCr Freizeitkredite"
+    gloss: 0
+    tier: 0
+  - key: doc.borrower
+    text: Kreditnehmer
+    gloss: 0
+    tier: 0
+  - key: doc.destination
+    text: Reiseziel
+    gloss: 0
+    tier: 0
+  - key: doc.account_class
+    text: Kontoklasse
+    gloss: 0
+    tier: 0
+  - key: doc.credit_line
+    text: Kreditrahmen
+    gloss: 0
+    tier: 0
+  - key: doc.issuing_seal
+    text: Ausstellersiegel
+    gloss: 0
+    tier: 0
+  - key: doc.1_borrower
+    text: 1  Kreditnehmer
+    gloss: 0
+    tier: 0
+  - key: doc.2_agreement
+    text: 2  Vereinbarung
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_act_of_2139_any_alteration_voids_this_docum
+    text: "Zeitzollgesetz von 2139. Jede \xC4nderung macht dieses Dokument ung\xFCltig."
+    gloss: 0
+    tier: 0
+  - key: doc.for_official_use_desk_stamp
+    text: "F\xFCr den Dienstgebrauch \xB7 Schalterstempel"
+    gloss: 0
+    tier: 0
+  - key: doc.issued_by_0
+    text: Ausgestellt von {0}
+    gloss: 0
+    tier: 0
+  - key: doc.proof_of_funds
+    text: Mittelnachweis
+    gloss: 0
+    tier: 0
+  - key: doc.account_holder
+    text: Kontoinhaber
+    gloss: 0
+    tier: 0
+  - key: doc.funds_held
+    text: Vorhandene Mittel
+    gloss: 0
+    tier: 0
+  - key: doc.1_account_holder
+    text: 1  Kontoinhaber
+    gloss: 0
+    tier: 0
+  - key: doc.2_funds
+    text: 2  Mittel
+    gloss: 0
+    tier: 0
+  - key: doc.travel_insurance_certificate
+    text: Reiseversicherungsschein
+    gloss: 0
+    tier: 0
+  - key: doc.transit_insurance_desk
+    text: "Schalter f\xFCr Transitversicherung"
+    gloss: 0
+    tier: 0
+  - key: doc.insured
+    text: Versicherter
+    gloss: 0
+    tier: 0
+  - key: doc.policy_no
+    text: Police Nr.
+    gloss: 0
+    tier: 0
+  - key: doc.1_insured
+    text: 1  Versicherter
+    gloss: 0
+    tier: 0
+  - key: doc.2_policy
+    text: 2  Police
+    gloss: 0
+    tier: 0
+  - key: doc.worker
+    text: Arbeiter
+    gloss: 0
+    tier: 0
+  - key: doc.employer
+    text: Arbeitgeber
+    gloss: 0
+    tier: 0
+  - key: doc.place_of_work_era
+    text: Arbeitsort (Epoche)
+    gloss: 0
+    tier: 0
+  - key: doc.term
+    text: Laufzeit
+    gloss: 0
+    tier: 0
+  - key: doc.wage
+    text: Lohn
+    gloss: 0
+    tier: 0
+  - key: doc.ministry_of_recovery_debt_relief_office
+    text: "Ministerium f\xFCr Erholung \xB7 Amt f\xFCr Schuldenerlass"
+    gloss: 0
+    tier: 0
+  - key: doc.work_permit_debt_relief_labour
+    text: "Arbeitserlaubnis \u2013 Schuldenerlass-Arbeit"
+    gloss: 0
+    tier: 0
+  - key: doc.authorised_by
+    text: Genehmigt von
+    gloss: 0
+    tier: 0
+  - key: doc.holder
+    text: Inhaber
+    gloss: 0
+    tier: 0
+  - key: doc.registry_id
+    text: Register-ID
+    gloss: 0
+    tier: 0
+  - key: doc.origin_era
+    text: Herkunft (Epoche)
+    gloss: 0
+    tier: 0
+  - key: doc.incident
+    text: Vorfall
+    gloss: 0
+    tier: 0
+  - key: doc.displacement_registry_temporal_customs_bureau
+    text: "Vertriebenenregister \xB7 Amt f\xFCr Zeitzoll"
+    gloss: 0
+    tier: 0
+  - key: doc.travel_permit
+    text: Reisegenehmigung
+    gloss: 0
+    tier: 0
+  - key: doc.language_spoken
+    text: Gesprochene Sprache
+    gloss: 0
+    tier: 0
+  - key: doc.technology_carried
+    text: "Mitgef\xFChrte Technik"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_return_intake
+    text: "Amt f\xFCr Zeitzoll \xB7 R\xFCckkehraufnahme"
+    gloss: 0
+    tier: 0
+  - key: doc.intake_declaration
+    text: "Aufnahmeerkl\xE4rung"
+    gloss: 0
+    tier: 0
+  - key: doc.nothing_to_declare
+    text: Nichts zu verzollen
+    gloss: 0
+    tier: 0
+  - key: doc.goods
+    text: Waren
+    gloss: 0
+    tier: 0
+  - key: doc.persons
+    text: Personen
+    gloss: 0
+    tier: 0
+  - key: doc.knowledge
+    text: Wissen
+    gloss: 0
+    tier: 0
+  - key: doc.declarant_signature
+    text: Unterschrift des Anmelders
+    gloss: 0
+    tier: 0
+  - key: doc.recalled_traveller
+    text: "Zur\xFCckgerufener Reisender"
+    gloss: 0
+    tier: 0
+  - key: doc.return_to
+    text: "R\xFCckkehr nach"
+    gloss: 0
+    tier: 0
+  - key: doc.return_by_date
+    text: "R\xFCckkehr bis (Datum)"
+    gloss: 0
+    tier: 0
+  - key: doc.temporal_customs_bureau_directorate_of_returns
+    text: "\xB7 Amt f\xFCr Zeitzoll \xB7 Direktion f\xFCr R\xFCckf\xFChrungen"
+    gloss: 0
+    tier: 0
+  - key: doc.return_order
+    text: "R\xFCckkehrbefehl"
+    gloss: 0
+    tier: 0
+  - key: doc.order_no
+    text: Befehl Nr.
+    gloss: 0
+    tier: 0
+  - key: doc.authorized_by
+    text: Genehmigt von
+    gloss: 0
+    tier: 0
+  - key: doc.deviation_report
+    text: Abweichungsbericht
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief_departures
+    text: Schuldenerlass-Abreisen
+    gloss: 0
+    tier: 0
+  - key: doc.statement
+    text: Aussage
+    gloss: 0
+    tier: 0
+  - key: doc.contradicted_by
+    text: Widerlegt durch
+    gloss: 0
+    tier: 0
+  - key: doc.desk_officer
+    text: Schalterbeamter
+    gloss: 0
+    tier: 0
+  - key: doc.a_deviation_is_documented_once_per_category_denial_on_docume
+    text: Eine Abweichung wird je Kategorie einmal belegt. Eine Ablehnung aufgrund
+      belegter Abweichungen ist nach dem Zeitzollgesetz von 2139 gerechtfertigt.
+    gloss: 0
+    tier: 0
+  - key: doc.directive_memo
+    text: Weisungsmitteilung
+    gloss: 0
+    tier: 0
+  - key: doc.to
+    text: An
+    gloss: 0
+    tier: 0
+  - key: doc.from
+    text: Von
+    gloss: 0
+    tier: 0
+  - key: doc.ref
+    text: Az.
+    gloss: 0
+    tier: 0
+  - key: doc.no
+    text: Nr.
+    gloss: 0
+    tier: 0
+  - key: doc.directive
+    text: Weisung
+    gloss: 0
+    tier: 0
+  - key: doc.issued_by_the_customs_directorate
+    text: Ausgestellt von der Zolldirektion
+    gloss: 0
+    tier: 0
+  - key: doc.interview_record
+    text: Befragungsprotokoll
+    gloss: 0
+    tier: 0
+  - key: doc.speaker
+    text: Sprecher
+    gloss: 0
+    tier: 0
+  - key: doc.taken_down_in_english_by_the_desk_officer_a_statement_in_the
+    text: Vom Schalterbeamten auf Englisch aufgenommen. Eine Aussage in der eigenen
+      Sprache des Reisenden wird wie gesprochen festgehalten. Nur die Antworten des
+      Reisenden sind Beweise.
+    gloss: 0
+    tier: 0
+  - key: doc.internal_memorandum
+    text: Interne Mitteilung
+    gloss: 0
+    tier: 0
+  - key: doc.subject
+    text: Betreff
+    gloss: 0
+    tier: 0
+  - key: doc.signed_for_the_sender
+    text: Im Auftrag des Absenders unterzeichnet
+    gloss: 0
+    tier: 0
+  - key: doc.portal_schedule
+    text: Portalfahrplan
+    gloss: 0
+    tier: 0
+  - key: doc.ring
+    text: Ring
+    gloss: 0
+    tier: 0
+  - key: doc.era
+    text: Epoche
+    gloss: 0
+    tier: 0
+  - key: doc.place
+    text: Ort
+    gloss: 0
+    tier: 0
+  - key: doc.state
+    text: Zustand
+    gloss: 0
+    tier: 0
+  - key: doc.record_extract
+    text: Aktenauszug
+    gloss: 0
+    tier: 0
+  - key: doc.an_extract_of_the_records_of_temporal_customs_true_on_the_da
+    text: "Ein Auszug aus den Akten des Zeitzolls, g\xFCltig am Tag der Ausstellung."
+    gloss: 0
+    tier: 0
+  - key: doc.register
+    text: Register
+    gloss: 0
+    tier: 0
+  - key: doc.value
+    text: Wert
+    gloss: 0
+    tier: 0
+  - key: doc.note
+    text: Notiz
+    gloss: 0
+    tier: 0
+  - key: doc.compiled_by_temporal_customs_from_the_day_s_historical_recor
+    text: "Vom Zeitzoll aus den historischen Aufzeichnungen des Tages zusammengestellt.
+      Ge\xE4nderte Eintr\xE4ge sind markiert."
+    gloss: 0
+    tier: 0
+  - key: doc.supply_requisition
+    text: Materialanforderung
+    gloss: 0
+    tier: 0
+  - key: doc.item
+    text: Artikel
+    gloss: 0
+    tier: 0
+  - key: doc.section
+    text: Bereich
+    gloss: 0
+    tier: 0
+  - key: doc.price
+    text: Preis
+    gloss: 0
+    tier: 0
+  - key: doc.status
+    text: Status
+    gloss: 0
+    tier: 0
+  - key: doc.requires
+    text: "Ben\xF6tigt"
+    gloss: 0
+    tier: 0
+  - key: doc.paid_on_order_delivered_at_the_start_of_the_next_shift_an_or
+    text: "Bei Bestellung bezahlt. Lieferung zu Beginn der n\xE4chsten Schicht. Eine
+      Bestellung wird nur am Tag der Aufgabe storniert und erstattet."
+    gloss: 0
+    tier: 0
+  - key: doc.seal_register
+    text: Siegelregister
+    gloss: 0
+    tier: 0
+  - key: doc.every_paper_carries_the_seal_of_the_office_that_issues_it_ho
+    text: "Jedes Papier tr\xE4gt das Siegel des Amts, das es ausstellt. Halte hier
+      das Siegel eines Papiers gegen das seines Amts: ein anderer Umriss, andere
+      Tinte oder Inschrift ist eine F\xE4lschung."
+    gloss: 0
+    tier: 0
+  - key: doc.compiled_by_temporal_customs_from_the_offices_seal_books_a_s
+    text: "Vom Zeitzoll aus den Siegelb\xFCchern der \xC4mter zusammengestellt. Ein
+      Siegel wird gedruckt, nie von Hand gestempelt."
+    gloss: 0
+    tier: 0
+  - key: doc.day
+    text: Tag
+    gloss: 0
+    tier: 0
+  - key: doc.wages
+    text: "L\xF6hne"
+    gloss: 0
+    tier: 0
+  - key: doc.fines
+    text: Strafen
+    gloss: 0
+    tier: 0
+  - key: doc.debt_relief
+    text: Schuldenerlass
+    gloss: 0
+    tier: 0
+  - key: doc.household
+    text: Haushalt
+    gloss: 0
+    tier: 0
+  - key: doc.purchases
+    text: "Eink\xE4ufe"
+    gloss: 0
+    tier: 0
+  - key: doc.balance
+    text: Kontostand
+    gloss: 0
+    tier: 0
+  - key: doc.owed
+    text: Geschuldet
+    gloss: 0
+    tier: 0
+  - key: doc.departures_are_voluntary
+    text: Abreisen sind freiwillig.
+    gloss: 0
+    tier: 0
+  - key: doc.scanned_0_desk_scanner_1
+    text: "GESCANNT {0} \xB7 SCHALTERSCANNER 1"
+    gloss: 0
+    tier: 0
+  - key: doc.analysed_0_1_contradiction_marked
+    text: "ANALYSIERT {0} \xB7 1 WIDERSPRUCH MARKIERT"
+    gloss: 0
+    tier: 0
+  - key: doc.analysed_0
+    text: "ANALYSIERT {0} \xB7"
+    gloss: 0
+    tier: 0
+  - key: doc.scanned_0_already_analysed
+    text: "GESCANNT {0} \xB7 BEREITS ANALYSIERT"
+    gloss: 0
+    tier: 0
+  - key: doc.approved
+    text: GENEHMIGT
+    gloss: 0
+    tier: 0
+  - key: doc.denied
+    text: ABGELEHNT
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.0
+    text: Sonntag
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.0
+    text: So
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.1
+    text: Montag
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.1
+    text: Mo
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.2
+    text: Dienstag
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.2
+    text: Di
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.3
+    text: Mittwoch
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.3
+    text: Mi
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.4
+    text: Donnerstag
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.4
+    text: Do
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.5
+    text: Freitag
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.5
+    text: Fr
+    gloss: 0
+    tier: 0
+  - key: calendar.weekday.6
+    text: Samstag
+    gloss: 0
+    tier: 0
+  - key: calendar.weekdayShort.6
+    text: Sa
+    gloss: 0
+    tier: 0
+  - key: calendar.month.1
+    text: Januar
+    gloss: 0
+    tier: 0
+  - key: calendar.month.2
+    text: Februar
+    gloss: 0
+    tier: 0
+  - key: calendar.month.3
+    text: "M\xE4rz"
+    gloss: 0
+    tier: 0
+  - key: calendar.month.4
+    text: April
+    gloss: 0
+    tier: 0
+  - key: calendar.month.5
+    text: Mai
+    gloss: 0
+    tier: 0
+  - key: calendar.month.6
+    text: Juni
+    gloss: 0
+    tier: 0
+  - key: calendar.month.7
+    text: Juli
+    gloss: 0
+    tier: 0
+  - key: calendar.month.8
+    text: August
+    gloss: 0
+    tier: 0
+  - key: calendar.month.9
+    text: September
+    gloss: 0
+    tier: 0
+  - key: calendar.month.10
+    text: Oktober
+    gloss: 0
+    tier: 0
+  - key: calendar.month.11
+    text: November
+    gloss: 0
+    tier: 0
+  - key: calendar.month.12
+    text: Dezember
+    gloss: 0
+    tier: 0
+  - key: doc.clerk_s_rulebook_desk_3
+    text: "Regelbuch des Sachbearbeiters \xB7 DESK 3"
+    gloss: 0
+    tier: 0
   words:
   - native: bildschirm
     english: Screen
@@ -4854,3 +5542,365 @@ MonoBehaviour:
     english: usual
   - native: "\xDCBUNG"
     english: practice
+  - native: Abfertigung
+    english: dispatch
+  - native: Absenders
+    english: sender
+  - native: Aktenauszug
+    english: record extract
+  - native: akzeptiert
+    english: accepts
+  - native: allen
+    english: all
+  - native: ANALYSIERT
+    english: analysed
+  - native: anderer
+    english: another
+  - native: anerkannten
+    english: recognized
+  - native: Anerkennung
+    english: acknowledgment
+  - native: "Angeh\xF6rige"
+    english: kin
+  - native: Angemeldete
+    english: declared
+  - native: Anmelders
+    english: declarant
+  - native: Annahme
+    english: acceptance
+  - native: "Anspr\xFCche"
+    english: claims
+  - native: April
+    english: April
+  - native: Artikel
+    english: item
+  - native: Aufgabe
+    english: placing (an order)
+  - native: aufgenommen
+    english: taken down
+  - native: aufgrund
+    english: on the basis of
+  - native: "Aufnahmeerkl\xE4rung"
+    english: intake declaration
+  - native: Auftrag
+    english: behalf
+  - native: Aufzeichnungen
+    english: records
+  - native: August
+    english: August
+  - native: Ausgestellt
+    english: issued
+  - native: Aussage
+    english: statement
+  - native: Ausstellersiegel
+    english: issuing seal
+  - native: ausstellt
+    english: issues
+  - native: Ausstellung
+    english: issue
+  - native: Az
+    english: Ref (file reference)
+  - native: Bedingungen
+    english: conditions
+  - native: Befehl
+    english: order
+  - native: Befragungsprotokoll
+    english: interview record
+  - native: belegter
+    english: documented
+  - native: belehrt
+    english: notified
+  - native: Betreff
+    english: subject
+  - native: "d'entr\xE9e"
+    english: of entry (French)
+  - native: dass
+    english: that
+  - native: de
+    english: of (French)
+  - native: Dezember
+    english: December
+  - native: Di
+    english: Tue
+  - native: Dienstag
+    english: Tuesday
+  - native: Dienstgebrauch
+    english: official use
+  - native: Do
+    english: Thu
+  - native: Donnerstag
+    english: Thursday
+  - native: "Eink\xE4ufe"
+    english: purchases
+  - native: einmal
+    english: once
+  - native: Einreiseticket
+    english: entry ticket
+  - native: Einreisevisum
+    english: entry visa
+  - native: entstehen
+    english: arise
+  - native: Erholung
+    english: recovery
+  - native: erstattet
+    english: refunded
+  - native: Erwartung
+    english: expectation
+  - native: Februar
+    english: February
+  - native: festgehalten
+    english: recorded
+  - native: "fortf\xE4hrt"
+    english: proceeds
+  - native: Fr
+    english: Fri
+  - native: Freitag
+    english: Friday
+  - native: freiwillig
+    english: voluntary
+  - native: freiwilligen
+    english: voluntary
+  - native: Freizeitkredite
+    english: leisure credit
+  - native: "fr\xFCheren"
+    english: prior
+  - native: "F\xE4lschung"
+    english: forgery
+  - native: garantiert
+    english: guaranteed
+  - native: gedruckt
+    english: printed
+  - native: "Ged\xE4chtnisdesynchronisation"
+    english: memory desynchronization
+  - native: geltende
+    english: applicable
+  - native: Geschuldet
+    english: owed
+  - native: gesprochen
+    english: spoken
+  - native: Gesprochene
+    english: spoken
+  - native: "gew\xF6hnlichen"
+    english: ordinary
+  - native: Habe
+    english: effects (belongings)
+  - native: Hand
+    english: hand
+  - native: Haushalt
+    english: household
+  - native: hinaus
+    english: beyond
+  - native: historischen
+    english: historical
+  - native: "Identit\xE4tsdrift"
+    english: identity drift
+  - native: Inhaber
+    english: holder
+  - native: Inschrift
+    english: legend (inscription)
+  - native: Interne
+    english: internal
+  - native: Intervall
+    english: interval
+  - native: Intervallverschiebungen
+    english: interval displacement
+  - native: Jahrhundert
+    english: century
+  - native: Januar
+    english: January
+  - native: je
+    english: per
+  - native: Jede
+    english: any / every
+  - native: Juli
+    english: July
+  - native: Juni
+    english: June
+  - native: Kalenderabweichung
+    english: calendar variance
+  - native: Kategorie
+    english: category
+  - native: "Konformit\xE4t"
+    english: compliance
+  - native: "Kontinuit\xE4ten"
+    english: continuities
+  - native: Kontoklasse
+    english: account class
+  - native: Korrektur
+    english: correction
+  - native: Kreditnehmer
+    english: borrower
+  - native: Kreditrahmen
+    english: credit line
+  - native: Lieferung
+    english: delivery
+  - native: "L\xF6hne"
+    english: wages
+  - native: Mai
+    english: May
+  - native: Materialanforderung
+    english: supply requisition
+  - native: Mi
+    english: Wed
+  - native: Ministerium
+    english: ministry
+  - native: "Mitgef\xFChrte"
+    english: carried
+  - native: Mitteilung
+    english: memo
+  - native: Mittwoch
+    english: Wednesday
+  - native: Mo
+    english: Mon
+  - native: Montag
+    english: Monday
+  - native: "M\xE4rz"
+    english: March
+  - native: Nachname
+    english: surname
+  - native: nie
+    english: never
+  - native: November
+    english: November
+  - native: Oktober
+    english: October
+  - native: Passeport
+    english: passport (French)
+  - native: Portalfahrplan
+    english: portal schedule
+  - native: Portalhalle
+    english: portal hall
+  - native: Preis
+    english: price
+  - native: Register
+    english: register
+  - native: Reisegenehmigung
+    english: travel permit
+  - native: Reiseklasse
+    english: travel class
+  - native: Reisepass
+    english: passport
+  - native: Reiseversicherungsschein
+    english: travel insurance certificate
+  - native: Rettung
+    english: rescue
+  - native: Ring
+    english: ring
+  - native: "R\xFCckf\xFChrungen"
+    english: returns
+  - native: "R\xFCckkehraufnahme"
+    english: return intake
+  - native: "R\xFCckkehrintervall"
+    english: return interval
+  - native: Sa
+    english: Sat
+  - native: Samstag
+    english: Saturday
+  - native: SCHALTERSCANNER
+    english: desk scanner
+  - native: Schalterstempel
+    english: desk stamp
+  - native: September
+    english: September
+  - native: setzen
+    english: suspend (with aus)
+  - native: "Siegelb\xFCchern"
+    english: seal books
+  - native: Sitten
+    english: customs
+  - native: So
+    english: Sun
+  - native: Sonntag
+    english: Sunday
+  - native: Sprecher
+    english: speaker
+  - native: "Staatsangeh\xF6rigkeit"
+    english: nationality
+  - native: Strafen
+    english: fines
+  - native: Strandung
+    english: stranding
+  - native: Tages
+    english: day's
+  - native: temporel
+    english: temporal (French)
+  - native: Tinte
+    english: ink
+  - native: Tor
+    english: gate
+  - native: Transitversicherung
+    english: transit insurance
+  - native: Transponderkarte
+    english: transponder card
+  - native: Transpondermodell
+    english: transponder model
+  - native: Umriss
+    english: outline
+  - native: "ung\xFCltig"
+    english: void
+  - native: "Unregelm\xE4\xDFigkeiten"
+    english: irregularities
+  - native: unterschrieben
+    english: signed
+  - native: unterzeichnet
+    english: signed
+  - native: Urkunde
+    english: instrument (document)
+  - native: Urlaubskreditvertrag
+    english: holiday credit agreement
+  - native: Verantwortung
+    english: responsibility
+  - native: Verbleibs
+    english: remaining
+  - native: Vereinbarung
+    english: agreement
+  - native: Versicherter
+    english: insured
+  - native: verzollen
+    english: declare (customs)
+  - native: Visas
+    english: visas (French)
+  - native: Vorhandene
+    english: held
+  - native: Vornamen
+    english: given names
+  - native: voyage
+    english: travel (French)
+  - native: Weisungsmitteilung
+    english: directive memo
+  - native: Widerlegt
+    english: contradicted
+  - native: WIDERSPRUCH
+    english: contradiction
+  - native: Wiederherstellung
+    english: restoration
+  - native: Wissen
+    english: knowledge
+  - native: zeitlichen
+    english: temporal
+  - native: Zeitzollgesetz
+    english: Temporal Customs Act
+  - native: Zeitzolls
+    english: Temporal Customs'
+  - native: zugelassene
+    english: authorized
+  - native: "Zur\xFCckgerufener"
+    english: recalled
+  - native: zusammengestellt
+    english: compiled
+  - native: Zustand
+    english: state
+  - native: "\xC4mter"
+    english: offices'
+  - native: "\xC4nderung"
+    english: alteration
+  - native: "\xF6rtlichen"
+    english: local
+  - native: "\xFCbernimmt"
+    english: assumes
+  - native: Regelbuch
+    english: rulebook
+  - native: Sachbearbeiters
+    english: clerk
+  - native: DESK
+    english: DESK
