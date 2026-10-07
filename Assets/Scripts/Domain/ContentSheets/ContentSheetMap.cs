@@ -663,7 +663,7 @@ public static class ContentSheetMap
                 Text("bill").Required().OneOf("Food", "Heating", "Electricity", "Tv", "Medicine").Note("which of the night's bills (one row each)"),
                 Text("name").Note("its name on the bills panel"),
                 Int("price").Note("cr a night (the Medicine's with the house's careCost)"),
-                Text("line").Note("a short line beside it")).Note("the night's optional bills: the Heating and the TV work only with the Electricity paid"),
+                Text("line").Note("a short line beside it")).Note("the night's optional bills: the TV works only with the Electricity paid; the Heating stands alone"),
             Single("homePet", "pet",
                 Int("nameMaxLength").Note("the adoption's name limit, in characters"),
                 Rows("homePetKinds", "kinds", Key("kind", "kind"),

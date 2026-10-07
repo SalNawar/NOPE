@@ -6,10 +6,11 @@ using System;
 /// each night, so the figures show what a careful clerk's pet costs; the
 /// game starts the bills step with it (no TV) when its default choice is more
 /// than the wallet. Food first,
-/// then the heating with its electricity, then medicine when the pet is
-/// unwell, each while the wallet covers it; the TV only when the pet is bored
-/// and the wallet keeps the reserve after it; a toy is played with when one
-/// is owned. Pure, so the picks are tested headless.
+/// then the heating (it needs no electricity), then medicine when the pet is
+/// unwell, then the electricity (the corner's light and the TV's power), each
+/// while the wallet covers it; the TV only when the pet is bored, the
+/// electricity is paid and the wallet keeps the reserve after it; a toy is
+/// played with when one is owned. Pure, so the picks are tested headless.
 /// </summary>
 public static class PetPolicy
 {
@@ -25,18 +26,22 @@ public static class PetPolicy
             care = care.With(HomeBill.Food, true);
             left -= Cost(HomeBill.Food);
         }
-        int warmth = Cost(HomeBill.Heating) + Cost(HomeBill.Electricity);
-        if (left >= warmth)
+        if (left >= Cost(HomeBill.Heating))
         {
-            care = care.With(HomeBill.Heating, true).With(HomeBill.Electricity, true);
-            left -= warmth;
+            care = care.With(HomeBill.Heating, true);
+            left -= Cost(HomeBill.Heating);
         }
         if (needs.Sickness > 0 && left >= Cost(HomeBill.Medicine))
         {
             care = care.With(HomeBill.Medicine, true);
             left -= Cost(HomeBill.Medicine);
         }
-        if (needs.Boredom > 0 && care.Electricity && left - Cost(HomeBill.Tv) >= reserve)
+        if (left >= Cost(HomeBill.Electricity))
+        {
+            care = care.With(HomeBill.Electricity, true);
+            left -= Cost(HomeBill.Electricity);
+        }
+        if (needs.Boredom > 0 && care.Offers(HomeBill.Tv) && left - Cost(HomeBill.Tv) >= reserve)
             care = care.With(HomeBill.Tv, true);
         return care;
     }

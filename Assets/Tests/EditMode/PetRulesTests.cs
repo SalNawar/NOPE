@@ -27,10 +27,10 @@ public class PetRulesTests
     }
 
     [Test]
-    public void Settle_TheHeatingAndTheTv_NeedTheElectricity()
+    public void Settle_TheHeatingStandsAlone_TheTvNeedsTheElectricity()
     {
         PetNeeds n = PetRules.Settle(new PetNeeds(0, 1, 2, 0), new PetCare(true, true, false, true, false), Max);
-        Assert.AreEqual(2, n.Cold, "heating without power warms nothing");
+        Assert.AreEqual(0, n.Cold, "the heating warms without electricity (gas or district heat)");
         Assert.AreEqual(3, n.Boredom, "a TV without power is no company");
         n = PetRules.Settle(new PetNeeds(0, 1, 2, 0), new PetCare(true, true, true, true, false), Max);
         Assert.AreEqual(0, n.Cold);
@@ -52,14 +52,20 @@ public class PetRulesTests
     }
 
     [Test]
-    public void Toggle_TheElectricityGoesWithTheHeatingAndTheTv()
+    public void Toggle_PaysOnlyTheBillClicked_NeverTheElectricity()
     {
+        // Saleh 2026-10-07: "when you pay for heating you auto pay for electricity too" was a bug: no hidden auto-pay.
         PetCare care = Nothing.Toggle(HomeBill.Heating);
-        Assert.IsTrue(care.Heating && care.Electricity, "heating brings the power with it");
-        care = care.Toggle(HomeBill.Tv);
-        Assert.IsTrue(care.Watched);
+        Assert.IsTrue(care.Heating && care.Warm, "the heating alone warms");
+        Assert.IsFalse(care.Electricity, "paying the heating pays nothing else");
+        Assert.AreEqual(care, care.Toggle(HomeBill.Tv), "no power: the TV cannot be chosen, and the electricity is not paid for it");
+        Assert.IsFalse(care.Offers(HomeBill.Tv));
+        care = care.Toggle(HomeBill.Electricity).Toggle(HomeBill.Tv);
+        Assert.IsTrue(care.Electricity && care.Watched && care.Offers(HomeBill.Tv));
         care = care.Toggle(HomeBill.Electricity);
-        Assert.IsFalse(care.Electricity || care.Heating || care.Tv, "no power: no heating, no TV");
+        Assert.IsFalse(care.Electricity || care.Tv, "skipping the electricity moves the TV to Skip");
+        Assert.IsTrue(care.Heating, "and keeps the heating");
+        Assert.IsTrue(Essentials.Toggle(HomeBill.Heating).Electricity, "skipping the heating keeps the electricity");
         Assert.IsTrue(Nothing.Toggle(HomeBill.Food).Food);
         Assert.IsFalse(Nothing.Toggle(HomeBill.Food).Toggle(HomeBill.Food).Food);
     }
@@ -158,9 +164,11 @@ public class PetRulesTests
         PetCare rich = PetPolicy.Care(new PetNeeds(0, 0, 1, 1), 200, b => prices[b], 60, true);
         Assert.IsTrue(rich.Food && rich.Warm && rich.Medicine && rich.Watched && rich.Played);
         PetCare poor = PetPolicy.Care(new PetNeeds(0, 0, 1, 1), 20, b => prices[b], 60, false);
-        Assert.IsTrue(poor.Food);
-        Assert.IsFalse(poor.Heating || poor.Electricity, "10 left: not the 14 the heating needs");
-        Assert.IsFalse(poor.Tv || poor.Medicine);
+        Assert.IsTrue(poor.Food && poor.Heating && poor.Warm, "the heating's 8 alone warms");
+        Assert.IsFalse(poor.Medicine, "2 left: not the medicine's 12");
+        Assert.IsFalse(poor.Electricity || poor.Tv, "nor the electricity's 6, so no TV");
+        PetCare sick = PetPolicy.Care(new PetNeeds(0, 0, 0, 1), 32, b => prices[b], 60, false);
+        Assert.IsTrue(sick.Food && sick.Heating && sick.Medicine && !sick.Electricity, "medicine before the electricity");
         Assert.IsFalse(PetPolicy.Care(new PetNeeds(0, 0, 0, 0), 200, b => prices[b], 60, false).Tv, "not bored: no TV");
         Assert.IsFalse(PetPolicy.Care(new PetNeeds(0, 0, 2, 0), 85, b => prices[b], 60, false).Tv, "the TV keeps the reserve");
     }
