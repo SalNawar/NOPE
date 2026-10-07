@@ -154,6 +154,15 @@ public class ArtSlotsTests
     }
 
     [Test]
+    public void HallSlot_ByTheSlotAndTheVariantsFile_AndItKeepsTheHallsWidth()
+    {
+        Assert.AreEqual("Hall/Slots/13-flag-left-cloth/egypt_2", ArtSlots.HallSlot("13-flag-left-cloth", "egypt_2"));
+        Assert.AreEqual("Hall/Slots/new-anomalies/breaching", ArtSlots.SlotOf(ArtSlots.AssetRoot + "Hall/Slots/new-anomalies/breaching.png"));
+        Assert.AreEqual(4096, ArtSlots.MaxSide(ArtSlots.HallSlot("x", "y")), "the hall's 2172 px canvas is not downscaled");
+        Assert.AreEqual(2048, ArtSlots.MaxSide(ArtSlots.PetCorner));
+    }
+
+    [Test]
     public void OnDeskPaper_TheFormsFolder()
     {
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.PhotoFrame));

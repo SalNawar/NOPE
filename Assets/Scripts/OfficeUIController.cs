@@ -27,9 +27,6 @@ public sealed class OfficeUIController : MonoBehaviour
     /// <summary>Shows current money.</summary>
     [SerializeField] private TMP_Text moneyText;
 
-    /// <summary>Shows timeline stability.</summary>
-    [SerializeField] private TMP_Text stabilityText;
-
     /// <summary>Shows today's date and the day number in the taskbar ("14 MAR 2150 · Day 1"; the desk-first redesign: "the date should be on the PC").</summary>
     [SerializeField] private TMP_Text dayText;
 
@@ -79,7 +76,7 @@ public sealed class OfficeUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Refreshes the money/stability/day HUD from world state.
+    /// Refreshes the money/day HUD from world state (stability shows as the Helix River, HelixRiverMonitor, never a number).
     /// Safe to call with unwired HUD fields.
     /// </summary>
     public void UpdateHud(WorldState world)
@@ -89,9 +86,6 @@ public sealed class OfficeUIController : MonoBehaviour
 
         if (moneyText != null)
             moneyText.text = UiText.Format("tray.money", UiText.Currency(UiText.WalletForm.Label), world.money);
-
-        if (stabilityText != null)
-            stabilityText.text = UiText.Format("tray.stability", StabilityRules.Format(world.timelineStability));
 
         if (dayText != null)
             dayText.text = TrayDate(world.day);
@@ -129,8 +123,8 @@ public sealed class OfficeUIController : MonoBehaviour
         SetResult(verdict.correct
             ? UiText.Format("verdict.correct", verdict.payAwarded, credits)
             : verdict.moneyPenalty > 0
-                ? UiText.Format("verdict.wrongPenalty", StabilityRules.FormatChange(verdict.stabilityDelta), verdict.moneyPenalty, credits)
-                : UiText.Format("verdict.wrong", StabilityRules.FormatChange(verdict.stabilityDelta)),
+                ? UiText.Format("verdict.wrongPenalty", verdict.moneyPenalty, credits)
+                : UiText.Get("verdict.wrong"),
             UiKitNames.VerdictRibbon(verdict.correct, verdict.wasFreeWarning));
 
         bool canShowSlip = verdict.citationIssued && citationPanel != null;

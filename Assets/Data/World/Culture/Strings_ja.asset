@@ -112,7 +112,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: tray.stability
-    text: "\u5B89\u5B9A\u5EA6\uFF1A{0}"
+    text: "\u5B89\u5B9A\u5EA6"
     gloss: 0
     tier: 0
   - key: taskbar.desk

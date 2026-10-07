@@ -16,7 +16,9 @@ using UnityEngine.SceneManagement;
 /// on the PC's glass, sizes the desk, the mat and the scanner, poses the desk
 /// view from the art's Cinemachine camera and the mat, lays the counter and
 /// the rulebook and the 3D stamp bar's rack, stands the traveller,
-/// binds the readouts to the art's texts (or shows the fallback HUD), has the
+/// binds the readouts to the art's texts (or shows the fallback HUD), lays the
+/// Helix River over the stability monitor's text (HelixRiverMonitor.Cover; the
+/// fallback HUD's river when the art has none), has the
 /// AVAILABLE sign's caption follow the desk's availability (AvailableSignLink), points
 /// the anime hall's presentation at the shift clock (AnimeHallShiftLink) and
 /// its portal rings at the day's portals (AnimeHallPortalLink) when the art
@@ -139,8 +141,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     [SerializeField] private PropBinding[] props;
 
     [Header("Readouts")]
-    /// <summary>Day, stability and credits.</summary>
+    /// <summary>Day and credits.</summary>
     [SerializeField] private OfficeReadouts readouts;
+
+    /// <summary>The Helix River's quad, laid over the art's stability text (ReadoutStability); hidden when the art has none.</summary>
+    [SerializeField] private HelixRiverMonitor deskRiver;
 
     /// <summary>The shift clock.</summary>
     [SerializeField] private ShiftClockReadouts clock;
@@ -151,8 +156,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The fallback HUD's day text.</summary>
     [SerializeField] private TMP_Text hudDay;
 
-    /// <summary>The fallback HUD's stability text.</summary>
-    [SerializeField] private TMP_Text hudStability;
+    /// <summary>The fallback HUD's Helix River (shown when the art has no stability text).</summary>
+    [SerializeField] private HelixRiverMonitor hudRiver;
 
     /// <summary>The fallback HUD's credits text.</summary>
     [SerializeField] private TMP_Text hudCredits;
@@ -524,7 +529,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         }
     }
 
-    /// <summary>Binds each readout to the art's text, or to the fallback HUD's when the art has none (the HUD shows only then).</summary>
+    /// <summary>Binds each readout to the art's text, or to the fallback HUD's when the art has none (the HUD shows only then); the Helix River covers the art's stability text, or shows in the HUD.</summary>
     private void BindReadouts()
     {
         bool hud = false;
@@ -538,17 +543,28 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         }
 
         TMP_Text day = Pick(OfficeAnchorId.ReadoutDay, hudDay);
-        TMP_Text stability = Pick(OfficeAnchorId.ReadoutStability, hudStability);
         TMP_Text credits = Pick(OfficeAnchorId.ReadoutCredits, hudCredits);
         TMP_Text time = Pick(OfficeAnchorId.ReadoutClock, hudClock);
         if (readouts != null)
-            readouts.Bind(day, stability, credits);
+            readouts.Bind(day, credits);
         if (clock != null)
             clock.Bind(time);
 
-        foreach (TMP_Text unused in new[] { hudDay, hudStability, hudCredits, hudClock })
+        TMP_Text stabilityScreen = TextOf(OfficeAnchorId.ReadoutStability);
+        if (deskRiver != null)
+        {
+            deskRiver.Cover(stabilityScreen);
+            deskRiver.gameObject.SetActive(stabilityScreen != null);
+        }
+        if (hudRiver != null)
+        {
+            hudRiver.gameObject.SetActive(stabilityScreen == null);
+            hud |= stabilityScreen == null;
+        }
+
+        foreach (TMP_Text unused in new[] { hudDay, hudCredits, hudClock })
             if (unused != null)
-                unused.gameObject.SetActive(unused == day || unused == stability || unused == credits || unused == time);
+                unused.gameObject.SetActive(unused == day || unused == credits || unused == time);
         if (fallbackHud != null)
             fallbackHud.SetActive(hud);
     }
@@ -596,7 +612,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         return null;
     }
 
-    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock (and the hall's lights, their day-night cycle, and the traveller's shade with it), and the ink of the art's calendar with it (the config's hall knobs), and a second link its portal rings (and their lights) from the day's portals, and the city view is bound to it (its left pan, its living city); an art office without one needs nothing (the city view stays off).</summary>
+    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock (and the hall's lights, their day-night cycle, and the traveller's shade with it), and the ink of the art's calendar with it (the config's hall knobs), and a second link its portal rings (and their lights) from the day's portals, a third its swappable slots from the hall's variables (HallSlotsLink, when the config names a HallSlotsSO), and the city view is bound to it (its left pan, its living city); an art office without one needs nothing (the city view stays off).</summary>
     private void BindHall(Scene art)
     {
         if (config == null)
@@ -610,6 +626,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             HallLightingRig lights = FindLights(art);
             gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config, TextOf(OfficeAnchorId.ReadoutDay), lights, traveller);
             gameObject.AddComponent<AnimeHallPortalLink>().Configure(hall, config, game, portalEffects, lights);
+            if (config.hallSlots != null)
+                gameObject.AddComponent<HallSlotsLink>().Configure(hall, config.hallSlots);
             if (cityView != null)
                 cityView.Bind(hall, hall.GetComponentInChildren<HallCityExterior>(false), lights);
             return;

@@ -123,7 +123,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt, Seeds.StrandingFateSalt, Seeds.WaiverSignSalt, Seeds.ReturnSalt, Seeds.ReturnSlotSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt, Seeds.StrandingFateSalt, Seeds.WaiverSignSalt, Seeds.ReturnSalt, Seeds.ReturnSlotSalt, Seeds.HallSlotSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -163,6 +163,26 @@ public class SeedsTests
         Assert.AreEqual(0x52435652, Seeds.RecoverySalt, "\"RCVR\"");
         Assert.AreEqual(-1690349512, Seeds.ForBreakIns(daySeed));
         Assert.AreEqual(0x42524B4E, Seeds.BreakInSalt, "\"BRKN\"");
+    }
+
+    /// <summary>
+    /// The hall's slot picks (HallSlotPick): one stream per run and per
+    /// slot/variant key, the same at every replay, apart from every other key's
+    /// and from the run's other streams.
+    /// </summary>
+    [Test]
+    public void ForHallSlot_IsPinned_PerRunAndKey_AndApartFromTheRunsOtherStreams()
+    {
+        Assert.AreEqual(0x48414C4C, Seeds.HallSlotSalt, "\"HALL\"");
+        Assert.AreEqual(Seeds.Mix(Seeds.Mix(12345, Seeds.HallSlotSalt), Seeds.OfKey("13-flag-left-cloth/egypt")), Seeds.ForHallSlot(12345, "13-flag-left-cloth/egypt"));
+        Assert.AreEqual(Seeds.ForHallSlot(12345, "a/b"), Seeds.ForHallSlot(12345, "a/b"), "a replay shows the same hall");
+        var seeds = new[]
+        {
+            Seeds.ForHallSlot(12345, "13-flag-left-cloth/egypt"), Seeds.ForHallSlot(12345, "14-flag-right-cloth/egypt"),
+            Seeds.ForHallSlot(12345, "13-flag-left-cloth/japan"), Seeds.ForHallSlot(54321, "13-flag-left-cloth/egypt"),
+            Seeds.ForDebtNews(12345), Seeds.Day(12345, 1), Seeds.Mix(12345, Seeds.CaseSalt)
+        };
+        CollectionAssert.AllItemsAreUnique(seeds);
     }
 
     /// <summary>

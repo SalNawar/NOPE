@@ -659,7 +659,7 @@ public static partial class OfficeSceneUIBuilder
         Prop("Stamp", OfficeAnchorId.Stamp, EnsureDeskReaction("Reaction_Stamp", ReactionKind.Squash, ""), null, "stamp");
         Prop("Intercom", OfficeAnchorId.Intercom, EnsureDeskReaction("Reaction_Intercom", ReactionKind.Squash, ""), null, null);
         Prop("Till", OfficeAnchorId.Till, EnsureDeskReaction("Reaction_Till", ReactionKind.Pulse, "tooltip.credits", 0.08f), OfficeAnchorId.ReadoutCredits, null);
-        Prop("StabilityMonitor", OfficeAnchorId.StabilityMonitor, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "tooltip.stability"), OfficeAnchorId.ReadoutStability, null);
+        Prop("StabilityMonitor", OfficeAnchorId.StabilityMonitor, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "tooltip.stability"), null, null);
         Prop("Calendar", OfficeAnchorId.Calendar, EnsureDeskReaction("Reaction_Calendar", ReactionKind.None, "tooltip.day"), OfficeAnchorId.ReadoutDay, null);
         Prop("Clock", OfficeAnchorId.Clock, EnsureDeskReaction("Reaction_Clock", ReactionKind.None, "tooltip.value"), OfficeAnchorId.ReadoutClock, null);
         Prop("Calculator", OfficeAnchorId.Calculator, EnsureDeskReaction("Reaction_Calculator", ReactionKind.Squash, ""), null, "calculator");
@@ -774,7 +774,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "clock", clockReadouts);
         SetRef(soBinder, "fallbackHud", hud.root);
         SetRef(soBinder, "hudDay", hud.day);
-        SetRef(soBinder, "hudStability", hud.stability);
+        SetRef(soBinder, "hudRiver", hud.river);
+        SetRef(soBinder, "deskRiver", BuildDeskRiver(office));
         SetRef(soBinder, "hudCredits", hud.credits);
         SetRef(soBinder, "hudClock", hud.clock);
         SetRef(soBinder, "game", game);
@@ -1231,12 +1232,12 @@ public static partial class OfficeSceneUIBuilder
     {
         public GameObject root;
         public TMP_Text day;
-        public TMP_Text stability;
+        public HelixRiverMonitor river;
         public TMP_Text credits;
         public TMP_Text clock;
     }
 
-    /// <summary>The fallback HUD on the office overlay canvas, top right, rebuilt each run and inactive: day, credits, stability and clock.</summary>
+    /// <summary>The fallback HUD on the office overlay canvas, top right, rebuilt each run and inactive: day, credits, the Helix River and clock.</summary>
     private static FallbackHud BuildFallbackHud(Transform overlay)
     {
         DestroyChildIfPresent(overlay, "FallbackHud");
@@ -1255,7 +1256,7 @@ public static partial class OfficeSceneUIBuilder
             root = panel.gameObject,
             day = Cell("Day", "01"),
             credits = Cell("Credits", "0"),
-            stability = Cell("Stability", "100%"),
+            river = BuildHudRiver(panel),
             clock = Cell("Clock", "09:00"),
         };
         panel.gameObject.SetActive(false);

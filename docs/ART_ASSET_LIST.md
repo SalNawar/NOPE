@@ -79,6 +79,10 @@ Drawn on the office overlay canvas (1920 × 1080 reference; it scales with the s
 - **Drawn by code, no art:** the fallback HUD (it shows only when the art office lacks a readout) and the floating hints.
 - **Piece 10 (desk examination, being built now)** adds the claim tag (1100 × 64) and an office compare strip (1200 × 56) at the top of the overlay, the stamp tray (Accept and Deny above the 3D stamp), and moves the verdict line and the citation slip onto the overlay. All are code-drawn themed panels with no art slot planned; the citation slip's art (section 5) follows it there.
 
+### The hall's swappable slots (2026-10-07; `ArtDeliverables/TimeDesk/HallSlots/HALL_SLOTS_ART_REQUEST.md`)
+
+The anime hall's parts that change with the run (the leading culture, the Helix River's tier, the debt crisis's phase, today's special, the famous travellers let through): 15 slots, 104 variant files, each a painting on the hall's whole 2172 x 724 transparent canvas registered to the live warm-stone painting (`Completion/WarmStone/HallWarmStone.png`), delivered to `Assets/Art/UI/Resources/Hall/Slots/<slot>/<variant>.png`. A missing file keeps the hall as painted, so none is needed to play. Templates: `ArtDeliverables/TimeDesk/HallSlots/templates/`. Priorities: 1 culture (banners, the board plate, the door signs, the floor medallion: 56), 2 stability (anomalies, cracked glass: 6), 3 phase posters and exhibits (37), 4 event checkpoints and queue clutter (5). Not counted in the totals below (their own request).
+
 ## 3. The PC desktop
 
 A 4:3 canvas of 1440 × 1080, seen in the PC frame (its glass is 1120 × 840 at 1080p) and cloned small onto the office PC's screen. The culture theme recolours and refonts everything here except the documents.

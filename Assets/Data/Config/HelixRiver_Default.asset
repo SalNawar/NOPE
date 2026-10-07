@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df81184b4dbd4fb886e27871d7ad7fd6, type: 3}
+  m_Name: HelixRiver_Default
+  m_EditorClassIdentifier: Assembly-CSharp::HelixRiverSO
+  knobs:
+    steadyAt: 100
+    settleSeconds: 1.2
+    meanderCalm: 6
+    meanderWild: 118
+    meanderCurve: 1.1
+    twistCalm: 26
+    twistWild: 40
+    unzipWild: 70
+    unzipCurve: 1.2
+    unzipStartWild: 0.62
+    unzipStartCalmShift: 0.35
+    snapWild: 0.5
+    snapCurve: 1.4
+    mutateWild: 0.5
+    oxbowsFrom: 0.75
+    oxbowsWild: 7
+    frayFrom: 0.5
+    frayWild: 24
+    flowCalm: 90
+    flowWild: 150
+    strayWild: 30
+    driftWild: 0.5
+    glitchWild: 1
+    agitationFullDrop: 7.5
+    agitationGlitch: 0.25
+    agitationFlow: 0.4
+    pulseSeconds: 1.2
+    reducedMotionSpeed: 0.1

@@ -112,7 +112,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: tray.stability
-    text: "Stabilit\xE4t: {0}"
+    text: "Stabilit\xE4t"
     gloss: 0
     tier: 0
   - key: taskbar.desk

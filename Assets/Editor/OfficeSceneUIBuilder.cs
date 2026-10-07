@@ -160,7 +160,7 @@ public static partial class OfficeSceneUIBuilder
         // XP desktop wallpaper (behind everything), the idle line between
         // travellers + taskbar with system-tray HUD.
         GameObject idleScreen = BuildDesktop(root, library);
-        BuildTaskbar(root, out TMP_Text dayText, out Button dateButton, out TMP_Text moneyText, out TMP_Text stabilityText, out TMP_Text trayClockText);
+        BuildTaskbar(root, out TMP_Text dayText, out Button dateButton, out TMP_Text moneyText, out TMP_Text trayClockText);
 
         // The verdict line and the citation slip moved to the office overlay (piece 10): the desktop keeps no copy.
         DestroyChildIfPresent(root, "VerdictStrip");
@@ -176,6 +176,7 @@ public static partial class OfficeSceneUIBuilder
         Transform briefing = BuildMorningPaper(officeCanvas.transform, out PaperTexts paper, out Button startShift);
         Transform results = BuildNewsletter(officeCanvas.transform, "ResultsPanel", "results.masthead",
             "results.goHome", out TMP_Text resultsTitle, out TMP_Text resultsBody, out Button goHome);
+        BuildResultsRiver(results);
 
         // The desk tuning and the scene contract (created once): screen power, the
         // clone, the papers, the traveller, the wheel; where the art's places are.
@@ -295,7 +296,6 @@ public static partial class OfficeSceneUIBuilder
         // --- Wire everything ---
         var soOffice = new SerializedObject(officeUI);
         SetRef(soOffice, "moneyText", moneyText);
-        SetRef(soOffice, "stabilityText", stabilityText);
         SetRef(soOffice, "dayText", dayText);
         SetRef(soOffice, "dateButton", dateButton);
         SetRef(soOffice, "app", app.App);
@@ -376,6 +376,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soGm, "desktopConfig", EnsureDesktopConfig());
         soGm.ApplyModifiedProperties();
 
+        WireHelixRivers(scene, gameManager);
         OrderDesktopLayers(root);
         ApplyKit(canvas, officeCanvas);
         SetLayer(monitorScreen.transform, OfficeLayers.PcDesktopLayer); // what the kit pass added to the desktop is on its layer too
@@ -883,25 +884,22 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The taskbar's Menu button's width, and Back to desk's (desktop units; the PC UX redesign's section 3).</summary>
     private const float MenuButtonWidth = 148f, DeskButtonWidth = 200f;
 
-    /// <summary>The tray's width at the taskbar's right end (Day, Credits, Stability, the clock at Caption size): room for a culture's long currency word beside its own script and today's date (wave 5 A3: the readouts overlapped at 600; at 760 with the date), with the stability's fixed slot; the window buttons keep the rest (run 7: at 1000 they had none and drew over it).</summary>
+    /// <summary>The tray's width at the taskbar's right end (Credits, the Helix River's strip, the date, the clock at Caption size): room for a culture's long currency word beside its own script and today's date (wave 5 A3: the readouts overlapped at 600; at 760 with the date) and the river's fixed strip; the window buttons keep the rest (run 7: at 1000 they had none and drew over it).</summary>
     private const float TrayWidth = 780f;
-
-    /// <summary>The tray's fixed slot for the stability display (desktop units): the Helix River's strip takes it (Track T); until then the line shrinks to fit it.</summary>
-    private const float StabilitySlotWidth = 180f;
 
     /// <summary>
     /// The taskbar (the PC UX redesign C7), rebuilt fresh: a flat bar in the
     /// Taskbar role (the culture's deep colour; no gloss), the Menu button
     /// (the StartButton role) at its left, the tray at its right with
-    /// Credits, Stability, today's date and the clock at Caption size in a
-    /// row sized by their words. The date ("14 MAR 2150 · Day 1"; the
+    /// Credits, the Helix River's live strip (stability without a number;
+    /// OfficeSceneUIBuilder.HelixRiver), today's date and the clock at Caption
+    /// size in a row sized by their words. The date ("14 MAR 2150 · Day 1"; the
     /// desk-first redesign: "the date should be on the PC") sits beside the
     /// clock on a clear button: a click holds today on the workbench, to
     /// compare with an expiry or a ticket's date. Back to desk and the window
     /// buttons are added after it (BuildDesktopShell, BuildWindowManager).
     /// </summary>
-    private static void BuildTaskbar(Transform root, out TMP_Text dayText, out Button dateButton, out TMP_Text moneyText, out TMP_Text stabilityText,
-                                     out TMP_Text clockText)
+    private static void BuildTaskbar(Transform root, out TMP_Text dayText, out Button dateButton, out TMP_Text moneyText, out TMP_Text clockText)
     {
         DestroyChildIfPresent(root, "Taskbar");
         Transform bar = Panel(root, "Taskbar", new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, TaskbarHeight / 2f), new Vector2(0f, TaskbarHeight), XpBlue, ThemeRoleId.Taskbar);
@@ -912,7 +910,7 @@ public static partial class OfficeSceneUIBuilder
                              ThemeRoleId.StartButton, "taskbar.start", FontStyles.Bold, ThemeTextKind.Button, true);
         menu.raycastTarget = false;
 
-        // System tray: Day | Credits | Stability | Clock, right to left from the bar's end, each as wide as its words.
+        // System tray: Credits | the Helix River | Date | Clock, right to left from the bar's end, each as wide as its words (the river as its strip).
         Transform tray = Panel(bar, "Tray", new Vector2(1f, 0f), Vector2.one, new Vector2(-(PcSize.S + TrayWidth / 2f), 0f), new Vector2(TrayWidth, 0f),
                                new Color(0.1f, 0.32f, 0.78f, 1f), ThemeRoleId.Tray);
         tray.GetComponent<Image>().raycastTarget = false;
@@ -925,13 +923,7 @@ public static partial class OfficeSceneUIBuilder
         row.childForceExpandWidth = false;
         row.childForceExpandHeight = true;
         moneyText = TrayText(tray, "MoneyText", "Credits: 0");
-        stabilityText = TrayText(tray, "StabilityText", "Stability: 100%");
-        LayoutElement slot = GetOrAdd<LayoutElement>(stabilityText.gameObject);
-        slot.minWidth = slot.preferredWidth = StabilitySlotWidth;
-        slot.flexibleWidth = 0f;
-        stabilityText.enableAutoSizing = true;
-        stabilityText.fontSizeMax = PcType.Caption;
-        stabilityText.fontSizeMin = 14f;
+        BuildTrayRiver(tray);
         dateButton = MakeButton(tray, "DateButton", null, Vector2.zero, Vector2.one, new Color(1f, 1f, 1f, 0f), ThemeRoleId.ClickCatcher);
         DestroyChildIfPresent(dateButton.transform, "Label");
         HorizontalLayoutGroup datePad = GetOrAdd<HorizontalLayoutGroup>(dateButton.gameObject);
