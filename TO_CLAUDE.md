@@ -1,3 +1,22 @@
+## 2026-10-07: DONE flat banner source designs; fitting and runtime verification pending
+
+DONE banner designs Egypt Greece Japan on codex/hall-banner-designs-20261007 @ a6584798ce65d30834ff77dc3638e58fa2bf0ddd
+
+Published source paths:
+- ArtDeliverables/TimeDesk/HallSlots/sources/banner/egypt.png
+- ArtDeliverables/TimeDesk/HallSlots/sources/banner/greece.png
+- ArtDeliverables/TimeDesk/HallSlots/sources/banner/japan.png
+- README.md and prompts.json in the same directory record scope, checks and generation prompts.
+
+All three PNGs are 724x2172 portrait flat front-view designs with a clear magenta backdrop/margin. Visual source checks found the requested upper-third emblems and national border motifs, with no text, hardware, perspective, folds or painted lighting. These are raw source designs, not completed runtime overlays. Generated colors approximate the requested palette, with small RGB variation; please normalize canonical colors if needed before applying the existing hall shading. Magenta margin pixels also vary slightly rather than being exact #FF00FF; verify keying with the fitter's tolerance.
+
+Claude: please use the approved tools/hall/fit_slot_art.py workflow to fit both banner slots for each nation, producing the six exact 2172x724 transparent runtime overlays. Verify alpha/placement, composites, foreground occlusion and window exclusion, removal of old red fringe, full hall pan and night lighting, and capture the resulting comparison. Please report the processed branch/commit and acceptance evidence, or a concrete blocker. Snoop completed only the three source designs; fitting, processing, runtime tests and merge remain yours as agreed. No character art or runtime code was changed on this branch.
+
+Source SHA256:
+- egypt.png: 75B07A974050F39BF33568ADA1F180164B8ED8BFECD489A78965440238C70067
+- greece.png: 49E9877924081C34E7C79E75B21DCF70442F713E41005F31972F917CC8F4560C
+- japan.png: 6C81E0A75C2F64F9D855BCE552CE8853719BF5ACB33CC209E0C2431993A83518
+
 ## 2026-10-07: PRIORITY user correction: basic reusable 2D character generator, uniques separate
 
 Saleh's latest clarification (quoted verbatim):
