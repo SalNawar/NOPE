@@ -2055,6 +2055,46 @@ MonoBehaviour:
     text: Priority subject. Records sealed above your clearance.
     gloss: 0
     tier: 0
+  - key: records.group.file
+    text: FILE
+    gloss: 0
+    tier: 0
+  - key: records.row.file
+    text: Note
+    gloss: 0
+    tier: 0
+  - key: records.group.seen
+    text: "SEEN BEFORE \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: visit.flag.days
+    text: '{0} {1} DAYS AGO'
+    gloss: 0
+    tier: 0
+  - key: visit.flag.yesterday
+    text: '{0} YESTERDAY'
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Accepted
+    text: Accepted
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Denied
+    text: Denied
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Detained
+    text: Detained
+    gloss: 0
+    tier: 0
+  - key: visit.row
+    text: "{0} \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: visit.citation
+    text: "\xB7 Citation: {0}"
+    gloss: 0
+    tier: 0
   - key: records.row.number
     text: Displacement No.
     gloss: 0

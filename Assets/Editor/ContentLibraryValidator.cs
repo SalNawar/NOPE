@@ -146,6 +146,9 @@ public static partial class ContentLibraryValidator
         // --- The morning paper's debt lines (redesign phase 13; ContentLibraryValidator.News.cs) ---
         issues += CheckNews(lib);
 
+        // --- The citizen file (the scanner app spec §3; ContentLibraryValidator.News.cs) ---
+        issues += CheckLore(lib);
+
         // --- The PC block: the Internet's sites, pages and people (ContentLibraryValidator.Pc.cs) ---
         issues += CheckPc(lib);
 

@@ -97,6 +97,10 @@ public static class DayCycle
 
         WorldOutcomeService.RecordDecision(world, inst, accepted, lib, config);
 
+        if (inst != null && world != null)
+            Visits.Record(world.visits ??= new List<VisitEntry>(), inst.RecordKey, world.day, lib != null ? AgencyCalendar.Today(lib.Agency.firstDate, world.day) : null,
+                          inst.originLabel, accepted ? Visits.Accepted : Visits.Denied, verdict.citationIssued ? verdict.citationReason : null);
+
         if (accepted)
         {
             TimelineService.ApplyVerdictImpacts(inst, inst.claimedEra, verdict.correct, world, lib);

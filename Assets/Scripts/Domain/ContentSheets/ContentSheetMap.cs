@@ -143,6 +143,7 @@ public static class ContentSheetMap
             Questions(),
             Dialogs(),
             Premades(),
+            Lore(),
             History(),
             Single("news", "news",
                 Text("stranded").Note("the morning paper's line per traveller stranded the day before: {name} and {place}"),
@@ -515,6 +516,30 @@ public static class ContentSheetMap
                 Text("factor").Ref("worldFactors"),
                 Text("outcome").Note("an outcome id of the factor (worldOutcomes)"),
                 Num("amount").Note("the pull when accepted, instead of the role's, unscaled")).OmitEmpty().Note("a famous traveller's big pull on the world")).Note("premade characters: real people and written stories");
+
+    /// <summary>The citizen file's content (the scanner app spec §3): each premade's lines, the random travellers' templates, the threads a recurring traveller's file grows.</summary>
+    private static SheetSpec Lore() =>
+        Single("lore", "lore",
+            Num("clueChance").Note("the chance a random traveller with a fault gets one clue line among their flavour (0 to 1)"),
+            Int("linesMin").Note("the fewest flavour lines in a random traveller's file"),
+            Int("linesMax").Note("the most flavour lines in a random traveller's file (at most 4)"),
+            Int("yearMin").Note("the earliest year a drawn {year} or {month} names"),
+            Int("yearMax").Note("the latest year a drawn {year} or {month} names"),
+            List("relatives").Note("the kin a drawn {relative} names (sister|cousin|...)"),
+            Rows("lorePremades", "premades", Key("premade", "lorePremade"),
+                Text("premade").Required().Ref("premades"),
+                Values("lorePremadeLines", "lines", Text("text")).Note("one file line per row, 2 to 4: a famous traveller's real, well-established facts as a 2150 registry notes them (\"Registry note: ...\"), contested claims as \"Archive sources claim ...\", and why they travel; no {slots}")).Note("each premade's citizen file lines"),
+            Rows("loreTemplates", "templates",
+                Text("id").Required(),
+                List("kinds").Omit().Note("the kinds it describes: RichTourist|PoorTourist|Labourer|Displaced (blank: any)"),
+                Text("personality").Omit().Ref("personalities").Note("the personality it describes (blank: any)"),
+                List("traits").Omit().Note("traits the traveller must have: debt, nodebt, frozen, good, trips, notrips, premium, standard, eligible"),
+                Text("clue").Omit().Note("a fault (a LieKind or DirectiveFault name) it is a clue to: picked only for a traveller who carries it (blank: flavour)"),
+                Text("text").Note("the line: {name} {first} {place} {era} {role} {year} {month} {count} {sector} {relative}; citizens' {status} {trips} {transponder}; with trait debt {debt}; labourers' {employer} {wage} {term}; the displaced's {incident} {found}")).Note("the random travellers' file lines, slot-filled and seeded per run"),
+            Rows("loreThreads", "threads",
+                Text("id").Required(),
+                Text("verdict").Note("the verdict word it follows (Accepted, Denied, Detained; blank: any verdict without a line of its own)"),
+                Text("text").Note("the line a recurring traveller's file grows per earlier visit: {date} {place} {verdict} {days} and the universal slots")).Note("what a recurring traveller's file says of their earlier visits")).Note("the citizen file: lines in each Citizen record's FILE section");
 
     private static SheetSpec History() =>
         Single("history", "history",

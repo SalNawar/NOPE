@@ -310,7 +310,7 @@ public sealed partial class GameManager : MonoBehaviour
     /// </summary>
     private CitizenRegistry BuildRegistry()
     {
-        CitizenRegistry registry = CaseFactory.BuildRegistry(_dayCases, contentLibrary.Introductions.Has(_worldState.day, Feature.Standing));
+        CitizenRegistry registry = CaseFactory.BuildRegistry(_dayCases, contentLibrary.Introductions.Has(_worldState.day, Feature.Standing), _worldState.day);
         var clerk = new ClerkAccountSource(_worldState, contentLibrary);
         registry.Add(AccountRecords.Clerk(clerk.Profile, Account.ExtractRows(clerk, UiText.Get, AccountMaker.Credits)));
         return registry;

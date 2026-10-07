@@ -80,6 +80,7 @@ public static partial class WorldContentGenerator
         CheckTranslation(src, authored, errors);
         CheckHome(src, authored, errors);
         CheckGuide(src, errors);
+        CheckLore(src, errors);
         WorldContent world = BuildWorld(src.world, errors);
         errors.AddRange(world.Problems());
         CheckWorldRefs(src, world, authored, errors);
@@ -176,6 +177,7 @@ public static partial class WorldContentGenerator
         WireNews(authored.library, src.news);
         WireHome(authored.library, src.home);
         WireGuide(authored.library, src.guide);
+        WireLore(authored.library, src.lore);
         WireWorld(authored.library, BuildWorld(src.world, null));
         WritePc(authored.library, pc);
 
@@ -2292,6 +2294,7 @@ public static partial class WorldContentGenerator
         public PcData pc;
         public HomeData home;
         public GuideData guide;
+        public LoreData lore;
         public WorldData world;
     }
 
