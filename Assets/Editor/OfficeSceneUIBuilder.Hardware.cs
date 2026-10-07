@@ -26,6 +26,9 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A dater's measures (metres, its foot at the origin): the frame's height and half width and depth, the body's height over the frame and its half width and depth, the wheels' radius.</summary>
     private const float DaterFrameTop = 0.033f, DaterHalfWidth = 0.034f, DaterHalfDepth = 0.023f, DaterBodyHeight = 0.048f, DaterWheelRadius = 0.0095f;
 
+    /// <summary>The colour of a dater's top window (the light grey of a clear plastic top over a white die plate).</summary>
+    private static readonly Color DaterWindowColour = new Color(0.86f, 0.87f, 0.88f);
+
     /// <summary>The model name on a dater's front (a generic stand-in for the reference's).</summary>
     private const string DaterModel = "TC-401  DATER";
 
@@ -58,7 +61,19 @@ public static partial class OfficeSceneUIBuilder
         Color button = approved ? new Color(0.46f, 0.76f, 0.52f) : new Color(0.9f, 0.46f, 0.42f);
         Material black = DaterMaterial(approved ? "Dater_BodyGreen" : "Dater_BodyRed", bodyColour, 0.3f, 0.12f);
         Material rubber = DaterMaterial("Dater_Rubber", new Color(0.16f, 0.15f, 0.15f), 0f, 0.05f);
-        Material glass = DaterMaterial("Dater_Window", new Color(0.2f, 0.22f, 0.26f), 0.4f, 0.2f);
+        // Saleh 2026-10-07: "the top part of the stamps should be white or grey, not black. It is hard to read": the window over the
+        // die is a light grey clear top (the S-401's), so the green or red preview and the date read on it; set on every build.
+        Material glass = DaterMaterial("Dater_Window", DaterWindowColour, 0.55f, 0.12f);
+        if (glass != null && glass.HasProperty("_BaseColor") && glass.GetColor("_BaseColor") != DaterWindowColour)
+        {
+            glass.SetColor("_BaseColor", DaterWindowColour);
+            if (glass.HasProperty("_HighlightStrength"))
+                glass.SetFloat("_HighlightStrength", 0.55f);
+            if (glass.HasProperty("_EdgeStrength"))
+                glass.SetFloat("_EdgeStrength", 0.12f);
+            EditorUtility.SetDirty(glass);
+            AssetDatabase.SaveAssetIfDirty(glass);
+        }
 
         Transform frameRoot = EnsureChild(root, "Frame");
         float plateH = DaterFrameTop - 0.002f;

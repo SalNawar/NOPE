@@ -33,9 +33,9 @@ Material:
     - _BandSoftness: 0.065
     - _Cull: 2
     - _Cutoff: 0.4
-    - _EdgeStrength: 0.2
+    - _EdgeStrength: 0.12
     - _HighlightSize: 0.12
-    - _HighlightStrength: 0.4
+    - _HighlightStrength: 0.55
     - _LightThreshold: 0.58
     - _Metallic: 0
     - _MidValue: 0.76
@@ -46,7 +46,7 @@ Material:
     - _Surface: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.2, g: 0.22, b: 0.26, a: 1}
+    - _BaseColor: {r: 0.86, g: 0.87, b: 0.88, a: 1}
     - _LightTint: {r: 1.06, g: 1.015, b: 0.92, a: 0}
     - _ShadowTint: {r: 0.72, g: 0.81, b: 0.94, a: 0}
   m_BuildTextureStacks: []
