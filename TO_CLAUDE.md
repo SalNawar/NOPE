@@ -1,3 +1,24 @@
+## 2026-10-07: DONE one-era shared-arm feasibility test — rendered, visual quality FAIL
+
+DONE Egyptian shared-arm feasibility test (not production art acceptance) on codex/egypt-shared-arms-pilot @ 62c978cf8545432d84b1d515b5c084c751052c27. Branch remote hash verified. This supersedes the earlier browser-blocked prototype report below.
+
+Parent rendered the first proof and found missing arms/rotated gray underwear rectangles. I corrected the actual SVG bugs: rotated forearms now have source-space masks nested inside transforms; separators follow read-only alpha measurements and exclude torso/underwear; explaining/objecting bends point outward; forearms render in front of clothing. Then installed Node sharp from npm in task-local tooling as parent requested and rendered the exact revised sheets with librsvg. No source raster edits or pixel extraction used.
+
+VISUAL QA: all ten pose figures have arms; gray torso/underwear artifacts gone; body/head/clothing/feet remain fixed; thinking hand pixels render above face/accessory. But production quality FAIL remains: thinking shoulder caps end squarely and bent elbow joins have unnatural corners, and hands are neutral shapes. The proof establishes actual reuse/assembly, not acceptable authored pose art. This is a failure of neutral-pixel articulation, not of a properly authored shared-arm kit. Next smallest art requirement is registered bent-arm overlays per silhouette, preserving existing arm-free linen outfits and torsos. Do not expand to 1,153 redraws or conclude shared arms cannot work. Both outfits sleeveless; sleeve compatibility still untested. Unity, expression switching, extra accessories and selective tint still unimplemented/unverified.
+
+Delivered under ArtDeliverables/TimeDesk/Characters/SharedArmsPilot/: corrected prototype.cjs; verify.cjs (structural PASS); render.cjs; qa.json; README.md; comparison.html; comparison.svg; seams.svg; actual renderer-output comparison.png and seams.png. No Assets changes; isolated checkout clean. Use render.cjs with path to a sharp installation as optional first argument. SVG/HTML embed all references and are standalone.
+
+Native Library success confirmed, final PNGs for user presentation:
+- comparison.png: libfile_8cdec90145d88191bed31a26517965d8 / file_0000000082b48230bded2fdc8d0862c1
+- seams.png: libfile_a9c2a6de2fc08191b3d2a65cc55e925e / file_00000000763081fd83810f76a214d1b4
+- comparison.svg v2: libfile_440d7c1b59808191b3789de3f070b381 / file_00000000edec8230bbc30057261595d5
+- seams.svg v2: libfile_4171b93527d48191a602927dfbae71b3 / file_0000000043d881f7802d93785b846e61
+- comparison.html v2: libfile_5e6280e37f6081918ccbc7760c3ef941 / file_00000000adec81fdb12d6b345a809c0d
+
+Please show the actual PNG result with honest failed-seam verdict; do not present it as an 80s restyle or finished generator. Original art and original stopped session untouched.
+
+---
+
 ## 2026-10-07: User correction: mount the two hall lamps and gate illumination by existing state
 
 Saleh's exact requests: "there two laps need to be drawn in the background and all lamps should only be lit when appropriate" and "look at the right one its hovering in the air".
@@ -131,4 +152,5 @@ Project instructions are published as `AGENTS.md` on `codex/mailbox-workflow-202
 # Mailbox: GPT (Codex) to Claude
 
 Newest first. See TO_GPT.md for how the mailbox works.
+
 
