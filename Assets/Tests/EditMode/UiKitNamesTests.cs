@@ -43,9 +43,29 @@ public class UiKitNamesTests
     }
 
     [Test]
+    public void VerdictRibbon_RightWrongWarningNotice()
+    {
+        Assert.AreEqual("ribbon_green", UiKitNames.VerdictRibbon(true, false));
+        Assert.AreEqual("ribbon_red", UiKitNames.VerdictRibbon(false, false));
+        Assert.AreEqual("ribbon_brass", UiKitNames.VerdictRibbon(false, true));
+        Assert.AreEqual("ribbon_brass", UiKitNames.VerdictRibbon(null, false));
+    }
+
+    [Test]
+    public void WheelTile_ByChoiceKind()
+    {
+        Assert.AreEqual("tile_eye", UiKitNames.WheelTile(DialogChoiceKind.Look));
+        Assert.AreEqual("tile_idcard", UiKitNames.WheelTile(DialogChoiceKind.Request));
+        Assert.AreEqual("tile_speech", UiKitNames.WheelTile(DialogChoiceKind.Question));
+        Assert.AreEqual("tile_speech", UiKitNames.WheelTile(DialogChoiceKind.Dialog));
+        Assert.AreEqual("tile_person", UiKitNames.WheelTile(DialogChoiceKind.Normal));
+    }
+
+    [Test]
     public void DarkFace_LightFacesPrintInInk()
     {
         Assert.IsFalse(UiKitNames.DarkFace("card"));
+        Assert.IsFalse(UiKitNames.DarkFace("ribbon_brass"));
         Assert.IsFalse(UiKitNames.DarkFace("plate_bone"));
         Assert.IsFalse(UiKitNames.DarkFace("miniplate_bone"));
         Assert.IsFalse(UiKitNames.DarkFace("panel_bone"));

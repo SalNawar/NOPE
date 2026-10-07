@@ -18,13 +18,13 @@ public class ArtSlotsTests
     [Test]
     public void First_MissingFallsBack()
     {
-        Assert.IsNull(ArtSlots.First(new[] { ArtSlots.SpeechBubble }, Present()));
+        Assert.IsNull(ArtSlots.First(new[] { ArtSlots.PetCorner }, Present()));
     }
 
     [Test]
     public void First_PresentIsUsed()
     {
-        Assert.AreEqual(ArtSlots.SpeechBubble, ArtSlots.First(new[] { ArtSlots.SpeechBubble }, Present(ArtSlots.SpeechBubble)));
+        Assert.AreEqual(ArtSlots.PetCorner, ArtSlots.First(new[] { ArtSlots.PetCorner }, Present(ArtSlots.PetCorner)));
     }
 
     [Test]
@@ -154,13 +154,11 @@ public class ArtSlotsTests
     }
 
     [Test]
-    public void SliceShare_OnlyTheBubbleAndTheTitleFacesAreSliced()
+    public void SliceShare_OnlyTheTitleFacesAreSliced()
     {
-        Assert.AreEqual(0.25f, ArtSlots.SliceShare(ArtSlots.SpeechBubble));
         Assert.AreEqual(0.25f, ArtSlots.SliceShare(ArtSlots.TitleButton));
         Assert.AreEqual(0.25f, ArtSlots.SliceShare(ArtSlots.TitleButtonHover));
-        Assert.AreEqual(0f, ArtSlots.SliceShare(ArtSlots.SpeechBubbleTail));
-        Assert.AreEqual(0f, ArtSlots.SliceShare(ArtSlots.BriefingPaper));
+        Assert.AreEqual(0f, ArtSlots.SliceShare(ArtSlots.PetCorner));
     }
 
     [Test]
@@ -170,7 +168,7 @@ public class ArtSlotsTests
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.AgencySeal));
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.VerdictMark(true)));
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.PaperFaces("TC-620")[0]));
-        Assert.IsFalse(ArtSlots.OnDeskPaper(ArtSlots.SpeechBubble));
+        Assert.IsFalse(ArtSlots.OnDeskPaper(ArtSlots.PetCorner));
         Assert.IsFalse(ArtSlots.OnDeskPaper(null));
     }
 }

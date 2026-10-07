@@ -68,8 +68,8 @@ Drawn on the office overlay canvas (1920 × 1080 reference; it scales with the s
 | Power button | the frame's chin, 64 × 64 | `Assets/Art/Office/Placeholder/crt_power.png` | builder placeholder, 28 × 28 | 96 × 96 | 1 | placeholder |
 | Power LED | the frame's chin, 18 × 18 | `Assets/Art/Office/Placeholder/crt_led.png` | a white disc, 8 × 8, tinted on and off by the game | keep | 1 | done |
 | Brand plate | the frame's chin | none: the game prints "CHRONODESK 2150" | – | keep that part of the chin blank | – | – |
-| Speech bubble | above the traveller's head, 420 × 110 | `Assets/Art/UI/Resources/Office/speech_bubble.png` | code-drawn cream panel | a 9-slice body: white or light grey (the game tints it cream), rounded corners inside the outer quarter of each side (the importer slices at a quarter of the shorter side), a clean 2 to 3 px dark outline, no shadow, no margin round the edge. Ask ChatGPT for 1024 × 1024; Claude scales it to 128 × 128 | 1 | code-drawn |
-| Speech bubble tail | under the bubble's bottom centre, its top on the bubble's bottom edge | `Assets/Art/UI/Resources/Office/speech_bubble_tail.png` | none (the bubble has no tail until it lands) | about 32 × 24 on screen, pointing down, white or light grey with the bubble's outline; deliver 64 × 48 | 1 | missing |
+| Speech bubble | superseded (run 7): the UI kit draws it (`Assets/Art/UI/Kit`, docs/UI_KIT.md); the slot is retired | - | - | - | - | retired |
+| Speech bubble tail | superseded (run 7): the UI kit draws it (`Assets/Art/UI/Kit`, docs/UI_KIT.md); the slot is retired | - | - | - | - | retired |
 | Wheel choices and the "< Back" centre | on an ellipse around the traveller, 240 × 44 and 150 × 44 | the UI kit's `ui_button.png` (section 3) | code-drawn themed buttons | from the kit | 2 | code-drawn, later |
 | Desk tooltip | above a clicked prop (credits, day, stability, time), 360 × 60 | the UI kit's `tooltip.png` (section 3) | code-drawn yellow panel | from the kit | 2 | code-drawn, later |
 | Portal glow | inside an open departure portal's ring in the anime hall (the portals spec v3 VX1), about 150 px across at 1080p for the front ring; tinted pale cyan and drawn as a glow (unlit) by the game, slowly turning | `Assets/Art/UI/Resources/Office/portal_glow.png` | a code-drawn radial glow (`PortalGlowPlaceholder`) | 512 × 512, a soft swirl of light on transparent, greyscale, clear at the rim | 1 | missing |
@@ -161,9 +161,9 @@ Saleh 2026-10-05: the player can look left at the 2150 city (item 6) and the day
 
 | Item | Where it shows | File | Now | Deliver | Tier | Status |
 |---|---|---|---|---|---|---|
-| Morning briefing sheet | "The Temporal Times", over the office at the start of each day, 700 × 780 | `Assets/Art/UI/Resources/DayFlow/temporal_times_paper.png` | interim 1200 × 1600, plain, wired; tinted by the newsletter's colour (the flat panel's) | 1400 × 1560, a light, nearly neutral newsprint sheet (the game tints it per culture), text-free (the game prints the masthead, the title and the news) | 1 | interim |
-| Shift ledger sheet | "Shift Ledger: Evening Edition", over the office at the end of the shift, 700 × 780 | `Assets/Art/UI/Resources/DayFlow/shift_ledger_paper.png` | interim 1200 × 1600, ruled, wired; tinted like the briefing | 1400 × 1560, light and nearly neutral, text-free | 1 | interim |
-| Citation slip | "Timeline Deviation Notice" after a wrong verdict, on the office overlay, centre, 560 × 320 | `Assets/Art/UI/Resources/DayFlow/citation_slip.png` | interim 600 × 800 (portrait, ruled), wired: stretched onto the landscape slip and tinted the alert red (the white text stays readable) | 1120 × 640, a light paper slip with a printed border, text-free; the game tints it the alert colour | 1 | interim |
+| Morning briefing sheet | superseded (run 7): the UI kit draws it (`Assets/Art/UI/Kit`, docs/UI_KIT.md); the slot is retired | - | - | - | - | retired |
+| Shift ledger sheet | superseded (run 7): the UI kit draws it (`Assets/Art/UI/Kit`, docs/UI_KIT.md); the slot is retired | - | - | - | - | retired |
+| Citation slip | superseded (run 7): the UI kit draws it (`Assets/Art/UI/Kit`, docs/UI_KIT.md); the slot is retired | - | - | - | - | retired |
 
 - The two sheets' "Start shift" and "Go home" buttons take the UI kit's button.
 - **Drawn by code, no art:** the verdict line and the idle line.

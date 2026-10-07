@@ -35,6 +35,9 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     /// <summary>The full-screen transparent click catcher, active only while open; the ring sits under it.</summary>
     [SerializeField] private GameObject catcher;
 
+    /// <summary>The UI kit: a choice's icon is its pictogram tile (optional; without it the icon art or the placeholder).</summary>
+    [SerializeField] private UiKitSO kit;
+
     /// <summary>The ring's root (anchors and pivot (0.5, 0.5)), placed over the traveller.</summary>
     [SerializeField] private RectTransform ring;
 
@@ -361,14 +364,16 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         ShowSpeech();
     }
 
-    /// <summary>The kind's icon: final art from Resources/WheelIcons by DialogChoiceKinds.IconName, else a generated placeholder (kept in memory, destroyed with the wheel); null when neither exists.</summary>
+    /// <summary>The kind's icon: the UI kit's pictogram tile (UiKitNames.WheelTile), else final art from Resources/WheelIcons by DialogChoiceKinds.IconName, else a generated placeholder (kept in memory, destroyed with the wheel); null when none exists.</summary>
     public Sprite IconFor(DialogChoiceKind kind)
     {
         if (_icons.TryGetValue(kind, out Sprite cached) && cached != null)
             return cached;
 
         string name = DialogChoiceKinds.IconName(kind);
-        Sprite sprite = Resources.Load<Sprite>($"{IconFolder}/{name}");
+        Sprite sprite = kit != null ? kit.Get(UiKitNames.WheelTile(kind), KitState.Rest) : null;
+        if (sprite == null)
+            sprite = Resources.Load<Sprite>($"{IconFolder}/{name}");
         byte[] rgba = sprite == null ? WheelIconPlaceholder.Render(name) : null;
         if (rgba != null)
         {

@@ -77,12 +77,33 @@ public static class UiKitNames
         }
     }
 
+    /// <summary>The verdict ribbon (sheet 05): green for a right call, brass for a wrong one let off with a free warning, red for a wrong one; brass for a notice that is no verdict (<paramref name="correct"/> null).</summary>
+    public static string VerdictRibbon(bool? correct, bool freeWarning) =>
+        correct == true ? "ribbon_green" : correct == false && !freeWarning ? "ribbon_red" : "ribbon_brass";
+
+    /// <summary>A traveller wheel choice's pictogram tile (sheet 05: the eye for a look, the ID card for a request, a speech balloon for a question or a line, the person for anything else).</summary>
+    public static string WheelTile(DialogChoiceKind kind)
+    {
+        switch (kind)
+        {
+            case DialogChoiceKind.Look:
+                return "tile_eye";
+            case DialogChoiceKind.Request:
+                return "tile_idcard";
+            case DialogChoiceKind.Question:
+            case DialogChoiceKind.Dialog:
+                return "tile_speech";
+            default:
+                return "tile_person";
+        }
+    }
+
     /// <summary>The pieces whose face is dark (oxblood, slate, red, green, brass and lavender plates and their kin): a label on them prints in bone.</summary>
     private static readonly string[] DarkPieces =
     {
         "plate_ox", "plate_slate", "plate_red", "plate_green", "plate_brass", "plate_lav", "miniplate_ox", "miniplate_slate",
-        "pulltab_", "iconkey", "titlebar_", "panel_dark", "panel_night", "panel_slate", "pill_", "strip_", "ribbon_",
-        "chip_active", "segment_on", "row_highlight", "badge_", "wheel_back", "wheelpill_hover", "lcd_glass", "keycap_lav", "inspect_"
+        "pulltab_", "iconkey", "titlebar_", "panel_dark", "panel_night", "panel_slate", "pill_", "strip_", "ribbon_green", "ribbon_red",
+        "chip_active", "segment_on", "row_highlight", "badge_", "wheel_back", "wheelpill_hover", "lcd_glass", "inspect_"
     };
 
     /// <summary>True when a label on <paramref name="sprite"/> (a piece or a sprite name) prints in bone; false for the light faces (cards, bone plates, panels of paper, fields, rows, tooltips), whose labels print in ink.</summary>

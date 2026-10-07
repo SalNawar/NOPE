@@ -134,6 +134,8 @@ public static partial class OfficeSceneUIBuilder
             ? EditorSceneManager.OpenScene(GameplayScenePath, OpenSceneMode.Single)
             : EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
+        _kit = UiKitAssets.Ensure();
+        KitDone.Clear();
         Canvas canvas = EnsureCanvas();
         Transform root = canvas.transform;
         EnsureEventSystem();
@@ -171,8 +173,7 @@ public static partial class OfficeSceneUIBuilder
         DestroyChildIfPresent(officeCanvas.transform, "BriefingPanel");
         DestroyChildIfPresent(officeCanvas.transform, "ResultsPanel");
 
-        Transform briefing = BuildNewsletter(officeCanvas.transform, "BriefingPanel", "briefing.masthead",
-            "briefing.start", out TMP_Text briefingTitle, out TMP_Text briefingBody, out Button startShift);
+        Transform briefing = BuildMorningPaper(officeCanvas.transform, out PaperTexts paper, out Button startShift);
         Transform results = BuildNewsletter(officeCanvas.transform, "ResultsPanel", "results.masthead",
             "results.goHome", out TMP_Text resultsTitle, out TMP_Text resultsBody, out Button goHome);
 
@@ -204,25 +205,10 @@ public static partial class OfficeSceneUIBuilder
         OverlayCallout boardTooltip = BuildOverlayCallout(officeCanvas.transform, "BoardTooltip", BoardTooltipSize, Tooltip, ThemeRoleId.Tooltip, false, true);
         DeskStampTray stampTray = BuildStampTray(officeCanvas.transform, officeView.transform, deskConfig);
 
-        // Verdict line (result text) on a strip that shows only while the line has text (piece 6 R18): top centre, the case HUD's compare strip's place (they never show together).
-        DestroyChildIfPresent(officeCanvas.transform, "VerdictStrip");
-        Transform verdictStrip = Panel(officeCanvas.transform, "VerdictStrip", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -TopStripTop - VerdictStripSize.y / 2f),
-                                       VerdictStripSize, ScreenStripColor, ThemeRoleId.ScreenStrip);
-        ((RectTransform)verdictStrip).pivot = Center;
-        verdictStrip.GetComponent<Image>().raycastTarget = false;
-        TMP_Text verdictText = Text(verdictStrip, "VerdictText", "", 26, TextAlignmentOptions.Center, new Vector2(0.02f, 0.04f), new Vector2(0.98f, 0.96f), Color.white,
-                                    ThemeRoleId.ScreenStrip, fit: true);
-        verdictText.raycastTarget = false;
-        verdictStrip.gameObject.SetActive(false);
-
-        // Citation slip (over the office and the frame; it still holds the day until Acknowledge). Sized for the rule and the exact
-        // values it names (lesson 6: title, mistake, the rule with its memo row, the values, the warning or penalty with stability).
-        DestroyChildIfPresent(officeCanvas.transform, "CitationPanel");
-        Transform citation = Panel(officeCanvas.transform, "CitationPanel", Center, Center, Vector2.zero, new Vector2(720f, 420f), new Color(0.85f, 0.2f, 0.15f, 0.96f), ThemeRoleId.Alert);
-        TMP_Text citationText = Text(citation, "CitationText", UiText.Get("citation.title"), 24, TextAlignmentOptions.Center, new Vector2(0.05f, 0.24f), new Vector2(0.95f, 0.95f), Color.white,
-                                     ThemeRoleId.Alert);
-        Button citationContinue = MakeButton(citation, "ContinueButton", null, new Vector2(0.34f, 0.05f), new Vector2(0.66f, 0.19f), null, ThemeRoleId.Button, "citation.acknowledge");
-        citation.gameObject.SetActive(false);
+        // The verdict ribbon and the citation slip over the office (OfficeSceneUIBuilder.Kit, the UI kit's).
+        Transform verdictStrip = BuildVerdictRibbon(officeCanvas.transform, out Image verdictRibbon, out TMP_Text verdictText);
+        Transform citation = BuildCitationSlip(officeCanvas.transform, out TMP_Text citationReason, out TMP_Text citationDetail, out TMP_Text citationConsequence,
+                                               out Button citationContinue);
 
         var soView = new SerializedObject(officeView);
         SetRef(soView, "frame", pcFrame);
@@ -301,7 +287,7 @@ public static partial class OfficeSceneUIBuilder
                                              fallbackHud, pcFrame, stampTray, caseHud, deskViewBack, out Clickable readySign);
 
         // The Tier-2 images' art slots (OfficeSceneUIBuilder.Art.cs, redesign phase 27), before the desktop's layer is applied to its covers.
-        BuildArtSlots(officeCanvas.transform, speechBubble, app.Reference, officeView);
+        BuildArtSlots(app.Reference, officeView);
 
         // The desktop's own layer covers everything under its place (the canvas's windows and templates included).
         SetLayer(monitorScreen.transform, OfficeLayers.PcDesktopLayer);
@@ -315,15 +301,25 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soOffice, "app", app.App);
         SetRef(soOffice, "resultText", verdictText);
         SetRef(soOffice, "resultBackdrop", verdictStrip.gameObject);
+        SetRef(soOffice, "resultRibbon", verdictRibbon);
+        SetRef(soOffice, "kit", _kit);
         SetRef(soOffice, "citationPanel", citation.gameObject);
-        SetRef(soOffice, "citationText", citationText);
+        SetRef(soOffice, "citationReasonText", citationReason);
+        SetRef(soOffice, "citationDetailText", citationDetail);
+        SetRef(soOffice, "citationConsequenceText", citationConsequence);
         SetRef(soOffice, "citationContinueButton", citationContinue);
         soOffice.ApplyModifiedProperties();
 
         var soFlow = new SerializedObject(dayFlow);
         SetRef(soFlow, "briefingPanel", briefing.gameObject);
-        SetRef(soFlow, "briefingTitleText", briefingTitle);
-        SetRef(soFlow, "briefingBodyText", briefingBody);
+        SetRef(soFlow, "briefingTitleText", paper.Title);
+        SetRef(soFlow, "briefingDateText", paper.Date);
+        SetRef(soFlow, "briefingKickerText", paper.Kicker);
+        SetRef(soFlow, "briefingHeadlineText", paper.Headline);
+        SetRef(soFlow, "briefingDeckText", paper.Deck);
+        SetRef(soFlow, "briefingStoryTitleText", paper.StoryTitle);
+        SetRef(soFlow, "briefingStoryText", paper.Story);
+        SetRef(soFlow, "briefingStoryFiller", paper.Filler);
         SetRef(soFlow, "startShiftButton", startShift);
         SetRef(soFlow, "resultsPanel", results.gameObject);
         SetRef(soFlow, "resultsTitleText", resultsTitle);
@@ -381,6 +377,7 @@ public static partial class OfficeSceneUIBuilder
         soGm.ApplyModifiedProperties();
 
         OrderDesktopLayers(root);
+        ApplyKit(canvas, officeCanvas);
         CheckThemeTags(canvas, officeCanvas);
         CheckLabelKeysAndRoles(library, canvas, officeCanvas);
         CheckContrast(library, canvas, officeCanvas);
@@ -860,6 +857,23 @@ public static partial class OfficeSceneUIBuilder
         body.fontSizeMin = NewsletterBodyMin;
         action = MakeButton(paper, "ActionButton", null, new Vector2(0.3f, 0.03f), new Vector2(0.7f, 0.11f), new Color(0.16f, 0.15f, 0.13f, 1f),
                             ThemeRoleId.NewsletterButton, buttonKey);
+
+        // The UI kit's ledger sheet (run 7): the bone sheet with its ink line, the masthead in condensed capitals, the oxblood plate.
+        if (_kit != null)
+        {
+            Image border = panel.GetComponent<Image>();
+            border.color = Color.clear;
+            SceneUiKit.Tag(border, ThemeRoleId.NewsletterBorder, ThemePart.Kit);
+            KitSkin(paper, "panel_bone", _kit.overlayScale);
+            SceneUiKit.SkinText(paper.Find("Masthead").GetComponent<TMP_Text>(), _kit.inkOnLight, _kit.labelFont, true);
+            Image rule = paper.Find("Rule").GetComponent<Image>();
+            rule.color = _kit.inkOnLight;
+            SceneUiKit.Tag(rule, ThemeRoleId.NewsletterBorder, ThemePart.Kit);
+            SceneUiKit.SkinText(title, _kit.inkOnLight, _kit.labelFont, true);
+            SceneUiKit.SkinText(body, _kit.inkOnLight, _kit.bodyFont, false);
+            KitSkin(action, "plate_ox", _kit.overlayScale);
+            KitLabel(action, "plate_ox_rest");
+        }
 
         panel.gameObject.SetActive(false);
         return panel;

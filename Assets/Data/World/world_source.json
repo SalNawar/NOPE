@@ -21767,7 +21767,7 @@
       },
       {
         "key": "briefing.masthead",
-        "text": "THE TEMPORAL TIMES",
+        "text": "The Temporal Times",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -22110,6 +22110,18 @@
       {
         "key": "briefing.deskHeader",
         "text": "FROM DESK 3",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "paper.edition",
+        "text": "MORNING EDITION",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "paper.price",
+        "text": "ONE CREDIT",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25085,13 +25097,13 @@
       },
       {
         "key": "controls.pcTab",
-        "text": "PC\n{0}",
+        "text": "PC",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "controls.deskTab",
-        "text": "DESK\n{0}",
+        "text": "DESK",
         "gloss": "None",
         "tier": "Full"
       },
@@ -25121,13 +25133,13 @@
       },
       {
         "key": "city.look",
-        "text": "< City (A)",
+        "text": "CITY",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "city.back",
-        "text": "Desk (D) >",
+        "text": "DESK",
         "gloss": "None",
         "tier": "Full"
       },

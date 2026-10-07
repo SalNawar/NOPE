@@ -1244,7 +1244,7 @@ public static partial class OfficeSceneUIBuilder
     /// </summary>
     private const float TopStripTop = 16f;
     private static readonly Vector2 CompareStripSize = new Vector2(760f, 56f);
-    private static readonly Vector2 VerdictStripSize = new Vector2(1100f, 64f);
+    private static readonly Vector2 VerdictStripSize = new Vector2(820f, 72f);
 
     /// <summary>Where the desk view's "▲ Back" control starts (reference px from the top): under the office case HUD's compare strip and a gap.</summary>
     private static readonly float CaseHudClearance = TopStripTop + CompareStripSize.y + 8f;
@@ -2238,6 +2238,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "centreSlot", centre);
         SetRef(so, "bubble", bubble);
         SetRef(so, "config", config);
+        SetRef(so, "kit", _kit);
         so.FindProperty("ringTopInset").floatValue = OverlayTopClearance;
         so.ApplyModifiedProperties();
 

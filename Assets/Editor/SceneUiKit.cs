@@ -287,9 +287,6 @@ internal static class SceneUiKit
         EditorUtility.SetDirty(art);
     }
 
-    /// <summary>The child that carries a skinned graphic's kit sprite.</summary>
-    public const string KitFaceName = "KitFace";
-
     /// <summary>
     /// Skins <paramref name="host"/> with the UI kit's <paramref name="piece"/>
     /// (docs/UI_KIT.md; re-applied on every build): the host keeps its rect and
@@ -320,10 +317,10 @@ internal static class SceneUiKit
         ThemeRoleId role = hostTag != null ? hostTag.Role : ThemeRoleId.ClickCatcher;
         Rekit(hostTag, FontStyles.Normal, null);
 
-        Transform faceTransform = host.transform.Find(KitFaceName);
+        Transform faceTransform = host.transform.Find(UiKitSO.FaceName);
         if (faceTransform == null)
         {
-            faceTransform = new GameObject(KitFaceName, typeof(RectTransform)).transform;
+            faceTransform = new GameObject(UiKitSO.FaceName, typeof(RectTransform)).transform;
             faceTransform.SetParent(host.transform, false);
         }
         faceTransform.SetAsFirstSibling();

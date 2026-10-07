@@ -18,6 +18,9 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "UiKit_", menuName = "TimeDesk/UI/UI Kit", order = 21)]
 public sealed class UiKitSO : ScriptableObject
 {
+    /// <summary>The child of a skinned control or panel that draws its kit sprite (SceneUiKit.Skin); a view finds it by this name to swap its piece.</summary>
+    public const string FaceName = "KitFace";
+
     /// <summary>One kit sprite by its manifest name.</summary>
     [Serializable]
     public sealed class KitSprite
@@ -50,11 +53,11 @@ public sealed class UiKitSO : ScriptableObject
     /// <summary>A label's ink on a light face (ink #2B1C24).</summary>
     public Color inkOnLight = new Color(0.169f, 0.11f, 0.141f, 1f);
 
+    /// <summary>An alerting line's ink on a light face (Quit game; oxblood #8A2F3B).</summary>
+    public Color inkAlert = new Color(0.541f, 0.184f, 0.231f, 1f);
+
     /// <summary>The phosphor readouts' ink (#CCFFD1).</summary>
     public Color phosphorInk = new Color(0.8f, 1f, 0.82f, 1f);
-
-    /// <summary>The red of the paper's and the slip's headings (signal red #C23A2E).</summary>
-    public Color signalRed = new Color(0.761f, 0.227f, 0.18f, 1f);
 
     /// <summary>The empty room round every sprite for its shadow and halo, in sprite pixels (the manifest's pad).</summary>
     public int spritePad = 28;

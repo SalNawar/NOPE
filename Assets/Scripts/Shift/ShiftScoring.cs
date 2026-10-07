@@ -99,13 +99,13 @@ public static class ShiftScoring
         if (VerdictRules.IsFreeWarning(world.citationsToday, config.freeWarningsPerDay))
         {
             v.wasFreeWarning = true;
-            v.citationText = Citation(mistake, facts, UiText.Format("citation.warning", world.citationsToday, config.freeWarningsPerDay), v.stabilityDelta);
+            v.citationText = Citation(v, mistake, facts, UiText.Format("citation.warning", world.citationsToday, config.freeWarningsPerDay), v.stabilityDelta);
         }
         else
         {
             v.moneyPenalty = VerdictRules.WrongDecisionPenalty(world.citationsToday, config.freeWarningsPerDay, config.wrongDecisionPenalty);
             world.money -= v.moneyPenalty;
-            v.citationText = Citation(mistake, facts, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)), v.stabilityDelta);
+            v.citationText = Citation(v, mistake, facts, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)), v.stabilityDelta);
         }
 
         Debug.Log($"[ShiftScoring] ApplyWrongDecision: accepted={v.accepted}, mistake='{v.MistakeKey}', citationsToday={world.citationsToday}, penalty={v.moneyPenalty}, stabilityDelta={StabilityRules.FormatChange(v.stabilityDelta)}, money={world.money}.");
@@ -147,10 +147,21 @@ public static class ShiftScoring
         return facts;
     }
 
-    /// <summary>A citation slip's text (UI string keys; piece 6, lesson 6): the title, the mistake, the rule it broke with its Directive Memo row, the exact values involved (Citations), the warning or penalty line and the stability change.</summary>
-    private static string Citation(string mistake, CitationFacts facts, string consequence, float stabilityDelta) =>
-        UiText.Format("citation.layout", UiText.Get("citation.title"), mistake,
-                      Citations.RuleLine(facts, UiText.Get, UiText.Get("citation.rule.numbered")),
-                      Citations.ValuesLine(facts?.Values, UiText.Get("citation.value"), UiText.Get("citation.value.separator")),
-                      consequence, UiText.Format("citation.stability", StabilityRules.FormatChange(stabilityDelta)));
+    /// <summary>
+    /// A citation slip (UI string keys; piece 6, lesson 6): its lines on the
+    /// verdict for the printed slip (the mistake, the rule it broke with its
+    /// Directive Memo row and the exact values involved (Citations), the
+    /// warning or penalty), and returned as one text for Mail's copy: the
+    /// title, those lines and the stability change.
+    /// </summary>
+    private static string Citation(CaseVerdict v, string mistake, CitationFacts facts, string consequence, float stabilityDelta)
+    {
+        string rule = Citations.RuleLine(facts, UiText.Get, UiText.Get("citation.rule.numbered"));
+        string values = Citations.ValuesLine(facts?.Values, UiText.Get("citation.value"), UiText.Get("citation.value.separator"));
+        v.citationReason = mistake;
+        v.citationDetail = string.IsNullOrEmpty(values) ? rule : rule + "\n" + values;
+        v.citationConsequence = consequence;
+        return UiText.Format("citation.layout", UiText.Get("citation.title"), mistake, rule, values,
+                             consequence, UiText.Format("citation.stability", StabilityRules.FormatChange(stabilityDelta)));
+    }
 }

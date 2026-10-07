@@ -348,6 +348,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "iconDoubleClickButton", iconDouble);
         SetRef(so, "iconSingleClickButton", iconSingle);
         SetRef(so, "resetIconsButton", resetIcons);
+        SetRef(so, "kit", _kit);
         SerializedArrays.Set(so, "textSizeButtons", textSizes);
         SetRef(so, "config", config);
         SetRef(so, "showShortcutsButton", shortcuts);

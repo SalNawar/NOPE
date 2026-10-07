@@ -33,6 +33,19 @@ public static partial class OfficeSceneUIBuilder
         { DesktopAppIds.Settings, "icon.settings" },
     };
 
+    /// <summary>Each app's pictogram tile in the UI kit (sheet 02: the desktop icons), by id.</summary>
+    private static readonly Dictionary<string, string> AppTiles = new Dictionary<string, string>
+    {
+        { DesktopAppIds.Investigation, "tile_magnifier" },
+        { DesktopAppIds.Portals, "tile_portal" },
+        { DesktopAppIds.Internet, "tile_globe" },
+        { DesktopAppIds.Mail, "tile_mail" },
+        { DesktopAppIds.CitizenAccount, "tile_idcard" },
+        { DesktopAppIds.Orders, "tile_crate" },
+        { DesktopAppIds.Notes, "tile_notes" },
+        { DesktopAppIds.Settings, "tile_gear" },
+    };
+
     /// <summary>The Menu's entry height (desktop units; the PC UX redesign C8).</summary>
     private const float StartMenuEntryHeight = PcSize.Row;
 
@@ -183,6 +196,25 @@ public static partial class OfficeSceneUIBuilder
                                   null, FontStyles.Bold);
         badgeText.raycastTarget = false;
         badge.gameObject.SetActive(false);
+
+        if (_kit != null && AppTiles.TryGetValue(place.Id, out string tile))
+        {
+            // Sheet 02: the app's pictogram tile (the taskbar's window button shows it too), its name on a bone plate in capitals,
+            // a slate backing while selected. The glyph's plate draws nothing: the tile is the plate.
+            Image plate = glyphPlate.GetComponent<Image>();
+            plate.color = Color.clear;
+            SceneUiKit.Tag(plate, ThemeRoleId.DesktopIcon, ThemePart.Kit);
+            ((RectTransform)glyph).offsetMin = new Vector2(-18f, -18f);
+            ((RectTransform)glyph).offsetMax = new Vector2(18f, 18f);
+            glyphImage.sprite = _kit.Get(tile, KitState.Rest);
+            glyphImage.color = Color.white;
+            SceneUiKit.Tag(glyphImage, ThemeRoleId.DesktopIcon, ThemePart.Kit);
+            KitSkin(labelPlate, "miniplate_bone_rest", _kit.desktopScale);
+            SceneUiKit.SkinText(label, _kit.inkOnLight, _kit.labelFont, true);
+            label.rectTransform.offsetMin = new Vector2(6f, 4f);
+            label.rectTransform.offsetMax = new Vector2(-6f, -4f);
+            KitSkin(selection, "row_highlight", _kit.desktopScale);
+        }
 
         DesktopIconView view = cell.gameObject.AddComponent<DesktopIconView>();
         var so = new SerializedObject(view);
