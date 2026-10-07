@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 170. Full regeneration is NOT complete.
+Saved: 194. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -174,3 +174,27 @@ Saved: 170. Full regeneration is NOT complete.
 | premade_darwin__thinking_c | visually reviewed; registration pending |
 | premade_darwin__objecting_c | visually reviewed; registration pending |
 | premade_darwin_photo | visually reviewed; registration pending |
+| premade_suntzu_neutral | visually reviewed; registration pending |
+| premade_suntzu_happy | visually reviewed; registration pending |
+| premade_suntzu_angry | visually reviewed; registration pending |
+| premade_suntzu_worried | visually reviewed; registration pending |
+| premade_suntzu__explaining_a | visually reviewed; registration pending |
+| premade_suntzu__thinking_a | visually reviewed; registration pending |
+| premade_suntzu__objecting_a | visually reviewed; registration pending |
+| premade_suntzu_photo | visually reviewed; registration pending |
+| premade_einstein_neutral | visually reviewed; registration pending |
+| premade_einstein_happy | visually reviewed; registration pending |
+| premade_einstein_angry | visually reviewed; registration pending |
+| premade_einstein_worried | visually reviewed; registration pending |
+| premade_einstein__explaining_b | visually reviewed; registration pending |
+| premade_einstein__thinking_b | visually reviewed; registration pending |
+| premade_einstein__objecting_b | visually reviewed; registration pending |
+| premade_einstein_photo | visually reviewed; registration pending |
+| premade_marx_neutral | visually reviewed; registration pending |
+| premade_marx_happy | visually reviewed; registration pending |
+| premade_marx_angry | visually reviewed; registration pending |
+| premade_marx_worried | visually reviewed; registration pending |
+| premade_marx__explaining_c | visually reviewed; registration pending |
+| premade_marx__thinking_c | visually reviewed; registration pending |
+| premade_marx__objecting_c | visually reviewed; registration pending |
+| premade_marx_photo | visually reviewed; registration pending |

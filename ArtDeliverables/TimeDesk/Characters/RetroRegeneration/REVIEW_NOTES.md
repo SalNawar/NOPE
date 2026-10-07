@@ -23,3 +23,5 @@ Headwear_f_egypt_medieval succeeded on a fully clothed fitting figure after an o
 Six civilian outfits and two brown hairstyles saved. These are fitting sources, not extracted runtime layers. Hairstyles contain a clothing guide which MUST be discarded when extracting hair. Male v2/v3 and female v3 necklines were lowered after review; exact collar mask checks still pending, particularly male v2 at the sides of the neck. All eight need registration and passport crop verification. Premade photos for 33 current identities queued, not generated. Old runtime art has not been removed.
 
 Cleopatra thinking_b is mirrored from the nominal template: RIGHT fingers at cheek, LEFT hand supports elbow. Accepted as whole-character pose variation; do not use as interchangeable modular arms. First five unique sets are raw sources only; green extraction, exact registration and in-game checks pending.
+
+- Einstein thinking_b uses the right hand at the cheek and left arm supporting (mirrored from generic b direction). Accepted as a whole-character pose variation; do not treat as modular arm registration proof.
