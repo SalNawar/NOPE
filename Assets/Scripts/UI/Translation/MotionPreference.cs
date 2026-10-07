@@ -23,10 +23,10 @@ public static class MotionPreference
     /// <summary>True when the player chose Reduced motion (saved at once when set; read from PlayerPrefs once, then cached).</summary>
     public static bool Reduced
     {
-        get => _reduced ??= PlayerPrefs.GetString(Key, FullValue) == ReducedValue;
+        get => _reduced ??= PlayerPrefs.GetString(PlayerPrefKeys.For(Key), FullValue) == ReducedValue;
         set
         {
-            PlayerPrefs.SetString(Key, value ? ReducedValue : FullValue);
+            PlayerPrefs.SetString(PlayerPrefKeys.For(Key), value ? ReducedValue : FullValue);
             PlayerPrefs.Save();
             _reduced = value;
             Changed?.Invoke();

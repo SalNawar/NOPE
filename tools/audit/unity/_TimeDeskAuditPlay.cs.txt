@@ -119,8 +119,8 @@ public static class _TimeDeskAuditPlay
     private const string DesktopPrefsKey = "AuditPlay.DesktopPrefs";
     private const string ViewWidthKey = "AuditPlay.ViewWidth";
     private const string ViewHeightKey = "AuditPlay.ViewHeight";
-    private const string UiLanguagePref = "TimeDesk.UiLanguage";
-    private const string MotionPref = "TimeDesk.ReducedMotion";
+    private static string UiLanguagePref => PlayerPrefKeys.For("TimeDesk.UiLanguage");
+    private static string MotionPref => PlayerPrefKeys.For("TimeDesk.ReducedMotion");
 
     private const int Playing = 1;
     private const int Finishing = 2;
@@ -221,7 +221,8 @@ public static class _TimeDeskAuditPlay
         typeof(DesktopPreferences).GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
             .Where(f => f.IsLiteral && f.FieldType == typeof(string))
             .Select(f => (string)f.GetRawConstantValue())
-            .Where(v => v.StartsWith("TimeDesk."));
+            .Where(v => v.StartsWith("TimeDesk."))
+            .Select(PlayerPrefKeys.For);
 
     private static void Tick()
     {
