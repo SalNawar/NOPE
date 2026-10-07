@@ -103,6 +103,9 @@ public static class SoundCues
     /// <summary>The interface.</summary>
     public const string UiHover = "ui_hover", UiPress = "ui_press", UiRelease = "ui_release", UiToggle = "ui_toggle", UiTab = "ui_tab", UiError = "ui_error", UiPopup = "ui_popup", WheelOpen = "wheel_open";
 
+    /// <summary>The Night Slots machine at Home: a ratchet notch of the lever, the reels spinning up, a reel landing, a win's bell, a loss's womp, the payout's coins.</summary>
+    public const string SlotLever = "slot_lever", SlotSpin = "slot_spin", SlotStop = "slot_stop", SlotWin = "slot_win", SlotLose = "slot_lose", Coins = "coins";
+
     /// <summary>The shift.</summary>
     public const string LastHourAlarm = "last_hour_alarm", ShiftEndBell = "shift_end_bell", PaChime = "pa_chime", BoardFlip = "board_flip", DayStart = "day_start";
 

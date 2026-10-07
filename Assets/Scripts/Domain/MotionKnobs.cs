@@ -158,6 +158,8 @@ public sealed class MotionKnobs
     /// <summary>The feel of the lever's arm (following the pull and springing back) and of its "no" wobble.</summary>
     public MotionFeel leverFeel = MotionFeel.Lever, leverRefuseFeel = MotionFeel.Elastic;
 
+    /// <summary>The Night Slots machine's spin, payout and lever (SlotSpinSchedule, SlotLever, SlotMachineView).</summary>
+    public SlotSpinKnobs slots = new SlotSpinKnobs();
 
     /// <summary>A spring settles (stops and leaves the motion driver) within this of its target and slower than settleSpeed.</summary>
     public float settleValue = 0.0005f, settleSpeed = 0.005f;

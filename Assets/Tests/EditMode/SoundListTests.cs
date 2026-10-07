@@ -98,6 +98,9 @@ public class SoundListTests
         Assert.AreEqual(PlaceholderKind.None, SoundList.PlaceholderFor(Row(rows, "amb_hall_day")), "the ambience stays silent rather than cheap");
         Assert.AreEqual(PlaceholderKind.None, SoundList.PlaceholderFor(Row(rows, "mug_set")), "P3");
         Assert.AreEqual(PlaceholderKind.None, SoundList.PlaceholderFor(new SoundListEntry("ui_press", 4, 2, false, 2, SoundBus.Ui)), "P1 only");
+        Assert.AreEqual(PlaceholderKind.Click, SoundList.PlaceholderFor(new SoundListEntry(SoundCues.SlotLever, 4, 2, false, 1, SoundBus.Ui)), "the slots' ratchet clicks");
+        Assert.AreEqual(PlaceholderKind.Click, SoundList.PlaceholderFor(new SoundListEntry(SoundCues.SlotStop, 4, 3, false, 1, SoundBus.Ui)), "a reel's stop clunks");
+        Assert.AreEqual(PlaceholderKind.Bell, SoundList.PlaceholderFor(new SoundListEntry(SoundCues.SlotWin, 4, 1, false, 1, SoundBus.Ui)), "a win rings");
     }
 
     [Test]

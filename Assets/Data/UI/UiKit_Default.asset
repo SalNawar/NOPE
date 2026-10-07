@@ -102,6 +102,10 @@ MonoBehaviour:
     share: 0.3
     min: 30
     max: 64
+  - kind: 19
+    share: 0.6
+    min: 32
+    max: 72
   labelTracking: 3
   sprites:
   - name: badge_brass
@@ -136,10 +140,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: a6c3f49a4360468aac595bd9f74be40f, type: 3}
   - name: content_inset
     sprite: {fileID: 21300000, guid: ce29a1d89a654c0fb4dd4d84fae10d6d, type: 3}
-  - name: dome_red_pressed
-    sprite: {fileID: 21300000, guid: c05260526acd4541ba7373738151fa69, type: 3}
-  - name: dome_red_rest
-    sprite: {fileID: 21300000, guid: f92a358df51d45b084499abfba5d032c, type: 3}
   - name: dropdown
     sprite: {fileID: 21300000, guid: 7c09cd1adcb642d8ba39fb48a310c619, type: 3}
   - name: field_error
@@ -370,10 +370,86 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 87ba2964ba884ff5ae3664f7f6e42caa, type: 3}
   - name: segmented_track
     sprite: {fileID: 21300000, guid: 145eb1cdcc4c4b2495b9d9ccd0cf790e, type: 3}
-  - name: slot_lever
-    sprite: {fileID: 21300000, guid: 41d368fefb5347ea86e8d7d0d34ef1e6, type: 3}
+  - name: slot_bulb_off
+    sprite: {fileID: 21300000, guid: adcf1036832a4d46954235ebba2760d2, type: 3}
+  - name: slot_bulb_on
+    sprite: {fileID: 21300000, guid: 443ef03ad2ea437b9b476bec645a1cb1, type: 3}
+  - name: slot_cabinet
+    sprite: {fileID: 21300000, guid: 6dc364cd1263430395ce89cc7de8893d, type: 3}
+  - name: slot_chain
+    sprite: {fileID: 21300000, guid: 9fa30fd7493c466d86533d4f1f4ff31b, type: 3}
+  - name: slot_chute
+    sprite: {fileID: 21300000, guid: 07a453e1326f42ef9943571fa527c59d, type: 3}
+  - name: slot_coin
+    sprite: {fileID: 21300000, guid: 9d94fbcee14f4b25ba3d66559633234b, type: 3}
+  - name: slot_coinslot
+    sprite: {fileID: 21300000, guid: 6d669d7bed1e4c48b137b661a026516f, type: 3}
+  - name: slot_crown
+    sprite: {fileID: 21300000, guid: 5ff5738274e14a2097ab9ac8a5415798, type: 3}
+  - name: slot_deck
+    sprite: {fileID: 21300000, guid: 1f2029d58da444fb90f0914db71ac659, type: 3}
+  - name: slot_glass
+    sprite: {fileID: 21300000, guid: e07ee8cb05cf4b23be8c89616c84ad29, type: 3}
+  - name: slot_glow
+    sprite: {fileID: 21300000, guid: 73f4e0dd008548b6ab724586500965bf, type: 3}
+  - name: slot_grille
+    sprite: {fileID: 21300000, guid: c39c5e0d42cb4077944fdd92038f8aed, type: 3}
+  - name: slot_lever_arm
+    sprite: {fileID: 21300000, guid: d424f45a69c64be9908bc53b67fc1a71, type: 3}
+  - name: slot_lever_ball
+    sprite: {fileID: 21300000, guid: 4ea81f795f23428ebe956b9d85884685, type: 3}
+  - name: slot_lever_hub
+    sprite: {fileID: 21300000, guid: 34bd03d0378e43ef926aaa47c2ee5c39, type: 3}
+  - name: slot_lower
+    sprite: {fileID: 21300000, guid: f61408b2445d4d4ead50df428a8a106b, type: 3}
+  - name: slot_marquee
+    sprite: {fileID: 21300000, guid: 5fd2bf94059142538059bce61b30466c, type: 3}
+  - name: slot_padlock
+    sprite: {fileID: 21300000, guid: f712103369f24177b2be1a28be21fdde, type: 3}
+  - name: slot_payline
+    sprite: {fileID: 21300000, guid: eaace228f8c64996811db8fa0a2da807, type: 3}
+  - name: slot_payline_arrow
+    sprite: {fileID: 21300000, guid: 2c4df74295274ca09705676ab916ce14, type: 3}
+  - name: slot_priceplate
+    sprite: {fileID: 21300000, guid: e90162790a1643f3aa1b3843b3969c13, type: 3}
+  - name: slot_priceplate_alert
+    sprite: {fileID: 21300000, guid: f873e5d46b2b46edad672ad37c03183c, type: 3}
   - name: slot_reel
     sprite: {fileID: 21300000, guid: 1ee0d90617224f1bb8df76768584962c, type: 3}
+  - name: slot_reel_shade
+    sprite: {fileID: 21300000, guid: 894cdddd79884037be8e0804593a1049, type: 3}
+  - name: slot_reelbed
+    sprite: {fileID: 21300000, guid: 8b9322e51ccf42e497ae46d73cf80175, type: 3}
+  - name: slot_sym_busted_machine
+    sprite: {fileID: 21300000, guid: 0ebc1544dfe84190875299b8a7d2434a, type: 3}
+  - name: slot_sym_busted_machine_blur
+    sprite: {fileID: 21300000, guid: 89fb458fc8b14ce78f8fc76a5d6bd93f, type: 3}
+  - name: slot_sym_default
+    sprite: {fileID: 21300000, guid: d4a232d1fbaf414a906985745b547e17, type: 3}
+  - name: slot_sym_default_blur
+    sprite: {fileID: 21300000, guid: 5cda947675c1481f834fdc4bff14d9b9, type: 3}
+  - name: slot_sym_forgery_warning
+    sprite: {fileID: 21300000, guid: a05040037ac4463e994ca8e4b929e613, type: 3}
+  - name: slot_sym_forgery_warning_blur
+    sprite: {fileID: 21300000, guid: b4b61beb26dc47a381338c49c1b784a2, type: 3}
+  - name: slot_sym_jackpot_cash
+    sprite: {fileID: 21300000, guid: 103caa10714e4549a515eb45345c0b8b, type: 3}
+  - name: slot_sym_jackpot_cash_blur
+    sprite: {fileID: 21300000, guid: 43f3c4ce62c4453d95b480f0ef12f146, type: 3}
+  - name: slot_sym_legendary_omen
+    sprite: {fileID: 21300000, guid: 981a0b13d8ee419494cd218c8a30ce5d, type: 3}
+  - name: slot_sym_legendary_omen_blur
+    sprite: {fileID: 21300000, guid: d091afa66d294d39bff0fd78d27ee9b7, type: 3}
+  - name: slot_sym_small_win
+    sprite: {fileID: 21300000, guid: 7a2fff3c745f4fc6bafcd610b7099b34, type: 3}
+  - name: slot_sym_small_win_blur
+    sprite: {fileID: 21300000, guid: 7551b85d7ffc487abb9fac781a239ac4, type: 3}
+  - name: slot_tray_back
+    sprite: {fileID: 21300000, guid: 637e21b4535a46fc8d81151589e06cd0, type: 3}
+  - name: slot_tray_lip
+    sprite: {fileID: 21300000, guid: faf664204c31468bbd81cd1d86a2c512, type: 3}
+  - name: slot_window
+    sprite: {fileID: 21300000, guid: f6101b5537bd4ea284360bae9a3127dc, type: 3}
   - name: speech_bubble
     sprite: {fileID: 21300000, guid: 64bf073db9174232bb6de16318e24626, type: 3}
   - name: speech_tail

@@ -96,6 +96,11 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 53 | `ui_error` | locked button pressed | 0.2 s | dull "nope" thunk | ×1 | P1 |
 | 54 | `ui_popup` | a pop-up appears | 0.25 s | soft paper pop | ×1 | P2 |
 | 55 | `wheel_open` | dialogue wheel opens | 0.3 s | quick fan-out flutter | ×1 | P2 |
+| 83 | `slot_lever` | the Home slot machine's lever clicks past a ratchet notch | 0.05 s | one heavy metal ratchet tooth | ×2 | P1 |
+| 84 | `slot_spin` | the slot machine's reels start spinning | 0.6 s | a motor whirr spinning up, a mechanical rattle | ×1 | P2 |
+| 85 | `slot_stop` | a reel lands on the payline | 0.15 s | a solid clunk, a reel's stop catching | ×3 | P1 |
+| 86 | `slot_win` | a winning spin lands | 1.2 s | a bright arcade bell ringing out | ×1 | P1 |
+| 87 | `slot_lose` | a spin lands on nothing | 0.6 s | a soft descending "womp" | ×1 | P2 |
 
 ## 5. Shift and time
 
@@ -138,4 +143,4 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 75 | `mus_desk_calm` | early shift, low and sparse (synth plus tape warble) | P3 |
 | 76 | `mus_desk_tense` | last hour / low stability layer | P3 |
 
-**Total:** 82 entries; about 150 files counting the variants. **P1 alone:** 39 entries.
+**Total:** 87 entries; about 170 files counting the variants. **P1 alone:** 42 entries.

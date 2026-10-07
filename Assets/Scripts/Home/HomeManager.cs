@@ -347,12 +347,22 @@ public sealed class HomeManager : MonoBehaviour
         RefreshHud();
 
         if (homeUI != null && homeUI.HasSlotPanel)
-            homeUI.ShowSlot(_world, _config, HandleSpin, ShowSleep);
+            homeUI.ShowSlot(_world, _config, SlotOutcomeIds(), HandleSpin, ShowSleep);
         else
         {
             Debug.Log("[HomeManager] ShowSlot: no slot panel, skipping to Sleep.");
             ShowSleep();
         }
+    }
+
+    /// <summary>The library's slot outcomes' ids, in order: the reels' symbols (SlotReels' faces index them).</summary>
+    private string[] SlotOutcomeIds()
+    {
+        IReadOnlyList<SlotOutcomeSO> outcomes = _lib != null ? _lib.SlotOutcomes : System.Array.Empty<SlotOutcomeSO>();
+        var ids = new string[outcomes.Count];
+        for (int i = 0; i < ids.Length; i++)
+            ids[i] = outcomes[i] != null ? outcomes[i].id : string.Empty;
+        return ids;
     }
 
     /// <summary>
@@ -371,7 +381,7 @@ public sealed class HomeManager : MonoBehaviour
         if (_world.money < spinCost)
         {
             Debug.Log($"[HomeManager] <<< Exiting HandleSpin — not enough credits ({_world.money} < {spinCost}).");
-            return new HomeUIController.SpinView($"Not enough {UiText.Currency(UiText.WalletForm.Inline)} to spin.");
+            return new HomeUIController.SpinView(SlotMachineView.BrokeLine());
         }
 
         IReadOnlyList<SlotOutcomeSO> outcomes = _lib != null ? _lib.SlotOutcomes : System.Array.Empty<SlotOutcomeSO>();
