@@ -17,18 +17,18 @@ Fresh main-based branch codex/famous-travellers-33. Sources: Production/FAMOUS_P
 | Albert Einstein | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
 | Karl Marx | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
 | Martin Luther | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
-| Isaac Newton | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Michelangelo Buonarroti | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Alan Turing | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Confucius | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Aristotle | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Katsushika Hokusai | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Genghis Khan | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Qin Shi Huang | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Umm Kulthum | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Leonardo da Vinci | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Elizabeth I | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Muhammad al-Khwarizmi | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Isaac Newton | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Michelangelo Buonarroti | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Alan Turing | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Confucius | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Aristotle | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Katsushika Hokusai | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Genghis Khan | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Qin Shi Huang | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Umm Kulthum | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Leonardo da Vinci | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Elizabeth I | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Muhammad al-Khwarizmi | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
 | William Shakespeare | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
 | Marco Polo | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
 | Galileo Galilei | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
