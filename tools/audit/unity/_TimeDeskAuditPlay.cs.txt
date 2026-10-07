@@ -137,8 +137,6 @@ public static class _TimeDeskAuditPlay
     private static readonly HashSet<string> Decided = new HashSet<string>(StringComparer.Ordinal);
     private static bool _ended;
 
-    /// <summary>The verdict line as the hardware committed the verdict (the next slot clears it while the lever springs back).</summary>
-    private static string _verdictLine;
     private static bool _frameOpen;
 
     private static bool ShotsOn => SessionState.GetBool(ShotsKey, false);
@@ -657,8 +655,9 @@ public static class _TimeDeskAuditPlay
             gatherEvidence = false;
         }
 
-        // The hardware that commits it (the desk machine spec §2): the lever for APPROVED, RETURN for DENIED; DETAIN for a law-breaker the
-        // plan denies with evidence (right: the stronger, never-required verdict), and day 1's planned mistake becomes a detention of the honest
+        // How it is committed (the desk machine spec §2; Saleh 2026-10-07: "everything diegetic", "no lever, no extra commit step"): the
+        // hand-back commits the passport's APPROVED or DENIED; the desk's DETAIN button takes a law-breaker the plan denies with evidence (right:
+        // the stronger, never-required verdict), and day 1's planned mistake becomes a detention of the honest
         // traveller (wrong: "Detained a traveller who broke no law", the same one penalty), each only when the traveller would not have come back
         // after a denial (Returns.Plan on their own stream: a detained traveller never comes back, so the later days stay as they were).
         DeskStamp hardware = accept ? DeskStamp.Approved : DeskStamp.Denied;
@@ -714,9 +713,8 @@ public static class _TimeDeskAuditPlay
         if (o.Stamps != null && !stampFirst)
         {
             // DETAIN works any time after the traveller arrives, stamp or not (the desk machine spec §2): the honest traveller is detained unstamped.
-            o.Hardware.Detain();
-            _verdictLine = ((TMP_Text)Field(o.OfficeUi, "resultText")).text;
-            Line("   decided with the hardware: DETAIN (no stamp)");
+            yield return PressDetain(o);
+            Line("   decided with the DETAIN button (no stamp)");
         }
         if (o.Stamps != null && stampFirst)
         {
@@ -792,42 +790,20 @@ public static class _TimeDeskAuditPlay
                 Check(o.Stamps.LastPress == StampPress.AlreadyStamped, $"d{day} slot {slot}: the other stamp is refused: approve and deny together is impossible ({o.Stamps.LastPress})");
                 if (ShotsOn && First("stamp bar"))
                     yield return Shots("stamp_bar_visa");
-                // Once: the lever will not move before the papers are handed back (a "no" wobble and a note; nothing decided).
-                if (accept && First("lever before the hand-back"))
+                if (hardware == DeskStamp.Detained)
                 {
-                    yield return PullLever(o);
-                    Check(o.Game.Ledger.verdicts.Count == before && !o.Lever.IsHome && (string)Field(o.Stamps, "_noteKey") == "hardware.refused.lever",
-                          $"d{day} slot {slot}: the lever refuses before the hand-back: \"{UiText.Get("hardware.refused.lever")}\" (angle {o.Lever.Angle:0.0})");
+                    // A law-breaker stamped DENIED is detained instead of handed back: the cover flipped up, the button pressed.
+                    yield return PressDetain(o);
                 }
-                // Hand back: the stamped passport dropped on the counter's slim strip. The papers go back; the verdict waits for the hardware.
-                Vector3 onCounter = CounterPoint(o);
-                passport.transform.position = onCounter;
-                Call(o.Desk, "HandleDragEnded", passport.Drag, onCounter);
-                yield return Frames(2);
-                Check(o.Stamps.HandedBack && o.Game.Ledger.verdicts.Count == before,
-                      $"d{day} slot {slot}: the stamped passport on the counter hands the papers back and decides nothing yet ({o.Game.Ledger.verdicts.Count - before} verdicts)");
+                else
+                {
+                    // Hand back: the stamped passport dropped on the counter's slim strip. That is the decision (no extra commit step).
+                    Vector3 onCounter = CounterPoint(o);
+                    passport.transform.position = onCounter;
+                    Call(o.Desk, "HandleDragEnded", passport.Drag, onCounter);
+                }
             }
-            // Once each: the other hardware refuses this passport (RETURN an APPROVED one, the lever a DENIED one).
-            if (accept && First("return refuses approved"))
-            {
-                o.Hardware.Return();
-                yield return Frames(2);
-                Check(o.Game.Ledger.verdicts.Count == before, $"d{day} slot {slot}: RETURN refuses an APPROVED passport");
-            }
-            if (!accept && hardware == DeskStamp.Denied && First("lever refuses denied"))
-            {
-                yield return PullLever(o);
-                Check(o.Game.Ledger.verdicts.Count == before && !o.Lever.IsHome, $"d{day} slot {slot}: the lever refuses a DENIED passport");
-            }
-            _verdictLine = null;
-            if (hardware == DeskStamp.Approved)
-                yield return PullLever(o);
-            else if (hardware == DeskStamp.Denied)
-                o.Hardware.Return();
-            else
-                o.Hardware.Detain();
-            _verdictLine ??= ((TMP_Text)Field(o.OfficeUi, "resultText")).text; // read as the verdict is committed: the next slot clears it
-            Line($"   decided with the stamps: {(accept ? "APPROVED" : "DENIED")}, committed by the {(hardware == DeskStamp.Approved ? "lever" : hardware == DeskStamp.Denied ? "RETURN button" : "DETAIN button")}");
+            Line($"   decided with the stamps: {(accept ? "APPROVED" : "DENIED")}{(hardware == DeskStamp.Detained ? ", then the DETAIN button" : "")}");
         }
         Check(o.Game.Ledger.verdicts.Count == before + 1, $"d{day} slot {slot}: the decision recorded one verdict");
         Decided.Add(c.visitorDisplayName);
@@ -864,8 +840,7 @@ public static class _TimeDeskAuditPlay
             ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
             yield return Frames(2);
         }
-        Line($"   verdict line: {(_verdictLine ?? ((TMP_Text)Field(o.OfficeUi, "resultText")).text).Replace("\n", " / ")}");
-        _verdictLine = null;
+        Line($"   verdict line: {((TMP_Text)Field(o.OfficeUi, "resultText")).text.Replace("\n", " / ")}");
     }
 
     private static bool Once(string key) => MistakesMade.Add(key);
@@ -906,44 +881,24 @@ public static class _TimeDeskAuditPlay
     }
 
     /// <summary>
-    /// Pulls the gate lever as the clerk does (the desk machine spec §2): the
-    /// left button down on its knob, a drag straight down the screen in steps
-    /// long enough for a full pull against its resistance, the release; then
-    /// waits for the arm to rest (home and back up, or sprung back, or the
-    /// "no" wobble done).
+    /// Presses the desk's DETAIN button as the clerk does (the desk machine
+    /// spec §2): a click on its clear cover (it flips up on its hinge), then a
+    /// click on the red mushroom under it; waits for the cover and the button
+    /// to rest.
     /// </summary>
-    private static IEnumerator PullLever(Office o)
+    private static IEnumerator PressDetain(Office o)
     {
-        GateLever lever = o.Lever;
-        var knob = lever.GetComponentInChildren<Clickable>();
-        PhysicsRaycaster raycaster = OfficeRaycaster();
-        Vector3 at = raycaster.eventCamera.WorldToScreenPoint(knob.transform.position);
-        var data = new PointerEventData(EventSystem.current)
-        {
-            button = PointerEventData.InputButton.Left,
-            position = at,
-            pointerPressRaycast = new RaycastResult { module = raycaster, gameObject = knob.gameObject }
-        };
-        // The verdict line as the lever commits (the slot that follows clears it before the arm has settled).
-        Action<DeskStamp> read = _ => _verdictLine = ((TMP_Text)Field(o.OfficeUi, "resultText")).text;
-        o.Stamps.Decided += read;
-        ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.pointerDownHandler);
-        ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.beginDragHandler);
-        MotionKnobs knobs = UiMotion.Knobs;
-        float pixels = knobs.leverTravel * (1f + knobs.leverResistance) / Mathf.Max(0.01f, knobs.leverPullPerPixel) * 1.2f;
-        const int Steps = 12;
-        for (int i = 0; i < Steps; i++)
-        {
-            data.delta = new Vector2(0f, -pixels / Steps);
-            data.position += data.delta;
-            ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.dragHandler);
-            yield return Seconds(0.03f);
-        }
-        yield return Settle(() => lever.IsHome || !lever.Moving, 3f); // home, or refused (its wobble done)
-        o.Stamps.Decided -= read;
-        ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.endDragHandler);
-        yield return Settle(() => !lever.Moving, 6f);
+        DetainButton detain = o.Detain;
+        Click((Clickable)Field(detain, "coverClick"));
+        yield return Settle(() => detain.CoverOpen && !detain.Moving, 3f);
+        Check(detain.CoverOpen, "the DETAIN button's cover flips up at a click");
+        Click((Clickable)Field(detain, "buttonClick"));
+        yield return Frames(2);
     }
+
+    /// <summary>A left-click on <paramref name="target"/> as the EventSystem delivers it.</summary>
+    private static void Click(Clickable target) =>
+        ExecuteEvents.Execute(target.gameObject, new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left }, ExecuteEvents.pointerClickHandler);
 
     /// <summary>True when <paramref name="c"/> would not come back after a denial (a premade, a returning traveller, or Returns.Plan on their own return stream says no): detaining them leaves the later days as they were.</summary>
     private static bool NeverBack(CaseInstance c)
@@ -2396,8 +2351,7 @@ public static class _TimeDeskAuditPlay
         /// <summary>A click on the AVAILABLE sign, as the EventSystem delivers it.</summary>
         public void ClickSign() => ExecuteEvents.Execute(Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
         public DeskStampTray Stamps => (DeskStampTray)Field(Coordinator, "stampTray");
-        public GateLever Lever => One<GateLever>();
-        public VerdictButtons Hardware => One<VerdictButtons>();
+        public DetainButton Detain => One<DetainButton>();
         public OfficeControls Controls => (OfficeControls)Field(Coordinator, "controls");
         public DeskRulebook Rulebook => (DeskRulebook)Field(One<DeskInspect>(), "rulebook");
         public GuideDirector Guide => One<GuideDirector>();
