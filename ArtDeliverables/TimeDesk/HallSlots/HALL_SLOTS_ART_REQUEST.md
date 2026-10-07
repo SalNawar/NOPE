@@ -23,7 +23,7 @@ Status: the runtime that shows these files is built and verified on branch `feat
 ## Style and light (every slot)
 
 - Match `HallWarmStone.png` exactly: clean 2D anime cel painting, the same dark brown-purple ink outline weight (about 2 px at canvas scale), two-tone cel shading, the same restrained palette (cream stone, oxblood, slate, brass, graphite), the same one-point perspective (follow the template's floor and wall lines; the hall's vanishing point is near canvas x 1085, y 300). Objects keep the scale of their neighbours.
-- **Paint at neutral daylight** (as the hall looks in `HallWarmStone.png`). Do not paint night, lamp glows or cast light: the game tints your art with the hall (morning, noon, evening, night), adds the floor's cast shadows on the floor, and cuts out the window glass (the red hatch: nothing is ever drawn there). Avoid pure white in the ceiling band (top 180 px, right of x 782): the night lighting makes the ceiling's brightest neutral pixels glow.
+- **Paint at neutral daylight** (as the hall looks in `HallWarmStone.png`). Do not paint night, lamp glows or cast light: the game tints your art with the hall (morning, noon, evening, night), adds the floor's cast shadows on the floor, and cuts out the window glass (the red hatch: nothing is ever drawn there). White is safe anywhere, the ceiling band included: the ceiling diffusers' night glow comes from the painting's own fixtures, and the game never applies it to slot art.
 - **No legible words or numbers** in any variant (the Translation Lens cannot read painted text): emblems, pictograms, colours and patterns carry the meaning.
 - Culture variants use each nation's passport emblem and the game's culture theme colours (the PC theme and the passports already use them):
 
