@@ -185,7 +185,8 @@ public sealed class HallLightingRig : MonoBehaviour
                 else
                     l.SinceOn += dt;
                 float flicker = HallDayCycle.Flicker(l.SinceOn, _reduced || !settings.fixtureFlicker);
-                Set(l, l.intensity * Mathf.Lerp(settings.fixtureOffShare, 1f, level) * flicker, settings.fixtureColour);
+                l.Lit = Mathf.Lerp(settings.fixtureOffShare, 1f, level) * flicker;
+                Set(l, l.intensity * l.Lit, settings.fixtureColour);
                 break;
 
             case HallLightKind.Screen:
@@ -286,6 +287,7 @@ public sealed class HallLightingRig : MonoBehaviour
                 l.Light2D.enabled = on;
             if (l.Light3D != null)
                 l.Light3D.enabled = on;
+            l.Lit = 0f;
         }
         foreach (ParticleSystem ps in dust)
             if (ps != null)

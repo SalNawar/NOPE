@@ -47,7 +47,7 @@ public sealed class HallBakedLighting : MonoBehaviour
         }
         int fixtureCount=System.Math.Min(fixtures.Length,16);
         for(int i=0;i<fixtureCount;i++)fixtureLevels[i]=fixtures[i]!=null && fixtures[i].gameObject.activeInHierarchy
-            ?HallMountedFixture.EmissionLevel(rig,fixtures[i]):0;
+            ?fixtures[i].Lit:0;
         properties??=new MaterialPropertyBlock();
         foreach(var layer in art.layers)
         {

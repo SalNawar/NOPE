@@ -170,7 +170,7 @@ What each kind of light does (`HallLightingRig`, every frame, 0 B):
 | Global | `globalColour` × `globalIntensity` at the solar position (multiplied over the art: 0.88 at noon, 0.4 blue at night); it reaches Default and `HallDisplays` |
 | Sky | `skyColour` × `skyIntensity` (only the `HallSky` layer: bright by day, orange at sunset, deep blue at night) |
 | Window (the shafts, additive) | `windowColour` × `windowIntensity` (strongest with a low sun, none at night); each turns about its pane's top from `shaftAngleAtSunrise` to `shaftAngleAtSunset` along the sun's arc and lengthens with a low sun (`shaftLowSunLength`); they cast the piers' shadows while `shaftShadows` |
-| Fixture | `fixtureColour` × its level (`fixtureOffShare` while off) × the strike flicker (`fixtureFlicker`, never with reduced motion) |
+| Fixture | `fixtureColour` × its level (`fixtureOffShare` while off) × the strike flicker (`fixtureFlicker`, never with reduced motion); that share (`HallLight.Lit`, 0 with the lighting off) also lights the painted glass: the gallery lamps' drawn diffusers (`HallMountedFixture`) and the ceiling's painted diffusers (each takes its nearest fixture's share in `NOPE/Hall Deep Layout`, fed by `HallBakedLighting`; unlit glass is darkened) |
 | Screen, Sign | always on, their light's own colour, `screenDayShare` / `signDayShare` of their strength by day, full at night |
 | Portal | on while its ring shows a glow or the Return Gate's spiral (`AnimeHallPortalLink` → `SetPortal`), off while it is closed (CLOSED or under maintenance); `portalOpenLight` or `returnGateLight`; fades over `portalFadeSeconds` (at once with reduced motion) |
 | DeskLamp, DeskScreen (3D) | always on, `deskLampDayShare` / `deskScreenDayShare` of their strength by day |

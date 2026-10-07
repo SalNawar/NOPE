@@ -21,10 +21,8 @@ Source PNG SHA256:11F42AB5B0F3208B7341EFE9CB869D6187E60BE521F6D501E4C05057F1F435
 
 Preview Library:libfile_c85c792997c48191824f471b63f68262 / file_00000000fd18823084081e4314cb0d2d, lamp-placement-proof.png. Library save succeeded; Windows xattr helper unsupported, so no local xattr persistence claimed.
 
-## Reproduce isolated checks
+## Merged (Claude, 2026-10-07)
 
-Run `dotnet restore tests/Tests.csproj --configfile tests/offline.nuget.config`, then `dotnet run --project tests/Tests.csproj --no-restore` from this directory with .NET10. The harness links repository production sources; it does not replace them.
-
-NativeValidation contains the exact isolated verification script and its limited dependencies. In a NEW throwaway Unity6000.4.11 project with URP17.4, copy production HallMountedFixture/HallBakedLighting/HallLight/HallDayCycle/HallBakedCycle, the supplied test dependencies and verifier, plus the fixture asset/meta and referenced shaders/includes. Execute VerifyFixture.Run in batch mode. Never copy those test dependencies into the game Assets tree.
+Merged on feat/hall-art-1007 and accepted in the game scene (the hall's full pan, off/day/dusk/night, custom sunset, reduced motion). One change at merge: the lit share is no longer recomputed beside the rig. `HallLightingRig` writes each fixture's share to `HallLight.Lit` (0 with the lighting off), and `HallMountedFixture` and `HallBakedLighting` read it, so there is one source for a fixture's level. The isolated .NET and native-project harnesses (`tests/`, `NativeValidation/`) were retired with it: they stubbed the removed `EmissionLevel` and duplicated Unity types; the game scene is the acceptance.
 
 The built-in image tool authored the PNG; no source raster extraction or repaint of the hall was performed. Prompt record accompanies it.
