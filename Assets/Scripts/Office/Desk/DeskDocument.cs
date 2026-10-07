@@ -47,8 +47,32 @@ using UnityEngine.EventSystems;
 /// </summary>
 public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointerMoveHandler, IPointerExitHandler
 {
-    /// <summary>How far above the sheet each layer lies (metres toward the camera): the seal, the fills, the hover and pick quads, the lines, the photo, the texts, the verdict's ink.</summary>
-    private const float SealLift = 0.0001f, FillLift = 0.0002f, HighlightLift = 0.0003f, LineLift = 0.0004f, PhotoLift = 0.0005f, TextLift = 0.0006f, InkLift = 0.0007f;
+    /// <summary>How far above the sheet each layer lies (metres toward the camera, never scaled with the paper: PaperLayers, the one stacking rule): the seal, the fills, the hover and pick quads, the lines, the photo, the texts, the verdict's ink.</summary>
+    private const float SealLift = PaperLayers.Seal, FillLift = PaperLayers.Fill, HighlightLift = PaperLayers.Highlight, LineLift = PaperLayers.Line, PhotoLift = PaperLayers.Photo, TextLift = PaperLayers.Text, InkLift = PaperLayers.Ink;
+
+    /// <summary>The share of its zone's size the paper was last shown at (SetZone).</summary>
+    private float _zoneShare = 1f;
+
+    /// <summary>The sheet's scale in <paramref name="zone"/>: the reading size on the desk (at the art's reading share), the counter's share on the counter; times the paper's own share (a citation's).</summary>
+    private float ZoneScale(DeskZone zone) => _zoneShare * (_config == null ? 1f
+        : zone == DeskZone.Desk ? _reading * DeskZones.ReadingScale(Size.x, Size.y, _config.readingHeight, _config.paperSize.x / _config.paperSize.y)
+        : _config.counterScale);
+
+    /// <summary>A paper's header band as a share of its height from its top: the part the desk's spread keeps in view (PaperSpread).</summary>
+    private const float HeaderShare = 0.2f;
+
+    private readonly List<Rect> _keys = new List<Rect>();
+
+    /// <summary>
+    /// The parts of the paper the desk's spread keeps in view when papers land
+    /// (PaperSpread; Saleh's playtest 2026-10-07: headers and photos visible at
+    /// once): its header band, its photo and its visa box, as shares of the paper (x from its
+    /// left, y from its top, both 0 to 1).
+    /// </summary>
+    public IReadOnlyList<Rect> KeyShares => _keys;
+
+    /// <summary>The paper's size in metres once it lies in <paramref name="zone"/> (its sheet's scale there, as SetZone gives it).</summary>
+    public Vector2 SizeIn(DeskZone zone) => Size * ZoneScale(zone);
 
     /// <summary>A code-drawn stamp's width over its height, its frame texture's size in pixels, its word's size as a share of its height, its ink's alpha, and its tilt in degrees (alternating with each mark).</summary>
     private const float StampAspect = 2.8f, StampWordShare = 0.5f, StampAlpha = 0.88f, StampTilt = 6f;
@@ -281,6 +305,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         _config = config;
         _slots.Clear();
         _form = null;
+        _keys.Clear();
+        _keys.Add(new Rect(0f, 0f, 1f, HeaderShare));
         if (config != null)
             Size = config.paperSize;
         if (config == null || doc == null || form == null || style == null || textTemplate == null)
@@ -316,6 +342,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                     break;
                 case FormItemKind.Photo:
                     PlacePhoto(item.Rect);
+                    break;
+                case FormItemKind.StampArea:
+                    _keys.Add(Share(Local(item.Rect))); // the visa box: the spread keeps it clear for the stamp
                     break;
                 case FormItemKind.Emblem:
                     PlaceMark("Emblem", item.Rect, EmblemArt.Texture(item.Text), cover, TextLift);
@@ -375,10 +404,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// </summary>
     public void SetZone(DeskZone zone, bool instant, float share = 1f)
     {
+        _zoneShare = share;
         Zone = zone;
-        float target = share * (_config == null ? 1f
-            : zone == DeskZone.Desk ? _reading * DeskZones.ReadingScale(Size.x, Size.y, _config.readingHeight, _config.paperSize.x / _config.paperSize.y)
-            : _config.counterScale);
+        float target = ZoneScale(zone);
         _sizeFrom = _sizeNow;
         _sizeTarget = target;
         _sizeElapsed = 0f;
@@ -597,7 +625,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             word.fontSizeMax = word.fontSize;
             word.fontSizeMin = word.fontSize * StampWordMinShare;
             word.rectTransform.sizeDelta = new Vector2(r.width * (1f - 2f * StampWordInset / StampPixelsWide), r.height * (1f - 2f * StampWordInset / StampPixelsHigh));
-            word.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -InkLift - 0.0001f);
+            word.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -PaperLayers.InkWord);
             word.rectTransform.localRotation = Quaternion.Euler(0f, 0f, tilt);
             word.GetComponent<MeshRenderer>().enabled = true;
             _lastWord = word;
@@ -868,7 +896,8 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         if (sheet == null)
             return;
         float wide = 1f + _squash.Value;
-        sheet.localScale = new Vector3(_sizeNow * wide, _sizeNow * wide, _sizeNow);
+        // The depth stays 1: the parts' heights over the sheet are metres (PaperLayers), so a paper read large never lifts its photo through the paper over it.
+        sheet.localScale = new Vector3(_sizeNow * wide, _sizeNow * wide, 1f);
     }
 
     /// <summary>
@@ -1059,6 +1088,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         Rect r = Local(rect);
         photoSlot.transform.localPosition = new Vector3(r.center.x, r.center.y, -PhotoLift);
         photoSlot.transform.localScale = new Vector3(r.height, r.height, 1f);
+        _keys.Add(Share(r));
     }
 
     /// <summary>True when the placed form prints a photo.</summary>
@@ -1069,6 +1099,10 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                 return true;
         return false;
     }
+
+    /// <summary>A sheet-local rectangle (metres, centre origin, y up) as a share of the paper (x from its left, y from its top).</summary>
+    private Rect Share(Rect local) =>
+        new Rect((local.xMin + Size.x / 2f) / Size.x, (Size.y / 2f - local.yMax) / Size.y, local.width / Size.x, local.height / Size.y);
 
     /// <summary>A form-space rectangle (the placed form's units from the page's top-left, y down) in the sheet's local space (metres, centre origin, y up).</summary>
     private Rect Local(FaceRect f) =>

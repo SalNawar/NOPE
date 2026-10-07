@@ -952,7 +952,7 @@ public static partial class OfficeSceneUIBuilder
         PrimitivePart(frame, "Frame", PrimitiveType.Quad, Vector3.zero, new Vector3(LookCanvas.PhotoAspect, 1f, 1f), LitMaterial("Paper_PhotoFrame", PhotoGrey, 0.1f));
         frame.Find("Frame").GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
         Transform portrait = EnsureChild(frame, "Photo");
-        portrait.localPosition = new Vector3(0f, 0f, -0.0005f);
+        portrait.localPosition = new Vector3(0f, 0f, -PaperLayers.PhotoInset); // the stacking rule: every part under PaperLayers.PartsDepth
         portrait.localRotation = Quaternion.identity;
         portrait.localScale = Vector3.one * PhotoFill;
         LookSpriteStack stack = portrait.gameObject.AddComponent<LookSpriteStack>();

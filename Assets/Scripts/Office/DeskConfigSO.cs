@@ -87,6 +87,12 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>A document's scale on the counter (small: a share of its own size).</summary>
     [Range(0.2f, 1f)] public float counterScale = 0.6f;
 
+    /// <summary>How much nearer each next row of the counter's spots lies once a traveller's papers outnumber them (metres; the row also shifts half a spot across: a staggered fan, each paper's header in view; DeskZones.CounterSpot).</summary>
+    [Min(0f)] public float counterRowDepth = 0.05f;
+
+    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the STAMPS tab and the inspect button): the spread lays them inside it (PaperSpread).</summary>
+    public Rect readingArea = new Rect(0.02f, 0.03f, 0.88f, 0.8f);
+
     /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): it reads in the reading view at 1280x720.</summary>
     [Min(0.05f)] public float readingHeight = 0.34f;
 

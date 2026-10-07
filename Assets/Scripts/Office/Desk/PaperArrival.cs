@@ -44,6 +44,9 @@ public sealed class PaperArrival : MonoBehaviour
     private Renderer _shadowRenderer;
     private MaterialPropertyBlock _block;
 
+    /// <summary>Where the paper lands (its flight's end).</summary>
+    public Vector3 To => _to;
+
     /// <summary>True while the paper flies (it takes no input then).</summary>
     public bool Flying { get; private set; }
 

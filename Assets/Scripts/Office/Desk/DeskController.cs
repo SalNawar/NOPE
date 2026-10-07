@@ -465,11 +465,132 @@ public sealed class DeskController : MonoBehaviour
         Vector3 spot = surface.transform.position;
         if (deskView != null && deskView.TryViewPoint(new Vector2(ReadingSpots[onDesk % ReadingSpots.Length], ReadingSpotY), surface.transform.position.y, out Vector3 shown))
             spot = surface.Clamp(shown);
-        paper.SetZone(DeskZone.Desk, false);
+        spot = Spread(paper, spot);
+        _restAt[paper.Index] = spot;
         _stack.BringToFront(paper.Index);
         ApplyStack();
+        paper.SetZone(DeskZone.Desk, false);
         Slide(paper, ClearOfBlockers(paper, spot));
         Read(paper);
+    }
+
+    /// <summary>Where each paper sent to the desk by a click was laid (its spread's spot), while it slides there.</summary>
+    private readonly Dictionary<int, Vector3> _restAt = new Dictionary<int, Vector3>();
+
+    /// <summary>What covering a citation (less than a paper: it is the day's record) and the rulebook folder (a little more than a paper: its page is read beside the papers, but the reading view has no room to keep it clear of them all) costs to the spread.</summary>
+    private const float CitationSpreadWeight = 0.3f, RulebookSpreadWeight = 1.5f;
+
+    /// <summary>
+    /// Where <paramref name="paper"/>, sent to the desk, lies (PaperSpread;
+    /// Saleh's playtest 2026-10-07: "documents overlap"): inside the reading
+    /// view's free area (DeskConfigSO.readingArea), covering as little as it can
+    /// of the papers on the desk (their headers, photos and visa boxes least of
+    /// all), the citations and the rulebook folder, nearest <paramref name="prefer"/>
+    /// (the reading spots' fan) among equal places; all in the papers' own frame
+    /// on the desk (their sheets' right and top, as the reading view shows them).
+    /// <paramref name="prefer"/> itself without the reading view.
+    /// </summary>
+    private Vector3 Spread(DeskDocument paper, Vector3 prefer)
+    {
+        if (surface == null || deskView == null || paper.Sheet == null)
+            return prefer;
+        _spreadRight = Vector3.ProjectOnPlane(paper.Sheet.right, Vector3.up).normalized;
+        _spreadTop = Vector3.ProjectOnPlane(paper.Sheet.up, Vector3.up).normalized;
+        if (_spreadRight == Vector3.zero || _spreadTop == Vector3.zero || !TryReadingArea(out DeskRect area))
+            return prefer;
+        Vector2 size = paper.SizeIn(DeskZone.Desk);
+        var taken = new List<SpreadTaken>();
+        foreach (DeskDocument other in _papers)
+        {
+            if (other == null || other == paper || _state == null || _state.ZoneOf(other.Index) != DeskZone.Desk)
+                continue;
+            Vector3 at = other.IsSliding && _restAt.TryGetValue(other.Index, out Vector3 rest) ? rest : other.transform.position;
+            taken.Add(Taken(other, at, 1f));
+        }
+        foreach (DeskDocument citation in _citations)
+            taken.Add(Taken(citation, citation.TryGetComponent(out PaperArrival arrival) && arrival.Flying ? arrival.To : citation.transform.position, CitationSpreadWeight));
+        if (rulebook != null && rulebook.gameObject.activeInHierarchy && TryFootprint(rulebook.transform, out DeskRect folder))
+            taken.Add(new SpreadTaken(folder, null, RulebookSpreadWeight));
+        (float px, float py) = SpreadFrame(prefer);
+        (float x, float y) = PaperSpread.Place(area, size.x, size.y, taken, px, py);
+        LastSpread = $"area {area.CentreX:0.000},{area.CentreY:0.000} {area.Width:0.000}x{area.Height:0.000}; paper {size.x:0.000}x{size.y:0.000} at {x:0.000},{y:0.000}; taken {taken.Count}, cost {PaperSpread.Cost(new DeskRect(x, y, size.x, size.y), taken):0.0000}";
+        return surface.Clamp(surface.transform.position + _spreadRight * x + _spreadTop * y);
+    }
+
+    /// <summary>The last spread's numbers (the probes report them).</summary>
+    public string LastSpread { get; private set; }
+
+    /// <summary>The spread's frame on the desk: the papers' right and top, level.</summary>
+    private Vector3 _spreadRight = Vector3.right, _spreadTop = Vector3.forward;
+
+    /// <summary>A world point in the spread's frame (metres from the desk's centre).</summary>
+    private (float x, float y) SpreadFrame(Vector3 world)
+    {
+        Vector3 d = world - surface.transform.position;
+        return (Vector3.Dot(d, _spreadRight), Vector3.Dot(d, _spreadTop));
+    }
+
+    /// <summary>A paper lying at <paramref name="at"/> as the spread sees it: its footprint at its zone's size, its header, photo and visa box, covering it costing <paramref name="weight"/>.</summary>
+    private SpreadTaken Taken(DeskDocument paper, Vector3 at, float weight)
+    {
+        Vector2 size = paper.SizeIn(paper.Zone);
+        (float x, float y) = SpreadFrame(at);
+        var shares = new List<(float, float, float, float)>();
+        foreach (Rect r in paper.KeyShares)
+            shares.Add((r.x, r.y, r.width, r.height));
+        return new SpreadTaken(new DeskRect(x, y, size.x, size.y), PaperSpread.Keys(x, y, size.x, size.y, shares), weight);
+    }
+
+    /// <summary>The footprint on the desk (the spread's frame) of everything drawn under <paramref name="root"/>.</summary>
+    private bool TryFootprint(Transform root, out DeskRect footprint)
+    {
+        footprint = default;
+        bool any = false;
+        Bounds all = default;
+        foreach (Renderer r in root.GetComponentsInChildren<Renderer>(false))
+        {
+            if (!r.enabled)
+                continue;
+            if (!any)
+                all = r.bounds;
+            else
+                all.Encapsulate(r.bounds);
+            any = true;
+        }
+        if (!any)
+            return false;
+        Vector3 min = all.min, max = all.max;
+        float l = float.MaxValue, rr = float.MinValue, n = float.MaxValue, f = float.MinValue;
+        foreach (Vector3 c in new[] { new Vector3(min.x, 0f, min.z), new Vector3(max.x, 0f, min.z), new Vector3(min.x, 0f, max.z), new Vector3(max.x, 0f, max.z) })
+        {
+            (float x, float y) = SpreadFrame(new Vector3(c.x, surface.transform.position.y, c.z));
+            l = Mathf.Min(l, x);
+            rr = Mathf.Max(rr, x);
+            n = Mathf.Min(n, y);
+            f = Mathf.Max(f, y);
+        }
+        footprint = new DeskRect((l + rr) / 2f, (n + f) / 2f, rr - l, f - n);
+        return true;
+    }
+
+    /// <summary>The reading view's free area on the desk (DeskConfigSO.readingArea's viewport corners on the desk plane, in the spread's frame: the largest rectangle inside them); false without the reading view.</summary>
+    private bool TryReadingArea(out DeskRect area)
+    {
+        area = default;
+        Rect v = config.readingArea;
+        float h = surface.transform.position.y;
+        if (!deskView.TryViewPoint(new Vector2(v.xMin, v.yMin), h, out Vector3 bl) || !deskView.TryViewPoint(new Vector2(v.xMax, v.yMin), h, out Vector3 br)
+            || !deskView.TryViewPoint(new Vector2(v.xMin, v.yMax), h, out Vector3 tl) || !deskView.TryViewPoint(new Vector2(v.xMax, v.yMax), h, out Vector3 tr))
+            return false;
+        (float blx, float bly) = SpreadFrame(bl);
+        (float brx, float bry) = SpreadFrame(br);
+        (float tlx, float tly) = SpreadFrame(tl);
+        (float trx, float tr_y) = SpreadFrame(tr);
+        float left = Mathf.Max(blx, tlx), right = Mathf.Min(brx, trx), near = Mathf.Max(bly, bry), far = Mathf.Min(tly, tr_y);
+        if (right <= left || far <= near)
+            return false;
+        area = new DeskRect((left + right) / 2f, (near + far) / 2f, right - left, far - near);
+        return true;
     }
 
     /// <summary>A document landed on the desk, full size: it counts as read (the day-1 note goes; the steps' "read"), and the reading view comes (DeskView.TiltIn: only while the desk takes input).</summary>
@@ -660,14 +781,45 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>Stack heights: one step per place from the desk (the bottom one, a paper, a citation or the rulebook, one step up); the dragged paper, citation or rulebook lifted above the whole stack.</summary>
     private void ApplyStack()
     {
-        float top = (_papers.Count + _citations.Count + 1) * config.paperStackStep;
+        // One stacking rule (PaperLayers): the step is more than any paper's parts lie over it, so the paper on top hides all of each paper under it.
+        float step = PaperLayers.StackStep(config.paperStackStep);
+        float top = (_papers.Count + _citations.Count + 1) * step;
         foreach (DeskDocument paper in _papers)
             if (paper != null)
-                paper.SetLift(paper.Index == _dragged ? top + config.dragLift : (_stack.IndexOf(paper.Index) + 1) * config.paperStackStep);
+                paper.SetLift(paper.Index == _dragged ? top + config.dragLift : (_stack.IndexOf(paper.Index) + 1) * step);
         foreach (DeskDocument citation in _citations)
-            citation.SetLift(citation == _draggedCitation ? top + config.dragLift : (_stack.IndexOf(citation.Index) + 1) * config.paperStackStep);
+            citation.SetLift(citation == _draggedCitation ? top + config.dragLift : (_stack.IndexOf(citation.Index) + 1) * step);
         if (rulebook != null)
-            rulebook.SetLift(_rulebookDragged ? top + config.dragLift : (_stack.IndexOf(RulebookId) + 1) * config.paperStackStep);
+            rulebook.SetLift(_rulebookDragged ? top + config.dragLift : (_stack.IndexOf(RulebookId) + 1) * step);
+    }
+
+    /// <summary>
+    /// True when the camera <paramref name="camera"/> sees paper
+    /// <paramref name="document"/>'s face at <paramref name="world"/>: no other
+    /// paper, citation or the rulebook lies over it there (the first of them a
+    /// ray from the camera meets is that paper; nothing of them met counts as
+    /// shown). The guide's arrow points only at what shows (GuideDirector).
+    /// </summary>
+    public bool Shows(int document, Vector3 world, Camera camera)
+    {
+        if (camera == null)
+            return true;
+        Vector3 from = camera.transform.position;
+        Vector3 way = world - from;
+        float distance = way.magnitude;
+        if (distance <= 0f)
+            return true;
+        RaycastHit[] hits = Physics.RaycastAll(from, way / distance, distance + 0.05f, 1 << OfficeLayers.InteractableLayer, QueryTriggerInteraction.Collide);
+        Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+        foreach (RaycastHit hit in hits)
+        {
+            DeskDocument paper = hit.collider.GetComponentInParent<DeskDocument>();
+            if (paper != null)
+                return paper.Index == document && (document <= FirstCitationId ? _citations.Contains(paper) : _papers.Contains(paper));
+            if (hit.collider.GetComponentInParent<DeskRulebook>() != null)
+                return false;
+        }
+        return true;
     }
 
     // ---------------- Citations ----------------
