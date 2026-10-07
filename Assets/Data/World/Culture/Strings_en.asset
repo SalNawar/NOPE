@@ -1767,7 +1767,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: briefing.bulletinHeader
-    text: "BULLETIN \xB7 NEW TODAY"
+    text: "BUREAU MEMO \xB7 DESK 3"
     gloss: 0
     tier: 0
   - key: briefing.bulletin

@@ -35,7 +35,7 @@
 // Protocols delivered), at most one a day, once the wallet holds its price and
 // 20 cr more; it arrives the next morning. The re-paced days (wave 5 track C,
 // Papers Please lessons 4-6 and D7) are checked on the way: each day's
-// briefing opens with its bulletin (days 1-5 each have one), every traveller
+// briefing's Bureau memo shows its bulletin (days 1-5 each have one) and the paper never does, every traveller
 // carries only the day's issued papers (day 1: the Passport alone) and the PC
 // follows them (the shelf's papers, the Citizen Account's forms on file), and
 // the desk-first ramp hides what is not introduced yet (Introductions: the
@@ -362,8 +362,8 @@ public static class _TimeDeskAuditPlay
         RecordPortals(o);
         DayPlanSO paced = RunManager.Instance.GetCurrentDayPlan();
         DayFlowUIController flow = Office.One<DayFlowUIController>();
-        // The front page's every line (the bulletin, with the new hours on the days they change, leads as headline and deck).
-        string brief = string.Join(" ", new[] { "briefingHeadlineText", "briefingDeckText", "briefingStoryTitleText", "briefingStoryText" }
+        // The Bureau memo's lines (the bulletin, with the new hours on the days they change); the front page is the world's.
+        string brief = string.Join(" ", new[] { "briefingMemoTitleText", "briefingMemoBodyText" }
             .Select(f => Field(flow, f) as TMP_Text).Where(t => t != null).Select(t => t.text));
         // Night shifts (the hours grow): the clock runs the day's own hours, and the briefing names new hours only on the days they change.
         ShiftHours hours = paced.Shift(RunManager.Instance.Config.gameConfig);
@@ -372,9 +372,11 @@ public static class _TimeDeskAuditPlay
         Check((day == 8 || day == 12) == brief.Contains(UiText.Format("briefing.newHours", hours.Open, hours.Close)),
               $"day {day}: the briefing names the new hours only on the days they change (8 and 12)");
         Check(day > 5 || !string.IsNullOrWhiteSpace(paced.Bulletin), $"day {day}: days 1-5 each announce their one new paper or check in a bulletin ('{paced.Bulletin}')");
-        Check(string.IsNullOrWhiteSpace(paced.Bulletin) || (((TMP_Text)Field(flow, "briefingKickerText")).gameObject.activeSelf
-                  && ((TMP_Text)Field(flow, "briefingHeadlineText")).text == MorningPaper.Compose(paced.Bulletin, null, null, null).Headline),
-              $"day {day}: the briefing leads with the day's bulletin (its kicker and headline)");
+        Check(string.IsNullOrWhiteSpace(paced.Bulletin) || (((GameObject)Field(flow, "briefingMemo")).activeSelf
+                  && ((TMP_Text)Field(flow, "briefingMemoTitleText")).text == BureauMemo.Of(paced.Bulletin).Title),
+              $"day {day}: the memo shows the day's bulletin (its title)");
+        Check(string.IsNullOrWhiteSpace(paced.Bulletin) || !PaperText().Contains(BureauMemo.Of(paced.Bulletin).Title),
+              $"day {day}: the paper is the world's: it never prints the bulletin");
         WorldHeadlines(day);
         PaperNames(day);
         if (ShotsOn)
@@ -2122,14 +2124,18 @@ public static class _TimeDeskAuditPlay
         Line("   briefing: " + ((TMP_Text)Field(flow, "briefingTitleText")).text);
         foreach (string l in Lines(PaperText()))
             Line("   | " + l);
+        if (((GameObject)Field(flow, "briefingMemo")).activeSelf)
+            foreach (string f in new[] { "briefingMemoTitleText", "briefingMemoBodyText" })
+                foreach (string l in Lines(((TMP_Text)Field(flow, f)).text))
+                    Line("   memo | " + l);
     }
 
-    /// <summary>The morning paper's printed lines (run 7's front page, MorningPaper): the kicker when shown, the headline, the deck, the small story's title and lines.</summary>
+    /// <summary>The morning paper's printed lines (run 7's front page, MorningPaper): the headline, the deck, the small story's title and lines (the Bureau memo apart).</summary>
     private static string PaperText()
     {
         DayFlowUIController flow = Office.One<DayFlowUIController>();
         var parts = new List<string>();
-        foreach (string f in new[] { "briefingKickerText", "briefingHeadlineText", "briefingDeckText", "briefingStoryTitleText", "briefingStoryText" })
+        foreach (string f in new[] { "briefingHeadlineText", "briefingDeckText", "briefingStoryTitleText", "briefingStoryText" })
         {
             var t = (TMP_Text)Field(flow, f);
             if (t != null && t.gameObject.activeSelf && !string.IsNullOrWhiteSpace(t.text))

@@ -265,8 +265,9 @@ public sealed partial class GameManager : MonoBehaviour
         string bulletin = TodaysBulletin();
 
         // The morning paper is printed: its lines go to the News site's back issues (the night rebuilds them, so they are kept now).
+        // The paper is the world's: the clerk's bulletin is the Bureau memo's, never a back issue's.
         if (desktopConfig != null)
-            NewsArchive.Record(_worldState.newsArchive, _worldState.day, Briefing(bulletin, _worldState.tomorrow.briefingLines), _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
+            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
                                _worldState.tomorrow.deskLines);
         else
             Debug.LogWarning("[GameManager] No DesktopConfigSO wired: today's paper is not kept for the News site. Run Tools > TimeDesk > Build Office UI.");
@@ -302,16 +303,6 @@ public sealed partial class GameManager : MonoBehaviour
             return bulletin;
         string hours = UiText.Format("briefing.newHours", today.Open, today.Close);
         return string.IsNullOrEmpty(bulletin) ? hours : bulletin + " " + hours;
-    }
-
-    /// <summary>The morning paper's briefing as the News site keeps it: the day's bulletin first (lesson 4; none when blank), then the tomorrow package's briefing lines.</summary>
-    private static List<string> Briefing(string bulletin, IEnumerable<string> lines)
-    {
-        var briefing = new List<string>();
-        if (!string.IsNullOrWhiteSpace(bulletin))
-            briefing.Add(bulletin.Trim());
-        briefing.AddRange(lines ?? Enumerable.Empty<string>());
-        return briefing;
     }
 
     /// <summary>

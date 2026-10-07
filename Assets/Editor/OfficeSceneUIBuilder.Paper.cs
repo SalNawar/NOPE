@@ -8,9 +8,14 @@ using UnityEngine.UI;
 /// office before the shift, built from the day's data by DayFlowUIController
 /// through MorningPaper: the issue line, the blackletter masthead between
 /// its weather and edition boxes, the dateline (the day, today's date, the
-/// edition), the key story (the kicker, the headline in condensed capitals,
-/// its deck) over three columns of dummy type, the small story in the right
-/// column under its title, and the START SHIFT plate on the paper's foot.
+/// edition), the key story (the headline in condensed capitals, its deck)
+/// over three columns of dummy type, the small story in the right column
+/// under its title, the START SHIFT plate on the paper's foot, and the
+/// Bureau memo clipped over the paper's lower right corner, under its small
+/// story and past its edge (a manila slip,
+/// a brass clip on its top, tilted: "BUREAU MEMO · DESK 3", the day's
+/// bulletin's title and body; Saleh 2026-10-07: the clerk's work news is the
+/// Bureau's, never the world's paper).
 /// Part of <see cref="OfficeSceneUIBuilder"/>.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
@@ -21,14 +26,23 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The START SHIFT plate on the paper's foot (overlay units).</summary>
     private static readonly Vector2 MorningPaperPlate = new Vector2(360f, 80f);
 
+    /// <summary>The Bureau memo slip (overlay units), its centre from the paper's lower right corner, and its tilt in degrees.</summary>
+    private static readonly Vector2 BureauMemoSize = new Vector2(470f, 330f), BureauMemoAt = new Vector2(-120f, 110f);
+
+    /// <summary>The memo's tilt (degrees; a slip clipped on by hand).</summary>
+    private const float BureauMemoTilt = -2.5f;
+
     /// <summary>The paper's texts DayFlowUIController writes.</summary>
     private struct PaperTexts
     {
-        /// <summary>The dateline's day, its date, the kicker, the key story's headline and deck, the small story's title and lines.</summary>
-        public TMP_Text Title, Date, Kicker, Headline, Deck, StoryTitle, Story;
+        /// <summary>The dateline's day, its date, the key story's headline and deck, the small story's title and lines, the Bureau memo's title and body.</summary>
+        public TMP_Text Title, Date, Headline, Deck, StoryTitle, Story, MemoTitle, MemoBody;
 
         /// <summary>The right column's dummy type shown on a day with no small story.</summary>
         public GameObject Filler;
+
+        /// <summary>The Bureau memo slip (shown on a day with a bulletin).</summary>
+        public GameObject Memo;
     }
 
     /// <summary>The morning paper (see the class summary), rebuilt each run, inactive; returns its panel.</summary>
@@ -70,8 +84,7 @@ public static partial class OfficeSceneUIBuilder
         TMP_Text date = Line("DateText", null, KitText.Pill, TextAlignmentOptions.Center, new Vector2(0.38f, 0.745f), new Vector2(0.62f, 0.78f), ink);
         Rule("RuleDate", 0.74f, thick: 1f);
 
-        // The key story: kicker, headline, deck.
-        TMP_Text kicker = Line("Kicker", "briefing.bulletinHeader", KitText.Pill, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.69f), new Vector2(0.64f, 0.725f), red);
+        // The key story: headline, deck.
         TMP_Text headline = Line("Headline", null, KitText.Headline, TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.47f), new Vector2(0.64f, 0.69f), ink);
         TMP_Text deck = Line("Deck", null, KitText.BodyLarge, TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.33f), new Vector2(0.64f, 0.465f), ink, FontStyles.Italic);
         Rule("RuleStory", 0.32f, 0.03f, 0.64f, 1f);
@@ -96,9 +109,51 @@ public static partial class OfficeSceneUIBuilder
         KitSkin(startShift, "plate_ox", scale);
         KitLabel(startShift, "plate_ox_rest");
 
-        texts = new PaperTexts { Title = title, Date = date, Kicker = kicker, Headline = headline, Deck = deck, StoryTitle = storyTitle, Story = story, Filler = filler.gameObject };
+        Transform memo = BuildBureauMemo(panel, scale, ink, red, out TMP_Text memoTitle, out TMP_Text memoBody);
+
+        texts = new PaperTexts { Title = title, Date = date, Headline = headline, Deck = deck, StoryTitle = storyTitle, Story = story, Filler = filler.gameObject,
+                                 Memo = memo.gameObject, MemoTitle = memoTitle, MemoBody = memoBody };
         panel.gameObject.SetActive(false);
         return panel;
+    }
+
+    /// <summary>
+    /// The Bureau memo (see the class summary): a manila slip over the
+    /// paper's lower right corner, over its side column's dummy type and
+    /// past its edge, tilted, a brass clip on its top; its header
+    /// ("briefing.bulletinHeader", "BUREAU MEMO · DESK 3") in the alert ink,
+    /// the bulletin's title as its heading and the rest as typed body text,
+    /// both written by DayFlowUIController. Returns the slip.
+    /// </summary>
+    private static Transform BuildBureauMemo(Transform panel, float scale, Color ink, Color red, out TMP_Text title, out TMP_Text body)
+    {
+        Transform memo = Panel(panel, "BureauMemo", new Vector2(1f, 0f), new Vector2(1f, 0f), BureauMemoAt, BureauMemoSize, Paper, ThemeRoleId.Newsletter);
+        memo.localRotation = Quaternion.Euler(0f, 0f, BureauMemoTilt);
+        memo.GetComponent<Image>().raycastTarget = false;
+        KitSkin(memo, "panel_manila", scale);
+
+        TMP_Text MemoLine(string name, string key, KitText kind, Vector2 aMin, Vector2 aMax, Color colour, TextAlignmentOptions align)
+        {
+            TMP_Text t = Text(memo, name, key != null ? null : string.Empty, 22, align, aMin, aMax, colour, ThemeRoleId.Newsletter, key);
+            t.raycastTarget = false;
+            if (_kit != null)
+                SceneUiKit.SkinText(t, _kit, kind, (aMax.y - aMin.y) * BureauMemoSize.y, colour);
+            return t;
+        }
+
+        MemoLine("Header", "briefing.bulletinHeader", KitText.Pill, new Vector2(0.07f, 0.8f), new Vector2(0.93f, 0.9f), red, TextAlignmentOptions.MidlineLeft);
+        title = MemoLine("Title", null, KitText.ListTitle, new Vector2(0.07f, 0.64f), new Vector2(0.93f, 0.79f), ink, TextAlignmentOptions.TopLeft);
+        title.fontStyle |= FontStyles.Bold;
+        body = MemoLine("Body", null, KitText.BodySmall, new Vector2(0.07f, 0.08f), new Vector2(0.93f, 0.63f), ink, TextAlignmentOptions.TopLeft);
+        body.textWrappingMode = TextWrappingModes.Normal;
+        body.overflowMode = TextOverflowModes.Ellipsis;
+
+        // The brass clip holding it on.
+        Transform clip = Panel(memo, "Clip", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -6f), new Vector2(96f, 30f), Color.white, ThemeRoleId.Newsletter);
+        clip.GetComponent<Image>().raycastTarget = false;
+        KitSkin(clip, "pill_brass", scale);
+        memo.gameObject.SetActive(false);
+        return memo;
     }
 
     /// <summary>The paper's dummy type (its bars named <paramref name="name"/>, column and line): <paramref name="columns"/> columns of grey lines between the anchors (the reference's "rest dummy lines"; no words, so nothing to translate).</summary>

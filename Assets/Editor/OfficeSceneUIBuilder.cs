@@ -314,7 +314,9 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soFlow, "briefingPanel", briefing.gameObject);
         SetRef(soFlow, "briefingTitleText", paper.Title);
         SetRef(soFlow, "briefingDateText", paper.Date);
-        SetRef(soFlow, "briefingKickerText", paper.Kicker);
+        SetRef(soFlow, "briefingMemo", paper.Memo);
+        SetRef(soFlow, "briefingMemoTitleText", paper.MemoTitle);
+        SetRef(soFlow, "briefingMemoBodyText", paper.MemoBody);
         SetRef(soFlow, "briefingHeadlineText", paper.Headline);
         SetRef(soFlow, "briefingDeckText", paper.Deck);
         SetRef(soFlow, "briefingStoryTitleText", paper.StoryTitle);
