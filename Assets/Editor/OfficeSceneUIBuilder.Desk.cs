@@ -1249,8 +1249,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>Where the desk view's "▲ Back" control starts (reference px from the top): under the office case HUD's compare strip and a gap.</summary>
     private static readonly float CaseHudClearance = TopStripTop + CompareStripSize.y + 8f;
 
-    /// <summary>The desk view's "▲ Back" control (reference px), top centre under the case HUD.</summary>
+    /// <summary>The desk view's "▲ Back" control (reference px), top left under the case HUD and the tutorial's prompt plate.</summary>
     private static readonly Vector2 DeskViewBackSize = new Vector2(200f, 44f);
+
+    /// <summary>The gap (reference px) between the tutorial's prompt plate and the desk view's "▲ Back" control under it.</summary>
+    private const float DeskViewBackGap = 12f;
 
     /// <summary>The band at the overlay's top the speech bubble and the wheel's ring keep clear (reference px): the office case HUD's strips, the desk view's Back control and gaps (the desk view clamps both to the top).</summary>
     private static readonly float OverlayTopClearance = CaseHudClearance + DeskViewBackSize.y + 8f;
@@ -1360,7 +1363,10 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The desk view's "▲ Back" control (the readability fix: a visible way
     /// out of the desk view) under the office overlay canvas, rebuilt each run:
-    /// a small button at the top centre, under the case HUD's strips, in the
+    /// a small button at the top left (the art pass, 2026-10-07: off the
+    /// traveller's face in the closer counter framing), under the case HUD's
+    /// strips and under the tutorial's prompt plate (GuidePlateAt,
+    /// GuidePlateSize: both show in the reading view on day 1), in the
     /// "&lt; Desk" button's role, its label keyed (deskView.back); a hover hint
     /// beside it, on its right (deskView.backHint: the other ways back), in the
     /// tooltip's role, shown by HoverHint (beside, not under: the speech bubble
@@ -1376,7 +1382,7 @@ public static partial class OfficeSceneUIBuilder
         rt.anchorMin = new Vector2(0f, 1f);
         rt.anchorMax = new Vector2(0f, 1f);
         rt.pivot = new Vector2(0f, 1f);
-        rt.anchoredPosition = new Vector2(24f, -CaseHudClearance);
+        rt.anchoredPosition = new Vector2(24f, Mathf.Min(-CaseHudClearance, GuidePlateAt.y - GuidePlateSize.y - DeskViewBackGap));
         rt.sizeDelta = DeskViewBackSize;
 
         Transform hint = Panel(back.transform, "Hint", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(8f, 0f), new Vector2(DeskViewBackSize.x, 34f), Tooltip, ThemeRoleId.Tooltip);
