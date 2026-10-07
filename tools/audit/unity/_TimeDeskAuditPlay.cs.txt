@@ -412,9 +412,12 @@ public static class _TimeDeskAuditPlay
             if (day == 1 && presented == 1)
             {
                 Check(o.Guide.StepShown == "desk", $"day 1: calling the traveller completes the tutorial's first step ('{o.Guide.StepShown}' shown: '{o.Guide.Prompt.Line}')");
+                GuideArrowAllocationFree(o, "day 1 tutorial step 2");
                 ((Button)Field(o.Guide.Prompt, "skipButton")).onClick.Invoke();
                 Check(!o.Guide.Prompt.IsShown && RunManager.Instance.World.guide.ftueSkipped, "day 1: Skip ends the tutorial (the run keeps it skipped)");
             }
+            if (day == 2 && !practiceSeen && o.Guide.ShowingNow == "practice")
+                GuideArrowAllocationFree(o, "day 2 practice");
             practiceSeen |= o.Guide.ShowingNow == "practice";
             if (day == 4 && o.Guide.ShowingNow == "practice")
                 yield return SealAtTheDesk(o);
@@ -478,6 +481,27 @@ public static class _TimeDeskAuditPlay
         if (ShotsOn)
             yield return Shots($"d{day}_shift_report");
         o.GoHome.onClick.Invoke();
+    }
+
+    /// <summary>
+    /// The guide's arrow costs nothing per frame (the profile found 68 B a frame in GuideTargets.TryForm's Substring, run 7): its
+    /// LateUpdate run 120 times allocates 0 B on this thread, while the same target parsed 120 times (the control) does allocate.
+    /// </summary>
+    private static void GuideArrowAllocationFree(Office o, string when)
+    {
+        var tick = (Action)Delegate.CreateDelegate(typeof(Action), o.Guide, typeof(GuideDirector).GetMethod("LateUpdate", BindingFlags.Instance | BindingFlags.NonPublic));
+        string target = (string)Field(o.Guide, "_target") ?? string.Empty;
+        tick();
+        long before = GC.GetAllocatedBytesForCurrentThread();
+        for (int i = 0; i < 120; i++)
+            tick();
+        long director = GC.GetAllocatedBytesForCurrentThread() - before;
+        before = GC.GetAllocatedBytesForCurrentThread();
+        for (int i = 0; i < 120; i++)
+            GuideTargets.TryForm(target, out _);
+        long control = GC.GetAllocatedBytesForCurrentThread() - before;
+        Check(director == 0 && control > 0,
+              $"{when}: the guide's arrow at '{target}' is placed without allocating ({director} B over 120 frames; the control, the target parsed each frame: {control} B)");
     }
 
     /// <summary>
