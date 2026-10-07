@@ -144,15 +144,16 @@ the gameplay side for a new hook when the art needs one.
 
 | Hook | What it gives | Used by |
 |---|---|---|
-| `ShiftClockDriver.Live` (`IShiftProgress`) | today's shift progress, `Progress01`: 0 at opening, 1 at closing (`ShiftClock.Progress01`), and the clock's `MinuteOfDay` (540 is 09:00); null when no gameplay layer is loaded (the art office on its own, edit mode) | `OfficeHallCrowdPalette` (the crowds' morning to evening colours); `AnimeHallShiftLink` (the anime hall's daylight and ambient, and its lights' hour) |
+| `ShiftClockDriver.Live` (`IShiftProgress`) | where the clock's hour stands on the standard day, `StandardProgress01`: 0 at or before GameConfigSO's standard opening (09:00), 1 at or after its closing (17:00), whatever today's own hours (night shifts, `ShiftHours.StandardProgress`: a late shift opens in the evening), and the clock's `MinuteOfDay` (540 is 09:00; a night shift ends at 1440, midnight); null when no gameplay layer is loaded (the art office on its own, edit mode) | `OfficeHallCrowdPalette` (the crowds' morning to evening colours); `AnimeHallShiftLink` (the anime hall's daylight and ambient, and its lights' hour) |
 
 The anime hall's `AnimeHallPresentation` offers `SetTime(normalizedEvening)` and
 `SetPan(normalizedPan)` ("gameplay supplies time and pan"). The gameplay layer
 drives **time** only: at load the binder adds an `AnimeHallShiftLink` to its own
 object when the art office carries a presentation; each frame it reads the hook
-above and calls `SetTime` with the crowds' curve (`CrowdPaletteBlend.Evening`,
+above and calls `SetTime` with the hall lights' evening, or without them the
+crowds' curve (`CrowdPaletteBlend.Evening` of `StandardProgress01`,
 `DeskConfigSO.hallEveningStartsAt` 0.5, `hallEveningFullAt` 0.9: morning until
-13:00, full evening from 16:12), writing only when the value changes. With it
+13:00, full evening from 16:12, on any day), writing only when the value changes. With it
 the link sets the colour of the calendar's readout (`ReadoutDay`, the art's
 text on the art's paper, which the evening dims to nearly black):
 `DeskConfigSO.hallCalendarDayInk` (black) by day and `hallCalendarEveningInk`

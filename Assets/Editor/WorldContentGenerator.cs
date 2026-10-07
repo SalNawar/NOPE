@@ -1789,6 +1789,8 @@ public static partial class WorldContentGenerator
         var so = new SerializedObject(plan);
         so.FindProperty("dayNumber").intValue = d.day;
         so.FindProperty("visitorsCount").intValue = d.queue;
+        so.FindProperty("shiftStartMinute").intValue = ShiftMinute(d.shiftStart);
+        so.FindProperty("shiftEndMinute").intValue = ShiftMinute(d.shiftEnd);
         so.FindProperty("bulletin").stringValue = d.bulletin ?? string.Empty;
         string[] dayPapers = d.papers ?? Array.Empty<string>();
         SerializedProperty papers = so.FindProperty("papers");
@@ -2442,6 +2444,10 @@ public static partial class WorldContentGenerator
         public string asset;
         public int day;
         public int queue;
+        /// <summary>The time the desk opens this day, "13:00" (blank: GameConfigSO's standard day; night shifts, ShiftHours).</summary>
+        public string shiftStart;
+        /// <summary>The time the desk closes this day, up to "24:00" (blank with shiftStart).</summary>
+        public string shiftEnd;
         /// <summary>The day's bulletin: one line naming what the day brings for the first time (blank: nothing; DayPacing).</summary>
         public string bulletin;
         /// <summary>The form numbers in circulation this day (empty: every form; DayPapers, lesson D7).</summary>

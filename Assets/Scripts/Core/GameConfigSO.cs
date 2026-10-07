@@ -56,17 +56,48 @@ public sealed class GameConfigSO : ScriptableObject
     public bool requireEvidenceToDeny = true;
 
     [Header("Shift clock")]
-    /// <summary>Hour the booth opens (0-23). The clock shows this during the briefing and starts at Start Shift.</summary>
+    /// <summary>Hour the booth opens on the standard day (0-23): every day whose plan authors no hours of its own (world_source.json days[].shiftStart). The clock shows the day's opening during the briefing and starts at Start Shift.</summary>
     [Range(0, 23)]
     public int shiftStartHour = 9;
 
-    /// <summary>Hour the booth closes (1-24, after the opening hour). No new traveller is called after it.</summary>
+    /// <summary>Hour the booth closes on the standard day (1-24, after the opening hour). No new traveller is called after the day's closing.</summary>
     [Range(1, 24)]
     public int shiftEndHour = 17;
 
-    /// <summary>Real seconds a whole shift lasts (the Papers, Please-style time pressure).</summary>
+    /// <summary>Real seconds a whole shift lasts, whatever the day's hours span (the Papers, Please-style time pressure; a longer span runs the clock faster).</summary>
     [Min(10f)]
     public float shiftRealSeconds = 480f;
+
+    /// <summary>The shortest a day's authored hours may last, in hours (Generate World and the validator, ShiftHours.Problems).</summary>
+    [Min(1)]
+    public int shiftMinHours = 4;
+
+    /// <summary>The longest a day's authored hours may last, in hours (Generate World and the validator, ShiftHours.Problems).</summary>
+    [Min(1)]
+    public int shiftMaxHours = 12;
+
+    /// <summary>What Home's backdrop is multiplied by after a shift that closed at midnight; a shift closing at the standard hour leaves it white, one between is blended (ShiftHours.Lateness: the late shifts send the clerk home in deep night).</summary>
+    public Color homeDeepNightTint = new Color(0.55f, 0.58f, 0.78f, 1f);
+
+    /// <summary>
+    /// The standard day's hours (<see cref="shiftStartHour"/> to
+    /// <see cref="shiftEndHour"/>), which a day without its own keeps;
+    /// without a config, the field defaults (09:00 to 17:00).
+    /// </summary>
+    public static ShiftHours Standard(GameConfigSO config)
+    {
+        if (config != null)
+            return new ShiftHours(config.shiftStartHour * 60, config.shiftEndHour * 60);
+
+        // Defaults live in the field initializers: read them from a throwaway instance.
+        GameConfigSO defaults = CreateInstance<GameConfigSO>();
+        ShiftHours hours = Standard(defaults);
+        if (Application.isPlaying)
+            Destroy(defaults);
+        else
+            DestroyImmediate(defaults);
+        return hours;
+    }
 
     [Header("Timeline stability (x.xx, changes compound)")]
     /// <summary>

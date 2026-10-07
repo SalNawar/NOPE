@@ -41,6 +41,20 @@ public sealed class DayPlanSO : ScriptableObject
     [SerializeField, Min(1)] private int visitorsCount = 6;
 
     /// <summary>
+    /// The minute of the day the desk opens today (night shifts: "the hours
+    /// grow"; 780 = 13:00), or -1 to keep GameConfigSO's standard day. Written
+    /// by Generate World from world_source.json days[].shiftStart.
+    /// </summary>
+    [SerializeField, Min(-1)] private int shiftStartMinute = -1;
+
+    /// <summary>
+    /// The minute of the day the desk closes today (1440 = midnight), or -1
+    /// with <see cref="shiftStartMinute"/>. Written by Generate World from
+    /// world_source.json days[].shiftEnd.
+    /// </summary>
+    [SerializeField, Min(-1)] private int shiftEndMinute = -1;
+
+    /// <summary>
     /// The day's bulletin (Papers Please lesson 4): one line naming the check
     /// or paper the day brings, the first line of the morning briefing; blank
     /// on a day that brings nothing new. Written by Generate World from
@@ -165,6 +179,15 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Public read-only number of visitors/cases.</summary>
     public int VisitorsCount => visitorsCount;
+
+    /// <summary>The minute the desk opens today as authored (-1: the standard day; the validator reads it).</summary>
+    public int ShiftStartMinute => shiftStartMinute;
+
+    /// <summary>The minute the desk closes today as authored (-1: the standard day; the validator reads it).</summary>
+    public int ShiftEndMinute => shiftEndMinute;
+
+    /// <summary>Today's desk hours: the plan's own, else <paramref name="config"/>'s standard day (ShiftHours.For; without a config, GameConfigSO's defaults).</summary>
+    public ShiftHours Shift(GameConfigSO config) => ShiftHours.For(shiftStartMinute, shiftEndMinute, GameConfigSO.Standard(config));
 
     /// <summary>The day's bulletin line (blank: nothing new today).</summary>
     public string Bulletin => bulletin ?? string.Empty;

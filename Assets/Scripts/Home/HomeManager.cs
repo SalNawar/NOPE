@@ -97,6 +97,14 @@ public sealed class HomeManager : MonoBehaviour
 
         RefreshHud();
 
+        // Home after a late shift is deep night (night shifts: the hours grow; ShiftHours.Lateness of the day's closing).
+        if (homeUI != null && _config != null)
+        {
+            DayPlanSO plan = run.GetCurrentDayPlan();
+            ShiftHours hours = plan != null ? plan.Shift(_config) : GameConfigSO.Standard(_config);
+            homeUI.SetLateness(ShiftHours.Lateness(hours.EndMinute, GameConfigSO.Standard(_config)), _config.homeDeepNightTint);
+        }
+
         Debug.Log("[HomeManager] <<< Exiting Start (showing the bills).");
 
         ShowBills();

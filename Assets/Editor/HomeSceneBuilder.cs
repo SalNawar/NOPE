@@ -131,6 +131,7 @@ public static class HomeSceneBuilder
         // --- Wire HomeUIController ---
         var soUi = new SerializedObject(homeUI);
         soUi.FindProperty("kit").objectReferenceValue = kit;
+        soUi.FindProperty("backdrop").objectReferenceValue = Backdrop(root);
         soUi.FindProperty("moneyText").objectReferenceValue = moneyText;
         soUi.FindProperty("dayText").objectReferenceValue = dayText;
 
@@ -191,6 +192,18 @@ public static class HomeSceneBuilder
         UiContrastCheck.Check(canvas, canvas.GetComponent<CanvasScaler>() is CanvasScaler s && s.referenceResolution.y > 0f ? 1080f / s.referenceResolution.y : 1f, null, null);
         EditorSceneManager.MarkSceneDirty(homeUI.gameObject.scene);
         Debug.Log("[TimeDesk] Home UI built and wired. Save the scene.");
+    }
+
+    /// <summary>
+    /// The flat's painted backdrop, the art's "ArtBackground" image on the
+    /// canvas (placed with the art, never created here), which Home tints
+    /// toward deep night after a late shift (HomeUIController.SetLateness;
+    /// night shifts); null when the scene has none.
+    /// </summary>
+    private static Image Backdrop(Transform canvas)
+    {
+        Transform art = canvas.Find("ArtBackground");
+        return art != null ? art.GetComponent<Image>() : null;
     }
 
     /// <summary>The bills panel's size (reference px): the title, the evening's lines (the break-in, the fixed costs, the pet's needs, the bills' total), the five bills' rows and Pay.</summary>

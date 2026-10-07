@@ -130,8 +130,9 @@ public sealed class DayFlowUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Shows the end-of-day report (Papers Please lesson 5): the travellers
-    /// processed out of the queue, then a money ledger read in one glance
+    /// Shows the end-of-day report (Papers Please lesson 5): the day's desk
+    /// <paramref name="hours"/> and the travellers processed out of the queue,
+    /// then a money ledger read in one glance
     /// (its currency named once in its header, the amounts bare in one column)
     /// (the right calls times their pay, the free warnings, the wrong calls
     /// times their fine, the stranding fines, the Debt Relief instalment, any
@@ -139,7 +140,7 @@ public sealed class DayFlowUIController : MonoBehaviour
     /// wallet after them), then stability, citations and the departures.
     /// Invokes onGoHome when the player clicks Go Home (or immediately if unwired).
     /// </summary>
-    public void ShowResults(WorldState world, ShiftLedger ledger, ShiftReport report, Action onGoHome)
+    public void ShowResults(WorldState world, ShiftLedger ledger, ShiftReport report, ShiftHours hours, Action onGoHome)
     {
         if (!HasResultsPanel || world == null || ledger == null || report == null)
         {
@@ -159,6 +160,7 @@ public sealed class DayFlowUIController : MonoBehaviour
             string Amount(int amount) => UiText.Format("results.amount", amount);
             void Row(string label, int amount) => sb.AppendLine(UiText.Format("results.row", label, Amount(amount)));
 
+            sb.AppendLine(UiText.Format("results.hours", hours.Open, hours.Close));
             sb.AppendLine(report.Waiting > 0
                 ? UiText.Format("results.processedOf", report.Processed, report.Queued, report.Waiting)
                 : UiText.Format("results.processedAll", report.Processed));
