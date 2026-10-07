@@ -230,6 +230,13 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The hall's swappable slots (Assets/Data/Config/HallSlots_Default.asset): the binder's HallSlotsLink swaps their art as the hall's variables shift; none: the hall stays as painted.</summary>
     public HallSlotsSO hallSlots;
 
+    [Header("The stability monitor (Saleh 2026-10-07: \"the timeline helix needs to be bigger; the screen itself is too small\")")]
+    /// <summary>How many times its art size the stability monitor is drawn (the binder grows the art's monitor parts and its stability text at load, so the Helix River on its glass grows with them; 1: as the art draws it). The river is drawn by its shader per pixel, so it stays sharp at any size.</summary>
+    [Min(1f)] public float stabilityMonitorScale = 2.4f;
+
+    /// <summary>The point of the monitor that stays put while it grows, as shares of its bounds (x left to right, y bottom to top): near its lower right, so it grows up and to the left, away from the screen's edge and the STAMPS tab.</summary>
+    public Vector2 stabilityMonitorPivot = new Vector2(0.9f, 0.25f);
+
     [Header("AVAILABLE sign")]
     /// <summary>The caption the game writes on the AVAILABLE sign's label (the art's NEXT sign; "AVAILABLE"): a UI string key (world_source.json ui.strings).</summary>
     public string readyCaptionKey = "desk.readyCaption";
