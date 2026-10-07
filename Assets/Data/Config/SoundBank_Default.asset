@@ -420,6 +420,44 @@ MonoBehaviour:
     clips: []
     placeholder: 0
     volume: 1
+  - id: slot_lever
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 64184bf04695c084686a46251c982bac, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: slot_spin
+    bus: 0
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: slot_stop
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: ded63aef3a2e2a9479a4c596a6afd845, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: slot_win
+    bus: 0
+    loop: 0
+    priority: 1
+    clips:
+    - {fileID: 8300000, guid: 72747b2a4afe1b44ab89a6d418f83c5c, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: slot_lose
+    bus: 0
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
   - id: clock_tick
     bus: 1
     loop: 0
