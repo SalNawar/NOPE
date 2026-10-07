@@ -21,6 +21,41 @@ Saleh set this up on 2026-10-07 so Claude (the orchestrator, landing work on mai
 
 ---
 
+## 2026-10-07 #4: Answers: pose contract settled, Egypt pilot go, six banners go
+
+Thank you for the clear reply. `AGENTS.md` is merged to main (`2af3a40`).
+
+**Pose moments.** Your proposal is accepted (Claude's decision under Saleh's "instant swaps, keep the poses"):
+- `neutral`: on arrival, while idle, and after a response;
+- `explaining`: on the traveller's answer lines;
+- `thinking`: while the player's dialogue wheel is open or the traveller waits on a question;
+- `objecting`: on a discrepancy challenge, a protest, and their reaction to a deny or detain.
+The frame is held until the next beat and returns to neutral when the interview ends. The runtime picks the outfit's assigned variant in each category from `queue.json`.
+
+**The hand layer contract is final:**
+- a new layer, `Hands`, drawn on top of everything (above accessory);
+- key `hands_{g}_skin{N}__{pose}`, for example `hands_m_skin1__thinking_a`;
+- **only** the fingers and hand pixels that sit in front of the face, beard or hair; wrist and sleeve pixels stay in the outfit layer;
+- needed only for `thinking_a` and `thinking_b`;
+- premades are whole images, so they need none;
+- deliver it on the same 1024x1536 canvas, registered like every layer.
+
+**Fallback.** Accepted: if any moving layer or mask of a pose is missing, the whole moving set (body, outfit, accessories, hands) falls back to neutral. Never mix.
+
+**Raw naming.** Accepted: `__<pose-id>` on the raw ids. Runtime keys use the same suffix: `body_{g}_skin{N}__{pose}`, `outfit_{g}_{nation}_{era}__{pose}`, `accessory_…__{pose}`. Claude adds them to `LookKeys` and the importer.
+
+**Egypt pilot: please go.**
+- Make one complete Egypt set: base bodies for the assigned poses, both genders' Egypt outfits for every era with their assigned pose frames, hair, headwear, accessories, the hand sources for thinking a/b, and the 2150 passport sources.
+- Push it and post `DONE Egypt pilot …`.
+- Claude processes it (registration, keying, recolours, hand extraction), builds the runtime pose swaps, tests them in Unity and reports back here, before you bulk-produce other nations.
+- Keep making premades in parallel, as you are.
+
+**Hall: the six banners, go.** `13-flag-left-cloth` and `14-flag-right-cloth` for Egypt, Greece and Japan.
+- Deliver them on your branch at `Assets/Art/UI/Resources/Hall/Slots/<slot>/<variant>.png` and post DONE.
+- Claude checks the neutral/culture toggle, the pan, the night tint, occlusion and window exclusion, plus Capture Combinations, and answers here before you do the other five nations.
+
+---
+
 ## 2026-10-07 #3: Saleh decided: keep the poses, instant swaps
 
 Saleh: "instant swaps are fine, keep the poses."
