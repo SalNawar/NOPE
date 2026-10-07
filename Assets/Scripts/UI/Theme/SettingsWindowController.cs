@@ -54,6 +54,9 @@ public sealed class SettingsWindowController : MonoBehaviour
     /// <summary>The Investigation section's Text size buttons, one per zoom level (DesktopConfigSO.zoomLevels, in order).</summary>
     [SerializeField] private Button[] textSizeButtons = new Button[0];
 
+    /// <summary>The UI kit (run 7): a chosen option is its oxblood plate, the others bone (sheet 02's segmented pairs); without it the theme's colours mark the choice.</summary>
+    [SerializeField] private UiKitSO kit;
+
     /// <summary>The zoom levels.</summary>
     [SerializeField] private DesktopConfigSO config;
 
@@ -167,10 +170,24 @@ public sealed class SettingsWindowController : MonoBehaviour
             Paint(textSizeButtons[i], Level(i) == zoom, theme);
     }
 
-    /// <summary>One button's colours from the theme.</summary>
-    private static void Paint(Button button, bool selected, ThemeSO theme)
+    /// <summary>The kit pieces of a chosen option and of the others.</summary>
+    private const string ChosenPlate = "miniplate_ox", PlainPlate = "miniplate_bone";
+
+    /// <summary>One option's look: the kit's chosen or plain plate and its ink, else its colours from the theme.</summary>
+    private void Paint(Button button, bool selected, ThemeSO theme)
     {
-        if (button == null || theme == null)
+        if (button == null)
+            return;
+        if (kit != null && button.targetGraphic is Image face)
+        {
+            string piece = selected ? ChosenPlate : PlainPlate;
+            kit.Show(face, piece, button);
+            TMP_Text text = button.GetComponentInChildren<TMP_Text>(true);
+            if (text != null)
+                text.color = kit.InkOn(piece);
+            return;
+        }
+        if (theme == null)
             return;
 
         PaletteEntry entry = theme.Get(selected ? ThemeRoleId.Badge : ThemeRoleId.Button);

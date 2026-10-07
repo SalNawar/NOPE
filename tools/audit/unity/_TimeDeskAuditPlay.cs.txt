@@ -361,7 +361,10 @@ public static class _TimeDeskAuditPlay
         RecordWorld();
         RecordPortals(o);
         DayPlanSO paced = RunManager.Instance.GetCurrentDayPlan();
-        string brief = ((TMP_Text)Field(Office.One<DayFlowUIController>(), "briefingBodyText")).text;
+        DayFlowUIController flow = Office.One<DayFlowUIController>();
+        // The front page's every line (the bulletin, with the new hours on the days they change, leads as headline and deck).
+        string brief = string.Join(" ", new[] { "briefingHeadlineText", "briefingDeckText", "briefingStoryTitleText", "briefingStoryText" }
+            .Select(f => Field(flow, f) as TMP_Text).Where(t => t != null).Select(t => t.text));
         // Night shifts (the hours grow): the clock runs the day's own hours, and the briefing names new hours only on the days they change.
         ShiftHours hours = paced.Shift(RunManager.Instance.Config.gameConfig);
         Check(o.Clock.Hours.Equals(hours) && Mathf.Approximately(o.Clock.MinuteOfDay, hours.StartMinute),
@@ -369,8 +372,9 @@ public static class _TimeDeskAuditPlay
         Check((day == 8 || day == 12) == brief.Contains(UiText.Format("briefing.newHours", hours.Open, hours.Close)),
               $"day {day}: the briefing names the new hours only on the days they change (8 and 12)");
         Check(day > 5 || !string.IsNullOrWhiteSpace(paced.Bulletin), $"day {day}: days 1-5 each announce their one new paper or check in a bulletin ('{paced.Bulletin}')");
-        Check(string.IsNullOrWhiteSpace(paced.Bulletin) || (brief.StartsWith(UiText.Get("briefing.bulletinHeader")) && brief.Contains(paced.Bulletin.Trim())),
-              $"day {day}: the briefing opens with the day's bulletin");
+        Check(string.IsNullOrWhiteSpace(paced.Bulletin) || (((TMP_Text)Field(flow, "briefingKickerText")).gameObject.activeSelf
+                  && ((TMP_Text)Field(flow, "briefingHeadlineText")).text == MorningPaper.Compose(paced.Bulletin, null, null, null).Headline),
+              $"day {day}: the briefing leads with the day's bulletin (its kicker and headline)");
         WorldHeadlines(day);
         PaperNames(day);
         if (ShotsOn)
@@ -789,7 +793,7 @@ public static class _TimeDeskAuditPlay
         }
         if (o.CitationPanel.activeInHierarchy)
         {
-            string slip = ((TMP_Text)Field(o.OfficeUi, "citationText")).text;
+            string slip = string.Join("\n", new[] { "citationReasonText", "citationDetailText", "citationConsequenceText" }.Select(f => ((TMP_Text)Field(o.OfficeUi, f)).text));
             Line($"   citation slip: {slip.Replace("\n", " / ")}");
             string rule = v.unprovenDenial ? UiText.Get("citation.rule.evidence") : Citations.RuleLine(c.citation, UiText.Get, UiText.Get("citation.rule.numbered"));
             string value = v.unprovenDenial ? "0" : c.citation?.Values.Select(x => x.Value).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
@@ -966,7 +970,7 @@ public static class _TimeDeskAuditPlay
     /// <summary>Wave 5, lesson 10: the morning paper's lines that name a traveller the clerk decided (a carry, a panic, a world outcome, a returning traveller's second visit, a stranding).</summary>
     private static void PaperNames(int day)
     {
-        string paper = ((TMP_Text)Field(Office.One<DayFlowUIController>(), "briefingBodyText")).text;
+        string paper = PaperText();
         List<string> named = Lines(paper).Where(l => Decided.Any(n => l.Contains(n))).ToList();
         foreach (string l in named)
             Line($"   paper names a traveller: {l}");
@@ -2116,8 +2120,22 @@ public static class _TimeDeskAuditPlay
     {
         DayFlowUIController flow = Office.One<DayFlowUIController>();
         Line("   briefing: " + ((TMP_Text)Field(flow, "briefingTitleText")).text);
-        foreach (string l in Lines(((TMP_Text)Field(flow, "briefingBodyText")).text))
+        foreach (string l in Lines(PaperText()))
             Line("   | " + l);
+    }
+
+    /// <summary>The morning paper's printed lines (run 7's front page, MorningPaper): the kicker when shown, the headline, the deck, the small story's title and lines.</summary>
+    private static string PaperText()
+    {
+        DayFlowUIController flow = Office.One<DayFlowUIController>();
+        var parts = new List<string>();
+        foreach (string f in new[] { "briefingKickerText", "briefingHeadlineText", "briefingDeckText", "briefingStoryTitleText", "briefingStoryText" })
+        {
+            var t = (TMP_Text)Field(flow, f);
+            if (t != null && t.gameObject.activeSelf && !string.IsNullOrWhiteSpace(t.text))
+                parts.Add(t.text.TrimEnd());
+        }
+        return string.Join("\n", parts);
     }
 
     private static void RecordWorld()
@@ -2159,7 +2177,7 @@ public static class _TimeDeskAuditPlay
         List<FactorLead> today = w.leads.Where(l => l.sinceDay == day).ToList();
         if (today.Count == 0)
             return;
-        string paper = ((TMP_Text)Field(Office.One<DayFlowUIController>(), "briefingBodyText")).text;
+        string paper = PaperText();
         // Wave 5, lesson 10: each headline ends with the last traveller whose verdict pulled it, and the day.
         string traced = RunManager.Instance.Library.HistoryLines.traced?.text;
         List<string> headlines = today.Select(l => Traces.Traced(content.Headline(l), traced, Traces.Of(w.pullTraces, l))).Where(h => !string.IsNullOrWhiteSpace(h)).ToList();

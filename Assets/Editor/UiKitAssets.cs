@@ -40,6 +40,11 @@ public static class UiKitAssets
         kit.bodyFont = kit.bodyFont != null ? kit.bodyFont : AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(UiKitFonts.Body);
         kit.bodyBoldFont = kit.bodyBoldFont != null ? kit.bodyBoldFont : AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(UiKitFonts.BodyBold);
 
+        // The type scale: every role present (a designer's values kept, a new role takes its default).
+        foreach ((KitText kind, float share, float min, float max) in KitTypeScale.Defaults)
+            if (!kit.typeScale.Exists(s => s != null && s.kind == kind))
+                kit.typeScale.Add(new UiKitSO.TextStyle { kind = kind, share = share, min = min, max = max });
+
         var sprites = new List<UiKitSO.KitSprite>();
         foreach (UiKitImporter.Entry entry in manifest.sprites)
         {

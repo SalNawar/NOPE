@@ -7,8 +7,8 @@ using UnityEngine;
 /// Single sprite (SlotArt loads sprites), transparent, clamped, at most 2048
 /// px (4096 for the hall's slots, whose paintings span the hall's 2172 px
 /// canvas: ArtSlots.MaxSide); the desk papers' art (ArtSlots.OnDeskPaper: the faces, the photo
-/// frame, the ink marks) with mipmaps, UI art without; and the 9-slice border
-/// of a sliced slot (ArtSlots.SliceShare of the image's shorter side), so a
+/// frame, the ink marks) with mipmaps, UI art without, never sliced (the
+/// sliced faces are the UI kit's since run 7: UiKitImporter), so a
 /// delivered file is ready without touching its import settings.
 /// </summary>
 public sealed class ArtSlotImporter : AssetPostprocessor
@@ -27,8 +27,6 @@ public sealed class ArtSlotImporter : AssetPostprocessor
         importer.wrapMode = TextureWrapMode.Clamp;
         importer.maxTextureSize = ArtSlots.MaxSide(slot);
 
-        importer.GetSourceTextureWidthAndHeight(out int width, out int height);
-        float border = Mathf.Round(ArtSlots.SliceShare(slot) * Mathf.Min(width, height));
-        importer.spriteBorder = new Vector4(border, border, border, border);
+        importer.spriteBorder = Vector4.zero;
     }
 }

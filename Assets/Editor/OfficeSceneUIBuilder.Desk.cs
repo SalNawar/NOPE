@@ -444,7 +444,7 @@ public static partial class OfficeSceneUIBuilder
         powerLed.sprite = EnsureOfficeShape("crt_led", 8, 8, Center, LedPixel);
         powerLed.raycastTarget = false;
 
-        TMP_Text brand = Text(frame, "Brand", "CHRONODESK 2150", 34, TextAlignmentOptions.Center, new Vector2(0.3f, 0f), new Vector2(0.7f, 0f), DeviceInk(library),
+        TMP_Text brand = Text(frame, "Brand", PcBrand, 34, TextAlignmentOptions.Center, new Vector2(0.3f, 0f), new Vector2(0.7f, 0f), DeviceInk(library),
                               ThemeRoleId.DiegeticDevice, style: FontStyles.Bold);
         var brandRect = (RectTransform)brand.transform;
         brandRect.sizeDelta = new Vector2(0f, 60f);
@@ -1012,9 +1012,10 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// A note floating in the office (the binder places it and turns it to the
     /// camera): light text with a dark outline, auto-sized, inactive until
-    /// shown; with <paramref name="backing"/> (the day-1 hints) a dark plate
-    /// behind it (a Backing quad in FloatingNote_Backing, fitted to the text by
-    /// NoteBacking). Idempotent.
+    /// shown; with <paramref name="backing"/> (the day-1 hints) a plate
+    /// behind it fitted to the text by NoteBacking: the UI kit's card with the
+    /// line in ink (run 7), else a dark Backing quad in FloatingNote_Backing.
+    /// Idempotent.
     /// </summary>
     private static TextMeshPro FloatingNote(Transform parent, string name, bool backing = false)
     {
@@ -1033,7 +1034,30 @@ public static partial class OfficeSceneUIBuilder
         tmp.fontStyle = FontStyles.Bold;
         tmp.fontSharedMaterial = NoteMaterial(tmp.font);
         tmp.sortingLayerID = GameplaySortingLayerId();
-        if (backing)
+        if (backing && _kit != null)
+        {
+            // The UI kit's card behind the note (run 7; sheet 05's hint plate), its line in the kit's ink and bold body face.
+            tmp.font = _kit.bodyBoldFont;
+            tmp.fontSharedMaterial = _kit.bodyBoldFont.material;
+            tmp.fontStyle = FontStyles.Normal;
+            tmp.color = _kit.inkOnLight;
+            var card = new GameObject("Backing", typeof(SpriteRenderer));
+            card.transform.SetParent(go.transform, false);
+            SpriteRenderer cardSprite = card.GetComponent<SpriteRenderer>();
+            cardSprite.sprite = _kit.Get("tooltip");
+            cardSprite.drawMode = SpriteDrawMode.Sliced;
+            cardSprite.sortingLayerID = tmp.sortingLayerID;
+            cardSprite.sortingOrder = -1;
+            cardSprite.shadowCastingMode = ShadowCastingMode.Off;
+            NoteBacking fit = go.AddComponent<NoteBacking>();
+            var so = new SerializedObject(fit);
+            SetRef(so, "text", tmp);
+            SetRef(so, "backing", card.transform);
+            so.FindProperty("margin").vector2Value = NoteBackingMargin + Vector2.one * (_kit.spritePad / 100f * NoteCardScale);
+            so.FindProperty("sliceScale").floatValue = NoteCardScale;
+            so.ApplyModifiedProperties();
+        }
+        else if (backing)
         {
             PrimitivePart(go.transform, "Backing", PrimitiveType.Quad, new Vector3(0f, 0f, 0.002f), Vector3.one, NoteBackingMaterial());
             MeshRenderer plate = go.transform.Find("Backing").GetComponent<MeshRenderer>();
@@ -1050,6 +1074,9 @@ public static partial class OfficeSceneUIBuilder
         go.SetActive(false);
         return tmp;
     }
+
+    /// <summary>The metres one sprite unit of the kit's card behind a floating note is drawn at (its corners about a centimetre round).</summary>
+    private const float NoteCardScale = 0.015f;
 
     /// <summary>The day-1 notes' backing material: unlit, transparent, dark, drawn before the notes' text. Created once; a designer's edits are kept.</summary>
     private static Material NoteBackingMaterial() =>
@@ -1245,7 +1272,7 @@ public static partial class OfficeSceneUIBuilder
     /// </summary>
     private const float TopStripTop = 16f;
     private static readonly Vector2 CompareStripSize = new Vector2(760f, 56f);
-    private static readonly Vector2 VerdictStripSize = new Vector2(1100f, 64f);
+    private static readonly Vector2 VerdictStripSize = new Vector2(820f, 72f);
 
     /// <summary>Where the desk view's "▲ Back" control starts (reference px from the top): under the office case HUD's compare strip and a gap.</summary>
     private static readonly float CaseHudClearance = TopStripTop + CompareStripSize.y + 8f;
@@ -2116,9 +2143,9 @@ public static partial class OfficeSceneUIBuilder
     /// DeskConfigSO.cityMatte; both in the diegetic DiegeticDevice role, so no
     /// theme recolours the art's view) holding Panorama (a RawImage fitted whole
     /// inside the screen by an AspectRatioFitter; the view gives it the living
-    /// city's material at bind); then "◀ City (A)" at the left edge and
-    /// "Desk (D) ▶" at the right edge, in the "&lt; Desk" button's role
-    /// (inactive: the view shows them). Returns it.
+    /// city's material at bind); then the CITY pull tab at the left edge and
+    /// the DESK one at the right edge (the UI kit's, OfficeSceneUIBuilder.Kit:
+    /// the word over its key's keycap; inactive: the view shows them). Returns it.
     /// </summary>
     private static CityView BuildCityView(Transform office, Transform overlay, DeskConfigSO config)
     {
@@ -2255,6 +2282,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "centreSlot", centre);
         SetRef(so, "bubble", bubble);
         SetRef(so, "config", config);
+        SetRef(so, "kit", _kit);
         so.FindProperty("ringTopInset").floatValue = OverlayTopClearance;
         so.ApplyModifiedProperties();
 

@@ -287,9 +287,6 @@ internal static class SceneUiKit
         EditorUtility.SetDirty(art);
     }
 
-    /// <summary>The child that carries a skinned graphic's kit sprite.</summary>
-    public const string KitFaceName = "KitFace";
-
     /// <summary>
     /// Skins <paramref name="host"/> with the UI kit's <paramref name="piece"/>
     /// (docs/UI_KIT.md; re-applied on every build): the host keeps its rect and
@@ -322,13 +319,14 @@ internal static class SceneUiKit
         ThemeRoleId role = hostTag != null ? hostTag.Role : ThemeRoleId.ClickCatcher;
         Rekit(hostTag, FontStyles.Normal, null);
 
-        Transform faceTransform = host.transform.Find(KitFaceName);
+        Transform faceTransform = host.transform.Find(UiKitSO.FaceName);
         if (faceTransform == null)
         {
-            faceTransform = new GameObject(KitFaceName, typeof(RectTransform)).transform;
+            faceTransform = new GameObject(UiKitSO.FaceName, typeof(RectTransform)).transform;
             faceTransform.SetParent(host.transform, false);
         }
         faceTransform.SetAsFirstSibling();
+        faceTransform.gameObject.layer = host.gameObject.layer;
         Image face = faceTransform.GetComponent<Image>();
         if (face == null)
             face = faceTransform.gameObject.AddComponent<Image>();
@@ -382,21 +380,91 @@ internal static class SceneUiKit
     }
 
     /// <summary>
-    /// A text on a kit face (re-applied on every build): <paramref name="ink"/>,
-    /// the kit's <paramref name="face"/> (kept by the theme unless the labels
-    /// are in a culture's script), upper case when <paramref name="upper"/>,
-    /// and its theme tag the kit's (the theme no longer recolours it).
+    /// A text on the kit (re-applied on every build), styled by the type scale
+    /// (UiKitSO.typeScale, the one place its sizes live): its role's face (kept
+    /// by the theme unless the labels are in a culture's script) and its size
+    /// for a component <paramref name="height"/> units tall (never under
+    /// <paramref name="floor"/>, a canvas's reading floor), in
+    /// <paramref name="ink"/>; its theme tag the kit's (the theme no longer
+    /// recolours it). A label role is one line in tracked capitals at its size,
+    /// fitted to its room (<see cref="FitLabel"/>: <paramref name="grow"/>, the
+    /// plate to widen when it does not fit, or none); a reading role wraps and
+    /// may shrink to its floor. Returns the size.
     /// </summary>
-    public static void SkinText(TMP_Text text, Color ink, TMP_FontAsset face, bool upper)
+    public static float SkinText(TMP_Text text, UiKitSO kit, KitText kind, float height, Color ink, float floor = 0f, RectTransform grow = null)
+    {
+        if (text == null || kit == null)
+            return 0f;
+        TMP_FontAsset face = kit.Face(kind);
+        float size = kit.TextSize(kind, height, floor);
+        bool label = KitTypeScale.IsLabel(kind);
+        text.color = ink;
+        if (face != null)
+            text.font = face;
+        text.fontSize = size;
+        text.overflowMode = TextOverflowModes.Overflow;
+        if (label)
+        {
+            text.fontStyle = (text.fontStyle & ~FontStyles.Italic) | FontStyles.UpperCase;
+            text.characterSpacing = KitTypeScale.IsTracked(kind) ? kit.labelTracking : 0f;
+        }
+        else
+        {
+            text.fontStyle &= ~FontStyles.UpperCase;
+            text.characterSpacing = 0f;
+        }
+        // Every role sizes itself at run time between its scale size and its floor (never smaller): a word set
+        // at run time (a culture's, an order's name) fits its room as the build's own words do.
+        text.enableAutoSizing = true;
+        text.fontSizeMax = size;
+        text.fontSizeMin = Mathf.Min(size, Mathf.Max(kit.Style(kind).min, floor));
+        // A text whose plate widens to fit it (a content-sized pill) never needs to shrink: it keeps its scale size.
+        if (text.transform.parent != null && text.transform.parent.TryGetComponent(out ContentSizeFitter sized) && sized.horizontalFit == ContentSizeFitter.FitMode.PreferredSize)
+            text.fontSizeMin = size;
+        text.textWrappingMode = KitTypeScale.Wraps(kind) ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
+        Rekit(text.GetComponent<ThemeTag>(), label && kind != KitText.Masthead ? FontStyles.UpperCase : FontStyles.Normal, face);
+        if (!KitTypeScale.Wraps(kind))
+            FitLabel(text, kit, kind, floor, grow);
+        return text.fontSizeMax;
+    }
+
+    /// <summary>Recolours a text that keeps its builder's size and font (a window's own content lines) in the kit's <paramref name="ink"/>, its theme tag the kit's.</summary>
+    public static void Ink(TMP_Text text, Color ink)
     {
         if (text == null)
             return;
         text.color = ink;
-        if (face != null)
-            text.font = face;
-        if (upper)
-            text.fontStyle |= FontStyles.UpperCase;
-        Rekit(text.GetComponent<ThemeTag>(), upper ? FontStyles.UpperCase : FontStyles.Normal, face);
+        Rekit(text.GetComponent<ThemeTag>(), FontStyles.Normal, null);
+    }
+
+    /// <summary>
+    /// Fits a one-line label to its room at its scale size (KitTypeScale.Fit):
+    /// too wide, it shrinks no lower than its role's floor, and the plate
+    /// <paramref name="grow"/> (sized by its own width) widens for the rest;
+    /// a label still too wide is logged (no shrink-to-tiny). A label written at
+    /// run time (empty at build) is left at its scale size.
+    /// </summary>
+    public static void FitLabel(TMP_Text text, UiKitSO kit, KitText kind, float floor, RectTransform grow)
+    {
+        string word = text.text;
+        ThemeTag tag = text.GetComponent<ThemeTag>();
+        if (string.IsNullOrEmpty(word) && tag != null && !string.IsNullOrEmpty(tag.LabelKey))
+            word = UiText.Get(tag.LabelKey); // a keyed label is written when the scene loads: fit the reading language's word
+        if (string.IsNullOrEmpty(word))
+            return;
+        float room = text.rectTransform.rect.width - text.margin.x - text.margin.z;
+        if (room <= 0f)
+            return;
+        float width = text.GetPreferredValues(word, float.PositiveInfinity, float.PositiveInfinity).x;
+        (float size, float more) = KitTypeScale.Fit(text.fontSize, width, room, Mathf.Max(kit.Style(kind).min, floor));
+        text.fontSize = size;
+        text.fontSizeMax = size;
+        if (more <= 0.5f)
+            return;
+        if (grow != null && grow.anchorMin.x == grow.anchorMax.x)
+            grow.sizeDelta += new Vector2(Mathf.Ceil(more), 0f);
+        else
+            Debug.LogWarning($"[TimeDesk] The {kind} '{word}' ({text.name}) needs {more:0} more units than its room at its floor size; widen its plate in the builder.", text);
     }
 
     /// <summary>Turns a theme tag into the kit's (part Kit, its role, label key, kind and fit kept), adding <paramref name="style"/> to its base style and setting its face.</summary>
