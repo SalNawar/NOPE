@@ -6,5 +6,3 @@ document.getElementById('fixed').onchange=draw;document.getElementById('guide').
 document.getElementById('play').onclick=()=>{if(timer){clearInterval(timer);timer=null}else{timer=setInterval(()=>{pose=['neutral','explaining','thinking','objecting'][(['neutral','explaining','thinking','objecting'].indexOf(pose)+1)%4];draw()},1200)}document.getElementById('play').textContent=timer?'Pause':'Play switch';document.getElementById('play').setAttribute('aria-pressed',String(!!timer))};
 Promise.all(['neutral','explaining','thinking','objecting'].map(p=>new Promise((resolve,reject)=>{const i=new Image;i.onload=()=>{frames[p]=i;resolve()};i.onerror=reject;i.src=p+'.png'}))).then(()=>{ready=true;draw()}).catch(()=>document.getElementById('state').textContent='Image loading failed');
 </script></html>
-
-

@@ -28,4 +28,3 @@ Latest main contains authored full-figure pose overrides for two exact looks; it
 CHECKLIST.md and manifest.json record saved/reviewed files only. Registration, masking, layered composites and Unity runtime tests remain separate statuses. Never mark the collection complete based on planned prompts.
 
 Initial inventory: 1,112 raw deliverables. Three gesture variants per category across the cast; each outfit receives neutral plus one of each category, assigned different variants across costumes. Body templates cover all nine non-neutral gestures. All 33 uniques receive four expressions plus three varied pose frames. Accessories crossing moved body regions require separate compatibility review, not automatic reuse.
-

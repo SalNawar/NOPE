@@ -1695,6 +1695,329 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "facialhair_m_egypt_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "facialhair",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "rounded beard",
+      "details": "Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Full, rounded, neatly trimmed beard with a moustache\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw facialhair_m_egypt_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "rounded beard"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "facialhair_m_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3146630a-f6bb-4c70-bb40-4946d46e3fd0.png",
+      "prompt": "Production modular historical clothing asset facialhair_m_egypt_medieval. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested facialhair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Full, rounded, neatly trimmed beard with a moustache\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw facialhair_m_egypt_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/facialhair_m_egypt_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f7204b9177029a9ec4e0bff32bc01553bcbd04ad08ee11cd2357965d22c5c570",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_m_egypt_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "headwear",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "imama turban",
+      "details": "Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Large, broad, rounded white muslin turban ('imama) wound low and full around a small hidden cap, its lower edge just above the eyebrows, with no cap showing above it. One loose end (the 'adhaba tail) hangs down in front of one shoulder.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw headwear_m_egypt_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "imama turban",
+        "leakable": true,
+        "covers": [
+          "Hair"
+        ]
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "headwear_m_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-38795ea7-14ac-4b80-a882-151d1f14fe4f.png",
+      "prompt": "Production modular historical clothing asset headwear_m_egypt_medieval. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested headwear on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Large, broad, rounded white muslin turban ('imama) wound low and full around a small hidden cap, its lower edge just above the eyebrows, with no cap showing above it. One loose end (the 'adhaba tail) hangs down in front of one shoulder.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw headwear_m_egypt_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/headwear_m_egypt_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6e5d86025f22f874dfacbfe89c97ba046f609e3166df71314904567afacdbab8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_m_egypt_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "accessory",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "fringed silk girdle",
+      "details": "Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Broad woven-silk girdle wound at the waist, with long knotted fringe ends\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw accessory_m_egypt_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "fringed silk girdle"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_m_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7e1b3301-4291-4a75-a1ee-a80114ea0d27.png",
+      "prompt": "Production modular historical clothing asset accessory_m_egypt_medieval. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested accessory on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Subject: man of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Broad woven-silk girdle wound at the waist, with long knotted fringe ends\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw accessory_m_egypt_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/accessory_m_egypt_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "caeda3563da51771e724174b2ca7868fcc52cc4233becf70ed7211d991db5e5e",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "qamis and white izar",
+      "details": "Draw: Ankle-length silk qamis in saffron, crimson or deep bottle green with small woven motifs. It has very wide sleeves that hang well below the hands and is worn over full trousers (sirwal) gathered at the ankle. Over it, a large plain WHITE linen izar falls from the shoulders down to the ankles, hanging behind the arms and open at the front, so the bright qamis shows down the middle and its big sleeves show at the sides.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); belly-dance costume; Crusader imagery",
+      "flags": {
+        "label": "qamis and white izar"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_f_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3664a7b6-04cc-4e01-aee1-98d320cff0ef.png",
+      "prompt": "Production modular historical clothing asset outfit_f_egypt_medieval. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Mamluk Egypt. Historical context: Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer). Requested item: qamis and white izar. Draw: Ankle-length silk qamis in saffron, crimson or deep bottle green with small woven motifs. It has very wide sleeves that hang well below the hands and is worn over full trousers (sirwal) gathered at the ankle. Over it, a large plain WHITE linen izar falls from the shoulders down to the ankles, hanging behind the arms and open at the front, so the bright qamis shows down the middle and its big sleeves show at the sides.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); belly-dance costume; Crusader imagery Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/outfit_f_egypt_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "bf55839b6d063fa7f3ef6b178d77431293ec0dda89ca4a6ae7f51f4b267dad98",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_medieval__explaining_c",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "qamis and white izar",
+      "details": "Draw: Ankle-length silk qamis in saffron, crimson or deep bottle green with small woven motifs. It has very wide sleeves that hang well below the hands and is worn over full trousers (sirwal) gathered at the ankle. Over it, a large plain WHITE linen izar falls from the shoulders down to the ankles, hanging behind the arms and open at the front, so the bright qamis shows down the middle and its big sleeves show at the sides.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); belly-dance costume; Crusader imagery",
+      "flags": {
+        "label": "qamis and white izar"
+      },
+      "pose": "explaining_c",
+      "gesture": "LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed",
+      "base_key": "outfit_f_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-3acb5716-e190-4281-8095-1d9e0d24561c.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_medieval__explaining_c. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and LEFT hand opens close to upper chest with compact measured gesture, right arm relaxed. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Mamluk Egypt. Historical context: Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer). Requested item: qamis and white izar. Draw: Ankle-length silk qamis in saffron, crimson or deep bottle green with small woven motifs. It has very wide sleeves that hang well below the hands and is worn over full trousers (sirwal) gathered at the ankle. Over it, a large plain WHITE linen izar falls from the shoulders down to the ankles, hanging behind the arms and open at the front, so the bright qamis shows down the middle and its big sleeves show at the sides.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); belly-dance costume; Crusader imagery Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_medieval__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ce786329a32b35db97c238443e6a247cea0b4d2b7b0a62e1ea96d3607349b7dd",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_medieval__thinking_a",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "qamis and white izar",
+      "details": "Draw: Ankle-length silk qamis in saffron, crimson or deep bottle green with small woven motifs. It has very wide sleeves that hang well below the hands and is worn over full trousers (sirwal) gathered at the ankle. Over it, a large plain WHITE linen izar falls from the shoulders down to the ankles, hanging behind the arms and open at the front, so the bright qamis shows down the middle and its big sleeves show at the sides.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); belly-dance costume; Crusader imagery",
+      "flags": {
+        "label": "qamis and white izar"
+      },
+      "pose": "thinking_a",
+      "gesture": "RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard",
+      "base_key": "outfit_f_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-648f15e2-7d72-4c1b-bdb0-5630520cb606.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_medieval__thinking_a. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and RIGHT fingertips under chin, elbow bent, left hand down; hand must render over lower beard. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Mamluk Egypt. Historical context: Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer). Requested item: qamis and white izar. Draw: Ankle-length silk qamis in saffron, crimson or deep bottle green with small woven motifs. It has very wide sleeves that hang well below the hands and is worn over full trousers (sirwal) gathered at the ankle. Over it, a large plain WHITE linen izar falls from the shoulders down to the ankles, hanging behind the arms and open at the front, so the bright qamis shows down the middle and its big sleeves show at the sides.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); belly-dance costume; Crusader imagery Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_medieval__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "109562a4fafb2ca76312b1901a864be7f8ddb5b3535db97e11b205b1880578fa",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_f_egypt_medieval__objecting_b",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "outfit",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "qamis and white izar",
+      "details": "Draw: Ankle-length silk qamis in saffron, crimson or deep bottle green with small woven motifs. It has very wide sleeves that hang well below the hands and is worn over full trousers (sirwal) gathered at the ankle. Over it, a large plain WHITE linen izar falls from the shoulders down to the ankles, hanging behind the arms and open at the front, so the bright qamis shows down the middle and its big sleeves show at the sides.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); belly-dance costume; Crusader imagery",
+      "flags": {
+        "label": "qamis and white izar"
+      },
+      "pose": "objecting_b",
+      "gesture": "BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso",
+      "base_key": "outfit_f_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a376aaf8-ff1f-4b2f-96bf-453e5fd88346.png",
+      "prompt": "Edit reference1 costume into reference2 arm pose. Preserve EXACT costume identity, knot position, trim, folds of stationary cloth, footwear and palette. Reference2 controls arms only. Production modular historical clothing asset outfit_f_egypt_medieval__objecting_b. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and BOTH palms open at lower chest facing outward, questioning refusal, elbows close to torso. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Mamluk Egypt. Historical context: Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer). Requested item: qamis and white izar. Draw: Ankle-length silk qamis in saffron, crimson or deep bottle green with small woven motifs. It has very wide sleeves that hang well below the hands and is worn over full trousers (sirwal) gathered at the ankle. Over it, a large plain WHITE linen izar falls from the shoulders down to the ankles, hanging behind the arms and open at the front, so the bright qamis shows down the middle and its big sleeves show at the sides.\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); belly-dance costume; Crusader imagery Preserve cloth design across pose variants. No text labels. Do not add anatomical lines in magenta areas.",
+      "path": "Raw/outfit_f_egypt_medieval__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0021c40064e336f7aa1d20e8b79cb058ffa744550b7e2a53115e95b2d207d415",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "hair_f_egypt_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "hair",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "pinned braids",
+      "details": "Draw: Long hair braided and pinned up close to the head, with a thin smooth edge of hair at the brow\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); belly-dance costume; Crusader imagery",
+      "flags": {
+        "label": "pinned braids"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "hair_f_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-163b526a-f5dd-49c1-9b04-623c5efa7000.png",
+      "prompt": "Production modular historical clothing asset hair_f_egypt_medieval. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested hair on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Mamluk Egypt. Historical context: Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer). Requested item: pinned braids. Draw: Long hair braided and pinned up close to the head, with a thin smooth edge of hair at the brow\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); belly-dance costume; Crusader imagery Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/hair_f_egypt_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7317ada389400470d9dd2738aeb72661282c63c80ced49248e4a2a4d9fbbc1ee",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "headwear_f_egypt_medieval",
+      "family": "wardrobe",
+      "gender": "f",
+      "layer": "headwear",
+      "pose": "neutral",
+      "base_key": "headwear_f_egypt_medieval",
+      "prompt": "Create a costume fitting sheet of a fully clothed adult woman. Reference preserves exact full-body framing and head size. Change her grey shirt and trousers into flat opaque magenta #FF00FF long-sleeve shirt, ankle trousers and socks. Face and hands also flat magenta with small face alignment marks. Render ONLY HEADWEAR in actual colors: a plain WHITE linen izar soft hood worn by a civilian woman in Mamluk Cairo c1340, pulled closely over the scalp and framing the fully visible face, covering all hair, fabric falls down both sides of neck onto shoulders. Hood ends at shoulders where a separate outer-wrap layer will connect. No face veil, jewellery, hat, crown or exposed torso. Textile has fine hand-painted late-1980s anime texture, subtle local folds and ink edges. Rest of support figure monochrome magenta clothing; outside is perfectly uniform green #00FF00. Same1024x1536 full-body canvas, no cropping. Front facing neutral arms down, no ground shadow.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5874761f-1a89-4246-a3bc-45df37099936.png",
+      "path": "Raw/headwear_f_egypt_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "69a62c390d1e74a72d95d28c2ea93366f41d96e4defb465eeafadacd326e7e79",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "accessory_f_egypt_medieval",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "f",
+      "layer": "accessory",
+      "place": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "country": "egypt",
+      "era": "medieval",
+      "label": "filigree collar",
+      "details": "Subject: woman of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Broad gold filigree collar necklace with a row of hanging pendants\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw accessory_f_egypt_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling.",
+      "flags": {
+        "label": "filigree collar"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "accessory_f_egypt_medieval",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-931c3853-d7c1-44c3-996d-0481b2f29ad9.png",
+      "prompt": "Production modular historical clothing asset accessory_f_egypt_medieval. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested accessory on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Mamluk Egypt. Historical context: Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer). Requested item: filigree collar. Subject: woman of Mamluk Egypt; Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer).\nDraw: Broad gold filigree collar necklace with a row of hanging pendants\nAvoid: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); harem or belly-dance cliches; Crusader imagery\nOutput one full-canvas raw accessory_f_egypt_medieval.\nSupport figure must be FULLY CLOTHED in plain opaque magenta long-sleeve calibration shirt, full-length straight magenta trousers and magenta socks covering the feet. Flat featureless cloth, no anatomical body markings, no skin showing except the magenta face and hands. The requested head/chest item remains the only non-magenta element. Keep the exact head, hands and feet positions and the original pose. This is a neutral clothing-fitting sheet, with no nudity or suggestive styling. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/accessory_f_egypt_medieval.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ebfc9180de7a5cd842658cd6c7a59a900fa744059995af320fc94d65761a8a8a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "outfit_m_egypt_earlymodern",
+      "family": "wardrobe",
+      "status": "pending",
+      "gender": "m",
+      "layer": "outfit",
+      "place": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "country": "egypt",
+      "era": "earlymodern",
+      "label": "quftan and gibba",
+      "details": "Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Ankle-length quftan (kaftan) of saffron or dusty-coral silk with small woven stripes or motifs, crossed over the chest. Over it a long, wide-sleeved gibba coat of plain dark broadcloth (bottle green or deep blue), open at the front. Wide trousers and pointed red leather slippers.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_m_egypt_earlymodern.",
+      "flags": {
+        "label": "quftan and gibba"
+      },
+      "pose": "neutral",
+      "gesture": "arms relaxed slightly away from body, empty hands down",
+      "base_key": "outfit_m_egypt_earlymodern",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7c7d6f91-2880-4333-a1bd-5bb126daf30c.png",
+      "prompt": "Production modular historical clothing asset outfit_m_egypt_earlymodern. Use attached magenta pose template as the exact fitting shape, same full 1024x1536 canvas, head/feet positions and arms relaxed slightly away from body, empty hands down. Draw ONLY requested outfit on this fitting shape. All exposed head hands and body stay flat solid magenta #FF00FF, all background solid green #00FF00. No real skin rendering, no added hair face accessories or weapons. Costume finished in hand-inked late-1980s/early-1990s anime: subtle hand-painted pigment texture inside fabric, lively fine linework, restrained rich form shadows, natural folds, worn everyday materials; not glossy vector art. Even neutral frontal lighting, no cast shadow or scene. Costume fits ordinary average proportions, not idealized. Ottoman Egypt. Historical context: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood). Requested item: quftan and gibba. Subject: man of Ottoman Egypt; Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood).\nDraw: Ankle-length quftan (kaftan) of saffron or dusty-coral silk with small woven stripes or motifs, crossed over the chest. Over it a long, wide-sleeved gibba coat of plain dark broadcloth (bottle green or deep blue), open at the front. Wide trousers and pointed red leather slippers.\nAvoid: Istanbul court kavuks and giant ceremonial turbans; janissary bork caps or any Ottoman military dress; Mamluk-bey armour and weapons; fez worn alone without a turban (a 19th-century look); coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq); a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern); face veils that hide the face; odalisque or harem imagery; Mamluk floor-length sleeves (read as Egypt-medieval)\nOutput one full-canvas raw outfit_m_egypt_earlymodern. Preserve cloth design across pose variants. No text labels.",
+      "path": "Raw/outfit_m_egypt_earlymodern.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "f38462fa22e5b901bbb5a35fb9db03019c4b9fd30b0f01654a02e0e97ba8c8a8",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
