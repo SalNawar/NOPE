@@ -218,7 +218,7 @@ public static class HomeSceneBuilder
     private const float Inset = 36f;
 
     /// <summary>A panel's heading: its box's height and size range.</summary>
-    private const float HeadingHeight = 56f, HeadingMax = 42f, HeadingMin = 26f;
+    private const float HeadingHeight = 56f;
 
     /// <summary>A primary plate's height (reference px, as seen).</summary>
     private const float PlateHeight = 66f;
@@ -301,10 +301,10 @@ public static class HomeSceneBuilder
         KitScreens.Size(panel, ExpensesPanelSize, PanelOffset);
         KitScreens.Panel(panel, kit, "panel_manila");
         KitScreens.Across(title.rectTransform, Inset, Inset, 26f, HeadingHeight);
-        KitScreens.Label(title, kit, kit.inkOnLight, HeadingMax, HeadingMin);
+        KitScreens.Label(title, kit, kit.inkOnLight, KitText.PanelHeading);
         title.alignment = TextAlignmentOptions.MidlineLeft;
         KitScreens.Across(body.rectTransform, Inset, Inset, 92f, 290f);
-        KitScreens.Body(body, kit.inkOnLight, 21f, 16f);
+        KitScreens.Body(body, kit, kit.inkOnLight, KitText.Body);
         KitScreens.Across((RectTransform)rows, Inset, Inset, 396f, 5f * 62f + 4f * RowSpacing);
         var layout = rows.GetComponent<VerticalLayoutGroup>();
         Undo.RecordObject(layout, "Lay out the bills");
@@ -335,7 +335,7 @@ public static class HomeSceneBuilder
         KitScreens.Size(panel, PetPanelSize, PanelOffset);
         KitScreens.Panel(panel, kit, "panel_bone");
         KitScreens.Across(title.rectTransform, Inset, Inset, 26f, HeadingHeight);
-        KitScreens.Label(title, kit, kit.inkOnLight, HeadingMax, HeadingMin);
+        KitScreens.Label(title, kit, kit.inkOnLight, KitText.PanelHeading);
         title.alignment = TextAlignmentOptions.MidlineLeft;
 
         Transform frame = FindOrCreatePanel(panel, "PetFrame", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, withBackground: true);
@@ -353,9 +353,9 @@ public static class HomeSceneBuilder
 
         float right = Inset + PetFrameSize.x + 32f;
         KitScreens.Across(body.rectTransform, right, Inset, 98f, 180f);
-        KitScreens.Body(body, kit.inkOnLight, 24f, 18f);
+        KitScreens.Body(body, kit, kit.inkOnLight, KitText.Body);
         KitScreens.Across(reaction.rectTransform, right, Inset, 286f, 76f);
-        KitScreens.Body(reaction, kit.inkOnLight, 22f, 17f);
+        KitScreens.Body(reaction, kit, kit.inkOnLight, KitText.Body);
         reaction.fontStyle = FontStyles.Italic;
         KitScreens.Across((RectTransform)toys, right, Inset, 376f, 4f * 62f + 3f * RowSpacing);
         var layout = toys.GetComponent<VerticalLayoutGroup>();
@@ -406,10 +406,10 @@ public static class HomeSceneBuilder
         KitScreens.Size(panel, HousePanelSize, PanelOffset);
         KitScreens.Panel(panel, kit, "panel_manila");
         KitScreens.Place(title.rectTransform, Inset, 24f, new Vector2(420f, HeadingHeight));
-        KitScreens.Label(title, kit, kit.inkOnLight, HeadingMax, HeadingMin);
+        KitScreens.Label(title, kit, kit.inkOnLight, KitText.PanelHeading);
         title.alignment = TextAlignmentOptions.MidlineLeft;
         KitScreens.Place(body.rectTransform, Inset + 440f, 34f, new Vector2(HousePanelSize.x - 2f * Inset - 440f - DetailCardWidth - 24f, 40f));
-        KitScreens.Body(body, kit.inkOnLight, 22f, 16f, TextAlignmentOptions.MidlineLeft);
+        KitScreens.Body(body, kit, kit.inkOnLight, KitText.Body, TextAlignmentOptions.MidlineLeft);
         body.textWrappingMode = TextWrappingModes.NoWrap;
 
         float treeWidth = HousePanelSize.x - 2f * Inset - DetailCardWidth - 30f;
@@ -423,11 +423,11 @@ public static class HomeSceneBuilder
         icon.preserveAspect = true;
         icon.raycastTarget = false;
         KitScreens.Across(detail.rectTransform, 28f, 28f, 28f + DetailIconSize + 18f, cardHeight - (28f + DetailIconSize + 18f) - 2f * (PlateHeight + 14f) - 28f);
-        KitScreens.Body(detail, kit.inkOnLight, 22f, 16f);
+        KitScreens.Body(detail, kit, kit.inkOnLight, KitText.Body);
         KitScreens.PlaceBottomLeft((RectTransform)buy.transform, 28f, 28f + PlateHeight + 14f, new Vector2(DetailCardWidth - 56f, PlateHeight));
         KitScreens.Plate(buy, kit, "plate_ox");
         KitScreens.PlaceBottomLeft((RectTransform)next.transform, 28f, 28f, new Vector2(DetailCardWidth - 56f, PlateHeight));
-        KitScreens.Plate(next, kit, "plate_slate", 26f);
+        KitScreens.Plate(next, kit, "plate_slate");
 
         KitScreens.Remove(panel, "ShopRows");
     }
@@ -489,7 +489,7 @@ public static class HomeSceneBuilder
         KitScreens.Remove(panel, "Machine");
         KitScreens.Remove(panel, "Lever");
         KitScreens.Across(title.rectTransform, Inset, Inset, 24f, HeadingHeight);
-        KitScreens.Label(title, kit, kit.inkOnDark, HeadingMax, HeadingMin);
+        KitScreens.Label(title, kit, kit.inkOnDark, KitText.PanelHeading);
         title.alignment = TextAlignmentOptions.MidlineLeft;
 
         var faces = new Image[SlotReels.Count];
@@ -505,7 +505,7 @@ public static class HomeSceneBuilder
 
         float domeLeft = Inset + 10f + SlotReels.Count * (ReelSize.x + 18f) + 22f;
         KitScreens.Place((RectTransform)spin.transform, domeLeft, 108f, DomeSize);
-        KitScreens.Plate(spin, kit, "dome_red", 34f, kit.inkOnDark);
+        KitScreens.Plate(spin, kit, "dome_red", kit.inkOnDark);
         Image dome = spin.transform.Find(UiKitSO.FaceName)?.GetComponent<Image>();
         Undo.RecordObject(spin, "Lay out the slots");
         spin.transition = Selectable.Transition.SpriteSwap;
@@ -515,9 +515,9 @@ public static class HomeSceneBuilder
         KitScreens.Picture(panel, "KitLever", kit, "slot_lever", domeLeft + DomeSize.x + 20f, 80f, LeverSize);
 
         KitScreens.Across(body.rectTransform, Inset, Inset, 296f, 90f);
-        KitScreens.Body(body, kit.inkOnDark, 24f, 17f);
+        KitScreens.Body(body, kit, kit.inkOnDark, KitText.Body);
         KitScreens.PlaceBottomRight((RectTransform)next.transform, Inset, 28f, new Vector2(280f, 60f));
-        KitScreens.Plate(next, kit, "plate_bone", 26f);
+        KitScreens.Plate(next, kit, "plate_bone");
         return faces;
     }
 
@@ -540,10 +540,10 @@ public static class HomeSceneBuilder
         KitScreens.Picture(panel, "Moon", kit, "tile_moon_rest", Inset, 34f, new Vector2(MoonSize, MoonSize));
         float left = Inset + MoonSize + 28f;
         KitScreens.Across(title.rectTransform, left, Inset, 30f, HeadingHeight);
-        KitScreens.Label(title, kit, kit.inkOnDark, HeadingMax, HeadingMin);
+        KitScreens.Label(title, kit, kit.inkOnDark, KitText.PanelHeading);
         title.alignment = TextAlignmentOptions.MidlineLeft;
         KitScreens.Across(body.rectTransform, left, Inset, 96f, 140f);
-        KitScreens.Body(body, kit.inkOnDark, 22f, 16f);
+        KitScreens.Body(body, kit, kit.inkOnDark, KitText.Body);
         KitScreens.PlaceBottomRight((RectTransform)sleep.transform, Inset, 30f, new Vector2(300f, PlateHeight));
         KitScreens.Plate(sleep, kit, "plate_ox");
     }

@@ -229,7 +229,7 @@ public static partial class OfficeSceneUIBuilder
             }
             ((RectTransform)box).sizeDelta = new Vector2(KitCheckboxSize, KitCheckboxSize);
             ((RectTransform)check).sizeDelta = new Vector2(KitCheckboxSize, KitCheckboxSize);
-            SceneUiKit.SkinText(label, _kit.inkOnLight, _kit.bodyFont, false);
+            KitType(label, KitText.ListTitle, plate, _kit.inkOnLight);
         }
         return toggle;
     }

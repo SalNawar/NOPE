@@ -232,7 +232,7 @@ public static partial class OfficeSceneUIBuilder
             Chrome(label, PcType.Caption);
             label.margin = Vector4.zero;
             label.lineSpacing = 0f;
-            SceneUiKit.SkinText(label, _kit.inkOnLight, _kit.labelFont, true);
+            KitType(label, KitText.TileCaption, labelPlate, _kit.inkOnLight);
             KitSkin(selection, "row_highlight", _kit.desktopScale);
         }
 

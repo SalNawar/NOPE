@@ -273,7 +273,7 @@ public static partial class OfficeSceneUIBuilder
         label.color = WbInk;
         SceneUiKit.Tag(label, ThemeRoleId.Surface, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button, false);
         if (_kit != null)
-            SceneUiKit.SkinText(label, _kit.inkOnLight, _kit.labelFont, true); // sheet 02: the menu bar's titles in condensed capitals
+            KitType(label, KitText.MiniPlateLabel, title, _kit.inkOnLight); // sheet 02: the menu bar's titles in condensed capitals
         label.transform.SetAsLastSibling();
 
         SidePlate(title.transform);

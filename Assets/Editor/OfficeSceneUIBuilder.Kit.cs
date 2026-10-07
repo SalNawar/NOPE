@@ -30,13 +30,16 @@ public static partial class OfficeSceneUIBuilder
     private static readonly HashSet<Image> KitDone = new HashSet<Image>();
 
     /// <summary>Every pull tab's size (overlay units; sheet 01 B1: a tab a little taller than wide).</summary>
-    private static readonly Vector2 PullTabSize = new Vector2(112f, 124f);
+    private static readonly Vector2 PullTabSize = new Vector2(128f, 136f);
+
+    /// <summary>A left pull tab's flat face across its width (shares: from its cut edge to before its grips); a right tab's is its mirror.</summary>
+    private static readonly Vector2 PullTabFace = new Vector2(0.05f, 0.66f);
 
     /// <summary>The speech bubble's tail (overlay units; the kit's sprite with its pad).</summary>
     private static readonly Vector2 SpeechTailSize = new Vector2(60f, 56f);
 
     /// <summary>A pull tab's keycap under its word (overlay units).</summary>
-    private static readonly Vector2 PullTabKeycap = new Vector2(52f, 30f);
+    private static readonly Vector2 PullTabKeycap = new Vector2(58f, 34f);
 
     /// <summary>The inspect button's SPACE keycap under it (overlay units).</summary>
     private static readonly Vector2 InspectKeycap = new Vector2(96f, 34f);
@@ -96,8 +99,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>How far a plate's label keeps inside its plate's edges (units): the label lies on the flat face, clear of the bevel and the ink line.</summary>
     private static readonly Vector2 KitLabelInset = new Vector2(8f, 6f);
 
-    /// <summary>A button's "Label" child in the kit's label face, its ink the piece's (bone on a dark face, ink on a light one), in capitals unless <paramref name="upper"/> is false, kept inside the plate's flat face.</summary>
-    private static void KitLabel(Component button, string piece, bool upper = true, TMP_FontAsset face = null)
+    /// <summary>A button's "Label" child on its kit plate: kept inside the plate's flat face, its ink the piece's (bone on a dark face, ink on a light one), sized by the type scale from the plate's height (a plate label, a mini plate's or a pill's), the plate widening when the word does not fit.</summary>
+    private static void KitLabel(Component button, string piece)
     {
         Transform label = button != null ? button.transform.Find("Label") : null;
         if (label == null)
@@ -108,7 +111,39 @@ public static partial class OfficeSceneUIBuilder
             rt.offsetMin = KitLabelInset;
             rt.offsetMax = -KitLabelInset;
         }
-        SceneUiKit.SkinText(label.GetComponent<TMP_Text>(), _kit.InkOn(piece), face != null ? face : _kit.labelFont, upper);
+        KitText kind = piece.StartsWith("plate_", System.StringComparison.Ordinal) ? KitText.PlateLabel
+            : piece.StartsWith("chip", System.StringComparison.Ordinal) || piece.StartsWith("pill", System.StringComparison.Ordinal) ? KitText.Pill : KitText.MiniPlateLabel;
+        KitType(label.GetComponent<TMP_Text>(), kind, button, _kit.InkOn(piece));
+    }
+
+    /// <summary>Styles <paramref name="text"/> by the type scale for its <paramref name="host"/> component (KitHeight), never under the host's canvas floor (KitFloor), the host widening when a label does not fit (Growable).</summary>
+    private static float KitType(TMP_Text text, KitText kind, Component host, Color ink) =>
+        SceneUiKit.SkinText(text, _kit, kind, KitHeight(host), ink, KitFloor(host), Growable(host));
+
+    /// <summary>The reading floor of the canvas <paramref name="c"/> is drawn on: the PC desktop's Caption (the 720p floor of its world-space canvas), none on the overlays (their scale's floors hold).</summary>
+    private static float KitFloor(Component c)
+    {
+        Canvas canvas = c != null ? c.GetComponentInParent<Canvas>(true) : null;
+        return canvas != null && canvas.renderMode == RenderMode.WorldSpace ? PcType.Caption : 0f;
+    }
+
+    /// <summary>A component's height for the type scale: its rect's, else its layout height (a laid-out row's).</summary>
+    private static float KitHeight(Component c)
+    {
+        if (c == null)
+            return 0f;
+        float h = ((RectTransform)c.transform).rect.height;
+        if (h > 0f)
+            return h;
+        LayoutElement layout = c.GetComponent<LayoutElement>();
+        return layout != null ? Mathf.Max(layout.preferredHeight, layout.minHeight) : 0f;
+    }
+
+    /// <summary>The rect a label may widen when its word does not fit: its plate's, when the plate sits at a point (not stretched, not laid out by a group); else none.</summary>
+    private static RectTransform Growable(Component c)
+    {
+        var rt = c != null ? c.transform as RectTransform : null;
+        return rt != null && rt.anchorMin.x == rt.anchorMax.x && rt.parent != null && rt.parent.GetComponent<LayoutGroup>() == null ? rt : null;
     }
 
     /// <summary>
@@ -121,26 +156,25 @@ public static partial class OfficeSceneUIBuilder
         if (tab == null)
             return;
         string piece = left ? "pulltab_left" : "pulltab_right";
-        ((RectTransform)tab).sizeDelta = PullTabSize;
+        var tabRect = (RectTransform)tab;
+        tabRect.sizeDelta = PullTabSize;
         KitSkin(tab, piece, _kit.overlayScale);
 
+        // The tab's flat face: clear of its grips (on the edge away from the screen's) and of the edge it is cut at.
+        float x0 = left ? PullTabFace.x : 1f - PullTabFace.y, x1 = left ? PullTabFace.y : 1f - PullTabFace.x;
         Transform label = tab.Find("Label");
         if (label != null)
         {
             var labelRect = (RectTransform)label;
-            labelRect.anchorMin = new Vector2(left ? 0.06f : 0.16f, 0.46f);
-            labelRect.anchorMax = new Vector2(left ? 0.84f : 0.94f, 0.92f);
+            labelRect.anchorMin = new Vector2(x0, 0.5f);
+            labelRect.anchorMax = new Vector2(x1, 0.88f);
             labelRect.offsetMin = labelRect.offsetMax = Vector2.zero;
             TMP_Text text = label.GetComponent<TMP_Text>();
-            text.enableAutoSizing = true;
-            text.fontSizeMax = 30f;
-            text.fontSizeMin = 16f;
-            text.textWrappingMode = TextWrappingModes.NoWrap;
             text.alignment = TextAlignmentOptions.Center;
-            text.characterSpacing = 4f;
-            SceneUiKit.SkinText(text, _kit.inkOnDark, _kit.labelFont, true);
+            text.margin = Vector4.zero;
+            SceneUiKit.SkinText(text, _kit, KitText.PullTabLabel, tabRect.sizeDelta.x, _kit.inkOnDark, 0f, tabRect);
         }
-        KitKeycap(tab, "Keycap", "keycap_bone", key, new Vector2(left ? 0.45f : 0.55f, 0.27f), PullTabKeycap);
+        KitKeycap(tab, "Keycap", "keycap_bone", key, new Vector2((x0 + x1) / 2f, 0.3f), PullTabKeycap);
     }
 
     /// <summary>A keycap printed with <paramref name="key"/> (a child plate in <paramref name="piece"/>, its word in the label face), centred at <paramref name="at"/> of its parent, rebuilt each build.</summary>
@@ -151,13 +185,9 @@ public static partial class OfficeSceneUIBuilder
         Image capImage = cap.GetComponent<Image>();
         capImage.raycastTarget = false;
         KitSkin(cap, piece, _kit.overlayScale);
-        TMP_Text word = Text(cap, "Key", key, 20, TextAlignmentOptions.Center, new Vector2(0.14f, 0.22f), new Vector2(0.86f, 0.86f), _kit.InkOn(piece), ThemeRoleId.DiegeticDevice);
+        TMP_Text word = Text(cap, "Key", key, 20, TextAlignmentOptions.Center, new Vector2(0.1f, 0.18f), new Vector2(0.9f, 0.9f), _kit.InkOn(piece), ThemeRoleId.DiegeticDevice);
         word.raycastTarget = false;
-        word.enableAutoSizing = true;
-        word.fontSizeMax = 20f;
-        word.fontSizeMin = 16f;
-        word.textWrappingMode = TextWrappingModes.NoWrap;
-        SceneUiKit.SkinText(word, _kit.InkOn(piece), _kit.labelFont, true);
+        SceneUiKit.SkinText(word, _kit, KitText.Keycap, size.y, _kit.InkOn(piece), 0f, (RectTransform)cap);
     }
 
     /// <summary>The red inspect button (sheet 01 B2): the domed button in its housing with the magnifier in the art, the code-drawn glyph and key label dropped, the lavender SPACE keycap under it.</summary>
@@ -315,7 +345,7 @@ public static partial class OfficeSceneUIBuilder
             return;
         KitSkin(hud, "lcd_glass", _kit.overlayScale);
         foreach (TMP_Text readout in hud.GetComponentsInChildren<TMP_Text>(true))
-            SceneUiKit.SkinText(readout, _kit.phosphorInk, _kit.readoutFont, true);
+            KitType(readout, KitText.Readout, hud, _kit.phosphorInk);
     }
 
     /// <summary>The traveller's speech bubble (sheet 05): the kit's cream bubble with the body face in ink.</summary>
@@ -335,7 +365,7 @@ public static partial class OfficeSceneUIBuilder
         tail.SetAsFirstSibling(); // behind the bubble: the bubble's ink line closes over the tail's top
         Transform label = panel.Find("Label");
         if (label != null)
-            SceneUiKit.SkinText(label.GetComponent<TMP_Text>(), _kit.inkOnLight, _kit.bodyFont, false);
+            SceneUiKit.SkinText(label.GetComponent<TMP_Text>(), _kit, KitText.Body, 0f, _kit.inkOnLight);
     }
 
     /// <summary>The dialogue wheel (sheet 05): each choice a pill (bone at rest, slate under the pointer) and its label in capitals.</summary>
@@ -357,11 +387,7 @@ public static partial class OfficeSceneUIBuilder
         back.targetGraphic = face;
         TMP_Text word = Text(round, "Label", "", 17, TextAlignmentOptions.Center, new Vector2(0.22f, 0.2f), new Vector2(0.78f, 0.37f), _kit.inkOnDark, ThemeRoleId.WheelButton);
         word.raycastTarget = false;
-        word.enableAutoSizing = true;
-        word.fontSizeMax = 17f;
-        word.fontSizeMin = 12f;
-        word.textWrappingMode = TextWrappingModes.NoWrap;
-        SceneUiKit.SkinText(word, _kit.inkOnDark, _kit.labelFont, true);
+        SceneUiKit.SkinText(word, _kit, KitText.Pill, WheelBackSize.y * 0.3f, _kit.inkOnDark);
         round.gameObject.SetActive(false);
 
         // The pill's pictogram tile at its left (TravellerWheel.IconFor), its drawn tile as tall as the pill.
@@ -401,9 +427,7 @@ public static partial class OfficeSceneUIBuilder
         word.localRotation = Quaternion.Euler(0f, 0f, 90f);
         TMP_Text brand = Text(word, "Text", PcBrand, 28, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, _kit.inkOnDark, ThemeRoleId.StartMenu);
         brand.raycastTarget = false;
-        brand.textWrappingMode = TextWrappingModes.NoWrap;
-        brand.characterSpacing = 6f;
-        SceneUiKit.SkinText(brand, _kit.inkOnDark, _kit.labelFont, true);
+        SceneUiKit.SkinText(brand, _kit, KitText.PanelHeading, StartBannerWidth, _kit.inkOnDark, PcType.Caption);
     }
 
     /// <summary>
@@ -462,31 +486,40 @@ public static partial class OfficeSceneUIBuilder
             // A window's own lines lie on its bone body (the kit's): ink, whatever the culture's window colours.
             if (tag.Role == ThemeRoleId.WindowBody && text.transform.parent.GetComponent<DesktopWindow>() != null)
             {
-                SceneUiKit.SkinText(text, _kit.inkOnLight, null, false);
+                SceneUiKit.Ink(text, _kit.inkOnLight);
                 continue;
             }
             // A quiet caption on a kit face (a drop-down's note) keeps its quiet, in the kit's muted ink.
             if (tag.Role == ThemeRoleId.SurfaceMuted && OnKitFace(text.transform))
             {
-                SceneUiKit.SkinText(text, _kit.inkOnLight, null, false);
+                SceneUiKit.Ink(text, _kit.inkOnLight);
                 continue;
             }
             switch (tag.Role)
             {
                 case ThemeRoleId.TitleBar:
-                case ThemeRoleId.StartButton:
                 case ThemeRoleId.ScreenStrip:
-                    SceneUiKit.SkinText(text, _kit.inkOnDark, _kit.labelFont, true);
+                    KitType(text, KitText.PanelHeading, text.transform.parent, _kit.inkOnDark);
+                    break;
+                case ThemeRoleId.StartButton:
+                    KitType(text, KitText.MiniPlateLabel, text.transform.parent, _kit.inkOnDark);
                     break;
                 case ThemeRoleId.Tray:
-                    SceneUiKit.SkinText(text, _kit.phosphorInk, _kit.readoutFont, true);
+                    // One size along the tray's row: the date (on its button) sized by the tray, as the credits and the clock.
+                    Transform trayRow = text.transform.parent;
+                    ThemeTag rowTag = trayRow.GetComponent<ThemeTag>();
+                    if ((rowTag == null || rowTag.Role != ThemeRoleId.Tray) && trayRow.parent != null)
+                        trayRow = trayRow.parent;
+                    KitType(text, KitText.Readout, trayRow, _kit.phosphorInk);
                     break;
                 case ThemeRoleId.Toast:
+                    KitType(text, KitText.Tooltip, text.transform.parent, _kit.inkOnDark);
+                    break;
                 case ThemeRoleId.Badge:
-                    SceneUiKit.SkinText(text, _kit.inkOnDark, _kit.labelFont, false);
+                    KitType(text, KitText.Pill, text.transform.parent, _kit.inkOnDark);
                     break;
                 case ThemeRoleId.Tooltip:
-                    SceneUiKit.SkinText(text, _kit.inkOnLight, _kit.bodyFont, false);
+                    KitType(text, KitText.Tooltip, text.transform.parent, _kit.inkOnLight);
                     break;
             }
         }
@@ -513,7 +546,7 @@ public static partial class OfficeSceneUIBuilder
         row.colors = tint;
         Transform label = row.transform.Find("Label");
         if (label != null)
-            SceneUiKit.SkinText(label.GetComponent<TMP_Text>(), ink, _kit.bodyFont, false);
+            KitType(label.GetComponent<TMP_Text>(), KitText.ListTitle, row, ink);
     }
 
     /// <summary>True when one of <paramref name="t"/>'s parents is a kit-skinned image (its text is drawn on a kit face).</summary>
@@ -615,7 +648,7 @@ public static partial class OfficeSceneUIBuilder
         line = Text(strip, "VerdictText", "", 30, TextAlignmentOptions.Center, new Vector2(0.08f, 0.14f), new Vector2(0.92f, 0.86f), Color.white, ThemeRoleId.ScreenStrip, fit: true);
         line.raycastTarget = false;
         if (_kit != null)
-            SceneUiKit.SkinText(line, _kit.InkOn(UiKitNames.VerdictRibbon(null, false)), _kit.labelFont, true);
+            SceneUiKit.SkinText(line, _kit, KitText.Ribbon, VerdictStripSize.y, _kit.InkOn(UiKitNames.VerdictRibbon(null, false)));
         strip.gameObject.SetActive(false);
         return strip;
     }
@@ -637,26 +670,28 @@ public static partial class OfficeSceneUIBuilder
         float scale = _kit != null ? _kit.overlayScale : 2f;
         KitSkin(slip, "citation_slip", scale);
 
-        TMP_Text Line(string name, string key, int size, int min, TextAlignmentOptions align, Vector2 aMin, Vector2 aMax, Color ink, TMP_FontAsset face, bool upper)
+        // Each line by the type scale: its role, and the height of its band on the slip.
+        TMP_Text Line(string name, string key, KitText kind, TextAlignmentOptions align, Vector2 aMin, Vector2 aMax, Color ink)
         {
-            TMP_Text t = Text(slip, name, key != null ? null : string.Empty, size, align, aMin, aMax, ink, ThemeRoleId.Alert, key);
+            TMP_Text t = Text(slip, name, key != null ? null : string.Empty, 22, align, aMin, aMax, ink, ThemeRoleId.Alert, key);
             t.raycastTarget = false;
-            t.enableAutoSizing = true;
-            t.fontSizeMax = size;
-            t.fontSizeMin = min;
-            t.textWrappingMode = TextWrappingModes.Normal;
             if (_kit != null)
-                SceneUiKit.SkinText(t, ink, face, upper);
+                SceneUiKit.SkinText(t, _kit, kind, (aMax.y - aMin.y) * CitationSlipSize.y, ink);
             return t;
         }
 
         Color ink = _kit != null ? _kit.inkOnLight : Ink, bone = _kit != null ? _kit.inkOnDark : Color.white, red = _kit != null ? _kit.inkAlert : Color.red;
-        Line("Title", "citation.title", 30, 24, TextAlignmentOptions.Center, new Vector2(0.07f, 0.80f), new Vector2(0.93f, 0.915f), bone, _kit?.labelFont, true);
-        reason = Line("Reason", null, 27, 18, TextAlignmentOptions.TopLeft, new Vector2(0.08f, 0.6f), new Vector2(0.92f, 0.765f), ink, _kit?.bodyBoldFont, false);
+        Line("Title", "citation.title", KitText.PanelHeading, TextAlignmentOptions.Center, new Vector2(0.07f, 0.80f), new Vector2(0.93f, 0.915f), bone);
+        reason = Line("Reason", null, KitText.BodyLarge, TextAlignmentOptions.TopLeft, new Vector2(0.08f, 0.6f), new Vector2(0.92f, 0.765f), ink);
+        if (_kit != null)
+        {
+            reason.font = _kit.bodyBoldFont; // the mistake reads bold over the rule and the values
+            reason.GetComponent<ThemeTag>().SetFace(_kit.bodyBoldFont);
+        }
         Transform rule = Panel(slip, "Rule", new Vector2(0.08f, 0.585f), new Vector2(0.92f, 0.585f), Vector2.zero, new Vector2(0f, 2f), red, ThemeRoleId.Alert);
         rule.GetComponent<Image>().raycastTarget = false;
-        detail = Line("Detail", null, 20, 15, TextAlignmentOptions.TopLeft, new Vector2(0.08f, 0.35f), new Vector2(0.92f, 0.565f), ink, _kit?.bodyFont, false);
-        consequence = Line("Consequence", null, 30, 22, TextAlignmentOptions.MidlineLeft, new Vector2(0.08f, 0.22f), new Vector2(0.92f, 0.335f), red, _kit?.labelFont, true);
+        detail = Line("Detail", null, KitText.Body, TextAlignmentOptions.TopLeft, new Vector2(0.08f, 0.35f), new Vector2(0.92f, 0.565f), ink);
+        consequence = Line("Consequence", null, KitText.Ribbon, TextAlignmentOptions.MidlineLeft, new Vector2(0.08f, 0.22f), new Vector2(0.92f, 0.335f), red);
 
         Transform stamp = Panel(slip, "Cited", new Vector2(0.66f, 0.13f), new Vector2(0.66f, 0.13f), Vector2.zero, CitedStampSize, Color.white, ThemeRoleId.Alert);
         stamp.localRotation = Quaternion.Euler(0f, 0f, CitedStampTilt);

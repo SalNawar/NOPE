@@ -173,7 +173,7 @@ public static partial class OfficeSceneUIBuilder
         {
             // Sheet 03: a band's head is a slate title plate, its glyph and name in bone.
             KitSkin(band, "titlebar_slate", _kit.desktopScale);
-            SceneUiKit.SkinText(label, _kit.inkOnDark, _kit.labelFont, true);
+            KitType(label, KitText.PanelHeading, band, _kit.inkOnDark);
             glyph.color = _kit.inkOnDark;
             SceneUiKit.Tag(glyph, ThemeRoleId.Sidebar, ThemePart.Kit);
         }
@@ -221,8 +221,8 @@ public static partial class OfficeSceneUIBuilder
         {
             // Sheet 03 D1: the upgrade card (OrdersWindow shows its state's card and badge); its name in condensed capitals.
             KitSkin(node, UiKitNames.UpgradeCard(OrderState.Orderable), _kit.desktopScale);
-            SceneUiKit.SkinText(name, _kit.inkOnLight, _kit.labelFont, true);
-            SceneUiKit.SkinText(state, _kit.inkOnLight, _kit.bodyFont, false);
+            KitType(name, KitText.CardTitle, node, _kit.inkOnLight);
+            KitType(state, KitText.CardSub, node, _kit.inkOnLight);
             // The band's pictogram tile (OrdersWindow shows it, locked while locked), drawn the glyph's 48 units inside its pad.
             glyph.color = Color.white;
             glyph.sprite = _kit.Get(UiKitNames.UpgradeTile(UpgradeBranch.Desk, OrderState.Orderable));

@@ -498,7 +498,7 @@ public static partial class OfficeSceneUIBuilder
             // Sheet 02: a list row is the kit's card row; the open one its selected row.
             KitSkin(row, "listrow", _kit.desktopScale);
             KitSkin(plate, "listrow_selected", _kit.desktopScale);
-            SceneUiKit.SkinText(label, _kit.inkOnLight, _kit.bodyFont, false);
+            KitType(label, KitText.ListTitle, row, _kit.inkOnLight);
         }
         return row;
     }

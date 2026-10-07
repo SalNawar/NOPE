@@ -123,10 +123,7 @@ public static partial class OfficeSceneUIBuilder
             grow.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             header.transform.SetParent(pillHost, false);
             header.alignment = TextAlignmentOptions.Center;
-            header.enableAutoSizing = false;
-            header.fontSize = 20f;
-            header.textWrappingMode = TextWrappingModes.NoWrap;
-            SceneUiKit.SkinText(header, _kit.inkOnDark, _kit.labelFont, true);
+            SceneUiKit.SkinText(header, _kit, KitText.Pill, pillRect.sizeDelta.y, _kit.inkOnDark);
             line.rectTransform.anchorMax = new Vector2(0.72f, 0.64f);
             KitSkin(ok, "plate_ox", _kit.overlayScale);
             KitLabel(ok, "plate_ox_rest");

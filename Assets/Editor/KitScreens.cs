@@ -15,12 +15,6 @@ using UnityEngine.UI;
 /// </summary>
 internal static class KitScreens
 {
-    /// <summary>A plate label's size range (shrinks to fit its plate).</summary>
-    public const float PlateLabelMax = 30f, PlateLabelMin = 16f;
-
-    /// <summary>The letter spacing of the kit's labels (the sheets' tracking).</summary>
-    public const float LabelSpacing = 4f;
-
     /// <summary>Places <paramref name="rt"/> inside its parent at <paramref name="left"/>, <paramref name="top"/> from the parent's top-left (y down) with <paramref name="size"/>.</summary>
     public static void Place(RectTransform rt, float left, float top, Vector2 size)
     {
@@ -83,12 +77,13 @@ internal static class KitScreens
 
     /// <summary>
     /// A button drawn as the kit's plate <paramref name="piece"/> (plate_ox,
-    /// plate_slate, plate_bone, miniplate_ox...: its four states swapped), its
-    /// art slot (an older hand-drawn face) removed, and its label on: the
-    /// kit's label face, upper case, in the ink for the plate's face (or
-    /// <paramref name="ink"/>), shrinking from <paramref name="maxSize"/> to fit.
+    /// plate_slate, plate_bone, miniplate_ox, a choice card, the dome: its
+    /// states swapped), its art slot (an older hand-drawn face) removed, and
+    /// its label on, by the type scale (SceneUiKit.SkinText): the plate's role
+    /// sized from the plate's height, in the ink for its face (or
+    /// <paramref name="ink"/>), the plate widening when the word does not fit.
     /// </summary>
-    public static void Plate(Button button, UiKitSO kit, string piece, float maxSize = PlateLabelMax, Color? ink = null)
+    public static void Plate(Button button, UiKitSO kit, string piece, Color? ink = null)
     {
         if (button == null)
             return;
@@ -103,44 +98,33 @@ internal static class KitScreens
             return;
         Undo.RecordObject(label, "Kit plate label");
         label.enabled = true;
-        Label(label, kit, ink ?? kit.InkOn(piece), maxSize, PlateLabelMin);
         label.alignment = TextAlignmentOptions.Center;
         label.margin = new Vector4(16f, 0f, 16f, 0f);
         label.raycastTarget = false;
+        var plate = (RectTransform)button.transform;
+        KitText kind = piece.StartsWith("miniplate", System.StringComparison.Ordinal) ? KitText.MiniPlateLabel
+            : piece.StartsWith("choicecard", System.StringComparison.Ordinal) ? KitText.CardTitle : KitText.PlateLabel;
+        SceneUiKit.SkinText(label, kit, kind, plate.rect.height, ink ?? kit.InkOn(piece), 0f, plate.anchorMin.x == plate.anchorMax.x ? plate : null);
         EditorUtility.SetDirty(label);
     }
 
-    /// <summary>A label or heading in the kit's label face: upper case, tracked, <paramref name="ink"/>, one line shrinking from <paramref name="maxSize"/> to <paramref name="minSize"/>.</summary>
-    public static void Label(TMP_Text text, UiKitSO kit, Color ink, float maxSize, float minSize)
+    /// <summary>A label or heading in the kit's label face by the type scale: <paramref name="kind"/> sized from the text's own box, in <paramref name="ink"/>.</summary>
+    public static void Label(TMP_Text text, UiKitSO kit, Color ink, KitText kind)
     {
         if (text == null)
             return;
         Undo.RecordObject(text, "Kit label");
-        SceneUiKit.SkinText(text, ink, kit.labelFont, true);
-        text.fontStyle = FontStyles.UpperCase;
-        text.characterSpacing = LabelSpacing;
-        text.enableAutoSizing = true;
-        text.fontSizeMax = maxSize;
-        text.fontSizeMin = minSize;
-        text.textWrappingMode = TextWrappingModes.NoWrap;
-        text.overflowMode = TextOverflowModes.Ellipsis;
+        SceneUiKit.SkinText(text, kit, kind, text.rectTransform.rect.height, ink);
         EditorUtility.SetDirty(text);
     }
 
-    /// <summary>A reading line on a kit surface: <paramref name="ink"/>, wrapping, shrinking from <paramref name="maxSize"/> to <paramref name="minSize"/>, in the project's body font.</summary>
-    public static void Body(TMP_Text text, Color ink, float maxSize, float minSize, TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft)
+    /// <summary>A reading line on a kit surface by the type scale (a body role: <paramref name="kind"/>): <paramref name="ink"/>, wrapping, shrinking no lower than its floor, in the kit's body face.</summary>
+    public static void Body(TMP_Text text, UiKitSO kit, Color ink, KitText kind, TextAlignmentOptions alignment = TextAlignmentOptions.TopLeft)
     {
         if (text == null)
             return;
         Undo.RecordObject(text, "Kit body");
-        text.color = ink;
-        text.fontStyle &= ~FontStyles.UpperCase;
-        text.characterSpacing = 0f;
-        text.enableAutoSizing = true;
-        text.fontSizeMax = maxSize;
-        text.fontSizeMin = minSize;
-        text.textWrappingMode = TextWrappingModes.Normal;
-        text.overflowMode = TextOverflowModes.Overflow;
+        SceneUiKit.SkinText(text, kit, kind, text.rectTransform.rect.height, ink);
         text.alignment = alignment;
         text.raycastTarget = false;
         EditorUtility.SetDirty(text);
@@ -177,14 +161,8 @@ internal static class KitScreens
         rt.offsetMin = new Vector2(14f, 4f);
         rt.offsetMax = new Vector2(-14f, -4f);
         Undo.RecordObject(text, "Kit readout");
-        SceneUiKit.SkinText(text, kit.phosphorInk, kit.readoutFont, false);
-        text.fontStyle = FontStyles.Bold;
+        SceneUiKit.SkinText(text, kit, KitText.Readout, size.y, kit.phosphorInk);
         text.alignment = TextAlignmentOptions.MidlineRight;
-        text.enableAutoSizing = true;
-        text.fontSizeMax = 26f;
-        text.fontSizeMin = 16f;
-        text.characterSpacing = 1f;
-        text.textWrappingMode = TextWrappingModes.NoWrap;
         text.raycastTarget = false;
         EditorUtility.SetDirty(text);
     }

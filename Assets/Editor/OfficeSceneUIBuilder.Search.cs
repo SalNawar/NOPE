@@ -133,7 +133,7 @@ public static partial class OfficeSceneUIBuilder
             // Sheet 02 C3: a search chip is the kit's pill chip (SearchResultsView shows the chosen one slate).
             DestroyChildIfPresent(chip.transform, "Frame");
             KitSkin(chip, "chip_rest", _kit.desktopScale);
-            SceneUiKit.SkinText(chipLabel, _kit.InkOn("chip_rest"), _kit.labelFont, true);
+            KitType(chipLabel, KitText.Pill, chip, _kit.InkOn("chip_rest"));
         }
         chip.gameObject.SetActive(false);
 

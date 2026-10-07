@@ -867,12 +867,12 @@ public static partial class OfficeSceneUIBuilder
             border.color = Color.clear;
             SceneUiKit.Tag(border, ThemeRoleId.NewsletterBorder, ThemePart.Kit);
             KitSkin(paper, "panel_bone", _kit.overlayScale);
-            SceneUiKit.SkinText(paper.Find("Masthead").GetComponent<TMP_Text>(), _kit.inkOnLight, _kit.labelFont, true);
+            SceneUiKit.SkinText(paper.Find("Masthead").GetComponent<TMP_Text>(), _kit, KitText.PanelHeading, 0.09f * NewsletterSize.y, _kit.inkOnLight);
             Image rule = paper.Find("Rule").GetComponent<Image>();
             rule.color = _kit.inkOnLight;
             SceneUiKit.Tag(rule, ThemeRoleId.NewsletterBorder, ThemePart.Kit);
-            SceneUiKit.SkinText(title, _kit.inkOnLight, _kit.labelFont, true);
-            SceneUiKit.SkinText(body, _kit.inkOnLight, _kit.bodyFont, false);
+            SceneUiKit.SkinText(title, _kit, KitText.Pill, 0.055f * NewsletterSize.y, _kit.inkOnLight);
+            SceneUiKit.SkinText(body, _kit, KitText.Body, 0f, _kit.inkOnLight);
             KitSkin(action, "plate_ox", _kit.overlayScale);
             KitLabel(action, "plate_ox_rest");
         }
@@ -884,8 +884,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The taskbar's Menu button's width, and Back to desk's (desktop units; the PC UX redesign's section 3).</summary>
     private const float MenuButtonWidth = 148f, DeskButtonWidth = 200f;
 
-    /// <summary>The tray's width at the taskbar's right end (Credits, the Helix River's strip, the date, the clock at Caption size): room for a culture's long currency word beside its own script and today's date (wave 5 A3: the readouts overlapped at 600; at 760 with the date) and the river's fixed strip; the window buttons keep the rest (run 7: at 1000 they had none and drew over it).</summary>
-    private const float TrayWidth = 780f;
+    /// <summary>The tray's width at the taskbar's right end (Credits, the Helix River's strip, the date, the clock at Caption size): room for a culture's long currency word beside its own script and today's date (wave 5 A3: the readouts overlapped at 600; at 760 with the date) and the river's fixed strip; the window buttons keep the rest (run 7: at 1000 they had none and drew over it; at 780 the kit's type scale, its readouts half the bar's height, ran 24 past it).</summary>
+    private const float TrayWidth = 840f;
 
     /// <summary>
     /// The taskbar (the PC UX redesign C7), rebuilt fresh: a flat bar in the

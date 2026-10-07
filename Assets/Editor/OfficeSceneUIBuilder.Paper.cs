@@ -41,18 +41,13 @@ public static partial class OfficeSceneUIBuilder
         Transform paper = Panel(panel, "Paper", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
 
         Color ink = _kit != null ? _kit.inkOnLight : Ink, red = _kit != null ? _kit.inkAlert : Color.red;
-        TMP_Text Line(string name, string key, int size, int min, TextAlignmentOptions align, Vector2 aMin, Vector2 aMax, Color colour, TMP_FontAsset face, bool upper,
-                      FontStyles style = FontStyles.Normal, bool wrap = false)
+        // Each line by the type scale: its role, and the height of its band on the page.
+        TMP_Text Line(string name, string key, KitText kind, TextAlignmentOptions align, Vector2 aMin, Vector2 aMax, Color colour, FontStyles style = FontStyles.Normal)
         {
-            TMP_Text t = Text(paper, name, key != null ? null : string.Empty, size, align, aMin, aMax, colour, ThemeRoleId.Newsletter, key, style);
+            TMP_Text t = Text(paper, name, key != null ? null : string.Empty, 22, align, aMin, aMax, colour, ThemeRoleId.Newsletter, key, style);
             t.raycastTarget = false;
-            t.enableAutoSizing = true;
-            t.fontSizeMax = size;
-            t.fontSizeMin = min;
-            t.textWrappingMode = wrap ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
-            t.overflowMode = TextOverflowModes.Ellipsis;
             if (_kit != null)
-                SceneUiKit.SkinText(t, colour, face, upper);
+                SceneUiKit.SkinText(t, _kit, kind, (aMax.y - aMin.y) * MorningPaperSize.y, colour);
             return t;
         }
 
@@ -64,21 +59,21 @@ public static partial class OfficeSceneUIBuilder
         }
 
         // The issue line, the masthead, its boxes and the double rule.
-        Line("Edition", "paper.edition", 18, 14, TextAlignmentOptions.MidlineRight, new Vector2(0.62f, 0.935f), new Vector2(0.97f, 0.975f), ink, _kit?.labelFont, true);
-        Line("Price", "paper.price", 18, 14, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.935f), new Vector2(0.38f, 0.975f), ink, _kit?.labelFont, true);
-        Line("Masthead", "briefing.masthead", 92, 48, TextAlignmentOptions.Center, new Vector2(0.18f, 0.80f), new Vector2(0.82f, 0.94f), ink, _kit?.mastheadFont, false);
+        Line("Edition", "paper.edition", KitText.Pill, TextAlignmentOptions.MidlineRight, new Vector2(0.62f, 0.935f), new Vector2(0.97f, 0.975f), ink);
+        Line("Price", "paper.price", KitText.Pill, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.935f), new Vector2(0.38f, 0.975f), ink);
+        Line("Masthead", "briefing.masthead", KitText.Masthead, TextAlignmentOptions.Center, new Vector2(0.18f, 0.80f), new Vector2(0.82f, 0.94f), ink);
         Rule("RuleTop", 0.795f);
         Rule("RuleTop2", 0.785f, thick: 1f);
 
         // The dateline.
-        TMP_Text title = Line("TitleText", null, 20, 14, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.745f), new Vector2(0.38f, 0.78f), ink, _kit?.labelFont, true);
-        TMP_Text date = Line("DateText", null, 20, 14, TextAlignmentOptions.Center, new Vector2(0.38f, 0.745f), new Vector2(0.62f, 0.78f), ink, _kit?.labelFont, true);
+        TMP_Text title = Line("TitleText", null, KitText.Pill, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.745f), new Vector2(0.38f, 0.78f), ink);
+        TMP_Text date = Line("DateText", null, KitText.Pill, TextAlignmentOptions.Center, new Vector2(0.38f, 0.745f), new Vector2(0.62f, 0.78f), ink);
         Rule("RuleDate", 0.74f, thick: 1f);
 
         // The key story: kicker, headline, deck.
-        TMP_Text kicker = Line("Kicker", "briefing.bulletinHeader", 22, 20, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.69f), new Vector2(0.64f, 0.725f), red, _kit?.labelFont, true);
-        TMP_Text headline = Line("Headline", null, 64, 30, TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.47f), new Vector2(0.64f, 0.69f), ink, _kit?.labelFont, true, wrap: true);
-        TMP_Text deck = Line("Deck", null, 25, 17, TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.33f), new Vector2(0.64f, 0.465f), ink, _kit?.bodyFont, false, FontStyles.Italic, true);
+        TMP_Text kicker = Line("Kicker", "briefing.bulletinHeader", KitText.Pill, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.69f), new Vector2(0.64f, 0.725f), red);
+        TMP_Text headline = Line("Headline", null, KitText.Headline, TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.47f), new Vector2(0.64f, 0.69f), ink);
+        TMP_Text deck = Line("Deck", null, KitText.BodyLarge, TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.33f), new Vector2(0.64f, 0.465f), ink, FontStyles.Italic);
         Rule("RuleStory", 0.32f, 0.03f, 0.64f, 1f);
         DummyColumns(paper, "Lead", new Vector2(0.03f, 0.13f), new Vector2(0.64f, 0.31f), 3, ink);
 
@@ -86,8 +81,8 @@ public static partial class OfficeSceneUIBuilder
         Transform column = Panel(paper, "ColumnRule", new Vector2(0.665f, 0.13f), new Vector2(0.665f, 0.73f), Vector2.zero, new Vector2(1f, 0f), ink, ThemeRoleId.NewsletterBorder);
         column.GetComponent<Image>().raycastTarget = false;
         SceneUiKit.Tag(column.GetComponent<Image>(), ThemeRoleId.NewsletterBorder, ThemePart.Kit);
-        TMP_Text storyTitle = Line("StoryTitle", null, 30, 18, TextAlignmentOptions.TopLeft, new Vector2(0.69f, 0.645f), new Vector2(0.97f, 0.725f), ink, _kit?.labelFont, true, wrap: true);
-        TMP_Text story = Line("Story", null, 20, 13, TextAlignmentOptions.TopLeft, new Vector2(0.69f, 0.36f), new Vector2(0.97f, 0.64f), ink, _kit?.bodyFont, false, wrap: true);
+        TMP_Text storyTitle = Line("StoryTitle", null, KitText.PanelHeading, TextAlignmentOptions.TopLeft, new Vector2(0.69f, 0.645f), new Vector2(0.97f, 0.725f), ink);
+        TMP_Text story = Line("Story", null, KitText.Body, TextAlignmentOptions.TopLeft, new Vector2(0.69f, 0.36f), new Vector2(0.97f, 0.64f), ink);
         DummyColumns(paper, "Side", new Vector2(0.69f, 0.13f), new Vector2(0.97f, 0.34f), 1, ink);
         Transform filler = Panel(paper, "StoryFiller", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         DummyColumns(filler, "Filler", new Vector2(0.69f, 0.37f), new Vector2(0.97f, 0.72f), 1, ink);
