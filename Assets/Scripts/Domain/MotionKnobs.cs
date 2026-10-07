@@ -108,6 +108,9 @@ public sealed class MotionKnobs
     /// <summary>The camera impulses' seconds: a slam's bump, a citation's, a breach's rumble.</summary>
     public float shakeStampSeconds = 0.18f, shakeCitationSeconds = 0.3f, shakeBreachSeconds = 0.9f;
 
+    /// <summary>The Night Slots machine's spin, payout and lever (SlotSpinSchedule, SlotLever, SlotMachineView).</summary>
+    public SlotSpinKnobs slots = new SlotSpinKnobs();
+
     /// <summary>A spring settles (stops and leaves the motion driver) within this of its target and slower than settleSpeed.</summary>
     public float settleValue = 0.0005f, settleSpeed = 0.005f;
 
