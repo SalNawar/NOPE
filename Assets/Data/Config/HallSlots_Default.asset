@@ -1,0 +1,697 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4102c090ec4cc5842f946d7e8697a0, type: 3}
+  m_Name: HallSlots_Default
+  m_EditorClassIdentifier: Assembly-CSharp::HallSlotsSO
+  paintingLayer: 62 Approved deeper architecture
+  painting: {fileID: 2800000, guid: b0bea8425ecc27a4eae222c7c0a93edc, type: 3}
+  windowMasks: {fileID: 2800000, guid: 86a0e0ea10c85274384d563b735a6c8b, type: 3}
+  canvasWidth: 2172
+  canvasHeight: 724
+  extendedFromDay: 8
+  nightsFromDay: 12
+  crossfadeSeconds: 0.6
+  river: {fileID: 11400000, guid: 778035fd3b5726b4ea97540f99bb4337, type: 2}
+  standInLight: {r: 0.933, g: 0.898, b: 0.816, a: 0.85}
+  standInShade: {r: 0.596, g: 0.525, b: 0.659, a: 0.85}
+  standInInk: {r: 0.169, g: 0.11, b: 0.141, a: 1}
+  slots:
+  - id: 13-flag-left-cloth
+    layer: '13 Flag left cloth'
+    shows: 'the left red hanging banner of the hall''s ceiling (painted red cloth, no emblem)'
+    x: 786
+    y: 0
+    width: 70
+    height: 204
+    order: 60
+    variants:
+    - id: egypt
+      when: 'culture=egypt'
+      priority: 10
+      alternates: 1
+      describes: 'The left hanging banner in the leading culture''s colours with its emblem centred in the upper third for Egypt: winged sun disc, lotus and papyrus borders, lapis blue and gold; emblem WingedSun, colours #1C4E80 / #C8962E'
+    - id: iraq
+      when: 'culture=iraq'
+      priority: 10
+      alternates: 1
+      describes: 'The left hanging banner in the leading culture''s colours with its emblem centred in the upper third for Iraq: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; emblem Octastar, colours #1B4F72 / #D4A017'
+    - id: greece
+      when: 'culture=greece'
+      priority: 10
+      alternates: 1
+      describes: 'The left hanging banner in the leading culture''s colours with its emblem centred in the upper third for Greece: laurel wreath, meander (Greek key) border, white and Aegean blue; emblem Laurel, colours #0D5EAF / #1F6F8B'
+    - id: italy
+      when: 'culture=italy'
+      priority: 10
+      alternates: 1
+      describes: 'The left hanging banner in the leading culture''s colours with its emblem centred in the upper third for Italy: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; emblem Star, colours #7A2E1F / #2E6B3F'
+    - id: china
+      when: 'culture=china'
+      priority: 10
+      alternates: 1
+      describes: 'The left hanging banner in the leading culture''s colours with its emblem centred in the upper third for China: five gold stars, cloud-scroll border, vermilion and gold; emblem FiveStars, colours #A31F1F / #D4AF37'
+    - id: japan
+      when: 'culture=japan'
+      priority: 10
+      alternates: 1
+      describes: 'The left hanging banner in the leading culture''s colours with its emblem centred in the upper third for Japan: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; emblem Chrysanthemum, colours #1F2F4A / #B23A1A'
+    - id: britain
+      when: 'culture=britain'
+      priority: 10
+      alternates: 1
+      describes: 'The left hanging banner in the leading culture''s colours with its emblem centred in the upper third for Britain: crown over a plain shield, Victorian railway-livery lining, navy and racing green; emblem Crown, colours #1F2A44 / #00563F'
+    - id: germany
+      when: 'culture=germany'
+      priority: 10
+      alternates: 1
+      describes: 'The left hanging banner in the leading culture''s colours with its emblem centred in the upper third for Germany: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; emblem Eagle, colours #2B2B2B / #E0B000'
+    fallback: 
+  - id: 14-flag-right-cloth
+    layer: '14 Flag right cloth'
+    shows: 'the right red hanging banner'
+    x: 1360
+    y: 0
+    width: 70
+    height: 200
+    order: 60
+    variants:
+    - id: egypt
+      when: 'culture=egypt'
+      priority: 10
+      alternates: 1
+      describes: 'The right hanging banner, the twin of the left one (same design, mirrored folds) for Egypt: winged sun disc, lotus and papyrus borders, lapis blue and gold; emblem WingedSun, colours #1C4E80 / #C8962E'
+    - id: iraq
+      when: 'culture=iraq'
+      priority: 10
+      alternates: 1
+      describes: 'The right hanging banner, the twin of the left one (same design, mirrored folds) for Iraq: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; emblem Octastar, colours #1B4F72 / #D4A017'
+    - id: greece
+      when: 'culture=greece'
+      priority: 10
+      alternates: 1
+      describes: 'The right hanging banner, the twin of the left one (same design, mirrored folds) for Greece: laurel wreath, meander (Greek key) border, white and Aegean blue; emblem Laurel, colours #0D5EAF / #1F6F8B'
+    - id: italy
+      when: 'culture=italy'
+      priority: 10
+      alternates: 1
+      describes: 'The right hanging banner, the twin of the left one (same design, mirrored folds) for Italy: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; emblem Star, colours #7A2E1F / #2E6B3F'
+    - id: china
+      when: 'culture=china'
+      priority: 10
+      alternates: 1
+      describes: 'The right hanging banner, the twin of the left one (same design, mirrored folds) for China: five gold stars, cloud-scroll border, vermilion and gold; emblem FiveStars, colours #A31F1F / #D4AF37'
+    - id: japan
+      when: 'culture=japan'
+      priority: 10
+      alternates: 1
+      describes: 'The right hanging banner, the twin of the left one (same design, mirrored folds) for Japan: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; emblem Chrysanthemum, colours #1F2F4A / #B23A1A'
+    - id: britain
+      when: 'culture=britain'
+      priority: 10
+      alternates: 1
+      describes: 'The right hanging banner, the twin of the left one (same design, mirrored folds) for Britain: crown over a plain shield, Victorian railway-livery lining, navy and racing green; emblem Crown, colours #1F2A44 / #00563F'
+    - id: germany
+      when: 'culture=germany'
+      priority: 10
+      alternates: 1
+      describes: 'The right hanging banner, the twin of the left one (same design, mirrored folds) for Germany: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; emblem Eagle, colours #2B2B2B / #E0B000'
+    fallback: 
+  - id: 15-departure-board-frame
+    layer: '15 Departure board frame'
+    shows: 'the band above the departure board between its two hanging rods (empty today): a header plate hangs here'
+    x: 950
+    y: 36
+    width: 226
+    height: 40
+    order: 60
+    variants:
+    - id: egypt
+      when: 'culture=egypt'
+      priority: 10
+      alternates: 1
+      describes: 'A short header plate hung between the board''s two rods, the leading culture''s emblem on a plate in its colours (no letters) for Egypt: winged sun disc, lotus and papyrus borders, lapis blue and gold; emblem WingedSun, colours #1C4E80 / #C8962E'
+    - id: iraq
+      when: 'culture=iraq'
+      priority: 10
+      alternates: 1
+      describes: 'A short header plate hung between the board''s two rods, the leading culture''s emblem on a plate in its colours (no letters) for Iraq: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; emblem Octastar, colours #1B4F72 / #D4A017'
+    - id: greece
+      when: 'culture=greece'
+      priority: 10
+      alternates: 1
+      describes: 'A short header plate hung between the board''s two rods, the leading culture''s emblem on a plate in its colours (no letters) for Greece: laurel wreath, meander (Greek key) border, white and Aegean blue; emblem Laurel, colours #0D5EAF / #1F6F8B'
+    - id: italy
+      when: 'culture=italy'
+      priority: 10
+      alternates: 1
+      describes: 'A short header plate hung between the board''s two rods, the leading culture''s emblem on a plate in its colours (no letters) for Italy: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; emblem Star, colours #7A2E1F / #2E6B3F'
+    - id: china
+      when: 'culture=china'
+      priority: 10
+      alternates: 1
+      describes: 'A short header plate hung between the board''s two rods, the leading culture''s emblem on a plate in its colours (no letters) for China: five gold stars, cloud-scroll border, vermilion and gold; emblem FiveStars, colours #A31F1F / #D4AF37'
+    - id: japan
+      when: 'culture=japan'
+      priority: 10
+      alternates: 1
+      describes: 'A short header plate hung between the board''s two rods, the leading culture''s emblem on a plate in its colours (no letters) for Japan: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; emblem Chrysanthemum, colours #1F2F4A / #B23A1A'
+    - id: britain
+      when: 'culture=britain'
+      priority: 10
+      alternates: 1
+      describes: 'A short header plate hung between the board''s two rods, the leading culture''s emblem on a plate in its colours (no letters) for Britain: crown over a plain shield, Victorian railway-livery lining, navy and racing green; emblem Crown, colours #1F2A44 / #00563F'
+    - id: germany
+      when: 'culture=germany'
+      priority: 10
+      alternates: 1
+      describes: 'A short header plate hung between the board''s two rods, the leading culture''s emblem on a plate in its colours (no letters) for Germany: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; emblem Eagle, colours #2B2B2B / #E0B000'
+    fallback: 
+  - id: 20-detention-pictogram
+    layer: '20 Detention pictogram'
+    shows: 'the Detention door''s window sign (navy prison-bars pictogram on white)'
+    x: 1448
+    y: 345
+    width: 76
+    height: 66
+    order: 60
+    variants:
+    - id: egypt
+      when: 'culture=egypt'
+      priority: 10
+      alternates: 1
+      describes: 'The Detention sign restyled in the culture''s sign language: same bars-and-lock idea, its colours and border motif for Egypt: winged sun disc, lotus and papyrus borders, lapis blue and gold; emblem WingedSun, colours #1C4E80 / #C8962E'
+    - id: iraq
+      when: 'culture=iraq'
+      priority: 10
+      alternates: 1
+      describes: 'The Detention sign restyled in the culture''s sign language: same bars-and-lock idea, its colours and border motif for Iraq: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; emblem Octastar, colours #1B4F72 / #D4A017'
+    - id: greece
+      when: 'culture=greece'
+      priority: 10
+      alternates: 1
+      describes: 'The Detention sign restyled in the culture''s sign language: same bars-and-lock idea, its colours and border motif for Greece: laurel wreath, meander (Greek key) border, white and Aegean blue; emblem Laurel, colours #0D5EAF / #1F6F8B'
+    - id: italy
+      when: 'culture=italy'
+      priority: 10
+      alternates: 1
+      describes: 'The Detention sign restyled in the culture''s sign language: same bars-and-lock idea, its colours and border motif for Italy: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; emblem Star, colours #7A2E1F / #2E6B3F'
+    - id: china
+      when: 'culture=china'
+      priority: 10
+      alternates: 1
+      describes: 'The Detention sign restyled in the culture''s sign language: same bars-and-lock idea, its colours and border motif for China: five gold stars, cloud-scroll border, vermilion and gold; emblem FiveStars, colours #A31F1F / #D4AF37'
+    - id: japan
+      when: 'culture=japan'
+      priority: 10
+      alternates: 1
+      describes: 'The Detention sign restyled in the culture''s sign language: same bars-and-lock idea, its colours and border motif for Japan: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; emblem Chrysanthemum, colours #1F2F4A / #B23A1A'
+    - id: britain
+      when: 'culture=britain'
+      priority: 10
+      alternates: 1
+      describes: 'The Detention sign restyled in the culture''s sign language: same bars-and-lock idea, its colours and border motif for Britain: crown over a plain shield, Victorian railway-livery lining, navy and racing green; emblem Crown, colours #1F2A44 / #00563F'
+    - id: germany
+      when: 'culture=germany'
+      priority: 10
+      alternates: 1
+      describes: 'The Detention sign restyled in the culture''s sign language: same bars-and-lock idea, its colours and border motif for Germany: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; emblem Eagle, colours #2B2B2B / #E0B000'
+    fallback: 
+  - id: 21-medbay-pictogram
+    layer: '21 Medbay pictogram'
+    shows: 'the Medbay door''s window sign (red heart with a pulse line on white)'
+    x: 1538
+    y: 359
+    width: 88
+    height: 77
+    order: 60
+    variants:
+    - id: egypt
+      when: 'culture=egypt'
+      priority: 10
+      alternates: 1
+      describes: 'The Medbay sign restyled in the culture''s sign language: same heart-and-pulse idea, its colours and border motif for Egypt: winged sun disc, lotus and papyrus borders, lapis blue and gold; emblem WingedSun, colours #1C4E80 / #C8962E'
+    - id: iraq
+      when: 'culture=iraq'
+      priority: 10
+      alternates: 1
+      describes: 'The Medbay sign restyled in the culture''s sign language: same heart-and-pulse idea, its colours and border motif for Iraq: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; emblem Octastar, colours #1B4F72 / #D4A017'
+    - id: greece
+      when: 'culture=greece'
+      priority: 10
+      alternates: 1
+      describes: 'The Medbay sign restyled in the culture''s sign language: same heart-and-pulse idea, its colours and border motif for Greece: laurel wreath, meander (Greek key) border, white and Aegean blue; emblem Laurel, colours #0D5EAF / #1F6F8B'
+    - id: italy
+      when: 'culture=italy'
+      priority: 10
+      alternates: 1
+      describes: 'The Medbay sign restyled in the culture''s sign language: same heart-and-pulse idea, its colours and border motif for Italy: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; emblem Star, colours #7A2E1F / #2E6B3F'
+    - id: china
+      when: 'culture=china'
+      priority: 10
+      alternates: 1
+      describes: 'The Medbay sign restyled in the culture''s sign language: same heart-and-pulse idea, its colours and border motif for China: five gold stars, cloud-scroll border, vermilion and gold; emblem FiveStars, colours #A31F1F / #D4AF37'
+    - id: japan
+      when: 'culture=japan'
+      priority: 10
+      alternates: 1
+      describes: 'The Medbay sign restyled in the culture''s sign language: same heart-and-pulse idea, its colours and border motif for Japan: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; emblem Chrysanthemum, colours #1F2F4A / #B23A1A'
+    - id: britain
+      when: 'culture=britain'
+      priority: 10
+      alternates: 1
+      describes: 'The Medbay sign restyled in the culture''s sign language: same heart-and-pulse idea, its colours and border motif for Britain: crown over a plain shield, Victorian railway-livery lining, navy and racing green; emblem Crown, colours #1F2A44 / #00563F'
+    - id: germany
+      when: 'culture=germany'
+      priority: 10
+      alternates: 1
+      describes: 'The Medbay sign restyled in the culture''s sign language: same heart-and-pulse idea, its colours and border motif for Germany: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; emblem Eagle, colours #2B2B2B / #E0B000'
+    fallback: 
+  - id: 22-executive-suites-pictogram
+    layer: '22 Executive suites pictogram'
+    shows: 'the Executive Suites door''s window sign (navy office chair with a crown on white)'
+    x: 1654
+    y: 377
+    width: 94
+    height: 74
+    order: 60
+    variants:
+    - id: egypt
+      when: 'culture=egypt'
+      priority: 10
+      alternates: 1
+      describes: 'The Executive Suites sign restyled in the culture''s sign language: same crowned-chair idea, its colours and border motif for Egypt: winged sun disc, lotus and papyrus borders, lapis blue and gold; emblem WingedSun, colours #1C4E80 / #C8962E'
+    - id: iraq
+      when: 'culture=iraq'
+      priority: 10
+      alternates: 1
+      describes: 'The Executive Suites sign restyled in the culture''s sign language: same crowned-chair idea, its colours and border motif for Iraq: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; emblem Octastar, colours #1B4F72 / #D4A017'
+    - id: greece
+      when: 'culture=greece'
+      priority: 10
+      alternates: 1
+      describes: 'The Executive Suites sign restyled in the culture''s sign language: same crowned-chair idea, its colours and border motif for Greece: laurel wreath, meander (Greek key) border, white and Aegean blue; emblem Laurel, colours #0D5EAF / #1F6F8B'
+    - id: italy
+      when: 'culture=italy'
+      priority: 10
+      alternates: 1
+      describes: 'The Executive Suites sign restyled in the culture''s sign language: same crowned-chair idea, its colours and border motif for Italy: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; emblem Star, colours #7A2E1F / #2E6B3F'
+    - id: china
+      when: 'culture=china'
+      priority: 10
+      alternates: 1
+      describes: 'The Executive Suites sign restyled in the culture''s sign language: same crowned-chair idea, its colours and border motif for China: five gold stars, cloud-scroll border, vermilion and gold; emblem FiveStars, colours #A31F1F / #D4AF37'
+    - id: japan
+      when: 'culture=japan'
+      priority: 10
+      alternates: 1
+      describes: 'The Executive Suites sign restyled in the culture''s sign language: same crowned-chair idea, its colours and border motif for Japan: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; emblem Chrysanthemum, colours #1F2F4A / #B23A1A'
+    - id: britain
+      when: 'culture=britain'
+      priority: 10
+      alternates: 1
+      describes: 'The Executive Suites sign restyled in the culture''s sign language: same crowned-chair idea, its colours and border motif for Britain: crown over a plain shield, Victorian railway-livery lining, navy and racing green; emblem Crown, colours #1F2A44 / #00563F'
+    - id: germany
+      when: 'culture=germany'
+      priority: 10
+      alternates: 1
+      describes: 'The Executive Suites sign restyled in the culture''s sign language: same crowned-chair idea, its colours and border motif for Germany: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; emblem Eagle, colours #2B2B2B / #E0B000'
+    fallback: 
+  - id: 06-concourse-terracotta-floor
+    layer: '06 Concourse terracotta floor'
+    shows: 'the open floor between the two rear portal bays, crossed by the burgundy inlay (plain today): a floor medallion lies here'
+    x: 1036
+    y: 376
+    width: 108
+    height: 34
+    order: 60
+    variants:
+    - id: egypt
+      when: 'culture=egypt'
+      priority: 10
+      alternates: 1
+      describes: 'A flat inlaid floor medallion in perspective (an ellipse about 100 x 30 px), the culture''s emblem in stone inlay, worn and polished like the floor for Egypt: winged sun disc, lotus and papyrus borders, lapis blue and gold; emblem WingedSun, colours #1C4E80 / #C8962E'
+    - id: iraq
+      when: 'culture=iraq'
+      priority: 10
+      alternates: 1
+      describes: 'A flat inlaid floor medallion in perspective (an ellipse about 100 x 30 px), the culture''s emblem in stone inlay, worn and polished like the floor for Iraq: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; emblem Octastar, colours #1B4F72 / #D4A017'
+    - id: greece
+      when: 'culture=greece'
+      priority: 10
+      alternates: 1
+      describes: 'A flat inlaid floor medallion in perspective (an ellipse about 100 x 30 px), the culture''s emblem in stone inlay, worn and polished like the floor for Greece: laurel wreath, meander (Greek key) border, white and Aegean blue; emblem Laurel, colours #0D5EAF / #1F6F8B'
+    - id: italy
+      when: 'culture=italy'
+      priority: 10
+      alternates: 1
+      describes: 'A flat inlaid floor medallion in perspective (an ellipse about 100 x 30 px), the culture''s emblem in stone inlay, worn and polished like the floor for Italy: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; emblem Star, colours #7A2E1F / #2E6B3F'
+    - id: china
+      when: 'culture=china'
+      priority: 10
+      alternates: 1
+      describes: 'A flat inlaid floor medallion in perspective (an ellipse about 100 x 30 px), the culture''s emblem in stone inlay, worn and polished like the floor for China: five gold stars, cloud-scroll border, vermilion and gold; emblem FiveStars, colours #A31F1F / #D4AF37'
+    - id: japan
+      when: 'culture=japan'
+      priority: 10
+      alternates: 1
+      describes: 'A flat inlaid floor medallion in perspective (an ellipse about 100 x 30 px), the culture''s emblem in stone inlay, worn and polished like the floor for Japan: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; emblem Chrysanthemum, colours #1F2F4A / #B23A1A'
+    - id: britain
+      when: 'culture=britain'
+      priority: 10
+      alternates: 1
+      describes: 'A flat inlaid floor medallion in perspective (an ellipse about 100 x 30 px), the culture''s emblem in stone inlay, worn and polished like the floor for Britain: crown over a plain shield, Victorian railway-livery lining, navy and racing green; emblem Crown, colours #1F2A44 / #00563F'
+    - id: germany
+      when: 'culture=germany'
+      priority: 10
+      alternates: 1
+      describes: 'A flat inlaid floor medallion in perspective (an ellipse about 100 x 30 px), the culture''s emblem in stone inlay, worn and polished like the floor for Germany: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; emblem Eagle, colours #2B2B2B / #E0B000'
+    fallback: 
+  - id: new-wall-poster
+    layer: 
+    shows: 'the blank grey wall panel between the vending machine and the framed artwork (right wall)'
+    x: 1842
+    y: 414
+    width: 62
+    height: 100
+    order: 60
+    variants:
+    - id: bureau
+      when: 
+      priority: 0
+      alternates: 1
+      describes: 'A calm Bureau of Temporal Customs notice poster: the hourglass seal, a queue pictogram, hall palette (oxblood, slate, brass, bone)'
+    - id: bureau_extended
+      when: 'phase=extended'
+      priority: 11
+      alternates: 1
+      describes: 'The Bureau''s debt-relief propaganda: a smiling clerk pictogram, a coin falling into an hourglass, harder reds'
+    - id: bureau_nights
+      when: 'phase=nights'
+      priority: 12
+      alternates: 1
+      describes: 'Night-shift propaganda: a clock past midnight, a stern eye, the coin chain; torn corner, pasted over the older poster'
+    - id: egypt
+      when: 'culture=egypt'
+      priority: 20
+      alternates: 1
+      describes: 'A civic poster of the leading culture Egypt: winged sun disc, lotus and papyrus borders, lapis blue and gold; emblem WingedSun'
+    - id: iraq
+      when: 'culture=iraq'
+      priority: 20
+      alternates: 1
+      describes: 'A civic poster of the leading culture Iraq: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; emblem Octastar'
+    - id: greece
+      when: 'culture=greece'
+      priority: 20
+      alternates: 1
+      describes: 'A civic poster of the leading culture Greece: laurel wreath, meander (Greek key) border, white and Aegean blue; emblem Laurel'
+    - id: italy
+      when: 'culture=italy'
+      priority: 20
+      alternates: 1
+      describes: 'A civic poster of the leading culture Italy: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; emblem Star'
+    - id: china
+      when: 'culture=china'
+      priority: 20
+      alternates: 1
+      describes: 'A civic poster of the leading culture China: five gold stars, cloud-scroll border, vermilion and gold; emblem FiveStars'
+    - id: japan
+      when: 'culture=japan'
+      priority: 20
+      alternates: 1
+      describes: 'A civic poster of the leading culture Japan: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; emblem Chrysanthemum'
+    - id: britain
+      when: 'culture=britain'
+      priority: 20
+      alternates: 1
+      describes: 'A civic poster of the leading culture Britain: crown over a plain shield, Victorian railway-livery lining, navy and racing green; emblem Crown'
+    - id: germany
+      when: 'culture=germany'
+      priority: 20
+      alternates: 1
+      describes: 'A civic poster of the leading culture Germany: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; emblem Eagle'
+    - id: egypt_crisis
+      when: 'culture=egypt & phase>=extended'
+      priority: 30
+      alternates: 1
+      describes: 'Egypt''s poster hardened by the debt crisis: the same design with a debt chain or a red stamp across it, pasted-over edges'
+    - id: iraq_crisis
+      when: 'culture=iraq & phase>=extended'
+      priority: 30
+      alternates: 1
+      describes: 'Iraq''s poster hardened by the debt crisis: the same design with a debt chain or a red stamp across it, pasted-over edges'
+    - id: greece_crisis
+      when: 'culture=greece & phase>=extended'
+      priority: 30
+      alternates: 1
+      describes: 'Greece''s poster hardened by the debt crisis: the same design with a debt chain or a red stamp across it, pasted-over edges'
+    - id: italy_crisis
+      when: 'culture=italy & phase>=extended'
+      priority: 30
+      alternates: 1
+      describes: 'Italy''s poster hardened by the debt crisis: the same design with a debt chain or a red stamp across it, pasted-over edges'
+    - id: china_crisis
+      when: 'culture=china & phase>=extended'
+      priority: 30
+      alternates: 1
+      describes: 'China''s poster hardened by the debt crisis: the same design with a debt chain or a red stamp across it, pasted-over edges'
+    - id: japan_crisis
+      when: 'culture=japan & phase>=extended'
+      priority: 30
+      alternates: 1
+      describes: 'Japan''s poster hardened by the debt crisis: the same design with a debt chain or a red stamp across it, pasted-over edges'
+    - id: britain_crisis
+      when: 'culture=britain & phase>=extended'
+      priority: 30
+      alternates: 1
+      describes: 'Britain''s poster hardened by the debt crisis: the same design with a debt chain or a red stamp across it, pasted-over edges'
+    - id: germany_crisis
+      when: 'culture=germany & phase>=extended'
+      priority: 30
+      alternates: 1
+      describes: 'Germany''s poster hardened by the debt crisis: the same design with a debt chain or a red stamp across it, pasted-over edges'
+    fallback: bureau
+  - id: 08-bridge-fascia
+    layer: '08 Bridge fascia'
+    shows: 'the dark fascia band under the bridge between its two small displays'
+    x: 964
+    y: 270
+    width: 242
+    height: 30
+    order: 60
+    variants:
+    - id: extended
+      when: 'phase=extended'
+      priority: 10
+      alternates: 1
+      describes: 'A long thin Bureau banner strip on the fascia: oxblood cloth with brass rings, a coin-and-hourglass icon repeated (no words)'
+    - id: nights
+      when: 'phase=nights'
+      priority: 20
+      alternates: 1
+      describes: 'The strip replaced by a night-shift banner: slate with a moon-and-clock icon, a red warning band; slightly sagging'
+    fallback: 
+  - id: 35-framed-historical-artwork
+    layer: '35 Framed historical artwork'
+    shows: 'the gold-framed blue artwork on the right wall (a white plane-like sculpture today)'
+    x: 1918
+    y: 390
+    width: 92
+    height: 135
+    order: 60
+    variants:
+    - id: egypt
+      when: 'recent=egypt'
+      priority: 10
+      alternates: 1
+      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Egypt''s famous traveller let through most recently: a silhouette bust in Egypt''s colours with WingedSun motif (no likeness, no text)'
+    - id: iraq
+      when: 'recent=iraq'
+      priority: 10
+      alternates: 1
+      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Iraq''s famous traveller let through most recently: a silhouette bust in Iraq''s colours with Octastar motif (no likeness, no text)'
+    - id: greece
+      when: 'recent=greece'
+      priority: 10
+      alternates: 1
+      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Greece''s famous traveller let through most recently: a silhouette bust in Greece''s colours with Laurel motif (no likeness, no text)'
+    - id: italy
+      when: 'recent=italy'
+      priority: 10
+      alternates: 1
+      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Italy''s famous traveller let through most recently: a silhouette bust in Italy''s colours with Star motif (no likeness, no text)'
+    - id: china
+      when: 'recent=china'
+      priority: 10
+      alternates: 1
+      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of China''s famous traveller let through most recently: a silhouette bust in China''s colours with FiveStars motif (no likeness, no text)'
+    - id: japan
+      when: 'recent=japan'
+      priority: 10
+      alternates: 1
+      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Japan''s famous traveller let through most recently: a silhouette bust in Japan''s colours with Chrysanthemum motif (no likeness, no text)'
+    - id: britain
+      when: 'recent=britain'
+      priority: 10
+      alternates: 1
+      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Britain''s famous traveller let through most recently: a silhouette bust in Britain''s colours with Crown motif (no likeness, no text)'
+    - id: germany
+      when: 'recent=germany'
+      priority: 10
+      alternates: 1
+      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Germany''s famous traveller let through most recently: a silhouette bust in Germany''s colours with Eagle motif (no likeness, no text)'
+    fallback: 
+  - id: 36-armillary-display
+    layer: '36 Armillary display'
+    shows: 'the armillary sphere on its stand in the gold alcove (right wall, far right)'
+    x: 2056
+    y: 440
+    width: 74
+    height: 96
+    order: 60
+    variants:
+    - id: egypt
+      when: 'exhibit=egypt'
+      priority: 10
+      alternates: 1
+      describes: 'The alcove''s exhibit replaced by an artefact of Egypt, the nation with the most famous travellers let through: winged sun disc, lotus and papyrus borders, lapis blue and gold; a museum object on the same stand'
+    - id: iraq
+      when: 'exhibit=iraq'
+      priority: 10
+      alternates: 1
+      describes: 'The alcove''s exhibit replaced by an artefact of Iraq, the nation with the most famous travellers let through: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; a museum object on the same stand'
+    - id: greece
+      when: 'exhibit=greece'
+      priority: 10
+      alternates: 1
+      describes: 'The alcove''s exhibit replaced by an artefact of Greece, the nation with the most famous travellers let through: laurel wreath, meander (Greek key) border, white and Aegean blue; a museum object on the same stand'
+    - id: italy
+      when: 'exhibit=italy'
+      priority: 10
+      alternates: 1
+      describes: 'The alcove''s exhibit replaced by an artefact of Italy, the nation with the most famous travellers let through: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; a museum object on the same stand'
+    - id: china
+      when: 'exhibit=china'
+      priority: 10
+      alternates: 1
+      describes: 'The alcove''s exhibit replaced by an artefact of China, the nation with the most famous travellers let through: five gold stars, cloud-scroll border, vermilion and gold; a museum object on the same stand'
+    - id: japan
+      when: 'exhibit=japan'
+      priority: 10
+      alternates: 1
+      describes: 'The alcove''s exhibit replaced by an artefact of Japan, the nation with the most famous travellers let through: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; a museum object on the same stand'
+    - id: britain
+      when: 'exhibit=britain'
+      priority: 10
+      alternates: 1
+      describes: 'The alcove''s exhibit replaced by an artefact of Britain, the nation with the most famous travellers let through: crown over a plain shield, Victorian railway-livery lining, navy and racing green; a museum object on the same stand'
+    - id: germany
+      when: 'exhibit=germany'
+      priority: 10
+      alternates: 1
+      describes: 'The alcove''s exhibit replaced by an artefact of Germany, the nation with the most famous travellers let through: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; a museum object on the same stand'
+    fallback: 
+  - id: new-anomalies
+    layer: 
+    shows: 'the rear-right cargo corner and the floor right of the front portal (era-bleed objects appear here)'
+    x: 1258
+    y: 300
+    width: 184
+    height: 246
+    order: 60
+    variants:
+    - id: strained
+      when: 'tier=strained'
+      priority: 10
+      alternates: 1
+      describes: 'One or two small era-bleed objects that should not be here: an amphora among the cargo, a medieval lantern on the floor; faint cyan time-shimmer outline'
+    - id: breaching
+      when: 'tier=breaching'
+      priority: 20
+      alternates: 1
+      describes: 'More objects bleeding in: a Roman column drum, a samurai helmet on a crate, a gramophone; cyan shimmer, one object half-transparent'
+    - id: collapsing
+      when: 'tier=collapsing'
+      priority: 30
+      alternates: 1
+      describes: 'The corner overrun: a pharaoh statue fragment, a Victorian lamp-post, a tilted Bauhaus chair, small floating debris with cyan rifts'
+    fallback: 
+  - id: new-glass-cracks
+    layer: 
+    shows: 'the blue glass fences of the three portal bays (front bay above the brass railing, both rear bays)'
+    x: 864
+    y: 358
+    width: 442
+    height: 190
+    order: 60
+    variants:
+    - id: strained
+      when: 'tier=strained'
+      priority: 10
+      alternates: 1
+      describes: 'A couple of small star chips on the front bay''s glass'
+    - id: breaching
+      when: 'tier=breaching'
+      priority: 20
+      alternates: 1
+      describes: 'Long cracks across the front bay''s glass and chips on both rear bays; tape patches on one pane'
+    - id: collapsing
+      when: 'tier=collapsing'
+      priority: 30
+      alternates: 1
+      describes: 'Shattered panes with spider-web cracks on every bay, a glowing cyan time rift along one crack'
+    fallback: 
+  - id: new-checkpoint
+    layer: 
+    shows: 'the open concourse floor between the stair foot and the front portal bay (left of centre)'
+    x: 690
+    y: 436
+    width: 182
+    height: 110
+    order: 60
+    variants:
+    - id: recall
+      when: 'event=recall'
+      priority: 10
+      alternates: 1
+      describes: 'A recall bin: a wheeled cage half full of confiscated Driftbox transponders with a striped RECALL-coloured barrier (no words, a crossed-out transponder icon)'
+    - id: ban
+      when: 'event=ban'
+      priority: 20
+      alternates: 1
+      describes: 'A border-closure checkpoint: two striped barriers, a stanchion rope and one Bureau guard silhouette in cel shading standing at attention'
+    - id: return
+      when: 'event=return'
+      priority: 30
+      alternates: 1
+      describes: 'A Return Gate queue lane: amber stanchions, a floor arrow, a small cart of returned luggage with old-era tags'
+    fallback: 
+  - id: new-queue-props
+    layer: 
+    shows: 'the walkway in front of the left parcel lockers, above the front brass railing'
+    x: 296
+    y: 452
+    width: 306
+    height: 96
+    order: 60
+    variants:
+    - id: extended
+      when: 'phase=extended'
+      priority: 10
+      alternates: 1
+      describes: 'Debt Relief queue clutter: a few bundles, a tool bag, a folded bedroll, one rope stanchion'
+    - id: nights
+      when: 'phase=nights'
+      priority: 20
+      alternates: 1
+      describes: 'The queue camps overnight: more bundles and tool bags, a thermos, blankets, a rope line along the lockers'
+    fallback: 

@@ -232,6 +232,10 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>A departure's flare: seconds, up and down (with reduced motion: one step up, then down at its end).</summary>
     [Min(0.05f)] public float hallPortalPulseSeconds = 0.8f;
 
+    [Header("Anime hall: the swappable slots (the hall slots spec)")]
+    /// <summary>The hall's swappable slots (Assets/Data/Config/HallSlots_Default.asset): the binder's HallSlotsLink swaps their art as the hall's variables shift; none: the hall stays as painted.</summary>
+    public HallSlotsSO hallSlots;
+
     [Header("AVAILABLE sign")]
     /// <summary>The caption the game writes on the AVAILABLE sign's label (the art's NEXT sign; "AVAILABLE"): a UI string key (world_source.json ui.strings).</summary>
     public string readyCaptionKey = "desk.readyCaption";
