@@ -1302,6 +1302,11 @@ public static class _TimeDeskAuditPlay
         {
             if (!done.Add(x.Category))
                 continue;
+            if (Documented(x.Category))
+            {
+                Line($"   cross proof of {x.Category}: already documented (the case board's cross-check)");
+                continue;
+            }
             int before = o.Ui.EvidenceCount;
             compare.Clear();
             compare.Select(EvidencePicks.ForField(x.DocumentA, new DocumentRow(x.FieldA, c.documents[x.DocumentA].fields[x.FieldA]), c.documents[x.DocumentA].DisplayName), null);
