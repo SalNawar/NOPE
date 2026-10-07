@@ -94,12 +94,12 @@ MonoBehaviour:
   - key: window.orders
     text: Orders
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.wallet
     text: "Wallet {0} \xB7 Orders are paid now and arrive at the start of tomorrow's
       shift; cancel one today for a refund."
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.price
     text: '{0} {1}'
     gloss: 0
@@ -107,67 +107,67 @@ MonoBehaviour:
   - key: app.orders.tooDear
     text: "{0} {1} \xB7 you cannot afford it yet"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.needs
     text: 'Needs: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.inTransit
     text: "In transit \xB7 arrives day {0}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.delivered
     text: Delivered day {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.owned
     text: Owned
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.installed
     text: Installed
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.stored
     text: In storage
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.installsTomorrow
     text: Installs tomorrow
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.leavesTomorrow
     text: Swapped out tomorrow
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.order
     text: Order
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.cancel
     text: Cancel order
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.install
     text: Install tomorrow
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.keep
     text: Keep installed
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.cancelInstall
     text: Cancel install
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.select
     text: Select an item in the tree to see it here.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.none
     text: None
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.zoom
     text: '{0} %'
     gloss: 0
@@ -183,43 +183,43 @@ MonoBehaviour:
   - key: app.orders.branch.desk
     text: Desk equipment
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.branch.interview
     text: Interview
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.branch.portals
     text: Portals
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.branch.contacts
     text: Contacts
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.orders.branch.toys
     text: Toys
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.from.supply
     text: Temporal Customs Supply
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.subject.delivery
     text: Your order has arrived
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.from.liability
     text: Transponder Liability Office
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.subject.stranding
     text: 'Transponder failure report: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.body.delivery
     text: 'Delivered this morning and in force from today''s shift:'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: icon.investigation
     text: Investigation
     gloss: 0
@@ -243,11 +243,11 @@ MonoBehaviour:
   - key: tray.date
     text: "{0} \xB7 Day {1}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: tray.date.hint
     text: Compare today's date
     gloss: 0
-    tier: 0
+    tier: 1
   - key: tray.stability
     text: Stability
     gloss: 0
@@ -271,27 +271,27 @@ MonoBehaviour:
   - key: briefing.deskHeader
     text: FROM DESK 3
     gloss: 0
-    tier: 0
+    tier: 1
   - key: paper.edition
     text: MORNING EDITION
     gloss: 0
-    tier: 0
+    tier: 1
   - key: paper.price
     text: ONE CREDIT
     gloss: 0
-    tier: 0
+    tier: 1
   - key: wallet.credits
     text: Credits
     gloss: 0
-    tier: 0
+    tier: 1
   - key: wallet.creditsInline
     text: credits
     gloss: 0
-    tier: 0
+    tier: 1
   - key: wallet.creditsShort
     text: cr
     gloss: 0
-    tier: 0
+    tier: 1
   - key: tray.money
     text: '{0}: {1}'
     gloss: 0
@@ -299,39 +299,39 @@ MonoBehaviour:
   - key: verdict.correct
     text: CORRECT  (+{0} {1})
     gloss: 0
-    tier: 0
+    tier: 1
   - key: verdict.wrong
     text: WRONG
     gloss: 0
-    tier: 0
+    tier: 1
   - key: verdict.wrongPenalty
     text: WRONG  (-{0} {1})
     gloss: 0
-    tier: 0
+    tier: 1
   - key: verdict.simpleCorrect
     text: Correct
     gloss: 0
-    tier: 0
+    tier: 1
   - key: verdict.simpleWrong
     text: Wrong
     gloss: 0
-    tier: 0
+    tier: 1
   - key: day.complete
     text: Day {0} complete.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: idle.waiting
     text: Waiting for the next traveller
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.title
     text: Investigation
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.counters
     text: "Papers received: {0} of {1} \xB7 scanned: {2}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.atDesk
     text: "<b>{0}</b>   \xB7   {1}"
     gloss: 0
@@ -343,277 +343,277 @@ MonoBehaviour:
   - key: app.tab.documents
     text: Papers
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.tab.records
     text: Citizen records
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.tab.reference
     text: Reference books
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.tab.transcript
     text: Transcript
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.tab.report
     text: Deviation report
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.tab.rules
     text: Today's rules
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.tab.calendar
     text: Calendar
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.tab.board
     text: Case board
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.side.left
     text: Left
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.side.right
     text: Right
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.pane.shelfHere
     text: Opens here
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.search.open
     text: Search   Ctrl K
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.row.rule
     text: "Today's rules \xB7 rule {0}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: shelf.side.left
     text: L
     gloss: 0
-    tier: 0
+    tier: 1
   - key: shelf.side.right
     text: R
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menubar.papers
     text: Papers
     gloss: 0
-    tier: 0
+    tier: 1
   - key: status.holding
     text: Holding <b>{0}</b> ({1}). Click another value to compare.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: status.holdingRule
     text: 'Holding the rule: <b>{0}</b> Click the value it is about.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: status.holdingToday
     text: Holding today's date, <b>{0}</b>. Click a departure date or a Valid Until.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: status.logged
     text: '{0}. Logged.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: status.evidence
     text: '{0}. Logged as evidence.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: status.already
     text: You already compared those two. Shown again.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: status.shown
     text: '{0}. Shown again.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: status.cancel
     text: Cancel   Esc
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.Match
     text: Matching data
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.Differs
     text: Data differs
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.Elsewhere
     text: Belongs elsewhere
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.DifferentDetails
     text: Different details
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.OtherPlace
     text: Not the claimed place
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.OtherPerson
     text: Another person
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.TwoTruths
     text: Both reference
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.RuleMet
     text: Meets the rule
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.RuleBroken
     text: Breaks the rule
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.RuleNotAbout
     text: Not what the rule covers
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.RuleByComparison
     text: Compare instead
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.RuleNotForTraveller
     text: Not for this traveller
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.NothingToCompare
     text: Nothing to compare
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.DepartsToday
     text: Departs today
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.NotToday
     text: Not today
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.StillValid
     text: Still valid
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.Expired
     text: Expired
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.SealIncorrect
     text: Seal incorrect
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.OtherOffice
     text: Another office
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.PaperMissing
     text: Not carried
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.link.NoRecord
     text: No record
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.note.DifferentDetails
     text: '{0} and {1} are different details. Nothing logged.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.note.OtherPlace
     text: That book row is about another place than the one claimed. Nothing logged.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.note.OtherPerson
     text: That record belongs to someone else. Nothing logged.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.note.TwoTruths
     text: Both are reference data. Hold a paper or an answer against one of them.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.note.RuleNotAbout
     text: That rule is not about the {1}. Nothing logged.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.note.RuleByComparison
     text: 'Check this rule by comparing: hold the value against the books or the
       record.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.note.RuleNotForTraveller
     text: This rule is not for this traveller. Nothing logged.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.note.NothingToCompare
     text: Hold a rule or today's date against the value it is about.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.note.OtherOffice
     text: Those seals are two offices'. Hold a paper's seal against its own office's
       seal in the Seal Register. Nothing logged.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.Match
     text: '{0} matches'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.Differs
     text: '{0} differs'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.Elsewhere
     text: '{0} belongs to another place'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.RuleMet
     text: 'Meets the rule: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.RuleBroken
     text: 'Breaks the rule: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.DepartsToday
     text: Departs today
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.NotToday
     text: Departure is not today
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.StillValid
     text: '{0} is still valid'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.Expired
     text: '{0} has expired'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.SealIncorrect
     text: Seal incorrect
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.PaperMissing
     text: '{0} missing'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.title.NoRecord
     text: '{0}: no record on file'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.detail
     text: '{0} against {1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.detail.same
     text: '{0} on both'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.detail.rule
     text: '{0} ({1})'
     gloss: 0
@@ -621,107 +621,107 @@ MonoBehaviour:
   - key: finding.detail.missing
     text: Asked for, not carried
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.detail.noRecord
     text: 'Looked up {0}: nothing on file'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.evidence
     text: "{0} \xB7 evidence"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.what.today
     text: Today's date
     gloss: 0
-    tier: 0
+    tier: 1
   - key: finding.what.rule
     text: The rule
     gloss: 0
-    tier: 0
+    tier: 1
   - key: findings.title
     text: Your findings
     gloss: 0
-    tier: 0
+    tier: 1
   - key: findings.empty
     text: No findings yet
     gloss: 0
-    tier: 0
+    tier: 1
   - key: calendar.title
     text: Agency calendar
     gloss: 0
-    tier: 0
+    tier: 1
   - key: calendar.today
     text: Today
     gloss: 0
-    tier: 0
+    tier: 1
   - key: calendar.todayTitle
     text: "Calendar \xB7 Today"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: calendar.shiftDay
     text: Shift day {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: calendar.unknown
     text: Date unknown
     gloss: 0
-    tier: 0
+    tier: 1
   - key: search.drawer.title
     text: Search documents
     gloss: 0
-    tier: 0
+    tier: 1
   - key: search.drawer.hint
     text: Pick a result to open that document on the side the shelf opens on.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.chip.onDesk
     text: '{0}: on the desk'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.chip.notHandedOver
     text: '{0}: not handed over'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.doc.none
     text: The papers the traveller hands over show here once they are scanned.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.doc.scanHint
     text: 'On the desk: scan it to read it here.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.doc.askHint
     text: 'Not handed over: ask the traveller for it.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.ref.claimedOnly
     text: Claimed place only
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.search
     text: A name, a place or a number
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.sidebar.pinned
     text: Pinned
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.sidebar.recent
     text: Recent
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.toast.scanned
     text: '{0} scanned'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.toast.open
     text: Open
     gloss: 0
-    tier: 0
+    tier: 1
   - key: search.all
     text: All
     gloss: 0
-    tier: 0
+    tier: 1
   - key: search.sourceChip
     text: '{0} ({1})'
     gloss: 0
@@ -729,23 +729,23 @@ MonoBehaviour:
   - key: search.more
     text: Show all {0} in {1}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: search.none
     text: Nothing in this case or today's records matches '{0}'.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: search.noneChip
     text: No untranslated line of this case is the same as the pasted clip.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: search.hint
     text: "Enter opens the first result \xB7 click a result to go there"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: search.close
     text: Close   Esc
     gloss: 0
-    tier: 0
+    tier: 1
   - key: search.title.row
     text: "{0} \xB7 {1}"
     gloss: 0
@@ -753,87 +753,87 @@ MonoBehaviour:
   - key: search.title.rule
     text: Rule {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: search.revised
     text: revised
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.rules
     text: Today's rules for the destination
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.papers
     text: Receive every paper
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.read
     text: Read every paper
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.identity
     text: Name, number and birth date in Citizen records
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.facts
     text: Place facts against the books
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.questions
     text: Ask today's questions
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.answers
     text: Answers against the books or Records
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.dress
     text: Dress against the Costume Guide
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.returnOrder
     text: Return order against the certificate
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.dates
     text: Dates against today's calendar
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.class
     text: Passport class against the account
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.transponder
     text: Transponder against the account
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.paperSet
     text: Paper set against today's rules
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.standing
     text: Account standing in Records
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.askMeans
     text: Ask for a proof of means
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.waiver
     text: Waiver against ticket and account
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.means
     text: Proof of means against the account
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.contract
     text: Contract against the registered one
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.hint.wheel
     text: 'Use the traveller wheel: click the traveller at the desk.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: steps.progress
     text: '{0} ({1}/{2})'
     gloss: 0
@@ -841,140 +841,140 @@ MonoBehaviour:
   - key: app.link.seal
     text: 'Open the Seal Register: the issuing office''s seal'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.link.reference
     text: 'Open Reference books: {0}, the claimed place'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.link.records
     text: 'Open Citizen records: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.link.rules
     text: Open today's rules
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.link.pick
     text: 'Open where it was picked: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.link.place
     text: 'Open Reference books: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.transcript.answersOnly
     text: Answers only
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.transcript.newLine
     text: New line below
     gloss: 0
-    tier: 0
+    tier: 1
   - key: window.minimize
     text: Minimise
     gloss: 0
-    tier: 0
+    tier: 1
   - key: window.maximize
     text: Maximise
     gloss: 0
-    tier: 0
+    tier: 1
   - key: window.close
     text: Close
     gloss: 0
-    tier: 0
+    tier: 1
   - key: window.internet
     text: Internet
     gloss: 0
-    tier: 0
+    tier: 1
   - key: window.notes
     text: Notes
     gloss: 0
-    tier: 0
+    tier: 1
   - key: browser.back
     text: Back
     gloss: 0
-    tier: 0
+    tier: 1
   - key: browser.forward
     text: Forward
     gloss: 0
-    tier: 0
+    tier: 1
   - key: browser.home
     text: Home
     gloss: 0
-    tier: 0
+    tier: 1
   - key: browser.go
     text: Go
     gloss: 0
-    tier: 0
+    tier: 1
   - key: browser.address
     text: Type a site's name or address
     gloss: 0
-    tier: 0
+    tier: 1
   - key: browser.search
     text: Search names
     gloss: 0
-    tier: 0
+    tier: 1
   - key: browser.searchButton
     text: Search
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.portal.title
     text: Start page
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.portal.masthead
     text: CHRONET
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.portal.intro
     text: The sites of the Temporal Customs network. Pick one, or type its name in
       the address field.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.notFound.title
     text: Page not found
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.notFound.body
     text: Nothing is filed at {0}.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.home
     text: Back to the start page
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.masthead
     text: "{0} \xB7 online edition \xB7 Day {1}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.issueTitle
     text: '{0}, day {1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.backIssue
     text: 'Back issue: the paper of day {0}.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.world
     text: WORLD
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.desk
     text: From Desk 3
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.notices
     text: NOTICES
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.noNotices
     text: No notices.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.standings
     text: TIMELINE STANDINGS
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.standing
     text: '{0}. {1}'
     gloss: 0
@@ -982,56 +982,56 @@ MonoBehaviour:
   - key: site.news.noStandings
     text: No standings yet.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.archive
     text: ARCHIVE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.issueLink
     text: Day {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.allIssues
     text: All back issues
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.today
     text: Today's edition
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.archiveTitle
     text: Back issues
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.archiveRow
     text: 'Day {0}: {1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.noBackIssues
     text: No back issues yet.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.news.quiet
     text: A quiet day on the timeline.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.intro
     text: Every country in every era, as history stands today. A revised fact says
       when it changed and what it was.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.present
     text: The present
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.revisions
     text: Revisions
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.country
     text: COUNTRY
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.none
     text: "\u2014"
     gloss: 0
@@ -1043,31 +1043,31 @@ MonoBehaviour:
   - key: site.history.presentNote
     text: 'This is the present: the Future belongs to its people.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.revised
     text: Revised on day {0} (was {1})
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.people
     text: People of {0} in the Lineage Archive
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.index
     text: Index of places
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.presentNone
     text: No power holds the Future. The present is unsettled until one rises.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.today
     text: 2150 today
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.whyCarry
     text: Carried from {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.whyRule
     text: '{0}'
     gloss: 0
@@ -1075,112 +1075,112 @@ MonoBehaviour:
   - key: site.history.whyPending
     text: Carried from {0} (pending)
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.noRevisions
     text: History has not changed yet.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.col.day
     text: DAY
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.col.place
     text: PLACE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.col.fact
     text: FACT
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.col.before
     text: BEFORE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.col.after
     text: AFTER
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.col.why
     text: WHY
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.changed
     text: Changed at Desk 3
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.history.changedRow
     text: 'Day {0}, {1}: {2} is now {3} ({4})'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.intro
     text: Records of citizens of the past. Search by name, or pick a country and
       an era.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.country
     text: COUNTRY
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.era
     text: ERA
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.all
     text: All
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.count
     text: '{0} records'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.hits
     text: '{0} records match "{1}"'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.noHits
     text: No record matches.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.col.name
     text: NAME
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.col.born
     text: BORN
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.col.place
     text: PLACE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.field.name
     text: NAME
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.field.born
     text: BORN
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.field.died
     text: DIED
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.field.place
     text: PLACE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.field.note
     text: OCCUPATION / NOTE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.unknown
     text: Unknown
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.relations
     text: RELATIONS
     gloss: 0
-    tier: 0
+    tier: 1
   - key: site.lineage.relation
     text: '{0}: {1}'
     gloss: 0
@@ -1188,7 +1188,7 @@ MonoBehaviour:
   - key: site.lineage.back
     text: Back to the search
     gloss: 0
-    tier: 0
+    tier: 1
   - key: title.name
     text: Time Sorter
     gloss: 0
@@ -1196,40 +1196,40 @@ MonoBehaviour:
   - key: ending.world.leftBehind
     text: The world you leave behind
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.language
     text: Language
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.followHistory
     text: Follow history
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.alwaysEnglish
     text: Always English
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.languageLocked
     text: 'Locked from day {0}: the office reads the world''s language now. Hover
       a word to translate it (the Translation Lens).'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.motion
     text: Motion
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.motionFull
     text: Full
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.motionReduced
     text: Reduced
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.motionIntensity
     text: Intensity
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.motionIntensityValue
     text: '{0} %'
     gloss: 0
@@ -1237,214 +1237,214 @@ MonoBehaviour:
   - key: settings.desktop
     text: Desktop icons open with
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.iconDouble
     text: Double click
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.iconSingle
     text: Single click
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.resetIcons
     text: Reset icon positions
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desktop.arrange
     text: Arrange icons
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menu.open
     text: Open
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.note
     text: Colours, fonts and the wallpaper always follow history. A language change
       applies the next time the office opens. Reduced motion shows translations at
       once.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: startmenu.mail
     text: Mail
     gloss: 0
-    tier: 0
+    tier: 1
   - key: startmenu.mailUnread
     text: Mail ({0})
     gloss: 0
-    tier: 0
+    tier: 1
   - key: startmenu.account
     text: Citizen Account
     gloss: 0
-    tier: 0
+    tier: 1
   - key: startmenu.notes
     text: Notes
     gloss: 0
-    tier: 0
+    tier: 1
   - key: window.mail
     text: Mail
     gloss: 0
-    tier: 0
+    tier: 1
   - key: window.mailUnread
     text: Mail ({0} unread)
     gloss: 0
-    tier: 0
+    tier: 1
   - key: window.account
     text: Citizen Account
     gloss: 0
-    tier: 0
+    tier: 1
   - key: window.shortcuts
     text: Keyboard shortcuts
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.keyboard
     text: Keyboard
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.showShortcuts
     text: Show shortcuts
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.focusSearch
     text: Open the Investigation app's search drawer
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.intoResults
     text: 'From the search field into its results: the arrows walk the hits, Enter
       opens one'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.escape
     text: 'Right-click or Esc: close a menu, this card or the search drawer; clear
       the search; leave a text field; let go of a held value; close the Menu or cancel
       a drag. With none of those, back to the desk'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.help
     text: Show or hide this card
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.openIcon
     text: 'Desktop: open the selected icon'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.icons
     text: 'Desktop: select the nearest icon that way'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.orders
     text: 'Orders: move along the tree (to a prerequisite, a dependant, or up and
       down a column)'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.ordersAct
     text: 'Orders: order, cancel or install the selected item'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.step
     text: 'Investigation: put up step 1 to 4''s documents (Papers, Records, Books,
       Rules)'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.nextStep
     text: 'Investigation: put up the next or previous step''s documents'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.findings
     text: Show or hide the findings column
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.otherPane
     text: Make the other side the one the shelf opens on
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.split
     text: Two panes or one
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.history
     text: Back or forward in the pane the shelf opens on
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.regions
     text: 'The next or previous part of the app: the menu bar, the panes, the findings,
       Cancel'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.rows
     text: Move the focus over the values, chips, findings, pins or buttons
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.follow
     text: Open the focused item, or follow a value's link
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.followOther
     text: Follow a value's link, or open the focused search result, on the other
       side
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.pick
     text: Hold the focused value, then compare it with the next one
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.copy
     text: 'Copy the focused value, or "Label: value"'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.paste
     text: 'Notes: paste the copied value as a clipping (a text field pastes as usual)'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.pin
     text: Pin or unpin the focused value, or the pane's document
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.zoom
     text: 'Zoom the panes in, out, or back to Settings'' Text size (the Orders tree:
       in, out, or back to 100 %)'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.contextMenu
     text: The context menu of the focused row or the selected icon (copy, pin, pick,
       open, arrange)
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.section.desk
     text: At the desk
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.section.pc
     text: On the PC
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.desk.drag
     text: 'Move a document or a stamp: on the counter a document is small, on the
       desk full size; once the passport is stamped, a paper dropped on the counter
       hands the papers back'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.desk.inspect
     text: 'Inspect mode (the red button): click two things to compare them'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.desk.stamps
     text: 'The stamp bar (the grey tab on the right): drag a stamp onto the passport
       and let go'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.desk.pc
     text: To the PC and back (the grey tab on the left)
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.desk.back
     text: 'Back out: a drag, the wheel, the PC, a held value, inspect mode, the stamp
       bar, the city, the reading view'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.desk.city
     text: Look at the city, and back
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.copyRow
     text: '{0}: {1}'
     gloss: 0
@@ -1452,11 +1452,11 @@ MonoBehaviour:
   - key: app.copied
     text: 'Copied: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.row.line
     text: "{0} \xB7 line {1}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.row.record
     text: "{0} \xB7 {1}"
     gloss: 0
@@ -1464,51 +1464,51 @@ MonoBehaviour:
   - key: app.item.record
     text: "Citizen records \xB7 {0}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.pins.full
     text: 'Unpin something first: the pins are full.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.pins.empty
     text: Ctrl+P pins the value you are on. Right-click a pin to unpin it.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.recent.empty
     text: The papers, books and records you open show here.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: app.jump.gone
     text: That is not here any more.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: search.chip
     text: "{0} \xB7 untranslated {1}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menu.copy
     text: Copy value
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menu.copyRow
     text: Copy row
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menu.pin
     text: Pin
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menu.unpin
     text: Unpin
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menu.pick
     text: Pick for compare
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.investigation
     text: Investigation
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.textSize
     text: '{0} %'
     gloss: 0
@@ -1516,15 +1516,15 @@ MonoBehaviour:
   - key: mail.inbox
     text: Inbox
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.none
     text: No mail.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.select
     text: Select a message to read it.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.unreadRow
     text: "\u2022 {0}"
     gloss: 0
@@ -1532,151 +1532,151 @@ MonoBehaviour:
   - key: mail.rowMeta
     text: "Day {0} \xB7 {1}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.to
     text: All desk officers
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.from.directorate
     text: Customs Directorate
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.from.times
     text: The Temporal Times
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.from.integrity
     text: Timeline Integrity Office
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.subject.memo
     text: Today's directives
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.subject.times
     text: The Temporal Times, day {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.subject.citation
     text: 'Citation notice: traveller {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.body.noDirectives
     text: No travel directives today.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.body.times
     text: Today's edition is on the News site.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.body.timesArchived
     text: This edition is kept in the News site's archive.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.body.citation
     text: 'A copy of the citation slip you acknowledged:'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.link.rules
     text: Open the directives >
     gloss: 0
-    tier: 0
+    tier: 1
   - key: mail.link.news
     text: Read it on the News site >
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.form.title
     text: CITIZEN RECORD EXTRACT
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.query
     text: "Account holder: {0} \xB7 Citizen ID {1}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.group.records
     text: RECORDS
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.group.forms
     text: FORMS ON FILE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.group.travel
     text: TRAVEL
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.row.name
     text: Name
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.row.born
     text: Born
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.row.lineage
     text: Lineage
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.row.citizenId
     text: Citizen ID
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.row.status
     text: Status
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.row.standing
     text: Standing
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.row.debt
     text: Debt
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.row.balance
     text: Balance
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.row.employment
     text: Employment
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.row.departure
     text: Booked departure
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.row.note
     text: Note
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.status.eligible
     text: Eligible
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.status.standard
     text: Standard
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.standing.good
     text: Good
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.standing.frozen
     text: Frozen
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.departure.none
     text: None
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.departure.booked
     text: Debt Relief departure, booked
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.instalmentRate
     text: '{0}% of pay to Debt Relief'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.unknown
     text: "\u2013"
     gloss: 0
@@ -1684,67 +1684,67 @@ MonoBehaviour:
   - key: account.statement.none
     text: 'No entries yet: a day is written when its shift ends.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: account.statement.unit
     text: Amounts in {0}.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: contract.title
     text: "DEBT RELIEF LABOUR CONTRACT \xB7 TC-520"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: contract.row.worker
     text: Worker
     gloss: 0
-    tier: 0
+    tier: 1
   - key: contract.row.citizenId
     text: Citizen ID
     gloss: 0
-    tier: 0
+    tier: 1
   - key: contract.row.employer
     text: Employer
     gloss: 0
-    tier: 0
+    tier: 1
   - key: contract.row.worksite
     text: Worksite
     gloss: 0
-    tier: 0
+    tier: 1
   - key: contract.row.term
     text: Term
     gloss: 0
-    tier: 0
+    tier: 1
   - key: contract.row.wage
     text: Day Wage
     gloss: 0
-    tier: 0
+    tier: 1
   - key: contract.term
     text: '{0:N0} days'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.days
     text: Days
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.day
     text: Day {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.today
     text: Day {0} (today)
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.pageTitle
     text: "Notes \xB7 day {0}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.clippings
     text: Clippings
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.notes
     text: Notes
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.counter
     text: '{0} / {1}'
     gloss: 0
@@ -1753,39 +1753,39 @@ MonoBehaviour:
     text: 'Nothing here yet. Copy a value (Ctrl+C, or right-click a row: Copy value),
       then Ctrl+V or Paste clipping; or type below.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.paste
     text: Paste clipping
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.pasted
     text: Pasted
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.remove
     text: Remove
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.placeholder
     text: Type your notes here...
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.loose
     text: Other clippings
     gloss: 0
-    tier: 0
+    tier: 1
   - key: notes.full
     text: 'This page holds {0} clippings: remove one to paste another.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: briefing.empty
     text: No directives. Process subjects accurately.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: briefing.bulletinHeader
     text: "BUREAU MEMO \xB7 DESK 3"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: briefing.bulletin
     text: <b>{0}</b>
     gloss: 0
@@ -1793,7 +1793,7 @@ MonoBehaviour:
   - key: briefing.newHours
     text: 'New hours from today: the desk opens at {0} and closes at {1}.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: list.bullet
     text: "\u2022 {0}"
     gloss: 0
@@ -1801,43 +1801,43 @@ MonoBehaviour:
   - key: results.leisureDepartures
     text: 'Leisure departures: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.debtReliefDepartures
     text: 'Debt Relief departures: {0}   ({1:N0} {2} of debt put to work)'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.timeline
     text: The timeline tonight
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.citations
     text: 'Citations today: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.unproven
     text: 'Undocumented denials: {0} (log a deviation before denying)'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.detained
     text: 'Detained: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.processedAll
     text: 'Travellers processed: {0}, the whole queue'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.processedOf
     text: 'Travellers processed: {0} of {1} ({2} still waiting at closing, unpaid)'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.hours
     text: 'Desk hours: {0} to {1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.moneyHeader
     text: <b>Money, in {0}</b>
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row
     text: '{0}<pos=76%>{1}'
     gloss: 0
@@ -1853,55 +1853,55 @@ MonoBehaviour:
   - key: results.row.pay
     text: 'Right calls: {0} x {1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row.payTotal
     text: 'Right calls: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row.warned
     text: 'Wrong calls: {0}, the free warning'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row.fined
     text: 'Wrong calls: {0} x {1} fine'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row.finedTotal
     text: 'Wrong calls fined: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row.stranded
     text: 'Stranded in transit: {0}, waivers on file'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row.strandedFined
     text: 'Stranded in transit: {0}, fined (no signed waiver)'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row.instalment
     text: Debt Relief instalment ({0:N0} still owed)
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row.other
     text: Other money
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row.net
     text: Shift net
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row.bills
     text: Bills due tonight
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.row.after
     text: Wallet after bills
     gloss: 0
-    tier: 0
+    tier: 1
   - key: results.wallet
     text: '{0} (now {1})'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: scanner.idle
     text: 'No deviations documented.
 
@@ -1910,31 +1910,31 @@ MonoBehaviour:
       answer or a garment they wear against the claimed place''s reference entry,
       the entry it really belongs to, or the Citizen Record to log evidence.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: scanner.summary
     text: '{0} deviation(s) documented. Denial is justified.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: report.proof.claimMismatch
     text: Mismatch
     gloss: 0
-    tier: 0
+    tier: 1
   - key: report.proof.foreignOrigin
     text: Belongs elsewhere
     gloss: 0
-    tier: 0
+    tier: 1
   - key: report.proof.recordMismatch
     text: Agency records
     gloss: 0
-    tier: 0
+    tier: 1
   - key: report.proof.crossMismatch
     text: Papers disagree
     gloss: 0
-    tier: 0
+    tier: 1
   - key: report.proof.personMismatch
     text: Not the person
     gloss: 0
-    tier: 0
+    tier: 1
   - key: form.report.caseLine
     text: "{0} \xB7 {1}"
     gloss: 0
@@ -1942,7 +1942,7 @@ MonoBehaviour:
   - key: form.interview.head
     text: "{0} \xB7 Desk officer: {1} \xB7 {2}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: form.interview.answerMark
     text: "\u25BA"
     gloss: 0
@@ -1950,15 +1950,15 @@ MonoBehaviour:
   - key: rules.memo.to
     text: All desk officers
     gloss: 0
-    tier: 0
+    tier: 1
   - key: directives.none
     text: 'Directives: all destinations cleared today.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: document.untitled
     text: Document
     gloss: 0
-    tier: 0
+    tier: 1
   - key: document.compareLabel
     text: "{0} \xB7 {1}"
     gloss: 0
@@ -1966,7 +1966,7 @@ MonoBehaviour:
   - key: book.untitled
     text: Reference
     gloss: 0
-    tier: 0
+    tier: 1
   - key: book.compareLabel
     text: '{0}: {1}'
     gloss: 0
@@ -1974,147 +1974,147 @@ MonoBehaviour:
   - key: book.claimedNote
     text: Claimed
     gloss: 0
-    tier: 0
+    tier: 1
   - key: book.revisedNote
     text: Revised
     gloss: 0
-    tier: 0
+    tier: 1
   - key: book.edition
     text: Edition of day {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: compare.deviationLogged
     text: "\u25CF  DEVIATION LOGGED \u2014 {0}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: compare.alreadyDocumented
     text: "\u25CF  ALREADY DOCUMENTED \u2014 {0} is in the Deviation Report"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: compare.pair
     text: "{0}  \xB7  {2}  vs  {4}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: compare.pickAnother
     text: '{0}:  {1}    vs    (pick another value to compare)'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: compare.travellerLabel
     text: "Traveller \xB7 {0}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: compare.faceSlot
     text: FACE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: compare.faceShown
     text: the person at the desk
     gloss: 0
-    tier: 0
+    tier: 1
   - key: compare.photoShown
     text: the photo
     gloss: 0
-    tier: 0
+    tier: 1
   - key: compare.untranslated
     text: (untranslated {0}; {1} Translator)
     gloss: 0
-    tier: 0
+    tier: 1
   - key: slot.Outfit
     text: OUTFIT
     gloss: 0
-    tier: 0
+    tier: 1
   - key: slot.Hair
     text: HAIR
     gloss: 0
-    tier: 0
+    tier: 1
   - key: slot.FacialHair
     text: FACIAL HAIR
     gloss: 0
-    tier: 0
+    tier: 1
   - key: slot.Headwear
     text: HEADWEAR
     gloss: 0
-    tier: 0
+    tier: 1
   - key: slot.Accessory
     text: ACCESSORY
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.placeholder
     text: "Name or number\u2026"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.idle
     text: Type a name or a record number and press SEARCH.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.noRecord
     text: "NO RECORD ON FILE for \"{0}\" \xB7 {1}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.onFile
     text: "Query \"{0}\" \xB7 1 record on file \xB7 {1}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.group.registry
     text: REGISTRY ENTRY
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.name
     text: Name
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.born
     text: Born
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.origin
     text: Origin
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.note
     text: Note
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.note.none
     text: No remarks on file.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.note.sealed
     text: Priority subject. Records sealed above your clearance.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.group.file
     text: FILE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.file
     text: Note
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.group.seen
     text: "SEEN BEFORE \xB7 {0}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: visit.flag.days
     text: '{0} {1} DAYS AGO'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: visit.flag.yesterday
     text: '{0} YESTERDAY'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: visit.verdict.Accepted
     text: Accepted
     gloss: 0
-    tier: 0
+    tier: 1
   - key: visit.verdict.Denied
     text: Denied
     gloss: 0
-    tier: 0
+    tier: 1
   - key: visit.verdict.Detained
     text: Detained
     gloss: 0
-    tier: 0
+    tier: 1
   - key: visit.row
     text: "{0} \xB7 {1}"
     gloss: 0
@@ -2122,43 +2122,43 @@ MonoBehaviour:
   - key: visit.citation
     text: "\xB7 Citation: {0}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.noScan
     text: 'Scan a paper to fill the case board: drop it on the scanner.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.record.found
     text: "RECORD ON FILE \xB7 {0} \xB7 {1} \xB7 OPEN"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.record.noNumber
     text: no number
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.record.none
     text: "NO RECORD ON FILE \xB7 {0}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.record.nothing
     text: No scanned paper names an ID or a name yet.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.section.rules
     text: RULES CHECK
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.rules.none
     text: Nothing of today's rules to check yet.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.rule.destination
     text: Destination
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.rule.paper
     text: Required paper
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.rule.date
     text: '{0} ({1})'
     gloss: 0
@@ -2166,39 +2166,39 @@ MonoBehaviour:
   - key: board.chip.Valid
     text: VALID
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.chip.Expired
     text: EXPIRED
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.chip.Closed
     text: CLOSED
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.chip.Missing
     text: MISSING
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.chip.WrongDate
     text: WRONG DATE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.section.cross
     text: CROSS-CHECK
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.cross.none
     text: Scan two papers (or one with a record on file) to compare them here.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.cross.detail
     text: Detail
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.cross.record
     text: Record
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.cross.blank
     text: '-'
     gloss: 0
@@ -2206,7 +2206,7 @@ MonoBehaviour:
   - key: board.cross.agree
     text: "{0} \xB7 {1} agree"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.cross.cell
     text: '{0}: {1}'
     gloss: 0
@@ -2214,83 +2214,83 @@ MonoBehaviour:
   - key: board.overlay.sources
     text: Sources
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.section.overlay
     text: OVERLAY
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.overlay.hint
     text: Drag one source onto another (or click two) to lay them over each other.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.overlay.over
     text: '{0} over {1}: slide to fade. Only real differences shimmer.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.overlay.nothing
     text: These two state nothing in common.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.overlay.photo
     text: the photo
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.overlay.face
     text: Their face
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.overlay.faceLabel
     text: Face
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.overlay.register
     text: Seal Register
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.tab.print
     text: PRINT
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.tab.uv
     text: UV
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.tab.chip
     text: CHIP
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.uv.title
     text: "UV LIGHT \xB7 HIDDEN LAYER"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.uv.none
     text: Nothing shows under UV light.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.uv.wholePaper
     text: the whole paper
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.uv.Watermark
     text: 'Watermark ({0}): {1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.uv.Ghost
     text: 'Ghost under {0}: {1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.uv.Microprint
     text: 'Microprint ({0}): {1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.chip.title
     text: CHIP RECORD
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.chip.none
     text: This paper carries no chip.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: layers.chip.line
     text: <b>{0}</b>  {1}
     gloss: 0
@@ -2302,173 +2302,173 @@ MonoBehaviour:
   - key: records.row.number
     text: Displacement No.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.incident
     text: Incident
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.found
     text: Found
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.status
     text: Status
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.status.awaiting
     text: Awaiting return
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.group.account
     text: RECORDS
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.group.forms
     text: FORMS ON FILE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.group.travel
     text: TRAVEL
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.citizenId
     text: Citizen ID
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.standing
     text: Standing
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.debt
     text: Debt
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.lineage
     text: Lineage
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.transponder
     text: Transponder
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.transponderClass
     text: Transponder Class
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.waiver
     text: Stranding Waiver
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.proof
     text: Proof of means
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.contract
     text: Work Permit
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.departure
     text: Booked departure
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.departureDate
     text: Departure date
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.trips
     text: Past trips
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.row.trip
     text: Past trip
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.standing.good
     text: Good
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.none
     text: None on file
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.trip.returned
     text: returned
     gloss: 0
-    tier: 0
+    tier: 1
   - key: case.roleUnknown
     text: Traveler
     gloss: 0
-    tier: 0
+    tier: 1
   - key: case.unlistedLand
     text: an unlisted land
     gloss: 0
-    tier: 0
+    tier: 1
   - key: case.subject
     text: Subject #{0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.compareLabel
     text: "Records \xB7 {0}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.unproven
     text: 'Denied without logged evidence. Log what is wrong before denying: a difference
       in the papers, a rule they break or a date that fails.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.acceptedWrong
     text: Approved a disguised traveller or a forbidden destination.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.acceptedWrong.panic
     text: Approved a traveller who would cause a panic in {0}.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.acceptedWrong.forged
     text: Approved forged papers.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.acceptedWrong.disguised
     text: Approved a disguised traveller.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.acceptedWrong.closed
     text: Approved a closed destination.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.acceptedWrong.smuggled
     text: Let 2150 goods leave 2150.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.acceptedWrong.wrongDate
     text: Approved a departure on the wrong date.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.acceptedWrong.expired
     text: Approved an expired paper.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.deniedWrong
     text: Denied a legitimate, permitted traveler.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.detainedWrong
     text: Detained a traveller who broke no law.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.detainedUnproven
     text: 'Detained without logged evidence. Log what they broke before detaining:
       a forged paper, a false identity or contraband.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.warning
     text: "Warning {0}/{1} \u2014 no pay deduction."
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.penalty
     text: 'Penalty: -{0} {1}.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.layout
     text: '{0}
 
@@ -2488,159 +2488,159 @@ MonoBehaviour:
   - key: rule.eraForbidden
     text: No travel permitted to {0}.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: rule.nationForbidden
     text: No travel permitted to {0}.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: rule.nationEraForbidden
     text: No travel permitted to {0} in {1}.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: rule.generic
     text: Travel restriction in effect.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.scanHint
     text: Drag a paper onto the scanner to open it on the PC.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.wheelHint
     text: Click the traveller to talk and ask for papers.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.readyCaption
     text: AVAILABLE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deskView.back
     text: "\u25B2 Back"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deskView.backHint
     text: Right-click / Esc
     gloss: 0
-    tier: 0
+    tier: 1
   - key: stamp.label.approved
     text: APPROVED
     gloss: 0
-    tier: 0
+    tier: 1
   - key: stamp.label.denied
     text: DENIED
     gloss: 0
-    tier: 0
+    tier: 1
   - key: stamp.hint.handBack
     text: Drag the stamped passport onto the COUNTER to hand the papers back.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: stamp.hint.place
     text: Drag a stamp onto the passport and let go.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: stamp.refused.notPassport
     text: Only the passport takes a verdict stamp.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: stamp.refused.already
     text: This passport already carries a verdict.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: stamp.refused.handBackFirst
     text: Stamp the passport first.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: hardware.detain
     text: DETAIN
     gloss: 0
-    tier: 0
+    tier: 1
   - key: stamp.dater.by
     text: 'BY: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.counter
     text: COUNTER
     gloss: 0
-    tier: 0
+    tier: 1
   - key: controls.pcTab
     text: PC
     gloss: 0
-    tier: 0
+    tier: 1
   - key: controls.deskTab
     text: DESK
     gloss: 0
-    tier: 0
+    tier: 1
   - key: controls.stampsTab
     text: STAMPS
     gloss: 0
-    tier: 0
+    tier: 1
   - key: controls.inspectHint
     text: 'INSPECT: click two things to compare. Right-click or Esc to leave.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: stamp.zone.handBack
     text: "\u25B2  HAND BACK  \u25B2"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: stamp.zone.stampFirst
     text: STAMP THE PASSPORT FIRST
     gloss: 0
-    tier: 0
+    tier: 1
   - key: city.look
     text: CITY
     gloss: 0
-    tier: 0
+    tier: 1
   - key: city.back
     text: DESK
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.title
     text: TODAY'S RULES
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.none
     text: No rules today.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.papers
     text: PAPERS NOT HANDED OVER
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.paperFlag
     text: '{0}: missing? Click to flag it.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.paperFlagged
     text: '{0}: flagged. Ask for it.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.paperNotCarried
     text: '{0}: not carried.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.papersNone
     text: Every paper is handed over.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.tabRules
     text: RULES
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.tabPapers
     text: PAPERS
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.tabSeals
     text: SEALS
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.seals
     text: SEAL REGISTER
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.rulebook.tabGuide
     text: GUIDE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.guide.body
     text: '<b>CHECK</b>  {0}
 
@@ -2651,7 +2651,7 @@ MonoBehaviour:
       <b>A FAULT</b> 
       {2}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.guide.page
     text: '{0} / {1}'
     gloss: 0
@@ -2659,51 +2659,51 @@ MonoBehaviour:
   - key: desk.guide.new
     text: NEW
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.guide.prev
     text: < PREV
     gloss: 0
-    tier: 0
+    tier: 1
   - key: desk.guide.next
     text: NEXT >
     gloss: 0
-    tier: 0
+    tier: 1
   - key: guide.step
     text: TUTORIAL {0}/{1}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: guide.skip
     text: Skip tutorial
     gloss: 0
-    tier: 0
+    tier: 1
   - key: guide.done
     text: TUTORIAL DONE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: guide.newToday
     text: NEW TODAY
     gloss: 0
-    tier: 0
+    tier: 1
   - key: guide.moment
     text: <b>{0}</b>  {1} Its page is open in the rulebook's GUIDE tab.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: guide.practice
     text: PRACTICE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: guide.gotIt
     text: Got it
     gloss: 0
-    tier: 0
+    tier: 1
   - key: settings.replayTutorial
     text: Replay the desk tutorial
     gloss: 0
-    tier: 0
+    tier: 1
   - key: keys.replayTutorial
     text: Replay the desk tutorial
     gloss: 0
-    tier: 0
+    tier: 1
   - key: tooltip.credits
     text: '{1}: {0}'
     gloss: 0
@@ -2711,11 +2711,11 @@ MonoBehaviour:
   - key: tooltip.day
     text: 'Today: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: tooltip.stability
     text: The timeline. Keep it between its banks.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: tooltip.value
     text: '{0}'
     gloss: 0
@@ -2723,146 +2723,146 @@ MonoBehaviour:
   - key: desk.calendar
     text: "{0} \xB7 DAY {1}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deviation.claimMismatch.papers
     text: "{0} INCORRECT \u2014 papers: \"{1}\"  /  expected: \"{2}\""
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deviation.claimMismatch.said
     text: "{0} INCORRECT \u2014 traveller said: \"{1}\"  /  expected: \"{2}\""
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deviation.claimMismatch.worn
     text: "{0} INCORRECT \u2014 traveller wears: \"{1}\"  /  expected: \"{2}\" \u2014
       would cause a panic"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deviation.foreignOrigin.papers
     text: "{0} INCORRECT \u2014 papers show \"{1}\", which belongs to {2}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deviation.foreignOrigin.said
     text: "{0} INCORRECT \u2014 traveller said \"{1}\", which belongs to {2}"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deviation.foreignOrigin.worn
     text: "{0} INCORRECT \u2014 traveller wears \"{1}\", which belongs to {2}: would
       cause a panic"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deviation.recordMismatch.papers
     text: "{0} INCORRECT \u2014 papers: \"{1}\"  /  agency records: \"{2}\""
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deviation.recordMismatch.said
     text: "{0} INCORRECT \u2014 traveller said: \"{1}\"  /  agency records: \"{2}\""
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deviation.recordMismatch.worn
     text: "{0} INCORRECT \u2014 traveller wears: \"{1}\"  /  agency records: \"{2}\""
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deviation.crossMismatch.papers
     text: "{0} INCONSISTENT \u2014 the papers disagree: \"{1}\"  /  \"{2}\""
     gloss: 0
-    tier: 0
+    tier: 1
   - key: deviation.personMismatch.papers
     text: "{0} INCORRECT \u2014 the photo on the papers is not the traveller at the
       desk"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Language
     text: LANGUAGE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Material
     text: MATERIAL
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Politics
     text: RULER
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Technology
     text: DEVICE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Currency
     text: CURRENCY
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Geography
     text: CAPITAL
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Culture
     text: DRESS
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Name
     text: NAME
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.BirthDate
     text: BIRTH DATE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.CitizenId
     text: CITIZEN ID
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Destination
     text: DESTINATION
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Incident
     text: INCIDENT
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.DepartureDate
     text: DEPARTURE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Expiry
     text: VALID UNTIL
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.AccountStatus
     text: VISA CLASS
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.TransponderId
     text: TRANSPONDER
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.TransponderClass
     text: TRANSPONDER CLASS
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Debt
     text: DEBT
     gloss: 0
-    tier: 0
+    tier: 1
   - key: records.standing.frozen
     text: 'Frozen: default, {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.acceptedWrong.incomplete
     text: Approved incomplete paperwork.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.acceptedWrong.frozen
     text: Approved a frozen account.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.acceptedWrong.recalled
     text: Approved a recalled transponder.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.numbered
     text: 'Directive {0}: {1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.value
     text: '{0}: {1}.'
     gloss: 0
@@ -2874,168 +2874,168 @@ MonoBehaviour:
   - key: citation.rule.record
     text: Every paper must match the Citizen Account.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.origin
     text: 'The displaced return only to their own time: their papers and answers
       must match their origin.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.goods
     text: No 2150 currency or technology leaves 2150.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.dress
     text: 'Dress for the destination: nothing from another time or place.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.paperSet.economyManifest
     text: A Premium passport travels on a Premium transponder.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.paperSet.premiumManifest
     text: A Standard passport travels on an Economy transponder.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.paperSet.waiverMissing
     text: This departure needs a signed Stranding Waiver.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.paperSet.waiverUnsigned
     text: This departure needs a signed Stranding Waiver.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.paperSet.proofMissing
     text: A Standard passport needs a proof of means.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.paperSet.contractMissing
     text: A Debt Relief departure needs a registered Work Permit.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.frozen
     text: A Frozen account may not depart.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.departure
     text: Depart only on the date printed on the travel papers.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.expired
     text: Never depart on an expired paper.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.none
     text: No directive and no record refuses this traveller.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.rule.evidence
     text: A denial needs logged evidence.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.destination
     text: Destination
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.account
     text: Citizen Account
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.registry
     text: Displacement Registry
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.standing
     text: Standing on the {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.today
     text: Today
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.garment
     text: Garment
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.onPaper
     text: '{0} on the {1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.answer
     text: Their answer ({0})
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.book
     text: '{0} of {1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.logged
     text: Evidence logged
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.missing.waiverMissing
     text: Stranding Waiver
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.missing.proofMissing
     text: Proof of means
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.label.missing.contractMissing
     text: Work Permit
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.value.notHandedOver
     text: not handed over
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.value.frozen
     text: Frozen since {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: citation.value.open
     text: '{0}, open today'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Employer
     text: EMPLOYER
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Term
     text: TERM
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Wage
     text: WAGE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.WaiverNo
     text: WAIVER NO.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Credit
     text: CREDIT
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Funds
     text: FUNDS
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.PolicyNo
     text: POLICY NO.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Signature
     text: SIGNATURE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Seal
     text: SEAL
     gloss: 0
-    tier: 0
+    tier: 1
   - key: category.Photo
     text: PHOTO
     gloss: 0
-    tier: 0
+    tier: 1
   - key: icon.portals
     text: Portals
     gloss: 0
@@ -3043,27 +3043,27 @@ MonoBehaviour:
   - key: window.portals
     text: Portals
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.returnGate
     text: RETURN GATE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.closed
     text: CLOSED
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.maintenance
     text: UNDER MAINTENANCE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.noRoute
     text: NO ROUTE
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.tooltip.title
     text: DEPARTURE BOARD
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.tooltip.route
     text: '{0} {1}: {2}, {3}'
     gloss: 0
@@ -3071,31 +3071,31 @@ MonoBehaviour:
   - key: board.tooltip.closed
     text: '{0} {1}: {2}, {3}: CLOSED today'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.tooltip.returnGate
     text: '{0} {1}: Return Gate'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.tooltip.returnGateMaintenance
     text: '{0} {1}: Return Gate, under maintenance'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.tooltip.maintenance
     text: '{0} {1}: under maintenance'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: board.tooltip.noRoute
     text: '{0} {1}: no route today'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: portals.date
     text: Routes for {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: portals.returnGate
     text: Return Gate
     gloss: 0
-    tier: 0
+    tier: 1
   - key: portals.none
     text: "\u2013"
     gloss: 0
@@ -3103,207 +3103,207 @@ MonoBehaviour:
   - key: portals.state.inService
     text: In service
     gloss: 0
-    tier: 0
+    tier: 1
   - key: portals.state.noRoute
     text: "In service \xB7 no route today"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: portals.state.closed
     text: 'CLOSED today: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: portals.state.underMaintenance
     text: Under maintenance
     gloss: 0
-    tier: 0
+    tier: 1
   - key: portals.state.maintenance
     text: "Under maintenance \xB7 repair it in Orders ({0})"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: portals.state.locked
     text: "Under maintenance \xB7 locked: repair {0} first"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: portals.state.transit
     text: "Under maintenance \xB7 repair in transit, in service tomorrow"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: portals.footer
     text: Routes are set by the Directorate. Until the Return Gate is repaired, the
       displaced leave through Portal {0}.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.title
     text: "Day {0} \u2014 Home"
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.breakIn
     text: 'Someone broke in while you were at work: -{0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.fixed
     text: 'Tonight''s fixed costs:'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.rent
     text: '  Rent & utilities: -{0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.drain
     text: '  {0}''s extra care while sick: -{1}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.upkeep
     text: '  House upkeep: -{0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.fixedTotal
     text: 'Paid: -{0} {1}   (Balance: {2})'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.debt
     text: You are in debt. Find a way to make ends meet.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.bills.total
     text: 'Tonight''s bills: {0} {1}   (Balance after: {2})'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.bills.short
     text: 'Tonight''s bills: {0} {1}, more than your {2}: skip something.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.bill.paying
     text: Paying
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.bill.skip
     text: Skip
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.bill.needsPower
     text: needs electricity
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.bill.notNeeded
     text: 'not needed: {0} is well'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.pay
     text: Pay and see {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.pet.title
     text: '{0}''s corner'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.pet.pat
     text: Pet {0}
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.pet.play
     text: Play
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.pet.played
     text: Played tonight
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.pet.noToys
     text: No toys yet. The Orders app on your PC sells them.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.pet.dark
     text: The lights are off tonight.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.next.house
     text: Continue to the House
     gloss: 0
-    tier: 0
+    tier: 1
   - key: home.next.slots
     text: Continue to Slots
     gloss: 0
-    tier: 0
+    tier: 1
   - key: adopt.title
     text: Adopt a companion
     gloss: 0
-    tier: 0
+    tier: 1
   - key: adopt.body
     text: The Directorate's shelter has a dog and a cat waiting. One of them goes
       home with you tonight. Choose, and give them a name.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: adopt.dog
     text: Dog
     gloss: 0
-    tier: 0
+    tier: 1
   - key: adopt.cat
     text: Cat
     gloss: 0
-    tier: 0
+    tier: 1
   - key: adopt.placeholder
     text: Type a name
     gloss: 0
-    tier: 0
+    tier: 1
   - key: adopt.go
     text: Adopt and start
     gloss: 0
-    tier: 0
+    tier: 1
   - key: adopt.back
     text: Back
     gloss: 0
-    tier: 0
+    tier: 1
   - key: adopt.problem.Empty
     text: Give your companion a name.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: adopt.problem.TooLong
     text: 'A shorter name, please: at most {0} letters.'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: adopt.problem.BadCharacters
     text: Letters, spaces, hyphens and apostrophes only.
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menubar.records
     text: Records
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menubar.rules
     text: Rules
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menubar.books
     text: Books
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menubar.calendar
     text: Calendar
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menubar.notHandedOver
     text: Not handed over
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menubar.missing.flag
     text: Flag missing
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menubar.missing.flagged
     text: 'Flagged: ask for it'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menubar.missing.notCarried
     text: Not carried
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menubar.today
     text: 'Today: {0}'
     gloss: 0
-    tier: 0
+    tier: 1
   - key: menubar.today.note
     text: Hold to compare
     gloss: 0
-    tier: 0
+    tier: 1
   words: []

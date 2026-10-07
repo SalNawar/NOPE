@@ -91,6 +91,119 @@ MonoBehaviour:
     text: Ordini
     gloss: 0
     tier: 0
+  - key: window.orders
+    text: Ordini
+    gloss: 0
+    tier: 0
+  - key: app.orders.wallet
+    text: "Portafoglio {0} \xB7 Gli ordini si pagano subito e arrivano all'inizio
+      del turno di domani; annullane uno oggi per il rimborso."
+    gloss: 0
+    tier: 0
+  - key: app.orders.tooDear
+    text: "{0} {1} \xB7 non puoi ancora permettertelo"
+    gloss: 0
+    tier: 0
+  - key: app.orders.needs
+    text: 'Richiede: {0}'
+    gloss: 0
+    tier: 0
+  - key: app.orders.inTransit
+    text: "In transito \xB7 arriva il giorno {0}"
+    gloss: 0
+    tier: 0
+  - key: app.orders.delivered
+    text: Consegnato il giorno {0}
+    gloss: 0
+    tier: 0
+  - key: app.orders.owned
+    text: Posseduto
+    gloss: 0
+    tier: 0
+  - key: app.orders.installed
+    text: Installato
+    gloss: 0
+    tier: 0
+  - key: app.orders.stored
+    text: In magazzino
+    gloss: 0
+    tier: 0
+  - key: app.orders.installsTomorrow
+    text: Si installa domani
+    gloss: 0
+    tier: 0
+  - key: app.orders.leavesTomorrow
+    text: Sostituito domani
+    gloss: 0
+    tier: 0
+  - key: app.orders.order
+    text: Ordina
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancel
+    text: Annulla ordine
+    gloss: 0
+    tier: 0
+  - key: app.orders.install
+    text: Installa domani
+    gloss: 0
+    tier: 0
+  - key: app.orders.keep
+    text: Lascia installato
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancelInstall
+    text: Annulla installazione
+    gloss: 0
+    tier: 0
+  - key: app.orders.select
+    text: Seleziona un oggetto nell'albero per vederlo qui.
+    gloss: 0
+    tier: 0
+  - key: app.orders.none
+    text: Nessuno
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.desk
+    text: Dotazione della scrivania
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.interview
+    text: Colloquio
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.portals
+    text: Portali
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.contacts
+    text: Contatti
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.toys
+    text: Giocattoli
+    gloss: 0
+    tier: 0
+  - key: mail.from.supply
+    text: Forniture della Dogana Temporale
+    gloss: 0
+    tier: 0
+  - key: mail.subject.delivery
+    text: "Il tuo ordine \xE8 arrivato"
+    gloss: 0
+    tier: 0
+  - key: mail.from.liability
+    text: "Ufficio Responsabilit\xE0 Transponder"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.stranding
+    text: 'Rapporto di guasto del transponder: {0}'
+    gloss: 0
+    tier: 0
+  - key: mail.body.delivery
+    text: 'Consegnato stamattina e in vigore dal turno di oggi:'
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: Indagine
     gloss: 0
@@ -109,6 +222,14 @@ MonoBehaviour:
     tier: 0
   - key: tray.day
     text: Giorno {0}
+    gloss: 0
+    tier: 0
+  - key: tray.date
+    text: "{0} \xB7 Giorno {1}"
+    gloss: 0
+    tier: 0
+  - key: tray.date.hint
+    text: Confronta la data di oggi
     gloss: 0
     tier: 0
   - key: tray.stability
@@ -131,8 +252,2867 @@ MonoBehaviour:
     text: "\u2014 NOTIZIE DELLA LINEA TEMPORALE \u2014"
     gloss: 0
     tier: 0
+  - key: briefing.deskHeader
+    text: DA DESK 3
+    gloss: 0
+    tier: 0
+  - key: paper.edition
+    text: EDIZIONE DEL MATTINO
+    gloss: 0
+    tier: 0
+  - key: paper.price
+    text: UN CREDITO
+    gloss: 0
+    tier: 0
+  - key: wallet.credits
+    text: Crediti
+    gloss: 0
+    tier: 0
+  - key: wallet.creditsInline
+    text: crediti
+    gloss: 0
+    tier: 0
+  - key: wallet.creditsShort
+    text: cr
+    gloss: 0
+    tier: 0
+  - key: verdict.correct
+    text: CORRETTO  (+{0} {1})
+    gloss: 0
+    tier: 0
+  - key: verdict.wrong
+    text: SBAGLIATO
+    gloss: 0
+    tier: 0
+  - key: verdict.wrongPenalty
+    text: SBAGLIATO  (-{0} {1})
+    gloss: 0
+    tier: 0
+  - key: verdict.simpleCorrect
+    text: Corretto
+    gloss: 0
+    tier: 0
+  - key: verdict.simpleWrong
+    text: Sbagliato
+    gloss: 0
+    tier: 0
+  - key: day.complete
+    text: Giorno {0} completato.
+    gloss: 0
+    tier: 0
+  - key: idle.waiting
+    text: In attesa del prossimo viaggiatore
+    gloss: 0
+    tier: 0
+  - key: app.title
+    text: Indagine
+    gloss: 0
+    tier: 0
+  - key: app.counters
+    text: "Documenti ricevuti: {0} su {1} \xB7 scansionati: {2}"
+    gloss: 0
+    tier: 0
+  - key: app.tab.documents
+    text: Documenti
+    gloss: 0
+    tier: 0
+  - key: app.tab.records
+    text: Registri dei cittadini
+    gloss: 0
+    tier: 0
+  - key: app.tab.reference
+    text: Manuali di riferimento
+    gloss: 0
+    tier: 0
+  - key: app.tab.transcript
+    text: Trascrizione
+    gloss: 0
+    tier: 0
+  - key: app.tab.report
+    text: Rapporto di deviazione
+    gloss: 0
+    tier: 0
+  - key: app.tab.rules
+    text: Regole di oggi
+    gloss: 0
+    tier: 0
+  - key: app.tab.calendar
+    text: Calendario
+    gloss: 0
+    tier: 0
+  - key: app.tab.board
+    text: Bacheca del caso
+    gloss: 0
+    tier: 0
+  - key: app.side.left
+    text: Sinistra
+    gloss: 0
+    tier: 0
+  - key: app.side.right
+    text: Destra
+    gloss: 0
+    tier: 0
+  - key: app.pane.shelfHere
+    text: Si apre qui
+    gloss: 0
+    tier: 0
+  - key: app.search.open
+    text: Cerca   Ctrl K
+    gloss: 0
+    tier: 0
+  - key: app.row.rule
+    text: "Regole di oggi \xB7 regola {0}"
+    gloss: 0
+    tier: 0
+  - key: shelf.side.left
+    text: S
+    gloss: 0
+    tier: 0
+  - key: shelf.side.right
+    text: D
+    gloss: 0
+    tier: 0
+  - key: menubar.papers
+    text: Documenti
+    gloss: 0
+    tier: 0
+  - key: status.holding
+    text: Tieni <b>{0}</b> ({1}). Clicca un altro valore per confrontarlo.
+    gloss: 0
+    tier: 0
+  - key: status.holdingRule
+    text: 'Tieni la regola: <b>{0}</b> Clicca il valore a cui si riferisce.'
+    gloss: 0
+    tier: 0
+  - key: status.holdingToday
+    text: Tieni la data di oggi, <b>{0}</b>. Clicca una data di partenza o un Valido
+      fino al.
+    gloss: 0
+    tier: 0
+  - key: status.logged
+    text: '{0}. Registrato.'
+    gloss: 0
+    tier: 0
+  - key: status.evidence
+    text: '{0}. Registrato come prova.'
+    gloss: 0
+    tier: 0
+  - key: status.already
+    text: "Hai gi\xE0 confrontato questi due. Mostrato di nuovo."
+    gloss: 0
+    tier: 0
+  - key: status.shown
+    text: '{0}. Mostrato di nuovo.'
+    gloss: 0
+    tier: 0
+  - key: status.cancel
+    text: Annulla   Esc
+    gloss: 0
+    tier: 0
+  - key: finding.link.Match
+    text: Dati corrispondenti
+    gloss: 0
+    tier: 0
+  - key: finding.link.Differs
+    text: Dati diversi
+    gloss: 0
+    tier: 0
+  - key: finding.link.Elsewhere
+    text: Appartiene altrove
+    gloss: 0
+    tier: 0
+  - key: finding.link.DifferentDetails
+    text: Dettagli diversi
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherPlace
+    text: "Non \xE8 il luogo dichiarato"
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherPerson
+    text: Un'altra persona
+    gloss: 0
+    tier: 0
+  - key: finding.link.TwoTruths
+    text: Entrambi di riferimento
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleMet
+    text: Rispetta la regola
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleBroken
+    text: Viola la regola
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleNotAbout
+    text: Non riguarda la regola
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleByComparison
+    text: Confronta invece
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleNotForTraveller
+    text: Non per questo viaggiatore
+    gloss: 0
+    tier: 0
+  - key: finding.link.NothingToCompare
+    text: Niente da confrontare
+    gloss: 0
+    tier: 0
+  - key: finding.link.DepartsToday
+    text: Parte oggi
+    gloss: 0
+    tier: 0
+  - key: finding.link.NotToday
+    text: Non oggi
+    gloss: 0
+    tier: 0
+  - key: finding.link.StillValid
+    text: Ancora valido
+    gloss: 0
+    tier: 0
+  - key: finding.link.Expired
+    text: Scaduto
+    gloss: 0
+    tier: 0
+  - key: finding.link.SealIncorrect
+    text: Sigillo errato
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherOffice
+    text: Un altro ufficio
+    gloss: 0
+    tier: 0
+  - key: finding.link.PaperMissing
+    text: Non portato
+    gloss: 0
+    tier: 0
+  - key: finding.link.NoRecord
+    text: Nessuna scheda
+    gloss: 0
+    tier: 0
+  - key: finding.note.DifferentDetails
+    text: '{0} e {1} sono dettagli diversi. Nulla registrato.'
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherPlace
+    text: Quella riga del manuale riguarda un luogo diverso da quello dichiarato.
+      Nulla registrato.
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherPerson
+    text: Quella scheda appartiene a qualcun altro. Nulla registrato.
+    gloss: 0
+    tier: 0
+  - key: finding.note.TwoTruths
+    text: Sono entrambi dati di riferimento. Confronta un documento o una risposta
+      con uno dei due.
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleNotAbout
+    text: Quella regola non riguarda il campo {1}. Nulla registrato.
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleByComparison
+    text: 'Verifica questa regola con un confronto: confronta il valore con i manuali
+      o con la scheda.'
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleNotForTraveller
+    text: Questa regola non vale per questo viaggiatore. Nulla registrato.
+    gloss: 0
+    tier: 0
+  - key: finding.note.NothingToCompare
+    text: Confronta una regola o la data di oggi con il valore a cui si riferisce.
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherOffice
+    text: Quei sigilli sono di due uffici diversi. Confronta il sigillo di un documento
+      con quello del suo ufficio nel Registro dei sigilli. Nulla registrato.
+    gloss: 0
+    tier: 0
+  - key: finding.title.Match
+    text: '{0} corrisponde'
+    gloss: 0
+    tier: 0
+  - key: finding.title.Differs
+    text: '{0} non corrisponde'
+    gloss: 0
+    tier: 0
+  - key: finding.title.Elsewhere
+    text: '{0} appartiene a un altro luogo'
+    gloss: 0
+    tier: 0
+  - key: finding.title.RuleMet
+    text: 'Rispetta la regola: {0}'
+    gloss: 0
+    tier: 0
+  - key: finding.title.RuleBroken
+    text: 'Viola la regola: {0}'
+    gloss: 0
+    tier: 0
+  - key: finding.title.DepartsToday
+    text: Parte oggi
+    gloss: 0
+    tier: 0
+  - key: finding.title.NotToday
+    text: "La partenza non \xE8 oggi"
+    gloss: 0
+    tier: 0
+  - key: finding.title.StillValid
+    text: "{0} \xE8 ancora valido"
+    gloss: 0
+    tier: 0
+  - key: finding.title.Expired
+    text: "{0} \xE8 scaduto"
+    gloss: 0
+    tier: 0
+  - key: finding.title.SealIncorrect
+    text: Sigillo errato
+    gloss: 0
+    tier: 0
+  - key: finding.title.PaperMissing
+    text: '{0} mancante'
+    gloss: 0
+    tier: 0
+  - key: finding.title.NoRecord
+    text: '{0}: nessuna scheda in archivio'
+    gloss: 0
+    tier: 0
+  - key: finding.detail
+    text: '{0} contro {1}'
+    gloss: 0
+    tier: 0
+  - key: finding.detail.same
+    text: '{0} su entrambi'
+    gloss: 0
+    tier: 0
+  - key: finding.detail.missing
+    text: Richiesto, non portato
+    gloss: 0
+    tier: 0
+  - key: finding.detail.noRecord
+    text: 'Cercato {0}: nulla in archivio'
+    gloss: 0
+    tier: 0
+  - key: finding.evidence
+    text: "{0} \xB7 prova"
+    gloss: 0
+    tier: 0
+  - key: finding.what.today
+    text: La data di oggi
+    gloss: 0
+    tier: 0
+  - key: finding.what.rule
+    text: La regola
+    gloss: 0
+    tier: 0
+  - key: findings.title
+    text: I tuoi riscontri
+    gloss: 0
+    tier: 0
+  - key: findings.empty
+    text: Ancora nessun riscontro
+    gloss: 0
+    tier: 0
+  - key: calendar.title
+    text: Calendario dell'agenzia
+    gloss: 0
+    tier: 0
+  - key: calendar.today
+    text: Oggi
+    gloss: 0
+    tier: 0
+  - key: calendar.todayTitle
+    text: "Calendario \xB7 Oggi"
+    gloss: 0
+    tier: 0
+  - key: calendar.shiftDay
+    text: Giorno di turno {0}
+    gloss: 0
+    tier: 0
+  - key: calendar.unknown
+    text: Data sconosciuta
+    gloss: 0
+    tier: 0
+  - key: search.drawer.title
+    text: Cerca nei documenti
+    gloss: 0
+    tier: 0
+  - key: search.drawer.hint
+    text: Scegli un risultato per aprire quel documento sul lato in cui si apre lo
+      scaffale.
+    gloss: 0
+    tier: 0
+  - key: app.chip.onDesk
+    text: '{0}: sulla scrivania'
+    gloss: 0
+    tier: 0
+  - key: app.chip.notHandedOver
+    text: '{0}: non consegnato'
+    gloss: 0
+    tier: 0
+  - key: app.doc.none
+    text: I documenti consegnati dal viaggiatore appaiono qui dopo la scansione.
+    gloss: 0
+    tier: 0
+  - key: app.doc.scanHint
+    text: 'Sulla scrivania: scansionalo per leggerlo qui.'
+    gloss: 0
+    tier: 0
+  - key: app.doc.askHint
+    text: 'Non consegnato: chiedilo al viaggiatore.'
+    gloss: 0
+    tier: 0
+  - key: app.ref.claimedOnly
+    text: Solo il luogo dichiarato
+    gloss: 0
+    tier: 0
+  - key: app.search
+    text: Un nome, un luogo o un numero
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.pinned
+    text: Fissati
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.recent
+    text: Recenti
+    gloss: 0
+    tier: 0
+  - key: app.toast.scanned
+    text: '{0} scansionato'
+    gloss: 0
+    tier: 0
+  - key: app.toast.open
+    text: Apri
+    gloss: 0
+    tier: 0
+  - key: search.all
+    text: Tutti
+    gloss: 0
+    tier: 0
+  - key: search.more
+    text: Mostra tutti i {0} in {1}
+    gloss: 0
+    tier: 0
+  - key: search.none
+    text: Niente in questo caso o nei registri di oggi corrisponde a '{0}'.
+    gloss: 0
+    tier: 0
+  - key: search.noneChip
+    text: "Nessuna riga non tradotta di questo caso \xE8 uguale al ritaglio incollato."
+    gloss: 0
+    tier: 0
+  - key: search.hint
+    text: "Enter apre il primo risultato \xB7 clicca un risultato per andarci"
+    gloss: 0
+    tier: 0
+  - key: search.close
+    text: Chiudi   Esc
+    gloss: 0
+    tier: 0
+  - key: search.title.rule
+    text: Regola {0}
+    gloss: 0
+    tier: 0
+  - key: search.revised
+    text: rivisto
+    gloss: 0
+    tier: 0
+  - key: steps.rules
+    text: Regole di oggi per la destinazione
+    gloss: 0
+    tier: 0
+  - key: steps.papers
+    text: Ricevi ogni documento
+    gloss: 0
+    tier: 0
+  - key: steps.read
+    text: Leggi ogni documento
+    gloss: 0
+    tier: 0
+  - key: steps.identity
+    text: Nome, numero e data di nascita nei Registri dei cittadini
+    gloss: 0
+    tier: 0
+  - key: steps.facts
+    text: Dati del luogo contro i manuali
+    gloss: 0
+    tier: 0
+  - key: steps.questions
+    text: Fai le domande di oggi
+    gloss: 0
+    tier: 0
+  - key: steps.answers
+    text: Risposte contro i manuali o i Registri
+    gloss: 0
+    tier: 0
+  - key: steps.dress
+    text: Abiti contro la Guida ai costumi
+    gloss: 0
+    tier: 0
+  - key: steps.returnOrder
+    text: Ordine di ritorno contro il certificato
+    gloss: 0
+    tier: 0
+  - key: steps.dates
+    text: Date contro il calendario di oggi
+    gloss: 0
+    tier: 0
+  - key: steps.class
+    text: Classe del passaporto contro il conto
+    gloss: 0
+    tier: 0
+  - key: steps.transponder
+    text: Transponder contro il conto
+    gloss: 0
+    tier: 0
+  - key: steps.paperSet
+    text: Set di documenti contro le regole di oggi
+    gloss: 0
+    tier: 0
+  - key: steps.standing
+    text: Posizione del conto nei Registri
+    gloss: 0
+    tier: 0
+  - key: steps.askMeans
+    text: Chiedi una prova di mezzi
+    gloss: 0
+    tier: 0
+  - key: steps.waiver
+    text: Liberatoria contro biglietto e conto
+    gloss: 0
+    tier: 0
+  - key: steps.means
+    text: Prova di mezzi contro il conto
+    gloss: 0
+    tier: 0
+  - key: steps.contract
+    text: Contratto contro quello registrato
+    gloss: 0
+    tier: 0
+  - key: steps.hint.wheel
+    text: 'Usa la ruota del viaggiatore: clicca il viaggiatore alla scrivania.'
+    gloss: 0
+    tier: 0
+  - key: app.link.seal
+    text: 'Apri il Registro dei sigilli: il sigillo dell''ufficio emittente'
+    gloss: 0
+    tier: 0
+  - key: app.link.reference
+    text: 'Apri i Manuali di riferimento: {0}, il luogo dichiarato'
+    gloss: 0
+    tier: 0
+  - key: app.link.records
+    text: 'Apri i Registri dei cittadini: {0}'
+    gloss: 0
+    tier: 0
+  - key: app.link.rules
+    text: Apri le regole di oggi
+    gloss: 0
+    tier: 0
+  - key: app.link.pick
+    text: "Apri dove \xE8 stato scelto: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.link.place
+    text: 'Apri i Manuali di riferimento: {0}'
+    gloss: 0
+    tier: 0
+  - key: app.transcript.answersOnly
+    text: Solo risposte
+    gloss: 0
+    tier: 0
+  - key: app.transcript.newLine
+    text: Nuova riga sotto
+    gloss: 0
+    tier: 0
+  - key: window.minimize
+    text: Riduci a icona
+    gloss: 0
+    tier: 0
+  - key: window.maximize
+    text: Ingrandisci
+    gloss: 0
+    tier: 0
+  - key: window.close
+    text: Chiudi
+    gloss: 0
+    tier: 0
+  - key: window.internet
+    text: Internet
+    gloss: 0
+    tier: 0
+  - key: window.notes
+    text: Appunti
+    gloss: 0
+    tier: 0
+  - key: browser.back
+    text: Indietro
+    gloss: 0
+    tier: 0
+  - key: browser.forward
+    text: Avanti
+    gloss: 0
+    tier: 0
+  - key: browser.home
+    text: Inizio
+    gloss: 0
+    tier: 0
+  - key: browser.go
+    text: Vai
+    gloss: 0
+    tier: 0
+  - key: browser.address
+    text: Scrivi il nome o l'indirizzo di un sito
+    gloss: 0
+    tier: 0
+  - key: browser.search
+    text: Cerca nomi
+    gloss: 0
+    tier: 0
+  - key: browser.searchButton
+    text: Cerca
+    gloss: 0
+    tier: 0
+  - key: site.portal.title
+    text: Pagina iniziale
+    gloss: 0
+    tier: 0
+  - key: site.portal.masthead
+    text: CHRONET
+    gloss: 0
+    tier: 0
+  - key: site.portal.intro
+    text: I siti della rete della Dogana Temporale. Scegline uno o scrivi il suo
+      nome nel campo dell'indirizzo.
+    gloss: 0
+    tier: 0
+  - key: site.notFound.title
+    text: Pagina non trovata
+    gloss: 0
+    tier: 0
+  - key: site.notFound.body
+    text: "Nulla \xE8 archiviato in {0}."
+    gloss: 0
+    tier: 0
+  - key: site.home
+    text: Torna alla pagina iniziale
+    gloss: 0
+    tier: 0
+  - key: site.news.masthead
+    text: "{0} \xB7 edizione online \xB7 Giorno {1}"
+    gloss: 0
+    tier: 0
+  - key: site.news.issueTitle
+    text: '{0}, giorno {1}'
+    gloss: 0
+    tier: 0
+  - key: site.news.backIssue
+    text: 'Numero arretrato: il giornale del giorno {0}.'
+    gloss: 0
+    tier: 0
+  - key: site.news.world
+    text: MONDO
+    gloss: 0
+    tier: 0
+  - key: site.news.desk
+    text: Da Desk 3
+    gloss: 0
+    tier: 0
+  - key: site.news.notices
+    text: AVVISI
+    gloss: 0
+    tier: 0
+  - key: site.news.noNotices
+    text: Nessun avviso.
+    gloss: 0
+    tier: 0
+  - key: site.news.standings
+    text: CLASSIFICA DELLA LINEA TEMPORALE
+    gloss: 0
+    tier: 0
+  - key: site.news.noStandings
+    text: Ancora nessuna classifica.
+    gloss: 0
+    tier: 0
+  - key: site.news.archive
+    text: ARCHIVIO
+    gloss: 0
+    tier: 0
+  - key: site.news.issueLink
+    text: Giorno {0}
+    gloss: 0
+    tier: 0
+  - key: site.news.allIssues
+    text: Tutti i numeri arretrati
+    gloss: 0
+    tier: 0
+  - key: site.news.today
+    text: Edizione di oggi
+    gloss: 0
+    tier: 0
+  - key: site.news.archiveTitle
+    text: Numeri arretrati
+    gloss: 0
+    tier: 0
+  - key: site.news.archiveRow
+    text: 'Giorno {0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: site.news.noBackIssues
+    text: Ancora nessun numero arretrato.
+    gloss: 0
+    tier: 0
+  - key: site.news.quiet
+    text: Una giornata tranquilla sulla linea temporale.
+    gloss: 0
+    tier: 0
+  - key: site.history.intro
+    text: "Ogni paese in ogni epoca, come la storia \xE8 oggi. Un fatto rivisto dice
+      quando \xE8 cambiato e cosa era prima."
+    gloss: 0
+    tier: 0
+  - key: site.history.present
+    text: Il presente
+    gloss: 0
+    tier: 0
+  - key: site.history.revisions
+    text: Revisioni
+    gloss: 0
+    tier: 0
+  - key: site.history.country
+    text: PAESE
+    gloss: 0
+    tier: 0
+  - key: site.history.presentNote
+    text: "Questo \xE8 il presente: il Futuro appartiene al suo popolo."
+    gloss: 0
+    tier: 0
+  - key: site.history.revised
+    text: Rivisto il giorno {0} (era {1})
+    gloss: 0
+    tier: 0
+  - key: site.history.people
+    text: Persone di {0} nell'Archivio delle stirpi
+    gloss: 0
+    tier: 0
+  - key: site.history.index
+    text: Indice dei luoghi
+    gloss: 0
+    tier: 0
+  - key: site.history.presentNone
+    text: "Nessuna potenza detiene il Futuro. Il presente resta incerto finch\xE9
+      una non sorge."
+    gloss: 0
+    tier: 0
+  - key: site.history.today
+    text: 2150 oggi
+    gloss: 0
+    tier: 0
+  - key: site.history.whyCarry
+    text: Portato da {0}
+    gloss: 0
+    tier: 0
+  - key: site.history.whyPending
+    text: Portato da {0} (in sospeso)
+    gloss: 0
+    tier: 0
+  - key: site.history.noRevisions
+    text: "La storia non \xE8 ancora cambiata."
+    gloss: 0
+    tier: 0
+  - key: site.history.col.day
+    text: GIORNO
+    gloss: 0
+    tier: 0
+  - key: site.history.col.place
+    text: LUOGO
+    gloss: 0
+    tier: 0
+  - key: site.history.col.fact
+    text: FATTO
+    gloss: 0
+    tier: 0
+  - key: site.history.col.before
+    text: PRIMA
+    gloss: 0
+    tier: 0
+  - key: site.history.col.after
+    text: DOPO
+    gloss: 0
+    tier: 0
+  - key: site.history.col.why
+    text: "PERCH\xC9"
+    gloss: 0
+    tier: 0
+  - key: site.history.changed
+    text: Cambiato a Desk 3
+    gloss: 0
+    tier: 0
+  - key: site.history.changedRow
+    text: "Giorno {0}, {1}: {2} ora \xE8 {3} ({4})"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.intro
+    text: Schede dei cittadini del passato. Cerca per nome, o scegli un paese e un'epoca.
+    gloss: 0
+    tier: 0
+  - key: site.lineage.country
+    text: PAESE
+    gloss: 0
+    tier: 0
+  - key: site.lineage.era
+    text: EPOCA
+    gloss: 0
+    tier: 0
+  - key: site.lineage.all
+    text: Tutti
+    gloss: 0
+    tier: 0
+  - key: site.lineage.count
+    text: '{0} schede'
+    gloss: 0
+    tier: 0
+  - key: site.lineage.hits
+    text: '{0} schede corrispondono a "{1}"'
+    gloss: 0
+    tier: 0
+  - key: site.lineage.noHits
+    text: Nessuna scheda corrisponde.
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.name
+    text: NOME
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.born
+    text: NASCITA
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.place
+    text: LUOGO
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.name
+    text: NOME
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.born
+    text: NASCITA
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.died
+    text: MORTE
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.place
+    text: LUOGO
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.note
+    text: PROFESSIONE / NOTA
+    gloss: 0
+    tier: 0
+  - key: site.lineage.unknown
+    text: Sconosciuto
+    gloss: 0
+    tier: 0
+  - key: site.lineage.relations
+    text: PARENTELE
+    gloss: 0
+    tier: 0
+  - key: site.lineage.back
+    text: Torna alla ricerca
+    gloss: 0
+    tier: 0
+  - key: ending.world.leftBehind
+    text: Il mondo che ti lasci alle spalle
+    gloss: 0
+    tier: 0
+  - key: settings.language
+    text: Lingua
+    gloss: 0
+    tier: 0
+  - key: settings.followHistory
+    text: Segui la storia
+    gloss: 0
+    tier: 0
+  - key: settings.alwaysEnglish
+    text: Sempre inglese
+    gloss: 0
+    tier: 0
+  - key: settings.languageLocked
+    text: 'Bloccata dal giorno {0}: ora l''ufficio legge la lingua del mondo. Passa
+      sopra una parola per tradurla (la Lente di traduzione).'
+    gloss: 0
+    tier: 0
+  - key: settings.motion
+    text: Movimento
+    gloss: 0
+    tier: 0
+  - key: settings.motionFull
+    text: Completo
+    gloss: 0
+    tier: 0
+  - key: settings.motionReduced
+    text: Ridotto
+    gloss: 0
+    tier: 0
+  - key: settings.motionIntensity
+    text: "Intensit\xE0"
+    gloss: 0
+    tier: 0
+  - key: settings.desktop
+    text: Le icone del desktop si aprono con
+    gloss: 0
+    tier: 0
+  - key: settings.iconDouble
+    text: Doppio clic
+    gloss: 0
+    tier: 0
+  - key: settings.iconSingle
+    text: Clic singolo
+    gloss: 0
+    tier: 0
+  - key: settings.resetIcons
+    text: Ripristina la posizione delle icone
+    gloss: 0
+    tier: 0
+  - key: desktop.arrange
+    text: Disponi le icone
+    gloss: 0
+    tier: 0
+  - key: menu.open
+    text: Apri
+    gloss: 0
+    tier: 0
+  - key: settings.note
+    text: Colori, caratteri e sfondo seguono sempre la storia. Un cambio di lingua
+      vale dalla prossima apertura dell'ufficio. Il movimento ridotto mostra subito
+      le traduzioni.
+    gloss: 0
+    tier: 0
+  - key: startmenu.mail
+    text: Posta
+    gloss: 0
+    tier: 0
+  - key: startmenu.mailUnread
+    text: Posta ({0})
+    gloss: 0
+    tier: 0
+  - key: startmenu.account
+    text: Conto del cittadino
+    gloss: 0
+    tier: 0
+  - key: startmenu.notes
+    text: Appunti
+    gloss: 0
+    tier: 0
+  - key: window.mail
+    text: Posta
+    gloss: 0
+    tier: 0
+  - key: window.mailUnread
+    text: Posta ({0} non letti)
+    gloss: 0
+    tier: 0
+  - key: window.account
+    text: Conto del cittadino
+    gloss: 0
+    tier: 0
+  - key: window.shortcuts
+    text: Scorciatoie da tastiera
+    gloss: 0
+    tier: 0
+  - key: settings.keyboard
+    text: Tastiera
+    gloss: 0
+    tier: 0
+  - key: settings.showShortcuts
+    text: Mostra le scorciatoie
+    gloss: 0
+    tier: 0
+  - key: keys.focusSearch
+    text: Apri il pannello di ricerca dell'app Indagine
+    gloss: 0
+    tier: 0
+  - key: keys.intoResults
+    text: 'Dal campo di ricerca ai risultati: le frecce scorrono i risultati, Enter
+      ne apre uno'
+    gloss: 0
+    tier: 0
+  - key: keys.escape
+    text: 'Clic destro o Esc: chiudi un menu, questa scheda o il pannello di ricerca;
+      cancella la ricerca; esci da un campo di testo; lascia un valore tenuto; chiudi
+      il Menu o annulla un trascinamento. Altrimenti, torna alla scrivania'
+    gloss: 0
+    tier: 0
+  - key: keys.help
+    text: Mostra o nascondi questa scheda
+    gloss: 0
+    tier: 0
+  - key: keys.openIcon
+    text: 'Desktop: apri l''icona selezionata'
+    gloss: 0
+    tier: 0
+  - key: keys.icons
+    text: "Desktop: seleziona l'icona pi\xF9 vicina in quella direzione"
+    gloss: 0
+    tier: 0
+  - key: keys.orders
+    text: "Ordini: muoviti nell'albero (verso un prerequisito, un dipendente, o su
+      e gi\xF9 in una colonna)"
+    gloss: 0
+    tier: 0
+  - key: keys.ordersAct
+    text: 'Ordini: ordina, annulla o installa l''oggetto selezionato'
+    gloss: 0
+    tier: 0
+  - key: keys.step
+    text: 'Indagine: mostra i documenti dei passi da 1 a 4 (Documenti, Registri,
+      Manuali, Regole)'
+    gloss: 0
+    tier: 0
+  - key: keys.nextStep
+    text: 'Indagine: mostra i documenti del passo successivo o precedente'
+    gloss: 0
+    tier: 0
+  - key: keys.findings
+    text: Mostra o nascondi la colonna dei riscontri
+    gloss: 0
+    tier: 0
+  - key: keys.otherPane
+    text: Fai dell'altro lato quello in cui si apre lo scaffale
+    gloss: 0
+    tier: 0
+  - key: keys.split
+    text: Due riquadri o uno
+    gloss: 0
+    tier: 0
+  - key: keys.history
+    text: Indietro o avanti nel riquadro in cui si apre lo scaffale
+    gloss: 0
+    tier: 0
+  - key: keys.regions
+    text: 'La parte successiva o precedente dell''app: la barra dei menu, i riquadri,
+      i riscontri, Annulla'
+    gloss: 0
+    tier: 0
+  - key: keys.rows
+    text: Sposta il focus su valori, etichette, riscontri, puntine o pulsanti
+    gloss: 0
+    tier: 0
+  - key: keys.follow
+    text: Apri l'elemento selezionato, o segui il collegamento di un valore
+    gloss: 0
+    tier: 0
+  - key: keys.followOther
+    text: Segui il collegamento di un valore, o apri il risultato selezionato, sull'altro
+      lato
+    gloss: 0
+    tier: 0
+  - key: keys.pick
+    text: Tieni il valore selezionato, poi confrontalo con il successivo
+    gloss: 0
+    tier: 0
+  - key: keys.copy
+    text: 'Copia il valore selezionato, o "Etichetta: valore"'
+    gloss: 0
+    tier: 0
+  - key: keys.paste
+    text: 'Appunti: incolla il valore copiato come ritaglio (un campo di testo incolla
+      come al solito)'
+    gloss: 0
+    tier: 0
+  - key: keys.pin
+    text: Fissa o togli il valore selezionato, o il documento del riquadro
+    gloss: 0
+    tier: 0
+  - key: keys.zoom
+    text: 'Ingrandisci, riduci o riporta i riquadri alla Dimensione testo delle Impostazioni
+      (l''albero degli Ordini: ingrandisci, riduci o torna al 100 %)'
+    gloss: 0
+    tier: 0
+  - key: keys.contextMenu
+    text: Il menu contestuale della riga selezionata o dell'icona selezionata (copia,
+      fissa, scegli, apri, disponi)
+    gloss: 0
+    tier: 0
+  - key: keys.section.desk
+    text: Alla scrivania
+    gloss: 0
+    tier: 0
+  - key: keys.section.pc
+    text: Al PC
+    gloss: 0
+    tier: 0
+  - key: keys.desk.drag
+    text: "Sposta un documento o un timbro: sul bancone un documento \xE8 piccolo,
+      sulla scrivania a grandezza piena; una volta timbrato il passaporto, un documento
+      lasciato sul bancone restituisce i documenti"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.inspect
+    text: "Modalit\xE0 ispezione (il pulsante rosso): clicca due cose per confrontarle"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.stamps
+    text: 'La barra dei timbri (la linguetta grigia a destra): trascina un timbro
+      sul passaporto e rilascialo'
+    gloss: 0
+    tier: 0
+  - key: keys.desk.pc
+    text: Al PC e ritorno (la linguetta grigia a sinistra)
+    gloss: 0
+    tier: 0
+  - key: keys.desk.back
+    text: "Esci da: un trascinamento, la ruota, il PC, un valore tenuto, la modalit\xE0
+      ispezione, la barra dei timbri, la citt\xE0, la vista di lettura"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.city
+    text: "Guarda la citt\xE0, e torna"
+    gloss: 0
+    tier: 0
+  - key: app.copied
+    text: 'Copiato: {0}'
+    gloss: 0
+    tier: 0
+  - key: app.row.line
+    text: "{0} \xB7 riga {1}"
+    gloss: 0
+    tier: 0
+  - key: app.item.record
+    text: "Registri dei cittadini \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: app.pins.full
+    text: 'Prima togli qualcosa: le puntine sono finite.'
+    gloss: 0
+    tier: 0
+  - key: app.pins.empty
+    text: Ctrl+P fissa il valore su cui sei. Clic destro su una puntina per toglierla.
+    gloss: 0
+    tier: 0
+  - key: app.recent.empty
+    text: I documenti, i manuali e le schede che apri appaiono qui.
+    gloss: 0
+    tier: 0
+  - key: app.jump.gone
+    text: "Non \xE8 pi\xF9 qui."
+    gloss: 0
+    tier: 0
+  - key: search.chip
+    text: "{0} \xB7 non tradotto {1}"
+    gloss: 0
+    tier: 0
+  - key: menu.copy
+    text: Copia valore
+    gloss: 0
+    tier: 0
+  - key: menu.copyRow
+    text: Copia riga
+    gloss: 0
+    tier: 0
+  - key: menu.pin
+    text: Fissa
+    gloss: 0
+    tier: 0
+  - key: menu.unpin
+    text: Togli
+    gloss: 0
+    tier: 0
+  - key: menu.pick
+    text: Scegli per confrontare
+    gloss: 0
+    tier: 0
+  - key: settings.investigation
+    text: Indagine
+    gloss: 0
+    tier: 0
+  - key: mail.inbox
+    text: Posta in arrivo
+    gloss: 0
+    tier: 0
+  - key: mail.none
+    text: Nessun messaggio.
+    gloss: 0
+    tier: 0
+  - key: mail.select
+    text: Seleziona un messaggio per leggerlo.
+    gloss: 0
+    tier: 0
+  - key: mail.rowMeta
+    text: "Giorno {0} \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: mail.to
+    text: A tutti gli agenti di sportello
+    gloss: 0
+    tier: 0
+  - key: mail.from.directorate
+    text: Direzione delle Dogane
+    gloss: 0
+    tier: 0
+  - key: mail.from.times
+    text: Il Corriere del Tempo
+    gloss: 0
+    tier: 0
+  - key: mail.from.integrity
+    text: "Ufficio Integrit\xE0 della Linea Temporale"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.memo
+    text: Direttive di oggi
+    gloss: 0
+    tier: 0
+  - key: mail.subject.times
+    text: Il Corriere del Tempo, giorno {0}
+    gloss: 0
+    tier: 0
+  - key: mail.subject.citation
+    text: 'Avviso di richiamo: viaggiatore {0}'
+    gloss: 0
+    tier: 0
+  - key: mail.body.noDirectives
+    text: Nessuna direttiva di viaggio oggi.
+    gloss: 0
+    tier: 0
+  - key: mail.body.times
+    text: "L'edizione di oggi \xE8 sul sito Notizie."
+    gloss: 0
+    tier: 0
+  - key: mail.body.timesArchived
+    text: "Questa edizione \xE8 conservata nell'archivio del sito Notizie."
+    gloss: 0
+    tier: 0
+  - key: mail.body.citation
+    text: 'Una copia del richiamo di cui hai preso atto:'
+    gloss: 0
+    tier: 0
+  - key: mail.link.rules
+    text: Apri le direttive >
+    gloss: 0
+    tier: 0
+  - key: mail.link.news
+    text: Leggilo sul sito Notizie >
+    gloss: 0
+    tier: 0
+  - key: account.form.title
+    text: ESTRATTO DELLA SCHEDA DEL CITTADINO
+    gloss: 0
+    tier: 0
+  - key: account.query
+    text: "Titolare del conto: {0} \xB7 ID cittadino {1}"
+    gloss: 0
+    tier: 0
+  - key: account.group.records
+    text: SCHEDE
+    gloss: 0
+    tier: 0
+  - key: account.group.forms
+    text: MODULI IN ARCHIVIO
+    gloss: 0
+    tier: 0
+  - key: account.group.travel
+    text: VIAGGI
+    gloss: 0
+    tier: 0
+  - key: account.row.name
+    text: Nome
+    gloss: 0
+    tier: 0
+  - key: account.row.born
+    text: Nascita
+    gloss: 0
+    tier: 0
+  - key: account.row.lineage
+    text: Stirpe
+    gloss: 0
+    tier: 0
+  - key: account.row.citizenId
+    text: ID cittadino
+    gloss: 0
+    tier: 0
+  - key: account.row.status
+    text: Stato
+    gloss: 0
+    tier: 0
+  - key: account.row.standing
+    text: Posizione
+    gloss: 0
+    tier: 0
+  - key: account.row.debt
+    text: Debito
+    gloss: 0
+    tier: 0
+  - key: account.row.balance
+    text: Saldo
+    gloss: 0
+    tier: 0
+  - key: account.row.employment
+    text: Impiego
+    gloss: 0
+    tier: 0
+  - key: account.row.departure
+    text: Partenza prenotata
+    gloss: 0
+    tier: 0
+  - key: account.row.note
+    text: Nota
+    gloss: 0
+    tier: 0
+  - key: account.status.eligible
+    text: Idoneo
+    gloss: 0
+    tier: 0
+  - key: account.status.standard
+    text: Standard
+    gloss: 0
+    tier: 0
+  - key: account.standing.good
+    text: Buona
+    gloss: 0
+    tier: 0
+  - key: account.standing.frozen
+    text: Congelata
+    gloss: 0
+    tier: 0
+  - key: account.departure.none
+    text: Nessuna
+    gloss: 0
+    tier: 0
+  - key: account.departure.booked
+    text: Partenza Sgravio del debito, prenotata
+    gloss: 0
+    tier: 0
+  - key: account.instalmentRate
+    text: '{0}% della paga allo Sgravio del debito'
+    gloss: 0
+    tier: 0
+  - key: account.statement.none
+    text: 'Ancora nessuna voce: un giorno viene scritto alla fine del suo turno.'
+    gloss: 0
+    tier: 0
+  - key: account.statement.unit
+    text: Importi in {0}.
+    gloss: 0
+    tier: 0
+  - key: contract.title
+    text: "CONTRATTO DI LAVORO SGRAVIO DEL DEBITO \xB7 TC-520"
+    gloss: 0
+    tier: 0
+  - key: contract.row.worker
+    text: Lavoratore
+    gloss: 0
+    tier: 0
+  - key: contract.row.citizenId
+    text: ID cittadino
+    gloss: 0
+    tier: 0
+  - key: contract.row.employer
+    text: Datore di lavoro
+    gloss: 0
+    tier: 0
+  - key: contract.row.worksite
+    text: Luogo di lavoro
+    gloss: 0
+    tier: 0
+  - key: contract.row.term
+    text: Durata
+    gloss: 0
+    tier: 0
+  - key: contract.row.wage
+    text: Paga giornaliera
+    gloss: 0
+    tier: 0
+  - key: contract.term
+    text: '{0:N0} giorni'
+    gloss: 0
+    tier: 0
+  - key: notes.days
+    text: Giorni
+    gloss: 0
+    tier: 0
+  - key: notes.day
+    text: Giorno {0}
+    gloss: 0
+    tier: 0
+  - key: notes.today
+    text: Giorno {0} (oggi)
+    gloss: 0
+    tier: 0
+  - key: notes.pageTitle
+    text: "Appunti \xB7 giorno {0}"
+    gloss: 0
+    tier: 0
+  - key: notes.clippings
+    text: Ritagli
+    gloss: 0
+    tier: 0
+  - key: notes.notes
+    text: Appunti
+    gloss: 0
+    tier: 0
+  - key: notes.hint
+    text: 'Ancora niente qui. Copia un valore (Ctrl+C, o clic destro su una riga:
+      Copia valore), poi Ctrl+V o Incolla ritaglio; oppure scrivi sotto.'
+    gloss: 0
+    tier: 0
+  - key: notes.paste
+    text: Incolla ritaglio
+    gloss: 0
+    tier: 0
+  - key: notes.pasted
+    text: Incollato
+    gloss: 0
+    tier: 0
+  - key: notes.remove
+    text: Rimuovi
+    gloss: 0
+    tier: 0
+  - key: notes.placeholder
+    text: Scrivi qui i tuoi appunti...
+    gloss: 0
+    tier: 0
+  - key: notes.loose
+    text: Altri ritagli
+    gloss: 0
+    tier: 0
+  - key: notes.full
+    text: 'Questa pagina contiene {0} ritagli: rimuovine uno per incollarne un altro.'
+    gloss: 0
+    tier: 0
+  - key: briefing.empty
+    text: Nessuna direttiva. Esamina i soggetti con precisione.
+    gloss: 0
+    tier: 0
+  - key: briefing.bulletinHeader
+    text: "PROMEMORIA DELL'UFFICIO \xB7 DESK 3"
+    gloss: 0
+    tier: 0
+  - key: briefing.newHours
+    text: 'Nuovo orario da oggi: lo sportello apre alle {0} e chiude alle {1}.'
+    gloss: 0
+    tier: 0
+  - key: results.leisureDepartures
+    text: 'Partenze di piacere: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.debtReliefDepartures
+    text: 'Partenze Sgravio del debito: {0}   ({1:N0} {2} di debito messi al lavoro)'
+    gloss: 0
+    tier: 0
+  - key: results.timeline
+    text: La linea temporale stasera
+    gloss: 0
+    tier: 0
+  - key: results.citations
+    text: 'Richiami oggi: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.unproven
+    text: 'Rifiuti non documentati: {0} (registra una deviazione prima di rifiutare)'
+    gloss: 0
+    tier: 0
+  - key: results.detained
+    text: 'Trattenuti: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.processedAll
+    text: 'Viaggiatori esaminati: {0}, tutta la coda'
+    gloss: 0
+    tier: 0
+  - key: results.processedOf
+    text: 'Viaggiatori esaminati: {0} su {1} ({2} ancora in attesa alla chiusura,
+      non pagati)'
+    gloss: 0
+    tier: 0
+  - key: results.hours
+    text: 'Orario dello sportello: dalle {0} alle {1}'
+    gloss: 0
+    tier: 0
+  - key: results.moneyHeader
+    text: <b>Denaro, in {0}</b>
+    gloss: 0
+    tier: 0
+  - key: results.row.pay
+    text: 'Decisioni giuste: {0} x {1}'
+    gloss: 0
+    tier: 0
+  - key: results.row.payTotal
+    text: 'Decisioni giuste: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.row.warned
+    text: 'Decisioni sbagliate: {0}, l''avvertimento gratuito'
+    gloss: 0
+    tier: 0
+  - key: results.row.fined
+    text: 'Decisioni sbagliate: {0} x {1} di multa'
+    gloss: 0
+    tier: 0
+  - key: results.row.finedTotal
+    text: 'Decisioni sbagliate multate: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.row.stranded
+    text: 'Bloccati in transito: {0}, liberatorie in archivio'
+    gloss: 0
+    tier: 0
+  - key: results.row.strandedFined
+    text: 'Bloccati in transito: {0}, multa (nessuna liberatoria firmata)'
+    gloss: 0
+    tier: 0
+  - key: results.row.instalment
+    text: Rata dello Sgravio del debito ({0:N0} ancora dovuti)
+    gloss: 0
+    tier: 0
+  - key: results.row.other
+    text: Altro denaro
+    gloss: 0
+    tier: 0
+  - key: results.row.net
+    text: Netto del turno
+    gloss: 0
+    tier: 0
+  - key: results.row.bills
+    text: Bollette di stasera
+    gloss: 0
+    tier: 0
+  - key: results.row.after
+    text: Portafoglio dopo le bollette
+    gloss: 0
+    tier: 0
+  - key: results.wallet
+    text: '{0} (ora {1})'
+    gloss: 0
+    tier: 0
+  - key: scanner.idle
+    text: 'Nessuna deviazione documentata.
+
+
+      Per registrare prove, confronta
+      un campo di un documento, una risposta del viaggiatore o un capo che indossa
+      con la voce di riferimento del luogo dichiarato, con la voce a cui appartiene
+      davvero o con la Scheda del cittadino.'
+    gloss: 0
+    tier: 0
+  - key: scanner.summary
+    text: "Deviazioni documentate: {0}. Il rifiuto \xE8 giustificato."
+    gloss: 0
+    tier: 0
+  - key: report.proof.claimMismatch
+    text: Non corrisponde
+    gloss: 0
+    tier: 0
+  - key: report.proof.foreignOrigin
+    text: Appartiene altrove
+    gloss: 0
+    tier: 0
+  - key: report.proof.recordMismatch
+    text: Registri dell'agenzia
+    gloss: 0
+    tier: 0
+  - key: report.proof.crossMismatch
+    text: I documenti discordano
+    gloss: 0
+    tier: 0
+  - key: report.proof.personMismatch
+    text: "Non \xE8 la persona"
+    gloss: 0
+    tier: 0
+  - key: form.interview.head
+    text: "{0} \xB7 Agente di sportello: {1} \xB7 {2}"
+    gloss: 0
+    tier: 0
+  - key: rules.memo.to
+    text: A tutti gli agenti di sportello
+    gloss: 0
+    tier: 0
+  - key: directives.none
+    text: 'Direttive: tutte le destinazioni autorizzate oggi.'
+    gloss: 0
+    tier: 0
+  - key: document.untitled
+    text: Documento
+    gloss: 0
+    tier: 0
+  - key: book.untitled
+    text: Riferimento
+    gloss: 0
+    tier: 0
+  - key: book.claimedNote
+    text: Dichiarato
+    gloss: 0
+    tier: 0
+  - key: book.revisedNote
+    text: Rivisto
+    gloss: 0
+    tier: 0
+  - key: book.edition
+    text: Edizione del giorno {0}
+    gloss: 0
+    tier: 0
+  - key: compare.deviationLogged
+    text: "\u25CF  DEVIAZIONE REGISTRATA \u2014 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.alreadyDocumented
+    text: "\u25CF  GI\xC0 DOCUMENTATA \u2014 {0} \xE8 nel Rapporto di deviazione"
+    gloss: 0
+    tier: 0
+  - key: compare.pair
+    text: "{0}  \xB7  {2}  vs  {4}"
+    gloss: 0
+    tier: 0
+  - key: compare.pickAnother
+    text: '{0}:  {1}    vs    (scegli un altro valore da confrontare)'
+    gloss: 0
+    tier: 0
+  - key: compare.travellerLabel
+    text: "Viaggiatore \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.faceSlot
+    text: VOLTO
+    gloss: 0
+    tier: 0
+  - key: compare.faceShown
+    text: la persona alla scrivania
+    gloss: 0
+    tier: 0
+  - key: compare.photoShown
+    text: la foto
+    gloss: 0
+    tier: 0
+  - key: compare.untranslated
+    text: (non tradotto {0}; Traduttore {1})
+    gloss: 0
+    tier: 0
+  - key: slot.Outfit
+    text: ABITO
+    gloss: 0
+    tier: 0
+  - key: slot.Hair
+    text: CAPELLI
+    gloss: 0
+    tier: 0
+  - key: slot.FacialHair
+    text: BARBA
+    gloss: 0
+    tier: 0
+  - key: slot.Headwear
+    text: COPRICAPO
+    gloss: 0
+    tier: 0
+  - key: slot.Accessory
+    text: ACCESSORIO
+    gloss: 0
+    tier: 0
+  - key: records.placeholder
+    text: "Nome o numero\u2026"
+    gloss: 0
+    tier: 0
+  - key: records.idle
+    text: Scrivi un nome o un numero di scheda e premi CERCA.
+    gloss: 0
+    tier: 0
+  - key: records.noRecord
+    text: "NESSUNA SCHEDA IN ARCHIVIO per \"{0}\" \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: records.onFile
+    text: "Ricerca \"{0}\" \xB7 1 scheda in archivio \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: records.group.registry
+    text: VOCE DEL REGISTRO
+    gloss: 0
+    tier: 0
+  - key: records.row.name
+    text: Nome
+    gloss: 0
+    tier: 0
+  - key: records.row.born
+    text: Nascita
+    gloss: 0
+    tier: 0
+  - key: records.row.origin
+    text: Origine
+    gloss: 0
+    tier: 0
+  - key: records.row.note
+    text: Nota
+    gloss: 0
+    tier: 0
+  - key: records.note.none
+    text: Nessuna osservazione in archivio.
+    gloss: 0
+    tier: 0
+  - key: records.note.sealed
+    text: Soggetto prioritario. Schede secretate oltre il tuo livello di accesso.
+    gloss: 0
+    tier: 0
+  - key: records.group.file
+    text: FASCICOLO
+    gloss: 0
+    tier: 0
+  - key: records.row.file
+    text: Nota
+    gloss: 0
+    tier: 0
+  - key: records.group.seen
+    text: "GI\xC0 VISTO \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: visit.flag.days
+    text: '{0} {1} GIORNI FA'
+    gloss: 0
+    tier: 0
+  - key: visit.flag.yesterday
+    text: '{0} IERI'
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Accepted
+    text: Accettato
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Denied
+    text: Rifiutato
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Detained
+    text: Trattenuto
+    gloss: 0
+    tier: 0
+  - key: visit.citation
+    text: "\xB7 Richiamo: {0}"
+    gloss: 0
+    tier: 0
+  - key: board.noScan
+    text: 'Scansiona un documento per riempire la bacheca: lascialo sullo scanner.'
+    gloss: 0
+    tier: 0
+  - key: board.record.found
+    text: "SCHEDA IN ARCHIVIO \xB7 {0} \xB7 {1} \xB7 APRI"
+    gloss: 0
+    tier: 0
+  - key: board.record.noNumber
+    text: nessun numero
+    gloss: 0
+    tier: 0
+  - key: board.record.none
+    text: "NESSUNA SCHEDA IN ARCHIVIO \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: board.record.nothing
+    text: Nessun documento scansionato indica ancora un ID o un nome.
+    gloss: 0
+    tier: 0
+  - key: board.section.rules
+    text: VERIFICA DELLE REGOLE
+    gloss: 0
+    tier: 0
+  - key: board.rules.none
+    text: Ancora nessuna regola di oggi da verificare.
+    gloss: 0
+    tier: 0
+  - key: board.rule.destination
+    text: Destinazione
+    gloss: 0
+    tier: 0
+  - key: board.rule.paper
+    text: Documento richiesto
+    gloss: 0
+    tier: 0
+  - key: board.chip.Valid
+    text: VALIDO
+    gloss: 0
+    tier: 0
+  - key: board.chip.Expired
+    text: SCADUTO
+    gloss: 0
+    tier: 0
+  - key: board.chip.Closed
+    text: CHIUSO
+    gloss: 0
+    tier: 0
+  - key: board.chip.Missing
+    text: MANCANTE
+    gloss: 0
+    tier: 0
+  - key: board.chip.WrongDate
+    text: DATA ERRATA
+    gloss: 0
+    tier: 0
+  - key: board.section.cross
+    text: CONFRONTO INCROCIATO
+    gloss: 0
+    tier: 0
+  - key: board.cross.none
+    text: Scansiona due documenti (o uno con una scheda in archivio) per confrontarli
+      qui.
+    gloss: 0
+    tier: 0
+  - key: board.cross.detail
+    text: Dettaglio
+    gloss: 0
+    tier: 0
+  - key: board.cross.record
+    text: Scheda
+    gloss: 0
+    tier: 0
+  - key: board.cross.agree
+    text: "{0} \xB7 {1} concordano"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.sources
+    text: Fonti
+    gloss: 0
+    tier: 0
+  - key: board.section.overlay
+    text: SOVRAPPOSIZIONE
+    gloss: 0
+    tier: 0
+  - key: board.overlay.hint
+    text: Trascina una fonte su un'altra (o cliccane due) per sovrapporle.
+    gloss: 0
+    tier: 0
+  - key: board.overlay.over
+    text: '{0} su {1}: scorri per sfumare. Solo le vere differenze luccicano.'
+    gloss: 0
+    tier: 0
+  - key: board.overlay.nothing
+    text: Questi due non hanno nulla in comune.
+    gloss: 0
+    tier: 0
+  - key: board.overlay.photo
+    text: la foto
+    gloss: 0
+    tier: 0
+  - key: board.overlay.face
+    text: Il suo volto
+    gloss: 0
+    tier: 0
+  - key: board.overlay.faceLabel
+    text: Volto
+    gloss: 0
+    tier: 0
+  - key: board.overlay.register
+    text: Registro dei sigilli
+    gloss: 0
+    tier: 0
+  - key: layers.tab.print
+    text: STAMPA
+    gloss: 0
+    tier: 0
+  - key: layers.tab.uv
+    text: UV
+    gloss: 0
+    tier: 0
+  - key: layers.tab.chip
+    text: CHIP
+    gloss: 0
+    tier: 0
+  - key: layers.uv.title
+    text: "LUCE UV \xB7 STRATO NASCOSTO"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.none
+    text: Nulla appare sotto la luce UV.
+    gloss: 0
+    tier: 0
+  - key: layers.uv.wholePaper
+    text: l'intero documento
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Watermark
+    text: 'Filigrana ({0}): {1}'
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Ghost
+    text: 'Fantasma sotto {0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Microprint
+    text: 'Microstampa ({0}): {1}'
+    gloss: 0
+    tier: 0
+  - key: layers.chip.title
+    text: DATI DEL CHIP
+    gloss: 0
+    tier: 0
+  - key: layers.chip.none
+    text: Questo documento non ha un chip.
+    gloss: 0
+    tier: 0
+  - key: records.row.number
+    text: N. di sfollamento
+    gloss: 0
+    tier: 0
+  - key: records.row.incident
+    text: Incidente
+    gloss: 0
+    tier: 0
+  - key: records.row.found
+    text: Ritrovato
+    gloss: 0
+    tier: 0
+  - key: records.row.status
+    text: Stato
+    gloss: 0
+    tier: 0
+  - key: records.status.awaiting
+    text: In attesa di ritorno
+    gloss: 0
+    tier: 0
+  - key: records.group.account
+    text: SCHEDE
+    gloss: 0
+    tier: 0
+  - key: records.group.forms
+    text: MODULI IN ARCHIVIO
+    gloss: 0
+    tier: 0
+  - key: records.group.travel
+    text: VIAGGI
+    gloss: 0
+    tier: 0
+  - key: records.row.citizenId
+    text: ID cittadino
+    gloss: 0
+    tier: 0
+  - key: records.row.standing
+    text: Posizione
+    gloss: 0
+    tier: 0
+  - key: records.row.debt
+    text: Debito
+    gloss: 0
+    tier: 0
+  - key: records.row.lineage
+    text: Stirpe
+    gloss: 0
+    tier: 0
+  - key: records.row.transponder
+    text: Transponder
+    gloss: 0
+    tier: 0
+  - key: records.row.transponderClass
+    text: Classe transponder
+    gloss: 0
+    tier: 0
+  - key: records.row.waiver
+    text: Liberatoria di blocco
+    gloss: 0
+    tier: 0
+  - key: records.row.proof
+    text: Prova di mezzi
+    gloss: 0
+    tier: 0
+  - key: records.row.contract
+    text: Permesso di lavoro
+    gloss: 0
+    tier: 0
+  - key: records.row.departure
+    text: Partenza prenotata
+    gloss: 0
+    tier: 0
+  - key: records.row.departureDate
+    text: Data di partenza
+    gloss: 0
+    tier: 0
+  - key: records.row.trips
+    text: Viaggi passati
+    gloss: 0
+    tier: 0
+  - key: records.row.trip
+    text: Viaggio passato
+    gloss: 0
+    tier: 0
+  - key: records.standing.good
+    text: Buona
+    gloss: 0
+    tier: 0
+  - key: records.none
+    text: Nessuno in archivio
+    gloss: 0
+    tier: 0
+  - key: records.trip.returned
+    text: rientrato
+    gloss: 0
+    tier: 0
+  - key: case.roleUnknown
+    text: Viaggiatore
+    gloss: 0
+    tier: 0
+  - key: case.unlistedLand
+    text: una terra non elencata
+    gloss: 0
+    tier: 0
+  - key: case.subject
+    text: Soggetto #{0}
+    gloss: 0
+    tier: 0
+  - key: records.compareLabel
+    text: "Registri \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: citation.unproven
+    text: 'Rifiutato senza prove registrate. Registra cosa non va prima di rifiutare:
+      una differenza nei documenti, una regola violata o una data non valida.'
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong
+    text: Approvato un viaggiatore travestito o una destinazione vietata.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.panic
+    text: Approvato un viaggiatore che causerebbe il panico in {0}.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.forged
+    text: Approvati documenti falsi.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.disguised
+    text: Approvato un viaggiatore travestito.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.closed
+    text: Approvata una destinazione chiusa.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.smuggled
+    text: Lasciati uscire beni del 2150 dal 2150.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.wrongDate
+    text: Approvata una partenza nella data sbagliata.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.expired
+    text: Approvato un documento scaduto.
+    gloss: 0
+    tier: 0
+  - key: citation.deniedWrong
+    text: Rifiutato un viaggiatore legittimo e autorizzato.
+    gloss: 0
+    tier: 0
+  - key: citation.detainedWrong
+    text: Trattenuto un viaggiatore che non ha violato alcuna legge.
+    gloss: 0
+    tier: 0
+  - key: citation.detainedUnproven
+    text: "Trattenuto senza prove registrate. Registra cosa ha violato prima di trattenere:
+      un documento falso, un'identit\xE0 falsa o contrabbando."
+    gloss: 0
+    tier: 0
+  - key: citation.warning
+    text: "Avvertimento {0}/{1} \u2014 nessuna trattenuta sulla paga."
+    gloss: 0
+    tier: 0
+  - key: citation.penalty
+    text: "Penalit\xE0: -{0} {1}."
+    gloss: 0
+    tier: 0
+  - key: rule.eraForbidden
+    text: Nessun viaggio consentito verso {0}.
+    gloss: 0
+    tier: 0
+  - key: rule.nationForbidden
+    text: Nessun viaggio consentito verso {0}.
+    gloss: 0
+    tier: 0
+  - key: rule.nationEraForbidden
+    text: Nessun viaggio consentito verso {0} in {1}.
+    gloss: 0
+    tier: 0
+  - key: rule.generic
+    text: Restrizione di viaggio in vigore.
+    gloss: 0
+    tier: 0
+  - key: desk.scanHint
+    text: Trascina un documento sullo scanner per aprirlo sul PC.
+    gloss: 0
+    tier: 0
+  - key: desk.wheelHint
+    text: Clicca il viaggiatore per parlare e chiedere i documenti.
+    gloss: 0
+    tier: 0
+  - key: desk.readyCaption
+    text: DISPONIBILE
+    gloss: 0
+    tier: 0
+  - key: deskView.back
+    text: "\u25B2 Indietro"
+    gloss: 0
+    tier: 0
+  - key: deskView.backHint
+    text: Clic destro / Esc
+    gloss: 0
+    tier: 0
+  - key: stamp.label.approved
+    text: APPROVATO
+    gloss: 0
+    tier: 0
+  - key: stamp.label.denied
+    text: RESPINTO
+    gloss: 0
+    tier: 0
+  - key: stamp.hint.handBack
+    text: Trascina il passaporto timbrato sul BANCONE per restituire i documenti.
+    gloss: 0
+    tier: 0
+  - key: stamp.hint.place
+    text: Trascina un timbro sul passaporto e rilascialo.
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.notPassport
+    text: Solo il passaporto riceve un timbro di verdetto.
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.already
+    text: "Questo passaporto ha gi\xE0 un verdetto."
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.handBackFirst
+    text: Prima timbra il passaporto.
+    gloss: 0
+    tier: 0
+  - key: hardware.detain
+    text: TRATTIENI
+    gloss: 0
+    tier: 0
+  - key: stamp.dater.by
+    text: 'DA: {0}'
+    gloss: 0
+    tier: 0
+  - key: desk.counter
+    text: BANCONE
+    gloss: 0
+    tier: 0
+  - key: controls.pcTab
+    text: PC
+    gloss: 0
+    tier: 0
+  - key: controls.deskTab
+    text: SCRIVANIA
+    gloss: 0
+    tier: 0
+  - key: controls.stampsTab
+    text: TIMBRI
+    gloss: 0
+    tier: 0
+  - key: controls.inspectHint
+    text: 'ISPEZIONE: clicca due cose per confrontarle. Clic destro o Esc per uscire.'
+    gloss: 0
+    tier: 0
+  - key: stamp.zone.handBack
+    text: "\u25B2  RESTITUISCI  \u25B2"
+    gloss: 0
+    tier: 0
+  - key: stamp.zone.stampFirst
+    text: PRIMA TIMBRA IL PASSAPORTO
+    gloss: 0
+    tier: 0
+  - key: city.look
+    text: "CITT\xC0"
+    gloss: 0
+    tier: 0
+  - key: city.back
+    text: SCRIVANIA
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.title
+    text: REGOLE DI OGGI
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.none
+    text: Nessuna regola oggi.
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.papers
+    text: DOCUMENTI NON CONSEGNATI
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperFlag
+    text: '{0}: mancante? Clicca per segnalarlo.'
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperFlagged
+    text: '{0}: segnalato. Chiedilo.'
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperNotCarried
+    text: '{0}: non portato.'
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.papersNone
+    text: "Ogni documento \xE8 stato consegnato."
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabRules
+    text: REGOLE
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabPapers
+    text: DOCUMENTI
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabSeals
+    text: SIGILLI
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.seals
+    text: REGISTRO DEI SIGILLI
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabGuide
+    text: GUIDA
+    gloss: 0
+    tier: 0
+  - key: desk.guide.body
+    text: '<b>VERIFICA</b>  {0}
+
+
+      <b>CONTRO</b>  {1}
+
+
+      <b>UN ERRORE</b> 
+      {2}'
+    gloss: 0
+    tier: 0
+  - key: desk.guide.new
+    text: NUOVO
+    gloss: 0
+    tier: 0
+  - key: desk.guide.prev
+    text: < PREC
+    gloss: 0
+    tier: 0
+  - key: desk.guide.next
+    text: SUCC >
+    gloss: 0
+    tier: 0
+  - key: guide.step
+    text: TUTORIAL {0}/{1}
+    gloss: 0
+    tier: 0
+  - key: guide.skip
+    text: Salta il tutorial
+    gloss: 0
+    tier: 0
+  - key: guide.done
+    text: TUTORIAL COMPLETATO
+    gloss: 0
+    tier: 0
+  - key: guide.newToday
+    text: NUOVO OGGI
+    gloss: 0
+    tier: 0
+  - key: guide.moment
+    text: "<b>{0}</b>  {1} La sua pagina \xE8 aperta nella scheda GUIDA del regolamento."
+    gloss: 0
+    tier: 0
+  - key: guide.practice
+    text: ESERCIZIO
+    gloss: 0
+    tier: 0
+  - key: guide.gotIt
+    text: Capito
+    gloss: 0
+    tier: 0
+  - key: settings.replayTutorial
+    text: Rivedi il tutorial della scrivania
+    gloss: 0
+    tier: 0
+  - key: keys.replayTutorial
+    text: Rivedi il tutorial della scrivania
+    gloss: 0
+    tier: 0
+  - key: tooltip.day
+    text: 'Oggi: {0}'
+    gloss: 0
+    tier: 0
+  - key: tooltip.stability
+    text: La linea temporale. Tienila tra i suoi argini.
+    gloss: 0
+    tier: 0
+  - key: desk.calendar
+    text: "{0} \xB7 GIORNO {1}"
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.papers
+    text: "{0} ERRATO \u2014 documenti: \"{1}\"  /  previsto: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.said
+    text: "{0} ERRATO \u2014 il viaggiatore ha detto: \"{1}\"  /  previsto: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.worn
+    text: "{0} ERRATO \u2014 il viaggiatore indossa: \"{1}\"  /  previsto: \"{2}\"
+      \u2014 causerebbe il panico"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.papers
+    text: "{0} ERRATO \u2014 i documenti mostrano \"{1}\", che appartiene a {2}"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.said
+    text: "{0} ERRATO \u2014 il viaggiatore ha detto \"{1}\", che appartiene a {2}"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.worn
+    text: "{0} ERRATO \u2014 il viaggiatore indossa \"{1}\", che appartiene a {2}:
+      causerebbe il panico"
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.papers
+    text: "{0} ERRATO \u2014 documenti: \"{1}\"  /  registri dell'agenzia: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.said
+    text: "{0} ERRATO \u2014 il viaggiatore ha detto: \"{1}\"  /  registri dell'agenzia:
+      \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.worn
+    text: "{0} ERRATO \u2014 il viaggiatore indossa: \"{1}\"  /  registri dell'agenzia:
+      \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.crossMismatch.papers
+    text: "{0} INCOERENTE \u2014 i documenti discordano: \"{1}\"  /  \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.personMismatch.papers
+    text: "{0} ERRATO \u2014 la foto sui documenti non \xE8 il viaggiatore alla scrivania"
+    gloss: 0
+    tier: 0
+  - key: category.Language
+    text: LINGUA
+    gloss: 0
+    tier: 0
+  - key: category.Material
+    text: MATERIALE
+    gloss: 0
+    tier: 0
+  - key: category.Politics
+    text: SOVRANO
+    gloss: 0
+    tier: 0
+  - key: category.Technology
+    text: DISPOSITIVO
+    gloss: 0
+    tier: 0
+  - key: category.Currency
+    text: VALUTA
+    gloss: 0
+    tier: 0
+  - key: category.Geography
+    text: CAPITALE
+    gloss: 0
+    tier: 0
+  - key: category.Culture
+    text: ABITO
+    gloss: 0
+    tier: 0
+  - key: category.Name
+    text: NOME
+    gloss: 0
+    tier: 0
+  - key: category.BirthDate
+    text: DATA DI NASCITA
+    gloss: 0
+    tier: 0
+  - key: category.CitizenId
+    text: ID CITTADINO
+    gloss: 0
+    tier: 0
+  - key: category.Destination
+    text: DESTINAZIONE
+    gloss: 0
+    tier: 0
+  - key: category.Incident
+    text: INCIDENTE
+    gloss: 0
+    tier: 0
+  - key: category.DepartureDate
+    text: PARTENZA
+    gloss: 0
+    tier: 0
+  - key: category.Expiry
+    text: VALIDO FINO AL
+    gloss: 0
+    tier: 0
+  - key: category.AccountStatus
+    text: CLASSE DEL VISTO
+    gloss: 0
+    tier: 0
+  - key: category.TransponderId
+    text: TRANSPONDER
+    gloss: 0
+    tier: 0
+  - key: category.TransponderClass
+    text: CLASSE TRANSPONDER
+    gloss: 0
+    tier: 0
+  - key: category.Debt
+    text: DEBITO
+    gloss: 0
+    tier: 0
+  - key: records.standing.frozen
+    text: 'Congelata: insolvenza, {0}'
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.incomplete
+    text: Approvata una pratica incompleta.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.frozen
+    text: Approvato un conto congelato.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.recalled
+    text: Approvato un transponder richiamato.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.numbered
+    text: 'Direttiva {0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: citation.rule.record
+    text: Ogni documento deve corrispondere al Conto del cittadino.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.origin
+    text: 'Gli sfollati tornano solo al proprio tempo: documenti e risposte devono
+      corrispondere alla loro origine.'
+    gloss: 0
+    tier: 0
+  - key: citation.rule.goods
+    text: Nessuna valuta o tecnologia del 2150 lascia il 2150.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.dress
+    text: 'Abiti adatti alla destinazione: niente di un altro tempo o luogo.'
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.economyManifest
+    text: Un passaporto Premium viaggia con un transponder Premium.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.premiumManifest
+    text: Un passaporto Standard viaggia con un transponder Economy.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.waiverMissing
+    text: Questa partenza richiede una Liberatoria di blocco firmata.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.waiverUnsigned
+    text: Questa partenza richiede una Liberatoria di blocco firmata.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.proofMissing
+    text: Un passaporto Standard richiede una prova di mezzi.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.contractMissing
+    text: Una partenza Sgravio del debito richiede un Permesso di lavoro registrato.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.frozen
+    text: "Un conto Congelato non pu\xF2 partire."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.departure
+    text: Si parte solo nella data stampata sui documenti di viaggio.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.expired
+    text: Mai partire con un documento scaduto.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.none
+    text: Nessuna direttiva e nessuna scheda respinge questo viaggiatore.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.evidence
+    text: Un rifiuto richiede prove registrate.
+    gloss: 0
+    tier: 0
+  - key: citation.label.destination
+    text: Destinazione
+    gloss: 0
+    tier: 0
+  - key: citation.label.account
+    text: Conto del cittadino
+    gloss: 0
+    tier: 0
+  - key: citation.label.registry
+    text: Registro degli sfollati
+    gloss: 0
+    tier: 0
+  - key: citation.label.standing
+    text: Posizione su {0}
+    gloss: 0
+    tier: 0
+  - key: citation.label.today
+    text: Oggi
+    gloss: 0
+    tier: 0
+  - key: citation.label.garment
+    text: Indumento
+    gloss: 0
+    tier: 0
+  - key: citation.label.onPaper
+    text: '{0} su {1}'
+    gloss: 0
+    tier: 0
+  - key: citation.label.answer
+    text: La sua risposta ({0})
+    gloss: 0
+    tier: 0
+  - key: citation.label.book
+    text: '{0} di {1}'
+    gloss: 0
+    tier: 0
+  - key: citation.label.logged
+    text: Prova registrata
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.waiverMissing
+    text: Liberatoria di blocco
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.proofMissing
+    text: Prova di mezzi
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.contractMissing
+    text: Permesso di lavoro
+    gloss: 0
+    tier: 0
+  - key: citation.value.notHandedOver
+    text: non consegnato
+    gloss: 0
+    tier: 0
+  - key: citation.value.frozen
+    text: Congelato dal {0}
+    gloss: 0
+    tier: 0
+  - key: citation.value.open
+    text: '{0}, aperto oggi'
+    gloss: 0
+    tier: 0
+  - key: category.Employer
+    text: DATORE DI LAVORO
+    gloss: 0
+    tier: 0
+  - key: category.Term
+    text: DURATA
+    gloss: 0
+    tier: 0
+  - key: category.Wage
+    text: PAGA
+    gloss: 0
+    tier: 0
+  - key: category.WaiverNo
+    text: N. LIBERATORIA
+    gloss: 0
+    tier: 0
+  - key: category.Credit
+    text: CREDITO
+    gloss: 0
+    tier: 0
+  - key: category.Funds
+    text: FONDI
+    gloss: 0
+    tier: 0
+  - key: category.PolicyNo
+    text: N. POLIZZA
+    gloss: 0
+    tier: 0
+  - key: category.Signature
+    text: FIRMA
+    gloss: 0
+    tier: 0
+  - key: category.Seal
+    text: SIGILLO
+    gloss: 0
+    tier: 0
+  - key: category.Photo
+    text: FOTO
+    gloss: 0
+    tier: 0
   - key: icon.portals
     text: Portali
+    gloss: 0
+    tier: 0
+  - key: window.portals
+    text: Portali
+    gloss: 0
+    tier: 0
+  - key: board.returnGate
+    text: VARCO DI RITORNO
+    gloss: 0
+    tier: 0
+  - key: board.closed
+    text: CHIUSO
+    gloss: 0
+    tier: 0
+  - key: board.maintenance
+    text: IN MANUTENZIONE
+    gloss: 0
+    tier: 0
+  - key: board.noRoute
+    text: NESSUNA ROTTA
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.title
+    text: TABELLONE DELLE PARTENZE
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.closed
+    text: '{0} {1}: {2}, {3}: CHIUSO oggi'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGate
+    text: '{0} {1}: Varco di ritorno'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGateMaintenance
+    text: '{0} {1}: Varco di ritorno, in manutenzione'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.maintenance
+    text: '{0} {1}: in manutenzione'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.noRoute
+    text: '{0} {1}: nessuna rotta oggi'
+    gloss: 0
+    tier: 0
+  - key: portals.date
+    text: Rotte per il {0}
+    gloss: 0
+    tier: 0
+  - key: portals.returnGate
+    text: Varco di ritorno
+    gloss: 0
+    tier: 0
+  - key: portals.state.inService
+    text: In servizio
+    gloss: 0
+    tier: 0
+  - key: portals.state.noRoute
+    text: "In servizio \xB7 nessuna rotta oggi"
+    gloss: 0
+    tier: 0
+  - key: portals.state.closed
+    text: 'CHIUSO oggi: {0}'
+    gloss: 0
+    tier: 0
+  - key: portals.state.underMaintenance
+    text: In manutenzione
+    gloss: 0
+    tier: 0
+  - key: portals.state.maintenance
+    text: "In manutenzione \xB7 riparalo in Ordini ({0})"
+    gloss: 0
+    tier: 0
+  - key: portals.state.locked
+    text: "In manutenzione \xB7 bloccato: prima ripara {0}"
+    gloss: 0
+    tier: 0
+  - key: portals.state.transit
+    text: "In manutenzione \xB7 riparazione in transito, in servizio domani"
+    gloss: 0
+    tier: 0
+  - key: portals.footer
+    text: "Le rotte sono stabilite dalla Direzione. Finch\xE9 il Varco di ritorno
+      non \xE8 riparato, gli sfollati partono dal Portale {0}."
+    gloss: 0
+    tier: 0
+  - key: home.title
+    text: "Giorno {0} \u2014 Casa"
+    gloss: 0
+    tier: 0
+  - key: home.breakIn
+    text: "Qualcuno \xE8 entrato in casa mentre eri al lavoro: -{0}"
+    gloss: 0
+    tier: 0
+  - key: home.fixed
+    text: 'Costi fissi di stasera:'
+    gloss: 0
+    tier: 0
+  - key: home.rent
+    text: '  Affitto e utenze: -{0}'
+    gloss: 0
+    tier: 0
+  - key: home.drain
+    text: '  Cure extra di {0} durante la malattia: -{1}'
+    gloss: 0
+    tier: 0
+  - key: home.upkeep
+    text: '  Manutenzione della casa: -{0}'
+    gloss: 0
+    tier: 0
+  - key: home.fixedTotal
+    text: 'Pagato: -{0} {1}   (Saldo: {2})'
+    gloss: 0
+    tier: 0
+  - key: home.debt
+    text: Sei in debito. Trova un modo per arrivare a fine mese.
+    gloss: 0
+    tier: 0
+  - key: home.bills.total
+    text: 'Bollette di stasera: {0} {1}   (Saldo dopo: {2})'
+    gloss: 0
+    tier: 0
+  - key: home.bills.short
+    text: "Bollette di stasera: {0} {1}, pi\xF9 dei tuoi {2}: salta qualcosa."
+    gloss: 0
+    tier: 0
+  - key: home.bill.paying
+    text: Pago
+    gloss: 0
+    tier: 0
+  - key: home.bill.skip
+    text: Salta
+    gloss: 0
+    tier: 0
+  - key: home.bill.needsPower
+    text: "richiede elettricit\xE0"
+    gloss: 0
+    tier: 0
+  - key: home.bill.notNeeded
+    text: 'non serve: {0} sta bene'
+    gloss: 0
+    tier: 0
+  - key: home.pay
+    text: Paga e vedi {0}
+    gloss: 0
+    tier: 0
+  - key: home.pet.title
+    text: L'angolo di {0}
+    gloss: 0
+    tier: 0
+  - key: home.pet.pat
+    text: Accarezza {0}
+    gloss: 0
+    tier: 0
+  - key: home.pet.play
+    text: Gioca
+    gloss: 0
+    tier: 0
+  - key: home.pet.played
+    text: Ha giocato stasera
+    gloss: 0
+    tier: 0
+  - key: home.pet.noToys
+    text: Ancora nessun giocattolo. L'app Ordini sul tuo PC li vende.
+    gloss: 0
+    tier: 0
+  - key: home.pet.dark
+    text: Stasera le luci sono spente.
+    gloss: 0
+    tier: 0
+  - key: home.next.house
+    text: Continua verso la Casa
+    gloss: 0
+    tier: 0
+  - key: home.next.slots
+    text: Continua verso le Slot
+    gloss: 0
+    tier: 0
+  - key: adopt.title
+    text: Adotta un compagno
+    gloss: 0
+    tier: 0
+  - key: adopt.body
+    text: Il rifugio della Direzione ha un cane e un gatto in attesa. Uno dei due
+      stasera torna a casa con te. Scegli, e dagli un nome.
+    gloss: 0
+    tier: 0
+  - key: adopt.dog
+    text: Cane
+    gloss: 0
+    tier: 0
+  - key: adopt.cat
+    text: Gatto
+    gloss: 0
+    tier: 0
+  - key: adopt.placeholder
+    text: Scrivi un nome
+    gloss: 0
+    tier: 0
+  - key: adopt.go
+    text: Adotta e inizia
+    gloss: 0
+    tier: 0
+  - key: adopt.back
+    text: Indietro
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.Empty
+    text: Dai un nome al tuo compagno.
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.TooLong
+    text: "Un nome pi\xF9 corto, per favore: al massimo {0} lettere."
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.BadCharacters
+    text: Solo lettere, spazi, trattini e apostrofi.
+    gloss: 0
+    tier: 0
+  - key: menubar.records
+    text: Registri
+    gloss: 0
+    tier: 0
+  - key: menubar.rules
+    text: Regole
+    gloss: 0
+    tier: 0
+  - key: menubar.books
+    text: Manuali
+    gloss: 0
+    tier: 0
+  - key: menubar.calendar
+    text: Calendario
+    gloss: 0
+    tier: 0
+  - key: menubar.notHandedOver
+    text: Non consegnati
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.flag
+    text: Segnala mancante
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.flagged
+    text: 'Segnalato: chiedilo'
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.notCarried
+    text: Non portato
+    gloss: 0
+    tier: 0
+  - key: menubar.today
+    text: 'Oggi: {0}'
+    gloss: 0
+    tier: 0
+  - key: menubar.today.note
+    text: Tieni per confrontare
     gloss: 0
     tier: 0
   words:
@@ -212,3 +3192,1601 @@ MonoBehaviour:
     english: news
   - native: linea
     english: line
+  - native: Abiti
+    english: clothes
+  - native: Abito
+    english: outfit
+  - native: Accarezza
+    english: pet (stroke)
+  - native: accesso
+    english: access
+  - native: Accessorio
+    english: accessory
+  - native: Accetta
+    english: accept
+  - native: Accettato
+    english: accepted
+  - native: adatti
+    english: suited
+  - native: Adotta
+    english: adopt
+  - native: Affitto
+    english: rent
+  - native: Agente
+    english: officer
+  - native: agenti
+    english: officers
+  - native: ai
+    english: to the
+  - native: al
+    english: to the
+  - native: alcuna
+    english: any
+  - native: alle
+    english: at the
+  - native: allo
+    english: to the
+  - native: Altri
+    english: other
+  - native: Altrimenti
+    english: otherwise
+  - native: altro
+    english: other
+  - native: altra
+    english: other
+  - native: altrove
+    english: elsewhere
+  - native: ancora
+    english: still / yet
+  - native: andarci
+    english: go there
+  - native: Annulla
+    english: cancel
+  - native: annullane
+    english: cancel one
+  - native: aperta
+    english: open
+  - native: aperto
+    english: open
+  - native: apertura
+    english: opening
+  - native: apostrofi
+    english: apostrophes
+  - native: appaiono
+    english: appear
+  - native: appare
+    english: appears
+  - native: Appartiene
+    english: belongs
+  - native: Approvata
+    english: approved
+  - native: Approvati
+    english: approved
+  - native: Approvato
+    english: approved
+  - native: Appunti
+    english: notes
+  - native: apre
+    english: opens
+  - native: Apri
+    english: open
+  - native: aprire
+    english: open
+  - native: aprirlo
+    english: open it
+  - native: aprono
+    english: open
+  - native: archiviato
+    english: filed
+  - native: archivio
+    english: archive / file
+  - native: argini
+    english: banks
+  - native: arretrati
+    english: back (issues)
+  - native: arretrato
+    english: back (issue)
+  - native: arriva
+    english: arrives
+  - native: arrivano
+    english: arrive
+  - native: arrivare
+    english: get to
+  - native: arrivato
+    english: arrived
+  - native: arrivo
+    english: arrival (in arrivo = incoming)
+  - native: attesa
+    english: waiting
+  - native: autorizzate
+    english: cleared
+  - native: autorizzato
+    english: permitted
+  - native: Avanti
+    english: forward
+  - native: Avvertimento
+    english: warning
+  - native: Avvisi
+    english: notices
+  - native: Bacheca
+    english: board
+  - native: bancone
+    english: counter
+  - native: Barba
+    english: facial hair
+  - native: barra
+    english: bar
+  - native: bene
+    english: well
+  - native: beni
+    english: goods
+  - native: biglietto
+    english: ticket
+  - native: Bloccata
+    english: locked
+  - native: Bloccati
+    english: stranded
+  - native: bloccato
+    english: locked
+  - native: blocco
+    english: stranding
+  - native: Bollette
+    english: bills
+  - native: Buona
+    english: good
+  - native: C
+    english: C
+  - native: Calendario
+    english: calendar
+  - native: cambiata
+    english: changed
+  - native: cambiato
+    english: changed
+  - native: cambio
+    english: change
+  - native: campo
+    english: field
+  - native: cancella
+    english: clear
+  - native: cane
+    english: dog
+  - native: Capelli
+    english: hair
+  - native: Capitale
+    english: capital
+  - native: Capito
+    english: got it
+  - native: capo
+    english: garment
+  - native: caratteri
+    english: fonts
+  - native: caso
+    english: case
+  - native: causerebbe
+    english: would cause
+  - native: Cerca
+    english: search
+  - native: Cercato
+    english: looked up
+  - native: certificato
+    english: certificate
+  - native: che
+    english: that / which
+  - native: chiedere
+    english: ask for
+  - native: Chiedi
+    english: ask for
+  - native: chiedilo
+    english: ask for it
+  - native: Chip
+    english: chip
+  - native: chiude
+    english: closes
+  - native: Chiudi
+    english: close
+  - native: chiusa
+    english: closed
+  - native: Chiuso
+    english: closed
+  - native: chiusura
+    english: closing
+  - native: Chronet
+    english: Chronet
+  - native: "citt\xE0"
+    english: city
+  - native: cittadini
+    english: citizens
+  - native: Classe
+    english: class
+  - native: Classifica
+    english: standings
+  - native: clic
+    english: click
+  - native: Clicca
+    english: click
+  - native: cliccane
+    english: click (two of them)
+  - native: coda
+    english: queue
+  - native: collegamento
+    english: link
+  - native: Colloquio
+    english: interview
+  - native: colonna
+    english: column
+  - native: Colori
+    english: colours
+  - native: come
+    english: as / like
+  - native: compagno
+    english: companion
+  - native: completato
+    english: complete
+  - native: Completo
+    english: full
+  - native: comune
+    english: common
+  - native: con
+    english: with / against
+  - native: concordano
+    english: agree
+  - native: Confronta
+    english: compare
+  - native: confrontalo
+    english: compare it
+  - native: confrontare
+    english: compare
+  - native: confrontarle
+    english: compare them
+  - native: confrontarli
+    english: compare them
+  - native: confrontarlo
+    english: compare it
+  - native: confrontato
+    english: compared
+  - native: confronto
+    english: comparison
+  - native: Congelata
+    english: frozen
+  - native: congelato
+    english: frozen
+  - native: consegnati
+    english: handed over
+  - native: Consegnato
+    english: delivered / handed over
+  - native: consentito
+    english: permitted
+  - native: conservata
+    english: kept
+  - native: Contatti
+    english: contacts
+  - native: contestuale
+    english: context
+  - native: contiene
+    english: holds
+  - native: Continua
+    english: continue
+  - native: contrabbando
+    english: contraband
+  - native: Contratto
+    english: contract
+  - native: contro
+    english: against
+  - native: Copia
+    english: copy
+  - native: copiato
+    english: copied
+  - native: Copricapo
+    english: headwear
+  - native: Corretto
+    english: correct
+  - native: corrispondenti
+    english: matching
+  - native: corrispondere
+    english: match
+  - native: corrispondono
+    english: match
+  - native: corto
+    english: short
+  - native: cosa
+    english: what
+  - native: cose
+    english: things
+  - native: Costi
+    english: costs
+  - native: costumi
+    english: costumes
+  - native: cr
+    english: credits (short)
+  - native: Crediti
+    english: credits
+  - native: Credito
+    english: credit
+  - native: Ctrl
+    english: Ctrl
+  - native: cui
+    english: which
+  - native: Cure
+    english: care
+  - native: D
+    english: right (side)
+  - native: Da
+    english: from / by
+  - native: dagli
+    english: give them
+  - native: Dai
+    english: give
+  - native: dalla
+    english: from the
+  - native: dalle
+    english: from (time)
+  - native: data
+    english: date
+  - native: Date
+    english: dates
+  - native: Dati
+    english: data
+  - native: Datore
+    english: employer (datore di lavoro)
+  - native: davvero
+    english: really
+  - native: Debito
+    english: debt
+  - native: Decisioni
+    english: calls
+  - native: degli
+    english: of the
+  - native: dei
+    english: of the
+  - native: delle
+    english: of the
+  - native: dello
+    english: of the
+  - native: Denaro
+    english: money
+  - native: Desk
+    english: Desk
+  - native: desktop
+    english: desktop
+  - native: destinazione
+    english: destination
+  - native: destinazioni
+    english: destinations
+  - native: Destra
+    english: right
+  - native: destro
+    english: right
+  - native: detiene
+    english: holds
+  - native: Dettagli
+    english: details
+  - native: Dettaglio
+    english: detail
+  - native: detto
+    english: said
+  - native: deve
+    english: must
+  - native: Deviazioni
+    english: deviations
+  - native: devono
+    english: must
+  - native: dice
+    english: says
+  - native: dichiarato
+    english: claimed
+  - native: differenza
+    english: difference
+  - native: differenze
+    english: differences
+  - native: Dimensione
+    english: size
+  - native: dipendente
+    english: dependant
+  - native: direttiva
+    english: directive
+  - native: Direttive
+    english: directives
+  - native: direzione
+    english: direction / Directorate
+  - native: discordano
+    english: disagree
+  - native: Disponi
+    english: arrange
+  - native: Disponibile
+    english: available
+  - native: Dispositivo
+    english: device
+  - native: diversi
+    english: different
+  - native: diverso
+    english: different
+  - native: documentata
+    english: documented
+  - native: documentate
+    english: documented
+  - native: documentati
+    english: documented
+  - native: Documenti
+    english: papers
+  - native: documento
+    english: document / paper
+  - native: Dogana
+    english: Customs
+  - native: Dogane
+    english: Customs
+  - native: domande
+    english: questions
+  - native: domani
+    english: tomorrow
+  - native: dopo
+    english: after
+  - native: Doppio
+    english: double
+  - native: Dotazione
+    english: equipment
+  - native: dove
+    english: where
+  - native: dovuti
+    english: owed
+  - native: due
+    english: two
+  - native: durante
+    english: during
+  - native: Durata
+    english: term
+  - native: e
+    english: and / is
+  - native: Economy
+    english: Economy
+  - native: elencata
+    english: listed
+  - native: "elettricit\xE0"
+    english: electricity
+  - native: emittente
+    english: issuing
+  - native: Enter
+    english: Enter
+  - native: Entrambi
+    english: both
+  - native: entrato
+    english: broke in (entered)
+  - native: epoca
+    english: era
+  - native: era
+    english: was
+  - native: eri
+    english: you were
+  - native: Errata
+    english: wrong
+  - native: errato
+    english: incorrect
+  - native: Errore
+    english: fault
+  - native: Esamina
+    english: process
+  - native: esaminati
+    english: processed
+  - native: Esc
+    english: Esc
+  - native: Esercizio
+    english: practice
+  - native: Estratto
+    english: extract
+  - native: Etichetta
+    english: label
+  - native: etichette
+    english: chips (labels)
+  - native: extra
+    english: extra
+  - native: fa
+    english: ago
+  - native: Fai
+    english: ask (make)
+  - native: falsa
+    english: false
+  - native: falsi
+    english: forged
+  - native: falso
+    english: forged
+  - native: Fantasma
+    english: ghost
+  - native: Fascicolo
+    english: file
+  - native: fatto
+    english: fact
+  - native: favore
+    english: favour (per favore = please)
+  - native: Filigrana
+    english: watermark
+  - native: "finch\xE9"
+    english: until
+  - native: fine
+    english: end
+  - native: finite
+    english: full (used up)
+  - native: fino
+    english: until
+  - native: Firma
+    english: signature
+  - native: firmata
+    english: signed
+  - native: Fissa
+    english: pin
+  - native: Fissati
+    english: pinned
+  - native: fissi
+    english: fixed
+  - native: focus
+    english: focus
+  - native: Fondi
+    english: funds
+  - native: fonte
+    english: source
+  - native: Fonti
+    english: sources
+  - native: Forniture
+    english: supply
+  - native: foto
+    english: photo
+  - native: frecce
+    english: arrows
+  - native: Futuro
+    english: Future
+  - native: gatto
+    english: cat
+  - native: "gi\xE0"
+    english: already
+  - native: Gioca
+    english: play
+  - native: giocato
+    english: played
+  - native: Giocattoli
+    english: toys
+  - native: giocattolo
+    english: toy
+  - native: giornale
+    english: paper
+  - native: giornaliera
+    english: daily
+  - native: giornata
+    english: day
+  - native: giorni
+    english: days
+  - native: "gi\xF9"
+    english: down
+  - native: giuste
+    english: right
+  - native: giustificato
+    english: justified
+  - native: Gli
+    english: the
+  - native: grandezza
+    english: size
+  - native: gratuito
+    english: free
+  - native: grigia
+    english: grey
+  - native: Guarda
+    english: look at
+  - native: guasto
+    english: failure
+  - native: Guida
+    english: guide
+  - native: ha
+    english: has
+  - native: Hai
+    english: you have
+  - native: hanno
+    english: have
+  - native: i
+    english: the
+  - native: icona
+    english: icon
+  - native: icone
+    english: icons
+  - native: ID
+    english: ID
+  - native: Idoneo
+    english: eligible
+  - native: Ieri
+    english: yesterday
+  - native: Impiego
+    english: employment
+  - native: Importi
+    english: amounts
+  - native: Impostazioni
+    english: settings
+  - native: In
+    english: in
+  - native: incerto
+    english: unsettled
+  - native: Incidente
+    english: incident
+  - native: Incoerente
+    english: inconsistent
+  - native: incolla
+    english: paste
+  - native: incollarne
+    english: paste (another)
+  - native: incollato
+    english: pasted
+  - native: incompleta
+    english: incomplete
+  - native: Incrociato
+    english: cross
+  - native: Indagine
+    english: investigation
+  - native: indica
+    english: names
+  - native: Indice
+    english: index
+  - native: Indietro
+    english: back
+  - native: indossa
+    english: wears
+  - native: Indumento
+    english: garment
+  - native: inglese
+    english: English
+  - native: Ingrandisci
+    english: maximise / zoom in
+  - native: iniziale
+    english: start
+  - native: Inizio
+    english: home (start)
+  - native: insolvenza
+    english: default
+  - native: installa
+    english: install
+  - native: Installato
+    english: installed
+  - native: installazione
+    english: install
+  - native: "Integrit\xE0"
+    english: integrity
+  - native: "Intensit\xE0"
+    english: intensity
+  - native: Internet
+    english: Internet
+  - native: invece
+    english: instead
+  - native: ispezione
+    english: inspect
+  - native: K
+    english: K
+  - native: l'albero
+    english: the tree
+  - native: L'angolo
+    english: the corner
+  - native: L'app
+    english: the app
+  - native: l'avvertimento
+    english: the warning
+  - native: l'elemento
+    english: the item
+  - native: l'icona
+    english: the icon
+  - native: l'indirizzo
+    english: the address
+  - native: l'intero
+    english: the whole
+  - native: l'oggetto
+    english: the item
+  - native: l'ufficio
+    english: the office
+  - native: L'edizione
+    english: the edition
+  - native: la
+    english: the / it
+  - native: lasci
+    english: leave
+  - native: Lascia
+    english: keep / let go
+  - native: lascialo
+    english: drop it
+  - native: Lasciati
+    english: let
+  - native: lasciato
+    english: dropped
+  - native: lato
+    english: side
+  - native: Lavoratore
+    english: worker
+  - native: lavoro
+    english: work / labour
+  - native: le
+    english: the
+  - native: legge
+    english: law
+  - native: leggerlo
+    english: read it
+  - native: Leggi
+    english: read
+  - native: Leggilo
+    english: read it
+  - native: legittimo
+    english: legitimate
+  - native: Lente
+    english: lens
+  - native: lettere
+    english: letters
+  - native: letti
+    english: read
+  - native: lettura
+    english: reading
+  - native: li
+    english: them
+  - native: Liberatoria
+    english: waiver
+  - native: liberatorie
+    english: waivers
+  - native: Lingua
+    english: language
+  - native: linguetta
+    english: tab
+  - native: livello
+    english: level
+  - native: loro
+    english: their
+  - native: luccicano
+    english: shimmer
+  - native: Luce
+    english: light
+  - native: luci
+    english: lights
+  - native: luoghi
+    english: places
+  - native: luogo
+    english: place
+  - native: magazzino
+    english: storage
+  - native: Mai
+    english: never
+  - native: malattia
+    english: sickness
+  - native: mancante
+    english: missing
+  - native: manuale
+    english: book
+  - native: Manuali
+    english: books
+  - native: Manutenzione
+    english: maintenance
+  - native: massimo
+    english: most
+  - native: Materiale
+    english: material
+  - native: mentre
+    english: while
+  - native: Menu
+    english: Menu
+  - native: mese
+    english: month
+  - native: messaggio
+    english: message
+  - native: messi
+    english: put
+  - native: mezzi
+    english: means
+  - native: Microstampa
+    english: microprint
+  - native: "Modalit\xE0"
+    english: mode
+  - native: modo
+    english: way
+  - native: Moduli
+    english: forms
+  - native: Mondo
+    english: world
+  - native: Morte
+    english: died (death)
+  - native: Mostra
+    english: show
+  - native: mostrano
+    english: show
+  - native: Mostrato
+    english: shown
+  - native: Movimento
+    english: motion
+  - native: multa
+    english: fine
+  - native: multate
+    english: fined
+  - native: muoviti
+    english: move
+  - native: N
+    english: No. (number)
+  - native: nascita
+    english: birth
+  - native: nascondi
+    english: hide
+  - native: Nascosto
+    english: hidden
+  - native: ne
+    english: of them
+  - native: nei
+    english: in the
+  - native: nel
+    english: in the
+  - native: nella
+    english: in the
+  - native: nessun
+    english: no
+  - native: Nessuna
+    english: no / none
+  - native: Nessuno
+    english: none
+  - native: Netto
+    english: net
+  - native: Niente
+    english: nothing
+  - native: nome
+    english: name
+  - native: nomi
+    english: names
+  - native: Nota
+    english: note
+  - native: Nulla
+    english: nothing
+  - native: numeri
+    english: issues / numbers
+  - native: numero
+    english: number / issue
+  - native: Nuova
+    english: new
+  - native: nuovo
+    english: new
+  - native: o
+    english: or
+  - native: oggetto
+    english: item
+  - native: oggi
+    english: today
+  - native: ogni
+    english: every
+  - native: oltre
+    english: beyond
+  - native: online
+    english: online
+  - native: oppure
+    english: or
+  - native: ora
+    english: now
+  - native: orario
+    english: hours
+  - native: Ordina
+    english: order
+  - native: ordine
+    english: order
+  - native: Ordini
+    english: orders
+  - native: Origine
+    english: origin
+  - native: osservazione
+    english: remark
+  - native: P
+    english: P
+  - native: paese
+    english: country
+  - native: paga
+    english: pay
+  - native: pagano
+    english: are paid
+  - native: pagati
+    english: paid
+  - native: Pagato
+    english: paid
+  - native: Pagina
+    english: page
+  - native: Pago
+    english: paying
+  - native: panico
+    english: panic
+  - native: pannello
+    english: drawer (panel)
+  - native: Parentele
+    english: relations
+  - native: parlare
+    english: talk
+  - native: parola
+    english: word
+  - native: Parte
+    english: departs
+  - native: partenza
+    english: departure
+  - native: Partenze
+    english: departures
+  - native: partire
+    english: depart
+  - native: partono
+    english: leave
+  - native: Passa
+    english: hover (pass)
+  - native: passaporto
+    english: passport
+  - native: passati
+    english: past
+  - native: passato
+    english: past
+  - native: passi
+    english: steps
+  - native: passo
+    english: step
+  - native: PC
+    english: PC
+  - native: "Penalit\xE0"
+    english: penalty
+  - native: per
+    english: for / to / by
+  - native: "Perch\xE9"
+    english: why
+  - native: Permesso
+    english: permit
+  - native: permettertelo
+    english: afford it
+  - native: persona
+    english: person
+  - native: Persone
+    english: people
+  - native: piacere
+    english: leisure
+  - native: piccolo
+    english: small
+  - native: piena
+    english: full
+  - native: "pi\xF9"
+    english: more / most
+  - native: poi
+    english: then
+  - native: Polizza
+    english: policy
+  - native: popolo
+    english: people
+  - native: Portafoglio
+    english: wallet
+  - native: Portale
+    english: portal
+  - native: Portali
+    english: portals
+  - native: portato
+    english: carried
+  - native: Posizione
+    english: standing
+  - native: Posseduto
+    english: owned
+  - native: Posta
+    english: mail
+  - native: potenza
+    english: power
+  - native: pratica
+    english: paperwork
+  - native: Prec
+    english: prev
+  - native: precedente
+    english: previous
+  - native: precisione
+    english: accuracy
+  - native: premi
+    english: press
+  - native: Premium
+    english: Premium
+  - native: prenotata
+    english: booked
+  - native: prerequisito
+    english: prerequisite
+  - native: presente
+    english: present
+  - native: previsto
+    english: expected
+  - native: prima
+    english: first / before
+  - native: primo
+    english: first
+  - native: prioritario
+    english: priority
+  - native: Professione
+    english: occupation
+  - native: Promemoria
+    english: memo
+  - native: proprio
+    english: own
+  - native: prossima
+    english: next
+  - native: prossimo
+    english: next
+  - native: prova
+    english: proof / evidence
+  - native: prove
+    english: evidence
+  - native: pulsante
+    english: button
+  - native: pulsanti
+    english: buttons
+  - native: puntina
+    english: pin
+  - native: puntine
+    english: pins
+  - native: "pu\xF2"
+    english: can
+  - native: puoi
+    english: you can
+  - native: qualcosa
+    english: something
+  - native: qualcun
+    english: someone
+  - native: Qualcuno
+    english: someone
+  - native: quando
+    english: when
+  - native: Quei
+    english: those
+  - native: quel
+    english: that
+  - native: Quella
+    english: that
+  - native: quello
+    english: that one
+  - native: questa
+    english: this
+  - native: questi
+    english: these
+  - native: questo
+    english: this
+  - native: qui
+    english: here
+  - native: Rata
+    english: instalment
+  - native: Recenti
+    english: recent
+  - native: registra
+    english: log
+  - native: registrare
+    english: log
+  - native: Registrata
+    english: logged
+  - native: registrate
+    english: logged
+  - native: Registrato
+    english: logged / registered
+  - native: Registri
+    english: records
+  - native: regola
+    english: rule
+  - native: regolamento
+    english: rulebook
+  - native: Regole
+    english: rules
+  - native: respinge
+    english: refuses
+  - native: Respinto
+    english: denied
+  - native: "Responsabilit\xE0"
+    english: liability
+  - native: resta
+    english: stays
+  - native: restituire
+    english: hand back
+  - native: restituisce
+    english: hands back
+  - native: Restituisci
+    english: hand back
+  - native: Restrizione
+    english: restriction
+  - native: rete
+    english: network
+  - native: Revisioni
+    english: revisions
+  - native: ricerca
+    english: search
+  - native: riceve
+    english: takes
+  - native: Ricevi
+    english: receive
+  - native: ricevuti
+    english: received
+  - native: richiamato
+    english: recalled
+  - native: Richiami
+    english: citations
+  - native: richiamo
+    english: citation
+  - native: Richiede
+    english: needs
+  - native: Richiesto
+    english: asked for
+  - native: Ridotto
+    english: reduced
+  - native: Riduci
+    english: minimise / zoom out
+  - native: riempire
+    english: fill
+  - native: rientrato
+    english: returned
+  - native: riferimento
+    english: reference
+  - native: riferisce
+    english: refers
+  - native: Rifiuta
+    english: deny
+  - native: rifiutare
+    english: deny
+  - native: Rifiutato
+    english: denied
+  - native: Rifiuti
+    english: denials
+  - native: rifiuto
+    english: denial
+  - native: rifugio
+    english: shelter
+  - native: riga
+    english: row / line
+  - native: riguarda
+    english: is about
+  - native: rilascialo
+    english: let go
+  - native: rimborso
+    english: refund
+  - native: Rimuovi
+    english: remove
+  - native: rimuovine
+    english: remove one
+  - native: ripara
+    english: repair
+  - native: riparalo
+    english: repair it
+  - native: riparato
+    english: repaired
+  - native: riparazione
+    english: repair
+  - native: riporta
+    english: put back
+  - native: Ripristina
+    english: reset
+  - native: riquadri
+    english: panes
+  - native: riquadro
+    english: pane
+  - native: riscontri
+    english: findings
+  - native: riscontro
+    english: finding
+  - native: Rispetta
+    english: meets
+  - native: risposta
+    english: answer
+  - native: Risposte
+    english: answers
+  - native: risultati
+    english: results
+  - native: risultato
+    english: result
+  - native: Ritagli
+    english: clippings
+  - native: ritaglio
+    english: clipping
+  - native: ritorno
+    english: return
+  - native: Ritrovato
+    english: found
+  - native: Rivedi
+    english: replay
+  - native: rivisto
+    english: revised
+  - native: rosso
+    english: red
+  - native: Rotta
+    english: route
+  - native: Rotte
+    english: routes
+  - native: ruota
+    english: wheel
+  - native: S
+    english: left (side)
+  - native: Saldo
+    english: balance
+  - native: Salta
+    english: skip
+  - native: sbagliata
+    english: wrong
+  - native: sbagliate
+    english: wrong
+  - native: Sbagliato
+    english: wrong
+  - native: Scaduto
+    english: expired
+  - native: scaffale
+    english: shelf
+  - native: scanner
+    english: scanner
+  - native: Scansiona
+    english: scan
+  - native: scansionalo
+    english: scan it
+  - native: scansionati
+    english: scanned
+  - native: scansionato
+    english: scanned
+  - native: scansione
+    english: scan
+  - native: Scegli
+    english: pick
+  - native: Scegline
+    english: pick one
+  - native: scelto
+    english: picked
+  - native: scheda
+    english: record / card / tab
+  - native: Schede
+    english: records
+  - native: sconosciuta
+    english: unknown
+  - native: Sconosciuto
+    english: unknown
+  - native: Scorciatoie
+    english: shortcuts
+  - native: scorri
+    english: slide
+  - native: scorrono
+    english: walk through
+  - native: scritto
+    english: written
+  - native: Scrivi
+    english: type
+  - native: secretate
+    english: sealed
+  - native: Segnala
+    english: flag
+  - native: segnalarlo
+    english: flag it
+  - native: segnalato
+    english: flagged
+  - native: Segui
+    english: follow
+  - native: seguono
+    english: follow
+  - native: sei
+    english: you are
+  - native: Seleziona
+    english: select
+  - native: selezionata
+    english: selected
+  - native: selezionato
+    english: selected
+  - native: Sempre
+    english: always
+  - native: senza
+    english: without
+  - native: serve
+    english: needed
+  - native: servizio
+    english: service
+  - native: Set
+    english: set
+  - native: sfollamento
+    english: displacement
+  - native: sfollati
+    english: displaced
+  - native: sfondo
+    english: wallpaper
+  - native: sfumare
+    english: fade
+  - native: Sgravio
+    english: relief
+  - native: si
+    english: itself (reflexive)
+  - native: sigilli
+    english: seals
+  - native: Sigillo
+    english: seal
+  - native: singolo
+    english: single
+  - native: Sinistra
+    english: left
+  - native: siti
+    english: sites
+  - native: sito
+    english: site
+  - native: Slot
+    english: Slots
+  - native: soggetti
+    english: subjects
+  - native: Soggetto
+    english: subject
+  - native: solito
+    english: usual
+  - native: Solo
+    english: only
+  - native: sono
+    english: are
+  - native: sopra
+    english: over
+  - native: sorge
+    english: rises
+  - native: Sorter
+    english: Sorter
+  - native: sospeso
+    english: pending
+  - native: Sostituito
+    english: swapped out
+  - native: sotto
+    english: below / under
+  - native: Sovrano
+    english: ruler
+  - native: sovrapporle
+    english: lay them over
+  - native: Sovrapposizione
+    english: overlay
+  - native: spalle
+    english: behind (shoulders)
+  - native: spazi
+    english: spaces
+  - native: spente
+    english: off
+  - native: sportello
+    english: desk (counter)
+  - native: Sposta
+    english: move
+  - native: sta
+    english: is (feeling)
+  - native: stabilite
+    english: set
+  - native: stamattina
+    english: this morning
+  - native: Stampa
+    english: print
+  - native: stampata
+    english: printed
+  - native: Standard
+    english: Standard
+  - native: stasera
+    english: tonight
+  - native: Stato
+    english: status / been
+  - native: Stirpe
+    english: lineage
+  - native: stirpi
+    english: lineages
+  - native: storia
+    english: history
+  - native: Strato
+    english: layer
+  - native: su
+    english: on / of
+  - native: sua
+    english: its / their
+  - native: subito
+    english: at once / now
+  - native: Succ
+    english: next
+  - native: successiva
+    english: next
+  - native: successivo
+    english: next
+  - native: sui
+    english: on the
+  - native: sul
+    english: on the
+  - native: sull'altro
+    english: on the other
+  - native: sulla
+    english: on the
+  - native: sullo
+    english: onto the
+  - native: suo
+    english: its / their
+  - native: suoi
+    english: its
+  - native: Tabellone
+    english: board
+  - native: tastiera
+    english: keyboard
+  - native: TC
+    english: TC
+  - native: te
+    english: you
+  - native: tecnologia
+    english: technology
+  - native: tenuto
+    english: held
+  - native: terra
+    english: land
+  - native: testo
+    english: text
+  - native: ti
+    english: yourself
+  - native: Tieni
+    english: hold / keep
+  - native: Tienila
+    english: keep it
+  - native: timbra
+    english: stamp
+  - native: timbrato
+    english: stamped
+  - native: timbri
+    english: stamps
+  - native: timbro
+    english: stamp
+  - native: Time
+    english: Time
+  - native: Titolare
+    english: holder
+  - native: togli
+    english: unpin / remove
+  - native: toglierla
+    english: unpin it
+  - native: tornano
+    english: return
+  - native: tra
+    english: between
+  - native: tradotta
+    english: translated
+  - native: tradotto
+    english: translated
+  - native: tradurla
+    english: translate it
+  - native: Traduttore
+    english: translator
+  - native: traduzione
+    english: translation
+  - native: traduzioni
+    english: translations
+  - native: tranquilla
+    english: quiet
+  - native: transito
+    english: transit
+  - native: Transponder
+    english: transponder
+  - native: trascina
+    english: drag
+  - native: trascinamento
+    english: drag
+  - native: Trascrizione
+    english: transcript
+  - native: trattenere
+    english: detain
+  - native: trattenuta
+    english: deduction
+  - native: Trattenuti
+    english: detained
+  - native: Trattenuto
+    english: detained
+  - native: Trattieni
+    english: detain
+  - native: trattini
+    english: hyphens
+  - native: travestito
+    english: disguised
+  - native: Trova
+    english: find
+  - native: trovata
+    english: found
+  - native: tuo
+    english: your
+  - native: tuoi
+    english: your
+  - native: Tutorial
+    english: tutorial
+  - native: tutta
+    english: whole
+  - native: tutte
+    english: all
+  - native: Tutti
+    english: all
+  - native: uffici
+    english: offices
+  - native: Ufficio
+    english: office
+  - native: uguale
+    english: the same
+  - native: un
+    english: a / an
+  - native: Un'altra
+    english: another
+  - native: un'epoca
+    english: an era
+  - native: "un'identit\xE0"
+    english: an identity
+  - native: una
+    english: a / one
+  - native: uno
+    english: one
+  - native: Usa
+    english: use
+  - native: uscire
+    english: leave
+  - native: utenze
+    english: utilities
+  - native: UV
+    english: UV
+  - native: V
+    english: V
+  - native: va
+    english: is (going)
+  - native: Vai
+    english: go
+  - native: vale
+    english: applies
+  - native: valida
+    english: valid
+  - native: Valido
+    english: valid
+  - native: valore
+    english: value
+  - native: valori
+    english: values
+  - native: Valuta
+    english: currency
+  - native: Varco
+    english: gate
+  - native: vederlo
+    english: see it
+  - native: vedi
+    english: see
+  - native: vende
+    english: sells
+  - native: verdetto
+    english: verdict
+  - native: vere
+    english: real
+  - native: Verifica
+    english: check
+  - native: verificare
+    english: check
+  - native: verso
+    english: to / towards
+  - native: Viaggi
+    english: travel / trips
+  - native: viaggia
+    english: travels
+  - native: viaggiatore
+    english: traveller
+  - native: Viaggiatori
+    english: travellers
+  - native: viaggio
+    english: travel / trip
+  - native: vicina
+    english: nearest
+  - native: viene
+    english: is
+  - native: vietata
+    english: forbidden
+  - native: vigore
+    english: force
+  - native: Viola
+    english: breaks
+  - native: violata
+    english: broken
+  - native: violato
+    english: broken
+  - native: vista
+    english: view
+  - native: Visto
+    english: visa / seen
+  - native: voce
+    english: entry
+  - native: volta
+    english: once (una volta)
+  - native: Volto
+    english: face
+  - native: vs
+    english: versus
+  - native: x
+    english: times
+  - native: dell'agenzia
+    english: of the agency
+  - native: dell'app
+    english: of the app
+  - native: dell'indirizzo
+    english: of the address
+  - native: nell'albero
+    english: in the tree
+  - native: all'inizio
+    english: to the home (start)
+  - native: dell'ufficio
+    english: of the office
+  - native: nell'Archivio
+    english: in the archive / file
+  - native: dell'altro
+    english: of the other
+  - native: dell'icona
+    english: of the icon

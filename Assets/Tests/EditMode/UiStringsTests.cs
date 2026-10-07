@@ -174,16 +174,21 @@ public class UiStringsTests
     private static List<string> FlavourKeys(ContentNode ui) =>
         ui.Get("strings").Items.Where(e => e.Get("tier").Text == "Flavour").Select(e => e.Get("key").Text).ToList();
 
+    /// <summary>True when a text has letters outside its placeholders and rich-text tags (a label a culture translates).</summary>
+    private static bool Worded(string text) =>
+        Regex.Replace(Regex.Replace(text ?? string.Empty, "</?[A-Za-z#][^<>]*>", string.Empty), @"\{[^{}]*\}", string.Empty).Any(char.IsLetter);
+
     [Test]
-    public void TodaysFlavourLabels_AreThePcRedesignsOrdersAndPortals()
+    public void EveryWordedLabel_IsFlavour_ButTheGamesName()
     {
-        // The PC redesign's 28, the Orders icon's (Saleh 2026-09-29) and the Portals icon's (the portals spec v3).
-        List<string> flavour = FlavourKeys(TodaysUi());
-        Assert.AreEqual(30, flavour.Count, string.Join(", ", flavour));
-        foreach (string added in new[] { "icon.investigation", "icon.mail", "icon.account", "icon.settings", "icon.orders", "icon.portals" })
-            CollectionAssert.Contains(flavour, added);
-        foreach (string gone in new[] { "icon.directives", "icon.scanner", "icon.records", "icon.lexicon", "icon.dialect", "icon.material", "icon.clueLog", "window.directives", "window.scanner", "records.title" })
-            CollectionAssert.DoesNotContain(flavour, gone);
+        // Saleh 2026-10-07: "I want the language to change on all documents and the apps": every label with words is
+        // translated (flavour); a key of placeholders and symbols only, and the game's name, stay as they are.
+        foreach (ContentNode e in TodaysUi().Get("strings").Items)
+        {
+            string key = e.Get("key").Text;
+            bool flavour = e.Get("tier").Text == "Flavour";
+            Assert.AreEqual(Worded(e.Get("text").Text) && key != "title.name", flavour, key);
+        }
     }
 
     /// <summary>The game's scripts folder (Assets/Scripts).</summary>

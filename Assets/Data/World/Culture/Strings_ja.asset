@@ -91,6 +91,119 @@ MonoBehaviour:
     text: "\u6CE8\u6587"
     gloss: 0
     tier: 0
+  - key: window.orders
+    text: "\u6CE8\u6587"
+    gloss: 0
+    tier: 0
+  - key: app.orders.wallet
+    text: "\u8CA1\u5E03 {0} \xB7 \u6CE8\u6587\u306F\u5373\u6642\u6255\u3044\u3067\u3001\u660E\u65E5\u306E\u52E4\u52D9\u958B\u59CB\u6642\u306B\u5C4A\u304D\u307E\u3059\u3002\u4ECA\u65E5\u4E2D\u306B\u53D6\u308A\u6D88\u305B\u3070\u8FD4\u91D1\u3055\u308C\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: app.orders.tooDear
+    text: "{0} {1} \xB7 \u307E\u3060\u8CB7\u3048\u307E\u305B\u3093"
+    gloss: 0
+    tier: 0
+  - key: app.orders.needs
+    text: "\u5FC5\u8981: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.orders.inTransit
+    text: "\u914D\u9001\u4E2D \xB7 {0}\u65E5\u76EE\u306B\u5230\u7740"
+    gloss: 0
+    tier: 0
+  - key: app.orders.delivered
+    text: "{0}\u65E5\u76EE\u306B\u914D\u9054\u6E08\u307F"
+    gloss: 0
+    tier: 0
+  - key: app.orders.owned
+    text: "\u6240\u6709\u6E08\u307F"
+    gloss: 0
+    tier: 0
+  - key: app.orders.installed
+    text: "\u8A2D\u7F6E\u6E08\u307F"
+    gloss: 0
+    tier: 0
+  - key: app.orders.stored
+    text: "\u4FDD\u7BA1\u4E2D"
+    gloss: 0
+    tier: 0
+  - key: app.orders.installsTomorrow
+    text: "\u660E\u65E5\u8A2D\u7F6E"
+    gloss: 0
+    tier: 0
+  - key: app.orders.leavesTomorrow
+    text: "\u660E\u65E5\u4EA4\u63DB"
+    gloss: 0
+    tier: 0
+  - key: app.orders.order
+    text: "\u6CE8\u6587"
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancel
+    text: "\u6CE8\u6587\u53D6\u6D88"
+    gloss: 0
+    tier: 0
+  - key: app.orders.install
+    text: "\u660E\u65E5\u8A2D\u7F6E\u3059\u308B"
+    gloss: 0
+    tier: 0
+  - key: app.orders.keep
+    text: "\u8A2D\u7F6E\u3092\u7DAD\u6301"
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancelInstall
+    text: "\u8A2D\u7F6E\u53D6\u6D88"
+    gloss: 0
+    tier: 0
+  - key: app.orders.select
+    text: "\u30C4\u30EA\u30FC\u306E\u9805\u76EE\u3092\u9078\u3076\u3068\u3053\u3053\u306B\u8868\u793A\u3055\u308C\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: app.orders.none
+    text: "\u306A\u3057"
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.desk
+    text: "\u30C7\u30B9\u30AF\u5099\u54C1"
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.interview
+    text: "\u9762\u63A5"
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.portals
+    text: "\u30DD\u30FC\u30BF\u30EB"
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.contacts
+    text: "\u9023\u7D61\u5148"
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.toys
+    text: "\u304A\u3082\u3061\u3083"
+    gloss: 0
+    tier: 0
+  - key: mail.from.supply
+    text: "\u6642\u9593\u7A0E\u95A2 \u88DC\u7D66\u8AB2"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.delivery
+    text: "\u3054\u6CE8\u6587\u306E\u54C1\u304C\u5C4A\u304D\u307E\u3057\u305F"
+    gloss: 0
+    tier: 0
+  - key: mail.from.liability
+    text: "\u30C8\u30E9\u30F3\u30B9\u30DD\u30F3\u30C0\u30FC\u8CE0\u511F\u5BA4"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.stranding
+    text: "\u30C8\u30E9\u30F3\u30B9\u30DD\u30F3\u30C0\u30FC\u6545\u969C\u5831\u544A:
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: mail.body.delivery
+    text: "\u4ECA\u671D\u914D\u9054\u3001\u672C\u65E5\u306E\u52E4\u52D9\u304B\u3089\u6709\u52B9:"
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: "\u8ABF\u67FB"
     gloss: 0
@@ -109,6 +222,14 @@ MonoBehaviour:
     tier: 0
   - key: tray.day
     text: "{0}\u65E5\u76EE"
+    gloss: 0
+    tier: 0
+  - key: tray.date
+    text: "{0} \xB7 {1}\u65E5\u76EE"
+    gloss: 0
+    tier: 0
+  - key: tray.date.hint
+    text: "\u4ECA\u65E5\u306E\u65E5\u4ED8\u3068\u7167\u5408"
     gloss: 0
     tier: 0
   - key: tray.stability
@@ -131,8 +252,2850 @@ MonoBehaviour:
     text: "\u2014 \u6642\u9593\u7DDA\u30CB\u30E5\u30FC\u30B9 \u2014"
     gloss: 0
     tier: 0
+  - key: briefing.deskHeader
+    text: "DESK 3\u3088\u308A"
+    gloss: 0
+    tier: 0
+  - key: paper.edition
+    text: "\u671D\u520A"
+    gloss: 0
+    tier: 0
+  - key: paper.price
+    text: "1\u30AF\u30EC\u30B8\u30C3\u30C8"
+    gloss: 0
+    tier: 0
+  - key: wallet.credits
+    text: "\u30AF\u30EC\u30B8\u30C3\u30C8"
+    gloss: 0
+    tier: 0
+  - key: wallet.creditsInline
+    text: "\u30AF\u30EC\u30B8\u30C3\u30C8"
+    gloss: 0
+    tier: 0
+  - key: wallet.creditsShort
+    text: cr
+    gloss: 0
+    tier: 0
+  - key: verdict.correct
+    text: "\u6B63\u89E3  (+{0} {1})"
+    gloss: 0
+    tier: 0
+  - key: verdict.wrong
+    text: "\u8AA4\u308A"
+    gloss: 0
+    tier: 0
+  - key: verdict.wrongPenalty
+    text: "\u8AA4\u308A  (-{0} {1})"
+    gloss: 0
+    tier: 0
+  - key: verdict.simpleCorrect
+    text: "\u6B63\u89E3"
+    gloss: 0
+    tier: 0
+  - key: verdict.simpleWrong
+    text: "\u8AA4\u308A"
+    gloss: 0
+    tier: 0
+  - key: day.complete
+    text: "{0}\u65E5\u76EE \u7D42\u4E86\u3002"
+    gloss: 0
+    tier: 0
+  - key: idle.waiting
+    text: "\u6B21\u306E\u6E21\u822A\u8005\u3092\u5F85\u3063\u3066\u3044\u307E\u3059"
+    gloss: 0
+    tier: 0
+  - key: app.title
+    text: "\u8ABF\u67FB"
+    gloss: 0
+    tier: 0
+  - key: app.counters
+    text: "\u53D7\u9818\u3057\u305F\u66F8\u985E: {0}/{1} \xB7 \u30B9\u30AD\u30E3\u30F3\u6E08\u307F:
+      {2}"
+    gloss: 0
+    tier: 0
+  - key: app.tab.documents
+    text: "\u66F8\u985E"
+    gloss: 0
+    tier: 0
+  - key: app.tab.records
+    text: "\u5E02\u6C11\u8A18\u9332"
+    gloss: 0
+    tier: 0
+  - key: app.tab.reference
+    text: "\u53C2\u8003\u8CC7\u6599"
+    gloss: 0
+    tier: 0
+  - key: app.tab.transcript
+    text: "\u554F\u7B54\u8A18\u9332"
+    gloss: 0
+    tier: 0
+  - key: app.tab.report
+    text: "\u9038\u8131\u5831\u544A"
+    gloss: 0
+    tier: 0
+  - key: app.tab.rules
+    text: "\u672C\u65E5\u306E\u898F\u5247"
+    gloss: 0
+    tier: 0
+  - key: app.tab.calendar
+    text: "\u30AB\u30EC\u30F3\u30C0\u30FC"
+    gloss: 0
+    tier: 0
+  - key: app.tab.board
+    text: "\u8ABF\u67FB\u30DC\u30FC\u30C9"
+    gloss: 0
+    tier: 0
+  - key: app.side.left
+    text: "\u5DE6"
+    gloss: 0
+    tier: 0
+  - key: app.side.right
+    text: "\u53F3"
+    gloss: 0
+    tier: 0
+  - key: app.pane.shelfHere
+    text: "\u3053\u3053\u306B\u958B\u304F"
+    gloss: 0
+    tier: 0
+  - key: app.search.open
+    text: "\u691C\u7D22   Ctrl K"
+    gloss: 0
+    tier: 0
+  - key: app.row.rule
+    text: "\u672C\u65E5\u306E\u898F\u5247 \xB7 \u898F\u5247{0}"
+    gloss: 0
+    tier: 0
+  - key: shelf.side.left
+    text: "\u5DE6"
+    gloss: 0
+    tier: 0
+  - key: shelf.side.right
+    text: "\u53F3"
+    gloss: 0
+    tier: 0
+  - key: menubar.papers
+    text: "\u66F8\u985E"
+    gloss: 0
+    tier: 0
+  - key: status.holding
+    text: "<b>{0}</b> ({1}) \u3092\u4FDD\u6301\u4E2D\u3002\u5225\u306E\u5024\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u7167\u5408\u3002"
+    gloss: 0
+    tier: 0
+  - key: status.holdingRule
+    text: "\u898F\u5247\u3092\u4FDD\u6301\u4E2D: <b>{0}</b> \u5BFE\u8C61\u306E\u5024\u3092\u30AF\u30EA\u30C3\u30AF\u3002"
+    gloss: 0
+    tier: 0
+  - key: status.holdingToday
+    text: "\u4ECA\u65E5\u306E\u65E5\u4ED8 <b>{0}</b> \u3092\u4FDD\u6301\u4E2D\u3002\u51FA\u767A\u65E5\u304B\u6709\u52B9\u671F\u9650\u3092\u30AF\u30EA\u30C3\u30AF\u3002"
+    gloss: 0
+    tier: 0
+  - key: status.logged
+    text: "{0}\u3002\u8A18\u9332\u3057\u307E\u3057\u305F\u3002"
+    gloss: 0
+    tier: 0
+  - key: status.evidence
+    text: "{0}\u3002\u8A3C\u62E0\u3068\u3057\u3066\u8A18\u9332\u3002"
+    gloss: 0
+    tier: 0
+  - key: status.already
+    text: "\u305D\u306E2\u3064\u306F\u7167\u5408\u6E08\u307F\u3067\u3059\u3002\u518D\u8868\u793A\u3057\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: status.shown
+    text: "{0}\u3002\u518D\u8868\u793A\u3057\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: status.cancel
+    text: "\u53D6\u6D88   Esc"
+    gloss: 0
+    tier: 0
+  - key: finding.link.Match
+    text: "\u30C7\u30FC\u30BF\u4E00\u81F4"
+    gloss: 0
+    tier: 0
+  - key: finding.link.Differs
+    text: "\u30C7\u30FC\u30BF\u76F8\u9055"
+    gloss: 0
+    tier: 0
+  - key: finding.link.Elsewhere
+    text: "\u4ED6\u306E\u5834\u6240\u306E\u3082\u306E"
+    gloss: 0
+    tier: 0
+  - key: finding.link.DifferentDetails
+    text: "\u5225\u306E\u9805\u76EE"
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherPlace
+    text: "\u7533\u544A\u5730\u3067\u306F\u306A\u3044"
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherPerson
+    text: "\u5225\u4EBA"
+    gloss: 0
+    tier: 0
+  - key: finding.link.TwoTruths
+    text: "\u4E21\u65B9\u3068\u3082\u53C2\u8003"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleMet
+    text: "\u898F\u5247\u3092\u6E80\u305F\u3059"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleBroken
+    text: "\u898F\u5247\u9055\u53CD"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleNotAbout
+    text: "\u898F\u5247\u306E\u5BFE\u8C61\u5916"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleByComparison
+    text: "\u7167\u5408\u3067\u78BA\u8A8D"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleNotForTraveller
+    text: "\u3053\u306E\u6E21\u822A\u8005\u306F\u5BFE\u8C61\u5916"
+    gloss: 0
+    tier: 0
+  - key: finding.link.NothingToCompare
+    text: "\u7167\u5408\u5BFE\u8C61\u306A\u3057"
+    gloss: 0
+    tier: 0
+  - key: finding.link.DepartsToday
+    text: "\u672C\u65E5\u51FA\u767A"
+    gloss: 0
+    tier: 0
+  - key: finding.link.NotToday
+    text: "\u672C\u65E5\u3067\u306F\u306A\u3044"
+    gloss: 0
+    tier: 0
+  - key: finding.link.StillValid
+    text: "\u6709\u52B9\u671F\u9650\u5185"
+    gloss: 0
+    tier: 0
+  - key: finding.link.Expired
+    text: "\u671F\u9650\u5207\u308C"
+    gloss: 0
+    tier: 0
+  - key: finding.link.SealIncorrect
+    text: "\u5370\u7AE0\u4E0D\u6B63"
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherOffice
+    text: "\u5225\u306E\u5F79\u6240"
+    gloss: 0
+    tier: 0
+  - key: finding.link.PaperMissing
+    text: "\u4E0D\u643A\u5E2F"
+    gloss: 0
+    tier: 0
+  - key: finding.link.NoRecord
+    text: "\u8A18\u9332\u306A\u3057"
+    gloss: 0
+    tier: 0
+  - key: finding.note.DifferentDetails
+    text: "{0}\u3068{1}\u306F\u5225\u306E\u9805\u76EE\u3067\u3059\u3002\u8A18\u9332\u306A\u3057\u3002"
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherPlace
+    text: "\u305D\u306E\u8CC7\u6599\u306E\u884C\u306F\u7533\u544A\u5730\u3068\u306F\u5225\u306E\u5834\u6240\u306E\u3082\u306E\u3067\u3059\u3002\u8A18\u9332\u306A\u3057\u3002"
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherPerson
+    text: "\u305D\u306E\u8A18\u9332\u306F\u5225\u4EBA\u306E\u3082\u306E\u3067\u3059\u3002\u8A18\u9332\u306A\u3057\u3002"
+    gloss: 0
+    tier: 0
+  - key: finding.note.TwoTruths
+    text: "\u3069\u3061\u3089\u3082\u53C2\u8003\u30C7\u30FC\u30BF\u3067\u3059\u3002\u66F8\u985E\u304B\u56DE\u7B54\u3092\u3069\u3061\u3089\u304B\u3068\u7167\u5408\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleNotAbout
+    text: "\u305D\u306E\u898F\u5247\u306F{1}\u306B\u95A2\u3059\u308B\u3082\u306E\u3067\u306F\u3042\u308A\u307E\u305B\u3093\u3002\u8A18\u9332\u306A\u3057\u3002"
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleByComparison
+    text: "\u3053\u306E\u898F\u5247\u306F\u7167\u5408\u3067\u78BA\u8A8D: \u5024\u3092\u8CC7\u6599\u304B\u8A18\u9332\u3068\u7167\u5408\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleNotForTraveller
+    text: "\u3053\u306E\u898F\u5247\u306F\u3053\u306E\u6E21\u822A\u8005\u306B\u306F\u9069\u7528\u3055\u308C\u307E\u305B\u3093\u3002\u8A18\u9332\u306A\u3057\u3002"
+    gloss: 0
+    tier: 0
+  - key: finding.note.NothingToCompare
+    text: "\u898F\u5247\u304B\u4ECA\u65E5\u306E\u65E5\u4ED8\u3092\u3001\u5BFE\u8C61\u306E\u5024\u3068\u7167\u5408\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherOffice
+    text: "\u305D\u308C\u306F2\u3064\u306E\u5F79\u6240\u306E\u5370\u7AE0\u3067\u3059\u3002\u66F8\u985E\u306E\u5370\u7AE0\u306F\u3001\u5370\u7AE0\u53F0\u5E33\u306B\u3042\u308B\u767A\u884C\u5143\u306E\u5370\u7AE0\u3068\u7167\u5408\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u8A18\u9332\u306A\u3057\u3002"
+    gloss: 0
+    tier: 0
+  - key: finding.title.Match
+    text: "{0}\u304C\u4E00\u81F4"
+    gloss: 0
+    tier: 0
+  - key: finding.title.Differs
+    text: "{0}\u304C\u76F8\u9055"
+    gloss: 0
+    tier: 0
+  - key: finding.title.Elsewhere
+    text: "{0}\u306F\u4ED6\u306E\u5834\u6240\u306E\u3082\u306E"
+    gloss: 0
+    tier: 0
+  - key: finding.title.RuleMet
+    text: "\u898F\u5247\u3092\u6E80\u305F\u3059: {0}"
+    gloss: 0
+    tier: 0
+  - key: finding.title.RuleBroken
+    text: "\u898F\u5247\u9055\u53CD: {0}"
+    gloss: 0
+    tier: 0
+  - key: finding.title.DepartsToday
+    text: "\u672C\u65E5\u51FA\u767A"
+    gloss: 0
+    tier: 0
+  - key: finding.title.NotToday
+    text: "\u51FA\u767A\u65E5\u304C\u672C\u65E5\u3067\u306F\u306A\u3044"
+    gloss: 0
+    tier: 0
+  - key: finding.title.StillValid
+    text: "{0}\u306F\u6709\u52B9\u671F\u9650\u5185"
+    gloss: 0
+    tier: 0
+  - key: finding.title.Expired
+    text: "{0}\u306F\u671F\u9650\u5207\u308C"
+    gloss: 0
+    tier: 0
+  - key: finding.title.SealIncorrect
+    text: "\u5370\u7AE0\u4E0D\u6B63"
+    gloss: 0
+    tier: 0
+  - key: finding.title.PaperMissing
+    text: "{0}\u304C\u306A\u3044"
+    gloss: 0
+    tier: 0
+  - key: finding.title.NoRecord
+    text: "{0}: \u8A18\u9332\u306A\u3057"
+    gloss: 0
+    tier: 0
+  - key: finding.detail
+    text: "{0} \u5BFE {1}"
+    gloss: 0
+    tier: 0
+  - key: finding.detail.same
+    text: "\u4E21\u65B9\u3068\u3082{0}"
+    gloss: 0
+    tier: 0
+  - key: finding.detail.missing
+    text: "\u8981\u6C42\u3057\u305F\u304C\u4E0D\u643A\u5E2F"
+    gloss: 0
+    tier: 0
+  - key: finding.detail.noRecord
+    text: "{0}\u3092\u7167\u4F1A: \u8A18\u9332\u306A\u3057"
+    gloss: 0
+    tier: 0
+  - key: finding.evidence
+    text: "{0} \xB7 \u8A3C\u62E0"
+    gloss: 0
+    tier: 0
+  - key: finding.what.today
+    text: "\u4ECA\u65E5\u306E\u65E5\u4ED8"
+    gloss: 0
+    tier: 0
+  - key: finding.what.rule
+    text: "\u898F\u5247"
+    gloss: 0
+    tier: 0
+  - key: findings.title
+    text: "\u3042\u306A\u305F\u306E\u6240\u898B"
+    gloss: 0
+    tier: 0
+  - key: findings.empty
+    text: "\u6240\u898B\u306F\u307E\u3060\u3042\u308A\u307E\u305B\u3093"
+    gloss: 0
+    tier: 0
+  - key: calendar.title
+    text: "\u5C40\u306E\u30AB\u30EC\u30F3\u30C0\u30FC"
+    gloss: 0
+    tier: 0
+  - key: calendar.today
+    text: "\u4ECA\u65E5"
+    gloss: 0
+    tier: 0
+  - key: calendar.todayTitle
+    text: "\u30AB\u30EC\u30F3\u30C0\u30FC \xB7 \u4ECA\u65E5"
+    gloss: 0
+    tier: 0
+  - key: calendar.shiftDay
+    text: "\u52E4\u52D9{0}\u65E5\u76EE"
+    gloss: 0
+    tier: 0
+  - key: calendar.unknown
+    text: "\u65E5\u4ED8\u4E0D\u660E"
+    gloss: 0
+    tier: 0
+  - key: search.drawer.title
+    text: "\u66F8\u985E\u3092\u691C\u7D22"
+    gloss: 0
+    tier: 0
+  - key: search.drawer.hint
+    text: "\u7D50\u679C\u3092\u9078\u3076\u3068\u3001\u68DA\u304C\u958B\u304F\u5074\u306B\u305D\u306E\u66F8\u985E\u304C\u958B\u304D\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: app.chip.onDesk
+    text: "{0}: \u30C7\u30B9\u30AF\u4E0A"
+    gloss: 0
+    tier: 0
+  - key: app.chip.notHandedOver
+    text: "{0}: \u672A\u63D0\u51FA"
+    gloss: 0
+    tier: 0
+  - key: app.doc.none
+    text: "\u6E21\u822A\u8005\u304C\u63D0\u51FA\u3057\u305F\u66F8\u985E\u306F\u3001\u30B9\u30AD\u30E3\u30F3\u5F8C\u3053\u3053\u306B\u8868\u793A\u3055\u308C\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: app.doc.scanHint
+    text: "\u30C7\u30B9\u30AF\u4E0A: \u30B9\u30AD\u30E3\u30F3\u3059\u308B\u3068\u3053\u3053\u3067\u8AAD\u3081\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: app.doc.askHint
+    text: "\u672A\u63D0\u51FA: \u6E21\u822A\u8005\u306B\u6C42\u3081\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: app.ref.claimedOnly
+    text: "\u7533\u544A\u5730\u306E\u307F"
+    gloss: 0
+    tier: 0
+  - key: app.search
+    text: "\u540D\u524D\u3001\u5834\u6240\u3001\u756A\u53F7"
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.pinned
+    text: "\u30D4\u30F3\u7559\u3081"
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.recent
+    text: "\u6700\u8FD1"
+    gloss: 0
+    tier: 0
+  - key: app.toast.scanned
+    text: "{0}\u3092\u30B9\u30AD\u30E3\u30F3"
+    gloss: 0
+    tier: 0
+  - key: app.toast.open
+    text: "\u958B\u304F"
+    gloss: 0
+    tier: 0
+  - key: search.all
+    text: "\u3059\u3079\u3066"
+    gloss: 0
+    tier: 0
+  - key: search.more
+    text: "{1}\u306E{0}\u4EF6\u3092\u3059\u3079\u3066\u8868\u793A"
+    gloss: 0
+    tier: 0
+  - key: search.none
+    text: "\u3053\u306E\u6848\u4EF6\u3068\u672C\u65E5\u306E\u8A18\u9332\u306B\u300C{0}\u300D\u3068\u4E00\u81F4\u3059\u308B\u3082\u306E\u306F\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: search.noneChip
+    text: "\u8CBC\u308A\u4ED8\u3051\u305F\u5207\u308A\u629C\u304D\u3068\u540C\u3058\u672A\u7FFB\u8A33\u306E\u884C\u306F\u3001\u3053\u306E\u6848\u4EF6\u306B\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: search.hint
+    text: "Enter\u3067\u6700\u521D\u306E\u7D50\u679C\u3092\u958B\u304F \xB7 \u30AF\u30EA\u30C3\u30AF\u3067\u79FB\u52D5"
+    gloss: 0
+    tier: 0
+  - key: search.close
+    text: "\u9589\u3058\u308B   Esc"
+    gloss: 0
+    tier: 0
+  - key: search.title.rule
+    text: "\u898F\u5247{0}"
+    gloss: 0
+    tier: 0
+  - key: search.revised
+    text: "\u6539\u8A02"
+    gloss: 0
+    tier: 0
+  - key: steps.rules
+    text: "\u76EE\u7684\u5730\u3078\u306E\u672C\u65E5\u306E\u898F\u5247"
+    gloss: 0
+    tier: 0
+  - key: steps.papers
+    text: "\u5168\u66F8\u985E\u3092\u53D7\u3051\u53D6\u308B"
+    gloss: 0
+    tier: 0
+  - key: steps.read
+    text: "\u5168\u66F8\u985E\u3092\u8AAD\u3080"
+    gloss: 0
+    tier: 0
+  - key: steps.identity
+    text: "\u6C0F\u540D\u3001\u756A\u53F7\u3001\u751F\u5E74\u6708\u65E5\u3092\u5E02\u6C11\u8A18\u9332\u3067"
+    gloss: 0
+    tier: 0
+  - key: steps.facts
+    text: "\u5834\u6240\u306E\u4E8B\u5B9F\u3092\u8CC7\u6599\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: steps.questions
+    text: "\u672C\u65E5\u306E\u8CEA\u554F\u3092\u3059\u308B"
+    gloss: 0
+    tier: 0
+  - key: steps.answers
+    text: "\u56DE\u7B54\u3092\u8CC7\u6599\u304B\u8A18\u9332\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: steps.dress
+    text: "\u670D\u88C5\u3092\u8863\u88C5\u30AC\u30A4\u30C9\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: steps.returnOrder
+    text: "\u5E30\u9084\u547D\u4EE4\u3092\u8A3C\u660E\u66F8\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: steps.dates
+    text: "\u65E5\u4ED8\u3092\u672C\u65E5\u306E\u30AB\u30EC\u30F3\u30C0\u30FC\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: steps.class
+    text: "\u30D1\u30B9\u30DD\u30FC\u30C8\u7B49\u7D1A\u3092\u53E3\u5EA7\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: steps.transponder
+    text: "\u30C8\u30E9\u30F3\u30B9\u30DD\u30F3\u30C0\u30FC\u3092\u53E3\u5EA7\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: steps.paperSet
+    text: "\u66F8\u985E\u4E00\u5F0F\u3092\u672C\u65E5\u306E\u898F\u5247\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: steps.standing
+    text: "\u53E3\u5EA7\u306E\u72B6\u614B\u3092\u8A18\u9332\u3067\u78BA\u8A8D"
+    gloss: 0
+    tier: 0
+  - key: steps.askMeans
+    text: "\u8CC7\u529B\u8A3C\u660E\u3092\u6C42\u3081\u308B"
+    gloss: 0
+    tier: 0
+  - key: steps.waiver
+    text: "\u514D\u8CAC\u66F8\u3092\u30C1\u30B1\u30C3\u30C8\u3068\u53E3\u5EA7\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: steps.means
+    text: "\u8CC7\u529B\u8A3C\u660E\u3092\u53E3\u5EA7\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: steps.contract
+    text: "\u5951\u7D04\u3092\u767B\u9332\u6E08\u307F\u306E\u3082\u306E\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: steps.hint.wheel
+    text: "\u6E21\u822A\u8005\u30DB\u30A4\u30FC\u30EB\u3092\u4F7F\u3046: \u30C7\u30B9\u30AF\u306E\u6E21\u822A\u8005\u3092\u30AF\u30EA\u30C3\u30AF\u3002"
+    gloss: 0
+    tier: 0
+  - key: app.link.seal
+    text: "\u5370\u7AE0\u53F0\u5E33\u3092\u958B\u304F: \u767A\u884C\u5143\u306E\u5370\u7AE0"
+    gloss: 0
+    tier: 0
+  - key: app.link.reference
+    text: "\u53C2\u8003\u8CC7\u6599\u3092\u958B\u304F: {0}\u3001\u7533\u544A\u5730"
+    gloss: 0
+    tier: 0
+  - key: app.link.records
+    text: "\u5E02\u6C11\u8A18\u9332\u3092\u958B\u304F: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.link.rules
+    text: "\u672C\u65E5\u306E\u898F\u5247\u3092\u958B\u304F"
+    gloss: 0
+    tier: 0
+  - key: app.link.pick
+    text: "\u9078\u3093\u3060\u5834\u6240\u3092\u958B\u304F: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.link.place
+    text: "\u53C2\u8003\u8CC7\u6599\u3092\u958B\u304F: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.transcript.answersOnly
+    text: "\u56DE\u7B54\u306E\u307F"
+    gloss: 0
+    tier: 0
+  - key: app.transcript.newLine
+    text: "\u4E0B\u306B\u65B0\u3057\u3044\u884C"
+    gloss: 0
+    tier: 0
+  - key: window.minimize
+    text: "\u6700\u5C0F\u5316"
+    gloss: 0
+    tier: 0
+  - key: window.maximize
+    text: "\u6700\u5927\u5316"
+    gloss: 0
+    tier: 0
+  - key: window.close
+    text: "\u9589\u3058\u308B"
+    gloss: 0
+    tier: 0
+  - key: window.internet
+    text: "\u30A4\u30F3\u30BF\u30FC\u30CD\u30C3\u30C8"
+    gloss: 0
+    tier: 0
+  - key: window.notes
+    text: "\u30E1\u30E2"
+    gloss: 0
+    tier: 0
+  - key: browser.back
+    text: "\u623B\u308B"
+    gloss: 0
+    tier: 0
+  - key: browser.forward
+    text: "\u9032\u3080"
+    gloss: 0
+    tier: 0
+  - key: browser.home
+    text: "\u30DB\u30FC\u30E0"
+    gloss: 0
+    tier: 0
+  - key: browser.go
+    text: "\u79FB\u52D5"
+    gloss: 0
+    tier: 0
+  - key: browser.address
+    text: "\u30B5\u30A4\u30C8\u540D\u304B\u30A2\u30C9\u30EC\u30B9\u3092\u5165\u529B"
+    gloss: 0
+    tier: 0
+  - key: browser.search
+    text: "\u540D\u524D\u3092\u691C\u7D22"
+    gloss: 0
+    tier: 0
+  - key: browser.searchButton
+    text: "\u691C\u7D22"
+    gloss: 0
+    tier: 0
+  - key: site.portal.title
+    text: "\u30B9\u30BF\u30FC\u30C8\u30DA\u30FC\u30B8"
+    gloss: 0
+    tier: 0
+  - key: site.portal.masthead
+    text: "\u30AF\u30ED\u30CD\u30C3\u30C8"
+    gloss: 0
+    tier: 0
+  - key: site.portal.intro
+    text: "\u6642\u9593\u7A0E\u95A2\u30CD\u30C3\u30C8\u30EF\u30FC\u30AF\u306E\u30B5\u30A4\u30C8\u30021\u3064\u9078\u3076\u304B\u3001\u30A2\u30C9\u30EC\u30B9\u6B04\u306B\u540D\u524D\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.notFound.title
+    text: "\u30DA\u30FC\u30B8\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093"
+    gloss: 0
+    tier: 0
+  - key: site.notFound.body
+    text: "{0}\u306B\u306F\u4F55\u3082\u767B\u9332\u3055\u308C\u3066\u3044\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.home
+    text: "\u30B9\u30BF\u30FC\u30C8\u30DA\u30FC\u30B8\u306B\u623B\u308B"
+    gloss: 0
+    tier: 0
+  - key: site.news.masthead
+    text: "{0} \xB7 \u30AA\u30F3\u30E9\u30A4\u30F3\u7248 \xB7 {1}\u65E5\u76EE"
+    gloss: 0
+    tier: 0
+  - key: site.news.issueTitle
+    text: "{0}\u3001{1}\u65E5\u76EE"
+    gloss: 0
+    tier: 0
+  - key: site.news.backIssue
+    text: "\u30D0\u30C3\u30AF\u30CA\u30F3\u30D0\u30FC: {0}\u65E5\u76EE\u306E\u65B0\u805E\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.news.world
+    text: "\u4E16\u754C"
+    gloss: 0
+    tier: 0
+  - key: site.news.desk
+    text: "Desk 3\u3088\u308A"
+    gloss: 0
+    tier: 0
+  - key: site.news.notices
+    text: "\u304A\u77E5\u3089\u305B"
+    gloss: 0
+    tier: 0
+  - key: site.news.noNotices
+    text: "\u304A\u77E5\u3089\u305B\u306F\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.news.standings
+    text: "\u6642\u9593\u7DDA\u306E\u9806\u4F4D"
+    gloss: 0
+    tier: 0
+  - key: site.news.noStandings
+    text: "\u9806\u4F4D\u306F\u307E\u3060\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.news.archive
+    text: "\u30A2\u30FC\u30AB\u30A4\u30D6"
+    gloss: 0
+    tier: 0
+  - key: site.news.issueLink
+    text: "{0}\u65E5\u76EE"
+    gloss: 0
+    tier: 0
+  - key: site.news.allIssues
+    text: "\u5168\u30D0\u30C3\u30AF\u30CA\u30F3\u30D0\u30FC"
+    gloss: 0
+    tier: 0
+  - key: site.news.today
+    text: "\u672C\u65E5\u306E\u7248"
+    gloss: 0
+    tier: 0
+  - key: site.news.archiveTitle
+    text: "\u30D0\u30C3\u30AF\u30CA\u30F3\u30D0\u30FC"
+    gloss: 0
+    tier: 0
+  - key: site.news.archiveRow
+    text: "{0}\u65E5\u76EE: {1}"
+    gloss: 0
+    tier: 0
+  - key: site.news.noBackIssues
+    text: "\u30D0\u30C3\u30AF\u30CA\u30F3\u30D0\u30FC\u306F\u307E\u3060\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.news.quiet
+    text: "\u6642\u9593\u7DDA\u306F\u7A4F\u3084\u304B\u306A\u4E00\u65E5\u3067\u3057\u305F\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.history.intro
+    text: "\u4ECA\u306E\u6B74\u53F2\u306B\u304A\u3051\u308B\u3001\u3042\u3089\u3086\u308B\u6642\u4EE3\u306E\u3042\u3089\u3086\u308B\u56FD\u3002\u6539\u8A02\u3055\u308C\u305F\u4E8B\u5B9F\u306B\u306F\u3001\u3044\u3064\u5909\u308F\u308A\u4EE5\u524D\u306F\u4F55\u3060\u3063\u305F\u304B\u304C\u8A18\u3055\u308C\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.history.present
+    text: "\u73FE\u5728"
+    gloss: 0
+    tier: 0
+  - key: site.history.revisions
+    text: "\u6539\u8A02"
+    gloss: 0
+    tier: 0
+  - key: site.history.country
+    text: "\u56FD"
+    gloss: 0
+    tier: 0
+  - key: site.history.presentNote
+    text: "\u3053\u308C\u304C\u73FE\u5728\u3067\u3059: \u672A\u6765\u306F\u3053\u306E\u56FD\u306E\u4EBA\u3005\u306E\u3082\u306E\u3067\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.history.revised
+    text: "{0}\u65E5\u76EE\u306B\u6539\u8A02 (\u65E7: {1})"
+    gloss: 0
+    tier: 0
+  - key: site.history.people
+    text: "\u7CFB\u8B5C\u6587\u66F8\u9928\u306E{0}\u306E\u4EBA\u3005"
+    gloss: 0
+    tier: 0
+  - key: site.history.index
+    text: "\u5834\u6240\u306E\u7D22\u5F15"
+    gloss: 0
+    tier: 0
+  - key: site.history.presentNone
+    text: "\u672A\u6765\u3092\u63E1\u308B\u52E2\u529B\u306F\u3042\u308A\u307E\u305B\u3093\u3002\u3044\u305A\u308C\u304B\u304C\u53F0\u982D\u3059\u308B\u307E\u3067\u73FE\u5728\u306F\u5B9A\u307E\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.history.today
+    text: "2150\u5E74 \u73FE\u5728"
+    gloss: 0
+    tier: 0
+  - key: site.history.whyCarry
+    text: "{0}\u304B\u3089\u7D99\u627F"
+    gloss: 0
+    tier: 0
+  - key: site.history.whyPending
+    text: "{0}\u304B\u3089\u7D99\u627F (\u4FDD\u7559\u4E2D)"
+    gloss: 0
+    tier: 0
+  - key: site.history.noRevisions
+    text: "\u6B74\u53F2\u306F\u307E\u3060\u5909\u308F\u3063\u3066\u3044\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.history.col.day
+    text: "\u65E5"
+    gloss: 0
+    tier: 0
+  - key: site.history.col.place
+    text: "\u5834\u6240"
+    gloss: 0
+    tier: 0
+  - key: site.history.col.fact
+    text: "\u4E8B\u5B9F"
+    gloss: 0
+    tier: 0
+  - key: site.history.col.before
+    text: "\u5909\u66F4\u524D"
+    gloss: 0
+    tier: 0
+  - key: site.history.col.after
+    text: "\u5909\u66F4\u5F8C"
+    gloss: 0
+    tier: 0
+  - key: site.history.col.why
+    text: "\u7406\u7531"
+    gloss: 0
+    tier: 0
+  - key: site.history.changed
+    text: "Desk 3\u3067\u5909\u66F4"
+    gloss: 0
+    tier: 0
+  - key: site.history.changedRow
+    text: "{0}\u65E5\u76EE\u3001{1}: {2}\u306F{3}\u306B ({4})"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.intro
+    text: "\u904E\u53BB\u306E\u5E02\u6C11\u306E\u8A18\u9332\u3002\u540D\u524D\u3067\u691C\u7D22\u3059\u308B\u304B\u3001\u56FD\u3068\u6642\u4EE3\u3092\u9078\u3093\u3067\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.country
+    text: "\u56FD"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.era
+    text: "\u6642\u4EE3"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.all
+    text: "\u3059\u3079\u3066"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.count
+    text: "{0}\u4EF6\u306E\u8A18\u9332"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.hits
+    text: "{0}\u4EF6\u304C\u300C{1}\u300D\u306B\u4E00\u81F4"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.noHits
+    text: "\u4E00\u81F4\u3059\u308B\u8A18\u9332\u306F\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.name
+    text: "\u6C0F\u540D"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.born
+    text: "\u751F\u5E74"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.place
+    text: "\u5834\u6240"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.name
+    text: "\u6C0F\u540D"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.born
+    text: "\u751F\u5E74"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.died
+    text: "\u6CA1\u5E74"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.place
+    text: "\u5834\u6240"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.note
+    text: "\u8077\u696D / \u5099\u8003"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.unknown
+    text: "\u4E0D\u660E"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.relations
+    text: "\u95A2\u4FC2"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.back
+    text: "\u691C\u7D22\u306B\u623B\u308B"
+    gloss: 0
+    tier: 0
+  - key: ending.world.leftBehind
+    text: "\u3042\u306A\u305F\u304C\u6B8B\u3057\u3066\u3044\u304F\u4E16\u754C"
+    gloss: 0
+    tier: 0
+  - key: settings.language
+    text: "\u8A00\u8A9E"
+    gloss: 0
+    tier: 0
+  - key: settings.followHistory
+    text: "\u6B74\u53F2\u306B\u5F93\u3046"
+    gloss: 0
+    tier: 0
+  - key: settings.alwaysEnglish
+    text: "\u5E38\u306B\u82F1\u8A9E"
+    gloss: 0
+    tier: 0
+  - key: settings.languageLocked
+    text: "{0}\u65E5\u76EE\u304B\u3089\u56FA\u5B9A: \u5C40\u306F\u4ECA\u3084\u4E16\u754C\u306E\u8A00\u8A9E\u3092\u4F7F\u3044\u307E\u3059\u3002\u5358\u8A9E\u306B\u30AB\u30FC\u30BD\u30EB\u3092\u5408\u308F\u305B\u308B\u3068\u7FFB\u8A33\u3055\u308C\u307E\u3059
+      (\u7FFB\u8A33\u30EC\u30F3\u30BA)\u3002"
+    gloss: 0
+    tier: 0
+  - key: settings.motion
+    text: "\u52D5\u304D"
+    gloss: 0
+    tier: 0
+  - key: settings.motionFull
+    text: "\u30D5\u30EB"
+    gloss: 0
+    tier: 0
+  - key: settings.motionReduced
+    text: "\u63A7\u3048\u3081"
+    gloss: 0
+    tier: 0
+  - key: settings.motionIntensity
+    text: "\u5F37\u3055"
+    gloss: 0
+    tier: 0
+  - key: settings.desktop
+    text: "\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\u30A2\u30A4\u30B3\u30F3\u3092\u958B\u304F\u64CD\u4F5C"
+    gloss: 0
+    tier: 0
+  - key: settings.iconDouble
+    text: "\u30C0\u30D6\u30EB\u30AF\u30EA\u30C3\u30AF"
+    gloss: 0
+    tier: 0
+  - key: settings.iconSingle
+    text: "\u30B7\u30F3\u30B0\u30EB\u30AF\u30EA\u30C3\u30AF"
+    gloss: 0
+    tier: 0
+  - key: settings.resetIcons
+    text: "\u30A2\u30A4\u30B3\u30F3\u306E\u4F4D\u7F6E\u3092\u30EA\u30BB\u30C3\u30C8"
+    gloss: 0
+    tier: 0
+  - key: desktop.arrange
+    text: "\u30A2\u30A4\u30B3\u30F3\u3092\u6574\u5217"
+    gloss: 0
+    tier: 0
+  - key: menu.open
+    text: "\u958B\u304F"
+    gloss: 0
+    tier: 0
+  - key: settings.note
+    text: "\u8272\u3001\u30D5\u30A9\u30F3\u30C8\u3001\u58C1\u7D19\u306F\u5E38\u306B\u6B74\u53F2\u306B\u5F93\u3044\u307E\u3059\u3002\u8A00\u8A9E\u306E\u5909\u66F4\u306F\u6B21\u306B\u5C40\u3092\u958B\u3044\u305F\u6642\u306B\u53CD\u6620\u3055\u308C\u307E\u3059\u3002\u52D5\u304D\u3092\u63A7\u3048\u3081\u306B\u3059\u308B\u3068\u7FFB\u8A33\u304C\u3059\u3050\u8868\u793A\u3055\u308C\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: startmenu.mail
+    text: "\u30E1\u30FC\u30EB"
+    gloss: 0
+    tier: 0
+  - key: startmenu.mailUnread
+    text: "\u30E1\u30FC\u30EB ({0})"
+    gloss: 0
+    tier: 0
+  - key: startmenu.account
+    text: "\u5E02\u6C11\u53E3\u5EA7"
+    gloss: 0
+    tier: 0
+  - key: startmenu.notes
+    text: "\u30E1\u30E2"
+    gloss: 0
+    tier: 0
+  - key: window.mail
+    text: "\u30E1\u30FC\u30EB"
+    gloss: 0
+    tier: 0
+  - key: window.mailUnread
+    text: "\u30E1\u30FC\u30EB (\u672A\u8AAD{0})"
+    gloss: 0
+    tier: 0
+  - key: window.account
+    text: "\u5E02\u6C11\u53E3\u5EA7"
+    gloss: 0
+    tier: 0
+  - key: window.shortcuts
+    text: "\u30AD\u30FC\u30DC\u30FC\u30C9\u30B7\u30E7\u30FC\u30C8\u30AB\u30C3\u30C8"
+    gloss: 0
+    tier: 0
+  - key: settings.keyboard
+    text: "\u30AD\u30FC\u30DC\u30FC\u30C9"
+    gloss: 0
+    tier: 0
+  - key: settings.showShortcuts
+    text: "\u30B7\u30E7\u30FC\u30C8\u30AB\u30C3\u30C8\u3092\u8868\u793A"
+    gloss: 0
+    tier: 0
+  - key: keys.focusSearch
+    text: "\u8ABF\u67FB\u30A2\u30D7\u30EA\u306E\u691C\u7D22\u30C9\u30ED\u30EF\u30FC\u3092\u958B\u304F"
+    gloss: 0
+    tier: 0
+  - key: keys.intoResults
+    text: "\u691C\u7D22\u6B04\u304B\u3089\u7D50\u679C\u3078: \u77E2\u5370\u3067\u7D50\u679C\u3092\u79FB\u52D5\u3001Enter\u3067\u958B\u304F"
+    gloss: 0
+    tier: 0
+  - key: keys.escape
+    text: "\u53F3\u30AF\u30EA\u30C3\u30AF\u304BEsc: \u30E1\u30CB\u30E5\u30FC\u3001\u3053\u306E\u30AB\u30FC\u30C9\u3001\u691C\u7D22\u30C9\u30ED\u30EF\u30FC\u3092\u9589\u3058\u308B;
+      \u691C\u7D22\u3092\u30AF\u30EA\u30A2; \u30C6\u30AD\u30B9\u30C8\u6B04\u3092\u96E2\u308C\u308B;
+      \u4FDD\u6301\u3057\u305F\u5024\u3092\u653E\u3059; \u30E1\u30CB\u30E5\u30FC\u3092\u9589\u3058\u308B\u304B\u30C9\u30E9\u30C3\u30B0\u3092\u53D6\u6D88\u3002\u3069\u308C\u3082\u306A\u3051\u308C\u3070\u30C7\u30B9\u30AF\u306B\u623B\u308B"
+    gloss: 0
+    tier: 0
+  - key: keys.help
+    text: "\u3053\u306E\u30AB\u30FC\u30C9\u306E\u8868\u793A/\u975E\u8868\u793A"
+    gloss: 0
+    tier: 0
+  - key: keys.openIcon
+    text: "\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7: \u9078\u629E\u3057\u305F\u30A2\u30A4\u30B3\u30F3\u3092\u958B\u304F"
+    gloss: 0
+    tier: 0
+  - key: keys.icons
+    text: "\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7: \u305D\u306E\u65B9\u5411\u306E\u6700\u5BC4\u308A\u306E\u30A2\u30A4\u30B3\u30F3\u3092\u9078\u629E"
+    gloss: 0
+    tier: 0
+  - key: keys.orders
+    text: "\u6CE8\u6587: \u30C4\u30EA\u30FC\u3092\u79FB\u52D5 (\u524D\u63D0\u3078\u3001\u4F9D\u5B58\u5148\u3078\u3001\u5217\u306E\u4E0A\u4E0B\u3078)"
+    gloss: 0
+    tier: 0
+  - key: keys.ordersAct
+    text: "\u6CE8\u6587: \u9078\u629E\u3057\u305F\u9805\u76EE\u3092\u6CE8\u6587\u3001\u53D6\u6D88\u3001\u8A2D\u7F6E"
+    gloss: 0
+    tier: 0
+  - key: keys.step
+    text: "\u8ABF\u67FB: \u624B\u98061\u301C4\u306E\u66F8\u985E\u3092\u8868\u793A
+      (\u66F8\u985E\u3001\u8A18\u9332\u3001\u8CC7\u6599\u3001\u898F\u5247)"
+    gloss: 0
+    tier: 0
+  - key: keys.nextStep
+    text: "\u8ABF\u67FB: \u6B21\u304B\u524D\u306E\u624B\u9806\u306E\u66F8\u985E\u3092\u8868\u793A"
+    gloss: 0
+    tier: 0
+  - key: keys.findings
+    text: "\u6240\u898B\u306E\u5217\u306E\u8868\u793A/\u975E\u8868\u793A"
+    gloss: 0
+    tier: 0
+  - key: keys.otherPane
+    text: "\u68DA\u304C\u958B\u304F\u5074\u3092\u3082\u3046\u4E00\u65B9\u306B\u3059\u308B"
+    gloss: 0
+    tier: 0
+  - key: keys.split
+    text: "2\u753B\u9762\u304B1\u753B\u9762"
+    gloss: 0
+    tier: 0
+  - key: keys.history
+    text: "\u68DA\u304C\u958B\u304F\u5074\u306E\u753B\u9762\u3067\u623B\u308B/\u9032\u3080"
+    gloss: 0
+    tier: 0
+  - key: keys.regions
+    text: "\u30A2\u30D7\u30EA\u306E\u6B21\u304B\u524D\u306E\u90E8\u5206: \u30E1\u30CB\u30E5\u30FC\u30D0\u30FC\u3001\u753B\u9762\u3001\u6240\u898B\u3001\u53D6\u6D88"
+    gloss: 0
+    tier: 0
+  - key: keys.rows
+    text: "\u5024\u3001\u30C1\u30C3\u30D7\u3001\u6240\u898B\u3001\u30D4\u30F3\u3001\u30DC\u30BF\u30F3\u306E\u9593\u3067\u30D5\u30A9\u30FC\u30AB\u30B9\u3092\u79FB\u52D5"
+    gloss: 0
+    tier: 0
+  - key: keys.follow
+    text: "\u30D5\u30A9\u30FC\u30AB\u30B9\u4E2D\u306E\u9805\u76EE\u3092\u958B\u304F\u3001\u307E\u305F\u306F\u5024\u306E\u30EA\u30F3\u30AF\u3092\u305F\u3069\u308B"
+    gloss: 0
+    tier: 0
+  - key: keys.followOther
+    text: "\u53CD\u5BFE\u5074\u3067\u3001\u5024\u306E\u30EA\u30F3\u30AF\u3092\u305F\u3069\u308B\u304B\u3001\u30D5\u30A9\u30FC\u30AB\u30B9\u4E2D\u306E\u691C\u7D22\u7D50\u679C\u3092\u958B\u304F"
+    gloss: 0
+    tier: 0
+  - key: keys.pick
+    text: "\u30D5\u30A9\u30FC\u30AB\u30B9\u4E2D\u306E\u5024\u3092\u4FDD\u6301\u3057\u3001\u6B21\u306E\u5024\u3068\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: keys.copy
+    text: "\u30D5\u30A9\u30FC\u30AB\u30B9\u4E2D\u306E\u5024\u3092\u30B3\u30D4\u30FC\u3001\u307E\u305F\u306F\u300C\u30E9\u30D9\u30EB:
+      \u5024\u300D"
+    gloss: 0
+    tier: 0
+  - key: keys.paste
+    text: "\u30E1\u30E2: \u30B3\u30D4\u30FC\u3057\u305F\u5024\u3092\u5207\u308A\u629C\u304D\u3068\u3057\u3066\u8CBC\u308A\u4ED8\u3051
+      (\u30C6\u30AD\u30B9\u30C8\u6B04\u3067\u306F\u901A\u5E38\u306E\u8CBC\u308A\u4ED8\u3051)"
+    gloss: 0
+    tier: 0
+  - key: keys.pin
+    text: "\u30D5\u30A9\u30FC\u30AB\u30B9\u4E2D\u306E\u5024\u3001\u307E\u305F\u306F\u753B\u9762\u306E\u66F8\u985E\u3092\u30D4\u30F3\u7559\u3081/\u89E3\u9664"
+    gloss: 0
+    tier: 0
+  - key: keys.zoom
+    text: "\u753B\u9762\u3092\u62E1\u5927\u3001\u7E2E\u5C0F\u3001\u307E\u305F\u306F\u8A2D\u5B9A\u306E\u6587\u5B57\u30B5\u30A4\u30BA\u306B\u623B\u3059
+      (\u6CE8\u6587\u30C4\u30EA\u30FC: \u62E1\u5927\u3001\u7E2E\u5C0F\u3001100 %\u306B\u623B\u3059)"
+    gloss: 0
+    tier: 0
+  - key: keys.contextMenu
+    text: "\u30D5\u30A9\u30FC\u30AB\u30B9\u4E2D\u306E\u884C\u304B\u9078\u629E\u3057\u305F\u30A2\u30A4\u30B3\u30F3\u306E\u30B3\u30F3\u30C6\u30AD\u30B9\u30C8\u30E1\u30CB\u30E5\u30FC
+      (\u30B3\u30D4\u30FC\u3001\u30D4\u30F3\u3001\u9078\u629E\u3001\u958B\u304F\u3001\u6574\u5217)"
+    gloss: 0
+    tier: 0
+  - key: keys.section.desk
+    text: "\u30C7\u30B9\u30AF\u3067"
+    gloss: 0
+    tier: 0
+  - key: keys.section.pc
+    text: "PC\u3067"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.drag
+    text: "\u66F8\u985E\u3084\u30B9\u30BF\u30F3\u30D7\u3092\u52D5\u304B\u3059: \u30AB\u30A6\u30F3\u30BF\u30FC\u3067\u306F\u66F8\u985E\u306F\u5C0F\u3055\u304F\u3001\u30C7\u30B9\u30AF\u3067\u306F\u539F\u5BF8\u3002\u30D1\u30B9\u30DD\u30FC\u30C8\u306B\u62BC\u5370\u5F8C\u3001\u66F8\u985E\u3092\u30AB\u30A6\u30F3\u30BF\u30FC\u306B\u7F6E\u304F\u3068\u8FD4\u5374"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.inspect
+    text: "\u691C\u67FB\u30E2\u30FC\u30C9 (\u8D64\u3044\u30DC\u30BF\u30F3): 2\u3064\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.stamps
+    text: "\u30B9\u30BF\u30F3\u30D7\u30D0\u30FC (\u53F3\u306E\u7070\u8272\u306E\u30BF\u30D6):
+      \u30B9\u30BF\u30F3\u30D7\u3092\u30D1\u30B9\u30DD\u30FC\u30C8\u306B\u30C9\u30E9\u30C3\u30B0\u3057\u3066\u653E\u3059"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.pc
+    text: "PC\u3078\u884C\u304D\u6765\u3059\u308B (\u5DE6\u306E\u7070\u8272\u306E\u30BF\u30D6)"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.back
+    text: "\u623B\u308B: \u30C9\u30E9\u30C3\u30B0\u3001\u30DB\u30A4\u30FC\u30EB\u3001PC\u3001\u4FDD\u6301\u3057\u305F\u5024\u3001\u691C\u67FB\u30E2\u30FC\u30C9\u3001\u30B9\u30BF\u30F3\u30D7\u30D0\u30FC\u3001\u8857\u3001\u95B2\u89A7\u753B\u9762"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.city
+    text: "\u8857\u3092\u898B\u308B\u3001\u305D\u3057\u3066\u623B\u308B"
+    gloss: 0
+    tier: 0
+  - key: app.copied
+    text: "\u30B3\u30D4\u30FC: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.row.line
+    text: "{0} \xB7 {1}\u884C\u76EE"
+    gloss: 0
+    tier: 0
+  - key: app.item.record
+    text: "\u5E02\u6C11\u8A18\u9332 \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: app.pins.full
+    text: "\u30D4\u30F3\u304C\u6E80\u676F\u3067\u3059: \u5148\u306B\u3069\u308C\u304B\u3092\u89E3\u9664\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: app.pins.empty
+    text: "Ctrl+P\u3067\u4ECA\u306E\u5024\u3092\u30D4\u30F3\u7559\u3081\u3002\u30D4\u30F3\u3092\u53F3\u30AF\u30EA\u30C3\u30AF\u3067\u89E3\u9664\u3002"
+    gloss: 0
+    tier: 0
+  - key: app.recent.empty
+    text: "\u958B\u3044\u305F\u66F8\u985E\u3001\u8CC7\u6599\u3001\u8A18\u9332\u304C\u3053\u3053\u306B\u8868\u793A\u3055\u308C\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: app.jump.gone
+    text: "\u305D\u308C\u306F\u3082\u3046\u3053\u3053\u306B\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: search.chip
+    text: "{0} \xB7 \u672A\u7FFB\u8A33 {1}"
+    gloss: 0
+    tier: 0
+  - key: menu.copy
+    text: "\u5024\u3092\u30B3\u30D4\u30FC"
+    gloss: 0
+    tier: 0
+  - key: menu.copyRow
+    text: "\u884C\u3092\u30B3\u30D4\u30FC"
+    gloss: 0
+    tier: 0
+  - key: menu.pin
+    text: "\u30D4\u30F3\u7559\u3081"
+    gloss: 0
+    tier: 0
+  - key: menu.unpin
+    text: "\u30D4\u30F3\u89E3\u9664"
+    gloss: 0
+    tier: 0
+  - key: menu.pick
+    text: "\u7167\u5408\u7528\u306B\u9078\u629E"
+    gloss: 0
+    tier: 0
+  - key: settings.investigation
+    text: "\u8ABF\u67FB"
+    gloss: 0
+    tier: 0
+  - key: mail.inbox
+    text: "\u53D7\u4FE1\u7BB1"
+    gloss: 0
+    tier: 0
+  - key: mail.none
+    text: "\u30E1\u30FC\u30EB\u306A\u3057\u3002"
+    gloss: 0
+    tier: 0
+  - key: mail.select
+    text: "\u30E1\u30C3\u30BB\u30FC\u30B8\u3092\u9078\u3093\u3067\u8AAD\u3080\u3002"
+    gloss: 0
+    tier: 0
+  - key: mail.rowMeta
+    text: "{0}\u65E5\u76EE \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: mail.to
+    text: "\u30C7\u30B9\u30AF\u8077\u54E1\u5404\u4F4D"
+    gloss: 0
+    tier: 0
+  - key: mail.from.directorate
+    text: "\u7A0E\u95A2\u7DCF\u5C40"
+    gloss: 0
+    tier: 0
+  - key: mail.from.times
+    text: "\u6642\u7A7A\u65B0\u5831"
+    gloss: 0
+    tier: 0
+  - key: mail.from.integrity
+    text: "\u6642\u9593\u7DDA\u4FDD\u5168\u5C40"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.memo
+    text: "\u672C\u65E5\u306E\u6307\u4EE4"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.times
+    text: "\u6642\u7A7A\u65B0\u5831 {0}\u65E5\u76EE"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.citation
+    text: "\u9055\u53CD\u901A\u77E5: \u6E21\u822A\u8005{0}"
+    gloss: 0
+    tier: 0
+  - key: mail.body.noDirectives
+    text: "\u672C\u65E5\u306E\u6E21\u822A\u6307\u4EE4\u306F\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: mail.body.times
+    text: "\u672C\u65E5\u306E\u7248\u306F\u30CB\u30E5\u30FC\u30B9\u30B5\u30A4\u30C8\u306B\u3042\u308A\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: mail.body.timesArchived
+    text: "\u3053\u306E\u7248\u306F\u30CB\u30E5\u30FC\u30B9\u30B5\u30A4\u30C8\u306E\u30A2\u30FC\u30AB\u30A4\u30D6\u306B\u4FDD\u7BA1\u3055\u308C\u3066\u3044\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: mail.body.citation
+    text: "\u3042\u306A\u305F\u304C\u4E86\u627F\u3057\u305F\u9055\u53CD\u901A\u77E5\u306E\u5199\u3057:"
+    gloss: 0
+    tier: 0
+  - key: mail.link.rules
+    text: "\u6307\u4EE4\u3092\u958B\u304F >"
+    gloss: 0
+    tier: 0
+  - key: mail.link.news
+    text: "\u30CB\u30E5\u30FC\u30B9\u30B5\u30A4\u30C8\u3067\u8AAD\u3080 >"
+    gloss: 0
+    tier: 0
+  - key: account.form.title
+    text: "\u5E02\u6C11\u8A18\u9332\u6284\u672C"
+    gloss: 0
+    tier: 0
+  - key: account.query
+    text: "\u53E3\u5EA7\u540D\u7FA9: {0} \xB7 \u5E02\u6C11ID {1}"
+    gloss: 0
+    tier: 0
+  - key: account.group.records
+    text: "\u8A18\u9332"
+    gloss: 0
+    tier: 0
+  - key: account.group.forms
+    text: "\u63D0\u51FA\u6E08\u307F\u66F8\u5F0F"
+    gloss: 0
+    tier: 0
+  - key: account.group.travel
+    text: "\u6E21\u822A"
+    gloss: 0
+    tier: 0
+  - key: account.row.name
+    text: "\u6C0F\u540D"
+    gloss: 0
+    tier: 0
+  - key: account.row.born
+    text: "\u751F\u5E74\u6708\u65E5"
+    gloss: 0
+    tier: 0
+  - key: account.row.lineage
+    text: "\u5BB6\u7CFB"
+    gloss: 0
+    tier: 0
+  - key: account.row.citizenId
+    text: "\u5E02\u6C11ID"
+    gloss: 0
+    tier: 0
+  - key: account.row.status
+    text: "\u533A\u5206"
+    gloss: 0
+    tier: 0
+  - key: account.row.standing
+    text: "\u72B6\u614B"
+    gloss: 0
+    tier: 0
+  - key: account.row.debt
+    text: "\u8CA0\u50B5"
+    gloss: 0
+    tier: 0
+  - key: account.row.balance
+    text: "\u6B8B\u9AD8"
+    gloss: 0
+    tier: 0
+  - key: account.row.employment
+    text: "\u96C7\u7528"
+    gloss: 0
+    tier: 0
+  - key: account.row.departure
+    text: "\u4E88\u7D04\u6E08\u307F\u306E\u51FA\u767A"
+    gloss: 0
+    tier: 0
+  - key: account.row.note
+    text: "\u5099\u8003"
+    gloss: 0
+    tier: 0
+  - key: account.status.eligible
+    text: "\u9069\u683C"
+    gloss: 0
+    tier: 0
+  - key: account.status.standard
+    text: "\u6A19\u6E96"
+    gloss: 0
+    tier: 0
+  - key: account.standing.good
+    text: "\u826F\u597D"
+    gloss: 0
+    tier: 0
+  - key: account.standing.frozen
+    text: "\u51CD\u7D50"
+    gloss: 0
+    tier: 0
+  - key: account.departure.none
+    text: "\u306A\u3057"
+    gloss: 0
+    tier: 0
+  - key: account.departure.booked
+    text: "\u50B5\u52D9\u6551\u6E08\u306E\u51FA\u767A\u3001\u4E88\u7D04\u6E08\u307F"
+    gloss: 0
+    tier: 0
+  - key: account.instalmentRate
+    text: "\u7D66\u4E0E\u306E{0}%\u3092\u50B5\u52D9\u6551\u6E08\u3078"
+    gloss: 0
+    tier: 0
+  - key: account.statement.none
+    text: "\u8A18\u5165\u306F\u307E\u3060\u3042\u308A\u307E\u305B\u3093: \u52E4\u52D9\u7D42\u4E86\u6642\u306B\u305D\u306E\u65E5\u304C\u8A18\u5165\u3055\u308C\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: account.statement.unit
+    text: "\u91D1\u984D\u306E\u5358\u4F4D: {0}\u3002"
+    gloss: 0
+    tier: 0
+  - key: contract.title
+    text: "\u50B5\u52D9\u6551\u6E08\u52B4\u50CD\u5951\u7D04 \xB7 TC-520"
+    gloss: 0
+    tier: 0
+  - key: contract.row.worker
+    text: "\u52B4\u50CD\u8005"
+    gloss: 0
+    tier: 0
+  - key: contract.row.citizenId
+    text: "\u5E02\u6C11ID"
+    gloss: 0
+    tier: 0
+  - key: contract.row.employer
+    text: "\u96C7\u7528\u4E3B"
+    gloss: 0
+    tier: 0
+  - key: contract.row.worksite
+    text: "\u4F5C\u696D\u73FE\u5834"
+    gloss: 0
+    tier: 0
+  - key: contract.row.term
+    text: "\u671F\u9593"
+    gloss: 0
+    tier: 0
+  - key: contract.row.wage
+    text: "\u65E5\u7D66"
+    gloss: 0
+    tier: 0
+  - key: contract.term
+    text: "{0:N0}\u65E5"
+    gloss: 0
+    tier: 0
+  - key: notes.days
+    text: "\u65E5\u4ED8"
+    gloss: 0
+    tier: 0
+  - key: notes.day
+    text: "{0}\u65E5\u76EE"
+    gloss: 0
+    tier: 0
+  - key: notes.today
+    text: "{0}\u65E5\u76EE (\u4ECA\u65E5)"
+    gloss: 0
+    tier: 0
+  - key: notes.pageTitle
+    text: "\u30E1\u30E2 \xB7 {0}\u65E5\u76EE"
+    gloss: 0
+    tier: 0
+  - key: notes.clippings
+    text: "\u5207\u308A\u629C\u304D"
+    gloss: 0
+    tier: 0
+  - key: notes.notes
+    text: "\u30E1\u30E2"
+    gloss: 0
+    tier: 0
+  - key: notes.hint
+    text: "\u307E\u3060\u4F55\u3082\u3042\u308A\u307E\u305B\u3093\u3002\u5024\u3092\u30B3\u30D4\u30FC
+      (Ctrl+C\u3001\u307E\u305F\u306F\u884C\u3092\u53F3\u30AF\u30EA\u30C3\u30AF:
+      \u5024\u3092\u30B3\u30D4\u30FC) \u3057\u3066\u3001Ctrl+V\u304B\u300C\u5207\u308A\u629C\u304D\u3092\u8CBC\u308B\u300D;
+      \u307E\u305F\u306F\u4E0B\u306B\u5165\u529B\u3002"
+    gloss: 0
+    tier: 0
+  - key: notes.paste
+    text: "\u5207\u308A\u629C\u304D\u3092\u8CBC\u308B"
+    gloss: 0
+    tier: 0
+  - key: notes.pasted
+    text: "\u8CBC\u308A\u4ED8\u3051\u6E08\u307F"
+    gloss: 0
+    tier: 0
+  - key: notes.remove
+    text: "\u524A\u9664"
+    gloss: 0
+    tier: 0
+  - key: notes.placeholder
+    text: "\u3053\u3053\u306B\u30E1\u30E2\u3092\u5165\u529B..."
+    gloss: 0
+    tier: 0
+  - key: notes.loose
+    text: "\u305D\u306E\u4ED6\u306E\u5207\u308A\u629C\u304D"
+    gloss: 0
+    tier: 0
+  - key: notes.full
+    text: "\u3053\u306E\u30DA\u30FC\u30B8\u306E\u5207\u308A\u629C\u304D\u306F{0}\u4EF6\u307E\u3067:
+      1\u4EF6\u524A\u9664\u3059\u308B\u3068\u8CBC\u308A\u4ED8\u3051\u3089\u308C\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: briefing.empty
+    text: "\u6307\u4EE4\u306A\u3057\u3002\u5BFE\u8C61\u8005\u3092\u6B63\u78BA\u306B\u51E6\u7406\u305B\u3088\u3002"
+    gloss: 0
+    tier: 0
+  - key: briefing.bulletinHeader
+    text: "\u5C40\u5185\u30E1\u30E2 \xB7 DESK 3"
+    gloss: 0
+    tier: 0
+  - key: briefing.newHours
+    text: "\u672C\u65E5\u304B\u3089\u65B0\u3057\u3044\u6642\u9593: \u30C7\u30B9\u30AF\u306F{0}\u306B\u958B\u304D\u3001{1}\u306B\u9589\u307E\u308A\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: results.leisureDepartures
+    text: "\u89B3\u5149\u306E\u51FA\u767A: {0}"
+    gloss: 0
+    tier: 0
+  - key: results.debtReliefDepartures
+    text: "\u50B5\u52D9\u6551\u6E08\u306E\u51FA\u767A: {0}   (\u8CA0\u50B5{1:N0}
+      {2}\u3092\u52B4\u50CD\u3078)"
+    gloss: 0
+    tier: 0
+  - key: results.timeline
+    text: "\u4ECA\u591C\u306E\u6642\u9593\u7DDA"
+    gloss: 0
+    tier: 0
+  - key: results.citations
+    text: "\u672C\u65E5\u306E\u9055\u53CD\u901A\u77E5: {0}"
+    gloss: 0
+    tier: 0
+  - key: results.unproven
+    text: "\u8A3C\u62E0\u306A\u3057\u306E\u5374\u4E0B: {0} (\u5374\u4E0B\u306E\u524D\u306B\u9038\u8131\u3092\u8A18\u9332)"
+    gloss: 0
+    tier: 0
+  - key: results.detained
+    text: "\u62D8\u7559: {0}"
+    gloss: 0
+    tier: 0
+  - key: results.processedAll
+    text: "\u51E6\u7406\u3057\u305F\u6E21\u822A\u8005: {0}\u3001\u5217\u306E\u5168\u54E1"
+    gloss: 0
+    tier: 0
+  - key: results.processedOf
+    text: "\u51E6\u7406\u3057\u305F\u6E21\u822A\u8005: {0}/{1} (\u9589\u5C40\u6642\u306B{2}\u4EBA\u304C\u5F85\u6A5F\u3001\u7121\u7D66)"
+    gloss: 0
+    tier: 0
+  - key: results.hours
+    text: "\u30C7\u30B9\u30AF\u306E\u6642\u9593: {0}\u301C{1}"
+    gloss: 0
+    tier: 0
+  - key: results.moneyHeader
+    text: "<b>\u53CE\u652F ({0})</b>"
+    gloss: 0
+    tier: 0
+  - key: results.row.pay
+    text: "\u6B63\u3057\u3044\u5224\u5B9A: {0} \xD7 {1}"
+    gloss: 0
+    tier: 0
+  - key: results.row.payTotal
+    text: "\u6B63\u3057\u3044\u5224\u5B9A: {0}"
+    gloss: 0
+    tier: 0
+  - key: results.row.warned
+    text: "\u8AA4\u3063\u305F\u5224\u5B9A: {0}\u3001\u521D\u56DE\u306E\u8B66\u544A"
+    gloss: 0
+    tier: 0
+  - key: results.row.fined
+    text: "\u8AA4\u3063\u305F\u5224\u5B9A: {0} \xD7 \u7F70\u91D1{1}"
+    gloss: 0
+    tier: 0
+  - key: results.row.finedTotal
+    text: "\u8AA4\u3063\u305F\u5224\u5B9A\u306E\u7F70\u91D1: {0}"
+    gloss: 0
+    tier: 0
+  - key: results.row.stranded
+    text: "\u79FB\u52D5\u4E2D\u306E\u53D6\u308A\u6B8B\u3057: {0}\u3001\u514D\u8CAC\u66F8\u3042\u308A"
+    gloss: 0
+    tier: 0
+  - key: results.row.strandedFined
+    text: "\u79FB\u52D5\u4E2D\u306E\u53D6\u308A\u6B8B\u3057: {0}\u3001\u7F70\u91D1
+      (\u7F72\u540D\u6E08\u307F\u306E\u514D\u8CAC\u66F8\u306A\u3057)"
+    gloss: 0
+    tier: 0
+  - key: results.row.instalment
+    text: "\u50B5\u52D9\u6551\u6E08\u306E\u5206\u5272\u6255\u3044 (\u6B8B\u308A{0:N0})"
+    gloss: 0
+    tier: 0
+  - key: results.row.other
+    text: "\u305D\u306E\u4ED6\u306E\u53CE\u652F"
+    gloss: 0
+    tier: 0
+  - key: results.row.net
+    text: "\u52E4\u52D9\u306E\u7D14\u76CA"
+    gloss: 0
+    tier: 0
+  - key: results.row.bills
+    text: "\u4ECA\u591C\u306E\u652F\u6255\u3044"
+    gloss: 0
+    tier: 0
+  - key: results.row.after
+    text: "\u652F\u6255\u3044\u5F8C\u306E\u8CA1\u5E03"
+    gloss: 0
+    tier: 0
+  - key: results.wallet
+    text: "{0} (\u73FE\u5728 {1})"
+    gloss: 0
+    tier: 0
+  - key: scanner.idle
+    text: "\u9038\u8131\u306E\u8A18\u9332\u306A\u3057\u3002\n\n\u66F8\u985E\u306E\u9805\u76EE\u3001\u6E21\u822A\u8005\u306E\u56DE\u7B54\u3001\u7740\u3066\u3044\u308B\u8863\u670D\u3092\u3001\u7533\u544A\u5730\u306E\u53C2\u8003\u9805\u76EE\u3001\u672C\u6765\u306E\u6240\u5C5E\u5148\u306E\u9805\u76EE\u3001\u307E\u305F\u306F\u5E02\u6C11\u8A18\u9332\u3068\u7167\u5408\u3057\u3066\u8A3C\u62E0\u3092\u8A18\u9332\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: scanner.summary
+    text: "\u9038\u8131{0}\u4EF6\u3092\u8A18\u9332\u3002\u5374\u4E0B\u306F\u6B63\u5F53\u3067\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: report.proof.claimMismatch
+    text: "\u4E0D\u4E00\u81F4"
+    gloss: 0
+    tier: 0
+  - key: report.proof.foreignOrigin
+    text: "\u4ED6\u306E\u5834\u6240\u306E\u3082\u306E"
+    gloss: 0
+    tier: 0
+  - key: report.proof.recordMismatch
+    text: "\u5C40\u306E\u8A18\u9332"
+    gloss: 0
+    tier: 0
+  - key: report.proof.crossMismatch
+    text: "\u66F8\u985E\u304C\u98DF\u3044\u9055\u3046"
+    gloss: 0
+    tier: 0
+  - key: report.proof.personMismatch
+    text: "\u672C\u4EBA\u3067\u306F\u306A\u3044"
+    gloss: 0
+    tier: 0
+  - key: form.interview.head
+    text: "{0} \xB7 \u30C7\u30B9\u30AF\u8077\u54E1: {1} \xB7 {2}"
+    gloss: 0
+    tier: 0
+  - key: rules.memo.to
+    text: "\u30C7\u30B9\u30AF\u8077\u54E1\u5404\u4F4D"
+    gloss: 0
+    tier: 0
+  - key: directives.none
+    text: "\u6307\u4EE4: \u672C\u65E5\u306F\u5168\u76EE\u7684\u5730\u304C\u8A31\u53EF\u3002"
+    gloss: 0
+    tier: 0
+  - key: document.untitled
+    text: "\u66F8\u985E"
+    gloss: 0
+    tier: 0
+  - key: book.untitled
+    text: "\u53C2\u8003\u8CC7\u6599"
+    gloss: 0
+    tier: 0
+  - key: book.claimedNote
+    text: "\u7533\u544A"
+    gloss: 0
+    tier: 0
+  - key: book.revisedNote
+    text: "\u6539\u8A02"
+    gloss: 0
+    tier: 0
+  - key: book.edition
+    text: "{0}\u65E5\u76EE\u306E\u7248"
+    gloss: 0
+    tier: 0
+  - key: compare.deviationLogged
+    text: "\u25CF  \u9038\u8131\u3092\u8A18\u9332 \u2014 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.alreadyDocumented
+    text: "\u25CF  \u8A18\u9332\u6E08\u307F \u2014 {0}\u306F\u9038\u8131\u5831\u544A\u306B\u3042\u308A\u307E\u3059"
+    gloss: 0
+    tier: 0
+  - key: compare.pair
+    text: "{0}  \xB7  {2}  \u5BFE  {4}"
+    gloss: 0
+    tier: 0
+  - key: compare.pickAnother
+    text: "{0}:  {1}    \u5BFE    (\u7167\u5408\u3059\u308B\u5225\u306E\u5024\u3092\u9078\u629E)"
+    gloss: 0
+    tier: 0
+  - key: compare.travellerLabel
+    text: "\u6E21\u822A\u8005 \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.faceSlot
+    text: "\u9854"
+    gloss: 0
+    tier: 0
+  - key: compare.faceShown
+    text: "\u30C7\u30B9\u30AF\u306E\u4EBA\u7269"
+    gloss: 0
+    tier: 0
+  - key: compare.photoShown
+    text: "\u5199\u771F"
+    gloss: 0
+    tier: 0
+  - key: compare.untranslated
+    text: "(\u672A\u7FFB\u8A33\u306E{0}; {1}\u7FFB\u8A33\u6A5F)"
+    gloss: 0
+    tier: 0
+  - key: slot.Outfit
+    text: "\u670D\u88C5"
+    gloss: 0
+    tier: 0
+  - key: slot.Hair
+    text: "\u9AEA"
+    gloss: 0
+    tier: 0
+  - key: slot.FacialHair
+    text: "\u3072\u3052"
+    gloss: 0
+    tier: 0
+  - key: slot.Headwear
+    text: "\u5E3D\u5B50"
+    gloss: 0
+    tier: 0
+  - key: slot.Accessory
+    text: "\u88C5\u98FE\u54C1"
+    gloss: 0
+    tier: 0
+  - key: records.placeholder
+    text: "\u540D\u524D\u304B\u756A\u53F7\u2026"
+    gloss: 0
+    tier: 0
+  - key: records.idle
+    text: "\u540D\u524D\u304B\u8A18\u9332\u756A\u53F7\u3092\u5165\u529B\u3057\u3001\u691C\u7D22\u3092\u62BC\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: records.noRecord
+    text: "\u8A18\u9332\u306A\u3057: \u300C{0}\u300D \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: records.onFile
+    text: "\u7167\u4F1A\u300C{0}\u300D \xB7 \u8A18\u93321\u4EF6 \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: records.group.registry
+    text: "\u767B\u9332\u9805\u76EE"
+    gloss: 0
+    tier: 0
+  - key: records.row.name
+    text: "\u6C0F\u540D"
+    gloss: 0
+    tier: 0
+  - key: records.row.born
+    text: "\u751F\u5E74\u6708\u65E5"
+    gloss: 0
+    tier: 0
+  - key: records.row.origin
+    text: "\u51FA\u8EAB"
+    gloss: 0
+    tier: 0
+  - key: records.row.note
+    text: "\u5099\u8003"
+    gloss: 0
+    tier: 0
+  - key: records.note.none
+    text: "\u5099\u8003\u306A\u3057\u3002"
+    gloss: 0
+    tier: 0
+  - key: records.note.sealed
+    text: "\u512A\u5148\u5BFE\u8C61\u8005\u3002\u8A18\u9332\u306F\u3042\u306A\u305F\u306E\u6A29\u9650\u3067\u306F\u95B2\u89A7\u3067\u304D\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: records.group.file
+    text: "\u30D5\u30A1\u30A4\u30EB"
+    gloss: 0
+    tier: 0
+  - key: records.row.file
+    text: "\u5099\u8003"
+    gloss: 0
+    tier: 0
+  - key: records.group.seen
+    text: "\u904E\u53BB\u306E\u6765\u8A2A \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: visit.flag.days
+    text: "{0} {1}\u65E5\u524D"
+    gloss: 0
+    tier: 0
+  - key: visit.flag.yesterday
+    text: "{0} \u6628\u65E5"
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Accepted
+    text: "\u627F\u8A8D"
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Denied
+    text: "\u5374\u4E0B"
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Detained
+    text: "\u62D8\u7559"
+    gloss: 0
+    tier: 0
+  - key: visit.citation
+    text: "\xB7 \u9055\u53CD\u901A\u77E5: {0}"
+    gloss: 0
+    tier: 0
+  - key: board.noScan
+    text: "\u66F8\u985E\u3092\u30B9\u30AD\u30E3\u30F3\u3057\u3066\u8ABF\u67FB\u30DC\u30FC\u30C9\u3092\u57CB\u3081\u308B:
+      \u30B9\u30AD\u30E3\u30CA\u30FC\u306B\u7F6E\u3044\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: board.record.found
+    text: "\u8A18\u9332\u3042\u308A \xB7 {0} \xB7 {1} \xB7 \u958B\u304F"
+    gloss: 0
+    tier: 0
+  - key: board.record.noNumber
+    text: "\u756A\u53F7\u306A\u3057"
+    gloss: 0
+    tier: 0
+  - key: board.record.none
+    text: "\u8A18\u9332\u306A\u3057 \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: board.record.nothing
+    text: "\u30B9\u30AD\u30E3\u30F3\u3057\u305F\u66F8\u985E\u306BID\u3082\u540D\u524D\u3082\u307E\u3060\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: board.section.rules
+    text: "\u898F\u5247\u30C1\u30A7\u30C3\u30AF"
+    gloss: 0
+    tier: 0
+  - key: board.rules.none
+    text: "\u78BA\u8A8D\u3059\u3079\u304D\u672C\u65E5\u306E\u898F\u5247\u306F\u307E\u3060\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: board.rule.destination
+    text: "\u76EE\u7684\u5730"
+    gloss: 0
+    tier: 0
+  - key: board.rule.paper
+    text: "\u5FC5\u8981\u66F8\u985E"
+    gloss: 0
+    tier: 0
+  - key: board.chip.Valid
+    text: "\u6709\u52B9"
+    gloss: 0
+    tier: 0
+  - key: board.chip.Expired
+    text: "\u671F\u9650\u5207\u308C"
+    gloss: 0
+    tier: 0
+  - key: board.chip.Closed
+    text: "\u9589\u9396"
+    gloss: 0
+    tier: 0
+  - key: board.chip.Missing
+    text: "\u4E0D\u8DB3"
+    gloss: 0
+    tier: 0
+  - key: board.chip.WrongDate
+    text: "\u65E5\u4ED8\u9055\u3044"
+    gloss: 0
+    tier: 0
+  - key: board.section.cross
+    text: "\u76F8\u4E92\u7167\u5408"
+    gloss: 0
+    tier: 0
+  - key: board.cross.none
+    text: "\u66F8\u985E\u30922\u679A (\u307E\u305F\u306F\u8A18\u9332\u306E\u3042\u308B1\u679A)
+      \u30B9\u30AD\u30E3\u30F3\u3059\u308B\u3068\u3001\u3053\u3053\u3067\u7167\u5408\u3067\u304D\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: board.cross.detail
+    text: "\u9805\u76EE"
+    gloss: 0
+    tier: 0
+  - key: board.cross.record
+    text: "\u8A18\u9332"
+    gloss: 0
+    tier: 0
+  - key: board.cross.agree
+    text: "{0} \xB7 {1} \u4E00\u81F4"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.sources
+    text: "\u30BD\u30FC\u30B9"
+    gloss: 0
+    tier: 0
+  - key: board.section.overlay
+    text: "\u91CD\u306D\u5408\u308F\u305B"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.hint
+    text: "\u30BD\u30FC\u30B9\u3092\u5225\u306E\u30BD\u30FC\u30B9\u306B\u30C9\u30E9\u30C3\u30B0
+      (\u307E\u305F\u306F2\u3064\u3092\u30AF\u30EA\u30C3\u30AF) \u3057\u3066\u91CD\u306D\u308B\u3002"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.over
+    text: "{0}\u3092{1}\u306B\u91CD\u306D\u308B: \u30B9\u30E9\u30A4\u30C9\u3067\u900F\u904E\u3002\u672C\u5F53\u306E\u9055\u3044\u3060\u3051\u304C\u5149\u308A\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.nothing
+    text: "\u3053\u306E2\u3064\u306B\u5171\u901A\u306E\u8A18\u8F09\u306F\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.photo
+    text: "\u5199\u771F"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.face
+    text: "\u672C\u4EBA\u306E\u9854"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.faceLabel
+    text: "\u9854"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.register
+    text: "\u5370\u7AE0\u53F0\u5E33"
+    gloss: 0
+    tier: 0
+  - key: layers.tab.print
+    text: "\u5370\u5237"
+    gloss: 0
+    tier: 0
+  - key: layers.tab.uv
+    text: UV
+    gloss: 0
+    tier: 0
+  - key: layers.tab.chip
+    text: "\u30C1\u30C3\u30D7"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.title
+    text: "UV\u30E9\u30A4\u30C8 \xB7 \u96A0\u3057\u5C64"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.none
+    text: "UV\u30E9\u30A4\u30C8\u3067\u306F\u4F55\u3082\u898B\u3048\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.wholePaper
+    text: "\u66F8\u985E\u5168\u4F53"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Watermark
+    text: "\u900F\u304B\u3057 ({0}): {1}"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Ghost
+    text: "{0}\u306E\u4E0B\u306E\u6B8B\u50CF: {1}"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Microprint
+    text: "\u30DE\u30A4\u30AF\u30ED\u5370\u5237 ({0}): {1}"
+    gloss: 0
+    tier: 0
+  - key: layers.chip.title
+    text: "\u30C1\u30C3\u30D7\u8A18\u9332"
+    gloss: 0
+    tier: 0
+  - key: layers.chip.none
+    text: "\u3053\u306E\u66F8\u985E\u306B\u30C1\u30C3\u30D7\u306F\u3042\u308A\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: records.row.number
+    text: "\u6F02\u6D41\u756A\u53F7"
+    gloss: 0
+    tier: 0
+  - key: records.row.incident
+    text: "\u4E8B\u4EF6"
+    gloss: 0
+    tier: 0
+  - key: records.row.found
+    text: "\u767A\u898B"
+    gloss: 0
+    tier: 0
+  - key: records.row.status
+    text: "\u72B6\u614B"
+    gloss: 0
+    tier: 0
+  - key: records.status.awaiting
+    text: "\u5E30\u9084\u5F85\u3061"
+    gloss: 0
+    tier: 0
+  - key: records.group.account
+    text: "\u8A18\u9332"
+    gloss: 0
+    tier: 0
+  - key: records.group.forms
+    text: "\u63D0\u51FA\u6E08\u307F\u66F8\u5F0F"
+    gloss: 0
+    tier: 0
+  - key: records.group.travel
+    text: "\u6E21\u822A"
+    gloss: 0
+    tier: 0
+  - key: records.row.citizenId
+    text: "\u5E02\u6C11ID"
+    gloss: 0
+    tier: 0
+  - key: records.row.standing
+    text: "\u72B6\u614B"
+    gloss: 0
+    tier: 0
+  - key: records.row.debt
+    text: "\u8CA0\u50B5"
+    gloss: 0
+    tier: 0
+  - key: records.row.lineage
+    text: "\u5BB6\u7CFB"
+    gloss: 0
+    tier: 0
+  - key: records.row.transponder
+    text: "\u30C8\u30E9\u30F3\u30B9\u30DD\u30F3\u30C0\u30FC"
+    gloss: 0
+    tier: 0
+  - key: records.row.transponderClass
+    text: "\u30C8\u30E9\u30F3\u30B9\u30DD\u30F3\u30C0\u30FC\u7B49\u7D1A"
+    gloss: 0
+    tier: 0
+  - key: records.row.waiver
+    text: "\u53D6\u308A\u6B8B\u3057\u514D\u8CAC\u66F8"
+    gloss: 0
+    tier: 0
+  - key: records.row.proof
+    text: "\u8CC7\u529B\u8A3C\u660E"
+    gloss: 0
+    tier: 0
+  - key: records.row.contract
+    text: "\u5C31\u52B4\u8A31\u53EF\u8A3C"
+    gloss: 0
+    tier: 0
+  - key: records.row.departure
+    text: "\u4E88\u7D04\u6E08\u307F\u306E\u51FA\u767A"
+    gloss: 0
+    tier: 0
+  - key: records.row.departureDate
+    text: "\u51FA\u767A\u65E5"
+    gloss: 0
+    tier: 0
+  - key: records.row.trips
+    text: "\u904E\u53BB\u306E\u6E21\u822A"
+    gloss: 0
+    tier: 0
+  - key: records.row.trip
+    text: "\u904E\u53BB\u306E\u6E21\u822A"
+    gloss: 0
+    tier: 0
+  - key: records.standing.good
+    text: "\u826F\u597D"
+    gloss: 0
+    tier: 0
+  - key: records.none
+    text: "\u8A18\u9332\u306A\u3057"
+    gloss: 0
+    tier: 0
+  - key: records.trip.returned
+    text: "\u5E30\u9084\u6E08\u307F"
+    gloss: 0
+    tier: 0
+  - key: case.roleUnknown
+    text: "\u6E21\u822A\u8005"
+    gloss: 0
+    tier: 0
+  - key: case.unlistedLand
+    text: "\u672A\u767B\u9332\u306E\u5730"
+    gloss: 0
+    tier: 0
+  - key: case.subject
+    text: "\u5BFE\u8C61\u8005 #{0}"
+    gloss: 0
+    tier: 0
+  - key: records.compareLabel
+    text: "\u8A18\u9332 \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: citation.unproven
+    text: "\u8A18\u9332\u3055\u308C\u305F\u8A3C\u62E0\u306A\u3057\u3067\u5374\u4E0B\u3002\u5374\u4E0B\u306E\u524D\u306B\u554F\u984C\u70B9\u3092\u8A18\u9332\u3059\u308B\u3053\u3068:
+      \u66F8\u985E\u306E\u76F8\u9055\u3001\u9055\u53CD\u3057\u305F\u898F\u5247\u3001\u4E0D\u9069\u5408\u306A\u65E5\u4ED8\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong
+    text: "\u5909\u88C5\u3057\u305F\u6E21\u822A\u8005\u304B\u7981\u6B62\u3055\u308C\u305F\u76EE\u7684\u5730\u3092\u627F\u8A8D\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.panic
+    text: "{0}\u3067\u6DF7\u4E71\u3092\u8D77\u3053\u3059\u6E21\u822A\u8005\u3092\u627F\u8A8D\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.forged
+    text: "\u507D\u9020\u66F8\u985E\u3092\u627F\u8A8D\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.disguised
+    text: "\u5909\u88C5\u3057\u305F\u6E21\u822A\u8005\u3092\u627F\u8A8D\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.closed
+    text: "\u9589\u9396\u3055\u308C\u305F\u76EE\u7684\u5730\u3092\u627F\u8A8D\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.smuggled
+    text: "2150\u5E74\u306E\u54C1\u30922150\u5E74\u306E\u5916\u3078\u6301\u3061\u51FA\u3055\u305B\u305F\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.wrongDate
+    text: "\u8AA4\u3063\u305F\u65E5\u4ED8\u306E\u51FA\u767A\u3092\u627F\u8A8D\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.expired
+    text: "\u671F\u9650\u5207\u308C\u306E\u66F8\u985E\u3092\u627F\u8A8D\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.deniedWrong
+    text: "\u6B63\u5F53\u3067\u8A31\u53EF\u3055\u308C\u305F\u6E21\u822A\u8005\u3092\u5374\u4E0B\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.detainedWrong
+    text: "\u6CD5\u3092\u7834\u3063\u3066\u3044\u306A\u3044\u6E21\u822A\u8005\u3092\u62D8\u7559\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.detainedUnproven
+    text: "\u8A18\u9332\u3055\u308C\u305F\u8A3C\u62E0\u306A\u3057\u3067\u62D8\u7559\u3002\u62D8\u7559\u306E\u524D\u306B\u9055\u53CD\u3092\u8A18\u9332\u3059\u308B\u3053\u3068:
+      \u507D\u9020\u66F8\u985E\u3001\u507D\u306E\u8EAB\u5143\u3001\u7981\u5236\u54C1\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.warning
+    text: "\u8B66\u544A {0}/{1} \u2014 \u6E1B\u7D66\u306A\u3057\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.penalty
+    text: "\u7F70\u91D1: -{0} {1}\u3002"
+    gloss: 0
+    tier: 0
+  - key: rule.eraForbidden
+    text: "{0}\u3078\u306E\u6E21\u822A\u306F\u7981\u6B62\u3002"
+    gloss: 0
+    tier: 0
+  - key: rule.nationForbidden
+    text: "{0}\u3078\u306E\u6E21\u822A\u306F\u7981\u6B62\u3002"
+    gloss: 0
+    tier: 0
+  - key: rule.nationEraForbidden
+    text: "{1}\u306E{0}\u3078\u306E\u6E21\u822A\u306F\u7981\u6B62\u3002"
+    gloss: 0
+    tier: 0
+  - key: rule.generic
+    text: "\u6E21\u822A\u5236\u9650\u304C\u767A\u52B9\u4E2D\u3002"
+    gloss: 0
+    tier: 0
+  - key: desk.scanHint
+    text: "\u66F8\u985E\u3092\u30B9\u30AD\u30E3\u30CA\u30FC\u306B\u30C9\u30E9\u30C3\u30B0\u3059\u308B\u3068PC\u3067\u958B\u304D\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: desk.wheelHint
+    text: "\u6E21\u822A\u8005\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u8A71\u3057\u3001\u66F8\u985E\u3092\u6C42\u3081\u308B\u3002"
+    gloss: 0
+    tier: 0
+  - key: desk.readyCaption
+    text: "\u53D7\u4ED8\u4E2D"
+    gloss: 0
+    tier: 0
+  - key: deskView.back
+    text: "\u25B2 \u623B\u308B"
+    gloss: 0
+    tier: 0
+  - key: deskView.backHint
+    text: "\u53F3\u30AF\u30EA\u30C3\u30AF / Esc"
+    gloss: 0
+    tier: 0
+  - key: stamp.label.approved
+    text: "\u627F\u8A8D"
+    gloss: 0
+    tier: 0
+  - key: stamp.label.denied
+    text: "\u5374\u4E0B"
+    gloss: 0
+    tier: 0
+  - key: stamp.hint.handBack
+    text: "\u62BC\u5370\u3057\u305F\u30D1\u30B9\u30DD\u30FC\u30C8\u3092\u30AB\u30A6\u30F3\u30BF\u30FC\u306B\u30C9\u30E9\u30C3\u30B0\u3057\u3066\u66F8\u985E\u3092\u8FD4\u5374\u3002"
+    gloss: 0
+    tier: 0
+  - key: stamp.hint.place
+    text: "\u30B9\u30BF\u30F3\u30D7\u3092\u30D1\u30B9\u30DD\u30FC\u30C8\u306B\u30C9\u30E9\u30C3\u30B0\u3057\u3066\u653E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.notPassport
+    text: "\u5224\u5B9A\u30B9\u30BF\u30F3\u30D7\u306F\u30D1\u30B9\u30DD\u30FC\u30C8\u306B\u3057\u304B\u62BC\u305B\u307E\u305B\u3093\u3002"
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.already
+    text: "\u3053\u306E\u30D1\u30B9\u30DD\u30FC\u30C8\u306F\u5224\u5B9A\u6E08\u307F\u3067\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.handBackFirst
+    text: "\u5148\u306B\u30D1\u30B9\u30DD\u30FC\u30C8\u306B\u62BC\u5370\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: hardware.detain
+    text: "\u62D8\u7559"
+    gloss: 0
+    tier: 0
+  - key: stamp.dater.by
+    text: "\u62C5\u5F53: {0}"
+    gloss: 0
+    tier: 0
+  - key: desk.counter
+    text: "\u30AB\u30A6\u30F3\u30BF\u30FC"
+    gloss: 0
+    tier: 0
+  - key: controls.pcTab
+    text: PC
+    gloss: 0
+    tier: 0
+  - key: controls.deskTab
+    text: "\u30C7\u30B9\u30AF"
+    gloss: 0
+    tier: 0
+  - key: controls.stampsTab
+    text: "\u30B9\u30BF\u30F3\u30D7"
+    gloss: 0
+    tier: 0
+  - key: controls.inspectHint
+    text: "\u691C\u67FB: 2\u3064\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u7167\u5408\u3002\u53F3\u30AF\u30EA\u30C3\u30AF\u304BEsc\u3067\u7D42\u4E86\u3002"
+    gloss: 0
+    tier: 0
+  - key: stamp.zone.handBack
+    text: "\u25B2  \u8FD4\u5374  \u25B2"
+    gloss: 0
+    tier: 0
+  - key: stamp.zone.stampFirst
+    text: "\u5148\u306B\u30D1\u30B9\u30DD\u30FC\u30C8\u306B\u62BC\u5370"
+    gloss: 0
+    tier: 0
+  - key: city.look
+    text: "\u8857"
+    gloss: 0
+    tier: 0
+  - key: city.back
+    text: "\u30C7\u30B9\u30AF"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.title
+    text: "\u672C\u65E5\u306E\u898F\u5247"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.none
+    text: "\u672C\u65E5\u306F\u898F\u5247\u306A\u3057\u3002"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.papers
+    text: "\u672A\u63D0\u51FA\u306E\u66F8\u985E"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperFlag
+    text: "{0}: \u4E0D\u8DB3? \u30AF\u30EA\u30C3\u30AF\u3067\u5370\u3092\u3064\u3051\u308B\u3002"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperFlagged
+    text: "{0}: \u5370\u6E08\u307F\u3002\u6C42\u3081\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperNotCarried
+    text: "{0}: \u4E0D\u643A\u5E2F\u3002"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.papersNone
+    text: "\u5168\u66F8\u985E\u304C\u63D0\u51FA\u6E08\u307F\u3002"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabRules
+    text: "\u898F\u5247"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabPapers
+    text: "\u66F8\u985E"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabSeals
+    text: "\u5370\u7AE0"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.seals
+    text: "\u5370\u7AE0\u53F0\u5E33"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabGuide
+    text: "\u30AC\u30A4\u30C9"
+    gloss: 0
+    tier: 0
+  - key: desk.guide.body
+    text: "<b>\u78BA\u8A8D</b>  {0}\n\n<b>\u7167\u5408\u5148</b>  {1}\n\n<b>\u4E0D\u5099</b> 
+      {2}"
+    gloss: 0
+    tier: 0
+  - key: desk.guide.new
+    text: "\u65B0\u898F"
+    gloss: 0
+    tier: 0
+  - key: desk.guide.prev
+    text: "< \u524D"
+    gloss: 0
+    tier: 0
+  - key: desk.guide.next
+    text: "\u6B21 >"
+    gloss: 0
+    tier: 0
+  - key: guide.step
+    text: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB {0}/{1}"
+    gloss: 0
+    tier: 0
+  - key: guide.skip
+    text: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u3092\u98DB\u3070\u3059"
+    gloss: 0
+    tier: 0
+  - key: guide.done
+    text: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u5B8C\u4E86"
+    gloss: 0
+    tier: 0
+  - key: guide.newToday
+    text: "\u672C\u65E5\u306E\u65B0\u9805\u76EE"
+    gloss: 0
+    tier: 0
+  - key: guide.moment
+    text: "<b>{0}</b>  {1} \u898F\u5247\u66F8\u306E\u30AC\u30A4\u30C9\u30BF\u30D6\u306B\u305D\u306E\u30DA\u30FC\u30B8\u304C\u958B\u3044\u3066\u3044\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: guide.practice
+    text: "\u7DF4\u7FD2"
+    gloss: 0
+    tier: 0
+  - key: guide.gotIt
+    text: "\u4E86\u89E3"
+    gloss: 0
+    tier: 0
+  - key: settings.replayTutorial
+    text: "\u30C7\u30B9\u30AF\u306E\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u3092\u518D\u751F"
+    gloss: 0
+    tier: 0
+  - key: keys.replayTutorial
+    text: "\u30C7\u30B9\u30AF\u306E\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u3092\u518D\u751F"
+    gloss: 0
+    tier: 0
+  - key: tooltip.day
+    text: "\u4ECA\u65E5: {0}"
+    gloss: 0
+    tier: 0
+  - key: tooltip.stability
+    text: "\u6642\u9593\u7DDA\u3002\u4E21\u5CB8\u306E\u9593\u306B\u4FDD\u3064\u3053\u3068\u3002"
+    gloss: 0
+    tier: 0
+  - key: desk.calendar
+    text: "{0} \xB7 {1}\u65E5\u76EE"
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.papers
+    text: "{0} \u4E0D\u6B63 \u2014 \u66F8\u985E: \u300C{1}\u300D  /  \u672C\u6765:
+      \u300C{2}\u300D"
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.said
+    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u767A\u8A00: \u300C{1}\u300D 
+      /  \u672C\u6765: \u300C{2}\u300D"
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.worn
+    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u7740\u8863: \u300C{1}\u300D 
+      /  \u672C\u6765: \u300C{2}\u300D \u2014 \u6DF7\u4E71\u3092\u62DB\u304F"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.papers
+    text: "{0} \u4E0D\u6B63 \u2014 \u66F8\u985E\u306E\u300C{1}\u300D\u306F{2}\u306E\u3082\u306E"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.said
+    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u767A\u8A00\u300C{1}\u300D\u306F{2}\u306E\u3082\u306E"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.worn
+    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u7740\u8863\u300C{1}\u300D\u306F{2}\u306E\u3082\u306E:
+      \u6DF7\u4E71\u3092\u62DB\u304F"
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.papers
+    text: "{0} \u4E0D\u6B63 \u2014 \u66F8\u985E: \u300C{1}\u300D  /  \u5C40\u306E\u8A18\u9332:
+      \u300C{2}\u300D"
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.said
+    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u767A\u8A00: \u300C{1}\u300D 
+      /  \u5C40\u306E\u8A18\u9332: \u300C{2}\u300D"
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.worn
+    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u7740\u8863: \u300C{1}\u300D 
+      /  \u5C40\u306E\u8A18\u9332: \u300C{2}\u300D"
+    gloss: 0
+    tier: 0
+  - key: deviation.crossMismatch.papers
+    text: "{0} \u4E0D\u6574\u5408 \u2014 \u66F8\u985E\u304C\u98DF\u3044\u9055\u3046:
+      \u300C{1}\u300D  /  \u300C{2}\u300D"
+    gloss: 0
+    tier: 0
+  - key: deviation.personMismatch.papers
+    text: "{0} \u4E0D\u6B63 \u2014 \u66F8\u985E\u306E\u5199\u771F\u306F\u30C7\u30B9\u30AF\u306E\u6E21\u822A\u8005\u3067\u306F\u306A\u3044"
+    gloss: 0
+    tier: 0
+  - key: category.Language
+    text: "\u8A00\u8A9E"
+    gloss: 0
+    tier: 0
+  - key: category.Material
+    text: "\u7D20\u6750"
+    gloss: 0
+    tier: 0
+  - key: category.Politics
+    text: "\u7D71\u6CBB\u8005"
+    gloss: 0
+    tier: 0
+  - key: category.Technology
+    text: "\u6A5F\u5668"
+    gloss: 0
+    tier: 0
+  - key: category.Currency
+    text: "\u901A\u8CA8"
+    gloss: 0
+    tier: 0
+  - key: category.Geography
+    text: "\u9996\u90FD"
+    gloss: 0
+    tier: 0
+  - key: category.Culture
+    text: "\u670D\u88C5"
+    gloss: 0
+    tier: 0
+  - key: category.Name
+    text: "\u6C0F\u540D"
+    gloss: 0
+    tier: 0
+  - key: category.BirthDate
+    text: "\u751F\u5E74\u6708\u65E5"
+    gloss: 0
+    tier: 0
+  - key: category.CitizenId
+    text: "\u5E02\u6C11ID"
+    gloss: 0
+    tier: 0
+  - key: category.Destination
+    text: "\u76EE\u7684\u5730"
+    gloss: 0
+    tier: 0
+  - key: category.Incident
+    text: "\u4E8B\u4EF6"
+    gloss: 0
+    tier: 0
+  - key: category.DepartureDate
+    text: "\u51FA\u767A"
+    gloss: 0
+    tier: 0
+  - key: category.Expiry
+    text: "\u6709\u52B9\u671F\u9650"
+    gloss: 0
+    tier: 0
+  - key: category.AccountStatus
+    text: "\u30D3\u30B6\u533A\u5206"
+    gloss: 0
+    tier: 0
+  - key: category.TransponderId
+    text: "\u30C8\u30E9\u30F3\u30B9\u30DD\u30F3\u30C0\u30FC"
+    gloss: 0
+    tier: 0
+  - key: category.TransponderClass
+    text: "\u30C8\u30E9\u30F3\u30B9\u30DD\u30F3\u30C0\u30FC\u7B49\u7D1A"
+    gloss: 0
+    tier: 0
+  - key: category.Debt
+    text: "\u8CA0\u50B5"
+    gloss: 0
+    tier: 0
+  - key: records.standing.frozen
+    text: "\u51CD\u7D50: \u50B5\u52D9\u4E0D\u5C65\u884C\u3001{0}"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.incomplete
+    text: "\u4E0D\u5B8C\u5168\u306A\u66F8\u985E\u3092\u627F\u8A8D\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.frozen
+    text: "\u51CD\u7D50\u53E3\u5EA7\u3092\u627F\u8A8D\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.recalled
+    text: "\u56DE\u53CE\u5BFE\u8C61\u306E\u30C8\u30E9\u30F3\u30B9\u30DD\u30F3\u30C0\u30FC\u3092\u627F\u8A8D\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.numbered
+    text: "\u6307\u4EE4{0}: {1}"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.record
+    text: "\u5168\u66F8\u985E\u306F\u5E02\u6C11\u53E3\u5EA7\u3068\u4E00\u81F4\u3059\u308B\u3053\u3068\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.origin
+    text: "\u6F02\u6D41\u8005\u306F\u81EA\u5206\u306E\u6642\u4EE3\u306B\u306E\u307F\u5E30\u9084\u3059\u308B:
+      \u66F8\u985E\u3068\u56DE\u7B54\u306F\u51FA\u8EAB\u3068\u4E00\u81F4\u3059\u308B\u3053\u3068\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.goods
+    text: "2150\u5E74\u306E\u901A\u8CA8\u3084\u6280\u8853\u30922150\u5E74\u306E\u5916\u3078\u6301\u3061\u51FA\u3055\u306A\u3044\u3053\u3068\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.dress
+    text: "\u76EE\u7684\u5730\u306B\u5408\u3063\u305F\u670D\u88C5\u3067: \u4ED6\u306E\u6642\u4EE3\u3084\u5834\u6240\u306E\u7269\u306F\u4E0D\u53EF\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.economyManifest
+    text: "\u30D7\u30EC\u30DF\u30A2\u30E0\u306E\u30D1\u30B9\u30DD\u30FC\u30C8\u306F\u30D7\u30EC\u30DF\u30A2\u30E0\u306E\u30C8\u30E9\u30F3\u30B9\u30DD\u30F3\u30C0\u30FC\u3067\u6E21\u822A\u3059\u308B\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.premiumManifest
+    text: "\u30B9\u30BF\u30F3\u30C0\u30FC\u30C9\u306E\u30D1\u30B9\u30DD\u30FC\u30C8\u306F\u30A8\u30B3\u30CE\u30DF\u30FC\u306E\u30C8\u30E9\u30F3\u30B9\u30DD\u30F3\u30C0\u30FC\u3067\u6E21\u822A\u3059\u308B\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.waiverMissing
+    text: "\u3053\u306E\u51FA\u767A\u306B\u306F\u7F72\u540D\u6E08\u307F\u306E\u53D6\u308A\u6B8B\u3057\u514D\u8CAC\u66F8\u304C\u5FC5\u8981\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.waiverUnsigned
+    text: "\u3053\u306E\u51FA\u767A\u306B\u306F\u7F72\u540D\u6E08\u307F\u306E\u53D6\u308A\u6B8B\u3057\u514D\u8CAC\u66F8\u304C\u5FC5\u8981\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.proofMissing
+    text: "\u30B9\u30BF\u30F3\u30C0\u30FC\u30C9\u306E\u30D1\u30B9\u30DD\u30FC\u30C8\u306B\u306F\u8CC7\u529B\u8A3C\u660E\u304C\u5FC5\u8981\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.contractMissing
+    text: "\u50B5\u52D9\u6551\u6E08\u306E\u51FA\u767A\u306B\u306F\u767B\u9332\u6E08\u307F\u306E\u5C31\u52B4\u8A31\u53EF\u8A3C\u304C\u5FC5\u8981\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.frozen
+    text: "\u51CD\u7D50\u53E3\u5EA7\u306F\u51FA\u767A\u3067\u304D\u306A\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.departure
+    text: "\u6E21\u822A\u66F8\u985E\u306B\u5370\u5B57\u3055\u308C\u305F\u65E5\u4ED8\u306B\u306E\u307F\u51FA\u767A\u3059\u308B\u3053\u3068\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.expired
+    text: "\u671F\u9650\u5207\u308C\u306E\u66F8\u985E\u3067\u306F\u6C7A\u3057\u3066\u51FA\u767A\u3057\u306A\u3044\u3053\u3068\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.none
+    text: "\u3053\u306E\u6E21\u822A\u8005\u3092\u62D2\u3080\u6307\u4EE4\u3082\u8A18\u9332\u3082\u306A\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.evidence
+    text: "\u5374\u4E0B\u306B\u306F\u8A18\u9332\u3055\u308C\u305F\u8A3C\u62E0\u304C\u5FC5\u8981\u3002"
+    gloss: 0
+    tier: 0
+  - key: citation.label.destination
+    text: "\u76EE\u7684\u5730"
+    gloss: 0
+    tier: 0
+  - key: citation.label.account
+    text: "\u5E02\u6C11\u53E3\u5EA7"
+    gloss: 0
+    tier: 0
+  - key: citation.label.registry
+    text: "\u6F02\u6D41\u8005\u767B\u9332\u7C3F"
+    gloss: 0
+    tier: 0
+  - key: citation.label.standing
+    text: "{0}\u306E\u72B6\u614B"
+    gloss: 0
+    tier: 0
+  - key: citation.label.today
+    text: "\u4ECA\u65E5"
+    gloss: 0
+    tier: 0
+  - key: citation.label.garment
+    text: "\u8863\u670D"
+    gloss: 0
+    tier: 0
+  - key: citation.label.onPaper
+    text: "{1}\u306E{0}"
+    gloss: 0
+    tier: 0
+  - key: citation.label.answer
+    text: "\u672C\u4EBA\u306E\u56DE\u7B54 ({0})"
+    gloss: 0
+    tier: 0
+  - key: citation.label.book
+    text: "{1}\u306E{0}"
+    gloss: 0
+    tier: 0
+  - key: citation.label.logged
+    text: "\u8A18\u9332\u3055\u308C\u305F\u8A3C\u62E0"
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.waiverMissing
+    text: "\u53D6\u308A\u6B8B\u3057\u514D\u8CAC\u66F8"
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.proofMissing
+    text: "\u8CC7\u529B\u8A3C\u660E"
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.contractMissing
+    text: "\u5C31\u52B4\u8A31\u53EF\u8A3C"
+    gloss: 0
+    tier: 0
+  - key: citation.value.notHandedOver
+    text: "\u672A\u63D0\u51FA"
+    gloss: 0
+    tier: 0
+  - key: citation.value.frozen
+    text: "{0}\u304B\u3089\u51CD\u7D50"
+    gloss: 0
+    tier: 0
+  - key: citation.value.open
+    text: "{0}\u3001\u672C\u65E5\u958B\u653E"
+    gloss: 0
+    tier: 0
+  - key: category.Employer
+    text: "\u96C7\u7528\u4E3B"
+    gloss: 0
+    tier: 0
+  - key: category.Term
+    text: "\u671F\u9593"
+    gloss: 0
+    tier: 0
+  - key: category.Wage
+    text: "\u8CC3\u91D1"
+    gloss: 0
+    tier: 0
+  - key: category.WaiverNo
+    text: "\u514D\u8CAC\u66F8\u756A\u53F7"
+    gloss: 0
+    tier: 0
+  - key: category.Credit
+    text: "\u4E0E\u4FE1"
+    gloss: 0
+    tier: 0
+  - key: category.Funds
+    text: "\u8CC7\u91D1"
+    gloss: 0
+    tier: 0
+  - key: category.PolicyNo
+    text: "\u8A3C\u5238\u756A\u53F7"
+    gloss: 0
+    tier: 0
+  - key: category.Signature
+    text: "\u7F72\u540D"
+    gloss: 0
+    tier: 0
+  - key: category.Seal
+    text: "\u5370\u7AE0"
+    gloss: 0
+    tier: 0
+  - key: category.Photo
+    text: "\u5199\u771F"
+    gloss: 0
+    tier: 0
   - key: icon.portals
     text: "\u30DD\u30FC\u30BF\u30EB"
+    gloss: 0
+    tier: 0
+  - key: window.portals
+    text: "\u30DD\u30FC\u30BF\u30EB"
+    gloss: 0
+    tier: 0
+  - key: board.returnGate
+    text: "\u5E30\u9084\u30B2\u30FC\u30C8"
+    gloss: 0
+    tier: 0
+  - key: board.closed
+    text: "\u9589\u9396"
+    gloss: 0
+    tier: 0
+  - key: board.maintenance
+    text: "\u6574\u5099\u4E2D"
+    gloss: 0
+    tier: 0
+  - key: board.noRoute
+    text: "\u8DEF\u7DDA\u306A\u3057"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.title
+    text: "\u51FA\u767A\u6848\u5185\u677F"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.closed
+    text: "{0} {1}: {2}\u3001{3}: \u672C\u65E5\u9589\u9396"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGate
+    text: "{0} {1}: \u5E30\u9084\u30B2\u30FC\u30C8"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGateMaintenance
+    text: "{0} {1}: \u5E30\u9084\u30B2\u30FC\u30C8\u3001\u6574\u5099\u4E2D"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.maintenance
+    text: "{0} {1}: \u6574\u5099\u4E2D"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.noRoute
+    text: "{0} {1}: \u672C\u65E5\u306F\u8DEF\u7DDA\u306A\u3057"
+    gloss: 0
+    tier: 0
+  - key: portals.date
+    text: "{0}\u306E\u8DEF\u7DDA"
+    gloss: 0
+    tier: 0
+  - key: portals.returnGate
+    text: "\u5E30\u9084\u30B2\u30FC\u30C8"
+    gloss: 0
+    tier: 0
+  - key: portals.state.inService
+    text: "\u904B\u884C\u4E2D"
+    gloss: 0
+    tier: 0
+  - key: portals.state.noRoute
+    text: "\u904B\u884C\u4E2D \xB7 \u672C\u65E5\u306F\u8DEF\u7DDA\u306A\u3057"
+    gloss: 0
+    tier: 0
+  - key: portals.state.closed
+    text: "\u672C\u65E5\u9589\u9396: {0}"
+    gloss: 0
+    tier: 0
+  - key: portals.state.underMaintenance
+    text: "\u6574\u5099\u4E2D"
+    gloss: 0
+    tier: 0
+  - key: portals.state.maintenance
+    text: "\u6574\u5099\u4E2D \xB7 \u6CE8\u6587\u3067\u4FEE\u7406 ({0})"
+    gloss: 0
+    tier: 0
+  - key: portals.state.locked
+    text: "\u6574\u5099\u4E2D \xB7 \u30ED\u30C3\u30AF: \u5148\u306B{0}\u3092\u4FEE\u7406"
+    gloss: 0
+    tier: 0
+  - key: portals.state.transit
+    text: "\u6574\u5099\u4E2D \xB7 \u4FEE\u7406\u54C1\u306F\u914D\u9001\u4E2D\u3001\u660E\u65E5\u904B\u884C"
+    gloss: 0
+    tier: 0
+  - key: portals.footer
+    text: "\u8DEF\u7DDA\u306F\u7DCF\u5C40\u304C\u6C7A\u3081\u307E\u3059\u3002\u5E30\u9084\u30B2\u30FC\u30C8\u304C\u4FEE\u7406\u3055\u308C\u308B\u307E\u3067\u3001\u6F02\u6D41\u8005\u306F\u30DD\u30FC\u30BF\u30EB{0}\u304B\u3089\u51FA\u767A\u3057\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: home.title
+    text: "{0}\u65E5\u76EE \u2014 \u81EA\u5B85"
+    gloss: 0
+    tier: 0
+  - key: home.breakIn
+    text: "\u4ED5\u4E8B\u4E2D\u306B\u7A7A\u304D\u5DE3\u306B\u5165\u3089\u308C\u305F:
+      -{0}"
+    gloss: 0
+    tier: 0
+  - key: home.fixed
+    text: "\u4ECA\u591C\u306E\u56FA\u5B9A\u8CBB:"
+    gloss: 0
+    tier: 0
+  - key: home.rent
+    text: "  \u5BB6\u8CC3\u3068\u5149\u71B1\u8CBB: -{0}"
+    gloss: 0
+    tier: 0
+  - key: home.drain
+    text: "  \u75C5\u6C17\u306E{0}\u306E\u8FFD\u52A0\u306E\u4E16\u8A71: -{1}"
+    gloss: 0
+    tier: 0
+  - key: home.upkeep
+    text: "  \u5BB6\u306E\u7DAD\u6301\u8CBB: -{0}"
+    gloss: 0
+    tier: 0
+  - key: home.fixedTotal
+    text: "\u652F\u6255\u3044: -{0} {1}   (\u6B8B\u9AD8: {2})"
+    gloss: 0
+    tier: 0
+  - key: home.debt
+    text: "\u501F\u91D1\u304C\u3042\u308A\u307E\u3059\u3002\u3084\u308A\u304F\u308A\u3059\u308B\u65B9\u6CD5\u3092\u63A2\u3057\u307E\u3057\u3087\u3046\u3002"
+    gloss: 0
+    tier: 0
+  - key: home.bills.total
+    text: "\u4ECA\u591C\u306E\u652F\u6255\u3044: {0} {1}   (\u652F\u6255\u3044\u5F8C\u306E\u6B8B\u9AD8:
+      {2})"
+    gloss: 0
+    tier: 0
+  - key: home.bills.short
+    text: "\u4ECA\u591C\u306E\u652F\u6255\u3044: {0} {1}\u3001\u6240\u6301\u91D1{2}\u3092\u8D85\u3048\u307E\u3059:
+      \u4F55\u304B\u3092\u7701\u3044\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: home.bill.paying
+    text: "\u652F\u6255\u3046"
+    gloss: 0
+    tier: 0
+  - key: home.bill.skip
+    text: "\u7701\u304F"
+    gloss: 0
+    tier: 0
+  - key: home.bill.needsPower
+    text: "\u96FB\u6C17\u304C\u5FC5\u8981"
+    gloss: 0
+    tier: 0
+  - key: home.bill.notNeeded
+    text: "\u4E0D\u8981: {0}\u306F\u5143\u6C17"
+    gloss: 0
+    tier: 0
+  - key: home.pay
+    text: "\u652F\u6255\u3063\u3066{0}\u306B\u4F1A\u3046"
+    gloss: 0
+    tier: 0
+  - key: home.pet.title
+    text: "{0}\u306E\u5C45\u5834\u6240"
+    gloss: 0
+    tier: 0
+  - key: home.pet.pat
+    text: "{0}\u3092\u306A\u3067\u308B"
+    gloss: 0
+    tier: 0
+  - key: home.pet.play
+    text: "\u904A\u3076"
+    gloss: 0
+    tier: 0
+  - key: home.pet.played
+    text: "\u4ECA\u591C\u306F\u904A\u3093\u3060"
+    gloss: 0
+    tier: 0
+  - key: home.pet.noToys
+    text: "\u304A\u3082\u3061\u3083\u306F\u307E\u3060\u3042\u308A\u307E\u305B\u3093\u3002PC\u306E\u6CE8\u6587\u30A2\u30D7\u30EA\u3067\u8CB7\u3048\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: home.pet.dark
+    text: "\u4ECA\u591C\u306F\u660E\u304B\u308A\u304C\u6D88\u3048\u3066\u3044\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: home.next.house
+    text: "\u5BB6\u3078\u9032\u3080"
+    gloss: 0
+    tier: 0
+  - key: home.next.slots
+    text: "\u30B9\u30ED\u30C3\u30C8\u3078\u9032\u3080"
+    gloss: 0
+    tier: 0
+  - key: adopt.title
+    text: "\u76F8\u68D2\u3092\u8FCE\u3048\u308B"
+    gloss: 0
+    tier: 0
+  - key: adopt.body
+    text: "\u7DCF\u5C40\u306E\u4FDD\u8B77\u65BD\u8A2D\u3067\u72AC\u3068\u732B\u304C\u5F85\u3063\u3066\u3044\u307E\u3059\u3002\u4ECA\u591C\u3069\u3061\u3089\u304B\u304C\u3042\u306A\u305F\u3068\u5BB6\u306B\u5E30\u308A\u307E\u3059\u3002\u9078\u3093\u3067\u3001\u540D\u524D\u3092\u3064\u3051\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: adopt.dog
+    text: "\u72AC"
+    gloss: 0
+    tier: 0
+  - key: adopt.cat
+    text: "\u732B"
+    gloss: 0
+    tier: 0
+  - key: adopt.placeholder
+    text: "\u540D\u524D\u3092\u5165\u529B"
+    gloss: 0
+    tier: 0
+  - key: adopt.go
+    text: "\u8FCE\u3048\u3066\u958B\u59CB"
+    gloss: 0
+    tier: 0
+  - key: adopt.back
+    text: "\u623B\u308B"
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.Empty
+    text: "\u76F8\u68D2\u306B\u540D\u524D\u3092\u3064\u3051\u3066\u304F\u3060\u3055\u3044\u3002"
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.TooLong
+    text: "\u3082\u3063\u3068\u77ED\u3044\u540D\u524D\u3092: \u6700\u5927{0}\u6587\u5B57\u3002"
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.BadCharacters
+    text: "\u6587\u5B57\u3001\u30B9\u30DA\u30FC\u30B9\u3001\u30CF\u30A4\u30D5\u30F3\u3001\u30A2\u30DD\u30B9\u30C8\u30ED\u30D5\u30A3\u306E\u307F\u3002"
+    gloss: 0
+    tier: 0
+  - key: menubar.records
+    text: "\u8A18\u9332"
+    gloss: 0
+    tier: 0
+  - key: menubar.rules
+    text: "\u898F\u5247"
+    gloss: 0
+    tier: 0
+  - key: menubar.books
+    text: "\u8CC7\u6599"
+    gloss: 0
+    tier: 0
+  - key: menubar.calendar
+    text: "\u30AB\u30EC\u30F3\u30C0\u30FC"
+    gloss: 0
+    tier: 0
+  - key: menubar.notHandedOver
+    text: "\u672A\u63D0\u51FA"
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.flag
+    text: "\u4E0D\u8DB3\u306E\u5370"
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.flagged
+    text: "\u5370\u6E08\u307F: \u6C42\u3081\u308B\u3053\u3068"
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.notCarried
+    text: "\u4E0D\u643A\u5E2F"
+    gloss: 0
+    tier: 0
+  - key: menubar.today
+    text: "\u4ECA\u65E5: {0}"
+    gloss: 0
+    tier: 0
+  - key: menubar.today.note
+    text: "\u4FDD\u6301\u3057\u3066\u7167\u5408"
     gloss: 0
     tier: 0
   words:
@@ -188,3 +3151,1431 @@ MonoBehaviour:
     english: report
   - native: "\u30CB\u30E5\u30FC\u30B9"
     english: news
+  - native: "\u627F\u8A8D"
+    english: approve
+  - native: "\u5374\u4E0B"
+    english: deny
+  - native: "\u30E1\u30CB\u30E5\u30FC"
+    english: menu
+  - native: "\u8A2D\u5B9A"
+    english: settings
+  - native: "\u5E30\u5B85"
+    english: go home
+  - native: "\u691C\u7D22"
+    english: search
+  - native: "\u4E86\u89E3"
+    english: got it
+  - native: "\u30A4\u30F3\u30BF\u30FC\u30CD\u30C3\u30C8"
+    english: internet
+  - native: "\u30E1\u30E2"
+    english: notes
+  - native: "\u6CE8\u6587"
+    english: order
+  - native: "\u8ABF\u67FB"
+    english: investigation
+  - native: "\u30E1\u30FC\u30EB"
+    english: mail
+  - native: "\u30DD\u30FC\u30BF\u30EB"
+    english: portal
+  - native: "\u8CA1\u5E03"
+    english: wallet
+  - native: "\u5373\u6642"
+    english: immediately
+  - native: "\u6255\u3044"
+    english: payment
+  - native: "\u660E\u65E5"
+    english: tomorrow
+  - native: "\u5C4A\u304D"
+    english: arrive
+  - native: "\u5C4A\u304D\u307E\u3057\u305F"
+    english: has arrived
+  - native: "\u4ECA\u65E5"
+    english: today
+  - native: "\u4ECA\u65E5\u4E2D"
+    english: within today
+  - native: "\u53D6\u308A\u6D88\u305B\u3070"
+    english: if you cancel
+  - native: "\u53D6\u6D88"
+    english: cancel
+  - native: "\u8FD4\u91D1"
+    english: refund
+  - native: "\u3055\u308C\u307E\u3059"
+    english: is done
+  - native: "\u307E\u3060"
+    english: not yet
+  - native: "\u8CB7\u3048\u307E\u305B\u3093"
+    english: cannot buy
+  - native: "\u5FC5\u8981"
+    english: needed
+  - native: "\u914D\u9001\u4E2D"
+    english: in transit
+  - native: "\u5230\u7740"
+    english: arrival
+  - native: "\u914D\u9054\u6E08\u307F"
+    english: delivered
+  - native: "\u914D\u9054"
+    english: delivery
+  - native: "\u6240\u6709\u6E08\u307F"
+    english: owned
+  - native: "\u8A2D\u7F6E\u6E08\u307F"
+    english: installed
+  - native: "\u4FDD\u7BA1\u4E2D"
+    english: in storage
+  - native: "\u8A2D\u7F6E"
+    english: install
+  - native: "\u4EA4\u63DB"
+    english: swap
+  - native: "\u7DAD\u6301"
+    english: keep
+  - native: "\u30C4\u30EA\u30FC"
+    english: tree
+  - native: "\u9805\u76EE"
+    english: item
+  - native: "\u9078\u3076"
+    english: choose
+  - native: "\u9078\u3093\u3067"
+    english: choose
+  - native: "\u9078\u3093\u3060"
+    english: chosen
+  - native: "\u3053\u3053"
+    english: here
+  - native: "\u8868\u793A"
+    english: show
+  - native: "\u306A\u3057"
+    english: none
+  - native: "\u5099\u54C1"
+    english: equipment
+  - native: "\u9762\u63A5"
+    english: interview
+  - native: "\u9023\u7D61\u5148"
+    english: contacts
+  - native: "\u304A\u3082\u3061\u3083"
+    english: toys
+  - native: "\u6642\u9593"
+    english: time
+  - native: "\u7A0E\u95A2"
+    english: customs
+  - native: "\u88DC\u7D66\u8AB2"
+    english: supply section
+  - native: "\u3054\u6CE8\u6587"
+    english: your order
+  - native: "\u54C1"
+    english: goods
+  - native: "\u30C8\u30E9\u30F3\u30B9\u30DD\u30F3\u30C0\u30FC"
+    english: transponder
+  - native: "\u8CE0\u511F\u5BA4"
+    english: liability office
+  - native: "\u6545\u969C"
+    english: failure
+  - native: "\u4ECA\u671D"
+    english: this morning
+  - native: "\u672C\u65E5"
+    english: today
+  - native: "\u6709\u52B9"
+    english: valid
+  - native: "\u65E5\u4ED8"
+    english: date
+  - native: "\u7167\u5408"
+    english: compare
+  - native: "\u3088\u308A"
+    english: from
+  - native: "\u671D\u520A"
+    english: morning edition
+  - native: "\u30AF\u30EC\u30B8\u30C3\u30C8"
+    english: credit
+  - native: cr
+    english: credits
+  - native: "\u6B63\u89E3"
+    english: correct
+  - native: "\u8AA4\u308A"
+    english: wrong
+  - native: "\u6B21"
+    english: next
+  - native: "\u6E21\u822A\u8005"
+    english: traveller
+  - native: "\u5F85\u3063\u3066\u3044\u307E\u3059"
+    english: is waiting
+  - native: "\u53D7\u9818"
+    english: received
+  - native: "\u66F8\u985E"
+    english: papers
+  - native: "\u30B9\u30AD\u30E3\u30F3"
+    english: scan
+  - native: "\u6E08\u307F"
+    english: done
+  - native: "\u8A18\u9332"
+    english: record
+  - native: "\u53C2\u8003\u8CC7\u6599"
+    english: reference books
+  - native: "\u53C2\u8003"
+    english: reference
+  - native: "\u8CC7\u6599"
+    english: books
+  - native: "\u554F\u7B54"
+    english: questions and answers
+  - native: "\u898F\u5247"
+    english: rule
+  - native: "\u30AB\u30EC\u30F3\u30C0\u30FC"
+    english: calendar
+  - native: "\u30DC\u30FC\u30C9"
+    english: board
+  - native: "\u5DE6"
+    english: left
+  - native: "\u53F3"
+    english: right
+  - native: "\u4FDD\u6301\u4E2D"
+    english: holding
+  - native: "\u5225"
+    english: another
+  - native: "\u5024"
+    english: value
+  - native: "\u30AF\u30EA\u30C3\u30AF"
+    english: click
+  - native: "\u5BFE\u8C61"
+    english: subject
+  - native: "\u51FA\u767A\u65E5"
+    english: departure date
+  - native: "\u51FA\u767A"
+    english: departure
+  - native: "\u6709\u52B9\u671F\u9650"
+    english: valid until
+  - native: "\u671F\u9650\u5207\u308C"
+    english: expired
+  - native: "\u3057\u307E\u3057\u305F"
+    english: did
+  - native: "\u8A3C\u62E0"
+    english: evidence
+  - native: "\u3068\u3057\u3066"
+    english: as
+  - native: "\u305D\u306E"
+    english: that
+  - native: "\u3064"
+    english: (counter)
+  - native: "\u518D\u8868\u793A"
+    english: show again
+  - native: "\u30C7\u30FC\u30BF"
+    english: data
+  - native: "\u76F8\u9055"
+    english: differs
+  - native: "\u4ED6"
+    english: other
+  - native: "\u5834\u6240"
+    english: place
+  - native: "\u3082\u306E"
+    english: thing
+  - native: "\u7533\u544A\u5730"
+    english: claimed place
+  - native: "\u7533\u544A"
+    english: claim
+  - native: "\u3067\u306F\u306A\u3044"
+    english: is not
+  - native: "\u5225\u4EBA"
+    english: another person
+  - native: "\u4E21\u65B9\u3068\u3082"
+    english: both
+  - native: "\u6E80\u305F\u3059"
+    english: meet
+  - native: "\u9055\u53CD"
+    english: violation
+  - native: "\u5BFE\u8C61\u5916"
+    english: not covered
+  - native: "\u78BA\u8A8D"
+    english: check
+  - native: "\u3053\u306E"
+    english: this
+  - native: "\u672C\u65E5\u51FA\u767A"
+    english: departs today
+  - native: "\u5370\u7AE0"
+    english: seal
+  - native: "\u4E0D\u6B63"
+    english: incorrect
+  - native: "\u5F79\u6240"
+    english: office
+  - native: "\u4E0D\u643A\u5E2F"
+    english: not carried
+  - native: "\u3067\u3059"
+    english: is
+  - native: "\u884C"
+    english: row
+  - native: "\u8CC7\u6599\u306E\u884C"
+    english: book row
+  - native: "\u3068\u306F"
+    english: than / is
+  - native: "\u3069\u3061\u3089\u3082"
+    english: both
+  - native: "\u56DE\u7B54"
+    english: answer
+  - native: "\u3069\u3061\u3089\u304B"
+    english: one of them
+  - native: "\u3057\u3066\u304F\u3060\u3055\u3044"
+    english: please do
+  - native: "\u95A2\u3059\u308B"
+    english: about
+  - native: "\u3042\u308A\u307E\u305B\u3093"
+    english: there is not
+  - native: "\u9069\u7528"
+    english: apply
+  - native: "\u3055\u308C\u307E\u305B\u3093"
+    english: is not done
+  - native: "\u305D\u308C"
+    english: that
+  - native: "\u767A\u884C\u5143"
+    english: issuer
+  - native: "\u3042\u308B"
+    english: that is
+  - native: "\u304C\u306A\u3044"
+    english: is missing
+  - native: "\u5BFE"
+    english: against
+  - native: "\u8981\u6C42"
+    english: request
+  - native: "\u3057\u305F\u304C"
+    english: did, but
+  - native: "\u7167\u4F1A"
+    english: look up
+  - native: "\u3042\u306A\u305F\u306E"
+    english: your
+  - native: "\u6240\u898B"
+    english: findings
+  - native: "\u5C40"
+    english: bureau
+  - native: "\u4E0D\u660E"
+    english: unknown
+  - native: "\u7D50\u679C"
+    english: result
+  - native: "\u68DA"
+    english: shelf
+  - native: "\u958B\u304F"
+    english: open
+  - native: "\u5074"
+    english: side
+  - native: "\u958B\u304D\u307E\u3059"
+    english: opens
+  - native: "\u672A\u63D0\u51FA"
+    english: not handed over
+  - native: "\u63D0\u51FA"
+    english: hand over
+  - native: "\u6E21\u822A"
+    english: travel
+  - native: "\u30B9\u30AD\u30E3\u30F3\u5F8C"
+    english: after scanning
+  - native: "\u3059\u308B\u3068"
+    english: when you do
+  - native: "\u8AAD\u3081\u307E\u3059"
+    english: can read
+  - native: "\u6C42\u3081\u3066"
+    english: ask for
+  - native: "\u306E\u307F"
+    english: only
+  - native: "\u540D\u524D"
+    english: name
+  - native: "\u756A\u53F7"
+    english: number
+  - native: "\u30D4\u30F3\u7559\u3081"
+    english: pin
+  - native: "\u6700\u8FD1"
+    english: recent
+  - native: "\u3059\u3079\u3066"
+    english: all
+  - native: "\u4EF6"
+    english: items
+  - native: "\u6848\u4EF6"
+    english: case
+  - native: "\u8CBC\u308A\u4ED8\u3051\u305F"
+    english: pasted
+  - native: "\u5207\u308A\u629C\u304D"
+    english: clipping
+  - native: "\u540C\u3058"
+    english: same
+  - native: "\u672A\u7FFB\u8A33"
+    english: untranslated
+  - native: "\u6700\u521D"
+    english: first
+  - native: "\u79FB\u52D5"
+    english: go
+  - native: "\u9589\u3058\u308B"
+    english: close
+  - native: "\u6539\u8A02"
+    english: revised
+  - native: "\u76EE\u7684\u5730"
+    english: destination
+  - native: "\u3078\u306E"
+    english: to
+  - native: "\u5168"
+    english: all
+  - native: "\u53D7\u3051\u53D6\u308B"
+    english: receive
+  - native: "\u8AAD\u3080"
+    english: read
+  - native: "\u6C0F\u540D"
+    english: full name
+  - native: "\u751F\u5E74\u6708\u65E5"
+    english: birth date
+  - native: "\u4E8B\u5B9F"
+    english: fact
+  - native: "\u8CEA\u554F"
+    english: question
+  - native: "\u3059\u308B"
+    english: do
+  - native: "\u670D\u88C5"
+    english: dress
+  - native: "\u8863\u88C5"
+    english: costume
+  - native: "\u30AC\u30A4\u30C9"
+    english: guide
+  - native: "\u5E30\u9084"
+    english: return
+  - native: "\u547D\u4EE4"
+    english: order
+  - native: "\u8A3C\u660E\u66F8"
+    english: certificate
+  - native: "\u30D1\u30B9\u30DD\u30FC\u30C8"
+    english: passport
+  - native: "\u7B49\u7D1A"
+    english: class
+  - native: "\u4E00\u5F0F"
+    english: set
+  - native: "\u72B6\u614B"
+    english: standing
+  - native: "\u8CC7\u529B"
+    english: means
+  - native: "\u8A3C\u660E"
+    english: proof
+  - native: "\u6C42\u3081\u308B"
+    english: ask for
+  - native: "\u514D\u8CAC\u66F8"
+    english: waiver
+  - native: "\u30C1\u30B1\u30C3\u30C8"
+    english: ticket
+  - native: "\u5951\u7D04"
+    english: contract
+  - native: "\u30DB\u30A4\u30FC\u30EB"
+    english: wheel
+  - native: "\u4F7F\u3046"
+    english: use
+  - native: "\u6700\u5C0F\u5316"
+    english: minimise
+  - native: "\u6700\u5927\u5316"
+    english: maximise
+  - native: "\u9032\u3080"
+    english: forward
+  - native: "\u30DB\u30FC\u30E0"
+    english: home
+  - native: "\u30B5\u30A4\u30C8"
+    english: site
+  - native: "\u30B5\u30A4\u30C8\u540D"
+    english: site name
+  - native: "\u30A2\u30C9\u30EC\u30B9"
+    english: address
+  - native: "\u5165\u529B"
+    english: type in
+  - native: "\u30B9\u30BF\u30FC\u30C8\u30DA\u30FC\u30B8"
+    english: start page
+  - native: "\u30AF\u30ED\u30CD\u30C3\u30C8"
+    english: Chronet
+  - native: "\u30CD\u30C3\u30C8\u30EF\u30FC\u30AF"
+    english: network
+  - native: "\u30A2\u30C9\u30EC\u30B9\u6B04"
+    english: address field
+  - native: "\u30DA\u30FC\u30B8"
+    english: page
+  - native: "\u898B\u3064\u304B\u308A\u307E\u305B\u3093"
+    english: not found
+  - native: "\u4F55\u3082"
+    english: nothing
+  - native: "\u767B\u9332"
+    english: register
+  - native: "\u3055\u308C\u3066\u3044\u307E\u305B\u3093"
+    english: is not done
+  - native: "\u30AA\u30F3\u30E9\u30A4\u30F3\u7248"
+    english: online edition
+  - native: "\u30D0\u30C3\u30AF\u30CA\u30F3\u30D0\u30FC"
+    english: back issue
+  - native: "\u65B0\u805E"
+    english: newspaper
+  - native: "\u4E16\u754C"
+    english: world
+  - native: "\u304A\u77E5\u3089\u305B"
+    english: notices
+  - native: "\u9806\u4F4D"
+    english: standings
+  - native: "\u30A2\u30FC\u30AB\u30A4\u30D6"
+    english: archive
+  - native: "\u7248"
+    english: edition
+  - native: "\u7A4F\u3084\u304B\u306A"
+    english: quiet
+  - native: "\u4E00\u65E5"
+    english: day
+  - native: "\u3067\u3057\u305F"
+    english: was
+  - native: "\u4ECA\u306E"
+    english: current
+  - native: "\u6B74\u53F2"
+    english: history
+  - native: "\u306B\u304A\u3051\u308B"
+    english: in
+  - native: "\u3042\u3089\u3086\u308B"
+    english: every
+  - native: "\u6642\u4EE3"
+    english: era
+  - native: "\u56FD"
+    english: country
+  - native: "\u6539\u8A02\u3055\u308C\u305F"
+    english: revised
+  - native: "\u306B\u306F"
+    english: in it
+  - native: "\u3044\u3064"
+    english: when
+  - native: "\u5909\u308F\u308A"
+    english: changed
+  - native: "\u4EE5\u524D"
+    english: before
+  - native: "\u4F55"
+    english: what
+  - native: "\u3060\u3063\u305F"
+    english: was
+  - native: "\u8A18\u3055\u308C\u307E\u3059"
+    english: is written
+  - native: "\u73FE\u5728"
+    english: present
+  - native: "\u3053\u308C"
+    english: this
+  - native: "\u672A\u6765"
+    english: future
+  - native: "\u4EBA\u3005"
+    english: people
+  - native: "\u65E7"
+    english: was
+  - native: "\u7CFB\u8B5C"
+    english: lineage
+  - native: "\u6587\u66F8\u9928"
+    english: archive
+  - native: "\u7D22\u5F15"
+    english: index
+  - native: "\u63E1\u308B"
+    english: holds
+  - native: "\u52E2\u529B"
+    english: power
+  - native: "\u3044\u305A\u308C\u304B"
+    english: one of them
+  - native: "\u53F0\u982D"
+    english: rise
+  - native: "\u3059\u308B\u307E\u3067"
+    english: until
+  - native: "\u5B9A\u307E\u308A\u307E\u305B\u3093"
+    english: is not settled
+  - native: "\u5E74"
+    english: year
+  - native: "\u7D99\u627F"
+    english: carried
+  - native: "\u4FDD\u7559\u4E2D"
+    english: pending
+  - native: "\u5909\u308F\u3063\u3066\u3044\u307E\u305B\u3093"
+    english: has not changed
+  - native: "\u65E5"
+    english: day
+  - native: "\u5909\u66F4\u524D"
+    english: before
+  - native: "\u5909\u66F4\u5F8C"
+    english: after
+  - native: "\u7406\u7531"
+    english: why
+  - native: "\u5909\u66F4"
+    english: change
+  - native: "\u904E\u53BB"
+    english: past
+  - native: "\u4E00\u81F4\u3059\u308B"
+    english: matching
+  - native: "\u751F\u5E74"
+    english: born
+  - native: "\u6CA1\u5E74"
+    english: died
+  - native: "\u8077\u696D"
+    english: occupation
+  - native: "\u5099\u8003"
+    english: note
+  - native: "\u95A2\u4FC2"
+    english: relations
+  - native: "\u30BF\u30A4\u30E0\u30BD\u30FC\u30BF\u30FC"
+    english: Time Sorter
+  - native: "\u6B8B\u3057\u3066\u3044\u304F"
+    english: leave behind
+  - native: "\u8A00\u8A9E"
+    english: language
+  - native: "\u6B74\u53F2\u306B\u5F93\u3046"
+    english: follow history
+  - native: "\u5E38\u306B"
+    english: always
+  - native: "\u82F1\u8A9E"
+    english: English
+  - native: "\u56FA\u5B9A"
+    english: locked
+  - native: "\u4ECA\u3084"
+    english: now
+  - native: "\u4F7F\u3044\u307E\u3059"
+    english: uses
+  - native: "\u5358\u8A9E"
+    english: word
+  - native: "\u30AB\u30FC\u30BD\u30EB"
+    english: cursor
+  - native: "\u5408\u308F\u305B\u308B"
+    english: place over
+  - native: "\u7FFB\u8A33"
+    english: translation
+  - native: "\u30EC\u30F3\u30BA"
+    english: lens
+  - native: "\u52D5\u304D"
+    english: motion
+  - native: "\u30D5\u30EB"
+    english: full
+  - native: "\u63A7\u3048\u3081"
+    english: reduced
+  - native: "\u5F37\u3055"
+    english: intensity
+  - native: "\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7"
+    english: desktop
+  - native: "\u30A2\u30A4\u30B3\u30F3"
+    english: icon
+  - native: "\u64CD\u4F5C"
+    english: action
+  - native: "\u30C0\u30D6\u30EB\u30AF\u30EA\u30C3\u30AF"
+    english: double click
+  - native: "\u30B7\u30F3\u30B0\u30EB\u30AF\u30EA\u30C3\u30AF"
+    english: single click
+  - native: "\u4F4D\u7F6E"
+    english: position
+  - native: "\u30EA\u30BB\u30C3\u30C8"
+    english: reset
+  - native: "\u6574\u5217"
+    english: arrange
+  - native: "\u8272"
+    english: colours
+  - native: "\u30D5\u30A9\u30F3\u30C8"
+    english: fonts
+  - native: "\u58C1\u7D19"
+    english: wallpaper
+  - native: "\u53CD\u6620"
+    english: apply
+  - native: "\u6B21\u306B"
+    english: next time
+  - native: "\u6642"
+    english: time
+  - native: "\u3059\u3050"
+    english: at once
+  - native: "\u672A\u8AAD"
+    english: unread
+  - native: "\u30AD\u30FC\u30DC\u30FC\u30C9"
+    english: keyboard
+  - native: "\u30B7\u30E7\u30FC\u30C8\u30AB\u30C3\u30C8"
+    english: shortcuts
+  - native: "\u30A2\u30D7\u30EA"
+    english: app
+  - native: "\u30C9\u30ED\u30EF\u30FC"
+    english: drawer
+  - native: "\u691C\u7D22\u6B04"
+    english: search field
+  - native: "\u77E2\u5370"
+    english: arrows
+  - native: "\u53F3\u30AF\u30EA\u30C3\u30AF"
+    english: right-click
+  - native: "\u30AB\u30FC\u30C9"
+    english: card
+  - native: "\u30AF\u30EA\u30A2"
+    english: clear
+  - native: "\u30C6\u30AD\u30B9\u30C8\u6B04"
+    english: text field
+  - native: "\u96E2\u308C\u308B"
+    english: leave
+  - native: "\u653E\u3059"
+    english: let go
+  - native: "\u30C9\u30E9\u30C3\u30B0"
+    english: drag
+  - native: "\u3069\u308C\u3082"
+    english: none of those
+  - native: "\u306A\u3051\u308C\u3070"
+    english: if not
+  - native: "\u975E\u8868\u793A"
+    english: hide
+  - native: "\u65B9\u5411"
+    english: direction
+  - native: "\u6700\u5BC4\u308A"
+    english: nearest
+  - native: "\u9078\u629E"
+    english: select
+  - native: "\u524D\u63D0"
+    english: prerequisite
+  - native: "\u4F9D\u5B58\u5148"
+    english: dependant
+  - native: "\u5217"
+    english: column
+  - native: "\u4E0A\u4E0B"
+    english: up and down
+  - native: "\u624B\u9806"
+    english: step
+  - native: "\u524D"
+    english: previous
+  - native: "\u3082\u3046\u4E00\u65B9"
+    english: the other one
+  - native: "\u90E8\u5206"
+    english: part
+  - native: "\u30E1\u30CB\u30E5\u30FC\u30D0\u30FC"
+    english: menu bar
+  - native: "\u30C1\u30C3\u30D7"
+    english: chip
+  - native: "\u30D4\u30F3"
+    english: pin
+  - native: "\u30DC\u30BF\u30F3"
+    english: button
+  - native: "\u9593"
+    english: between
+  - native: "\u30D5\u30A9\u30FC\u30AB\u30B9"
+    english: focus
+  - native: "\u30EA\u30F3\u30AF"
+    english: link
+  - native: "\u305F\u3069\u308B"
+    english: follow
+  - native: "\u53CD\u5BFE\u5074"
+    english: other side
+  - native: "\u30B3\u30D4\u30FC"
+    english: copy
+  - native: "\u30E9\u30D9\u30EB"
+    english: label
+  - native: "\u8CBC\u308A\u4ED8\u3051"
+    english: paste
+  - native: "\u901A\u5E38"
+    english: usual
+  - native: "\u89E3\u9664"
+    english: unpin
+  - native: "\u62E1\u5927"
+    english: zoom in
+  - native: "\u7E2E\u5C0F"
+    english: zoom out
+  - native: "\u6587\u5B57"
+    english: letters
+  - native: "\u30B5\u30A4\u30BA"
+    english: size
+  - native: "\u30B3\u30F3\u30C6\u30AD\u30B9\u30C8\u30E1\u30CB\u30E5\u30FC"
+    english: context menu
+  - native: "\u30B9\u30BF\u30F3\u30D7"
+    english: stamp
+  - native: "\u30AB\u30A6\u30F3\u30BF\u30FC"
+    english: counter
+  - native: "\u5C0F\u3055\u304F"
+    english: small
+  - native: "\u539F\u5BF8"
+    english: full size
+  - native: "\u62BC\u5370"
+    english: stamping
+  - native: "\u62BC\u5370\u5F8C"
+    english: after stamping
+  - native: "\u7F6E\u304F"
+    english: put
+  - native: "\u8FD4\u5374"
+    english: hand back
+  - native: "\u691C\u67FB"
+    english: inspect
+  - native: "\u30E2\u30FC\u30C9"
+    english: mode
+  - native: "\u8D64\u3044"
+    english: red
+  - native: "\u7070\u8272"
+    english: grey
+  - native: "\u30BF\u30D6"
+    english: tab
+  - native: "\u30D0\u30FC"
+    english: bar
+  - native: "\u884C\u304D\u6765\u3059\u308B"
+    english: go back and forth
+  - native: "\u8857"
+    english: city
+  - native: "\u95B2\u89A7"
+    english: reading
+  - native: "\u898B\u308B"
+    english: look
+  - native: "\u305D\u3057\u3066"
+    english: and then
+  - native: "\u884C\u76EE"
+    english: line
+  - native: "\u6E80\u676F"
+    english: full
+  - native: "\u5148\u306B"
+    english: first
+  - native: "\u3069\u308C\u304B"
+    english: one of them
+  - native: "\u958B\u3044\u305F"
+    english: opened
+  - native: "\u3082\u3046"
+    english: any more
+  - native: "\u53D7\u4FE1\u7BB1"
+    english: inbox
+  - native: "\u30E1\u30C3\u30BB\u30FC\u30B8"
+    english: message
+  - native: "\u5404\u4F4D"
+    english: all
+  - native: "\u7DCF\u5C40"
+    english: Directorate
+  - native: "\u6642\u9593\u7DDA\u4FDD\u5168\u5C40"
+    english: Timeline Integrity Office
+  - native: "\u6307\u4EE4"
+    english: directive
+  - native: "\u9055\u53CD\u901A\u77E5"
+    english: citation
+  - native: "\u30CB\u30E5\u30FC\u30B9\u30B5\u30A4\u30C8"
+    english: News site
+  - native: "\u4FDD\u7BA1"
+    english: kept
+  - native: "\u3055\u308C\u3066\u3044\u307E\u3059"
+    english: is done
+  - native: "\u4E86\u627F\u3057\u305F"
+    english: acknowledged
+  - native: "\u5199\u3057"
+    english: copy
+  - native: "\u6284\u672C"
+    english: extract
+  - native: "\u540D\u7FA9"
+    english: holder
+  - native: "\u63D0\u51FA\u6E08\u307F"
+    english: on file
+  - native: "\u66F8\u5F0F"
+    english: forms
+  - native: "\u5BB6\u7CFB"
+    english: lineage
+  - native: "\u533A\u5206"
+    english: status
+  - native: "\u8CA0\u50B5"
+    english: debt
+  - native: "\u6B8B\u9AD8"
+    english: balance
+  - native: "\u96C7\u7528"
+    english: employment
+  - native: "\u4E88\u7D04\u6E08\u307F"
+    english: booked
+  - native: "\u9069\u683C"
+    english: eligible
+  - native: "\u6A19\u6E96"
+    english: standard
+  - native: "\u826F\u597D"
+    english: good
+  - native: "\u51CD\u7D50"
+    english: frozen
+  - native: "\u50B5\u52D9\u6551\u6E08"
+    english: Debt Relief
+  - native: "\u7D66\u4E0E"
+    english: pay
+  - native: "\u8A18\u5165"
+    english: entry
+  - native: "\u52E4\u52D9\u7D42\u4E86\u6642"
+    english: end of shift
+  - native: "\u8A18\u5165\u3055\u308C\u307E\u3059"
+    english: is written
+  - native: "\u91D1\u984D"
+    english: amounts
+  - native: "\u5358\u4F4D"
+    english: unit
+  - native: "\u52B4\u50CD\u5951\u7D04"
+    english: labour contract
+  - native: "\u52B4\u50CD\u8005"
+    english: worker
+  - native: "\u96C7\u7528\u4E3B"
+    english: employer
+  - native: "\u4F5C\u696D\u73FE\u5834"
+    english: worksite
+  - native: "\u671F\u9593"
+    english: term
+  - native: "\u65E5\u7D66"
+    english: day wage
+  - native: "\u4ECA\u65E5\u306E"
+    english: today's
+  - native: "\u8CBC\u308B"
+    english: paste
+  - native: "\u524A\u9664"
+    english: remove
+  - native: "\u305D\u306E\u4ED6"
+    english: other
+  - native: "\u51E6\u7406"
+    english: process
+  - native: "\u305B\u3088"
+    english: do it (order)
+  - native: "\u5BFE\u8C61\u8005"
+    english: subject
+  - native: "\u6B63\u78BA"
+    english: accurate
+  - native: "\u5C40\u5185"
+    english: bureau
+  - native: "\u65B0\u3057\u3044"
+    english: new
+  - native: "\u9589\u307E\u308A\u307E\u3059"
+    english: closes
+  - native: "\u89B3\u5149"
+    english: leisure
+  - native: "\u52B4\u50CD"
+    english: labour
+  - native: "\u4ECA\u591C"
+    english: tonight
+  - native: "\u5374\u4E0B\u306E\u524D"
+    english: before denying
+  - native: "\u524D\u306B"
+    english: before
+  - native: "\u8A18\u9332\u3059\u308B\u3053\u3068"
+    english: log it
+  - native: "\u62D8\u7559"
+    english: detained
+  - native: "\u51E6\u7406\u3057\u305F"
+    english: processed
+  - native: "\u5168\u54E1"
+    english: everyone
+  - native: "\u9589\u5C40\u6642"
+    english: at closing
+  - native: "\u4EBA"
+    english: people
+  - native: "\u5F85\u6A5F"
+    english: waiting
+  - native: "\u7121\u7D66"
+    english: unpaid
+  - native: "\u53CE\u652F"
+    english: money
+  - native: "\u6B63\u3057\u3044"
+    english: right
+  - native: "\u5224\u5B9A"
+    english: call
+  - native: "\u8AA4\u3063\u305F"
+    english: wrong
+  - native: "\u521D\u56DE"
+    english: first
+  - native: "\u8B66\u544A"
+    english: warning
+  - native: "\u7F70\u91D1"
+    english: fine
+  - native: "\u79FB\u52D5\u4E2D"
+    english: in transit
+  - native: "\u53D6\u308A\u6B8B\u3057"
+    english: stranding
+  - native: "\u5206\u5272\u6255\u3044"
+    english: instalment
+  - native: "\u6B8B\u308A"
+    english: still owed
+  - native: "\u7D14\u76CA"
+    english: net
+  - native: "\u652F\u6255\u3044"
+    english: payment
+  - native: "\u652F\u6255\u3044\u5F8C"
+    english: after paying
+  - native: "\u7740\u3066\u3044\u308B"
+    english: wearing
+  - native: "\u8863\u670D"
+    english: garment
+  - native: "\u672C\u6765"
+    english: real
+  - native: "\u6240\u5C5E\u5148"
+    english: where it belongs
+  - native: "\u6B63\u5F53"
+    english: justified
+  - native: "\u98DF\u3044\u9055\u3046"
+    english: disagree
+  - native: "\u672C\u4EBA"
+    english: the person
+  - native: "\u30C7\u30B9\u30AF\u8077\u54E1"
+    english: desk officer
+  - native: "\u8A31\u53EF"
+    english: cleared
+  - native: "\u4EBA\u7269"
+    english: person
+  - native: "\u5199\u771F"
+    english: photo
+  - native: "\u7FFB\u8A33\u6A5F"
+    english: translator
+  - native: "\u9854"
+    english: face
+  - native: "\u9AEA"
+    english: hair
+  - native: "\u3072\u3052"
+    english: facial hair
+  - native: "\u5E3D\u5B50"
+    english: headwear
+  - native: "\u88C5\u98FE\u54C1"
+    english: accessory
+  - native: "\u62BC\u3057\u3066"
+    english: press
+  - native: "\u767B\u9332\u9805\u76EE"
+    english: registry entry
+  - native: "\u51FA\u8EAB"
+    english: origin
+  - native: "\u512A\u5148"
+    english: priority
+  - native: "\u6A29\u9650"
+    english: clearance
+  - native: "\u95B2\u89A7\u3067\u304D\u307E\u305B\u3093"
+    english: cannot view
+  - native: "\u30D5\u30A1\u30A4\u30EB"
+    english: file
+  - native: "\u6765\u8A2A"
+    english: visit
+  - native: "\u65E5\u524D"
+    english: days ago
+  - native: "\u6628\u65E5"
+    english: yesterday
+  - native: "\u57CB\u3081\u308B"
+    english: fill
+  - native: "\u30B9\u30AD\u30E3\u30CA\u30FC"
+    english: scanner
+  - native: "\u7F6E\u3044\u3066"
+    english: put
+  - native: "\u30C1\u30A7\u30C3\u30AF"
+    english: check
+  - native: "\u78BA\u8A8D\u3059\u3079\u304D"
+    english: to check
+  - native: "\u5FC5\u8981\u66F8\u985E"
+    english: required paper
+  - native: "\u9589\u9396"
+    english: closed
+  - native: "\u4E0D\u8DB3"
+    english: missing
+  - native: "\u65E5\u4ED8\u9055\u3044"
+    english: wrong date
+  - native: "\u76F8\u4E92\u7167\u5408"
+    english: cross-check
+  - native: "\u679A"
+    english: sheets
+  - native: "\u30BD\u30FC\u30B9"
+    english: source
+  - native: "\u91CD\u306D\u5408\u308F\u305B"
+    english: overlay
+  - native: "\u91CD\u306D\u308B"
+    english: lay over
+  - native: "\u30B9\u30E9\u30A4\u30C9"
+    english: slide
+  - native: "\u900F\u904E"
+    english: fade
+  - native: "\u672C\u5F53\u306E"
+    english: real
+  - native: "\u9055\u3044"
+    english: differences
+  - native: "\u3060\u3051"
+    english: only
+  - native: "\u5149\u308A\u307E\u3059"
+    english: shimmer
+  - native: "\u5171\u901A"
+    english: common
+  - native: "\u8A18\u8F09"
+    english: statement
+  - native: "\u5370\u5237"
+    english: print
+  - native: UV
+    english: UV
+  - native: "\u30E9\u30A4\u30C8"
+    english: light
+  - native: "\u96A0\u3057\u5C64"
+    english: hidden layer
+  - native: "\u898B\u3048\u307E\u305B\u3093"
+    english: cannot see
+  - native: "\u5168\u4F53"
+    english: whole
+  - native: "\u900F\u304B\u3057"
+    english: watermark
+  - native: "\u4E0B"
+    english: under
+  - native: "\u6B8B\u50CF"
+    english: ghost
+  - native: "\u30DE\u30A4\u30AF\u30ED\u5370\u5237"
+    english: microprint
+  - native: "\u6F02\u6D41\u756A\u53F7"
+    english: displacement no.
+  - native: "\u6F02\u6D41\u8005"
+    english: the displaced
+  - native: "\u6F02\u6D41\u8005\u767B\u9332\u7C3F"
+    english: Displacement Registry
+  - native: "\u4E8B\u4EF6"
+    english: incident
+  - native: "\u767A\u898B"
+    english: found
+  - native: "\u5E30\u9084\u5F85\u3061"
+    english: awaiting return
+  - native: "\u904E\u53BB\u306E\u6E21\u822A"
+    english: past trips
+  - native: "\u5E30\u9084\u6E08\u307F"
+    english: returned
+  - native: "\u672A\u767B\u9332"
+    english: unlisted
+  - native: "\u5730"
+    english: land
+  - native: "\u554F\u984C\u70B9"
+    english: what is wrong
+  - native: "\u4E0D\u9069\u5408\u306A"
+    english: failing
+  - native: "\u5909\u88C5\u3057\u305F"
+    english: disguised
+  - native: "\u7981\u6B62\u3055\u308C\u305F"
+    english: forbidden
+  - native: "\u6DF7\u4E71"
+    english: panic
+  - native: "\u8D77\u3053\u3059"
+    english: cause
+  - native: "\u507D\u9020"
+    english: forged
+  - native: "\u6301\u3061\u51FA\u3055\u305B\u305F"
+    english: let be taken out
+  - native: "\u5916\u3078"
+    english: outside
+  - native: "\u8A31\u53EF\u3055\u308C\u305F"
+    english: permitted
+  - native: "\u6CD5"
+    english: law
+  - native: "\u7834\u3063\u3066\u3044\u306A\u3044"
+    english: did not break
+  - native: "\u507D\u306E"
+    english: false
+  - native: "\u8EAB\u5143"
+    english: identity
+  - native: "\u7981\u5236\u54C1"
+    english: contraband
+  - native: "\u6E1B\u7D66"
+    english: pay deduction
+  - native: "\u7981\u6B62"
+    english: forbidden
+  - native: "\u6E21\u822A\u5236\u9650"
+    english: travel restriction
+  - native: "\u767A\u52B9\u4E2D"
+    english: in effect
+  - native: "\u8A71\u3057"
+    english: talk
+  - native: "\u53D7\u4ED8\u4E2D"
+    english: available
+  - native: "\u5224\u5B9A\u30B9\u30BF\u30F3\u30D7"
+    english: verdict stamp
+  - native: "\u3057\u304B"
+    english: only
+  - native: "\u62BC\u305B\u307E\u305B\u3093"
+    english: cannot stamp
+  - native: "\u5224\u5B9A\u6E08\u307F"
+    english: has a verdict
+  - native: "\u62C5\u5F53"
+    english: by
+  - native: PC
+    english: PC
+  - native: "\u898F\u5247\u66F8"
+    english: rulebook
+  - native: "\u5370\u3092\u3064\u3051\u308B"
+    english: flag
+  - native: "\u5370\u6E08\u307F"
+    english: flagged
+  - native: "\u65B0\u898F"
+    english: new
+  - native: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB"
+    english: tutorial
+  - native: "\u98DB\u3070\u3059"
+    english: skip
+  - native: "\u5B8C\u4E86"
+    english: done
+  - native: "\u65B0\u9805\u76EE"
+    english: new items
+  - native: "\u7DF4\u7FD2"
+    english: practice
+  - native: "\u518D\u751F"
+    english: replay
+  - native: "\u4E21\u5CB8"
+    english: banks
+  - native: "\u4FDD\u3064"
+    english: keep
+  - native: "\u4E0D\u6574\u5408"
+    english: inconsistent
+  - native: "\u767A\u8A00"
+    english: said
+  - native: "\u7740\u8863"
+    english: wears
+  - native: "\u62DB\u304F"
+    english: cause
+  - native: "\u7D20\u6750"
+    english: material
+  - native: "\u7D71\u6CBB\u8005"
+    english: ruler
+  - native: "\u6A5F\u5668"
+    english: device
+  - native: "\u901A\u8CA8"
+    english: currency
+  - native: "\u9996\u90FD"
+    english: capital
+  - native: "\u30D3\u30B6"
+    english: visa
+  - native: "\u50B5\u52D9\u4E0D\u5C65\u884C"
+    english: default
+  - native: "\u4E0D\u5B8C\u5168\u306A"
+    english: incomplete
+  - native: "\u56DE\u53CE\u5BFE\u8C61"
+    english: recalled
+  - native: "\u4E00\u81F4\u3059\u308B\u3053\u3068"
+    english: must match
+  - native: "\u81EA\u5206\u306E"
+    english: own
+  - native: "\u6280\u8853"
+    english: technology
+  - native: "\u6301\u3061\u51FA\u3055\u306A\u3044\u3053\u3068"
+    english: must not take out
+  - native: "\u5408\u3063\u305F"
+    english: suitable
+  - native: "\u7269"
+    english: things
+  - native: "\u4E0D\u53EF"
+    english: not allowed
+  - native: "\u30D7\u30EC\u30DF\u30A2\u30E0"
+    english: Premium
+  - native: "\u30B9\u30BF\u30F3\u30C0\u30FC\u30C9"
+    english: Standard
+  - native: "\u30A8\u30B3\u30CE\u30DF\u30FC"
+    english: Economy
+  - native: "\u7F72\u540D\u6E08\u307F\u306E"
+    english: signed
+  - native: "\u767B\u9332\u6E08\u307F\u306E"
+    english: registered
+  - native: "\u3067\u304D\u306A\u3044"
+    english: cannot
+  - native: "\u5370\u5B57\u3055\u308C\u305F"
+    english: printed
+  - native: "\u6C7A\u3057\u3066"
+    english: never
+  - native: "\u62D2\u3080"
+    english: refuses
+  - native: "\u958B\u653E"
+    english: open
+  - native: "\u8CC3\u91D1"
+    english: wage
+  - native: "\u514D\u8CAC\u66F8\u756A\u53F7"
+    english: waiver no.
+  - native: "\u4E0E\u4FE1"
+    english: credit
+  - native: "\u8CC7\u91D1"
+    english: funds
+  - native: "\u8A3C\u5238\u756A\u53F7"
+    english: policy no.
+  - native: "\u7F72\u540D"
+    english: signature
+  - native: "\u5E30\u9084\u30B2\u30FC\u30C8"
+    english: Return Gate
+  - native: "\u6574\u5099\u4E2D"
+    english: under maintenance
+  - native: "\u8DEF\u7DDA"
+    english: route
+  - native: "\u51FA\u767A\u6848\u5185\u677F"
+    english: departure board
+  - native: "\u904B\u884C\u4E2D"
+    english: in service
+  - native: "\u4FEE\u7406"
+    english: repair
+  - native: "\u30ED\u30C3\u30AF"
+    english: locked
+  - native: "\u4FEE\u7406\u54C1"
+    english: repair part
+  - native: "\u904B\u884C"
+    english: service
+  - native: "\u6C7A\u3081\u307E\u3059"
+    english: decides
+  - native: "\u4FEE\u7406\u3055\u308C\u308B"
+    english: is repaired
+  - native: "\u307E\u3067"
+    english: until
+  - native: "\u81EA\u5B85"
+    english: home
+  - native: "\u4ED5\u4E8B\u4E2D"
+    english: at work
+  - native: "\u7A7A\u304D\u5DE3"
+    english: break-in
+  - native: "\u5165\u3089\u308C\u305F"
+    english: was broken into
+  - native: "\u56FA\u5B9A\u8CBB"
+    english: fixed costs
+  - native: "\u5BB6\u8CC3"
+    english: rent
+  - native: "\u5149\u71B1\u8CBB"
+    english: utilities
+  - native: "\u75C5\u6C17"
+    english: sick
+  - native: "\u8FFD\u52A0"
+    english: extra
+  - native: "\u4E16\u8A71"
+    english: care
+  - native: "\u5BB6"
+    english: house
+  - native: "\u7DAD\u6301\u8CBB"
+    english: upkeep
+  - native: "\u501F\u91D1"
+    english: debt
+  - native: "\u3042\u308A\u307E\u3059"
+    english: there is
+  - native: "\u3084\u308A\u304F\u308A"
+    english: make ends meet
+  - native: "\u65B9\u6CD5"
+    english: way
+  - native: "\u63A2\u3057\u307E\u3057\u3087\u3046"
+    english: let's find
+  - native: "\u6240\u6301\u91D1"
+    english: your money
+  - native: "\u8D85\u3048\u307E\u3059"
+    english: exceeds
+  - native: "\u4F55\u304B"
+    english: something
+  - native: "\u7701\u3044\u3066"
+    english: skip
+  - native: "\u7701\u304F"
+    english: skip
+  - native: "\u652F\u6255\u3046"
+    english: pay
+  - native: "\u96FB\u6C17"
+    english: electricity
+  - native: "\u4E0D\u8981"
+    english: not needed
+  - native: "\u5143\u6C17"
+    english: well
+  - native: "\u4F1A\u3046"
+    english: see
+  - native: "\u5C45\u5834\u6240"
+    english: corner
+  - native: "\u306A\u3067\u308B"
+    english: pet
+  - native: "\u904A\u3076"
+    english: play
+  - native: "\u904A\u3093\u3060"
+    english: played
+  - native: "\u8CB7\u3048\u307E\u3059"
+    english: can buy
+  - native: "\u660E\u304B\u308A"
+    english: lights
+  - native: "\u6D88\u3048\u3066\u3044\u307E\u3059"
+    english: are off
+  - native: "\u30B9\u30ED\u30C3\u30C8"
+    english: slots
+  - native: "\u76F8\u68D2"
+    english: companion
+  - native: "\u8FCE\u3048\u308B"
+    english: adopt
+  - native: "\u8FCE\u3048\u3066"
+    english: adopt
+  - native: "\u4FDD\u8B77\u65BD\u8A2D"
+    english: shelter
+  - native: "\u72AC"
+    english: dog
+  - native: "\u732B"
+    english: cat
+  - native: "\u5E30\u308A\u307E\u3059"
+    english: goes home
+  - native: "\u3064\u3051\u3066\u304F\u3060\u3055\u3044"
+    english: please give
+  - native: "\u3082\u3063\u3068"
+    english: more
+  - native: "\u77ED\u3044"
+    english: short
+  - native: "\u6700\u5927"
+    english: at most
+  - native: "\u30B9\u30DA\u30FC\u30B9"
+    english: spaces
+  - native: "\u30CF\u30A4\u30D5\u30F3"
+    english: hyphens
+  - native: "\u30A2\u30DD\u30B9\u30C8\u30ED\u30D5\u30A3"
+    english: apostrophes
+  - native: "\u6C42\u3081\u308B\u3053\u3068"
+    english: ask for it
+  - native: "\u4FDD\u6301\u3057\u3066"
+    english: hold
+  - native: "\u4FDD\u6301\u3057\u305F"
+    english: held
+  - native: "\u4FDD\u6301\u3057"
+    english: hold
+  - native: DESK
+    english: DESK
+  - native: Ctrl
+    english: Ctrl
+  - native: Esc
+    english: Esc
+  - native: Enter
+    english: Enter
+  - native: ID
+    english: ID
+  - native: TC
+    english: TC
+  - native: K
+    english: K
+  - native: C
+    english: C
+  - native: V
+    english: V
+  - native: P
+    english: P
+  - native: N
+    english: N
+  - native: "\u304F\u3060\u3055\u3044"
+    english: please
+  - native: "\u3053\u3068"
+    english: (must)
+  - native: "\u958B\u3044\u3066"
+    english: open
+  - native: "\u3044\u307E\u3059"
+    english: is (-ing)
+  - native: "\u3042\u308A"
+    english: on file
+  - native: "\u3042\u306A\u305F"
+    english: you
+  - native: "\u304B\u3089"
+    english: from
+  - native: "\u307E\u305F\u306F"
+    english: or
+  - native: "\u3067\u304D\u307E\u3059"
+    english: can
+  - native: "\u3089\u308C\u307E\u3059"
+    english: can be
+  - native: "\u4E2D"
+    english: in progress
+  - native: "\u5C31\u52B4\u8A31\u53EF\u8A3C"
+    english: Work Permit
+  - native: "\u5185"
+    english: within
+  - native: "\u4E0A"
+    english: on
+  - native: "\u623B\u3059"
+    english: put back
+  - native: "\u958B\u304D"
+    english: opens
+  - native: "\u5F93\u3044\u307E\u3059"
+    english: follows
+  - native: "\u52D5\u304B\u3059"
+    english: move
+  - native: "\u7528"
+    english: for
+  - native: "\u7167\u5408\u5148"
+    english: against
+  - native: "\u4E0D\u5099"
+    english: a fault
+  - native: "\u652F\u6255\u3063\u3066"
+    english: pay and
+  - native: "\u5370"
+    english: mark
+  - native: "\u304B"
+    english: "or, ? (\u304B) / subject (\u304C)"
+  - native: "\u3057"
+    english: do
+  - native: "\u305F"
+    english: (past) / is
+  - native: "\u3066"
+    english: "and (\u3066) / at, by (\u3067)"
+  - native: "\u3068"
+    english: and, with
+  - native: "\u306E"
+    english: of
+  - native: "\u306F"
+    english: (topic) / if
+  - native: "\u3078"
+    english: to
+  - native: "\u3082"
+    english: also
+  - native: "\u3084"
+    english: or
+  - native: "\u3092"
+    english: (object)
+  - native: "\u307E\u3059"
+    english: (polite)
+  - native: "\u3057\u3066"
+    english: doing
+  - native: "\u3057\u305F"
+    english: did
+  - native: "\u3055\u308C"
+    english: is done
+  - native: "\u306A\u3044"
+    english: not

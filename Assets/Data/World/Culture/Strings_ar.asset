@@ -92,6 +92,130 @@ MonoBehaviour:
     text: "\u0627\u0644\u0637\u0644\u0628\u0627\u062A"
     gloss: 0
     tier: 0
+  - key: window.orders
+    text: "\u0627\u0644\u0637\u0644\u0628\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: app.orders.wallet
+    text: "\u0627\u0644\u0645\u062D\u0641\u0638\u0629 {0} \xB7 \u062A\u062F\u0641\u0639
+      \u0627\u0644\u0637\u0644\u0628\u0627\u062A \u0627\u0644\u0622\u0646 \u0648\u062A\u0635\u0644
+      \u0641\u064A \u0628\u062F\u0627\u064A\u0629 \u0645\u0646\u0627\u0648\u0628\u0629
+      \u0627\u0644\u063A\u062F, \u0648\u064A\u0645\u0643\u0646 \u0625\u0644\u063A\u0627\u0621
+      \u0627\u0644\u0637\u0644\u0628 \u0627\u0644\u064A\u0648\u0645 \u0648\u0627\u0633\u062A\u0631\u062F\u0627\u062F
+      \u062B\u0645\u0646\u0647."
+    gloss: 0
+    tier: 0
+  - key: app.orders.tooDear
+    text: "{0} {1} \xB7 \u0644\u0627 \u064A\u0645\u0643\u0646\u0643 \u062F\u0641\u0639
+      \u062B\u0645\u0646\u0647 \u0628\u0639\u062F"
+    gloss: 0
+    tier: 0
+  - key: app.orders.needs
+    text: "\u064A\u062A\u0637\u0644\u0628: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.orders.inTransit
+    text: "\u0641\u064A \u0627\u0644\u0637\u0631\u064A\u0642 \xB7 \u064A\u0635\u0644
+      \u064A\u0648\u0645 {0}"
+    gloss: 0
+    tier: 0
+  - key: app.orders.delivered
+    text: "\u0648\u0635\u0644 \u064A\u0648\u0645 {0}"
+    gloss: 0
+    tier: 0
+  - key: app.orders.owned
+    text: "\u0645\u0645\u0644\u0648\u0643"
+    gloss: 0
+    tier: 0
+  - key: app.orders.installed
+    text: "\u0645\u0631\u0643\u0628"
+    gloss: 0
+    tier: 0
+  - key: app.orders.stored
+    text: "\u0641\u064A \u0627\u0644\u0645\u062E\u0632\u0646"
+    gloss: 0
+    tier: 0
+  - key: app.orders.installsTomorrow
+    text: "\u064A\u0631\u0643\u0628 \u063A\u062F\u0627"
+    gloss: 0
+    tier: 0
+  - key: app.orders.leavesTomorrow
+    text: "\u064A\u0633\u062A\u0628\u062F\u0644 \u063A\u062F\u0627"
+    gloss: 0
+    tier: 0
+  - key: app.orders.order
+    text: "\u0627\u0637\u0644\u0628"
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancel
+    text: "\u0625\u0644\u063A\u0627\u0621 \u0627\u0644\u0637\u0644\u0628"
+    gloss: 0
+    tier: 0
+  - key: app.orders.install
+    text: "\u062A\u0631\u0643\u064A\u0628 \u063A\u062F\u0627"
+    gloss: 0
+    tier: 0
+  - key: app.orders.keep
+    text: "\u0625\u0628\u0642\u0627\u0621 \u0627\u0644\u062A\u0631\u0643\u064A\u0628"
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancelInstall
+    text: "\u0625\u0644\u063A\u0627\u0621 \u0627\u0644\u062A\u0631\u0643\u064A\u0628"
+    gloss: 0
+    tier: 0
+  - key: app.orders.select
+    text: "\u0627\u062E\u062A\u0631 \u0639\u0646\u0635\u0631\u0627 \u0645\u0646 \u0627\u0644\u0634\u062C\u0631\u0629
+      \u0644\u0639\u0631\u0636\u0647 \u0647\u0646\u0627."
+    gloss: 0
+    tier: 0
+  - key: app.orders.none
+    text: "\u0644\u0627 \u0634\u064A\u0621"
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.desk
+    text: "\u0645\u0639\u062F\u0627\u062A \u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.interview
+    text: "\u0627\u0644\u0645\u0642\u0627\u0628\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.portals
+    text: "\u0627\u0644\u0628\u0648\u0627\u0628\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.contacts
+    text: "\u0627\u0644\u0645\u0639\u0627\u0631\u0641"
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.toys
+    text: "\u0627\u0644\u0623\u0644\u0639\u0627\u0628"
+    gloss: 0
+    tier: 0
+  - key: mail.from.supply
+    text: "\u0625\u0645\u062F\u0627\u062F\u0627\u062A \u0627\u0644\u062C\u0645\u0627\u0631\u0643
+      \u0627\u0644\u0632\u0645\u0646\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.delivery
+    text: "\u0648\u0635\u0644 \u0637\u0644\u0628\u0643"
+    gloss: 0
+    tier: 0
+  - key: mail.from.liability
+    text: "\u0645\u0643\u062A\u0628 \u0645\u0633\u0624\u0648\u0644\u064A\u0629 \u0627\u0644\u0645\u0631\u0627\u0633\u064A\u0644"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.stranding
+    text: "\u062A\u0642\u0631\u064A\u0631 \u0639\u0637\u0644 \u0645\u0631\u0633\u0627\u0644:
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: mail.body.delivery
+    text: "\u0648\u0635\u0644 \u0647\u0630\u0627 \u0627\u0644\u0635\u0628\u0627\u062D
+      \u0648\u064A\u0633\u0631\u064A \u0645\u0646 \u0645\u0646\u0627\u0648\u0628\u0629
+      \u0627\u0644\u064A\u0648\u0645:"
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: "\u0627\u0644\u062A\u062D\u0642\u064A\u0642"
     gloss: 0
@@ -110,6 +234,14 @@ MonoBehaviour:
     tier: 0
   - key: tray.day
     text: "\u0627\u0644\u064A\u0648\u0645 {0}"
+    gloss: 0
+    tier: 0
+  - key: tray.date
+    text: "{0} \xB7 \u0627\u0644\u064A\u0648\u0645 {1}"
+    gloss: 0
+    tier: 0
+  - key: tray.date.hint
+    text: "\u0642\u0627\u0631\u0646 \u062A\u0627\u0631\u064A\u062E \u0627\u0644\u064A\u0648\u0645"
     gloss: 0
     tier: 0
   - key: tray.stability
@@ -135,8 +267,3198 @@ MonoBehaviour:
       \u2014"
     gloss: 0
     tier: 0
+  - key: briefing.deskHeader
+    text: "\u0645\u0646 DESK 3"
+    gloss: 0
+    tier: 0
+  - key: paper.edition
+    text: "\u0627\u0644\u0637\u0628\u0639\u0629 \u0627\u0644\u0635\u0628\u0627\u062D\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: paper.price
+    text: "\u0631\u0635\u064A\u062F \u0648\u0627\u062D\u062F"
+    gloss: 0
+    tier: 0
+  - key: wallet.credits
+    text: "\u0623\u0631\u0635\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: wallet.creditsInline
+    text: "\u0631\u0635\u064A\u062F"
+    gloss: 0
+    tier: 0
+  - key: wallet.creditsShort
+    text: "\u0631"
+    gloss: 0
+    tier: 0
+  - key: verdict.correct
+    text: "\u0635\u062D\u064A\u062D  (+{0} {1})"
+    gloss: 0
+    tier: 0
+  - key: verdict.wrong
+    text: "\u062E\u0637\u0623"
+    gloss: 0
+    tier: 0
+  - key: verdict.wrongPenalty
+    text: "\u062E\u0637\u0623  (-{0} {1})"
+    gloss: 0
+    tier: 0
+  - key: verdict.simpleCorrect
+    text: "\u0635\u062D\u064A\u062D"
+    gloss: 0
+    tier: 0
+  - key: verdict.simpleWrong
+    text: "\u062E\u0637\u0623"
+    gloss: 0
+    tier: 0
+  - key: day.complete
+    text: "\u0627\u0646\u062A\u0647\u0649 \u0627\u0644\u064A\u0648\u0645 {0}."
+    gloss: 0
+    tier: 0
+  - key: idle.waiting
+    text: "\u0628\u0627\u0646\u062A\u0638\u0627\u0631 \u0627\u0644\u0645\u0633\u0627\u0641\u0631
+      \u0627\u0644\u062A\u0627\u0644\u064A"
+    gloss: 0
+    tier: 0
+  - key: app.title
+    text: "\u0627\u0644\u062A\u062D\u0642\u064A\u0642"
+    gloss: 0
+    tier: 0
+  - key: app.counters
+    text: "\u0627\u0644\u0623\u0648\u0631\u0627\u0642 \u0627\u0644\u0645\u0633\u062A\u0644\u0645\u0629:
+      {0} \u0645\u0646 {1} \xB7 \u0627\u0644\u0645\u0645\u0633\u0648\u062D\u0629:
+      {2}"
+    gloss: 0
+    tier: 0
+  - key: app.tab.documents
+    text: "\u0627\u0644\u0623\u0648\u0631\u0627\u0642"
+    gloss: 0
+    tier: 0
+  - key: app.tab.records
+    text: "\u0633\u062C\u0644\u0627\u062A \u0627\u0644\u0645\u0648\u0627\u0637\u0646\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: app.tab.reference
+    text: "\u0627\u0644\u0643\u062A\u0628 \u0627\u0644\u0645\u0631\u062C\u0639\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: app.tab.transcript
+    text: "\u0627\u0644\u0645\u062D\u0636\u0631"
+    gloss: 0
+    tier: 0
+  - key: app.tab.report
+    text: "\u062A\u0642\u0631\u064A\u0631 \u0627\u0644\u0627\u0646\u062D\u0631\u0627\u0641"
+    gloss: 0
+    tier: 0
+  - key: app.tab.rules
+    text: "\u0642\u0648\u0627\u0639\u062F \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: app.tab.calendar
+    text: "\u0627\u0644\u062A\u0642\u0648\u064A\u0645"
+    gloss: 0
+    tier: 0
+  - key: app.tab.board
+    text: "\u0644\u0648\u062D\u0629 \u0627\u0644\u0642\u0636\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: app.side.left
+    text: "\u064A\u0633\u0627\u0631"
+    gloss: 0
+    tier: 0
+  - key: app.side.right
+    text: "\u064A\u0645\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: app.pane.shelfHere
+    text: "\u064A\u0641\u062A\u062D \u0647\u0646\u0627"
+    gloss: 0
+    tier: 0
+  - key: app.search.open
+    text: "\u0628\u062D\u062B   Ctrl K"
+    gloss: 0
+    tier: 0
+  - key: app.row.rule
+    text: "\u0642\u0648\u0627\u0639\u062F \u0627\u0644\u064A\u0648\u0645 \xB7 \u0627\u0644\u0642\u0627\u0639\u062F\u0629
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: shelf.side.left
+    text: "\u064A\u0633\u0627\u0631"
+    gloss: 0
+    tier: 0
+  - key: shelf.side.right
+    text: "\u064A\u0645\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: menubar.papers
+    text: "\u0627\u0644\u0623\u0648\u0631\u0627\u0642"
+    gloss: 0
+    tier: 0
+  - key: status.holding
+    text: "\u062A\u0645\u0633\u0643 <b>{0}</b> ({1}). \u0627\u0646\u0642\u0631 \u0642\u064A\u0645\u0629
+      \u0623\u062E\u0631\u0649 \u0644\u0644\u0645\u0642\u0627\u0631\u0646\u0629."
+    gloss: 0
+    tier: 0
+  - key: status.holdingRule
+    text: "\u062A\u0645\u0633\u0643 \u0627\u0644\u0642\u0627\u0639\u062F\u0629: <b>{0}</b>
+      \u0627\u0646\u0642\u0631 \u0627\u0644\u0642\u064A\u0645\u0629 \u0627\u0644\u062A\u064A
+      \u062A\u062E\u0635\u0647\u0627."
+    gloss: 0
+    tier: 0
+  - key: status.holdingToday
+    text: "\u062A\u0645\u0633\u0643 \u062A\u0627\u0631\u064A\u062E \u0627\u0644\u064A\u0648\u0645,
+      <b>{0}</b>. \u0627\u0646\u0642\u0631 \u062A\u0627\u0631\u064A\u062E \u0645\u063A\u0627\u062F\u0631\u0629
+      \u0623\u0648 \u062A\u0627\u0631\u064A\u062E \u0635\u0644\u0627\u062D\u064A\u0629."
+    gloss: 0
+    tier: 0
+  - key: status.logged
+    text: "{0}. \u062A\u0645 \u0627\u0644\u062A\u0633\u062C\u064A\u0644."
+    gloss: 0
+    tier: 0
+  - key: status.evidence
+    text: "{0}. \u062A\u0645 \u0627\u0644\u062A\u0633\u062C\u064A\u0644 \u0643\u062F\u0644\u064A\u0644."
+    gloss: 0
+    tier: 0
+  - key: status.already
+    text: "\u0642\u0627\u0631\u0646\u062A \u0647\u0630\u064A\u0646 \u0645\u0646 \u0642\u0628\u0644.
+      \u064A\u0639\u0631\u0636\u0627\u0646 \u0645\u062C\u062F\u062F\u0627."
+    gloss: 0
+    tier: 0
+  - key: status.shown
+    text: "{0}. \u064A\u0639\u0631\u0636 \u0645\u062C\u062F\u062F\u0627."
+    gloss: 0
+    tier: 0
+  - key: status.cancel
+    text: "\u0625\u0644\u063A\u0627\u0621   Esc"
+    gloss: 0
+    tier: 0
+  - key: finding.link.Match
+    text: "\u0628\u064A\u0627\u0646\u0627\u062A \u0645\u062A\u0637\u0627\u0628\u0642\u0629"
+    gloss: 0
+    tier: 0
+  - key: finding.link.Differs
+    text: "\u0628\u064A\u0627\u0646\u0627\u062A \u0645\u062E\u062A\u0644\u0641\u0629"
+    gloss: 0
+    tier: 0
+  - key: finding.link.Elsewhere
+    text: "\u064A\u0646\u062A\u0645\u064A \u0644\u0645\u0643\u0627\u0646 \u0622\u062E\u0631"
+    gloss: 0
+    tier: 0
+  - key: finding.link.DifferentDetails
+    text: "\u062A\u0641\u0627\u0635\u064A\u0644 \u0645\u062E\u062A\u0644\u0641\u0629"
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherPlace
+    text: "\u0644\u064A\u0633 \u0627\u0644\u0645\u0643\u0627\u0646 \u0627\u0644\u0645\u062F\u0639\u0649"
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherPerson
+    text: "\u0634\u062E\u0635 \u0622\u062E\u0631"
+    gloss: 0
+    tier: 0
+  - key: finding.link.TwoTruths
+    text: "\u0643\u0644\u0627\u0647\u0645\u0627 \u0645\u0631\u062C\u0639"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleMet
+    text: "\u064A\u0633\u062A\u0648\u0641\u064A \u0627\u0644\u0642\u0627\u0639\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleBroken
+    text: "\u064A\u062E\u0627\u0644\u0641 \u0627\u0644\u0642\u0627\u0639\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleNotAbout
+    text: "\u062E\u0627\u0631\u062C \u0646\u0637\u0627\u0642 \u0627\u0644\u0642\u0627\u0639\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleByComparison
+    text: "\u0642\u0627\u0631\u0646 \u0628\u062F\u0644\u0627 \u0645\u0646 \u0630\u0644\u0643"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleNotForTraveller
+    text: "\u0644\u0627 \u062A\u062E\u0635 \u0647\u0630\u0627 \u0627\u0644\u0645\u0633\u0627\u0641\u0631"
+    gloss: 0
+    tier: 0
+  - key: finding.link.NothingToCompare
+    text: "\u0644\u0627 \u0634\u064A\u0621 \u0644\u0644\u0645\u0642\u0627\u0631\u0646\u0629"
+    gloss: 0
+    tier: 0
+  - key: finding.link.DepartsToday
+    text: "\u064A\u063A\u0627\u062F\u0631 \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: finding.link.NotToday
+    text: "\u0644\u064A\u0633 \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: finding.link.StillValid
+    text: "\u0645\u0627 \u0632\u0627\u0644 \u0635\u0627\u0644\u062D\u0627"
+    gloss: 0
+    tier: 0
+  - key: finding.link.Expired
+    text: "\u0645\u0646\u062A\u0647\u064A \u0627\u0644\u0635\u0644\u0627\u062D\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: finding.link.SealIncorrect
+    text: "\u062F\u0645\u063A\u0629 \u062E\u0627\u0637\u0626\u0629"
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherOffice
+    text: "\u0645\u0643\u062A\u0628 \u0622\u062E\u0631"
+    gloss: 0
+    tier: 0
+  - key: finding.link.PaperMissing
+    text: "\u0644\u0645 \u064A\u062D\u0636\u0631\u0647\u0627"
+    gloss: 0
+    tier: 0
+  - key: finding.link.NoRecord
+    text: "\u0644\u0627 \u0633\u062C\u0644"
+    gloss: 0
+    tier: 0
+  - key: finding.note.DifferentDetails
+    text: "{0} \u0648 {1} \u062A\u0641\u0627\u0635\u064A\u0644 \u0645\u062E\u062A\u0644\u0641\u0629.
+      \u0644\u0645 \u064A\u0633\u062C\u0644 \u0634\u064A\u0621."
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherPlace
+    text: "\u0633\u0637\u0631 \u0627\u0644\u0643\u062A\u0627\u0628 \u0647\u0630\u0627
+      \u0639\u0646 \u0645\u0643\u0627\u0646 \u063A\u064A\u0631 \u0627\u0644\u0645\u0643\u0627\u0646
+      \u0627\u0644\u0645\u062F\u0639\u0649. \u0644\u0645 \u064A\u0633\u062C\u0644
+      \u0634\u064A\u0621."
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherPerson
+    text: "\u0647\u0630\u0627 \u0627\u0644\u0633\u062C\u0644 \u064A\u062E\u0635 \u0634\u062E\u0635\u0627
+      \u0622\u062E\u0631. \u0644\u0645 \u064A\u0633\u062C\u0644 \u0634\u064A\u0621."
+    gloss: 0
+    tier: 0
+  - key: finding.note.TwoTruths
+    text: "\u0643\u0644\u0627\u0647\u0645\u0627 \u0628\u064A\u0627\u0646\u0627\u062A
+      \u0645\u0631\u062C\u0639\u064A\u0629. \u0642\u0627\u0631\u0646 \u0648\u0631\u0642\u0629
+      \u0623\u0648 \u0625\u062C\u0627\u0628\u0629 \u0628\u0623\u062D\u062F\u0647\u0645\u0627."
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleNotAbout
+    text: "\u0647\u0630\u0647 \u0627\u0644\u0642\u0627\u0639\u062F\u0629 \u0644\u0627
+      \u062A\u062E\u0635 {1}. \u0644\u0645 \u064A\u0633\u062C\u0644 \u0634\u064A\u0621."
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleByComparison
+    text: "\u062A\u062D\u0642\u0642 \u0645\u0646 \u0647\u0630\u0647 \u0627\u0644\u0642\u0627\u0639\u062F\u0629
+      \u0628\u0627\u0644\u0645\u0642\u0627\u0631\u0646\u0629: \u0642\u0627\u0631\u0646
+      \u0627\u0644\u0642\u064A\u0645\u0629 \u0628\u0627\u0644\u0643\u062A\u0628 \u0623\u0648
+      \u0628\u0627\u0644\u0633\u062C\u0644."
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleNotForTraveller
+    text: "\u0647\u0630\u0647 \u0627\u0644\u0642\u0627\u0639\u062F\u0629 \u0644\u0627
+      \u062A\u062E\u0635 \u0647\u0630\u0627 \u0627\u0644\u0645\u0633\u0627\u0641\u0631.
+      \u0644\u0645 \u064A\u0633\u062C\u0644 \u0634\u064A\u0621."
+    gloss: 0
+    tier: 0
+  - key: finding.note.NothingToCompare
+    text: "\u0642\u0627\u0631\u0646 \u0642\u0627\u0639\u062F\u0629 \u0623\u0648 \u062A\u0627\u0631\u064A\u062E
+      \u0627\u0644\u064A\u0648\u0645 \u0628\u0627\u0644\u0642\u064A\u0645\u0629 \u0627\u0644\u062A\u064A
+      \u062A\u062E\u0635\u0647\u0627."
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherOffice
+    text: "\u0647\u0627\u062A\u0627\u0646 \u062F\u0645\u063A\u062A\u0627 \u0645\u0643\u062A\u0628\u064A\u0646
+      \u0645\u062E\u062A\u0644\u0641\u064A\u0646. \u0642\u0627\u0631\u0646 \u062F\u0645\u063A\u0629
+      \u0627\u0644\u0648\u0631\u0642\u0629 \u0628\u062F\u0645\u063A\u0629 \u0645\u0643\u062A\u0628\u0647\u0627
+      \u0641\u064A \u0633\u062C\u0644 \u0627\u0644\u062F\u0645\u063A\u0627\u062A.
+      \u0644\u0645 \u064A\u0633\u062C\u0644 \u0634\u064A\u0621."
+    gloss: 0
+    tier: 0
+  - key: finding.title.Match
+    text: "{0} \u0645\u062A\u0637\u0627\u0628\u0642"
+    gloss: 0
+    tier: 0
+  - key: finding.title.Differs
+    text: "{0} \u0645\u062E\u062A\u0644\u0641"
+    gloss: 0
+    tier: 0
+  - key: finding.title.Elsewhere
+    text: "{0} \u064A\u0646\u062A\u0645\u064A \u0644\u0645\u0643\u0627\u0646 \u0622\u062E\u0631"
+    gloss: 0
+    tier: 0
+  - key: finding.title.RuleMet
+    text: "\u064A\u0633\u062A\u0648\u0641\u064A \u0627\u0644\u0642\u0627\u0639\u062F\u0629:
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: finding.title.RuleBroken
+    text: "\u064A\u062E\u0627\u0644\u0641 \u0627\u0644\u0642\u0627\u0639\u062F\u0629:
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: finding.title.DepartsToday
+    text: "\u064A\u063A\u0627\u062F\u0631 \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: finding.title.NotToday
+    text: "\u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0629 \u0644\u064A\u0633\u062A
+      \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: finding.title.StillValid
+    text: "{0} \u0645\u0627 \u0632\u0627\u0644 \u0635\u0627\u0644\u062D\u0627"
+    gloss: 0
+    tier: 0
+  - key: finding.title.Expired
+    text: "{0} \u0645\u0646\u062A\u0647\u064A \u0627\u0644\u0635\u0644\u0627\u062D\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: finding.title.SealIncorrect
+    text: "\u062F\u0645\u063A\u0629 \u062E\u0627\u0637\u0626\u0629"
+    gloss: 0
+    tier: 0
+  - key: finding.title.PaperMissing
+    text: "{0} \u0645\u0641\u0642\u0648\u062F"
+    gloss: 0
+    tier: 0
+  - key: finding.title.NoRecord
+    text: "{0}: \u0644\u0627 \u0633\u062C\u0644 \u0645\u062D\u0641\u0648\u0638"
+    gloss: 0
+    tier: 0
+  - key: finding.detail
+    text: "{0} \u0645\u0642\u0627\u0628\u0644 {1}"
+    gloss: 0
+    tier: 0
+  - key: finding.detail.same
+    text: "{0} \u0641\u064A \u0627\u0644\u0627\u062B\u0646\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: finding.detail.missing
+    text: "\u0637\u0644\u0628\u062A \u0648\u0644\u0645 \u062A\u062D\u0636\u0631"
+    gloss: 0
+    tier: 0
+  - key: finding.detail.noRecord
+    text: "\u0628\u062D\u062B \u0639\u0646 {0}: \u0644\u0627 \u0634\u064A\u0621 \u0645\u062D\u0641\u0648\u0638"
+    gloss: 0
+    tier: 0
+  - key: finding.evidence
+    text: "{0} \xB7 \u062F\u0644\u064A\u0644"
+    gloss: 0
+    tier: 0
+  - key: finding.what.today
+    text: "\u062A\u0627\u0631\u064A\u062E \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: finding.what.rule
+    text: "\u0627\u0644\u0642\u0627\u0639\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: findings.title
+    text: "\u0646\u062A\u0627\u0626\u062C\u0643"
+    gloss: 0
+    tier: 0
+  - key: findings.empty
+    text: "\u0644\u0627 \u0646\u062A\u0627\u0626\u062C \u0628\u0639\u062F"
+    gloss: 0
+    tier: 0
+  - key: calendar.title
+    text: "\u062A\u0642\u0648\u064A\u0645 \u0627\u0644\u0648\u0643\u0627\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: calendar.today
+    text: "\u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: calendar.todayTitle
+    text: "\u0627\u0644\u062A\u0642\u0648\u064A\u0645 \xB7 \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: calendar.shiftDay
+    text: "\u064A\u0648\u0645 \u0627\u0644\u0645\u0646\u0627\u0648\u0628\u0629 {0}"
+    gloss: 0
+    tier: 0
+  - key: calendar.unknown
+    text: "\u062A\u0627\u0631\u064A\u062E \u0645\u062C\u0647\u0648\u0644"
+    gloss: 0
+    tier: 0
+  - key: search.drawer.title
+    text: "\u0627\u0644\u0628\u062D\u062B \u0641\u064A \u0627\u0644\u0648\u062B\u0627\u0626\u0642"
+    gloss: 0
+    tier: 0
+  - key: search.drawer.hint
+    text: "\u0627\u062E\u062A\u0631 \u0646\u062A\u064A\u062C\u0629 \u0644\u0641\u062A\u062D
+      \u0648\u062B\u064A\u0642\u062A\u0647\u0627 \u0641\u064A \u0627\u0644\u062C\u0647\u0629
+      \u0627\u0644\u062A\u064A \u064A\u0641\u062A\u062D \u0641\u064A\u0647\u0627
+      \u0627\u0644\u0631\u0641."
+    gloss: 0
+    tier: 0
+  - key: app.chip.onDesk
+    text: "{0}: \u0639\u0644\u0649 \u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: app.chip.notHandedOver
+    text: "{0}: \u0644\u0645 \u062A\u0633\u0644\u0645"
+    gloss: 0
+    tier: 0
+  - key: app.doc.none
+    text: "\u062A\u0638\u0647\u0631 \u0647\u0646\u0627 \u0627\u0644\u0623\u0648\u0631\u0627\u0642
+      \u0627\u0644\u062A\u064A \u064A\u0633\u0644\u0645\u0647\u0627 \u0627\u0644\u0645\u0633\u0627\u0641\u0631
+      \u0628\u0639\u062F \u0645\u0633\u062D\u0647\u0627."
+    gloss: 0
+    tier: 0
+  - key: app.doc.scanHint
+    text: "\u0639\u0644\u0649 \u0627\u0644\u0645\u0643\u062A\u0628: \u0627\u0645\u0633\u062D\u0647\u0627
+      \u0644\u0642\u0631\u0627\u0621\u062A\u0647\u0627 \u0647\u0646\u0627."
+    gloss: 0
+    tier: 0
+  - key: app.doc.askHint
+    text: "\u0644\u0645 \u062A\u0633\u0644\u0645: \u0627\u0637\u0644\u0628\u0647\u0627
+      \u0645\u0646 \u0627\u0644\u0645\u0633\u0627\u0641\u0631."
+    gloss: 0
+    tier: 0
+  - key: app.ref.claimedOnly
+    text: "\u0627\u0644\u0645\u0643\u0627\u0646 \u0627\u0644\u0645\u062F\u0639\u0649
+      \u0641\u0642\u0637"
+    gloss: 0
+    tier: 0
+  - key: app.search
+    text: "\u0627\u0633\u0645 \u0623\u0648 \u0645\u0643\u0627\u0646 \u0623\u0648
+      \u0631\u0642\u0645"
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.pinned
+    text: "\u0627\u0644\u0645\u062B\u0628\u062A\u0629"
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.recent
+    text: "\u0627\u0644\u0623\u062E\u064A\u0631\u0629"
+    gloss: 0
+    tier: 0
+  - key: app.toast.scanned
+    text: "\u062A\u0645 \u0645\u0633\u062D {0}"
+    gloss: 0
+    tier: 0
+  - key: app.toast.open
+    text: "\u0641\u062A\u062D"
+    gloss: 0
+    tier: 0
+  - key: search.all
+    text: "\u0627\u0644\u0643\u0644"
+    gloss: 0
+    tier: 0
+  - key: search.more
+    text: "\u0639\u0631\u0636 \u0643\u0644 {0} \u0641\u064A {1}"
+    gloss: 0
+    tier: 0
+  - key: search.none
+    text: "\u0644\u0627 \u0634\u064A\u0621 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0636\u064A\u0629
+      \u0623\u0648 \u0633\u062C\u0644\u0627\u062A \u0627\u0644\u064A\u0648\u0645
+      \u064A\u0637\u0627\u0628\u0642 '{0}'."
+    gloss: 0
+    tier: 0
+  - key: search.noneChip
+    text: "\u0644\u0627 \u064A\u0648\u062C\u062F \u0633\u0637\u0631 \u063A\u064A\u0631
+      \u0645\u062A\u0631\u062C\u0645 \u0641\u064A \u0647\u0630\u0647 \u0627\u0644\u0642\u0636\u064A\u0629
+      \u064A\u0637\u0627\u0628\u0642 \u0627\u0644\u0642\u0635\u0627\u0635\u0629 \u0627\u0644\u0645\u0644\u0635\u0642\u0629."
+    gloss: 0
+    tier: 0
+  - key: search.hint
+    text: "Enter \u064A\u0641\u062A\u062D \u0627\u0644\u0646\u062A\u064A\u062C\u0629
+      \u0627\u0644\u0623\u0648\u0644\u0649 \xB7 \u0627\u0646\u0642\u0631 \u0646\u062A\u064A\u062C\u0629
+      \u0644\u0644\u0627\u0646\u062A\u0642\u0627\u0644 \u0625\u0644\u064A\u0647\u0627"
+    gloss: 0
+    tier: 0
+  - key: search.close
+    text: "\u0625\u063A\u0644\u0627\u0642   Esc"
+    gloss: 0
+    tier: 0
+  - key: search.title.rule
+    text: "\u0627\u0644\u0642\u0627\u0639\u062F\u0629 {0}"
+    gloss: 0
+    tier: 0
+  - key: search.revised
+    text: "\u0645\u0639\u062F\u0644"
+    gloss: 0
+    tier: 0
+  - key: steps.rules
+    text: "\u0642\u0648\u0627\u0639\u062F \u0627\u0644\u064A\u0648\u0645 \u0644\u0644\u0648\u062C\u0647\u0629"
+    gloss: 0
+    tier: 0
+  - key: steps.papers
+    text: "\u0627\u0633\u062A\u0644\u0645 \u0643\u0644 \u0627\u0644\u0623\u0648\u0631\u0627\u0642"
+    gloss: 0
+    tier: 0
+  - key: steps.read
+    text: "\u0627\u0642\u0631\u0623 \u0643\u0644 \u0627\u0644\u0623\u0648\u0631\u0627\u0642"
+    gloss: 0
+    tier: 0
+  - key: steps.identity
+    text: "\u0627\u0644\u0627\u0633\u0645 \u0648\u0627\u0644\u0631\u0642\u0645 \u0648\u062A\u0627\u0631\u064A\u062E
+      \u0627\u0644\u0645\u064A\u0644\u0627\u062F \u0641\u064A \u0633\u062C\u0644\u0627\u062A
+      \u0627\u0644\u0645\u0648\u0627\u0637\u0646\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: steps.facts
+    text: "\u062D\u0642\u0627\u0626\u0642 \u0627\u0644\u0645\u0643\u0627\u0646 \u0645\u0642\u0627\u0628\u0644
+      \u0627\u0644\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: steps.questions
+    text: "\u0627\u0637\u0631\u062D \u0623\u0633\u0626\u0644\u0629 \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: steps.answers
+    text: "\u0627\u0644\u0625\u062C\u0627\u0628\u0627\u062A \u0645\u0642\u0627\u0628\u0644
+      \u0627\u0644\u0643\u062A\u0628 \u0623\u0648 \u0627\u0644\u0633\u062C\u0644\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: steps.dress
+    text: "\u0627\u0644\u0644\u0628\u0627\u0633 \u0645\u0642\u0627\u0628\u0644 \u062F\u0644\u064A\u0644
+      \u0627\u0644\u0623\u0632\u064A\u0627\u0621"
+    gloss: 0
+    tier: 0
+  - key: steps.returnOrder
+    text: "\u0623\u0645\u0631 \u0627\u0644\u0639\u0648\u062F\u0629 \u0645\u0642\u0627\u0628\u0644
+      \u0627\u0644\u0634\u0647\u0627\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: steps.dates
+    text: "\u0627\u0644\u062A\u0648\u0627\u0631\u064A\u062E \u0645\u0642\u0627\u0628\u0644
+      \u062A\u0642\u0648\u064A\u0645 \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: steps.class
+    text: "\u0641\u0626\u0629 \u0627\u0644\u062C\u0648\u0627\u0632 \u0645\u0642\u0627\u0628\u0644
+      \u0627\u0644\u062D\u0633\u0627\u0628"
+    gloss: 0
+    tier: 0
+  - key: steps.transponder
+    text: "\u0627\u0644\u0645\u0631\u0633\u0627\u0644 \u0645\u0642\u0627\u0628\u0644
+      \u0627\u0644\u062D\u0633\u0627\u0628"
+    gloss: 0
+    tier: 0
+  - key: steps.paperSet
+    text: "\u0645\u062C\u0645\u0648\u0639\u0629 \u0627\u0644\u0623\u0648\u0631\u0627\u0642
+      \u0645\u0642\u0627\u0628\u0644 \u0642\u0648\u0627\u0639\u062F \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: steps.standing
+    text: "\u0648\u0636\u0639 \u0627\u0644\u062D\u0633\u0627\u0628 \u0641\u064A \u0627\u0644\u0633\u062C\u0644\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: steps.askMeans
+    text: "\u0627\u0637\u0644\u0628 \u0625\u062B\u0628\u0627\u062A \u0627\u0644\u0645\u0644\u0627\u0621\u0629"
+    gloss: 0
+    tier: 0
+  - key: steps.waiver
+    text: "\u0627\u0644\u0625\u0642\u0631\u0627\u0631 \u0645\u0642\u0627\u0628\u0644
+      \u0627\u0644\u062A\u0630\u0643\u0631\u0629 \u0648\u0627\u0644\u062D\u0633\u0627\u0628"
+    gloss: 0
+    tier: 0
+  - key: steps.means
+    text: "\u0625\u062B\u0628\u0627\u062A \u0627\u0644\u0645\u0644\u0627\u0621\u0629
+      \u0645\u0642\u0627\u0628\u0644 \u0627\u0644\u062D\u0633\u0627\u0628"
+    gloss: 0
+    tier: 0
+  - key: steps.contract
+    text: "\u0627\u0644\u0639\u0642\u062F \u0645\u0642\u0627\u0628\u0644 \u0627\u0644\u0639\u0642\u062F
+      \u0627\u0644\u0645\u0633\u062C\u0644"
+    gloss: 0
+    tier: 0
+  - key: steps.hint.wheel
+    text: "\u0627\u0633\u062A\u062E\u062F\u0645 \u0639\u062C\u0644\u0629 \u0627\u0644\u0645\u0633\u0627\u0641\u0631:
+      \u0627\u0646\u0642\u0631 \u0627\u0644\u0645\u0633\u0627\u0641\u0631 \u0639\u0646\u062F
+      \u0627\u0644\u0645\u0643\u062A\u0628."
+    gloss: 0
+    tier: 0
+  - key: app.link.seal
+    text: "\u0627\u0641\u062A\u062D \u0633\u062C\u0644 \u0627\u0644\u062F\u0645\u063A\u0627\u062A:
+      \u062F\u0645\u063A\u0629 \u0627\u0644\u0645\u0643\u062A\u0628 \u0627\u0644\u0645\u0635\u062F\u0631"
+    gloss: 0
+    tier: 0
+  - key: app.link.reference
+    text: "\u0627\u0641\u062A\u062D \u0627\u0644\u0643\u062A\u0628 \u0627\u0644\u0645\u0631\u062C\u0639\u064A\u0629:
+      {0}, \u0627\u0644\u0645\u0643\u0627\u0646 \u0627\u0644\u0645\u062F\u0639\u0649"
+    gloss: 0
+    tier: 0
+  - key: app.link.records
+    text: "\u0627\u0641\u062A\u062D \u0633\u062C\u0644\u0627\u062A \u0627\u0644\u0645\u0648\u0627\u0637\u0646\u064A\u0646:
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: app.link.rules
+    text: "\u0627\u0641\u062A\u062D \u0642\u0648\u0627\u0639\u062F \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: app.link.pick
+    text: "\u0627\u0641\u062A\u062D \u0645\u0648\u0636\u0639 \u0627\u0644\u0627\u062E\u062A\u064A\u0627\u0631:
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: app.link.place
+    text: "\u0627\u0641\u062A\u062D \u0627\u0644\u0643\u062A\u0628 \u0627\u0644\u0645\u0631\u062C\u0639\u064A\u0629:
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: app.transcript.answersOnly
+    text: "\u0627\u0644\u0625\u062C\u0627\u0628\u0627\u062A \u0641\u0642\u0637"
+    gloss: 0
+    tier: 0
+  - key: app.transcript.newLine
+    text: "\u0633\u0637\u0631 \u062C\u062F\u064A\u062F \u0628\u0627\u0644\u0623\u0633\u0641\u0644"
+    gloss: 0
+    tier: 0
+  - key: window.minimize
+    text: "\u062A\u0635\u063A\u064A\u0631"
+    gloss: 0
+    tier: 0
+  - key: window.maximize
+    text: "\u062A\u0643\u0628\u064A\u0631"
+    gloss: 0
+    tier: 0
+  - key: window.close
+    text: "\u0625\u063A\u0644\u0627\u0642"
+    gloss: 0
+    tier: 0
+  - key: window.internet
+    text: "\u0627\u0644\u0625\u0646\u062A\u0631\u0646\u062A"
+    gloss: 0
+    tier: 0
+  - key: window.notes
+    text: "\u0645\u0644\u0627\u062D\u0638\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: browser.back
+    text: "\u0631\u062C\u0648\u0639"
+    gloss: 0
+    tier: 0
+  - key: browser.forward
+    text: "\u062A\u0642\u062F\u0645"
+    gloss: 0
+    tier: 0
+  - key: browser.home
+    text: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: browser.go
+    text: "\u0627\u0630\u0647\u0628"
+    gloss: 0
+    tier: 0
+  - key: browser.address
+    text: "\u0627\u0643\u062A\u0628 \u0627\u0633\u0645 \u0627\u0644\u0645\u0648\u0642\u0639
+      \u0623\u0648 \u0639\u0646\u0648\u0627\u0646\u0647"
+    gloss: 0
+    tier: 0
+  - key: browser.search
+    text: "\u0628\u062D\u062B \u0628\u0627\u0644\u0623\u0633\u0645\u0627\u0621"
+    gloss: 0
+    tier: 0
+  - key: browser.searchButton
+    text: "\u0628\u062D\u062B"
+    gloss: 0
+    tier: 0
+  - key: site.portal.title
+    text: "\u0635\u0641\u062D\u0629 \u0627\u0644\u0628\u062F\u0627\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: site.portal.masthead
+    text: "\u0643\u0631\u0648\u0646\u062A"
+    gloss: 0
+    tier: 0
+  - key: site.portal.intro
+    text: "\u0645\u0648\u0627\u0642\u0639 \u0634\u0628\u0643\u0629 \u0627\u0644\u062C\u0645\u0627\u0631\u0643
+      \u0627\u0644\u0632\u0645\u0646\u064A\u0629. \u0627\u062E\u062A\u0631 \u0648\u0627\u062D\u062F\u0627,
+      \u0623\u0648 \u0627\u0643\u062A\u0628 \u0627\u0633\u0645\u0647 \u0641\u064A
+      \u062D\u0642\u0644 \u0627\u0644\u0639\u0646\u0648\u0627\u0646."
+    gloss: 0
+    tier: 0
+  - key: site.notFound.title
+    text: "\u0627\u0644\u0635\u0641\u062D\u0629 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: site.notFound.body
+    text: "\u0644\u0627 \u0634\u064A\u0621 \u0645\u062D\u0641\u0648\u0638 \u0641\u064A
+      {0}."
+    gloss: 0
+    tier: 0
+  - key: site.home
+    text: "\u0627\u0644\u0639\u0648\u062F\u0629 \u0625\u0644\u0649 \u0635\u0641\u062D\u0629
+      \u0627\u0644\u0628\u062F\u0627\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: site.news.masthead
+    text: "{0} \xB7 \u0627\u0644\u0637\u0628\u0639\u0629 \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A\u0629
+      \xB7 \u0627\u0644\u064A\u0648\u0645 {1}"
+    gloss: 0
+    tier: 0
+  - key: site.news.issueTitle
+    text: "{0}, \u0627\u0644\u064A\u0648\u0645 {1}"
+    gloss: 0
+    tier: 0
+  - key: site.news.backIssue
+    text: "\u0639\u062F\u062F \u0633\u0627\u0628\u0642: \u0635\u062D\u064A\u0641\u0629
+      \u0627\u0644\u064A\u0648\u0645 {0}."
+    gloss: 0
+    tier: 0
+  - key: site.news.world
+    text: "\u0627\u0644\u0639\u0627\u0644\u0645"
+    gloss: 0
+    tier: 0
+  - key: site.news.desk
+    text: "\u0645\u0646 Desk 3"
+    gloss: 0
+    tier: 0
+  - key: site.news.notices
+    text: "\u0625\u0639\u0644\u0627\u0646\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: site.news.noNotices
+    text: "\u0644\u0627 \u0625\u0639\u0644\u0627\u0646\u0627\u062A."
+    gloss: 0
+    tier: 0
+  - key: site.news.standings
+    text: "\u062A\u0631\u062A\u064A\u0628 \u0627\u0644\u062E\u0637 \u0627\u0644\u0632\u0645\u0646\u064A"
+    gloss: 0
+    tier: 0
+  - key: site.news.noStandings
+    text: "\u0644\u0627 \u062A\u0631\u062A\u064A\u0628 \u0628\u0639\u062F."
+    gloss: 0
+    tier: 0
+  - key: site.news.archive
+    text: "\u0627\u0644\u0623\u0631\u0634\u064A\u0641"
+    gloss: 0
+    tier: 0
+  - key: site.news.issueLink
+    text: "\u0627\u0644\u064A\u0648\u0645 {0}"
+    gloss: 0
+    tier: 0
+  - key: site.news.allIssues
+    text: "\u0643\u0644 \u0627\u0644\u0623\u0639\u062F\u0627\u062F \u0627\u0644\u0633\u0627\u0628\u0642\u0629"
+    gloss: 0
+    tier: 0
+  - key: site.news.today
+    text: "\u0637\u0628\u0639\u0629 \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: site.news.archiveTitle
+    text: "\u0627\u0644\u0623\u0639\u062F\u0627\u062F \u0627\u0644\u0633\u0627\u0628\u0642\u0629"
+    gloss: 0
+    tier: 0
+  - key: site.news.archiveRow
+    text: "\u0627\u0644\u064A\u0648\u0645 {0}: {1}"
+    gloss: 0
+    tier: 0
+  - key: site.news.noBackIssues
+    text: "\u0644\u0627 \u0623\u0639\u062F\u0627\u062F \u0633\u0627\u0628\u0642\u0629
+      \u0628\u0639\u062F."
+    gloss: 0
+    tier: 0
+  - key: site.news.quiet
+    text: "\u064A\u0648\u0645 \u0647\u0627\u062F\u0626 \u0639\u0644\u0649 \u0627\u0644\u062E\u0637
+      \u0627\u0644\u0632\u0645\u0646\u064A."
+    gloss: 0
+    tier: 0
+  - key: site.history.intro
+    text: "\u0643\u0644 \u0628\u0644\u062F \u0641\u064A \u0643\u0644 \u062D\u0642\u0628\u0629,
+      \u0643\u0645\u0627 \u064A\u0642\u0641 \u0627\u0644\u062A\u0627\u0631\u064A\u062E
+      \u0627\u0644\u064A\u0648\u0645. \u0627\u0644\u062D\u0642\u064A\u0642\u0629
+      \u0627\u0644\u0645\u0639\u062F\u0644\u0629 \u062A\u0630\u0643\u0631 \u0645\u062A\u0649
+      \u062A\u063A\u064A\u0631\u062A \u0648\u0645\u0627\u0630\u0627 \u0643\u0627\u0646\u062A."
+    gloss: 0
+    tier: 0
+  - key: site.history.present
+    text: "\u0627\u0644\u062D\u0627\u0636\u0631"
+    gloss: 0
+    tier: 0
+  - key: site.history.revisions
+    text: "\u0627\u0644\u062A\u0639\u062F\u064A\u0644\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: site.history.country
+    text: "\u0627\u0644\u0628\u0644\u062F"
+    gloss: 0
+    tier: 0
+  - key: site.history.presentNote
+    text: "\u0647\u0630\u0627 \u0647\u0648 \u0627\u0644\u062D\u0627\u0636\u0631:
+      \u0627\u0644\u0645\u0633\u062A\u0642\u0628\u0644 \u0645\u0644\u0643 \u0644\u0634\u0639\u0628\u0647."
+    gloss: 0
+    tier: 0
+  - key: site.history.revised
+    text: "\u0639\u062F\u0644 \u0641\u064A \u0627\u0644\u064A\u0648\u0645 {0} (\u0643\u0627\u0646
+      {1})"
+    gloss: 0
+    tier: 0
+  - key: site.history.people
+    text: "\u0623\u0647\u0644 {0} \u0641\u064A \u0623\u0631\u0634\u064A\u0641 \u0627\u0644\u0623\u0646\u0633\u0627\u0628"
+    gloss: 0
+    tier: 0
+  - key: site.history.index
+    text: "\u0641\u0647\u0631\u0633 \u0627\u0644\u0623\u0645\u0627\u0643\u0646"
+    gloss: 0
+    tier: 0
+  - key: site.history.presentNone
+    text: "\u0644\u0627 \u0642\u0648\u0629 \u062A\u0645\u0644\u0643 \u0627\u0644\u0645\u0633\u062A\u0642\u0628\u0644.
+      \u0627\u0644\u062D\u0627\u0636\u0631 \u0645\u0636\u0637\u0631\u0628 \u062D\u062A\u0649
+      \u062A\u0646\u0647\u0636 \u0625\u062D\u062F\u0627\u0647\u0627."
+    gloss: 0
+    tier: 0
+  - key: site.history.today
+    text: "2150 \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: site.history.whyCarry
+    text: "\u0645\u0646\u0642\u0648\u0644 \u0645\u0646 {0}"
+    gloss: 0
+    tier: 0
+  - key: site.history.whyPending
+    text: "\u0645\u0646\u0642\u0648\u0644 \u0645\u0646 {0} (\u0645\u0639\u0644\u0642)"
+    gloss: 0
+    tier: 0
+  - key: site.history.noRevisions
+    text: "\u0644\u0645 \u064A\u062A\u063A\u064A\u0631 \u0627\u0644\u062A\u0627\u0631\u064A\u062E
+      \u0628\u0639\u062F."
+    gloss: 0
+    tier: 0
+  - key: site.history.col.day
+    text: "\u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: site.history.col.place
+    text: "\u0627\u0644\u0645\u0643\u0627\u0646"
+    gloss: 0
+    tier: 0
+  - key: site.history.col.fact
+    text: "\u0627\u0644\u062D\u0642\u064A\u0642\u0629"
+    gloss: 0
+    tier: 0
+  - key: site.history.col.before
+    text: "\u0642\u0628\u0644"
+    gloss: 0
+    tier: 0
+  - key: site.history.col.after
+    text: "\u0628\u0639\u062F"
+    gloss: 0
+    tier: 0
+  - key: site.history.col.why
+    text: "\u0627\u0644\u0633\u0628\u0628"
+    gloss: 0
+    tier: 0
+  - key: site.history.changed
+    text: "\u062A\u063A\u064A\u0631 \u0639\u0646\u062F Desk 3"
+    gloss: 0
+    tier: 0
+  - key: site.history.changedRow
+    text: "\u0627\u0644\u064A\u0648\u0645 {0}, {1}: {2} \u0635\u0627\u0631 \u0627\u0644\u0622\u0646
+      {3} ({4})"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.intro
+    text: "\u0633\u062C\u0644\u0627\u062A \u0645\u0648\u0627\u0637\u0646\u064A \u0627\u0644\u0645\u0627\u0636\u064A.
+      \u0627\u0628\u062D\u062B \u0628\u0627\u0644\u0627\u0633\u0645, \u0623\u0648
+      \u0627\u062E\u062A\u0631 \u0628\u0644\u062F\u0627 \u0648\u062D\u0642\u0628\u0629."
+    gloss: 0
+    tier: 0
+  - key: site.lineage.country
+    text: "\u0627\u0644\u0628\u0644\u062F"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.era
+    text: "\u0627\u0644\u062D\u0642\u0628\u0629"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.all
+    text: "\u0627\u0644\u0643\u0644"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.count
+    text: "{0} \u0633\u062C\u0644"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.hits
+    text: "{0} \u0633\u062C\u0644 \u064A\u0637\u0627\u0628\u0642 \"{1}\""
+    gloss: 0
+    tier: 0
+  - key: site.lineage.noHits
+    text: "\u0644\u0627 \u0633\u062C\u0644 \u064A\u0637\u0627\u0628\u0642."
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.name
+    text: "\u0627\u0644\u0627\u0633\u0645"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.born
+    text: "\u0627\u0644\u0645\u064A\u0644\u0627\u062F"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.place
+    text: "\u0627\u0644\u0645\u0643\u0627\u0646"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.name
+    text: "\u0627\u0644\u0627\u0633\u0645"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.born
+    text: "\u0627\u0644\u0645\u064A\u0644\u0627\u062F"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.died
+    text: "\u0627\u0644\u0648\u0641\u0627\u0629"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.place
+    text: "\u0627\u0644\u0645\u0643\u0627\u0646"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.note
+    text: "\u0627\u0644\u0645\u0647\u0646\u0629 / \u0645\u0644\u0627\u062D\u0638\u0629"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.unknown
+    text: "\u0645\u062C\u0647\u0648\u0644"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.relations
+    text: "\u0627\u0644\u0623\u0642\u0627\u0631\u0628"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.back
+    text: "\u0627\u0644\u0639\u0648\u062F\u0629 \u0625\u0644\u0649 \u0627\u0644\u0628\u062D\u062B"
+    gloss: 0
+    tier: 0
+  - key: ending.world.leftBehind
+    text: "\u0627\u0644\u0639\u0627\u0644\u0645 \u0627\u0644\u0630\u064A \u062A\u062A\u0631\u0643\u0647
+      \u062E\u0644\u0641\u0643"
+    gloss: 0
+    tier: 0
+  - key: settings.language
+    text: "\u0627\u0644\u0644\u063A\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.followHistory
+    text: "\u0627\u062A\u0628\u0639 \u0627\u0644\u062A\u0627\u0631\u064A\u062E"
+    gloss: 0
+    tier: 0
+  - key: settings.alwaysEnglish
+    text: "\u0627\u0644\u0625\u0646\u062C\u0644\u064A\u0632\u064A\u0629 \u062F\u0627\u0626\u0645\u0627"
+    gloss: 0
+    tier: 0
+  - key: settings.languageLocked
+    text: "\u0645\u0642\u0641\u0644\u0629 \u0645\u0646\u0630 \u0627\u0644\u064A\u0648\u0645
+      {0}: \u0627\u0644\u0645\u0643\u062A\u0628 \u064A\u0642\u0631\u0623 \u0644\u063A\u0629
+      \u0627\u0644\u0639\u0627\u0644\u0645 \u0627\u0644\u0622\u0646. \u0645\u0631\u0631
+      \u0627\u0644\u0645\u0624\u0634\u0631 \u0641\u0648\u0642 \u0643\u0644\u0645\u0629
+      \u0644\u062A\u0631\u062C\u0645\u062A\u0647\u0627 (\u0639\u062F\u0633\u0629
+      \u0627\u0644\u062A\u0631\u062C\u0645\u0629)."
+    gloss: 0
+    tier: 0
+  - key: settings.motion
+    text: "\u0627\u0644\u062D\u0631\u0643\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.motionFull
+    text: "\u0643\u0627\u0645\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.motionReduced
+    text: "\u0645\u062E\u0641\u0641\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.motionIntensity
+    text: "\u0627\u0644\u0634\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.desktop
+    text: "\u0641\u062A\u062D \u0623\u064A\u0642\u0648\u0646\u0627\u062A \u0633\u0637\u062D
+      \u0627\u0644\u0645\u0643\u062A\u0628 \u0628\u0648\u0627\u0633\u0637\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.iconDouble
+    text: "\u0646\u0642\u0631\u0629 \u0645\u0632\u062F\u0648\u062C\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.iconSingle
+    text: "\u0646\u0642\u0631\u0629 \u0648\u0627\u062D\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.resetIcons
+    text: "\u0625\u0639\u0627\u062F\u0629 \u0636\u0628\u0637 \u0645\u0648\u0627\u0636\u0639
+      \u0627\u0644\u0623\u064A\u0642\u0648\u0646\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: desktop.arrange
+    text: "\u062A\u0631\u062A\u064A\u0628 \u0627\u0644\u0623\u064A\u0642\u0648\u0646\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: menu.open
+    text: "\u0641\u062A\u062D"
+    gloss: 0
+    tier: 0
+  - key: settings.note
+    text: "\u0627\u0644\u0623\u0644\u0648\u0627\u0646 \u0648\u0627\u0644\u062E\u0637\u0648\u0637
+      \u0648\u0627\u0644\u062E\u0644\u0641\u064A\u0629 \u062A\u062A\u0628\u0639 \u0627\u0644\u062A\u0627\u0631\u064A\u062E
+      \u062F\u0627\u0626\u0645\u0627. \u062A\u063A\u064A\u064A\u0631 \u0627\u0644\u0644\u063A\u0629
+      \u064A\u0633\u0631\u064A \u0641\u064A \u0627\u0644\u0645\u0631\u0629 \u0627\u0644\u0642\u0627\u062F\u0645\u0629
+      \u0627\u0644\u062A\u064A \u064A\u0641\u062A\u062D \u0641\u064A\u0647\u0627
+      \u0627\u0644\u0645\u0643\u062A\u0628. \u0627\u0644\u062D\u0631\u0643\u0629
+      \u0627\u0644\u0645\u062E\u0641\u0641\u0629 \u062A\u0639\u0631\u0636 \u0627\u0644\u062A\u0631\u062C\u0645\u0627\u062A
+      \u0641\u0648\u0631\u0627."
+    gloss: 0
+    tier: 0
+  - key: startmenu.mail
+    text: "\u0627\u0644\u0628\u0631\u064A\u062F"
+    gloss: 0
+    tier: 0
+  - key: startmenu.mailUnread
+    text: "\u0627\u0644\u0628\u0631\u064A\u062F ({0})"
+    gloss: 0
+    tier: 0
+  - key: startmenu.account
+    text: "\u062D\u0633\u0627\u0628 \u0627\u0644\u0645\u0648\u0627\u0637\u0646"
+    gloss: 0
+    tier: 0
+  - key: startmenu.notes
+    text: "\u0645\u0644\u0627\u062D\u0638\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: window.mail
+    text: "\u0627\u0644\u0628\u0631\u064A\u062F"
+    gloss: 0
+    tier: 0
+  - key: window.mailUnread
+    text: "\u0627\u0644\u0628\u0631\u064A\u062F ({0} \u063A\u064A\u0631 \u0645\u0642\u0631\u0648\u0621\u0629)"
+    gloss: 0
+    tier: 0
+  - key: window.account
+    text: "\u062D\u0633\u0627\u0628 \u0627\u0644\u0645\u0648\u0627\u0637\u0646"
+    gloss: 0
+    tier: 0
+  - key: window.shortcuts
+    text: "\u0627\u062E\u062A\u0635\u0627\u0631\u0627\u062A \u0644\u0648\u062D\u0629
+      \u0627\u0644\u0645\u0641\u0627\u062A\u064A\u062D"
+    gloss: 0
+    tier: 0
+  - key: settings.keyboard
+    text: "\u0644\u0648\u062D\u0629 \u0627\u0644\u0645\u0641\u0627\u062A\u064A\u062D"
+    gloss: 0
+    tier: 0
+  - key: settings.showShortcuts
+    text: "\u0639\u0631\u0636 \u0627\u0644\u0627\u062E\u062A\u0635\u0627\u0631\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: keys.focusSearch
+    text: "\u0627\u0641\u062A\u062D \u062F\u0631\u062C \u0627\u0644\u0628\u062D\u062B
+      \u0641\u064A \u062A\u0637\u0628\u064A\u0642 \u0627\u0644\u062A\u062D\u0642\u064A\u0642"
+    gloss: 0
+    tier: 0
+  - key: keys.intoResults
+    text: "\u0645\u0646 \u062D\u0642\u0644 \u0627\u0644\u0628\u062D\u062B \u0625\u0644\u0649
+      \u0646\u062A\u0627\u0626\u062C\u0647: \u0627\u0644\u0623\u0633\u0647\u0645
+      \u062A\u062A\u0646\u0642\u0644 \u0628\u064A\u0646 \u0627\u0644\u0646\u062A\u0627\u0626\u062C,
+      \u0648 Enter \u064A\u0641\u062A\u062D \u0625\u062D\u062F\u0627\u0647\u0627"
+    gloss: 0
+    tier: 0
+  - key: keys.escape
+    text: "\u0627\u0644\u0646\u0642\u0631 \u0627\u0644\u0623\u064A\u0645\u0646 \u0623\u0648
+      Esc: \u0623\u063A\u0644\u0642 \u0642\u0627\u0626\u0645\u0629 \u0623\u0648 \u0647\u0630\u0647
+      \u0627\u0644\u0628\u0637\u0627\u0642\u0629 \u0623\u0648 \u062F\u0631\u062C
+      \u0627\u0644\u0628\u062D\u062B, \u0627\u0645\u0633\u062D \u0627\u0644\u0628\u062D\u062B,
+      \u0627\u062E\u0631\u062C \u0645\u0646 \u062D\u0642\u0644 \u0646\u0635, \u0623\u0641\u0644\u062A
+      \u0642\u064A\u0645\u0629 \u0645\u0645\u0633\u0648\u0643\u0629, \u0623\u063A\u0644\u0642
+      \u0627\u0644\u0642\u0627\u0626\u0645\u0629 \u0623\u0648 \u0623\u0644\u063A
+      \u0627\u0644\u0633\u062D\u0628. \u0648\u0625\u0646 \u0644\u0645 \u064A\u0643\u0646
+      \u0634\u064A\u0621 \u0645\u0646 \u0630\u0644\u0643, \u0639\u062F \u0625\u0644\u0649
+      \u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: keys.help
+    text: "\u0625\u0638\u0647\u0627\u0631 \u0647\u0630\u0647 \u0627\u0644\u0628\u0637\u0627\u0642\u0629
+      \u0623\u0648 \u0625\u062E\u0641\u0627\u0624\u0647\u0627"
+    gloss: 0
+    tier: 0
+  - key: keys.openIcon
+    text: "\u0633\u0637\u062D \u0627\u0644\u0645\u0643\u062A\u0628: \u0627\u0641\u062A\u062D
+      \u0627\u0644\u0623\u064A\u0642\u0648\u0646\u0629 \u0627\u0644\u0645\u062D\u062F\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: keys.icons
+    text: "\u0633\u0637\u062D \u0627\u0644\u0645\u0643\u062A\u0628: \u062D\u062F\u062F
+      \u0623\u0642\u0631\u0628 \u0623\u064A\u0642\u0648\u0646\u0629 \u0641\u064A
+      \u0630\u0644\u0643 \u0627\u0644\u0627\u062A\u062C\u0627\u0647"
+    gloss: 0
+    tier: 0
+  - key: keys.orders
+    text: "\u0627\u0644\u0637\u0644\u0628\u0627\u062A: \u062A\u0646\u0642\u0644 \u0641\u064A
+      \u0627\u0644\u0634\u062C\u0631\u0629 (\u0625\u0644\u0649 \u0645\u062A\u0637\u0644\u0628
+      \u0633\u0627\u0628\u0642, \u0623\u0648 \u062A\u0627\u0628\u0639, \u0623\u0648
+      \u0635\u0639\u0648\u062F\u0627 \u0648\u0646\u0632\u0648\u0644\u0627 \u0641\u064A
+      \u0639\u0645\u0648\u062F)"
+    gloss: 0
+    tier: 0
+  - key: keys.ordersAct
+    text: "\u0627\u0644\u0637\u0644\u0628\u0627\u062A: \u0627\u0637\u0644\u0628 \u0627\u0644\u0639\u0646\u0635\u0631
+      \u0627\u0644\u0645\u062D\u062F\u062F \u0623\u0648 \u0623\u0644\u063A\u0647
+      \u0623\u0648 \u0631\u0643\u0628\u0647"
+    gloss: 0
+    tier: 0
+  - key: keys.step
+    text: "\u0627\u0644\u062A\u062D\u0642\u064A\u0642: \u0627\u0639\u0631\u0636 \u0648\u062B\u0627\u0626\u0642
+      \u0627\u0644\u062E\u0637\u0648\u0627\u062A 1 \u0625\u0644\u0649 4 (\u0627\u0644\u0623\u0648\u0631\u0627\u0642,
+      \u0627\u0644\u0633\u062C\u0644\u0627\u062A, \u0627\u0644\u0643\u062A\u0628,
+      \u0627\u0644\u0642\u0648\u0627\u0639\u062F)"
+    gloss: 0
+    tier: 0
+  - key: keys.nextStep
+    text: "\u0627\u0644\u062A\u062D\u0642\u064A\u0642: \u0627\u0639\u0631\u0636 \u0648\u062B\u0627\u0626\u0642
+      \u0627\u0644\u062E\u0637\u0648\u0629 \u0627\u0644\u062A\u0627\u0644\u064A\u0629
+      \u0623\u0648 \u0627\u0644\u0633\u0627\u0628\u0642\u0629"
+    gloss: 0
+    tier: 0
+  - key: keys.findings
+    text: "\u0625\u0638\u0647\u0627\u0631 \u0639\u0645\u0648\u062F \u0627\u0644\u0646\u062A\u0627\u0626\u062C
+      \u0623\u0648 \u0625\u062E\u0641\u0627\u0624\u0647"
+    gloss: 0
+    tier: 0
+  - key: keys.otherPane
+    text: "\u0627\u062C\u0639\u0644 \u0627\u0644\u062C\u0647\u0629 \u0627\u0644\u0623\u062E\u0631\u0649
+      \u0647\u064A \u0627\u0644\u062A\u064A \u064A\u0641\u062A\u062D \u0641\u064A\u0647\u0627
+      \u0627\u0644\u0631\u0641"
+    gloss: 0
+    tier: 0
+  - key: keys.split
+    text: "\u0644\u0648\u062D\u0627\u0646 \u0623\u0648 \u0644\u0648\u062D \u0648\u0627\u062D\u062F"
+    gloss: 0
+    tier: 0
+  - key: keys.history
+    text: "\u0631\u062C\u0648\u0639 \u0623\u0648 \u062A\u0642\u062F\u0645 \u0641\u064A
+      \u0627\u0644\u0644\u0648\u062D \u0627\u0644\u0630\u064A \u064A\u0641\u062A\u062D
+      \u0641\u064A\u0647 \u0627\u0644\u0631\u0641"
+    gloss: 0
+    tier: 0
+  - key: keys.regions
+    text: "\u0627\u0644\u062C\u0632\u0621 \u0627\u0644\u062A\u0627\u0644\u064A \u0623\u0648
+      \u0627\u0644\u0633\u0627\u0628\u0642 \u0645\u0646 \u0627\u0644\u062A\u0637\u0628\u064A\u0642:
+      \u0634\u0631\u064A\u0637 \u0627\u0644\u0642\u0648\u0627\u0626\u0645, \u0627\u0644\u0623\u0644\u0648\u0627\u062D,
+      \u0627\u0644\u0646\u062A\u0627\u0626\u062C, \u0627\u0644\u0625\u0644\u063A\u0627\u0621"
+    gloss: 0
+    tier: 0
+  - key: keys.rows
+    text: "\u0627\u0646\u0642\u0644 \u0627\u0644\u062A\u0631\u0643\u064A\u0632 \u0628\u064A\u0646
+      \u0627\u0644\u0642\u064A\u0645 \u0648\u0627\u0644\u0634\u0627\u0631\u0627\u062A
+      \u0648\u0627\u0644\u0646\u062A\u0627\u0626\u062C \u0648\u0627\u0644\u062F\u0628\u0627\u0628\u064A\u0633
+      \u0648\u0627\u0644\u0623\u0632\u0631\u0627\u0631"
+    gloss: 0
+    tier: 0
+  - key: keys.follow
+    text: "\u0627\u0641\u062A\u062D \u0627\u0644\u0639\u0646\u0635\u0631 \u0627\u0644\u0645\u062D\u062F\u062F,
+      \u0623\u0648 \u0627\u062A\u0628\u0639 \u0631\u0627\u0628\u0637 \u0627\u0644\u0642\u064A\u0645\u0629"
+    gloss: 0
+    tier: 0
+  - key: keys.followOther
+    text: "\u0627\u062A\u0628\u0639 \u0631\u0627\u0628\u0637 \u0627\u0644\u0642\u064A\u0645\u0629,
+      \u0623\u0648 \u0627\u0641\u062A\u062D \u0646\u062A\u064A\u062C\u0629 \u0627\u0644\u0628\u062D\u062B
+      \u0627\u0644\u0645\u062D\u062F\u062F\u0629, \u0641\u064A \u0627\u0644\u062C\u0647\u0629
+      \u0627\u0644\u0623\u062E\u0631\u0649"
+    gloss: 0
+    tier: 0
+  - key: keys.pick
+    text: "\u0627\u0645\u0633\u0643 \u0627\u0644\u0642\u064A\u0645\u0629 \u0627\u0644\u0645\u062D\u062F\u062F\u0629,
+      \u062B\u0645 \u0642\u0627\u0631\u0646\u0647\u0627 \u0628\u0627\u0644\u062A\u0627\u0644\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: keys.copy
+    text: "\u0627\u0646\u0633\u062E \u0627\u0644\u0642\u064A\u0645\u0629 \u0627\u0644\u0645\u062D\u062F\u062F\u0629,
+      \u0623\u0648 \"\u0627\u0644\u062A\u0633\u0645\u064A\u0629: \u0627\u0644\u0642\u064A\u0645\u0629\""
+    gloss: 0
+    tier: 0
+  - key: keys.paste
+    text: "\u0627\u0644\u0645\u0644\u0627\u062D\u0638\u0627\u062A: \u0627\u0644\u0635\u0642
+      \u0627\u0644\u0642\u064A\u0645\u0629 \u0627\u0644\u0645\u0646\u0633\u0648\u062E\u0629
+      \u0643\u0642\u0635\u0627\u0635\u0629 (\u062D\u0642\u0644 \u0627\u0644\u0646\u0635
+      \u064A\u0644\u0635\u0642 \u0643\u0627\u0644\u0645\u0639\u062A\u0627\u062F)"
+    gloss: 0
+    tier: 0
+  - key: keys.pin
+    text: "\u062B\u0628\u062A \u0627\u0644\u0642\u064A\u0645\u0629 \u0627\u0644\u0645\u062D\u062F\u062F\u0629
+      \u0623\u0648 \u0623\u0644\u063A \u062A\u062B\u0628\u064A\u062A\u0647\u0627,
+      \u0623\u0648 \u0648\u062B\u064A\u0642\u0629 \u0627\u0644\u0644\u0648\u062D"
+    gloss: 0
+    tier: 0
+  - key: keys.zoom
+    text: "\u0643\u0628\u0631 \u0627\u0644\u0623\u0644\u0648\u0627\u062D \u0623\u0648
+      \u0635\u063A\u0631\u0647\u0627 \u0623\u0648 \u0623\u0639\u062F\u0647\u0627
+      \u0625\u0644\u0649 \u062D\u062C\u0645 \u0627\u0644\u0646\u0635 \u0641\u064A
+      \u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A (\u0634\u062C\u0631\u0629
+      \u0627\u0644\u0637\u0644\u0628\u0627\u062A: \u062A\u0643\u0628\u064A\u0631,
+      \u062A\u0635\u063A\u064A\u0631, \u0623\u0648 \u0627\u0644\u0639\u0648\u062F\u0629
+      \u0625\u0644\u0649 100 %)"
+    gloss: 0
+    tier: 0
+  - key: keys.contextMenu
+    text: "\u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u0633\u064A\u0627\u0642 \u0644\u0644\u0635\u0641
+      \u0627\u0644\u0645\u062D\u062F\u062F \u0623\u0648 \u0627\u0644\u0623\u064A\u0642\u0648\u0646\u0629
+      \u0627\u0644\u0645\u062D\u062F\u062F\u0629 (\u0646\u0633\u062E, \u062A\u062B\u0628\u064A\u062A,
+      \u0627\u062E\u062A\u064A\u0627\u0631, \u0641\u062A\u062D, \u062A\u0631\u062A\u064A\u0628)"
+    gloss: 0
+    tier: 0
+  - key: keys.section.desk
+    text: "\u0639\u0646\u062F \u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: keys.section.pc
+    text: "\u0639\u0644\u0649 \u0627\u0644\u062D\u0627\u0633\u0648\u0628"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.drag
+    text: "\u062D\u0631\u0643 \u0648\u062B\u064A\u0642\u0629 \u0623\u0648 \u062E\u062A\u0645\u0627:
+      \u0639\u0644\u0649 \u0627\u0644\u0637\u0627\u0648\u0644\u0629 \u062A\u0643\u0648\u0646
+      \u0627\u0644\u0648\u062B\u064A\u0642\u0629 \u0635\u063A\u064A\u0631\u0629,
+      \u0648\u0639\u0644\u0649 \u0627\u0644\u0645\u0643\u062A\u0628 \u0628\u062D\u062C\u0645\u0647\u0627
+      \u0627\u0644\u0643\u0627\u0645\u0644. \u0628\u0639\u062F \u062E\u062A\u0645
+      \u0627\u0644\u062C\u0648\u0627\u0632, \u0648\u0631\u0642\u0629 \u062A\u0633\u0642\u0637\u0647\u0627
+      \u0639\u0644\u0649 \u0627\u0644\u0637\u0627\u0648\u0644\u0629 \u062A\u0639\u064A\u062F
+      \u0627\u0644\u0623\u0648\u0631\u0627\u0642"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.inspect
+    text: "\u0648\u0636\u0639 \u0627\u0644\u0641\u062D\u0635 (\u0627\u0644\u0632\u0631
+      \u0627\u0644\u0623\u062D\u0645\u0631): \u0627\u0646\u0642\u0631 \u0634\u064A\u0626\u064A\u0646
+      \u0644\u0645\u0642\u0627\u0631\u0646\u062A\u0647\u0645\u0627"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.stamps
+    text: "\u0634\u0631\u064A\u0637 \u0627\u0644\u0623\u062E\u062A\u0627\u0645 (\u0627\u0644\u0644\u0633\u0627\u0646
+      \u0627\u0644\u0631\u0645\u0627\u062F\u064A \u0639\u0644\u0649 \u0627\u0644\u064A\u0645\u064A\u0646):
+      \u0627\u0633\u062D\u0628 \u062E\u062A\u0645\u0627 \u0625\u0644\u0649 \u0627\u0644\u062C\u0648\u0627\u0632
+      \u0648\u0623\u0641\u0644\u062A\u0647"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.pc
+    text: "\u0625\u0644\u0649 \u0627\u0644\u062D\u0627\u0633\u0648\u0628 \u0648\u0627\u0644\u0639\u0648\u062F\u0629
+      (\u0627\u0644\u0644\u0633\u0627\u0646 \u0627\u0644\u0631\u0645\u0627\u062F\u064A
+      \u0639\u0644\u0649 \u0627\u0644\u064A\u0633\u0627\u0631)"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.back
+    text: "\u062A\u0631\u0627\u062C\u0639: \u0627\u0644\u0633\u062D\u0628, \u0627\u0644\u0639\u062C\u0644\u0629,
+      \u0627\u0644\u062D\u0627\u0633\u0648\u0628, \u0627\u0644\u0642\u064A\u0645\u0629
+      \u0627\u0644\u0645\u0645\u0633\u0648\u0643\u0629, \u0648\u0636\u0639 \u0627\u0644\u0641\u062D\u0635,
+      \u0634\u0631\u064A\u0637 \u0627\u0644\u0623\u062E\u062A\u0627\u0645, \u0627\u0644\u0645\u062F\u064A\u0646\u0629,
+      \u0639\u0631\u0636 \u0627\u0644\u0642\u0631\u0627\u0621\u0629"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.city
+    text: "\u0627\u0646\u0638\u0631 \u0625\u0644\u0649 \u0627\u0644\u0645\u062F\u064A\u0646\u0629,
+      \u062B\u0645 \u0639\u062F"
+    gloss: 0
+    tier: 0
+  - key: app.copied
+    text: "\u0646\u0633\u062E: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.row.line
+    text: "{0} \xB7 \u0627\u0644\u0633\u0637\u0631 {1}"
+    gloss: 0
+    tier: 0
+  - key: app.item.record
+    text: "\u0633\u062C\u0644\u0627\u062A \u0627\u0644\u0645\u0648\u0627\u0637\u0646\u064A\u0646
+      \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: app.pins.full
+    text: "\u0623\u0644\u063A \u062A\u062B\u0628\u064A\u062A \u0634\u064A\u0621 \u0623\u0648\u0644\u0627:
+      \u0627\u0644\u062F\u0628\u0627\u0628\u064A\u0633 \u0645\u0645\u062A\u0644\u0626\u0629."
+    gloss: 0
+    tier: 0
+  - key: app.pins.empty
+    text: "Ctrl+P \u064A\u062B\u0628\u062A \u0627\u0644\u0642\u064A\u0645\u0629 \u0627\u0644\u062A\u064A
+      \u0623\u0646\u062A \u0639\u0644\u064A\u0647\u0627. \u0627\u0646\u0642\u0631
+      \u062F\u0628\u0648\u0633\u0627 \u0628\u0627\u0644\u0632\u0631 \u0627\u0644\u0623\u064A\u0645\u0646
+      \u0644\u0625\u0644\u063A\u0627\u0621 \u062A\u062B\u0628\u064A\u062A\u0647."
+    gloss: 0
+    tier: 0
+  - key: app.recent.empty
+    text: "\u062A\u0638\u0647\u0631 \u0647\u0646\u0627 \u0627\u0644\u0623\u0648\u0631\u0627\u0642
+      \u0648\u0627\u0644\u0643\u062A\u0628 \u0648\u0627\u0644\u0633\u062C\u0644\u0627\u062A
+      \u0627\u0644\u062A\u064A \u062A\u0641\u062A\u062D\u0647\u0627."
+    gloss: 0
+    tier: 0
+  - key: app.jump.gone
+    text: "\u0644\u0645 \u064A\u0639\u062F \u0647\u0630\u0627 \u0647\u0646\u0627."
+    gloss: 0
+    tier: 0
+  - key: search.chip
+    text: "{0} \xB7 \u063A\u064A\u0631 \u0645\u062A\u0631\u062C\u0645 {1}"
+    gloss: 0
+    tier: 0
+  - key: menu.copy
+    text: "\u0646\u0633\u062E \u0627\u0644\u0642\u064A\u0645\u0629"
+    gloss: 0
+    tier: 0
+  - key: menu.copyRow
+    text: "\u0646\u0633\u062E \u0627\u0644\u0635\u0641"
+    gloss: 0
+    tier: 0
+  - key: menu.pin
+    text: "\u062A\u062B\u0628\u064A\u062A"
+    gloss: 0
+    tier: 0
+  - key: menu.unpin
+    text: "\u0625\u0644\u063A\u0627\u0621 \u0627\u0644\u062A\u062B\u0628\u064A\u062A"
+    gloss: 0
+    tier: 0
+  - key: menu.pick
+    text: "\u0627\u062E\u062A\u0631 \u0644\u0644\u0645\u0642\u0627\u0631\u0646\u0629"
+    gloss: 0
+    tier: 0
+  - key: settings.investigation
+    text: "\u0627\u0644\u062A\u062D\u0642\u064A\u0642"
+    gloss: 0
+    tier: 0
+  - key: mail.inbox
+    text: "\u0627\u0644\u0648\u0627\u0631\u062F"
+    gloss: 0
+    tier: 0
+  - key: mail.none
+    text: "\u0644\u0627 \u0628\u0631\u064A\u062F."
+    gloss: 0
+    tier: 0
+  - key: mail.select
+    text: "\u0627\u062E\u062A\u0631 \u0631\u0633\u0627\u0644\u0629 \u0644\u0642\u0631\u0627\u0621\u062A\u0647\u0627."
+    gloss: 0
+    tier: 0
+  - key: mail.rowMeta
+    text: "\u0627\u0644\u064A\u0648\u0645 {0} \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: mail.to
+    text: "\u0643\u0644 \u0645\u0648\u0638\u0641\u064A \u0627\u0644\u0645\u0643\u0627\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: mail.from.directorate
+    text: "\u0645\u062F\u064A\u0631\u064A\u0629 \u0627\u0644\u062C\u0645\u0627\u0631\u0643"
+    gloss: 0
+    tier: 0
+  - key: mail.from.times
+    text: "\u0635\u062D\u064A\u0641\u0629 \u0627\u0644\u0632\u0645\u0646"
+    gloss: 0
+    tier: 0
+  - key: mail.from.integrity
+    text: "\u0645\u0643\u062A\u0628 \u0633\u0644\u0627\u0645\u0629 \u0627\u0644\u062E\u0637
+      \u0627\u0644\u0632\u0645\u0646\u064A"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.memo
+    text: "\u062A\u0648\u062C\u064A\u0647\u0627\u062A \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.times
+    text: "\u0635\u062D\u064A\u0641\u0629 \u0627\u0644\u0632\u0645\u0646, \u0627\u0644\u064A\u0648\u0645
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.citation
+    text: "\u0625\u0634\u0639\u0627\u0631 \u0645\u062E\u0627\u0644\u0641\u0629: \u0627\u0644\u0645\u0633\u0627\u0641\u0631
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: mail.body.noDirectives
+    text: "\u0644\u0627 \u062A\u0648\u062C\u064A\u0647\u0627\u062A \u0633\u0641\u0631
+      \u0627\u0644\u064A\u0648\u0645."
+    gloss: 0
+    tier: 0
+  - key: mail.body.times
+    text: "\u0637\u0628\u0639\u0629 \u0627\u0644\u064A\u0648\u0645 \u0639\u0644\u0649
+      \u0645\u0648\u0642\u0639 \u0627\u0644\u0623\u062E\u0628\u0627\u0631."
+    gloss: 0
+    tier: 0
+  - key: mail.body.timesArchived
+    text: "\u0647\u0630\u0647 \u0627\u0644\u0637\u0628\u0639\u0629 \u0645\u062D\u0641\u0648\u0638\u0629
+      \u0641\u064A \u0623\u0631\u0634\u064A\u0641 \u0645\u0648\u0642\u0639 \u0627\u0644\u0623\u062E\u0628\u0627\u0631."
+    gloss: 0
+    tier: 0
+  - key: mail.body.citation
+    text: "\u0646\u0633\u062E\u0629 \u0645\u0646 \u0642\u0633\u064A\u0645\u0629 \u0627\u0644\u0645\u062E\u0627\u0644\u0641\u0629
+      \u0627\u0644\u062A\u064A \u0627\u0637\u0644\u0639\u062A \u0639\u0644\u064A\u0647\u0627:"
+    gloss: 0
+    tier: 0
+  - key: mail.link.rules
+    text: "\u0627\u0641\u062A\u062D \u0627\u0644\u062A\u0648\u062C\u064A\u0647\u0627\u062A
+      >"
+    gloss: 0
+    tier: 0
+  - key: mail.link.news
+    text: "\u0627\u0642\u0631\u0623\u0647\u0627 \u0639\u0644\u0649 \u0645\u0648\u0642\u0639
+      \u0627\u0644\u0623\u062E\u0628\u0627\u0631 >"
+    gloss: 0
+    tier: 0
+  - key: account.form.title
+    text: "\u0645\u0633\u062A\u062E\u0631\u062C \u0633\u062C\u0644 \u0627\u0644\u0645\u0648\u0627\u0637\u0646"
+    gloss: 0
+    tier: 0
+  - key: account.query
+    text: "\u0635\u0627\u062D\u0628 \u0627\u0644\u062D\u0633\u0627\u0628: {0} \xB7
+      \u0631\u0642\u0645 \u0627\u0644\u0645\u0648\u0627\u0637\u0646 {1}"
+    gloss: 0
+    tier: 0
+  - key: account.group.records
+    text: "\u0627\u0644\u0633\u062C\u0644\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: account.group.forms
+    text: "\u0627\u0644\u0646\u0645\u0627\u0630\u062C \u0627\u0644\u0645\u062D\u0641\u0648\u0638\u0629"
+    gloss: 0
+    tier: 0
+  - key: account.group.travel
+    text: "\u0627\u0644\u0633\u0641\u0631"
+    gloss: 0
+    tier: 0
+  - key: account.row.name
+    text: "\u0627\u0644\u0627\u0633\u0645"
+    gloss: 0
+    tier: 0
+  - key: account.row.born
+    text: "\u0627\u0644\u0645\u064A\u0644\u0627\u062F"
+    gloss: 0
+    tier: 0
+  - key: account.row.lineage
+    text: "\u0627\u0644\u0646\u0633\u0628"
+    gloss: 0
+    tier: 0
+  - key: account.row.citizenId
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0645\u0648\u0627\u0637\u0646"
+    gloss: 0
+    tier: 0
+  - key: account.row.status
+    text: "\u0627\u0644\u062D\u0627\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: account.row.standing
+    text: "\u0627\u0644\u0648\u0636\u0639"
+    gloss: 0
+    tier: 0
+  - key: account.row.debt
+    text: "\u0627\u0644\u062F\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: account.row.balance
+    text: "\u0627\u0644\u0631\u0635\u064A\u062F"
+    gloss: 0
+    tier: 0
+  - key: account.row.employment
+    text: "\u0627\u0644\u0639\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: account.row.departure
+    text: "\u0645\u063A\u0627\u062F\u0631\u0629 \u0645\u062D\u062C\u0648\u0632\u0629"
+    gloss: 0
+    tier: 0
+  - key: account.row.note
+    text: "\u0645\u0644\u0627\u062D\u0638\u0629"
+    gloss: 0
+    tier: 0
+  - key: account.status.eligible
+    text: "\u0645\u0624\u0647\u0644"
+    gloss: 0
+    tier: 0
+  - key: account.status.standard
+    text: "\u0639\u0627\u062F\u064A"
+    gloss: 0
+    tier: 0
+  - key: account.standing.good
+    text: "\u062C\u064A\u062F"
+    gloss: 0
+    tier: 0
+  - key: account.standing.frozen
+    text: "\u0645\u062C\u0645\u062F"
+    gloss: 0
+    tier: 0
+  - key: account.departure.none
+    text: "\u0644\u0627 \u0634\u064A\u0621"
+    gloss: 0
+    tier: 0
+  - key: account.departure.booked
+    text: "\u0645\u063A\u0627\u062F\u0631\u0629 \u062A\u0633\u0648\u064A\u0629 \u062F\u064A\u0648\u0646,
+      \u0645\u062D\u062C\u0648\u0632\u0629"
+    gloss: 0
+    tier: 0
+  - key: account.instalmentRate
+    text: "{0}% \u0645\u0646 \u0627\u0644\u0623\u062C\u0631 \u0644\u062A\u0633\u0648\u064A\u0629
+      \u0627\u0644\u062F\u064A\u0648\u0646"
+    gloss: 0
+    tier: 0
+  - key: account.statement.none
+    text: "\u0644\u0627 \u0642\u064A\u0648\u062F \u0628\u0639\u062F: \u064A\u0643\u062A\u0628
+      \u0627\u0644\u064A\u0648\u0645 \u0639\u0646\u062F \u0627\u0646\u062A\u0647\u0627\u0621
+      \u0645\u0646\u0627\u0648\u0628\u062A\u0647."
+    gloss: 0
+    tier: 0
+  - key: account.statement.unit
+    text: "\u0627\u0644\u0645\u0628\u0627\u0644\u063A \u0628\u0639\u0645\u0644\u0629
+      {0}."
+    gloss: 0
+    tier: 0
+  - key: contract.title
+    text: "\u0639\u0642\u062F \u0639\u0645\u0644 \u062A\u0633\u0648\u064A\u0629 \u0627\u0644\u062F\u064A\u0648\u0646
+      \xB7 TC-520"
+    gloss: 0
+    tier: 0
+  - key: contract.row.worker
+    text: "\u0627\u0644\u0639\u0627\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: contract.row.citizenId
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0645\u0648\u0627\u0637\u0646"
+    gloss: 0
+    tier: 0
+  - key: contract.row.employer
+    text: "\u0635\u0627\u062D\u0628 \u0627\u0644\u0639\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: contract.row.worksite
+    text: "\u0645\u0648\u0642\u0639 \u0627\u0644\u0639\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: contract.row.term
+    text: "\u0627\u0644\u0645\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: contract.row.wage
+    text: "\u0627\u0644\u0623\u062C\u0631 \u0627\u0644\u064A\u0648\u0645\u064A"
+    gloss: 0
+    tier: 0
+  - key: contract.term
+    text: "{0:N0} \u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: notes.days
+    text: "\u0627\u0644\u0623\u064A\u0627\u0645"
+    gloss: 0
+    tier: 0
+  - key: notes.day
+    text: "\u0627\u0644\u064A\u0648\u0645 {0}"
+    gloss: 0
+    tier: 0
+  - key: notes.today
+    text: "\u0627\u0644\u064A\u0648\u0645 {0} (\u0627\u0644\u062D\u0627\u0644\u064A)"
+    gloss: 0
+    tier: 0
+  - key: notes.pageTitle
+    text: "\u0645\u0644\u0627\u062D\u0638\u0627\u062A \xB7 \u0627\u0644\u064A\u0648\u0645
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: notes.clippings
+    text: "\u0627\u0644\u0642\u0635\u0627\u0635\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: notes.notes
+    text: "\u0645\u0644\u0627\u062D\u0638\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: notes.hint
+    text: "\u0644\u0627 \u0634\u064A\u0621 \u0647\u0646\u0627 \u0628\u0639\u062F.
+      \u0627\u0646\u0633\u062E \u0642\u064A\u0645\u0629 (Ctrl+C, \u0623\u0648 \u0627\u0646\u0642\u0631
+      \u0635\u0641\u0627 \u0628\u0627\u0644\u0632\u0631 \u0627\u0644\u0623\u064A\u0645\u0646:
+      \u0646\u0633\u062E \u0627\u0644\u0642\u064A\u0645\u0629), \u062B\u0645 Ctrl+V
+      \u0623\u0648 \u0644\u0635\u0642 \u0642\u0635\u0627\u0635\u0629, \u0623\u0648
+      \u0627\u0643\u062A\u0628 \u0628\u0627\u0644\u0623\u0633\u0641\u0644."
+    gloss: 0
+    tier: 0
+  - key: notes.paste
+    text: "\u0644\u0635\u0642 \u0642\u0635\u0627\u0635\u0629"
+    gloss: 0
+    tier: 0
+  - key: notes.pasted
+    text: "\u062A\u0645 \u0627\u0644\u0644\u0635\u0642"
+    gloss: 0
+    tier: 0
+  - key: notes.remove
+    text: "\u0625\u0632\u0627\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: notes.placeholder
+    text: "\u0627\u0643\u062A\u0628 \u0645\u0644\u0627\u062D\u0638\u0627\u062A\u0643
+      \u0647\u0646\u0627..."
+    gloss: 0
+    tier: 0
+  - key: notes.loose
+    text: "\u0642\u0635\u0627\u0635\u0627\u062A \u0623\u062E\u0631\u0649"
+    gloss: 0
+    tier: 0
+  - key: notes.full
+    text: "\u0647\u0630\u0647 \u0627\u0644\u0635\u0641\u062D\u0629 \u062A\u062D\u0645\u0644
+      {0} \u0642\u0635\u0627\u0635\u0627\u062A: \u0623\u0632\u0644 \u0648\u0627\u062D\u062F\u0629
+      \u0644\u0644\u0635\u0642 \u0623\u062E\u0631\u0649."
+    gloss: 0
+    tier: 0
+  - key: briefing.empty
+    text: "\u0644\u0627 \u062A\u0648\u062C\u064A\u0647\u0627\u062A. \u0639\u0627\u0644\u062C
+      \u0627\u0644\u062D\u0627\u0644\u0627\u062A \u0628\u062F\u0642\u0629."
+    gloss: 0
+    tier: 0
+  - key: briefing.bulletinHeader
+    text: "\u0645\u0630\u0643\u0631\u0629 \u0627\u0644\u0645\u0643\u062A\u0628 \xB7
+      DESK 3"
+    gloss: 0
+    tier: 0
+  - key: briefing.newHours
+    text: "\u0633\u0627\u0639\u0627\u062A \u062C\u062F\u064A\u062F\u0629 \u0645\u0646
+      \u0627\u0644\u064A\u0648\u0645: \u064A\u0641\u062A\u062D \u0627\u0644\u0645\u0643\u062A\u0628
+      \u0641\u064A {0} \u0648\u064A\u063A\u0644\u0642 \u0641\u064A {1}."
+    gloss: 0
+    tier: 0
+  - key: results.leisureDepartures
+    text: "\u0645\u063A\u0627\u062F\u0631\u0627\u062A \u0633\u064A\u0627\u062D\u064A\u0629:
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: results.debtReliefDepartures
+    text: "\u0645\u063A\u0627\u062F\u0631\u0627\u062A \u062A\u0633\u0648\u064A\u0629
+      \u0627\u0644\u062F\u064A\u0648\u0646: {0}   ({1:N0} {2} \u0645\u0646 \u0627\u0644\u062F\u064A\u0646
+      \u0635\u0627\u0631\u062A \u0639\u0645\u0644\u0627)"
+    gloss: 0
+    tier: 0
+  - key: results.timeline
+    text: "\u0627\u0644\u062E\u0637 \u0627\u0644\u0632\u0645\u0646\u064A \u0627\u0644\u0644\u064A\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: results.citations
+    text: "\u0645\u062E\u0627\u0644\u0641\u0627\u062A \u0627\u0644\u064A\u0648\u0645:
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: results.unproven
+    text: "\u0631\u0641\u0636 \u0628\u0644\u0627 \u062A\u0648\u062B\u064A\u0642:
+      {0} (\u0633\u062C\u0644 \u0627\u0646\u062D\u0631\u0627\u0641\u0627 \u0642\u0628\u0644
+      \u0627\u0644\u0631\u0641\u0636)"
+    gloss: 0
+    tier: 0
+  - key: results.detained
+    text: "\u0627\u0644\u0645\u062D\u062A\u062C\u0632\u0648\u0646: {0}"
+    gloss: 0
+    tier: 0
+  - key: results.processedAll
+    text: "\u0627\u0644\u0645\u0633\u0627\u0641\u0631\u0648\u0646 \u0627\u0644\u0645\u0639\u0627\u0644\u062C\u0648\u0646:
+      {0}, \u0627\u0644\u0637\u0627\u0628\u0648\u0631 \u0643\u0644\u0647"
+    gloss: 0
+    tier: 0
+  - key: results.processedOf
+    text: "\u0627\u0644\u0645\u0633\u0627\u0641\u0631\u0648\u0646 \u0627\u0644\u0645\u0639\u0627\u0644\u062C\u0648\u0646:
+      {0} \u0645\u0646 {1} ({2} \u0645\u0627 \u0632\u0627\u0644\u0648\u0627 \u064A\u0646\u062A\u0638\u0631\u0648\u0646
+      \u0639\u0646\u062F \u0627\u0644\u0625\u063A\u0644\u0627\u0642, \u0628\u0644\u0627
+      \u0623\u062C\u0631)"
+    gloss: 0
+    tier: 0
+  - key: results.hours
+    text: "\u0633\u0627\u0639\u0627\u062A \u0627\u0644\u0645\u0643\u062A\u0628: \u0645\u0646
+      {0} \u0625\u0644\u0649 {1}"
+    gloss: 0
+    tier: 0
+  - key: results.moneyHeader
+    text: "<b>\u0627\u0644\u0645\u0627\u0644, \u0628\u0639\u0645\u0644\u0629 {0}</b>"
+    gloss: 0
+    tier: 0
+  - key: results.row.pay
+    text: "\u0642\u0631\u0627\u0631\u0627\u062A \u0635\u062D\u064A\u062D\u0629: {0}
+      \xD7 {1}"
+    gloss: 0
+    tier: 0
+  - key: results.row.payTotal
+    text: "\u0642\u0631\u0627\u0631\u0627\u062A \u0635\u062D\u064A\u062D\u0629: {0}"
+    gloss: 0
+    tier: 0
+  - key: results.row.warned
+    text: "\u0642\u0631\u0627\u0631\u0627\u062A \u062E\u0627\u0637\u0626\u0629: {0},
+      \u0627\u0644\u0625\u0646\u0630\u0627\u0631 \u0627\u0644\u0645\u062C\u0627\u0646\u064A"
+    gloss: 0
+    tier: 0
+  - key: results.row.fined
+    text: "\u0642\u0631\u0627\u0631\u0627\u062A \u062E\u0627\u0637\u0626\u0629: {0}
+      \xD7 \u063A\u0631\u0627\u0645\u0629 {1}"
+    gloss: 0
+    tier: 0
+  - key: results.row.finedTotal
+    text: "\u063A\u0631\u0627\u0645\u0627\u062A \u0627\u0644\u0642\u0631\u0627\u0631\u0627\u062A
+      \u0627\u0644\u062E\u0627\u0637\u0626\u0629: {0}"
+    gloss: 0
+    tier: 0
+  - key: results.row.stranded
+    text: "\u0639\u0627\u0644\u0642\u0648\u0646 \u0641\u064A \u0627\u0644\u0637\u0631\u064A\u0642:
+      {0}, \u0627\u0644\u0625\u0642\u0631\u0627\u0631\u0627\u062A \u0645\u062D\u0641\u0648\u0638\u0629"
+    gloss: 0
+    tier: 0
+  - key: results.row.strandedFined
+    text: "\u0639\u0627\u0644\u0642\u0648\u0646 \u0641\u064A \u0627\u0644\u0637\u0631\u064A\u0642:
+      {0}, \u0628\u063A\u0631\u0627\u0645\u0629 (\u0644\u0627 \u0625\u0642\u0631\u0627\u0631
+      \u0645\u0648\u0642\u0639)"
+    gloss: 0
+    tier: 0
+  - key: results.row.instalment
+    text: "\u0642\u0633\u0637 \u062A\u0633\u0648\u064A\u0629 \u0627\u0644\u062F\u064A\u0648\u0646
+      ({0:N0} \u0645\u0627 \u0632\u0627\u0644 \u0645\u0633\u062A\u062D\u0642\u0627)"
+    gloss: 0
+    tier: 0
+  - key: results.row.other
+    text: "\u0623\u0645\u0648\u0627\u0644 \u0623\u062E\u0631\u0649"
+    gloss: 0
+    tier: 0
+  - key: results.row.net
+    text: "\u0635\u0627\u0641\u064A \u0627\u0644\u0645\u0646\u0627\u0648\u0628\u0629"
+    gloss: 0
+    tier: 0
+  - key: results.row.bills
+    text: "\u0641\u0648\u0627\u062A\u064A\u0631 \u0627\u0644\u0644\u064A\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: results.row.after
+    text: "\u0627\u0644\u0645\u062D\u0641\u0638\u0629 \u0628\u0639\u062F \u0627\u0644\u0641\u0648\u0627\u062A\u064A\u0631"
+    gloss: 0
+    tier: 0
+  - key: results.wallet
+    text: "{0} (\u0627\u0644\u0622\u0646 {1})"
+    gloss: 0
+    tier: 0
+  - key: scanner.idle
+    text: "\u0644\u0627 \u0627\u0646\u062D\u0631\u0627\u0641\u0627\u062A \u0645\u0648\u062B\u0642\u0629.\n\n\u0642\u0627\u0631\u0646
+      \u062D\u0642\u0644\u0627 \u0641\u064A \u0648\u062B\u064A\u0642\u0629, \u0623\u0648
+      \u0625\u062C\u0627\u0628\u0629 \u0627\u0644\u0645\u0633\u0627\u0641\u0631,
+      \u0623\u0648 \u0642\u0637\u0639\u0629 \u064A\u0644\u0628\u0633\u0647\u0627,
+      \u0628\u0645\u062F\u062E\u0644 \u0627\u0644\u0645\u0631\u062C\u0639 \u0644\u0644\u0645\u0643\u0627\u0646
+      \u0627\u0644\u0645\u062F\u0639\u0649, \u0623\u0648 \u0628\u0627\u0644\u0645\u062F\u062E\u0644
+      \u0627\u0644\u0630\u064A \u062A\u0646\u062A\u0645\u064A \u0625\u0644\u064A\u0647
+      \u062D\u0642\u0627, \u0623\u0648 \u0628\u0633\u062C\u0644 \u0627\u0644\u0645\u0648\u0627\u0637\u0646
+      \u0644\u062A\u0633\u062C\u064A\u0644 \u062F\u0644\u064A\u0644."
+    gloss: 0
+    tier: 0
+  - key: scanner.summary
+    text: "{0} \u0627\u0646\u062D\u0631\u0627\u0641 \u0645\u0648\u062B\u0642. \u0627\u0644\u0631\u0641\u0636
+      \u0645\u0628\u0631\u0631."
+    gloss: 0
+    tier: 0
+  - key: report.proof.claimMismatch
+    text: "\u0639\u062F\u0645 \u062A\u0637\u0627\u0628\u0642"
+    gloss: 0
+    tier: 0
+  - key: report.proof.foreignOrigin
+    text: "\u064A\u0646\u062A\u0645\u064A \u0644\u0645\u0643\u0627\u0646 \u0622\u062E\u0631"
+    gloss: 0
+    tier: 0
+  - key: report.proof.recordMismatch
+    text: "\u0633\u062C\u0644\u0627\u062A \u0627\u0644\u0648\u0643\u0627\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: report.proof.crossMismatch
+    text: "\u0627\u0644\u0623\u0648\u0631\u0627\u0642 \u0645\u062A\u0639\u0627\u0631\u0636\u0629"
+    gloss: 0
+    tier: 0
+  - key: report.proof.personMismatch
+    text: "\u0644\u064A\u0633 \u0627\u0644\u0634\u062E\u0635 \u0646\u0641\u0633\u0647"
+    gloss: 0
+    tier: 0
+  - key: form.interview.head
+    text: "{0} \xB7 \u0645\u0648\u0638\u0641 \u0627\u0644\u0645\u0643\u062A\u0628:
+      {1} \xB7 {2}"
+    gloss: 0
+    tier: 0
+  - key: rules.memo.to
+    text: "\u0643\u0644 \u0645\u0648\u0638\u0641\u064A \u0627\u0644\u0645\u0643\u0627\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: directives.none
+    text: "\u0627\u0644\u062A\u0648\u062C\u064A\u0647\u0627\u062A: \u0643\u0644 \u0627\u0644\u0648\u062C\u0647\u0627\u062A
+      \u0645\u0641\u062A\u0648\u062D\u0629 \u0627\u0644\u064A\u0648\u0645."
+    gloss: 0
+    tier: 0
+  - key: document.untitled
+    text: "\u0648\u062B\u064A\u0642\u0629"
+    gloss: 0
+    tier: 0
+  - key: book.untitled
+    text: "\u0645\u0631\u062C\u0639"
+    gloss: 0
+    tier: 0
+  - key: book.claimedNote
+    text: "\u0645\u062F\u0639\u0649"
+    gloss: 0
+    tier: 0
+  - key: book.revisedNote
+    text: "\u0645\u0639\u062F\u0644"
+    gloss: 0
+    tier: 0
+  - key: book.edition
+    text: "\u0637\u0628\u0639\u0629 \u0627\u0644\u064A\u0648\u0645 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.deviationLogged
+    text: "\u25CF  \u0633\u062C\u0644 \u0627\u0646\u062D\u0631\u0627\u0641 \u2014
+      {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.alreadyDocumented
+    text: "\u25CF  \u0645\u0648\u062B\u0642 \u0645\u0633\u0628\u0642\u0627 \u2014
+      {0} \u0641\u064A \u062A\u0642\u0631\u064A\u0631 \u0627\u0644\u0627\u0646\u062D\u0631\u0627\u0641"
+    gloss: 0
+    tier: 0
+  - key: compare.pair
+    text: "{0}  \xB7  {2}  \u0645\u0642\u0627\u0628\u0644  {4}"
+    gloss: 0
+    tier: 0
+  - key: compare.pickAnother
+    text: "{0}:  {1}    \u0645\u0642\u0627\u0628\u0644    (\u0627\u062E\u062A\u0631
+      \u0642\u064A\u0645\u0629 \u0623\u062E\u0631\u0649 \u0644\u0644\u0645\u0642\u0627\u0631\u0646\u0629)"
+    gloss: 0
+    tier: 0
+  - key: compare.travellerLabel
+    text: "\u0627\u0644\u0645\u0633\u0627\u0641\u0631 \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.faceSlot
+    text: "\u0627\u0644\u0648\u062C\u0647"
+    gloss: 0
+    tier: 0
+  - key: compare.faceShown
+    text: "\u0627\u0644\u0634\u062E\u0635 \u0639\u0646\u062F \u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: compare.photoShown
+    text: "\u0627\u0644\u0635\u0648\u0631\u0629"
+    gloss: 0
+    tier: 0
+  - key: compare.untranslated
+    text: "({0} \u063A\u064A\u0631 \u0645\u062A\u0631\u062C\u0645, \u0645\u062A\u0631\u062C\u0645
+      {1})"
+    gloss: 0
+    tier: 0
+  - key: slot.Outfit
+    text: "\u0627\u0644\u0632\u064A"
+    gloss: 0
+    tier: 0
+  - key: slot.Hair
+    text: "\u0627\u0644\u0634\u0639\u0631"
+    gloss: 0
+    tier: 0
+  - key: slot.FacialHair
+    text: "\u0634\u0639\u0631 \u0627\u0644\u0648\u062C\u0647"
+    gloss: 0
+    tier: 0
+  - key: slot.Headwear
+    text: "\u063A\u0637\u0627\u0621 \u0627\u0644\u0631\u0623\u0633"
+    gloss: 0
+    tier: 0
+  - key: slot.Accessory
+    text: "\u0625\u0643\u0633\u0633\u0648\u0627\u0631"
+    gloss: 0
+    tier: 0
+  - key: records.placeholder
+    text: "\u0627\u0633\u0645 \u0623\u0648 \u0631\u0642\u0645\u2026"
+    gloss: 0
+    tier: 0
+  - key: records.idle
+    text: "\u0627\u0643\u062A\u0628 \u0627\u0633\u0645\u0627 \u0623\u0648 \u0631\u0642\u0645
+      \u0633\u062C\u0644 \u0648\u0627\u0636\u063A\u0637 \u0628\u062D\u062B."
+    gloss: 0
+    tier: 0
+  - key: records.noRecord
+    text: "\u0644\u0627 \u0633\u062C\u0644 \u0645\u062D\u0641\u0648\u0638 \u0639\u0646
+      \"{0}\" \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: records.onFile
+    text: "\u0627\u0633\u062A\u0639\u0644\u0627\u0645 \"{0}\" \xB7 \u0633\u062C\u0644
+      \u0648\u0627\u062D\u062F \u0645\u062D\u0641\u0648\u0638 \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: records.group.registry
+    text: "\u0642\u064A\u062F \u0627\u0644\u0633\u062C\u0644"
+    gloss: 0
+    tier: 0
+  - key: records.row.name
+    text: "\u0627\u0644\u0627\u0633\u0645"
+    gloss: 0
+    tier: 0
+  - key: records.row.born
+    text: "\u0627\u0644\u0645\u064A\u0644\u0627\u062F"
+    gloss: 0
+    tier: 0
+  - key: records.row.origin
+    text: "\u0627\u0644\u0623\u0635\u0644"
+    gloss: 0
+    tier: 0
+  - key: records.row.note
+    text: "\u0645\u0644\u0627\u062D\u0638\u0629"
+    gloss: 0
+    tier: 0
+  - key: records.note.none
+    text: "\u0644\u0627 \u0645\u0644\u0627\u062D\u0638\u0627\u062A \u0645\u062D\u0641\u0648\u0638\u0629."
+    gloss: 0
+    tier: 0
+  - key: records.note.sealed
+    text: "\u062D\u0627\u0644\u0629 \u0630\u0627\u062A \u0623\u0648\u0644\u0648\u064A\u0629.
+      \u0627\u0644\u0633\u062C\u0644\u0627\u062A \u0645\u062E\u062A\u0648\u0645\u0629
+      \u0641\u0648\u0642 \u0635\u0644\u0627\u062D\u064A\u062A\u0643."
+    gloss: 0
+    tier: 0
+  - key: records.group.file
+    text: "\u0627\u0644\u0645\u0644\u0641"
+    gloss: 0
+    tier: 0
+  - key: records.row.file
+    text: "\u0645\u0644\u0627\u062D\u0638\u0629"
+    gloss: 0
+    tier: 0
+  - key: records.group.seen
+    text: "\u0634\u0648\u0647\u062F \u0645\u0646 \u0642\u0628\u0644 \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: visit.flag.days
+    text: "{0} \u0642\u0628\u0644 {1} \u0623\u064A\u0627\u0645"
+    gloss: 0
+    tier: 0
+  - key: visit.flag.yesterday
+    text: "{0} \u0623\u0645\u0633"
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Accepted
+    text: "\u0645\u0642\u0628\u0648\u0644"
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Denied
+    text: "\u0645\u0631\u0641\u0648\u0636"
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Detained
+    text: "\u0645\u062D\u062A\u062C\u0632"
+    gloss: 0
+    tier: 0
+  - key: visit.citation
+    text: "\xB7 \u0645\u062E\u0627\u0644\u0641\u0629: {0}"
+    gloss: 0
+    tier: 0
+  - key: board.noScan
+    text: "\u0627\u0645\u0633\u062D \u0648\u0631\u0642\u0629 \u0644\u0645\u0644\u0621
+      \u0644\u0648\u062D\u0629 \u0627\u0644\u0642\u0636\u064A\u0629: \u0636\u0639\u0647\u0627
+      \u0639\u0644\u0649 \u0627\u0644\u0645\u0627\u0633\u062D."
+    gloss: 0
+    tier: 0
+  - key: board.record.found
+    text: "\u0633\u062C\u0644 \u0645\u062D\u0641\u0648\u0638 \xB7 {0} \xB7 {1} \xB7
+      \u0641\u062A\u062D"
+    gloss: 0
+    tier: 0
+  - key: board.record.noNumber
+    text: "\u0628\u0644\u0627 \u0631\u0642\u0645"
+    gloss: 0
+    tier: 0
+  - key: board.record.none
+    text: "\u0644\u0627 \u0633\u062C\u0644 \u0645\u062D\u0641\u0648\u0638 \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: board.record.nothing
+    text: "\u0644\u0627 \u0648\u0631\u0642\u0629 \u0645\u0645\u0633\u0648\u062D\u0629
+      \u062A\u0630\u0643\u0631 \u0631\u0642\u0645\u0627 \u0623\u0648 \u0627\u0633\u0645\u0627
+      \u0628\u0639\u062F."
+    gloss: 0
+    tier: 0
+  - key: board.section.rules
+    text: "\u0641\u062D\u0635 \u0627\u0644\u0642\u0648\u0627\u0639\u062F"
+    gloss: 0
+    tier: 0
+  - key: board.rules.none
+    text: "\u0644\u0627 \u0634\u064A\u0621 \u0645\u0646 \u0642\u0648\u0627\u0639\u062F
+      \u0627\u0644\u064A\u0648\u0645 \u0644\u0644\u0641\u062D\u0635 \u0628\u0639\u062F."
+    gloss: 0
+    tier: 0
+  - key: board.rule.destination
+    text: "\u0627\u0644\u0648\u062C\u0647\u0629"
+    gloss: 0
+    tier: 0
+  - key: board.rule.paper
+    text: "\u0648\u0631\u0642\u0629 \u0645\u0637\u0644\u0648\u0628\u0629"
+    gloss: 0
+    tier: 0
+  - key: board.chip.Valid
+    text: "\u0635\u0627\u0644\u062D"
+    gloss: 0
+    tier: 0
+  - key: board.chip.Expired
+    text: "\u0645\u0646\u062A\u0647\u064A"
+    gloss: 0
+    tier: 0
+  - key: board.chip.Closed
+    text: "\u0645\u063A\u0644\u0642"
+    gloss: 0
+    tier: 0
+  - key: board.chip.Missing
+    text: "\u0645\u0641\u0642\u0648\u062F"
+    gloss: 0
+    tier: 0
+  - key: board.chip.WrongDate
+    text: "\u062A\u0627\u0631\u064A\u062E \u062E\u0627\u0637\u0626"
+    gloss: 0
+    tier: 0
+  - key: board.section.cross
+    text: "\u0645\u0637\u0627\u0628\u0642\u0629 \u0645\u062A\u0642\u0627\u0637\u0639\u0629"
+    gloss: 0
+    tier: 0
+  - key: board.cross.none
+    text: "\u0627\u0645\u0633\u062D \u0648\u0631\u0642\u062A\u064A\u0646 (\u0623\u0648
+      \u0648\u0631\u0642\u0629 \u0644\u0647\u0627 \u0633\u062C\u0644 \u0645\u062D\u0641\u0648\u0638)
+      \u0644\u0645\u0642\u0627\u0631\u0646\u062A\u0647\u0645\u0627 \u0647\u0646\u0627."
+    gloss: 0
+    tier: 0
+  - key: board.cross.detail
+    text: "\u0627\u0644\u062A\u0641\u0635\u064A\u0644"
+    gloss: 0
+    tier: 0
+  - key: board.cross.record
+    text: "\u0627\u0644\u0633\u062C\u0644"
+    gloss: 0
+    tier: 0
+  - key: board.cross.agree
+    text: "{0} \xB7 {1} \u0645\u062A\u0641\u0642\u0627\u0646"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.sources
+    text: "\u0627\u0644\u0645\u0635\u0627\u062F\u0631"
+    gloss: 0
+    tier: 0
+  - key: board.section.overlay
+    text: "\u0627\u0644\u062A\u0631\u0627\u0643\u0628"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.hint
+    text: "\u0627\u0633\u062D\u0628 \u0645\u0635\u062F\u0631\u0627 \u0641\u0648\u0642
+      \u0622\u062E\u0631 (\u0623\u0648 \u0627\u0646\u0642\u0631 \u0627\u062B\u0646\u064A\u0646)
+      \u0644\u0648\u0636\u0639 \u0623\u062D\u062F\u0647\u0645\u0627 \u0641\u0648\u0642
+      \u0627\u0644\u0622\u062E\u0631."
+    gloss: 0
+    tier: 0
+  - key: board.overlay.over
+    text: "{0} \u0641\u0648\u0642 {1}: \u062D\u0631\u0643 \u0644\u0644\u062A\u0644\u0627\u0634\u064A.
+      \u0627\u0644\u0641\u0631\u0648\u0642 \u0627\u0644\u062D\u0642\u064A\u0642\u064A\u0629
+      \u0648\u062D\u062F\u0647\u0627 \u062A\u0644\u0645\u0639."
+    gloss: 0
+    tier: 0
+  - key: board.overlay.nothing
+    text: "\u0644\u0627 \u064A\u0630\u0643\u0631 \u0647\u0630\u0627\u0646 \u0634\u064A\u0626\u0627
+      \u0645\u0634\u062A\u0631\u0643\u0627."
+    gloss: 0
+    tier: 0
+  - key: board.overlay.photo
+    text: "\u0627\u0644\u0635\u0648\u0631\u0629"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.face
+    text: "\u0648\u062C\u0647\u0647"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.faceLabel
+    text: "\u0627\u0644\u0648\u062C\u0647"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.register
+    text: "\u0633\u062C\u0644 \u0627\u0644\u062F\u0645\u063A\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: layers.tab.print
+    text: "\u0627\u0644\u0637\u0628\u0627\u0639\u0629"
+    gloss: 0
+    tier: 0
+  - key: layers.tab.uv
+    text: UV
+    gloss: 0
+    tier: 0
+  - key: layers.tab.chip
+    text: "\u0627\u0644\u0634\u0631\u064A\u062D\u0629"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.title
+    text: "\u0636\u0648\u0621 UV \xB7 \u0637\u0628\u0642\u0629 \u0645\u062E\u0641\u064A\u0629"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.none
+    text: "\u0644\u0627 \u0634\u064A\u0621 \u064A\u0638\u0647\u0631 \u062A\u062D\u062A
+      \u0636\u0648\u0621 UV."
+    gloss: 0
+    tier: 0
+  - key: layers.uv.wholePaper
+    text: "\u0627\u0644\u0648\u0631\u0642\u0629 \u0643\u0644\u0647\u0627"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Watermark
+    text: "\u0639\u0644\u0627\u0645\u0629 \u0645\u0627\u0626\u064A\u0629 ({0}): {1}"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Ghost
+    text: "\u0623\u062B\u0631 \u062E\u0641\u064A \u062A\u062D\u062A {0}: {1}"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Microprint
+    text: "\u0637\u0628\u0627\u0639\u0629 \u062F\u0642\u064A\u0642\u0629 ({0}): {1}"
+    gloss: 0
+    tier: 0
+  - key: layers.chip.title
+    text: "\u0633\u062C\u0644 \u0627\u0644\u0634\u0631\u064A\u062D\u0629"
+    gloss: 0
+    tier: 0
+  - key: layers.chip.none
+    text: "\u0647\u0630\u0647 \u0627\u0644\u0648\u0631\u0642\u0629 \u0628\u0644\u0627
+      \u0634\u0631\u064A\u062D\u0629."
+    gloss: 0
+    tier: 0
+  - key: records.row.number
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0646\u0632\u0648\u062D"
+    gloss: 0
+    tier: 0
+  - key: records.row.incident
+    text: "\u0627\u0644\u062D\u0627\u062F\u062B\u0629"
+    gloss: 0
+    tier: 0
+  - key: records.row.found
+    text: "\u0648\u062C\u062F"
+    gloss: 0
+    tier: 0
+  - key: records.row.status
+    text: "\u0627\u0644\u062D\u0627\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: records.status.awaiting
+    text: "\u0628\u0627\u0646\u062A\u0638\u0627\u0631 \u0627\u0644\u0639\u0648\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: records.group.account
+    text: "\u0627\u0644\u0633\u062C\u0644\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: records.group.forms
+    text: "\u0627\u0644\u0646\u0645\u0627\u0630\u062C \u0627\u0644\u0645\u062D\u0641\u0648\u0638\u0629"
+    gloss: 0
+    tier: 0
+  - key: records.group.travel
+    text: "\u0627\u0644\u0633\u0641\u0631"
+    gloss: 0
+    tier: 0
+  - key: records.row.citizenId
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0645\u0648\u0627\u0637\u0646"
+    gloss: 0
+    tier: 0
+  - key: records.row.standing
+    text: "\u0627\u0644\u0648\u0636\u0639"
+    gloss: 0
+    tier: 0
+  - key: records.row.debt
+    text: "\u0627\u0644\u062F\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: records.row.lineage
+    text: "\u0627\u0644\u0646\u0633\u0628"
+    gloss: 0
+    tier: 0
+  - key: records.row.transponder
+    text: "\u0627\u0644\u0645\u0631\u0633\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: records.row.transponderClass
+    text: "\u0641\u0626\u0629 \u0627\u0644\u0645\u0631\u0633\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: records.row.waiver
+    text: "\u0625\u0642\u0631\u0627\u0631 \u0627\u0644\u0627\u0646\u0642\u0637\u0627\u0639"
+    gloss: 0
+    tier: 0
+  - key: records.row.proof
+    text: "\u0625\u062B\u0628\u0627\u062A \u0627\u0644\u0645\u0644\u0627\u0621\u0629"
+    gloss: 0
+    tier: 0
+  - key: records.row.contract
+    text: "\u062A\u0635\u0631\u064A\u062D \u0627\u0644\u0639\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: records.row.departure
+    text: "\u0645\u063A\u0627\u062F\u0631\u0629 \u0645\u062D\u062C\u0648\u0632\u0629"
+    gloss: 0
+    tier: 0
+  - key: records.row.departureDate
+    text: "\u062A\u0627\u0631\u064A\u062E \u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0629"
+    gloss: 0
+    tier: 0
+  - key: records.row.trips
+    text: "\u0631\u062D\u0644\u0627\u062A \u0633\u0627\u0628\u0642\u0629"
+    gloss: 0
+    tier: 0
+  - key: records.row.trip
+    text: "\u0631\u062D\u0644\u0629 \u0633\u0627\u0628\u0642\u0629"
+    gloss: 0
+    tier: 0
+  - key: records.standing.good
+    text: "\u062C\u064A\u062F"
+    gloss: 0
+    tier: 0
+  - key: records.none
+    text: "\u0644\u0627 \u0634\u064A\u0621 \u0645\u062D\u0641\u0648\u0638"
+    gloss: 0
+    tier: 0
+  - key: records.trip.returned
+    text: "\u0639\u0627\u062F"
+    gloss: 0
+    tier: 0
+  - key: case.roleUnknown
+    text: "\u0645\u0633\u0627\u0641\u0631"
+    gloss: 0
+    tier: 0
+  - key: case.unlistedLand
+    text: "\u0623\u0631\u0636 \u063A\u064A\u0631 \u0645\u062F\u0631\u062C\u0629"
+    gloss: 0
+    tier: 0
+  - key: case.subject
+    text: "\u0627\u0644\u062D\u0627\u0644\u0629 #{0}"
+    gloss: 0
+    tier: 0
+  - key: records.compareLabel
+    text: "\u0627\u0644\u0633\u062C\u0644\u0627\u062A \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: citation.unproven
+    text: "\u0631\u0641\u0636 \u0628\u0644\u0627 \u062F\u0644\u064A\u0644 \u0645\u0633\u062C\u0644.
+      \u0633\u062C\u0644 \u0627\u0644\u062E\u0637\u0623 \u0642\u0628\u0644 \u0627\u0644\u0631\u0641\u0636:
+      \u0641\u0631\u0642 \u0641\u064A \u0627\u0644\u0623\u0648\u0631\u0627\u0642,
+      \u0623\u0648 \u0642\u0627\u0639\u062F\u0629 \u064A\u062E\u0627\u0644\u0641\u0647\u0627,
+      \u0623\u0648 \u062A\u0627\u0631\u064A\u062E \u0644\u0627 \u064A\u0635\u0644\u062D."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong
+    text: "\u0648\u0627\u0641\u0642\u062A \u0639\u0644\u0649 \u0645\u0633\u0627\u0641\u0631
+      \u0645\u062A\u0646\u0643\u0631 \u0623\u0648 \u0648\u062C\u0647\u0629 \u0645\u062D\u0638\u0648\u0631\u0629."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.panic
+    text: "\u0648\u0627\u0641\u0642\u062A \u0639\u0644\u0649 \u0645\u0633\u0627\u0641\u0631
+      \u0633\u064A\u062B\u064A\u0631 \u0627\u0644\u0630\u0639\u0631 \u0641\u064A
+      {0}."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.forged
+    text: "\u0648\u0627\u0641\u0642\u062A \u0639\u0644\u0649 \u0623\u0648\u0631\u0627\u0642
+      \u0645\u0632\u0648\u0631\u0629."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.disguised
+    text: "\u0648\u0627\u0641\u0642\u062A \u0639\u0644\u0649 \u0645\u0633\u0627\u0641\u0631
+      \u0645\u062A\u0646\u0643\u0631."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.closed
+    text: "\u0648\u0627\u0641\u0642\u062A \u0639\u0644\u0649 \u0648\u062C\u0647\u0629
+      \u0645\u063A\u0644\u0642\u0629."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.smuggled
+    text: "\u0633\u0645\u062D\u062A \u0644\u0628\u0636\u0627\u0626\u0639 2150 \u0628\u0645\u063A\u0627\u062F\u0631\u0629
+      2150."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.wrongDate
+    text: "\u0648\u0627\u0641\u0642\u062A \u0639\u0644\u0649 \u0645\u063A\u0627\u062F\u0631\u0629
+      \u0641\u064A \u062A\u0627\u0631\u064A\u062E \u062E\u0627\u0637\u0626."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.expired
+    text: "\u0648\u0627\u0641\u0642\u062A \u0639\u0644\u0649 \u0648\u0631\u0642\u0629
+      \u0645\u0646\u062A\u0647\u064A\u0629 \u0627\u0644\u0635\u0644\u0627\u062D\u064A\u0629."
+    gloss: 0
+    tier: 0
+  - key: citation.deniedWrong
+    text: "\u0631\u0641\u0636\u062A \u0645\u0633\u0627\u0641\u0631\u0627 \u0634\u0631\u0639\u064A\u0627
+      \u0645\u0633\u0645\u0648\u062D\u0627 \u0644\u0647."
+    gloss: 0
+    tier: 0
+  - key: citation.detainedWrong
+    text: "\u0627\u062D\u062A\u062C\u0632\u062A \u0645\u0633\u0627\u0641\u0631\u0627
+      \u0644\u0645 \u064A\u062E\u0627\u0644\u0641 \u0623\u064A \u0642\u0627\u0646\u0648\u0646."
+    gloss: 0
+    tier: 0
+  - key: citation.detainedUnproven
+    text: "\u0627\u062D\u062A\u062C\u0627\u0632 \u0628\u0644\u0627 \u062F\u0644\u064A\u0644
+      \u0645\u0633\u062C\u0644. \u0633\u062C\u0644 \u0645\u0627 \u062E\u0627\u0644\u0641\u0647
+      \u0642\u0628\u0644 \u0627\u0644\u0627\u062D\u062A\u062C\u0627\u0632: \u0648\u0631\u0642\u0629
+      \u0645\u0632\u0648\u0631\u0629, \u0623\u0648 \u0647\u0648\u064A\u0629 \u0643\u0627\u0630\u0628\u0629,
+      \u0623\u0648 \u0628\u0636\u0627\u0639\u0629 \u0645\u0647\u0631\u0628\u0629."
+    gloss: 0
+    tier: 0
+  - key: citation.warning
+    text: "\u0625\u0646\u0630\u0627\u0631 {0}/{1} \u2014 \u0628\u0644\u0627 \u062E\u0635\u0645
+      \u0645\u0646 \u0627\u0644\u0623\u062C\u0631."
+    gloss: 0
+    tier: 0
+  - key: citation.penalty
+    text: "\u0627\u0644\u0639\u0642\u0648\u0628\u0629: -{0} {1}."
+    gloss: 0
+    tier: 0
+  - key: rule.eraForbidden
+    text: "\u0627\u0644\u0633\u0641\u0631 \u0625\u0644\u0649 {0} \u0645\u0645\u0646\u0648\u0639."
+    gloss: 0
+    tier: 0
+  - key: rule.nationForbidden
+    text: "\u0627\u0644\u0633\u0641\u0631 \u0625\u0644\u0649 {0} \u0645\u0645\u0646\u0648\u0639."
+    gloss: 0
+    tier: 0
+  - key: rule.nationEraForbidden
+    text: "\u0627\u0644\u0633\u0641\u0631 \u0625\u0644\u0649 {0} \u0641\u064A {1}
+      \u0645\u0645\u0646\u0648\u0639."
+    gloss: 0
+    tier: 0
+  - key: rule.generic
+    text: "\u0642\u064A\u0648\u062F \u0627\u0644\u0633\u0641\u0631 \u0633\u0627\u0631\u064A\u0629."
+    gloss: 0
+    tier: 0
+  - key: desk.scanHint
+    text: "\u0627\u0633\u062D\u0628 \u0648\u0631\u0642\u0629 \u0625\u0644\u0649 \u0627\u0644\u0645\u0627\u0633\u062D
+      \u0644\u0641\u062A\u062D\u0647\u0627 \u0639\u0644\u0649 \u0627\u0644\u062D\u0627\u0633\u0648\u0628."
+    gloss: 0
+    tier: 0
+  - key: desk.wheelHint
+    text: "\u0627\u0646\u0642\u0631 \u0627\u0644\u0645\u0633\u0627\u0641\u0631 \u0644\u0644\u062D\u062F\u064A\u062B
+      \u0648\u0637\u0644\u0628 \u0627\u0644\u0623\u0648\u0631\u0627\u0642."
+    gloss: 0
+    tier: 0
+  - key: desk.readyCaption
+    text: "\u0645\u062A\u0627\u062D"
+    gloss: 0
+    tier: 0
+  - key: deskView.back
+    text: "\u25B2 \u0631\u062C\u0648\u0639"
+    gloss: 0
+    tier: 0
+  - key: deskView.backHint
+    text: "\u0627\u0644\u0646\u0642\u0631 \u0627\u0644\u0623\u064A\u0645\u0646 /
+      Esc"
+    gloss: 0
+    tier: 0
+  - key: stamp.label.approved
+    text: "\u0645\u0642\u0628\u0648\u0644"
+    gloss: 0
+    tier: 0
+  - key: stamp.label.denied
+    text: "\u0645\u0631\u0641\u0648\u0636"
+    gloss: 0
+    tier: 0
+  - key: stamp.hint.handBack
+    text: "\u0627\u0633\u062D\u0628 \u0627\u0644\u062C\u0648\u0627\u0632 \u0627\u0644\u0645\u062E\u062A\u0648\u0645
+      \u0625\u0644\u0649 \u0627\u0644\u0637\u0627\u0648\u0644\u0629 \u0644\u0625\u0639\u0627\u062F\u0629
+      \u0627\u0644\u0623\u0648\u0631\u0627\u0642."
+    gloss: 0
+    tier: 0
+  - key: stamp.hint.place
+    text: "\u0627\u0633\u062D\u0628 \u062E\u062A\u0645\u0627 \u0625\u0644\u0649 \u0627\u0644\u062C\u0648\u0627\u0632
+      \u0648\u0623\u0641\u0644\u062A\u0647."
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.notPassport
+    text: "\u0627\u0644\u062C\u0648\u0627\u0632 \u0648\u062D\u062F\u0647 \u064A\u062D\u0645\u0644
+      \u062E\u062A\u0645 \u0627\u0644\u0642\u0631\u0627\u0631."
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.already
+    text: "\u0647\u0630\u0627 \u0627\u0644\u062C\u0648\u0627\u0632 \u064A\u062D\u0645\u0644
+      \u0642\u0631\u0627\u0631\u0627 \u0628\u0627\u0644\u0641\u0639\u0644."
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.handBackFirst
+    text: "\u0627\u062E\u062A\u0645 \u0627\u0644\u062C\u0648\u0627\u0632 \u0623\u0648\u0644\u0627."
+    gloss: 0
+    tier: 0
+  - key: hardware.detain
+    text: "\u0627\u062D\u062A\u062C\u0627\u0632"
+    gloss: 0
+    tier: 0
+  - key: stamp.dater.by
+    text: "\u0628\u0648\u0627\u0633\u0637\u0629: {0}"
+    gloss: 0
+    tier: 0
+  - key: desk.counter
+    text: "\u0627\u0644\u0637\u0627\u0648\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: controls.pcTab
+    text: "\u0627\u0644\u062D\u0627\u0633\u0648\u0628"
+    gloss: 0
+    tier: 0
+  - key: controls.deskTab
+    text: "\u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: controls.stampsTab
+    text: "\u0627\u0644\u0623\u062E\u062A\u0627\u0645"
+    gloss: 0
+    tier: 0
+  - key: controls.inspectHint
+    text: "\u0627\u0644\u0641\u062D\u0635: \u0627\u0646\u0642\u0631 \u0634\u064A\u0626\u064A\u0646
+      \u0644\u0644\u0645\u0642\u0627\u0631\u0646\u0629. \u0627\u0644\u0646\u0642\u0631
+      \u0627\u0644\u0623\u064A\u0645\u0646 \u0623\u0648 Esc \u0644\u0644\u062E\u0631\u0648\u062C."
+    gloss: 0
+    tier: 0
+  - key: stamp.zone.handBack
+    text: "\u25B2  \u0623\u0639\u062F \u0627\u0644\u0623\u0648\u0631\u0627\u0642 
+      \u25B2"
+    gloss: 0
+    tier: 0
+  - key: stamp.zone.stampFirst
+    text: "\u0627\u062E\u062A\u0645 \u0627\u0644\u062C\u0648\u0627\u0632 \u0623\u0648\u0644\u0627"
+    gloss: 0
+    tier: 0
+  - key: city.look
+    text: "\u0627\u0644\u0645\u062F\u064A\u0646\u0629"
+    gloss: 0
+    tier: 0
+  - key: city.back
+    text: "\u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.title
+    text: "\u0642\u0648\u0627\u0639\u062F \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.none
+    text: "\u0644\u0627 \u0642\u0648\u0627\u0639\u062F \u0627\u0644\u064A\u0648\u0645."
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.papers
+    text: "\u0623\u0648\u0631\u0627\u0642 \u0644\u0645 \u062A\u0633\u0644\u0645"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperFlag
+    text: "{0}: \u0645\u0641\u0642\u0648\u062F\u0629? \u0627\u0646\u0642\u0631 \u0644\u062A\u0639\u0644\u064A\u0645\u0647\u0627."
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperFlagged
+    text: "{0}: \u0645\u0639\u0644\u0645\u0629. \u0627\u0637\u0644\u0628\u0647\u0627."
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperNotCarried
+    text: "{0}: \u0644\u0627 \u064A\u062D\u0645\u0644\u0647\u0627."
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.papersNone
+    text: "\u0643\u0644 \u0627\u0644\u0623\u0648\u0631\u0627\u0642 \u0633\u0644\u0645\u062A."
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabRules
+    text: "\u0627\u0644\u0642\u0648\u0627\u0639\u062F"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabPapers
+    text: "\u0627\u0644\u0623\u0648\u0631\u0627\u0642"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabSeals
+    text: "\u0627\u0644\u062F\u0645\u063A\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.seals
+    text: "\u0633\u062C\u0644 \u0627\u0644\u062F\u0645\u063A\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabGuide
+    text: "\u0627\u0644\u062F\u0644\u064A\u0644"
+    gloss: 0
+    tier: 0
+  - key: desk.guide.body
+    text: "<b>\u0627\u0641\u062D\u0635</b>  {0}\n\n<b>\u0645\u0642\u0627\u0628\u0644</b> 
+      {1}\n\n<b>\u0627\u0644\u062E\u0644\u0644</b>  {2}"
+    gloss: 0
+    tier: 0
+  - key: desk.guide.new
+    text: "\u062C\u062F\u064A\u062F"
+    gloss: 0
+    tier: 0
+  - key: desk.guide.prev
+    text: "< \u0627\u0644\u0633\u0627\u0628\u0642"
+    gloss: 0
+    tier: 0
+  - key: desk.guide.next
+    text: "\u0627\u0644\u062A\u0627\u0644\u064A >"
+    gloss: 0
+    tier: 0
+  - key: guide.step
+    text: "\u0627\u0644\u062F\u0631\u0633 {0}/{1}"
+    gloss: 0
+    tier: 0
+  - key: guide.skip
+    text: "\u062A\u062E\u0637\u064A \u0627\u0644\u062F\u0631\u0633"
+    gloss: 0
+    tier: 0
+  - key: guide.done
+    text: "\u0627\u0646\u062A\u0647\u0649 \u0627\u0644\u062F\u0631\u0633"
+    gloss: 0
+    tier: 0
+  - key: guide.newToday
+    text: "\u062C\u062F\u064A\u062F \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: guide.moment
+    text: "<b>{0}</b>  {1} \u0635\u0641\u062D\u062A\u0647 \u0645\u0641\u062A\u0648\u062D\u0629
+      \u0641\u064A \u0644\u0633\u0627\u0646 \u0627\u0644\u062F\u0644\u064A\u0644
+      \u0641\u064A \u0643\u062A\u0627\u0628 \u0627\u0644\u0642\u0648\u0627\u0639\u062F."
+    gloss: 0
+    tier: 0
+  - key: guide.practice
+    text: "\u062A\u062F\u0631\u064A\u0628"
+    gloss: 0
+    tier: 0
+  - key: guide.gotIt
+    text: "\u0641\u0647\u0645\u062A"
+    gloss: 0
+    tier: 0
+  - key: settings.replayTutorial
+    text: "\u0623\u0639\u062F \u062F\u0631\u0633 \u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: keys.replayTutorial
+    text: "\u0623\u0639\u062F \u062F\u0631\u0633 \u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: tooltip.day
+    text: "\u0627\u0644\u064A\u0648\u0645: {0}"
+    gloss: 0
+    tier: 0
+  - key: tooltip.stability
+    text: "\u0627\u0644\u062E\u0637 \u0627\u0644\u0632\u0645\u0646\u064A. \u0623\u0628\u0642\u0647
+      \u0628\u064A\u0646 \u0636\u0641\u062A\u064A\u0647."
+    gloss: 0
+    tier: 0
+  - key: desk.calendar
+    text: "{0} \xB7 \u0627\u0644\u064A\u0648\u0645 {1}"
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.papers
+    text: "{0} \u063A\u064A\u0631 \u0635\u062D\u064A\u062D \u2014 \u0627\u0644\u0623\u0648\u0631\u0627\u0642:
+      \"{1}\"  /  \u0627\u0644\u0645\u062A\u0648\u0642\u0639: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.said
+    text: "{0} \u063A\u064A\u0631 \u0635\u062D\u064A\u062D \u2014 \u0642\u0627\u0644
+      \u0627\u0644\u0645\u0633\u0627\u0641\u0631: \"{1}\"  /  \u0627\u0644\u0645\u062A\u0648\u0642\u0639:
+      \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.worn
+    text: "{0} \u063A\u064A\u0631 \u0635\u062D\u064A\u062D \u2014 \u064A\u0644\u0628\u0633
+      \u0627\u0644\u0645\u0633\u0627\u0641\u0631: \"{1}\"  /  \u0627\u0644\u0645\u062A\u0648\u0642\u0639:
+      \"{2}\" \u2014 \u0633\u064A\u062B\u064A\u0631 \u0627\u0644\u0630\u0639\u0631"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.papers
+    text: "{0} \u063A\u064A\u0631 \u0635\u062D\u064A\u062D \u2014 \u062A\u0638\u0647\u0631
+      \u0627\u0644\u0623\u0648\u0631\u0627\u0642 \"{1}\", \u0648\u0647\u0648 \u064A\u0646\u062A\u0645\u064A
+      \u0625\u0644\u0649 {2}"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.said
+    text: "{0} \u063A\u064A\u0631 \u0635\u062D\u064A\u062D \u2014 \u0642\u0627\u0644
+      \u0627\u0644\u0645\u0633\u0627\u0641\u0631 \"{1}\", \u0648\u0647\u0648 \u064A\u0646\u062A\u0645\u064A
+      \u0625\u0644\u0649 {2}"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.worn
+    text: "{0} \u063A\u064A\u0631 \u0635\u062D\u064A\u062D \u2014 \u064A\u0644\u0628\u0633
+      \u0627\u0644\u0645\u0633\u0627\u0641\u0631 \"{1}\", \u0648\u0647\u0648 \u064A\u0646\u062A\u0645\u064A
+      \u0625\u0644\u0649 {2}: \u0633\u064A\u062B\u064A\u0631 \u0627\u0644\u0630\u0639\u0631"
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.papers
+    text: "{0} \u063A\u064A\u0631 \u0635\u062D\u064A\u062D \u2014 \u0627\u0644\u0623\u0648\u0631\u0627\u0642:
+      \"{1}\"  /  \u0633\u062C\u0644\u0627\u062A \u0627\u0644\u0648\u0643\u0627\u0644\u0629:
+      \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.said
+    text: "{0} \u063A\u064A\u0631 \u0635\u062D\u064A\u062D \u2014 \u0642\u0627\u0644
+      \u0627\u0644\u0645\u0633\u0627\u0641\u0631: \"{1}\"  /  \u0633\u062C\u0644\u0627\u062A
+      \u0627\u0644\u0648\u0643\u0627\u0644\u0629: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.worn
+    text: "{0} \u063A\u064A\u0631 \u0635\u062D\u064A\u062D \u2014 \u064A\u0644\u0628\u0633
+      \u0627\u0644\u0645\u0633\u0627\u0641\u0631: \"{1}\"  /  \u0633\u062C\u0644\u0627\u062A
+      \u0627\u0644\u0648\u0643\u0627\u0644\u0629: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.crossMismatch.papers
+    text: "{0} \u063A\u064A\u0631 \u0645\u062A\u0633\u0642 \u2014 \u0627\u0644\u0623\u0648\u0631\u0627\u0642
+      \u0645\u062A\u0639\u0627\u0631\u0636\u0629: \"{1}\"  /  \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.personMismatch.papers
+    text: "{0} \u063A\u064A\u0631 \u0635\u062D\u064A\u062D \u2014 \u0627\u0644\u0635\u0648\u0631\u0629
+      \u0641\u064A \u0627\u0644\u0623\u0648\u0631\u0627\u0642 \u0644\u064A\u0633\u062A
+      \u0644\u0644\u0645\u0633\u0627\u0641\u0631 \u0639\u0646\u062F \u0627\u0644\u0645\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: category.Language
+    text: "\u0627\u0644\u0644\u063A\u0629"
+    gloss: 0
+    tier: 0
+  - key: category.Material
+    text: "\u0627\u0644\u0645\u0627\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: category.Politics
+    text: "\u0627\u0644\u062D\u0627\u0643\u0645"
+    gloss: 0
+    tier: 0
+  - key: category.Technology
+    text: "\u0627\u0644\u062C\u0647\u0627\u0632"
+    gloss: 0
+    tier: 0
+  - key: category.Currency
+    text: "\u0627\u0644\u0639\u0645\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: category.Geography
+    text: "\u0627\u0644\u0639\u0627\u0635\u0645\u0629"
+    gloss: 0
+    tier: 0
+  - key: category.Culture
+    text: "\u0627\u0644\u0644\u0628\u0627\u0633"
+    gloss: 0
+    tier: 0
+  - key: category.Name
+    text: "\u0627\u0644\u0627\u0633\u0645"
+    gloss: 0
+    tier: 0
+  - key: category.BirthDate
+    text: "\u062A\u0627\u0631\u064A\u062E \u0627\u0644\u0645\u064A\u0644\u0627\u062F"
+    gloss: 0
+    tier: 0
+  - key: category.CitizenId
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0645\u0648\u0627\u0637\u0646"
+    gloss: 0
+    tier: 0
+  - key: category.Destination
+    text: "\u0627\u0644\u0648\u062C\u0647\u0629"
+    gloss: 0
+    tier: 0
+  - key: category.Incident
+    text: "\u0627\u0644\u062D\u0627\u062F\u062B\u0629"
+    gloss: 0
+    tier: 0
+  - key: category.DepartureDate
+    text: "\u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0629"
+    gloss: 0
+    tier: 0
+  - key: category.Expiry
+    text: "\u0635\u0627\u0644\u062D \u062D\u062A\u0649"
+    gloss: 0
+    tier: 0
+  - key: category.AccountStatus
+    text: "\u0641\u0626\u0629 \u0627\u0644\u062A\u0623\u0634\u064A\u0631\u0629"
+    gloss: 0
+    tier: 0
+  - key: category.TransponderId
+    text: "\u0627\u0644\u0645\u0631\u0633\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: category.TransponderClass
+    text: "\u0641\u0626\u0629 \u0627\u0644\u0645\u0631\u0633\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: category.Debt
+    text: "\u0627\u0644\u062F\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: records.standing.frozen
+    text: "\u0645\u062C\u0645\u062F: \u062A\u0639\u062B\u0631, {0}"
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.incomplete
+    text: "\u0648\u0627\u0641\u0642\u062A \u0639\u0644\u0649 \u0623\u0648\u0631\u0627\u0642
+      \u0646\u0627\u0642\u0635\u0629."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.frozen
+    text: "\u0648\u0627\u0641\u0642\u062A \u0639\u0644\u0649 \u062D\u0633\u0627\u0628
+      \u0645\u062C\u0645\u062F."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.recalled
+    text: "\u0648\u0627\u0641\u0642\u062A \u0639\u0644\u0649 \u0645\u0631\u0633\u0627\u0644
+      \u0645\u0633\u062D\u0648\u0628."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.numbered
+    text: "\u0627\u0644\u062A\u0648\u062C\u064A\u0647 {0}: {1}"
+    gloss: 0
+    tier: 0
+  - key: citation.rule.record
+    text: "\u064A\u062C\u0628 \u0623\u0646 \u062A\u0637\u0627\u0628\u0642 \u0643\u0644
+      \u0648\u0631\u0642\u0629 \u062D\u0633\u0627\u0628 \u0627\u0644\u0645\u0648\u0627\u0637\u0646."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.origin
+    text: "\u0627\u0644\u0646\u0627\u0632\u062D\u0648\u0646 \u064A\u0639\u0648\u062F\u0648\u0646
+      \u0625\u0644\u0649 \u0632\u0645\u0646\u0647\u0645 \u0641\u0642\u0637: \u064A\u062C\u0628
+      \u0623\u0646 \u062A\u0637\u0627\u0628\u0642 \u0623\u0648\u0631\u0627\u0642\u0647\u0645
+      \u0648\u0625\u062C\u0627\u0628\u0627\u062A\u0647\u0645 \u0623\u0635\u0644\u0647\u0645."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.goods
+    text: "\u0644\u0627 \u0639\u0645\u0644\u0629 \u0648\u0644\u0627 \u062A\u0642\u0646\u064A\u0629
+      \u0645\u0646 2150 \u062A\u063A\u0627\u062F\u0631 2150."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.dress
+    text: "\u0627\u0644\u0644\u0628\u0627\u0633 \u0644\u0644\u0648\u062C\u0647\u0629:
+      \u0644\u0627 \u0634\u064A\u0621 \u0645\u0646 \u0632\u0645\u0646 \u0622\u062E\u0631
+      \u0623\u0648 \u0645\u0643\u0627\u0646 \u0622\u062E\u0631."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.economyManifest
+    text: "\u0627\u0644\u062C\u0648\u0627\u0632 \u0627\u0644\u0645\u0645\u062A\u0627\u0632
+      \u064A\u0633\u0627\u0641\u0631 \u0628\u0645\u0631\u0633\u0627\u0644 \u0645\u0645\u062A\u0627\u0632."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.premiumManifest
+    text: "\u0627\u0644\u062C\u0648\u0627\u0632 \u0627\u0644\u0639\u0627\u062F\u064A
+      \u064A\u0633\u0627\u0641\u0631 \u0628\u0645\u0631\u0633\u0627\u0644 \u0627\u0642\u062A\u0635\u0627\u062F\u064A."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.waiverMissing
+    text: "\u0647\u0630\u0647 \u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0629 \u062A\u062A\u0637\u0644\u0628
+      \u0625\u0642\u0631\u0627\u0631 \u0627\u0646\u0642\u0637\u0627\u0639 \u0645\u0648\u0642\u0639\u0627."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.waiverUnsigned
+    text: "\u0647\u0630\u0647 \u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0629 \u062A\u062A\u0637\u0644\u0628
+      \u0625\u0642\u0631\u0627\u0631 \u0627\u0646\u0642\u0637\u0627\u0639 \u0645\u0648\u0642\u0639\u0627."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.proofMissing
+    text: "\u0627\u0644\u062C\u0648\u0627\u0632 \u0627\u0644\u0639\u0627\u062F\u064A
+      \u064A\u062A\u0637\u0644\u0628 \u0625\u062B\u0628\u0627\u062A \u0645\u0644\u0627\u0621\u0629."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.contractMissing
+    text: "\u0645\u063A\u0627\u062F\u0631\u0629 \u062A\u0633\u0648\u064A\u0629 \u0627\u0644\u062F\u064A\u0648\u0646
+      \u062A\u062A\u0637\u0644\u0628 \u062A\u0635\u0631\u064A\u062D \u0639\u0645\u0644
+      \u0645\u0633\u062C\u0644\u0627."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.frozen
+    text: "\u0627\u0644\u062D\u0633\u0627\u0628 \u0627\u0644\u0645\u062C\u0645\u062F
+      \u0644\u0627 \u064A\u063A\u0627\u062F\u0631."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.departure
+    text: "\u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0629 \u0641\u0642\u0637 \u0641\u064A
+      \u0627\u0644\u062A\u0627\u0631\u064A\u062E \u0627\u0644\u0645\u0637\u0628\u0648\u0639
+      \u0639\u0644\u0649 \u0623\u0648\u0631\u0627\u0642 \u0627\u0644\u0633\u0641\u0631."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.expired
+    text: "\u0644\u0627 \u0645\u063A\u0627\u062F\u0631\u0629 \u0623\u0628\u062F\u0627
+      \u0628\u0648\u0631\u0642\u0629 \u0645\u0646\u062A\u0647\u064A\u0629 \u0627\u0644\u0635\u0644\u0627\u062D\u064A\u0629."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.none
+    text: "\u0644\u0627 \u062A\u0648\u062C\u064A\u0647 \u0648\u0644\u0627 \u0633\u062C\u0644
+      \u064A\u0631\u0641\u0636 \u0647\u0630\u0627 \u0627\u0644\u0645\u0633\u0627\u0641\u0631."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.evidence
+    text: "\u0627\u0644\u0631\u0641\u0636 \u064A\u062A\u0637\u0644\u0628 \u062F\u0644\u064A\u0644\u0627
+      \u0645\u0633\u062C\u0644\u0627."
+    gloss: 0
+    tier: 0
+  - key: citation.label.destination
+    text: "\u0627\u0644\u0648\u062C\u0647\u0629"
+    gloss: 0
+    tier: 0
+  - key: citation.label.account
+    text: "\u062D\u0633\u0627\u0628 \u0627\u0644\u0645\u0648\u0627\u0637\u0646"
+    gloss: 0
+    tier: 0
+  - key: citation.label.registry
+    text: "\u0633\u062C\u0644 \u0627\u0644\u0646\u0627\u0632\u062D\u064A\u0646"
+    gloss: 0
+    tier: 0
+  - key: citation.label.standing
+    text: "\u0627\u0644\u0648\u0636\u0639 \u0641\u064A {0}"
+    gloss: 0
+    tier: 0
+  - key: citation.label.today
+    text: "\u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: citation.label.garment
+    text: "\u0627\u0644\u0645\u0644\u0628\u0633"
+    gloss: 0
+    tier: 0
+  - key: citation.label.onPaper
+    text: "{0} \u0641\u064A {1}"
+    gloss: 0
+    tier: 0
+  - key: citation.label.answer
+    text: "\u0625\u062C\u0627\u0628\u062A\u0647 ({0})"
+    gloss: 0
+    tier: 0
+  - key: citation.label.book
+    text: "{0} \u0641\u064A {1}"
+    gloss: 0
+    tier: 0
+  - key: citation.label.logged
+    text: "\u062F\u0644\u064A\u0644 \u0645\u0633\u062C\u0644"
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.waiverMissing
+    text: "\u0625\u0642\u0631\u0627\u0631 \u0627\u0644\u0627\u0646\u0642\u0637\u0627\u0639"
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.proofMissing
+    text: "\u0625\u062B\u0628\u0627\u062A \u0627\u0644\u0645\u0644\u0627\u0621\u0629"
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.contractMissing
+    text: "\u062A\u0635\u0631\u064A\u062D \u0627\u0644\u0639\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: citation.value.notHandedOver
+    text: "\u0644\u0645 \u062A\u0633\u0644\u0645"
+    gloss: 0
+    tier: 0
+  - key: citation.value.frozen
+    text: "\u0645\u062C\u0645\u062F \u0645\u0646\u0630 {0}"
+    gloss: 0
+    tier: 0
+  - key: citation.value.open
+    text: "{0}, \u0645\u0641\u062A\u0648\u062D\u0629 \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: category.Employer
+    text: "\u0635\u0627\u062D\u0628 \u0627\u0644\u0639\u0645\u0644"
+    gloss: 0
+    tier: 0
+  - key: category.Term
+    text: "\u0627\u0644\u0645\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: category.Wage
+    text: "\u0627\u0644\u0623\u062C\u0631"
+    gloss: 0
+    tier: 0
+  - key: category.WaiverNo
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0625\u0642\u0631\u0627\u0631"
+    gloss: 0
+    tier: 0
+  - key: category.Credit
+    text: "\u0627\u0644\u0631\u0635\u064A\u062F"
+    gloss: 0
+    tier: 0
+  - key: category.Funds
+    text: "\u0627\u0644\u0623\u0645\u0648\u0627\u0644"
+    gloss: 0
+    tier: 0
+  - key: category.PolicyNo
+    text: "\u0631\u0642\u0645 \u0627\u0644\u0628\u0648\u0644\u064A\u0635\u0629"
+    gloss: 0
+    tier: 0
+  - key: category.Signature
+    text: "\u0627\u0644\u062A\u0648\u0642\u064A\u0639"
+    gloss: 0
+    tier: 0
+  - key: category.Seal
+    text: "\u0627\u0644\u062F\u0645\u063A\u0629"
+    gloss: 0
+    tier: 0
+  - key: category.Photo
+    text: "\u0627\u0644\u0635\u0648\u0631\u0629"
+    gloss: 0
+    tier: 0
   - key: icon.portals
     text: "\u0627\u0644\u0628\u0648\u0627\u0628\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: window.portals
+    text: "\u0627\u0644\u0628\u0648\u0627\u0628\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: board.returnGate
+    text: "\u0628\u0648\u0627\u0628\u0629 \u0627\u0644\u0639\u0648\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: board.closed
+    text: "\u0645\u063A\u0644\u0642\u0629"
+    gloss: 0
+    tier: 0
+  - key: board.maintenance
+    text: "\u062A\u062D\u062A \u0627\u0644\u0635\u064A\u0627\u0646\u0629"
+    gloss: 0
+    tier: 0
+  - key: board.noRoute
+    text: "\u0644\u0627 \u0645\u0633\u0627\u0631"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.title
+    text: "\u0644\u0648\u062D\u0629 \u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0629"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.closed
+    text: "{0} {1}: {2}, {3}: \u0645\u063A\u0644\u0642\u0629 \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGate
+    text: "{0} {1}: \u0628\u0648\u0627\u0628\u0629 \u0627\u0644\u0639\u0648\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGateMaintenance
+    text: "{0} {1}: \u0628\u0648\u0627\u0628\u0629 \u0627\u0644\u0639\u0648\u062F\u0629,
+      \u062A\u062D\u062A \u0627\u0644\u0635\u064A\u0627\u0646\u0629"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.maintenance
+    text: "{0} {1}: \u062A\u062D\u062A \u0627\u0644\u0635\u064A\u0627\u0646\u0629"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.noRoute
+    text: "{0} {1}: \u0644\u0627 \u0645\u0633\u0627\u0631 \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: portals.date
+    text: "\u0645\u0633\u0627\u0631\u0627\u062A {0}"
+    gloss: 0
+    tier: 0
+  - key: portals.returnGate
+    text: "\u0628\u0648\u0627\u0628\u0629 \u0627\u0644\u0639\u0648\u062F\u0629"
+    gloss: 0
+    tier: 0
+  - key: portals.state.inService
+    text: "\u0641\u064A \u0627\u0644\u062E\u062F\u0645\u0629"
+    gloss: 0
+    tier: 0
+  - key: portals.state.noRoute
+    text: "\u0641\u064A \u0627\u0644\u062E\u062F\u0645\u0629 \xB7 \u0644\u0627 \u0645\u0633\u0627\u0631
+      \u0627\u0644\u064A\u0648\u0645"
+    gloss: 0
+    tier: 0
+  - key: portals.state.closed
+    text: "\u0645\u063A\u0644\u0642\u0629 \u0627\u0644\u064A\u0648\u0645: {0}"
+    gloss: 0
+    tier: 0
+  - key: portals.state.underMaintenance
+    text: "\u062A\u062D\u062A \u0627\u0644\u0635\u064A\u0627\u0646\u0629"
+    gloss: 0
+    tier: 0
+  - key: portals.state.maintenance
+    text: "\u062A\u062D\u062A \u0627\u0644\u0635\u064A\u0627\u0646\u0629 \xB7 \u0623\u0635\u0644\u062D\u0647\u0627
+      \u0641\u064A \u0627\u0644\u0637\u0644\u0628\u0627\u062A ({0})"
+    gloss: 0
+    tier: 0
+  - key: portals.state.locked
+    text: "\u062A\u062D\u062A \u0627\u0644\u0635\u064A\u0627\u0646\u0629 \xB7 \u0645\u0642\u0641\u0644\u0629:
+      \u0623\u0635\u0644\u062D {0} \u0623\u0648\u0644\u0627"
+    gloss: 0
+    tier: 0
+  - key: portals.state.transit
+    text: "\u062A\u062D\u062A \u0627\u0644\u0635\u064A\u0627\u0646\u0629 \xB7 \u0627\u0644\u0625\u0635\u0644\u0627\u062D
+      \u0641\u064A \u0627\u0644\u0637\u0631\u064A\u0642, \u0641\u064A \u0627\u0644\u062E\u062F\u0645\u0629
+      \u063A\u062F\u0627"
+    gloss: 0
+    tier: 0
+  - key: portals.footer
+    text: "\u0627\u0644\u0645\u062F\u064A\u0631\u064A\u0629 \u062A\u062D\u062F\u062F
+      \u0627\u0644\u0645\u0633\u0627\u0631\u0627\u062A. \u062D\u062A\u0649 \u0625\u0635\u0644\u0627\u062D
+      \u0628\u0648\u0627\u0628\u0629 \u0627\u0644\u0639\u0648\u062F\u0629, \u064A\u063A\u0627\u062F\u0631
+      \u0627\u0644\u0646\u0627\u0632\u062D\u0648\u0646 \u0639\u0628\u0631 \u0627\u0644\u0628\u0648\u0627\u0628\u0629
+      {0}."
+    gloss: 0
+    tier: 0
+  - key: home.title
+    text: "\u0627\u0644\u064A\u0648\u0645 {0} \u2014 \u0627\u0644\u0628\u064A\u062A"
+    gloss: 0
+    tier: 0
+  - key: home.breakIn
+    text: "\u0627\u0642\u062A\u062D\u0645 \u0623\u062D\u062F\u0647\u0645 \u0627\u0644\u0628\u064A\u062A
+      \u0648\u0623\u0646\u062A \u0641\u064A \u0627\u0644\u0639\u0645\u0644: -{0}"
+    gloss: 0
+    tier: 0
+  - key: home.fixed
+    text: "\u0627\u0644\u062A\u0643\u0627\u0644\u064A\u0641 \u0627\u0644\u062B\u0627\u0628\u062A\u0629
+      \u0627\u0644\u0644\u064A\u0644\u0629:"
+    gloss: 0
+    tier: 0
+  - key: home.rent
+    text: "  \u0627\u0644\u0625\u064A\u062C\u0627\u0631 \u0648\u0627\u0644\u062E\u062F\u0645\u0627\u062A:
+      -{0}"
+    gloss: 0
+    tier: 0
+  - key: home.drain
+    text: "  \u0631\u0639\u0627\u064A\u0629 {0} \u0627\u0644\u0625\u0636\u0627\u0641\u064A\u0629
+      \u0623\u062B\u0646\u0627\u0621 \u0627\u0644\u0645\u0631\u0636: -{1}"
+    gloss: 0
+    tier: 0
+  - key: home.upkeep
+    text: "  \u0635\u064A\u0627\u0646\u0629 \u0627\u0644\u0628\u064A\u062A: -{0}"
+    gloss: 0
+    tier: 0
+  - key: home.fixedTotal
+    text: "\u0627\u0644\u0645\u062F\u0641\u0648\u0639: -{0} {1}   (\u0627\u0644\u0631\u0635\u064A\u062F:
+      {2})"
+    gloss: 0
+    tier: 0
+  - key: home.debt
+    text: "\u0623\u0646\u062A \u0645\u062F\u064A\u0646. \u062C\u062F \u0637\u0631\u064A\u0642\u0629
+      \u0644\u062A\u062F\u0628\u0631 \u0623\u0645\u0648\u0631\u0643."
+    gloss: 0
+    tier: 0
+  - key: home.bills.total
+    text: "\u0641\u0648\u0627\u062A\u064A\u0631 \u0627\u0644\u0644\u064A\u0644\u0629:
+      {0} {1}   (\u0627\u0644\u0631\u0635\u064A\u062F \u0628\u0639\u062F\u0647\u0627:
+      {2})"
+    gloss: 0
+    tier: 0
+  - key: home.bills.short
+    text: "\u0641\u0648\u0627\u062A\u064A\u0631 \u0627\u0644\u0644\u064A\u0644\u0629:
+      {0} {1}, \u0623\u0643\u062B\u0631 \u0645\u0645\u0627 \u0644\u062F\u064A\u0643
+      {2}: \u062A\u062E\u0644 \u0639\u0646 \u0634\u064A\u0621."
+    gloss: 0
+    tier: 0
+  - key: home.bill.paying
+    text: "\u062F\u0641\u0639"
+    gloss: 0
+    tier: 0
+  - key: home.bill.skip
+    text: "\u062A\u062E\u0637"
+    gloss: 0
+    tier: 0
+  - key: home.bill.needsPower
+    text: "\u064A\u062D\u062A\u0627\u062C \u0627\u0644\u0643\u0647\u0631\u0628\u0627\u0621"
+    gloss: 0
+    tier: 0
+  - key: home.bill.notNeeded
+    text: "\u063A\u064A\u0631 \u0644\u0627\u0632\u0645: {0} \u0628\u062E\u064A\u0631"
+    gloss: 0
+    tier: 0
+  - key: home.pay
+    text: "\u0627\u062F\u0641\u0639 \u0648\u0634\u0627\u0647\u062F {0}"
+    gloss: 0
+    tier: 0
+  - key: home.pet.title
+    text: "\u0631\u0643\u0646 {0}"
+    gloss: 0
+    tier: 0
+  - key: home.pet.pat
+    text: "\u062F\u0627\u0639\u0628 {0}"
+    gloss: 0
+    tier: 0
+  - key: home.pet.play
+    text: "\u0627\u0644\u0639\u0628"
+    gloss: 0
+    tier: 0
+  - key: home.pet.played
+    text: "\u0644\u0639\u0628 \u0627\u0644\u0644\u064A\u0644\u0629"
+    gloss: 0
+    tier: 0
+  - key: home.pet.noToys
+    text: "\u0644\u0627 \u0623\u0644\u0639\u0627\u0628 \u0628\u0639\u062F. \u062A\u0637\u0628\u064A\u0642
+      \u0627\u0644\u0637\u0644\u0628\u0627\u062A \u0639\u0644\u0649 \u062D\u0627\u0633\u0648\u0628\u0643
+      \u064A\u0628\u064A\u0639\u0647\u0627."
+    gloss: 0
+    tier: 0
+  - key: home.pet.dark
+    text: "\u0627\u0644\u0623\u0636\u0648\u0627\u0621 \u0645\u0637\u0641\u0623\u0629
+      \u0627\u0644\u0644\u064A\u0644\u0629."
+    gloss: 0
+    tier: 0
+  - key: home.next.house
+    text: "\u062A\u0627\u0628\u0639 \u0625\u0644\u0649 \u0627\u0644\u0628\u064A\u062A"
+    gloss: 0
+    tier: 0
+  - key: home.next.slots
+    text: "\u062A\u0627\u0628\u0639 \u0625\u0644\u0649 \u0627\u0644\u062E\u0627\u0646\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: adopt.title
+    text: "\u062A\u0628\u0646 \u0631\u0641\u064A\u0642\u0627"
+    gloss: 0
+    tier: 0
+  - key: adopt.body
+    text: "\u0641\u064A \u0645\u0644\u062C\u0623 \u0627\u0644\u0645\u062F\u064A\u0631\u064A\u0629
+      \u0643\u0644\u0628 \u0648\u0642\u0637\u0629 \u064A\u0646\u062A\u0638\u0631\u0627\u0646.
+      \u0623\u062D\u062F\u0647\u0645\u0627 \u064A\u0630\u0647\u0628 \u0645\u0639\u0643
+      \u0625\u0644\u0649 \u0627\u0644\u0628\u064A\u062A \u0627\u0644\u0644\u064A\u0644\u0629.
+      \u0627\u062E\u062A\u0631, \u0648\u0623\u0639\u0637\u0647 \u0627\u0633\u0645\u0627."
+    gloss: 0
+    tier: 0
+  - key: adopt.dog
+    text: "\u0643\u0644\u0628"
+    gloss: 0
+    tier: 0
+  - key: adopt.cat
+    text: "\u0642\u0637\u0629"
+    gloss: 0
+    tier: 0
+  - key: adopt.placeholder
+    text: "\u0627\u0643\u062A\u0628 \u0627\u0633\u0645\u0627"
+    gloss: 0
+    tier: 0
+  - key: adopt.go
+    text: "\u062A\u0628\u0646 \u0648\u0627\u0628\u062F\u0623"
+    gloss: 0
+    tier: 0
+  - key: adopt.back
+    text: "\u0631\u062C\u0648\u0639"
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.Empty
+    text: "\u0623\u0639\u0637 \u0631\u0641\u064A\u0642\u0643 \u0627\u0633\u0645\u0627."
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.TooLong
+    text: "\u0627\u0633\u0645 \u0623\u0642\u0635\u0631 \u0645\u0646 \u0641\u0636\u0644\u0643:
+      {0} \u062D\u0631\u0641\u0627 \u0639\u0644\u0649 \u0627\u0644\u0623\u0643\u062B\u0631."
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.BadCharacters
+    text: "\u062D\u0631\u0648\u0641 \u0648\u0645\u0633\u0627\u0641\u0627\u062A \u0648\u0634\u0631\u0637\u0627\u062A
+      \u0648\u0641\u0648\u0627\u0635\u0644 \u0639\u0644\u0648\u064A\u0629 \u0641\u0642\u0637."
+    gloss: 0
+    tier: 0
+  - key: menubar.records
+    text: "\u0627\u0644\u0633\u062C\u0644\u0627\u062A"
+    gloss: 0
+    tier: 0
+  - key: menubar.rules
+    text: "\u0627\u0644\u0642\u0648\u0627\u0639\u062F"
+    gloss: 0
+    tier: 0
+  - key: menubar.books
+    text: "\u0627\u0644\u0643\u062A\u0628"
+    gloss: 0
+    tier: 0
+  - key: menubar.calendar
+    text: "\u0627\u0644\u062A\u0642\u0648\u064A\u0645"
+    gloss: 0
+    tier: 0
+  - key: menubar.notHandedOver
+    text: "\u0644\u0645 \u062A\u0633\u0644\u0645"
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.flag
+    text: "\u062A\u0639\u0644\u064A\u0645 \u0643\u0645\u0641\u0642\u0648\u062F"
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.flagged
+    text: "\u0645\u0639\u0644\u0645: \u0627\u0637\u0644\u0628\u0647"
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.notCarried
+    text: "\u0644\u0627 \u064A\u062D\u0645\u0644\u0647\u0627"
+    gloss: 0
+    tier: 0
+  - key: menubar.today
+    text: "\u0627\u0644\u064A\u0648\u0645: {0}"
+    gloss: 0
+    tier: 0
+  - key: menubar.today.note
+    text: "\u0627\u0645\u0633\u0643 \u0644\u0644\u0645\u0642\u0627\u0631\u0646\u0629"
     gloss: 0
     tier: 0
   words:
@@ -204,3 +3526,1803 @@ MonoBehaviour:
     english: line
   - native: "\u0627\u0644\u0632\u0645\u0646\u064A"
     english: time
+  - native: C
+    english: C
+  - native: Ctrl
+    english: Ctrl
+  - native: DESK
+    english: DESK
+  - native: Enter
+    english: Enter
+  - native: Esc
+    english: Esc
+  - native: K
+    english: K
+  - native: N
+    english: N
+  - native: P
+    english: P
+  - native: TC
+    english: TC
+  - native: UV
+    english: UV
+  - native: V
+    english: V
+  - native: "\u0622\u062E\u0631"
+    english: other
+  - native: "\u0623\u0628\u0642\u0647"
+    english: keep it
+  - native: "\u0623\u062B\u0631"
+    english: trace
+  - native: "\u0623\u062B\u0646\u0627\u0621"
+    english: during
+  - native: "\u0623\u062C\u0631"
+    english: pay
+  - native: "\u0623\u062D\u062F\u0647\u0645"
+    english: someone
+  - native: "\u0623\u062D\u062F\u0647\u0645\u0627"
+    english: one of them
+  - native: "\u0623\u062E\u0631\u0649"
+    english: another
+  - native: "\u0623\u0631\u0634\u064A\u0641"
+    english: archive
+  - native: "\u0623\u0631\u0636"
+    english: land
+  - native: "\u0623\u0632\u0644"
+    english: remove
+  - native: "\u0623\u0633\u0626\u0644\u0629"
+    english: questions
+  - native: "\u0623\u0635\u0644\u062D"
+    english: repair
+  - native: "\u0623\u0635\u0644\u062D\u0647\u0627"
+    english: repair it
+  - native: "\u0623\u0635\u0644\u0647\u0645"
+    english: their origin
+  - native: "\u0623\u0639\u062F"
+    english: replay
+  - native: "\u0623\u0639\u062F\u0627\u062F"
+    english: issues
+  - native: "\u0623\u0639\u062F\u0647\u0627"
+    english: reset them
+  - native: "\u0623\u0639\u0637"
+    english: give
+  - native: "\u0623\u063A\u0644\u0642"
+    english: close
+  - native: "\u0623\u0641\u0644\u062A"
+    english: let go of
+  - native: "\u0623\u0642\u0631\u0628"
+    english: nearest
+  - native: "\u0623\u0642\u0635\u0631"
+    english: shorter
+  - native: "\u0623\u0643\u062B\u0631"
+    english: more
+  - native: "\u0623\u0644\u0639\u0627\u0628"
+    english: toys
+  - native: "\u0623\u0644\u063A"
+    english: cancel
+  - native: "\u0623\u0644\u063A\u0647"
+    english: cancel it
+  - native: "\u0623\u0645\u0631"
+    english: order
+  - native: "\u0623\u0645\u0633"
+    english: yesterday
+  - native: "\u0623\u0645\u0648\u0627\u0644"
+    english: money
+  - native: "\u0623\u0645\u0648\u0631\u0643"
+    english: your affairs
+  - native: "\u0623\u0646"
+    english: that
+  - native: "\u0623\u0646\u062A"
+    english: you
+  - native: "\u0623\u0647\u0644"
+    english: people
+  - native: "\u0623\u0648"
+    english: or
+  - native: "\u0623\u0648\u0631\u0627\u0642"
+    english: papers
+  - native: "\u0623\u0648\u0631\u0627\u0642\u0647\u0645"
+    english: their papers
+  - native: "\u0623\u0648\u0644\u0627"
+    english: first
+  - native: "\u0623\u0648\u0644\u0648\u064A\u0629"
+    english: priority
+  - native: "\u0623\u064A"
+    english: any
+  - native: "\u0623\u064A\u0627\u0645"
+    english: days
+  - native: "\u0623\u064A\u0642\u0648\u0646\u0627\u062A"
+    english: icons
+  - native: "\u0623\u064A\u0642\u0648\u0646\u0629"
+    english: icon
+  - native: "\u0625\u0628\u0642\u0627\u0621"
+    english: keep
+  - native: "\u0625\u062B\u0628\u0627\u062A"
+    english: proof
+  - native: "\u0625\u062C\u0627\u0628\u0629"
+    english: answer
+  - native: "\u0625\u062C\u0627\u0628\u062A\u0647"
+    english: their answer
+  - native: "\u0625\u062D\u062F\u0627\u0647\u0627"
+    english: one of them
+  - native: "\u0625\u062E\u0641\u0627\u0624\u0647"
+    english: hide it
+  - native: "\u0625\u062E\u0641\u0627\u0624\u0647\u0627"
+    english: hide it
+  - native: "\u0625\u0635\u0644\u0627\u062D"
+    english: repair
+  - native: "\u0625\u0638\u0647\u0627\u0631"
+    english: show
+  - native: "\u0625\u0639\u0627\u062F\u0629"
+    english: reset
+  - native: "\u0625\u0639\u0644\u0627\u0646\u0627\u062A"
+    english: notices
+  - native: "\u0625\u063A\u0644\u0627\u0642"
+    english: close
+  - native: "\u0625\u0642\u0631\u0627\u0631"
+    english: waiver
+  - native: "\u0625\u0644\u063A\u0627\u0621"
+    english: cancel
+  - native: "\u0625\u0644\u064A\u0647"
+    english: to it
+  - native: "\u0625\u0644\u064A\u0647\u0627"
+    english: to it
+  - native: "\u0625\u0645\u062F\u0627\u062F\u0627\u062A"
+    english: supply
+  - native: "\u0625\u0646\u0630\u0627\u0631"
+    english: warning
+  - native: "\u0627\u0628\u062D\u062B"
+    english: search
+  - native: "\u0627\u062A\u0628\u0639"
+    english: follow
+  - native: "\u0627\u062B\u0646\u064A\u0646"
+    english: two
+  - native: "\u0627\u062C\u0639\u0644"
+    english: make
+  - native: "\u0627\u062D\u062A\u062C\u0627\u0632"
+    english: detain
+  - native: "\u0627\u062D\u062A\u062C\u0632\u062A"
+    english: you detained
+  - native: "\u0627\u062E\u062A\u0631"
+    english: pick
+  - native: "\u0627\u062E\u062A\u0635\u0627\u0631\u0627\u062A"
+    english: shortcuts
+  - native: "\u0627\u062E\u062A\u0645"
+    english: stamp
+  - native: "\u0627\u062E\u062A\u064A\u0627\u0631"
+    english: pick
+  - native: "\u0627\u062E\u0631\u062C"
+    english: leave
+  - native: "\u0627\u062F\u0641\u0639"
+    english: pay
+  - native: "\u0627\u0633\u062A\u062E\u062F\u0645"
+    english: use
+  - native: "\u0627\u0633\u062A\u0639\u0644\u0627\u0645"
+    english: query
+  - native: "\u0627\u0633\u062A\u0644\u0645"
+    english: receive
+  - native: "\u0627\u0633\u062D\u0628"
+    english: drag
+  - native: "\u0627\u0633\u0645"
+    english: name
+  - native: "\u0627\u0633\u0645\u0627"
+    english: a name
+  - native: "\u0627\u0633\u0645\u0647"
+    english: its name
+  - native: "\u0627\u0637\u0631\u062D"
+    english: ask
+  - native: "\u0627\u0637\u0644\u0628"
+    english: ask for
+  - native: "\u0627\u0637\u0644\u0628\u0647"
+    english: ask for it
+  - native: "\u0627\u0637\u0644\u0628\u0647\u0627"
+    english: ask for it
+  - native: "\u0627\u0637\u0644\u0639\u062A"
+    english: you acknowledged
+  - native: "\u0627\u0639\u0631\u0636"
+    english: put up
+  - native: "\u0627\u0641\u062A\u062D"
+    english: open
+  - native: "\u0627\u0641\u062D\u0635"
+    english: check
+  - native: "\u0627\u0642\u062A\u062D\u0645"
+    english: broke in
+  - native: "\u0627\u0642\u062A\u0635\u0627\u062F\u064A"
+    english: Economy
+  - native: "\u0627\u0642\u0631\u0623"
+    english: read
+  - native: "\u0627\u0642\u0631\u0623\u0647\u0627"
+    english: read it
+  - native: "\u0627\u0643\u062A\u0628"
+    english: type
+  - native: "\u0627\u0644\u0622\u062E\u0631"
+    english: the other
+  - native: "\u0627\u0644\u0622\u0646"
+    english: now
+  - native: "\u0627\u0644\u0623\u062C\u0631"
+    english: pay
+  - native: "\u0627\u0644\u0623\u062D\u0645\u0631"
+    english: red
+  - native: "\u0627\u0644\u0623\u062E\u0628\u0627\u0631"
+    english: news
+  - native: "\u0627\u0644\u0623\u062E\u062A\u0627\u0645"
+    english: stamps
+  - native: "\u0627\u0644\u0623\u062E\u0631\u0649"
+    english: other
+  - native: "\u0627\u0644\u0623\u0632\u064A\u0627\u0621"
+    english: costume
+  - native: "\u0627\u0644\u0623\u0633\u0647\u0645"
+    english: arrows
+  - native: "\u0627\u0644\u0623\u0636\u0648\u0627\u0621"
+    english: lights
+  - native: "\u0627\u0644\u0623\u0639\u062F\u0627\u062F"
+    english: issues
+  - native: "\u0627\u0644\u0623\u0643\u062B\u0631"
+    english: most
+  - native: "\u0627\u0644\u0623\u0644\u0648\u0627\u062D"
+    english: panes
+  - native: "\u0627\u0644\u0623\u0644\u0648\u0627\u0646"
+    english: colours
+  - native: "\u0627\u0644\u0623\u0645\u0627\u0643\u0646"
+    english: places
+  - native: "\u0627\u0644\u0623\u0646\u0633\u0627\u0628"
+    english: lineage
+  - native: "\u0627\u0644\u0623\u0648\u0631\u0627\u0642"
+    english: papers
+  - native: "\u0627\u0644\u0623\u0648\u0644\u0649"
+    english: first
+  - native: "\u0627\u0644\u0623\u064A\u0642\u0648\u0646\u0627\u062A"
+    english: icons
+  - native: "\u0627\u0644\u0623\u064A\u0642\u0648\u0646\u0629"
+    english: icon
+  - native: "\u0627\u0644\u0623\u064A\u0645\u0646"
+    english: right
+  - native: "\u0627\u0644\u0625\u062C\u0627\u0628\u0627\u062A"
+    english: answers
+  - native: "\u0627\u0644\u0625\u0635\u0644\u0627\u062D"
+    english: repair
+  - native: "\u0627\u0644\u0625\u0636\u0627\u0641\u064A\u0629"
+    english: extra
+  - native: "\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A"
+    english: Settings
+  - native: "\u0627\u0644\u0625\u063A\u0644\u0627\u0642"
+    english: closing
+  - native: "\u0627\u0644\u0625\u0642\u0631\u0627\u0631"
+    english: waiver
+  - native: "\u0627\u0644\u0625\u0642\u0631\u0627\u0631\u0627\u062A"
+    english: waivers
+  - native: "\u0627\u0644\u0625\u0644\u063A\u0627\u0621"
+    english: Cancel
+  - native: "\u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A\u0629"
+    english: online
+  - native: "\u0627\u0644\u0625\u0646\u062C\u0644\u064A\u0632\u064A\u0629"
+    english: English
+  - native: "\u0627\u0644\u0625\u0646\u0630\u0627\u0631"
+    english: warning
+  - native: "\u0627\u0644\u0625\u064A\u062C\u0627\u0631"
+    english: rent
+  - native: "\u0627\u0644\u0627\u062A\u062C\u0627\u0647"
+    english: direction
+  - native: "\u0627\u0644\u0627\u062B\u0646\u064A\u0646"
+    english: both
+  - native: "\u0627\u0644\u0627\u062D\u062A\u062C\u0627\u0632"
+    english: detaining
+  - native: "\u0627\u0644\u0627\u062E\u062A\u0635\u0627\u0631\u0627\u062A"
+    english: shortcuts
+  - native: "\u0627\u0644\u0627\u062E\u062A\u064A\u0627\u0631"
+    english: picking
+  - native: "\u0627\u0644\u0627\u0633\u0645"
+    english: name
+  - native: "\u0627\u0644\u0627\u0646\u062D\u0631\u0627\u0641"
+    english: deviation
+  - native: "\u0627\u0644\u0627\u0646\u0642\u0637\u0627\u0639"
+    english: stranding
+  - native: "\u0627\u0644\u0628\u062D\u062B"
+    english: search
+  - native: "\u0627\u0644\u0628\u062F\u0627\u064A\u0629"
+    english: start
+  - native: "\u0627\u0644\u0628\u0631\u064A\u062F"
+    english: Mail
+  - native: "\u0627\u0644\u0628\u0637\u0627\u0642\u0629"
+    english: card
+  - native: "\u0627\u0644\u0628\u0648\u0627\u0628\u0629"
+    english: portal
+  - native: "\u0627\u0644\u0628\u0648\u0644\u064A\u0635\u0629"
+    english: policy
+  - native: "\u0627\u0644\u062A\u0623\u0634\u064A\u0631\u0629"
+    english: visa
+  - native: "\u0627\u0644\u062A\u0627\u0631\u064A\u062E"
+    english: history; date
+  - native: "\u0627\u0644\u062A\u0627\u0644\u064A"
+    english: next
+  - native: "\u0627\u0644\u062A\u0627\u0644\u064A\u0629"
+    english: next one
+  - native: "\u0627\u0644\u062A\u062B\u0628\u064A\u062A"
+    english: pin
+  - native: "\u0627\u0644\u062A\u062D\u0642\u064A\u0642"
+    english: Investigation
+  - native: "\u0627\u0644\u062A\u0630\u0643\u0631\u0629"
+    english: ticket
+  - native: "\u0627\u0644\u062A\u0631\u062C\u0645\u0627\u062A"
+    english: translations
+  - native: "\u0627\u0644\u062A\u0631\u062C\u0645\u0629"
+    english: translation
+  - native: "\u0627\u0644\u062A\u0631\u0643\u064A\u0628"
+    english: install
+  - native: "\u0627\u0644\u062A\u0631\u0643\u064A\u0632"
+    english: focus
+  - native: "\u0627\u0644\u062A\u0633\u062C\u064A\u0644"
+    english: logging
+  - native: "\u0627\u0644\u062A\u0633\u0645\u064A\u0629"
+    english: label
+  - native: "\u0627\u0644\u062A\u0637\u0628\u064A\u0642"
+    english: app
+  - native: "\u0627\u0644\u062A\u0642\u0648\u064A\u0645"
+    english: calendar
+  - native: "\u0627\u0644\u062A\u0643\u0627\u0644\u064A\u0641"
+    english: costs
+  - native: "\u0627\u0644\u062A\u0648\u0627\u0631\u064A\u062E"
+    english: dates
+  - native: "\u0627\u0644\u062A\u0648\u062C\u064A\u0647"
+    english: directive
+  - native: "\u0627\u0644\u062A\u0648\u062C\u064A\u0647\u0627\u062A"
+    english: directives
+  - native: "\u0627\u0644\u062A\u064A"
+    english: which
+  - native: "\u0627\u0644\u062B\u0627\u0628\u062A\u0629"
+    english: fixed
+  - native: "\u0627\u0644\u062C\u0632\u0621"
+    english: part
+  - native: "\u0627\u0644\u062C\u0645\u0627\u0631\u0643"
+    english: customs
+  - native: "\u0627\u0644\u062C\u0647\u0629"
+    english: side
+  - native: "\u0627\u0644\u062C\u0648\u0627\u0632"
+    english: passport
+  - native: "\u0627\u0644\u062D\u0627\u0633\u0648\u0628"
+    english: PC
+  - native: "\u0627\u0644\u062D\u0627\u0636\u0631"
+    english: present
+  - native: "\u0627\u0644\u062D\u0627\u0644\u0627\u062A"
+    english: subjects
+  - native: "\u0627\u0644\u062D\u0627\u0644\u0629"
+    english: status
+  - native: "\u0627\u0644\u062D\u0627\u0644\u064A"
+    english: today
+  - native: "\u0627\u0644\u062D\u0631\u0643\u0629"
+    english: motion
+  - native: "\u0627\u0644\u062D\u0633\u0627\u0628"
+    english: account
+  - native: "\u0627\u0644\u062D\u0642\u064A\u0642\u0629"
+    english: fact
+  - native: "\u0627\u0644\u062D\u0642\u064A\u0642\u064A\u0629"
+    english: real
+  - native: "\u0627\u0644\u062E\u0627\u0637\u0626\u0629"
+    english: wrong
+  - native: "\u0627\u0644\u062E\u0627\u0646\u0627\u062A"
+    english: slots
+  - native: "\u0627\u0644\u062E\u062F\u0645\u0629"
+    english: service
+  - native: "\u0627\u0644\u062E\u0637\u0623"
+    english: what is wrong
+  - native: "\u0627\u0644\u062E\u0637\u0648\u0627\u062A"
+    english: steps
+  - native: "\u0627\u0644\u062E\u0637\u0648\u0629"
+    english: step
+  - native: "\u0627\u0644\u062E\u0644\u0644"
+    english: fault
+  - native: "\u0627\u0644\u062F\u0628\u0627\u0628\u064A\u0633"
+    english: pins
+  - native: "\u0627\u0644\u062F\u0631\u0633"
+    english: tutorial
+  - native: "\u0627\u0644\u062F\u0644\u064A\u0644"
+    english: guide
+  - native: "\u0627\u0644\u062F\u0645\u063A\u0627\u062A"
+    english: seals
+  - native: "\u0627\u0644\u062F\u064A\u0646"
+    english: debt
+  - native: "\u0627\u0644\u062F\u064A\u0648\u0646"
+    english: debts
+  - native: "\u0627\u0644\u0630\u0639\u0631"
+    english: panic
+  - native: "\u0627\u0644\u0630\u064A"
+    english: which
+  - native: "\u0627\u0644\u0631\u0623\u0633"
+    english: head
+  - native: "\u0627\u0644\u0631\u0635\u064A\u062F"
+    english: balance
+  - native: "\u0627\u0644\u0631\u0641"
+    english: shelf
+  - native: "\u0627\u0644\u0631\u0641\u0636"
+    english: denial
+  - native: "\u0627\u0644\u0631\u0645\u0627\u062F\u064A"
+    english: grey
+  - native: "\u0627\u0644\u0632\u0631"
+    english: button
+  - native: "\u0627\u0644\u0632\u0645\u0646\u064A\u0629"
+    english: temporal
+  - native: "\u0627\u0644\u0633\u0627\u0628\u0642"
+    english: previous
+  - native: "\u0627\u0644\u0633\u0627\u0628\u0642\u0629"
+    english: previous
+  - native: "\u0627\u0644\u0633\u062C\u0644"
+    english: record
+  - native: "\u0627\u0644\u0633\u062C\u0644\u0627\u062A"
+    english: records
+  - native: "\u0627\u0644\u0633\u062D\u0628"
+    english: drag
+  - native: "\u0627\u0644\u0633\u0637\u0631"
+    english: line
+  - native: "\u0627\u0644\u0633\u0641\u0631"
+    english: travel
+  - native: "\u0627\u0644\u0633\u064A\u0627\u0642"
+    english: context
+  - native: "\u0627\u0644\u0634\u062C\u0631\u0629"
+    english: tree
+  - native: "\u0627\u0644\u0634\u062E\u0635"
+    english: person
+  - native: "\u0627\u0644\u0634\u0631\u064A\u062D\u0629"
+    english: chip
+  - native: "\u0627\u0644\u0634\u0647\u0627\u062F\u0629"
+    english: certificate
+  - native: "\u0627\u0644\u0635\u0628\u0627\u062D"
+    english: morning
+  - native: "\u0627\u0644\u0635\u0641"
+    english: row
+  - native: "\u0627\u0644\u0635\u0641\u062D\u0629"
+    english: page
+  - native: "\u0627\u0644\u0635\u0642"
+    english: paste
+  - native: "\u0627\u0644\u0635\u0644\u0627\u062D\u064A\u0629"
+    english: validity
+  - native: "\u0627\u0644\u0635\u0648\u0631\u0629"
+    english: photo
+  - native: "\u0627\u0644\u0635\u064A\u0627\u0646\u0629"
+    english: maintenance
+  - native: "\u0627\u0644\u0637\u0627\u0628\u0648\u0631"
+    english: queue
+  - native: "\u0627\u0644\u0637\u0627\u0648\u0644\u0629"
+    english: counter
+  - native: "\u0627\u0644\u0637\u0631\u064A\u0642"
+    english: transit
+  - native: "\u0627\u0644\u0637\u0644\u0628"
+    english: order
+  - native: "\u0627\u0644\u0637\u0644\u0628\u0627\u062A"
+    english: Orders
+  - native: "\u0627\u0644\u0639\u0627\u062F\u064A"
+    english: Standard
+  - native: "\u0627\u0644\u0639\u0627\u0644\u0645"
+    english: world
+  - native: "\u0627\u0644\u0639\u062C\u0644\u0629"
+    english: wheel
+  - native: "\u0627\u0644\u0639\u0642\u062F"
+    english: contract
+  - native: "\u0627\u0644\u0639\u0642\u0648\u0628\u0629"
+    english: penalty
+  - native: "\u0627\u0644\u0639\u0645\u0644"
+    english: work
+  - native: "\u0627\u0644\u0639\u0646\u0635\u0631"
+    english: item
+  - native: "\u0627\u0644\u0639\u0646\u0648\u0627\u0646"
+    english: address
+  - native: "\u0627\u0644\u063A\u062F"
+    english: tomorrow
+  - native: "\u0627\u0644\u0641\u062D\u0635"
+    english: inspect
+  - native: "\u0627\u0644\u0641\u0631\u0648\u0642"
+    english: differences
+  - native: "\u0627\u0644\u0641\u0648\u0627\u062A\u064A\u0631"
+    english: bills
+  - native: "\u0627\u0644\u0642\u0627\u0626\u0645\u0629"
+    english: menu
+  - native: "\u0627\u0644\u0642\u0627\u062F\u0645\u0629"
+    english: next
+  - native: "\u0627\u0644\u0642\u0627\u0639\u062F\u0629"
+    english: rule
+  - native: "\u0627\u0644\u0642\u0631\u0627\u0621\u0629"
+    english: reading
+  - native: "\u0627\u0644\u0642\u0631\u0627\u0631"
+    english: verdict
+  - native: "\u0627\u0644\u0642\u0631\u0627\u0631\u0627\u062A"
+    english: calls
+  - native: "\u0627\u0644\u0642\u0635\u0627\u0635\u0629"
+    english: clip
+  - native: "\u0627\u0644\u0642\u0636\u064A\u0629"
+    english: case
+  - native: "\u0627\u0644\u0642\u0648\u0627\u0626\u0645"
+    english: menus
+  - native: "\u0627\u0644\u0642\u0648\u0627\u0639\u062F"
+    english: rules
+  - native: "\u0627\u0644\u0642\u064A\u0645"
+    english: values
+  - native: "\u0627\u0644\u0642\u064A\u0645\u0629"
+    english: value
+  - native: "\u0627\u0644\u0643\u0627\u0645\u0644"
+    english: full
+  - native: "\u0627\u0644\u0643\u062A\u0627\u0628"
+    english: book
+  - native: "\u0627\u0644\u0643\u062A\u0628"
+    english: books
+  - native: "\u0627\u0644\u0643\u0647\u0631\u0628\u0627\u0621"
+    english: electricity
+  - native: "\u0627\u0644\u0644\u0628\u0627\u0633"
+    english: dress
+  - native: "\u0627\u0644\u0644\u0633\u0627\u0646"
+    english: tab
+  - native: "\u0627\u0644\u0644\u0635\u0642"
+    english: paste
+  - native: "\u0627\u0644\u0644\u063A\u0629"
+    english: language
+  - native: "\u0627\u0644\u0644\u0648\u062D"
+    english: pane
+  - native: "\u0627\u0644\u0644\u064A\u0644\u0629"
+    english: tonight
+  - native: "\u0627\u0644\u0645\u0624\u0634\u0631"
+    english: pointer
+  - native: "\u0627\u0644\u0645\u0627\u0633\u062D"
+    english: scanner
+  - native: "\u0627\u0644\u0645\u0627\u0636\u064A"
+    english: past
+  - native: "\u0627\u0644\u0645\u0627\u0644"
+    english: money
+  - native: "\u0627\u0644\u0645\u0628\u0627\u0644\u063A"
+    english: amounts
+  - native: "\u0627\u0644\u0645\u062A\u0648\u0642\u0639"
+    english: expected
+  - native: "\u0627\u0644\u0645\u062C\u0627\u0646\u064A"
+    english: free
+  - native: "\u0627\u0644\u0645\u062C\u0645\u062F"
+    english: frozen
+  - native: "\u0627\u0644\u0645\u062D\u062A\u062C\u0632\u0648\u0646"
+    english: detained
+  - native: "\u0627\u0644\u0645\u062D\u062F\u062F"
+    english: selected
+  - native: "\u0627\u0644\u0645\u062D\u062F\u062F\u0629"
+    english: selected
+  - native: "\u0627\u0644\u0645\u062D\u0641\u0638\u0629"
+    english: wallet
+  - native: "\u0627\u0644\u0645\u062D\u0641\u0648\u0638\u0629"
+    english: on file
+  - native: "\u0627\u0644\u0645\u062E\u0627\u0644\u0641\u0629"
+    english: citation
+  - native: "\u0627\u0644\u0645\u062E\u062A\u0648\u0645"
+    english: stamped
+  - native: "\u0627\u0644\u0645\u062E\u0632\u0646"
+    english: storage
+  - native: "\u0627\u0644\u0645\u062E\u0641\u0641\u0629"
+    english: reduced
+  - native: "\u0627\u0644\u0645\u062F\u0639\u0649"
+    english: claimed
+  - native: "\u0627\u0644\u0645\u062F\u0641\u0648\u0639"
+    english: paid
+  - native: "\u0627\u0644\u0645\u062F\u064A\u0631\u064A\u0629"
+    english: Directorate
+  - native: "\u0627\u0644\u0645\u062F\u064A\u0646\u0629"
+    english: city
+  - native: "\u0627\u0644\u0645\u0631\u0627\u0633\u064A\u0644"
+    english: transponders
+  - native: "\u0627\u0644\u0645\u0631\u0629"
+    english: time
+  - native: "\u0627\u0644\u0645\u0631\u062C\u0639"
+    english: reference
+  - native: "\u0627\u0644\u0645\u0631\u062C\u0639\u064A\u0629"
+    english: reference
+  - native: "\u0627\u0644\u0645\u0631\u0633\u0627\u0644"
+    english: transponder
+  - native: "\u0627\u0644\u0645\u0631\u0636"
+    english: sickness
+  - native: "\u0627\u0644\u0645\u0633\u0627\u0631\u0627\u062A"
+    english: routes
+  - native: "\u0627\u0644\u0645\u0633\u0627\u0641\u0631"
+    english: traveller
+  - native: "\u0627\u0644\u0645\u0633\u0627\u0641\u0631\u0648\u0646"
+    english: travellers
+  - native: "\u0627\u0644\u0645\u0633\u062A\u0642\u0628\u0644"
+    english: Future
+  - native: "\u0627\u0644\u0645\u0633\u062A\u0644\u0645\u0629"
+    english: received
+  - native: "\u0627\u0644\u0645\u0633\u062C\u0644"
+    english: registered
+  - native: "\u0627\u0644\u0645\u0635\u062F\u0631"
+    english: issuing
+  - native: "\u0627\u0644\u0645\u0637\u0628\u0648\u0639"
+    english: printed
+  - native: "\u0627\u0644\u0645\u0639\u0627\u0644\u062C\u0648\u0646"
+    english: processed
+  - native: "\u0627\u0644\u0645\u0639\u062F\u0644\u0629"
+    english: revised
+  - native: "\u0627\u0644\u0645\u063A\u0627\u062F\u0631\u0629"
+    english: departure
+  - native: "\u0627\u0644\u0645\u0641\u0627\u062A\u064A\u062D"
+    english: keys
+  - native: "\u0627\u0644\u0645\u0643\u0627\u062A\u0628"
+    english: desks
+  - native: "\u0627\u0644\u0645\u0643\u0627\u0646"
+    english: place
+  - native: "\u0627\u0644\u0645\u0644\u0627\u0621\u0629"
+    english: means
+  - native: "\u0627\u0644\u0645\u0644\u0627\u062D\u0638\u0627\u062A"
+    english: Notes
+  - native: "\u0627\u0644\u0645\u0644\u0635\u0642\u0629"
+    english: pasted
+  - native: "\u0627\u0644\u0645\u0645\u062A\u0627\u0632"
+    english: Premium
+  - native: "\u0627\u0644\u0645\u0645\u0633\u0648\u062D\u0629"
+    english: scanned
+  - native: "\u0627\u0644\u0645\u0645\u0633\u0648\u0643\u0629"
+    english: held
+  - native: "\u0627\u0644\u0645\u0646\u0633\u0648\u062E\u0629"
+    english: copied
+  - native: "\u0627\u0644\u0645\u0647\u0646\u0629"
+    english: occupation
+  - native: "\u0627\u0644\u0645\u0648\u0627\u0637\u0646\u064A\u0646"
+    english: citizens
+  - native: "\u0627\u0644\u0645\u0648\u0642\u0639"
+    english: site
+  - native: "\u0627\u0644\u0645\u064A\u0644\u0627\u062F"
+    english: birth
+  - native: "\u0627\u0644\u0646\u0627\u0632\u062D\u0648\u0646"
+    english: the displaced
+  - native: "\u0627\u0644\u0646\u0627\u0632\u062D\u064A\u0646"
+    english: displaced
+  - native: "\u0627\u0644\u0646\u062A\u0627\u0626\u062C"
+    english: findings
+  - native: "\u0627\u0644\u0646\u062A\u064A\u062C\u0629"
+    english: result
+  - native: "\u0627\u0644\u0646\u0632\u0648\u062D"
+    english: displacement
+  - native: "\u0627\u0644\u0646\u0635"
+    english: text
+  - native: "\u0627\u0644\u0646\u0642\u0631"
+    english: click
+  - native: "\u0627\u0644\u0646\u0645\u0627\u0630\u062C"
+    english: forms
+  - native: "\u0627\u0644\u0648\u062B\u0627\u0626\u0642"
+    english: documents
+  - native: "\u0627\u0644\u0648\u062B\u064A\u0642\u0629"
+    english: document
+  - native: "\u0627\u0644\u0648\u062C\u0647"
+    english: face
+  - native: "\u0627\u0644\u0648\u062C\u0647\u0627\u062A"
+    english: destinations
+  - native: "\u0627\u0644\u0648\u0631\u0642\u0629"
+    english: paper
+  - native: "\u0627\u0644\u0648\u0636\u0639"
+    english: standing
+  - native: "\u0627\u0644\u0648\u0643\u0627\u0644\u0629"
+    english: agency
+  - native: "\u0627\u0644\u064A\u0633\u0627\u0631"
+    english: left
+  - native: "\u0627\u0644\u064A\u0645\u064A\u0646"
+    english: right
+  - native: "\u0627\u0644\u064A\u0648\u0645\u064A"
+    english: daily
+  - native: "\u0627\u0645\u0633\u062D"
+    english: scan
+  - native: "\u0627\u0645\u0633\u062D\u0647\u0627"
+    english: scan it
+  - native: "\u0627\u0645\u0633\u0643"
+    english: hold
+  - native: "\u0627\u0646\u062A\u0647\u0627\u0621"
+    english: end
+  - native: "\u0627\u0646\u062A\u0647\u0649"
+    english: complete
+  - native: "\u0627\u0646\u062D\u0631\u0627\u0641\u0627"
+    english: a deviation
+  - native: "\u0627\u0646\u062D\u0631\u0627\u0641\u0627\u062A"
+    english: deviations
+  - native: "\u0627\u0646\u0633\u062E"
+    english: copy
+  - native: "\u0627\u0646\u0638\u0631"
+    english: look
+  - native: "\u0627\u0646\u0642\u0631"
+    english: click
+  - native: "\u0627\u0646\u0642\u0637\u0627\u0639"
+    english: stranding
+  - native: "\u0627\u0646\u0642\u0644"
+    english: move
+  - native: "\u0628\u0623\u062D\u062F\u0647\u0645\u0627"
+    english: against one of them
+  - native: "\u0628\u0627\u0644\u0623\u0633\u0641\u0644"
+    english: below
+  - native: "\u0628\u0627\u0644\u0623\u0633\u0645\u0627\u0621"
+    english: by names
+  - native: "\u0628\u0627\u0644\u0627\u0633\u0645"
+    english: by name
+  - native: "\u0628\u0627\u0644\u062A\u0627\u0644\u064A\u0629"
+    english: with the next one
+  - native: "\u0628\u0627\u0644\u0632\u0631"
+    english: with the button
+  - native: "\u0628\u0627\u0644\u0633\u062C\u0644"
+    english: against the record
+  - native: "\u0628\u0627\u0644\u0641\u0639\u0644"
+    english: already
+  - native: "\u0628\u0627\u0644\u0642\u064A\u0645\u0629"
+    english: against the value
+  - native: "\u0628\u0627\u0644\u0643\u062A\u0628"
+    english: against the books
+  - native: "\u0628\u0627\u0644\u0645\u062F\u062E\u0644"
+    english: against the entry
+  - native: "\u0628\u0627\u0644\u0645\u0642\u0627\u0631\u0646\u0629"
+    english: by comparing
+  - native: "\u0628\u0627\u0646\u062A\u0638\u0627\u0631"
+    english: waiting for
+  - native: "\u0628\u062D\u062B"
+    english: search
+  - native: "\u0628\u062D\u062C\u0645\u0647\u0627"
+    english: at its size
+  - native: "\u0628\u062E\u064A\u0631"
+    english: well
+  - native: "\u0628\u062F\u0627\u064A\u0629"
+    english: start
+  - native: "\u0628\u062F\u0642\u0629"
+    english: accurately
+  - native: "\u0628\u062F\u0644\u0627"
+    english: instead
+  - native: "\u0628\u062F\u0645\u063A\u0629"
+    english: against the seal
+  - native: "\u0628\u0631\u064A\u062F"
+    english: mail
+  - native: "\u0628\u0633\u062C\u0644"
+    english: against the record
+  - native: "\u0628\u0636\u0627\u0639\u0629"
+    english: goods
+  - native: "\u0628\u0639\u062F"
+    english: yet; after
+  - native: "\u0628\u0639\u062F\u0647\u0627"
+    english: after
+  - native: "\u0628\u0639\u0645\u0644\u0629"
+    english: in currency
+  - native: "\u0628\u063A\u0631\u0627\u0645\u0629"
+    english: fined
+  - native: "\u0628\u0644\u0627"
+    english: without
+  - native: "\u0628\u0644\u062F"
+    english: country
+  - native: "\u0628\u0644\u062F\u0627"
+    english: a country
+  - native: "\u0628\u0645\u062F\u062E\u0644"
+    english: against the entry
+  - native: "\u0628\u0645\u0631\u0633\u0627\u0644"
+    english: on a transponder
+  - native: "\u0628\u0645\u063A\u0627\u062F\u0631\u0629"
+    english: to leave
+  - native: "\u0628\u0648\u0627\u0628\u0629"
+    english: gate
+  - native: "\u0628\u0648\u0627\u0633\u0637\u0629"
+    english: by
+  - native: "\u0628\u0648\u0631\u0642\u0629"
+    english: on a paper
+  - native: "\u0628\u064A\u0627\u0646\u0627\u062A"
+    english: data
+  - native: "\u0628\u064A\u0646"
+    english: between
+  - native: "\u062A\u0627\u0628\u0639"
+    english: continue
+  - native: "\u062A\u0627\u0631\u064A\u062E"
+    english: date
+  - native: "\u062A\u0628\u0646"
+    english: adopt
+  - native: "\u062A\u062A\u0628\u0639"
+    english: follow
+  - native: "\u062A\u062A\u0631\u0643\u0647"
+    english: you leave
+  - native: "\u062A\u062A\u0637\u0644\u0628"
+    english: needs
+  - native: "\u062A\u062A\u0646\u0642\u0644"
+    english: walk
+  - native: "\u062A\u062B\u0628\u064A\u062A"
+    english: pin
+  - native: "\u062A\u062B\u0628\u064A\u062A\u0647"
+    english: its pin
+  - native: "\u062A\u062B\u0628\u064A\u062A\u0647\u0627"
+    english: pin it
+  - native: "\u062A\u062D\u062A"
+    english: under
+  - native: "\u062A\u062D\u062F\u062F"
+    english: sets
+  - native: "\u062A\u062D\u0636\u0631"
+    english: carried
+  - native: "\u062A\u062D\u0642\u0642"
+    english: check
+  - native: "\u062A\u062D\u0645\u0644"
+    english: holds
+  - native: "\u062A\u062E\u0635"
+    english: is for
+  - native: "\u062A\u062E\u0635\u0647\u0627"
+    english: it is about
+  - native: "\u062A\u062E\u0637\u064A"
+    english: skip
+  - native: "\u062A\u062E\u0644"
+    english: give up
+  - native: "\u062A\u062F\u0641\u0639"
+    english: are paid
+  - native: "\u062A\u0630\u0643\u0631"
+    english: says
+  - native: "\u062A\u0631\u0627\u062C\u0639"
+    english: back out
+  - native: "\u062A\u0631\u062A\u064A\u0628"
+    english: arrange
+  - native: "\u062A\u0631\u0643\u064A\u0628"
+    english: install
+  - native: "\u062A\u0633\u0642\u0637\u0647\u0627"
+    english: you drop
+  - native: "\u062A\u0633\u0644\u0645"
+    english: handed over
+  - native: "\u062A\u0633\u0648\u064A\u0629"
+    english: settlement
+  - native: "\u062A\u0635\u0631\u064A\u062D"
+    english: permit
+  - native: "\u062A\u0635\u063A\u064A\u0631"
+    english: minimise
+  - native: "\u062A\u0637\u0628\u064A\u0642"
+    english: app
+  - native: "\u062A\u0638\u0647\u0631"
+    english: show
+  - native: "\u062A\u0639\u062B\u0631"
+    english: default
+  - native: "\u062A\u0639\u0631\u0636"
+    english: shows
+  - native: "\u062A\u0639\u0644\u064A\u0645"
+    english: flag
+  - native: "\u062A\u0639\u064A\u062F"
+    english: hands back
+  - native: "\u062A\u063A\u0627\u062F\u0631"
+    english: leaves
+  - native: "\u062A\u063A\u064A\u0631"
+    english: changed
+  - native: "\u062A\u063A\u064A\u0631\u062A"
+    english: it changed
+  - native: "\u062A\u063A\u064A\u064A\u0631"
+    english: change
+  - native: "\u062A\u0641\u0627\u0635\u064A\u0644"
+    english: details
+  - native: "\u062A\u0641\u062A\u062D\u0647\u0627"
+    english: you open
+  - native: "\u062A\u0642\u062F\u0645"
+    english: forward
+  - native: "\u062A\u0642\u0646\u064A\u0629"
+    english: technology
+  - native: "\u062A\u0642\u0648\u064A\u0645"
+    english: calendar
+  - native: "\u062A\u0643\u0628\u064A\u0631"
+    english: maximise
+  - native: "\u062A\u0643\u0648\u0646"
+    english: is
+  - native: "\u062A\u0644\u0645\u0639"
+    english: shimmer
+  - native: "\u062A\u0645\u0633\u0643"
+    english: holding
+  - native: "\u062A\u0645\u0644\u0643"
+    english: holds
+  - native: "\u062A\u0646\u062A\u0645\u064A"
+    english: belongs
+  - native: "\u062A\u0646\u0642\u0644"
+    english: move
+  - native: "\u062A\u0646\u0647\u0636"
+    english: rises
+  - native: "\u062A\u0648\u062B\u064A\u0642"
+    english: documentation
+  - native: "\u062A\u0648\u062C\u064A\u0647"
+    english: directive
+  - native: "\u062A\u0648\u062C\u064A\u0647\u0627\u062A"
+    english: directives
+  - native: "\u062B\u0628\u062A"
+    english: pin
+  - native: "\u062B\u0645"
+    english: then
+  - native: "\u062B\u0645\u0646\u0647"
+    english: its price
+  - native: "\u062C\u062F"
+    english: find
+  - native: "\u062C\u062F\u064A\u062F"
+    english: new
+  - native: "\u062C\u062F\u064A\u062F\u0629"
+    english: new
+  - native: "\u062D\u0627\u0633\u0648\u0628\u0643"
+    english: your PC
+  - native: "\u062D\u0627\u0644\u0629"
+    english: subject
+  - native: "\u062D\u062A\u0649"
+    english: until
+  - native: "\u062D\u062C\u0645"
+    english: size
+  - native: "\u062D\u062F\u062F"
+    english: select
+  - native: "\u062D\u0631\u0641\u0627"
+    english: letters
+  - native: "\u062D\u0631\u0643"
+    english: move
+  - native: "\u062D\u0631\u0648\u0641"
+    english: letters
+  - native: "\u062D\u0642\u0627"
+    english: really
+  - native: "\u062D\u0642\u0627\u0626\u0642"
+    english: facts
+  - native: "\u062D\u0642\u0628\u0629"
+    english: era
+  - native: "\u062D\u0642\u0644"
+    english: field
+  - native: "\u062D\u0642\u0644\u0627"
+    english: a field
+  - native: "\u062E\u0627\u0631\u062C"
+    english: outside
+  - native: "\u062E\u0627\u0637\u0626"
+    english: wrong
+  - native: "\u062E\u0627\u0637\u0626\u0629"
+    english: wrong
+  - native: "\u062E\u0627\u0644\u0641\u0647"
+    english: they broke
+  - native: "\u062E\u062A\u0645"
+    english: stamp
+  - native: "\u062E\u062A\u0645\u0627"
+    english: a stamp
+  - native: "\u062E\u0635\u0645"
+    english: deduction
+  - native: "\u062E\u0637\u0623"
+    english: wrong
+  - native: "\u062E\u0641\u064A"
+    english: hidden
+  - native: "\u062E\u0644\u0641\u0643"
+    english: behind
+  - native: "\u062F\u0627\u0626\u0645\u0627"
+    english: always
+  - native: "\u062F\u0627\u0639\u0628"
+    english: pet
+  - native: "\u062F\u0628\u0648\u0633\u0627"
+    english: a pin
+  - native: "\u062F\u0631\u062C"
+    english: drawer
+  - native: "\u062F\u0631\u0633"
+    english: tutorial
+  - native: "\u062F\u0641\u0639"
+    english: paying
+  - native: "\u062F\u0642\u064A\u0642\u0629"
+    english: micro
+  - native: "\u062F\u0644\u064A\u0644"
+    english: evidence
+  - native: "\u062F\u0644\u064A\u0644\u0627"
+    english: evidence
+  - native: "\u062F\u0645\u063A\u0629"
+    english: seal
+  - native: "\u062F\u0645\u063A\u062A\u0627"
+    english: seals of
+  - native: "\u062F\u064A\u0648\u0646"
+    english: debt
+  - native: "\u0630\u0627\u062A"
+    english: of
+  - native: "\u0630\u0644\u0643"
+    english: that
+  - native: "\u0631\u0627\u0628\u0637"
+    english: link
+  - native: "\u0631\u062C\u0648\u0639"
+    english: back
+  - native: "\u0631\u062D\u0644\u0627\u062A"
+    english: trips
+  - native: "\u0631\u062D\u0644\u0629"
+    english: trip
+  - native: "\u0631\u0633\u0627\u0644\u0629"
+    english: message
+  - native: "\u0631\u0635\u064A\u062F"
+    english: credit
+  - native: "\u0631\u0639\u0627\u064A\u0629"
+    english: care
+  - native: "\u0631\u0641\u0636"
+    english: denial
+  - native: "\u0631\u0641\u0636\u062A"
+    english: you denied
+  - native: "\u0631\u0641\u064A\u0642\u0627"
+    english: a companion
+  - native: "\u0631\u0641\u064A\u0642\u0643"
+    english: your companion
+  - native: "\u0631\u0642\u0645"
+    english: number
+  - native: "\u0631\u0642\u0645\u0627"
+    english: a number
+  - native: "\u0631\u0643\u0628\u0647"
+    english: install it
+  - native: "\u0631\u0643\u0646"
+    english: corner
+  - native: "\u0632\u0627\u0644"
+    english: still
+  - native: "\u0632\u0627\u0644\u0648\u0627"
+    english: still
+  - native: "\u0632\u0645\u0646"
+    english: time
+  - native: "\u0632\u0645\u0646\u0647\u0645"
+    english: their time
+  - native: "\u0633\u0627\u0628\u0642"
+    english: back
+  - native: "\u0633\u0627\u0628\u0642\u0629"
+    english: past
+  - native: "\u0633\u0627\u0631\u064A\u0629"
+    english: in effect
+  - native: "\u0633\u0627\u0639\u0627\u062A"
+    english: hours
+  - native: "\u0633\u062C\u0644\u0627\u062A"
+    english: records
+  - native: "\u0633\u0637\u062D"
+    english: desktop
+  - native: "\u0633\u0637\u0631"
+    english: line
+  - native: "\u0633\u0641\u0631"
+    english: travel
+  - native: "\u0633\u0644\u0627\u0645\u0629"
+    english: integrity
+  - native: "\u0633\u0644\u0645\u062A"
+    english: handed over
+  - native: "\u0633\u0645\u062D\u062A"
+    english: you let
+  - native: "\u0633\u064A\u0627\u062D\u064A\u0629"
+    english: leisure
+  - native: "\u0633\u064A\u062B\u064A\u0631"
+    english: would cause
+  - native: "\u0634\u0628\u0643\u0629"
+    english: network
+  - native: "\u0634\u062C\u0631\u0629"
+    english: tree
+  - native: "\u0634\u062E\u0635"
+    english: person
+  - native: "\u0634\u062E\u0635\u0627"
+    english: someone
+  - native: "\u0634\u0631\u0639\u064A\u0627"
+    english: legitimate
+  - native: "\u0634\u0631\u064A\u062D\u0629"
+    english: chip
+  - native: "\u0634\u0631\u064A\u0637"
+    english: bar
+  - native: "\u0634\u0639\u0631"
+    english: hair
+  - native: "\u0634\u0648\u0647\u062F"
+    english: seen
+  - native: "\u0634\u064A\u0621"
+    english: thing
+  - native: "\u0634\u064A\u0626\u0627"
+    english: anything
+  - native: "\u0634\u064A\u0626\u064A\u0646"
+    english: two things
+  - native: "\u0635\u0627\u062D\u0628"
+    english: holder
+  - native: "\u0635\u0627\u0631"
+    english: became
+  - native: "\u0635\u0627\u0631\u062A"
+    english: became
+  - native: "\u0635\u0627\u0641\u064A"
+    english: net
+  - native: "\u0635\u0627\u0644\u062D"
+    english: valid
+  - native: "\u0635\u0627\u0644\u062D\u0627"
+    english: valid
+  - native: "\u0635\u062D\u064A\u062D"
+    english: correct
+  - native: "\u0635\u062D\u064A\u062D\u0629"
+    english: right
+  - native: "\u0635\u0639\u0648\u062F\u0627"
+    english: up
+  - native: "\u0635\u063A\u0631\u0647\u0627"
+    english: shrink them
+  - native: "\u0635\u063A\u064A\u0631\u0629"
+    english: small
+  - native: "\u0635\u0641\u0627"
+    english: a row
+  - native: "\u0635\u0641\u062D\u0629"
+    english: page
+  - native: "\u0635\u0641\u062D\u062A\u0647"
+    english: its page
+  - native: "\u0635\u0644\u0627\u062D\u064A\u0629"
+    english: validity
+  - native: "\u0635\u0644\u0627\u062D\u064A\u062A\u0643"
+    english: your clearance
+  - native: "\u0635\u064A\u0627\u0646\u0629"
+    english: upkeep
+  - native: "\u0636\u0628\u0637"
+    english: set
+  - native: "\u0636\u0639\u0647\u0627"
+    english: drop it
+  - native: "\u0636\u0641\u062A\u064A\u0647"
+    english: its banks
+  - native: "\u0636\u0648\u0621"
+    english: light
+  - native: "\u0637\u0628\u0627\u0639\u0629"
+    english: print
+  - native: "\u0637\u0628\u0639\u0629"
+    english: edition
+  - native: "\u0637\u0628\u0642\u0629"
+    english: layer
+  - native: "\u0637\u0631\u064A\u0642\u0629"
+    english: way
+  - native: "\u0637\u0644\u0628\u062A"
+    english: asked for
+  - native: "\u0637\u0644\u0628\u0643"
+    english: your order
+  - native: "\u0639\u0627\u0644\u062C"
+    english: process
+  - native: "\u0639\u0627\u0644\u0642\u0648\u0646"
+    english: stranded
+  - native: "\u0639\u0628\u0631"
+    english: through
+  - native: "\u0639\u062C\u0644\u0629"
+    english: wheel
+  - native: "\u0639\u062F"
+    english: go back
+  - native: "\u0639\u062F\u062F"
+    english: issue
+  - native: "\u0639\u062F\u0633\u0629"
+    english: lens
+  - native: "\u0639\u062F\u0644"
+    english: revised
+  - native: "\u0639\u0631\u0636"
+    english: show
+  - native: "\u0639\u0637\u0644"
+    english: failure
+  - native: "\u0639\u0642\u062F"
+    english: contract
+  - native: "\u0639\u0644\u0627\u0645\u0629"
+    english: mark
+  - native: "\u0639\u0644\u0648\u064A\u0629"
+    english: apostrophes
+  - native: "\u0639\u0644\u0649"
+    english: on
+  - native: "\u0639\u0644\u064A\u0647\u0627"
+    english: on it
+  - native: "\u0639\u0645\u0644"
+    english: work
+  - native: "\u0639\u0645\u0644\u0627"
+    english: work
+  - native: "\u0639\u0645\u0644\u0629"
+    english: currency
+  - native: "\u0639\u0645\u0648\u062F"
+    english: column
+  - native: "\u0639\u0646"
+    english: about
+  - native: "\u0639\u0646\u062F"
+    english: at
+  - native: "\u0639\u0646\u0635\u0631\u0627"
+    english: an item
+  - native: "\u0639\u0646\u0648\u0627\u0646\u0647"
+    english: its address
+  - native: "\u063A\u062F\u0627"
+    english: tomorrow
+  - native: "\u063A\u0631\u0627\u0645\u0627\u062A"
+    english: fines
+  - native: "\u063A\u0631\u0627\u0645\u0629"
+    english: fine
+  - native: "\u063A\u0637\u0627\u0621"
+    english: cover
+  - native: "\u063A\u064A\u0631"
+    english: not
+  - native: "\u0641\u0626\u0629"
+    english: class
+  - native: "\u0641\u0627\u0631\u0632"
+    english: sorter
+  - native: "\u0641\u062A\u062D"
+    english: open
+  - native: "\u0641\u062D\u0635"
+    english: check
+  - native: "\u0641\u0631\u0642"
+    english: difference
+  - native: "\u0641\u0636\u0644\u0643"
+    english: please
+  - native: "\u0641\u0642\u0637"
+    english: only
+  - native: "\u0641\u0647\u0631\u0633"
+    english: index
+  - native: "\u0641\u0648\u0627\u062A\u064A\u0631"
+    english: bills
+  - native: "\u0641\u0648\u0631\u0627"
+    english: at once
+  - native: "\u0641\u0648\u0642"
+    english: over
+  - native: "\u0641\u064A"
+    english: in
+  - native: "\u0641\u064A\u0647"
+    english: in it
+  - native: "\u0641\u064A\u0647\u0627"
+    english: in it
+  - native: "\u0642\u0627\u0626\u0645\u0629"
+    english: menu
+  - native: "\u0642\u0627\u0631\u0646"
+    english: compare
+  - native: "\u0642\u0627\u0631\u0646\u062A"
+    english: you compared
+  - native: "\u0642\u0627\u0631\u0646\u0647\u0627"
+    english: compare it
+  - native: "\u0642\u0627\u0639\u062F\u0629"
+    english: rule
+  - native: "\u0642\u0627\u0644"
+    english: said
+  - native: "\u0642\u0627\u0646\u0648\u0646"
+    english: law
+  - native: "\u0642\u0628\u0644"
+    english: before; ago
+  - native: "\u0642\u0631\u0627\u0631\u0627"
+    english: a verdict
+  - native: "\u0642\u0631\u0627\u0631\u0627\u062A"
+    english: calls
+  - native: "\u0642\u0633\u0637"
+    english: instalment
+  - native: "\u0642\u0633\u064A\u0645\u0629"
+    english: slip
+  - native: "\u0642\u0635\u0627\u0635\u0627\u062A"
+    english: clippings
+  - native: "\u0642\u0635\u0627\u0635\u0629"
+    english: clipping
+  - native: "\u0642\u0637\u0639\u0629"
+    english: garment
+  - native: "\u0642\u0648\u0627\u0639\u062F"
+    english: rules
+  - native: "\u0642\u0648\u0629"
+    english: power
+  - native: "\u0642\u064A\u062F"
+    english: entry
+  - native: "\u0642\u064A\u0645\u0629"
+    english: value
+  - native: "\u0642\u064A\u0648\u062F"
+    english: restrictions
+  - native: "\u0643\u0627\u0630\u0628\u0629"
+    english: false
+  - native: "\u0643\u0627\u0644\u0645\u0639\u062A\u0627\u062F"
+    english: as usual
+  - native: "\u0643\u0627\u0646"
+    english: was
+  - native: "\u0643\u0627\u0646\u062A"
+    english: it was
+  - native: "\u0643\u0628\u0631"
+    english: zoom in
+  - native: "\u0643\u062A\u0627\u0628"
+    english: book
+  - native: "\u0643\u062F\u0644\u064A\u0644"
+    english: as evidence
+  - native: "\u0643\u0644"
+    english: every; all
+  - native: "\u0643\u0644\u0627\u0647\u0645\u0627"
+    english: both
+  - native: "\u0643\u0644\u0628"
+    english: dog
+  - native: "\u0643\u0644\u0645\u0629"
+    english: word
+  - native: "\u0643\u0644\u0647"
+    english: whole
+  - native: "\u0643\u0644\u0647\u0627"
+    english: whole
+  - native: "\u0643\u0645\u0627"
+    english: as
+  - native: "\u0643\u0645\u0641\u0642\u0648\u062F"
+    english: as missing
+  - native: "\u0643\u0642\u0635\u0627\u0635\u0629"
+    english: as a clipping
+  - native: "\u0644\u0625\u0639\u0627\u062F\u0629"
+    english: to hand back
+  - native: "\u0644\u0625\u0644\u063A\u0627\u0621"
+    english: to cancel
+  - native: "\u0644\u0627"
+    english: no; not
+  - native: "\u0644\u0627\u0632\u0645"
+    english: needed
+  - native: "\u0644\u0628\u0636\u0627\u0626\u0639"
+    english: goods
+  - native: "\u0644\u062A\u062F\u0628\u0631"
+    english: to manage
+  - native: "\u0644\u062A\u0631\u062C\u0645\u062A\u0647\u0627"
+    english: to translate it
+  - native: "\u0644\u062A\u0633\u062C\u064A\u0644"
+    english: to log
+  - native: "\u0644\u062A\u0633\u0648\u064A\u0629"
+    english: to Debt Relief
+  - native: "\u0644\u062A\u0639\u0644\u064A\u0645\u0647\u0627"
+    english: to flag it
+  - native: "\u0644\u062F\u064A\u0643"
+    english: you have
+  - native: "\u0644\u0633\u0627\u0646"
+    english: tab
+  - native: "\u0644\u0634\u0639\u0628\u0647"
+    english: to its people
+  - native: "\u0644\u0635\u0642"
+    english: paste
+  - native: "\u0644\u0639\u0628"
+    english: played
+  - native: "\u0644\u0639\u0631\u0636\u0647"
+    english: to show it
+  - native: "\u0644\u063A\u0629"
+    english: language
+  - native: "\u0644\u0641\u062A\u062D"
+    english: to open
+  - native: "\u0644\u0641\u062A\u062D\u0647\u0627"
+    english: to open it
+  - native: "\u0644\u0642\u0631\u0627\u0621\u062A\u0647\u0627"
+    english: to read it
+  - native: "\u0644\u0644\u0627\u0646\u062A\u0642\u0627\u0644"
+    english: to go
+  - native: "\u0644\u0644\u062A\u0644\u0627\u0634\u064A"
+    english: to fade
+  - native: "\u0644\u0644\u062D\u062F\u064A\u062B"
+    english: to talk
+  - native: "\u0644\u0644\u062E\u0631\u0648\u062C"
+    english: to leave
+  - native: "\u0644\u0644\u0635\u0641"
+    english: of the row
+  - native: "\u0644\u0644\u0635\u0642"
+    english: to paste
+  - native: "\u0644\u0644\u0641\u062D\u0635"
+    english: to check
+  - native: "\u0644\u0644\u0645\u0633\u0627\u0641\u0631"
+    english: of the traveller
+  - native: "\u0644\u0644\u0645\u0642\u0627\u0631\u0646\u0629"
+    english: to compare
+  - native: "\u0644\u0644\u0645\u0643\u0627\u0646"
+    english: of the place
+  - native: "\u0644\u0644\u0648\u062C\u0647\u0629"
+    english: for the destination
+  - native: "\u0644\u0645"
+    english: not
+  - native: "\u0644\u0645\u0642\u0627\u0631\u0646\u062A\u0647\u0645\u0627"
+    english: to compare them
+  - native: "\u0644\u0645\u0643\u0627\u0646"
+    english: to a place
+  - native: "\u0644\u0645\u0644\u0621"
+    english: to fill
+  - native: "\u0644\u0647"
+    english: has
+  - native: "\u0644\u0647\u0627"
+    english: with
+  - native: "\u0644\u0648\u062D"
+    english: pane
+  - native: "\u0644\u0648\u062D\u0627\u0646"
+    english: two panes
+  - native: "\u0644\u0648\u062D\u0629"
+    english: board
+  - native: "\u0644\u0648\u0636\u0639"
+    english: to lay
+  - native: "\u0644\u064A\u0633"
+    english: not
+  - native: "\u0644\u064A\u0633\u062A"
+    english: is not
+  - native: "\u0645\u0627"
+    english: still; what
+  - native: "\u0645\u0627\u0626\u064A\u0629"
+    english: water
+  - native: "\u0645\u0628\u0631\u0631"
+    english: justified
+  - native: "\u0645\u062A\u0631\u062C\u0645"
+    english: translated; Translator
+  - native: "\u0645\u062A\u0633\u0642"
+    english: consistent
+  - native: "\u0645\u062A\u0637\u0627\u0628\u0642"
+    english: matches
+  - native: "\u0645\u062A\u0637\u0627\u0628\u0642\u0629"
+    english: matching
+  - native: "\u0645\u062A\u0637\u0644\u0628"
+    english: prerequisite
+  - native: "\u0645\u062A\u0639\u0627\u0631\u0636\u0629"
+    english: disagree
+  - native: "\u0645\u062A\u0641\u0642\u0627\u0646"
+    english: agree
+  - native: "\u0645\u062A\u0642\u0627\u0637\u0639\u0629"
+    english: cross
+  - native: "\u0645\u062A\u0646\u0643\u0631"
+    english: disguised
+  - native: "\u0645\u062A\u0649"
+    english: when
+  - native: "\u0645\u062C\u062F\u062F\u0627"
+    english: again
+  - native: "\u0645\u062C\u0645\u062F"
+    english: frozen
+  - native: "\u0645\u062C\u0645\u0648\u0639\u0629"
+    english: set
+  - native: "\u0645\u062C\u0647\u0648\u0644"
+    english: unknown
+  - native: "\u0645\u062D\u062C\u0648\u0632\u0629"
+    english: booked
+  - native: "\u0645\u062D\u0638\u0648\u0631\u0629"
+    english: forbidden
+  - native: "\u0645\u062D\u0641\u0648\u0638"
+    english: on file
+  - native: "\u0645\u062D\u0641\u0648\u0638\u0629"
+    english: on file
+  - native: "\u0645\u062E\u0627\u0644\u0641\u0627\u062A"
+    english: citations
+  - native: "\u0645\u062E\u0627\u0644\u0641\u0629"
+    english: citation
+  - native: "\u0645\u062E\u062A\u0644\u0641"
+    english: differs
+  - native: "\u0645\u062E\u062A\u0644\u0641\u0629"
+    english: different
+  - native: "\u0645\u062E\u062A\u0644\u0641\u064A\u0646"
+    english: different
+  - native: "\u0645\u062E\u062A\u0648\u0645\u0629"
+    english: sealed
+  - native: "\u0645\u062E\u0641\u064A\u0629"
+    english: hidden
+  - native: "\u0645\u062F\u0631\u062C\u0629"
+    english: listed
+  - native: "\u0645\u062F\u064A\u0631\u064A\u0629"
+    english: Directorate
+  - native: "\u0645\u062F\u064A\u0646"
+    english: in debt
+  - native: "\u0645\u0630\u0643\u0631\u0629"
+    english: memo
+  - native: "\u0645\u0631\u062C\u0639"
+    english: reference
+  - native: "\u0645\u0631\u062C\u0639\u064A\u0629"
+    english: reference
+  - native: "\u0645\u0631\u0631"
+    english: hover
+  - native: "\u0645\u0631\u0633\u0627\u0644"
+    english: transponder
+  - native: "\u0645\u0632\u062F\u0648\u062C\u0629"
+    english: double
+  - native: "\u0645\u0632\u0648\u0631\u0629"
+    english: forged
+  - native: "\u0645\u0633\u0624\u0648\u0644\u064A\u0629"
+    english: liability
+  - native: "\u0645\u0633\u0627\u0631"
+    english: route
+  - native: "\u0645\u0633\u0627\u0631\u0627\u062A"
+    english: routes
+  - native: "\u0645\u0633\u0627\u0641\u0631"
+    english: traveller
+  - native: "\u0645\u0633\u0627\u0641\u0631\u0627"
+    english: a traveller
+  - native: "\u0645\u0633\u0628\u0642\u0627"
+    english: already
+  - native: "\u0645\u0633\u062A\u062D\u0642\u0627"
+    english: owed
+  - native: "\u0645\u0633\u062A\u062E\u0631\u062C"
+    english: extract
+  - native: "\u0645\u0633\u062C\u0644"
+    english: logged
+  - native: "\u0645\u0633\u062C\u0644\u0627"
+    english: registered
+  - native: "\u0645\u0633\u062D"
+    english: scanned
+  - native: "\u0645\u0633\u062D\u0647\u0627"
+    english: scanning
+  - native: "\u0645\u0633\u062D\u0648\u0628"
+    english: recalled
+  - native: "\u0645\u0633\u0645\u0648\u062D\u0627"
+    english: permitted
+  - native: "\u0645\u0634\u062A\u0631\u0643\u0627"
+    english: in common
+  - native: "\u0645\u0635\u062F\u0631\u0627"
+    english: a source
+  - native: "\u0645\u0636\u0637\u0631\u0628"
+    english: unsettled
+  - native: "\u0645\u0637\u0627\u0628\u0642\u0629"
+    english: check
+  - native: "\u0645\u0637\u0641\u0623\u0629"
+    english: off
+  - native: "\u0645\u0637\u0644\u0648\u0628\u0629"
+    english: required
+  - native: "\u0645\u0639\u062F\u0627\u062A"
+    english: equipment
+  - native: "\u0645\u0639\u0643"
+    english: with you
+  - native: "\u0645\u0639\u0644\u0642"
+    english: pending
+  - native: "\u0645\u0639\u0644\u0645"
+    english: flagged
+  - native: "\u0645\u0639\u0644\u0645\u0629"
+    english: flagged
+  - native: "\u0645\u063A\u0627\u062F\u0631\u0627\u062A"
+    english: departures
+  - native: "\u0645\u063A\u0627\u062F\u0631\u0629"
+    english: departure
+  - native: "\u0645\u063A\u0644\u0642\u0629"
+    english: closed
+  - native: "\u0645\u0641\u062A\u0648\u062D\u0629"
+    english: open
+  - native: "\u0645\u0641\u0642\u0648\u062F"
+    english: missing
+  - native: "\u0645\u0641\u0642\u0648\u062F\u0629"
+    english: missing
+  - native: "\u0645\u0642\u0627\u0628\u0644"
+    english: against
+  - native: "\u0645\u0642\u0631\u0648\u0621\u0629"
+    english: read
+  - native: "\u0645\u0642\u0641\u0644\u0629"
+    english: locked
+  - native: "\u0645\u0643\u0627\u0646"
+    english: place
+  - native: "\u0645\u0643\u062A\u0628"
+    english: office
+  - native: "\u0645\u0643\u062A\u0628\u0647\u0627"
+    english: its office
+  - native: "\u0645\u0643\u062A\u0628\u064A\u0646"
+    english: offices
+  - native: "\u0645\u0644\u0627\u0621\u0629"
+    english: means
+  - native: "\u0645\u0644\u0627\u062D\u0638\u0627\u062A"
+    english: notes
+  - native: "\u0645\u0644\u0627\u062D\u0638\u0627\u062A\u0643"
+    english: your notes
+  - native: "\u0645\u0644\u0627\u062D\u0638\u0629"
+    english: note
+  - native: "\u0645\u0644\u062C\u0623"
+    english: shelter
+  - native: "\u0645\u0644\u0643"
+    english: belongs
+  - native: "\u0645\u0645\u0627"
+    english: than
+  - native: "\u0645\u0645\u062A\u0627\u0632"
+    english: Premium
+  - native: "\u0645\u0645\u062A\u0644\u0626\u0629"
+    english: full
+  - native: "\u0645\u0645\u0633\u0648\u062D\u0629"
+    english: scanned
+  - native: "\u0645\u0645\u0633\u0648\u0643\u0629"
+    english: held
+  - native: "\u0645\u0645\u0646\u0648\u0639"
+    english: forbidden
+  - native: "\u0645\u0646"
+    english: from; of
+  - native: "\u0645\u0646\u0627\u0648\u0628\u0629"
+    english: shift
+  - native: "\u0645\u0646\u0627\u0648\u0628\u062A\u0647"
+    english: its shift
+  - native: "\u0645\u0646\u062A\u0647\u064A"
+    english: expired
+  - native: "\u0645\u0646\u062A\u0647\u064A\u0629"
+    english: expired
+  - native: "\u0645\u0646\u0630"
+    english: since
+  - native: "\u0645\u0646\u0642\u0648\u0644"
+    english: carried
+  - native: "\u0645\u0647\u0631\u0628\u0629"
+    english: contraband
+  - native: "\u0645\u0648\u0627\u0636\u0639"
+    english: positions
+  - native: "\u0645\u0648\u0627\u0637\u0646\u064A"
+    english: citizens of
+  - native: "\u0645\u0648\u0627\u0642\u0639"
+    english: sites
+  - native: "\u0645\u0648\u062B\u0642"
+    english: documented
+  - native: "\u0645\u0648\u062B\u0642\u0629"
+    english: documented
+  - native: "\u0645\u0648\u062C\u0648\u062F\u0629"
+    english: found
+  - native: "\u0645\u0648\u0636\u0639"
+    english: place
+  - native: "\u0645\u0648\u0638\u0641"
+    english: officer
+  - native: "\u0645\u0648\u0638\u0641\u064A"
+    english: officers
+  - native: "\u0645\u0648\u0642\u0639"
+    english: site
+  - native: "\u0645\u0648\u0642\u0639\u0627"
+    english: signed
+  - native: "\u0646\u0627\u0642\u0635\u0629"
+    english: incomplete
+  - native: "\u0646\u062A\u0627\u0626\u062C"
+    english: results
+  - native: "\u0646\u062A\u0627\u0626\u062C\u0647"
+    english: its results
+  - native: "\u0646\u062A\u064A\u062C\u0629"
+    english: result
+  - native: "\u0646\u0633\u062E"
+    english: copy
+  - native: "\u0646\u0633\u062E\u0629"
+    english: copy
+  - native: "\u0646\u0635"
+    english: text
+  - native: "\u0646\u0637\u0627\u0642"
+    english: scope
+  - native: "\u0646\u0641\u0633\u0647"
+    english: same
+  - native: "\u0646\u0642\u0631\u0629"
+    english: click
+  - native: "\u0647\u0627\u062A\u0627\u0646"
+    english: these two
+  - native: "\u0647\u0627\u062F\u0626"
+    english: quiet
+  - native: "\u0647\u0630\u0627"
+    english: this
+  - native: "\u0647\u0630\u0627\u0646"
+    english: these two
+  - native: "\u0647\u0630\u0647"
+    english: this
+  - native: "\u0647\u0630\u064A\u0646"
+    english: these two
+  - native: "\u0647\u0646\u0627"
+    english: here
+  - native: "\u0647\u0648"
+    english: is
+  - native: "\u0647\u0648\u064A\u0629"
+    english: identity
+  - native: "\u0647\u064A"
+    english: is
+  - native: "\u0648"
+    english: and
+  - native: "\u0648\u0623\u0639\u0637\u0647"
+    english: and give it
+  - native: "\u0648\u0623\u0641\u0644\u062A\u0647"
+    english: and let go
+  - native: "\u0648\u0623\u0646\u062A"
+    english: while you
+  - native: "\u0648\u0625\u062C\u0627\u0628\u0627\u062A\u0647\u0645"
+    english: and their answers
+  - native: "\u0648\u0625\u0646"
+    english: and if
+  - native: "\u0648\u0627\u0628\u062F\u0623"
+    english: and start
+  - native: "\u0648\u0627\u062D\u062F"
+    english: one
+  - native: "\u0648\u0627\u062D\u062F\u0627"
+    english: one
+  - native: "\u0648\u0627\u062D\u062F\u0629"
+    english: one
+  - native: "\u0648\u0627\u0633\u062A\u0631\u062F\u0627\u062F"
+    english: and refund
+  - native: "\u0648\u0627\u0636\u063A\u0637"
+    english: and press
+  - native: "\u0648\u0627\u0641\u0642\u062A"
+    english: you approved
+  - native: "\u0648\u0627\u0644\u0623\u0632\u0631\u0627\u0631"
+    english: and buttons
+  - native: "\u0648\u0627\u0644\u062D\u0633\u0627\u0628"
+    english: and account
+  - native: "\u0648\u0627\u0644\u062E\u062F\u0645\u0627\u062A"
+    english: and utilities
+  - native: "\u0648\u0627\u0644\u062E\u0637\u0648\u0637"
+    english: and fonts
+  - native: "\u0648\u0627\u0644\u062E\u0644\u0641\u064A\u0629"
+    english: and wallpaper
+  - native: "\u0648\u0627\u0644\u062F\u0628\u0627\u0628\u064A\u0633"
+    english: and pins
+  - native: "\u0648\u0627\u0644\u0631\u0642\u0645"
+    english: and number
+  - native: "\u0648\u0627\u0644\u0633\u062C\u0644\u0627\u062A"
+    english: and records
+  - native: "\u0648\u0627\u0644\u0634\u0627\u0631\u0627\u062A"
+    english: and chips
+  - native: "\u0648\u0627\u0644\u0639\u0648\u062F\u0629"
+    english: and back
+  - native: "\u0648\u0627\u0644\u0643\u062A\u0628"
+    english: and books
+  - native: "\u0648\u0627\u0644\u0646\u062A\u0627\u0626\u062C"
+    english: and findings
+  - native: "\u0648\u062A\u0627\u0631\u064A\u062E"
+    english: and date
+  - native: "\u0648\u062A\u0635\u0644"
+    english: and arrive
+  - native: "\u0648\u062B\u0627\u0626\u0642"
+    english: documents
+  - native: "\u0648\u062B\u064A\u0642\u0629"
+    english: document
+  - native: "\u0648\u062B\u064A\u0642\u062A\u0647\u0627"
+    english: its document
+  - native: "\u0648\u062C\u0647\u0629"
+    english: destination
+  - native: "\u0648\u062D\u062F\u0647"
+    english: only
+  - native: "\u0648\u062D\u062F\u0647\u0627"
+    english: only
+  - native: "\u0648\u062D\u0642\u0628\u0629"
+    english: and an era
+  - native: "\u0648\u0631\u0642\u0629"
+    english: paper
+  - native: "\u0648\u0631\u0642\u062A\u064A\u0646"
+    english: two papers
+  - native: "\u0648\u0634\u0627\u0647\u062F"
+    english: and see
+  - native: "\u0648\u0634\u0631\u0637\u0627\u062A"
+    english: and hyphens
+  - native: "\u0648\u0635\u0644"
+    english: arrived
+  - native: "\u0648\u0636\u0639"
+    english: mode
+  - native: "\u0648\u0637\u0644\u0628"
+    english: and ask for
+  - native: "\u0648\u0639\u0644\u0649"
+    english: and on
+  - native: "\u0648\u0641\u0648\u0627\u0635\u0644"
+    english: and commas
+  - native: "\u0648\u0642\u0637\u0629"
+    english: and a cat
+  - native: "\u0648\u0644\u0627"
+    english: nor
+  - native: "\u0648\u0644\u0645"
+    english: and not
+  - native: "\u0648\u0645\u0627\u0630\u0627"
+    english: and what
+  - native: "\u0648\u0645\u0633\u0627\u0641\u0627\u062A"
+    english: and spaces
+  - native: "\u0648\u0646\u0632\u0648\u0644\u0627"
+    english: and down
+  - native: "\u0648\u0647\u0648"
+    english: which
+  - native: "\u0648\u064A\u0633\u0631\u064A"
+    english: and in force
+  - native: "\u0648\u064A\u063A\u0644\u0642"
+    english: and closes
+  - native: "\u0648\u064A\u0645\u0643\u0646"
+    english: and can
+  - native: "\u064A\u0628\u064A\u0639\u0647\u0627"
+    english: sells them
+  - native: "\u064A\u062A\u0637\u0644\u0628"
+    english: needs
+  - native: "\u064A\u062A\u063A\u064A\u0631"
+    english: changed
+  - native: "\u064A\u062B\u0628\u062A"
+    english: pins
+  - native: "\u064A\u062C\u0628"
+    english: must
+  - native: "\u064A\u062D\u062A\u0627\u062C"
+    english: needs
+  - native: "\u064A\u062D\u0636\u0631\u0647\u0627"
+    english: carried it
+  - native: "\u064A\u062D\u0645\u0644"
+    english: carries
+  - native: "\u064A\u062D\u0645\u0644\u0647\u0627"
+    english: carried
+  - native: "\u064A\u062E\u0627\u0644\u0641"
+    english: breaks
+  - native: "\u064A\u062E\u0627\u0644\u0641\u0647\u0627"
+    english: they break
+  - native: "\u064A\u062E\u0635"
+    english: belongs to
+  - native: "\u064A\u0630\u0643\u0631"
+    english: state
+  - native: "\u064A\u0630\u0647\u0628"
+    english: goes
+  - native: "\u064A\u0631\u0641\u0636"
+    english: refuses
+  - native: "\u064A\u0631\u0643\u0628"
+    english: installs
+  - native: "\u064A\u0633\u0627\u0641\u0631"
+    english: travels
+  - native: "\u064A\u0633\u062A\u0628\u062F\u0644"
+    english: swapped out
+  - native: "\u064A\u0633\u062A\u0648\u0641\u064A"
+    english: meets
+  - native: "\u064A\u0633\u062C\u0644"
+    english: logged
+  - native: "\u064A\u0633\u0631\u064A"
+    english: applies
+  - native: "\u064A\u0633\u0644\u0645\u0647\u0627"
+    english: hands over
+  - native: "\u064A\u0635\u0644"
+    english: arrives
+  - native: "\u064A\u0635\u0644\u062D"
+    english: fails
+  - native: "\u064A\u0637\u0627\u0628\u0642"
+    english: matches
+  - native: "\u064A\u0638\u0647\u0631"
+    english: shows
+  - native: "\u064A\u0639\u062F"
+    english: no longer
+  - native: "\u064A\u0639\u0631\u0636"
+    english: shown
+  - native: "\u064A\u0639\u0631\u0636\u0627\u0646"
+    english: shown
+  - native: "\u064A\u0639\u0648\u062F\u0648\u0646"
+    english: return
+  - native: "\u064A\u063A\u0627\u062F\u0631"
+    english: departs
+  - native: "\u064A\u0641\u062A\u062D"
+    english: opens
+  - native: "\u064A\u0642\u0631\u0623"
+    english: reads
+  - native: "\u064A\u0642\u0641"
+    english: stands
+  - native: "\u064A\u0643\u062A\u0628"
+    english: is written
+  - native: "\u064A\u0643\u0646"
+    english: be
+  - native: "\u064A\u0644\u0628\u0633"
+    english: wears
+  - native: "\u064A\u0644\u0628\u0633\u0647\u0627"
+    english: they wear
+  - native: "\u064A\u0644\u0635\u0642"
+    english: pastes
+  - native: "\u064A\u0645\u0643\u0646\u0643"
+    english: you can
+  - native: "\u064A\u0646\u062A\u0638\u0631\u0627\u0646"
+    english: waiting
+  - native: "\u064A\u0646\u062A\u0638\u0631\u0648\u0646"
+    english: waiting
+  - native: "\u064A\u0646\u062A\u0645\u064A"
+    english: belongs
+  - native: "\u064A\u0648\u062C\u062F"
+    english: there is
+  - native: "\u064A\u0648\u0645"
+    english: day

@@ -91,6 +91,119 @@ MonoBehaviour:
     text: Bestellungen
     gloss: 0
     tier: 0
+  - key: window.orders
+    text: Bestellungen
+    gloss: 0
+    tier: 0
+  - key: app.orders.wallet
+    text: "Geldb\xF6rse {0} \xB7 Bestellungen werden jetzt bezahlt und kommen zu
+      Beginn der morgigen Schicht; heute storniert gibt es das Geld zur\xFCck."
+    gloss: 0
+    tier: 0
+  - key: app.orders.tooDear
+    text: "{0} {1} \xB7 noch nicht bezahlbar"
+    gloss: 0
+    tier: 0
+  - key: app.orders.needs
+    text: "Ben\xF6tigt: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.orders.inTransit
+    text: "Unterwegs \xB7 kommt an Tag {0}"
+    gloss: 0
+    tier: 0
+  - key: app.orders.delivered
+    text: Geliefert an Tag {0}
+    gloss: 0
+    tier: 0
+  - key: app.orders.owned
+    text: Im Besitz
+    gloss: 0
+    tier: 0
+  - key: app.orders.installed
+    text: Installiert
+    gloss: 0
+    tier: 0
+  - key: app.orders.stored
+    text: Im Lager
+    gloss: 0
+    tier: 0
+  - key: app.orders.installsTomorrow
+    text: Wird morgen installiert
+    gloss: 0
+    tier: 0
+  - key: app.orders.leavesTomorrow
+    text: Wird morgen getauscht
+    gloss: 0
+    tier: 0
+  - key: app.orders.order
+    text: Bestellen
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancel
+    text: Bestellung stornieren
+    gloss: 0
+    tier: 0
+  - key: app.orders.install
+    text: Morgen installieren
+    gloss: 0
+    tier: 0
+  - key: app.orders.keep
+    text: Installiert lassen
+    gloss: 0
+    tier: 0
+  - key: app.orders.cancelInstall
+    text: Installation abbrechen
+    gloss: 0
+    tier: 0
+  - key: app.orders.select
+    text: "W\xE4hle einen Eintrag im Baum, um ihn hier zu sehen."
+    gloss: 0
+    tier: 0
+  - key: app.orders.none
+    text: Keine
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.desk
+    text: Schreibtischausstattung
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.interview
+    text: Befragung
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.portals
+    text: Portale
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.contacts
+    text: Kontakte
+    gloss: 0
+    tier: 0
+  - key: app.orders.branch.toys
+    text: Spielzeug
+    gloss: 0
+    tier: 0
+  - key: mail.from.supply
+    text: Zeitzoll-Beschaffung
+    gloss: 0
+    tier: 0
+  - key: mail.subject.delivery
+    text: Deine Bestellung ist da
+    gloss: 0
+    tier: 0
+  - key: mail.from.liability
+    text: Transponder-Haftungsamt
+    gloss: 0
+    tier: 0
+  - key: mail.subject.stranding
+    text: "Bericht \xFCber Transponderausfall: {0}"
+    gloss: 0
+    tier: 0
+  - key: mail.body.delivery
+    text: 'Heute Morgen geliefert und ab der heutigen Schicht in Kraft:'
+    gloss: 0
+    tier: 0
   - key: icon.investigation
     text: Ermittlung
     gloss: 0
@@ -109,6 +222,14 @@ MonoBehaviour:
     tier: 0
   - key: tray.day
     text: Tag {0}
+    gloss: 0
+    tier: 0
+  - key: tray.date
+    text: "{0} \xB7 Tag {1}"
+    gloss: 0
+    tier: 0
+  - key: tray.date.hint
+    text: Heutiges Datum vergleichen
     gloss: 0
     tier: 0
   - key: tray.stability
@@ -131,8 +252,2863 @@ MonoBehaviour:
     text: "\u2014 ZEITLINIEN-NACHRICHTEN \u2014"
     gloss: 0
     tier: 0
+  - key: briefing.deskHeader
+    text: VON SCHALTER 3
+    gloss: 0
+    tier: 0
+  - key: paper.edition
+    text: MORGENAUSGABE
+    gloss: 0
+    tier: 0
+  - key: paper.price
+    text: EIN CREDIT
+    gloss: 0
+    tier: 0
+  - key: wallet.credits
+    text: Credits
+    gloss: 0
+    tier: 0
+  - key: wallet.creditsInline
+    text: Credits
+    gloss: 0
+    tier: 0
+  - key: wallet.creditsShort
+    text: Cr
+    gloss: 0
+    tier: 0
+  - key: verdict.correct
+    text: RICHTIG  (+{0} {1})
+    gloss: 0
+    tier: 0
+  - key: verdict.wrong
+    text: FALSCH
+    gloss: 0
+    tier: 0
+  - key: verdict.wrongPenalty
+    text: FALSCH  (-{0} {1})
+    gloss: 0
+    tier: 0
+  - key: verdict.simpleCorrect
+    text: Richtig
+    gloss: 0
+    tier: 0
+  - key: verdict.simpleWrong
+    text: Falsch
+    gloss: 0
+    tier: 0
+  - key: day.complete
+    text: Tag {0} abgeschlossen.
+    gloss: 0
+    tier: 0
+  - key: idle.waiting
+    text: "Warte auf den n\xE4chsten Reisenden"
+    gloss: 0
+    tier: 0
+  - key: app.title
+    text: Ermittlung
+    gloss: 0
+    tier: 0
+  - key: app.counters
+    text: "Papiere erhalten: {0} von {1} \xB7 gescannt: {2}"
+    gloss: 0
+    tier: 0
+  - key: app.tab.documents
+    text: Papiere
+    gloss: 0
+    tier: 0
+  - key: app.tab.records
+    text: "B\xFCrgerakten"
+    gloss: 0
+    tier: 0
+  - key: app.tab.reference
+    text: Nachschlagewerke
+    gloss: 0
+    tier: 0
+  - key: app.tab.transcript
+    text: Protokoll
+    gloss: 0
+    tier: 0
+  - key: app.tab.report
+    text: Abweichungsbericht
+    gloss: 0
+    tier: 0
+  - key: app.tab.rules
+    text: Heutige Regeln
+    gloss: 0
+    tier: 0
+  - key: app.tab.calendar
+    text: Kalender
+    gloss: 0
+    tier: 0
+  - key: app.tab.board
+    text: Fallwand
+    gloss: 0
+    tier: 0
+  - key: app.side.left
+    text: Links
+    gloss: 0
+    tier: 0
+  - key: app.side.right
+    text: Rechts
+    gloss: 0
+    tier: 0
+  - key: app.pane.shelfHere
+    text: "\xD6ffnet hier"
+    gloss: 0
+    tier: 0
+  - key: app.search.open
+    text: Suchen   Ctrl K
+    gloss: 0
+    tier: 0
+  - key: app.row.rule
+    text: "Heutige Regeln \xB7 Regel {0}"
+    gloss: 0
+    tier: 0
+  - key: shelf.side.left
+    text: L
+    gloss: 0
+    tier: 0
+  - key: shelf.side.right
+    text: R
+    gloss: 0
+    tier: 0
+  - key: menubar.papers
+    text: Papiere
+    gloss: 0
+    tier: 0
+  - key: status.holding
+    text: "Du h\xE4ltst <b>{0}</b> ({1}). Klicke einen anderen Wert zum Vergleichen."
+    gloss: 0
+    tier: 0
+  - key: status.holdingRule
+    text: "Du h\xE4ltst die Regel: <b>{0}</b> Klicke den Wert, um den es geht."
+    gloss: 0
+    tier: 0
+  - key: status.holdingToday
+    text: "Du h\xE4ltst das heutige Datum, <b>{0}</b>. Klicke ein Abreisedatum oder
+      ein G\xFCltig bis."
+    gloss: 0
+    tier: 0
+  - key: status.logged
+    text: '{0}. Erfasst.'
+    gloss: 0
+    tier: 0
+  - key: status.evidence
+    text: '{0}. Als Beweis erfasst.'
+    gloss: 0
+    tier: 0
+  - key: status.already
+    text: Diese beiden hast du schon verglichen. Erneut gezeigt.
+    gloss: 0
+    tier: 0
+  - key: status.shown
+    text: '{0}. Erneut gezeigt.'
+    gloss: 0
+    tier: 0
+  - key: status.cancel
+    text: Abbrechen   Esc
+    gloss: 0
+    tier: 0
+  - key: finding.link.Match
+    text: Daten stimmen
+    gloss: 0
+    tier: 0
+  - key: finding.link.Differs
+    text: Daten weichen ab
+    gloss: 0
+    tier: 0
+  - key: finding.link.Elsewhere
+    text: "Geh\xF6rt woandershin"
+    gloss: 0
+    tier: 0
+  - key: finding.link.DifferentDetails
+    text: Andere Angaben
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherPlace
+    text: Nicht der angegebene Ort
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherPerson
+    text: Andere Person
+    gloss: 0
+    tier: 0
+  - key: finding.link.TwoTruths
+    text: Beides Referenz
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleMet
+    text: "Erf\xFCllt die Regel"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleBroken
+    text: "Verst\xF6\xDFt gegen die Regel"
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleNotAbout
+    text: Nicht Gegenstand der Regel
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleByComparison
+    text: Stattdessen vergleichen
+    gloss: 0
+    tier: 0
+  - key: finding.link.RuleNotForTraveller
+    text: "Nicht f\xFCr diesen Reisenden"
+    gloss: 0
+    tier: 0
+  - key: finding.link.NothingToCompare
+    text: Nichts zu vergleichen
+    gloss: 0
+    tier: 0
+  - key: finding.link.DepartsToday
+    text: Reist heute ab
+    gloss: 0
+    tier: 0
+  - key: finding.link.NotToday
+    text: Nicht heute
+    gloss: 0
+    tier: 0
+  - key: finding.link.StillValid
+    text: "Noch g\xFCltig"
+    gloss: 0
+    tier: 0
+  - key: finding.link.Expired
+    text: Abgelaufen
+    gloss: 0
+    tier: 0
+  - key: finding.link.SealIncorrect
+    text: Siegel falsch
+    gloss: 0
+    tier: 0
+  - key: finding.link.OtherOffice
+    text: Anderes Amt
+    gloss: 0
+    tier: 0
+  - key: finding.link.PaperMissing
+    text: Nicht dabei
+    gloss: 0
+    tier: 0
+  - key: finding.link.NoRecord
+    text: Keine Akte
+    gloss: 0
+    tier: 0
+  - key: finding.note.DifferentDetails
+    text: '{0} und {1} sind verschiedene Angaben. Nichts erfasst.'
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherPlace
+    text: Diese Buchzeile betrifft einen anderen Ort als den angegebenen. Nichts
+      erfasst.
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherPerson
+    text: "Diese Akte geh\xF6rt jemand anderem. Nichts erfasst."
+    gloss: 0
+    tier: 0
+  - key: finding.note.TwoTruths
+    text: Beides sind Referenzdaten. Halte ein Papier oder eine Antwort gegen eines
+      davon.
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleNotAbout
+    text: Diese Regel betrifft nicht {1}. Nichts erfasst.
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleByComparison
+    text: "Pr\xFCfe diese Regel durch Vergleich: Halte den Wert gegen die B\xFCcher
+      oder die Akte."
+    gloss: 0
+    tier: 0
+  - key: finding.note.RuleNotForTraveller
+    text: "Diese Regel gilt nicht f\xFCr diesen Reisenden. Nichts erfasst."
+    gloss: 0
+    tier: 0
+  - key: finding.note.NothingToCompare
+    text: Halte eine Regel oder das heutige Datum gegen den Wert, um den es geht.
+    gloss: 0
+    tier: 0
+  - key: finding.note.OtherOffice
+    text: "Diese Siegel geh\xF6ren zwei \xC4mtern. Halte das Siegel eines Papiers
+      gegen das Siegel seines eigenen Amts im Siegelregister. Nichts erfasst."
+    gloss: 0
+    tier: 0
+  - key: finding.title.Match
+    text: '{0} stimmt'
+    gloss: 0
+    tier: 0
+  - key: finding.title.Differs
+    text: '{0} weicht ab'
+    gloss: 0
+    tier: 0
+  - key: finding.title.Elsewhere
+    text: "{0} geh\xF6rt zu einem anderen Ort"
+    gloss: 0
+    tier: 0
+  - key: finding.title.RuleMet
+    text: "Erf\xFCllt die Regel: {0}"
+    gloss: 0
+    tier: 0
+  - key: finding.title.RuleBroken
+    text: "Verst\xF6\xDFt gegen die Regel: {0}"
+    gloss: 0
+    tier: 0
+  - key: finding.title.DepartsToday
+    text: Reist heute ab
+    gloss: 0
+    tier: 0
+  - key: finding.title.NotToday
+    text: Abreise ist nicht heute
+    gloss: 0
+    tier: 0
+  - key: finding.title.StillValid
+    text: "{0} ist noch g\xFCltig"
+    gloss: 0
+    tier: 0
+  - key: finding.title.Expired
+    text: '{0} ist abgelaufen'
+    gloss: 0
+    tier: 0
+  - key: finding.title.SealIncorrect
+    text: Siegel falsch
+    gloss: 0
+    tier: 0
+  - key: finding.title.PaperMissing
+    text: '{0} fehlt'
+    gloss: 0
+    tier: 0
+  - key: finding.title.NoRecord
+    text: '{0}: keine Akte vorhanden'
+    gloss: 0
+    tier: 0
+  - key: finding.detail
+    text: '{0} gegen {1}'
+    gloss: 0
+    tier: 0
+  - key: finding.detail.same
+    text: '{0} auf beiden'
+    gloss: 0
+    tier: 0
+  - key: finding.detail.missing
+    text: Verlangt, nicht dabei
+    gloss: 0
+    tier: 0
+  - key: finding.detail.noRecord
+    text: '{0} nachgeschlagen: nichts vorhanden'
+    gloss: 0
+    tier: 0
+  - key: finding.evidence
+    text: "{0} \xB7 Beweis"
+    gloss: 0
+    tier: 0
+  - key: finding.what.today
+    text: Heutiges Datum
+    gloss: 0
+    tier: 0
+  - key: finding.what.rule
+    text: Die Regel
+    gloss: 0
+    tier: 0
+  - key: findings.title
+    text: Deine Befunde
+    gloss: 0
+    tier: 0
+  - key: findings.empty
+    text: Noch keine Befunde
+    gloss: 0
+    tier: 0
+  - key: calendar.title
+    text: "Beh\xF6rdenkalender"
+    gloss: 0
+    tier: 0
+  - key: calendar.today
+    text: Heute
+    gloss: 0
+    tier: 0
+  - key: calendar.todayTitle
+    text: "Kalender \xB7 Heute"
+    gloss: 0
+    tier: 0
+  - key: calendar.shiftDay
+    text: Schichttag {0}
+    gloss: 0
+    tier: 0
+  - key: calendar.unknown
+    text: Datum unbekannt
+    gloss: 0
+    tier: 0
+  - key: search.drawer.title
+    text: Dokumente suchen
+    gloss: 0
+    tier: 0
+  - key: search.drawer.hint
+    text: "W\xE4hle ein Ergebnis, um das Dokument auf der Seite des Regals zu \xF6ffnen."
+    gloss: 0
+    tier: 0
+  - key: app.chip.onDesk
+    text: '{0}: auf dem Schreibtisch'
+    gloss: 0
+    tier: 0
+  - key: app.chip.notHandedOver
+    text: "{0}: nicht \xFCbergeben"
+    gloss: 0
+    tier: 0
+  - key: app.doc.none
+    text: Die Papiere des Reisenden erscheinen hier, sobald sie gescannt sind.
+    gloss: 0
+    tier: 0
+  - key: app.doc.scanHint
+    text: 'Auf dem Schreibtisch: scanne es, um es hier zu lesen.'
+    gloss: 0
+    tier: 0
+  - key: app.doc.askHint
+    text: "Nicht \xFCbergeben: verlange es vom Reisenden."
+    gloss: 0
+    tier: 0
+  - key: app.ref.claimedOnly
+    text: Nur angegebener Ort
+    gloss: 0
+    tier: 0
+  - key: app.search
+    text: Ein Name, ein Ort oder eine Nummer
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.pinned
+    text: Angeheftet
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.recent
+    text: Zuletzt
+    gloss: 0
+    tier: 0
+  - key: app.toast.scanned
+    text: '{0} gescannt'
+    gloss: 0
+    tier: 0
+  - key: app.toast.open
+    text: "\xD6ffnen"
+    gloss: 0
+    tier: 0
+  - key: search.all
+    text: Alle
+    gloss: 0
+    tier: 0
+  - key: search.more
+    text: Alle {0} in {1} zeigen
+    gloss: 0
+    tier: 0
+  - key: search.none
+    text: "Nichts in diesem Fall oder den heutigen Akten passt zu \u201E{0}\u201C."
+    gloss: 0
+    tier: 0
+  - key: search.noneChip
+    text: "Keine un\xFCbersetzte Zeile dieses Falls gleicht dem eingef\xFCgten Ausschnitt."
+    gloss: 0
+    tier: 0
+  - key: search.hint
+    text: "Enter \xF6ffnet das erste Ergebnis \xB7 klicke ein Ergebnis, um hinzugehen"
+    gloss: 0
+    tier: 0
+  - key: search.close
+    text: "Schlie\xDFen   Esc"
+    gloss: 0
+    tier: 0
+  - key: search.title.rule
+    text: Regel {0}
+    gloss: 0
+    tier: 0
+  - key: search.revised
+    text: "ge\xE4ndert"
+    gloss: 0
+    tier: 0
+  - key: steps.rules
+    text: "Heutige Regeln f\xFCr das Reiseziel"
+    gloss: 0
+    tier: 0
+  - key: steps.papers
+    text: Alle Papiere entgegennehmen
+    gloss: 0
+    tier: 0
+  - key: steps.read
+    text: Alle Papiere lesen
+    gloss: 0
+    tier: 0
+  - key: steps.identity
+    text: "Name, Nummer und Geburtsdatum in den B\xFCrgerakten"
+    gloss: 0
+    tier: 0
+  - key: steps.facts
+    text: "Ortsangaben gegen die B\xFCcher"
+    gloss: 0
+    tier: 0
+  - key: steps.questions
+    text: Die heutigen Fragen stellen
+    gloss: 0
+    tier: 0
+  - key: steps.answers
+    text: "Antworten gegen B\xFCcher oder Akten"
+    gloss: 0
+    tier: 0
+  - key: steps.dress
+    text: "Kleidung gegen den Kost\xFCmf\xFChrer"
+    gloss: 0
+    tier: 0
+  - key: steps.returnOrder
+    text: "R\xFCckkehrbefehl gegen die Bescheinigung"
+    gloss: 0
+    tier: 0
+  - key: steps.dates
+    text: Daten gegen den heutigen Kalender
+    gloss: 0
+    tier: 0
+  - key: steps.class
+    text: Passklasse gegen das Konto
+    gloss: 0
+    tier: 0
+  - key: steps.transponder
+    text: Transponder gegen das Konto
+    gloss: 0
+    tier: 0
+  - key: steps.paperSet
+    text: Papiersatz gegen die heutigen Regeln
+    gloss: 0
+    tier: 0
+  - key: steps.standing
+    text: Kontostand in den Akten
+    gloss: 0
+    tier: 0
+  - key: steps.askMeans
+    text: Mittelnachweis verlangen
+    gloss: 0
+    tier: 0
+  - key: steps.waiver
+    text: Verzicht gegen Ticket und Konto
+    gloss: 0
+    tier: 0
+  - key: steps.means
+    text: Mittelnachweis gegen das Konto
+    gloss: 0
+    tier: 0
+  - key: steps.contract
+    text: Vertrag gegen den registrierten
+    gloss: 0
+    tier: 0
+  - key: steps.hint.wheel
+    text: 'Nutze das Reisendenrad: klicke den Reisenden am Schreibtisch.'
+    gloss: 0
+    tier: 0
+  - key: app.link.seal
+    text: "Siegelregister \xF6ffnen: Siegel des ausstellenden Amts"
+    gloss: 0
+    tier: 0
+  - key: app.link.reference
+    text: "Nachschlagewerke \xF6ffnen: {0}, der angegebene Ort"
+    gloss: 0
+    tier: 0
+  - key: app.link.records
+    text: "B\xFCrgerakten \xF6ffnen: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.link.rules
+    text: "Heutige Regeln \xF6ffnen"
+    gloss: 0
+    tier: 0
+  - key: app.link.pick
+    text: "Dort \xF6ffnen, wo es gew\xE4hlt wurde: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.link.place
+    text: "Nachschlagewerke \xF6ffnen: {0}"
+    gloss: 0
+    tier: 0
+  - key: app.transcript.answersOnly
+    text: Nur Antworten
+    gloss: 0
+    tier: 0
+  - key: app.transcript.newLine
+    text: Neue Zeile unten
+    gloss: 0
+    tier: 0
+  - key: window.minimize
+    text: Minimieren
+    gloss: 0
+    tier: 0
+  - key: window.maximize
+    text: Maximieren
+    gloss: 0
+    tier: 0
+  - key: window.close
+    text: "Schlie\xDFen"
+    gloss: 0
+    tier: 0
+  - key: window.internet
+    text: Internet
+    gloss: 0
+    tier: 0
+  - key: window.notes
+    text: Notizen
+    gloss: 0
+    tier: 0
+  - key: browser.back
+    text: "Zur\xFCck"
+    gloss: 0
+    tier: 0
+  - key: browser.forward
+    text: Vor
+    gloss: 0
+    tier: 0
+  - key: browser.home
+    text: Start
+    gloss: 0
+    tier: 0
+  - key: browser.go
+    text: Los
+    gloss: 0
+    tier: 0
+  - key: browser.address
+    text: Name oder Adresse einer Seite eingeben
+    gloss: 0
+    tier: 0
+  - key: browser.search
+    text: Namen suchen
+    gloss: 0
+    tier: 0
+  - key: browser.searchButton
+    text: Suchen
+    gloss: 0
+    tier: 0
+  - key: site.portal.title
+    text: Startseite
+    gloss: 0
+    tier: 0
+  - key: site.portal.masthead
+    text: CHRONET
+    gloss: 0
+    tier: 0
+  - key: site.portal.intro
+    text: "Die Seiten des Zeitzoll-Netzes. W\xE4hle eine oder gib ihren Namen in
+      das Adressfeld ein."
+    gloss: 0
+    tier: 0
+  - key: site.notFound.title
+    text: Seite nicht gefunden
+    gloss: 0
+    tier: 0
+  - key: site.notFound.body
+    text: Unter {0} ist nichts abgelegt.
+    gloss: 0
+    tier: 0
+  - key: site.home
+    text: "Zur\xFCck zur Startseite"
+    gloss: 0
+    tier: 0
+  - key: site.news.masthead
+    text: "{0} \xB7 Onlineausgabe \xB7 Tag {1}"
+    gloss: 0
+    tier: 0
+  - key: site.news.issueTitle
+    text: '{0}, Tag {1}'
+    gloss: 0
+    tier: 0
+  - key: site.news.backIssue
+    text: "\xC4ltere Ausgabe: die Zeitung von Tag {0}."
+    gloss: 0
+    tier: 0
+  - key: site.news.world
+    text: WELT
+    gloss: 0
+    tier: 0
+  - key: site.news.desk
+    text: Von Schalter 3
+    gloss: 0
+    tier: 0
+  - key: site.news.notices
+    text: BEKANNTMACHUNGEN
+    gloss: 0
+    tier: 0
+  - key: site.news.noNotices
+    text: Keine Bekanntmachungen.
+    gloss: 0
+    tier: 0
+  - key: site.news.standings
+    text: ZEITLINIEN-TABELLE
+    gloss: 0
+    tier: 0
+  - key: site.news.noStandings
+    text: Noch keine Tabelle.
+    gloss: 0
+    tier: 0
+  - key: site.news.archive
+    text: ARCHIV
+    gloss: 0
+    tier: 0
+  - key: site.news.issueLink
+    text: Tag {0}
+    gloss: 0
+    tier: 0
+  - key: site.news.allIssues
+    text: "Alle \xE4lteren Ausgaben"
+    gloss: 0
+    tier: 0
+  - key: site.news.today
+    text: Heutige Ausgabe
+    gloss: 0
+    tier: 0
+  - key: site.news.archiveTitle
+    text: "\xC4ltere Ausgaben"
+    gloss: 0
+    tier: 0
+  - key: site.news.archiveRow
+    text: 'Tag {0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: site.news.noBackIssues
+    text: "Noch keine \xE4lteren Ausgaben."
+    gloss: 0
+    tier: 0
+  - key: site.news.quiet
+    text: Ein ruhiger Tag auf der Zeitlinie.
+    gloss: 0
+    tier: 0
+  - key: site.history.intro
+    text: "Jedes Land in jeder Epoche, wie die Geschichte heute steht. Eine ge\xE4nderte
+      Tatsache zeigt, wann sie sich \xE4nderte und was sie war."
+    gloss: 0
+    tier: 0
+  - key: site.history.present
+    text: Die Gegenwart
+    gloss: 0
+    tier: 0
+  - key: site.history.revisions
+    text: "\xC4nderungen"
+    gloss: 0
+    tier: 0
+  - key: site.history.country
+    text: LAND
+    gloss: 0
+    tier: 0
+  - key: site.history.presentNote
+    text: "Dies ist die Gegenwart: Die Zukunft geh\xF6rt ihrem Volk."
+    gloss: 0
+    tier: 0
+  - key: site.history.revised
+    text: "Ge\xE4ndert an Tag {0} (war {1})"
+    gloss: 0
+    tier: 0
+  - key: site.history.people
+    text: Menschen aus {0} im Abstammungsarchiv
+    gloss: 0
+    tier: 0
+  - key: site.history.index
+    text: Ortsverzeichnis
+    gloss: 0
+    tier: 0
+  - key: site.history.presentNone
+    text: "Keine Macht h\xE4lt die Zukunft. Die Gegenwart ist offen, bis eine aufsteigt."
+    gloss: 0
+    tier: 0
+  - key: site.history.today
+    text: 2150 heute
+    gloss: 0
+    tier: 0
+  - key: site.history.whyCarry
+    text: "\xDCbernommen aus {0}"
+    gloss: 0
+    tier: 0
+  - key: site.history.whyPending
+    text: "\xDCbernommen aus {0} (ausstehend)"
+    gloss: 0
+    tier: 0
+  - key: site.history.noRevisions
+    text: "Die Geschichte hat sich noch nicht ge\xE4ndert."
+    gloss: 0
+    tier: 0
+  - key: site.history.col.day
+    text: TAG
+    gloss: 0
+    tier: 0
+  - key: site.history.col.place
+    text: ORT
+    gloss: 0
+    tier: 0
+  - key: site.history.col.fact
+    text: TATSACHE
+    gloss: 0
+    tier: 0
+  - key: site.history.col.before
+    text: VORHER
+    gloss: 0
+    tier: 0
+  - key: site.history.col.after
+    text: NACHHER
+    gloss: 0
+    tier: 0
+  - key: site.history.col.why
+    text: WARUM
+    gloss: 0
+    tier: 0
+  - key: site.history.changed
+    text: "Ge\xE4ndert an Schalter 3"
+    gloss: 0
+    tier: 0
+  - key: site.history.changedRow
+    text: 'Tag {0}, {1}: {2} ist jetzt {3} ({4})'
+    gloss: 0
+    tier: 0
+  - key: site.lineage.intro
+    text: "Akten von B\xFCrgern der Vergangenheit. Suche nach Namen oder w\xE4hle
+      ein Land und eine Epoche."
+    gloss: 0
+    tier: 0
+  - key: site.lineage.country
+    text: LAND
+    gloss: 0
+    tier: 0
+  - key: site.lineage.era
+    text: EPOCHE
+    gloss: 0
+    tier: 0
+  - key: site.lineage.all
+    text: Alle
+    gloss: 0
+    tier: 0
+  - key: site.lineage.count
+    text: '{0} Akten'
+    gloss: 0
+    tier: 0
+  - key: site.lineage.hits
+    text: "{0} Akten passen zu \u201E{1}\u201C"
+    gloss: 0
+    tier: 0
+  - key: site.lineage.noHits
+    text: Keine Akte passt.
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.name
+    text: NAME
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.born
+    text: GEBOREN
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.place
+    text: ORT
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.name
+    text: NAME
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.born
+    text: GEBOREN
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.died
+    text: GESTORBEN
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.place
+    text: ORT
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.note
+    text: BERUF / NOTIZ
+    gloss: 0
+    tier: 0
+  - key: site.lineage.unknown
+    text: Unbekannt
+    gloss: 0
+    tier: 0
+  - key: site.lineage.relations
+    text: BEZIEHUNGEN
+    gloss: 0
+    tier: 0
+  - key: site.lineage.back
+    text: "Zur\xFCck zur Suche"
+    gloss: 0
+    tier: 0
+  - key: ending.world.leftBehind
+    text: "Die Welt, die du hinterl\xE4sst"
+    gloss: 0
+    tier: 0
+  - key: settings.language
+    text: Sprache
+    gloss: 0
+    tier: 0
+  - key: settings.followHistory
+    text: Der Geschichte folgen
+    gloss: 0
+    tier: 0
+  - key: settings.alwaysEnglish
+    text: Immer Englisch
+    gloss: 0
+    tier: 0
+  - key: settings.languageLocked
+    text: "Gesperrt seit Tag {0}: Das Amt spricht jetzt die Sprache der Welt. Fahre
+      \xFCber ein Wort, um es zu \xFCbersetzen (die \xDCbersetzungslupe)."
+    gloss: 0
+    tier: 0
+  - key: settings.motion
+    text: Bewegung
+    gloss: 0
+    tier: 0
+  - key: settings.motionFull
+    text: Voll
+    gloss: 0
+    tier: 0
+  - key: settings.motionReduced
+    text: Reduziert
+    gloss: 0
+    tier: 0
+  - key: settings.motionIntensity
+    text: "St\xE4rke"
+    gloss: 0
+    tier: 0
+  - key: settings.desktop
+    text: "Desktop-Symbole \xF6ffnen mit"
+    gloss: 0
+    tier: 0
+  - key: settings.iconDouble
+    text: Doppelklick
+    gloss: 0
+    tier: 0
+  - key: settings.iconSingle
+    text: Einfachklick
+    gloss: 0
+    tier: 0
+  - key: settings.resetIcons
+    text: "Symbolpositionen zur\xFCcksetzen"
+    gloss: 0
+    tier: 0
+  - key: desktop.arrange
+    text: Symbole anordnen
+    gloss: 0
+    tier: 0
+  - key: menu.open
+    text: "\xD6ffnen"
+    gloss: 0
+    tier: 0
+  - key: settings.note
+    text: "Farben, Schriften und das Hintergrundbild folgen immer der Geschichte.
+      Ein Sprachwechsel gilt ab dem n\xE4chsten \xD6ffnen des Amts. Reduzierte Bewegung
+      zeigt \xDCbersetzungen sofort."
+    gloss: 0
+    tier: 0
+  - key: startmenu.mail
+    text: Post
+    gloss: 0
+    tier: 0
+  - key: startmenu.mailUnread
+    text: Post ({0})
+    gloss: 0
+    tier: 0
+  - key: startmenu.account
+    text: "B\xFCrgerkonto"
+    gloss: 0
+    tier: 0
+  - key: startmenu.notes
+    text: Notizen
+    gloss: 0
+    tier: 0
+  - key: window.mail
+    text: Post
+    gloss: 0
+    tier: 0
+  - key: window.mailUnread
+    text: Post ({0} ungelesen)
+    gloss: 0
+    tier: 0
+  - key: window.account
+    text: "B\xFCrgerkonto"
+    gloss: 0
+    tier: 0
+  - key: window.shortcuts
+    text: "Tastenk\xFCrzel"
+    gloss: 0
+    tier: 0
+  - key: settings.keyboard
+    text: Tastatur
+    gloss: 0
+    tier: 0
+  - key: settings.showShortcuts
+    text: "Tastenk\xFCrzel zeigen"
+    gloss: 0
+    tier: 0
+  - key: keys.focusSearch
+    text: "Die Suchleiste der Ermittlungs-App \xF6ffnen"
+    gloss: 0
+    tier: 0
+  - key: keys.intoResults
+    text: "Vom Suchfeld in die Ergebnisse: Pfeile gehen die Treffer durch, Enter
+      \xF6ffnet einen"
+    gloss: 0
+    tier: 0
+  - key: keys.escape
+    text: "Rechtsklick oder Esc: ein Men\xFC, diese Karte oder die Suchleiste schlie\xDFen;
+      die Suche leeren; ein Textfeld verlassen; einen gehaltenen Wert loslassen;
+      das Men\xFC schlie\xDFen oder ein Ziehen abbrechen. Ist nichts davon offen,
+      zur\xFCck zum Schreibtisch"
+    gloss: 0
+    tier: 0
+  - key: keys.help
+    text: Diese Karte zeigen oder ausblenden
+    gloss: 0
+    tier: 0
+  - key: keys.openIcon
+    text: "Desktop: das gew\xE4hlte Symbol \xF6ffnen"
+    gloss: 0
+    tier: 0
+  - key: keys.icons
+    text: "Desktop: das n\xE4chste Symbol in dieser Richtung w\xE4hlen"
+    gloss: 0
+    tier: 0
+  - key: keys.orders
+    text: 'Bestellungen: im Baum bewegen (zu einer Voraussetzung, einem Folgeeintrag
+      oder in einer Spalte auf und ab)'
+    gloss: 0
+    tier: 0
+  - key: keys.ordersAct
+    text: "Bestellungen: gew\xE4hlten Eintrag bestellen, stornieren oder installieren"
+    gloss: 0
+    tier: 0
+  - key: keys.step
+    text: "Ermittlung: die Dokumente von Schritt 1 bis 4 aufrufen (Papiere, Akten,
+      B\xFCcher, Regeln)"
+    gloss: 0
+    tier: 0
+  - key: keys.nextStep
+    text: "Ermittlung: die Dokumente des n\xE4chsten oder vorigen Schritts aufrufen"
+    gloss: 0
+    tier: 0
+  - key: keys.findings
+    text: Befundspalte zeigen oder ausblenden
+    gloss: 0
+    tier: 0
+  - key: keys.otherPane
+    text: Die andere Seite zur Regalseite machen
+    gloss: 0
+    tier: 0
+  - key: keys.split
+    text: Zwei Bereiche oder einer
+    gloss: 0
+    tier: 0
+  - key: keys.history
+    text: "Zur\xFCck oder vor im Bereich, auf dem sich das Regal \xF6ffnet"
+    gloss: 0
+    tier: 0
+  - key: keys.regions
+    text: "Der n\xE4chste oder vorige Teil der App: Men\xFCleiste, Bereiche, Befunde,
+      Abbrechen"
+    gloss: 0
+    tier: 0
+  - key: keys.rows
+    text: "Den Fokus \xFCber Werte, Chips, Befunde, Nadeln oder Kn\xF6pfe bewegen"
+    gloss: 0
+    tier: 0
+  - key: keys.follow
+    text: "Das fokussierte Element \xF6ffnen oder dem Link eines Werts folgen"
+    gloss: 0
+    tier: 0
+  - key: keys.followOther
+    text: "Dem Link eines Werts folgen oder das fokussierte Suchergebnis auf der
+      anderen Seite \xF6ffnen"
+    gloss: 0
+    tier: 0
+  - key: keys.pick
+    text: "Den fokussierten Wert halten und dann mit dem n\xE4chsten vergleichen"
+    gloss: 0
+    tier: 0
+  - key: keys.copy
+    text: "Den fokussierten Wert kopieren, oder \u201EBezeichnung: Wert\u201C"
+    gloss: 0
+    tier: 0
+  - key: keys.paste
+    text: "Notizen: den kopierten Wert als Ausschnitt einf\xFCgen (ein Textfeld f\xFCgt
+      wie \xFCblich ein)"
+    gloss: 0
+    tier: 0
+  - key: keys.pin
+    text: "Den fokussierten Wert oder das Dokument des Bereichs anheften oder l\xF6sen"
+    gloss: 0
+    tier: 0
+  - key: keys.zoom
+    text: "Die Bereiche vergr\xF6\xDFern, verkleinern oder auf die Textgr\xF6\xDFe
+      der Einstellungen zur\xFCcksetzen (der Bestellbaum: vergr\xF6\xDFern, verkleinern
+      oder zur\xFCck auf 100 %)"
+    gloss: 0
+    tier: 0
+  - key: keys.contextMenu
+    text: "Das Kontextmen\xFC der fokussierten Zeile oder des gew\xE4hlten Symbols
+      (kopieren, anheften, w\xE4hlen, \xF6ffnen, anordnen)"
+    gloss: 0
+    tier: 0
+  - key: keys.section.desk
+    text: Am Schreibtisch
+    gloss: 0
+    tier: 0
+  - key: keys.section.pc
+    text: Am PC
+    gloss: 0
+    tier: 0
+  - key: keys.desk.drag
+    text: "Ein Dokument oder einen Stempel bewegen: auf dem Tresen ist ein Dokument
+      klein, auf dem Schreibtisch in voller Gr\xF6\xDFe; ist der Pass gestempelt,
+      gibt ein auf den Tresen gelegtes Papier die Papiere zur\xFCck"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.inspect
+    text: "Pr\xFCfmodus (der rote Knopf): klicke zwei Dinge, um sie zu vergleichen"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.stamps
+    text: 'Die Stempelleiste (der graue Reiter rechts): ziehe einen Stempel auf den
+      Pass und lass los'
+    gloss: 0
+    tier: 0
+  - key: keys.desk.pc
+    text: "Zum PC und zur\xFCck (der graue Reiter links)"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.back
+    text: "Zur\xFCck: ein Ziehen, das Rad, der PC, ein gehaltener Wert, der Pr\xFCfmodus,
+      die Stempelleiste, die Stadt, die Leseansicht"
+    gloss: 0
+    tier: 0
+  - key: keys.desk.city
+    text: "Auf die Stadt schauen und zur\xFCck"
+    gloss: 0
+    tier: 0
+  - key: app.copied
+    text: 'Kopiert: {0}'
+    gloss: 0
+    tier: 0
+  - key: app.row.line
+    text: "{0} \xB7 Zeile {1}"
+    gloss: 0
+    tier: 0
+  - key: app.item.record
+    text: "B\xFCrgerakten \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: app.pins.full
+    text: "L\xF6se zuerst etwas: Die Nadeln sind voll."
+    gloss: 0
+    tier: 0
+  - key: app.pins.empty
+    text: "Ctrl+P heftet den aktuellen Wert an. Rechtsklick auf eine Nadel l\xF6st
+      sie."
+    gloss: 0
+    tier: 0
+  - key: app.recent.empty
+    text: "Die Papiere, B\xFCcher und Akten, die du \xF6ffnest, erscheinen hier."
+    gloss: 0
+    tier: 0
+  - key: app.jump.gone
+    text: Das ist nicht mehr hier.
+    gloss: 0
+    tier: 0
+  - key: search.chip
+    text: "{0} \xB7 un\xFCbersetzt {1}"
+    gloss: 0
+    tier: 0
+  - key: menu.copy
+    text: Wert kopieren
+    gloss: 0
+    tier: 0
+  - key: menu.copyRow
+    text: Zeile kopieren
+    gloss: 0
+    tier: 0
+  - key: menu.pin
+    text: Anheften
+    gloss: 0
+    tier: 0
+  - key: menu.unpin
+    text: "L\xF6sen"
+    gloss: 0
+    tier: 0
+  - key: menu.pick
+    text: "Zum Vergleich w\xE4hlen"
+    gloss: 0
+    tier: 0
+  - key: settings.investigation
+    text: Ermittlung
+    gloss: 0
+    tier: 0
+  - key: mail.inbox
+    text: Posteingang
+    gloss: 0
+    tier: 0
+  - key: mail.none
+    text: Keine Post.
+    gloss: 0
+    tier: 0
+  - key: mail.select
+    text: "W\xE4hle eine Nachricht, um sie zu lesen."
+    gloss: 0
+    tier: 0
+  - key: mail.rowMeta
+    text: "Tag {0} \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: mail.to
+    text: Alle Schalterbeamten
+    gloss: 0
+    tier: 0
+  - key: mail.from.directorate
+    text: Zolldirektion
+    gloss: 0
+    tier: 0
+  - key: mail.from.times
+    text: Der Zeitbote
+    gloss: 0
+    tier: 0
+  - key: mail.from.integrity
+    text: "Amt f\xFCr Zeitlinienintegrit\xE4t"
+    gloss: 0
+    tier: 0
+  - key: mail.subject.memo
+    text: Heutige Weisungen
+    gloss: 0
+    tier: 0
+  - key: mail.subject.times
+    text: Der Zeitbote, Tag {0}
+    gloss: 0
+    tier: 0
+  - key: mail.subject.citation
+    text: 'Verwarnung: Reisender {0}'
+    gloss: 0
+    tier: 0
+  - key: mail.body.noDirectives
+    text: Heute keine Reiseweisungen.
+    gloss: 0
+    tier: 0
+  - key: mail.body.times
+    text: Die heutige Ausgabe steht auf der Nachrichtenseite.
+    gloss: 0
+    tier: 0
+  - key: mail.body.timesArchived
+    text: Diese Ausgabe liegt im Archiv der Nachrichtenseite.
+    gloss: 0
+    tier: 0
+  - key: mail.body.citation
+    text: "Eine Kopie des Verwarnungszettels, den du best\xE4tigt hast:"
+    gloss: 0
+    tier: 0
+  - key: mail.link.rules
+    text: "Weisungen \xF6ffnen >"
+    gloss: 0
+    tier: 0
+  - key: mail.link.news
+    text: Auf der Nachrichtenseite lesen >
+    gloss: 0
+    tier: 0
+  - key: account.form.title
+    text: "AUSZUG AUS DER B\xDCRGERAKTE"
+    gloss: 0
+    tier: 0
+  - key: account.query
+    text: "Kontoinhaber: {0} \xB7 B\xFCrger-ID {1}"
+    gloss: 0
+    tier: 0
+  - key: account.group.records
+    text: AKTEN
+    gloss: 0
+    tier: 0
+  - key: account.group.forms
+    text: HINTERLEGTE FORMULARE
+    gloss: 0
+    tier: 0
+  - key: account.group.travel
+    text: REISEN
+    gloss: 0
+    tier: 0
+  - key: account.row.name
+    text: Name
+    gloss: 0
+    tier: 0
+  - key: account.row.born
+    text: Geboren
+    gloss: 0
+    tier: 0
+  - key: account.row.lineage
+    text: Abstammung
+    gloss: 0
+    tier: 0
+  - key: account.row.citizenId
+    text: "B\xFCrger-ID"
+    gloss: 0
+    tier: 0
+  - key: account.row.status
+    text: Status
+    gloss: 0
+    tier: 0
+  - key: account.row.standing
+    text: Ansehen
+    gloss: 0
+    tier: 0
+  - key: account.row.debt
+    text: Schulden
+    gloss: 0
+    tier: 0
+  - key: account.row.balance
+    text: Kontostand
+    gloss: 0
+    tier: 0
+  - key: account.row.employment
+    text: "Besch\xE4ftigung"
+    gloss: 0
+    tier: 0
+  - key: account.row.departure
+    text: Gebuchte Abreise
+    gloss: 0
+    tier: 0
+  - key: account.row.note
+    text: Notiz
+    gloss: 0
+    tier: 0
+  - key: account.status.eligible
+    text: Berechtigt
+    gloss: 0
+    tier: 0
+  - key: account.status.standard
+    text: Standard
+    gloss: 0
+    tier: 0
+  - key: account.standing.good
+    text: Gut
+    gloss: 0
+    tier: 0
+  - key: account.standing.frozen
+    text: Gesperrt
+    gloss: 0
+    tier: 0
+  - key: account.departure.none
+    text: Keine
+    gloss: 0
+    tier: 0
+  - key: account.departure.booked
+    text: Schuldenerlass-Abreise, gebucht
+    gloss: 0
+    tier: 0
+  - key: account.instalmentRate
+    text: '{0}% des Lohns an den Schuldenerlass'
+    gloss: 0
+    tier: 0
+  - key: account.statement.none
+    text: "Noch keine Eintr\xE4ge: Ein Tag wird verbucht, wenn seine Schicht endet."
+    gloss: 0
+    tier: 0
+  - key: account.statement.unit
+    text: "Betr\xE4ge in {0}."
+    gloss: 0
+    tier: 0
+  - key: contract.title
+    text: "SCHULDENERLASS-ARBEITSVERTRAG \xB7 TC-520"
+    gloss: 0
+    tier: 0
+  - key: contract.row.worker
+    text: Arbeiter
+    gloss: 0
+    tier: 0
+  - key: contract.row.citizenId
+    text: "B\xFCrger-ID"
+    gloss: 0
+    tier: 0
+  - key: contract.row.employer
+    text: Arbeitgeber
+    gloss: 0
+    tier: 0
+  - key: contract.row.worksite
+    text: Arbeitsort
+    gloss: 0
+    tier: 0
+  - key: contract.row.term
+    text: Laufzeit
+    gloss: 0
+    tier: 0
+  - key: contract.row.wage
+    text: Tageslohn
+    gloss: 0
+    tier: 0
+  - key: contract.term
+    text: '{0:N0} Tage'
+    gloss: 0
+    tier: 0
+  - key: notes.days
+    text: Tage
+    gloss: 0
+    tier: 0
+  - key: notes.day
+    text: Tag {0}
+    gloss: 0
+    tier: 0
+  - key: notes.today
+    text: Tag {0} (heute)
+    gloss: 0
+    tier: 0
+  - key: notes.pageTitle
+    text: "Notizen \xB7 Tag {0}"
+    gloss: 0
+    tier: 0
+  - key: notes.clippings
+    text: Ausschnitte
+    gloss: 0
+    tier: 0
+  - key: notes.notes
+    text: Notizen
+    gloss: 0
+    tier: 0
+  - key: notes.hint
+    text: "Noch nichts hier. Kopiere einen Wert (Ctrl+C oder Rechtsklick auf eine
+      Zeile: Wert kopieren), dann Ctrl+V oder Ausschnitt einf\xFCgen; oder tippe
+      unten."
+    gloss: 0
+    tier: 0
+  - key: notes.paste
+    text: "Ausschnitt einf\xFCgen"
+    gloss: 0
+    tier: 0
+  - key: notes.pasted
+    text: "Eingef\xFCgt"
+    gloss: 0
+    tier: 0
+  - key: notes.remove
+    text: Entfernen
+    gloss: 0
+    tier: 0
+  - key: notes.placeholder
+    text: Notizen hier eingeben...
+    gloss: 0
+    tier: 0
+  - key: notes.loose
+    text: Weitere Ausschnitte
+    gloss: 0
+    tier: 0
+  - key: notes.full
+    text: "Diese Seite fasst {0} Ausschnitte: Entferne einen, um einen weiteren einzuf\xFCgen."
+    gloss: 0
+    tier: 0
+  - key: briefing.empty
+    text: Keine Weisungen. Personen genau abfertigen.
+    gloss: 0
+    tier: 0
+  - key: briefing.bulletinHeader
+    text: "AMTSMITTEILUNG \xB7 SCHALTER 3"
+    gloss: 0
+    tier: 0
+  - key: briefing.newHours
+    text: "Neue Zeiten ab heute: Der Schalter \xF6ffnet um {0} und schlie\xDFt um
+      {1}."
+    gloss: 0
+    tier: 0
+  - key: results.leisureDepartures
+    text: 'Urlaubsabreisen: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.debtReliefDepartures
+    text: 'Schuldenerlass-Abreisen: {0}   ({1:N0} {2} Schulden in Arbeit umgesetzt)'
+    gloss: 0
+    tier: 0
+  - key: results.timeline
+    text: Die Zeitlinie heute Abend
+    gloss: 0
+    tier: 0
+  - key: results.citations
+    text: 'Verwarnungen heute: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.unproven
+    text: 'Unbelegte Ablehnungen: {0} (vor dem Ablehnen eine Abweichung erfassen)'
+    gloss: 0
+    tier: 0
+  - key: results.detained
+    text: 'Festgenommen: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.processedAll
+    text: 'Abgefertigte Reisende: {0}, die ganze Schlange'
+    gloss: 0
+    tier: 0
+  - key: results.processedOf
+    text: 'Abgefertigte Reisende: {0} von {1} ({2} warteten bei Schluss noch, unbezahlt)'
+    gloss: 0
+    tier: 0
+  - key: results.hours
+    text: 'Schalterzeiten: {0} bis {1}'
+    gloss: 0
+    tier: 0
+  - key: results.moneyHeader
+    text: <b>Geld, in {0}</b>
+    gloss: 0
+    tier: 0
+  - key: results.row.pay
+    text: 'Richtige Entscheidungen: {0} x {1}'
+    gloss: 0
+    tier: 0
+  - key: results.row.payTotal
+    text: 'Richtige Entscheidungen: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.row.warned
+    text: 'Falsche Entscheidungen: {0}, die freie Verwarnung'
+    gloss: 0
+    tier: 0
+  - key: results.row.fined
+    text: 'Falsche Entscheidungen: {0} x {1} Strafe'
+    gloss: 0
+    tier: 0
+  - key: results.row.finedTotal
+    text: 'Bestrafte Fehlentscheidungen: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.row.stranded
+    text: 'Unterwegs gestrandet: {0}, Verzichte hinterlegt'
+    gloss: 0
+    tier: 0
+  - key: results.row.strandedFined
+    text: 'Unterwegs gestrandet: {0}, bestraft (kein unterschriebener Verzicht)'
+    gloss: 0
+    tier: 0
+  - key: results.row.instalment
+    text: Schuldenerlass-Rate (noch {0:N0} offen)
+    gloss: 0
+    tier: 0
+  - key: results.row.other
+    text: Sonstiges Geld
+    gloss: 0
+    tier: 0
+  - key: results.row.net
+    text: Schicht netto
+    gloss: 0
+    tier: 0
+  - key: results.row.bills
+    text: "Heute f\xE4llige Rechnungen"
+    gloss: 0
+    tier: 0
+  - key: results.row.after
+    text: "Geldb\xF6rse nach Rechnungen"
+    gloss: 0
+    tier: 0
+  - key: results.wallet
+    text: '{0} (jetzt {1})'
+    gloss: 0
+    tier: 0
+  - key: scanner.idle
+    text: "Keine Abweichungen belegt.\n\nVergleiche ein Dokumentfeld, eine Antwort
+      des Reisenden oder ein getragenes Kleidungsst\xFCck mit dem Referenzeintrag
+      des angegebenen Orts, dem Eintrag, zu dem es wirklich geh\xF6rt, oder der B\xFCrgerakte,
+      um Beweise zu erfassen."
+    gloss: 0
+    tier: 0
+  - key: scanner.summary
+    text: '{0} Abweichung(en) belegt. Ablehnung ist gerechtfertigt.'
+    gloss: 0
+    tier: 0
+  - key: report.proof.claimMismatch
+    text: Abweichung
+    gloss: 0
+    tier: 0
+  - key: report.proof.foreignOrigin
+    text: "Geh\xF6rt woandershin"
+    gloss: 0
+    tier: 0
+  - key: report.proof.recordMismatch
+    text: "Beh\xF6rdenakten"
+    gloss: 0
+    tier: 0
+  - key: report.proof.crossMismatch
+    text: Papiere widersprechen sich
+    gloss: 0
+    tier: 0
+  - key: report.proof.personMismatch
+    text: Nicht die Person
+    gloss: 0
+    tier: 0
+  - key: form.interview.head
+    text: "{0} \xB7 Schalterbeamter: {1} \xB7 {2}"
+    gloss: 0
+    tier: 0
+  - key: rules.memo.to
+    text: Alle Schalterbeamten
+    gloss: 0
+    tier: 0
+  - key: directives.none
+    text: 'Weisungen: Heute sind alle Reiseziele freigegeben.'
+    gloss: 0
+    tier: 0
+  - key: document.untitled
+    text: Dokument
+    gloss: 0
+    tier: 0
+  - key: book.untitled
+    text: Referenz
+    gloss: 0
+    tier: 0
+  - key: book.claimedNote
+    text: Angegeben
+    gloss: 0
+    tier: 0
+  - key: book.revisedNote
+    text: "Ge\xE4ndert"
+    gloss: 0
+    tier: 0
+  - key: book.edition
+    text: Ausgabe von Tag {0}
+    gloss: 0
+    tier: 0
+  - key: compare.deviationLogged
+    text: "\u25CF  ABWEICHUNG ERFASST \u2014 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.alreadyDocumented
+    text: "\u25CF  BEREITS BELEGT \u2014 {0} steht im Abweichungsbericht"
+    gloss: 0
+    tier: 0
+  - key: compare.pair
+    text: "{0}  \xB7  {2}  gegen  {4}"
+    gloss: 0
+    tier: 0
+  - key: compare.pickAnother
+    text: "{0}:  {1}    gegen    (anderen Wert zum Vergleich w\xE4hlen)"
+    gloss: 0
+    tier: 0
+  - key: compare.travellerLabel
+    text: "Reisender \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.faceSlot
+    text: GESICHT
+    gloss: 0
+    tier: 0
+  - key: compare.faceShown
+    text: die Person am Schreibtisch
+    gloss: 0
+    tier: 0
+  - key: compare.photoShown
+    text: das Foto
+    gloss: 0
+    tier: 0
+  - key: compare.untranslated
+    text: "(un\xFCbersetzt {0}; {1}-\xDCbersetzer)"
+    gloss: 0
+    tier: 0
+  - key: slot.Outfit
+    text: KLEIDUNG
+    gloss: 0
+    tier: 0
+  - key: slot.Hair
+    text: HAAR
+    gloss: 0
+    tier: 0
+  - key: slot.FacialHair
+    text: BART
+    gloss: 0
+    tier: 0
+  - key: slot.Headwear
+    text: KOPFBEDECKUNG
+    gloss: 0
+    tier: 0
+  - key: slot.Accessory
+    text: ACCESSOIRE
+    gloss: 0
+    tier: 0
+  - key: records.placeholder
+    text: "Name oder Nummer\u2026"
+    gloss: 0
+    tier: 0
+  - key: records.idle
+    text: "Gib einen Namen oder eine Aktennummer ein und dr\xFCcke SUCHEN."
+    gloss: 0
+    tier: 0
+  - key: records.noRecord
+    text: "KEINE AKTE VORHANDEN f\xFCr \u201E{0}\u201C \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: records.onFile
+    text: "Suche \u201E{0}\u201C \xB7 1 Akte vorhanden \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: records.group.registry
+    text: REGISTEREINTRAG
+    gloss: 0
+    tier: 0
+  - key: records.row.name
+    text: Name
+    gloss: 0
+    tier: 0
+  - key: records.row.born
+    text: Geboren
+    gloss: 0
+    tier: 0
+  - key: records.row.origin
+    text: Herkunft
+    gloss: 0
+    tier: 0
+  - key: records.row.note
+    text: Notiz
+    gloss: 0
+    tier: 0
+  - key: records.note.none
+    text: Keine Vermerke vorhanden.
+    gloss: 0
+    tier: 0
+  - key: records.note.sealed
+    text: "Vorrangige Person. Akten \xFCber deiner Freigabestufe versiegelt."
+    gloss: 0
+    tier: 0
+  - key: records.group.file
+    text: AKTE
+    gloss: 0
+    tier: 0
+  - key: records.row.file
+    text: Notiz
+    gloss: 0
+    tier: 0
+  - key: records.group.seen
+    text: "SCHON GESEHEN \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: visit.flag.days
+    text: '{0} VOR {1} TAGEN'
+    gloss: 0
+    tier: 0
+  - key: visit.flag.yesterday
+    text: '{0} GESTERN'
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Accepted
+    text: Angenommen
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Denied
+    text: Abgelehnt
+    gloss: 0
+    tier: 0
+  - key: visit.verdict.Detained
+    text: Festgenommen
+    gloss: 0
+    tier: 0
+  - key: visit.citation
+    text: "\xB7 Verwarnung: {0}"
+    gloss: 0
+    tier: 0
+  - key: board.noScan
+    text: "Scanne ein Papier, um die Fallwand zu f\xFCllen: Leg es auf den Scanner."
+    gloss: 0
+    tier: 0
+  - key: board.record.found
+    text: "AKTE VORHANDEN \xB7 {0} \xB7 {1} \xB7 \xD6FFNEN"
+    gloss: 0
+    tier: 0
+  - key: board.record.noNumber
+    text: keine Nummer
+    gloss: 0
+    tier: 0
+  - key: board.record.none
+    text: "KEINE AKTE VORHANDEN \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: board.record.nothing
+    text: Noch nennt kein gescanntes Papier eine ID oder einen Namen.
+    gloss: 0
+    tier: 0
+  - key: board.section.rules
+    text: "REGELPR\xDCFUNG"
+    gloss: 0
+    tier: 0
+  - key: board.rules.none
+    text: "Von den heutigen Regeln ist noch nichts zu pr\xFCfen."
+    gloss: 0
+    tier: 0
+  - key: board.rule.destination
+    text: Reiseziel
+    gloss: 0
+    tier: 0
+  - key: board.rule.paper
+    text: "Ben\xF6tigtes Papier"
+    gloss: 0
+    tier: 0
+  - key: board.chip.Valid
+    text: "G\xDCLTIG"
+    gloss: 0
+    tier: 0
+  - key: board.chip.Expired
+    text: ABGELAUFEN
+    gloss: 0
+    tier: 0
+  - key: board.chip.Closed
+    text: GESCHLOSSEN
+    gloss: 0
+    tier: 0
+  - key: board.chip.Missing
+    text: FEHLT
+    gloss: 0
+    tier: 0
+  - key: board.chip.WrongDate
+    text: FALSCHES DATUM
+    gloss: 0
+    tier: 0
+  - key: board.section.cross
+    text: ABGLEICH
+    gloss: 0
+    tier: 0
+  - key: board.cross.none
+    text: Scanne zwei Papiere (oder eines mit vorhandener Akte), um sie hier zu vergleichen.
+    gloss: 0
+    tier: 0
+  - key: board.cross.detail
+    text: Angabe
+    gloss: 0
+    tier: 0
+  - key: board.cross.record
+    text: Akte
+    gloss: 0
+    tier: 0
+  - key: board.cross.agree
+    text: "{0} \xB7 {1} stimmen \xFCberein"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.sources
+    text: Quellen
+    gloss: 0
+    tier: 0
+  - key: board.section.overlay
+    text: "\xDCBERLAGERUNG"
+    gloss: 0
+    tier: 0
+  - key: board.overlay.hint
+    text: "Zieh eine Quelle auf eine andere (oder klicke zwei), um sie \xFCbereinanderzulegen."
+    gloss: 0
+    tier: 0
+  - key: board.overlay.over
+    text: "{0} \xFCber {1}: Schieben zum \xDCberblenden. Nur echte Unterschiede schimmern."
+    gloss: 0
+    tier: 0
+  - key: board.overlay.nothing
+    text: Diese beiden haben keine gemeinsamen Angaben.
+    gloss: 0
+    tier: 0
+  - key: board.overlay.photo
+    text: das Foto
+    gloss: 0
+    tier: 0
+  - key: board.overlay.face
+    text: Ihr Gesicht
+    gloss: 0
+    tier: 0
+  - key: board.overlay.faceLabel
+    text: Gesicht
+    gloss: 0
+    tier: 0
+  - key: board.overlay.register
+    text: Siegelregister
+    gloss: 0
+    tier: 0
+  - key: layers.tab.print
+    text: DRUCK
+    gloss: 0
+    tier: 0
+  - key: layers.tab.uv
+    text: UV
+    gloss: 0
+    tier: 0
+  - key: layers.tab.chip
+    text: CHIP
+    gloss: 0
+    tier: 0
+  - key: layers.uv.title
+    text: "UV-LICHT \xB7 VERBORGENE EBENE"
+    gloss: 0
+    tier: 0
+  - key: layers.uv.none
+    text: Unter UV-Licht zeigt sich nichts.
+    gloss: 0
+    tier: 0
+  - key: layers.uv.wholePaper
+    text: das ganze Papier
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Watermark
+    text: 'Wasserzeichen ({0}): {1}'
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Ghost
+    text: 'Geisterbild unter {0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: layers.uv.Microprint
+    text: 'Mikrodruck ({0}): {1}'
+    gloss: 0
+    tier: 0
+  - key: layers.chip.title
+    text: CHIPDATEN
+    gloss: 0
+    tier: 0
+  - key: layers.chip.none
+    text: "Dieses Papier tr\xE4gt keinen Chip."
+    gloss: 0
+    tier: 0
+  - key: records.row.number
+    text: Vertriebenen-Nr.
+    gloss: 0
+    tier: 0
+  - key: records.row.incident
+    text: Vorfall
+    gloss: 0
+    tier: 0
+  - key: records.row.found
+    text: Gefunden
+    gloss: 0
+    tier: 0
+  - key: records.row.status
+    text: Status
+    gloss: 0
+    tier: 0
+  - key: records.status.awaiting
+    text: "Wartet auf R\xFCckkehr"
+    gloss: 0
+    tier: 0
+  - key: records.group.account
+    text: AKTEN
+    gloss: 0
+    tier: 0
+  - key: records.group.forms
+    text: HINTERLEGTE FORMULARE
+    gloss: 0
+    tier: 0
+  - key: records.group.travel
+    text: REISEN
+    gloss: 0
+    tier: 0
+  - key: records.row.citizenId
+    text: "B\xFCrger-ID"
+    gloss: 0
+    tier: 0
+  - key: records.row.standing
+    text: Ansehen
+    gloss: 0
+    tier: 0
+  - key: records.row.debt
+    text: Schulden
+    gloss: 0
+    tier: 0
+  - key: records.row.lineage
+    text: Abstammung
+    gloss: 0
+    tier: 0
+  - key: records.row.transponder
+    text: Transponder
+    gloss: 0
+    tier: 0
+  - key: records.row.transponderClass
+    text: Transponderklasse
+    gloss: 0
+    tier: 0
+  - key: records.row.waiver
+    text: Strandungsverzicht
+    gloss: 0
+    tier: 0
+  - key: records.row.proof
+    text: Mittelnachweis
+    gloss: 0
+    tier: 0
+  - key: records.row.contract
+    text: Arbeitserlaubnis
+    gloss: 0
+    tier: 0
+  - key: records.row.departure
+    text: Gebuchte Abreise
+    gloss: 0
+    tier: 0
+  - key: records.row.departureDate
+    text: Abreisedatum
+    gloss: 0
+    tier: 0
+  - key: records.row.trips
+    text: "Fr\xFChere Reisen"
+    gloss: 0
+    tier: 0
+  - key: records.row.trip
+    text: "Fr\xFChere Reise"
+    gloss: 0
+    tier: 0
+  - key: records.standing.good
+    text: Gut
+    gloss: 0
+    tier: 0
+  - key: records.none
+    text: Nichts hinterlegt
+    gloss: 0
+    tier: 0
+  - key: records.trip.returned
+    text: "zur\xFCckgekehrt"
+    gloss: 0
+    tier: 0
+  - key: case.roleUnknown
+    text: Reisender
+    gloss: 0
+    tier: 0
+  - key: case.unlistedLand
+    text: ein nicht verzeichnetes Land
+    gloss: 0
+    tier: 0
+  - key: case.subject
+    text: Person #{0}
+    gloss: 0
+    tier: 0
+  - key: records.compareLabel
+    text: "Akten \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: citation.unproven
+    text: "Ohne erfasste Beweise abgelehnt. Erfasse vor dem Ablehnen, was falsch
+      ist: einen Unterschied in den Papieren, eine verletzte Regel oder ein ung\xFCltiges
+      Datum."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong
+    text: Einen verkleideten Reisenden oder ein verbotenes Reiseziel genehmigt.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.panic
+    text: "Einen Reisenden genehmigt, der in {0} eine Panik ausl\xF6sen w\xFCrde."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.forged
+    text: "Gef\xE4lschte Papiere genehmigt."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.disguised
+    text: Einen verkleideten Reisenden genehmigt.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.closed
+    text: Ein geschlossenes Reiseziel genehmigt.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.smuggled
+    text: Waren aus 2150 aus 2150 hinausgelassen.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.wrongDate
+    text: Eine Abreise am falschen Datum genehmigt.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.expired
+    text: Ein abgelaufenes Papier genehmigt.
+    gloss: 0
+    tier: 0
+  - key: citation.deniedWrong
+    text: "Einen rechtm\xE4\xDFigen, zugelassenen Reisenden abgelehnt."
+    gloss: 0
+    tier: 0
+  - key: citation.detainedWrong
+    text: Einen Reisenden festgenommen, der kein Gesetz brach.
+    gloss: 0
+    tier: 0
+  - key: citation.detainedUnproven
+    text: "Ohne erfasste Beweise festgenommen. Erfasse vor der Festnahme, was gebrochen
+      wurde: ein gef\xE4lschtes Papier, eine falsche Identit\xE4t oder Schmuggelware."
+    gloss: 0
+    tier: 0
+  - key: citation.warning
+    text: "Verwarnung {0}/{1} \u2014 kein Lohnabzug."
+    gloss: 0
+    tier: 0
+  - key: citation.penalty
+    text: 'Strafe: -{0} {1}.'
+    gloss: 0
+    tier: 0
+  - key: rule.eraForbidden
+    text: Keine Reisen nach {0} erlaubt.
+    gloss: 0
+    tier: 0
+  - key: rule.nationForbidden
+    text: Keine Reisen nach {0} erlaubt.
+    gloss: 0
+    tier: 0
+  - key: rule.nationEraForbidden
+    text: Keine Reisen nach {0} in {1} erlaubt.
+    gloss: 0
+    tier: 0
+  - key: rule.generic
+    text: "Reisebeschr\xE4nkung in Kraft."
+    gloss: 0
+    tier: 0
+  - key: desk.scanHint
+    text: "Zieh ein Papier auf den Scanner, um es am PC zu \xF6ffnen."
+    gloss: 0
+    tier: 0
+  - key: desk.wheelHint
+    text: Klicke den Reisenden, um zu sprechen und Papiere zu verlangen.
+    gloss: 0
+    tier: 0
+  - key: desk.readyCaption
+    text: FREI
+    gloss: 0
+    tier: 0
+  - key: deskView.back
+    text: "\u25B2 Zur\xFCck"
+    gloss: 0
+    tier: 0
+  - key: deskView.backHint
+    text: Rechtsklick / Esc
+    gloss: 0
+    tier: 0
+  - key: stamp.label.approved
+    text: GENEHMIGT
+    gloss: 0
+    tier: 0
+  - key: stamp.label.denied
+    text: ABGELEHNT
+    gloss: 0
+    tier: 0
+  - key: stamp.hint.handBack
+    text: "Zieh den gestempelten Pass auf den TRESEN, um die Papiere zur\xFCckzugeben."
+    gloss: 0
+    tier: 0
+  - key: stamp.hint.place
+    text: Zieh einen Stempel auf den Pass und lass los.
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.notPassport
+    text: Nur der Pass bekommt einen Entscheidungsstempel.
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.already
+    text: "Dieser Pass tr\xE4gt schon eine Entscheidung."
+    gloss: 0
+    tier: 0
+  - key: stamp.refused.handBackFirst
+    text: Stemple zuerst den Pass.
+    gloss: 0
+    tier: 0
+  - key: hardware.detain
+    text: FESTNEHMEN
+    gloss: 0
+    tier: 0
+  - key: stamp.dater.by
+    text: 'VON: {0}'
+    gloss: 0
+    tier: 0
+  - key: desk.counter
+    text: TRESEN
+    gloss: 0
+    tier: 0
+  - key: controls.pcTab
+    text: PC
+    gloss: 0
+    tier: 0
+  - key: controls.deskTab
+    text: TISCH
+    gloss: 0
+    tier: 0
+  - key: controls.stampsTab
+    text: STEMPEL
+    gloss: 0
+    tier: 0
+  - key: controls.inspectHint
+    text: "PR\xDCFEN: klicke zwei Dinge zum Vergleichen. Rechtsklick oder Esc zum
+      Verlassen."
+    gloss: 0
+    tier: 0
+  - key: stamp.zone.handBack
+    text: "\u25B2  ZUR\xDCCKGEBEN  \u25B2"
+    gloss: 0
+    tier: 0
+  - key: stamp.zone.stampFirst
+    text: ZUERST DEN PASS STEMPELN
+    gloss: 0
+    tier: 0
+  - key: city.look
+    text: STADT
+    gloss: 0
+    tier: 0
+  - key: city.back
+    text: TISCH
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.title
+    text: HEUTIGE REGELN
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.none
+    text: Heute keine Regeln.
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.papers
+    text: "NICHT \xDCBERGEBENE PAPIERE"
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperFlag
+    text: '{0}: fehlt? Klicken zum Markieren.'
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperFlagged
+    text: '{0}: markiert. Verlange es.'
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.paperNotCarried
+    text: '{0}: nicht dabei.'
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.papersNone
+    text: "Alle Papiere sind \xFCbergeben."
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabRules
+    text: REGELN
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabPapers
+    text: PAPIERE
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabSeals
+    text: SIEGEL
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.seals
+    text: SIEGELREGISTER
+    gloss: 0
+    tier: 0
+  - key: desk.rulebook.tabGuide
+    text: LEITFADEN
+    gloss: 0
+    tier: 0
+  - key: desk.guide.body
+    text: "<b>PR\xDCFE</b>  {0}\n\n<b>GEGEN</b>  {1}\n\n<b>EIN FEHLER</b>  {2}"
+    gloss: 0
+    tier: 0
+  - key: desk.guide.new
+    text: NEU
+    gloss: 0
+    tier: 0
+  - key: desk.guide.prev
+    text: "< ZUR\xDCCK"
+    gloss: 0
+    tier: 0
+  - key: desk.guide.next
+    text: WEITER >
+    gloss: 0
+    tier: 0
+  - key: guide.step
+    text: "EINF\xDCHRUNG {0}/{1}"
+    gloss: 0
+    tier: 0
+  - key: guide.skip
+    text: "Einf\xFChrung \xFCberspringen"
+    gloss: 0
+    tier: 0
+  - key: guide.done
+    text: "EINF\xDCHRUNG BEENDET"
+    gloss: 0
+    tier: 0
+  - key: guide.newToday
+    text: NEU HEUTE
+    gloss: 0
+    tier: 0
+  - key: guide.moment
+    text: <b>{0}</b>  {1} Die Seite dazu ist im Reiter LEITFADEN des Regelbuchs offen.
+    gloss: 0
+    tier: 0
+  - key: guide.practice
+    text: "\xDCBUNG"
+    gloss: 0
+    tier: 0
+  - key: guide.gotIt
+    text: Verstanden
+    gloss: 0
+    tier: 0
+  - key: settings.replayTutorial
+    text: "Schreibtisch-Einf\xFChrung wiederholen"
+    gloss: 0
+    tier: 0
+  - key: keys.replayTutorial
+    text: "Schreibtisch-Einf\xFChrung wiederholen"
+    gloss: 0
+    tier: 0
+  - key: tooltip.day
+    text: 'Heute: {0}'
+    gloss: 0
+    tier: 0
+  - key: tooltip.stability
+    text: Die Zeitlinie. Halte sie zwischen ihren Ufern.
+    gloss: 0
+    tier: 0
+  - key: desk.calendar
+    text: "{0} \xB7 TAG {1}"
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.papers
+    text: "{0} FALSCH \u2014 Papiere: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C"
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.said
+    text: "{0} FALSCH \u2014 Reisender sagte: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C"
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.worn
+    text: "{0} FALSCH \u2014 Reisender tr\xE4gt: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C
+      \u2014 w\xFCrde eine Panik ausl\xF6sen"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.papers
+    text: "{0} FALSCH \u2014 Papiere zeigen \u201E{1}\u201C, das zu {2} geh\xF6rt"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.said
+    text: "{0} FALSCH \u2014 Reisender sagte \u201E{1}\u201C, das zu {2} geh\xF6rt"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.worn
+    text: "{0} FALSCH \u2014 Reisender tr\xE4gt \u201E{1}\u201C, das zu {2} geh\xF6rt:
+      w\xFCrde eine Panik ausl\xF6sen"
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.papers
+    text: "{0} FALSCH \u2014 Papiere: \u201E{1}\u201C  /  Beh\xF6rdenakten: \u201E{2}\u201C"
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.said
+    text: "{0} FALSCH \u2014 Reisender sagte: \u201E{1}\u201C  /  Beh\xF6rdenakten:
+      \u201E{2}\u201C"
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.worn
+    text: "{0} FALSCH \u2014 Reisender tr\xE4gt: \u201E{1}\u201C  /  Beh\xF6rdenakten:
+      \u201E{2}\u201C"
+    gloss: 0
+    tier: 0
+  - key: deviation.crossMismatch.papers
+    text: "{0} WIDERSPR\xDCCHLICH \u2014 die Papiere widersprechen sich: \u201E{1}\u201C 
+      /  \u201E{2}\u201C"
+    gloss: 0
+    tier: 0
+  - key: deviation.personMismatch.papers
+    text: "{0} FALSCH \u2014 das Foto in den Papieren ist nicht der Reisende am Schreibtisch"
+    gloss: 0
+    tier: 0
+  - key: category.Language
+    text: SPRACHE
+    gloss: 0
+    tier: 0
+  - key: category.Material
+    text: MATERIAL
+    gloss: 0
+    tier: 0
+  - key: category.Politics
+    text: HERRSCHER
+    gloss: 0
+    tier: 0
+  - key: category.Technology
+    text: "GER\xC4T"
+    gloss: 0
+    tier: 0
+  - key: category.Currency
+    text: "W\xC4HRUNG"
+    gloss: 0
+    tier: 0
+  - key: category.Geography
+    text: HAUPTSTADT
+    gloss: 0
+    tier: 0
+  - key: category.Culture
+    text: KLEIDUNG
+    gloss: 0
+    tier: 0
+  - key: category.Name
+    text: NAME
+    gloss: 0
+    tier: 0
+  - key: category.BirthDate
+    text: GEBURTSDATUM
+    gloss: 0
+    tier: 0
+  - key: category.CitizenId
+    text: "B\xDCRGER-ID"
+    gloss: 0
+    tier: 0
+  - key: category.Destination
+    text: REISEZIEL
+    gloss: 0
+    tier: 0
+  - key: category.Incident
+    text: VORFALL
+    gloss: 0
+    tier: 0
+  - key: category.DepartureDate
+    text: ABREISE
+    gloss: 0
+    tier: 0
+  - key: category.Expiry
+    text: "G\xDCLTIG BIS"
+    gloss: 0
+    tier: 0
+  - key: category.AccountStatus
+    text: VISUMKLASSE
+    gloss: 0
+    tier: 0
+  - key: category.TransponderId
+    text: TRANSPONDER
+    gloss: 0
+    tier: 0
+  - key: category.TransponderClass
+    text: TRANSPONDERKLASSE
+    gloss: 0
+    tier: 0
+  - key: category.Debt
+    text: SCHULDEN
+    gloss: 0
+    tier: 0
+  - key: records.standing.frozen
+    text: 'Gesperrt: Zahlungsausfall, {0}'
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.incomplete
+    text: "Unvollst\xE4ndige Papiere genehmigt."
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.frozen
+    text: Ein gesperrtes Konto genehmigt.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.recalled
+    text: "Einen zur\xFCckgerufenen Transponder genehmigt."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.numbered
+    text: 'Weisung {0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: citation.rule.record
+    text: "Jedes Papier muss zum B\xFCrgerkonto passen."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.origin
+    text: "Vertriebene kehren nur in ihre eigene Zeit zur\xFCck: Ihre Papiere und
+      Antworten m\xFCssen zu ihrer Herkunft passen."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.goods
+    text: "Keine W\xE4hrung und keine Technik aus 2150 verl\xE4sst 2150."
+    gloss: 0
+    tier: 0
+  - key: citation.rule.dress
+    text: 'Kleidung passend zum Reiseziel: nichts aus einer anderen Zeit oder einem
+      anderen Ort.'
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.economyManifest
+    text: Ein Premium-Pass reist mit einem Premium-Transponder.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.premiumManifest
+    text: Ein Standard-Pass reist mit einem Economy-Transponder.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.waiverMissing
+    text: Diese Abreise braucht einen unterschriebenen Strandungsverzicht.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.waiverUnsigned
+    text: Diese Abreise braucht einen unterschriebenen Strandungsverzicht.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.proofMissing
+    text: Ein Standard-Pass braucht einen Mittelnachweis.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.paperSet.contractMissing
+    text: Eine Schuldenerlass-Abreise braucht eine registrierte Arbeitserlaubnis.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.frozen
+    text: Ein gesperrtes Konto darf nicht abreisen.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.departure
+    text: Abreise nur an dem Datum, das auf den Reisepapieren steht.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.expired
+    text: Niemals mit einem abgelaufenen Papier abreisen.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.none
+    text: Keine Weisung und keine Akte weist diesen Reisenden ab.
+    gloss: 0
+    tier: 0
+  - key: citation.rule.evidence
+    text: Eine Ablehnung braucht erfasste Beweise.
+    gloss: 0
+    tier: 0
+  - key: citation.label.destination
+    text: Reiseziel
+    gloss: 0
+    tier: 0
+  - key: citation.label.account
+    text: "B\xFCrgerkonto"
+    gloss: 0
+    tier: 0
+  - key: citation.label.registry
+    text: Vertriebenenregister
+    gloss: 0
+    tier: 0
+  - key: citation.label.standing
+    text: Ansehen laut {0}
+    gloss: 0
+    tier: 0
+  - key: citation.label.today
+    text: Heute
+    gloss: 0
+    tier: 0
+  - key: citation.label.garment
+    text: "Kleidungsst\xFCck"
+    gloss: 0
+    tier: 0
+  - key: citation.label.onPaper
+    text: '{0} auf dem Papier {1}'
+    gloss: 0
+    tier: 0
+  - key: citation.label.answer
+    text: Ihre Antwort ({0})
+    gloss: 0
+    tier: 0
+  - key: citation.label.book
+    text: '{0} von {1}'
+    gloss: 0
+    tier: 0
+  - key: citation.label.logged
+    text: Beweis erfasst
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.waiverMissing
+    text: Strandungsverzicht
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.proofMissing
+    text: Mittelnachweis
+    gloss: 0
+    tier: 0
+  - key: citation.label.missing.contractMissing
+    text: Arbeitserlaubnis
+    gloss: 0
+    tier: 0
+  - key: citation.value.notHandedOver
+    text: "nicht \xFCbergeben"
+    gloss: 0
+    tier: 0
+  - key: citation.value.frozen
+    text: Gesperrt seit {0}
+    gloss: 0
+    tier: 0
+  - key: citation.value.open
+    text: '{0}, heute offen'
+    gloss: 0
+    tier: 0
+  - key: category.Employer
+    text: ARBEITGEBER
+    gloss: 0
+    tier: 0
+  - key: category.Term
+    text: LAUFZEIT
+    gloss: 0
+    tier: 0
+  - key: category.Wage
+    text: LOHN
+    gloss: 0
+    tier: 0
+  - key: category.WaiverNo
+    text: VERZICHT NR.
+    gloss: 0
+    tier: 0
+  - key: category.Credit
+    text: "BONIT\xC4T"
+    gloss: 0
+    tier: 0
+  - key: category.Funds
+    text: MITTEL
+    gloss: 0
+    tier: 0
+  - key: category.PolicyNo
+    text: POLICE NR.
+    gloss: 0
+    tier: 0
+  - key: category.Signature
+    text: UNTERSCHRIFT
+    gloss: 0
+    tier: 0
+  - key: category.Seal
+    text: SIEGEL
+    gloss: 0
+    tier: 0
+  - key: category.Photo
+    text: FOTO
+    gloss: 0
+    tier: 0
   - key: icon.portals
     text: Portale
+    gloss: 0
+    tier: 0
+  - key: window.portals
+    text: Portale
+    gloss: 0
+    tier: 0
+  - key: board.returnGate
+    text: "R\xDCCKKEHRTOR"
+    gloss: 0
+    tier: 0
+  - key: board.closed
+    text: GESCHLOSSEN
+    gloss: 0
+    tier: 0
+  - key: board.maintenance
+    text: IN WARTUNG
+    gloss: 0
+    tier: 0
+  - key: board.noRoute
+    text: KEINE ROUTE
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.title
+    text: ABFAHRTSTAFEL
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.closed
+    text: '{0} {1}: {2}, {3}: heute GESCHLOSSEN'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGate
+    text: "{0} {1}: R\xFCckkehrtor"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGateMaintenance
+    text: "{0} {1}: R\xFCckkehrtor, in Wartung"
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.maintenance
+    text: '{0} {1}: in Wartung'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.noRoute
+    text: '{0} {1}: heute keine Route'
+    gloss: 0
+    tier: 0
+  - key: portals.date
+    text: "Routen f\xFCr {0}"
+    gloss: 0
+    tier: 0
+  - key: portals.returnGate
+    text: "R\xFCckkehrtor"
+    gloss: 0
+    tier: 0
+  - key: portals.state.inService
+    text: In Betrieb
+    gloss: 0
+    tier: 0
+  - key: portals.state.noRoute
+    text: "In Betrieb \xB7 heute keine Route"
+    gloss: 0
+    tier: 0
+  - key: portals.state.closed
+    text: 'Heute GESCHLOSSEN: {0}'
+    gloss: 0
+    tier: 0
+  - key: portals.state.underMaintenance
+    text: In Wartung
+    gloss: 0
+    tier: 0
+  - key: portals.state.maintenance
+    text: "In Wartung \xB7 in Bestellungen reparieren ({0})"
+    gloss: 0
+    tier: 0
+  - key: portals.state.locked
+    text: "In Wartung \xB7 gesperrt: zuerst {0} reparieren"
+    gloss: 0
+    tier: 0
+  - key: portals.state.transit
+    text: "In Wartung \xB7 Reparatur unterwegs, morgen in Betrieb"
+    gloss: 0
+    tier: 0
+  - key: portals.footer
+    text: "Die Routen legt die Direktion fest. Bis das R\xFCckkehrtor repariert ist,
+      reisen Vertriebene durch Portal {0} ab."
+    gloss: 0
+    tier: 0
+  - key: home.title
+    text: "Tag {0} \u2014 Zuhause"
+    gloss: 0
+    tier: 0
+  - key: home.breakIn
+    text: "Jemand ist eingebrochen, w\xE4hrend du bei der Arbeit warst: -{0}"
+    gloss: 0
+    tier: 0
+  - key: home.fixed
+    text: 'Fixkosten heute Abend:'
+    gloss: 0
+    tier: 0
+  - key: home.rent
+    text: '  Miete & Nebenkosten: -{0}'
+    gloss: 0
+    tier: 0
+  - key: home.drain
+    text: "  Extrapflege f\xFCr {0}, solange krank: -{1}"
+    gloss: 0
+    tier: 0
+  - key: home.upkeep
+    text: '  Hausunterhalt: -{0}'
+    gloss: 0
+    tier: 0
+  - key: home.fixedTotal
+    text: 'Bezahlt: -{0} {1}   (Kontostand: {2})'
+    gloss: 0
+    tier: 0
+  - key: home.debt
+    text: "Du bist verschuldet. Finde einen Weg, \xFCber die Runden zu kommen."
+    gloss: 0
+    tier: 0
+  - key: home.bills.total
+    text: 'Rechnungen heute: {0} {1}   (Kontostand danach: {2})'
+    gloss: 0
+    tier: 0
+  - key: home.bills.short
+    text: 'Rechnungen heute: {0} {1}, mehr als deine {2}: Lass etwas aus.'
+    gloss: 0
+    tier: 0
+  - key: home.bill.paying
+    text: Wird bezahlt
+    gloss: 0
+    tier: 0
+  - key: home.bill.skip
+    text: Auslassen
+    gloss: 0
+    tier: 0
+  - key: home.bill.needsPower
+    text: braucht Strom
+    gloss: 0
+    tier: 0
+  - key: home.bill.notNeeded
+    text: "nicht n\xF6tig: {0} geht es gut"
+    gloss: 0
+    tier: 0
+  - key: home.pay
+    text: Bezahlen und {0} sehen
+    gloss: 0
+    tier: 0
+  - key: home.pet.title
+    text: Ecke von {0}
+    gloss: 0
+    tier: 0
+  - key: home.pet.pat
+    text: '{0} streicheln'
+    gloss: 0
+    tier: 0
+  - key: home.pet.play
+    text: Spielen
+    gloss: 0
+    tier: 0
+  - key: home.pet.played
+    text: Heute gespielt
+    gloss: 0
+    tier: 0
+  - key: home.pet.noToys
+    text: Noch kein Spielzeug. Die Bestell-App auf deinem PC verkauft welches.
+    gloss: 0
+    tier: 0
+  - key: home.pet.dark
+    text: Heute Abend ist das Licht aus.
+    gloss: 0
+    tier: 0
+  - key: home.next.house
+    text: Weiter zum Haus
+    gloss: 0
+    tier: 0
+  - key: home.next.slots
+    text: Weiter zu den Automaten
+    gloss: 0
+    tier: 0
+  - key: adopt.title
+    text: "Einen Gef\xE4hrten aufnehmen"
+    gloss: 0
+    tier: 0
+  - key: adopt.body
+    text: "Im Tierheim der Direktion warten ein Hund und eine Katze. Einer von ihnen
+      geht heute Abend mit dir nach Hause. W\xE4hle und gib ihm einen Namen."
+    gloss: 0
+    tier: 0
+  - key: adopt.dog
+    text: Hund
+    gloss: 0
+    tier: 0
+  - key: adopt.cat
+    text: Katze
+    gloss: 0
+    tier: 0
+  - key: adopt.placeholder
+    text: Namen eingeben
+    gloss: 0
+    tier: 0
+  - key: adopt.go
+    text: Aufnehmen und beginnen
+    gloss: 0
+    tier: 0
+  - key: adopt.back
+    text: "Zur\xFCck"
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.Empty
+    text: "Gib deinem Gef\xE4hrten einen Namen."
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.TooLong
+    text: "Bitte einen k\xFCrzeren Namen: h\xF6chstens {0} Buchstaben."
+    gloss: 0
+    tier: 0
+  - key: adopt.problem.BadCharacters
+    text: Nur Buchstaben, Leerzeichen, Bindestriche und Apostrophe.
+    gloss: 0
+    tier: 0
+  - key: menubar.records
+    text: Akten
+    gloss: 0
+    tier: 0
+  - key: menubar.rules
+    text: Regeln
+    gloss: 0
+    tier: 0
+  - key: menubar.books
+    text: "B\xFCcher"
+    gloss: 0
+    tier: 0
+  - key: menubar.calendar
+    text: Kalender
+    gloss: 0
+    tier: 0
+  - key: menubar.notHandedOver
+    text: "Nicht \xFCbergeben"
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.flag
+    text: Als fehlend markieren
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.flagged
+    text: 'Markiert: verlange es'
+    gloss: 0
+    tier: 0
+  - key: menubar.missing.notCarried
+    text: Nicht dabei
+    gloss: 0
+    tier: 0
+  - key: menubar.today
+    text: 'Heute: {0}'
+    gloss: 0
+    tier: 0
+  - key: menubar.today.note
+    text: Halten zum Vergleichen
     gloss: 0
     tier: 0
   words:
@@ -188,3 +3164,1693 @@ MonoBehaviour:
     english: timeline
   - native: nachrichten
     english: news
+  - native: ab
+    english: from / off
+  - native: abbrechen
+    english: cancel
+  - native: Abend
+    english: evening
+  - native: ABFAHRTSTAFEL
+    english: departure board
+  - native: abfertigen
+    english: process
+  - native: Abgefertigte
+    english: processed
+  - native: Abgelaufen
+    english: expired
+  - native: abgelaufenen
+    english: expired
+  - native: abgelaufenes
+    english: expired
+  - native: abgelegt
+    english: filed
+  - native: Abgelehnt
+    english: denied
+  - native: abgeschlossen
+    english: complete
+  - native: ABGLEICH
+    english: cross-check
+  - native: ABLEHNEN
+    english: deny
+  - native: Ablehnung
+    english: denial
+  - native: Ablehnungen
+    english: denials
+  - native: Abreise
+    english: departure
+  - native: Abreisedatum
+    english: departure date
+  - native: Abreisen
+    english: departures
+  - native: Abstammung
+    english: lineage
+  - native: Abstammungsarchiv
+    english: Lineage Archive
+  - native: ABWEICHUNG
+    english: deviation
+  - native: Abweichungen
+    english: deviations
+  - native: Abweichungsbericht
+    english: deviation report
+  - native: ACCESSOIRE
+    english: accessory
+  - native: Adresse
+    english: address
+  - native: Adressfeld
+    english: address field
+  - native: Akte
+    english: record
+  - native: Akten
+    english: records
+  - native: Aktennummer
+    english: record number
+  - native: aktuellen
+    english: current
+  - native: Alle
+    english: all
+  - native: Als
+    english: as
+  - native: am
+    english: at the
+  - native: Amt
+    english: office
+  - native: Amts
+    english: office's
+  - native: AMTSMITTEILUNG
+    english: bureau memo
+  - native: an
+    english: on / to
+  - native: Andere
+    english: other
+  - native: anderem
+    english: else
+  - native: anderen
+    english: other
+  - native: Anderes
+    english: another
+  - native: Angabe
+    english: detail
+  - native: Angaben
+    english: details
+  - native: Angegeben
+    english: claimed
+  - native: angegebene
+    english: claimed
+  - native: angegebenen
+    english: claimed
+  - native: angegebener
+    english: claimed
+  - native: Angeheftet
+    english: pinned
+  - native: Angenommen
+    english: accepted
+  - native: anheften
+    english: pin
+  - native: ANNEHMEN
+    english: accept
+  - native: anordnen
+    english: arrange
+  - native: Ansehen
+    english: standing
+  - native: Antwort
+    english: answer
+  - native: Antworten
+    english: answers
+  - native: Apostrophe
+    english: apostrophes
+  - native: App
+    english: app
+  - native: Arbeit
+    english: work
+  - native: Arbeiter
+    english: worker
+  - native: Arbeitgeber
+    english: employer
+  - native: Arbeitserlaubnis
+    english: work permit
+  - native: Arbeitsort
+    english: worksite
+  - native: ARBEITSVERTRAG
+    english: labour contract
+  - native: ARCHIV
+    english: archive
+  - native: auf
+    english: on
+  - native: aufnehmen
+    english: adopt
+  - native: aufrufen
+    english: put up
+  - native: aufsteigt
+    english: rises
+  - native: ausblenden
+    english: hide
+  - native: Ausgabe
+    english: edition
+  - native: Ausgaben
+    english: editions
+  - native: Auslassen
+    english: skip
+  - native: "ausl\xF6sen"
+    english: cause
+  - native: Ausschnitt
+    english: clipping
+  - native: Ausschnitte
+    english: clippings
+  - native: ausstehend
+    english: pending
+  - native: ausstellenden
+    english: issuing
+  - native: AUSZUG
+    english: extract
+  - native: Automaten
+    english: slots
+  - native: BART
+    english: facial hair
+  - native: Baum
+    english: tree
+  - native: BEENDET
+    english: done
+  - native: Befragung
+    english: interview
+  - native: Befunde
+    english: findings
+  - native: Befundspalte
+    english: findings column
+  - native: Beginn
+    english: start
+  - native: "Beh\xF6rdenakten"
+    english: agency records
+  - native: "Beh\xF6rdenkalender"
+    english: agency calendar
+  - native: bei
+    english: at
+  - native: beiden
+    english: both / two
+  - native: Beides
+    english: both
+  - native: BEKANNTMACHUNGEN
+    english: notices
+  - native: bekommt
+    english: gets
+  - native: belegt
+    english: documented
+  - native: "Ben\xF6tigt"
+    english: needs
+  - native: "Ben\xF6tigtes"
+    english: required
+  - native: Berechtigt
+    english: eligible
+  - native: Bereich
+    english: pane
+  - native: Bereiche
+    english: panes
+  - native: Bereichs
+    english: pane's
+  - native: BEREITS
+    english: already
+  - native: Bericht
+    english: report
+  - native: BERUF
+    english: occupation
+  - native: Beschaffung
+    english: supply
+  - native: Bescheinigung
+    english: certificate
+  - native: "Besch\xE4ftigung"
+    english: employment
+  - native: Besitz
+    english: possession
+  - native: Bestell
+    english: order
+  - native: Bestellbaum
+    english: orders tree
+  - native: Bestellen
+    english: order
+  - native: Bestellung
+    english: order
+  - native: Bestellungen
+    english: orders
+  - native: bestraft
+    english: fined
+  - native: Bestrafte
+    english: fined
+  - native: "best\xE4tigt"
+    english: acknowledged
+  - native: Betrieb
+    english: service
+  - native: betrifft
+    english: concerns
+  - native: "Betr\xE4ge"
+    english: amounts
+  - native: bewegen
+    english: move
+  - native: Bewegung
+    english: motion
+  - native: Beweis
+    english: evidence
+  - native: Beweise
+    english: evidence
+  - native: bezahlbar
+    english: affordable
+  - native: Bezahlen
+    english: pay
+  - native: bezahlt
+    english: paid
+  - native: Bezeichnung
+    english: label
+  - native: BEZIEHUNGEN
+    english: relations
+  - native: Bindestriche
+    english: hyphens
+  - native: bis
+    english: until / to
+  - native: bist
+    english: are
+  - native: Bitte
+    english: please
+  - native: "BONIT\xC4T"
+    english: credit
+  - native: brach
+    english: broke
+  - native: braucht
+    english: needs
+  - native: Buchstaben
+    english: letters
+  - native: Buchzeile
+    english: book row
+  - native: "B\xFCcher"
+    english: books
+  - native: "B\xFCrger"
+    english: citizen
+  - native: "B\xDCRGERAKTE"
+    english: citizen record
+  - native: "B\xFCrgerakten"
+    english: citizen records
+  - native: "B\xFCrgerkonto"
+    english: Citizen Account
+  - native: "B\xFCrgern"
+    english: citizens
+  - native: C
+    english: C
+  - native: CHIP
+    english: chip
+  - native: CHIPDATEN
+    english: chip record
+  - native: Chips
+    english: chips
+  - native: CHRONET
+    english: CHRONET
+  - native: Cr
+    english: cr (credits)
+  - native: CREDIT
+    english: credit
+  - native: Credits
+    english: credits
+  - native: Ctrl
+    english: Ctrl
+  - native: da
+    english: here / arrived
+  - native: dabei
+    english: carried
+  - native: danach
+    english: after
+  - native: dann
+    english: then
+  - native: darf
+    english: may
+  - native: das
+    english: the / that
+  - native: Daten
+    english: data / dates
+  - native: Datum
+    english: date
+  - native: davon
+    english: of those
+  - native: dazu
+    english: for it
+  - native: Deine
+    english: your
+  - native: deinem
+    english: your
+  - native: deiner
+    english: your
+  - native: dem
+    english: the
+  - native: den
+    english: the
+  - native: des
+    english: of the
+  - native: Desktop
+    english: desktop
+  - native: die
+    english: the
+  - native: Dies
+    english: this
+  - native: Diese
+    english: these / this
+  - native: diesem
+    english: this
+  - native: diesen
+    english: this
+  - native: dieser
+    english: this
+  - native: dieses
+    english: this
+  - native: Dinge
+    english: things
+  - native: dir
+    english: you
+  - native: Direktion
+    english: Directorate
+  - native: Dokument
+    english: document
+  - native: Dokumente
+    english: documents
+  - native: Dokumentfeld
+    english: document field
+  - native: Doppelklick
+    english: double click
+  - native: Dort
+    english: there
+  - native: DRUCK
+    english: print
+  - native: "dr\xFCcke"
+    english: press
+  - native: Du
+    english: you
+  - native: durch
+    english: through
+  - native: EBENE
+    english: layer
+  - native: echte
+    english: real
+  - native: Ecke
+    english: corner
+  - native: Economy
+    english: Economy
+  - native: eigene
+    english: own
+  - native: eigenen
+    english: own
+  - native: EIN
+    english: a / one
+  - native: eine
+    english: a
+  - native: einem
+    english: a
+  - native: einen
+    english: a
+  - native: eines
+    english: one
+  - native: Einfachklick
+    english: single click
+  - native: "einf\xFCgen"
+    english: paste
+  - native: "EINF\xDCHRUNG"
+    english: tutorial
+  - native: eingeben
+    english: enter / type
+  - native: eingebrochen
+    english: broken in
+  - native: "Eingef\xFCgt"
+    english: pasted
+  - native: "eingef\xFCgten"
+    english: pasted
+  - native: Einstellungen
+    english: settings
+  - native: Eintrag
+    english: entry / item
+  - native: "Eintr\xE4ge"
+    english: entries
+  - native: "einzuf\xFCgen"
+    english: to paste
+  - native: Element
+    english: item
+  - native: en
+    english: (plural ending)
+  - native: endet
+    english: ends
+  - native: Englisch
+    english: English
+  - native: Enter
+    english: Enter
+  - native: Entferne
+    english: remove
+  - native: Entfernen
+    english: remove
+  - native: entgegennehmen
+    english: receive
+  - native: Entscheidung
+    english: verdict
+  - native: Entscheidungen
+    english: calls
+  - native: Entscheidungsstempel
+    english: verdict stamp
+  - native: Epoche
+    english: era
+  - native: Erfasse
+    english: log
+  - native: erfassen
+    english: log
+  - native: Erfasst
+    english: logged
+  - native: erfasste
+    english: logged
+  - native: "Erf\xFCllt"
+    english: meets
+  - native: Ergebnis
+    english: result
+  - native: Ergebnisse
+    english: results
+  - native: erhalten
+    english: received
+  - native: erlaubt
+    english: permitted
+  - native: Ermittlung
+    english: investigation
+  - native: Ermittlungs
+    english: investigation
+  - native: Erneut
+    english: again
+  - native: erscheinen
+    english: appear
+  - native: erste
+    english: first
+  - native: erwartet
+    english: expected
+  - native: es
+    english: it
+  - native: Esc
+    english: Esc
+  - native: etwas
+    english: something
+  - native: Extrapflege
+    english: extra care
+  - native: Fahre
+    english: move (hover)
+  - native: Fall
+    english: case
+  - native: Falls
+    english: case's
+  - native: Fallwand
+    english: case board
+  - native: FALSCH
+    english: wrong / incorrect
+  - native: Falsche
+    english: wrong
+  - native: falschen
+    english: wrong
+  - native: FALSCHES
+    english: wrong
+  - native: Farben
+    english: colours
+  - native: fasst
+    english: holds
+  - native: fehlend
+    english: missing
+  - native: Fehlentscheidungen
+    english: wrong calls
+  - native: FEHLER
+    english: fault
+  - native: fehlt
+    english: missing
+  - native: fest
+    english: set
+  - native: Festgenommen
+    english: detained
+  - native: Festnahme
+    english: detention
+  - native: FESTNEHMEN
+    english: detain
+  - native: Finde
+    english: find
+  - native: Fixkosten
+    english: fixed costs
+  - native: Fokus
+    english: focus
+  - native: fokussierte
+    english: focused
+  - native: fokussierten
+    english: focused
+  - native: Folgeeintrag
+    english: dependant
+  - native: folgen
+    english: follow
+  - native: FORMULARE
+    english: forms
+  - native: Foto
+    english: photo
+  - native: Fragen
+    english: questions
+  - native: FREI
+    english: available
+  - native: freie
+    english: free
+  - native: Freigabestufe
+    english: clearance
+  - native: freigegeben
+    english: cleared
+  - native: "Fr\xFChere"
+    english: past
+  - native: "f\xE4llige"
+    english: due
+  - native: "f\xFCgt"
+    english: pastes
+  - native: "f\xFCllen"
+    english: fill
+  - native: "f\xFCr"
+    english: for
+  - native: ganze
+    english: whole
+  - native: GEBOREN
+    english: born
+  - native: gebrochen
+    english: broken
+  - native: gebucht
+    english: booked
+  - native: Gebuchte
+    english: booked
+  - native: Geburtsdatum
+    english: birth date
+  - native: gefunden
+    english: found
+  - native: "Gef\xE4hrten"
+    english: companion
+  - native: "Gef\xE4lschte"
+    english: forged
+  - native: "gef\xE4lschtes"
+    english: forged
+  - native: gegen
+    english: against / vs
+  - native: Gegenstand
+    english: subject
+  - native: Gegenwart
+    english: present
+  - native: gehaltenen
+    english: held
+  - native: gehaltener
+    english: held
+  - native: gehen
+    english: walk
+  - native: geht
+    english: goes / is (well)
+  - native: "geh\xF6ren"
+    english: belong
+  - native: "Geh\xF6rt"
+    english: belongs
+  - native: Geisterbild
+    english: ghost image
+  - native: Geld
+    english: money
+  - native: "Geldb\xF6rse"
+    english: wallet
+  - native: gelegtes
+    english: dropped
+  - native: Geliefert
+    english: delivered
+  - native: gemeinsamen
+    english: in common
+  - native: genau
+    english: accurately
+  - native: genehmigt
+    english: approved
+  - native: gerechtfertigt
+    english: justified
+  - native: "GER\xC4T"
+    english: device
+  - native: gescannt
+    english: scanned
+  - native: gescanntes
+    english: scanned
+  - native: Geschichte
+    english: history
+  - native: GESCHLOSSEN
+    english: closed
+  - native: geschlossenes
+    english: closed
+  - native: GESEHEN
+    english: seen
+  - native: Gesetz
+    english: law
+  - native: GESICHT
+    english: face
+  - native: Gesperrt
+    english: frozen / locked
+  - native: gesperrtes
+    english: frozen
+  - native: gespielt
+    english: played
+  - native: gestempelt
+    english: stamped
+  - native: gestempelten
+    english: stamped
+  - native: GESTERN
+    english: yesterday
+  - native: GESTORBEN
+    english: died
+  - native: gestrandet
+    english: stranded
+  - native: getauscht
+    english: swapped
+  - native: getragenes
+    english: worn
+  - native: "gew\xE4hlt"
+    english: picked
+  - native: "gew\xE4hlte"
+    english: selected
+  - native: "gew\xE4hlten"
+    english: selected
+  - native: gezeigt
+    english: shown
+  - native: "ge\xE4ndert"
+    english: revised
+  - native: "ge\xE4nderte"
+    english: revised
+  - native: gib
+    english: give / type
+  - native: gibt
+    english: gives
+  - native: gilt
+    english: applies
+  - native: gleicht
+    english: matches
+  - native: graue
+    english: grey
+  - native: "Gr\xF6\xDFe"
+    english: size
+  - native: Gut
+    english: good
+  - native: "G\xFCltig"
+    english: valid
+  - native: HAAR
+    english: hair
+  - native: haben
+    english: have
+  - native: Haftungsamt
+    english: liability office
+  - native: Halte
+    english: hold
+  - native: halten
+    english: hold
+  - native: hast
+    english: have
+  - native: hat
+    english: has
+  - native: HAUPTSTADT
+    english: capital
+  - native: Haus
+    english: house
+  - native: Hausunterhalt
+    english: house upkeep
+  - native: heftet
+    english: pins
+  - native: Herkunft
+    english: origin
+  - native: HERRSCHER
+    english: ruler
+  - native: heute
+    english: today
+  - native: Heutige
+    english: today's
+  - native: heutigen
+    english: today's
+  - native: Heutiges
+    english: today's
+  - native: hier
+    english: here
+  - native: hinausgelassen
+    english: let out
+  - native: Hintergrundbild
+    english: wallpaper
+  - native: hinterlegt
+    english: on file
+  - native: HINTERLEGTE
+    english: on file
+  - native: "hinterl\xE4sst"
+    english: leave behind
+  - native: hinzugehen
+    english: to go there
+  - native: Hund
+    english: dog
+  - native: "h\xE4lt"
+    english: holds
+  - native: "h\xE4ltst"
+    english: are holding
+  - native: "h\xF6chstens"
+    english: at most
+  - native: ID
+    english: ID
+  - native: "Identit\xE4t"
+    english: identity
+  - native: ihm
+    english: it / him
+  - native: ihn
+    english: it
+  - native: ihnen
+    english: them
+  - native: Ihr
+    english: their
+  - native: ihre
+    english: their / its
+  - native: ihrem
+    english: its
+  - native: ihren
+    english: their
+  - native: ihrer
+    english: their
+  - native: Im
+    english: in the
+  - native: Immer
+    english: always
+  - native: in
+    english: in
+  - native: Installation
+    english: install
+  - native: installieren
+    english: install
+  - native: Installiert
+    english: installed
+  - native: Internet
+    english: Internet
+  - native: ist
+    english: is
+  - native: jeder
+    english: every
+  - native: Jedes
+    english: every
+  - native: jemand
+    english: someone
+  - native: jetzt
+    english: now
+  - native: K
+    english: K
+  - native: Kalender
+    english: calendar
+  - native: Karte
+    english: card
+  - native: Katze
+    english: cat
+  - native: kehren
+    english: return
+  - native: kein
+    english: no
+  - native: Keine
+    english: no / none
+  - native: keinen
+    english: no
+  - native: Kleidung
+    english: dress / outfit
+  - native: "Kleidungsst\xFCck"
+    english: garment
+  - native: klein
+    english: small
+  - native: Klicke
+    english: click
+  - native: Klicken
+    english: click
+  - native: Knopf
+    english: button
+  - native: "Kn\xF6pfe"
+    english: buttons
+  - native: kommen
+    english: arrive
+  - native: kommt
+    english: arrives
+  - native: Kontakte
+    english: contacts
+  - native: "Kontextmen\xFC"
+    english: context menu
+  - native: Konto
+    english: account
+  - native: Kontoinhaber
+    english: account holder
+  - native: Kontostand
+    english: balance
+  - native: KOPFBEDECKUNG
+    english: headwear
+  - native: Kopie
+    english: copy
+  - native: Kopiere
+    english: copy
+  - native: kopieren
+    english: copy
+  - native: Kopiert
+    english: copied
+  - native: kopierten
+    english: copied
+  - native: "Kost\xFCmf\xFChrer"
+    english: Costume Guide
+  - native: Kraft
+    english: force
+  - native: krank
+    english: sick
+  - native: "k\xFCrzeren"
+    english: shorter
+  - native: L
+    english: L (left)
+  - native: Lager
+    english: storage
+  - native: Land
+    english: country / land
+  - native: lass
+    english: let
+  - native: lassen
+    english: keep / leave
+  - native: Laufzeit
+    english: term
+  - native: laut
+    english: according to
+  - native: leeren
+    english: clear
+  - native: Leerzeichen
+    english: spaces
+  - native: Leg
+    english: put
+  - native: legt
+    english: sets
+  - native: LEITFADEN
+    english: guide
+  - native: Leseansicht
+    english: reading view
+  - native: lesen
+    english: read
+  - native: LICHT
+    english: light
+  - native: liegt
+    english: is kept
+  - native: Link
+    english: link
+  - native: Links
+    english: left
+  - native: LOHN
+    english: wage
+  - native: Lohnabzug
+    english: pay deduction
+  - native: Lohns
+    english: pay
+  - native: Los
+    english: go
+  - native: loslassen
+    english: let go
+  - native: "L\xF6se"
+    english: unpin
+  - native: "l\xF6sen"
+    english: unpin
+  - native: "l\xF6st"
+    english: unpins
+  - native: machen
+    english: make
+  - native: Macht
+    english: power
+  - native: Markieren
+    english: flag
+  - native: markiert
+    english: flagged
+  - native: MATERIAL
+    english: material
+  - native: Maximieren
+    english: maximise
+  - native: mehr
+    english: more
+  - native: Menschen
+    english: people
+  - native: "Men\xFC"
+    english: menu
+  - native: "Men\xFCleiste"
+    english: menu bar
+  - native: Miete
+    english: rent
+  - native: Mikrodruck
+    english: microprint
+  - native: Minimieren
+    english: minimise
+  - native: mit
+    english: with
+  - native: MITTEL
+    english: funds
+  - native: Mittelnachweis
+    english: proof of means
+  - native: morgen
+    english: tomorrow
+  - native: MORGENAUSGABE
+    english: morning edition
+  - native: morgigen
+    english: tomorrow's
+  - native: muss
+    english: must
+  - native: "m\xFCssen"
+    english: must
+  - native: N
+    english: N (number format)
+  - native: nachgeschlagen
+    english: looked up
+  - native: NACHHER
+    english: after
+  - native: Nachricht
+    english: message
+  - native: Nachrichtenseite
+    english: news site
+  - native: Nachschlagewerke
+    english: reference books
+  - native: Nadel
+    english: pin
+  - native: Nadeln
+    english: pins
+  - native: Name
+    english: name
+  - native: Namen
+    english: name / names
+  - native: Nebenkosten
+    english: utilities
+  - native: nennt
+    english: names
+  - native: netto
+    english: net
+  - native: Netzes
+    english: network
+  - native: NEU
+    english: new
+  - native: Neue
+    english: new
+  - native: nicht
+    english: not
+  - native: Nichts
+    english: nothing
+  - native: Niemals
+    english: never
+  - native: noch
+    english: still / yet
+  - native: NOTIZ
+    english: note
+  - native: Notizen
+    english: notes
+  - native: Nr
+    english: No. (number)
+  - native: Nummer
+    english: number
+  - native: Nur
+    english: only
+  - native: Nutze
+    english: use
+  - native: "n\xE4chste"
+    english: next / nearest
+  - native: "n\xE4chsten"
+    english: next
+  - native: "n\xF6tig"
+    english: needed
+  - native: oder
+    english: or
+  - native: offen
+    english: open / owed
+  - native: Ohne
+    english: without
+  - native: Onlineausgabe
+    english: online edition
+  - native: Ort
+    english: place
+  - native: Orts
+    english: place's
+  - native: Ortsangaben
+    english: place facts
+  - native: Ortsverzeichnis
+    english: index of places
+  - native: P
+    english: P
+  - native: Panik
+    english: panic
+  - native: Papier
+    english: paper
+  - native: Papiere
+    english: papers
+  - native: Papieren
+    english: papers
+  - native: Papiers
+    english: paper's
+  - native: Papiersatz
+    english: paper set
+  - native: Pass
+    english: passport
+  - native: passen
+    english: match
+  - native: passend
+    english: suited
+  - native: Passklasse
+    english: passport class
+  - native: passt
+    english: matches
+  - native: PC
+    english: PC
+  - native: Person
+    english: person
+  - native: Personen
+    english: subjects
+  - native: Pfeile
+    english: arrows
+  - native: POLICE
+    english: policy
+  - native: Portal
+    english: portal
+  - native: Portale
+    english: portals
+  - native: Post
+    english: mail
+  - native: Posteingang
+    english: inbox
+  - native: Premium
+    english: Premium
+  - native: Protokoll
+    english: transcript
+  - native: "Pr\xFCfe"
+    english: check
+  - native: "pr\xFCfen"
+    english: check / inspect
+  - native: "Pr\xFCfmodus"
+    english: inspect mode
+  - native: Quelle
+    english: source
+  - native: Quellen
+    english: sources
+  - native: R
+    english: R (right)
+  - native: Rad
+    english: wheel
+  - native: Rate
+    english: instalment
+  - native: Rechnungen
+    english: bills
+  - native: "rechtm\xE4\xDFigen"
+    english: legitimate
+  - native: Rechts
+    english: right
+  - native: Rechtsklick
+    english: right-click
+  - native: Reduziert
+    english: reduced
+  - native: Reduzierte
+    english: reduced
+  - native: Referenz
+    english: reference
+  - native: Referenzdaten
+    english: reference data
+  - native: Referenzeintrag
+    english: reference entry
+  - native: Regal
+    english: shelf
+  - native: Regals
+    english: shelf's
+  - native: Regalseite
+    english: shelf side
+  - native: Regel
+    english: rule
+  - native: Regelbuchs
+    english: rulebook's
+  - native: Regeln
+    english: rules
+  - native: "REGELPR\xDCFUNG"
+    english: rules check
+  - native: REGISTEREINTRAG
+    english: registry entry
+  - native: registrierte
+    english: registered
+  - native: registrierten
+    english: registered
+  - native: Reise
+    english: trip
+  - native: "Reisebeschr\xE4nkung"
+    english: travel restriction
+  - native: REISEN
+    english: travel / trips
+  - native: Reisende
+    english: traveller
+  - native: Reisenden
+    english: traveller
+  - native: Reisendenrad
+    english: traveller wheel
+  - native: Reisender
+    english: traveller
+  - native: Reisepapieren
+    english: travel papers
+  - native: Reiseweisungen
+    english: travel directives
+  - native: Reiseziel
+    english: destination
+  - native: Reiseziele
+    english: destinations
+  - native: Reist
+    english: departs
+  - native: Reiter
+    english: tab
+  - native: Reparatur
+    english: repair
+  - native: reparieren
+    english: repair
+  - native: repariert
+    english: repaired
+  - native: RICHTIG
+    english: correct
+  - native: Richtige
+    english: right
+  - native: Richtung
+    english: direction
+  - native: rote
+    english: red
+  - native: ROUTE
+    english: route
+  - native: Routen
+    english: routes
+  - native: ruhiger
+    english: quiet
+  - native: Runden
+    english: ends (make ends meet)
+  - native: "R\xFCckkehr"
+    english: return
+  - native: "R\xFCckkehrbefehl"
+    english: return order
+  - native: "R\xDCCKKEHRTOR"
+    english: return gate
+  - native: sagte
+    english: said
+  - native: scanne
+    english: scan
+  - native: Scanner
+    english: scanner
+  - native: SCHALTER
+    english: desk
+  - native: Schalterbeamten
+    english: desk officers
+  - native: Schalterbeamter
+    english: desk officer
+  - native: Schalterzeiten
+    english: desk hours
+  - native: schauen
+    english: look
+  - native: Schichttag
+    english: shift day
+  - native: Schieben
+    english: slide
+  - native: schimmern
+    english: shimmer
+  - native: Schlange
+    english: queue
+  - native: "Schlie\xDFen"
+    english: close
+  - native: "schlie\xDFt"
+    english: closes
+  - native: Schluss
+    english: closing
+  - native: Schmuggelware
+    english: contraband
+  - native: schon
+    english: already
+  - native: Schreibtischausstattung
+    english: desk equipment
+  - native: Schriften
+    english: fonts
+  - native: Schritt
+    english: step
+  - native: Schritts
+    english: step's
+  - native: Schulden
+    english: debt
+  - native: Schuldenerlass
+    english: Debt Relief
+  - native: sehen
+    english: see
+  - native: seine
+    english: its
+  - native: seines
+    english: its
+  - native: seit
+    english: since
+  - native: Seite
+    english: page / side
+  - native: Seiten
+    english: sites
+  - native: sich
+    english: itself / each other
+  - native: sie
+    english: it / they
+  - native: Siegel
+    english: seal / seals
+  - native: Siegelregister
+    english: Seal Register
+  - native: sind
+    english: are
+  - native: sobald
+    english: once
+  - native: sofort
+    english: at once
+  - native: solange
+    english: while
+  - native: Sonstiges
+    english: other
+  - native: Spalte
+    english: column
+  - native: Spielen
+    english: play
+  - native: Spielzeug
+    english: toys
+  - native: Sprache
+    english: language
+  - native: Sprachwechsel
+    english: language change
+  - native: sprechen
+    english: talk
+  - native: spricht
+    english: speaks
+  - native: Stadt
+    english: city
+  - native: Standard
+    english: Standard
+  - native: Start
+    english: home
+  - native: Startseite
+    english: start page
+  - native: Stattdessen
+    english: instead
+  - native: Status
+    english: status
+  - native: steht
+    english: stands / is
+  - native: stellen
+    english: ask
+  - native: Stempel
+    english: stamp / stamps
+  - native: Stempelleiste
+    english: stamp bar
+  - native: STEMPELN
+    english: stamp
+  - native: Stemple
+    english: stamp
+  - native: stimmen
+    english: agree
+  - native: STIMMT
+    english: match
+  - native: stornieren
+    english: cancel
+  - native: storniert
+    english: cancelled
+  - native: Strafe
+    english: fine / penalty
+  - native: Strandungsverzicht
+    english: Stranding Waiver
+  - native: streicheln
+    english: pet
+  - native: Strom
+    english: electricity
+  - native: "St\xE4rke"
+    english: intensity
+  - native: Suche
+    english: search
+  - native: Suchen
+    english: search
+  - native: Suchergebnis
+    english: search result
+  - native: Suchfeld
+    english: search field
+  - native: Suchleiste
+    english: search drawer
+  - native: Symbol
+    english: icon
+  - native: Symbole
+    english: icons
+  - native: Symbolpositionen
+    english: icon positions
+  - native: Symbols
+    english: icon
+  - native: TABELLE
+    english: standings
+  - native: Tage
+    english: days
+  - native: TAGEN
+    english: days
+  - native: Tageslohn
+    english: day wage
+  - native: Tastatur
+    english: keyboard
+  - native: "Tastenk\xFCrzel"
+    english: keyboard shortcuts
+  - native: Tatsache
+    english: fact
+  - native: TC
+    english: TC
+  - native: Technik
+    english: technology
+  - native: Teil
+    english: part
+  - native: Textfeld
+    english: text field
+  - native: "Textgr\xF6\xDFe"
+    english: text size
+  - native: Ticket
+    english: ticket
+  - native: Tierheim
+    english: shelter
+  - native: tippe
+    english: type
+  - native: TISCH
+    english: desk
+  - native: Transponder
+    english: transponder
+  - native: Transponderausfall
+    english: transponder failure
+  - native: Transponderklasse
+    english: transponder class
+  - native: Treffer
+    english: hits
+  - native: Tresen
+    english: counter
+  - native: "tr\xE4gt"
+    english: wears / carries
+  - native: Ufern
+    english: banks
+  - native: um
+    english: at / about
+  - native: umgesetzt
+    english: put (to work)
+  - native: unbekannt
+    english: unknown
+  - native: Unbelegte
+    english: undocumented
+  - native: unbezahlt
+    english: unpaid
+  - native: und
+    english: and
+  - native: ungelesen
+    english: unread
+  - native: "ung\xFCltiges"
+    english: failing
+  - native: unten
+    english: below
+  - native: Unter
+    english: under / at
+  - native: Unterschied
+    english: difference
+  - native: Unterschiede
+    english: differences
+  - native: unterschriebenen
+    english: signed
+  - native: unterschriebener
+    english: signed
+  - native: UNTERSCHRIFT
+    english: signature
+  - native: Unterwegs
+    english: in transit
+  - native: "Unvollst\xE4ndige"
+    english: incomplete
+  - native: "un\xFCbersetzt"
+    english: untranslated
+  - native: "un\xFCbersetzte"
+    english: untranslated
+  - native: Urlaubsabreisen
+    english: leisure departures
+  - native: UV
+    english: UV
+  - native: V
+    english: V
+  - native: VERBORGENE
+    english: hidden
+  - native: verbotenes
+    english: forbidden
+  - native: verbucht
+    english: written (booked)
+  - native: Vergangenheit
+    english: past
+  - native: Vergleich
+    english: comparison
+  - native: Vergleiche
+    english: compare
+  - native: vergleichen
+    english: compare
+  - native: verglichen
+    english: compared
+  - native: "vergr\xF6\xDFern"
+    english: zoom in
+  - native: verkauft
+    english: sells
+  - native: verkleideten
+    english: disguised
+  - native: verkleinern
+    english: zoom out
+  - native: verlange
+    english: ask for
+  - native: verlangen
+    english: ask for
+  - native: Verlangt
+    english: asked for
+  - native: verlassen
+    english: leave
+  - native: verletzte
+    english: broken
+  - native: "verl\xE4sst"
+    english: leaves
+  - native: Vermerke
+    english: remarks
+  - native: verschiedene
+    english: different
+  - native: verschuldet
+    english: in debt
+  - native: versiegelt
+    english: sealed
+  - native: Verstanden
+    english: got it
+  - native: "Verst\xF6\xDFt"
+    english: breaks
+  - native: Vertrag
+    english: contract
+  - native: Vertriebene
+    english: displaced
+  - native: Vertriebenen
+    english: displacement
+  - native: Vertriebenenregister
+    english: Displacement Registry
+  - native: Verwarnung
+    english: citation / warning
+  - native: Verwarnungen
+    english: citations
+  - native: Verwarnungszettels
+    english: citation slip
+  - native: verzeichnetes
+    english: listed
+  - native: Verzicht
+    english: waiver
+  - native: Verzichte
+    english: waivers
+  - native: VISUMKLASSE
+    english: visa class
+  - native: Volk
+    english: people
+  - native: Voll
+    english: full
+  - native: voller
+    english: full
+  - native: vom
+    english: from the
+  - native: VON
+    english: from / by / of
+  - native: Vor
+    english: forward / ago
+  - native: Voraussetzung
+    english: prerequisite
+  - native: Vorfall
+    english: incident
+  - native: vorhanden
+    english: on file
+  - native: vorhandener
+    english: on file
+  - native: VORHER
+    english: before
+  - native: vorige
+    english: previous
+  - native: vorigen
+    english: previous
+  - native: Vorrangige
+    english: priority
+  - native: wann
+    english: when
+  - native: war
+    english: was
+  - native: Waren
+    english: goods
+  - native: warst
+    english: were
+  - native: Warte
+    english: waiting
+  - native: warten
+    english: wait
+  - native: Wartet
+    english: awaiting
+  - native: warteten
+    english: waited
+  - native: WARTUNG
+    english: maintenance
+  - native: WARUM
+    english: why
+  - native: was
+    english: what
+  - native: Wasserzeichen
+    english: watermark
+  - native: Weg
+    english: way
+  - native: weichen
+    english: differ
+  - native: weicht
+    english: differs
+  - native: weist
+    english: refuses
+  - native: Weisung
+    english: directive
+  - native: Weisungen
+    english: directives
+  - native: WEITER
+    english: next / continue
+  - native: Weitere
+    english: other
+  - native: weiteren
+    english: another
+  - native: welches
+    english: some
+  - native: WELT
+    english: world
+  - native: wenn
+    english: when
+  - native: werden
+    english: are
+  - native: Wert
+    english: value
+  - native: Werte
+    english: values
+  - native: Werts
+    english: value's
+  - native: widersprechen
+    english: disagree
+  - native: "WIDERSPR\xDCCHLICH"
+    english: inconsistent
+  - native: wie
+    english: as
+  - native: wiederholen
+    english: replay
+  - native: Wird
+    english: will be
+  - native: wirklich
+    english: really
+  - native: wo
+    english: where
+  - native: woandershin
+    english: elsewhere
+  - native: Wort
+    english: word
+  - native: wurde
+    english: was
+  - native: "W\xE4hle"
+    english: pick / select
+  - native: "w\xE4hlen"
+    english: pick / select
+  - native: "w\xE4hrend"
+    english: while
+  - native: "W\xC4HRUNG"
+    english: currency
+  - native: x
+    english: x (times)
+  - native: Zahlungsausfall
+    english: default
+  - native: zeigen
+    english: show
+  - native: zeigt
+    english: shows
+  - native: Zeile
+    english: line / row
+  - native: Zeit
+    english: time
+  - native: Zeiten
+    english: hours
+  - native: Zeitlinie
+    english: timeline
+  - native: "Zeitlinienintegrit\xE4t"
+    english: timeline integrity
+  - native: Zeitsortierer
+    english: Time Sorter
+  - native: Zeitung
+    english: newspaper
+  - native: Zeitzoll
+    english: temporal customs
+  - native: Zieh
+    english: drag
+  - native: ziehe
+    english: drag
+  - native: Ziehen
+    english: drag
+  - native: Zolldirektion
+    english: Customs Directorate
+  - native: zu
+    english: to
+  - native: zuerst
+    english: first
+  - native: zugelassenen
+    english: permitted
+  - native: Zuhause
+    english: home
+  - native: Zukunft
+    english: future
+  - native: Zuletzt
+    english: recent
+  - native: "ZUR\xDCCKGEBEN"
+    english: hand back
+  - native: "zur\xFCckgekehrt"
+    english: returned
+  - native: "zur\xFCckgerufenen"
+    english: recalled
+  - native: "zur\xFCcksetzen"
+    english: reset
+  - native: "zur\xFCckzugeben"
+    english: to hand back
+  - native: zwei
+    english: two
+  - native: zwischen
+    english: between
+  - native: "\xC4ltere"
+    english: back (older)
+  - native: "\xE4lteren"
+    english: back (older)
+  - native: "\xC4mtern"
+    english: offices
+  - native: "\xE4nderte"
+    english: changed
+  - native: "\xC4nderungen"
+    english: revisions
+  - native: "\xF6ffnen"
+    english: open
+  - native: "\xF6ffnest"
+    english: open
+  - native: "\xD6ffnet"
+    english: opens
+  - native: "\xFCber"
+    english: over / about
+  - native: "\xDCberblenden"
+    english: fade
+  - native: "\xFCberein"
+    english: agree
+  - native: "\xFCbereinanderzulegen"
+    english: to lay over each other
+  - native: "\xFCbergeben"
+    english: handed over
+  - native: "\xDCBERGEBENE"
+    english: handed over
+  - native: "\xDCBERLAGERUNG"
+    english: overlay
+  - native: "\xDCbernommen"
+    english: carried
+  - native: "\xFCbersetzen"
+    english: translate
+  - native: "\xDCbersetzer"
+    english: translator
+  - native: "\xDCbersetzungen"
+    english: translations
+  - native: "\xDCbersetzungslupe"
+    english: Translation Lens
+  - native: "\xFCberspringen"
+    english: skip
+  - native: "\xFCblich"
+    english: usual
+  - native: "\xDCBUNG"
+    english: practice

@@ -16,7 +16,11 @@ MonoBehaviour:
   displayName: Greece
   language: el
   runtimeFont: 1
-  fonts: []
+  fonts:
+  - file: arial.ttf
+    face: 0
+    family: Arial
+    style: Regular
   headingAdd: 0
   buttonAdd: 0
   stripItalic: 0
