@@ -324,6 +324,7 @@ internal static class SceneUiKit
             faceTransform.SetParent(host.transform, false);
         }
         faceTransform.SetAsFirstSibling();
+        faceTransform.gameObject.layer = host.gameObject.layer;
         Image face = faceTransform.GetComponent<Image>();
         if (face == null)
             face = faceTransform.gameObject.AddComponent<Image>();

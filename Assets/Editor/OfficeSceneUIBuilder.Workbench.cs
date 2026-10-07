@@ -206,6 +206,12 @@ public static partial class OfficeSceneUIBuilder
         fit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         GetOrAdd<LayoutElement>(dropdown.gameObject).minWidth = WbSize.Menu;
         HairlineFrame(dropdown, WbLineStrong, ThemeRoleId.HairlineStrong);
+        if (_kit != null)
+        {
+            // Sheet 02: a menu's drop-down is the kit's cream drop-down.
+            DestroyChildIfPresent(dropdown, "Frame");
+            KitSkin(dropdown, "dropdown", _kit.desktopScale);
+        }
         Button rowTemplate = MenuRow(dropdown, "RowTemplate");
         rowTemplate.gameObject.SetActive(false);
         TMP_Text caption = WbText(dropdown, "CaptionTemplate", null, UiText.Get("menubar.notHandedOver"), PcType.Caption, ThemeRoleId.SurfaceMuted,
@@ -266,6 +272,8 @@ public static partial class OfficeSceneUIBuilder
         label.raycastTarget = false;
         label.color = WbInk;
         SceneUiKit.Tag(label, ThemeRoleId.Surface, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button, false);
+        if (_kit != null)
+            SceneUiKit.SkinText(label, _kit.inkOnLight, _kit.labelFont, true); // sheet 02: the menu bar's titles in condensed capitals
         label.transform.SetAsLastSibling();
 
         SidePlate(title.transform);

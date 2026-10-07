@@ -32,7 +32,7 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Vector2 PullTabSize = new Vector2(112f, 124f);
 
     /// <summary>The speech bubble's tail (overlay units; the kit's sprite with its pad).</summary>
-    private static readonly Vector2 SpeechTailSize = new Vector2(46f, 42f);
+    private static readonly Vector2 SpeechTailSize = new Vector2(60f, 56f);
 
     /// <summary>A pull tab's keycap under its word (overlay units).</summary>
     private static readonly Vector2 PullTabKeycap = new Vector2(52f, 30f);
@@ -241,13 +241,14 @@ public static partial class OfficeSceneUIBuilder
             return;
         KitSkin(panel, "speech_bubble", _kit.overlayScale);
         // The tail under the bubble's bottom, pointing down at the traveller.
-        Transform tail = Panel(panel, "Tail", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 4f), SpeechTailSize, Color.white, ThemeRoleId.DiegeticBubble);
+        Transform tail = Panel(panel, "Tail", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, SpeechTailSize.y * 0.27f), SpeechTailSize, Color.white, ThemeRoleId.DiegeticBubble);
         ((RectTransform)tail).pivot = new Vector2(0.5f, 1f);
         Image tailImage = tail.GetComponent<Image>();
         tailImage.sprite = _kit.Get("speech_tail");
         tailImage.raycastTarget = false;
         tailImage.preserveAspect = true;
         SceneUiKit.Tag(tailImage, ThemeRoleId.DiegeticBubble, ThemePart.Kit);
+        tail.SetAsFirstSibling(); // behind the bubble: the bubble's ink line closes over the tail's top
         Transform label = panel.Find("Label");
         if (label != null)
             SceneUiKit.SkinText(label.GetComponent<TMP_Text>(), _kit.inkOnLight, _kit.bodyFont, false);
@@ -358,6 +359,7 @@ public static partial class OfficeSceneUIBuilder
             {
                 case ThemeRoleId.TitleBar:
                 case ThemeRoleId.StartButton:
+                case ThemeRoleId.ScreenStrip:
                     SceneUiKit.SkinText(text, _kit.inkOnDark, _kit.labelFont, true);
                     break;
                 case ThemeRoleId.Tray:
@@ -457,6 +459,8 @@ public static partial class OfficeSceneUIBuilder
             case ThemeRoleId.Tooltip:
             case ThemeRoleId.CompareBar:
                 return "tooltip";
+            case ThemeRoleId.ScreenStrip:
+                return image.name == "IdleScreen" ? "strip_slate" : null;
             case ThemeRoleId.Toast:
                 return image.GetComponent<Button>() == null ? "panel_dark" : null;
             case ThemeRoleId.Badge:
