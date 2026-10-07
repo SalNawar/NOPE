@@ -80,7 +80,10 @@ public static class HallAmbience
 public static class SoundCues
 {
     /// <summary>The stamps.</summary>
-    public const string StampApprove = "stamp_approve", StampDeny = "stamp_deny", StampMiss = "stamp_miss", StampBarOut = "stamp_bar_out", StampBarIn = "stamp_bar_in", StampLift = "stamp_lift";
+    public const string StampApprove = "stamp_approve", StampDeny = "stamp_deny", StampMiss = "stamp_miss", StampLift = "stamp_lift";
+
+    /// <summary>The brass stamp drawer (Track BR, Saleh 2026-10-08): opening, a typewriter's carriage-return carry and the clunk at the stop; closing, a shorter reverse rasp and a deep thud.</summary>
+    public const string DrawerOpen = "drawer_open", DrawerClose = "drawer_close";
 
     /// <summary>The papers.</summary>
     public const string PaperPickup = "paper_pickup", PaperDrop = "paper_drop", PaperSlide = "paper_slide";

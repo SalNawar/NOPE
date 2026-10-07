@@ -1475,17 +1475,19 @@ public static partial class OfficeSceneUIBuilder
     /// inactive until the booth shows it), the hint's plate at the top right
     /// under the case HUD's strip (inactive) and an AudioSource for the clacks.
     /// In the office: StampRack (inactive until slid out; the office binder
-    /// lays it, its origin at the daters' feet): a low lip in the art's DeskClean
-    /// green-dark at the daters' feet in front of them, with wooden end caps and
-    /// brass brackets to the two daters, and
-    /// the DENIED dater (left) and the APPROVED dater (right), each a click box
+    /// lays it, its origin at the daters' feet): the heavy brass drawer when its
+    /// art is in the project and complete (BuildBrassDrawer; PropArt.UseArt over
+    /// PropArt.BrassDrawer), its daters standing in its cradles and the
+    /// verdict words on its enamel plates; else (the fallback) a low lip in the
+    /// art's DeskClean green-dark at the daters' feet in front of them, with
+    /// wooden end caps and brass brackets to the two daters, the words on its
+    /// top; and the DENIED dater (left) and the APPROVED dater (right), each a click box
     /// on the Interactable layer (its pivot at its foot) with a DeskDraggable
     /// (the click box its proxy: the dater is dragged onto the paper) and a
     /// PointerHold (a held press), holding its body (DaterBody: the prop
-    /// contract's Body, Frame, Die and Wheels; green on APPROVED, red on DENIED);
-    /// the word printed on the lip's top in front of each dater, readable from the
-    /// reading view. The tray gets the papers' style, the date's face and
-    /// Saleh's dater sounds (WireDaters). The old overlay bar, the 3D tray of
+    /// contract's Body, Frame, Die and Wheels; green on APPROVED, red on DENIED).
+    /// The tray gets the papers' style, the date's face,
+    /// Saleh's dater sounds and the drawer's (WireDaters). The old overlay bar, the 3D tray of
     /// the desk-first redesign and the overlay's hand-back buttons are destroyed.
     /// </summary>
     private static DeskStampTray BuildStampTray(Transform overlay, Transform office, DeskConfigSO config)
@@ -1522,21 +1524,27 @@ public static partial class OfficeSceneUIBuilder
 
         // The rack in the office: x along the office view's right, z away from the chair, y up from the stamps' feet.
         Transform rack = EnsureChild(office, "StampRack");
+        BrassDrawer drawer = BuildBrassDrawer(rack);
         Material rail = DeskMaterial("GreenDark", new Color(0.204f, 0.294f, 0.275f));
         Material wood = DeskMaterial("Wood", new Color(0.537f, 0.392f, 0.282f));
         Material brass = DeskMaterial("Brass", new Color(0.72f, 0.58f, 0.3f));
         float railLength = 2f * (StampSpacing / 2f + StampRailOverhang);
-        // The lip at the daters' feet, in front of their frames (DaterHalfDepth), its top StampRailSection.y over the feet.
+        // The fallback's lip at the daters' feet, in front of their frames (DaterHalfDepth), its top StampRailSection.y over the feet.
         float lipZ = -(DaterHalfDepth + StampLipGap + StampRailSection.x / 2f);
-        PrimitivePart(rack, "Rail", PrimitiveType.Cube, new Vector3(0f, StampRailSection.y / 2f, lipZ), new Vector3(railLength, StampRailSection.y, StampRailSection.x), rail);
-        PrimitivePart(rack, "CapLeft", PrimitiveType.Cube, new Vector3(-railLength / 2f, (StampRailSection.y + 0.004f) / 2f, lipZ), new Vector3(0.012f, StampRailSection.y + 0.004f, StampRailSection.x + 0.006f), wood);
-        PrimitivePart(rack, "CapRight", PrimitiveType.Cube, new Vector3(railLength / 2f, (StampRailSection.y + 0.004f) / 2f, lipZ), new Vector3(0.012f, StampRailSection.y + 0.004f, StampRailSection.x + 0.006f), wood);
+        if (drawer == null)
+        {
+            PrimitivePart(rack, "Rail", PrimitiveType.Cube, new Vector3(0f, StampRailSection.y / 2f, lipZ), new Vector3(railLength, StampRailSection.y, StampRailSection.x), rail);
+            PrimitivePart(rack, "CapLeft", PrimitiveType.Cube, new Vector3(-railLength / 2f, (StampRailSection.y + 0.004f) / 2f, lipZ), new Vector3(0.012f, StampRailSection.y + 0.004f, StampRailSection.x + 0.006f), wood);
+            PrimitivePart(rack, "CapRight", PrimitiveType.Cube, new Vector3(railLength / 2f, (StampRailSection.y + 0.004f) / 2f, lipZ), new Vector3(0.012f, StampRailSection.y + 0.004f, StampRailSection.x + 0.006f), wood);
+        }
         Color labelInk = new Color(0.95f, 0.93f, 0.86f);
 
         (Clickable stamp, Transform die) Stamp(string name, float x, bool approved, string labelKey)
         {
-            Clickable click = EnsureClickBox(rack, name);
-            click.transform.localPosition = new Vector3(x, 0f, 0f);
+            // In the brass drawer the dater stands in its cradle (the cradle's origin is its back-foot edge); else on the rack.
+            Transform cradle = drawer != null ? drawer.Cradle(approved ? DrawerSequence.Approved : DrawerSequence.Denied) : null;
+            Clickable click = EnsureClickBox(cradle != null ? cradle : rack, name);
+            click.transform.localPosition = cradle != null ? new Vector3(0f, 0f, -BrassPivotDepth) : new Vector3(x, 0f, 0f);
             StampShape shape = DaterBody(click.transform, approved);
             var box = click.GetComponent<BoxCollider>();
             box.center = new Vector3(0f, shape.Top / 2f, 0f);
@@ -1544,11 +1552,16 @@ public static partial class OfficeSceneUIBuilder
             string word = UiText.Get(labelKey);
             Transform die = click.transform.Find("Die");
 
-            // The brass bracket from the lip to the dater's frame, and the word on the lip's top in front of the dater.
-            PrimitivePart(rack, name + "Arm", PrimitiveType.Cube, new Vector3(x, 0.002f, -(DaterHalfDepth + StampLipGap / 2f)), new Vector3(0.012f, 0.004f, StampLipGap + 0.002f), brass);
-            TextMeshPro label = FlatText(rack, name + "Label", new Vector3(x, StampRailSection.y + 0.0006f, lipZ),
-                                         new Vector2(StampSpacing - 0.012f, StampRailSection.x - 0.004f), 0.2f, labelInk, FontStyles.Bold);
-            label.text = word;
+            if (drawer != null)
+                PlateWord(drawer.transform.Find("Plate" + name), word);
+            else
+            {
+                // The brass bracket from the lip to the dater's frame, and the word on the lip's top in front of the dater.
+                PrimitivePart(rack, name + "Arm", PrimitiveType.Cube, new Vector3(x, 0.002f, -(DaterHalfDepth + StampLipGap / 2f)), new Vector3(0.012f, 0.004f, StampLipGap + 0.002f), brass);
+                TextMeshPro label = FlatText(rack, name + "Label", new Vector3(x, StampRailSection.y + 0.0006f, lipZ),
+                                             new Vector2(StampSpacing - 0.012f, StampRailSection.x - 0.004f), 0.2f, labelInk, FontStyles.Bold);
+                label.text = word;
+            }
 
             click.SetOutline(click.GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponent<TextMeshPro>() == null && r.name != "Window").ToArray());
             // The dater is moved, not the paper (Saleh 2026-10-06): left-drag carries it over the desk; its click box is the drag's proxy.
@@ -1572,6 +1585,7 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(stamps);
         SetRef(so, "config", config);
         SetRef(so, "rack", rack);
+        SetRef(so, "drawer", drawer);
         SetRef(so, "tab", tab);
         SetRef(so, "approvedStamp", approved);
         SetRef(so, "deniedStamp", denied);

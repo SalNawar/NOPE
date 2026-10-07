@@ -165,9 +165,11 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "approvedRelease", DaterSound("stamp_release"));
         SetRef(so, "deniedPress", DaterSound("stamp_press_deep"));
         SetRef(so, "deniedRelease", DaterSound("stamp_release_deep"));
+        SetRef(so, "drawerOpen", DaterSound("drawer_open"));
+        SetRef(so, "drawerClose", DaterSound("drawer_close"));
     }
 
-    /// <summary>A dater sound by its file name (a warning when it is missing: the dater is then silent there).</summary>
+    /// <summary>A dater's or the drawer's sound by its file name (a warning when it is missing: it is then silent there).</summary>
     private static AudioClip DaterSound(string file)
     {
         var clip = AssetDatabase.LoadAssetAtPath<AudioClip>($"{DaterSoundsFolder}/{file}.wav");
