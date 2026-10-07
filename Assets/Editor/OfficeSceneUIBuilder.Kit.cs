@@ -35,6 +35,9 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A pull tab's label's margin from the edge it is cut at (the screen's edge), in overlay units; its other side keeps clear of the grips by the sprite's inner 9-slice border (KitPullTab).</summary>
     private const float PullTabCutMargin = 6f;
 
+    /// <summary>A pull tab's word's ink: the palette's card (#FAF2E1), a shade lighter than the kit's bone ink on dark faces, because the word sits on the tab's airbrushed sheen (the left tab's word, kept clear of its grips, reads 4.4:1 in bone; the readability check needs 4.5:1).</summary>
+    private static readonly Color PullTabInk = new Color(0.98f, 0.949f, 0.882f, 1f);
+
     /// <summary>The speech bubble's tail (overlay units; the kit's sprite with its pad).</summary>
     private static readonly Vector2 SpeechTailSize = new Vector2(60f, 56f);
 
@@ -182,7 +185,7 @@ public static partial class OfficeSceneUIBuilder
             TMP_Text text = label.GetComponent<TMP_Text>();
             text.alignment = TextAlignmentOptions.Center;
             text.margin = Vector4.zero;
-            SceneUiKit.SkinText(text, _kit, KitText.PullTabLabel, tabRect.sizeDelta.x, _kit.inkOnDark, 0f, tabRect);
+            SceneUiKit.SkinText(text, _kit, KitText.PullTabLabel, tabRect.sizeDelta.x, PullTabInk, 0f, tabRect);
         }
         KitKeycap(tab, "Keycap", "keycap_bone", key, new Vector2(centre, 0.3f), PullTabKeycap);
     }
