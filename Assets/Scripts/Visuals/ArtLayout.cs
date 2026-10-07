@@ -39,9 +39,35 @@ public static class ArtLayout
     /// <summary>
     /// <paramref name="text"/> in capitals as a printed form sets them: upper
     /// case (invariant), a Greek capital without its accent (Greek writes
-    /// capitals bare: "Υπηρεσία" gives ΥΠΗΡΕΣΙΑ; the diaeresis stays).
+    /// capitals bare: "Υπηρεσία" gives ΥΠΗΡΕΣΙΑ; the diaeresis stays); a
+    /// rich-text tag ("&lt;size=60%&gt;") is kept as it is.
     /// </summary>
     public static string Capitals(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return text ?? string.Empty;
+        if (text.IndexOf('<') < 0)
+            return PlainCapitals(text);
+        var sb = new System.Text.StringBuilder(text.Length);
+        int at = 0;
+        while (at < text.Length)
+        {
+            int open = text.IndexOf('<', at);
+            int close = open >= 0 ? text.IndexOf('>', open) : -1;
+            if (open < 0 || close < 0)
+            {
+                sb.Append(PlainCapitals(text.Substring(at)));
+                break;
+            }
+            sb.Append(PlainCapitals(text.Substring(at, open - at)));
+            sb.Append(text, open, close - open + 1);
+            at = close + 1;
+        }
+        return sb.ToString();
+    }
+
+    /// <summary><see cref="Capitals"/> of a text without tags.</summary>
+    private static string PlainCapitals(string text)
     {
         if (string.IsNullOrEmpty(text))
             return text ?? string.Empty;

@@ -205,11 +205,18 @@ public static class _TimeDeskQASweep
         RunManager.Instance.Config.fixedRunSeed = Seed;
         yield return Frames(5);
         yield return Title();
+        if (Culture.Length == 0 && !string.IsNullOrEmpty(RunManager.Instance.World.history.leaderId))
+        {
+            HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, string.Empty);
+            CultureThemeService.RefreshActive();
+            Note("a leader forced earlier in this editor session (DevToolsState) is cleared: the run as found");
+        }
         if (Culture.Length > 0)
         {
             UiLanguagePreference.AlwaysEnglish = false;
             HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, Culture);
-            Note($"culture: {Culture} leads from day 1 (HistoryService.ForceLeader), Settings on Follow history");
+            CultureThemeService.RefreshActive();
+            Note($"culture: {Culture} leads from day 1 (HistoryService.ForceLeader, the theme refreshed before the office loads, as after a night), Settings on Follow history");
         }
         yield return OfficeDay1();
         yield return HomeNight();
@@ -219,7 +226,38 @@ public static class _TimeDeskQASweep
         RunManager.Instance.JumpToDay(5);
         WorldChange();
         yield return OfficeDay5();
+        if (Culture.Length > 0)
+            yield return SwitchLanguage();
         yield return TitleContinue();
+        ClearLeader();
+    }
+
+    /// <summary>
+    /// The language changing mid-run (track LANG): another nation leads and
+    /// the theme refreshes in the office; every builder-printed word
+    /// (KeyedText) prints again in the new language (CultureThemeService.LabelsChanged).
+    /// </summary>
+    private static IEnumerator SwitchLanguage()
+    {
+        string other = Culture == "japan" ? "egypt" : "japan";
+        TMP_Text[] keyed = Object.FindObjectsByType<KeyedText>(FindObjectsInactive.Include, FindObjectsSortMode.None).Select(k => k.GetComponent<TMP_Text>()).ToArray();
+        string[] before = keyed.Select(t => t.text).ToArray();
+        HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, other);
+        CultureThemeService.RefreshActive();
+        yield return Frames(5);
+        int changed = keyed.Where((t, i) => t.text != before[i]).Count();
+        Check(keyed.Length > 0 && changed == keyed.Length, $"language switch to {other}'s mid-run: {changed} of {keyed.Length} builder-printed words print again in it");
+        yield return Shot("office", "switched_to_" + other);
+        HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, Culture);
+        CultureThemeService.RefreshActive();
+        yield return Frames(3);
+    }
+
+    /// <summary>Clears the forced leader (DevToolsState keeps it for the editor session) before the sweep ends.</summary>
+    private static void ClearLeader()
+    {
+        if (RunManager.HasInstance && RunManager.Instance.World != null)
+            HistoryService.ForceLeader(RunManager.Instance.World, RunManager.Instance.Library, string.Empty);
     }
 
     /// <summary>

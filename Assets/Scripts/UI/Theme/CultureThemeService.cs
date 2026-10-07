@@ -385,7 +385,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
             image.color = ink ? entry.ink : entry.fill;
     }
 
-    /// <summary>A themed text: ink (not a kit text's), font (a kit face unless the labels are in a culture's script), style (italics stripped or additions), shrink-to-fit, and its label when keyed.</summary>
+    /// <summary>A themed text: ink (not a kit text's), font (a kit face unless the labels are in a culture's script), style (italics stripped or additions), shrink-to-fit, and its label when keyed; a culture's label set in capitals by its style is written in capitals itself (ArtLayout.Capitals: TMP's capitals keep a Greek word's accents, Greek capitals drop them).</summary>
     private void ApplyText(ThemeTag tag, TMP_Text text, PaletteEntry entry)
     {
         if (entry.hasInk && tag.Part != ThemePart.Kit)
@@ -403,6 +403,8 @@ public sealed class CultureThemeService : TimelineCueReceiver
 
         if (!string.IsNullOrEmpty(tag.LabelKey))
             text.text = UiText.Get(tag.LabelKey);
+        if ((text.fontStyle & FontStyles.UpperCase) != 0 && Language == LabelLanguage.Culture)
+            text.text = ArtLayout.Capitals(text.text);
     }
 
     /// <summary>No wrapping; auto-size from labelMinScale of the text's first size to that size (R21).</summary>

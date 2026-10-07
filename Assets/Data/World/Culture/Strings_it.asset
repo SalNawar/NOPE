@@ -213,7 +213,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: icon.account
-    text: Conto del cittadino
+    text: Conto cittadino
     gloss: 0
     tier: 0
   - key: icon.settings
