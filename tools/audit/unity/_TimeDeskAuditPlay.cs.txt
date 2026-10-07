@@ -831,7 +831,8 @@ public static class _TimeDeskAuditPlay
                 {
                     Call(o.Desk, "HandlePaperClicked", other, -1);
                     yield return Seconds(0.5f);
-                    yield return DragStamp(o, !accept, other.Sheet.position);
+                    // A point of that paper that shows (no other paper over it there: DeskController.Shows); the passport's visa page lies under the daters now and may cover the paper's middle.
+                    yield return DragStamp(o, !accept, ShownPoint(o, other));
                     yield return Settle(() => !o.Stamps.IsMoving, 5f);
                     Check(o.Stamps.LastPress == StampPress.NotPassport && !o.Stamps.HasVerdict,
                           $"d{day} slot {slot}: a stamp dragged onto paper {other.Index} (not the passport) is refused: only the passport takes a verdict ({o.Stamps.LastPress})");
@@ -1003,6 +1004,32 @@ public static class _TimeDeskAuditPlay
         Check(detain.CoverOpen, "the DETAIN button's cover flips up at a click");
         Click((Clickable)Field(detain, "buttonClick"));
         yield return Frames(2);
+    }
+
+    /// <summary>The point of <paramref name="paper"/> nearest its middle that the office camera sees on it (DeskController.Shows: no other paper over it), on a 9 x 9 grid over its sheet; its middle when none shows.</summary>
+    private static Vector3 ShownPoint(Office o, DeskDocument paper)
+    {
+        Camera cam = OfficeRaycaster().eventCamera;
+        Renderer[] parts = paper.Sheet.GetComponentsInChildren<Renderer>(false);
+        if (parts.Length == 0 || cam == null)
+            return paper.Sheet.position;
+        Bounds b = parts[0].bounds;
+        foreach (Renderer r in parts)
+            b.Encapsulate(r.bounds);
+        Vector3 best = paper.Sheet.position;
+        float nearest = float.MaxValue;
+        for (int i = 1; i < 10; i++)
+            for (int j = 1; j < 10; j++)
+            {
+                var p = new Vector3(Mathf.Lerp(b.min.x, b.max.x, i / 10f), b.max.y, Mathf.Lerp(b.min.z, b.max.z, j / 10f));
+                float d = (p - b.center).sqrMagnitude;
+                if (d < nearest && o.Desk.Shows(paper.Index, p, cam))
+                {
+                    nearest = d;
+                    best = p;
+                }
+            }
+        return best;
     }
 
     /// <summary>A left-click on <paramref name="target"/> as the EventSystem delivers it.</summary>
