@@ -7,8 +7,8 @@ using UnityEngine;
 /// (DevCheats.Register; the hall slots spec): each "Hall:" button steps one
 /// of the hall's variables through its values (the run's own first, then
 /// each value: HallSlotsDev's overrides), "Hall: the run's" clears them all,
-/// "Hall: stand-ins" shows the stand-in of every slot whose art is missing
-/// (the registered layers' too) or only the new overlays'. The hall swaps at
+/// "Hall: stand-ins" turns on or off the stand-in of every slot whose art is
+/// missing (off by default). The hall swaps at
 /// once and logs its state and picks.
 /// </summary>
 public static class HallSlotsCheats
@@ -65,7 +65,7 @@ public static class HallSlotsCheats
     {
         HallSlotsDev.Changed();
         HallSlotsLink link = HallSlotsLink.Live;
-        Debug.Log($"[HallSlotsCheats] overrides: stand-ins {(HallSlotsDev.ShowAllStandIns ? "all" : "new overlays")}, culture={HallSlotsDev.Culture ?? "run"} tier={(HallSlotsDev.Tier?.ToString() ?? "run")} phase={(HallSlotsDev.Phase?.ToString() ?? "run")} event={(HallSlotsDev.Event?.ToString() ?? "run")} exhibit={HallSlotsDev.Exhibit ?? "run"}; the hall {(link != null ? "re-reads its state" : "is not loaded")}.");
+        Debug.Log($"[HallSlotsCheats] overrides: stand-ins {(HallSlotsDev.ShowAllStandIns ? "on" : "off")}, culture={HallSlotsDev.Culture ?? "run"} tier={(HallSlotsDev.Tier?.ToString() ?? "run")} phase={(HallSlotsDev.Phase?.ToString() ?? "run")} event={(HallSlotsDev.Event?.ToString() ?? "run")} exhibit={HallSlotsDev.Exhibit ?? "run"}; the hall {(link != null ? "re-reads its state" : "is not loaded")}.");
     }
 }
 #endif

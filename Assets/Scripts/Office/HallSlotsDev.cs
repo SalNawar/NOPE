@@ -22,7 +22,7 @@ public static class HallSlotsDev
     /// <summary>The famous nation shown as both the strongest and the latest exhibit ("none" or a nation id; it also counts one let through), or null for the run's.</summary>
     public static string Exhibit;
 
-    /// <summary>True to draw the stand-in of every slot whose picked art is missing, the registered layers' too (by default only the new overlays').</summary>
+    /// <summary>True to draw the stand-in of every slot whose picked art is missing (off by default: no stand-ins in play unless the cheat asks).</summary>
     public static bool ShowAllStandIns;
 
     /// <summary>Counts the changes, so the link re-reads the state at the next frame.</summary>
