@@ -56,6 +56,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>The code-drawn stamp frame's texture size in pixels (width, height).</summary>
     private const int StampPixelsWide = 224, StampPixelsHigh = 80;
 
+    /// <summary>The code-drawn stamp's word: its inset from the frame's edge (frame pixels, just inside the hairline at 13) and the least share of its full size it may shrink to.</summary>
+    private const float StampWordInset = 17f, StampWordMinShare = 0.3f;
+
     /// <summary>The code-drawn stamps' inks: the approval's green and the denial's red.</summary>
     private static readonly Color ApprovedInk = new Color(0.12f, 0.47f, 0.23f), DeniedInk = new Color(0.7f, 0.15f, 0.12f);
 
@@ -567,7 +570,11 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             word.color = ink;
             word.alignment = TextAlignmentOptions.Center;
             word.textWrappingMode = TextWrappingModes.NoWrap;
-            word.rectTransform.sizeDelta = new Vector2(r.width, r.height);
+            // The word fits inside the frame's inner line (a long word like APPROVED shrinks rather than crossing the frame).
+            word.enableAutoSizing = true;
+            word.fontSizeMax = word.fontSize;
+            word.fontSizeMin = word.fontSize * StampWordMinShare;
+            word.rectTransform.sizeDelta = new Vector2(r.width * (1f - 2f * StampWordInset / StampPixelsWide), r.height * (1f - 2f * StampWordInset / StampPixelsHigh));
             word.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -InkLift - 0.0001f);
             word.rectTransform.localRotation = Quaternion.Euler(0f, 0f, tilt);
             word.GetComponent<MeshRenderer>().enabled = true;
