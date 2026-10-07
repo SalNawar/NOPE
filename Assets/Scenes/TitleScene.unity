@@ -951,6 +951,7 @@ GameObject:
   - component: {fileID: 308353880}
   - component: {fileID: 308353879}
   - component: {fileID: 308353881}
+  - component: {fileID: 308353882}
   m_Layer: 0
   m_Name: AdoptButton
   m_TagString: Untagged
@@ -1061,6 +1062,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &308353882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308353877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &359519626
 GameObject:
   m_ObjectHideFlags: 0
@@ -2091,6 +2104,7 @@ GameObject:
   - component: {fileID: 643323304}
   - component: {fileID: 643323303}
   - component: {fileID: 643323305}
+  - component: {fileID: 643323306}
   m_Layer: 0
   m_Name: DogButton
   m_TagString: Untagged
@@ -2202,6 +2216,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &643323306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643323301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &680953973
 GameObject:
   m_ObjectHideFlags: 0
@@ -2405,6 +2431,7 @@ GameObject:
   - component: {fileID: 774019514}
   - component: {fileID: 774019513}
   - component: {fileID: 774019512}
+  - component: {fileID: 774019516}
   m_Layer: 0
   m_Name: NewRunButton
   m_TagString: Untagged
@@ -2515,6 +2542,18 @@ RectTransform:
   m_AnchoredPosition: {x: 190, y: 30}
   m_SizeDelta: {x: 440, y: 70}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &774019516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774019511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &800623672
 GameObject:
   m_ObjectHideFlags: 0
@@ -2780,6 +2819,7 @@ GameObject:
   - component: {fileID: 810446771}
   - component: {fileID: 810446770}
   - component: {fileID: 810446772}
+  - component: {fileID: 810446773}
   m_Layer: 0
   m_Name: BackButton
   m_TagString: Untagged
@@ -2890,6 +2930,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &810446773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810446768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &832905806
 GameObject:
   m_ObjectHideFlags: 0
@@ -3924,6 +3976,7 @@ GameObject:
   - component: {fileID: 1107060446}
   - component: {fileID: 1107060445}
   - component: {fileID: 1107060447}
+  - component: {fileID: 1107060448}
   m_Layer: 0
   m_Name: CatButton
   m_TagString: Untagged
@@ -4035,6 +4088,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1107060448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107060443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &1116344259
 GameObject:
   m_ObjectHideFlags: 0
@@ -4437,6 +4502,7 @@ GameObject:
   - component: {fileID: 1311911538}
   - component: {fileID: 1311911537}
   - component: {fileID: 1311911539}
+  - component: {fileID: 1311911540}
   m_Layer: 0
   m_Name: WorldButton
   m_TagString: Untagged
@@ -4547,6 +4613,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1311911540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311911534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &1382115337
 GameObject:
   m_ObjectHideFlags: 0
@@ -4559,6 +4637,7 @@ GameObject:
   - component: {fileID: 1382115340}
   - component: {fileID: 1382115339}
   - component: {fileID: 1382115341}
+  - component: {fileID: 1382115342}
   m_Layer: 0
   m_Name: ContinueButton
   m_TagString: Untagged
@@ -4669,6 +4748,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1382115342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382115337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &1388762401
 GameObject:
   m_ObjectHideFlags: 0
@@ -5622,6 +5713,7 @@ GameObject:
   - component: {fileID: 1573941130}
   - component: {fileID: 1573941129}
   - component: {fileID: 1573941131}
+  - component: {fileID: 1573941132}
   m_Layer: 0
   m_Name: NewRunButton
   m_TagString: Untagged
@@ -5732,6 +5824,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1573941132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573941127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &1580224397
 GameObject:
   m_ObjectHideFlags: 0
@@ -6308,6 +6412,7 @@ GameObject:
   - component: {fileID: 1760020824}
   - component: {fileID: 1760020823}
   - component: {fileID: 1760020825}
+  - component: {fileID: 1760020826}
   m_Layer: 0
   m_Name: NewRunButton
   m_TagString: Untagged
@@ -6418,6 +6523,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1760020826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760020820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiJuice
 --- !u!1 &1764294173
 GameObject:
   m_ObjectHideFlags: 0
