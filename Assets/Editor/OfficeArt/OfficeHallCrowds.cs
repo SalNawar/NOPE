@@ -20,13 +20,13 @@ public static class OfficeHallCrowds
     const string FloorPath = "HybridOffice/Hall/Blender_HallFloor/Hall_Floor__Hall_Floor";
 
     /// <summary>Shows the morning palette (in edit mode an undoable scene change: set Follow Shift again before saving).</summary>
-    [MenuItem("Tools/Office Art/Hall Crowds/Preview Morning")]
+    [MenuItem("Tools/Terminal Art/Office Scene/Hall Crowds/Preview Morning")]
     public static void Morning()=>Preview(OfficeHallCrowdPalette.PreviewMode.Morning);
     /// <summary>Shows the evening palette.</summary>
-    [MenuItem("Tools/Office Art/Hall Crowds/Preview Evening")]
+    [MenuItem("Tools/Terminal Art/Office Scene/Hall Crowds/Preview Evening")]
     public static void Evening()=>Preview(OfficeHallCrowdPalette.PreviewMode.Evening);
     /// <summary>Follows the gameplay shift clock: the mode to leave selected for play.</summary>
-    [MenuItem("Tools/Office Art/Hall Crowds/Follow Shift")]
+    [MenuItem("Tools/Terminal Art/Office Scene/Hall Crowds/Follow Shift")]
     public static void Automatic()=>Preview(OfficeHallCrowdPalette.PreviewMode.Automatic);
     /// <summary>Sets the palette's mode; refuses when the open scene has no crowds.</summary>
     static void Preview(OfficeHallCrowdPalette.PreviewMode mode)
@@ -80,7 +80,7 @@ public static class OfficeHallCrowds
     /// play mode a live shift clock for Follow Shift. Writes validation_{mode}.json and logs
     /// an error on failure.
     /// </summary>
-    [MenuItem("Tools/Office Art/Hall Crowds/Validate")]
+    [MenuItem("Tools/Terminal Art/Office Scene/Hall Crowds/Validate")]
     public static void Validate()
     {
         var report=new Check();var root=GameObject.Find(Root);

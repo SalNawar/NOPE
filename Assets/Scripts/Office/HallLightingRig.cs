@@ -43,6 +43,7 @@ public sealed class HallLightingRig : MonoBehaviour
     private const int MaxPortal = 8;
 
     private HallBakedLighting _baked;
+    private bool _bakedLooked;
     private HallLight[] _lights = System.Array.Empty<HallLight>();
     private readonly bool[] _portalOpen = new bool[MaxPortal + 1];
     private readonly bool[] _portalReturns = new bool[MaxPortal + 1];
@@ -66,8 +67,21 @@ public sealed class HallLightingRig : MonoBehaviour
     /// <summary>The art presentation's evening for <see cref="Hour"/> (0 by day, 1 at night; AnimeHallShiftLink hands it to SetTime).</summary>
     public float Evening => settings != null ? HallDayCycle.Evening(Hour, settings.Cycle) : 0f;
 
-    /// <summary>What the traveller's tint is multiplied by at <see cref="Hour"/> (white without knobs).</summary>
-    public Color TravellerShade => (_baked ??= GetComponent<HallBakedLighting>()) != null && _baked.isActiveAndEnabled ? _baked.TravellerShade : settings != null ? settings.travellerShade.Evaluate(HallDayCycle.SolarPosition(Hour, settings.Cycle)) : Color.white;
+    /// <summary>What the traveller's tint is multiplied by at <see cref="Hour"/>: the baked hall's shade (HallBakedLighting on this object, looked up once per enable) when it is on, else the knobs' gradient (white without knobs).</summary>
+    public Color TravellerShade
+    {
+        get
+        {
+            if (!_bakedLooked)
+            {
+                _baked = GetComponent<HallBakedLighting>();
+                _bakedLooked = true;
+            }
+            if (_baked != null && _baked.isActiveAndEnabled)
+                return _baked.TravellerShade;
+            return settings != null ? settings.travellerShade.Evaluate(HallDayCycle.SolarPosition(Hour, settings.Cycle)) : Color.white;
+        }
+    }
 
     /// <summary>The layer a gameplay drawing among the painted layers must be on to draw with them (the portal rings' effects); -1 when the 2D pass is off (they draw with the office camera).</summary>
     public int ArtLayer => backdrop != null && backdrop.Active ? backdrop.Layer : -1;
@@ -90,6 +104,7 @@ public sealed class HallLightingRig : MonoBehaviour
 
     private void OnEnable()
     {
+        _bakedLooked = false;
         Gather();
         _reduced = MotionPreference.Reduced;
         MotionPreference.Changed += OnMotionChanged;

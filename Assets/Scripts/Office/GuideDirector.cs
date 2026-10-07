@@ -55,6 +55,9 @@ public sealed class GuideDirector : MonoBehaviour
     /// <summary>The reading view: the new rule's moment tilts into it, so the rulebook's open page is read; Got it returns.</summary>
     [SerializeField] private DeskView deskView;
 
+    /// <summary>The city view (optional): while the player looks at the city the arrow hides (what it points at is behind the panorama); the plate stays.</summary>
+    [SerializeField] private CityView city;
+
     [Header("Where the arrows point (GuideTargets)")]
     /// <summary>The AVAILABLE sign's click box ("sign").</summary>
     [SerializeField] private Transform sign;
@@ -391,7 +394,7 @@ public sealed class GuideDirector : MonoBehaviour
 
     // ---- The arrow ----
 
-    /// <summary>Places the arrow at the target this frame; on the PC only a prompt pointing at the PC shows.</summary>
+    /// <summary>Places the arrow at the target this frame; on the PC only a prompt pointing at the PC shows; while the player looks at the city the arrow hides.</summary>
     private void LateUpdate()
     {
         if (prompt == null || _showing == Showing.None)
@@ -407,7 +410,7 @@ public sealed class GuideDirector : MonoBehaviour
         }
         if (!prompt.IsShown)
             prompt.Show(prompt.Header, prompt.Line, _showing == Showing.Step);
-        if (string.IsNullOrEmpty(_target))
+        if (string.IsNullOrEmpty(_target) || (city != null && city.IsOn))
         {
             prompt.HideArrow();
             return;

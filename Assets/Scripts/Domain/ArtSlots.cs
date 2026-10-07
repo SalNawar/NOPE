@@ -65,9 +65,6 @@ public static class ArtSlots
     /// <summary>A reference book's cover by the category it lists (the asset list's book ids: the Geography book is the capitals', the Politics book the rulers').</summary>
     public static string BookCover(ClueCategory category) => "Investigation/refbook_cover_" + BookId(category);
 
-    /// <summary>The painting of the 2150 city seen when the player looks left (the desk-first redesign, item 6); without it CityView draws its code-drawn skyline.</summary>
-    public const string CityView = "City/city_view";
-
     /// <summary>The verdict's ink mark on the papers: the tick for an accept, the cross for a deny.</summary>
     public static string VerdictMark(bool accepted) => accepted ? "Forms/stamp_accept" : "Forms/stamp_deny";
 

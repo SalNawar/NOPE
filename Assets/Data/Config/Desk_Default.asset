@@ -22,7 +22,6 @@ MonoBehaviour:
   cloneBrightness: 1
   cloneFill: 0.92
   scanSeconds: 1.5
-  analysisScanSeconds: 3
   scanHintKey: desk.scanHint
   scanHintUntilDay: 5
   paperSize: {x: 0.26, y: 0.34}
@@ -31,7 +30,6 @@ MonoBehaviour:
   - {x: 0.74, y: 0.5}
   - {x: 0.27, y: 0.45}
   - {x: 0.55, y: 0.28}
-  landingGrid: {x: 5, y: 4}
   paperSlideSeconds: 0.25
   paperStackStep: 0.0015
   heldPaperLift: 0.02
@@ -48,61 +46,4 @@ MonoBehaviour:
   bubbleMinSeconds: 1.5
   bubbleOffset: {x: 0, y: 290}
   reactionSeconds: 2.5
-  examine:
-    officeHeight: 0.44
-    officeCentreX: 0.2
-    officeBottom: 0.02
-    wheelDip: 0.2
-    frameHeight: 0.62
-    frameMinHeight: 0.3
-    margin: 0.02
-    gap: 0.03
-    distance: 0.6
-    nearMargin: 1.5
-    deskMargin: 0.8
-    roll: 0
-    seconds: 0.18
-  examineTint: {r: 1, g: 1, b: 1, a: 1}
-  stampTrayOffset: {x: 0, y: 140}
-  deskView:
-    forward: 0.6
-    rise: 0.3
-    pitch: -4
-    seconds: 0.35
-  hallEveningStartsAt: 0.5
-  hallEveningFullAt: 0.9
-  hallCalendarDayInk: {r: 0, g: 0, b: 0, a: 1}
-  hallCalendarEveningInk: {r: 1, g: 1, b: 1, a: 1}
-  hallCalendarEveningInkFrom: 0.555
-  hallBoardInk: {r: 1, g: 0.949, b: 0.851, a: 1}
-  hallBoardStateInk: {r: 1, g: 0.62, b: 0.4, a: 1}
-  hallBoardInset: 0.08
-  hallPortalLayers:
-  - portal: 1
-    bay: 38 Portal 01 front secure bay
-    ring: 39 Portal 01 front metal ring
-    glass: 53 Portal 01 front painted glass
-  - portal: 2
-    bay: 40 Portal 02 rear left secure bay
-    ring: 41 Portal 02 rear left metal ring
-    glass: 54 Portal 02 rear left painted glass
-  - portal: 3
-    bay: 42 Portal 03 rear right secure bay
-    ring: 43 Portal 03 rear right metal ring
-    glass: 55 Portal 03 rear right painted glass
-  - portal: 4
-    bay: 44 Portal 04 upper left secure bay
-    ring: 45 Portal 04 upper left metal ring
-    glass: 56 Portal 04 upper left painted glass
-  - portal: 5
-    bay: 46 Portal 05 upper right secure bay
-    ring: 47 Portal 05 upper right metal ring
-    glass: 57 Portal 05 upper right painted glass
-  hallPortalGlowTint: {r: 0.35, g: 0.85, b: 1, a: 0.9}
-  hallReturnGateTint: {r: 1, g: 0.6, b: 0.15, a: 0.95}
-  hallPortalGlowSize: 0.85
-  hallPortalSpinDegrees: 12
-  hallPortalPulseScale: 1.3
-  hallPortalPulseSeconds: 0.8
   readyCaptionKey: desk.readyCaption
-  readyPausedInk: {r: 0.42, g: 0.4, b: 0.37, a: 1}
