@@ -5,21 +5,21 @@ Fresh main-based branch codex/famous-travellers-33. Sources: Production/FAMOUS_P
 | Character | Neutral | Happy | Angry | Worried | Explaining | Thinking | Objecting |
 |---|---|---|---|---|---|---|---|
 | Julius Caesar | reviewed | reviewed | reviewed | reviewed | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
-| Ramesses II | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Akira Kurosawa | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Saladin | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
-| Cleopatra | pending | pending | pending | pending | pending | pending | pending |
-| Ludwig van Beethoven | pending | pending | pending | pending | pending | pending | pending |
-| Oda Nobunaga | pending | pending | pending | pending | pending | pending | pending |
-| Alexander the Great | pending | pending | pending | pending | pending | pending | pending |
-| Charles Darwin | pending | pending | pending | pending | pending | pending | pending |
-| Sun Tzu | pending | pending | pending | pending | pending | pending | pending |
-| Albert Einstein | pending | pending | pending | pending | pending | pending | pending |
-| Karl Marx | pending | pending | pending | pending | pending | pending | pending |
-| Martin Luther | pending | pending | pending | pending | pending | pending | pending |
-| Isaac Newton | pending | pending | pending | pending | pending | pending | pending |
-| Michelangelo Buonarroti | pending | pending | pending | pending | pending | pending | pending |
-| Alan Turing | pending | pending | pending | pending | pending | pending | pending |
+| Ramesses II | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Akira Kurosawa | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Saladin | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Cleopatra | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending | reviewed; registration pending |
+| Ludwig van Beethoven | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Oda Nobunaga | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Alexander the Great | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Charles Darwin | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Sun Tzu | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Albert Einstein | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Karl Marx | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Martin Luther | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Isaac Newton | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Michelangelo Buonarroti | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
+| Alan Turing | reviewed; registration pending | pending | pending | pending | pending | pending | pending |
 | Confucius | pending | pending | pending | pending | pending | pending | pending |
 | Aristotle | pending | pending | pending | pending | pending | pending | pending |
 | Katsushika Hokusai | pending | pending | pending | pending | pending | pending | pending |
