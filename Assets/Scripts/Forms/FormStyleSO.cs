@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -81,6 +82,13 @@ public sealed class FormStyleSO : ScriptableObject
     /// <summary>How much heavier the printed words are than the font (TextMeshPro's face dilate on the paper's text material): a held paper's small print needs the weight to read at 720p as drawn. Build Office UI writes it into the material.</summary>
     [Header("Print")]
     [Range(0f, 0.5f)] public float inkWeight = 0.2f;
+
+    /// <summary>The font a document drawn on its art prints its values in (FormArt, the Canva documents: a typewriter's monospace on the art's ink); null: the paper's own font.</summary>
+    [Header("Documents on their art")]
+    public TMP_FontAsset artValueFont;
+
+    /// <summary>The font a document drawn on its art prints the labels it relabels in (the art's condensed capitals); null: the paper's own font.</summary>
+    public TMP_FontAsset artLabelFont;
 
     /// <summary>The colour a text of <paramref name="role"/> is printed in.</summary>
     public Color Ink(FormTextRole role)

@@ -86,6 +86,43 @@ public sealed class TmpFormText : ITextMeasure
             target.fontSharedMaterial = _material;
     }
 
+    /// <summary>
+    /// Puts <paramref name="text"/> (styled for <paramref name="item"/>'s role
+    /// by Style) in the look of a document drawn on its art
+    /// (<paramref name="art"/>; the Canva documents): a value or a hand in
+    /// <paramref name="style"/>'s art value font, a printed label or caption in
+    /// its art label font (each in the font's own material), in the art's inks
+    /// (ArtInk), centred down its place (at its left, or across it for a centred
+    /// item), and shrunk as far as ArtLayout.FitFloor so it fits its place
+    /// (TextMeshPro's auto size, from the size it was styled at). The desk
+    /// paper and the PC's copy print every text on the art through it.
+    /// </summary>
+    public static void OnArt(TMP_Text text, FormItem item, FormStyleSO style, FormArt art)
+    {
+        bool label = item.Role == FormTextRole.Label || item.Role == FormTextRole.Caption;
+        TMP_FontAsset font = style == null ? null : label ? style.artLabelFont : style.artValueFont;
+        if (font != null && text.font != font)
+        {
+            text.font = font;
+            text.fontSharedMaterial = font.material;
+        }
+        text.fontSizeMax = text.fontSize;
+        text.fontSizeMin = text.fontSize * ArtLayout.FitFloor;
+        text.enableAutoSizing = true;
+        text.alignment = item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Center : TextAlignmentOptions.Left;
+        text.color = ArtInk(art, item.Role, style);
+    }
+
+    /// <summary>The ink a text of <paramref name="role"/> prints in on <paramref name="art"/>: a caption in its stamp ink (the visa box's), a label or a caption without one in its label ink, any other in its value ink, each the style's (FormStyleSO.Ink) when the art names none.</summary>
+    public static Color ArtInk(FormArt art, FormTextRole role, FormStyleSO style)
+    {
+        bool label = role == FormTextRole.Label || role == FormTextRole.Caption;
+        string hex = art == null ? null : role == FormTextRole.Caption && !string.IsNullOrEmpty(art.stampInk) ? art.stampInk : label ? art.labelInk : art.ink;
+        if (Rgba.TryParseHex(hex, out Rgba ink))
+            return new Color(ink.R, ink.G, ink.B, 1f);
+        return style != null ? style.Ink(role) : Color.black;
+    }
+
     /// <summary>Sets <paramref name="text"/> to a role's type style at a size in its units: bold and small capitals by role, a fixed size, words wrapping, nothing cut.</summary>
     public static void Style(TMP_Text text, FormTextRole role, float size)
     {
@@ -96,6 +133,8 @@ public sealed class TmpFormText : ITextMeasure
             styles |= FontStyles.Bold;
         if (FormTextStyles.IsSmallCaps(role))
             styles |= FontStyles.SmallCaps;
+        if (FormTextStyles.IsItalic(role))
+            styles |= FontStyles.Italic;
         text.fontStyle = styles;
         text.textWrappingMode = TextWrappingModes.Normal;
         text.overflowMode = TextOverflowModes.Overflow;

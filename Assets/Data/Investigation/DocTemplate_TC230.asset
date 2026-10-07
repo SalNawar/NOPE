@@ -111,5 +111,126 @@ MonoBehaviour:
       frame: 4
       accent: '#1D5A36'
       paper: '#E4F0E2'
-      aspect: 1.15
+      aspect: 1.2938
       scale: 0.5
+      art:
+        corner: 0.00917
+        ink: '#2B1C24'
+        labelInk: '#60261B'
+        valueShare: 0.45
+        labelShare: 0.56
+        fields:
+        - field: 0
+          value:
+            x0: 0.26417
+            y0: 0.55094
+            x1: 0.56417
+            y1: 0.60916
+          label:
+            x0: 0.06917
+            y0: 0.55633
+            x1: 0.2525
+            y1: 0.6027
+          relabel: 0
+        - field: 1
+          value:
+            x0: 0.26417
+            y0: 0.4814
+            x1: 0.56417
+            y1: 0.53962
+          label:
+            x0: 0.06917
+            y0: 0.48625
+            x1: 0.2525
+            y1: 0.53315
+          relabel: 1
+        - field: 2
+          value:
+            x0: 0.26417
+            y0: 0.83342
+            x1: 0.56417
+            y1: 0.89164
+          label:
+            x0: 0.06917
+            y0: 0.83827
+            x1: 0.2525
+            y1: 0.88518
+          relabel: 1
+        - field: 3
+          value:
+            x0: 0.26417
+            y0: 0.62102
+            x1: 0.56417
+            y1: 0.67925
+          label:
+            x0: 0.06917
+            y0: 0.62642
+            x1: 0.2525
+            y1: 0.67278
+          relabel: 1
+        - field: 4
+          value:
+            x0: 0.26417
+            y0: 0.69218
+            x1: 0.56417
+            y1: 0.7504
+          label:
+            x0: 0.06917
+            y0: 0.69757
+            x1: 0.2525
+            y1: 0.74394
+          relabel: 1
+        - field: 5
+          value:
+            x0: 0.26417
+            y0: 0.76226
+            x1: 0.56417
+            y1: 0.82049
+          label:
+            x0: 0.06917
+            y0: 0.76712
+            x1: 0.2525
+            y1: 0.81402
+          relabel: 0
+        - field: 6
+          value:
+            x0: 0.59
+            y0: 0.74394
+            x1: 0.705
+            y1: 0.89272
+          label:
+            x0: 0
+            y0: 0
+            x1: 0
+            y1: 0
+          relabel: 0
+        prints:
+        - kind: 5
+          field: -1
+          text: DESK 3
+          rect:
+            x0: 0.78917
+            y0: 0.56388
+            x1: 0.94
+            y1: 0.64151
+        - kind: 0
+          field: 5
+          text: 
+          rect:
+            x0: 0.78917
+            y0: 0.71159
+            x1: 0.94
+            y1: 0.7903
+        stamp:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
+        stampInk: 
+        stampCaption: 
+        covers: []
+        spine:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0

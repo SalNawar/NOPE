@@ -150,5 +150,130 @@ MonoBehaviour:
       frame: 5
       accent: '#14505C'
       paper: '#F7F7F2'
-      aspect: 0
+      aspect: 0.7728
       scale: 1.12
+      art:
+        corner: 0
+        ink: '#0B1C2F'
+        labelInk: '#0B1C2F'
+        valueShare: 0.42
+        labelShare: 0.6
+        fields:
+        - field: 0
+          value:
+            x0: 0.3375
+            y0: 0.37828
+            x1: 0.912
+            y1: 0.42852
+          label:
+            x0: 0.1585
+            y0: 0.38485
+            x1: 0.32
+            y1: 0.41577
+          relabel: 0
+        - field: 1
+          value:
+            x0: 0.3375
+            y0: 0.43934
+            x1: 0.912
+            y1: 0.48995
+          label:
+            x0: 0.1585
+            y0: 0.4459
+            x1: 0.32
+            y1: 0.47798
+          relabel: 0
+        - field: 2
+          value:
+            x0: 0.3375
+            y0: 0.50077
+            x1: 0.912
+            y1: 0.55178
+          label:
+            x0: 0.1585
+            y0: 0.50734
+            x1: 0.32
+            y1: 0.53903
+          relabel: 0
+        - field: 3
+          value:
+            x0: 0.374
+            y0: 0.56298
+            x1: 0.912
+            y1: 0.61437
+          label:
+            x0: 0.1565
+            y0: 0.56878
+            x1: 0.37
+            y1: 0.59969
+          relabel: 0
+        - field: 4
+          value:
+            x0: 0.3375
+            y0: 0.62519
+            x1: 0.912
+            y1: 0.66924
+          label:
+            x0: 0.1585
+            y0: 0.62867
+            x1: 0.32
+            y1: 0.65881
+          relabel: 0
+        - field: 5
+          value:
+            x0: 0.3375
+            y0: 0.68045
+            x1: 0.912
+            y1: 0.72488
+          label:
+            x0: 0.1585
+            y0: 0.68393
+            x1: 0.32
+            y1: 0.71368
+          relabel: 0
+        - field: 6
+          value:
+            x0: 0.1695
+            y0: 0.81685
+            x1: 0.3365
+            y1: 0.9459
+          label:
+            x0: 0
+            y0: 0
+            x1: 0
+            y1: 0
+          relabel: 0
+        - field: 7
+          value:
+            x0: 0.7555
+            y0: 0.79869
+            x1: 0.8795
+            y1: 0.91886
+          label:
+            x0: 0
+            y0: 0
+            x1: 0
+            y1: 0
+          relabel: 0
+        prints:
+        - kind: 4
+          field: -1
+          text: 
+          rect:
+            x0: 0.3855
+            y0: 0.87558
+            x1: 0.6855
+            y1: 0.91267
+        stamp:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
+        stampInk: 
+        stampCaption: 
+        covers: []
+        spine:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0

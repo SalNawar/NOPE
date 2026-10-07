@@ -128,6 +128,12 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// <summary>The watermarks' pooled images (clones of the seal just over the fills, under the slots' tints, the lines and the texts; TD1).</summary>
     private readonly List<Image> _watermarks = new List<Image>();
 
+    /// <summary>The patches' pooled images (clones of the seal just over the paper; a document drawn on its art, ArtLayout).</summary>
+    private readonly List<Image> _patches = new List<Image>();
+
+    /// <summary>The blank faces' pieces as sprites, made once each (a texture's id and the piece in its pixels).</summary>
+    private static readonly Dictionary<(int, Rect), Sprite> PatchSprites = new Dictionary<(int, Rect), Sprite>();
+
     /// <summary>A card's rounded paper (a 9-sliced sprite painted once; TD1).</summary>
     private static Sprite _cardPaper;
 
@@ -238,17 +244,22 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         _form = FormLayout.Layout(spec, data, rt.rect.width, style.metrics, _measure, linkHint != null ? linkSize : 0f);
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _form.Height);
         FormPalette palette = look.Palette(style.Palette());
-        ShowArt(spec != null && spec.fixedPage && data != null ? data.FormNumber : null, data != null ? data.Issuer : null,
+        FormArt art = ArtLayout.IsArt(spec) ? look.art : null;
+        string formNumber = spec != null && spec.fixedPage && data != null ? data.FormNumber : null;
+        ShowArt(formNumber, data != null ? data.Issuer : null,
                 string.IsNullOrEmpty(look.paper) ? style.paper : new Color(palette.Paper.R, palette.Paper.G, palette.Paper.B, 1f),
-                PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit));
+                PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit), art != null);
+        Texture2D blank = art != null ? SlotArt.Texture(new[] { ArtSlots.PaperBlank(formNumber) }) : null;
 
-        int texts = 0, seals = 0, emblems = 0, watermarks = 0;
+        int texts = 0, seals = 0, emblems = 0, watermarks = 0, patches = 0;
         bool sealShown = false, photoShown = false;
         Color cover = EmblemArt.Ink(data != null ? data.Cover : null, new Color(palette.Accent.R, palette.Accent.G, palette.Accent.B, 1f));
         foreach (FormItem item in _form.Items)
         {
             if (item.Kind == FormItemKind.Text)
-                Print(texts++, item);
+                Print(texts++, item, art);
+            else if (item.Kind == FormItemKind.Patch && seal != null)
+                ShowPatch(patches++, item.Rect, blank);
             else if (item.Kind == FormItemKind.Emblem && seal != null)
                 ShowMark(_emblems, emblems++, textsRoot, item.Rect, EmblemArt.Sprite(item.Text), cover);
             else if (item.Kind == FormItemKind.Watermark && seal != null)
@@ -275,6 +286,8 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
             _emblems[i].gameObject.SetActive(false);
         for (int i = watermarks; i < _watermarks.Count; i++)
             _watermarks[i].gameObject.SetActive(false);
+        for (int i = patches; i < _patches.Count; i++)
+            _patches[i].gameObject.SetActive(false);
         if (seal != null)
             seal.gameObject.SetActive(sealShown);
         if (photoFrame != null)
@@ -351,7 +364,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// spec, TD1), the code-drawn ring and no frame; a page kind (no number)
     /// keeps the plain paper.
     /// </summary>
-    private void ShowArt(string formNumber, string issuer, Color tint, float corner)
+    private void ShowArt(string formNumber, string issuer, Color tint, float corner, bool onArt)
     {
         if (paper != null)
         {
@@ -369,7 +382,41 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
             seal.sprite = SlotArt.Sprite(ArtSlots.AgencySeal) ?? _sealRing;
         }
         if (photoFrameArt != null)
-            photoFrameArt.sprite = SlotArt.Sprite(ArtSlots.PhotoFrame);
+            photoFrameArt.sprite = SlotArt.Sprite(onArt ? ArtSlots.PhotoHolo : ArtSlots.PhotoFrame);
+    }
+
+    /// <summary>
+    /// Patch <paramref name="index"/> (FormItemKind.Patch; ArtSlots.PaperBlank):
+    /// a pooled clone of the seal image just over the paper showing the piece
+    /// of <paramref name="blank"/> under <paramref name="rect"/>, so a field not
+    /// introduced yet shows no label on its art; hidden without the blank face.
+    /// </summary>
+    private void ShowPatch(int index, FaceRect rect, Texture2D blank)
+    {
+        if (index >= _patches.Count)
+        {
+            Image clone = Instantiate(seal, seal.transform.parent);
+            clone.name = "Patch";
+            clone.raycastTarget = false;
+            _patches.Add(clone);
+        }
+        Image image = _patches[index];
+        image.gameObject.SetActive(blank != null);
+        if (blank == null)
+            return;
+        var piece = new Rect(rect.XMin / _form.Width * blank.width, (1f - rect.YMax / _form.PageHeight) * blank.height,
+                             rect.Width / _form.Width * blank.width, rect.Height / _form.PageHeight * blank.height);
+        if (!PatchSprites.TryGetValue((blank.GetInstanceID(), piece), out Sprite sprite) || sprite == null)
+        {
+            sprite = UnityEngine.Sprite.Create(blank, piece, new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect);
+            sprite.name = "Patch";
+            PatchSprites[(blank.GetInstanceID(), piece)] = sprite;
+        }
+        image.sprite = sprite;
+        image.preserveAspect = false;
+        image.color = Color.white;
+        Place(image.rectTransform, rect);
+        image.transform.SetSiblingIndex(paper != null && paper.transform.parent == image.transform.parent ? paper.transform.GetSiblingIndex() + 1 : 0);
     }
 
     /// <summary>The Analysis Scanner's marks (the PC redesign SC4): a dashed outline in the style's analysis colour over the box of each field in <paramref name="fields"/> (null or empty: none), over the form's own lines; the next Show drops them.</summary>
@@ -546,7 +593,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     }
 
     /// <summary>Prints text item <paramref name="index"/>: a pooled clone of the template in its role's style and ink, in the font it was measured in (its script's, else the template's again, whatever the clone printed before), over its rectangle.</summary>
-    private void Print(int index, FormItem item)
+    private void Print(int index, FormItem item, FormArt art)
     {
         if (index >= _texts.Count)
             _texts.Add(Instantiate(textTemplate, textsRoot != null ? textsRoot : textTemplate.transform.parent));
@@ -556,11 +603,14 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         _measure.SetFont(text, item.Text);
         TmpFormText.Style(text, item.Role, item.Size);
         text.text = item.Text;
-        FitWords(text, item);
+        if (art == null)
+            FitWords(text, item);
         text.color = style.Ink(item.Role);
         text.alignment = item.Align == FormTextAlign.Right ? TextAlignmentOptions.TopRight
             : item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Top
             : TextAlignmentOptions.TopLeft;
+        if (art != null)
+            TmpFormText.OnArt(text, item, style, art);
         Place(text.rectTransform, item.Rect);
     }
 
