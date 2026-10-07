@@ -1,6 +1,6 @@
 # Generated assets
 
-Saved: 146. Full regeneration is NOT complete.
+Saved: 170. Full regeneration is NOT complete.
 
 | Asset | Status |
 |---|---|
@@ -150,3 +150,27 @@ Saved: 146. Full regeneration is NOT complete.
 | premade_beethoven__explaining_c | visually reviewed; registration pending |
 | premade_beethoven__thinking_c | visually reviewed; registration pending |
 | premade_beethoven__objecting_c | visually reviewed; registration pending |
+| premade_nobunaga_neutral | visually reviewed; registration pending |
+| premade_nobunaga_happy | visually reviewed; registration pending |
+| premade_nobunaga_angry | visually reviewed; registration pending |
+| premade_nobunaga_worried | visually reviewed; registration pending |
+| premade_nobunaga__explaining_a | visually reviewed; registration pending |
+| premade_nobunaga__thinking_a | visually reviewed; registration pending |
+| premade_nobunaga__objecting_a | visually reviewed; registration pending |
+| premade_nobunaga_photo | visually reviewed; registration pending |
+| premade_alexander_neutral | visually reviewed; registration pending |
+| premade_alexander_happy | visually reviewed; registration pending |
+| premade_alexander_angry | visually reviewed; registration pending |
+| premade_alexander_worried | visually reviewed; registration pending |
+| premade_alexander__explaining_b | visually reviewed; registration pending |
+| premade_alexander__thinking_b | visually reviewed; registration pending |
+| premade_alexander__objecting_b | visually reviewed; registration pending |
+| premade_alexander_photo | visually reviewed; registration pending |
+| premade_darwin_neutral | visually reviewed; registration pending |
+| premade_darwin_happy | visually reviewed; registration pending |
+| premade_darwin_angry | visually reviewed; registration pending |
+| premade_darwin_worried | visually reviewed; registration pending |
+| premade_darwin__explaining_c | visually reviewed; registration pending |
+| premade_darwin__thinking_c | visually reviewed; registration pending |
+| premade_darwin__objecting_c | visually reviewed; registration pending |
+| premade_darwin_photo | visually reviewed; registration pending |

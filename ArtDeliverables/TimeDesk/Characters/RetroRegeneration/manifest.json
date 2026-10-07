@@ -3144,6 +3144,459 @@
       "tool": "built-in image_gen",
       "review": "visually reviewed; registration pending",
       "integration": "raw source only"
+    },
+    {
+      "name": "premade_nobunaga_neutral",
+      "family": "unique",
+      "id": "nobunaga",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Oda Nobunaga age42, Sengoku Azuchi1576. Middle-aged Japanese man, long narrow face, high cheekbones, small sharp eyes, thin moustache, shaved pate with neat small traditional topknot. Muted slate-blue kamishimo with stiff winged shoulders over cream kosode, pleated hakama, plain red European-style cape draped behind shoulders, white tabi and straw sandals. No weapons or swords or armor or insignia. Natural lean build, weathered but not elderly. Empty hands visible.. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-5193a11c-03a3-4c44-b181-40a4b38eb9e5.png",
+      "path": "Raw/premade_nobunaga_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "2d22b10be8ad64cdcc3a3f31267e73aab28707e28d3b4336d10a8b51ddf8443c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_nobunaga_happy",
+      "id": "nobunaga",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-93f1db33-cd8d-49bd-a571-4976913ebed2.png",
+      "path": "Raw/premade_nobunaga_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "125309322a7cb52332426ff8ba68fab19dbf71608889d11b065fe339508fb1b0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_nobunaga_angry",
+      "id": "nobunaga",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-eaa3ac53-ae97-44fd-acdc-4e14b86ff11b.png",
+      "path": "Raw/premade_nobunaga_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "b8cc3426edef3bdf2bb5c8f1283b1924df363f0682d7f4970c10d29e83c078c1",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_nobunaga_worried",
+      "id": "nobunaga",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-45545ac6-8ac6-49e2-9f3d-b5881c2bbb24.png",
+      "path": "Raw/premade_nobunaga_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "fd0e6e3a84e4ece3786013edd65b04529b4ad116a2ed86171b1f351930a9c070",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_nobunaga__explaining_a",
+      "id": "nobunaga",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_a",
+      "change": "RIGHT palm up at lower chest, elbow open, left arm down, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT palm up at lower chest, elbow open, left arm down, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a4db607d-008b-41ba-ae7c-dc2d8af55089.png",
+      "path": "Raw/premade_nobunaga__explaining_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "caf02e24d8a30892f0383a9ee3b0c6120bdd6654d064784352443801d3b1011d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_nobunaga__thinking_a",
+      "id": "nobunaga",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_a",
+      "change": "RIGHT fingertips touch chin, hand in front of beard if present, left arm down. Face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT fingertips touch chin, hand in front of beard if present, left arm down. Face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-37c2cc4d-ca54-4ef0-810a-2df1ebc76641.png",
+      "path": "Raw/premade_nobunaga__thinking_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "1cae340c750c03d92a1dc78a992ae3a3e889f822af301c3349d0f1f1db0c595d",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_nobunaga__objecting_a",
+      "id": "nobunaga",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_a",
+      "change": "RIGHT open palm forward shoulder height, fingers up, calm please-wait gesture, left arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT open palm forward shoulder height, fingers up, calm please-wait gesture, left arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-41bde95d-1cad-4b40-b34f-b7802f62f23f.png",
+      "path": "Raw/premade_nobunaga__objecting_a.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6caef2a062f4c4f3d7a7514dcc7a8ad85aabcd2a657288b31f20d7699fdf44d7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_nobunaga_photo",
+      "id": "nobunaga",
+      "family": "unique_photo",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Passport civilian clothing variant: preserve exact same 42-year-old Japanese man and neutral face, thin moustache, skin, proportions and arms-down pose. Replace historical kamishimo and red cape and sandals with a grounded year2150 slate civilian collared jacket over cream shirt, plain charcoal trousers and simple dark shoes. Replace topknot with neatly combed short black hair with naturally high receding hairline. No cape, no historical accessories. Same head size and soles position.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Passport civilian clothing variant: preserve exact same 42-year-old Japanese man and neutral face, thin moustache, skin, proportions and arms-down pose. Replace historical kamishimo and red cape and sandals with a grounded year2150 slate civilian collared jacket over cream shirt, plain charcoal trousers and simple dark shoes. Replace topknot with neatly combed short black hair with naturally high receding hairline. No cape, no historical accessories. Same head size and soles position. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-508c8b81-d6fc-4252-9f92-3588defdfee5.png",
+      "path": "Raw/premade_nobunaga_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "8eed1db6d7d9c27e27092a63f0722bceab859868414e5761d3c41045e4ed92c4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_alexander_neutral",
+      "family": "unique",
+      "id": "alexander",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Alexander the Great, Macedonian Pella336BCE, male20. Youthful clean-shaven face, strong slightly crooked nose, deep-set hazel eyes, thick chestnut lion-mane hair swept up from brow, slight natural head tilt while facing viewer. Distinct from elderly Caesar reference. Stocky athletic young build without exaggerated muscles. Dusty muted plum chlamys cloak pinned at right shoulder with simple bronze brooch over belted ivory knee-length chiton, worn brown Greek leather sandals, bare lower legs. No crown, no armour, unarmed. Natural individual face, slight asymmetry. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-eaea76d5-81c4-476b-988d-06b1613dd894.png",
+      "path": "Raw/premade_alexander_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "90983eae94d004d1c5b64e9011e384fb506542bb143121045fc5f063e52e2ff7",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_alexander_happy",
+      "id": "alexander",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-bb5769cc-c755-4955-8ca6-e3c818cd7ba0.png",
+      "path": "Raw/premade_alexander_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "aa0b1cfed016e601fca1cf843cebab756c58f36e2841ae1255afdc14afc573c5",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_alexander_angry",
+      "id": "alexander",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b275d7e7-9d22-46b5-ae38-e3319bb50e96.png",
+      "path": "Raw/premade_alexander_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4ae3439f9d52a0973eca2402c8217f98a6991217e2afdb89dc78c5ff6185845f",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_alexander_worried",
+      "id": "alexander",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-7c035e7b-48ca-4078-829a-a64e36f013a4.png",
+      "path": "Raw/premade_alexander_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4bb0b1eb89aeab509cc6da6d95dad078af2f7fa070596dbf83cdf0f20d5100b4",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_alexander__explaining_b",
+      "id": "alexander",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_b",
+      "change": "Both palms up low, asymmetrical heights, elbows bent, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both palms up low, asymmetrical heights, elbows bent, measured explanation. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-005f0a3b-5934-413a-afee-afbfdf161fba.png",
+      "path": "Raw/premade_alexander__explaining_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7e6c7c2048008d4ef2af74f6938ad55ec34d7b29cfdae023cc9c8d8f06c022eb",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_alexander__thinking_b",
+      "id": "alexander",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_b",
+      "change": "LEFT fingertips at cheek, RIGHT forearm supports elbow. Natural hands, face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. LEFT fingertips at cheek, RIGHT forearm supports elbow. Natural hands, face readable. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-a028da65-0fa3-4d16-bdd4-d32a5b9e6e1a.png",
+      "path": "Raw/premade_alexander__thinking_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "a084804b3cd5ef86183c64aa90d5c1068bb51a65a0fb6b9f6dd9ad8188d1bb30",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_alexander__objecting_b",
+      "id": "alexander",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_b",
+      "change": "Both palms forward at lower chest, elbows close to torso, restrained refusal. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both palms forward at lower chest, elbows close to torso, restrained refusal. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-ed286ae3-aae4-4f0b-b961-9a6e9c1cd153.png",
+      "path": "Raw/premade_alexander__objecting_b.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "91e33da22f08e0d88f53a840f65f140727e81c102794e42cfd9c02572d2b8a0c",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_alexander_photo",
+      "id": "alexander",
+      "family": "unique_photo",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Passport civilian version: keep identical young20-year-old face, head tilt, hair colour, body scale, neutral arms-down pose. Replace historical chlamys cloak, chiton and sandals with year2150 practical worn brown hooded jacket over plain grey shirt, charcoal trousers and scuffed dark shoes. Hair neatly combed back, still full and wavy chestnut. No historical brooch or props. Keep exact face position and full-body framing.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Passport civilian version: keep identical young20-year-old face, head tilt, hair colour, body scale, neutral arms-down pose. Replace historical chlamys cloak, chiton and sandals with year2150 practical worn brown hooded jacket over plain grey shirt, charcoal trousers and scuffed dark shoes. Hair neatly combed back, still full and wavy chestnut. No historical brooch or props. Keep exact face position and full-body framing. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-990295c6-4403-4ffa-9433-72bb74baeeea.png",
+      "path": "Raw/premade_alexander_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "42b1dd00a60d7b53b0f6e5e9de431969ed73f1c73dd108a10f5b735ed4d813a9",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_darwin_neutral",
+      "family": "unique",
+      "id": "darwin",
+      "expression": "neutral",
+      "pose": "neutral",
+      "prompt": "Draw NEW distinct historical traveller Charles Darwin aged34 in Victorian Britain1843. Younger adult man with broad heavy brow, long straight nose, small thoughtful grey eyes, slightly receding brown hair combed to side, brown side whiskers at cheeks, CLEAN-SHAVEN CHIN AND UPPER LIP, absolutely no full beard. Ordinary slightly rounded torso, sloping shoulders, pale skin, individual asymmetrical brows. Worn brown Victorian frock coat over muted ochre waistcoat and ivory high-collared shirt with dark cravat, dark grey trousers and black leather ankle boots. Tiny dark beetle resting on left lapel. No hat. Hands down. Textured late1980s anime cel artwork, varying dark ink weight, narrow expressive eyes, mature natural face structure, ordinary imperfect proportions, not glamorous, no glossy vector rendering. Even frontal lighting, no ground shadow. Empty hands relaxed down. Neutral expression facing player. Full1024x1536 canvas solidgreen #00FF00. Use reference ONLY for overall fullbody framing, NOT its identity or costume. Keep large empty top margin: scalp at y260,chin424,shoulders500,waist760,hips900,knees1170,soles1490,centerx512. No crown sceptre weapons logos or text. Full shoes visible.\nCorrection: Edit this same sprite only the facial age: this is Charles Darwin at34, currently face looks55. Make skin smoother with no forehead wrinkle lines, no deep nasolabial folds, no eye bags. Keep large brow, long nose, small thoughtful eyes, brown side whiskers, clean-shaven chin and upper lip, same receding hairline and haircut. Preserve ordinary individual face rather than model, clearly early30s adult. All costume, beetle, pose, framing, textured anime finish and uniformgreen background unchanged.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-912434e4-7386-4a3f-a977-d5057cc8173d.png",
+      "path": "Raw/premade_darwin_neutral.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "524f9e66f2addb5b2e86ad3435c59b92d7d6f52111b160aad2f4051692717215",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_darwin_happy",
+      "id": "darwin",
+      "family": "unique",
+      "expression": "happy",
+      "pose": "neutral",
+      "change": "Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to modest warm smile, softened lids and lifted cheeks. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-011c4dce-ac30-4aec-b032-971064f3cf64.png",
+      "path": "Raw/premade_darwin_happy.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "4f2ba8c98996b0673fb959b228e19b8b25b93aa58f62367e2b885cba8f712bb2",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_darwin_angry",
+      "id": "darwin",
+      "family": "unique",
+      "expression": "angry",
+      "pose": "neutral",
+      "change": "Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to controlled anger: knitted brows narrowed eyes compressed lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-514d2114-458c-4e40-87e9-42fb0f8a9af2.png",
+      "path": "Raw/premade_darwin_angry.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "5c9cbdcd793481140e7fb10604d1280f04a9a1c88b5e092f6c3e1ac070e89731",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_darwin_worried",
+      "id": "darwin",
+      "family": "unique",
+      "expression": "worried",
+      "pose": "neutral",
+      "change": "Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Only facial expression changes to quiet concern: raised inner brows uncertain eyes slightly parted lips. No other changes. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-6e39293a-5c48-4e45-9af2-2bb05569f250.png",
+      "path": "Raw/premade_darwin_worried.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "9a728feaef8b8dcd85dda504f7cc0278ca402024e99e7ce48fd06ff447cb4f60",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_darwin__explaining_c",
+      "id": "darwin",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "explaining_c",
+      "change": "LEFT palm opens close to chest in compact explanation, right arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. LEFT palm opens close to chest in compact explanation, right arm down. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-4dcb0239-3fb2-4d88-8790-07e34ce5f39b.png",
+      "path": "Raw/premade_darwin__explaining_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "30340df37d20f547044459c9a5c99dcd567230cc980bc62b0d4614f92429d3c0",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_darwin__thinking_c",
+      "id": "darwin",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "thinking_c",
+      "change": "Both hands loosely linked at waist, reserved reflective stance. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Both hands loosely linked at waist, reserved reflective stance. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-23d80787-3904-4824-8a86-a7f5ac5003f8.png",
+      "path": "Raw/premade_darwin__thinking_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "6c5da9fee28e595f1dc8928d2c5e24faa9db1035905db31d631ce1ba984c7c9a",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_darwin__objecting_c",
+      "id": "darwin",
+      "family": "unique_pose",
+      "expression": "neutral",
+      "pose": "objecting_c",
+      "change": "RIGHT hand on upper chest, LEFT palm extends low to side, personal objection. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. RIGHT hand on upper chest, LEFT palm extends low to side, personal objection. Keep face neutral and redraw affected sleeves and cloth naturally; all stationary cloth and ornament identity unchanged. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-815f6e57-108d-495c-8e54-fa2da3e2f1c4.png",
+      "path": "Raw/premade_darwin__objecting_c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "7f83441df2496626daba681f1781e62692b3c62242b4131959f2d533585e5aab",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
+    },
+    {
+      "name": "premade_darwin_photo",
+      "id": "darwin",
+      "family": "unique_photo",
+      "expression": "neutral",
+      "pose": "neutral",
+      "change": "Passport civilian outfit version. Preserve exact34-year-old face, brown side whiskers, clean-shaven chin and upper lip, receding brown hair and neutral arms-down pose. Replace Victorian frock coat, waistcoat, cravat and boots with year2150 modest practical slate-blue work jacket, cream collarless shirt, dark trousers and scuffed plain shoes. Remove beetle and historical accessories. Hair neatly side-combed. Same full-body canvas positions and textured anime finish.",
+      "prompt": "Edit attached game sprite. Keep exact person identity, age, face shape, skin, hair, texture, palette, body scale and positions unchanged. Full1024x1536 same uniformgreen background and headroom. Passport civilian outfit version. Preserve exact34-year-old face, brown side whiskers, clean-shaven chin and upper lip, receding brown hair and neutral arms-down pose. Replace Victorian frock coat, waistcoat, cravat and boots with year2150 modest practical slate-blue work jacket, cream collarless shirt, dark trousers and scuffed plain shoes. Remove beetle and historical accessories. Hair neatly side-combed. Same full-body canvas positions and textured anime finish. Preserve textured1980s anime ink and cel shading. No added objects or text. Feet and head stay fixed.",
+      "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a101ae-b1f2-7f11-b4b8-4fc035acd519\\exec-b77565e5-64ac-4c27-92dd-e06316ca1835.png",
+      "path": "Raw/premade_darwin_photo.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "ba42536bbeb1675b43689effc2584b815d44be6d3affcff8fbde358a409bd8ab",
+      "tool": "built-in image_gen",
+      "review": "visually reviewed; registration pending",
+      "integration": "raw source only"
     }
   ]
 }
