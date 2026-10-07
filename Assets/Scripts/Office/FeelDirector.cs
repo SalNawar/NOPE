@@ -66,7 +66,23 @@ public sealed class FeelDirector : MonoBehaviour
     public static void Punch(FeelHit hit)
     {
         if (_current != null)
-            _current.Hit(hit);
+            _current.Play(hit);
+    }
+
+    /// <summary>
+    /// A generic punch of <paramref name="strength"/> (0 to 1, clamped; the shared
+    /// API the desk machines call): above 0 a hit-stop, and a camera bump whose
+    /// force is the strength times MotionKnobs.shakeBreach (the largest shake),
+    /// a rumble from 0.75 up. Nothing without the office's director.
+    /// </summary>
+    public static void Hit(float strength)
+    {
+        strength = Mathf.Clamp01(strength);
+        if (_current == null || strength <= 0f)
+            return;
+        MotionKnobs knobs = UiMotion.Knobs;
+        _current.HitStop(knobs);
+        CameraFeel.Shake(knobs.shakeBreach * strength, Mathf.Lerp(knobs.shakeStampSeconds, knobs.shakeBreachSeconds, strength), strength >= 0.75f);
     }
 
     private void Listen(GameManager game, ShiftClockDriver clock)
@@ -106,9 +122,9 @@ public sealed class FeelDirector : MonoBehaviour
     private void HandleResolved(CaseInstance inst, CaseVerdict verdict, bool accepted, float stabilityBefore)
     {
         if (verdict != null && verdict.citationIssued)
-            Hit(FeelHit.Citation);
+            Play(FeelHit.Citation);
         if (accepted && inst != null && inst.IsFamous)
-            Hit(FeelHit.Famous);
+            Play(FeelHit.Famous);
         GameConfigSO config = _game.Config;
         WorldState world = _game.World;
         if (config == null || world == null)
@@ -116,7 +132,7 @@ public sealed class FeelDirector : MonoBehaviour
         StabilityTier before = HelixRiver.Tier(stabilityBefore, config.firedAtStability, config.stabilityWarningMargin, config.stabilityCriticalMargin, null);
         StabilityTier after = HelixRiver.Tier(world.timelineStability, config.firedAtStability, config.stabilityWarningMargin, config.stabilityCriticalMargin, null);
         if (after > before && after >= StabilityTier.Breaching)
-            Hit(FeelHit.Breach);
+            Play(FeelHit.Breach);
     }
 
     /// <summary>An accepted traveller's portal is announced in the hall: the PA chime (the hall's ambience ducks under it).</summary>
@@ -126,7 +142,7 @@ public sealed class FeelDirector : MonoBehaviour
     private void HandleClosed() => Sounds.Play(SoundCues.ShiftEndBell);
 
     /// <summary>One moment's hit-stop, camera impulse and sound.</summary>
-    private void Hit(FeelHit hit)
+    private void Play(FeelHit hit)
     {
         MotionKnobs knobs = UiMotion.Knobs;
         switch (hit)

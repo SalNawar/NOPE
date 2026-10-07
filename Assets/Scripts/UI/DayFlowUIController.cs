@@ -127,6 +127,8 @@ public sealed class DayFlowUIController : MonoBehaviour
         }
 
         briefingPanel.SetActive(true);
+        UiAppear.Of(briefingPanel, AppearStyle.Drop).Open(); // the morning paper drops in and settles like paper (the game feel)
+        Sounds.Play(SoundCues.DayStart);
     }
 
     /// <summary>
