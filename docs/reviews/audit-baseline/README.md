@@ -344,6 +344,63 @@ RunConfig names (the anime hall), Home between them, until night 15's sleep ends
   - The profile job decides travellers with the cheat menu's `CheatDecideCorrectly` (the controller's `Decide` it called
     is gone since `4315bce`).
 
+- **Round 7, the desk machine prototype** (`feat/desk-machine`, with main `50831a4` merged: Track J's game feel, the sound
+  bank, the office kit), re-packed after Saleh's verdict on the first cut ("everything diegetic", "no lever, no extra commit
+  step"). Runs A and B were identical (41 deterministic files; the transcript and all 30 saves byte-equal); each play report
+  passes 6,368 checks and fails 1 (round 6's open day-5 GUIDE check), and logs no warning. Round 6's pack was never re-taken
+  after main's night shifts, Helix River, morning paper, citation slip and kit rounds, so most differences from it are those
+  tracks'; this round's own changes are:
+  - The audit stamps every traveller with a dater and hands the papers back, which is the decision (130 APPROVED, 51 DENIED),
+    except the 34 law-breakers the plan denies with their evidence who would not have come back after a denial
+    (`Returns.Plan` on their own stream, so no later day changes): stamped DENIED, they are detained with the desk's DETAIN
+    button (the cover clicked open, the mushroom pressed). Those lines read `decided with the stamps: DENIED, then the DETAIN
+    button`; the verdict JSON gains `"detained"`; 14 shift reports gain `Detained: N`; every save gains
+    `world.totalDetained`. Day 1's planned mistake stays a denial (that honest traveller would come back); a wrong detention
+    is checked by the desk machine probe and the domain tests.
+  - Read timing only, after a DETAIN press: the audit reads the verdict line after the next slot has already cleared it (30 of
+    the 34 `verdict line:` entries are empty), and on the 4 days that end with a detention the last `world:` line is read
+    after closing, so it already shows the Debt Relief instalment. Verdicts, pay, fines, stability, outcomes and the ending
+    are unchanged; a save compared with a peer track's run of the same main differs only in `totalDetained`.
+  - `scene_OfficeGameplay`: the two daters (Frame, Die, Wheels, Body with its window, model name and side button, green and
+    red) and the DetainButton (Base, Cover with its Lid, Button with its Cap) on the desk, and the overlay's DetainFlash; the
+    prototype's GateLever and RETURN / DETAIN plates are gone. Each rebuild equals the committed scene. `data_hashes.txt`: the
+    strings (`citation.detainedWrong`, `citation.detainedUnproven`, `results.detained`, `hardware.detain`, `stamp.dater.by`)
+    and the daters' and the button's materials.
+  - Profiles not re-taken (round 6's kept).
+
+- **Round 8, the run 7 integration** (`integrate/1007`: main `50831a4` with Tracks FX `e01e63d`, J `42647af`, DOC
+  `becf8a2`, SA `441198f`, DM `aec0700`, SL `5f383fc` and P `0274c55` merged). Re-packed once from the integrated run A;
+  runs A and B were identical (the transcript and all 30 saves byte-equal); each play report passes 6,432 checks and fails
+  none, and logs no warning. Against round 7's pack (DM's), the 215 verdicts, word for word, the day-15 ending
+  (`world_report`), the Welfare notices, the orders and the House purchases are unchanged. The intended changes, by track:
+  - **INT** (read timing): the verdict line and the `world:` line are read as the verdict is committed
+    (`DeskStampTray.Decided`, after the game wrote them). The 30 `verdict line:` entries that read empty after a DETAIN press
+    now show the real line, and the 4 days that end with a detention no longer print the Debt Relief instalment in their
+    last `world:` line.
+  - **P** (`fix/playtest-1007`): the paper leads with the world's news (the "BULLETIN · NEW TODAY" kicker gone; day 1 on
+    the debt line); the bulletin moves to the briefing's Bureau memo (`memo |` lines, days 1-15); "shift started at <hour>
+    on AVAILABLE" each day and the tutorial's step 1 text; the bills: Heating no longer pays Electricity, so night 4's
+    default care costs 9 cr, not 11, and every later wallet and `world:` money field moves by +2 cr (the final wallet
+    123 cr); the pet's corner reads warm instead of cold that night; every save hash (the News archive drops the bulletin).
+  - **SA** (`feat/scanner-app`): the case board's cross-check documents a category once ("cross proof of ...: already
+    documented (the case board's cross-check)"), so two Citizen ID proofs log as the record's difference (RecordMismatch)
+    instead of the papers' (CrossMismatch); the saves carry the citizen file's visits.
+  - **FX** (`fix/day5-guide`): round 6's open day-5 GUIDE check passes; the guide's arrow allocates nothing (checked).
+  - **DOC** (`feat/document-art`): the Citation's lines are read as it lands; no verdict, pay or stability moves.
+  - **J**, **SL**: no transcript change (the play never spins the Night Slots machine).
+  - `cases.txt`: SA's citizen file in every case (registry notes, the random travellers' templates, clues and threads,
+    seen-before visits); every claim, name, paper, tell and verdict input is round 7's.
+  - `scene_OfficeGameplay`: every track's builder (the daters' label lip low in front of them, the city view's desk
+    controls fading out, the case board, the Citation, the memo, the DETAIN button); `scene_HomeScene` (now over 200 kB, so
+    stored gzipped): SL's machine with J's serialized pull; `scene_TitleScene`: J's serialized pull. Each rebuild equals the
+    committed scene. `data_hashes.txt`, `world_generate.txt` (`Assets/Data` 1012 -> 1014 files: DOC's
+    `CitationForm_TC900` and its meta): the merged strings, documents, kit, knobs, sound bank and content.
+  - Re-taken after the orchestrator's review (the passport's visa page slides under the daters as the rack slides out; the
+    daters' top window light grey; the audit's not-the-passport press aims at a part of the other paper that shows): the
+    transcript and all 30 saves are byte-equal to the pack above; only `scenes_summary.txt`'s committed OfficeGameplay file
+    hash changes (the rebuilt scene; its semantic dump is unchanged).
+  - Profiles not re-taken (round 6's kept).
+
 ## Baseline results (ff3a6e0)
 
 - **Tests:** compile 0 errors; offline EditMode 1067 passed, 0 failed.

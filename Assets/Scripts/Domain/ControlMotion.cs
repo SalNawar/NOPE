@@ -1,68 +1,148 @@
+using System;
+
+/// <summary>How far a control's face reaches past its rest rect on each side (px; positive out, negative in) and how dark it is now (0 to 1).</summary>
+public readonly struct FaceEdges
+{
+    /// <summary>The left, right, bottom and top edges' reach past the rest rect.</summary>
+    public readonly float Left, Right, Bottom, Top;
+
+    /// <summary>How much the face darkens (a press).</summary>
+    public readonly float Darken;
+
+    /// <summary>A face from its parts.</summary>
+    public FaceEdges(float left, float right, float bottom, float top, float darken)
+    {
+        Left = left;
+        Right = right;
+        Bottom = bottom;
+        Top = top;
+        Darken = darken;
+    }
+
+    /// <summary>At rest: the rest rect, undarkened.</summary>
+    public static FaceEdges Rest => default;
+}
+
 /// <summary>
-/// A UI control's physical feel (Saleh 2026-10-07, the "live component"
-/// reel: a press squashes before anything moves, the release springs back
-/// past its rest and wobbles in, every touch reads as physical), as springs:
-/// under the pointer it lifts (MotionKnobs.hoverScale); pressed it squashes
-/// wider and shorter (pressScaleX/Y); let go it springs back with an
-/// overshoot (releaseFeel); a confirmed click pops it (1 to 1 + popAmount and
-/// back); a click on a disabled control shakes it sideways, a short "no",
-/// and never pops. Reduced Motion and the Motion intensity scale every
-/// amplitude (MotionAmount): reduced, the control never moves (its kit face
-/// still shows the state). The view (UiJuice) reads ScaleX, ScaleY and
-/// OffsetX after each Step.
+/// A control's physical feel (Saleh 2026-10-07, the "live component" reel;
+/// round 2: "they go out of bounds of their borders, buttons overlap", "too
+/// fast"): the control's frame never moves or grows; its FACE moves inside
+/// it. Under the pointer the face lifts a pixel or two (MotionKnobs.hoverLift;
+/// the kit's hover face adds the glint); pressed, its top comes down into its
+/// bezel (pressDepth) while its bottom stays, it widens by the area's rule
+/// and darkens (pressDarken; the Balanced feel, its peak at about 90 ms); let
+/// go it springs back past its rest and wobbles in (Elastic, settling over
+/// about 400 ms in two or three decaying wobbles); a confirmed click pops its
+/// top up (popLift) and wobbles; a click on a disabled control shakes it
+/// sideways, a short "no". A screen-edge pull tab (SetPull) is also pulled
+/// out of its edge under the pointer and on a click (the edge it hangs from
+/// stays), stretched along its travel by its speed
+/// and squashed by its acceleration (SquashStretch.FromMotion). Every edge's
+/// reach outward is capped by the control's room (SetRoom: the kit's border
+/// inset, never into a neighbour's rest rect: ControlRoom), so no animated
+/// face overlaps a neighbour. Reduced Motion and the Motion intensity scale
+/// every amplitude (reduced, the face stays put; the darkening still shows
+/// the press). The view (UiJuice) reads Edges after each Step.
 /// </summary>
 public sealed class ControlMotion
 {
-    private Spring _x = Spring.At(1f), _y = Spring.At(1f), _pop, _shake;
-    private MotionFeel _baseFeel = MotionFeel.Balanced;
+    private Spring _sink, _shake, _pull, _darken;
+    private MotionFeel _sinkFeel = MotionFeel.Balanced, _pullFeel = MotionFeel.Balanced;
     private bool _hovered, _pressed;
-
-    /// <summary>The horizontal scale now (the base pose and the pop).</summary>
-    public float ScaleX => _x.Value + _pop.Value;
-
-    /// <summary>The vertical scale now.</summary>
-    public float ScaleY => _y.Value + _pop.Value;
-
-    /// <summary>The sideways offset now (the "no" shake; px).</summary>
-    public float OffsetX => _shake.Value;
+    private float _roomLeft, _roomRight, _roomBottom, _roomTop;
+    private int _pullX, _pullY;
 
     /// <summary>True while any part still moves (the view keeps stepping it).</summary>
-    public bool Moving => !(_x.AtRest && _y.AtRest && _pop.AtRest && _shake.AtRest);
+    public bool Moving => !(_sink.AtRest && _shake.AtRest && _pull.AtRest && _darken.AtRest);
 
     /// <summary>True while it is held down.</summary>
     public bool Pressed => _pressed;
 
-    /// <summary>The pointer came over the control (<paramref name="over"/>) or left it: it lifts or comes back down (not while pressed: the release decides).</summary>
+    /// <summary>True when it rests exactly at its rest pose (no reach, no darkening).</summary>
+    public bool AtRestPose => !Moving && _sink.Value == 0f && _shake.Value == 0f && _pull.Value == 0f && _darken.Value == 0f;
+
+    /// <summary>How far each edge of the face may reach past the rest rect (px, 0 or more): ControlRoom's answer for the control's place.</summary>
+    public void SetRoom(float left, float right, float bottom, float top)
+    {
+        _roomLeft = left > 0f ? left : 0f;
+        _roomRight = right > 0f ? right : 0f;
+        _roomBottom = bottom > 0f ? bottom : 0f;
+        _roomTop = top > 0f ? top : 0f;
+    }
+
+    /// <summary>Makes it a pull tab sliding out along (<paramref name="x"/>, <paramref name="y"/>) (each -1, 0 or 1; 0, 0: none).</summary>
+    public void SetPull(int x, int y)
+    {
+        _pullX = Math.Sign(x);
+        _pullY = Math.Sign(y);
+    }
+
+    /// <summary>True for a pull tab.</summary>
+    public bool Pulls => _pullX != 0 || _pullY != 0;
+
+    /// <summary>A pull tab's direction (-1, 0 or 1 on each axis).</summary>
+    public int PullX => _pullX;
+
+    /// <summary>A pull tab's direction on y.</summary>
+    public int PullY => _pullY;
+
+    /// <summary>The pointer came over the control (<paramref name="over"/>) or left it: the face lifts (a pull tab slides out) or comes back (not while pressed: the release decides).</summary>
     public void Hover(bool over, MotionKnobs knobs, MotionAmount amount)
     {
         _hovered = over;
-        if (!_pressed)
-            Aim(over ? knobs.hoverScale : 1f, over ? knobs.hoverScale : 1f, knobs.hoverFeel, amount);
+        if (_pressed)
+            return;
+        Aim(ref _sink, over ? -knobs.hoverLift : 0f, amount);
+        _sinkFeel = knobs.hoverFeel;
+        if (Pulls)
+        {
+            Aim(ref _pull, over ? knobs.pullHover : 0f, amount);
+            _pullFeel = knobs.slideFeel;
+        }
     }
 
-    /// <summary>Pressed down: the anticipation squash.</summary>
+    /// <summary>Pressed down: the face goes into its bezel and darkens (a pull tab is pushed back in).</summary>
     public void Press(MotionKnobs knobs, MotionAmount amount)
     {
         _pressed = true;
-        Aim(knobs.pressScaleX, knobs.pressScaleY, knobs.pressFeel, amount);
+        Aim(ref _sink, knobs.pressDepth, amount);
+        _sinkFeel = knobs.pressFeel;
+        AimDarken(knobs.pressDarken, amount);
+        if (Pulls)
+        {
+            Aim(ref _pull, 0f, amount);
+            _pullFeel = knobs.pressFeel;
+        }
     }
 
-    /// <summary>Let go: springs back (with overshoot) to its hover lift, or its rest when the pointer has left.</summary>
+    /// <summary>Let go: the face springs back past its rest (or its hover lift) and wobbles in.</summary>
     public void Release(MotionKnobs knobs, MotionAmount amount)
     {
         if (!_pressed)
             return;
         _pressed = false;
-        float rest = _hovered ? knobs.hoverScale : 1f;
-        Aim(rest, rest, knobs.releaseFeel, amount);
+        Aim(ref _sink, _hovered ? -knobs.hoverLift : 0f, amount);
+        _sinkFeel = knobs.releaseFeel;
+        AimDarken(0f, amount);
+        if (Pulls)
+        {
+            Aim(ref _pull, _hovered ? knobs.pullHover : 0f, amount);
+            _pullFeel = knobs.releaseFeel;
+        }
     }
 
-    /// <summary>A confirmed click: the pop (out to 1 + popAmount and back).</summary>
+    /// <summary>A confirmed click: the face's top pops up and wobbles back (a pull tab pops further out).</summary>
     public void Confirm(MotionKnobs knobs, MotionAmount amount)
     {
         if (amount.Still)
             return;
-        _pop.Kick(knobs.Get(knobs.popFeel).KickFor(knobs.popAmount * amount.Share));
+        _sink.Kick(-knobs.Get(knobs.popFeel).KickFor(knobs.popLift * amount.Share));
+        _sinkFeel = knobs.popFeel;
+        if (Pulls)
+        {
+            _pull.Kick(knobs.Get(knobs.popFeel).KickFor(knobs.pullPop * amount.Share));
+            _pullFeel = knobs.popFeel;
+        }
     }
 
     /// <summary>A click on a disabled control: the sideways "no" shake, no pop.</summary>
@@ -77,36 +157,76 @@ public sealed class ControlMotion
     public void Reset()
     {
         _hovered = _pressed = false;
-        _x.Snap(1f);
-        _y.Snap(1f);
-        _pop.Snap(0f);
+        _sink.Snap(0f);
         _shake.Snap(0f);
+        _pull.Snap(0f);
+        _darken.Snap(0f);
     }
 
     /// <summary>Advances every part by <paramref name="dt"/> seconds; true while any still moves.</summary>
     public bool Step(float dt, MotionKnobs knobs)
     {
-        SpringTuning tuning = knobs.Get(_baseFeel);
-        _x.Step(dt, tuning, knobs.settleValue, knobs.settleSpeed);
-        _y.Step(dt, tuning, knobs.settleValue, knobs.settleSpeed);
-        _pop.Step(dt, knobs.Get(knobs.popFeel), knobs.settleValue, knobs.settleSpeed);
-        _shake.Step(dt, knobs.Get(knobs.refuseFeel), knobs.settleValue * 100f, knobs.settleSpeed * 100f); // px, not a scale
+        float v = knobs.settleValue * 100f, s = knobs.settleSpeed * 100f; // px
+        _sink.Step(dt, knobs.Get(_sinkFeel), v, s);
+        _shake.Step(dt, knobs.Get(knobs.refuseFeel), v, s);
+        _pull.Step(dt, knobs.Get(_pullFeel), v, s);
+        _darken.Step(dt, knobs.Get(knobs.pressFeel), knobs.settleValue, knobs.settleSpeed);
         return Moving;
     }
 
-    /// <summary>Pulls the base pose toward <paramref name="x"/>, <paramref name="y"/> (scaled by the amount; a cut when nothing moves) with <paramref name="feel"/>.</summary>
-    private void Aim(float x, float y, MotionFeel feel, MotionAmount amount)
+    /// <summary>
+    /// The face of a <paramref name="width"/> x <paramref name="height"/>
+    /// control now: its top down by the sink (its bottom fixed), wider or
+    /// narrower by the area's rule; a pull tab reaching out of its edge by its
+    /// pull (the edge it hangs from fixed), stretched along its travel; the
+    /// shake; then each edge's outward reach capped by its room.
+    /// </summary>
+    public FaceEdges Edges(float width, float height, MotionKnobs knobs)
     {
-        _baseFeel = feel;
-        float tx = amount.Scale(x), ty = amount.Scale(y);
-        if (amount.Still)
+        if (width <= 0f || height <= 0f)
+            return FaceEdges.Rest;
+        float h = Math.Max(1f, height - _sink.Value); // the top moves, the bottom stays
+        float w = width * height / h;
+        float midY = h / 2f;
+        if (Pulls)
         {
-            _x.Snap(tx);
-            _y.Snap(ty);
-            return;
+            Stretch st = SquashStretch.FromMotion(_pull.Velocity, _pull.Acceleration(knobs.Get(_pullFeel)), knobs.pullStretchPerSpeed, knobs.pullSquashPerAccel, knobs.maxStretch);
+            if (_pullX != 0)
+            {
+                w *= st.Along;
+                h *= st.Across;
+            }
+            else
+            {
+                w *= st.Across;
+                h *= st.Along;
+            }
         }
-        _x.Target = tx;
-        _y.Target = ty;
+        // A pull tab is pulled out of its screen edge: the edge it hangs from stays put and the face reaches out by the pull (it never leaves a gap at the edge).
+        float px = _pull.Value * _pullX, py = _pull.Value * _pullY;
+        float left = (w - width) / 2f - _shake.Value + Math.Max(0f, -px), right = (w - width) / 2f + _shake.Value + Math.Max(0f, px);
+        float bottom = -(midY - h / 2f) + Math.Max(0f, -py), top = midY + h / 2f - height + Math.Max(0f, py);
+        return new FaceEdges(Math.Min(left, _roomLeft), Math.Min(right, _roomRight), Math.Min(bottom, _roomBottom), Math.Min(top, _roomTop),
+                             _darken.Value < 0f ? 0f : _darken.Value);
+    }
+
+    /// <summary>Pulls <paramref name="spring"/> toward <paramref name="target"/> scaled by the amount (a cut when nothing moves).</summary>
+    private static void Aim(ref Spring spring, float target, MotionAmount amount)
+    {
+        float t = target * amount.Share;
+        if (amount.Still)
+            spring.Snap(t);
+        else
+            spring.Target = t;
+    }
+
+    /// <summary>The darkening toward <paramref name="target"/> (a state, not a motion: it shows under Reduced Motion too, at once).</summary>
+    private void AimDarken(float target, MotionAmount amount)
+    {
+        if (amount.Still)
+            _darken.Snap(target);
+        else
+            _darken.Target = target;
     }
 }
 
@@ -170,6 +290,12 @@ public sealed class AppearMotion
 
     /// <summary>The offset to draw at: <paramref name="distance"/> away (scaled by the amount) when gone, none when shown; 0 under Reduced Motion.</summary>
     public float Offset(float distance, MotionAmount amount) => _fading ? 0f : distance * amount.Share * (1f - _presence.Value);
+
+    /// <summary>How fast the presence changes (per second; 0 under Reduced Motion): an offset of distance d travels at d · share · this.</summary>
+    public float Speed => _fading ? 0f : _presence.Velocity;
+
+    /// <summary>The presence's acceleration under <paramref name="tuning"/> (per second²; 0 under Reduced Motion): a travelling piece squashes by it.</summary>
+    public float Acceleration(SpringTuning tuning) => _fading ? 0f : _presence.Acceleration(tuning);
 
     /// <summary>Advances it by <paramref name="dt"/> seconds with <paramref name="tuning"/> (a fade over <paramref name="fadeSeconds"/> under Reduced Motion); true while it still moves.</summary>
     public bool Step(float dt, SpringTuning tuning, float fadeSeconds, float settleValue, float settleSpeed)

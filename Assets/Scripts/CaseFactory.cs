@@ -565,6 +565,8 @@ public sealed class CaseFactory
 
         // 6) Build the documents the traveller carries today (their fields are filled below).
         BuildDocuments(inst, plan, blueprint);
+        inst.requiredForms = plan.TemplatesOf(blueprint).Where(t => t != null && DocumentHandOvers.IsRequested(t.handOver))
+                                 .Select(t => FormRequests.IdOf(t.askGroup, t.formNumber)).Where(id => !string.IsNullOrEmpty(id)).Distinct().ToList();
 
         // 7) Investigation layer: structured fields (the claim is only spoken: InterviewScript.Opening), then the rolled
         //    lie planned and printed, or the paper side of a broken directive (a form left out or unsigned, a date falsified).
@@ -632,6 +634,12 @@ public sealed class CaseFactory
             ? Slips.PremadeSlips(intent, _lib.Interview.voices.slips.Exists(r => r != null && r.premade == legendary.id))
             : Slips.Rolls(intent, false) && Slips.Roll(plan.SlipChance, _slipRng);
         inst.slip = slips ? Voices.Slip(_lib.Interview, inst.Voice, slipContext, inst.lie) : null;
+
+        // 8.6) The citizen file (the scanner app spec §3): the premade's lines or the random traveller's, drawn on their own
+        //      file stream (a returning traveller's first visit's, so it comes back the same), and a line per earlier visit
+        //      this run (WorldState.visits, kept under their record's identity). Last: it reads the finished case and moves no draw.
+        inst.seenBefore = Visits.Before(state.visits, inst.RecordKey, state.day);
+        inst.file = CitizenFile.Lines(_lib.Lore, LoreSubjectOf(inst, role), Seeds.ForLore(back != null ? back.caseSeed : _caseSeed), inst.seenBefore, state.day);
 
         string archetypeName = archetype != null ? archetype.displayName : string.Empty;
         string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
@@ -1113,6 +1121,12 @@ public sealed class CaseFactory
             return null;
 
         bool hasPapers = blueprint.DocumentTemplates != null && blueprint.DocumentTemplates.Any(t => t != null && t.fieldSpecs != null && t.fieldSpecs.Length > 0);
+        if (DevToolsState.ForcedLie is LieKind forced && legendary == null && !inst.HasDirectiveFault && hasPapers && LieKinds.AppliesTo(forced, inst.kind))
+        {
+            DevToolsState.ForcedLie = null;
+            Debug.Log($"[CaseFactory] ForcedLie '{forced}' consumed by case {caseIndex1Based} ({inst.kind}).");
+            return forced;
+        }
         if (authoredLie != null)
             return Lies.MayLie(false, !inst.HasDirectiveFault, hasPapers) ? Lies.Roll(1f, new[] { authoredLie.Value }, _lieRng) : null;
         if (legendary != null)
@@ -1796,6 +1810,30 @@ public sealed class CaseFactory
             .Select(t => new FormEntry(t.formNumber, t.askGroup, Expires(t))).ToList()
     };
 
+    /// <summary>Whom the citizen file is about (CitizenFile): the case's registered identity, its account or agency file, its role and its fault (a clue must agree with it).</summary>
+    private static LoreSubject LoreSubjectOf(CaseInstance inst, string role) => new LoreSubject
+    {
+        Kind = inst.kind,
+        Premade = inst.legendarySource != null ? inst.legendarySource.id : string.Empty,
+        Personality = inst.personality ?? string.Empty,
+        Name = inst.visitorGivenName ?? string.Empty,
+        Place = inst.originLabel ?? string.Empty,
+        Era = inst.claimedEra != null ? inst.claimedEra.displayName : string.Empty,
+        Role = role ?? string.Empty,
+        Debt = inst.account != null ? inst.account.Debt : 0,
+        Status = inst.account != null ? inst.account.Status.ToString() : string.Empty,
+        Frozen = inst.account != null && inst.account.Standing == AccountStanding.Frozen,
+        Trips = inst.account != null ? inst.account.Trips.Count : 0,
+        Employer = inst.account != null && inst.account.HasContract ? inst.account.Employer : string.Empty,
+        Wage = inst.account != null && inst.account.HasContract ? AccountMaker.Credits(inst.account.Wage) : string.Empty,
+        Term = inst.account != null && inst.account.HasContract ? AccountMaker.Term(inst.account.TermDays) : string.Empty,
+        Transponder = inst.account != null ? inst.account.Transponder ?? string.Empty : string.Empty,
+        Incident = inst.displacement != null ? inst.displacement.Incident : string.Empty,
+        Found = inst.displacement != null ? inst.displacement.Found : string.Empty,
+        Fault = inst.directiveFault,
+        Lie = inst.lie
+    };
+
     /// <summary>True when the form prints a Valid Until (an Expiry field).</summary>
     private static bool Expires(DocumentTemplateSO template) =>
         template.fieldSpecs != null && template.fieldSpecs.Any(s => s != null && s.category == ClueCategory.Expiry);
@@ -1812,9 +1850,13 @@ public sealed class CaseFactory
     /// evidence); the number, incident and found rows only with an agency file.
     /// Records carry the registered identity: an honest traveller's, or a
     /// liar's cover (claimed origin). They never reveal a true home. (Future:
-    /// deliberately missing/corrupted records + family history.)
+    /// deliberately missing/corrupted records + family history.) Every
+    /// record ends with the traveller's citizen file (FILE) and, when they
+    /// were seen before this run, SEEN BEFORE with the flag of their latest
+    /// verdict as of <paramref name="today"/> (CitizenFile.Groups; the
+    /// scanner app spec §2.6, §3).
     /// </summary>
-    public static CitizenRegistry BuildRegistry(IReadOnlyList<CaseInstance> cases, bool standing = true)
+    public static CitizenRegistry BuildRegistry(IReadOnlyList<CaseInstance> cases, bool standing = true, int today = 0)
     {
         var registry = new CitizenRegistry();
 
@@ -1827,11 +1869,13 @@ public sealed class CaseFactory
                 continue;
 
             string origin = !string.IsNullOrEmpty(inst.originLabel) ? inst.originLabel : FallbackOriginLabel(inst.claimedNation, inst.claimedEra);
+            List<RecordGroup> fileGroups = CitizenFile.Groups(inst.file, inst.seenBefore, today, UiText.Get);
             if (inst.account != null)
             {
-                registry.Add(AccountRecords.Record(inst.visitorGivenName, inst.trueBirthDate, origin, inst.account, UiText.Get,
-                                                   inst.isLegendary && inst.legendarySource != null ? inst.legendarySource.recordNote : null,
-                                                   inst.facts != null ? inst.facts.Issued : null, standing));
+                CitizenRecord account = AccountRecords.Record(inst.visitorGivenName, inst.trueBirthDate, origin, inst.account, UiText.Get,
+                                                              inst.isLegendary && inst.legendarySource != null ? inst.legendarySource.recordNote : null,
+                                                              inst.facts != null ? inst.facts.Issued : null, standing);
+                registry.Add(new CitizenRecord(account.FullName, account.Number, account.Groups.Concat(fileGroups)));
                 continue;
             }
 
@@ -1851,7 +1895,7 @@ public sealed class CaseFactory
             }
             rows.Add(new RecordRow(UiText.Get("records.row.status"), UiText.Get("records.status.awaiting")));
             rows.Add(new RecordRow(UiText.Get("records.row.note"), note));
-            registry.Add(new CitizenRecord(inst.visitorGivenName, file?.Number, new[] { new RecordGroup(UiText.Get("records.group.registry"), rows) }));
+            registry.Add(new CitizenRecord(inst.visitorGivenName, file?.Number, new[] { new RecordGroup(UiText.Get("records.group.registry"), rows) }.Concat(fileGroups)));
         }
 
         return registry;

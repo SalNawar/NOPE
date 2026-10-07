@@ -114,6 +114,9 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The desk's guide (world_source.json "guide", via Generate World): the BASICS page, a rulebook page per introduced feature, the day-1 steps (Guide).</summary>
     [SerializeField] private GuideContent guide = new();
 
+    /// <summary>The citizen file's content (world_source.json "lore", via Generate World; the scanner app spec §3): each premade's lines, the random travellers' templates, the threads (CitizenFile).</summary>
+    [SerializeField] private LoreContent lore = new();
+
     [Header("The world's outcomes (the endings spec E0)")]
     /// <summary>The questions the end of the demo answers about 2150 and how each is answered today (written by Generate World from world_source.json "world").</summary>
     [SerializeField] private WorldContent world = new();
@@ -429,6 +432,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>Home's radio block (never null).</summary>
     public HomeContent Home => home ?? new HomeContent();
+
+    /// <summary>The citizen file's content (CitizenFile reads it; empty until Generate World runs).</summary>
+    public LoreContent Lore => lore ?? new LoreContent();
 
     /// <summary>The guide over the ramp (its pages by day, the day's moment, the FTUE's steps), built once per load from the guide content and the introductions.</summary>
     public Guide Guide => _guide ??= new Guide(guide ?? new GuideContent(), Introductions);

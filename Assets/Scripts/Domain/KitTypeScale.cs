@@ -63,7 +63,10 @@ public enum KitText
     Masthead,
 
     /// <summary>A key story's headline (condensed capitals).</summary>
-    Headline
+    Headline,
+
+    /// <summary>A lit sign's name (the Night Slots machine's marquee): big condensed capitals, one line.</summary>
+    Marquee
 }
 
 /// <summary>
@@ -118,6 +121,7 @@ public static class KitTypeScale
         (KitText.BodyLarge, 0f, 18f, 28f),
         (KitText.Masthead, 0.8f, 40f, 96f),
         (KitText.Headline, 0.3f, 30f, 64f),
+        (KitText.Marquee, 0.6f, 32f, 72f),
     };
 
     /// <summary>

@@ -150,7 +150,7 @@ public sealed partial class GameManager
         _cheatEvidence = true;
         try
         {
-            investigationUI.Decide(accept);
+            investigationUI.Decide(accept ? DeskStamp.Approved : DeskStamp.Denied);
         }
         finally
         {

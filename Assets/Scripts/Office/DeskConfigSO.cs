@@ -43,11 +43,11 @@ public sealed class DeskConfigSO : ScriptableObject
     [Range(0.5f, 1f)] public float cloneFill = 0.92f;
 
     [Header("Scanner")]
-    /// <summary>Seconds a desk scan takes (the shift clock keeps running).</summary>
-    [Min(0.1f)] public float scanSeconds = 1.5f;
+    /// <summary>Seconds a desk scan takes per paper (the shift clock keeps running): a fast sweep (drop and go, the scanner app spec §1: about 0.8 s).</summary>
+    [Min(0.1f)] public float scanSeconds = 0.8f;
 
-    /// <summary>Seconds a scan by hand takes with the Analysis Scanner (the analysis pass, the PC redesign SC4); a scan the Auto-Feed Scanner feeds itself keeps scanSeconds.</summary>
-    [Min(0.1f)] public float analysisScanSeconds = 3f;
+    /// <summary>Seconds a scan by hand takes with the Analysis Scanner (its pass: faster sweeps that also mark the first fault, the scanner app spec §1); a scan the Auto-Feed Scanner feeds itself keeps scanSeconds.</summary>
+    [Min(0.1f)] public float analysisScanSeconds = 0.5f;
 
     /// <summary>The deepest shadow behind the scanner, in metres, where its body hides a paper from the office camera (ScannerClearance: a paper left there moves out to the left, right or front; the desk-first redesign, item 4).</summary>
     [Min(0f)] public float scannerShadowMax = 0.35f;
@@ -87,11 +87,42 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>A document's scale on the counter (small: a share of its own size).</summary>
     [Range(0.2f, 1f)] public float counterScale = 0.6f;
 
+    /// <summary>How much nearer each next row of the counter's spots lies once a traveller's papers outnumber them (metres; the row also shifts half a spot across: a staggered fan, each paper's header in view; DeskZones.CounterSpot).</summary>
+    [Min(0f)] public float counterRowDepth = 0.05f;
+
+    /// <summary>The reading view's free area for the papers sent to the desk (viewport: clear of the BACK key, the bubble, the STAMPS tab and the inspect button): the spread lays them inside it (PaperSpread).</summary>
+    public Rect readingArea = new Rect(0.02f, 0.03f, 0.88f, 0.8f);
+
     /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): it reads in the reading view at 1280x720.</summary>
     [Min(0.05f)] public float readingHeight = 0.34f;
 
     /// <summary>The photo's tint while its paper lies on the desk, full size (evenly lit, unlike travellerTint on the counter).</summary>
     [FormerlySerializedAs("examineTint")] public Color readingTint = Color.white;
+
+    [Header("Citations (the Citation lands on the desk, Saleh 2026-10-07)")]
+    /// <summary>Where the day's first citation lands, in metres from the desk's centre in the office view's frame (x right, y away from the camera): the mat's far half right of centre, clear of the rulebook folder, so it lies wholly on the screen in the office view and the reading view (the reading view shows it right of the folder's page).</summary>
+    public Vector2 citationSpot = new Vector2(0f, 0.14f);
+
+    /// <summary>How far each next citation of the day lands from the last (metres, the same frame): they stack with an offset; a continuation sheet lands a third of it from its first.</summary>
+    public Vector2 citationStep = new Vector2(0.025f, -0.02f);
+
+    /// <summary>A citation's height on the desk relative to its form's (DeskZones' reading height at its form's scale): smaller, so a pile of them does not cover the case's papers and the day's stack fits the reading view's height.</summary>
+    [Range(0.3f, 1f)] public float citationScale = 0.75f;
+
+    /// <summary>Where a citation flies in from: a point of the camera's view (viewport coordinates: off the screen's right, near its top) <see cref="citationFromDepth"/> metres in front of the camera, so it starts large, close to the eye, and flies down onto the desk.</summary>
+    public Vector2 citationFrom = new Vector2(1.08f, 0.9f);
+
+    /// <summary>How far in front of the camera a citation starts its flight (metres).</summary>
+    [Min(0.05f)] public float citationFromDepth = 0.45f;
+
+    /// <summary>A citation's flight: the arc's top over the straight way (metres), the twist about the vertical and the tumble about its long axis at the start (degrees).</summary>
+    [Min(0f)] public float citationArc = 0.12f;
+
+    /// <summary>A citation's twist about the vertical and its tumble about its long axis as it starts its flight (degrees).</summary>
+    public float citationTwist = 28f, citationTumble = 32f;
+
+    /// <summary>A citation's punch as it lands (FeelDirector.Hit's strength, 0 to 1: its hit-stop and camera bump; 0 none), with the sound cue citation_land.</summary>
+    [Range(0f, 1f)] public float citationLandHit = 0.25f;
 
     [Header("Traveller")]
     /// <summary>The traveller figure's height in metres (feet at the traveller anchor).</summary>
@@ -142,19 +173,43 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds of the city panorama's fade in and out (0: a cut at the fade's start).</summary>
     [Min(0f)] public float cityFadeSeconds = 0.7f;
 
+    /// <summary>Seconds the desk's own controls (the PC and STAMPS pull tabs, the red inspect button) take to fade out as the view turns to the city, and back in as it returns (the orchestrator, run 7's integration: in the city view only the DESK tab shows); a cut under Reduced Motion.</summary>
+    [Min(0f)] public float cityDeskControlsFadeSeconds = 0.15f;
+
     /// <summary>The colour round the city panorama where it does not fill the screen (it is shown whole, fitted inside the screen; the palette's ink).</summary>
     public Color cityMatte = new Color(0.169f, 0.11f, 0.141f, 1f);
 
+    /// <summary>The city's depth parallax as it comes into view (Saleh 2026-10-07: "why is the city not animated and no parallax when you switch to it"): its pan (the living city shader's _CityPan, in shares of the painting) at the fade's start, settling to 0 over citySettleSeconds, the near roofs sweeping further than the sky (its depth map); the panorama is cropped by as much at each side so the sweep never runs off the painting.</summary>
+    [Range(0f, 0.2f)] public float cityParallax = 0.05f;
+
+    /// <summary>Seconds the city's parallax sweep takes to settle once the city shows.</summary>
+    [Min(0f)] public float citySettleSeconds = 1.8f;
+
+    /// <summary>While the city shows, the pointer looks around it: its pan follows the pointer's place across the screen by this much at the edges (shares of the painting; 0: off), smoothed.</summary>
+    [Range(0f, 0.2f)] public float cityLookParallax = 0.02f;
+
+    /// <summary>The pace of the city's moving sky, airship, bus and headlights in the city view, against the hall window's (the shader's _AtmospherePace; 1: as slow as the hall window draws them, which reads as still full screen).</summary>
+    [Min(0f)] public float cityAtmospherePace = 8f;
+
+    /// <summary>The headlights' size in the city view, against the hall window's (the shader's _HeadlightSize).</summary>
+    [Min(0.1f)] public float cityHeadlightSize = 6f;
+
+    /// <summary>The flying traffic in the city view (the hall window's lanes, HallCityExterior.lanes, drawn over the panorama): its speed against the hall window's.</summary>
+    [Min(0f)] public float cityTrafficPace = 2.5f;
+
+    /// <summary>The flying traffic's size in the city view, against its size in the hall window.</summary>
+    [Min(0.1f)] public float cityTrafficScale = 1.8f;
+
     [Header("Inspection at the desk (the desk-first redesign, item 11)")]
-    /// <summary>Where the rulebook card lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat).</summary>
-    public Vector2 rulebookAt = new Vector2(-0.3f, -0.05f);
+    /// <summary>Where the rulebook folder lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat); its open folder fills the reading view's left, its page (the right sheet) left of where the papers land (DeskController's reading spots).</summary>
+    public Vector2 rulebookAt = new Vector2(-0.25f, -0.06f);
 
     [Header("Stamps (Papers, Please's stamp bar, Saleh 2026-10-06: the art's 3D stamps)")]
     /// <summary>How high above the desk the stamps' dies hang while the bar is out (metres): a paper slides under them (above a dragged paper's lift), and a press dips them down onto it.</summary>
     [Min(0.005f)] public float stampHover = 0.03f;
 
-    /// <summary>Where the stamp bar's middle (between its two stamps) hangs out over the desk: the point of the desk the reading view shows there (viewport x, y; low on the right, so a passport whose visa box is under a stamp stands in the view above it).</summary>
-    public Vector2 stampBarView = new Vector2(0.72f, 0.36f);
+    /// <summary>Where the stamp bar's middle (between its two daters' dies) hangs out over the desk: the point of the desk the reading view shows there (viewport x, y). High on the right (run 7's integration): the passport slides so its visa page lies under the daters (DeskController.PassportUnderDaters), its data page whole and clear below the rack in the view.</summary>
+    public Vector2 stampBarView = new Vector2(0.66f, 0.62f);
 
     /// <summary>How far the stamp bar slides out from the desk's right (metres along the office view's right): in, it waits that far right of where it hangs out, out of the reading view.</summary>
     [Min(0.1f)] public float stampBarTravel = 0.6f;
@@ -162,8 +217,17 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds the stamp bar takes to slide out or back (a cut under Reduced Motion).</summary>
     [FormerlySerializedAs("stampTraySeconds"), Min(0f)] public float stampBarSeconds = 0.3f;
 
-    /// <summary>Seconds a stamp dragged out over the desk takes to go back to its place in the rack once pressed or let go (a cut under Reduced Motion).</summary>
-    [Min(0f)] public float stampReturnSeconds = 0.2f;
+    /// <summary>The daters' ink (the desk machine spec §1; DaterInk): how much lighter each print since inking is.</summary>
+    [Range(0f, 0.2f)] public float daterInkFade = 0.035f;
+
+    /// <summary>The least density a dater's pad ever prints (it never runs out: a look, not a resource).</summary>
+    [Range(0f, 1f)] public float daterInkFloor = 0.45f;
+
+    /// <summary>How much one print's density may vary around the pad's.</summary>
+    [Range(0f, 0.3f)] public float daterInkSpread = 0.08f;
+
+    /// <summary>Where the DETAIN button stands on the desk (the desk machine spec §2: within easy reach, near the daters on the counter side): the point of the desk's plane the office view shows there (viewport x, y).</summary>
+    public Vector2 detainView = new Vector2(0.7f, 0.09f);
 
     /// <summary>Seconds a refused press's note, or the counter's "Stamp the passport first", stays up.</summary>
     [Min(0.5f)] public float stampNoteSeconds = 2.5f;
@@ -230,12 +294,22 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The hall's swappable slots (Assets/Data/Config/HallSlots_Default.asset): the binder's HallSlotsLink swaps their art as the hall's variables shift; none: the hall stays as painted.</summary>
     public HallSlotsSO hallSlots;
 
+    [Header("The stability monitor (Saleh 2026-10-07: \"the timeline helix needs to be bigger; the screen itself is too small\")")]
+    /// <summary>How many times its art size the stability monitor is drawn (the binder grows the art's monitor parts and its stability text at load, so the Helix River on its glass grows with them; 1: as the art draws it). The river is drawn by its shader per pixel, so it stays sharp at any size.</summary>
+    [Min(1f)] public float stabilityMonitorScale = 2.4f;
+
+    /// <summary>The point of the monitor that stays put while it grows, as shares of its bounds (x left to right, y bottom to top): near its lower right, so it grows up and to the left, away from the screen's edge and the STAMPS tab.</summary>
+    public Vector2 stabilityMonitorPivot = new Vector2(0.9f, 0.25f);
+
     [Header("AVAILABLE sign")]
     /// <summary>The caption the game writes on the AVAILABLE sign's label (the art's NEXT sign; "AVAILABLE"): a UI string key (world_source.json ui.strings).</summary>
     public string readyCaptionKey = "desk.readyCaption";
 
     /// <summary>The caption's ink while the desk is paused (the shift's start, a break, after closing; AvailableSignLink): the art's lit ink turned down, like an unlit sign, that still reads on the sign's dark glass (large text: 3.2:1 as drawn in the hall at 1080p, against the lit ink's 16.7:1). Lit, the label keeps the art's own ink.</summary>
     public Color readyPausedInk = new Color(0.42f, 0.4f, 0.37f, 1f);
+
+    /// <summary>The AVAILABLE caption's invitation before the shift opens (AvailableSignLink): one beat of its gentle pulse between the paused and the lit ink, in seconds.</summary>
+    [Min(0.1f)] public float readyInviteSeconds = 1.6f;
 }
 
 /// <summary>One portal's art layers in the anime hall (DeskConfigSO.hallPortalLayers), by their AnimeHallPresentation ids.</summary>

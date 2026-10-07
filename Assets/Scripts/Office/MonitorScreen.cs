@@ -57,17 +57,14 @@ public sealed class MonitorScreen : MonoBehaviour
         _screen.Changed -= HandleChanged;
     }
 
-    /// <summary>Turns the screen on or off (the power buttons' persistent call); a held screen stays on.</summary>
+    /// <summary>Turns the screen on or off (the power buttons' persistent call).</summary>
     public void TogglePower() => _screen.Toggle();
 
-    /// <summary>Turns the screen off (Start > Turn off screen); a held screen stays on.</summary>
+    /// <summary>Turns the screen off (Start > Turn off screen).</summary>
     public void TurnOff() => _screen.TurnOff();
 
     /// <summary>Turns a dark screen on when the reason's wake rule is on.</summary>
     public void Wake(WakeReason reason) => _screen.Wake(reason);
-
-    /// <summary>Holds the screen on (a pending citation slip) or releases it.</summary>
-    public void SetHeld(bool held) => _screen.SetHeld(held);
 
     /// <summary>True while the desktop takes input (BoothRules.DesktopInteractive: the frame open, the screen on, no newsletter): the player is looking at the PC.</summary>
     public bool IsInteractive { get; private set; }

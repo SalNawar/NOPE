@@ -318,6 +318,31 @@ public sealed class MatchBoard : MonoBehaviour
         Changed?.Invoke();
     }
 
+    /// <summary>
+    /// The case board's lookup found no record of <paramref name="query"/>
+    /// (the scanner app spec §2.1: the NO RECORD plate is itself a finding):
+    /// logged as a difference ("No record on file"), once per case and query;
+    /// no line is drawn.
+    /// </summary>
+    public void LogNoRecord(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+            return;
+        Wire();
+        var finding = new Finding(FindingKind.NoRecord, NoRecordKey(query), string.Empty, UiText.Get("app.tab.records"), query.Trim(), string.Empty, string.Empty,
+                                  query.Trim(), null, ClueCategory.CitizenId);
+        if (!_log.Add(finding))
+            return;
+        ShowStatus(FindingLook.Differ, UiText.Format("status.logged", FindingsView.Title(finding)));
+        if (findings != null)
+            findings.Show(_log);
+        Logged?.Invoke(finding);
+        Changed?.Invoke();
+    }
+
+    /// <summary>A NO RECORD finding's key ("norecord:NHA-512"): no row has it, so a revisit opens Records only by its own link.</summary>
+    private static string NoRecordKey(string query) => "norecord:" + query.Trim();
+
     /// <summary>A missing paper's finding key ("missing:TC-230"): no row has it, so a revisit opens nothing.</summary>
     private static string MissingKey(string requestId) => InterviewUnlocks.Missing(requestId);
 

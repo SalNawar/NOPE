@@ -7,7 +7,10 @@ using System;
 /// starts. While it is on, the traveller waiting in the queue is called as
 /// soon as the desk is free: one is waiting (their slot started: Arm) and the
 /// last one has left (their reaction's linger is over: SetDeparting(false)); a
-/// citation slip holds the next slot itself, so it holds the call too. Turned
+/// citation slip holds the next slot itself, so it holds the call too. The
+/// sign's first turn on opens the shift (Saleh 2026-10-07: "shift should not
+/// start until you press AVAILABLE"): Opened is raised once and the shift
+/// clock starts from it; later presses only pause and resume. Turned
 /// off, the traveller at the desk is finished normally and nobody new is
 /// called until it is turned on again (the shift clock never stops for it: a
 /// break is time off the queue, not off the clock). Closing time and the day's
@@ -28,19 +31,30 @@ public sealed class DeskAvailability
     /// <summary>The shift is over (closing time or the day's end): nobody is called and the sign no longer turns on.</summary>
     public bool IsClosed { get; private set; }
 
+    /// <summary>The sign has been turned on once: the shift is open (its clock runs from then).</summary>
+    public bool HasOpened { get; private set; }
+
+    /// <summary>Raised once, at the sign's first turn on, before the waiting traveller is called: the shift opens and its clock starts.</summary>
+    public event Action Opened;
+
     /// <summary>Raised when the waiting traveller is called to the desk (at most once per Arm).</summary>
     public event Action Called;
 
     /// <summary>Raised after <see cref="IsAvailable"/> changes (the sign lights up or dims).</summary>
     public event Action Changed;
 
-    /// <summary>The sign's click: turns the desk available (calling the waiting traveller at once when the desk is free) or pauses it; nothing once closed.</summary>
+    /// <summary>The sign's click: turns the desk available (the first time, opening the shift: Opened; then calling the waiting traveller at once when the desk is free) or pauses it; nothing once closed.</summary>
     public void Toggle()
     {
         if (IsClosed)
             return;
 
         IsAvailable = !IsAvailable;
+        if (IsAvailable && !HasOpened)
+        {
+            HasOpened = true;
+            Opened?.Invoke();
+        }
         Changed?.Invoke();
         TryCall();
     }

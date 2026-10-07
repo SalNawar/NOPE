@@ -293,6 +293,19 @@ public static class Seeds
     /// </summary>
     public static int ForHallSlot(int runSeed, string key) => Mix(Mix(runSeed, HallSlotSalt), OfKey(key));
 
+    /// <summary>Salt for a traveller's citizen file ("LORE").</summary>
+    public const int LoreSalt = 0x4C4F5245;
+
+    /// <summary>
+    /// Seed for one traveller's citizen file (the scanner app spec §3;
+    /// CitizenFile.Lines: which templates, which clue, the drawn years and
+    /// kin): every draw a value of it, seeded by the traveller's first visit
+    /// (a returning traveller's file comes back the same and grows), apart
+    /// from every other stream, so the file never moves who travels, who lies
+    /// or what they carry.
+    /// </summary>
+    public static int ForLore(int caseSeed) => Mix(caseSeed, LoreSalt);
+
     /// <summary>Where <see cref="OfKey"/> starts ("KEYS"): the value of an empty key.</summary>
     public const int KeyStart = 0x4B455953;
 

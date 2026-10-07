@@ -12,8 +12,9 @@ using static SceneUiKit;
 /// the pet's needs, one row per night's bill with its Paying / Skip pair; the
 /// Home pet spec), the pet's corner (the pet drawn by PetStandIn, Pet, the
 /// toys' rows), the House (Home's upgrade tree beside its detail card; the
-/// Home upgrades spec §6), the night slots (three reels, the SPIN dome and the
-/// lever) and the sleep prompt. Every panel is drawn in the cel UI kit
+/// Home upgrades spec §6), the Night Slots machine (its cabinet, marquee and
+/// bulbs, three reels behind glass, deck, tray and lever: SlotMachineView) and
+/// the sleep prompt. Every panel is drawn in the cel UI kit
 /// (docs/UI_KIT.md, sheet 04; KitScreens): kit panels, plates and readouts
 /// with live TMP labels, laid out and skinned again on every build. Unlike
 /// OfficeSceneUIBuilder, this script creates the Canvas, EventSystem,
@@ -106,18 +107,12 @@ public static class HomeSceneBuilder
         Button shopContinue = ReparentedButton(shop, detailCard, "ContinueButton", "Continue to Slots");
         LayOutHouse(shop, kit, shopTitle, shopBody, houseTree, detailCard, detailIcon, houseDetail, houseBuy, shopContinue);
 
-        // --- Slot panel ---
+        // --- The Night Slots machine (SlotMachineView) ---
         Transform slot = FindOrCreatePanel(uiRoot, "SlotPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, SlotPanelSize, withBackground: true);
-        TMP_Text slotTitle = FindOrCreateText(slot, "TitleText", "Night Slots", 34,
-            TextAlignmentOptions.Left, new Vector2(0.05f, 0.85f), new Vector2(0.95f, 0.98f));
-        TMP_Text slotBody = FindOrCreateText(slot, "BodyText", "...", 24,
-            TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.4f), new Vector2(0.94f, 0.82f));
-        Button slotSpin = FindOrCreateButton(slot, "SpinButton", "Spin",
-            new Vector2(0.1f, 0.2f), new Vector2(0.45f, 0.34f));
+            Vector2.zero, Vector2.zero, withBackground: true);
         Button slotContinue = FindOrCreateButton(slot, "ContinueButton", "Continue",
             new Vector2(0.55f, 0.2f), new Vector2(0.9f, 0.34f));
-        Image[] reelFaces = LayOutSlot(slot, kit, slotTitle, slotBody, slotSpin, slotContinue);
+        SlotMachineView slotMachine = LayOutSlot(slot, kit, slotContinue);
 
         // --- Sleep panel ---
         Transform sleep = FindOrCreatePanel(uiRoot, "SleepPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -162,11 +157,8 @@ public static class HomeSceneBuilder
         soUi.FindProperty("shopContinueButton").objectReferenceValue = shopContinue;
 
         soUi.FindProperty("slotPanel").objectReferenceValue = slot.gameObject;
-        soUi.FindProperty("slotTitleText").objectReferenceValue = slotTitle;
-        soUi.FindProperty("slotBodyText").objectReferenceValue = slotBody;
-        soUi.FindProperty("slotSpinButton").objectReferenceValue = slotSpin;
+        soUi.FindProperty("slotMachine").objectReferenceValue = slotMachine;
         soUi.FindProperty("slotContinueButton").objectReferenceValue = slotContinue;
-        SerializedArrays.Set(soUi, "slotReelFaces", reelFaces);
 
         soUi.FindProperty("sleepPanel").objectReferenceValue = sleep.gameObject;
         soUi.FindProperty("sleepTitleText").objectReferenceValue = sleepTitle;
@@ -217,9 +209,6 @@ public static class HomeSceneBuilder
 
     /// <summary>The House panel's size (reference px): five category columns of cards, four rows deep, beside the detail card.</summary>
     private static readonly Vector2 HousePanelSize = new Vector2(1840f, 920f);
-
-    /// <summary>The night slots' size (reference px): the three reels, the dome and the lever over the result line and Continue.</summary>
-    private static readonly Vector2 SlotPanelSize = new Vector2(860f, 500f);
 
     /// <summary>The sleep prompt's size (reference px).</summary>
     private static readonly Vector2 SleepPanelSize = new Vector2(800f, 360f);
@@ -476,66 +465,279 @@ public static class HomeSceneBuilder
         return FindOrCreateButton(card, name, label, Vector2.zero, Vector2.one);
     }
 
-    /// <summary>A reel window's size (reference px, as seen) and the symbol tile inside it.</summary>
-    private static readonly Vector2 ReelSize = new Vector2(132f, 168f);
+    /// <summary>The machine's size (reference px, as seen) and its centre's offset from the screen's: the cabinet from the crown's arch to its foot.</summary>
+    private static readonly Vector2 MachineSize = new Vector2(640f, 960f), MachineOffset = new Vector2(0f, 4f);
 
-    /// <summary>The symbol tile inside a reel (reference px, as seen).</summary>
-    private const float ReelSymbolSize = 92f;
+    /// <summary>The veil over the flat behind the machine (the kit's ink, translucent).</summary>
+    private static readonly Color SlotVeil = new Color(0.118f, 0.078f, 0.11f, 0.47f);
 
-    /// <summary>The SPIN dome's size (reference px, as seen) and the lever's.</summary>
-    private static readonly Vector2 DomeSize = new Vector2(150f, 150f), LeverSize = new Vector2(54f, 170f);
+    /// <summary>The reels' left edges inside the machine, their top, and a reel's size (two symbol pitches tall: the payline's symbol whole, its neighbours cut by the window).</summary>
+    private static readonly float[] ReelLefts = { 62f, 240f, 418f };
+    private const float ReelTop = 236f;
+    private static readonly Vector2 ReelSize = new Vector2(160f, 244f);
+
+    /// <summary>A reel symbol's size, and its win glow's (reference px, as seen).</summary>
+    private static readonly Vector2 SymbolSize = new Vector2(100f, 100f), GlowSize = new Vector2(170f, 170f);
+
+    /// <summary>The marquee's bulbs: the ring round its plate (left, right, top, bottom centres), the bulbs along the top and bottom, the bulbs between the corners on each side, and a bulb's size.</summary>
+    private const float BulbLeft = 44f, BulbRight = 596f, BulbTop = 40f, BulbBottom = 186f, BulbSize = 20f;
+    private const int BulbsAcross = 18, BulbsBetweenDown = 3;
+
+    /// <summary>The lever's box inside the machine (the ball up top to the ball pulled down), the hub's pivot in it, the rod's and the ball's size.</summary>
+    private static readonly Vector2 LeverAt = new Vector2(598f, 70f), LeverBox = new Vector2(140f, 560f), LeverPivot = new Vector2(70f, 280f);
+    private static readonly Vector2 ArmSize = new Vector2(28f, 230f), BallSize = new Vector2(74f, 74f);
 
     /// <summary>
-    /// Re-applies the night slots on every build (sheet 04's NIGHT SLOTS): the
-    /// kit's dark plum panel; its heading; three reel windows each holding a
-    /// symbol tile (HomeUIController spins and lands them); the SPIN dome (its
-    /// pressed face swapped in) and the lever beside it; the result line under
-    /// them; Continue on the bone plate at the foot. The slot machine's older
-    /// art slots (the landscape machine and its lever above the panel) are
-    /// removed: the kit's reels, dome and lever replace them. Returns the
-    /// reels' symbol images.
+    /// Re-applies the Night Slots machine on every build (Saleh 2026-10-07:
+    /// "make it a real 80s/90s slot machine"; mockup in the run's SL folder):
+    /// the panel is the whole screen under an ink veil; in its middle the
+    /// machine, every piece the kit's (slot_*): the oxblood cabinet under the
+    /// arched crown, the lit marquee with the live title ringed by bulbs, the
+    /// three reels (each a masked strip of five symbol cells and its win glow,
+    /// the cylinder's shade over it) in the dark well, the payline and its
+    /// arrows, the glass and the brass bezel; the LCD strip holding the line;
+    /// the deck with the coin slot, its price plate, the credits readout, the
+    /// red SPIN plate and its SPACE keycap; the lower panel's grilles, chute
+    /// and payout tray (the coins fall between its inside and its lip); and
+    /// on the right side the lever: the hub, the rod pivoting there, the
+    /// ball, the chain and padlock (hidden), and its grip. Continue sits on
+    /// the bone plate at the screen's foot right. The older panel's reels,
+    /// lever and dome are removed. Returns the machine's view, wired.
     /// </summary>
-    private static Image[] LayOutSlot(Transform panel, UiKitSO kit, TMP_Text title, TMP_Text body, Button spin, Button next)
+    private static SlotMachineView LayOutSlot(Transform panel, UiKitSO kit, Button next)
     {
-        KitScreens.Size(panel, SlotPanelSize, PanelOffset);
-        KitScreens.Panel(panel, kit, "panel_dark");
-        KitScreens.Remove(panel, "Machine");
-        KitScreens.Remove(panel, "Lever");
-        KitScreens.Across(title.rectTransform, Inset, Inset, 24f, HeadingHeight);
-        KitScreens.Label(title, kit, kit.inkOnDark, KitText.PanelHeading);
-        title.alignment = TextAlignmentOptions.MidlineLeft;
+        var panelRect = (RectTransform)panel;
+        Undo.RecordObject(panelRect, "Lay out the slots");
+        Stretch(panelRect, Vector2.zero, Vector2.one);
+        panelRect.offsetMin = panelRect.offsetMax = Vector2.zero;
+        panelRect.pivot = new Vector2(0.5f, 0.5f);
+        KitScreens.Remove(panel, UiKitSO.FaceName);
+        foreach (string old in new[] { "Reel1", "Reel2", "Reel3", "KitLever" })
+            KitScreens.Remove(panel, old);
+        Image veil = panel.GetComponent<Image>();
+        Undo.RecordObject(veil, "Lay out the slots");
+        veil.sprite = null;
+        veil.color = SlotVeil;
+        veil.raycastTarget = true;
 
-        var faces = new Image[SlotReels.Count];
-        for (int i = 0; i < SlotReels.Count; i++)
+        RectTransform machine = FindOrCreateArea(panel, "SlotMachine");
+        Undo.RecordObject(machine, "Lay out the slots");
+        machine.anchorMin = machine.anchorMax = machine.pivot = new Vector2(0.5f, 0.5f);
+        machine.anchoredPosition = MachineOffset;
+        machine.sizeDelta = MachineSize;
+        machine.SetAsFirstSibling();
+
+        Piece(machine, "Cabinet", kit, "slot_cabinet", 0f, 180f, new Vector2(640f, 780f));
+        Piece(machine, "Crown", kit, "slot_crown", 0f, 0f, new Vector2(640f, 200f));
+        Image marquee = Piece(machine, "Marquee", kit, "slot_marquee", 64f, 60f, new Vector2(512f, 106f));
+        TMP_Text title = ReparentedText(panel, Host(marquee), "TitleText");
+        Fill(title, 12f, 4f);
+        title.text = "Night Slots";
+        SceneUiKit.SkinText(title, kit, KitText.Marquee, 106f, kit.signalRed);
+        title.alignment = TextAlignmentOptions.Center;
+        title.raycastTarget = false;
+
+        RectTransform bulbRing = FindOrCreateArea(machine, "Bulbs");
+        KitScreens.Place(bulbRing, 0f, 0f, new Vector2(640f, 200f));
+        var bulbs = new System.Collections.Generic.List<Image>();
+        foreach (Vector2 at in BulbRing())
+            bulbs.Add(Piece(bulbRing, "Bulb" + bulbs.Count.ToString("00"), kit, "slot_bulb_off", at.x - BulbSize / 2f, at.y - BulbSize / 2f, new Vector2(BulbSize, BulbSize)));
+
+        Piece(machine, "ReelBed", kit, "slot_reelbed", ReelLefts[0], ReelTop, new Vector2(ReelLefts[2] + ReelSize.x - ReelLefts[0], ReelSize.y));
+        var strips = new RectTransform[SlotReels.Count];
+        var glows = new RectTransform[SlotReels.Count];
+        var cells = new RectTransform[SlotReels.Count * SlotMachineView.CellsPerReel];
+        var cellFaces = new Image[cells.Length];
+        for (int r = 0; r < SlotReels.Count; r++)
         {
-            Transform reel = FindOrCreatePanel(panel, "Reel" + (i + 1), Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, withBackground: true);
-            KitScreens.Place((RectTransform)reel, Inset + 10f + i * (ReelSize.x + 18f), 100f, ReelSize);
-            KitScreens.Panel(reel, kit, "slot_reel");
-            Image host = KitScreens.Picture(reel, "Symbol", kit, ReelSymbols[i], (ReelSize.x - ReelSymbolSize) / 2f, (ReelSize.y - ReelSymbolSize) / 2f,
-                                            new Vector2(ReelSymbolSize, ReelSymbolSize));
-            faces[i] = host;
+            Transform reel = Host(Piece(machine, "Reel" + (r + 1), kit, "slot_reel", ReelLefts[r], ReelTop, ReelSize));
+            RectTransform strip = FindOrCreateArea(reel, "Strip");
+            Undo.RecordObject(strip, "Lay out the slots");
+            Stretch(strip, Vector2.zero, Vector2.one);
+            strip.offsetMin = strip.offsetMax = Vector2.zero;
+            strip.SetSiblingIndex(1);
+            if (strip.GetComponent<RectMask2D>() == null)
+                Undo.AddComponent<RectMask2D>(strip.gameObject);
+            strips[r] = strip;
+            glows[r] = (RectTransform)Host(Centred(strip, "Glow", kit, "slot_glow", GlowSize));
+            glows[r].gameObject.SetActive(false);
+            for (int k = 0; k < SlotMachineView.CellsPerReel; k++)
+            {
+                Image face = Centred(strip, "Cell" + k, kit, "slot_sym_default", SymbolSize);
+                cells[r * SlotMachineView.CellsPerReel + k] = (RectTransform)Host(face);
+                cellFaces[r * SlotMachineView.CellsPerReel + k] = face;
+            }
+            Piece(reel, "Shade", kit, "slot_reel_shade", 0f, 0f, ReelSize);
+            reel.Find("Shade").SetAsLastSibling();
         }
+        Piece(machine, "Payline", kit, "slot_payline", 52f, ReelTop + ReelSize.y / 2f - 3f, new Vector2(536f, 6f));
+        Piece(machine, "Glass", kit, "slot_glass", ReelLefts[0], ReelTop, new Vector2(ReelLefts[2] + ReelSize.x - ReelLefts[0], ReelSize.y));
+        Piece(machine, "Window", kit, "slot_window", 40f, 214f, new Vector2(560f, 288f));
+        Piece(machine, "ArrowLeft", kit, "slot_payline_arrow", 42f, ReelTop + ReelSize.y / 2f - 13f, new Vector2(20f, 26f));
+        Mirror(Host(Piece(machine, "ArrowRight", kit, "slot_payline_arrow", 578f, ReelTop + ReelSize.y / 2f - 13f, new Vector2(20f, 26f))));
 
-        float domeLeft = Inset + 10f + SlotReels.Count * (ReelSize.x + 18f) + 22f;
-        KitScreens.Place((RectTransform)spin.transform, domeLeft, 108f, DomeSize);
-        KitScreens.Plate(spin, kit, "dome_red", kit.inkOnDark);
-        Image dome = spin.transform.Find(UiKitSO.FaceName)?.GetComponent<Image>();
-        Undo.RecordObject(spin, "Lay out the slots");
-        spin.transition = Selectable.Transition.SpriteSwap;
-        spin.spriteState = new SpriteState { pressedSprite = kit.Get("dome_red_pressed") };
-        if (dome != null)
-            spin.targetGraphic = dome;
-        KitScreens.Picture(panel, "KitLever", kit, "slot_lever", domeLeft + DomeSize.x + 20f, 80f, LeverSize);
+        Image lcd = Piece(machine, "Lcd", kit, "lcd_glass", 52f, 520f, new Vector2(536f, 74f));
+        TMP_Text line = ReparentedText(panel, Host(lcd), "BodyText");
+        Fill(line, 16f, 6f);
+        SceneUiKit.SkinText(line, kit, KitText.Readout, 40f, kit.phosphorInk);
+        line.textWrappingMode = TextWrappingModes.Normal;
+        line.alignment = TextAlignmentOptions.Center;
+        line.raycastTarget = false;
 
-        KitScreens.Across(body.rectTransform, Inset, Inset, 296f, 90f);
-        KitScreens.Body(body, kit, kit.inkOnDark, KitText.Body);
-        KitScreens.PlaceBottomRight((RectTransform)next.transform, Inset, 28f, new Vector2(280f, 60f));
+        Piece(machine, "Deck", kit, "slot_deck", 20f, 612f, new Vector2(600f, 150f));
+        Piece(machine, "CoinSlot", kit, "slot_coinslot", 56f, 626f, new Vector2(68f, 92f));
+        Image price = Piece(machine, "PricePlate", kit, "slot_priceplate", 22f, 724f, new Vector2(156f, 34f));
+        TMP_Text priceText = FindOrCreateText(Host(price), "PriceText", "10 cr", 20, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
+        Fill(priceText, 8f, 2f);
+        SceneUiKit.SkinText(priceText, kit, KitText.Pill, 34f, kit.inkOnLight);
+        priceText.alignment = TextAlignmentOptions.Center;
+        priceText.raycastTarget = false;
+        TMP_Text credits = Find<TMP_Text>(machine, "Credits/CreditsText")
+                           ?? FindOrCreateText(machine, "CreditsText", "0 cr", 26, TextAlignmentOptions.Right, Vector2.zero, Vector2.one);
+        KitScreens.Readout(machine, "Credits", kit, credits, 166f, 650f, new Vector2(196f, 56f));
+        Button spin = ReparentedButton(panel, machine, "SpinButton", "Spin");
+        KitScreens.Place((RectTransform)spin.transform, 392f, 636f, new Vector2(200f, 64f));
+        KitScreens.Plate(spin, kit, "plate_red");
+        Image key = Piece(machine, "SpinKey", kit, "keycap_bone_rest", 452f, 712f, new Vector2(80f, 30f));
+        TMP_Text keyText = FindOrCreateText(Host(key), "KeyText", "Space", 14, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
+        Fill(keyText, 4f, 0f);
+        keyText.text = "Space";
+        SceneUiKit.SkinText(keyText, kit, KitText.Keycap, 30f, kit.inkOnLight);
+        keyText.alignment = TextAlignmentOptions.Center;
+        keyText.raycastTarget = false;
+
+        Piece(machine, "Lower", kit, "slot_lower", 40f, 782f, new Vector2(560f, 158f));
+        Piece(machine, "GrilleLeft", kit, "slot_grille", 66f, 804f, new Vector2(96f, 114f));
+        Piece(machine, "GrilleRight", kit, "slot_grille", 478f, 804f, new Vector2(96f, 114f));
+        Piece(machine, "Chute", kit, "slot_chute", 278f, 796f, new Vector2(84f, 26f));
+        Piece(machine, "TrayBack", kit, "slot_tray_back", 186f, 832f, new Vector2(268f, 66f));
+        RectTransform coins = FindOrCreateArea(machine, "Coins");
+        KitScreens.Place(coins, 186f, 806f, new Vector2(268f, 92f));
+        var coin = (RectTransform)Host(Centred(coins, "CoinTemplate", kit, "slot_coin", new Vector2(30f, 30f)));
+        coin.gameObject.SetActive(false);
+        Piece(machine, "TrayLip", kit, "slot_tray_lip", 176f, 870f, new Vector2(288f, 54f));
+
+        RectTransform lever = FindOrCreateArea(machine, "Lever");
+        KitScreens.Place(lever, LeverAt.x, LeverAt.y, LeverBox);
+        lever.SetAsLastSibling();
+        Piece(lever, "Hub", kit, "slot_lever_hub", LeverPivot.x - 36f, LeverPivot.y - 54f, new Vector2(72f, 108f));
+        var arm = (RectTransform)Host(Piece(lever, "Arm", kit, "slot_lever_arm", 0f, 0f, ArmSize));
+        arm.pivot = new Vector2(0.5f, 0f);
+        arm.anchoredPosition = new Vector2(LeverPivot.x, -LeverPivot.y);
+        var ball = (RectTransform)Host(Piece(lever, "Ball", kit, "slot_lever_ball", 0f, 0f, BallSize));
+        ball.pivot = new Vector2(0.5f, 0.5f);
+        ball.anchoredPosition = new Vector2(LeverPivot.x, -LeverPivot.y + ArmSize.y);
+        RectTransform locked = FindOrCreateArea(lever, "Lock");
+        KitScreens.Place(locked, 0f, 0f, LeverBox);
+        Piece(locked, "Chain", kit, "slot_chain", LeverPivot.x - 84f, LeverPivot.y - 114f, new Vector2(128f, 82f));
+        Piece(locked, "Padlock", kit, "slot_padlock", LeverPivot.x - 46f, LeverPivot.y - 58f, new Vector2(44f, 54f));
+        locked.gameObject.SetActive(false);
+        Image grip = FindOrCreateImage(lever, "Grip", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero);
+        KitScreens.Place(grip.rectTransform, 0f, 0f, new Vector2(LeverBox.x, LeverPivot.y + 60f));
+        Undo.RecordObject(grip, "Lay out the slots");
+        grip.sprite = null;
+        grip.color = Color.clear;
+        grip.raycastTarget = true;
+        grip.transform.SetAsLastSibling();
+        SlotLeverHandle handle = grip.GetComponent<SlotLeverHandle>();
+        if (handle == null)
+            handle = Undo.AddComponent<SlotLeverHandle>(grip.gameObject);
+
+        KitScreens.PlaceBottomRight((RectTransform)next.transform, 64f, 44f, new Vector2(300f, PlateHeight));
         KitScreens.Plate(next, kit, "plate_bone");
-        return faces;
+
+        SlotMachineView view = panel.GetComponent<SlotMachineView>();
+        if (view == null)
+            view = Undo.AddComponent<SlotMachineView>(panel.gameObject);
+        var so = new SerializedObject(view);
+        so.FindProperty("kit").objectReferenceValue = kit;
+        so.FindProperty("marqueeFace").objectReferenceValue = marquee;
+        so.FindProperty("titleText").objectReferenceValue = title;
+        SerializedArrays.Set(so, "bulbs", bulbs.ToArray());
+        SerializedArrays.Set(so, "reels", strips);
+        SerializedArrays.Set(so, "cells", cells);
+        SerializedArrays.Set(so, "cellFaces", cellFaces);
+        SerializedArrays.Set(so, "glows", glows);
+        so.FindProperty("lcdText").objectReferenceValue = line;
+        so.FindProperty("creditsText").objectReferenceValue = credits;
+        so.FindProperty("priceFace").objectReferenceValue = price;
+        so.FindProperty("priceText").objectReferenceValue = priceText;
+        so.FindProperty("spinButton").objectReferenceValue = spin;
+        so.FindProperty("keyFace").objectReferenceValue = key;
+        so.FindProperty("lever").objectReferenceValue = lever;
+        so.FindProperty("leverArm").objectReferenceValue = arm;
+        so.FindProperty("leverBall").objectReferenceValue = ball;
+        so.FindProperty("leverHandle").objectReferenceValue = handle;
+        so.FindProperty("leverLock").objectReferenceValue = locked.gameObject;
+        so.FindProperty("coinsRoot").objectReferenceValue = coins;
+        so.FindProperty("coinTemplate").objectReferenceValue = coin;
+        so.ApplyModifiedProperties();
+        return view;
     }
 
-    /// <summary>The reels' symbols as built (HomeUIController's first faces; sheet 04).</summary>
-    private static readonly string[] ReelSymbols = { "tile_crate_rest", "tile_star_rest", "tile_bolt_rest" };
+    /// <summary>The marquee bulbs' centres (machine px), in chase order: along the top, down the right, back along the bottom, up the left.</summary>
+    private static System.Collections.Generic.IEnumerable<Vector2> BulbRing()
+    {
+        for (int k = 0; k < BulbsAcross; k++)
+            yield return new Vector2(Mathf.Lerp(BulbLeft, BulbRight, k / (BulbsAcross - 1f)), BulbTop);
+        for (int k = 1; k <= BulbsBetweenDown; k++)
+            yield return new Vector2(BulbRight, Mathf.Lerp(BulbTop, BulbBottom, k / (BulbsBetweenDown + 1f)));
+        for (int k = 0; k < BulbsAcross; k++)
+            yield return new Vector2(Mathf.Lerp(BulbRight, BulbLeft, k / (BulbsAcross - 1f)), BulbBottom);
+        for (int k = 1; k <= BulbsBetweenDown; k++)
+            yield return new Vector2(BulbLeft, Mathf.Lerp(BulbBottom, BulbTop, k / (BulbsBetweenDown + 1f)));
+    }
+
+    /// <summary>A kit piece <paramref name="sprite"/> as a part called <paramref name="name"/> under <paramref name="parent"/> (found or created), its visible face on the rect at <paramref name="left"/>, <paramref name="top"/>, <paramref name="size"/> (stretched as drawn, never kept to its aspect); no raycasts. Returns the face.</summary>
+    private static Image Piece(Transform parent, string name, UiKitSO kit, string sprite, float left, float top, Vector2 size)
+    {
+        Image host = FindOrCreateImage(parent, name, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero);
+        KitScreens.Place(host.rectTransform, left, top, size);
+        Undo.RecordObject(host, "Lay out the slots");
+        host.raycastTarget = false;
+        host.preserveAspect = false;
+        return SceneUiKit.Skin(host, kit, sprite, kit.overlayScale);
+    }
+
+    /// <summary>A kit piece centred in <paramref name="parent"/> (a reel's cell or glow, the coin): the view moves it from the centre.</summary>
+    private static Image Centred(Transform parent, string name, UiKitSO kit, string sprite, Vector2 size)
+    {
+        Image face = Piece(parent, name, kit, sprite, 0f, 0f, size);
+        var rt = (RectTransform)Host(face);
+        rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = Vector2.zero;
+        return face;
+    }
+
+    /// <summary>The part a kit face belongs to (Skin draws the face as the part's first child).</summary>
+    private static Transform Host(Image face) => face != null ? face.transform.parent : null;
+
+    /// <summary>Mirrors a placed part left to right about its own middle (the right payline arrow).</summary>
+    private static void Mirror(Transform part)
+    {
+        var rt = (RectTransform)part;
+        Undo.RecordObject(rt, "Lay out the slots");
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition += new Vector2(rt.sizeDelta.x / 2f, -rt.sizeDelta.y / 2f);
+        rt.localScale = new Vector3(-1f, 1f, 1f);
+    }
+
+    /// <summary>Stretches <paramref name="text"/> over its parent, <paramref name="x"/> in from the sides and <paramref name="y"/> from the top and foot.</summary>
+    private static void Fill(TMP_Text text, float x, float y)
+    {
+        RectTransform rt = text.rectTransform;
+        Undo.RecordObject(rt, "Lay out the slots");
+        Stretch(rt, Vector2.zero, Vector2.one);
+        rt.offsetMin = new Vector2(x, y);
+        rt.offsetMax = new Vector2(-x, -y);
+    }
+
+    /// <summary>The component <typeparamref name="T"/> on the child at <paramref name="path"/>, or null.</summary>
+    private static T Find<T>(Transform parent, string path) where T : Component
+    {
+        Transform child = parent.Find(path);
+        return child != null ? child.GetComponent<T>() : null;
+    }
 
     /// <summary>The moon tile on the sleep prompt (reference px, as seen).</summary>
     private const float MoonSize = 96f;

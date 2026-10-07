@@ -240,6 +240,8 @@ public static class SoundList
             case "window_open":
             case "window_close":
             case "stamp_bar_in":
+            case "slot_lever":
+            case "slot_stop":
                 return PlaceholderKind.Click;
             case "key_tap":
                 return PlaceholderKind.Key;
@@ -261,6 +263,7 @@ public static class SoundList
                 return PlaceholderKind.Beep;
             case "shift_end_bell":
             case "inspect_match":
+            case "slot_win":
                 return PlaceholderKind.Bell;
             case "pa_chime":
                 return PlaceholderKind.Chime;

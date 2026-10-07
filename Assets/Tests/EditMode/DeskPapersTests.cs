@@ -124,7 +124,7 @@ public class DeskPapersTests
     [TestCase(State.OnDesk, false, false, DropOutcome.Stays)]
     [TestCase(State.OnDesk, false, true, DropOutcome.Stays)]
     [TestCase(State.OnDesk, true, false, DropOutcome.Scanning)]
-    [TestCase(State.OnDesk, true, true, DropOutcome.Refused)]
+    [TestCase(State.OnDesk, true, true, DropOutcome.Queued)]
     [TestCase(State.Scanning, false, true, DropOutcome.Refused)]
     [TestCase(State.Scanning, true, true, DropOutcome.Refused)]
     [TestCase(State.Returned, false, false, DropOutcome.Refused)]
@@ -144,6 +144,12 @@ public class DeskPapersTests
             Assert.IsFalse(p.CanDrag(0), "a scanning paper cannot be dragged");
             Assert.AreEqual(onDesk, p.OnDeskCount, "a scanning paper still counts as on the desk");
         }
+        else if (expected == DropOutcome.Queued)
+        {
+            Assert.IsTrue(p.CanDrag(0), "a queued paper lies on the desk until its turn");
+            Assert.AreEqual(1, p.QueuedCount, "it waits in the feed");
+            Assert.AreEqual(wasBusy, p.ScannerBusy);
+        }
         else
         {
             Assert.AreEqual(couldDrag, p.CanDrag(0), "nothing changes for the dropped paper");
@@ -153,14 +159,49 @@ public class DeskPapersTests
     }
 
     [Test]
-    public void ABusyScanner_KeepsScanningItsPaper_WhileTheRefusedOneStaysDraggable()
+    public void DropAndGo_ADropOnABusyScanner_QueuesIt_AndTheStackFeedsThroughOneAtATime_ByHand()
+    {
+        DeskPapers p = new DeskPapers(new[]
+        {
+            Doc("Travel Passport", DocumentHandOver.OnArrival), Doc("Transit Permit", DocumentHandOver.OnRequest), Doc("Letter", DocumentHandOver.OnArrival)
+        }, Scan, 0.5f, new ScannerDay(false, true));
+        for (int i = 0; i < p.Count; i++)
+            Assert.IsTrue(p.HandOver(i));
+        Assert.AreEqual(DropOutcome.Scanning, p.Drop(0, true));
+        Assert.AreEqual(DropOutcome.Queued, p.Drop(2, true), "the scanner is busy: the paper waits its turn (no slide back)");
+        Assert.AreEqual(DropOutcome.Queued, p.Drop(1, true));
+        Assert.AreEqual(DropOutcome.Queued, p.Drop(1, true), "dropped again: still queued once");
+        Assert.AreEqual(2, p.QueuedCount);
+        Assert.AreEqual(-1, p.FeedNext(null), "one at a time");
+        Assert.AreEqual(0, p.Tick(0.5f), "the first paper's (analysis) scan finishes");
+        Assert.AreEqual(2, p.FeedNext(null), "then the stack, in drop order");
+        Assert.AreEqual(ScanPass.Analysis, p.Pass, "a dropped paper scans by hand: the Analysis Scanner's pass");
+        Assert.AreEqual(2, p.Tick(0.5f));
+        Assert.AreEqual(1, p.FeedNext(null));
+        Assert.AreEqual(1, p.Tick(0.5f));
+        Assert.AreEqual(0, p.QueuedCount);
+    }
+
+    [Test]
+    public void DropAndGo_AQueuedPaperDraggedAway_LeavesTheFeed()
     {
         DeskPapers p = AllOnDesk();
         Assert.AreEqual(DropOutcome.Scanning, p.Drop(0, true));
-        Assert.AreEqual(DropOutcome.Refused, p.Drop(1, true));
-        Assert.IsTrue(p.CanDrag(1));
-        Assert.AreEqual(-1, p.Tick(1f));
-        Assert.AreEqual(0, p.Tick(0.5f), "the first paper's scan still finishes");
+        Assert.AreEqual(DropOutcome.Queued, p.Drop(1, true));
+        Assert.AreEqual(DropOutcome.Stays, p.Drop(1, false), "taken off the scanner: no longer waiting");
+        Assert.AreEqual(0, p.QueuedCount);
+    }
+
+    [Test]
+    public void Progress_RunsFromZeroToOne_DuringAScan()
+    {
+        DeskPapers p = AllOnDesk();
+        Assert.AreEqual(0f, p.Progress);
+        Assert.AreEqual(DropOutcome.Scanning, p.Drop(0, true));
+        p.Tick(Scan / 2f);
+        Assert.AreEqual(0.5f, p.Progress, 1e-4f);
+        p.Tick(Scan);
+        Assert.AreEqual(0f, p.Progress, "idle again");
     }
 
     [Test]
@@ -441,7 +482,7 @@ public class DeskPapersTests
         Assert.AreEqual(ScanPass.Plain, p.Pass, "idle again");
         Assert.AreEqual(0, p.FeedNext(null));
         Assert.AreEqual(ScanPass.Plain, p.Pass, "the scanner fed itself");
-        Assert.AreEqual(DropOutcome.Refused, p.Drop(1, true), "a drop on the busy scanner slides back, as ever");
+        Assert.AreEqual(DropOutcome.Queued, p.Drop(1, true), "a drop on the busy scanner waits its turn (drop and go)");
     }
 
     [Test]

@@ -130,8 +130,7 @@ public static partial class OfficeSceneUIBuilder
         PlaceIconArea(layer);
         DesktopIcons board = layer.gameObject.AddComponent<DesktopIcons>();
 
-        IReadOnlyList<IconPlace> places = DesktopLayout.Arrange(config.iconOrder, new IconGrid(DesktopSize.x, DesktopSize.y - config.MaximisedBottom,
-            config.iconCellSize.x, config.iconCellSize.y, config.iconOrigin.x, config.iconOrigin.y, config.iconColumnStep, config.iconRowStep));
+        IReadOnlyList<IconPlace> places = DesktopLayout.Arrange(config.iconOrder, config.IconBand(DesktopSize.x, DesktopSize.y - config.MaximisedBottom));
         var views = new List<Object>();
         foreach (IconPlace place in places)
             views.Add(BuildIcon(layer, place, board, config));

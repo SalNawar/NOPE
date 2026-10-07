@@ -35,14 +35,14 @@
 // Protocols delivered), at most one a day, once the wallet holds its price and
 // 20 cr more; it arrives the next morning. The re-paced days (wave 5 track C,
 // Papers Please lessons 4-6 and D7) are checked on the way: each day's
-// briefing opens with its bulletin (days 1-5 each have one), every traveller
+// briefing's Bureau memo shows its bulletin (days 1-5 each have one) and the paper never does, every traveller
 // carries only the day's issued papers (day 1: the Passport alone) and the PC
 // follows them (the shelf's papers, the Citizen Account's forms on file), and
 // the desk-first ramp hides what is not introduced yet (Introductions: the
 // scanner before day 5, the Departure Board before day 3, the Citizen records
 // chip before day 5, the PC apps, every document field; the guided steps and
 // their foot never show), every
-// citation slip names its rule and a value, and every shift report shows
+// citation names its rule and a value, and every shift report shows
 // tonight's bills and the wallet after them. New Run goes through the
 // adoption panel (the Home pet spec: a dog named "Biscuit"; a refused name is
 // tried first and must say why). Home: the bills step with its default care
@@ -119,8 +119,10 @@ public static class _TimeDeskAuditPlay
     private const string DesktopPrefsKey = "AuditPlay.DesktopPrefs";
     private const string ViewWidthKey = "AuditPlay.ViewWidth";
     private const string ViewHeightKey = "AuditPlay.ViewHeight";
-    private const string UiLanguagePref = "TimeDesk.UiLanguage";
-    private const string MotionPref = "TimeDesk.ReducedMotion";
+    private static string UiLanguagePref => PlayerPrefKeys.For("TimeDesk.UiLanguage");
+    private static string MotionPref => PlayerPrefKeys.For("TimeDesk.ReducedMotion");
+    private const string IntensityKey = "AuditPlay.MotionIntensity";
+    private static string IntensityPref => PlayerPrefKeys.For("TimeDesk.MotionIntensity");
 
     private const int Playing = 1;
     private const int Finishing = 2;
@@ -136,6 +138,7 @@ public static class _TimeDeskAuditPlay
     /// <summary>Wave 5, lesson 10: every traveller decided so far, as the paper names them.</summary>
     private static readonly HashSet<string> Decided = new HashSet<string>(StringComparer.Ordinal);
     private static bool _ended;
+
     private static bool _frameOpen;
 
     private static bool ShotsOn => SessionState.GetBool(ShotsKey, false);
@@ -189,6 +192,8 @@ public static class _TimeDeskAuditPlay
         SessionState.SetString(MotionKey, PlayerPrefs.HasKey(MotionPref) ? PlayerPrefs.GetString(MotionPref) : "<absent>");
         PlayerPrefs.DeleteKey(UiLanguagePref);
         PlayerPrefs.DeleteKey(MotionPref);
+        SessionState.SetString(IntensityKey, PlayerPrefs.HasKey(IntensityPref) ? PlayerPrefs.GetFloat(IntensityPref).ToString("R", System.Globalization.CultureInfo.InvariantCulture) : "<absent>");
+        PlayerPrefs.DeleteKey(IntensityPref);
 
         // The desktop's per-player preferences (icons, split, tab order, zoom, sidebar, steps) start at their defaults and are restored at the end.
         var desktop = new List<string>();
@@ -221,7 +226,8 @@ public static class _TimeDeskAuditPlay
         typeof(DesktopPreferences).GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
             .Where(f => f.IsLiteral && f.FieldType == typeof(string))
             .Select(f => (string)f.GetRawConstantValue())
-            .Where(v => v.StartsWith("TimeDesk."));
+            .Where(v => v.StartsWith("TimeDesk."))
+            .Select(PlayerPrefKeys.For);
 
     private static void Tick()
     {
@@ -362,8 +368,8 @@ public static class _TimeDeskAuditPlay
         RecordPortals(o);
         DayPlanSO paced = RunManager.Instance.GetCurrentDayPlan();
         DayFlowUIController flow = Office.One<DayFlowUIController>();
-        // The front page's every line (the bulletin, with the new hours on the days they change, leads as headline and deck).
-        string brief = string.Join(" ", new[] { "briefingHeadlineText", "briefingDeckText", "briefingStoryTitleText", "briefingStoryText" }
+        // The Bureau memo's lines (the bulletin, with the new hours on the days they change); the front page is the world's.
+        string brief = string.Join(" ", new[] { "briefingMemoTitleText", "briefingMemoBodyText" }
             .Select(f => Field(flow, f) as TMP_Text).Where(t => t != null).Select(t => t.text));
         // Night shifts (the hours grow): the clock runs the day's own hours, and the briefing names new hours only on the days they change.
         ShiftHours hours = paced.Shift(RunManager.Instance.Config.gameConfig);
@@ -372,9 +378,11 @@ public static class _TimeDeskAuditPlay
         Check((day == 8 || day == 12) == brief.Contains(UiText.Format("briefing.newHours", hours.Open, hours.Close)),
               $"day {day}: the briefing names the new hours only on the days they change (8 and 12)");
         Check(day > 5 || !string.IsNullOrWhiteSpace(paced.Bulletin), $"day {day}: days 1-5 each announce their one new paper or check in a bulletin ('{paced.Bulletin}')");
-        Check(string.IsNullOrWhiteSpace(paced.Bulletin) || (((TMP_Text)Field(flow, "briefingKickerText")).gameObject.activeSelf
-                  && ((TMP_Text)Field(flow, "briefingHeadlineText")).text == MorningPaper.Compose(paced.Bulletin, null, null, null).Headline),
-              $"day {day}: the briefing leads with the day's bulletin (its kicker and headline)");
+        Check(string.IsNullOrWhiteSpace(paced.Bulletin) || (((GameObject)Field(flow, "briefingMemo")).activeSelf
+                  && ((TMP_Text)Field(flow, "briefingMemoTitleText")).text == BureauMemo.Of(paced.Bulletin).Title),
+              $"day {day}: the memo shows the day's bulletin (its title)");
+        Check(string.IsNullOrWhiteSpace(paced.Bulletin) || !PaperText().Contains(BureauMemo.Of(paced.Bulletin).Title),
+              $"day {day}: the paper is the world's: it never prints the bulletin");
         WorldHeadlines(day);
         PaperNames(day);
         if (ShotsOn)
@@ -394,8 +402,14 @@ public static class _TimeDeskAuditPlay
         // The AVAILABLE sign (Saleh 2026-09-30): the desk starts paused; one click and the travellers come one after another.
         Check(!o.Game.Desk.IsAvailable && o.Ready.Interactable, $"day {day}: the desk starts paused and the AVAILABLE sign takes clicks");
         OrderAtThePc(day);
+        // Saleh 2026-10-07: "shift should not start until you press AVAILABLE": the clock holds the opening hour until the first press.
+        yield return Seconds(1f);
+        Check(!o.Clock.Clock.IsStarted && Mathf.Approximately(o.Clock.MinuteOfDay, hours.StartMinute),
+              $"day {day}: before AVAILABLE the shift clock holds the opening hour {hours.Open} ({ShiftClock.Format(o.Clock.MinuteOfDay)}, started {o.Clock.Clock.IsStarted})");
         o.ClickSign();
         Check(o.Game.Desk.IsAvailable, $"day {day}: one click turns the desk available");
+        Check(o.Clock.Clock.IsStarted && o.Game.Desk.HasOpened, $"day {day}: the first click opens the shift and starts its clock");
+        Line($"   shift started at {ShiftClock.Format(o.Clock.MinuteOfDay)} on AVAILABLE");
 
         int presented = 0;
         bool paused = false;
@@ -412,9 +426,12 @@ public static class _TimeDeskAuditPlay
             if (day == 1 && presented == 1)
             {
                 Check(o.Guide.StepShown == "desk", $"day 1: calling the traveller completes the tutorial's first step ('{o.Guide.StepShown}' shown: '{o.Guide.Prompt.Line}')");
+                yield return GuideArrowAllocationFree(o, "day 1 tutorial step 2");
                 ((Button)Field(o.Guide.Prompt, "skipButton")).onClick.Invoke();
                 Check(!o.Guide.Prompt.IsShown && RunManager.Instance.World.guide.ftueSkipped, "day 1: Skip ends the tutorial (the run keeps it skipped)");
             }
+            if (day == 2 && !practiceSeen && o.Guide.ShowingNow == "practice")
+                yield return GuideArrowAllocationFree(o, "day 2 practice");
             practiceSeen |= o.Guide.ShowingNow == "practice";
             if (day == 4 && o.Guide.ShowingNow == "practice")
                 yield return SealAtTheDesk(o);
@@ -452,6 +469,8 @@ public static class _TimeDeskAuditPlay
         if (practice != null)
             Check(practiceSeen, $"day {day}: the new page's practice ('{practice.id}') showed on a traveller who carries it");
         yield return Frames(3);
+        if (RunManager.Instance.Library.Introductions.Has(day, Feature.Scanner) && !Seen.Contains($"board d{day}"))
+            Line($"-- day {day}: no deviation case's papers and record disagreed on the case board today");
         Line($"-- day {day} shift report ({presented} presented)");
         Line("   " + ((TMP_Text)Field(o.DayFlow(), "resultsTitleText")).text);
         string report = ((TMP_Text)Field(o.DayFlow(), "resultsBodyText")).text;
@@ -481,6 +500,61 @@ public static class _TimeDeskAuditPlay
     }
 
     /// <summary>
+    /// The guide's arrow costs nothing per frame (the profile found 68 B a frame in GuideTargets.TryForm's Substring, run 7). Mono
+    /// keeps no per-thread allocation count, so the frames' "GC Allocated In Frame" is read: three frames that each run the arrow's
+    /// LateUpdate <see cref="ArrowTicks"/> times stay at the frame's usual allocations (any allocation a call, 16 B or more, would add
+    /// 800 KB or more), while three frames that parse the same target as often (the control) allocate far more.
+    /// </summary>
+    private static IEnumerator GuideArrowAllocationFree(Office o, string when)
+    {
+        var tick = (Action)Delegate.CreateDelegate(typeof(Action), o.Guide, typeof(GuideDirector).GetMethod("LateUpdate", BindingFlags.Instance | BindingFlags.NonPublic));
+        string target = (string)Field(o.Guide, "_target") ?? string.Empty;
+        tick();
+        bool profiler = UnityEditorInternal.ProfilerDriver.enabled;
+        UnityEditorInternal.ProfilerDriver.enabled = true;
+        long director = 0, control = 0;
+        try
+        {
+            for (int pass = 0; pass < 2; pass++)
+            {
+                var gc = Unity.Profiling.ProfilerRecorder.StartNew(Unity.Profiling.ProfilerCategory.Memory, "GC Allocated In Frame", 32);
+                for (int frame = 0; frame < 3; frame++)
+                {
+                    for (int i = 0; i < ArrowTicks; i++)
+                    {
+                        if (pass == 0)
+                            tick();
+                        else
+                            GuideTargets.TryForm(target, out _);
+                    }
+                    yield return Frames(1);
+                }
+                yield return Frames(3);
+                var samples = new List<Unity.Profiling.ProfilerRecorderSample>();
+                gc.CopyTo(samples);
+                gc.Dispose();
+                long most = samples.Count > 0 ? samples.Max(s => s.Value) : -1;
+                if (pass == 0)
+                    director = most;
+                else
+                    control = most;
+            }
+        }
+        finally
+        {
+            UnityEditorInternal.ProfilerDriver.enabled = profiler;
+        }
+        Check(director >= 0 && director < ArrowQuietFrame && control > 2 * ArrowQuietFrame,
+              $"{when}: the guide's arrow at '{target}' is placed without allocating (the most a frame of {ArrowTicks} placements allocated: {director} B, under {ArrowQuietFrame} B; the control, the target parsed as often: {control} B)");
+    }
+
+    /// <summary>How many times a frame the allocation probe places the guide's arrow (and parses its target, the control).</summary>
+    private const int ArrowTicks = 50000;
+
+    /// <summary>The most a frame of the probe may allocate when the arrow allocates nothing (the editor's frame alone is about 13 KB; one allocation a placement adds at least 800 KB).</summary>
+    private const long ArrowQuietFrame = 256 * 1024;
+
+    /// <summary>
     /// The desk's guide at the shift's start: the rulebook's GUIDE holds BASICS and every page introduced so far (today's marked NEW);
     /// day 1 starts the tutorial at its first step; a guided day opens the rulebook on its new page with the moment's prompt; a later
     /// day with a new page only badges the GUIDE tab.
@@ -502,9 +576,16 @@ public static class _TimeDeskAuditPlay
         }
         GuidePage moment = guide.MomentPage(day);
         if (moment != null)
-            Check(o.Guide.ShowingNow == "moment" && book.Page == DeskRulebook.GuidePageIndex && book.GuideSheets[book.GuideSheetIndex].Id == moment.id &&
-                  o.Guide.Prompt.Line.Contains(moment.title) && !book.GuideBadge,
-                  $"day {day}: the rulebook opens itself on the new page '{moment.id}' and the prompt names it");
+        {
+            string open = book.GuideSheetIndex < book.GuideSheets.Count ? book.GuideSheets[book.GuideSheetIndex].Id : "?";
+            Check(o.Guide.ShowingNow == "moment" && book.Page == DeskRulebook.GuidePageIndex && open == moment.id && o.Guide.Prompt.Line.Contains(moment.title),
+                  $"day {day}: the rulebook opens itself on the new page '{moment.id}' and the prompt names it (page {book.Page}, sheet '{open}')");
+            // The badge marks a page added today until it is opened (the guide spec 2026-10-06 section 7): the moment opens the day's first
+            // new page, so it goes out, unless the day adds another (day 5: the scanner's page is opened, the Travel Permit's still waits).
+            List<string> unread = guide.NewOn(day).Where(g => g.id != moment.id).Select(g => g.id).ToList();
+            Check(book.GuideBadge == unread.Count > 0,
+                  $"day {day}: the GUIDE tab's badge stays exactly while another of today's pages is unread ([{string.Join(", ", unread)}], badge {book.GuideBadge})");
+        }
         else
             Check(o.Guide.ShowingNow.Length == 0 && book.GuideBadge == guide.NewOn(day).Count > 0, $"day {day}: no moment; the GUIDE tab's badge marks a new page");
     }
@@ -654,6 +735,20 @@ public static class _TimeDeskAuditPlay
             gatherEvidence = false;
         }
 
+        // How it is committed (the desk machine spec §2; Saleh 2026-10-07: "everything diegetic", "no lever, no extra commit step"): the
+        // hand-back commits the passport's APPROVED or DENIED; the desk's DETAIN button takes a law-breaker the plan denies with evidence (right:
+        // the stronger, never-required verdict), and day 1's planned mistake becomes a detention of the honest
+        // traveller (wrong: "Detained a traveller who broke no law", the same one penalty), each only when the traveller would not have come back
+        // after a denial (Returns.Plan on their own stream: a detained traveller never comes back, so the later days stay as they were).
+        DeskStamp hardware = accept ? DeskStamp.Approved : DeskStamp.Denied;
+        if (!accept && NeverBack(c) && (plan.StartsWith("MISTAKE deny an honest") || c.BreaksLaw && gatherEvidence))
+        {
+            hardware = DeskStamp.Detained;
+            if (plan.StartsWith("MISTAKE"))
+                plan = "MISTAKE detain an honest traveller";
+            Count(plan.StartsWith("MISTAKE") ? "detain wrong" : "detain right");
+        }
+
         // The interview: every request, every question (slot 1 also runs its first dialog).
         yield return Interview(o, c, slot == 1);
         CheckRamp(o, c, day, slot);
@@ -666,6 +761,7 @@ public static class _TimeDeskAuditPlay
             yield return VisualProbe(o, c, day, slot);
         if (gatherEvidence)
         {
+            yield return BoardCrossCheck(o, c, day, slot);
             yield return Evidence(o, c, day, slot);
             if (ShotsOn)
                 yield return CaughtShots(o, c);
@@ -694,7 +790,20 @@ public static class _TimeDeskAuditPlay
         int before = o.Game.Ledger.verdicts.Count;
         if (!accept && (c.HasDeviationFault && gatherEvidence || c.HasDirectiveFault))
             Check(o.App.Board.Log.HasDifference, $"d{day} slot {slot}: a right denial ({FaultKey(c)}) rests on a logged difference ({o.App.Board.Log.Differences} logged)");
+        // The verdict line and the world as the verdict is committed (DeskStampTray.Decided, after the game has written them): a detention's
+        // exit and the day's close (the Debt Relief instalment) run on before the next lines are read.
+        _verdictLine = _worldAtDecision = null;
+        Action<DeskStamp> read = _ => ReadAtDecision(o);
         if (o.Stamps != null)
+            o.Stamps.Decided += read;
+        bool stampFirst = !(hardware == DeskStamp.Detained && plan.StartsWith("MISTAKE"));
+        if (o.Stamps != null && !stampFirst)
+        {
+            // DETAIN works any time after the traveller arrives, stamp or not (the desk machine spec §2): the honest traveller is detained unstamped.
+            yield return PressDetain(o);
+            Line("   decided with the DETAIN button (no stamp)");
+        }
+        if (o.Stamps != null && stampFirst)
         {
             // Papers, Please's controls (2026-10-06) with the art's 3D stamps (Saleh, same day), moved by the clerk (Saleh, later that day: "the
             // stamp should be two stamps that I physically move ... I should be able to stamp anywhere on the document"): TAB slides the 3D stamp
@@ -722,7 +831,9 @@ public static class _TimeDeskAuditPlay
                 {
                     Call(o.Desk, "HandlePaperClicked", other, -1);
                     yield return Seconds(0.5f);
-                    yield return DragStamp(o, !accept, other.Sheet.position);
+                    // A point of that paper that shows (no other paper over it there: DeskController.Shows); the passport's visa page lies under the daters now and may cover the paper's middle.
+                    yield return DragStamp(o, !accept, ShownPoint(o, other));
+                    yield return Settle(() => !o.Stamps.IsMoving, 5f);
                     Check(o.Stamps.LastPress == StampPress.NotPassport && !o.Stamps.HasVerdict,
                           $"d{day} slot {slot}: a stamp dragged onto paper {other.Index} (not the passport) is refused: only the passport takes a verdict ({o.Stamps.LastPress})");
                     if (ShotsOn)
@@ -752,6 +863,8 @@ public static class _TimeDeskAuditPlay
                 yield return Frames(2);
                 Vector3 anywhere = passport.Sheet.TransformPoint(new Vector3(0f, passport.Size.y * 0.2f, 0f));
                 yield return DragStamp(o, accept, anywhere);
+                // The dater strokes down (its print lands as it bottoms out) and back up on its springs: wait for the stroke, not a fixed time.
+                yield return Settle(() => !o.Stamps.IsMoving, 5f);
                 Renderer mark = passport.GetComponentsInChildren<Renderer>(true).FirstOrDefault(r => r.name == "Stamp_1" && r.gameObject.activeSelf);
                 float markOff = mark != null ? new Vector2(mark.bounds.center.x - anywhere.x, mark.bounds.center.z - anywhere.z).magnitude : -1f;
                 Check(o.Stamps.LastPress == StampPress.Stamped && o.Stamps.HasVerdict && mark != null && markOff >= 0f && markOff < 0.003f,
@@ -761,20 +874,33 @@ public static class _TimeDeskAuditPlay
                 Check(!o.Stamps.IsCarrying && StampHome(o, accept),
                       $"d{day} slot {slot}: the stamp goes back to its place in the rack");
                 yield return DragStamp(o, !accept, anywhere);
+                yield return Settle(() => !o.Stamps.IsMoving, 5f);
                 Check(o.Stamps.LastPress == StampPress.AlreadyStamped, $"d{day} slot {slot}: the other stamp is refused: approve and deny together is impossible ({o.Stamps.LastPress})");
                 if (ShotsOn && First("stamp bar"))
                     yield return Shots("stamp_bar_visa");
-                // Hand back: the stamped passport dropped on the counter's slim strip.
-                Vector3 onCounter = CounterPoint(o);
-                passport.transform.position = onCounter;
-                Call(o.Desk, "HandleDragEnded", passport.Drag, onCounter);
+                if (hardware == DeskStamp.Detained)
+                {
+                    // A law-breaker stamped DENIED is detained instead of handed back: the cover flipped up, the button pressed.
+                    yield return PressDetain(o);
+                }
+                else
+                {
+                    // Hand back: the stamped passport dropped on the counter's slim strip. That is the decision (no extra commit step).
+                    Vector3 onCounter = CounterPoint(o);
+                    passport.transform.position = onCounter;
+                    Call(o.Desk, "HandleDragEnded", passport.Drag, onCounter);
+                }
             }
-            Line($"   decided with the stamps: {(accept ? "APPROVED" : "DENIED")}");
+            Line($"   decided with the stamps: {(accept ? "APPROVED" : "DENIED")}{(hardware == DeskStamp.Detained ? ", then the DETAIN button" : "")}");
         }
+        if (o.Stamps != null)
+            o.Stamps.Decided -= read;
         Check(o.Game.Ledger.verdicts.Count == before + 1, $"d{day} slot {slot}: the decision recorded one verdict");
         Decided.Add(c.visitorDisplayName);
-        if (!accept && c.legendarySource == null && c.returning == null)
+        if (!accept && hardware == DeskStamp.Denied && c.legendarySource == null && c.returning == null)
             DeniedFaces[c.caseSeed] = Face(c);
+        if (hardware == DeskStamp.Detained)
+            Check(o.Game.Ledger.verdicts.Last().detained, $"d{day} slot {slot}: the verdict is a detention");
         CaseVerdict v = o.Game.Ledger.verdicts.Last();
         Line($"   verdict: {JsonUtility.ToJson(v)}");
         bool mistake = plan.StartsWith("MISTAKE");
@@ -783,7 +909,7 @@ public static class _TimeDeskAuditPlay
         foreach (DialogLine l in reacted.Transcript.Skip(Math.Max(0, reacted.Transcript.Count - 2)).Where(l => l.Id != null && l.Id.Contains("reactions")))
             Line($"   reaction: [{l.Id}] {l.Text}");
         WorldState w = RunManager.Instance.World;
-        Line($"   world: money={w.money} stability={F(w.timelineStability)} citationsToday={w.citationsToday} ending='{w.endingId}'");
+        Line($"   world: {_worldAtDecision ?? WorldNow(w)} ending='{w.endingId}'");
         yield return Frames(2);
         if (!string.IsNullOrEmpty(w.endingId))
         {
@@ -791,20 +917,24 @@ public static class _TimeDeskAuditPlay
             _ended = true;
             yield break;
         }
-        if (o.CitationPanel.activeInHierarchy)
+        // The verdict line as the verdict was committed (the hardware read it then), else as shown now: the day goes on while the Citation flies (the next traveller's call clears it).
+        string verdictLine = _verdictLine ?? ((TMP_Text)Field(o.OfficeUi, "resultText")).text;
+        if (v.citationIssued)
         {
-            string slip = string.Join("\n", new[] { "citationReasonText", "citationDetailText", "citationConsequenceText" }.Select(f => ((TMP_Text)Field(o.OfficeUi, f)).text));
+            // The Citation (2026-10-07) lands on the desk; its lines are the slip's (its violation, its rule and values, its consequence).
+            string slip = string.Join("\n", v.citationReason, v.citationDetail, v.citationConsequence);
             Line($"   citation slip: {slip.Replace("\n", " / ")}");
             string rule = v.unprovenDenial ? UiText.Get("citation.rule.evidence") : Citations.RuleLine(c.citation, UiText.Get, UiText.Get("citation.rule.numbered"));
             string value = v.unprovenDenial ? "0" : c.citation?.Values.Select(x => x.Value).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
             Check(!string.IsNullOrEmpty(rule) && slip.Contains(rule) && !string.IsNullOrEmpty(value) && slip.Contains(value),
                   $"d{day} slot {slot}: the citation slip names the exact rule ('{rule}') and value ('{value}')");
+            yield return Until(() => !o.CitationFlying, 10f, "the citation on the desk");
             if (ShotsOn && First($"citation {v.faultReason}/{v.unprovenDenial}/{v.accepted}"))
                 yield return Shots($"citation_{(v.accepted ? "accepted" : "denied")}_{(string.IsNullOrEmpty(v.faultReason) ? "honest" : v.faultReason)}{(v.unprovenDenial ? "_unproven" : "")}");
-            ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
-            yield return Frames(2);
         }
-        Line($"   verdict line: {((TMP_Text)Field(o.OfficeUi, "resultText")).text.Replace("\n", " / ")}");
+        Line($"   verdict line: {verdictLine.Replace("\n", " / ")}");
+        _verdictLine = null;
+        _worldAtDecision = null;
     }
 
     private static bool Once(string key) => MistakesMade.Add(key);
@@ -842,6 +972,76 @@ public static class _TimeDeskAuditPlay
         }
         ExecuteEvents.Execute(click.gameObject, data, ExecuteEvents.endDragHandler);
         yield return Frames(2);
+    }
+
+    /// <summary>The verdict line as the verdict was committed (null until the next decision reads it).</summary>
+    private static string _verdictLine;
+
+    /// <summary>The world line's money, stability and citations as the verdict was committed (null until the next decision reads it).</summary>
+    private static string _worldAtDecision;
+
+    /// <summary>Reads the verdict line and the world as the verdict is committed (DeskStampTray.Decided, after the game has written them).</summary>
+    private static void ReadAtDecision(Office o)
+    {
+        _verdictLine = ((TMP_Text)Field(o.OfficeUi, "resultText")).text;
+        _worldAtDecision = WorldNow(RunManager.Instance.World);
+    }
+
+    /// <summary>The world line's money, stability and citations today.</summary>
+    private static string WorldNow(WorldState w) => $"money={w.money} stability={F(w.timelineStability)} citationsToday={w.citationsToday}";
+
+    /// <summary>
+    /// Presses the desk's DETAIN button as the clerk does (the desk machine
+    /// spec §2): a click on its clear cover (it flips up on its hinge), then a
+    /// click on the red mushroom under it; waits for the cover and the button
+    /// to rest.
+    /// </summary>
+    private static IEnumerator PressDetain(Office o)
+    {
+        DetainButton detain = o.Detain;
+        Click((Clickable)Field(detain, "coverClick"));
+        yield return Settle(() => detain.CoverOpen && !detain.Moving, 3f);
+        Check(detain.CoverOpen, "the DETAIN button's cover flips up at a click");
+        Click((Clickable)Field(detain, "buttonClick"));
+        yield return Frames(2);
+    }
+
+    /// <summary>The point of <paramref name="paper"/> nearest its middle that the office camera sees on it (DeskController.Shows: no other paper over it), on a 9 x 9 grid over its sheet; its middle when none shows.</summary>
+    private static Vector3 ShownPoint(Office o, DeskDocument paper)
+    {
+        Camera cam = OfficeRaycaster().eventCamera;
+        Renderer[] parts = paper.Sheet.GetComponentsInChildren<Renderer>(false);
+        if (parts.Length == 0 || cam == null)
+            return paper.Sheet.position;
+        Bounds b = parts[0].bounds;
+        foreach (Renderer r in parts)
+            b.Encapsulate(r.bounds);
+        Vector3 best = paper.Sheet.position;
+        float nearest = float.MaxValue;
+        for (int i = 1; i < 10; i++)
+            for (int j = 1; j < 10; j++)
+            {
+                var p = new Vector3(Mathf.Lerp(b.min.x, b.max.x, i / 10f), b.max.y, Mathf.Lerp(b.min.z, b.max.z, j / 10f));
+                float d = (p - b.center).sqrMagnitude;
+                if (d < nearest && o.Desk.Shows(paper.Index, p, cam))
+                {
+                    nearest = d;
+                    best = p;
+                }
+            }
+        return best;
+    }
+
+    /// <summary>A left-click on <paramref name="target"/> as the EventSystem delivers it.</summary>
+    private static void Click(Clickable target) =>
+        ExecuteEvents.Execute(target.gameObject, new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left }, ExecuteEvents.pointerClickHandler);
+
+    /// <summary>True when <paramref name="c"/> would not come back after a denial (a premade, a returning traveller, or Returns.Plan on their own return stream says no): detaining them leaves the later days as they were.</summary>
+    private static bool NeverBack(CaseInstance c)
+    {
+        GameConfigSO cfg = RunManager.Instance.Config.gameConfig;
+        return c.isLegendary || c.returning != null || cfg == null
+               || Returns.Plan(true, cfg.returnChance, cfg.returnAfterDaysMin, cfg.returnAfterDaysMax, cfg.returnCorrectedChance, RunManager.Instance.World.day, Seeds.ForReturn(c.caseSeed)) == null;
     }
 
     /// <summary>The office camera's 3D raycaster (on the art scene's camera; a Physics2DRaycaster derives from it, so the exact type).</summary>
@@ -1189,6 +1389,49 @@ public static class _TimeDeskAuditPlay
         return FindRecord(registry, c.visitorGivenName);
     }
 
+    /// <summary>
+    /// The case board's cross-check table (the scanner app spec §2.3) logs the
+    /// evidence of one case a day, from the scanner's day: the first traveller
+    /// with a deviation fault whose scanned papers and record disagree on a
+    /// row (every paper scanned as the desk scanner reports it), the first
+    /// glowing cell clicked (it and its partner through the one compare), the
+    /// finding written to the transcript; a day with none says so at its end.
+    /// </summary>
+    private static IEnumerator BoardCrossCheck(Office o, CaseInstance c, int day, int slot)
+    {
+        if (!RunManager.Instance.Library.Introductions.Has(day, Feature.Scanner) || Seen.Contains($"board d{day}"))
+            yield break;
+        object documents = Field(o.Ui, "_documents");
+        var papers = (CasePapers)Field(documents, "_papers");
+        for (int i = 0; i < c.documents.Count; i++)
+            if (papers.State(i) == PaperState.OnDesk)
+                Call(documents, "Scan", i);
+        yield return Frames(2);
+        CaseBoardView board = (o.RightPane.gameObject.activeInHierarchy ? o.RightPane : o.LeftPane).View(AppTab.Board) as CaseBoardView;
+        if (board == null)
+        {
+            Check(false, $"d{day} slot {slot}: the app hosts the case board");
+            yield break;
+        }
+        CaseBoardModel model = board.Model;
+        for (int r = 0; r < model.Cross.Count; r++)
+        {
+            CrossRow row = model.Cross[r];
+            int cell = row.Cells.FindIndex(x => x.Glows);
+            if (cell < 0)
+                continue;
+            int before = o.App.Board.Log.Count;
+            Call(board, "CellClicked", r, cell);
+            yield return Frames(1);
+            Finding logged = o.App.Board.Log.Items.Count > before ? o.App.Board.Log.Items[o.App.Board.Log.Items.Count - 1] : null;
+            CrossCell partner = row.Cells[row.Cells[cell].Partner];
+            Line($"   board: record {model.By} '{model.Query}'; cross-check {row.Category} '{row.Cells[cell].Value.Value.Value}' ({model.Columns[cell].Title}) against '{partner.Value.Value.Value}' ({model.Columns[row.Cells[cell].Partner].Title}) -> {(logged != null ? logged.Kind + (logged.Proof ? " (evidence)" : string.Empty) : "nothing logged")}");
+            Check(logged != null && FindingRules.IsDifference(logged.Kind), $"d{day} slot {slot}: the case board's cross-check logs a difference ({row.Category})");
+            First($"board d{day}");
+            yield break;
+        }
+    }
+
     /// <summary>Proves each of a deviation fault's tells through the real compare path: two papers that disagree first (the cross proof, one pair per category), then each tell picked against the claimed place's book row, else the row its value belongs to (or the traveller's own record row for a record category); a dress tell is picked through the wheel's Look menu. A category already documented is not proven twice.</summary>
     private static IEnumerator Evidence(Office o, CaseInstance c, int day, int slot)
     {
@@ -1256,6 +1499,11 @@ public static class _TimeDeskAuditPlay
         {
             if (!done.Add(x.Category))
                 continue;
+            if (Documented(x.Category))
+            {
+                Line($"   cross proof of {x.Category}: already documented (the case board's cross-check)");
+                continue;
+            }
             int before = o.Ui.EvidenceCount;
             compare.Clear();
             compare.Select(EvidencePicks.ForField(x.DocumentA, new DocumentRow(x.FieldA, c.documents[x.DocumentA].fields[x.FieldA]), c.documents[x.DocumentA].DisplayName), null);
@@ -2122,14 +2370,18 @@ public static class _TimeDeskAuditPlay
         Line("   briefing: " + ((TMP_Text)Field(flow, "briefingTitleText")).text);
         foreach (string l in Lines(PaperText()))
             Line("   | " + l);
+        if (((GameObject)Field(flow, "briefingMemo")).activeSelf)
+            foreach (string f in new[] { "briefingMemoTitleText", "briefingMemoBodyText" })
+                foreach (string l in Lines(((TMP_Text)Field(flow, f)).text))
+                    Line("   memo | " + l);
     }
 
-    /// <summary>The morning paper's printed lines (run 7's front page, MorningPaper): the kicker when shown, the headline, the deck, the small story's title and lines.</summary>
+    /// <summary>The morning paper's printed lines (run 7's front page, MorningPaper): the headline, the deck, the small story's title and lines (the Bureau memo apart).</summary>
     private static string PaperText()
     {
         DayFlowUIController flow = Office.One<DayFlowUIController>();
         var parts = new List<string>();
-        foreach (string f in new[] { "briefingKickerText", "briefingHeadlineText", "briefingDeckText", "briefingStoryTitleText", "briefingStoryText" })
+        foreach (string f in new[] { "briefingHeadlineText", "briefingDeckText", "briefingStoryTitleText", "briefingStoryText" })
         {
             var t = (TMP_Text)Field(flow, f);
             if (t != null && t.gameObject.activeSelf && !string.IsNullOrWhiteSpace(t.text))
@@ -2287,13 +2539,14 @@ public static class _TimeDeskAuditPlay
         /// <summary>A click on the AVAILABLE sign, as the EventSystem delivers it.</summary>
         public void ClickSign() => ExecuteEvents.Execute(Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
         public DeskStampTray Stamps => (DeskStampTray)Field(Coordinator, "stampTray");
+        public DetainButton Detain => One<DetainButton>();
         public OfficeControls Controls => (OfficeControls)Field(Coordinator, "controls");
         public DeskRulebook Rulebook => (DeskRulebook)Field(One<DeskInspect>(), "rulebook");
         public GuideDirector Guide => One<GuideDirector>();
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
-        public GameObject CitationPanel => (GameObject)Field(OfficeUi, "citationPanel");
+        public bool CitationFlying => ((List<DeskDocument>)Field(Desk, "_citations")).Any(p => p.TryGetComponent(out PaperArrival a) && a.Flying);
         public InvestigationApp App => (InvestigationApp)Field(Ui, "app");
         public AppPane LeftPane => (AppPane)Field(App, "leftPane");
         public AppPane RightPane => (AppPane)Field(App, "rightPane");
@@ -2355,6 +2608,11 @@ public static class _TimeDeskAuditPlay
             else
                 PlayerPrefs.SetString(pref, value);
         }
+        string intensity = SessionState.GetString(IntensityKey, "<absent>");
+        if (intensity == "<absent>")
+            PlayerPrefs.DeleteKey(IntensityPref);
+        else
+            PlayerPrefs.SetFloat(IntensityPref, float.Parse(intensity, System.Globalization.CultureInfo.InvariantCulture));
         foreach (string entry in SessionState.GetString(DesktopPrefsKey, string.Empty).Split('\u0002').Where(e => e.Length > 0))
         {
             string[] kv = entry.Split('\u0001');

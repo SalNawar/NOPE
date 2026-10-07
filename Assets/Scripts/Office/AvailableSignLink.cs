@@ -6,10 +6,13 @@ using UnityEngine;
 /// available"): writes the caption (DeskConfigSO.readyCaptionKey) on the art's
 /// NEXT sign label, or on the gameplay's stand-in sign when the art has none,
 /// and lights it in the label's own ink while the desk is available; paused
-/// (the shift's start, a break, after closing) it dims to
-/// DeskConfigSO.readyPausedInk, still readable. It follows
-/// <see cref="DeskAvailability.Changed"/>, so it never polls. OfficeSceneBinder
-/// adds it to the gameplay layer at load, so no art file is touched.
+/// (a break, after closing) it dims to DeskConfigSO.readyPausedInk, still
+/// readable. Until its first press opens the shift (the clock waits for it,
+/// Saleh 2026-10-07) the caption invites the press: it pulses gently between
+/// the two inks (DeskConfigSO.readyInviteSeconds a beat; steady lit under
+/// Reduced Motion). It follows <see cref="DeskAvailability.Changed"/>, and
+/// runs a frame only while it invites. OfficeSceneBinder adds it to the
+/// gameplay layer at load, so no art file is touched.
 /// </summary>
 [DisallowMultipleComponent]
 public sealed class AvailableSignLink : MonoBehaviour
@@ -38,6 +41,22 @@ public sealed class AvailableSignLink : MonoBehaviour
         Apply();
     }
 
+    /// <summary>The invitation's pulse: the caption breathes between the paused and the lit ink until the shift opens or the desk closes.</summary>
+    private void Update()
+    {
+        if (_caption == null || _desk == null || !Inviting)
+        {
+            enabled = false;
+            return;
+        }
+        float beat = Mathf.Max(0.1f, _config.readyInviteSeconds);
+        float t = MotionPreference.Reduced ? 1f : 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 2f * Mathf.PI / beat);
+        _caption.color = Color.Lerp(_config.readyPausedInk, _lit, t);
+    }
+
+    /// <summary>True until the sign's first press opens the shift (and not once the desk is closed).</summary>
+    private bool Inviting => !_desk.HasOpened && !_desk.IsClosed;
+
     private void OnDestroy() => Unhook();
 
     private void Unhook()
@@ -46,10 +65,11 @@ public sealed class AvailableSignLink : MonoBehaviour
             _desk.Changed -= Apply;
     }
 
-    /// <summary>The lit ink while the desk is available, the paused ink otherwise.</summary>
+    /// <summary>The lit ink while the desk is available, the paused ink otherwise; the pulse runs while the sign invites its first press.</summary>
     private void Apply()
     {
         if (_caption != null)
             _caption.color = _desk.IsAvailable ? _lit : _config.readyPausedInk;
+        enabled = _caption != null && Inviting;
     }
 }

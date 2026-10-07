@@ -88,49 +88,4 @@ public class PcScreenTests
         Assert.IsFalse(screen.IsOn);
         Assert.AreEqual(0, changes[0]);
     }
-
-    [Test]
-    public void Holding_TurnsADarkScreenOn_RaisingChangedOnce()
-    {
-        (PcScreen screen, int[] changes) = Watch(false, null);
-        screen.SetHeld(true);
-        Assert.IsTrue(screen.IsOn);
-        Assert.AreEqual(1, changes[0]);
-    }
-
-    [Test]
-    public void Holding_ALitScreen_RaisesNothing()
-    {
-        (PcScreen screen, int[] changes) = Watch(true, Rules());
-        screen.SetHeld(true);
-        Assert.IsTrue(screen.IsOn);
-        Assert.AreEqual(0, changes[0]);
-    }
-
-    [Test]
-    public void AHeldScreen_RefusesToggleAndTurnOff_StayingOnAndRaisingNothing()
-    {
-        (PcScreen screen, int[] changes) = Watch(true, Rules());
-        screen.SetHeld(true);
-        Assert.IsFalse(screen.Toggle());
-        Assert.IsFalse(screen.TurnOff());
-        Assert.IsTrue(screen.IsOn);
-        Assert.AreEqual(0, changes[0]);
-    }
-
-    [Test]
-    public void Releasing_ChangesNothing_ThenToggleAndTurnOffWorkAgain()
-    {
-        (PcScreen screen, int[] changes) = Watch(false, null);
-        screen.SetHeld(true);
-        screen.SetHeld(false);
-        Assert.IsTrue(screen.IsOn, "releasing leaves the screen on");
-        Assert.AreEqual(1, changes[0], "only the hold's own wake was raised");
-
-        Assert.IsTrue(screen.TurnOff());
-        Assert.IsFalse(screen.IsOn);
-        Assert.IsTrue(screen.Toggle());
-        Assert.IsTrue(screen.IsOn);
-        Assert.AreEqual(3, changes[0]);
-    }
 }

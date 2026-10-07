@@ -4,8 +4,9 @@ using UnityEngine.UI;
 /// <summary>
 /// Lays its active children out on an ellipse (RadialLayout.Point: item 0 at
 /// the top, then clockwise), each at <see cref="ItemSize"/>, centred on this
-/// rect's pivot. A child with LayoutElement.ignoreLayout (the traveller wheel's
-/// centre slot) is left alone. Reports no preferred size.
+/// rect's pivot (through UiAppear.PlaceAnchored, so a child flying in keeps its
+/// flight on top of its place). A child with LayoutElement.ignoreLayout (the
+/// traveller wheel's centre slot) is left alone. Reports no preferred size.
 /// </summary>
 public sealed class RadialLayoutGroup : LayoutGroup
 {
@@ -68,7 +69,7 @@ public sealed class RadialLayoutGroup : LayoutGroup
             child.anchorMax = middle;
             child.pivot = middle;
             child.sizeDelta = itemSize;
-            child.anchoredPosition = new Vector2(x, y);
+            UiAppear.PlaceAnchored(child, new Vector2(x, y)); // a pill flying out from the centre keeps its flight (UiAppear's offset) on top of its place
         }
     }
 }

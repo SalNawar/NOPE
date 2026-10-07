@@ -53,3 +53,5 @@ MonoBehaviour:
   band: {r: 0.87, g: 0.84, b: 0.76, a: 1}
   stampDash: {r: 0.42, g: 0.39, b: 0.345, a: 1}
   seal: {r: 0.1, g: 0.09, b: 0.08, a: 0.1}
+  artValueFont: {fileID: 11400000, guid: 217ec87cbb051d9469204f7628483534, type: 2}
+  artLabelFont: {fileID: 11400000, guid: fb77052ab1c961049b15210f1a79eb9c, type: 2}

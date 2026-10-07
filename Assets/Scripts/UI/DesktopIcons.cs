@@ -3,20 +3,25 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// The desktop's six icons (the PC redesign DK1-DK6), on the icon layer: the
-/// icon area above the compare dock and the taskbar, under the case chrome
-/// and every window. At start the icons take the player's saved layout
-/// (DesktopPreferences, DesktopLayout.Restore: unknown ids dropped, a new id
-/// in the first free spot, off-screen places clamped), else the default
-/// arrangement. One icon at a time is selected (a press on it); a press on
+/// The desktop's icons (the PC redesign DK1-DK6), on the icon layer: the
+/// icon area above the taskbar, under the case chrome and every window; they
+/// keep to its icon band (DesktopConfigSO.IconBand: its left columns, the
+/// waiting strip right of them). Only the shown icons (ShowApps: the apps
+/// introduced so far) take places: at start and whenever the shown set
+/// changes they take the player's saved layout (DesktopPreferences,
+/// DesktopLayout.Restore: unknown ids dropped, places clamped into the band,
+/// one that then covers another icon and a newly shown one in the first free
+/// spot), else the default arrangement of the shown ones, with no gaps
+/// (Saleh 2026-10-07: "arrange icons not working": the hidden apps kept
+/// their spots, so Arrange left holes and looked like it did nothing). One icon at a time is selected (a press on it); a press on
 /// the empty icon area deselects. Shift+F10 or the Menu key opens the
 /// selected icon's context menu (Open), or with none selected the desktop's
 /// ("Arrange icons"): ShowMenu (a right-click backs out instead, ControlRules). An icon opens its app through
 /// DesktopApps.OpenApp on a double click (a single one with Settings'
 /// choice); a drop goes through DesktopLayout.Drop and saves the layout;
 /// Arrange (the context menu, the Start menu, Settings' "Reset icon
-/// positions") lays the icons out column-first in the default order and
-/// saves. While no window or text field has the keyboard, the arrow keys
+/// positions") lays the shown icons out column-first in the default order
+/// and saves. While no window or text field has the keyboard, the arrow keys
 /// move the selection to the nearest icon that way and Enter opens it (the
 /// desktop's one keyboard poller, DesktopKeyboard, calls Step and
 /// OpenSelected). Badges: an app's count or dot
@@ -82,8 +87,7 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler
     /// <summary>The icons take the player's saved layout (or the default arrangement).</summary>
     private void Start()
     {
-        if (config != null)
-            Apply(DesktopLayout.Restore(DesktopPreferences.IconPositions, Order(), Grid));
+        Layout();
         foreach (DesktopIconView icon in icons)
             if (icon != null)
             {
@@ -112,14 +116,23 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler
     /// <summary>
     /// Shows the icon of each app <paramref name="introduced"/> accepts and
     /// hides the rest (the desk-first redesign, item 9: an app arrives on the
-    /// day it is introduced, Feature.App; the day's start). A hidden icon keeps
-    /// its place; the Start menu lists only the shown ones (IsShown).
+    /// day it is introduced, Feature.App; the day's start). A hidden icon takes
+    /// no place; the shown ones are laid out again (Layout); the Start menu
+    /// lists only the shown ones (IsShown).
     /// </summary>
     public void ShowApps(System.Func<string, bool> introduced)
     {
         foreach (DesktopIconView icon in icons)
             if (icon != null)
                 icon.gameObject.SetActive(introduced == null || introduced(icon.AppId));
+        Layout();
+    }
+
+    /// <summary>The shown icons in the saved layout, else the default arrangement (DesktopLayout.Restore: in the band, off each other).</summary>
+    private void Layout()
+    {
+        if (config != null)
+            Apply(DesktopLayout.Restore(DesktopPreferences.IconPositions, Order(), Grid));
     }
 
     /// <summary>True when the app's icon shows today (ShowApps); false for an id no icon has.</summary>
@@ -139,7 +152,7 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler
     /// <summary>Enter: opens the selected icon's app (nothing when none is selected).</summary>
     public void OpenSelected() => Open(_selected);
 
-    /// <summary>Lays the icons out column-first in the default order and saves the layout (the context menu, the Start menu, Settings' reset).</summary>
+    /// <summary>Lays the shown icons out column-first in the default order, with no gaps, and saves the layout (the context menu, the Start menu, Settings' reset).</summary>
     public void Arrange()
     {
         if (config == null)
@@ -190,7 +203,7 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler
 
         _others.Clear();
         foreach (DesktopIconView other in icons)
-            if (other != null && other != icon)
+            if (Shown(other) && other != icon)
                 _others.Add(other.Place);
         IconPlace at = icon.Place;
         icon.MoveTo(DesktopLayout.Drop(icon.AppId, at.X, at.Y, _others, Grid, config.iconDropOverlap));
@@ -223,26 +236,29 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler
 
         _others.Clear();
         foreach (DesktopIconView icon in icons)
-            if (icon != null)
+            if (Shown(icon))
                 _others.Add(icon.Place);
         string next = DesktopLayout.Nearest(_selected.AppId, dx, dy, _others);
         if (next != null)
             Select(IconOf(next));
     }
 
-    /// <summary>The ids in the default order (the knob's, then any icon it does not name).</summary>
+    /// <summary>The shown icons' ids in the default order (the knob's, then any icon it does not name); a hidden icon (an app not yet introduced) takes no place.</summary>
     private List<string> Order()
     {
         _order.Clear();
         if (config != null && config.iconOrder != null)
             foreach (string id in config.iconOrder)
-                if (IconOf(id) != null && !_order.Contains(id))
+                if (Shown(IconOf(id)) && !_order.Contains(id))
                     _order.Add(id);
         foreach (DesktopIconView icon in icons)
-            if (icon != null && !_order.Contains(icon.AppId))
+            if (Shown(icon) && !_order.Contains(icon.AppId))
                 _order.Add(icon.AppId);
         return _order;
     }
+
+    /// <summary>True for an icon that shows today (ShowApps).</summary>
+    private static bool Shown(DesktopIconView icon) => icon != null && icon.gameObject.activeSelf;
 
     private void Apply(IReadOnlyList<IconPlace> places)
     {
@@ -270,12 +286,10 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler
         return null;
     }
 
+    /// <summary>The icon band in the icon layer's rect (DesktopConfigSO.IconBand); without the knobs, the whole area in 120 x 132 cells.</summary>
     private IconGrid MakeGrid()
     {
         Rect area = ((RectTransform)transform).rect;
-        Vector2 cell = config != null ? config.iconCellSize : new Vector2(120f, 132f);
-        Vector2 origin = config != null ? config.iconOrigin : Vector2.zero;
-        return new IconGrid(area.width, area.height, cell.x, cell.y, origin.x, origin.y,
-                            config != null ? config.iconColumnStep : cell.x, config != null ? config.iconRowStep : cell.y);
+        return config != null ? config.IconBand(area.width, area.height) : new IconGrid(area.width, area.height, 120f, 132f, 0f, 0f, 120f, 132f);
     }
 }

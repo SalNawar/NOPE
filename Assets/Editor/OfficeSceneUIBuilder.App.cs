@@ -43,6 +43,7 @@ public static partial class OfficeSceneUIBuilder
         public ReportView[] Report;
         public RulesView[] Rules;
         public CalendarView[] Calendar;
+        public CaseBoardView[] CaseBoards;
         public GuideBar Guide;
         public MatchBoard Board;
     }
@@ -110,6 +111,7 @@ public static partial class OfficeSceneUIBuilder
         parts.Report = new[] { leftViews.Report, rightViews.Report };
         parts.Rules = new[] { leftViews.Rules, rightViews.Rules };
         parts.Calendar = new[] { leftViews.Calendar, rightViews.Calendar };
+        parts.CaseBoards = new[] { leftViews.Board, rightViews.Board };
 
         AppToast toast = BuildAppToast(status.Root);
         parts.App = win.gameObject.AddComponent<InvestigationApp>();
@@ -133,6 +135,8 @@ public static partial class OfficeSceneUIBuilder
             WireBoard(rules, parts.Board);
         foreach (CalendarView calendar in parts.Calendar)
             WireBoard(calendar, parts.Board);
+        foreach (CaseBoardView caseBoard in parts.CaseBoards)
+            WireBoard(caseBoard, parts.Board);
 
         var so = new SerializedObject(parts.App);
         Wire(so, "window", window);
@@ -183,12 +187,17 @@ public static partial class OfficeSceneUIBuilder
                              style.backingInk, ThemeRoleId.DiegeticBacking);
         hint.textWrappingMode = TextWrappingModes.Normal;
 
-        DocumentWindowController copy = BuildDocumentPage(root);
+        // The copies sit under the layer tabs (the scanner app spec §2.4), so the tabs never cover a copy's scan strip.
+        Transform copies = Panel(root, "Copies", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(copies, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -LayerStripHeight));
+        DocumentWindowController copy = BuildDocumentPage(copies);
+        ScanLayerSwitch layers = BuildScanLayers(root, style);
 
         DocumentsView documents = root.gameObject.AddComponent<DocumentsView>();
         var soView = new SerializedObject(documents);
         Wire(soView, "pageTemplate", copy);
         Wire(soView, "hintText", hint);
+        Wire(soView, "layers", layers);
         soView.ApplyModifiedProperties();
         view = documents;
         return documents;

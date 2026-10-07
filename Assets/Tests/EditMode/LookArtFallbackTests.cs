@@ -140,4 +140,32 @@ public class LookArtFallbackTests
         Assert.AreEqual(0, table.NeighboursOf("japan").Count);
         CollectionAssert.AreEqual(new[] { "iraq", "greece" }, table.NeighboursOf("egypt").ToList());
     }
+
+    [Test]
+    public void TheCivilDress_FallsBackToTheCivilRowsNations_InTheLatestEra_WithoutItsVariant_InItsColour()
+    {
+        var table = new LookArtFallbackTable
+        {
+            neighbours = new List<LookArtNeighbours> { new LookArtNeighbours { nation = LookKeys.CivilNation, near = new List<string> { "neutral", "britain" } } },
+            layers = new List<LookArtLayerSteps>
+            {
+                new LookArtLayerSteps { layer = LookLayer.Outfit, steps = new List<LookArtFallbackStep> { LookArtFallbackStep.CivilDress } },
+                new LookArtLayerSteps { layer = LookLayer.Hair, steps = new List<LookArtFallbackStep> { LookArtFallbackStep.CivilDress } }
+            }
+        };
+        CollectionAssert.AreEqual(new[] { "outfit_m_civil_2150_v2", "outfit_m_neutral_future", "outfit_m_britain_future" },
+                                  Names(LookKeys.CivilOutfit(TravellerGender.Male, "v2"), table));
+        CollectionAssert.AreEqual(new[] { "hair_f_civil_2150_red", "hair_f_neutral_future_red", "hair_f_britain_future_red" },
+                                  Names(LookKeys.CivilHair(TravellerGender.Female, "red"), table));
+        Assert.AreEqual("outfit_f_britain_future", LookArtFallback.Resolve(LookKeys.CivilOutfit(TravellerGender.Female, "v1"), table, Universe, n => n == "outfit_f_britain_future")?.Name,
+                        "today's 2150 outfit stands in until the civilian one lands");
+        CollectionAssert.AreEqual(new[] { "outfit_m_egypt_modern" }, Names(LookKeys.Garment(LookLayer.Outfit, TravellerGender.Male, "egypt", "modern", null), table), "a place's garment takes no civil step");
+    }
+
+    [Test]
+    public void APremadesPhoto_FallsBackToTheirNeutralPicture()
+    {
+        CollectionAssert.AreEqual(new[] { "premade_socrates_photo", "premade_socrates_neutral" },
+                                  Names(LookKeys.PremadePhoto("socrates"), Table(LookLayer.Whole, LookArtFallbackStep.NeutralExpression)));
+    }
 }

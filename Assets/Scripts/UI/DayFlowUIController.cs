@@ -6,9 +6,11 @@ using UnityEngine.UI;
 /// <summary>
 /// Owns the two day-flow panels in the office:
 /// - Morning briefing, "The Temporal Times" (the UI kit's front page,
-///   MorningPaper: the day's bulletin naming its one new paper or check as the
-///   key story, lesson 4, the other TomorrowPackage lines as the small story,
-///   under the dateline with the day and today's date) before the shift
+///   MorningPaper: the world's news, the first timeline headline as the key
+///   story and the other TomorrowPackage lines as the small story, under the
+///   dateline with the day and today's date; the day's bulletin naming its
+///   one new paper or check, lesson 4, on the Bureau memo clipped to it,
+///   BureauMemo) before the shift
 /// - End-of-day results (the ShiftReport's money ledger at a glance, lesson 5) after the last case
 /// All references are optional; unwired panels are skipped gracefully.
 /// </summary>
@@ -24,8 +26,14 @@ public sealed class DayFlowUIController : MonoBehaviour
     /// <summary>Today's date in the agency's calendar, the dateline's centre (optional).</summary>
     [SerializeField] private TMP_Text briefingDateText;
 
-    /// <summary>The kicker over the key story ("BULLETIN · NEW TODAY"), shown when the day's bulletin leads (optional).</summary>
-    [SerializeField] private TMP_Text briefingKickerText;
+    /// <summary>The Bureau memo clipped to the paper ("BUREAU MEMO · DESK 3"), shown on a day with a bulletin (optional).</summary>
+    [SerializeField] private GameObject briefingMemo;
+
+    /// <summary>The memo's title (BureauMemo.Title).</summary>
+    [SerializeField] private TMP_Text briefingMemoTitleText;
+
+    /// <summary>The memo's body (BureauMemo.Body).</summary>
+    [SerializeField] private TMP_Text briefingMemoBodyText;
 
     /// <summary>The key story's headline (MorningPaper.Headline).</summary>
     [SerializeField] private TMP_Text briefingHeadlineText;
@@ -85,10 +93,12 @@ public sealed class DayFlowUIController : MonoBehaviour
 
     /// <summary>
     /// Shows the morning briefing as the paper's front page (MorningPaper):
-    /// the day's <paramref name="bulletin"/> as the key story under its kicker
-    /// when the day brings something new (Papers Please lesson 4,
-    /// DayPlanSO.Bulletin), else the first timeline headline; the world's other
-    /// tomorrow package lines as the small story.
+    /// the world's first timeline headline as the key story (on a day with
+    /// no news and no notes, the debt economy's line of the day, DebtNews.Line)
+    /// and the world's other tomorrow package lines as the small story; the
+    /// day's <paramref name="bulletin"/> (Papers Please lesson 4,
+    /// DayPlanSO.Bulletin, with the new hours) on the Bureau memo, shown only
+    /// on a day with one (BureauMemo).
     /// Invokes onStartShift when the player clicks Start (or immediately if unwired).
     /// </summary>
     public void ShowBriefing(WorldState world, string bulletin, Action onStartShift)
@@ -104,17 +114,23 @@ public sealed class DayFlowUIController : MonoBehaviour
         if (briefingTitleText != null)
             briefingTitleText.text = UiText.Format("briefing.title", world.day);
 
-        // The front page: the key story (the bulletin, else the first headline), then every other line in the small story
-        // (the desk's own stories, days 7-15, Q9, among them).
-        MorningPaper page = MorningPaper.Compose(bulletin, world.tomorrow.briefingLines, world.tomorrow.newsLines, world.tomorrow.deskLines);
+        // The front page: the world's first headline leads, then every other line in the small story
+        // (the desk's own stories, days 7-15, Q9, among them); the clerk's bulletin goes on the memo.
+        ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
+        string quiet = library != null ? DebtNews.Line(library.News.debt, world.runSeed, world.day) : null;
+        MorningPaper page = MorningPaper.Compose(world.tomorrow.briefingLines, world.tomorrow.newsLines, world.tomorrow.deskLines, quiet);
         if (briefingDateText != null)
         {
-            ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
             string today = library != null ? AgencyCalendar.Today(library.Agency.firstDate, world.day) : null;
             briefingDateText.text = today != null ? today.ToUpperInvariant() : string.Empty;
         }
-        if (briefingKickerText != null)
-            briefingKickerText.gameObject.SetActive(page.LeadIsBulletin);
+        BureauMemo memo = BureauMemo.Of(bulletin);
+        if (briefingMemo != null)
+            briefingMemo.SetActive(!memo.IsEmpty);
+        if (briefingMemoTitleText != null)
+            briefingMemoTitleText.text = memo.Title;
+        if (briefingMemoBodyText != null)
+            briefingMemoBodyText.text = memo.Body;
         if (briefingHeadlineText != null)
             briefingHeadlineText.text = page.Headline.Length > 0 ? page.Headline : UiText.Get("briefing.empty");
         if (briefingDeckText != null)
@@ -195,6 +211,9 @@ public sealed class DayFlowUIController : MonoBehaviour
 
             if (ledger.UnprovenDenialCount > 0)
                 sb.AppendLine(UiText.Format("results.unproven", ledger.UnprovenDenialCount));
+
+            if (ledger.DetainedCount > 0)
+                sb.AppendLine(UiText.Format("results.detained", ledger.DetainedCount));
 
             sb.AppendLine(UiText.Format("results.leisureDepartures", ledger.LeisureDepartures));
             sb.AppendLine(UiText.Format("results.debtReliefDepartures", ledger.DebtReliefDepartures, ledger.DebtPutToWork, cr));

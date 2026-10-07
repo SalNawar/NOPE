@@ -124,6 +124,17 @@ public sealed class ShiftLedger
         }
     }
 
+    /// <summary>The travellers detained this shift (the third verdict; the day's results count them).</summary>
+    public int DetainedCount
+    {
+        get
+        {
+            int n = 0;
+            foreach (CaseVerdict v in verdicts) if (v.detained) n++;
+            return n;
+        }
+    }
+
     /// <summary>Total stability change across the shift (signed): the verdicts' and the strandings'.</summary>
     public float TotalStabilityDelta
     {
@@ -189,24 +200,30 @@ public sealed class CaseVerdict
     /// <summary>True if this verdict dropped stability to/below the firing threshold.</summary>
     public bool firedNow;
 
-    /// <summary>Citation slip text shown to the player (empty if none): the whole slip in one text (Mail's copy of it).</summary>
+    /// <summary>The citation's whole text in one (Mail's copy of it; empty if none).</summary>
     public string citationText = string.Empty;
 
-    /// <summary>The slip's reason line: the mistake ("Approved an expired paper."; empty if none).</summary>
+    /// <summary>The citation's violation: the mistake ("Approved an expired paper."; empty if none): each row of the Citation prints it.</summary>
     public string citationReason = string.Empty;
 
-    /// <summary>The slip's detail: the rule broken and the exact values involved (lesson 6; empty if none).</summary>
+    /// <summary>The citation's detail: the rule broken, then the exact values involved (lesson 6; empty if none): the Citation prints its first line, the rule, under each violation.</summary>
     public string citationDetail = string.Empty;
 
-    /// <summary>The slip's consequence: the free warning or the penalty (empty if none).</summary>
+    /// <summary>The citation's consequence: the free warning or the penalty (empty if none): the Citation's TOTAL PENALTY.</summary>
     public string citationConsequence = string.Empty;
+
+    /// <summary>The citation as the desk prints it (CitationTickets; null without one). Runtime only: never saved.</summary>
+    [NonSerialized] public CitationTicket ticket;
 
     // -----------------------------
     // Investigation (accept/deny)
     // -----------------------------
 
-    /// <summary>True if the player accepted (approved travel); false = denied.</summary>
+    /// <summary>True if the player accepted (approved travel); false = denied or detained.</summary>
     public bool accepted;
+
+    /// <summary>True if the player detained the traveller (the third verdict, the desk's DETAIN button; <see cref="accepted"/> is false).</summary>
+    public bool detained;
 
     /// <summary>The traveller's kind (the ledger's departure lines count leisure and Debt Relief departures by it; traveller types §10).</summary>
     public TravellerKind kind;
@@ -236,12 +253,15 @@ public sealed class CaseVerdict
 
     /// <summary>
     /// The UI string key of a wrong decision's mistake: "citation.unproven"
-    /// for an unproven denial, "citation.deniedWrong" for another denial,
+    /// for an unproven denial ("citation.detainedUnproven" for an unproven
+    /// detention), "citation.detainedWrong" for a
+    /// detention of a traveller who broke no law, "citation.deniedWrong" for another denial,
     /// "citation.acceptedWrong" plus "." and the fault reason (when there is
     /// one) for an accept ({0} = the destination).
     /// </summary>
     public string MistakeKey =>
-        unprovenDenial ? "citation.unproven"
+        unprovenDenial ? (detained ? "citation.detainedUnproven" : "citation.unproven")
+        : detained ? "citation.detainedWrong"
         : !accepted ? "citation.deniedWrong"
         : string.IsNullOrEmpty(faultReason) ? "citation.acceptedWrong"
         : "citation.acceptedWrong." + faultReason;

@@ -61,6 +61,9 @@ public sealed class FormLook
     /// <summary>The paper's height on the desk relative to the desk's paper (Desk_Default.paperSize); 1: the same.</summary>
     public float scale = 1f;
 
+    /// <summary>The form drawn on its art (the Canva documents, run 7; ArtLayout): set, the paper is its kind's face with the values printed on the art's places, and the aspect must be the art's.</summary>
+    public FormArt art = new FormArt();
+
     /// <summary>The least and the greatest aspect a look may set (a long legal sheet to a card).</summary>
     public const float MinAspect = 0.5f, MaxAspect = 2f;
 
@@ -97,6 +100,8 @@ public sealed class FormLook
             p.Accent = band.WithAlpha(1f);
             p.Band = Contrast.Over(band.WithAlpha(BandShare), p.Paper);
         }
+        if (art != null && art.IsSet && Rgba.TryParseHex(art.stampInk, out Rgba stamp))
+            p.StampDash = stamp.WithAlpha(1f);
         return p;
     }
 

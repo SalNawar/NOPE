@@ -47,10 +47,10 @@ public static class DesktopPreferences
     /// <summary>The saved icon layout, or "" when the player never moved an icon (the default arrangement).</summary>
     public static string IconPositions
     {
-        get => PlayerPrefs.GetString(IconsKey, string.Empty);
+        get => PlayerPrefs.GetString(PlayerPrefKeys.For(IconsKey), string.Empty);
         set
         {
-            PlayerPrefs.SetString(IconsKey, value ?? string.Empty);
+            PlayerPrefs.SetString(PlayerPrefKeys.For(IconsKey), value ?? string.Empty);
             PlayerPrefs.Save();
         }
     }
@@ -58,10 +58,10 @@ public static class DesktopPreferences
     /// <summary>True (the default) when the player wants the Investigation app's two panes side by side (it shows them while the window is wide enough).</summary>
     public static bool AppSplit
     {
-        get => PlayerPrefs.GetString(AppSplitKey, On) != Off;
+        get => PlayerPrefs.GetString(PlayerPrefKeys.For(AppSplitKey), On) != Off;
         set
         {
-            PlayerPrefs.SetString(AppSplitKey, value ? On : Off);
+            PlayerPrefs.SetString(PlayerPrefKeys.For(AppSplitKey), value ? On : Off);
             PlayerPrefs.Save();
         }
     }
@@ -69,10 +69,10 @@ public static class DesktopPreferences
     /// <summary>True when one click opens a desktop icon (Settings' accessibility choice); false (the default) when it takes a double click.</summary>
     public static bool OpenIconsWithSingleClick
     {
-        get => PlayerPrefs.GetString(IconOpenKey, Double) == Single;
+        get => PlayerPrefs.GetString(PlayerPrefKeys.For(IconOpenKey), Double) == Single;
         set
         {
-            PlayerPrefs.SetString(IconOpenKey, value ? Single : Double);
+            PlayerPrefs.SetString(PlayerPrefKeys.For(IconOpenKey), value ? Single : Double);
             PlayerPrefs.Save();
         }
     }
@@ -80,10 +80,10 @@ public static class DesktopPreferences
     /// <summary>The Investigation app's default zoom as saved ("" when never set: 100 %); AppZoom.Parse reads it against the levels.</summary>
     public static string DefaultZoom
     {
-        get => PlayerPrefs.GetString(ZoomKey, string.Empty);
+        get => PlayerPrefs.GetString(PlayerPrefKeys.For(ZoomKey), string.Empty);
         set
         {
-            PlayerPrefs.SetString(ZoomKey, value ?? string.Empty);
+            PlayerPrefs.SetString(PlayerPrefKeys.For(ZoomKey), value ?? string.Empty);
             PlayerPrefs.Save();
         }
     }
@@ -91,10 +91,10 @@ public static class DesktopPreferences
     /// <summary>True (the default) while the Investigation app's findings column shows; Ctrl+B hides it.</summary>
     public static bool SidebarShown
     {
-        get => PlayerPrefs.GetString(SidebarKey, Shown) != Hidden;
+        get => PlayerPrefs.GetString(PlayerPrefKeys.For(SidebarKey), Shown) != Hidden;
         set
         {
-            PlayerPrefs.SetString(SidebarKey, value ? Shown : Hidden);
+            PlayerPrefs.SetString(PlayerPrefKeys.For(SidebarKey), value ? Shown : Hidden);
             PlayerPrefs.Save();
         }
     }

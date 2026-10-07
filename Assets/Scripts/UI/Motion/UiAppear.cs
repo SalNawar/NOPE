@@ -18,7 +18,9 @@ public enum AppearStyle
 
 /// <summary>
 /// A popup's or a panel's coming and going through the game feel's springs
-/// (AppearMotion): Open after the object is switched on (it grows, slides or
+/// (AppearMotion; Saleh 2026-10-07, round 2: what travels stretches along its
+/// travel by its speed, overshoots, squashes on arrival and wobbles into
+/// place: SquashStretch.FromMotion): Open after the object is switched on (it grows, slides or
 /// drops in from its style's start, optionally from a point: a window from
 /// its taskbar button, after a stagger's delay), Close to take it away (it
 /// shrinks or slides back, optionally toward a point, takes no clicks while
@@ -41,6 +43,9 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
     private bool _posed, _closing, _finishing;
     private MotionAmount _amount;
 
+    /// <summary>The tuning of the running motion (its acceleration shapes the squash).</summary>
+    private SpringTuning _tuning;
+
     /// <summary>True while it is going (Close ran; it switches itself off when gone).</summary>
     public bool Closing => _closing;
 
@@ -61,11 +66,55 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
     /// <summary>True when <paramref name="target"/> is on its way out (Close ran and it is still showing).</summary>
     public static bool IsClosing(GameObject target) => target != null && target.TryGetComponent(out UiAppear appear) && appear._closing;
 
+    /// <summary>
+    /// Sets <paramref name="target"/>'s place outright while it may be moving
+    /// (a window's maximise and restore, its drag, its pull back on screen):
+    /// <paramref name="place"/> runs on the rest place, the motion's offset
+    /// taken out first and put back after, so the motion goes on from the new
+    /// place and settles exactly there. (A place set over the offset, then
+    /// settled, ended off by the offset: the playtest's Investigation window,
+    /// maximised on its first frame, came to rest pushed up off the screen.)
+    /// </summary>
+    /// <remarks>A layout group that drives a moving piece's place (the wheel's ring, RadialLayoutGroup) uses PlaceAnchored.</remarks>
+    public static void Place(GameObject target, System.Action place)
+    {
+        if (target == null || !target.TryGetComponent(out UiAppear appear) || !appear._posed)
+        {
+            place();
+            return;
+        }
+        Transform t = appear.transform;
+        t.localPosition -= appear._applied;
+        place();
+        t.localPosition += appear._applied;
+    }
+
+    /// <summary>
+    /// Sets <paramref name="target"/>'s anchored position to <paramref name="at"/>
+    /// as Place does, without allocating: for a layout group that drives the
+    /// place of a piece that may be flying in (run 7's QA sweep: the wheel's
+    /// ring re-laid its pills while they flew out from its centre, and they came
+    /// to rest twice their radius out, the bottom one off the screen).
+    /// </summary>
+    public static void PlaceAnchored(RectTransform target, Vector2 at)
+    {
+        if (target == null)
+            return;
+        if (!target.TryGetComponent(out UiAppear appear) || !appear._posed)
+        {
+            target.anchoredPosition = at;
+            return;
+        }
+        target.localPosition -= appear._applied;
+        target.anchoredPosition = at;
+        target.localPosition += appear._applied;
+    }
+
     /// <summary>Plays it in from its style's start, after <paramref name="delay"/> seconds (the object should be on).</summary>
     public void Open(float delay = 0f) => OpenFrom(StyleStart(), delay);
 
-    /// <summary>Plays it in growing from <paramref name="world"/> (a window from its taskbar button).</summary>
-    public void Open(Vector3 world) => OpenFrom(LocalOffsetTo(world), 0f);
+    /// <summary>Plays it in growing from <paramref name="world"/> (a window from its taskbar button, a wheel's pill from the ring's centre) after <paramref name="delay"/> seconds.</summary>
+    public void Open(Vector3 world, float delay = 0f) => OpenFrom(LocalOffsetTo(world), delay);
 
     /// <summary>Takes it away toward its style's start, then switches it off.</summary>
     public void Close() => CloseTo(StyleStart());
@@ -117,7 +166,8 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
             return false;
         MotionKnobs knobs = UiMotion.Knobs;
         MotionFeel feel = _closing ? MotionFeel.Heavy : _style == AppearStyle.Pop ? knobs.appearFeel : _style == AppearStyle.Drop ? knobs.paperFeel : knobs.slideFeel;
-        bool moving = _motion.Step(dt, knobs.Get(feel), knobs.reducedFadeSeconds, knobs.settleValue, knobs.settleSpeed);
+        _tuning = knobs.Get(feel);
+        bool moving = _motion.Step(dt, _tuning, knobs.reducedFadeSeconds, knobs.settleValue, knobs.settleSpeed);
         if (_closing && _motion.Gone)
         {
             Finish();
@@ -172,7 +222,20 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
         MotionKnobs knobs = UiMotion.Knobs;
         float from = _style == AppearStyle.Pop || _from != StyleStart() ? knobs.appearFromScale : 1f;
         float s = _motion.Scale(from, _amount);
-        transform.localScale = _restScale * s;
+        // A piece that travels (a slide, a window from its taskbar button, a wheel pill from the ring's centre) stretches along its travel by its speed and squashes by its acceleration.
+        float distance = _from.magnitude * _amount.Share;
+        Stretch st = distance > 0f
+            ? SquashStretch.FromMotion(distance * _motion.Speed, distance * _motion.Acceleration(_tuning), knobs.stretchPerSpeed, knobs.squashPerAccel, knobs.maxStretch)
+            : Stretch.None;
+        bool alongY = Mathf.Abs(_from.y) > Mathf.Abs(_from.x);
+        float sx = s * (alongY ? st.Across : st.Along), sy = s * (alongY ? st.Along : st.Across);
+        // Never more than appearGrowMax px past its rest size either way (a big window stretched by a quarter would leave the screen).
+        Rect rect = ((RectTransform)transform).rect;
+        if (rect.width > 0f)
+            sx = Mathf.Min(sx, 1f + knobs.appearGrowMax / rect.width);
+        if (rect.height > 0f)
+            sy = Mathf.Min(sy, 1f + knobs.appearGrowMax / rect.height);
+        transform.localScale = new Vector3(_restScale.x * sx, _restScale.y * sy, _restScale.z * s);
         Vector3 offset = _from * _motion.Offset(1f, _amount);
         if (offset != _applied)
         {

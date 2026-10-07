@@ -118,13 +118,6 @@ public class ArtSlotsTests
     }
 
     [Test]
-    public void VerdictMark()
-    {
-        Assert.AreEqual("Forms/stamp_accept", ArtSlots.VerdictMark(true));
-        Assert.AreEqual("Forms/stamp_deny", ArtSlots.VerdictMark(false));
-    }
-
-    [Test]
     public void PetSprite_KindAndLook_AndTheCorner()
     {
         Assert.AreEqual("Home/pet_dog_idle", ArtSlots.PetSprite(PetKind.Dog, PetLook.Idle));
@@ -167,7 +160,6 @@ public class ArtSlotsTests
     {
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.PhotoFrame));
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.AgencySeal));
-        Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.VerdictMark(true)));
         Assert.IsTrue(ArtSlots.OnDeskPaper(ArtSlots.PaperFaces("TC-620")[0]));
         Assert.IsFalse(ArtSlots.OnDeskPaper(ArtSlots.PetCorner));
         Assert.IsFalse(ArtSlots.OnDeskPaper(null));

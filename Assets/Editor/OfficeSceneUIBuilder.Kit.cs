@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// done, new art in the game"), run at the end of Build on both canvases and
 /// re-applied on every build: the desk's own pieces first (the pull tabs with
 /// their keycaps, the red inspect button over its SPACE key, the speech
-/// bubble, the verdict ribbon, the citation slip, the morning paper's and
+/// bubble, the verdict ribbon, the morning paper's and
 /// the ledger's plates), then every other control and panel by its theme
 /// role (<see cref="RolePiece"/>: a default button is a bone mini plate, a
 /// desk button a slate plate, a wheel choice a pill, the taskbar, title bars,
@@ -32,8 +32,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>Every pull tab's size (overlay units; sheet 01 B1: a tab a little taller than wide).</summary>
     private static readonly Vector2 PullTabSize = new Vector2(128f, 136f);
 
-    /// <summary>A left pull tab's flat face across its width (shares: from its cut edge to before its grips); a right tab's is its mirror.</summary>
-    private static readonly Vector2 PullTabFace = new Vector2(0.05f, 0.66f);
+    /// <summary>A pull tab's label's margin from the edge it is cut at (the screen's edge), in overlay units; its other side keeps clear of the grips by the sprite's inner 9-slice border (KitPullTab).</summary>
+    private const float PullTabCutMargin = 6f;
+
+    /// <summary>A pull tab's word's ink: the palette's card (#FAF2E1), a shade lighter than the kit's bone ink on dark faces, because the word sits on the tab's airbrushed sheen (the left tab's word, kept clear of its grips, reads 4.4:1 in bone; the readability check needs 4.5:1).</summary>
+    private static readonly Color PullTabInk = new Color(0.98f, 0.949f, 0.882f, 1f);
 
     /// <summary>The speech bubble's tail (overlay units; the kit's sprite with its pad).</summary>
     private static readonly Vector2 SpeechTailSize = new Vector2(60f, 56f);
@@ -149,32 +152,42 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// A screen-edge pull tab (sheet 01 B1): the slate tab flush to its edge
     /// (<paramref name="left"/> or right), its word in the upper part and a bone
-    /// keycap printed with <paramref name="key"/> under it.
+    /// keycap printed with <paramref name="key"/> under it. The word's room runs
+    /// from the cut edge's margin to the sprite's inner 9-slice border, where
+    /// the grip lines are drawn (kit_manifest.json: the pull tabs' inner
+    /// border holds their grips, so they never stretch; Saleh 2026-10-07: "the
+    /// S touches the two lines in the stamp label"), and the type scale fits
+    /// the word in it.
     /// </summary>
     private static void KitPullTab(Transform tab, bool left, string key)
     {
         if (tab == null)
             return;
-        string piece = left ? "pulltab_left" : "pulltab_right";
+        string piece = left ? UiKitNames.PullTabLeft : UiKitNames.PullTabRight;
         var tabRect = (RectTransform)tab;
         tabRect.sizeDelta = PullTabSize;
         KitSkin(tab, piece, _kit.overlayScale);
 
-        // The tab's flat face: clear of its grips (on the edge away from the screen's) and of the edge it is cut at.
-        float x0 = left ? PullTabFace.x : 1f - PullTabFace.y, x1 = left ? PullTabFace.y : 1f - PullTabFace.x;
+        // The tab's flat face: from the cut edge's margin to the inner border, which holds the grips (its face is grown past the tab by the sprite's pad).
+        Sprite rest = _kit.Get(piece, KitState.Rest) ?? _kit.Get(piece);
+        float perPixel = rest != null ? 1f / (rest.pixelsPerUnit / 100f * _kit.overlayScale) : 0f;
+        float grips = rest != null ? ((left ? rest.border.z : rest.border.x) - _kit.spritePad) * perPixel : 0f;
+        float inset0 = left ? PullTabCutMargin : grips, inset1 = left ? grips : PullTabCutMargin;
+        float centre = (inset0 + PullTabSize.x - inset1) / 2f / PullTabSize.x;
         Transform label = tab.Find("Label");
         if (label != null)
         {
             var labelRect = (RectTransform)label;
-            labelRect.anchorMin = new Vector2(x0, 0.5f);
-            labelRect.anchorMax = new Vector2(x1, 0.88f);
-            labelRect.offsetMin = labelRect.offsetMax = Vector2.zero;
+            labelRect.anchorMin = new Vector2(0f, 0.5f);
+            labelRect.anchorMax = new Vector2(1f, 0.88f);
+            labelRect.offsetMin = new Vector2(inset0, 0f);
+            labelRect.offsetMax = new Vector2(-inset1, 0f);
             TMP_Text text = label.GetComponent<TMP_Text>();
             text.alignment = TextAlignmentOptions.Center;
             text.margin = Vector4.zero;
-            SceneUiKit.SkinText(text, _kit, KitText.PullTabLabel, tabRect.sizeDelta.x, _kit.inkOnDark, 0f, tabRect);
+            SceneUiKit.SkinText(text, _kit, KitText.PullTabLabel, tabRect.sizeDelta.x, PullTabInk, 0f, tabRect);
         }
-        KitKeycap(tab, "Keycap", "keycap_bone", key, new Vector2((x0 + x1) / 2f, 0.3f), PullTabKeycap);
+        KitKeycap(tab, "Keycap", "keycap_bone", key, new Vector2(centre, 0.3f), PullTabKeycap);
     }
 
     /// <summary>A keycap printed with <paramref name="key"/> (a child plate in <paramref name="piece"/>, its word in the label face), centred at <paramref name="at"/> of its parent, rebuilt each build.</summary>
@@ -214,10 +227,10 @@ public static partial class OfficeSceneUIBuilder
         KitSkin(lit, "inspect_hover", _kit.overlayScale);
     }
 
-    /// <summary>The counter strip's three looks (sheet 05: slate COUNTER, green HAND BACK, red STAMP THE PASSPORT FIRST) and the rulebook's folder tabs (manila, the open one lighter).</summary>
+    /// <summary>The counter strip's three looks (sheet 05: slate COUNTER, green HAND BACK, red STAMP THE PASSPORT FIRST) and the rulebook's folder tabs (their art as drawn when open, a shade darker when shut).</summary>
     private static readonly Color KitSlate = new Color(0.29f, 0.345f, 0.447f, 0.92f), KitGreen = new Color(0.373f, 0.522f, 0.314f, 0.92f),
                                   KitGreenLit = new Color(0.373f, 0.522f, 0.314f, 1f), KitRed = new Color(0.761f, 0.227f, 0.18f, 0.92f),
-                                  KitManila = new Color(0.886f, 0.788f, 0.58f), KitManilaShut = new Color(0.79f, 0.69f, 0.48f);
+                                  KitManila = Color.white, KitManilaShut = new Color(0.82f, 0.79f, 0.74f);
 
     /// <summary>
     /// The desk's 3D pieces in the kit's colours (they are lit quads and flat
@@ -279,14 +292,13 @@ public static partial class OfficeSceneUIBuilder
     /// on an icon key, <paramref name="share"/> of the key's side (its pad
     /// included), taking no clicks; rebuilt each build.
     /// </summary>
-    private static void KitGlyph(Component key, string glyph, float share = 0.9f, float turn = 0f)
+    private static void KitGlyph(Component key, string glyph, float share = 0.9f)
     {
         DestroyChildIfPresent(key.transform, "KitGlyph");
         float h = share / 2f;
         Transform g = Panel(key.transform, "KitGlyph", new Vector2(0.5f - h, 0.5f - h), new Vector2(0.5f + h, 0.5f + h), Vector2.zero, Vector2.zero, Color.white,
                             key.TryGetComponent(out ThemeTag tag) ? tag.Role : ThemeRoleId.DiegeticDevice);
         SetAnchors(g, new Vector2(0.5f - h, 0.5f - h), new Vector2(0.5f + h, 0.5f + h));
-        g.localRotation = Quaternion.Euler(0f, 0f, turn);
         Image image = g.GetComponent<Image>();
         image.sprite = _kit.Get(glyph);
         image.preserveAspect = true;
@@ -304,7 +316,7 @@ public static partial class OfficeSceneUIBuilder
             return;
         KitSkin(arrow, "iconkey", _kit.overlayScale);
         DestroyChildIfPresent(arrow, "Glyph");
-        KitGlyph(arrow, "glyph_back", 0.9f, 90f); // the kit's back arrow turned to point down (its glyph_down is drawn empty)
+        KitGlyph(arrow, "glyph_down");
     }
 
     /// <summary>
@@ -621,16 +633,6 @@ public static partial class OfficeSceneUIBuilder
         }
     }
 
-    /// <summary>The citation slip's size (overlay units): the kit's slip at 1.3 times its design size (340 x 400).</summary>
-    private static readonly Vector2 CitationSlipSize = new Vector2(442f, 520f);
-
-    /// <summary>The slip's ACKNOWLEDGE plate under it (overlay units).</summary>
-    private static readonly Vector2 CitationAcknowledgeSize = new Vector2(330f, 72f);
-
-    /// <summary>The CITED stamp on the slip (overlay units) and its tilt (degrees).</summary>
-    private static readonly Vector2 CitedStampSize = new Vector2(250f, 102f);
-    private const float CitedStampTilt = 12f;
-
     /// <summary>
     /// The verdict ribbon (sheet 05), rebuilt each run: top centre, the case
     /// HUD's compare strip's place (they never show together), inactive; its
@@ -651,66 +653,5 @@ public static partial class OfficeSceneUIBuilder
             SceneUiKit.SkinText(line, _kit, KitText.Ribbon, VerdictStripSize.y, _kit.InkOn(UiKitNames.VerdictRibbon(null, false)));
         strip.gameObject.SetActive(false);
         return strip;
-    }
-
-    /// <summary>
-    /// The citation slip (sheet 05: "prints from the desk, stamped, one
-    /// button"), rebuilt each run over the office and the frame (it holds the
-    /// day until ACKNOWLEDGE): the kit's printed slip with its perforated top,
-    /// the red header band with the notice's title, the reason line (the
-    /// mistake, bold), a red rule, the rule broken and the exact values
-    /// (lesson 6), the warning or penalty in red capitals, the CITED stamp
-    /// across its foot, and the oxblood ACKNOWLEDGE plate under it. Inactive.
-    /// </summary>
-    private static Transform BuildCitationSlip(Transform overlay, out TMP_Text reason, out TMP_Text detail, out TMP_Text consequence, out Button acknowledge)
-    {
-        DestroyChildIfPresent(overlay, "CitationPanel");
-        Transform slip = Panel(overlay, "CitationPanel", Center, Center, new Vector2(0f, CitationAcknowledgeSize.y / 2f), CitationSlipSize, new Color(0.96f, 0.9f, 0.88f, 1f),
-                               ThemeRoleId.Alert);
-        float scale = _kit != null ? _kit.overlayScale : 2f;
-        KitSkin(slip, "citation_slip", scale);
-
-        // Each line by the type scale: its role, and the height of its band on the slip.
-        TMP_Text Line(string name, string key, KitText kind, TextAlignmentOptions align, Vector2 aMin, Vector2 aMax, Color ink)
-        {
-            TMP_Text t = Text(slip, name, key != null ? null : string.Empty, 22, align, aMin, aMax, ink, ThemeRoleId.Alert, key);
-            t.raycastTarget = false;
-            if (_kit != null)
-                SceneUiKit.SkinText(t, _kit, kind, (aMax.y - aMin.y) * CitationSlipSize.y, ink);
-            return t;
-        }
-
-        Color ink = _kit != null ? _kit.inkOnLight : Ink, bone = _kit != null ? _kit.inkOnDark : Color.white, red = _kit != null ? _kit.inkAlert : Color.red;
-        Line("Title", "citation.title", KitText.PanelHeading, TextAlignmentOptions.Center, new Vector2(0.07f, 0.80f), new Vector2(0.93f, 0.915f), bone);
-        reason = Line("Reason", null, KitText.BodyLarge, TextAlignmentOptions.TopLeft, new Vector2(0.08f, 0.6f), new Vector2(0.92f, 0.765f), ink);
-        if (_kit != null)
-        {
-            reason.font = _kit.bodyBoldFont; // the mistake reads bold over the rule and the values
-            reason.GetComponent<ThemeTag>().SetFace(_kit.bodyBoldFont);
-        }
-        Transform rule = Panel(slip, "Rule", new Vector2(0.08f, 0.585f), new Vector2(0.92f, 0.585f), Vector2.zero, new Vector2(0f, 2f), red, ThemeRoleId.Alert);
-        rule.GetComponent<Image>().raycastTarget = false;
-        detail = Line("Detail", null, KitText.Body, TextAlignmentOptions.TopLeft, new Vector2(0.08f, 0.35f), new Vector2(0.92f, 0.565f), ink);
-        consequence = Line("Consequence", null, KitText.Ribbon, TextAlignmentOptions.MidlineLeft, new Vector2(0.08f, 0.22f), new Vector2(0.92f, 0.335f), red);
-
-        Transform stamp = Panel(slip, "Cited", new Vector2(0.66f, 0.13f), new Vector2(0.66f, 0.13f), Vector2.zero, CitedStampSize, Color.white, ThemeRoleId.Alert);
-        stamp.localRotation = Quaternion.Euler(0f, 0f, CitedStampTilt);
-        Image stampImage = stamp.GetComponent<Image>();
-        stampImage.raycastTarget = false;
-        stampImage.preserveAspect = true;
-        stampImage.sprite = _kit != null ? _kit.Get("stamp_cited") : null;
-        if (_kit != null)
-            SceneUiKit.Tag(stampImage, ThemeRoleId.Alert, ThemePart.Kit);
-
-        acknowledge = MakeButton(slip, "ContinueButton", null, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), null, ThemeRoleId.Button, "citation.acknowledge");
-        var rt = (RectTransform)acknowledge.transform;
-        rt.pivot = new Vector2(0.5f, 1f);
-        rt.anchoredPosition = new Vector2(0f, -10f);
-        rt.sizeDelta = CitationAcknowledgeSize;
-        KitSkin(acknowledge, "plate_ox", scale);
-        KitLabel(acknowledge, "plate_ox_rest");
-
-        slip.gameObject.SetActive(false);
-        return slip;
     }
 }

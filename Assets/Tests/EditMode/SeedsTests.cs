@@ -123,7 +123,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt, Seeds.StrandingFateSalt, Seeds.WaiverSignSalt, Seeds.ReturnSalt, Seeds.ReturnSlotSalt, Seeds.HallSlotSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt, Seeds.StrandingFateSalt, Seeds.WaiverSignSalt, Seeds.ReturnSalt, Seeds.ReturnSlotSalt, Seeds.HallSlotSalt, Seeds.LoreSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -215,6 +215,13 @@ public class SeedsTests
     }
 
     /// <summary>The personality stream's salt is "PRSN" (the personalities spec's PS2).</summary>
+    [Test]
+    public void LoreSalt_IsPinned()
+    {
+        Assert.AreEqual(0x4C4F5245, Seeds.LoreSalt, "\"LORE\"");
+        Assert.AreEqual(Seeds.Mix(77, Seeds.LoreSalt), Seeds.ForLore(77));
+    }
+
     [Test]
     public void SlipSalt_IsPinned()
     {

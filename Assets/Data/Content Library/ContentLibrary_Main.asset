@@ -17761,7 +17761,7 @@ MonoBehaviour:
     - bill: 2
       name: Electricity
       price: 7
-      line: The lights, the radiator's pump and the TV.
+      line: The lights and the TV.
     - bill: 3
       name: TV
       price: 4
@@ -18154,7 +18154,8 @@ MonoBehaviour:
       categories: 
       form: 
       target: sign
-      text: Click the AVAILABLE sign to call the first traveller.
+      text: 'Click the AVAILABLE sign to open the desk: the shift clock starts and
+        the first traveller comes.'
     - id: desk
       action: 2
       categories: 
@@ -18200,6 +18201,642 @@ MonoBehaviour:
       text: Drag the stamped Passport onto the counter to hand the papers back.
     ftueDone: That is the job. The rulebook's GUIDE tab explains every rule, and
       new rules add new pages. F1 lists the keys.
+  lore:
+    clueChance: 0.35
+    linesMin: 2
+    linesMax: 3
+    yearMin: 2140
+    yearMax: 2149
+    relatives:
+    - sister
+    - brother
+    - cousin
+    - aunt
+    - uncle
+    - mother
+    - father
+    - grandmother
+    - nephew
+    - niece
+    premades:
+    - premade: cleopatra
+      lines:
+      - 'Registry note: Cleopatra VII Philopator, last active ruler of the Ptolemaic
+        Kingdom of Egypt.'
+      - 'Registry note: Plutarch records she was the first of her dynasty to speak
+        Egyptian.'
+      - 'Registry note: allied with Julius Caesar, then Mark Antony; defeated at
+        Actium, 31 BCE.'
+      - 'Declared purpose: going home to Alexandria.'
+    - premade: ramesses
+      lines:
+      - 'Registry note: third pharaoh of the Nineteenth Dynasty; reigned some 66
+        years.'
+      - 'Registry note: fought the Hittites at Kadesh, then agreed a treaty with
+        them whose text still survives.'
+      - 'Registry note: commissioned the rock-cut temples of Abu Simbel.'
+      - 'Declared purpose: going home to his capital, Pi-Ramesses.'
+    - premade: saladin
+      lines:
+      - 'Registry note: Salah ad-Din Yusuf ibn Ayyub, founder of the Ayyubid dynasty.'
+      - 'Registry note: defeated the crusader army at Hattin and took Jerusalem in
+        1187.'
+      - 'Registry note: agreed the Treaty of Jaffa with Richard I of England in 1192.'
+      - Archive sources claim he died with too little money to pay for his own funeral.
+    - premade: kulthum
+      lines:
+      - 'Registry note: Egyptian singer, known across the Arab world as the Star
+        of the East.'
+      - 'Registry note: her concerts on the first Thursday of the month were broadcast
+        live across the region.'
+      - 'Archive sources disagree on her birth year: 1898 or 1904.'
+      - 'Declared purpose: going home to Cairo, a concert to give.'
+    - premade: hammurabi
+      lines:
+      - 'Registry note: sixth king of the First Dynasty of Babylon.'
+      - 'Registry note: his law code of 282 laws survives on a basalt stele found
+        at Susa in 1901.'
+      - 'Registry note: brought much of Mesopotamia under Babylon in his reign.'
+      - 'Declared purpose: going home to Babylon, with the stele.'
+    - premade: khwarizmi
+      lines:
+      - 'Registry note: scholar of the House of Wisdom in Baghdad.'
+      - 'Registry note: his book on al-jabr gave algebra its name.'
+      - 'Registry note: the word ''algorithm'' comes from the Latin form of his name.'
+      - 'Registry note: his treatise on Indian numerals helped bring them to Europe.'
+    - premade: alexander
+      lines:
+      - 'Registry note: King of Macedon from 336 BCE; tutored by Aristotle.'
+      - 'Registry note: defeated Darius III of Persia at Issus and at Gaugamela.'
+      - 'Registry note: founded Alexandria in Egypt, 331 BCE, one of many cities
+        named for him.'
+      - 'Declared purpose: going home to Macedon. Then further.'
+    - premade: aristotle
+      lines:
+      - 'Registry note: studied at Plato''s Academy in Athens for some twenty years.'
+      - 'Registry note: tutor to the young Alexander of Macedon.'
+      - 'Registry note: founded the Lyceum in Athens; wrote on logic, biology, ethics
+        and politics.'
+      - 'Declared purpose: going home to Macedon, to his pupil.'
+    - premade: socrates
+      lines:
+      - 'Registry note: Athenian philosopher; left no writings of his own.'
+      - 'Registry note: known chiefly through the dialogues of his student Plato,
+        and through Xenophon.'
+      - 'Registry note: tried in Athens and put to death by hemlock, 399 BCE.'
+      - 'Declared purpose: going home to Athens.'
+    - premade: archimedes
+      lines:
+      - 'Registry note: mathematician and engineer of Syracuse.'
+      - 'Registry note: set out the principle of buoyancy and the law of the lever.'
+      - 'Registry note: bounded pi between 3 10/71 and 3 1/7.'
+      - Archive sources (Vitruvius) claim he ran through Syracuse shouting 'Eureka!'.
+    - premade: caesar
+      lines:
+      - 'Registry note: Roman general; conquered Gaul between 58 and 50 BCE.'
+      - 'Registry note: crossed the Rubicon in 49 BCE and started a civil war.'
+      - 'Registry note: brought in the Julian calendar, 46 BCE.'
+      - 'Registry note: assassinated in Rome on the Ides of March, 44 BCE.'
+    - premade: marcopolo
+      lines:
+      - 'Registry note: Venetian merchant; travelled to the court of Kublai Khan.'
+      - 'Registry note: his travels were written down by Rustichello da Pisa while
+        both were prisoners in Genoa.'
+      - Archive sources dispute how much of his account he saw himself.
+      - 'Declared purpose: going home to Venice.'
+    - premade: galileo
+      lines:
+      - 'Registry note: found four moons of Jupiter with his telescope, January 1610.'
+      - 'Registry note: published Sidereus Nuncius, The Starry Messenger, in 1610.'
+      - 'Registry note: tried by the Roman Inquisition in 1633; spent his last years
+        under house arrest.'
+      - 'Declared purpose: going home to Padua.'
+    - premade: leonardo
+      lines:
+      - 'Registry note: painted the Last Supper on a refectory wall in Milan, and
+        the Mona Lisa.'
+      - 'Registry note: kept notebooks of machines and anatomy, written in mirror
+        script.'
+      - 'Registry note: died in France in 1519, in the service of King Francis I.'
+      - 'Declared purpose: going home to Milan.'
+    - premade: michelangelo
+      lines:
+      - 'Registry note: sculptor of the Pieta in Rome and the David in Florence.'
+      - 'Registry note: painted the Sistine Chapel ceiling, 1508 to 1512.'
+      - 'Registry note: architect of the dome of St Peter''s in his later years.'
+      - 'Declared purpose: going home to Florence. Marble to find.'
+    - premade: confucius
+      lines:
+      - 'Registry note: teacher and official of the state of Lu.'
+      - 'Registry note: his sayings were gathered by his students as the Analects.'
+      - 'Registry note: taught that order rests on ritual, duty and respect for elders.'
+      - 'Declared purpose: going home to Lu.'
+    - premade: qinshihuang
+      lines:
+      - 'Registry note: King of Qin; unified China in 221 BCE and took the title
+        of First Emperor.'
+      - 'Registry note: standardised the script, the coinage, and weights and measures.'
+      - 'Registry note: buried near Xi''an with an army of terracotta soldiers.'
+      - Archive sources claim he sent expeditions to find an elixir of immortality.
+    - premade: suntzu
+      lines:
+      - 'Registry note: credited as the author of The Art of War.'
+      - 'Registry note: by tradition, a general in the service of the King of Wu.'
+      - Archive sources disagree on when he lived, and on whether one man wrote the
+        book.
+      - 'Declared purpose: going home to Wu.'
+    - premade: genghis
+      lines:
+      - 'Registry note: born Temujin; proclaimed Genghis Khan of the Mongols in 1206.'
+      - 'Registry note: founded the Mongol Empire, later the largest contiguous land
+        empire.'
+      - Archive sources credit him with founding the Yam, the Mongol relay post.
+      - 'Declared purpose: going home to the steppe.'
+    - premade: nobunaga
+      lines:
+      - 'Registry note: daimyo of Owari; began the unification of Japan.'
+      - 'Registry note: defeated Imagawa Yoshimoto at Okehazama, 1560.'
+      - 'Registry note: abolished toll barriers and opened free markets (rakuichi
+        rakuza).'
+      - 'Declared purpose: going home to Azuchi.'
+    - premade: hokusai
+      lines:
+      - 'Registry note: ukiyo-e painter and printmaker of Edo.'
+      - 'Registry note: made the print series Thirty-six Views of Mount Fuji, The
+        Great Wave among them.'
+      - 'Registry note: worked under some thirty art names in his life.'
+      - Archive sources claim he moved house more than ninety times.
+    - premade: kurosawa
+      lines:
+      - 'Registry note: film director; Rashomon won the Golden Lion at Venice in
+        1951.'
+      - 'Registry note: directed Seven Samurai (1954) and Ran (1985).'
+      - 'Registry note: given an honorary Academy Award in 1990.'
+      - 'Declared purpose: going home to Tokyo. A shoot to finish.'
+    - premade: elizabeth
+      lines:
+      - 'Registry note: Queen of England and Ireland, 1558 to 1603; the last of the
+        Tudors.'
+      - 'Registry note: her fleet turned back the Spanish Armada in 1588.'
+      - 'Registry note: granted the East India Company its charter on 31 December
+        1600.'
+      - 'Declared purpose: going home to London.'
+    - premade: newton
+      lines:
+      - 'Registry note: published the Principia, 1687: the laws of motion and universal
+        gravitation.'
+      - 'Registry note: built the first practical reflecting telescope.'
+      - 'Registry note: developed calculus, independently of Leibniz.'
+      - 'Registry note: Warden, then Master of the Royal Mint until his death.'
+    - premade: shakespeare
+      lines:
+      - 'Registry note: playwright and poet of Stratford-upon-Avon; some 37 plays
+        survive.'
+      - 'Registry note: part-owner of the Globe Theatre in Southwark, built in 1599.'
+      - 'Registry note: baptised 26 April 1564; his birthday of 23 April is tradition.'
+      - 'Registry note: drew many plots from Holinshed''s Chronicles and from Plutarch.'
+    - premade: ada
+      lines:
+      - 'Registry note: Augusta Ada King, Countess of Lovelace; daughter of Lord
+        Byron.'
+      - 'Registry note: wrote the Notes on Babbage''s Analytical Engine, published
+        in 1843.'
+      - 'Registry note: her Note G sets out how the Engine could compute Bernoulli
+        numbers.'
+      - 'Declared purpose: going home to London.'
+    - premade: darwin
+      lines:
+      - 'Registry note: naturalist on HMS Beagle''s voyage, 1831 to 1836.'
+      - 'Registry note: published On the Origin of Species, 1859: evolution by natural
+        selection.'
+      - 'Registry note: by his own account, once put a beetle in his mouth to free
+        a hand for a third.'
+      - 'Declared purpose: going home to Kent.'
+    - premade: turing
+      lines:
+      - 'Registry note: described the universal computing machine in 1936.'
+      - 'Registry note: worked on breaking Enigma at Bletchley Park in the Second
+        World War.'
+      - 'Registry note: proposed the imitation game in 1950, asking whether machines
+        can think.'
+      - 'Declared purpose: going home to Manchester.'
+    - premade: gutenberg
+      lines:
+      - 'Registry note: goldsmith of Mainz; brought movable metal type printing to
+        Europe.'
+      - 'Registry note: printed the Gutenberg Bible, about 1455.'
+      - 'Registry note: a lawsuit of 1439 over his Strasbourg partnership survives
+        in the court records.'
+      - 'Declared purpose: going home to Mainz.'
+    - premade: luther
+      lines:
+      - 'Registry note: professor of theology at Wittenberg.'
+      - 'Registry note: his Ninety-five Theses of 1517 began the Protestant Reformation.'
+      - Archive sources dispute whether he nailed the theses to the church door himself.
+      - 'Registry note: translated the Bible into German; the New Testament in 1522.'
+    - premade: beethoven
+      lines:
+      - 'Registry note: composer and pianist of Bonn; settled in Vienna in 1792.'
+      - 'Registry note: his birth date is unknown; baptised 17 December 1770.'
+      - 'Registry note: went on composing after losing his hearing; the Ninth Symphony
+        among them.'
+      - 'Declared purpose: going home to Bonn, then Vienna and Haydn.'
+    - premade: marx
+      lines:
+      - 'Registry note: philosopher and journalist, born in Trier.'
+      - 'Registry note: co-wrote The Communist Manifesto with Friedrich Engels, 1848.'
+      - 'Registry note: edited the Neue Rheinische Zeitung until it was shut down
+        in 1849.'
+      - 'Registry note: author of Das Kapital; the first volume in 1867.'
+    - premade: einstein
+      lines:
+      - 'Registry note: published special relativity and the light quantum paper
+        in 1905.'
+      - 'Registry note: awarded the 1921 Nobel Prize in Physics for the photoelectric
+        effect.'
+      - 'Registry note: co-patented a refrigerator with Leo Szilard, 1930.'
+      - 'Declared purpose: going home to Berlin.'
+    - premade: pell
+      lines:
+      - 'Clerk note: honeymoon booked for two; one ticket refunded the same week.'
+      - 'Account note: saved for the trip for six years, one ration card at a time.'
+      - 'Clerk note: carries the travel brochure everywhere. It is very folded.'
+    - premade: ines
+      lines:
+      - 'Employment note: Temporal Customs officer, Desk 4, eleven years.'
+      - 'Account note: her debt passed the agency''s own garnish limit in 2149.'
+      - 'Clerk note: asked for Debt Relief labour herself. Signed the form without
+        reading it. She knew it.'
+    - premade: rook
+      lines:
+      - 'Clerk note: two complaints of ''friendly offers'' to desk officers, both
+        withdrawn.'
+      - 'Employment note: three employers in two years; references not on file.'
+      - 'Clerk note: talks his way to the front of most queues.'
+    - premade: hollis
+      lines:
+      - 'Account note: debt passed to him from his father''s estate, 2147.'
+      - 'Account note: payment plan missed twice; collections opened.'
+      - 'Clerk note: his father left on Debt Relief in 2131.'
+    - premade: auditor
+      lines:
+      - 'Account note: Premium since the account opened. A first-series Citizen ID.'
+      - 'Clerk note: has filed fourteen procedural complaints. All upheld.'
+      - 'Clerk note: asks each desk officer for their name, and writes it down.'
+    templates:
+    - id: rich_since
+      kinds: 00000000
+      personality: 
+      traits:
+      - premium
+      clue: 
+      text: Premium account since {year}. Travel insurance renewed without being
+        asked.
+    - id: rich_summer
+      kinds: 00000000
+      personality: 
+      traits: []
+      clue: 
+      text: Booked {place} for the summer, like half the Premium tier.
+    - id: rich_trips
+      kinds: 00000000
+      personality: 
+      traits:
+      - trips
+      clue: 
+      text: '{trips} departures on file. A complaint about the queue on each.'
+    - id: rich_research
+      kinds: 00000000
+      personality: 
+      traits: []
+      clue: 
+      text: Declares the purpose of travel as 'research'. No research on file.
+    - id: rich_window
+      kinds: 00000000
+      personality: 
+      traits: []
+      clue: 
+      text: Requested a window seat. The portals have no windows.
+    - id: poor_instalments
+      kinds: 01000000
+      personality: 
+      traits:
+      - debt
+      clue: 
+      text: Missed {count} debt instalments ({year}). This trip paid in cash.
+    - id: poor_saved
+      kinds: 01000000
+      personality: 
+      traits: []
+      clue: 
+      text: Saved for this trip since {year}, one ration card at a time.
+    - id: poor_first
+      kinds: 01000000
+      personality: 
+      traits:
+      - notrips
+      clue: 
+      text: First departure on file. Packed the night before last.
+    - id: poor_lottery
+      kinds: 01000000
+      personality: 
+      traits: []
+      clue: 
+      text: Won the trip in a Sector {sector} lottery. The lottery's licence is on
+        file.
+    - id: poor_brochure
+      kinds: 01000000
+      personality: 
+      traits: []
+      clue: 
+      text: Borrowed the brochure for {place} from the library. Twice renewed.
+    - id: lab_transfer
+      kinds: 02000000
+      personality: 
+      traits:
+      - debt
+      clue: 
+      text: Debt Relief transfer approved in {month}. Owes {debt}.
+    - id: lab_contract
+      kinds: 02000000
+      personality: 
+      traits: []
+      clue: 
+      text: Contracted to {employer} for {term} at {wage} a day.
+    - id: lab_advert
+      kinds: 02000000
+      personality: 
+      traits: []
+      clue: 
+      text: 'Answered the advert CLEAR YOUR DEBT: 180 days in the Victorian mills.'
+    - id: lab_relative
+      kinds: 02000000
+      personality: 
+      traits: []
+      clue: 
+      text: Their {relative} left on Debt Relief the same month. Another worksite.
+    - id: lab_record
+      kinds: 02000000
+      personality: 
+      traits: []
+      clue: 
+      text: One of this year's record Debt Relief departures. Sent a postcard ahead.
+    - id: lab_trade
+      kinds: 02000000
+      personality: 
+      traits: []
+      clue: 
+      text: 'Previous trade: {role}. Skills assessment: ''adequate''.'
+    - id: dis_found
+      kinds: 03000000
+      personality: 
+      traits: []
+      clue: 
+      text: Found {found} in Sector {sector} after rift {incident}. Refused the shelter's
+        soup.
+    - id: dis_day
+      kinds: 03000000
+      personality: 
+      traits: []
+      clue: 
+      text: 'Shelter note: asks every morning which day it is. Told every morning.'
+    - id: dis_coin
+      kinds: 03000000
+      personality: 
+      traits: []
+      clue: 
+      text: 'Shelter note: offered a coin from home for a blanket. Coin returned
+        for the journey.'
+    - id: dis_queue
+      kinds: 03000000
+      personality: 
+      traits: []
+      clue: 
+      text: 'Shelter note: learned the word ''queue'' on the first day and has used
+        it since.'
+    - id: dis_song
+      kinds: 03000000
+      personality: 
+      traits: []
+      clue: 
+      text: Taught the shelter's children a song from {place}. Song not on file.
+    - id: dis_lifts
+      kinds: 03000000
+      personality: 
+      traits: []
+      clue: 
+      text: 'Shelter note: will not use the hall''s lifts. Takes the stairs, all
+        of them.'
+    - id: dis_rift
+      kinds: 03000000
+      personality: 
+      traits: []
+      clue: 
+      text: Rift {incident} also took their {relative}. That file is still open.
+    - id: dis_trade
+      kinds: 03000000
+      personality: 
+      traits: []
+      clue: 
+      text: 'Listed as a {role} by trade. Shelter rota: the kitchens.'
+    - id: p_chatty
+      kinds: 
+      personality: chatty
+      traits: []
+      clue: 
+      text: 'Clerk note: talked through the whole intake interview. It ran {count}
+        hours.'
+    - id: p_curt
+      kinds: 
+      personality: curt
+      traits: []
+      clue: 
+      text: 'Clerk note: intake form answered in single words.'
+    - id: p_anxious
+      kinds: 
+      personality: anxious
+      traits: []
+      clue: 
+      text: 'Clerk note: arrived {count} hours early for the appointment.'
+    - id: p_sunny
+      kinds: 
+      personality: sunny
+      traits: []
+      clue: 
+      text: 'Clerk note: thanked the intake officer. The officer logged it as unusual.'
+    - id: p_grand
+      kinds: 
+      personality: grand
+      traits: []
+      clue: 
+      text: 'Clerk note: signed the intake form with a flourish across three lines.'
+    - id: p_stickler
+      kinds: 
+      personality: stickler
+      traits: []
+      clue: 
+      text: 'Clerk note: corrected a spelling on the agency''s own form. Correction
+        accepted.'
+    - id: p_glum
+      kinds: 
+      personality: glum
+      traits: []
+      clue: 
+      text: 'Clerk note: asked whether the trip could be cancelled halfway.'
+    - id: news_frozen
+      kinds: 0100000002000000
+      personality: 
+      traits:
+      - debt
+      - good
+      clue: 
+      text: Account frozen in default once, in {year}. Unfrozen on appeal.
+    - id: news_stranded
+      kinds: 000000000100000002000000
+      personality: 
+      traits: []
+      clue: 
+      text: Their {relative} was stranded on an Economy transponder in {year}. Family
+        claim pending.
+    - id: news_athens
+      kinds: 00000000
+      personality: 
+      traits: []
+      clue: 
+      text: 'Was quoted in the paper on Periclean Athens: ''Sunnier than the brochure.'''
+    - id: any_photo
+      kinds: 
+      personality: 
+      traits: []
+      clue: 
+      text: Keeps a photo of their {relative} in the left pocket. Declared at every
+        desk.
+    - id: any_address
+      kinds: 000000000100000002000000
+      personality: 
+      traits: []
+      clue: 
+      text: Registered a change of address to Sector {sector} in {month}.
+    - id: clue_frozen
+      kinds: 0100000002000000
+      personality: 
+      traits: []
+      clue: FrozenAccount
+      text: Collections notice served; account frozen in default.
+    - id: clue_debtor
+      kinds: 01000000
+      personality: 
+      traits:
+      - debt
+      clue: DebtorPosingAsTourist
+      text: Registered debtor; leisure departures flagged for review since {year}.
+    - id: clue_tier
+      kinds: 000000000100000002000000
+      personality: 
+      traits: []
+      clue: PoorPosingAsRich
+      text: Upgrade to Premium requested in {year}; refused. Account remains {status}.
+    - id: clue_contract
+      kinds: 02000000
+      personality: 
+      traits: []
+      clue: ForgedContract
+      text: 'Registered contract: {employer}. No other contract on file.'
+    - id: clue_proof
+      kinds: 01000000
+      personality: 
+      traits: []
+      clue: ForgedProof
+      text: Proof of means queried by the issuing bank in {year}.
+    - id: clue_waiver
+      kinds: 000000000100000002000000
+      personality: 
+      traits: []
+      clue: FakeWaiver
+      text: 'Clerk note: asked twice where on a waiver to sign.'
+    - id: clue_identity
+      kinds: 
+      personality: 
+      traits: []
+      clue: DoctoredIdentity
+      text: 'Records office: a request to amend this file was refused in {year}.'
+    - id: clue_origin
+      kinds: 03000000
+      personality: 
+      traits: []
+      clue: FalseOrigin
+      text: 'Shelter note: accent logged as uncertain; the interpreter could not
+        place it.'
+    - id: clue_fake
+      kinds: 03000000
+      personality: 
+      traits: []
+      clue: FakeDisplaced
+      text: 'Shelter note: worked the hall''s ticket machines on the first day.'
+    - id: clue_smuggling
+      kinds: 
+      personality: 
+      traits: []
+      clue: Smuggling
+      text: 'Customs note: luggage weighed heavier at check-in than declared.'
+    - id: clue_seal
+      kinds: 
+      personality: 
+      traits: []
+      clue: ForgedSeal
+      text: 'Clerk note: papers collected from a copy shop, not the issuing office.'
+    - id: clue_photo
+      kinds: 
+      personality: 
+      traits: []
+      clue: SwappedPhoto
+      text: 'Intake note: photo resubmitted twice; never by the holder in person.'
+    - id: clue_expired
+      kinds: 
+      personality: 
+      traits: []
+      clue: ExpiredPaper
+      text: Renewal reminder sent in {month}; no reply on file.
+    - id: clue_closed
+      kinds: 
+      personality: 
+      traits: []
+      clue: ClosedDestination
+      text: Booking made before the closure notice. Not rebooked.
+    - id: clue_date
+      kinds: 
+      personality: 
+      traits: []
+      clue: WrongDepartureDate
+      text: 'Booking office note: departure date changed once at the counter.'
+    - id: clue_incomplete
+      kinds: 
+      personality: 
+      traits: []
+      clue: IncompletePapers
+      text: 'Waiver office: reminder issued; a form still outstanding.'
+    - id: clue_recall
+      kinds: 000000000100000002000000
+      personality: 
+      traits: []
+      clue: RecalledTransponder
+      text: Transponder service notice issued in {month}; not acknowledged.
+    threads:
+    - id: thread_denied
+      verdict: Denied
+      text: Turned away at this desk on {date}. Back {days} days later.
+    - id: thread_denied2
+      verdict: Denied
+      text: Denied at this desk on {date}. Papers 'corrected' since, the holder says.
+    - id: thread_accepted
+      verdict: Accepted
+      text: Cleared at this desk on {date} for {place}. Back again.
+    - id: thread_detained
+      verdict: Detained
+      text: Detained at this desk on {date}; released pending review.
+    - id: thread_any
+      verdict: 
+      text: Seen at this desk on {date} ({verdict}).
   world:
     factors:
     - id: government

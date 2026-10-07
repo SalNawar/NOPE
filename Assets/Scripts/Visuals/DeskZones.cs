@@ -24,9 +24,12 @@ public static class DeskZones
     /// a small paper, so the row lies along it rather than in it), spaced
     /// <paramref name="spacing"/> apart round <paramref name="middle"/>, the
     /// row kept inside [<paramref name="left"/>, <paramref name="right"/>]
-    /// (narrower when it does not fit).
+    /// (narrower when it does not fit). Papers past <paramref name="count"/>
+    /// reuse the spots a row nearer by <paramref name="rowDepth"/> and half a
+    /// step across (a staggered fan: each row's headers stay in view; 0 lays
+    /// them on the same spots).
     /// </summary>
-    public static (float x, float y) CounterSpot(int k, int count, float middle, float left, float right, float far, float inset, float spacing)
+    public static (float x, float y) CounterSpot(int k, int count, float middle, float left, float right, float far, float inset, float spacing, float rowDepth = 0f)
     {
         count = Math.Max(1, count);
         float width = Math.Max(0f, right - left);
@@ -34,7 +37,9 @@ public static class DeskZones
         float first = middle - step * (count - 1) / 2f;
         first = Math.Max(left, Math.Min(right - step * (count - 1), first));
         int i = ((k % count) + count) % count;
-        return (first + step * i, far - inset);
+        int row = rowDepth > 0f && k > 0 ? k / count : 0;
+        float x = first + step * i + (row % 2 == 1 ? (i < count - 1 || count == 1 ? step / 2f : -step / 2f) : 0f);
+        return (x, far - inset - row * rowDepth);
     }
 
     /// <summary>A document's scale on the desk (full size): its height brought to <paramref name="readingHeight"/>, or for a paper wider than the desk paper's <paramref name="deskAspect"/> its width to that height's width; 1 for a paper of no size.</summary>
