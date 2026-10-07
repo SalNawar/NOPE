@@ -60,6 +60,9 @@ public sealed class MotionKnobs
     /// <summary>The scale a popup (a tooltip, a toast, a window, a wheel's pill) grows from as it opens; it shrinks back to it as it closes.</summary>
     public float appearFromScale = 0.6f;
 
+    /// <summary>The most a popup or a panel grows past its rest size on either axis as it overshoots or stretches (px): a big window grows by little, a pill by up to its share.</summary>
+    public float appearGrowMax = 24f;
+
     /// <summary>How far a sliding piece (a toast, a ribbon, the newspaper) comes in from (px).</summary>
     public float slideDistance = 80f;
 

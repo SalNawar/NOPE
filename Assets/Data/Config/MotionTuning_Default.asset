@@ -49,6 +49,7 @@ MonoBehaviour:
     popFeel: 2
     refuseFeel: 2
     appearFromScale: 0.6
+    appearGrowMax: 24
     slideDistance: 80
     staggerSeconds: 0.035
     printLinesPerSecond: 10

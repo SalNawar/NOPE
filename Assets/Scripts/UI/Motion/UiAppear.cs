@@ -184,7 +184,14 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
             ? SquashStretch.FromMotion(distance * _motion.Speed, distance * _motion.Acceleration(_tuning), knobs.stretchPerSpeed, knobs.squashPerAccel, knobs.maxStretch)
             : Stretch.None;
         bool alongY = Mathf.Abs(_from.y) > Mathf.Abs(_from.x);
-        transform.localScale = new Vector3(_restScale.x * s * (alongY ? st.Across : st.Along), _restScale.y * s * (alongY ? st.Along : st.Across), _restScale.z * s);
+        float sx = s * (alongY ? st.Across : st.Along), sy = s * (alongY ? st.Along : st.Across);
+        // Never more than appearGrowMax px past its rest size either way (a big window stretched by a quarter would leave the screen).
+        Rect rect = ((RectTransform)transform).rect;
+        if (rect.width > 0f)
+            sx = Mathf.Min(sx, 1f + knobs.appearGrowMax / rect.width);
+        if (rect.height > 0f)
+            sy = Mathf.Min(sy, 1f + knobs.appearGrowMax / rect.height);
+        transform.localScale = new Vector3(_restScale.x * sx, _restScale.y * sy, _restScale.z * s);
         Vector3 offset = _from * _motion.Offset(1f, _amount);
         if (offset != _applied)
         {
