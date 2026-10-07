@@ -145,6 +145,27 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The colour round the city panorama where it does not fill the screen (it is shown whole, fitted inside the screen; the palette's ink).</summary>
     public Color cityMatte = new Color(0.169f, 0.11f, 0.141f, 1f);
 
+    /// <summary>The city's depth parallax as it comes into view (Saleh 2026-10-07: "why is the city not animated and no parallax when you switch to it"): its pan (the living city shader's _CityPan, in shares of the painting) at the fade's start, settling to 0 over citySettleSeconds, the near roofs sweeping further than the sky (its depth map); the panorama is cropped by as much at each side so the sweep never runs off the painting.</summary>
+    [Range(0f, 0.2f)] public float cityParallax = 0.05f;
+
+    /// <summary>Seconds the city's parallax sweep takes to settle once the city shows.</summary>
+    [Min(0f)] public float citySettleSeconds = 1.8f;
+
+    /// <summary>While the city shows, the pointer looks around it: its pan follows the pointer's place across the screen by this much at the edges (shares of the painting; 0: off), smoothed.</summary>
+    [Range(0f, 0.2f)] public float cityLookParallax = 0.02f;
+
+    /// <summary>The pace of the city's moving sky, airship, bus and headlights in the city view, against the hall window's (the shader's _AtmospherePace; 1: as slow as the hall window draws them, which reads as still full screen).</summary>
+    [Min(0f)] public float cityAtmospherePace = 8f;
+
+    /// <summary>The headlights' size in the city view, against the hall window's (the shader's _HeadlightSize).</summary>
+    [Min(0.1f)] public float cityHeadlightSize = 6f;
+
+    /// <summary>The flying traffic in the city view (the hall window's lanes, HallCityExterior.lanes, drawn over the panorama): its speed against the hall window's.</summary>
+    [Min(0f)] public float cityTrafficPace = 2.5f;
+
+    /// <summary>The flying traffic's size in the city view, against its size in the hall window.</summary>
+    [Min(0.1f)] public float cityTrafficScale = 1.8f;
+
     [Header("Inspection at the desk (the desk-first redesign, item 11)")]
     /// <summary>Where the rulebook card lies: metres right of and ahead of the mat's centre along the office view's level right and forward (inside the desk view's frame; negative right: left of the mat).</summary>
     public Vector2 rulebookAt = new Vector2(-0.3f, -0.05f);
