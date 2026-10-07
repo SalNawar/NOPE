@@ -243,12 +243,33 @@ public sealed partial class InvestigationApp : MonoBehaviour
                 documents.Select(paper);
         }
         if (arrival.OpenApp)
+        {
             OpenWindow();
+            OpenBoard(paper);
+        }
         if (arrival.BadgeDocuments)
             Arrived(AppTab.Documents);
         if (arrival.Toast && toast != null)
-            toast.Show(UiText.Format("app.toast.scanned", paperName), config != null ? config.toastSeconds : 4f,
-                       () => OpenOnTarget(LinkTarget.ToTab(AppTab.Documents, paper)));
+            toast.Show(UiText.Format("app.toast.scanned", paperName), config != null ? config.toastSeconds : 4f, () =>
+            {
+                OpenWindow();
+                OpenBoard(paper);
+            });
+    }
+
+    /// <summary>
+    /// The case board up (the scanner app spec §2: "when a scan lands, the app
+    /// opens to that traveller's case board"): the scanned paper on the left
+    /// and the board on the right, or the board alone in one pane; the
+    /// scanned paper alone where no pane hosts a board.
+    /// </summary>
+    private void OpenBoard(int paper)
+    {
+        LinkTarget scanned = LinkTarget.ToTab(AppTab.Documents, paper);
+        if (!Hosts(AppTab.Board))
+            OpenOnTarget(scanned);
+        else
+            OpenPair(_split ? scanned : LinkTarget.None, LinkTarget.ToTab(AppTab.Board));
     }
 
     /// <summary>Opens the app (a minimised one restores) on the source on the target side: Mail's directive memo shows today's rules.</summary>
@@ -637,6 +658,8 @@ public sealed partial class InvestigationApp : MonoBehaviour
                     items.Add(new ShelfItem(ShelfGroup.Traveller, documents.Chips[i].Label, LinkTarget.ToTab(AppTab.Documents, i), documents.Chips[i].Available));
         if (_traveller != null && Hosts(AppTab.Transcript))
             items.Add(new ShelfItem(ShelfGroup.Traveller, UiText.Get("app.tab.transcript"), LinkTarget.ToTab(AppTab.Transcript), true));
+        if (_traveller != null && Hosts(AppTab.Board) && Introduced(Feature.Scanner))
+            items.Add(new ShelfItem(ShelfGroup.Traveller, UiText.Get("app.tab.board"), LinkTarget.ToTab(AppTab.Board), true));
         if (Hosts(AppTab.Records) && Introduced(Feature.Records))
             items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Get("app.tab.records"), LinkTarget.ToTab(AppTab.Records), true));
         if (Hosts(AppTab.Rules) && Introduced(Feature.Rulebook))

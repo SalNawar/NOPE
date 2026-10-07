@@ -80,12 +80,16 @@ public static class DayCycle
     /// land on the claimed place, their tell source's carry is recorded and a
     /// costume error's panic is noted. A returning traveller's second verdict
     /// is kept for the paper's desk section; a generated traveller denied on
-    /// a first visit may come back (PlanReturn; wave 5, lesson 9).
+    /// a first visit may come back (PlanReturn; wave 5, lesson 9). A detained
+    /// traveller (the third verdict, the desk machine spec §2) counts as
+    /// denied for the world and the premade's memory, never comes back (only
+    /// a denial plans a return) and is added to the run's detentions.
     /// </summary>
-    public static CaseVerdict Decide(CaseInstance inst, bool accepted, int caseIndex1Based, int evidenceCount,
+    public static CaseVerdict Decide(CaseInstance inst, DeskStamp decision, int caseIndex1Based, int evidenceCount,
                                      WorldState world, TodaysWorld today, ShiftLedger ledger, ContentLibrarySO lib, GameConfigSO config)
     {
-        CaseVerdict verdict = ShiftScoring.ResolveDecision(inst, accepted, caseIndex1Based, world, config, lib, evidenceCount);
+        bool accepted = decision == DeskStamp.Approved;
+        CaseVerdict verdict = ShiftScoring.ResolveDecision(inst, decision, caseIndex1Based, world, config, lib, evidenceCount);
         ledger.verdicts.Add(verdict);
 
         if (inst != null && inst.isLegendary && inst.legendarySource != null && world != null)
@@ -96,6 +100,10 @@ public static class DayCycle
         }
 
         WorldOutcomeService.RecordDecision(world, inst, accepted, lib, config);
+
+        if (inst != null && world != null)
+            Visits.Record(world.visits ??= new List<VisitEntry>(), inst.RecordKey, world.day, lib != null ? AgencyCalendar.Today(lib.Agency.firstDate, world.day) : null,
+                          inst.originLabel, accepted ? Visits.Accepted : Visits.Denied, verdict.citationIssued ? verdict.citationReason : null);
 
         if (accepted)
         {
@@ -110,10 +118,13 @@ public static class DayCycle
             inst.returning.acceptedBack = accepted;
             inst.returning.reported = false;
         }
-        else if (!accepted)
+        else if (decision == DeskStamp.Denied)
         {
             PlanReturn(world, inst, config);
         }
+
+        if (decision == DeskStamp.Detained && world != null)
+            world.totalDetained++;
 
         return verdict;
     }

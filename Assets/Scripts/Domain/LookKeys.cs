@@ -84,6 +84,21 @@ public static class LookKeys
         return new LookKey(name, layer, gender, nationId, eraId, 0, null, colour, hasVariant ? variant : null, null, null);
     }
 
+    /// <summary>The nation and era tokens an ID photo's 2150 civilian dress is filed under (Looks.PhotoLook): "outfit_m_civil_2150_v1", "hair_f_civil_2150_brown".</summary>
+    public const string CivilNation = "civil", CivilEra = "2150";
+
+    /// <summary>The expression token of a premade's ID photo ("premade_{id}_photo").</summary>
+    public const string PhotoExpression = "photo";
+
+    /// <summary>An ID photo's 2150 civilian outfit for <paramref name="gender"/> in <paramref name="variant"/> ("outfit_m_civil_2150_v1": v1 tidy, v2 labourer, v3 worn; Looks.CivilVariant).</summary>
+    public static LookKey CivilOutfit(TravellerGender gender, string variant) => Garment(LookLayer.Outfit, gender, CivilNation, CivilEra, null, variant);
+
+    /// <summary>An ID photo's 2150 civilian hair for <paramref name="gender"/> in the traveller's own <paramref name="colour"/> ("hair_f_civil_2150_brown").</summary>
+    public static LookKey CivilHair(TravellerGender gender, string colour) => Garment(LookLayer.Hair, gender, CivilNation, CivilEra, colour);
+
+    /// <summary>A premade's ID photo ("premade_{id}_photo"; the neutral expression's picture, cropped to the head and neck, stands in until it lands).</summary>
+    public static LookKey PremadePhoto(string premadeId) => Premade(premadeId, PhotoExpression);
+
     /// <summary>A premade's whole image: "premade_{id}_{expression}".</summary>
     public static LookKey Premade(string premadeId, string expression) =>
         new LookKey($"premade_{premadeId}_{expression}", LookLayer.Whole, TravellerGender.Unknown, null, null, 0, null, null, null, premadeId, expression);

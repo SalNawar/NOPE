@@ -288,7 +288,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         OpenChanged?.Invoke();
     }
 
-    /// <summary>The game feel's opening: the ring's pills pop out one after another (MotionKnobs.staggerSeconds apart, UiAppear) with the wheel_open cue; the ring lays them out, so they grow in place.</summary>
+    /// <summary>The game feel's opening: the ring's pills fly out from its centre one after another (MotionKnobs.staggerSeconds apart, UiAppear: stretched along their flight, overshooting and wobbling into place) with the wheel_open cue.</summary>
     private void PopPills()
     {
         Sounds.Play(SoundCues.WheelOpen);
@@ -296,12 +296,15 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         if (pills == null)
             return;
         float stagger = UiMotion.Knobs.staggerSeconds;
+        if (pills is RectTransform laidOut)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(laidOut); // each pill at its place on the ring before it flies there
+        Vector3 centre = pills.position;
         int shown = 0;
         for (int i = 0; i < pills.childCount; i++)
         {
             GameObject pill = pills.GetChild(i).gameObject;
             if (pill.activeSelf)
-                UiAppear.Of(pill, AppearStyle.Pop).Open(stagger * shown++);
+                UiAppear.Of(pill, AppearStyle.Pop).Open(centre, stagger * shown++);
         }
     }
 

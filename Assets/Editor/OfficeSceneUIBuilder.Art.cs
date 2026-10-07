@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// Tier-2 image of the gameplay layer gets its slot, which shows the slot's
 /// file from Assets/Art/UI/Resources/ when it exists and keeps today's
 /// code-drawn look when it does not (the speech bubble, the briefing's and
-/// the ledger's sheets and the citation slip are the UI kit's since run 7:
+/// the ledger's sheets are the UI kit's since run 7:
 /// OfficeSceneUIBuilder.Kit): a reference book's cover at the top of its register page in
 /// the Investigation app's Reference tab (inactive until the cover is found
 /// at runtime; the tab's book chips can show it through SlotArt.CoverFor);

@@ -86,7 +86,13 @@ public static class SoundCues
     public const string PaperPickup = "paper_pickup", PaperDrop = "paper_drop", PaperSlide = "paper_slide";
 
     /// <summary>The citation and the scanner.</summary>
-    public const string CitationPrint = "citation_print", CitationLand = "citation_land", ScannerStart = "scanner_start", ScannerDone = "scanner_done";
+    public const string CitationPrint = "citation_print", CitationLand = "citation_land", ScannerStart = "scanner_start", ScannerDone = "scanner_done", ScannerFlag = "scanner_flag";
+
+    /// <summary>The scanner's PC app (the scanner app spec's "Feel"): a glow's soft tick (a cell that differs, a paper flagged) and a finding pinned to the board (evidence_pin: added to the list by Track SA).</summary>
+    public const string InspectLink = "inspect_link", EvidencePin = "evidence_pin";
+
+    /// <summary>The desk machine (the desk machine spec, Track DM): the date wheels' ratchet click, the re-ink squish, the DETAIN button's cover snapping open or shut, DETAIN's chirp.</summary>
+    public const string DaterWheelClick = "dater_wheel_click", DaterReink = "dater_reink", DetainCover = "detain_cover", Detain = "detain";
 
     /// <summary>The booth.</summary>
     public const string CallNext = "call_next", PortalThrough = "portal_through", DialogueBlip = "dialogue_blip";
@@ -96,6 +102,9 @@ public static class SoundCues
 
     /// <summary>The interface.</summary>
     public const string UiHover = "ui_hover", UiPress = "ui_press", UiRelease = "ui_release", UiToggle = "ui_toggle", UiTab = "ui_tab", UiError = "ui_error", UiPopup = "ui_popup", WheelOpen = "wheel_open";
+
+    /// <summary>The Night Slots machine at Home: a ratchet notch of the lever, the reels spinning up, a reel landing, a win's bell, a loss's womp, the payout's coins.</summary>
+    public const string SlotLever = "slot_lever", SlotSpin = "slot_spin", SlotStop = "slot_stop", SlotWin = "slot_win", SlotLose = "slot_lose", Coins = "coins";
 
     /// <summary>The shift.</summary>
     public const string LastHourAlarm = "last_hour_alarm", ShiftEndBell = "shift_end_bell", PaChime = "pa_chime", BoardFlip = "board_flip", DayStart = "day_start";

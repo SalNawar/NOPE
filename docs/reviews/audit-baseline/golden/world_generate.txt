@@ -1,4 +1,4 @@
-Assets/Data files: 995
+Assets/Data files: 1014
 first Generate World changed vs the committed tree: []
 second Generate World changed vs the first: []
 --- first Generate World log (warnings, errors, generator summary lines) ---
@@ -9,7 +9,7 @@ second Generate World changed vs the first: []
 [Log] [WorldContentGenerator] Personality 'grand' (Grand) has its own lines for every slot.
 [Log] [WorldContentGenerator] Personality 'stickler' (Stickler) has its own lines for every slot.
 [Log] [WorldContentGenerator] Personality 'glum' (Glum) has its own lines for every slot.
-[Log] [WorldContentGenerator] World generated: 12 eras, 8 nations, 63 places (8 Future), 38 rules, 38 premades, 15 day plans, 6 questions, 13 dialogs, 6 unlock triggers, 63 history rules, 8 leader effects, 9 themes, 7 UI string tables, 13 tongues, 6 translator upgrades, 1 translation notice, 18 house upgrades, 4 toys; 0 unlisted generated asset(s) moved to the trash.
+[Log] [WorldContentGenerator] World generated: 12 eras, 8 nations, 63 places (8 Future), 38 rules, 38 premades, 15 day plans, 6 questions, 13 dialogs, 6 unlock triggers, 65 history rules, 8 leader effects, 9 themes, 7 UI string tables, 13 tongues, 6 translator upgrades, 1 translation notice, 18 house upgrades, 4 toys; 0 unlisted generated asset(s) moved to the trash.
 --- second Generate World log ---
 [Log] [WorldContentGenerator] Personality 'chatty' (Chatty) has its own lines for every slot.
 [Log] [WorldContentGenerator] Personality 'curt' (Curt) has its own lines for every slot.
@@ -18,4 +18,4 @@ second Generate World changed vs the first: []
 [Log] [WorldContentGenerator] Personality 'grand' (Grand) has its own lines for every slot.
 [Log] [WorldContentGenerator] Personality 'stickler' (Stickler) has its own lines for every slot.
 [Log] [WorldContentGenerator] Personality 'glum' (Glum) has its own lines for every slot.
-[Log] [WorldContentGenerator] World generated: 12 eras, 8 nations, 63 places (8 Future), 38 rules, 38 premades, 15 day plans, 6 questions, 13 dialogs, 6 unlock triggers, 63 history rules, 8 leader effects, 9 themes, 7 UI string tables, 13 tongues, 6 translator upgrades, 1 translation notice, 18 house upgrades, 4 toys; 0 unlisted generated asset(s) moved to the trash.
+[Log] [WorldContentGenerator] World generated: 12 eras, 8 nations, 63 places (8 Future), 38 rules, 38 premades, 15 day plans, 6 questions, 13 dialogs, 6 unlock triggers, 65 history rules, 8 leader effects, 9 themes, 7 UI string tables, 13 tongues, 6 translator upgrades, 1 translation notice, 18 house upgrades, 4 toys; 0 unlisted generated asset(s) moved to the trash.

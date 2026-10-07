@@ -81,6 +81,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The stamp bar (Papers, Please's with the art's 3D stamps, Saleh 2026-10-06; optional): its rack is laid where the reading view shows the desk's right.</summary>
     [SerializeField] private DeskStampTray stampTray;
 
+    /// <summary>The DETAIN button (optional; the desk machine spec §2): laid on the desk where the office view shows DeskConfigSO.detainView.</summary>
+    [SerializeField] private DetainButton detainButton;
+
     /// <summary>The counter (optional): laid along the desk's far edge in the office view's frame, once the desk view is posed.</summary>
     [SerializeField] private DeskCounter counter;
 
@@ -448,6 +451,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         // The 3D stamp bar hangs where the reading view shows the desk's right (Saleh 2026-10-06: "I want the 3D stamp").
         if (stampTray != null && _office != null)
             stampTray.Lay(_office.transform.forward);
+        // The DETAIN button stands on the desk where the office view shows DeskConfigSO.detainView (the desk machine spec §2).
+        if (detainButton != null && config != null && _officeVcam != null)
+            detainButton.Lay(_officeVcam, _office != null ? _office.aspect : 16f / 9f, top, config.detainView);
         if (rulebook != null && config != null && _office != null)
         {
             Vector3 level = Vector3.ProjectOnPlane(_office.transform.forward, Vector3.up).normalized;
@@ -551,6 +557,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             clock.Bind(time);
 
         TMP_Text stabilityScreen = TextOf(OfficeAnchorId.ReadoutStability);
+        GrowStabilityMonitor(stabilityScreen);
         if (deskRiver != null)
         {
             deskRiver.Cover(stabilityScreen);
@@ -567,6 +574,48 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 unused.gameObject.SetActive(unused == day || unused == credits || unused == time);
         if (fallbackHud != null)
             fallbackHud.SetActive(hud);
+    }
+
+    /// <summary>
+    /// The stability monitor drawn big enough to read the Helix River on
+    /// (Saleh 2026-10-07: "the timeline helix needs to be bigger; the screen
+    /// itself is too small"): the art's monitor parts (the StabilityMonitor
+    /// anchor and its siblings named with its prefix, "Office_Stability__")
+    /// and its stability text grow DeskConfigSO.stabilityMonitorScale times
+    /// about DeskConfigSO.stabilityMonitorPivot of the monitor's bounds, at
+    /// load (the art scene is never edited); the river then covers the grown
+    /// glass (HelixRiverMonitor.Cover), and the monitor's click box and
+    /// tooltip take its new bounds.
+    /// </summary>
+    private void GrowStabilityMonitor(TMP_Text readout)
+    {
+        ResolvedAnchor anchor = At(OfficeAnchorId.StabilityMonitor);
+        Transform monitor = anchor.Transform;
+        float k = config != null ? config.stabilityMonitorScale : 1f;
+        if (monitor == null || monitor.parent == null || readout == null || !anchor.HasBounds || Mathf.Approximately(k, 1f))
+            return;
+
+        int cut = monitor.name.IndexOf("__", StringComparison.Ordinal);
+        string prefix = cut > 0 ? monitor.name.Substring(0, cut + 2) : monitor.name;
+        var parts = new List<Transform>();
+        foreach (Transform part in monitor.parent)
+            if (part.name.StartsWith(prefix, StringComparison.Ordinal))
+                parts.Add(part);
+        if (!parts.Exists(p => readout.transform.IsChildOf(p)))
+            parts.Add(readout.transform);
+
+        Bounds b = anchor.Bounds;
+        foreach (Transform part in parts)
+            if (OfficeAnchors.TryBounds(part, out Bounds more))
+                b.Encapsulate(more);
+        Vector2 share = config.stabilityMonitorPivot;
+        Vector3 pivot = new Vector3(Mathf.Lerp(b.min.x, b.max.x, share.x), Mathf.Lerp(b.min.y, b.max.y, share.y), b.center.z);
+        foreach (Transform part in parts)
+        {
+            part.position = pivot + (part.position - pivot) * k;
+            part.localScale *= k;
+        }
+        anchor.HasBounds = OfficeAnchors.TryBounds(monitor, out anchor.Bounds);
     }
 
     /// <summary>The AVAILABLE sign's caption and lit or paused ink follow the desk's availability (AvailableSignLink): on the art's NEXT label, else on the stand-in sign's when it shows.</summary>

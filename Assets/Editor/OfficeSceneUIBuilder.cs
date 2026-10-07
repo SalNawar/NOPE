@@ -205,11 +205,12 @@ public static partial class OfficeSceneUIBuilder
         OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip, false);
         OverlayCallout boardTooltip = BuildOverlayCallout(officeCanvas.transform, "BoardTooltip", BoardTooltipSize, Tooltip, ThemeRoleId.Tooltip, false, true);
         DeskStampTray stampTray = BuildStampTray(officeCanvas.transform, officeView.transform, deskConfig);
+        DestroyChildIfPresent(officeCanvas.transform, "VerdictButtons"); // the prototype's RETURN and DETAIN plates (Saleh 2026-10-07: everything diegetic)
 
-        // The verdict ribbon and the citation slip over the office (OfficeSceneUIBuilder.Kit, the UI kit's).
+        // The verdict ribbon over the office (OfficeSceneUIBuilder.Kit, the UI kit's). The citation slip is retired (2026-10-07: a citation is a
+        // paper on the desk, DeskController.Cite): it goes from scenes built before.
         Transform verdictStrip = BuildVerdictRibbon(officeCanvas.transform, out Image verdictRibbon, out TMP_Text verdictText);
-        Transform citation = BuildCitationSlip(officeCanvas.transform, out TMP_Text citationReason, out TMP_Text citationDetail, out TMP_Text citationConsequence,
-                                               out Button citationContinue);
+        DestroyChildIfPresent(officeCanvas.transform, "CitationPanel");
 
         var soView = new SerializedObject(officeView);
         SetRef(soView, "frame", pcFrame);
@@ -303,18 +304,15 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soOffice, "resultBackdrop", verdictStrip.gameObject);
         SetRef(soOffice, "resultRibbon", verdictRibbon);
         SetRef(soOffice, "kit", _kit);
-        SetRef(soOffice, "citationPanel", citation.gameObject);
-        SetRef(soOffice, "citationReasonText", citationReason);
-        SetRef(soOffice, "citationDetailText", citationDetail);
-        SetRef(soOffice, "citationConsequenceText", citationConsequence);
-        SetRef(soOffice, "citationContinueButton", citationContinue);
         soOffice.ApplyModifiedProperties();
 
         var soFlow = new SerializedObject(dayFlow);
         SetRef(soFlow, "briefingPanel", briefing.gameObject);
         SetRef(soFlow, "briefingTitleText", paper.Title);
         SetRef(soFlow, "briefingDateText", paper.Date);
-        SetRef(soFlow, "briefingKickerText", paper.Kicker);
+        SetRef(soFlow, "briefingMemo", paper.Memo);
+        SetRef(soFlow, "briefingMemoTitleText", paper.MemoTitle);
+        SetRef(soFlow, "briefingMemoBodyText", paper.MemoBody);
         SetRef(soFlow, "briefingHeadlineText", paper.Headline);
         SetRef(soFlow, "briefingDeckText", paper.Deck);
         SetRef(soFlow, "briefingStoryTitleText", paper.StoryTitle);
@@ -345,6 +343,7 @@ public static partial class OfficeSceneUIBuilder
         SerializedArrays.Set(soInvest, "reportViews", app.Report);
         SerializedArrays.Set(soInvest, "rulesViews", app.Rules);
         SerializedArrays.Set(soInvest, "calendarViews", app.Calendar);
+        SerializedArrays.Set(soInvest, "caseBoardViews", app.CaseBoards);
         Wire(soInvest, "interactionPanel", interaction);
         Wire(soInvest, "desk", officeView.transform.Find("Desk").GetComponent<DeskController>());
         Wire(soInvest, "hud", caseHud);
@@ -779,8 +778,12 @@ public static partial class OfficeSceneUIBuilder
         desk.SetAsFirstSibling();
 
         // Between travellers the desktop reads this, large enough for the office PC's
-        // clone, on a strip so it never reads off the wallpaper (piece 6 R18).
-        Transform strip = Panel(root, "IdleScreen", new Vector2(0.05f, 0.38f), new Vector2(0.95f, 0.62f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ScreenStrip);
+        // clone, on a strip so it never reads off the wallpaper (piece 6 R18); right of the
+        // icon band, so no icon is ever under it (Saleh 2026-10-07: "arrange icons not working").
+        DesktopConfigSO desktop = EnsureDesktopConfig();
+        float band = desktop.IconBand(DesktopSize.x, DesktopSize.y - desktop.MaximisedBottom).AreaWidth;
+        Transform strip = Panel(root, "IdleScreen", new Vector2((band + desktop.iconOrigin.x) / DesktopSize.x, 0.38f), new Vector2(0.97f, 0.62f), Vector2.zero, Vector2.zero,
+                                ScreenStripColor, ThemeRoleId.ScreenStrip);
         strip.GetComponent<Image>().raycastTarget = false;
         TMP_Text idle = Text(strip, "IdleText", null, 80, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white,
                              ThemeRoleId.ScreenStrip, "idle.waiting", FontStyles.Bold, ThemeTextKind.Heading, true);

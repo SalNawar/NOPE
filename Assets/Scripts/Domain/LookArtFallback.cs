@@ -23,7 +23,10 @@ public enum LookArtFallbackStep
     AnyPlace,
 
     /// <summary>A premade's whole image: the same premade's neutral expression.</summary>
-    NeutralExpression
+    NeutralExpression,
+
+    /// <summary>A garment of an ID photo's 2150 civilian dress (LookKeys.CivilNation): the same layer and colour, no variant, under each of the "civil" row's neighbours in the latest era (today's 2150 clothes), in the table's order.</summary>
+    CivilDress
 }
 
 /// <summary>A nation's neighbours for the character art fallback (the nearest first).</summary>
@@ -193,6 +196,12 @@ public static class LookArtFallback
             case LookArtFallbackStep.NeutralExpression:
                 if (r.Layer == LookLayer.Whole)
                     yield return LookKeys.Premade(r.PremadeId, LookKeys.NeutralExpression);
+                break;
+
+            case LookArtFallbackStep.CivilDress:
+                if (garment && r.NationId == LookKeys.CivilNation && u.Eras.Count > 0)
+                    foreach (string nation in table.NeighboursOf(LookKeys.CivilNation))
+                        yield return LookKeys.Garment(r.Layer, r.Gender, nation, u.Eras[u.Eras.Count - 1], r.HairColour);
                 break;
         }
     }

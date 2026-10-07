@@ -49,6 +49,11 @@ MonoBehaviour:
       near:
       - britain
       - italy
+    - nation: civil
+      near:
+      - neutral
+      - britain
+      - germany
     layers:
     - layer: 1
       steps:
@@ -63,6 +68,7 @@ MonoBehaviour:
       - 3
     - layer: 2
       steps:
+      - 6
       - 2
       - 3
       - 4
@@ -73,6 +79,7 @@ MonoBehaviour:
       - 4
     - layer: 5
       steps:
+      - 6
       - 2
       - 3
       - 4

@@ -19,7 +19,7 @@ public sealed partial class GameManager : MonoBehaviour
     /// <summary>Day plan to run.</summary>
     [SerializeField] private DayPlanSO dayPlan;
 
-    /// <summary>UI controller for HUD, citation slip, and verdict display.</summary>
+    /// <summary>UI controller for the HUD and the verdict line.</summary>
     [SerializeField] private OfficeUIController officeUI;
 
     /// <summary>
@@ -104,8 +104,11 @@ public sealed partial class GameManager : MonoBehaviour
     /// <summary>Raised when an accepted traveller leaves, with the portal they leave through (PortalDay.DepartureFor; the hall's rings pulse it, VX4).</summary>
     public event System.Action<int> Departed;
 
-    /// <summary>Raised when the player acknowledges a citation slip (Mail's citation notice arrives then; redesign phase 25).</summary>
-    public event System.Action<CaseVerdict> CitationAcknowledged;
+    /// <summary>Raised when a citation is issued (Mail's citation notice arrives then; redesign phase 25).</summary>
+    public event System.Action<CaseVerdict> CitationIssued;
+
+    /// <summary>Raised when a citation lands on the desk (the Helix River's red pulse runs then).</summary>
+    public event System.Action<CaseVerdict> CitationLanded;
 
     /// <summary>Raised once a traveller is decided and scored (the game feel reacts: FeelDirector): the case, the verdict, whether they were accepted and the stability before the decision (after is the world's).</summary>
     public event System.Action<CaseInstance, CaseVerdict, bool, float> Resolved;
@@ -244,7 +247,9 @@ public sealed partial class GameManager : MonoBehaviour
         orchestrator.OnDayCompleted += HandleDayCompleted;
 
         // The AVAILABLE sign toggles the desk (only meaningful when wired): while it is on, each waiting traveller is called as the desk frees up.
+        // Its first press opens the shift: the clock starts then, not at Start Shift (Saleh 2026-10-07).
         _desk.Called += CallTraveller;
+        _desk.Opened += OpenShift;
         if (readySign != null)
         {
             readySign.Interactable = false;
@@ -265,8 +270,9 @@ public sealed partial class GameManager : MonoBehaviour
         string bulletin = TodaysBulletin();
 
         // The morning paper is printed: its lines go to the News site's back issues (the night rebuilds them, so they are kept now).
+        // The paper is the world's: the clerk's bulletin is the Bureau memo's, never a back issue's.
         if (desktopConfig != null)
-            NewsArchive.Record(_worldState.newsArchive, _worldState.day, Briefing(bulletin, _worldState.tomorrow.briefingLines), _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
+            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
                                _worldState.tomorrow.deskLines);
         else
             Debug.LogWarning("[GameManager] No DesktopConfigSO wired: today's paper is not kept for the News site. Run Tools > TimeDesk > Build Office UI.");
@@ -304,16 +310,6 @@ public sealed partial class GameManager : MonoBehaviour
         return string.IsNullOrEmpty(bulletin) ? hours : bulletin + " " + hours;
     }
 
-    /// <summary>The morning paper's briefing as the News site keeps it: the day's bulletin first (lesson 4; none when blank), then the tomorrow package's briefing lines.</summary>
-    private static List<string> Briefing(string bulletin, IEnumerable<string> lines)
-    {
-        var briefing = new List<string>();
-        if (!string.IsNullOrWhiteSpace(bulletin))
-            briefing.Add(bulletin.Trim());
-        briefing.AddRange(lines ?? Enumerable.Empty<string>());
-        return briefing;
-    }
-
     /// <summary>
     /// The day's Citizen Records (traveller types R1): each traveller's record
     /// (CaseFactory.BuildRegistry), then the clerk's own account as the Citizen
@@ -322,7 +318,7 @@ public sealed partial class GameManager : MonoBehaviour
     /// </summary>
     private CitizenRegistry BuildRegistry()
     {
-        CitizenRegistry registry = CaseFactory.BuildRegistry(_dayCases, contentLibrary.Introductions.Has(_worldState.day, Feature.Standing));
+        CitizenRegistry registry = CaseFactory.BuildRegistry(_dayCases, contentLibrary.Introductions.Has(_worldState.day, Feature.Standing), _worldState.day);
         var clerk = new ClerkAccountSource(_worldState, contentLibrary);
         registry.Add(AccountRecords.Clerk(clerk.Profile, Account.ExtractRows(clerk, UiText.Get, AccountMaker.Credits)));
         return registry;
@@ -544,7 +540,7 @@ public sealed partial class GameManager : MonoBehaviour
         Debug.Log($"[GameManager] <<< Exiting HandleCaseSlotStarted (slot {caseIndex1Based}, awaiting player decision).");
     }
 
-    /// <summary>Starts the day loop and the shift clock together (after the briefing); the AVAILABLE sign takes clicks from here (the desk starts paused).</summary>
+    /// <summary>Starts the day loop (after the briefing); the AVAILABLE sign takes clicks from here (the desk starts paused) and its first press starts the shift clock (OpenShift; Saleh 2026-10-07: "shift should not start until you press AVAILABLE"); without a sign the clock starts at once.</summary>
     private void BeginShift(DayPlanSO plan, int daySeed)
     {
         if (booth != null)
@@ -554,8 +550,8 @@ public sealed partial class GameManager : MonoBehaviour
 
         orchestrator.StartDay(_worldState, plan, daySeed, _dayCases);
 
-        if (shiftClock != null)
-            shiftClock.StartShift();
+        if (readySign == null)
+            OpenShift();
 
         // The desk's guide: day 1's FTUE, a guided day's new page opened in the rulebook, the GUIDE's pages so far.
         if (guide != null)
@@ -581,6 +577,14 @@ public sealed partial class GameManager : MonoBehaviour
             orchestrator.CloseAfterCurrentSlot();
         else
             orchestrator.CloseNow();
+    }
+
+    /// <summary>The shift opens (the AVAILABLE sign's first press, DeskAvailability.Opened; at once without a sign): the shift clock starts from the opening hour, and with it what it times (the hall's light, closing time, the last-hour alarm).</summary>
+    private void OpenShift()
+    {
+        if (shiftClock != null)
+            shiftClock.StartShift();
+        Debug.Log($"[GameManager] Shift started at {ShiftClock.Format(shiftClock != null ? shiftClock.MinuteOfDay : 0f)} on AVAILABLE (day {_worldState.day}).");
     }
 
     /// <summary>The AVAILABLE sign's click: turns the desk available (the waiting traveller is called once the desk is free) or pauses it (the traveller at the desk is finished normally; the shift clock keeps running).</summary>
@@ -673,13 +677,15 @@ public sealed partial class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Resolves the player's Accept/Deny decision (the one decision handler,
-    /// audit R3-017): scores it, dispatches timeline impacts only on accept,
-    /// checks for an ending, then shows the verdict and advances the day.
+    /// Resolves the player's decision, one of the three verdicts committed at
+    /// the desk (the hand-back, the DETAIN button; the one decision handler, audit R3-017; the desk
+    /// machine spec §2): scores it, dispatches timeline impacts only on
+    /// accept, checks for an ending, then shows the verdict and advances the day.
     /// </summary>
-    private void HandleDecision(bool accepted)
+    private void HandleDecision(DeskStamp decision)
     {
-        Debug.Log($"[GameManager] >>> Entering HandleDecision (slot {_activeCaseIndex1Based}, accepted={accepted}).");
+        bool accepted = decision == DeskStamp.Approved;
+        Debug.Log($"[GameManager] >>> Entering HandleDecision (slot {_activeCaseIndex1Based}, verdict={decision}).");
         // The booth has no traveller from here (the wheel cannot open); the figure stays for their reaction (R4). The papers are handed back: the guide hears it.
         SetTravellerAtDesk(false, keepFigure: true);
         if (guide != null)
@@ -726,14 +732,14 @@ public sealed partial class GameManager : MonoBehaviour
         // home's fact into the claim, and an accepted costume error causes a
         // panic there (tomorrow's news). DayCycle holds the step, so the balance
         // simulation plays the same one.
-        CaseVerdict verdict = DayCycle.Decide(inst, accepted, _activeCaseIndex1Based, evidenceCount, _worldState, _today, _ledger, contentLibrary, _gameConfig);
+        CaseVerdict verdict = DayCycle.Decide(inst, decision, _activeCaseIndex1Based, evidenceCount, _worldState, _today, _ledger, contentLibrary, _gameConfig);
         if (accepted)
             AnnounceDeparture(inst);
 
         if (officeUI != null)
             officeUI.UpdateHud(_worldState);
 
-        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: accepted={accepted}, shouldAccept={inst.ShouldAccept}, fault='{inst.FaultReason}', home='{inst.HomeLabel}', directive={inst.directiveFault}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.00}->{_worldState.timelineStability:0.00}, firedNow={verdict.firedNow}.");
+        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: verdict={decision}, shouldAccept={inst.ShouldAccept}, fault='{inst.FaultReason}', home='{inst.HomeLabel}', directive={inst.directiveFault}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.00}->{_worldState.timelineStability:0.00}, firedNow={verdict.firedNow}.");
 
         // The reaction (the personalities spec's R1-R5): presentation only, after the scoring, never changing it.
         React(inst, accepted);
@@ -798,36 +804,23 @@ public sealed partial class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Shows the verdict slip if a UI is wired (pausing the shift clock while a
-    /// citation slip is up, and holding the PC screen on so the slip can never
-    /// sit on a dark screen), then runs the continuation.
+    /// Shows the verdict line and, for a citation, prints it and flies it
+    /// onto the desk (BoothCoordinator.Cite; the Citation replaces the slip,
+    /// Saleh 2026-10-07: Papers, Please's way, nothing waits for it):
+    /// CitationIssued at once (Mail's copy), CitationLanded when it lies on
+    /// the desk (the Helix River's pulse); then the continuation, at once.
     /// </summary>
     private void ShowVerdictThen(CaseVerdict verdict, System.Action onContinue)
     {
-        if (officeUI == null)
+        if (officeUI != null)
+            officeUI.ShowVerdict(verdict);
+        if (verdict != null && verdict.citationIssued)
         {
-            onContinue?.Invoke();
-            return;
+            CitationIssued?.Invoke(verdict);
+            if (booth == null || !booth.Cite(verdict.ticket, () => CitationLanded?.Invoke(verdict)))
+                CitationLanded?.Invoke(verdict);
         }
-
-        // A citation slip holds the day, the shift clock and the screen until acknowledged.
-        bool citation = verdict != null && verdict.citationIssued;
-        bool holdsClock = shiftClock != null && citation;
-        if (holdsClock)
-            shiftClock.Pause();
-        if (citation && booth != null)
-            booth.SetCitationPending(true);
-
-        officeUI.ShowVerdict(verdict, () =>
-        {
-            if (citation && booth != null)
-                booth.SetCitationPending(false);
-            if (holdsClock)
-                shiftClock.Resume();
-            if (citation)
-                CitationAcknowledged?.Invoke(verdict);
-            onContinue?.Invoke();
-        });
+        onContinue?.Invoke();
     }
 
     /// <summary>

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,12 +10,13 @@ using UnityEngine.UI;
 /// fixed costs paid, the pet's needs in words, and the night's optional
 /// bills, each a row with its Paying / Skip pair), the pet's corner (the pet
 /// drawn by PetStandIn, petted, played with a toy), the House (Home's upgrade
-/// tree: the office's upgrades are the PC's Orders app's), slot machine (three
-/// reels and the SPIN dome), and the sleep prompt that hands off to the next
+/// tree: the office's upgrades are the PC's Orders app's), the Night Slots
+/// machine (SlotMachineView: its reels, lever and tray; it keeps the HUD's
+/// wallet in step with its credits), and the sleep prompt that hands off to the next
 /// day. All references are optional; unwired panels are skipped so the flow
 /// degrades gracefully (HomeManager just calls straight through). Everything
 /// it spawns at runtime (the bills' and toys' rows, the House's heads, links
-/// and cards, the reels' faces) is drawn in the cel UI kit (docs/UI_KIT.md;
+/// and cards) is drawn in the cel UI kit (docs/UI_KIT.md;
 /// <see cref="kit"/>): kit plates with live TMP labels in the kit's fonts, so
 /// the language settings keep working; without the kit they stay plain. A
 /// card shows its art when the file exists (redesign phase 27): an upgrade's
@@ -111,20 +111,11 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>Root of the slot machine panel.</summary>
     [SerializeField] private GameObject slotPanel;
 
-    /// <summary>Slot title.</summary>
-    [SerializeField] private TMP_Text slotTitleText;
-
-    /// <summary>Slot result / status text.</summary>
-    [SerializeField] private TMP_Text slotBodyText;
-
-    /// <summary>Spins the slot machine.</summary>
-    [SerializeField] private Button slotSpinButton;
+    /// <summary>The Night Slots machine (its reels, lever, deck and tray; SlotMachineView).</summary>
+    [SerializeField] private SlotMachineView slotMachine;
 
     /// <summary>Continues to the sleep prompt.</summary>
     [SerializeField] private Button slotContinueButton;
-
-    /// <summary>The three reels' symbols (a kit tile each, in its reel window): spun and landed on the outcome's faces (SlotReels).</summary>
-    [SerializeField] private Image[] slotReelFaces = Array.Empty<Image>();
 
     [Header("Sleep Panel")]
     /// <summary>Root of the sleep panel.</summary>
@@ -184,9 +175,6 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>Pending callback for the sleep button.</summary>
     private Action _onSleep;
 
-    /// <summary>The reels' spin while it runs (a new spin stops it first).</summary>
-    private Coroutine _reelSpin;
-
     /// <summary>True if the expenses panel and its continue button are wired, so it can be shown and left (audit R4-014: a panel without its button would strand the flow).</summary>
     public bool HasExpensesPanel => expensesPanel != null && expensesContinueButton != null;
 
@@ -197,7 +185,7 @@ public sealed class HomeUIController : MonoBehaviour
     public bool HasShopPanel => shopPanel != null && shopContinueButton != null;
 
     /// <summary>True if the slot panel and its continue button are wired, so it can be shown and left.</summary>
-    public bool HasSlotPanel => slotPanel != null && slotContinueButton != null;
+    public bool HasSlotPanel => slotPanel != null && slotContinueButton != null && slotMachine != null;
 
     /// <summary>True if the sleep panel is wired and can be shown.</summary>
     public bool HasSleepPanel => sleepPanel != null && sleepButton != null;
@@ -254,11 +242,17 @@ public sealed class HomeUIController : MonoBehaviour
         if (world == null)
             return;
 
-        if (moneyText != null)
-            moneyText.text = $"{world.money} {UiText.Currency(UiText.WalletForm.Short)}";
+        ShowWallet(world.money);
 
         if (dayText != null)
             dayText.text = $"Day {world.day}";
+    }
+
+    /// <summary>Shows <paramref name="money"/> in the HUD's wallet (the slot machine keeps it in step with its credits during a spin).</summary>
+    private void ShowWallet(int money)
+    {
+        if (moneyText != null)
+            moneyText.text = $"{money} {UiText.Currency(UiText.WalletForm.Short)}";
     }
 
     // =========================================================
@@ -837,12 +831,15 @@ public sealed class HomeUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Shows the slot machine. onSpin is invoked when the player clicks Spin and
-    /// returns what to show (its line, and for a spin that happened the reels'
-    /// result: they spin briefly and land on SlotReels' faces). onContinue is
-    /// invoked when the player moves on to sleep (or immediately if unwired).
+    /// Shows the Night Slots machine (SlotMachineView): <paramref name="outcomeIds"/>
+    /// are the library's slot outcomes in order (the reels' symbols; SlotReels'
+    /// faces index them). <paramref name="onSpin"/> draws and applies a spin
+    /// when the lever fires and returns what to show (its line, and for a spin
+    /// that happened the outcome's place and whether it won money: the reels
+    /// land on SlotReels' faces). <paramref name="onContinue"/> is invoked when
+    /// the player moves on to sleep (or immediately if unwired).
     /// </summary>
-    public void ShowSlot(WorldState world, GameConfigSO config, Func<SpinView> onSpin, Action onContinue)
+    public void ShowSlot(WorldState world, GameConfigSO config, IReadOnlyList<string> outcomeIds, Func<SpinView> onSpin, Action onContinue)
     {
         if (!HasSlotPanel || world == null)
         {
@@ -851,86 +848,19 @@ public sealed class HomeUIController : MonoBehaviour
         }
 
         _onSlotContinue = onContinue;
-
-        if (slotTitleText != null)
-            slotTitleText.text = "Night Slots";
-
         int spinCost = config != null ? config.slotSpinCost : 0;
-
-        if (slotBodyText != null)
-            slotBodyText.text = $"Spin for {spinCost} {UiText.Currency(UiText.WalletForm.Inline)}. Try your luck for tomorrow's shift.";
-
-        if (slotSpinButton != null)
-        {
-            slotSpinButton.onClick.RemoveAllListeners();
-            slotSpinButton.onClick.AddListener(() =>
-            {
-                if (onSpin == null)
-                    return;
-                SpinView spin = onSpin.Invoke();
-                if (slotBodyText != null && !string.IsNullOrEmpty(spin.Line))
-                    slotBodyText.text = spin.Line;
-                if (spin.Outcome >= 0)
-                    SpinReels(SlotReels.Faces(spin.Outcome, spin.Win, ReelSymbols.Length));
-            });
-        }
-
         slotPanel.SetActive(true);
-        ShowReels(SlotReels.Faces(0, false, ReelSymbols.Length));
-    }
-
-    /// <summary>The reels' symbols: kit tiles (SlotReels indexes into this list).</summary>
-    private static readonly string[] ReelSymbols = { "tile_crate_rest", "tile_star_rest", "tile_bolt_rest", "tile_paw_rest", "tile_moon_rest" };
-
-    /// <summary>Spins the reels (each cycles through the symbols, stopping one after another) and lands them on <paramref name="faces"/>.</summary>
-    private void SpinReels(int[] faces)
-    {
-        if (_reelSpin != null)
-            StopCoroutine(_reelSpin);
-        _reelSpin = isActiveAndEnabled ? StartCoroutine(Spin(faces)) : null;
-        if (_reelSpin == null)
-            ShowReels(faces);
-    }
-
-    /// <summary>The reels' spin: every reel cycles, the first stops after <see cref="ReelSpinSeconds"/>, each next one a beat later.</summary>
-    private IEnumerator Spin(int[] faces)
-    {
-        float start = Time.unscaledTime;
-        var shown = new int[faces.Length];
-        int turn = 0;
-        while (true)
-        {
-            float t = Time.unscaledTime - start;
-            bool done = true;
-            for (int i = 0; i < shown.Length; i++)
-            {
-                bool stopped = t >= ReelSpinSeconds + i * ReelStopGap;
-                shown[i] = stopped ? faces[i] : (turn + i * 2) % ReelSymbols.Length;
-                done &= stopped;
-            }
-            ShowReels(shown);
-            if (done)
-                break;
-            turn++;
-            yield return new WaitForSecondsRealtime(ReelFrameSeconds);
-        }
-        _reelSpin = null;
-    }
-
-    /// <summary>Shows <paramref name="faces"/> on the reels (a reel without a face keeps its sprite).</summary>
-    private void ShowReels(int[] faces)
-    {
-        for (int i = 0; i < slotReelFaces.Length && i < faces.Length; i++)
-        {
-            Sprite symbol = Kit(ReelSymbols[faces[i]]);
-            if (slotReelFaces[i] != null && symbol != null)
-                slotReelFaces[i].sprite = symbol;
-        }
+        slotMachine.Show(world, spinCost, outcomeIds,
+                         $"Spin for {spinCost} {UiText.Currency(UiText.WalletForm.Inline)}. Try your luck for tomorrow's shift.",
+                         onSpin, ShowWallet);
     }
 
     /// <summary>Slot continue clicked: close and move to the sleep prompt.</summary>
     private void HandleSlotContinueClicked()
     {
+        if (slotMachine != null)
+            slotMachine.Finish();
+
         if (slotPanel != null)
             slotPanel.SetActive(false);
 
@@ -1009,11 +939,6 @@ public sealed class HomeUIController : MonoBehaviour
     private const float RowButtonFontSize = 19f;
     private static readonly Color RowDetailInk = new Color(0.42f, 0.36f, 0.33f, 1f);
     private static readonly Color RowButtonFill = new Color(0.95f, 0.95f, 0.95f, 1f);
-
-    // The reels' spin (seconds).
-    private const float ReelSpinSeconds = 0.6f;
-    private const float ReelStopGap = 0.25f;
-    private const float ReelFrameSeconds = 0.06f;
 
     // The House's layout (reference px) and colours: the kit's cards under dark ink (sheet 03).
     private const float HouseHeadHeight = 44f;

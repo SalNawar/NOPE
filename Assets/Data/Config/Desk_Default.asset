@@ -21,7 +21,7 @@ MonoBehaviour:
   cloneResolution: {x: 1024, y: 768}
   cloneBrightness: 1
   cloneFill: 0.92
-  scanSeconds: 1.5
+  scanSeconds: 0.8
   scanHintKey: desk.scanHint
   scanHintUntilDay: 5
   paperSize: {x: 0.26, y: 0.34}

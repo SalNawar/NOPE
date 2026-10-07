@@ -154,6 +154,7 @@ public static class NarrativeWorkbook
         AddMail(b, sheet);
         AddPaper(b, sheet);
         AddGuide(b, sheet);
+        AddLore(b, sheet);
 
         foreach (int r in b.Rows("historyRules"))
         {
@@ -195,6 +196,11 @@ public static class NarrativeWorkbook
 
         foreach ((string field, string note) in new[] { ("name", "the name on their papers"), ("intro", "the desk's opener for them (blank: the interview's)"), ("recordNote", "the note on their record"), ("dialog", "the dialog offered while they are at the desk (blank: none)") })
             sheet.Field(b, id, who, "at the desk", "premade", "premades", p, field, string.Empty, note);
+
+        int fileLine = 0;
+        foreach (int r in b.Rows("lorePremadeLines").Where(r => b.Get("lorePremadeLines", r, "lorePremade") == id))
+            sheet.Field(b, id, who, "their Citizen record's FILE", "citizen file", "lorePremadeLines", r, "text", string.Empty,
+                        "one line; a famous traveller's: real facts only, contested claims as \"Archive sources claim ...\"", $"file line {++fileLine}");
 
         foreach (int r in appearances)
             AddAppearance(b, sheet, id, who, r);
@@ -331,6 +337,35 @@ public static class NarrativeWorkbook
                 sheet.Field(b, id, who, when, part, "guidePages", r, field, string.Empty, string.Empty);
             if (b.Get("guidePages", r, "practice.text").Length > 0)
                 sheet.Field(b, id, who, when + ", on the first traveller who carries it (days 2-7)", part, "guidePages", r, "practice.text", string.Empty, string.Empty, "practice");
+        }
+    }
+
+    /// <summary>
+    /// The citizen file (the scanner app spec §3): every template of a random
+    /// traveller's FILE (who it describes: kinds, personality, traits, the
+    /// fault a clue agrees with) and every thread a recurring traveller's file
+    /// grows; the premades' own lines are in their blocks.
+    /// </summary>
+    private static void AddLore(Book b, SheetWriter sheet)
+    {
+        const string id = "lore", who = "The citizen file";
+        if (!b.Has("loreTemplates", "text"))
+            return;
+        sheet.Section(id, who, "every Citizen record's FILE: a random traveller's lines drawn from these by kind, personality and traits, seeded per run; a clue only for the case's real fault",
+                      "{slots}: see the content workbook's README (loreTemplates.text); a thread per earlier visit");
+        foreach (int r in b.Rows("loreTemplates"))
+        {
+            string kinds = b.Get("loreTemplates", r, "kinds"), personality = b.Get("loreTemplates", r, "personality");
+            string traits = b.Get("loreTemplates", r, "traits"), clue = b.Get("loreTemplates", r, "clue");
+            string when = (kinds.Length > 0 ? kinds : "any kind") + (personality.Length > 0 ? " · " + personality : string.Empty) +
+                          (traits.Length > 0 ? " · " + traits : string.Empty) + (clue.Length > 0 ? " · a clue to " + clue : string.Empty);
+            sheet.Field(b, id, who, when, clue.Length > 0 ? "clue" : "flavour", "loreTemplates", r, "text", string.Empty, string.Empty, "template " + b.Get("loreTemplates", r, "id"));
+        }
+        foreach (int r in b.Rows("loreThreads"))
+        {
+            string verdict = b.Get("loreThreads", r, "verdict");
+            sheet.Field(b, id, who, "a recurring traveller, an earlier verdict: " + (verdict.Length > 0 ? verdict : "any without its own line"), "thread", "loreThreads", r, "text",
+                        string.Empty, string.Empty, "thread " + b.Get("loreThreads", r, "id"));
         }
     }
 

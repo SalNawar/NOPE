@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
@@ -123,127 +126,238 @@ public class MotionTests
             Stretch s = SquashStretch.Preserve(a);
             Assert.AreEqual(1f, s.Along * s.Across, 1e-5f, $"stretch {a}");
         }
-        Stretch squash = SquashStretch.Squash(0.2f);
-        Assert.AreEqual(0.8f, squash.Along, 1e-5f);
-        Assert.AreEqual(1f, squash.Along * squash.Across, 1e-5f);
-        Stretch fast = SquashStretch.FromSpeed(-1e6f, 0.001f, 0.3f);
+        Stretch fast = SquashStretch.FromMotion(-1e6f, 0f, 0.001f, 0f, 0.3f);
         Assert.AreEqual(1.3f, fast.Along, 1e-5f, "capped at 1 + max, whichever way it travels");
         Assert.AreEqual(1f, fast.Along * fast.Across, 1e-5f);
-        Assert.AreEqual(1f, SquashStretch.FromSpeed(0f, 0.001f, 0.3f).Along);
         Assert.AreEqual(1f, SquashStretch.Preserve(0f).Along, "a non-positive stretch is none");
     }
 
-    /// <summary>Steps <paramref name="m"/> for <paramref name="seconds"/> at 120 fps, returning the extremes of ScaleX, ScaleY and OffsetX.</summary>
-    private static (float minX, float maxX, float minY, float maxY, float minO, float maxO) Play(ControlMotion m, float seconds)
+    private const float W = 300f, H = 44f;
+
+    /// <summary>A control with the kit's room on every side.</summary>
+    private static ControlMotion Control()
     {
-        float minX = m.ScaleX, maxX = m.ScaleX, minY = m.ScaleY, maxY = m.ScaleY, minO = m.OffsetX, maxO = m.OffsetX;
-        for (int i = 0; i < seconds * 120f; i++)
+        var m = new ControlMotion();
+        m.SetRoom(Knobs.faceRoom, Knobs.faceRoom, Knobs.faceRoom, Knobs.faceRoom);
+        return m;
+    }
+
+    /// <summary>Steps <paramref name="m"/> for <paramref name="seconds"/> at 240 fps, the face's edges each frame (time, edges).</summary>
+    private static List<(float t, FaceEdges e)> Play(ControlMotion m, float seconds, float w = W, float h = H)
+    {
+        var frames = new List<(float, FaceEdges)>();
+        for (int i = 1; i <= seconds * 240f; i++)
         {
-            m.Step(1f / 120f, Knobs);
-            minX = System.Math.Min(minX, m.ScaleX);
-            maxX = System.Math.Max(maxX, m.ScaleX);
-            minY = System.Math.Min(minY, m.ScaleY);
-            maxY = System.Math.Max(maxY, m.ScaleY);
-            minO = System.Math.Min(minO, m.OffsetX);
-            maxO = System.Math.Max(maxO, m.OffsetX);
+            m.Step(1f / 240f, Knobs);
+            frames.Add((i / 240f, m.Edges(w, h, Knobs)));
         }
-        return (minX, maxX, minY, maxY, minO, maxO);
+        return frames;
     }
 
     [Test]
-    public void Control_HoverPressRelease_LiftsSquashesAndSpringsBackPastRest()
+    public void Control_Hover_LiftsTheFaceAPixelOrTwo_NoGrowth()
     {
-        var m = new ControlMotion();
+        var m = Control();
         m.Hover(true, Knobs, MotionAmount.Full);
-        Play(m, 2f);
-        Assert.AreEqual(Knobs.hoverScale, m.ScaleX, 1e-3f, "hover lifts");
-        Assert.IsFalse(m.Moving, "and settles");
+        var f = Play(m, 1f);
+        FaceEdges e = f[f.Count - 1].e;
+        Assert.AreEqual(Knobs.hoverLift, e.Top, 0.05f, "the face's top lifts");
+        Assert.AreEqual(0f, e.Bottom, 1e-4f, "its bottom stays");
+        Assert.LessOrEqual(e.Left, 0f, "no sideways growth: a taller face is narrower by the area's rule");
+        Assert.LessOrEqual(Knobs.hoverLift, 2f);
+        Assert.GreaterOrEqual(Knobs.hoverLift, 1f);
+    }
 
+    [Test]
+    public void Control_Press_GoesDownIntoTheBezelInAbout90ms_AndDarkens()
+    {
+        var m = Control();
         m.Press(Knobs, MotionAmount.Full);
-        Play(m, 1f);
-        Assert.AreEqual(Knobs.pressScaleX, m.ScaleX, 1e-3f, "pressed: wider");
-        Assert.AreEqual(Knobs.pressScaleY, m.ScaleY, 1e-3f, "pressed: shorter");
+        var f = Play(m, 0.5f);
+        float at90 = f.Find(x => x.t >= 0.09f).e.Top;
+        Assert.LessOrEqual(at90, -0.9f * Knobs.pressDepth, "most of the way down by 90 ms");
+        float at45 = f.Find(x => x.t >= 0.045f).e.Top;
+        Assert.Greater(at45, -0.95f * Knobs.pressDepth, "not a snap: still going at 45 ms");
+        FaceEdges e = f[f.Count - 1].e;
+        Assert.AreEqual(-Knobs.pressDepth, e.Top, 0.05f, "its top pushed down 2-3 px");
+        Assert.AreEqual(0f, e.Bottom, 1e-4f, "its bottom stays in the bezel");
+        Assert.AreEqual(Knobs.pressDarken, e.Darken, 0.01f, "darkened");
+        Assert.LessOrEqual(e.Right, Knobs.faceRoom + 1e-4f);
+    }
 
+    [Test]
+    public void Control_Release_SpringsBackPastRest_InTwoOrThreeDecayingWobbles_Over350To450ms()
+    {
+        var m = Control();
+        m.Press(Knobs, MotionAmount.Full);
+        Play(m, 0.5f);
         m.Release(Knobs, MotionAmount.Full);
-        var r = Play(m, 2f);
-        Assert.Greater(r.maxY, Knobs.hoverScale + 0.02f, "the release springs up past the hover lift");
-        Assert.Less(r.minX, Knobs.hoverScale - 0.01f, "and narrows past it: jelly");
-        Assert.AreEqual(Knobs.hoverScale, m.ScaleY, 1e-3f, "then settles on the lift");
+        var f = Play(m, 1.2f);
+        // Wobbles: the top's crossings of rest, and their peaks, while visible (a tenth of a pixel or more).
+        int crossings = 0;
+        float lastPeak = float.MaxValue;
+        bool decaying = true;
+        float sign = Math.Sign(f[0].e.Top), peak = 0f, settledAt = 0f;
+        foreach ((float t, FaceEdges e) in f)
+        {
+            if (Math.Abs(e.Top) >= 0.1f)
+                settledAt = t;
+            if (Math.Sign(e.Top) != sign && Math.Sign(e.Top) != 0)
+            {
+                if (peak >= 0.1f)
+                {
+                    crossings++;
+                    decaying &= peak < lastPeak;
+                    lastPeak = peak;
+                }
+                sign = Math.Sign(e.Top);
+                peak = 0f;
+            }
+            peak = Math.Max(peak, Math.Abs(e.Top));
+        }
+        Assert.GreaterOrEqual(crossings, 2, "at least two visible wobbles");
+        Assert.LessOrEqual(crossings, 4, "and not an endless jelly");
+        Assert.IsTrue(decaying, "each smaller than the last");
+        Assert.Greater(settledAt, 0.3f, "not a quick snap");
+        Assert.Less(settledAt, 0.5f, "settled (within a tenth of a pixel) by about 400 ms");
+        Assert.LessOrEqual(f.Max(x => x.e.Top), Knobs.faceRoom + 1e-4f, "the overshoot stays in the room");
+        Assert.AreEqual(0f, f[f.Count - 1].e.Darken, 1e-3f, "the darkening goes");
+    }
+
+    [Test]
+    public void Control_Confirm_PopsTheTopUpAndBack_NoSidewaysGrowthPastTheRoom()
+    {
+        var m = Control();
+        m.Confirm(Knobs, MotionAmount.Full);
+        var f = Play(m, 1.5f);
+        Assert.AreEqual(Math.Min(Knobs.popLift, Knobs.faceRoom), f.Max(x => x.e.Top), 0.15f, "up by the pop");
+        Assert.LessOrEqual(f.Max(x => Math.Max(x.e.Left, x.e.Right)), Knobs.faceRoom + 1e-4f);
+        Assert.AreEqual(0f, f[f.Count - 1].e.Top, 0.01f, "and back");
         Assert.IsFalse(m.Moving);
     }
 
     [Test]
-    public void Control_ReleaseAfterThePointerLeft_SettlesAtRest()
+    public void Control_Refuse_ShakesInsideItsRoom()
     {
         var m = new ControlMotion();
-        m.Hover(true, Knobs, MotionAmount.Full);
-        m.Press(Knobs, MotionAmount.Full);
-        m.Hover(false, Knobs, MotionAmount.Full);
-        Play(m, 0.5f);
-        Assert.AreEqual(Knobs.pressScaleY, m.ScaleY, 1e-3f, "still squashed while held");
-        m.Release(Knobs, MotionAmount.Full);
-        Play(m, 2f);
-        Assert.AreEqual(1f, m.ScaleX, 1e-3f);
-        Assert.AreEqual(1f, m.ScaleY, 1e-3f);
-    }
-
-    [Test]
-    public void Control_Confirm_PopsToItsAmountAndBack()
-    {
-        var m = new ControlMotion();
-        m.Confirm(Knobs, MotionAmount.Full);
-        var r = Play(m, 2f);
-        Assert.AreEqual(1f + Knobs.popAmount, r.maxX, 0.005f, "1.0 to 1.08");
-        Assert.AreEqual(r.maxX, r.maxY, 1e-6f, "evenly");
-        Assert.AreEqual(1f, m.ScaleX, 1e-3f, "and back");
-        Assert.AreEqual(0f, r.maxO, "no shake");
-    }
-
-    [Test]
-    public void Control_Refuse_ShakesSidewaysWithoutPopping()
-    {
-        var m = new ControlMotion();
+        m.SetRoom(Knobs.faceRoom, 0f, Knobs.faceRoom, Knobs.faceRoom); // a neighbour touching its right
         m.Refuse(Knobs, MotionAmount.Full);
-        var r = Play(m, 2f);
-        Assert.AreEqual(Knobs.refuseShake, r.maxO, 0.4f, "out to the shake's size");
-        Assert.Less(r.minO, -1f, "and back past the middle: a no");
-        Assert.AreEqual(1f, r.maxX, 1e-6f, "no pop");
-        Assert.AreEqual(1f, r.maxY, 1e-6f);
-        Assert.AreEqual(0f, m.OffsetX, 0.05f, "settled in the middle");
+        var f = Play(m, 1.5f);
+        Assert.Greater(f.Max(x => x.e.Left), 1f, "it shakes out to the left");
+        Assert.LessOrEqual(f.Max(x => x.e.Right), 0f, "never into the neighbour on its right");
+        Assert.AreEqual(0f, f.Max(x => Math.Abs(x.e.Top)), 1e-4f, "no pop");
     }
 
     [Test]
-    public void Control_ReducedMotion_NeverMovesTheControl()
+    public void Control_ReducedMotion_TheFaceStaysPut_ThePressStillDarkens()
     {
-        var m = new ControlMotion();
+        var m = Control();
         var reduced = new MotionAmount(1f, true);
         m.Hover(true, Knobs, reduced);
         m.Press(Knobs, reduced);
-        m.Release(Knobs, reduced);
         m.Confirm(Knobs, reduced);
         m.Refuse(Knobs, reduced);
+        FaceEdges e = m.Edges(W, H, Knobs);
+        Assert.AreEqual((0f, 0f, 0f, 0f), (e.Left, e.Right, e.Bottom, e.Top));
+        Assert.AreEqual(Knobs.pressDarken, e.Darken, 1e-4f);
         Assert.IsFalse(m.Moving);
-        var r = Play(m, 1f);
-        Assert.AreEqual(1f, r.minX);
-        Assert.AreEqual(1f, r.maxY);
-        Assert.AreEqual(0f, r.maxO);
-        Assert.AreEqual(0f, r.minO);
+        m.Release(Knobs, reduced);
+        Assert.IsTrue(m.AtRestPose);
     }
 
     [Test]
     public void Control_Intensity_ScalesTheAmplitude()
     {
+        var m = Control();
+        m.Press(Knobs, new MotionAmount(0.5f, false));
+        var f = Play(m, 1f);
+        Assert.AreEqual(-Knobs.pressDepth * 0.5f, f[f.Count - 1].e.Top, 0.05f);
+    }
+
+    [Test]
+    public void PullTab_SlidesOut_StretchedAlongItsTravel()
+    {
         var m = new ControlMotion();
-        m.Hover(true, Knobs, new MotionAmount(0.5f, false));
-        Play(m, 2f);
-        Assert.AreEqual(1f + (Knobs.hoverScale - 1f) * 0.5f, m.ScaleX, 1e-3f);
-        var pop = new ControlMotion();
-        pop.Confirm(Knobs, new MotionAmount(0.5f, false));
-        Assert.AreEqual(1f + Knobs.popAmount * 0.5f, Play(pop, 2f).maxX, 0.005f);
-        var none = new ControlMotion();
-        none.Press(Knobs, new MotionAmount(0f, false));
-        Assert.IsFalse(none.Moving, "intensity 0 cuts");
-        Assert.AreEqual(1f, none.ScaleY);
+        m.SetRoom(0f, Knobs.pullHover + Knobs.pullPop + Knobs.faceRoom, Knobs.faceRoom, Knobs.faceRoom); // on the screen's left edge
+        m.SetPull(1, 0);
+        m.Hover(true, Knobs, MotionAmount.Full);
+        var f = Play(m, 1f, 128f, 136f);
+        Assert.AreEqual(Knobs.pullHover, f[f.Count - 1].e.Right, 1f, "out by the hover's slide (less the lifted face's narrowing)");
+        Assert.LessOrEqual(f.Max(x => x.e.Left), 0f, "never past the screen's edge");
+        Assert.GreaterOrEqual(f.Min(x => x.e.Left), -2f, "nor away from it: it is pulled out, its edge stays (only the lift's narrowing)");
+        bool stretched = f.Exists(x => x.e.Right + x.e.Left > 4f && x.e.Top + x.e.Bottom < -4f);
+        Assert.IsTrue(stretched, "on the way: longer along its travel, thinner across");
+    }
+
+    [Test]
+    public void SquashStretch_FromMotion_StretchesBySpeed_SquashesByAcceleration()
+    {
+        Assert.AreEqual(1f, SquashStretch.FromMotion(0f, 0f, 0.001f, 0.001f, 0.25f).Along);
+        Assert.Greater(SquashStretch.FromMotion(200f, 0f, 0.001f, 0.001f, 0.25f).Along, 1.1f, "speed stretches");
+        Assert.Less(SquashStretch.FromMotion(0f, 200f, 0.001f, 0.001f, 0.25f).Along, 0.9f, "acceleration squashes");
+        Stretch capped = SquashStretch.FromMotion(1e6f, 0f, 0.001f, 0.001f, 0.25f);
+        Assert.AreEqual(1.25f, capped.Along, 1e-5f);
+        Assert.AreEqual(1f, capped.Along * capped.Across, 1e-5f, "the area keeps");
+        Assert.AreEqual(0.75f, SquashStretch.FromMotion(0f, -1e6f, 0.001f, 0.001f, 0.25f).Along, 1e-5f);
+    }
+
+    /// <summary>The layouts the kit's controls stand in (canvas px, y up): rows and columns at every spacing the office, the PC and Home use (0 for the bills' Paying / Skip pair), plates, mini plates and segments.</summary>
+    private static IEnumerable<(string name, List<FaceRect> rects)> Layouts()
+    {
+        foreach (float gap in new[] { 0f, 2f, 4f, 6f, 8f, 12f, 16f })
+            foreach ((float w, float h) in new[] { (300f, 44f), (240f, 44f), (160f, 48f), (110f, 40f) })
+            {
+                var row = new List<FaceRect>();
+                for (int i = 0; i < 4; i++)
+                    row.Add(new FaceRect(i * (w + gap), 0f, i * (w + gap) + w, h));
+                yield return ($"row {w}x{h} gap {gap}", row);
+                var grid = new List<FaceRect>();
+                for (int r = 0; r < 3; r++)
+                    for (int c = 0; c < 3; c++)
+                        grid.Add(new FaceRect(c * (w + gap), r * (h + gap), c * (w + gap) + w, r * (h + gap) + h));
+                yield return ($"grid {w}x{h} gap {gap}", grid);
+            }
+    }
+
+    [Test]
+    public void NoAnimatedFace_EverOverlapsANeighboursRestRect()
+    {
+        foreach ((string name, List<FaceRect> rects) in Layouts())
+            for (int i = 0; i < rects.Count; i++)
+            {
+                FaceRect rest = rects[i];
+                var others = new List<FaceRect>(rects);
+                others.RemoveAt(i);
+                ControlRoom.Of(rest, others, Knobs.faceRoom, Knobs.faceRoom, Knobs.faceRoom, Knobs.faceRoom, out float l, out float r, out float b, out float t);
+                foreach (int script in new[] { 0, 1, 2 })
+                {
+                    var m = new ControlMotion();
+                    m.SetRoom(l, r, b, t);
+                    m.Hover(true, Knobs, MotionAmount.Full);
+                    if (script == 0)
+                        m.Press(Knobs, MotionAmount.Full);
+                    if (script == 1)
+                        m.Refuse(Knobs, MotionAmount.Full);
+                    for (int k = 0; k < 240; k++)
+                    {
+                        if (script == 0 && k == 30)
+                        {
+                            m.Release(Knobs, MotionAmount.Full);
+                            m.Confirm(Knobs, MotionAmount.Full);
+                        }
+                        if (script == 2 && k == 10)
+                            m.Confirm(Knobs, MotionAmount.Full);
+                        m.Step(1f / 240f, Knobs);
+                        FaceEdges e = m.Edges(rest.Width, rest.Height, Knobs);
+                        var face = new FaceRect(rest.XMin - e.Left, rest.YMin - e.Bottom, rest.XMax + e.Right, rest.YMax + e.Top);
+                        Assert.IsTrue(e.Left <= Knobs.faceRoom + 1e-4f && e.Right <= Knobs.faceRoom + 1e-4f && e.Bottom <= Knobs.faceRoom + 1e-4f && e.Top <= Knobs.faceRoom + 1e-4f,
+                                      $"{name} #{i}: within the kit's border inset");
+                        foreach (FaceRect n in others)
+                            Assert.IsFalse(BubbleLayout.Overlap(face, n, 0f) && !BubbleLayout.Overlap(rest, n, 0f),
+                                           $"{name} #{i} script {script} frame {k}: the face reaches into a neighbour's rest rect");
+                    }
+                }
+            }
     }
 
     [Test]

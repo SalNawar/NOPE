@@ -14,14 +14,14 @@ using System;
 [Serializable]
 public sealed class MotionKnobs
 {
-    /// <summary>Quick and nearly flat (damping ratio 0.8): a press going down, a stamp's slam.</summary>
+    /// <summary>Heavy desk objects (damping ratio 0.8, nearly flat): a stamp's rebound, the desk's timed moves.</summary>
     public SpringTuning firm = SpringTuning.WithRatio(700f, 0.8f);
 
-    /// <summary>The default (ratio 0.55, about 12 % overshoot): hover, a pill sliding across.</summary>
-    public SpringTuning balanced = SpringTuning.WithRatio(480f, 0.55f);
+    /// <summary>A kit button going down (Saleh 2026-10-07, round 2: "too fast"; ratio 0.6, its peak at about 90 ms) and the hover's lift.</summary>
+    public SpringTuning balanced = SpringTuning.WithRatio(1900f, 0.6f);
 
-    /// <summary>Jelly (ratio 0.3, about a third overshoot): a release, a pop, a "no" shake.</summary>
-    public SpringTuning elastic = SpringTuning.WithRatio(420f, 0.3f);
+    /// <summary>Jelly (ratio 0.28): a release settling over about 400 ms in two or three visible, decaying wobbles (the reel's Elastic toggle), a pop, a "no" shake, everything that travels.</summary>
+    public SpringTuning elastic = SpringTuning.WithRatio(645f, 0.28f);
 
     /// <summary>Slow and soft (ratio 0.62): a paper lifting and settling, the newspaper dropping in.</summary>
     public SpringTuning paper = SpringTuning.WithRatio(160f, 0.62f);
@@ -29,24 +29,42 @@ public sealed class MotionKnobs
     /// <summary>Weighty (ratio 0.85, heavier mass): a window, a panel, the camera's last bit of travel.</summary>
     public SpringTuning heavy = SpringTuning.WithRatio(380f, 0.85f, 1.6f);
 
-    /// <summary>A control's scale under the pointer (the lift; the kit's hover face adds the glint).</summary>
-    public float hoverScale = 1.03f;
+    /// <summary>A dater's stroke going down (ratio 0.95, stiff): about 60 ms to the paper, slowing into it.</summary>
+    public SpringTuning dater = SpringTuning.WithRatio(2600f, 0.95f);
 
-    /// <summary>A control's scale while pressed: wider and shorter (the anticipation squash).</summary>
-    public float pressScaleX = 1.06f, pressScaleY = 0.92f;
+    /// <summary>How far a control's face lifts under the pointer (px; Saleh 2026-10-07, round 2: a 1-2 px lift and the glint, no growth).</summary>
+    public float hoverLift = 1.5f;
 
-    /// <summary>How much a confirmed click pops the control (1.0 to 1 + this and back).</summary>
-    public float popAmount = 0.08f;
+    /// <summary>How far a press pushes the face down into its bezel (px): its top comes down, its bottom stays.</summary>
+    public float pressDepth = 2.5f;
 
-    /// <summary>How far a click on a disabled control shakes it sideways (px): a short "no".</summary>
-    public float refuseShake = 7f;
+    /// <summary>How much a pressed face darkens (0 to 1).</summary>
+    public float pressDarken = 0.14f;
 
-    /// <summary>The feel of the press going down, the release springing back, the hover lift, the click's pop and the "no" shake.</summary>
-    public MotionFeel pressFeel = MotionFeel.Firm, releaseFeel = MotionFeel.Elastic, hoverFeel = MotionFeel.Balanced,
-                      popFeel = MotionFeel.Balanced, refuseFeel = MotionFeel.Elastic;
+    /// <summary>How far a confirmed click pops the face's top up before it wobbles back (px).</summary>
+    public float popLift = 2f;
+
+    /// <summary>How far a click on a disabled control shakes its face sideways (px): a short "no", inside its room.</summary>
+    public float refuseShake = 3f;
+
+    /// <summary>The most a face may grow past its rest rect on any side (px: the kit's border inset), and never into a neighbour's rest rect (ControlRoom).</summary>
+    public float faceRoom = 3f;
+
+    /// <summary>How far a screen-edge pull tab slides out under the pointer (px), and pops out on a click.</summary>
+    public float pullHover = 12f, pullPop = 8f;
+
+    /// <summary>A pull tab's stretch along its slide per px/s and its squash per px/s² (its slide is short, so it stretches harder than a long traveller), at most maxStretch.</summary>
+    public float pullStretchPerSpeed = 0.0006f, pullSquashPerAccel = 0.000006f;
+
+    /// <summary>The feel of the press going down, the release springing back, the hover lift, the click's pop and the "no" shake (one tuning for every kit button).</summary>
+    public MotionFeel pressFeel = MotionFeel.Balanced, releaseFeel = MotionFeel.Elastic, hoverFeel = MotionFeel.Balanced,
+                      popFeel = MotionFeel.Elastic, refuseFeel = MotionFeel.Elastic;
 
     /// <summary>The scale a popup (a tooltip, a toast, a window, a wheel's pill) grows from as it opens; it shrinks back to it as it closes.</summary>
     public float appearFromScale = 0.6f;
+
+    /// <summary>The most a popup or a panel grows past its rest size on either axis as it overshoots or stretches (px): a big window grows by little, a pill by up to its share.</summary>
+    public float appearGrowMax = 24f;
 
     /// <summary>How far a sliding piece (a toast, a ribbon, the newspaper) comes in from (px).</summary>
     public float slideDistance = 80f;
@@ -57,11 +75,19 @@ public sealed class MotionKnobs
     /// <summary>How many lines a second a printed slip (the citation) shows as it prints.</summary>
     public float printLinesPerSecond = 10f;
 
-    /// <summary>The feel of a popup opening, a slide coming in and a sliding selection pill.</summary>
-    public MotionFeel appearFeel = MotionFeel.Balanced, slideFeel = MotionFeel.Elastic, pillFeel = MotionFeel.Balanced;
+    /// <summary>The feel of a popup opening, a slide coming in and a sliding selection pill (Elastic: it overshoots and wobbles into place).</summary>
+    public MotionFeel appearFeel = MotionFeel.Elastic, slideFeel = MotionFeel.Elastic, pillFeel = MotionFeel.Elastic;
 
-    /// <summary>A selection pill's stretch along its travel per px/s of speed, and its most (0.3: 30 % longer, thinner by the area's rule).</summary>
-    public float stretchPerSpeed = 0.00035f, maxStretch = 0.3f;
+    /// <summary>
+    /// What travels stretches along its travel by its speed and squashes by its
+    /// acceleration (the launch's anticipation, the arrival, each turn of the
+    /// wobble), keeping its area (SquashStretch.FromMotion): per px/s, per px/s²,
+    /// and the most either way (0.25: 25 % longer or shorter).
+    /// </summary>
+    public float stretchPerSpeed = 0.00012f, squashPerAccel = 0.0000012f, maxStretch = 0.25f;
+
+    /// <summary>The desk's travelling objects' stretch (the stamp bar sliding out and back): per metre per second and their squash per metre per second², at most maxStretch.</summary>
+    public float deskStretchPerSpeed = 0.06f, deskSquashPerAccel = 0.0005f;
 
     /// <summary>The seconds a fade takes in place of a motion under Reduced Motion.</summary>
     public float reducedFadeSeconds = 0.12f;
@@ -85,10 +111,10 @@ public sealed class MotionKnobs
     public float inkBloomSeconds = 0.08f;
 
     /// <summary>The feel of a paper's lift (DeskConfigSO.dragLift high), tilt and drop, and a stamp's rebound.</summary>
-    public MotionFeel paperFeel = MotionFeel.Paper, stampFeel = MotionFeel.Balanced;
+    public MotionFeel paperFeel = MotionFeel.Paper, stampFeel = MotionFeel.Firm;
 
     /// <summary>The curve of the desk's timed moves (a paper's slide and change of size, a stamp's way back to the rack, the stamp bar): their seconds stay the desk's knobs, their shape this feel's (SpringCurve).</summary>
-    public MotionFeel deskMoveFeel = MotionFeel.Balanced;
+    public MotionFeel deskMoveFeel = MotionFeel.Firm;
 
     /// <summary>The curve of the desk camera's blend (the reading view, the PC zoom): a heavy settle with a slight overshoot.</summary>
     public MotionFeel cameraFeel = MotionFeel.Heavy;
@@ -108,6 +134,33 @@ public sealed class MotionKnobs
     /// <summary>The camera impulses' seconds: a slam's bump, a citation's, a breach's rumble.</summary>
     public float shakeStampSeconds = 0.18f, shakeCitationSeconds = 0.3f, shakeBreachSeconds = 0.9f;
 
+    /// <summary>How far a dater's body sinks over its frame once the frame stands on the paper (metres): the self-inker's stroke.</summary>
+    public float daterCompress = 0.012f;
+
+    /// <summary>A dater held down: how long a click on a hanging dater waits before its stroke goes down and holds (seconds; a drag starting sooner carries it instead), and the least time a quick stroke stays down.</summary>
+    public float daterHoldDelay = 0.12f, daterQuickHold = 0.07f;
+
+    /// <summary>The seconds between two ratchet clicks of the date wheels' morning roll.</summary>
+    public float daterWheelClick = 0.07f;
+
+    /// <summary>How hard an approval's portal spin-up hits as the papers go back (FeelDirector.Hit's strength, 0 to 1), and the DETAIN button's press (a dater's impression is the stamp's own punch, FeelHit.Stamp).</summary>
+    public float approveHit = 0.3f, detainHit = 0.5f;
+
+    /// <summary>The feel of a dater's stroke down, of its release springing up (an overshoot) and of a date wheel's click.</summary>
+    public MotionFeel daterFeel = MotionFeel.Dater, daterReleaseFeel = MotionFeel.Elastic, wheelFeel = MotionFeel.Firm;
+
+    /// <summary>The DETAIN button on the desk (the desk machine spec §2): how far its safety cover swings up on its hinge (degrees), how long it stays open unused before it closes by itself (seconds), and how deep the mushroom button presses (metres).</summary>
+    public float detainCoverAngle = 105f, detainCoverSeconds = 4f, detainPress = 0.01f;
+
+    /// <summary>How long the DETAIN button stays down after a press before it springs back up (seconds).</summary>
+    public float detainPressSeconds = 0.18f;
+
+    /// <summary>The feel of the DETAIN cover's spring hinge, of the button's press and of its spring back up.</summary>
+    public MotionFeel detainCoverFeel = MotionFeel.Elastic, detainPressFeel = MotionFeel.Firm, detainReleaseFeel = MotionFeel.Elastic;
+
+    /// <summary>The Night Slots machine's spin, payout and lever (SlotSpinSchedule, SlotLever, SlotMachineView).</summary>
+    public SlotSpinKnobs slots = new SlotSpinKnobs();
+
     /// <summary>A spring settles (stops and leaves the motion driver) within this of its target and slower than settleSpeed.</summary>
     public float settleValue = 0.0005f, settleSpeed = 0.005f;
 
@@ -124,6 +177,8 @@ public sealed class MotionKnobs
                 return paper;
             case MotionFeel.Heavy:
                 return heavy;
+            case MotionFeel.Dater:
+                return dater;
             default:
                 return balanced;
         }
@@ -157,7 +212,4 @@ public readonly struct MotionAmount
 
     /// <summary>True when nothing moves (Reduced Motion, or intensity 0): motions cut.</summary>
     public bool Still => Share <= 0f;
-
-    /// <summary>A scale factor <paramref name="factor"/> scaled down toward 1 by the share (1.08 at half intensity is 1.04).</summary>
-    public float Scale(float factor) => 1f + (factor - 1f) * Share;
 }

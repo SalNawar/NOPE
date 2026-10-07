@@ -80,5 +80,84 @@ MonoBehaviour:
       frame: 7
       accent: '#0F6E7A'
       paper: '#E6EEF2'
-      aspect: 1.586
+      aspect: 1.75055
       scale: 0.36
+      art:
+        corner: 0.02917
+        ink: '#1B3442'
+        labelInk: '#274B5D'
+        valueShare: 0.62
+        labelShare: 0.82
+        reading: 1.6
+        fields:
+        - field: 0
+          value:
+            x0: 0.5825
+            y0: 0.44201
+            x1: 0.895
+            y1: 0.5062
+          label:
+            x0: 0.48583
+            y0: 0.44493
+            x1: 0.575
+            y1: 0.48286
+          relabel: 0
+          centre: 0
+        - field: 1
+          value:
+            x0: 0.675
+            y0: 0.53538
+            x1: 0.85
+            y1: 0.60029
+          label:
+            x0: 0.48583
+            y0: 0.53756
+            x1: 0.6725
+            y1: 0.57622
+          relabel: 0
+          centre: 0
+        - field: 2
+          value:
+            x0: 0.675
+            y0: 0.62874
+            x1: 0.7525
+            y1: 0.69292
+          label:
+            x0: 0.48583
+            y0: 0.6302
+            x1: 0.6175
+            y1: 0.66885
+          relabel: 1
+          centre: 0
+        - field: 3
+          value:
+            x0: 0.235
+            y0: 0.64333
+            x1: 0.325
+            y1: 0.80088
+          label:
+            x0: 0
+            y0: 0
+            x1: 0
+            y1: 0
+          relabel: 0
+          centre: 0
+        prints: []
+        photo:
+          x0: 0.055
+          y0: 0.1488
+          x1: 0.30792
+          y1: 0.77899
+        stamp:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
+        stampInk: 
+        stampCaption: 
+        covers: []
+        spine:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0

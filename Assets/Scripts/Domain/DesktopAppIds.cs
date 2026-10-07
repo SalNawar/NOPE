@@ -35,6 +35,6 @@ public static class DesktopAppIds
     /// <summary>Settings.</summary>
     public const string Settings = "settings";
 
-    /// <summary>The eight ids in the desktop's default order (Arrange lays them out in it; the Start menu lists them in it): Portals after the case it serves, Orders after the account it spends from.</summary>
-    public static readonly IReadOnlyList<string> DefaultOrder = new[] { Investigation, Portals, Internet, Mail, CitizenAccount, Orders, Notes, Settings };
+    /// <summary>The eight ids in the desktop's default order (Arrange lays them out in it; the Start menu lists them in it; the orchestrator's order of 2026-10-07): the case's app, Mail and Notes first, then Portals, the Internet, the account and the Orders that spend from it, Settings last.</summary>
+    public static readonly IReadOnlyList<string> DefaultOrder = new[] { Investigation, Mail, Notes, Portals, Internet, CitizenAccount, Orders, Settings };
 }

@@ -21,7 +21,10 @@ public enum MotionFeel
     Paper,
 
     /// <summary>Weighty and barely overshooting: a panel, a window, the camera.</summary>
-    Heavy
+    Heavy,
+
+    /// <summary>A dater's stroke going down (the desk machine spec §1): stiff, nearly critical, so the body slows into the paper as if against a building spring.</summary>
+    Dater
 }
 
 /// <summary>
@@ -177,6 +180,9 @@ public struct Spring
             return false;
         return true;
     }
+
+    /// <summary>Its acceleration now under <paramref name="tuning"/> (units per second²): the spring's pull on its displacement less its damping.</summary>
+    public float Acceleration(SpringTuning tuning) => (-tuning.stiffness * (Value - Target) - tuning.damping * Velocity) / tuning.SafeMass;
 
     /// <summary>Snaps onto the target and stops when within <paramref name="valueTolerance"/> of it and slower than <paramref name="speedTolerance"/>; true when it did (or already rested).</summary>
     public bool Settle(float valueTolerance, float speedTolerance)

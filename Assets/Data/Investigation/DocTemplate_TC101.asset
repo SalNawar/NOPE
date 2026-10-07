@@ -151,5 +151,168 @@ MonoBehaviour:
       frame: 6
       accent: '#23305E'
       paper: '#F3EEDF'
-      aspect: 0.66
+      aspect: 0.65435
       scale: 0.64
+      art:
+        corner: 0.01452
+        ink: '#1B2B45'
+        labelInk: '#1F3F62'
+        valueShare: 0.56
+        labelShare: 0.6
+        reading: 1.3
+        fields:
+        - field: 0
+          value:
+            x0: 0.5
+            y0: 0.63245
+            x1: 0.87016
+            y1: 0.66095
+          label:
+            x0: 0.49597
+            y0: 0.61847
+            x1: 0.675
+            y1: 0.63113
+          relabel: 0
+          centre: 0
+        - field: 1
+          value:
+            x0: 0.5
+            y0: 0.68628
+            x1: 0.6621
+            y1: 0.71478
+          label:
+            x0: 0.49718
+            y0: 0.6715
+            x1: 0.57258
+            y1: 0.68417
+          relabel: 0
+          centre: 0
+        - field: 2
+          value:
+            x0: 0.67661
+            y0: 0.68628
+            x1: 0.87016
+            y1: 0.71478
+          label:
+            x0: 0.67419
+            y0: 0.6715
+            x1: 0.77984
+            y1: 0.68417
+          relabel: 0
+          centre: 0
+        - field: 3
+          value:
+            x0: 0.67661
+            y0: 0.73879
+            x1: 0.87016
+            y1: 0.76649
+          label:
+            x0: 0.67419
+            y0: 0.72427
+            x1: 0.80887
+            y1: 0.73747
+          relabel: 0
+          centre: 0
+        - field: 4
+          value:
+            x0: 0.5
+            y0: 0.79129
+            x1: 0.6621
+            y1: 0.82348
+          label:
+            x0: 0.49718
+            y0: 0.77678
+            x1: 0.60081
+            y1: 0.78997
+          relabel: 0
+          centre: 0
+        - field: 5
+          value:
+            x0: 0.67661
+            y0: 0.79129
+            x1: 0.87016
+            y1: 0.82348
+          label:
+            x0: 0.67419
+            y0: 0.77678
+            x1: 0.7629
+            y1: 0.78997
+          relabel: 0
+          centre: 0
+        - field: 6
+          value:
+            x0: 0.74597
+            y0: 0.8438
+            x1: 0.83468
+            y1: 0.90211
+          label:
+            x0: 0
+            y0: 0
+            x1: 0
+            y1: 0
+          relabel: 0
+          centre: 0
+        - field: 7
+          value:
+            x0: 0.08871
+            y0: 0.62982
+            x1: 0.35968
+            y1: 0.85145
+          label:
+            x0: 0
+            y0: 0
+            x1: 0
+            y1: 0
+          relabel: 0
+          centre: 0
+        prints:
+        - kind: 2
+          field: -1
+          text: 
+          rect:
+            x0: 0.5
+            y0: 0.73879
+            x1: 0.6621
+            y1: 0.76649
+        - kind: 1
+          field: 0
+          text: 
+          rect:
+            x0: 0.5
+            y0: 0.84828
+            x1: 0.73226
+            y1: 0.90264
+        photo:
+          x0: 0
+          y0: 0
+          x1: 0
+          y1: 0
+        stamp:
+          x0: 0.08871
+          y0: 0.12823
+          x1: 0.91129
+          y1: 0.41847
+        stampInk: '#8A2F3B'
+        stampCaption: "ENTRY VISA \u00B7 VISAS D'ENTR\u00C9E"
+        covers:
+        - x0: 0
+          y0: 0
+          x1: 1
+          y1: 0.01055
+        - x0: 0
+          y0: 0.98945
+          x1: 1
+          y1: 1
+        - x0: 0
+          y0: 0.01055
+          x1: 0.01613
+          y1: 0.98945
+        - x0: 0.98387
+          y0: 0.01055
+          x1: 1
+          y1: 0.98945
+        spine:
+          x0: 0.01613
+          y0: 0.49736
+          x1: 0.98387
+          y1: 0.50264

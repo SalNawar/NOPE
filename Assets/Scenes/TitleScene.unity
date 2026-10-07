@@ -1074,6 +1074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &359519626
 GameObject:
   m_ObjectHideFlags: 0
@@ -2228,6 +2229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &680953973
 GameObject:
   m_ObjectHideFlags: 0
@@ -2554,6 +2556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &800623672
 GameObject:
   m_ObjectHideFlags: 0
@@ -2942,6 +2945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &832905806
 GameObject:
   m_ObjectHideFlags: 0
@@ -4100,6 +4104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &1116344259
 GameObject:
   m_ObjectHideFlags: 0
@@ -4625,6 +4630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &1382115337
 GameObject:
   m_ObjectHideFlags: 0
@@ -4760,6 +4766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &1388762401
 GameObject:
   m_ObjectHideFlags: 0
@@ -5836,6 +5843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &1580224397
 GameObject:
   m_ObjectHideFlags: 0
@@ -6535,6 +6543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97704a4fb68443b0bea520e1ade63969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiJuice
+  pull: {x: 0, y: 0}
 --- !u!1 &1764294173
 GameObject:
   m_ObjectHideFlags: 0

@@ -86,6 +86,80 @@ public sealed class TmpFormText : ITextMeasure
             target.fontSharedMaterial = _material;
     }
 
+    /// <summary>
+    /// Puts <paramref name="text"/> (styled for <paramref name="item"/>'s role
+    /// by Style) in the look of a document drawn on its art
+    /// (<paramref name="art"/>; the Canva documents): a value or a hand in
+    /// <paramref name="style"/>'s art value font, a printed label or caption in
+    /// its art label font (each in the font's own material), in the art's inks
+    /// (ArtInk), centred down its place (at its left, or across it for a centred
+    /// item), and at the largest share of the size it was styled at, down
+    /// to ArtLayout.FitFloor, at which it fits its place, words wrapping onto
+    /// a second line before it shrinks further (ArtFit, measured on
+    /// <paramref name="measure"/> at the layout's units: a world-space text a
+    /// few millimetres tall measures taller than it draws). The desk paper and
+    /// the PC's copy print every text on the art through it.
+    /// </summary>
+    public static void OnArt(TMP_Text text, FormItem item, FormStyleSO style, FormArt art, TMP_Text measure)
+    {
+        bool label = item.Role == FormTextRole.Label || item.Role == FormTextRole.Caption;
+        TMP_FontAsset font = style == null ? null : label ? style.artLabelFont : style.artValueFont;
+        if (font != null && text.font != font)
+        {
+            text.font = font;
+            text.fontSharedMaterial = font.material;
+        }
+        text.fontSize *= ArtFit(measure, item, font);
+        text.enableAutoSizing = false;
+        text.alignment = item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Center : TextAlignmentOptions.Left;
+        text.color = ArtInk(art, item.Role, style);
+    }
+
+    /// <summary>The steps ArtFit tries between the floor and the full size.</summary>
+    private const int FitSteps = 8;
+
+    /// <summary>The largest share of <paramref name="item"/>'s size, from 1 down to ArtLayout.FitFloor (the floor when none fits), at which its words in <paramref name="font"/> (null: the measure's own), wrapped at its place's width, are no taller than its place, measured on <paramref name="measure"/> in the item's units (its font put back after; its style is the last tried).</summary>
+    public static float ArtFit(TMP_Text measure, FormItem item, TMP_FontAsset font)
+    {
+        if (measure == null || string.IsNullOrEmpty(item.Text))
+            return 1f;
+        TMP_FontAsset own = measure.font;
+        Material ownMaterial = measure.fontSharedMaterial;
+        if (font != null && own != font)
+        {
+            measure.font = font;
+            measure.fontSharedMaterial = font.material;
+        }
+        float fit = ArtLayout.FitFloor;
+        for (int i = 0; i <= FitSteps; i++)
+        {
+            float share = 1f - (1f - ArtLayout.FitFloor) * i / FitSteps;
+            Style(measure, item.Role, item.Size * share);
+            Vector2 need = measure.GetPreferredValues(item.Text, item.Rect.Width, float.PositiveInfinity);
+            if (need.y <= item.Rect.Height * 1.02f && need.x <= item.Rect.Width * 1.02f)
+            {
+                fit = share;
+                break;
+            }
+        }
+        if (measure.font != own)
+        {
+            measure.font = own;
+            measure.fontSharedMaterial = ownMaterial;
+        }
+        return fit;
+    }
+
+    /// <summary>The ink a text of <paramref name="role"/> prints in on <paramref name="art"/>: a caption in its stamp ink (the visa box's), a label or a caption without one in its label ink, any other in its value ink, each the style's (FormStyleSO.Ink) when the art names none.</summary>
+    public static Color ArtInk(FormArt art, FormTextRole role, FormStyleSO style)
+    {
+        bool label = role == FormTextRole.Label || role == FormTextRole.Caption;
+        string hex = art == null ? null : role == FormTextRole.Caption && !string.IsNullOrEmpty(art.stampInk) ? art.stampInk : label ? art.labelInk : art.ink;
+        if (Rgba.TryParseHex(hex, out Rgba ink))
+            return new Color(ink.R, ink.G, ink.B, 1f);
+        return style != null ? style.Ink(role) : Color.black;
+    }
+
     /// <summary>Sets <paramref name="text"/> to a role's type style at a size in its units: bold and small capitals by role, a fixed size, words wrapping, nothing cut.</summary>
     public static void Style(TMP_Text text, FormTextRole role, float size)
     {
@@ -96,6 +170,8 @@ public sealed class TmpFormText : ITextMeasure
             styles |= FontStyles.Bold;
         if (FormTextStyles.IsSmallCaps(role))
             styles |= FontStyles.SmallCaps;
+        if (FormTextStyles.IsItalic(role))
+            styles |= FontStyles.Italic;
         text.fontStyle = styles;
         text.textWrappingMode = TextWrappingModes.Normal;
         text.overflowMode = TextOverflowModes.Overflow;

@@ -371,7 +371,8 @@ public class SerializedEnumsTests
         Assert.AreEqual(3, (int)LookArtFallbackStep.NeighbourNation);
         Assert.AreEqual(4, (int)LookArtFallbackStep.AnyPlace);
         Assert.AreEqual(5, (int)LookArtFallbackStep.NeutralExpression);
-        Assert.AreEqual(6, System.Enum.GetValues(typeof(LookArtFallbackStep)).Length, "a new member is appended here too");
+        Assert.AreEqual(6, (int)LookArtFallbackStep.CivilDress);
+        Assert.AreEqual(7, System.Enum.GetValues(typeof(LookArtFallbackStep)).Length, "a new member is appended here too");
     }
 
     /// <summary>FormFrame: stored in every form asset's look (DocTemplate_*, Form_*; the document design spec, D1).</summary>

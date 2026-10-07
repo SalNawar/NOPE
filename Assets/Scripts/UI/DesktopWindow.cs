@@ -12,6 +12,10 @@ using UnityEngine.UI;
 /// a double-click on the title bar (WindowDrag) toggles it, and a maximised
 /// window does not drag. The restored rect and the maximised state are
 /// remembered while the window lives (the office session; never saved).
+/// The window keeps inside the window layer (KeepInside, RectClamp.Window:
+/// its title bar always reachable): each time it shows and while it is
+/// dragged. Its place is set through UiAppear.Place, so a maximise or a
+/// drag during its open motion lands where it should.
 /// Attach to the window root and wire the title-bar buttons; WindowDrag sits
 /// on the title bar.
 /// </summary>
@@ -109,6 +113,36 @@ public sealed class DesktopWindow : MonoBehaviour
         if (window == null || manager == null)
             return;
 
+        UiAppear.Place(gameObject, SwapMaximised);
+        manager.Focus(this);
+    }
+
+    /// <summary>
+    /// Moves the window inside the window layer (RectClamp.Window): a window
+    /// past an edge comes back just inside, one taller than the layer keeps
+    /// its title bar on the layer's top, so the title bar can always be
+    /// dragged. Runs on the rest place (UiAppear.Place).
+    /// </summary>
+    public void KeepInside()
+    {
+        if (window != null && window.parent is RectTransform)
+            UiAppear.Place(gameObject, ClampToLayer);
+    }
+
+    /// <summary>The clamp itself, on the rest place.</summary>
+    private void ClampToLayer()
+    {
+        Rect bounds = ((RectTransform)window.parent).rect;
+        Rect own = window.rect;
+        Vector3 at = window.localPosition;
+        (float dx, float dy) = RectClamp.Window(new DeskRect(at.x + own.center.x, at.y + own.center.y, own.width, own.height),
+                                                new DeskRect(bounds.center.x, bounds.center.y, bounds.width, bounds.height));
+        window.anchoredPosition += new Vector2(dx, dy);
+    }
+
+    /// <summary>Swaps between the restored rect and the whole layer, remembering the restored one.</summary>
+    private void SwapMaximised()
+    {
         if (!_maximised)
         {
             _restoreMin = window.anchorMin;
@@ -130,7 +164,5 @@ public sealed class DesktopWindow : MonoBehaviour
             window.anchoredPosition = _restorePos;
             _maximised = false;
         }
-
-        manager.Focus(this);
     }
 }

@@ -183,8 +183,8 @@ public readonly struct PetCare
         Played = played;
     }
 
-    /// <summary>Warm tonight: the heating paid and powered.</summary>
-    public bool Warm => Heating && Electricity;
+    /// <summary>Warm tonight: the heating paid (gas or district heat: it needs no electricity; Saleh 2026-10-07, "when you pay for heating you auto pay for electricity too").</summary>
+    public bool Warm => Heating;
 
     /// <summary>The TV on tonight: paid and powered.</summary>
     public bool Watched => Tv && Electricity;
@@ -211,19 +211,24 @@ public readonly struct PetCare
     /// <summary>This care with the toy played or not.</summary>
     public PetCare WithPlay(bool played) => new PetCare(Food, Heating, Electricity, Tv, Medicine, played);
 
+    /// <summary>True when <paramref name="bill"/> can be chosen tonight: the TV only while the electricity is paid (it needs the power); every other bill always.</summary>
+    public bool Offers(HomeBill bill) => bill != HomeBill.Tv || Electricity;
+
     /// <summary>
-    /// The bills panel's toggle of <paramref name="bill"/>: electricity
-    /// powers the heating and the TV, so paying either pays the electricity
-    /// too, and dropping the electricity drops them.
+    /// The bills panel's toggle of <paramref name="bill"/>: that bill alone
+    /// is paid or skipped, nothing is ever paid for the player (Saleh
+    /// 2026-10-07: no hidden auto-pay). The TV needs the power: it cannot be
+    /// chosen while the electricity is skipped (Offers), and skipping the
+    /// electricity moves the TV to Skip, a consequence the panel shows.
     /// </summary>
     public PetCare Toggle(HomeBill bill)
     {
         bool on = !Pays(bill);
+        if (on && !Offers(bill))
+            return this;
         PetCare care = With(bill, on);
-        if (on && (bill == HomeBill.Heating || bill == HomeBill.Tv))
-            care = care.With(HomeBill.Electricity, true);
         if (!on && bill == HomeBill.Electricity)
-            care = care.With(HomeBill.Heating, false).With(HomeBill.Tv, false);
+            care = care.With(HomeBill.Tv, false);
         return care;
     }
 }
@@ -242,7 +247,7 @@ public static class PetRules
 {
     /// <summary>
     /// The needs after tonight's care: hunger to 0 when fed, else a step up;
-    /// cold to 0 when warm (Heating with Electricity), else a step up; boredom
+    /// cold to 0 when warm (the Heating), else a step up; boredom
     /// a step down for the TV (with Electricity) and a step down for a toy
     /// played with, else a step up; sickness a step down with Medicine. Each
     /// between 0 and <paramref name="max"/>.

@@ -47,6 +47,30 @@ public static class CityLookTimeline
         return Math.Min(total, Math.Max(0f, seconds + (toCity ? delta : -delta)));
     }
 
+    /// <summary>
+    /// The city's depth parallax as it comes into view (Saleh 2026-10-07:
+    /// "no parallax when you switch to it"): the share (1..0, eased) of its
+    /// sweep left after the city has shown for <paramref name="shownSeconds"/>
+    /// of a <paramref name="settleSeconds"/> settle: the panorama starts turned
+    /// with the hall and its near roofs sweep further than its sky as it
+    /// settles; 0 once settled or for a settle of no length.
+    /// </summary>
+    public static float Sweep(float shownSeconds, float settleSeconds) =>
+        settleSeconds <= 0f ? 0f : 1f - Ease(shownSeconds / settleSeconds);
+
+    /// <summary>
+    /// Where a vehicle of a traffic lane is along it (0 its start, 1 its end)
+    /// after <paramref name="seconds"/>: from its <paramref name="phase"/>, at
+    /// <paramref name="speed"/> pixels a second over the lane's
+    /// <paramref name="length"/> pixels, wrapping (the hall window's own
+    /// traffic rule, HallCityExterior; the city view draws the same lanes).
+    /// </summary>
+    public static float Travel(float seconds, float phase, float speed, float length)
+    {
+        float along = phase + (length > 0f ? seconds * speed / length : 0f);
+        return along - (float)Math.Floor(along);
+    }
+
     private static float FadeStart(float turnSeconds, float fadeFrom) => turnSeconds * Math.Min(1f, Math.Max(0f, fadeFrom));
 
     /// <summary>Smoothstep of <paramref name="t"/> clamped to 0..1.</summary>

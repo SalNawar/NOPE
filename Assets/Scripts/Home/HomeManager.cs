@@ -134,19 +134,20 @@ public sealed class HomeManager : MonoBehaviour
                             UiText.Format("home.pay", Pet.name), canPay, HandleToggleBill, HandlePay);
     }
 
-    /// <summary>A bill's row: its name, its price and line (and "needs electricity" for the heating and the TV), whether tonight's care pays it (the Paying / Skip pair); the medicine offered only while the pet is unwell.</summary>
+    /// <summary>A bill's row: its name, its price and line, whether tonight's care pays it (the Paying / Skip pair); the medicine offered only while the pet is unwell; the TV's pair greyed with "needs electricity" while the electricity is skipped (PetCare.Offers: it is never paid for the player).</summary>
     private HomeUIController.BillView BillRow(HomeBill bill)
     {
         BillRow row = _lib != null ? _lib.Home.Bill(bill) : null;
         string name = row != null ? row.name : bill.ToString();
         string detail = $"-{HomeEconomy.BillPrice(_world, _lib, bill)} {UiText.Currency(UiText.WalletForm.Short)}";
         bool needless = bill == HomeBill.Medicine && Pet.sickness <= 0;
+        bool unpowered = !_care.Offers(bill);
         string note = needless ? UiText.Format("home.bill.notNeeded", Pet.name)
-            : bill == HomeBill.Heating || bill == HomeBill.Tv ? UiText.Get("home.bill.needsPower")
+            : unpowered ? UiText.Get("home.bill.needsPower")
             : row != null ? row.line : string.Empty;
         if (!string.IsNullOrEmpty(note))
             detail += "  ·  " + note;
-        return new HomeUIController.BillView(bill, name, detail, _care.Pays(bill), !needless);
+        return new HomeUIController.BillView(bill, name, detail, _care.Pays(bill), !needless && !unpowered);
     }
 
     /// <summary>The bills panel's body: the break-in, the fixed costs paid and the wallet, the pet's needs now in words, last night's change and the Welfare Office's notice, then the night's bills' total.</summary>
@@ -198,11 +199,11 @@ public sealed class HomeManager : MonoBehaviour
         return string.Join(separator, lines);
     }
 
-    /// <summary>What the wallet covers, in the careful carer's order (PetPolicy: food, the heating with its power, medicine when unwell; never the TV): the starting choice when the default is more than the wallet, so Pay is never offered beyond it.</summary>
+    /// <summary>What the wallet covers, in the careful carer's order (PetPolicy: food, the heating, medicine when unwell, the electricity; never the TV): the starting choice when the default is more than the wallet, so Pay is never offered beyond it.</summary>
     private PetCare AffordableCare() =>
         PetPolicy.Care(Pet.Needs, _world.money, bill => HomeEconomy.BillPrice(_world, _lib, bill), int.MaxValue, false);
 
-    /// <summary>A bill's row clicked: paid or skipped (electricity going with the heating and the TV, PetCare.Toggle), then the panel again.</summary>
+    /// <summary>A bill's row clicked: that bill alone paid or skipped (PetCare.Toggle: skipping the electricity moves the TV to Skip; nothing is ever paid for the player), then the panel again.</summary>
     private void HandleToggleBill(HomeBill bill)
     {
         if (_paid || (bill == HomeBill.Medicine && Pet.sickness <= 0))
@@ -346,12 +347,22 @@ public sealed class HomeManager : MonoBehaviour
         RefreshHud();
 
         if (homeUI != null && homeUI.HasSlotPanel)
-            homeUI.ShowSlot(_world, _config, HandleSpin, ShowSleep);
+            homeUI.ShowSlot(_world, _config, SlotOutcomeIds(), HandleSpin, ShowSleep);
         else
         {
             Debug.Log("[HomeManager] ShowSlot: no slot panel, skipping to Sleep.");
             ShowSleep();
         }
+    }
+
+    /// <summary>The library's slot outcomes' ids, in order: the reels' symbols (SlotReels' faces index them).</summary>
+    private string[] SlotOutcomeIds()
+    {
+        IReadOnlyList<SlotOutcomeSO> outcomes = _lib != null ? _lib.SlotOutcomes : System.Array.Empty<SlotOutcomeSO>();
+        var ids = new string[outcomes.Count];
+        for (int i = 0; i < ids.Length; i++)
+            ids[i] = outcomes[i] != null ? outcomes[i].id : string.Empty;
+        return ids;
     }
 
     /// <summary>
@@ -370,7 +381,7 @@ public sealed class HomeManager : MonoBehaviour
         if (_world.money < spinCost)
         {
             Debug.Log($"[HomeManager] <<< Exiting HandleSpin — not enough credits ({_world.money} < {spinCost}).");
-            return new HomeUIController.SpinView($"Not enough {UiText.Currency(UiText.WalletForm.Inline)} to spin.");
+            return new HomeUIController.SpinView(SlotMachineView.BrokeLine());
         }
 
         IReadOnlyList<SlotOutcomeSO> outcomes = _lib != null ? _lib.SlotOutcomes : System.Array.Empty<SlotOutcomeSO>();

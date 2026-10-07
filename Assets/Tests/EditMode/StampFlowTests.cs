@@ -77,9 +77,91 @@ public class StampFlowTests
         var flow = new StampFlow();
         flow.ToggleBar();
         flow.Press(DeskStamp.Approved, true, true);
-        flow.BeginCase();
+        flow.BeginCase(true);
         Assert.AreEqual(DeskStamp.None, flow.Verdict);
         Assert.IsTrue(flow.BarOut);
         Assert.AreEqual(StampPress.Stamped, flow.Press(DeskStamp.Denied, true, true), "the next passport takes its own verdict");
+    }
+
+    // The commit (the desk machine spec §2): the hand-back commits the passport's own verdict; DETAIN commits any time.
+
+    private static StampFlow Stamped(DeskStamp stamp)
+    {
+        var flow = new StampFlow();
+        flow.BeginCase(true);
+        flow.ToggleBar();
+        flow.Press(stamp, true, true);
+        return flow;
+    }
+
+    [Test]
+    public void HandingBack_NeedsAVerdict_AndHappensOnce()
+    {
+        var flow = new StampFlow();
+        flow.BeginCase(true);
+        Assert.IsFalse(flow.HandBack(), "no verdict yet");
+        flow.ToggleBar();
+        flow.Press(DeskStamp.Approved, true, true);
+        Assert.IsTrue(flow.HandBack());
+        Assert.IsTrue(flow.HandedBack);
+        Assert.IsFalse(flow.CanHandBack, "the papers are back with the traveller");
+        Assert.IsFalse(flow.HandBack(), "once");
+    }
+
+    [Test]
+    public void Approval_IsCommittedOnlyForAnApprovedPassportHandedBack()
+    {
+        StampFlow flow = Stamped(DeskStamp.Approved);
+        Assert.IsFalse(flow.Commit(DeskStamp.Approved), "not handed back yet");
+        flow.HandBack();
+        Assert.IsFalse(flow.Commit(DeskStamp.Denied), "never the other verdict");
+        Assert.IsTrue(flow.Commit(DeskStamp.Approved));
+        Assert.IsTrue(flow.Committed);
+        Assert.IsFalse(flow.Commit(DeskStamp.Approved), "one commit a case");
+    }
+
+    [Test]
+    public void Denial_IsCommittedOnlyForADeniedPassportHandedBack()
+    {
+        StampFlow flow = Stamped(DeskStamp.Denied);
+        flow.HandBack();
+        Assert.IsFalse(flow.Commit(DeskStamp.Approved), "never the other verdict");
+        Assert.IsTrue(flow.Commit(DeskStamp.Denied));
+    }
+
+    [Test]
+    public void Detain_WorksAnyTimeATravellerIsThere_StampOrNot()
+    {
+        var flow = new StampFlow();
+        Assert.IsFalse(flow.Commit(DeskStamp.Detained), "nobody at the desk");
+        flow.BeginCase(true);
+        Assert.IsTrue(flow.Commit(DeskStamp.Detained), "before any stamp");
+        StampFlow stamped = Stamped(DeskStamp.Approved);
+        Assert.IsTrue(stamped.Commit(DeskStamp.Detained), "after a stamp, before the hand-back");
+        StampFlow handed = Stamped(DeskStamp.Denied);
+        handed.HandBack();
+        Assert.IsTrue(handed.Commit(DeskStamp.Detained), "after the hand-back");
+    }
+
+    [Test]
+    public void NoStampCommitsNothing()
+    {
+        var flow = new StampFlow();
+        flow.BeginCase(true);
+        Assert.IsFalse(flow.Commit(DeskStamp.None));
+        Assert.IsFalse(flow.Commit(DeskStamp.Approved));
+    }
+
+    [Test]
+    public void ANewCase_ClearsTheHandBackAndTheCommit()
+    {
+        StampFlow flow = Stamped(DeskStamp.Approved);
+        flow.HandBack();
+        flow.Commit(DeskStamp.Approved);
+        flow.BeginCase(true);
+        Assert.IsFalse(flow.HandedBack);
+        Assert.IsFalse(flow.Committed);
+        flow.BeginCase(false);
+        Assert.IsFalse(flow.Commit(DeskStamp.Detained), "the case ended: nobody to detain");
     }
 }

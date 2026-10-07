@@ -91,7 +91,7 @@ public sealed class DeskCounter : MonoBehaviour
     {
         if (!Edges(out float far, out float left, out float right, out float middle))
             return surface != null ? surface.transform.position : transform.position;
-        (float x, float y) = DeskZones.CounterSpot(k, config.counterSpots, middle, left + EndMargin, right - EndMargin, far, config.counterSpotInset, config.counterSpacing);
+        (float x, float y) = DeskZones.CounterSpot(k, config.counterSpots, middle, left + EndMargin, right - EndMargin, far, config.counterSpotInset, config.counterSpacing, config.counterRowDepth);
         return surface.transform.position + _right * x + _forward * y;
     }
 

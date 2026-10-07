@@ -12,7 +12,7 @@ public interface IMotionTick
 /// The game feel's one driver and its settings: a hidden persistent object
 /// that steps only the motions that move (Run registers one; it leaves the
 /// list when it settles, so an idle control costs nothing per frame), with
-/// unscaled time; and the tuning (RunConfig's MotionTuningSO, else the
+/// unscaled time (or the capture step while one records: Time.captureDeltaTime); and the tuning (RunConfig's MotionTuningSO, else the
 /// defaults with a warning) and the player's amount of motion
 /// (MotionPreference: the Motion intensity, Reduced Motion). No per-frame
 /// allocation: the list is reused and swapped down in place.
@@ -99,6 +99,17 @@ public sealed class UiMotion : MonoBehaviour
             _driver._running.Add(motion);
     }
 
+    /// <summary>
+    /// The game feel's frame time from a real-time frame <paramref name="dt"/>:
+    /// <paramref name="dt"/> itself, or the capture's frame while frames are
+    /// captured at a fixed rate (Time.captureDeltaTime, which Unity's unscaled
+    /// time ignores), so a recording of the motion plays at its true speed.
+    /// </summary>
+    public static float Delta(float dt) => Time.captureDeltaTime > 0f ? Time.captureDeltaTime : dt;
+
+    /// <summary>The game feel's clock (seconds): real time, or the game's while frames are captured at a fixed rate (Delta).</summary>
+    public static float Now => Time.captureDeltaTime > 0f ? Time.time : Time.unscaledTime;
+
     /// <summary>True while <paramref name="motion"/> is being stepped (the probes wait for it).</summary>
     public static bool IsRunning(IMotionTick motion) => _driver != null && motion != null && _driver._running.Contains(motion);
 
@@ -108,7 +119,8 @@ public sealed class UiMotion : MonoBehaviour
     /// <summary>Steps every moving motion; drops those that settled or were destroyed (swapped down in place).</summary>
     private void Update()
     {
-        float dt = Time.unscaledDeltaTime;
+        // Recording at a fixed frame rate (Time.captureDeltaTime: a capture, a trailer) steps the springs by it too, so every recorded frame is one step of the motion.
+        float dt = Delta(Time.unscaledDeltaTime);
         for (int i = _running.Count - 1; i >= 0; i--)
         {
             IMotionTick motion = _running[i];

@@ -5,8 +5,8 @@ using NUnit.Framework;
 /// <summary>
 /// The booth's input table (the physical-desk spec section 1.9, as the office
 /// move, piece 10 and Papers, Please's controls changed it, Saleh
-/// 2026-10-06): one test per output, each over every row; the wheel and
-/// citation details; the default context. Expected outputs are written in
+/// 2026-10-06): one test per output, each over every row; the wheel's
+/// details; the default context. Expected outputs are written in
 /// this order: Desktop, CRT, Power, pRops, pApers, Wheel allowed, Traveller
 /// live, then Stamps live, Inspect live, case hUd visible, then the desk
 /// View allowed, the "▲ Back" control (B), the Normal view's own ways (N)
@@ -23,9 +23,9 @@ public class BoothRulesTests
     }
 
     private static Row R(string name, bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool deskView, string expected) =>
-        new Row { Name = name, Context = new BoothContext(focused, screenOn, phase, wheelOpen, false, deskView), Expected = expected.Replace(" ", "") };
+        new Row { Name = name, Context = new BoothContext(focused, screenOn, phase, wheelOpen, deskView), Expected = expected.Replace(" ", "") };
 
-    /// <summary>The rows of the input table (the citation row is tested separately).</summary>
+    /// <summary>The rows of the input table.</summary>
     private static readonly Row[] Rows =
     {
         //                                          focused screen phase                      wheel  desk    DCPRAWT SIU VBNQ
@@ -126,8 +126,8 @@ public class BoothRulesTests
     {
         foreach (BoothContext c in AllContexts())
         {
-            bool[] off = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, c.CitationPending, false)));
-            bool[] on = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, c.CitationPending, true)));
+            bool[] off = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, false)));
+            bool[] on = Outputs(BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, true)));
             for (int i = 0; i < off.Length; i++)
                 if (i != 11 && i != 12)
                     Assert.AreEqual(off[i], on[i], $"{c.Phase}: output {i} must not depend on the reading view");
@@ -137,33 +137,16 @@ public class BoothRulesTests
     private static IEnumerable<BoothContext> AllContexts()
     {
         foreach (BoothPhase phase in (BoothPhase[])Enum.GetValues(typeof(BoothPhase)))
-            for (int bits = 0; bits < 32; bits++)
-                yield return new BoothContext((bits & 1) != 0, (bits & 2) != 0, phase, (bits & 4) != 0, (bits & 8) != 0, (bits & 16) != 0);
+            for (int bits = 0; bits < 16; bits++)
+                yield return new BoothContext((bits & 1) != 0, (bits & 2) != 0, phase, (bits & 4) != 0, (bits & 8) != 0);
     }
 
     [Test]
     public void AnOpenWheel_StaysAllowed_SoOpeningItNeverClosesIt_ButTheTravellerGoesInert()
     {
-        BoothInput open = BoothRules.Evaluate(new BoothContext(false, true, BoothPhase.TravellerAtDesk, true, false, false));
+        BoothInput open = BoothRules.Evaluate(new BoothContext(false, true, BoothPhase.TravellerAtDesk, true, false));
         Assert.IsTrue(open.WheelAllowed);
         Assert.IsFalse(open.TravellerLive);
-    }
-
-    [Test]
-    public void APendingCitation_OnlyMakesThePowerButtonInert_InEveryRow()
-    {
-        foreach (Row row in Rows)
-        {
-            BoothContext c = row.Context;
-            BoothInput plain = BoothRules.Evaluate(c);
-            BoothInput held = BoothRules.Evaluate(new BoothContext(c.Focused, c.ScreenOn, c.Phase, c.WheelOpen, true, c.DeskView));
-
-            Assert.IsFalse(held.PowerButtonLive, row.Name);
-            bool[] a = Outputs(plain), b = Outputs(held);
-            for (int i = 0; i < a.Length; i++)
-                if (i != 2)
-                    Assert.AreEqual(a[i], b[i], $"{row.Name}: output {i} must not depend on the citation");
-        }
     }
 
     /// <summary>The frame covers the left of the office and its exits sit around it, so nothing behind it may take input while it is open: no prop, document, PC click, wheel, traveller, stamp bar, inspect mode, case HUD, mat or reading view; only the PC switch (back to the desk) stays.</summary>
@@ -178,7 +161,7 @@ public class BoothRulesTests
             BoothInput o = BoothRules.Evaluate(c);
             if (o.CrtFocusable || o.PropsLive || o.PapersLive || o.WheelAllowed || o.TravellerLive || o.StampsLive || o.InspectLive ||
                 o.CaseHudVisible || o.DeskViewAllowed || o.DeskViewBackLive || o.NormalViewLive)
-                wrong.Add($"{c.Phase}, screen {c.ScreenOn}, wheel {c.WheelOpen}, citation {c.CitationPending}, desk view {c.DeskView}");
+                wrong.Add($"{c.Phase}, screen {c.ScreenOn}, wheel {c.WheelOpen}, desk view {c.DeskView}");
             Assert.AreEqual(c.Phase != BoothPhase.Newsletter, o.PcSwitchLive, "the PC switch goes back to the desk");
         }
 

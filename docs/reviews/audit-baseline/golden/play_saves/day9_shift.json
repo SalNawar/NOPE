@@ -3,9 +3,10 @@
     "world": {
         "day": 9,
         "runSeed": 12345,
-        "money": 262,
+        "money": 260,
         "stabilityHundredths": 8858,
         "totalCitations": 4,
+        "totalDetained": 19,
         "citationsToday": 0,
         "clerkDebtPaid": 330,
         "debtReliefYesterday": 5,
@@ -70,6 +71,7 @@
             "premade:beethoven:accepted",
             "premade:nobunaga:met",
             "premade:nobunaga:accepted",
+            "trig:history_hours_extended:fired",
             "trig:history_pell_turned_away:fired",
             "trig:history_kulthum_home:fired",
             "trig:history_cleopatra_home:fired",
@@ -1273,20 +1275,922 @@
                 "reported": false
             }
         ],
+        "visits": [
+            {
+                "record": "WYW-755",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "EHL-134",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": "Denied a legitimate, permitted traveler."
+            },
+            {
+                "record": "RQR-503",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "EKR-071",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "JYK-931",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "JSM-559",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "KTC-732",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "HBU-204",
+                "day": 1,
+                "date": "14 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "ZTP-206",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "BHN-829",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Abbasid Baghdad (Medieval)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "ANS-046",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "NDD-284",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "UPQ-750",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "WYW-755",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "SYL-795",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "MQS-875",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "BJW-858",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "HSH-092",
+                "day": 2,
+                "date": "15 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": "Approved forged papers."
+            },
+            {
+                "record": "JXG-910",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "LAS-990",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "EHL-134",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "SBH-741",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Anglo-Saxon England (Medieval)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "FXK-460",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DVN-585",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "XGM-534",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "MDN-703",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "BRD-734",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "PVB-606",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DXP-512",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "FDC-044",
+                "day": 3,
+                "date": "16 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DXP-512",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Denied",
+                "citation": "Denied without logged evidence. Log what is wrong before denying: a difference in the papers, a rule they break or a date that fails."
+            },
+            {
+                "record": "FDA-071",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "New Kingdom Egypt (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "TRU-349",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "ZMW-583",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "Northern Song Kaifeng (Medieval)",
+                "verdict": "Accepted",
+                "citation": "Approved a closed destination."
+            },
+            {
+                "record": "YEK-840",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "AHJ-074",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "New Kingdom Egypt (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "QVQ-743",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "UMR-962",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "New Kingdom Egypt (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DUS-570",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "New Kingdom Egypt (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "FMN-433",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "New Kingdom Egypt (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "LJG-945",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "New Kingdom Egypt (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "ULH-258",
+                "day": 4,
+                "date": "17 Mar 2150",
+                "place": "New Kingdom Egypt (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "AZC-435",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-9337",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Elizabethan England (Early modern)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-5271",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Metapolitefsi Athens (Modern)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "QPX-880",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Abbasid Baghdad (Medieval)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "QAV-614",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "JQM-550",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Mamluk Egypt (Medieval)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "ZQA-924",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Abbasid Baghdad (Medieval)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "DP-1211",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Ottoman Egypt (Early modern)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "GAZ-393",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Abbasid Baghdad (Medieval)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "DP-5800",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Tokugawa Edo (Early modern)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "VYJ-584",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "TMJ-075",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "ZFQ-436",
+                "day": 5,
+                "date": "18 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "EPH-492",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "Renaissance Nuremberg (Early modern)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "MYJ-586",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "Victorian Britain (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-2178",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "AHJ-074",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "New Kingdom Egypt (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "WQP-562",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "Victorian Britain (Industrial)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "WMH-145",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "New Kingdom Egypt (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "BGA-429",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "Victorian Britain (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-0197",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "Ramesside Egypt (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-2451",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "Showa Tokyo (Modern)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-3467",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "Ayyubid Cairo (Medieval)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "CNU-510",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "New Kingdom Egypt (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "DP-3218",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "Elizabethan England (Early modern)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-1709",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "Ottoman Egypt (Early modern)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "DP-6667",
+                "day": 6,
+                "date": "19 Mar 2150",
+                "place": "Abbasid Baghdad (Medieval)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "EET-537",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Anglo-Saxon England (Medieval)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "QLQ-659",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "DP-7147",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Ptolemaic Alexandria (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "QAV-614",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "NHA-512",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "JYB-278",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Victorian Britain (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-8064",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Nasser's Egypt (Modern)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-8330",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Electoral Bonn (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "QGK-494",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Victorian Britain (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-6903",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Sengoku Azuchi (Early modern)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-4760",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Kofun Yamato (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "QLF-674",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Victorian Britain (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DQW-806",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Periclean Athens (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "XGJ-610",
+                "day": 7,
+                "date": "20 Mar 2150",
+                "place": "Victorian Britain (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "JYK-060",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Wilhelmine Germany (Industrial)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "NXV-245",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Kofun Yamato (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "DP-7327",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Macedonian Pella (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "RKW-773",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Victorian Britain (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-6105",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Beijing, People's Republic (Modern)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "PHR-466",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Victorian Britain (Industrial)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "TVZ-806",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Wilhelmine Germany (Industrial)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "DP-1269",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Victorian Britain (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "VSN-432",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Wilhelmine Germany (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-0247",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Spring and Autumn Lu (Ancient)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "KTQ-215",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Wilhelmine Germany (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "YAN-906",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Wilhelmine Germany (Industrial)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "SWG-479",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Wilhelmine Germany (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "WQP-562",
+                "day": 8,
+                "date": "21 Mar 2150",
+                "place": "Victorian Britain (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "XYG-808",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Khedivate of Egypt (Industrial)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "RNJ-806",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Republican Rome (Ancient)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "DP-8816",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Weimar Berlin (Modern)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "WWN-127",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Khedivate of Egypt (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "BGQ-796",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Ottoman Egypt (Early modern)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "DP-9755",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Holy Roman Empire (Rhineland) (Medieval)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DQS-613",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Khedivate of Egypt (Industrial)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "PAY-407",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Khedivate of Egypt (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-5718",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Revolutionary Cologne (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "PRV-889",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Khedivate of Egypt (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-1897",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Renaissance Nuremberg (Early modern)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "MKH-535",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Khedivate of Egypt (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "BXJ-162",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Khedivate of Egypt (Industrial)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "MUN-711",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Khedivate of Egypt (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            },
+            {
+                "record": "DP-1554",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Ottoman Baghdad (Early modern)",
+                "verdict": "Denied",
+                "citation": ""
+            },
+            {
+                "record": "WAA-121",
+                "day": 9,
+                "date": "22 Mar 2150",
+                "place": "Khedivate of Egypt (Industrial)",
+                "verdict": "Accepted",
+                "citation": ""
+            }
+        ],
         "newsArchive": [
             {
                 "day": 1,
-                "briefing": [
-                    "NEW: your desk. Each traveller hands you a Passport. Approve only the destination open today (the Directive Memo names it), a Passport still valid (its Valid Until against the calendar) and a photo of the person at the desk."
-                ],
+                "briefing": [],
                 "news": [],
                 "desk": []
             },
             {
                 "day": 2,
-                "briefing": [
-                    "NEW: the Entry Ticket. Ask for it: its Citizen ID must match the Passport's, and its departure date must be today."
-                ],
+                "briefing": [],
                 "news": [
                     "Art is now DOMINANT in Periclean Athens.",
                     "HISTORY: Greece now dominates the timeline. The Future belongs to Aegean Commonwealth (2150).",
@@ -1299,7 +2203,6 @@
             {
                 "day": 3,
                 "briefing": [
-                    "NEW: the Departure Board. A second destination opens: a traveller may leave only for a route the board shows.",
                     "A traveller's tip: someone is smuggling pocket calculators into the past. Keep your eyes open."
                 ],
                 "news": [
@@ -1312,9 +2215,7 @@
             },
             {
                 "day": 4,
-                "briefing": [
-                    "NEW: issuing seals. Every paper's seal must match its office's in the Seal Register, now in your rulebook (the SEALS tab)."
-                ],
+                "briefing": [],
                 "news": [
                     "Reports indicate democratic institutions are crumbling across the timeline.",
                     "2150 VOTES: the Directorate hands the building to an elected assembly. Its first sitting ran eleven hours. Traced to Desk 3: Wanting (Soldier), day 3.",
@@ -1327,9 +2228,7 @@
             },
             {
                 "day": 5,
-                "briefing": [
-                    "NEW: the scanner and the records. Scan a paper to read it in the Investigation app, now on your PC: it must match the traveller's record (a citizen's Citizen Account; for the displaced, who now come home through your desk with a Travel Permit, the Displacement Registry)."
-                ],
+                "briefing": [],
                 "news": [
                     "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
                     "CLEAR YOUR DEBT: 180 days in the Victorian mills."
@@ -1340,9 +2239,7 @@
             },
             {
                 "day": 6,
-                "briefing": [
-                    "NEW: the Transponder Card and travel class. A Premium passport travels on a Premium transponder, a Standard passport on an Economy one: hold the Passport's class against the card's."
-                ],
+                "briefing": [],
                 "news": [
                     "Art is now DOMINANT in Metapolitefsi Athens.",
                     "A renaissance of artistic movements ripples through every era.",
@@ -1354,9 +2251,7 @@
             },
             {
                 "day": 7,
-                "briefing": [
-                    "NEW: the Stranding Waiver. A Standard passport on an Economy transponder also needs a signed waiver: ask for it."
-                ],
+                "briefing": [],
                 "news": [
                     "THE ALGORITHM: al-Khwarizmi, stamped home at Desk 3, teaches the House of Wisdom 2150's arithmetic. Baghdad computes.",
                     "COLOSSAL: Ramesses II, stamped home at Desk 3, builds a temple to 2150 at Abu Simbel. It has four of him out front.",
@@ -1376,10 +2271,9 @@
             },
             {
                 "day": 8,
-                "briefing": [
-                    "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver. And from today the office reads the world's language: the Bureau issues you a Translation Lens. Hover a word to read it."
-                ],
+                "briefing": [],
                 "news": [
+                    "BUREAU EXTENDS HOURS AS DEBT QUEUES GROW: from today the desks open after lunch and close after dark. The Drive cannot wait for morning.",
                     "THURSDAY NIGHT: Umm Kulthum, stamped home at Desk 3, sings Cairo a song about 2150. The streets empty to listen.",
                     "THE QUEEN COMES HOME: Cleopatra, stamped home at Desk 3, opens 2150's library in Alexandria. Rome asks for a card.",
                     "FREE MARKETS, FREE GUILDS: Oda Nobunaga, stamped home at Desk 3, opens Azuchi to 2150's trade. Every castle town booms.",
@@ -1396,9 +2290,7 @@
             },
             {
                 "day": 9,
-                "briefing": [
-                    "NEW: dress for the destination. Look at their clothes (the wheel's Look menu): an item from another time or place causes a panic. Check it against the Costume Guide on your shelf."
-                ],
+                "briefing": [],
                 "news": [
                     "SON OF ZEUS: Alexander the Great, stamped home at Desk 3, rules Macedon by 2150's order. One empire, one law, every city named after him.",
                     "THE ART OF WAR, VOLUME TWO: Sun Tzu, stamped home at Desk 3, writes a strategy for 2150. Every merchant in Lu buys a copy.",
@@ -1455,9 +2347,9 @@
                 "wages": 100,
                 "fines": 25,
                 "debtRelief": 25,
-                "household": 41,
+                "household": 39,
                 "purchases": 0,
-                "balance": 0,
+                "balance": 2,
                 "owed": 125336
             },
             {
@@ -1467,7 +2359,7 @@
                 "debtRelief": 32,
                 "household": 30,
                 "purchases": 80,
-                "balance": -12,
+                "balance": -10,
                 "owed": 125304
             },
             {
@@ -1477,7 +2369,7 @@
                 "debtRelief": 53,
                 "household": 75,
                 "purchases": 15,
-                "balance": 60,
+                "balance": 62,
                 "owed": 125251
             },
             {
@@ -1485,9 +2377,9 @@
                 "wages": 200,
                 "fines": 0,
                 "debtRelief": 50,
-                "household": 58,
+                "household": 62,
                 "purchases": 40,
-                "balance": 112,
+                "balance": 110,
                 "owed": 125201
             },
             {
@@ -1497,7 +2389,7 @@
                 "debtRelief": 46,
                 "household": 64,
                 "purchases": 90,
-                "balance": 97,
+                "balance": 95,
                 "owed": 125155
             },
             {
@@ -1507,7 +2399,7 @@
                 "debtRelief": 55,
                 "household": 0,
                 "purchases": 0,
-                "balance": 262,
+                "balance": 260,
                 "owed": 125100
             }
         ],
