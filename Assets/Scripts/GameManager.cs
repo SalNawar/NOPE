@@ -110,6 +110,15 @@ public sealed partial class GameManager : MonoBehaviour
     /// <summary>Raised when a citation lands on the desk (the Helix River's red pulse runs then).</summary>
     public event System.Action<CaseVerdict> CitationLanded;
 
+    /// <summary>Raised once a traveller is decided and scored (the game feel reacts: FeelDirector): the case, the verdict, whether they were accepted and the stability before the decision (after is the world's).</summary>
+    public event System.Action<CaseInstance, CaseVerdict, bool, float> Resolved;
+
+    /// <summary>The game's tuning (null when RunConfig has none).</summary>
+    public GameConfigSO Config => _gameConfig;
+
+    /// <summary>The run's world (stability, day).</summary>
+    public WorldState World => _worldState;
+
     /// <summary>
     /// Initializes systems, generates cases once, and starts the day loop.
     /// </summary>
@@ -178,6 +187,9 @@ public sealed partial class GameManager : MonoBehaviour
             shiftClock.Configure(_gameConfig, dayPlan);
             shiftClock.Closed += HandleShiftClosed;
         }
+
+        // The game feel's director (hit-stop, camera impulses, the shift's bells, the hall's ambience).
+        FeelDirector.Attach(this, shiftClock);
 
         // A waiver signed from the desk's pad costs shift time (the endings and strandings spec §7.3, Q15 = A).
         if (investigationUI != null)
@@ -727,6 +739,7 @@ public sealed partial class GameManager : MonoBehaviour
 
         // The reaction (the personalities spec's R1-R5): presentation only, after the scoring, never changing it.
         React(inst, accepted);
+        Resolved?.Invoke(inst, verdict, accepted, stabilityBefore);
 
         EndingSO ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig, EndingMoment.Immediate);
 

@@ -285,6 +285,7 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>Starts a case's papers, each printing its form (<paramref name="forms"/>, by paper; a photo document shows <paramref name="look"/>); the documents handed over on arrival slide onto the counter; the first of them is the passport (the stamps' verdict is its).</summary>
     public void BeginCase(IReadOnlyList<CaseDocument> docs, IReadOnlyList<DocumentForm> forms, TravellerLook look, CharacterArt art)
     {
+        Sounds.Play(SoundCues.CallNext);
         _documents = docs ?? Array.Empty<CaseDocument>();
         _forms = forms ?? Array.Empty<DocumentForm>();
         _look = look;
@@ -520,6 +521,7 @@ public sealed class DeskController : MonoBehaviour
                 stamps.HandBack();
                 return;
             case DropOutcome.Scanning:
+                Sounds.Play(SoundCues.ScannerStart);
                 paper.SetZone(_state.ZoneOf(paper.Index), false);
                 Slide(paper, scanner.BedPoint);
                 break;

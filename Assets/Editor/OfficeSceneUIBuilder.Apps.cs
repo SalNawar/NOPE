@@ -266,7 +266,8 @@ public static partial class OfficeSceneUIBuilder
     /// choices that share the row (the chosen one in the accent colours:
     /// SettingsWindowController): Language (Follow history / Always English,
     /// and the lock's line under them, hidden until the Translation Lens's day),
-    /// Motion (Full / Reduced), Desktop icons open with (Double click /
+    /// Motion (Full / Reduced, and the Motion intensity slider under them,
+    /// 0-100 %: the kit's sunk track and bone thumb), Desktop icons open with (Double click /
     /// Single click) and Reset icon positions (its icons wired by
     /// WireIconSettings), Investigation's Text size (a choice per zoom level,
     /// redesign phase 20; the step hints' pair is gone with the hints),
@@ -305,6 +306,18 @@ public static partial class OfficeSceneUIBuilder
         Transform motion = SettingsRow(column, "MotionRow");
         Button full = SettingsChoice(motion, "FullMotionButton", "settings.motionFull");
         Button reduced = SettingsChoice(motion, "ReducedMotionButton", "settings.motionReduced");
+        Transform intensityRow = SettingsRow(column, "MotionIntensityRow");
+        TMP_Text intensityLabel = Text(intensityRow, "MotionIntensityLabel", null, PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
+                                       ThemeRoleId.WindowBody, "settings.motionIntensity");
+        Chrome(intensityLabel, PcType.Body);
+        intensityLabel.raycastTarget = false;
+        GetOrAdd<LayoutElement>(intensityLabel.gameObject).flexibleWidth = 1f;
+        Slider intensity = SettingsSlider(intensityRow, "MotionIntensitySlider");
+        TMP_Text intensityValue = Text(intensityRow, "MotionIntensityValue", null, PcType.Body, TextAlignmentOptions.MidlineRight, Vector2.zero, Vector2.one, Ink,
+                                       ThemeRoleId.WindowBody);
+        Chrome(intensityValue, PcType.Body);
+        intensityValue.raycastTarget = false;
+        GetOrAdd<LayoutElement>(intensityValue.gameObject).flexibleWidth = 0.5f;
 
         SettingsHeading(column, "DesktopLabel", "settings.desktop");
         Transform icons = SettingsRow(column, "IconOpenRow");
@@ -345,6 +358,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "languageLockText", languageLock);
         SetRef(so, "fullMotionButton", full);
         SetRef(so, "reducedMotionButton", reduced);
+        SetRef(so, "motionIntensitySlider", intensity);
+        SetRef(so, "motionIntensityText", intensityValue);
         SetRef(so, "iconDoubleClickButton", iconDouble);
         SetRef(so, "iconSingleClickButton", iconSingle);
         SetRef(so, "resetIconsButton", resetIcons);
@@ -379,6 +394,39 @@ public static partial class OfficeSceneUIBuilder
         line.childForceExpandWidth = true;
         line.childForceExpandHeight = true;
         return row;
+    }
+
+    /// <summary>
+    /// A slider in a Settings row (0 to 100, whole numbers), twice a label's
+    /// share of the row: a track with a thumb that slides along it, skinned
+    /// as the kit's sunk scroll track and its bone thumb (sheet 02; the role
+    /// pass leaves them), the thumb its graphic. Its value is set through the
+    /// serialized field (a setter would drive the thumb's anchors at build).
+    /// </summary>
+    private static Slider SettingsSlider(Transform row, string name)
+    {
+        Transform track = Panel(row, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.WindowBody);
+        GetOrAdd<LayoutElement>(track.gameObject).flexibleWidth = 2f;
+        Transform area = Panel(track, "HandleSlideArea", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(area, Vector2.zero, Vector2.one, new Vector2(PcSize.M, 0f), new Vector2(-PcSize.M, 0f));
+        Transform thumb = Panel(area, "Handle", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, XpBlue, ThemeRoleId.TitleBar);
+        PlaceRect(thumb, new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(-PcSize.M, 0f), new Vector2(PcSize.M, 0f));
+        Slider slider = GetOrAdd<Slider>(track.gameObject);
+        var so = new SerializedObject(slider);
+        so.FindProperty("m_HandleRect").objectReferenceValue = thumb;
+        so.FindProperty("m_TargetGraphic").objectReferenceValue = thumb.GetComponent<Image>();
+        so.FindProperty("m_MinValue").floatValue = 0f;
+        so.FindProperty("m_MaxValue").floatValue = 100f;
+        so.FindProperty("m_WholeNumbers").boolValue = true;
+        so.FindProperty("m_Value").floatValue = 100f;
+        so.ApplyModifiedProperties();
+        if (_kit != null)
+        {
+            KitSkin(track, "scroll_track", _kit.desktopScale);
+            slider.targetGraphic = KitSkin(thumb, "scroll_thumb", _kit.desktopScale);
+            slider.transition = Selectable.Transition.None;
+        }
+        return slider;
     }
 
     /// <summary>A choice in a Settings row: a Button-role plate with its keyed label at Body size.</summary>

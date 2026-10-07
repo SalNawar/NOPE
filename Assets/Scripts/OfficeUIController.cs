@@ -43,6 +43,7 @@ public sealed class OfficeUIController : MonoBehaviour
     /// <summary>Writes the verdict line on <paramref name="ribbon"/> (a UI kit sprite) and shows its strip only while it has text.</summary>
     private void SetResult(string text, string ribbon)
     {
+        bool changed = resultText != null && resultText.text != text;
         if (resultText != null)
             resultText.text = text;
         if (kit != null)
@@ -51,8 +52,11 @@ public sealed class OfficeUIController : MonoBehaviour
             if (resultText != null)
                 resultText.color = kit.InkOn(ribbon);
         }
-        if (resultBackdrop != null)
-            resultBackdrop.SetActive(!string.IsNullOrEmpty(text));
+        if (resultBackdrop == null)
+            return;
+        resultBackdrop.SetActive(!string.IsNullOrEmpty(text));
+        if (changed && !string.IsNullOrEmpty(text))
+            UiAppear.Of(resultBackdrop, AppearStyle.Whip).Open(); // the verdict ribbon whips in (the game feel)
     }
 
     /// <summary>

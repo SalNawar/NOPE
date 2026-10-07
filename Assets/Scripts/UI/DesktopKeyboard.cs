@@ -118,6 +118,8 @@ public sealed class DesktopKeyboard : MonoBehaviour
         Keyboard keyboard = Keyboard.current;
         if (keyboard == null)
             return;
+        if (keyboard.anyKey.wasPressedThisFrame)
+            Sounds.Play(SoundCues.KeyTap); // a mechanical key under every key the PC takes
         bool ctrl = keyboard.ctrlKey.isPressed;
         bool shift = keyboard.shiftKey.isPressed;
         bool alt = keyboard.altKey.isPressed;

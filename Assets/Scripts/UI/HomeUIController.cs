@@ -142,6 +142,9 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>Spawned bill rows (cleared/rebuilt on refresh).</summary>
     private readonly List<GameObject> _billRows = new();
 
+    /// <summary>Each bill's Paying side as last shown (a toggle's re-show slides the pair's pill across from the side it left: UiPill).</summary>
+    private readonly Dictionary<HomeBill, bool> _billPaying = new();
+
     /// <summary>Spawned toy rows (cleared/rebuilt on refresh).</summary>
     private readonly List<GameObject> _toyRows = new();
 
@@ -1216,7 +1219,9 @@ public sealed class HomeUIController : MonoBehaviour
     /// locked when the bill is not offered), its name over its price and line,
     /// and its Paying / Skip pair on the right (the kit's segmented track, the
     /// side that holds oxblood and pressed, the other bone; clicking the side
-    /// that is off calls <paramref name="onToggle"/>).
+    /// that is off calls <paramref name="onToggle"/>; when the choice changed
+    /// since the last show, the oxblood face slides across from the side it
+    /// left, the reel's segmented pill: UiPill).
     /// </summary>
     private GameObject CreateBillRow(BillView view, string payingLabel, string skipLabel, Action onToggle)
     {
@@ -1235,13 +1240,19 @@ public sealed class HomeUIController : MonoBehaviour
         Image trackFace = Face(track.transform, "segmented_track");
         if (trackFace != null)
             trackFace.raycastTarget = false;
-        PairSide(track.transform, "Paying", payingLabel, 4f, view.Paying, view.Enabled, onToggle);
-        PairSide(track.transform, "Skip", skipLabel, 4f + SegmentWidth, !view.Paying, view.Enabled, onToggle);
+        Image paying = PairSide(track.transform, "Paying", payingLabel, 4f, view.Paying, view.Enabled, onToggle);
+        Image skip = PairSide(track.transform, "Skip", skipLabel, 4f + SegmentWidth, !view.Paying, view.Enabled, onToggle);
+        if (_billPaying.TryGetValue(view.Bill, out bool was) && was != view.Paying && paying != null && skip != null)
+        {
+            Image on = view.Paying ? paying : skip, off = view.Paying ? skip : paying;
+            UiPill.Slide(on.rectTransform, off.transform.parent.TransformPoint(on.rectTransform.localPosition));
+        }
+        _billPaying[view.Bill] = view.Paying;
         return row;
     }
 
-    /// <summary>One side of a choice pair at <paramref name="x"/> in <paramref name="track"/>: on (the kit's oxblood segment, cream label) or off (bone, ink label; a click calls <paramref name="onPick"/>); locked when not <paramref name="enabled"/>.</summary>
-    private void PairSide(Transform track, string name, string label, float x, bool on, bool enabled, Action onPick)
+    /// <summary>One side of a choice pair at <paramref name="x"/> in <paramref name="track"/>: on (the kit's oxblood segment, cream label) or off (bone, ink label; a click calls <paramref name="onPick"/>); locked when not <paramref name="enabled"/>; with the kit controls' game feel (UiJuice; the on side is the chosen one). Returns its face.</summary>
+    private Image PairSide(Transform track, string name, string label, float x, bool on, bool enabled, Action onPick)
     {
         var go = new GameObject(name, typeof(RectTransform));
         go.transform.SetParent(track, false);
@@ -1261,10 +1272,14 @@ public sealed class HomeUIController : MonoBehaviour
         button.colors = colours;
         if (onPick != null)
             button.onClick.AddListener(() => onPick());
+        UiJuice.On(button);
+        if (enabled)
+            UiJuice.Choose(button, on, false); // the pill slides instead of a bounce
         TMP_Text text = Text(go.transform, "Label", label, SegmentFontSize, on ? LabelInk(true) : LabelInk(false), TextAlignmentOptions.Center, Vector2.zero,
                              new Vector2(SegmentWidth, SegmentHeight), true);
         if (!enabled)
             text.alpha = 0.55f;
+        return face;
     }
 
     /// <summary>The kit tile that stands for a bill (sheet 04's bills).</summary>

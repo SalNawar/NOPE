@@ -151,9 +151,6 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The least seconds a line stays up once fully shown before the next line replaces it (never more than bubbleSeconds).</summary>
     [Min(0f)] public float bubbleMinSeconds = 1.5f;
 
-    /// <summary>Where the bubble's centre sits from the traveller's anchor (overlay reference px): above the head, clear of the wheel's top item (radius y + half an item + half the bubble).</summary>
-    public Vector2 bubbleOffset = new Vector2(0f, 290f);
-
     /// <summary>Seconds the traveller stays after their reaction's last line is fully shown, then leaves (the personalities spec's R4; 0 leaves at once, the reaction only in the transcript); calling the next traveller ends it at once. Authored here: Generate World never writes it.</summary>
     [Min(0f)] public float reactionSeconds = 2.5f;
 
@@ -186,9 +183,6 @@ public sealed class DeskConfigSO : ScriptableObject
 
     /// <summary>Seconds the stamp bar takes to slide out or back (a cut under Reduced Motion).</summary>
     [FormerlySerializedAs("stampTraySeconds"), Min(0f)] public float stampBarSeconds = 0.3f;
-
-    /// <summary>Seconds a press takes, down and up.</summary>
-    [Min(0f)] public float stampPressSeconds = 0.18f;
 
     /// <summary>Seconds a stamp dragged out over the desk takes to go back to its place in the rack once pressed or let go (a cut under Reduced Motion).</summary>
     [Min(0f)] public float stampReturnSeconds = 0.2f;

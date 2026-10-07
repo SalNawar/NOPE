@@ -38,13 +38,23 @@ using UnityEngine.UI;
 /// passport's verdict; the counter then reads "▲ HAND BACK ▲", and a paper
 /// dropped on the counter hands the papers back (DeskController calls
 /// HandBack: Decided), the only way a case is decided (the PC only
-/// investigates). There is no ink: Papers, Please has none. A right-click or
+/// investigates). The press is the game feel's slam (Saleh 2026-10-07): the
+/// stamp rises a little (the anticipation, MotionKnobs.stampLift), slams
+/// down, squashes on impact (stampSquash, keeping its volume), the desk
+/// shakes (FeelDirector.Punch: a hit-stop and a Cinemachine impulse) and the mark's ink blooms in (DeskDocument.BloomLastStamp:
+/// the mark is printed, and counts, at the press; only its look waits for the
+/// impact), then the stamp rebounds on its spring (stampFeel) and goes back
+/// (the way back and the bar's slide on the desk's spring curve, their seconds
+/// the desk's knobs); a refused press shakes sideways on a spring; Reduced
+/// Motion cuts it all (the mark shows at once). There is no ink: Papers, Please has none. A right-click or
 /// Esc drops a carried stamp back into the rack, else slides the bar back
 /// (ControlRules.BackOut). The bar takes input while BoothRules.StampsLive
 /// (false slides it back) and shows its tab while the desk takes input
 /// (BoothRules.PropsLive). The hint at the top right says the next step, or
 /// a note (a refusal's, the counter's "Stamp the passport first": Note). The
-/// thump and the thunk are made in code (no sound asset yet). Build Office UI
+/// thump and the thunk are made in code until the sound bank has stamp_approve /
+/// stamp_deny and ui_error clips (Sounds), and the bar plays stamp_bar_out /
+/// stamp_bar_in. Build Office UI
 /// builds the tab, the hint and the audio source on the overlay and the rack
 /// and its stamps in the office; the office binder lays the rack (Lay).
 /// </summary>
@@ -116,8 +126,17 @@ public sealed class DeskStampTray : MonoBehaviour
         /// <summary>Its place in the rack (local).</summary>
         public Vector3 Home;
 
+        /// <summary>Its scale at rest (a slam squashes it and gives it back).</summary>
+        public Vector3 RestScale = Vector3.one;
+
         /// <summary>Seconds into its press (-1: no press runs).</summary>
         public float Pressing = -1f;
+
+        /// <summary>True once the running press struck the paper (its rebound and squash then spring back).</summary>
+        public bool Struck;
+
+        /// <summary>After the impact: its height over the press point (metres) and its squash (a share shorter); a refusal's sideways shake (metres).</summary>
+        public Spring Rebound, Squash, Shake;
 
         /// <summary>True when the running press was refused (a shake, not a dip).</summary>
         public bool Refused;
@@ -186,6 +205,7 @@ public sealed class DeskStampTray : MonoBehaviour
         if (click == null)
             return handle;
         handle.Home = click.transform.localPosition;
+        handle.RestScale = click.transform.localScale;
         click.onClick.AddListener(() => Press(handle));
         handle.Drag = click.GetComponent<DeskDraggable>();
         if (handle.Drag != null)
@@ -228,7 +248,7 @@ public sealed class DeskStampTray : MonoBehaviour
         _out = new Vector3(at.x, desk + config.stampHover, at.z);
         _in = _out + right * config.stampBarTravel;
         _laid = true;
-        rack.SetPositionAndRotation(Vector3.Lerp(_in, _out, DeskZones.Ease(_slide)), Quaternion.LookRotation(forward, Vector3.up));
+        rack.SetPositionAndRotation(Vector3.LerpUnclamped(_in, _out, BarCurve(config.stampBarSeconds)), Quaternion.LookRotation(forward, Vector3.up));
     }
 
     /// <summary>The grey tab, TAB, the desk's stamp: slides the bar out (bringing the reading view) or back; nothing while the stamps take no input.</summary>
@@ -238,7 +258,9 @@ public sealed class DeskStampTray : MonoBehaviour
         if (!_live)
             return;
         CancelCarry();
-        if (_flow.ToggleBar() && deskView != null)
+        bool slidOut = _flow.ToggleBar();
+        Sounds.Play(slidOut ? SoundCues.StampBarOut : SoundCues.StampBarIn);
+        if (slidOut && deskView != null)
             deskView.TiltIn();
         Raise();
     }
@@ -249,6 +271,7 @@ public sealed class DeskStampTray : MonoBehaviour
         CancelCarry();
         if (!_flow.StowBar())
             return false;
+        Sounds.Play(SoundCues.StampBarIn);
         Raise();
         return true;
     }
@@ -295,7 +318,9 @@ public sealed class DeskStampTray : MonoBehaviour
         if (!_flow.CanHandBack)
             return;
         CancelCarry();
-        _flow.StowBar();
+        if (_flow.StowBar())
+            Sounds.Play(SoundCues.StampBarIn);
+        Sounds.Play(SoundCues.PaperSlide);
         Decided?.Invoke(_flow.Verdict == DeskStamp.Approved);
     }
 
@@ -336,7 +361,11 @@ public sealed class DeskStampTray : MonoBehaviour
             return;
         }
         if (LastPress == StampPress.Stamped)
+        {
             paper.Stamp(handle.Kind == DeskStamp.Approved, paper.PagePoint(point));
+            MotionKnobs knobs = UiMotion.Knobs;
+            paper.BloomLastStamp(knobs.stampRiseSeconds + knobs.stampSlamSeconds);
+        }
         string note = LastPress switch
         {
             StampPress.NotPassport => "stamp.refused.notPassport",
@@ -346,7 +375,8 @@ public sealed class DeskStampTray : MonoBehaviour
         if (note != null)
             Note(note);
         bool refused = LastPress != StampPress.Stamped;
-        Play(refused ? _thunk : _thump);
+        if (refused && !Sounds.Play(SoundCues.UiError))
+            Play(_thunk);
         Dip(handle, refused);
         Raise();
     }
@@ -356,6 +386,7 @@ public sealed class DeskStampTray : MonoBehaviour
     {
         Deselect();
         handle.Pressing = handle.Returning = -1f;
+        handle.Click.transform.localScale = handle.RestScale;
         _carried = handle;
     }
 
@@ -422,36 +453,97 @@ public sealed class DeskStampTray : MonoBehaviour
         }
     }
 
-    /// <summary>One stamp's motion this frame: the press (down onto the paper and up, or a shake), then, away from the rack, the way back to its place (cuts under Reduced Motion).</summary>
+    /// <summary>One stamp's motion this frame: the press (the slam: a rise, the fall, the impact's squash, shake and thump, the rebound; or a refusal's shake), then, away from the rack, the way back to its place (cuts under Reduced Motion).</summary>
     private void Move(Handle handle)
     {
         if (handle.Click == null)
             return;
         Transform stamp = handle.Click.transform;
-        if (handle.Pressing >= 0f)
-        {
-            float seconds = config != null && !MotionPreference.Reduced ? config.stampPressSeconds : 0f;
-            handle.Pressing += Time.unscaledDeltaTime;
-            float t = seconds > 0f ? Mathf.Clamp01(handle.Pressing / seconds) : 1f;
-            float depth = config != null ? Mathf.Max(0f, config.stampHover - PressFloor) : 0f;
-            stamp.localPosition = handle.PressedAt + (handle.Refused
-                ? new Vector3(Mathf.Sin(t * Mathf.PI * 4f) * Shake * (1f - t), 0f, 0f)
-                : Vector3.down * depth * Mathf.Sin(t * Mathf.PI));
-            if (t < 1f)
-                return;
-            stamp.localPosition = handle.PressedAt;
-            handle.Pressing = -1f;
-            Return(handle);
-        }
+        if (handle.Pressing >= 0f && Pressed(handle, stamp, Time.unscaledDeltaTime))
+            return;
         if (handle.Returning >= 0f)
         {
             float seconds = config != null && !MotionPreference.Reduced ? config.stampReturnSeconds : 0f;
             handle.Returning += Time.unscaledDeltaTime;
             float t = seconds > 0f ? Mathf.Clamp01(handle.Returning / seconds) : 1f;
-            stamp.localPosition = Vector3.Lerp(handle.ReturnFrom, handle.Home, DeskZones.Ease(t));
+            stamp.localPosition = Vector3.LerpUnclamped(handle.ReturnFrom, handle.Home, UiMotion.Ease(t, UiMotion.Knobs.deskMoveFeel, seconds));
             if (t >= 1f)
                 handle.Returning = -1f;
         }
+    }
+
+    /// <summary>
+    /// Steps a running press by <paramref name="dt"/>: a refusal's shake on
+    /// its spring; an accepted press's rise (stampRiseSeconds, easing out to
+    /// stampLift), its slam (stampSlamSeconds, accelerating down onto the
+    /// paper), the impact (Strike), then the rebound and the squash springing
+    /// back. True while the press still runs; once it is over the stamp is at
+    /// rest where it was pressed and starts back to the rack.
+    /// </summary>
+    private bool Pressed(Handle handle, Transform stamp, float dt)
+    {
+        MotionKnobs knobs = UiMotion.Knobs;
+        MotionAmount amount = UiMotion.Amount;
+        handle.Pressing += dt;
+        if (handle.Refused)
+        {
+            if (handle.Shake.Step(dt, knobs.Get(knobs.refuseFeel), 1e-5f, 1e-4f))
+            {
+                stamp.localPosition = handle.PressedAt + Vector3.right * handle.Shake.Value;
+                return true;
+            }
+        }
+        else if (!handle.Struck)
+        {
+            float depth = config != null ? Mathf.Max(0f, config.stampHover - PressFloor) : 0f;
+            float rise = amount.Still ? 0f : knobs.stampRiseSeconds, slam = amount.Still ? 0f : knobs.stampSlamSeconds;
+            float lift = knobs.stampLift * amount.Share, t = handle.Pressing, y;
+            if (t < rise)
+            {
+                float p = t / rise;
+                y = lift * (1f - (1f - p) * (1f - p));
+            }
+            else if (t < rise + slam)
+            {
+                float p = (t - rise) / slam;
+                y = lift - (lift + depth) * p * p;
+            }
+            else
+            {
+                Strike(handle, depth, knobs, amount);
+                y = -depth;
+            }
+            stamp.localPosition = handle.PressedAt + Vector3.up * y;
+            return true;
+        }
+        else
+        {
+            SpringTuning tuning = knobs.Get(knobs.stampFeel);
+            bool moving = handle.Rebound.Step(dt, tuning, 1e-4f, 1e-3f) | handle.Squash.Step(dt, tuning, knobs.settleValue, knobs.settleSpeed);
+            stamp.localPosition = handle.PressedAt + Vector3.up * handle.Rebound.Value;
+            Stretch squash = SquashStretch.Preserve(1f - handle.Squash.Value);
+            float across = Mathf.Sqrt(squash.Across); // the two other axes share the area's rule, so the volume keeps
+            stamp.localScale = new Vector3(handle.RestScale.x * across, handle.RestScale.y * squash.Along, handle.RestScale.z * across);
+            if (moving)
+                return true;
+        }
+        stamp.localPosition = handle.PressedAt;
+        stamp.localScale = handle.RestScale;
+        handle.Pressing = -1f;
+        handle.Struck = false;
+        Return(handle);
+        return false;
+    }
+
+    /// <summary>The impact: the thump (StampSlam's clip, else the made-up one), the desk's shake, and the rebound from <paramref name="depth"/> down and the squash (stampSquash) handed to their springs (at rest at once without motion).</summary>
+    private void Strike(Handle handle, float depth, MotionKnobs knobs, MotionAmount amount)
+    {
+        handle.Struck = true;
+        if (!Sounds.Play(handle.Kind == DeskStamp.Approved ? SoundCues.StampApprove : SoundCues.StampDeny))
+            Play(_thump);
+        FeelDirector.Punch(FeelHit.Stamp);
+        handle.Rebound = amount.Still ? Spring.At(0f) : new Spring { Value = -depth, Target = 0f };
+        handle.Squash = amount.Still ? Spring.At(0f) : new Spring { Value = knobs.stampSquash * amount.Share, Target = 0f };
     }
 
     /// <summary>Sends a stamp away from the rack back to its place (nothing when it is there, or carried).</summary>
@@ -478,21 +570,39 @@ public sealed class DeskStampTray : MonoBehaviour
         float seconds = config != null && !MotionPreference.Reduced ? config.stampBarSeconds : 0f;
         _slide = seconds > 0f ? Mathf.MoveTowards(_slide, target, Time.unscaledDeltaTime / seconds) : target;
         if (_laid)
-            rack.position = Vector3.Lerp(_in, _out, DeskZones.Ease(_slide));
+            rack.position = Vector3.LerpUnclamped(_in, _out, BarCurve(seconds));
         bool shown = _slide > 0f;
         if (rack.gameObject.activeSelf != shown)
             rack.gameObject.SetActive(shown);
     }
 
-    /// <summary>Starts a stamp's dip onto the paper where it is (or its shake, <paramref name="refused"/>).</summary>
+    /// <summary>Where the bar is along its travel (0 in, 1 out) on the desk's spring curve: past out as it arrives, past in as it goes back (UiMotion.Ease over <paramref name="seconds"/>).</summary>
+    private float BarCurve(float seconds)
+    {
+        MotionFeel feel = UiMotion.Knobs.deskMoveFeel;
+        return _flow.BarOut ? UiMotion.Ease(_slide, feel, seconds) : 1f - UiMotion.Ease(1f - _slide, feel, seconds);
+    }
+
+    /// <summary>Starts a stamp's slam onto the paper where it is (or its shake, <paramref name="refused"/>).</summary>
     private static void Dip(Handle handle, bool refused)
     {
         handle.Returning = -1f;
         if (handle.Pressing >= 0f)
+        {
             handle.Click.transform.localPosition = handle.PressedAt; // a press while one runs starts from where that one did
+            handle.Click.transform.localScale = handle.RestScale;
+        }
         handle.PressedAt = handle.Click.transform.localPosition;
         handle.Refused = refused;
+        handle.Struck = false;
         handle.Pressing = 0f;
+        handle.Shake = Spring.At(0f);
+        MotionAmount amount = UiMotion.Amount;
+        if (refused && !amount.Still)
+        {
+            MotionKnobs knobs = UiMotion.Knobs;
+            handle.Shake.Kick(knobs.Get(knobs.refuseFeel).KickFor(Shake * amount.Share));
+        }
     }
 
     private void Play(AudioClip clip)

@@ -9,7 +9,9 @@ using UnityEngine.UI;
 /// ("Displacement Certificate scanned") with an Open button, gone after its
 /// time or once Open is clicked; a hint (a step done at the desk: "Use the
 /// traveller wheel") shows without Open. It lives on the desktop, not in the app, so
-/// it shows while the app is closed or minimised too.
+/// it shows while the app is closed or minimised too. It slides up in on a
+/// spring with the ui_popup cue and slides back down as it goes (UiAppear,
+/// the game feel; it takes no clicks while it goes).
 /// </summary>
 public sealed class AppToast : MonoBehaviour
 {
@@ -33,20 +35,26 @@ public sealed class AppToast : MonoBehaviour
             openButton.gameObject.SetActive(open != null);
         _open = open;
         _until = Time.unscaledTime + seconds;
+        bool showing = gameObject.activeSelf && !UiAppear.IsClosing(gameObject);
         gameObject.SetActive(true);
+        if (!showing)
+        {
+            UiAppear.Of(gameObject, AppearStyle.Rise).Open();
+            Sounds.Play(SoundCues.UiPopup);
+        }
     }
 
     /// <summary>Hides the toast.</summary>
     public void Hide()
     {
         _open = null;
-        if (gameObject.activeSelf)
-            gameObject.SetActive(false);
+        if (gameObject.activeSelf && !UiAppear.IsClosing(gameObject))
+            UiAppear.Of(gameObject, AppearStyle.Rise).Close();
     }
 
     private void Update()
     {
-        if (Time.unscaledTime >= _until)
+        if (Time.unscaledTime >= _until && !UiAppear.IsClosing(gameObject))
             Hide();
     }
 

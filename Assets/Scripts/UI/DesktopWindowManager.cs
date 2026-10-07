@@ -196,16 +196,37 @@ public sealed class DesktopWindowManager : MonoBehaviour
         return id;
     }
 
-    /// <summary>Applies the stack: which windows show, their order, the taskbar's buttons.</summary>
+    /// <summary>The windows that showed or went in the last Apply (reused: the game feel animates them once the taskbar is laid out).</summary>
+    private readonly List<string> _opened = new List<string>(), _closed = new List<string>();
+
+    /// <summary>
+    /// Applies the stack: which windows show, their order, the taskbar's
+    /// buttons. A window that shows grows out of its taskbar button with a
+    /// spring and window_open; one that goes (closed or minimised) shrinks
+    /// into the taskbar with window_close, taking no clicks while it goes, then
+    /// switches off (UiAppear, the game feel; the stack, not the object, says
+    /// what is open).
+    /// </summary>
     private void Apply()
     {
+        _opened.Clear();
+        _closed.Clear();
         foreach (KeyValuePair<string, DesktopWindow> pair in _windows)
         {
             if (pair.Value == null)
                 continue;
             bool visible = _stack.IsOpen(pair.Key) && !_stack.IsMinimised(pair.Key);
-            if (pair.Value.gameObject.activeSelf != visible)
-                pair.Value.gameObject.SetActive(visible);
+            GameObject go = pair.Value.gameObject;
+            bool showing = go.activeSelf && !UiAppear.IsClosing(go);
+            if (showing == visible)
+                continue;
+            if (visible)
+            {
+                go.SetActive(true);
+                _opened.Add(pair.Key);
+            }
+            else
+                _closed.Add(pair.Key);
         }
 
         IReadOnlyList<string> z = _stack.ZOrder;
@@ -214,6 +235,33 @@ public sealed class DesktopWindowManager : MonoBehaviour
                 w.transform.SetAsLastSibling();
 
         ApplyTaskbar();
+        if (_opened.Count + _closed.Count > 0)
+            AnimateWindows();
+    }
+
+    /// <summary>The windows that showed grow out of the taskbar, those that went shrink into it (the taskbar laid out first, so a new button is where it will be).</summary>
+    private void AnimateWindows()
+    {
+        if (taskbarButtons != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(taskbarButtons);
+        foreach (string id in _opened)
+        {
+            UiAppear.Of(_windows[id].gameObject, AppearStyle.Pop).Open(TaskbarPoint(id, _windows[id]));
+            Sounds.Play(SoundCues.WindowOpen);
+        }
+        foreach (string id in _closed)
+        {
+            UiAppear.Of(_windows[id].gameObject, AppearStyle.Pop).Close(TaskbarPoint(id, _windows[id]));
+            Sounds.Play(SoundCues.WindowClose);
+        }
+    }
+
+    /// <summary>Where window <paramref name="id"/> grows from or shrinks into: its taskbar button, else the taskbar's strip, else its own place.</summary>
+    private Vector3 TaskbarPoint(string id, DesktopWindow window)
+    {
+        if (_buttons.TryGetValue(id, out TaskbarButton button) && button.Button != null)
+            return button.Button.transform.position;
+        return taskbarButtons != null ? taskbarButtons.position : window.transform.position;
     }
 
     /// <summary>One button per open window in open order: the glyph (or the title), the title in its hint, the focus bar when focused, faded when minimised.</summary>
@@ -306,6 +354,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
     /// </summary>
     private void Press(Vector2 screen)
     {
+        Sounds.Play(SoundCues.MouseClick);
         GameObject top = TopHit(screen);
         Pressed?.Invoke(top);
         if (contextMenu != null && contextMenu.IsOpen && !contextMenu.IsPart(top))
