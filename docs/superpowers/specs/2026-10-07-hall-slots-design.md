@@ -76,12 +76,15 @@ draw nothing. The cheat "Hall: stand-ins" shows every slot's stand-in.
 
 1. The slots live in an Inspector asset, not in `world_source.json`: they are art registration data the art
    side edits, not content; the rules and the validator are Domain and tested.
-2. Fifteen slots: 9 on registered layers (both banners, the board's header band, the three door signs, the
-   floor between the rear bays, the bridge fascia, the framed artwork, the armillary alcove), 6 new overlays
-   (a wall poster on the blank grey panel, anomalies in the rear-right cargo corner, cracks on the portal
-   bays' glass, a checkpoint on the left concourse, the Debt Relief queue's clutter by the lockers). Dropped:
-   the stone bust (cut by the canvas edge), the doors themselves, the lockers (the clutter stands before them).
-3. The framed artwork follows the latest famous nation (`recent=`), the armillary alcove the strongest
+2. Fifteen slots, all in the part of the hall the desk shows (the screen covers canvas x 165-2015 and the
+   desk's corkboards hide x 1770 and right, and x 400 and left below y 370): 8 on registered layers (both
+   banners, the board's header band, the three door signs, the floor between the rear bays, the bridge
+   fascia), 7 new overlays (a wall poster on the dark left pier, a framed portrait on the right pillar, a
+   vitrine on the upper gallery, anomalies in the rear-right cargo corner, cracks on the portal bays' glass, a
+   checkpoint on the left concourse, the Debt Relief queue's clutter by the lockers). Dropped: the right
+   wall's framed artwork, armillary and stone bust (behind the right corkboard: the first stand-in captures
+   showed them hidden), the doors themselves, the lockers (the clutter stands before them).
+3. The framed portrait follows the latest famous nation (`recent=`), the vitrine the strongest
    (`exhibit=`).
 4. No painted words in any variant (the Translation Lens cannot read painted text).
 5. All slots draw at order 60 (over the painting and the portal glows, under the crowds and the fixtures).

@@ -2,7 +2,7 @@
 
 Saleh (2026-10-07): "We have all these variables and layers - we need assets that you can easily swap as the variables shift, to create unique combinations", then "the hall is split into layers at the moment for this reason" and "I need the GPT document to start generating inner hall assets". This is that document: what to paint for each swappable part of the anime terminal hall (`Assets/Art/Office/AnimeHallLayers/AnimeHall.unity`), at what size, where, and when the game shows it. **No art is required to play**: a missing file keeps the hall exactly as painted today.
 
-Status: this request and its templates land first (docs only); the runtime that shows the files (the slots asset, the gameplay link, the cheat buttons and the capture tool named below) follows on branch `feat/hall-slots`. Files delivered before it lands simply wait in their folders.
+Status: the runtime that shows these files is built and verified on branch `feat/hall-slots` (the slots asset, the gameplay link, the cheat buttons, the template and capture tools); a test banner on the whole canvas landed exactly on the painted one, through the hall's pan and at night. Revised 2026-10-07 after the first in-game check: the right wall (old layers 35, 36) is hidden behind the desk's corkboard, so the poster moved to the left pier and the exhibits to the right pillar and the upper gallery.
 
 ## Read this first: which picture you paint against
 
@@ -10,6 +10,7 @@ Status: this request and its templates land first (docs only); the runtime that 
 - Same canvas as every layer: **2172 x 724 px, RGBA, transparent background**, registered pixel for pixel to `HallWarmStone.png` (its (0,0) is your (0,0); no offset, no scaling, no crop). The game places the file over the painting exactly as the layers were placed.
 - A variant is drawn **over** the composite painting (it is one picture, so nothing of the painting can be "behind" your art). Therefore: (1) a variant that replaces an object must cover the old object completely where it shows (opaque over the old banner, sign, plate...), so nothing of the old one peeks out; (2) anything that stands **in front** of your object in the painting (a railing, a post, a rod) must be left **out** of your art (transparent there), so it still reads in front. The templates show both.
 - Paint only inside the slot's box (the magenta box of its template). Pixels outside it are ignored by the review and may be cleared.
+- What the player sees: from the desk the screen shows the canvas from about x 165 to x 2015, and the desk's corkboards cover x 1770 and right (the right board, all heights) and x 400 and left below y 370 (the left board); looking left (the city view) pans the hall left. Every slot below sits in the visible part, which is why the right wall's framed artwork and armillary (layers 35, 36) are not slots.
 - If your pipeline prefers it, first re-cut the warm-stone painting into new registered layers for these objects (same canvas, same naming `NN-name.png`), then paint the variants from those: the game only needs the variant files below.
 
 ## Files and naming
@@ -17,7 +18,7 @@ Status: this request and its templates land first (docs only); the runtime that 
 - Deliver each variant to `Assets/Art/UI/Resources/Hall/Slots/<slot>/<variant>.png` (the slot is the folder; the import settings are automatic: a sprite, at most 4096 px, no mipmaps). Example: `Assets/Art/UI/Resources/Hall/Slots/13-flag-left-cloth/egypt.png`. A slot of a registered layer keeps that layer's file stem as its folder name; a new overlay is named `new-…`.
 - **Alternates** (optional, any variant): to give a variant several interchangeable paintings, deliver `<variant>_1.png`, `<variant>_2.png`, … and tell the gameplay side the count (one field, `alternates`, in `Assets/Data/Config/HallSlots_Default.asset`); the game picks one per run, so runs differ but a replay shows the same hall.
 - The game picks a slot's variant from the hall's variables (below); the highest priority whose condition holds shows; with none, the painting stays as it is (or the slot's fallback shows). The rules live in `Assets/Data/Config/HallSlots_Default.asset` (`HallSlotsSO`), editable in the Inspector; the conditions' grammar is in `docs/superpowers/specs/2026-10-07-hall-slots-design.md`.
-- Templates: `ArtDeliverables/TimeDesk/HallSlots/templates/<slot>.png` (the hall around the slot at daylight and at night, the paintable box in magenta, window glass hatched red), `_canvas_guide.png` (every slot on the whole canvas) and `_blank_canvas_2172x724.png` (a transparent canvas to paint on).
+- Templates: `ArtDeliverables/TimeDesk/HallSlots/templates/<slot>.png` (the hall around the slot at daylight and at night, the paintable box in magenta, window glass hatched red), `_canvas_guide.png` (every slot on the whole canvas: magenta a registered layer's, cyan a new overlay's), `_blank_canvas_2172x724.png` (a transparent canvas to paint on) and `_slots.txt` (every box and variant). They are made by `Tools > Terminal Art > Hall Slots > Export Templates` from the slots asset, so they follow any change to it.
 
 ## Style and light (every slot)
 
@@ -90,8 +91,8 @@ The 58 registered layers (`layers.json`) and their role here. "Slot" = varied by
 | 32 Right waiting seats | `32-right-waiting-seats.png` | 1770,544 - 1940,674 | no: seats |
 | 33 Right waste bin | `33-right-waste-bin.png` | 1921,586 - 1969,679 | no: bin |
 | 34 Left waste bin | `34-left-waste-bin.png` | 592,546 - 633,614 | no: bin |
-| 35 Framed historical artwork | `35-framed-historical-artwork.png` | 1863,414 - 1932,522 | **slot `35-framed-historical-artwork`** (8 variants) |
-| 36 Armillary display | `36-armillary-display.png` | 1954,455 - 2012,533 | **slot `36-armillary-display`** (8 variants) |
+| 35 Framed historical artwork | `35-framed-historical-artwork.png` | 1863,414 - 1932,522 | no: on the right wall behind the desk corkboard: never seen from the desk (the exhibits hang on the right pillar and stand on the upper gallery instead) |
+| 36 Armillary display | `36-armillary-display.png` | 1954,455 - 2012,533 | no: the same: behind the right corkboard |
 | 37 Stone bust display | `37-stone-bust-display.png` | 2057,457 - 2124,555 | no: cut by the canvas edge (half visible) |
 | 38 Portal 01 front secure bay | `38-portal-01-front-secure-bay.png` | 804,475 - 1238,639 | no: portal bay (the portal effects and the glass cracks overlay) |
 | 39 Portal 01 front metal ring | `39-portal-01-front-metal-ring.png` | 938,405 - 1117,586 | no: portal ring (the game's portal glow) |
@@ -114,7 +115,7 @@ The 58 registered layers (`layers.json`) and their role here. "Slot" = varied by
 | 56 Portal 04 upper left painted glass | `56-portal-04-upper-left-painted-glass.png` | 1574,203 - 1788,263 | no: upper portal glass |
 | 57 Portal 05 upper right painted glass | `57-portal-05-upper-right-painted-glass.png` | 1802,202 - 2074,267 | no: upper portal glass |
 
-New overlay layers (no registered layer shows these things; each is a 2172 x 724 canvas like the layers, drawn over the painting): `new-wall-poster`, `new-anomalies`, `new-glass-cracks`, `new-checkpoint`, `new-queue-props`.
+New overlay layers (no registered layer shows these things; each is a 2172 x 724 canvas like the layers, drawn over the painting): `new-wall-poster`, `new-exhibit-portrait`, `new-exhibit-vitrine`, `new-anomalies`, `new-glass-cracks`, `new-checkpoint`, `new-queue-props`.
 
 ## The slots, in priority order
 
@@ -293,9 +294,9 @@ Why: the debt crisis hardens the propaganda; the famous travellers let through e
 
 #### `new-wall-poster`
 
-- What it is today: the blank grey wall panel between the vending machine and the framed artwork (right wall).
+- What it is today: the flat lower face of the dark left pier (graphite, below its two pipes, above the bridge-level railing).
 - Slot: a **new overlay layer** (nothing registered shows this).
-- Paintable box: **62 x 100 px at canvas (1842, 414)** (top-left origin) on the 2172 x 724 canvas; template `templates/new-wall-poster.png`.
+- Paintable box: **60 x 72 px at canvas (684, 166)** (top-left origin) on the 2172 x 724 canvas; template `templates/new-wall-poster.png`.
 - Draw order: over the painting (58) and the portal glows (59), under the crowds (61-62) and the gallery fixtures (99): sorting order 60.
 - Fallback (shows when no other variant does): `bureau`. This slot is blank in the painting, so its fallback is needed first.
 
@@ -334,43 +335,43 @@ Why: the debt crisis hardens the propaganda; the famous travellers let through e
 | `08-bridge-fascia/extended.png` | `phase=extended` | 10 | A long thin Bureau banner strip on the fascia: oxblood cloth with brass rings, a coin-and-hourglass icon repeated (no words) |
 | `08-bridge-fascia/nights.png` | `phase=nights` | 20 | The strip replaced by a night-shift banner: slate with a moon-and-clock icon, a red warning band; slightly sagging |
 
-#### `35-framed-historical-artwork`
+#### `new-exhibit-portrait`
 
-- What it is today: the gold-framed blue artwork on the right wall (a white plane-like sculpture today).
-- Slot: varies the registered layer `35 Framed historical artwork` (old file `Textures/35-framed-historical-artwork.png`, for reference only).
-- Paintable box: **92 x 135 px at canvas (1918, 390)** (top-left origin) on the 2172 x 724 canvas; template `templates/35-framed-historical-artwork.png`.
+- What it is today: the narrow cream wall of the right pillar, between the right banner and the big vertical pipe (a framed portrait hangs here).
+- Slot: a **new overlay layer** (nothing registered shows this).
+- Paintable box: **44 x 96 px at canvas (1428, 20)** (top-left origin) on the 2172 x 724 canvas; template `templates/new-exhibit-portrait.png`.
 - Draw order: over the painting (58) and the portal glows (59), under the crowds (61-62) and the gallery fixtures (99): sorting order 60.
 - With no variant: the painting as it is.
 
 | File | Shows when | Priority | What to paint |
 |---|---|---|---|
-| `35-framed-historical-artwork/egypt.png` | `recent=egypt` | 10 | The frame keeps its gold border; inside, a museum portrait-poster of Egypt's famous traveller let through most recently: a silhouette bust in Egypt's colours with WingedSun motif (no likeness, no text) |
-| `35-framed-historical-artwork/iraq.png` | `recent=iraq` | 10 | The frame keeps its gold border; inside, a museum portrait-poster of Iraq's famous traveller let through most recently: a silhouette bust in Iraq's colours with Octastar motif (no likeness, no text) |
-| `35-framed-historical-artwork/greece.png` | `recent=greece` | 10 | The frame keeps its gold border; inside, a museum portrait-poster of Greece's famous traveller let through most recently: a silhouette bust in Greece's colours with Laurel motif (no likeness, no text) |
-| `35-framed-historical-artwork/italy.png` | `recent=italy` | 10 | The frame keeps its gold border; inside, a museum portrait-poster of Italy's famous traveller let through most recently: a silhouette bust in Italy's colours with Star motif (no likeness, no text) |
-| `35-framed-historical-artwork/china.png` | `recent=china` | 10 | The frame keeps its gold border; inside, a museum portrait-poster of China's famous traveller let through most recently: a silhouette bust in China's colours with FiveStars motif (no likeness, no text) |
-| `35-framed-historical-artwork/japan.png` | `recent=japan` | 10 | The frame keeps its gold border; inside, a museum portrait-poster of Japan's famous traveller let through most recently: a silhouette bust in Japan's colours with Chrysanthemum motif (no likeness, no text) |
-| `35-framed-historical-artwork/britain.png` | `recent=britain` | 10 | The frame keeps its gold border; inside, a museum portrait-poster of Britain's famous traveller let through most recently: a silhouette bust in Britain's colours with Crown motif (no likeness, no text) |
-| `35-framed-historical-artwork/germany.png` | `recent=germany` | 10 | The frame keeps its gold border; inside, a museum portrait-poster of Germany's famous traveller let through most recently: a silhouette bust in Germany's colours with Eagle motif (no likeness, no text) |
+| `new-exhibit-portrait/egypt.png` | `recent=egypt` | 10 | A small gold-framed museum portrait of Egypt's famous traveller let through most recently: a stylised silhouette bust in Egypt's colours with the WingedSun motif (no likeness, no text) |
+| `new-exhibit-portrait/iraq.png` | `recent=iraq` | 10 | A small gold-framed museum portrait of Iraq's famous traveller let through most recently: a stylised silhouette bust in Iraq's colours with the Octastar motif (no likeness, no text) |
+| `new-exhibit-portrait/greece.png` | `recent=greece` | 10 | A small gold-framed museum portrait of Greece's famous traveller let through most recently: a stylised silhouette bust in Greece's colours with the Laurel motif (no likeness, no text) |
+| `new-exhibit-portrait/italy.png` | `recent=italy` | 10 | A small gold-framed museum portrait of Italy's famous traveller let through most recently: a stylised silhouette bust in Italy's colours with the Star motif (no likeness, no text) |
+| `new-exhibit-portrait/china.png` | `recent=china` | 10 | A small gold-framed museum portrait of China's famous traveller let through most recently: a stylised silhouette bust in China's colours with the FiveStars motif (no likeness, no text) |
+| `new-exhibit-portrait/japan.png` | `recent=japan` | 10 | A small gold-framed museum portrait of Japan's famous traveller let through most recently: a stylised silhouette bust in Japan's colours with the Chrysanthemum motif (no likeness, no text) |
+| `new-exhibit-portrait/britain.png` | `recent=britain` | 10 | A small gold-framed museum portrait of Britain's famous traveller let through most recently: a stylised silhouette bust in Britain's colours with the Crown motif (no likeness, no text) |
+| `new-exhibit-portrait/germany.png` | `recent=germany` | 10 | A small gold-framed museum portrait of Germany's famous traveller let through most recently: a stylised silhouette bust in Germany's colours with the Eagle motif (no likeness, no text) |
 
-#### `36-armillary-display`
+#### `new-exhibit-vitrine`
 
-- What it is today: the armillary sphere on its stand in the gold alcove (right wall, far right).
-- Slot: varies the registered layer `36 Armillary display` (old file `Textures/36-armillary-display.png`, for reference only).
-- Paintable box: **74 x 96 px at canvas (2056, 440)** (top-left origin) on the 2172 x 724 canvas; template `templates/36-armillary-display.png`.
+- What it is today: the upper gallery's floor between the pipes and portal 04's glass bay, behind the gallery's brass railing (a museum vitrine stands here).
+- Slot: a **new overlay layer** (nothing registered shows this).
+- Paintable box: **52 x 56 px at canvas (1586, 194)** (top-left origin) on the 2172 x 724 canvas; template `templates/new-exhibit-vitrine.png`.
 - Draw order: over the painting (58) and the portal glows (59), under the crowds (61-62) and the gallery fixtures (99): sorting order 60.
 - With no variant: the painting as it is.
 
 | File | Shows when | Priority | What to paint |
 |---|---|---|---|
-| `36-armillary-display/egypt.png` | `exhibit=egypt` | 10 | The alcove's exhibit replaced by an artefact of Egypt, the nation with the most famous travellers let through: winged sun disc, lotus and papyrus borders, lapis blue and gold; a museum object on the same stand |
-| `36-armillary-display/iraq.png` | `exhibit=iraq` | 10 | The alcove's exhibit replaced by an artefact of Iraq, the nation with the most famous travellers let through: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; a museum object on the same stand |
-| `36-armillary-display/greece.png` | `exhibit=greece` | 10 | The alcove's exhibit replaced by an artefact of Greece, the nation with the most famous travellers let through: laurel wreath, meander (Greek key) border, white and Aegean blue; a museum object on the same stand |
-| `36-armillary-display/italy.png` | `exhibit=italy` | 10 | The alcove's exhibit replaced by an artefact of Italy, the nation with the most famous travellers let through: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; a museum object on the same stand |
-| `36-armillary-display/china.png` | `exhibit=china` | 10 | The alcove's exhibit replaced by an artefact of China, the nation with the most famous travellers let through: five gold stars, cloud-scroll border, vermilion and gold; a museum object on the same stand |
-| `36-armillary-display/japan.png` | `exhibit=japan` | 10 | The alcove's exhibit replaced by an artefact of Japan, the nation with the most famous travellers let through: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; a museum object on the same stand |
-| `36-armillary-display/britain.png` | `exhibit=britain` | 10 | The alcove's exhibit replaced by an artefact of Britain, the nation with the most famous travellers let through: crown over a plain shield, Victorian railway-livery lining, navy and racing green; a museum object on the same stand |
-| `36-armillary-display/germany.png` | `exhibit=germany` | 10 | The alcove's exhibit replaced by an artefact of Germany, the nation with the most famous travellers let through: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; a museum object on the same stand |
+| `new-exhibit-vitrine/egypt.png` | `exhibit=egypt` | 10 | A glass museum vitrine on a plinth holding an artefact of Egypt, the nation with the most famous travellers let through: winged sun disc, lotus and papyrus borders, lapis blue and gold; leave the railing's posts in front out |
+| `new-exhibit-vitrine/iraq.png` | `exhibit=iraq` | 10 | A glass museum vitrine on a plinth holding an artefact of Iraq, the nation with the most famous travellers let through: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; leave the railing's posts in front out |
+| `new-exhibit-vitrine/greece.png` | `exhibit=greece` | 10 | A glass museum vitrine on a plinth holding an artefact of Greece, the nation with the most famous travellers let through: laurel wreath, meander (Greek key) border, white and Aegean blue; leave the railing's posts in front out |
+| `new-exhibit-vitrine/italy.png` | `exhibit=italy` | 10 | A glass museum vitrine on a plinth holding an artefact of Italy, the nation with the most famous travellers let through: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; leave the railing's posts in front out |
+| `new-exhibit-vitrine/china.png` | `exhibit=china` | 10 | A glass museum vitrine on a plinth holding an artefact of China, the nation with the most famous travellers let through: five gold stars, cloud-scroll border, vermilion and gold; leave the railing's posts in front out |
+| `new-exhibit-vitrine/japan.png` | `exhibit=japan` | 10 | A glass museum vitrine on a plinth holding an artefact of Japan, the nation with the most famous travellers let through: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; leave the railing's posts in front out |
+| `new-exhibit-vitrine/britain.png` | `exhibit=britain` | 10 | A glass museum vitrine on a plinth holding an artefact of Britain, the nation with the most famous travellers let through: crown over a plain shield, Victorian railway-livery lining, navy and racing green; leave the railing's posts in front out |
+| `new-exhibit-vitrine/germany.png` | `exhibit=germany` | 10 | A glass museum vitrine on a plinth holding an artefact of Germany, the nation with the most famous travellers let through: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; leave the railing's posts in front out |
 
 ### Priority 4: Event checkpoints and queue clutter (5 files)
 
@@ -394,7 +395,7 @@ Why: today's recall, border closure or return, and the Debt Relief queue.
 
 - What it is today: the walkway in front of the left parcel lockers, above the front brass railing.
 - Slot: a **new overlay layer** (nothing registered shows this).
-- Paintable box: **306 x 96 px at canvas (296, 452)** (top-left origin) on the 2172 x 724 canvas; template `templates/new-queue-props.png`.
+- Paintable box: **222 x 100 px at canvas (380, 448)** (top-left origin) on the 2172 x 724 canvas; template `templates/new-queue-props.png`.
 - Draw order: over the painting (58) and the portal glows (59), under the crowds (61-62) and the gallery fixtures (99): sorting order 60.
 - With no variant: the painting as it is.
 
@@ -411,7 +412,7 @@ Why: today's recall, border closure or return, and the Debt Relief queue.
 | 2. Stability: anomalies and cracked glass | 6 |
 | 3. Phase posters and exhibits | 37 |
 | 4. Event checkpoints and queue clutter | 5 |
-| **All** | **104** (15 slots: 9 on registered layers, 6 new overlays) |
+| **All** | **104** (15 slots: 8 on registered layers, 7 new overlays) |
 
 Suggested order inside priority 1: the two banners (16 files), then the board plate (8), the three door signs (24), the floor medallion (8). A first useful drop is just `13-flag-left-cloth` and `14-flag-right-cloth` for two or three nations: they show on the first day a culture leads.
 

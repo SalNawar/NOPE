@@ -377,11 +377,11 @@ MonoBehaviour:
     fallback: 
   - id: new-wall-poster
     layer: 
-    shows: 'the blank grey wall panel between the vending machine and the framed artwork (right wall)'
-    x: 1842
-    y: 414
-    width: 62
-    height: 100
+    shows: 'the flat lower face of the dark left pier (graphite, below its two pipes, above the bridge-level railing)'
+    x: 684
+    y: 166
+    width: 60
+    height: 72
     order: 60
     variants:
     - id: bureau
@@ -500,105 +500,105 @@ MonoBehaviour:
       alternates: 1
       describes: 'The strip replaced by a night-shift banner: slate with a moon-and-clock icon, a red warning band; slightly sagging'
     fallback: 
-  - id: 35-framed-historical-artwork
-    layer: '35 Framed historical artwork'
-    shows: 'the gold-framed blue artwork on the right wall (a white plane-like sculpture today)'
-    x: 1918
-    y: 390
-    width: 92
-    height: 135
+  - id: new-exhibit-portrait
+    layer: 
+    shows: 'the narrow cream wall of the right pillar, between the right banner and the big vertical pipe (a framed portrait hangs here)'
+    x: 1428
+    y: 20
+    width: 44
+    height: 96
     order: 60
     variants:
     - id: egypt
       when: 'recent=egypt'
       priority: 10
       alternates: 1
-      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Egypt''s famous traveller let through most recently: a silhouette bust in Egypt''s colours with WingedSun motif (no likeness, no text)'
+      describes: 'A small gold-framed museum portrait of Egypt''s famous traveller let through most recently: a stylised silhouette bust in Egypt''s colours with the WingedSun motif (no likeness, no text)'
     - id: iraq
       when: 'recent=iraq'
       priority: 10
       alternates: 1
-      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Iraq''s famous traveller let through most recently: a silhouette bust in Iraq''s colours with Octastar motif (no likeness, no text)'
+      describes: 'A small gold-framed museum portrait of Iraq''s famous traveller let through most recently: a stylised silhouette bust in Iraq''s colours with the Octastar motif (no likeness, no text)'
     - id: greece
       when: 'recent=greece'
       priority: 10
       alternates: 1
-      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Greece''s famous traveller let through most recently: a silhouette bust in Greece''s colours with Laurel motif (no likeness, no text)'
+      describes: 'A small gold-framed museum portrait of Greece''s famous traveller let through most recently: a stylised silhouette bust in Greece''s colours with the Laurel motif (no likeness, no text)'
     - id: italy
       when: 'recent=italy'
       priority: 10
       alternates: 1
-      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Italy''s famous traveller let through most recently: a silhouette bust in Italy''s colours with Star motif (no likeness, no text)'
+      describes: 'A small gold-framed museum portrait of Italy''s famous traveller let through most recently: a stylised silhouette bust in Italy''s colours with the Star motif (no likeness, no text)'
     - id: china
       when: 'recent=china'
       priority: 10
       alternates: 1
-      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of China''s famous traveller let through most recently: a silhouette bust in China''s colours with FiveStars motif (no likeness, no text)'
+      describes: 'A small gold-framed museum portrait of China''s famous traveller let through most recently: a stylised silhouette bust in China''s colours with the FiveStars motif (no likeness, no text)'
     - id: japan
       when: 'recent=japan'
       priority: 10
       alternates: 1
-      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Japan''s famous traveller let through most recently: a silhouette bust in Japan''s colours with Chrysanthemum motif (no likeness, no text)'
+      describes: 'A small gold-framed museum portrait of Japan''s famous traveller let through most recently: a stylised silhouette bust in Japan''s colours with the Chrysanthemum motif (no likeness, no text)'
     - id: britain
       when: 'recent=britain'
       priority: 10
       alternates: 1
-      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Britain''s famous traveller let through most recently: a silhouette bust in Britain''s colours with Crown motif (no likeness, no text)'
+      describes: 'A small gold-framed museum portrait of Britain''s famous traveller let through most recently: a stylised silhouette bust in Britain''s colours with the Crown motif (no likeness, no text)'
     - id: germany
       when: 'recent=germany'
       priority: 10
       alternates: 1
-      describes: 'The frame keeps its gold border; inside, a museum portrait-poster of Germany''s famous traveller let through most recently: a silhouette bust in Germany''s colours with Eagle motif (no likeness, no text)'
+      describes: 'A small gold-framed museum portrait of Germany''s famous traveller let through most recently: a stylised silhouette bust in Germany''s colours with the Eagle motif (no likeness, no text)'
     fallback: 
-  - id: 36-armillary-display
-    layer: '36 Armillary display'
-    shows: 'the armillary sphere on its stand in the gold alcove (right wall, far right)'
-    x: 2056
-    y: 440
-    width: 74
-    height: 96
+  - id: new-exhibit-vitrine
+    layer: 
+    shows: 'the upper gallery''s floor between the pipes and portal 04''s glass bay, behind the gallery''s brass railing (a museum vitrine stands here)'
+    x: 1586
+    y: 194
+    width: 52
+    height: 56
     order: 60
     variants:
     - id: egypt
       when: 'exhibit=egypt'
       priority: 10
       alternates: 1
-      describes: 'The alcove''s exhibit replaced by an artefact of Egypt, the nation with the most famous travellers let through: winged sun disc, lotus and papyrus borders, lapis blue and gold; a museum object on the same stand'
+      describes: 'A glass museum vitrine on a plinth holding an artefact of Egypt, the nation with the most famous travellers let through: winged sun disc, lotus and papyrus borders, lapis blue and gold; leave the railing''s posts in front out'
     - id: iraq
       when: 'exhibit=iraq'
       priority: 10
       alternates: 1
-      describes: 'The alcove''s exhibit replaced by an artefact of Iraq, the nation with the most famous travellers let through: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; a museum object on the same stand'
+      describes: 'A glass museum vitrine on a plinth holding an artefact of Iraq, the nation with the most famous travellers let through: eight-pointed star of Ishtar, glazed-brick blue with gold lions-gate stepped border; leave the railing''s posts in front out'
     - id: greece
       when: 'exhibit=greece'
       priority: 10
       alternates: 1
-      describes: 'The alcove''s exhibit replaced by an artefact of Greece, the nation with the most famous travellers let through: laurel wreath, meander (Greek key) border, white and Aegean blue; a museum object on the same stand'
+      describes: 'A glass museum vitrine on a plinth holding an artefact of Greece, the nation with the most famous travellers let through: laurel wreath, meander (Greek key) border, white and Aegean blue; leave the railing''s posts in front out'
     - id: italy
       when: 'exhibit=italy'
       priority: 10
       alternates: 1
-      describes: 'The alcove''s exhibit replaced by an artefact of Italy, the nation with the most famous travellers let through: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; a museum object on the same stand'
+      describes: 'A glass museum vitrine on a plinth holding an artefact of Italy, the nation with the most famous travellers let through: five-pointed star in a laurel ring, Roman civic arches, terracotta and olive green; leave the railing''s posts in front out'
     - id: china
       when: 'exhibit=china'
       priority: 10
       alternates: 1
-      describes: 'The alcove''s exhibit replaced by an artefact of China, the nation with the most famous travellers let through: five gold stars, cloud-scroll border, vermilion and gold; a museum object on the same stand'
+      describes: 'A glass museum vitrine on a plinth holding an artefact of China, the nation with the most famous travellers let through: five gold stars, cloud-scroll border, vermilion and gold; leave the railing''s posts in front out'
     - id: japan
       when: 'exhibit=japan'
       priority: 10
       alternates: 1
-      describes: 'The alcove''s exhibit replaced by an artefact of Japan, the nation with the most famous travellers let through: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; a museum object on the same stand'
+      describes: 'A glass museum vitrine on a plinth holding an artefact of Japan, the nation with the most famous travellers let through: sixteen-petal chrysanthemum, seigaiha wave border, indigo and vermilion; leave the railing''s posts in front out'
     - id: britain
       when: 'exhibit=britain'
       priority: 10
       alternates: 1
-      describes: 'The alcove''s exhibit replaced by an artefact of Britain, the nation with the most famous travellers let through: crown over a plain shield, Victorian railway-livery lining, navy and racing green; a museum object on the same stand'
+      describes: 'A glass museum vitrine on a plinth holding an artefact of Britain, the nation with the most famous travellers let through: crown over a plain shield, Victorian railway-livery lining, navy and racing green; leave the railing''s posts in front out'
     - id: germany
       when: 'exhibit=germany'
       priority: 10
       alternates: 1
-      describes: 'The alcove''s exhibit replaced by an artefact of Germany, the nation with the most famous travellers let through: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; a museum object on the same stand'
+      describes: 'A glass museum vitrine on a plinth holding an artefact of Germany, the nation with the most famous travellers let through: plain heraldic eagle, Bauhaus bar border, charcoal and signal yellow; leave the railing''s posts in front out'
     fallback: 
   - id: new-anomalies
     layer: 
@@ -678,10 +678,10 @@ MonoBehaviour:
   - id: new-queue-props
     layer: 
     shows: 'the walkway in front of the left parcel lockers, above the front brass railing'
-    x: 296
-    y: 452
-    width: 306
-    height: 96
+    x: 380
+    y: 448
+    width: 222
+    height: 100
     order: 60
     variants:
     - id: extended
