@@ -1,5 +1,7 @@
 # Art request: the pet (for the ChatGPT art side)
 
+> **Delivered (run 7, 2026-10-07):** files 1-8 arrived as coats instead: `Home/pet_<kind>_<coat>_<look>.png`, five coats per kind (the Home pet spec PS11), made in Canva and recoloured by `tools/art/pets/make_pets.py`. `ArtSlots.PetSprite` still tries `Home/pet_<kind>_<look>` after the coat's file, so a coat-less file 1-8 would show for a coat without its own picture. Files 9-18 are still open.
+
 *2026-10-05 · the Home pet spec (`docs/superpowers/specs/2026-10-05-home-pet-design.md`) · until these arrive the game draws a stand-in in code (`PetStandIn`), so each file switches on by itself the moment it is dropped in place (the art slots: `ArtSlots.PetSprite`, `PetCorner`, `PetToy`, `OrderIcon`, `OrderBranch`).*
 
 The run starts with the player adopting a **dog or a cat** and naming it. Each night at Home the player pays (or skips) its food, heating, electricity, TV and medicine; the pet's corner then shows it as tonight's care leaves it, the player pets it and plays with toys bought at the PC's Orders app. If it is left hungry, cold or very sick two nights running, the Animal Welfare Office rehomes it (the run's failure ending).

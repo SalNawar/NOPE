@@ -153,6 +153,7 @@ public static class NarrativeWorkbook
         AddStrandings(b, sheet, context);
         AddMail(b, sheet);
         AddPaper(b, sheet);
+        AddPet(b, sheet);
         AddGuide(b, sheet);
         AddLore(b, sheet);
 
@@ -311,6 +312,37 @@ public static class NarrativeWorkbook
         n = 0;
         foreach (int r in b.Rows("homeRadio"))
             sheet.Field(b, id, who, "one a night at home, in order, once the radio is owned", "radio", "homeRadio", r, "text", string.Empty, string.Empty, $"night {++n}");
+    }
+
+    /// <summary>
+    /// The pet (the Home pet spec): each kind's suggested name and its coats'
+    /// names on the adoption panel (the coats' UI strings, PS11), then its
+    /// reactions to a pat and its toy lines at Home.
+    /// </summary>
+    private static void AddPet(Book b, SheetWriter sheet)
+    {
+        const string id = "pet", who = "The pet";
+        List<int> kinds = b.Rows("homePetKinds").ToList();
+        if (kinds.Count == 0)
+            return;
+        sheet.Section(id, who, "adopted at New Run (a dog or a cat, its coat and its name), then at Home every night", "{name} is the pet's name, {kind} its kind's word, {toy} a toy's name");
+        foreach (int r in kinds)
+        {
+            string kind = b.Get("homePetKinds", r, "kind"), part = kind.ToLowerInvariant();
+            sheet.Field(b, id, who, "the adoption panel", part, "homePetKinds", r, "suggestedName", string.Empty, "letters, spaces, hyphens and apostrophes only");
+            foreach (int c in b.Rows("homePetCoats").Where(c => b.Get("homePetCoats", c, "kind") == kind))
+            {
+                string coat = b.Get("homePetCoats", c, "id"), key = b.Get("homePetCoats", c, "nameKey");
+                foreach (int s in b.Rows("uiStrings").Where(s => b.Get("uiStrings", s, "key") == key))
+                    sheet.Field(b, id, who, "the adoption panel's coat row", part, "uiStrings", s, "text", string.Empty, $"the coat '{coat}' (UI string {key})", "coat " + coat);
+            }
+            int n = 0;
+            foreach (int x in b.Rows("homePetReactions").Where(x => b.Get("homePetReactions", x, "kind") == kind))
+                sheet.Field(b, id, who, "Home, a pat (in turn)", part, "homePetReactions", x, "text", string.Empty, string.Empty, $"pat {++n}");
+            n = 0;
+            foreach (int x in b.Rows("homePetToyLines").Where(x => b.Get("homePetToyLines", x, "kind") == kind))
+                sheet.Field(b, id, who, "Home, playing with a toy (in turn by the day)", part, "homePetToyLines", x, "text", string.Empty, string.Empty, $"toy line {++n}");
+        }
     }
 
     /// <summary>The desk's guide (Saleh 2026-10-06): day 1's tutorial steps, the rulebook's BASICS page and each GUIDE page with its practice prompt.</summary>
