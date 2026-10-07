@@ -83,7 +83,7 @@ public class StampFlowTests
         Assert.AreEqual(StampPress.Stamped, flow.Press(DeskStamp.Denied, true, true), "the next passport takes its own verdict");
     }
 
-    // The hardware commits the verdict (the desk machine spec §2): stamping judges, the lever (APPROVED), RETURN (DENIED) or DETAIN executes.
+    // The commit (the desk machine spec §2): the hand-back commits the passport's own verdict; DETAIN commits any time.
 
     private static StampFlow Stamped(DeskStamp stamp)
     {
@@ -109,23 +109,23 @@ public class StampFlowTests
     }
 
     [Test]
-    public void TheLever_CommitsOnlyAnApprovedPassportHandedBack()
+    public void Approval_IsCommittedOnlyForAnApprovedPassportHandedBack()
     {
         StampFlow flow = Stamped(DeskStamp.Approved);
-        Assert.IsFalse(flow.Commit(DeskStamp.Approved), "not handed back yet: the lever will not move");
+        Assert.IsFalse(flow.Commit(DeskStamp.Approved), "not handed back yet");
         flow.HandBack();
-        Assert.IsFalse(flow.Commit(DeskStamp.Denied), "RETURN does nothing for an APPROVED passport");
+        Assert.IsFalse(flow.Commit(DeskStamp.Denied), "never the other verdict");
         Assert.IsTrue(flow.Commit(DeskStamp.Approved));
         Assert.IsTrue(flow.Committed);
         Assert.IsFalse(flow.Commit(DeskStamp.Approved), "one commit a case");
     }
 
     [Test]
-    public void Return_CommitsOnlyADeniedPassportHandedBack()
+    public void Denial_IsCommittedOnlyForADeniedPassportHandedBack()
     {
         StampFlow flow = Stamped(DeskStamp.Denied);
         flow.HandBack();
-        Assert.IsFalse(flow.Commit(DeskStamp.Approved), "the lever will not move for a DENIED passport");
+        Assert.IsFalse(flow.Commit(DeskStamp.Approved), "never the other verdict");
         Assert.IsTrue(flow.Commit(DeskStamp.Denied));
     }
 

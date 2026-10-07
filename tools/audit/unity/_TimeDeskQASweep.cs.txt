@@ -15,8 +15,8 @@
 //   rulebook's tabs, the city's look-left pan and back (only the DESK tab shows there), every pull tab (PC, stamps,
 //   city), the dater rack (the label lip under the daters); then the full day to the shift report, every traveller
 //   decided with the desk machine: a dater pressed over a passport field (its ink over the printed box), a dater on the
-//   booklet's visa page, the papers handed back, the gate lever for APPROVED, RETURN for DENIED, DETAIN once; the
-//   Citation flying onto the desk (wholly on the screen);
+//   booklet's visa page, the papers handed back (the hand-back decides), DETAIN once on the desk's covered button (the
+//   cover flipped up, the button pressed); the Citation flying onto the desk (wholly on the screen);
 // - home, night 1: the bills (each toggled; Heating must leave Electricity alone), the pet corner (pat, play), the House
 //   (a card selected, bought when the wallet allows), the Night Slots machine (idle, a lever pull, the spin landing,
 //   the can't-afford state), Sleep;
@@ -666,9 +666,8 @@ public static class _TimeDeskQASweep
     /// A traveller decided with the desk machine (the desk machine spec): the
     /// dater rack out, the passport on the desk, the APPROVED or DENIED dater
     /// dragged onto it at <paramref name="at"/> (its mark where it was pressed,
-    /// its ink over everything printed on the paper), the papers handed back on
-    /// the counter, then the hardware commits: the gate lever for APPROVED,
-    /// RETURN for DENIED.
+    /// its ink over everything printed on the paper), then the papers handed
+    /// back on the counter, which decides (Papers, Please's way).
     /// </summary>
     private static IEnumerator Decide(Office o, bool accept, string shotTag, PressAt at = PressAt.Anywhere)
     {
@@ -747,46 +746,34 @@ public static class _TimeDeskQASweep
         passport.transform.position = onCounter;
         Call(o.Desk, "HandleDragEnded", passport.Drag, onCounter);
         yield return Frames(3);
-        Check(o.Stamps.HandedBack && o.Game.Ledger.verdicts.Count == before, $"the stamped passport on the counter hands the papers back and decides nothing yet ({o.Game.Ledger.verdicts.Count - before} verdicts)");
-        if (accept)
-        {
-            yield return PullLever(o, shotTag);
-            Check(o.Game.Ledger.verdicts.Count == before + 1, $"the gate lever pulled commits the APPROVED traveller ({o.Game.Ledger.verdicts.Count - before} verdict)");
-        }
-        else
-        {
-            var ret = (Button)Field(o.Hardware, "returnButton");
-            Check(ret != null && ret.gameObject.activeInHierarchy && ret.interactable, "RETURN shows while the traveller waits");
-            if (ret != null && shotTag != null)
-                CheckInside((RectTransform)ret.transform, $"{shotTag}: RETURN");
-            if (ret != null)
-                ret.onClick.Invoke();
-            else
-                o.Hardware.Return();
-            yield return Frames(3);
-            Check(o.Game.Ledger.verdicts.Count == before + 1, $"RETURN commits the DENIED traveller ({o.Game.Ledger.verdicts.Count - before} verdict)");
-        }
+        Check(o.Game.Ledger.verdicts.Count == before + 1, $"the stamped passport handed back on the counter decides the traveller ({o.Game.Ledger.verdicts.Count - before} verdict)");
     }
 
-    /// <summary>DETAIN (the third verdict, any time a traveller is here, stamped or not): the button shown, pressed, the red flash, one detention.</summary>
+    /// <summary>DETAIN (the third verdict, any time a traveller is here, stamped or not): the desk's covered button on the screen, its clear cover flipped up, the red button pressed, one detention.</summary>
     private static IEnumerator Detain(Office o, string shotTag)
     {
         int before = o.Game.Ledger.verdicts.Count;
-        var detain = (Button)Field(o.Hardware, "detainButton");
-        Check(detain != null && detain.gameObject.activeInHierarchy && detain.interactable, $"{shotTag}: DETAIN shows while the traveller waits");
-        if (detain != null)
+        DetainButton detain = o.Detain;
+        if (detain == null)
         {
-            CheckInside((RectTransform)detain.transform, $"{shotTag}: DETAIN");
-            yield return Shot("office", $"{shotTag}_buttons");
-            detain.onClick.Invoke();
+            Check(false, $"{shotTag}: the DETAIN button is on the desk");
+            yield break;
         }
-        else
-        {
-            o.Hardware.Detain();
-        }
+        Camera cam = OfficeRaycaster().eventCamera;
+        Rect r = ScreenBounds(cam, BoundsOf(detain.GetComponentsInChildren<Renderer>(false)));
+        bool inside = r.xMin >= -1f && r.yMin >= -1f && r.xMax <= UnityEngine.Screen.width + 1f && r.yMax <= UnityEngine.Screen.height + 1f && r.width > 8f;
+        Check(inside, $"{shotTag}: the DETAIN button lies on the desk, on the screen ({Fmt(r)})");
+        var cover = (Clickable)Field(detain, "coverClick");
+        var button = (Clickable)Field(detain, "buttonClick");
+        cover.onClick.Invoke();
+        yield return Settle(() => detain.CoverOpen && !detain.Moving, 3f);
+        Check(detain.CoverOpen, $"{shotTag}: a click on the clear cover flips it up");
+        yield return Shot("office", $"{shotTag}_cover_open");
+        button.onClick.Invoke();
         yield return Frames(4);
-        yield return Shot("office", $"{shotTag}_flash");
-        Check(o.Game.Ledger.verdicts.Count == before + 1 && o.Game.Ledger.verdicts.Last().detained, $"{shotTag}: DETAIN commits a detention ({o.Game.Ledger.verdicts.Count - before} verdict, detained {o.Game.Ledger.verdicts.LastOrDefault()?.detained})");
+        yield return Shot("office", $"{shotTag}_pressed");
+        yield return Settle(() => !detain.Moving, 3f);
+        Check(o.Game.Ledger.verdicts.Count == before + 1 && o.Game.Ledger.verdicts.Last().detained, $"{shotTag}: the red button under the cover detains the traveller ({o.Game.Ledger.verdicts.Count - before} verdict, detained {o.Game.Ledger.verdicts.LastOrDefault()?.detained})");
     }
 
     /// <summary>The dater's ink lies over everything printed on the paper (its own layer, the highest of the paper's parts: PaperLayers.Ink) and draws after the paper's printed layers.</summary>
@@ -805,44 +792,6 @@ public static class _TimeDeskQASweep
         }
         Check(Mathf.Abs(inkLift - PaperLayers.Ink) < 1e-6f && under.Count == 0,
               $"{tag}: the dater's ink lies over every printed part of the paper (ink lift {inkLift * 1000f:0.0} mm, queue {mark.sharedMaterial.renderQueue}){List(under)}");
-    }
-
-    /// <summary>Pulls the gate lever as the clerk does: the button down on its knob, a drag down the screen long enough for a full pull against its resistance, the release; then waits for the arm to rest.</summary>
-    private static IEnumerator PullLever(Office o, string shotTag)
-    {
-        GateLever lever = o.Lever;
-        if (lever == null)
-        {
-            Check(false, "the gate lever is in the office");
-            yield break;
-        }
-        var knob = lever.GetComponentInChildren<Clickable>();
-        PhysicsRaycaster raycaster = OfficeRaycaster();
-        Vector3 at = raycaster.eventCamera.WorldToScreenPoint(knob.transform.position);
-        Check(at.x >= 0f && at.y >= 0f && at.x <= UnityEngine.Screen.width && at.y <= UnityEngine.Screen.height && at.z > 0f, $"the gate lever's knob is on the screen ({at.x:0},{at.y:0})");
-        var data = new PointerEventData(EventSystem.current)
-        {
-            button = PointerEventData.InputButton.Left,
-            position = at,
-            pointerPressRaycast = new RaycastResult { module = raycaster, gameObject = knob.gameObject }
-        };
-        ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.pointerDownHandler);
-        ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.beginDragHandler);
-        MotionKnobs knobs = UiMotion.Knobs;
-        float pixels = knobs.leverTravel * (1f + knobs.leverResistance) / Mathf.Max(0.01f, knobs.leverPullPerPixel) * 1.2f;
-        const int Steps = 12;
-        for (int i = 0; i < Steps; i++)
-        {
-            data.delta = new Vector2(0f, -pixels / Steps);
-            data.position += data.delta;
-            ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.dragHandler);
-            yield return Seconds(0.03f);
-            if (i == Steps / 2 && shotTag != null)
-                yield return Shot("office", $"{shotTag}_lever_pulling");
-        }
-        yield return Settle(() => lever.IsHome || !lever.Moving, 3f);
-        ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.endDragHandler);
-        yield return Settle(() => !lever.Moving, 6f);
     }
 
     private static PhysicsRaycaster OfficeRaycaster() =>
@@ -1756,8 +1705,7 @@ public static class _TimeDeskQASweep
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
-        public GateLever Lever => One<GateLever>();
-        public VerdictButtons Hardware => One<VerdictButtons>();
+        public DetainButton Detain => One<DetainButton>();
         public List<DeskDocument> Citations => (List<DeskDocument>)Field(Desk, "_citations");
         public bool CitationFlying => Citations.Any(p => p != null && p.TryGetComponent(out PaperArrival a) && a.Flying);
         public List<DeskDocument> Papers() => ((Transform)Field(Desk, "paperRoot")).GetComponentsInChildren<DeskDocument>().OrderBy(p => p.Index).ToList();

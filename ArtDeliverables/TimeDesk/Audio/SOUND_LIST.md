@@ -64,9 +64,7 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 35 | `booth_shutter_close` | shift ends, shutter down | 1.2 s | metal roller shutter down, final clang | ×1 | P1 |
 | 36 | `portal_through` | an approved traveller goes through the portal | 1.5 s | rising warp whoosh, tonal | ×2 | P2 |
 | 37 | `detain` | a traveller is detained | 1.0 s | alarm chirp plus guard boots | ×1 | P2 |
-| 80 | `lever_ratchet` | the gate lever pulled through each notch | 0.05 s | heavy iron ratchet tooth | ×3 | P2 |
-| 81 | `lever_home` | the gate lever springs back home | 0.3 s | deep metal thunk with a little ring | ×1 | P2 |
-| 82 | `return_buzz` | RETURN sends a denied traveller back | 0.5 s | button clunk plus a short low buzzer | ×1 | P2 |
+| 80 | `detain_cover` | the DETAIN button's clear cover flips up or snaps shut | 0.1 s | a stiff plastic hinge snapping | ×2 | P2 |
 | 38 | `dialogue_blip` | each line of dialogue appears | 0.05 s | tiny voice-like blip (Papers, Please murmur) | ×4 | P2 |
 
 ## 3. The PC (terminal)
@@ -96,11 +94,11 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 53 | `ui_error` | locked button pressed | 0.2 s | dull "nope" thunk | ×1 | P1 |
 | 54 | `ui_popup` | a pop-up appears | 0.25 s | soft paper pop | ×1 | P2 |
 | 55 | `wheel_open` | dialogue wheel opens | 0.3 s | quick fan-out flutter | ×1 | P2 |
-| 83 | `slot_lever` | the Home slot machine's lever clicks past a ratchet notch | 0.05 s | one heavy metal ratchet tooth | ×2 | P1 |
-| 84 | `slot_spin` | the slot machine's reels start spinning | 0.6 s | a motor whirr spinning up, a mechanical rattle | ×1 | P2 |
-| 85 | `slot_stop` | a reel lands on the payline | 0.15 s | a solid clunk, a reel's stop catching | ×3 | P1 |
-| 86 | `slot_win` | a winning spin lands | 1.2 s | a bright arcade bell ringing out | ×1 | P1 |
-| 87 | `slot_lose` | a spin lands on nothing | 0.6 s | a soft descending "womp" | ×1 | P2 |
+| 81 | `slot_lever` | the Home slot machine's lever clicks past a ratchet notch | 0.05 s | one heavy metal ratchet tooth | ×2 | P1 |
+| 82 | `slot_spin` | the slot machine's reels start spinning | 0.6 s | a motor whirr spinning up, a mechanical rattle | ×1 | P2 |
+| 83 | `slot_stop` | a reel lands on the payline | 0.15 s | a solid clunk, a reel's stop catching | ×3 | P1 |
+| 84 | `slot_win` | a winning spin lands | 1.2 s | a bright arcade bell ringing out | ×1 | P1 |
+| 85 | `slot_lose` | a spin lands on nothing | 0.6 s | a soft descending "womp" | ×1 | P2 |
 
 ## 5. Shift and time
 
@@ -143,4 +141,4 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 75 | `mus_desk_calm` | early shift, low and sparse (synth plus tape warble) | P3 |
 | 76 | `mus_desk_tense` | last hour / low stability layer | P3 |
 
-**Total:** 87 entries; about 170 files counting the variants. **P1 alone:** 42 entries.
+**Total:** 85 entries; about 165 files counting the variants. **P1 alone:** 42 entries.

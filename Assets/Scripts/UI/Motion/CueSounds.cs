@@ -7,7 +7,7 @@ using UnityEngine;
 /// placeholder"): Play(id, source) plays the cue through the game's sound
 /// bank when it has a clip (Sounds.Play: each id is SoundCues' and a row
 /// of SOUND_LIST.md), else a short sound made in code once per id through
-/// the source (a click, a thunk, a whoosh, a buzz, a chirp) until its file
+/// the source (a click, a snap, a whoosh, a chirp) until its file
 /// is delivered. Tone and Noise make the placeholders, also for the
 /// stamps' own refusal thunk and a delivered paper's thud (PaperArrival).
 /// </summary>
@@ -37,10 +37,8 @@ public static class CueSounds
         {
             case SoundCues.DaterWheelClick: return Noise("WheelClick", 0.025f, 0.35f, 2600f);
             case SoundCues.DaterReink: return Noise("Reink", 0.18f, 0.35f, 500f);
-            case SoundCues.LeverRatchet: return Noise("LeverRatchet", 0.04f, 0.6f, 1800f);
-            case SoundCues.LeverHome: return Tone("LeverHome", 62f, 0.28f, 0.9f);
+            case SoundCues.DetainCover: return Noise("CoverSnap", 0.05f, 0.55f, 1500f);
             case SoundCues.PortalThrough: return Sweep("PortalThrough", 180f, 900f, 1.2f, 0.4f);
-            case SoundCues.ReturnBuzz: return Sweep("Return", 130f, 110f, 0.45f, 0.5f);
             case SoundCues.Detain: return Sweep("Detain", 1400f, 900f, 0.5f, 0.35f);
             case SoundCues.UiError: return Tone("Error", 70f, 0.16f, 0.7f);
             default: return null;

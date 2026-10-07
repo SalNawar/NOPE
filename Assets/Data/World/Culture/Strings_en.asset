@@ -2549,28 +2549,8 @@ MonoBehaviour:
     text: Stamp the passport first.
     gloss: 0
     tier: 0
-  - key: stamp.hint.lever
-    text: Pull the LEVER down to send them through the portal.
-    gloss: 0
-    tier: 0
-  - key: stamp.hint.return
-    text: Press RETURN to send them back the way they came.
-    gloss: 0
-    tier: 0
-  - key: hardware.return
-    text: RETURN
-    gloss: 0
-    tier: 0
   - key: hardware.detain
     text: DETAIN
-    gloss: 0
-    tier: 0
-  - key: hardware.refused.lever
-    text: The lever only moves for an APPROVED passport handed back.
-    gloss: 0
-    tier: 0
-  - key: hardware.refused.return
-    text: RETURN only works for a DENIED passport handed back.
     gloss: 0
     tier: 0
   - key: stamp.dater.by

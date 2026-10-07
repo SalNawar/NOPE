@@ -32,9 +32,6 @@ public sealed class MotionKnobs
     /// <summary>A dater's stroke going down (ratio 0.95, stiff): about 60 ms to the paper, slowing into it.</summary>
     public SpringTuning dater = SpringTuning.WithRatio(2600f, 0.95f);
 
-    /// <summary>The gate lever's arm (ratio 0.42, a heavy mass): a slow swing back with a visible overshoot.</summary>
-    public SpringTuning lever = SpringTuning.WithRatio(220f, 0.42f, 1.5f);
-
     /// <summary>How far a control's face lifts under the pointer (px; Saleh 2026-10-07, round 2: a 1-2 px lift and the glint, no growth).</summary>
     public float hoverLift = 1.5f;
 
@@ -146,17 +143,20 @@ public sealed class MotionKnobs
     /// <summary>The seconds between two ratchet clicks of the date wheels' morning roll.</summary>
     public float daterWheelClick = 0.07f;
 
-    /// <summary>How hard the lever's thunk home hits (FeelDirector.Hit's strength, 0 to 1; a dater's impression is the stamp's own punch, FeelHit.Stamp).</summary>
-    public float leverHit = 0.3f;
+    /// <summary>How hard an approval's portal spin-up hits as the papers go back (FeelDirector.Hit's strength, 0 to 1), and the DETAIN button's press (a dater's impression is the stamp's own punch, FeelHit.Stamp).</summary>
+    public float approveHit = 0.3f, detainHit = 0.5f;
 
     /// <summary>The feel of a dater's stroke down, of its release springing up (an overshoot) and of a date wheel's click.</summary>
     public MotionFeel daterFeel = MotionFeel.Dater, daterReleaseFeel = MotionFeel.Elastic, wheelFeel = MotionFeel.Firm;
 
-    /// <summary>The gate lever: its full travel and a ratchet notch (degrees), how much it resists (the pull past the travel a full pull needs, LeverTravel.Resisted), how many degrees a pixel of pointer travel pulls, the "no" wobble's swing (degrees) and how long it rests home before it springs back up (seconds).</summary>
-    public float leverTravel = 60f, leverNotch = 15f, leverResistance = 0.6f, leverPullPerPixel = 0.22f, leverRefuse = 5f, leverHomeSeconds = 0.6f;
+    /// <summary>The DETAIN button on the desk (the desk machine spec §2): how far its safety cover swings up on its hinge (degrees), how long it stays open unused before it closes by itself (seconds), and how deep the mushroom button presses (metres).</summary>
+    public float detainCoverAngle = 105f, detainCoverSeconds = 4f, detainPress = 0.01f;
 
-    /// <summary>The feel of the lever's arm (following the pull and springing back) and of its "no" wobble.</summary>
-    public MotionFeel leverFeel = MotionFeel.Lever, leverRefuseFeel = MotionFeel.Elastic;
+    /// <summary>How long the DETAIN button stays down after a press before it springs back up (seconds).</summary>
+    public float detainPressSeconds = 0.18f;
+
+    /// <summary>The feel of the DETAIN cover's spring hinge, of the button's press and of its spring back up.</summary>
+    public MotionFeel detainCoverFeel = MotionFeel.Elastic, detainPressFeel = MotionFeel.Firm, detainReleaseFeel = MotionFeel.Elastic;
 
     /// <summary>The Night Slots machine's spin, payout and lever (SlotSpinSchedule, SlotLever, SlotMachineView).</summary>
     public SlotSpinKnobs slots = new SlotSpinKnobs();
@@ -179,8 +179,6 @@ public sealed class MotionKnobs
                 return heavy;
             case MotionFeel.Dater:
                 return dater;
-            case MotionFeel.Lever:
-                return lever;
             default:
                 return balanced;
         }

@@ -40,9 +40,10 @@ using UnityEngine.UI;
 /// passport, anywhere on it, once (StampFlow: the other dater, another paper
 /// or the rulebook are refused with a thunk, a shake and a note); over the
 /// bare desk the dater just goes back. Then the stamped passport dropped on
-/// the counter hands the papers back (HandBack) and the hardware commits the
-/// verdict (Commit: the gate lever APPROVED, RETURN DENIED, DETAIN anyone at
-/// any time); the hint names the hardware to use. A right-click or Esc
+/// the counter hands the papers back (HandBack), and that commits the
+/// verdict (Saleh 2026-10-07: no extra step): APPROVED spins the portal up,
+/// DENIED sends the traveller back; the desk's DETAIN button commits the
+/// third verdict any time (Commit). A right-click or Esc
 /// drops a carried dater back into the rack, else slides the bar back
 /// (ControlRules.BackOut). The bar takes input while BoothRules.StampsLive
 /// and shows its tab while BoothRules.PropsLive. Reduced Motion cuts every
@@ -205,12 +206,6 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>True while the passport carries a verdict (stamped; handed back or not).</summary>
     public bool HasVerdict => _flow.Verdict != DeskStamp.None;
 
-    /// <summary>The passport's verdict (None: not stamped yet).</summary>
-    public DeskStamp Verdict => _flow.Verdict;
-
-    /// <summary>True once the stamped papers went back to the traveller: the hardware commits the verdict.</summary>
-    public bool HandedBack => _flow.HandedBack;
-
     /// <summary>The rack's rest scale, and its speed last frame (m/s along its travel: its change squashes it).</summary>
     private Vector3 _rackScale = Vector3.one;
     private float _barSpeed;
@@ -242,10 +237,10 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>Where the last press met a paper or the rulebook (straight under the dater's die; the probes read it).</summary>
     public Vector3 LastPressPoint { get; private set; }
 
-    /// <summary>Raised when the bar, the verdict or the hand-back changes (the counter's label, the booth's rules, the hardware).</summary>
+    /// <summary>Raised when the bar, the verdict or the case changes (the counter's label, the booth's rules, the DETAIN button).</summary>
     public event Action Changed;
 
-    /// <summary>Raised when the hardware commits the case's verdict (Commit: the lever APPROVED, RETURN DENIED, DETAIN DETAINED).</summary>
+    /// <summary>Raised when the case's verdict is committed (the hand-back APPROVED or DENIED, the DETAIN button DETAINED).</summary>
     public event Action<DeskStamp> Decided;
 
     private void Awake()
@@ -440,7 +435,16 @@ public sealed class DeskStampTray : MonoBehaviour
     /// <summary>The decision (DeskController): no passport, no verdict, nobody here.</summary>
     public void EndCase() => BeginCase(-1);
 
-    /// <summary>The papers handed back with the passport's verdict (a paper dropped on the counter once the passport is stamped: DeskController, which then sends the papers back): the verdict is locked and waits for the hardware, and the view lifts to the hall (false, nothing done, without a verdict or once handed back).</summary>
+    /// <summary>
+    /// The papers handed back with the passport's verdict (a paper dropped on
+    /// the counter once the passport is stamped: DeskController): that is the
+    /// decision (Saleh 2026-10-07: "no lever, no extra commit step", Papers,
+    /// Please's way). The bar slides in, the view lifts to the hall and the
+    /// verdict is committed (Decided): an APPROVED passport spins the
+    /// traveller's portal up (portal_through and a hit; the hall's ring
+    /// flares as they leave through it), a DENIED one sends them back the way
+    /// they came. False (nothing done) without a verdict or once handed back.
+    /// </summary>
     public bool HandBack()
     {
         if (!_flow.HandBack())
@@ -451,11 +455,17 @@ public sealed class DeskStampTray : MonoBehaviour
         Sounds.Play(SoundCues.PaperSlide);
         if (deskView != null)
             deskView.Return();
-        Raise();
+        DeskStamp verdict = _flow.Verdict;
+        if (verdict == DeskStamp.Approved)
+        {
+            CueSounds.Play(SoundCues.PortalThrough, sound);
+            FeelDirector.Hit(UiMotion.Knobs.approveHit);
+        }
+        Commit(verdict);
         return true;
     }
 
-    /// <summary>The hardware commits <paramref name="verdict"/> (StampFlow.Commit: the lever an APPROVED passport handed back, RETURN a DENIED one, DETAIN any traveller at any time): Decided; false (nothing done: the hardware's "no") otherwise.</summary>
+    /// <summary>Commits <paramref name="verdict"/> (StampFlow.Commit: the hand-back an APPROVED or a DENIED passport, the DETAIN button any traveller at any time, stamp or not): Decided; false (nothing done) otherwise.</summary>
     public bool Commit(DeskStamp verdict)
     {
         if (!_flow.Commit(verdict))
@@ -466,7 +476,7 @@ public sealed class DeskStampTray : MonoBehaviour
         return true;
     }
 
-    /// <summary>Shows the note <paramref name="key"/> (a UI string) on the hint's plate for DeskConfigSO.stampNoteSeconds (DeskController: "Stamp the passport first"; the hardware's refusals).</summary>
+    /// <summary>Shows the note <paramref name="key"/> (a UI string) on the hint's plate for DeskConfigSO.stampNoteSeconds (DeskController: a paper bounced off the counter, "Stamp the passport first").</summary>
     public void Note(string key)
     {
         _noteKey = key;
@@ -945,7 +955,7 @@ public sealed class DeskStampTray : MonoBehaviour
         Changed?.Invoke();
     }
 
-    /// <summary>The daters' input (pressed and dragged while the bar is out) and the hint: a note while it lasts; else, out, to drag a dater onto the passport, or (stamped) to hand the papers back on the counter, or (handed back) the hardware to use: the lever for APPROVED, RETURN for DENIED.</summary>
+    /// <summary>The daters' input (pressed and dragged while the bar is out) and the hint: a note while it lasts; else, out, to drag a dater onto the passport, or (stamped) to hand the papers back on the counter.</summary>
     private void Show()
     {
         bool usable = _live && _flow.BarOut;
@@ -961,8 +971,7 @@ public sealed class DeskStampTray : MonoBehaviour
         if (hint == null)
             return;
         string key = _passport < 0 ? null
-            : _noteKey ?? (_flow.HandedBack ? (_flow.Verdict == DeskStamp.Approved ? "stamp.hint.lever" : "stamp.hint.return")
-                : !_live ? null : _flow.CanHandBack ? "stamp.hint.handBack" : _flow.BarOut ? "stamp.hint.place" : null);
+            : _noteKey ?? (!_live ? null : _flow.CanHandBack ? "stamp.hint.handBack" : _flow.BarOut ? "stamp.hint.place" : null);
         GameObject plate = hint.transform.parent != null ? hint.transform.parent.gameObject : hint.gameObject;
         if (plate.activeSelf != (key != null))
             plate.SetActive(key != null);
