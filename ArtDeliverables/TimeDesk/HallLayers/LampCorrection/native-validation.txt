@@ -1,0 +1,13 @@
+FIXTURE_IMPORT rect=(x:0.00, y:0.00, width:724.00, height:2172.00) pivot=(362.00, 781.92) ppu=2205.938
+FIXTURE_SPRITE_REFERENCE guid=72d39e17c1c9465789398d82b1142706 fileID=21300000
+FIXTURE_SHADER_IMPORT_PASS NOPE/Hall Mounted Fixture
+FIXTURE_SHADER_IMPORT_PASS NOPE/Hall Four State
+FIXTURE_SHADER_IMPORT_PASS NOPE/Hall Waiting Bay Repair
+FIXTURE_SHADER_IMPORT_PASS NOPE/Hall Deep Layout
+FIXTURE_NATIVE_IMPORT_PASS (not a game-scene capture)
+FIXTURE_NATIVE_STATE_PASS noon=0
+FIXTURE_NATIVE_STATE_PASS night=1
+FIXTURE_NATIVE_STATE_PASS night lights off=0
+FIXTURE_NATIVE_STATE_PASS changed sunset=0
+FIXTURE_NATIVE_LIVE_HALL_PASS registered centers and live on/off/noon levels
+Exiting without the bug reporter. Application will terminate with return code 0
