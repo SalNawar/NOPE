@@ -6,11 +6,12 @@ using UnityEngine.TextCore;
 
 /// <summary>
 /// The daters' impression and date bands, painted at runtime (the desk
-/// machine spec §1; Saleh's reference, the S-401: "the word in a hollow,
-/// outlined, slab-serif display face in violet-blue, below it the date in
-/// solid red, then BY: in violet-blue"). An impression is the verdict word's
-/// outline (DaterLetters; a letter they lack, the font's outline), the date
-/// in solid red and the BY line, each print inked by its density
+/// machine spec §1; Saleh's reference, the S-401: the word in a hollow,
+/// outlined, slab-serif display face over the date and "BY:"; Saleh
+/// 2026-10-07: APPROVED in green ink, DENIED in red, the date and the BY
+/// line in a dark navy so every print shows its date). An impression is
+/// the verdict word's outline (DaterLetters; a letter they lack, the
+/// font's outline) in its verdict's ink, the date and the BY line, each print inked by its density
 /// (DaterInk: the pad's fade and the print's own variation) with blotchy
 /// coverage, edge breaks where the rubber missed and a faint smudge a
 /// pixel or two off. The date and the BY line come from a TMP font's SDF
@@ -24,8 +25,8 @@ public static class DaterImpressionArt
     /// <summary>An impression texture's size in pixels (its aspect is the mark's on the paper).</summary>
     public const int Width = 480, Height = 216;
 
-    /// <summary>The violet-blue ink (the word, the BY line) and the red ink (the date).</summary>
-    public static readonly Color32 Violet = new Color32(72, 60, 168, 255), Red = new Color32(196, 34, 40, 255);
+    /// <summary>The verdict words' inks (Saleh 2026-10-07: "approve and deny stamp need to be green and red so they are easy to tell apart"): APPROVED's green, DENIED's red; and the dark navy of the date and the BY line, so every print shows its date clearly.</summary>
+    public static readonly Color32 ApprovedInk = new Color32(30, 122, 58, 255), DeniedInk = new Color32(184, 32, 36, 255), DateInk = new Color32(26, 30, 58, 255);
 
     /// <summary>The rows (shares of the height, from the top): the word, the date, the BY line.</summary>
     private const float WordTop = 0.05f, WordBottom = 0.53f, DateTop = 0.57f, DateBottom = 0.79f, ByTop = 0.82f, ByBottom = 0.97f;
@@ -49,14 +50,15 @@ public static class DaterImpressionArt
     }
 
     /// <summary>
-    /// A print of <paramref name="word"/> over <paramref name="date"/> and
-    /// <paramref name="byLine"/> (the date and the BY line in
-    /// <paramref name="font"/>) at ink <paramref name="density"/> (0..1),
+    /// A print of <paramref name="word"/> in <paramref name="wordInk"/>
+    /// (ApprovedInk or DeniedInk) over <paramref name="date"/> and
+    /// <paramref name="byLine"/> (in <paramref name="font"/>, DateInk) at
+    /// ink <paramref name="density"/> (0..1),
     /// worn by the print's <paramref name="seed"/> (its blotches, edge breaks
     /// and smudge; <paramref name="worn"/> false: a clean print). Textures
     /// run bottom-up; the print reads the right way round.
     /// </summary>
-    public static Texture2D Paint(string word, string date, string byLine, TMP_FontAsset font, float density, int seed, bool worn = true)
+    public static Texture2D Paint(string word, Color32 wordInk, string date, string byLine, TMP_FontAsset font, float density, int seed, bool worn = true)
     {
         Layers layers = LayersOf(word ?? string.Empty, date ?? string.Empty, byLine ?? string.Empty, font);
         var pixels = new Color32[Width * Height];
@@ -66,14 +68,14 @@ public static class DaterImpressionArt
             for (int x = 0; x < Width; x++)
             {
                 int i = y * Width + x;
-                float violet = Mathf.Max(layers.Word[i], layers.By[i]), red = layers.Date[i];
+                float inked = layers.Word[i], text = Mathf.Max(layers.Date[i], layers.By[i]);
                 if (worn)
                 {
                     int j = Mathf.Clamp(y - sy, 0, Height - 1) * Width + Mathf.Clamp(x - sx, 0, Width - 1);
-                    violet = Mathf.Max(violet, 0.16f * Mathf.Max(layers.Word[j], layers.By[j]));
-                    red = Mathf.Max(red, 0.16f * layers.Date[j]);
+                    inked = Mathf.Max(inked, 0.16f * layers.Word[j]);
+                    text = Mathf.Max(text, 0.16f * Mathf.Max(layers.Date[j], layers.By[j]));
                 }
-                float cover = Mathf.Max(violet, red);
+                float cover = Mathf.Max(inked, text);
                 if (cover <= 0f)
                     continue;
                 float ink = d;
@@ -84,7 +86,7 @@ public static class DaterImpressionArt
                     if (grain < (1.15f - d) * 0.42f)
                         ink *= 0.12f; // an edge break: the rubber missed here
                 }
-                Color32 colour = red > violet ? Red : Violet;
+                Color32 colour = inked > text ? wordInk : DateInk;
                 colour.a = (byte)(255f * Mathf.Clamp01(cover * ink));
                 pixels[i] = colour;
             }

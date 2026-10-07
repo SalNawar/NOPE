@@ -1417,7 +1417,7 @@ public static partial class OfficeSceneUIBuilder
     /// on the Interactable layer (its pivot at its foot) with a DeskDraggable
     /// (the click box its proxy: the dater is dragged onto the paper) and a
     /// PointerHold (a held press), holding its body (DaterBody: the prop
-    /// contract's Body, Frame, Die and Wheels; a green or red side button);
+    /// contract's Body, Frame, Die and Wheels; green on APPROVED, red on DENIED);
     /// the word printed on the rail's top over each dater, readable from the
     /// reading view. The tray gets the papers' style, the date's face and
     /// Saleh's dater sounds (WireDaters). The old overlay bar, the 3D tray of
@@ -1466,11 +1466,11 @@ public static partial class OfficeSceneUIBuilder
         PrimitivePart(rack, "CapRight", PrimitiveType.Cube, new Vector3(railLength / 2f, StampRailHeight, -StampRailFront), new Vector3(0.012f, StampRailSection.y + 0.006f, StampRailSection.x + 0.006f), wood);
         Color labelInk = new Color(0.95f, 0.93f, 0.86f);
 
-        (Clickable stamp, Transform die) Stamp(string name, float x, Color button, string labelKey)
+        (Clickable stamp, Transform die) Stamp(string name, float x, bool approved, string labelKey)
         {
             Clickable click = EnsureClickBox(rack, name);
             click.transform.localPosition = new Vector3(x, 0f, 0f);
-            StampShape shape = DaterBody(click.transform, button);
+            StampShape shape = DaterBody(click.transform, approved);
             var box = click.GetComponent<BoxCollider>();
             box.center = new Vector3(0f, shape.Top / 2f, 0f);
             box.size = new Vector3(shape.HalfWidth * 2f + 0.006f, shape.Top, shape.HalfDepth * 2f + 0.006f);
@@ -1494,8 +1494,8 @@ public static partial class OfficeSceneUIBuilder
             return (click, die);
         }
 
-        (Clickable denied, Transform deniedDie) = Stamp("Denied", -StampSpacing / 2f, new Color(0.76f, 0.16f, 0.13f), "stamp.label.denied");
-        (Clickable approved, Transform approvedDie) = Stamp("Approved", StampSpacing / 2f, new Color(0.18f, 0.58f, 0.26f), "stamp.label.approved");
+        (Clickable denied, Transform deniedDie) = Stamp("Denied", -StampSpacing / 2f, false, "stamp.label.denied");
+        (Clickable approved, Transform approvedDie) = Stamp("Approved", StampSpacing / 2f, true, "stamp.label.approved");
         // No shadows: hanging over the desk under the hall's low light they cast long dark shapes across the papers (Papers, Please's bar casts none).
         foreach (MeshRenderer part in rack.GetComponentsInChildren<MeshRenderer>(true))
             part.shadowCastingMode = ShadowCastingMode.Off;

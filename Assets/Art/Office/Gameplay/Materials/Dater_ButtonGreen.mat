@@ -46,7 +46,7 @@ Material:
     - _Surface: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.18, g: 0.58, b: 0.26, a: 1}
+    - _BaseColor: {r: 0.46, g: 0.76, b: 0.52, a: 1}
     - _LightTint: {r: 1.06, g: 1.015, b: 0.92, a: 0}
     - _ShadowTint: {r: 0.72, g: 0.81, b: 0.94, a: 0}
   m_BuildTextureStacks: []

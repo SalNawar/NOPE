@@ -16,10 +16,10 @@ using UnityEngine.UI;
 /// brings the reading view. The bar is a rack holding the DENIED dater
 /// (left) and the APPROVED dater (right), self-inking daters after Saleh's
 /// S-401 reference, built under a prop contract (a root with Body, Frame,
-/// Die, Wheels and Button: the art may replace the meshes): a glossy black
-/// body with a window on top showing the die's print, a white frame, the
-/// date wheels seen through it and a side button, green on APPROVED, red on
-/// DENIED. A dater is moved, not the paper: left-press and drag it (its
+/// Die, Wheels and Button: the art may replace the meshes): a glossy body,
+/// deep green on APPROVED and red on DENIED (Saleh 2026-10-07: "easy to
+/// tell apart"), with a window on top showing the die's print, a white
+/// frame, the date wheels seen through it and a lighter side button. A dater is moved, not the paper: left-press and drag it (its
 /// DeskDraggable) and its die is carried over the pointer's spot on the
 /// papers; letting go strokes it there (down and straight back up: both
 /// clacks), then it goes back to its place in the rack; a left-press on a
@@ -370,7 +370,7 @@ public sealed class DeskStampTray : MonoBehaviour
 
     /// <summary>A fresh print of the APPROVED (<paramref name="approved"/>) or the DENIED dater at the pad's full density: the verdict's ink on papers leaving unstamped (DeskDocument.ShowVerdict; the paper owns it).</summary>
     public Texture2D Impression(bool approved) =>
-        DaterImpressionArt.Paint(Word(approved), _dateText, _byLine, daterFont, 1f, _day * 977 + _presses++);
+        DaterImpressionArt.Paint(Word(approved), Ink(approved), _dateText, _byLine, daterFont, 1f, _day * 977 + _presses++);
 
     /// <summary>The grey tab, TAB, the desk's stamp: slides the bar out (bringing the reading view) or back; nothing while the daters take no input.</summary>
     public void ToggleBar()
@@ -538,7 +538,7 @@ public sealed class DeskStampTray : MonoBehaviour
             float density = config != null ? DaterInk.Print(handle.Prints, _day * 31 + (int)handle.Kind, config.daterInkFade, config.daterInkFloor, config.daterInkSpread) : 1f;
             int seed = _day * 977 + _presses * 13 + (int)handle.Kind;
             float twist = (DaterInk.Hash01(seed, 5, 5) * 2f - 1f) * PrintTwist;
-            handle.PrintOn.Stamp(DaterImpressionArt.Paint(Word(handle.Kind == DeskStamp.Approved), _dateText, _byLine, daterFont, density, seed), handle.PrintAt, twist);
+            handle.PrintOn.Stamp(DaterImpressionArt.Paint(Word(handle.Kind == DeskStamp.Approved), Ink(handle.Kind == DeskStamp.Approved), _dateText, _byLine, daterFont, density, seed), handle.PrintAt, twist);
             handle.Prints++;
             handle.PrintOn = null;
         }
@@ -679,7 +679,7 @@ public sealed class DeskStampTray : MonoBehaviour
             return;
         if (handle.WindowPrint != null)
             Destroy(handle.WindowPrint);
-        handle.WindowPrint = DaterImpressionArt.Paint(Word(handle.Kind == DeskStamp.Approved), _dateText, _byLine, daterFont, 1f, 0, false);
+        handle.WindowPrint = DaterImpressionArt.Paint(Word(handle.Kind == DeskStamp.Approved), Ink(handle.Kind == DeskStamp.Approved), _dateText, _byLine, daterFont, 1f, 0, false);
         var block = new MaterialPropertyBlock();
         handle.Window.GetPropertyBlock(block);
         block.SetTexture("_BaseMap", handle.WindowPrint);
@@ -688,6 +688,9 @@ public sealed class DeskStampTray : MonoBehaviour
 
     /// <summary>The verdict word the daters print (the papers' style's).</summary>
     private string Word(bool approved) => style == null ? (approved ? "APPROVED" : "DENIED") : approved ? style.approvedStamp : style.deniedStamp;
+
+    /// <summary>The verdict word's ink: APPROVED green, DENIED red (Saleh 2026-10-07: easy to tell apart).</summary>
+    private static Color32 Ink(bool approved) => approved ? DaterImpressionArt.ApprovedInk : DaterImpressionArt.DeniedInk;
 
     /// <summary>This press's pitch: 1 ± PitchSpread, a value of the press's number (no draw).</summary>
     private float Pitch() => 1f + (DaterInk.Hash01(_day, _presses, 9) * 2f - 1f) * PitchSpread;

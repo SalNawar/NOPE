@@ -25,7 +25,7 @@ Every motion here uses those springs. There are no linear lerps and no DOTween.
 ## 1. Dater stamps (the hero piece)
 
 - **Two daters replace the two flat stamps:** APPROVED and DENIED, in the style of the S-401.
-  - A black body, a red button on the side and a clear top window showing the impression.
+  - **Saleh, 2026-10-07:** "approve and deny stamp need to be green and red so they are easy to tell apart." The APPROVED dater's body is a deep, slightly glossy green, the DENIED dater's a deep red (kit colours, not neon), each with its side button in a lighter tint and a clear top window showing the impression. The S-401 shape stays.
   - A white frame.
   - Four date wheels you can see through the side: day, month, year (2150-style) and the era code.
 - **Use is two clicks:**
@@ -33,9 +33,9 @@ Every motion here uses those springs. There are no linear lerps and no DOTween.
   - **Release (mouse up):** a second, lighter **clack** as the die flips back. The body springs up with overshoot.
   - Holding the button holds the stamp down. A quick click does both clacks fast.
 - **The impression:**
-  - the word in an outline display face, in violet-blue ink;
-  - the date in red, from the dater's wheels;
-  - "BY: <clerk id>" in violet-blue.
+  - the word in an outline display face, in the verdict's ink: APPROVED green, DENIED red (Saleh, 2026-10-07; this replaces the reference's violet-blue word and red date);
+  - the date in a dark ink (near-black navy), from the dater's wheels, so every print shows its date clearly;
+  - "BY: <clerk id>" in the same dark ink.
   - It is rendered into the paper where pressed, as the stamp lands today, inside the passport's visa frame as the guide.
 - **Ink:**
   - Each print's density varies slightly, with edge breaks and a soft smudge offset.
@@ -46,7 +46,7 @@ Every motion here uses those springs. There are no linear lerps and no DOTween.
   - **Decision:** this is automatic, with a visible and audible roll. It is not a manual task the player can get wrong.
 - **Art.**
   - The daters are new 3D props.
-  - **Decision:** build them in-engine from primitives and kit materials (bevelled black body, red button, white frame, textured wheels), shaped like the reference. The art side may replace the meshes later under the same prop contract.
+  - **Decision:** build them in-engine from primitives and kit materials (a bevelled green or red body, a lighter side button, white frame, textured wheels), shaped like the reference. The art side may replace the meshes later under the same prop contract.
   - The impression's outline face is drawn into a texture at runtime.
 
 ## 2. Decision hardware: three verdicts

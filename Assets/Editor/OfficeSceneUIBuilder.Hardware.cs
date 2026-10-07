@@ -11,8 +11,8 @@ using UnityEngine.UI;
 /// and RETURN and DETAIN as plain kit buttons by the counter (their own
 /// hardware comes in step 2). Every prop is built in-engine from primitives
 /// in the desk's materials under a prop contract the art may later fill
-/// with its own meshes: a dater is a root holding Body (the glossy black
-/// body: its rounded top, the window showing the die's print, the model
+/// with its own meshes: a dater is a root holding Body (the glossy green
+/// or red body: its rounded top, the window showing the die's print, the model
 /// name and the side Button), Frame (the white frame), Die (the press point
 /// at the foot, over the rubber) and Wheels (Day, Month, Year, turning
 /// about their own axes); the lever is a root holding Base, Arm (its pivot
@@ -42,17 +42,22 @@ public static partial class OfficeSceneUIBuilder
     /// plates, a top band and thin rims), the Die (the press point; the dark
     /// rubber under it), the Wheels (Day, Month, Year: dark rubber cylinders
     /// across the frame, axes along x, the tray paints their bands and turns
-    /// them) and the Body (glossy black over the frame with a rounded top, its
-    /// Window, the model name on its front and the side Button: green on
-    /// APPROVED, red on DENIED, a click box that re-inks). Returns the
+    /// them) and the Body (Saleh 2026-10-07: a deep glossy green on
+    /// APPROVED, red on DENIED, so they tell apart at a glance; over the frame
+    /// with a rounded top, its Window, the model name on its front and the
+    /// side Button in a lighter tint, a click box that re-inks). Returns the
     /// measures the click box and the rack need.
     /// </summary>
-    private static StampShape DaterBody(Transform root, Color button)
+    private static StampShape DaterBody(Transform root, bool approved)
     {
         foreach (string part in new[] { "Frame", "Die", "Wheels", "Body" })
             DestroyChildIfPresent(root, part);
         Material frame = DaterMaterial("Dater_Frame", new Color(0.9f, 0.9f, 0.88f), 0.05f, 0.08f);
-        Material black = DaterMaterial("Dater_Body", new Color(0.07f, 0.07f, 0.08f), 0.3f, 0.12f);
+        // Saleh 2026-10-07: "approve and deny stamp need to be green and red so they are easy to tell apart": a deep, slightly glossy kit
+        // green or red body (darkened so the window and the wheels read on it), its side button a lighter tint.
+        Color bodyColour = approved ? new Color(0.13f, 0.38f, 0.21f) : new Color(0.52f, 0.11f, 0.12f);
+        Color button = approved ? new Color(0.46f, 0.76f, 0.52f) : new Color(0.9f, 0.46f, 0.42f);
+        Material black = DaterMaterial(approved ? "Dater_BodyGreen" : "Dater_BodyRed", bodyColour, 0.3f, 0.12f);
         Material rubber = DaterMaterial("Dater_Rubber", new Color(0.16f, 0.15f, 0.15f), 0f, 0.05f);
         Material glass = DaterMaterial("Dater_Window", new Color(0.2f, 0.22f, 0.26f), 0.4f, 0.2f);
 
@@ -115,7 +120,7 @@ public static partial class OfficeSceneUIBuilder
 
         Clickable reink = EnsureClickBox(body, "Button");
         reink.transform.localPosition = new Vector3(DaterHalfWidth + 0.003f, bodyBottom + 0.024f, 0f);
-        GameObject cap = PrimitivePart(reink.transform, "Cap", PrimitiveType.Cylinder, Vector3.zero, new Vector3(0.015f, 0.003f, 0.015f), DaterMaterial(button.g > button.r ? "Dater_ButtonGreen" : "Dater_ButtonRed", button, 0.35f, 0.1f));
+        GameObject cap = PrimitivePart(reink.transform, "Cap", PrimitiveType.Cylinder, Vector3.zero, new Vector3(0.015f, 0.003f, 0.015f), DaterMaterial(approved ? "Dater_ButtonGreen" : "Dater_ButtonRed", button, 0.35f, 0.1f));
         cap.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
         var capBox = reink.GetComponent<BoxCollider>();
         capBox.center = Vector3.zero;
