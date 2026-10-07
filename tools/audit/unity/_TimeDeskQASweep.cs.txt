@@ -9,16 +9,22 @@
 //
 // The path, with a fixed seed (12345), from a clean slot (the player's save and preferences set aside and restored):
 // - title: the Title (Continue hidden with no save), New Run, the pet adoption (a refused name, then the dog Biscuit);
-// - office, day 1: the briefing, the AVAILABLE start, the desk with a traveller, the wheel opened and every one of its
-//   choices with the speech bubble, inspect mode with a passport field linked to a rulebook row, the passport picked up,
-//   dropped and moved to the reading view, the rulebook's tabs, the city and back, every pull tab (PC, stamps, city), the
-//   stamp rack (stamp, hand back), the citation slip; then the full day to the shift report (every traveller decided);
+// - office, day 1: the briefing and its Bureau memo, the AVAILABLE start, the desk with a traveller, the stability
+//   monitor's size (the Helix River), the wheel opened and every one of its choices with the speech bubble, inspect mode
+//   with a passport field linked to a rulebook row, the passport picked up, dropped and moved to the reading view, the
+//   rulebook's tabs, the city's look-left pan and back (only the DESK tab shows there), every pull tab (PC, stamps,
+//   city), the dater rack (the label lip under the daters); then the full day to the shift report, every traveller
+//   decided with the desk machine: a dater pressed over a passport field (its ink over the printed box), a dater on the
+//   booklet's visa page, the papers handed back, the gate lever for APPROVED, RETURN for DENIED, DETAIN once; the
+//   Citation flying onto the desk (wholly on the screen);
 // - home, night 1: the bills (each toggled; Heating must leave Electricity alone), the pet corner (pat, play), the House
-//   (a card selected, bought when the wallet allows), the slots (a spin, then a spin it cannot afford), Sleep;
+//   (a card selected, bought when the wallet allows), the Night Slots machine (idle, a lever pull, the spin landing,
+//   the can't-afford state), Sleep;
 // - office, day 5 (RunManager.JumpToDay: the scanner and every PC app are in): two papers overlapped both ways, two papers'
 //   fields linked in inspect mode, the scanner drop, the rulebook's SEALS tab; the PC: every app opened from its icon
-//   (its window inside the screen, its title bar reachable, dragged by it, closed), Arrange icons (the grid, no icon
-//   under the waiting strip), the Orders tree, a mail opened, Settings' every row;
+//   (its window inside the screen, its title bar reachable, dragged by it, closed), the case board's panels (the record,
+//   the rules check, the cross-check, the overlay), Arrange icons (the grid, no icon under the waiting strip), the
+//   Orders tree, a mail opened, Settings' every row;
 // - title again: Continue shown with the save, and it resumes the run.
 // Everywhere a screen is shot the overlay's kit controls are checked: none off the screen, no two of them overlapping at
 // rest; on the desk no paper is drawn over one lying above it.
@@ -270,6 +276,7 @@ public static class _TimeDeskQASweep
         var o = new Office();
         yield return Shot("office", "d1_briefing");
         CheckInside(Office.Briefing().transform as RectTransform, "day 1: the briefing");
+        BureauMemo(o, "day 1");
         o.StartShift.onClick.Invoke();
         yield return Seconds(1f);
         yield return Shot("office", "d1_available_start");
@@ -287,6 +294,7 @@ public static class _TimeDeskQASweep
         }
         yield return Shot("office", "d1_traveller_at_desk");
         yield return KitChecks("office", "day 1 traveller at the desk");
+        HelixMonitor(o, "d1");
 
         yield return Wheel(o, "d1");
         yield return InspectRulebook(o);
@@ -295,7 +303,8 @@ public static class _TimeDeskQASweep
         yield return CityAndBack(o, "d1");
         yield return PullTabs(o, "d1");
 
-        // The first traveller is turned away without evidence (a citation arrives); the rest of the day decided right.
+        // The first traveller is turned away without evidence (a citation arrives), a dater pressed over a field of the passport; the
+        // second is decided with a dater on the booklet's visa page; the third is detained; the rest of the day decided right.
         int decided = 0;
         bool first = true;
         while (true)
@@ -309,21 +318,17 @@ public static class _TimeDeskQASweep
             }
             var c = (CaseInstance)Field(o.Ui, "_currentCase");
             bool accept = !first && c.ShouldAccept;
-            yield return Decide(o, accept, first ? "d1_first" : null);
+            int citationsBefore = o.Citations.Count;
+            if (decided == 2)
+                yield return Detain(o, "d1_detain");
+            else
+                yield return Decide(o, accept, decided < 2 ? $"d1_slot{decided + 1}" : null, decided == 0 ? PressAt.Field : decided == 1 ? PressAt.Visa : PressAt.Anywhere);
             decided++;
             yield return Seconds(0.5f);
-            if (o.CitationPanel.activeInHierarchy)
-            {
-                yield return Shot("office", $"d1_citation_{decided}");
-                CheckInside(o.CitationPanel.transform as RectTransform, "day 1: the citation slip");
-                ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
-                yield return Seconds(0.4f);
-                Check(!o.CitationPanel.activeInHierarchy, "day 1: Continue puts the citation slip away");
-            }
+            if (o.Citations.Count > citationsBefore)
+                yield return CitationArrival(o, $"d1_citation_{decided}");
             else if (first)
-            {
-                Note("day 1: the first traveller's denial brought no citation slip (a free warning, or the traveller was faulty)");
-            }
+                Note("day 1: the first traveller's denial brought no Citation (a free warning, or the traveller was faulty)");
             first = false;
             if (!string.IsNullOrEmpty(RunManager.Instance.World.endingId))
             {
@@ -591,17 +596,30 @@ public static class _TimeDeskQASweep
             look.onClick.Invoke();
         else
             city.Look();
+        // The look-left pan: the hall turns toward its window wall, then the city fades in over it.
+        yield return Seconds(0.3f);
+        float midPan = (float)Field(city, "_pan");
+        yield return Shot("office", $"{tag}_city_turning");
         yield return Seconds(1.2f);
-        Check(city.IsOn, $"{tag}: looking left shows the city (CITY tab {(look != null && look.gameObject.activeInHierarchy ? "shown" : "hidden")})");
+        float endPan = (float)Field(city, "_pan");
+        Check(city.IsOn && midPan > 0f && endPan >= 0.999f, $"{tag}: looking left turns the hall to its window wall (pan {midPan:0.00} on the way, {endPan:0.00} at the end; CITY tab {(look != null && look.gameObject.activeInHierarchy ? "shown" : "hidden")})");
+        var screen = (CanvasGroup)Field(city, "screen");
+        Check(screen != null && screen.alpha >= 0.99f, $"{tag}: the whole city panorama shows (alpha {(screen != null ? screen.alpha : -1f):0.00})");
         yield return Shot("office", $"{tag}_city");
-        yield return KitChecks("office", $"{tag} city");
+        // Only the DESK tab shows over the city: the PC and STAMPS tabs and the inspect button are faded out and take no clicks.
         var back = (Button)Field(city, "backButton");
+        var hidden = (CanvasGroup[])Field(city, "deskControls");
+        string Names(IEnumerable<CanvasGroup> gs) => string.Join(", ", gs.Select(g => g != null ? $"{g.name} {g.alpha:0.00}/{g.blocksRaycasts}" : "null"));
+        Check(hidden.Length == 3 && hidden.All(g => g != null && g.alpha <= 0.01f && !g.blocksRaycasts), $"{tag}: in the city view the PC and STAMPS tabs and the inspect button are hidden [{Names(hidden)}]");
+        Check(back != null && back.gameObject.activeInHierarchy && back.interactable, $"{tag}: in the city view the DESK tab shows");
+        yield return KitChecks("office", $"{tag} city");
         if (back != null && back.gameObject.activeInHierarchy && back.interactable)
             back.onClick.Invoke();
         else
             city.Return();
         yield return Seconds(1.2f);
         Check(!city.IsOn, $"{tag}: the DESK tab brings the desk back");
+        Check(hidden.All(g => g != null && g.alpha >= 0.99f && g.blocksRaycasts), $"{tag}: back at the desk the PC and STAMPS tabs and the inspect button show again [{Names(hidden)}]");
     }
 
     /// <summary>The pull tabs: the PC tab (the PC opens, then closes), the stamps tab (the bar slides out, then in).</summary>
@@ -633,6 +651,7 @@ public static class _TimeDeskQASweep
         Check(o.Stamps.BarOut != wasOut, $"{tag}: the stamps tab slides the bar ({wasOut} -> {o.Stamps.BarOut})");
         yield return Shot("office", $"{tag}_stamp_bar_out");
         yield return KitChecks("office", $"{tag} stamp bar out");
+        RackLip(o, tag);
         o.Stamps.ToggleBar();
         yield return Seconds(0.8f);
         Check(o.Stamps.BarOut == wasOut, $"{tag}: the stamps tab slides it back");
@@ -640,7 +659,18 @@ public static class _TimeDeskQASweep
 
     // ---- The stamps: the decision ----
 
-    private static IEnumerator Decide(Office o, bool accept, string shotTag)
+    /// <summary>Where a dater is pressed on the passport: anywhere on it, over one of its printed fields' boxes, or on the booklet's visa page (its stamp area).</summary>
+    private enum PressAt { Anywhere, Field, Visa }
+
+    /// <summary>
+    /// A traveller decided with the desk machine (the desk machine spec): the
+    /// dater rack out, the passport on the desk, the APPROVED or DENIED dater
+    /// dragged onto it at <paramref name="at"/> (its mark where it was pressed,
+    /// its ink over everything printed on the paper), the papers handed back on
+    /// the counter, then the hardware commits: the gate lever for APPROVED,
+    /// RETURN for DENIED.
+    /// </summary>
+    private static IEnumerator Decide(Office o, bool accept, string shotTag, PressAt at = PressAt.Anywhere)
     {
         int before = o.Game.Ledger.verdicts.Count;
         if (!o.Stamps.BarOut)
@@ -658,17 +688,266 @@ public static class _TimeDeskQASweep
         yield return Seconds(0.9f);
         Call(o.Desk, "HandlePaperClicked", passport, -1);
         yield return Frames(2);
-        Vector3 anywhere = passport.Sheet.TransformPoint(new Vector3(0f, passport.Size.y * 0.2f, 0f));
-        yield return DragStamp(o, accept, anywhere);
-        Check(o.Stamps.HasVerdict, $"the {(accept ? "APPROVED" : "DENIED")} stamp dragged onto the passport stamps it ({o.Stamps.LastPress})");
+        Vector3 target = passport.Sheet.TransformPoint(new Vector3(0f, passport.Size.y * 0.2f, 0f));
+        Bounds field = default;
+        FaceRect visa = default;
+        if (at == PressAt.Field)
+        {
+            var c = (CaseInstance)Field(o.Ui, "_currentCase");
+            DocumentInstance doc = c.documents[passport.Index];
+            int row = doc.fields.FindIndex(f => f.category == ClueCategory.Destination);
+            if (row < 0)
+                row = 0;
+            if (passport.TryBoundsOf(passport.SlotOfRow(row), out field))
+                target = field.center;
+            else
+                Check(false, $"{shotTag}: the passport's field {row} has a box to press over");
+        }
+        else if (at == PressAt.Visa)
+        {
+            var form = (PlacedForm)Field(passport, "_form");
+            float scale = (float)Field(passport, "_scale");
+            visa = StampSpots.Area(form);
+            float cx = (visa.XMin + visa.XMax) / 2f, cy = (visa.YMin + visa.YMax) / 2f;
+            target = passport.Sheet.TransformPoint(new Vector3((cx - form.Width / 2f) * scale, (form.PageHeight / 2f - cy) * scale, 0f));
+        }
+        yield return DragStamp(o, accept, target);
+        yield return Settle(() => !o.Stamps.IsMoving, 5f);
+        Check(o.Stamps.HasVerdict, $"the {(accept ? "APPROVED" : "DENIED")} dater dragged onto the passport stamps it ({o.Stamps.LastPress})");
+        Renderer mark = passport.GetComponentsInChildren<Renderer>(true).FirstOrDefault(r => r.name == "Stamp_1" && r.gameObject.activeSelf);
+        if (mark != null && at != PressAt.Anywhere)
+            InkOnTop(passport, mark, shotTag);
+        if (mark != null && at == PressAt.Field)
+        {
+            bool over = mark.bounds.min.x < field.max.x && field.min.x < mark.bounds.max.x && mark.bounds.min.z < field.max.z && field.min.z < mark.bounds.max.z;
+            Check(over, $"{shotTag}: the dater pressed over the passport's field prints its mark over that field's box (mark {mark.bounds.center}, box {field.center})");
+        }
+        if (mark != null && at == PressAt.Visa)
+        {
+            float scale = (float)Field(passport, "_scale");
+            Vector2 page = passport.PagePoint(mark.bounds.center) / scale;
+            bool inside = page.x >= visa.XMin && page.x <= visa.XMax && page.y >= visa.YMin && page.y <= visa.YMax;
+            Check(inside, $"{shotTag}: the dater pressed on the booklet's visa page prints inside its stamp area (mark at ({page.x:0.00},{page.y:0.00}) of the area ({visa.XMin:0.00},{visa.YMin:0.00})-({visa.XMax:0.00},{visa.YMax:0.00}))");
+        }
         if (shotTag != null)
+        {
             yield return Shot("office", $"{shotTag}_stamped");
+            var view = (DeskView)Field(o.Desk, "deskView");
+            if (view != null)
+            {
+                view.TiltIn();
+                yield return Seconds(0.8f);
+                yield return Shot("office", $"{shotTag}_stamped_reading");
+                view.Return();
+                yield return Seconds(0.8f);
+            }
+        }
         yield return Settle(() => !o.Stamps.IsCarrying, 5f);
         Vector3 onCounter = CounterPoint(o);
         passport.transform.position = onCounter;
         Call(o.Desk, "HandleDragEnded", passport.Drag, onCounter);
-        yield return Seconds(0.5f);
-        Check(o.Game.Ledger.verdicts.Count == before + 1, $"the stamped passport handed back on the counter decides the traveller ({o.Game.Ledger.verdicts.Count - before} verdict)");
+        yield return Frames(3);
+        Check(o.Stamps.HandedBack && o.Game.Ledger.verdicts.Count == before, $"the stamped passport on the counter hands the papers back and decides nothing yet ({o.Game.Ledger.verdicts.Count - before} verdicts)");
+        if (accept)
+        {
+            yield return PullLever(o, shotTag);
+            Check(o.Game.Ledger.verdicts.Count == before + 1, $"the gate lever pulled commits the APPROVED traveller ({o.Game.Ledger.verdicts.Count - before} verdict)");
+        }
+        else
+        {
+            var ret = (Button)Field(o.Hardware, "returnButton");
+            Check(ret != null && ret.gameObject.activeInHierarchy && ret.interactable, "RETURN shows while the traveller waits");
+            if (ret != null && shotTag != null)
+                CheckInside((RectTransform)ret.transform, $"{shotTag}: RETURN");
+            if (ret != null)
+                ret.onClick.Invoke();
+            else
+                o.Hardware.Return();
+            yield return Frames(3);
+            Check(o.Game.Ledger.verdicts.Count == before + 1, $"RETURN commits the DENIED traveller ({o.Game.Ledger.verdicts.Count - before} verdict)");
+        }
+    }
+
+    /// <summary>DETAIN (the third verdict, any time a traveller is here, stamped or not): the button shown, pressed, the red flash, one detention.</summary>
+    private static IEnumerator Detain(Office o, string shotTag)
+    {
+        int before = o.Game.Ledger.verdicts.Count;
+        var detain = (Button)Field(o.Hardware, "detainButton");
+        Check(detain != null && detain.gameObject.activeInHierarchy && detain.interactable, $"{shotTag}: DETAIN shows while the traveller waits");
+        if (detain != null)
+        {
+            CheckInside((RectTransform)detain.transform, $"{shotTag}: DETAIN");
+            yield return Shot("office", $"{shotTag}_buttons");
+            detain.onClick.Invoke();
+        }
+        else
+        {
+            o.Hardware.Detain();
+        }
+        yield return Frames(4);
+        yield return Shot("office", $"{shotTag}_flash");
+        Check(o.Game.Ledger.verdicts.Count == before + 1 && o.Game.Ledger.verdicts.Last().detained, $"{shotTag}: DETAIN commits a detention ({o.Game.Ledger.verdicts.Count - before} verdict, detained {o.Game.Ledger.verdicts.LastOrDefault()?.detained})");
+    }
+
+    /// <summary>The dater's ink lies over everything printed on the paper (its own layer, the highest of the paper's parts: PaperLayers.Ink) and draws after the paper's printed layers.</summary>
+    private static void InkOnTop(DeskDocument paper, Renderer mark, string tag)
+    {
+        float inkLift = -mark.transform.localPosition.z;
+        var under = new List<string>();
+        foreach (Renderer r in paper.Sheet.GetComponentsInChildren<Renderer>(false))
+        {
+            if (r == mark || r.name.StartsWith("Stamp_") || r.transform.parent != mark.transform.parent)
+                continue;
+            float lift = -r.transform.localPosition.z;
+            int queue = r.sharedMaterial != null ? r.sharedMaterial.renderQueue : 0;
+            if (lift >= inkLift || queue > mark.sharedMaterial.renderQueue)
+                under.Add($"{r.name} (lift {lift * 1000f:0.0} mm, queue {queue})");
+        }
+        Check(Mathf.Abs(inkLift - PaperLayers.Ink) < 1e-6f && under.Count == 0,
+              $"{tag}: the dater's ink lies over every printed part of the paper (ink lift {inkLift * 1000f:0.0} mm, queue {mark.sharedMaterial.renderQueue}){List(under)}");
+    }
+
+    /// <summary>Pulls the gate lever as the clerk does: the button down on its knob, a drag down the screen long enough for a full pull against its resistance, the release; then waits for the arm to rest.</summary>
+    private static IEnumerator PullLever(Office o, string shotTag)
+    {
+        GateLever lever = o.Lever;
+        if (lever == null)
+        {
+            Check(false, "the gate lever is in the office");
+            yield break;
+        }
+        var knob = lever.GetComponentInChildren<Clickable>();
+        PhysicsRaycaster raycaster = OfficeRaycaster();
+        Vector3 at = raycaster.eventCamera.WorldToScreenPoint(knob.transform.position);
+        Check(at.x >= 0f && at.y >= 0f && at.x <= UnityEngine.Screen.width && at.y <= UnityEngine.Screen.height && at.z > 0f, $"the gate lever's knob is on the screen ({at.x:0},{at.y:0})");
+        var data = new PointerEventData(EventSystem.current)
+        {
+            button = PointerEventData.InputButton.Left,
+            position = at,
+            pointerPressRaycast = new RaycastResult { module = raycaster, gameObject = knob.gameObject }
+        };
+        ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.pointerDownHandler);
+        ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.beginDragHandler);
+        MotionKnobs knobs = UiMotion.Knobs;
+        float pixels = knobs.leverTravel * (1f + knobs.leverResistance) / Mathf.Max(0.01f, knobs.leverPullPerPixel) * 1.2f;
+        const int Steps = 12;
+        for (int i = 0; i < Steps; i++)
+        {
+            data.delta = new Vector2(0f, -pixels / Steps);
+            data.position += data.delta;
+            ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.dragHandler);
+            yield return Seconds(0.03f);
+            if (i == Steps / 2 && shotTag != null)
+                yield return Shot("office", $"{shotTag}_lever_pulling");
+        }
+        yield return Settle(() => lever.IsHome || !lever.Moving, 3f);
+        ExecuteEvents.ExecuteHierarchy(knob.gameObject, data, ExecuteEvents.endDragHandler);
+        yield return Settle(() => !lever.Moving, 6f);
+    }
+
+    private static PhysicsRaycaster OfficeRaycaster() =>
+        Object.FindObjectsByType<PhysicsRaycaster>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).First(r => r.GetType() == typeof(PhysicsRaycaster));
+
+    /// <summary>A world box's rectangle on the screen (its eight corners through <paramref name="cam"/>).</summary>
+    private static Rect ScreenBounds(Camera cam, Bounds b)
+    {
+        float x0 = float.MaxValue, y0 = float.MaxValue, x1 = float.MinValue, y1 = float.MinValue;
+        for (int i = 0; i < 8; i++)
+        {
+            Vector3 corner = new Vector3((i & 1) == 0 ? b.min.x : b.max.x, (i & 2) == 0 ? b.min.y : b.max.y, (i & 4) == 0 ? b.min.z : b.max.z);
+            Vector3 s = cam.WorldToScreenPoint(corner);
+            x0 = Mathf.Min(x0, s.x); y0 = Mathf.Min(y0, s.y); x1 = Mathf.Max(x1, s.x); y1 = Mathf.Max(y1, s.y);
+        }
+        return Rect.MinMaxRect(x0, y0, x1, y1);
+    }
+
+    private static Bounds BoundsOf(IEnumerable<Renderer> renderers)
+    {
+        Bounds b = default;
+        bool any = false;
+        foreach (Renderer r in renderers)
+        {
+            if (!any) { b = r.bounds; any = true; }
+            else b.Encapsulate(r.bounds);
+        }
+        return b;
+    }
+
+    /// <summary>The dater rack's label lip lies low in front of the daters: it covers little of either dater's body on the screen.</summary>
+    private static void RackLip(Office o, string tag)
+    {
+        var rack = (Transform)Field(o.Stamps, "rack");
+        Camera cam = OfficeRaycaster().eventCamera;
+        Renderer rail = rack != null ? rack.Find("Rail")?.GetComponent<Renderer>() : null;
+        if (rail == null || cam == null)
+        {
+            Check(false, $"{tag}: the dater rack has its label lip");
+            return;
+        }
+        Rect lip = ScreenBounds(cam, rail.bounds);
+        foreach (string name in new[] { "Denied", "Approved" })
+        {
+            Transform body = rack.Find(name + "/Body");
+            if (body == null)
+            {
+                Check(false, $"{tag}: the {name} dater has a body");
+                continue;
+            }
+            Rect b = ScreenBounds(cam, BoundsOf(body.GetComponentsInChildren<Renderer>(false).Where(r => r.GetComponent<TMPro.TextMeshPro>() == null)));
+            float w = Mathf.Max(0f, Mathf.Min(lip.xMax, b.xMax) - Mathf.Max(lip.xMin, b.xMin)), h = Mathf.Max(0f, Mathf.Min(lip.yMax, b.yMax) - Mathf.Max(lip.yMin, b.yMin));
+            float share = b.width * b.height > 0f ? w * h / (b.width * b.height) : 1f;
+            Check(share < 0.1f && lip.yMin <= b.yMin + 1f, $"{tag}: the rack's label lip lies under the {name} dater, covering {share:P0} of its body on the screen (lip {Fmt(lip)}, body {Fmt(b)})");
+        }
+    }
+
+    /// <summary>The Citation's arrival (DOC: it flies onto the desk instead of the slip): it flies, lands, and lies wholly on the screen.</summary>
+    private static IEnumerator CitationArrival(Office o, string shotTag)
+    {
+        DeskDocument citation = o.Citations.LastOrDefault();
+        yield return Seconds(0.25f);
+        yield return Shot("office", $"{shotTag}_flying");
+        yield return Until(() => !o.CitationFlying, 10f, "the Citation on the desk");
+        yield return Seconds(0.3f);
+        Camera cam = OfficeRaycaster().eventCamera;
+        if (citation != null && cam != null)
+        {
+            Rect r = ScreenBounds(cam, SheetBounds(citation));
+            bool inside = r.xMin >= -1f && r.yMin >= -1f && r.xMax <= UnityEngine.Screen.width + 1f && r.yMax <= UnityEngine.Screen.height + 1f;
+            Check(inside, $"{shotTag}: the Citation lands wholly on the screen ({Fmt(r)} of {UnityEngine.Screen.width}x{UnityEngine.Screen.height})");
+        }
+        else
+        {
+            Check(false, $"{shotTag}: the Citation lies on the desk");
+        }
+        yield return Shot("office", $"{shotTag}_landed");
+    }
+
+    /// <summary>The briefing's Bureau memo (Track P: the day's bulletin moved off the paper): shown on the screen with a title and a body.</summary>
+    private static void BureauMemo(Office o, string when)
+    {
+        DayFlowUIController flow = o.DayFlow();
+        var memo = (GameObject)Field(flow, "briefingMemo");
+        string title = ((TMP_Text)Field(flow, "briefingMemoTitleText")).text, body = ((TMP_Text)Field(flow, "briefingMemoBodyText")).text;
+        Check(memo != null && memo.activeInHierarchy && title.Length > 0 && body.Length > 0, $"{when}: the briefing shows the Bureau memo ('{title}')");
+        if (memo != null && memo.activeInHierarchy)
+            CheckInside((RectTransform)memo.transform, $"{when}: the Bureau memo");
+    }
+
+    /// <summary>The stability monitor (Track P: drawn 2.4 times its art size so the Helix River reads): big enough on the screen, wholly on it.</summary>
+    private static void HelixMonitor(Office o, string tag)
+    {
+        Camera cam = OfficeRaycaster().eventCamera;
+        Rect best = default;
+        foreach (HelixRiverMonitor m in Object.FindObjectsByType<HelixRiverMonitor>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        {
+            if (!m.TryGetComponent(out MeshRenderer r) || !r.enabled || m.GetComponentInParent<Canvas>() != null)
+                continue;
+            Rect s = ScreenBounds(cam, r.bounds);
+            if (s.width * s.height > best.width * best.height)
+                best = s;
+        }
+        bool inside = best.xMin >= -1f && best.yMin >= -1f && best.xMax <= UnityEngine.Screen.width + 1f && best.yMax <= UnityEngine.Screen.height + 1f;
+        Check(best.width >= 150f * UnityEngine.Screen.height / 1080f && inside, $"{tag}: the stability monitor's Helix River is drawn big and on the screen ({best.width:0}x{best.height:0} px at {Fmt(best)})");
     }
 
     private static IEnumerator DragStamp(Office o, bool approved, Vector3 target)
@@ -823,25 +1102,63 @@ public static class _TimeDeskQASweep
         Check(slots != null && slots.activeInHierarchy, "home: the slots follow the House");
         if (slots != null && slots.activeInHierarchy)
         {
-            yield return Shot("home", "slots");
+            // The Night Slots machine (Track SL): idle, a lever pull, the spin landing, the can't-afford state.
+            var machine = (SlotMachineView)Field(ui, "slotMachine");
+            yield return Seconds(0.8f);
+            yield return Shot("home", "slots_idle");
+            yield return KitChecks("home", "slots idle");
             WorldState w = RunManager.Instance.World;
             int cost = RunManager.Instance.Config.gameConfig.slotSpinCost;
-            if (w.money >= cost)
+            var spin = (Button)Field(machine, "spinButton");
+            var leverLock = (GameObject)Field(machine, "leverLock");
+            Check(spin != null && spin.interactable == (w.money >= cost), $"home: the SPIN plate takes clicks exactly when the wallet pays a spin ({w.money} cr, {cost} a spin)");
+            int keep = w.money;
+            if (w.money < cost)
+            {
+                Note($"home: the wallet ({w.money} cr) cannot pay a spin ({cost}) tonight: the sweep lends it {cost * 3} cr for the spin, then puts the wallet back");
+                w.money = cost * 3;
+                Call(machine, "RefreshBroke");
+                Call(machine, "ShowWallet", w.money);
+                yield return Frames(2);
+            }
             {
                 int m = w.money;
-                ((Button)Field(ui, "slotSpinButton")).onClick.Invoke();
-                yield return Seconds(2.5f);
-                Check(w.money != m || w.money == m - cost + cost, $"home: a spin plays ({m} -> {w.money})");
-                yield return Shot("home", "slots_spun");
+                var data = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = new Vector2(100f, 600f) };
+                Call(machine, "HandleLeverPressed", data);
+                for (int i = 1; i <= 10 && !machine.Spinning; i++)
+                {
+                    data.position = new Vector2(100f, 600f - 30f * i);
+                    Call(machine, "HandleLeverDragged", data);
+                    yield return Seconds(0.04f);
+                    if (i == 4)
+                        yield return Shot("home", "slots_lever_pulling");
+                }
+                Call(machine, "HandleLeverReleased", data);
+                yield return Settle(() => machine.Spinning, 2f);
+                Check(machine.Spinning, $"home: the lever pulled down fires a spin (spinning {machine.Spinning})");
+                if (!machine.Spinning)
+                {
+                    spin.onClick.Invoke(); // the SPIN plate: the lever pulls itself
+                    yield return Settle(() => machine.Spinning, 3f);
+                }
+                yield return Seconds(0.4f);
+                yield return Shot("home", "slots_spinning");
+                yield return Settle(() => !machine.Spinning, 10f);
+                yield return Seconds(1f);
+                Check(!machine.Spinning && w.money != m, $"home: the spin lands and settles the wallet ({m} -> {w.money})");
+                yield return Shot("home", "slots_landed");
             }
-            int keep = w.money;
             w.money = 0;
-            ((Button)Field(ui, "slotSpinButton")).onClick.Invoke();
-            yield return Seconds(1f);
-            string body = ((TMP_Text)Field(ui, "slotBodyText")).text;
-            Check(w.money == 0 && body.Length > 0, $"home: a spin the wallet cannot afford takes nothing and says so ('{body}')");
+            Call(machine, "RefreshBroke");
+            yield return Frames(2);
+            var price = (TMP_Text)Field(machine, "priceText");
+            Check(spin != null && !spin.interactable && leverLock != null && leverLock.activeInHierarchy, $"home: with an empty wallet the machine cannot spin: SPIN rests, the lever is locked, the price reads '{price?.text}'");
+            Call(machine, "HandleLeverPressed", new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = new Vector2(100f, 600f) });
+            yield return Seconds(0.3f);
+            Check(w.money == 0 && !machine.Spinning, "home: a pull the wallet cannot afford takes nothing and spins nothing");
             yield return Shot("home", "slots_cannot_afford");
             w.money = keep;
+            Call(machine, "RefreshBroke");
             ((Button)Field(ui, "slotContinueButton")).onClick.Invoke();
             yield return Seconds(0.8f);
         }
@@ -894,8 +1211,7 @@ public static class _TimeDeskQASweep
         yield return Pc(o);
         yield return Decide(o, ((CaseInstance)Field(o.Ui, "_currentCase")).ShouldAccept, "d5");
         yield return Seconds(1f);
-        if (o.CitationPanel.activeInHierarchy)
-            ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
+        yield return Until(() => !o.CitationFlying, 10f, "any Citation on the desk");
     }
 
     /// <summary>Inspect mode with two papers' fields of the same detail linked (a paper against a paper).</summary>
@@ -1047,6 +1363,8 @@ public static class _TimeDeskQASweep
             Check(!win.IsOpen, $"pc: the {id} window closes");
         }
 
+        yield return CaseBoard(o, canvas, icons, windows);
+
         icons.Arrange();
         yield return Frames(5);
         IconGrid grid = icons.Grid;
@@ -1070,6 +1388,57 @@ public static class _TimeDeskQASweep
         o.View.FocusOffice();
         yield return Seconds(1.5f);
         Check(o.View.Current == OfficeView.OfficeFocus, "pc: back to the office");
+    }
+
+    /// <summary>The case board (Track SA) after the scan: the Investigation app shows it; its panels (the record found, the rules check, the cross-check, the overlay chips) are filled and lie inside the desktop.</summary>
+    private static IEnumerator CaseBoard(Office o, RectTransform canvas, DesktopIcons icons, Dictionary<string, DesktopWindow> windows)
+    {
+        DesktopIconView icon = ((DesktopIconView[])Field(icons, "icons")).FirstOrDefault(i => i != null && i.AppId == DesktopAppIds.Investigation);
+        windows.TryGetValue(DesktopAppIds.Investigation, out DesktopWindow win);
+        if (icon != null && win != null && !win.IsOpen)
+        {
+            icons.Open(icon);
+            yield return Seconds(1f);
+        }
+        var app = (InvestigationApp)Field(o.Ui, "app");
+        app.ShowTab(AppTab.Board);
+        yield return Seconds(1f);
+        // The board shows in the target pane (one view per pane): the one that is on.
+        CaseBoardView board = ((CaseBoardView[])Field(o.Ui, "caseBoardViews")).FirstOrDefault(v => v != null && v.gameObject.activeInHierarchy);
+        Check(board != null && board.gameObject.activeInHierarchy, "pc: the Investigation app shows the case board");
+        if (board == null)
+            yield break;
+        CaseBoardModel model = board.Model;
+        Check(model != null && model.Scanned.Count > 0, $"pc: the case board holds the scanned paper(s) ({model?.Scanned.Count ?? 0})");
+        if (model != null)
+        {
+            Report($"   board: record {model.By} '{model.Query}' ({(model.Record != null ? "on file" : "none")}), {model.Rules.Count} rule rows, {model.Cross.Count} cross rows, {model.Overlays.Count} overlay sources, {model.File.Count} file groups");
+            Check(model.Rules.Count > 0, $"pc: the case board's rules check has rows ({model.Rules.Count})");
+            Check(model.Overlays.Count > 0, $"pc: the case board's overlay has chips ({model.Overlays.Count})");
+        }
+        var content = (RectTransform)Field(board, "content");
+        var sections = content != null ? content.Cast<Transform>().Where(t => t.gameObject.activeInHierarchy).ToList() : new List<Transform>();
+        Check(sections.Count > 0, $"pc: the case board shows its panels ({sections.Count})");
+        var viewport = content != null ? content.parent as RectTransform : null;
+        if (viewport != null)
+        {
+            Rect area = LocalRect(viewport, canvas);
+            List<string> wide = sections.Select(s => (s, r: LocalRect((RectTransform)s, canvas))).Where(x => x.r.xMin < area.xMin - 1f || x.r.xMax > area.xMax + 1f).Select(x => $"{x.s.name} {Fmt(x.r)}").ToList();
+            Check(wide.Count == 0, $"pc: every case board panel fits the pane's width ({Fmt(area)}){List(wide)}");
+        }
+        yield return ShotPc("case_board");
+        if (model != null && model.Overlays.Count >= 2)
+        {
+            board.Overlay(0, 1);
+            yield return Seconds(0.5f);
+            Check(board.OverlayRows != null, $"pc: two overlay chips laid one over the other compare ({board.OverlayRows?.Count ?? 0} lines)");
+            yield return ShotPc("case_board_overlay");
+        }
+        if (win != null && win.IsOpen)
+        {
+            win.Close();
+            yield return Seconds(0.5f);
+        }
     }
 
     private static IEnumerator Orders()
@@ -1179,7 +1548,9 @@ public static class _TimeDeskQASweep
     /// <summary>The overlay's kit controls at rest: none off the screen, no two overlapping (a control and its own parts excepted).</summary>
     private static IEnumerator KitChecks(string area, string when)
     {
-        yield return Settle(() => Object.FindObjectsByType<UiJuice>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).All(j => !j.Moving), 2f);
+        // At rest: no control's face moving and no popup still flying in (a wheel's pills fly out from its centre and wobble into place).
+        yield return Settle(() => Object.FindObjectsByType<UiJuice>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).All(j => !j.Moving)
+                                  && Object.FindObjectsByType<UiAppear>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).All(a => !a.Moving), 3f);
         var controls = new List<(UiJuice j, Rect r, Canvas c)>();
         foreach (UiJuice j in Object.FindObjectsByType<UiJuice>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
         {
@@ -1385,7 +1756,10 @@ public static class _TimeDeskQASweep
         public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
-        public GameObject CitationPanel => (GameObject)Field(OfficeUi, "citationPanel");
+        public GateLever Lever => One<GateLever>();
+        public VerdictButtons Hardware => One<VerdictButtons>();
+        public List<DeskDocument> Citations => (List<DeskDocument>)Field(Desk, "_citations");
+        public bool CitationFlying => Citations.Any(p => p != null && p.TryGetComponent(out PaperArrival a) && a.Flying);
         public List<DeskDocument> Papers() => ((Transform)Field(Desk, "paperRoot")).GetComponentsInChildren<DeskDocument>().OrderBy(p => p.Index).ToList();
         public DeskDocument Paper(int index) => Papers().FirstOrDefault(p => p.Index == index);
     }
